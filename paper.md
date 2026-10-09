@@ -31,7 +31,7 @@ account and no installation, works offline after a first visit, and encodes any
 simulation state into a shareable URL.
 
 The distinguishing commitment is that the software says what it is doing. A
-public validation page reports 286 checks of the physics engine against
+public validation page reports 304 checks of the physics engine against
 analytic results, published values and independent integrations, each with its
 measured error and each labelled by the kind of evidence it rests on; a public
 model page states what the simulation represents and, at equal length, what it
@@ -192,7 +192,7 @@ has never been raised.
 
 Gravitas is tested at three levels. A unit suite covers the modules. A browser
 suite runs in full in Chromium, against both the sources and the production
-build; a tagged cross-engine subset of it runs in Firefox and WebKit. A physics validation suite runs 286 checks and publishes the
+build; a tagged cross-engine subset of it runs in Firefox and WebKit. A physics validation suite runs 304 checks and publishes the
 result: each check names what it compares, the kind of evidence it rests on —
 analytic, integrated, published, approximation or empirical — and its measured
 error. The public validation page is generated from the suite that ran, not

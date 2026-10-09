@@ -6516,7 +6516,19 @@ export async function runChecks() {
       unit: 'mag',
       tolerance: 0.01,
       toleranceKind: 'absolute',
-      why: 'Willmer 2018 Table 3 prints -0.125 for the SDSS g curve with Vega at 0.03 mag; the pack computes it from the CALSPEC Vega spectrum. 0.01: his table has three decimals and his calibration uncertainty is 0.02. UBVRI agree to 0.05, not 0.01, and RADIATION.md says why.',
+      why: 'Willmer 2018 Table 3 prints -0.125 for the SDSS g curve with Vega at 0.03 mag; the pack computes it from the CALSPEC Vega spectrum. 0.01: his table has three decimals and his calibration uncertainty is 0.02. UBVRI are held to the same 0.01 (an earlier 0.05 hid a sampling bug, RADIATION.md deviation 1).',
+    });
+    add({
+      group: G,
+      kind: 'data',
+      source: 'Willmer 2018, ApJS 236, 47, Table 3',
+      name: "AB - Vega offset of Johnson U (through Vega's Balmer jump), against Willmer 2018",
+      measured: bandPack.BANDS.find(b => b.id === 'U').abMinusVega,
+      expected: 0.768,
+      unit: 'mag',
+      tolerance: 0.01,
+      toleranceKind: 'absolute',
+      why: "Willmer 2018 Table 3 prints 0.768 for the Bessell & Murphy U passband with Vega at 0.03 mag. U sits on the Balmer jump: integrating the spectrum only at the passband's own 50 A nodes gave 0.806; at steps of at most 1 nm the pack agrees to 0.01 (three printed decimals, 0.02 calibration uncertainty).",
     });
     add({
       group: G,
@@ -6526,9 +6538,9 @@ export async function runChecks() {
       measured: R.extinctionRatio(1000 / 1.11, 3.1, extLaw.LAW),
       expected: 0.479,
       unit: 'ratio',
-      tolerance: 0.015,
+      tolerance: 0.003,
       toleranceKind: 'absolute',
-      why: "CCM89 Table 3 prints 0.479. The tolerance is the residual of the paper's own fit to that table (0.012 at B, under 0.003 elsewhere), so it is not rounding; tests/radiationKernel.test.js compares all eight filters.",
+      why: 'CCM89 Table 3 prints 0.479 from coefficients printed to four digits; 0.003 is three units of its last digit. B alone departs more (0.014 at x = 2.27: the table is the data the polynomial was fitted to, not its output) and has its own tolerance in tests/radiationKernel.test.js, which compares all eight filters and the exact eq. 3.',
     });
     add({
       group: G,

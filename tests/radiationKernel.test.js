@@ -68,8 +68,8 @@ describe('the Planck function and its laws', () => {
   });
 
   test('B_lambda integrated over wavelength is sigma T^4 / pi', () => {
-    // 1e-9 relative: Simpson with 2000 log-spaced intervals from 10 nm to 1 cm
-    // converges to ~1e-11, and the part outside is ~1e-12 of the total at 5772 K;
+    // 1e-9 relative: Simpson with 4000 log-spaced intervals from 10 nm to 1 cm
+    // (the default is 2000; both are converged to 1e-10 or better here), and the part outside is ~1e-12 of the total at 5772 K;
     // the independent reference (adaptive quadrature) agrees to its own 1e-12.
     const T = REF.radianceTotal.T;
     const total = K.bandRadiance(1e-8, 1e-2, T, 4000);
@@ -197,14 +197,15 @@ describe('bandpasses and synthetic photometry', () => {
   });
 
   test('blackbody AB magnitudes: the trapezoid against adaptive quadrature of the piecewise-linear response', () => {
-    // 2e-3 mag: the discretisation error of the convention BM12 and Willmer use (the
-    // source is sampled at the filter's own nodes, 100 A apart for BVRI), which is
-    // what an exact integral of the same piecewise-linear response would not have.
+    // 1e-4 mag, fixed before it was measured: the kernel integrates at steps of at
+    // most 1 nm, and the trapezoid's error on a smooth Planck curve is about
+    // (h/lambda)^2 / 12 times the curvature, 1e-6 relative at 1 nm and a few 1e-5
+    // mag on the steep Wien side of the hot blackbodies.
     for (const r of REF.abBlackbodyQuad) {
       near(
         K.abMag(band(r.band), K.blackbodySed(r.T)),
         r.value,
-        2e-3,
+        1e-4,
         `${r.band} at ${r.T} K (quad)`
       );
     }
@@ -242,10 +243,12 @@ describe('bandpasses and synthetic photometry', () => {
 
   test('zero points: AB - Vega against Willmer 2018 Table 3 (Vega to AB) and Cohen et al. 2003 (2MASS fluxes)', () => {
     // Tolerances as in tools/data-packs/radiation.mjs, which holds the pack to them at
-    // build time. 0.01 where Willmer used the same curves (SDSS, 2MASS); 0.05 for
-    // UBVRI, where the published offsets differ among themselves by up to 0.04 (BM12
-    // Tables 3 and 5 give U 0.784 and B -0.107 against Willmer's 0.768 and -0.134, for
-    // what is nominally the same system; this pack gives 0.806 and -0.096).
+    // build time: 0.01 for every band (Willmer prints three decimals and states a
+    // 0.02 mag Vega calibration). The first version held UBVRI to 0.05 because U and B
+    // were 0.04 off (0.806 and -0.096): a sampling bug (the spectrum was sampled only
+    // at the band's own 50 and 100 A nodes, aliasing the Balmer jump of Vega), found
+    // by the physics review and fixed; U is now 0.768 and B -0.133. The numbers
+    // below are the published ones, a fixed independent reference.
     const will = {
       U: 0.768,
       B: -0.134,
@@ -262,12 +265,7 @@ describe('bandpasses and synthetic photometry', () => {
       z: 0.494,
     };
     for (const [k, v] of Object.entries(will)) {
-      near(
-        BANDS.find(b => b.id === k).abMinusVega,
-        v,
-        'UBVRI'.includes(k) ? 0.05 : 0.01,
-        `AB - Vega ${k}`
-      );
+      near(BANDS.find(b => b.id === k).abMinusVega, v, 0.01, `AB - Vega ${k}`);
     }
     const jy = { J: 1594, H: 1024, Ks: 666.7 };
     for (const [k, f] of Object.entries(jy)) {
@@ -277,6 +275,48 @@ describe('bandpasses and synthetic photometry', () => {
         0.02,
         `Cohen ${k}`
       );
+    }
+  });
+
+  test('aliasing guard: Vega through UBVRI integrated on the band grid against a 1 A grid built here, to 0.003', () => {
+    // The kernel refines the band before it integrates. An independent version here:
+    // the response linearly interpolated to a 0.1 nm comb, trapezoid, AB zero point
+    // 3631 Jy. 0.003 mag, fixed beforehand: the smallest offset difference reported.
+    // The same arithmetic on the band's own nodes (not refined) is shown to alias by
+    // more than 0.02 mag in U, so the guard is not vacuous.
+    const vega = K.sedFromSamples(SED.vega.lambdaNm, SED.vega.fLambda);
+    const C = 299792458e9;
+    const independent = (b, step) => {
+      const l = [];
+      const s = [];
+      for (let x = b.lambdaNm[0]; x <= b.lambdaNm.at(-1) + 1e-9; x += step) {
+        let i = 0;
+        while (i < b.lambdaNm.length - 2 && b.lambdaNm[i + 1] <= x) i++;
+        const t = (x - b.lambdaNm[i]) / (b.lambdaNm[i + 1] - b.lambdaNm[i]);
+        l.push(x);
+        s.push(b.s[i] + t * (b.s[i + 1] - b.s[i]));
+      }
+      let num = 0;
+      let den = 0;
+      for (let i = 1; i < l.length; i++) {
+        const w = l[i] - l[i - 1];
+        num +=
+          0.5 *
+          w *
+          (vega(l[i]) * s[i] * l[i] + vega(l[i - 1]) * s[i - 1] * l[i - 1]);
+        den += 0.5 * w * (s[i] / l[i] + s[i - 1] / l[i - 1]);
+      }
+      return -2.5 * Math.log10(num / (C * den) / 1e-26 / 3631);
+    };
+    let nodesU = 0;
+    for (const id of ['U', 'B', 'V', 'R', 'I']) {
+      const b = band(id);
+      near(K.abMag(b, vega), independent(b, 0.1), 0.003, `Vega ${id}`);
+      if (id === 'U') {
+        // On the band's own nodes: step = the grid step, no refinement.
+        nodesU = independent(b, b.lambdaNm[1] - b.lambdaNm[0]);
+        expect(Math.abs(nodesU - independent(b, 0.1))).toBeGreaterThan(0.02);
+      }
     }
   });
 
@@ -315,9 +355,13 @@ describe('bandpasses and synthetic photometry', () => {
 
 describe('extinction', () => {
   test('CCM89 Table 3: A/A_V at R_V = 3.1, eight standard filters (U ... K), against the paper', () => {
-    // 0.015: the table column is the data eq. 3 was fitted to, not its output, so the
-    // polynomial departs from it by the fit residual: 0.012 at B, under 0.003 elsewhere.
-    // This tolerance was set after the first comparison (the first version claimed 0.006).
+    // Per filter, with reasons (tools/data-packs/radiation.mjs holds the same): 0.003,
+    // three units of the last digit of a table printed to 3 decimals from coefficients
+    // printed to 4. B alone gets 0.015: Table 3 is the passband fit the optical
+    // polynomial was fitted to, and the polynomial has a +0.05 hump between B and U that
+    // the fit does not follow, so at x = 2.27 it departs from the printed 1.337 by
+    // 0.014. The flat 0.015 of the first version was set after a first comparison and
+    // was too loose for the seven others; that is disclosed in the PR.
     const table = [
       ['U', 2.78, 1.569],
       ['B', 2.27, 1.337],
@@ -329,7 +373,70 @@ describe('extinction', () => {
       ['K', 0.46, 0.114],
     ];
     for (const [f, x, a] of table)
-      near(K.extinctionRatio(1000 / x, 3.1, CCM), a, 0.015, `A(${f})/A(V)`);
+      near(
+        K.extinctionRatio(1000 / x, 3.1, CCM),
+        a,
+        f === 'B' ? 0.015 : 0.003,
+        `A(${f})/A(V)`
+      );
+  });
+  test('CCM89 eqs. 2 to 4 against an independent transcription, exact to 1e-12, and A_B/A_V = 1 + 1/R_V at x = 2.27', () => {
+    // 1e-12: the same closed form written again from the paper, rounding only.
+    const ccm = (x, Rv) => {
+      let a;
+      let b;
+      if (x < 1.1) {
+        a = 0.574 * x ** 1.61;
+        b = -0.527 * x ** 1.61;
+      } else if (x <= 3.3) {
+        const y = x - 1.82;
+        a =
+          1 +
+          0.17699 * y -
+          0.50447 * y ** 2 -
+          0.02427 * y ** 3 +
+          0.72085 * y ** 4 +
+          0.01979 * y ** 5 -
+          0.7753 * y ** 6 +
+          0.32999 * y ** 7;
+        b =
+          1.41338 * y +
+          2.28305 * y ** 2 +
+          1.07233 * y ** 3 -
+          5.38434 * y ** 4 -
+          0.62251 * y ** 5 +
+          5.3026 * y ** 6 -
+          2.09002 * y ** 7;
+      } else {
+        let fa = 0;
+        let fb = 0;
+        if (x >= 5.9) {
+          const d = x - 5.9;
+          fa = -0.04473 * d * d - 0.009779 * d ** 3;
+          fb = 0.213 * d * d + 0.1207 * d ** 3;
+        }
+        a = 1.752 - 0.316 * x - 0.104 / ((x - 4.67) ** 2 + 0.341) + fa;
+        b = -3.09 + 1.825 * x + 1.206 / ((x - 4.62) ** 2 + 0.263) + fb;
+      }
+      return a + b / Rv;
+    };
+    for (let x = 0.3; x <= 8; x += 0.1)
+      for (const Rv of [2.5, 3.1, 5])
+        near(
+          K.extinctionRatio(1000 / x, Rv, CCM),
+          ccm(x, Rv),
+          1e-12,
+          `x ${x} R_V ${Rv}`
+        );
+    // E(B-V) = A_B - A_V by definition, so A_B/A_V = 1 + 1/R_V where B is. 0.002,
+    // fixed beforehand: the polynomial was fitted to data that obey it to a few 1e-3.
+    for (const Rv of [2.5, 3.1, 5])
+      near(
+        K.extinctionRatio(1000 / 2.27, Rv, CCM),
+        1 + 1 / Rv,
+        0.002,
+        `A_B/A_V at R_V ${Rv}`
+      );
   });
   test('the law is continuous at its joins, is 1 at V for every R_V, and refuses to extrapolate', () => {
     for (const x of [1.1, 3.3, 5.9]) {
@@ -373,6 +480,15 @@ describe('bolometric corrections', () => {
       );
     }
     expect(K.bolometricCorrectionV(3000, BC)).toBeNaN();
+    // 3500 to 4000 K is inside the polynomial's range but below the pack's reliableAboveK.
+    expect(K.bolometricCorrectionV(3700, BC)).toBeNaN();
+    expect(
+      Number.isFinite(
+        K.bolometricCorrectionV(3700, BC, { allowUnreliable: true })
+      )
+    ).toBe(true);
+    expect(K.absoluteVFromLuminosity(0.05, 3700, BC)).toBeNaN();
+    expect(Number.isFinite(K.bolometricCorrectionV(4000, BC))).toBe(true);
     expect(K.bolometricCorrectionV(60000, BC)).toBeNaN();
   });
   test("anchored on the Sun, a solar twin has the Sun's absolute V magnitude (4.812 from V_sun = -26.76)", () => {
@@ -437,6 +553,13 @@ describe('Doppler shift, redshift and air and vacuum', () => {
     // own check holds all fifteen non-hydrogen lines with observed wavelengths to 0.02 A and
     // they agree to under 0.004.
     near(K.airToVacuumNm(588.995095) * 10, 1e8 / 16973.36619, 0.002, 'Na D2');
+    // Standard air, 200 nm to 2 um: no number outside.
+    for (const x of [150, 199.9, 2000.1, 5000, NaN]) {
+      expect(K.airToVacuumNm(x)).toBeNaN();
+      expect(K.vacuumToAirNm(x)).toBeNaN();
+    }
+    expect(Number.isFinite(K.airToVacuumNm(200))).toBe(true);
+    expect(Number.isFinite(K.airToVacuumNm(2000))).toBe(true);
     // 1e-5 nm (1e-4 A): vacuumToAirNm evaluates the index at the vacuum wavelength, as its comment says.
     near(K.vacuumToAirNm(K.airToVacuumNm(500)), 500, 1e-5, 'round trip');
   });

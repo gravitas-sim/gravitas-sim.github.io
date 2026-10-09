@@ -165,10 +165,10 @@
       "vegaMagnitude": 0.03
     },
     "steps": [
-      "UBVRI: read Table 1 of Bessell & Murphy 2012 from tools/data-packs/radiation/bm12-table1.txt (transcribed from the pinned PDF with pdftotext; its pivot wavelengths must reproduce the paper's Table 5). Kept on the paper's own 50 A (U) and 100 A grids.",
+      "UBVRI: read Table 1 of Bessell & Murphy 2012 from tools/data-packs/radiation/bm12-table1.txt (transcribed with pdftotext from the pinned PDF, which is the arXiv v1 preprint 1112.2698v1, not the published PASP version; its pivot wavelengths must reproduce the paper's Table 5). Kept on the paper's own 50 A (U) and 100 A grids.",
       "SDSS: read the five extensions of the pinned FITS file, column respt (the response on the sky at 1.3 airmasses, which includes the atmosphere).",
       "TESS and 2MASS: read the pinned response tables (wavelength, response).",
-      "SDSS, TESS and 2MASS: resample by linear interpolation onto a uniform grid (2.5 nm for SDSS, whose curves are tabulated at that spacing; 5 nm for TESS and 2MASS), one zero point either side of the nonzero response, response to 1/10000 of the peak. Refuse any band for which the resampling moves the AB magnitude of Vega, or of a blackbody from 3000 K to 30000 K, by more than 0.003 mag.",
+      "SDSS, TESS and 2MASS: resample by linear interpolation onto a uniform grid (2.5 nm for SDSS, whose curves are tabulated at that spacing; 5 nm for TESS and 2MASS), one zero point either side of the nonzero response, response to 1/10000 of the peak. Refuse any band for which the resampling moves the AB magnitude of Vega, or of a blackbody from 3000 K to 30000 K, by more than 0.003 mag. Refuse any band (UBVRI included, whose grid is not resampled) for which integrating at the kernel 1 nm step instead of 0.1 nm moves those magnitudes by more than 0.003 mag.",
       "Zero point: the AB magnitude of the CALSPEC Vega spectrum alpha_lyr_stis_008 through the shipped band (the kernel's own photon-counting synthetic photometry), minus 0.03: Vega is 0.03 mag in every band, the convention of BM12 and Willmer 2018."
     ],
     "record": {
@@ -183,17 +183,34 @@
         "r": 0,
         "i": 0,
         "z": 0,
-        "T": 0.00186,
-        "J": 0.00096,
-        "H": 0.0004,
-        "Ks": 0.00053
+        "T": 0.00045,
+        "J": 0.00078,
+        "H": 0.00006,
+        "Ks": 0.00009
+      },
+      "integrationStepWorstMagnitudeChange": {
+        "U": 0.00083,
+        "B": 0.00011,
+        "V": 0,
+        "R": 0,
+        "I": 0.00006,
+        "u": 0.00093,
+        "g": 0.00022,
+        "r": 0.0001,
+        "i": 0,
+        "z": 0.00007,
+        "T": 0.00002,
+        "J": 0.00001,
+        "H": 0,
+        "Ks": 0
       }
     }
   },
   "assumptions": [
-    "Every response is photon-counting (relative number of photons detected): BM12 Table 1 by their definition; the SDSS curve is a quantum efficiency; the TESS function is the instrument response including QE; the 2MASS curves are Cohen et al.'s photon-counting RSRs. A band published as an energy response must be divided by wavelength before it is added.",
-    "The AB - Vega offset is computed here against the Vega spectrum of Bohlin 2014 with Vega = 0.03 mag in every band. It is not the zero point any survey published, except where the validation says it reproduces one. SDSS and 2MASS reproduce Willmer 2018 to better than 0.01 mag; UBVRI to 0.05 (the published offsets disagree with each other by that much). TESS has no published AB - Vega offset and none is quoted.",
-    "The SDSS curves are the 2001 preliminary curves of J. Gunn and include the atmosphere at 1.3 airmasses; a magnitude through them is on the SDSS system for a point source observed from APO.",
+    "Every response is photon-counting (relative number of photons detected): BM12 Table 1 by their definition; the SDSS curve is a quantum efficiency (the 2001 preliminary curves of J. Gunn, with the atmosphere at 1.3 airmasses); the TESS function is the instrument response including QE; the 2MASS curves are Cohen et al.'s photon-counting RSRs. A band published as an energy response must be divided by wavelength before it is added.",
+    "The AB - Vega offset is computed here against the Vega spectrum of Bohlin 2014 with Vega = 0.03 mag in every band. It is not the zero point any survey published, except where the validation says it reproduces one. SDSS and 2MASS reproduce Willmer 2018 to better than 0.01 mag; UBVRI to 0.01 as well (the spectrum is integrated at steps of at most 1 nm; the Balmer jump and lines of Vega alias if it is sampled only at the 50 and 100 A nodes of the BM12 tables). BM12 own Table 3 offsets for U and B (0.784, -0.107) differ from those of Willmer by 0.02 to 0.03 and are not reproduced. TESS has no published AB - Vega offset and none is quoted.",
+    "The SDSS curves are the 2001 preliminary curves of J. Gunn and include the atmosphere at 1.3 airmasses. Magnitudes through them are true AB magnitudes (the kernel integrates f_nu against the curve); native SDSS u and z magnitudes differ from AB by about -0.04 and +0.02 mag (the survey's AB offsets) and the kernel does not apply them. They are not the Doi et al. 2010 curves.",
+    "2MASS: here Vega is 0.03 mag in every band, as for the other systems; real 2MASS catalogue magnitudes put Vega near 0 in J, H and Ks, so a catalogue magnitude differs from this kernel's Vega magnitude by 0.024 to 0.03 mag.",
     "Gaia G, G_BP and G_RP are not here (RADIATION.md, Blockers)."
   ],
   "masks": [],
@@ -206,7 +223,7 @@
   "derived": {
     "file": "js/data/radiation/bandpasses.js",
     "bytes": 13547,
-    "sha256": "06466edc6286fd602b610091e9b3fe95bb273fb986b071078106622b1ffd2be6"
+    "sha256": "422ebf73efac7122f317929349e1df6452e2d779e5d25ca6fb3ed3dd07f10f3e"
   },
   "validation": {
     "check": "each band reproduces the published pivot wavelength (UBVRI) and the published AB - Vega offset (Willmer 2018; 2MASS also from Cohen 2003 zero-magnitude fluxes), within the tolerances stated in tools/data-packs/radiation.mjs",
@@ -347,17 +364,17 @@
         "I": 7980.8
       },
       "offsetVsWillmer": {
-        "U": 0.038,
-        "B": 0.038,
-        "V": -0.003,
-        "R": -0.007,
-        "I": -0.002,
+        "U": 0,
+        "B": 0.001,
+        "V": 0,
+        "R": -0.002,
+        "I": -0.001,
         "J": 0,
         "H": 0,
         "Ks": 0,
-        "u": -0.007,
-        "g": -0.002,
-        "r": -0.001,
+        "u": 0.001,
+        "g": -0.001,
+        "r": 0,
         "i": 0,
         "z": 0
       },

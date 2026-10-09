@@ -11,8 +11,11 @@
 //
 //      <f_nu> = Int f_lambda S lambda dlambda / ( c Int S dlambda / lambda )
 //
-// (the integrals are the trapezoid rule on the band's own wavelength grid, the
-// way Bessell & Murphy 2012 eq. A11 and Willmer 2018 eq. 1 are evaluated), and
+// (the integrals are the trapezoid rule, the way Bessell & Murphy 2012 eq. A11
+// and Willmer 2018 eq. 1 are evaluated, but on the band's response refined by
+// linear interpolation to steps of at most 1 nm: a band tabulated every 50 or
+// 100 A, as the BM12 UBVRI are, would otherwise sample a spectrum with a Balmer
+// jump and lines at its own nodes only, and alias them), and
 //
 //      AB magnitude    m_AB   = -2.5 log10( <f_nu> / 3631 Jy )      Oke & Gunn 1983
 //      Vega magnitude  m_Vega = m_AB - (AB - Vega)_band
@@ -53,7 +56,34 @@ export function decodeBand(raw) {
   };
 }
 
-/** Trapezoid integral of g(i) over the band's grid. */
+/** The widest step, nm, at which a band is refined before a spectrum is integrated. */
+export const MAX_STEP_NM = 1;
+
+/**
+ * The band refined by linear interpolation of its response to steps of at most
+ * `maxStepNm`, every original node kept. A spectrum is then sampled at least that
+ * finely however coarse the band's own table is.
+ */
+export function refineBand(band, maxStepNm = MAX_STEP_NM) {
+  const { lambdaNm: l, s } = band;
+  const lam = [l[0]];
+  const resp = [s[0]];
+  for (let i = 1; i < l.length; i++) {
+    const n = Math.max(1, Math.ceil((l[i] - l[i - 1]) / maxStepNm - 1e-9));
+    for (let k = 1; k <= n; k++) {
+      const t = k / n;
+      lam.push(l[i - 1] + t * (l[i] - l[i - 1]));
+      resp.push(s[i - 1] + t * (s[i] - s[i - 1]));
+    }
+  }
+  return {
+    ...band,
+    lambdaNm: Float64Array.from(lam),
+    s: Float64Array.from(resp),
+  };
+}
+
+/** Trapezoid integral of g(i) over a band's grid. */
 function integrate(band, g) {
   const { lambdaNm: l } = band;
   let acc = 0;
@@ -86,9 +116,10 @@ export function meanPhotonWavelength(band) {
  * @param {(lambdaNm: number) => number} sed - f_lambda in W m^-2 nm^-1
  */
 export function meanFluxJy(band, sed) {
-  const { lambdaNm: l, s } = band;
-  const num = integrate(band, i => sed(l[i]) * s[i] * l[i]);
-  const den = integrate(band, i => s[i] / l[i]);
+  const fine = refineBand(band);
+  const { lambdaNm: l, s } = fine;
+  const num = integrate(fine, i => sed(l[i]) * s[i] * l[i]);
+  const den = integrate(fine, i => s[i] / l[i]);
   return num / (C_NM_PER_S * den) / JY;
 }
 

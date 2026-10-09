@@ -7,7 +7,9 @@ run once; its output is committed as reference.json and sed.json. Inputs:
   bands.json   js/data/radiation/bandpasses.js BANDS, dumped by node
   raw/*.fits   CALSPEC alpha_lyr_stis_008 and sun_reference_stis_002 (STScI),
                pinned in data-packs/radiation-bandpasses.json (Vega); the Sun file
-               is a test fixture only: https://ssb.stsci.edu/cdbs/calspec/sun_reference_stis_002.fits
+               is a test fixture only (it is not an input to any pack):
+               https://ssb.stsci.edu/cdbs/calspec/sun_reference_stis_002.fits
+               sha256 a50b70a5c6515322cee14a3fe8060d9e4d7260912ae8d3e85b7fa88302130ab3
 
 Run: python3 make_reference.py <bands.json> <vega.fits> <sun.fits>   (needs numpy, scipy, astropy)
 Conventions: wavelengths nm; f_lambda W m^-2 nm^-1; photon-counting responses.
@@ -31,8 +33,19 @@ def band_arrays(b):
     lam = b['startNm'] + b['stepNm'] * np.arange(n) if 'startNm' in b else np.array(b['lambdaNm'], float)
     return lam, np.array(b['response'], float) / b['scale']
 
+def refine(lam, s, max_step=1.0):
+    # The kernel integrates on the band refined by linear interpolation of the
+    # response to steps of at most 1 nm (every original node kept): written here
+    # independently, as np.interp on a union of the nodes and a 1 nm comb.
+    fine = [lam[0]]
+    for a, b in zip(lam[:-1], lam[1:]):
+        n = max(1, int(np.ceil((b - a) / max_step - 1e-9)))
+        fine.extend(a + (b - a) * np.arange(1, n + 1) / n)
+    fine = np.array(fine)
+    return fine, np.interp(fine, lam, s)
+
 def ab_trapz(b, sed):
-    lam, s = band_arrays(b)
+    lam, s = refine(*band_arrays(b))
     num = np.trapz(sed(lam) * s * lam, lam)
     den = np.trapz(s / lam, lam)
     fnu_jy = num / (C * 1e9 * den) / 1e-26

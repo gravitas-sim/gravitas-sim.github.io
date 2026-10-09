@@ -63,8 +63,21 @@ export function classicalError(vKmS) {
   return (zr - zFromVelocityClassical(vKmS)) / zr;
 }
 
-/** Air wavelength to vacuum, nm (Morton 2000). */
+/** The range of the air and vacuum conversions, nm (Morton 2000). */
+export const AIR_RANGE_NM = [200, 2000];
+
+/**
+ * Air wavelength to vacuum, nm (Morton 2000, the formula the SDSS and the
+ * Stellar Lab use). Air is standard air: 15 C, 101325 Pa, dry (Edlen 1966's
+ * index, the IAU standard). Valid from 200 nm to 2 um; NaN outside, the
+ * formula's polynomial in 1/lambda^2 is not an index of refraction beyond it.
+ * The wavenumber term s = 1e3 / lambda is evaluated at the air wavelength, as
+ * the formula is written (Morton's own text); the physical index would be
+ * evaluated at the vacuum wavelength, which moves the result by at most 1e-5 nm
+ * (measured over 200 nm to 2 um, worst at 200 nm).
+ */
 export function airToVacuumNm(airNm) {
+  if (!(airNm >= AIR_RANGE_NM[0] && airNm <= AIR_RANGE_NM[1])) return NaN;
   const s = 1e3 / airNm; // um^-1 uses lambda in nm: 1e4 / A, A = 10 nm
   const s2 = s * s;
   return (
@@ -72,7 +85,12 @@ export function airToVacuumNm(airNm) {
     (1 + 0.0000834254 + 0.02406147 / (130 - s2) + 0.00015998 / (38.9 - s2))
   );
 }
-/** Vacuum wavelength to air, nm: the inverse, to a part in 1e6 of the index. */
+/**
+ * Vacuum wavelength to air, nm: lambda_vac / n with n evaluated at the vacuum
+ * wavelength, so it inverts the physical index exactly and airToVacuumNm (which
+ * evaluates it at the air wavelength) to within 1e-5 nm. Same range and
+ * standard air; NaN outside.
+ */
 export function vacuumToAirNm(vacNm) {
   return vacNm / (airToVacuumNm(vacNm) / vacNm);
 }

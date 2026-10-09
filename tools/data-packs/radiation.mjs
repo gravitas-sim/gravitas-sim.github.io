@@ -35,6 +35,7 @@ import {
   pivotWavelength,
   sedFromSamples,
   blackbodySed,
+  refineBand,
 } from '../../js/kernels/radiation/photometry.js';
 import { extinctionRatio } from '../../js/kernels/radiation/extinction.js';
 import { bolometricCorrectionV } from '../../js/kernels/radiation/magnitudes.js';
@@ -268,6 +269,7 @@ function buildBands(bytes) {
   const vega = vegaSed(bytes[5]);
   const bands = [];
   const resampling = {};
+  const sampling = {};
   for (const [id, [system, name, source]] of Object.entries(BAND_INFO)) {
     const shipped =
       source === 'bm12'
@@ -305,8 +307,24 @@ function buildBands(bytes) {
       throw new Error(
         `${id}: resampling to ${STEP_NM} nm moves a test magnitude by ${worst}`
       );
+    // The guard above compares two grids of the response and is empty for
+    // UBVRI, which ship on their native grid. This one asks the question that
+    // matters for them: is the kernel's integral converged in the sampling of
+    // the spectrum? The kernel's 1 nm refinement against a 0.1 nm one. The
+    // tolerance (0.003 mag) is the resampling guard's, fixed before it was
+    // measured: it is the size of the smallest offset difference we report.
+    const finer = refineBand(band, 0.1);
+    let conv = 0;
+    for (const sed of [...TEST_T.map(T => blackbodySed(T)), vega]) {
+      conv = Math.max(conv, Math.abs(abMag(band, sed) - abMag(finer, sed)));
+    }
+    sampling[id] = Number(conv.toFixed(5));
+    if (conv > 0.003)
+      throw new Error(
+        `${id}: integrating at 1 nm instead of 0.1 nm moves a test magnitude by ${conv}`
+      );
   }
-  return { bands, resampling, nat };
+  return { bands, resampling, sampling, nat };
 }
 
 // Published numbers the bands are held to. Tolerances and their reasons are
@@ -330,17 +348,19 @@ const WILLMER = {
   z: 0.494,
 };
 // Willmer prints 3 decimals and estimates the Vega calibration at 2%, 0.02 mag,
-// and for U and B the zero point rests on the Vega-based colour offsets that BM12
-// say are uncertain by a few hundredths. Tolerance: 0.01 for the bands whose
-// passbands are Willmer's own source (2MASS, SDSS: his table is then a rounding
-// check), 0.05 for UBVRI, whose published offsets disagree between BM12 Tables 3
-// and 5 and Willmer's by up to that much.
+// so 0.01 mag (three printed decimals, 2 percent in the calibration's own
+// estimate) is the tolerance for every band. UBVRI had 0.05 in the first version
+// because the pack's U and B were 0.04 off; that was a sampling bug in the
+// kernel (the spectrum was sampled only at the band's own 50 and 100 A nodes,
+// which aliases Vega's Balmer jump), found by the physics review, fixed by
+// integrating on a grid of at most 1 nm, and the tolerance was then set to 0.01
+// before the offsets were recomputed.
 const WILLMER_TOL = {
-  U: 0.05,
-  B: 0.05,
-  V: 0.05,
-  R: 0.05,
-  I: 0.05,
+  U: 0.01,
+  B: 0.01,
+  V: 0.01,
+  R: 0.01,
+  I: 0.01,
   J: 0.01,
   H: 0.01,
   Ks: 0.01,
@@ -437,7 +457,7 @@ const bandsPack = {
   raw: BAND_RAW,
   namedBy: ['js/kernels/radiation/packs.js'],
   async build(bytes) {
-    const { bands, resampling } = buildBands(bytes);
+    const { bands, resampling, sampling } = buildBands(bytes);
     const meta = {
       id: this.id,
       version: '1.0.0',
@@ -526,18 +546,22 @@ const bandsPack = {
           vegaMagnitude: VEGA_MAG,
         },
         steps: [
-          "UBVRI: read Table 1 of Bessell & Murphy 2012 from tools/data-packs/radiation/bm12-table1.txt (transcribed from the pinned PDF with pdftotext; its pivot wavelengths must reproduce the paper's Table 5). Kept on the paper's own 50 A (U) and 100 A grids.",
+          "UBVRI: read Table 1 of Bessell & Murphy 2012 from tools/data-packs/radiation/bm12-table1.txt (transcribed with pdftotext from the pinned PDF, which is the arXiv v1 preprint 1112.2698v1, not the published PASP version; its pivot wavelengths must reproduce the paper's Table 5). Kept on the paper's own 50 A (U) and 100 A grids.",
           'SDSS: read the five extensions of the pinned FITS file, column respt (the response on the sky at 1.3 airmasses, which includes the atmosphere).',
           'TESS and 2MASS: read the pinned response tables (wavelength, response).',
-          'SDSS, TESS and 2MASS: resample by linear interpolation onto a uniform grid (2.5 nm for SDSS, whose curves are tabulated at that spacing; 5 nm for TESS and 2MASS), one zero point either side of the nonzero response, response to 1/10000 of the peak. Refuse any band for which the resampling moves the AB magnitude of Vega, or of a blackbody from 3000 K to 30000 K, by more than 0.003 mag.',
+          'SDSS, TESS and 2MASS: resample by linear interpolation onto a uniform grid (2.5 nm for SDSS, whose curves are tabulated at that spacing; 5 nm for TESS and 2MASS), one zero point either side of the nonzero response, response to 1/10000 of the peak. Refuse any band for which the resampling moves the AB magnitude of Vega, or of a blackbody from 3000 K to 30000 K, by more than 0.003 mag. Refuse any band (UBVRI included, whose grid is not resampled) for which integrating at the kernel 1 nm step instead of 0.1 nm moves those magnitudes by more than 0.003 mag.',
           "Zero point: the AB magnitude of the CALSPEC Vega spectrum alpha_lyr_stis_008 through the shipped band (the kernel's own photon-counting synthetic photometry), minus 0.03: Vega is 0.03 mag in every band, the convention of BM12 and Willmer 2018.",
         ],
-        record: { resamplingWorstMagnitudeChange: resampling },
+        record: {
+          resamplingWorstMagnitudeChange: resampling,
+          integrationStepWorstMagnitudeChange: sampling,
+        },
       },
       assumptions: [
-        "Every response is photon-counting (relative number of photons detected): BM12 Table 1 by their definition; the SDSS curve is a quantum efficiency; the TESS function is the instrument response including QE; the 2MASS curves are Cohen et al.'s photon-counting RSRs. A band published as an energy response must be divided by wavelength before it is added.",
-        'The AB - Vega offset is computed here against the Vega spectrum of Bohlin 2014 with Vega = 0.03 mag in every band. It is not the zero point any survey published, except where the validation says it reproduces one. SDSS and 2MASS reproduce Willmer 2018 to better than 0.01 mag; UBVRI to 0.05 (the published offsets disagree with each other by that much). TESS has no published AB - Vega offset and none is quoted.',
-        'The SDSS curves are the 2001 preliminary curves of J. Gunn and include the atmosphere at 1.3 airmasses; a magnitude through them is on the SDSS system for a point source observed from APO.',
+        "Every response is photon-counting (relative number of photons detected): BM12 Table 1 by their definition; the SDSS curve is a quantum efficiency (the 2001 preliminary curves of J. Gunn, with the atmosphere at 1.3 airmasses); the TESS function is the instrument response including QE; the 2MASS curves are Cohen et al.'s photon-counting RSRs. A band published as an energy response must be divided by wavelength before it is added.",
+        'The AB - Vega offset is computed here against the Vega spectrum of Bohlin 2014 with Vega = 0.03 mag in every band. It is not the zero point any survey published, except where the validation says it reproduces one. SDSS and 2MASS reproduce Willmer 2018 to better than 0.01 mag; UBVRI to 0.01 as well (the spectrum is integrated at steps of at most 1 nm; the Balmer jump and lines of Vega alias if it is sampled only at the 50 and 100 A nodes of the BM12 tables). BM12 own Table 3 offsets for U and B (0.784, -0.107) differ from those of Willmer by 0.02 to 0.03 and are not reproduced. TESS has no published AB - Vega offset and none is quoted.',
+        "The SDSS curves are the 2001 preliminary curves of J. Gunn and include the atmosphere at 1.3 airmasses. Magnitudes through them are true AB magnitudes (the kernel integrates f_nu against the curve); native SDSS u and z magnitudes differ from AB by about -0.04 and +0.02 mag (the survey's AB offsets) and the kernel does not apply them. They are not the Doi et al. 2010 curves.",
+        "2MASS: here Vega is 0.03 mag in every band, as for the other systems; real 2MASS catalogue magnitudes put Vega near 0 in J, H and Ks, so a catalogue magnitude differs from this kernel's Vega magnitude by 0.024 to 0.03 mag.",
         'Gaia G, G_BP and G_RP are not here (RADIATION.md, Blockers).',
       ],
       ...COMMON,
@@ -858,16 +882,28 @@ const CCM_TABLE3 = [
   ['H', 0.63, 0.2693, -0.2473, 0.19],
   ['K', 0.46, 0.1615, -0.1483, 0.114],
 ];
-// Tolerance on A/A_V: 0.015. Set after the first comparison, and said so: the first
-// version of this check claimed 0.006 and failed at B by 0.014. The reason is not
-// rounding. The table's per-filter a(x) and b(x) are the data CCM89 fitted eq. 3
-// to, and their table column "a + b/R_V" is that data, so the polynomial departs from
-// it by the fit's residual: 0.012 at B (a printed 1.337 against 1.325 from eq. 3),
-// under 0.003 at the other eight. 0.015 is the fit residual this pack
-// accepts, and the B departure is recorded in RADIATION.md as a deviation of the
-// paper's table from the paper's equation. L (3.45 um, x = 0.29) lies outside the
-// law's stated range 0.3 to 8 um^-1 and is not compared.
-const CCM_RATIO_TOL = 0.015;
+// Tolerance on A/A_V, per filter, fixed with their reasons before the numbers
+// were compared again. 0.003 for seven filters: the table prints the ratio to 3
+// decimals from a(x) and b(x) printed to 4, and eq. 3 was fitted to those
+// per-filter values, so a seven-filter departure above three units of the last
+// printed digit would mean a wrong coefficient. B gets 0.015: Table 3 is the
+// passband fit that the optical polynomial was fitted to, not its output, and the
+// polynomial has a +0.05 hump between B and U that the fit does not follow, so
+// at x = 2.27 it departs from the printed 1.337 by 0.014 (1.323 from eq. 3; the
+// identity A_B/A_V = 1 + 1/R_V = 1.3226 holds). The first version of this check
+// used a flat 0.015 for all eight, set after the first comparison; that was too
+// loose for seven of them and is disclosed in the PR. L (3.45 um, x = 0.29) lies
+// outside the law's range 0.3 to 8 um^-1 and is not compared.
+const CCM_RATIO_TOL = {
+  U: 0.003,
+  B: 0.015,
+  V: 0.003,
+  R: 0.003,
+  I: 0.003,
+  J: 0.003,
+  H: 0.003,
+  K: 0.003,
+};
 
 const extinctionPack = {
   id: 'radiation-extinction',
@@ -970,12 +1006,12 @@ const extinctionPack = {
         ref: 'Cardelli, Clayton & Mathis 1989, Table 3',
       });
       result[f] = r3(r - ratio);
-      ok &&= Math.abs(r - ratio) <= CCM_RATIO_TOL;
+      ok &&= Math.abs(r - ratio) <= CCM_RATIO_TOL[f];
       void a;
       void b;
     }
     return {
-      check: `A(lambda)/A(V) at R_V = 3.1 reproduces the eight published values of CCM89 Table 3 inside the law's range within ${CCM_RATIO_TOL}, the residual of the paper's own fit to that table`,
+      check: `A(lambda)/A(V) at R_V = 3.1 reproduces the eight published values of CCM89 Table 3 inside the law's range within 0.003 (0.015 at B, where the paper's table is the data its polynomial was fitted to and the polynomial departs from it by 0.014)`,
       against,
       result: { calculatedMinusPublished: result },
       ok,

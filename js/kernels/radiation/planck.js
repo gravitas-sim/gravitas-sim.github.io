@@ -50,8 +50,10 @@ export const effectiveTemperature = (L, radiusM) =>
 
 /**
  * Integral of B_lambda from a to b (metres), W m^-2 sr^-1, by composite
- * Simpson on a grid of n intervals in log wavelength. n = 2000 is converged to
- * 1e-10 over any band that holds the peak; the tails beyond are what the
+ * Simpson on a grid of n intervals in log wavelength. The default n = 2000 was
+ * measured converged to better than 1e-10 (relative to n = 200000) for 30 nm to
+ * 10 um and 10 nm to 1 cm at 5772 K; it is not a guarantee for other bands or
+ * temperatures, so pass a larger n and compare; the tails beyond are what the
  * validation group integrates to show the total is sigma T^4 / pi.
  */
 export function bandRadiance(a, b, T, n = 2000) {

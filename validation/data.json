@@ -1,9 +1,9 @@
 {
  "generatedAt": "2026-10-09",
  "version": "1.0.0",
- "passed": 303,
+ "passed": 304,
  "failed": 0,
- "elapsedMs": 162300,
+ "elapsedMs": 100144,
  "checks": [
   {
    "group": "Unit system",
@@ -3848,13 +3848,13 @@
    "group": "Radiation and photometry",
    "kind": "analytic",
    "name": "A source flat in f_nu has AB magnitude 0 in a band",
-   "measured": 1.205409333191609e-16,
+   "measured": -1.2054093331916083e-15,
    "expected": 0,
    "unit": "mag",
    "tolerance": 1e-12,
    "toleranceKind": "absolute",
    "why": "The AB system is defined by 3631 Jy at every wavelength (Oke & Gunn 1983). It tests the photon-counting weights and the c, Jy and nm conversions together, in a band of the pack.",
-   "error": 1.205409333191609e-16,
+   "error": 1.2054093331916083e-15,
    "pass": true
   },
   {
@@ -3876,13 +3876,27 @@
    "kind": "data",
    "source": "Willmer 2018, ApJS 236, 47, Table 3",
    "name": "AB - Vega offset of SDSS g, against Willmer 2018",
-   "measured": -0.1272,
+   "measured": -0.1255,
    "expected": -0.125,
    "unit": "mag",
    "tolerance": 0.01,
    "toleranceKind": "absolute",
-   "why": "Willmer 2018 Table 3 prints -0.125 for the SDSS g curve with Vega at 0.03 mag; the pack computes it from the CALSPEC Vega spectrum. 0.01: his table has three decimals and his calibration uncertainty is 0.02. UBVRI agree to 0.05, not 0.01, and RADIATION.md says why.",
-   "error": 0.0022000000000000075,
+   "why": "Willmer 2018 Table 3 prints -0.125 for the SDSS g curve with Vega at 0.03 mag; the pack computes it from the CALSPEC Vega spectrum. 0.01: his table has three decimals and his calibration uncertainty is 0.02. UBVRI are held to the same 0.01 (an earlier 0.05 hid a sampling bug, RADIATION.md deviation 1).",
+   "error": 0.0005000000000000004,
+   "pass": true
+  },
+  {
+   "group": "Radiation and photometry",
+   "kind": "data",
+   "source": "Willmer 2018, ApJS 236, 47, Table 3",
+   "name": "AB - Vega offset of Johnson U (through Vega's Balmer jump), against Willmer 2018",
+   "measured": 0.7676,
+   "expected": 0.768,
+   "unit": "mag",
+   "tolerance": 0.01,
+   "toleranceKind": "absolute",
+   "why": "Willmer 2018 Table 3 prints 0.768 for the Bessell & Murphy U passband with Vega at 0.03 mag. U sits on the Balmer jump: integrating the spectrum only at the passband's own 50 A nodes gave 0.806; at steps of at most 1 nm the pack agrees to 0.01 (three printed decimals, 0.02 calibration uncertainty).",
+   "error": 0.00040000000000006697,
    "pass": true
   },
   {
@@ -3893,9 +3907,9 @@
    "measured": 0.4780345957923095,
    "expected": 0.479,
    "unit": "ratio",
-   "tolerance": 0.015,
+   "tolerance": 0.003,
    "toleranceKind": "absolute",
-   "why": "CCM89 Table 3 prints 0.479. The tolerance is the residual of the paper's own fit to that table (0.012 at B, under 0.003 elsewhere), so it is not rounding; tests/radiationKernel.test.js compares all eight filters.",
+   "why": "CCM89 Table 3 prints 0.479 from coefficients printed to four digits; 0.003 is three units of its last digit. B alone departs more (0.014 at x = 2.27: the table is the data the polynomial was fitted to, not its output) and has its own tolerance in tests/radiationKernel.test.js, which compares all eight filters and the exact eq. 3.",
    "error": 0.000965404207690479,
    "pass": true
   },
