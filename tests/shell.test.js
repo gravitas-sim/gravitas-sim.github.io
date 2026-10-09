@@ -204,8 +204,12 @@ describe('the navigation', () => {
     // holds that index to listing them all and each of them to leading back.
     // The kit is reached from Teach and the activity builder
     // (tests/instructorFlow.test.js holds both links).
+    // The investigations check (/studio/course/packs/, REMIX.md) is reached
+    // from the course builder's item for an instructor's investigation
+    // (e2e/remixDelivery.spec.js holds that link).
     const adoption = p =>
-      /^\/teaching\/(investigation|activity|find|kit)\//.test(p);
+      /^\/teaching\/(investigation|activity|find|kit)\//.test(p) ||
+      p === '/studio/course/packs/';
     expect([...served].filter(p => !adoption(p) && !hrefs.has(p))).toEqual([]);
   });
 

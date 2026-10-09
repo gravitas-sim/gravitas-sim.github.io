@@ -251,7 +251,7 @@ export const EN_COURSE = {
   'course.audit.objectiveUnserved': 'No core item serves the objective "{id}".',
   'course.audit.noTime': 'This item has no time.',
   'course.audit.packUnchecked':
-    'This investigation pack has not been opened and checked. Do that at /studio/course/packs/ before sending the course.',
+    'This investigation has not been opened and checked. Check it on the investigations check page before sending the course.',
   'course.audit.needs':
     'This item comes after "{id}", which the course does not have.',
   'course.audit.noGuide': '{lessonTitle} has no instructor guide yet.',
@@ -280,7 +280,7 @@ export const EN_COURSE = {
   'course.error.items': 'From 1 to {max} items.',
   'course.error.kind': 'One of: {kinds}.',
   'course.error.lesson': 'Choose an investigation Gravitas has.',
-  'course.error.packId': 'The public id of the investigation pack.',
+  'course.error.packId': 'The public id of the investigation.',
   'course.error.packLink':
     'The investigation’s link: the part after #, as the Composer’s Publish makes it, up to {max} characters.',
   'course.error.lessonTwice': 'This investigation is already in the course.',

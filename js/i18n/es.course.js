@@ -256,7 +256,7 @@ export const ES_COURSE = {
     'Ningún elemento principal sirve al objetivo «{id}».',
   'course.audit.noTime': 'Este elemento no tiene tiempo.',
   'course.audit.packUnchecked':
-    'Este paquete de investigación no se ha abierto ni comprobado. Hazlo en /studio/course/packs/ antes de enviar el curso.',
+    'Esta investigación no se ha abierto ni comprobado. Compruébala en la página de comprobación de investigaciones antes de enviar el curso.',
   'course.audit.needs':
     'Este elemento va después de «{id}», que el curso no tiene.',
   'course.audit.noGuide': '{lessonTitle} aún no tiene guía para docentes.',
@@ -287,8 +287,7 @@ export const ES_COURSE = {
   'course.error.items': 'De 1 a {max} elementos.',
   'course.error.kind': 'Uno de: {kinds}.',
   'course.error.lesson': 'Elige una investigación que tenga Gravitas.',
-  'course.error.packId':
-    'El identificador público del paquete de investigación.',
+  'course.error.packId': 'El identificador público de la investigación.',
   'course.error.packLink':
     'El enlace de la investigación: lo que sigue a #, como lo hace Publicar en el Compositor, hasta {max} caracteres.',
   'course.error.lessonTwice': 'Esta investigación ya está en el curso.',

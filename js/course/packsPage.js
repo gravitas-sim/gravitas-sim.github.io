@@ -46,7 +46,7 @@ export const WORDS = {
     'ck.h': 'Check a course',
     'ck.note':
       'Paste a course file, or choose one. Each investigation it carries is opened and its pin compared with the digest of the steps it has now.',
-    'ck.label': 'A course file (gravitas.course-pack)',
+    'ck.label': 'A course file',
     'ck.go': 'Check the course',
     'ck.file': 'or choose a course file',
     'ck.none': 'That course carries no investigation pack.',
@@ -95,7 +95,7 @@ export const WORDS = {
     'ck.h': 'Comprobar un curso',
     'ck.note':
       'Pega un archivo de curso, o elige uno. Cada investigación que lleva se abre y su ficha se compara con el resumen de los pasos que tiene ahora.',
-    'ck.label': 'Un archivo de curso (gravitas.course-pack)',
+    'ck.label': 'Un archivo de curso',
     'ck.go': 'Comprobar el curso',
     'ck.file': 'o elige un archivo de curso',
     'ck.none': 'Ese curso no lleva ningún paquete de investigación.',

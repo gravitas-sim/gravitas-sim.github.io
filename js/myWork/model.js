@@ -155,21 +155,19 @@ export function describe(records, library = new Map()) {
         bodies: Object.keys(isObj(value) ? value : {}).length,
       });
     } else if (/^gravitas_(composer|studio|course)_draft:/.test(key)) {
-      const kind = key.split('_')[1];
+      const [, kind, , id] = key.split(/[_:]/);
       out.drafts.push({
         key,
         kind,
-        title:
-          text(value?.doc?.title?.en ?? value?.doc?.title) || key.split(':')[1],
+        title: text(value?.doc?.title?.en ?? value?.doc?.title) || id,
         when: iso(value?.savedAt),
         // Opens this draft, not the one saved last (?open=<id> in each page).
-        href: `${
+        href:
           {
             composer: '/studio/lesson/',
             studio: '/studio/',
             course: '/studio/course/',
-          }[kind]
-        }?open=${encodeURIComponent(key.slice(key.indexOf(':') + 1))}`,
+          }[kind] + `?open=${id}`,
       });
     } else if (key.startsWith('gravitas_evaluation_draft_')) {
       out.drafts.push({
