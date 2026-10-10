@@ -41,8 +41,10 @@ registerMessages('es', ES_GALACTIC);
 let data = null;
 
 /**
- * Resolves true when the instruments' data are usable. Never rejects: a pack
- * that fails to load is reported and the instrument says so on screen.
+ * Resolves true once the packs have been tried. Never rejects, and a failure is
+ * logged, not reported as false, so a missing file never blocks the other
+ * instruments or the audits that wait for every family (as skyReady); the
+ * instrument's rows keep reading "loading".
  */
 export const galacticReady = loadGalacticPacks()
   .then(d => {
@@ -51,7 +53,7 @@ export const galacticReady = loadGalacticPacks()
   })
   .catch(err => {
     console.warn('The galactic data could not be loaded:', err);
-    return false;
+    return true;
   });
 
 const num = (v, sig = 3) => formatNumber(v, { sig, sci: false });
