@@ -80,6 +80,14 @@ export const WIDGET_FAMILIES = Object.freeze({
   gw: ['gw-lab', 'gw-real'],
   light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
   galactic: ['solar-motion', 'rotating-disk', 'cluster-members'],
+  sky: [
+    'sky-turning',
+    'sky-seasons',
+    'sky-phases',
+    'sky-eclipses',
+    'sky-wanderers',
+    'sky-plan',
+  ],
   compare: ['compare-transit'],
   gwEvents: ['gw-events'],
 });

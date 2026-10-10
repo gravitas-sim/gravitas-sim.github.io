@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1686.5,
+    limit: 1637.9,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -580,8 +580,11 @@ const BUDGETS = [
       '1,611,524 bytes (1573.75 KB; 4330.9 KB raw) after merging v2. Under ' +
       "the owner's standing size-budget approval (CLAUDE.md, 2026-10-10); " +
       'D-BUDGET-04. The initial download is untouched (789.0 of 830 KB).' +
-      '\n\nRaised from 1573.8 to 1573.9 KB for Prompt 92 (D-BUDGET-08, the standing size-budget approval): the three galactic data packs the Observatory opens (gaiaSolarNeighbourhood, gaiaNgc2420, milkyWayRotationCurve) are lazy chunks; measured 1,611,595 bytes gzipped, 1573.82 KB, an overrun of 0.02 KB.' +
-      '\n\nRaised from 1573.9 to 1686.5 KB for Prompt 92 part 2 (D-BUDGET-09, the standing size-budget approval): the galactic instrument family (js/galacticWidgets.js, the galactic model and its words) and the three Gaia / rotation-curve data packages it loads. Measured 1,726,924 bytes gzipped, 1686.45 KB, an overrun of 112.55 KB. Most of it is the packs counted more than once: the composer, course-packs and observatory bundles each reach the family through the instrument registry and each carries its own copy of the 65 KB (40 KB gzipped) solar-neighbourhood chunk, and the cluster and rotation packs likewise. Putting the packs behind a sidecar JSON file as the Sky Lab does for its star table would take most of it back; recommended for Carl.',
+      '\n\nRaised from 1573.8 to 1637.9 KB gzipped for the five sky ' +
+      'investigations (Prompt 89) with their Spanish, depths, instrument family ' +
+      'and guides, measured at 1,677,161 bytes (1637.85 KB; 4492.4 KB raw) ' +
+      'after merging v2 ce3d2e8. Under the same standing approval; ' +
+      'D-BUDGET-07.',
   },
 ];
 

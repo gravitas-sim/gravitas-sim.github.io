@@ -200,12 +200,17 @@ test.describe('the curated orders', () => {
 
     // The first lesson of a sequence assumes nothing; a later one names what
     // it assumes.
-    await expect(
-      page.locator('.inv-seq').first().locator('.inv-seq-needs').first()
-    ).toHaveClass(/is-none/);
-    await expect(
-      page.locator('.inv-seq').first().locator('.inv-seq-needs').nth(1)
-    ).toContainText('Kepler');
+    // Named by a lesson it holds, so the order the sequences are listed in
+    // (The sky is first) is not what this checks.
+    const orbital = page
+      .locator('.inv-seq')
+      .filter({ has: page.locator('[data-sequence-lesson="keplers-laws"]') });
+    await expect(orbital.locator('.inv-seq-needs').first()).toHaveClass(
+      /is-none/
+    );
+    await expect(orbital.locator('.inv-seq-needs').nth(1)).toContainText(
+      'Kepler'
+    );
 
     await page.locator('#investigationSearch').fill('transit');
     await expect(sequences).toBeHidden();
@@ -422,10 +427,13 @@ test.describe('everyone can use it', () => {
     await expect(
       page.locator('#investigationFilterSubject option').first()
     ).toHaveText('Cualquier materia');
-    await expect(page.locator('.inv-seq-title').first()).toHaveText(
+    const orbitalEs = page
+      .locator('.inv-seq')
+      .filter({ has: page.locator('[data-sequence-lesson="keplers-laws"]') });
+    await expect(orbitalEs.locator('.inv-seq-title')).toHaveText(
       'Mecánica orbital'
     );
-    await expect(page.locator('.inv-seq-needs').first()).toHaveText(
+    await expect(orbitalEs.locator('.inv-seq-needs').first()).toHaveText(
       /No da nada por hecho/
     );
 

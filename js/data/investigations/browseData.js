@@ -112,6 +112,26 @@ export const BROWSE_META = {
     tags: ['observing', 'stars'],
     numericCount: 3,
   },
+  'the-turning-sky': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 2,
+  },
+  'the-sun-through-the-year': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 2,
+  },
+  'phases-and-eclipses': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 2,
+  },
+  'wanderers-on-the-sky': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 2,
+  },
+  'plan-a-night': {
+    tags: ['observing', 'stars'],
+    numericCount: 3,
+  },
   'lines-and-motion': {
     tags: ['observing', 'stars'],
     numericCount: 1,

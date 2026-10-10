@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 30 investigations and 748 steps: 698 steps
+Across 32 investigations and 765 steps: 715 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 314 show a prescribed model result, 106 draw
-on a stored dataset, 193 put a self-contained panel beside the text,
-129 keep something, and 30 are prose.
-Of 95 prediction loops, 95 are returned to,
-95 produce a measurement before they are answered, and
+running integration, 326 show a prescribed model result, 106 draw
+on a stored dataset, 205 put a self-contained panel beside the text,
+130 keep something, and 30 are prose.
+Of 97 prediction loops, 97 are returned to,
+97 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-95 hold their marking until the experiment settles them.
+97 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -371,6 +371,76 @@ Of 95 prediction loops, 95 are returned to,
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:blackbody`, control blackbody/T, measures the peak wavelength at three temperatures, and its product with the temperature, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
+## The Turning Sky (`the-turning-sky`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words, read.
+- **Objects the steps declare:** sun.
+- **Instruments:** sky-turning.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-tomorrow → rise-shift, a-month-on, why-four-minutes, sidereal-clock, height-at-the-meridian, never-sets, one-sentence → rise-shift.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:sky-turning`, control sky-turning/nights, measures the time a star rises on night 0 and night 30, and the sidereal time at midnight, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Sun Through the Year (`the-sun-through-the-year`)
+
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words, read.
+- **Objects the steps declare:** sun.
+- **Instruments:** sky-seasons.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-noon-height → three-noons, what-if-the-tilt, three-day-lengths, distance-is-not-it, equinox-longitude, one-sentence → three-noons.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:sky-seasons`, control sky-seasons/day, measures the Sun’s altitude at noon at the equinox and the two solstices, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Phases and Eclipses (`phases-and-eclipses`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words, read.
+- **Objects the steps declare:** sun.
+- **Instruments:** sky-phases, sky-eclipses.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-quarter → four-phases, phase-from-elongation → four-phases; predict-the-eclipses → eclipse-table, months-between, why-not-every-month, one-sentence → eclipse-table.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:sky-phases`, control sky-phases/day, measures the lit fraction of the Moon at four ages, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Wanderers on the Sky (`wanderers-on-the-sky`)
+
+- **Steps:** 11. Scene declared on 11; a reader can change something on 0; 11 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words, read.
+- **Objects the steps declare:** sun.
+- **Instruments:** sky-wanderers.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-loop → retrograde-window, fastest-westward, two-views-one-event, venus-elongation, the-inner-limit, jupiter-loop, when-retrograde, one-sentence → retrograde-window.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:sky-wanderers`, control sky-wanderers/day, measures the first days of retrograde and of direct motion for Mars, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Plan a Night at the Telescope (`plan-a-night`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option, answer-in-words, read.
+- **Objects the steps declare:** sun.
+- **Instruments:** sky-plan.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-dark → dark-hours, airmass-at-thirty, why-limit-airmass, what-the-moon-costs, count-the-targets, tighten-the-limit, write-the-plan → dark-hours.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:sky-plan`, control sky-plan/airmassMax, measures the hours of astronomical dark on two nights, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
 ## Lines and Motion (`lines-and-motion`)
 
 - **Steps:** 11. Scene declared on 11; a reader can change something on 0; 11 declare a scene nobody on that step can touch.
@@ -398,46 +468,4 @@ Of 95 prediction loops, 95 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:kirchhoff`, control kirchhoff/Tc, measures the brightness at the H-alpha center against the source's, with the same cloud cooler than the source (a dark line) and hotter (a bright line), evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
-## The Sun’s Motion (`the-suns-motion`)
-
-- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
-- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
-- **Objects the steps declare:** sun, neighbor.
-- **Instruments:** solar-motion.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** predict-the-mean → measure-the-sun, why-v-is-big, measure-farther, the-lsr-problem, record-both-frames, where-is-the-apex, state-the-assumption, what-you-worked-out → measure-the-sun.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:solar-motion`, control solar-motion/maxPc, measures the Sun's U, V and W against the mean of the stars within the distance limit, with their uncertainties, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
-## The Rotating Disk (`the-rotating-disk`)
-
-- **Steps:** 12. Scene declared on 12; a reader can change something on 0; 12 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 12 prescribed model, 0 stored dataset, 12 self-contained panel.
-- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
-- **Objects the steps declare:** sun, orbiter.
-- **Instruments:** rotating-disk.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** predict-the-shape → measure-a-and-b, why-weight-by-distance, speed-at-the-sun, the-rotation-curve → measure-a-and-b; predict-stars-alone → fit-stars-only, fit-with-a-halo, where-the-halo-matters, say-what-it-assumes, what-you-worked-out → fit-stars-only.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:rotating-disk`, control rotating-disk/weight, measures the Oort constants A and B from Gaia proper motions, with the stars weighted by distance and all alike, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
-
-## Cluster Membership by Motion (`cluster-membership`)
-
-- **Steps:** 11. Scene declared on 11; a reader can change something on 0; 11 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 11 prescribed model, 0 stored dataset, 11 self-contained panel.
-- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
-- **Objects the steps declare:** member, field.
-- **Instruments:** cluster-members.
-- **Stored data:** none.
-- **Evidence kept:** notebook-fields.
-- **Prediction loops:** predict-the-clump → measure-the-cluster, a-label-or-a-probability, move-the-threshold, why-so-stable, does-the-color-agree, read-the-distance, what-is-not-corrected, one-sentence, what-you-worked-out → measure-the-cluster.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:cluster-members`, control cluster-members/threshold, measures the number of stars above a membership-probability threshold, and the cluster's proper motion, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

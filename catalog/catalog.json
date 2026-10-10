@@ -24,10 +24,6 @@
       "en": "The Butterfly Effect in Space",
       "es": "El efecto mariposa en el espacio"
     },
-    "cluster-membership": {
-      "en": "Cluster Membership by Motion",
-      "es": "Pertenencia a un cúmulo por movimiento"
-    },
     "color-and-temperature": {
       "en": "Color and Temperature",
       "es": "Color y temperatura"
@@ -80,6 +76,14 @@
       "en": "Bound, Unbound and Escape",
       "es": "Ligado, no ligado y escape"
     },
+    "phases-and-eclipses": {
+      "en": "Phases and Eclipses",
+      "es": "Fases y eclipses"
+    },
+    "plan-a-night": {
+      "en": "Plan a Night at the Telescope",
+      "es": "Planifica una noche en el telescopio"
+    },
     "power-law-gravity": {
       "en": "What If Gravity Were Not Inverse Square?",
       "es": "¿Y si la gravedad no fuera inversa al cuadrado?"
@@ -92,13 +96,13 @@
       "en": "Why Mars Goes Backwards",
       "es": "Por qué Marte va hacia atrás"
     },
-    "the-rotating-disk": {
-      "en": "The Rotating Disk",
-      "es": "El disco que gira"
+    "the-sun-through-the-year": {
+      "en": "The Sun Through the Year",
+      "es": "El Sol a lo largo del año"
     },
-    "the-suns-motion": {
-      "en": "The Sun’s Motion",
-      "es": "El movimiento del Sol"
+    "the-turning-sky": {
+      "en": "The Turning Sky",
+      "es": "El cielo que gira"
     },
     "tides": {
       "en": "Tides",
@@ -111,6 +115,10 @@
     "twelve-nights": {
       "en": "Twelve Nights",
       "es": "Doce noches"
+    },
+    "wanderers-on-the-sky": {
+      "en": "Wanderers on the Sky",
+      "es": "Errantes en el cielo"
     },
     "weighing-stars": {
       "en": "Weighing the Stars",
