@@ -249,12 +249,13 @@ export const LAZY_FAMILIES = Object.freeze({
     'GW_WIDGETS',
     ['gw-lab', 'gw-real']
   ),
-  // Its bandpasses arrive behind a second import; whenWidgetsReady() waits.
+  // Its bandpasses, line list and spectra arrive behind more imports;
+  // whenWidgetsReady() waits.
   light: familyEntry(
     () => import('./lightWidgets.js'),
     './lightWidgets.js',
     'LIGHT_WIDGETS',
-    ['blackbody'],
+    ['blackbody', 'spectrum-viewer'],
     'lightReady'
   ),
   // Its strain arrives behind a second import, like the spectra's flux.

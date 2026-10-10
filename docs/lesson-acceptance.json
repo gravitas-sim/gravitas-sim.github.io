@@ -348,6 +348,16 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-peak", "three-peaks"],
       "evidenceFrom": "model"
+    },
+    "lines-and-motion": {
+      "centralExperimentId": "ce.lines-and-motion",
+      "object": "panel:spectrum-viewer",
+      "control": "spectrum-viewer/src",
+      "quantity": "the Doppler velocity of two synthetic stars from their H-alpha lines, one receding and one approaching",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["predict-the-shift", "measure-one-shift"],
+      "evidenceFrom": "model"
     }
   }
 }

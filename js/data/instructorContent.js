@@ -16,6 +16,92 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'lines-and-motion': {
+    topic:
+      'Spectral lines and the Doppler shift: naming a star’s lines, and a velocity from a shift with its uncertainty',
+    difficulty: 'Introductory',
+    placement:
+      'After Color and Temperature, once students know a blackbody’s smooth curve, and before any investigation that uses a radial velocity (Radial Velocity, the exoplanet investigations). It supports OpenStax Astronomy 2e sections 5.3 (spectroscopy) and 5.4 (the Doppler effect).',
+    overview:
+      'Students read the deepest dips in two real SDSS spectra against the line list, predict what a motion along the line of sight does to a line, and measure the shift on synthetic spectra whose velocity the viewer does not show. They turn a shift into a speed with its sign and its uncertainty, and meet a star whose shift is smaller than its uncertainty and so cannot be called a motion. They end on why a spectrum gives only the motion toward or away from us. Quantitative depth adds the relativistic form, the weighted mean of two lines and the equivalent width; advanced depth measures a real star’s velocity from two of its own lines and compares it with the SDSS catalog value.',
+    priorKnowledge: [
+      'That a spectrum is light spread out by wavelength, and that a blackbody’s is smooth',
+      'Dividing one number by another, and the idea of a fraction of a wavelength',
+      'What “toward us” and “away from us” mean for a moving source, as with a siren',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Lines belong to atoms',
+        body: 'Each kind of atom absorbs at its own wavelengths, so the dark lines in a star’s spectrum name what is in its atmosphere. Which lines show depends on temperature: hydrogen is deepest in the A star and calcium in the G star.',
+      },
+      {
+        heading: 'A motion moves every line by the same fraction',
+        body: 'The shift Δλ ÷ λ is v ÷ c for speeds far below the speed of light, to longer wavelengths when the source recedes and shorter when it approaches. Students measure it on synthetic stars before they are given the formula.',
+      },
+      {
+        heading: 'A result needs its uncertainty',
+        body: 'The viewer prints each velocity with a ± . Synthetic star 3 is noisy on purpose: its shift is smaller than its uncertainty, so the data cannot say whether it moves. A small number is not a zero.',
+      },
+      {
+        heading: 'Only the line of sight',
+        body: 'A line moves for the part of the motion along the line of sight. A sideways motion leaves no first-order mark, so a spectrum cannot give a star’s speed across the sky.',
+      },
+    ],
+    features: [
+      {
+        name: 'Spectrum viewer (the Light Lab)',
+        text: 'Four observed SDSS DR18 spectra (one each of A, G, K and M) and three synthetic ones, a line list laid over the spectrum, a zoom on one line with the continuum fit and its windows shaded, and a list under the plot of the measured center, shift, velocity, equivalent width and depth, each with its uncertainty. The list is the viewer’s text equivalent: every number on the canvas is in it.',
+      },
+      {
+        name: 'The measurement node',
+        text: 'The viewer runs the same line measurement the Measurement pipeline offers (js/measure/spectrumLine.js): a straight-line continuum from two windows, an equivalent width, a depth-weighted center and a velocity. Its uncertainties assume white noise as large as the continuum’s scatter; for the real SDSS spectra, which are not white, they are only an indication.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the relativistic Doppler formula, the weighted mean of two lines and the equivalent width. Advanced: the velocity of a real star from H-alpha and H-beta, its comparison with the SDSS catalog z, and why the spectra are heliocentric.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A star that is moving fast has lines that disappear or split.',
+        response:
+          'Step 4. The lines keep their shape and move together, each by the same fraction of its wavelength. Splitting is a different effect (two stars, or a magnetic field).',
+      },
+      {
+        claim: 'A small measured shift means the star is at rest.',
+        response:
+          'Step 8. The uncertainty is larger than the shift, so rest is as consistent with the data as the number shown. A measurement is a value and how well it is known.',
+      },
+      {
+        claim: 'A spectrum gives a star’s whole velocity.',
+        response:
+          'Step 9. Only the part along the line of sight shifts the lines; the motion across the sky leaves a second-order effect near one part in 10⁸.',
+      },
+      {
+        claim: 'A redshift always means moving away at v = c z.',
+        response:
+          'The first quantitative step. The simple form holds far below the speed of light; at z = 0.1 it is 5 percent off, and at that size most of a galaxy’s shift is the stretching of space.',
+      },
+    ],
+    teachingNotes: [
+      'The synthetic spectra are models with a fixed noise realisation, so every student sees the same numbers. The truth (+85, −142 and +12 km/s) is in the answer key and the validator accepts within 12 km/s of it for stars 1 and 2.',
+      'The real SDSS spectra are not white-noise and have blended lines: the A star’s H-alpha and H-beta agree within about two of their uncertainties, and the G star’s H-beta is blended and measures poorly. The viewer reports what it measures; do not grade a student on a real line the node cannot fit.',
+      'The SDSS spectra are thinned to about 4.5 Å per pixel at H-alpha, so a 100 km/s shift (2 Å) is under half a pixel. That is why the shift is measured on the synthetic spectra, which are sampled every 0.5 Å.',
+      'The SDSS catalog z used in the advanced steps is the pipeline’s template fit over the whole spectrum. The comparison instrument that overlays a measurement on a catalog does not exist yet, so the investigation compares by number.',
+    ],
+    discussion: [
+      'Two stars show the same shift. What would you need to know to say they move at the same speed?',
+      'Why does a longer exposure make a velocity more certain, and what does it cost the observer?',
+      'What could you learn from a spectrum that a color index (the last investigation) cannot give?',
+    ],
+    extensions: [
+      'Radial Velocity uses the same shift, measured over weeks, to find a planet.',
+      'Measure the equivalent width of H-beta in each of the four SDSS stars and say how it changes with temperature.',
+    ],
+    modelNotes:
+      'The synthetic spectra are a 5,800 K Planck continuum with four Gaussian absorption lines (H-alpha, H-beta, H-gamma, Ca II K) at the line list’s vacuum wavelengths, shifted by the relativistic Doppler formula, sampled every 0.5 Å and given seeded Gaussian noise; the depths and widths are round numbers, not a fit to any star. The measurement is a straight-line continuum, an equivalent-width sum and a depth-weighted center, with velocity c × shift ÷ rest (non-relativistic, stated on screen). The real spectra are SDSS DR18 wavelengths in vacuum and in the Sun’s frame.',
+  },
+
   'color-and-temperature': {
     topic:
       'Blackbody radiation: Wien’s law, color indices, and where a blackbody stops being a star',
