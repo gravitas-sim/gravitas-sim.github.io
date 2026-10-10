@@ -108,6 +108,7 @@ export const FAMILY_IDS = Object.freeze({
   ],
   gw: ['gw-lab', 'gw-real'],
   light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
+  compare: ['compare-transit'],
   gwEvents: ['gw-events'],
 });
 

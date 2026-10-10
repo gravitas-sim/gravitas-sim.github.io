@@ -134,6 +134,9 @@ export const ES_OBSERVATORY = {
   'obs.origin.model': 'Un modelo',
   'obs.origin.compilation': 'Valores publicados, recopilados',
   'obs.origin.imported': 'Tu archivo',
+  'obs.origin.synthetic':
+    'Una observación sintética: la hizo un modelo de Gravitas con una configuración y una semilla declaradas, no se observó',
+  'obs.synthetic.badge': 'sintética',
 
   'obs.seeing.title': 'Lo que estás viendo',
   'obs.seeing.imported':
@@ -274,6 +277,7 @@ export const ES_OBSERVATORY = {
   'obs.table.next': 'Filas siguientes',
   'obs.export.json': 'Guardar como JSON (todo, con tus cambios)',
   'obs.export.csv': 'Guardar las filas como CSV',
+  'obs.cmp.title': 'Comparar un modelo con los datos',
   'obs.fit.title': 'Ajustar un modelo (diagnóstico)',
   'obs.arc.title':
     'O busca las épocas de Gaia de una estrella en el CDS (en vivo, opcional)',

@@ -1407,6 +1407,7 @@
             "blackbody",
             "spectrum-viewer",
             "kirchhoff",
+            "compare-transit",
             "gw-events"
           ]
         }

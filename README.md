@@ -304,7 +304,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->8253<!--/fact--> strings, and
+of <!--fact:uiStrings-->8351<!--/fact--> strings, and
 all <!--fact:investigations-->27<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -340,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->9235<!--/fact--> tests across <!--fact:jestSuites-->295<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->9353<!--/fact--> tests across <!--fact:jestSuites-->300<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -365,8 +365,8 @@ reports what the browser downloads at start-up separately from what is deferred:
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->208<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->581<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->4270<!--/fact--> KB         | <!--fact:buildDeferredChunks-->257<!--/fact--> |
+| JavaScript at start-up | <!--fact:buildStartupJs-->581<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->4331<!--/fact--> KB         | <!--fact:buildDeferredChunks-->260<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->789<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -485,8 +485,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->2023<!--/fact--> tests
-in <!--fact:e2eFiles-->147<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->2036<!--/fact--> tests
+in <!--fact:e2eFiles-->150<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -585,7 +585,7 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-All <!--fact:instructorDocuments-->160<!--/fact--> documents are generated from
+All <!--fact:instructorDocuments-->170<!--/fact--> documents are generated from
 the investigations at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 

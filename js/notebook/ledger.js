@@ -374,6 +374,7 @@ export function contextText(c, t) {
 /** Sources whose entries are an envelope made elsewhere (./artifactEntry.js). */
 export const ARTIFACT_SOURCES = [
   'inference-fit',
+  'comparison',
   'sweep-analysis',
   'experiment-result',
 ];

@@ -65,7 +65,8 @@
         "observed",
         "model",
         "compilation",
-        "imported"
+        "imported",
+        "synthetic"
       ]
     },
     "source": {
@@ -79,7 +80,8 @@
             "pack",
             "builtin",
             "import",
-            "experiment"
+            "experiment",
+            "forward"
           ]
         },
         "id": {
@@ -353,6 +355,55 @@
     "workspace": {
       "type": "object",
       "description": "What the file was opened from, the changes made to it in order, and the observation as opened, so a read-back replays them. `openedFrom.digest` is the content digest of the observation as opened."
+    },
+    "synthetic": {
+      "type": "object",
+      "description": "Only when origin is synthetic: the forward model that made the observation, the gravitas.observing-setup/1 it was observed with, and the truth manifest (the parameters that made it and the noise injected). js/forward/observation.js lists what is in it; the Observatory's compare-with-truth view reads it.",
+      "required": [
+        "forwardModel",
+        "setup",
+        "truth"
+      ],
+      "properties": {
+        "forwardModel": {
+          "type": "object",
+          "required": [
+            "id",
+            "version"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          }
+        },
+        "setup": {
+          "type": "object"
+        },
+        "truth": {
+          "type": "object",
+          "required": [
+            "parameters"
+          ],
+          "properties": {
+            "parameters": {
+              "type": "array"
+            },
+            "injected": {
+              "type": "object"
+            },
+            "columns": {
+              "type": "object"
+            },
+            "notes": {
+              "type": "array"
+            }
+          }
+        }
+      }
     }
   }
 }

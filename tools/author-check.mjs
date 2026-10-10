@@ -38,6 +38,10 @@ import {
   RULE_DESCRIPTION as MODEL_RULE_DESCRIPTION,
   modelCheckFindings,
 } from './authoring/modelChecked.mjs';
+import {
+  RULE_ID as FORWARD_RULE,
+  forwardFindings,
+} from './authoring/forwardSources.mjs';
 
 const argv = process.argv.slice(2);
 const has = flag => argv.includes(flag);
@@ -112,6 +116,18 @@ for (const f of await realSystemFindings()) {
   findings.push({
     level: 'error',
     rule: 'instructor/attribution',
+    lesson: f.where,
+    step: null,
+    message: f.message,
+  });
+}
+
+// Lesson-declared forward-model sources (Prompt 84): each declared setup is
+// valid and its measurement reproduces the truth manifest.
+for (const f of forwardFindings()) {
+  findings.push({
+    level: 'error',
+    rule: FORWARD_RULE,
     lesson: f.where,
     step: null,
     message: f.message,

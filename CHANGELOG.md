@@ -13,8 +13,11 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+- Prompt 85: the model-versus-data comparison instrument (`js/compare/`, Observatory panel, `COMPARE_INSTRUMENT.md`); artifact source kind `comparison`; notebook source `comparison`. Lesson docking is not built.
+
 ### Added
 
+- **The forward-model loop** (Roadmap II P84). `gravitas.observing-setup/1` and seven pure forward models (transit, radial velocity, astrometry, periodic, spectrum, catalogue, image) return synthetic observations with a truth manifest; the Observatory labels them and compares a fit with the truth. See `FORWARD_MODELS.md`.
 - **A Package from the Composer** (Roadmap II P81, repair R-A5, SDK 1.10.0).
   `sdk init <type> <id> --from <pack>` now wraps an investigation pack (a
   Composer save or a remix) and a course pack as well as a scenario pack: it
@@ -1522,7 +1525,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->160<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->170<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is

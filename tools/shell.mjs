@@ -61,6 +61,7 @@ export const WORDS = {
   teach: ['Teach', 'Enseñar'],
   about: ['About', 'Acerca de'],
   library: ['Library', 'Biblioteca'],
+  skyLab: ['Sky Lab', 'Laboratorio del cielo'],
   myWork: ['My work', 'Mi trabajo'],
   investigations: ['Investigations', 'Investigaciones'],
   courses: ['Courses', 'Cursos'],
@@ -118,6 +119,7 @@ export const NAV = [
       ['sandbox', '/'],
       ['lab3d', '/3d/'],
       ['missionLab', '/mission/lab/'],
+      ['skyLab', '/sky/'],
     ],
   ],
   [
