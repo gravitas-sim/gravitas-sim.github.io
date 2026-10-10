@@ -4719,6 +4719,10 @@ export const INSTRUCTOR_CONTENT = {
         name: 'Depth',
         text: 'Quantitative: the Sun’s bending by hand. Advanced: the distance at which rays from the limb cross, 548 au.',
       },
+      {
+        name: 'Presets',
+        text: 'The Sun’s limb, a ray 100 solar radii out, a ten-solar-mass star and a black hole of 100 million Suns load in one click, each with its readout.',
+      },
     ],
     misconceptions: [
       {
@@ -4736,11 +4740,17 @@ export const INSTRUCTOR_CONTENT = {
         response:
           'It is a weak-field result; at 2.4 Schwarzschild radii the instrument says it cannot be trusted.',
       },
+      {
+        claim: 'Only a black hole can bend light.',
+        response:
+          'Any mass does: the Sun’s limb turns a ray by 1.75 arcseconds.',
+      },
     ],
     teachingNotes: [
       'The model is a thin point lens in the weak field (GRAVITATIONAL_LENSING.md). Say so if a student asks about a ray that dips close to a black hole.',
-      'The 1919 values are from Dyson, Eddington and Davidson (1920): 1.98 ± 0.12 at Sobral and 1.61 ± 0.30 at Principe. Later reductions of the plates are debated; the lesson states only the published numbers.',
+      'The 1919 values are from Dyson, Eddington and Davidson (1920): 1.98 ± 0.12 at Sobral and 1.61 ± 0.30 at Principe. Later reductions of the plates are debated; the investigation states only the published numbers.',
       'The Sun’s bending uses the app’s constants, 1.7517 arcseconds; the rounded 1.75 is the textbook value.',
+      'The instrument’s closest approach is a log slider in solar radii, so the Sun’s limb is the left-hand preset; remind students the Newtonian row is half of the other.',
     ],
     discussion: [
       'Why is a measurement that could have gone either way worth more than one that could not?',
@@ -4790,6 +4800,10 @@ export const INSTRUCTOR_CONTENT = {
         name: 'Depth',
         text: 'Quantitative: the mass inside a 1-arcsecond ring by hand (2.46 × 10^11). Advanced: the speed spread of the galaxy that makes it, 263 km/s.',
       },
+      {
+        name: 'Presets',
+        text: 'A Sun at 4 kpc, a galaxy at 1 Gpc with the source straight behind or off to one side, and an isothermal galaxy load in one click.',
+      },
     ],
     misconceptions: [
       {
@@ -4805,11 +4819,17 @@ export const INSTRUCTOR_CONTENT = {
         claim: 'Lensed galaxies should be rings.',
         response: 'Alignment is rarely exact; off-axis the images are arcs.',
       },
+      {
+        claim: 'A bigger lens always makes a bigger ring on the sky.',
+        response:
+          'The ring grows as the square root of the mass and falls with distance; a star’s ring is a thousand times smaller than a galaxy’s.',
+      },
     ],
     teachingNotes: [
       'Distances are Euclidean with the source at twice the lens distance: no cosmology, no ellipticity or external shear (GRAVITATIONAL_LENSING.md). Say so for a student who compares with a real lens such as the Einstein Cross.',
       'The mass slider is the mass inside the Einstein radius; for the isothermal sphere the instrument gives the equivalent speed spread, 4π(σ/c)²Dls/Ds = θE.',
       'The inner image’s magnification is negative because it is flipped; the totals use absolute values.',
+      'The source offset is a slider, not a draggable point (the widget framework has no pointer hook); it works from the keyboard.',
     ],
     discussion: [
       'Why does a galaxy at a billion parsecs make a ring a thousand times larger than a star at four thousand?',
@@ -4880,11 +4900,17 @@ export const INSTRUCTOR_CONTENT = {
         response:
           'The no-blend fit’s bar is 0.06 days and its answer is 8 days short, with chi-square 2.1.',
       },
+      {
+        claim: 'The star really brightens, so something is heating it.',
+        response:
+          'Its output is unchanged; the lens focuses more of the same light toward us, and the curve is symmetric.',
+      },
     ],
     teachingNotes: [
       'The model is one point lens, a uniform source disk and straight constant-speed motion; no parallax, limb darkening, binary lens or second source (GRAVITATIONAL_LENSING.md).',
-      'The synthetic event has a fixed seed, so every student sees the same points, and the answer key is exact; the truth (t0 = 0, u0 = 0.15, tE = 25 days, source share 0.6) is in the lesson file, not on screen.',
+      'The synthetic event has a fixed seed, so every student sees the same points, and the answer key is exact; the truth (t0 = 0, u0 = 0.15, tE = 25 days, source share 0.6) is in the investigation’s source file, not on screen.',
       'The tolerance on the free fit is two standard errors; the held fit’s chi-square is read, not its tE, so a student cannot be marked wrong for a narrower reading.',
+      'Presets “A very close pass, finite source” and “Fit the synthetic event” are the two to rehearse; the fit rows appear only with the synthetic event switched on.',
     ],
     discussion: [
       'Which of mass, distance and speed would you most like to measure independently, and how?',

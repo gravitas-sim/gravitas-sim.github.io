@@ -191,13 +191,13 @@ const A_LENS_PASSING_BY = {
         {
           id: 'near',
           label: 'At 2 kpc and 100 km/s',
-          unit: 'M☉',
+          unit: 'solar masses',
           hint: '0.075',
         },
         {
           id: 'far',
           label: 'At 6 kpc and 300 km/s',
-          unit: 'M☉',
+          unit: 'solar masses',
           hint: '0.68',
         },
       ],

@@ -26,7 +26,7 @@ export default {
              D<sub>ls</sub> = 1 Gpc. One gigaparsec is 3.086 × 10<sup>25</sup> m
              and a solar mass is 1.989 × 10<sup>30</sup> kg.`,
       prompt: 'The mass inside the ring',
-      unit: '10¹¹ M☉',
+      unit: 'solar masses ×10^11',
       answer: 2.46,
       tolerance: 0.05,
       hints: [

@@ -123,7 +123,7 @@ const EINSTEIN_RINGS_AND_ARCS = {
              solar masses inside the ring, 1 gigaparsec away. Read the Einstein
              radius in arcseconds, and its size at the lens in kiloparsecs.`,
       fields: [
-        { id: 'theta', label: 'Einstein radius', unit: '″', hint: '0.64' },
+        { id: 'theta', label: 'Einstein radius', unit: 'arcsec', hint: '0.64' },
         { id: 'radius', label: 'Radius at the lens', unit: 'kpc', hint: '3.1' },
       ],
       validate: v => {
@@ -160,7 +160,7 @@ const EINSTEIN_RINGS_AND_ARCS = {
         {
           id: 'mass',
           label: 'Mass inside the ring',
-          unit: '10¹¹ M☉',
+          unit: 'solar masses ×10^11',
           hint: '2.5',
         },
       ],
@@ -192,7 +192,12 @@ const EINSTEIN_RINGS_AND_ARCS = {
              outer image's position (in Einstein radii) and the total
              magnification.`,
       fields: [
-        { id: 'outer', label: 'Outer image', unit: 'θ_E', hint: '1.28' },
+        {
+          id: 'outer',
+          label: 'Outer image',
+          unit: 'Einstein radii',
+          hint: '1.28',
+        },
         { id: 'total', label: 'Total magnification', unit: '', hint: '2.18' },
       ],
       validate: v => {
@@ -225,7 +230,12 @@ const EINSTEIN_RINGS_AND_ARCS = {
              ring and the same source position. Read the outer image and the
              total magnification again.`,
       fields: [
-        { id: 'outer', label: 'Outer image', unit: 'θ_E', hint: '1.5' },
+        {
+          id: 'outer',
+          label: 'Outer image',
+          unit: 'Einstein radii',
+          hint: '1.5',
+        },
         { id: 'total', label: 'Total magnification', unit: '', hint: '4' },
       ],
       validate: v => {

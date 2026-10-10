@@ -22,7 +22,7 @@ export default {
              bending of a ray that grazes the limb is 4GM ÷ (c²R) radians, and an
              arcsecond is 4.848 × 10<sup>−6</sup> radians.`,
       prompt: 'The bending of a ray at the Sun’s limb',
-      unit: '″',
+      unit: 'arcsec',
       answer: 1.75,
       tolerance: 0.02,
       hints: [
