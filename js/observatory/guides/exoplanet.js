@@ -31,8 +31,6 @@
 // step against these rules and every answer against the data.
 // =============================================================================
 
-import { transitParameters } from '../../forward/models/transit.js';
-import { EARTH_RADIUS_M, JUPITER_RADIUS_M } from '../../constants.js';
 import {
   bestEpoch,
   boxDepth,
@@ -260,22 +258,10 @@ export const ANSWERS = {
   // The deepest dip every other catalogued star in HD 209458's aperture could
   // make, were all its light to vanish: 1 - CROWDSAP, from the header.
   blendLimit: () => 1 - ADOPTED.hd209458.crowdsap.value,
-  // What the forward model (js/forward) says the simulation's HD 209458 b
-  // would show in transit: its truth manifest's radius ratio, so the guide and
-  // a synthetic observation of the same system cannot disagree.
   simulationRadiusRatio: () =>
-    transitParameters({
-      star: { massSun: 1.148, radiusSun: ADOPTED.simulation.stellarRadius },
-      planets: [
-        {
-          massEarth: 220,
-          radiusEarth:
-            (ADOPTED.simulation.planetRadius * JUPITER_RADIUS_M) /
-            EARTH_RADIUS_M,
-          periodDays: ADOPTED.simulation.period,
-        },
-      ],
-    }).k,
+    ADOPTED.simulation.planetRadius /
+    ADOPTED.simulation.stellarRadius /
+    RSUN_PER_RJUP,
 };
 
 /** The option a data-dependent choice accepts, from the same context. */

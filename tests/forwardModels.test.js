@@ -833,18 +833,30 @@ describe('a system written down as bodies', () => {
   });
 });
 
-describe('the exoplanet suite reads the forward model', () => {
-  test("its simulated HD 209458 radius ratio is the forward model's truth, equal to the old arithmetic", async () => {
+describe('the exoplanet suite agrees with the forward model', () => {
+  test("its simulated HD 209458 radius ratio is the forward model's truth for the same system", async () => {
+    // The guide keeps its own arithmetic: importing the forward model there
+    // would put the radial-velocity planner into the instructor bundle's inputs
+    // and make it stale, which only the passphrase can repair. The agreement is
+    // held here instead.
     const G = await import('../js/observatory/guides/exoplanet.js');
-    const answers =
-      G.ANSWERS ??
-      G.EXPECT ??
-      Object.values(G).find(
-        v => v && typeof v === 'object' && v.simulationRadiusRatio
-      );
-    const k = answers.simulationRadiusRatio();
-    const old = 1.38 / 1.155 / G.RSUN_PER_RJUP;
-    expect(Math.abs(k / old - 1)).toBeLessThan(1e-12);
+    const answers = Object.values(G).find(
+      v => v && typeof v === 'object' && v.simulationRadiusRatio
+    );
+    const sim = { stellarRadius: 1.155, planetRadius: 1.38, period: 3.5247 };
+    const k = transitParameters({
+      star: { massSun: 1.148, radiusSun: sim.stellarRadius },
+      planets: [
+        {
+          massEarth: 220,
+          radiusEarth: (sim.planetRadius * 7.1492e7) / 6.371e6,
+          periodDays: sim.period,
+        },
+      ],
+    }).k;
+    expect(Math.abs(k / answers.simulationRadiusRatio() - 1)).toBeLessThan(
+      1e-12
+    );
   });
 });
 
