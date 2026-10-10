@@ -8,9 +8,7 @@
 // tests/galacticInvestigations.test.js also reads GALACTIC_VALUES. Node only.
 // =============================================================================
 
-import * as solarPack from '../../js/data/observations/gaiaSolarNeighbourhood.js';
-import * as clusterPack from '../../js/data/observations/gaiaNgc2420.js';
-import * as rotationPack from '../../js/data/observations/milkyWayRotationCurve.js';
+import { galacticPack } from './galacticPacks.mjs';
 import {
   solarStars,
   clusterRows,
@@ -23,9 +21,9 @@ import {
 } from '../../js/galactic/model.js';
 import { enclosedMass, curveAt } from '../../js/kernels/galactic/index.js';
 
-const stars = solarStars(solarPack);
-const rows = clusterRows(clusterPack);
-const points = rotationPoints(rotationPack);
+const stars = solarStars(galacticPack('solar'));
+const rows = clusterRows(galacticPack('cluster'));
+const points = rotationPoints(galacticPack('rotation'));
 
 const R0 = 8.3;
 const members = () => {

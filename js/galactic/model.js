@@ -48,12 +48,42 @@ export const ROTATION_SET = Object.freeze({
 
 const column = (t, id) => t.columns.find(c => c.id === id).values;
 
-/** The packs, as the instruments read them. Resolves to {solar, cluster, rotation}. */
-export async function loadGalacticPacks() {
+/** Where each pack's rows are (tools/data-packs/gaia-dynamics.mjs): sidecar files, not modules. */
+export const GAIA_SIDECARS = Object.freeze({
+  solar: '/gaia/solar-neighbourhood.json',
+  cluster: '/gaia/ngc2420.json',
+  rotation: '/gaia/milky-way-rotation-curve.json',
+});
+
+/** A pack's record from its (small) module and its rows from its sidecar file. */
+async function packOf(load, url, fetchImpl) {
+  const [mod, res] = await Promise.all([load(), fetchImpl(url)]);
+  if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+  return { PACK: mod.PACK, SERIES: await res.json() };
+}
+
+/**
+ * The packs, as the instruments read them. Resolves to {solar, cluster,
+ * rotation, packs}. A caller passes its own fetch so a test or a Worker can
+ * supply the files; the default is the page's.
+ */
+export async function loadGalacticPacks(fetchImpl = globalThis.fetch) {
   const [s, c, r] = await Promise.all([
-    import('../data/observations/gaiaSolarNeighbourhood.js'),
-    import('../data/observations/gaiaNgc2420.js'),
-    import('../data/observations/milkyWayRotationCurve.js'),
+    packOf(
+      () => import('../data/observations/gaiaSolarNeighbourhood.js'),
+      GAIA_SIDECARS.solar,
+      fetchImpl
+    ),
+    packOf(
+      () => import('../data/observations/gaiaNgc2420.js'),
+      GAIA_SIDECARS.cluster,
+      fetchImpl
+    ),
+    packOf(
+      () => import('../data/observations/milkyWayRotationCurve.js'),
+      GAIA_SIDECARS.rotation,
+      fetchImpl
+    ),
   ]);
   return {
     solar: solarStars(s),

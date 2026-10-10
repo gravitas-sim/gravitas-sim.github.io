@@ -1,3 +1,4 @@
+import './galacticFetch.js';
 import { describe, test, expect, beforeAll } from '@jest/globals';
 import SUN from '../js/data/investigations/the-suns-motion.js';
 import SUN_ES from '../js/data/investigations/es/the-suns-motion.js';

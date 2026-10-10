@@ -147,6 +147,10 @@ const FILES = [
   // The Sky Lab and its star table (data-packs/sky-bright-stars.json).
   { path: 'sky/index.html', core: false },
   { path: 'sky/bright-stars.json', core: false },
+  // The galactic tables' rows (data-packs/gaia-dr3-*.json, milky-way-rotation-curve.json).
+  { path: 'gaia/solar-neighbourhood.json', core: false },
+  { path: 'gaia/ngc2420.json', core: false },
+  { path: 'gaia/milky-way-rotation-curve.json', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },

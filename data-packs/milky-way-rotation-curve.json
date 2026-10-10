@@ -222,8 +222,13 @@
   "offline": "optional",
   "derived": {
     "file": "js/data/observations/milkyWayRotationCurve.js",
-    "bytes": 9388,
-    "sha256": "9b2381501001646e06264a653dfea59a1cd9e41a3e2b037dafc421bec43d4d69"
+    "bytes": 6522,
+    "sha256": "22e0578511b39cd8ccf4efa6c171e11e1e2ab4a307d26404250fb9698e6970a5",
+    "sidecar": {
+      "file": "gaia/milky-way-rotation-curve.json",
+      "bytes": 2784,
+      "sha256": "ede56476e42e620df6093e0fe3889d31f8b6624c983b0685429cf9db73abc379"
+    }
   },
   "validation": {
     "check": "within each set the points are in increasing radius, and between 5 and 15 kpc the speed stays within 25 percent of that set's V0",
