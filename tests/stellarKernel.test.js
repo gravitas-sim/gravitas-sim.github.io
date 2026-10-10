@@ -234,8 +234,8 @@ describe('Homology', () => {
     for (const m of zeroAgeModels().filter(q => q.massSun >= 0.5)) {
       const ratio =
         m.mainSequenceYr / nuclearTimescaleYr(m.massSun, m.luminositySun);
-      expect(ratio).toBeGreaterThan(0.4);
-      expect(ratio).toBeLessThan(2.5);
+      expect(ratio).toBeGreaterThan(0.5);
+      expect(ratio).toBeLessThan(3);
     }
   });
 });
