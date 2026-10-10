@@ -16,6 +16,8 @@
 // arrive in `ctx`), for the reason js/observatory/fitPanel.js gives.
 // =============================================================================
 
+import { parseNumber } from '../answerParse.js';
+import { roundSig } from '../format.js';
 import { EN_INFERENCE } from '../i18n/en.inference.js';
 import { ES_INFERENCE } from '../i18n/es.inference.js';
 import {
@@ -58,9 +60,7 @@ const svgEl = id => {
 };
 
 const fmt = v =>
-  Number.isFinite(v)
-    ? String(Number(Math.abs(v) < 1e-300 ? 0 : v.toPrecision(5)))
-    : '-';
+  Number.isFinite(v) ? String(roundSig(Math.abs(v) < 1e-300 ? 0 : v, 5)) : '-';
 /** The table's rows, enough to read and to keep the page light. */
 const TABLE_ROWS = 200;
 /** The overlay is a curve: thinned past this many points. */
@@ -217,7 +217,7 @@ export function mountComparePanel(root, ctx) {
       });
       const out = el('output', { for: `cmpEl-${id}`, text: fmt(v) });
       input.addEventListener('input', () => {
-        const value = Number(input.value);
+        const value = parseNumber(input.value).value;
         state = withElement(state, id, value);
         moved.add(id);
         out.textContent = fmt(value);
