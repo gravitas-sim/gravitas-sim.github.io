@@ -411,7 +411,7 @@ Of 95 prediction loops, 95 are returned to,
 - **Prediction loops:** predict-the-mean → measure-the-sun, why-v-is-big, measure-farther, the-lsr-problem, record-both-frames, where-is-the-apex, state-the-assumption, what-you-worked-out → measure-the-sun.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:solar-motion`, control solar-motion/maxPc, measures the Sun's U, V and W against the mean of the stars within the distance limit, with their uncertainties, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Rotating Disk (`the-rotating-disk`)
 
@@ -425,7 +425,7 @@ Of 95 prediction loops, 95 are returned to,
 - **Prediction loops:** predict-the-shape → measure-a-and-b, why-weight-by-distance, speed-at-the-sun, the-rotation-curve → measure-a-and-b; predict-stars-alone → fit-stars-only, fit-with-a-halo, where-the-halo-matters, say-what-it-assumes, what-you-worked-out → fit-stars-only.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:rotating-disk`, control rotating-disk/weight, measures the Oort constants A and B from Gaia proper motions, with the stars weighted by distance and all alike, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Cluster Membership by Motion (`cluster-membership`)
 
@@ -439,5 +439,5 @@ Of 95 prediction loops, 95 are returned to,
 - **Prediction loops:** predict-the-clump → measure-the-cluster, a-label-or-a-probability, move-the-threshold, why-so-stable, does-the-color-agree, read-the-distance, what-is-not-corrected, one-sentence, what-you-worked-out → measure-the-cluster.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:cluster-members`, control cluster-members/threshold, measures the number of stars above a membership-probability threshold, and the cluster's proper motion, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

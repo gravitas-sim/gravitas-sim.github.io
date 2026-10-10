@@ -56,7 +56,7 @@ export default {
       {
         from: 'what-you-worked-out',
         to: 'what-you-worked-out',
-        text: 'The close.',
+        text: 'The close: what the data showed and what it assumed.',
       },
     ],
     'cluster-membership': [
@@ -78,7 +78,7 @@ export default {
       {
         from: 'what-you-worked-out',
         to: 'what-you-worked-out',
-        text: 'The close.',
+        text: 'The close: what the data showed and what it assumed.',
       },
     ],
     'what-a-spectrum-is-made-of': [
