@@ -109,6 +109,12 @@ export default {
     'Dónde está el máximo, cómo muestrean la curva las dos bandas y el índice de color que dan; en el visor de espectros, dónde está una línea y cuánto se ha movido de su longitud de onda en reposo.',
     'Una estrella real no es un cuerpo negro: sus líneas y saltos cambian el color medido respecto de este. El corrimiento de una línea da solo la velocidad a lo largo de la visual, nunca el movimiento transversal.',
   ],
+  compare: [
+    'Los datos (vertical, arriba) y el modelo encima, frente al tiempo; abajo, cada residuo en unidades de su propia barra de error.',
+    'Donde los residuos se alejan de cero en una racha, el modelo queda por encima o por debajo de los datos; la dispersión en torno a cero es el ruido.',
+    'En qué región falla el modelo y si mover un elemento devuelve los residuos al ruido.',
+    'Los deslizadores mueven valores dados al modelo; no se ajusta nada, y un mejor encaje no dice por sí solo que el modelo sea correcto.',
+  ],
   gwEvents: [
     'Deformación real del detector frente al tiempo, y un mapa de tono frente al tiempo.',
     'Una traza ascendente en el mapa es el chirrido de una espiral.',

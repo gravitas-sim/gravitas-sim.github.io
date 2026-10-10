@@ -258,6 +258,12 @@ export const LAZY_FAMILIES = Object.freeze({
     ['blackbody', 'spectrum-viewer'],
     'lightReady'
   ),
+  compare: familyEntry(
+    () => import('./compareWidgets.js'),
+    './compareWidgets.js',
+    'COMPARE_WIDGETS',
+    ['compare-transit']
+  ),
   // Its strain arrives behind a second import, like the spectra's flux.
   gwEvents: familyEntry(
     () => import('./gwEventWidgets.js'),

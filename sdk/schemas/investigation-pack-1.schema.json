@@ -1404,6 +1404,7 @@
             "gw-real",
             "blackbody",
             "spectrum-viewer",
+            "compare-transit",
             "gw-events"
           ]
         }

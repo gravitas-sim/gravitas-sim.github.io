@@ -20,6 +20,7 @@
 const SURFACE = {
   observatory: 'observatory',
   'inference-fit': 'observatory',
+  comparison: 'observatory',
   'sweep-analysis': 'experiments',
   'experiment-result': 'experiments',
 };

@@ -3598,6 +3598,7 @@ export const EN_DEFERRED = {
   'nb.source.observatory': 'Observatory measurement',
   // --- A fit, an analysis or an experiment result kept as its envelope -----
   'nb.source.inference-fit': 'Inference-core fit',
+  'nb.source.comparison': 'Model against data',
   'nb.source.sweep-analysis': 'Sweep analysis',
   'nb.source.experiment-result': 'Experiment result',
   'nb.entry.cite': 'The result and where it came from',

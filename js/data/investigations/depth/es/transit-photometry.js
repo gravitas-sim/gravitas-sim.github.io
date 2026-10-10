@@ -53,5 +53,18 @@ export default {
       because:
         'La incertidumbre combinada es √(0,0004² + 0,0007²) = 0,0008, y la diferencia es 0,0004, la mitad. Un modelo y una medición concuerdan cuando difieren no más de lo que permiten sus incertidumbres, y estos lo hacen. La prueba no encuentra un problema; no demuestra que el modelo sea correcto.',
     },
+    {
+      title: 'Superpón el modelo a los datos',
+      body: 'El instrumento superpone el sistema HD 209458, tal como lo dan los registros, a una curva de luz con sus barras de error. Lee las filas de debajo: ¿dónde queda el modelo por encima de los datos y en cuánto?\n\nNo se ajusta nada. Cada deslizador cambia un valor dado al modelo, y la superposición y el chi cuadrado lo siguen. La pregunta es qué valor, movido solo, devuelve los residuos al ruido: el chi cuadrado reducido cerca de 1 y ninguna región donde el modelo falle.',
+      prompt: '¿Qué elemento, movido solo, elimina el desajuste?',
+      options: [
+        'El radio del planeta, hecho mayor',
+        'El periodo, hecho más largo',
+        'La inclinación, hecha menor',
+        'La época, desplazada más tarde',
+      ],
+      because:
+        'El modelo queda por encima de los datos solo dentro del tránsito, así que la caída es demasiado poco profunda, no está mal situada: un planeta mayor tapa más luz, y la profundidad va como el cuadrado del cociente de radios. Un periodo o una época erróneos dejarían residuos de ambos signos en la entrada y la salida, y una inclinación menor haría la caída aún menos profunda. Que el chi cuadrado reducido vuelva a cerca de 1 es la comprobación, y dice que el modelo es compatible con los datos, no que el radio sea correcto.',
+    },
   ],
 };

@@ -51,16 +51,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 675 | 12.6 MB |
+| JavaScript | 683 | 12.6 MB |
 | Images | 62 | 1.7 MB |
 | Stylesheets | 10 | 490 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 9 | 270 KB |
 | Other | 3 | 230 KB |
-| **Total** | **778** | **15.5 MB** |
+| **Total** | **786** | **15.5 MB** |
 
-Of those, 637 are core (the install fails without them) and 141 optional (a missing one is reported and costs nothing).
+Of those, 645 are core (the install fails without them) and 141 optional (a missing one is reported and costs nothing).
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 

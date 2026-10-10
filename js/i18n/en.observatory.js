@@ -273,6 +273,7 @@ export const EN_OBSERVATORY = {
   'obs.table.next': 'Next rows',
   'obs.export.json': 'Save as JSON (everything, with your changes)',
   'obs.export.csv': 'Save the rows as CSV',
+  'obs.cmp.title': 'Compare a model with the data',
   'obs.fit.title': 'Fit a model (diagnostic)',
   'obs.arc.title': "Or find a star's Gaia epochs at CDS (live, opt-in)",
   'obs.ms.title': 'Measure, and the pipeline',

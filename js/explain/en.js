@@ -112,6 +112,12 @@ export default {
     'Where the peak is, how the two bandpasses sample the curve, and the color index they give; in the spectrum viewer, where a line sits and how far it has moved from its rest wavelength.',
     'A real star is not a blackbody: its lines and edges change a measured color from this one. A line’s shift gives only the speed along the line of sight, never the sideways motion.',
   ],
+  compare: [
+    'The data (vertical, above) and the model over them, against time; below, each residual in units of its own error bar.',
+    'Where the residuals leave the zero line in a run, the model is above or below the data there; scatter around zero is the noise.',
+    'Which region the model misses, and whether moving one element brings the residuals back to the noise.',
+    'The sliders move values the model was given; nothing is fitted, and a better match does not by itself say the model is right.',
+  ],
   gwEvents: [
     'Real detector strain against time, and a map of pitch against time.',
     'A rising track on the map is the chirp of an inspiral.',
