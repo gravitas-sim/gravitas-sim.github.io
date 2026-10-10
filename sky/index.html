@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sky Lab | Gravitas</title>
+    <meta
+      name="description"
+      content="What is up, where and when: a horizon view and a celestial map for any place and time from 1900 to 2100, with the Sun, Moon, planets and 904 bright stars, and instruments for altitude and azimuth, sidereal time, airmass and twilight, rise and set, and the Moon's phase. Nothing leaves your browser."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: the Sky Lab (SKY_LAB.md). */
+      .sky-controls {
+        display: grid;
+        gap: var(--space-3) var(--space-4);
+        grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+        align-items: end;
+      }
+      .sky-controls label {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+        font-size: var(--text-sm);
+        color: var(--text-secondary);
+      }
+      .sky-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        align-items: center;
+        margin-block: var(--space-3);
+      }
+      .sky-views {
+        display: grid;
+        gap: var(--space-4);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+        align-items: start;
+      }
+      .sky-views svg {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: var(--radius);
+      }
+      .sky-views figure {
+        margin: 0;
+      }
+      .sky-views figcaption {
+        font-size: var(--text-sm);
+        color: var(--text-secondary);
+        margin-block: var(--space-2);
+      }
+      .sky-layers {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-4);
+        align-items: center;
+      }
+      .sky-tablewrap {
+        max-height: 26rem;
+        overflow: auto;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+      .sky-tablewrap table {
+        border-collapse: collapse;
+        width: 100%;
+        font-variant-numeric: tabular-nums;
+      }
+      .sky-tablewrap th,
+      .sky-tablewrap td {
+        padding: var(--space-1) var(--space-3);
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+      }
+      .sky-tablewrap td.num {
+        text-align: right;
+      }
+      .sky-tablewrap th[scope='col'] button {
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        font-weight: var(--weight-semibold);
+        min-height: 2.75rem;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+      }
+      .sky-tablewrap thead th {
+        position: sticky;
+        top: 0;
+        background: var(--surface-1);
+      }
+      .sky-inst-body {
+        display: grid;
+        gap: var(--space-3);
+      }
+      .sky-readout {
+        display: grid;
+        gap: var(--space-1);
+        margin: 0;
+      }
+      .sky-readout div {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: var(--space-1) var(--space-4);
+        border-bottom: 1px solid var(--border);
+        padding-block: var(--space-1);
+      }
+      .sky-readout dt {
+        color: var(--text-secondary);
+      }
+      .sky-readout dd {
+        margin: 0;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+      .sky-instruments-grid {
+        display: grid;
+        gap: var(--space-4);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+        margin-top: var(--space-3);
+      }
+      .sky-fixed {
+        display: grid;
+        gap: var(--space-2);
+      }
+    </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
+  </head>
+  <body class="doc-page">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/" aria-current="page"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<div class="gs-offline" role="status"><template><div class="gs-offline-box">
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
+</div></template></div>
+<!-- /shell:header -->
+    <main
+      id="main"
+      class="ui-page is-wide"
+      aria-labelledby="skyTitle"
+    >
+      <h1 id="skyTitle"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></h1>
+      <p><span class="gs-en">What is up, where, and when. Choose a place and a time between 1900 and 2100 and see the horizon as an observer there sees it, and the same sky laid out as a map. The Sun, Moon, five planets and the 904 brightest stars are placed by the same calculations the instruments below read, so the picture, the table and every reading agree.</span><span class="gs-es" lang="es">Qué hay en el cielo, dónde y cuándo. Elige un lugar y una fecha entre 1900 y 2100 y mira el horizonte como lo ve un observador allí, y el mismo cielo como un mapa. El Sol, la Luna, cinco planetas y las 904 estrellas más brillantes se sitúan con los mismos cálculos que leen los instrumentos de abajo, así que el dibujo, la tabla y cada lectura coinciden.</span></p>
+      <p id="skyStatus" class="ui-hint" role="status" aria-live="polite"></p>
+      <p id="skyNote" class="ui-hint"></p>
+
+      <section class="ui-card" aria-labelledby="skyWhereH">
+        <h2 id="skyWhereH"><span class="gs-en">Where and when</span><span class="gs-es" lang="es">Dónde y cuándo</span></h2>
+        <div class="sky-controls">
+          <label><span class="gs-en">Place</span><span class="gs-es" lang="es">Lugar</span><select id="skySite" class="ui-select"></select></label>
+          <label><span class="gs-en">Latitude (degrees north)</span><span class="gs-es" lang="es">Latitud (grados norte)</span><input id="skyLat" class="ui-input" type="number" step="0.01" min="-90" max="90" /></label>
+          <label><span class="gs-en">Longitude (degrees east)</span><span class="gs-es" lang="es">Longitud (grados este)</span><input id="skyLon" class="ui-input" type="number" step="0.01" min="-180" max="180" /></label>
+          <label><span class="gs-en">Date (UTC)</span><span class="gs-es" lang="es">Fecha (UTC)</span><input id="skyDate" class="ui-input" type="date" min="1900-01-01" max="2100-12-31" /></label>
+          <label><span class="gs-en">Time (UTC)</span><span class="gs-es" lang="es">Hora (UTC)</span><input id="skyTime" class="ui-input" type="time" /></label>
+        </div>
+        <div class="sky-row">
+          <button type="button" class="ui-button" id="skyGeo"><span class="gs-en">Use my location</span><span class="gs-es" lang="es">Usar mi ubicación</span></button>
+          <button type="button" class="ui-button" id="skyNow"><span class="gs-en">Set to now</span><span class="gs-es" lang="es">Poner la hora actual</span></button>
+          <span id="skyGeoNote" class="ui-hint" role="status"></span>
+        </div>
+        <div class="sky-row">
+          <button type="button" class="ui-button" id="skyBack1d"><span class="gs-en">Back 1 day</span><span class="gs-es" lang="es">Atrás 1 día</span></button>
+          <button type="button" class="ui-button" id="skyBack1h"><span class="gs-en">Back 1 hour</span><span class="gs-es" lang="es">Atrás 1 hora</span></button>
+          <button type="button" class="ui-button" id="skyFwd1h"><span class="gs-en">Forward 1 hour</span><span class="gs-es" lang="es">Adelante 1 hora</span></button>
+          <button type="button" class="ui-button" id="skyFwd1d"><span class="gs-en">Forward 1 day</span><span class="gs-es" lang="es">Adelante 1 día</span></button>
+          <button type="button" class="ui-button" id="skyPlay" aria-pressed="false"><span class="gs-en">Play</span><span class="gs-es" lang="es">Reproducir</span></button>
+          <span id="skyReduced" class="ui-hint" hidden><span class="gs-en">Your device asks for less motion, so the sky does not play; use the step buttons.</span><span class="gs-es" lang="es">Tu dispositivo pide menos movimiento, así que el cielo no se reproduce; usa los botones de paso.</span></span>
+        </div>
+        <p class="ui-hint"><span class="gs-en">"Use my location" asks your browser once, uses the answer on this page only, and does not send or save it. The time is UTC; civil time and universal time are treated as the same (they differ by under a second).</span><span class="gs-es" lang="es">"Usar mi ubicación" se la pide una vez a tu navegador, usa la respuesta solo en esta página y no la envía ni la guarda. La hora es UTC; el tiempo civil y el universal se tratan como el mismo (difieren menos de un segundo).</span></p>
+      </section>
+
+      <section class="ui-card" aria-labelledby="skyViewsH">
+        <h2 id="skyViewsH"><span class="gs-en">The sky</span><span class="gs-es" lang="es">El cielo</span></h2>
+        <div class="sky-layers">
+          <label><input id="skyLines" type="checkbox" checked /> <span class="gs-en">Constellation lines</span><span class="gs-es" lang="es">Líneas de constelaciones</span></label>
+          <label><input id="skyNames" type="checkbox" checked /> <span class="gs-en">Star names</span><span class="gs-es" lang="es">Nombres de estrellas</span></label>
+          <label><span class="gs-en">Faintest star drawn</span><span class="gs-es" lang="es">Estrella más tenue dibujada</span> <select id="skyMag" class="ui-select">
+            <option value="3">V 3.0</option>
+            <option value="4" selected>V 4.0</option>
+            <option value="4.5">V 4.5</option>
+          </select></label>
+        </div>
+        <div class="sky-views">
+          <figure>
+            <svg id="skyHorizon" viewBox="0 0 1000 1000" role="img" aria-label="Horizon view"></svg>
+            <figcaption><span class="gs-en">Horizon view: the zenith is at the centre, north is up and east is to the left, as when you lie on your back and look up. Rings mark 30° and 60° of altitude.</span><span class="gs-es" lang="es">Vista del horizonte: el cenit está en el centro, el norte arriba y el este a la izquierda, como al mirar hacia arriba tumbado de espaldas. Los anillos marcan 30° y 60° de altura.</span></figcaption>
+          </figure>
+          <figure>
+            <svg id="skyEq" viewBox="0 0 1000 500" role="img" aria-label="Equatorial map"></svg>
+            <figcaption><span class="gs-en">Equatorial map: right ascension (increasing to the left) against declination. The dashed green line is the ecliptic and the orange line is this place's horizon now.</span><span class="gs-es" lang="es">Mapa ecuatorial: ascensión recta (aumenta hacia la izquierda) contra declinación. La línea verde discontinua es la eclíptica y la naranja el horizonte de este lugar ahora.</span></figcaption>
+          </figure>
+        </div>
+        <div class="sky-row">
+          <button type="button" class="ui-button" id="skyExportHorizon"><span class="gs-en">Download the horizon view (SVG)</span><span class="gs-es" lang="es">Descargar la vista del horizonte (SVG)</span></button>
+          <button type="button" class="ui-button" id="skyExportMap"><span class="gs-en">Download the map (SVG)</span><span class="gs-es" lang="es">Descargar el mapa (SVG)</span></button>
+        </div>
+      </section>
+
+      <section class="ui-card" aria-labelledby="skyTableH">
+        <h2 id="skyTableH"><span class="gs-en">Above the horizon now</span><span class="gs-es" lang="es">Sobre el horizonte ahora</span></h2>
+        <p id="skyCount" role="status" aria-live="polite"></p>
+        <div class="sky-tablewrap" tabindex="0" role="region" aria-labelledby="skyTableCap">
+          <table>
+            <caption class="gs-vh" id="skyTableCap"><span class="gs-en">Objects above the horizon, with the numbers the drawing uses</span><span class="gs-es" lang="es">Objetos sobre el horizonte, con los números que usa el dibujo</span></caption>
+            <thead><tr id="skyHead"></tr></thead>
+            <tbody id="skyRows"></tbody>
+          </table>
+        </div>
+        <div class="sky-row">
+          <button type="button" class="ui-button" id="skyExportTable"><span class="gs-en">Download the table (CSV)</span><span class="gs-es" lang="es">Descargar la tabla (CSV)</span></button>
+        </div>
+      </section>
+
+      <details id="skyInstruments" class="ui-card">
+        <summary><h2 style="display:inline"><span class="gs-en">Instruments</span><span class="gs-es" lang="es">Instrumentos</span></h2></summary>
+        <p><span class="gs-en">Five readers that use the place and time above. Each shows its numbers and can save them as a Gravitas evidence file (gravitas.artifact/1) that says what each number is and how far to trust it.</span><span class="gs-es" lang="es">Cinco lectores que usan el lugar y la hora de arriba. Cada uno muestra sus números y puede guardarlos como un archivo de evidencia de Gravitas (gravitas.artifact/1) que dice qué es cada número y cuánto fiarse de él.</span></p>
+        <div id="skyInstrumentHost" class="sky-instruments-grid"></div>
+      </details>
+
+      <section class="ui-card" aria-labelledby="skyAboutH">
+        <h2 id="skyAboutH"><span class="gs-en">How far to trust these numbers</span><span class="gs-es" lang="es">Cuánto fiarse de estos números</span></h2>
+        <ul>
+          <li><span class="gs-en">Stars are placed to about 1 arcminute from 5° of altitude upward (measured against the IAU SOFA algorithms); the Sun to 0.01°, the Moon to 0.02°, the planets to 0.2° (Saturn to 0.21°). Planets are drawn from 1800 to 2050 only.</span><span class="gs-es" lang="es">Las estrellas se sitúan con unos 1 minuto de arco desde 5° de altura hacia arriba (medido contra los algoritmos SOFA de la UAI); el Sol con 0,01°, la Luna con 0,02° y los planetas con 0,2° (Saturno 0,21°). Los planetas se dibujan solo de 1800 a 2050.</span></li>
+          <li><span class="gs-en">Near the horizon, refraction depends on the weather and the model here is a standard atmosphere: below 5° of altitude the altitude shown can be off by several arcminutes, and the readings say so. The airmass fit is for apparent altitude.</span><span class="gs-es" lang="es">Cerca del horizonte la refracción depende del clima y el modelo aquí es una atmósfera estándar: por debajo de 5° de altura la altura mostrada puede errar varios minutos de arco, y las lecturas lo dicen. El ajuste de masa de aire es para la altura aparente.</span></li>
+          <li><span class="gs-en">Dates after 2025 use an extrapolated Earth-rotation correction (delta-T), uncertain by about half a second a year; this moves the sky by under an arcminute.</span><span class="gs-es" lang="es">Las fechas posteriores a 2025 usan una corrección de la rotación terrestre (delta-T) extrapolada, incierta en cerca de medio segundo al año; esto mueve el cielo menos de un minuto de arco.</span></li>
+          <li><span class="gs-en">Stars: the Yale Bright Star Catalogue (Hoffleit and Warren, via CDS V/50), shipped with no licence stated and credited, to magnitude 4.5. A star's colour is the blackbody colour that matches its B-V, not its true temperature. Traditional names are the catalogue's own spellings. Constellation lines were drawn for Gravitas and mark patterns, not boundaries.</span><span class="gs-es" lang="es">Estrellas: el Catálogo de Estrellas Brillantes de Yale (Hoffleit y Warren, vía CDS V/50), enviado sin licencia indicada y con crédito, hasta la magnitud 4,5. El color de una estrella es el color del cuerpo negro que coincide con su B-V, no su temperatura real. Los nombres tradicionales son las grafías del propio catálogo. Las líneas de constelaciones se dibujaron para Gravitas y marcan patrones, no fronteras.</span></li>
+        </ul>
+      </section>
+    </main>
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
+    <script type="module" src="/js/skyPage.js"></script>
+  </body>
+</html>

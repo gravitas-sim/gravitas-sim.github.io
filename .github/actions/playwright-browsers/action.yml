@@ -38,6 +38,21 @@ runs:
       shell: bash
       run: npx playwright install ${{ inputs.browser }}
 
+    # A mirror that answers nothing ("Ign" on every request from
+    # azure.archive.ubuntu.com, twice on 2026-10-09) holds apt for its default
+    # two-minute connect timeout per request, so a single attempt below spends
+    # its five minutes waiting. Thirty seconds and three retries per request
+    # let apt fail on its own inside an attempt, and the next attempt starts
+    # fresh. Carl approved the change on 2026-10-09.
+    - name: Bound apt's network waits
+      shell: bash
+      run: |
+        printf '%s\n' \
+          'Acquire::http::Timeout "30";' \
+          'Acquire::https::Timeout "30";' \
+          'Acquire::Retries "3";' \
+          | sudo tee /etc/apt/apt.conf.d/80-gravitas-network > /dev/null
+
     - name: Install browser dependencies
       shell: bash
       env:

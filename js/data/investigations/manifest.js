@@ -313,4 +313,16 @@ export const MANIFEST = [
     gradedCount: 9,
     objectiveCount: 5,
   },
+  {
+    id: 'lines-and-motion',
+    title: 'Lines and Motion',
+    subtitle: 'Read a star’s lines, then measure how fast it moves',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/lines-and-motion.webp',
+    depths: 3,
+    stepCount: 11,
+    gradedCount: 9,
+    objectiveCount: 5,
+  },
 ];

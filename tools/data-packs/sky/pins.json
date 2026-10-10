@@ -1,0 +1,20 @@
+{
+  "cds-v50-bsc5-readme.txt": {
+    "file": "cds-v50-bsc5-readme.txt",
+    "url": "https://cdsarc.cds.unistra.fr/ftp/V/50/ReadMe",
+    "bytes": 11571,
+    "sha256": "44fd9c73e2eecad0beb47bdfa3f01c60fd43f93d6964198e31fcd48732de5b33"
+  },
+  "cds-v50-bsc5-catalog.gz": {
+    "file": "cds-v50-bsc5-catalog.gz",
+    "url": "https://cdsarc.cds.unistra.fr/ftp/V/50/catalog.gz",
+    "bytes": 573921,
+    "sha256": "3dc44b1e90be8fbe5bcc7656032560f51275f985c7e3f783c9028e1838ec7bed"
+  },
+  "cds-v50-bsc5-notes.gz": {
+    "file": "cds-v50-bsc5-notes.gz",
+    "url": "https://cdsarc.cds.unistra.fr/ftp/V/50/notes.gz",
+    "bytes": 161634,
+    "sha256": "d489d8ceaead65b0af8bce36f2421886782bbe953ecf76b08bc3fd4b84df1405"
+  }
+}

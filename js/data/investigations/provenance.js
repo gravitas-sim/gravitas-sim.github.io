@@ -24,6 +24,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'hohmann-transfer': 'engine',
   'keplers-laws': 'engine',
   'lagrange-points': 'engine',
+  'lines-and-motion': 'model',
   'listening-to-spacetime': 'model',
   'lives-of-stars': 'data',
   'missing-mass': 'engine',

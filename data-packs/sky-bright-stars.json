@@ -1,0 +1,192 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "sky-bright-stars",
+  "version": "1.0.0",
+  "title": "Bright stars to V 4.5 for the Sky Lab: the Yale Bright Star Catalogue (5th revised edition)",
+  "object": {
+    "name": "the brightest stars of the whole sky",
+    "identifiers": [
+      "Harvard Revised (Bright Star) numbers"
+    ]
+  },
+  "facility": {
+    "observatory": "Yale University Observatory; NASA/NSSDC Astronomical Data Center; CDS (VizieR V/50)",
+    "pipeline": "tools/data-packs/sky.mjs 1.0.0"
+  },
+  "dataType": "catalog",
+  "origin": "compilation",
+  "credit": "Hoffleit, D. and Warren, W. H. Jr., The Bright Star Catalogue, 5th Revised Ed. (preliminary version), NASA/NSSDC Astronomical Data Center (1991); CDS V/50 (1991bsc..book.....H)",
+  "license": {
+    "status": "no-license-stated",
+    "statement": "The ReadMe of CDS catalogue V/50 (pinned here), the Yale/Harvard catalogue pages and HEASARC's page state no licence and no permission to redistribute. CDS's terms (cds.unistra.fr/vizier-org/licences_vizier.html, read 2026-10-09) say VizieR data are free for scientific use with the original authors cited and that commercial use depends on the origin, so use with citation is confirmed and redistribution of a derived subset is not.",
+    "basis": "A reduced derivative for teaching (904 of 9,110 entries, the facts of position, brightness, colour and name, no remarks text), credited in full, with the checksum of every raw file recorded so the original can be fetched again and compared; shipped on the data-pack \"no licence stated, credited\" basis with citation, by Carl's instruction of 2026-10-09 (DECISION_REGISTER.md D-SKY-02). Hipparcos and Tycho are CC BY-NC 3.0 IGO and are not used."
+  },
+  "retrieved": "2026-10-09",
+  "columns": [
+    {
+      "name": "ra",
+      "unit": "deg",
+      "description": "right ascension J2000.0, stored in 1e-4 degree"
+    },
+    {
+      "name": "dec",
+      "unit": "deg",
+      "description": "declination J2000.0, stored in 1e-4 degree"
+    },
+    {
+      "name": "v",
+      "unit": "mag",
+      "description": "visual magnitude, stored in 1e-2 mag"
+    },
+    {
+      "name": "tcol",
+      "unit": "K",
+      "description": "blackbody colour temperature from B-V through the radiation kernel; not an effective temperature"
+    }
+  ],
+  "source": {
+    "archive": "CDS VizieR catalogue V/50 (Bright Star Catalogue, 5th rev. ed.)",
+    "urls": [
+      "https://cdsarc.cds.unistra.fr/ftp/V/50/ReadMe",
+      "https://cdsarc.cds.unistra.fr/ftp/V/50/catalog.gz",
+      "https://cdsarc.cds.unistra.fr/ftp/V/50/notes.gz"
+    ],
+    "citations": [
+      {
+        "text": "Hoffleit & Warren 1991, The Bright Star Catalogue, 5th Revised Ed. (preliminary version), NASA/ADC; CDS V/50",
+        "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/V/50"
+      },
+      {
+        "text": "Hoffleit & Jaschek 1982, The Bright Star Catalogue, 4th Revised Ed., Yale University Observatory"
+      },
+      {
+        "text": "Bessell & Murphy 2012, PASP 124, 140 (the B and V bands the colour temperature uses)",
+        "doi": "10.1086/664083"
+      }
+    ],
+    "acknowledgement": "Stars are from the Yale Bright Star Catalogue (Hoffleit and Warren), as served by CDS."
+  },
+  "raw": [
+    {
+      "file": "cds-v50-bsc5-readme.txt",
+      "url": "https://cdsarc.cds.unistra.fr/ftp/V/50/ReadMe",
+      "bytes": 11571,
+      "sha256": "44fd9c73e2eecad0beb47bdfa3f01c60fd43f93d6964198e31fcd48732de5b33"
+    },
+    {
+      "file": "cds-v50-bsc5-catalog.gz",
+      "url": "https://cdsarc.cds.unistra.fr/ftp/V/50/catalog.gz",
+      "bytes": 573921,
+      "sha256": "3dc44b1e90be8fbe5bcc7656032560f51275f985c7e3f783c9028e1838ec7bed"
+    },
+    {
+      "file": "cds-v50-bsc5-notes.gz",
+      "url": "https://cdsarc.cds.unistra.fr/ftp/V/50/notes.gz",
+      "bytes": 161634,
+      "sha256": "d489d8ceaead65b0af8bce36f2421886782bbe953ecf76b08bc3fd4b84df1405"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/sky.mjs",
+    "version": "1.0.0",
+    "options": {
+      "vmax": 4.5,
+      "colourTemperatureRangeK": [
+        2500,
+        60000
+      ],
+      "colourTemperatureStepK": 10,
+      "unzippedSha256": {
+        "catalog": "69797549cc1605aad7ff94e9325e29a1661f2a253917faaa056d9bf20b809afd",
+        "notes": "4614517ebb689fdf6e200d2ce7308b111c92272b8d5f7e492c86ec36777f6a0c"
+      }
+    },
+    "steps": [
+      "Gunzip the pinned catalog and notes files and check the unzipped files against their recorded SHA-256.",
+      "Keep every entry with a visual magnitude of 4.5 or brighter and a J2000 position: 904 stars, brightest first (the Harvard number breaks a tie).",
+      "Position: the catalogue's J2000 hours, minutes and seconds of right ascension and degrees, arcminutes and arcseconds of declination, as degrees, rounded to 1e-4 degree (0.36 arcsecond). Proper motion in mas/yr from the catalogue's arcsec/yr (pmRA is the projected motion, cos(dec) d(RA)/dt). Magnitude and B-V to 0.01 mag.",
+      "Designation: the catalogue's Name field (Flamsteed number, Bayer letter, constellation) split into its three parts and rejoined with spaces.",
+      "Name: the first name of the star's \"N:\" remark where the remark prints it in capitals, as the remark spells it and title-cased; 65 stars. The spellings are the catalogue's and are not the IAU's (Mirphak for Mirfak, Etamin for Eltanin, Kocab for Kochab).",
+      "Colour temperature: for each star with a B-V, the temperature of the blackbody whose B-V through the radiation kernel (Bessell and Murphy B and V, Vega scale, 5772 K gives 0.64) equals it, by bisection, to 10 K; a B-V beyond what 2,500-60,000 K reaches is clamped to the nearer end.",
+      "Write the rows as a sidecar (sky/bright-stars.json), which the page fetches; the module in js/data/sky/ carries the pack record and the sidecar's checksum."
+    ],
+    "record": {
+      "stars": 904,
+      "withName": 65,
+      "withBV": 901,
+      "colourClamped": 2
+    }
+  },
+  "assumptions": [
+    "Positions are the catalogue's FK5 J2000.0 values at epoch 2000.0; a position at another date applies the proper motion linearly, and neglects radial velocity and parallax (0.016 arcminute over 1900-2100, SKY_LAB.md).",
+    "The traditional names are those of the catalogue's own remarks, 65 of 904; they are not confirmed against the IAU Working Group on Star Names.",
+    "B-V of a blackbody is not the B-V of a star (line blanketing, the Balmer jump): the colour temperature is the temperature of the blackbody that would look that colour in these bands, nothing more.",
+    "The catalogue is a preliminary version of the fifth edition: its V magnitudes are 0.01 mag, and variable stars carry the value the catalogue lists."
+  ],
+  "masks": [],
+  "reductions": [],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/sky/brightStars.js",
+    "bytes": 4163,
+    "sha256": "b8247e2e8d5521fea605ab16d4c38855951080083ebec54cbc9a6367473d4ed0",
+    "sidecar": {
+      "file": "sky/bright-stars.json",
+      "bytes": 62075,
+      "sha256": "da12c3290b40c6fce365666084a7232f7db6d4efc4e1e3f6509cf1164611f577"
+    }
+  },
+  "validation": {
+    "check": "five stars with published Hipparcos positions (Sirius, Vega, Arcturus, Betelgeuse, Polaris) lie within 1 arcsecond of them",
+    "against": [
+      {
+        "quantity": "J2000 position of Sirius (HR 2491)",
+        "value": 0,
+        "unit": "arcsec",
+        "ref": "Hipparcos (ESA 1997) positions, ICRS J2000 at epoch 2000, via SIMBAD (CDS): the catalogue is FK5, so the offset is the two systems and the catalogue's 0.1-arcsecond precision"
+      },
+      {
+        "quantity": "J2000 position of Vega (HR 7001)",
+        "value": 0,
+        "unit": "arcsec",
+        "ref": "Hipparcos (ESA 1997) positions, ICRS J2000 at epoch 2000, via SIMBAD (CDS): the catalogue is FK5, so the offset is the two systems and the catalogue's 0.1-arcsecond precision"
+      },
+      {
+        "quantity": "J2000 position of Arcturus (HR 5340)",
+        "value": 0,
+        "unit": "arcsec",
+        "ref": "Hipparcos (ESA 1997) positions, ICRS J2000 at epoch 2000, via SIMBAD (CDS): the catalogue is FK5, so the offset is the two systems and the catalogue's 0.1-arcsecond precision"
+      },
+      {
+        "quantity": "J2000 position of Betelgeuse (HR 2061)",
+        "value": 0,
+        "unit": "arcsec",
+        "ref": "Hipparcos (ESA 1997) positions, ICRS J2000 at epoch 2000, via SIMBAD (CDS): the catalogue is FK5, so the offset is the two systems and the catalogue's 0.1-arcsecond precision"
+      },
+      {
+        "quantity": "J2000 position of Polaris (HR 424)",
+        "value": 0,
+        "unit": "arcsec",
+        "ref": "Hipparcos (ESA 1997) positions, ICRS J2000 at epoch 2000, via SIMBAD (CDS): the catalogue is FK5, so the offset is the two systems and the catalogue's 0.1-arcsecond precision"
+      }
+    ],
+    "result": {
+      "offsetArcsec": {
+        "Sirius": 0.2,
+        "Vega": 0.5,
+        "Arcturus": 0.47,
+        "Betelgeuse": 0.6,
+        "Polaris": 0.33
+      },
+      "worst": {
+        "name": "Betelgeuse",
+        "arcsec": 0.6
+      }
+    }
+  }
+}

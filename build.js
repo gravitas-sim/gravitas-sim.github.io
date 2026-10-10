@@ -14,7 +14,8 @@
 
 import * as esbuild from 'esbuild';
 import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { gzipSync } from 'node:zlib';
 import path from 'node:path';
 import { keyGroupsPlugin } from './tools/key-groups.mjs';
 import { proseWhitespacePlugin } from './tools/prose-whitespace.mjs';
@@ -37,6 +38,9 @@ const STATIC_FILES = [
   'catalog/catalog.json',
   // The Library's index (LIBRARY.md), which /library/ and Home read.
   'library/library.json',
+  // The Sky Lab's star table (data-packs/sky-bright-stars.json): fetched by
+  // /sky/ at run time, so no bundle holds it.
+  'sky/bright-stars.json',
 ];
 
 // Directories copied whole. Lesson figures are photographs used under licenses
@@ -94,6 +98,7 @@ const DOC_PAGES = [
   'mission',
   'mission/lab',
   '3d',
+  'sky',
 ];
 
 /**
@@ -331,10 +336,19 @@ function summarizeBundle(metafile) {
   }
 
   const deferred = Object.keys(outputs).filter(f => !eager.has(f));
+  // What a reader's browser actually transfers for the deferred chunks: each
+  // file gzipped on its own, as a static host serves it, at zlib's default
+  // level. The bundle budget judges this rather than the raw bytes (Carl,
+  // 2026-10-09), because shortening identifiers and key prefixes saves far
+  // more raw bytes than it saves on the wire. Node 20 and Node 24 ship
+  // different zlib builds and land a few hundred bytes apart on this total,
+  // which is why no documentation fact quotes it.
+  const gzipped = f => gzipSync(readFileSync(f)).length;
   return {
     initial: [...eager].reduce((a, f) => a + size(f), 0),
     initialFiles: eager.size,
     deferred: deferred.reduce((a, f) => a + size(f), 0),
+    deferredGzip: deferred.reduce((a, f) => a + gzipped(f), 0),
     deferredFiles: deferred.length,
     total: Object.keys(outputs).reduce((a, f) => a + size(f), 0),
   };
@@ -688,6 +702,24 @@ async function buildDocPages() {
     });
   }
 
+  // The Sky Lab (/sky/, SKY_LAB.md): its own entry. The instruments, the
+  // evidence writer and the constellation figures are lazy chunks; the star
+  // table is a JSON file the page fetches (STATIC_FILES), so no bundle holds it.
+  if (existsSync('js/skyPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/skyPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'sky-[hash]',
+      legalComments: 'none',
+    });
+  }
+
   // The 3-D dynamics diagnostics page (/lab3d/): its own entry. It reads the
   // 3-D kernel's state checks and reference problems, never the kernel,
   // which runs in its Worker (built with the others above).
@@ -945,7 +977,7 @@ async function run() {
     `JS at start-up     ${kb(js.initial).padStart(9)}   ${js.initialFiles} file(s)`
   );
   console.log(
-    `JS on demand       ${kb(js.deferred).padStart(9)}   ${js.deferredFiles} chunk(s)`
+    `JS on demand       ${kb(js.deferred).padStart(9)}   ${js.deferredFiles} chunk(s), ${kb(js.deferredGzip)} gzipped`
   );
   console.log(`\nInitial download   ${kb(css + js.initial).padStart(9)}`);
 
@@ -965,6 +997,7 @@ async function run() {
         initialJsBytes: js.initial,
         initialFiles: js.initialFiles,
         deferredJsBytes: js.deferred,
+        deferredJsGzipBytes: js.deferredGzip,
         deferredChunks: js.deferredFiles,
         initialDownloadBytes: css + js.initial,
       },
