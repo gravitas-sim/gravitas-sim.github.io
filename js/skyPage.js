@@ -18,7 +18,7 @@ import { loadStars } from './kernels/sky/stars.js';
 import { loadStarFile, loadConstellations } from './kernels/sky/packs.js';
 import { mountShell } from './shell.js';
 import { createHorizon, drawEquatorial, svgFile } from './sky/view.js';
-import { fmt, round } from './sky/fmt.js';
+import { fmt, round, prettyDesignation } from './sky/fmt.js';
 
 const $ = id => document.getElementById(id);
 const es = () => document.documentElement.lang.startsWith('es');
@@ -83,42 +83,6 @@ const PLANET_NAMES = {
   jupiter: ['Jupiter', 'Júpiter'],
   saturn: ['Saturn', 'Saturno'],
 };
-const GREEK = {
-  Alp: 'α',
-  Bet: 'β',
-  Gam: 'γ',
-  Del: 'δ',
-  Eps: 'ε',
-  Zet: 'ζ',
-  Eta: 'η',
-  The: 'θ',
-  Iot: 'ι',
-  Kap: 'κ',
-  Lam: 'λ',
-  Mu: 'μ',
-  Nu: 'ν',
-  Xi: 'ξ',
-  Omi: 'ο',
-  Pi: 'π',
-  Rho: 'ρ',
-  Sig: 'σ',
-  Tau: 'τ',
-  Ups: 'υ',
-  Phi: 'φ',
-  Chi: 'χ',
-  Psi: 'ψ',
-  Ome: 'ω',
-};
-const SUPER = '⁰¹²³⁴⁵⁶⁷⁸⁹';
-
-/** "9 Alp CMa" as "α CMa", "80 UMa" as "80 UMa", "Gam1 And" as "γ¹ And". */
-export function prettyDesignation(d) {
-  const t = d.split(' ');
-  const bayer = t.find(x => GREEK[x.slice(0, 3)]);
-  if (!bayer) return d;
-  const sup = bayer.slice(3);
-  return `${GREEK[bayer.slice(0, 3)]}${sup ? [...sup].map(c => SUPER[c]).join('') : ''} ${t[t.length - 1]}`;
-}
 /** The key the constellation figures use: "9 Alp CMa" is "Alp CMa". */
 const figureKey = d => {
   const t = d.split(' ');

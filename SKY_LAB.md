@@ -97,7 +97,7 @@ largest offset is 0.6").
 
 ## Constellation figures
 
-`js/data/sky/constellations.js`: 23 figures written for Gravitas (CC BY 4.0), pairs
+`js/data/sky/constellations.js`: 22 figures written for Gravitas (CC BY 4.0), pairs
 of catalogue stars by Bayer designation. They mark patterns and are not copied
 from any chart. `tests/skyData.test.js` holds every star to the pack and every line
 to a sane length.
