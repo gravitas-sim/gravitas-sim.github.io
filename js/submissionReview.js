@@ -77,10 +77,14 @@ const DEEPER = {
   'missing-mass': () => import('./data/investigations/depth/missing-mass.js'),
   'color-and-temperature': () =>
     import('./data/investigations/depth/color-and-temperature.js'),
-  'the-turning-sky': () => import('./data/investigations/depth/the-turning-sky.js'),
-  'the-sun-through-the-year': () => import('./data/investigations/depth/the-sun-through-the-year.js'),
-  'phases-and-eclipses': () => import('./data/investigations/depth/phases-and-eclipses.js'),
-  'wanderers-on-the-sky': () => import('./data/investigations/depth/wanderers-on-the-sky.js'),
+  'the-turning-sky': () =>
+    import('./data/investigations/depth/the-turning-sky.js'),
+  'the-sun-through-the-year': () =>
+    import('./data/investigations/depth/the-sun-through-the-year.js'),
+  'phases-and-eclipses': () =>
+    import('./data/investigations/depth/phases-and-eclipses.js'),
+  'wanderers-on-the-sky': () =>
+    import('./data/investigations/depth/wanderers-on-the-sky.js'),
   'plan-a-night': () => import('./data/investigations/depth/plan-a-night.js'),
 };
 const deepen = async lesson =>

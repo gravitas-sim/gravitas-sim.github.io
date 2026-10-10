@@ -172,7 +172,8 @@ const TRANSLATIONS = {
     'twelve-nights': () => import('./es/twelve-nights.js'),
     'color-and-temperature': () => import('./es/color-and-temperature.js'),
     'the-turning-sky': () => import('./es/the-turning-sky.js'),
-    'the-sun-through-the-year': () => import('./es/the-sun-through-the-year.js'),
+    'the-sun-through-the-year': () =>
+      import('./es/the-sun-through-the-year.js'),
     'phases-and-eclipses': () => import('./es/phases-and-eclipses.js'),
     'wanderers-on-the-sky': () => import('./es/wanderers-on-the-sky.js'),
     'plan-a-night': () => import('./es/plan-a-night.js'),

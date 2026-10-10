@@ -52,7 +52,8 @@ export default {
       feedback: {
         close:
           'Casi. Lee la fila de elongación el día con el cambio de longitud más negativo.',
-        'wrong-order-of-magnitude': 'Una elongación es un ángulo en el cielo, nunca mayor que media circunferencia.',
+        'wrong-order-of-magnitude':
+          'Una elongación es un ángulo en el cielo, nunca mayor que media circunferencia.',
         off: 'En el movimiento más rápido hacia el oeste, busca la fila de elongación.',
       },
     },

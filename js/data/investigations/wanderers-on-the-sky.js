@@ -150,7 +150,8 @@ const WANDERERS_ON_THE_SKY = {
       feedback: {
         close:
           'Close. Read the elongation row on the day with the most negative change of longitude.',
-        'wrong-order-of-magnitude': 'An elongation is an angle on the sky, never more than half a circle.',
+        'wrong-order-of-magnitude':
+          'An elongation is an angle on the sky, never more than half a circle.',
         off: 'At the fastest westward motion, find the elongation row.',
       },
       tool: WAN({ planet: 2, day: 100 }),

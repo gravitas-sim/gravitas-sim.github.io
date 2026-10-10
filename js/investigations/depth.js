@@ -57,8 +57,7 @@ const EXTENSIONS = {
     import('../data/investigations/depth/phases-and-eclipses.js'),
   'wanderers-on-the-sky': () =>
     import('../data/investigations/depth/wanderers-on-the-sky.js'),
-  'plan-a-night': () =>
-    import('../data/investigations/depth/plan-a-night.js'),
+  'plan-a-night': () => import('../data/investigations/depth/plan-a-night.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */

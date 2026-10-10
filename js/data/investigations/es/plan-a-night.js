@@ -17,14 +17,17 @@ export default {
     {
       title: 'Predice la oscuridad',
       body: 'La noche del 29 de enero y la noche del 21 de junio, a latitud 30° norte.',
-      prompt: 'Comparada con la noche de enero, la noche de junio tiene una oscuridad astronómica&hellip;',
+      prompt:
+        'Comparada con la noche de enero, la noche de junio tiene una oscuridad astronómica&hellip;',
       options: [
         'de duración parecida',
         'unas cuatro horas más corta',
         'el doble de larga',
         'ausente por completo',
       ],
-      hints: ['A latitudes medias el Sol de verano se mantiene más cerca del horizonte toda la noche.'],
+      hints: [
+        'A latitudes medias el Sol de verano se mantiene más cerca del horizonte toda la noche.',
+      ],
       because:
         'Unas cuatro horas más corta: el Sol de verano no se hunde mucho bajo el horizonte, así que el crepúsculo dura más y la oscuridad se reduce. El paso siguiente mide las dos noches.',
     },
