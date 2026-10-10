@@ -168,6 +168,57 @@
       ],
       "pack": "sdss-dr18-ngc2420-segue"
     },
+    "gaia-solar-neighbourhood": {
+      "kind": "table",
+      "summary": {
+        "en": "Gaia DR3 astrometry and radial velocities for 1,570 stars within 1 kpc of the Sun: the table for the Sun's motion and the Oort constants. Non-commercial data (CC BY-NC 3.0 IGO).",
+        "es": "Astrometría y velocidades radiales de Gaia DR3 para 1570 estrellas a menos de 1 kpc del Sol: la tabla para el movimiento del Sol y las constantes de Oort. Datos no comerciales (CC BY-NC 3.0 IGO)."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 25,
+        "max": 40
+      },
+      "mathematics": "algebra",
+      "prerequisites": [
+        "investigation:pop-members"
+      ],
+      "pack": "gaia-dr3-solar-neighbourhood"
+    },
+    "gaia-ngc2420": {
+      "kind": "table",
+      "summary": {
+        "en": "Gaia DR3 proper motions and parallaxes for stars toward NGC 2420: the cluster stands out in motion before it does in colour. Non-commercial data (CC BY-NC 3.0 IGO).",
+        "es": "Movimientos propios y paralajes de Gaia DR3 para estrellas hacia NGC 2420: el cúmulo destaca en movimiento antes que en color. Datos no comerciales (CC BY-NC 3.0 IGO)."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 20,
+        "max": 30
+      },
+      "mathematics": "algebra",
+      "prerequisites": [
+        "investigation:pop-members"
+      ],
+      "pack": "gaia-dr3-ngc2420"
+    },
+    "milky-way-rotation-curve": {
+      "kind": "table",
+      "summary": {
+        "en": "The Milky Way's rotation curve from 0.2 to 200 kpc in three sets of the Sun's distance and speed (Bhattacharjee, Chaudhury and Kundu 2014): the authentic curve the dark halo has to explain.",
+        "es": "La curva de rotación de la Vía Láctea de 0,2 a 200 kpc en tres conjuntos de distancia y velocidad del Sol (Bhattacharjee, Chaudhury y Kundu 2014): la curva auténtica que el halo oscuro debe explicar."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 20,
+        "max": 30
+      },
+      "mathematics": "algebra",
+      "prerequisites": [
+        "investigation:pop-members"
+      ],
+      "pack": "milky-way-rotation-curve"
+    },
     "mist-isochrones": {
       "kind": "model",
       "summary": {

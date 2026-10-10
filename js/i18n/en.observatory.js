@@ -37,6 +37,12 @@ export const EN_OBSERVATORY = {
     'NGC 2420: SDSS photometry (a cluster and its field)',
   'obs.fixture.ngc2420-segue':
     'NGC 2420: SEGUE stellar parameters (radial velocity, Teff, log g, [Fe/H])',
+  'obs.fixture.gaia-ngc2420':
+    'NGC 2420: Gaia DR3 proper motions and parallaxes',
+  'obs.fixture.gaia-solar-neighbourhood':
+    'The solar neighbourhood: Gaia DR3 stars with radial velocities',
+  'obs.fixture.milky-way-rotation-curve':
+    "The Milky Way's rotation curve (three sets of the Sun's distance and speed)",
   'obs.fixture.mist-isochrones':
     'MIST isochrones in the SDSS bands (a model, not an observation)',
   'obs.import.file': 'Or import your own file',

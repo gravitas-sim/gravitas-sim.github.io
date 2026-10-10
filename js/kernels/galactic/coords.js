@@ -27,7 +27,7 @@ export const K_PM = 4.740470446;
 /** The Hipparcos/Gaia matrix A_G': ICRS Cartesian to Galactic Cartesian. */
 export const A_G = Object.freeze([
   Object.freeze([-0.0548755604162154, -0.873437090234885, -0.4838350155487132]),
-  Object.freeze([0.4941094278755837, -0.4448296299600112, 0.7469822444972189]),
+  Object.freeze([0.4941094278755837, -0.4448296299600112, 0.746982244497219]),
   Object.freeze([-0.8676661490190047, -0.1980763734312015, 0.4559837761750669]),
 ]);
 

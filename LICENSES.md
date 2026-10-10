@@ -95,8 +95,11 @@ say something different from them; NOTICE lists what each one cites.
 | File | Pack | Origin | Status |
 | --- | --- | --- | --- |
 | `js/data/exoplanetSystems.js` | HD 209458 and the Sun and Jupiter: parameters compiled from the literature (`exoplanet-systems`) | compilation | no license; attribution requested; see NOTICE |
+| `js/data/observations/gaiaNgc2420.js` | NGC 2420: Gaia DR3 astrometry (`gaia-dr3-ngc2420`) | observed | CC BY-NC 3.0 IGO (non-commercial use only); see NOTICE |
+| `js/data/observations/gaiaSolarNeighbourhood.js` | The solar neighbourhood: 1,570 Gaia DR3 stars with radial velocities (`gaia-dr3-solar-neighbourhood`) | observed | CC BY-NC 3.0 IGO (non-commercial use only); see NOTICE |
 | `js/data/gw/gw150914.js` | GW150914: the published figure data (`gw150914-figure-data`) | observed | CC BY 4.0; see NOTICE |
 | `js/data/gw/gwoscEvents.js` | Five gravitational-wave events: whitened GWOSC strain (`gwosc-five-events`) | observed | CC BY 4.0; see NOTICE |
+| `js/data/observations/milkyWayRotationCurve.js` | The Milky Way's rotation curve (Bhattacharjee, Chaudhury and Kundu 2014) (`milky-way-rotation-curve`) | compilation | no license stated; see NOTICE |
 | `js/data/observations/mistSdssIsochrones.js` | MIST v1.2 isochrones in the SDSS bands (a model) (`mist-sdss-isochrones`) | model | no license stated; see NOTICE |
 | `js/data/stellar/mistTracks.js` | MIST v1.2 evolutionary tracks: eight model stars at solar metallicity (`mist-v12-tracks`) | model | no license stated; see NOTICE |
 | `js/data/ngc3198Synthetic.js` | NGC 3198: a synthetic rotation curve (`ngc3198-synthetic-curve`) | synthetic | CC BY 4.0; see NOTICE |

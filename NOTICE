@@ -369,6 +369,26 @@ exoplanet-systems: HD 209458 and the Sun and Jupiter: parameters compiled from t
     NASA Exoplanet Archive, Planetary Systems table (NASA Exoplanet Science Institute 2020), doi:10.26133/NEA12
     Christiansen et al. 2025, PSJ 6, 186 (the NASA Exoplanet Archive), doi:10.3847/psj/ade3c2
 
+gaia-dr3-ngc2420: NGC 2420: Gaia DR3 astrometry
+  File: js/data/observations/gaiaNgc2420.js (observed)
+  Licence: CC BY-NC 3.0 IGO (non-commercial use only). ESA's Gaia data licence page (https://www.cosmos.esa.int/web/gaia-users/license, read 2026-10-10) says: "Gaia data are distributed under the CC BY-NC 3.0 IGO license." and refers to ESA's Terms and Conditions for the use of data in the ESA space science archives for commercial use. This pack is a compact subset of Gaia DR3, offered under CC BY-NC 3.0 IGO: attribute ESA/Gaia/DPAC and the Gaia DR3 papers, do not use it commercially, and say that it is a selected and rounded subset of the archive (the selection is the query in the manifest and each column's rounding is stated).
+  Basis: CC BY-NC 3.0 IGO permits copying, redistribution and adaptation, which includes a derived subset of the catalogue, with attribution and for non-commercial purposes; Gravitas is a free educational tool. It is the same licence, and so the same mechanism, as radiation-gaia-bandpasses (D-RAD-01), which the project owner shipped by explicit instruction; extending it to these Gaia samples is a delegated decision awaiting his review (DECISION_REGISTER.md D-GAIA-01), not a standing licence. Each sample is a pack of its own so that no other data is covered by the NC terms, and none may be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md); removing the pack is removing its module, manifest and service-worker entry.
+  Cite:
+    Gaia Collaboration, Vallenari et al. 2023, A&A 674, A1 (Gaia Data Release 3: summary of the content and survey properties), doi:10.1051/0004-6361/202243940
+    Gaia Collaboration, Prusti et al. 2016, A&A 595, A1 (The Gaia mission), doi:10.1051/0004-6361/201629272
+    Katz et al. 2023, A&A 674, A5 (Gaia DR3: properties and validation of the radial velocities), doi:10.1051/0004-6361/202244220
+    Lindegren et al. 2021, A&A 649, A2 (Gaia EDR3: astrometric solution; the RUWE statistic and the parallax zero-point), doi:10.1051/0004-6361/202039709
+
+gaia-dr3-solar-neighbourhood: The solar neighbourhood: 1,570 Gaia DR3 stars with radial velocities
+  File: js/data/observations/gaiaSolarNeighbourhood.js (observed)
+  Licence: CC BY-NC 3.0 IGO (non-commercial use only). ESA's Gaia data licence page (https://www.cosmos.esa.int/web/gaia-users/license, read 2026-10-10) says: "Gaia data are distributed under the CC BY-NC 3.0 IGO license." and refers to ESA's Terms and Conditions for the use of data in the ESA space science archives for commercial use. This pack is a compact subset of Gaia DR3, offered under CC BY-NC 3.0 IGO: attribute ESA/Gaia/DPAC and the Gaia DR3 papers, do not use it commercially, and say that it is a selected and rounded subset of the archive (the selection is the query in the manifest and each column's rounding is stated).
+  Basis: CC BY-NC 3.0 IGO permits copying, redistribution and adaptation, which includes a derived subset of the catalogue, with attribution and for non-commercial purposes; Gravitas is a free educational tool. It is the same licence, and so the same mechanism, as radiation-gaia-bandpasses (D-RAD-01), which the project owner shipped by explicit instruction; extending it to these Gaia samples is a delegated decision awaiting his review (DECISION_REGISTER.md D-GAIA-01), not a standing licence. Each sample is a pack of its own so that no other data is covered by the NC terms, and none may be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md); removing the pack is removing its module, manifest and service-worker entry.
+  Cite:
+    Gaia Collaboration, Vallenari et al. 2023, A&A 674, A1 (Gaia Data Release 3: summary of the content and survey properties), doi:10.1051/0004-6361/202243940
+    Gaia Collaboration, Prusti et al. 2016, A&A 595, A1 (The Gaia mission), doi:10.1051/0004-6361/201629272
+    Katz et al. 2023, A&A 674, A5 (Gaia DR3: properties and validation of the radial velocities), doi:10.1051/0004-6361/202244220
+    Lindegren et al. 2021, A&A 649, A2 (Gaia EDR3: astrometric solution; the RUWE statistic and the parallax zero-point), doi:10.1051/0004-6361/202039709
+
 gw150914-figure-data: GW150914: the published figure data
   File: js/data/gw/gw150914.js (observed)
   Licence: CC BY 4.0. CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
@@ -386,6 +406,24 @@ gwosc-five-events: Five gravitational-wave events: whitened GWOSC strain
     GWOSC strain data release for GWTC-2.1, doi:10.7935/qf3a-3z67
     Abbott et al. 2021, SoftwareX 13, 100658 (O1 and O2 open data), doi:10.1016/j.softx.2021.100658
     Abbott et al. 2023, ApJS 267, 29 (O3 open data), doi:10.3847/1538-4365/acdc9f
+
+milky-way-rotation-curve: The Milky Way's rotation curve (Bhattacharjee, Chaudhury and Kundu 2014)
+  File: js/data/observations/milkyWayRotationCurve.js (compilation)
+  Licence: no license stated. The data table of a published paper (Bhattacharjee, Chaudhury & Kundu 2014, ApJ 785, 63, Table 2) as the CDS distributes it (J/ApJ/785/63/table2, read 2026-10-10). The CDS record and the paper's machine-readable table state no licence; the table is reproduced whole, with the paper cited and credited.
+  Basis: A published scientific data table, reproduced in full with citation and credit as scientific practice and the CDS's own acknowledgement policy expect, for education; the same basis as the other credited tables (D-SKY-02 is the same class of decision). 151 numbers, none of them the authors' code or text.
+  Cite:
+    Bhattacharjee, Chaudhury & Kundu 2014, ApJ 785, 63 (Rotation curve of the Milky Way out to ~200 kpc), doi:10.1088/0004-637X/785/1/63
+    Sofue 2012, PASJ 64, 75 (Grand rotation curve and dark-matter halo in the Milky Way Galaxy), the R0 = 8.0 kpc, V0 = 200 km/s set, doi:10.1093/pasj/64.4.75
+    Disk tracers: HI regions, tangent points: Westerhout 1976 (Maryland-Bonn survey); Burton & Gordon 1978, A&A 63, 7
+    Disk tracers: CO clouds, tangent points: Burton & Gordon 1978, A&A 63, 7; Clemens 1985, ApJ 295, 422
+    Disk tracers: HI regions, tangent points: Fich, Blitz & Stark 1989, ApJ 342, 272
+    Disk tracers: HII regions: Fich, Blitz & Stark 1989, ApJ 342, 272
+    Disk tracers: HII regions and reflection nebulae: Brand & Blitz 1993, A&A 275, 67
+    Disk tracers: Cepheids: Pont, Mayor & Burki 1994, A&A 285, 415
+    Disk tracers: Planetary nebulae: Maciel & Lago 2005, RMxAA 41, 383; Maciel 1984, A&AS 55, 253; Durand, Acker & Zijlstra 1998, A&AS 132, 13
+    Halo tracers: Blue horizontal-branch stars, SDSS DR8: Xue et al. 2011, ApJ 738, 79
+    Halo tracers: K giants, SDSS DR9: Xue et al. 2012 (arXiv:1211.0549)
+    Halo tracers: Globular clusters (Harris 1996, 2010), field blue horizontal-branch stars (Clewley et al. 2004) and dwarf spheroidals (McConnachie 2012)
 
 mist-sdss-isochrones: MIST v1.2 isochrones in the SDSS bands (a model)
   File: js/data/observations/mistSdssIsochrones.js (model)

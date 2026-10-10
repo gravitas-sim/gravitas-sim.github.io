@@ -514,7 +514,7 @@ export const FIXTURES = Object.freeze([
   {
     id: 'gaia-solar-neighbourhood',
     kind: 'table',
-    tags: ['observing', 'stars', 'galaxies'],
+    tags: ['observing', 'galaxies'],
     load: gaiaSolar,
   },
   {
@@ -526,7 +526,7 @@ export const FIXTURES = Object.freeze([
   {
     id: 'milky-way-rotation-curve',
     kind: 'table',
-    tags: ['galaxies', 'dark-matter'],
+    tags: ['galaxies'],
     load: milkyWayRotation,
   },
   {
