@@ -32,6 +32,7 @@ const step = (lesson, sid) => lesson.steps.find(s => s.sid === sid);
 
 describe('the numeric answers are the kernel’s', () => {
   for (const [key, model] of Object.entries(LIGHT_MODELS)) {
+    if (!key.startsWith('color-and-temperature/')) continue;
     const [, sid] = key.split('/');
     const s = step(COLOR, sid);
     test(`${sid}: the kernel value is accepted, and a value past the tolerance is not`, () => {

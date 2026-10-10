@@ -15,6 +15,28 @@ export default {
   format: 'gravitas.instructor-flow',
   formatVersion: 2,
   lessons: {
+    'lines-and-motion': [
+      {
+        from: 'light-by-wavelength',
+        to: 'calcium-in-the-g-star',
+        text: 'A real spectrum has dark lines in it, and the line list names them. Students read hydrogen in the A star and calcium in the G star, and see that which lines show depends on temperature.',
+      },
+      {
+        from: 'predict-the-shift',
+        to: 'doppler-arithmetic',
+        text: 'A motion moves every line. Students predict the direction, measure two shifts on synthetic stars, read the sign as a direction and turn a shift into a speed by hand.',
+      },
+      {
+        from: 'star-three',
+        to: 'sideways-motion',
+        text: 'A shift smaller than its uncertainty is not a detection, and a sideways motion leaves no mark: what a spectrum can and cannot say about motion.',
+      },
+      {
+        from: 'one-sentence',
+        to: 'what-you-worked-out',
+        text: 'A written plan to settle star 3, and the close.',
+      },
+    ],
     'color-and-temperature': [
       {
         from: 'everything-glows',

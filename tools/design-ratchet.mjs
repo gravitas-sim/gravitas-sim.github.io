@@ -52,6 +52,7 @@ export const TOOL_PAGES = [
   '3d/index.html',
   'mission/index.html',
   'mission/lab/index.html',
+  'sky/index.html',
 ];
 
 const read = rel => readFileSync(path.join(ROOT, rel), 'utf8');

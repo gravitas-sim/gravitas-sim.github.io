@@ -108,6 +108,7 @@ say something different from them; NOTICE lists what each one cites.
 | `js/data/observations/sdssNgc2420Photometry.js` | NGC 2420: SDSS DR18 photometry (`sdss-dr18-ngc2420-photometry`) | observed | public domain; see NOTICE |
 | `js/data/observations/sdssNgc2420Segue.js` | NGC 2420: SEGUE stellar parameters (`sdss-dr18-ngc2420-segue`) | observed | public domain; see NOTICE |
 | `js/data/spectra/sdssSpectra.js` | Four observed stellar spectra: SDSS DR18, one each of A, G, K and M (`sdss-dr18-stellar-spectra`) | observed | public domain; see NOTICE |
+| `js/data/sky/brightStars.js` | Bright stars to V 4.5 for the Sky Lab: the Yale Bright Star Catalogue (5th revised edition) (`sky-bright-stars`) | compilation | no license stated; see NOTICE |
 | `js/data/observations/tessHd209458S56Aperture.js` | HD 209458: TESS sector 56 aperture mask (`tess-hd209458-s56-aperture`) | observed | public domain; see NOTICE |
 | `js/data/observations/tessHd209458S56.js` | HD 209458: TESS sector 56 light curve (`tess-hd209458-s56-lc`) | observed | public domain; see NOTICE |
 | `js/data/trappist1.js` | TRAPPIST-1: the star and its seven planets, compiled from the literature (`trappist-1-system`) | compilation | no license; attribution requested; see NOTICE |

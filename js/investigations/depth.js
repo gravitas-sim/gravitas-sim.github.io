@@ -49,6 +49,8 @@ const EXTENSIONS = {
   'missing-mass': () => import('../data/investigations/depth/missing-mass.js'),
   'color-and-temperature': () =>
     import('../data/investigations/depth/color-and-temperature.js'),
+  'lines-and-motion': () =>
+    import('../data/investigations/depth/lines-and-motion.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -62,6 +64,8 @@ const WORDS = {
       import('../data/investigations/depth/es/weighing-stars.js'),
     'color-and-temperature': () =>
       import('../data/investigations/depth/es/color-and-temperature.js'),
+    'lines-and-motion': () =>
+      import('../data/investigations/depth/es/lines-and-motion.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
   },

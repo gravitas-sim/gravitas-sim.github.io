@@ -126,6 +126,9 @@ const FORBIDDEN = {
   programme: 'program',
 };
 
+// Titles of published works, quoted as spelled in the citation.
+const PROPER_TITLES = /\bBright Star Catalogue\b/g;
+
 const PATTERN = new RegExp(`\\b(${Object.keys(FORBIDDEN).join('|')})\\b`, 'gi');
 
 /**
@@ -135,8 +138,10 @@ const PATTERN = new RegExp(`\\b(${Object.keys(FORBIDDEN).join('|')})\\b`, 'gi');
  * @param {string} text - The text to read
  * @returns {string[]} One line per hit
  */
-function offences(where, text) {
-  if (typeof text !== 'string') return [];
+function offences(where, rawText) {
+  if (typeof rawText !== 'string') return [];
+  // A published title is quoted as its authors spelled it.
+  const text = rawText.replace(PROPER_TITLES, m => '_'.repeat(m.length));
   const out = [];
   const say = (m, right) => {
     const from = Math.max(0, m.index - 30);

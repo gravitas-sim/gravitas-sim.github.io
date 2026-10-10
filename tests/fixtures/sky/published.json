@@ -1,0 +1,42 @@
+{
+  "note": "Published values pinned as fixtures. Each carries its source. The ERFA cross-check in measure.mjs also reports how far each fixture is from an independent ERFA-based value, so a transcription error would show.",
+  "sources": {
+    "AA2": "Jean Meeus, Astronomical Algorithms, 2nd ed., Willmann-Bell, 1998",
+    "USNO": "U.S. Naval Observatory, Astronomical Applications Department, 'Earth's Seasons: Equinoxes, Solstices, Perihelion, and Aphelion' (aa.usno.navy.mil/data/Earth_Seasons)"
+  },
+  "jd": [
+    {"src": "AA2 Example 7.a", "y": 1957, "m": 10, "d": 4.81, "jd": 2436116.31},
+    {"src": "AA2 ch. 7, table of examples", "y": 1987, "m": 1, "d": 27.0, "jd": 2446822.5},
+    {"src": "AA2 ch. 7, table of examples", "y": 1987, "m": 6, "d": 19.5, "jd": 2446966.0},
+    {"src": "AA2 ch. 7, table of examples", "y": 1988, "m": 1, "d": 27.0, "jd": 2447187.5},
+    {"src": "AA2 ch. 7, table of examples", "y": 1988, "m": 6, "d": 19.5, "jd": 2447332.0},
+    {"src": "AA2 ch. 7, table of examples", "y": 1900, "m": 1, "d": 1.0, "jd": 2415020.5},
+    {"src": "AA2 ch. 7, table of examples", "y": 2000, "m": 1, "d": 1.5, "jd": 2451545.0},
+    {"src": "AA2 ch. 7, table of examples", "y": 1999, "m": 1, "d": 1.0, "jd": 2451179.5}
+  ],
+  "siderealTime": [
+    {"src": "AA2 Example 12.a (1987 Apr 10, 0h UT)", "jdUt": 2446895.5, "gmstDeg": 197.693195, "gmstHms": "13h10m46.3668s", "gastHms": "13h10m46.1351s", "dpsiArcsec": -3.788, "depsArcsec": 9.443},
+    {"src": "AA2 Example 12.b (1987 Apr 10, 19h21m UT)", "jdUt": 2446896.30625, "gmstHms": "8h34m57.0896s"}
+  ],
+  "horizontal": [
+    {"src": "AA2 Example 13.b (Venus, Washington, 1987 Apr 10 19h21m00s UT)", "haDeg": 64.352133, "decDeg": -6.719892, "latDeg": 38.921389, "altDeg": 15.1249, "azFromSouthDeg": 68.0337}
+  ],
+  "sun": [
+    {"src": "AA2 Example 25.a (1992 Oct 13, 0h TD), apparent, VSOP87", "jdTt": 2448908.5, "raHms": "13h13m30.749s", "decDms": "-7d47m01.74s", "lowAccuracyLonDeg": 199.90895, "lowAccuracyRaDeg": 198.38083, "lowAccuracyDecDeg": -7.78507}
+  ],
+  "seasons2024": [
+    {"src": "USNO seasons 2024", "lonDeg": 0, "utc": "2024-03-20T03:06:00Z"},
+    {"src": "USNO seasons 2024", "lonDeg": 90, "utc": "2024-06-20T20:51:00Z"},
+    {"src": "USNO seasons 2024", "lonDeg": 180, "utc": "2024-09-22T12:44:00Z"},
+    {"src": "USNO seasons 2024", "lonDeg": 270, "utc": "2024-12-21T09:21:00Z"}
+  ],
+  "moon": [
+    {"src": "AA2 Example 47.a (1992 Apr 12, 0h TD)", "jdTt": 2448724.5, "lonDeg": 133.162655, "latDeg": -3.229126, "distKm": 368409.7, "raAppDeg": 134.688470, "decAppDeg": 13.768368}
+  ],
+  "newMoon": [
+    {"src": "AA2 Example 49.a (new Moon of 1977 Feb 18, 03h37m42s TD)", "jdTt": 2443192.65118}
+  ],
+  "venus": [
+    {"src": "AA2 Example 33.a (1992 Dec 20, 0h TD), apparent, VSOP87", "jdTt": 2448976.5, "raHms": "21h04m41.454s", "decDms": "-18d53m16.84s", "distAu": 0.910845}
+  ]
+}

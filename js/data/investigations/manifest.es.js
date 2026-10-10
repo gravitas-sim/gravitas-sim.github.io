@@ -319,4 +319,16 @@ export const MANIFEST = [
     gradedCount: 9,
     objectiveCount: 5,
   },
+  {
+    id: 'lines-and-motion',
+    title: 'Líneas y movimiento',
+    subtitle: 'Lee las líneas de una estrella y mide a qué velocidad se mueve',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/lines-and-motion.webp',
+    depths: 3,
+    stepCount: 11,
+    gradedCount: 9,
+    objectiveCount: 5,
+  },
 ];

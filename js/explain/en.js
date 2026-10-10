@@ -109,8 +109,8 @@ export default {
   light: [
     'Brightness per unit wavelength (vertical) against wavelength on a logarithmic scale (horizontal).',
     'The peak moves to shorter wavelengths as the temperature rises, and the whole curve rises with it.',
-    'Where the peak is, how the two bandpasses sample the curve, and the color index they give.',
-    'A real star is not a blackbody: its lines and edges change a measured color from this one.',
+    'Where the peak is, how the two bandpasses sample the curve, and the color index they give; in the spectrum viewer, where a line sits and how far it has moved from its rest wavelength.',
+    'A real star is not a blackbody: its lines and edges change a measured color from this one. A line’s shift gives only the speed along the line of sight, never the sideways motion.',
   ],
   compare: [
     'The data (vertical, above) and the model over them, against time; below, each residual in units of its own error bar.',
