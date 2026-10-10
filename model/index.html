@@ -2879,9 +2879,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->25<!--/fact-->
+        <!--fact:investigations-->30<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->25<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->30<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -2992,6 +2992,26 @@ try {
             <tr>
               <td>Color and Temperature</td>
               <td>Planck’s law with the exact SI constants; colors by integrating the blackbody through the Bessell &amp; Murphy 2012 B and V and the SDSS g and r curves, photon-counting, with the Vega and AB zero points stated in RADIATION.md. The displayed color uses the Wyman, Sloan and Shirley 2013 fit to the CIE 1931 curves. A real star has absorption lines and edges that this model leaves out, and the investigation says so.</td>
+            </tr>
+            <tr>
+              <td>The Turning Sky</td>
+              <td>Positions neglect proper motion and annual aberration in the lesson’s rising times (the Sky Lab’s accurate chain includes them); the effect is under 0.1 degree. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.</td>
+            </tr>
+            <tr>
+              <td>The Sun Through the Year</td>
+              <td>The Sun is the kernel’s apparent Sun (Meeus, nutation and aberration). The tilt control replaces the obliquity in the Sun’s declination, a what-if. Day length uses a horizon of minus 0.83 degrees (refraction and the Sun’s radius) and the sunlight uses the geometric horizon. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.</td>
+            </tr>
+            <tr>
+              <td>Phases and Eclipses</td>
+              <td>Phases use the geometric phase angle (Sun-Moon-Earth) from the kernel; the lit fraction formula ignores the Moon’s finite distance, a difference of about 0.2 percent. The eclipse limit is a rough rule of 1.5 degrees of ecliptic latitude, and the list is of geocentric new and full Moons. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.</td>
+            </tr>
+            <tr>
+              <td>Wanderers on the Sky</td>
+              <td>Planet positions are Standish’s Table 1 elements for 1800 to 2050, geometric without light time, accurate to about 0.2 degrees; the lesson uses 2024 to 2026. Rates are central differences over two days. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.</td>
+            </tr>
+            <tr>
+              <td>Plan a Night at the Telescope</td>
+              <td>Windows are sampled every quarter of an hour on the kernel’s positions with refraction; star proper motion is neglected. The Moon constraint applies only while the Moon is above the horizon. Horizon refraction below 5 degrees carries no accuracy claim, so airmass limits above about 5 are safe. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.</td>
             </tr>
           <!--/fact-block-->
           </tbody>

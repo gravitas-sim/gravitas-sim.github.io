@@ -57,6 +57,26 @@ const PLAN_A_NIGHT = {
       tool: PLAN({ lat: 30, day: 28, airmassMax: 2, moonSep: 30 }),
     },
     {
+      sid: 'predict-the-dark',
+      stage: STAGE,
+      type: 'predict',
+      reveal: 'dark-hours',
+      title: 'Predict the dark',
+      body: `The night of 29 January and the night of 21 June, at latitude 30&deg; north.`,
+      prompt: 'Compared with the January night, the June night has astronomical dark that is&hellip;',
+      options: [
+        'about the same length',
+        'about four hours shorter',
+        'about twice as long',
+        'absent altogether',
+      ],
+      answer: 1,
+      hints: ['At middle latitudes the summer Sun stays closer to the horizon all night.'],
+      because:
+        'About four hours shorter: the summer Sun does not sink far below the horizon, so twilight lasts longer and the dark is squeezed. The next step measures both nights.',
+      tool: PLAN({ lat: 30, day: 28, airmassMax: 2, moonSep: 30 }),
+    },
+    {
       sid: 'dark-hours',
       stage: STAGE,
       type: 'measure',

@@ -15,6 +15,20 @@ export default {
       body: 'Tienes una noche en un telescopio a latitud 30&deg; norte, y ocho estrellas brillantes que te gustaría observar. ¿Cuáles puedes observar, y por cuánto tiempo? Lo deciden tres cosas: la <strong>oscuridad astronómica</strong> (el Sol a más de 18&deg; bajo el horizonte), la <strong>masa de aire</strong> (cuánta atmósfera cruza la luz, que crece cuando una estrella está baja) y la <strong>Luna</strong> (una Luna brillante cerca borra el cielo).\n\nEs el paso previo a las investigaciones <em>Diseña el calendario</em> y <em>Doce noches</em>, que toman el objetivo como dado y planifican sus épocas. Aquí eliges los objetivos. El instrumento es un modelo del núcleo del Laboratorio del Cielo: cada fila es una estrella a lo largo de la noche, y la lista de abajo da sus horas utilizables.',
     },
     {
+      title: 'Predice la oscuridad',
+      body: 'La noche del 29 de enero y la noche del 21 de junio, a latitud 30&deg; norte.',
+      prompt: 'Comparada con la noche de enero, la noche de junio tiene una oscuridad astronómica&hellip;',
+      options: [
+        'de duración parecida',
+        'unas cuatro horas más corta',
+        'el doble de larga',
+        'ausente por completo',
+      ],
+      hints: ['A latitudes medias el Sol de verano se mantiene más cerca del horizonte toda la noche.'],
+      because:
+        'Unas cuatro horas más corta: el Sol de verano no se hunde mucho bajo el horizonte, así que el crepúsculo dura más y la oscuridad se reduce. El paso siguiente mide las dos noches.',
+    },
+    {
       title: 'Cuánto dura la oscuridad',
       body: 'Pon la tarde en 2025-01-29 y luego en 2025-06-21, a latitud 30&deg;. Lee cada vez la duración de la oscuridad astronómica.',
       fields: [

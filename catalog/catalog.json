@@ -72,6 +72,14 @@
       "en": "Bound, Unbound and Escape",
       "es": "Ligado, no ligado y escape"
     },
+    "phases-and-eclipses": {
+      "en": "Phases and Eclipses",
+      "es": "Fases y eclipses"
+    },
+    "plan-a-night": {
+      "en": "Plan a Night at the Telescope",
+      "es": "Planifica una noche en el telescopio"
+    },
     "power-law-gravity": {
       "en": "What If Gravity Were Not Inverse Square?",
       "es": "¿Y si la gravedad no fuera inversa al cuadrado?"
@@ -84,6 +92,14 @@
       "en": "Why Mars Goes Backwards",
       "es": "Por qué Marte va hacia atrás"
     },
+    "the-sun-through-the-year": {
+      "en": "The Sun Through the Year",
+      "es": "El Sol a lo largo del año"
+    },
+    "the-turning-sky": {
+      "en": "The Turning Sky",
+      "es": "El cielo que gira"
+    },
     "tides": {
       "en": "Tides",
       "es": "Mareas"
@@ -95,6 +111,10 @@
     "twelve-nights": {
       "en": "Twelve Nights",
       "es": "Doce noches"
+    },
+    "wanderers-on-the-sky": {
+      "en": "Wanderers on the Sky",
+      "es": "Errantes en el cielo"
     },
     "weighing-stars": {
       "en": "Weighing the Stars",

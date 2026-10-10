@@ -71,7 +71,12 @@ export function setSkyStars(doc) {
   starsByHr = new Map(loadStars(doc).map(s => [s.hr, s]));
 }
 
-/** Resolves true when the star file has arrived. Never rejects. */
+/**
+ * Resolves true once the star file has been tried. A failure is logged and the
+ * star rows keep reading "loading" (the sky kernel itself needs no catalogue),
+ * so a missing file never blocks the other instruments or the audits that wait
+ * for every family. Never rejects.
+ */
 export const skyReady = loadStarFile()
   .then(doc => {
     setSkyStars(doc);
@@ -79,7 +84,7 @@ export const skyReady = loadStarFile()
   })
   .catch(err => {
     console.warn('The star catalogue could not be loaded:', err);
-    return false;
+    return true;
   });
 
 const starAt = i => starsByHr?.get(STAR_HR[Math.round(i)]) ?? null;

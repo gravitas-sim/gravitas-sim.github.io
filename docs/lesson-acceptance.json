@@ -26,7 +26,11 @@
       "quantity": "the dates and elongations of one retrograde loop",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["before-you-look", "catch-the-reversal", "say-it-in-your-own"],
+      "loop": [
+        "before-you-look",
+        "catch-the-reversal",
+        "say-it-in-your-own"
+      ],
       "evidenceFrom": "engine"
     },
     "transit-photometry": {
@@ -268,7 +272,11 @@
       "quantity": "whether each of three sources emits, and the ring's change in length",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["a-sphere-that-breathes", "change-the-shape", "the-chirp"],
+      "loop": [
+        "a-sphere-that-breathes",
+        "change-the-shape",
+        "the-chirp"
+      ],
       "evidenceFrom": "model"
     },
     "listening-to-spacetime": {
@@ -307,7 +315,11 @@
       "quantity": "radius and luminosity at a stated model age",
       "evidence": "instrument-capture",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["predict-direction", "measure-the-giant", "why-iron-stops-it"],
+      "loop": [
+        "predict-direction",
+        "measure-the-giant",
+        "why-iron-stops-it"
+      ],
       "evidenceFrom": "data"
     },
     "twelve-nights": {
@@ -346,7 +358,75 @@
       "quantity": "the peak wavelength at three temperatures, and its product with the temperature",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["predict-the-peak", "three-peaks"],
+      "loop": [
+        "predict-the-peak",
+        "three-peaks"
+      ],
+      "evidenceFrom": "model"
+    },
+    "the-turning-sky": {
+      "centralExperimentId": "ce.the-turning-sky",
+      "object": "panel:sky-turning",
+      "control": "sky-turning/nights",
+      "quantity": "the time a star rises on night 0 and night 30, and the sidereal time at midnight",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-tomorrow",
+        "rise-shift"
+      ],
+      "evidenceFrom": "model"
+    },
+    "the-sun-through-the-year": {
+      "centralExperimentId": "ce.the-sun-through-the-year",
+      "object": "panel:sky-seasons",
+      "control": "sky-seasons/day",
+      "quantity": "the Sun’s altitude at noon at the equinox and the two solstices",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-noon-height",
+        "three-noons"
+      ],
+      "evidenceFrom": "model"
+    },
+    "phases-and-eclipses": {
+      "centralExperimentId": "ce.phases-and-eclipses",
+      "object": "panel:sky-phases",
+      "control": "sky-phases/day",
+      "quantity": "the lit fraction of the Moon at four ages",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-quarter",
+        "four-phases"
+      ],
+      "evidenceFrom": "model"
+    },
+    "wanderers-on-the-sky": {
+      "centralExperimentId": "ce.wanderers-on-the-sky",
+      "object": "panel:sky-wanderers",
+      "control": "sky-wanderers/day",
+      "quantity": "the first days of retrograde and of direct motion for Mars",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-loop",
+        "retrograde-window"
+      ],
+      "evidenceFrom": "model"
+    },
+    "plan-a-night": {
+      "centralExperimentId": "ce.plan-a-night",
+      "object": "panel:sky-plan",
+      "control": "sky-plan/airmassMax",
+      "quantity": "the hours of astronomical dark on two nights",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-dark",
+        "dark-hours"
+      ],
       "evidenceFrom": "model"
     }
   }

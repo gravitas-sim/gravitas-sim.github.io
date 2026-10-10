@@ -1931,4 +1931,116 @@ test.describe('the central experiment of each investigation', () => {
 
     await expectVerdictRevealed(page, plan, predict);
   });
+
+  // ---- The sky sequence (Roadmap II, Prompt 89) ---------------------------------
+  const SKY = [
+    {
+      id: 'the-turning-sky',
+      title:
+        'the-turning-sky: a star rises about four minutes earlier each night @accepts:ce.the-turning-sky',
+      async run(page, measureSid, control) {
+        const out = {};
+        for (const n of [0, 30]) {
+          const { after } = await setControl(page, control, n);
+          out[n] = Number(
+            /([\d.]+) minutes after noon/.exec(row(after, /^rises/i).text)[1]
+          );
+        }
+        expect(out[0] - out[30]).toBeGreaterThan(30 * 3.8);
+        expect(out[0] - out[30]).toBeLessThan(30 * 4.1);
+        return { r0: out[0].toFixed(1), r30: out[30].toFixed(1) };
+      },
+    },
+    {
+      id: 'the-sun-through-the-year',
+      title:
+        'the-sun-through-the-year: the noon Sun swings through twice the tilt @accepts:ce.the-sun-through-the-year',
+      async run(page, measureSid, control) {
+        const alt = {};
+        for (const d of [78, 171, 354]) {
+          const { after } = await setControl(page, control, d);
+          alt[d] = reading(after, /altitude at noon/i);
+        }
+        expect(alt[171] - alt[354]).toBeCloseTo(46.9, 0);
+        return {
+          eq: alt[78].toFixed(1),
+          jun: alt[171].toFixed(1),
+          dec: alt[354].toFixed(1),
+        };
+      },
+    },
+    {
+      id: 'phases-and-eclipses',
+      title:
+        'phases-and-eclipses: the lit fraction rises with the elongation @accepts:ce.phases-and-eclipses',
+      async run(page, measureSid, control) {
+        const lit = [];
+        for (const d of [3.7, 7.4, 11.1, 14.8]) {
+          const { after } = await setControl(page, control, d);
+          lit.push(reading(after, /fraction of the disc lit/i));
+        }
+        expect(lit[0]).toBeCloseTo(0.17, 1);
+        expect(lit[3]).toBeGreaterThan(0.98);
+        return {
+          l1: lit[0].toFixed(2),
+          l2: lit[1].toFixed(2),
+          l3: lit[2].toFixed(2),
+          l4: lit[3].toFixed(2),
+        };
+      },
+    },
+    {
+      id: 'wanderers-on-the-sky',
+      title:
+        'wanderers-on-the-sky: Mars turns retrograde and direct again, months apart @accepts:ce.wanderers-on-the-sky',
+      async run(page, measureSid, control) {
+        const { after: a } = await setControl(page, control, 67);
+        expect(row(a, /^motion on the sky/i).text).toMatch(/direct|retrograde/);
+        const { after: b } = await setControl(page, control, 100);
+        expect(row(b, /^motion on the sky/i).text).toMatch(/retrograde/);
+        const { after: c } = await setControl(page, control, 160);
+        expect(row(c, /^motion on the sky/i).text).toMatch(/direct/);
+        return { start: '68', end: '147' };
+      },
+    },
+    {
+      id: 'plan-a-night',
+      title:
+        'plan-a-night: the winter night is hours darker than the summer one @accepts:ce.plan-a-night',
+      async run(page, measureSid, control) {
+        const hrs = {};
+        for (const [name, d] of [
+          ['jan', 28],
+          ['jun', 171],
+        ]) {
+          const { after } = await setControl(page, 'day', d);
+          hrs[name] = Number(
+            /([\d.]+) hours/.exec(row(after, /astronomical dark/i).text)[1]
+          );
+        }
+        expect(hrs.jan - hrs.jun).toBeGreaterThan(3);
+        const { before, after } = await setControl(page, control, 1.5);
+        expect(after).not.toEqual(before);
+        return { jan: hrs.jan.toFixed(1), jun: hrs.jun.toFixed(1) };
+      },
+    },
+  ];
+  for (const lesson of SKY) {
+    test(lesson.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(lesson.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+      await openInvestigation(page, app, lesson.id);
+      const plan = await lessonPlan(page, lesson.id);
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+      await walkToSid(page, plan, measureSid);
+      expect(step(plan, measureSid).tool).toMatch(/^sky-/);
+      const evidence = await lesson.run(page, measureSid, control);
+      await recordFields(page, lesson.id, measureSid, evidence);
+      await expectEvidenceRetained(page, lesson.id, measureSid, evidence);
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
 });
