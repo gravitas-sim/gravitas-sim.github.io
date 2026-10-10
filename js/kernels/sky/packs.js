@@ -26,6 +26,9 @@ export async function loadStarFile(fetchImpl = globalThis.fetch) {
   return res.json();
 }
 
+/** The pack's record: credit, licence and columns, for a page to show. A lazy module. */
+export const loadStarPack = () => import('../../data/sky/brightStars.js');
+
 /** The constellation figures (a lazy module of its own). */
 export const loadConstellations = () =>
   import('../../data/sky/constellations.js');

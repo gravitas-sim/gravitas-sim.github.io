@@ -19,6 +19,7 @@ import {
 } from '../kernels/sky/readings.js';
 import { calendarDate } from '../kernels/sky/time.js';
 import { PLANET_IDS } from '../kernels/sky/sky.js';
+import { fmt } from './fmt.js';
 
 const esc = s =>
   String(s ?? '').replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
@@ -60,9 +61,9 @@ export function mountInstruments(host, ctx) {
     const hh = Math.floor(h);
     const m = Math.floor((h - hh) * 60);
     const s = ((h - hh) * 60 - m) * 60;
-    return `${pad(hh)}h ${pad(m)}m ${s.toFixed(1).padStart(4, '0')}s`;
+    return `${pad(hh)}h ${pad(m)}m ${fmt(s, 1).padStart(4, '0')}s`;
   };
-  const f = (x, d = 3) => (Number.isFinite(x) ? x.toFixed(d) : '—');
+  const f = (x, d = 3) => fmt(x, d);
   const rows = list =>
     `<dl class="sky-readout">${list.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>`;
   const saveButton = (body, id, make) => {
@@ -127,8 +128,8 @@ export function mountInstruments(host, ctx) {
     if (v === 'sun' || v === 'moon') return { type: v };
     if (PLANET_IDS.includes(v)) return { type: 'planet', id: v };
     if (v === 'fixed') {
-      const [ra, dec] = [...fixed.querySelectorAll('input')].map(i =>
-        Number(i.value)
+      const [ra, dec] = [...fixed.querySelectorAll('input')].map(
+        i => i.valueAsNumber
       );
       return { type: 'fixed', raDeg: ra, decDeg: dec };
     }
@@ -276,7 +277,7 @@ export function mountInstruments(host, ctx) {
       body.append(lab, out);
       let last = null;
       const update = () => {
-        const a = airmassReading(Number(alt.value));
+        const a = airmassReading(alt.valueAsNumber);
         const jd0 = Math.floor(ctx.state.jdUt - 0.5) + 0.5;
         const t = twilightReading(jd0, ctx.state.site);
         last = { a, t };

@@ -18,6 +18,7 @@ import { loadStars } from './kernels/sky/stars.js';
 import { loadStarFile, loadConstellations } from './kernels/sky/packs.js';
 import { mountShell } from './shell.js';
 import { createHorizon, drawEquatorial, svgFile } from './sky/view.js';
+import { fmt, round } from './sky/fmt.js';
 
 const $ = id => document.getElementById(id);
 const es = () => document.documentElement.lang.startsWith('es');
@@ -158,7 +159,7 @@ const typeName = t =>
     planet: L('Planet', 'Planeta'),
     star: L('Star', 'Estrella'),
   })[t];
-const f2 = x => x.toFixed(2);
+const f2 = x => fmt(x, 2);
 const pad = n => String(n).padStart(2, '0');
 
 function saveFile(name, text, type) {
@@ -237,8 +238,8 @@ function renderTable() {
       typeName(o.type),
       f2(o.altDeg),
       f2(o.azDeg),
-      o.mag == null ? '—' : o.mag.toFixed(2),
-      o.airmass == null ? '—' : o.airmass.toFixed(2),
+      o.mag == null ? '—' : fmt(o.mag, 2),
+      o.airmass == null ? '—' : fmt(o.airmass, 2),
     ];
     cells.forEach((v, i) => {
       const td = document.createElement(i === 0 ? 'th' : 'td');
@@ -281,14 +282,14 @@ function readout() {
   $('skyDate').value =
     `${String(c.year).padStart(4, '0')}-${pad(c.month)}-${pad(c.day)}`;
   $('skyTime').value = `${pad(c.hours)}:${pad(c.minutes)}`;
-  $('skyLat').value = String(Number(state.site.latDeg.toFixed(4)));
-  $('skyLon').value = String(Number(state.site.lonDeg.toFixed(4)));
+  $('skyLat').value = String(round(state.site.latDeg, 4));
+  $('skyLon').value = String(round(state.site.lonDeg, 4));
   const lst = state.model.lstDeg / 15;
   const hh = Math.floor(lst);
   const mm = Math.floor((lst - hh) * 60);
   $('skyStatus').textContent = L(
-    `${state.site.name ?? L('Custom place', 'Lugar propio')}: latitude ${state.site.latDeg.toFixed(2)}°, longitude ${state.site.lonDeg.toFixed(2)}°; ${pad(c.year)}-${pad(c.month)}-${pad(c.day)} ${pad(c.hours)}:${pad(c.minutes)} UTC; local sidereal time ${pad(hh)}h ${pad(mm)}m.`,
-    `${state.site.name ?? 'Lugar propio'}: latitud ${state.site.latDeg.toFixed(2)}°, longitud ${state.site.lonDeg.toFixed(2)}°; ${pad(c.year)}-${pad(c.month)}-${pad(c.day)} ${pad(c.hours)}:${pad(c.minutes)} UTC; tiempo sideral local ${pad(hh)}h ${pad(mm)}m.`
+    `${state.site.name ?? L('Custom place', 'Lugar propio')}: latitude ${f2(state.site.latDeg)}°, longitude ${f2(state.site.lonDeg)}°; ${pad(c.year)}-${pad(c.month)}-${pad(c.day)} ${pad(c.hours)}:${pad(c.minutes)} UTC; local sidereal time ${pad(hh)}h ${pad(mm)}m.`,
+    `${state.site.name ?? 'Lugar propio'}: latitud ${f2(state.site.latDeg)}°, longitud ${f2(state.site.lonDeg)}°; ${pad(c.year)}-${pad(c.month)}-${pad(c.day)} ${pad(c.hours)}:${pad(c.minutes)} UTC; tiempo sideral local ${pad(hh)}h ${pad(mm)}m.`
   );
   const note = state.model.planetsInRange
     ? ''
@@ -328,8 +329,8 @@ function readInputs() {
   const [hh, mm] = $('skyTime').value.split(':').map(Number);
   if ([y, mo, d, hh, mm].every(Number.isFinite))
     state.jdUt = clampJd(julianDate(y, mo, d, hh + mm / 60));
-  const lat = Number($('skyLat').value);
-  const lon = Number($('skyLon').value);
+  const lat = $('skyLat').valueAsNumber;
+  const lon = $('skyLon').valueAsNumber;
   if (Number.isFinite(lat) && Number.isFinite(lon)) {
     state.site = {
       latDeg: Math.max(-89.9, Math.min(89.9, lat)),
@@ -505,12 +506,12 @@ async function exportTable() {
       o.id,
       nameOf(o),
       o.type,
-      o.altDeg.toFixed(4),
-      o.azDeg.toFixed(4),
+      round(o.altDeg, 4),
+      round(o.azDeg, 4),
       o.mag ?? '',
-      o.airmass?.toFixed(4) ?? '',
-      o.raDeg.toFixed(4),
-      o.decDeg.toFixed(4),
+      o.airmass == null ? '' : round(o.airmass, 4),
+      round(o.raDeg, 4),
+      round(o.decDeg, 4),
     ]);
   }
   const c = calendarDate(state.jdUt);

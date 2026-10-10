@@ -385,6 +385,9 @@ function copyForCheck() {
     // The radiation packs' checks run the kernel they are measured with.
     'js/kernels/radiation',
     'js/data/radiation',
+    // The Sky Lab's star pack checks its sidecar, and the colours it derives run the radiation kernel.
+    'js/data/sky',
+    'sky',
     // The compilations, and the synthetic curve's model.
     'js/data/exoplanetSystems.js',
     'js/data/trappist1.js',

@@ -147,6 +147,7 @@ const FILES = [
   // The Sky Lab and its star table (data-packs/sky-bright-stars.json).
   { path: 'sky/index.html', core: false },
   { path: 'sky/bright-stars.json', core: false },
+  { path: 'js/data/sky/brightStars.js', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },

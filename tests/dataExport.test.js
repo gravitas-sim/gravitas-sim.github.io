@@ -731,6 +731,7 @@ describe('every CSV the application writes', () => {
     'js/experiments/panel.js': 'text from js/experiments/exports.js',
     'js/observatoryPage.js': 'text from js/observatory/export.js',
     'js/submissionReview.js': 'text from js/submission/results.js',
+    'js/skyPage.js': 'imports csv.js (toCsv), when the table is downloaded',
     'js/missionPage.js':
       'numbers, a date and a fixed set of status names; nothing a student types',
   };

@@ -15,6 +15,7 @@
 // =============================================================================
 
 import { colourOfTemperature } from '../kernels/sky/stars.js';
+import { round } from './fmt.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const R = 470;
@@ -175,10 +176,7 @@ export function createHorizon(svg, cfg) {
         const [x, y] = project(o.altDeg, o.azDeg);
         n.x = x;
         n.y = y;
-        n.grp.setAttribute(
-          'transform',
-          `translate(${x.toFixed(2)} ${y.toFixed(2)})`
-        );
+        n.grp.setAttribute('transform', `translate(${round(x)} ${round(y)})`);
       }
       if (!showLines) return;
       for (const l of lineNodes) {
@@ -196,10 +194,10 @@ export function createHorizon(svg, cfg) {
           l.ln.style.display = '';
           l.shown = true;
         }
-        l.ln.setAttribute('x1', a.x.toFixed(1));
-        l.ln.setAttribute('y1', a.y.toFixed(1));
-        l.ln.setAttribute('x2', b.x.toFixed(1));
-        l.ln.setAttribute('y2', b.y.toFixed(1));
+        l.ln.setAttribute('x1', round(a.x, 1));
+        l.ln.setAttribute('y1', round(a.y, 1));
+        l.ln.setAttribute('x2', round(b.x, 1));
+        l.ln.setAttribute('y2', round(b.y, 1));
       }
     },
     /** The settled write: the numbers the table carries, on the drawing too. */
@@ -208,8 +206,8 @@ export function createHorizon(svg, cfg) {
         if (o.altDeg <= 0) continue;
         const n = nodes.get(o.id);
         if (!n) continue;
-        n.grp.setAttribute('data-alt', o.altDeg.toFixed(2));
-        n.grp.setAttribute('data-az', o.azDeg.toFixed(2));
+        n.grp.setAttribute('data-alt', round(o.altDeg));
+        n.grp.setAttribute('data-az', round(o.azDeg));
       }
     },
   };
@@ -234,7 +232,7 @@ export function drawEquatorial(svg, model, site, opts) {
     pts.forEach(([ra, dec], i) => {
       const [x, y] = eqXY(ra, dec);
       const prev = pts[i - 1];
-      d += `${i === 0 || (prev && Math.abs(ra - prev[0]) > 180) ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`;
+      d += `${i === 0 || (prev && Math.abs(ra - prev[0]) > 180) ? 'M' : 'L'}${round(x, 1)} ${round(y, 1)}`;
     });
     el('path', { d, class: cls }, g);
   };
@@ -272,10 +270,10 @@ export function drawEquatorial(svg, model, site, opts) {
       el(
         'line',
         {
-          x1: x1.toFixed(1),
-          y1: y1.toFixed(1),
-          x2: x2.toFixed(1),
-          y2: y2.toFixed(1),
+          x1: round(x1, 1),
+          y1: round(y1, 1),
+          x2: round(x2, 1),
+          y2: round(y2, 1),
           class: 'con',
         },
         g
@@ -288,8 +286,8 @@ export function drawEquatorial(svg, model, site, opts) {
     const c = el(
       'circle',
       {
-        cx: x.toFixed(2),
-        cy: y.toFixed(2),
+        cx: round(x),
+        cy: round(y),
         r: o.type === 'star' ? starRadius(o.mag) * 0.8 : 6,
         class: `obj ${o.type}${o.altDeg > 0 ? '' : ' below'}`,
         'data-id': o.id,
