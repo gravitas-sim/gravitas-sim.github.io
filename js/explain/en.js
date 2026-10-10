@@ -118,6 +118,12 @@ export default {
     'What the data say before a model is put on them, and how far a changed assumption (the Sun’s V, the weighting, the halo) moves the answer.',
     'Real measurements with real scatter; the models are simple and stated, and a membership is a probability, not a label.',
   ],
+  interiors: [
+    'The inside of a star from center to surface: density, pressure, temperature and the mass inside each radius; the mass and radius of white dwarfs; or luminosity, radius and lifetime against mass for model stars.',
+    'How the profile, the central values, the white-dwarf mass and the fitted exponents change as the polytropic index, the mass, the radius, the central density, the composition and the physics of the scaling change.',
+    'Why the center is hot and dense, why a degenerate star has a limiting mass, and how far a scaling argument gets before the shape of real stars shows.',
+    'A polytrope is a shape, not a star: no energy generation, opacity or convection; the white dwarf is cold and ideal; the main sequence is a MIST model, not a measurement.',
+  ],
   survey: [
     'Synthetic stars of known brightness at known distances: counted and missed stars, the bias by shells of distance, or the luminosity function against its truth.',
     'How the counted share, the bias and the recovered luminosity function change as the magnitude limit, the completeness curve or the parallax cut changes.',

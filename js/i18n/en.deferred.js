@@ -3369,6 +3369,15 @@ export const EN_DEFERRED = {
   'stelW.value.mass': '{now} now, {born} at birth',
   'stelW.row.age': 'Age',
   'stelW.row.phase': 'Phase',
+  'stelW.row.interior': 'Interior (a model)',
+  'stelW.value.interior.convective':
+    'A polytrope with n = 3/2, as for a fully convective star: center {rho} g/cm³ and {temp}',
+  'stelW.value.interior.radiative':
+    'A polytrope with n = 3 (Eddington’s standard model): center {rho} g/cm³ and {temp}',
+  'stelW.value.interior.white-dwarf':
+    'Degenerate electrons hold it up: see the white-dwarf mass and radius',
+  'stelW.value.interior.none':
+    'A dense core in a tenuous envelope, which no single polytrope describes',
   'stelW.action.pace': 'Change what the age slider paces',
   'stelW.row.pace': 'The age slider',
   'stelW.value.paceTime':

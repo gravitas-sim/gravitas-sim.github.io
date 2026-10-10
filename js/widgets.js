@@ -258,6 +258,13 @@ export const LAZY_FAMILIES = Object.freeze({
     ['blackbody', 'spectrum-viewer', 'kirchhoff'],
     'lightReady'
   ),
+  // Pure model plus the MIST zero-age models the main sequence is scaled against.
+  interiors: familyEntry(
+    () => import('./interiorsWidgets.js'),
+    './interiorsWidgets.js',
+    'INTERIORS_WIDGETS',
+    ['polytrope', 'wd-mass-radius', 'ms-scaling']
+  ),
   // Its Gaia and rotation-curve packs arrive behind more imports;
   // whenWidgetsReady() waits.
   galactic: familyEntry(

@@ -38,6 +38,7 @@ import {
   typeAt,
 } from './widgetCanvas.js';
 import { starColor, paintStarDisc } from './bodyVisuals.js';
+import { interiorOf } from './kernels/stellar/star.js';
 // Through the seam, not the service: a widget definition is content, and the
 // authoring CLI reads these modules in a plain Node process with no DOM. See
 // js/widgetRuntime.js for why the direction matters.
@@ -114,6 +115,21 @@ const years = y => {
   if (y >= 1e3) return `${(y / 1e3).toPrecision(3)} kyr`;
   return `${Math.round(y).toLocaleString()} yr`;
 };
+
+/**
+ * The interior model that goes with a star of this lab, in words: which
+ * polytrope approximates it and what that predicts at the centre, or why none
+ * does (js/kernels/stellar/star.js, STELLAR_STRUCTURE.md). A model, stated.
+ */
+function interiorText(sel) {
+  const m = interiorOf(sel);
+  if (m.model !== 'polytrope') return t(`stelW.value.interior.${m.model}`);
+  return t(`stelW.value.interior.${m.why}`, {
+    n: m.n,
+    rho: (m.star.rhoCentral / 1000).toPrecision(3),
+    temp: kelvin(m.star.tCentral),
+  });
+}
 
 /** A ratio, as a multiplier. */
 const times = r => {
@@ -1281,6 +1297,10 @@ const STELLAR_LAB = {
       rows.push({
         label: t('stelW.row.phase'),
         value: t(`stellar.phase.${sel.phase}`),
+      });
+      rows.push({
+        label: t('stelW.row.interior'),
+        value: interiorText(sel),
       });
       rows.push({
         label: t('stelW.row.pace'),

@@ -103,7 +103,7 @@ export function polytropeProfile(star, count = 60) {
  * @returns {{model: string, why: string, n?: number, star?: object}}
  */
 export function interiorOf(state) {
-  const mass = state.currentMassSun ?? state.initialMassSun;
+  const mass = state.currentMassSun ?? state.massSun ?? state.initialMassSun;
   if (state.phase === 'white-dwarf')
     return { model: 'white-dwarf', why: 'degenerate' };
   const ms = ['pre-main-sequence', 'main-sequence'].includes(state.phase);
