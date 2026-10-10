@@ -144,6 +144,9 @@ const FILES = [
   // The mission lab (MISSION_LAB.md): the page, its modules, the ephemeris
   // pack and the solvers, optional as the 3-D lab's are.
   { path: 'mission/lab/index.html', core: false },
+  // The Sky Lab and its star table (data-packs/sky-bright-stars.json).
+  { path: 'sky/index.html', core: false },
+  { path: 'sky/bright-stars.json', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },
@@ -167,6 +170,9 @@ const OBSERVATORY_ONLY = new Set([
   'js/data/radiation/extinction.js',
   'js/data/radiation/bolometric.js',
   'js/data/radiation/gaiaBandpasses.js',
+  // The Sky Lab's star pack (js/kernels/sky/packs.js): the rows are a fetched
+  // file, and this module is read only for its hash.
+  'js/data/sky/brightStars.js',
 ]);
 
 /**
