@@ -4720,7 +4720,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'The synthetic survey',
-        text: 'The same universe can be surveyed outside the lesson: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labelled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
+        text: 'The same universe can be surveyed outside the investigation: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labeled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
       },
     ],
     misconceptions: [
@@ -4737,11 +4737,17 @@ export const INSTRUCTOR_CONTENT = {
         claim: 'The missed stars are a random sample.',
         response: 'All of them are faint: the survey selected on brightness.',
       },
+      {
+        claim: 'A bigger telescope would fix it.',
+        response:
+          'A deeper limit helps but never reaches the faint end of a population that rises toward faint stars; the model still misses half the stars at limit 18.',
+      },
     ],
     teachingNotes: [
       'The model is bolometric: no bolometric correction, no dust, no binaries, stars uniform in space (SELECTION_EFFECTS.md). Say so if a student asks whether the numbers are real.',
       'The core values come from a fixed seed (survey-lab-1), so every student sees the same 2,645 stars.',
       'The real-sample comparison uses the Gaia table, a stratified and radial-velocity-selected subset (CC BY-NC 3.0 IGO, D-GAIA-01); its shell means are stated in the advanced step and recomputed by a test.',
+      'All three selection-effects investigations use the same fixed synthetic universe, so every student sees the same stars and the answer key is exact.',
     ],
     discussion: [
       'What would a survey of only the nearest 100 parsecs miss, and what would it get right?',
@@ -4793,7 +4799,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'The synthetic survey',
-        text: 'The same universe can be surveyed outside the lesson: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labelled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
+        text: 'The same universe can be surveyed outside the investigation: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labeled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
       },
     ],
     misconceptions: [
@@ -4811,11 +4817,17 @@ export const INSTRUCTOR_CONTENT = {
         claim: 'A strict parallax cut is free.',
         response: 'It leaves 82 stars of 471 and they are the nearest.',
       },
+      {
+        claim: 'The bias is an error in the measurements.',
+        response:
+          'Every measured value is right; the bias is in which stars were selected to be measured.',
+      },
     ],
     teachingNotes: [
       'The standard-candle comparison measures stars in the last half magnitude before the limit with their true apparent magnitudes; with 30,000 candles about 750 stars fall in it, so the agreement is within about 0.05 mag.',
       'The closed form is the textbook case (uniform density, no distance boundary); the cone has a boundary, so only the candle universe (500 pc, M = 10) is used for it.',
       'Spanish text is unreviewed by a native reader.',
+      'The first two measure steps use the population; the standard-candle step uses a separate universe of 30,000 candles so that the closed form can be checked.',
     ],
     discussion: [
       'Why does a standard candle with no scatter have no Malmquist bias?',
@@ -4867,7 +4879,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'The synthetic survey',
-        text: 'The same universe can be surveyed outside the lesson: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labelled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
+        text: 'The same universe can be surveyed outside the investigation: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labeled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
       },
     ],
     misconceptions: [
@@ -4885,11 +4897,17 @@ export const INSTRUCTOR_CONTENT = {
         claim: 'Corrected values should equal the truth exactly.',
         response: 'They agree to within the Poisson error.',
       },
+      {
+        claim: 'A correction needs the true magnitudes.',
+        response:
+          "Only this synthetic survey has them; the last measure step shows what the catalog's own magnitudes give instead.",
+      },
     ],
     teachingNotes: [
       "The catalog-magnitude value of 1.604 in the faintest bin depends on the instrument's astrometry (Gaia-like: 0.02 mas to magnitude 13); with worse parallaxes it is larger.",
       'The SDSS counts in the advanced step are from the NGC 2420 photometry table (a cluster field, not a uniform one) and are recomputed by a test.',
       "The statistics-of-surveys module is the advanced depth plus the pure functions in js/survey/model.js (sweepLimit, bootstrapLuminosityFunction) that use the analysis lab's bootstrap and quantiles.",
+      'The predict step before the first measure is held until the measure step is answered, as in the other investigations.',
     ],
     discussion: [
       'How would you test a completeness curve you did not trust?',

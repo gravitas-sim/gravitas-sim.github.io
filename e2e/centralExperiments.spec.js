@@ -2208,7 +2208,11 @@ test.describe('the central experiment of each investigation', () => {
       const seen = [];
       for (const [value, want, tol] of c.values) {
         await setControl(page, control, value);
-        await page.waitForTimeout(800);
+        await expect
+          .poll(async () => reading(await readout(page), c.row), {
+            timeout: 5000,
+          })
+          .not.toBeNaN();
         let got = reading(await readout(page), c.row);
         if (c.abs) got = Math.abs(got);
         seen.push(got);

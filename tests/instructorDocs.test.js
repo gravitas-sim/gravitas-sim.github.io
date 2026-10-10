@@ -238,12 +238,12 @@ describe('the document inventory', () => {
 
   test('counts by language, kind and cut', () => {
     const inv = inventoryOf(files);
-    expect(inv.documents).toBe(260);
-    expect(inv.byLocale).toEqual({ en: 139, es: 121 });
+    expect(inv.documents).toBe(290);
+    expect(inv.byLocale).toEqual({ en: 154, es: 136 });
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 90,
-      full: 140,
+      depth: 108,
+      full: 152,
       general: 18,
     });
   });
@@ -271,7 +271,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(15);
+    expect(withDepth.length).toBe(18);
     for (const id of withDepth)
       for (const d of ['core', 'quantitative', 'advanced'])
         for (const suffix of ['', '-es'])
