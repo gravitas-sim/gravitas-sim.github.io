@@ -55,7 +55,7 @@ export default {
     },
     {
       title: '¿Qué lo resolvería?',
-      body: 'La corrección de Strömberg trata el retraso como fijado solo por la dispersión. Schönrich y sus colegas hallaron que depende también de la metalicidad. En esta muestra, ajustar el retraso por intervalos de color da una V del Sol que se mueve más que su propio error de una elección de intervalos a otra.',
+      body: 'La corrección de Strömberg trata el retraso como fijado solo por la dispersión. Schönrich y sus colegas hallaron que depende también de la metalicidad. Ajustar el retraso por intervalos de color de esta muestra es la prueba obvia. Las notas del proyecto (GALACTIC_DYNAMICS.md) registran que da 12,3 ± 6,7&nbsp;km/s para una elección de intervalos: un error casi tan grande como los 8&nbsp;km/s entre los dos valores, así que no puede resolverlos. Es un resultado registrado, no algo que muestre el instrumento.',
       prompt: '¿Qué permitiría a una muestra decidir entre los dos valores?',
       options: [
         'Muchas más estrellas con velocidad radial y metalicidad medida, separadas por ambas, para ajustar el retraso frente a cada una',

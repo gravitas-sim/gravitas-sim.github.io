@@ -6,6 +6,7 @@
 // =============================================================================
 
 import { readFileSync } from 'node:fs';
+import { URL } from 'node:url';
 import * as solar from '../../js/data/observations/gaiaSolarNeighbourhood.js';
 import * as cluster from '../../js/data/observations/gaiaNgc2420.js';
 import * as rotation from '../../js/data/observations/milkyWayRotationCurve.js';

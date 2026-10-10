@@ -211,7 +211,11 @@ const THE_SUNS_MOTION = {
              stars’ own spread σ<sub>U</sub>; the instrument lists it. Take it
              off and the Sun’s V against the LSR is about
              <strong>4&nbsp;km/s</strong>.
-             \n\nBut Schönrich, Binney and Dehnen (2010) argued, from stars of
+             \n\nThe correction is a statement about <em>this sample</em>: it takes the
+             lag from how stirred up these stars are, through a relation that
+             was calibrated on other stars. It does not measure the LSR directly.
+             \n\nSchönrich, Binney and Dehnen (2010) made an independent
+             determination of the Sun’s motion. They argued, from stars of
              different metallicity, that the lag depends on more than the spread,
              and found the Sun’s V to be <strong>12.24&nbsp;km/s</strong>. The two
              published values differ by about 8&nbsp;km/s. This sample cannot

@@ -4495,8 +4495,8 @@ export const INSTRUCTOR_CONTENT = {
       'OPEN SCIENCE ITEM (Carl): the Sun’s V against the LSR is not chosen by Gravitas. Strömberg’s correction from this sample gives 3.77 km/s at 100 pc (the old Dehnen and Binney 1998 value was 5.2); Schönrich et al. 2010 give 12.24. The third frame in the instrument adopts 12.24 and says so on screen. The core measurement accepts 3.77 within 0.5 and 12.24 within 0.3.',
       'The core measurement accepts U = 10.5 within 1.5, V = 21.9 within 2 and W = 9.1 within 1.5 (Schönrich et al. U = 11.1 and W = 7.25 are inside the sample’s own uncertainty plus the package check’s 3 km/s).',
       'The solar sample is not volume-complete (Gaia radial velocities exist for bright stars) and its near stratum is over-sampled on purpose; the investigation never uses its star counts, only the means and scatter. GALACTIC_DYNAMICS.md lists the limits.',
-      'The advanced step about color-bin fits states that the Sun’s V from the drift fit changes by more than its error with the choice of bins; it is a statement from GALACTIC_DYNAMICS.md (12.3 ± 6.7 km/s for one choice of bins) and is not shown in the instrument.',
-      'The Gaia data are CC BY-NC 3.0 IGO: not for commercial use (D-GAIA-01, pending Carl’s confirmation).',
+      'The advanced step about color-bin fits quotes GALACTIC_DYNAMICS.md (12.3 ± 6.7 km/s for one choice of bins, an error about as large as the 8 km/s between the two values); it is a recorded result and is not shown in the instrument, and the drift fit has not been shown to be stable against the choice of bins.',
+      'The Gaia data are CC BY-NC 3.0 IGO: not for commercial use (D-GAIA-01, ratified by Carl).',
     ],
     discussion: [
       'Why can a measurement relative to nearby stars not be quoted as the Sun’s speed in the Galaxy?',

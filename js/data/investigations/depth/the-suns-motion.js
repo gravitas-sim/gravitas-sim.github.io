@@ -119,9 +119,11 @@ export default {
       title: 'What would settle it?',
       body: `Strömberg’s correction treats the lag as set by the dispersion
              alone. Schönrich and colleagues found it depends on metallicity as
-             well. In this sample, fitting the lag across color bins gives a Sun’s V
-             that moves by more than its own error from one choice of bins to
-             another.`,
+             well. Fitting the lag across color bins of this sample is the obvious
+             test. The project’s notes (GALACTIC_DYNAMICS.md) record it giving
+             12.3 ± 6.7&nbsp;km/s for one choice of bins: an error about as big as
+             the 8&nbsp;km/s between the two values, so it cannot settle them.
+             That is a recorded result, not something the instrument shows.`,
       prompt: 'What would let a sample decide between the two values?',
       options: [
         'Many more stars with a radial velocity and a measured metallicity, split by both, so the lag can be fitted against each',

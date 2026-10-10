@@ -23,6 +23,7 @@
 
 import { URLSearchParams, fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { Buffer } from 'node:buffer';
 
 import { sha256 } from './pinned.mjs';
 import { tableOf } from '../../js/tableObservation.js';
