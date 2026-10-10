@@ -85,6 +85,33 @@ export const DATASETS = Object.freeze([
     license: 'public-domain',
   },
   {
+    id: 'gaia-solar-neighbourhood',
+    kind: 'table',
+    title: {
+      en: 'The solar neighbourhood: Gaia DR3 stars with radial velocities',
+      es: 'El entorno solar: estrellas de Gaia DR3 con velocidades radiales',
+    },
+    license: 'cc-by-nc-3.0-igo',
+  },
+  {
+    id: 'gaia-ngc2420',
+    kind: 'table',
+    title: {
+      en: 'NGC 2420: Gaia DR3 proper motions and parallaxes',
+      es: 'NGC 2420: movimientos propios y paralajes de Gaia DR3',
+    },
+    license: 'cc-by-nc-3.0-igo',
+  },
+  {
+    id: 'milky-way-rotation-curve',
+    kind: 'table',
+    title: {
+      en: "The Milky Way's rotation curve (three sets of the Sun's distance and speed)",
+      es: 'La curva de rotación de la Vía Láctea (tres conjuntos de distancia y velocidad del Sol)',
+    },
+    license: 'no-license-stated',
+  },
+  {
     id: 'mist-isochrones',
     kind: 'table',
     title: {

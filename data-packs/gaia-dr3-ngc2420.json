@@ -1,0 +1,332 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "gaia-dr3-ngc2420",
+  "version": "1.0.0",
+  "title": "NGC 2420: Gaia DR3 astrometry",
+  "object": {
+    "name": "NGC 2420",
+    "identifiers": [
+      "NGC 2420"
+    ],
+    "ra": 114.602,
+    "dec": 21.575,
+    "frame": "ICRS, epoch J2016.0"
+  },
+  "facility": {
+    "observatory": "ESA Gaia",
+    "instrument": "Gaia astrometric, photometric and radial-velocity spectrometer instruments",
+    "pipeline": "Gaia DR3 (gaiadr3.gaia_source), via the ESA Gaia archive TAP service"
+  },
+  "dataType": "catalog",
+  "origin": "observed",
+  "credit": "ESA/Gaia/DPAC; Gaia Collaboration (Vallenari et al. 2023, A&A 674, A1). This work has made use of data from the European Space Agency (ESA) mission Gaia (https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and Analysis Consortium (DPAC). NON-COMMERCIAL: CC BY-NC 3.0 IGO.",
+  "license": {
+    "status": "cc-by-nc-3.0-igo",
+    "statement": "ESA's Gaia data licence page (https://www.cosmos.esa.int/web/gaia-users/license, read 2026-10-10) says: \"Gaia data are distributed under the CC BY-NC 3.0 IGO license.\" and refers to ESA's Terms and Conditions for the use of data in the ESA space science archives for commercial use. This pack is a compact subset of Gaia DR3, offered under CC BY-NC 3.0 IGO: attribute ESA/Gaia/DPAC and the Gaia DR3 papers, do not use it commercially, and say that it is a selected and rounded subset of the archive (the selection is the query in the manifest and each column's rounding is stated).",
+    "basis": "CC BY-NC 3.0 IGO permits copying, redistribution and adaptation, which includes a derived subset of the catalogue, with attribution and for non-commercial purposes; Gravitas is a free educational tool. It is the same licence, and so the same mechanism, as radiation-gaia-bandpasses (D-RAD-01), which the project owner shipped by explicit instruction; extending it to these Gaia samples is a delegated decision awaiting his review (DECISION_REGISTER.md D-GAIA-01), not a standing licence. Each sample is a pack of its own so that no other data is covered by the NC terms, and none may be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md); removing the pack is removing its module, manifest and service-worker entry.",
+    "nonCommercial": true
+  },
+  "retrieved": "2026-10-10",
+  "columns": [
+    {
+      "id": "ra",
+      "name": "ra",
+      "unit": "deg",
+      "description": "right ascension, ICRS, epoch J2016.0"
+    },
+    {
+      "id": "dec",
+      "name": "dec",
+      "unit": "deg",
+      "description": "declination, ICRS, epoch J2016.0"
+    },
+    {
+      "id": "parallax",
+      "name": "parallax",
+      "unit": "mas",
+      "description": "parallax, not corrected for the zero point"
+    },
+    {
+      "id": "parallax_err",
+      "name": "parallax error",
+      "unit": "mas",
+      "uncertaintyOf": "parallax",
+      "description": "its one-sigma error"
+    },
+    {
+      "id": "pmra",
+      "name": "pm ra",
+      "unit": "mas/yr",
+      "description": "proper motion in right ascension times cos(dec), mu_alpha*"
+    },
+    {
+      "id": "pmra_err",
+      "name": "pm ra error",
+      "unit": "mas/yr",
+      "uncertaintyOf": "pm ra",
+      "description": "its one-sigma error"
+    },
+    {
+      "id": "pmdec",
+      "name": "pm dec",
+      "unit": "mas/yr",
+      "description": "proper motion in declination"
+    },
+    {
+      "id": "pmdec_err",
+      "name": "pm dec error",
+      "unit": "mas/yr",
+      "uncertaintyOf": "pm dec",
+      "description": "its one-sigma error"
+    },
+    {
+      "id": "g",
+      "name": "G",
+      "unit": "mag",
+      "description": "Gaia G magnitude"
+    },
+    {
+      "id": "bp_rp",
+      "name": "BP-RP",
+      "unit": "mag",
+      "description": "Gaia BP minus RP colour, not corrected for extinction"
+    }
+  ],
+  "masks": [
+    {
+      "column": "ruwe",
+      "rule": "a star with RUWE of 1.4 or more, whose astrometric solution Gaia flags as poor, is dropped",
+      "dropped": 55
+    }
+  ],
+  "reductions": [
+    "Every star within 14.14 arcmin of the same adopted center as the SDSS photometry pack (RA 114.602, Dec +21.575): 1048 stars brighter than G = 17.5, of which 993 have RUWE below 1.4 and are kept. The circle is the SDSS pack's, so the two tables can be set side by side.",
+    "Stars fainter than G = 17.5 are left out: their proper-motion errors approach the cluster's own spread.",
+    "Gaia is not blind in the cluster's core, as SDSS is: its crowding limit is far higher, so the core is in this table.",
+    "Positions are rounded to 0.00001 degree (0.04 arcsec), parallaxes, proper motions, errors and magnitudes to 0.001.",
+    "The Gaia source ids are left out; the query in the pack's manifest returns them."
+  ],
+  "source": {
+    "archive": "ESA Gaia archive, Gaia DR3",
+    "urls": [
+      "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+phot_g_mean_mag%2C+bp_rp+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+phot_g_mean_mag%3C17.5+AND+parallax+IS+NOT+NULL+AND+pmra+IS+NOT+NULL+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29+ORDER+BY+source_id",
+      "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+phot_g_mean_mag%3C17.5+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29",
+      "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+phot_g_mean_mag%3C17.5+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29"
+    ],
+    "queries": [
+      "SELECT ra, dec, parallax, parallax_error, pmra, pmra_error, pmdec, pmdec_error, phot_g_mean_mag, bp_rp FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND phot_g_mean_mag<17.5 AND parallax IS NOT NULL AND pmra IS NOT NULL AND 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',114.602,21.575,0.2357023)) ORDER BY source_id",
+      "SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE phot_g_mean_mag<17.5 AND 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',114.602,21.575,0.2357023))",
+      "SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND phot_g_mean_mag<17.5 AND 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',114.602,21.575,0.2357023))"
+    ],
+    "citations": [
+      {
+        "text": "Gaia Collaboration, Vallenari et al. 2023, A&A 674, A1 (Gaia Data Release 3: summary of the content and survey properties)",
+        "doi": "10.1051/0004-6361/202243940"
+      },
+      {
+        "text": "Gaia Collaboration, Prusti et al. 2016, A&A 595, A1 (The Gaia mission)",
+        "doi": "10.1051/0004-6361/201629272"
+      },
+      {
+        "text": "Katz et al. 2023, A&A 674, A5 (Gaia DR3: properties and validation of the radial velocities)",
+        "doi": "10.1051/0004-6361/202244220"
+      },
+      {
+        "text": "Lindegren et al. 2021, A&A 649, A2 (Gaia EDR3: astrometric solution; the RUWE statistic and the parallax zero-point)",
+        "doi": "10.1051/0004-6361/202039709"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "gaia-dr3-ngc2420.csv",
+      "url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+phot_g_mean_mag%2C+bp_rp+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+phot_g_mean_mag%3C17.5+AND+parallax+IS+NOT+NULL+AND+pmra+IS+NOT+NULL+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29+ORDER+BY+source_id",
+      "sha256": "62e9aa5b9d9d755c02a2c6a2a83a3f128d748bceb43d31d9199f842e0945f39c",
+      "bytes": 149370
+    },
+    {
+      "file": "gaia-dr3-ngc2420-cone.csv",
+      "url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+phot_g_mean_mag%3C17.5+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29",
+      "sha256": "9b09a72bf27d22eb1fe30e506b14725ff6fe462622b3cbf97b1b00fa14e0887d",
+      "bytes": 7
+    },
+    {
+      "file": "gaia-dr3-ngc2420-ruwe.csv",
+      "url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+phot_g_mean_mag%3C17.5+AND+1%3DCONTAINS%28POINT%28%27ICRS%27%2Cra%2Cdec%29%2CCIRCLE%28%27ICRS%27%2C114.602%2C21.575%2C0.2357023%29%29",
+      "sha256": "f31ce53b9574258526873e217b4169e9aee48e9ae98467917df4c0bf164ebd25",
+      "bytes": 6
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/gaia-dynamics.mjs",
+    "version": "1.0.0",
+    "options": {
+      "columns": [
+        {
+          "id": "ra",
+          "step": 0.00001
+        },
+        {
+          "id": "dec",
+          "step": 0.00001
+        },
+        {
+          "id": "parallax",
+          "step": 0.001
+        },
+        {
+          "id": "parallax_err",
+          "step": 0.001
+        },
+        {
+          "id": "pmra",
+          "step": 0.001
+        },
+        {
+          "id": "pmra_err",
+          "step": 0.001
+        },
+        {
+          "id": "pmdec",
+          "step": 0.001
+        },
+        {
+          "id": "pmdec_err",
+          "step": 0.001
+        },
+        {
+          "id": "g",
+          "step": 0.001
+        },
+        {
+          "id": "bp_rp",
+          "step": 0.001
+        }
+      ]
+    },
+    "steps": [
+      "Query Gaia DR3 for every star within 0.2357023 degree of the adopted center with RUWE below 1.4, G below 17.5 and a five-parameter astrometric solution, ordered by source id.",
+      "Count, in two further queries, the stars in the same circle with and without the RUWE cut, for the mask.",
+      "Encode as table-columns/1: each column a whole number of its step from an offset, int16 where the range fits."
+    ],
+    "record": {
+      "rows": 993,
+      "columns": [
+        {
+          "id": "ra",
+          "type": "int16",
+          "step": 0.00001,
+          "missing": 0,
+          "maxRounding": 0.000005
+        },
+        {
+          "id": "dec",
+          "type": "int16",
+          "step": 0.00001,
+          "missing": 0,
+          "maxRounding": 0.000005
+        },
+        {
+          "id": "parallax",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.000499
+        },
+        {
+          "id": "parallax_err",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "pmra",
+          "type": "int32",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "pmra_err",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "pmdec",
+          "type": "int32",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.000499
+        },
+        {
+          "id": "pmdec_err",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "g",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "bp_rp",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 4,
+          "maxRounding": 0.0005
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    "Parallaxes are not corrected for the zero point (about -0.017 mas on average, Lindegren et al. 2021); at the cluster's 0.3 mas that is a 6 percent effect on its distance, which a lesson that quotes a distance says."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/observations/gaiaNgc2420.js",
+    "bytes": 39177,
+    "sha256": "1479a964720d1c2fc70022e4270f5c69d16006c66f6f1e1053cf292a347be418"
+  },
+  "validation": {
+    "check": "a proper-motion and parallax mixture finds a cluster of at least 100 members within 0.3 mas/yr and 0.15 mas of the literature's values",
+    "against": [
+      {
+        "quantity": "pm ra",
+        "value": -1.2,
+        "unit": "mas/yr",
+        "ref": "Cantat-Gaudin et al. 2018, A&A 618, A93 (Gaia DR2), approximate values"
+      },
+      {
+        "quantity": "pm dec",
+        "value": -2.1,
+        "unit": "mas/yr",
+        "ref": "Cantat-Gaudin et al. 2018, A&A 618, A93 (Gaia DR2), approximate values"
+      },
+      {
+        "quantity": "parallax",
+        "value": 0.3,
+        "unit": "mas",
+        "ref": "Cantat-Gaudin et al. 2018, A&A 618, A93 (Gaia DR2), approximate values"
+      }
+    ],
+    "result": {
+      "pmra": -1.227,
+      "pmdec": -2.041,
+      "parallax": 0.389,
+      "members": 506,
+      "converged": true
+    }
+  }
+}

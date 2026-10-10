@@ -37,6 +37,12 @@ export const ES_OBSERVATORY = {
     'NGC 2420: fotometría de SDSS (un cúmulo y su campo)',
   'obs.fixture.ngc2420-segue':
     'NGC 2420: parámetros estelares de SEGUE (velocidad radial, Teff, log g, [Fe/H])',
+  'obs.fixture.gaia-ngc2420':
+    'NGC 2420: movimientos propios y paralajes de Gaia DR3',
+  'obs.fixture.gaia-solar-neighbourhood':
+    'El entorno solar: estrellas de Gaia DR3 con velocidades radiales',
+  'obs.fixture.milky-way-rotation-curve':
+    'La curva de rotación de la Vía Láctea (tres conjuntos de distancia y velocidad del Sol)',
   'obs.fixture.mist-isochrones':
     'Isócronas de MIST en las bandas de SDSS (un modelo, no una observación)',
   'obs.import.file': 'O importa tu propio archivo',

@@ -352,6 +352,18 @@ const ngc2420Segue = () =>
   tablePack(() => import('../data/observations/sdssNgc2420Segue.js'), {
     axes: { x: 'rv', y: 'feh' },
   });
+const gaiaSolar = () =>
+  tablePack(() => import('../data/observations/gaiaSolarNeighbourhood.js'), {
+    axes: { x: 'pmra', y: 'pmdec' },
+  });
+const gaiaNgc2420 = () =>
+  tablePack(() => import('../data/observations/gaiaNgc2420.js'), {
+    axes: { x: 'pmra', y: 'pmdec' },
+  });
+const milkyWayRotation = () =>
+  tablePack(() => import('../data/observations/milkyWayRotationCurve.js'), {
+    axes: { x: 'r', y: 'vc' },
+  });
 const mistIsochrones = () =>
   tablePack(() => import('../data/observations/mistSdssIsochrones.js'), {
     axes: { x: 'logTeff', y: 'logL' },
@@ -498,6 +510,24 @@ export const FIXTURES = Object.freeze([
     kind: 'table',
     tags: ['observing', 'stars'],
     load: ngc2420Segue,
+  },
+  {
+    id: 'gaia-solar-neighbourhood',
+    kind: 'table',
+    tags: ['observing', 'galaxies'],
+    load: gaiaSolar,
+  },
+  {
+    id: 'gaia-ngc2420',
+    kind: 'table',
+    tags: ['observing', 'stars'],
+    load: gaiaNgc2420,
+  },
+  {
+    id: 'milky-way-rotation-curve',
+    kind: 'table',
+    tags: ['galaxies'],
+    load: milkyWayRotation,
   },
   {
     id: 'mist-isochrones',
