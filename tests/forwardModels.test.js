@@ -18,6 +18,7 @@ import { valid } from './jsonSchemaSubset.js';
 import {
   FORWARD_MODELS,
   compareWithTruth,
+  gradeAgainstTruth,
   elementsFromBodies,
   runForward,
 } from '../js/forward/index.js';
@@ -844,5 +845,47 @@ describe('the exoplanet suite reads the forward model', () => {
     const k = answers.simulationRadiusRatio();
     const old = 1.38 / 1.155 / G.RSUN_PER_RJUP;
     expect(Math.abs(k / old - 1)).toBeLessThan(1e-12);
+  });
+});
+
+describe('lesson-declared forward sources', () => {
+  test('the declared steps are valid and their measurement reproduces the truth', async () => {
+    const { FORWARD_STEPS, forwardFindings, forwardModels } =
+      await import('../tools/authoring/forwardSources.mjs');
+    expect(forwardFindings()).toEqual([]);
+    const key = 'transit-photometry/from-a-depth-to-a';
+    expect(Object.keys(FORWARD_STEPS)).toContain(key);
+    // The step's literal is 0.1: the truth manifest's radius ratio.
+    expect(forwardModels()[key].value()).toBeCloseTo(0.1, 12);
+  });
+  test('a declaration with a bad setup, an unknown truth or a measurement that misses is refused', async () => {
+    const { FORWARD_STEPS, forwardFindings } =
+      await import('../tools/authoring/forwardSources.mjs');
+    const d = FORWARD_STEPS['transit-photometry/from-a-depth-to-a'];
+    const msgs = steps =>
+      forwardFindings(steps)
+        .map(f => f.message)
+        .join(' | ');
+    expect(msgs({ 'x/y': { ...d, setup: { ...d.setup, seed: '' } } })).toMatch(
+      /not valid: seed/
+    );
+    expect(msgs({ 'x/y': { ...d, truth: 'nope' } })).toMatch(
+      /no parameter "nope"/
+    );
+    expect(msgs({ 'x/y': { ...d, measure: () => 0.2 } })).toMatch(
+      /does not reproduce/
+    );
+    expect(msgs({ 'x/y': { ...d, model: 'nothing' } })).toMatch(/refused/);
+  });
+  test('gradeAgainstTruth marks an answer inside the tolerance and outside it', () => {
+    const o = runForward('transit', STATE(), SETUP());
+    const k = truthOf(o).k;
+    expect(gradeAgainstTruth(o, 'k', k * 1.01, 0.02)).toMatchObject({
+      ok: true,
+      truth: k,
+    });
+    expect(gradeAgainstTruth(o, 'k', k * 1.2, 0.02).ok).toBe(false);
+    expect(gradeAgainstTruth(o, 'zzz', 1, 0.1)).toBeNull();
+    expect(gradeAgainstTruth({ origin: 'observed' }, 'k', 1, 0.1)).toBeNull();
   });
 });

@@ -142,3 +142,22 @@ export function compareWithTruth(observation, fit) {
   }
   return { rows, unfitted };
 }
+
+/**
+ * Grade an answer to "what would this survey have seen" against the truth
+ * manifest: the answer is right when it is within `tolerance` (a fraction of
+ * the truth, or absolute when the truth is 0) of the named truth parameter.
+ * @returns {{ok: boolean, truth: number, difference: number}|null} null when the
+ *   observation is not synthetic or has no such parameter
+ */
+export function gradeAgainstTruth(observation, id, answer, tolerance) {
+  const p = observation?.synthetic?.truth?.parameters?.find(q => q.id === id);
+  if (!p || !Number.isFinite(answer)) return null;
+  const difference = answer - p.value;
+  const scale = p.value === 0 ? 1 : Math.abs(p.value);
+  return {
+    ok: Math.abs(difference) / scale <= tolerance,
+    truth: p.value,
+    difference,
+  };
+}

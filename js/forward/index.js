@@ -41,6 +41,10 @@ export function runForward(id, state, setup, opts = {}) {
   return model.run(state, setup, opts);
 }
 
-export { compareWithTruth, isSynthetic } from './observation.js';
+export {
+  compareWithTruth,
+  gradeAgainstTruth,
+  isSynthetic,
+} from './observation.js';
 export * from './setup.js';
 export { elementsFromBodies } from './system.js';

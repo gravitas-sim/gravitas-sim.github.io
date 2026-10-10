@@ -62,6 +62,7 @@ import {
   criticalSemiMajorPType,
 } from '../../js/binaryStability.js';
 import { expectedKeplerSlope } from '../../js/powerLawGravity.js';
+import { forwardModels } from './forwardSources.mjs';
 import { LIGHT_MODELS } from './lightModels.mjs';
 import { allWidgets, whenWidgetsReady } from '../../js/widgets.js';
 
@@ -209,6 +210,7 @@ const E_BINARY = 0.4;
  */
 export const MODELS = {
   ...LIGHT_MODELS,
+  ...forwardModels(),
   'keplers-laws/use-the-law': {
     via: "js/tidalPhysics.js (G, solar mass, AU): Newton's form of the third law",
     value: () => periodAboutSun(4) / YEAR_S,
@@ -268,14 +270,6 @@ export const MODELS = {
   'missing-mass/the-prediction-mond-makes': {
     via: 'js/mond.js asymptoticSpeed of the 2.15e10 solar-mass disc and bulge at A0_GALACTIC',
     value: () => mondAsymptoticSpeed(2.15e10, A0_GALACTIC),
-  },
-  'transit-photometry/from-a-depth-to-a': {
-    via: 'js/transitWidgets.js depth-size compute(): the radius ratio of a planet whose transit is 1% deep',
-    value: async () => {
-      const w = await widget('depth-size');
-      const rp = solve(r => w.compute({ rp: r, rs: 1 }).depth, 0.01, 0.3, 15);
-      return w.compute({ rp, rs: 1 }).k;
-    },
   },
   'missing-mass/how-much-of-it-is': {
     via: 'js/darkMatterWidgets.js dm-fit compute() at the published decomposition (disc 3.3, halo 150 km/s, core 6 kpc): halo over visible mass inside 30 kpc',

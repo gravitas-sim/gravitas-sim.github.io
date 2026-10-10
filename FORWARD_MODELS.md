@@ -26,6 +26,10 @@ Noise statistics over 200 seeds of 100 points: white mean and standard deviation
 
 Circular orbits only for the transit model (an eccentric planet is refused). Planets' reflex motions add; they do not interact. Eclipsing binaries are uniform disks. Spectrum lines are Gaussians, sampled at pixel centres, and the flux is continuum-relative. Catalogue stars are blackbodies without extinction or binaries. Images have no cosmic rays, saturation or flat-field structure. `elementsFromBodies` reads a counter-clockwise two-body state into elements; the caller supplies the time unit.
 
+## Lessons declare a setup
+
+A lesson step's answer may be a measurement of a forward-modelled system. The declaration (model state, setup, forward model, the truth parameter, how the student measures) is in `tools/authoring/forwardSources.mjs`, not on the step, so no route pays for it. `modelChecked.mjs` turns each declaration into a MODELS entry whose value is the truth manifest's, so `tests/modelCheckedExpectations.test.js` proves the literal; `author:check` (rule `instructor/forward-source`) refuses a declaration whose setup is invalid, whose model or truth id is unknown, or whose measurement misses the truth. The first use is "From a depth to a size" in Transit Photometry. `gradeAgainstTruth` (js/forward) grades an answer against a manifest at run time.
+
 ## Not done in this prompt
 
-Lesson steps declaring a setup and grading against the truth manifest (item 5) and `author:check` for them; opening synthetic observations from a menu in the Observatory (they open as files, and the label and the compare-with-truth table appear in the page); wiring the radial-velocity panel's live run to the setup module (the migration and equivalence are tested; the panel's code path is unchanged).
+Opening synthetic observations from a menu in the Observatory (they open as files; the label and the compare-with-truth table appear in the page); wiring the radial-velocity panel's live run to the setup module (the migration and equivalence are tested; the panel's code path is unchanged).
