@@ -14,7 +14,7 @@
 // Meeus ch. 47 series plus nutation, and ch. 40's parallax for the observer.
 // =============================================================================
 
-import { lunarPosition, eclipticToEquatorial } from '../../observingWindow.js';
+import { lunarPosition, eclipticToEquatorial } from './moon.js';
 import { nutation, meanObliquityDeg, wrap360, gastDeg } from './time.js';
 import { toHorizontal } from './coords.js';
 const DEG = Math.PI / 180;

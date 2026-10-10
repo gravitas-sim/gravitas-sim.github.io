@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // Delta-T, the nutation series, apparent sidereal time, precession (rigorous
 // and first order) and the periodic part of TDB - TT. Julian date and calendar
-// date are js/observingWindow.js's, re-exported so a caller of the sky kernel
+// date are copies of js/observingWindow.js's (./moon.js says why), re-exported so a caller of the sky kernel
 // needs one import.
 //
 // Pure: no DOM, no clock, no module state; importable in Node and in a Worker.
@@ -20,7 +20,7 @@
 //   - Valid for 1900-2100.
 // =============================================================================
 
-export { julianDate, calendarDate } from '../../observingWindow.js';
+export { julianDate, calendarDate } from './moon.js';
 
 export const J2000 = 2451545.0;
 const DEG = Math.PI / 180;

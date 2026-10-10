@@ -415,3 +415,33 @@ describe('events and readings', () => {
     expect(r.secantAirmass).toBeCloseTo(2, 6);
   });
 });
+
+describe('copies of observingWindow.js', () => {
+  test('the Moon series, Julian and calendar date, airmass and the rotation to the equator are equal to the originals', () => {
+    for (let jd = 2415020.5; jd < 2488070; jd += 997.3) {
+      const a = K.lunarPosition(jd);
+      const b = OW.lunarPosition(jd);
+      for (const k of [
+        'raDeg',
+        'decDeg',
+        'longitudeDeg',
+        'latitudeDeg',
+        'distanceKm',
+      ])
+        expect(a[k]).toBe(b[k]);
+      expect(K.calendarDate(jd)).toEqual(OW.calendarDate(jd));
+      expect(K.meanObliquity(jd)).toBe(OW.meanObliquity(jd));
+    }
+    for (const [y, m, d, h] of [
+      [1957, 10, 4.81, 0],
+      [2026, 3, 20, 3.5],
+      [1900, 1, 1, 0],
+      [2100, 12, 31, 23],
+    ])
+      expect(K.julianDate(y, m, d, h)).toBe(OW.julianDate(y, m, d, h));
+    for (let alt = -5; alt <= 90; alt += 0.5)
+      expect(K.airmass(alt)).toBe(OW.airmass(alt));
+    const e = K.eclipticToEquatorial(123.4, -2.1, 23.43);
+    expect(e).toEqual(OW.eclipticToEquatorial(123.4, -2.1, 23.43));
+  });
+});

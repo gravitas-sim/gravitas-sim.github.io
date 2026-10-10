@@ -8,7 +8,7 @@
 // function, so a reading and the drawing of it cannot differ. Pure.
 // =============================================================================
 
-import { airmass } from '../../observingWindow.js';
+import { airmass } from './moon.js';
 import {
   ttFromUt,
   deltaT,

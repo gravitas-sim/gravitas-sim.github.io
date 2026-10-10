@@ -10,7 +10,7 @@
 // catalogue with linear proper motion (./stars.js). Pure: no DOM, no clock.
 // =============================================================================
 
-import { airmass } from '../../observingWindow.js';
+import { airmass } from './moon.js';
 import { ttFromUt, gastDeg, wrap360 } from './time.js';
 import {
   toHorizontal,
