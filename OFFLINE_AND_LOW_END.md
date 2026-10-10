@@ -62,15 +62,15 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 
 Of those, 717 are core (the install fails without them) and 147 optional (a missing one is reported and costs nothing).
 
-Gzipped, as Pages serves it, the whole is about 6 MB.
+Gzipped, as Pages serves it, the whole is about 5 MB.
 
 | Link | Precache transfer |
 | --- | --- |
-| 10 Mbps | ~5 s |
-| 3 Mbps | ~17 s |
-| 1.5 Mbps | ~34 s |
+| 10 Mbps | ~4 s |
+| 3 Mbps | ~14 s |
+| 1.5 Mbps | ~28 s |
 <!--/fact-block-->
-Pages serves gzip, so the real transfer is about <!--fact:precacheGzipMB-->6<!--/fact--> MB. The images barely
+Pages serves gzip, so the real transfer is more than <!--fact:precacheGzipMB-->5<!--/fact--> MB. The images barely
 compress, being WebP already.
 
 The transfer times are computed from that payload rather than measured: CDP
