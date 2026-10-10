@@ -4,15 +4,15 @@
 // it changes when they do and only when they do - which is what makes the old
 // cache safe to delete on activate and safe to keep otherwise.
 //
-// Split two ways, and the split is what install enforces. The 623 core
+// Split two ways, and the split is what install enforces. The 622 core
 // entries are the shell, the modules, the stylesheets and the self-hosted
 // fonts and libraries: if any one of them cannot be fetched the install fails
 // and this version never activates, because a half-cached build is the mixed
-// revision the whole arrangement exists to prevent. The 140 optional
+// revision the whole arrangement exists to prevent. The 141 optional
 // entries are pictures; a missing one is reported and does not cost the reader
 // the version.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-fe9d71e0ccbd';
-self.__GRAVITAS_PRECACHE_BYTES = 16068252;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-0032b5a4093a';
+self.__GRAVITAS_PRECACHE_BYTES = 16068271;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',
@@ -185,7 +185,6 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/data/scenarioInfo.js',
   './js/data/scenarioTags.js',
   './js/data/settingKeys.js',
-  './js/data/sky/brightStars.js',
   './js/data/sky/constellations.js',
   './js/data/spectra/sdssSpectra.js',
   './js/data/stellar/mistTracks.js',
@@ -717,6 +716,7 @@ self.__GRAVITAS_PRECACHE_OPTIONAL = [
   './js/data/radiation/extinction.js',
   './js/data/radiation/gaiaBandpasses.js',
   './js/data/radiation/lines.js',
+  './js/data/sky/brightStars.js',
   './js/i18n/en.lab3dGuides.js',
   './js/i18n/en.lab3dLab.js',
   './js/i18n/en.mission.js',

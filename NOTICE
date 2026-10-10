@@ -495,11 +495,11 @@ sdss-dr18-stellar-spectra: Four observed stellar spectra: SDSS DR18, one each of
     Yanny et al. 2009, AJ 137, 4377 (SEGUE), doi:10.1088/0004-6256/137/5/4377
 
 sky-bright-stars: Bright stars to V 4.5 for the Sky Lab: the Yale Bright Star Catalogue (5th revised edition)
-  File: js/data/sky/brightStars.js (compilation); the rows are the sidecar sky/bright-stars.json
-  Licence: no licence stated. The ReadMe of CDS catalogue V/50, the Yale/Harvard catalogue pages and HEASARC's page state no licence and no permission to redistribute. CDS's terms (cds.unistra.fr/vizier-org/licences_vizier.html, read 2026-10-09) say VizieR data are free for scientific use with the original authors cited and that commercial use depends on the origin, so use with citation is confirmed and redistribution of a derived subset is not.
-  Basis: A reduced derivative for teaching (904 of 9,110 entries, the facts of position, brightness, colour and name, no remarks text), credited in full, with the checksum of every raw file recorded so the original can be fetched again and compared; shipped on the data-pack "no licence stated, credited" basis with citation, by the project owner's instruction of 2026-10-09 (DECISION_REGISTER.md D-SKY-02). Hipparcos and Tycho are CC BY-NC 3.0 IGO and are not used.
+  File: js/data/sky/brightStars.js (compilation)
+  Licence: no license stated. The ReadMe of CDS catalogue V/50 (pinned here), the Yale/Harvard catalogue pages and HEASARC's page state no licence and no permission to redistribute. CDS's terms (cds.unistra.fr/vizier-org/licences_vizier.html, read 2026-10-09) say VizieR data are free for scientific use with the original authors cited and that commercial use depends on the origin, so use with citation is confirmed and redistribution of a derived subset is not.
+  Basis: A reduced derivative for teaching (904 of 9,110 entries, the facts of position, brightness, colour and name, no remarks text), credited in full, with the checksum of every raw file recorded so the original can be fetched again and compared; shipped on the data-pack "no licence stated, credited" basis with citation, by Carl's instruction of 2026-10-09 (DECISION_REGISTER.md D-SKY-02). Hipparcos and Tycho are CC BY-NC 3.0 IGO and are not used.
   Cite:
-    Hoffleit & Warren 1991, The Bright Star Catalogue, 5th Revised Ed. (preliminary version), NASA/NSSDC Astronomical Data Center; CDS V/50, https://cdsarc.cds.unistra.fr/viz-bin/cat/V/50
+    Hoffleit & Warren 1991, The Bright Star Catalogue, 5th Revised Ed. (preliminary version), NASA/ADC; CDS V/50, https://cdsarc.cds.unistra.fr/viz-bin/cat/V/50
     Hoffleit & Jaschek 1982, The Bright Star Catalogue, 4th Revised Ed., Yale University Observatory
     Bessell & Murphy 2012, PASP 124, 140 (the B and V bands the colour temperature uses), doi:10.1086/664083
 

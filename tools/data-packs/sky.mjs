@@ -236,8 +236,18 @@ export function encode(rows) {
 export const SIMBAD_CHECK = [
   { hr: 2491, name: 'Sirius', ra: [6, 45, 8.9173], dec: [-1, 16, 42, 58.017] },
   { hr: 7001, name: 'Vega', ra: [18, 36, 56.3364], dec: [1, 38, 47, 1.291] },
-  { hr: 5340, name: 'Arcturus', ra: [14, 15, 39.6723], dec: [1, 19, 10, 56.673] },
-  { hr: 2061, name: 'Betelgeuse', ra: [5, 55, 10.3053], dec: [1, 7, 24, 25.426] },
+  {
+    hr: 5340,
+    name: 'Arcturus',
+    ra: [14, 15, 39.6723],
+    dec: [1, 19, 10, 56.673],
+  },
+  {
+    hr: 2061,
+    name: 'Betelgeuse',
+    ra: [5, 55, 10.3053],
+    dec: [1, 7, 24, 25.426],
+  },
   { hr: 424, name: 'Polaris', ra: [2, 31, 49.09], dec: [1, 89, 15, 50.8] },
 ];
 /** Arcseconds: the catalogue is FK5 at epoch 2000, the reference ICRS. */
@@ -299,7 +309,7 @@ const starsPack = {
       license: {
         status: 'no-license-stated',
         statement:
-          'The ReadMe of CDS catalogue V/50 (pinned here), the Yale/Harvard catalogue pages and HEASARC\'s page state no licence and no permission to redistribute. CDS\'s terms (cds.unistra.fr/vizier-org/licences_vizier.html, read 2026-10-09) say VizieR data are free for scientific use with the original authors cited and that commercial use depends on the origin, so use with citation is confirmed and redistribution of a derived subset is not.',
+          "The ReadMe of CDS catalogue V/50 (pinned here), the Yale/Harvard catalogue pages and HEASARC's page state no licence and no permission to redistribute. CDS's terms (cds.unistra.fr/vizier-org/licences_vizier.html, read 2026-10-09) say VizieR data are free for scientific use with the original authors cited and that commercial use depends on the origin, so use with citation is confirmed and redistribution of a derived subset is not.",
         basis:
           'A reduced derivative for teaching (904 of 9,110 entries, the facts of position, brightness, colour and name, no remarks text), credited in full, with the checksum of every raw file recorded so the original can be fetched again and compared; shipped on the data-pack "no licence stated, credited" basis with citation, by Carl\'s instruction of 2026-10-09 (DECISION_REGISTER.md D-SKY-02). Hipparcos and Tycho are CC BY-NC 3.0 IGO and are not used.',
       },
@@ -338,7 +348,8 @@ const starsPack = {
     };
     const manifestRest = {
       source: {
-        archive: 'CDS VizieR catalogue V/50 (Bright Star Catalogue, 5th rev. ed.)',
+        archive:
+          'CDS VizieR catalogue V/50 (Bright Star Catalogue, 5th rev. ed.)',
         urls: this.raw.map(r => r.url),
         citations: [
           {
@@ -369,11 +380,11 @@ const starsPack = {
         steps: [
           'Gunzip the pinned catalog and notes files and check the unzipped files against their recorded SHA-256.',
           'Keep every entry with a visual magnitude of 4.5 or brighter and a J2000 position: 904 stars, brightest first (the Harvard number breaks a tie).',
-          'Position: the catalogue\'s J2000 hours, minutes and seconds of right ascension and degrees, arcminutes and arcseconds of declination, as degrees, rounded to 1e-4 degree (0.36 arcsecond). Proper motion in mas/yr from the catalogue\'s arcsec/yr (pmRA is the projected motion, cos(dec) d(RA)/dt). Magnitude and B-V to 0.01 mag.',
-          'Designation: the catalogue\'s Name field (Flamsteed number, Bayer letter, constellation) split into its three parts and rejoined with spaces.',
-          'Name: the first name of the star\'s "N:" remark where the remark prints it in capitals, as the remark spells it and title-cased; 65 stars. The spellings are the catalogue\'s and are not the IAU\'s (Mirphak for Mirfak, Etamin for Eltanin, Kocab for Kochab).',
+          "Position: the catalogue's J2000 hours, minutes and seconds of right ascension and degrees, arcminutes and arcseconds of declination, as degrees, rounded to 1e-4 degree (0.36 arcsecond). Proper motion in mas/yr from the catalogue's arcsec/yr (pmRA is the projected motion, cos(dec) d(RA)/dt). Magnitude and B-V to 0.01 mag.",
+          "Designation: the catalogue's Name field (Flamsteed number, Bayer letter, constellation) split into its three parts and rejoined with spaces.",
+          "Name: the first name of the star's \"N:\" remark where the remark prints it in capitals, as the remark spells it and title-cased; 65 stars. The spellings are the catalogue's and are not the IAU's (Mirphak for Mirfak, Etamin for Eltanin, Kocab for Kochab).",
           'Colour temperature: for each star with a B-V, the temperature of the blackbody whose B-V through the radiation kernel (Bessell and Murphy B and V, Vega scale, 5772 K gives 0.64) equals it, by bisection, to 10 K; a B-V beyond what 2,500-60,000 K reaches is clamped to the nearer end.',
-          'Write the rows as a sidecar (sky/bright-stars.json), which the page fetches; the module in js/data/sky/ carries the pack record and the sidecar\'s checksum.',
+          "Write the rows as a sidecar (sky/bright-stars.json), which the page fetches; the module in js/data/sky/ carries the pack record and the sidecar's checksum.",
         ],
         record: {
           stars: stars.length,
@@ -383,8 +394,8 @@ const starsPack = {
         },
       },
       assumptions: [
-        'Positions are the catalogue\'s FK5 J2000.0 values at epoch 2000.0; a position at another date applies the proper motion linearly, and neglects radial velocity and parallax (0.016 arcminute over 1900-2100, SKY_LAB.md).',
-        'The traditional names are those of the catalogue\'s own remarks, 65 of 904; they are not confirmed against the IAU Working Group on Star Names.',
+        "Positions are the catalogue's FK5 J2000.0 values at epoch 2000.0; a position at another date applies the proper motion linearly, and neglects radial velocity and parallax (0.016 arcminute over 1900-2100, SKY_LAB.md).",
+        "The traditional names are those of the catalogue's own remarks, 65 of 904; they are not confirmed against the IAU Working Group on Star Names.",
         'B-V of a blackbody is not the B-V of a star (line blanketing, the Balmer jump): the colour temperature is the temperature of the blackbody that would look that colour in these bands, nothing more.',
         'The catalogue is a preliminary version of the fifth edition: its V magnitudes are 0.01 mag, and variable stars carry the value the catalogue lists.',
       ],
@@ -447,25 +458,34 @@ export const SIDECAR = ${JSON.stringify({
   check: async mod => {
     const out = [];
     const doc = JSON.parse(mod.SIDECAR_TEXT);
-    if (doc.format !== 'gravitas.sky-stars/1') out.push('the sidecar is not sky-stars/1');
+    if (doc.format !== 'gravitas.sky-stars/1')
+      out.push('the sidecar is not sky-stars/1');
     if (JSON.stringify(doc.pack) !== JSON.stringify(mod.PACK))
       out.push("the sidecar's pack is not the module's");
-    if (doc.stars.length !== mod.SIDECAR.count || doc.count !== doc.stars.length)
+    if (
+      doc.stars.length !== mod.SIDECAR.count ||
+      doc.count !== doc.stars.length
+    )
       out.push('the star count is not the one the module records');
     if (sha256(mod.SIDECAR_TEXT) !== mod.SIDECAR.sha256)
       out.push('the sidecar is not the file the module records');
     const seen = new Set();
     let last = -Infinity;
     for (const s of doc.stars) {
-      if (s.length !== COLUMNS.length) out.push(`HR ${s[0]}: a row has ${s.length} columns`);
+      if (s.length !== COLUMNS.length)
+        out.push(`HR ${s[0]}: a row has ${s.length} columns`);
       if (seen.has(s[0])) out.push(`HR ${s[0]} is listed twice`);
       seen.add(s[0]);
-      if (!(s[1] >= 0 && s[1] < 3600000)) out.push(`HR ${s[0]}: right ascension ${s[1]}`);
-      if (!(s[2] >= -900000 && s[2] <= 900000)) out.push(`HR ${s[0]}: declination ${s[2]}`);
-      if (s[3] > V_MAX * 100) out.push(`HR ${s[0]}: V ${s[3] / 100} is fainter than ${V_MAX}`);
+      if (!(s[1] >= 0 && s[1] < 3600000))
+        out.push(`HR ${s[0]}: right ascension ${s[1]}`);
+      if (!(s[2] >= -900000 && s[2] <= 900000))
+        out.push(`HR ${s[0]}: declination ${s[2]}`);
+      if (s[3] > V_MAX * 100)
+        out.push(`HR ${s[0]}: V ${s[3] / 100} is fainter than ${V_MAX}`);
       if (s[3] < last) out.push(`HR ${s[0]}: out of magnitude order`);
       last = s[3];
-      if (s[4] === null && s[10] !== 0) out.push(`HR ${s[0]}: a colour temperature without a B-V`);
+      if (s[4] === null && s[10] !== 0)
+        out.push(`HR ${s[0]}: a colour temperature without a B-V`);
     }
     return out;
   },
@@ -492,7 +512,7 @@ export const SIDECAR = ${JSON.stringify({
         quantity: `J2000 position of ${c.name} (HR ${c.hr})`,
         value: 0,
         unit: 'arcsec',
-        ref: 'Hipparcos (ESA 1997) positions, ICRS J2000 at epoch 2000, via SIMBAD (CDS): the catalogue is FK5, so the offset is the two systems and the catalogue\'s 0.1-arcsecond precision',
+        ref: "Hipparcos (ESA 1997) positions, ICRS J2000 at epoch 2000, via SIMBAD (CDS): the catalogue is FK5, so the offset is the two systems and the catalogue's 0.1-arcsecond precision",
       })),
       result: {
         offsetArcsec: result,
