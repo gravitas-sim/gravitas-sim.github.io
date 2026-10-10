@@ -42,7 +42,7 @@ const THE_COMPLETENESS_CURVE = {
     'Say what a completeness curve is, and what a raw count of the stars in a bin leaves out',
     'Correct a luminosity function by weighting each counted star by the volume it could have been seen in',
     'Judge a corrected value against its Poisson error, and say when the correction cannot help',
-    'Say what bias is left when the correction uses the catalogue’s own magnitudes',
+    'Say what bias is left when the correction uses the catalog’s own magnitudes',
     'State, for a corrected result, an assumption and a residual bias',
   ],
   steps: [
@@ -63,6 +63,28 @@ const THE_COMPLETENESS_CURVE = {
              volume of the cone; the <em>corrected</em> value (a dot, with its
              Poisson error) weights each counted star by 1 ÷ the volume in which
              it could have been counted.`,
+      tool: CC(SHARP),
+    },
+    {
+      sid: 'predict-the-raw-count',
+      stage: STARS,
+      type: 'predict',
+      reveal: 'raw-against-truth',
+      title: 'How much does a raw count lose?',
+      body: `The survey has a limit of 20 and is 50 percent complete there, with a sharp edge, so it counts almost every star it can reach. Take the faintest bin, absolute magnitudes 10 to 12, and do not change the instrument yet.`,
+      prompt: 'A raw count of that bin will recover&hellip;',
+      options: [
+        'about half of the stars that are there, because red dwarfs can be seen only nearby',
+        'all of them: the survey is nearly complete',
+        'almost none of them',
+        'more than are there',
+      ],
+      answer: 0,
+      hints: [
+        'Remember how far a red dwarf can be seen at a limit of 20, compared with the depth of the cone.',
+      ],
+      because:
+        'About half. Even with a sharp edge, a star of absolute magnitude 11 is lost beyond 630 parsecs, inside a cone 1,000 parsecs deep. The next step reads the number.',
       tool: CC(SHARP),
     },
     {
@@ -133,7 +155,7 @@ const THE_COMPLETENESS_CURVE = {
         {
           id: 'fixed',
           label: 'Corrected, bin 8 to 10',
-          unit: '× truth',
+          unit: '',
           hint: '0.97',
         },
       ],
@@ -188,13 +210,13 @@ const THE_COMPLETENESS_CURVE = {
         {
           id: 'n',
           label: 'Stars counted, bin 10 to 12',
-          unit: 'stars',
+          unit: '',
           hint: '3',
         },
         {
           id: 'err',
           label: 'Error of the corrected value',
-          unit: '× truth',
+          unit: '',
           hint: '0.46',
         },
       ],
@@ -216,45 +238,45 @@ const THE_COMPLETENESS_CURVE = {
       tool: CC(POOR),
     },
     {
-      sid: 'the-catalogue-own-magnitudes',
+      sid: 'the-catalog-own-magnitudes',
       stage: STARS,
       type: 'measure',
-      title: 'Correct with the catalogue’s own magnitudes',
+      title: 'Correct with the catalog’s own magnitudes',
       body: `So far the correction used each star’s true absolute magnitude, which only
              a synthetic survey knows. An analyst has the measured apparent
              magnitude and parallax and works the absolute magnitude out from
              them. Go back to the first preset. In the bin from M = 10 to 12, read the corrected value with true magnitudes and the
-             value <strong>from the catalogue’s own magnitudes</strong>.`,
+             value <strong>from the catalog’s own magnitudes</strong>.`,
       fields: [
         {
           id: 'true',
           label: 'Corrected, true magnitudes',
-          unit: '× truth',
+          unit: '',
           hint: '1.00',
         },
         {
-          id: 'catalogue',
-          label: 'Corrected, catalogue magnitudes',
-          unit: '× truth',
+          id: 'catalog',
+          label: 'Corrected, catalog magnitudes',
+          unit: '',
           hint: '1.6',
         },
       ],
       validate: v => {
-        if (![v.true, v.catalogue].every(Number.isFinite)) return null;
+        if (![v.true, v.catalog].every(Number.isFinite)) return null;
         if (
           Math.abs(v.true - 1.002) <= 0.06 &&
-          Math.abs(v.catalogue - 1.604) <= 0.12
+          Math.abs(v.catalog - 1.604) <= 0.12
         ) {
           return {
             level: 'ok',
             message:
-              'The same stars, with the same correction, give 1.00 with true magnitudes and 1.60 with the catalogue’s: 60 percent too many. A star’s parallax error scatters it between bins, and where bins have a steep number gradient more stars scatter in than out.',
+              'The same stars, with the same correction, give 1.00 with true magnitudes and 1.60 with the catalog’s: 60 percent too many. A star’s parallax error scatters it between bins, and where bins have a steep number gradient more stars scatter in than out.',
           };
         }
         return {
           level: 'error',
           message:
-            'Use the first preset and read the last two rows of the bin from 10 to 12: the corrected value, and the one “from the catalogue’s own magnitudes”.',
+            'Use the first preset and read the last two rows of the bin from 10 to 12: the corrected value, and the one “from the catalog’s own magnitudes”.',
         };
       },
       tool: CC(SHARP),
@@ -265,7 +287,7 @@ const THE_COMPLETENESS_CURVE = {
       type: 'question',
       kind: 'short',
       rubric:
-        'Full credit for stating (1) the assumption the correction rests on, that the completeness function and the limit are known and the stars are spread evenly; (2) that the corrected luminosity function agrees with the truth to within its Poisson error where the survey counted enough stars; and (3) a residual bias with its source and a number: with the catalogue’s own magnitudes the faintest bin comes out about 60 percent too high (1.6 against 1.0), because parallax and magnitude errors scatter stars between bins of a steep function. Credit also saying that a bin with three stars carries no usable constraint. Do not credit an answer that says the correction removes all bias, or that gives a corrected number with no error.',
+        'Full credit for stating (1) the assumption the correction rests on, that the completeness function and the limit are known and the stars are spread evenly; (2) that the corrected luminosity function agrees with the truth to within its Poisson error where the survey counted enough stars; and (3) a residual bias with its source and a number: with the catalog’s own magnitudes the faintest bin comes out about 60 percent too high (1.6 against 1.0), because parallax and magnitude errors scatter stars between bins of a steep function. Credit also saying that a bin with three stars carries no usable constraint. Do not credit an answer that says the correction removes all bias, or that gives a corrected number with no error.',
       title: 'Report it',
       body: `You corrected a luminosity function from a survey with a fading
              completeness curve and measured it against a truth that a real
@@ -284,7 +306,7 @@ const THE_COMPLETENESS_CURVE = {
              star by the volume it could have been seen in recovers the
              luminosity function to within its Poisson error, even for a survey
              that fades long before its limit, as long as some stars of each kind
-             were counted. A correction made with the catalogue’s own
+             were counted. A correction made with the catalog’s own
              magnitudes leaves a bias, here 60 percent in the faintest bin, from the
              errors of the measurement. The result to report is the corrected
              value, its error, the assumption it rests on and the bias that

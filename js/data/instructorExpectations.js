@@ -64,8 +64,8 @@ export default {
         'Second preset, bin 8-10: raw 13.3 percent (within 2) and corrected 0.97 times the truth (within 0.08).',
       'when-it-cannot-help':
         'Third preset, bin 10-12: 3 stars (within 1) and an error of 0.459 (within 0.06).',
-      'the-catalogue-own-magnitudes':
-        "First preset, bin 10-12: 1.00 from true magnitudes (within 0.06) and 1.60 from the catalogue's (within 0.12).",
+      'the-catalog-own-magnitudes':
+        "First preset, bin 10-12: 1.00 from true magnitudes (within 0.06) and 1.60 from the catalog's (within 0.12).",
     },
     'what-a-spectrum-is-made-of': {
       'measure-two-clouds':

@@ -83,10 +83,10 @@ export const EN_SURVEY = {
   'svyW.k.row.bin8': 'Bin M = 8 to 10: stars counted',
   'svyW.k.row.raw8': 'raw count, share of the truth',
   'svyW.k.row.fix8': 'corrected, share of the truth (± Poisson)',
-  'svyW.k.row.cat8': 'corrected from the catalogue’s own magnitudes',
+  'svyW.k.row.cat8': 'corrected from the catalog’s own magnitudes',
   'svyW.k.row.bin10': 'Bin M = 10 to 12: stars counted',
   'svyW.k.row.raw10': 'raw count, share of the truth',
   'svyW.k.row.fix10': 'corrected, share of the truth (± Poisson)',
-  'svyW.k.row.cat10': 'corrected from the catalogue’s own magnitudes',
+  'svyW.k.row.cat10': 'corrected from the catalog’s own magnitudes',
   'svyW.k.value.fix': '{r} ± {e}',
 };

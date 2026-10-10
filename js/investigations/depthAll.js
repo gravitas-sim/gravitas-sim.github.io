@@ -16,6 +16,9 @@ import MADE_OF_DEEPER from '../data/investigations/depth/what-a-spectrum-is-made
 import THE_SUNS_MOTION_DEEPER from '../data/investigations/depth/the-suns-motion.js';
 import THE_ROTATING_DISK_DEEPER from '../data/investigations/depth/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP_DEEPER from '../data/investigations/depth/cluster-membership.js';
+import WHO_GETS_COUNTED_DEEPER from '../data/investigations/depth/who-gets-counted.js';
+import WHY_THE_BRIGHT_ONES_WIN_DEEPER from '../data/investigations/depth/why-the-bright-ones-win.js';
+import THE_COMPLETENESS_CURVE_DEEPER from '../data/investigations/depth/the-completeness-curve.js';
 import MISSING_MASS_DEEPER from '../data/investigations/depth/missing-mass.js';
 import THE_TURNING_SKY_DEEPER from '../data/investigations/depth/the-turning-sky.js';
 import THE_SUN_THROUGH_THE_YEAR_DEEPER from '../data/investigations/depth/the-sun-through-the-year.js';
@@ -26,9 +29,6 @@ import PLAN_A_NIGHT_DEEPER from '../data/investigations/depth/plan-a-night.js';
 /** The deeper steps of the lessons that have them, by lesson id (DEPTH.md). */
 export const DEEPER = Object.freeze({
   [KEPLER_DEEPER.id]: KEPLER_DEEPER.steps,
-import WHO_GETS_COUNTED_DEEPER from '../data/investigations/depth/who-gets-counted.js';
-import WHY_THE_BRIGHT_ONES_WIN_DEEPER from '../data/investigations/depth/why-the-bright-ones-win.js';
-import THE_COMPLETENESS_CURVE_DEEPER from '../data/investigations/depth/the-completeness-curve.js';
   [TRANSIT_DEEPER.id]: TRANSIT_DEEPER.steps,
   [WEIGHING_DEEPER.id]: WEIGHING_DEEPER.steps,
   [MISSING_MASS_DEEPER.id]: MISSING_MASS_DEEPER.steps,

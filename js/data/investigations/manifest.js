@@ -470,8 +470,8 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-completeness-curve.webp',
     depths: 3,
-    stepCount: 9,
-    gradedCount: 7,
+    stepCount: 10,
+    gradedCount: 8,
     objectiveCount: 5,
   },
 ];

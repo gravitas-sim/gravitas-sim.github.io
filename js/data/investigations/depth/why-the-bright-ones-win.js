@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // The same instrument. Quantitative: Malmquist's closed form by hand. Advanced:
 // what the parallax bias does to a luminosity, and the same drift in a real
-// catalogue. Every expected value is recomputed (tools/authoring/surveyModels.mjs
+// catalog. Every expected value is recomputed (tools/authoring/surveyModels.mjs
 // and tests/surveyInvestigations.test.js).
 // =============================================================================
 
@@ -50,7 +50,7 @@ export default {
       tolerance: 0.03,
       hints: ['1.4² = 1.96.'],
       worked:
-        '1.3816 × 1.96 = 2.708 magnitudes: four times the shift, a factor of twelve in luminosity. The real luminosity function of stars is much wider than 1.4 magnitudes, which is why a magnitude-limited catalogue of stars is so different from the stars there are.',
+        '1.3816 × 1.96 = 2.708 magnitudes: four times the shift, a factor of twelve in luminosity. The real luminosity function of stars is much wider than 1.4 magnitudes, which is why a magnitude-limited catalog of stars is so different from the stars there are.',
       feedback: {
         close: 'Close. σ² for σ = 1.4 is 1.96.',
         off: 'Shift = 1.3816 × 1.96.',
@@ -88,8 +88,8 @@ export default {
       depth: 'advanced',
       type: 'question',
       kind: 'choice',
-      title: 'A real catalogue does it too',
-      body: `In the solar-neighbourhood pack (real Gaia stars), the mean absolute
+      title: 'A real catalog does it too',
+      body: `In the solar-neighbourhood table (real Gaia stars), the mean absolute
              magnitude falls from 8.80 within 100&nbsp;pc to 6.68 at
              100–250, 5.35 at 250–500 and 4.23 at 500–1,000&nbsp;pc. That
              sample was selected on a radial velocity, which Gaia measures

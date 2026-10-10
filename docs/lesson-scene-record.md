@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 38 investigations and 827 steps: 777 steps
+Across 38 investigations and 828 steps: 778 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 388 show a prescribed model result, 135 draw
-on a stored dataset, 267 put a self-contained panel beside the text,
+running integration, 389 show a prescribed model result, 136 draw
+on a stored dataset, 268 put a self-contained panel beside the text,
 151 keep something, and 30 are prose.
-Of 103 prediction loops, 103 are returned to,
-103 produce a measurement before they are answered, and
+Of 104 prediction loops, 104 are returned to,
+104 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-103 hold their marking until the experiment settles them.
+104 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -523,7 +523,7 @@ Of 103 prediction loops, 103 are returned to,
 - **Prediction loops:** predict-what-is-missed → count-a-shallow-survey, count-a-deep-survey, what-the-deep-survey-misses, how-far-can-it-see, the-average-star, counts-by-magnitude, a-count-is-not-a-census, what-you-worked-out → count-a-shallow-survey.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:survey-counts`, control survey-counts/limit, measures the number of stars a survey counts, and the share of the population, at a magnitude limit, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Why the Bright Ones Win (`why-the-bright-ones-win`)
 
@@ -537,19 +537,19 @@ Of 103 prediction loops, 103 are returned to,
 - **Prediction loops:** predict-the-shells → measure-the-shells, why-it-grows, standard-candles, double-the-scatter, a-second-bias, raise-the-cut, say-what-follows, what-you-worked-out → measure-the-shells.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:malmquist`, control malmquist/limit, measures the Malmquist bias: how much brighter the counted stars are than the stars there are, in shells of distance, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Completeness Curve (`the-completeness-curve`)
 
-- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 9 prescribed model, 9 stored dataset, 9 self-contained panel.
-- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, choose-an-option, answer-in-words.
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 10 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
 - **Objects the steps declare:** sun, dwarf.
 - **Instruments:** completeness-lf.
 - **Stored data:** MIST v1.2 evolutionary tracks (computed-grid).
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** none.
+- **Prediction loops:** predict-the-raw-count → raw-against-truth, why-raw-is-low, correct-the-fade, is-it-one, when-it-cannot-help, the-catalog-own-magnitudes, state-the-residual, what-you-worked-out → raw-against-truth.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:completeness-lf`, control completeness-lf/m50, measures the share of the true luminosity function a raw count recovers, and the corrected value, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

@@ -66,7 +66,10 @@
           "what-a-spectrum-is-made-of",
           "the-suns-motion",
           "the-rotating-disk",
-          "cluster-membership"
+          "cluster-membership",
+          "who-gets-counted",
+          "why-the-bright-ones-win",
+          "the-completeness-curve"
         ]
       }
     },
@@ -282,7 +285,10 @@
                   "what-a-spectrum-is-made-of",
                   "the-suns-motion",
                   "the-rotating-disk",
-                  "cluster-membership"
+                  "cluster-membership",
+                  "who-gets-counted",
+                  "why-the-bright-ones-win",
+                  "the-completeness-curve"
                 ]
               }
             }
@@ -1438,6 +1444,9 @@
             "solar-motion",
             "rotating-disk",
             "cluster-members",
+            "survey-counts",
+            "malmquist",
+            "completeness-lf",
             "sky-turning",
             "sky-seasons",
             "sky-phases",

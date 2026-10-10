@@ -15,6 +15,22 @@ export default {
       body: 'Un sondeo real no cuenta todas las estrellas por encima de su límite. La fracción que halla baja a medida que las estrellas se debilitan: la <strong>curva de completitud</strong>. En este instrumento es una curva que vale el 50 por ciento en una magnitud y cae en una anchura indicada.\n\nLa otra imagen es la <strong>función de luminosidad</strong>: cuántas estrellas hay por parsec cúbico en cada magnitud absoluta. Como las estrellas son sintéticas, conocemos la verdadera (gris). La cuenta <em>bruta</em> (un cuadrado abierto) solo divide las estrellas contadas de cada intervalo entre el volumen del cono; el valor <em>corregido</em> (un punto, con su error de Poisson) pondera cada estrella contada por 1 ÷ el volumen en que pudo contarse.',
     },
     {
+      title: '¿Cuánto pierde una cuenta bruta?',
+      body: 'El sondeo tiene un límite de 20 y es completo al 50 por ciento ahí, con un borde nítido, así que cuenta casi toda estrella que alcanza. Toma el intervalo más débil, magnitudes absolutas de 10 a 12, y todavía no cambies el instrumento.',
+      prompt: 'Una cuenta bruta de ese intervalo recuperará&hellip;',
+      options: [
+        'cerca de la mitad de las estrellas que hay, porque las enanas rojas solo se ven cerca',
+        'todas: el sondeo es casi completo',
+        'casi ninguna',
+        'más de las que hay',
+      ],
+      hints: [
+        'Recuerda a qué distancia se ve una enana roja con un límite de 20, comparada con la profundidad del cono.',
+      ],
+      because:
+        'Cerca de la mitad. Incluso con un borde nítido, una estrella de magnitud absoluta 11 se pierde más allá de 630 parsecs, dentro de un cono de 1.000 parsecs de profundidad. El paso siguiente lee el número.',
+    },
+    {
       title: 'Bruta frente a verdad, con un borde nítido',
       body: 'El límite es 20 y el sondeo es completo al 50 por ciento en 20, con un borde nítido. En los dos intervalos más débiles, lee la <strong>cuenta bruta como parte de la verdad</strong>: el intervalo de M = 8 a 10 y el de 10 a 12.',
       fields: [{ label: 'Intervalo 8 a 10' }, { label: 'Intervalo 10 a 12' }],

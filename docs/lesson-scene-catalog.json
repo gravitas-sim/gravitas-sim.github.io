@@ -61355,7 +61355,7 @@
      "sid": "a-count-is-not-a-census",
      "index": 9,
      "type": "question",
-     "title": "A friend reads the catalogue",
+     "title": "A friend reads the catalog",
      "declares": {
       "stage": {
        "objects": 2,
@@ -62472,8 +62472,85 @@
      ]
     },
     {
-     "sid": "raw-against-truth",
+     "sid": "predict-the-raw-count",
      "index": 2,
+     "type": "predict",
+     "title": "How much does a raw count lose?",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "sun",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "commit-a-prediction",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": "raw-against-truth",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "completeness-lf",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "raw-against-truth",
+     "index": 3,
      "type": "measure",
      "title": "Raw against truth, with a sharp edge",
      "declares": {
@@ -62553,7 +62630,7 @@
     },
     {
      "sid": "why-raw-is-low",
-     "index": 3,
+     "index": 4,
      "type": "question",
      "title": "Why is the raw count low?",
      "declares": {
@@ -62629,7 +62706,7 @@
     },
     {
      "sid": "correct-the-fade",
-     "index": 4,
+     "index": 5,
      "type": "measure",
      "title": "Correct a survey that fades early",
      "declares": {
@@ -62709,7 +62786,7 @@
     },
     {
      "sid": "is-it-one",
-     "index": 5,
+     "index": 6,
      "type": "question",
      "title": "Is 0.97 equal to 1?",
      "declares": {
@@ -62785,7 +62862,7 @@
     },
     {
      "sid": "when-it-cannot-help",
-     "index": 6,
+     "index": 7,
      "type": "measure",
      "title": "When a correction cannot help",
      "declares": {
@@ -62864,10 +62941,10 @@
      ]
     },
     {
-     "sid": "the-catalogue-own-magnitudes",
-     "index": 7,
+     "sid": "the-catalog-own-magnitudes",
+     "index": 8,
      "type": "measure",
-     "title": "Correct with the catalogue’s own magnitudes",
+     "title": "Correct with the catalog’s own magnitudes",
      "declares": {
       "stage": {
        "objects": 2,
@@ -62945,7 +63022,7 @@
     },
     {
      "sid": "state-the-residual",
-     "index": 8,
+     "index": 9,
      "type": "question",
      "title": "Report it",
      "declares": {
@@ -63021,7 +63098,7 @@
     },
     {
      "sid": "what-you-worked-out",
-     "index": 9,
+     "index": 10,
      "type": "read",
      "title": "What you worked out",
      "declares": {
@@ -63094,17 +63171,55 @@
      ]
     }
    ],
-   "loops": [],
+   "loops": [
+    {
+     "predict": "predict-the-raw-count",
+     "predictCollects": true,
+     "heldUntil": "raw-against-truth",
+     "experiment": [
+      "raw-against-truth",
+      "why-raw-is-low",
+      "correct-the-fade",
+      "is-it-one",
+      "when-it-cannot-help",
+      "the-catalog-own-magnitudes",
+      "state-the-residual",
+      "what-you-worked-out"
+     ],
+     "measure": [
+      "raw-against-truth",
+      "why-raw-is-low",
+      "correct-the-fade",
+      "is-it-one",
+      "when-it-cannot-help",
+      "the-catalog-own-magnitudes",
+      "state-the-residual",
+      "what-you-worked-out"
+     ],
+     "evidence": [
+      "raw-against-truth",
+      "correct-the-fade",
+      "when-it-cannot-help",
+      "the-catalog-own-magnitudes"
+     ],
+     "interpret": "raw-against-truth",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
    "totals": {
-    "steps": 9,
-    "declared": 9,
+    "steps": 10,
+    "declared": 10,
     "student": 0,
     "engine": 0,
-    "model": 9,
-    "data": 9,
-    "diagram": 9,
+    "model": 10,
+    "data": 10,
+    "diagram": 10,
     "evidence": 4,
-    "declaredButInert": 9,
+    "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -63112,23 +63227,23 @@
   }
  ],
  "totals": {
-  "steps": 827,
-  "declared": 777,
+  "steps": 828,
+  "declared": 778,
   "student": 157,
   "engine": 163,
-  "model": 388,
-  "data": 135,
-  "diagram": 267,
+  "model": 389,
+  "data": 136,
+  "diagram": 268,
   "evidence": 151,
-  "declaredButInert": 620,
+  "declaredButInert": 621,
   "prose": 30,
   "mismatched": 0,
   "rebuilds": 71,
   "lessons": 38,
-  "loops": 103,
-  "closedLoops": 103,
+  "loops": 104,
+  "closedLoops": 104,
   "explainedLoops": 0,
-  "heldLoops": 103,
-  "completeLoops": 103
+  "heldLoops": 104,
+  "completeLoops": 104
  }
 }

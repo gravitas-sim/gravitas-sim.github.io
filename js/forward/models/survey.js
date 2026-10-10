@@ -116,7 +116,7 @@ export function run(state, rawSetup, opts = {}) {
           id: 'density',
           name: 'stars per cubic parsec',
           value: u.n / u.volume,
-          unit: 'pc^-3',
+          unit: '',
         },
       ],
       columns: {

@@ -4684,7 +4684,7 @@ export const INSTRUCTOR_CONTENT = {
   },
   'who-gets-counted': {
     topic:
-      'Selection by a magnitude limit: what a survey counts, what it misses and why a catalogue is not a census',
+      'Selection by a magnitude limit: what a survey counts, what it misses and why a catalog is not a census',
     difficulty: 'Introductory (model-driven)',
     placement:
       'After Lives of Stars (or any work with luminosity and absolute magnitude). The first of three selection-effects investigations; it needs only the magnitude scale and the idea of distance. It supports OpenStax Astronomy 2e chapter 19 on stellar populations and surveys.',
@@ -4716,7 +4716,11 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Depth',
-        text: 'Quantitative: the distance by hand and the volume gained per magnitude (3.98). Advanced: the same drift of brightness with distance in the real Gaia solar-neighbourhood pack (8.80 to 4.23, 4.56 mag).',
+        text: 'Quantitative: the distance by hand and the volume gained per magnitude (3.98). Advanced: the same drift of brightness with distance in the real Gaia solar-neighbourhood table (8.80 to 4.23, 4.56 mag).',
+      },
+      {
+        name: 'The synthetic survey',
+        text: 'The same universe can be surveyed outside the lesson: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labelled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
       },
     ],
     misconceptions: [
@@ -4737,11 +4741,11 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'The model is bolometric: no bolometric correction, no dust, no binaries, stars uniform in space (SELECTION_EFFECTS.md). Say so if a student asks whether the numbers are real.',
       'The core values come from a fixed seed (survey-lab-1), so every student sees the same 2,645 stars.',
-      'The real-sample comparison uses the Gaia pack, a stratified and radial-velocity-selected subset (CC BY-NC 3.0 IGO, D-GAIA-01); its shell means are stated in the advanced step and recomputed by a test.',
+      'The real-sample comparison uses the Gaia table, a stratified and radial-velocity-selected subset (CC BY-NC 3.0 IGO, D-GAIA-01); its shell means are stated in the advanced step and recomputed by a test.',
     ],
     discussion: [
       'What would a survey of only the nearest 100 parsecs miss, and what would it get right?',
-      'Who would be misled by a catalogue of the brightest stars, and how?',
+      'Who would be misled by a catalog of the brightest stars, and how?',
       'How would you know how many stars a real survey missed?',
     ],
     extensions: [
@@ -4785,7 +4789,11 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Depth',
-        text: 'Quantitative: the closed form by hand for sigma 0.7 (0.677) and 1.4 (2.708). Advanced: the luminosity error from the parallax bias (20.6 percent) and the real Gaia pack drifting the same way (8.80, 6.68, 5.35, 4.23 mag).',
+        text: 'Quantitative: the closed form by hand for sigma 0.7 (0.677) and 1.4 (2.708). Advanced: the luminosity error from the parallax bias (20.6 percent) and the real Gaia table drifting the same way (8.80, 6.68, 5.35, 4.23 mag).',
+      },
+      {
+        name: 'The synthetic survey',
+        text: 'The same universe can be surveyed outside the lesson: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labelled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
       },
     ],
     misconceptions: [
@@ -4828,7 +4836,7 @@ export const INSTRUCTOR_CONTENT = {
     placement:
       'After Why the Bright Ones Win. It supports OpenStax Astronomy 2e chapter 19 and is the introduction to correcting a survey; the advanced steps serve an upper-level statistics-of-surveys module.',
     overview:
-      "Students see that a raw count of faint stars is too low (96 and 57 percent of the truth in the two faintest bins even for a sharp edge at 20), that weighting each counted star by 1 over the volume it could be seen in recovers the truth (0.97 +/- 0.06 for a survey 50 percent complete at 17, where the raw count gets 13 percent), that three stars cannot carry a bin (0.78 +/- 0.46), and that working the absolute magnitudes out from the catalogue's own parallaxes leaves a 60 percent bias (1.60 against 1.00) in the faintest bin.",
+      "Students see that a raw count of faint stars is too low (96 and 57 percent of the truth in the two faintest bins even for a sharp edge at 20), that weighting each counted star by 1 over the volume it could be seen in recovers the truth (0.97 +/- 0.06 for a survey 50 percent complete at 17, where the raw count gets 13 percent), that three stars cannot carry a bin (0.78 +/- 0.46), and that working the absolute magnitudes out from the catalog's own parallaxes leaves a 60 percent bias (1.60 against 1.00) in the faintest bin.",
     priorKnowledge: [
       'Who Gets Counted and Why the Bright Ones Win',
       'Poisson counting (the error of N is the square root of N)',
@@ -4851,11 +4859,15 @@ export const INSTRUCTOR_CONTENT = {
     features: [
       {
         name: 'Completeness instrument (survey family)',
-        text: 'The luminosity function (truth, raw, corrected) or the completeness curve; the magnitude limit, the 50 percent point and the width of the fade; listed counts and shares for the two faintest bins, with the corrected value from true and from catalogue magnitudes.',
+        text: 'The luminosity function (truth, raw, corrected) or the completeness curve; the magnitude limit, the 50 percent point and the width of the fade; listed counts and shares for the two faintest bins, with the corrected value from true and from catalog magnitudes.',
       },
       {
         name: 'Depth',
-        text: 'Quantitative: the weight of one star (3.98) and the Poisson error (4.5 percent). Advanced: the Euclidean count slope 0.6, a real catalogue (SDSS NGC 2420) running out beyond r = 21, and what a bootstrap can and cannot say.',
+        text: 'Quantitative: the weight of one star (3.98) and the Poisson error (4.5 percent). Advanced: the Euclidean count slope 0.6, a real catalog (SDSS NGC 2420) running out beyond r = 21, and what a bootstrap can and cannot say.',
+      },
+      {
+        name: 'The synthetic survey',
+        text: 'The same universe can be surveyed outside the lesson: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labelled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
       },
     ],
     misconceptions: [
@@ -4875,8 +4887,8 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      "The catalogue-magnitude value of 1.604 in the faintest bin depends on the instrument's astrometry (Gaia-like: 0.02 mas to magnitude 13); with worse parallaxes it is larger.",
-      'The SDSS counts in the advanced step are from the NGC 2420 photometry pack (a cluster field, not a uniform one) and are recomputed by a test.',
+      "The catalog-magnitude value of 1.604 in the faintest bin depends on the instrument's astrometry (Gaia-like: 0.02 mas to magnitude 13); with worse parallaxes it is larger.",
+      'The SDSS counts in the advanced step are from the NGC 2420 photometry table (a cluster field, not a uniform one) and are recomputed by a test.',
       "The statistics-of-surveys module is the advanced depth plus the pure functions in js/survey/model.js (sweepLimit, bootstrapLuminosityFunction) that use the analysis lab's bootstrap and quantiles.",
     ],
     discussion: [
@@ -4889,7 +4901,7 @@ export const INSTRUCTOR_CONTENT = {
       "Compare the model's luminosity function with the stellar-populations investigations.",
     ],
     modelNotes:
-      'js/survey/model.js: effectiveVolume, recoveredLuminosityFunction (truth and catalogue modes), completenessCurve, bootstrapLuminosityFunction. See SELECTION_EFFECTS.md.',
+      'js/survey/model.js: effectiveVolume, recoveredLuminosityFunction (truth and catalog modes), completenessCurve, bootstrapLuminosityFunction. See SELECTION_EFFECTS.md.',
   },
 };
 

@@ -68,16 +68,16 @@ import KEPLERS_LAWS_DEEPER from './data/investigations/depth/es/keplers-laws.js'
 import MISSING_MASS_DEEPER from './data/investigations/depth/es/missing-mass.js';
 import TRANSIT_PHOTOMETRY_DEEPER from './data/investigations/depth/es/transit-photometry.js';
 import WEIGHING_STARS_DEEPER from './data/investigations/depth/es/weighing-stars.js';
-
-/** The Spanish shadow of each lesson, by lesson id. */
-export const SHADOWS = Object.freeze({
-  'a-universe-of-stars': A_UNIVERSE_OF_STARS,
 import WHO_GETS_COUNTED_DEEPER from './data/investigations/depth/es/who-gets-counted.js';
 import WHY_THE_BRIGHT_ONES_WIN_DEEPER from './data/investigations/depth/es/why-the-bright-ones-win.js';
 import THE_COMPLETENESS_CURVE_DEEPER from './data/investigations/depth/es/the-completeness-curve.js';
 import WHO_GETS_COUNTED from './data/investigations/es/who-gets-counted.js';
 import WHY_THE_BRIGHT_ONES_WIN from './data/investigations/es/why-the-bright-ones-win.js';
 import THE_COMPLETENESS_CURVE from './data/investigations/es/the-completeness-curve.js';
+
+/** The Spanish shadow of each lesson, by lesson id. */
+export const SHADOWS = Object.freeze({
+  'a-universe-of-stars': A_UNIVERSE_OF_STARS,
   'binary-star-planets': BINARY_STAR_PLANETS,
   'black-holes': BLACK_HOLES,
   'butterfly-effect': BUTTERFLY_EFFECT,

@@ -4,7 +4,7 @@
 // The same instrument. Quantitative: the weight of one counted star and the
 // Poisson error, by hand. Advanced, the statistics of surveys for an upper-level
 // course: the Euclidean count slope, a bootstrap, and the completeness of a
-// real catalogue. Every expected value is recomputed
+// real catalog. Every expected value is recomputed
 // (tools/authoring/surveyModels.mjs and tests/surveyInvestigations.test.js).
 // =============================================================================
 
@@ -29,7 +29,7 @@ export default {
              (631 ÷ 1,000)³ of the cone.`,
       prompt:
         'How many stars of its kind in the cone does this one star stand for?',
-      unit: 'stars',
+      unit: '',
       answer: 3.98,
       tolerance: 0.05,
       hints: [
@@ -69,7 +69,7 @@ export default {
     },
     {
       sid: 'euclidean-slope',
-      after: 'the-catalogue-own-magnitudes',
+      after: 'the-catalog-own-magnitudes',
       depth: 'advanced',
       type: 'question',
       kind: 'numeric',
@@ -79,7 +79,7 @@ export default {
              can be seen to, and one magnitude is a factor 10<sup>0.2</sup> in
              distance. So log<sub>10</sub> N rises linearly with m.`,
       prompt: 'The slope of log₁₀ N(< m) against m',
-      unit: 'per mag',
+      unit: '',
       answer: 0.6,
       tolerance: 0.02,
       hints: ['N goes as d³ and d goes as 10 raised to 0.2 m.'],
@@ -98,8 +98,8 @@ export default {
       depth: 'advanced',
       type: 'question',
       kind: 'choice',
-      title: 'A real catalogue runs out',
-      body: `The NGC 2420 photometry pack (SDSS DR18, real stars within 14
+      title: 'A real catalog runs out',
+      body: `The NGC 2420 photometry table (SDSS DR18, real stars within 14
              arcminutes of the cluster) counts stars per magnitude in r:
              312 from 17 to 18, 377, 431 and 519 from 20 to 21, then
              <strong>153</strong> from 21 to 22 and <strong>11</strong> from 22
@@ -123,7 +123,7 @@ export default {
         'What did the counts do before the fall, and what would a complete survey do?',
       ],
       because:
-        'The completeness is falling. The counts rose steadily to 519 and then fall by a factor of 3 and a further 14: the sky does not do that, a completeness curve does. This is the same fade the instrument draws, here measured in real stars (the pack is the cluster field, so the rise is not Euclidean).',
+        'The completeness is falling. The counts rose steadily to 519 and then fall by a factor of 3 and a further 14: the sky does not do that, a completeness curve does. This is the same fade the instrument draws, here measured in real stars (the table is the cluster field, so the rise is not Euclidean).',
       tool: CC(FADE),
     },
     {
@@ -147,7 +147,7 @@ export default {
       answer: 0,
       hints: ['What does it vary, and what does it keep fixed?'],
       because:
-        'The sampling spread only. It resamples the stars that were counted and keeps the selection and the magnitudes as given, so a bias in either, like the 60 percent of the catalogue-magnitude correction, is invisible to it. The interval says how well the data constrain the answer, not whether the answer is right.',
+        'The sampling spread only. It resamples the stars that were counted and keeps the selection and the magnitudes as given, so a bias in either, like the 60 percent of the catalog-magnitude correction, is invisible to it. The interval says how well the data constrain the answer, not whether the answer is right.',
       tool: CC(SHARP),
     },
   ],

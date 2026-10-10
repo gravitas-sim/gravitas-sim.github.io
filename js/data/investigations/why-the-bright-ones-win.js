@@ -39,7 +39,7 @@ const WHY_THE_BRIGHT_ONES_WIN = {
     'Explain why the bias grows with distance: a limit admits only the intrinsically bright stars from far away',
     'Compare a measured Malmquist bias with its closed form for standard candles with a scatter',
     'Say why selecting on a well-measured parallax makes the stars look fainter than they are',
-    'Say what each bias does to a distance or a luminosity worked out from a catalogue',
+    'Say what each bias does to a distance or a luminosity worked out from a catalog',
   ],
   steps: [
     {
@@ -210,7 +210,7 @@ const WHY_THE_BRIGHT_ONES_WIN = {
       stage: STARS,
       type: 'measure',
       title: 'A second bias: trusting the good parallaxes',
-      body: `A catalogue gives parallaxes, and an analyst may keep only stars
+      body: `A catalog gives parallaxes, and an analyst may keep only stars
              whose parallax is well measured, say at least 3 times its error.
              Set the limit to <strong>18</strong>, the stars to the
              <strong>population</strong> and the parallax cut to
@@ -272,10 +272,10 @@ const WHY_THE_BRIGHT_ONES_WIN = {
       type: 'question',
       kind: 'short',
       rubric:
-        'Full credit for stating both biases and their direction: a magnitude limit counts stars that are brighter than the population, increasingly so with distance (Malmquist, a few magnitudes in the far shell); a cut on measured parallax gives parallaxes that are too large and absolute magnitudes too faint (by 0.25 mag at a cut of 3 sigma in this model). Credit saying what they do to a result: an average luminosity worked out from a magnitude-limited catalogue is too bright, one worked out from parallax-selected stars is too faint. Credit naming a fix (a volume-limited sample, or weighting by the volume each star could be seen in). Do not credit an answer that says either bias goes away with more stars.',
+        'Full credit for stating both biases and their direction: a magnitude limit counts stars that are brighter than the population, increasingly so with distance (Malmquist, a few magnitudes in the far shell); a cut on measured parallax gives parallaxes that are too large and absolute magnitudes too faint (by 0.25 mag at a cut of 3 sigma in this model). Credit saying what they do to a result: an average luminosity worked out from a magnitude-limited catalog is too bright, one worked out from parallax-selected stars is too faint. Credit naming a fix (a volume-limited sample, or weighting by the volume each star could be seen in). Do not credit an answer that says either bias goes away with more stars.',
       title: 'What follows',
       body: `A student averages the absolute magnitudes of every star in a
-             catalogue with a limit of 16 and says, “That is the average
+             catalog with a limit of 16 and says, “That is the average
              brightness of stars in the Galaxy.”`,
       prompt:
         'In two or three sentences, say which bias this ignores, in which direction it pushes the answer, and one way to avoid it.',

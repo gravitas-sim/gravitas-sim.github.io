@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // The same instrument. Quantitative: the distance a star can be seen to, by
 // hand, and how the volume grows with the limit. Advanced: the same drift of
-// brightness with distance in a real Gaia catalogue. Every expected value is
+// brightness with distance in a real Gaia catalog. Every expected value is
 // recomputed (tools/authoring/surveyModels.mjs, tests/surveyInvestigations.test.js).
 // =============================================================================
 
@@ -53,7 +53,7 @@ export default {
              are spread evenly, so the number inside grows as the
              <em>cube</em> of the distance.`,
       prompt: 'By what factor does the volume grow for one more magnitude?',
-      unit: '×',
+      unit: '',
       answer: 3.98,
       tolerance: 0.1,
       hints: ['Cube 1.585, or write it as 10 raised to 0.6.'],
@@ -72,7 +72,7 @@ export default {
       type: 'question',
       kind: 'numeric',
       title: 'The same drift in real stars',
-      body: `The solar-neighbourhood pack (1,570 Gaia DR3 stars with radial
+      body: `The solar-neighbourhood table (1,570 Gaia DR3 stars with radial
              velocities, a real sample limited by what Gaia's spectrometer can
              measure, about G = 14 to 15) lets you ask the same question of
              data. Taking each star's absolute magnitude from its parallax,
@@ -116,7 +116,7 @@ export default {
       answer: 0,
       hints: ['Which numbers needed us to know every star in the cone?'],
       because:
-        'The missed stars. With a real catalogue the denominator is unknown, so a correction needs a model of the selection (its limit and completeness) and a stated assumption about what is there. That is the work of the third investigation, and the reason the synthetic surveys exist: to test the correction where the answer is known.',
+        'The missed stars. With a real catalog the denominator is unknown, so a correction needs a model of the selection (its limit and completeness) and a stated assumption about what is there. That is the work of the third investigation, and the reason the synthetic surveys exist: to test the correction where the answer is known.',
       tool: SC({ limit: 16, view: 0 }),
     },
   ],

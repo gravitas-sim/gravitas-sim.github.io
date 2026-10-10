@@ -100,7 +100,7 @@ export default {
       {
         from: 'counts-by-magnitude',
         to: 'a-count-is-not-a-census',
-        text: 'The counts split at the limit; a written reply to a friend who reads the catalogue as a census.',
+        text: 'The counts split at the limit; a written reply to a friend who reads the catalog as a census.',
       },
       {
         from: 'what-you-worked-out',
@@ -148,8 +148,8 @@ export default {
       },
       {
         from: 'when-it-cannot-help',
-        to: 'the-catalogue-own-magnitudes',
-        text: 'Three stars cannot carry a bin; catalogue magnitudes leave a 60 percent bias.',
+        to: 'the-catalog-own-magnitudes',
+        text: 'Three stars cannot carry a bin; catalog magnitudes leave a 60 percent bias.',
       },
       {
         from: 'state-the-residual',

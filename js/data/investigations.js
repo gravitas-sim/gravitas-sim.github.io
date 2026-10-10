@@ -85,6 +85,9 @@ import THE_ROTATING_DISK from './investigations/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP from './investigations/cluster-membership.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
+import WHO_GETS_COUNTED from './investigations/who-gets-counted.js';
+import WHY_THE_BRIGHT_ONES_WIN from './investigations/why-the-bright-ones-win.js';
+import THE_COMPLETENESS_CURVE from './investigations/the-completeness-curve.js';
 
 // Order matters: the browser lists them in this order, and the three exoplanet
 // lessons form a sequence. Shadows measures a radius, Tug measures a mass and
@@ -94,9 +97,6 @@ import { SUMMARIES } from './investigations/summaries.js';
 //
 // The Missing Mass sits after all of them. It belongs to no sequence, it is
 // half the length of the others, and it uses an instrument none of them touch,
-import WHO_GETS_COUNTED from './investigations/who-gets-counted.js';
-import WHY_THE_BRIGHT_ONES_WIN from './investigations/why-the-bright-ones-win.js';
-import THE_COMPLETENESS_CURVE from './investigations/the-completeness-curve.js';
 // so it reads as what it is: a short, self-contained argument at the end.
 //
 // This array and MANIFEST in ./investigations/manifest.js are the same order,

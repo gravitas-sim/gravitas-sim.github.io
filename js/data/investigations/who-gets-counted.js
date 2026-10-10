@@ -45,7 +45,7 @@ const WHO_GETS_COUNTED = {
     'Say what a magnitude limit selects: the stars that look bright, not the stars that are common',
     'Measure how much of a synthetic population a survey counts at three limits, and what is in the part it misses',
     'Find how far away a star of a given brightness can be and still be counted',
-    'Explain why a catalogue of the brightest stars has a different average brightness from the stars there are',
+    'Explain why a catalog of the brightest stars has a different average brightness from the stars there are',
     'Say why a count of what was found is not a census of what is there',
   ],
   steps: [
@@ -100,7 +100,7 @@ const WHO_GETS_COUNTED = {
              survey <strong>counted</strong> and what share of all the stars in
              the cone that is.`,
       fields: [
-        { id: 'counted', label: 'Stars counted', unit: 'stars', hint: '167' },
+        { id: 'counted', label: 'Stars counted', unit: '', hint: '167' },
         { id: 'share', label: 'Share of the stars', unit: '%', hint: '6.3' },
       ],
       validate: v => {
@@ -129,7 +129,7 @@ const WHO_GETS_COUNTED = {
              magnitudes fainter is counted, which is forty times fainter in
              light. Read the number counted and the share again.`,
       fields: [
-        { id: 'counted', label: 'Stars counted', unit: 'stars', hint: '1289' },
+        { id: 'counted', label: 'Stars counted', unit: '', hint: '1289' },
         { id: 'share', label: 'Share of the stars', unit: '%', hint: '49' },
       ],
       validate: v => {
@@ -277,8 +277,8 @@ const WHO_GETS_COUNTED = {
       kind: 'short',
       rubric:
         'Full credit for saying that the survey selects on apparent brightness, so the counted stars are the intrinsically bright or the near ones, and that this makes them a biased sample of the stars there are; and for saying what it misses (the faint red dwarfs, which are the commonest). Credit a number from the instrument (for example 49 percent counted at a limit of 18, or a mean brightness four and a half magnitudes above the truth). Do not credit an answer that says the counted stars are typical, or that the missing ones are unimportant.',
-      title: 'A friend reads the catalogue',
-      body: `A friend looks at a catalogue of the stars brighter than magnitude 14 and
+      title: 'A friend reads the catalog',
+      body: `A friend looks at a catalog of the stars brighter than magnitude 14 and
              says, “Most stars are bright, Sun-like or brighter, so the Galaxy
              is mostly stars like these.”`,
       prompt:
@@ -294,7 +294,7 @@ const WHO_GETS_COUNTED = {
              limit of 14 counts one star in sixteen and a limit of 18 counts one
              in two; everything it misses is faint. A Sun-like star can be
              counted out to 700&nbsp;parsecs at the first limit, but a red dwarf
-             only to 63. So a catalogue is brighter than the population it was
+             only to 63. So a catalog is brighter than the population it was
              drawn from, here by four and a half magnitudes. The next
              investigation measures that bias, and the one after corrects for it.`,
       tool: SC({ limit: 14, view: 0 }),
