@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1559,
+    limit: 1576.6,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -574,7 +574,13 @@ const BUDGETS = [
       'exactly the room the 4300 KB raw ceiling gave: 1513.0 x 4300 / 4174.0 = ' +
       '1558.7, rounded up to 1559. The raw total is still printed beside it, ' +
       'and is still what the README quotes, because raw sizes are the same on ' +
-      'every Node.',
+      'every Node.\n\n' +
+      'Raised 1559 to 1576.6 KB (D-BUDGET-07, Prompt 89, under the standing ' +
+      'approval for size budgets of 2026-10-10): the five sky investigations ' +
+      '(turning sky, Sun through the year, phases and eclipses, wanderers, plan ' +
+      'a night), their Spanish, three depths each, instrument family ' +
+      '(js/skyWidgets.js), strings and instructor guides measured 1576.6 KB ' +
+      'gzipped against 1559.0, an overrun of 17.6 KB, which is the raise.',
   },
 ];
 
