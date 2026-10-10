@@ -458,7 +458,7 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/scaling-the-main-sequence.webp',
     depths: 3,
-    stepCount: 11,
+    stepCount: 10,
     gradedCount: 8,
     objectiveCount: 4,
   },

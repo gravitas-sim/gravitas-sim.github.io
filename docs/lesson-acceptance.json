@@ -532,6 +532,45 @@
         "raw-against-truth"
       ],
       "evidenceFrom": "model"
+    },
+    "inside-a-star": {
+      "centralExperimentId": "ce.inside-a-star",
+      "object": "panel:polytrope",
+      "control": "polytrope/logM",
+      "quantity": "the mean density of a star, as its mass changes at a fixed radius",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-centre",
+        "the-suns-centre"
+      ],
+      "evidenceFrom": "model"
+    },
+    "scaling-the-main-sequence": {
+      "centralExperimentId": "ce.scaling-the-main-sequence",
+      "object": "panel:ms-scaling",
+      "control": "ms-scaling/opacity",
+      "quantity": "the luminosity exponent a scaling argument predicts, as the opacity law changes",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-slope",
+        "the-prediction"
+      ],
+      "evidenceFrom": "model"
+    },
+    "the-limit": {
+      "centralExperimentId": "ce.the-limit",
+      "object": "panel:wd-mass-radius",
+      "control": "wd-mass-radius/logRho",
+      "quantity": "the radius of a white dwarf in kilometers, as its central density changes",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-squeeze",
+        "a-dense-dwarf"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }

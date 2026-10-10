@@ -52,6 +52,10 @@
       "en": "Getting There From Here",
       "es": "Llegar hasta allí desde aquí"
     },
+    "inside-a-star": {
+      "en": "Inside a Star",
+      "es": "Dentro de una estrella"
+    },
     "keplers-laws": {
       "en": "Kepler's Laws",
       "es": "Las leyes de Kepler"
@@ -100,9 +104,17 @@
       "en": "Why Mars Goes Backwards",
       "es": "Por qué Marte va hacia atrás"
     },
+    "scaling-the-main-sequence": {
+      "en": "Scaling the Main Sequence",
+      "es": "Escalar la secuencia principal"
+    },
     "the-completeness-curve": {
       "en": "The Completeness Curve",
       "es": "La curva de completitud"
+    },
+    "the-limit": {
+      "en": "The Limit",
+      "es": "El límite"
     },
     "the-rotating-disk": {
       "en": "The Rotating Disk",

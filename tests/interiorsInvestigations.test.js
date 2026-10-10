@@ -182,7 +182,7 @@ describe('Scaling the Main Sequence: the numbers the steps write', () => {
     const a = view(0, 1, 1);
     expect(a.high.rms).toBeLessThan(0.15);
     // 0.5 to 2 solar masses: the prediction is a factor of 4^5.46 and the models 4^4.43.
-    near(4 ** 5.46, 1950, 10);
+    near(4 ** 5.4615, 1944, 5);
     near(4 ** a.low.fit, 464, 8);
     // A single line through all eight models leaves 0.36 dex.
     const z = a.z;

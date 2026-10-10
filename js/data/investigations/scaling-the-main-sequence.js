@@ -159,7 +159,7 @@ const SCALING_THE_MAIN_SEQUENCE = {
           return {
             level: 'ok',
             message:
-              'Predicted 5.46, fitted 4.43. The scaling is steeper than the models by about one in the exponent: from 0.5 to 2 solar masses it predicts a factor of about 1,950 in luminosity and the models give about 460. It gets the direction and the rough size, not the number. The low-mass star has a convective envelope, which the scaling does not know about.',
+              'Predicted 5.46, fitted 4.43. The scaling is steeper than the models by about one in the exponent: from 0.5 to 2 solar masses it predicts a factor of about 1,900 in luminosity and the models give about 460. It gets the direction and the rough size, not the number. The low-mass star has a convective envelope, which the scaling does not know about.',
           };
         }
         return {

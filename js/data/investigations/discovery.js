@@ -370,36 +370,6 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
-  'who-gets-counted': {
-    audience: 'intro',
-    mathematics: 'algebra',
-    prerequisites: ['lives-of-stars'],
-    textbook: {
-      chapter: 19,
-      section: null,
-    },
-    courseLevel: 'majors',
-  },
-  'why-the-bright-ones-win': {
-    audience: 'intro',
-    mathematics: 'algebra',
-    prerequisites: ['who-gets-counted'],
-    textbook: {
-      chapter: 19,
-      section: null,
-    },
-    courseLevel: 'majors',
-  },
-  'the-completeness-curve': {
-    audience: 'intro',
-    mathematics: 'algebra',
-    prerequisites: ['why-the-bright-ones-win'],
-    textbook: {
-      chapter: 19,
-      section: null,
-    },
-    courseLevel: 'majors',
-  },
   'inside-a-star': {
     audience: 'intro',
     mathematics: 'algebra',
@@ -426,6 +396,36 @@ export const DISCOVERY = {
     prerequisites: ['inside-a-star'],
     textbook: {
       chapter: 23,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'who-gets-counted': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['lives-of-stars'],
+    textbook: {
+      chapter: 19,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'why-the-bright-ones-win': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['who-gets-counted'],
+    textbook: {
+      chapter: 19,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'the-completeness-curve': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['why-the-bright-ones-win'],
+    textbook: {
+      chapter: 19,
       section: null,
     },
     courseLevel: 'majors',
