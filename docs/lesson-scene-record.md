@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 35 investigations and 798 steps: 748 steps
+Across 38 investigations and 827 steps: 777 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 359 show a prescribed model result, 106 draw
-on a stored dataset, 238 put a self-contained panel beside the text,
-140 keep something, and 30 are prose.
-Of 101 prediction loops, 101 are returned to,
-101 produce a measurement before they are answered, and
+running integration, 388 show a prescribed model result, 135 draw
+on a stored dataset, 267 put a self-contained panel beside the text,
+151 keep something, and 30 are prose.
+Of 103 prediction loops, 103 are returned to,
+103 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-101 hold their marking until the experiment settles them.
+103 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -510,4 +510,46 @@ Of 101 prediction loops, 101 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:cluster-members`, control cluster-members/threshold, measures the number of stars above a membership-probability threshold, and the cluster's proper motion, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Who Gets Counted (`who-gets-counted`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 10 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** bright, dwarf.
+- **Instruments:** survey-counts.
+- **Stored data:** MIST v1.2 evolutionary tracks (computed-grid).
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-what-is-missed → count-a-shallow-survey, count-a-deep-survey, what-the-deep-survey-misses, how-far-can-it-see, the-average-star, counts-by-magnitude, a-count-is-not-a-census, what-you-worked-out → count-a-shallow-survey.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment:** not yet reviewed.
+
+## Why the Bright Ones Win (`why-the-bright-ones-win`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 10 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** near, far.
+- **Instruments:** malmquist.
+- **Stored data:** MIST v1.2 evolutionary tracks (computed-grid).
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-shells → measure-the-shells, why-it-grows, standard-candles, double-the-scatter, a-second-bias, raise-the-cut, say-what-follows, what-you-worked-out → measure-the-shells.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment:** not yet reviewed.
+
+## The Completeness Curve (`the-completeness-curve`)
+
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 9 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** sun, dwarf.
+- **Instruments:** completeness-lf.
+- **Stored data:** MIST v1.2 evolutionary tracks (computed-grid).
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** none.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment:** not yet reviewed.
 
