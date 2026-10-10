@@ -72,6 +72,7 @@ import LISTENING_TO_SPACETIME from './investigations/listening-to-spacetime.js';
 import A_UNIVERSE_OF_STARS from './investigations/a-universe-of-stars.js';
 import LIVES_OF_STARS from './investigations/lives-of-stars.js';
 import TWELVE_NIGHTS from './investigations/twelve-nights.js';
+import COLOR_AND_TEMPERATURE from './investigations/color-and-temperature.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 
@@ -118,6 +119,7 @@ export const INVESTIGATIONS = [
   // The force law itself, after the lessons that assume it. Kepler's laws are
   // the thing this one takes apart, so it cannot come before them.
   POWER_LAW,
+  COLOR_AND_TEMPERATURE,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

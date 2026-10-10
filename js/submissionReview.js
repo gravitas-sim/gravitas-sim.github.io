@@ -75,6 +75,8 @@ const DEEPER = {
   'weighing-stars': () =>
     import('./data/investigations/depth/weighing-stars.js'),
   'missing-mass': () => import('./data/investigations/depth/missing-mass.js'),
+  'color-and-temperature': () =>
+    import('./data/investigations/depth/color-and-temperature.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]

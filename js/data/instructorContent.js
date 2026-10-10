@@ -16,6 +16,93 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'color-and-temperature': {
+    topic:
+      'Blackbody radiation: Wien’s law, color indices, and where a blackbody stops being a star',
+    difficulty: 'Introductory',
+    placement:
+      'After students have met the idea of a star’s temperature (the H-R diagram) and before they read spectral lines (Lines and Motion). It supports OpenStax Astronomy 2e section 5.2 (radiation laws) and section 17.2 (colors of stars).',
+    overview:
+      'Students predict how a blackbody’s peak wavelength moves with temperature, measure it on a computed Planck curve, and use Wien’s law in both directions. They then measure a B − V color index, recover a temperature from it, and are asked why the Sun’s green peak does not make it look green and how far a blackbody is a model of a star. Every value comes from the radiation kernel (RADIATION.md); the curve is computed and never presented as an observation. Quantitative depth adds the Stefan–Boltzmann law and the size of a star from its light; advanced depth adds synthetic photometry in two real filter systems.',
+    priorKnowledge: [
+      'That hot objects glow, and that a star has a surface temperature',
+      'Dividing one number by another, and raising a ratio to a power',
+      'Reading a logarithmic wavelength axis, at the level of “each tick is ten times the last”',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Wien’s law',
+        body: 'Peak wavelength times temperature is a constant, about 2.898 million nm·K. Students measure it at three temperatures before they are given it, so the constant is a result and not a formula to memorize.',
+      },
+      {
+        heading: 'The peak is not the color',
+        body: 'The Sun’s peak is green and the Sun does not look green: the curve is broad, and the eye adds up the whole visible range. A peak wavelength says where the most light is per unit wavelength and nothing more.',
+      },
+      {
+        heading: 'A color index is a thermometer',
+        body: 'B − V is a difference of two magnitudes through two filters. It falls steadily as temperature rises, and it needs only two ordinary brightness measurements, where a peak needs a spectrum.',
+      },
+      {
+        heading: 'A color temperature is the matching blackbody’s',
+        body: 'It is the temperature of the blackbody that would have this color, close to a star’s effective temperature for many stars and different from it by the effect of the real spectrum’s lines and edges.',
+      },
+    ],
+    features: [
+      {
+        name: 'Blackbody explorer (the Light Lab)',
+        text: 'A temperature slider, the Planck curve on a log wavelength axis scaled to its own peak, two bandpasses overlaid, the Wien peak in wavelength and in frequency, the power radiated, and a displayed color. Every number is in the list under the plot.',
+      },
+      {
+        name: 'Real filter curves',
+        text: 'B and V from Bessell and Murphy 2012 (Vega system) and g and r from the SDSS 2001 curves (AB system), integrated photon-counting against the blackbody by the radiation kernel.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the Stefan–Boltzmann law and the luminosity–radius–temperature relation. Advanced: synthetic photometry in two real systems and why the numbers differ for one blackbody.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The peak wavelength is the color a thing looks.',
+        response:
+          'Step 6. The Sun’s peak is green and it is white; the curve is broad and the eye mixes the whole visible range. The peak says where the most light is, not what color it is.',
+      },
+      {
+        claim:
+          'The peak per unit frequency is the speed of light divided by the peak per unit wavelength.',
+        response:
+          'The readout gives both and says they differ: a spectrum per unit frequency is a different curve, so its peak is at a different place.',
+      },
+      {
+        claim: 'A color temperature is the star’s surface temperature.',
+        response:
+          'Step 9. It is the temperature of the blackbody that matches the color. The lines and edges of a real spectrum move it away from the effective temperature, by a small amount for many stars and a large one for cool ones.',
+      },
+      {
+        claim: 'Hotter means redder, because a hot stove ring glows red.',
+        response:
+          'Steps 2 and 3. A stove ring is glowing red because it is cool; raising the temperature moves the peak to shorter wavelengths, through yellow and white to blue.',
+      },
+    ],
+    teachingNotes: [
+      'The swatch is a display aid computed from the CIE 1931 curves; a blackbody hotter than about 9,000 K is bluer than sRGB can show, and the readout says so. Do not grade on a shade.',
+      'The explorer is a model. Do not let students quote its numbers as measurements of a star; the instrument’s own first row says it is computed.',
+      'The slider moves in one-kelvin steps and the plot is scaled to its own peak on purpose, so the curve’s height is not a brightness. The power radiated is the row labeled σT⁴.',
+      'Step 8 is the only step where students tune a value to a target. Accept anything within 250 K; the color index changes by about 0.1 per 160 K near 5,000 K.',
+    ],
+    discussion: [
+      'Why does a color index need only two ordinary brightness measurements, while a peak wavelength needs a whole spectrum?',
+      'Two stars have the same B − V in different filter systems. Are they the same color?',
+      'What would you expect a real star’s color to do that a blackbody’s cannot?',
+    ],
+    extensions: [
+      'Lines and Motion reads the lines a blackbody does not have.',
+      'Compare the blackbody g − r of the Sun with a measured value and say what the lines do to it.',
+    ],
+    modelNotes:
+      'Planck’s law with the exact SI constants; colors by integrating the blackbody through the Bessell & Murphy 2012 B and V and the SDSS g and r curves, photon-counting, with the Vega and AB zero points stated in RADIATION.md. The displayed color uses the Wyman, Sloan and Shirley 2013 fit to the CIE 1931 curves. A real star has absorption lines and edges that this model leaves out, and the investigation says so.',
+  },
+
   'twelve-nights': {
     topic:
       'Observability, the sidereal day, and why a once-a-night schedule aliases',

@@ -338,6 +338,16 @@
         "record-the-precession"
       ],
       "evidenceFrom": "model"
+    },
+    "color-and-temperature": {
+      "centralExperimentId": "ce.color-and-temperature",
+      "object": "panel:blackbody",
+      "control": "blackbody/T",
+      "quantity": "the peak wavelength at three temperatures, and its product with the temperature",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["predict-the-peak", "three-peaks"],
+      "evidenceFrom": "model"
     }
   }
 }

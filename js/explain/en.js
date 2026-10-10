@@ -106,6 +106,12 @@ export default {
     'The pitch and the speed of the rise, which depend on the masses.',
     'The mass and distance trade off; one signal does not fix both on its own.',
   ],
+  light: [
+    'Brightness per unit wavelength (vertical) against wavelength on a logarithmic scale (horizontal).',
+    'The peak moves to shorter wavelengths as the temperature rises, and the whole curve rises with it.',
+    'Where the peak is, how the two bandpasses sample the curve, and the color index they give.',
+    'A real star is not a blackbody: its lines and edges change a measured color from this one.',
+  ],
   gwEvents: [
     'Real detector strain against time, and a map of pitch against time.',
     'A rising track on the map is the chirp of an inspiral.',

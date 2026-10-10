@@ -107,6 +107,7 @@ export const FAMILY_IDS = Object.freeze({
     'power-law-conservation',
   ],
   gw: ['gw-lab', 'gw-real'],
+  light: ['blackbody'],
   gwEvents: ['gw-events'],
 });
 
