@@ -4900,7 +4900,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'A correction needs the true magnitudes.',
         response:
-          "Only this synthetic survey has them; the last measure step shows what the catalog's own magnitudes give instead.",
+          "Only this synthetic survey has them; the measure step on the catalog's own magnitudes shows what an analyst gets instead, 1.60 against 1.00.",
       },
     ],
     teachingNotes: [
