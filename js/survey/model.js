@@ -593,3 +593,52 @@ export function bootstrapLuminosityFunction(obs, edges, o = {}) {
     return r ? { M: edges[b] + step / 2, ...r } : null;
   });
 }
+
+// -----------------------------------------------------------------------------
+// The same questions of a real catalogue
+// -----------------------------------------------------------------------------
+
+/**
+ * Shells of distance in a real catalogue: the mean absolute magnitude
+ * M = m + 5 log10(parallax in mas) - 10 of the stars in each, and the
+ * faintest apparent magnitude in it. A real sample selected on an apparent
+ * magnitude shows the same drift as a synthetic one: the farther the shell,
+ * the brighter its stars. (Parallax is taken as given: no zero-point
+ * correction and no Lutz-Kelker treatment.)
+ */
+export function shellMeanAbsolute(mags, parallaxMas, edgesPc) {
+  const rows = [];
+  for (let s = 0; s + 1 < edgesPc.length; s++) {
+    let n = 0;
+    let sumM = 0;
+    let faint = -Infinity;
+    for (let i = 0; i < mags.length; i++) {
+      if (!(parallaxMas[i] > 0)) continue;
+      const d = 1000 / parallaxMas[i];
+      if (d < edgesPc[s] || d >= edgesPc[s + 1]) continue;
+      n++;
+      sumM += mags[i] + 5 * Math.log10(parallaxMas[i]) - 10;
+      if (mags[i] > faint) faint = mags[i];
+    }
+    rows.push({
+      from: edgesPc[s],
+      to: edgesPc[s + 1],
+      stars: n,
+      meanM: n ? sumM / n : NaN,
+      faintest: n ? faint : NaN,
+    });
+  }
+  return rows;
+}
+
+/** How many stars fall in each interval of magnitude: the apparent distribution. */
+export function countsPerMagnitude(mags, lo, hi, step = 1) {
+  const rows = [];
+  for (let a = lo; a < hi - 1e-9; a += step)
+    rows.push({ from: a, to: a + step, n: 0 });
+  for (const m of mags) {
+    const k = Math.floor((m - lo) / step + 1e-12);
+    if (k >= 0 && k < rows.length) rows[k].n++;
+  }
+  return rows;
+}
