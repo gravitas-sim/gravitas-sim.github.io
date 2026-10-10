@@ -217,4 +217,17 @@ export const ES_INFERENCE = {
   'obs.fit.corr.strong': '(fuerte)',
   'obs.fit.corr.legend':
     'Una correlación cercana a +1 o −1 significa que los datos fijan una combinación de los dos, no cada uno: subir uno y cambiar el otro ajusta casi igual de bien. Sus incertidumbres por separado son entonces mayores de lo que parecen, y lo que los separa son más datos de otro tipo.',
+  'obs.fit.truth.title': 'Comparar con la verdad',
+  'obs.fit.truth.caption':
+    'Lo que produjo esta observación sintética, junto a lo que recuperó el ajuste.',
+  'obs.fit.truth.col.truth': 'Valor de entrada (verdad)',
+  'obs.fit.truth.col.recovered': 'Recuperado',
+  'obs.fit.truth.col.sigma': 'Su incertidumbre',
+  'obs.fit.truth.col.pull': 'Diferencia en sigmas',
+  'obs.fit.truth.col.within': 'Verdad dentro de 1 sigma',
+  'obs.fit.truth.yes': 'sí',
+  'obs.fit.truth.no': 'no',
+  'obs.fit.truth.unfitted': 'Este ajuste no los estimó: {list}.',
+  'obs.fit.truth.legend':
+    'La verdad se conoce solo porque Gravitas hizo los datos; una observación real no la tiene. Si el modelo es correcto y el ruido es el declarado, la verdad queda dentro de una sigma en unos dos parámetros de cada tres y dentro de dos sigmas en unos 95 de cada 100. Una diferencia mayor no es un error que ocultar: así se ven el ruido rojo, los valores atípicos o un modelo equivocado.',
 };

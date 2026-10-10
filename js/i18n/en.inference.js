@@ -219,4 +219,17 @@ export const EN_INFERENCE = {
   'obs.fit.corr.strong': '(strong)',
   'obs.fit.corr.legend':
     'A correlation near +1 or −1 means the data constrain a combination of the two, not each: raising one and changing the other fits almost as well. Their separate uncertainties are then larger than they look, and more data of a different kind is what separates them.',
+  'obs.fit.truth.title': 'Compare with truth',
+  'obs.fit.truth.caption':
+    'What made this synthetic observation, beside what the fit recovered.',
+  'obs.fit.truth.col.truth': 'Input (truth)',
+  'obs.fit.truth.col.recovered': 'Recovered',
+  'obs.fit.truth.col.sigma': 'Its uncertainty',
+  'obs.fit.truth.col.pull': 'Difference in sigmas',
+  'obs.fit.truth.col.within': 'Truth inside 1 sigma',
+  'obs.fit.truth.yes': 'yes',
+  'obs.fit.truth.no': 'no',
+  'obs.fit.truth.unfitted': 'Not estimated by this fit: {list}.',
+  'obs.fit.truth.legend':
+    'The truth is known only because Gravitas made the data; a real observation has none. If the model is right and the noise is as stated, the truth lies within one sigma for about two parameters in three and within two sigma for about 95 in 100. A larger difference is not an error to hide: it is what red noise, outliers or a wrong model look like.',
 };

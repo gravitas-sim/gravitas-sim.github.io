@@ -12,8 +12,9 @@
 //     kind: 'time-series' | 'spectrum' | 'image' | 'table',
 //     id, title,
 //     object:  { name, ra, dec, frame } | null,      degrees
-//     facility, origin: 'observed' | 'model' | 'compilation' | 'imported',
-//     source:  { kind: 'pack' | 'builtin' | 'import' | 'experiment', id,
+//     facility, origin: 'observed' | 'model' | 'compilation' | 'imported'
+//               | 'synthetic',
+//     source:  { kind: 'pack' | 'builtin' | 'import' | 'experiment' | 'forward', id,
 //                version, file?, digest?, engine? },    an experiment's table
 //                names its result's hash and the digest of its trials
 //     credit, license, retrieved, citations: [{ text, url? }],
@@ -27,6 +28,8 @@
 //     image?:    { width, height, wcs, x, y, value },  image
 //     masks: [{ id, label, source: 'source' | 'reader', rows }],
 //     annotations: [{ id, rows, text }],
+//     synthetic?: { forwardModel: { id, version }, setup, truth },  origin
+//                'synthetic' only: js/forward/observation.js says what is in it
 //   }
 //
 // The contracts every view and every transformation keep:
@@ -84,12 +87,14 @@ export const ORIGINS = Object.freeze([
   'model',
   'compilation',
   'imported',
+  'synthetic',
 ]);
 export const SOURCE_KINDS = Object.freeze([
   'pack',
   'builtin',
   'import',
   'experiment',
+  'forward',
 ]);
 export const MEDIA = Object.freeze(['vacuum', 'air', 'unknown']);
 
@@ -184,6 +189,30 @@ export function validateObservation(o) {
       o.license && typeof o.license.status === 'string',
       'license',
       'is required'
+    );
+  }
+  if (o.origin === 'synthetic') {
+    // A synthetic observation says what made it; the truth manifest is what
+    // "compare with truth" reads, and a file without one is not synthetic.
+    need(
+      o.source?.kind === 'forward',
+      'source.kind',
+      'a synthetic observation came from a forward model'
+    );
+    const sy = o.synthetic;
+    need(
+      sy &&
+        typeof sy.forwardModel?.id === 'string' &&
+        sy.setup?.format === 'gravitas.observing-setup' &&
+        Array.isArray(sy.truth?.parameters),
+      'synthetic',
+      'names its forward model, its setup and its truth parameters'
+    );
+  } else {
+    need(
+      o.synthetic === undefined,
+      'synthetic',
+      'is only for an observation whose origin is synthetic'
     );
   }
   if (o.object) {
