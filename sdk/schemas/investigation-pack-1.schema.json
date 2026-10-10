@@ -285,7 +285,10 @@
                   "what-a-spectrum-is-made-of",
                   "the-suns-motion",
                   "the-rotating-disk",
-                  "cluster-membership"
+                  "cluster-membership",
+                  "bending-light",
+                  "einstein-rings-and-arcs",
+                  "a-lens-passing-by"
                 ]
               }
             }
@@ -1441,6 +1444,9 @@
             "solar-motion",
             "rotating-disk",
             "cluster-members",
+            "light-bending",
+            "lens-plane",
+            "lens-passing",
             "sky-turning",
             "sky-seasons",
             "sky-phases",
