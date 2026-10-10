@@ -132,10 +132,15 @@ env:
   # The suite is noisy about color codes in a log that has none.
   NO_COLOR: '1'
 
+# Every job runs on ubuntu-24.04 by name, not ubuntu-latest, which GitHub moves
+# to Ubuntu 26 from 2026-10-19. A new image changes the system libraries the
+# browsers load, the apt mirror and the fonts the screenshots draw with, so the
+# move is made on purpose in a pull request of its own and not under whichever
+# branch happens to run first that day (Carl, 2026-10-09).
 jobs:
   checks:
     name: Lint, tests and physics validation
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       # The whole history, without old file contents: tests/decisionRegister.test.js
@@ -391,7 +396,7 @@ jobs:
 
   build:
     name: Production build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
@@ -449,7 +454,7 @@ jobs:
 
   e2e:
     name: Browser smoke tests (sources) ${{ matrix.shard }}/${{ strategy.job-total }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Twelve shards of equal DURATION, planned by tools/e2e-shards.mjs.
     #
     # Playwright's own `--shard=k/n` gives each shard an equal number of tests
@@ -538,7 +543,7 @@ jobs:
 
   e2e-report:
     name: Browser smoke tests (sources) report
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Runs whether the shards passed or not: the report is most wanted when
     # they did not. It does not decide anything - see the `ci` job, which
     # requires every shard itself - so a merge that fails cannot turn a red
@@ -577,7 +582,7 @@ jobs:
 
   e2e-coverage:
     name: Browser smoke tests (sources) coverage
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # What makes twelve green shards mean the suite passed: the merged results
     # have to contain every test `--list` names, exactly once. A shard that
     # crashed before uploading, a plan two shards computed differently, a list
@@ -622,7 +627,7 @@ jobs:
 
   accessibility:
     name: Accessibility (axe + keyboard)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     # Its own job rather than a line inside the browser suite. An accessibility
     # regression should be legible as one on the pull request rather than as
@@ -674,7 +679,7 @@ jobs:
 
   e2e-build:
     name: Browser smoke tests (production build)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
     timeout-minutes: 20
     steps:
@@ -731,7 +736,7 @@ jobs:
     name: Engine compatibility (${{ matrix.browser }})
     # Not on pull requests. See the header for why.
     if: github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Thirty minutes is the budget, and the profile is sized to fit inside it
     # rather than the budget being raised to fit the profile. See the header.
     timeout-minutes: 30
@@ -788,7 +793,7 @@ jobs:
   provenance:
     name: Datasets against their pinned sources
     if: ${{ github.event.schedule == '0 5 1 * *' || inputs.scheduled == 'provenance' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
@@ -883,7 +888,7 @@ jobs:
     name: Refresh the e2e timings
     if: ${{ !cancelled() && (github.event.schedule == '0 6 * * 1' || inputs.scheduled == 'timings') }}
     needs: [e2e-coverage]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
       contents: write
@@ -944,7 +949,7 @@ jobs:
   observatory-report:
     name: Observatory interaction budgets (report only)
     if: ${{ github.event.schedule == '0 6 * * 1' || inputs.scheduled == 'observatory' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
@@ -977,7 +982,7 @@ jobs:
   tablet-walk:
     name: Lessons walked at tablet size
     if: ${{ github.event.schedule == '0 6 * * 1' || inputs.scheduled == 'tablet-walk' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
@@ -1015,7 +1020,7 @@ jobs:
   nav-matrix:
     name: Navigation, the whole matrix
     if: ${{ github.event.schedule == '0 6 * * 1' || inputs.scheduled == 'nav-matrix' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v7
@@ -1051,7 +1056,7 @@ jobs:
   ci:
     name: CI
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       [
         checks,
@@ -1173,7 +1178,7 @@ jobs:
     name: Deploy to Pages
     needs: [ci]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
       contents: read
