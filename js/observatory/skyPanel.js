@@ -107,7 +107,7 @@ export function mountSkyPanel(body, ctx) {
     let d = '';
     for (let l = 0; l <= 360; l += 5) {
       const [x, y] = P(l, 0);
-      d += `${l === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`;
+      d += `${l === 0 ? 'M' : 'L'}${x} ${y}`;
     }
     fig.append(svg('path', { d, fill: 'none', stroke: k.grid }));
     const pos = galacticPositions(obs);
@@ -115,8 +115,8 @@ export function mountSkyPanel(body, ctx) {
       const [x, y] = P(p.l, p.b);
       fig.append(
         svg('circle', {
-          cx: x.toFixed(1),
-          cy: y.toFixed(1),
+          cx: x,
+          cy: y,
           r: 2,
           fill: k.accent,
         })
@@ -182,18 +182,18 @@ export function mountSkyPanel(body, ctx) {
       const dy = -pmdec[i] * per;
       fig.append(
         svg('line', {
-          x1: x.toFixed(1),
-          y1: y.toFixed(1),
-          x2: (x + dx).toFixed(1),
-          y2: (y + dy).toFixed(1),
+          x1: x,
+          y1: y,
+          x2: x + dx,
+          y2: y + dy,
           stroke: k.accent,
           'stroke-width': 1,
         })
       );
       fig.append(
         svg('circle', {
-          cx: x.toFixed(1),
-          cy: y.toFixed(1),
+          cx: x,
+          cy: y,
           r: 1.5,
           fill: k.ink,
         })
@@ -205,7 +205,9 @@ export function mountSkyPanel(body, ctx) {
       fill: k.muted,
       'font-size': 12,
     });
-    text.textContent = t('galW.sky.scale', { v: median.toFixed(2) });
+    text.textContent = t('galW.sky.scale', {
+      v: Math.round(median * 100) / 100,
+    });
     fig.append(text);
     fig.setAttribute(
       'aria-label',
@@ -213,7 +215,7 @@ export function mountSkyPanel(body, ctx) {
     );
     note.textContent = t('galW.sky.note.vectors', {
       n: idx.length,
-      v: median.toFixed(2),
+      v: Math.round(median * 100) / 100,
     });
   }
 

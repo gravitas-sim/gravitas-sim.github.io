@@ -84,11 +84,11 @@ function plot(canvas, xr, yr, labels, base = 260) {
     return out;
   };
   for (const v of ticks(...xr))
-    g.fillText(String(+v.toFixed(6)), X(v), r.y + r.h + 4);
+    g.fillText(String(Math.round(v * 1e6) / 1e6), X(v), r.y + r.h + 4);
   g.textAlign = 'right';
   g.textBaseline = 'middle';
   for (const v of ticks(...yr))
-    g.fillText(String(+v.toFixed(6)), r.x - 5, Y(v));
+    g.fillText(String(Math.round(v * 1e6) / 1e6), r.x - 5, Y(v));
   g.textBaseline = 'top';
   g.textAlign = 'left';
   g.fillText(t(labels[0]), r.x, r.y + r.h + 20);

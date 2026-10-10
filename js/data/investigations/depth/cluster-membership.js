@@ -71,7 +71,7 @@ export default {
              has 993 stars, and the fit expects 505.9 of them in the cluster
              (proper motion and parallax).`,
       prompt: 'The number of field stars the fit expects',
-      unit: 'stars',
+      unit: '',
       answer: 487,
       tolerance: 3,
       hints: [

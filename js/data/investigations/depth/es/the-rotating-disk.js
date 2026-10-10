@@ -18,7 +18,7 @@ export default {
     {
       title: 'La masa dentro de la órbita del Sol',
       body: 'La gravedad debe suministrar el movimiento circular: M = v² r ÷ G. En unidades de kiloparsecs, km/s y masas solares, G = 4,30 × 10<sup>−6</sup>. Toma v = 244&nbsp;km/s en r = 8,3&nbsp;kpc, los valores de la curva de rotación. Esto supone que la masa es esférica, lo que un disco no es: tómalo como una estimación.',
-      prompt: 'La masa dentro de 8,3 kpc',
+      prompt: 'La masa dentro de 8,3 kpc, en 10¹⁰ masas solares',
       hints: ['244² es 59.536; multiplica por 8,3 y divide entre 4,30 × 10⁻⁶.'],
       worked:
         '244² × 8,3 ÷ 4,30 × 10⁻⁶ = 59.536 × 8,3 ÷ 4,30 × 10⁻⁶ = 1,15 × 10¹¹, o 11,5 × 10¹⁰ masas solares.',

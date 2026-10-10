@@ -81,7 +81,10 @@ export default {
     {
       title: 'Mejor ajuste, solo estrellas',
       body: 'Pon <strong>Parámetros del modelo</strong> en <strong>mejor ajuste, solo estrellas (sin halo)</strong>. Lee el χ² reducido (χ² por grado de libertad: cerca de 1 es un ajuste tan bueno como los errores) y la masa del disco.',
-      fields: [{ label: 'χ² reducido' }, { label: 'Masa del disco' }],
+      fields: [
+        { label: 'χ² reducido' },
+        { label: 'Masa del disco, en 10¹⁰ masas solares' },
+      ],
     },
     {
       title: 'Añade un halo',

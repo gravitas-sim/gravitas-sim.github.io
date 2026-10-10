@@ -221,7 +221,12 @@ const THE_ROTATING_DISK = {
              errors) and the disk mass.`,
       fields: [
         { id: 'reduced', label: 'Reduced χ²', unit: '', hint: '50' },
-        { id: 'disc', label: 'Disk mass', unit: '10¹⁰ M☉', hint: '8' },
+        {
+          id: 'disc',
+          label: 'Disk mass, in 10¹⁰ solar masses',
+          unit: '',
+          hint: '8',
+        },
       ],
       validate: v => {
         if (![v.reduced, v.disc].every(Number.isFinite)) return null;

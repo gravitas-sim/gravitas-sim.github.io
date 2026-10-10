@@ -49,8 +49,8 @@ export default {
              Take v = 244&nbsp;km/s at r = 8.3&nbsp;kpc, the rotation curve’s
              values. This assumes the mass is spherical, which a disk is not:
              treat it as an estimate.`,
-      prompt: 'The mass inside 8.3 kpc',
-      unit: '10¹⁰ M☉',
+      prompt: 'The mass inside 8.3 kpc, in 10¹⁰ solar masses',
+      unit: '',
       answer: 11.5,
       tolerance: 0.5,
       hints: ['244² is 59,536; multiply by 8.3 and divide by 4.30 × 10⁻⁶.'],

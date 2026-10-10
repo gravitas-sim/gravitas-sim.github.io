@@ -109,7 +109,7 @@ const CLUSTER_MEMBERSHIP = {
           unit: 'mas/yr',
           hint: '-2.0',
         },
-        { id: 'members', label: 'Stars above 0.5', unit: 'stars', hint: '506' },
+        { id: 'members', label: 'Stars above 0.5', unit: '', hint: '506' },
       ],
       validate: v => {
         if (![v.pmra, v.pmdec, v.members].every(Number.isFinite)) return null;
@@ -170,8 +170,8 @@ const CLUSTER_MEMBERSHIP = {
              and read the number of stars above it. Then lower it to
              <strong>0.1</strong> and read it again.`,
       fields: [
-        { id: 'strict', label: 'Stars above 0.99', unit: 'stars', hint: '497' },
-        { id: 'loose', label: 'Stars above 0.1', unit: 'stars', hint: '509' },
+        { id: 'strict', label: 'Stars above 0.99', unit: '', hint: '497' },
+        { id: 'loose', label: 'Stars above 0.1', unit: '', hint: '509' },
       ],
       validate: v => {
         if (![v.strict, v.loose].every(Number.isFinite)) return null;
