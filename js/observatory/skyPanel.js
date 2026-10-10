@@ -50,8 +50,7 @@ export function galacticPositions(o) {
 }
 
 export function mountSkyPanel(body, ctx) {
-  ctx.registerMessages?.('en', EN_GALACTIC);
-  ctx.registerMessages?.('es', ES_GALACTIC);
+  ctx.registerMessages({ en: EN_GALACTIC, es: ES_GALACTIC });
   const { t } = ctx;
   body.textContent = '';
   const row = document.createElement('div');

@@ -91,11 +91,15 @@ for (const c of CASES) {
 
 test('the Observatory sky panel draws the Galactic map and the vectors for a Gaia table', async ({
   page,
-  app,
 }) => {
   test.slow();
-  await page.goto(`${app}/observatory/?open=gaia-ngc2420`);
-  await expect(page.locator('#obsWork')).toBeVisible();
+  await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
+    timeout: 30_000,
+  });
+  await page.locator('#obsFixture').selectOption('gaia-ngc2420');
+  await page.locator('#obsOpen').click();
+  await expect(page.locator('#obsWork')).toBeVisible({ timeout: 30_000 });
   const panel = page.locator('#obsSkyPanel');
   await expect(panel).toBeVisible();
   await panel.locator('summary').click();
