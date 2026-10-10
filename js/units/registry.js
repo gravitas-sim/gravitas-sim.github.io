@@ -102,6 +102,20 @@ export const UNITS = Object.freeze({
     es: 'ua/año',
   },
 
+  // Proper motions and angular rates (Roadmap II Prompt 92): a proper motion
+  // in Gaia's mas/yr and the Oort constants and angular speeds in km/s/kpc.
+  'mas/yr': {
+    dim: 'angular-rate',
+    factor: Math.PI / 648000000 / 31557600,
+    symbol: 'mas/yr',
+    es: 'mas/año',
+  },
+  'km/s/kpc': {
+    dim: 'angular-rate',
+    factor: 1e3 / 3.085677581491367e19,
+    symbol: 'km/s/kpc',
+  },
+
   W: { dim: 'power', factor: 1, symbol: 'W' },
   // IAU 2015 nominal solar luminosity.
   Lsun: { dim: 'power', factor: 3.828e26, symbol: 'L☉' },

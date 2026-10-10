@@ -59,6 +59,7 @@ import { COMPILATIONS } from './data-packs/compilations.mjs';
 import { NGC3198_SYNTHETIC } from './data-packs/ngc3198-synthetic.mjs';
 import { RADIATION_PACKS } from './data-packs/radiation.mjs';
 import { SKY_PACKS } from './data-packs/sky.mjs';
+import { GALACTIC_PACKS } from './data-packs/gaia-dynamics.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CACHE =
@@ -437,6 +438,8 @@ export const PACKS = [
   ...RADIATION_PACKS,
   // The Sky Lab's bright-star catalogue (Roadmap II Prompt 88).
   ...SKY_PACKS,
+  // Galactic dynamics with Gaia (Roadmap II Prompt 92).
+  ...GALACTIC_PACKS,
 ];
 
 // A table pack (js/tableObservation.js) is decoded and checked as a table;
