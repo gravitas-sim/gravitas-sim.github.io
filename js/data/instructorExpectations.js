@@ -543,5 +543,58 @@ export default {
       'measure-conservation':
         'Momentum and angular-momentum drift around 1e-15 at both exponents, with no systematic difference between them. Energy drift is around 1e-5, larger than the other two because that bench uses a first-order scheme; it is bounded rather than growing, which is the point.',
     },
+    'the-turning-sky': {
+      'rise-shift':
+        'Arcturus at 40 degrees north rises near 738.5 minutes after noon on night 0 and 620.6 on night 30: 3.93 minutes earlier a night. The validator accepts each within 3 minutes and says so when the second number is larger.',
+      'sidereal-clock':
+        'Sidereal time at midnight is about 6.79 h on night 0 and 8.76 h on night 30, an advance of 1.97 h. The validator accepts each within 0.04 h.',
+      'a-month-on':
+        '122 minutes (31 × 3.93), within 4. A student who gives hours has left out the conversion.',
+      'height-at-the-meridian':
+        '69.1 degrees, within 0.5. Students who give 69.2 used the rounded declination; both pass.',
+    },
+    'the-sun-through-the-year': {
+      'three-noons':
+        'About 50.0, 73.4 and 26.6 degrees at 40 degrees north, accepted within 0.5; the range is 46.9. A student who reads the declination instead has the wrong row.',
+      'three-day-lengths':
+        '12.1, 15.0 and 22.0 hours on the June solstice at latitudes 0, 40 and 65, accepted within 0.15 h.',
+      'what-if-the-tilt':
+        '60 degrees, from 90 minus 40 plus 10. The instrument gives 60.0 with the tilt slider at 10.',
+      'equinox-longitude':
+        '180 degrees within 3; the noon Sun on 22 September is at 179.8 degrees.',
+    },
+    'phases-and-eclipses': {
+      'four-phases':
+        'Lit fractions of about 0.17, 0.57, 0.91 and 0.99 at 3.7, 7.4, 11.1 and 14.8 days, accepted within 0.02.',
+      'eclipse-table':
+        'Two possible eclipses in each half year of 2025: the full and new Moons of 14 and 29 March, and of 7 and 21 September. Students who count February’s 28th (latitude −1.6) have misread the 1.5-degree limit.',
+      'months-between':
+        '177 days from the 14 March full Moon (06:55 UT) to the 7 September one (18:11 UT), within 2.',
+      'phase-from-elongation': '0.25 from (1 − cos 60°)/2, within 0.02.',
+    },
+    'wanderers-on-the-sky': {
+      'retrograde-window':
+        'Mars is retrograde from day 68 (6 December 2024) to day 146, with direct motion first on day 147 (24 February 2025): 79 days, each end accepted within 2.',
+      'fastest-westward':
+        'About 175 degrees on day 106 (12 January 2025), within 5. The instrument gives −0.40 degrees per day then.',
+      'venus-elongation':
+        '47.2 degrees on day 101 (10 January 2025), within 1.2 degrees and 4 days.',
+      'jupiter-loop':
+        'Retrograde from day 9 to day 127: 118 days, each end within 2.',
+      'the-inner-limit':
+        '46.3 degrees from arcsin(0.723); the instrument gives 47.2 and the difference is eccentricity.',
+    },
+    'plan-a-night': {
+      'dark-hours':
+        'About 10.5 hours of astronomical dark on 29 January and 6.7 on 21 June at 30 degrees north, accepted within 0.2.',
+      'what-the-moon-costs':
+        'Regulus has about 8.1 usable hours on the new-Moon night of 29 January and none on 12 February, when the full Moon is in Leo. Accepted within 0.3 h.',
+      'count-the-targets':
+        'Five with at least 3 hours on 15 February (Sirius, Arcturus, Capella, Aldebaran, Regulus), within 0.4.',
+      'tighten-the-limit':
+        'Four at airmass 1.5 (Arcturus, Capella, Aldebaran, Regulus); Sirius falls to about 1.5 hours.',
+      'airmass-at-thirty':
+        '2.0 from 1/sin 30; the kernel’s fit gives 1.99. Accepted within 0.05.',
+    },
   },
 };

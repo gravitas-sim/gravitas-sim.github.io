@@ -73,6 +73,11 @@ import A_UNIVERSE_OF_STARS from './investigations/a-universe-of-stars.js';
 import LIVES_OF_STARS from './investigations/lives-of-stars.js';
 import TWELVE_NIGHTS from './investigations/twelve-nights.js';
 import COLOR_AND_TEMPERATURE from './investigations/color-and-temperature.js';
+import THE_TURNING_SKY from './investigations/the-turning-sky.js';
+import THE_SUN_THROUGH_THE_YEAR from './investigations/the-sun-through-the-year.js';
+import PHASES_AND_ECLIPSES from './investigations/phases-and-eclipses.js';
+import WANDERERS_ON_THE_SKY from './investigations/wanderers-on-the-sky.js';
+import PLAN_A_NIGHT from './investigations/plan-a-night.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 
@@ -120,6 +125,11 @@ export const INVESTIGATIONS = [
   // the thing this one takes apart, so it cannot come before them.
   POWER_LAW,
   COLOR_AND_TEMPERATURE,
+  THE_TURNING_SKY,
+  THE_SUN_THROUGH_THE_YEAR,
+  PHASES_AND_ECLIPSES,
+  WANDERERS_ON_THE_SKY,
+  PLAN_A_NIGHT,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

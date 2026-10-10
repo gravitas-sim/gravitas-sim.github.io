@@ -270,4 +270,54 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'the-turning-sky': {
+    audience: 'intro',
+    mathematics: 'arithmetic',
+    prerequisites: [],
+    textbook: {
+      chapter: 2,
+      section: '2.1',
+    },
+    courseLevel: 'survey',
+  },
+  'the-sun-through-the-year': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 2,
+      section: '2.2',
+    },
+    courseLevel: 'survey',
+  },
+  'phases-and-eclipses': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 2,
+      section: '2.3',
+    },
+    courseLevel: 'survey',
+  },
+  'wanderers-on-the-sky': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 3,
+      section: '3.1',
+    },
+    courseLevel: 'survey',
+  },
+  'plan-a-night': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 4,
+      section: '4.3',
+    },
+    courseLevel: 'survey',
+  },
 };

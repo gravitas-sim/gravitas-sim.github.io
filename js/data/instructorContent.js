@@ -16,6 +16,250 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'plan-a-night': {
+    topic: 'Observing plans: astronomical dark, airmass and Moon constraints',
+    difficulty: 'Introductory',
+    placement:
+      'Fifth in the sky sequence, and a step before Design the Schedule and Twelve Nights in the exoplanet sequence, which take the target as given.',
+    overview:
+      'Students plan one night at latitude 30 degrees north among eight bright stars. They measure the hours of astronomical dark in winter and summer, compute an airmass, see that a full Moon in Leo removes Regulus entirely, count the targets worth the night under two airmass limits, and write a plan with reasons. Quantitative depth looks at the error of the flat-layer airmass; advanced explains why 60 degrees north has no astronomical dark in June.',
+    priorKnowledge: ['Altitude and the idea of twilight', 'The Moon’s phases'],
+    keyConcepts: [
+      'Astronomical dark is the Sun more than 18 degrees below the horizon',
+      'Airmass is about 1/sin(altitude)',
+      'A bright Moon near a target costs it its hours',
+      'A plan is a set of windows and a reason for each choice',
+    ],
+    flow: [
+      'The brief and the instrument.',
+      'Dark hours in two seasons.',
+      'Airmass and why it is limited.',
+      'The cost of the Moon.',
+      'Count targets under two limits, and write the plan.',
+    ],
+    features: [
+      'The planning instrument (sky-plan) with bars per star and a Moon row',
+      'Written plan graded by rubric (reflect-style, never marked)',
+    ],
+    misconceptions: [
+      'The best target is always the brightest; the Moon and the airmass decide.',
+      'Summer nights are best; the dark is shortest then at middle latitudes.',
+    ],
+    teachingNotes: [
+      'The 3-hour threshold and the 30-degree Moon limit are the lesson’s choices, not rules; invite students to change them.',
+      'The eight stars are bright stars of the Sky Lab catalogue; a star the Moon sits near is lost for the night.',
+    ],
+    discussion: [
+      'Which constraint would you relax first for a bright target, and which never?',
+      'How would the plan change at latitude -30?',
+    ],
+    extensions: [
+      'Do the same plan on the Sky Lab page with the airmass and twilight calculator.',
+      'Take one chosen star into Design the Schedule.',
+    ],
+    modelNotes:
+      'Windows are sampled every quarter of an hour on the kernel’s positions with refraction; star proper motion is neglected. The Moon constraint applies only while the Moon is above the horizon. Horizon refraction below 5 degrees carries no accuracy claim, so airmass limits above about 5 are safe. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+
+  'wanderers-on-the-sky': {
+    topic:
+      'Planetary configurations, elongations and retrograde loops, seen on the sky and from above the orbits',
+    difficulty: 'Introductory',
+    placement:
+      'Fourth in the sky sequence, and a natural partner for Why Mars Goes Backwards, which shows the same event in the orbit view. It does not require it.',
+    overview:
+      'Students find the start and end of Mars’s retrograde loop from December 2024 to February 2025, read its elongation at its fastest westward motion, and see the same date from above the orbits. They measure the greatest elongation of Venus, compute the circular-orbit limit, and time Jupiter’s loop. The central idea is relative motion: no planet reverses its orbit.',
+    priorKnowledge: [
+      'That planets orbit the Sun in the same direction',
+      'Elongation as the angle from the Sun on the sky',
+    ],
+    keyConcepts: [
+      'A retrograde loop is Earth overtaking a slower outer planet',
+      'Loops are centered on opposition',
+      'An inner planet’s elongation is limited by arcsin of its orbit radius',
+      'The synodic period is set by the two orbital periods',
+    ],
+    flow: [
+      'Orientation to the two panels.',
+      'Predict, then find the loop dates for Mars.',
+      'Elongation at the fastest westward motion, and the orbit view.',
+      'Venus’s greatest elongation and its geometry.',
+      'Jupiter’s loop, when outer planets are retrograde, and a written explanation.',
+    ],
+    features: [
+      'The wanderers instrument (sky-wanderers) with sky and orbit panels',
+      'The companion lesson Why Mars Goes Backwards',
+    ],
+    misconceptions: [
+      'Mars goes backward in its orbit; correct with the orbit panel.',
+      'Retrograde happens at a fixed date each year; correct with the synodic period.',
+    ],
+    teachingNotes: [
+      'Ask students to step the slider day by day near each station; the slider shows the day number and the date.',
+      'The planet model is good to about 0.2 degrees, so station dates may shift by a day against an almanac.',
+    ],
+    discussion: [
+      'How would Tycho or Ptolemy have described the loop?',
+      'Why can Mercury and Venus never be at opposition?',
+    ],
+    extensions: [
+      'Run Why Mars Goes Backwards and compare its frame switch with the right-hand panel.',
+      'Compare Saturn’s loop with Jupiter’s.',
+    ],
+    modelNotes:
+      'Planet positions are Standish’s Table 1 elements for 1800 to 2050, geometric without light time, accurate to about 0.2 degrees; the lesson uses 2024 to 2026. Rates are central differences over two days. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+
+  'phases-and-eclipses': {
+    topic:
+      'Moon phases from elongation, the tilted lunar orbit and eclipse seasons',
+    difficulty: 'Introductory',
+    placement:
+      'Third in the sky sequence, after The Sun Through the Year, or on its own in a unit on the Moon.',
+    overview:
+      'Students measure the lit fraction of the Moon at four days after new Moon and turn the angle between Moon and Sun into a fraction with (1 - cos E)/2. They predict how often eclipses happen, tabulate the new and full Moons of two half years of 2025 against the Moon’s ecliptic latitude, and find the four that can make an eclipse. The model is the kernel’s positions of the Sun and Moon; the 3-D lab’s system is not used. Quantitative depth derives the eclipse year; advanced the saros.',
+    priorKnowledge: [
+      'Phases as a matter of viewing angle',
+      'The idea of a plane of the orbit',
+    ],
+    keyConcepts: [
+      'The lit fraction is (1 - cos E)/2 for elongation E',
+      'The Moon’s orbit is tilted about 5 degrees to the ecliptic',
+      'Eclipses need a new or full Moon near a node, so they come in seasons about half a year apart',
+    ],
+    flow: [
+      'Orientation and prediction for the quarter phase.',
+      'Measure four lit fractions and use the formula.',
+      'Predict and count eclipse chances in 2025; compute the interval.',
+      'Explain the tilt, in a choice and in words.',
+    ],
+    features: [
+      'The phases instrument (sky-phases) and the eclipse list (sky-eclipses)',
+      'Held predictions, measurements and numeric questions',
+    ],
+    misconceptions: [
+      'The phases come from the Earth’s shadow; correct with the viewing angle.',
+      'A quarter Moon is a quarter lit; it is half lit.',
+      'Eclipses should happen every month.',
+    ],
+    teachingNotes: [
+      'The 1.5-degree limit is a rough rule for the lesson; it flags the four 2025 eclipses (14 and 29 March, 7 and 21 September) and not the near misses in February and August.',
+      'The eclipse list says whether an eclipse is possible, not where it is visible.',
+    ],
+    discussion: [
+      'Why are a solar and a lunar eclipse paired two weeks apart?',
+      'Why is a total solar eclipse more local than a total lunar eclipse?',
+    ],
+    extensions: [
+      'Switch to the 2026 preset and find the February and March eclipses.',
+      'Look up the saros series of the 2025 eclipses.',
+    ],
+    modelNotes:
+      'Phases use the geometric phase angle (Sun-Moon-Earth) from the kernel; the lit fraction formula ignores the Moon’s finite distance, a difference of about 0.2 percent. The eclipse limit is a rough rule of 1.5 degrees of ecliptic latitude, and the list is of geocentric new and full Moons. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+
+  'the-sun-through-the-year': {
+    topic:
+      'The ecliptic and obliquity, the Sun’s noon altitude and the length of the day through the year, and why the seasons are not about distance',
+    difficulty: 'Introductory',
+    placement:
+      'Second in the sky sequence, after The Turning Sky. It stands alone for a course that starts with seasons.',
+    overview:
+      'Students measure the Sun’s noon altitude at the equinoxes and solstices at 40 degrees north, the length of the day at three latitudes, and change the tilt of the axis to see the seasons disappear. They meet the distance trap: the Earth is farther from the Sun in June. Quantitative depth computes the daily sunlight on a square meter from the radiation kernel’s solar constant and the effect of the distance in percent; advanced compares a high latitude with the equator.',
+    priorKnowledge: [
+      'Latitude and the celestial equator',
+      'The idea of an orbit',
+    ],
+    keyConcepts: [
+      'The ecliptic is tilted from the celestial equator by the obliquity',
+      'Noon altitude is 90° minus latitude plus declination',
+      'Day length depends on declination and latitude',
+      'Seasons come from the tilt, not the distance',
+    ],
+    flow: [
+      'Orientation: ecliptic, obliquity, the two plots.',
+      'Predict the June–December difference, then measure three noons.',
+      'Predict the effect of a smaller tilt, then three day lengths.',
+      'The distance trap and the Sun’s ecliptic longitude.',
+      'A written account of a world with no tilt.',
+    ],
+    features: [
+      'The seasons instrument (sky-seasons) with a tilt control',
+      'Held prediction, measurement, numeric and choice questions',
+      'Radiation-kernel solar constant for the sunlight (quantitative depth)',
+    ],
+    misconceptions: [
+      'It is warmer in summer because the Earth is closer to the Sun; the readout shows the opposite for the northern summer and the southern hemisphere has winter then.',
+      'The seasons are the same everywhere; day length differs strongly with latitude.',
+    ],
+    teachingNotes: [
+      'The No tilt and Real tilt presets are the experiment; let students step through the year with each.',
+      'Noon altitude is geometric, with no refraction.',
+    ],
+    discussion: [
+      'What would the seasons be on a planet with a tilt of 80 degrees?',
+      'Why does the equator have almost no change in day length?',
+    ],
+    extensions: [
+      'Compare the sunlight at 65 degrees north and at the equator over the year.',
+      'Use the Sky Lab’s rise-transit-set tool to check a day length.',
+    ],
+    modelNotes:
+      'The Sun is the kernel’s apparent Sun (Meeus, nutation and aberration). The tilt control replaces the obliquity in the Sun’s declination, a what-if. Day length uses a horizon of minus 0.83 degrees (refraction and the Sun’s radius) and the sunlight uses the geometric horizon. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+
+  'the-turning-sky': {
+    topic:
+      'Horizon and equatorial coordinates, sidereal time and why stars rise about four minutes earlier each night',
+    difficulty: 'Introductory',
+    placement:
+      'First of the sky sequence, after any course introduction to the celestial sphere. It needs nothing earlier and the next three investigations reuse its instrument.',
+    overview:
+      'Students follow one star through a night and through a month on a computed sky. They predict, then measure, that a star rises about four minutes earlier each night, read a sidereal clock to see the same four minutes from the other side, and work out how high a star climbs and which stars never set. The aim is the difference between a star’s fixed equatorial coordinates and its changing horizon coordinates, and the sidereal day.',
+    priorKnowledge: [
+      'Altitude and azimuth as angles on the sky',
+      'That the Earth turns once a day and orbits the Sun once a year',
+    ],
+    keyConcepts: [
+      'Horizon coordinates change with time and place; equatorial coordinates are fixed on the sky',
+      'The sidereal day is about four minutes shorter than the solar day',
+      'Local sidereal time is the right ascension on the meridian',
+      'Meridian altitude is 90° minus latitude plus declination, and circumpolar stars have declination above 90° minus latitude',
+    ],
+    flow: [
+      'Orientation to the instrument and the two coordinate systems.',
+      'Predict tomorrow’s rising time, then measure the shift over 30 nights.',
+      'Explain the four minutes and see it again in the sidereal clock.',
+      'Use declination and latitude for a meridian altitude and for circumpolar stars.',
+      'A written explanation of why the evening sky changes with the seasons.',
+    ],
+    features: [
+      'The turning-sky instrument (sky-turning)',
+      'Held prediction, measurement with computed fields and numeric questions',
+      'The Sky Lab kernel behind it, which the Sky Lab page (/sky/) also uses',
+    ],
+    misconceptions: [
+      'The stars move about from night to night; correct by showing that the shift is the same for every star and comes from the clock.',
+      'The Earth’s rotation is not steady; correct with the sidereal day.',
+      'Circumpolar stars are near the pole only in a figure of speech; correct with the declination rule.',
+    ],
+    teachingNotes: [
+      'Have students set night 0 and night 30 and say aloud what the clock did and what the stars did.',
+      'The “night” starts at noon so a rising time never wraps; this is a modelling choice, say so.',
+      'Validate messages are in English only in this release.',
+    ],
+    discussion: [
+      'Why does a constellation that is overhead at 9 pm in December not appear at 9 pm in June?',
+      'What would the shift be on a planet with a year of 100 days?',
+    ],
+    extensions: [
+      'Open the Sky Lab at /sky/ and reproduce the rising time with the rise-transit-set tool.',
+      'Follow Vega at latitude 60 and at latitude 20 and compare how long it is above the horizon.',
+    ],
+    modelNotes:
+      'Positions neglect proper motion and annual aberration in the lesson’s rising times (the Sky Lab’s accurate chain includes them); the effect is under 0.1 degree. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+
   'color-and-temperature': {
     topic:
       'Blackbody radiation: Wien’s law, color indices, and where a blackbody stops being a star',

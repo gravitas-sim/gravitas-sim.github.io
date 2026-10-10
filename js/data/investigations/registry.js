@@ -126,6 +126,11 @@ const LOADERS = {
   'lives-of-stars': () => import('./lives-of-stars.js'),
   'twelve-nights': () => import('./twelve-nights.js'),
   'color-and-temperature': () => import('./color-and-temperature.js'),
+  'the-turning-sky': () => import('./the-turning-sky.js'),
+  'the-sun-through-the-year': () => import('./the-sun-through-the-year.js'),
+  'phases-and-eclipses': () => import('./phases-and-eclipses.js'),
+  'wanderers-on-the-sky': () => import('./wanderers-on-the-sky.js'),
+  'plan-a-night': () => import('./plan-a-night.js'),
 };
 
 /**
@@ -166,6 +171,11 @@ const TRANSLATIONS = {
     'lives-of-stars': () => import('./es/lives-of-stars.js'),
     'twelve-nights': () => import('./es/twelve-nights.js'),
     'color-and-temperature': () => import('./es/color-and-temperature.js'),
+    'the-turning-sky': () => import('./es/the-turning-sky.js'),
+    'the-sun-through-the-year': () => import('./es/the-sun-through-the-year.js'),
+    'phases-and-eclipses': () => import('./es/phases-and-eclipses.js'),
+    'wanderers-on-the-sky': () => import('./es/wanderers-on-the-sky.js'),
+    'plan-a-night': () => import('./es/plan-a-night.js'),
   },
 };
 

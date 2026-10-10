@@ -940,5 +940,140 @@ export default {
         text: 'Synthesis: the two lists, the n = 3 stability boundary and why the instrument stops short of it, one closing question about method, and an explicit statement of what the model is and is not.',
       },
     ],
+    'the-turning-sky': [
+      {
+        from: 'a-sky-that-turns',
+        to: 'predict-tomorrow',
+        text: 'The two coordinate systems and the instrument, then a held prediction of tomorrow’s rising time.',
+      },
+      {
+        from: 'rise-shift',
+        to: 'a-month-on',
+        text: 'Students measure Arcturus’s rising time on night 0 and night 30 and use the shift for a month.',
+      },
+      {
+        from: 'why-four-minutes',
+        to: 'sidereal-clock',
+        text: 'The cause, in a choice, and the same four minutes in the sidereal clock.',
+      },
+      {
+        from: 'height-at-the-meridian',
+        to: 'never-sets',
+        text: 'Meridian altitude from declination and latitude, and a circumpolar star.',
+      },
+      {
+        from: 'one-sentence',
+        to: 'what-you-worked-out',
+        text: 'A written explanation of the changing evening sky, and the close.',
+      },
+    ],
+    'the-sun-through-the-year': [
+      {
+        from: 'a-sun-that-moves',
+        to: 'predict-noon-height',
+        text: 'The ecliptic and obliquity, the instrument, and a held prediction of the June–December noon difference.',
+      },
+      {
+        from: 'three-noons',
+        to: 'what-if-the-tilt',
+        text: 'Three noon altitudes at 40 degrees north, and the effect of a smaller tilt.',
+      },
+      {
+        from: 'three-day-lengths',
+        to: 'distance-is-not-it',
+        text: 'Day length at three latitudes and the distance trap.',
+      },
+      {
+        from: 'equinox-longitude',
+        to: 'one-sentence',
+        text: 'The Sun’s ecliptic longitude and a written account of a world with no tilt.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close.',
+      },
+    ],
+    'phases-and-eclipses': [
+      {
+        from: 'a-moon-that-changes',
+        to: 'predict-the-quarter',
+        text: 'Elongation and the instrument, and a held prediction for the quarter phase.',
+      },
+      {
+        from: 'four-phases',
+        to: 'phase-from-elongation',
+        text: 'Four lit fractions, then the formula (1 − cos E)/2.',
+      },
+      {
+        from: 'predict-the-eclipses',
+        to: 'eclipse-table',
+        text: 'A held prediction of eclipse frequency, then counting the possible eclipses of two half years.',
+      },
+      {
+        from: 'months-between',
+        to: 'why-not-every-month',
+        text: 'The interval between the March and September eclipses and the cause, the tilted orbit.',
+      },
+      {
+        from: 'one-sentence',
+        to: 'what-you-worked-out',
+        text: 'A written explanation of eclipse seasons, and the close.',
+      },
+    ],
+    'wanderers-on-the-sky': [
+      {
+        from: 'five-wanderers',
+        to: 'predict-the-loop',
+        text: 'The two panels, and a held prediction of Mars’s motion.',
+      },
+      {
+        from: 'retrograde-window',
+        to: 'two-views-one-event',
+        text: 'Finding the loop’s dates, the elongation at the fastest westward motion and the same event from above.',
+      },
+      {
+        from: 'venus-elongation',
+        to: 'the-inner-limit',
+        text: 'Venus’s greatest elongation and the circular-orbit limit.',
+      },
+      {
+        from: 'jupiter-loop',
+        to: 'when-retrograde',
+        text: 'Jupiter’s loop and the rule for outer planets.',
+      },
+      {
+        from: 'one-sentence',
+        to: 'what-you-worked-out',
+        text: 'A written explanation of apparent backward motion, and the close.',
+      },
+    ],
+    'plan-a-night': [
+      {
+        from: 'the-brief',
+        to: 'dark-hours',
+        text: 'The brief and the dark in two seasons.',
+      },
+      {
+        from: 'airmass-at-thirty',
+        to: 'why-limit-airmass',
+        text: 'An airmass and why observers limit it.',
+      },
+      {
+        from: 'what-the-moon-costs',
+        to: 'count-the-targets',
+        text: 'The cost of the Moon and counting worthwhile targets.',
+      },
+      {
+        from: 'tighten-the-limit',
+        to: 'write-the-plan',
+        text: 'A stricter airmass and the written plan.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close.',
+      },
+    ],
   },
 };

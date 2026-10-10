@@ -63,6 +63,7 @@ import {
 } from '../../js/binaryStability.js';
 import { expectedKeplerSlope } from '../../js/powerLawGravity.js';
 import { LIGHT_MODELS } from './lightModels.mjs';
+import { SKY_MODELS } from './skyModels.mjs';
 import { allWidgets, whenWidgetsReady } from '../../js/widgets.js';
 
 export const RULE_ID = 'instructor/model-checked';
@@ -209,6 +210,7 @@ const E_BINARY = 0.4;
  */
 export const MODELS = {
   ...LIGHT_MODELS,
+  ...SKY_MODELS,
   'keplers-laws/use-the-law': {
     via: "js/tidalPhysics.js (G, solar mass, AU): Newton's form of the third law",
     value: () => periodAboutSun(4) / YEAR_S,

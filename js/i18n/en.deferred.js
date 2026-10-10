@@ -1764,6 +1764,20 @@ export const EN_DEFERRED = {
   'inv.seq.assign':
     'Cut a shorter activity out of this investigation with the activity builder',
 
+  'inv.seq.sky.title': 'The sky',
+  'inv.seq.sky.blurb':
+    'Where things are in the sky and why they move: the turning of the stars, the Sun’s year, the Moon’s phases and eclipses, the planets’ loops, and then planning a night at a telescope. The first sequence for an introductory course; each takes about 35 minutes.',
+  'inv.seq.sky.the-turning-sky':
+    'Start here: coordinates, sidereal time and the four minutes.',
+  'inv.seq.sky.the-sun-through-the-year':
+    'The Sun’s height and the day’s length through the year, and the seasons.',
+  'inv.seq.sky.phases-and-eclipses':
+    'The Moon’s phases, and why eclipses are rare.',
+  'inv.seq.sky.wanderers-on-the-sky':
+    'The planets’ loops, from the sky and from above; pairs with Why Mars Goes Backwards.',
+  'inv.seq.sky.plan-a-night':
+    'Put it to work: choose targets for a night at a telescope.',
+
   'inv.seq.orbits.title': 'Orbital mechanics',
   'inv.seq.orbits.blurb':
     'From the shape of an orbit to moving between two of them. The first two measure what orbits do; the last three spend that understanding on getting somewhere.',

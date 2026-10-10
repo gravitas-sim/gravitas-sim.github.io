@@ -79,6 +79,14 @@ export const WIDGET_FAMILIES = Object.freeze({
   ],
   gw: ['gw-lab', 'gw-real'],
   light: ['blackbody'],
+  sky: [
+    'sky-turning',
+    'sky-seasons',
+    'sky-phases',
+    'sky-eclipses',
+    'sky-wanderers',
+    'sky-plan',
+  ],
   gwEvents: ['gw-events'],
 });
 

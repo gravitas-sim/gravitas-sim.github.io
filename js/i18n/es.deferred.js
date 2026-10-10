@@ -1785,6 +1785,20 @@ export const ES_DEFERRED = {
   'inv.seq.assign':
     'Recorta una actividad más corta de esta investigación con el generador de actividades',
 
+  'inv.seq.sky.title': 'El cielo',
+  'inv.seq.sky.blurb':
+    'Dónde están las cosas en el cielo y por qué se mueven: el giro de las estrellas, el año del Sol, las fases de la Luna y los eclipses, los lazos de los planetas, y luego planificar una noche en un telescopio. La primera secuencia para un curso introductorio; cada una dura unos 35 minutos.',
+  'inv.seq.sky.the-turning-sky':
+    'Empieza aquí: coordenadas, tiempo sidéreo y los cuatro minutos.',
+  'inv.seq.sky.the-sun-through-the-year':
+    'La altura del Sol y la duración del día a lo largo del año, y las estaciones.',
+  'inv.seq.sky.phases-and-eclipses':
+    'Las fases de la Luna y por qué los eclipses son raros.',
+  'inv.seq.sky.wanderers-on-the-sky':
+    'Los lazos de los planetas, desde el cielo y desde arriba; va con Por qué Marte va hacia atrás.',
+  'inv.seq.sky.plan-a-night':
+    'Ponlo a trabajar: elige objetivos para una noche en un telescopio.',
+
   'inv.seq.orbits.title': 'Mecánica orbital',
   'inv.seq.orbits.blurb':
     'De la forma de una órbita a moverse entre dos. Las dos primeras miden lo que hacen las órbitas; las tres últimas usan eso para llegar a alguna parte.',

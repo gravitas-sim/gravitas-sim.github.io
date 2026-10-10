@@ -60,4 +60,14 @@ export const SUMMARIES = {
     'Newton said gravity falls off as one over the distance squared. Not one over the distance, not one over the cube — squared, exactly. This investigation asks what that exactly is doing. You will turn the exponent up and down and measure three things: whether the orbit still closes, how the orbital period depends on distance, and which conservation laws survive. Two of those change immediately. One of them does not change at all, and the reason it does not is the most useful thing in the investigation.',
   'color-and-temperature':
     "Everything that glows by temperature leaves a signature in its light. You will predict how the peak wavelength of a blackbody moves as it heats up, measure it on a computed Planck curve, and run Wien's law both ways: temperature from a peak, and temperature from a color index. Along the way the Sun's green peak turns out not to make it green, and the line between a blackbody and a real star is drawn. Quantitative depth adds the Stefan–Boltzmann law and the size of a star from its light; advanced depth adds synthetic photometry in two real filter systems.",
+  'the-turning-sky':
+    'Follow one star through a night and then through a month, from a model of the sky computed by the Sky Lab kernel. You will measure how much earlier it rises each night and explain the four minutes, read a sidereal clock, find how high a star climbs from its declination and your latitude, and see which stars never set.',
+  'the-sun-through-the-year':
+    "Measure the Sun's height at noon and the length of the day at the equinoxes and solstices and at three latitudes, then change the tilt of the axis and see the seasons go. The distance to the Sun turns out to be the wrong suspect. Deeper levels compute the sunlight on a square meter and compare the pole with the equator.",
+  'phases-and-eclipses':
+    "Measure how much of the Moon is lit as it moves away from the Sun, and turn the angle into a fraction with one formula. Then list the new and full Moons of a half year against the Moon's tilted orbit and find the few that can make an eclipse, and why they come in seasons. Deeper levels derive the eclipse year and the saros.",
+  'wanderers-on-the-sky':
+    "Find the start and end of Mars's retrograde loop in 2024-25 and Jupiter's, measure how far Venus gets from the Sun, and see the same events from above the orbits, where nothing ever goes backwards. A companion to Why Mars Goes Backwards, seen from the sky. Deeper levels compute the synodic period and the speed of the loop.",
+  'plan-a-night':
+    'Plan a night at a telescope: measure how long the astronomical dark lasts, compute an airmass, see what a full Moon costs a target, then count which of eight bright stars are worth the night under the limits you set, and write the plan. The step before Design the Schedule and Twelve Nights, which take the target as given.',
 };

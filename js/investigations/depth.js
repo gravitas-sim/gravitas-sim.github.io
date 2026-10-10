@@ -49,6 +49,16 @@ const EXTENSIONS = {
   'missing-mass': () => import('../data/investigations/depth/missing-mass.js'),
   'color-and-temperature': () =>
     import('../data/investigations/depth/color-and-temperature.js'),
+  'the-turning-sky': () =>
+    import('../data/investigations/depth/the-turning-sky.js'),
+  'the-sun-through-the-year': () =>
+    import('../data/investigations/depth/the-sun-through-the-year.js'),
+  'phases-and-eclipses': () =>
+    import('../data/investigations/depth/phases-and-eclipses.js'),
+  'wanderers-on-the-sky': () =>
+    import('../data/investigations/depth/wanderers-on-the-sky.js'),
+  'plan-a-night': () =>
+    import('../data/investigations/depth/plan-a-night.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -64,6 +74,16 @@ const WORDS = {
       import('../data/investigations/depth/es/color-and-temperature.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
+    'the-turning-sky': () =>
+      import('../data/investigations/depth/es/the-turning-sky.js'),
+    'the-sun-through-the-year': () =>
+      import('../data/investigations/depth/es/the-sun-through-the-year.js'),
+    'phases-and-eclipses': () =>
+      import('../data/investigations/depth/es/phases-and-eclipses.js'),
+    'wanderers-on-the-sky': () =>
+      import('../data/investigations/depth/es/wanderers-on-the-sky.js'),
+    'plan-a-night': () =>
+      import('../data/investigations/depth/es/plan-a-night.js'),
   },
 };
 
