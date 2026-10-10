@@ -270,3 +270,82 @@ export function deepestDips(x, y, lines, n = 5, tolA = 8) {
   }
   return out.sort((p, q) => q.depth - p.depth).slice(0, n);
 }
+
+// -----------------------------------------------------------------------------
+// The Kirchhoff demonstrator (What a Spectrum Is Made Of)
+// -----------------------------------------------------------------------------
+// A MODEL of one uniform cloud of hydrogen between a blackbody and a detector,
+// by the equation of transfer for a slab with no scattering:
+//
+//   I = B(Ts) exp(-tau) + B(Tc) (1 - exp(-tau))
+//
+// The first term is the source's light, thinned by the cloud; the second is the
+// cloud's own glow, which grows as the cloud gets thicker. B is the Planck
+// function (the kernel's), Ts the source's temperature, Tc the cloud's, and tau
+// the optical depth: zero between the lines, and tau0 times a Gaussian of
+// width KIRCHHOFF_SIGMA_A at each of the three Balmer lines below. Equal tau0
+// for every line, and one Gaussian width, are teaching simplifications: real
+// Balmer lines differ in strength and take their widths from the temperature
+// and the pressure. A thick line (tau >> 1) goes to B(Tc), so it is dark when
+// the cloud is cooler than the source and bright when it is hotter: Kirchhoff's
+// three laws are this one equation in three cases.
+// -----------------------------------------------------------------------------
+
+/** The cloud's lines: the first three of the synthetic spectra's (all hydrogen). */
+export const KIRCHHOFF_LINES = Object.freeze(SYNTH_LINES.slice(0, 3));
+
+/** The width of each line, Angstroms: drawn wide enough to see on a 3,000 A plot. */
+export const KIRCHHOFF_SIGMA_A = 5;
+
+/** What is in the beam: the source behind the cloud, the cloud alone, or the source alone. */
+export const KIRCHHOFF_MODES = Object.freeze(['both', 'cloud', 'source']);
+
+/**
+ * The intensity, W per m2 per sr per m, at one wavelength.
+ * @param {number} lamA - Wavelength, vacuum Angstroms
+ * @param {{Ts: number, Tc: number, tau0: number, mode: string}} s - The setup
+ */
+export function kirchhoffIntensity(lamA, { Ts, Tc, tau0, mode }) {
+  let tau = 0;
+  if (mode !== 'source')
+    for (const L of KIRCHHOFF_LINES)
+      tau += tau0 * exp(-0.5 * ((lamA - L.rest) / KIRCHHOFF_SIGMA_A) ** 2);
+  const lam = lamA * 1e-10;
+  const through = mode === 'cloud' ? 0 : planckLambda(lam, Ts) * exp(-tau);
+  const glow = mode === 'source' ? 0 : planckLambda(lam, Tc) * (1 - exp(-tau));
+  return through + glow;
+}
+
+/** B(Tc) over B(Ts) at one wavelength: where a thick line goes, against the continuum. */
+export const planckRatio = (lamA, Tc, Ts) =>
+  planckLambda(lamA * 1e-10, Tc) / planckLambda(lamA * 1e-10, Ts);
+
+/**
+ * Everything the demonstrator shows at H-alpha for one setup, pure. The
+ * measurement is the node's own (measureViewLine, the Hα windows of the
+ * spectrum viewer) on the noise-free model sampled every 0.5 Angstrom, and is
+ * made only when a continuum is there to measure against (the source in the
+ * beam).
+ */
+export function kirchhoffFacts(s) {
+  const rest = KIRCHHOFF_LINES[0].rest;
+  const x = syntheticGrid(rest);
+  const y = x.map(l => kirchhoffIntensity(l, s));
+  const out = { ...s, rest, x, y };
+  const Bs = planckLambda(rest * 1e-10, s.Ts);
+  out.centre = kirchhoffIntensity(rest, s) / Bs;
+  out.ratio = planckRatio(rest, s.Tc, s.Ts);
+  out.boltzmann = boltzmannRatio21(s.Tc);
+  if (s.mode === 'both') out.m = measureViewLine(x, y, rest, VIEW_LINES[0]);
+  out.kind =
+    s.mode === 'source'
+      ? 'continuum'
+      : s.mode === 'cloud'
+        ? 'emission'
+        : Math.abs(s.Tc - s.Ts) < 0.5
+          ? 'none'
+          : s.Tc < s.Ts
+            ? 'absorption'
+            : 'bright';
+  return out;
+}

@@ -101,4 +101,48 @@ export const ES_LIGHT = {
   'lightW.line.ca1-4227': 'Ca I 4227',
   'lightW.line.na1-d2': 'Na I D2',
   'lightW.line.mg1-b2': 'Mg I b2',
+  'lightW.kf.title': 'Demostrador de Kirchhoff',
+  'lightW.kf.note':
+    'Un cuerpo negro caliente, una nube de gas de hidrógeno, un detector. Pon la fuente detrás de la nube, o mira la nube sola, y fija las dos temperaturas y cuánto gas hay. El detector ve lo que dice la física: la luz que la nube quita a la fuente, más el brillo propio de la nube.',
+  'lightW.kf.control.mode': 'Lo que mira el detector',
+  'lightW.kf.control.Ts': 'Temperatura de la fuente',
+  'lightW.kf.control.Tc': 'Temperatura de la nube',
+  'lightW.kf.control.tau': 'Gas en la nube (profundidad óptica de cada línea)',
+  'lightW.kf.mode.both': 'la fuente, a través de la nube',
+  'lightW.kf.mode.cloud': 'la nube sola',
+  'lightW.kf.mode.source': 'la fuente sola',
+  'lightW.kf.view.zoom': 'acercar a H-alfa',
+  'lightW.kf.preset.source': 'Un sólido caliente, sin nube',
+  'lightW.kf.preset.cool': 'Una nube fría delante de una fuente más caliente',
+  'lightW.kf.preset.hot': 'Una nube caliente, sin fuente detrás',
+  'lightW.kf.tag': 'Calculado: un modelo, no una medición',
+  'lightW.kf.axisYAll': 'brillo, escalado al mayor de la vista',
+  'lightW.kf.axisYZoom': 'brillo ÷ el continuo junto a la línea',
+  'lightW.kf.axisYCloud': 'brillo ÷ el cuerpo negro de la propia nube',
+  'lightW.kf.value.kind':
+    'Calculado: una nube uniforme de hidrógeno delante de un cuerpo negro, con la ecuación de transferencia',
+  'lightW.kf.row.sees': 'Lo que ve el detector',
+  'lightW.kf.case.continuum':
+    'Un continuo liso y ninguna línea: una fuente caliente y densa',
+  'lightW.kf.case.absorption':
+    'Un continuo con líneas oscuras de absorción: la nube está más fría que la fuente',
+  'lightW.kf.case.bright':
+    'Un continuo con líneas brillantes de emisión encima: la nube está más caliente que la fuente',
+  'lightW.kf.case.none':
+    'Un continuo liso y ninguna línea: la nube y la fuente tienen la misma temperatura',
+  'lightW.kf.case.emission':
+    'Líneas brillantes de emisión sobre un fondo oscuro: un gas caliente y tenue visto solo',
+  'lightW.kf.row.centre':
+    'En el centro de H-alfa, brillo respecto del de la fuente',
+  'lightW.kf.row.ratio':
+    'El cuerpo negro de la nube en H-alfa respecto del de la fuente: dónde termina una línea gruesa',
+  'lightW.kf.row.ew': 'Ancho equivalente de H-alfa (positivo es absorción)',
+  'lightW.kf.value.how':
+    'El nodo de medición ajusta un continuo recto por las dos ventanas grises junto a la línea y suma lo que la línea quita dentro de la ventana teñida. Un ancho negativo es una línea que añade luz. El modelo no tiene ruido, así que no se imprime incertidumbre.',
+  'lightW.kf.row.boltz':
+    'Átomos de hidrógeno en n = 2 respecto de n = 1 a la temperatura de la nube (un modelo)',
+  'lightW.kf.value.boltz':
+    '{r}, solo con el factor de Boltzmann; deja fuera la ionización, así que sigue subiendo donde las líneas de Balmer reales se debilitan',
+  'lightW.kf.value.cite':
+    'Ecuación de transferencia para una capa sin dispersión; función de Planck del núcleo de radiación de Gravitas; longitudes de onda de Balmer de la lista de líneas (NIST ASD, Morton 2000); los anchos de línea y la igualdad de intensidades son simplificaciones didácticas',
 };

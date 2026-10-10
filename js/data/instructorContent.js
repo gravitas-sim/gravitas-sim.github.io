@@ -16,6 +16,93 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'what-a-spectrum-is-made-of': {
+    topic:
+      'Kirchhoff’s three kinds of spectrum: why one gas makes dark lines, bright lines or none, depending on what is behind it',
+    difficulty: 'Introductory',
+    placement:
+      'After Lines and Motion, once students can name a star’s lines and know a blackbody’s smooth curve, and before any investigation that reads a star’s temperature or composition from its spectrum. It supports OpenStax Astronomy 2e section 5.3 (spectroscopy in astronomy).',
+    overview:
+      'Students predict what a cloud of thin hydrogen does to the light of a hotter source behind it, then measure it in a model that puts a blackbody, a cloud and a detector in one line. They find that the same gas makes dark lines when it is cooler than the source, bright lines when it is hotter and alone, and none at the same temperature, and say why: the cloud takes light out of the beam and also glows at its own temperature. They apply it to the Sun’s dark lines and to the flash spectrum at an eclipse. The quantitative depth adds the Planck ratio that sets how dark a thick line gets, the equivalent width and where it changes sign, and the Boltzmann factor as a stated model; the advanced depth sets that model against two real stars.',
+    priorKnowledge: [
+      'That a hot dense source makes a smooth blackbody continuum, and that a star’s spectrum has lines in it',
+      'That each kind of atom has its own wavelengths',
+      'Comparing two numbers as a ratio or a percentage',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Three kinds of spectrum',
+        body: 'A hot dense source makes a continuum. A hot thin gas seen alone makes bright emission lines. A cooler gas in front of a hotter source makes dark absorption lines. They are one piece of physics met in three arrangements, not three kinds of matter.',
+      },
+      {
+        heading: 'The cloud also glows',
+        body: 'The cloud removes light from the source and adds its own, at its own temperature. At a line’s center a thick cloud puts back only the brightness of a blackbody at the cloud’s temperature, so the line is dark when the cloud is cooler than the source, bright when hotter, and absent when equal.',
+      },
+      {
+        heading: 'Temperature, not the gas, sets the sign',
+        body: 'The wavelengths belong to the atoms; whether the lines are dark or bright belongs to the temperatures. The same hydrogen is shown absorbing, emitting and doing neither by moving one slider.',
+      },
+      {
+        heading: 'A model of excitation, and its limit',
+        body: 'The Boltzmann factor counts how many atoms are in the level that makes the Balmer lines. It rises steeply with temperature and is stated as a model: it leaves out ionization and saturation, which is why the real stars’ lines differ by a factor of 2, not thousands.',
+      },
+    ],
+    features: [
+      {
+        name: 'Kirchhoff demonstrator (the Light Lab)',
+        text: 'A blackbody source, a uniform cloud of hydrogen and a detector, with the source seen through the cloud, the cloud alone or the source alone; sliders for both temperatures and the amount of gas; a whole-spectrum view and a zoom on H-alpha; and a list under the plot of what the detector sees, the brightness at the line center, where a thick line ends, the equivalent width and the Boltzmann ratio.',
+      },
+      {
+        name: 'The measurement node',
+        text: 'The equivalent width is the same line measurement as the spectrum viewer and the Measurement pipeline (js/measure/spectrumLine.js), run on the model’s noise-free spectrum. A negative width is an emission line.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the Planck ratio of a thick line’s floor, the equivalent width, its sign change at equal temperatures and the Boltzmann ratio between 6,000 and 10,000 K. Advanced: the part of the width that depends only on the gas, and the Boltzmann model set against the A and G stars’ H-alpha widths.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim:
+          'A gas always absorbs, so a cloud in front of a source always makes dark lines.',
+        response:
+          'Steps 3 to 6. The cloud also glows. Hotter than the source it makes bright lines on the continuum, and at the same temperature it makes none.',
+      },
+      {
+        claim: 'The gas decides whether a spectrum has dark or bright lines.',
+        response:
+          'Step 4 and the eclipse flash. The same hydrogen makes both; the sign depends on the temperatures and on what is behind it.',
+      },
+      {
+        claim: 'A thicker cloud makes a line go to zero.',
+        response:
+          'The first quantitative step. A thick line goes to the cloud’s own blackbody brightness, not to zero, and it does so whichever way the cloud lies against the source.',
+      },
+      {
+        claim: 'More atoms in the right level always means a stronger line.',
+        response:
+          'The advanced steps. The Boltzmann factor alone predicts a ratio near 2,800 between an A and a G star; the stars give about 2.3, because ionization removes atoms and a thick line saturates.',
+      },
+    ],
+    teachingNotes: [
+      'The demonstrator is a model with no noise, so every student sees the same numbers. The core measurement accepts 19.9 percent within 1.5 and 251.6 percent within 8; anything below 100 percent is a dark line.',
+      'The lines are drawn with one width (5 Å, wider than a real gas’s thermal width, so that they can be seen) and equal strength for all three, so their depths in the whole-spectrum view are a teaching choice and not a prediction for any star.',
+      'The Boltzmann ratio uses 10.2 eV (Lyman-alpha’s energy to one digit) and statistical weights 2n²; it is introductory by design and stated as a model on screen. Ionization (the Saha equation) is not in it.',
+      'The effective temperatures of the A and G stars in the advanced steps (about 9,500 and 5,800 K) are typical for their spectral types, not fitted to those spectra.',
+    ],
+    discussion: [
+      'A student says the Sun’s dark lines mean the Sun is cold. What would you answer?',
+      'Why does it matter that the gas in the eclipse flash is the same gas that makes the Sun’s dark lines?',
+      'What would the spectrum of a hot cloud in front of a cooler source look like, and where might you find one?',
+    ],
+    extensions: [
+      'Lines and Motion measures a Doppler shift on the same lines.',
+      'Measure the H-alpha equivalent width of all four SDSS stars in the spectrum viewer and say how it changes with temperature.',
+    ],
+    modelNotes:
+      'A uniform slab with no scattering, by the equation of transfer I = B(T_s) e^(−τ) + B(T_c) (1 − e^(−τ)), with the Planck function from the Gravitas radiation kernel. The optical depth is zero between the lines and τ0 times a Gaussian of width 5 Å at H-alpha, H-beta and H-gamma (vacuum wavelengths from the line list), the same τ0 for all three. Real lines differ in strength and take their widths from temperature and pressure, and a real atmosphere is not one slab at one temperature. The spectrum is sampled every 0.5 Å without noise, and the equivalent width is the measurement node’s.',
+  },
+
   'lines-and-motion': {
     topic:
       'Spectral lines and the Doppler shift: naming a star’s lines, and a velocity from a shift with its uncertainty',

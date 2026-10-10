@@ -98,4 +98,48 @@ export const EN_LIGHT = {
   'lightW.line.ca1-4227': 'Ca I 4227',
   'lightW.line.na1-d2': 'Na I D2',
   'lightW.line.mg1-b2': 'Mg I b2',
+  'lightW.kf.title': 'Kirchhoff demonstrator',
+  'lightW.kf.note':
+    'One hot blackbody, one cloud of hydrogen gas, one detector. Put the source behind the cloud, or look at the cloud alone, and set the two temperatures and how much gas there is. The detector sees what the physics says: light removed from the source, plus the cloud’s own glow.',
+  'lightW.kf.control.mode': 'What the detector looks at',
+  'lightW.kf.control.Ts': 'Source temperature',
+  'lightW.kf.control.Tc': 'Cloud temperature',
+  'lightW.kf.control.tau': 'Gas in the cloud (optical depth of each line)',
+  'lightW.kf.mode.both': 'the source, through the cloud',
+  'lightW.kf.mode.cloud': 'the cloud alone',
+  'lightW.kf.mode.source': 'the source alone',
+  'lightW.kf.view.zoom': 'zoom on H-alpha',
+  'lightW.kf.preset.source': 'A hot solid, no cloud',
+  'lightW.kf.preset.cool': 'A cool cloud in front of a hotter source',
+  'lightW.kf.preset.hot': 'A hot cloud, no source behind it',
+  'lightW.kf.tag': 'Computed: a model, not a measurement',
+  'lightW.kf.axisYAll': 'brightness, scaled to the largest in view',
+  'lightW.kf.axisYZoom': 'brightness ÷ the continuum beside the line',
+  'lightW.kf.axisYCloud': 'brightness ÷ the cloud’s own blackbody',
+  'lightW.kf.value.kind':
+    'Computed: a uniform hydrogen cloud in front of a blackbody, by the equation of transfer',
+  'lightW.kf.row.sees': 'What the detector sees',
+  'lightW.kf.case.continuum':
+    'A smooth continuum and no lines: a hot dense source',
+  'lightW.kf.case.absorption':
+    'A continuum with dark absorption lines: the cloud is cooler than the source',
+  'lightW.kf.case.bright':
+    'A continuum with bright emission lines on it: the cloud is hotter than the source',
+  'lightW.kf.case.none':
+    'A smooth continuum and no lines: the cloud and the source are at the same temperature',
+  'lightW.kf.case.emission':
+    'Bright emission lines on a dark background: a hot thin gas seen alone',
+  'lightW.kf.row.centre':
+    'At the H-alpha center, brightness against the source’s',
+  'lightW.kf.row.ratio':
+    'The cloud’s own blackbody at H-alpha against the source’s: where a thick line ends',
+  'lightW.kf.row.ew': 'Equivalent width of H-alpha (positive is absorption)',
+  'lightW.kf.value.how':
+    'The measurement node fits a straight continuum through the two gray windows beside the line and sums what the line removes inside the tinted window. A negative width is a line that adds light. The model has no noise, so no uncertainty is printed.',
+  'lightW.kf.row.boltz':
+    'Hydrogen atoms in n = 2 against n = 1 at the cloud’s temperature (a model)',
+  'lightW.kf.value.boltz':
+    '{r}, from the Boltzmann factor alone; it leaves out ionization, so it keeps rising where real Balmer lines weaken',
+  'lightW.kf.value.cite':
+    'Equation of transfer for a slab without scattering; Planck function from the Gravitas radiation kernel; Balmer rest wavelengths from the line list (NIST ASD, Morton 2000); line widths and equal strengths are teaching simplifications',
 };

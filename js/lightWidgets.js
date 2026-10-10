@@ -43,6 +43,10 @@ import {
   DIP_IDS,
   measureViewLine,
   deepestDips,
+  KIRCHHOFF_LINES,
+  KIRCHHOFF_MODES,
+  kirchhoffIntensity,
+  kirchhoffFacts,
 } from './light/model.js';
 
 registerMessages('en', EN_LIGHT);
@@ -692,5 +696,252 @@ const SPECTRUM = {
   },
 };
 
-export const LIGHT_WIDGETS = [BLACKBODY, SPECTRUM];
+// -----------------------------------------------------------------------------
+// Kirchhoff demonstrator
+// -----------------------------------------------------------------------------
+
+const KF_VIEW = [3900, 6700];
+const modeAt = v =>
+  KIRCHHOFF_MODES[Math.max(0, Math.min(2, Math.round(v.mode)))];
+const kfSetup = v => ({
+  Ts: v.Ts,
+  Tc: v.Tc,
+  tau0: v.tau,
+  mode: modeAt(v),
+});
+
+/** Everything the demonstrator shows for one setting. Pure, for the tests. */
+export const kirchhoffView = v => kirchhoffFacts(kfSetup(v));
+
+function drawKirchhoff(canvas, v) {
+  const colors = palette();
+  const { ctx: g, w, h } = surface(canvas, responsiveHeight(270, 200));
+  const f = kirchhoffView(v);
+  const s = kfSetup(v);
+  const zoom = v.view >= 0.5;
+  const r = { x: 44, y: 22, w: w - 56, h: h - 56 };
+  const [lo, hi] = zoom ? [f.rest - 70, f.rest + 70] : KF_VIEW;
+  const X = lam => r.x + ((lam - lo) / (hi - lo)) * r.w;
+  const cloud = s.mode !== 'source';
+  const B = (lam, T) =>
+    kirchhoffIntensity(lam, { ...s, Ts: T, mode: 'source' });
+  const lams = [];
+  for (let l = lo; l <= hi; l += zoom ? 0.5 : 2) lams.push(l);
+  let curve;
+  let ref = null;
+  if (zoom) {
+    const c = f.m
+      ? l => f.m.continuum.c0 + f.m.continuum.c1 * (l - f.m.continuum.reference)
+      : l => (s.mode === 'cloud' ? B(l, s.Tc) : B(l, s.Ts));
+    curve = lams.map(l => kirchhoffIntensity(l, s) / c(l));
+  } else {
+    curve = lams.map(l => kirchhoffIntensity(l, s));
+    if (cloud) ref = lams.map(l => B(l, s.Tc));
+  }
+  const top = zoom
+    ? Math.max(1.15, Math.max(...curve) * 1.08)
+    : Math.max(...curve, ...(ref || [0])) * 1.08;
+  const Y = val => r.y + r.h - (val / top) * r.h;
+  g.strokeStyle = colors.grid;
+  g.lineWidth = 1;
+  g.strokeRect(r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1);
+  g.font = typeAt(TYPE.TICK);
+  g.fillStyle = colors.muted;
+  g.textBaseline = 'top';
+  g.textAlign = 'left';
+  g.fillText(t('lightW.kf.tag'), r.x, 4);
+  const trace = (ys, hue, width, dash) => {
+    g.strokeStyle = hue;
+    g.lineWidth = width;
+    g.setLineDash(dash);
+    g.beginPath();
+    ys.forEach((y, k) => {
+      const px = X(lams[k]);
+      if (k === 0) g.moveTo(px, Y(y));
+      else g.lineTo(px, Y(y));
+    });
+    g.stroke();
+    g.setLineDash([]);
+  };
+  if (ref) trace(ref, colors.accent, 1, [4, 3]);
+  if (zoom) {
+    g.strokeStyle = colors.muted;
+    g.setLineDash([2, 3]);
+    g.lineWidth = 1;
+    g.beginPath();
+    g.moveTo(r.x, Y(1));
+    g.lineTo(r.x + r.w, Y(1));
+    g.stroke();
+    g.setLineDash([]);
+    if (s.mode === 'both')
+      trace(
+        lams.map(() => f.ratio),
+        colors.accent,
+        1,
+        [4, 3]
+      );
+  }
+  trace(curve, colors.ink, 1.5, []);
+  g.textAlign = 'center';
+  g.fillStyle = colors.accent;
+  for (const L of KIRCHHOFF_LINES) {
+    if (L.rest < lo || L.rest > hi) continue;
+    g.fillText(t(`lightW.line.${L.id}`), X(L.rest), r.y + 4);
+  }
+  g.fillStyle = colors.muted;
+  const step = zoom ? 20 : 500;
+  for (let lam = Math.ceil(lo / step) * step; lam <= hi; lam += step)
+    g.fillText(String(lam), X(lam), r.y + r.h + 4);
+  g.textAlign = 'left';
+  g.fillText(t('lightW.sp.axisX'), r.x, r.y + r.h + 20);
+  g.textAlign = 'right';
+  g.fillText(
+    t(
+      zoom
+        ? s.mode === 'cloud'
+          ? 'lightW.kf.axisYCloud'
+          : 'lightW.kf.axisYZoom'
+        : 'lightW.kf.axisYAll'
+    ),
+    r.x + r.w,
+    r.y + r.h + 20
+  );
+}
+
+const TEMP_CONTROL = (id, labelKey, value) => ({
+  id,
+  get label() {
+    return t(labelKey);
+  },
+  min: 3000,
+  max: 12000,
+  step: 50,
+  value,
+  decimals: 0,
+  format: v => withUnit(Math.round(v), 'K', { sig: 5 }),
+});
+
+const KIRCHHOFF = {
+  id: 'kirchhoff',
+  get title() {
+    return t('lightW.kf.title');
+  },
+  get note() {
+    return t('lightW.kf.note');
+  },
+  animated: false,
+  controls: [
+    {
+      id: 'mode',
+      get label() {
+        return t('lightW.kf.control.mode');
+      },
+      min: 0,
+      max: 2,
+      step: 1,
+      value: 0,
+      decimals: 0,
+      format: v => t(`lightW.kf.mode.${modeAt({ mode: v })}`),
+    },
+    TEMP_CONTROL('Ts', 'lightW.kf.control.Ts', 6000),
+    TEMP_CONTROL('Tc', 'lightW.kf.control.Tc', 4000),
+    {
+      id: 'tau',
+      get label() {
+        return t('lightW.kf.control.tau');
+      },
+      min: 0.1,
+      max: 10,
+      step: 0.1,
+      value: 3,
+      decimals: 1,
+      format: v => formatNumber(v, { sig: 3, sci: false }),
+    },
+    {
+      id: 'view',
+      get label() {
+        return t('lightW.sp.control.view');
+      },
+      min: 0,
+      max: 1,
+      step: 1,
+      value: 0,
+      decimals: 0,
+      format: v => t(v >= 0.5 ? 'lightW.kf.view.zoom' : 'lightW.sp.view.all'),
+    },
+  ],
+  presets: [
+    {
+      values: { mode: 2, view: 0 },
+      get label() {
+        return t('lightW.kf.preset.source');
+      },
+    },
+    {
+      values: { mode: 0, Ts: 6000, Tc: 4000, tau: 3, view: 0 },
+      get label() {
+        return t('lightW.kf.preset.cool');
+      },
+    },
+    {
+      values: { mode: 1, Tc: 8000, tau: 3, view: 0 },
+      get label() {
+        return t('lightW.kf.preset.hot');
+      },
+    },
+  ],
+
+  draw: drawKirchhoff,
+
+  readout(v) {
+    const f = kirchhoffView(v);
+    const rows = [
+      {
+        label: t('lightW.row.kind'),
+        value: t('lightW.kf.value.kind'),
+        emphasis: true,
+      },
+      {
+        label: t('lightW.kf.row.sees'),
+        value: t(`lightW.kf.case.${f.kind}`),
+        emphasis: true,
+      },
+    ];
+    if (f.mode !== 'source')
+      rows.push(
+        {
+          label: t('lightW.kf.row.centre'),
+          value: `${formatNumber(f.centre * 100, { sig: 3, sci: false })} %`,
+          emphasis: true,
+        },
+        {
+          label: t('lightW.kf.row.ratio'),
+          value: `${formatNumber(f.ratio * 100, { sig: 3, sci: false })} %`,
+        }
+      );
+    if (f.m)
+      rows.push(
+        {
+          label: t('lightW.kf.row.ew'),
+          value: `${formatNumber(f.m.ew, { sig: 3, sci: false })} Å`,
+          emphasis: true,
+        },
+        { label: t('lightW.sp.row.how'), value: t('lightW.kf.value.how') }
+      );
+    if (f.mode !== 'source')
+      rows.push({
+        label: t('lightW.kf.row.boltz'),
+        value: t('lightW.kf.value.boltz', {
+          r: formatNumber(f.boltzmann, { sig: 3 }),
+        }),
+      });
+    rows.push({
+      label: t('lightW.sp.row.cite'),
+      value: t('lightW.kf.value.cite'),
+    });
+    return rows;
+  },
+};
+
+export const LIGHT_WIDGETS = [BLACKBODY, SPECTRUM, KIRCHHOFF];
 export { PAIRS, SOURCES };
