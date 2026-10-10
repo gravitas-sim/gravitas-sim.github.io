@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 48 of them. 25 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 49 of them. 26 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -20,6 +20,7 @@ The columns:
 | Format | Identified by | Version | Owner | Persisted | Previous | Newer | Schema |
 |---|---|---|---|---|---|---|---|
 | gravitas.observation | format, formatVersion | 1 | js/observatory/schema.js validateObservation | download | v1 only | refused: "reads /1" | [yes](sdk/schemas/observation-1.schema.json) |
+| gravitas.observing-setup | format, formatVersion | 1 | js/forward/setup.js readSetup | download, inside a synthetic observation | reads the radial-velocity survey configuration (no format) as version 0 | refused, in words | [yes](sdk/schemas/observing-setup-1.schema.json) |
 | gravitas.pipeline | format, formatVersion | 1 | js/measure/pipeline.js readPipeline | download | v1 only | refused, in words | [yes](sdk/schemas/pipeline-1.schema.json) |
 | gravitas.inference | format, formatVersion | 1 | js/inference/manifest.js validateInference | download | v1 only | a validation problem | [yes](sdk/schemas/inference-1.schema.json) |
 | gravitas.analysis | format, formatVersion, kind | 1 | js/analysis/seams.js readAnalysis (the analysis lab) | download | v1 only | refused, in words | [yes](sdk/schemas/analysis-1.schema.json) |
@@ -85,6 +86,7 @@ The columns:
 ## Fields added inside a version
 
 - **`rubricCriteria` (Prompt 79).** A written answer in an investigation pack or a question bank may carry one to six criteria beside its `rubric`, each a name and two to five levels (a label, what it looks like, optionally its points), best first, every text in the file's locales. It is optional, so `investigation-pack/1` and `question-bank/1` stay version 1: a reader that does not know the field refuses the file, in words, as an unknown field. The compile lays it on the lesson step and its Spanish shadow, a remix carries it (`REMIX.md`), the answer key prints it and the review page shows it.
+- **`synthetic` origin (Prompt 84).** A `gravitas.observation/1` made by a forward model has origin `synthetic`, source kind `forward` and a `synthetic` block holding the model, the `gravitas.observing-setup/1` it was run with and the truth manifest. The values are new members of two enums and the block is optional, so the format stays version 1: an older reader refuses such a file at the origin, in words, rather than opening it as if it were observed.
 
 ## Scenarios by id
 

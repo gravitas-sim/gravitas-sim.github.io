@@ -22,6 +22,7 @@
 
 import { describe, test, expect } from '@jest/globals';
 import { INVESTIGATIONS, getInvestigation } from '../js/data/investigations.js';
+import { DEPTH_LESSONS, loadDepthSteps } from '../js/investigations/depth.js';
 import { SCENARIO_INFO, scenarioId } from '../js/data/scenarioInfo.js';
 import {
   allWidgets,
@@ -241,10 +242,13 @@ describe('instrument references', () => {
     expect(bad).toEqual([]);
   });
 
-  test('every registered widget is used by some lesson', () => {
+  test('every registered widget is used by some lesson', async () => {
     // A widget nobody reaches is either a mistake in a lesson or dead weight in
     // the bundle, and both are worth knowing about.
     const used = new Set(TOOL_STEPS.map(s => s.step.tool.id));
+    // A depth step may dock an instrument no lesson step does (Prompt 85).
+    for (const id of DEPTH_LESSONS)
+      for (const s of await loadDepthSteps(id)) if (s.tool) used.add(s.tool.id);
     const orphans = allWidgets()
       .map(w => w.id)
       .filter(id => !used.has(id));

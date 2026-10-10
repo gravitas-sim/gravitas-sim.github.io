@@ -58,6 +58,10 @@ const EXTENSIONS = {
   'wanderers-on-the-sky': () =>
     import('../data/investigations/depth/wanderers-on-the-sky.js'),
   'plan-a-night': () => import('../data/investigations/depth/plan-a-night.js'),
+  'lines-and-motion': () =>
+    import('../data/investigations/depth/lines-and-motion.js'),
+  'what-a-spectrum-is-made-of': () =>
+    import('../data/investigations/depth/what-a-spectrum-is-made-of.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -71,6 +75,10 @@ const WORDS = {
       import('../data/investigations/depth/es/weighing-stars.js'),
     'color-and-temperature': () =>
       import('../data/investigations/depth/es/color-and-temperature.js'),
+    'lines-and-motion': () =>
+      import('../data/investigations/depth/es/lines-and-motion.js'),
+    'what-a-spectrum-is-made-of': () =>
+      import('../data/investigations/depth/es/what-a-spectrum-is-made-of.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
     'the-turning-sky': () =>

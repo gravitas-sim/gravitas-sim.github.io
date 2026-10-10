@@ -116,6 +116,8 @@ export const FAMILY_IDS = Object.freeze({
     'sky-wanderers',
     'sky-plan',
   ],
+  light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
+  compare: ['compare-transit'],
   gwEvents: ['gw-events'],
 });
 

@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1576.6,
+    limit: 1637.9,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -574,13 +574,17 @@ const BUDGETS = [
       'exactly the room the 4300 KB raw ceiling gave: 1513.0 x 4300 / 4174.0 = ' +
       '1558.7, rounded up to 1559. The raw total is still printed beside it, ' +
       'and is still what the README quotes, because raw sizes are the same on ' +
-      'every Node.\n\n' +
-      'Raised 1559 to 1576.6 KB (D-BUDGET-07, Prompt 89, under the standing ' +
-      'approval for size budgets of 2026-10-10): the five sky investigations ' +
-      '(turning sky, Sun through the year, phases and eclipses, wanderers, plan ' +
-      'a night), their Spanish, three depths each, instrument family ' +
-      '(js/skyWidgets.js), strings and instructor guides measured 1576.6 KB ' +
-      'gzipped against 1559.0, an overrun of 17.6 KB, which is the raise.',
+      'every Node.' +
+      '\n\nRaised from 1559 to 1573.8 KB gzipped for What a Spectrum Is Made Of ' +
+      'and the Kirchhoff demonstrator (Prompt 83, part 3), measured at ' +
+      '1,611,524 bytes (1573.75 KB; 4330.9 KB raw) after merging v2. Under ' +
+      "the owner's standing size-budget approval (CLAUDE.md, 2026-10-10); " +
+      'D-BUDGET-04. The initial download is untouched (789.0 of 830 KB).' +
+      '\n\nRaised from 1573.8 to 1637.9 KB gzipped for the five sky ' +
+      'investigations (Prompt 89) with their Spanish, depths, instrument family ' +
+      'and guides, measured at 1,677,161 bytes (1637.85 KB; 4492.4 KB raw) ' +
+      'after merging v2 ce3d2e8. Under the same standing approval; ' +
+      'D-BUDGET-07.',
   },
 ];
 

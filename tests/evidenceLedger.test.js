@@ -178,6 +178,25 @@ const every = () => [
       ],
     }),
   }),
+  artifactEntry({
+    source: SOURCE.COMPARISON,
+    title: 'Comparison',
+    capturedAt: at,
+    context: { page: 'observatory' },
+    envelope: artifact({
+      id: 'comparison-1',
+      source: { kind: 'comparison', id: 'obs', version: '1.0.0', digest },
+      quantities: [
+        {
+          id: 'objective:chi-square',
+          value: 310.2,
+          unit: '',
+          uncertainty: { kind: 'none' },
+          origin: 'derived',
+        },
+      ],
+    }),
+  }),
   // A sweep's analysis and an experiment's result, which js/experiments/
   // analysisPanel.js keeps as envelopes (P75 R-5: the list used to omit them).
   ...[

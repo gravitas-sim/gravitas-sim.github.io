@@ -132,4 +132,12 @@ export const BROWSE_META = {
     tags: ['observing', 'stars'],
     numericCount: 3,
   },
+  'lines-and-motion': {
+    tags: ['observing', 'stars'],
+    numericCount: 1,
+  },
+  'what-a-spectrum-is-made-of': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
 };

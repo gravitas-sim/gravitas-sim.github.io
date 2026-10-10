@@ -15,6 +15,50 @@ export default {
   format: 'gravitas.instructor-flow',
   formatVersion: 2,
   lessons: {
+    'what-a-spectrum-is-made-of': [
+      {
+        from: 'a-hot-solid',
+        to: 'measure-two-clouds',
+        text: 'A hot dense source makes a continuum. Students predict what a cooler cloud in front of it does, then measure the H-alpha line center with the cloud cooler and hotter than the source.',
+      },
+      {
+        from: 'what-flipped-it',
+        to: 'same-temperature',
+        text: 'The same gas made a dark line and a bright one, so temperature and not the gas set the sign. A cloud alone makes bright lines; at the source’s own temperature it makes none.',
+      },
+      {
+        from: 'why-cool-absorbs',
+        to: 'flash-spectrum',
+        text: 'A written explanation of why a cool cloud still makes dark lines, then two real cases: the Sun’s dark lines say cooler gas lies over hotter, and the eclipse flash shows the same gas bright against dark sky.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: three kinds of spectrum from one piece of physics.',
+      },
+    ],
+    'lines-and-motion': [
+      {
+        from: 'light-by-wavelength',
+        to: 'calcium-in-the-g-star',
+        text: 'A real spectrum has dark lines in it, and the line list names them. Students read hydrogen in the A star and calcium in the G star, and see that which lines show depends on temperature.',
+      },
+      {
+        from: 'predict-the-shift',
+        to: 'doppler-arithmetic',
+        text: 'A motion moves every line. Students predict the direction, measure two shifts on synthetic stars, read the sign as a direction and turn a shift into a speed by hand.',
+      },
+      {
+        from: 'star-three',
+        to: 'sideways-motion',
+        text: 'A shift smaller than its uncertainty is not a detection, and a sideways motion leaves no mark: what a spectrum can and cannot say about motion.',
+      },
+      {
+        from: 'one-sentence',
+        to: 'what-you-worked-out',
+        text: 'A written plan to settle star 3, and the close.',
+      },
+    ],
     'color-and-temperature': [
       {
         from: 'everything-glows',

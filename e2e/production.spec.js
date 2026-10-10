@@ -20,6 +20,9 @@ import { test, expect } from './fixtures.js';
 // from the built site, but the spec process is an ordinary ESM process and the
 // number of demonstrations is a fact worth reading rather than typing.
 import { DEMOS } from '../js/data/teaching.js';
+import { runForward } from '../js/forward/index.js';
+import { stateFromExoplanet } from '../js/compare/system.js';
+import { observationJson } from '../js/observatory/export.js';
 
 /** Fail on any request the built site issues that does not come back. */
 function watchRequests(page) {
@@ -238,6 +241,38 @@ test.describe('the built site', () => {
     expect(Number(payload.headers()['content-length'] || 0)).toBeGreaterThan(
       10_000
     );
+    expect(failures).toEqual([]);
+  });
+
+  test('the comparison panel ships: a system laid over a synthetic transit, its chunk loaded from the bundle', async ({
+    page,
+  }) => {
+    const failures = watchRequests(page);
+    const o = runForward('transit', stateFromExoplanet('hd209458'), {
+      format: 'gravitas.observing-setup',
+      formatVersion: 1,
+      seed: 'dist-compare',
+      epochs: { kind: 'regular', duration: 8, count: 200 },
+      noise: { white: { sigma: 0.0004 } },
+      instrument: { kind: 'photometer' },
+    });
+    await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
+      timeout: 30_000,
+    });
+    await page.locator('#obsFile').setInputFiles({
+      name: 'synthetic.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(observationJson(o, { source: o, changes: [] })),
+    });
+    await expect(page.locator('#obsTitle')).toContainText('(synthetic)', {
+      timeout: 30_000,
+    });
+    await page.locator('#obsComparePanel summary').click();
+    await expect(page.locator('#cmpSummary')).toContainText('Chi-square', {
+      timeout: 30_000,
+    });
+    await expect(page.locator('#cmpPlot .ow-overlay')).toHaveCount(1);
     expect(failures).toEqual([]);
   });
 });

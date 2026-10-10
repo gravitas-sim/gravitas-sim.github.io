@@ -214,6 +214,8 @@ describe('the runtime copy and the record', () => {
       'mjd',
       'fiberID',
       'observed',
+      'z',
+      'zErr',
       'url',
       'count',
       'scale',

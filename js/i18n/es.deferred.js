@@ -3146,7 +3146,7 @@ export const ES_DEFERRED = {
     'Ve las relaciones que describe una ecuación. Aleja un planeta y observa cómo se alarga su año; estira una órbita y observa cómo oscila la luz estelar.',
   'welcomeAudience.instructors.title': 'Para el profesorado',
   'welcomeAudience.instructors.text':
-    '30 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
+    '32 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
   'welcomeAudience.curious.title': 'Para curiosos',
   'welcomeAudience.curious.text':
     'Sin cuenta, sin instalación, sin nada que leer antes. Carga una fusión de agujeros negros y obsérvala, o parte del espacio vacío y mira qué hace la gravedad.',
@@ -3522,6 +3522,7 @@ export const ES_DEFERRED = {
   'nb.source.observatory': 'Medida en el Observatorio',
   // --- Un ajuste, un análisis o un resultado de experimento, con su sobre ---
   'nb.source.inference-fit': 'Ajuste del núcleo de inferencia',
+  'nb.source.comparison': 'Modelo frente a datos',
   'nb.source.sweep-analysis': 'Análisis de barrido',
   'nb.source.experiment-result': 'Resultado de experimento',
   'nb.entry.cite': 'El resultado y de dónde viene',

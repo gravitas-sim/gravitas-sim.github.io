@@ -61,7 +61,8 @@
             "experiment",
             "analysis",
             "guide",
-            "forward-model"
+            "forward-model",
+            "comparison"
           ]
         },
         "id": {

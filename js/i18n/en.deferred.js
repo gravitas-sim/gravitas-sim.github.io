@@ -3114,7 +3114,7 @@ export const EN_DEFERRED = {
     'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
   'welcomeAudience.instructors.title': 'For instructors',
   'welcomeAudience.instructors.text':
-    '30 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
+    '32 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
   'welcomeAudience.curious.title': 'For the curious',
   'welcomeAudience.curious.text':
     'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',
@@ -3612,6 +3612,7 @@ export const EN_DEFERRED = {
   'nb.source.observatory': 'Observatory measurement',
   // --- A fit, an analysis or an experiment result kept as its envelope -----
   'nb.source.inference-fit': 'Inference-core fit',
+  'nb.source.comparison': 'Model against data',
   'nb.source.sweep-analysis': 'Sweep analysis',
   'nb.source.experiment-result': 'Experiment result',
   'nb.entry.cite': 'The result and where it came from',

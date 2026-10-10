@@ -16,263 +16,91 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
-  'plan-a-night': {
-    topic: 'Observing plans: astronomical dark, airmass and Moon constraints',
-    difficulty: 'Introductory',
-    placement:
-      'Fifth in the sky sequence, and a step before Design the Schedule and Twelve Nights in the exoplanet sequence, which take the target as given.',
-    overview:
-      'Students plan one night at latitude 30 degrees north among eight bright stars. They measure the hours of astronomical dark in winter and summer, compute an airmass, see that a full Moon in Leo removes Regulus entirely, count the targets worth the night under two airmass limits, and write a plan with reasons. Quantitative depth looks at the error of the flat-layer airmass; advanced explains why 60 degrees north has no astronomical dark in June.',
-    priorKnowledge: [
-      'Altitude and the idea of twilight',
-      'The Moon’s phases',
-      'Counting rows of a list against a threshold',
-    ],
-    keyConcepts: [
-      {
-        heading: 'Astronomical dark',
-        body: 'Observing faint objects needs the Sun more than 18 degrees below the horizon; the length of that dark changes by hours across the year and vanishes at high latitude in summer.',
-      },
-      {
-        heading: 'Airmass',
-        body: 'Airmass is about 1/sin of the altitude; low stars are dimmer, redder and blurrier, so observers set a limit near 2.',
-      },
-      {
-        heading: 'The Moon',
-        body: 'A bright Moon near a target washes out the sky; in the instrument the full Moon of February removes Regulus for the whole night.',
-      },
-      {
-        heading: 'A plan is windows and reasons',
-        body: 'Each target has a usable window inside the dark, below the airmass limit and clear of the Moon; the plan orders them and says which constraint decides.',
-      },
-    ],
-    features: [
-      {
-        name: 'Planning instrument (sky-plan)',
-        text: 'Bars per star across the night with a Moon row, and a list of usable hours and best airmass for each of eight bright stars.',
-      },
-      {
-        name: 'Adjustable limits',
-        text: 'Students change the airmass limit and the least Moon distance and watch the windows move.',
-      },
-      {
-        name: 'Written plan',
-        text: 'The last question is a written plan graded by rubric; it is never marked right or wrong by the application.',
-      },
-    ],
-    misconceptions: [
-      {
-        claim: 'The brightest star is always the best target.',
-        response:
-          'Step 5 and step 6. The Moon and the airmass decide the usable hours; Sirius loses time at a stricter limit.',
-      },
-      {
-        claim: 'Summer nights are best for observing.',
-        response:
-          'Steps 2 and 3. At middle latitudes the June dark is nearly four hours shorter than in January.',
-      },
-      {
-        claim: 'Airmass is just the altitude.',
-        response:
-          'Step 4. It grows steeply as a star gets low, which is why a limit of 2 corresponds to 30 degrees.',
-      },
-      {
-        claim: 'The Moon only matters at full phase.',
-        response:
-          'Step 5. The constraint applies while the Moon is up and near the target, so a crescent far away costs nothing and a gibbous nearby may cost a lot.',
-      },
-    ],
-    teachingNotes: [
-      'The three-hour threshold and the 30-degree Moon limit are the investigation’s choices, not rules; invite students to change them and say what they would do.',
-      'The eight stars are bright stars of the Sky Lab catalog; a star the Moon sits near is lost for the night.',
-      'Compare with Design the Schedule and Twelve Nights: there the target is given, here it is chosen.',
-      'The Moon constraint applies only while the Moon is above the horizon, which the bottom row shows.',
-    ],
-    discussion: [
-      'Which constraint would you relax first for a bright target, and which never?',
-      'How would the plan change at latitude minus 30?',
-      'What would you add to the list of constraints for a real proposal?',
-    ],
-    extensions: [
-      'Do the same plan on the Sky Lab page with the airmass and twilight calculator.',
-      'Take one chosen star into Design the Schedule.',
-    ],
-    modelNotes:
-      'Windows are sampled every quarter of an hour on the kernel’s positions with refraction; star proper motion is neglected. The Moon constraint applies only while the Moon is above the horizon. Refraction below 5 degrees carries no accuracy claim, so airmass limits below about 11 are safe. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
-  },
-
-  'wanderers-on-the-sky': {
+  'the-turning-sky': {
     topic:
-      'Planetary configurations, elongations and retrograde loops, seen on the sky and from above the orbits',
+      'Horizon and equatorial coordinates, sidereal time and why stars rise about four minutes earlier each night',
     difficulty: 'Introductory',
     placement:
-      'Fourth in the sky sequence, and a natural partner for Why Mars Goes Backwards, which shows the same event in the orbit view. It does not require it.',
+      'First of the sky sequence, after any course introduction to the celestial sphere. It needs nothing earlier and the next three investigations reuse its instrument.',
     overview:
-      'Students find the start and end of Mars’s retrograde loop from December 2024 to February 2025, read its elongation at its fastest westward motion, and see the same date from above the orbits. They measure the greatest elongation of Venus, compute the circular-orbit limit, and time Jupiter’s loop. The central idea is relative motion: no planet reverses its orbit.',
+      'Students follow one star through a night and through a month on a computed sky. They predict, then measure, that a star rises about four minutes earlier each night, read a sidereal clock to see the same four minutes from the other side, and work out how high a star climbs and which stars never set. The aim is the difference between a star’s fixed equatorial coordinates and its changing horizon coordinates, and the sidereal day.',
     priorKnowledge: [
-      'That the planets orbit the Sun in the same direction',
-      'Elongation as the angle from the Sun on the sky',
-      'Reading a date and a day number off a slider',
+      'Altitude and azimuth as angles on the sky',
+      'That the Earth turns once a day and orbits the Sun once a year',
+      'Reading a time of day as hours and minutes',
     ],
     keyConcepts: [
       {
-        heading: 'Retrograde is overtaking',
-        body: 'A planet’s orbital motion never reverses; Earth overtakes a slower outer planet and the line of sight swings backward against the stars for a while.',
+        heading: 'Two coordinate systems',
+        body: 'Horizon coordinates change with time and place; equatorial coordinates are fixed on the sky, so a star keeps its right ascension and declination from night to night.',
       },
       {
-        heading: 'Loops are centered on opposition',
-        body: 'An outer planet moves westward fastest at opposition, when it is opposite the Sun, and the loop repeats every synodic period.',
+        heading: 'The sidereal day',
+        body: 'The Earth turns once against the stars in about 23 h 56 min, four minutes less than the solar day, so every star rises about four minutes earlier each night.',
       },
       {
-        heading: 'Inner planets have a limit',
-        body: 'Venus and Mercury never stray far from the Sun: the greatest elongation is the inverse sine of the orbit radius for circular orbits.',
+        heading: 'Sidereal time',
+        body: 'Local sidereal time is the right ascension on the meridian; at midnight it advances about two hours in thirty nights.',
       },
       {
-        heading: 'The synodic period',
-        body: 'The time between repeats is set by the two orbital periods: 1/S = 1/P Earth − 1/P Mars, about 780 days for Mars.',
+        heading: 'Meridian altitude and circumpolar stars',
+        body: 'A star crosses the meridian at 90° minus latitude plus declination, and never sets when its declination exceeds 90° minus the latitude.',
       },
     ],
     features: [
       {
-        name: 'Wanderers instrument (sky-wanderers)',
-        text: 'A planet and date control, the planet’s path across the sky for 120 days either side, and the orbits seen from above with the line of sight.',
+        name: 'Turning-sky instrument (sky-turning)',
+        text: 'Latitude, night and star controls; the star’s altitude through the day, its rising, meridian and setting times, and the sidereal time at midnight, all listed beneath the canvas.',
       },
       {
-        name: 'Companion investigation',
-        text: 'Why Mars Goes Backwards shows the same event in the orbit view by switching the reference frame; this one measures it from the sky.',
+        name: 'Held prediction and measurement',
+        text: 'Students commit to tomorrow’s rising time and keep the evidence in their notebook fields, with a computed shift per night.',
       },
       {
-        name: 'Depth',
-        text: 'Quantitative computes the synodic period; advanced estimates the westward rate at opposition from circular orbits and compares the instrument’s.',
+        name: 'The Sky Lab kernel',
+        text: 'The same pure kernel the Sky Lab page (/sky/) uses; a reading here can be reproduced there with the rise, transit and set tool.',
       },
     ],
     misconceptions: [
       {
-        claim: 'Mars goes backward in its orbit.',
+        claim: 'The stars move about from night to night.',
         response:
-          'Steps 5 and 11. The orbit panel shows Mars always moving the same way; only the line of sight swings back.',
+          'Step 3 and step 5. The shift is identical for every star and comes from the clock following the Sun, not from the stars.',
       },
       {
-        claim: 'Retrograde happens at a fixed date each year.',
+        claim: 'The Earth’s rotation is not steady, so the times drift.',
         response:
-          'Step 8 and the synodic period. The loops come about every 26 months for Mars and 13 for Jupiter.',
+          'The rotation is steady; the sidereal day is a fixed length, four minutes shorter than the solar day.',
       },
       {
-        claim: 'Venus can be seen at midnight.',
+        claim: 'Circumpolar stars are only near the pole.',
         response:
-          'Step 6. Its elongation never exceeds about 47 degrees, so it sets within a few hours of the Sun.',
+          'Step 8. A star is circumpolar when its declination exceeds 90° minus the latitude, which depends on where you stand.',
       },
       {
-        claim: 'A planet stops because it slows down.',
+        claim: 'Horizon coordinates are properties of the star.',
         response:
-          'Step 3. The station is where the line of sight’s motion changes sign; the planet’s speed hardly changes.',
+          'Step 1. Altitude and azimuth change through the night and differ between observers; right ascension and declination do not.',
       },
     ],
     teachingNotes: [
-      'Ask students to step the slider day by day near each station; the slider shows the day number and the date, and the row says retrograde or direct.',
-      'The planet model is good to about 0.2 degrees, so station dates may differ by a day from an almanac.',
-      'The Mars loop of 2024 to 2025 is a real event; students can compare it with a published ephemeris.',
-      'Run Why Mars Goes Backwards first or afterwards; either order works, and the two share no state.',
+      'Have students set night 0 and night 30 and say aloud what the clock did and what the stars did; the two statements are the point.',
+      'A night starts at noon so that a rising time never wraps through midnight. This is a modeling choice; tell students so.',
+      'The validator messages are in English only in this release; the step text, prompts, hints and answers are translated.',
+      'The instrument fixes the site on the Greenwich meridian so that local time is UT; the four-minute shift is the same at any longitude.',
     ],
     discussion: [
-      'How would Ptolemy and Copernicus each have explained the loop?',
-      'Why can Mercury and Venus never be at opposition?',
-      'Why is Jupiter’s loop longer than Mars’s?',
+      'Why is a constellation overhead at 9 pm in December not overhead at 9 pm in June?',
+      'What would the shift be on a planet whose year lasted 100 days?',
+      'Why does the rising time of the Sun not shift by four minutes a day?',
     ],
     extensions: [
-      'Run Why Mars Goes Backwards and compare its frame switch with the right-hand panel.',
-      'Compare Saturn’s loop with Jupiter’s.',
+      'Open the Sky Lab at /sky/ and reproduce a rising time with the rise, transit and set tool.',
+      'Follow Vega at latitude 60 and at latitude 20 and compare how long it is above the horizon.',
     ],
     modelNotes:
-      'Planet positions are Standish’s Table 1 elements for 1800 to 2050, geometric without light time, accurate to about 0.2 degrees; the investigation uses 2024 to 2026. Rates are central differences over two days. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+      'The rising times use each star’s catalog position and neglect proper motion and annual aberration (under 0.1 degree here; the Sky Lab’s accurate chain includes them). The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
   },
-
-  'phases-and-eclipses': {
-    topic:
-      'Moon phases from elongation, the tilted lunar orbit and eclipse seasons',
-    difficulty: 'Introductory',
-    placement:
-      'Third in the sky sequence, after The Sun Through the Year, or on its own in a unit on the Moon.',
-    overview:
-      'Students measure the lit fraction of the Moon at four days after new Moon and turn the angle between Moon and Sun into a fraction with (1 - cos E)/2. They predict how often eclipses happen, tabulate the new and full Moons of two half years of 2025 against the Moon’s ecliptic latitude, and find the four that can make an eclipse. The model is the kernel’s positions of the Sun and Moon; the 3-D lab’s system is not used. Quantitative depth derives the eclipse year; advanced the saros.',
-    priorKnowledge: [
-      'Phases of the Moon as a matter of viewing angle',
-      'The idea of a plane of the orbit',
-      'Taking the cosine of an angle on a calculator',
-    ],
-    keyConcepts: [
-      {
-        heading: 'Elongation sets the phase',
-        body: 'The Moon is always half lit; how much of that half is seen depends on its angle from the Sun, with lit fraction (1 − cos E)/2.',
-      },
-      {
-        heading: 'The tilted orbit',
-        body: 'The Moon’s orbit is tilted about 5 degrees from the ecliptic, so most new and full Moons pass above or below the Sun and the Earth’s shadow.',
-      },
-      {
-        heading: 'Nodes and eclipse seasons',
-        body: 'An eclipse needs a new or full Moon near one of the two nodes; the Sun passes each about every half year, so eclipses come in seasons.',
-      },
-      {
-        heading: 'Pairs of eclipses',
-        body: 'A solar and a lunar eclipse come about two weeks apart in a season, as in March and September 2025.',
-      },
-    ],
-    features: [
-      {
-        name: 'Phase instrument (sky-phases)',
-        text: 'A top view of the Sun, Earth and Moon beside the Moon’s disc as seen from Earth, with the elongation, phase angle and lit fraction listed.',
-      },
-      {
-        name: 'Eclipse list (sky-eclipses)',
-        text: 'Every new and full Moon of a half year with the Moon’s ecliptic latitude, flagged when within 1.5 degrees; the plot shows the latitude through the half year.',
-      },
-      {
-        name: 'Depth',
-        text: 'Quantitative derives the eclipse year from the regression of the nodes; advanced shows the saros as a coincidence of two kinds of month.',
-      },
-    ],
-    misconceptions: [
-      {
-        claim: 'The phases come from the Earth’s shadow.',
-        response:
-          'Step 1 and step 3. The shadow causes eclipses only; phases are the changing view of the lit half.',
-      },
-      {
-        claim: 'A quarter Moon is a quarter lit.',
-        response:
-          'Step 2. “Quarter” counts how far round its orbit the Moon is; half the disc is lit.',
-      },
-      {
-        claim: 'There should be an eclipse every month.',
-        response:
-          'Steps 5 to 8. The Moon’s tilted orbit usually carries it above or below the line to the Sun.',
-      },
-      {
-        claim: 'Solar and lunar eclipses are unrelated events.',
-        response:
-          'Step 6. They come in pairs, two weeks apart, because the same node crossing allows both.',
-      },
-    ],
-    teachingNotes: [
-      'The 1.5-degree limit is a rough rule for the investigation; it flags the four 2025 eclipses (14 and 29 March, 7 and 21 September) and not the near misses in February and August.',
-      'The list says whether an eclipse is possible, not where it can be seen; do not let students quote it as a forecast.',
-      'The Moon’s disc is drawn for the northern hemisphere; a southern student sees it turned over.',
-      'The model is the kernel’s positions of the Sun and Moon; the 3-D lab’s Earth, Moon and Sun system is not used.',
-    ],
-    discussion: [
-      'Why are a solar and a lunar eclipse paired two weeks apart?',
-      'Why is a total solar eclipse seen from a narrow track while a lunar eclipse is seen from a whole hemisphere?',
-      'Which would change more if the Moon’s orbit were tilted 10 degrees instead of 5: the number of eclipses or their timing?',
-    ],
-    extensions: [
-      'Switch to the 2026 preset and find the February and March eclipses.',
-      'Look up the saros series of the 2025 eclipses.',
-    ],
-    modelNotes:
-      'Phases use the geometric phase angle from the kernel; the lit-fraction formula ignores the Moon’s finite distance, a difference of about 0.2 percent. The eclipse limit is a rough rule of 1.5 degrees of ecliptic latitude, and the list is of geocentric new and full Moons. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
-  },
-
   'the-sun-through-the-year': {
     topic:
       'The ecliptic and obliquity, the Sun’s noon altitude and the length of the day through the year, and why the seasons are not about distance',
@@ -358,91 +186,431 @@ export const INSTRUCTOR_CONTENT = {
     modelNotes:
       'The Sun is the kernel’s apparent Sun (Meeus, with nutation and aberration). The tilt control replaces the obliquity in the Sun’s declination, a what-if. Day length uses a horizon of minus 0.83 degrees (refraction and the Sun’s radius) and the sunlight uses the geometric horizon. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
   },
-
-  'the-turning-sky': {
+  'phases-and-eclipses': {
     topic:
-      'Horizon and equatorial coordinates, sidereal time and why stars rise about four minutes earlier each night',
+      'Moon phases from elongation, the tilted lunar orbit and eclipse seasons',
     difficulty: 'Introductory',
     placement:
-      'First of the sky sequence, after any course introduction to the celestial sphere. It needs nothing earlier and the next three investigations reuse its instrument.',
+      'Third in the sky sequence, after The Sun Through the Year, or on its own in a unit on the Moon.',
     overview:
-      'Students follow one star through a night and through a month on a computed sky. They predict, then measure, that a star rises about four minutes earlier each night, read a sidereal clock to see the same four minutes from the other side, and work out how high a star climbs and which stars never set. The aim is the difference between a star’s fixed equatorial coordinates and its changing horizon coordinates, and the sidereal day.',
+      'Students measure the lit fraction of the Moon at four days after new Moon and turn the angle between Moon and Sun into a fraction with (1 - cos E)/2. They predict how often eclipses happen, tabulate the new and full Moons of two half years of 2025 against the Moon’s ecliptic latitude, and find the four that can make an eclipse. The model is the kernel’s positions of the Sun and Moon; the 3-D lab’s system is not used. Quantitative depth derives the eclipse year; advanced the saros.',
     priorKnowledge: [
-      'Altitude and azimuth as angles on the sky',
-      'That the Earth turns once a day and orbits the Sun once a year',
-      'Reading a time of day as hours and minutes',
+      'Phases of the Moon as a matter of viewing angle',
+      'The idea of a plane of the orbit',
+      'Taking the cosine of an angle on a calculator',
     ],
     keyConcepts: [
       {
-        heading: 'Two coordinate systems',
-        body: 'Horizon coordinates change with time and place; equatorial coordinates are fixed on the sky, so a star keeps its right ascension and declination from night to night.',
+        heading: 'Elongation sets the phase',
+        body: 'The Moon is always half lit; how much of that half is seen depends on its angle from the Sun, with lit fraction (1 − cos E)/2.',
       },
       {
-        heading: 'The sidereal day',
-        body: 'The Earth turns once against the stars in about 23 h 56 min, four minutes less than the solar day, so every star rises about four minutes earlier each night.',
+        heading: 'The tilted orbit',
+        body: 'The Moon’s orbit is tilted about 5 degrees from the ecliptic, so most new and full Moons pass above or below the Sun and the Earth’s shadow.',
       },
       {
-        heading: 'Sidereal time',
-        body: 'Local sidereal time is the right ascension on the meridian; at midnight it advances about two hours in thirty nights.',
+        heading: 'Nodes and eclipse seasons',
+        body: 'An eclipse needs a new or full Moon near one of the two nodes; the Sun passes each about every half year, so eclipses come in seasons.',
       },
       {
-        heading: 'Meridian altitude and circumpolar stars',
-        body: 'A star crosses the meridian at 90° minus latitude plus declination, and never sets when its declination exceeds 90° minus the latitude.',
+        heading: 'Pairs of eclipses',
+        body: 'A solar and a lunar eclipse come about two weeks apart in a season, as in March and September 2025.',
       },
     ],
     features: [
       {
-        name: 'Turning-sky instrument (sky-turning)',
-        text: 'Latitude, night and star controls; the star’s altitude through the day, its rising, meridian and setting times, and the sidereal time at midnight, all listed beneath the canvas.',
+        name: 'Phase instrument (sky-phases)',
+        text: 'A top view of the Sun, Earth and Moon beside the Moon’s disc as seen from Earth, with the elongation, phase angle and lit fraction listed.',
       },
       {
-        name: 'Held prediction and measurement',
-        text: 'Students commit to tomorrow’s rising time and keep the evidence in their notebook fields, with a computed shift per night.',
+        name: 'Eclipse list (sky-eclipses)',
+        text: 'Every new and full Moon of a half year with the Moon’s ecliptic latitude, flagged when within 1.5 degrees; the plot shows the latitude through the half year.',
       },
       {
-        name: 'The Sky Lab kernel',
-        text: 'The same pure kernel the Sky Lab page (/sky/) uses; a reading here can be reproduced there with the rise, transit and set tool.',
+        name: 'Depth',
+        text: 'Quantitative derives the eclipse year from the regression of the nodes; advanced shows the saros as a coincidence of two kinds of month.',
       },
     ],
     misconceptions: [
       {
-        claim: 'The stars move about from night to night.',
+        claim: 'The phases come from the Earth’s shadow.',
         response:
-          'Step 3 and step 5. The shift is identical for every star and comes from the clock following the Sun, not from the stars.',
+          'Step 1 and step 3. The shadow causes eclipses only; phases are the changing view of the lit half.',
       },
       {
-        claim: 'The Earth’s rotation is not steady, so the times drift.',
+        claim: 'A quarter Moon is a quarter lit.',
         response:
-          'The rotation is steady; the sidereal day is a fixed length, four minutes shorter than the solar day.',
+          'Step 2. “Quarter” counts how far round its orbit the Moon is; half the disc is lit.',
       },
       {
-        claim: 'Circumpolar stars are only near the pole.',
+        claim: 'There should be an eclipse every month.',
         response:
-          'Step 8. A star is circumpolar when its declination exceeds 90° minus the latitude, which depends on where you stand.',
+          'Steps 5 to 8. The Moon’s tilted orbit usually carries it above or below the line to the Sun.',
       },
       {
-        claim: 'Horizon coordinates are properties of the star.',
+        claim: 'Solar and lunar eclipses are unrelated events.',
         response:
-          'Step 1. Altitude and azimuth change through the night and differ between observers; right ascension and declination do not.',
+          'Step 6. They come in pairs, two weeks apart, because the same node crossing allows both.',
       },
     ],
     teachingNotes: [
-      'Have students set night 0 and night 30 and say aloud what the clock did and what the stars did; the two statements are the point.',
-      'A night starts at noon so that a rising time never wraps through midnight. This is a modeling choice; tell students so.',
-      'The validator messages are in English only in this release; the step text, prompts, hints and answers are translated.',
-      'The instrument fixes the site on the Greenwich meridian so that local time is UT; the four-minute shift is the same at any longitude.',
+      'The 1.5-degree limit is a rough rule for the investigation; it flags the four 2025 eclipses (14 and 29 March, 7 and 21 September) and not the near misses in February and August.',
+      'The list says whether an eclipse is possible, not where it can be seen; do not let students quote it as a forecast.',
+      'The Moon’s disc is drawn for the northern hemisphere; a southern student sees it turned over.',
+      'The model is the kernel’s positions of the Sun and Moon; the 3-D lab’s Earth, Moon and Sun system is not used.',
     ],
     discussion: [
-      'Why is a constellation overhead at 9 pm in December not overhead at 9 pm in June?',
-      'What would the shift be on a planet whose year lasted 100 days?',
-      'Why does the rising time of the Sun not shift by four minutes a day?',
+      'Why are a solar and a lunar eclipse paired two weeks apart?',
+      'Why is a total solar eclipse seen from a narrow track while a lunar eclipse is seen from a whole hemisphere?',
+      'Which would change more if the Moon’s orbit were tilted 10 degrees instead of 5: the number of eclipses or their timing?',
     ],
     extensions: [
-      'Open the Sky Lab at /sky/ and reproduce a rising time with the rise, transit and set tool.',
-      'Follow Vega at latitude 60 and at latitude 20 and compare how long it is above the horizon.',
+      'Switch to the 2026 preset and find the February and March eclipses.',
+      'Look up the saros series of the 2025 eclipses.',
     ],
     modelNotes:
-      'The rising times use each star’s catalog position and neglect proper motion and annual aberration (under 0.1 degree here; the Sky Lab’s accurate chain includes them). The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+      'Phases use the geometric phase angle from the kernel; the lit-fraction formula ignores the Moon’s finite distance, a difference of about 0.2 percent. The eclipse limit is a rough rule of 1.5 degrees of ecliptic latitude, and the list is of geocentric new and full Moons. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+  'wanderers-on-the-sky': {
+    topic:
+      'Planetary configurations, elongations and retrograde loops, seen on the sky and from above the orbits',
+    difficulty: 'Introductory',
+    placement:
+      'Fourth in the sky sequence, and a natural partner for Why Mars Goes Backwards, which shows the same event in the orbit view. It does not require it.',
+    overview:
+      'Students find the start and end of Mars’s retrograde loop from December 2024 to February 2025, read its elongation at its fastest westward motion, and see the same date from above the orbits. They measure the greatest elongation of Venus, compute the circular-orbit limit, and time Jupiter’s loop. The central idea is relative motion: no planet reverses its orbit.',
+    priorKnowledge: [
+      'That the planets orbit the Sun in the same direction',
+      'Elongation as the angle from the Sun on the sky',
+      'Reading a date and a day number off a slider',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Retrograde is overtaking',
+        body: 'A planet’s orbital motion never reverses; Earth overtakes a slower outer planet and the line of sight swings backward against the stars for a while.',
+      },
+      {
+        heading: 'Loops are centered on opposition',
+        body: 'An outer planet moves westward fastest at opposition, when it is opposite the Sun, and the loop repeats every synodic period.',
+      },
+      {
+        heading: 'Inner planets have a limit',
+        body: 'Venus and Mercury never stray far from the Sun: the greatest elongation is the inverse sine of the orbit radius for circular orbits.',
+      },
+      {
+        heading: 'The synodic period',
+        body: 'The time between repeats is set by the two orbital periods: 1/S = 1/P Earth − 1/P Mars, about 780 days for Mars.',
+      },
+    ],
+    features: [
+      {
+        name: 'Wanderers instrument (sky-wanderers)',
+        text: 'A planet and date control, the planet’s path across the sky for 120 days either side, and the orbits seen from above with the line of sight.',
+      },
+      {
+        name: 'Companion investigation',
+        text: 'Why Mars Goes Backwards shows the same event in the orbit view by switching the reference frame; this one measures it from the sky.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative computes the synodic period; advanced estimates the westward rate at opposition from circular orbits and compares the instrument’s.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Mars goes backward in its orbit.',
+        response:
+          'Steps 5 and 11. The orbit panel shows Mars always moving the same way; only the line of sight swings back.',
+      },
+      {
+        claim: 'Retrograde happens at a fixed date each year.',
+        response:
+          'Step 8 and the synodic period. The loops come about every 26 months for Mars and 13 for Jupiter.',
+      },
+      {
+        claim: 'Venus can be seen at midnight.',
+        response:
+          'Step 6. Its elongation never exceeds about 47 degrees, so it sets within a few hours of the Sun.',
+      },
+      {
+        claim: 'A planet stops because it slows down.',
+        response:
+          'Step 3. The station is where the line of sight’s motion changes sign; the planet’s speed hardly changes.',
+      },
+    ],
+    teachingNotes: [
+      'Ask students to step the slider day by day near each station; the slider shows the day number and the date, and the row says retrograde or direct.',
+      'The planet model is good to about 0.2 degrees, so station dates may differ by a day from an almanac.',
+      'The Mars loop of 2024 to 2025 is a real event; students can compare it with a published ephemeris.',
+      'Run Why Mars Goes Backwards first or afterwards; either order works, and the two share no state.',
+    ],
+    discussion: [
+      'How would Ptolemy and Copernicus each have explained the loop?',
+      'Why can Mercury and Venus never be at opposition?',
+      'Why is Jupiter’s loop longer than Mars’s?',
+    ],
+    extensions: [
+      'Run Why Mars Goes Backwards and compare its frame switch with the right-hand panel.',
+      'Compare Saturn’s loop with Jupiter’s.',
+    ],
+    modelNotes:
+      'Planet positions are Standish’s Table 1 elements for 1800 to 2050, geometric without light time, accurate to about 0.2 degrees; the investigation uses 2024 to 2026. Rates are central differences over two days. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+  'plan-a-night': {
+    topic: 'Observing plans: astronomical dark, airmass and Moon constraints',
+    difficulty: 'Introductory',
+    placement:
+      'Fifth in the sky sequence, and a step before Design the Schedule and Twelve Nights in the exoplanet sequence, which take the target as given.',
+    overview:
+      'Students plan one night at latitude 30 degrees north among eight bright stars. They measure the hours of astronomical dark in winter and summer, compute an airmass, see that a full Moon in Leo removes Regulus entirely, count the targets worth the night under two airmass limits, and write a plan with reasons. Quantitative depth looks at the error of the flat-layer airmass; advanced explains why 60 degrees north has no astronomical dark in June.',
+    priorKnowledge: [
+      'Altitude and the idea of twilight',
+      'The Moon’s phases',
+      'Counting rows of a list against a threshold',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Astronomical dark',
+        body: 'Observing faint objects needs the Sun more than 18 degrees below the horizon; the length of that dark changes by hours across the year and vanishes at high latitude in summer.',
+      },
+      {
+        heading: 'Airmass',
+        body: 'Airmass is about 1/sin of the altitude; low stars are dimmer, redder and blurrier, so observers set a limit near 2.',
+      },
+      {
+        heading: 'The Moon',
+        body: 'A bright Moon near a target washes out the sky; in the instrument the full Moon of February removes Regulus for the whole night.',
+      },
+      {
+        heading: 'A plan is windows and reasons',
+        body: 'Each target has a usable window inside the dark, below the airmass limit and clear of the Moon; the plan orders them and says which constraint decides.',
+      },
+    ],
+    features: [
+      {
+        name: 'Planning instrument (sky-plan)',
+        text: 'Bars per star across the night with a Moon row, and a list of usable hours and best airmass for each of eight bright stars.',
+      },
+      {
+        name: 'Adjustable limits',
+        text: 'Students change the airmass limit and the least Moon distance and watch the windows move.',
+      },
+      {
+        name: 'Written plan',
+        text: 'The last question is a written plan graded by rubric; it is never marked right or wrong by the application.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The brightest star is always the best target.',
+        response:
+          'Step 5 and step 6. The Moon and the airmass decide the usable hours; Sirius loses time at a stricter limit.',
+      },
+      {
+        claim: 'Summer nights are best for observing.',
+        response:
+          'Steps 2 and 3. At middle latitudes the June dark is nearly four hours shorter than in January.',
+      },
+      {
+        claim: 'Airmass is just the altitude.',
+        response:
+          'Step 4. It grows steeply as a star gets low, which is why a limit of 2 corresponds to 30 degrees.',
+      },
+      {
+        claim: 'The Moon only matters at full phase.',
+        response:
+          'Step 5. The constraint applies while the Moon is up and near the target, so a crescent far away costs nothing and a gibbous nearby may cost a lot.',
+      },
+    ],
+    teachingNotes: [
+      'The three-hour threshold and the 30-degree Moon limit are the investigation’s choices, not rules; invite students to change them and say what they would do.',
+      'The eight stars are bright stars of the Sky Lab catalog; a star the Moon sits near is lost for the night.',
+      'Compare with Design the Schedule and Twelve Nights: there the target is given, here it is chosen.',
+      'The Moon constraint applies only while the Moon is above the horizon, which the bottom row shows.',
+    ],
+    discussion: [
+      'Which constraint would you relax first for a bright target, and which never?',
+      'How would the plan change at latitude minus 30?',
+      'What would you add to the list of constraints for a real proposal?',
+    ],
+    extensions: [
+      'Do the same plan on the Sky Lab page with the airmass and twilight calculator.',
+      'Take one chosen star into Design the Schedule.',
+    ],
+    modelNotes:
+      'Windows are sampled every quarter of an hour on the kernel’s positions with refraction; star proper motion is neglected. The Moon constraint applies only while the Moon is above the horizon. Refraction below 5 degrees carries no accuracy claim, so airmass limits below about 11 are safe. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+  'what-a-spectrum-is-made-of': {
+    topic:
+      'Kirchhoff’s three kinds of spectrum: why one gas makes dark lines, bright lines or none, depending on what is behind it',
+    difficulty: 'Introductory',
+    placement:
+      'After Lines and Motion, once students can name a star’s lines and know a blackbody’s smooth curve, and before any investigation that reads a star’s temperature or composition from its spectrum. It supports OpenStax Astronomy 2e section 5.3 (spectroscopy in astronomy).',
+    overview:
+      'Students predict what a cloud of thin hydrogen does to the light of a hotter source behind it, then measure it in a model that puts a blackbody, a cloud and a detector in one line. They find that the same gas makes dark lines when it is cooler than the source, bright lines when it is hotter and alone, and none at the same temperature, and say why: the cloud takes light out of the beam and also glows at its own temperature. They apply it to the Sun’s dark lines and to the flash spectrum at an eclipse. The quantitative depth adds the Planck ratio that sets how dark a thick line gets, the equivalent width and where it changes sign, and the Boltzmann factor as a stated model; the advanced depth sets that model against two real stars.',
+    priorKnowledge: [
+      'That a hot dense source makes a smooth blackbody continuum, and that a star’s spectrum has lines in it',
+      'That each kind of atom has its own wavelengths',
+      'Comparing two numbers as a ratio or a percentage',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Three kinds of spectrum',
+        body: 'A hot dense source makes a continuum. A hot thin gas seen alone makes bright emission lines. A cooler gas in front of a hotter source makes dark absorption lines. They are one piece of physics met in three arrangements, not three kinds of matter.',
+      },
+      {
+        heading: 'The cloud also glows',
+        body: 'The cloud removes light from the source and adds its own, at its own temperature. At a line’s center a thick cloud puts back only the brightness of a blackbody at the cloud’s temperature, so the line is dark when the cloud is cooler than the source, bright when hotter, and absent when equal.',
+      },
+      {
+        heading: 'Temperature, not the gas, sets the sign',
+        body: 'The wavelengths belong to the atoms; whether the lines are dark or bright belongs to the temperatures. The same hydrogen is shown absorbing, emitting and doing neither by moving one slider.',
+      },
+      {
+        heading: 'A model of excitation, and its limit',
+        body: 'The Boltzmann factor counts how many atoms are in the level that makes the Balmer lines. It rises steeply with temperature and is stated as a model: it leaves out ionization and saturation, which is why the real stars’ lines differ by a factor of 2, not thousands.',
+      },
+    ],
+    features: [
+      {
+        name: 'Kirchhoff demonstrator (the Light Lab)',
+        text: 'A blackbody source, a uniform cloud of hydrogen and a detector, with the source seen through the cloud, the cloud alone or the source alone; sliders for both temperatures and the amount of gas; a whole-spectrum view and a zoom on H-alpha; and a list under the plot of what the detector sees, the brightness at the line center, where a thick line ends, the equivalent width and the Boltzmann ratio.',
+      },
+      {
+        name: 'The measurement node',
+        text: 'The equivalent width is the same line measurement as the spectrum viewer and the Measurement pipeline (js/measure/spectrumLine.js), run on the model’s noise-free spectrum. A negative width is an emission line.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the Planck ratio of a thick line’s floor, the equivalent width, its sign change at equal temperatures and the Boltzmann ratio between 6,000 and 10,000 K. Advanced: the part of the width that depends only on the gas, and the Boltzmann model set against the A and G stars’ H-alpha widths.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim:
+          'A gas always absorbs, so a cloud in front of a source always makes dark lines.',
+        response:
+          'Steps 3 to 6. The cloud also glows. Hotter than the source it makes bright lines on the continuum, and at the same temperature it makes none.',
+      },
+      {
+        claim: 'The gas decides whether a spectrum has dark or bright lines.',
+        response:
+          'Step 4 and the eclipse flash. The same hydrogen makes both; the sign depends on the temperatures and on what is behind it.',
+      },
+      {
+        claim: 'A thicker cloud makes a line go to zero.',
+        response:
+          'The first quantitative step. A thick line goes to the cloud’s own blackbody brightness, not to zero, and it does so whichever way the cloud lies against the source.',
+      },
+      {
+        claim: 'More atoms in the right level always means a stronger line.',
+        response:
+          'The advanced steps. The Boltzmann factor alone predicts a ratio near 2,800 between an A and a G star; the stars give about 2.3, because ionization removes atoms and a thick line saturates.',
+      },
+    ],
+    teachingNotes: [
+      'The demonstrator is a model with no noise, so every student sees the same numbers. The core measurement accepts 19.9 percent within 1.5 and 251.6 percent within 8; anything below 100 percent is a dark line.',
+      'The lines are drawn with one width (5 Å, wider than a real gas’s thermal width, so that they can be seen) and equal strength for all three, so their depths in the whole-spectrum view are a teaching choice and not a prediction for any star.',
+      'The Boltzmann ratio uses 10.2 eV (Lyman-alpha’s energy to one digit) and statistical weights 2n²; it is introductory by design and stated as a model on screen. Ionization (the Saha equation) is not in it.',
+      'The effective temperatures of the A and G stars in the advanced steps (about 9,500 and 5,800 K) are typical for their spectral types, not fitted to those spectra.',
+    ],
+    discussion: [
+      'A student says the Sun’s dark lines mean the Sun is cold. What would you answer?',
+      'Why does it matter that the gas in the eclipse flash is the same gas that makes the Sun’s dark lines?',
+      'What would the spectrum of a hot cloud in front of a cooler source look like, and where might you find one?',
+    ],
+    extensions: [
+      'Lines and Motion measures a Doppler shift on the same lines.',
+      'Measure the H-alpha equivalent width of all four SDSS stars in the spectrum viewer and say how it changes with temperature.',
+    ],
+    modelNotes:
+      'A uniform slab with no scattering, by the equation of transfer I = B(T_s) e^(−τ) + B(T_c) (1 − e^(−τ)), with the Planck function from the Gravitas radiation kernel. The optical depth is zero between the lines and τ0 times a Gaussian of width 5 Å at H-alpha, H-beta and H-gamma (vacuum wavelengths from the line list), the same τ0 for all three. Real lines differ in strength and take their widths from temperature and pressure, and a real atmosphere is not one slab at one temperature. The spectrum is sampled every 0.5 Å without noise, and the equivalent width is the measurement node’s.',
+  },
+
+  'lines-and-motion': {
+    topic:
+      'Spectral lines and the Doppler shift: naming a star’s lines, and a velocity from a shift with its uncertainty',
+    difficulty: 'Introductory',
+    placement:
+      'After Color and Temperature, once students know a blackbody’s smooth curve, and before any investigation that uses a radial velocity (Radial Velocity, the exoplanet investigations). It supports OpenStax Astronomy 2e sections 5.3 (spectroscopy) and 5.4 (the Doppler effect).',
+    overview:
+      'Students read the deepest dips in two real SDSS spectra against the line list, predict what a motion along the line of sight does to a line, and measure the shift on synthetic spectra whose velocity the viewer does not show. They turn a shift into a speed with its sign and its uncertainty, and meet a star whose shift is smaller than its uncertainty and so cannot be called a motion. They end on why a spectrum gives only the motion toward or away from us. Quantitative depth adds the relativistic form, the weighted mean of two lines and the equivalent width; advanced depth measures a real star’s velocity from two of its own lines and compares it with the SDSS catalog value.',
+    priorKnowledge: [
+      'That a spectrum is light spread out by wavelength, and that a blackbody’s is smooth',
+      'Dividing one number by another, and the idea of a fraction of a wavelength',
+      'What “toward us” and “away from us” mean for a moving source, as with a siren',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Lines belong to atoms',
+        body: 'Each kind of atom absorbs at its own wavelengths, so the dark lines in a star’s spectrum name what is in its atmosphere. Which lines show depends on temperature: hydrogen is deepest in the A star and calcium in the G star.',
+      },
+      {
+        heading: 'A motion moves every line by the same fraction',
+        body: 'The shift Δλ ÷ λ is v ÷ c for speeds far below the speed of light, to longer wavelengths when the source recedes and shorter when it approaches. Students measure it on synthetic stars before they are given the formula.',
+      },
+      {
+        heading: 'A result needs its uncertainty',
+        body: 'The viewer prints each velocity with a ± . Synthetic star 3 is noisy on purpose: its shift is smaller than its uncertainty, so the data cannot say whether it moves. A small number is not a zero.',
+      },
+      {
+        heading: 'Only the line of sight',
+        body: 'A line moves for the part of the motion along the line of sight. A sideways motion leaves no first-order mark, so a spectrum cannot give a star’s speed across the sky.',
+      },
+    ],
+    features: [
+      {
+        name: 'Spectrum viewer (the Light Lab)',
+        text: 'Four observed SDSS DR18 spectra (one each of A, G, K and M) and three synthetic ones, a line list laid over the spectrum, a zoom on one line with the continuum fit and its windows shaded, and a list under the plot of the measured center, shift, velocity, equivalent width and depth, each with its uncertainty. The list is the viewer’s text equivalent: every number on the canvas is in it.',
+      },
+      {
+        name: 'The measurement node',
+        text: 'The viewer runs the same line measurement the Measurement pipeline offers (js/measure/spectrumLine.js): a straight-line continuum from two windows, an equivalent width, a depth-weighted center and a velocity. Its uncertainties assume white noise as large as the continuum’s scatter; for the real SDSS spectra, which are not white, they are only an indication.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the relativistic Doppler formula, the weighted mean of two lines and the equivalent width. Advanced: the velocity of a real star from H-alpha and H-beta, its comparison with the SDSS catalog z, and why the spectra are heliocentric.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A star that is moving fast has lines that disappear or split.',
+        response:
+          'Step 4. The lines keep their shape and move together, each by the same fraction of its wavelength. Splitting is a different effect (two stars, or a magnetic field).',
+      },
+      {
+        claim: 'A small measured shift means the star is at rest.',
+        response:
+          'Step 8. The uncertainty is larger than the shift, so rest is as consistent with the data as the number shown. A measurement is a value and how well it is known.',
+      },
+      {
+        claim: 'A spectrum gives a star’s whole velocity.',
+        response:
+          'Step 9. Only the part along the line of sight shifts the lines; the motion across the sky leaves a second-order effect near one part in 10⁸.',
+      },
+      {
+        claim: 'A redshift always means moving away at v = c z.',
+        response:
+          'The first quantitative step. The simple form holds far below the speed of light; at z = 0.1 it is 5 percent off, and at that size most of a galaxy’s shift is the stretching of space.',
+      },
+    ],
+    teachingNotes: [
+      'The synthetic spectra are models with a fixed noise realisation, so every student sees the same numbers. The truth (+85, −142 and +12 km/s) is in the answer key and the validator accepts within 12 km/s of it for stars 1 and 2.',
+      'The real SDSS spectra are not white-noise and have blended lines: the A star’s H-alpha and H-beta agree within about two of their uncertainties, and the G star’s H-beta is blended and measures poorly. The viewer reports what it measures; do not grade a student on a real line the node cannot fit.',
+      'The SDSS spectra are thinned to about 4.5 Å per pixel at H-alpha, so a 100 km/s shift (2 Å) is under half a pixel. That is why the shift is measured on the synthetic spectra, which are sampled every 0.5 Å.',
+      'The SDSS catalog z used in the advanced steps is the pipeline’s template fit over the whole spectrum. The comparison instrument that overlays a measurement on a catalog does not exist yet, so the investigation compares by number.',
+    ],
+    discussion: [
+      'Two stars show the same shift. What would you need to know to say they move at the same speed?',
+      'Why does a longer exposure make a velocity more certain, and what does it cost the observer?',
+      'What could you learn from a spectrum that a color index (the last investigation) cannot give?',
+    ],
+    extensions: [
+      'Radial Velocity uses the same shift, measured over weeks, to find a planet.',
+      'Measure the equivalent width of H-beta in each of the four SDSS stars and say how it changes with temperature.',
+    ],
+    modelNotes:
+      'The synthetic spectra are a 5,800 K Planck continuum with four Gaussian absorption lines (H-alpha, H-beta, H-gamma, Ca II K) at the line list’s vacuum wavelengths, shifted by the relativistic Doppler formula, sampled every 0.5 Å and given seeded Gaussian noise; the depths and widths are round numbers, not a fit to any star. The measurement is a straight-line continuum, an equivalent-width sum and a depth-weighted center, with velocity c × shift ÷ rest (non-relativistic, stated on screen). The real spectra are SDSS DR18 wavelengths in vacuum and in the Sun’s frame.',
   },
 
   'color-and-temperature': {

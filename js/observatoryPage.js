@@ -348,6 +348,26 @@ $('obsGuidePanel').addEventListener('toggle', () => {
   if ($('obsGuidePanel').open) guidePanel();
 });
 
+// The comparison (COMPARE_INSTRUMENT.md): a model over the data in view,
+// loaded when first opened.
+const cmp = { panel: null, loading: null, module: null };
+function mountCompare(m) {
+  cmp.module = m;
+  cmp.panel?.destroy();
+  cmp.panel = m.mountComparePanel($('obsCompareBody'), {
+    ...lent,
+    observation: state.view,
+    dimensionOfText: text => dimensionOf(parseUnit(text).unit),
+    fits: () => state.fits,
+  });
+  return cmp.panel;
+}
+$('obsComparePanel').addEventListener('toggle', async () => {
+  if (!$('obsComparePanel').open || !state.view) return;
+  if (cmp.panel) return cmp.panel.update(state.view);
+  cmp.loading ??= import('./observatory/comparePanel.js').then(mountCompare);
+  await cmp.loading;
+});
 $('obsFitPanel').addEventListener('toggle', async () => {
   if (!$('obsFitPanel').open || !state.view) return;
   (await fitPanel()).update(state.view);
@@ -362,13 +382,22 @@ function renderFit(o) {
     (o.kind === 'time-series' &&
       (dim === 'ratio' || dim === 'velocity' || dim === null));
   $('obsFitPanel').hidden = !fit.suits;
+  // A model of a flux or a velocity against time can be laid over the data.
+  const compares =
+    o.kind === 'time-series' &&
+    (dim === 'ratio' || dim === 'velocity' || dim === null);
+  $('obsComparePanel').hidden = !compares;
+  if (compares && cmp.panel && $('obsComparePanel').open) cmp.panel.update(o);
   if (fit.suits && fit.panel && $('obsFitPanel').open) fit.panel.update(o);
 }
 
 function renderAll() {
   const o = state.view;
   $('obsWork').hidden = false;
-  $('obsTitle').textContent = o.title;
+  $('obsTitle').textContent =
+    o.origin === 'synthetic'
+      ? `${o.title} (${t('obs.synthetic.badge')})`
+      : o.title;
   renderSource(o);
   renderAxes(o);
   const isImage = o.kind === 'image';
@@ -1373,6 +1402,7 @@ function translateAll() {
   // Built in the old language; built again in the new one, and a fit still
   // running in the old one is canceled rather than left writing to nothing.
   if (fit.module) mountFit(fit.module);
+  if (cmp.module) mountCompare(cmp.module);
   archive?.then(p => p.rebuild());
   measure?.then(p => p.rebuild());
   guide?.then(p => p.rebuild());

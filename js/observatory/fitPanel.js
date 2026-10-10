@@ -23,6 +23,7 @@ import { parseNumber } from '../answerParse.js';
 import { dataFrom } from '../inference/infer.js';
 import { fitArtifact, modelUnit, rowsDigest } from '../analysis/seams.js';
 import { observationDigest } from './identity.js';
+import { compareWithTruth } from '../forward/observation.js';
 import { roundSig } from '../format.js';
 import { artifactEntry } from '../notebook/artifactEntry.js';
 import { SOURCE } from '../notebook/entry.js';
@@ -900,6 +901,68 @@ export function mountFitPanel(root, ctx) {
     );
   }
 
+  /** "Compare with truth": only for an observation a forward model made. */
+  function truthSection(fit) {
+    const cmp = compareWithTruth(o, fit);
+    if (!cmp?.rows.length) return [];
+    const fmt = v => (Number.isFinite(v) ? number(v) : '—');
+    const head = el(
+      'tr',
+      {},
+      el('th', { scope: 'col', text: t('obs.fit.res.parameter') }),
+      ...['truth', 'recovered', 'sigma', 'pull', 'within'].map(k =>
+        el('th', { scope: 'col', text: t(`obs.fit.truth.col.${k}`) })
+      )
+    );
+    const rows = cmp.rows.map(r =>
+      el(
+        'tr',
+        {},
+        el('th', { scope: 'row', text: r.name }),
+        el('td', { text: fmt(r.truth) }),
+        el('td', { text: fmt(r.recovered) }),
+        el('td', { text: fmt(r.sigma) }),
+        el('td', { text: fmt(r.pull) }),
+        el('td', {
+          text:
+            r.within === null
+              ? '—'
+              : t(r.within ? 'obs.fit.truth.yes' : 'obs.fit.truth.no'),
+        })
+      )
+    );
+    return [
+      el('h3', { text: t('obs.fit.truth.title') }),
+      el(
+        'div',
+        {
+          class: 'ui-table-wrap is-numeric',
+          tabindex: '0',
+          role: 'region',
+          'aria-label': t('obs.fit.truth.caption'),
+        },
+        el(
+          'table',
+          { id: 'fitTruth' },
+          el('caption', { text: t('obs.fit.truth.caption') }),
+          el('thead', {}, head),
+          el('tbody', {}, ...rows)
+        )
+      ),
+      ...(cmp.unfitted.length
+        ? [
+            el('p', {
+              class: 'ui-hint',
+              text: t('obs.fit.truth.unfitted', {
+                list: cmp.unfitted.map(u => u.name).join(', '),
+              }),
+            }),
+          ]
+        : []),
+      el('p', { class: 'ui-hint', text: t('obs.fit.truth.legend') }),
+    ];
+  }
+
   function render(out, d) {
     const fit = out.fit;
     const profileOf = name => out.profiles.find(p => p.parameter === name);
@@ -1113,6 +1176,7 @@ export function mountFitPanel(root, ctx) {
             el('p', { class: 'ui-hint', text: t('obs.fit.corr.legend') }),
           ]
         : []),
+      ...truthSection(fit),
       el('h3', { text: t('obs.fit.warnTitle') }),
       warnings,
       el('h3', { text: t('obs.fit.notClaimed') }),

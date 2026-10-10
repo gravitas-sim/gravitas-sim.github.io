@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 30 investigations and 744 steps: 694 steps
+Across 32 investigations and 765 steps: 715 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 305 show a prescribed model result, 94 draw
-on a stored dataset, 184 put a self-contained panel beside the text,
-128 keep something, and 30 are prose.
-Of 95 prediction loops, 95 are returned to,
-95 produce a measurement before they are answered, and
+running integration, 326 show a prescribed model result, 106 draw
+on a stored dataset, 205 put a self-contained panel beside the text,
+130 keep something, and 30 are prose.
+Of 97 prediction loops, 97 are returned to,
+97 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-95 hold their marking until the experiment settles them.
+97 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -440,4 +440,32 @@ Of 95 prediction loops, 95 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:sky-plan`, control sky-plan/airmassMax, measures the hours of astronomical dark on two nights, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Lines and Motion (`lines-and-motion`)
+
+- **Steps:** 11. Scene declared on 11; a reader can change something on 0; 11 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 11 prescribed model, 11 stored dataset, 11 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, choose-an-option, commit-a-prediction, record-values, answer-in-words.
+- **Objects the steps declare:** one, two, three.
+- **Instruments:** spectrum-viewer.
+- **Stored data:** Four observed stellar spectra, SDSS DR18 (observation).
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-shift → measure-one-shift, which-way, doppler-arithmetic, star-three, sideways-motion, one-sentence, what-you-worked-out → measure-one-shift.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:spectrum-viewer`, control spectrum-viewer/src, measures the Doppler velocity of two synthetic stars from their H-alpha lines, one receding and one approaching, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## What a Spectrum Is Made Of (`what-a-spectrum-is-made-of`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 1 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** source, cloud.
+- **Instruments:** kirchhoff, spectrum-viewer.
+- **Stored data:** Four observed stellar spectra, SDSS DR18 (observation).
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-cloud → measure-two-clouds, what-flipped-it, cloud-alone, same-temperature, why-cool-absorbs, the-sun-is-the-cloud, flash-spectrum, what-you-worked-out → measure-two-clouds.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:kirchhoff`, control kirchhoff/Tc, measures the brightness at the H-alpha center against the source's, with the same cloud cooler than the source (a dark line) and hotter (a bright line), evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

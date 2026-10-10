@@ -131,6 +131,8 @@ const LOADERS = {
   'phases-and-eclipses': () => import('./phases-and-eclipses.js'),
   'wanderers-on-the-sky': () => import('./wanderers-on-the-sky.js'),
   'plan-a-night': () => import('./plan-a-night.js'),
+  'lines-and-motion': () => import('./lines-and-motion.js'),
+  'what-a-spectrum-is-made-of': () => import('./what-a-spectrum-is-made-of.js'),
 };
 
 /**
@@ -177,6 +179,9 @@ const TRANSLATIONS = {
     'phases-and-eclipses': () => import('./es/phases-and-eclipses.js'),
     'wanderers-on-the-sky': () => import('./es/wanderers-on-the-sky.js'),
     'plan-a-night': () => import('./es/plan-a-night.js'),
+    'lines-and-motion': () => import('./es/lines-and-motion.js'),
+    'what-a-spectrum-is-made-of': () =>
+      import('./es/what-a-spectrum-is-made-of.js'),
   },
 };
 

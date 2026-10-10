@@ -55,6 +55,7 @@ const OBSERVATION_KEYS = [
   'time',
   'spectral',
   'image',
+  'synthetic',
 ];
 
 /**

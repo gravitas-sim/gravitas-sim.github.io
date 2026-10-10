@@ -428,6 +428,26 @@
         "dark-hours"
       ],
       "evidenceFrom": "model"
+    },
+    "lines-and-motion": {
+      "centralExperimentId": "ce.lines-and-motion",
+      "object": "panel:spectrum-viewer",
+      "control": "spectrum-viewer/src",
+      "quantity": "the Doppler velocity of two synthetic stars from their H-alpha lines, one receding and one approaching",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["predict-the-shift", "measure-one-shift"],
+      "evidenceFrom": "model"
+    },
+    "what-a-spectrum-is-made-of": {
+      "centralExperimentId": "ce.what-a-spectrum-is-made-of",
+      "object": "panel:kirchhoff",
+      "control": "kirchhoff/Tc",
+      "quantity": "the brightness at the H-alpha center against the source's, with the same cloud cooler than the source (a dark line) and hotter (a bright line)",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["predict-the-cloud", "measure-two-clouds"],
+      "evidenceFrom": "model"
     }
   }
 }

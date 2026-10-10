@@ -56,6 +56,10 @@
       "en": "Where Can It Get To?",
       "es": "¿Hasta dónde puede llegar?"
     },
+    "lines-and-motion": {
+      "en": "Lines and Motion",
+      "es": "Líneas y movimiento"
+    },
     "listening-to-spacetime": {
       "en": "Listening to Spacetime",
       "es": "Escuchar el espacio-tiempo"
@@ -119,6 +123,10 @@
     "weighing-stars": {
       "en": "Weighing the Stars",
       "es": "Pesar las estrellas"
+    },
+    "what-a-spectrum-is-made-of": {
+      "en": "What a Spectrum Is Made Of",
+      "es": "De qué está hecho un espectro"
     },
     "what-is-a-gravitational-wave": {
       "en": "What Is a Gravitational Wave?",
@@ -662,7 +670,7 @@
         }
       ],
       "offline": "precache",
-      "bytes": 21503
+      "bytes": 21730
     },
     {
       "id": "gravitas.tess-hd209458-s56",

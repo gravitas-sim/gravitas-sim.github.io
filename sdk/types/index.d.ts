@@ -246,7 +246,7 @@ export interface Artifact {
   id: string;
   made: { app: string; platform?: string; engineFingerprint?: string; at?: string };
   source: {
-    kind: 'simulation' | 'observation' | 'data-pack' | 'pipeline' | 'inference' | 'experiment' | 'analysis' | 'guide' | 'forward-model';
+    kind: 'simulation' | 'observation' | 'data-pack' | 'pipeline' | 'inference' | 'experiment' | 'analysis' | 'guide' | 'forward-model' | 'comparison';
     id: string;
     version?: string;
     digest?: string;

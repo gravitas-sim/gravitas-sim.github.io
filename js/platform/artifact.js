@@ -76,6 +76,7 @@ export const SOURCE_KINDS = Object.freeze([
   'analysis',
   'guide',
   'forward-model',
+  'comparison',
 ]);
 
 const isObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);

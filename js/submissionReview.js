@@ -86,6 +86,10 @@ const DEEPER = {
   'wanderers-on-the-sky': () =>
     import('./data/investigations/depth/wanderers-on-the-sky.js'),
   'plan-a-night': () => import('./data/investigations/depth/plan-a-night.js'),
+  'lines-and-motion': () =>
+    import('./data/investigations/depth/lines-and-motion.js'),
+  'what-a-spectrum-is-made-of': () =>
+    import('./data/investigations/depth/what-a-spectrum-is-made-of.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]

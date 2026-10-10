@@ -24,6 +24,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'hohmann-transfer': 'engine',
   'keplers-laws': 'engine',
   'lagrange-points': 'engine',
+  'lines-and-motion': 'model',
   'listening-to-spacetime': 'model',
   'lives-of-stars': 'data',
   'missing-mass': 'engine',
@@ -40,6 +41,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'twelve-nights': 'model',
   'wanderers-on-the-sky': 'model',
   'weighing-stars': 'engine',
+  'what-a-spectrum-is-made-of': 'model',
   'what-is-a-gravitational-wave': 'model',
   'when-orbits-lock': 'engine',
 });

@@ -78,6 +78,8 @@ import THE_SUN_THROUGH_THE_YEAR from './investigations/the-sun-through-the-year.
 import PHASES_AND_ECLIPSES from './investigations/phases-and-eclipses.js';
 import WANDERERS_ON_THE_SKY from './investigations/wanderers-on-the-sky.js';
 import PLAN_A_NIGHT from './investigations/plan-a-night.js';
+import LINES_AND_MOTION from './investigations/lines-and-motion.js';
+import WHAT_A_SPECTRUM_IS_MADE_OF from './investigations/what-a-spectrum-is-made-of.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 
@@ -130,6 +132,8 @@ export const INVESTIGATIONS = [
   PHASES_AND_ECLIPSES,
   WANDERERS_ON_THE_SKY,
   PLAN_A_NIGHT,
+  LINES_AND_MOTION,
+  WHAT_A_SPECTRUM_IS_MADE_OF,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

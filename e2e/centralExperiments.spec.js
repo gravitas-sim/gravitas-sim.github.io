@@ -162,6 +162,90 @@ test.describe('the central experiment of each investigation', () => {
     await expectVerdictRevealed(page, plan, predict);
   });
 
+  test('lines-and-motion: a line moves to longer wavelengths for a receding star and shorter for an approaching one @accepts:ce.lines-and-motion', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'lines-and-motion';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen: two stars
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('spectrum-viewer');
+    const at = {};
+    for (const src of [4, 5]) {
+      const { before, after } = await setControl(page, control, src);
+      if (src !== 4) expect(after).not.toEqual(before);
+      at[src] = reading(after, /velocity/i);
+    }
+
+    // 3. one is receding and one approaching, at the speeds the model gave
+    expect(at[4]).toBeGreaterThan(0);
+    expect(at[5]).toBeLessThan(0);
+    expect(Math.abs(at[4] - 85)).toBeLessThan(12);
+    expect(Math.abs(at[5] + 142)).toBeLessThan(12);
+
+    // 4. the evidence, written down and kept
+    const evidence = { v1: at[4].toFixed(0), v2: at[5].toFixed(0) };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('what-a-spectrum-is-made-of: the same cloud makes a dark line when cooler than the source and a bright one when hotter @accepts:ce.what-a-spectrum-is-made-of', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'what-a-spectrum-is-made-of';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen: the cloud's temperature
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('kirchhoff');
+    const at = {};
+    for (const Tc of [4000, 8000]) {
+      const { before, after } = await setControl(page, control, Tc);
+      if (Tc !== 4000) expect(after).not.toEqual(before);
+      at[Tc] = reading(after, /h-alpha center/i);
+    }
+
+    // 3. cooler than the source is dark and hotter is bright, at the model's numbers
+    expect(at[4000]).toBeLessThan(100);
+    expect(at[8000]).toBeGreaterThan(100);
+    expect(Math.abs(at[4000] - 19.9)).toBeLessThan(1.5);
+    expect(Math.abs(at[8000] - 251.6)).toBeLessThan(8);
+
+    // 4. the evidence, written down and kept
+    const evidence = { cool: at[4000].toFixed(1), hot: at[8000].toFixed(0) };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
   test('power-law-gravity: the ellipse stops closing when the exponent moves @accepts:ce.power-law-gravity', async ({
     page,
     app,

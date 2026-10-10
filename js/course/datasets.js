@@ -109,6 +109,7 @@ export const GUIDED = Object.freeze([
   'hohmann-transfer',
   'keplers-laws',
   'lagrange-points',
+  'lines-and-motion',
   'listening-to-spacetime',
   'lives-of-stars',
   'missing-mass',
@@ -125,6 +126,7 @@ export const GUIDED = Object.freeze([
   'twelve-nights',
   'wanderers-on-the-sky',
   'weighing-stars',
+  'what-a-spectrum-is-made-of',
   'what-is-a-gravitational-wave',
   'when-orbits-lock',
 ]);

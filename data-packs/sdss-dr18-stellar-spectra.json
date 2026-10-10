@@ -374,8 +374,8 @@
   "offline": "core",
   "derived": {
     "file": "js/data/spectra/sdssSpectra.js",
-    "bytes": 21503,
-    "sha256": "0699c3907c9d8bda52f0832f006207ad922148834825d8a11c647b9962a8c5f8"
+    "bytes": 21730,
+    "sha256": "5c81bdeab74594303edcd4692d957dba076b3ec2d1d30a3bc34a408ca12cfad5"
   },
   "validation": {
     "check": "each star shows the signature its two archive classifications give it, measured on the committed spectra: H-beta deepest in the A star; Ca II K deeper in the G and K stars than in the A star; Na D and the TiO band deepest in the M star, whose TiO5 index is below 0.75 while the other three are above 0.9",
