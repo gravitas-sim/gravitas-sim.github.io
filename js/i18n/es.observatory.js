@@ -277,6 +277,7 @@ export const ES_OBSERVATORY = {
   'obs.table.next': 'Filas siguientes',
   'obs.export.json': 'Guardar como JSON (todo, con tus cambios)',
   'obs.export.csv': 'Guardar las filas como CSV',
+  'obs.cmp.title': 'Comparar un modelo con los datos',
   'obs.fit.title': 'Ajustar un modelo (diagnóstico)',
   'obs.arc.title':
     'O busca las épocas de Gaia de una estrella en el CDS (en vivo, opcional)',

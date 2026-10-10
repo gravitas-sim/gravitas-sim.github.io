@@ -256,3 +256,34 @@ export const elementValue = (state, element, planet = 0) =>
   ELEMENTS[element].get(state, planet);
 
 export { SOLAR_RADIUS_M };
+
+/**
+ * A slider's range for an element, about the value the system was given: a
+ * factor of two either way for a size, the whole circle for an angle, a
+ * period's own span for an epoch. Chosen so that every end is a state the
+ * forward models accept, and recorded here so a lesson and the Observatory
+ * offer the same sliders.
+ * @returns {{min: number, max: number, step: number}}
+ */
+export function elementRange(state, element, planet = 0) {
+  const v = ELEMENTS[element].get(state, planet);
+  const P = state.planets[planet]?.periodDays ?? 1;
+  const span = (lo, hi) => ({ min: lo, max: hi, step: (hi - lo) / 400 });
+  switch (element) {
+    case 'e':
+      return { min: 0, max: 0.9, step: 0.005 };
+    case 'omegaDeg':
+    case 'meanAnomalyDeg':
+      return { min: 0, max: 360, step: 0.5 };
+    case 'inclinationDeg':
+      return { min: 60, max: 90, step: 0.05 };
+    case 'epochDays':
+      return span(v - P / 2, v + P / 2);
+    case 'systemicKmS':
+      return span(v - 100, v + 100);
+    case 'baselineFlux':
+      return span(v * 0.9, v * 1.1);
+    default:
+      return span(v * 0.5, v * 2);
+  }
+}

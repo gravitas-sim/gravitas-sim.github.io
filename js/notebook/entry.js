@@ -72,6 +72,7 @@ export const SOURCE = Object.freeze({
   // A fit, a sweep analysis and an experiment result, each kept as the
   // gravitas.artifact/1 envelope it was made as (js/notebook/artifactEntry.js).
   INFERENCE_FIT: 'inference-fit',
+  COMPARISON: 'comparison',
   SWEEP_ANALYSIS: 'sweep-analysis',
   EXPERIMENT_RESULT: 'experiment-result',
 });
@@ -88,6 +89,7 @@ export const SOURCES = [
   SOURCE.HORIZON_TRIALS,
   SOURCE.OBSERVATORY,
   SOURCE.INFERENCE_FIT,
+  SOURCE.COMPARISON,
   SOURCE.SWEEP_ANALYSIS,
   SOURCE.EXPERIMENT_RESULT,
 ];
