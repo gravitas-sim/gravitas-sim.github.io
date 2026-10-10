@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1573.8,
+    limit: 1573.9,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -579,7 +579,8 @@ const BUDGETS = [
       'and the Kirchhoff demonstrator (Prompt 83, part 3), measured at ' +
       '1,611,524 bytes (1573.75 KB; 4330.9 KB raw) after merging v2. Under ' +
       "the owner's standing size-budget approval (CLAUDE.md, 2026-10-10); " +
-      'D-BUDGET-04. The initial download is untouched (789.0 of 830 KB).',
+      'D-BUDGET-04. The initial download is untouched (789.0 of 830 KB).' +
+      '\n\nRaised from 1573.8 to 1573.9 KB for Prompt 92 (D-BUDGET-08, the standing size-budget approval): the three galactic data packs the Observatory opens (gaiaSolarNeighbourhood, gaiaNgc2420, milkyWayRotationCurve) are lazy chunks; measured 1,611,595 bytes gzipped, 1573.82 KB, an overrun of 0.02 KB.',
   },
 ];
 
