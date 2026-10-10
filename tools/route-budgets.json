@@ -12,17 +12,17 @@
         "requests": 102
       },
       "kepler": {
-        "kb": 3293.2,
+        "kb": 3293.3,
         "requests": 140
       },
       "transit": {
-        "kb": 3305.1,
+        "kb": 3305.2,
         "requests": 140,
-        "toolKb": 3513.2,
+        "toolKb": 3513.3,
         "toolRequests": 142
       },
       "power-law": {
-        "kb": 3270,
+        "kb": 3270.1,
         "requests": 140,
         "toolKb": 3323.4,
         "toolRequests": 143
@@ -171,7 +171,7 @@
       },
       "observatory": {
         "kb": 86.3,
-        "requests": 3
+        "requests": 4
       },
       "catalog": {
         "kb": 36.4,
@@ -182,7 +182,7 @@
         "requests": 2
       },
       "my-work": {
-        "kb": 33.1,
+        "kb": 33.3,
         "requests": 2
       },
       "studio": {
