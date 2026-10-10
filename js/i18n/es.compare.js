@@ -7,7 +7,6 @@
 
 export const ES_COMPARE = {
   'compareW.title.transit': 'Modelo frente a datos: un tránsito',
-  'compareW.title.rv': 'Modelo frente a datos: una órbita de velocidad radial',
   'compareW.note':
     'Un sistema superpuesto a los datos. No se ajusta nada: mover un elemento solo muestra qué hace ese elemento, y la tabla dice qué números se dieron al modelo.',
   'compareW.control.radiusEarth': 'Radio del planeta',

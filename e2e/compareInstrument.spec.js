@@ -83,3 +83,57 @@ test('a system over its own noisy data, then one element moved by keyboard', asy
   ).violations.map(v => `${v.id}: ${v.nodes.map(n => n.target).join(' ')}`);
   expect(violations).toEqual([]);
 });
+
+test('in a lesson: the instrument docks at the advanced depth, names where the model misses, and one slider mends it', async ({
+  page,
+  app,
+}) => {
+  test.slow();
+  await app.boot({ url: '/#investigation=transit-photometry/advanced' });
+  await expect(page.locator('.inv-step-title')).toBeVisible({
+    timeout: 30_000,
+  });
+  for (let i = 0; i < 80; i++) {
+    if (
+      (await page.locator('.inv-step-title').innerText()) ===
+      'Lay the model over the data'
+    )
+      break;
+    await page.locator('#investigationNext').click();
+  }
+  await expect(page.locator('.inv-step-title')).toHaveText(
+    'Lay the model over the data'
+  );
+  const readout = page.locator('#investigationToolReadout');
+  await expect(readout).toContainText('the model is', {
+    useInnerText: true,
+    timeout: 30_000,
+  });
+  await expect(readout).not.toContainText('nowhere', { useInnerText: true });
+  // The canvas paints the data and the model.
+  const painted = await page.evaluate(() => {
+    const c = document.getElementById('investigationToolCanvas');
+    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+    let n = 0;
+    for (let i = 3; i < d.length; i += 4) if (d[i] > 0) n++;
+    return n;
+  });
+  expect(painted).toBeGreaterThan(500);
+  const slider = page.locator(
+    '#investigationToolControls [data-tool="radiusEarth"]'
+  );
+  await slider.fill('18.3');
+  await slider.dispatchEvent('input');
+  await expect(readout).toContainText('nowhere', {
+    useInnerText: true,
+    timeout: 10_000,
+  });
+  await expect(readout).toContainText('radiusEarth', { useInnerText: true });
+  const results = await new AxeBuilder({ page })
+    .include('#investigationTool')
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+    .analyze();
+  expect(results.violations.map(v => `${v.id}: ${v.nodes[0]?.target}`)).toEqual(
+    []
+  );
+});

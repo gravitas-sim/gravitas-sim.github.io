@@ -454,10 +454,7 @@ describe('the lesson cases and the docked instruments', () => {
     }
   });
   test('the widgets read their declared case, say what the model misses, and are registered', () => {
-    expect(COMPARE_WIDGETS.map(w => w.id)).toEqual([
-      'compare-transit',
-      'compare-rv',
-    ]);
+    expect(COMPARE_WIDGETS.map(w => w.id)).toEqual(['compare-transit']);
     for (const w of COMPARE_WIDGETS) {
       const v = Object.fromEntries(w.controls.map(k => [k.id, k.value]));
       const rows = w.readout(v, undefined, { case: w.defaultCase });
@@ -474,9 +471,6 @@ describe('the lesson cases and the docked instruments', () => {
       expect(after.map(r => r.value).join(' ')).toContain('nowhere');
       expect(after.map(r => r.value).join(' ')).toContain(truthEl);
     }
-    expect(LAZY_FAMILIES.compare.ids).toEqual([
-      'compare-transit',
-      'compare-rv',
-    ]);
+    expect(LAZY_FAMILIES.compare.ids).toEqual(['compare-transit']);
   });
 });

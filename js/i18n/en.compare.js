@@ -7,7 +7,6 @@
 
 export const EN_COMPARE = {
   'compareW.title.transit': 'Model against data: a transit',
-  'compareW.title.rv': 'Model against data: a radial-velocity orbit',
   'compareW.note':
     'A system laid over data. Nothing is fitted: moving an element only shows what that element does, and the table says which numbers were given to the model.',
   'compareW.control.radiusEarth': 'Planet radius',

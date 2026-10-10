@@ -12,6 +12,8 @@
 // was given and the overlay is recomputed from it.
 // =============================================================================
 
+// Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
+import './instrumentStartup.js';
 import { registerMessages, t } from './i18n/index.js';
 import { EN_COMPARE } from './i18n/en.compare.js';
 import { ES_COMPARE } from './i18n/es.compare.js';
@@ -218,18 +220,6 @@ export const COMPARE_WIDGETS = [
       control('periodDays', 3.4, 3.65, 0.0005, 4, 'd'),
       control('epochDays', -0.5, 0.5, 0.005, 3, 'd'),
       control('inclinationDeg', 80, 90, 0.05, 2, '°'),
-    ]
-  ),
-  family(
-    'compare-rv',
-    'radial-velocity',
-    'compareW.title.rv',
-    'hd209458-heavier-planet',
-    [
-      control('massEarth', 100, 450, 1, 0, 'M⊕'),
-      control('periodDays', 3.4, 3.65, 0.0005, 4, 'd'),
-      control('epochDays', -0.5, 0.5, 0.005, 3, 'd'),
-      control('e', 0, 0.5, 0.005, 3, ''),
     ]
   ),
 ];

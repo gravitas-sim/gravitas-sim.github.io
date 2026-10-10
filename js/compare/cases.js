@@ -34,16 +34,6 @@ export const CASES = Object.freeze({
       noise: { white: { sigma: 0.0004, unit: '' } },
     }),
   },
-  // The same star's wobble measured with a planet 1.6 times as massive.
-  'hd209458-heavier-planet': {
-    system: 'hd209458',
-    model: 'radial-velocity',
-    truth: { element: 'massEarth', factor: 1.6 },
-    setup: setup('spectrograph', {
-      seed: 'compare-heavier-planet',
-      noise: { white: { sigma: 3, unit: 'm/s' } },
-    }),
-  },
 });
 
 /** The system the case's data were made from. */

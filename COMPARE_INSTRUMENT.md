@@ -32,6 +32,10 @@ The one the inference core fits: chi-square with the stated uncertainties, or th
 
 Residuals table (first 200 rows), a text summary of the overlay, native range inputs for keyboard adjustment, a polite status line.
 
+## In lessons
+
+`js/compareWidgets.js` is the widget family `compare` (id `compare-transit`): canvas data and model over a residual strip, sliders on the planet radius, period, epoch and inclination, and rows that say the objective, where the model misses and which elements were moved. A step names a declared case, `tool: { id: 'compare-transit', case: 'hd209458-larger-planet' }`; `js/compare/cases.js` holds the case (synthetic data from a system that differs from the starting one in one stated element, held to that by tests: only that element mends the misfit and no other slider, swept, comes within three times its reduced chi-square). The first use is the advanced step "Lay the model over the data" in Transit Photometry (depth file, English and Spanish; a graded choice about which element removes the misfit). The radial-velocity model is supported by the core (`system` source, model `radial-velocity`, tested) and by the Observatory panel; no lesson widget for it, because no lesson step would use one.
+
 ## Not done in this prompt
 
-The lesson `compare` step type and the widget family that docks the instrument in lessons, and the use of it by the exoplanet guides and the depth-advanced steps; the dist-coverage test. The core and the envelope are what those need.
+The exoplanet Observatory guides do not open the panel: their `show` mechanism and their text are read by the instructor documents, and a guide edit would stale the instructor bundle, which cannot be rebuilt here. A guide step that names the panel is the next piece. A separate `compare` step *type* was not added: a step that docks an instrument through `tool` is already the engine's one mechanism, and the declared data and model live in the case.
