@@ -384,6 +384,8 @@ function copyForCheck() {
     'js/rng.js',
     // The radiation packs' checks run the kernel they are measured with.
     'js/kernels/radiation',
+    // The galactic packs' checks run the galactic kernel.
+    'js/kernels/galactic',
     'js/data/radiation',
     // The Sky Lab's star pack checks its sidecar, and the colours it derives run the radiation kernel.
     'js/data/sky',

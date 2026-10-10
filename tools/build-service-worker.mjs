@@ -163,6 +163,9 @@ const OBSERVATORY_ONLY = new Set([
   'js/data/observations/sdssNgc2420Photometry.js',
   'js/data/observations/sdssNgc2420Segue.js',
   'js/data/observations/mistSdssIsochrones.js',
+  'js/data/observations/gaiaSolarNeighbourhood.js',
+  'js/data/observations/gaiaNgc2420.js',
+  'js/data/observations/milkyWayRotationCurve.js',
   // The radiation kernel's data (Roadmap II Prompt 82): loaded on demand by
   // js/kernels/radiation/packs.js, and by no page's start-up.
   'js/data/radiation/bandpasses.js',

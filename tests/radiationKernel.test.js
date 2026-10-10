@@ -804,14 +804,19 @@ describe('Gaia G, G_BP and G_RP (radiation-gaia-bandpasses)', () => {
     expect(GAIA_PACK.id).toBe('radiation-gaia-bandpasses');
   });
 
-  test('licence: no other pack is under a non-commercial status, and the bandpass pack does not hold Gaia', () => {
+  test('licence: no pack but the three Gaia ones is under a non-commercial status, and the bandpass pack does not hold Gaia', () => {
     const dir2 = path.join(ROOT, 'data-packs');
     const nc = readdirSync(dir2)
       .filter(f => f.endsWith('.json'))
       .map(f => JSON.parse(readFileSync(path.join(dir2, f), 'utf8')))
       .filter(m => m.license?.status === 'cc-by-nc-3.0-igo')
       .map(m => m.id);
-    expect(nc).toEqual(['radiation-gaia-bandpasses']);
+    // D-GAIA-01 (P92): the two Gaia samples are the only other NC packs.
+    expect(nc.sort()).toEqual([
+      'gaia-dr3-ngc2420',
+      'gaia-dr3-solar-neighbourhood',
+      'radiation-gaia-bandpasses',
+    ]);
     expect(BANDS.map(b => b.id)).not.toContain('G_BP');
     expect(BANDS.map(b => b.id)).not.toContain('G');
   });
