@@ -18,6 +18,7 @@
 //     registrations, the precache, and every word in both languages.
 // =============================================================================
 
+import './galacticFetch.js';
 import { describe, test, expect, beforeAll } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 
