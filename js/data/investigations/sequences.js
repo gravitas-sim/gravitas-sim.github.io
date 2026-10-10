@@ -112,6 +112,34 @@ export const CALCULATIONS = ['none', 'some', 'lots'];
  */
 export const SEQUENCES = [
   {
+    id: 'the-sky',
+    titleId: 'inv.seq.sky.title',
+    blurbId: 'inv.seq.sky.blurb',
+    lessons: [
+      { id: 'the-turning-sky', whyId: 'inv.seq.sky.the-turning-sky' },
+      {
+        id: 'the-sun-through-the-year',
+        whyId: 'inv.seq.sky.the-sun-through-the-year',
+        needs: ['the-turning-sky'],
+      },
+      {
+        id: 'phases-and-eclipses',
+        whyId: 'inv.seq.sky.phases-and-eclipses',
+        needs: ['the-sun-through-the-year'],
+      },
+      {
+        id: 'wanderers-on-the-sky',
+        whyId: 'inv.seq.sky.wanderers-on-the-sky',
+        needs: ['the-turning-sky'],
+      },
+      {
+        id: 'plan-a-night',
+        whyId: 'inv.seq.sky.plan-a-night',
+        needs: ['the-turning-sky', 'the-sun-through-the-year'],
+      },
+    ],
+  },
+  {
     id: 'orbital-mechanics',
     titleId: 'inv.seq.orbits.title',
     blurbId: 'inv.seq.orbits.blurb',

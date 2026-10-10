@@ -57,6 +57,11 @@
           "twelve-nights",
           "power-law-gravity",
           "color-and-temperature",
+          "the-turning-sky",
+          "the-sun-through-the-year",
+          "phases-and-eclipses",
+          "wanderers-on-the-sky",
+          "plan-a-night",
           "lines-and-motion",
           "what-a-spectrum-is-made-of"
         ]
@@ -265,6 +270,11 @@
                   "twelve-nights",
                   "power-law-gravity",
                   "color-and-temperature",
+                  "the-turning-sky",
+                  "the-sun-through-the-year",
+                  "phases-and-eclipses",
+                  "wanderers-on-the-sky",
+                  "plan-a-night",
                   "lines-and-motion",
                   "what-a-spectrum-is-made-of"
                 ]
@@ -1407,6 +1417,12 @@
             "blackbody",
             "spectrum-viewer",
             "kirchhoff",
+            "sky-turning",
+            "sky-seasons",
+            "sky-phases",
+            "sky-eclipses",
+            "sky-wanderers",
+            "sky-plan",
             "compare-transit",
             "gw-events"
           ]
