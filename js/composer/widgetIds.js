@@ -79,6 +79,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   ],
   gw: ['gw-lab', 'gw-real'],
   light: ['blackbody'],
+  compare: ['compare-transit', 'compare-rv'],
   gwEvents: ['gw-events'],
 });
 

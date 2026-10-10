@@ -1401,6 +1401,8 @@
             "gw-lab",
             "gw-real",
             "blackbody",
+            "compare-transit",
+            "compare-rv",
             "gw-events"
           ]
         }

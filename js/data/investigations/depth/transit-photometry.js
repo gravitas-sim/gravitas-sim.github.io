@@ -186,5 +186,32 @@ export default {
       because:
         'The combined uncertainty is √(0.0004² + 0.0007²) = 0.0008, and the difference is 0.0004, half of that. A model and a measurement agree when they differ by no more than their uncertainties allow, and these do. The test fails to find a problem; it does not prove the model right.',
     },
+    {
+      sid: 'lay-the-model-over-the-data',
+      after: 'does-the-model-agree',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'choice',
+      title: 'Lay the model over the data',
+      tool: { id: 'compare-transit', case: 'hd209458-larger-planet' },
+      body: `The instrument lays the HD 209458 system, as the records give
+ it, over a light curve with its error bars. Read the rows under it:
+ where is the model above the data, and by how much?
+ \n\nNothing is fitted. Each slider changes one value the model was
+ given, and the overlay and the chi-square follow. The question is
+ which one value, moved alone, brings the residuals back to the
+ noise: the reduced chi-square near 1 and no region where the model
+ misses.`,
+      prompt: 'Which element, moved alone, removes the misfit?',
+      options: [
+        'The planet’s radius, made larger',
+        'The period, made longer',
+        'The inclination, made smaller',
+        'The epoch, shifted later',
+      ],
+      answer: 0,
+      because:
+        'The model is above the data only inside the transit, so the dip is too shallow, not misplaced: a larger planet blocks more light, and the depth goes as the radius ratio squared. A wrong period or epoch would leave residuals of both signs at the ingress and egress, and a lower inclination would make the dip shallower still. The reduced chi-square returning to about 1 is the check, and it says the model is consistent with the data, not that the radius is right.',
+    },
   ],
 };

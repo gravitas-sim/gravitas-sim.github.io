@@ -14,6 +14,7 @@ import { describe, test, expect } from '@jest/globals';
 import { runForward } from '../js/forward/index.js';
 import {
   ELEMENTS,
+  elementRange,
   periodFromSemiMajor,
   semiMajorFromPeriod,
   stateFromBuilder,
@@ -35,6 +36,9 @@ import {
 } from '../js/systemSpec.js';
 import { elementsFromBodies } from '../js/forward/index.js';
 import { MODELS } from '../js/inference/models.js';
+import { CASES, caseObservation, truthState } from '../js/compare/cases.js';
+import { COMPARE_WIDGETS } from '../js/compareWidgets.js';
+import { LAZY_FAMILIES } from '../js/widgets.js';
 
 // structuredClone is not in the Jest VM's globals.
 const clone = o => JSON.parse(JSON.stringify(o));
@@ -414,5 +418,65 @@ describe('refusals and limits', () => {
     expect(s.bins[0].sense).toBe('over');
     expect(s.bins.at(-1).sense).toBe('under');
     expect(s.longestRun).toBe(15);
+  });
+});
+
+describe('the lesson cases and the docked instruments', () => {
+  const all = Object.entries(CASES);
+  test.each(all)('%s: only the stated element mends the misfit', (id, c) => {
+    const obs = caseObservation(id);
+    const start = stateFromExoplanet(c.system);
+    const run = state =>
+      compareModel(obs, { kind: 'system', model: c.model, state });
+    const wrong = run(start);
+    expect(wrong.pattern.structured).toBe(true);
+    expect(wrong.reducedChi2).toBeGreaterThan(5);
+    const fixed = run(truthState(c));
+    const n = fixed.n;
+    expect(Math.abs(fixed.reducedChi2 - 1)).toBeLessThan(5 * Math.sqrt(2 / n));
+    expect(fixed.pattern.structured).toBe(false);
+    // No other single element, swept across its slider, does as well.
+    const others = ['periodDays', 'epochDays', 'inclinationDeg', 'e'].filter(
+      e => e !== c.truth.element
+    );
+    for (const el of others) {
+      const r = elementRange(start, el);
+      let best = Infinity;
+      for (let k = 0; k <= 40; k++) {
+        const v = r.min + ((r.max - r.min) * k) / 40;
+        try {
+          best = Math.min(best, run(withElement(start, el, v)).reducedChi2);
+        } catch {
+          /* an end of the slider the model refuses is not a candidate */
+        }
+      }
+      expect([id, el, best > 3 * fixed.reducedChi2]).toEqual([id, el, true]);
+    }
+  });
+  test('the widgets read their declared case, say what the model misses, and are registered', () => {
+    expect(COMPARE_WIDGETS.map(w => w.id)).toEqual([
+      'compare-transit',
+      'compare-rv',
+    ]);
+    for (const w of COMPARE_WIDGETS) {
+      const v = Object.fromEntries(w.controls.map(k => [k.id, k.value]));
+      const rows = w.readout(v, undefined, { case: w.defaultCase });
+      const text = Object.fromEntries(rows.map(r => [r.label, r.value]));
+      expect(Object.values(text).join(' ')).toMatch(
+        /the model is (above|below) the data/
+      );
+      const truthEl = CASES[w.defaultCase].truth.element;
+      const fixed = {
+        ...v,
+        [truthEl]: v[truthEl] * CASES[w.defaultCase].truth.factor,
+      };
+      const after = w.readout(fixed, undefined, { case: w.defaultCase });
+      expect(after.map(r => r.value).join(' ')).toContain('nowhere');
+      expect(after.map(r => r.value).join(' ')).toContain(truthEl);
+    }
+    expect(LAZY_FAMILIES.compare.ids).toEqual([
+      'compare-transit',
+      'compare-rv',
+    ]);
   });
 });
