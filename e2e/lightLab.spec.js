@@ -100,3 +100,85 @@ test.describe('the blackbody explorer', () => {
     expect(overflow).toBe(false);
   });
 });
+
+// -----------------------------------------------------------------------------
+// The spectrum viewer and "Lines and Motion"
+// -----------------------------------------------------------------------------
+
+const MOTION = 'lines-and-motion';
+
+async function toMeasure(page, app, locale) {
+  await openInvestigation(page, app, MOTION);
+  if (locale) {
+    await page.evaluate(async l => {
+      const i18n = await import('/js/i18n/index.js');
+      await i18n.setLocale(l, { persist: true });
+    }, locale);
+    await page.reload();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await expect(page.locator('.inv-step-title')).not.toBeEmpty();
+    await page.waitForFunction(() => window.splashScreenEnded === true);
+  }
+  const plan = await lessonPlan(page, MOTION);
+  await walkToSid(page, plan, 'measure-one-shift');
+  return plan;
+}
+
+test.describe('the spectrum viewer', () => {
+  for (const locale of ['en', 'es']) {
+    test(`lists the line it measured and passes axe (${locale})`, async ({
+      page,
+      app,
+    }) => {
+      test.slow();
+      await toMeasure(page, app, locale === 'es' ? 'es' : null);
+      const { control } = controlOf(declared(MOTION));
+      const readout = page.locator('#investigationToolReadout');
+      await expect(readout).toContainText(/km\/s/, { useInnerText: true });
+
+      const painted = await page.evaluate(() => {
+        const c = document.getElementById('investigationToolCanvas');
+        const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+        let n = 0;
+        for (let i = 3; i < d.length; i += 4) if (d[i] > 0) n++;
+        return n;
+      });
+      expect(painted).toBeGreaterThan(500);
+
+      // Star 1 recedes and star 2 approaches: the readout's sign says which.
+      const at = {};
+      for (const src of [4, 5]) {
+        const { after } = await setControl(page, control, src);
+        at[src] = reading(after, /velocidad|velocity/i);
+      }
+      expect(at[4]).toBeGreaterThan(0);
+      expect(at[5]).toBeLessThan(0);
+
+      const results = await new AxeBuilder({ page })
+        .include('#investigationTool')
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+        .analyze();
+      expect(
+        results.violations.map(v => `${v.id}: ${v.nodes[0]?.target}`)
+      ).toEqual([]);
+
+      if (locale === 'es') {
+        await expect(page.locator('.inv-step-title')).toHaveText(
+          'Mide dos corrimientos'
+        );
+      }
+    });
+  }
+
+  test('fits a phone', async ({ page, app }) => {
+    test.slow();
+    await page.setViewportSize({ width: 390, height: 780 });
+    await toMeasure(page, app, null);
+    const box = await page.locator('#investigationToolCanvas').boundingBox();
+    expect(box.width).toBeLessThanOrEqual(390);
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > window.innerWidth + 1
+    );
+    expect(overflow).toBe(false);
+  });
+});

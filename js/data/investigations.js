@@ -73,6 +73,7 @@ import A_UNIVERSE_OF_STARS from './investigations/a-universe-of-stars.js';
 import LIVES_OF_STARS from './investigations/lives-of-stars.js';
 import TWELVE_NIGHTS from './investigations/twelve-nights.js';
 import COLOR_AND_TEMPERATURE from './investigations/color-and-temperature.js';
+import LINES_AND_MOTION from './investigations/lines-and-motion.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 
@@ -120,6 +121,7 @@ export const INVESTIGATIONS = [
   // the thing this one takes apart, so it cannot come before them.
   POWER_LAW,
   COLOR_AND_TEMPERATURE,
+  LINES_AND_MOTION,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

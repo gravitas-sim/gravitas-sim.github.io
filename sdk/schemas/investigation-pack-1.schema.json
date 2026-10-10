@@ -56,7 +56,8 @@
           "lives-of-stars",
           "twelve-nights",
           "power-law-gravity",
-          "color-and-temperature"
+          "color-and-temperature",
+          "lines-and-motion"
         ]
       }
     },
@@ -262,7 +263,8 @@
                   "lives-of-stars",
                   "twelve-nights",
                   "power-law-gravity",
-                  "color-and-temperature"
+                  "color-and-temperature",
+                  "lines-and-motion"
                 ]
               }
             }
@@ -1401,6 +1403,7 @@
             "gw-lab",
             "gw-real",
             "blackbody",
+            "spectrum-viewer",
             "gw-events"
           ]
         }

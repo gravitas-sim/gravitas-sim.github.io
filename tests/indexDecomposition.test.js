@@ -61,7 +61,7 @@ const idsIn = html => [...html.matchAll(/\sid="([^"]+)"/g)].map(m => m[1]);
  */
 // 104 KB, and 256 bytes more for the Sky Lab's link in the stamped navigation
 // (D-SKY-03): the link measured 103 bytes over the old ceiling.
-const INDEX_CEILING = 104 * 1024 + 256;
+const INDEX_CEILING = Math.ceil(104.2 * 1024);
 
 describe('index.html', () => {
   const html = indexHtml();

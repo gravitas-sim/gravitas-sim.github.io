@@ -270,4 +270,14 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'lines-and-motion': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['color-and-temperature'],
+    textbook: {
+      chapter: 5,
+      section: '5.4',
+    },
+    courseLevel: 'survey',
+  },
 };

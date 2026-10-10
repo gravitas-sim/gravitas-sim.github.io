@@ -126,6 +126,7 @@ const LOADERS = {
   'lives-of-stars': () => import('./lives-of-stars.js'),
   'twelve-nights': () => import('./twelve-nights.js'),
   'color-and-temperature': () => import('./color-and-temperature.js'),
+  'lines-and-motion': () => import('./lines-and-motion.js'),
 };
 
 /**
@@ -166,6 +167,7 @@ const TRANSLATIONS = {
     'lives-of-stars': () => import('./es/lives-of-stars.js'),
     'twelve-nights': () => import('./es/twelve-nights.js'),
     'color-and-temperature': () => import('./es/color-and-temperature.js'),
+    'lines-and-motion': () => import('./es/lines-and-motion.js'),
   },
 };
 
