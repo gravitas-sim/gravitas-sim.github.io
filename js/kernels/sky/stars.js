@@ -14,13 +14,7 @@
 const DEG = Math.PI / 180;
 const ARCSEC = DEG / 3600;
 
-/** Unit vector of an equatorial direction, degrees. */
-export const unitVector = (raDeg, decDeg) => {
-  const a = raDeg * DEG;
-  const d = decDeg * DEG;
-  const c = Math.cos(d);
-  return [c * Math.cos(a), c * Math.sin(a), Math.sin(d)];
-};
+import { unitVector } from './coords.js';
 
 /**
  * One row of the sidecar as a star, with its J2000 unit vector `p` and its

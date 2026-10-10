@@ -272,7 +272,7 @@ def thin(o):
     return o
 
 def rnd(x):
-    if isinstance(x, float): return float('%.10g' % x)
+    if isinstance(x, float): return float('%.15g' % x)
     if isinstance(x, list): return [rnd(i) for i in x]
     if isinstance(x, dict): return {k: rnd(v) for k, v in x.items()}
     return x

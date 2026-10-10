@@ -12,10 +12,15 @@
 
 import { airmass } from '../../observingWindow.js';
 import { ttFromUt, gastDeg, wrap360 } from './time.js';
-import { toHorizontal, makeFastFrame, refractionFromTrue } from './coords.js';
+import {
+  toHorizontal,
+  makeFastFrame,
+  refractionFromTrue,
+  unitVector,
+} from './coords.js';
 import { apparentSun, topocentricMoon, phase } from './solar.js';
 import { geocentricEquatorial } from './planets.js';
-import { starAtEpoch, unitVector } from './stars.js';
+import { starAtEpoch } from './stars.js';
 
 /** The planets the Sky Lab draws, in order. Saturn carries its 0.2 degree tolerance. */
 export const PLANET_IDS = ['mercury', 'venus', 'mars', 'jupiter', 'saturn'];

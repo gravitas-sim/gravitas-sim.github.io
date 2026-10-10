@@ -11,10 +11,9 @@
 // =============================================================================
 
 import { ttFromUt, gastDeg, wrap360 } from './time.js';
-import { toHorizontal, makeFastFrame } from './coords.js';
+import { toHorizontal, makeFastFrame, unitVector } from './coords.js';
 import { apparentSun, topocentricMoon, syzygyTime } from './solar.js';
 import { geocentricEquatorial } from './planets.js';
-import { unitVector } from './stars.js';
 
 const DEG = Math.PI / 180;
 const wrap180 = d => wrap360(d + 180) - 180;
