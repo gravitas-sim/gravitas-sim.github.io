@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 26 investigations and 705 steps: 655 steps
+Across 27 investigations and 715 steps: 665 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 271 show a prescribed model result, 105 draw
-on a stored dataset, 150 put a self-contained panel beside the text,
-118 keep something, and 30 are prose.
-Of 90 prediction loops, 90 are returned to,
-90 produce a measurement before they are answered, and
+running integration, 281 show a prescribed model result, 106 draw
+on a stored dataset, 160 put a self-contained panel beside the text,
+119 keep something, and 30 are prose.
+Of 91 prediction loops, 91 are returned to,
+91 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-90 hold their marking until the experiment settles them.
+91 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -384,4 +384,18 @@ Of 90 prediction loops, 90 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:spectrum-viewer`, control spectrum-viewer/src, measures the Doppler velocity of two synthetic stars from their H-alpha lines, one receding and one approaching, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## What a Spectrum Is Made Of (`what-a-spectrum-is-made-of`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 1 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** source, cloud.
+- **Instruments:** kirchhoff, spectrum-viewer.
+- **Stored data:** Four observed stellar spectra, SDSS DR18 (observation).
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-cloud → measure-two-clouds, what-flipped-it, cloud-alone, same-temperature, why-cool-absorbs, the-sun-is-the-cloud, flash-spectrum, what-you-worked-out → measure-two-clouds.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:kirchhoff`, control kirchhoff/Tc, measures the brightness at the H-alpha center against the source's, with the same cloud cooler than the source (a dark line) and hotter (a bright line), evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

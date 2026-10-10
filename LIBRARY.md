@@ -80,7 +80,7 @@ Prompt 76 starts from.
 <!-- library:coverage -->
 | Kind | Entries | summary | level | duration | mathematics | calculation | subjects | prerequisites | textbook | courseLevel | thumbnail |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| investigation | 43 | all | all | all | all | all | all | all | all | all | 26 |
+| investigation | 44 | all | all | all | all | all | all | all | all | all | 27 |
 | activity | 6 | all | all | all | all | all | all | all | all | all | all |
 | scenario | 59 | all | all | all | all | all | all | all | **none** | **none** | all |
 | dataset | 13 | all | all | all | all | all | all | all | **none** | **none** | **none** |

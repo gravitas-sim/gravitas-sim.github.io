@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1559,
+    limit: 1573.8,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -574,7 +574,12 @@ const BUDGETS = [
       'exactly the room the 4300 KB raw ceiling gave: 1513.0 x 4300 / 4174.0 = ' +
       '1558.7, rounded up to 1559. The raw total is still printed beside it, ' +
       'and is still what the README quotes, because raw sizes are the same on ' +
-      'every Node.',
+      'every Node.' +
+      '\n\nRaised from 1559 to 1573.8 KB gzipped for What a Spectrum Is Made Of ' +
+      'and the Kirchhoff demonstrator (Prompt 83, part 3), measured at ' +
+      '1,611,524 bytes (1573.75 KB; 4330.9 KB raw) after merging v2. Under ' +
+      "the owner's standing size-budget approval (CLAUDE.md, 2026-10-10); " +
+      'D-BUDGET-04. The initial download is untouched (789.0 of 830 KB).',
   },
 ];
 

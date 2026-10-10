@@ -31,6 +31,10 @@ import {
   SYNTH_STARS,
   VIEW_LINES,
   measureViewLine,
+  kirchhoffFacts,
+  planckRatio,
+  KIRCHHOFF_LINES,
+  boltzmannRatio21,
 } from '../../js/light/model.js';
 
 const band = id => decodeBand(BANDS.find(b => b.id === id));
@@ -111,6 +115,16 @@ export const MOTION_VALUES = {
   aCatalogue: () => SDSS.decodeSpectrum('a').z * 299792.458,
 };
 
+/** What the Kirchhoff demonstrator reads at H-alpha for a source seen through a cloud. */
+export const kirchhoff = (Ts, Tc, tau0 = 3) =>
+  kirchhoffFacts({ Ts, Tc, tau0, mode: 'both' });
+
+/** What What a Spectrum Is Made Of asks for in its core measurement, percent. */
+export const KIRCHHOFF_CORE = {
+  cool: () => kirchhoff(6000, 4000).centre * 100,
+  hot: () => kirchhoff(6000, 8000).centre * 100,
+};
+
 export const LIGHT_MODELS = {
   'color-and-temperature/peak-of-4000': {
     via: 'js/kernels/radiation planck.js wienPeakLambda at 4,000 K, in nm',
@@ -136,4 +150,14 @@ export const LIGHT_DEPTH_VALUES = {
   radius: () =>
     Math.sqrt((1e5 * L_SUN_W) / (4 * Math.PI * SIGMA_SB)) / 3600 ** 2 / R_SUN_M,
   gMinusR4400: () => gMinusR(4400),
+  // What a Spectrum Is Made Of
+  planckFloor: () => planckRatio(KIRCHHOFF_LINES[0].rest, 4000, 8000) * 100,
+  equivalentWidth: () => kirchhoff(6000, 4000).m.ew,
+  boltzmann: () => boltzmannRatio21(10000) / boltzmannRatio21(6000),
+  patch: Tc => {
+    const f = kirchhoff(6000, Tc);
+    return f.m.ew / (1 - f.ratio);
+  },
+  balmerRatio: () =>
+    viewerMeasurement('a', 'h-alpha').ew / viewerMeasurement('g', 'h-alpha').ew,
 };

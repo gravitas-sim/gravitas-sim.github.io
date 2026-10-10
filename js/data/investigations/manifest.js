@@ -325,4 +325,16 @@ export const MANIFEST = [
     gradedCount: 9,
     objectiveCount: 5,
   },
+  {
+    id: 'what-a-spectrum-is-made-of',
+    title: 'What a Spectrum Is Made Of',
+    subtitle: 'Why one gas makes dark lines, bright lines, or none',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-a-spectrum-is-made-of.webp',
+    depths: 3,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 5,
+  },
 ];

@@ -36,6 +36,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'transit-photometry': 'engine',
   'twelve-nights': 'model',
   'weighing-stars': 'engine',
+  'what-a-spectrum-is-made-of': 'model',
   'what-is-a-gravitational-wave': 'model',
   'when-orbits-lock': 'engine',
 });
