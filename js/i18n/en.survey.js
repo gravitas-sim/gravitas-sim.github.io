@@ -71,7 +71,7 @@ export const EN_SURVEY = {
   'svyW.k.control.view': 'Picture',
   'svyW.k.view.lf': 'Luminosity function: truth, raw, corrected',
   'svyW.k.view.curve': 'Completeness against apparent magnitude',
-  'svyW.k.preset.sharp': 'Sharp, complete to the limit',
+  'svyW.k.preset.sharp': 'A sharp edge at magnitude 20',
   'svyW.k.preset.fade': 'Fading before the limit',
   'svyW.k.preset.bad': 'A poor survey',
   'svyW.k.axisM': 'absolute magnitude',

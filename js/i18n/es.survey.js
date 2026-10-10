@@ -72,7 +72,7 @@ export const ES_SURVEY = {
   'svyW.k.control.view': 'Imagen',
   'svyW.k.view.lf': 'Función de luminosidad: verdad, bruta, corregida',
   'svyW.k.view.curve': 'Completitud frente a magnitud aparente',
-  'svyW.k.preset.sharp': 'Nítida, completa hasta el límite',
+  'svyW.k.preset.sharp': 'Un borde nítido en la magnitud 20',
   'svyW.k.preset.fade': 'Se desvanece antes del límite',
   'svyW.k.preset.bad': 'Un sondeo pobre',
   'svyW.k.axisM': 'magnitud absoluta',
