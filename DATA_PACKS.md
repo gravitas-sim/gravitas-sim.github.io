@@ -28,6 +28,9 @@ and the model page their badges, all generated from the manifests.
 | `radiation-extinction` | the Cardelli, Clayton & Mathis 1989 law | compilation | `js/data/radiation/extinction.js` | `packs:*` |
 | `radiation-bolometric` | Flower 1996 `BC_V(Teff)` as Torres 2010 corrected it | compilation | `js/data/radiation/bolometric.js` | `packs:*` |
 | `radiation-gaia-bandpasses` | Gaia (E)DR3 G, G_BP and G_RP passbands and zero points; **non-commercial** | compilation | `js/data/radiation/gaiaBandpasses.js` | `packs:*` |
+| `gaia-dr3-solar-neighbourhood` | 1,570 Gaia DR3 stars within 1 kpc with radial velocities; **non-commercial** | observed | `js/data/observations/gaiaSolarNeighbourhood.js` | `packs:*` |
+| `gaia-dr3-ngc2420` | Gaia DR3 astrometry of the NGC 2420 field; **non-commercial** | observed | `js/data/observations/gaiaNgc2420.js` | `packs:*` |
+| `milky-way-rotation-curve` | the Milky Way's circular-speed curve, three (R0, V0) sets | compilation | `js/data/observations/milkyWayRotationCurve.js` | `packs:*` |
 
 The last five are the radiation kernel's (`RADIATION.md`). They are `dataType`
 `model-grid` and `catalog` for want of a type for a response function or a law,
