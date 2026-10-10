@@ -274,6 +274,13 @@ export const LAZY_FAMILIES = Object.freeze({
     ['solar-motion', 'rotating-disk', 'cluster-members'],
     'galacticReady'
   ),
+  // Synthetic stars, observed by a model survey: no data to wait for.
+  survey: familyEntry(
+    () => import('./surveyWidgets.js'),
+    './surveyWidgets.js',
+    'SURVEY_WIDGETS',
+    ['survey-counts', 'malmquist', 'completeness-lf']
+  ),
   // Its stars arrive behind a second import (the Sky Lab's sidecar).
   sky: familyEntry(
     () => import('./skyWidgets.js'),

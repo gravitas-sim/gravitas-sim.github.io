@@ -101,6 +101,12 @@ const DEEPER = {
     import('./data/investigations/depth/einstein-rings-and-arcs.js'),
   'a-lens-passing-by': () =>
     import('./data/investigations/depth/a-lens-passing-by.js'),
+  'who-gets-counted': () =>
+    import('./data/investigations/depth/who-gets-counted.js'),
+  'why-the-bright-ones-win': () =>
+    import('./data/investigations/depth/why-the-bright-ones-win.js'),
+  'the-completeness-curve': () =>
+    import('./data/investigations/depth/the-completeness-curve.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]

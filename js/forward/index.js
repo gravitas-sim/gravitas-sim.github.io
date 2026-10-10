@@ -14,6 +14,7 @@ import * as spectrum from './models/spectrum.js';
 import * as catalogue from './models/catalogue.js';
 import * as image from './models/image.js';
 import * as microlensing from './models/microlensing.js';
+import * as survey from './models/survey.js';
 
 export const FORWARD_MODELS = Object.freeze({
   [transit.ID]: transit,
@@ -24,6 +25,7 @@ export const FORWARD_MODELS = Object.freeze({
   [catalogue.ID]: catalogue,
   [image.ID]: image,
   [microlensing.ID]: microlensing,
+  [survey.ID]: survey,
 });
 
 /**

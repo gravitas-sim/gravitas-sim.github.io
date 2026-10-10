@@ -194,6 +194,28 @@
    "mutates": [],
    "datasets": []
   },
+  "completeness-lf": {
+   "live": false,
+   "controls": [
+    "limit",
+    "m50",
+    "width",
+    "view"
+   ],
+   "presets": 3,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": [
+    {
+     "name": "MIST v1.2 evolutionary tracks",
+     "origin": "computed-grid",
+     "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/survey/model.js",
+     "binding": "makeUniverse"
+    }
+   ]
+  },
   "depth-size": {
    "live": false,
    "controls": [
@@ -522,50 +544,6 @@
    "mutates": [],
    "datasets": []
   },
-  "lens-passing": {
-   "live": false,
-   "controls": [
-    "logM",
-    "dl",
-    "v",
-    "u0",
-    "fs",
-    "rho",
-    "data"
-   ],
-   "presets": 4,
-   "buttons": [],
-   "engineReads": [],
-   "mutates": [],
-   "datasets": []
-  },
-  "lens-plane": {
-   "live": false,
-   "controls": [
-    "kind",
-    "logM",
-    "logD",
-    "y",
-    "size"
-   ],
-   "presets": 4,
-   "buttons": [],
-   "engineReads": [],
-   "mutates": [],
-   "datasets": []
-  },
-  "light-bending": {
-   "live": false,
-   "controls": [
-    "logM",
-    "logB"
-   ],
-   "presets": 4,
-   "buttons": [],
-   "engineReads": [],
-   "mutates": [],
-   "datasets": []
-  },
   "live-energy": {
    "live": true,
    "controls": [],
@@ -578,6 +556,27 @@
    ],
    "mutates": [],
    "datasets": []
+  },
+  "malmquist": {
+   "live": false,
+   "controls": [
+    "limit",
+    "lf",
+    "snr"
+   ],
+   "presets": 3,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": [
+    {
+     "name": "MIST v1.2 evolutionary tracks",
+     "origin": "computed-grid",
+     "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/survey/model.js",
+     "binding": "makeUniverse"
+    }
+   ]
   },
   "method-comparison": {
    "live": false,
@@ -1125,6 +1124,26 @@
      "dataset": "js/data/stellar/mistTracks.js",
      "via": "js/stellarLab.js",
      "binding": "createLab"
+    }
+   ]
+  },
+  "survey-counts": {
+   "live": false,
+   "controls": [
+    "limit",
+    "view"
+   ],
+   "presets": 3,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": [
+    {
+     "name": "MIST v1.2 evolutionary tracks",
+     "origin": "computed-grid",
+     "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/survey/model.js",
+     "binding": "makeUniverse"
     }
    ]
   },
@@ -60701,18 +60720,18 @@
    }
   },
   {
-   "id": "bending-light",
-   "title": "Bending Light",
+   "id": "who-gets-counted",
+   "title": "Who Gets Counted",
    "lock": {
     "placement": true,
     "inspector": true
    },
    "steps": [
     {
-     "sid": "a-mass-turns-light",
+     "sid": "a-survey-counts-what-it-sees",
      "index": 1,
      "type": "read",
-     "title": "A mass turns a ray of light",
+     "title": "A census of the sky",
      "declares": {
       "stage": {
        "objects": 2,
@@ -60723,14 +60742,15 @@
       },
       "bound": [],
       "roles": [
-       "lens",
-       "source"
+       "bright",
+       "dwarf"
       ]
      },
      "kinds": [
       "scene-declared",
       "model-result",
-      "panel-diagram"
+      "panel-diagram",
+      "imported-data"
      ],
      "actions": [
       "move-an-instrument-control",
@@ -60769,7 +60789,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "light-bending",
+      "id": "survey-counts",
       "capture": false
      },
      "evidence": [],
@@ -60783,10 +60803,10 @@
      ]
     },
     {
-     "sid": "the-suns-limb",
+     "sid": "predict-what-is-missed",
      "index": 2,
-     "type": "measure",
-     "title": "Light grazing the Sun",
+     "type": "predict",
+     "title": "What does a shallow survey miss?",
      "declares": {
       "stage": {
        "objects": 2,
@@ -60797,93 +60817,15 @@
       },
       "bound": [],
       "roles": [
-       "lens",
-       "source"
+       "bright",
+       "dwarf"
       ]
      },
      "kinds": [
       "scene-declared",
       "model-result",
       "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "light-bending",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "predict-the-far-ray",
-     "index": 3,
-     "type": "predict",
-     "title": "A ray a hundred times farther out",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
+      "imported-data"
      ],
      "actions": [
       "commit-a-prediction",
@@ -60891,7 +60833,7 @@
       "press-an-instrument-preset"
      ],
      "requires": [],
-     "reveal": "the-far-ray",
+     "reveal": "count-a-shallow-survey",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -60925,7 +60867,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "light-bending",
+      "id": "survey-counts",
       "capture": false
      },
      "evidence": [],
@@ -60938,10 +60880,90 @@
      ]
     },
     {
-     "sid": "the-far-ray",
+     "sid": "count-a-shallow-survey",
+     "index": 3,
+     "type": "measure",
+     "title": "Count a shallow survey",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "bright",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "survey-counts",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "count-a-deep-survey",
      "index": 4,
      "type": "measure",
-     "title": "Measure the far ray",
+     "title": "Go four magnitudes deeper",
      "declares": {
       "stage": {
        "objects": 2,
@@ -60952,14 +60974,15 @@
       },
       "bound": [],
       "roles": [
-       "lens",
-       "source"
+       "bright",
+       "dwarf"
       ]
      },
      "kinds": [
       "scene-declared",
       "model-result",
       "panel-diagram",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -61001,7 +61024,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "light-bending",
+      "id": "survey-counts",
       "capture": false
      },
      "evidence": [
@@ -61017,10 +61040,10 @@
      ]
     },
     {
-     "sid": "ten-times-the-mass",
+     "sid": "what-the-deep-survey-misses",
      "index": 5,
-     "type": "measure",
-     "title": "Ten times the mass",
+     "type": "question",
+     "title": "What is in the other half?",
      "declares": {
       "stage": {
        "objects": 2,
@@ -61031,93 +61054,15 @@
       },
       "bound": [],
       "roles": [
-       "lens",
-       "source"
+       "bright",
+       "dwarf"
       ]
      },
      "kinds": [
       "scene-declared",
       "model-result",
       "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "light-bending",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "what-1919-showed",
-     "index": 6,
-     "type": "question",
-     "title": "What the 1919 eclipse decided",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
+      "imported-data"
      ],
      "actions": [
       "choose-an-option",
@@ -61158,7 +61103,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "light-bending",
+      "id": "survey-counts",
       "capture": false
      },
      "evidence": [],
@@ -61171,605 +61116,10 @@
      ]
     },
     {
-     "sid": "where-the-formula-fails",
-     "index": 7,
-     "type": "measure",
-     "title": "Where the formula cannot be trusted",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "light-bending",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "what-you-worked-out",
-     "index": 8,
-     "type": "read",
-     "title": "What you worked out",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "read",
-      "actual": [
-       "experiment",
-       "measure"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "light-bending",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged"
-     ]
-    }
-   ],
-   "loops": [
-    {
-     "predict": "predict-the-far-ray",
-     "predictCollects": true,
-     "heldUntil": "the-far-ray",
-     "experiment": [
-      "the-far-ray",
-      "ten-times-the-mass",
-      "what-1919-showed",
-      "where-the-formula-fails",
-      "what-you-worked-out"
-     ],
-     "measure": [
-      "the-far-ray",
-      "ten-times-the-mass",
-      "what-1919-showed",
-      "where-the-formula-fails",
-      "what-you-worked-out"
-     ],
-     "evidence": [
-      "the-far-ray",
-      "ten-times-the-mass",
-      "where-the-formula-fails"
-     ],
-     "interpret": "the-far-ray",
-     "measuredBeforeAnswering": true,
-     "explained": false,
-     "answeredByTheExperiment": true,
-     "closed": true,
-     "complete": true
-    }
-   ],
-   "totals": {
-    "steps": 8,
-    "declared": 8,
-    "student": 0,
-    "engine": 0,
-    "model": 8,
-    "data": 0,
-    "diagram": 8,
-    "evidence": 4,
-    "declaredButInert": 8,
-    "prose": 0,
-    "mismatched": 0,
-    "rebuilds": 0
-   }
-  },
-  {
-   "id": "einstein-rings-and-arcs",
-   "title": "Einstein Rings and Arcs",
-   "lock": {
-    "placement": true,
-    "inspector": true
-   },
-   "steps": [
-    {
-     "sid": "a-lens-makes-a-ring",
-     "index": 1,
-     "type": "read",
-     "title": "A ring made of a lens",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "read",
-      "actual": [
-       "experiment",
-       "measure"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-plane",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "inherits the world already on screen",
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged"
-     ]
-    },
-    {
-     "sid": "predict-the-ring",
-     "index": 2,
-     "type": "predict",
-     "title": "How big is the ring of a star?",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "commit-a-prediction",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": "a-star-ring",
-     "asks": {
-      "choice": true,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "predict",
-      "actual": [
-       "predict",
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-plane",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged"
-     ]
-    },
-    {
-     "sid": "a-star-ring",
-     "index": 3,
-     "type": "measure",
-     "title": "The ring of a star",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-plane",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "a-galaxy-ring",
-     "index": 4,
-     "type": "measure",
-     "title": "The ring of a galaxy",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-plane",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "weigh-the-lens",
-     "index": 5,
-     "type": "measure",
-     "title": "Weigh a galaxy with its ring",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-plane",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "move-the-source",
+     "sid": "how-far-can-it-see",
      "index": 6,
      "type": "measure",
-     "title": "Move the source off to one side",
+     "title": "How far can a star be?",
      "declares": {
       "stage": {
        "objects": 2,
@@ -61780,14 +61130,15 @@
       },
       "bound": [],
       "roles": [
-       "lens",
-       "source"
+       "bright",
+       "dwarf"
       ]
      },
      "kinds": [
       "scene-declared",
       "model-result",
       "panel-diagram",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -61829,7 +61180,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "lens-plane",
+      "id": "survey-counts",
       "capture": false
      },
      "evidence": [
@@ -61845,10 +61196,10 @@
      ]
     },
     {
-     "sid": "an-isothermal-galaxy",
+     "sid": "the-average-star",
      "index": 7,
      "type": "measure",
-     "title": "A galaxy is not a point",
+     "title": "The average star, counted and real",
      "declares": {
       "stage": {
        "objects": 2,
@@ -61859,14 +61210,15 @@
       },
       "bound": [],
       "roles": [
-       "lens",
-       "source"
+       "bright",
+       "dwarf"
       ]
      },
      "kinds": [
       "scene-declared",
       "model-result",
       "panel-diagram",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -61908,7 +61260,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "lens-plane",
+      "id": "survey-counts",
       "capture": false
      },
      "evidence": [
@@ -61924,10 +61276,10 @@
      ]
     },
     {
-     "sid": "why-arcs",
+     "sid": "counts-by-magnitude",
      "index": 8,
      "type": "question",
-     "title": "Arcs, not rings",
+     "title": "Counting by magnitude",
      "declares": {
       "stage": {
        "objects": 2,
@@ -61938,14 +61290,15 @@
       },
       "bound": [],
       "roles": [
-       "lens",
-       "source"
+       "bright",
+       "dwarf"
       ]
      },
      "kinds": [
       "scene-declared",
       "model-result",
-      "panel-diagram"
+      "panel-diagram",
+      "imported-data"
      ],
      "actions": [
       "choose-an-option",
@@ -61986,7 +61339,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "lens-plane",
+      "id": "survey-counts",
       "capture": false
      },
      "evidence": [],
@@ -61999,611 +61352,10 @@
      ]
     },
     {
-     "sid": "what-you-worked-out",
+     "sid": "a-count-is-not-a-census",
      "index": 9,
-     "type": "read",
-     "title": "What you worked out",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "read",
-      "actual": [
-       "experiment",
-       "measure"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-plane",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged"
-     ]
-    }
-   ],
-   "loops": [
-    {
-     "predict": "predict-the-ring",
-     "predictCollects": true,
-     "heldUntil": "a-star-ring",
-     "experiment": [
-      "a-star-ring",
-      "a-galaxy-ring",
-      "weigh-the-lens",
-      "move-the-source",
-      "an-isothermal-galaxy",
-      "why-arcs",
-      "what-you-worked-out"
-     ],
-     "measure": [
-      "a-star-ring",
-      "a-galaxy-ring",
-      "weigh-the-lens",
-      "move-the-source",
-      "an-isothermal-galaxy",
-      "why-arcs",
-      "what-you-worked-out"
-     ],
-     "evidence": [
-      "a-star-ring",
-      "a-galaxy-ring",
-      "weigh-the-lens",
-      "move-the-source",
-      "an-isothermal-galaxy"
-     ],
-     "interpret": "a-star-ring",
-     "measuredBeforeAnswering": true,
-     "explained": false,
-     "answeredByTheExperiment": true,
-     "closed": true,
-     "complete": true
-    }
-   ],
-   "totals": {
-    "steps": 9,
-    "declared": 9,
-    "student": 0,
-    "engine": 0,
-    "model": 9,
-    "data": 0,
-    "diagram": 9,
-    "evidence": 5,
-    "declaredButInert": 9,
-    "prose": 0,
-    "mismatched": 0,
-    "rebuilds": 0
-   }
-  },
-  {
-   "id": "a-lens-passing-by",
-   "title": "A Lens Passing By",
-   "lock": {
-    "placement": true,
-    "inspector": true
-   },
-   "steps": [
-    {
-     "sid": "a-star-brightens",
-     "index": 1,
-     "type": "read",
-     "title": "A star brightens and fades",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "read",
-      "actual": [
-       "experiment",
-       "measure"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-passing",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "inherits the world already on screen",
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged"
-     ]
-    },
-    {
-     "sid": "predict-the-peak",
-     "index": 2,
-     "type": "predict",
-     "title": "How bright does it get?",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "commit-a-prediction",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": "the-peak",
-     "asks": {
-      "choice": true,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "predict",
-      "actual": [
-       "predict",
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-passing",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged"
-     ]
-    },
-    {
-     "sid": "the-peak",
-     "index": 3,
-     "type": "measure",
-     "title": "The peak",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-passing",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "how-long",
-     "index": 4,
-     "type": "measure",
-     "title": "How long it lasts",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-passing",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "a-faster-lens",
-     "index": 5,
-     "type": "measure",
-     "title": "Twice the speed",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-passing",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "one-curve-three-lenses",
-     "index": 6,
-     "type": "measure",
-     "title": "Other lenses, the same curve",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-passing",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "can-the-curve-weigh-the-lens",
-     "index": 7,
      "type": "question",
-     "title": "Can the light curve weigh the lens?",
+     "title": "A friend reads the catalog",
      "declares": {
       "stage": {
        "objects": 2,
@@ -62614,27 +61366,28 @@
       },
       "bound": [],
       "roles": [
-       "lens",
-       "source"
+       "bright",
+       "dwarf"
       ]
      },
      "kinds": [
       "scene-declared",
       "model-result",
-      "panel-diagram"
+      "panel-diagram",
+      "imported-data"
      ],
      "actions": [
-      "choose-an-option",
+      "answer-in-words",
       "move-an-instrument-control",
       "press-an-instrument-preset"
      ],
      "requires": [],
      "reveal": null,
      "asks": {
-      "choice": true,
+      "choice": false,
       "numeric": false,
-      "short": false,
-      "rubric": false,
+      "short": true,
+      "rubric": true,
       "validated": false
      },
      "worldRunning": "inherited",
@@ -62662,7 +61415,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "lens-passing",
+      "id": "survey-counts",
       "capture": false
      },
      "evidence": [],
@@ -62672,164 +61425,6 @@
      ],
      "recovery": [
       "wrong body: the object list names what the step staged"
-     ]
-    },
-    {
-     "sid": "blended-light",
-     "index": 8,
-     "type": "measure",
-     "title": "Light from other stars",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-passing",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "a-star-with-a-size",
-     "index": 9,
-     "type": "measure",
-     "title": "A star is not a point",
-     "declares": {
-      "stage": {
-       "objects": 2,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "lens",
-       "source"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "lens-passing",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
@@ -62847,14 +61442,15 @@
       },
       "bound": [],
       "roles": [
-       "lens",
-       "source"
+       "bright",
+       "dwarf"
       ]
      },
      "kinds": [
       "scene-declared",
       "model-result",
-      "panel-diagram"
+      "panel-diagram",
+      "imported-data"
      ],
      "actions": [
       "move-an-instrument-control",
@@ -62893,7 +61489,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "lens-passing",
+      "id": "survey-counts",
       "capture": false
      },
      "evidence": [],
@@ -62908,38 +61504,36 @@
    ],
    "loops": [
     {
-     "predict": "predict-the-peak",
+     "predict": "predict-what-is-missed",
      "predictCollects": true,
-     "heldUntil": "the-peak",
+     "heldUntil": "count-a-shallow-survey",
      "experiment": [
-      "the-peak",
-      "how-long",
-      "a-faster-lens",
-      "one-curve-three-lenses",
-      "can-the-curve-weigh-the-lens",
-      "blended-light",
-      "a-star-with-a-size",
+      "count-a-shallow-survey",
+      "count-a-deep-survey",
+      "what-the-deep-survey-misses",
+      "how-far-can-it-see",
+      "the-average-star",
+      "counts-by-magnitude",
+      "a-count-is-not-a-census",
       "what-you-worked-out"
      ],
      "measure": [
-      "the-peak",
-      "how-long",
-      "a-faster-lens",
-      "one-curve-three-lenses",
-      "can-the-curve-weigh-the-lens",
-      "blended-light",
-      "a-star-with-a-size",
+      "count-a-shallow-survey",
+      "count-a-deep-survey",
+      "what-the-deep-survey-misses",
+      "how-far-can-it-see",
+      "the-average-star",
+      "counts-by-magnitude",
+      "a-count-is-not-a-census",
       "what-you-worked-out"
      ],
      "evidence": [
-      "the-peak",
-      "how-long",
-      "a-faster-lens",
-      "one-curve-three-lenses",
-      "blended-light",
-      "a-star-with-a-size"
+      "count-a-shallow-survey",
+      "count-a-deep-survey",
+      "how-far-can-it-see",
+      "the-average-star"
      ],
-     "interpret": "the-peak",
+     "interpret": "count-a-shallow-survey",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -62953,9 +61547,1678 @@
     "student": 0,
     "engine": 0,
     "model": 10,
-    "data": 0,
+    "data": 10,
     "diagram": 10,
-    "evidence": 6,
+    "evidence": 4,
+    "declaredButInert": 10,
+    "prose": 0,
+    "mismatched": 0,
+    "rebuilds": 0
+   }
+  },
+  {
+   "id": "why-the-bright-ones-win",
+   "title": "Why the Bright Ones Win",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "the-same-survey-by-distance",
+     "index": 1,
+     "type": "read",
+     "title": "The same survey, by distance",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "near",
+       "far"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "malmquist",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "inherits the world already on screen",
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "predict-the-shells",
+     "index": 2,
+     "type": "predict",
+     "title": "Near and far",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "near",
+       "far"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "commit-a-prediction",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": "measure-the-shells",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "malmquist",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "measure-the-shells",
+     "index": 3,
+     "type": "measure",
+     "title": "Measure the bias in two shells",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "near",
+       "far"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "malmquist",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "why-it-grows",
+     "index": 4,
+     "type": "question",
+     "title": "Why does it grow?",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "near",
+       "far"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "malmquist",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "standard-candles",
+     "index": 5,
+     "type": "measure",
+     "title": "Standard candles with a scatter",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "near",
+       "far"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "malmquist",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "double-the-scatter",
+     "index": 6,
+     "type": "question",
+     "title": "Double the scatter",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "near",
+       "far"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "malmquist",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "a-second-bias",
+     "index": 7,
+     "type": "measure",
+     "title": "A second bias: trusting the good parallaxes",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "near",
+       "far"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "malmquist",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "raise-the-cut",
+     "index": 8,
+     "type": "question",
+     "title": "Raise the cut",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "near",
+       "far"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "malmquist",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "say-what-follows",
+     "index": 9,
+     "type": "question",
+     "title": "What follows",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "near",
+       "far"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "answer-in-words",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": true,
+      "rubric": true,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "malmquist",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 10,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "near",
+       "far"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "malmquist",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    }
+   ],
+   "loops": [
+    {
+     "predict": "predict-the-shells",
+     "predictCollects": true,
+     "heldUntil": "measure-the-shells",
+     "experiment": [
+      "measure-the-shells",
+      "why-it-grows",
+      "standard-candles",
+      "double-the-scatter",
+      "a-second-bias",
+      "raise-the-cut",
+      "say-what-follows",
+      "what-you-worked-out"
+     ],
+     "measure": [
+      "measure-the-shells",
+      "why-it-grows",
+      "standard-candles",
+      "double-the-scatter",
+      "a-second-bias",
+      "raise-the-cut",
+      "say-what-follows",
+      "what-you-worked-out"
+     ],
+     "evidence": [
+      "measure-the-shells",
+      "standard-candles",
+      "a-second-bias"
+     ],
+     "interpret": "measure-the-shells",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 10,
+    "declared": 10,
+    "student": 0,
+    "engine": 0,
+    "model": 10,
+    "data": 10,
+    "diagram": 10,
+    "evidence": 3,
+    "declaredButInert": 10,
+    "prose": 0,
+    "mismatched": 0,
+    "rebuilds": 0
+   }
+  },
+  {
+   "id": "the-completeness-curve",
+   "title": "The Completeness Curve",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "a-survey-that-fades",
+     "index": 1,
+     "type": "read",
+     "title": "A survey that fades out",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "sun",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "completeness-lf",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "inherits the world already on screen",
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "predict-the-raw-count",
+     "index": 2,
+     "type": "predict",
+     "title": "How much does a raw count lose?",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "sun",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "commit-a-prediction",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": "raw-against-truth",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "completeness-lf",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "raw-against-truth",
+     "index": 3,
+     "type": "measure",
+     "title": "Raw against truth, with a sharp edge",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "sun",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "completeness-lf",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "why-raw-is-low",
+     "index": 4,
+     "type": "question",
+     "title": "Why is the raw count low?",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "sun",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "completeness-lf",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "correct-the-fade",
+     "index": 5,
+     "type": "measure",
+     "title": "Correct a survey that fades early",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "sun",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "completeness-lf",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "is-it-one",
+     "index": 6,
+     "type": "question",
+     "title": "Is 0.97 equal to 1?",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "sun",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "completeness-lf",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "when-it-cannot-help",
+     "index": 7,
+     "type": "measure",
+     "title": "When a correction cannot help",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "sun",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "completeness-lf",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "the-catalog-own-magnitudes",
+     "index": 8,
+     "type": "measure",
+     "title": "Correct with the catalog’s own magnitudes",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "sun",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "completeness-lf",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "state-the-residual",
+     "index": 9,
+     "type": "question",
+     "title": "Report it",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "sun",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "answer-in-words",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": true,
+      "rubric": true,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "completeness-lf",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 10,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "sun",
+       "dwarf"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "completeness-lf",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    }
+   ],
+   "loops": [
+    {
+     "predict": "predict-the-raw-count",
+     "predictCollects": true,
+     "heldUntil": "raw-against-truth",
+     "experiment": [
+      "raw-against-truth",
+      "why-raw-is-low",
+      "correct-the-fade",
+      "is-it-one",
+      "when-it-cannot-help",
+      "the-catalog-own-magnitudes",
+      "state-the-residual",
+      "what-you-worked-out"
+     ],
+     "measure": [
+      "raw-against-truth",
+      "why-raw-is-low",
+      "correct-the-fade",
+      "is-it-one",
+      "when-it-cannot-help",
+      "the-catalog-own-magnitudes",
+      "state-the-residual",
+      "what-you-worked-out"
+     ],
+     "evidence": [
+      "raw-against-truth",
+      "correct-the-fade",
+      "when-it-cannot-help",
+      "the-catalog-own-magnitudes"
+     ],
+     "interpret": "raw-against-truth",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 10,
+    "declared": 10,
+    "student": 0,
+    "engine": 0,
+    "model": 10,
+    "data": 10,
+    "diagram": 10,
+    "evidence": 4,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
@@ -62964,15 +63227,15 @@
   }
  ],
  "totals": {
-  "steps": 825,
-  "declared": 775,
+  "steps": 828,
+  "declared": 778,
   "student": 157,
   "engine": 163,
-  "model": 386,
-  "data": 106,
-  "diagram": 265,
-  "evidence": 155,
-  "declaredButInert": 618,
+  "model": 389,
+  "data": 136,
+  "diagram": 268,
+  "evidence": 151,
+  "declaredButInert": 621,
   "prose": 30,
   "mismatched": 0,
   "rebuilds": 71,

@@ -86,4 +86,10 @@ export const SUMMARIES_ES = {
     'Cuando una fuente está detrás de una lente, la luz nos llega rodeándola como un anillo. Medirás el radio de Einstein de una estrella y de una galaxia, pesarás una galaxia por el tamaño de su anillo y hallarás las imágenes, los arcos y las amplificaciones cuando la fuente está a un lado, para una masa puntual y para una galaxia.',
   'a-lens-passing-by':
     'Cuando una lente pasa por delante de una estrella, esta se aviva y se apaga durante días o semanas. Leerás el máximo y la duración de un suceso de microlente, verás por qué una curva de luz no puede pesar la lente, qué hacen la luz mezclada y una estrella finita, y ajustarás un suceso sintético para ver qué puede y qué no puede recuperar el ajuste.',
+  'who-gets-counted':
+    'Un sondeo cuenta las estrellas que parecen brillantes, no las que son comunes. Contarás una población sintética con tres límites de magnitud, hallarás qué hay en la parte que se pierde y a qué distancia pueden estar una estrella como el Sol y una enana roja para ser contadas. Dirás por qué un catálogo de las estrellas más brillantes no es un censo.',
+  'why-the-bright-ones-win':
+    'Lejos, solo las estrellas intrínsecamente brillantes llegan a un sondeo, así que las que cuenta son más brillantes que las que hay: sesgo de Malmquist. Lo medirás en capas de distancia, lo compararás con su forma cerrada para candelas estándar y conocerás un segundo sesgo que viene de fiarse solo de paralajes bien medidas. Cada uno se comprueba contra una verdad que conoces.',
+  'the-completeness-curve':
+    'Un sondeo real se desvanece antes de su límite. Ponderarás cada estrella contada por el volumen en que pudo verse, recuperarás la función de luminosidad que entró dentro de su error de Poisson, verás cuándo una corrección no puede ayudar y medirás el sesgo que queda cuando la corrección usa las magnitudes del propio catálogo.',
 };

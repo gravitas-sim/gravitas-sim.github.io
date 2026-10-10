@@ -69,7 +69,10 @@
           "cluster-membership",
           "bending-light",
           "einstein-rings-and-arcs",
-          "a-lens-passing-by"
+          "a-lens-passing-by",
+          "who-gets-counted",
+          "why-the-bright-ones-win",
+          "the-completeness-curve"
         ]
       }
     },
@@ -288,7 +291,10 @@
                   "cluster-membership",
                   "bending-light",
                   "einstein-rings-and-arcs",
-                  "a-lens-passing-by"
+                  "a-lens-passing-by",
+                  "who-gets-counted",
+                  "why-the-bright-ones-win",
+                  "the-completeness-curve"
                 ]
               }
             }
@@ -1447,6 +1453,9 @@
             "light-bending",
             "lens-plane",
             "lens-passing",
+            "survey-counts",
+            "malmquist",
+            "completeness-lf",
             "sky-turning",
             "sky-seasons",
             "sky-phases",

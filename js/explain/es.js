@@ -121,6 +121,12 @@ export default {
     'Cuánto desvía la luz una masa, qué tamaño de anillo hace, y qué fija una curva de luz (el tiempo de cruce) y qué deja abierto (la masa, la distancia y la velocidad por separado).',
     'Una lente delgada en campo débil, una masa puntual o una galaxia circular, una estrella uniforme, sin cizalla ni segunda lente; el suceso sintético es un modelo con ruido, con una verdad que el cielo real nunca da.',
   ],
+  survey: [
+    'Estrellas sintéticas de brillo conocido a distancias conocidas: estrellas contadas y perdidas, el sesgo por capas de distancia, o la función de luminosidad frente a su verdad.',
+    'Cómo cambian la parte contada, el sesgo y la función de luminosidad recuperada al cambiar el límite de magnitud, la curva de completitud o el corte de paralaje.',
+    'Qué estrellas pierde un sondeo, en qué se distinguen las contadas de las que hay, y cuánto de la verdad devuelve una corrección.',
+    'Las estrellas son un modelo, el sondeo es un modelo, y la verdad se conoce solo porque se hicieron aquí; un sondeo real no tiene tal clave de respuestas.',
+  ],
   compare: [
     'Los datos (vertical, arriba) y el modelo encima, frente al tiempo; abajo, cada residuo en unidades de su propia barra de error.',
     'Donde los residuos se alejan de cero en una racha, el modelo queda por encima o por debajo de los datos; la dispersión en torno a cero es el ruido.',

@@ -38,6 +38,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'power-law-gravity': 'model',
   'radial-velocity': 'model',
   'retrograde-motion': 'engine',
+  'the-completeness-curve': 'model',
   'the-rotating-disk': 'model',
   'the-sun-through-the-year': 'model',
   'the-suns-motion': 'model',
@@ -50,6 +51,8 @@ export const EVIDENCE_FROM = Object.freeze({
   'what-a-spectrum-is-made-of': 'model',
   'what-is-a-gravitational-wave': 'model',
   'when-orbits-lock': 'engine',
+  'who-gets-counted': 'model',
+  'why-the-bright-ones-win': 'model',
 });
 
 /** @param {string} id - An investigation id @returns {?string} engine|model|data|illustration */

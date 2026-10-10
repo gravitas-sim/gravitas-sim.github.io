@@ -74,6 +74,12 @@ const EXTENSIONS = {
     import('../data/investigations/depth/einstein-rings-and-arcs.js'),
   'a-lens-passing-by': () =>
     import('../data/investigations/depth/a-lens-passing-by.js'),
+  'who-gets-counted': () =>
+    import('../data/investigations/depth/who-gets-counted.js'),
+  'why-the-bright-ones-win': () =>
+    import('../data/investigations/depth/why-the-bright-ones-win.js'),
+  'the-completeness-curve': () =>
+    import('../data/investigations/depth/the-completeness-curve.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -103,6 +109,12 @@ const WORDS = {
       import('../data/investigations/depth/es/einstein-rings-and-arcs.js'),
     'a-lens-passing-by': () =>
       import('../data/investigations/depth/es/a-lens-passing-by.js'),
+    'who-gets-counted': () =>
+      import('../data/investigations/depth/es/who-gets-counted.js'),
+    'why-the-bright-ones-win': () =>
+      import('../data/investigations/depth/es/why-the-bright-ones-win.js'),
+    'the-completeness-curve': () =>
+      import('../data/investigations/depth/es/the-completeness-curve.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
     'the-turning-sky': () =>

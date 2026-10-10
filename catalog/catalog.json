@@ -112,6 +112,10 @@
       "en": "Why Mars Goes Backwards",
       "es": "Por qué Marte va hacia atrás"
     },
+    "the-completeness-curve": {
+      "en": "The Completeness Curve",
+      "es": "La curva de completitud"
+    },
     "the-rotating-disk": {
       "en": "The Rotating Disk",
       "es": "El disco que gira"
@@ -159,6 +163,14 @@
     "when-orbits-lock": {
       "en": "When Orbits Lock",
       "es": "Cuando las órbitas se enganchan"
+    },
+    "who-gets-counted": {
+      "en": "Who Gets Counted",
+      "es": "Quién entra en la cuenta"
+    },
+    "why-the-bright-ones-win": {
+      "en": "Why the Bright Ones Win",
+      "es": "Por qué ganan las brillantes"
     }
   },
   "entries": [

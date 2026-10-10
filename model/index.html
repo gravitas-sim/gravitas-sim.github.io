@@ -3085,16 +3085,16 @@ try {
               <td>Two-component Gaussian mixture over proper motion and parallax by expectation-maximization (js/kernels/galactic/membership.js), each star’s own errors widening both components; the cluster’s intrinsic width uses the standard approximate update. See GALACTIC_DYNAMICS.md.</td>
             </tr>
             <tr>
-              <td>Bending Light</td>
-              <td>js/kernels/lensing/lens.js: deflectionAngle = 4GM/(c²b), valid for b much greater than 2GM/c²; the instrument shades b below ten Schwarzschild radii. See GRAVITATIONAL_LENSING.md.</td>
+              <td>Who Gets Counted</td>
+              <td>js/survey/model.js: a cone of stars uniform in space drawn from the stellar-population synthesis, observed with a limit on the measured magnitude; every draw keyed by seed and star index. See SELECTION_EFFECTS.md.</td>
             </tr>
             <tr>
-              <td>Einstein Rings and Arcs</td>
-              <td>js/kernels/lensing/lens.js: einsteinAngle, sisEinsteinAngle, pointImages (lens equation y = x − 1/x), sisImages (y = x − sign x) and pointTimeDelay. The mass is the mass inside the Einstein radius for either lens. See GRAVITATIONAL_LENSING.md.</td>
+              <td>Why the Bright Ones Win</td>
+              <td>js/survey/model.js: malmquistShells, malmquistAtMagnitude, malmquistFormula, parallaxSelectionBias. See SELECTION_EFFECTS.md.</td>
             </tr>
             <tr>
-              <td>A Lens Passing By</td>
-              <td>js/kernels/lensing/microlensing.js (Paczynski, uniform finite source by ring integration, blending) and fit.js (the inference core’s createProblem and refine, multi-start, source and blend fluxes solved exactly). Validated against closed forms and over 30 seeds in tests/lensingKernel.test.js. See GRAVITATIONAL_LENSING.md.</td>
+              <td>The Completeness Curve</td>
+              <td>js/survey/model.js: effectiveVolume, recoveredLuminosityFunction (truth and catalog modes), completenessCurve, bootstrapLuminosityFunction. See SELECTION_EFFECTS.md.</td>
             </tr>
           <!--/fact-block-->
           </tbody>

@@ -118,6 +118,7 @@ describe('the registry', () => {
       'periodic',
       'radial-velocity',
       'spectrum',
+      'survey',
       'transit',
     ]);
     expect(() => runForward('nope', {}, SETUP())).toThrow(

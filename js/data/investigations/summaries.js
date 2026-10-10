@@ -86,4 +86,10 @@ export const SUMMARIES = {
     'When a source lies behind a lens, light reaches us around it as a ring. You will measure the Einstein radius of a star and of a galaxy, weigh a galaxy from the size of its ring, and find the images, arcs and magnifications when the source is off to one side, for a point mass and for a galaxy.',
   'a-lens-passing-by':
     'As a lens passes in front of a star the star brightens and fades over days or weeks. You will read the peak and the duration of a microlensing event, find why one light curve cannot weigh the lens, see what blended light and a finite star do to it, and fit a synthetic event to see what the fit can and cannot recover.',
+  'who-gets-counted':
+    'A survey counts the stars that look bright, not the stars that are common. You will count a synthetic population at three magnitude limits, find what is in the part that is missed, and find how far a Sun-like star and a red dwarf can be and still be counted. You will say why a catalog of the brightest stars is not a census.',
+  'why-the-bright-ones-win':
+    'Far away, only the intrinsically bright stars reach a survey, so the stars it counts are brighter than the stars there are: Malmquist bias. You will measure it in shells of distance, compare it with its closed form for standard candles, and meet a second bias that comes from trusting only well-measured parallaxes. Each is checked against a truth you know.',
+  'the-completeness-curve':
+    'A real survey fades out before its limit. You will weight each counted star by the volume in which it could have been seen, recover the luminosity function that went in to within its Poisson error, see when a correction cannot help, and measure the bias that remains when the correction uses the catalog’s own magnitudes.',
 };

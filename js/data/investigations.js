@@ -88,6 +88,9 @@ import { SUMMARIES } from './investigations/summaries.js';
 import BENDING_LIGHT from './investigations/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS from './investigations/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY from './investigations/a-lens-passing-by.js';
+import WHO_GETS_COUNTED from './investigations/who-gets-counted.js';
+import WHY_THE_BRIGHT_ONES_WIN from './investigations/why-the-bright-ones-win.js';
+import THE_COMPLETENESS_CURVE from './investigations/the-completeness-curve.js';
 
 // Order matters: the browser lists them in this order, and the three exoplanet
 // lessons form a sequence. Shadows measures a radius, Tug measures a mass and
@@ -146,6 +149,9 @@ export const INVESTIGATIONS = [
   BENDING_LIGHT,
   EINSTEIN_RINGS_AND_ARCS,
   A_LENS_PASSING_BY,
+  WHO_GETS_COUNTED,
+  WHY_THE_BRIGHT_ONES_WIN,
+  THE_COMPLETENESS_CURVE,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

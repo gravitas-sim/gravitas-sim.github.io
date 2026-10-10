@@ -139,6 +139,9 @@ const LOADERS = {
   'bending-light': () => import('./bending-light.js'),
   'einstein-rings-and-arcs': () => import('./einstein-rings-and-arcs.js'),
   'a-lens-passing-by': () => import('./a-lens-passing-by.js'),
+  'who-gets-counted': () => import('./who-gets-counted.js'),
+  'why-the-bright-ones-win': () => import('./why-the-bright-ones-win.js'),
+  'the-completeness-curve': () => import('./the-completeness-curve.js'),
 };
 
 /**
@@ -194,6 +197,9 @@ const TRANSLATIONS = {
     'bending-light': () => import('./es/bending-light.js'),
     'einstein-rings-and-arcs': () => import('./es/einstein-rings-and-arcs.js'),
     'a-lens-passing-by': () => import('./es/a-lens-passing-by.js'),
+    'who-gets-counted': () => import('./es/who-gets-counted.js'),
+    'why-the-bright-ones-win': () => import('./es/why-the-bright-ones-win.js'),
+    'the-completeness-curve': () => import('./es/the-completeness-curve.js'),
   },
 };
 
