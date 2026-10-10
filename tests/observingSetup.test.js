@@ -173,6 +173,34 @@ describe('epochs', () => {
   });
 });
 
+describe('long schedules', () => {
+  test("a regular setup past the planner's 400 epochs is not truncated, and is the same line as a short one", () => {
+    const long = planEpochs(
+      base({ epochs: { kind: 'regular', duration: 10, count: 5001 } })
+    );
+    expect(long.times.length).toBe(5001);
+    expect(long.times.at(-1)).toBe(10);
+    expect(long.times[2500]).toBe(5);
+    const gapped = planEpochs(
+      base({
+        epochs: { kind: 'regular', duration: 10, count: 5001, gaps: [[2, 4]] },
+      })
+    );
+    expect(gapped.times.length).toBe(5001 - 1000);
+    expect(gapped.indices[gapped.indices.length - 1]).toBe(5000);
+  });
+  test('a long listed setup keeps every time, and an over-long irregular one is refused in words', () => {
+    const list = Array.from({ length: 1000 }, (_, i) => i * 0.01);
+    expect(
+      planEpochs(base({ epochs: { kind: 'listed', list } })).times.length
+    ).toBe(1000);
+    const problems = validateSetup(
+      base({ epochs: { kind: 'irregular', duration: 10, count: 500 } })
+    );
+    expect(problems.map(p => p.message).join()).toMatch(/at most 400/);
+  });
+});
+
 describe('noise', () => {
   const idx = n => Int32Array.from({ length: n }, (_, i) => i);
   const day = n => Float64Array.from({ length: n }, (_, i) => i);

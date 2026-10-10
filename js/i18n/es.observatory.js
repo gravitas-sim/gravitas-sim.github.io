@@ -134,6 +134,9 @@ export const ES_OBSERVATORY = {
   'obs.origin.model': 'Un modelo',
   'obs.origin.compilation': 'Valores publicados, recopilados',
   'obs.origin.imported': 'Tu archivo',
+  'obs.origin.synthetic':
+    'Una observación sintética: la hizo un modelo de Gravitas con una configuración y una semilla declaradas, no se observó',
+  'obs.synthetic.badge': 'sintética',
 
   'obs.seeing.title': 'Lo que estás viendo',
   'obs.seeing.imported':

@@ -368,7 +368,10 @@ function renderFit(o) {
 function renderAll() {
   const o = state.view;
   $('obsWork').hidden = false;
-  $('obsTitle').textContent = o.title;
+  $('obsTitle').textContent =
+    o.origin === 'synthetic'
+      ? `${o.title} (${t('obs.synthetic.badge')})`
+      : o.title;
   renderSource(o);
   renderAxes(o);
   const isImage = o.kind === 'image';

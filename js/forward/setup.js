@@ -59,8 +59,12 @@ export const INSTRUMENT_KINDS = Object.freeze([
   'catalogue',
   'metrics',
 ]);
-/** Largest number of epochs, pixels or rows one setup may ask for. */
+/** Largest number of pixels or rows one setup may ask for. */
 export const MAX_POINTS = 4_000_000;
+/** Most epochs a regular or listed setup may have; irregular and clustered
+ *  setups keep the radial-velocity planner's limit of 400. */
+export const MAX_EPOCHS = 100_000;
+const PLANNER_EPOCHS = 400;
 
 const finite = v => typeof v === 'number' && Number.isFinite(v);
 
@@ -98,8 +102,13 @@ export function validateSetup(s) {
     );
   const e = s.epochs;
   // A single frame or a catalogue has no schedule of its own.
+  // A spectrum (a spectrograph with a wavelength window) is likewise one
+  // exposure; a spectrograph without one is a radial-velocity series.
   const unscheduled =
-    s.instrument?.kind === 'imager' || s.instrument?.kind === 'catalogue';
+    s.instrument?.kind === 'imager' ||
+    s.instrument?.kind === 'catalogue' ||
+    (s.instrument?.kind === 'spectrograph' &&
+      s.instrument.window !== undefined);
   if (unscheduled && e === undefined) {
     // nothing to check
   } else if (need(isObject(e), 'epochs', 'is required')) {
@@ -122,7 +131,7 @@ export function validateSetup(s) {
       need(
         Array.isArray(e.list) &&
           e.list.length >= 2 &&
-          e.list.length <= MAX_POINTS &&
+          e.list.length <= MAX_EPOCHS &&
           e.list.every(v => finite(v) && v >= 0),
         'epochs.list',
         'is at least two times from the start, none negative'
@@ -141,6 +150,12 @@ export function validateSetup(s) {
         'epochs.count',
         'is a whole number of at least 2 (a regular setup may give a cadence)'
       );
+      if (n)
+        need(
+          e.count <= (e.kind === 'regular' ? MAX_EPOCHS : PLANNER_EPOCHS),
+          'epochs.count',
+          `is at most ${e.kind === 'regular' ? MAX_EPOCHS : PLANNER_EPOCHS} for a ${e.kind} setup`
+        );
     }
     for (const [i, g] of (e.gaps ?? []).entries())
       need(
@@ -290,6 +305,32 @@ export function planEpochs(setup) {
   const count =
     e.count ??
     (e.cadence > 0 ? Math.floor(e.duration / e.cadence + 1e-9) + 1 : 2);
+  const inGap = o => (e.gaps ?? []).some(([from, to]) => o >= from && o < to);
+  const quantise = v => Number(v.toFixed(6));
+  if (
+    (e.kind === 'regular' && count > PLANNER_EPOCHS) ||
+    (e.kind === 'listed' && e.list.length > PLANNER_EPOCHS)
+  ) {
+    // Beyond the radial-velocity planner's 400: the same rules, written out.
+    // Regular epochs are evenly spaced from 0 to the duration; a listed setup
+    // is sorted and de-duplicated; both keep the indices of the ungapped list.
+    const all =
+      e.kind === 'regular'
+        ? Array.from({ length: count }, (_, i) =>
+            quantise((i * (e.duration ?? 0)) / (count - 1))
+          )
+        : [...new Set(e.list.map(quantise))].sort((a, b) => a - b);
+    const kept = [];
+    all.forEach((offset, index) => {
+      if (!inGap(offset)) kept.push({ index, offset });
+    });
+    return {
+      times: Float64Array.from(kept, p => e.start + p.offset),
+      indices: Int32Array.from(kept, p => p.index),
+      offsets: kept.map(p => p.offset),
+      plan: { kind: e.kind, epochs: kept, ok: true, problems: [] },
+    };
+  }
   const plan = planSchedule({
     kind: e.kind === 'listed' ? 'explicit' : e.kind,
     epochs: count,
