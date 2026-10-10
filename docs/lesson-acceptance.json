@@ -306,7 +306,7 @@
         "measure-the-radius-ratio",
         "what-the-trend-covers"
       ],
-      "evidenceFrom": "data"
+      "evidenceFrom": "model"
     },
     "lives-of-stars": {
       "centralExperimentId": "ce.lives-of-stars",
@@ -320,7 +320,7 @@
         "measure-the-giant",
         "why-iron-stops-it"
       ],
-      "evidenceFrom": "data"
+      "evidenceFrom": "model"
     },
     "twelve-nights": {
       "centralExperimentId": "ce.twelve-nights",
@@ -401,7 +401,7 @@
         "predict-the-mean",
         "measure-the-sun"
       ],
-      "evidenceFrom": "data"
+      "evidenceFrom": "model"
     },
     "the-rotating-disk": {
       "centralExperimentId": "ce.the-rotating-disk",
@@ -414,7 +414,7 @@
         "predict-the-shape",
         "measure-a-and-b"
       ],
-      "evidenceFrom": "data"
+      "evidenceFrom": "model"
     },
     "cluster-membership": {
       "centralExperimentId": "ce.cluster-membership",
@@ -427,7 +427,7 @@
         "predict-the-clump",
         "measure-the-cluster"
       ],
-      "evidenceFrom": "data"
+      "evidenceFrom": "model"
     }
   }
 }
