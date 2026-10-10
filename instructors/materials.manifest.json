@@ -1,28 +1,28 @@
 {
   "version": "October 2026",
-  "generated": "2026-10-09",
-  "documents": 150,
+  "generated": "2026-10-10",
+  "documents": 160,
   "inventory": {
-    "documents": 150,
+    "documents": 160,
     "byLocale": {
-      "en": 84,
-      "es": 66
+      "en": 89,
+      "es": 71
     },
     "byKind": {
       "general": 2,
-      "guide": 55,
-      "key": 88,
+      "guide": 57,
+      "key": 96,
       "worksheet": 5
     },
     "byVariant": {
       "activity": 12,
-      "depth": 24,
-      "full": 96,
+      "depth": 30,
+      "full": 100,
       "general": 18
     }
   },
-  "sourceFiles": 134,
-  "sourceDigest": "6aa41512d90a354850126c6a123c775804573f6633fa4ff48d56a09009642b09",
+  "sourceFiles": 138,
+  "sourceDigest": "2e80bbb2f3c95338efd7e50299710700a30f1a546ea68ef095edcd934323eeb2",
   "sources": {
     "js/activities/activities.js": "831a7712f2372ff8b54693d6669abfe9a185e677cd43411cac355fef979b8937",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -41,18 +41,21 @@
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
     "js/data/exoplanetAnswerKey.js": "b3eed2e93a5f18cc85b0b91c1127b4a977790edacf4288575961963a3673e817",
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
-    "js/data/instructorContent.js": "cd5b35fcbb22e30d4ec920fb6a1bb33c1dd1e947b77a4d76fa4d4ef21070f622",
+    "js/data/instructorContent.js": "ecc7b3d50932364dab3ecc727d931bbb773ab506af1d480ca10712ee1a7925a2",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
-    "js/data/instructorExpectations.js": "cb01aa2c1dfa124ed3c4ca429178c3df9be589f72b7b62e7bcc327f2af933777",
+    "js/data/instructorExpectations.js": "3e0b2fc239b00fe64ee928834d1bcb61ab1da36b28d12f9069dd2ae19ba50f39",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
-    "js/data/instructorFlow.js": "f3ee5a0bcb18aa7ead1f55b59b96fb7707bdb3d50888e3bf77ccb4c46ba3e208",
+    "js/data/instructorFlow.js": "16d38dee5da948905e59f74e1f72573c38b11e0d235533ea685960aaf879f97b",
     "js/data/instructorLabels.js": "3019b69c1d40002333bbf5ac414f3daf79879de9d70197558b44e5e71677b2ec",
-    "js/data/investigations.js": "29b098b815a30ea26937de9007629f99be97ba2b1f6fd9513c00db24f7f61b1c",
+    "js/data/investigations.js": "d57dc401b1219fd038c7b1e692e55b1fc1aca3940798d0976cbbd1bf75b14bf1",
     "js/data/investigations/a-universe-of-stars.js": "8a5cf66239f97a96d71b262a24b178cbe327a86500f252f6e65a405455f1dd65",
     "js/data/investigations/binary-star-planets.js": "dae7b75bc10cd1f6e40dfac40dd8bddfd82e30af12e8bd9674021cac1dd7024b",
     "js/data/investigations/black-holes.js": "de69e31c8b1979a2a88770fd017278b75379a57ea9b5aef4eb0fe890d3b8d546",
     "js/data/investigations/butterfly-effect.js": "ada0be23956ab6f10285137c4bec97a603637399292a142e136ed3a925f683ff",
     "js/data/investigations/catalog.js": "c24c233767ebd28a49066263de0c3db6eca72298a925e62ece364eec38dfc04f",
+    "js/data/investigations/color-and-temperature.js": "76b99b8ae55fdc4029b92b852e61d656ffec185503088d2b97b0629bf16b18aa",
+    "js/data/investigations/depth/color-and-temperature.js": "f7167525956a3de941f787a5b7f74e76edc0c30c3b56a4dcd75b4610d7ad1d17",
+    "js/data/investigations/depth/es/color-and-temperature.js": "28ae3e6aa32be6ece9baf98378f001535f5a2921447fa68bfa223b845204a123",
     "js/data/investigations/depth/es/keplers-laws.js": "4884da2cc36b38da2b246019e12e0174b1c91099ad6284034c82c32292f45ab7",
     "js/data/investigations/depth/es/missing-mass.js": "f97654c8b8f9bf80afff42689f88a4b10b8b37e24ea457ecfd31d519cd494e0d",
     "js/data/investigations/depth/es/transit-photometry.js": "6d13f18fcaad3eeb00ebd7d598584b5987688d45968aa1d56c7458a8c20473d2",
@@ -63,11 +66,12 @@
     "js/data/investigations/depth/weighing-stars.js": "b32ee557dcaa6e8aa50335b4da7430a182cf609bf1f484c76935f82271dddd6e",
     "js/data/investigations/design-the-schedule.js": "8262b01d351491c0b1c0af1355b52daeb7817caaee519db0a17edb54a6a9d0b0",
     "js/data/investigations/detect-this-planet.js": "77913bacd845880a8e8b6ecf68fb01663df3a6ffd3cb88bb93b41c27a1da9d90",
-    "js/data/investigations/discovery.js": "6b574ed97d8dd81758947ecba88f0b12bcb897f14eab67c4317a000d2b8a26bd",
+    "js/data/investigations/discovery.js": "e0215b4cf86a6c06fd90ed7333a0526a653ae34a912835668277bd1a63d05454",
     "js/data/investigations/es/a-universe-of-stars.js": "e978b7bb1a4297064769e4a005c48a4f3399d8851ea1c321568aff8627265bbe",
     "js/data/investigations/es/binary-star-planets.js": "cceb1992dda614a4f3bad0b58eb2b8a07f195ed694ecd5974a366b6c3e378af1",
     "js/data/investigations/es/black-holes.js": "3f2ae212cc14c06b08e9c5ae8bfcaf1a6981f50c1ee239cf95e05eb292f30164",
     "js/data/investigations/es/butterfly-effect.js": "112c84a0b41aebd6f17f928fc615e361125def7f0542a3234debe7a25436ac2a",
+    "js/data/investigations/es/color-and-temperature.js": "29a59a4ff629dc4d302254c1daeea41577ca6f2b02f8c4a50c367bf1b2d2dc82",
     "js/data/investigations/es/design-the-schedule.js": "2c8f4dd583188fcdf4962e3154f23810ac11874c1727818db79cae1f18b768d4",
     "js/data/investigations/es/detect-this-planet.js": "1c74020c215271befc7e9423627db99fbb6fb794f0e0c990181df1fd5a21a1ce",
     "js/data/investigations/es/goldilocks-question.js": "6b22a9cf3a4f4d3ec808722691090f58c83a7f0d14c7c809ee8eaf432a23f0a0",
@@ -101,7 +105,7 @@
     "js/data/investigations/power-law-gravity.js": "a7f55c014027e37f55614461c94d3af0b654a0adc284d53b4a65cd3357090d56",
     "js/data/investigations/radial-velocity.js": "c4068814583be55b15acac5ff774c956bde6879eed8fd0a00db3ad73ceedf864",
     "js/data/investigations/retrograde-motion.js": "5ba6a444d4b1a8edf9d2b6283e61864cefae11c0dcb6e4e004b931102ba9a97b",
-    "js/data/investigations/summaries.js": "4e8f2f6f28ace1a061971c4cc560c3cb292efdaa72a246560654244513e73a3a",
+    "js/data/investigations/summaries.js": "d8a07be913f073ebd4a3ca9c9824785f5bbbd0d31ca5e382cb68d79868cadf3c",
     "js/data/investigations/tides.js": "aeff04db2427d4a29534355a7dd846d0b5b34c00b068b4ce36b6babc2849a406",
     "js/data/investigations/transit-photometry.js": "cfbc5479e3ab8b6bc1c48fc5e7206ff9532e9152260ef6d315a9ead851fa2034",
     "js/data/investigations/twelve-nights.js": "bd1d848b94247745f6e775037f5c8d9b40f62af570df459bae5f82548612adf3",
@@ -129,9 +133,9 @@
     "js/instructorExpectations.js": "09b1aeac6b3fa134374f0286029cdda1cbe68c9e3d7885afdc75387a4f5d6282",
     "js/instructorFacts.js": "a8939d4e55ea32df76d53d4ae9222ccb98554a0251603aafe523f4f37f658a41",
     "js/instructorFlow.js": "d06edcc3404196951515250e971b81ddb53cd00315704c7f65b2616de0084122",
-    "js/instructorLocale.js": "5d85fbf3da0903d7355e1652a9ac4546543942c535d06045ad079faed5067efc",
+    "js/instructorLocale.js": "c19c79c42f8fd72019f5b179b6d069138a2d6fe03512e30293b6707e4532d889",
     "js/instructorSource.js": "da3fb5a0d4387db76d3117b0c7cac81919de0186041cf4161c328d5802f5890a",
-    "js/investigations/depthAll.js": "5e5f347ecd4256ef785dd49a6f40c8ea284664c675014a3b0712645f4e8f9a35",
+    "js/investigations/depthAll.js": "8dd401c21a35a9743db9940f87e8c52d92295181005b0f99b62a821b3d9835e2",
     "js/investigations/depthPure.js": "61ea6369eef1b8b9c39c2395f2be1a1ebaf83772180520f6ec7fbe3c8ea085f6",
     "js/investigations/progressBackup.js": "06cd1e3eed5e2cdb887aa850e6e2e097a5708ef294193af9fc31ce39f27b22dc",
     "js/lab3d/elements.js": "6a951db87df0d36795285e1ea6abb6ab473c48cda372ea985279bc498a34d043",
@@ -159,5 +163,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "a7042f1f1f4543c140437dd3e85e428c208407e407b6805df5891154f12d7ee0"
+  "contentDigest": "d77199baf8f8deb030279be4c482f8a1fdd6ca8bf7011c97325f26c0c2394c7d"
 }
