@@ -306,7 +306,7 @@ export function planEpochs(setup) {
     e.count ??
     (e.cadence > 0 ? Math.floor(e.duration / e.cadence + 1e-9) + 1 : 2);
   const inGap = o => (e.gaps ?? []).some(([from, to]) => o >= from && o < to);
-  const quantise = v => Number(v.toFixed(6));
+  const quantise = v => Math.round(v * 1e6) / 1e6;
   if (
     (e.kind === 'regular' && count > PLANNER_EPOCHS) ||
     (e.kind === 'listed' && e.list.length > PLANNER_EPOCHS)

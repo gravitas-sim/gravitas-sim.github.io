@@ -44,7 +44,8 @@ export const FORMATS = Object.freeze([
     const: ['js/forward/setup.js', 'FORMAT_VERSION'],
     owner: 'js/forward/setup.js readSetup',
     persisted: 'download, inside a synthetic observation',
-    older: 'reads the radial-velocity survey configuration (no format) as version 0',
+    older:
+      'reads the radial-velocity survey configuration (no format) as version 0',
     newer: 'refused, in words',
     schema: 'observing-setup-1.schema.json',
   },

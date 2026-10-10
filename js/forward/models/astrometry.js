@@ -75,8 +75,13 @@ export function run(state, rawSetup, opts = {}) {
     );
   });
   parameters.push(
-    { id: 'pmx', name: 'proper motion x', value: pm[0], unit: 'mas/yr' },
-    { id: 'pmy', name: 'proper motion y', value: pm[1], unit: 'mas/yr' }
+    {
+      id: 'pmx',
+      name: 'proper motion x, mas per year',
+      value: pm[0],
+      unit: '',
+    },
+    { id: 'pmy', name: 'proper motion y, mas per year', value: pm[1], unit: '' }
   );
   return syntheticObservation({
     model: ID,
