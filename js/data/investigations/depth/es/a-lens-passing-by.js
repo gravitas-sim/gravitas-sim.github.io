@@ -11,7 +11,7 @@ export default {
       feedback: {
         close: 'Casi. Comprueba la conversión de segundos a días.',
         'wrong-order-of-magnitude':
-          'Se pasa una potencia de diez: una lente a 200 km/s recorre 17 millones de kilómetros al día.',
+          'Se pasa una potencia de diez: convierte la velocidad en kilómetros por día y compárala con el radio de Einstein en kilómetros.',
         off: 't_E = (1,91 × 1,496 × 10⁸ km) ÷ (200 km/s), en días.',
       },
     },

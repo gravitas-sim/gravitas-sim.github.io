@@ -27,7 +27,7 @@ export default {
         'un microsegundo de arco',
       ],
       hints: [
-        'Un milisegundo de arco es una milésima de segundo de arco; Hubble resuelve unos 50.',
+        'Piensa en el ángulo más pequeño que resuelven los mejores telescopios, y pregúntate si el anillo de una estrella podría ser mayor.',
       ],
       because:
         'Unos mil milésimas de segundo de arco, un milisegundo. El radio de Einstein de una estrella a distancias de kiloparsecs es mucho menor que lo que resuelve cualquier telescopio, y por eso las estrellas hacen un suceso de microlente en vez de un anillo visible.',

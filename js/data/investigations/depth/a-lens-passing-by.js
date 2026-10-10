@@ -46,7 +46,7 @@ export default {
       feedback: {
         close: 'Close. Check the conversion from seconds to days.',
         'wrong-order-of-magnitude':
-          'A power of ten out: a lens moving at 200 km/s covers 17 million kilometers a day.',
+          'A power of ten out: turn the speed into kilometers per day and compare it with the Einstein radius in kilometers.',
         off: 't_E = (1.91 × 1.496 × 10⁸ km) ÷ (200 km/s), in days.',
       },
       tool: LM(TYPICAL),

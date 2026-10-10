@@ -81,7 +81,7 @@ const EINSTEIN_RINGS_AND_ARCS = {
       ],
       answer: 0,
       hints: [
-        'A milliarcsecond is a thousandth of an arcsecond; Hubble resolves about 50 of them.',
+        'Think of the smallest angle the best telescopes can resolve, and ask whether one star’s ring could be larger.',
       ],
       because:
         'About a milliarcsecond. The Einstein radius of a star at kiloparsec distances is far smaller than any telescope can resolve, which is why stars make a microlensing event instead of a visible ring.',
