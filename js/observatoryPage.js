@@ -280,6 +280,18 @@ async function fitPanel() {
   fit.loading ??= import('./observatory/fitPanel.js').then(mountFit);
   return fit.loading;
 }
+// The sky panel (Galactic map and proper-motion vectors): loaded when first
+// opened, for a table that has right ascension and declination.
+const sky = { panel: null, loading: null };
+$('obsSkyPanel').addEventListener('toggle', async () => {
+  if (!$('obsSkyPanel').open || !state.view) return;
+  sky.loading ??= import('./observatory/skyPanel.js').then(m => {
+    sky.module = m;
+    sky.panel = m.mountSkyPanel($('obsSkyBody'), lent);
+  });
+  await sky.loading;
+  sky.panel.update(state.view);
+});
 // The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
 let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
@@ -382,6 +394,11 @@ function renderFit(o) {
     (o.kind === 'time-series' &&
       (dim === 'ratio' || dim === 'velocity' || dim === null));
   $('obsFitPanel').hidden = !fit.suits;
+  // A table with positions can be drawn on the sky, and one with proper motions as vectors.
+  const hasId = id => o.columns.some(c => c.id === id);
+  $('obsSkyPanel').hidden = !(hasId('ra') && hasId('dec'));
+  if (!$('obsSkyPanel').hidden && sky.panel && $('obsSkyPanel').open)
+    sky.panel.update(o);
   // A model of a flux or a velocity against time can be laid over the data.
   const compares =
     o.kind === 'time-series' &&

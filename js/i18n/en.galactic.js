@@ -130,4 +130,17 @@ export const EN_GALACTIC = {
   'galW.cm.row.how': 'The fit',
   'galW.cm.value.how':
     'A narrow Gaussian for the cluster and a broad one for the field, fitted together by expectation-maximization from fixed starting values; each star’s own errors widen both.',
+  'galW.sky.view': 'Picture',
+  'galW.sky.view.galactic': 'Galactic map of the sources',
+  'galW.sky.view.vectors': 'Proper-motion vectors on the sky',
+  'galW.sky.aria.map':
+    'Map of {n} sources in Galactic coordinates, Hammer-Aitoff projection',
+  'galW.sky.note.map':
+    '{n} sources placed by their Galactic longitude and latitude; their values are in the table below.',
+  'galW.sky.aria.vectors':
+    'Proper-motion arrows for {n} sources, right ascension increasing to the left',
+  'galW.sky.note.vectors':
+    '{n} sources, each with an arrow along its proper motion; the median proper motion is {v} mas/yr and its arrow is about a twentieth of the picture wide, all arrows on one scale.',
+  'galW.sky.scale':
+    'right ascension increases to the left; arrows on one scale, median {v} mas/yr',
 };

@@ -132,5 +132,52 @@ export default {
       rubric:
         'Look for a measurement the models predict differently (the cluster, or a galaxy of another mass, or the lensing), and the point that two models fitting one curve within its uncertainty have not been separated by it.',
     },
+    {
+      sid: 'the-milky-way-as-measured',
+      after: 'what-would-tell-them-apart',
+      depth: 'advanced',
+      type: 'read',
+      title: 'The authentic option: the Milky Way as measured',
+      body: `Every galaxy curve in this lesson so far is a <strong>model</strong>:
+             the NGC 3198 curve was built from published parameters with a
+             fixed scatter added, and is labelled synthetic. Here is a measured
+             one. The instrument shows the Milky Way’s own circular speed from
+             2 to 25 kpc, from Bhattacharjee, Chaudhury and Kundu (2014), who
+             combined many tracers. It assumes the Sun is 8.3 kpc from the center,
+             moving at 244 km/s; the citations are in the data pack.
+             Set the model to a best fit without a halo, then with one.`,
+      tool: { id: 'rotating-disk', values: { view: 1, fit: 2 } },
+    },
+    {
+      sid: 'the-real-halo-fit',
+      after: 'the-milky-way-as-measured',
+      depth: 'advanced',
+      type: 'measure',
+      title: 'The same test on real data',
+      body: `Read the reduced χ² of the best fit <strong>without a halo</strong>
+             (the disk bounded at 8 × 10<sup>10</sup> solar masses) and of the
+             best fit <strong>with a halo</strong>. Compare the improvement with
+             what you found for the synthetic curve.`,
+      fields: [
+        { id: 'stars', label: 'Reduced χ², stars only', unit: '', hint: '50' },
+        { id: 'halo', label: 'Reduced χ², with a halo', unit: '', hint: '4.8' },
+      ],
+      validate: v => {
+        if (![v.stars, v.halo].every(Number.isFinite)) return null;
+        if (Math.abs(v.stars - 50) <= 5 && Math.abs(v.halo - 4.79) <= 0.5) {
+          return {
+            level: 'ok',
+            message:
+              'The measured Milky Way shows what the synthetic galaxy did: stars and gas alone miss badly, and a halo fits about ten times better. The real curve has real scatter and the fit is still not 1, so this is evidence for a halo in a simple model, not a measurement of one.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'In the instrument choose “best fit, stars only (no halo)” and read the reduced χ², then “best fit, with a halo” and read it again.',
+        };
+      },
+      tool: { id: 'rotating-disk', values: { view: 1, fit: 1 } },
+    },
   ],
 };

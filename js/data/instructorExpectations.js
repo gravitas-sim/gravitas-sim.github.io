@@ -196,6 +196,8 @@ export default {
         'All three candidates receive close to one Earth of starlight and all three are inside the zone. The differences are atmosphere, size and stellar activity.',
     },
     'missing-mass': {
+      'the-real-halo-fit':
+        'Advanced depth. On the Milky Way’s measured curve (R0 = 8.3 kpc, V0 = 244 km/s, 15 points from 2 to 25 kpc) the best stars-only fit, with the disk bounded at 8 × 10^10 solar masses, has a reduced chi-square of about 50; with a halo it is 4.79. Accepted within 5 and 0.5. The synthetic NGC 3198 curve earlier in the lesson stays labelled synthetic.',
       'put-the-mass-somewhere':
         'All four presets should be pressed. The falling presets return an outer slope near -0.50 and the shape reads "falling, Keplerian"; the disc reads about -0.28 and "falling"; "What galaxies do" reads about +0.10 and "FLAT". The +0.10 is worth a word if a student queries it: a pseudo-isothermal halo approaches its asymptote from below, so over a finite range it is still climbing slightly. The claim the investigation makes is comparative — flat rather than -0.5 — and the panel’s bands are set for that.',
       'the-solar-system-plotted':

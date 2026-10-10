@@ -133,4 +133,17 @@ export const ES_GALACTIC = {
   'galW.cm.row.how': 'El ajuste',
   'galW.cm.value.how':
     'Una gaussiana estrecha para el cúmulo y una ancha para el campo, ajustadas juntas por maximización de la esperanza desde valores iniciales fijos; los errores propios de cada estrella ensanchan ambas.',
+  'galW.sky.view': 'Imagen',
+  'galW.sky.view.galactic': 'Mapa galáctico de las fuentes',
+  'galW.sky.view.vectors': 'Vectores de movimiento propio en el cielo',
+  'galW.sky.aria.map':
+    'Mapa de {n} fuentes en coordenadas galácticas, proyección de Hammer-Aitoff',
+  'galW.sky.note.map':
+    '{n} fuentes ubicadas por su longitud y latitud galácticas; sus valores están en la tabla de abajo.',
+  'galW.sky.aria.vectors':
+    'Flechas de movimiento propio de {n} fuentes, con la ascensión recta creciendo hacia la izquierda',
+  'galW.sky.note.vectors':
+    '{n} fuentes, cada una con una flecha según su movimiento propio; la mediana del movimiento propio es {v} mas/año y su flecha mide cerca de una veinteava parte de la imagen, todas en la misma escala.',
+  'galW.sky.scale':
+    'la ascensión recta crece hacia la izquierda; flechas en una escala, mediana {v} mas/año',
 };
