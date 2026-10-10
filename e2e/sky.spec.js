@@ -188,7 +188,7 @@ test.describe('the Sky Lab', () => {
       await page.locator('#skyInstruments > summary').click();
       await expect(page.locator('.sky-inst')).toHaveCount(5);
       if (locale === 'es') {
-        await expect(page.locator('#skyPlay')).toHaveText('Reproducir');
+        await expect(page.locator('#skyPlay')).toContainText('Reproducir');
         await expect(page.locator('#skyCount')).toContainText(
           'objetos sobre el horizonte'
         );

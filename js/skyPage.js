@@ -504,6 +504,14 @@ async function openInstruments() {
 }
 
 async function init() {
+  // The stored language, before anything is drawn: the page is stamped lang="en".
+  try {
+    const stored = window.localStorage.getItem('gravitas_locale');
+    if (stored)
+      document.documentElement.lang = stored.startsWith('es') ? 'es' : 'en';
+  } catch {
+    /* storage unavailable: the page stays in English */
+  }
   mountShell({
     onLanguage: () => {
       if (!state.built) return;
