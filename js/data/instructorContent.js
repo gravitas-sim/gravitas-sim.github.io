@@ -4895,7 +4895,8 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         claim: 'Corrected values should equal the truth exactly.',
-        response: 'They agree to within the Poisson error.',
+        response:
+          'They agree to within the Poisson error, which is the most a finite count can promise.',
       },
       {
         claim: 'A correction needs the true magnitudes.',
