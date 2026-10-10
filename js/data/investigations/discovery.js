@@ -400,4 +400,34 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'inside-a-star': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['lives-of-stars'],
+    textbook: {
+      chapter: 16,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'scaling-the-main-sequence': {
+    audience: 'intro',
+    mathematics: 'logarithms',
+    prerequisites: ['inside-a-star'],
+    textbook: {
+      chapter: 18,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'the-limit': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['inside-a-star'],
+    textbook: {
+      chapter: 23,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
 };

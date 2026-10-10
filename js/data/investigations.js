@@ -85,6 +85,9 @@ import THE_ROTATING_DISK from './investigations/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP from './investigations/cluster-membership.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
+import INSIDE_A_STAR from './investigations/inside-a-star.js';
+import SCALING_THE_MAIN_SEQUENCE from './investigations/scaling-the-main-sequence.js';
+import THE_LIMIT from './investigations/the-limit.js';
 import WHO_GETS_COUNTED from './investigations/who-gets-counted.js';
 import WHY_THE_BRIGHT_ONES_WIN from './investigations/why-the-bright-ones-win.js';
 import THE_COMPLETENESS_CURVE from './investigations/the-completeness-curve.js';
@@ -143,6 +146,9 @@ export const INVESTIGATIONS = [
   THE_SUNS_MOTION,
   THE_ROTATING_DISK,
   CLUSTER_MEMBERSHIP,
+  INSIDE_A_STAR,
+  SCALING_THE_MAIN_SEQUENCE,
+  THE_LIMIT,
   WHO_GETS_COUNTED,
   WHY_THE_BRIGHT_ONES_WIN,
   THE_COMPLETENESS_CURVE,

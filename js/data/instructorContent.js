@@ -4922,6 +4922,249 @@ export const INSTRUCTOR_CONTENT = {
     modelNotes:
       'js/survey/model.js: effectiveVolume, recoveredLuminosityFunction (truth and catalog modes), completenessCurve, bootstrapLuminosityFunction. See SELECTION_EFFECTS.md.',
   },
+  'inside-a-star': {
+    topic:
+      'Hydrostatic equilibrium and the polytrope: the central density and temperature of a star from its weight, how concentrated it is, and why the center is hot',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Lives of Stars (or any first work on stellar structure). The first of three stellar-interior investigations; it needs proportional reasoning and one power law. It supports OpenStax Astronomy 2e chapter 16.',
+    overview:
+      'Students use a polytrope scaled to a star. With n = 3, one solar mass and one solar radius (Eddington’s standard model) the center is 76.4 g/cm³ (54.2 times the mean of 1.41) and 11.8 million kelvin, half the mass lies inside 0.283 of the radius, and doubling the mass at the same radius doubles both the central density (153) and temperature (23.5 million kelvin). A red dwarf as n = 3/2 (0.2 solar masses, 0.22 solar radii) is only 5.99 times denser at the center and 6.74 million kelvin; a uniform ball (n = 0) has ratio 1 and half its mass inside 0.794. The depths estimate the temperature by hand (13.8 million kelvin) and the central pressure in units of GM²/R⁴ (11.05).',
+    priorKnowledge: [
+      'Lives of Stars (what a star is made of and why it shines)',
+      'Density, pressure and the ideal gas law in words',
+      'Powers and ratios',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Weight sets pressure sets temperature',
+        body: 'Hydrostatic equilibrium fixes the pressure at the center; for a gas of that density the pressure demands a temperature, with no fusion in the model.',
+      },
+      {
+        heading: 'The temperature scales as M over R',
+        body: 'Doubling the mass at the same size doubles the central temperature; a compact star is hotter than a diffuse one of the same mass.',
+      },
+      {
+        heading: 'The index n is a concentration',
+        body: 'A uniform ball has a central density equal to the mean; n = 3 puts fifty times more at the center; a red dwarf (n = 3/2) is in between.',
+      },
+    ],
+    features: [
+      {
+        name: 'Polytrope instrument (interiors family)',
+        text: 'Density, pressure, temperature and enclosed mass from the center to the surface for an index n from 0 to 4.5, a mass and a radius; listed ξ₁, the dimensionless mass, the central-to-mean density ratio, mean and central density, central pressure and temperature, the radius that holds half the mass and what the index approximates.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the temperature scale GMμm/(kR) by hand, 13.8 million kelvin. Advanced: the central pressure in units of GM²/R⁴, 11.05.',
+      },
+      {
+        name: 'Presets and the Stellar Lab',
+        text: 'The Sun as n = 3, a red dwarf as n = 3/2, a uniform ball and a centrally condensed n = 4.5 load in one click. The Stellar Lab’s star card has an interior row that names the polytrope and its central values, stated as a model.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The center of a star is hot because fusion is happening there.',
+        response:
+          'The model has no fusion and the temperature is the same; fusion is possible because the weight already made the center hot.',
+      },
+      {
+        claim: 'A star is the same density throughout.',
+        response:
+          'The Sun’s center is some fifty times denser than its average; half its mass is inside a quarter of its radius.',
+      },
+      {
+        claim: 'A bigger star is hotter inside.',
+        response:
+          'The central temperature scales as M over R: for a given mass the larger star is cooler.',
+      },
+      {
+        claim: 'The polytrope is the Sun.',
+        response:
+          'It is a shape with the right order of magnitude: the real center is denser (150 g/cm³) and hotter (15.7 million kelvin) than n = 3 gives.',
+      },
+    ],
+    teachingNotes: [
+      'The model is the Lane-Emden polytrope with an ideal-gas temperature at μ = 0.6 (STELLAR_STRUCTURE.md). Radiation pressure matters above about ten solar masses, where the temperature row is not to be trusted.',
+      'The instrument gives the temperature in kelvin and the lesson asks for millions of kelvin: the conversion is part of the step.',
+      'The real Sun is better described by n near 3.3 (central concentration 106). The lesson says that the model underestimates, and the instrument does not hide it.',
+      'The Stellar Lab’s interior row uses n = 3/2 below 0.35 solar masses and n = 3 above, for main-sequence stars only; giants have a dense core in a tenuous envelope and white dwarfs have their own model.',
+    ],
+    discussion: [
+      'Why would a more compact star of the same mass be hotter inside?',
+      'What would have to be added to the model to say how fast the star radiates?',
+      'The Sun’s real center is hotter than the model’s. Which way does that push the star’s structure?',
+    ],
+    extensions: [
+      'Continue with Scaling the Main Sequence.',
+      'Open the Stellar Lab and read the interior row for a 5-solar-mass star.',
+    ],
+    modelNotes:
+      'js/kernels/stellar/polytrope.js (RK4 from a series start at small ξ, surface by bisection; closed forms for n = 0, 1, 5) and star.js. Checked against Chandrasekhar’s table to 2 × 10⁻⁵ in tests/stellarKernel.test.js. See STELLAR_STRUCTURE.md.',
+  },
+  'scaling-the-main-sequence': {
+    topic:
+      'Homology: what a scaling argument predicts for luminosity, radius and lifetime against mass, and how far the MIST zero-age models follow it',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Inside a Star. It uses log-log fits and exponents and supports OpenStax Astronomy 2e chapter 18; the advanced depth shows an exponent falling toward the Eddington limit.',
+    overview:
+      'Students set the exponents a homology argument predicts against the zero-age models of the MIST grid (eight masses, 0.2 to 40 solar masses). With electron scattering and the CNO cycle the predicted luminosity exponent is 3.00 and the fit over 2 to 40 solar masses is 3.16 with 0.143 dex of scatter; with Kramers opacity and the proton-proton chain it is 5.46 against 4.43 fitted over 0.5 to 2 solar masses; Kramers on massive stars scatters 0.92 dex. The radius exponent is predicted 0.789 and fitted 0.546; the lifetime exponent −2 against −1.82. The Sun’s MIST life is 9.88 Gyr against a nuclear timescale of 13.9. The depths find the 40 to 20 solar-mass luminosity ratio (5.29, against 8) and the effective exponent between them, 2.40.',
+    priorKnowledge: [
+      'Inside a Star (central temperature from weight)',
+      'Reading log-log plots and exponents',
+      'Main-sequence mass–luminosity relation as a fact',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A scaling argument predicts exponents, not constants',
+        body: 'The lines are slid to fit; the test is the slope and the scatter about it.',
+      },
+      {
+        heading: 'Different physics dominates in different mass ranges',
+        body: 'Low-mass stars are Kramers and proton-proton, massive stars electron scattering and CNO; one exponent cannot hold across both.',
+      },
+      {
+        heading: 'The residual is the result',
+        body: 'A wrong law gives 0.92 dex of scatter, the right one 0.14: the size of what is left is how a model is judged.',
+      },
+    ],
+    features: [
+      {
+        name: 'Scaling instrument (interiors family)',
+        text: 'Luminosity, radius or lifetime against mass on log-log axes for the eight MIST zero-age models, with the predicted exponent as lines over 0.5 to 2 and 2 to 40 solar masses (dashed and solid); choices of opacity law (Kramers or electron scattering) and energy source (proton-proton or CNO); listed predicted exponent, fitted exponents, scatter and the selected model’s luminosity, radius, MIST life and nuclear timescale.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the luminosity ratio of the 40 and 20 solar-mass models, 5.29 against 8. Advanced: the effective exponent between them, 2.40.',
+      },
+      {
+        name: 'The data',
+        text: 'The MIST v1.2 tracks pack (mist-v12-tracks, no licence stated, attributed) read through the existing track module; nothing new is bundled.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Stars of different masses are made of different materials.',
+        response:
+          'All the models start with the same composition; what changes is the central temperature, which decides the opacity and the reactions.',
+      },
+      {
+        claim:
+          'A scaling law that is off by 10 percent in its exponent is wrong.',
+        response:
+          'It is a scaling argument; 3.16 against 3 over a factor of 20 in mass is a good prediction, and the scatter is the part it does not capture.',
+      },
+      {
+        claim: 'The mass–luminosity relation is one power law.',
+        response:
+          'The fitted exponent is 4.4 at low mass and 3.2 above 2 solar masses, and keeps falling toward 1.',
+      },
+      {
+        claim: 'The nuclear timescale is the lifetime.',
+        response:
+          'It is an estimate with a fixed burned fraction (0.1) and the zero-age luminosity; it is within about 40 percent for the Sun and further off for massive stars.',
+      },
+    ],
+    teachingNotes: [
+      'The MIST stars are models, not measurements; the page says so. A comparison against observed stars (the HR diagram of a cluster) belongs to Stellar Populations.',
+      'Each fitted range has only three or five models: 0.5, 1 and 2 solar masses at low mass, and 2, 5, 10, 20 and 40 above. The scatter is a description of those points, not a statistical estimate.',
+      'The nuclear timescale uses 0.7 percent efficiency, 10 percent of the mass burned and the zero-age luminosity, so for massive stars it is a factor of up to 2.6 below MIST (the luminosity rises during the main sequence).',
+      'The scatter rows give residuals about the predicted exponent with the best-fitting intercept: the scaling does not fix the height.',
+    ],
+    discussion: [
+      'Why does a steeper energy source (CNO against proton-proton) change the radius so much more than the luminosity?',
+      'At what mass would you expect the exponent to leave 3? Why?',
+      'What observations would you use to test the prediction for lifetimes?',
+    ],
+    extensions: [
+      'Continue with The Limit.',
+      'Read STELLAR_STRUCTURE.md for the homology derivation and its limits.',
+    ],
+    modelNotes:
+      'js/kernels/stellar/homology.js: L ∝ μ^(4+b) M^(3+b−a) R^(3a−b) for κ ∝ ρ^a T^−b and the radius from equating with ε ∝ ρ^λ T^ν; the zero-age models are js/stellar/tracks.js mainSequenceAt(mass, 0) at the eight grid masses. See STELLAR_STRUCTURE.md.',
+  },
+  'the-limit': {
+    topic:
+      'White dwarfs from a cold degenerate electron gas: mass and radius, why heavier is smaller, and the limiting mass 5.8/μₑ² solar masses',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Inside a Star (or the stellar-evolution unit). It supports OpenStax Astronomy 2e chapter 23 and is a first look at why a limiting mass exists at all.',
+    overview:
+      'Students integrate a white dwarf from a central density. At 3.2 million g/cm³ (carbon and oxygen) it has 0.597 solar masses and 8,864 km; at 10⁹ it has 1.367 and 2,470 km; at 10¹¹ it has 1.450, against a limit of 1.456 that the integration approaches and never passes. A hydrogen star (μₑ = 1) would have 5.82 and an iron composition (μₑ = 2.15) 1.26. The depths find the typical dwarf’s mean density (4.07 × 10⁵ g/cm³) and the six percent of mass a hundredfold density adds near the limit.',
+    priorKnowledge: [
+      'Inside a Star (hydrostatic equilibrium)',
+      'The idea that particles cannot all be in the same state',
+      'Orders of magnitude in size and density',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Degenerate electrons hold the star up, at any temperature',
+        body: 'The pressure comes from the exclusion principle; the star can be cold and still not collapse.',
+      },
+      {
+        heading: 'Heavier is smaller',
+        body: 'More mass presses the electrons closer, so the radius falls as the mass rises, from planet-sized to a few thousand kilometers.',
+      },
+      {
+        heading: 'The limit emerges',
+        body: 'When the electrons are relativistic the pressure rises as ρ^(4/3), the rate gravity strengthens, and the mass saturates at 5.8/μₑ² solar masses.',
+      },
+    ],
+    features: [
+      {
+        name: 'White-dwarf instrument (interiors family)',
+        text: 'The mass-radius relation (every central density from 10⁴ to 10¹¹ g/cm³) with your dwarf, the limiting mass as a dashed line, and the nucleons-per-electron slider; listed mass, radius (solar radii and kilometers), mean density, central Fermi momentum, regime and fraction of the limit.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the mean density by hand, 4.07 × 10⁵ g/cm³. Advanced: the 6 percent a hundredfold density adds near the limit.',
+      },
+      {
+        name: 'No observed white dwarfs',
+        text: 'The instrument draws no observed dwarfs: a public compilation’s terms could not be confirmed in this session (D-STELLAR-01). The model’s radius is a few percent larger than the best published relations.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A white dwarf over the limit runs out of fuel and collapses.',
+        response:
+          'A white dwarf has no fuel at any mass; the limit is where the electron pressure cannot keep up.',
+      },
+      {
+        claim: 'At 1.4 solar masses a white dwarf becomes a black hole.',
+        response: 'It collapses until neutrons hold it up, or it explodes.',
+      },
+      {
+        claim: 'A more massive white dwarf is larger.',
+        response:
+          'It is smaller: 0.6 solar masses is planet-sized and 1.4 is under 3,000 km.',
+      },
+      {
+        claim: 'The limit is a fixed 1.4 for every star.',
+        response:
+          'It is 5.8/μₑ²: 1.46 for carbon and oxygen, 1.26 for iron and 5.8 for pure hydrogen; real stars add other effects.',
+      },
+    ],
+    teachingNotes: [
+      'The equation of state is Chandrasekhar’s cold, ideal, degenerate electron gas with ions supplying mass only; Coulomb corrections, layers, temperature and the instabilities that end a real dwarf below the limit are left out (STELLAR_STRUCTURE.md).',
+      'The limit is checked three ways in tests/stellarKernel.test.js: the integration at central x = 10⁴ against the closed form from the n = 3 polytrope (within 2 × 10⁻⁴), Chandrasekhar’s 5.836/μₑ², and the n = 3/2 scaling at low density.',
+      'The instrument’s radius is about 3 percent above the Eggleton fit at 0.6 solar masses; say so if students compare it with observed radii.',
+      'The iron case (μₑ = 2.15, limit 1.26) is the cold bound for a star’s core, not the collapse mass of a real supernova core.',
+    ],
+    discussion: [
+      'Why does the exclusion principle give a pressure that does not depend on temperature?',
+      'What changes about the pressure when the electrons become relativistic?',
+      'What would a measured white dwarf at 1.5 solar masses tell you about the composition?',
+    ],
+    extensions: [
+      'Return to Lives of Stars and find where the model dwarfs sit on the cooling track.',
+      'Compare with the neutron-star case in the gravitational-wave lessons.',
+    ],
+    modelNotes:
+      'js/kernels/stellar/whiteDwarf.js: P(x) and ρ(x) of the degenerate gas, integrated in q = x² (regular at the surface) by RK4; the limit is also the closed form from the n = 3 polytrope. See STELLAR_STRUCTURE.md.',
+  },
 };
 
 /** @returns {Object|null} The instructor content for an investigation id */

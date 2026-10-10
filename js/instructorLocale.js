@@ -33,6 +33,9 @@ import WHAT_A_SPECTRUM_IS_MADE_OF from './data/investigations/es/what-a-spectrum
 import THE_SUNS_MOTION from './data/investigations/es/the-suns-motion.js';
 import THE_ROTATING_DISK from './data/investigations/es/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP from './data/investigations/es/cluster-membership.js';
+import INSIDE_A_STAR from './data/investigations/es/inside-a-star.js';
+import SCALING_THE_MAIN_SEQUENCE from './data/investigations/es/scaling-the-main-sequence.js';
+import THE_LIMIT from './data/investigations/es/the-limit.js';
 import DESIGN_THE_SCHEDULE from './data/investigations/es/design-the-schedule.js';
 import DETECT_THIS_PLANET from './data/investigations/es/detect-this-planet.js';
 import GOLDILOCKS_QUESTION from './data/investigations/es/goldilocks-question.js';
@@ -64,6 +67,9 @@ import WHAT_A_SPECTRUM_IS_MADE_OF_DEEPER from './data/investigations/depth/es/wh
 import THE_SUNS_MOTION_DEEPER from './data/investigations/depth/es/the-suns-motion.js';
 import THE_ROTATING_DISK_DEEPER from './data/investigations/depth/es/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP_DEEPER from './data/investigations/depth/es/cluster-membership.js';
+import INSIDE_A_STAR_DEEPER from './data/investigations/depth/es/inside-a-star.js';
+import SCALING_THE_MAIN_SEQUENCE_DEEPER from './data/investigations/depth/es/scaling-the-main-sequence.js';
+import THE_LIMIT_DEEPER from './data/investigations/depth/es/the-limit.js';
 import KEPLERS_LAWS_DEEPER from './data/investigations/depth/es/keplers-laws.js';
 import MISSING_MASS_DEEPER from './data/investigations/depth/es/missing-mass.js';
 import TRANSIT_PHOTOMETRY_DEEPER from './data/investigations/depth/es/transit-photometry.js';
@@ -92,6 +98,9 @@ export const SHADOWS = Object.freeze({
   'the-suns-motion': THE_SUNS_MOTION,
   'the-rotating-disk': THE_ROTATING_DISK,
   'cluster-membership': CLUSTER_MEMBERSHIP,
+  'inside-a-star': INSIDE_A_STAR,
+  'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE,
+  'the-limit': THE_LIMIT,
   'who-gets-counted': WHO_GETS_COUNTED,
   'why-the-bright-ones-win': WHY_THE_BRIGHT_ONES_WIN,
   'the-completeness-curve': THE_COMPLETENESS_CURVE,
@@ -130,6 +139,9 @@ export const DEEPER_SHADOWS = Object.freeze({
   'the-suns-motion': THE_SUNS_MOTION_DEEPER,
   'the-rotating-disk': THE_ROTATING_DISK_DEEPER,
   'cluster-membership': CLUSTER_MEMBERSHIP_DEEPER,
+  'inside-a-star': INSIDE_A_STAR_DEEPER,
+  'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE_DEEPER,
+  'the-limit': THE_LIMIT_DEEPER,
   'who-gets-counted': WHO_GETS_COUNTED_DEEPER,
   'why-the-bright-ones-win': WHY_THE_BRIGHT_ONES_WIN_DEEPER,
   'the-completeness-curve': THE_COMPLETENESS_CURVE_DEEPER,

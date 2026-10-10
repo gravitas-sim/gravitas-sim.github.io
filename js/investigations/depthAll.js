@@ -16,6 +16,9 @@ import MADE_OF_DEEPER from '../data/investigations/depth/what-a-spectrum-is-made
 import THE_SUNS_MOTION_DEEPER from '../data/investigations/depth/the-suns-motion.js';
 import THE_ROTATING_DISK_DEEPER from '../data/investigations/depth/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP_DEEPER from '../data/investigations/depth/cluster-membership.js';
+import INSIDE_A_STAR_DEEPER from '../data/investigations/depth/inside-a-star.js';
+import SCALING_THE_MAIN_SEQUENCE_DEEPER from '../data/investigations/depth/scaling-the-main-sequence.js';
+import THE_LIMIT_DEEPER from '../data/investigations/depth/the-limit.js';
 import WHO_GETS_COUNTED_DEEPER from '../data/investigations/depth/who-gets-counted.js';
 import WHY_THE_BRIGHT_ONES_WIN_DEEPER from '../data/investigations/depth/why-the-bright-ones-win.js';
 import THE_COMPLETENESS_CURVE_DEEPER from '../data/investigations/depth/the-completeness-curve.js';
@@ -43,6 +46,9 @@ export const DEEPER = Object.freeze({
   [THE_SUNS_MOTION_DEEPER.id]: THE_SUNS_MOTION_DEEPER.steps,
   [THE_ROTATING_DISK_DEEPER.id]: THE_ROTATING_DISK_DEEPER.steps,
   [CLUSTER_MEMBERSHIP_DEEPER.id]: CLUSTER_MEMBERSHIP_DEEPER.steps,
+  [INSIDE_A_STAR_DEEPER.id]: INSIDE_A_STAR_DEEPER.steps,
+  [SCALING_THE_MAIN_SEQUENCE_DEEPER.id]: SCALING_THE_MAIN_SEQUENCE_DEEPER.steps,
+  [THE_LIMIT_DEEPER.id]: THE_LIMIT_DEEPER.steps,
   [WHO_GETS_COUNTED_DEEPER.id]: WHO_GETS_COUNTED_DEEPER.steps,
   [WHY_THE_BRIGHT_ONES_WIN_DEEPER.id]: WHY_THE_BRIGHT_ONES_WIN_DEEPER.steps,
   [THE_COMPLETENESS_CURVE_DEEPER.id]: THE_COMPLETENESS_CURVE_DEEPER.steps,

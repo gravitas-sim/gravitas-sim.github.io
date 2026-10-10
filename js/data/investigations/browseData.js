@@ -152,6 +152,18 @@ export const BROWSE_META = {
     tags: ['galaxies', 'observing', 'stars'],
     numericCount: 0,
   },
+  'inside-a-star': {
+    tags: ['stars', 'stellar-evolution'],
+    numericCount: 0,
+  },
+  'scaling-the-main-sequence': {
+    tags: ['stars', 'stellar-evolution'],
+    numericCount: 0,
+  },
+  'the-limit': {
+    tags: ['compact-objects', 'stars'],
+    numericCount: 0,
+  },
   'who-gets-counted': {
     tags: ['observing', 'stars'],
     numericCount: 0,

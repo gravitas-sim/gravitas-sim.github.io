@@ -96,6 +96,10 @@ const DEEPER = {
     import('./data/investigations/depth/the-rotating-disk.js'),
   'cluster-membership': () =>
     import('./data/investigations/depth/cluster-membership.js'),
+  'inside-a-star': () => import('./data/investigations/depth/inside-a-star.js'),
+  'scaling-the-main-sequence': () =>
+    import('./data/investigations/depth/scaling-the-main-sequence.js'),
+  'the-limit': () => import('./data/investigations/depth/the-limit.js'),
   'who-gets-counted': () =>
     import('./data/investigations/depth/who-gets-counted.js'),
   'why-the-bright-ones-win': () =>

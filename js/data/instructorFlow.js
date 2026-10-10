@@ -1266,5 +1266,91 @@ export default {
         text: 'The close of the investigation, with what was worked out.',
       },
     ],
+    'inside-a-star': [
+      {
+        from: 'weight-and-pressure',
+        to: 'predict-the-centre',
+        text: 'Weight against pressure fixes a star; students predict how dense the center is.',
+      },
+      {
+        from: 'the-suns-centre',
+        to: 'half-the-mass',
+        text: 'The Sun as a polytrope: 76 g/cm³ and 11.8 million kelvin at the center, half the mass inside 0.28 of the radius.',
+      },
+      {
+        from: 'twice-the-mass',
+        to: 'why-the-centre-is-hot',
+        text: 'Twice the mass in the same size doubles the temperature; why the center is hot from weight alone.',
+      },
+      {
+        from: 'a-red-dwarf',
+        to: 'no-concentration',
+        text: 'A red dwarf is less concentrated (6 times), a uniform ball not at all.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: the shape of the balance and what the model leaves out.',
+      },
+    ],
+    'scaling-the-main-sequence': [
+      {
+        from: 'stars-as-scaled-copies',
+        to: 'predict-the-slope',
+        text: 'Stars as scaled copies; students predict whether the models follow the exponent.',
+      },
+      {
+        from: 'the-prediction',
+        to: 'low-mass-stars',
+        text: 'Massive stars follow L ∝ M³ to 5 percent; low-mass stars are a unit shallower than predicted.',
+      },
+      {
+        from: 'the-wrong-law',
+        to: 'why-no-single-exponent',
+        text: 'The wrong opacity gives six times the scatter; why no single exponent holds.',
+      },
+      {
+        from: 'radius-scaling',
+        to: 'lifetimes',
+        text: 'The radius prediction is the weaker; lifetimes follow M ÷ L.',
+      },
+      {
+        from: 'the-suns-clock',
+        to: 'the-suns-clock',
+        text: 'A nuclear clock for the Sun, 13.9 Gyr, against MIST’s 9.9.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: scaling says what to expect, the residuals how far to trust it.',
+      },
+    ],
+    'the-limit': [
+      {
+        from: 'a-star-held-up-by-electrons',
+        to: 'a-typical-dwarf',
+        text: 'A star held up by degenerate electrons; a typical dwarf is 0.6 solar masses in 8,900 km.',
+      },
+      {
+        from: 'predict-the-squeeze',
+        to: 'a-dense-dwarf',
+        text: 'Students predict that squeezing gives more mass and less radius; 1.37 solar masses in 2,470 km.',
+      },
+      {
+        from: 'the-ceiling',
+        to: 'why-a-limit',
+        text: 'The mass climbs toward 1.456 and never passes; relativistic electrons explain why.',
+      },
+      {
+        from: 'hydrogen-would-be-different',
+        to: 'an-iron-core',
+        text: 'The limit goes as 1/μₑ²: 5.8 for hydrogen, 1.26 for iron.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: heavier is smaller, and the limit emerges.',
+      },
+    ],
   },
 };
