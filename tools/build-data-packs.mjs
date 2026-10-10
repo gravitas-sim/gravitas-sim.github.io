@@ -58,6 +58,7 @@ import { MIST_TRACKS } from './data-packs/mist-tracks.mjs';
 import { COMPILATIONS } from './data-packs/compilations.mjs';
 import { NGC3198_SYNTHETIC } from './data-packs/ngc3198-synthetic.mjs';
 import { RADIATION_PACKS } from './data-packs/radiation.mjs';
+import { SKY_PACKS } from './data-packs/sky.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CACHE =
@@ -434,6 +435,8 @@ export const PACKS = [
   // The radiation kernel's data (Roadmap II Prompt 82): bandpasses, lines,
   // the extinction law and bolometric corrections.
   ...RADIATION_PACKS,
+  // The Sky Lab's bright-star catalogue (Roadmap II Prompt 88).
+  ...SKY_PACKS,
 ];
 
 // A table pack (js/tableObservation.js) is decoded and checked as a table;
@@ -509,11 +512,26 @@ export async function buildPack(pack, raw) {
   const text = built.render
     ? await built.render(PACK)
     : await moduleText(pack, PACK, series);
-  const mod = built.render ? await importText(text) : { PACK, SERIES: series };
+  const ns = built.render ? await importText(text) : { PACK, SERIES: series };
+  // A pack with a sidecar (a data file fetched at run time rather than
+  // imported, so a route budget that counts JavaScript does not count it, as
+  // for library/library.json) hands its text to decode() and check() as
+  // SIDECAR_TEXT, and its manifest records the file beside the module's.
+  const sidecarText = built.sidecar;
+  const mod = sidecarText === undefined ? ns : { ...ns, SIDECAR_TEXT: sidecarText };
   const derived = {
     file: pack.module,
     bytes: Buffer.byteLength(text),
     sha256: sha256(text),
+    ...(sidecarText === undefined
+      ? {}
+      : {
+          sidecar: {
+            file: pack.sidecar,
+            bytes: Buffer.byteLength(sidecarText),
+            sha256: sha256(sidecarText),
+          },
+        }),
   };
   const observation = decodeOf(pack)(mod);
   const problems = pack.check
@@ -533,6 +551,7 @@ export async function buildPack(pack, raw) {
     );
   return {
     moduleText: text,
+    sidecarText,
     manifest,
     manifestText: `${JSON.stringify(manifest, null, 2)}\n`,
   };
@@ -588,6 +607,20 @@ export async function checkPacks({ root = REPO, only } = {}) {
     } catch (err) {
       say(`${pack.module} will not load: ${err.message}`);
       continue;
+    }
+    if (pack.sidecar) {
+      const where = manifest.derived?.sidecar;
+      if (!where || where.file !== pack.sidecar || !existsSync(at(pack.sidecar))) {
+        say(`${pack.sidecar} is missing or not the sidecar its manifest records`);
+        continue;
+      }
+      const side = readFileSync(at(pack.sidecar));
+      if (side.length !== where.bytes || sha256(side) !== where.sha256) {
+        say(
+          `${pack.sidecar} is not the file its manifest records (${side.length} bytes, ${sha256(side)})`
+        );
+      }
+      mod = { ...mod, SIDECAR_TEXT: side.toString('utf8') };
     }
     // A compilation's module is content Gravitas wrote, with no PACK: its
     // check compares each value, and its sources (js/data/realSystemSources.js),
@@ -679,6 +712,14 @@ async function provenance({ only, offline = true } = {}) {
         `${pack.id}: ${pack.manifest} does not rebuild from the raw product`
       );
     }
+    if (
+      pack.sidecar &&
+      readFileSync(path.join(REPO, pack.sidecar), 'utf8') !== built.sidecarText
+    ) {
+      problems.push(
+        `${pack.id}: ${pack.sidecar} does not rebuild from the raw product`
+      );
+    }
   }
   return problems;
 }
@@ -694,6 +735,10 @@ async function write({ only, offline, offlineFlag = false } = {}) {
     });
     if (!pack.handWritten)
       writeFileSync(path.join(REPO, pack.module), built.moduleText);
+    if (pack.sidecar) {
+      mkdirSync(path.dirname(path.join(REPO, pack.sidecar)), { recursive: true });
+      writeFileSync(path.join(REPO, pack.sidecar), built.sidecarText);
+    }
     writeFileSync(path.join(REPO, pack.manifest), built.manifestText);
     console.log(
       `${pack.id}: ${built.manifest.derived.bytes} bytes, ${JSON.stringify(built.manifest.validation.result)}`
