@@ -13,6 +13,8 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+- Prompt 85: the model-versus-data comparison instrument (`js/compare/`, Observatory panel, `COMPARE_INSTRUMENT.md`); artifact source kind `comparison`; notebook source `comparison`. Lesson docking is not built.
+
 ### Added
 
 - **The forward-model loop** (Roadmap II P84). `gravitas.observing-setup/1` and seven pure forward models (transit, radial velocity, astrometry, periodic, spectrum, catalogue, image) return synthetic observations with a truth manifest; the Observatory labels them and compares a fit with the truth. See `FORWARD_MODELS.md`.
