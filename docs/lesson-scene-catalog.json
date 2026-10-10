@@ -795,6 +795,19 @@
   "spectrum": {
    "live": false,
    "controls": [
+    "lambda",
+    "clouds",
+    "H"
+   ],
+   "presets": 4,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
+  "spectrum-viewer": {
+   "live": false,
+   "controls": [
     "src",
     "view",
     "line"
@@ -6421,8 +6434,7 @@
      "kinds": [
       "scene-declared",
       "model-result",
-      "panel-diagram",
-      "imported-data"
+      "panel-diagram"
      ],
      "actions": [
       "move-an-instrument-control",
@@ -7094,7 +7106,7 @@
     "student": 5,
     "engine": 6,
     "model": 5,
-    "data": 1,
+    "data": 0,
     "diagram": 5,
     "evidence": 5,
     "declaredButInert": 24,
@@ -52164,7 +52176,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "spectrum",
+      "id": "spectrum-viewer",
       "capture": false
      },
      "evidence": [],
@@ -52242,7 +52254,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "spectrum",
+      "id": "spectrum-viewer",
       "capture": false
      },
      "evidence": [],
@@ -52319,7 +52331,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "spectrum",
+      "id": "spectrum-viewer",
       "capture": false
      },
      "evidence": [],
@@ -52397,7 +52409,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "spectrum",
+      "id": "spectrum-viewer",
       "capture": false
      },
      "evidence": [],
@@ -52475,7 +52487,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "spectrum",
+      "id": "spectrum-viewer",
       "capture": false
      },
      "evidence": [
@@ -52555,7 +52567,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "spectrum",
+      "id": "spectrum-viewer",
       "capture": false
      },
      "evidence": [],
@@ -52631,7 +52643,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "spectrum",
+      "id": "spectrum-viewer",
       "capture": false
      },
      "evidence": [],
@@ -52708,7 +52720,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "spectrum",
+      "id": "spectrum-viewer",
       "capture": false
      },
      "evidence": [],
@@ -52785,7 +52797,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "spectrum",
+      "id": "spectrum-viewer",
       "capture": false
      },
      "evidence": [],
@@ -52862,7 +52874,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "spectrum",
+      "id": "spectrum-viewer",
       "capture": false
      },
      "evidence": [],
@@ -52937,7 +52949,7 @@
       "eventWatch": null
      },
      "instrument": {
-      "id": "spectrum",
+      "id": "spectrum-viewer",
       "capture": false
      },
      "evidence": [],
@@ -53006,7 +53018,7 @@
   "student": 157,
   "engine": 163,
   "model": 271,
-  "data": 106,
+  "data": 105,
   "diagram": 150,
   "evidence": 118,
   "declaredButInert": 498,
