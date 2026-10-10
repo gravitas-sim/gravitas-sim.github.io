@@ -112,6 +112,12 @@ export default {
     'Where the peak is, how the two bandpasses sample the curve, and the color index they give.',
     'A real star is not a blackbody: its lines and edges change a measured color from this one.',
   ],
+  sky: [
+    'The sky as a computed model: heights, times and angles for a place and a date.',
+    'Each reading is a number from a model of the Sun, Moon, stars and planets, listed beneath the picture.',
+    'How a height, a time or an angle changes when you move the date, the place or a limit.',
+    'It is a model, good to a fraction of a degree for the Sun and Moon and about 0.2 degrees for planets; it is not tonight’s sky.',
+  ],
   gwEvents: [
     'Real detector strain against time, and a map of pitch against time.',
     'A rising track on the map is the chirp of an inspiral.',

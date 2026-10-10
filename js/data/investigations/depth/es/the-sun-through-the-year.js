@@ -3,7 +3,7 @@ export default {
   steps: [
     {
       title: 'Luz solar sobre un metro cuadrado',
-      body: 'La luz solar media diaria en lo alto de la atmósfera sobre un metro cuadrado horizontal es S&#8320;/&pi; &times; (1/R&sup2;) &times; (H sen&phi; sen&delta; + cos&phi; cos&delta; sen&nbsp;H), donde S&#8320; es la constante solar del Sol del núcleo de radiación, 1.361&nbsp;W/m&sup2;, R la distancia en ua y H el semiarco del día. El instrumento la evalúa. A latitud 40&deg;, léela en los dos solsticios.',
+      body: 'La luz solar media diaria en lo alto de la atmósfera sobre un metro cuadrado horizontal es S₀/π × (1/R²) × (H senφ senδ + cosφ cosδ sen&nbsp;H), donde S₀ es la constante solar del Sol del núcleo de radiación, 1.361&nbsp;W/m², R la distancia en ua y H el semiarco del día. El instrumento la evalúa. A latitud 40°, léela en los dos solsticios.',
       fields: [
         { label: 'Solsticio de junio' },
         { label: 'Solsticio de diciembre' },
@@ -12,7 +12,7 @@ export default {
     },
     {
       title: 'Cuánto importa la distancia',
-      body: 'La luz solar cae como 1/R&sup2;. El Sol está a 1,0163&nbsp;ua en el solsticio de junio y a 0,9838&nbsp;ua en el de diciembre.',
+      body: 'La luz solar cae como 1/R². El Sol está a 1,0163&nbsp;ua en el solsticio de junio y a 0,9838&nbsp;ua en el de diciembre.',
       prompt:
         '¿En qué porcentaje es más fuerte la luz solar en diciembre que en junio, solo por la distancia?',
       hints: [
@@ -30,7 +30,7 @@ export default {
     },
     {
       title: 'El polo supera al ecuador',
-      body: 'En el solsticio de junio, lee la luz solar media diaria a latitud 0&deg; y a latitud 65&deg;.',
+      body: 'En el solsticio de junio, lee la luz solar media diaria a latitud 0° y a latitud 65°.',
       prompt: '¿Cuál recibe más luz solar a lo largo del día?',
       options: [
         'la latitud 65°, donde el Sol está bajo pero arriba durante 22 horas',

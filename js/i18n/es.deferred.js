@@ -1787,7 +1787,7 @@ export const ES_DEFERRED = {
 
   'inv.seq.sky.title': 'El cielo',
   'inv.seq.sky.blurb':
-    'Dónde están las cosas en el cielo y por qué se mueven: el giro de las estrellas, el año del Sol, las fases de la Luna y los eclipses, los lazos de los planetas, y luego planificar una noche en un telescopio. La primera secuencia para un curso introductorio; cada una dura unos 35 minutos.',
+    'Dónde están las cosas en el cielo y por qué se mueven: el giro de las estrellas, el año del Sol, las fases de la Luna y los eclipses, los lazos de los planetas, y luego planificar una noche en un telescopio. La primera secuencia para un curso introductorio; cada una dura de 10 a 20 minutos.',
   'inv.seq.sky.the-turning-sky':
     'Empieza aquí: coordenadas, tiempo sidéreo y los cuatro minutos.',
   'inv.seq.sky.the-sun-through-the-year':

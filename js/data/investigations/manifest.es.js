@@ -323,7 +323,7 @@ export const MANIFEST = [
     id: 'the-turning-sky',
     title: 'El cielo que gira',
     subtitle: 'Mide por qué una estrella sale cuatro minutos antes cada noche',
-    duration: '30-40 min',
+    duration: '10-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-turning-sky.webp',
     depths: 3,
@@ -336,7 +336,7 @@ export const MANIFEST = [
     title: 'El Sol a lo largo del año',
     subtitle:
       'Mide la altura del Sol, la duración del día y por qué junio es cálido',
-    duration: '35-45 min',
+    duration: '10-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-sun-through-the-year.webp',
     depths: 3,
@@ -349,7 +349,7 @@ export const MANIFEST = [
     title: 'Fases y eclipses',
     subtitle:
       'Mide qué parte de la Luna está iluminada y averigua por qué los eclipses son raros',
-    duration: '35-45 min',
+    duration: '10-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/phases-and-eclipses.webp',
     depths: 3,
@@ -362,7 +362,7 @@ export const MANIFEST = [
     title: 'Errantes en el cielo',
     subtitle:
       'Sigue a Marte, Venus y Júpiter por sus lazos, desde el cielo y desde arriba',
-    duration: '35-45 min',
+    duration: '12-22 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/wanderers-on-the-sky.webp',
     depths: 3,
@@ -375,7 +375,7 @@ export const MANIFEST = [
     title: 'Planifica una noche en el telescopio',
     subtitle:
       'Elige objetivos para una fecha y un lugar con límites de crepúsculo, masa de aire y Luna',
-    duration: '35-45 min',
+    duration: '10-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/plan-a-night.webp',
     depths: 3,

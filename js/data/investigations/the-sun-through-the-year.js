@@ -20,14 +20,14 @@ const THE_SUN_THROUGH_THE_YEAR = {
   title: 'The Sun Through the Year',
   subtitle:
     'Measure the Sun’s height, the length of the day and why June is warm',
-  duration: '35-45 min',
+  duration: '10-20 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 2, section: '2.2' },
   courseLevel: 'survey',
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
-  prerequisites: [],
+  prerequisites: ['the-turning-sky'],
   tags: ['observing', 'solar-system'],
   lock: { placement: true, inspector: true },
   objectives: [
@@ -46,10 +46,10 @@ const THE_SUN_THROUGH_THE_YEAR = {
       body: `Over a year the Sun moves along a great circle on the sky, the
              <strong>ecliptic</strong>, through the constellations of the
              zodiac. The ecliptic is tilted from the celestial equator by
-             23.4&deg;: the <strong>obliquity</strong>. When the Sun is at the
-             crossing points (ecliptic longitude 0&deg; and 180&deg;) its
-             declination is zero, the equinoxes. At longitude 90&deg; and
-             270&deg; it is as far north and south as it goes, the solstices.
+             23.4°: the <strong>obliquity</strong>. When the Sun is at the
+             crossing points (ecliptic longitude 0° and 180°) its
+             declination is zero, the equinoxes. At longitude 90° and
+             270° it is as far north and south as it goes, the solstices.
              \n\nThe instrument computes the Sun for local noon on a date, at a
              latitude you choose, from the Sky Lab kernel. It is a model, not a
              measurement. The upper plot is the Sun's noon altitude through the
@@ -62,7 +62,7 @@ const THE_SUN_THROUGH_THE_YEAR = {
       type: 'predict',
       reveal: 'three-noons',
       title: 'Predict the noon Sun',
-      body: `At latitude 40&deg; north, about the latitude of Madrid or New
+      body: `At latitude 40° north, about the latitude of Madrid or New
              York, think about the Sun at noon in June and in December.`,
       prompt:
         'The Sun’s noon altitude in June compared with December is&hellip;',
@@ -86,7 +86,7 @@ const THE_SUN_THROUGH_THE_YEAR = {
       type: 'measure',
       title: 'Three noons',
       body: `Use the presets for the March equinox, the June solstice and the
-             December solstice, at latitude 40&deg;. Read the Sun's altitude at
+             December solstice, at latitude 40°. Read the Sun's altitude at
              noon each time.`,
       fields: [
         {
@@ -140,8 +140,8 @@ const THE_SUN_THROUGH_THE_YEAR = {
       kind: 'numeric',
       title: 'What if the tilt were smaller',
       body: `At the June solstice the Sun's declination equals the tilt. Work out
-             the noon altitude at 40&deg; north if the tilt were only
-             10&deg;, then set the tilt slider to 10 to check.`,
+             the noon altitude at 40° north if the tilt were only
+             10°, then set the tilt slider to 10 to check.`,
       prompt: 'Noon altitude at the June solstice, latitude 40°, tilt 10°',
       unit: 'deg',
       answer: 60,
@@ -165,7 +165,7 @@ const THE_SUN_THROUGH_THE_YEAR = {
       type: 'measure',
       title: 'Three day lengths',
       body: `Go back to the real tilt and the June solstice. Set the latitude to
-             0&deg;, 40&deg; and 65&deg; in turn and read the length of the day.`,
+             0°, 40° and 65° in turn and read the length of the day.`,
       fields: [
         {
           id: 'h0',
@@ -277,8 +277,8 @@ const THE_SUN_THROUGH_THE_YEAR = {
       type: 'read',
       title: 'What you worked out',
       body: `The Sun's declination swings between plus and minus the obliquity,
-             23.4&deg;, as it travels the ecliptic. That moves the noon Sun
-             through 47&deg; of altitude at 40&deg; north and lengthens the
+             23.4°, as it travels the ecliptic. That moves the noon Sun
+             through 47° of altitude at 40° north and lengthens the
              June day to 15 hours. The distance to the Sun changes by about 3
              percent and is the wrong place to look. The next investigation
              turns to the Moon.`,

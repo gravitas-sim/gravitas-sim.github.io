@@ -991,7 +991,7 @@ export default {
       {
         from: 'what-you-worked-out',
         to: 'what-you-worked-out',
-        text: 'The close.',
+        text: 'The close of the investigation, with what was worked out.',
       },
     ],
     'phases-and-eclipses': [
@@ -1072,7 +1072,7 @@ export default {
       {
         from: 'what-you-worked-out',
         to: 'what-you-worked-out',
-        text: 'The close.',
+        text: 'The close of the investigation, with what was worked out.',
       },
     ],
   },

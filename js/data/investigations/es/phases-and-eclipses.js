@@ -12,11 +12,11 @@ export default {
   steps: [
     {
       title: 'Una Luna que cambia',
-      body: 'La Luna siempre tiene la mitad iluminada por el Sol. Lo que cambia es cuánto de esa mitad podemos ver, y eso depende de un solo ángulo: la <strong>elongación</strong>, el ángulo en el cielo entre la Luna y el Sol. En luna nueva es cercano a 0&deg;, en luna llena cercano a 180&deg;.\n\nEl instrumento es la Luna y el Sol del núcleo (un modelo calculado con series publicadas, no una imagen del cielo de esta noche). A la izquierda: los tres cuerpos vistos desde arriba, con la luz del Sol desde la izquierda. A la derecha: la Luna vista desde la Tierra. El control cuenta días desde la luna nueva del 29 de enero de 2025.',
+      body: 'La Luna siempre tiene la mitad iluminada por el Sol. Lo que cambia es cuánto de esa mitad podemos ver, y eso depende de un solo ángulo: la <strong>elongación</strong>, el ángulo en el cielo entre la Luna y el Sol. En luna nueva es cercano a 0°, en luna llena cercano a 180°.\n\nEl instrumento es la Luna y el Sol del núcleo (un modelo calculado con series publicadas, no una imagen del cielo de esta noche). A la izquierda: los tres cuerpos vistos desde arriba, con la luz del Sol desde la izquierda. A la derecha: la Luna vista desde la Tierra. El control cuenta días desde la luna nueva del 29 de enero de 2025.',
     },
     {
       title: 'Predice el cuarto',
-      body: 'En cuarto creciente la Luna está a 90&deg; del Sol en el cielo.',
+      body: 'En cuarto creciente la Luna está a 90° del Sol en el cielo.',
       prompt: 'En ese momento, ¿qué parte del disco de la Luna está iluminada?',
       options: ['ninguna', 'un cuarto', 'la mitad', 'tres cuartos'],
       hints: [
@@ -37,7 +37,7 @@ export default {
     },
     {
       title: 'Del ángulo a la fracción',
-      body: 'La fracción iluminada del disco es (1 &minus; cos&nbsp;E)/2 para una elongación E. Compruébalo con una de tus lecturas (el instrumento da la elongación) y luego úsalo.',
+      body: 'La fracción iluminada del disco es (1 − cos&nbsp;E)/2 para una elongación E. Compruébalo con una de tus lecturas (el instrumento da la elongación) y luego úsalo.',
       prompt: 'Fracción del disco iluminada cuando la Luna está a 60° del Sol',
       hints: ['cos 60° vale 0,5.', 'Pon la elongación en (1 − cos E) ÷ 2.'],
       worked: '(1 − cos 60°) ÷ 2 = (1 − 0,5) ÷ 2 = 0,25.',
@@ -65,7 +65,7 @@ export default {
     },
     {
       title: 'Cuenta las oportunidades de eclipse',
-      body: 'El instrumento lista todas las lunas nuevas y llenas de medio año con la latitud eclíptica de la Luna, y marca como eclipses posibles las que están a menos de 1,5&deg; de la eclíptica. Usa los dos preajustes de 2025 y cuenta las filas que dicen que es posible un eclipse.',
+      body: 'El instrumento lista todas las lunas nuevas y llenas de medio año con la latitud eclíptica de la Luna, y marca como eclipses posibles las que están a menos de 1,5° de la eclíptica. Usa los dos preajustes de 2025 y cuenta las filas que dicen que es posible un eclipse.',
       fields: [
         { label: 'Eclipses posibles, enero a junio de 2025' },
         { label: 'Eclipses posibles, julio a diciembre de 2025' },
@@ -112,7 +112,7 @@ export default {
     },
     {
       title: 'Lo que has deducido',
-      body: 'La fracción iluminada de la Luna la fija su elongación respecto del Sol, (1 &minus; cos&nbsp;E)/2. Un eclipse necesita una luna nueva o llena sobre la eclíptica, y la órbita inclinada de la Luna la pone ahí solo cerca de sus nodos, que el Sol alcanza más o menos cada medio año. El instrumento es un modelo de la geometría (un límite aproximado de 1,5&deg;), no un pronóstico de qué eclipse se ve desde dónde. La investigación siguiente sigue a los planetas.',
+      body: 'La fracción iluminada de la Luna la fija su elongación respecto del Sol, (1 − cos&nbsp;E)/2. Un eclipse necesita una luna nueva o llena sobre la eclíptica, y la órbita inclinada de la Luna la pone ahí solo cerca de sus nodos, que el Sol alcanza más o menos cada medio año. El instrumento es un modelo de la geometría (un límite aproximado de 1,5°), no un pronóstico de qué eclipse se ve desde dónde. La investigación siguiente sigue a los planetas.',
     },
   ],
 };

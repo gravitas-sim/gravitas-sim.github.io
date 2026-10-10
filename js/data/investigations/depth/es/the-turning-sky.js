@@ -21,7 +21,7 @@ export default {
     },
     {
       title: 'Cuánto tiempo se queda arriba',
-      body: 'Con Arcturus seleccionada a latitud 40&deg;, halla con las horas de salida y de puesta cuánto tiempo está sobre el horizonte. El ángulo horario al que se pone una estrella cumple cos H = &minus;tan&nbsp;latitud &times; tan&nbsp;declinación, así que el tiempo arriba es 2H en horas de tiempo sidéreo. El instrumento también tiene en cuenta la refracción y el lugar aparente de la estrella.',
+      body: 'Con Arcturus seleccionada a latitud 40°, halla con las horas de salida y de puesta cuánto tiempo está sobre el horizonte. El ángulo horario al que se pone una estrella cumple cos H = −tan&nbsp;latitud × tan&nbsp;declinación, así que el tiempo arriba es 2H en horas de tiempo sidéreo. El instrumento también tiene en cuenta la refracción y el lugar aparente de la estrella.',
       prompt: 'Tiempo que Arcturus está sobre el horizonte a latitud 40°',
       hints: [
         'Resta la hora de salida a la de puesta y pasa los minutos a horas.',

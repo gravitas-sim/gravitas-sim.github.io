@@ -45,10 +45,10 @@ export default {
       type: 'question',
       kind: 'numeric',
       title: 'How long it stays up',
-      body: `With Arcturus selected at latitude 40&deg;, find from the rising
+      body: `With Arcturus selected at latitude 40°, find from the rising
              and setting times how long it is above the horizon. The hour
-             angle at which a star sets satisfies cos H = &minus;tan&nbsp;latitude
-             &times; tan&nbsp;declination, so the time up is 2H as hours of
+             angle at which a star sets satisfies cos H = −tan&nbsp;latitude
+             × tan&nbsp;declination, so the time up is 2H as hours of
              sidereal time. The instrument also allows for refraction and the
              star's apparent place.`,
       prompt: 'Time Arcturus is above the horizon at latitude 40°',

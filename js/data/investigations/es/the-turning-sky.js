@@ -32,7 +32,7 @@ export default {
     },
     {
       title: 'Mide el adelanto',
-      body: 'Está seleccionada Arcturus, a latitud 40&deg;. Lee la hora a la que sale, en minutos después del mediodía, en la noche&nbsp;0, y luego pasa a la noche&nbsp;30 y léela otra vez. (Una noche empieza al mediodía, así que la hora de salida nunca da la vuelta por la medianoche.)',
+      body: 'Está seleccionada Arcturus, a latitud 40°. Lee la hora a la que sale, en minutos después del mediodía, en la noche&nbsp;0, y luego pasa a la noche&nbsp;30 y léela otra vez. (Una noche empieza al mediodía, así que la hora de salida nunca da la vuelta por la medianoche.)',
       fields: [
         { label: 'Sale la noche 0 (minutos después del mediodía)' },
         { label: 'Sale la noche 30 (minutos después del mediodía)' },
@@ -90,7 +90,7 @@ export default {
     },
     {
       title: 'A qué altura llega',
-      body: 'Arcturus está a declinación +19,2&deg;. Una estrella cruza el meridiano a una altura de 90&deg; menos la latitud más su declinación, desde un lugar del hemisferio norte. Úsalo para la latitud 40&deg; y luego comprueba la altura en el meridiano que da el instrumento.',
+      body: 'Arcturus está a declinación +19,2°. Una estrella cruza el meridiano a una altura de 90° menos la latitud más su declinación, desde un lugar del hemisferio norte. Úsalo para la latitud 40° y luego comprueba la altura en el meridiano que da el instrumento.',
       prompt: 'Altura de Arcturus en el meridiano, latitud 40°',
       hints: [
         'Resta la latitud a 90° y luego suma la declinación.',
@@ -106,7 +106,7 @@ export default {
     },
     {
       title: 'Una estrella que no se pone',
-      body: 'Selecciona Vega, a declinación +38,8&deg;, y pon la latitud en 60&deg;. Lee lo que dice el instrumento sobre ella.',
+      body: 'Selecciona Vega, a declinación +38,8°, y pon la latitud en 60°. Lee lo que dice el instrumento sobre ella.',
       prompt: 'Desde la latitud 60° norte, Vega&hellip;',
       options: [
         'sale y se pone, como casi todas las estrellas',

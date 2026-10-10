@@ -15,15 +15,15 @@ export default {
       type: 'measure',
       title: 'Sunlight on a square meter',
       body: `The daily mean sunlight at the top of the atmosphere on a
-             horizontal square meter is S&#8320;/&pi; &times; (1/R&sup2;)
-             &times; (H sin&phi; sin&delta; + cos&phi; cos&delta; sin&nbsp;H),
-             where S&#8320; is the solar constant from the radiation kernel's
-             Sun, 1,361&nbsp;W/m&sup2;, R the distance in au and H the
-             half-day arc. The instrument evaluates it. At latitude 40&deg;,
+             horizontal square meter is S₀/π × (1/R²)
+             × (H sinφ sinδ + cosφ cosδ sin&nbsp;H),
+             where S₀ is the solar constant from the radiation kernel's
+             Sun, 1,361&nbsp;W/m², R the distance in au and H the
+             half-day arc. The instrument evaluates it. At latitude 40°,
              read it at the two solstices.`,
       fields: [
-        { id: 'jun', label: 'June solstice', unit: 'W/m²', hint: '483' },
-        { id: 'dec', label: 'December solstice', unit: 'W/m²', hint: '156' },
+        { id: 'jun', label: 'June solstice', unit: '', hint: '483' },
+        { id: 'dec', label: 'December solstice', unit: '', hint: '156' },
         {
           id: 'ratio',
           label: 'June divided by December',
@@ -57,7 +57,7 @@ export default {
       type: 'question',
       kind: 'numeric',
       title: 'How much the distance matters',
-      body: `Sunlight falls as 1/R&sup2;. The Sun is 1.0163&nbsp;au away on the
+      body: `Sunlight falls as 1/R². The Sun is 1.0163&nbsp;au away on the
              June solstice and 0.9838&nbsp;au on the December solstice.`,
       prompt:
         'By what percent is the sunlight stronger in December than in June, from distance alone?',
@@ -85,7 +85,7 @@ export default {
       kind: 'choice',
       title: 'The pole beats the equator',
       body: `At the June solstice, read the daily mean sunlight at latitude
-             0&deg; and at latitude 65&deg;.`,
+             0° and at latitude 65°.`,
       prompt: 'Which receives more sunlight over the day?',
       options: [
         'latitude 65°, where the Sun is low but up for 22 hours',

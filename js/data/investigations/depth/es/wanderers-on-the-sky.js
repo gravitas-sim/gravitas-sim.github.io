@@ -3,7 +3,7 @@ export default {
   steps: [
     {
       title: 'Cada cuánto vuelve el lazo',
-      body: 'La Tierra gana a Marte una vez por <em>periodo sinódico</em> S, con 1/S = 1/P<sub>Tierra</sub> &minus; 1/P<sub>Marte</sub>. Los periodos orbitales son 365,256 y 686,98 días.',
+      body: 'La Tierra gana a Marte una vez por <em>periodo sinódico</em> S, con 1/S = 1/P<sub>Tierra</sub> − 1/P<sub>Marte</sub>. Los periodos orbitales son 365,256 y 686,98 días.',
       prompt: 'El periodo sinódico de Marte',
       hints: ['Toma la diferencia de las dos tasas (por día) e invierte.'],
       worked:
@@ -17,7 +17,7 @@ export default {
     },
     {
       title: 'La velocidad del lazo',
-      body: 'En la oposición la Tierra (29,78&nbsp;km/s) adelanta a Marte (24,07&nbsp;km/s) en una línea que pasa por el Sol, a 0,524&nbsp;ua (7,84&times;10&sup7;&nbsp;km) en órbitas circulares. La línea de visión gira a la velocidad relativa dividida entre la distancia.',
+      body: 'En la oposición la Tierra (29,78&nbsp;km/s) adelanta a Marte (24,07&nbsp;km/s) en una línea que pasa por el Sol, a 0,524&nbsp;ua (7,84×10⁷&nbsp;km) en órbitas circulares. La línea de visión gira a la velocidad relativa dividida entre la distancia.',
       prompt:
         'La tasa hacia el oeste de Marte en la oposición en órbitas circulares, como magnitud en grados por día',
       hints: [

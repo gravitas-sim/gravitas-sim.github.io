@@ -13,11 +13,11 @@ export default {
   steps: [
     {
       title: 'Un Sol que se mueve',
-      body: 'A lo largo de un año el Sol recorre un círculo máximo del cielo, la <strong>eclíptica</strong>, por las constelaciones del zodiaco. La eclíptica está inclinada 23,4&deg; respecto del ecuador celeste: es la <strong>oblicuidad</strong>. Cuando el Sol está en los puntos de cruce (longitud eclíptica 0&deg; y 180&deg;) su declinación es cero: los equinoccios. En las longitudes 90&deg; y 270&deg; está lo más al norte y al sur que llega: los solsticios.\n\nEl instrumento calcula el Sol al mediodía local de una fecha, a la latitud que elijas, con el núcleo del Laboratorio del Cielo. Es un modelo, no una medición. La gráfica de arriba es la altura del Sol al mediodía a lo largo del año; la de abajo, la duración del día.',
+      body: 'A lo largo de un año el Sol recorre un círculo máximo del cielo, la <strong>eclíptica</strong>, por las constelaciones del zodiaco. La eclíptica está inclinada 23,4° respecto del ecuador celeste: es la <strong>oblicuidad</strong>. Cuando el Sol está en los puntos de cruce (longitud eclíptica 0° y 180°) su declinación es cero: los equinoccios. En las longitudes 90° y 270° está lo más al norte y al sur que llega: los solsticios.\n\nEl instrumento calcula el Sol al mediodía local de una fecha, a la latitud que elijas, con el núcleo del Laboratorio del Cielo. Es un modelo, no una medición. La gráfica de arriba es la altura del Sol al mediodía a lo largo del año; la de abajo, la duración del día.',
     },
     {
       title: 'Predice el Sol del mediodía',
-      body: 'A latitud 40&deg; norte, más o menos la de Madrid o Nueva York, piensa en el Sol al mediodía en junio y en diciembre.',
+      body: 'A latitud 40° norte, más o menos la de Madrid o Nueva York, piensa en el Sol al mediodía en junio y en diciembre.',
       prompt:
         'La altura del Sol al mediodía en junio comparada con diciembre es&hellip;',
       options: [
@@ -32,7 +32,7 @@ export default {
     },
     {
       title: 'Tres mediodías',
-      body: 'Usa los preajustes del equinoccio de marzo, el solsticio de junio y el solsticio de diciembre, a latitud 40&deg;. Lee cada vez la altura del Sol al mediodía.',
+      body: 'Usa los preajustes del equinoccio de marzo, el solsticio de junio y el solsticio de diciembre, a latitud 40°. Lee cada vez la altura del Sol al mediodía.',
       fields: [
         { label: 'Altura al mediodía, equinoccio de marzo' },
         { label: 'Altura al mediodía, solsticio de junio' },
@@ -42,7 +42,7 @@ export default {
     },
     {
       title: 'Y si la inclinación fuera menor',
-      body: 'En el solsticio de junio la declinación del Sol es igual a la inclinación. Calcula la altura al mediodía a 40&deg; norte si la inclinación fuera de solo 10&deg;, y luego pon el control de inclinación en 10 para comprobarlo.',
+      body: 'En el solsticio de junio la declinación del Sol es igual a la inclinación. Calcula la altura al mediodía a 40° norte si la inclinación fuera de solo 10°, y luego pon el control de inclinación en 10 para comprobarlo.',
       prompt:
         'Altura al mediodía en el solsticio de junio, latitud 40°, inclinación 10°',
       hints: [
@@ -59,7 +59,7 @@ export default {
     },
     {
       title: 'Tres duraciones del día',
-      body: 'Vuelve a la inclinación real y al solsticio de junio. Pon la latitud en 0&deg;, 40&deg; y 65&deg; por turno y lee la duración del día.',
+      body: 'Vuelve a la inclinación real y al solsticio de junio. Pon la latitud en 0°, 40° y 65° por turno y lee la duración del día.',
       fields: [
         { label: 'Duración del día a latitud 0°' },
         { label: 'Duración del día a latitud 40°' },
@@ -111,7 +111,7 @@ export default {
     },
     {
       title: 'Lo que has deducido',
-      body: 'La declinación del Sol oscila entre más y menos la oblicuidad, 23,4&deg;, mientras recorre la eclíptica. Eso mueve el Sol del mediodía a lo largo de 47&deg; de altura a 40&deg; norte y alarga el día de junio hasta 15 horas. La distancia al Sol cambia cerca de un 3 por ciento y es el lugar equivocado donde buscar. La investigación siguiente se ocupa de la Luna.',
+      body: 'La declinación del Sol oscila entre más y menos la oblicuidad, 23,4°, mientras recorre la eclíptica. Eso mueve el Sol del mediodía a lo largo de 47° de altura a 40° norte y alarga el día de junio hasta 15 horas. La distancia al Sol cambia cerca de un 3 por ciento y es el lugar equivocado donde buscar. La investigación siguiente se ocupa de la Luna.',
     },
   ],
 };

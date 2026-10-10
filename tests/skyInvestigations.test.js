@@ -8,7 +8,7 @@ import PLAN from '../js/data/investigations/plan-a-night.js';
 import { DEEPER } from '../js/investigations/depthAll.js';
 import { SEQUENCES } from '../js/data/investigations/sequences.js';
 import { gradeAnswer, checkAnswer } from '../js/answerCheck.js';
-import { SKY_MODELS } from '../tools/authoring/skyModels.mjs';
+import { SKY_MODELS, SKY_DEPTH_VALUES } from '../tools/authoring/skyModels.mjs';
 import {
   SKY_WIDGETS,
   turningFacts,
@@ -57,7 +57,10 @@ beforeAll(async () => {
 });
 
 describe('the numeric answers are the kernel’s', () => {
-  for (const [key, model] of Object.entries(SKY_MODELS)) {
+  for (const [key, model] of Object.entries({
+    ...SKY_MODELS,
+    ...SKY_DEPTH_VALUES,
+  })) {
     const [id, sid] = key.split('/');
     test(`${key}: the kernel value is accepted, and one past the tolerance is not`, () => {
       const s = stepOf(id, sid);

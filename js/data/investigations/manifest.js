@@ -317,7 +317,7 @@ export const MANIFEST = [
     id: 'the-turning-sky',
     title: 'The Turning Sky',
     subtitle: 'Measure why a star rises four minutes earlier every night',
-    duration: '30-40 min',
+    duration: '10-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-turning-sky.webp',
     depths: 3,
@@ -330,7 +330,7 @@ export const MANIFEST = [
     title: 'The Sun Through the Year',
     subtitle:
       'Measure the Sun’s height, the length of the day and why June is warm',
-    duration: '35-45 min',
+    duration: '10-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-sun-through-the-year.webp',
     depths: 3,
@@ -343,7 +343,7 @@ export const MANIFEST = [
     title: 'Phases and Eclipses',
     subtitle:
       'Measure how much of the Moon is lit, then find out why eclipses are rare',
-    duration: '35-45 min',
+    duration: '10-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/phases-and-eclipses.webp',
     depths: 3,
@@ -356,7 +356,7 @@ export const MANIFEST = [
     title: 'Wanderers on the Sky',
     subtitle:
       'Follow Mars, Venus and Jupiter through their loops, from the sky and from above',
-    duration: '35-45 min',
+    duration: '12-22 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/wanderers-on-the-sky.webp',
     depths: 3,
@@ -369,7 +369,7 @@ export const MANIFEST = [
     title: 'Plan a Night at the Telescope',
     subtitle:
       'Choose targets for a date and a site under twilight, airmass and Moon limits',
-    duration: '35-45 min',
+    duration: '10-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/plan-a-night.webp',
     depths: 3,

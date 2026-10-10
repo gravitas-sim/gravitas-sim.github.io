@@ -21,14 +21,14 @@ const PHASES_AND_ECLIPSES = {
   title: 'Phases and Eclipses',
   subtitle:
     'Measure how much of the Moon is lit, then find out why eclipses are rare',
-  duration: '35-45 min',
+  duration: '10-20 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 2, section: '2.3' },
   courseLevel: 'survey',
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
-  prerequisites: [],
+  prerequisites: ['the-sun-through-the-year'],
   tags: ['observing', 'solar-system'],
   lock: { placement: true, inspector: true },
   objectives: [
@@ -46,8 +46,8 @@ const PHASES_AND_ECLIPSES = {
       body: `The Moon always has half of itself lit by the Sun. What changes is
              how much of that half we can see, and that depends on one angle:
              the <strong>elongation</strong>, the angle on the sky between the
-             Moon and the Sun. At new Moon it is near 0&deg;, at full Moon near
-             180&deg;.
+             Moon and the Sun. At new Moon it is near 0°, at full Moon near
+             180°.
              \n\nThe instrument is the kernel's Moon and Sun (a model computed
              from published series, not a picture of tonight's sky). Left: the
              three bodies seen from above, with sunlight from the left. Right:
@@ -61,7 +61,7 @@ const PHASES_AND_ECLIPSES = {
       type: 'predict',
       reveal: 'four-phases',
       title: 'Predict the quarter',
-      body: `At first quarter the Moon is 90&deg; from the Sun on the sky.`,
+      body: `At first quarter the Moon is 90° from the Sun on the sky.`,
       prompt: 'At that moment, how much of the Moon’s disc is lit?',
       options: ['none', 'a quarter', 'a half', 'three quarters'],
       answer: 2,
@@ -138,7 +138,7 @@ const PHASES_AND_ECLIPSES = {
       type: 'question',
       kind: 'numeric',
       title: 'From the angle to the fraction',
-      body: `The lit fraction of the disc is (1 &minus; cos&nbsp;E)/2 for an
+      body: `The lit fraction of the disc is (1 − cos&nbsp;E)/2 for an
              elongation E. Check it against one of your readings (the
              instrument lists the elongation), then use it.`,
       prompt: 'Fraction of the disc lit when the Moon is 60° from the Sun',
@@ -183,7 +183,7 @@ const PHASES_AND_ECLIPSES = {
       type: 'measure',
       title: 'Count the eclipse chances',
       body: `The instrument lists every new and full Moon in half a year with
-             the Moon's ecliptic latitude, and marks those within 1.5&deg; of
+             the Moon's ecliptic latitude, and marks those within 1.5° of
              the ecliptic as possible eclipses. Use the two 2025 presets and
              count the rows that say an eclipse is possible.`,
       fields: [
@@ -285,10 +285,10 @@ const PHASES_AND_ECLIPSES = {
       type: 'read',
       title: 'What you worked out',
       body: `The lit fraction of the Moon is set by its elongation from the Sun,
-             (1 &minus; cos&nbsp;E)/2. An eclipse needs a new or full Moon on
+             (1 − cos&nbsp;E)/2. An eclipse needs a new or full Moon on
              the ecliptic, and the Moon’s tilted orbit puts it there only near
              its nodes, which the Sun reaches about every half year. The
-             instrument is a model of the geometry (a rough 1.5&deg; limit),
+             instrument is a model of the geometry (a rough 1.5° limit),
              not a forecast of which eclipse is seen from where. The next
              investigation follows the planets.`,
     },

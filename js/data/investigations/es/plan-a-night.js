@@ -12,11 +12,11 @@ export default {
   steps: [
     {
       title: 'El encargo',
-      body: 'Tienes una noche en un telescopio a latitud 30&deg; norte, y ocho estrellas brillantes que te gustaría observar. ¿Cuáles puedes observar, y por cuánto tiempo? Lo deciden tres cosas: la <strong>oscuridad astronómica</strong> (el Sol a más de 18&deg; bajo el horizonte), la <strong>masa de aire</strong> (cuánta atmósfera cruza la luz, que crece cuando una estrella está baja) y la <strong>Luna</strong> (una Luna brillante cerca borra el cielo).\n\nEs el paso previo a las investigaciones <em>Diseña el calendario</em> y <em>Doce noches</em>, que toman el objetivo como dado y planifican sus épocas. Aquí eliges los objetivos. El instrumento es un modelo del núcleo del Laboratorio del Cielo: cada fila es una estrella a lo largo de la noche, y la lista de abajo da sus horas utilizables.',
+      body: 'Tienes una noche en un telescopio a latitud 30° norte, y ocho estrellas brillantes que te gustaría observar. ¿Cuáles puedes observar, y por cuánto tiempo? Lo deciden tres cosas: la <strong>oscuridad astronómica</strong> (el Sol a más de 18° bajo el horizonte), la <strong>masa de aire</strong> (cuánta atmósfera cruza la luz, que crece cuando una estrella está baja) y la <strong>Luna</strong> (una Luna brillante cerca borra el cielo).\n\nEs el paso previo a las investigaciones <em>Diseña el calendario</em> y <em>Doce noches</em>, que toman el objetivo como dado y planifican sus épocas. Aquí eliges los objetivos. El instrumento es un modelo del núcleo del Laboratorio del Cielo: cada fila es una estrella a lo largo de la noche, y la lista de abajo da sus horas utilizables.',
     },
     {
       title: 'Predice la oscuridad',
-      body: 'La noche del 29 de enero y la noche del 21 de junio, a latitud 30&deg; norte.',
+      body: 'La noche del 29 de enero y la noche del 21 de junio, a latitud 30° norte.',
       prompt: 'Comparada con la noche de enero, la noche de junio tiene una oscuridad astronómica&hellip;',
       options: [
         'de duración parecida',
@@ -30,7 +30,7 @@ export default {
     },
     {
       title: 'Cuánto dura la oscuridad',
-      body: 'Pon la tarde en 2025-01-29 y luego en 2025-06-21, a latitud 30&deg;. Lee cada vez la duración de la oscuridad astronómica.',
+      body: 'Pon la tarde en 2025-01-29 y luego en 2025-06-21, a latitud 30°. Lee cada vez la duración de la oscuridad astronómica.',
       fields: [
         { label: 'Oscuridad astronómica, 29 de enero' },
         { label: 'Oscuridad astronómica, 21 de junio' },
@@ -70,7 +70,7 @@ export default {
     },
     {
       title: 'Lo que cuesta la Luna',
-      body: 'Mira Régulo, con el límite de masa de aire 2 y la menor distancia a la Luna 30&deg;. Lee sus horas utilizables la tarde de 2025-01-29 (luna nueva) y la tarde de 2025-02-12 (luna llena).',
+      body: 'Mira Régulo, con el límite de masa de aire 2 y la menor distancia a la Luna 30°. Lee sus horas utilizables la tarde de 2025-01-29 (luna nueva) y la tarde de 2025-02-12 (luna llena).',
       fields: [
         { label: 'Régulo, noche de luna nueva' },
         { label: 'Régulo, noche de luna llena' },
@@ -79,7 +79,7 @@ export default {
     },
     {
       title: 'Cuántas valen la pena',
-      body: 'Pon la tarde en 2025-02-15, latitud 30&deg;, límite de masa de aire 2 y menor distancia a la Luna 30&deg;. Un objetivo vale una noche si tiene al menos 3 horas utilizables.',
+      body: 'Pon la tarde en 2025-02-15, latitud 30°, límite de masa de aire 2 y menor distancia a la Luna 30°. Un objetivo vale una noche si tiene al menos 3 horas utilizables.',
       prompt:
         '¿Cuántas de las ocho estrellas tienen al menos 3 horas utilizables?',
       hints: [
@@ -109,7 +109,7 @@ export default {
     },
     {
       title: 'Escribe el plan',
-      body: 'Pon la tarde en 2025-02-15, masa de aire máxima 2, distancia a la Luna 30&deg;. Mira las barras: dónde es utilizable cada estrella a lo largo de la noche.',
+      body: 'Pon la tarde en 2025-02-15, masa de aire máxima 2, distancia a la Luna 30°. Mira las barras: dónde es utilizable cada estrella a lo largo de la noche.',
       prompt:
         'Escribe un plan para la noche: tres objetivos, el orden en que los observarías y qué restricción decide cada uno.',
     },

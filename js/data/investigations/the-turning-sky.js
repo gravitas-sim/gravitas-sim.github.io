@@ -25,7 +25,7 @@ const THE_TURNING_SKY = {
   thumbnail: 'images/investigations/the-turning-sky.webp',
   title: 'The Turning Sky',
   subtitle: 'Measure why a star rises four minutes earlier every night',
-  duration: '30-40 min',
+  duration: '10-20 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 2, section: '2.1' },
@@ -89,7 +89,7 @@ const THE_TURNING_SKY = {
       stage: STAGE,
       type: 'measure',
       title: 'Measure the shift',
-      body: `Arcturus is selected, at latitude 40&deg;. Read the time it rises
+      body: `Arcturus is selected, at latitude 40°. Read the time it rises
              in minutes after noon on night&nbsp;0, then move to night&nbsp;30
              and read it again. (A night starts at noon, so a rising time never
              wraps through midnight.)`,
@@ -250,10 +250,10 @@ const THE_TURNING_SKY = {
       type: 'question',
       kind: 'numeric',
       title: 'How high does it get',
-      body: `Arcturus is at declination +19.2&deg;. A star crosses the meridian
-             at an altitude of 90&deg; minus the latitude plus its declination,
+      body: `Arcturus is at declination +19.2°. A star crosses the meridian
+             at an altitude of 90° minus the latitude plus its declination,
              from a site in the northern hemisphere. Use it for latitude
-             40&deg;, then check the instrument's altitude at the meridian.`,
+             40°, then check the instrument's altitude at the meridian.`,
       prompt: 'Altitude of Arcturus at the meridian, latitude 40°',
       unit: 'deg',
       answer: 69.1,
@@ -277,8 +277,8 @@ const THE_TURNING_SKY = {
       type: 'question',
       kind: 'choice',
       title: 'A star that never sets',
-      body: `Select Vega, at declination +38.8&deg;, and set the latitude to
-             60&deg;. Read what the instrument says about it.`,
+      body: `Select Vega, at declination +38.8°, and set the latitude to
+             60°. Read what the instrument says about it.`,
       prompt: 'From latitude 60° north, Vega&hellip;',
       options: [
         'rises and sets, like most stars',

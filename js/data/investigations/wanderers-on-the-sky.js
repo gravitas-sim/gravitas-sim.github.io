@@ -20,14 +20,14 @@ const WANDERERS_ON_THE_SKY = {
   title: 'Wanderers on the Sky',
   subtitle:
     'Follow Mars, Venus and Jupiter through their loops, from the sky and from above',
-  duration: '35-45 min',
+  duration: '12-22 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 3, section: '3.1' },
   courseLevel: 'survey',
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
-  prerequisites: [],
+  prerequisites: ['the-turning-sky'],
   tags: ['observing', 'solar-system'],
   lock: { placement: true, inspector: true },
   objectives: [
@@ -50,7 +50,7 @@ const WANDERERS_ON_THE_SKY = {
              shows the cause in the orbits: Earth overtaking a slower planet.
              This one measures the same thing from the sky.
              \n\nThe instrument has two views of one date, from the Sky Lab's
-             planet model (Standish elements, good to about 0.2&deg;): the
+             planet model (Standish elements, good to about 0.2°): the
              path across the sky for 120 days each way, and the orbits seen
              from above, with the line of sight from Earth (green) to the
              planet (blue). Day&nbsp;0 is 1&nbsp;October 2024.`,
@@ -346,9 +346,9 @@ const WANDERERS_ON_THE_SKY = {
       body: `Mars was retrograde for about 79 days around its opposition in
              January 2025, Jupiter for about 118 days, and the loop appears
              whenever Earth overtakes a slower planet. Venus never gets
-             farther than about 47&deg; from the Sun because its orbit is inside
+             farther than about 47° from the Sun because its orbit is inside
              ours. These are models of the sky (planet positions good to about
-             0.2&deg;), and each can be checked against an almanac. The next
+             0.2°), and each can be checked against an almanac. The next
              investigation uses the positions to plan a night at a
              telescope.`,
     },

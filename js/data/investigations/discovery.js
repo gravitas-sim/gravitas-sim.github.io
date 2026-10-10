@@ -283,7 +283,7 @@ export const DISCOVERY = {
   'the-sun-through-the-year': {
     audience: 'intro',
     mathematics: 'algebra',
-    prerequisites: [],
+    prerequisites: ['the-turning-sky'],
     textbook: {
       chapter: 2,
       section: '2.2',
@@ -293,7 +293,7 @@ export const DISCOVERY = {
   'phases-and-eclipses': {
     audience: 'intro',
     mathematics: 'algebra',
-    prerequisites: [],
+    prerequisites: ['the-sun-through-the-year'],
     textbook: {
       chapter: 2,
       section: '2.3',
@@ -303,7 +303,7 @@ export const DISCOVERY = {
   'wanderers-on-the-sky': {
     audience: 'intro',
     mathematics: 'algebra',
-    prerequisites: [],
+    prerequisites: ['the-turning-sky'],
     textbook: {
       chapter: 3,
       section: '3.1',
@@ -313,7 +313,7 @@ export const DISCOVERY = {
   'plan-a-night': {
     audience: 'intro',
     mathematics: 'algebra',
-    prerequisites: [],
+    prerequisites: ['the-turning-sky', 'the-sun-through-the-year'],
     textbook: {
       chapter: 4,
       section: '4.3',

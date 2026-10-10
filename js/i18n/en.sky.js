@@ -6,7 +6,7 @@
 // =============================================================================
 
 export const EN_SKY = {
-  'skyW.loading': 'loading the star catalogue…',
+  'skyW.loading': 'loading the star catalog…',
   'skyW.none': 'does not happen in this window',
   'skyW.control.lat': 'Latitude of the site',
   'skyW.control.nights': 'Nights after 1 January 2025',
@@ -124,7 +124,7 @@ export const EN_SKY = {
   'skyW.row.dist': 'Distance from Earth',
   'skyW.plan.title': 'An observing plan',
   'skyW.plan.note':
-    'Each row is a star across the dark of the night. Green: usable (above the airmass limit and clear of the Moon). Orange: too near the Moon. Faint grey: up but too low. The last row is when the Moon is up. Astronomical dark means the Sun is more than 18 degrees below the horizon.',
+    'Each row is a star across the dark of the night. Green: usable (above the airmass limit and clear of the Moon). Orange: too near the Moon. Faint gray: up but too low. The last row is when the Moon is up. Astronomical dark means the Sun is more than 18 degrees below the horizon.',
   'skyW.plan.moon': 'Moon up',
   'skyW.plan.noDark':
     'there is no astronomical dark on this night at this latitude',

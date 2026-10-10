@@ -16,7 +16,7 @@ export default {
       kind: 'numeric',
       title: 'How often the loop comes round',
       body: `Earth gains on Mars once per <em>synodic period</em> S, with
-             1/S = 1/P<sub>Earth</sub> &minus; 1/P<sub>Mars</sub>. The orbital
+             1/S = 1/P<sub>Earth</sub> − 1/P<sub>Mars</sub>. The orbital
              periods are 365.256 and 686.98 days.`,
       prompt: 'The synodic period of Mars',
       unit: 'd',
@@ -41,12 +41,12 @@ export default {
       kind: 'numeric',
       title: 'The speed of the loop',
       body: `At opposition Earth (29.78&nbsp;km/s) passes Mars (24.07&nbsp;km/s)
-             on a line through the Sun, 0.524&nbsp;au (7.84&times;10&sup7;&nbsp;km)
+             on a line through the Sun, 0.524&nbsp;au (7.84×10⁷&nbsp;km)
              away in circular orbits. The line of sight turns at the relative
              speed divided by the distance.`,
       prompt:
         'The westward rate of Mars at opposition in circular orbits, as a magnitude in degrees per day',
-      unit: 'deg/d',
+      unit: '',
       answer: 0.36,
       tolerance: 0.01,
       hints: [

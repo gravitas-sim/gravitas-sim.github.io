@@ -13,7 +13,7 @@ export default {
   steps: [
     {
       title: 'Cinco errantes',
-      body: 'La palabra antigua para un planeta es <em>errante</em>. Contra las estrellas fijas avanza hacia el este, casi siempre, luego se detiene, retrocede hacia el oeste un tiempo, se detiene y vuelve a avanzar hacia el este. La investigación hermana <strong>Por qué Marte va hacia atrás</strong> muestra la causa en las órbitas: la Tierra adelantando a un planeta más lento. Esta mide lo mismo desde el cielo.\n\nEl instrumento tiene dos vistas de una fecha, con el modelo de planetas del Laboratorio del Cielo (elementos de Standish, buenos a unos 0,2&deg;): la trayectoria por el cielo durante 120 días a cada lado, y las órbitas vistas desde arriba, con la línea de visión de la Tierra (verde) al planeta (azul). El día&nbsp;0 es el 1&nbsp;de octubre de 2024.',
+      body: 'La palabra antigua para un planeta es <em>errante</em>. Contra las estrellas fijas avanza hacia el este, casi siempre, luego se detiene, retrocede hacia el oeste un tiempo, se detiene y vuelve a avanzar hacia el este. La investigación hermana <strong>Por qué Marte va hacia atrás</strong> muestra la causa en las órbitas: la Tierra adelantando a un planeta más lento. Esta mide lo mismo desde el cielo.\n\nEl instrumento tiene dos vistas de una fecha, con el modelo de planetas del Laboratorio del Cielo (elementos de Standish, buenos a unos 0,2°): la trayectoria por el cielo durante 120 días a cada lado, y las órbitas vistas desde arriba, con la línea de visión de la Tierra (verde) al planeta (azul). El día&nbsp;0 es el 1&nbsp;de octubre de 2024.',
     },
     {
       title: 'Predice el lazo',
@@ -135,7 +135,7 @@ export default {
     },
     {
       title: 'Lo que has deducido',
-      body: 'Marte fue retrógrado unos 79 días en torno a su oposición de enero de 2025, Júpiter unos 118 días, y el lazo aparece siempre que la Tierra adelanta a un planeta más lento. Venus nunca se aleja más de unos 47&deg; del Sol porque su órbita está dentro de la nuestra. Son modelos del cielo (posiciones de planetas buenas a unos 0,2&deg;), y cada uno puede comprobarse con un almanaque. La investigación siguiente usa las posiciones para planificar una noche en un telescopio.',
+      body: 'Marte fue retrógrado unos 79 días en torno a su oposición de enero de 2025, Júpiter unos 118 días, y el lazo aparece siempre que la Tierra adelanta a un planeta más lento. Venus nunca se aleja más de unos 47° del Sol porque su órbita está dentro de la nuestra. Son modelos del cielo (posiciones de planetas buenas a unos 0,2°), y cada uno puede comprobarse con un almanaque. La investigación siguiente usa las posiciones para planificar una noche en un telescopio.',
     },
   ],
 };

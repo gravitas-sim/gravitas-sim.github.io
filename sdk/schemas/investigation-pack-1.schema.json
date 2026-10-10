@@ -56,7 +56,12 @@
           "lives-of-stars",
           "twelve-nights",
           "power-law-gravity",
-          "color-and-temperature"
+          "color-and-temperature",
+          "the-turning-sky",
+          "the-sun-through-the-year",
+          "phases-and-eclipses",
+          "wanderers-on-the-sky",
+          "plan-a-night"
         ]
       }
     },
@@ -262,7 +267,12 @@
                   "lives-of-stars",
                   "twelve-nights",
                   "power-law-gravity",
-                  "color-and-temperature"
+                  "color-and-temperature",
+                  "the-turning-sky",
+                  "the-sun-through-the-year",
+                  "phases-and-eclipses",
+                  "wanderers-on-the-sky",
+                  "plan-a-night"
                 ]
               }
             }
@@ -318,11 +328,23 @@
       "description": "A remix: the built-in investigation it was made from, its version and a digest of its steps (js/platform/remix.js). A remix may reorder, remove, reword and translate steps, change hints, feedback, depth and instructions, and add read, explore and question steps; it may not change a step's scenario, seed, instrument or expected value. A step with an id of the original's keeps the original's code by reference, and may be a kind of step (ellipse, wedges) only the original's engine code knows.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "version", "digest"],
+      "required": [
+        "id",
+        "version",
+        "digest"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/publicId" },
-        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
-        "digest": { "type": "string", "pattern": "^[0-9a-f]{8}$" }
+        "id": {
+          "$ref": "#/$defs/publicId"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}$"
+        }
       }
     },
     "bank": {
@@ -1401,6 +1423,12 @@
             "gw-lab",
             "gw-real",
             "blackbody",
+            "sky-turning",
+            "sky-seasons",
+            "sky-phases",
+            "sky-eclipses",
+            "sky-wanderers",
+            "sky-plan",
             "gw-events"
           ]
         }

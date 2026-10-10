@@ -3,7 +3,7 @@ export default {
   steps: [
     {
       title: 'Cuánto se equivoca la capa plana',
-      body: 'La masa de aire de capa plana 1/sen(altura) crece sin límite en el horizonte, lo que la atmósfera real, curva, no hace. El ajuste de Kasten y Young que usa el núcleo da 5,59 a una altura de 10&deg;.',
+      body: 'La masa de aire de capa plana 1/sen(altura) crece sin límite en el horizonte, lo que la atmósfera real, curva, no hace. El ajuste de Kasten y Young que usa el núcleo da 5,59 a una altura de 10°.',
       prompt: '¿Cuánto sobreestima 1/sen(altura) la masa de aire a 10°?',
       hints: ['Calcula 1 ÷ sen 10° y luego resta el ajuste.'],
       worked:
@@ -17,7 +17,7 @@ export default {
     },
     {
       title: 'Por qué no hay oscuridad',
-      body: 'Pon la tarde en 2025-06-21 y la latitud en 60&deg;: el instrumento informa de que no hay oscuridad astronómica. A medianoche el Sol está lo más bajo, a una altura de latitud + declinación &minus; 90&deg;. El 21 de junio la declinación es +23,44&deg;. La oscuridad astronómica necesita una altura menor que &minus;18&deg;.',
+      body: 'Pon la tarde en 2025-06-21 y la latitud en 60°: el instrumento informa de que no hay oscuridad astronómica. A medianoche el Sol está lo más bajo, a una altura de latitud + declinación − 90°. El 21 de junio la declinación es +23,44°. La oscuridad astronómica necesita una altura menor que −18°.',
       prompt: 'La altura del Sol a medianoche el 21 de junio a latitud 60°',
       hints: ['Suma la latitud y la declinación, y luego resta 90°.'],
       worked:

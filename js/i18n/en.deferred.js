@@ -1766,7 +1766,7 @@ export const EN_DEFERRED = {
 
   'inv.seq.sky.title': 'The sky',
   'inv.seq.sky.blurb':
-    'Where things are in the sky and why they move: the turning of the stars, the Sun’s year, the Moon’s phases and eclipses, the planets’ loops, and then planning a night at a telescope. The first sequence for an introductory course; each takes about 35 minutes.',
+    'Where things are in the sky and why they move: the turning of the stars, the Sun’s year, the Moon’s phases and eclipses, the planets’ loops, and then planning a night at a telescope. The first sequence for an introductory course; each takes 10 to 20 minutes.',
   'inv.seq.sky.the-turning-sky':
     'Start here: coordinates, sidereal time and the four minutes.',
   'inv.seq.sky.the-sun-through-the-year':

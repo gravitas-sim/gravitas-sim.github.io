@@ -65,14 +65,6 @@ export const SKY_MODELS = {
     via: 'js/kernels/sky events.js riseTransitSet transitAltDeg: Arcturus at 40 N',
     value: () => turning(0).transitAltDeg,
   },
-  'the-turning-sky/sidereal-day': {
-    via: '1440 min over 366.2422 turns of the Earth in the tropical year of 365.2422 days',
-    value: () => 1440 / 366.2422,
-  },
-  'the-turning-sky/time-above-the-horizon': {
-    via: 'js/kernels/sky events.js riseTransitSet: Arcturus at 40 N, setting less rising time, in hours',
-    value: () => turning(0).aboveHours,
-  },
   'the-sun-through-the-year/what-if-the-tilt': {
     via: 'js/kernels/sky solar.js apparentSun at the June solstice with the tilt as the ecliptic obliquity: 90 - 40 + declination',
     value: () => W.seasonFacts({ lat: 40, day: 171, tilt: 10 }).noonAltDeg,
@@ -81,12 +73,8 @@ export const SKY_MODELS = {
     via: 'js/kernels/sky solar.js apparentSun ecliptic longitude at noon UT on 2025-09-22',
     value: () => sun(264).longitudeDeg,
   },
-  'the-sun-through-the-year/distance-in-percent': {
-    via: 'js/kernels/sky solar.js apparentSun distance on the two solstices, inverse square, as a percent',
-    value: () => ((sun(171).distanceAu / sun(354).distanceAu) ** 2 - 1) * 100,
-  },
   'phases-and-eclipses/phase-from-elongation': {
-    via: 'illuminated fraction (1 - cos E)/2; tests hold it to js/kernels/sky planetPhase/phaseReading at the instrument’s readings',
+    via: 'js/kernels/sky planets.js planetPhase: the illuminated fraction (1 - cos E)/2; tests hold it to js/kernels/sky planetPhase/phaseReading at the instrument’s readings',
     value: () => (1 - Math.cos(60 * DEG)) / 2,
   },
   'phases-and-eclipses/months-between': {
@@ -98,30 +86,13 @@ export const SKY_MODELS = {
       return sep.jd - mar.jd;
     },
   },
-  'phases-and-eclipses/eclipse-year': {
-    via: 'the regression of the nodes: 1/E = 1/365.2422 + 1/6798.4 per day, halved',
-    value: () => 1 / (1 / 365.2422 + 1 / 6798.4) / 2,
-  },
-  'phases-and-eclipses/saros': {
-    via: '242 draconic months of 27.212221 d less 223 synodic months of 29.530589 d',
-    value: () => 242 * 27.212221 - 223 * 29.530589,
-  },
   'wanderers-on-the-sky/fastest-westward': {
     via: 'js/kernels/sky planets.js planetPhase: Mars’s elongation on the day of its most negative longitude rate',
     value: () => wander(2, fastestWestDay()).elongationDeg,
   },
   'wanderers-on-the-sky/the-inner-limit': {
-    via: 'arcsin of Venus’s orbit radius, 0.723 au (circular orbits)',
+    via: 'js/kernels/sky planets.js: arcsin of Venus’s orbit radius, 0.723 au (circular orbits)',
     value: () => Math.asin(0.723) / DEG,
-  },
-  'wanderers-on-the-sky/synodic-period': {
-    via: 'js/tidalPhysics.js periods: 1/S = 1/P Earth - 1/P Mars with 365.256 and 686.98 d',
-    value: () => 1 / (1 / 365.256 - 1 / 686.98),
-  },
-  'wanderers-on-the-sky/westward-rate': {
-    via: 'circular orbits: (29.78 - 24.07) km/s over 0.524 au, in degrees per day',
-    value: () =>
-      ((29.78 - 24.07) / (0.524 * 1.495978707e8)) * 86400 * (180 / Math.PI),
   },
   'plan-a-night/airmass-at-thirty': {
     via: 'js/kernels/sky readings.js airmassReading (Kasten and Young) at an altitude of 30 degrees',
@@ -140,6 +111,39 @@ export const SKY_MODELS = {
       countAtLeast3(
         W.planFacts({ lat: 30, day: 45, airmassMax: 1.5, moonSep: 30 })
       ),
+  },
+};
+
+/** The deeper steps' values (not literals of the core lesson, so not in MODELS). */
+export const SKY_DEPTH_VALUES = {
+  'the-turning-sky/sidereal-day': {
+    via: '1440 min over 366.2422 turns of the Earth in the tropical year of 365.2422 days',
+    value: () => 1440 / 366.2422,
+  },
+  'the-turning-sky/time-above-the-horizon': {
+    via: 'js/kernels/sky events.js riseTransitSet: Arcturus at 40 N, setting less rising time, in hours',
+    value: () => turning(0).aboveHours,
+  },
+  'the-sun-through-the-year/distance-in-percent': {
+    via: 'js/kernels/sky solar.js apparentSun distance on the two solstices, inverse square, as a percent',
+    value: () => ((sun(171).distanceAu / sun(354).distanceAu) ** 2 - 1) * 100,
+  },
+  'phases-and-eclipses/eclipse-year': {
+    via: 'the regression of the nodes: 1/E = 1/365.2422 + 1/6798.4 per day, halved',
+    value: () => 1 / (1 / 365.2422 + 1 / 6798.4) / 2,
+  },
+  'phases-and-eclipses/saros': {
+    via: '242 draconic months of 27.212221 d less 223 synodic months of 29.530589 d',
+    value: () => 242 * 27.212221 - 223 * 29.530589,
+  },
+  'wanderers-on-the-sky/synodic-period': {
+    via: 'js/tidalPhysics.js periods: 1/S = 1/P Earth - 1/P Mars with 365.256 and 686.98 d',
+    value: () => 1 / (1 / 365.256 - 1 / 686.98),
+  },
+  'wanderers-on-the-sky/westward-rate': {
+    via: 'circular orbits: (29.78 - 24.07) km/s over 0.524 au, in degrees per day',
+    value: () =>
+      ((29.78 - 24.07) / (0.524 * 1.495978707e8)) * 86400 * (180 / Math.PI),
   },
   'plan-a-night/secant-versus-fit': {
     via: 'js/kernels/sky readings.js airmassReading secantMinusFit at 10 degrees',

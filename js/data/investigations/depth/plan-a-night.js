@@ -18,7 +18,7 @@ export default {
       body: `The flat-layer airmass 1/sin(altitude) grows without limit at the
              horizon, which the real, curved atmosphere does not. The Kasten and
              Young fit that the kernel uses gives 5.59 at an altitude of
-             10&deg;.`,
+             10°.`,
       prompt:
         'By how much does 1/sin(altitude) overestimate the airmass at 10°?',
       unit: '',
@@ -44,11 +44,11 @@ export default {
       type: 'question',
       kind: 'numeric',
       title: 'Why there is no dark',
-      body: `Set the evening to 2025-06-21 and the latitude to 60&deg;: the
+      body: `Set the evening to 2025-06-21 and the latitude to 60°: the
              instrument reports no astronomical dark. At midnight the Sun is at
-             its lowest, at an altitude of latitude + declination &minus; 90&deg;.
-             On 21 June the declination is +23.44&deg;. Astronomical dark needs
-             an altitude below &minus;18&deg;.`,
+             its lowest, at an altitude of latitude + declination − 90°.
+             On 21 June the declination is +23.44°. Astronomical dark needs
+             an altitude below −18°.`,
       prompt: 'The Sun’s altitude at midnight on 21 June at latitude 60°',
       unit: 'deg',
       answer: -6.6,

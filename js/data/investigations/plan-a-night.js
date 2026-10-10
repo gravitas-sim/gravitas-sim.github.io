@@ -20,14 +20,14 @@ const PLAN_A_NIGHT = {
   title: 'Plan a Night at the Telescope',
   subtitle:
     'Choose targets for a date and a site under twilight, airmass and Moon limits',
-  duration: '35-45 min',
+  duration: '10-20 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 4, section: '4.3' },
   courseLevel: 'survey',
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
-  prerequisites: [],
+  prerequisites: ['the-turning-sky', 'the-sun-through-the-year'],
   tags: ['observing', 'stars'],
   lock: { placement: true, inspector: true },
   objectives: [
@@ -42,10 +42,10 @@ const PLAN_A_NIGHT = {
       stage: STAGE,
       type: 'read',
       title: 'The brief',
-      body: `You have one night at a telescope at latitude 30&deg; north, and
+      body: `You have one night at a telescope at latitude 30° north, and
              eight bright stars you would like to observe. Which can you
              observe, and for how long? Three things decide it:
-             <strong>astronomical dark</strong> (the Sun more than 18&deg; below
+             <strong>astronomical dark</strong> (the Sun more than 18° below
              the horizon), <strong>airmass</strong> (how much atmosphere the
              light crosses, which grows as a star gets low) and the
              <strong>Moon</strong> (a bright Moon nearby washes out the sky).
@@ -62,7 +62,7 @@ const PLAN_A_NIGHT = {
       type: 'predict',
       reveal: 'dark-hours',
       title: 'Predict the dark',
-      body: `The night of 29 January and the night of 21 June, at latitude 30&deg; north.`,
+      body: `The night of 29 January and the night of 21 June, at latitude 30° north.`,
       prompt: 'Compared with the January night, the June night has astronomical dark that is&hellip;',
       options: [
         'about the same length',
@@ -82,7 +82,7 @@ const PLAN_A_NIGHT = {
       type: 'measure',
       title: 'How long is the dark',
       body: `Set the evening to 2025-01-29, then to 2025-06-21, at latitude
-             30&deg;. Read the length of the astronomical dark each time.`,
+             30°. Read the length of the astronomical dark each time.`,
       fields: [
         {
           id: 'jan',
@@ -173,7 +173,7 @@ const PLAN_A_NIGHT = {
       type: 'measure',
       title: 'What the Moon costs',
       body: `Look at Regulus, with the airmass limit 2 and the least distance
-             from the Moon 30&deg;. Read its usable hours on the evening of
+             from the Moon 30°. Read its usable hours on the evening of
              2025-01-29 (new Moon) and on the evening of 2025-02-12 (full Moon).`,
       fields: [
         {
@@ -221,8 +221,8 @@ const PLAN_A_NIGHT = {
       type: 'question',
       kind: 'numeric',
       title: 'How many are worth it',
-      body: `Set the evening to 2025-02-15, latitude 30&deg;, airmass limit 2
-             and least Moon distance 30&deg;. A target is worth a night if it
+      body: `Set the evening to 2025-02-15, latitude 30°, airmass limit 2
+             and least Moon distance 30°. A target is worth a night if it
              has at least 3 usable hours.`,
       prompt: 'How many of the eight stars have at least 3 usable hours?',
       unit: '',
@@ -270,7 +270,7 @@ const PLAN_A_NIGHT = {
       rubric:
         'Full credit for a plan for the evening of 15 February at latitude 30 degrees that names at least three targets from the list, puts them in a time order that follows when each is usable (read from the bars), and says which constraint decides at least one choice: the dark, the airmass limit or the Moon. Credit an answer that gives a reason tied to the readout. Do not credit one that names stars without any reason.',
       title: 'Write the plan',
-      body: `Set the evening to 2025-02-15, airmass limit 2, Moon distance 30&deg;.
+      body: `Set the evening to 2025-02-15, airmass limit 2, Moon distance 30°.
              Look at the bars: where each star is usable across the night.`,
       prompt:
         'Write a plan for the night: three targets, the order you would observe them in, and which constraint decides each.',
