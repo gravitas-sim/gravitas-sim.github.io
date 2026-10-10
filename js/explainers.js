@@ -107,7 +107,7 @@ export const FAMILY_IDS = Object.freeze({
     'power-law-conservation',
   ],
   gw: ['gw-lab', 'gw-real'],
-  light: ['blackbody'],
+  light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
   sky: [
     'sky-turning',
     'sky-seasons',
@@ -116,7 +116,6 @@ export const FAMILY_IDS = Object.freeze({
     'sky-wanderers',
     'sky-plan',
   ],
-  light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
   compare: ['compare-transit'],
   gwEvents: ['gw-events'],
 });
