@@ -255,7 +255,7 @@ export const LAZY_FAMILIES = Object.freeze({
     () => import('./lightWidgets.js'),
     './lightWidgets.js',
     'LIGHT_WIDGETS',
-    ['blackbody', 'spectrum-viewer'],
+    ['blackbody', 'spectrum-viewer', 'kirchhoff'],
     'lightReady'
   ),
   // Its strain arrives behind a second import, like the spectra's flux.

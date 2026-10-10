@@ -121,6 +121,7 @@ export const GUIDED = Object.freeze([
   'transit-photometry',
   'twelve-nights',
   'weighing-stars',
+  'what-a-spectrum-is-made-of',
   'what-is-a-gravitational-wave',
   'when-orbits-lock',
 ]);

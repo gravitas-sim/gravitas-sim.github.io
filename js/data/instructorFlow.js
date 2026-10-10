@@ -15,6 +15,28 @@ export default {
   format: 'gravitas.instructor-flow',
   formatVersion: 2,
   lessons: {
+    'what-a-spectrum-is-made-of': [
+      {
+        from: 'a-hot-solid',
+        to: 'measure-two-clouds',
+        text: 'A hot dense source makes a continuum. Students predict what a cooler cloud in front of it does, then measure the H-alpha line center with the cloud cooler and hotter than the source.',
+      },
+      {
+        from: 'what-flipped-it',
+        to: 'same-temperature',
+        text: 'The same gas made a dark line and a bright one, so temperature and not the gas set the sign. A cloud alone makes bright lines; at the source’s own temperature it makes none.',
+      },
+      {
+        from: 'why-cool-absorbs',
+        to: 'flash-spectrum',
+        text: 'A written explanation of why a cool cloud still makes dark lines, then two real cases: the Sun’s dark lines say cooler gas lies over hotter, and the eclipse flash shows the same gas bright against dark sky.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: three kinds of spectrum from one piece of physics.',
+      },
+    ],
     'lines-and-motion': [
       {
         from: 'light-by-wavelength',

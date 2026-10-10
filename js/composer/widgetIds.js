@@ -78,7 +78,7 @@ export const WIDGET_FAMILIES = Object.freeze({
     'power-law-conservation',
   ],
   gw: ['gw-lab', 'gw-real'],
-  light: ['blackbody', 'spectrum-viewer'],
+  light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
   gwEvents: ['gw-events'],
 });
 

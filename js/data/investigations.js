@@ -74,6 +74,7 @@ import LIVES_OF_STARS from './investigations/lives-of-stars.js';
 import TWELVE_NIGHTS from './investigations/twelve-nights.js';
 import COLOR_AND_TEMPERATURE from './investigations/color-and-temperature.js';
 import LINES_AND_MOTION from './investigations/lines-and-motion.js';
+import WHAT_A_SPECTRUM_IS_MADE_OF from './investigations/what-a-spectrum-is-made-of.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 
@@ -122,6 +123,7 @@ export const INVESTIGATIONS = [
   POWER_LAW,
   COLOR_AND_TEMPERATURE,
   LINES_AND_MOTION,
+  WHAT_A_SPECTRUM_IS_MADE_OF,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

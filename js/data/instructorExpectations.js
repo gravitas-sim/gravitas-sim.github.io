@@ -13,6 +13,10 @@ export default {
   format: 'gravitas.instructor-expectations',
   formatVersion: 2,
   lessons: {
+    'what-a-spectrum-is-made-of': {
+      'measure-two-clouds':
+        'With a 6,000 K source, a 4,000 K cloud and gas 3, the H-alpha center reads about 19.9 percent of the source’s brightness, and about 251.6 percent with the cloud at 8,000 K; the validator accepts 19.9 within 1.5 and 251.6 within 8. Below 100 percent is a dark line and above 100 percent a bright one. A student who reads the equivalent width instead, or zooms on the wrong line, gets numbers that are not percentages of the source’s brightness.',
+    },
     'lines-and-motion': {
       'measure-one-shift':
         'Synthetic star 1 reads about +86 ± 5 km/s and star 2 about −143 ± 5 km/s from H-alpha. The true values, +85 and −142, are accepted within 12 km/s. The velocity is positive for a redshift (a line at a longer wavelength than rest): a student who reports star 2 as +143 has dropped the sign.',

@@ -331,4 +331,16 @@ export const MANIFEST = [
     gradedCount: 9,
     objectiveCount: 5,
   },
+  {
+    id: 'what-a-spectrum-is-made-of',
+    title: 'De qué está hecho un espectro',
+    subtitle: 'Por qué un mismo gas hace líneas oscuras, brillantes o ninguna',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-a-spectrum-is-made-of.webp',
+    depths: 3,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 5,
+  },
 ];

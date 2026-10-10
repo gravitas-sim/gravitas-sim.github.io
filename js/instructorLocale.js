@@ -24,6 +24,7 @@ import BLACK_HOLES from './data/investigations/es/black-holes.js';
 import BUTTERFLY_EFFECT from './data/investigations/es/butterfly-effect.js';
 import COLOR_AND_TEMPERATURE from './data/investigations/es/color-and-temperature.js';
 import LINES_AND_MOTION from './data/investigations/es/lines-and-motion.js';
+import WHAT_A_SPECTRUM_IS_MADE_OF from './data/investigations/es/what-a-spectrum-is-made-of.js';
 import DESIGN_THE_SCHEDULE from './data/investigations/es/design-the-schedule.js';
 import DETECT_THIS_PLANET from './data/investigations/es/detect-this-planet.js';
 import GOLDILOCKS_QUESTION from './data/investigations/es/goldilocks-question.js';
@@ -46,6 +47,7 @@ import WHAT_IS_A_GRAVITATIONAL_WAVE from './data/investigations/es/what-is-a-gra
 import WHEN_ORBITS_LOCK from './data/investigations/es/when-orbits-lock.js';
 import COLOR_AND_TEMPERATURE_DEEPER from './data/investigations/depth/es/color-and-temperature.js';
 import LINES_AND_MOTION_DEEPER from './data/investigations/depth/es/lines-and-motion.js';
+import WHAT_A_SPECTRUM_IS_MADE_OF_DEEPER from './data/investigations/depth/es/what-a-spectrum-is-made-of.js';
 import KEPLERS_LAWS_DEEPER from './data/investigations/depth/es/keplers-laws.js';
 import MISSING_MASS_DEEPER from './data/investigations/depth/es/missing-mass.js';
 import TRANSIT_PHOTOMETRY_DEEPER from './data/investigations/depth/es/transit-photometry.js';
@@ -59,6 +61,7 @@ export const SHADOWS = Object.freeze({
   'butterfly-effect': BUTTERFLY_EFFECT,
   'color-and-temperature': COLOR_AND_TEMPERATURE,
   'lines-and-motion': LINES_AND_MOTION,
+  'what-a-spectrum-is-made-of': WHAT_A_SPECTRUM_IS_MADE_OF,
   'design-the-schedule': DESIGN_THE_SCHEDULE,
   'detect-this-planet': DETECT_THIS_PLANET,
   'goldilocks-question': GOLDILOCKS_QUESTION,
@@ -85,6 +88,7 @@ export const SHADOWS = Object.freeze({
 export const DEEPER_SHADOWS = Object.freeze({
   'color-and-temperature': COLOR_AND_TEMPERATURE_DEEPER,
   'lines-and-motion': LINES_AND_MOTION_DEEPER,
+  'what-a-spectrum-is-made-of': WHAT_A_SPECTRUM_IS_MADE_OF_DEEPER,
   'keplers-laws': KEPLERS_LAWS_DEEPER,
   'missing-mass': MISSING_MASS_DEEPER,
   'transit-photometry': TRANSIT_PHOTOMETRY_DEEPER,
