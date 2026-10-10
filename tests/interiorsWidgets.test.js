@@ -10,6 +10,7 @@ import {
   radiusEnclosing,
   curveFor,
 } from '../js/interiorsWidgets.js';
+import { interiorOf } from '../js/kernels/stellar/index.js';
 import { EN_INTERIORS } from '../js/i18n/en.interiors.js';
 import { ES_INTERIORS } from '../js/i18n/es.interiors.js';
 
@@ -132,5 +133,23 @@ describe('the main-sequence scaling instrument', () => {
     expect(f.sel.massSun).toBe(1);
     expect(f.sel.luminositySun).toBeGreaterThan(0.6);
     expect(f.sel.luminositySun).toBeLessThan(0.9);
+  });
+});
+
+describe('the Stellar Lab interior row', () => {
+  test('its inlined polytrope numbers are the kernel’s', async () => {
+    const { polytrope } = await import('../js/kernels/stellar/index.js');
+    for (const [n, want] of [
+      [1.5, { ratio: 5.99071, mass: 2.71406, xi: 3.65375 }],
+      [3, { ratio: 54.1825, mass: 2.01824, xi: 6.89685 }],
+    ]) {
+      const s = polytrope(n);
+      expect(rel(s.rhoRatio, want.ratio)).toBeLessThan(2e-5);
+      expect(rel(s.mass, want.mass)).toBeLessThan(2e-5);
+      expect(rel(s.xi1, want.xi)).toBeLessThan(2e-5);
+    }
+    expect(
+      interiorOf({ phase: 'main-sequence', massSun: 1, radiusSun: 1 }).n
+    ).toBe(3);
   });
 });

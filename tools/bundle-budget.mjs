@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1736.2,
+    limit: 1774,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -585,7 +585,8 @@ const BUDGETS = [
       'and guides, measured at 1,677,161 bytes (1637.85 KB; 4492.4 KB raw) ' +
       'after merging v2 ce3d2e8. Under the same standing approval; ' +
       'D-BUDGET-07.' +
-      '\n\nRaised from 1637.9 to 1693.6 KB gzipped for Prompt 92 part 2 (D-BUDGET-09, the standing size-budget approval): the galactic instrument family (js/galacticWidgets.js, the galactic model and its words) and three investigations with their Spanish and depth files, which the composer, course-packs, course-builder, kit and submission bundles each carry. The three Gaia and rotation-curve packs are fetched sidecar files (gaia/*.json) and are in no bundle. Measured 1,734,208 bytes gzipped after merging v2 ae4815f, 1693.56 KB, an overrun of 55.66 KB (1,733,851 bytes, 1693.21 KB, on the branch before the merge); with the rows in modules, copied into three bundles, the overrun was 112.55 KB.',
+      '\n\nRaised from 1637.9 to 1693.6 KB gzipped for Prompt 92 part 2 (D-BUDGET-09, the standing size-budget approval): the galactic instrument family (js/galacticWidgets.js, the galactic model and its words) and three investigations with their Spanish and depth files, which the composer, course-packs, course-builder, kit and submission bundles each carry. The three Gaia and rotation-curve packs are fetched sidecar files (gaia/*.json) and are in no bundle. Measured 1,734,208 bytes gzipped after merging v2 ae4815f, 1693.56 KB, an overrun of 55.66 KB (1,733,851 bytes, 1693.21 KB, on the branch before the merge); with the rows in modules, copied into three bundles, the overrun was 112.55 KB.' +
+      '\n\nRaised from 1736.2 to 1774 KB gzipped for Prompt 95 (D-BUDGET-15, the standing size-budget approval): the interiors instrument family (js/interiorsWidgets.js, its words and the stellar kernel with its Worker) and three investigations with their Spanish and depth files, which the composer, course-packs, course-builder, kit and submission bundles each carry. Measured 1,816,562 bytes gzipped after merging v2 797c7c6, 1773.98 KB, an overrun of 37.8 KB. No data pack ships, so there is nothing to move to a sidecar.',
   },
 ];
 
