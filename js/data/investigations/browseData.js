@@ -120,4 +120,16 @@ export const BROWSE_META = {
     tags: ['observing', 'stars'],
     numericCount: 0,
   },
+  'the-suns-motion': {
+    tags: ['galaxies', 'observing', 'stars'],
+    numericCount: 0,
+  },
+  'the-rotating-disk': {
+    tags: ['dark-matter', 'galaxies', 'observing'],
+    numericCount: 0,
+  },
+  'cluster-membership': {
+    tags: ['galaxies', 'observing', 'stars'],
+    numericCount: 0,
+  },
 };

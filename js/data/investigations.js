@@ -75,6 +75,9 @@ import TWELVE_NIGHTS from './investigations/twelve-nights.js';
 import COLOR_AND_TEMPERATURE from './investigations/color-and-temperature.js';
 import LINES_AND_MOTION from './investigations/lines-and-motion.js';
 import WHAT_A_SPECTRUM_IS_MADE_OF from './investigations/what-a-spectrum-is-made-of.js';
+import THE_SUNS_MOTION from './investigations/the-suns-motion.js';
+import THE_ROTATING_DISK from './investigations/the-rotating-disk.js';
+import CLUSTER_MEMBERSHIP from './investigations/cluster-membership.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 
@@ -124,6 +127,9 @@ export const INVESTIGATIONS = [
   COLOR_AND_TEMPERATURE,
   LINES_AND_MOTION,
   WHAT_A_SPECTRUM_IS_MADE_OF,
+  THE_SUNS_MOTION,
+  THE_ROTATING_DISK,
+  CLUSTER_MEMBERSHIP,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

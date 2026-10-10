@@ -50,8 +50,8 @@ describe('the digits a literal is written to', () => {
 });
 
 describe('the allowlist only shrinks', () => {
-  test('there are 38 numeric literals, and each is in exactly one table', () => {
-    expect(literals).toHaveLength(38);
+  test('there are 48 numeric literals, and each is in exactly one table', () => {
+    expect(literals).toHaveLength(48);
     for (const l of literals) {
       const homes = [MODELS, SOURCED, UNCHECKED].filter(t => t[l.key]);
       expect({ key: l.key, homes: homes.length }).toEqual({
@@ -67,7 +67,7 @@ describe('the allowlist only shrinks', () => {
     expect(UNCHECKED_CEILING).toBe(34);
     expect(
       Object.keys(MODELS).length + Object.keys(SOURCED).length + UNCHECKED_COUNT
-    ).toBe(38);
+    ).toBe(48);
   });
 
   test('every entry names a real literal and gives a reason', () => {

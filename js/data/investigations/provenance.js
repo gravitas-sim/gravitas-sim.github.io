@@ -37,6 +37,9 @@ export const EVIDENCE_FROM = Object.freeze({
   'twelve-nights': 'model',
   'weighing-stars': 'engine',
   'what-a-spectrum-is-made-of': 'model',
+  'the-suns-motion': 'model',
+  'the-rotating-disk': 'model',
+  'cluster-membership': 'model',
   'what-is-a-gravitational-wave': 'model',
   'when-orbits-lock': 'engine',
 });

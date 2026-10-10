@@ -13,6 +13,32 @@ export default {
   format: 'gravitas.instructor-expectations',
   formatVersion: 2,
   lessons: {
+    'the-suns-motion': {
+      'measure-the-sun':
+        'Within 100 pc against the mean of the stars the Sun reads U about 10.5, V about 21.9 and W about 9.1 km/s (489 stars). The validator accepts 10.5 and 9.1 within 1.5 and 21.9 within 2.',
+      'measure-farther':
+        'Within 1,000 pc U reads 9.74 with an uncertainty of 1.03 km/s (1,570 stars); accepted within 1 and 0.3.',
+      'record-both-frames':
+        'At 100 pc V is 3.77 km/s with the Strömberg correction and 12.24 with the Schönrich LSR, which the instrument adopts rather than measures. Accepted within 0.5 and 0.3. Either answer to the next step is acceptable if it is stated as an assumption.',
+    },
+    'the-rotating-disk': {
+      'measure-a-and-b':
+        'With the weighted fit A is 13.5 ± 2.4 and B is −13.7 ± 1.7 km/s/kpc; each accepted within 1.',
+      'speed-at-the-sun':
+        '(A − B) × 8.3 kpc = 226 km/s, accepted within 5; the uncertainty is about 24 km/s, so 244 km/s from the curve agrees.',
+      'fit-stars-only':
+        'Stars only, disk bounded at 8 × 10^10: reduced chi-square about 50 (within 5) and the disk at its bound, 8.0 (within 0.3).',
+      'fit-with-a-halo':
+        'With a halo the reduced chi-square is 4.79 (within 0.5) and the halo’s far speed 254 km/s (within 10).',
+    },
+    'cluster-membership': {
+      'measure-the-cluster':
+        'With proper motion and parallax at threshold 0.5: cluster motion (−1.227, −2.041) mas/yr, each within 0.05, and 506 stars above 0.5 within 8.',
+      'move-the-threshold':
+        '497 stars above 0.99 and 509 above 0.1, each within 6: the count barely moves.',
+      'read-the-distance':
+        'Mean parallax of the members 0.385 mas (within 0.02) and the distance 2.6 kpc (within 0.15), with no zero-point correction.',
+    },
     'what-a-spectrum-is-made-of': {
       'measure-two-clouds':
         'With a 6,000 K source, a 4,000 K cloud and gas 3, the H-alpha center reads about 19.9 percent of the source’s brightness, and about 251.6 percent with the cloud at 8,000 K; the validator accepts 19.9 within 1.5 and 251.6 within 8. Below 100 percent is a dark line and above 100 percent a bright one. A student who reads the equivalent width instead, or zooms on the wrong line, gets numbers that are not percentages of the source’s brightness.',

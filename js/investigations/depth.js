@@ -53,6 +53,9 @@ const EXTENSIONS = {
     import('../data/investigations/depth/lines-and-motion.js'),
   'what-a-spectrum-is-made-of': () =>
     import('../data/investigations/depth/what-a-spectrum-is-made-of.js'),
+  'the-suns-motion': () => import('../data/investigations/depth/the-suns-motion.js'),
+  'the-rotating-disk': () => import('../data/investigations/depth/the-rotating-disk.js'),
+  'cluster-membership': () => import('../data/investigations/depth/cluster-membership.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -70,6 +73,12 @@ const WORDS = {
       import('../data/investigations/depth/es/lines-and-motion.js'),
     'what-a-spectrum-is-made-of': () =>
       import('../data/investigations/depth/es/what-a-spectrum-is-made-of.js'),
+    'the-suns-motion': () =>
+      import('../data/investigations/depth/es/the-suns-motion.js'),
+    'the-rotating-disk': () =>
+      import('../data/investigations/depth/es/the-rotating-disk.js'),
+    'cluster-membership': () =>
+      import('../data/investigations/depth/es/cluster-membership.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
   },

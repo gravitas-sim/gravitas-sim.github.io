@@ -290,4 +290,34 @@ export const DISCOVERY = {
     },
     courseLevel: 'survey',
   },
+  'the-suns-motion': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['lines-and-motion'],
+    textbook: {
+      chapter: 25,
+      section: '25.1',
+    },
+    courseLevel: 'majors',
+  },
+  'the-rotating-disk': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['the-suns-motion'],
+    textbook: {
+      chapter: 25,
+      section: '25.3',
+    },
+    courseLevel: 'majors',
+  },
+  'cluster-membership': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['lives-of-stars'],
+    textbook: {
+      chapter: 22,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
 };
