@@ -51,26 +51,26 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 740 | 13.2 MB |
+| JavaScript | 758 | 13.4 MB |
 | Images | 62 | 710 KB |
 | Stylesheets | 10 | 490 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 9 | 270 KB |
-| Other | 6 | 340 KB |
-| **Total** | **846** | **15.2 MB** |
+| Other | 6 | 350 KB |
+| **Total** | **864** | **15.4 MB** |
 
-Of those, 699 are core (the install fails without them) and 147 optional (a missing one is reported and costs nothing).
+Of those, 717 are core (the install fails without them) and 147 optional (a missing one is reported and costs nothing).
 
-Gzipped, as Pages serves it, the whole is about 5 MB.
+Gzipped, as Pages serves it, the whole is about 6 MB.
 
 | Link | Precache transfer |
 | --- | --- |
-| 10 Mbps | ~4 s |
-| 3 Mbps | ~14 s |
-| 1.5 Mbps | ~28 s |
+| 10 Mbps | ~5 s |
+| 3 Mbps | ~17 s |
+| 1.5 Mbps | ~34 s |
 <!--/fact-block-->
-Pages serves gzip, so the real transfer is about <!--fact:precacheGzipMB-->5<!--/fact--> MB. The images barely
+Pages serves gzip, so the real transfer is about <!--fact:precacheGzipMB-->6<!--/fact--> MB. The images barely
 compress, being WebP already.
 
 The transfer times are computed from that payload rather than measured: CDP
@@ -87,11 +87,11 @@ catalog, the course home and the two labs (`model/`, `instructors/`,
 the `/validation/` page runs on demand; and `social-card.png` (only ever
 fetched by a link unfurler).
 
-### Which of the <!--fact:investigations-->38<!--/fact--> lessons
+### Which of the <!--fact:investigations-->41<!--/fact--> lessons
 
 Each lesson is one dynamically imported file, so this is a real decision.
 
-**All <!--fact:investigations-->38<!--/fact--> English bodies are precached**, about a tenth of the
+**All <!--fact:investigations-->41<!--/fact--> English bodies are precached**, about a tenth of the
 payload. The reasoning: the lesson a class is already in when the wifi dies is
 by definition already fetched, so precaching buys nothing there. What it buys is
 the teacher who *switches lesson after the drop*, which is exactly the moment a
@@ -99,7 +99,7 @@ runtime cache has nothing. A tenth of the payload to remove that cliff is worth
 it, and picking a favorite subset would be guessing which lesson a class is
 about to want.
 
-**The <!--fact:spanishShadows-->38<!--/fact--> Spanish shadows are not**: they are only ever fetched
+**The <!--fact:spanishShadows-->41<!--/fact--> Spanish shadows are not**: they are only ever fetched
 when the interface is in Spanish. They are runtime-cached on first use, and
 `js/offline.js` asks the worker to warm all of them the moment the language is
 switched. A Spanish classroom is therefore covered from when it chooses
