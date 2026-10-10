@@ -143,7 +143,7 @@ export function massFractionAt(sol, xi) {
   while (i < X.length - 1 && X[i] < xi) i++;
   const w = (xi - X[i - 1]) / (X[i] - X[i - 1]);
   const d = D[i - 1] + w * (D[i] - D[i - 1]);
-  return Math.max(0, (-xi * xi * d) / sol.mass);
+  return Math.min(1, Math.max(0, (-xi * xi * d) / sol.mass));
 }
 
 const cache = new Map();
