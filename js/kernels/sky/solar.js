@@ -55,7 +55,12 @@ export function apparentMoon(jdTt) {
   const lon = wrap360(m.longitudeDeg + dpsiArcsec / 3600);
   const eps = meanObliquityDeg(jdTt) + depsArcsec / 3600;
   const eq = eclipticToEquatorial(lon, m.latitudeDeg, eps);
-  return { ...eq, longitudeDeg: lon, latitudeDeg: m.latitudeDeg, distanceKm: m.distanceKm };
+  return {
+    ...eq,
+    longitudeDeg: lon,
+    latitudeDeg: m.latitudeDeg,
+    distanceKm: m.distanceKm,
+  };
 }
 
 /** Meeus ch. 40: parallax of the Moon for an observer at sea level. */
@@ -67,8 +72,14 @@ export function topocentricMoon(jdUt, jdTt, latDeg, lonDeg) {
   const sinPi = 6378.14 / m.distanceKm;
   const H = wrap180(gastDeg(jdUt, jdTt) + lonDeg - m.raDeg) * DEG;
   const d = m.decDeg * DEG;
-  const dra = Math.atan2(-rhoCos * sinPi * Math.sin(H), Math.cos(d) - rhoCos * sinPi * Math.cos(H));
-  const dec = Math.atan2((Math.sin(d) - rhoSin * sinPi) * Math.cos(dra), Math.cos(d) - rhoCos * sinPi * Math.cos(H));
+  const dra = Math.atan2(
+    -rhoCos * sinPi * Math.sin(H),
+    Math.cos(d) - rhoCos * sinPi * Math.cos(H)
+  );
+  const dec = Math.atan2(
+    (Math.sin(d) - rhoSin * sinPi) * Math.cos(dra),
+    Math.cos(d) - rhoCos * sinPi * Math.cos(H)
+  );
   const raT = wrap360(m.raDeg + dra * RAD);
   const Ht = wrap180(gastDeg(jdUt, jdTt) + lonDeg - raT);
   const hor = toHorizontal(Ht, dec * RAD, latDeg);
@@ -87,11 +98,17 @@ function solveAngle(f, target, guess, rate) {
 }
 
 /** TT instant near `guess` that the Sun's apparent longitude equals `lonDeg`. */
-export const sunLongitudeTime = (lonDeg, guess) => solveAngle(jd => apparentSun(jd).longitudeDeg, lonDeg, guess, 0.9856);
+export const sunLongitudeTime = (lonDeg, guess) =>
+  solveAngle(jd => apparentSun(jd).longitudeDeg, lonDeg, guess, 0.9856);
 
 /** TT instants of syzygy: Moon minus Sun apparent longitude = 0 (new) or 180 (full). */
 export const syzygyTime = (diffDeg, guess) =>
-  solveAngle(jd => wrap360(apparentMoon(jd).longitudeDeg - apparentSun(jd).longitudeDeg), diffDeg, guess, 12.19);
+  solveAngle(
+    jd => wrap360(apparentMoon(jd).longitudeDeg - apparentSun(jd).longitudeDeg),
+    diffDeg,
+    guess,
+    12.19
+  );
 
 /** Phase angle and illuminated fraction from the apparent Sun and Moon. */
 export function phase(jdTt) {
@@ -99,9 +116,15 @@ export function phase(jdTt) {
   const m = apparentMoon(jdTt);
   const elong = Math.acos(
     Math.sin(s.decDeg * DEG) * Math.sin(m.decDeg * DEG) +
-      Math.cos(s.decDeg * DEG) * Math.cos(m.decDeg * DEG) * Math.cos((s.raDeg - m.raDeg) * DEG)
+      Math.cos(s.decDeg * DEG) *
+        Math.cos(m.decDeg * DEG) *
+        Math.cos((s.raDeg - m.raDeg) * DEG)
   );
   const R = s.distanceAu * 149597870.7;
   const i = Math.atan2(R * Math.sin(elong), m.distanceKm - R * Math.cos(elong));
-  return { elongationDeg: elong * RAD, phaseAngleDeg: i * RAD, illuminated: (1 + Math.cos(i)) / 2 };
+  return {
+    elongationDeg: elong * RAD,
+    phaseAngleDeg: i * RAD,
+    illuminated: (1 + Math.cos(i)) / 2,
+  };
 }
