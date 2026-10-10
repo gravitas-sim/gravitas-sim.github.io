@@ -115,6 +115,12 @@ export default {
     'Qué dicen los datos antes de ponerles un modelo, y cuánto mueve la respuesta un supuesto cambiado (la V del Sol, la ponderación, el halo).',
     'Mediciones reales con dispersión real; los modelos son simples y se declaran, y una pertenencia es una probabilidad, no una etiqueta.',
   ],
+  lensing: [
+    'La desviación frente al máximo acercamiento (escalas logarítmicas); el plano de la lente en radios de Einstein con la fuente y sus imágenes; o el flujo frente al tiempo cuando pasa una lente.',
+    'Cómo cambian la desviación, el anillo, las imágenes y la curva de luz al cambiar la masa, la distancia, la velocidad, el desplazamiento y la mezcla.',
+    'Cuánto desvía la luz una masa, qué tamaño de anillo hace, y qué fija una curva de luz (el tiempo de cruce) y qué deja abierto (la masa, la distancia y la velocidad por separado).',
+    'Una lente delgada en campo débil, una masa puntual o una galaxia circular, una estrella uniforme, sin cizalla ni segunda lente; el suceso sintético es un modelo con ruido, con una verdad que el cielo real nunca da.',
+  ],
   compare: [
     'Los datos (vertical, arriba) y el modelo encima, frente al tiempo; abajo, cada residuo en unidades de su propia barra de error.',
     'Donde los residuos se alejan de cero en una racha, el modelo queda por encima o por debajo de los datos; la dispersión en torno a cero es el ruido.',

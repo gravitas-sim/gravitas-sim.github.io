@@ -118,6 +118,12 @@ export default {
     'What the data say before a model is put on them, and how far a changed assumption (the Sun’s V, the weighting, the halo) moves the answer.',
     'Real measurements with real scatter; the models are simple and stated, and a membership is a probability, not a label.',
   ],
+  lensing: [
+    'Bending against closest approach (log scales); the lens plane in Einstein radii with the source and its images; or flux against time as a lens passes.',
+    'How the bending, the ring, the images and the light curve change as the mass, the distance, the speed, the offset and the blend change.',
+    'How far a mass bends light, how large a ring a mass makes, and what a light curve fixes (the crossing time) and what it leaves open (mass, distance and speed separately).',
+    'One thin lens in the weak field, a point mass or a circular galaxy, a uniform star, no shear or second lens; the synthetic event is a model with noise, with a truth the real sky never gives.',
+  ],
   compare: [
     'The data (vertical, above) and the model over them, against time; below, each residual in units of its own error bar.',
     'Where the residuals leave the zero line in a run, the model is above or below the data there; scatter around zero is the noise.',
