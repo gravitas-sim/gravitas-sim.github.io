@@ -100,8 +100,8 @@ const BUDGETS = [
   },
   {
     id: 'deferred',
-    label: 'Deferred JavaScript (lazy chunks)',
-    limit: 4300,
+    label: 'Deferred JavaScript (lazy chunks, gzipped)',
+    limit: 1559,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -560,7 +560,21 @@ const BUDGETS = [
       'the deferred total from 4108.5 to 4174.0 KB with the remaining parts ' +
       'of the prompt (a spectrum viewer and two lessons, about 100 KB) still ' +
       'to come. Every byte is behind a dynamic import; the initial download ' +
-      'is untouched. Further raises are itemised the same way.',
+      'is untouched. Further raises are itemised the same way.' +
+      '\n\nMeasured gzipped from 2026-10-09 (Carl approved the change in the ' +
+      'queue session), not raw. Every limit above this paragraph is in raw ' +
+      'kilobytes. Raw bytes had stopped tracking what a reader downloads: ' +
+      'writing catalog key prefixes once (#209) took 45.7 KB off the raw total ' +
+      'and almost nothing off the wire, so recoveries bought room the reader ' +
+      'never saw. The figure is each deferred chunk gzipped on its own at ' +
+      "zlib's default level, as a static host serves it, summed by build.js " +
+      'into .build-report.json (deferredJsGzipBytes). At v2 6277240 the ' +
+      'deferred JavaScript was 4174.0 KB raw and 1513.0 KB gzipped (Node 24; ' +
+      'Node 20, which CI runs, compresses about 0.2% smaller). The limit keeps ' +
+      'exactly the room the 4300 KB raw ceiling gave: 1513.0 x 4300 / 4174.0 = ' +
+      '1558.7, rounded up to 1559. The raw total is still printed beside it, ' +
+      'and is still what the README quotes, because raw sizes are the same on ' +
+      'every Node.',
   },
 ];
 
@@ -585,9 +599,16 @@ async function buildReport() {
 }
 
 const report = await buildReport();
+if (report.deferredJsGzipBytes === undefined) {
+  console.error(
+    '.build-report.json has no deferredJsGzipBytes: it was written by an\n' +
+      'older build. Run `npm run build` again.'
+  );
+  process.exit(2);
+}
 const measured = {
   initial: report.initialDownloadBytes / 1024,
-  deferred: report.deferredJsBytes / 1024,
+  deferred: report.deferredJsGzipBytes / 1024,
 };
 
 let over = 0;
@@ -604,9 +625,13 @@ const kb = n => `${n.toFixed(1)} KB`;
 console.log('Bundle budget\n');
 for (const { budget, size, pct } of rows) {
   const state = size > budget.limit ? 'OVER' : 'ok';
+  const raw =
+    budget.id === 'deferred'
+      ? `  (${kb(report.deferredJsBytes / 1024)} raw)`
+      : '';
   console.log(
     `  ${budget.label}\n` +
-      `    ${kb(size)} of ${kb(budget.limit)}  (${pct.toFixed(0)}%)  ${state}`
+      `    ${kb(size)} of ${kb(budget.limit)}  (${pct.toFixed(0)}%)  ${state}${raw}`
   );
   if (!check) console.log(`    ${budget.reason}\n`);
 }
