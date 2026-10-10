@@ -301,4 +301,16 @@ export const MANIFEST = [
     gradedCount: 14,
     objectiveCount: 5,
   },
+  {
+    id: 'color-and-temperature',
+    title: 'Color and Temperature',
+    subtitle: 'Predict, then measure, what a hot glowing thing looks like',
+    duration: '15-25 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/color-and-temperature.webp',
+    depths: 3,
+    stepCount: 11,
+    gradedCount: 9,
+    objectiveCount: 5,
+  },
 ];

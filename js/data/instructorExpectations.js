@@ -13,6 +13,12 @@ export default {
   format: 'gravitas.instructor-expectations',
   formatVersion: 2,
   lessons: {
+    'color-and-temperature': {
+      'three-peaks':
+        'Peaks near 966, 483 and 241.5 nm: each doubling of temperature halves the peak, and peak × temperature comes out near 2.9 million nm·K. The validator accepts readings within 1.5 percent.',
+      'three-colors':
+        'B − V (Vega system) of about 1.69 at 3,000 K, 0.60 at 6,000 K and 0.15 at 10,000 K. Within 0.05 is accepted; a student who reads the g − r row instead will be a little off at every temperature.',
+    },
     'keplers-laws': {
       'measure-the-two-orbits':
         'The Circular Orbiter comes out at e near 0.02; the Eccentric Orbiter at roughly e = 0.6–0.7. The derived semi-major axis is the mean of the periapsis and apoapsis distances, and the validator warns if the two are entered the wrong way round.',

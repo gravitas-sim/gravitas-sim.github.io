@@ -260,4 +260,14 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'color-and-temperature': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 5,
+      section: '5.2',
+    },
+    courseLevel: 'survey',
+  },
 };

@@ -117,6 +117,51 @@ test.describe('the central experiment of each investigation', () => {
     await expectVerdictRevealed(page, plan, predict);
   });
 
+  test('color-and-temperature: the peak wavelength is inversely proportional to the temperature @accepts:ce.color-and-temperature', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'color-and-temperature';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('blackbody');
+    const at = {};
+    for (const T of [3000, 6000, 12000]) {
+      const { before, after } = await setControl(page, control, T);
+      if (T !== 3000) expect(after).not.toEqual(before);
+      at[T] = reading(after, /peak wavelength/i);
+    }
+
+    // 3. Wien's law: peak times temperature is the same every time.
+    expect(at[3000] / at[6000]).toBeCloseTo(2, 2);
+    expect(at[6000] / at[12000]).toBeCloseTo(2, 2);
+    expect(at[6000] * 6000).toBeCloseTo(2897772, -3);
+
+    // 4. the evidence, written down and kept
+    const evidence = {
+      p3: at[3000].toFixed(1),
+      p6: at[6000].toFixed(1),
+      p12: at[12000].toFixed(1),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
   test('power-law-gravity: the ellipse stops closing when the exponent moves @accepts:ce.power-law-gravity', async ({
     page,
     app,

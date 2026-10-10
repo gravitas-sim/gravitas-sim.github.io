@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 4180,
+    limit: 4300,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -552,7 +552,15 @@ const BUDGETS = [
       'scripts are always decoded as UTF-8, so it is the same program. The ' +
       'figure is the raw bytes this budget counts; compressed, the escapes ' +
       'were already cheap, so the saving on the wire is a good deal smaller. ' +
-      'The initial download went 796.8 to 796.2 KB.',
+      'The initial download went 796.8 to 796.2 KB.' +
+      '\n\nRaised from 4180 to 4300 for the light and spectra lessons ' +
+      '(Prompt 83) and the science prompts queued behind them, on the ' +
+      "owner's direct instruction 'go with option 1' after the itemised " +
+      'proposal: the lesson Color and Temperature and its instruments took ' +
+      'the deferred total from 4108.5 to 4174.0 KB with the remaining parts ' +
+      'of the prompt (a spectrum viewer and two lessons, about 100 KB) still ' +
+      'to come. Every byte is behind a dynamic import; the initial download ' +
+      'is untouched. Further raises are itemised the same way.',
   },
 ];
 
