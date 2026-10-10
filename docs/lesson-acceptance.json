@@ -306,7 +306,7 @@
         "measure-the-radius-ratio",
         "what-the-trend-covers"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "data"
     },
     "lives-of-stars": {
       "centralExperimentId": "ce.lives-of-stars",
@@ -320,7 +320,7 @@
         "measure-the-giant",
         "why-iron-stops-it"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "data"
     },
     "twelve-nights": {
       "centralExperimentId": "ce.twelve-nights",

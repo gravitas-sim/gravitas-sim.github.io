@@ -12,7 +12,7 @@
 // a label cannot claim evidence the lesson never produces; it caught three of
 // the first twenty-two as unsupported.
 export const EVIDENCE_FROM = Object.freeze({
-  'a-universe-of-stars': 'model',
+  'a-universe-of-stars': 'data',
   'binary-star-planets': 'engine',
   'black-holes': 'model',
   'butterfly-effect': 'engine',
@@ -27,7 +27,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'lagrange-points': 'engine',
   'lines-and-motion': 'model',
   'listening-to-spacetime': 'model',
-  'lives-of-stars': 'model',
+  'lives-of-stars': 'data',
   'missing-mass': 'engine',
   'orbital-energy': 'model',
   'power-law-gravity': 'model',
