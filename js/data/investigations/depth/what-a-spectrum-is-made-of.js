@@ -127,6 +127,7 @@ export default {
              10,000&nbsp;K.`,
       prompt:
         'How many times more hydrogen atoms are in n = 2 at 10,000 K than at 6,000 K?',
+      unit: '',
       answer: 2673,
       tolerance: 120,
       hints: [
@@ -186,6 +187,7 @@ export default {
              as many atoms in n = 2. In the spectrum viewer, zoom on H-alpha
              and read its equivalent width in each star.`,
       prompt: 'The A star’s H-alpha equivalent width divided by the G star’s',
+      unit: '',
       answer: 2.34,
       tolerance: 0.4,
       hints: [

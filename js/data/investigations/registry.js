@@ -169,7 +169,8 @@ const TRANSLATIONS = {
     'twelve-nights': () => import('./es/twelve-nights.js'),
     'color-and-temperature': () => import('./es/color-and-temperature.js'),
     'lines-and-motion': () => import('./es/lines-and-motion.js'),
-    'what-a-spectrum-is-made-of': () => import('./es/what-a-spectrum-is-made-of.js'),
+    'what-a-spectrum-is-made-of': () =>
+      import('./es/what-a-spectrum-is-made-of.js'),
   },
 };
 

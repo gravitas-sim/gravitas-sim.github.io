@@ -192,7 +192,7 @@ describe('the instructor expectations record', () => {
         expect(text.length).toBeGreaterThan(20);
       }
     }
-    expect(total).toBe(241);
+    expect(total).toBe(242);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {
