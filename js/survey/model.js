@@ -51,15 +51,16 @@ export const errorAt = (spec, m) =>
 export const completenessAt = (c, m) =>
   c ? 1 / (1 + Math.exp((m - c.m50) / c.width)) : 1;
 
-/** The default instrument: a deep, clean survey. */
+/** The default instrument: a deep survey with Gaia-like astrometry (0.02 mas
+ *  to G = 13, growing as flux error: 0.2 mas at 18). */
 export const DEFAULT_INSTRUMENT = Object.freeze({
   limit: 18,
   skyAreaDeg2: 100,
   completeness: null,
   errors: Object.freeze({
     mag: Object.freeze({ floor: 0.01, m0: 17, slope: 0.2 }),
-    parallax: Object.freeze({ floor: 0.1, m0: 12, slope: 0.2 }),
-    pm: Object.freeze({ floor: 0.1, m0: 12, slope: 0.2 }),
+    parallax: Object.freeze({ floor: 0.02, m0: 13, slope: 0.2 }),
+    pm: Object.freeze({ floor: 0.02, m0: 13, slope: 0.2 }),
   }),
 });
 
