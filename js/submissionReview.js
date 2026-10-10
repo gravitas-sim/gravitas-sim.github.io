@@ -96,6 +96,11 @@ const DEEPER = {
     import('./data/investigations/depth/the-rotating-disk.js'),
   'cluster-membership': () =>
     import('./data/investigations/depth/cluster-membership.js'),
+  'bending-light': () => import('./data/investigations/depth/bending-light.js'),
+  'einstein-rings-and-arcs': () =>
+    import('./data/investigations/depth/einstein-rings-and-arcs.js'),
+  'a-lens-passing-by': () =>
+    import('./data/investigations/depth/a-lens-passing-by.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]

@@ -152,4 +152,16 @@ export const BROWSE_META = {
     tags: ['galaxies', 'observing', 'stars'],
     numericCount: 0,
   },
+  'bending-light': {
+    tags: ['gravity', 'observing'],
+    numericCount: 0,
+  },
+  'einstein-rings-and-arcs': {
+    tags: ['galaxies', 'gravity'],
+    numericCount: 0,
+  },
+  'a-lens-passing-by': {
+    tags: ['observing', 'stars', 'gravity'],
+    numericCount: 0,
+  },
 };

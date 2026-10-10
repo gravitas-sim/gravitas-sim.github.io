@@ -370,4 +370,34 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'bending-light': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['what-is-a-gravitational-wave'],
+    textbook: {
+      chapter: 24,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'einstein-rings-and-arcs': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['bending-light'],
+    textbook: {
+      chapter: 24,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'a-lens-passing-by': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['einstein-rings-and-arcs'],
+    textbook: {
+      chapter: 24,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
 };

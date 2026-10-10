@@ -136,6 +136,9 @@ const LOADERS = {
   'the-suns-motion': () => import('./the-suns-motion.js'),
   'the-rotating-disk': () => import('./the-rotating-disk.js'),
   'cluster-membership': () => import('./cluster-membership.js'),
+  'bending-light': () => import('./bending-light.js'),
+  'einstein-rings-and-arcs': () => import('./einstein-rings-and-arcs.js'),
+  'a-lens-passing-by': () => import('./a-lens-passing-by.js'),
 };
 
 /**
@@ -188,6 +191,9 @@ const TRANSLATIONS = {
     'the-suns-motion': () => import('./es/the-suns-motion.js'),
     'the-rotating-disk': () => import('./es/the-rotating-disk.js'),
     'cluster-membership': () => import('./es/cluster-membership.js'),
+    'bending-light': () => import('./es/bending-light.js'),
+    'einstein-rings-and-arcs': () => import('./es/einstein-rings-and-arcs.js'),
+    'a-lens-passing-by': () => import('./es/a-lens-passing-by.js'),
   },
 };
 

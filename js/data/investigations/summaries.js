@@ -80,4 +80,10 @@ export const SUMMARIES = {
     'Nearby stars show the Galaxy’s rotation as a double wave in their proper motions, and its height and center are the Oort constants. You will measure A and B from Gaia, turn them into the Sun’s circular speed, and then set the Milky Way’s measured rotation curve against a model of bulge, disk and halo. Stars and gas alone fit it badly; a halo fits it ten times better. You will say what that comparison assumes.',
   'cluster-membership':
     'The stars of a cluster were born together and still move together. You will find NGC 2420 in 993 Gaia stars as a tight clump in proper motion, fit it against the field, and give each star a probability of belonging, not a label. You will move the threshold, check the members against a color-magnitude diagram the fit never used, and state what a distance from the mean parallax leaves out.',
+  'bending-light':
+    'Mass bends light, and a ray that grazes the Sun is turned by 1.75 arcseconds, twice what Newton’s gravity gives. You will measure the bending against the mass and the distance of closest approach, see what the 1919 eclipse plates decided, and find the case where the formula cannot be trusted.',
+  'einstein-rings-and-arcs':
+    'When a source lies behind a lens, light reaches us around it as a ring. You will measure the Einstein radius of a star and of a galaxy, weigh a galaxy from the size of its ring, and find the images, arcs and magnifications when the source is off to one side, for a point mass and for a galaxy.',
+  'a-lens-passing-by':
+    'As a lens passes in front of a star the star brightens and fades over days or weeks. You will read the peak and the duration of a microlensing event, find why one light curve cannot weigh the lens, see what blended light and a finite star do to it, and fit a synthetic event to see what the fit can and cannot recover.',
 };

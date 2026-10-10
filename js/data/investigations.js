@@ -85,6 +85,9 @@ import THE_ROTATING_DISK from './investigations/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP from './investigations/cluster-membership.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
+import BENDING_LIGHT from './investigations/bending-light.js';
+import EINSTEIN_RINGS_AND_ARCS from './investigations/einstein-rings-and-arcs.js';
+import A_LENS_PASSING_BY from './investigations/a-lens-passing-by.js';
 
 // Order matters: the browser lists them in this order, and the three exoplanet
 // lessons form a sequence. Shadows measures a radius, Tug measures a mass and
@@ -140,6 +143,9 @@ export const INVESTIGATIONS = [
   THE_SUNS_MOTION,
   THE_ROTATING_DISK,
   CLUSTER_MEMBERSHIP,
+  BENDING_LIGHT,
+  EINSTEIN_RINGS_AND_ARCS,
+  A_LENS_PASSING_BY,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

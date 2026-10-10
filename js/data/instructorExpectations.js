@@ -630,5 +630,37 @@ export default {
       'airmass-at-thirty':
         '2.0 from 1/sin 30; the kernel’s fit gives 1.99. Accepted within 0.05.',
     },
+    'bending-light': {
+      'the-suns-limb':
+        'Mass 1, closest approach 1: 1.75 arcseconds (within 0.02); the Newtonian row reads 0.88.',
+      'the-far-ray': 'Closest approach 100: 0.0175 arcseconds (within 0.0008).',
+      'ten-times-the-mass':
+        'Mass 10, closest approach 1: 17.5 arcseconds (within 0.2) and a Schwarzschild radius of 29.5 km (within 0.5).',
+      'where-the-formula-fails':
+        '10^8 solar masses at 1,000 solar radii: 2.4 Schwarzschild radii (within 0.15); the instrument says the weak field does not hold.',
+    },
+    'einstein-rings-and-arcs': {
+      'a-star-ring': 'One solar mass at 4 kpc: 1.01 mas (within 0.03).',
+      'a-galaxy-ring':
+        '10^11 solar masses at 1 Gpc: 0.638 arcseconds (within 0.015) and 3.09 kpc at the lens (within 0.1).',
+      'weigh-the-lens':
+        'A 1.0-arcsecond ring at 1 Gpc: 2.46 × 10^11 solar masses (within 0.3); the slider’s 11.4 reads 1.01 arcseconds.',
+      'move-the-source':
+        'Point mass, offset 0.5: outer image 1.28 Einstein radii (within 0.03), total magnification 2.18 (within 0.05).',
+      'an-isothermal-galaxy':
+        'Isothermal sphere, offset 0.5: outer image 1.5 (within 0.03), total magnification 4 (within 0.1).',
+    },
+    'a-lens-passing-by': {
+      'the-peak':
+        'Closest approach 0.1: peak flux 10.04 over baseline (within 0.1).',
+      'how-long':
+        '0.3 solar masses, 6 kpc, 200 km/s: tE 16.6 days (within 0.3) and 33 days above 1.34 (within 0.6).',
+      'a-faster-lens': '400 km/s: tE 8.29 days (within 0.2).',
+      'one-curve-three-lenses':
+        'Masses for the same tE: 0.075 solar masses at 2 kpc and 100 km/s (within 0.005) and 0.675 at 6 kpc and 300 km/s (within 0.03).',
+      'blended-light': 'Half the light blended: peak 5.52 (within 0.1).',
+      'a-star-with-a-size':
+        'u0 = 0.01, source radius 0.1: peak 19.98 (within 0.3), against 100 for a point.',
+    },
   },
 };
