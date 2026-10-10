@@ -136,6 +136,9 @@ const LOADERS = {
   'the-suns-motion': () => import('./the-suns-motion.js'),
   'the-rotating-disk': () => import('./the-rotating-disk.js'),
   'cluster-membership': () => import('./cluster-membership.js'),
+  'who-gets-counted': () => import('./who-gets-counted.js'),
+  'why-the-bright-ones-win': () => import('./why-the-bright-ones-win.js'),
+  'the-completeness-curve': () => import('./the-completeness-curve.js'),
 };
 
 /**
@@ -188,6 +191,9 @@ const TRANSLATIONS = {
     'the-suns-motion': () => import('./es/the-suns-motion.js'),
     'the-rotating-disk': () => import('./es/the-rotating-disk.js'),
     'cluster-membership': () => import('./es/cluster-membership.js'),
+    'who-gets-counted': () => import('./es/who-gets-counted.js'),
+    'why-the-bright-ones-win': () => import('./es/why-the-bright-ones-win.js'),
+    'the-completeness-curve': () => import('./es/the-completeness-curve.js'),
   },
 };
 

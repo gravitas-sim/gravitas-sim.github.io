@@ -2153,6 +2153,77 @@ test.describe('the central experiment of each investigation', () => {
     // 5. and only now is the prediction settled
     await expectVerdictRevealed(page, plan, predict);
   });
+
+  // ---- The selection-effects sequence (Roadmap II, Prompt 93) -------------------
+  const SURVEY = [
+    {
+      id: 'who-gets-counted',
+      title:
+        'who-gets-counted: a deeper survey counts many more stars, and the model says how many @accepts:ce.who-gets-counted',
+      row: /Stars counted/i,
+      values: [
+        [14, 167, 8],
+        [18, 1289, 40],
+      ],
+    },
+    {
+      id: 'why-the-bright-ones-win',
+      title:
+        'why-the-bright-ones-win: the counted stars are brighter than the stars there are, by an amount that falls with the limit @accepts:ce.why-the-bright-ones-win',
+      row: /Malmquist bias/i,
+      values: [
+        [16, 2.94, 0.3],
+        [18, 1.33, 0.3],
+      ],
+      abs: true,
+      last: 16,
+    },
+    {
+      id: 'the-completeness-curve',
+      title:
+        'the-completeness-curve: a raw count loses the faint stars that a corrected one puts back @accepts:ce.the-completeness-curve',
+      row: /raw count, share of the truth/i,
+      values: [
+        [17, null, null],
+        [20, 56.7, 3],
+      ],
+    },
+  ];
+  for (const c of SURVEY) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      // 1. the prediction, committed and held
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      // 2. the declared control, moved, on the declared screen
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(async () => reading(await readout(page), c.row), {
+            timeout: 5000,
+          })
+          .not.toBeNaN();
+        let got = reading(await readout(page), c.row);
+        if (c.abs) got = Math.abs(got);
+        seen.push(got);
+        if (want !== null) expect(Math.abs(got - want)).toBeLessThan(tol);
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      // 3. and only now is the prediction settled
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
   // ---- The sky sequence (Roadmap II, Prompt 89) ---------------------------------
   const SKY = [
     {

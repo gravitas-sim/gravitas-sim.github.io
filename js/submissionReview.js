@@ -96,6 +96,12 @@ const DEEPER = {
     import('./data/investigations/depth/the-rotating-disk.js'),
   'cluster-membership': () =>
     import('./data/investigations/depth/cluster-membership.js'),
+  'who-gets-counted': () =>
+    import('./data/investigations/depth/who-gets-counted.js'),
+  'why-the-bright-ones-win': () =>
+    import('./data/investigations/depth/why-the-bright-ones-win.js'),
+  'the-completeness-curve': () =>
+    import('./data/investigations/depth/the-completeness-curve.js'),
 };
 const deepen = async lesson =>
   lesson.depthLaid || !DEEPER[lesson.id]

@@ -109,7 +109,7 @@ const accepted = o => {
 };
 
 describe('the registry', () => {
-  test('lists the seven models and refuses an unknown one in words', () => {
+  test('lists the eight models and refuses an unknown one in words', () => {
     expect(Object.keys(FORWARD_MODELS).sort()).toEqual([
       'astrometry',
       'catalogue',
@@ -117,6 +117,7 @@ describe('the registry', () => {
       'periodic',
       'radial-velocity',
       'spectrum',
+      'survey',
       'transit',
     ]);
     expect(() => runForward('nope', {}, SETUP())).toThrow(

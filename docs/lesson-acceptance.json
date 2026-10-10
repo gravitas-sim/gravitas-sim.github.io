@@ -493,6 +493,45 @@
         "measure-the-cluster"
       ],
       "evidenceFrom": "model"
+    },
+    "who-gets-counted": {
+      "centralExperimentId": "ce.who-gets-counted",
+      "object": "panel:survey-counts",
+      "control": "survey-counts/limit",
+      "quantity": "the number of stars a survey counts, and the share of the population, at a magnitude limit",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-what-is-missed",
+        "count-a-shallow-survey"
+      ],
+      "evidenceFrom": "model"
+    },
+    "why-the-bright-ones-win": {
+      "centralExperimentId": "ce.why-the-bright-ones-win",
+      "object": "panel:malmquist",
+      "control": "malmquist/limit",
+      "quantity": "the Malmquist bias: how much brighter the counted stars are than the stars there are, in shells of distance",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-shells",
+        "measure-the-shells"
+      ],
+      "evidenceFrom": "model"
+    },
+    "the-completeness-curve": {
+      "centralExperimentId": "ce.the-completeness-curve",
+      "object": "panel:completeness-lf",
+      "control": "completeness-lf/m50",
+      "quantity": "the share of the true luminosity function a raw count recovers, and the corrected value",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-raw-count",
+        "raw-against-truth"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }

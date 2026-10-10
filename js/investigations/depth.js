@@ -68,6 +68,12 @@ const EXTENSIONS = {
     import('../data/investigations/depth/the-rotating-disk.js'),
   'cluster-membership': () =>
     import('../data/investigations/depth/cluster-membership.js'),
+  'who-gets-counted': () =>
+    import('../data/investigations/depth/who-gets-counted.js'),
+  'why-the-bright-ones-win': () =>
+    import('../data/investigations/depth/why-the-bright-ones-win.js'),
+  'the-completeness-curve': () =>
+    import('../data/investigations/depth/the-completeness-curve.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -91,6 +97,12 @@ const WORDS = {
       import('../data/investigations/depth/es/the-rotating-disk.js'),
     'cluster-membership': () =>
       import('../data/investigations/depth/es/cluster-membership.js'),
+    'who-gets-counted': () =>
+      import('../data/investigations/depth/es/who-gets-counted.js'),
+    'why-the-bright-ones-win': () =>
+      import('../data/investigations/depth/es/why-the-bright-ones-win.js'),
+    'the-completeness-curve': () =>
+      import('../data/investigations/depth/es/the-completeness-curve.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
     'the-turning-sky': () =>

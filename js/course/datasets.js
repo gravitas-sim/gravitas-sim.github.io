@@ -147,6 +147,7 @@ export const GUIDED = Object.freeze([
   'power-law-gravity',
   'radial-velocity',
   'retrograde-motion',
+  'the-completeness-curve',
   'the-rotating-disk',
   'the-sun-through-the-year',
   'the-suns-motion',
@@ -159,4 +160,6 @@ export const GUIDED = Object.freeze([
   'what-a-spectrum-is-made-of',
   'what-is-a-gravitational-wave',
   'when-orbits-lock',
+  'who-gets-counted',
+  'why-the-bright-ones-win',
 ]);

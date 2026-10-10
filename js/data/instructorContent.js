@@ -4682,6 +4682,246 @@ export const INSTRUCTOR_CONTENT = {
     modelNotes:
       'Two-component Gaussian mixture over proper motion and parallax by expectation-maximization (js/kernels/galactic/membership.js), each star’s own errors widening both components; the cluster’s intrinsic width uses the standard approximate update. See GALACTIC_DYNAMICS.md.',
   },
+  'who-gets-counted': {
+    topic:
+      'Selection by a magnitude limit: what a survey counts, what it misses and why a catalog is not a census',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Lives of Stars (or any work with luminosity and absolute magnitude). The first of three selection-effects investigations; it needs only the magnitude scale and the idea of distance. It supports OpenStax Astronomy 2e chapter 19 on stellar populations and surveys.',
+    overview:
+      'Students count a synthetic population of stars at three magnitude limits. A limit of 14 counts 167 of 2,645 stars (6.3 percent) and a limit of 18 counts 1,289 (48.7 percent); every star a limit of 18 misses is faint (absolute magnitude above 8). A Sun-like star can be counted to 711 pc at limit 14 but a red dwarf only to 63 pc, and the counted stars average 3.8 in absolute magnitude against 8.3 for every star. The point: a survey counts what it can see, and that is not a census.',
+    priorKnowledge: [
+      'The magnitude scale and what absolute magnitude means',
+      'Distance and the inverse-square law',
+      'A luminosity function in words: more faint stars than bright',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A limit selects on apparent brightness',
+        body: 'Stars are counted when they look brighter than the limit, which mixes how bright they are with how far away.',
+      },
+      {
+        heading: 'The missing stars are the faint ones',
+        body: 'Red dwarfs are the commonest stars and the faintest, so a shallow survey loses most of the population.',
+      },
+      {
+        heading: 'A truth that real surveys lack',
+        body: 'The stars are synthetic, so every missed star is known. A real survey cannot see its own misses.',
+      },
+    ],
+    features: [
+      {
+        name: 'Who-gets-counted instrument (survey family)',
+        text: 'Absolute magnitude against distance with the limit drawn, or the cumulative counts; the magnitude limit; listed counts, share, the faint share of the missed stars, the distance to which a Sun-like star and a red dwarf are counted, and the mean magnitudes of all and of counted stars.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the distance by hand and the volume gained per magnitude (3.98). Advanced: the same drift of brightness with distance in the real Gaia solar-neighbourhood table (8.80 to 4.23, 4.56 mag).',
+      },
+      {
+        name: 'The synthetic survey',
+        text: 'The same universe can be surveyed outside the investigation: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labeled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Most stars are like the bright ones we see.',
+        response:
+          'The counted stars average four and a half magnitudes brighter than every star in the model.',
+      },
+      {
+        claim: 'A deeper survey counts everything.',
+        response: 'At limit 18 half the stars are still missed.',
+      },
+      {
+        claim: 'The missed stars are a random sample.',
+        response: 'All of them are faint: the survey selected on brightness.',
+      },
+      {
+        claim: 'A bigger telescope would fix it.',
+        response:
+          'A deeper limit helps but never reaches the faint end of a population that rises toward faint stars; the model still misses half the stars at limit 18.',
+      },
+    ],
+    teachingNotes: [
+      'The model is bolometric: no bolometric correction, no dust, no binaries, stars uniform in space (SELECTION_EFFECTS.md). Say so if a student asks whether the numbers are real.',
+      'The core values come from a fixed seed (survey-lab-1), so every student sees the same 2,645 stars.',
+      'The real-sample comparison uses the Gaia table, a stratified and radial-velocity-selected subset (CC BY-NC 3.0 IGO, D-GAIA-01); its shell means are stated in the advanced step and recomputed by a test.',
+      'All three selection-effects investigations use the same fixed synthetic universe, so every student sees the same stars and the answer key is exact.',
+    ],
+    discussion: [
+      'What would a survey of only the nearest 100 parsecs miss, and what would it get right?',
+      'Who would be misled by a catalog of the brightest stars, and how?',
+      'How would you know how many stars a real survey missed?',
+    ],
+    extensions: [
+      'Continue with Why the Bright Ones Win, which measures the bias.',
+      'Open the Gaia solar-neighbourhood table in the Observatory and plot absolute magnitude against distance.',
+    ],
+    modelNotes:
+      'js/survey/model.js: a cone of stars uniform in space drawn from the stellar-population synthesis, observed with a limit on the measured magnitude; every draw keyed by seed and star index. See SELECTION_EFFECTS.md.',
+  },
+  'why-the-bright-ones-win': {
+    topic:
+      'Malmquist bias and a second bias from selecting on a well-measured parallax, each measured against a known truth',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Who Gets Counted. It supports OpenStax Astronomy 2e chapter 19 and is a first look at a bias that every distance-limited statistic in astronomy has to address.',
+    overview:
+      "Students group the survey by distance and compare the counted stars with all stars in each shell: at limit 16 the counted stars are brighter by 0.50 mag in the nearest shell and 3.56 mag in the farthest. For standard candles with a scatter of 0.7 mag the measured bias at the limit (-0.645) agrees with Malmquist's closed form (-1.382 sigma squared = -0.677). A parallax cut of 3 sigma makes measured parallaxes 18 percent too large and absolute magnitudes 0.25 mag too faint; a cut of 10 removes the bias but leaves 82 of 471 stars.",
+    priorKnowledge: [
+      'Who Gets Counted (or the magnitude limit idea)',
+      'Parallax and distance',
+      'Squaring a number',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The bias grows with distance',
+        body: 'A fixed apparent limit needs a brighter star at every larger distance, so far shells keep only the brightest of their stars.',
+      },
+      {
+        heading: 'A closed form for a simple case',
+        body: 'For equal-density stars with a Gaussian luminosity function the shift is -1.3816 sigma squared, and it quadruples when the scatter doubles.',
+      },
+      {
+        heading: 'Cuts make new selections',
+        body: 'Selecting on a well-measured parallax removes one bias and adds another; a stricter cut costs most of the sample.',
+      },
+    ],
+    features: [
+      {
+        name: 'Malmquist instrument (survey family)',
+        text: 'Bars of bias by shell of distance; the magnitude limit; two kinds of star (a population, or standard candles); a parallax cut; listed means, bias, shells, the bias at the limit with its closed form, and the parallax selection bias. The astrometer is deliberately weaker than Gaia so that the second bias is visible.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the closed form by hand for sigma 0.7 (0.677) and 1.4 (2.708). Advanced: the luminosity error from the parallax bias (20.6 percent) and the real Gaia table drifting the same way (8.80, 6.68, 5.35, 4.23 mag).',
+      },
+      {
+        name: 'The synthetic survey',
+        text: 'The same universe can be surveyed outside the investigation: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labeled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Far stars are intrinsically brighter.',
+        response:
+          'The model has the same stars everywhere; the selection makes the drift. The real Gaia sample drifts the same way.',
+      },
+      {
+        claim: 'Using more stars removes the bias.',
+        response:
+          'The bias is a property of the selection, not the sample size.',
+      },
+      {
+        claim: 'A strict parallax cut is free.',
+        response: 'It leaves 82 stars of 471 and they are the nearest.',
+      },
+      {
+        claim: 'The bias is an error in the measurements.',
+        response:
+          'Every measured value is right; the bias is in which stars were selected to be measured.',
+      },
+    ],
+    teachingNotes: [
+      'The standard-candle comparison measures stars in the last half magnitude before the limit with their true apparent magnitudes; with 30,000 candles about 750 stars fall in it, so the agreement is within about 0.05 mag.',
+      'The closed form is the textbook case (uniform density, no distance boundary); the cone has a boundary, so only the candle universe (500 pc, M = 10) is used for it.',
+      'Spanish text is unreviewed by a native reader.',
+      'The first two measure steps use the population; the standard-candle step uses a separate universe of 30,000 candles so that the closed form can be checked.',
+    ],
+    discussion: [
+      'Why does a standard candle with no scatter have no Malmquist bias?',
+      'Which is worse for a distance scale, Malmquist bias or the parallax selection bias?',
+      'How could a survey design avoid both?',
+    ],
+    extensions: [
+      'Continue with The Completeness Curve.',
+      'Compare the shell means of the Gaia solar-neighbourhood table with the synthetic ones.',
+    ],
+    modelNotes:
+      'js/survey/model.js: malmquistShells, malmquistAtMagnitude, malmquistFormula, parallaxSelectionBias. See SELECTION_EFFECTS.md.',
+  },
+  'the-completeness-curve': {
+    topic:
+      'Correcting a luminosity function for a completeness curve with the effective-volume method, and stating the residual bias',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Why the Bright Ones Win. It supports OpenStax Astronomy 2e chapter 19 and is the introduction to correcting a survey; the advanced steps serve an upper-level statistics-of-surveys module.',
+    overview:
+      "Students see that a raw count of faint stars is too low (96 and 57 percent of the truth in the two faintest bins even for a sharp edge at 20), that weighting each counted star by 1 over the volume it could be seen in recovers the truth (0.97 +/- 0.06 for a survey 50 percent complete at 17, where the raw count gets 13 percent), that three stars cannot carry a bin (0.78 +/- 0.46), and that working the absolute magnitudes out from the catalog's own parallaxes leaves a 60 percent bias (1.60 against 1.00) in the faintest bin.",
+    priorKnowledge: [
+      'Who Gets Counted and Why the Bright Ones Win',
+      'Poisson counting (the error of N is the square root of N)',
+      'Cube laws for volumes',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The effective-volume method',
+        body: 'Each counted star stands for 1 over the volume in which it could have been counted (Schmidt 1968).',
+      },
+      {
+        heading: 'An error bar is part of the answer',
+        body: '0.97 +/- 0.06 is consistent with 1; three stars give an error too large to say anything.',
+      },
+      {
+        heading: 'Residual bias',
+        body: 'A correction made from measured magnitudes inherits the measurement errors; the bias must be stated.',
+      },
+    ],
+    features: [
+      {
+        name: 'Completeness instrument (survey family)',
+        text: 'The luminosity function (truth, raw, corrected) or the completeness curve; the magnitude limit, the 50 percent point and the width of the fade; listed counts and shares for the two faintest bins, with the corrected value from true and from catalog magnitudes.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the weight of one star (3.98) and the Poisson error (4.5 percent). Advanced: the Euclidean count slope 0.6, a real catalog (SDSS NGC 2420) running out beyond r = 21, and what a bootstrap can and cannot say.',
+      },
+      {
+        name: 'The synthetic survey',
+        text: 'The same universe can be surveyed outside the investigation: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labeled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A correction recovers everything.',
+        response:
+          'Only where some stars were counted; three stars give 0.78 +/- 0.46.',
+      },
+      {
+        claim: 'A bootstrap interval is the whole error.',
+        response:
+          'It is only the sampling spread; selection and magnitude bias are invisible to it.',
+      },
+      {
+        claim: 'Corrected values should equal the truth exactly.',
+        response:
+          'They agree to within the Poisson error, which is the most a finite count can promise.',
+      },
+      {
+        claim: 'A correction needs the true magnitudes.',
+        response:
+          "Only this synthetic survey has them; the measure step on the catalog's own magnitudes shows what an analyst gets instead, 1.60 against 1.00.",
+      },
+    ],
+    teachingNotes: [
+      "The catalog-magnitude value of 1.604 in the faintest bin depends on the instrument's astrometry (Gaia-like: 0.02 mas to magnitude 13); with worse parallaxes it is larger.",
+      'The SDSS counts in the advanced step are from the NGC 2420 photometry table (a cluster field, not a uniform one) and are recomputed by a test.',
+      "The statistics-of-surveys module is the advanced depth plus the pure functions in js/survey/model.js (sweepLimit, bootstrapLuminosityFunction) that use the analysis lab's bootstrap and quantiles.",
+      'The predict step before the first measure is held until the measure step is answered, as in the other investigations.',
+    ],
+    discussion: [
+      'How would you test a completeness curve you did not trust?',
+      'What would you report from a survey with a bin that holds three stars?',
+      'Why does a correction made from measured magnitudes differ from one made from true ones?',
+    ],
+    extensions: [
+      'Sweep the limit over seeds in a notebook using js/survey/model.js sweepLimit and report the spread.',
+      "Compare the model's luminosity function with the stellar-populations investigations.",
+    ],
+    modelNotes:
+      'js/survey/model.js: effectiveVolume, recoveredLuminosityFunction (truth and catalog modes), completenessCurve, bootstrapLuminosityFunction. See SELECTION_EFFECTS.md.',
+  },
 };
 
 /** @returns {Object|null} The instructor content for an investigation id */

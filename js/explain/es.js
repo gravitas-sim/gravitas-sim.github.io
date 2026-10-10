@@ -115,6 +115,12 @@ export default {
     'Qué dicen los datos antes de ponerles un modelo, y cuánto mueve la respuesta un supuesto cambiado (la V del Sol, la ponderación, el halo).',
     'Mediciones reales con dispersión real; los modelos son simples y se declaran, y una pertenencia es una probabilidad, no una etiqueta.',
   ],
+  survey: [
+    'Estrellas sintéticas de brillo conocido a distancias conocidas: estrellas contadas y perdidas, el sesgo por capas de distancia, o la función de luminosidad frente a su verdad.',
+    'Cómo cambian la parte contada, el sesgo y la función de luminosidad recuperada al cambiar el límite de magnitud, la curva de completitud o el corte de paralaje.',
+    'Qué estrellas pierde un sondeo, en qué se distinguen las contadas de las que hay, y cuánto de la verdad devuelve una corrección.',
+    'Las estrellas son un modelo, el sondeo es un modelo, y la verdad se conoce solo porque se hicieron aquí; un sondeo real no tiene tal clave de respuestas.',
+  ],
   compare: [
     'Los datos (vertical, arriba) y el modelo encima, frente al tiempo; abajo, cada residuo en unidades de su propia barra de error.',
     'Donde los residuos se alejan de cero en una racha, el modelo queda por encima o por debajo de los datos; la dispersión en torno a cero es el ruido.',

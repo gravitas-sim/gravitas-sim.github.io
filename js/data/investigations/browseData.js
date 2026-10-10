@@ -152,4 +152,16 @@ export const BROWSE_META = {
     tags: ['galaxies', 'observing', 'stars'],
     numericCount: 0,
   },
+  'who-gets-counted': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  'why-the-bright-ones-win': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  'the-completeness-curve': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
 };

@@ -85,6 +85,9 @@ import THE_ROTATING_DISK from './investigations/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP from './investigations/cluster-membership.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
+import WHO_GETS_COUNTED from './investigations/who-gets-counted.js';
+import WHY_THE_BRIGHT_ONES_WIN from './investigations/why-the-bright-ones-win.js';
+import THE_COMPLETENESS_CURVE from './investigations/the-completeness-curve.js';
 
 // Order matters: the browser lists them in this order, and the three exoplanet
 // lessons form a sequence. Shadows measures a radius, Tug measures a mass and
@@ -140,6 +143,9 @@ export const INVESTIGATIONS = [
   THE_SUNS_MOTION,
   THE_ROTATING_DISK,
   CLUSTER_MEMBERSHIP,
+  WHO_GETS_COUNTED,
+  WHY_THE_BRIGHT_ONES_WIN,
+  THE_COMPLETENESS_CURVE,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

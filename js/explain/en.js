@@ -118,6 +118,12 @@ export default {
     'What the data say before a model is put on them, and how far a changed assumption (the Sun’s V, the weighting, the halo) moves the answer.',
     'Real measurements with real scatter; the models are simple and stated, and a membership is a probability, not a label.',
   ],
+  survey: [
+    'Synthetic stars of known brightness at known distances: counted and missed stars, the bias by shells of distance, or the luminosity function against its truth.',
+    'How the counted share, the bias and the recovered luminosity function change as the magnitude limit, the completeness curve or the parallax cut changes.',
+    'Which stars a survey misses, how the counted ones differ from the stars there are, and how much of the truth a correction puts back.',
+    'The stars are a model, the survey is a model, and the truth is known only because they were made here; a real survey has no such answer key.',
+  ],
   compare: [
     'The data (vertical, above) and the model over them, against time; below, each residual in units of its own error bar.',
     'Where the residuals leave the zero line in a run, the model is above or below the data there; scatter around zero is the noise.',
