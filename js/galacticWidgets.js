@@ -9,6 +9,7 @@
 // place a value is. What each computes is in js/galactic/model.js.
 // =============================================================================
 
+import './instrumentStartup.js';
 import { t, registerMessages } from './i18n/index.js';
 import { EN_GALACTIC } from './i18n/en.galactic.js';
 import { ES_GALACTIC } from './i18n/es.galactic.js';

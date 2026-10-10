@@ -125,7 +125,7 @@ export const BROWSE_META = {
     numericCount: 0,
   },
   'the-rotating-disk': {
-    tags: ['dark-matter', 'galaxies', 'observing'],
+    tags: ['galaxies', 'observing'],
     numericCount: 0,
   },
   'cluster-membership': {

@@ -47,7 +47,7 @@ export default {
     },
     {
       title: 'La opción auténtica: la Vía Láctea medida',
-      body: 'Todas las curvas de galaxia de esta lección hasta ahora son un <strong>modelo</strong>: la curva de NGC 3198 se construyó con parámetros publicados y una dispersión fija añadida, y está rotulada como sintética. Aquí hay una medida. El instrumento muestra la rapidez circular de la propia Vía Láctea de 2 a 25 kpc, de Bhattacharjee, Chaudhury y Kundu (2014), que combinaron muchos trazadores. Supone que el Sol está a 8,3 kpc del centro y se mueve a 244 km/s; las citas están en el paquete de datos. Pon el modelo en un mejor ajuste sin halo y luego con uno.',
+      body: 'Todas las curvas de galaxia de esta investigación hasta ahora son un <strong>modelo</strong>: la curva de NGC 3198 se construyó con parámetros publicados y una dispersión fija añadida, y está rotulada como sintética. Aquí hay una medida. El instrumento muestra la rapidez circular de la propia Vía Láctea de 2 a 25 kpc, de Bhattacharjee, Chaudhury y Kundu (2014), que combinaron muchos trazadores. Supone que el Sol está a 8,3 kpc del centro y se mueve a 244 km/s; las citas están en el paquete de datos. Pon el modelo en un mejor ajuste sin halo y luego con uno.',
     },
     {
       title: 'La misma prueba con datos reales',

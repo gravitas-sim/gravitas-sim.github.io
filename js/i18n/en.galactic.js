@@ -85,7 +85,7 @@ export const EN_GALACTIC = {
   'galW.rd.about.none':
     'weights every star alike, so the nearest stars, with the largest scatter, dominate',
   'galW.rd.value.curve':
-    'Measured: published rotation-curve points, three sets cited in the data pack (this is the R0 = 8.3 kpc set). The curves are a model.',
+    'Measured: published rotation-curve points, three sets cited in the data package (this is the R0 = 8.3 kpc set). The curves are a model.',
   'galW.rd.row.points': 'Points (2 to 25 kpc)',
   'galW.rd.row.chi2': 'χ² against the points',
   'galW.rd.row.reduced': 'Reduced χ²',

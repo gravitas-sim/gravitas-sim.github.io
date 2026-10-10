@@ -4007,7 +4007,7 @@ export const INSTRUCTOR_CONTENT = {
     placement:
       'After Lines and Motion, once students can turn a Doppler shift into a radial velocity, and before The Rotating Disk. It supports OpenStax Astronomy 2e section 25.1 (the architecture of the Galaxy), and works in an upper-level course as an introduction to what a reference frame assumes.',
     overview:
-      'Students turn 1,570 real Gaia DR3 stars into velocities (U toward the Galactic center, V along the rotation, W toward the north Galactic pole) and measure the Sun’s velocity relative to the nearer ones as minus their mean, with uncertainties. They find the Sun moving about 10, 22 and 9 km/s in U, V and W relative to the stars within 100 pc, and learn why V is so large: the stars lag the Galaxy’s rotation (asymmetric drift). Taking out the lag gives the Sun’s V against the local standard of rest, and two published ways of doing so disagree by about 8 km/s. The lesson states both, lets the student record each, and makes the choice an assumption to state.',
+      'Students turn 1,570 real Gaia DR3 stars into velocities (U toward the Galactic center, V along the rotation, W toward the north Galactic pole) and measure the Sun’s velocity relative to the nearer ones as minus their mean, with uncertainties. They find the Sun moving about 10, 22 and 9 km/s in U, V and W relative to the stars within 100 pc, and learn why V is so large: the stars lag the Galaxy’s rotation (asymmetric drift). Taking out the lag gives the Sun’s V against the local standard of rest, and two published ways of doing so disagree by about 8 km/s. The investigation states both, lets the student record each, and makes the choice an assumption to state.',
     priorKnowledge: [
       'A Doppler shift gives a radial velocity (Lines and Motion)',
       'That a star’s proper motion is its angular drift across the sky and parallax its distance',
@@ -4028,7 +4028,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'A choice the sample cannot make',
-        body: 'Taking out the Strömberg lag gives the Sun’s V against the LSR as about 3.8 km/s; Schönrich, Binney and Dehnen (2010) found 12.24 km/s by arguing that the lag also depends on metallicity. The drift fit across color bins in this sample is too noisy to choose. The instrument offers both, labelled, and the lesson asks the student to state which they use.',
+        body: 'Taking out the Strömberg lag gives the Sun’s V against the LSR as about 3.8 km/s; Schönrich, Binney and Dehnen (2010) found 12.24 km/s by arguing that the lag also depends on metallicity. The drift fit across color bins in this sample is too noisy to choose. The instrument offers both, labeled, and the investigation asks the student to state which they use.',
       },
     ],
     features: [
@@ -4039,6 +4039,10 @@ export const INSTRUCTOR_CONTENT = {
       {
         name: 'Depth',
         text: 'Quantitative: the speed from the components, the Strömberg lag by hand and the error of a mean. Advanced: what the frame choice does to the Sun’s speed (about 4 km/s of 14 to 19), and what sample could settle it.',
+      },
+      {
+        name: 'The Observatory',
+        text: 'The same Gaia table opens in the Observatory (gaia-solar-neighborhood), whose sky panel draws it on a Galactic map and as proper-motion vectors.',
       },
     ],
     misconceptions: [
@@ -4060,13 +4064,13 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'One of the two published values is simply correct.',
         response:
-          'Record both and Your assumption. Both are published; this sample cannot choose; the lesson is built so that a student must say which one they assumed.',
+          'Record both and Your assumption. Both are published; this sample cannot choose; the investigation is built so that a student must say which one they assumed.',
       },
     ],
     teachingNotes: [
       'OPEN SCIENCE ITEM (Carl): the Sun’s V against the LSR is not chosen by Gravitas. Strömberg’s correction from this sample gives 3.77 km/s at 100 pc (the old Dehnen and Binney 1998 value was 5.2); Schönrich et al. 2010 give 12.24. The third frame in the instrument adopts 12.24 and says so on screen. The core measurement accepts 3.77 within 0.5 and 12.24 within 0.3.',
-      'The core measurement accepts U = 10.5 within 1.5, V = 21.9 within 2 and W = 9.1 within 1.5 (Schönrich et al. U = 11.1 and W = 7.25 are inside the sample’s own uncertainty plus the pack check’s 3 km/s).',
-      'The solar sample is not volume-complete (Gaia radial velocities exist for bright stars) and its near stratum is over-sampled on purpose; the lesson never uses its star counts, only the means and scatter. GALACTIC_DYNAMICS.md lists the limits.',
+      'The core measurement accepts U = 10.5 within 1.5, V = 21.9 within 2 and W = 9.1 within 1.5 (Schönrich et al. U = 11.1 and W = 7.25 are inside the sample’s own uncertainty plus the package check’s 3 km/s).',
+      'The solar sample is not volume-complete (Gaia radial velocities exist for bright stars) and its near stratum is over-sampled on purpose; the investigation never uses its star counts, only the means and scatter. GALACTIC_DYNAMICS.md lists the limits.',
       'The advanced step about color-bin fits states that the Sun’s V from the drift fit changes by more than its error with the choice of bins; it is a statement from GALACTIC_DYNAMICS.md (12.3 ± 6.7 km/s for one choice of bins) and is not shown in the instrument.',
       'The Gaia data are CC BY-NC 3.0 IGO: not for commercial use (D-GAIA-01, pending Carl’s confirmation).',
     ],
@@ -4123,6 +4127,10 @@ export const INSTRUCTOR_CONTENT = {
         name: 'Depth',
         text: 'Quantitative: the circular speed from A − B, and the mass inside 8.3 kpc by M = v² r / G (about 1.15 times 10 to the 11, as an estimate). Advanced: the halo’s share of the force at the Sun (43.5 percent) and why the disk is bounded.',
       },
+      {
+        name: 'Data behind the curve',
+        text: 'The rotation curve is the milky-way-rotation-curve data package, three sets of the Sun’s distance and speed with citations by region; the Observatory opens it as a table.',
+      },
     ],
     misconceptions: [
       {
@@ -4139,12 +4147,17 @@ export const INSTRUCTOR_CONTENT = {
         response:
           'Where the halo matters. At the Sun the stars and gas are the larger share in this fit (203 against 178 km/s); the halo takes over far out.',
       },
+      {
+        claim: 'A flat rotation curve is just what a disk of stars does.',
+        response:
+          'Stars only fit. The best stars-only curve falls away past about 10 kpc and misses the measured points (reduced chi-square of 50).',
+      },
     ],
     teachingNotes: [
-      'The rotation curve is the R0 = 8.3 kpc, V0 = 244 km/s set of Bhattacharjee et al. 2014 Table 2, disk-region points from 2 to 25 kpc, with errors floored at 3 km/s. The pack carries two other sets; the instrument uses one and says so (D-GAIA-02: cited by region, not by point).',
+      'The rotation curve is the R0 = 8.3 kpc, V0 = 244 km/s set of Bhattacharjee et al. 2014 Table 2, disk-region points from 2 to 25 kpc, with errors floored at 3 km/s. The data package carries two other sets; the instrument uses one and says so (D-GAIA-02: cited by region, not by point).',
       'The Sun’s distance 8.3 kpc is an assumption in the circular speed from the Oort constants, stated on screen.',
-      'The unweighted Oort fit is shown on purpose: A about −2.4 ± 11.5, B about −4.3 ± 8.0. It is a lesson in why a fit needs the right weights, not a second result.',
-      'The model fit is Nelder-Mead with several starts in the galactic kernel; the best-fit values the lesson quotes are deterministic.',
+      'The unweighted Oort fit is shown on purpose: A about −2.4 ± 11.5, B about −4.3 ± 8.0. It is a investigation in why a fit needs the right weights, not a second result.',
+      'The model fit is Nelder-Mead with several starts in the galactic kernel; the best-fit values the investigation quotes are deterministic.',
     ],
     discussion: [
       'Why do proper motions along the plane make a double wave and not a single one?',
@@ -4164,7 +4177,7 @@ export const INSTRUCTOR_CONTENT = {
       'Cluster membership from motion: a mixture fit over Gaia proper motions and parallaxes, membership as a probability, and a check against a color-magnitude diagram',
     difficulty: 'Introductory (data-driven)',
     placement:
-      'After Lives of Stars (or any use of a color-magnitude diagram), and independent of the other two galactic lessons. It supports OpenStax Astronomy 2e on star clusters (chapter 22) and is a first lesson in separating a population from a background.',
+      'After Lives of Stars (or any use of a color-magnitude diagram), and independent of the other two galactic investigations. It supports OpenStax Astronomy 2e on star clusters (chapter 22) and is a first investigation in separating a population from a background.',
     overview:
       'Students see that a cluster is a tight clump in proper motion among the broad cloud of field stars, measure NGC 2420’s proper motion and member count from a two-component mixture fit (about 506 of 993 stars, moving at −1.23, −2.04 mas/yr), and meet the central idea: each star has a membership probability, and a count of members is a count above a threshold someone chooses. The count hardly changes between 0.1 and 0.99 here because the cluster is well separated. A color-magnitude diagram that the fit never used confirms the members as one population, and a mean parallax gives about 2.6 kpc with the zero-point not corrected.',
     priorKnowledge: [
@@ -4187,7 +4200,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'What a parallax distance leaves out',
-        body: '1 over the mean parallax is 2.6 kpc; the zero-point offset of about 0.02 mas (about 5 percent) is not corrected and nothing else was used to check it. The lesson states the value and nothing more.',
+        body: '1 over the mean parallax is 2.6 kpc; the zero-point offset of about 0.02 mas (about 5 percent) is not corrected and nothing else was used to check it. The investigation states the value and nothing more.',
       },
     ],
     features: [
@@ -4198,6 +4211,10 @@ export const INSTRUCTOR_CONTENT = {
       {
         name: 'Depth',
         text: 'Quantitative: the distance by hand and the members’ internal speed spread (about 1 km/s). Advanced: the expected number of field stars (487) and what parallax adds to a proper-motion-only fit (the borderline stars go from 8 to 4).',
+      },
+      {
+        name: 'The Observatory',
+        text: 'The same table opens in the Observatory (gaia-ngc2420), whose sky panel draws the field on a Galactic map and each star’s proper motion as an arrow.',
       },
     ],
     misconceptions: [
@@ -4217,9 +4234,14 @@ export const INSTRUCTOR_CONTENT = {
         response:
           'What the distance leaves out. The zero-point alone is about 5 percent here.',
       },
+      {
+        claim: 'A smaller list of members is a cleaner one.',
+        response:
+          'Move the threshold. The count barely changes from 0.1 to 0.99 here, so a strict threshold mostly throws away stars that are almost surely members.',
+      },
     ],
     teachingNotes: [
-      'OPEN ITEM (Carl): the members’ mean parallax of 0.385 mas (2.6 kpc) has not been compared with a literature distance for NGC 2420, and the pack applies no zero-point correction. The lesson claims only what the instrument shows.',
+      'OPEN ITEM (Carl): the members’ mean parallax of 0.385 mas (2.6 kpc) has not been compared with a literature distance for NGC 2420, and the package applies no zero-point correction. The investigation claims only what the instrument shows.',
       'The core measurement accepts the proper motion within 0.05 mas/yr of (−1.227, −2.041), the member count 506 within 8, 497 and 509 at the two thresholds within 6, and the mean parallax within 0.02.',
       'The fit starts from fixed values (cluster at (−1, −2) mas/yr and 0.3 mas, field broad) so a result is reproducible; the number of uncertain stars is 4 with parallax and 8 without.',
       'Gaia data are CC BY-NC 3.0 IGO: not for commercial use (D-GAIA-01).',
@@ -4227,10 +4249,10 @@ export const INSTRUCTOR_CONTENT = {
     discussion: [
       'What would a less well separated cluster do to the count between 0.1 and 0.99?',
       'Why is a color-magnitude diagram a fair check, and when would it not be?',
-      'Who is harmed if a catalogue publishes only a member / non-member column?',
+      'Who is harmed if a catalog publishes only a member / non-member column?',
     ],
     extensions: [
-      'Stellar populations lessons use cluster color-magnitude diagrams; compare NGC 2420’s turnoff with an isochrone.',
+      'Stellar populations investigations use cluster color-magnitude diagrams; compare NGC 2420’s turnoff with an isochrone.',
       'Open the Observatory’s Gaia NGC 2420 table and make the same plot.',
     ],
     modelNotes:

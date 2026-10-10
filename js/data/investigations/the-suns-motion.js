@@ -25,7 +25,7 @@ const STARS = {
   fit: true,
   stars: [
     { role: 'sun', name: 'The Sun', teffK: 5772, lumSun: 1 },
-    { role: 'neighbour', name: 'A neighbour', teffK: 5000, lumSun: 0.4 },
+    { role: 'neighbor', name: 'A neighbor', teffK: 5000, lumSun: 0.4 },
   ],
 };
 const SM = (values = {}) => ({ id: 'solar-motion', values });
@@ -35,7 +35,7 @@ const THE_SUNS_MOTION = {
   thumbnail: 'images/investigations/the-suns-motion.webp',
   title: 'The Sun’s Motion',
   subtitle: 'Measuring the solar apex from nearby stars in Gaia',
-  duration: '15-25 min',
+  duration: '25-40 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 25, section: '25.1' },
@@ -77,7 +77,7 @@ const THE_SUNS_MOTION = {
       stage: STARS,
       type: 'predict',
       reveal: 'measure-the-sun',
-      title: 'What the neighbours’ average says',
+      title: 'What the neighbors’ average says',
       body: `Suppose the Sun is moving through a swarm of nearby stars that,
              taken together, are not going anywhere. Do not change the
              instrument yet.`,
@@ -216,7 +216,7 @@ const THE_SUNS_MOTION = {
              and found the Sun’s V to be <strong>12.24&nbsp;km/s</strong>. The two
              published values differ by about 8&nbsp;km/s. This sample cannot
              choose between them, and Gravitas does not: the third frame in the
-             instrument is labelled as an assumption, and so should your answer be.`,
+             instrument is labeled as an assumption, and so should your answer be.`,
       tool: SM({ maxPc: 100, frame: 1, view: 1 }),
     },
     {

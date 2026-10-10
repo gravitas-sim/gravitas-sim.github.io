@@ -138,13 +138,13 @@ export default {
       depth: 'advanced',
       type: 'read',
       title: 'The authentic option: the Milky Way as measured',
-      body: `Every galaxy curve in this lesson so far is a <strong>model</strong>:
+      body: `Every galaxy curve in this investigation so far is a <strong>model</strong>:
              the NGC 3198 curve was built from published parameters with a
              fixed scatter added, and is labelled synthetic. Here is a measured
              one. The instrument shows the Milky Way’s own circular speed from
              2 to 25 kpc, from Bhattacharjee, Chaudhury and Kundu (2014), who
              combined many tracers. It assumes the Sun is 8.3 kpc from the center,
-             moving at 244 km/s; the citations are in the data pack.
+             moving at 244 km/s; the citations are in the data package.
              Set the model to a best fit without a halo, then with one.`,
       tool: { id: 'rotating-disk', values: { view: 1, fit: 2 } },
     },

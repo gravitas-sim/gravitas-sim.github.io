@@ -25,7 +25,7 @@ const THE_ROTATING_DISK = {
   title: 'The Rotating Disk',
   subtitle:
     'The Oort constants and the Milky Way’s rotation curve, from data, then a mass model',
-  duration: '15-25 min',
+  duration: '25-40 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 25, section: '25.3' },
@@ -33,7 +33,7 @@ const THE_ROTATING_DISK = {
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
   prerequisites: ['the-suns-motion'],
-  tags: ['galaxies', 'dark-matter', 'observing'],
+  tags: ['galaxies', 'observing'],
   lock: { placement: true, inspector: true },
   objectives: [
     'Measure the Oort constants A and B from the proper motions of nearby stars, with uncertainties',

@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 27 investigations and 715 steps: 665 steps
+Across 30 investigations and 748 steps: 698 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 281 show a prescribed model result, 106 draw
-on a stored dataset, 160 put a self-contained panel beside the text,
-119 keep something, and 30 are prose.
-Of 91 prediction loops, 91 are returned to,
-91 produce a measurement before they are answered, and
+running integration, 314 show a prescribed model result, 106 draw
+on a stored dataset, 193 put a self-contained panel beside the text,
+129 keep something, and 30 are prose.
+Of 95 prediction loops, 95 are returned to,
+95 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-91 hold their marking until the experiment settles them.
+95 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -398,4 +398,46 @@ Of 91 prediction loops, 91 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:kirchhoff`, control kirchhoff/Tc, measures the brightness at the H-alpha center against the source's, with the same cloud cooler than the source (a dark line) and hotter (a bright line), evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Sun’s Motion (`the-suns-motion`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** sun, neighbor.
+- **Instruments:** solar-motion.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-mean → measure-the-sun, why-v-is-big, measure-farther, the-lsr-problem, record-both-frames, where-is-the-apex, state-the-assumption, what-you-worked-out → measure-the-sun.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment:** not yet reviewed.
+
+## The Rotating Disk (`the-rotating-disk`)
+
+- **Steps:** 12. Scene declared on 12; a reader can change something on 0; 12 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 12 prescribed model, 0 stored dataset, 12 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** sun, orbiter.
+- **Instruments:** rotating-disk.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-shape → measure-a-and-b, why-weight-by-distance, speed-at-the-sun, the-rotation-curve → measure-a-and-b; predict-stars-alone → fit-stars-only, fit-with-a-halo, where-the-halo-matters, say-what-it-assumes, what-you-worked-out → fit-stars-only.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment:** not yet reviewed.
+
+## Cluster Membership by Motion (`cluster-membership`)
+
+- **Steps:** 11. Scene declared on 11; a reader can change something on 0; 11 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 11 prescribed model, 0 stored dataset, 11 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
+- **Objects the steps declare:** member, field.
+- **Instruments:** cluster-members.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-clump → measure-the-cluster, a-label-or-a-probability, move-the-threshold, why-so-stable, does-the-color-agree, read-the-distance, what-is-not-corrected, one-sentence, what-you-worked-out → measure-the-cluster.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment:** not yet reviewed.
 

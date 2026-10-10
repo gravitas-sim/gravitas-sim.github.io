@@ -28,7 +28,7 @@ const CLUSTER_MEMBERSHIP = {
   thumbnail: 'images/investigations/cluster-membership.webp',
   title: 'Cluster Membership by Motion',
   subtitle: 'Finding the stars of NGC 2420 in Gaia, as probabilities',
-  duration: '15-25 min',
+  duration: '25-40 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 22, section: null },
@@ -59,7 +59,7 @@ const CLUSTER_MEMBERSHIP = {
              \n\nThe instrument holds 993 Gaia DR3 stars brighter than G = 17.5
              within 14 arcminutes of the cluster, and plots each star’s
              <strong>proper motion</strong> in the sky. Gaia’s errors are
-             included in the fit. Nothing is labelled yet: the list under the
+             included in the fit. Nothing is labeled yet: the list under the
              picture is what a fit finds.`,
       tool: CM({ view: 0, dims: 1, threshold: 0.5 }),
     },
