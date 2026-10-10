@@ -118,6 +118,12 @@ export default {
     'Which region the model misses, and whether moving one element brings the residuals back to the noise.',
     'The sliders move values the model was given; nothing is fitted, and a better match does not by itself say the model is right.',
   ],
+  sky: [
+    'The sky as a computed model: heights, times and angles for a place and a date.',
+    'Each reading is a number from a model of the Sun, Moon, stars and planets, listed beneath the picture.',
+    'How a height, a time or an angle changes when you move the date, the place or a limit.',
+    'It is a model, good to a fraction of a degree for the Sun and Moon and about 0.2 degrees for planets; it is not tonight’s sky.',
+  ],
   gwEvents: [
     'Real detector strain against time, and a map of pitch against time.',
     'A rising track on the map is the chirp of an inspiral.',

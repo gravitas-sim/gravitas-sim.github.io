@@ -115,6 +115,12 @@ export default {
     'En qué región falla el modelo y si mover un elemento devuelve los residuos al ruido.',
     'Los deslizadores mueven valores dados al modelo; no se ajusta nada, y un mejor encaje no dice por sí solo que el modelo sea correcto.',
   ],
+  sky: [
+    'El cielo como un modelo calculado: alturas, horas y ángulos para un lugar y una fecha.',
+    'Cada lectura es un número de un modelo del Sol, la Luna, las estrellas y los planetas, listado bajo la imagen.',
+    'Cómo cambia una altura, una hora o un ángulo al mover la fecha, el lugar o un límite.',
+    'Es un modelo, bueno a una fracción de grado para el Sol y la Luna y a unos 0,2 grados para los planetas; no es el cielo de esta noche.',
+  ],
   gwEvents: [
     'Deformación real del detector frente al tiempo, y un mapa de tono frente al tiempo.',
     'Una traza ascendente en el mapa es el chirrido de una espiral.',

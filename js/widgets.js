@@ -258,6 +258,21 @@ export const LAZY_FAMILIES = Object.freeze({
     ['blackbody', 'spectrum-viewer', 'kirchhoff'],
     'lightReady'
   ),
+  // Its stars arrive behind a second import (the Sky Lab's sidecar).
+  sky: familyEntry(
+    () => import('./skyWidgets.js'),
+    './skyWidgets.js',
+    'SKY_WIDGETS',
+    [
+      'sky-turning',
+      'sky-seasons',
+      'sky-phases',
+      'sky-eclipses',
+      'sky-wanderers',
+      'sky-plan',
+    ],
+    'skyReady'
+  ),
   compare: familyEntry(
     () => import('./compareWidgets.js'),
     './compareWidgets.js',

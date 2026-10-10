@@ -23,6 +23,11 @@ import BINARY_STAR_PLANETS from './data/investigations/es/binary-star-planets.js
 import BLACK_HOLES from './data/investigations/es/black-holes.js';
 import BUTTERFLY_EFFECT from './data/investigations/es/butterfly-effect.js';
 import COLOR_AND_TEMPERATURE from './data/investigations/es/color-and-temperature.js';
+import THE_TURNING_SKY from './data/investigations/es/the-turning-sky.js';
+import THE_SUN_THROUGH_THE_YEAR from './data/investigations/es/the-sun-through-the-year.js';
+import PHASES_AND_ECLIPSES from './data/investigations/es/phases-and-eclipses.js';
+import WANDERERS_ON_THE_SKY from './data/investigations/es/wanderers-on-the-sky.js';
+import PLAN_A_NIGHT from './data/investigations/es/plan-a-night.js';
 import LINES_AND_MOTION from './data/investigations/es/lines-and-motion.js';
 import WHAT_A_SPECTRUM_IS_MADE_OF from './data/investigations/es/what-a-spectrum-is-made-of.js';
 import DESIGN_THE_SCHEDULE from './data/investigations/es/design-the-schedule.js';
@@ -46,6 +51,11 @@ import WEIGHING_STARS from './data/investigations/es/weighing-stars.js';
 import WHAT_IS_A_GRAVITATIONAL_WAVE from './data/investigations/es/what-is-a-gravitational-wave.js';
 import WHEN_ORBITS_LOCK from './data/investigations/es/when-orbits-lock.js';
 import COLOR_AND_TEMPERATURE_DEEPER from './data/investigations/depth/es/color-and-temperature.js';
+import THE_TURNING_SKY_DEEPER from './data/investigations/depth/es/the-turning-sky.js';
+import THE_SUN_THROUGH_THE_YEAR_DEEPER from './data/investigations/depth/es/the-sun-through-the-year.js';
+import PHASES_AND_ECLIPSES_DEEPER from './data/investigations/depth/es/phases-and-eclipses.js';
+import WANDERERS_ON_THE_SKY_DEEPER from './data/investigations/depth/es/wanderers-on-the-sky.js';
+import PLAN_A_NIGHT_DEEPER from './data/investigations/depth/es/plan-a-night.js';
 import LINES_AND_MOTION_DEEPER from './data/investigations/depth/es/lines-and-motion.js';
 import WHAT_A_SPECTRUM_IS_MADE_OF_DEEPER from './data/investigations/depth/es/what-a-spectrum-is-made-of.js';
 import KEPLERS_LAWS_DEEPER from './data/investigations/depth/es/keplers-laws.js';
@@ -60,6 +70,11 @@ export const SHADOWS = Object.freeze({
   'black-holes': BLACK_HOLES,
   'butterfly-effect': BUTTERFLY_EFFECT,
   'color-and-temperature': COLOR_AND_TEMPERATURE,
+  'the-turning-sky': THE_TURNING_SKY,
+  'the-sun-through-the-year': THE_SUN_THROUGH_THE_YEAR,
+  'phases-and-eclipses': PHASES_AND_ECLIPSES,
+  'wanderers-on-the-sky': WANDERERS_ON_THE_SKY,
+  'plan-a-night': PLAN_A_NIGHT,
   'lines-and-motion': LINES_AND_MOTION,
   'what-a-spectrum-is-made-of': WHAT_A_SPECTRUM_IS_MADE_OF,
   'design-the-schedule': DESIGN_THE_SCHEDULE,
@@ -87,6 +102,11 @@ export const SHADOWS = Object.freeze({
 /** The Spanish shadow of each lesson's deeper steps, by lesson id. */
 export const DEEPER_SHADOWS = Object.freeze({
   'color-and-temperature': COLOR_AND_TEMPERATURE_DEEPER,
+  'the-turning-sky': THE_TURNING_SKY_DEEPER,
+  'the-sun-through-the-year': THE_SUN_THROUGH_THE_YEAR_DEEPER,
+  'phases-and-eclipses': PHASES_AND_ECLIPSES_DEEPER,
+  'wanderers-on-the-sky': WANDERERS_ON_THE_SKY_DEEPER,
+  'plan-a-night': PLAN_A_NIGHT_DEEPER,
   'lines-and-motion': LINES_AND_MOTION_DEEPER,
   'what-a-spectrum-is-made-of': WHAT_A_SPECTRUM_IS_MADE_OF_DEEPER,
   'keplers-laws': KEPLERS_LAWS_DEEPER,
