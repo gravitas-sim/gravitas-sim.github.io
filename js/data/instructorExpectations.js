@@ -39,6 +39,34 @@ export default {
       'read-the-distance':
         'Mean parallax of the members 0.385 mas (within 0.02) and the distance 2.6 kpc (within 0.15), with no zero-point correction.',
     },
+    'who-gets-counted': {
+      'count-a-shallow-survey':
+        'At limit 14: 167 stars counted (within 8) and 6.3 percent (within 0.5).',
+      'count-a-deep-survey':
+        'At limit 18: 1,289 counted (within 40) and 48.7 percent (within 1.5).',
+      'how-far-can-it-see':
+        'At limit 14: a Sun-like star to 711 pc (within 25) and a red dwarf to 63 pc (within 3).',
+      'the-average-star':
+        'At limit 14: mean absolute magnitude 8.32 for every star (within 0.15) and 3.79 for the counted (within 0.2).',
+    },
+    'why-the-bright-ones-win': {
+      'measure-the-shells':
+        'Limit 16, population: 0.50 mag in the 0-250 pc shell (within 0.15) and 3.56 in the 750-1,000 pc shell (within 0.25).',
+      'standard-candles':
+        'Standard candles at limit 16: the bias at the limit -0.645 (within 0.12) and the closed form -0.677 (within 0.02), entered with the sign shown.',
+      'a-second-bias':
+        'Limit 18, cut 3 sigma: parallaxes 18.1 percent too large (within 1.5) and absolute magnitudes 0.25 mag too faint (within 0.04).',
+    },
+    'the-completeness-curve': {
+      'raw-against-truth':
+        'First preset: raw count 96.2 percent of the truth in the 8-10 bin (within 2) and 56.7 in the 10-12 bin (within 3).',
+      'correct-the-fade':
+        'Second preset, bin 8-10: raw 13.3 percent (within 2) and corrected 0.97 times the truth (within 0.08).',
+      'when-it-cannot-help':
+        'Third preset, bin 10-12: 3 stars (within 1) and an error of 0.459 (within 0.06).',
+      'the-catalogue-own-magnitudes':
+        "First preset, bin 10-12: 1.00 from true magnitudes (within 0.06) and 1.60 from the catalogue's (within 0.12).",
+    },
     'what-a-spectrum-is-made-of': {
       'measure-two-clouds':
         'With a 6,000 K source, a 4,000 K cloud and gas 3, the H-alpha center reads about 19.9 percent of the source’s brightness, and about 251.6 percent with the cloud at 8,000 K; the validator accepts 19.9 within 1.5 and 251.6 within 8. Below 100 percent is a dark line and above 100 percent a bright one. A student who reads the equivalent width instead, or zooms on the wrong line, gets numbers that are not percentages of the source’s brightness.',

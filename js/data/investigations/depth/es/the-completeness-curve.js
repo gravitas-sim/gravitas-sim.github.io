@@ -33,7 +33,7 @@ export default {
       prompt: 'La pendiente de log₁₀ N(< m) frente a m',
       hints: ['N va como d³ y d va como 10 elevado a 0,2 m.'],
       worked:
-        'N ∝ d³ ∝ (10^(0,2 m))³ = 10^(0,6 m), así que la pendiente de log₁₀ N es 0,6. La cuenta del modelo de una candela estándar en un cono profundo sale en 0,60 (tests/surveyModel.test.js). Todo lo que la curva, un borde, el polvo, un disco o una muestra incompleta, se ve como una pendiente menor.',
+        'N ∝ d³ ∝ (10^(0,2 m))³ = 10^(0,6 m), así que la pendiente de log₁₀ N es 0,6. La cuenta del modelo de una candela estándar en un cono profundo sale en 0,60 (tests/surveyModel.test.js). Todo lo que la dobla (un borde, el polvo, un disco o una muestra incompleta) se ve como una pendiente menor.',
       feedback: {
         close:
           'Casi. Eleva al cubo el factor de distancia de una magnitud y toma su logaritmo.',

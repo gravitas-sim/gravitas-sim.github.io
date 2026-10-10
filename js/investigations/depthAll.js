@@ -26,6 +26,9 @@ import PLAN_A_NIGHT_DEEPER from '../data/investigations/depth/plan-a-night.js';
 /** The deeper steps of the lessons that have them, by lesson id (DEPTH.md). */
 export const DEEPER = Object.freeze({
   [KEPLER_DEEPER.id]: KEPLER_DEEPER.steps,
+import WHO_GETS_COUNTED_DEEPER from '../data/investigations/depth/who-gets-counted.js';
+import WHY_THE_BRIGHT_ONES_WIN_DEEPER from '../data/investigations/depth/why-the-bright-ones-win.js';
+import THE_COMPLETENESS_CURVE_DEEPER from '../data/investigations/depth/the-completeness-curve.js';
   [TRANSIT_DEEPER.id]: TRANSIT_DEEPER.steps,
   [WEIGHING_DEEPER.id]: WEIGHING_DEEPER.steps,
   [MISSING_MASS_DEEPER.id]: MISSING_MASS_DEEPER.steps,
@@ -40,6 +43,9 @@ export const DEEPER = Object.freeze({
   [THE_SUNS_MOTION_DEEPER.id]: THE_SUNS_MOTION_DEEPER.steps,
   [THE_ROTATING_DISK_DEEPER.id]: THE_ROTATING_DISK_DEEPER.steps,
   [CLUSTER_MEMBERSHIP_DEEPER.id]: CLUSTER_MEMBERSHIP_DEEPER.steps,
+  [WHO_GETS_COUNTED_DEEPER.id]: WHO_GETS_COUNTED_DEEPER.steps,
+  [WHY_THE_BRIGHT_ONES_WIN_DEEPER.id]: WHY_THE_BRIGHT_ONES_WIN_DEEPER.steps,
+  [THE_COMPLETENESS_CURVE_DEEPER.id]: THE_COMPLETENESS_CURVE_DEEPER.steps,
 });
 
 /** A lesson with every depth laid in; one without deeper steps as it is. */

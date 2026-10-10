@@ -80,4 +80,10 @@ export const SUMMARIES_ES = {
     'Las estrellas cercanas muestran la rotación de la Galaxia como una onda doble en sus movimientos propios, y su altura y centro son las constantes de Oort. Medirás A y B con Gaia, las convertirás en la rapidez circular del Sol y luego pondrás la curva de rotación medida de la Vía Láctea frente a un modelo de bulbo, disco y halo. Las estrellas y el gas solos la ajustan mal; un halo la ajusta diez veces mejor. Dirás qué supone esa comparación.',
   'cluster-membership':
     'Las estrellas de un cúmulo nacieron juntas y todavía se mueven juntas. Hallarás NGC 2420 en 993 estrellas de Gaia como un grupo compacto en movimiento propio, lo ajustarás frente al campo y darás a cada estrella una probabilidad de pertenecer, no una etiqueta. Moverás el umbral, comprobarás los miembros con un diagrama color-magnitud que el ajuste nunca usó y dirás qué deja fuera una distancia por el paralaje medio.',
+  'who-gets-counted':
+    'Un sondeo cuenta las estrellas que parecen brillantes, no las que son comunes. Contarás una población sintética con tres límites de magnitud, hallarás qué hay en la parte que se pierde y a qué distancia pueden estar una estrella como el Sol y una enana roja para ser contadas. Dirás por qué un catálogo de las estrellas más brillantes no es un censo.',
+  'why-the-bright-ones-win':
+    'Lejos, solo las estrellas intrínsecamente brillantes llegan a un sondeo, así que las que cuenta son más brillantes que las que hay: sesgo de Malmquist. Lo medirás en capas de distancia, lo compararás con su forma cerrada para candelas estándar y conocerás un segundo sesgo que viene de fiarse solo de paralajes bien medidas. Cada uno se comprueba contra una verdad que conoces.',
+  'the-completeness-curve':
+    'Un sondeo real se desvanece antes de su límite. Ponderarás cada estrella contada por el volumen en que pudo verse, recuperarás la función de luminosidad que entró dentro de su error de Poisson, verás cuándo una corrección no puede ayudar y medirás el sesgo que queda cuando la corrección usa las magnitudes del propio catálogo.',
 };

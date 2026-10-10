@@ -10,6 +10,7 @@
 
 const CC = (values = {}) => ({ id: 'completeness-lf', values });
 const SHARP = { limit: 20, m50: 20, width: 0.3, view: 0 };
+const FADE = { limit: 20, m50: 17, width: 0.5, view: 0 };
 
 export default {
   id: 'the-completeness-curve',

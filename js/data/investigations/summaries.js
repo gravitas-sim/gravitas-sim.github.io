@@ -80,4 +80,10 @@ export const SUMMARIES = {
     'Nearby stars show the Galaxy’s rotation as a double wave in their proper motions, and its height and center are the Oort constants. You will measure A and B from Gaia, turn them into the Sun’s circular speed, and then set the Milky Way’s measured rotation curve against a model of bulge, disk and halo. Stars and gas alone fit it badly; a halo fits it ten times better. You will say what that comparison assumes.',
   'cluster-membership':
     'The stars of a cluster were born together and still move together. You will find NGC 2420 in 993 Gaia stars as a tight clump in proper motion, fit it against the field, and give each star a probability of belonging, not a label. You will move the threshold, check the members against a color-magnitude diagram the fit never used, and state what a distance from the mean parallax leaves out.',
+  'who-gets-counted':
+    'A survey counts the stars that look bright, not the stars that are common. You will count a synthetic population at three magnitude limits, find what is in the part that is missed, and find how far a Sun-like star and a red dwarf can be and still be counted. You will say why a catalogue of the brightest stars is not a census.',
+  'why-the-bright-ones-win':
+    'Far away, only the intrinsically bright stars reach a survey, so the stars it counts are brighter than the stars there are: Malmquist bias. You will measure it in shells of distance, compare it with its closed form for standard candles, and meet a second bias that comes from trusting only well-measured parallaxes. Each is checked against a truth you know.',
+  'the-completeness-curve':
+    'A real survey fades out before its limit. You will weight each counted star by the volume in which it could have been seen, recover the luminosity function that went in to within its Poisson error, see when a correction cannot help, and measure the bias that remains when the correction uses the catalogue’s own magnitudes.',
 };

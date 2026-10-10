@@ -36,7 +36,7 @@ const THE_COMPLETENESS_CURVE = {
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
   prerequisites: ['why-the-bright-ones-win'],
-  tags: ['stars', 'observing', 'statistics'],
+  tags: ['stars', 'observing'],
   lock: { placement: true, inspector: true },
   objectives: [
     'Say what a completeness curve is, and what a raw count of the stars in a bin leaves out',

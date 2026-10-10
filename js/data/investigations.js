@@ -94,6 +94,9 @@ import { SUMMARIES } from './investigations/summaries.js';
 //
 // The Missing Mass sits after all of them. It belongs to no sequence, it is
 // half the length of the others, and it uses an instrument none of them touch,
+import WHO_GETS_COUNTED from './investigations/who-gets-counted.js';
+import WHY_THE_BRIGHT_ONES_WIN from './investigations/why-the-bright-ones-win.js';
+import THE_COMPLETENESS_CURVE from './investigations/the-completeness-curve.js';
 // so it reads as what it is: a short, self-contained argument at the end.
 //
 // This array and MANIFEST in ./investigations/manifest.js are the same order,
@@ -140,6 +143,9 @@ export const INVESTIGATIONS = [
   THE_SUNS_MOTION,
   THE_ROTATING_DISK,
   CLUSTER_MEMBERSHIP,
+  WHO_GETS_COUNTED,
+  WHY_THE_BRIGHT_ONES_WIN,
+  THE_COMPLETENESS_CURVE,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

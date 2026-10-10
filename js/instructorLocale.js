@@ -72,6 +72,12 @@ import WEIGHING_STARS_DEEPER from './data/investigations/depth/es/weighing-stars
 /** The Spanish shadow of each lesson, by lesson id. */
 export const SHADOWS = Object.freeze({
   'a-universe-of-stars': A_UNIVERSE_OF_STARS,
+import WHO_GETS_COUNTED_DEEPER from './data/investigations/depth/es/who-gets-counted.js';
+import WHY_THE_BRIGHT_ONES_WIN_DEEPER from './data/investigations/depth/es/why-the-bright-ones-win.js';
+import THE_COMPLETENESS_CURVE_DEEPER from './data/investigations/depth/es/the-completeness-curve.js';
+import WHO_GETS_COUNTED from './data/investigations/es/who-gets-counted.js';
+import WHY_THE_BRIGHT_ONES_WIN from './data/investigations/es/why-the-bright-ones-win.js';
+import THE_COMPLETENESS_CURVE from './data/investigations/es/the-completeness-curve.js';
   'binary-star-planets': BINARY_STAR_PLANETS,
   'black-holes': BLACK_HOLES,
   'butterfly-effect': BUTTERFLY_EFFECT,
@@ -86,6 +92,9 @@ export const SHADOWS = Object.freeze({
   'the-suns-motion': THE_SUNS_MOTION,
   'the-rotating-disk': THE_ROTATING_DISK,
   'cluster-membership': CLUSTER_MEMBERSHIP,
+  'who-gets-counted': WHO_GETS_COUNTED,
+  'why-the-bright-ones-win': WHY_THE_BRIGHT_ONES_WIN,
+  'the-completeness-curve': THE_COMPLETENESS_CURVE,
   'design-the-schedule': DESIGN_THE_SCHEDULE,
   'detect-this-planet': DETECT_THIS_PLANET,
   'goldilocks-question': GOLDILOCKS_QUESTION,
@@ -121,6 +130,9 @@ export const DEEPER_SHADOWS = Object.freeze({
   'the-suns-motion': THE_SUNS_MOTION_DEEPER,
   'the-rotating-disk': THE_ROTATING_DISK_DEEPER,
   'cluster-membership': CLUSTER_MEMBERSHIP_DEEPER,
+  'who-gets-counted': WHO_GETS_COUNTED_DEEPER,
+  'why-the-bright-ones-win': WHY_THE_BRIGHT_ONES_WIN_DEEPER,
+  'the-completeness-curve': THE_COMPLETENESS_CURVE_DEEPER,
   'keplers-laws': KEPLERS_LAWS_DEEPER,
   'missing-mass': MISSING_MASS_DEEPER,
   'transit-photometry': TRANSIT_PHOTOMETRY_DEEPER,

@@ -81,6 +81,87 @@ export default {
         text: 'The close: what the data showed and what it assumed.',
       },
     ],
+    'who-gets-counted': [
+      {
+        from: 'a-survey-counts-what-it-sees',
+        to: 'predict-what-is-missed',
+        text: 'A survey counts what it can see. Students predict what a shallow survey misses.',
+      },
+      {
+        from: 'count-a-shallow-survey',
+        to: 'what-the-deep-survey-misses',
+        text: 'Counts at limits 14 and 18, and the finding that everything missed is faint.',
+      },
+      {
+        from: 'how-far-can-it-see',
+        to: 'the-average-star',
+        text: 'How far a Sun-like star and a red dwarf can be counted, and the counted stars average four and a half magnitudes brighter than the truth.',
+      },
+      {
+        from: 'counts-by-magnitude',
+        to: 'a-count-is-not-a-census',
+        text: 'The counts split at the limit; a written reply to a friend who reads the catalogue as a census.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: a count of what was found is not a census of what is there.',
+      },
+    ],
+    'why-the-bright-ones-win': [
+      {
+        from: 'the-same-survey-by-distance',
+        to: 'why-it-grows',
+        text: 'Bias by shells of distance: predicted, measured and explained.',
+      },
+      {
+        from: 'standard-candles',
+        to: 'double-the-scatter',
+        text: "Standard candles: the measured bias against Malmquist's closed form, and what doubling the scatter does.",
+      },
+      {
+        from: 'a-second-bias',
+        to: 'raise-the-cut',
+        text: 'Trusting well-measured parallaxes makes stars look closer and fainter; a stricter cut costs most of the sample.',
+      },
+      {
+        from: 'say-what-follows',
+        to: 'say-what-follows',
+        text: 'A written statement of which bias a naive average ignores and one way to avoid it.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: both biases come from selection, not measurement.',
+      },
+    ],
+    'the-completeness-curve': [
+      {
+        from: 'a-survey-that-fades',
+        to: 'why-raw-is-low',
+        text: 'Raw counts against the known luminosity function, and why faint bins fall short.',
+      },
+      {
+        from: 'correct-the-fade',
+        to: 'is-it-one',
+        text: 'Weighting by effective volume recovers the truth within its Poisson error.',
+      },
+      {
+        from: 'when-it-cannot-help',
+        to: 'the-catalogue-own-magnitudes',
+        text: 'Three stars cannot carry a bin; catalogue magnitudes leave a 60 percent bias.',
+      },
+      {
+        from: 'state-the-residual',
+        to: 'state-the-residual',
+        text: 'A report with an assumption, an agreement and a residual bias.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: the corrected value, its error, its assumption and its bias.',
+      },
+    ],
     'what-a-spectrum-is-made-of': [
       {
         from: 'a-hot-solid',

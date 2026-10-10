@@ -133,7 +133,10 @@ describe('Malmquist bias', () => {
 
 describe('Lutz-Kelker style selection on the measured parallax', () => {
   const u = makeUniverse({ count: 6000, seed: 'lk', maxPc: 1000 });
-  const obs = observe(u, { limit: 18 });
+  const obs = observe(u, {
+    limit: 18,
+    errors: { parallax: { floor: 0.1, m0: 12, slope: 0.2 } },
+  });
   test('measured parallaxes in the sample are too large, and more so for lower signal to noise', () => {
     const lo = parallaxSelectionBias(obs, 3);
     const hi = parallaxSelectionBias(obs, 10);

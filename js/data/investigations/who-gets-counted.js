@@ -39,7 +39,7 @@ const WHO_GETS_COUNTED = {
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
   prerequisites: ['lives-of-stars'],
-  tags: ['stars', 'observing', 'statistics'],
+  tags: ['stars', 'observing'],
   lock: { placement: true, inspector: true },
   objectives: [
     'Say what a magnitude limit selects: the stars that look bright, not the stars that are common',

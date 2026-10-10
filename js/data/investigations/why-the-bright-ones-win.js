@@ -32,7 +32,7 @@ const WHY_THE_BRIGHT_ONES_WIN = {
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
   prerequisites: ['who-gets-counted'],
-  tags: ['stars', 'observing', 'statistics'],
+  tags: ['stars', 'observing'],
   lock: { placement: true, inspector: true },
   objectives: [
     'Measure how much brighter the counted stars are than the stars there are, in shells of distance',
