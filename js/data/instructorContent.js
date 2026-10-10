@@ -4987,8 +4987,8 @@ export const INSTRUCTOR_CONTENT = {
     ],
     teachingNotes: [
       'The model is the Lane-Emden polytrope with an ideal-gas temperature at μ = 0.6 (STELLAR_STRUCTURE.md). Radiation pressure matters above about ten solar masses, where the temperature row is not to be trusted.',
-      'The instrument gives the temperature in kelvin and the lesson asks for millions of kelvin: the conversion is part of the step.',
-      'The real Sun is better described by n near 3.3 (central concentration 106). The lesson says that the model underestimates, and the instrument does not hide it.',
+      'The instrument gives the temperature in kelvin and the step asks for millions of kelvin: the conversion is part of the step.',
+      'The real Sun is better described by n near 3.3 (central concentration 106). The investigation says that the model underestimates, and the instrument does not hide it.',
       'The Stellar Lab’s interior row uses n = 3/2 below 0.35 solar masses and n = 3 above, for main-sequence stars only; giants have a dense core in a tenuous envelope and white dwarfs have their own model.',
     ],
     discussion: [
@@ -5019,7 +5019,7 @@ export const INSTRUCTOR_CONTENT = {
     keyConcepts: [
       {
         heading: 'A scaling argument predicts exponents, not constants',
-        body: 'The lines are slid to fit; the test is the slope and the scatter about it.',
+        body: 'The lines are slid to fit the height; what is tested is the slope, and the scatter that is left about it.',
       },
       {
         heading: 'Different physics dominates in different mass ranges',
@@ -5041,7 +5041,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'The data',
-        text: 'The MIST v1.2 tracks pack (mist-v12-tracks, no licence stated, attributed) read through the existing track module; nothing new is bundled.',
+        text: 'The MIST v1.2 tracks data set (mist-v12-tracks, no license stated, attributed) read through the existing track module; nothing new is bundled.',
       },
     ],
     misconceptions: [
@@ -5123,7 +5123,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'No observed white dwarfs',
-        text: 'The instrument draws no observed dwarfs: a public compilation’s terms could not be confirmed in this session (D-STELLAR-01). The model’s radius is a few percent larger than the best published relations.',
+        text: 'The instrument draws no observed dwarfs: a public compilation’s terms could not be confirmed in this session (D-INTERIOR-01). The model’s radius is a few percent larger than the best published relations.',
       },
     ],
     misconceptions: [
@@ -5160,7 +5160,7 @@ export const INSTRUCTOR_CONTENT = {
     ],
     extensions: [
       'Return to Lives of Stars and find where the model dwarfs sit on the cooling track.',
-      'Compare with the neutron-star case in the gravitational-wave lessons.',
+      'Compare with the neutron-star case in the gravitational-wave investigations.',
     ],
     modelNotes:
       'js/kernels/stellar/whiteDwarf.js: P(x) and ρ(x) of the degenerate gas, integrated in q = x² (regular at the surface) by RK4; the limit is also the closed form from the n = 3 polytrope. See STELLAR_STRUCTURE.md.',

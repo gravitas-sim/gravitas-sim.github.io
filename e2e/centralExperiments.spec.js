@@ -2163,7 +2163,7 @@ test.describe('the central experiment of each investigation', () => {
       row: /Mean density/,
       values: [
         [0, 1.41, 0.03],
-        [Math.log10(2), 2.82, 0.05],
+        [0.3, 2.81, 0.05],
       ],
     },
     {

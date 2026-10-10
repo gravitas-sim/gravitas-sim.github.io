@@ -520,10 +520,10 @@ Of 107 prediction loops, 107 are returned to,
 - **Instruments:** polytrope.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** predict-the-centre → the-suns-centre, half-the-mass, twice-the-mass, why-the-centre-is-hot, a-red-dwarf, no-concentration, what-you-worked-out → the-suns-centre.
+- **Prediction loops:** predict-the-center → the-suns-center, half-the-mass, twice-the-mass, why-the-center-is-hot, a-red-dwarf, no-concentration, what-you-worked-out → the-suns-center.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:polytrope`, control polytrope/logM, measures the mean density of a star, as its mass changes at a fixed radius, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Scaling the Main Sequence (`scaling-the-main-sequence`)
 
@@ -537,7 +537,7 @@ Of 107 prediction loops, 107 are returned to,
 - **Prediction loops:** predict-the-slope → the-prediction, low-mass-stars, the-wrong-law, why-no-single-exponent, radius-scaling, lifetimes, the-suns-clock, what-you-worked-out → the-prediction.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:ms-scaling`, control ms-scaling/opacity, measures the luminosity exponent a scaling argument predicts, as the opacity law changes, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Limit (`the-limit`)
 
@@ -551,7 +551,7 @@ Of 107 prediction loops, 107 are returned to,
 - **Prediction loops:** predict-the-squeeze → a-dense-dwarf, the-ceiling, why-a-limit, hydrogen-would-be-different, an-iron-core, what-you-worked-out → a-dense-dwarf.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment:** not yet reviewed.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:wd-mass-radius`, control wd-mass-radius/logRho, measures the radius of a white dwarf in kilometers, as its central density changes, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Who Gets Counted (`who-gets-counted`)
 

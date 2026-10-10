@@ -281,12 +281,12 @@ const SCALING_THE_MAIN_SEQUENCE = {
              predicts and the exponent fitted to the models from 2 to 40 solar
              masses.`,
       fields: [
-        { id: 'pred', label: 'Predicted exponent', unit: '', hint: '−2' },
+        { id: 'pred', label: 'Predicted exponent', unit: '', hint: '-2' },
         {
           id: 'fit',
           label: 'Fitted exponent, 2 to 40 M☉',
           unit: '',
-          hint: '−1.82',
+          hint: '-1.82',
         },
       ],
       validate: v => {

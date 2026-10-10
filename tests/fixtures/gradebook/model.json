@@ -35,9 +35,7 @@
       "instructorPoints": 1,
       "instructorMarked": 1,
       "awaiting": 0,
-      "instructorComments": [
-        "Names the speed-up."
-      ],
+      "instructorComments": ["Names the speed-up."],
       "points": 6,
       "pointsPossible": 13,
       "percent": 0.46153846153846156,
@@ -89,9 +87,7 @@
       "instructorPoints": 0.5,
       "instructorMarked": 1,
       "awaiting": 0,
-      "instructorComments": [
-        "=Needs the second law"
-      ],
+      "instructorComments": ["=Needs the second law"],
       "points": 5.5,
       "pointsPossible": 13,
       "percent": 0.4230769230769231,

@@ -70,10 +70,10 @@ const INSIDE_A_STAR = {
       tool: PT(SUN),
     },
     {
-      sid: 'predict-the-centre',
+      sid: 'predict-the-center',
       stage: STARS,
       type: 'predict',
-      reveal: 'the-suns-centre',
+      reveal: 'the-suns-center',
       title: 'How dense is the center?',
       body: `The Sun’s average density is 1.4 grams per cubic centimeter, a bit
              more than water. The instrument shows the Sun as a polytrope with
@@ -95,7 +95,7 @@ const INSIDE_A_STAR = {
       tool: PT(SUN),
     },
     {
-      sid: 'the-suns-centre',
+      sid: 'the-suns-center',
       stage: STARS,
       type: 'measure',
       title: 'The center of the Sun, as a polytrope',
@@ -204,10 +204,10 @@ const INSIDE_A_STAR = {
             'Keep n = 3 and the radius at 1, set the mass to 2, then read the two rows (temperature in kelvin, divided by a million).',
         };
       },
-      tool: PT({ n: 3, logM: Math.log10(2), logR: 0 }),
+      tool: PT({ n: 3, logM: 0.3, logR: 0 }),
     },
     {
-      sid: 'why-the-centre-is-hot',
+      sid: 'why-the-center-is-hot',
       stage: STARS,
       type: 'question',
       kind: 'choice',
@@ -236,7 +236,7 @@ const INSIDE_A_STAR = {
       ],
       because:
         'The weight sets the pressure (millions of times atmospheric at the Sun’s center), and the gas law sets what temperature a gas of that density needs to supply it. Fusion is then possible because the center is hot, and it replaces the energy the star radiates, but it does not set the structure.',
-      tool: PT({ n: 3, logM: Math.log10(2), logR: 0 }),
+      tool: PT({ n: 3, logM: 0.3, logR: 0 }),
     },
     {
       sid: 'a-red-dwarf',
@@ -276,7 +276,7 @@ const INSIDE_A_STAR = {
             'Use the preset “A red dwarf as n = 3/2”, then read “Central temperature” (divide kelvin by a million) and “Central density divided by the mean density”.',
         };
       },
-      tool: PT({ n: 1.5, logM: Math.log10(0.2), logR: Math.log10(0.22) }),
+      tool: PT({ n: 1.5, logM: -0.7, logR: -0.66 }),
     },
     {
       sid: 'no-concentration',

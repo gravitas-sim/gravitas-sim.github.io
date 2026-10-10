@@ -13,7 +13,7 @@ export default {
   steps: [
     {
       sid: 'the-estimate-by-hand',
-      after: 'the-suns-centre',
+      after: 'the-suns-center',
       depth: 'quantitative',
       type: 'question',
       kind: 'numeric',

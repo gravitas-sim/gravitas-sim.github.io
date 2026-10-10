@@ -30,7 +30,7 @@ Inside a Star (hydrostatic equilibrium, the polytrope, why the center is hot, th
 
 ## Observed white dwarfs
 
-None ships. A public compilation of white-dwarf masses and radii was not downloaded and its terms of use could not be confirmed in this run, so the prompt's "if rights allow" condition was not met: the mass-radius panel shows the model only. See D-STELLAR-01 in the decision register.
+None ships. A public compilation of white-dwarf masses and radii was not downloaded and its terms of use could not be confirmed in this run, so the prompt's "if rights allow" condition was not met: the mass-radius panel shows the model only. See D-INTERIOR-01 in the decision register.
 
 ## Not done
 

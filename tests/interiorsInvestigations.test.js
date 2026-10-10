@@ -63,7 +63,7 @@ describe('Inside a Star: the numbers the steps write', () => {
   test('the Sun as n = 3, twice the mass, a red dwarf and a uniform ball', () => {
     const f = polytropeView(sun);
     expect(
-      grade('inside-a-star', 'the-suns-centre', {
+      grade('inside-a-star', 'the-suns-center', {
         rho: f.rhoCentralGcc,
         tc: f.tCentral / 1e6,
       })
@@ -74,7 +74,7 @@ describe('Inside a Star: the numbers the steps write', () => {
         ratio: f.ratio,
       })
     ).toBe('ok');
-    const two = polytropeView({ n: 3, logM: Math.log10(2), logR: 0 });
+    const two = polytropeView({ n: 3, logM: 0.3, logR: 0 });
     expect(
       grade('inside-a-star', 'twice-the-mass', {
         rho: two.rhoCentralGcc,
@@ -83,8 +83,8 @@ describe('Inside a Star: the numbers the steps write', () => {
     ).toBe('ok');
     const red = polytropeView({
       n: 1.5,
-      logM: Math.log10(0.2),
-      logR: Math.log10(0.22),
+      logM: -0.7,
+      logR: -0.66,
     });
     expect(
       grade('inside-a-star', 'a-red-dwarf', {
@@ -102,12 +102,12 @@ describe('Inside a Star: the numbers the steps write', () => {
   });
   test('the validators refuse wrong readings', () => {
     expect(
-      grade('inside-a-star', 'the-suns-centre', { rho: 150, tc: 15.7 })
+      grade('inside-a-star', 'the-suns-center', { rho: 150, tc: 15.7 })
     ).toBe('error');
     expect(
       grade('inside-a-star', 'half-the-mass', { half: 0.5, ratio: 54 })
     ).toBe('error');
-    expect(grade('inside-a-star', 'the-suns-centre', { rho: NaN, tc: 1 })).toBe(
+    expect(grade('inside-a-star', 'the-suns-center', { rho: NaN, tc: 1 })).toBe(
       undefined
     );
   });

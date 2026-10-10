@@ -19,7 +19,7 @@ import {
 const CASES = [
   {
     id: 'inside-a-star',
-    sid: 'the-suns-centre',
+    sid: 'the-suns-center',
     row: /Central temperature/i,
     rowEs: /Temperatura central/i,
   },

@@ -541,8 +541,8 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
-        "predict-the-centre",
-        "the-suns-centre"
+        "predict-the-center",
+        "the-suns-center"
       ],
       "evidenceFrom": "model"
     },

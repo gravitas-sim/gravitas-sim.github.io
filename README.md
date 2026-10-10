@@ -26,8 +26,8 @@ tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
-**<!--fact:investigations-->38<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->828<!--/fact--> steps between
+**<!--fact:investigations-->41<!--/fact--> guided
+investigations**, <!--fact:investigationSteps-->856<!--/fact--> steps between
 them:
 
 | Investigation                    | What a student does                                                                             |
@@ -49,7 +49,7 @@ locally, and exports a lab report as a PDF that they submit through whatever LMS
 the course already uses.
 
 **Instructor materials.** An instructor guide and a generated answer key for each of
-the <!--fact:investigations-->38<!--/fact--> investigations — learning
+the <!--fact:investigations-->41<!--/fact--> investigations — learning
 objectives, expected observations, the numbers a student should get and the
 common wrong turns — plus an adopter's guide and a curriculum map, all rebuilt
 from the investigations themselves on every release so a key cannot disagree with the
@@ -304,8 +304,8 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->8672<!--/fact--> strings, and
-all <!--fact:investigations-->38<!--/fact--> investigations are translated. A
+of <!--fact:uiStrings-->8768<!--/fact--> strings, and
+all <!--fact:investigations-->41<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
 change what an investigation measures.
@@ -589,8 +589,8 @@ All <!--fact:instructorDocuments-->260<!--/fact--> documents are generated from
 the investigations at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 
-- <!--fact:investigations-->38<!--/fact--> instructor guides
-- <!--fact:investigations-->38<!--/fact--> answer keys
+- <!--fact:investigations-->41<!--/fact--> instructor guides
+- <!--fact:investigations-->41<!--/fact--> answer keys
 - <!--fact:activityDocuments-->8<!--/fact--> classroom-activity instructor guides and
   student worksheets, across <!--fact:activities-->3<!--/fact--> activities
 - an adopter's guide and a curriculum map
@@ -648,7 +648,7 @@ part was built:
 | [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md)                             | The shared controls: field, input, select, textarea, file, range, toolbar, buttons; their states, tokens and accessibility                     |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
-| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->38<!--/fact--> investigations, and what a 2019 Chromebook actually gets |
+| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->41<!--/fact--> investigations, and what a 2019 Chromebook actually gets |
 | [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
 Three documents are records of finished work rather than descriptions of the

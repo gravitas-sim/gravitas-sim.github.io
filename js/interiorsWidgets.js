@@ -8,7 +8,7 @@
 // the main sequence set against the MIST zero-age models. Every assumption is a
 // row of the readout and every number a lesson asks for is a row too. No
 // observed white dwarfs are drawn: the compilation's terms could not be
-// confirmed (D-STELLAR-01).
+// confirmed (D-INTERIOR-01).
 //
 // The heavy integrations (the table of indices, the white-dwarf relation) are
 // requested from the kernel's Worker when the family loads, so the page does
@@ -312,7 +312,7 @@ const POLYTROPE = {
       },
       min: -1,
       max: 1.5,
-      step: 0.05,
+      step: 0.01,
       value: 0,
       decimals: 2,
       format: v => withUnit(plain(10 ** v, 3), 'M☉'),
@@ -324,7 +324,7 @@ const POLYTROPE = {
       },
       min: -1,
       max: 1,
-      step: 0.05,
+      step: 0.01,
       value: 0,
       decimals: 2,
       format: v => withUnit(plain(10 ** v, 3), 'R☉'),
@@ -338,7 +338,7 @@ const POLYTROPE = {
       },
     },
     {
-      values: { n: 1.5, logM: Math.log10(0.2), logR: Math.log10(0.22) },
+      values: { n: 1.5, logM: -0.7, logR: -0.66 },
       get label() {
         return t('intW.p.preset.dwarf');
       },

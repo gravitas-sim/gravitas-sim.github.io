@@ -659,7 +659,7 @@ export default {
         '2.0 from 1/sin 30; the kernel’s fit gives 1.99. Accepted within 0.05.',
     },
     'inside-a-star': {
-      'the-suns-centre':
+      'the-suns-center':
         'n = 3, mass 1, radius 1: central density 76.4 g/cm³ (within 0.8) and 11.8 million kelvin (within 0.3).',
       'half-the-mass':
         'n = 3: half the mass inside 0.283 of the radius (within 0.012) and a central-to-mean density ratio of 54.2 (within 0.4).',

@@ -1269,17 +1269,17 @@ export default {
     'inside-a-star': [
       {
         from: 'weight-and-pressure',
-        to: 'predict-the-centre',
+        to: 'predict-the-center',
         text: 'Weight against pressure fixes a star; students predict how dense the center is.',
       },
       {
-        from: 'the-suns-centre',
+        from: 'the-suns-center',
         to: 'half-the-mass',
         text: 'The Sun as a polytrope: 76 g/cm³ and 11.8 million kelvin at the center, half the mass inside 0.28 of the radius.',
       },
       {
         from: 'twice-the-mass',
-        to: 'why-the-centre-is-hot',
+        to: 'why-the-center-is-hot',
         text: 'Twice the mass in the same size doubles the temperature; why the center is hot from weight alone.',
       },
       {

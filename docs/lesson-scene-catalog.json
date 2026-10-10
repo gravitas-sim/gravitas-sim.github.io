@@ -60849,7 +60849,7 @@
      ]
     },
     {
-     "sid": "predict-the-centre",
+     "sid": "predict-the-center",
      "index": 2,
      "type": "predict",
      "title": "How dense is the center?",
@@ -60878,7 +60878,7 @@
       "press-an-instrument-preset"
      ],
      "requires": [],
-     "reveal": "the-suns-centre",
+     "reveal": "the-suns-center",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -60925,7 +60925,7 @@
      ]
     },
     {
-     "sid": "the-suns-centre",
+     "sid": "the-suns-center",
      "index": 3,
      "type": "measure",
      "title": "The center of the Sun, as a polytrope",
@@ -61162,7 +61162,7 @@
      ]
     },
     {
-     "sid": "why-the-centre-is-hot",
+     "sid": "why-the-center-is-hot",
      "index": 6,
      "type": "question",
      "title": "Why the center is hot",
@@ -61470,35 +61470,35 @@
    ],
    "loops": [
     {
-     "predict": "predict-the-centre",
+     "predict": "predict-the-center",
      "predictCollects": true,
-     "heldUntil": "the-suns-centre",
+     "heldUntil": "the-suns-center",
      "experiment": [
-      "the-suns-centre",
+      "the-suns-center",
       "half-the-mass",
       "twice-the-mass",
-      "why-the-centre-is-hot",
+      "why-the-center-is-hot",
       "a-red-dwarf",
       "no-concentration",
       "what-you-worked-out"
      ],
      "measure": [
-      "the-suns-centre",
+      "the-suns-center",
       "half-the-mass",
       "twice-the-mass",
-      "why-the-centre-is-hot",
+      "why-the-center-is-hot",
       "a-red-dwarf",
       "no-concentration",
       "what-you-worked-out"
      ],
      "evidence": [
-      "the-suns-centre",
+      "the-suns-center",
       "half-the-mass",
       "twice-the-mass",
       "a-red-dwarf",
       "no-concentration"
      ],
-     "interpret": "the-suns-centre",
+     "interpret": "the-suns-center",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,

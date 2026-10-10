@@ -3,16 +3,9 @@
   "name": "Planet a doubled",
   "created": 1700000000000,
   "notes": "Does a wider orbit change the period?",
-  "objects": [
-    3,
-    1
-  ],
+  "objects": [3, 1],
   "primary": 1,
-  "metrics": [
-    "separation",
-    "energy_drift",
-    "orbital_period"
-  ],
+  "metrics": ["separation", "energy_drift", "orbital_period"],
   "initialState": {
     "v": 1,
     "s": "Binary Planet Lab",

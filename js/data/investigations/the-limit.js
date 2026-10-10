@@ -12,7 +12,7 @@
 // degenerate electrons integrated from a central density, whose mass rises to
 // a limit that nothing in the integration puts in. The numbers a student reads
 // are checked against that model by tests/interiorsInvestigations.test.js. No
-// observed white dwarfs are drawn (D-STELLAR-01), and the lesson says the model
+// observed white dwarfs are drawn (D-INTERIOR-01), and the lesson says the model
 // is cold and ideal.
 // =============================================================================
 
