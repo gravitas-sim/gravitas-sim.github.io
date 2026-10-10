@@ -133,6 +133,9 @@ const LOADERS = {
   'plan-a-night': () => import('./plan-a-night.js'),
   'lines-and-motion': () => import('./lines-and-motion.js'),
   'what-a-spectrum-is-made-of': () => import('./what-a-spectrum-is-made-of.js'),
+  'the-suns-motion': () => import('./the-suns-motion.js'),
+  'the-rotating-disk': () => import('./the-rotating-disk.js'),
+  'cluster-membership': () => import('./cluster-membership.js'),
 };
 
 /**
@@ -182,6 +185,9 @@ const TRANSLATIONS = {
     'lines-and-motion': () => import('./es/lines-and-motion.js'),
     'what-a-spectrum-is-made-of': () =>
       import('./es/what-a-spectrum-is-made-of.js'),
+    'the-suns-motion': () => import('./es/the-suns-motion.js'),
+    'the-rotating-disk': () => import('./es/the-rotating-disk.js'),
+    'cluster-membership': () => import('./es/cluster-membership.js'),
   },
 };
 

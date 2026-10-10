@@ -258,6 +258,15 @@ export const LAZY_FAMILIES = Object.freeze({
     ['blackbody', 'spectrum-viewer', 'kirchhoff'],
     'lightReady'
   ),
+  // Its Gaia and rotation-curve packs arrive behind more imports;
+  // whenWidgetsReady() waits.
+  galactic: familyEntry(
+    () => import('./galacticWidgets.js'),
+    './galacticWidgets.js',
+    'GALACTIC_WIDGETS',
+    ['solar-motion', 'rotating-disk', 'cluster-members'],
+    'galacticReady'
+  ),
   // Its stars arrive behind a second import (the Sky Lab's sidecar).
   sky: familyEntry(
     () => import('./skyWidgets.js'),

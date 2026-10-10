@@ -80,6 +80,9 @@ import WANDERERS_ON_THE_SKY from './investigations/wanderers-on-the-sky.js';
 import PLAN_A_NIGHT from './investigations/plan-a-night.js';
 import LINES_AND_MOTION from './investigations/lines-and-motion.js';
 import WHAT_A_SPECTRUM_IS_MADE_OF from './investigations/what-a-spectrum-is-made-of.js';
+import THE_SUNS_MOTION from './investigations/the-suns-motion.js';
+import THE_ROTATING_DISK from './investigations/the-rotating-disk.js';
+import CLUSTER_MEMBERSHIP from './investigations/cluster-membership.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 
@@ -134,6 +137,9 @@ export const INVESTIGATIONS = [
   PLAN_A_NIGHT,
   LINES_AND_MOTION,
   WHAT_A_SPECTRUM_IS_MADE_OF,
+  THE_SUNS_MOTION,
+  THE_ROTATING_DISK,
+  CLUSTER_MEMBERSHIP,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

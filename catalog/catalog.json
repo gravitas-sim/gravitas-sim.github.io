@@ -24,6 +24,10 @@
       "en": "The Butterfly Effect in Space",
       "es": "El efecto mariposa en el espacio"
     },
+    "cluster-membership": {
+      "en": "Cluster Membership by Motion",
+      "es": "Pertenencia a un cúmulo por movimiento"
+    },
     "color-and-temperature": {
       "en": "Color and Temperature",
       "es": "Color y temperatura"
@@ -96,9 +100,17 @@
       "en": "Why Mars Goes Backwards",
       "es": "Por qué Marte va hacia atrás"
     },
+    "the-rotating-disk": {
+      "en": "The Rotating Disk",
+      "es": "El disco que gira"
+    },
     "the-sun-through-the-year": {
       "en": "The Sun Through the Year",
       "es": "El Sol a lo largo del año"
+    },
+    "the-suns-motion": {
+      "en": "The Sun’s Motion",
+      "es": "El movimiento del Sol"
     },
     "the-turning-sky": {
       "en": "The Turning Sky",

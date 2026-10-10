@@ -112,6 +112,12 @@ export default {
     'Where the peak is, how the two bandpasses sample the curve, and the color index they give; in the spectrum viewer, where a line sits and how far it has moved from its rest wavelength.',
     'A real star is not a blackbody: its lines and edges change a measured color from this one. A line’s shift gives only the speed along the line of sight, never the sideways motion.',
   ],
+  galactic: [
+    'Stars as measured by Gaia: velocities, proper motions against longitude, a rotation curve, or a cluster’s proper motions and colors.',
+    'How the stars’ mean velocity, the fitted Oort constants, the curve against its model or the membership change as you change what is kept, weighted or assumed.',
+    'What the data say before a model is put on them, and how far a changed assumption (the Sun’s V, the weighting, the halo) moves the answer.',
+    'Real measurements with real scatter; the models are simple and stated, and a membership is a probability, not a label.',
+  ],
   compare: [
     'The data (vertical, above) and the model over them, against time; below, each residual in units of its own error bar.',
     'Where the residuals leave the zero line in a run, the model is above or below the data there; scatter around zero is the noise.',

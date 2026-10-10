@@ -436,7 +436,10 @@
       "quantity": "the Doppler velocity of two synthetic stars from their H-alpha lines, one receding and one approaching",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["predict-the-shift", "measure-one-shift"],
+      "loop": [
+        "predict-the-shift",
+        "measure-one-shift"
+      ],
       "evidenceFrom": "model"
     },
     "what-a-spectrum-is-made-of": {
@@ -446,7 +449,49 @@
       "quantity": "the brightness at the H-alpha center against the source's, with the same cloud cooler than the source (a dark line) and hotter (a bright line)",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["predict-the-cloud", "measure-two-clouds"],
+      "loop": [
+        "predict-the-cloud",
+        "measure-two-clouds"
+      ],
+      "evidenceFrom": "model"
+    },
+    "the-suns-motion": {
+      "centralExperimentId": "ce.the-suns-motion",
+      "object": "panel:solar-motion",
+      "control": "solar-motion/maxPc",
+      "quantity": "the Sun's U, V and W against the mean of the stars within the distance limit, with their uncertainties",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-mean",
+        "measure-the-sun"
+      ],
+      "evidenceFrom": "model"
+    },
+    "the-rotating-disk": {
+      "centralExperimentId": "ce.the-rotating-disk",
+      "object": "panel:rotating-disk",
+      "control": "rotating-disk/weight",
+      "quantity": "the Oort constants A and B from Gaia proper motions, with the stars weighted by distance and all alike",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-shape",
+        "measure-a-and-b"
+      ],
+      "evidenceFrom": "model"
+    },
+    "cluster-membership": {
+      "centralExperimentId": "ce.cluster-membership",
+      "object": "panel:cluster-members",
+      "control": "cluster-members/threshold",
+      "quantity": "the number of stars above a membership-probability threshold, and the cluster's proper motion",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-clump",
+        "measure-the-cluster"
+      ],
       "evidenceFrom": "model"
     }
   }

@@ -326,8 +326,13 @@
   "offline": "optional",
   "derived": {
     "file": "js/data/observations/gaiaSolarNeighbourhood.js",
-    "bytes": 67628,
-    "sha256": "2361c263fe06b6c1fcc7f6c84d1c3cbf2085cd664ef5f68e3b2b22adaac27588"
+    "bytes": 7982,
+    "sha256": "f0effd8e7fa979ecdb71c8a79f7e62f01642d5fb880123dba0a28f5b62bf7e87",
+    "sidecar": {
+      "file": "gaia/solar-neighbourhood.json",
+      "bytes": 59345,
+      "sha256": "8e0a738c697822aa7204c6dcc1118bc1755380a6a7c635c6da4c5f5e6f8d3c23"
+    }
   },
   "validation": {
     "check": "the kernel's solar motion from the stars within 100 pc has U and W within 3 km/s of Schonrich, Binney and Dehnen 2010",

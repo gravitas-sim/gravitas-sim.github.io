@@ -352,18 +352,43 @@ const ngc2420Segue = () =>
   tablePack(() => import('../data/observations/sdssNgc2420Segue.js'), {
     axes: { x: 'rv', y: 'feh' },
   });
+// The three galactic tables keep their rows in a fetched sidecar file
+// (/gaia/*.json), not in the module, which carries the record and a checksum.
+const withSidecar = (load, url) => async () => {
+  const [mod, res] = await Promise.all([load(), fetch(url)]);
+  if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+  return { PACK: mod.PACK, SERIES: await res.json() };
+};
 const gaiaSolar = () =>
-  tablePack(() => import('../data/observations/gaiaSolarNeighbourhood.js'), {
-    axes: { x: 'pmra', y: 'pmdec' },
-  });
+  tablePack(
+    withSidecar(
+      () => import('../data/observations/gaiaSolarNeighbourhood.js'),
+      '/gaia/solar-neighbourhood.json'
+    ),
+    {
+      axes: { x: 'pmra', y: 'pmdec' },
+    }
+  );
 const gaiaNgc2420 = () =>
-  tablePack(() => import('../data/observations/gaiaNgc2420.js'), {
-    axes: { x: 'pmra', y: 'pmdec' },
-  });
+  tablePack(
+    withSidecar(
+      () => import('../data/observations/gaiaNgc2420.js'),
+      '/gaia/ngc2420.json'
+    ),
+    {
+      axes: { x: 'pmra', y: 'pmdec' },
+    }
+  );
 const milkyWayRotation = () =>
-  tablePack(() => import('../data/observations/milkyWayRotationCurve.js'), {
-    axes: { x: 'r', y: 'vc' },
-  });
+  tablePack(
+    withSidecar(
+      () => import('../data/observations/milkyWayRotationCurve.js'),
+      '/gaia/milky-way-rotation-curve.json'
+    ),
+    {
+      axes: { x: 'r', y: 'vc' },
+    }
+  );
 const mistIsochrones = () =>
   tablePack(() => import('../data/observations/mistSdssIsochrones.js'), {
     axes: { x: 'logTeff', y: 'logL' },

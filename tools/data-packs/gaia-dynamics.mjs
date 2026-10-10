@@ -21,7 +21,12 @@
 // by its SHA-256.
 // =============================================================================
 
-import { URLSearchParams } from 'node:url';
+import { URLSearchParams, fileURLToPath } from 'node:url';
+import path from 'node:path';
+import { Buffer } from 'node:buffer';
+
+import { sha256 } from './pinned.mjs';
+import { tableOf } from '../../js/tableObservation.js';
 
 import {
   ENCODING,
@@ -35,6 +40,63 @@ import {
   solarMotion,
   spaceVelocities,
 } from '../../js/kernels/galactic/index.js';
+
+const REPO = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '../..'
+);
+
+/**
+ * What a build() of these packs returns: the series is a sidecar file the
+ * page fetches (as the Sky Lab's star table is), not a module, so that no
+ * route or bundle that reaches the pack's loader carries the rows. The module
+ * is the pack record and the sidecar's size and checksum.
+ */
+function asSidecar(pack, { meta, manifestRest, series }) {
+  const sidecar = `${JSON.stringify(series)}\n`;
+  return {
+    meta,
+    manifestRest,
+    sidecar,
+    render: async PACK => {
+      const body = `// =============================================================================
+// ${meta.title}
+// -----------------------------------------------------------------------------
+// GENERATED FILE. Do not edit. Written by tools/build-data-packs.mjs
+// (tools/data-packs/gaia-dynamics.mjs) from ${pack.raw.map(r => r.file).join(', ')};
+// \`npm run packs:check\` verifies it offline and \`npm run packs:provenance\`
+// rebuilds it from the pinned raw product and compares byte for byte. The full
+// record is ${pack.manifest}.
+//
+// The rows are not here. They are the sidecar ${pack.sidecar}, a table-columns/1
+// series that the page fetches, so that a budget that counts JavaScript does not
+// count a table; SIDECAR records its size and checksum.
+// =============================================================================
+
+/** What the data is and who to credit, as an interface shows it. */
+export const PACK = ${JSON.stringify(PACK, null, 2)};
+
+/** The sidecar: where the rows are, and what they must be. */
+export const SIDECAR = ${JSON.stringify({
+        file: pack.sidecar,
+        bytes: Buffer.byteLength(sidecar),
+        sha256: sha256(sidecar),
+      })};
+`;
+      const prettier = await import('prettier');
+      const options =
+        (await prettier.resolveConfig(path.join(REPO, pack.module))) || {};
+      return prettier.format(body, {
+        ...options,
+        filepath: path.join(REPO, pack.module),
+      });
+    },
+  };
+}
+
+/** The pack as a table, from its module (the record) and its sidecar text (the series). */
+const decodeSidecar = mod =>
+  tableOf({ PACK: mod.PACK, SERIES: JSON.parse(mod.SIDECAR_TEXT) });
 
 const TAP = 'https://gea.esac.esa.int/tap-server/tap/sync';
 const tapUrl = query =>
@@ -128,6 +190,9 @@ export const GAIA_SOLAR = {
   exportName: 'gaiaSolarNeighbourhood',
   transformVersion: TABLE_VERSION,
   table: true,
+  namedBy: ['js/galactic/model.js', 'js/observatory/fixtures.js'],
+  sidecar: 'gaia/solar-neighbourhood.json',
+  decode: decodeSidecar,
   raw: [
     {
       ...pinned(
@@ -302,7 +367,7 @@ export const GAIA_SOLAR = {
       compatible: { widgets: [], investigations: [] },
       offline: 'optional',
     };
-    return { meta, manifestRest, series };
+    return asSidecar(this, { meta, manifestRest, series });
   },
 
   /**
@@ -378,6 +443,9 @@ export const GAIA_NGC2420 = {
   exportName: 'gaiaNgc2420',
   transformVersion: TABLE_VERSION,
   table: true,
+  namedBy: ['js/galactic/model.js', 'js/observatory/fixtures.js'],
+  sidecar: 'gaia/ngc2420.json',
+  decode: decodeSidecar,
   raw: [
     {
       ...pinned(
@@ -536,7 +604,7 @@ export const GAIA_NGC2420 = {
       compatible: { widgets: [], investigations: [] },
       offline: 'optional',
     };
-    return { meta, manifestRest, series };
+    return asSidecar(this, { meta, manifestRest, series });
   },
 
   /**
@@ -626,6 +694,9 @@ export const MILKY_WAY_ROTATION = {
   exportName: 'milkyWayRotationCurve',
   transformVersion: TABLE_VERSION,
   table: true,
+  namedBy: ['js/galactic/model.js', 'js/observatory/fixtures.js'],
+  sidecar: 'gaia/milky-way-rotation-curve.json',
+  decode: decodeSidecar,
   raw: [
     {
       ...pinned(
@@ -772,7 +843,7 @@ export const MILKY_WAY_ROTATION = {
       compatible: { widgets: [], investigations: [] },
       offline: 'optional',
     };
-    return { meta, manifestRest, series };
+    return asSidecar(this, { meta, manifestRest, series });
   },
 
   /**

@@ -25,9 +25,11 @@ import {
 } from '../js/kernels/galactic/index.js';
 import { galaxyCurveAt } from '../js/darkMatter.js';
 import { tableOf } from '../js/tableObservation.js';
-import * as solarPack from '../js/data/observations/gaiaSolarNeighbourhood.js';
-import * as clusterPack from '../js/data/observations/gaiaNgc2420.js';
-import * as rotationPack from '../js/data/observations/milkyWayRotationCurve.js';
+import { galacticPack } from '../tools/authoring/galacticPacks.mjs';
+
+const solarPack = galacticPack('solar');
+const clusterPack = galacticPack('cluster');
+const rotationPack = galacticPack('rotation');
 
 const DEG = Math.PI / 180;
 const rng = seed => {

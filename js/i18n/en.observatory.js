@@ -281,6 +281,7 @@ export const EN_OBSERVATORY = {
   'obs.export.csv': 'Save the rows as CSV',
   'obs.cmp.title': 'Compare a model with the data',
   'obs.fit.title': 'Fit a model (diagnostic)',
+  'obs.sky.title': 'Sky: Galactic map and proper-motion vectors',
   'obs.arc.title': "Or find a star's Gaia epochs at CDS (live, opt-in)",
   'obs.ms.title': 'Measure, and the pipeline',
   'obs.gd.title': 'Guided investigations',

@@ -30,6 +30,9 @@ import WANDERERS_ON_THE_SKY from './data/investigations/es/wanderers-on-the-sky.
 import PLAN_A_NIGHT from './data/investigations/es/plan-a-night.js';
 import LINES_AND_MOTION from './data/investigations/es/lines-and-motion.js';
 import WHAT_A_SPECTRUM_IS_MADE_OF from './data/investigations/es/what-a-spectrum-is-made-of.js';
+import THE_SUNS_MOTION from './data/investigations/es/the-suns-motion.js';
+import THE_ROTATING_DISK from './data/investigations/es/the-rotating-disk.js';
+import CLUSTER_MEMBERSHIP from './data/investigations/es/cluster-membership.js';
 import DESIGN_THE_SCHEDULE from './data/investigations/es/design-the-schedule.js';
 import DETECT_THIS_PLANET from './data/investigations/es/detect-this-planet.js';
 import GOLDILOCKS_QUESTION from './data/investigations/es/goldilocks-question.js';
@@ -58,6 +61,9 @@ import WANDERERS_ON_THE_SKY_DEEPER from './data/investigations/depth/es/wanderer
 import PLAN_A_NIGHT_DEEPER from './data/investigations/depth/es/plan-a-night.js';
 import LINES_AND_MOTION_DEEPER from './data/investigations/depth/es/lines-and-motion.js';
 import WHAT_A_SPECTRUM_IS_MADE_OF_DEEPER from './data/investigations/depth/es/what-a-spectrum-is-made-of.js';
+import THE_SUNS_MOTION_DEEPER from './data/investigations/depth/es/the-suns-motion.js';
+import THE_ROTATING_DISK_DEEPER from './data/investigations/depth/es/the-rotating-disk.js';
+import CLUSTER_MEMBERSHIP_DEEPER from './data/investigations/depth/es/cluster-membership.js';
 import KEPLERS_LAWS_DEEPER from './data/investigations/depth/es/keplers-laws.js';
 import MISSING_MASS_DEEPER from './data/investigations/depth/es/missing-mass.js';
 import TRANSIT_PHOTOMETRY_DEEPER from './data/investigations/depth/es/transit-photometry.js';
@@ -77,6 +83,9 @@ export const SHADOWS = Object.freeze({
   'plan-a-night': PLAN_A_NIGHT,
   'lines-and-motion': LINES_AND_MOTION,
   'what-a-spectrum-is-made-of': WHAT_A_SPECTRUM_IS_MADE_OF,
+  'the-suns-motion': THE_SUNS_MOTION,
+  'the-rotating-disk': THE_ROTATING_DISK,
+  'cluster-membership': CLUSTER_MEMBERSHIP,
   'design-the-schedule': DESIGN_THE_SCHEDULE,
   'detect-this-planet': DETECT_THIS_PLANET,
   'goldilocks-question': GOLDILOCKS_QUESTION,
@@ -109,6 +118,9 @@ export const DEEPER_SHADOWS = Object.freeze({
   'plan-a-night': PLAN_A_NIGHT_DEEPER,
   'lines-and-motion': LINES_AND_MOTION_DEEPER,
   'what-a-spectrum-is-made-of': WHAT_A_SPECTRUM_IS_MADE_OF_DEEPER,
+  'the-suns-motion': THE_SUNS_MOTION_DEEPER,
+  'the-rotating-disk': THE_ROTATING_DISK_DEEPER,
+  'cluster-membership': CLUSTER_MEMBERSHIP_DEEPER,
   'keplers-laws': KEPLERS_LAWS_DEEPER,
   'missing-mass': MISSING_MASS_DEEPER,
   'transit-photometry': TRANSIT_PHOTOMETRY_DEEPER,

@@ -296,8 +296,13 @@
   "offline": "optional",
   "derived": {
     "file": "js/data/observations/gaiaNgc2420.js",
-    "bytes": 39177,
-    "sha256": "1479a964720d1c2fc70022e4270f5c69d16006c66f6f1e1053cf292a347be418"
+    "bytes": 6532,
+    "sha256": "52b0254932db79b281ff084af53115736c6cbb5b188c6d79cef6cbd5b02d9075",
+    "sidecar": {
+      "file": "gaia/ngc2420.json",
+      "bytes": 32390,
+      "sha256": "6709a0a33b43602e7e7bc62cc342502fb361ff2ff4595fb1ff1a5b019dbb42ef"
+    }
   },
   "validation": {
     "check": "a proper-motion and parallax mixture finds a cluster of at least 100 members within 0.3 mas/yr and 0.15 mas of the literature's values",

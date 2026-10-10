@@ -15,6 +15,72 @@ export default {
   format: 'gravitas.instructor-flow',
   formatVersion: 2,
   lessons: {
+    'the-suns-motion': [
+      {
+        from: 'from-stars-to-velocities',
+        to: 'measure-the-sun',
+        text: 'Parallax, proper motion and radial velocity make a velocity in space. Students predict what a still crowd looks like from a moving Sun and measure the Sun’s U, V and W from Gaia stars within 100 pc.',
+      },
+      {
+        from: 'why-v-is-big',
+        to: 'measure-farther',
+        text: 'V is largest because the stars lag the Galaxy’s rotation; using more stars from farther away shrinks the error.',
+      },
+      {
+        from: 'the-lsr-problem',
+        to: 'state-the-assumption',
+        text: 'Two published values for the Sun’s V against the LSR disagree by 8 km/s. Students record both, see the apex move, and write which they assume.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: a velocity, its uncertainty, a lag, and an assumption.',
+      },
+    ],
+    'the-rotating-disk': [
+      {
+        from: 'a-wave-in-the-proper-motions',
+        to: 'speed-at-the-sun',
+        text: 'A double wave in longitude: students predict it, measure the Oort constants, see why the fit needs weights, and turn A − B into the Sun’s circular speed.',
+      },
+      {
+        from: 'the-rotation-curve',
+        to: 'fit-with-a-halo',
+        text: 'The measured rotation curve against a model: stars and gas alone fit it badly, a halo ten times better.',
+      },
+      {
+        from: 'where-the-halo-matters',
+        to: 'say-what-it-assumes',
+        text: 'Where the halo matters and what the comparison assumes.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: what the data showed and what it assumed.',
+      },
+    ],
+    'cluster-membership': [
+      {
+        from: 'a-cluster-in-a-field',
+        to: 'a-label-or-a-probability',
+        text: 'A cluster is a clump in proper motion. Students predict it, measure its motion and member count, and meet membership as a probability.',
+      },
+      {
+        from: 'move-the-threshold',
+        to: 'does-the-color-agree',
+        text: 'Moving the threshold hardly changes the count; a color-magnitude diagram the fit never used confirms the members.',
+      },
+      {
+        from: 'read-the-distance',
+        to: 'one-sentence',
+        text: 'A distance from the mean parallax, what it leaves out, and a written reason for a probability.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: what the data showed and what it assumed.',
+      },
+    ],
     'what-a-spectrum-is-made-of': [
       {
         from: 'a-hot-solid',

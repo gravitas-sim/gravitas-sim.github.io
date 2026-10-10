@@ -2016,6 +2016,143 @@ test.describe('the central experiment of each investigation', () => {
     await expectVerdictRevealed(page, plan, predict);
   });
 
+  test('the-suns-motion: a nearby-star sample gives the Sun about 10, 22 and 9 km/s against the stars @accepts:ce.the-suns-motion', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'the-suns-motion';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('solar-motion');
+    const at = {};
+    for (const pc of [50, 100]) {
+      const { before, after } = await setControl(page, control, pc);
+      if (pc !== 50) expect(after).not.toEqual(before);
+      at[pc] = {
+        U: reading(after, /Sun.s U/i),
+        V: reading(after, /Sun.s V/i),
+        W: reading(after, /Sun.s W/i),
+      };
+    }
+
+    // 3. the model's numbers, within the validator's tolerances
+    expect(Math.abs(at[100].U - 10.5)).toBeLessThan(1.5);
+    expect(Math.abs(at[100].V - 21.9)).toBeLessThan(2);
+    expect(Math.abs(at[100].W - 9.1)).toBeLessThan(1.5);
+
+    // 4. the evidence, written down and kept
+    const evidence = {
+      U: at[100].U.toFixed(1),
+      V: at[100].V.toFixed(1),
+      W: at[100].W.toFixed(1),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('the-rotating-disk: weighting by distance gives the Oort constants, and weighting all alike does not @accepts:ce.the-rotating-disk', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'the-rotating-disk';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('rotating-disk');
+    const at = {};
+    for (const w of [1, 0]) {
+      const { before, after } = await setControl(page, control, w);
+      if (w === 0) expect(after).not.toEqual(before);
+      at[w] = { A: reading(after, /Oort A/i), B: reading(after, /Oort B/i) };
+    }
+
+    // 3. weighted by distance A is positive and B negative, near the model's values
+    expect(Math.abs(at[0].A - 13.5)).toBeLessThan(1);
+    expect(Math.abs(at[0].B + 13.7)).toBeLessThan(1);
+    expect(Math.abs(at[1].A - at[0].A)).toBeGreaterThan(5);
+
+    // 4. the evidence, written down and kept
+    const evidence = { A: at[0].A.toFixed(1), B: at[0].B.toFixed(1) };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('cluster-membership: almost every star is clearly in or clearly out of NGC 2420, so the count barely moves with the threshold @accepts:ce.cluster-membership', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'cluster-membership';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('cluster-members');
+    const at = {};
+    for (const th of [0.99, 0.5]) {
+      const { before, after } = await setControl(page, control, th);
+      if (th === 0.5) expect(after).not.toEqual(before);
+      at[th] = {
+        members: reading(after, /Stars above the probability/i),
+        pmra: reading(after, /Cluster.s proper motion/i),
+      };
+    }
+
+    // 3. the model's numbers
+    expect(Math.abs(at[0.5].members - 506)).toBeLessThan(8);
+    expect(Math.abs(at[0.99].members - 497)).toBeLessThan(6);
+    expect(Math.abs(at[0.5].pmra + 1.227)).toBeLessThan(0.05);
+
+    // 4. the evidence, written down and kept
+    const evidence = {
+      pmra: at[0.5].pmra.toFixed(2),
+      pmdec: '-2.04',
+      members: String(at[0.5].members),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
   // ---- The sky sequence (Roadmap II, Prompt 89) ---------------------------------
   const SKY = [
     {

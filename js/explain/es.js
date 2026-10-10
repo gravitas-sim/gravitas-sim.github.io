@@ -109,6 +109,12 @@ export default {
     'Dónde está el máximo, cómo muestrean la curva las dos bandas y el índice de color que dan; en el visor de espectros, dónde está una línea y cuánto se ha movido de su longitud de onda en reposo.',
     'Una estrella real no es un cuerpo negro: sus líneas y saltos cambian el color medido respecto de este. El corrimiento de una línea da solo la velocidad a lo largo de la visual, nunca el movimiento transversal.',
   ],
+  galactic: [
+    'Estrellas medidas por Gaia: velocidades, movimientos propios según la longitud, una curva de rotación, o los movimientos propios y colores de un cúmulo.',
+    'Cómo cambian la velocidad media de las estrellas, las constantes de Oort ajustadas, la curva frente a su modelo o la pertenencia al cambiar lo que se conserva, pondera o supone.',
+    'Qué dicen los datos antes de ponerles un modelo, y cuánto mueve la respuesta un supuesto cambiado (la V del Sol, la ponderación, el halo).',
+    'Mediciones reales con dispersión real; los modelos son simples y se declaran, y una pertenencia es una probabilidad, no una etiqueta.',
+  ],
   compare: [
     'Los datos (vertical, arriba) y el modelo encima, frente al tiempo; abajo, cada residuo en unidades de su propia barra de error.',
     'Donde los residuos se alejan de cero en una racha, el modelo queda por encima o por debajo de los datos; la dispersión en torno a cero es el ruido.',

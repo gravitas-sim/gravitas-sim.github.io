@@ -108,6 +108,7 @@ export const FAMILY_IDS = Object.freeze({
   ],
   gw: ['gw-lab', 'gw-real'],
   light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
+  galactic: ['solar-motion', 'rotating-disk', 'cluster-members'],
   sky: [
     'sky-turning',
     'sky-seasons',

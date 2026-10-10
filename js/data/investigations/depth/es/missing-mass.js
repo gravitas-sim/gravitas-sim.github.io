@@ -45,5 +45,17 @@ export default {
       rubric:
         'Busca una medida que los modelos predigan distinto (el cúmulo, o una galaxia de otra masa, o las lentes) y la idea de que dos modelos que ajustan una curva dentro de su incertidumbre no han sido separados por ella.',
     },
+    {
+      title: 'La opción auténtica: la Vía Láctea medida',
+      body: 'Todas las curvas de galaxia de esta investigación hasta ahora son un <strong>modelo</strong>: la curva de NGC 3198 se construyó con parámetros publicados y una dispersión fija añadida, y está rotulada como sintética. Aquí hay una medida. El instrumento muestra la rapidez circular de la propia Vía Láctea de 2 a 25 kpc, de Bhattacharjee, Chaudhury y Kundu (2014), que combinaron muchos trazadores. Supone que el Sol está a 8,3 kpc del centro y se mueve a 244 km/s; las citas están en el paquete de datos. Pon el modelo en un mejor ajuste sin halo y luego con uno.',
+    },
+    {
+      title: 'La misma prueba con datos reales',
+      body: 'Lee el χ² reducido del mejor ajuste <strong>sin halo</strong> (el disco acotado en 8 × 10<sup>10</sup> masas solares) y del mejor ajuste <strong>con halo</strong>. Compara la mejora con la que hallaste para la curva sintética.',
+      fields: [
+        { label: 'χ² reducido, solo estrellas' },
+        { label: 'χ² reducido, con halo' },
+      ],
+    },
   ],
 };

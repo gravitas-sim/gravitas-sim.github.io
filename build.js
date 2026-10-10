@@ -41,6 +41,12 @@ const STATIC_FILES = [
   // The Sky Lab's star table (data-packs/sky-bright-stars.json): fetched by
   // /sky/ at run time, so no bundle holds it.
   'sky/bright-stars.json',
+  // The galactic tables' rows (data-packs/gaia-dr3-*.json and
+  // milky-way-rotation-curve.json), fetched by the galactic instruments and
+  // the Observatory.
+  'gaia/solar-neighbourhood.json',
+  'gaia/ngc2420.json',
+  'gaia/milky-way-rotation-curve.json',
 ];
 
 // Directories copied whole. Lesson figures are photographs used under licenses
