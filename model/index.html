@@ -2930,9 +2930,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->35<!--/fact-->
+        <!--fact:investigations-->38<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->35<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->38<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3083,6 +3083,18 @@ try {
             <tr>
               <td>Cluster Membership by Motion</td>
               <td>Two-component Gaussian mixture over proper motion and parallax by expectation-maximization (js/kernels/galactic/membership.js), each star’s own errors widening both components; the cluster’s intrinsic width uses the standard approximate update. See GALACTIC_DYNAMICS.md.</td>
+            </tr>
+            <tr>
+              <td>Bending Light</td>
+              <td>js/kernels/lensing/lens.js: deflectionAngle = 4GM/(c²b), valid for b much greater than 2GM/c²; the instrument shades b below ten Schwarzschild radii. See GRAVITATIONAL_LENSING.md.</td>
+            </tr>
+            <tr>
+              <td>Einstein Rings and Arcs</td>
+              <td>js/kernels/lensing/lens.js: einsteinAngle, sisEinsteinAngle, pointImages (lens equation y = x − 1/x), sisImages (y = x − sign x) and pointTimeDelay. The mass is the mass inside the Einstein radius for either lens. See GRAVITATIONAL_LENSING.md.</td>
+            </tr>
+            <tr>
+              <td>A Lens Passing By</td>
+              <td>js/kernels/lensing/microlensing.js (Paczynski, uniform finite source by ring integration, blending) and fit.js (the inference core’s createProblem and refine, multi-start, source and blend fluxes solved exactly). Validated against closed forms and over 30 seeds in tests/lensingKernel.test.js. See GRAVITATIONAL_LENSING.md.</td>
             </tr>
           <!--/fact-block-->
           </tbody>

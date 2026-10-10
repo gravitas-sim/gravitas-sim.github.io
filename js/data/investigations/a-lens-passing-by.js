@@ -44,7 +44,7 @@ const A_LENS_PASSING_BY = {
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
   prerequisites: ['einstein-rings-and-arcs'],
-  tags: ['observing', 'stars', 'gravity'],
+  tags: ['gravity', 'observing', 'stars'],
   lock: { placement: true, inspector: true },
   objectives: [
     'Say why a star brightens and fades when a lens passes in front of it, and read the peak and the duration of the event',

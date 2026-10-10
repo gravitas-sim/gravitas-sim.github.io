@@ -161,7 +161,7 @@ export const BROWSE_META = {
     numericCount: 0,
   },
   'a-lens-passing-by': {
-    tags: ['observing', 'stars', 'gravity'],
+    tags: ['gravity', 'observing', 'stars'],
     numericCount: 0,
   },
 };

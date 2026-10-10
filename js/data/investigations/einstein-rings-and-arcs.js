@@ -160,7 +160,7 @@ const EINSTEIN_RINGS_AND_ARCS = {
         {
           id: 'mass',
           label: 'Mass inside the ring',
-          unit: 'solar masses ×10^11',
+          unit: '10^11 solar masses',
           hint: '2.5',
         },
       ],
@@ -195,7 +195,7 @@ const EINSTEIN_RINGS_AND_ARCS = {
         {
           id: 'outer',
           label: 'Outer image',
-          unit: 'Einstein radii',
+          unit: '',
           hint: '1.28',
         },
         { id: 'total', label: 'Total magnification', unit: '', hint: '2.18' },
@@ -233,7 +233,7 @@ const EINSTEIN_RINGS_AND_ARCS = {
         {
           id: 'outer',
           label: 'Outer image',
-          unit: 'Einstein radii',
+          unit: '',
           hint: '1.5',
         },
         { id: 'total', label: 'Total magnification', unit: '', hint: '4' },

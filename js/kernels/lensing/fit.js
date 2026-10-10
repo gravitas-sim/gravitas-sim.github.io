@@ -41,8 +41,8 @@ export const MICROLENSING_MODEL = {
     },
   ],
   linear: [
-    { name: 'Fs', unit: 'flux', label: 'source flux' },
-    { name: 'Fb', unit: 'flux', label: 'blend flux' },
+    { name: 'Fs', unit: '', label: 'source flux' },
+    { name: 'Fb', unit: '', label: 'blend flux' },
   ],
   assumptions: [
     'A single point lens and a single source moving in straight lines at constant speed.',
