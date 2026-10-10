@@ -37,6 +37,9 @@ const STATIC_FILES = [
   'catalog/catalog.json',
   // The Library's index (LIBRARY.md), which /library/ and Home read.
   'library/library.json',
+  // The Sky Lab's star table (data-packs/sky-bright-stars.json): fetched by
+  // /sky/ at run time, so no bundle holds it.
+  'sky/bright-stars.json',
 ];
 
 // Directories copied whole. Lesson figures are photographs used under licenses
@@ -94,6 +97,7 @@ const DOC_PAGES = [
   'mission',
   'mission/lab',
   '3d',
+  'sky',
 ];
 
 /**
@@ -684,6 +688,24 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'mission-lab-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The Sky Lab (/sky/, SKY_LAB.md): its own entry. The instruments, the
+  // evidence writer and the constellation figures are lazy chunks; the star
+  // table is a JSON file the page fetches (STATIC_FILES), so no bundle holds it.
+  if (existsSync('js/skyPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/skyPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'sky-[hash]',
       legalComments: 'none',
     });
   }
