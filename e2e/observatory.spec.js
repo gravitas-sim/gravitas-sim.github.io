@@ -70,6 +70,9 @@ test.describe('the observatory', () => {
       'gwosc-events',
       'ngc2420-photometry',
       'ngc2420-segue',
+      'gaia-solar-neighbourhood',
+      'gaia-ngc2420',
+      'milky-way-rotation-curve',
       'mist-isochrones',
       'tess-aperture',
     ]);
@@ -82,6 +85,10 @@ test.describe('the observatory', () => {
       'ngc2420-photometry': { rows: 2301, seeing: /not from the sky/ },
       'ngc2420-segue': { rows: 517, seeing: /55 arcsec/ },
       'mist-isochrones': { rows: 1410, seeing: /Ramer-Douglas-Peucker/ },
+      // The Gaia packs (Prompt 92): what is shown, what was cut, the licence.
+      'gaia-solar-neighbourhood': { rows: 1570, seeing: /\S/ },
+      'gaia-ngc2420': { rows: 993, seeing: /\S/ },
+      'milky-way-rotation-curve': { rows: 151, seeing: /\S/ },
     };
     for (const id of ids) {
       await openFixture(page, id);
