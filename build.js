@@ -14,7 +14,8 @@
 
 import * as esbuild from 'esbuild';
 import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { gzipSync } from 'node:zlib';
 import path from 'node:path';
 import { keyGroupsPlugin } from './tools/key-groups.mjs';
 import { proseWhitespacePlugin } from './tools/prose-whitespace.mjs';
@@ -335,10 +336,19 @@ function summarizeBundle(metafile) {
   }
 
   const deferred = Object.keys(outputs).filter(f => !eager.has(f));
+  // What a reader's browser actually transfers for the deferred chunks: each
+  // file gzipped on its own, as a static host serves it, at zlib's default
+  // level. The bundle budget judges this rather than the raw bytes (Carl,
+  // 2026-10-09), because shortening identifiers and key prefixes saves far
+  // more raw bytes than it saves on the wire. Node 20 and Node 24 ship
+  // different zlib builds and land a few hundred bytes apart on this total,
+  // which is why no documentation fact quotes it.
+  const gzipped = f => gzipSync(readFileSync(f)).length;
   return {
     initial: [...eager].reduce((a, f) => a + size(f), 0),
     initialFiles: eager.size,
     deferred: deferred.reduce((a, f) => a + size(f), 0),
+    deferredGzip: deferred.reduce((a, f) => a + gzipped(f), 0),
     deferredFiles: deferred.length,
     total: Object.keys(outputs).reduce((a, f) => a + size(f), 0),
   };
@@ -967,7 +977,7 @@ async function run() {
     `JS at start-up     ${kb(js.initial).padStart(9)}   ${js.initialFiles} file(s)`
   );
   console.log(
-    `JS on demand       ${kb(js.deferred).padStart(9)}   ${js.deferredFiles} chunk(s)`
+    `JS on demand       ${kb(js.deferred).padStart(9)}   ${js.deferredFiles} chunk(s), ${kb(js.deferredGzip)} gzipped`
   );
   console.log(`\nInitial download   ${kb(css + js.initial).padStart(9)}`);
 
@@ -987,6 +997,7 @@ async function run() {
         initialJsBytes: js.initial,
         initialFiles: js.initialFiles,
         deferredJsBytes: js.deferred,
+        deferredJsGzipBytes: js.deferredGzip,
         deferredChunks: js.deferredFiles,
         initialDownloadBytes: css + js.initial,
       },
