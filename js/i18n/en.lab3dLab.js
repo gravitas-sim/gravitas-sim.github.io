@@ -172,6 +172,8 @@ export const EN_LAB3DLAB = {
     'The graphics context was lost. The run and the tables go on, and the picture comes back when the browser restores it.',
   'l3.guides': 'Guided investigations',
   'l3.ev.open': 'Evidence and observing',
+  'l3.status.badLink':
+    'This link does not hold a system the lab can open ({why}). The lab opened a reference system instead.',
   'l3.status.noSaved':
     'No saved system with that name is in this browser. Open one from My work.',
   'l3.tool.sky': 'On the sky, seen from here',

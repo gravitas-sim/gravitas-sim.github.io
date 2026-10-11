@@ -1249,6 +1249,33 @@ function retranslate() {
   tell();
 }
 
+/**
+ * A link that carries a system (a scenario pack's, js/lab3d/link.js), opened
+ * as a file is: through the same checks, with the reason when it is refused.
+ */
+async function openLink(fragment) {
+  let found = null;
+  let why = 'notLink';
+  try {
+    const link = await import('./lab3d/link.js');
+    const read = await link.readSystemFragment(fragment);
+    why = read.code;
+    const m = read.ok && migrateSystem(read.system);
+    const problems = m?.ok ? validateSystem(m.system) : [];
+    if (m?.ok && !problems.length) found = m.system;
+    else if (m) why = m.code ?? problems[0].code;
+  } catch {
+    why = 'unreadable';
+  }
+  if (!found)
+    return open(state.choice).then(() =>
+      notice(t('l3.status.badLink', { why }), true, 'error')
+    );
+  state.fileSystem = found;
+  $('l3-system').value = 'file';
+  return open('file');
+}
+
 /** A system saved to My work (js/myWork/made.js), opened as a file is. */
 function openSaved(id) {
   let found = null;
@@ -1388,6 +1415,7 @@ async function init() {
   // A guide opens its own system, so the page does not open one first.
   if (guide) openGuides({ id: guide, path: params.get('path') });
   else if (saved) openSaved(saved);
+  else if (/^#sys\d/.test(location.hash)) openLink(location.hash);
   else open(state.choice);
 }
 
