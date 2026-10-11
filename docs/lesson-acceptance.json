@@ -622,7 +622,7 @@
         "predict-once-a-night",
         "once-a-night"
       ],
-      "evidenceFrom": "data"
+      "evidenceFrom": "model"
     },
     "leavitts-law": {
       "centralExperimentId": "ce.leavitts-law",
@@ -635,7 +635,7 @@
         "predict-the-trend",
         "the-calibration"
       ],
-      "evidenceFrom": "data"
+      "evidenceFrom": "model"
     },
     "the-first-rung": {
       "centralExperimentId": "ce.the-first-rung",
@@ -648,7 +648,7 @@
         "predict-the-maser-check",
         "a-maser-galaxy"
       ],
-      "evidenceFrom": "data"
+      "evidenceFrom": "model"
     },
     "which-kind-of-variable": {
       "centralExperimentId": "ce.which-kind-of-variable",
