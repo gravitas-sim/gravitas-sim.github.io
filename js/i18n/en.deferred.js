@@ -3114,7 +3114,7 @@ export const EN_DEFERRED = {
     'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
   'welcomeAudience.instructors.title': 'For instructors',
   'welcomeAudience.instructors.text':
-    '41 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
+    '44 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
   'welcomeAudience.curious.title': 'For the curious',
   'welcomeAudience.curious.text':
     'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',
@@ -3369,6 +3369,15 @@ export const EN_DEFERRED = {
   'stelW.value.mass': '{now} now, {born} at birth',
   'stelW.row.age': 'Age',
   'stelW.row.phase': 'Phase',
+  'stelW.row.interior': 'Interior (a model)',
+  'stelW.value.interior.convective':
+    'A polytrope with n = 3/2, as for a fully convective star: center {rho} g/cm³ and {temp}',
+  'stelW.value.interior.radiative':
+    'A polytrope with n = 3 (Eddington’s standard model): center {rho} g/cm³ and {temp}',
+  'stelW.value.interior.white-dwarf':
+    'Degenerate electrons hold it up: see the white-dwarf mass and radius',
+  'stelW.value.interior.none':
+    'A dense core in a tenuous envelope, which no single polytrope describes',
   'stelW.action.pace': 'Change what the age slider paces',
   'stelW.row.pace': 'The age slider',
   'stelW.value.paceTime':

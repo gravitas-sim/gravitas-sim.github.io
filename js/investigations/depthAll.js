@@ -16,6 +16,9 @@ import MADE_OF_DEEPER from '../data/investigations/depth/what-a-spectrum-is-made
 import THE_SUNS_MOTION_DEEPER from '../data/investigations/depth/the-suns-motion.js';
 import THE_ROTATING_DISK_DEEPER from '../data/investigations/depth/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP_DEEPER from '../data/investigations/depth/cluster-membership.js';
+import INSIDE_A_STAR_DEEPER from '../data/investigations/depth/inside-a-star.js';
+import SCALING_THE_MAIN_SEQUENCE_DEEPER from '../data/investigations/depth/scaling-the-main-sequence.js';
+import THE_LIMIT_DEEPER from '../data/investigations/depth/the-limit.js';
 import BENDING_LIGHT_DEEPER from '../data/investigations/depth/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS_DEEPER from '../data/investigations/depth/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY_DEEPER from '../data/investigations/depth/a-lens-passing-by.js';
@@ -46,6 +49,9 @@ export const DEEPER = Object.freeze({
   [THE_SUNS_MOTION_DEEPER.id]: THE_SUNS_MOTION_DEEPER.steps,
   [THE_ROTATING_DISK_DEEPER.id]: THE_ROTATING_DISK_DEEPER.steps,
   [CLUSTER_MEMBERSHIP_DEEPER.id]: CLUSTER_MEMBERSHIP_DEEPER.steps,
+  [INSIDE_A_STAR_DEEPER.id]: INSIDE_A_STAR_DEEPER.steps,
+  [SCALING_THE_MAIN_SEQUENCE_DEEPER.id]: SCALING_THE_MAIN_SEQUENCE_DEEPER.steps,
+  [THE_LIMIT_DEEPER.id]: THE_LIMIT_DEEPER.steps,
   [BENDING_LIGHT_DEEPER.id]: BENDING_LIGHT_DEEPER.steps,
   [EINSTEIN_RINGS_AND_ARCS_DEEPER.id]: EINSTEIN_RINGS_AND_ARCS_DEEPER.steps,
   [A_LENS_PASSING_BY_DEEPER.id]: A_LENS_PASSING_BY_DEEPER.steps,

@@ -3146,7 +3146,7 @@ export const ES_DEFERRED = {
     'Ve las relaciones que describe una ecuación. Aleja un planeta y observa cómo se alarga su año; estira una órbita y observa cómo oscila la luz estelar.',
   'welcomeAudience.instructors.title': 'Para el profesorado',
   'welcomeAudience.instructors.text':
-    '41 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
+    '44 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
   'welcomeAudience.curious.title': 'Para curiosos',
   'welcomeAudience.curious.text':
     'Sin cuenta, sin instalación, sin nada que leer antes. Carga una fusión de agujeros negros y obsérvala, o parte del espacio vacío y mira qué hace la gravedad.',
@@ -3406,6 +3406,15 @@ export const ES_DEFERRED = {
   'stelW.value.mass': '{now} ahora, {born} al nacer',
   'stelW.row.age': 'Edad',
   'stelW.row.phase': 'Fase',
+  'stelW.row.interior': 'Interior (un modelo)',
+  'stelW.value.interior.convective':
+    'Un politropo con n = 3/2, como una estrella totalmente convectiva: centro {rho} g/cm³ y {temp}',
+  'stelW.value.interior.radiative':
+    'Un politropo con n = 3 (modelo estándar de Eddington): centro {rho} g/cm³ y {temp}',
+  'stelW.value.interior.white-dwarf':
+    'La sostienen electrones degenerados: mira la masa y el radio de las enanas blancas',
+  'stelW.value.interior.none':
+    'Un núcleo denso en una envoltura tenue, que ningún politropo describe',
   'stelW.action.pace': 'Cambiar lo que marca el deslizador de edad',
   'stelW.row.pace': 'El deslizador de edad',
   'stelW.value.paceTime':

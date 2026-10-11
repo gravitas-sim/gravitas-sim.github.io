@@ -145,6 +145,7 @@ export default [
       'js/lab3d/worker.js',
       'js/mission/worker.js',
       'js/mission/labWorker.js',
+      'js/kernels/stellar/worker.js',
     ],
     languageOptions: {
       ecmaVersion: 2021,

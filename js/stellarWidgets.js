@@ -25,6 +25,7 @@
 // Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
 import './instrumentStartup.js';
 import { t } from './i18n/index.js';
+import { formatNumber } from './format.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 
 ensureDeferredMessages().catch(() => {});
@@ -114,6 +115,45 @@ const years = y => {
   if (y >= 1e3) return `${(y / 1e3).toPrecision(3)} kyr`;
   return `${Math.round(y).toLocaleString()} yr`;
 };
+
+/**
+ * The Lane-Emden numbers of the two polytropes this card names (n = 3/2 and
+ * n = 3): the central-to-mean density ratio, the dimensionless mass and the
+ * dimensionless radius, from Chandrasekhar's table. They are the kernel's
+ * (js/kernels/stellar, held to the table in tests/stellarKernel.test.js, and
+ * tests/interiorsWidgets.test.js holds this row to the kernel), copied so that
+ * the Stellar Lab does not import the kernel for one line.
+ */
+const INTERIOR_POLYTROPES = {
+  1.5: { ratio: 5.99071, mass: 2.71406, xi: 3.65375 },
+  3: { ratio: 54.1825, mass: 2.01824, xi: 6.89685 },
+};
+
+/**
+ * The interior model that goes with a star of this lab, in words: which
+ * polytrope approximates it and what that predicts at the centre, or why none
+ * does (STELLAR_STRUCTURE.md). A model, stated.
+ */
+function interiorText(sel) {
+  if (sel.phase === 'white-dwarf') return t('stelW.value.interior.white-dwarf');
+  const ms = ['pre-main-sequence', 'main-sequence'].includes(sel.phase);
+  if (!ms) return t('stelW.value.interior.none');
+  const m = (sel.massSun ?? sel.initialMassSun) * 1.989e30;
+  const r = sel.radiusSun * 6.957e8;
+  const n = m < 0.35 * 1.989e30 ? 1.5 : 3;
+  const p = INTERIOR_POLYTROPES[n];
+  const rhoC = (p.ratio * 3 * m) / (4 * Math.PI * r ** 3);
+  const pC =
+    (6.6743e-11 * m * m) /
+    r ** 4 /
+    (4 * Math.PI * (n + 1) * (p.mass / p.xi ** 2) ** 2);
+  const tC = (0.6 * 1.66053907e-27 * pC) / (rhoC * 1.380649e-23);
+  return t(`stelW.value.interior.${n === 1.5 ? 'convective' : 'radiative'}`, {
+    n,
+    rho: formatNumber(rhoC / 1000, { sig: 3, sci: false }),
+    temp: kelvin(tC),
+  });
+}
 
 /** A ratio, as a multiplier. */
 const times = r => {
@@ -1281,6 +1321,10 @@ const STELLAR_LAB = {
       rows.push({
         label: t('stelW.row.phase'),
         value: t(`stellar.phase.${sel.phase}`),
+      });
+      rows.push({
+        label: t('stelW.row.interior'),
+        value: interiorText(sel),
       });
       rows.push({
         label: t('stelW.row.pace'),
