@@ -141,11 +141,14 @@ test.describe('the 3-D lab keeps evidence and observes', () => {
     expect(json.format).toBe('gravitas.system3d');
     // Reopened from its record, it starts from the saved numbers: the masses
     // exactly, and the separation as the file has it (the picture's own frame
-    // and the moment it is read are not the file's, but the separation of two
-    // bodies is neither).
+    // is not the file's, but the separation of two bodies is not frame-bound).
+    // Reduced motion makes the lab open paused, so the frame read is the one at
+    // t = 0 whatever the machine's speed; playing first read a moving orbit.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await openLab(page, `open=${id}`);
-    await page.locator('#l3-play').click();
+    await page.waitForFunction(() => window.gravitasLab3d.frame() !== null);
     const after = await page.evaluate(() => window.gravitasLab3d.frame());
+    expect(after.t).toBe(0);
     expect(after.m).toEqual(json.bodies.map(b => b.m));
     const [a, b] = json.bodies.map(body => body.x);
     const gap = Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
@@ -154,7 +157,7 @@ test.describe('the 3-D lab keeps evidence and observes', () => {
       after.x[1] - after.x[4],
       after.x[2] - after.x[5]
     );
-    expect(Math.abs(seen / gap - 1)).toBeLessThan(0.05);
+    expect(Math.abs(seen / gap - 1)).toBeLessThan(1e-9);
   });
 
   test('a missing saved system is said so, and the lab still opens one', async ({
