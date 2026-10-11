@@ -40,6 +40,9 @@ import THE_EXPANDING_UNIVERSE from './data/investigations/es/the-expanding-unive
 import STANDARD_CANDLES from './data/investigations/es/standard-candles.js';
 import THE_SHAPE_OF_EXPANSION from './data/investigations/es/the-shape-of-expansion.js';
 import WHERE_GALAXIES_LIVE from './data/investigations/es/where-galaxies-live.js';
+import WHAT_A_CCD_RECORDS from './data/investigations/es/what-a-ccd-records.js';
+import SIGNAL_NOISE_AND_EXPOSURE from './data/investigations/es/signal-noise-and-exposure.js';
+import A_VARIABLE_STAR_FROM_FRAMES from './data/investigations/es/a-variable-star-from-frames.js';
 import THE_BEAT_OF_A_STAR from './data/investigations/es/the-beat-of-a-star.js';
 import LEAVITTS_LAW from './data/investigations/es/leavitts-law.js';
 import THE_FIRST_RUNG from './data/investigations/es/the-first-rung.js';
@@ -85,6 +88,9 @@ import THE_EXPANDING_UNIVERSE_DEEPER from './data/investigations/depth/es/the-ex
 import STANDARD_CANDLES_DEEPER from './data/investigations/depth/es/standard-candles.js';
 import THE_SHAPE_OF_EXPANSION_DEEPER from './data/investigations/depth/es/the-shape-of-expansion.js';
 import WHERE_GALAXIES_LIVE_DEEPER from './data/investigations/depth/es/where-galaxies-live.js';
+import WHAT_A_CCD_RECORDS_DEEPER from './data/investigations/depth/es/what-a-ccd-records.js';
+import SIGNAL_NOISE_AND_EXPOSURE_DEEPER from './data/investigations/depth/es/signal-noise-and-exposure.js';
+import A_VARIABLE_STAR_FROM_FRAMES_DEEPER from './data/investigations/depth/es/a-variable-star-from-frames.js';
 import THE_BEAT_OF_A_STAR_DEEPER from './data/investigations/depth/es/the-beat-of-a-star.js';
 import LEAVITTS_LAW_DEEPER from './data/investigations/depth/es/leavitts-law.js';
 import THE_FIRST_RUNG_DEEPER from './data/investigations/depth/es/the-first-rung.js';
@@ -127,6 +133,9 @@ export const SHADOWS = Object.freeze({
   'standard-candles': STANDARD_CANDLES,
   'the-shape-of-expansion': THE_SHAPE_OF_EXPANSION,
   'where-galaxies-live': WHERE_GALAXIES_LIVE,
+  'what-a-ccd-records': WHAT_A_CCD_RECORDS,
+  'signal-noise-and-exposure': SIGNAL_NOISE_AND_EXPOSURE,
+  'a-variable-star-from-frames': A_VARIABLE_STAR_FROM_FRAMES,
   'the-beat-of-a-star': THE_BEAT_OF_A_STAR,
   'leavitts-law': LEAVITTS_LAW,
   'the-first-rung': THE_FIRST_RUNG,
@@ -179,6 +188,9 @@ export const DEEPER_SHADOWS = Object.freeze({
   'standard-candles': STANDARD_CANDLES_DEEPER,
   'the-shape-of-expansion': THE_SHAPE_OF_EXPANSION_DEEPER,
   'where-galaxies-live': WHERE_GALAXIES_LIVE_DEEPER,
+  'what-a-ccd-records': WHAT_A_CCD_RECORDS_DEEPER,
+  'signal-noise-and-exposure': SIGNAL_NOISE_AND_EXPOSURE_DEEPER,
+  'a-variable-star-from-frames': A_VARIABLE_STAR_FROM_FRAMES_DEEPER,
   'the-beat-of-a-star': THE_BEAT_OF_A_STAR_DEEPER,
   'leavitts-law': LEAVITTS_LAW_DEEPER,
   'the-first-rung': THE_FIRST_RUNG_DEEPER,

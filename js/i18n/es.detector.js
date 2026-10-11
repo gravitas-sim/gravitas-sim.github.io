@@ -1,7 +1,7 @@
 // =============================================================================
 // Las palabras de los instrumentos del detector, en español
 // -----------------------------------------------------------------------------
-// Registradas por js/detectorInstruments.js al cargar la familia. Mismas claves que
+// Registradas por js/detectorWidgets.js al cargar la familia. Mismas claves que
 // en.detector.js.
 // =============================================================================
 

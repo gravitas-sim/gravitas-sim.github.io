@@ -180,6 +180,18 @@ export const BROWSE_META = {
     tags: ['galaxies', 'observing'],
     numericCount: 0,
   },
+  'what-a-ccd-records': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'signal-noise-and-exposure': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'a-variable-star-from-frames': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
   'the-beat-of-a-star': {
     tags: ['observing', 'stars'],
     numericCount: 0,

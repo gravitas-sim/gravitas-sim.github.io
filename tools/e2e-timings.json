@@ -1783,5 +1783,14 @@
   "[chromium] › lensingLessons.spec.js › einstein-rings-and-arcs: the instrument paints, lists its numbers and passes axe (en)": 14.6,
   "[chromium] › lensingLessons.spec.js › einstein-rings-and-arcs: the instrument paints, lists its numbers and passes axe (es)": 15.7,
   "[chromium] › lensingLessons.spec.js › a-lens-passing-by: the instrument paints, lists its numbers and passes axe (en)": 13.6,
-  "[chromium] › lensingLessons.spec.js › a-lens-passing-by: the instrument paints, lists its numbers and passes axe (es)": 13.7
+  "[chromium] › lensingLessons.spec.js › a-lens-passing-by: the instrument paints, lists its numbers and passes axe (es)": 13.7,
+  "[chromium] › calibrationLessons.spec.js › what-a-ccd-records: the instrument paints, lists its numbers and passes axe (en)": 20,
+  "[chromium] › calibrationLessons.spec.js › what-a-ccd-records: the instrument paints, lists its numbers and passes axe (es)": 20,
+  "[chromium] › calibrationLessons.spec.js › signal-noise-and-exposure: the instrument paints, lists its numbers and passes axe (en)": 18,
+  "[chromium] › calibrationLessons.spec.js › signal-noise-and-exposure: the instrument paints, lists its numbers and passes axe (es)": 18,
+  "[chromium] › calibrationLessons.spec.js › a-variable-star-from-frames: the instrument paints, lists its numbers and passes axe (en)": 25,
+  "[chromium] › calibrationLessons.spec.js › a-variable-star-from-frames: the instrument paints, lists its numbers and passes axe (es)": 25,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › what-a-ccd-records: dividing by the flat raises a corner star @accepts:ce.what-a-ccd-records": 20,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › signal-noise-and-exposure: four times the exposure gives twice the signal-to-noise @accepts:ce.signal-noise-and-exposure": 18,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › a-variable-star-from-frames: without calibration the mean is off the truth @accepts:ce.a-variable-star-from-frames": 25
 }
