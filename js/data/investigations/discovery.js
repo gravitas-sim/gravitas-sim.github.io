@@ -400,6 +400,46 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'the-beat-of-a-star': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['lives-of-stars'],
+    textbook: {
+      chapter: 19,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'leavitts-law': {
+    audience: 'intro',
+    mathematics: 'logarithms',
+    prerequisites: ['the-beat-of-a-star'],
+    textbook: {
+      chapter: 19,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'the-first-rung': {
+    audience: 'intro',
+    mathematics: 'logarithms',
+    prerequisites: ['leavitts-law'],
+    textbook: {
+      chapter: 19,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'which-kind-of-variable': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['the-beat-of-a-star'],
+    textbook: {
+      chapter: 19,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'bending-light': {
     audience: 'intro',
     mathematics: 'algebra',

@@ -265,6 +265,15 @@ export const LAZY_FAMILIES = Object.freeze({
     'INTERIORS_WIDGETS',
     ['polytrope', 'wd-mass-radius', 'ms-scaling']
   ),
+  // Two TESS light curves, the Cepheid table and the synthetic class sample are
+  // sidecar files; whenWidgetsReady() waits for variablesReady.
+  variables: familyEntry(
+    () => import('./variableWidgets.js'),
+    './variableWidgets.js',
+    'VARIABLES_WIDGETS',
+    ['variable-fold', 'leavitt-law', 'variable-class'],
+    'variablesReady'
+  ),
   // Pure model, no data to wait for: a lens, a source and a light curve.
   lensing: familyEntry(
     () => import('./lensingWidgets.js'),
@@ -489,7 +498,14 @@ export async function whenWidgetsReady() {
   // './bodyVisuals.js' is not in cache" - where a browser does not. It costs a
   // reader of the whole catalog nothing: every one of them fetches it anyway.
   await import('./instrumentStartup.js');
-  await Promise.all(Object.keys(LAZY_FAMILIES).map(loadFamily));
+  // The variable-star family reaches the forward models' shared setup, which
+  // the survey, sky and lensing families reach too: asked for together under a
+  // loaded machine, jest's linker lost it ("request for '../setup.js' is not in
+  // cache"). It is loaded after the rest, so that setup is already linked. This
+  // adds no import, so no chunk and no request.
+  const families = Object.keys(LAZY_FAMILIES);
+  await Promise.all(families.filter(f => f !== 'variables').map(loadFamily));
+  await loadFamily('variables');
   const results = await Promise.all([...familyReady.values()]);
   return results.every(Boolean);
 }

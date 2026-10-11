@@ -2283,6 +2283,97 @@ test.describe('the central experiment of each investigation', () => {
     });
   }
 
+  // ---- The variable-star investigations (Roadmap II, Prompt 96) ------------------
+  const VARIABLES = [
+    {
+      id: 'the-beat-of-a-star',
+      title:
+        'the-beat-of-a-star: seen once a night, the highest peak is an alias @accepts:ce.the-beat-of-a-star',
+      row: /Highest peak of the period search/,
+      values: [
+        [0, 0.6604, 0.01],
+        [2, 1.972, 0.03],
+      ],
+    },
+    {
+      id: 'the-first-rung',
+      title:
+        'the-first-rung: another galaxy’s Cepheids slide the relation to its own distance modulus @accepts:ce.the-first-rung',
+      row: /Distance modulus/,
+      values: [
+        [1, 29.4, 0.03],
+        [2, 29.21, 0.03],
+      ],
+    },
+    {
+      id: 'which-kind-of-variable',
+      title:
+        'which-kind-of-variable: more measurements raise the share classified correctly @accepts:ce.which-kind-of-variable',
+      row: /Share classified correctly/,
+      values: [
+        [0, 83.3, 1],
+        [1, 90.8, 1],
+      ],
+    },
+  ];
+  for (const c of VARIABLES) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(async () => reading(await readout(page), c.row), {
+            timeout: 5000,
+          })
+          .not.toBeNaN();
+        const got = reading(await readout(page), c.row);
+        seen.push(got);
+        expect(Math.abs(got - want)).toBeLessThan(tol);
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
+
+  test('leavitts-law: the calibration slope is the same whichever galaxy is chosen @accepts:ce.leavitts-law', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const entry = declared('leavitts-law');
+    const [predictSid, measureSid] = entry.loop;
+    await openInvestigation(page, app, 'leavitts-law');
+    const plan = await lessonPlan(page, 'leavitts-law');
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+    await expect
+      .poll(async () => reading(await readout(page), /Slope/), {
+        timeout: 5000,
+      })
+      .not.toBeNaN();
+    const slope = reading(await readout(page), /Slope/);
+    expect(Math.abs(slope + 3.29)).toBeLessThan(0.03);
+    await setControl(page, 'host', 1);
+    expect(
+      Math.abs(reading(await readout(page), /Slope/) - slope)
+    ).toBeLessThan(1e-9);
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
   // ---- The selection-effects sequence (Roadmap II, Prompt 93) -------------------
   const SURVEY = [
     {

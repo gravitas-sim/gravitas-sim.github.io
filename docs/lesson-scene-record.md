@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 44 investigations and 883 steps: 833 steps
+Across 48 investigations and 921 steps: 871 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 444 show a prescribed model result, 146 draw
-on a stored dataset, 323 put a self-contained panel beside the text,
-182 keep something, and 30 are prose.
-Of 110 prediction loops, 110 are returned to,
-110 produce a measurement before they are answered, and
+running integration, 482 show a prescribed model result, 146 draw
+on a stored dataset, 361 put a self-contained panel beside the text,
+199 keep something, and 30 are prose.
+Of 115 prediction loops, 115 are returned to,
+115 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-110 hold their marking until the experiment settles them.
+115 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -552,6 +552,62 @@ Of 110 prediction loops, 110 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:wd-mass-radius`, control wd-mass-radius/logRho, measures the radius of a white dwarf in kilometers, as its central density changes, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Beat of a Star (`the-beat-of-a-star`)
+
+- **Steps:** 13. Scene declared on 13; a reader can change something on 0; 13 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 13 prescribed model, 0 stored dataset, 13 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** rrlyrae, cepheid.
+- **Instruments:** variable-fold.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-twice-the-period → fold-on-twice-the-period, a-slightly-wrong-period, a-second-star, why-the-error-is-bigger → fold-on-twice-the-period; predict-once-a-night → once-a-night, the-false-periods, why-aliases, what-you-worked-out → once-a-night.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:variable-fold`, control variable-fold/star, measures the highest period-search peak of a variable star, whole run against seen once a night, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Leavitt’s Law (`leavitts-law`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** long, short.
+- **Instruments:** leavitt-law.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-trend → the-calibration, how-tight, why-wesenheit, the-tenfold-step, why-one-galaxy, what-you-worked-out → the-calibration.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:leavitt-law`, control the Galaxy selector, which slides the fitted line onto another galaxy’s Cepheids; the calibration itself has no control, measures the slope and zero point of the Cepheid relation, and the distance a galaxy’s Cepheids give, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The First Rung (`the-first-rung`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** host, anchor.
+- **Instruments:** leavitt-law.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-maser-check → the-maser-check, the-budget, what-limits-it, another-galaxy, what-you-worked-out → the-maser-check.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:leavitt-law`, control leavitt-law/host, measures the distance modulus of a galaxy from sliding the Cepheid relation onto its Cepheids, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Which Kind of Variable (`which-kind-of-variable`)
+
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** pulsator, binary.
+- **Instruments:** variable-class.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-amplitude → add-the-amplitude, the-shape, what-a-single-number-hides, what-you-worked-out → add-the-amplitude.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:variable-class`, control variable-class/features, measures the share of variable stars classified correctly as the classifier is given more measurements, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Bending Light (`bending-light`)
 

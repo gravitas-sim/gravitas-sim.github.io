@@ -10,6 +10,12 @@
 
 import { tableOf } from './tableObservation.js';
 import { magnitudesOf } from './kernels/variables/fit.js';
+// Linked statically, not with import(): three dynamic imports started together
+// lose a module in Jest's node:vm (the concurrent import race), and these
+// records are small (their rows are sidecars).
+import * as SU_DRA from './data/observations/tessSuDraS15.js';
+import * as ETA_AQL from './data/observations/tessEtaAqlS81.js';
+import * as CEPHEIDS from './data/observations/shoesR22Cepheids.js';
 
 /** Where each pack's rows are: sidecar files, not modules. */
 export const VARIABLES_SIDECARS = Object.freeze({
@@ -97,18 +103,14 @@ export async function loadClassSample(fetchImpl = globalThis.fetch) {
 /** Everything, from the sidecars. Resolves to {suDra, etaAql, cepheids, sample}. */
 export async function loadVariablesData(fetchImpl = globalThis.fetch) {
   const [a, b, c, sample] = await Promise.all([
+    packOf(() => Promise.resolve(SU_DRA), VARIABLES_SIDECARS.suDra, fetchImpl),
     packOf(
-      () => import('./data/observations/tessSuDraS15.js'),
-      VARIABLES_SIDECARS.suDra,
-      fetchImpl
-    ),
-    packOf(
-      () => import('./data/observations/tessEtaAqlS81.js'),
+      () => Promise.resolve(ETA_AQL),
       VARIABLES_SIDECARS.etaAql,
       fetchImpl
     ),
     packOf(
-      () => import('./data/observations/shoesR22Cepheids.js'),
+      () => Promise.resolve(CEPHEIDS),
       VARIABLES_SIDECARS.cepheids,
       fetchImpl
     ),
