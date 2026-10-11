@@ -85,7 +85,7 @@ export default {
     {
       title: 'Lo que has deducido',
       body: `Deslizar la relación de las cefeidas de la Nube de Magallanes sobre las de NGC 4258 da un módulo de distancia de 29,40 ± 0,05, 7,59 ± 0,18 megapársecs, y la distancia geométrica por máseres concuerda con una décima del error combinado. M101 sale a 6,95 ± 0,17 megapársecs. El error es la dispersión propia de la galaxia y la distancia de la Nube; el resto no importa.
-             \n\nEs el primer peldaño de la escalera de distancias: las cefeidas llegan a galaxias a decenas de millones de años luz, y las supernovas, calibradas con ellas, llegan mucho más lejos. Sin corregir aquí: el efecto del contenido de metales en las cefeidas, el apiñamiento en las imágenes y la covarianza en los errores de la tabla, que la dispersión alrededor de la relación sustituye. El enlace de esta escalera con la constante de Hubble no se hace aquí; necesita un catálogo de galaxias anfitrionas de supernovas que esta investigación no lleva.`,
+             \n\nEs el primer peldaño de la escalera de distancias: las cefeidas llegan a galaxias a decenas de millones de años luz, y las supernovas, calibradas con ellas, llegan mucho más lejos. Sin corregir aquí: el efecto del contenido de metales en las cefeidas, el apiñamiento en las imágenes y la covarianza en los errores de la tabla, que la dispersión alrededor de la relación sustituye. El enlace de esta escalera con la constante de Hubble se hace en <em>Candelas estándar</em>: el error de un peldaño es el error que transmite, y el paso avanzado de aquí lo cuenta. Las galaxias anfitrionas de supernovas que llevarían la escalera hasta la constante de Hubble no están en esta investigación.`,
     },
   ],
 };

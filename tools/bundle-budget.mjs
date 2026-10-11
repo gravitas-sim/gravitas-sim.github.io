@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1872,
+    limit: 1927.4,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -593,7 +593,8 @@ const BUDGETS = [
       'its lazy pack loaders and the forward model (Prompt 91, part 1), ' +
       'measured at 1,916,873 bytes (1871.95 KB; 5093.6 KB raw) after merging ' +
       "v2 3d655eb. Under the owner's standing size-budget approval (CLAUDE.md, " +
-      '2026-10-10); D-BUDGET-19. The packs themselves are sidecar files.',
+      '2026-10-10); D-BUDGET-19. The packs themselves are sidecar files.' +
+      '\n\nRaised from 1872 to 1927.4 KB gzipped for Prompt 91 part 2 (D-BUDGET-20, the standing size-budget approval): the cosmology instrument family (js/cosmologyWidgets.js and its words), four investigations with their Spanish and depth files and the First Rung step, which the composer, course-packs, course-builder, kit and submission bundles each carry. Measured 1,973,616 bytes gzipped (1927.36 KB, 5233.9 KB raw) after merging v2 b888735, an overrun of 55.36 KB. The four data packs are fetched sidecar files (cosmology/*.json) and are in no bundle.',
   },
 ];
 

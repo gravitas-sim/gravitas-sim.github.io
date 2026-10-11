@@ -737,6 +737,37 @@ export default {
       'the-shape':
         'With the shape: 99.2 percent (within 0.6), eclipsing binaries 100 (within 0.6).',
     },
+    'the-expanding-universe': {
+      'hubbles-slope':
+        'Hubble’s 24 nebulae: slope 423.9 (within 3) and error 42 (within 2.5).',
+      'a-modern-sample':
+        'Supernovae to z = 0.1: 197 objects and slope 66.33 (within 0.3).',
+      'further-out':
+        'Supernovae to z = 0.5: 955 objects and slope 59.35 (within 0.3).',
+    },
+    'standard-candles': {
+      'the-sample': '1,829 supernovae and chi-square 1688 (within 2).',
+      'a-calibration-error':
+        '0.10 mag: implied H0 66.85 (within 0.15) and 4.5 percent per 0.1 mag (within 0.1).',
+    },
+    'the-shape-of-expansion': {
+      'a-matter-only-universe':
+        'Ωm = 1: chi-square 3303 (within 4) and 1615 above the best fit (within 4).',
+      'the-best-fit':
+        'Ωm 0.361 (within 0.003), interval 0.349 to 0.372 (each within 0.003).',
+      'the-usual-value': 'Ωm = 0.30: 30.9 above the best fit (within 0.4).',
+      'the-degeneracy-check':
+        'Ωm 0.36, 0.15 mag: chi-square 1687.9 (within 2) and implied H0 65.33 (within 0.2).',
+    },
+    'where-galaxies-live': {
+      'the-near-sample':
+        'z ≤ 0.04: 363 galaxies and a farthest of 169.8 Mpc (within 1.5).',
+      'the-whole-strip':
+        'z ≤ 0.12: 2911 galaxies and a farthest of 499.7 Mpc (within 2).',
+      'the-clumping': 'Variance over mean 9.79 (within 0.2).',
+      'the-thinning':
+        'Near shell 15,800 (within 120) and far shell 4,860 (within 40) per million cubic Mpc.',
+    },
     'bending-light': {
       'the-suns-limb':
         'Mass 1, closest approach 1: 1.75 arcseconds (within 0.02); the Newtonian row reads 0.88.',

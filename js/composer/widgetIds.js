@@ -84,6 +84,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   variables: ['variable-fold', 'leavitt-law', 'variable-class'],
   lensing: ['light-bending', 'lens-plane', 'lens-passing'],
   survey: ['survey-counts', 'malmquist', 'completeness-lf'],
+  cosmology: ['hubble-law', 'hubble-diagram', 'redshift-wedge'],
   sky: [
     'sky-turning',
     'sky-seasons',

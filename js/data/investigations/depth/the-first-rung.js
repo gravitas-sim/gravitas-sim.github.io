@@ -120,5 +120,34 @@ export default {
       },
       tool: LEAVITT({ host: 1 }),
     },
+    {
+      sid: 'from-the-rung-to-the-hubble-constant',
+      after: 'the-error-in-percent',
+      depth: 'advanced',
+      type: 'question',
+      kind: 'numeric',
+      title: 'From the rung to the Hubble constant',
+      body: `A Hubble constant is a speed over a distance, so a distance
+             scale that is wrong by a fraction is wrong by the same fraction in
+             the constant. Suppose supernovae calibrated on NGC 4258 give
+             H<sub>0</sub> = 70 km/s/Mpc, and the only error is this rung’s
+             0.051 magnitudes, which is 2.35 percent in distance (the previous
+             step). <em>Standard Candles</em> shows the same arithmetic on the
+             supernovae.`,
+      prompt: 'The error this rung passes on to H₀, in km/s/Mpc',
+      unit: 'km/s/Mpc',
+      answer: 1.64,
+      tolerance: 0.05,
+      hints: ['70 × 0.4605 × 0.051.'],
+      worked:
+        '70 × 0.0235 = 1.64 km/s/Mpc: a Hubble constant of 70 ± 1.6 from this one rung, before any supernova error. Averaging many galaxies would not reduce it far, because the Cloud’s distance in it is shared by every galaxy (the previous steps).',
+      feedback: {
+        close: 'Close. Multiply 70 by the fractional error in distance.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: two percent of a number near seventy is a little over one.',
+        off: '70 × (0.4605 × 0.051).',
+      },
+      tool: LEAVITT({ host: 1 }),
+    },
   ],
 };

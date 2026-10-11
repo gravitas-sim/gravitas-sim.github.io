@@ -662,6 +662,58 @@
         "add-the-amplitude"
       ],
       "evidenceFrom": "model"
+    },
+    "the-expanding-universe": {
+      "centralExperimentId": "ce.the-expanding-universe",
+      "object": "panel:hubble-law",
+      "control": "hubble-law/zmax",
+      "quantity": "the slope through the origin of velocity against distance for the supernovae, out to z = 0.1 against out to z = 0.5",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-further-out",
+        "a-modern-sample"
+      ],
+      "evidenceFrom": "model"
+    },
+    "standard-candles": {
+      "centralExperimentId": "ce.standard-candles",
+      "object": "panel:hubble-diagram",
+      "control": "hubble-diagram/calib",
+      "quantity": "the Hubble constant implied by an error in the supernovae’s absolute magnitude",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-a-calibration-error",
+        "a-calibration-error"
+      ],
+      "evidenceFrom": "model"
+    },
+    "the-shape-of-expansion": {
+      "centralExperimentId": "ce.the-shape-of-expansion",
+      "object": "panel:hubble-diagram",
+      "control": "hubble-diagram/om",
+      "quantity": "the chi-square of the flat Lambda-CDM curve above the best fit, for a matter density you set",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-matter-only",
+        "a-matter-only-universe"
+      ],
+      "evidenceFrom": "model"
+    },
+    "where-galaxies-live": {
+      "centralExperimentId": "ce.where-galaxies-live",
+      "object": "panel:redshift-wedge",
+      "control": "redshift-wedge/zmax",
+      "quantity": "the variance over mean of the galaxy counts in cells, and the galaxies shown, for the range you set",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-clumping",
+        "the-clumping"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }

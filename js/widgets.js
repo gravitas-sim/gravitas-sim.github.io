@@ -297,6 +297,15 @@ export const LAZY_FAMILIES = Object.freeze({
     'SURVEY_WIDGETS',
     ['survey-counts', 'malmquist', 'completeness-lf']
   ),
+  // The supernova, Hubble and SDSS tables are sidecar files;
+  // whenWidgetsReady() waits for cosmologyReady.
+  cosmology: familyEntry(
+    () => import('./cosmologyWidgets.js'),
+    './cosmologyWidgets.js',
+    'COSMOLOGY_WIDGETS',
+    ['hubble-law', 'hubble-diagram', 'redshift-wedge'],
+    'cosmologyReady'
+  ),
   // Its stars arrive behind a second import (the Sky Lab's sidecar).
   sky: familyEntry(
     () => import('./skyWidgets.js'),

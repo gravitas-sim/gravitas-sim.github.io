@@ -193,8 +193,9 @@ describe('the instructor expectations record', () => {
       }
     }
     // 316 after the three stellar-interior investigations (Prompt 95): 16 more.
-    // 333 after the four variable-star investigations (Prompt 96): 17 more.
-    expect(total).toBe(333);
+    // 333 after the four variable-star investigations (Prompt 96): 17 more;
+    // 346 after the four cosmology investigations (Prompt 91): 13 more.
+    expect(total).toBe(346);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

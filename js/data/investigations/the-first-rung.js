@@ -298,8 +298,10 @@ const THE_FIRST_RUNG = {
              effect of metal content on the Cepheids, crowding in the images,
              and the covariance in the table’s errors, which the scatter about
              the relation stands in for. The link from this ladder to the
-             Hubble constant is not made here; it needs a catalog of supernova
-             hosts that this investigation does not carry.`,
+             Hubble constant is made in <em>Standard Candles</em>: the error
+             of a rung is the error it passes on, and the advanced step here
+             counts it. The supernova hosts that would carry the ladder to the
+             Hubble constant are not in this investigation.`,
       tool: LEAVITT({ host: 1 }),
     },
   ],

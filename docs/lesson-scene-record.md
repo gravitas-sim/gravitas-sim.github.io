@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 48 investigations and 921 steps: 871 steps
+Across 52 investigations and 955 steps: 905 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 482 show a prescribed model result, 146 draw
-on a stored dataset, 361 put a self-contained panel beside the text,
-199 keep something, and 30 are prose.
-Of 115 prediction loops, 115 are returned to,
-115 produce a measurement before they are answered, and
+running integration, 516 show a prescribed model result, 146 draw
+on a stored dataset, 395 put a self-contained panel beside the text,
+212 keep something, and 30 are prose.
+Of 122 prediction loops, 122 are returned to,
+122 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-115 hold their marking until the experiment settles them.
+122 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -552,6 +552,62 @@ Of 115 prediction loops, 115 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:wd-mass-radius`, control wd-mass-radius/logRho, measures the radius of a white dwarf in kilometers, as its central density changes, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Expanding Universe (`the-expanding-universe`)
+
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** near, far.
+- **Instruments:** hubble-law.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-slope → hubbles-slope, does-it-need-the-origin, a-modern-sample → hubbles-slope; predict-further-out → further-out, why-it-changes, what-you-worked-out → further-out.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:hubble-law`, control hubble-law/zmax, measures the slope through the origin of velocity against distance for the supernovae, out to z = 0.1 against out to z = 0.5, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Standard Candles (`standard-candles`)
+
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** cepheid, supernova.
+- **Instruments:** hubble-diagram.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-a-calibration-error → a-calibration-error, the-degeneracy, the-rung-below, what-you-worked-out → a-calibration-error.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:hubble-diagram`, control hubble-diagram/calib, measures the Hubble constant implied by an error in the supernovae’s absolute magnitude, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## The Shape of Expansion (`the-shape-of-expansion`)
+
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** near, far.
+- **Instruments:** hubble-diagram.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-matter-only → a-matter-only-universe, the-best-fit, the-usual-value, what-the-interval-leaves-out → a-matter-only-universe; predict-the-degeneracy → the-degeneracy-check, what-you-worked-out → the-degeneracy-check.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:hubble-diagram`, control hubble-diagram/om, measures the chi-square of the flat Lambda-CDM curve above the best fit, for a matter density you set, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Where Galaxies Live (`where-galaxies-live`)
+
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** bright, faint.
+- **Instruments:** redshift-wedge.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-clumping → the-clumping → the-clumping; predict-the-thinning → the-thinning, why-it-thins, what-you-worked-out → the-thinning.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:redshift-wedge`, control redshift-wedge/zmax, measures the variance over mean of the galaxy counts in cells, and the galaxies shown, for the range you set, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Beat of a Star (`the-beat-of-a-star`)
 

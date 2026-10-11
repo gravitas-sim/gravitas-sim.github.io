@@ -36,6 +36,10 @@ import CLUSTER_MEMBERSHIP from './data/investigations/es/cluster-membership.js';
 import INSIDE_A_STAR from './data/investigations/es/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE from './data/investigations/es/scaling-the-main-sequence.js';
 import THE_LIMIT from './data/investigations/es/the-limit.js';
+import THE_EXPANDING_UNIVERSE from './data/investigations/es/the-expanding-universe.js';
+import STANDARD_CANDLES from './data/investigations/es/standard-candles.js';
+import THE_SHAPE_OF_EXPANSION from './data/investigations/es/the-shape-of-expansion.js';
+import WHERE_GALAXIES_LIVE from './data/investigations/es/where-galaxies-live.js';
 import THE_BEAT_OF_A_STAR from './data/investigations/es/the-beat-of-a-star.js';
 import LEAVITTS_LAW from './data/investigations/es/leavitts-law.js';
 import THE_FIRST_RUNG from './data/investigations/es/the-first-rung.js';
@@ -77,6 +81,10 @@ import CLUSTER_MEMBERSHIP_DEEPER from './data/investigations/depth/es/cluster-me
 import INSIDE_A_STAR_DEEPER from './data/investigations/depth/es/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE_DEEPER from './data/investigations/depth/es/scaling-the-main-sequence.js';
 import THE_LIMIT_DEEPER from './data/investigations/depth/es/the-limit.js';
+import THE_EXPANDING_UNIVERSE_DEEPER from './data/investigations/depth/es/the-expanding-universe.js';
+import STANDARD_CANDLES_DEEPER from './data/investigations/depth/es/standard-candles.js';
+import THE_SHAPE_OF_EXPANSION_DEEPER from './data/investigations/depth/es/the-shape-of-expansion.js';
+import WHERE_GALAXIES_LIVE_DEEPER from './data/investigations/depth/es/where-galaxies-live.js';
 import THE_BEAT_OF_A_STAR_DEEPER from './data/investigations/depth/es/the-beat-of-a-star.js';
 import LEAVITTS_LAW_DEEPER from './data/investigations/depth/es/leavitts-law.js';
 import THE_FIRST_RUNG_DEEPER from './data/investigations/depth/es/the-first-rung.js';
@@ -115,6 +123,10 @@ export const SHADOWS = Object.freeze({
   'inside-a-star': INSIDE_A_STAR,
   'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE,
   'the-limit': THE_LIMIT,
+  'the-expanding-universe': THE_EXPANDING_UNIVERSE,
+  'standard-candles': STANDARD_CANDLES,
+  'the-shape-of-expansion': THE_SHAPE_OF_EXPANSION,
+  'where-galaxies-live': WHERE_GALAXIES_LIVE,
   'the-beat-of-a-star': THE_BEAT_OF_A_STAR,
   'leavitts-law': LEAVITTS_LAW,
   'the-first-rung': THE_FIRST_RUNG,
@@ -163,6 +175,10 @@ export const DEEPER_SHADOWS = Object.freeze({
   'inside-a-star': INSIDE_A_STAR_DEEPER,
   'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE_DEEPER,
   'the-limit': THE_LIMIT_DEEPER,
+  'the-expanding-universe': THE_EXPANDING_UNIVERSE_DEEPER,
+  'standard-candles': STANDARD_CANDLES_DEEPER,
+  'the-shape-of-expansion': THE_SHAPE_OF_EXPANSION_DEEPER,
+  'where-galaxies-live': WHERE_GALAXIES_LIVE_DEEPER,
   'the-beat-of-a-star': THE_BEAT_OF_A_STAR_DEEPER,
   'leavitts-law': LEAVITTS_LAW_DEEPER,
   'the-first-rung': THE_FIRST_RUNG_DEEPER,

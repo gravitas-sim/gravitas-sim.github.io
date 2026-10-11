@@ -19,6 +19,10 @@ import CLUSTER_MEMBERSHIP_DEEPER from '../data/investigations/depth/cluster-memb
 import INSIDE_A_STAR_DEEPER from '../data/investigations/depth/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE_DEEPER from '../data/investigations/depth/scaling-the-main-sequence.js';
 import THE_LIMIT_DEEPER from '../data/investigations/depth/the-limit.js';
+import THE_EXPANDING_UNIVERSE_DEEPER from '../data/investigations/depth/the-expanding-universe.js';
+import STANDARD_CANDLES_DEEPER from '../data/investigations/depth/standard-candles.js';
+import THE_SHAPE_OF_EXPANSION_DEEPER from '../data/investigations/depth/the-shape-of-expansion.js';
+import WHERE_GALAXIES_LIVE_DEEPER from '../data/investigations/depth/where-galaxies-live.js';
 import THE_BEAT_OF_A_STAR_DEEPER from '../data/investigations/depth/the-beat-of-a-star.js';
 import LEAVITTS_LAW_DEEPER from '../data/investigations/depth/leavitts-law.js';
 import THE_FIRST_RUNG_DEEPER from '../data/investigations/depth/the-first-rung.js';
@@ -56,6 +60,10 @@ export const DEEPER = Object.freeze({
   [INSIDE_A_STAR_DEEPER.id]: INSIDE_A_STAR_DEEPER.steps,
   [SCALING_THE_MAIN_SEQUENCE_DEEPER.id]: SCALING_THE_MAIN_SEQUENCE_DEEPER.steps,
   [THE_LIMIT_DEEPER.id]: THE_LIMIT_DEEPER.steps,
+  [THE_EXPANDING_UNIVERSE_DEEPER.id]: THE_EXPANDING_UNIVERSE_DEEPER.steps,
+  [STANDARD_CANDLES_DEEPER.id]: STANDARD_CANDLES_DEEPER.steps,
+  [THE_SHAPE_OF_EXPANSION_DEEPER.id]: THE_SHAPE_OF_EXPANSION_DEEPER.steps,
+  [WHERE_GALAXIES_LIVE_DEEPER.id]: WHERE_GALAXIES_LIVE_DEEPER.steps,
   [THE_BEAT_OF_A_STAR_DEEPER.id]: THE_BEAT_OF_A_STAR_DEEPER.steps,
   [LEAVITTS_LAW_DEEPER.id]: LEAVITTS_LAW_DEEPER.steps,
   [THE_FIRST_RUNG_DEEPER.id]: THE_FIRST_RUNG_DEEPER.steps,

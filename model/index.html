@@ -3003,9 +3003,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->48<!--/fact-->
+        <!--fact:investigations-->52<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->48<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->52<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3168,6 +3168,22 @@ try {
             <tr>
               <td>The Limit</td>
               <td>js/kernels/stellar/whiteDwarf.js: P(x) and ρ(x) of the degenerate gas, integrated in q = x² (regular at the surface) by RK4; the limit is also the closed form from the n = 3 polytrope. See STELLAR_STRUCTURE.md.</td>
+            </tr>
+            <tr>
+              <td>The Expanding Universe</td>
+              <td>js/kernels/cosmology/fit.js: fitHubbleLaw (weighted least squares through the origin, or with an intercept). Datasets hubble-1929-table1 and des-sn5yr-hd (COSMOLOGY.md). The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.</td>
+            </tr>
+            <tr>
+              <td>Standard Candles</td>
+              <td>js/kernels/cosmology/fit.js: the flat Lambda-CDM supernova model, the free offset and h0Degeneracy; js/kernels/cosmology/flrw.js for the moduli. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.</td>
+            </tr>
+            <tr>
+              <td>The Shape of Expansion</td>
+              <td>js/kernels/cosmology/fit.js: fitSupernovae (flat Lambda-CDM, profile interval) and h0Degeneracy; js/kernels/cosmology/flrw.js (Mattig for the open comparison). The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.</td>
+            </tr>
+            <tr>
+              <td>Where Galaxies Live</td>
+              <td>js/kernels/cosmology/flrw.js: comovingDistance and wedgePoint; the strip is dataset sdss-dr18-redshift-slice. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.</td>
             </tr>
             <tr>
               <td>The Beat of a Star</td>

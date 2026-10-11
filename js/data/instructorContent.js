@@ -5575,7 +5575,7 @@ export const INSTRUCTOR_CONTENT = {
       'The distance to NGC 4258 and M101 from Cepheids, an independent maser check, and a four-term error budget',
     difficulty: 'Introductory (data-driven)',
     placement:
-      'After Leavitt’s Law. It supports OpenStax Astronomy 2e chapter 19. The link to the Hubble constant is not made (Prompt 91 has not landed).',
+      'After Leavitt’s Law. It supports OpenStax Astronomy 2e chapter 19. The link to the Hubble constant is made in Standard Candles and in this investigation’s last advanced step.',
     overview:
       'The Cloud’s relation is slid onto Cepheids of NGC 4258 (μ 29.40 ± 0.05, 7.59 ± 0.18 Mpc, 111 stars) and M101 (29.21 ± 0.05, 6.95 ± 0.17 Mpc, 65 stars). Water masers give 29.397 ± 0.032 for NGC 4258, agreeing to 0.1 of the combined error. The budget: host scatter 0.043, Cloud distance 0.026, calibration scatter 0.0048, slope 0.00015. The depths compute the distance from the modulus, add the budget in quadrature (0.0505), find 2.35 percent, and show ten galaxies reach only 0.030 because the anchor is shared.',
     priorKnowledge: [
@@ -5637,7 +5637,7 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'The maser check is not a proof: the two distances agree to 0.1 of their combined error, which one galaxy cannot make a test of the whole ladder.',
       'Hosts are thinned to every fourth star in the shipped table; the host scatter stands in for the unpublished covariance.',
-      'The Hubble constant is not derived: Prompt 91’s data are absent (TIME_DOMAIN_LADDER.md).',
+      'The Hubble constant is not derived here; the last advanced step only passes the rung’s 2.35 percent to H0 = 70, and Standard Candles shows the supernova side (COSMOLOGY.md).',
       'Error-budget coverage over simulated hosts holds one sigma for 60 to 78 percent of the truths, so the budget is slightly optimistic.',
     ],
     discussion: [
@@ -5732,6 +5732,327 @@ export const INSTRUCTOR_CONTENT = {
     ],
     modelNotes:
       'js/kernels/variables/classify.js: five classes through the periodic forward model, measured by the same pipeline, kNN leave one out. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
+  },
+  'the-expanding-universe': {
+    topic:
+      'Hubble’s law as a straight line through the origin, fitted to Hubble’s own 24 nebulae and to Dark Energy Survey supernovae, and why the slope depends on the sample',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'In the galaxies or cosmology unit, after the distance ladder if you have one. It supports OpenStax Astronomy 2e chapter 26 and leads into Standard Candles and Where Galaxies Live.',
+    overview:
+      'Students fit a line through the origin to Hubble’s 24 nebulae of 1929 (424 ± 42 km/s/Mpc, six times today’s value; with a free intercept 454 ± 75) and to the DES supernovae: 66.33 ± 0.24 out to z = 0.1 (197 objects), 59.35 ± 0.20 out to z = 0.5 (955). They see that the slope falls by 22 combined errors as the sample reaches farther, because a straight line is the wrong shape beyond small redshift. The depths compute the Hubble time (2.31 Gyr for 424), a velocity from a distance, the slope’s 0.37 percent error and the 22.3-sigma gap.',
+    priorKnowledge: [
+      'Redshift and the Doppler shift',
+      'Slope of a line',
+      'Megaparsecs and kilometers per second',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A slope is a speed over a distance',
+        body: 'Distances that are too small make a slope that is too large: Hubble’s was six times today’s value.',
+      },
+      {
+        heading: 'The line is only the nearby limit',
+        body: 'Beyond a redshift of a few hundredths, velocity against distance bends, so the slope depends on how far the sample reaches.',
+      },
+      {
+        heading: 'The supernova scale is not measured here',
+        body: 'The distances come on the survey’s own scale (H0 = 70), so the modern slope shows the effect of the sample, not the scale.',
+      },
+    ],
+    features: [
+      {
+        name: 'The slope and its error',
+        text: 'The slope through the origin, its error from the scatter of the points, and the slope with a free intercept for Hubble’s table; the number of objects and the ratio to 70 are listed.',
+      },
+      {
+        name: 'Hubble-law instrument (cosmology family)',
+        text: 'Two samples (the 24 nebulae, the DES supernovae out to a redshift you set), a scatter plot with the fitted line, a data-source label and the readout rows.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the Hubble time 977.8 ÷ H0 and v = H0 d. Advanced: the relative error (0.37 percent) and the 22.3 standard deviations between the two slopes.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Hubble discovered the expansion at about 70 km/s/Mpc.',
+        response:
+          'His line was good and his scale was not: his slope is about 424.',
+      },
+      {
+        claim: 'A slope that changes with the sample means bad data.',
+        response:
+          'The change is 22 times the error and systematic: the relation is not a line at large redshift.',
+      },
+      {
+        claim: 'Recession velocities are the speeds of galaxies through space.',
+        response:
+          'They are the stretching of space; the line is the linear limit of that.',
+      },
+      {
+        claim: 'The Hubble constant is measured by these supernovae.',
+        response:
+          'Their distances come on the release’s scale; the scale comes from the distance ladder.',
+      },
+    ],
+    teachingNotes: [
+      'The supernova distances come from the DES-SN5YR Hubble diagram’s distance moduli, on the release scale H0 = 70; the supernova fit therefore cannot measure the scale (COSMOLOGY.md).',
+      'The instrument converts cz to a velocity without relativistic corrections, which is a stated simplification; the bend of the relation is the point of the last steps.',
+      'Hubble printed no errors; the instrument gives each nebula the same error (100 km/s, the scatter of the points) and the slope’s error comes from the scatter about the line.',
+      'Peculiar velocities are not removed; DES has few supernovae below z of 0.03, where they matter most.',
+    ],
+    discussion: [
+      'Why would distances that are too small make the universe look too young?',
+      'What would you need to measure to know the true scale of the supernova distances?',
+      'Where would you expect the line to bend, and which way?',
+    ],
+    extensions: [
+      'Continue with Standard Candles, which shows how a calibration error becomes an error in the Hubble constant.',
+      'Set the supernova range to a few values between 0.05 and 0.5 and plot the slope against the range.',
+    ],
+    modelNotes:
+      'js/kernels/cosmology/fit.js: fitHubbleLaw (weighted least squares through the origin, or with an intercept). Datasets hubble-1929-table1 and des-sn5yr-hd (COSMOLOGY.md). The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
+  },
+  'standard-candles': {
+    topic:
+      'Type Ia supernovae as standard candles, the degeneracy of the Hubble constant with their absolute magnitude, and how a calibration error is passed up the distance ladder',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'After The Expanding Universe, and after The First Rung if you teach the variable-star investigations. It supports OpenStax Astronomy 2e chapter 26.',
+    overview:
+      'Students read the 1,829 DES supernovae against redshift (chi-square 1688 for 1827 degrees of freedom at the best fit), then set a 0.1 mag error in the absolute magnitude: the implied H0 falls from 70 to 66.85, 4.5 percent, and the chi-square does not move. The supernovae fix the shape of the curve and not the scale. A 0.051 mag Cepheid distance error passes on 2.4 percent. The depths compute the 4.71 percent distance factor and the 4.5 percent fall, the 0.0216 mag a 1 percent H0 needs, and the 0.106 mag of a 5 percent gap.',
+    priorKnowledge: [
+      'The Expanding Universe',
+      'The distance modulus',
+      'Logarithms',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A candle gives distance only through its calibration',
+        body: 'Brightness and true luminosity give a distance; an error in the luminosity is the same fractional error in every distance.',
+      },
+      {
+        heading: 'The scale is degenerate with the calibration',
+        body: 'A change of H0 and a change of the absolute magnitude shift every modulus alike, and a fit with a free offset cannot tell them apart.',
+      },
+      {
+        heading: 'Errors are passed up the ladder',
+        body: 'Each rung of the distance ladder inherits the error of the rung below it and adds its own, so the top rung carries them all.',
+      },
+    ],
+    features: [
+      {
+        name: 'The calibration control',
+        text: 'The error in the absolute magnitude moves the implied Hubble constant (70 × 10^(−error/5)) and the percent change per 0.1 mag, and leaves the chi-square where it was.',
+      },
+      {
+        name: 'Hubble-diagram instrument (cosmology family)',
+        text: 'Moduli against redshift for 1,829 supernovae with a flat Lambda-CDM curve and its offset, the best fit, chi-square, the profile interval and the degeneracy range.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the distance factor and the Hubble-constant fall of 0.1 mag. Advanced: the calibration a 1 percent constant needs and a 5 percent gap in magnitudes.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A good chi-square means a good Hubble constant.',
+        response:
+          'The chi-square is the same for any H0: the fit is blind to the scale.',
+      },
+      {
+        claim: 'A fainter candle makes H0 larger.',
+        response:
+          'A fainter candle is farther, so every distance is larger and H0 is smaller.',
+      },
+      {
+        claim: '0.05 mag is negligible.',
+        response: 'It is 2.4 percent in distance, and every rung adds its own.',
+      },
+      {
+        claim: 'Supernovae measure H0 by themselves.',
+        response:
+          'They need the rungs below them, such as Cepheids, to fix the scale.',
+      },
+    ],
+    teachingNotes: [
+      'The “error in the absolute magnitude” stands for whatever the calibration of the lower rungs would change; the instrument does not recompute the ladder.',
+      'The First Rung’s 0.051 mag is quoted, not computed here, so this investigation does not need that one to be taken first.',
+      'The DES moduli carry the statistical errors only; the covariance of a real analysis (calibration, selection, host mass) is not in the table (COSMOLOGY.md).',
+      'The chi-square range over H0 50 to 90 is 2.5e-12 in the validation: the degeneracy is exact, not approximate.',
+    ],
+    discussion: [
+      'Where would you look for a calibration error that affects every supernova?',
+      'Why might a 5 percent disagreement between two methods be a calibration, not a physics, difference?',
+      'How would you check a calibration with a method that does not use supernovae?',
+    ],
+    extensions: [
+      'Continue with The Shape of Expansion.',
+      'If you teach the variable-star investigations, take The First Rung first and compare its 2.4 percent with the 4.5 percent a tenth of a magnitude gives.',
+    ],
+    modelNotes:
+      'js/kernels/cosmology/fit.js: the flat Lambda-CDM supernova model, the free offset and h0Degeneracy; js/kernels/cosmology/flrw.js for the moduli. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
+  },
+  'the-shape-of-expansion': {
+    topic:
+      'The matter density of a flat universe from 1,829 supernovae: the fit, its statistical interval, what the interval leaves out, and what the supernovae cannot determine',
+    difficulty: 'Advanced (data-driven)',
+    placement:
+      'After Standard Candles, near the end of a cosmology unit. It supports OpenStax Astronomy 2e chapter 29 and is the most demanding of the four.',
+    overview:
+      'Students see that a matter-only universe (Ωm = 1) fits 1,615 in chi-square worse than the best fit (3303 against 1688), fit Ωm = 0.361 (0.349 to 0.372) with the rest a cosmological constant, find that 0.30 is 30.9 above (5.6 sigma) and learn why the interval is too narrow (the published 0.352 ± 0.017 carries systematic errors), and see that moving the absolute magnitude by 0.15 mag changes H0 implied to 65.33 and leaves chi-square at 1687.9. The depths compute q0 = −0.459, the 63.9 percent dark-energy share, 5.56 sigma and the 1.48 ratio of intervals.',
+    priorKnowledge: [
+      'Standard Candles',
+      'Chi-square as a measure of fit',
+      'The idea of a model with a free parameter',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The curve is the history of the expansion',
+        body: 'Supernovae fainter than a decelerating universe predicts mean the expansion has sped up.',
+      },
+      {
+        heading: 'A statistical interval is a floor',
+        body: 'It shrinks as more supernovae are added; errors that every supernova shares do not shrink with the sample.',
+      },
+      {
+        heading: 'Shape, not scale',
+        body: 'The supernovae fix Ωm for a flat universe; H0 is degenerate with the calibration.',
+      },
+    ],
+    features: [
+      {
+        name: 'The two pictures',
+        text: 'Moduli against redshift, or the residual from an empty universe, with the curve for the Ωm you set and the offset that fits best.',
+      },
+      {
+        name: 'Hubble-diagram instrument (cosmology family)',
+        text: 'The best-fit Ωm and 68 percent interval from the profile, chi-square at the curve you chose and above the best fit, the H0 range, and the implied H0.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: q0 and the dark-energy share. Advanced: the sigma count of 0.30 and the published interval against this one.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: '0.30 is ruled out at 5.6 sigma.',
+        response:
+          'Only by statistical errors alone; the published analysis, with its systematics, is 0.352 ± 0.017.',
+      },
+      {
+        claim: 'The fit measures H0.',
+        response: 'The chi-square is flat in H0 once the offset is free.',
+      },
+      {
+        claim: 'A matter-only universe is the default.',
+        response:
+          'It is 1,615 worse in chi-square; the data prefer acceleration.',
+      },
+      {
+        claim: 'The supernovae prove dark energy is a cosmological constant.',
+        response: 'They fit one with w = −1; other forms are not tested here.',
+      },
+    ],
+    teachingNotes: [
+      'The fit assumes a flat universe, w = −1 and no radiation (COSMOLOGY.md); the best Ωm 0.3607 sits 0.009 from the published 0.352, inside the published error.',
+      'The residual picture subtracts an empty universe (Ωm = ΩΛ = 0), not the best fit, so the curve for the best fit bows rather than lying flat.',
+      'The validation covers 200 seeded synthetic diagrams, with coverage 67.5 percent for the 68 percent interval (cosmology:validate).',
+      'The 1,827 degrees of freedom follow from 1,829 supernovae less two fitted parameters; the offset is solved, not fitted by hand.',
+    ],
+    discussion: [
+      'What would a curved universe do to the fit?',
+      'Which errors would you add to make the interval honest?',
+      'Why can a fit be excellent and the constant still be unknown?',
+    ],
+    extensions: [
+      'Fit a different range of redshift in the Analysis Lab and compare the intervals.',
+      'Compare the published 0.352 ± 0.017 with the instrument’s 0.361 and say why the two intervals differ in width.',
+    ],
+    modelNotes:
+      'js/kernels/cosmology/fit.js: fitSupernovae (flat Lambda-CDM, profile interval) and h0Degeneracy; js/kernels/cosmology/flrw.js (Mattig for the open comparison). The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
+  },
+  'where-galaxies-live': {
+    topic:
+      'A redshift survey as a map: 2,911 SDSS galaxies in a wedge, the clustering of counts in cells, and the thinning of a flux-limited sample with distance',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'After The Expanding Universe, in the large-scale structure part of a galaxies unit. It supports OpenStax Astronomy 2e chapter 28 and previews the selection-effects investigations.',
+    overview:
+      'Students place 2,911 galaxies of an SDSS strip (120° by 0.5°, r < 17.77) in a wedge: 363 out to z = 0.04 (170 Mpc), all out to z = 0.12 (500 Mpc). The variance over the mean of counts in 5° cells is 9.79 against 1 for a random scatter. The density falls from 15,800 to 4,860 galaxies per million cubic Mpc between 100 and 300 Mpc, and they decide that is the survey’s flux limit, not a void. The depths compute the density ratio 3.26, a shell volume 5,807 Mpc³, the luminosity factor 9 and 2.39 mag.',
+    priorKnowledge: [
+      'The Expanding Universe',
+      'Magnitudes and the inverse-square law',
+      'Right ascension',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A redshift and a direction make a position',
+        body: 'The distance comes from the redshift through the expansion; the direction from right ascension.',
+      },
+      {
+        heading: 'Galaxies are clustered',
+        body: 'Counts in cells vary far more than chance, which would give a variance over mean of 1.',
+      },
+      {
+        heading: 'A flux limit thins a sample with distance',
+        body: 'Far away only the brightest galaxies make the cut, so a falling density is selection, not a void.',
+      },
+    ],
+    features: [
+      {
+        name: 'The wedge and the density picture',
+        text: 'The wedge from above with the observer at the bottom, or the density in shells of 25 Mpc against distance; the distances use the Ωm you set.',
+      },
+      {
+        name: 'Redshift-wedge instrument (cosmology family)',
+        text: 'Galaxies shown, the farthest distance, the variance over mean averaged over shells, and the near and far shell densities.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the density ratio and a shell volume. Advanced: the luminosity factor of a flux cut from 100 to 300 Mpc, and the same in magnitudes.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The galaxies are scattered evenly.',
+        response:
+          'They gather in clusters and walls with voids between; the variance over mean is about 10.',
+      },
+      {
+        claim: 'The thinning shows we live in a void.',
+        response:
+          'The flux limit of the survey explains it, with no new physics needed.',
+      },
+      {
+        claim: 'A redshift is a pure distance.',
+        response:
+          'Peculiar motions distort it along the line of sight, which stretches clusters in the wedge.',
+      },
+      {
+        claim: 'The wedge is a picture of the whole sky.',
+        response:
+          'It is a strip half a degree thick, so it is a slice and not a map of the whole sky.',
+      },
+    ],
+    teachingNotes: [
+      'The strip is the SDSS Legacy main sample at declination 0 to 0.5 degrees (dataset sdss-dr18-redshift-slice); it is flux limited at r < 17.77, so its density falls with distance by selection (COSMOLOGY.md).',
+      'The distances are comoving distances in a flat universe with H0 = 70 and the Ωm set by the control; changing Ωm from 0.1 to 0.5 moves the farthest galaxy by under 4 percent.',
+      'The variance over mean is averaged over shells of 25 Mpc from 100 Mpc, with 24 cells of 5° in right ascension; a shell with no galaxies does not count.',
+      'The correction for the flux limit is the subject of the selection-effects investigations; this investigation only shows the need.',
+    ],
+    discussion: [
+      'What would a map of a volume-limited sample look like?',
+      'Why does the wedge show walls and voids rather than a smooth fog?',
+      'How would a galaxy’s own motion change its place in the wedge?',
+    ],
+    extensions: [
+      'Continue with the selection-effects investigations, which correct a sample for its limit.',
+      'Change the matter density and watch the farthest galaxy and the shell densities move.',
+    ],
+    modelNotes:
+      'js/kernels/cosmology/flrw.js: comovingDistance and wedgePoint; the strip is dataset sdss-dr18-redshift-slice. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
   },
 };
 

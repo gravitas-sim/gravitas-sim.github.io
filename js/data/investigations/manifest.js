@@ -475,6 +475,58 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'the-expanding-universe',
+    title: 'The Expanding Universe',
+    subtitle:
+      'Hubble’s line of 1929, and what the same line says of 955 modern supernovae',
+    duration: '12-20 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/the-expanding-universe.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
+    id: 'standard-candles',
+    title: 'Standard Candles',
+    subtitle:
+      'From Cepheids to supernovae: how an error in one rung becomes an error in the Hubble constant',
+    duration: '12-20 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/standard-candles.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-shape-of-expansion',
+    title: 'The Shape of Expansion',
+    subtitle:
+      'Fitting the matter density to 1,829 supernovae, and what the fit can and cannot say',
+    duration: '25-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/the-shape-of-expansion.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
+    id: 'where-galaxies-live',
+    title: 'Where Galaxies Live',
+    subtitle:
+      'A wedge of the sky from the Sloan survey: the scale of structure, and a thinning that is not a void',
+    duration: '12-22 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/where-galaxies-live.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
     id: 'the-beat-of-a-star',
     title: 'The Beat of a Star',
     subtitle:

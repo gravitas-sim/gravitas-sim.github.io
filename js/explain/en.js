@@ -136,6 +136,12 @@ export default {
     'How far a mass bends light, how large a ring a mass makes, and what a light curve fixes (the crossing time) and what it leaves open (mass, distance and speed separately).',
     'One thin lens in the weak field, a point mass or a circular galaxy, a uniform star, no shear or second lens; the synthetic event is a model with noise, with a truth the real sky never gives.',
   ],
+  cosmology: [
+    "Hubble's 24 nebulae of 1929 and the 1,829 supernovae of the Dark Energy Survey, the line of velocity against distance, a distance-modulus diagram with a flat Lambda-CDM curve, or 2,911 SDSS galaxies drawn as a wedge of the sky.",
+    'How the Hubble constant, the matter density, its interval, the chi-square and the clustering and density in each shell change as the sample, the redshift limit, the curve or the calibration offset change.',
+    'What a straight line of velocity against distance can and cannot say, why distant supernovae are fainter than a coasting universe predicts, why H0 and the supernovae\u2019s absolute brightness cannot be separated, and what a flux-limited survey of galaxies shows.',
+    'The supernova distances are on the release scale (H0 = 70), the statistical errors only, the model is flat Lambda-CDM with w = -1 and no radiation, and the SDSS strip is flux limited, so its thinning with distance is selection and not structure.',
+  ],
   survey: [
     'Synthetic stars of known brightness at known distances: counted and missed stars, the bias by shells of distance, or the luminosity function against its truth.',
     'How the counted share, the bias and the recovered luminosity function change as the magnitude limit, the completeness curve or the parallax cut changes.',

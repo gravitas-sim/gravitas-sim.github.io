@@ -3,8 +3,7 @@
 **Status: complete except the cosmology link.** The kernel, three data
 packs and three instruments (#251), and the four investigations, their Spanish
 and depth text, instructor material and e2e (this slice, D-LADDER-02) are
-built and tested. The link to Prompt 91's Hubble-constant packs is absent
-because Prompt 91 has not landed.
+built and tested. The link to the Hubble constant is the advanced step of The First Rung and the Standard Candles investigation (COSMOLOGY.md).
 
 ## What is here
 
@@ -31,7 +30,7 @@ because Prompt 91 has not landed.
 
 ## Not modelled
 
-Pulsar timing (out of scope, as the prompt says); metallicity and crowding corrections to the Cepheid relation; blends, outbursts and second periods in the classification sample; Blazhko modulation. The link to Prompt 91's Hubble-constant packs is absent because Prompt 91 has not landed.
+Pulsar timing (out of scope, as the prompt says); metallicity and crowding corrections to the Cepheid relation; blends, outbursts and second periods in the classification sample; Blazhko modulation. The link to the Hubble constant is the advanced step of The First Rung and the Standard Candles investigation (COSMOLOGY.md).
 
 ## Rights
 

@@ -63,5 +63,19 @@ export default {
         off: 'raíz((0,043 ÷ √10)² + 0,0048² + 0,026²).',
       },
     },
+    {
+      title: 'Del peldaño a la constante de Hubble',
+      body: 'Una constante de Hubble es una velocidad sobre una distancia, así que una escala de distancias equivocada en una fracción lo está en la misma fracción en la constante. Supón que las supernovas calibradas con NGC 4258 dan H<sub>0</sub> = 70 km/s/Mpc, y que el único error es el de 0,051 magnitudes de este peldaño, un 2,35 por ciento en distancia (el paso anterior). <em>Candelas estándar</em> muestra la misma aritmética con las supernovas.',
+      prompt: 'El error que este peldaño transmite a H₀, en km/s/Mpc',
+      hints: ['70 × 0,4605 × 0,051.'],
+      worked:
+        '70 × 0,0235 = 1,64 km/s/Mpc: una constante de Hubble de 70 ± 1,6 por este solo peldaño, antes de cualquier error de supernovas. Promediar muchas galaxias no lo reduciría mucho, porque la distancia de la Nube que contiene la comparten todas las galaxias (los pasos anteriores).',
+      feedback: {
+        close: 'Casi. Multiplica 70 por el error fraccionario de la distancia.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: un dos por ciento de un número cercano a setenta es poco más de uno.',
+        off: '70 × (0,4605 × 0,051).',
+      },
+    },
   ],
 };
