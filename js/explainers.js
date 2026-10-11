@@ -110,6 +110,7 @@ export const FAMILY_IDS = Object.freeze({
   light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
   galactic: ['solar-motion', 'rotating-disk', 'cluster-members'],
   interiors: ['polytrope', 'wd-mass-radius', 'ms-scaling'],
+  lensing: ['light-bending', 'lens-plane', 'lens-passing'],
   survey: ['survey-counts', 'malmquist', 'completeness-lf'],
   sky: [
     'sky-turning',

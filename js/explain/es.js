@@ -121,6 +121,12 @@ export default {
     'Por qué el centro es caliente y denso, por qué una estrella degenerada tiene una masa límite y hasta dónde llega un argumento de escala antes de que se vea la forma de las estrellas reales.',
     'Un politropo es una forma, no una estrella: sin generación de energía, opacidad ni convección; la enana blanca es fría e ideal; la secuencia principal es un modelo MIST, no una medición.',
   ],
+  lensing: [
+    'La desviación frente al máximo acercamiento (escalas logarítmicas); el plano de la lente en radios de Einstein con la fuente y sus imágenes; o el flujo frente al tiempo cuando pasa una lente.',
+    'Cómo cambian la desviación, el anillo, las imágenes y la curva de luz al cambiar la masa, la distancia, la velocidad, el desplazamiento y la mezcla.',
+    'Cuánto desvía la luz una masa, qué tamaño de anillo hace, y qué fija una curva de luz (el tiempo de cruce) y qué deja abierto (la masa, la distancia y la velocidad por separado).',
+    'Una lente delgada en campo débil, una masa puntual o una galaxia circular, una estrella uniforme, sin cizalla ni segunda lente; el suceso sintético es un modelo con ruido, con una verdad que el cielo real nunca da.',
+  ],
   survey: [
     'Estrellas sintéticas de brillo conocido a distancias conocidas: estrellas contadas y perdidas, el sesgo por capas de distancia, o la función de luminosidad frente a su verdad.',
     'Cómo cambian la parte contada, el sesgo y la función de luminosidad recuperada al cambiar el límite de magnitud, la curva de completitud o el corte de paralaje.',

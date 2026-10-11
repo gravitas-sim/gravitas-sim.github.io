@@ -8,9 +8,17 @@
     "es"
   ],
   "lessons": {
+    "a-lens-passing-by": {
+      "en": "A Lens Passing By",
+      "es": "Una lente que pasa"
+    },
     "a-universe-of-stars": {
       "en": "A Universe of Stars",
       "es": "Un universo de estrellas"
+    },
+    "bending-light": {
+      "en": "Bending Light",
+      "es": "La luz que se curva"
     },
     "binary-star-planets": {
       "en": "Planets in Binary Stars",
@@ -39,6 +47,10 @@
     "detect-this-planet": {
       "en": "Can You Detect This Planet?",
       "es": "¿Puedes detectar este planeta?"
+    },
+    "einstein-rings-and-arcs": {
+      "en": "Einstein Rings and Arcs",
+      "es": "Anillos y arcos de Einstein"
     },
     "goldilocks-question": {
       "en": "The Goldilocks Question",

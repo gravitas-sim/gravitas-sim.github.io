@@ -86,6 +86,12 @@ export const SUMMARIES_ES = {
     'Si las estrellas fueran copias a escala unas de otras, unas pocas leyes físicas fijarían cómo cambian la luminosidad, el radio y la vida con la masa. Leerás los exponentes que predice un argumento de escala y ajustarás los mismos exponentes a los modelos MIST de edad cero, hallarás que las estrellas masivas siguen la luminosidad como masa al cubo con un cinco por ciento de error mientras las de poca masa no, usarás los residuos para ver dónde fallan los supuestos y compararás un reloj nuclear del Sol con el del modelo.',
   'the-limit':
     'Una enana blanca se sostiene por electrones apretados hasta no poder más, y una más pesada es más pequeña. Medirás la masa y el radio de enanas blancas modelo a partir de su densidad central, verás la masa subir hacia un techo que no pasa, hallarás por qué los electrones relativistas hacen inevitable ese techo en 1,46 masas solares para carbono y oxígeno, y verás cómo cambia el límite con la composición.',
+  'bending-light':
+    'La masa curva la luz, y un rayo que roza el Sol se desvía 1,75 segundos de arco, el doble de lo que da la gravedad de Newton. Medirás la desviación según la masa y la distancia de máximo acercamiento, verás qué decidieron las placas del eclipse de 1919 y hallarás el caso en que no se puede fiar de la fórmula.',
+  'einstein-rings-and-arcs':
+    'Cuando una fuente está detrás de una lente, la luz nos llega rodeándola como un anillo. Medirás el radio de Einstein de una estrella y de una galaxia, pesarás una galaxia por el tamaño de su anillo y hallarás las imágenes, los arcos y las amplificaciones cuando la fuente está a un lado, para una masa puntual y para una galaxia.',
+  'a-lens-passing-by':
+    'Cuando una lente pasa por delante de una estrella, esta se aviva y se apaga durante días o semanas. Leerás el máximo y la duración de un suceso de microlente, verás por qué una curva de luz no puede pesar la lente, qué hacen la luz mezclada y una estrella finita, y ajustarás un suceso sintético para ver qué puede y qué no puede recuperar el ajuste.',
   'who-gets-counted':
     'Un sondeo cuenta las estrellas que parecen brillantes, no las que son comunes. Contarás una población sintética con tres límites de magnitud, hallarás qué hay en la parte que se pierde y a qué distancia pueden estar una estrella como el Sol y una enana roja para ser contadas. Dirás por qué un catálogo de las estrellas más brillantes no es un censo.',
   'why-the-bright-ones-win':

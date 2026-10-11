@@ -192,8 +192,8 @@ describe('the instructor expectations record', () => {
         expect(text.length).toBeGreaterThan(20);
       }
     }
-    // 301 after the three stellar-interior investigations (Prompt 95): 16 more.
-    expect(total).toBe(301);
+    // 316 after the three stellar-interior investigations (Prompt 95): 16 more.
+    expect(total).toBe(316);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

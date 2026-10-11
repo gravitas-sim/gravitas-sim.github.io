@@ -126,6 +126,7 @@ try {
           <li><span class="gs-en"><a href="#stars">Stars: how hot, how bright, how big</a></span><span class="gs-es" lang="es"><a href="#stars">Estrellas: qué tan calientes, brillantes y grandes</a></span></li>
           <li><span class="gs-en"><a href="#interiors">Stellar interiors</a></span><span class="gs-es" lang="es"><a href="#interiors">Interiores estelares</a></span></li>
           <li><span class="gs-en"><a href="#spacetime">The spacetime view</a></span><span class="gs-es" lang="es"><a href="#spacetime">La vista del espacio-tiempo</a></span></li>
+          <li><span class="gs-en"><a href="#lensing">Gravitational lensing</a></span><span class="gs-es" lang="es"><a href="#lensing">Lentes gravitacionales</a></span></li>
           <li><span class="gs-en"><a href="#visual">Visual effects</a></span><span class="gs-es" lang="es"><a href="#visual">Efectos visuales</a></span></li>
           <li>
             <span class="gs-en"><a href="#conservation">The conservation check</a></span><span class="gs-es" lang="es"><a href="#conservation">La comprobación de conservación</a></span>
@@ -1371,6 +1372,38 @@ try {
         version is a metaphor drawn for clarity. It is genuinely useful for
         talking about why mass matters and why a deeper well is harder to climb
         out of, and it should not be read as a calculation.</span><span class="gs-es" lang="es">La conocida imagen de la lámina de goma es una metáfora incluso cuando se dibuja con rigor, pues representa el espacio curvo mediante una superficie incrustada en un espacio plano, y no dice nada sobre la curvatura del <em>tiempo</em>, que es lo que realmente produce la caída de un objeto soltado. La versión de Gravitas es una metáfora dibujada para dar claridad. Es verdaderamente útil para hablar de por qué importa la masa y por qué es más difícil salir de un pozo más profundo, y no debe leerse como un cálculo.</span>
+      </p>
+
+      <h2 id="lensing"><span class="gs-en">Gravitational lensing</span><span class="gs-es" lang="es">Lentes gravitacionales</span></h2>
+      <p><span class="gs-en"><span class="doc-badge is-approximate">Approximated</span></span><span class="gs-es" lang="es"><span class="doc-badge is-approximate">Aproximado</span></span></p>
+      <p>
+        <span class="gs-en">The lensing instruments (Bending Light, Einstein Rings and Arcs, A Lens
+        Passing By) compute with a pure kernel, <code>js/kernels/lensing</code>, held to the
+        Sun&rsquo;s 1.75 arcseconds, the Einstein radius of a star (1.01 milliarcseconds for one solar mass
+        at 4 kpc before a source at 8) and of a singular isothermal sphere (1.153 arcseconds for 200 km/s),
+        closed forms for the point lens and for a finite source at zero separation, an independent
+        integration over the source disk, and a fit that recovers a synthetic event over thirty seeds. It
+        rests on three assumptions, each stated on screen.</span><span class="gs-es" lang="es">Los instrumentos de lentes (La luz que se curva, Anillos y arcos de Einstein, Una lente que pasa) calculan con un núcleo puro, <code>js/kernels/lensing</code>, contrastado con los 1,75 segundos de arco del Sol, el radio de Einstein de una estrella (1,01 milisegundos de arco para una masa solar a 4 kpc ante una fuente a 8) y de una esfera isoterma singular (1,153 segundos de arco para 200 km/s), con formas cerradas para la lente puntual y para una fuente finita con separación cero, una integración independiente sobre el disco de la fuente y un ajuste que recupera un suceso sintético con treinta semillas. Se apoya en tres supuestos, cada uno declarado en pantalla.</span>
+      </p>
+      <p>
+        <span class="gs-en"><strong>Thin lens.</strong> All the bending happens in one plane at the lens, and
+        the distances are ordinary Euclidean ones: the source is twice as far as the lens in the lens plane,
+        and a lens inside the Galaxy has D<sub>ls</sub> = D<sub>s</sub> &minus; D<sub>l</sub>. There is no
+        cosmology, no external shear, no ellipticity and no second lens plane.</span><span class="gs-es" lang="es"><strong>Lente delgada.</strong> Toda la desviación ocurre en un plano, el de la lente, y las distancias son euclídeas ordinarias: la fuente está al doble de distancia que la lente en el plano de la lente, y una lente dentro de la Galaxia tiene D<sub>ls</sub> = D<sub>s</sub> &minus; D<sub>l</sub>. No hay cosmología, ni cizalla externa, ni elipticidad, ni un segundo plano de lente.</span>
+      </p>
+      <p>
+        <span class="gs-en"><strong>Weak field.</strong> The bending 4GM/(c<sup>2</sup>b) is valid when the
+        ray passes at many Schwarzschild radii. The Bending Light instrument shades the region within ten and
+        says when its answer cannot be trusted; closer, general relativity gives a different, larger
+        angle.</span><span class="gs-es" lang="es"><strong>Campo débil.</strong> La desviación 4GM/(c<sup>2</sup>b) vale cuando el rayo pasa a muchos radios de Schwarzschild. El instrumento de la luz que se curva sombrea la región a menos de diez y avisa cuando su respuesta no es fiable; más cerca, la relatividad general da un ángulo distinto y mayor.</span>
+      </p>
+      <p>
+        <span class="gs-en"><strong>Point mass, or a circular galaxy.</strong> The lens is a point or a
+        singular isothermal sphere. The microlensing curve adds one source disk of uniform brightness and a
+        blend, and leaves out limb darkening, parallax, orbital motion of the lens, a binary lens and a second
+        source. No authentic event light curve is shipped, because its terms of use could not be confirmed;
+        the data in the fit are synthetic, with a truth the real sky does not give, and are labeled
+        so.</span><span class="gs-es" lang="es"><strong>Masa puntual, o una galaxia circular.</strong> La lente es un punto o una esfera isoterma singular. La curva de microlente añade un disco de fuente de brillo uniforme y una mezcla de luz, y deja fuera el oscurecimiento del limbo, el paralaje, el movimiento orbital de la lente, una lente binaria y una segunda fuente. No se incluye ninguna curva de luz de un suceso real, porque no se pudieron confirmar sus condiciones de uso; los datos del ajuste son sintéticos, con una verdad que el cielo real no da, y así se indica.</span>
       </p>
 
       <h2 id="visual"><span class="gs-en">Visual effects</span><span class="gs-es" lang="es">Efectos visuales</span></h2>
@@ -2928,9 +2961,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->41<!--/fact-->
+        <!--fact:investigations-->44<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->41<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->44<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3093,6 +3126,18 @@ try {
             <tr>
               <td>The Limit</td>
               <td>js/kernels/stellar/whiteDwarf.js: P(x) and ρ(x) of the degenerate gas, integrated in q = x² (regular at the surface) by RK4; the limit is also the closed form from the n = 3 polytrope. See STELLAR_STRUCTURE.md.</td>
+            </tr>
+            <tr>
+              <td>Bending Light</td>
+              <td>js/kernels/lensing/lens.js: deflectionAngle = 4GM/(c²b), valid for b much greater than 2GM/c²; the instrument shades b below ten Schwarzschild radii. See GRAVITATIONAL_LENSING.md.</td>
+            </tr>
+            <tr>
+              <td>Einstein Rings and Arcs</td>
+              <td>js/kernels/lensing/lens.js: einsteinAngle, sisEinsteinAngle, pointImages (lens equation y = x − 1/x), sisImages (y = x − sign x) and pointTimeDelay. The mass is the mass inside the Einstein radius for either lens. See GRAVITATIONAL_LENSING.md.</td>
+            </tr>
+            <tr>
+              <td>A Lens Passing By</td>
+              <td>js/kernels/lensing/microlensing.js (Paczynski, uniform finite source by ring integration, blending) and fit.js (the inference core’s createProblem and refine, multi-start, source and blend fluxes solved exactly). Validated against closed forms and over 30 seeds in tests/lensingKernel.test.js. See GRAVITATIONAL_LENSING.md.</td>
             </tr>
             <tr>
               <td>Who Gets Counted</td>

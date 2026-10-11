@@ -36,6 +36,9 @@ import CLUSTER_MEMBERSHIP from './data/investigations/es/cluster-membership.js';
 import INSIDE_A_STAR from './data/investigations/es/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE from './data/investigations/es/scaling-the-main-sequence.js';
 import THE_LIMIT from './data/investigations/es/the-limit.js';
+import BENDING_LIGHT from './data/investigations/es/bending-light.js';
+import EINSTEIN_RINGS_AND_ARCS from './data/investigations/es/einstein-rings-and-arcs.js';
+import A_LENS_PASSING_BY from './data/investigations/es/a-lens-passing-by.js';
 import DESIGN_THE_SCHEDULE from './data/investigations/es/design-the-schedule.js';
 import DETECT_THIS_PLANET from './data/investigations/es/detect-this-planet.js';
 import GOLDILOCKS_QUESTION from './data/investigations/es/goldilocks-question.js';
@@ -70,6 +73,9 @@ import CLUSTER_MEMBERSHIP_DEEPER from './data/investigations/depth/es/cluster-me
 import INSIDE_A_STAR_DEEPER from './data/investigations/depth/es/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE_DEEPER from './data/investigations/depth/es/scaling-the-main-sequence.js';
 import THE_LIMIT_DEEPER from './data/investigations/depth/es/the-limit.js';
+import BENDING_LIGHT_DEEPER from './data/investigations/depth/es/bending-light.js';
+import EINSTEIN_RINGS_AND_ARCS_DEEPER from './data/investigations/depth/es/einstein-rings-and-arcs.js';
+import A_LENS_PASSING_BY_DEEPER from './data/investigations/depth/es/a-lens-passing-by.js';
 import KEPLERS_LAWS_DEEPER from './data/investigations/depth/es/keplers-laws.js';
 import MISSING_MASS_DEEPER from './data/investigations/depth/es/missing-mass.js';
 import TRANSIT_PHOTOMETRY_DEEPER from './data/investigations/depth/es/transit-photometry.js';
@@ -101,6 +107,9 @@ export const SHADOWS = Object.freeze({
   'inside-a-star': INSIDE_A_STAR,
   'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE,
   'the-limit': THE_LIMIT,
+  'bending-light': BENDING_LIGHT,
+  'einstein-rings-and-arcs': EINSTEIN_RINGS_AND_ARCS,
+  'a-lens-passing-by': A_LENS_PASSING_BY,
   'who-gets-counted': WHO_GETS_COUNTED,
   'why-the-bright-ones-win': WHY_THE_BRIGHT_ONES_WIN,
   'the-completeness-curve': THE_COMPLETENESS_CURVE,
@@ -142,6 +151,9 @@ export const DEEPER_SHADOWS = Object.freeze({
   'inside-a-star': INSIDE_A_STAR_DEEPER,
   'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE_DEEPER,
   'the-limit': THE_LIMIT_DEEPER,
+  'bending-light': BENDING_LIGHT_DEEPER,
+  'einstein-rings-and-arcs': EINSTEIN_RINGS_AND_ARCS_DEEPER,
+  'a-lens-passing-by': A_LENS_PASSING_BY_DEEPER,
   'who-gets-counted': WHO_GETS_COUNTED_DEEPER,
   'why-the-bright-ones-win': WHY_THE_BRIGHT_ONES_WIN_DEEPER,
   'the-completeness-curve': THE_COMPLETENESS_CURVE_DEEPER,

@@ -100,6 +100,11 @@ const DEEPER = {
   'scaling-the-main-sequence': () =>
     import('./data/investigations/depth/scaling-the-main-sequence.js'),
   'the-limit': () => import('./data/investigations/depth/the-limit.js'),
+  'bending-light': () => import('./data/investigations/depth/bending-light.js'),
+  'einstein-rings-and-arcs': () =>
+    import('./data/investigations/depth/einstein-rings-and-arcs.js'),
+  'a-lens-passing-by': () =>
+    import('./data/investigations/depth/a-lens-passing-by.js'),
   'who-gets-counted': () =>
     import('./data/investigations/depth/who-gets-counted.js'),
   'why-the-bright-ones-win': () =>

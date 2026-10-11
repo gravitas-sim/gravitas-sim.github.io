@@ -89,9 +89,13 @@ const mb = n =>
 /**
  * The gzip total in whole megabytes. Gzip's output differs by a few kilobytes
  * between zlib versions - Node 20's and Node 24's disagreed at the tenth - so
- * a checked document quotes it only this coarsely, and never per kind.
+ * a checked document quotes it only this coarsely, and never per kind. It is
+ * the whole megabytes the transfer exceeds (a floor, quoted as "more than"):
+ * a rounded figure flips between the two Nodes whenever the total sits near a
+ * half megabyte, which is where it was when this was changed, and a floor only
+ * flips near a whole one.
  */
-export const gzipMB = inv => Math.round(inv.gzip / 1048576);
+export const gzipMB = inv => Math.floor(inv.gzip / 1048576);
 
 /** The table OFFLINE_AND_LOW_END.md shows, and the transfer times from its gzip total. */
 export function precacheTable(inv) {

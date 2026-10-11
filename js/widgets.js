@@ -265,6 +265,13 @@ export const LAZY_FAMILIES = Object.freeze({
     'INTERIORS_WIDGETS',
     ['polytrope', 'wd-mass-radius', 'ms-scaling']
   ),
+  // Pure model, no data to wait for: a lens, a source and a light curve.
+  lensing: familyEntry(
+    () => import('./lensingWidgets.js'),
+    './lensingWidgets.js',
+    'LENSING_WIDGETS',
+    ['light-bending', 'lens-plane', 'lens-passing']
+  ),
   // Its Gaia and rotation-curve packs arrive behind more imports;
   // whenWidgetsReady() waits.
   galactic: familyEntry(

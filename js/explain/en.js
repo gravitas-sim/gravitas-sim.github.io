@@ -124,6 +124,12 @@ export default {
     'Why the center is hot and dense, why a degenerate star has a limiting mass, and how far a scaling argument gets before the shape of real stars shows.',
     'A polytrope is a shape, not a star: no energy generation, opacity or convection; the white dwarf is cold and ideal; the main sequence is a MIST model, not a measurement.',
   ],
+  lensing: [
+    'Bending against closest approach (log scales); the lens plane in Einstein radii with the source and its images; or flux against time as a lens passes.',
+    'How the bending, the ring, the images and the light curve change as the mass, the distance, the speed, the offset and the blend change.',
+    'How far a mass bends light, how large a ring a mass makes, and what a light curve fixes (the crossing time) and what it leaves open (mass, distance and speed separately).',
+    'One thin lens in the weak field, a point mass or a circular galaxy, a uniform star, no shear or second lens; the synthetic event is a model with noise, with a truth the real sky never gives.',
+  ],
   survey: [
     'Synthetic stars of known brightness at known distances: counted and missed stars, the bias by shells of distance, or the luminosity function against its truth.',
     'How the counted share, the bias and the recovered luminosity function change as the magnitude limit, the completeness curve or the parallax cut changes.',

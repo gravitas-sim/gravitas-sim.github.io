@@ -86,6 +86,12 @@ export const SUMMARIES = {
     "If stars were scaled copies of one another, a few physical laws would fix how luminosity, radius and lifetime change with mass. You will read the exponents a scaling argument predicts and fit the same exponents to the MIST zero-age models, find that massive stars follow luminosity as mass cubed to within five percent while low-mass stars do not, use the residuals to see where the assumptions fail, and compare a nuclear clock for the Sun with the model's.",
   'the-limit':
     'A white dwarf is held up by electrons squeezed until they cannot be squeezed further, and a heavier one is a smaller one. You will measure the mass and radius of model white dwarfs from their central density, watch the mass climb toward a ceiling it never passes, find why relativistic electrons make that ceiling inevitable at 1.46 solar masses for carbon and oxygen, and see how the limit changes with composition.',
+  'bending-light':
+    'Mass bends light, and a ray that grazes the Sun is turned by 1.75 arcseconds, twice what Newton’s gravity gives. You will measure the bending against the mass and the distance of closest approach, see what the 1919 eclipse plates decided, and find the case where the formula cannot be trusted.',
+  'einstein-rings-and-arcs':
+    'When a source lies behind a lens, light reaches us around it as a ring. You will measure the Einstein radius of a star and of a galaxy, weigh a galaxy from the size of its ring, and find the images, arcs and magnifications when the source is off to one side, for a point mass and for a galaxy.',
+  'a-lens-passing-by':
+    'As a lens passes in front of a star the star brightens and fades over days or weeks. You will read the peak and the duration of a microlensing event, find why one light curve cannot weigh the lens, see what blended light and a finite star do to it, and fit a synthetic event to see what the fit can and cannot recover.',
   'who-gets-counted':
     'A survey counts the stars that look bright, not the stars that are common. You will count a synthetic population at three magnitude limits, find what is in the part that is missed, and find how far a Sun-like star and a red dwarf can be and still be counted. You will say why a catalog of the brightest stars is not a census.',
   'why-the-bright-ones-win':

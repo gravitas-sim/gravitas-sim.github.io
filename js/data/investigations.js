@@ -88,6 +88,9 @@ import { SUMMARIES } from './investigations/summaries.js';
 import INSIDE_A_STAR from './investigations/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE from './investigations/scaling-the-main-sequence.js';
 import THE_LIMIT from './investigations/the-limit.js';
+import BENDING_LIGHT from './investigations/bending-light.js';
+import EINSTEIN_RINGS_AND_ARCS from './investigations/einstein-rings-and-arcs.js';
+import A_LENS_PASSING_BY from './investigations/a-lens-passing-by.js';
 import WHO_GETS_COUNTED from './investigations/who-gets-counted.js';
 import WHY_THE_BRIGHT_ONES_WIN from './investigations/why-the-bright-ones-win.js';
 import THE_COMPLETENESS_CURVE from './investigations/the-completeness-curve.js';
@@ -149,6 +152,9 @@ export const INVESTIGATIONS = [
   INSIDE_A_STAR,
   SCALING_THE_MAIN_SEQUENCE,
   THE_LIMIT,
+  BENDING_LIGHT,
+  EINSTEIN_RINGS_AND_ARCS,
+  A_LENS_PASSING_BY,
   WHO_GETS_COUNTED,
   WHY_THE_BRIGHT_ONES_WIN,
   THE_COMPLETENESS_CURVE,

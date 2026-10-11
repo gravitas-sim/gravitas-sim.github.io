@@ -2153,6 +2153,70 @@ test.describe('the central experiment of each investigation', () => {
     // 5. and only now is the prediction settled
     await expectVerdictRevealed(page, plan, predict);
   });
+  // ---- The lensing investigations (Roadmap II, Prompt 94) -----------------------
+  const LENSING = [
+    {
+      id: 'bending-light',
+      title:
+        'bending-light: a ray a hundred times farther out is bent a hundred times less @accepts:ce.bending-light',
+      row: /Bending of the ray/i,
+      values: [
+        [0, 1.75, 0.03],
+        [2, 0.0175, 0.002],
+      ],
+    },
+    {
+      id: 'einstein-rings-and-arcs',
+      title:
+        'einstein-rings-and-arcs: ten solar masses makes a ring three times larger @accepts:ce.einstein-rings-and-arcs',
+      row: /Einstein radius, in milliarcseconds/i,
+      values: [
+        [0, 1.009, 0.03],
+        [1, 3.19, 0.1],
+      ],
+    },
+    {
+      id: 'a-lens-passing-by',
+      title:
+        'a-lens-passing-by: a closer pass brightens the star more, as the point-lens formula says @accepts:ce.a-lens-passing-by',
+      row: /Peak flux over baseline/i,
+      values: [
+        [0.1, 10.04, 0.15],
+        [0.5, 2.18, 0.05],
+      ],
+    },
+  ];
+  for (const c of LENSING) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(async () => reading(await readout(page), c.row), {
+            timeout: 5000,
+          })
+          .not.toBeNaN();
+        const got = reading(await readout(page), c.row);
+        seen.push(got);
+        expect(Math.abs(got - want)).toBeLessThan(tol);
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
 
   // ---- The stellar-interior investigations (Roadmap II, Prompt 95) --------------
   const INTERIORS = [
