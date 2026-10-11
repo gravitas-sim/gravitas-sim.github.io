@@ -538,10 +538,10 @@ export async function buildLibrary() {
       ),
       subjects: named.flatMap(l => BROWSE_META[l]?.tags || []),
       prerequisites: [],
-      courseLevel: top(
-        sorted(named.map(l => DISCOVERY[l]?.courseLevel)),
-        COURSE_LEVELS
-      ),
+      // A pack's own declaration wins over the highest level it names.
+      courseLevel:
+        pack.courseLevel ??
+        top(sorted(named.map(l => DISCOVERY[l]?.courseLevel)), COURSE_LEVELS),
       steps: count,
       ...(units ? { units } : {}),
       ...more,
