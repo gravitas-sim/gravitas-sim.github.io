@@ -695,6 +695,48 @@ export default {
         'μₑ = 1: limiting mass 5.82 (within 0.03).',
       'an-iron-core': 'μₑ = 2.15: limiting mass 1.26 (within 0.006).',
     },
+    'the-beat-of-a-star': {
+      'the-first-period':
+        'SU Draconis, period search: highest peak 0.6604 days (within 0.002) and width 0.0167 (within 0.003).',
+      'fold-it':
+        'Refined period 0.66041 (within 0.0003), bootstrap error 0.00015 (within 0.00006), amplitude 0.712 mag (within 0.01).',
+      'fold-on-twice-the-period':
+        'Fold on twice the period: 1.3208 days (within 0.002).',
+      'a-slightly-wrong-period':
+        'Offset +2 percent: fold period 0.6736 days (within 0.0008).',
+      'a-second-star':
+        'Eta Aquilae: period 7.226 (within 0.04), error 0.030 (within 0.01), 3.68 cycles (within 0.06).',
+      'once-a-night':
+        'Seen once a night: highest peak 1.972 days (within 0.02), width 0.212 (within 0.03).',
+      'the-false-periods':
+        'Whole run aliases: 1.945 days (within 0.01) and 0.3977 (within 0.004).',
+    },
+    'leavitts-law': {
+      'the-calibration':
+        'Large Magellanic Cloud: slope −3.29 (within 0.03; a positive entry is refused) and 12.60 at 10 days (within 0.03).',
+      'how-tight':
+        'Scatter 0.089 mag (within 0.005) and dust left 0.040 (within 0.004).',
+    },
+    'the-first-rung': {
+      'a-maser-galaxy':
+        'NGC 4258: modulus 29.40 (within 0.02) and 7.59 Mpc (within 0.08).',
+      'the-maser-check':
+        'Maser modulus 29.40 (within 0.02) with error 0.032 (within 0.004).',
+      'the-budget':
+        'Host scatter 0.043 (within 0.003) and the Cloud’s distance 0.026 (within 0.002).',
+      'another-galaxy':
+        'M101: modulus 29.21 (within 0.02) and 6.95 Mpc (within 0.08).',
+    },
+    'which-kind-of-variable': {
+      'period-alone':
+        'Period only: 83.3 percent correct (within 0.6), eclipsing binaries found 29.2 (within 0.6).',
+      'read-the-table':
+        'Eclipsing binaries: 6 called RRab and 7 called eclipsing, exactly.',
+      'add-the-amplitude':
+        'Period and amplitude: 90.8 percent (within 0.6), eclipsing binaries 54.2 (within 0.6).',
+      'the-shape':
+        'With the shape: 99.2 percent (within 0.6), eclipsing binaries 100 (within 0.6).',
+    },
     'bending-light': {
       'the-suns-limb':
         'Mass 1, closest approach 1: 1.75 arcseconds (within 0.02); the Newtonian row reads 0.88.',

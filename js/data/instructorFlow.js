@@ -1438,5 +1438,118 @@ export default {
         text: 'The close: heavier is smaller, and the limit emerges.',
       },
     ],
+    'the-beat-of-a-star': [
+      {
+        from: 'a-star-that-repeats',
+        to: 'the-first-period',
+        text: 'A star that repeats; a period search gives 0.6604 days with a narrow peak.',
+      },
+      {
+        from: 'fold-it',
+        to: 'fold-it',
+        text: 'Folding and a bootstrap give 0.66041 ± 0.00015 days and a 0.71 mag amplitude.',
+      },
+      {
+        from: 'predict-twice-the-period',
+        to: 'a-slightly-wrong-period',
+        text: 'Students predict twice the period shows the shape twice; 2 percent off smears the fold.',
+      },
+      {
+        from: 'a-second-star',
+        to: 'why-the-error-is-bigger',
+        text: 'Eta Aquilae: 7.226 ± 0.030 days from 3.7 cycles; the peak is wide.',
+      },
+      {
+        from: 'predict-once-a-night',
+        to: 'once-a-night',
+        text: 'Students predict the once-a-night result; the highest peak is at 1.97 days.',
+      },
+      {
+        from: 'the-false-periods',
+        to: 'why-aliases',
+        text: 'The aliases at 1.945 and 0.398 days; sampling once a day cannot tell them from the star.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close, and what is left out.',
+      },
+    ],
+    'leavitts-law': [
+      {
+        from: 'brighter-and-slower',
+        to: 'predict-the-trend',
+        text: 'Brighter and slower; students predict the line rises to the right.',
+      },
+      {
+        from: 'the-calibration',
+        to: 'how-tight',
+        text: 'Slope −3.29, zero point 12.60, scatter 0.089, dust left 0.040.',
+      },
+      {
+        from: 'why-wesenheit',
+        to: 'the-tenfold-step',
+        text: 'Why a Wesenheit magnitude; a tenfold step in period is 3.3 magnitudes.',
+      },
+      {
+        from: 'why-one-galaxy',
+        to: 'why-one-galaxy',
+        text: 'Why the fit is made in one galaxy.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close, and what is left out.',
+      },
+    ],
+    'the-first-rung': [
+      {
+        from: 'sliding-the-relation',
+        to: 'a-maser-galaxy',
+        text: 'Sliding the relation; NGC 4258 is 7.59 Mpc.',
+      },
+      {
+        from: 'predict-the-maser-check',
+        to: 'the-maser-check',
+        text: 'Students predict agreement with masers; 29.397 ± 0.032 against 29.403 ± 0.051.',
+      },
+      {
+        from: 'the-budget',
+        to: 'what-limits-it',
+        text: 'The budget: host scatter 0.043 and the Cloud’s distance 0.026 dominate.',
+      },
+      {
+        from: 'another-galaxy',
+        to: 'another-galaxy',
+        text: 'M101 is 6.95 Mpc.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close; the Hubble-constant link is not made.',
+      },
+    ],
+    'which-kind-of-variable': [
+      {
+        from: 'five-kinds-of-star',
+        to: 'read-the-table',
+        text: 'The five kinds; the period alone gives 83.3 percent and loses the binaries.',
+      },
+      {
+        from: 'why-the-eclipsers-are-lost',
+        to: 'add-the-amplitude',
+        text: 'Why binaries are lost; students predict the amplitude helps them most.',
+      },
+      {
+        from: 'the-shape',
+        to: 'what-a-single-number-hides',
+        text: 'The shape reaches 99.2 percent; one number hides the weakest kind.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: synthetic, balanced, stylised.',
+      },
+    ],
   },
 };
