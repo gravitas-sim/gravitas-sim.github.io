@@ -279,8 +279,8 @@ describe('what an observer would record, as evidence', () => {
     });
     accepted(env);
     expect(env.source.kind).toBe('forward-model');
-    expect(q(env, 'K').origin).toBe('truth');
-    expect(q(env, 'K').unit).toBe('m/s');
+    expect(q(env, 'inner.K').origin).toBe('truth');
+    expect(q(env, 'inner.K').unit).toBe('m/s');
     expect(q(env, 'sightInclination').origin).toBe('assumed');
     expect(q(env, 'sightInclination').value).toBeCloseTo(80, 9);
     // A different setup is a different observation, and says so.
