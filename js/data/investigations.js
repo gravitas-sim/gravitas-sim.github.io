@@ -85,6 +85,9 @@ import THE_ROTATING_DISK from './investigations/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP from './investigations/cluster-membership.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
+import INSIDE_A_STAR from './investigations/inside-a-star.js';
+import SCALING_THE_MAIN_SEQUENCE from './investigations/scaling-the-main-sequence.js';
+import THE_LIMIT from './investigations/the-limit.js';
 import BENDING_LIGHT from './investigations/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS from './investigations/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY from './investigations/a-lens-passing-by.js';
@@ -146,6 +149,9 @@ export const INVESTIGATIONS = [
   THE_SUNS_MOTION,
   THE_ROTATING_DISK,
   CLUSTER_MEMBERSHIP,
+  INSIDE_A_STAR,
+  SCALING_THE_MAIN_SEQUENCE,
+  THE_LIMIT,
   BENDING_LIGHT,
   EINSTEIN_RINGS_AND_ARCS,
   A_LENS_PASSING_BY,

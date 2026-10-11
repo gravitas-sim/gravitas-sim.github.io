@@ -257,6 +257,21 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/inside-a-star/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/scaling-the-main-sequence/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/the-limit/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://gravitas-sim.online/teaching/investigation/bending-light/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

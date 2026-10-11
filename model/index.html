@@ -124,6 +124,7 @@ try {
           </li>
           <li><span class="gs-en"><a href="#blackholes">Black holes</a></span><span class="gs-es" lang="es"><a href="#blackholes">Agujeros negros</a></span></li>
           <li><span class="gs-en"><a href="#stars">Stars: how hot, how bright, how big</a></span><span class="gs-es" lang="es"><a href="#stars">Estrellas: qué tan calientes, brillantes y grandes</a></span></li>
+          <li><span class="gs-en"><a href="#interiors">Stellar interiors</a></span><span class="gs-es" lang="es"><a href="#interiors">Interiores estelares</a></span></li>
           <li><span class="gs-en"><a href="#spacetime">The spacetime view</a></span><span class="gs-es" lang="es"><a href="#spacetime">La vista del espacio-tiempo</a></span></li>
           <li><span class="gs-en"><a href="#lensing">Gravitational lensing</a></span><span class="gs-es" lang="es"><a href="#lensing">Lentes gravitacionales</a></span></li>
           <li><span class="gs-en"><a href="#visual">Visual effects</a></span><span class="gs-es" lang="es"><a href="#visual">Efectos visuales</a></span></li>
@@ -1316,6 +1317,36 @@ try {
           runs.</span><span class="gs-es" lang="es"><strong>Sirve para:</strong> la diferencia entre masa, temperatura, luminosidad y radio; leer un diagrama H&ndash;R; por qué las estrellas masivas viven poco; comparar estrellas modeladas entre sí. <br /> <strong>No sirve para:</strong> interiores estelares, rendimientos de nucleosíntesis, astrosismología, composiciones no solares ni el destino de ninguna estrella real individual. Y nada aquí envejece a una estrella en el sandbox ordinario: las propiedades de una estrella del sandbox no cambian mientras corre la simulación.</span>
         </p>
       </div>
+
+      <h2 id="interiors"><span class="gs-en">Stellar interiors</span><span class="gs-es" lang="es">Interiores estelares</span></h2>
+      <p><span class="gs-en"><span class="doc-badge is-approximate">Approximated</span></span><span class="gs-es" lang="es"><span class="doc-badge is-approximate">Aproximado</span></span></p>
+      <p>
+        <span class="gs-en">The interiors instruments (Inside a Star, Scaling the Main Sequence, The Limit) compute with a
+        pure kernel, <code>js/kernels/stellar</code>, held to Chandrasekhar&rsquo;s table of Lane-Emden polytropes
+        (to 2 &times; 10<sup>&minus;5</sup>), the closed forms for n = 0, 1 and 5, Eddington&rsquo;s standard model of
+        the Sun, and a white-dwarf integration whose limiting mass appears from the equations (1.456 solar masses
+        for two nucleons per electron) and agrees with the closed form. They rest on assumptions, each stated on
+        screen, and they leave out three things a real star has.</span><span class="gs-es" lang="es">Los instrumentos de interiores (Dentro de una estrella, Escalar la secuencia principal, El límite) calculan con un núcleo puro, <code>js/kernels/stellar</code>, contrastado con la tabla de politropos de Lane-Emden de Chandrasekhar (a 2 &times; 10<sup>&minus;5</sup>), las formas cerradas para n = 0, 1 y 5, el modelo estándar de Eddington del Sol y una integración de enana blanca cuya masa límite sale de las ecuaciones (1,456 masas solares con dos nucleones por electrón) y concuerda con la forma cerrada. Descansan en supuestos, cada uno indicado en pantalla, y dejan fuera tres cosas que tiene una estrella real.</span>
+      </p>
+      <p>
+        <span class="gs-en"><strong>Opacity.</strong> A polytrope fixes how pressure follows density and says nothing
+        about how light gets out. Homology brings in one opacity law (Kramers or electron scattering) throughout the
+        star, so its exponents hold where one law dominates and the residuals against the MIST zero-age models
+        show where it does not.</span><span class="gs-es" lang="es"><strong>Opacidad.</strong> Un politropo fija cómo sigue la presión a la densidad y no dice nada de cómo sale la luz. La homología introduce una sola ley de opacidad (Kramers o dispersión de electrones) en toda la estrella, así que sus exponentes valen donde domina una ley y los residuos frente a los modelos MIST de edad cero muestran dónde no.</span>
+      </p>
+      <p>
+        <span class="gs-en"><strong>Convection.</strong> The index n is a stated shape, not a result: n = 3/2 for a fully
+        convective star and n = 3 for a radiative one are choices, and the real Sun is closer to n = 3.3. The
+        temperature assumes an ideal gas at a mean molecular weight of 0.6 and is not to be trusted above about ten
+        solar masses, where radiation pressure matters.</span><span class="gs-es" lang="es"><strong>Convección.</strong> El índice n es una forma declarada, no un resultado: n = 3/2 para una estrella totalmente convectiva y n = 3 para una radiativa son elecciones, y el Sol real se acerca más a n = 3,3. La temperatura supone un gas ideal con peso molecular medio 0,6 y no es fiable por encima de unas diez masas solares, donde importa la presión de radiación.</span>
+      </p>
+      <p>
+        <span class="gs-en"><strong>Nuclear networks.</strong> There is no energy generation in the polytrope; the
+        nuclear timescale is 0.7 percent of a tenth of the star&rsquo;s mass at its luminosity, which is right in
+        order of magnitude (13.9 against 9.9 billion years for the Sun&rsquo;s zero-age model). The white dwarf is a cold,
+        ideal degenerate electron gas, with no Coulomb corrections, layers or temperature, so its radius is a few percent
+        large, and no observed white dwarfs are drawn because a compilation&rsquo;s terms could not be confirmed.</span><span class="gs-es" lang="es"><strong>Redes nucleares.</strong> El politropo no tiene generación de energía; la escala de tiempo nuclear es el 0,7 por ciento de una décima parte de la masa de la estrella a su luminosidad, que acierta en orden de magnitud (13,9 frente a 9,9 miles de millones de años para el modelo de edad cero del Sol). La enana blanca es un gas de electrones degenerado frío e ideal, sin correcciones de Coulomb, capas ni temperatura, así que su radio sale unos pocos por ciento grande, y no se dibuja ninguna enana blanca observada porque no se pudieron confirmar los términos de una compilación.</span>
+      </p>
 
       <h2 id="spacetime"><span class="gs-en">The spacetime view</span><span class="gs-es" lang="es">La vista del espacio-tiempo</span></h2>
       <p><span class="gs-en"><span class="doc-badge is-illustrative">Illustrative</span></span><span class="gs-es" lang="es"><span class="doc-badge is-illustrative">Ilustrativo</span></span></p>
@@ -2930,9 +2961,9 @@ try {
         <span class="gs-en">Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->41<!--/fact-->
+        <!--fact:investigations-->44<!--/fact-->
         investigations and cannot fall behind them. It listed six of the twelve when it
-        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->41<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
+        was maintained by hand.</span><span class="gs-es" lang="es">Cada investigación guiada se apoya en una parte distinta del modelo. Esta tabla se genera a partir del mismo campo <code>modelNotes</code> que imprime la guía docente, de modo que cubre cada una de las <!--fact:investigations-->44<!--/fact--> investigaciones y no puede quedar rezagada respecto a ellas. Cuando se mantenía a mano, enumeraba seis de las doce.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3083,6 +3114,18 @@ try {
             <tr>
               <td>Cluster Membership by Motion</td>
               <td>Two-component Gaussian mixture over proper motion and parallax by expectation-maximization (js/kernels/galactic/membership.js), each star’s own errors widening both components; the cluster’s intrinsic width uses the standard approximate update. See GALACTIC_DYNAMICS.md.</td>
+            </tr>
+            <tr>
+              <td>Inside a Star</td>
+              <td>js/kernels/stellar/polytrope.js (RK4 from a series start at small ξ, surface by bisection; closed forms for n = 0, 1, 5) and star.js. Checked against Chandrasekhar’s table to 2 × 10⁻⁵ in tests/stellarKernel.test.js. See STELLAR_STRUCTURE.md.</td>
+            </tr>
+            <tr>
+              <td>Scaling the Main Sequence</td>
+              <td>js/kernels/stellar/homology.js: L ∝ μ^(4+b) M^(3+b−a) R^(3a−b) for κ ∝ ρ^a T^−b and the radius from equating with ε ∝ ρ^λ T^ν; the zero-age models are js/stellar/tracks.js mainSequenceAt(mass, 0) at the eight grid masses. See STELLAR_STRUCTURE.md.</td>
+            </tr>
+            <tr>
+              <td>The Limit</td>
+              <td>js/kernels/stellar/whiteDwarf.js: P(x) and ρ(x) of the degenerate gas, integrated in q = x² (regular at the surface) by RK4; the limit is also the closed form from the n = 3 polytrope. See STELLAR_STRUCTURE.md.</td>
             </tr>
             <tr>
               <td>Bending Light</td>
