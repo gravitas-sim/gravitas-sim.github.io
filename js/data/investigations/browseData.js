@@ -170,7 +170,7 @@ export const BROWSE_META = {
   },
   'standard-candles': {
     tags: ['galaxies', 'observing', 'stars'],
-    numericCount: 1,
+    numericCount: 0,
   },
   'the-shape-of-expansion': {
     tags: ['galaxies', 'observing'],

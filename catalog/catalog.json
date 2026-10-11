@@ -120,9 +120,17 @@
       "en": "Scaling the Main Sequence",
       "es": "Escalar la secuencia principal"
     },
+    "standard-candles": {
+      "en": "Standard Candles",
+      "es": "Candelas estándar"
+    },
     "the-completeness-curve": {
       "en": "The Completeness Curve",
       "es": "La curva de completitud"
+    },
+    "the-expanding-universe": {
+      "en": "The Expanding Universe",
+      "es": "El universo en expansión"
     },
     "the-limit": {
       "en": "The Limit",
@@ -131,6 +139,10 @@
     "the-rotating-disk": {
       "en": "The Rotating Disk",
       "es": "El disco que gira"
+    },
+    "the-shape-of-expansion": {
+      "en": "The Shape of Expansion",
+      "es": "La forma de la expansión"
     },
     "the-sun-through-the-year": {
       "en": "The Sun Through the Year",
@@ -175,6 +187,10 @@
     "when-orbits-lock": {
       "en": "When Orbits Lock",
       "es": "Cuando las órbitas se enganchan"
+    },
+    "where-galaxies-live": {
+      "en": "Where Galaxies Live",
+      "es": "Dónde viven las galaxias"
     },
     "who-gets-counted": {
       "en": "Who Gets Counted",

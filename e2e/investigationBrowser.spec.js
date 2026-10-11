@@ -292,7 +292,7 @@ test.describe('filtering', () => {
     app,
   }) => {
     await openBrowser(page, app);
-    await page.locator('#investigationFilterSubject').selectOption('galaxies');
+    await page.locator('#investigationFilterSubject').selectOption('dark-matter');
     await page.locator('#investigationFilterLength').selectOption('demo');
 
     const short = await idsOfLength(page, 'demo');

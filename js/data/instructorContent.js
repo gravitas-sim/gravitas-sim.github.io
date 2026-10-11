@@ -5512,7 +5512,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Errors are passed up the ladder',
-        body: 'Each rung inherits the error of the rung below and adds its own.',
+        body: 'Each rung of the distance ladder inherits the error of the rung below it and adds its own, so the top rung carries them all.',
       },
     ],
     features: [
@@ -5546,7 +5546,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         claim: 'Supernovae measure H0 by themselves.',
-        response: 'They need the rungs below them to fix the scale.',
+        response: 'They need the rungs below them, such as Cepheids, to fix the scale.',
       },
     ],
     teachingNotes: [
@@ -5587,7 +5587,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'A statistical interval is a floor',
-        body: 'It shrinks with the sample; errors every supernova shares do not shrink.',
+        body: 'It shrinks as more supernovae are added; errors that every supernova shares do not shrink with the sample.',
       },
       {
         heading: 'Shape, not scale',
@@ -5695,7 +5695,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         claim: 'The thinning shows we live in a void.',
-        response: 'The flux limit explains it with no new physics.',
+        response: 'The flux limit of the survey explains it, with no new physics needed.',
       },
       {
         claim: 'A redshift is a pure distance.',
@@ -5704,7 +5704,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         claim: 'The wedge is a picture of the whole sky.',
-        response: 'It is a strip half a degree thick.',
+        response: 'It is a strip half a degree thick, so it is a slice and not a map of the whole sky.',
       },
     ],
     teachingNotes: [

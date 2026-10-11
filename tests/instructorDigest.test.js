@@ -190,7 +190,8 @@ describe('the digest the derived closure produces', () => {
     // after the deeper steps (depthAll.js and its four ext files, Prompt 72).
     // 160 after the Spanish documents (Prompt 79): 24 lesson shadows, 4 deeper
     // shadows, the labels, the flow and the facts the guides read.
-    expect(current.length).toBeLessThan(220);
+    expect(current.length).toBeLessThan(240);
+    // 230 after the four cosmology investigations (Prompt 91): their shadows, deeper shadows and depth files.
     // 202 after the three lensing investigations (Prompt 94): their shadows,
     // deeper shadows and guides.
     // 214 after the three stellar-interior investigations (Prompt 95), a count of files, flagged in the PR.
