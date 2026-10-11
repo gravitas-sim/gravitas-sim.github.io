@@ -350,6 +350,23 @@ For each pack: the file the browser loads, its licence status as its manifest
 records it, the basis where that status is not a licence, and what to cite.
 
 <!--fact-block:dataPackNotices-->
+coma-cluster-quoted: The Coma cluster: the four values the Coma scenario and its virial instrument quote
+  File: js/data/observations/comaClusterQuoted.js (compilation)
+  Licence: CC BY 4.0. Gravitas's own record of the numbers its scenario quotes, licensed as its teaching material is (CC BY 4.0, LICENSES.md). The published values it is compared with are cited, not reproduced.
+  Basis: The four numbers are rounded facts a lesson uses; the pack records them, cites the one published value that was checked, and marks the rest as not sourced to a table here.
+  Cite:
+    Colless & Dunn 1996, ApJ 458, 435 (Structure and dynamics of the Coma cluster), the published dispersion the quoted one is compared with, doi:10.1086/176827
+    Zwicky 1933, Helvetica Physica Acta 6, 110 (the first virial argument for missing mass in Coma)
+
+des-sn5yr-hd: Type Ia supernova Hubble diagram: DES-SN5YR, 1,829 supernovae
+  File: js/data/observations/desSn5yrHd.js (compilation)
+  Licence: CC BY 4.0. The Zenodo record's metadata gives CC BY 4.0, whose Share clause permits reproducing the material with attribution (read 2026-10-09). Cite Sanchez et al. 2024 (arXiv:2406.05046) and DES Collaboration 2024, ApJL 973, L14.
+  Basis: COSMOLOGY_GATE.md section 1: the license as read from the record, kept with its legal code; D-COSMO-02 (delegated).
+  Cite:
+    Sanchez et al. 2024 (The Dark Energy Survey Supernova Program: cosmological analysis and systematic uncertainties), https://arxiv.org/abs/2406.05046
+    DES Collaboration 2024, ApJL 973, L14 (The Dark Energy Survey: cosmology results with ~1500 new high-redshift type Ia supernovae using the full 5-year dataset), doi:10.3847/2041-8213/ad6f9f
+    Zenodo record, DES-SN5YR-1.2 data release, doi:10.5281/zenodo.12720778
+
 exoplanet-systems: HD 209458 and the Sun and Jupiter: parameters compiled from the literature
   File: js/data/exoplanetSystems.js (compilation)
   Licence: no license; attribution requested. Published values, each cited to its paper; the NASA Exoplanet Archive and SIMBAD ask that work using them acknowledge them (NOTICE).
@@ -406,6 +423,12 @@ gwosc-five-events: Five gravitational-wave events: whitened GWOSC strain
     GWOSC strain data release for GWTC-2.1, doi:10.7935/qf3a-3z67
     Abbott et al. 2021, SoftwareX 13, 100658 (O1 and O2 open data), doi:10.1016/j.softx.2021.100658
     Abbott et al. 2023, ApJS 267, 29 (O3 open data), doi:10.3847/1538-4365/acdc9f
+
+hubble-1929-table1: Hubble's 1929 distances and velocities of 24 nebulae (Table 1)
+  File: js/data/observations/hubble1929Table1.js (compilation)
+  Licence: public domain. Published in the United States in 1929. The US Copyright Office (Circular 15A) says every work published in the United States before 1 January 1931 is in the public domain.
+  Cite:
+    Hubble, E. 1929, PNAS 15, 168 (A relation between distance and radial velocity among extra-galactic nebulae), doi:10.1073/pnas.15.3.168
 
 milky-way-rotation-curve: The Milky Way's rotation curve (Bhattacharjee, Chaudhury and Kundu 2014)
   File: js/data/observations/milkyWayRotationCurve.js (compilation)
@@ -521,6 +544,13 @@ sdss-dr18-ngc2420-segue: NGC 2420: SEGUE stellar parameters
     Lee et al. 2008a, AJ 136, 2022 (the SEGUE Stellar Parameter Pipeline), doi:10.1088/0004-6256/136/5/2022
     Lee et al. 2008b, AJ 136, 2050 (its validation on globular and open clusters, NGC 2420 among them), doi:10.1088/0004-6256/136/5/2050
     Yanny et al. 2009, AJ 137, 4377 (SEGUE), doi:10.1088/0004-6256/137/5/4377
+
+sdss-dr18-redshift-slice: SDSS DR18 galaxy redshifts in a 120 to 240 degree strip at declination 0 to 0.5 degrees (a wedge)
+  File: js/data/observations/sdssDr18RedshiftSlice.js (observed)
+  Licence: public domain. SDSS states that all data released in its public data releases are considered public domain (image-use policy, read 2026-10-09); it asks for the acknowledgement of the survey phase and the data release.
+  Cite:
+    Almeida et al. 2023, ApJS 267, 44 (The Eighteenth Data Release of the Sloan Digital Sky Surveys), doi:10.3847/1538-4365/acda98
+    Strauss et al. 2002, AJ 124, 1810 (Spectroscopic target selection in the SDSS: the main galaxy sample), doi:10.1086/342343
 
 sdss-dr18-stellar-spectra: Four observed stellar spectra: SDSS DR18, one each of A, G, K and M
   File: js/data/spectra/sdssSpectra.js (observed)
