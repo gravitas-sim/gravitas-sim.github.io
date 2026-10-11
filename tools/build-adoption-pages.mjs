@@ -1239,7 +1239,7 @@ function alignmentPage(S, rows) {
   );
   const one = r =>
     `<li><a href="${html(r.url)}">${plain(r.title)}</a> (${bi(wt(CL_KEY[r.courseLevel]))}, ${r.duration ? `${r.duration.min}–${r.duration.max} ${bi(wt('minutes'))}` : ''})</li>`;
-  const body = `<p>${bi({ en: 'The chapter is the claim; check it against the edition you teach from (the chapters were matched from the table of contents). Each link opens the investigation’s adoption page.', es: 'El capítulo es la afirmación; compúrebalo con la edición que usa (los capítulos se asociaron a partir del índice). Cada enlace abre la página de adopción de la investigación.' })}</p>
+  const body = `<p>${bi({ en: 'The chapter is the claim; check it against the edition you teach from (the chapters were matched from the table of contents). Each link opens the investigation’s adoption page.', es: 'El capítulo es la afirmación; compruébelo con la edición que usa (los capítulos se asociaron a partir del índice). Cada enlace abre la página de adopción de la investigación.' })}</p>
 ${chapters
   .map(ch => {
     const here = rows.filter(r => r.chapter === ch);
@@ -1260,7 +1260,7 @@ ${chapters
     title: { ...title, html: plain(title) },
     description:
       'Every Gravitas investigation and activity by OpenStax Astronomy 2e chapter.',
-    eyebrow: w('eyebrowInv'),
+    eyebrow: w('crumbTeach'),
     lede: bi({
       en: 'Which investigations go with which chapter of OpenStax Astronomy 2e.',
       es: 'Qué investigaciones van con cada capítulo de OpenStax Astronomy 2e.',
