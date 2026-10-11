@@ -10,9 +10,12 @@ the verdict are in `SAMPLER_GATE.md`; the prototype is on the spike branch.
 Should the inference core gain a bounded posterior sampler (an affine-invariant
 ensemble sampler, Goodman and Weare 2010, over the core's model and likelihood
 interface, at most six parameters), or does posterior sampling belong on the
-compute page alone? The compute page (Prompts 101 and 102) is skipped
-(D-PLAN-03), so a C verdict means posterior sampling is not offered in
-Gravitas at all, until Carl records the origin decision and those prompts run.
+compute page alone? The compute page (Prompts 101 and 102) has not landed: Carl has recorded the
+compute-origin decision, so they will run, but this gate proceeds without them
+and depends on neither. A C verdict means posterior sampling is not offered in
+the core, and is left to the compute page once it exists.
+(Corrected in a later commit: the first text of this paragraph said those prompts
+were skipped. No threshold below changed.)
 
 ## The prototype under test
 
