@@ -40,8 +40,17 @@ export async function publish(pack) {
   return packLink(pack, { root: `${location.origin}/`, base });
 }
 
+/**
+ * Every status below is worded after a language switch in progress has landed
+ * (js/composerPage.js passes ctx.languageSettled), so it is said in the
+ * language the reader chose and not the one they were leaving.
+ */
+const settled = c => c.languageSettled?.();
+
 export async function remix(c) {
-  const got = await remixNew(c.$('cp-remix-from').value, c.taken());
+  const from = c.$('cp-remix-from').value;
+  const got = await remixNew(from, c.taken());
+  await settled(c);
   if (!got) return c.setStatus(c.t('composer.status.remixFailed'));
   c.start(
     got.pack,
@@ -50,8 +59,10 @@ export async function remix(c) {
 }
 
 export async function publishLink(c) {
+  await settled(c);
   if (!c.ok()) return c.setStatus(c.t('composer.publish.fixFirst'));
   const link = await publish(c.doc());
+  await settled(c);
   c.$('cp-link').value = link.url;
   c.$('cp-link-note').textContent = c.t(
     link.comfortable ? 'composer.publish.ok' : 'composer.publish.long',
@@ -61,8 +72,11 @@ export async function publishLink(c) {
 
 /** The preview is the delivery path a student's link takes (js/remix/open.js). */
 export async function preview(c) {
+  await settled(c);
   if (!c.ok()) return c.setStatus(c.t('studio.status.fixFirst'));
-  c.$('cp-preview').src = (await publish(c.doc())).url;
+  const { url } = await publish(c.doc());
+  await settled(c);
+  c.$('cp-preview').src = url;
   c.setStatus(c.t('composer.status.previewed'));
 }
 
@@ -73,7 +87,7 @@ export async function preview(c) {
  */
 async function key(c, locale) {
   try {
-    await c.languageSettled?.();
+    await settled(c);
     for (let i = 0; i < 150 && !c.verdict(); i++)
       await new Promise(r => setTimeout(r, 100));
     if (!c.ok()) return c.setStatus(c.t('studio.status.fixFirst'));
@@ -81,7 +95,7 @@ async function key(c, locale) {
     await saveKey(c.doc(), c.compiled(), c.texts(), locale);
   } catch {
     // A language chosen a moment ago may still be loading; say it in that one.
-    await c.languageSettled?.();
+    await settled(c);
     c.setStatus(c.t('composer.key.failed'));
   }
 }
