@@ -43,6 +43,7 @@ current, and the orchestrator checks it.
 | `check-links.mjs` | Internal link and asset checker | `npm run validate:links`, `npm run validate:links:dist` |
 | `check-test-policy.mjs` | A skip has to be a capability, and it has to be on the record | `npm run test:policy` |
 | `checks.mjs` | One list of what has to pass |  |
+| `cosmology-validate.mjs` | (no header) | `npm run cosmology:validate` |
 | `csp.mjs` | A Content-Security-Policy on every page |  |
 | `deps-audit.mjs` | The dependency audit | `npm run deps:audit` |
 | `design-ratchet.mjs` | Four migrations to the design system that may only go one way |  |
