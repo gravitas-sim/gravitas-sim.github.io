@@ -107,7 +107,21 @@ const PARSES = {
   // A file a student opens, not yet behind parseDocument: route room.
   'js/composerPage.js': [2, 'none', 'route room: a file and the raw box'],
   'js/lab3dPage.js': [1, 'none', 'route room: a system file'],
-  'js/lab3dLab.js': [1, 'none', 'route room: a system file'],
+  'js/lab3dLab.js': [
+    2,
+    'none',
+    'route room: a system file (one); a record this build saved to My work (one)',
+  ],
+  'js/lab3d/link.js': [
+    1,
+    'none',
+    'a link, capped at 8000 characters and 256 KiB inflated before it is parsed; the lab then validates what it holds',
+  ],
+  'js/observatory/comparePanel.js': [
+    1,
+    'none',
+    'a system file capped at 1 MiB, then migrated and validated by the lab',
+  ],
   'js/experiments/analysisPanel.js': [2, 'none', 'route room: a result file'],
   'js/catalog/install.js': [
     5,

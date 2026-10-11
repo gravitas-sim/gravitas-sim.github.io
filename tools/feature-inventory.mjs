@@ -185,6 +185,11 @@ export const FEATURES = [
         detect: /typeof CompressionStream === 'undefined'/,
         note: 'payload goes uncompressed',
       },
+      {
+        file: 'js/lab3d/link.js',
+        detect: /typeof CompressionStream !== 'undefined'/,
+        note: 'a 3-D system link is written uncompressed (sys1r)',
+      },
     ],
   },
   {

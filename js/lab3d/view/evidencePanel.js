@@ -22,6 +22,7 @@
 // =============================================================================
 
 import { EN_LAB3DEVIDENCE } from '../../i18n/en.lab3dEvidence.js';
+import { parseNumber } from '../../answerParse.js';
 import {
   eventEnvelope,
   forwardEnvelope,
@@ -100,6 +101,13 @@ const slug = s =>
  * @returns {{show: Function, hide: Function, loadLanguage: Function}}
  */
 export function createEvidencePanel(root, lab) {
+  /** A number the reader typed, in the page's language; NaN when it is not one. */
+  const typed = input => {
+    const r = parseNumber(input.value, lab.language());
+    return r.ok ? r.value : NaN;
+  };
+  /** A pixel position to a tenth, for a path. */
+  const tenth = v => Math.round(v * 10) / 10;
   const t = (id, vars) => {
     const entry = CATALOGS[lab.language()]?.[id] ?? CATALOGS.en[id];
     if (entry === undefined) return id;
@@ -241,7 +249,7 @@ export function createEvidencePanel(root, lab) {
   });
   keepEvent.addEventListener('click', () => {
     const e = lab.events().filter(x => EVENT_KINDS.includes(x.kind))[
-      Number(eventSelect.value)
+      typed(eventSelect)
     ];
     const env = e && eventEnvelope(lab.origin(), e);
     if (!env) return;
@@ -444,8 +452,8 @@ export function createEvidencePanel(root, lab) {
   /** The line of sight the choices describe, as a unit vector. */
   function sightDirection() {
     if (sightAngles.checked) {
-      const i = (Number(incl.value) * Math.PI) / 180;
-      const a = (Number(azim.value) * Math.PI) / 180;
+      const i = (typed(incl) * Math.PI) / 180;
+      const a = (typed(azim) * Math.PI) / 180;
       return [
         Math.sin(i) * Math.cos(a),
         Math.sin(i) * Math.sin(a),
@@ -459,7 +467,7 @@ export function createEvidencePanel(root, lab) {
     const sizesGiven = {};
     const radiusEarth = {};
     for (const [key, input] of sizeInputs) {
-      const v = Number(input.value);
+      const v = typed(input);
       if (!(v > 0)) continue;
       if (key === 'star') sizesGiven.radiusSun = v;
       else radiusEarth[key] = v;
@@ -468,8 +476,8 @@ export function createEvidencePanel(root, lab) {
       star: starSelect.value || undefined,
       observer: { direction: sightDirection() },
       starProps: {
-        teffK: Number(teff.value) > 0 ? Number(teff.value) : undefined,
-        distancePc: Number(dist.value) > 0 ? Number(dist.value) : undefined,
+        teffK: typed(teff) > 0 ? typed(teff) : undefined,
+        distancePc: typed(dist) > 0 ? typed(dist) : undefined,
         ...sizesGiven,
       },
       radiusEarth,
@@ -500,7 +508,7 @@ export function createEvidencePanel(root, lab) {
       svg('rect', { x: 0, y: 0, width: W, height: H, fill: 'none' }),
       svg('polyline', {
         points: [...x]
-          .map((v, i) => `${sx(v).toFixed(1)},${sy(y[i]).toFixed(1)}`)
+          .map((v, i) => `${tenth(sx(v))},${tenth(sy(y[i]))}`)
           .join(' '),
         fill: 'none',
         stroke: 'currentColor',
@@ -575,11 +583,11 @@ export function createEvidencePanel(root, lab) {
     const bridge = stateFromSystem3d(system, o);
     if (!bridge.ok) return refuse(bridge);
     drawSizes(model === 'transit' ? bridge.warnings : []);
-    const duration = Number(span.value);
-    const epochs = Math.round(Number(count.value));
+    const duration = typed(span);
+    const epochs = Math.round(typed(count));
     if (!(duration > 0) || !(epochs >= 2))
       return refuse({ code: 'setup', why: t('l3e.obs.span') });
-    const sigma = Math.max(0, Number(noise.value) || 0);
+    const sigma = Math.max(0, typed(noise) || 0);
     const setup = {
       format: 'gravitas.observing-setup',
       formatVersion: 1,

@@ -83,7 +83,19 @@ test.describe('the 3-D lab as an embedded figure', () => {
       requests: [],
     });
     await send(page, { type: 'ping' });
-    await page.waitForTimeout(500);
+    // Two frames in the figure: a message it had meant to answer would have
+    // been answered by then.
+    await page
+      .frameLocator('#figure')
+      .locator('html')
+      .evaluate(
+        () =>
+          new Promise(done =>
+            window.requestAnimationFrame(() =>
+              window.requestAnimationFrame(done)
+            )
+          )
+      );
     expect(await heard(page)).toHaveLength(1);
   });
 
