@@ -115,6 +115,12 @@ export const UNITS = Object.freeze({
     factor: 1e3 / 3.085677581491367e19,
     symbol: 'km/s/kpc',
   },
+  // The Hubble constant (Roadmap II Prompt 91).
+  'km/s/Mpc': {
+    dim: 'angular-rate',
+    factor: 1e3 / 3.085677581491367e22,
+    symbol: 'km/s/Mpc',
+  },
 
   W: { dim: 'power', factor: 1, symbol: 'W' },
   // IAU 2015 nominal solar luminosity.
