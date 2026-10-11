@@ -16,6 +16,7 @@ import { tableOf } from './tableObservation.js';
 export const COSMOLOGY_SIDECARS = Object.freeze({
   hubble: '/cosmology/hubble-1929-table1.json',
   des: '/cosmology/des-sn5yr-hd.json',
+  pantheon: '/cosmology/pantheon-plus-hd.json',
   sdss: '/cosmology/sdss-dr18-redshift-slice.json',
   coma: '/cosmology/coma-cluster-quoted.json',
 });
@@ -67,6 +68,30 @@ export function comaOf(pack) {
     radius: column(t, 'radius')[0],
     starMass: column(t, 'star_mass')[0],
     gasMass: column(t, 'gas_mass')[0],
+  };
+}
+
+/**
+ * The Pantheon+SH0ES table (pack `pantheon-plus-hd`, no licence stated,
+ * credited; DECISION_REGISTER.md D-RIGHTS-04): redshift, SH0ES-scale modulus,
+ * its covariance-diagonal error (plotting only), the Cepheid-calibrator flag
+ * and the survey code. Fetched on its own, so no caller of loadCosmologyData
+ * pays for it.
+ */
+export async function loadPantheonPlus(fetchImpl = globalThis.fetch) {
+  const pack = await packOf(
+    () => import('./data/observations/pantheonPlusHd.js'),
+    COSMOLOGY_SIDECARS.pantheon,
+    fetchImpl
+  );
+  const t = tableOf(pack);
+  return {
+    pack: pack.PACK,
+    z: column(t, 'z'),
+    mu: column(t, 'mu'),
+    err: column(t, 'mu_err'),
+    calibrator: column(t, 'cal'),
+    survey: column(t, 'survey'),
   };
 }
 
