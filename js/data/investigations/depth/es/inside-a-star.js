@@ -4,7 +4,7 @@ export default {
     {
       title: 'La temperatura a mano',
       body: 'Toma un gas de peso molecular medio μ = 0,6 sostenido contra el peso de una estrella de masa <em>M</em> y radio <em>R</em>. Igualar la energía térmica por partícula, kT, a la energía gravitatoria por partícula, GMμm<sub>u</sub> ÷ R, da una escala de temperatura T ≈ GMμm<sub>u</sub> ÷ (kR). Para el Sol, GM = 1,3275 × 10<sup>20</sup> m³/s², m<sub>u</sub> = 1,6605 × 10<sup>−27</sup> kg, k = 1,3806 × 10<sup>−23</sup> J/K y R = 6,957 × 10<sup>8</sup> m.',
-      prompt: 'La escala de temperatura del Sol',
+      prompt: 'La escala de temperatura del Sol, en millones de kelvin',
       hints: [
         'Multiplica 1,3275 × 10²⁰ por 0,6 y por 1,6605 × 10⁻²⁷, y divide entre el producto de k y R.',
       ],

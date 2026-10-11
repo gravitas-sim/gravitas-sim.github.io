@@ -25,6 +25,7 @@
 // Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
 import './instrumentStartup.js';
 import { t } from './i18n/index.js';
+import { formatNumber } from './format.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 
 ensureDeferredMessages().catch(() => {});
@@ -149,7 +150,7 @@ function interiorText(sel) {
   const tC = (0.6 * 1.66053907e-27 * pC) / (rhoC * 1.380649e-23);
   return t(`stelW.value.interior.${n === 1.5 ? 'convective' : 'radiative'}`, {
     n,
-    rho: (rhoC / 1000).toPrecision(3),
+    rho: formatNumber(rhoC / 1000, { sig: 3, sci: false }),
     temp: kelvin(tC),
   });
 }

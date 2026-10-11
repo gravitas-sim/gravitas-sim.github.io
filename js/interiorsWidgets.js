@@ -61,14 +61,14 @@ const curves = new Map();
 const client = createStellarClient();
 /** The white-dwarf relation for a mu_e: from the Worker when it has answered, else computed in place. */
 export function curveFor(muE) {
-  const key = muE.toFixed(2);
+  const key = String(Math.round(muE * 100));
   if (!curves.has(key)) curves.set(key, massRadiusCurve(undefined, muE));
   return curves.get(key);
 }
 if (typeof Worker !== 'undefined') {
   client
     .request('whiteDwarfCurve', { muE: 2 })
-    .then(c => curves.set('2.00', c))
+    .then(c => curves.set('200', c))
     .catch(() => {});
 }
 

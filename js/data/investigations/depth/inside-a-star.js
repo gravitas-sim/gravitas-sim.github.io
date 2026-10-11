@@ -26,8 +26,8 @@ export default {
              GM = 1.3275 × 10<sup>20</sup> m³/s², m<sub>u</sub> = 1.6605 ×
              10<sup>−27</sup> kg, k = 1.3806 × 10<sup>−23</sup> J/K and
              R = 6.957 × 10<sup>8</sup> m.`,
-      prompt: 'The temperature scale for the Sun',
-      unit: 'million K',
+      prompt: 'The temperature scale for the Sun, in millions of kelvin',
+      unit: '',
       answer: 13.77,
       tolerance: 0.25,
       hints: [

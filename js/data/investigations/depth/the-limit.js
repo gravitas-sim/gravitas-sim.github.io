@@ -23,8 +23,9 @@ export default {
              1.989 × 10<sup>30</sup> kg) and a radius of 8,864 km. The mean density
              is mass ÷ (4/3 π R³). Give it in units of 10<sup>5</sup> g/cm³
              (1 g/cm³ is 1,000 kg/m³); the instrument lists the same number.`,
-      prompt: 'The mean density of the typical white dwarf',
-      unit: '10⁵ g/cm³',
+      prompt:
+        'The mean density of the typical white dwarf, in units of 10⁵ g/cm³',
+      unit: '',
       answer: 4.07,
       tolerance: 0.06,
       hints: [

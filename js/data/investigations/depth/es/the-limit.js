@@ -4,7 +4,8 @@ export default {
     {
       title: 'La densidad media a mano',
       body: 'La enana típica tiene una masa de 0,597 masas solares (1 masa solar = 1,989 × 10<sup>30</sup> kg) y un radio de 8.864 km. La densidad media es la masa ÷ (4/3 π R³). Dala en unidades de 10<sup>5</sup> g/cm³ (1 g/cm³ son 1.000 kg/m³); el instrumento indica el mismo número.',
-      prompt: 'La densidad media de la enana blanca típica',
+      prompt:
+        'La densidad media de la enana blanca típica, en unidades de 10⁵ g/cm³',
       hints: [
         'Masa: 1,188 × 10³⁰ kg. Volumen: 4,19 × (8,864 × 10⁶ m)³ = 2,92 × 10²¹ m³.',
       ],

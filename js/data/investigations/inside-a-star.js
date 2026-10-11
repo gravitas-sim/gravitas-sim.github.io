@@ -107,8 +107,8 @@ const INSIDE_A_STAR = {
         { id: 'rho', label: 'Central density', unit: 'g/cm³', hint: '76.4' },
         {
           id: 'tc',
-          label: 'Central temperature',
-          unit: 'million K',
+          label: 'Central temperature, millions of K',
+          unit: '',
           hint: '11.8',
         },
       ],
@@ -184,8 +184,8 @@ const INSIDE_A_STAR = {
         { id: 'rho', label: 'Central density', unit: 'g/cm³', hint: '153' },
         {
           id: 'tc',
-          label: 'Central temperature',
-          unit: 'million K',
+          label: 'Central temperature, millions of K',
+          unit: '',
           hint: '23.5',
         },
       ],
@@ -250,8 +250,8 @@ const INSIDE_A_STAR = {
       fields: [
         {
           id: 'tc',
-          label: 'Central temperature',
-          unit: 'million K',
+          label: 'Central temperature, millions of K',
+          unit: '',
           hint: '6.74',
         },
         {

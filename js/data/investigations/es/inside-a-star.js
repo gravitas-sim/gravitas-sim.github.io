@@ -34,7 +34,10 @@ export default {
     {
       title: 'El centro del Sol, como politropo',
       body: `Con <em>n</em> = 3, una masa solar y un radio solar, lee la <strong>densidad central</strong> y la <strong>temperatura central</strong>. El instrumento da la temperatura en kelvin; escríbela en millones de kelvin.`,
-      fields: [{ label: 'Densidad central' }, { label: 'Temperatura central' }],
+      fields: [
+        { label: 'Densidad central' },
+        { label: 'Temperatura central, millones de K' },
+      ],
     },
     {
       title: 'Dónde está la masa',
@@ -47,7 +50,10 @@ export default {
     {
       title: 'El doble de masa en el mismo tamaño',
       body: `Deja el radio en 1 radio solar y pon la masa en <strong>2</strong> masas solares. Lee la densidad central y la temperatura central (en millones de kelvin). Compara cada una con los valores de una masa solar.`,
-      fields: [{ label: 'Densidad central' }, { label: 'Temperatura central' }],
+      fields: [
+        { label: 'Densidad central' },
+        { label: 'Temperatura central, millones de K' },
+      ],
     },
     {
       title: 'Por qué el centro es caliente',
@@ -74,7 +80,7 @@ export default {
       title: 'Una enana roja tiene otra forma',
       body: `Carga “Una enana roja como n = 3/2”: 0,2 masas solares en 0,22 radios solares. Una estrella convectiva de arriba abajo está menos condensada en el centro. Lee la temperatura central (en millones de kelvin) y cuántas veces es más denso el centro que la media.`,
       fields: [
-        { label: 'Temperatura central' },
+        { label: 'Temperatura central, millones de K' },
         { label: 'Densidad central ÷ densidad media' },
       ],
     },
