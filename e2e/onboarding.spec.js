@@ -180,7 +180,7 @@ test.describe('in a lesson', () => {
     await page.evaluate(() =>
       localStorage.setItem(
         'gravitas_next_context',
-        JSON.stringify({ k: 'seq', id: 'orbital-mechanics' })
+        JSON.stringify({ k: 'seq', id: 'gravity-and-orbits' })
       )
     );
     await page.locator('#investigationNext').click();
@@ -189,7 +189,7 @@ test.describe('in a lesson', () => {
     await expect(list.locator('a')).toContainText('Next in');
     await expect(list.locator('a')).toHaveAttribute(
       'href',
-      /investigation=orbital-energy/
+      /investigation=retrograde-motion/
     );
     // The way on to the Library and My work is always there.
     await expect(page.locator('.inv-next a[href="/my-work/"]')).toBeVisible();

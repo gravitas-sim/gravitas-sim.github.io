@@ -258,12 +258,20 @@ test.describe('the pair of lessons', () => {
     await app.boot();
     await page.locator('#investigationsBtn').click();
     await expect(page.locator('#investigationBrowser')).toBeVisible();
-    const seq = page
-      .locator('.inv-seq')
-      .filter({ hasText: /Gravitational waves, from nothing/i });
+    const seq = page.locator('.inv-seq').filter({
+      has: page.locator(
+        '[data-sequence-lesson="what-is-a-gravitational-wave"]'
+      ),
+    });
     await expect(seq).toBeVisible();
-    const steps = seq.locator('.inv-seq-step');
+    // The pair closes Gravity and orbits (Prompt 97 folded the old two-lesson
+    // order into it), so the last two steps are the ones that matter.
+    const all = seq.locator('.inv-seq-step');
+    const steps = all.filter({
+      hasText: /What Is a Gravitational Wave|Listening to Spacetime/i,
+    });
     await expect(steps).toHaveCount(2);
+    await expect(all.last()).toContainText(/Listening to Spacetime/i);
     // Order, and the recommendation - which must be a recommendation: the
     // beginner lesson needs nothing, and the advanced one names it.
     await expect(steps.nth(0)).toContainText(/What Is a Gravitational Wave/i);
