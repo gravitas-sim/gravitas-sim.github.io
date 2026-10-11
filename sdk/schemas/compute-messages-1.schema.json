@@ -1,0 +1,456 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/compute-messages-1.schema.json",
+  "title": "gravitas-compute messages/1",
+  "description": "A message the compute page and its sandboxed frame exchange (COMPUTE.md): the page sends hello (to the frame's window, with a MessagePort), then load, run and cancel on that port; the frame sends ready, loaded, progress, result and error. Every string is bounded: an input of at most 2,000,000 characters, at most 40 cells of 20,000, an answer of at most 4,000,000. js/compute/messages.js readMessage() is the authority and the frame and the page both read through it; it refuses another key, a field of the wrong type, a string past its bound, and a message from the wrong side. FORMATS.md lists it.",
+  "anyOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "version",
+        "type"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "gravitas-compute"
+        },
+        "version": {
+          "const": 1
+        },
+        "type": {
+          "const": "hello"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "version",
+        "type",
+        "id",
+        "packages"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "gravitas-compute"
+        },
+        "version": {
+          "const": 1
+        },
+        "type": {
+          "const": "load"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.:-]{1,64}$"
+        },
+        "packages": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "enum": [
+              "numpy",
+              "matplotlib"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "version",
+        "type",
+        "id",
+        "input",
+        "params",
+        "cells",
+        "packages"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "gravitas-compute"
+        },
+        "version": {
+          "const": 1
+        },
+        "type": {
+          "const": "run"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.:-]{1,64}$"
+        },
+        "input": {
+          "type": "string",
+          "maxLength": 2000000
+        },
+        "params": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "cells": {
+          "type": "array",
+          "maxItems": 40,
+          "items": {
+            "type": "string",
+            "maxLength": 20000
+          }
+        },
+        "packages": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "enum": [
+              "numpy",
+              "matplotlib"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "version",
+        "type",
+        "id"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "gravitas-compute"
+        },
+        "version": {
+          "const": 1
+        },
+        "type": {
+          "const": "cancel"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.:-]{1,64}$"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "version",
+        "type",
+        "build",
+        "probes"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "gravitas-compute"
+        },
+        "version": {
+          "const": 1
+        },
+        "type": {
+          "const": "ready"
+        },
+        "build": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "probes": {
+          "type": "object",
+          "maxProperties": 12,
+          "propertyNames": {
+            "pattern": "^[A-Za-z][A-Za-z0-9.]{0,31}$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "maxLength": 80
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "version",
+        "type",
+        "id",
+        "runtime",
+        "marks",
+        "heapBytes"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "gravitas-compute"
+        },
+        "version": {
+          "const": 1
+        },
+        "type": {
+          "const": "loaded"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.:-]{1,64}$"
+        },
+        "runtime": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "version",
+            "python",
+            "lockSha256",
+            "packages"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_-]{0,31}$"
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^[0-9A-Za-z.+_-]{1,32}$"
+            },
+            "python": {
+              "type": "string",
+              "pattern": "^[0-9A-Za-z.+_-]{1,32}$"
+            },
+            "lockSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "packages": {
+              "type": "object",
+              "maxProperties": 16,
+              "additionalProperties": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 32
+              }
+            }
+          }
+        },
+        "marks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "runtime": {
+              "type": "number",
+              "minimum": 0
+            },
+            "packages": {
+              "type": "number",
+              "minimum": 0
+            },
+            "cells": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "heapBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967296
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "version",
+        "type",
+        "id",
+        "phase"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "gravitas-compute"
+        },
+        "version": {
+          "const": 1
+        },
+        "type": {
+          "const": "progress"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.:-]{1,64}$"
+        },
+        "phase": {
+          "enum": [
+            "runtime",
+            "packages",
+            "cells"
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "version",
+        "type",
+        "id",
+        "output",
+        "stdout",
+        "heapBytes",
+        "marks",
+        "runtime"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "gravitas-compute"
+        },
+        "version": {
+          "const": 1
+        },
+        "type": {
+          "const": "result"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.:-]{1,64}$"
+        },
+        "output": {
+          "type": "string",
+          "maxLength": 4000000
+        },
+        "stdout": {
+          "type": "string",
+          "maxLength": 64000
+        },
+        "heapBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967296
+        },
+        "marks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "runtime": {
+              "type": "number",
+              "minimum": 0
+            },
+            "packages": {
+              "type": "number",
+              "minimum": 0
+            },
+            "cells": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "runtime": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "version",
+            "python",
+            "lockSha256",
+            "packages"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_-]{0,31}$"
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^[0-9A-Za-z.+_-]{1,32}$"
+            },
+            "python": {
+              "type": "string",
+              "pattern": "^[0-9A-Za-z.+_-]{1,32}$"
+            },
+            "lockSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "packages": {
+              "type": "object",
+              "maxProperties": 16,
+              "additionalProperties": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 32
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "version",
+        "type",
+        "id",
+        "code",
+        "message"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "gravitas-compute"
+        },
+        "version": {
+          "const": 1
+        },
+        "type": {
+          "const": "error"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_.:-]{1,64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "code": {
+          "enum": [
+            "invalid-request",
+            "busy",
+            "runtime-download",
+            "runtime-version",
+            "notebook-error",
+            "memory",
+            "output-too-large",
+            "cancelled"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      }
+    }
+  ]
+}

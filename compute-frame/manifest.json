@@ -1,0 +1,26 @@
+{
+  "note": "Written by tools/compute.mjs in the Gravitas application repository. Do not edit.",
+  "origin": "https://gravitas-compute.github.io",
+  "build": "6c5b2588b069612c4cad91c682a92c7c9405bf3504dfbaa85600632400ff6ba7",
+  "indexSha256": "3713f05794c98564f247b4995cdccd32b21043999c521588006cabc63d8969fe",
+  "scriptSha256Base64": "+eFnu00Q13nMJN3z4REfRxSUMSrSwBJK0z8rZYl2p4A=",
+  "csp": "default-src 'none'; script-src 'sha256-+eFnu00Q13nMJN3z4REfRxSUMSrSwBJK0z8rZYl2p4A=' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; connect-src https://cdn.jsdelivr.net; worker-src blob:; base-uri 'none'; form-action 'none'",
+  "answers": [
+    "https://gravitas-sim.online"
+  ],
+  "runtime": {
+    "name": "pyodide",
+    "version": "314.0.7",
+    "python": "3.14.2",
+    "base": "https://cdn.jsdelivr.net/pyodide/v314.0.7/full/",
+    "lockSha256": "5dc2fc119108bc148c7457dc86e7675b5c87e1cafd420b9c34c1eaef7b36c010",
+    "packages": {
+      "numpy": {
+        "version": "2.4.6"
+      },
+      "matplotlib": {
+        "version": "3.10.8"
+      }
+    }
+  }
+}

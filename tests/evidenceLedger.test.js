@@ -179,6 +179,25 @@ const every = () => [
     }),
   }),
   artifactEntry({
+    source: SOURCE.COMPUTE_CAPSULE,
+    title: 'Capsule',
+    capturedAt: at,
+    context: { page: 'compute' },
+    envelope: artifact({
+      id: 'capsule-1',
+      source: { kind: 'analysis', id: 'line-centroid', version: '1', digest },
+      quantities: [
+        {
+          id: 'line.centroid',
+          value: 6560.8,
+          unit: 'Angstrom',
+          uncertainty: { kind: 'sigma', sigma: 0.05, basis: 'data' },
+          origin: 'measured',
+        },
+      ],
+    }),
+  }),
+  artifactEntry({
     source: SOURCE.COMPARISON,
     title: 'Comparison',
     capturedAt: at,

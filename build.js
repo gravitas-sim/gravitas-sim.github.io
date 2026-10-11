@@ -80,6 +80,10 @@ const STATIC_DIRS = [
   'vendor',
   'catalog/packages',
   'js/fragments',
+  // The compute page's reviewed notebooks and their example inputs, fetched
+  // by /compute/ when a run is asked for (COMPUTE.md).
+  'compute/notebooks',
+  'compute/inputs',
 ];
 
 // Static document pages outside the single-page app.
@@ -120,6 +124,7 @@ const DOC_PAGES = [
   'mission/lab',
   '3d',
   'sky',
+  'compute',
 ];
 
 /**
@@ -740,6 +745,24 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'sky-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The compute page (/compute/, COMPUTE.md): its own entry, opt-in, online
+  // only, and kept out of the precache (tools/build-service-worker.mjs). It
+  // runs no Python itself; the frame and the runtime are another origin's.
+  if (existsSync('js/computePage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/computePage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'compute-[hash]',
       legalComments: 'none',
     });
   }

@@ -3713,6 +3713,7 @@ export const EN_DEFERRED = {
   'nb.source.derived-quantity': 'Derived quantity',
   'nb.formula.summary': 'Derive a quantity by a formula',
   'nb.source.experiment-result': 'Experiment result',
+  'nb.source.compute-capsule': 'Notebook run (compute capsule)',
   'nb.entry.cite': 'The result and where it came from',
   'nb.cite.source': 'Made by',
   'nb.cite.digest': 'Digest of its data',

@@ -3623,6 +3623,7 @@ export const ES_DEFERRED = {
   'nb.source.derived-quantity': 'Cantidad derivada',
   'nb.formula.summary': 'Derivar una cantidad con una fórmula',
   'nb.source.experiment-result': 'Resultado de experimento',
+  'nb.source.compute-capsule': 'Ejecución de cuaderno (cápsula de cálculo)',
   'nb.entry.cite': 'El resultado y de dónde viene',
   'nb.cite.source': 'Producido por',
   'nb.cite.digest': 'Resumen de sus datos',

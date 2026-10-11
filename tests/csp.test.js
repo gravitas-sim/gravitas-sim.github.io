@@ -14,6 +14,7 @@ import { readFileSync } from 'node:fs';
 
 import { inlineScripts, pages, policyFor, withPolicy } from '../tools/csp.mjs';
 import { ALLOW } from '../js/archive/cds.js';
+import { FRAME_ORIGIN } from '../js/compute/origin.js';
 
 const directives = policy =>
   Object.fromEntries(
@@ -66,9 +67,16 @@ describe('every published page', () => {
       const beyond = d['connect-src'].filter(
         s => s !== "'self'" && s !== 'blob:'
       );
+      // The compute page also fetches its frame's document, to check its hash
+      // before framing it (COMPUTE.md); it names the one origin and no other.
       expect({ page, beyond: beyond.sort() }).toEqual({
         page,
-        beyond: page === 'observatory/index.html' ? [...ALLOW].sort() : [],
+        beyond:
+          page === 'observatory/index.html'
+            ? [...ALLOW].sort()
+            : page === 'compute/index.html'
+              ? [FRAME_ORIGIN]
+              : [],
       });
     }
   });
@@ -77,13 +85,23 @@ describe('every published page', () => {
     for (const page of all)
       expect(
         directives(policyOf(readFileSync(page, 'utf8')))['worker-src']
-      ).toEqual(["'self'", 'blob:']);
+      ).toEqual(
+        // The compute page starts no Worker: its frame does, on its own origin.
+        page === 'compute/index.html' ? ["'none'"] : ["'self'", 'blob:']
+      );
     // A Worker made from a Blob URL, in anything the site ships.
     const shipped = execFileSync('git', ['ls-files', 'js', 'sdk/lib'], {
       encoding: 'utf8',
     })
       .split('\n')
-      .filter(f => f.endsWith('.js') || f.endsWith('.mjs'));
+      // js/compute/frame/ is the compute frame's own script, bundled into the
+      // document published to the compute origin (tools/compute.mjs), where
+      // its policy names worker-src blob: itself; no page of this site loads it.
+      .filter(
+        f =>
+          (f.endsWith('.js') || f.endsWith('.mjs')) &&
+          !f.startsWith('js/compute/frame/')
+      );
     const blobWorkers = shipped.filter(f =>
       /new Worker\([^)]*(?:blob|Blob|createObjectURL)/s.test(
         readFileSync(f, 'utf8')

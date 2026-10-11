@@ -8,6 +8,7 @@
     "js/blackHolePhysics.js": 11,
     "js/blackHoleWidgets.js": 9,
     "js/chaosWidgets.js": 11,
+    "js/computePage.js": 2,
     "js/coursePage.js": 1,
     "js/csv.js": 1,
     "js/darkMatterWidgets.js": 26,
@@ -141,6 +142,7 @@
     "js/validation/physicsChecks.js": 131
   },
   "parsing": {
+    "js/computePage.js": 1,
     "js/mission/lab/curriculum.js": 1,
     "js/missionLabPage.js": 1,
     "js/missionPage.js": 2,

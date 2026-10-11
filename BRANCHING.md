@@ -57,6 +57,7 @@ The table is written from `tools/generate-graph.mjs`, the list that
 | `catalog/catalog.json` | `node tools/catalog.mjs generate` |  |
 | `js/data/investigations/manifest.js`, `js/data/investigations/manifest.es.js`, `js/data/investigations/browseData.js` | `node tools/build-investigation-manifest.js` |  |
 | `images/investigations` | `node tools/generate-lesson-cards.mjs` |  |
+| `compute-frame`, `js/compute/framePin.js`, `js/compute/catalogueHashes.js` | `node tools/compute.mjs` |  |
 | `js/data/teachingGenerated.js` | `node tools/build-teaching-demos.mjs` |  |
 | `library/library.json` | `node tools/build-library.mjs` |  |
 | `teaching/investigation`, `teaching/activity`, `teaching/find`, `teaching/alignment` | `node tools/build-adoption-pages.mjs` | Whole files, each stamped with the shared shell and its policy as the repository holds it, so shell.mjs --write and csp.mjs --write find nothing to change. |

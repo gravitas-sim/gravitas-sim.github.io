@@ -57,7 +57,7 @@ describe('the decision register', () => {
     expect(all.length).toBeGreaterThan(30);
     for (const r of all) {
       expect([r.id, r.cells]).toEqual([r.id, 8]);
-      expect(r.id).toMatch(/^D-[A-Z0-9]+-\d{2}$/);
+      expect(r.id).toMatch(/^D-[A-Z0-9]+(-[A-Z0-9]+)*-\d{2}$/);
       for (const k of ['title', 'source', 'verdict', 'where', 'reverse'])
         expect([r.id, k, r[k].length > 0]).toEqual([r.id, k, true]);
     }

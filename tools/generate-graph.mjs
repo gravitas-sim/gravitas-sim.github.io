@@ -66,6 +66,27 @@ export const GRAPH = Object.freeze([
     after: ['manifest'],
   },
   {
+    // Roadmap II Prompt 101 (COMPUTE.md): the compute page's sandboxed frame,
+    // published verbatim to its own origin, the pin the page checks it against,
+    // and the hashes of the reviewed notebooks and their example inputs.
+    id: 'compute',
+    generate: 'node tools/compute.mjs',
+    check: 'node tools/compute.mjs --check',
+    inputs: [
+      'js/compute',
+      'compute/notebooks',
+      'compute/inputs',
+      'tools/compute.mjs',
+      'LICENSE',
+    ],
+    outputs: [
+      'compute-frame',
+      'js/compute/framePin.js',
+      'js/compute/catalogueHashes.js',
+    ],
+    after: [],
+  },
+  {
     id: 'teaching',
     generate: 'node tools/build-teaching-demos.mjs',
     check: 'node tools/build-teaching-demos.mjs --check',

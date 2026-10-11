@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 49 of them. 26 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 51 of them. 28 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -64,6 +64,8 @@ The columns:
 | gravitas.catalog-curation | format, formatVersion | 1 | tools/catalog.mjs readCuration | repository | not checked | not checked | [yes](sdk/schemas/catalog-curation-1.schema.json) |
 | gravitas.extension-archive | none (the archive structure) | 1 | sdk/lib/archive.mjs, js/catalog/archive.js | repository, download | structure checked, not version | structure checked, not version | no |
 | gravitas-embed messages | protocol, version | 1 | js/embedMessages.js readMessage | memory | v1 only | refused by error code | [yes](sdk/schemas/embed-messages-1.schema.json) |
+| gravitas-compute messages | protocol, version | 1 | js/compute/messages.js readMessage | memory | v1 only | refused by error code (unsupported-version) | [yes](sdk/schemas/compute-messages-1.schema.json) |
+| gravitas.compute-capsule | format, formatVersion | 1 | js/compute/capsule.js readCapsule, verifyCapsule | download, My work (the envelope it holds, as a notebook entry) | v1 only | refused: "reads /1" | [yes](sdk/schemas/compute-capsule-1.schema.json) |
 | embed options | query ev | 1 | js/embedOptions.js readEmbedOptions | link | v1 only | ignored: opens as a plain embed | no |
 | gravitas.student-data | format, formatVersion | 1 | js/storage/index.js Store.importAll | download | v1 only | refused, with a reason | no |
 | gravitas.made | format, formatVersion, kind | 1 | js/myWork/made.js readMade | localStorage, inside gravitas.student-data | v1 only | left out of the list, not overwritten | no |

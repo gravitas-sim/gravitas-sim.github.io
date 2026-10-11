@@ -54,6 +54,9 @@ const NOT_THE_SITE = new Set([
   'coverage',
   'bench',
   '_siteA',
+  // The compute frame (COMPUTE.md): published verbatim to its own origin,
+  // gravitas-compute.github.io, and not a page of this site's build.
+  'compute-frame',
   '_siteB',
   // The worker-realm spike. It has an index.html and it is deliberately not a
   // page: MULTI_WORLD_DECISION.md records that the multi-instance engine was

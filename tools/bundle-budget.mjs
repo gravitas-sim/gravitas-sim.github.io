@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1987.9,
+    limit: 1988.0,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -607,7 +607,11 @@ const BUDGETS = [
       '0.4 KB more, and the rest is its words in two languages, the ' +
       'Observatory and notebook forms, the composer field and the derived ' +
       'entry. The initial download did not move (789.0 KB). D-BUDGET-29, under ' +
-      'the standing size-budget approval in the project CLAUDE.md.',
+      'the standing size-budget approval in the project CLAUDE.md.' +
+      '\n\n' +
+      'Raised from 1987.9 to 1988.0 KB gzipped for Prompt 101 (D-BUDGET-COMPUTE-01, ' +
+      'the standing size-budget approval): the compute-capsule notebook source ' +
+      'and its words in the deferred catalogs, on top of the formula language.',
   },
 ];
 

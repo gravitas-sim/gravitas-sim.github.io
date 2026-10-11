@@ -86,6 +86,7 @@ const SURFACES = {
   sandbox: ['Sandbox', 'Simulación libre'],
   observatory: ['Observatory', 'Observatorio'],
   experiments: ['Experiments', 'Experimentos'],
+  compute: ['Compute page', 'Página de cálculo'],
 };
 
 // --- Reading -----------------------------------------------------------------
