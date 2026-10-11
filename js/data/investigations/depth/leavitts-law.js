@@ -8,6 +8,7 @@
 // =============================================================================
 
 const LEAVITT = (values = {}) => ({ id: 'leavitt-law', values });
+const LMC = { host: 0 };
 
 export default {
   id: 'leavitts-law',
