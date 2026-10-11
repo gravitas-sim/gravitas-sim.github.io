@@ -532,6 +532,16 @@ sdss-dr18-stellar-spectra: Four observed stellar spectra: SDSS DR18, one each of
     Gunn et al. 2006, AJ 131, 2332 (the SDSS 2.5 m telescope), doi:10.1086/500975
     Yanny et al. 2009, AJ 137, 4377 (SEGUE), doi:10.1088/0004-6256/137/5/4377
 
+shoes-r22-cepheids: Cepheids in the LMC, NGC 4258 and M101: periods and Wesenheit magnitudes (Riess et al. 2022)
+  File: js/data/observations/shoesR22Cepheids.js (compilation)
+  Licence: CC BY 4.0. The paper's publisher page and Crossref record say original content may be used under CC BY 4.0 (read 2026-10-10); the repository copy of the table has no licence of its own, so the pack relies on the paper's. Attribute Riess et al. 2022, ApJ 934, L7.
+  Basis: A published table from a CC BY 4.0 article, reduced to periods and Wesenheit magnitudes with the paper cited and credited; the same finding as the cosmology gate (COSMOLOGY_GATE.md, D-COSMO-07), made again here because the pack does not depend on that delegated verdict (D-LADDER-01).
+  Cite:
+    Riess et al. 2022, ApJ 934, L7 (A comprehensive measurement of the local value of the Hubble constant), doi:10.3847/2041-8213/ac5c5b
+    Pietrzynski et al. 2019, Nature 567, 200 (the LMC distance from eclipsing binaries), doi:10.1038/s41586-019-0999-4
+    Reid, Pesce & Riess 2019, ApJ 886, L27 (the NGC 4258 maser distance), doi:10.3847/2041-8213/ab552d
+    Leavitt & Pickering 1912, Harvard College Observatory Circular 173
+
 sky-bright-stars: Bright stars to V 4.5 for the Sky Lab: the Yale Bright Star Catalogue (5th revised edition)
   File: js/data/sky/brightStars.js (compilation)
   Licence: no license stated. The ReadMe of CDS catalogue V/50 (pinned here), the Yale/Harvard catalogue pages and HEASARC's page state no licence and no permission to redistribute. CDS's terms (cds.unistra.fr/vizier-org/licences_vizier.html, read 2026-10-09) say VizieR data are free for scientific use with the original authors cited and that commercial use depends on the origin, so use with citation is confirmed and redistribution of a derived subset is not.
@@ -540,6 +550,14 @@ sky-bright-stars: Bright stars to V 4.5 for the Sky Lab: the Yale Bright Star Ca
     Hoffleit & Warren 1991, The Bright Star Catalogue, 5th Revised Ed. (preliminary version), NASA/ADC; CDS V/50, https://cdsarc.cds.unistra.fr/viz-bin/cat/V/50
     Hoffleit & Jaschek 1982, The Bright Star Catalogue, 4th Revised Ed., Yale University Observatory
     Bessell & Murphy 2012, PASP 124, 140 (the B and V bands the colour temperature uses), doi:10.1086/664083
+
+tess-eta-aql-s81: Eta Aquilae: TESS sector 81 light curve (a classical Cepheid)
+  File: js/data/observations/tessEtaAqlS81.js (observed)
+  Licence: public domain. NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive.
+  Cite:
+    TESS Light Curves - All Sectors, STScI/MAST, doi:10.17909/t9-nmc8-f686
+    Ricker et al. 2015, JATIS 1, 014003 (TESS), doi:10.1117/1.JATIS.1.1.014003
+    Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC), doi:10.1117/12.2233418
 
 tess-hd209458-s56-aperture: HD 209458: TESS sector 56 aperture mask
   File: js/data/observations/tessHd209458S56Aperture.js (observed)
@@ -552,6 +570,14 @@ tess-hd209458-s56-aperture: HD 209458: TESS sector 56 aperture mask
 
 tess-hd209458-s56-lc: HD 209458: TESS sector 56 light curve
   File: js/data/observations/tessHd209458S56.js (observed)
+  Licence: public domain. NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive.
+  Cite:
+    TESS Light Curves - All Sectors, STScI/MAST, doi:10.17909/t9-nmc8-f686
+    Ricker et al. 2015, JATIS 1, 014003 (TESS), doi:10.1117/1.JATIS.1.1.014003
+    Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC), doi:10.1117/12.2233418
+
+tess-su-dra-s15: SU Draconis: TESS sector 15 light curve (an RR Lyrae star)
+  File: js/data/observations/tessSuDraS15.js (observed)
   Licence: public domain. NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive.
   Cite:
     TESS Light Curves - All Sectors, STScI/MAST, doi:10.17909/t9-nmc8-f686
@@ -573,3 +599,31 @@ trappist-1-system: TRAPPIST-1: the star and its seven planets, compiled from the
     Christiansen et al. 2025, PSJ 6, 186 (the NASA Exoplanet Archive), doi:10.3847/psj/ade3c2
     Wenger et al. 2000, A&AS 143, 9 (SIMBAD), doi:10.1051/aas:2000332
 <!--/fact-block-->
+
+tess-su-dra-s15: SU Draconis: TESS sector 15 light curve (an RR Lyrae star)
+  File: js/data/observations/tessSuDraS15.js (observed)
+  Licence: public domain. NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive.
+  Basis: 
+  Cite:
+    TESS Light Curves - All Sectors, STScI/MAST, doi:10.17909/t9-nmc8-f686
+    Ricker et al. 2015, JATIS 1, 014003 (TESS), doi:10.1117/1.JATIS.1.1.014003
+    Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC), doi:10.1117/12.2233418
+
+tess-eta-aql-s81: Eta Aquilae: TESS sector 81 light curve (a classical Cepheid)
+  File: js/data/observations/tessEtaAqlS81.js (observed)
+  Licence: public domain. NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive.
+  Basis: 
+  Cite:
+    TESS Light Curves - All Sectors, STScI/MAST, doi:10.17909/t9-nmc8-f686
+    Ricker et al. 2015, JATIS 1, 014003 (TESS), doi:10.1117/1.JATIS.1.1.014003
+    Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC), doi:10.1117/12.2233418
+
+shoes-r22-cepheids: Cepheids in the LMC, NGC 4258 and M101: periods and Wesenheit magnitudes (Riess et al. 2022)
+  File: js/data/observations/shoesR22Cepheids.js (compilation)
+  Licence: CC BY 4.0. The paper's publisher page and Crossref record say original content may be used under CC BY 4.0 (read 2026-10-10); the repository copy of the table has no licence of its own, so the pack relies on the paper's. Attribute Riess et al. 2022, ApJ 934, L7.
+  Basis: A published table from a CC BY 4.0 article, reduced to periods and Wesenheit magnitudes with the paper cited and credited; the same finding as the cosmology gate (COSMOLOGY_GATE.md, D-COSMO-07), made again here because the pack does not depend on that delegated verdict (D-LADDER-01).
+  Cite:
+    Riess et al. 2022, ApJ 934, L7 (A comprehensive measurement of the local value of the Hubble constant), doi:10.3847/2041-8213/ac5c5b
+    Pietrzynski et al. 2019, Nature 567, 200 (the LMC distance from eclipsing binaries), doi:10.1038/s41586-019-0999-4
+    Reid, Pesce & Riess 2019, ApJ 886, L27 (the NGC 4258 maser distance), doi:10.3847/2041-8213/ab552d
+    Leavitt & Pickering 1912, Harvard College Observatory Circular 173

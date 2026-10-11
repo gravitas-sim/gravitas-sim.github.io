@@ -47,6 +47,13 @@ const STATIC_FILES = [
   'gaia/solar-neighbourhood.json',
   'gaia/ngc2420.json',
   'gaia/milky-way-rotation-curve.json',
+  // The variable-star tables' rows (data-packs/tess-su-dra-s15.json and two
+  // more, Roadmap II Prompt 96), fetched by the variable-star instruments.
+  'variables/tess-su-dra-s15.json',
+  'variables/tess-eta-aql-s81.json',
+  'variables/shoes-r22-cepheids.json',
+  // The synthetic labelled sample of the classification instrument.
+  'variables/class-sample.json',
 ];
 
 // Directories copied whole. Lesson figures are photographs used under licenses

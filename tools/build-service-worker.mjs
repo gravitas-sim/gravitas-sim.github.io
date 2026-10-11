@@ -151,6 +151,11 @@ const FILES = [
   { path: 'gaia/solar-neighbourhood.json', core: false },
   { path: 'gaia/ngc2420.json', core: false },
   { path: 'gaia/milky-way-rotation-curve.json', core: false },
+  // The variable-star tables' rows (Roadmap II Prompt 96).
+  { path: 'variables/tess-su-dra-s15.json', core: false },
+  { path: 'variables/tess-eta-aql-s81.json', core: false },
+  { path: 'variables/shoes-r22-cepheids.json', core: false },
+  { path: 'variables/class-sample.json', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },
@@ -170,6 +175,10 @@ const OBSERVATORY_ONLY = new Set([
   'js/data/observations/gaiaSolarNeighbourhood.js',
   'js/data/observations/gaiaNgc2420.js',
   'js/data/observations/milkyWayRotationCurve.js',
+  // The variable-star packs' records (js/variablesData.js); the rows are sidecars.
+  'js/data/observations/tessSuDraS15.js',
+  'js/data/observations/tessEtaAqlS81.js',
+  'js/data/observations/shoesR22Cepheids.js',
   // The radiation kernel's data (Roadmap II Prompt 82): loaded on demand by
   // js/kernels/radiation/packs.js, and by no page's start-up.
   'js/data/radiation/bandpasses.js',

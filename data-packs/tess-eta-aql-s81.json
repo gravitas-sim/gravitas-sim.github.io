@@ -1,0 +1,203 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "tess-eta-aql-s81",
+  "version": "1.0.0",
+  "title": "Eta Aquilae: TESS sector 81 light curve (a classical Cepheid)",
+  "object": {
+    "name": "Eta Aquilae",
+    "identifiers": [
+      "TIC 111010123"
+    ],
+    "ra": 298.118209419885,
+    "dec": 1.00566065135047,
+    "frame": "ICRS, epoch J2000",
+    "tessMagnitude": 3.14499998
+  },
+  "facility": {
+    "observatory": "TESS",
+    "instrument": "camera 1, CCD 2, 2-minute cadence",
+    "pipeline": "SPOC spoc-5.0.107-20240830"
+  },
+  "dataType": "light-curve",
+  "origin": "observed",
+  "credit": "TESS, sector 81 (NASA; SPOC light curve from MAST)",
+  "license": {
+    "status": "public-domain",
+    "statement": "NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive."
+  },
+  "retrieved": "2026-10-10",
+  "time": {
+    "scale": "TDB",
+    "reference": "BTJD = BJD - 2457000",
+    "unit": "d"
+  },
+  "columns": [
+    {
+      "id": "time",
+      "name": "time",
+      "unit": "d",
+      "description": "bin centre, BTJD = BJD - 2457000"
+    },
+    {
+      "id": "flux",
+      "name": "flux",
+      "unit": "",
+      "description": "PDCSAP flux over its median"
+    },
+    {
+      "id": "flux_err",
+      "name": "flux error",
+      "unit": "",
+      "uncertaintyOf": "flux",
+      "description": "propagated PDCSAP error over the median, one sigma, per bin"
+    }
+  ],
+  "masks": [
+    {
+      "column": "QUALITY",
+      "rule": "any nonzero flag drops the cadence",
+      "dropped": 3194
+    },
+    {
+      "column": "bin",
+      "rule": "a bin with fewer than 3 kept cadences is dropped",
+      "dropped": 0
+    }
+  ],
+  "reductions": [
+    "60-minute bins average 30 two-minute cadences each; the bin error is the quadrature sum over the count.",
+    "Flux is stored to 20 ppm, its error to 1 ppm and time to 0.0001 d (8.6 s); the manifest records the largest rounding.",
+    "Eta Aql is a naked-eye star (Tmag 3.1), saturated in TESS: the SPOC aperture collects the bleed trails and the light curve carries systematics at the few-percent level, which is why the residuals about a Fourier fit are larger than the photon noise. The run covers about 3.7 cycles of its period."
+  ],
+  "source": {
+    "archive": "MAST (Barbara A. Mikulski Archive for Space Telescopes)",
+    "urls": [
+      "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2024196212429-s0081-0000000111010123-0276-s_lc.fits"
+    ],
+    "citations": [
+      {
+        "text": "TESS Light Curves - All Sectors, STScI/MAST",
+        "doi": "10.17909/t9-nmc8-f686"
+      },
+      {
+        "text": "Ricker et al. 2015, JATIS 1, 014003 (TESS)",
+        "doi": "10.1117/1.JATIS.1.1.014003"
+      },
+      {
+        "text": "Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC)",
+        "doi": "10.1117/12.2233418"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "tess2024196212429-s0081-0000000111010123-0276-s_lc.fits",
+      "url": "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2024196212429-s0081-0000000111010123-0276-s_lc.fits",
+      "bytes": 1949760,
+      "sha256": "552107abb14a0cc390c1ca4ff8ecfd2ba91581be725dd9ce527c1f5c1db546c1"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/variables.mjs",
+    "version": "1.0.0",
+    "options": {
+      "binMinutes": 60,
+      "minPerBin": 3,
+      "errStepPpm": 5,
+      "fluxStepPpm": 20,
+      "columns": [
+        {
+          "id": "time",
+          "step": 0.0001
+        },
+        {
+          "id": "flux",
+          "step": 0.00002
+        },
+        {
+          "id": "flux_err",
+          "step": 0.000001
+        }
+      ]
+    },
+    "steps": [
+      "Read TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR and QUALITY from the LIGHTCURVE binary table.",
+      "Keep cadences with QUALITY 0 and a finite time, flux and error.",
+      "Divide flux and error by the median kept flux.",
+      "Average into 60-minute bins from t0, keeping bins with at least 3 cadences.",
+      "Store time, flux and error as table-columns/1."
+    ],
+    "record": {
+      "cadences": 19174,
+      "flagged": 3194,
+      "notFinite": 0,
+      "kept": 15980,
+      "binsDropped": 0,
+      "bins": 541,
+      "medianFlux": 9176163.5,
+      "fluxUnit": "e-/s",
+      "rows": 541,
+      "columns": [
+        {
+          "id": "time",
+          "type": "int32",
+          "step": 0.0001,
+          "missing": 0,
+          "maxRounding": 0.0000333
+        },
+        {
+          "id": "flux",
+          "type": "int16",
+          "step": 0.00002,
+          "missing": 0,
+          "maxRounding": 2.22e-16
+        },
+        {
+          "id": "flux_err",
+          "type": "int16",
+          "step": 0.000001,
+          "missing": 0,
+          "maxRounding": 3.39e-21
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    "PDCSAP flux has had instrumental systematics and crowding removed by SPOC; that correction is used as published.",
+    "Times are barycentric dynamical time for the target, as SPOC corrects them.",
+    "The light is the TESS band, not V or I; the run is short, so the period from it is good to a few tenths of a percent and no better."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/observations/tessEtaAqlS81.js",
+    "bytes": 3751,
+    "sha256": "7e2b1801fd9e64cb6665160d2aca397c3cc67708e5792a2c434176ee459f8cd4",
+    "sidecar": {
+      "file": "variables/tess-eta-aql-s81.json",
+      "bytes": 6005,
+      "sha256": "2633aed54797ca1025dec8c8d44d45b88d8de8ad1a0da66c389bf1c6fbd56111"
+    }
+  },
+  "validation": {
+    "check": "a period search and a six-harmonic refinement find the published period within 2 percent",
+    "against": [
+      {
+        "quantity": "period",
+        "value": 7.1767,
+        "unit": "d",
+        "ref": "GCVS (Samus et al. 2017): 7.176641 d"
+      }
+    ],
+    "result": {
+      "foundPeriod": 7.22638,
+      "peakPeriod": 7.50185,
+      "fraction": 0.0069,
+      "points": 541
+    }
+  }
+}
