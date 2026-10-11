@@ -33,9 +33,9 @@ export const ASTRONOMY_SEMESTER = {
     esOf: '2adc9246',
   },
   teacherGuide: {
-    en: "Set about one investigation a week beside the lectures: the core path is roughly eleven to fifteen hours in all, spread over a semester. The chapters are matched from the book's table of contents; check them against the edition you use. Every investigation has an instructor guide and an answer key in the instructors' portal. Students need nothing installed, and once Gravitas has been opened it works without a network. The introductory readings are optional background; the advanced items are for extra credit or an honors section.",
-    es: 'Asigna una investigación por semana junto a las clases: el camino principal ocupa de once a quince horas en total, repartidas en el semestre. Los capítulos se alinearon con el índice del libro; compruébalos con la edición que uses. Cada investigación tiene una guía para el docente y una clave de respuestas en el portal para docentes. Los estudiantes no necesitan instalar nada y, una vez abierto Gravitas, funciona sin red. Las lecturas introductorias son contexto opcional; los elementos avanzados sirven para crédito extra o un grupo de honores.',
-    esOf: '76688fcb',
+    en: "Set about one investigation a week beside the lectures: the core path is roughly eleven to fifteen hours in all, spread over a semester. The chapters are matched from the book's table of contents; check them against the edition you use. Every investigation has instructor notes and an answer key in the instructors' portal. Students need nothing installed, and once Gravitas has been opened it works without a network. The introductory readings are optional background; the advanced items are for extra credit or an honors section.",
+    es: 'Asigna una investigación por semana junto a las clases: el camino principal ocupa de once a quince horas en total, repartidas en el semestre. Los capítulos se alinearon con el índice del libro; compruébalos con la edición que uses. Cada investigación tiene notas para el docente y una clave de respuestas en el portal para docentes. Los estudiantes no necesitan instalar nada y, una vez abierto Gravitas, funciona sin red. Las lecturas introductorias son contexto opcional; los elementos avanzados sirven para crédito extra o un grupo de honores.',
+    esOf: 'c6e9b353',
   },
   objectives: [
     {
@@ -433,7 +433,7 @@ export const ASTRONOMY_SEMESTER = {
           objectives: ['worlds'],
           teacherNote: {
             en: 'A seventy-minute investigation: set it over two sittings or give the second half as homework.',
-            es: 'Una investigación de setenta minutos: asígnenla en dos sesiones o dejen la segunda mitad como tarea.',
+            es: 'Una investigación de setenta minutos: asígnenla en dos sesiones o dejen la segunda mitad como trabajo en casa.',
             esOf: '5f8fff4b',
           },
           pin: {

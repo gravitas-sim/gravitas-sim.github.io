@@ -33,9 +33,9 @@ export const UPPER_LEVEL_MODULES = {
     esOf: 'e908e7b7',
   },
   teacherGuide: {
-    en: 'Each unit takes about two to four hours and can be set on its own. Where an investigation has an advanced depth, items open at it. Students carry results between investigations, so keep each unit in order. The 3-D lab guides on orbit planes, eclipses, mutual events and the Kozai effect, and the mission lab guides, suit the celestial mechanics unit; they are separate pages and not course items. Instructor guides and keys are in the portal.',
-    es: 'Cada unidad ocupa de dos a cuatro horas y puede asignarse sola. Donde una investigación tiene profundidad avanzada, los elementos se abren en ella. Los estudiantes llevan resultados de una investigación a otra, así que mantengan cada unidad en orden. Las guías del laboratorio 3D sobre planos orbitales, eclipses, eventos mutuos y el efecto Kozai, y las del laboratorio de misiones, sirven para la unidad de mecánica celeste; son páginas aparte y no elementos del curso. Las guías y las claves están en el portal.',
-    esOf: 'fbf483ff',
+    en: 'Each unit takes about two to four hours and can be set on its own. Where an investigation has an advanced depth, items open at it. Students carry results between investigations, so keep each unit in order. The 3-D lab investigations on orbit planes, eclipses, mutual events and the Kozai effect, and the mission lab investigations, suit the celestial mechanics unit; they are separate pages and not course items. Instructor notes and keys are in the portal.',
+    es: 'Cada unidad ocupa de dos a cuatro horas y puede asignarse sola. Donde una investigación tiene profundidad avanzada, los elementos se abren en ella. Los estudiantes llevan resultados de una investigación a otra, así que mantengan cada unidad en orden. Las investigaciones del laboratorio 3D sobre planos orbitales, eclipses, eventos mutuos y el efecto Kozai, y las del laboratorio de misiones, sirven para la unidad de mecánica celeste; son páginas aparte y no elementos del curso. Las notas y las claves están en el portal.',
+    esOf: '2926e859',
   },
   objectives: [
     {

@@ -1831,7 +1831,7 @@ export const ES_DEFERRED = {
 
   'inv.seq.light.title': 'Luz y estrellas',
   'inv.seq.light.blurb':
-    'Lo que lleva la luz de las estrellas: color y temperatura, líneas espectrales y movimiento, y luego qué son las estrellas, cómo se pesan, cómo funcionan por dentro y cómo terminan. Diez investigaciones; las tres primeras duran de 15 a 25 minutos.',
+    'Lo que lleva la luz de las estrellas: color y temperatura, líneas espectrales y movimiento, y luego qué son las estrellas, cómo se pesan, cómo funcionan por dentro y cómo terminan. Las tres primeras duran de 15 a 25 minutos.',
   'inv.seq.light.color-and-temperature':
     'Empieza aquí: por qué una estrella caliente es azul y una fría roja, y cómo leer una temperatura en un color.',
   'inv.seq.light.what-a-spectrum-is-made-of':
@@ -1855,7 +1855,7 @@ export const ES_DEFERRED = {
 
   'inv.seq.planets.title': 'Planetas y exoplanetas',
   'inv.seq.planets.blurb':
-    'Los dos métodos que han encontrado casi todos los planetas conocidos, usados juntos en una estrella desconocida, y luego si algún lugar es habitable y qué hacen dos estrellas a un planeta. Investigaciones largas: planea dos sesiones o deja parte como tarea. Mejor después de Gravedad y órbitas.',
+    'Los dos métodos que han encontrado casi todos los planetas conocidos, usados juntos en una estrella desconocida, y luego si algún lugar es habitable y qué hacen dos estrellas a un planeta. Investigaciones largas: planea dos sesiones o deja parte para casa. Mejor después de Gravedad y órbitas.',
   'inv.seq.planets.transit-photometry':
     'Profundidad, duración y ruido, a partir de una curva de luz que mides tú. El vocabulario que usa el resto del recorrido.',
   'inv.seq.planets.radial-velocity':
@@ -1871,7 +1871,7 @@ export const ES_DEFERRED = {
 
   'inv.seq.galaxies.title': 'Galaxias y el universo',
   'inv.seq.galaxies.blurb':
-    'Nuestro lugar en la Vía Láctea, la masa que no vemos, la luz curvada por la gravedad, la escalera de distancias desde las estrellas variables y el universo en expansión. Catorce investigaciones cortas en tres grupos. Mejor después de Gravedad y órbitas y de Luz y estrellas.',
+    'Nuestro lugar en la Vía Láctea, la masa que no vemos, la luz curvada por la gravedad, la escalera de distancias desde las estrellas variables y el universo en expansión. Investigaciones cortas en tres grupos. Mejor después de Gravedad y órbitas y de Luz y estrellas.',
   'inv.seq.galaxies.the-suns-motion':
     'Empieza aquí: el movimiento del propio Sol por la Galaxia, a partir de las estrellas que lo rodean.',
   'inv.seq.galaxies.the-rotating-disk':

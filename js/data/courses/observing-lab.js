@@ -33,9 +33,9 @@ export const OBSERVING_LAB = {
     esOf: 'a86c9c96',
   },
   teacherGuide: {
-    en: "Five units, one lab meeting each, with the quantitative depth of each investigation. Students work with the same data a researcher would open: the datasets are real spectra, a TESS light curve and a cluster observed by SDSS, SEGUE and Gaia. Ask for a lab report from the last unit. The instructor guides and answer keys are in the instructors' portal.",
-    es: 'Cinco unidades, una sesión de laboratorio cada una, con la profundidad cuantitativa de cada investigación. Los estudiantes trabajan con los mismos datos que abriría un investigador: espectros reales, una curva de luz de TESS y un cúmulo observado por SDSS, SEGUE y Gaia. Pide un informe de laboratorio de la última unidad. Las guías y las claves están en el portal para docentes.',
-    esOf: 'a978eec9',
+    en: "Five units, one lab meeting each, with the quantitative depth of each investigation. Students work with the same data a researcher would open: the datasets are real spectra, a TESS light curve and a cluster observed by SDSS, SEGUE and Gaia. Ask for a lab report from the last unit. The instructor notes and answer keys are in the instructors' portal.",
+    es: 'Cinco unidades, una sesión de laboratorio cada una, con la profundidad cuantitativa de cada investigación. Los estudiantes trabajan con los mismos datos que abriría un investigador: espectros reales, una curva de luz de TESS y un cúmulo observado por SDSS, SEGUE y Gaia. Pide un informe de laboratorio de la última unidad. Las notas y las claves están en el portal para docentes.',
+    esOf: 'c4dc39b5',
   },
   objectives: [
     {

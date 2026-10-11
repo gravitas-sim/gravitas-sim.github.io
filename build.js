@@ -100,6 +100,7 @@ const DOC_PAGES = [
   'glossary',
   'teaching',
   'teaching/find',
+  'teaching/alignment',
   'teaching/kit',
   'evaluation',
   'figure',

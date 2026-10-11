@@ -1810,7 +1810,7 @@ export const EN_DEFERRED = {
 
   'inv.seq.light.title': 'Light and stars',
   'inv.seq.light.blurb':
-    'What starlight carries: color and temperature, spectral lines and motion, then what the stars are, how they are weighed, how they work inside and how they end. Ten investigations; the first three take 15 to 25 minutes each.',
+    'What starlight carries: color and temperature, spectral lines and motion, then what the stars are, how they are weighed, how they work inside and how they end. The first three take 15 to 25 minutes each.',
   'inv.seq.light.color-and-temperature':
     'Start here: why a hot star is blue and a cool one red, and how to read a temperature from a color.',
   'inv.seq.light.what-a-spectrum-is-made-of':
@@ -1850,7 +1850,7 @@ export const EN_DEFERRED = {
 
   'inv.seq.galaxies.title': 'Galaxies and the universe',
   'inv.seq.galaxies.blurb':
-    'Our place in the Milky Way, the mass we cannot see, light bent by gravity, the distance ladder from variable stars, and the expanding universe. Fourteen short investigations in three groups. Better after Gravity and orbits and Light and stars.',
+    'Our place in the Milky Way, the mass we cannot see, light bent by gravity, the distance ladder from variable stars, and the expanding universe. Short investigations in three groups. Better after Gravity and orbits and Light and stars.',
   'inv.seq.galaxies.the-suns-motion':
     'Start here: the Sun’s own motion through the Galaxy, from the stars around it.',
   'inv.seq.galaxies.the-rotating-disk':
