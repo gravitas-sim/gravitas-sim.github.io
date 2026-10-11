@@ -1,0 +1,12 @@
+{
+  "connectSrc": "'self' blob:",
+  "fetchToInstructorEndpoint": {
+    "error": "Failed to fetch"
+  },
+  "standinReceived": 0,
+  "fetchSameOriginControl": {
+    "ok": true,
+    "status": 200
+  },
+  "consoleViolations": 2
+}

@@ -1,0 +1,188 @@
+{
+  "corpus": {
+    "packs": 56,
+    "H": 812,
+    "S": 7476,
+    "D": 990
+  },
+  "U1": {
+    "hint": {
+      "requests": 812,
+      "leaked": 0,
+      "outsideAllowList": 0
+    },
+    "spanish": {
+      "requests": 7476,
+      "leaked": 0,
+      "outsideAllowList": 0
+    },
+    "distractor": {
+      "requests": 990,
+      "leaked": 0,
+      "outsideAllowList": 0
+    },
+    "wire": {
+      "bodies": 233,
+      "leaked": 0
+    }
+  },
+  "U3": {
+    "hostnames": 0,
+    "keys": 0,
+    "vendors": 0,
+    "adapters": 2,
+    "bytes": 13122,
+    "shapesWorking": {
+      "chat": true,
+      "plain": true
+    }
+  },
+  "U4": {
+    "scripted": {
+      "hint": {
+        "scripted": 20,
+        "classifiedRight": 20,
+        "misses": []
+      },
+      "spanish": {
+        "scripted": 20,
+        "classifiedRight": 20,
+        "misses": []
+      },
+      "distractor": {
+        "scripted": 20,
+        "classifiedRight": 20,
+        "misses": []
+      }
+    },
+    "packMutatedByPropose": 0,
+    "accept": {
+      "hint": {
+        "checked": 163,
+        "exactlyOneTextChanged": 163,
+        "inputPackTouched": 0
+      },
+      "spanish": {
+        "checked": 1496,
+        "exactlyOneTextChanged": 1496,
+        "inputPackTouched": 0
+      },
+      "distractor": {
+        "checked": 198,
+        "exactlyOneTextChanged": 198,
+        "inputPackTouched": 0
+      }
+    },
+    "validator": {
+      "hint": {
+        "errorsBefore": 57,
+        "errorsAfterTextOnly": 57,
+        "provenanceAtTopLevelRefused": true,
+        "provenanceInTextRefused": true
+      },
+      "spanish": {
+        "errorsBefore": 0,
+        "errorsAfterTextOnly": 0,
+        "provenanceAtTopLevelRefused": true,
+        "provenanceInTextRefused": true
+      },
+      "distractor": {
+        "errorsBefore": 57,
+        "errorsAfterTextOnly": 57,
+        "provenanceAtTopLevelRefused": true,
+        "provenanceInTextRefused": true
+      }
+    }
+  },
+  "U5": {
+    "promptsBuiltTwice": 1326,
+    "identical": 1326,
+    "acceptedDrafts": 30,
+    "withAllFive": 30
+  },
+  "U9": {
+    "charCountShown": {
+      "hint": true,
+      "spanish": true,
+      "distractor": true
+    },
+    "projectHeldEndpoints": 0
+  },
+  "U7": {
+    "disabledValue": null,
+    "silent": 24,
+    "total": 24,
+    "modes": {
+      "timeout": {
+        "hint": true,
+        "spanish": true,
+        "distractor": true
+      },
+      "http500": {
+        "hint": true,
+        "spanish": true,
+        "distractor": true
+      },
+      "networkError": {
+        "hint": true,
+        "spanish": true,
+        "distractor": true
+      },
+      "nonJson": {
+        "hint": true,
+        "spanish": true,
+        "distractor": true
+      },
+      "emptyBody": {
+        "hint": true,
+        "spanish": true,
+        "distractor": true
+      },
+      "oversize": {
+        "hint": true,
+        "spanish": true,
+        "distractor": true
+      },
+      "refusedByChecks": {
+        "hint": true,
+        "spanish": true,
+        "distractor": true
+      },
+      "abort": {
+        "hint": true,
+        "spanish": true,
+        "distractor": true
+      }
+    }
+  },
+  "U6": {
+    "freshStorageDisabled": true,
+    "undefinedStoreDisabled": true,
+    "throwingStoreDisabled": true,
+    "gzipSourceBytes": 4704,
+    "gzipMinifiedBytes": 2832
+  },
+  "V": {
+    "hint": {
+      "texts": 812,
+      "pass": 305,
+      "share": 0.3756,
+      "refusedForDigits": 337,
+      "refusedForWordsOnly": 170
+    },
+    "spanish": {
+      "texts": 7476,
+      "pass": 7052,
+      "share": 0.9433,
+      "refusedForDigits": 71,
+      "refusedForWordsOnly": 353
+    },
+    "distractor": {
+      "texts": 990,
+      "pass": 756,
+      "share": 0.7636,
+      "refusedForDigits": 113,
+      "refusedForWordsOnly": 121
+    }
+  }
+}

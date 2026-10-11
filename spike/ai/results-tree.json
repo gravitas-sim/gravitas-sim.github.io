@@ -1,0 +1,14 @@
+{
+  "pagesChecked": 117,
+  "pagesThatCanReachTheModule": [
+    "studio/lesson/index.html"
+  ],
+  "everyReachingPageIsStudio": true,
+  "filesNamingComposerPage": [
+    "js/composer/publish.js",
+    "js/coursePage.js",
+    "js/i18n/en.composer.js",
+    "js/i18n/es.composer.js",
+    "studio/lesson/index.html"
+  ]
+}
