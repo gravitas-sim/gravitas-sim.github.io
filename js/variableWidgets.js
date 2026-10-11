@@ -29,7 +29,7 @@ import {
   typeAt,
 } from './widgetCanvas.js';
 import { loadVariablesData, ANCHORS } from './variablesData.js';
-import { LAW } from './data/radiation/extinction.js';
+import { loadExtinction } from './kernels/radiation/packs.js';
 import {
   harmonicFit,
   curveStats,
@@ -51,14 +51,17 @@ registerMessages('en', EN_VARIABLES);
 registerMessages('es', ES_VARIABLES);
 
 let data = null;
-const law = LAW;
+let law = null;
 /**
  * Resolves true once the data have been tried. Never rejects: a missing file
  * is logged and the rows keep reading "loading".
  */
+// One import at a time: starting several together loses a module in Jest's
+// node:vm (the concurrent import race), so the extinction law follows the data.
 export const variablesReady = loadVariablesData()
-  .then(d => {
+  .then(async d => {
     data = d;
+    law = (await loadExtinction()).LAW;
     return true;
   })
   .catch(err => {
