@@ -37,6 +37,7 @@ import { figureMarkup } from './embedMarkup.js';
 import { buildPayload, decodePayload, encodePayload } from './shareState.js';
 import { formatSeed, parseSeed, randomSeed } from './rng.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
+import { readSystemFragment } from './lab3d/link.js';
 
 const $ = id => document.getElementById(id);
 const els = {};
@@ -48,6 +49,26 @@ const ASPECTS = {
 };
 const SEED = /^[A-Za-z0-9_-]{1,24}$/;
 const FRAGMENT = /#(\d+[zr][A-Za-z0-9_-]+)\s*$/;
+// A pasted link to the 3-D lab (/3d/): a reference system, or one in the
+// fragment (js/lab3d/link.js). Only its parts are kept, never its address.
+const LAB3D =
+  /^https?:\/\/[^/]+\/3d\/(?:\?([^#]*))?(?:#(sys1[zr][A-Za-z0-9_-]+))?\s*$/;
+
+/** The 3-D figure a pasted link describes: null when it is not one. */
+async function readLab3d(pasted) {
+  const m = LAB3D.exec(pasted);
+  if (!m) return null;
+  const ref = /^R[1-8]$/.test(new URLSearchParams(m[1]).get('system') ?? '')
+    ? new URLSearchParams(m[1]).get('system')
+    : '';
+  if (m[2]) {
+    const r = await readSystemFragment(m[2]);
+    if (!r.ok || r.system?.format !== 'gravitas.system3d')
+      return { error: t('fig.error.link.unreadable') };
+    return { fragment: m[2], message: t('fig.status.system3d') };
+  }
+  return { ref, message: t('fig.status.reference3d', { id: ref || 'R1' }) };
+}
 
 /** Scenario names in Spanish, fetched the first time the page is in Spanish. */
 let spanishNames = null;
@@ -173,7 +194,14 @@ let generation = 0;
 /** Everything on the right from everything on the left. */
 async function update() {
   const mine = ++generation;
-  const read = await readState();
+  const lab3d = await readLab3d(els.link.value.trim());
+  const read = lab3d
+    ? {
+        payload: lab3d.error ? null : {},
+        message: lab3d.error ?? lab3d.message,
+        error: Boolean(lab3d.error),
+      }
+    : await readState();
   if (mine !== generation) return; // a later edit has already taken over
   setStatus(els.linkStatus, read.message, read.error);
 
@@ -192,14 +220,17 @@ async function update() {
     return;
   }
   const payload = { ...read.payload };
-  if (
-    document.querySelector('input[name="fbStart"]:checked')?.value === 'paused'
-  ) {
-    payload.p = 1;
-  } else {
-    delete payload.p;
+  if (!lab3d) {
+    if (
+      document.querySelector('input[name="fbStart"]:checked')?.value ===
+      'paused'
+    ) {
+      payload.p = 1;
+    } else {
+      delete payload.p;
+    }
   }
-  const fragment = await encodePayload(payload);
+  const fragment = lab3d ? lab3d.fragment : await encodePayload(payload);
   if (mine !== generation) return;
 
   const options = {
@@ -211,14 +242,19 @@ async function update() {
     reset: els.reset.value,
     parent,
   };
-  const base = `${location.origin}/`;
-  const query = new URLSearchParams(embedParams(options)).toString();
-  const src = `${base}?${query}#${fragment}`;
-  const plain = `${base}#${fragment}`;
+  const base = `${location.origin}/${lab3d ? '3d/' : ''}`;
+  const params = new URLSearchParams(embedParams(options));
+  if (lab3d?.ref) params.set('system', lab3d.ref);
+  const query = params.toString();
+  const tail = fragment ? `#${fragment}` : '';
+  const src = `${base}?${query}${tail}`;
+  const plain = `${base}${lab3d?.ref ? `?system=${lab3d.ref}` : ''}${tail}`;
   const [w, h] = ASPECTS[els.aspect.value] || ASPECTS['16:10'];
   const title =
     els.title.value.trim() ||
-    t('fig.frame.title', { scenario: scenarioTitle(payload.s) });
+    (lab3d
+      ? t('fig.frame.title3d')
+      : t('fig.frame.title', { scenario: scenarioTitle(payload.s) }));
 
   els.markup.value = figureMarkup({
     src,

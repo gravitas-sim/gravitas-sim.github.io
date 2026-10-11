@@ -154,4 +154,43 @@ test.describe('the 3-D lab as an embedded figure', () => {
       .analyze();
     expect(axe.violations).toEqual([]);
   });
+
+  test('the figure builder makes a 3-D figure from a lab link, and only from one', async ({
+    page,
+    baseURL,
+  }) => {
+    const r3 = REFERENCES.find(r => r.id === 'R3').make().system;
+    const { systemFragment } = await import('../js/lab3d/link.js');
+    const made = await systemFragment(r3);
+    await page.goto('/figure/', { waitUntil: 'domcontentloaded' });
+    const link = page.locator('#fbLink');
+    // A reference system.
+    await link.fill(`${baseURL}/3d/?system=R5`);
+    await expect(page.locator('#fbLinkStatus')).toContainText(
+      'reference system R5'
+    );
+    expect(await page.locator('#fbMarkup').inputValue()).toContain(
+      `${baseURL}/3d/?embed=1&amp;ev=1&amp;reset=authored&amp;system=R5`
+    );
+    // A system carried in the link, at reduced quality by the options.
+    await link.fill(`${baseURL}/3d/#${made.fragment}`);
+    await expect(page.locator('#fbLinkStatus')).toContainText('3-D system');
+    const markup = await page.locator('#fbMarkup').inputValue();
+    expect(markup).toContain(
+      `${baseURL}/3d/?embed=1&amp;ev=1&amp;reset=authored#sys1`
+    );
+    expect(markup).toContain('Gravitas 3-D lab');
+    await expect(
+      page.frameLocator('#fbPreview').locator('#l3-canvas')
+    ).toBeVisible({ timeout: 30_000 });
+    // A damaged system is refused, and so is any other address.
+    await link.fill(`${baseURL}/3d/#sys1zabc`);
+    await expect(page.locator('#fbLinkStatus')).toContainText(
+      'could not be read'
+    );
+    await expect(page.locator('#fbMarkup')).toHaveValue('');
+    await link.fill('https://evil.example/page');
+    await expect(page.locator('#fbLinkStatus')).toHaveClass(/is-error/);
+    await expect(page.locator('#fbMarkup')).toHaveValue('');
+  });
 });
