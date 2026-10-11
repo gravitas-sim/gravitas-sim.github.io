@@ -171,6 +171,9 @@ export const EN_LAB3DLAB = {
   'l3.status.lost':
     'The graphics context was lost. The run and the tables go on, and the picture comes back when the browser restores it.',
   'l3.guides': 'Guided investigations',
+  'l3.ev.open': 'Evidence and observing',
+  'l3.status.noSaved':
+    'No saved system with that name is in this browser. Open one from My work.',
   'l3.tool.sky': 'On the sky, seen from here',
   'l3.tool.between': 'Between two orbits',
   'l3.read.sky':

@@ -78,6 +78,7 @@ const reducedQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)');
 
 const state = {
   system: null, // the validated system being played
+  origin: null, // the system as opened, which saved files and evidence cite
   choice: 'R5',
   interval: 0.01,
   session: null,
@@ -200,6 +201,7 @@ async function open(choice, { interval } = {}) {
 async function start(system, extra = {}) {
   state.session?.stop();
   state.system = system;
+  state.origin = system;
   // A guide may play a system at its own tick (js/lab3d/guides/).
   state.interval = extra.interval || chooseInterval(system);
   state.snaps = [];
@@ -369,12 +371,16 @@ function currentFrame() {
  * The newest snapshot at or before the clock, as it is: what the tables,
  * the instruments and the framing read, so no number shown is interpolated.
  */
-function numbersFrame() {
+function numbersSnapshot() {
   const snaps = state.snaps;
   if (!snaps.length) return null;
   let i = snaps.length - 1;
   while (i > 0 && snaps[i].t > state.tau) i--;
-  return exactFrame(snaps[i]);
+  return snaps[i];
+}
+function numbersFrame() {
+  const s = numbersSnapshot();
+  return s && exactFrame(s);
 }
 
 function display(f) {
@@ -1076,6 +1082,35 @@ const labApi = Object.freeze({
     );
   },
   G: () => G(),
+  /** The system as opened: what a saved file and a piece of evidence cite. */
+  origin: () => state.origin,
+  originId: () => state.choice,
+  /** The system as it is at the clock, or null with fewer than two bodies. */
+  now() {
+    const s = numbersSnapshot();
+    const sys = s && restartFrom(state.system, s);
+    return sys && sys.bodies.length >= 2 ? sys : null;
+  },
+  /** The instrument chosen under the view, as numbers. */
+  reading: () => ({
+    tool: $('l3-tool').value,
+    a: Number($('l3-a').value),
+    b: Number($('l3-b').value),
+    v: Number($('l3-v').value),
+    direction: viewDirection(),
+    frame: state.frame,
+  }),
+  /** The index of the body a body orbits, or -1. */
+  primaryOf(i) {
+    const f = numbersFrame();
+    return f ? hierarchy(f).primary[i] : -1;
+  },
+  /** From the scene toward the viewer, as a unit vector. */
+  sightDirection() {
+    const d = viewDirection();
+    const n = Math.hypot(d[0], d[1], d[2]) || 1;
+    return d.map(c => c / n);
+  },
   events: () => state.events.slice(),
   language: () => language(),
   onChange(fn) {
@@ -1083,6 +1118,20 @@ const labApi = Object.freeze({
     return () => state.listeners.delete(fn);
   },
 });
+
+let evidencePanel = null;
+/** Open the evidence and observing panel, loading it the first time. */
+async function openEvidence() {
+  if (!evidencePanel) {
+    // By URL, as the guide panel is: a bundle of its own in dist/ (build.js).
+    const m = await import(
+      new URL('./lab3d/view/evidencePanel.js', import.meta.url).href
+    );
+    evidencePanel = m.createEvidencePanel($('l3-evidence-panel'), labApi);
+    if (language() === 'es') await evidencePanel.loadLanguage('es');
+  }
+  evidencePanel.show();
+}
 
 let guidePanel = null;
 /** Open the guide panel, loading it the first time. */
@@ -1196,7 +1245,29 @@ function retranslate() {
   }
   $('l3-play').textContent = t(state.playing ? 'l3.pause' : 'l3.play');
   updateTables(true);
+  evidencePanel?.redraw();
   tell();
+}
+
+/** A system saved to My work (js/myWork/made.js), opened as a file is. */
+function openSaved(id) {
+  let found = null;
+  try {
+    const rec = JSON.parse(localStorage.getItem(`gravitas_made_${id}`));
+    const m = rec?.kind === 'system3d' && migrateSystem(rec.system3d?.system);
+    if (m?.ok) found = m.system;
+  } catch {
+    /* not there, or not readable: said below */
+  }
+  if (!found) {
+    // After the lab has opened one, for opening clears the notice.
+    return open(state.choice).then(() =>
+      notice(t('l3.status.noSaved'), true, 'error')
+    );
+  }
+  state.fileSystem = found;
+  $('l3-system').value = 'file';
+  return open('file');
 }
 
 async function init() {
@@ -1220,6 +1291,7 @@ async function init() {
     if (!b) return;
     await loadLanguage(b.dataset.lang);
     await guidePanel?.loadLanguage(b.dataset.lang);
+    await evidencePanel?.loadLanguage(b.dataset.lang);
     setLanguage(b.dataset.lang);
     retranslate();
   });
@@ -1275,6 +1347,7 @@ async function init() {
   $('l3-refresh').addEventListener('click', () => updateTables(true));
   $('l3-canvas').addEventListener('keydown', keyboard);
   $('l3-guides').addEventListener('click', () => openGuides());
+  $('l3-evidence').addEventListener('click', () => openEvidence());
 
   // For the browser tests: what the page believes, read-only.
   window.gravitasLab3d = Object.freeze({
@@ -1311,8 +1384,10 @@ async function init() {
   requestAnimationFrame(frame);
   const params = new URL(location.href).searchParams;
   const guide = params.get('guide');
+  const saved = params.get('open');
   // A guide opens its own system, so the page does not open one first.
   if (guide) openGuides({ id: guide, path: params.get('path') });
+  else if (saved) openSaved(saved);
   else open(state.choice);
 }
 
