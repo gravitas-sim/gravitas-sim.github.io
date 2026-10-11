@@ -174,6 +174,7 @@ const en = {
   'key.rowCorrect': 'Correct answer',
   'key.rowConclusion': 'Conclusion after experimenting',
   'key.rowValue': 'Expected value',
+  'key.rowFormula': 'Expected value, from the student’s own numbers',
   'key.rowRange': 'Accepted range',
   'key.rangeTo': '{low} to {high}',
   'key.lookFor': 'What to look for:',
@@ -377,6 +378,8 @@ const es = {
   'key.rowCorrect': 'Respuesta correcta',
   'key.rowConclusion': 'Conclusión tras experimentar',
   'key.rowValue': 'Valor esperado',
+  'key.rowFormula':
+    'Valor esperado, a partir de los números del propio estudiante',
   'key.rowRange': 'Intervalo aceptado',
   'key.rangeTo': '{low} a {high}',
   'key.lookFor': 'Qué buscar:',

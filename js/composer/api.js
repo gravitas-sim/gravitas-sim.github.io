@@ -19,7 +19,7 @@ import { gradedSteps } from '../data/investigations/catalog.js';
 import { SETTING_KEYS } from '../data/settingKeys.js';
 import { WIDGET_FAMILIES, WIDGET_IDS } from './widgetIds.js';
 import { ENTITIES } from '../lessonMarkup.js';
-import { UNITS } from '../answerParse.js';
+import { UNITS, parseNumber } from '../answerParse.js';
 import { validateInvestigationPack } from '../platform/investigation.js';
 import { compileInvestigation, judge } from './compile.js';
 
@@ -81,9 +81,18 @@ async function unitCheck(pack) {
  *   is not compiled.
  */
 export async function checkInvestigationPack(pack) {
+  // The formula engine only for a pack with a formula question: it is a
+  // chunk the composer page does not otherwise carry.
+  let formula;
+  if (pack?.steps?.some?.(s => s?.formula !== undefined)) {
+    const g = await import('../formula/grade.js');
+    g.useNumberReader(parseNumber);
+    formula = g.formulaProblem;
+  }
   let errors = validateInvestigationPack(pack, {
     ...packApi(),
     isUnit: await unitCheck(pack),
+    ...(formula ? { formula } : {}),
   });
   // A remix is also judged against the built-in it was made from
   // (./remixApi.js, loaded only for a pack that says it has one).

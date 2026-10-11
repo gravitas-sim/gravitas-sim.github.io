@@ -377,6 +377,7 @@ export const ARTIFACT_SOURCES = [
   'comparison',
   'sweep-analysis',
   'experiment-result',
+  'derived-quantity',
 ];
 
 /**

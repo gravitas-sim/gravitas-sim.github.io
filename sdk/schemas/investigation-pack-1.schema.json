@@ -556,6 +556,26 @@
         }
       ]
     },
+    "formula": {
+      "description": "A numeric question's expected value as a formula over the student's own measured fields (js/formula/grade.js), in place of an answer and a tolerance: `expr` in the formula language, `of` naming each field it reads as step.field of an earlier measure step, and a tolerance in percent (5 if absent). The validator reads the formula against the units of those fields and the question's own.",
+      "type": "object",
+      "required": ["expr", "of"],
+      "additionalProperties": false,
+      "properties": {
+        "expr": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "of": {
+          "type": "object",
+          "minProperties": 1,
+          "maxProperties": 6,
+          "propertyNames": { "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*\\.[A-Za-z][A-Za-z0-9_-]*$"
+          }
+        },
+        "tolerancePct": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+      }
+    },
     "expect": {
       "description": "The answer parser's unit expectation: a dimension, the unit the answer is graded in, and the other units it accepts, each read whatever its case. The graded unit must be among those accepted, which a schema cannot say.",
       "type": "object",
@@ -1032,6 +1052,16 @@
             }
           },
           "$ref": "#/$defs/relationVariants"
+        },
+        {
+          "required": ["kind", "prompt", "because", "formula", "scoring"],
+          "properties": {
+            "kind": { "const": "numeric" },
+            "options": false,
+            "answer": false,
+            "tolerance": false,
+            "variants": false
+          }
         },
         {
           "required": ["kind", "prompt", "rubric", "scoring"],
@@ -1740,6 +1770,9 @@
             "tolerance": {},
             "expect": {
               "$ref": "#/$defs/expect"
+            },
+            "formula": {
+              "$ref": "#/$defs/formula"
             },
             "hints": {
               "$ref": "#/$defs/hints"

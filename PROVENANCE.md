@@ -41,6 +41,7 @@ Each mapping comes with the rule for reversing it, so no older document loses wh
 | `assumed` | Stated, not estimated: where the data carry none |
 | `scaled` | A data sigma rescaled, by the reduced chi-square or a correlated-noise factor |
 | `profile` | A likelihood profile, as a Delta chi-square interval |
+| `derived` | Propagated to first order from the uncertainties of the inputs of a formula (`js/formula/`); the envelope's provenance names the formula and the inputs |
 
 ## The older vocabularies, and where they map
 

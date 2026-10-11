@@ -827,6 +827,71 @@ function feedbackFields(base) {
   );
 }
 
+/**
+ * An inline numeric question's expected value as a formula over the student's
+ * own measured fields (js/formula/grade.js), in place of an answer. A bank
+ * item has none: it cannot see the steps whose fields a formula reads.
+ */
+function formulaFields(base, s) {
+  const f = s.formula;
+  const write = patch =>
+    commit(x => {
+      const item = getAt(x, base);
+      const next = { expr: '', of: {}, ...item.formula, ...patch };
+      if (!next.expr.trim()) {
+        delete item.formula;
+        return;
+      }
+      item.formula = { expr: next.expr, of: next.of };
+      if (next.tolerancePct !== undefined)
+        item.formula.tolerancePct = next.tolerancePct;
+      delete item.answer;
+      delete item.tolerance;
+    });
+  const ofText = Object.entries(f?.of ?? {})
+    .map(([n, r]) => `${n} = ${r}`)
+    .join('; ');
+  return el(
+    'details',
+    { className: 'ui-disclosure', open: f !== undefined },
+    el('summary', {}, t('composer.formula.legend')),
+    el('p', { className: 'ui-hint' }, t('composer.formula.hint')),
+    el(
+      'div',
+      { className: 'ui-grid' },
+      field(
+        idOf(`${base}.formula`),
+        t('composer.formula.expr'),
+        textInput(f?.expr, v => write({ expr: v }))
+      ),
+      field(
+        idOf(`${base}.formula.of`),
+        t('composer.formula.of'),
+        textInput(ofText, v => {
+          const of = {};
+          for (const part of v.split(/[;,\n]/)) {
+            const [n, r] = part.split('=').map(z => z.trim());
+            if (n) of[n] = r ?? '';
+          }
+          write({ of });
+        })
+      ),
+      field(
+        idOf(`${base}.formula.tolerancePct`),
+        t('composer.formula.tolerance'),
+        textInput(
+          f?.tolerancePct,
+          v => {
+            const n = numberOf(v);
+            write({ tolerancePct: typeof n === 'number' ? n : undefined });
+          },
+          { numeric: true }
+        )
+      )
+    )
+  );
+}
+
 /** A question's parts, whether it is a step's own or a bank item. */
 function questionParts(base, s, { bankItem = false } = {}) {
   const parts = [
@@ -868,6 +933,7 @@ function questionParts(base, s, { bankItem = false } = {}) {
       )
     );
     parts.push(grid, expectFields(base, s));
+    if (!bankItem) parts.push(formulaFields(base, s));
     parts.push(...hintFields(base, s), feedbackFields(base));
     parts.push(
       pair(`${base}.worked`, t('composer.step.worked'), {
@@ -1623,8 +1689,21 @@ function finishBank(section) {
 
 // --- Checks and everything on the side ----------------------------------------
 
+/** The formula language's words, fetched only for a pack with a formula. */
+async function formulaWords(pack) {
+  if (!pack?.steps?.some?.(s => s?.formula !== undefined)) return;
+  const [en, es] = await Promise.all([
+    import('./i18n/en.formula.js'),
+    import('./i18n/es.formula.js'),
+  ]);
+  registerMessages('en', en.EN_FORMULA);
+  registerMessages('es', es.ES_FORMULA);
+}
+
 /** A complaint in the reader's language: the composer's words, then the Studio's. */
 function describe(e) {
+  if (e.code === 'formula' && hasMessage(`formula.err.${e.vars?.why}`))
+    return t(`formula.err.${e.vars.why}`, e.vars);
   for (const id of [`composer.error.${e.code}`, `studio.error.${e.code}`])
     if (hasMessage(id)) return t(id, e.vars);
   return e.message;
@@ -1683,6 +1762,7 @@ function scheduleCheck() {
   checkTimer = setTimeout(async () => {
     let r;
     try {
+      await formulaWords(doc());
       r = await checkInvestigationPack(doc());
     } catch (err) {
       r = {
@@ -1916,6 +1996,11 @@ function renderKey(r) {
       const at = lesson.steps.findIndex(x => x.sid === s.reveal);
       answer = `${s.options[s.answer] ?? ''} (${t('composer.key.prediction', { n: at + 1 })})`;
     } else if (s.kind === 'choice') answer = s.options[s.answer] ?? '';
+    else if (s.kind === 'numeric' && s.formula)
+      answer = t('composer.key.formula', {
+        expr: s.formula.expr,
+        pct: s.formula.tolerancePct ?? 5,
+      });
     else if (s.kind === 'numeric')
       answer = `${s.answer} ± ${s.tolerance} ${s.unit ?? ''}`.trim();
     else answer = t('composer.key.rubric', { rubric: s.rubric });
@@ -2088,7 +2173,8 @@ async function sampleReport() {
       const key = stepKey(lesson.id, s.sid);
       if (s.type === 'predict' || s.kind === 'choice')
         responses[key] = String(s.answer);
-      else if (s.kind === 'numeric') responses[key] = String(s.answer);
+      else if (s.kind === 'numeric' && !s.formula)
+        responses[key] = String(s.answer);
       else if (s.kind === 'short') responses[key] = s.because || s.rubric || '';
       if (s.type === 'explore')
         s.checklist.forEach((_, j) => (responses[`${key}:check:${j}`] = true));

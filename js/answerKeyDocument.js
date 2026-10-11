@@ -240,6 +240,17 @@ export function answerKeyDocument(
       );
     }
 
+    if (e.answerFormula !== undefined) {
+      doc.row(
+        L('key.rowFormula'),
+        `${e.answerFormula}${e.unit ? ` (${e.unit})` : ''}, ${Object.entries(
+          e.formulaOf
+        )
+          .map(([n, r]) => `${n} = ${r}`)
+          .join('; ')}`
+      );
+    }
+
     if (e.answerValue !== undefined) {
       doc.row(
         L('key.rowValue'),

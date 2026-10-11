@@ -2038,6 +2038,8 @@ export const EN_DEFERRED = {
     'That looks like the value in years, and the question asks for days.',
   'inv.misconception.radiansForDegrees':
     'That looks like the angle in radians, and the question asks for degrees.',
+  'inv.formula.needs':
+    'This answer is checked against your own measurements. Record them in the steps before it, and it can be checked.',
   'inv.answer.check': 'Check',
 
   // --- The restricted three-body teaching mode ---------------------------------
@@ -3708,6 +3710,8 @@ export const EN_DEFERRED = {
   'nb.source.inference-fit': 'Inference-core fit',
   'nb.source.comparison': 'Model against data',
   'nb.source.sweep-analysis': 'Sweep analysis',
+  'nb.source.derived-quantity': 'Derived quantity',
+  'nb.formula.summary': 'Derive a quantity by a formula',
   'nb.source.experiment-result': 'Experiment result',
   'nb.entry.cite': 'The result and where it came from',
   'nb.cite.source': 'Made by',

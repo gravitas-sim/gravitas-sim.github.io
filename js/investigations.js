@@ -2224,6 +2224,8 @@ function renderStep() {
         })
       : null;
     parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
+    if (step.formula && !Number.isFinite(step.answer))
+      parts.push(`<p class="inv-hint">${escape(t('inv.formula.needs'))}</p>`);
     parts.push(
       `<div class="inv-numeric">
          <input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${attr(id)}"
@@ -3757,6 +3759,23 @@ export async function openInvestigation(id, opts = {}) {
   // lesson might not be there yet.
   let inv = await loadInvestigation(id);
   if (!inv || generation !== openGeneration) return;
+  // A question whose expected value is a formula over the student's own
+  // measurements (js/formula/grade.js) is bound to read them, so every grader
+  // below sees the number that student is owed; the module loads only for a
+  // lesson that has one.
+  if (inv.steps.some(s => s.formula)) {
+    const { bindFormulas, useNumberReader } =
+      await import('./formula/grade.js');
+    useNumberReader(parseNumber);
+    if (generation !== openGeneration) return;
+    inv = bindFormulas(inv, (sid, field) => {
+      const key = `${stepKey(inv.id, sid)}:${field}`;
+      return parseFieldNumber(
+        responses[key],
+        localeOfAnswer(responses, key, getLocale())
+      );
+    });
+  }
   depth = 'core';
   depthChoice = null;
   deepest = 'core';

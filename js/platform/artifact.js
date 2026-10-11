@@ -56,6 +56,7 @@ export const UNCERTAINTY_KINDS = Object.freeze(['sigma', 'interval', 'none']);
  *   assumed  stated, not estimated
  *   scaled   a data sigma rescaled, by reduced chi-square or a noise factor
  *   profile  from a likelihood profile (a Delta chi-square interval)
+ *   derived  propagated to first order from the inputs' own (Prompt 100)
  */
 export const BASES = Object.freeze([
   'data',
@@ -63,6 +64,7 @@ export const BASES = Object.freeze([
   'assumed',
   'scaled',
   'profile',
+  'derived',
 ]);
 
 /** What made the result. */
