@@ -6118,7 +6118,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Every frame is synthetic, generated from a seed; the lesson says so in the first step and the instrument’s first row. Do not describe the numbers as measurements of a real camera.',
+      'Every frame is synthetic, generated from a seed; the investigation says so in the first step and the instrument’s first row. Do not describe the numbers as measurements of a real camera.',
       'The gain, read noise and dark current are those of the model (1.5, 8, 0.1); the instrument recovers them from the frames, which is what the numbers in the table show.',
       'Left out, and stated in the instrument: blooming, nonlinearity, one flat for every color and a round Gaussian star. A saturated star in a real camera also bleeds along its column.',
       'The error is shown only once the frame is calibrated, because before that the bias is in the sky level and the CCD equation does not apply.',
