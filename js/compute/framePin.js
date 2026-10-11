@@ -10,6 +10,6 @@
 
 export const FRAME_PIN = Object.freeze({
   indexSha256:
-    '4fbdb15a2fcd15f0275b7ad99f0e14969e49f86d0e20c99bd46bcec95742790b',
-  build: '467fe12d6e86d6d243ef5efebc870f3090a1b0fc5b490a3331cf16c90df18a8d',
+    'd0c1f10284cde515a6ec7fc8ed625a2cdb8ef9d563ae9c56154d286d79750d0f',
+  build: 'ccc145714284d69fbf6c47631c29e063987d82cdbf1754b357a45e1d01bf66ae',
 });

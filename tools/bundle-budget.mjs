@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1973.8,
+    limit: 1973.9,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -599,7 +599,8 @@ const BUDGETS = [
       '\n\nRaised from 1935.7 to 1938.6 KB gzipped for Prompt 86 (D-BUDGET-24, the standing size-budget approval): the detector kernel and the ccd forward model, which the forward-model registry carries into the bundles that import it. Measured 1,985,098 bytes gzipped (1938.57 KB, 5266.0 KB raw), an overrun of 2.87 KB. The detector instruments are not registered until a lesson uses them (D-CALIB-02).' +
       '\n\nRaised from 1938.6 to 1986.2 KB gzipped for Prompt 86 part 2 (D-BUDGET-25, the standing size-budget approval): the detector instrument family (js/detectorWidgets.js and its words), three investigations with their Spanish and depth files, and their instructor content, which the composer, course-packs, course-builder, kit and submission bundles each carry. Measured 1986.1 KB gzipped (5396.6 KB raw, rounded up to 1986.2), an overrun of 47.6 KB.' +
       '\n\nRaised from 1986.2 to 1988.3 KB gzipped for the Pantheon+ pack record (js/data/observations/pantheonPlusHd.js, its citations and licence record, a lazy chunk behind loadPantheonPlus; D-RIGHTS-04 and D-BUDGET-27, the standing size-budget approval). Measured 2,035,956 bytes gzipped (1988.24 KB, 5400.9 KB raw) after merging v2 78f44b4, an overrun of 2.04 KB. The 1,701 rows are a fetched sidecar (cosmology/pantheon-plus-hd.json) and are in no bundle.' +
-      '\n\nLowered from 1988.3 to 1973.8 KB gzipped by the budget-recovery pass (D-BUDGET-28): esbuild wrote a sourceMappingURL comment at the end of every chunk, a 40-byte hash that does not compress, about 36.8 bytes gzipped on each of the 401 deferred chunks. build.js now emits the maps without the comment (sourcemap: external); the .map files are still written. Measured 2,021,119 bytes gzipped (1973.75 KB, 5384.1 KB raw), 14,758 bytes fewer than the 2,035,877 of v2 707f278f. The initial download also fell, 789.0 to 786.8 KB; its 830 KB ceiling was not touched.',
+      '\n\nLowered from 1988.3 to 1973.8 KB gzipped by the budget-recovery pass (D-BUDGET-28): esbuild wrote a sourceMappingURL comment at the end of every chunk, a 40-byte hash that does not compress, about 36.8 bytes gzipped on each of the 401 deferred chunks. build.js now emits the maps without the comment (sourcemap: external); the .map files are still written. Measured 2,021,119 bytes gzipped (1973.75 KB, 5384.1 KB raw), 14,758 bytes fewer than the 2,035,877 of v2 707f278f. The initial download also fell, 789.0 to 786.8 KB; its 830 KB ceiling was not touched.' +
+      '\n\nRaised from 1973.8 to 1973.9 KB gzipped for Prompt 101 (D-BUDGET-COMPUTE-01, the standing size-budget approval): the compute-capsule notebook source and its words in the deferred catalogs (nb.source.compute-capsule, led.ctx.compute) and My work\u2019s compute surface. Measured 2,021,187 bytes gzipped (1973.82 KB), overrun 0.02 KB. The compute page\u2019s own bundle is a route with its own ceilings (tools/route-budgets.json) and is not in this total.',
   },
 ];
 

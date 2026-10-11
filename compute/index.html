@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob: https://gravitas-compute.github.io; worker-src 'none'; frame-src https://gravitas-compute.github.io; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Compute page | Gravitas</title>
+    <meta
+      name="description"
+      content="Run a reviewed Python notebook on a Gravitas observation, in your browser, and keep the result with a record of exactly what ran. Opt-in and online only: it downloads a Python runtime when you ask."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: the compute page (COMPUTE.md). */
+      .cp-grid {
+        display: grid;
+        gap: var(--space-3) var(--space-4);
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+        align-items: end;
+      }
+      .cp-grid label,
+      .cp-field {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+        font-size: var(--text-sm);
+        color: var(--text-secondary);
+      }
+      .cp-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        align-items: center;
+        margin-block: var(--space-3);
+      }
+      .cp-wrap {
+        max-height: 24rem;
+        overflow: auto;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+      .cp-wrap table {
+        border-collapse: collapse;
+        width: 100%;
+        font-variant-numeric: tabular-nums;
+      }
+      .cp-wrap th,
+      .cp-wrap td {
+        padding: var(--space-1) var(--space-3);
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+      }
+      .cp-wrap td.num {
+        text-align: right;
+      }
+      .cp-fig {
+        max-width: 100%;
+        height: auto;
+        background: #fff;
+        border-radius: var(--radius);
+      }
+      .cp-digest {
+        overflow-wrap: anywhere;
+        font-family: var(--font-mono, monospace);
+        font-size: var(--text-sm);
+      }
+      pre.cp-stdout {
+        max-height: 12rem;
+        overflow: auto;
+        white-space: pre-wrap;
+        font-size: var(--text-sm);
+      }
+    </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
+  </head>
+  <body class="doc-page">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<div class="gs-offline" role="status"><template><div class="gs-offline-box">
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
+</div></template></div>
+<!-- /shell:header -->
+    <main id="main" class="ui-page is-wide" aria-labelledby="cpTitle">
+      <h1 id="cpTitle"><span class="gs-en">Compute page</span><span class="gs-es" lang="es">Página de cálculo</span></h1>
+      <p class="ui-alert" id="cpOnline"><span class="gs-en"><strong>Online and opt-in.</strong> Nothing on this page loads until you press "Start the runtime", which downloads a Python runtime from the internet. It does not work offline, and nothing about you or your data is sent anywhere: the notebook runs in a sandbox with no access to Gravitas, your work or your files.</span><span class="gs-es" lang="es"><strong>Solo en línea y opcional.</strong> Nada de esta página se carga hasta que pulsas "Iniciar el entorno", que descarga un entorno de Python de internet. No funciona sin conexión, y nada sobre ti ni sobre tus datos se envía a ningún sitio: el cuaderno se ejecuta en una zona aislada sin acceso a Gravitas, a tu trabajo ni a tus archivos.</span></p>
+      <p><span class="gs-en">Run one of a few reviewed Python notebooks on a Gravitas observation, and keep the result with a record, a compute capsule, of exactly what ran: the notebook by its hash, the input by its hash, the runtime release, the numbers it returned and how long it took. You cannot run a notebook of your own here; each one in the list was read and vendored with the site, and the page refuses any whose hash is not in its catalogue. Researchers can take the same run to their own Jupyter.</span><span class="gs-es" lang="es">Ejecuta uno de unos pocos cuadernos de Python revisados sobre una observación de Gravitas, y guarda el resultado con un registro, una cápsula de cálculo, de exactamente lo que se ejecutó: el cuaderno por su hash, la entrada por su hash, la versión del entorno, los números que devolvió y cuánto tardó. Aquí no puedes ejecutar un cuaderno propio; cada uno de la lista fue leído e incluido con el sitio, y la página rechaza cualquiera cuyo hash no esté en su catálogo. Los investigadores pueden llevar la misma ejecución a su propio Jupyter.</span></p>
+      <p id="cpStatus" class="ui-hint" role="status" aria-live="polite"></p>
+      <div id="cpState" class="ui-state is-error" role="alert" hidden></div>
+
+      <section class="ui-card" aria-labelledby="cpPickH">
+        <h2 id="cpPickH"><span class="gs-en">1. Choose a notebook and its input</span><span class="gs-es" lang="es">1. Elige un cuaderno y su entrada</span></h2>
+        <div class="cp-grid">
+          <label><span class="gs-en">Notebook</span><span class="gs-es" lang="es">Cuaderno</span><select id="cpNotebook" class="ui-select"></select></label>
+          <label><span class="gs-en">Input</span><span class="gs-es" lang="es">Entrada</span><select id="cpInputKind" class="ui-select"><option value="example"></option><option value="file"></option></select></label>
+          <label id="cpFileLabel" hidden><span class="gs-en">An observation file (gravitas.observation/1, JSON)</span><span class="gs-es" lang="es">Un archivo de observación (gravitas.observation/1, JSON)</span><input id="cpFile" class="ui-input" type="file" accept=".json,application/json" /></label>
+        </div>
+        <p id="cpSummary"></p>
+        <dl id="cpFacts" class="ui-meta"></dl>
+        <div id="cpParams" class="cp-grid"></div>
+      </section>
+
+      <section class="ui-card" aria-labelledby="cpRunH">
+        <h2 id="cpRunH"><span class="gs-en">2. Start the runtime, then run</span><span class="gs-es" lang="es">2. Inicia el entorno y ejecuta</span></h2>
+        <p id="cpCost"></p>
+        <div class="cp-row">
+          <button type="button" class="ui-button" id="cpStart"></button>
+          <button type="button" class="ui-button" id="cpRun" disabled></button>
+          <button type="button" class="ui-button" id="cpStop" disabled></button>
+        </div>
+      </section>
+
+      <section class="ui-card" id="cpResult" aria-labelledby="cpResultH" hidden>
+        <h2 id="cpResultH"><span class="gs-en">3. Result</span><span class="gs-es" lang="es">3. Resultado</span></h2>
+        <div class="cp-wrap" tabindex="0" role="region" aria-labelledby="cpQuantCap">
+          <table>
+            <caption class="gs-vh" id="cpQuantCap"></caption>
+            <thead><tr id="cpQuantHead"></tr></thead>
+            <tbody id="cpQuantRows"></tbody>
+          </table>
+        </div>
+        <figure id="cpFigure" hidden>
+          <img id="cpFigureImg" class="cp-fig" width="600" height="350" alt="" />
+          <figcaption id="cpFigureCap"></figcaption>
+        </figure>
+        <details id="cpTableBox" hidden>
+          <summary id="cpTableSummary"></summary>
+          <div class="cp-wrap" tabindex="0" role="region" aria-labelledby="cpTableCap">
+            <table>
+              <caption class="gs-vh" id="cpTableCap"></caption>
+              <thead><tr id="cpTableHead"></tr></thead>
+              <tbody id="cpTableRows"></tbody>
+            </table>
+          </div>
+        </details>
+        <details id="cpStdoutBox" hidden>
+          <summary><span class="gs-en">What the notebook printed</span><span class="gs-es" lang="es">Lo que imprimió el cuaderno</span></summary>
+          <pre id="cpStdout" class="cp-stdout"></pre>
+        </details>
+      </section>
+
+      <section class="ui-card" id="cpCapsule" aria-labelledby="cpCapsuleH" hidden>
+        <h2 id="cpCapsuleH"><span class="gs-en">The compute capsule</span><span class="gs-es" lang="es">La cápsula de cálculo</span></h2>
+        <dl id="cpCapsuleFacts" class="ui-meta"></dl>
+        <div class="cp-row">
+          <button type="button" class="ui-button" id="cpSaveCapsule"></button>
+          <button type="button" class="ui-button" id="cpKeep"></button>
+          <button type="button" class="ui-button" id="cpLocal"></button>
+        </div>
+        <p id="cpKeepNote" class="ui-hint" role="status"></p>
+      </section>
+
+      <section class="ui-card" aria-labelledby="cpImportH">
+        <h2 id="cpImportH"><span class="gs-en">Open a capsule</span><span class="gs-es" lang="es">Abrir una cápsula</span></h2>
+        <p><span class="gs-en">A capsule file is checked before anything is shown: every hash, the notebook against the catalogue, and its answer as a result. Opening one runs nothing and needs no runtime.</span><span class="gs-es" lang="es">Un archivo de cápsula se comprueba antes de mostrar nada: cada hash, el cuaderno contra el catálogo y su respuesta como resultado. Abrir una no ejecuta nada ni necesita el entorno.</span></p>
+        <label class="cp-field"><span class="gs-en">A capsule file (gravitas.compute-capsule/1, JSON)</span><span class="gs-es" lang="es">Un archivo de cápsula (gravitas.compute-capsule/1, JSON)</span><input id="cpOpenFile" class="ui-input" type="file" accept=".json,application/json" /></label>
+      </section>
+
+      <section class="ui-card" aria-labelledby="cpAboutH">
+        <h2 id="cpAboutH"><span class="gs-en">What to know</span><span class="gs-es" lang="es">Qué conviene saber</span></h2>
+        <ul>
+          <li><span class="gs-en">The notebook runs in Pyodide (Python compiled to WebAssembly) inside a Worker, inside a sandboxed frame served from a separate origin, gravitas-compute.github.io. The frame cannot read this site's storage or pages, and this page checks every byte it returns.</span><span class="gs-es" lang="es">El cuaderno se ejecuta en Pyodide (Python compilado a WebAssembly) dentro de un Worker, dentro de un marco aislado servido desde un origen distinto, gravitas-compute.github.io. El marco no puede leer el almacenamiento ni las páginas de este sitio, y esta página comprueba cada byte que devuelve.</span></li>
+          <li><span class="gs-en">The runtime comes from the pinned Pyodide release on the jsDelivr network. If that network stops serving it, a notebook cannot run, though a capsule can still be opened and checked.</span><span class="gs-es" lang="es">El entorno viene de la versión fijada de Pyodide en la red jsDelivr. Si esa red deja de servirla, un cuaderno no puede ejecutarse, aunque una cápsula sí puede abrirse y comprobarse.</span></li>
+          <li><span class="gs-en">It needs memory (the runtime holds about 80 MB before your data) and it has not been measured on phones. The notebooks' own text is in English.</span><span class="gs-es" lang="es">Necesita memoria (el entorno ocupa unos 80 MB antes de tus datos) y no se ha medido en teléfonos. El texto de los propios cuadernos está en inglés.</span></li>
+        </ul>
+      </section>
+    </main>
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
+    <script type="module" src="/js/computePage.js"></script>
+  </body>
+</html>

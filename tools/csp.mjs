@@ -38,6 +38,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { ALLOW } from '../js/archive/cds.js';
+import { FRAME_ORIGIN } from '../js/compute/origin.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -52,6 +53,9 @@ export function pages() {
       f =>
         f.endsWith('.html') &&
         !/^(spike|dist|e2e|tests|sdk|node_modules)\//.test(f) &&
+        // The compute frame, published verbatim to its own origin with a
+        // policy of its own (tools/compute.mjs), not a page of this site.
+        !f.startsWith('compute-frame/') &&
         // A panel's markup, inserted into index.html (INDEX_DECOMPOSITION.md):
         // it runs under index.html's policy and is not a page of its own.
         !f.startsWith('js/fragments/') &&
@@ -92,6 +96,11 @@ export function policyFor(page, html) {
     'blob:',
     ...(page === 'observatory/index.html' ? ALLOW : []),
   ];
+  // The compute page frames one other origin and fetches its document to
+  // check it, and starts no Worker: its frame is the only thing that runs
+  // Python, and runs it on its own origin (COMPUTE.md).
+  const compute = page === 'compute/index.html';
+  if (compute) connect.push(FRAME_ORIGIN);
   return [
     `default-src 'self'`,
     `script-src ${scripts.join(' ')}`,
@@ -100,8 +109,8 @@ export function policyFor(page, html) {
     `img-src 'self' data: blob:`,
     `media-src 'self' blob:`,
     `connect-src ${connect.join(' ')}`,
-    `worker-src 'self' blob:`,
-    `frame-src 'self'`,
+    compute ? `worker-src 'none'` : `worker-src 'self' blob:`,
+    compute ? `frame-src ${FRAME_ORIGIN}` : `frame-src 'self'`,
     `object-src 'none'`,
     `base-uri 'self'`,
     `form-action 'self'`,

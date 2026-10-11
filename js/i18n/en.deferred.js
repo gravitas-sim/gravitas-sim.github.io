@@ -3709,6 +3709,7 @@ export const EN_DEFERRED = {
   'nb.source.comparison': 'Model against data',
   'nb.source.sweep-analysis': 'Sweep analysis',
   'nb.source.experiment-result': 'Experiment result',
+  'nb.source.compute-capsule': 'Notebook run (compute capsule)',
   'nb.entry.cite': 'The result and where it came from',
   'nb.cite.source': 'Made by',
   'nb.cite.digest': 'Digest of its data',

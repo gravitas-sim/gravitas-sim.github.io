@@ -23,12 +23,14 @@ const SURFACE = {
   comparison: 'observatory',
   'sweep-analysis': 'experiments',
   'experiment-result': 'experiments',
+  'compute-capsule': 'compute',
 };
 export const surfaceOf = source => SURFACE[source] ?? 'sandbox';
 export const SURFACE_ROUTE = {
   sandbox: '/',
   observatory: '/observatory/',
   experiments: '/experiments/',
+  compute: '/compute/',
 };
 
 const GUIDE_KEYS = [
@@ -56,7 +58,7 @@ export function describe(records, library = new Map()) {
     courses: [],
     evidence: {
       notebook: null,
-      groups: { sandbox: [], observatory: [], experiments: [] },
+      groups: { sandbox: [], observatory: [], experiments: [], compute: [] },
     },
     experiments: [],
     saved: [],

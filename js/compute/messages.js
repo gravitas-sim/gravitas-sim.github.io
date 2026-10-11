@@ -73,11 +73,12 @@ const PROBE_KEY = /^[A-Za-z][A-Za-z0-9.]{0,31}$/;
 const NAME = /^[a-z][a-z0-9_-]{0,31}$/;
 const VERSION = /^[0-9A-Za-z.+_-]{1,32}$/;
 
-const isObj = v =>
-  v !== null &&
-  typeof v === 'object' &&
-  !Array.isArray(v) &&
-  Object.getPrototypeOf(v) === Object.prototype;
+/** A plain object of any realm: its prototype's prototype is null. */
+const isObj = v => {
+  if (v === null || typeof v !== 'object' || Array.isArray(v)) return false;
+  const p = Object.getPrototypeOf(v);
+  return p === null || Object.getPrototypeOf(p) === null;
+};
 const str = max => v => typeof v === 'string' && v.length <= max;
 const re =
   (r, max = 128) =>

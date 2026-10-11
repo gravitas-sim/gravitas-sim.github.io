@@ -75,6 +75,9 @@ export const SOURCE = Object.freeze({
   COMPARISON: 'comparison',
   SWEEP_ANALYSIS: 'sweep-analysis',
   EXPERIMENT_RESULT: 'experiment-result',
+  // A run of a reviewed notebook on the compute page, kept as its envelope
+  // (js/compute/keep.js).
+  COMPUTE_CAPSULE: 'compute-capsule',
 });
 
 /** The sources this build can capture from. */
@@ -92,6 +95,7 @@ export const SOURCES = [
   SOURCE.COMPARISON,
   SOURCE.SWEEP_ANALYSIS,
   SOURCE.EXPERIMENT_RESULT,
+  SOURCE.COMPUTE_CAPSULE,
 ];
 
 /** How long a student's prose may be, per field. */

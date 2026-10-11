@@ -211,6 +211,13 @@ const OBSERVATORY_ONLY = new Set([
  * reader's install for a page one reader in many opens. Kept out, as before:
  * the live run needs the network either way.
  */
+/**
+ * The compute page (COMPUTE.md) is online only and opt-in: its page, its
+ * modules, its notebooks and its example inputs are never precached, so no
+ * install downloads them and no offline reader is promised them.
+ */
+const NEVER_PRECACHED = [/^js\/compute\//, /^js\/computePage\.js$/, /^compute\//, /^compute-frame\//];
+
 const ON_DEMAND_ONLY = new Set([
   'js/validation/physicsChecks.js',
   'js/validation/domShim.js',
@@ -354,7 +361,10 @@ export async function buildManifest() {
 
   const kept = applyCapabilityOffline(
     collected.filter(
-      f => !EXCLUDE.some(re => re.test(f.path)) && !ON_DEMAND_ONLY.has(f.path)
+      f =>
+        !EXCLUDE.some(re => re.test(f.path)) &&
+        !NEVER_PRECACHED.some(re => re.test(f.path)) &&
+        !ON_DEMAND_ONLY.has(f.path)
     )
   ).sort((a, b) => a.path.localeCompare(b.path));
   const paths = kept.map(f => f.path);
