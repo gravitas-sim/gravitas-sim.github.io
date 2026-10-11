@@ -9,18 +9,14 @@ import {
 } from '../js/detectorWidgets.js';
 import { EN_DETECTOR } from '../js/i18n/en.detector.js';
 import { ES_DETECTOR } from '../js/i18n/es.detector.js';
-import { FAMILY_IDS } from '../js/explainers.js';
-import { WIDGET_FAMILIES } from '../js/composer/widgetIds.js';
 
 const near = (got, want, tol) =>
   expect(Math.abs(got - want)).toBeLessThanOrEqual(tol);
 
 describe('the detector family', () => {
-  test('is the three instruments every registry names', () => {
+  test('is the three instruments (unregistered until a lesson docks them, D-CALIB-02)', () => {
     const ids = DETECTOR_WIDGETS.map(w => w.id);
     expect(ids).toEqual(['ccd-frames', 'ccd-snr', 'diff-photometry']);
-    expect(FAMILY_IDS.detector).toEqual(ids);
-    expect(WIDGET_FAMILIES.detector).toEqual(ids);
   });
   test('English and Spanish carry the same keys', () => {
     expect(Object.keys(ES_DETECTOR).sort()).toEqual(

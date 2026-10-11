@@ -274,13 +274,6 @@ export const LAZY_FAMILIES = Object.freeze({
     ['variable-fold', 'leavitt-law', 'variable-class'],
     'variablesReady'
   ),
-  // Pure model, no data to wait for: synthetic CCD frames from a seed.
-  detector: familyEntry(
-    () => import('./detectorWidgets.js'),
-    './detectorWidgets.js',
-    'DETECTOR_WIDGETS',
-    ['ccd-frames', 'ccd-snr', 'diff-photometry']
-  ),
   // Pure model, no data to wait for: a lens, a source and a light curve.
   lensing: familyEntry(
     () => import('./lensingWidgets.js'),

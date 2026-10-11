@@ -127,12 +127,6 @@ export default {
     'Cómo se lee un periodo en una curva de luz y qué lo limita, por qué el periodo de una cefeida da su luminosidad y con ella una distancia, y por qué una sola cifra de exactitud oculta qué tipos de estrella se toman por cuáles.',
     'Las curvas de luz y las cefeidas son mediciones reales en una banda, sin corrección de metalicidad ni de apiñamiento; el error del bootstrap es un mínimo; la muestra de clasificación es sintética, equilibrada y estilizada; la cronometría de púlsares no se modela.',
   ],
-  detector: [
-    'Imágenes sintéticas de un modelo de un CCD (un sesgo, una oscura, un campo plano y cuatro estrellas) tras cada paso de calibración; la señal a ruido de una estrella frente a la exposición; o cuarenta imágenes de un campo con una estrella variable, como curvas de luz crudas y diferenciales.',
-    'Cómo cambian la imagen, la luz de la estrella y su error con el paso de calibración, cómo cambian la señal a ruido, el ruido dominante y la exposición necesaria con la estrella, la abertura, el cielo y la exposición, y cómo cambian la dispersión y la amplitud ajustada con la estrella de comparación y la calibración.',
-    'Qué añade un detector a la luz y cómo lo mide cada imagen de calibración, por qué el ruido es una suma de términos y cuál limita una exposición dada, y por qué una estrella de comparación quita la nube.',
-    'Todas las imágenes son sintéticas de un modelo declarado; sin desbordamiento, no linealidad, términos de color ni telescopio real; la calculadora es para un telescopio de enseñanza de 0,4 m; el seno es un modelo de la variable, no la curva.',
-  ],
   lensing: [
     'La desviación frente al máximo acercamiento (escalas logarítmicas); el plano de la lente en radios de Einstein con la fuente y sus imágenes; o el flujo frente al tiempo cuando pasa una lente.',
     'Cómo cambian la desviación, el anillo, las imágenes y la curva de luz al cambiar la masa, la distancia, la velocidad, el desplazamiento y la mezcla.',

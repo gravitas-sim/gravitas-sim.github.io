@@ -1,7 +1,7 @@
 // =============================================================================
 // The photon rate of a star through a band: the exposure-time calculator's source
 // -----------------------------------------------------------------------------
-// From the radiation kernel's bandpasses (js/data/radiation/bandpasses.js):
+// From the radiation kernel's band pack, decoded by the caller:
 //
 //   rate = (f_nu / h) Int S(lambda) d lambda / lambda  x  area x throughput
 //
