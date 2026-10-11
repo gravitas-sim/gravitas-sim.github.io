@@ -82,3 +82,50 @@ describe('the shipped course packs', () => {
     ).toBe('https://x/#investigation=keplers-laws/core');
   });
 });
+
+describe('the default short route', () => {
+  test('every investigation has one, of at least two steps and no more than 25 estimated minutes', async () => {
+    const { shortRoute, SHORT_ROUTE_MAX } =
+      await import('../js/assignments/shortRoute.js');
+    for (const m of MANIFEST) {
+      const r = shortRoute(await loadInvestigation(m.id, 'en'));
+      expect({ id: m.id, ok: r.sids.length >= 2 }).toEqual({
+        id: m.id,
+        ok: true,
+      });
+      expect(r.minutes).toBeLessThanOrEqual(SHORT_ROUTE_MAX);
+      expect(r.sids).toEqual(expect.arrayContaining(r.chosen));
+    }
+  }, 60_000);
+});
+
+describe('scenario concept tags', () => {
+  test('every tag is used by a lesson that builds one of its scenarios, or covered in the curation file', async () => {
+    const { SCENARIO_INFO, scenarioId } =
+      await import('../js/data/scenarioInfo.js');
+    const curation = JSON.parse(
+      (await import('node:fs')).readFileSync(
+        'tools/library-curation.json',
+        'utf8'
+      )
+    );
+    const used = new Set();
+    for (const m of MANIFEST) {
+      const lesson = await loadInvestigation(m.id, 'en');
+      for (const s of lesson.steps) {
+        const key = scenarioId(s.setup?.scenario) ?? s.setup?.scenario;
+        for (const tag of SCENARIO_INFO[key]?.tags || []) used.add(tag);
+      }
+    }
+    const tags = new Set(
+      Object.values(SCENARIO_INFO).flatMap(i => i.tags || [])
+    );
+    const ids = new Set(MANIFEST.map(m => m.id));
+    for (const [tag, lessons] of Object.entries(curation.conceptCoverage)) {
+      expect(tags.has(tag)).toBe(true);
+      lessons.forEach(l => expect(ids.has(l)).toBe(true));
+      used.add(tag);
+    }
+    expect([...tags].filter(t => !used.has(t))).toEqual([]);
+  }, 60_000);
+});

@@ -48,6 +48,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const load = rel => import(pathToFileURL(path.join(ROOT, rel)).href);
 const readJson = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
 
+const { shortRoute } = await load('js/assignments/shortRoute.js');
+
 export const BASE = 'teaching';
 export const SITE = 'https://gravitas-sim.online';
 
@@ -88,6 +90,8 @@ const W = {
   calc: ['Arithmetic', 'Aritmética'],
   subjects: ['Subjects', 'Temas'],
   steps: ['Steps', 'Pasos'],
+  about: ['about', 'unos'],
+  stepsLower: ['steps', 'pasos'],
   offline: ['Offline', 'Sin conexión'],
   start: ['Open it', 'Abrirla'],
   preview: ['Preview as a student', 'Vista previa como estudiante'],
@@ -180,6 +184,11 @@ const W = {
   assignBuilderNote: [
     'Choose steps, add a note and a roster name, and share one link; results come back as a token you can review.',
     'Elija pasos, añada una nota y un nombre de grupo, y comparta un enlace; los resultados vuelven como una ficha que puede revisar.',
+  ],
+  shortRoute: ['Short route', 'Ruta corta'],
+  shortRouteNote: [
+    'A default short route the activity builder derives from the steps: a prediction, a measurement, a number, a choice and an explanation, with whatever they need. The time is an estimate from the step types, not a measured class time.',
+    'Una ruta corta predeterminada que el constructor de actividades deriva de los pasos: una predicción, una medición, un número, una opción y una explicación, con lo que necesiten. El tiempo es una estimación según los tipos de paso, no un tiempo medido en clase.',
   ],
   assignNone: [
     'This one is handed out as its own link, from the lab it runs in.',
@@ -921,7 +930,7 @@ function investigationPage(S, entry) {
   const assignHtml = section(
     'assign',
     w('assign'),
-    `${lesson ? `<p><a class="ui-button" href="/?assign=${id}">${w('assignBuilder')}</a> <a class="ui-button" href="/studio/course/?add=${id}">${w('addCourse')}</a></p>\n<p>${w('assignBuilderNote')}</p>` : `<p>${w('assignNone')}</p>`}
+    `${lesson ? `<p><a class="ui-button" href="/?assign=${id}">${w('assignBuilder')}</a> <a class="ui-button" href="/studio/course/?add=${id}">${w('addCourse')}</a></p>\n<p>${w('assignBuilderNote')}</p>\n<p><a class="ui-button" href="/?assign=${id}&amp;route=short">${w('shortRoute')}</a> ${shortRoute(lesson).sids.length} ${bi(wt('stepsLower'))}, ${bi(wt('about'))} ${shortRoute(lesson).minutes} ${bi(wt('minutes'))}</p>\n<p>${w('shortRouteNote')}</p>` : `<p>${w('assignNone')}</p>`}
 ${templates.length ? `<h3>${w('templates')}</h3>\n${list(templates)}` : ''}`
   );
 
