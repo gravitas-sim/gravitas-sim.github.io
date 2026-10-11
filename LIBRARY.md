@@ -107,6 +107,10 @@ and `after` (sequences worth doing first). Every investigation is in at least
 one, and every `needs` in `js/data/investigations/sequences.js` is an earlier
 item that the lesson declares as a prerequisite.
 
+`sequenceAliases` maps a sequence id that was renamed or merged to the id that
+took it over (`SEQUENCE_ALIASES` in `js/data/sequenceAliases.js`), because a
+student's browser can still hold the old one in the "what next" record.
+
 ## What no source owns (Prompt 76, R-L)
 
 `tools/library-curation.json` holds the fields no source file declares: the

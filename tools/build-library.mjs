@@ -220,6 +220,7 @@ export async function buildLibrary() {
     DEMO_MINUTES,
     PERIOD_MINUTES,
   } = await load('js/data/investigations/sequences.js');
+  const { SEQUENCE_ALIASES } = await load('js/data/sequenceAliases.js');
   const { INVESTIGATIONS } = await load('js/data/investigations.js');
   const curation = JSON.parse(readFileSync(path.join(ROOT, CURATION), 'utf8'));
   const usedCuration = new Set();
@@ -709,6 +710,8 @@ export async function buildLibrary() {
     kinds: [...KINDS],
     subjects,
     sequences,
+    // Old sequence ids a stored link may still carry, to the current id.
+    sequenceAliases: { ...SEQUENCE_ALIASES },
     entries,
   };
 }

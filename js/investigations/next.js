@@ -61,7 +61,9 @@ export async function whatNext(list, { id, deeper, onDeeper }) {
   try {
     if (ctx?.k === 'seq') {
       const lib = await (await fetch('/library/library.json')).json();
-      const seq = lib.sequences.find(s => s.id === ctx.id);
+      // A renamed sequence still answers to the id it was stored under.
+      const sid = lib.sequenceAliases?.[ctx.id] ?? ctx.id;
+      const seq = lib.sequences.find(s => s.id === sid);
       const at = seq?.entries.indexOf(`investigation:${id}`) ?? -1;
       const next =
         at >= 0 && lib.entries.find(e => e.id === seq.entries[at + 1]);

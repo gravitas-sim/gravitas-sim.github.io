@@ -195,6 +195,26 @@ test.describe('in a lesson', () => {
     await expect(page.locator('.inv-next a[href="/my-work/"]')).toBeVisible();
   });
 
+  test('a renamed sequence still offers the next step from an old stored id', async ({
+    page,
+    app,
+  }) => {
+    await resumeAtEnd(page, app);
+    await page.evaluate(() =>
+      localStorage.setItem(
+        'gravitas_next_context',
+        JSON.stringify({ k: 'seq', id: 'orbital-mechanics' })
+      )
+    );
+    await page.locator('#investigationNext').click();
+    const list = page.locator('#investigationNextList');
+    await expect(list.locator('a')).toHaveCount(1);
+    await expect(list.locator('a')).toHaveAttribute(
+      'href',
+      /investigation=retrograde-motion/
+    );
+  });
+
   test('a course item offers the course’s next one, and the deeper depth', async ({
     page,
     app,
