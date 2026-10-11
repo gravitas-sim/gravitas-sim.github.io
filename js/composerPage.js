@@ -207,7 +207,13 @@ const numberOf = text => {
 
 // --- Language ---------------------------------------------------------------
 
-async function useLanguage(id) {
+// The switch in progress, so that a message built while it runs waits for it:
+// the words are those of the language the reader has chosen, not of the one
+// they are leaving.
+let switching = Promise.resolve();
+const useLanguage = id => (switching = switchTo(id));
+
+async function switchTo(id) {
   if (!LOCAL[id] && LOADERS[id]) LOCAL[id] = await LOADERS[id]();
   for (const table of LOCAL[id] || []) registerMessages(id, table);
   await setLocale(id);
@@ -2141,6 +2147,7 @@ const ctx = () => ({
   el,
   t,
   setStatus,
+  languageSettled: () => switching,
   doc,
   start,
   verdict: () => verdict,
