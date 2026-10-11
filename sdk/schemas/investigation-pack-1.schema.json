@@ -573,7 +573,11 @@
             "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*\\.[A-Za-z][A-Za-z0-9_-]*$"
           }
         },
-        "tolerancePct": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+        "tolerancePct": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 100
+        }
       }
     },
     "expect": {
@@ -1052,16 +1056,6 @@
             }
           },
           "$ref": "#/$defs/relationVariants"
-        },
-        {
-          "required": ["kind", "prompt", "because", "formula", "scoring"],
-          "properties": {
-            "kind": { "const": "numeric" },
-            "options": false,
-            "answer": false,
-            "tolerance": false,
-            "variants": false
-          }
         },
         {
           "required": ["kind", "prompt", "rubric", "scoring"],
@@ -1808,7 +1802,20 @@
               "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           },
-          "$ref": "#/$defs/questionRules"
+          "anyOf": [
+            { "$ref": "#/$defs/questionRules" },
+            {
+              "description": "A numeric question whose expected value is a formula over the student's own measured fields, in place of an answer (Prompt 100).",
+              "required": ["kind", "prompt", "because", "formula", "scoring"],
+              "properties": {
+                "kind": { "const": "numeric" },
+                "options": false,
+                "answer": false,
+                "tolerance": false,
+                "variants": false
+              }
+            }
+          ]
         }
       ]
     },

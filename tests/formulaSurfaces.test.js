@@ -1,5 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
+import { readFileSync } from 'node:fs';
 import { webcrypto } from 'node:crypto';
+import { valid } from './jsonSchemaSubset.js';
 import { TextEncoder } from 'node:util';
 
 import {
@@ -394,5 +396,23 @@ describe('a composer question expected from a formula', () => {
       expect([EN_FORMULA, ES_FORMULA].every(c => c[`formula.err.${k}`])).toBe(
         true
       );
+  });
+
+  test('the pack schema reads a formula question, and not one with an answer as well', () => {
+    const sch = JSON.parse(
+      readFileSync(
+        new URL(
+          '../sdk/schemas/investigation-pack-1.schema.json',
+          import.meta.url
+        ),
+        'utf8'
+      )
+    );
+    expect(valid(sch, pack(good))).toBe(true);
+    const both = pack(good);
+    both.steps[5].answer = 2;
+    expect(valid(sch, both)).toBe(false);
+    expect(valid(sch, pack({ ...good, extra: 1 }))).toBe(false);
+    expect(valid(sch, pack({ expr: '', of: {} }))).toBe(false);
   });
 });
