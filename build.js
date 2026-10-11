@@ -250,7 +250,10 @@ async function buildJs() {
     outdir: path.join(OUT, 'js'),
     splitting: true,
     chunkNames: 'chunk-[hash]',
-    sourcemap: true,
+    // External: the maps are written but the chunks do not end in a
+    // sourceMappingURL comment, an incompressible hash on every one of them
+    // (D-BUDGET-27).
+    sourcemap: 'external',
     metafile: true,
     // Emit non-ASCII characters as themselves. esbuild's default writes each
     // as an escape (\xE9 for e-acute, \u2014 for an em dash), four to six
