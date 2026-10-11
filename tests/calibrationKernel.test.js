@@ -540,7 +540,7 @@ describe('the differential light curve of a night', () => {
     // A pull is within 4.5 sigma in every night; the amplitude's mean pull within 4.5 / sqrt(8).
     for (const p of pullAmp) expect(Math.abs(p)).toBeLessThan(4.5);
     expect(Math.abs(mean(pullAmp))).toBeLessThan(4.5 / Math.sqrt(8));
-    // The period of 1.7 cycles is good to about 2 percent.
+    // The period, from 2.6 cycles, is good to 5 percent in every night.
     for (const p of per) expect(Math.abs(p)).toBeLessThan(0.05);
     expect(mean(chi)).toBeGreaterThan(0.7);
     expect(mean(chi)).toBeLessThan(1.3);
