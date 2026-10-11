@@ -1539,7 +1539,11 @@ async function makeLinks(d) {
   for (const { item } of itemsOf(d)) {
     const entry = {};
     for (const locale of d.locales) {
-      const link = await itemLink(item, { root: ROOT, locale });
+      const link = await itemLink(item, {
+        root: ROOT,
+        locale,
+        level: d.courseLevel,
+      });
       if (link) entry[locale] = link.href;
     }
     items.set(item.id, entry);

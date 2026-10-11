@@ -37,7 +37,7 @@ import {
   ASSIGNMENT_TAG,
 } from '../assignments/assignment.js';
 import { formatSeed, parseSeed } from '../rng.js';
-import { FORMAT_VERSION } from './pack.js';
+import { FORMAT_VERSION, LEVEL_DEPTH } from './pack.js';
 
 export { COMFORTABLE_URL_LENGTH };
 /** Where the builder leaves the draft the course home previews (?draft=1). */
@@ -82,16 +82,23 @@ export const scenarioPayload = item => ({
 
 /**
  * An item's link, in one language.
+ * A lesson with no depth of its own opens at the depth of the course's level
+ * (`level`, a pack's courseLevel): core for a survey course, quantitative for
+ * majors, advanced for upper-level. An item's own depth wins.
  * @returns {Promise<{href: string, kind: string}|null>} kind: 'app', 'data',
  *   'catalog' (install first) or 'external'
  */
-export async function itemLink(item, { root, locale = 'en' }) {
+export async function itemLink(item, { root, locale = 'en', level }) {
   switch (item.kind) {
-    case 'lesson':
+    case 'lesson': {
+      const own = item.depth;
+      const bound = level && LEVEL_DEPTH[level];
+      const depth = own || (bound !== 'core' && bound);
       return {
-        href: `${root}#investigation=${encodeURIComponent(item.lesson)}${item.depth ? `/${item.depth}` : ''}`,
+        href: `${root}#investigation=${encodeURIComponent(item.lesson)}${depth ? `/${depth}` : ''}`,
         kind: 'app',
       };
+    }
     case 'pack':
       // The investigation travels in the item as its own link (Prompt 78).
       return { href: `${root}#${item.link}`, kind: 'app' };
