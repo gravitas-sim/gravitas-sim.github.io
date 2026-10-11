@@ -1,5 +1,5 @@
 // =============================================================================
-// Which kind of variable: a labelled synthetic sample, features, and a confusion table
+// Which kind of variable: a labeled synthetic sample, features, and a confusion table
 // -----------------------------------------------------------------------------
 // The sample is SYNTHETIC. Each star is a light curve made by the periodic
 // forward model (js/forward/models/periodic.js) from a class template whose
@@ -17,7 +17,9 @@
 // Lyrae star from an eclipsing binary, and shape can.
 // =============================================================================
 
-import { runForward } from '../../forward/index.js';
+// The periodic model alone, not the registry: the registry links every forward
+// model, and a Jest family load that races another family over them loses one.
+import { run as runPeriodic } from '../../forward/models/periodic.js';
 import { mulberry32, normalizeSeed } from '../../rng.js';
 import { harmonicFit, curveStats, magnitudesOf } from './fit.js';
 import { findPeriod, refinePeriod } from './period.js';
@@ -166,7 +168,7 @@ export function measureLightCurve(
 }
 
 /**
- * The labelled sample: `perClass` stars of each class, simulated and measured.
+ * The labeled sample: `perClass` stars of each class, simulated and measured.
  * Deterministic for a seed.
  * @returns {Array<{id: string, cls: string, truthPeriod: number} & ReturnType<typeof measureLightCurve>>}
  */
@@ -177,7 +179,7 @@ export function makeSample({ perClass = 24, seed = 'variables-sample' } = {}) {
     for (let i = 0; i < perClass; i++) {
       const id = `${cls.id}-${i + 1}`;
       const state = drawStar(cls, rand);
-      const obs = runForward('periodic', state, sampleSetup(`${seed}:${id}`));
+      const obs = runPeriodic(state, sampleSetup(`${seed}:${id}`));
       const col = name => obs.columns.find(c => c.id === name).values;
       const t = col('time');
       const mag = magnitudesOf(col('value'));

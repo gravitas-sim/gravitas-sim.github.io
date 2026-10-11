@@ -83,7 +83,7 @@ export const EN_VARIABLES = {
     'Metallicity and crowding are not corrected; the table’s errors carry no covariance, so the scatter about the relation stands in for them; every fourth star of the two hosts',
   'varW.c.title': 'Which kind of variable',
   'varW.c.note':
-    'A labelled sample of five kinds of variable star, each measured the way a real light curve is: its period, its amplitude and its shape. Pick the numbers a classifier may use and read the confusion table.',
+    'A labeled sample of five kinds of variable star, each measured the way a real light curve is: its period, its amplitude and its shape. Pick the numbers a classifier may use and read the confusion table.',
   'varW.c.control.features': 'The classifier may use',
   'varW.c.control.view': 'Picture',
   'varW.c.features.0': 'the period only',

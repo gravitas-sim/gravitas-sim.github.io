@@ -8,7 +8,7 @@
 //                   and a real star seen once a night (the aliases)
 //   leavitt-law     the Cepheid period-luminosity relation, fitted on the LMC and
 //                   used to measure a host's distance with its error budget
-//   variable-class  a labelled synthetic sample of five kinds of variable and
+//   variable-class  a labeled synthetic sample of five kinds of variable and
 //                   a nearest-neighbour classifier with its confusion table
 //
 // The stars and the Cepheids are authentic; the classification sample is
