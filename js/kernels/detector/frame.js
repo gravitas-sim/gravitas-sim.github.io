@@ -39,6 +39,9 @@
 
 import { mulberry32, normalizeSeed } from '../../rng.js';
 
+// Free globals are slow under Jest's vm; the local names are not.
+const { Math, Float64Array, Int32Array } = globalThis;
+
 export const VERSION = '1.0.0';
 const FWHM_PER_SIGMA = 2 * Math.sqrt(2 * Math.LN2);
 
@@ -88,7 +91,7 @@ export const DEFAULT_DETECTOR = Object.freeze({
   /** pixel-to-pixel sensitivity scatter, as a fraction */
   qeScatter: 0.01,
   /** the corner's loss against the center, as a fraction */
-  vignette: 0.2,
+  vignette: 0.3,
   /** dust shadows: how many, and the fraction of light each blocks at its middle */
   dustCount: 3,
   dustDepth: 0.08,

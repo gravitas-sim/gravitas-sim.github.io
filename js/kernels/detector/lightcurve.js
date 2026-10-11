@@ -12,6 +12,9 @@
 // Pure: no DOM.
 // =============================================================================
 
+// Free globals are slow under Jest's vm; the local names are not.
+const { Math, Float64Array } = globalThis;
+
 export const VERSION = '1.0.0';
 
 /** Weighted fit at one period. @returns {{c, a, b, amplitude, sigmaAmplitude, sigmaC, chi2, dof, phase}} */

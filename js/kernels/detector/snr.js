@@ -24,6 +24,9 @@
 // Pure: no DOM.
 // =============================================================================
 
+// Free globals are slow under Jest's vm; the local names are not.
+const { Math } = globalThis;
+
 export const VERSION = '1.0.0';
 
 /** The terms of the CCD equation, electrons. */

@@ -21,6 +21,9 @@ import {
 } from './reduce.js';
 import { scanPeriod, scatter } from './lightcurve.js';
 
+// Free globals are slow under Jest's vm; the local names are not.
+const { Math, Float64Array } = globalThis;
+
 export const VERSION = '1.0.0';
 
 /** The three masters, with the records that made them. */

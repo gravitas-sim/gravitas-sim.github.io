@@ -28,6 +28,9 @@
 
 import { noiseTerms } from './snr.js';
 
+// Free globals are slow under Jest's vm; the local names are not.
+const { Math, Float64Array, Uint8Array } = globalThis;
+
 export const VERSION = '1.0.0';
 
 /** The kinds of the pipeline (js/measure/pipeline.js KIND), by value. */

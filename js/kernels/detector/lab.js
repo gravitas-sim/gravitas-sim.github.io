@@ -67,9 +67,9 @@ export const FRAME_FIELD = Object.freeze({
   exposure: 60,
   sources: Object.freeze([
     { id: 'A', x: 24, y: 24, rate: 600 },
-    { id: 'B', x: 9, y: 11, rate: 900 },
-    { id: 'C', x: 38, y: 37, rate: 400 },
-    { id: 'D', x: 36, y: 10, rate: 9000 },
+    { id: 'B', x: 6, y: 7, rate: 900 },
+    { id: 'C', x: 41, y: 40, rate: 400 },
+    { id: 'D', x: 36, y: 10, rate: 30000 },
   ]),
 });
 
