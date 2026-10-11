@@ -29,7 +29,7 @@ import {
   typeAt,
 } from './widgetCanvas.js';
 import { loadVariablesData, ANCHORS } from './variablesData.js';
-import { loadExtinction } from './kernels/radiation/packs.js';
+import { LAW } from './data/radiation/extinction.js';
 import {
   harmonicFit,
   curveStats,
@@ -51,18 +51,14 @@ registerMessages('en', EN_VARIABLES);
 registerMessages('es', ES_VARIABLES);
 
 let data = null;
-let law = null;
+const law = LAW;
 /**
  * Resolves true once the data have been tried. Never rejects: a missing file
  * is logged and the rows keep reading "loading".
  */
-export const variablesReady = Promise.all([
-  loadVariablesData(),
-  loadExtinction(),
-])
-  .then(([d, ext]) => {
+export const variablesReady = loadVariablesData()
+  .then(d => {
     data = d;
-    law = ext.LAW;
     return true;
   })
   .catch(err => {
