@@ -864,7 +864,7 @@
           "$ref": "#/$defs/text120"
         },
         "guide": {
-          "description": "One of the 3-D lab's guided investigations (js/course/guides3d.js).",
+          "description": "One of the 3-D lab's guided investigations (GUIDES_3D in js/course/pack.js).",
           "enum": [
             "l3-planes",
             "l3-eclipse",
