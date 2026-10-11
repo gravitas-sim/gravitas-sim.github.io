@@ -73,12 +73,15 @@ export async function preview(c) {
  */
 async function key(c, locale) {
   try {
+    await c.languageSettled?.();
     for (let i = 0; i < 150 && !c.verdict(); i++)
       await new Promise(r => setTimeout(r, 100));
     if (!c.ok()) return c.setStatus(c.t('studio.status.fixFirst'));
     const { saveKey } = await import('./packKey.js');
     await saveKey(c.doc(), c.compiled(), c.texts(), locale);
   } catch {
+    // A language chosen a moment ago may still be loading; say it in that one.
+    await c.languageSettled?.();
     c.setStatus(c.t('composer.key.failed'));
   }
 }

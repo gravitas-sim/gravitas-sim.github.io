@@ -276,6 +276,7 @@ function stepToPack(s, es = {}) {
     if (s.unit !== undefined) out.unit = s.unit;
     if (s.tolerance !== undefined) out.tolerance = s.tolerance;
     if (s.expect !== undefined) out.expect = clone(s.expect);
+    if (s.formula !== undefined) out.formula = clone(s.formula);
     if (Array.isArray(s.hints)) out.hints = texts(s.hints, es.hints);
     else if (isObject(s.hints)) {
       out.hints = {};

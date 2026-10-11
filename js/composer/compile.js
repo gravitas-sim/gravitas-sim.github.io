@@ -147,6 +147,10 @@ export function realizeItem(item, seed) {
         values,
       });
       if (RELATIONS[rel].output.unit) step.unit = RELATIONS[rel].output.unit;
+    } else if (item.formula) {
+      // The expected value is computed from the student's own numbers when an
+      // answer is graded (js/formula/grade.js): no answer is written here.
+      step.formula = clone(item.formula);
     } else {
       step.answer = item.answer;
       step.tolerance = item.tolerance;

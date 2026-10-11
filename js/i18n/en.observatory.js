@@ -247,6 +247,7 @@ export const EN_OBSERVATORY = {
   'obs.derive.sepName': 'New column: distance from a position',
   'obs.derive.ra': 'RA of the position (deg)',
   'obs.derive.dec': 'Dec of the position (deg)',
+  'obs.formula.open': 'By a formula…',
   'obs.derive.sepGo': 'Add the distance',
   'obs.op.annotate': 'note',
   'obs.op.unannotate': 'note removed',

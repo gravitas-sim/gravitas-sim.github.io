@@ -251,6 +251,7 @@ export const ES_OBSERVATORY = {
   'obs.derive.sepName': 'Columna nueva: distancia a una posición',
   'obs.derive.ra': 'AR de la posición (grados)',
   'obs.derive.dec': 'Dec de la posición (grados)',
+  'obs.formula.open': 'Con una fórmula…',
   'obs.derive.sepGo': 'Añadir la distancia',
   'obs.op.annotate': 'nota',
   'obs.op.unannotate': 'nota quitada',

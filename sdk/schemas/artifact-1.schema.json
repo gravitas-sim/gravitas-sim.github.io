@@ -176,7 +176,8 @@
                   "model",
                   "assumed",
                   "scaled",
-                  "profile"
+                  "profile",
+                  "derived"
                 ]
               }
             }

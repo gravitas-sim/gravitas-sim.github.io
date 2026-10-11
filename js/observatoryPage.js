@@ -39,7 +39,12 @@ import {
   rowCount,
   uncertaintyOf,
 } from './observatory/schema.js';
-import { OPS, replay, whyNot } from './observatory/transforms.js';
+import {
+  OPS,
+  replay,
+  useFormulaEngine,
+  whyNot,
+} from './observatory/transforms.js';
 import { createHistory } from './observatory/history.js';
 import { createSelection, interact } from './plot/select.js';
 import { pixelScale, skyOf } from './observatory/wcs.js';
@@ -769,6 +774,7 @@ function renderChanges(o) {
     ['convert', 'obsConvertBox'],
     ['timeFormat', 'obsTimeBox'],
     ['derive', 'obsDeriveBox'],
+    ['formula', 'obsFormulaBox'],
   ]) {
     $(box).hidden = !OPS[op].kinds.includes(kind);
   }
@@ -780,6 +786,7 @@ function renderChanges(o) {
     sel.replaceChildren(...numbers.map(c => option(c.id, c.name)));
     if (numbers.some(c => c.id === keep)) sel.value = keep;
   }
+  formula?.then(f => f.panel.update(o));
   const degrees = numbers.filter(c => parseUnit(c.unit).unit?.id === 'deg');
   $('obsSepBox').hidden = kind === 'image' || degrees.length < 2;
   if (o.object?.ra !== undefined && $('obsSepRa').dataset.for !== o.id) {
@@ -934,6 +941,28 @@ $('obsDeriveGo').addEventListener('click', () => {
     })
   )
     $('obsDeriveName').value = '';
+});
+// The formula engine and its form (js/observatory/formulaPanel.js): loaded the
+// first time a reader asks for a formula, or a saved session holds one.
+let formula = null;
+const formulaReady = () =>
+  (formula ??= import('./observatory/formulaPanel.js').then(m => {
+    const engine = m.engineFor({
+      ...{ columnOf, maskedRows, rowCount, uncertaintyOf, t },
+      registerMessages,
+    });
+    useFormulaEngine(engine);
+    const panel = m.mountFormulaPanel($('obsFormulaHost'), {
+      ...{ t, language, apply, engine, newId },
+      getView: () => state.view,
+    });
+    return { panel };
+  }));
+$('obsFormulaOpen').addEventListener('click', async () => {
+  await formulaReady();
+  $('obsFormulaOpen').hidden = true;
+  $('obsFormulaHost').hidden = false;
+  $('obsFormulaText').focus();
 });
 $('obsSepGo').addEventListener('click', () => {
   const name = $('obsSepName').value.trim();
@@ -1111,6 +1140,7 @@ async function readImport() {
     // One of this page's own saves: the observation as it was opened, and the
     // changes made again to it, so undo reaches back to where it started.
     $('obsImport').hidden = true;
+    if (r.changes.some(c => c.op === 'formula')) await formulaReady();
     open(r.observation, r.changes);
     const same =
       !r.expected || (await exporter()).sameObservation(state.view, r.expected);
@@ -1421,6 +1451,7 @@ function translateAll() {
   if (fit.module) mountFit(fit.module);
   if (cmp.module) mountCompare(cmp.module);
   archive?.then(p => p.rebuild());
+  formula?.then(f => f.panel.rebuild());
   measure?.then(p => p.rebuild());
   guide?.then(p => p.rebuild());
   if (state.view) renderAll();
