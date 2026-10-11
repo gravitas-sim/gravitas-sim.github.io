@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 2002.7,
+    limit: 2002.4,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -601,11 +601,11 @@ const BUDGETS = [
       '\n\nRaised from 1986.2 to 1988.3 KB gzipped for the Pantheon+ pack record (js/data/observations/pantheonPlusHd.js, its citations and licence record, a lazy chunk behind loadPantheonPlus; D-RIGHTS-04 and D-BUDGET-27, the standing size-budget approval). Measured 2,035,956 bytes gzipped (1988.24 KB, 5400.9 KB raw) after merging v2 78f44b4, an overrun of 2.04 KB. The 1,701 rows are a fetched sidecar (cosmology/pantheon-plus-hd.json) and are in no bundle.' +
       '\n\n' +
       'The formula language (Prompt 100) took the deferred total from 1988.3 ' +
-      'KB to 2002.7 KB gzipped (2,050,725 bytes, 5434.8 KB raw), 14.4 KB: the ' +
+      'KB to 2002.4 KB gzipped (5434.6 KB raw), 14.1 KB: the ' +
       'language itself is 5.8 KB (tools/formula-size.mjs), the question grader ' +
       '0.4 KB more, and the rest is its words in two languages, the ' +
       'Observatory and notebook forms, the composer field and the derived ' +
-      'entry. The initial download did not move (789.0 KB). D-BUDGET-28, under ' +
+      'entry. The initial download did not move (789.0 KB). D-BUDGET-29, under ' +
       'the standing size-budget approval in the project CLAUDE.md.',
   },
 ];
