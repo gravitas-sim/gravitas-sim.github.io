@@ -16,6 +16,10 @@
       "en": "A Universe of Stars",
       "es": "Un universo de estrellas"
     },
+    "a-variable-star-from-frames": {
+      "en": "A Variable Star From Frames",
+      "es": "Una estrella variable a partir de imágenes"
+    },
     "bending-light": {
       "en": "Bending Light",
       "es": "La luz que se curva"
@@ -124,6 +128,10 @@
       "en": "Scaling the Main Sequence",
       "es": "Escalar la secuencia principal"
     },
+    "signal-noise-and-exposure": {
+      "en": "Signal, Noise and Exposure",
+      "es": "Señal, ruido y exposición"
+    },
     "standard-candles": {
       "en": "Standard Candles",
       "es": "Candelas estándar"
@@ -187,6 +195,10 @@
     "weighing-stars": {
       "en": "Weighing the Stars",
       "es": "Pesar las estrellas"
+    },
+    "what-a-ccd-records": {
+      "en": "What a CCD Records",
+      "es": "Qué registra un CCD"
     },
     "what-a-spectrum-is-made-of": {
       "en": "What a Spectrum Is Made Of",

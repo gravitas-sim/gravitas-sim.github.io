@@ -14,6 +14,7 @@
 export const EVIDENCE_FROM = Object.freeze({
   'a-lens-passing-by': 'model',
   'a-universe-of-stars': 'data',
+  'a-variable-star-from-frames': 'model',
   'bending-light': 'model',
   'binary-star-planets': 'engine',
   'black-holes': 'model',
@@ -41,6 +42,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'radial-velocity': 'model',
   'retrograde-motion': 'engine',
   'scaling-the-main-sequence': 'model',
+  'signal-noise-and-exposure': 'model',
   'standard-candles': 'model',
   'the-beat-of-a-star': 'model',
   'the-completeness-curve': 'model',
@@ -57,6 +59,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'twelve-nights': 'model',
   'wanderers-on-the-sky': 'model',
   'weighing-stars': 'engine',
+  'what-a-ccd-records': 'model',
   'what-a-spectrum-is-made-of': 'model',
   'what-is-a-gravitational-wave': 'model',
   'when-orbits-lock': 'engine',

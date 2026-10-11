@@ -527,6 +527,45 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'what-a-ccd-records',
+    title: 'What a CCD Records',
+    subtitle:
+      'Bias, dark and flat frames, and why a star’s light needs all three taken out before it is a measurement',
+    duration: '10-18 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-a-ccd-records.webp',
+    depths: 3,
+    stepCount: 11,
+    gradedCount: 9,
+    objectiveCount: 4,
+  },
+  {
+    id: 'signal-noise-and-exposure',
+    title: 'Signal, Noise and Exposure',
+    subtitle:
+      'How long to expose to reach a signal-to-noise, and why four times the light is not four times the quality',
+    duration: '10-18 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/signal-noise-and-exposure.webp',
+    depths: 3,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
+    id: 'a-variable-star-from-frames',
+    title: 'A Variable Star From Frames',
+    subtitle:
+      'Differential photometry of forty calibrated frames: why a comparison star removes the cloud, and how to know a variation is real',
+    duration: '10-18 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/a-variable-star-from-frames.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
     id: 'the-beat-of-a-star',
     title: 'The Beat of a Star',
     subtitle:

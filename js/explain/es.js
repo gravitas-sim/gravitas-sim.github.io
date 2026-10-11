@@ -139,6 +139,12 @@ export default {
     'Qué puede y qué no puede decir una recta de velocidad contra distancia, por qué las supernovas lejanas son más débiles de lo que predice un universo sin aceleración, por qué H0 y el brillo absoluto de las supernovas no se pueden separar, y qué muestra un sondeo de galaxias limitado por flujo.',
     'Las distancias de las supernovas están en la escala de la publicación (H0 = 70), con solo los errores estadísticos; el modelo es Lambda-CDM plano con w = -1 y sin radiación, y la franja de SDSS está limitada por flujo, de modo que su enrarecimiento con la distancia es selección y no estructura.',
   ],
+  detector: [
+    'Imágenes sintéticas de un CCD a partir de un modelo declarado: un bias, un oscuro, un campo plano y una imagen de cuatro estrellas, un cálculo de la señal sobre ruido de una estrella, o cuarenta imágenes de un campo con una estrella variable.',
+    'Cómo cambian la luz medida, el ruido, la exposición que alcanza un objetivo, y la dispersión y la amplitud ajustada de una curva de luz al cambiar los pasos de calibración, la exposición, la abertura, el cielo o la estrella de comparación.',
+    'Qué quita cada imagen de calibración, qué limita la señal sobre ruido de una estrella brillante y de una débil, y por qué una estrella de comparación quita la nube delgada que una estrella medida sola no puede.',
+    'Todo es sintético, de un modelo directo con verdad conocida, o un cálculo para un telescopio declarado de 0,4 m: sin blooming, no linealidad, términos de color ni seeing, así que una cámara real añade errores que estas imágenes no muestran.',
+  ],
   survey: [
     'Estrellas sintéticas de brillo conocido a distancias conocidas: estrellas contadas y perdidas, el sesgo por capas de distancia, o la función de luminosidad frente a su verdad.',
     'Cómo cambian la parte contada, el sesgo y la función de luminosidad recuperada al cambiar el límite de magnitud, la curva de completitud o el corte de paralaje.',
