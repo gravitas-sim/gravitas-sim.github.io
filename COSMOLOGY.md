@@ -1,8 +1,8 @@
 # Cosmology kernel and Hubble-diagram data (Roadmap II, Prompt 91)
 
 Built on the verdicts of [COSMOLOGY_GATE.md](COSMOLOGY_GATE.md). Status: kernel,
-data, forward model and fits done and tested; instruments and investigations
-not yet written (D-COSMO-14).
+data, forward model and fits done and tested; the three instruments and the
+four investigations landed in #254 (D-COSMO-14).
 
 ## Kernel: `js/kernels/cosmology/`
 
@@ -40,6 +40,9 @@ model: `hubble-diagram`. Not built: Pantheon+, SPARC, Faber-Jackson, Coma from S
 
 ## Not done
 
-Instruments (hubble-law, hubble-diagram, redshift-wedge), the four
-investigations, their Spanish and depth files, instructor material and e2e.
-The First Rung (PR #252) should gain a Hubble-constant step once they land.
+Nothing from the original list: the instruments (hubble-law, hubble-diagram,
+redshift-wedge), the four investigations, their Spanish and depth files,
+instructor material and e2e landed in #254, which also gave The First Rung
+(#252) its Hubble-constant step. Still not built are the datasets named under
+Data packs (Pantheon+, SPARC, Faber-Jackson, Coma from SDSS); the Coma pack's
+radius and masses stay unsourced teaching values.

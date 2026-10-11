@@ -13,7 +13,7 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
-- Prompt 85: the model-versus-data comparison instrument (`js/compare/`, Observatory panel, `COMPARE_INSTRUMENT.md`); artifact source kind `comparison`; notebook source `comparison`. Lesson docking is not built.
+- Prompt 85: the model-versus-data comparison instrument (`js/compare/`, Observatory panel, `COMPARE_INSTRUMENT.md`); artifact source kind `comparison`; notebook source `comparison`. One lesson step uses it (the advanced Transit Photometry step); the exoplanet Observatory guides do not open the panel.
 
 ### Added
 
