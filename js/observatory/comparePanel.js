@@ -92,6 +92,10 @@ export function mountComparePanel(root, ctx) {
   let state = base;
   let moved = new Set();
   let last = null;
+  // A 3-D system file (js/forward/system3d.js), seen by an observer the
+  // student orients: the planets' elements are the file's, not sliders.
+  let sys3d = null;
+  const OBSERVER = { inclinationDeg: 90, positionAngleDeg: 0 };
 
   const sourceSelect = el('select', { id: 'cmpSource', class: 'ui-select' });
   const systemSelect = el('select', { id: 'cmpSystem', class: 'ui-select' });
@@ -127,6 +131,12 @@ export function mountComparePanel(root, ctx) {
   const mainPlot = plotter(plotSvg);
   const resPlot = plotter(resSvg);
 
+  const file3d = el('input', {
+    id: 'cmpFile3d',
+    class: 'ui-file',
+    type: 'file',
+    accept: 'application/json,.json',
+  });
   const field = (label, control) =>
     el(
       'label',
@@ -151,6 +161,7 @@ export function mountComparePanel(root, ctx) {
       { class: 'ui-toolbar' },
       field(t('obs.cmp.source'), sourceSelect),
       field(t('obs.cmp.system'), systemSelect),
+      field(t('obs.cmp.file3d'), file3d),
       reset
     ),
     controls,
@@ -200,6 +211,41 @@ export function mountComparePanel(root, ctx) {
   function drawControls() {
     controls.replaceChildren();
     if (kind !== 'system') return;
+    if (sys3d && systemId === '3d') {
+      for (const [key, id, max, label] of [
+        ['inclinationDeg', 'cmp3d-inc', 180, 'obs.cmp.el.inc3d'],
+        ['positionAngleDeg', 'cmp3d-pa', 360, 'obs.cmp.el.pa3d'],
+      ]) {
+        const input = el('input', {
+          id,
+          type: 'range',
+          class: 'ui-range',
+          min: 0,
+          max,
+          step: 1,
+          value: sys3d.observer[key],
+        });
+        const out = el('output', {
+          for: id,
+          text: fmt(sys3d.observer[key]),
+        });
+        input.addEventListener('input', () => {
+          sys3d.observer[key] = parseNumber(input.value).value;
+          out.textContent = fmt(sys3d.observer[key]);
+          if (rebuild3d()) refresh();
+        });
+        controls.append(
+          el(
+            'label',
+            { class: 'ui-field' },
+            el('span', { class: 'ui-label', text: t(label) }),
+            input,
+            out
+          )
+        );
+      }
+      return;
+    }
     const model = systemModelFor(o, dimensionOfText);
     if (!model) return;
     for (const id of SYSTEM_MODELS[model].elements) {
@@ -430,6 +476,19 @@ export function mountComparePanel(root, ctx) {
     );
   }
 
+  /** The state the 3-D system gives for its observer; false (said) when none. */
+  function rebuild3d() {
+    const r = sys3d.forward.stateFromSystem3d(sys3d.system, {
+      observer: sys3d.observer,
+    });
+    if (!r.ok) {
+      status.textContent = t('obs.cmp.file3d.refused', { why: r.code });
+      return false;
+    }
+    base = state = r.state;
+    return true;
+  }
+
   function refresh() {
     try {
       last = compareModel(o, currentSource());
@@ -454,15 +513,58 @@ export function mountComparePanel(root, ctx) {
     drawControls();
     refresh();
   });
+  file3d.addEventListener('change', async () => {
+    const file = file3d.files?.[0];
+    if (!file) return;
+    try {
+      if (file.size > 1048576) throw new Error('size');
+      const [lab, forward] = await Promise.all([
+        import('../lab3d/state.js'),
+        import('../forward/system3d.js'),
+      ]);
+      const read = lab.migrateSystem(JSON.parse(await file.text()));
+      if (!read.ok) throw new Error(read.code);
+      sys3d = {
+        system: read.system,
+        forward,
+        observer: { ...OBSERVER },
+      };
+    } catch (err) {
+      status.textContent = t('obs.cmp.file3d.bad', { why: err.message });
+      return;
+    }
+    systemSelect.querySelector('option[value="3d"]')?.remove();
+    systemSelect.append(
+      el('option', { value: '3d', text: t('obs.cmp.sys.3d') })
+    );
+    systemSelect.value = systemId = '3d';
+    kind = 'system';
+    sourceSelect.value = 'system';
+    systemSelect.disabled = false;
+    moved = new Set();
+    drawControls();
+    if (rebuild3d()) refresh();
+    else {
+      last = null;
+      keep.disabled = true;
+    }
+  });
   systemSelect.addEventListener('change', () => {
     systemId = systemSelect.value;
-    base = stateFromExoplanet(systemId);
+    if (systemId === '3d') {
+      Object.assign(sys3d.observer, OBSERVER);
+      rebuild3d();
+    } else base = stateFromExoplanet(systemId);
     state = base;
     moved = new Set();
     drawControls();
     refresh();
   });
   reset.addEventListener('click', () => {
+    if (sys3d && systemId === '3d') {
+      Object.assign(sys3d.observer, OBSERVER);
+      rebuild3d();
+    }
     state = base;
     moved = new Set();
     drawControls();

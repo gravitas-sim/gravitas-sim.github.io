@@ -241,6 +241,13 @@ export const EN_INFERENCE = {
   'obs.cmp.system': 'System',
   'obs.cmp.sys.hd209458': 'HD 209458 and its planet',
   'obs.cmp.sys.sun-jupiter': 'The Sun and Jupiter',
+  'obs.cmp.sys.3d': 'Your 3-D system',
+  'obs.cmp.file3d': 'A 3-D system file (solar units)',
+  'obs.cmp.file3d.bad': 'That file is not a 3-D system ({why}).',
+  'obs.cmp.file3d.refused':
+    'This 3-D system cannot be observed as it is ({why}). Solar, SI or astronomical units are needed, with the star as its heaviest body.',
+  'obs.cmp.el.inc3d': 'Observer inclination (deg)',
+  'obs.cmp.el.pa3d': 'Observer direction around the system (deg)',
   'obs.cmp.observed': 'Observed through',
   'obs.cmp.model.transit': 'a transit light curve',
   'obs.cmp.model.radial-velocity': 'a radial-velocity curve',

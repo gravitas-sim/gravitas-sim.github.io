@@ -35,6 +35,7 @@ import {
 } from '../js/forward/models/radialVelocity.js';
 import { transitParameters } from '../js/forward/models/transit.js';
 import { starOffsetMas } from '../js/forward/models/astrometry.js';
+import { compareModel } from '../js/compare/compare.js';
 
 const DEG = Math.PI / 180;
 const AU_M = 1.495978707e11;
@@ -431,5 +432,56 @@ describe('no change for a state with no planet geometry', () => {
     for (const t of [0, 1.3, 4.9])
       expect(starVelocity(own, t)).toBe(starVelocity(state, t));
     expect(semiAmplitude(own)).toBe(semiAmplitude(state));
+  });
+});
+
+describe('the comparison instrument takes a 3-D system as its model', () => {
+  const setup = {
+    format: 'gravitas.observing-setup',
+    formatVersion: 1,
+    seed: 'compare-3d',
+    epochs: { kind: 'regular', unit: 'd', start: 0, duration: 9, count: 200 },
+    instrument: { kind: 'spectrograph' },
+  };
+  const state = (system, inclinationDeg, positionAngleDeg = 0) =>
+    stateFromSystem3d(system, {
+      observer: { inclinationDeg, positionAngleDeg },
+    }).state;
+  const system = pair(
+    orbit({ i: 40 * DEG, Omega: 30 * DEG, omega: 1, e: 0.2 })
+  );
+
+  test('the model over the data it made leaves nothing, from any chosen orientation', () => {
+    for (const [inc, pa] of [
+      [90, 0],
+      [60, 120],
+      [20, 300],
+    ]) {
+      const truth = state(system, inc, pa);
+      const data = runForward('radial-velocity', truth, setup);
+      const r = compareModel(data, {
+        kind: 'system',
+        model: 'radial-velocity',
+        state: truth,
+      });
+      expect(r.maxAbs).toBeLessThan(1e-9);
+    }
+  });
+
+  test('another orientation is a misfit the instrument measures, and it never fits', () => {
+    const data = runForward('radial-velocity', state(system, 90, 0), setup);
+    const same = compareModel(data, {
+      kind: 'system',
+      model: 'radial-velocity',
+      state: state(system, 90, 0),
+    });
+    const tilted = compareModel(data, {
+      kind: 'system',
+      model: 'radial-velocity',
+      state: state(system, 30, 0),
+    });
+    expect(same.objective.value).toBeLessThan(1e-12);
+    expect(tilted.objective.value).toBeGreaterThan(1);
+    expect(tilted.fitted).toBe(0);
   });
 });
