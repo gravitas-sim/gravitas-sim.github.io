@@ -82,6 +82,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   galactic: ['solar-motion', 'rotating-disk', 'cluster-members'],
   interiors: ['polytrope', 'wd-mass-radius', 'ms-scaling'],
   variables: ['variable-fold', 'leavitt-law', 'variable-class'],
+  detector: ['ccd-frames', 'ccd-snr', 'diff-photometry'],
   lensing: ['light-bending', 'lens-plane', 'lens-passing'],
   survey: ['survey-counts', 'malmquist', 'completeness-lf'],
   cosmology: ['hubble-law', 'hubble-diagram', 'redshift-wedge'],

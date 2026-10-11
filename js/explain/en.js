@@ -130,6 +130,12 @@ export default {
     'How a period is read from a light curve and what limits it, why a Cepheid’s period gives its luminosity and so a distance, and why one accuracy number hides which kinds of star are mistaken for which.',
     'The light curves and Cepheids are real measurements in one band, with no metallicity or crowding correction; the bootstrap error is a floor; the classification sample is synthetic, balanced and stylised; pulsar timing is not modelled.',
   ],
+  detector: [
+    'Synthetic frames from a model of a CCD (a bias, a dark, a flat field and four stars) shown after each calibration step; the signal-to-noise of a star against exposure; or forty frames of a field with a variable star, as raw and differential light curves.',
+    'How the frame, the star’s light and its error change with the calibration step, how the signal-to-noise, the dominant noise and the exposure needed change with the star, the aperture, the sky and the exposure, and how the scatter and the fitted amplitude change with the comparison star and the calibration.',
+    'What a detector adds to the light and how each calibration frame measures it, why the noise is a sum of terms and which one limits a given exposure, and why a comparison star removes the cloud.',
+    'Every frame is synthetic from a stated model; no blooming, nonlinearity, color terms or real telescope; the calculator is for a 0.4 m teaching telescope; the sine is a model of the variable, not the curve.',
+  ],
   lensing: [
     'Bending against closest approach (log scales); the lens plane in Einstein radii with the source and its images; or flux against time as a lens passes.',
     'How the bending, the ring, the images and the light curve change as the mass, the distance, the speed, the offset and the blend change.',
