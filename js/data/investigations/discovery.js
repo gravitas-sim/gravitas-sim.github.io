@@ -370,32 +370,32 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
-  'who-gets-counted': {
+  'inside-a-star': {
     audience: 'intro',
     mathematics: 'algebra',
     prerequisites: ['lives-of-stars'],
     textbook: {
-      chapter: 19,
+      chapter: 16,
       section: null,
     },
     courseLevel: 'majors',
   },
-  'why-the-bright-ones-win': {
+  'scaling-the-main-sequence': {
     audience: 'intro',
-    mathematics: 'algebra',
-    prerequisites: ['who-gets-counted'],
+    mathematics: 'logarithms',
+    prerequisites: ['inside-a-star'],
     textbook: {
-      chapter: 19,
+      chapter: 18,
       section: null,
     },
     courseLevel: 'majors',
   },
-  'the-completeness-curve': {
+  'the-limit': {
     audience: 'intro',
     mathematics: 'algebra',
-    prerequisites: ['why-the-bright-ones-win'],
+    prerequisites: ['inside-a-star'],
     textbook: {
-      chapter: 19,
+      chapter: 23,
       section: null,
     },
     courseLevel: 'majors',
@@ -426,6 +426,36 @@ export const DISCOVERY = {
     prerequisites: ['einstein-rings-and-arcs'],
     textbook: {
       chapter: 24,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'who-gets-counted': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['lives-of-stars'],
+    textbook: {
+      chapter: 19,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'why-the-bright-ones-win': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['who-gets-counted'],
+    textbook: {
+      chapter: 19,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'the-completeness-curve': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['why-the-bright-ones-win'],
+    textbook: {
+      chapter: 19,
       section: null,
     },
     courseLevel: 'majors',

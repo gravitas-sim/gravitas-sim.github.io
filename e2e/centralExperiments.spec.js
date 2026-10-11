@@ -2218,6 +2218,71 @@ test.describe('the central experiment of each investigation', () => {
     });
   }
 
+  // ---- The stellar-interior investigations (Roadmap II, Prompt 95) --------------
+  const INTERIORS = [
+    {
+      id: 'inside-a-star',
+      title:
+        'inside-a-star: twice the mass in the same size doubles the mean density @accepts:ce.inside-a-star',
+      row: /Mean density/,
+      values: [
+        [0, 1.41, 0.03],
+        [0.3, 2.81, 0.05],
+      ],
+    },
+    {
+      id: 'scaling-the-main-sequence',
+      title:
+        'scaling-the-main-sequence: Kramers opacity predicts a steeper luminosity law than electron scattering @accepts:ce.scaling-the-main-sequence',
+      row: /Exponent the scaling predicts/,
+      values: [
+        [1, 3, 0.02],
+        [0, 5.16, 0.03],
+      ],
+    },
+    {
+      id: 'the-limit',
+      title:
+        'the-limit: a denser white dwarf is a smaller one @accepts:ce.the-limit',
+      row: /Radius, in kilometers/,
+      values: [
+        [6.5, 8864, 120],
+        [9, 2470, 50],
+      ],
+    },
+  ];
+  for (const c of INTERIORS) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(async () => reading(await readout(page), c.row), {
+            timeout: 5000,
+          })
+          .not.toBeNaN();
+        const got = reading(await readout(page), c.row);
+        seen.push(got);
+        expect(Math.abs(got - want)).toBeLessThan(tol);
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
+
   // ---- The selection-effects sequence (Roadmap II, Prompt 93) -------------------
   const SURVEY = [
     {

@@ -658,6 +658,43 @@ export default {
       'airmass-at-thirty':
         '2.0 from 1/sin 30; the kernel’s fit gives 1.99. Accepted within 0.05.',
     },
+    'inside-a-star': {
+      'the-suns-center':
+        'n = 3, mass 1, radius 1: central density 76.4 g/cm³ (within 0.8) and 11.8 million kelvin (within 0.3).',
+      'half-the-mass':
+        'n = 3: half the mass inside 0.283 of the radius (within 0.012) and a central-to-mean density ratio of 54.2 (within 0.4).',
+      'twice-the-mass':
+        'Mass 2, radius 1: central density 153 g/cm³ (within 1.6) and 23.5 million kelvin (within 0.5).',
+      'a-red-dwarf':
+        'n = 3/2, 0.2 solar masses, 0.22 solar radii: 6.74 million kelvin (within 0.15) and a ratio of 5.99 (within 0.06).',
+      'no-concentration':
+        'n = 0: ratio 1.00 (within 0.01) and half the mass inside 0.794 (within 0.012).',
+    },
+    'scaling-the-main-sequence': {
+      'the-prediction':
+        'Luminosity, electron scattering and CNO: predicted exponent 3.00 (within 0.01), fitted 3.16 over 2 to 40 solar masses (within 0.03), scatter 0.143 dex (within 0.01).',
+      'low-mass-stars':
+        'Kramers and proton-proton: predicted 5.46 (within 0.03), fitted 4.43 over 0.5 to 2 solar masses (within 0.03).',
+      'the-wrong-law':
+        'Kramers with CNO on massive stars: predicted 5.16 (within 0.03), scatter 0.917 dex (within 0.03).',
+      'radius-scaling':
+        'Radius, electron scattering and CNO: predicted 0.789 (within 0.01), fitted 0.546 over 2 to 40 solar masses (within 0.02).',
+      lifetimes:
+        'Lifetime: predicted −2 (within 0.01), fitted −1.815 over 2 to 40 solar masses (within 0.03).',
+      'the-suns-clock':
+        '1 solar-mass model: MIST life 9.88 Gyr (within 0.15) and nuclear timescale 13.9 Gyr (within 0.25).',
+    },
+    'the-limit': {
+      'a-typical-dwarf':
+        'Central density 10^6.5 (3.2 million g/cm³), μₑ = 2: 0.597 solar masses (within 0.012) and 8,864 km (within 150).',
+      'a-dense-dwarf':
+        'Central density 10⁹: 1.367 solar masses (within 0.015) and 2,470 km (within 50).',
+      'the-ceiling':
+        'Central density 10¹¹: 1.450 solar masses (within 0.012) and a limiting mass of 1.456 (within 0.003).',
+      'hydrogen-would-be-different':
+        'μₑ = 1: limiting mass 5.82 (within 0.03).',
+      'an-iron-core': 'μₑ = 2.15: limiting mass 1.26 (within 0.006).',
+    },
     'bending-light': {
       'the-suns-limb':
         'Mass 1, closest approach 1: 1.75 arcseconds (within 0.02); the Newtonian row reads 0.88.',

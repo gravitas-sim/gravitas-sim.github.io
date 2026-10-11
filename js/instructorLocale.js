@@ -33,6 +33,9 @@ import WHAT_A_SPECTRUM_IS_MADE_OF from './data/investigations/es/what-a-spectrum
 import THE_SUNS_MOTION from './data/investigations/es/the-suns-motion.js';
 import THE_ROTATING_DISK from './data/investigations/es/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP from './data/investigations/es/cluster-membership.js';
+import INSIDE_A_STAR from './data/investigations/es/inside-a-star.js';
+import SCALING_THE_MAIN_SEQUENCE from './data/investigations/es/scaling-the-main-sequence.js';
+import THE_LIMIT from './data/investigations/es/the-limit.js';
 import BENDING_LIGHT from './data/investigations/es/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS from './data/investigations/es/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY from './data/investigations/es/a-lens-passing-by.js';
@@ -67,6 +70,9 @@ import WHAT_A_SPECTRUM_IS_MADE_OF_DEEPER from './data/investigations/depth/es/wh
 import THE_SUNS_MOTION_DEEPER from './data/investigations/depth/es/the-suns-motion.js';
 import THE_ROTATING_DISK_DEEPER from './data/investigations/depth/es/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP_DEEPER from './data/investigations/depth/es/cluster-membership.js';
+import INSIDE_A_STAR_DEEPER from './data/investigations/depth/es/inside-a-star.js';
+import SCALING_THE_MAIN_SEQUENCE_DEEPER from './data/investigations/depth/es/scaling-the-main-sequence.js';
+import THE_LIMIT_DEEPER from './data/investigations/depth/es/the-limit.js';
 import BENDING_LIGHT_DEEPER from './data/investigations/depth/es/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS_DEEPER from './data/investigations/depth/es/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY_DEEPER from './data/investigations/depth/es/a-lens-passing-by.js';
@@ -98,6 +104,9 @@ export const SHADOWS = Object.freeze({
   'the-suns-motion': THE_SUNS_MOTION,
   'the-rotating-disk': THE_ROTATING_DISK,
   'cluster-membership': CLUSTER_MEMBERSHIP,
+  'inside-a-star': INSIDE_A_STAR,
+  'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE,
+  'the-limit': THE_LIMIT,
   'bending-light': BENDING_LIGHT,
   'einstein-rings-and-arcs': EINSTEIN_RINGS_AND_ARCS,
   'a-lens-passing-by': A_LENS_PASSING_BY,
@@ -139,6 +148,9 @@ export const DEEPER_SHADOWS = Object.freeze({
   'the-suns-motion': THE_SUNS_MOTION_DEEPER,
   'the-rotating-disk': THE_ROTATING_DISK_DEEPER,
   'cluster-membership': CLUSTER_MEMBERSHIP_DEEPER,
+  'inside-a-star': INSIDE_A_STAR_DEEPER,
+  'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE_DEEPER,
+  'the-limit': THE_LIMIT_DEEPER,
   'bending-light': BENDING_LIGHT_DEEPER,
   'einstein-rings-and-arcs': EINSTEIN_RINGS_AND_ARCS_DEEPER,
   'a-lens-passing-by': A_LENS_PASSING_BY_DEEPER,

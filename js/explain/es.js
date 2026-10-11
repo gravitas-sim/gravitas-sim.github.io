@@ -115,6 +115,12 @@ export default {
     'Qué dicen los datos antes de ponerles un modelo, y cuánto mueve la respuesta un supuesto cambiado (la V del Sol, la ponderación, el halo).',
     'Mediciones reales con dispersión real; los modelos son simples y se declaran, y una pertenencia es una probabilidad, no una etiqueta.',
   ],
+  interiors: [
+    'El interior de una estrella del centro a la superficie: densidad, presión, temperatura y la masa dentro de cada radio; la masa y el radio de las enanas blancas; o luminosidad, radio y vida frente a la masa en estrellas modelo.',
+    'Cómo cambian el perfil, los valores centrales, la masa de la enana blanca y los exponentes ajustados al cambiar el índice politrópico, la masa, el radio, la densidad central, la composición y la física de la escala.',
+    'Por qué el centro es caliente y denso, por qué una estrella degenerada tiene una masa límite y hasta dónde llega un argumento de escala antes de que se vea la forma de las estrellas reales.',
+    'Un politropo es una forma, no una estrella: sin generación de energía, opacidad ni convección; la enana blanca es fría e ideal; la secuencia principal es un modelo MIST, no una medición.',
+  ],
   lensing: [
     'La desviación frente al máximo acercamiento (escalas logarítmicas); el plano de la lente en radios de Einstein con la fuente y sus imágenes; o el flujo frente al tiempo cuando pasa una lente.',
     'Cómo cambian la desviación, el anillo, las imágenes y la curva de luz al cambiar la masa, la distancia, la velocidad, el desplazamiento y la mezcla.',

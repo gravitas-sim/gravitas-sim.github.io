@@ -61,6 +61,11 @@ export const FEATURES = [
         note: 'reports that estimates need Workers',
       },
       {
+        file: 'js/kernels/stellar/client.js',
+        detect: /typeof Worker === 'undefined'/,
+        note: 'runs the same handler in place',
+      },
+      {
         file: 'js/missionPage.js',
         detect: /new Worker\(/,
         note: 'no fallback',
