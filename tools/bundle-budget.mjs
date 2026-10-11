@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1940.6,
+    limit: 1988.3,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -597,7 +597,8 @@ const BUDGETS = [
       '\n\nRaised from 1872 to 1927.4 KB gzipped for Prompt 91 part 2 (D-BUDGET-20, the standing size-budget approval): the cosmology instrument family (js/cosmologyWidgets.js and its words), four investigations with their Spanish and depth files and the First Rung step, which the composer, course-packs, course-builder, kit and submission bundles each carry. Measured 1,973,616 bytes gzipped (1927.36 KB, 5233.9 KB raw) after merging v2 b888735, an overrun of 55.36 KB. The four data packs are fetched sidecar files (cosmology/*.json) and are in no bundle.' +
       '\n\nRaised from 1927.4 to 1935.7 KB gzipped for Prompt 97 (D-BUDGET-22, the standing size-budget approval): the six named sequences with their reasons and depth labels in both languages, ten ladders and feedback texts on numeric steps in ten investigations and their Spanish shadows, the short-route derivation in the assignment builder, and the three course packs (js/data/courses/*.js, lazy files the course home, builder and composer routes carry). Measured 1,982,123 bytes gzipped (1935.67 KB, 5258.4 KB raw) after merging v2 916f933, an overrun of 8.27 KB.' +
       '\n\nRaised from 1935.7 to 1938.6 KB gzipped for Prompt 86 (D-BUDGET-24, the standing size-budget approval): the detector kernel and the ccd forward model, which the forward-model registry carries into the bundles that import it. Measured 1,985,098 bytes gzipped (1938.57 KB, 5266.0 KB raw), an overrun of 2.87 KB. The detector instruments are not registered until a lesson uses them (D-CALIB-02).' +
-      '\n\nRaised from 1938.6 to 1940.6 KB gzipped for the Pantheon+ pack record (js/data/observations/pantheonPlusHd.js, its citations and licence record, a lazy chunk behind loadPantheonPlus; D-RIGHTS-04 and the standing size-budget approval). Measured 1,987,150 bytes gzipped (1940.58 KB, 5270.2 KB raw), an overrun of 1.98 KB. The 1,701 rows are a fetched sidecar (cosmology/pantheon-plus-hd.json) and are in no bundle.',
+      '\n\nRaised from 1938.6 to 1986.2 KB gzipped for Prompt 86 part 2 (D-BUDGET-25, the standing size-budget approval): the detector instrument family (js/detectorWidgets.js and its words), three investigations with their Spanish and depth files, and their instructor content, which the composer, course-packs, course-builder, kit and submission bundles each carry. Measured 1986.1 KB gzipped (5396.6 KB raw, rounded up to 1986.2), an overrun of 47.6 KB.' +
+      '\n\nRaised from 1986.2 to 1988.3 KB gzipped for the Pantheon+ pack record (js/data/observations/pantheonPlusHd.js, its citations and licence record, a lazy chunk behind loadPantheonPlus; D-RIGHTS-04 and D-BUDGET-27, the standing size-budget approval). Measured 2,035,956 bytes gzipped (1988.24 KB, 5400.9 KB raw) after merging v2 78f44b4, an overrun of 2.04 KB. The 1,701 rows are a fetched sidecar (cosmology/pantheon-plus-hd.json) and are in no bundle.',
   },
 ];
 

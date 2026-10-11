@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 52 investigations and 955 steps: 905 steps
+Across 55 investigations and 984 steps: 934 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 516 show a prescribed model result, 146 draw
-on a stored dataset, 395 put a self-contained panel beside the text,
-212 keep something, and 30 are prose.
-Of 122 prediction loops, 122 are returned to,
-122 produce a measurement before they are answered, and
+running integration, 545 show a prescribed model result, 146 draw
+on a stored dataset, 424 put a self-contained panel beside the text,
+225 keep something, and 30 are prose.
+Of 125 prediction loops, 125 are returned to,
+125 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-122 hold their marking until the experiment settles them.
+125 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -608,6 +608,48 @@ Of 122 prediction loops, 122 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:redshift-wedge`, control redshift-wedge/zmax, measures the variance over mean of the galaxy counts in cells, and the galaxies shown, for the range you set, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## What a CCD Records (`what-a-ccd-records`)
+
+- **Steps:** 11. Scene declared on 11; a reader can change something on 0; 11 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 11 prescribed model, 0 stored dataset, 11 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** ccd-frames.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-flat → what-the-flat-does, divide-not-subtract, cosmic-rays, the-saturated-star, what-you-worked-out → what-the-flat-does.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:ccd-frames`, control ccd-frames/view, measures the net light of star B in electrons, raw and after dividing by the flat, for the frame shown, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Signal, Noise and Exposure (`signal-noise-and-exposure`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** ccd-snr.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-four-times → four-times-longer, a-faint-star, why-more-than-double, exposure-for-the-target, faintest-star, what-you-worked-out → four-times-longer.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:ccd-snr`, control ccd-snr/exposure, measures the signal-to-noise of a V = 15 star for the exposure you set, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## A Variable Star From Frames (`a-variable-star-from-frames`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, choose-an-option, commit-a-prediction.
+- **Objects the steps declare:** star.
+- **Instruments:** diff-photometry.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-curve → the-sine, is-it-real, what-you-worked-out → the-sine.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:diff-photometry`, control diff-photometry/reduction, measures the scatter of the check star and the mean of the variable against the comparison, for the calibration applied, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Beat of a Star (`the-beat-of-a-star`)
 

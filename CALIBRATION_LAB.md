@@ -24,14 +24,18 @@ Tolerances were fixed by the method, not the result. Recovered stated parameters
 
 Known limitation found: a cosmic ray that lands on a star's core can escape the single-frame mask (the test excludes pixels within 7 of a star). A series should use several frames.
 
-## Instruments (`js/detectorInstruments.js`)
+## Instruments (`js/detectorWidgets.js`)
 
-File `js/detectorInstruments.js` (family `detector`, deliberately NOT registered in `js/widgets.js` until a lesson docks it, and named `*Instruments.js` so the lazy-widget manifest does not claim it: tests/investigationIntegrity refuses a registered instrument no lesson uses): `ccd-frames` (bias, dark, flat, raw, and each calibration step, with photometry of four stars against the truth), `ccd-snr` (the CCD equation, dominant term, exposure for a target, limiting magnitude) and `diff-photometry` (forty frames, raw and differential light curves, the check star, the fit, an optional truth manifest). The readout under each picture is its table alternative.
+File `js/detectorWidgets.js` (family `detector`, registered in `js/widgets.js` as a lazy family, the file named `*Widgets.js` as the lazy-widget manifest requires): `ccd-frames` (bias, dark, flat, raw, and each calibration step, with photometry of four stars against the truth), `ccd-snr` (the CCD equation, dominant term, exposure for a target, limiting magnitude) and `diff-photometry` (forty frames, raw and differential light curves, the check star, the fit, an optional truth manifest). The readout under each picture is its table alternative.
 
 ## Rights
 
 D-CALIB-01: no authentic calibration or science frames ship. No public teaching set with an explicit, confirmed licence was identified in this run, so the stop condition applies: synthetic only, labelled.
 
-## Not done in this prompt
+## Investigations
 
-The three investigations (what a CCD records; signal, noise and exposure; a variable star from frames, with the advanced full reduction against the truth manifest) are written in draft but not registered: their Spanish, depth variants, instructor materials, acceptance entries, browse registrations, generated pages and end-to-end tests remain (D-CALIB-02). Registering the reduction nodes as pipeline tools. Wiring the instruments into the Observatory menu.
+What a CCD Records, Signal, Noise and Exposure, and A Variable Star From Frames (`js/data/investigations/`), each in English, Spanish and quantitative and advanced depth (the advanced steps compare with the truth manifest of the synthetic set), with instructor content, acceptance entries and `tests/calibrationLessons.test.js`, which recomputes every number a lesson states from the kernel. They are in the observing-and-measuring sequence.
+
+## Not done
+
+Registering the reduction nodes as `TOOLS` of the measurement pipeline (js/measure/pipeline.js is on the Observatory route, which has no room and no page calls them); wiring the instruments into the Observatory menu; authentic frames (D-CALIB-01).
