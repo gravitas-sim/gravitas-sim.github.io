@@ -6065,7 +6065,7 @@ export const INSTRUCTOR_CONTENT = {
     priorKnowledge: [
       'What a pixel is and what a count is',
       'Averages and scatter',
-      'Percent',
+      'Percent as a share of a whole',
     ],
     keyConcepts: [
       {
@@ -6283,6 +6283,7 @@ export const INSTRUCTOR_CONTENT = {
       'The frames are synthetic: the variable is a perfect sine, the comparison and check stars are perfectly steady, there are no color terms and no pointing drift, and the cloud has no color.',
       'The comparison and check stars are not guaranteed steady in a real night; checking that is part of the method.',
       'The cosmic-ray step changes nothing in this series, which has none; the instrument still offers the level.',
+      'The fit scans trial periods between 0.05 and 0.3 day for the smallest chi-square; with only two and a half cycles in the run, the period error is about two percent.',
     ],
     discussion: [
       'What if the comparison star turned out to vary?',
