@@ -4,7 +4,11 @@
 import { describe, test, expect, beforeAll } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { URL } from 'node:url';
-import { loadCosmologyData, COSMOLOGY_SIDECARS } from '../js/cosmologyData.js';
+import {
+  loadCosmologyData,
+  loadPantheonPlus,
+  COSMOLOGY_SIDECARS,
+} from '../js/cosmologyData.js';
 import { COMA } from '../js/darkMatterWidgets.js';
 
 const here = p => new URL(`../${p}`, import.meta.url);
@@ -77,6 +81,48 @@ describe('DES-SN5YR', () => {
     expect(manifest).toMatch(/Statistical errors only/);
     expect(manifest).toMatch(/H0 = 70/);
     expect(manifest).toMatch(/down-weighted/);
+  });
+});
+
+describe('Pantheon+SH0ES', () => {
+  let pp;
+  const raw = read('tools/data-packs/cosmology/Pantheon+SH0ES.dat')
+    .trim()
+    .split('\n')
+    .map(l => l.trim().split(/\s+/));
+  const head = raw[0];
+  const rows = raw.slice(1);
+  const at = n => head.indexOf(n);
+  beforeAll(async () => {
+    pp = await loadPantheonPlus(fetchFile);
+  });
+  test('1,701 rows; mean z and mean modulus equal the raw file to 1e-12; every row is a raw row', () => {
+    expect(pp.z).toHaveLength(1701);
+    expect(rows).toHaveLength(1701);
+    expect(rel(mean(pp.z), mean(rows.map(r => +r[at('zHD')])))).toBeLessThan(
+      1e-12
+    );
+    expect(
+      rel(mean(pp.mu), mean(rows.map(r => +r[at('MU_SH0ES')])))
+    ).toBeLessThan(1e-12);
+    const key = (z, mu) => `${z.toFixed(5)}|${mu.toFixed(4)}`;
+    const have = new Set(rows.map(r => key(+r[at('zHD')], +r[at('MU_SH0ES')])));
+    pp.z.forEach((z, i) => expect(have.has(key(z, pp.mu[i]))).toBe(true));
+    expect(pp.calibrator.reduce((a, b) => a + b, 0)).toBe(
+      rows.filter(r => r[at('IS_CALIBRATOR')] === '1').length
+    );
+  });
+  test('the pack carries the three citations the release page asks for, and the no-licence basis', () => {
+    const m = JSON.parse(read('data-packs/pantheon-plus-hd.json'));
+    expect(m.license.status).toBe('no-license-stated');
+    expect(m.license.statement).toMatch(/Please cite papers individually/);
+    expect(m.license.basis).toMatch(/D-RIGHTS-04/);
+    const urls = m.source.citations.map(c => c.url).join(' ');
+    for (const id of ['2112.03863', '2202.04077', '2112.04510'])
+      expect(urls).toContain(id);
+    expect(m.source.urls).toContain('https://pantheonplussh0es.github.io/');
+    expect(m.reductions.join(' ')).toMatch(/for plotting only/);
+    expect(m.derived.sidecar.file).toBe('cosmology/pantheon-plus-hd.json');
   });
 });
 

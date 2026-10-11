@@ -34,4 +34,4 @@ Pulsar timing (out of scope, as the prompt says); metallicity and crowding corre
 
 ## Rights
 
-See D-LADDER-01 in `DECISION_REGISTER.md`.
+See D-LADDER-01 in `DECISION_REGISTER.md`. OGLE, MOA and ASAS-SN data are not bundled and will not be (D-RIGHTS-02, Carl, 2026-10-11): the classification sample stays synthetic and labelled, and the model page's "Survey archives" section (`model/index.html#survey-archives`) links the survey archives with their citation text. OGLE: https://ogle.astrouw.edu.pl/ogle4/ews/ews.html (cite Udalski et al. 2015, Acta Astron. 65, 1, with the web address; the page asks to be contacted before publication use); MOA: https://moaprime.massey.ac.nz/alerts (no citation request found; reference Bond et al. 2001, MNRAS 327, 868); ASAS-SN: https://asas-sn.osu.edu/ (cite Shappee et al. 2014, ApJ 788, 48 and Kochanek et al. 2017, PASP 129, 104502). Read 2026-10-11.
