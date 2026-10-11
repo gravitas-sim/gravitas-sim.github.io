@@ -54,6 +54,12 @@ const STATIC_FILES = [
   'variables/shoes-r22-cepheids.json',
   // The synthetic labelled sample of the classification instrument.
   'variables/class-sample.json',
+  // The cosmology tables' rows (data-packs/hubble-1929-table1.json and three
+  // more, Roadmap II Prompt 91), fetched by the cosmology instruments.
+  'cosmology/hubble-1929-table1.json',
+  'cosmology/des-sn5yr-hd.json',
+  'cosmology/sdss-dr18-redshift-slice.json',
+  'cosmology/coma-cluster-quoted.json',
 ];
 
 // Directories copied whole. Lesson figures are photographs used under licenses

@@ -25,6 +25,10 @@
 // suite (tests/cosmologyKernel.test.js).
 // =============================================================================
 
+// Bound once, not read as globals: in Jest's vm context every free global read
+// goes through the context, which made integration loops 10x slower than in Node.
+const { Math } = globalThis;
+
 export const C_KMS = 299792.458;
 const MPC_KM = 3.085677581491367e19;
 const JULIAN_YEAR_S = 365.25 * 86400;

@@ -184,7 +184,14 @@ export function fitSupernovae(data, opts = {}) {
     omProfile: prof
       .map(p => ({ value: p.value, chi2: p.chi2 }))
       .sort((a, b) => a.value - b.value),
-    degenerate: free && !model.noOffset && cov.covariance === null,
+    // An uncertainty on H0 wider than the whole range it may take (130
+    // km/s/Mpc) says the data do not constrain it: with the offset free the
+    // covariance is singular to rounding, and the error comes out in the
+    // millions or as no covariance at all.
+    degenerate:
+      free &&
+      !model.noOffset &&
+      (cov.covariance === null || !(cov.sigma[1] < 130)),
     converged: r.converged,
   };
 }

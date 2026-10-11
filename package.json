@@ -102,6 +102,7 @@
     "capabilities:check": "node tools/generate.mjs --check --only capabilities",
     "vendor": "node tools/vendor-deps.mjs",
     "vendor:check": "node tools/vendor-deps.mjs --check",
+    "cosmology:validate": "node tools/cosmology-validate.mjs",
     "budget": "node tools/bundle-budget.mjs",
     "budget:composition": "node tools/bundle-composition.mjs",
     "budget:routes": "node tools/route-budget.mjs",

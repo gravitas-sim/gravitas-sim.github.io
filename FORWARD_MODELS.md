@@ -20,6 +20,7 @@ Older formats read in through `readVersioned`: the radial-velocity panel's surve
 | catalogue | `synthesisePopulation`, decoded bands | distance modulus (1e-9 mag); colour independent of distance (1e-9) |
 | image | point sources, Gaussian PSF, TAN WCS | total counts (1e-6), centroid (1e-4 pixel) |
 | microlensing | a point lens crossing a star: own parameters or a lens geometry, finite source, blending | the lensing kernel's curve, exact; tE and theta_E from the geometry (1e-12); the fit recovers t0, u0, tE over 30 seeds (tests/lensingKernel.test.js) |
+| hubble-diagram | a flat or open Lambda-CDM universe, the survey's count, redshift range and error (catalogue instrument), an unknown offset | the cosmology kernel's distance moduli, exact; the fit recovers Omega_m over seeds (tests/cosmologyFit.test.js, `npm run cosmology:validate`); H0 and the offset are one parameter and the truth manifest says so |
 
 Noise statistics over 200 seeds of 100 points: white mean and standard deviation, chi-square per point, red lag-1 correlation exp(-dt/tau), outlier fraction and sign balance, each within 4.5 standard errors fixed before the run (tests/observingSetup.test.js). A noise-free setup returns the model exactly.
 
