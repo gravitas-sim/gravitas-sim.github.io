@@ -3,9 +3,9 @@
 // -----------------------------------------------------------------------------
 // Needs the network: it downloads Pyodide 314.0.7 and the packages from the
 // jsDelivr CDN (about 9 MB for the NumPy notebook, about 19 MB for the plotting
-// one). It therefore runs only when COMPUTE_ONLINE=1, in its own CI job
-// (.github/workflows: compute-online, manual and weekly), and no normal gate
-// depends on it. The frame is the REAL built one, served at the compute origin
+// one). It therefore runs only when COMPUTE_ONLINE=1, by hand or in a job of
+// its own that a maintainer adds (the CI workflow is not changed here), and no
+// normal gate depends on it. The frame is the REAL built one, served at the compute origin
 // by Playwright, so this works before that origin is published and checks the
 // bytes that will be.
 //

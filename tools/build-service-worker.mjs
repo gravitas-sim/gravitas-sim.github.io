@@ -216,7 +216,12 @@ const OBSERVATORY_ONLY = new Set([
  * modules, its notebooks and its example inputs are never precached, so no
  * install downloads them and no offline reader is promised them.
  */
-const NEVER_PRECACHED = [/^js\/compute\//, /^js\/computePage\.js$/, /^compute\//, /^compute-frame\//];
+const NEVER_PRECACHED = [
+  /^js\/compute\//,
+  /^js\/computePage\.js$/,
+  /^compute\//,
+  /^compute-frame\//,
+];
 
 const ON_DEMAND_ONLY = new Set([
   'js/validation/physicsChecks.js',

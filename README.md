@@ -419,6 +419,7 @@ teaching/           the public showcase page for instructors
 instructors/        the instructor area; instructors/submissions/ reviews hand-ins
 evaluation/         printable pilot instruments for evaluating a section
 observatory/        the Observatory: data, measurement and the guided suites
+compute/            the compute page's reviewed notebooks and example inputs (compute-frame/ is the frame, published to its own origin)
 catalog/            the curated catalog of extensions, and its archives
 experiments/        the experiment runner
 figure/             the figure builder, and embeds
@@ -633,6 +634,7 @@ part was built:
 | [`CHAOS_INVESTIGATION.md`](CHAOS_INVESTIGATION.md)                 | The chaos investigation: why the Lagrange equilateral configuration, the divergence definition, and the evidence it is not a timestep artifact |
 | [`RESONANCE_INVESTIGATION.md`](RESONANCE_INVESTIGATION.md)         | The resonance investigation: the resonant angles, the three verdicts and why one of them is a refusal, the four scenarios and their measured values |
 | [`EXOPLANET_OBSERVING.md`](EXOPLANET_OBSERVING.md)                 | The transit, radial-velocity and astrometry panels and the shared observer                                                                     |
+| [`COMPUTE.md`](COMPUTE.md)                                         | The opt-in, online-only compute page: reviewed Python notebooks in a sandboxed frame on its own origin, what is pinned, the capsule and how to publish the frame |
 | [`EXOPLANET_OBSERVATORY.md`](EXOPLANET_OBSERVATORY.md)             | Investigations with real TESS light curves in the Observatory: what each checks, the data and licenses, and the approximations left               |
 | [`STELLAR_POPULATIONS.md`](STELLAR_POPULATIONS.md)                 | Investigations with SDSS spectra and photometry, SEGUE, MIST and TESS: what each checks, the platform they reuse, the data and licenses           |
 | [`REFERENCE_FRAMES.md`](REFERENCE_FRAMES.md)                       | Re-expressing the scene in another body's frame                                                                                                |

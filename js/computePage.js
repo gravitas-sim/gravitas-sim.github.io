@@ -15,14 +15,24 @@
 
 import { mountShell } from './shell.js';
 import { sha256Hex } from './hash.js';
-import { NOTEBOOKS, defaultParams, entryOf, paramsText } from './compute/catalogue.js';
-import { ComputeError, checkInput, checkParams, loadNotebook } from './compute/prepare.js';
+import { NOTEBOOKS, entryOf, paramsText } from './compute/catalogue.js';
+import {
+  ComputeError,
+  checkInput,
+  checkParams,
+  loadNotebook,
+} from './compute/prepare.js';
 import { createSession } from './compute/session.js';
 import { connect, fetchFrame } from './compute/transport.js';
 import { FRAME_PIN } from './compute/framePin.js';
 import { RUNTIME, downloadBytes } from './compute/runtime.js';
 import { LIMITS } from './compute/messages.js';
-import { capsuleFile, localNotebook, readCapsule, verifyCapsule } from './compute/capsule.js';
+import {
+  capsuleFile,
+  localNotebook,
+  readCapsule,
+  verifyCapsule,
+} from './compute/capsule.js';
 
 const $ = id => document.getElementById(id);
 const es = () => document.documentElement.lang.startsWith('es');
@@ -85,21 +95,24 @@ const FAILURES = {
     'Stopped. The runtime was removed; start it again to continue.',
     'Detenido. Se quitó el entorno; inícialo de nuevo para continuar.',
   ],
-  busy: ['Still working on the last request.', 'Todavía trabajando en la solicitud anterior.'],
+  busy: [
+    'Still working on the last request.',
+    'Todavía trabajando en la solicitud anterior.',
+  ],
   input: [
     'That file is not an input this notebook reads:',
     'Ese archivo no es una entrada que lea este cuaderno:',
   ],
-  capsule: [
-    'That capsule was not opened:',
-    'Esa cápsula no se abrió:',
-  ],
+  capsule: ['That capsule was not opened:', 'Esa cápsula no se abrió:'],
 };
 
 const STATES = {
   verifying: ['Checking the frame…', 'Comprobando el marco…'],
   starting: ['Starting the frame…', 'Iniciando el marco…'],
-  loading: ['Downloading and checking the runtime…', 'Descargando y comprobando el entorno…'],
+  loading: [
+    'Downloading and checking the runtime…',
+    'Descargando y comprobando el entorno…',
+  ],
   ready: ['The runtime is ready.', 'El entorno está listo.'],
   running: ['Running the notebook…', 'Ejecutando el cuaderno…'],
   stopped: ['The runtime is stopped.', 'El entorno está detenido.'],
@@ -120,13 +133,20 @@ const state = {
 
 const mb = bytes => `${(bytes / 1e6).toFixed(1)} MB`;
 const num = (v, digits = 8) =>
-  new Intl.NumberFormat(es() ? 'es' : 'en', { maximumSignificantDigits: digits }).format(v);
+  new Intl.NumberFormat(es() ? 'es' : 'en', {
+    maximumSignificantDigits: digits,
+  }).format(v);
 const ms = v => `${(v / 1000).toFixed(1)} s`;
 
 function showFailure(err, extra = '') {
   const code = err instanceof ComputeError ? err.code : 'notebook-error';
   const [en, sp] = FAILURES[code] ?? FAILURES['notebook-error'];
-  const detail = ['notebook-error', 'output-refused', 'input', 'capsule'].includes(code)
+  const detail = [
+    'notebook-error',
+    'output-refused',
+    'input',
+    'capsule',
+  ].includes(code)
     ? ` ${err.message ?? ''}`
     : '';
   const box = $('cpState');
@@ -170,7 +190,10 @@ function fillNotebooks() {
   }
   sel.value = keep;
   const kind = $('cpInputKind');
-  kind.options[0].textContent = L('The example Gravitas vendors', 'El ejemplo que incluye Gravitas');
+  kind.options[0].textContent = L(
+    'The example Gravitas vendors',
+    'El ejemplo que incluye Gravitas'
+  );
   kind.options[1].textContent = L('A file of my own', 'Un archivo mío');
 }
 
@@ -187,12 +210,19 @@ function describeEntry() {
   $('cpSummary').textContent = `${say(e.summary)} ${say(e.note)}`;
   const dl = $('cpFacts');
   dl.textContent = '';
-  fact(dl, L('Reads', 'Lee'), `${e.input.format}/${e.input.version} (${e.input.kind})`);
+  fact(
+    dl,
+    L('Reads', 'Lee'),
+    `${e.input.format}/${e.input.version} (${e.input.kind})`
+  );
   fact(
     dl,
     L('Returns', 'Devuelve'),
     [
-      L('numbers with units and uncertainties', 'números con unidades e incertidumbres') +
+      L(
+        'numbers with units and uncertainties',
+        'números con unidades e incertidumbres'
+      ) +
         ` (${e.outputs.envelope.quantities.map(q => say(q.label).toLowerCase()).join(', ')})`,
       e.outputs.table ? L('a table', 'una tabla') : null,
       e.outputs.figure ? L('a plot', 'un gráfico') : null,
@@ -202,7 +232,11 @@ function describeEntry() {
   );
   fact(dl, L('Packages', 'Paquetes'), e.packages.join(', '));
   fact(dl, L('Notebook hash', 'Hash del cuaderno'), e.cellsSha256);
-  fact(dl, L('Example input', 'Entrada de ejemplo'), say(e.input.example.title));
+  fact(
+    dl,
+    L('Example input', 'Entrada de ejemplo'),
+    say(e.input.example.title)
+  );
   const box = $('cpParams');
   const had = Object.fromEntries(
     [...box.querySelectorAll('input')].map(i => [i.dataset.id, i.value])
@@ -227,7 +261,10 @@ function describeEntry() {
     `Pressing "Start the runtime" downloads about ${mb(bytes)} (Pyodide ${RUNTIME.version}, ${e.packages.join(' and ')}), once, from the internet. The runtime holds about 80 MB of memory before your data. Nothing is installed on your computer, and your browser may keep the files in its cache.`,
     `Pulsar "Iniciar el entorno" descarga unos ${mb(bytes)} (Pyodide ${RUNTIME.version}, ${e.packages.join(' y ')}), una vez, de internet. El entorno ocupa unos 80 MB de memoria antes de tus datos. No se instala nada en tu ordenador, y tu navegador puede guardar los archivos en su caché.`
   );
-  $('cpStart').textContent = L(`Start the runtime (about ${mb(bytes)})`, `Iniciar el entorno (unos ${mb(bytes)})`);
+  $('cpStart').textContent = L(
+    `Start the runtime (about ${mb(bytes)})`,
+    `Iniciar el entorno (unos ${mb(bytes)})`
+  );
   $('cpRun').textContent = L('Run the notebook', 'Ejecutar el cuaderno');
   $('cpStop').textContent = L('Stop', 'Detener');
   $('cpFileLabel').hidden = $('cpInputKind').value !== 'file';
@@ -235,12 +272,16 @@ function describeEntry() {
 
 function paramValues() {
   return Object.fromEntries(
-    [...$('cpParams').querySelectorAll('input')].map(i => [i.dataset.id, Number(i.value)])
+    [...$('cpParams').querySelectorAll('input')].map(i => [
+      i.dataset.id,
+      Number(i.value),
+    ])
   );
 }
 
 function sync() {
-  const started = state.started && state.entry.packages.every(p => state.started.includes(p));
+  const started =
+    state.started && state.entry.packages.every(p => state.started.includes(p));
   const s = state.session?.state ?? 'idle';
   const working = ['verifying', 'starting', 'loading', 'running'].includes(s);
   $('cpStart').disabled = working || (s === 'ready' && started);
@@ -255,7 +296,12 @@ function newSession() {
   state.started = null;
   state.session = createSession({
     fetchFrame,
-    connect: () => connect(document, $('main'), L('Notebook runner', 'Ejecutor de cuadernos')),
+    connect: () =>
+      connect(
+        document,
+        $('main'),
+        L('Notebook runner', 'Ejecutor de cuadernos')
+      ),
     pin: FRAME_PIN,
     onState: s => {
       const w = STATES[s];
@@ -284,15 +330,29 @@ async function start() {
 async function inputText() {
   if ($('cpInputKind').value === 'file') {
     const f = $('cpFile').files?.[0];
-    if (!f) throw new ComputeError('input', L('choose a file first', 'elige un archivo primero'));
+    if (!f)
+      throw new ComputeError(
+        'input',
+        L('choose a file first', 'elige un archivo primero')
+      );
     if (f.size > LIMITS.input)
-      throw new ComputeError('input', L('it is larger than 2 MB', 'es mayor que 2 MB'));
-    return { text: await f.text(), source: 'file', title: f.name.slice(0, 120) };
+      throw new ComputeError(
+        'input',
+        L('it is larger than 2 MB', 'es mayor que 2 MB')
+      );
+    return {
+      text: await f.text(),
+      source: 'file',
+      title: f.name.slice(0, 120),
+    };
   }
   const e = state.entry;
   const text = await fetchText(`/${e.input.example.path}`);
   if ((await sha256Hex(text)) !== e.example.sha256)
-    throw new ComputeError('input', L('the example is not the vendored one', 'el ejemplo no es el incluido'));
+    throw new ComputeError(
+      'input',
+      L('the example is not the vendored one', 'el ejemplo no es el incluido')
+    );
   return { text, source: 'example', title: e.input.example.title.en };
 }
 
@@ -316,9 +376,17 @@ async function run() {
       params: values,
       paramsText: paramsText(e, values),
       at: new Date().toISOString(),
-      inputCitations: (ok.doc.citations ?? []).filter(c => typeof c?.text === 'string').slice(0, 20),
+      inputCitations: (ok.doc.citations ?? [])
+        .filter(c => typeof c?.text === 'string')
+        .slice(0, 20),
     });
-    state.last = { ...out, entry: e, input, cells: notebook.cells, paramsText: paramsText(e, values) };
+    state.last = {
+      ...out,
+      entry: e,
+      input,
+      cells: notebook.cells,
+      paramsText: paramsText(e, values),
+    };
     show(state.last);
     $('cpStatus').textContent = L('Done.', 'Hecho.');
   } catch (err) {
@@ -364,7 +432,9 @@ function drawTable(headId, rowsId, cols, caption, capId) {
 
 function show({ capsule, parts, entry, stdout }) {
   const env = parts.envelope;
-  const q = Object.fromEntries(entry.outputs.envelope.quantities.map(x => [x.id, x]));
+  const q = Object.fromEntries(
+    entry.outputs.envelope.quantities.map(x => [x.id, x])
+  );
   const cols = [
     { head: L('Quantity', 'Cantidad'), values: [], numeric: false },
     { head: L('Value', 'Valor'), values: [], numeric: true },
@@ -376,20 +446,32 @@ function show({ capsule, parts, entry, stdout }) {
     cols[0].values.push(q[x.id] ? say(q[x.id].label) : x.id);
     cols[1].values.push(num(x.value));
     cols[2].values.push(uncertaintyText(x.uncertainty));
-    cols[3].values.push(x.unit === '' ? L('(dimensionless)', '(sin dimensión)') : x.unit);
+    cols[3].values.push(
+      x.unit === '' ? L('(dimensionless)', '(sin dimensión)') : x.unit
+    );
     cols[4].values.push(x.origin);
   }
-  drawTable('cpQuantHead', 'cpQuantRows', cols, `${say(entry.title)}: ${L('the numbers returned', 'los números devueltos')}`, 'cpQuantCap');
+  drawTable(
+    'cpQuantHead',
+    'cpQuantRows',
+    cols,
+    `${say(entry.title)}: ${L('the numbers returned', 'los números devueltos')}`,
+    'cpQuantCap'
+  );
   $('cpResult').hidden = false;
 
   const tb = parts.table;
   $('cpTableBox').hidden = !tb;
   if (tb) {
-    const names = tb.columns.map(c => (c.unit ? `${c.name} (${c.unit})` : c.name));
+    const names = tb.columns.map(c =>
+      c.unit ? `${c.name} (${c.unit})` : c.name
+    );
     const view = tb.columns.map((c, i) => ({
       head: names[i],
       numeric: c.role !== 'label',
-      values: c.values.map(v => (typeof v === 'number' ? num(v, 8) : v === null ? '–' : String(v))),
+      values: c.values.map(v =>
+        typeof v === 'number' ? num(v, 8) : v === null ? '–' : String(v)
+      ),
     }));
     drawTable('cpTableHead', 'cpTableRows', view, tb.title, 'cpTableCap');
     const rows = tb.columns[0].values.length;
@@ -420,12 +502,32 @@ function show({ capsule, parts, entry, stdout }) {
   dl.textContent = '';
   const t = capsule.timing;
   fact(dl, L('Digest', 'Resumen'), capsule.digest);
-  fact(dl, L('Notebook', 'Cuaderno'), `${capsule.notebook.id} v${capsule.notebook.version}, ${capsule.notebook.cellsSha256}`);
+  fact(
+    dl,
+    L('Notebook', 'Cuaderno'),
+    `${capsule.notebook.id} v${capsule.notebook.version}, ${capsule.notebook.cellsSha256}`
+  );
   for (const i of capsule.inputs)
-    fact(dl, L('Input', 'Entrada'), `${i.format}, ${i.bytes} bytes, ${i.sha256} (${i.source === 'example' ? L('example', 'ejemplo') : L('your file', 'tu archivo')})`);
+    fact(
+      dl,
+      L('Input', 'Entrada'),
+      `${i.format}, ${i.bytes} bytes, ${i.sha256} (${i.source === 'example' ? L('example', 'ejemplo') : L('your file', 'tu archivo')})`
+    );
   fact(dl, L('Settings', 'Ajustes'), JSON.stringify(capsule.params));
-  fact(dl, L('Runtime', 'Entorno'), `${capsule.runtime.name} ${capsule.runtime.version}, Python ${capsule.runtime.python}, ${Object.entries(capsule.runtime.packages).map(([k, v]) => `${k} ${v}`).join(', ')}`);
-  fact(dl, L('Frame', 'Marco'), `${capsule.frame.origin}, ${capsule.frame.build.slice(0, 12)}`);
+  fact(
+    dl,
+    L('Runtime', 'Entorno'),
+    `${capsule.runtime.name} ${capsule.runtime.version}, Python ${capsule.runtime.python}, ${Object.entries(
+      capsule.runtime.packages
+    )
+      .map(([k, v]) => `${k} ${v}`)
+      .join(', ')}`
+  );
+  fact(
+    dl,
+    L('Frame', 'Marco'),
+    `${capsule.frame.origin}, ${capsule.frame.build.slice(0, 12)}`
+  );
   fact(
     dl,
     L('Time', 'Tiempo'),
@@ -435,9 +537,15 @@ function show({ capsule, parts, entry, stdout }) {
     )
   );
   fact(dl, L('Cite', 'Citas'), capsule.citations.map(c => c.text).join('; '));
-  $('cpSaveCapsule').textContent = L('Download the capsule (JSON)', 'Descargar la cápsula (JSON)');
+  $('cpSaveCapsule').textContent = L(
+    'Download the capsule (JSON)',
+    'Descargar la cápsula (JSON)'
+  );
   $('cpKeep').textContent = L('Keep in My work', 'Guardar en Mi trabajo');
-  $('cpLocal').textContent = L('Run it yourself: download a notebook for Jupyter', 'Ejecútalo tú: descargar un cuaderno para Jupyter');
+  $('cpLocal').textContent = L(
+    'Run it yourself: download a notebook for Jupyter',
+    'Ejecútalo tú: descargar un cuaderno para Jupyter'
+  );
   $('cpLocal').disabled = !state.last?.input && !state.last?.cells;
   $('cpKeepNote').textContent = '';
 }
@@ -447,7 +555,12 @@ async function keep() {
   if (!last) return;
   try {
     const { capsuleEntry, keepEntry } = await import('./compute/keep.js');
-    const entry = capsuleEntry(last.capsule, last.parts.envelope, last.entry, say);
+    const entry = capsuleEntry(
+      last.capsule,
+      last.parts.envelope,
+      last.entry,
+      say
+    );
     const r = keepEntry(entry);
     if (!r.ok) throw new Error(r.reason);
     $('cpKeepNote').textContent = L(
@@ -455,7 +568,10 @@ async function keep() {
       'Guardado en Mi trabajo como evidencia. Tu informe puede citarlo, y su sobre nombra la entrada de la cápsula y el hash del cuaderno.'
     );
   } catch (err) {
-    $('cpKeepNote').textContent = L(`It could not be kept: ${err.message}`, `No se pudo guardar: ${err.message}`);
+    $('cpKeepNote').textContent = L(
+      `It could not be kept: ${err.message}`,
+      `No se pudo guardar: ${err.message}`
+    );
   }
 }
 
@@ -468,13 +584,21 @@ function runItYourself() {
     inputs: { [l.entry.input.name]: l.input.text },
     params: l.paramsText,
   });
-  saveFile(`${l.capsule.notebook.id}-${l.capsule.digest.slice(0, 8)}.ipynb`, `${JSON.stringify(nb, null, 1)}\n`, 'application/x-ipynb+json');
+  saveFile(
+    `${l.capsule.notebook.id}-${l.capsule.digest.slice(0, 8)}.ipynb`,
+    `${JSON.stringify(nb, null, 1)}\n`,
+    'application/x-ipynb+json'
+  );
 }
 
 async function openCapsule(file) {
   clearFailure();
   try {
-    if (file.size > 12_000_000) throw new ComputeError('capsule', L('it is larger than a capsule is', 'es más grande que una cápsula'));
+    if (file.size > 12_000_000)
+      throw new ComputeError(
+        'capsule',
+        L('it is larger than a capsule is', 'es más grande que una cápsula')
+      );
     const read = readCapsule(await file.text());
     if (!read.ok) throw new ComputeError('capsule', read.message);
     const v = await verifyCapsule(read.capsule, entryOf);
@@ -486,7 +610,11 @@ async function openCapsule(file) {
     if (read.capsule.inputs[0].sha256 === entry.example.sha256) {
       const text = await fetchText(`/${entry.input.example.path}`);
       const nb = await loadNotebook(entry, fetchText);
-      state.last.input = { text, source: 'example', title: entry.input.example.title.en };
+      state.last.input = {
+        text,
+        source: 'example',
+        title: entry.input.example.title.en,
+      };
       state.last.cells = nb.cells;
       state.last.paramsText = JSON.stringify(read.capsule.params);
     }
@@ -515,7 +643,8 @@ function render() {
 async function init() {
   try {
     const stored = window.localStorage.getItem('gravitas_locale');
-    if (stored) document.documentElement.lang = stored.startsWith('es') ? 'es' : 'en';
+    if (stored)
+      document.documentElement.lang = stored.startsWith('es') ? 'es' : 'en';
   } catch {
     /* storage unavailable: the page stays in English */
   }
@@ -540,7 +669,11 @@ async function init() {
   $('cpLocal').addEventListener('click', runItYourself);
   $('cpSaveCapsule').addEventListener('click', () => {
     if (state.last)
-      saveFile(`capsule-${state.last.capsule.digest.slice(0, 12)}.json`, capsuleFile(state.last.capsule), 'application/json');
+      saveFile(
+        `capsule-${state.last.capsule.digest.slice(0, 12)}.json`,
+        capsuleFile(state.last.capsule),
+        'application/json'
+      );
   });
   $('cpOpenFile').addEventListener('change', e => {
     const f = e.target.files?.[0];
