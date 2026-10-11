@@ -247,7 +247,7 @@ describe('the document inventory', () => {
     expect(inv.byVariant).toEqual({
       activity: 12,
       depth: 192,
-      full: 216,
+      full: 208,
       general: 18,
     });
   });
