@@ -6,7 +6,7 @@ import {
   frameStory,
   snrView,
   seriesView,
-} from '../js/detectorWidgets.js';
+} from '../js/detectorInstruments.js';
 import { EN_DETECTOR } from '../js/i18n/en.detector.js';
 import { ES_DETECTOR } from '../js/i18n/es.detector.js';
 

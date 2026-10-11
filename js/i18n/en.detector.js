@@ -1,7 +1,7 @@
 // =============================================================================
 // The detector instruments' words, in English
 // -----------------------------------------------------------------------------
-// Registered by js/detectorWidgets.js when the family loads, so no other page
+// Registered by js/detectorInstruments.js when the family loads, so no other page
 // carries them. detW.* ids. The same keys are in es.detector.js.
 // =============================================================================
 

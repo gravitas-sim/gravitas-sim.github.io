@@ -11,8 +11,8 @@
 // revision the whole arrangement exists to prevent. The 162 optional
 // entries are pictures; a missing one is reported and does not cost the reader
 // the version.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-5ba7f644dcbd';
-self.__GRAVITAS_PRECACHE_BYTES = 17007971;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-89cafeca0b11';
+self.__GRAVITAS_PRECACHE_BYTES = 17007979;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',
@@ -286,7 +286,7 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/data/trappist1.js',
   './js/data/welcome.js',
   './js/dataExport.js',
-  './js/detectorWidgets.js',
+  './js/detectorInstruments.js',
   './js/dialog.js',
   './js/embed.js',
   './js/embedBridge.js',
@@ -1346,7 +1346,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/data/trappist1.js',
   './js/data/welcome.js',
   './js/dataExport.js',
-  './js/detectorWidgets.js',
+  './js/detectorInstruments.js',
   './js/dialog.js',
   './js/embed.js',
   './js/embedBridge.js',
