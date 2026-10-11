@@ -36,6 +36,10 @@ import CLUSTER_MEMBERSHIP from './data/investigations/es/cluster-membership.js';
 import INSIDE_A_STAR from './data/investigations/es/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE from './data/investigations/es/scaling-the-main-sequence.js';
 import THE_LIMIT from './data/investigations/es/the-limit.js';
+import THE_BEAT_OF_A_STAR from './data/investigations/es/the-beat-of-a-star.js';
+import LEAVITTS_LAW from './data/investigations/es/leavitts-law.js';
+import THE_FIRST_RUNG from './data/investigations/es/the-first-rung.js';
+import WHICH_KIND_OF_VARIABLE from './data/investigations/es/which-kind-of-variable.js';
 import BENDING_LIGHT from './data/investigations/es/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS from './data/investigations/es/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY from './data/investigations/es/a-lens-passing-by.js';
@@ -73,6 +77,10 @@ import CLUSTER_MEMBERSHIP_DEEPER from './data/investigations/depth/es/cluster-me
 import INSIDE_A_STAR_DEEPER from './data/investigations/depth/es/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE_DEEPER from './data/investigations/depth/es/scaling-the-main-sequence.js';
 import THE_LIMIT_DEEPER from './data/investigations/depth/es/the-limit.js';
+import THE_BEAT_OF_A_STAR_DEEPER from './data/investigations/depth/es/the-beat-of-a-star.js';
+import LEAVITTS_LAW_DEEPER from './data/investigations/depth/es/leavitts-law.js';
+import THE_FIRST_RUNG_DEEPER from './data/investigations/depth/es/the-first-rung.js';
+import WHICH_KIND_OF_VARIABLE_DEEPER from './data/investigations/depth/es/which-kind-of-variable.js';
 import BENDING_LIGHT_DEEPER from './data/investigations/depth/es/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS_DEEPER from './data/investigations/depth/es/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY_DEEPER from './data/investigations/depth/es/a-lens-passing-by.js';
@@ -107,6 +115,10 @@ export const SHADOWS = Object.freeze({
   'inside-a-star': INSIDE_A_STAR,
   'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE,
   'the-limit': THE_LIMIT,
+  'the-beat-of-a-star': THE_BEAT_OF_A_STAR,
+  'leavitts-law': LEAVITTS_LAW,
+  'the-first-rung': THE_FIRST_RUNG,
+  'which-kind-of-variable': WHICH_KIND_OF_VARIABLE,
   'bending-light': BENDING_LIGHT,
   'einstein-rings-and-arcs': EINSTEIN_RINGS_AND_ARCS,
   'a-lens-passing-by': A_LENS_PASSING_BY,
@@ -151,6 +163,10 @@ export const DEEPER_SHADOWS = Object.freeze({
   'inside-a-star': INSIDE_A_STAR_DEEPER,
   'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE_DEEPER,
   'the-limit': THE_LIMIT_DEEPER,
+  'the-beat-of-a-star': THE_BEAT_OF_A_STAR_DEEPER,
+  'leavitts-law': LEAVITTS_LAW_DEEPER,
+  'the-first-rung': THE_FIRST_RUNG_DEEPER,
+  'which-kind-of-variable': WHICH_KIND_OF_VARIABLE_DEEPER,
   'bending-light': BENDING_LIGHT_DEEPER,
   'einstein-rings-and-arcs': EINSTEIN_RINGS_AND_ARCS_DEEPER,
   'a-lens-passing-by': A_LENS_PASSING_BY_DEEPER,

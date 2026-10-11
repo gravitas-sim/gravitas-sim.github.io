@@ -610,6 +610,58 @@
         "a-dense-dwarf"
       ],
       "evidenceFrom": "model"
+    },
+    "the-beat-of-a-star": {
+      "centralExperimentId": "ce.the-beat-of-a-star",
+      "object": "panel:variable-fold",
+      "control": "variable-fold/star",
+      "quantity": "the highest period-search peak of a variable star, whole run against seen once a night",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-once-a-night",
+        "once-a-night"
+      ],
+      "evidenceFrom": "model"
+    },
+    "leavitts-law": {
+      "centralExperimentId": "ce.leavitts-law",
+      "object": "panel:leavitt-law",
+      "control": "the Galaxy selector, which slides the fitted line onto another galaxy’s Cepheids; the calibration itself has no control",
+      "quantity": "the slope and zero point of the Cepheid relation, and the distance a galaxy’s Cepheids give",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-trend",
+        "the-calibration"
+      ],
+      "evidenceFrom": "model"
+    },
+    "the-first-rung": {
+      "centralExperimentId": "ce.the-first-rung",
+      "object": "panel:leavitt-law",
+      "control": "leavitt-law/host",
+      "quantity": "the distance modulus of a galaxy from sliding the Cepheid relation onto its Cepheids",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-maser-check",
+        "a-maser-galaxy"
+      ],
+      "evidenceFrom": "model"
+    },
+    "which-kind-of-variable": {
+      "centralExperimentId": "ce.which-kind-of-variable",
+      "object": "panel:variable-class",
+      "control": "variable-class/features",
+      "quantity": "the share of variable stars classified correctly as the classifier is given more measurements",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-amplitude",
+        "add-the-amplitude"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }

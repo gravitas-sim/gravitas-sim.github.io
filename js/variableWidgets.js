@@ -56,13 +56,12 @@ let law = null;
  * Resolves true once the data have been tried. Never rejects: a missing file
  * is logged and the rows keep reading "loading".
  */
-export const variablesReady = Promise.all([
-  loadVariablesData(),
-  loadExtinction(),
-])
-  .then(([d, ext]) => {
+// One import at a time: starting several together loses a module in Jest's
+// node:vm (the concurrent import race), so the extinction law follows the data.
+export const variablesReady = loadVariablesData()
+  .then(async d => {
     data = d;
-    law = ext.LAW;
+    law = (await loadExtinction()).LAW;
     return true;
   })
   .catch(err => {

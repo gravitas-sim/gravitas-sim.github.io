@@ -1751,5 +1751,13 @@
   "[tablet] › responsiveLayout.spec.js › the four layouts › the Observatory stacks its views and keeps them linked": 6.0,
   "[tablet] › responsiveLayout.spec.js › the four layouts › the Studio edits from the tablet up, and reads on a phone": 4.0,
   "[tablet] › responsiveLayout.spec.js › the four layouts › the application leaves every corner to one thing": 6.0,
-  "[tablet] › responsiveLayout.spec.js › the four layouts › the image of an observation fits the window": 4.0
+  "[tablet] › responsiveLayout.spec.js › the four layouts › the image of an observation fits the window": 4.0,
+  "[chromium] › variableLessons.spec.js › leavitts-law: the instrument paints, lists its numbers and passes axe (en)": 13,
+  "[chromium] › variableLessons.spec.js › leavitts-law: the instrument paints, lists its numbers and passes axe (es)": 15.3,
+  "[chromium] › variableLessons.spec.js › the-beat-of-a-star: the instrument paints, lists its numbers and passes axe (en)": 10.2,
+  "[chromium] › variableLessons.spec.js › the-beat-of-a-star: the instrument paints, lists its numbers and passes axe (es)": 14.9,
+  "[chromium] › variableLessons.spec.js › the-first-rung: the instrument paints, lists its numbers and passes axe (en)": 10.5,
+  "[chromium] › variableLessons.spec.js › the-first-rung: the instrument paints, lists its numbers and passes axe (es)": 14.9,
+  "[chromium] › variableLessons.spec.js › which-kind-of-variable: the instrument paints, lists its numbers and passes axe (en)": 9.8,
+  "[chromium] › variableLessons.spec.js › which-kind-of-variable: the instrument paints, lists its numbers and passes axe (es)": 11.4
 }

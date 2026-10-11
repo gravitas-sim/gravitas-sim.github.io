@@ -88,6 +88,10 @@ import { SUMMARIES } from './investigations/summaries.js';
 import INSIDE_A_STAR from './investigations/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE from './investigations/scaling-the-main-sequence.js';
 import THE_LIMIT from './investigations/the-limit.js';
+import THE_BEAT_OF_A_STAR from './investigations/the-beat-of-a-star.js';
+import LEAVITTS_LAW from './investigations/leavitts-law.js';
+import THE_FIRST_RUNG from './investigations/the-first-rung.js';
+import WHICH_KIND_OF_VARIABLE from './investigations/which-kind-of-variable.js';
 import BENDING_LIGHT from './investigations/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS from './investigations/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY from './investigations/a-lens-passing-by.js';
@@ -152,6 +156,10 @@ export const INVESTIGATIONS = [
   INSIDE_A_STAR,
   SCALING_THE_MAIN_SEQUENCE,
   THE_LIMIT,
+  THE_BEAT_OF_A_STAR,
+  LEAVITTS_LAW,
+  THE_FIRST_RUNG,
+  WHICH_KIND_OF_VARIABLE,
   BENDING_LIGHT,
   EINSTEIN_RINGS_AND_ARCS,
   A_LENS_PASSING_BY,
