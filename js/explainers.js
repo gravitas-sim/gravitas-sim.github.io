@@ -114,6 +114,7 @@ export const FAMILY_IDS = Object.freeze({
   lensing: ['light-bending', 'lens-plane', 'lens-passing'],
   survey: ['survey-counts', 'malmquist', 'completeness-lf'],
   cosmology: ['hubble-law', 'hubble-diagram', 'redshift-wedge'],
+  detector: ['ccd-frames', 'ccd-snr', 'diff-photometry'],
   sky: [
     'sky-turning',
     'sky-seasons',

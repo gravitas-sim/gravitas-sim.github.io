@@ -24,9 +24,9 @@ Tolerances were fixed by the method, not the result. Recovered stated parameters
 
 Known limitation found: a cosmic ray that lands on a star's core can escape the single-frame mask (the test excludes pixels within 7 of a star). A series should use several frames.
 
-## Instruments (`js/detectorInstruments.js`)
+## Instruments (`js/detectorWidgets.js`)
 
-File `js/detectorInstruments.js` (family `detector`, deliberately NOT registered in `js/widgets.js` until a lesson docks it, and named `*Instruments.js` so the lazy-widget manifest does not claim it: tests/investigationIntegrity refuses a registered instrument no lesson uses): `ccd-frames` (bias, dark, flat, raw, and each calibration step, with photometry of four stars against the truth), `ccd-snr` (the CCD equation, dominant term, exposure for a target, limiting magnitude) and `diff-photometry` (forty frames, raw and differential light curves, the check star, the fit, an optional truth manifest). The readout under each picture is its table alternative.
+File `js/detectorWidgets.js` (family `detector`, deliberately NOT registered in `js/widgets.js` until a lesson docks it, and named `*Instruments.js` so the lazy-widget manifest does not claim it: tests/investigationIntegrity refuses a registered instrument no lesson uses): `ccd-frames` (bias, dark, flat, raw, and each calibration step, with photometry of four stars against the truth), `ccd-snr` (the CCD equation, dominant term, exposure for a target, limiting magnitude) and `diff-photometry` (forty frames, raw and differential light curves, the check star, the fit, an optional truth manifest). The readout under each picture is its table alternative.
 
 ## Rights
 

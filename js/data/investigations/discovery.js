@@ -440,6 +440,36 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'what-a-ccd-records': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'signal-noise-and-exposure': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['what-a-ccd-records'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'a-variable-star-from-frames': {
+    audience: 'intro',
+    mathematics: 'logarithms',
+    prerequisites: ['what-a-ccd-records'],
+    textbook: {
+      chapter: 6,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'the-beat-of-a-star': {
     audience: 'intro',
     mathematics: 'algebra',

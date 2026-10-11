@@ -23,6 +23,9 @@ import THE_EXPANDING_UNIVERSE_DEEPER from '../data/investigations/depth/the-expa
 import STANDARD_CANDLES_DEEPER from '../data/investigations/depth/standard-candles.js';
 import THE_SHAPE_OF_EXPANSION_DEEPER from '../data/investigations/depth/the-shape-of-expansion.js';
 import WHERE_GALAXIES_LIVE_DEEPER from '../data/investigations/depth/where-galaxies-live.js';
+import WHAT_A_CCD_RECORDS_DEEPER from '../data/investigations/depth/what-a-ccd-records.js';
+import SIGNAL_NOISE_AND_EXPOSURE_DEEPER from '../data/investigations/depth/signal-noise-and-exposure.js';
+import A_VARIABLE_STAR_FROM_FRAMES_DEEPER from '../data/investigations/depth/a-variable-star-from-frames.js';
 import THE_BEAT_OF_A_STAR_DEEPER from '../data/investigations/depth/the-beat-of-a-star.js';
 import LEAVITTS_LAW_DEEPER from '../data/investigations/depth/leavitts-law.js';
 import THE_FIRST_RUNG_DEEPER from '../data/investigations/depth/the-first-rung.js';
@@ -64,6 +67,9 @@ export const DEEPER = Object.freeze({
   [STANDARD_CANDLES_DEEPER.id]: STANDARD_CANDLES_DEEPER.steps,
   [THE_SHAPE_OF_EXPANSION_DEEPER.id]: THE_SHAPE_OF_EXPANSION_DEEPER.steps,
   [WHERE_GALAXIES_LIVE_DEEPER.id]: WHERE_GALAXIES_LIVE_DEEPER.steps,
+  [WHAT_A_CCD_RECORDS_DEEPER.id]: WHAT_A_CCD_RECORDS_DEEPER.steps,
+  [SIGNAL_NOISE_AND_EXPOSURE_DEEPER.id]: SIGNAL_NOISE_AND_EXPOSURE_DEEPER.steps,
+  [A_VARIABLE_STAR_FROM_FRAMES_DEEPER.id]: A_VARIABLE_STAR_FROM_FRAMES_DEEPER.steps,
   [THE_BEAT_OF_A_STAR_DEEPER.id]: THE_BEAT_OF_A_STAR_DEEPER.steps,
   [LEAVITTS_LAW_DEEPER.id]: LEAVITTS_LAW_DEEPER.steps,
   [THE_FIRST_RUNG_DEEPER.id]: THE_FIRST_RUNG_DEEPER.steps,
