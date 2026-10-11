@@ -8,11 +8,11 @@
 // move it, translate it, never change its sid.
 //
 // The instrument is the variable-star family's "variable-fold" tool
-// (js/variableInstruments.js over js/kernels/variables): two authentic TESS
+// (js/variableWidgets.js over js/kernels/variables): two authentic TESS
 // light curves (SU Draconis, an RR Lyrae star, and Eta Aquilae, a Cepheid) and
 // SU Draconis kept once a night, a period search on each and a fold. The numbers
 // a student reads are checked against that pipeline by
-// tests/variableInvestigations.test.js. Not modelled: the TESS band is not V,
+// tests/variableInvestigations.test.js. Not modeled: the TESS band is not V,
 // and the bootstrap treats points as independent, so its error is a floor.
 // =============================================================================
 
@@ -445,7 +445,7 @@ const THE_BEAT_OF_A_STAR = {
              Cepheid’s period tells you how luminous it is. Left out here: the
              TESS band is not the V band; the bootstrap treats the points as
              independent, so its errors are floors; and pulsar timing, which
-             needs a different method, is not modelled.`,
+             needs a different method, is not modeled.`,
       tool: FOLD({ star: 0, view: 2, multiple: 1, offset: 0 }),
     },
   ],

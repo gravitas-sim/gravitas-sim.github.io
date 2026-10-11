@@ -8,7 +8,7 @@
 // move it, translate it, never change its sid.
 //
 // The instrument is the variable-star family's "leavitt-law" tool, here on its
-// two host galaxies (js/variableInstruments.js over js/kernels/variables/
+// two host galaxies (js/variableWidgets.js over js/kernels/variables/
 // ladder.js): the relation fitted on the Large Magellanic Cloud is slid onto the
 // Cepheids of NGC 4258 and M101, and the slide is the distance modulus, with a
 // four-term error budget. NGC 4258 has an independent distance from water masers
@@ -298,7 +298,7 @@ const THE_FIRST_RUNG = {
              effect of metal content on the Cepheids, crowding in the images,
              and the covariance in the table’s errors, which the scatter about
              the relation stands in for. The link from this ladder to the
-             Hubble constant is not made here; it needs a catalogue of supernova
+             Hubble constant is not made here; it needs a catalog of supernova
              hosts that this investigation does not carry.`,
       tool: LEAVITT({ host: 1 }),
     },

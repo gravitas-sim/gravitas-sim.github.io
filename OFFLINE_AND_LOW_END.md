@@ -51,16 +51,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 791 | 13.6 MB |
-| Images | 62 | 710 KB |
+| JavaScript | 803 | 13.7 MB |
+| Images | 62 | 610 KB |
 | Stylesheets | 10 | 490 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 9 | 270 KB |
 | Other | 10 | 400 KB |
-| **Total** | **901** | **15.7 MB** |
+| **Total** | **913** | **15.7 MB** |
 
-Of those, 747 are core (the install fails without them) and 154 optional (a missing one is reported and costs nothing).
+Of those, 759 are core (the install fails without them) and 154 optional (a missing one is reported and costs nothing).
 
 Gzipped, as Pages serves it, the whole is about 5 MB.
 
@@ -99,7 +99,7 @@ runtime cache has nothing. A tenth of the payload to remove that cliff is worth
 it, and picking a favorite subset would be guessing which lesson a class is
 about to want.
 
-**The <!--fact:spanishShadows-->44<!--/fact--> Spanish shadows are not**: they are only ever fetched
+**The <!--fact:spanishShadows-->48<!--/fact--> Spanish shadows are not**: they are only ever fetched
 when the interface is in Spanish. They are runtime-cached on first use, and
 `js/offline.js` asks the worker to warm all of them the moment the language is
 switched. A Spanish classroom is therefore covered from when it chooses

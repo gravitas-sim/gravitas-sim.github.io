@@ -81,7 +81,7 @@ export default {
              Use the slope to find how many times brighter the 100-day Cepheid
              is than the 10-day one.`,
       prompt: 'The brightness ratio of the two Cepheids',
-      unit: '×',
+      unit: '',
       answer: 20.7,
       tolerance: 0.7,
       hints: ['10 to the power 0.4 × 3.29 = 10 to the power 1.316.'],

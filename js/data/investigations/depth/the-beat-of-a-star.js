@@ -52,7 +52,7 @@ export default {
              add up. Give the total drift of the last cycle against the first,
              in cycles.`,
       prompt: 'Drift over the whole run, in cycles',
-      unit: 'cycles',
+      unit: '',
       answer: 0.77,
       tolerance: 0.04,
       hints: [
@@ -127,18 +127,18 @@ export default {
       depth: 'advanced',
       type: 'question',
       kind: 'numeric',
-      title: 'How many sigma from the catalogue',
+      title: 'How many sigma from the catalog',
       body: `The General Catalogue of Variable Stars gives Eta Aquilae’s period
              as 7.1766 days, from decades of observation. The run measured
              7.226 ± 0.030 days. Express the difference in units of the
              bootstrap error.`,
       prompt: 'The difference in bootstrap errors',
-      unit: 'σ',
+      unit: '',
       answer: 1.7,
       tolerance: 0.15,
       hints: ['(7.226 − 7.1766) ÷ 0.030.'],
       worked:
-        '0.0498 ÷ 0.030 = 1.7. A 1.7σ difference is ordinary, but the bootstrap treats the points as independent and a smooth light curve’s neighbours are not, so its error is a floor and the true uncertainty is larger. The honest statement is that the run agrees with the catalogue and could not have done better with 3.7 cycles.',
+        '0.0498 ÷ 0.030 = 1.7. A 1.7σ difference is ordinary, but the bootstrap treats the points as independent and a smooth light curve’s neighbors are not, so its error is a floor and the true uncertainty is larger. The honest statement is that the run agrees with the catalog and could not have done better with 3.7 cycles.',
       feedback: {
         close: 'Close. Divide the difference by 0.030, not by the period.',
         'wrong-order-of-magnitude':

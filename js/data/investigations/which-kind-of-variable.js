@@ -8,12 +8,12 @@
 // move it, translate it, never change its sid.
 //
 // The instrument is the variable-star family's "variable-class" tool
-// (js/variableInstruments.js over js/kernels/variables/classify.js): a labeled
+// (js/variableWidgets.js over js/kernels/variables/classify.js): a labeled
 // SYNTHETIC sample of 120 stars, 24 each of RRab, RRc, Cepheid, delta Scuti and
 // eclipsing binary, made by the periodic forward model from stylised templates
 // and measured by the same pipeline as a real light curve (variables/class-
 // sample.json, held to the kernel by a test). It is not survey data and the
-// lesson says so. The classifier is k-nearest-neighbours (k = 5) scored leave
+// lesson says so. The classifier is k-nearest-neighbors (k = 5) scored leave
 // one out. The numbers a student reads are checked by
 // tests/variableInvestigations.test.js.
 // =============================================================================
@@ -70,7 +70,7 @@ const WHICH_KIND_OF_VARIABLE = {
              templates of each kind, with noise, and measured by the same
              pipeline as a real light curve, so the labels are known. The
              classifier gives each star the majority kind of its five nearest
-             neighbours among the other 119, and the instrument shows a
+             neighbors among the other 119, and the instrument shows a
              <strong>confusion table</strong>: for each true kind, what it was
              called.`,
       tool: CLASS({ features: 0, view: 0 }),

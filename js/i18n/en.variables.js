@@ -1,7 +1,7 @@
 // =============================================================================
 // The variable-star instruments' words, in English
 // -----------------------------------------------------------------------------
-// Registered by js/variableInstruments.js when the family loads, so no other page
+// Registered by js/variableWidgets.js when the family loads, so no other page
 // carries them. varW.* ids. The same keys are in es.variables.js.
 // =============================================================================
 

@@ -4958,7 +4958,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Depth',
-        text: 'Quantitative: the distance by hand and the volume gained per magnitude (3.98). Advanced: the same drift of brightness with distance in the real Gaia solar-neighbourhood table (8.80 to 4.23, 4.56 mag).',
+        text: 'Quantitative: the distance by hand and the volume gained per magnitude (3.98). Advanced: the same drift of brightness with distance in the real Gaia solar-neighborhood table (8.80 to 4.23, 4.56 mag).',
       },
       {
         name: 'The synthetic survey',
@@ -4998,7 +4998,7 @@ export const INSTRUCTOR_CONTENT = {
     ],
     extensions: [
       'Continue with Why the Bright Ones Win, which measures the bias.',
-      'Open the Gaia solar-neighbourhood table in the Observatory and plot absolute magnitude against distance.',
+      'Open the Gaia solar-neighborhood table in the Observatory and plot absolute magnitude against distance.',
     ],
     modelNotes:
       'js/survey/model.js: a cone of stars uniform in space drawn from the stellar-population synthesis, observed with a limit on the measured magnitude; every draw keyed by seed and star index. See SELECTION_EFFECTS.md.',
@@ -5078,7 +5078,7 @@ export const INSTRUCTOR_CONTENT = {
     ],
     extensions: [
       'Continue with The Completeness Curve.',
-      'Compare the shell means of the Gaia solar-neighbourhood table with the synthetic ones.',
+      'Compare the shell means of the Gaia solar-neighborhood table with the synthetic ones.',
     ],
     modelNotes:
       'js/survey/model.js: malmquistShells, malmquistAtMagnitude, malmquistFormula, parallaxSelectionBias. See SELECTION_EFFECTS.md.',
@@ -5414,7 +5414,7 @@ export const INSTRUCTOR_CONTENT = {
     placement:
       'After Lives of Stars, in the variable-star or distance-ladder unit. It supports OpenStax Astronomy 2e chapter 19 and leads into Leavitt’s Law.',
     overview:
-      'Students search two authentic TESS light curves for their periods: SU Draconis, 0.66041 ± 0.00015 days over 39 cycles, and Eta Aquilae, 7.226 ± 0.030 days over 3.7. They fold on twice the period and on one 2 percent off, then keep SU Draconis once a night: the highest peak moves to 1.97 days, three times the true period, with equal peaks at 0.66 and 0.40 days. The depths find the peak width from the run length, the phase drift of a 2 percent error (0.77 cycles), the longer alias (1.945 days), and the bootstrap error against the catalogue period (1.7 sigma).',
+      'Students search two authentic TESS light curves for their periods: SU Draconis, 0.66041 ± 0.00015 days over 39 cycles, and Eta Aquilae, 7.226 ± 0.030 days over 3.7. They fold on twice the period and on one 2 percent off, then keep SU Draconis once a night: the highest peak moves to 1.97 days, three times the true period, with equal peaks at 0.66 and 0.40 days. The depths find the peak width from the run length, the phase drift of a 2 percent error (0.77 cycles), the longer alias (1.945 days), and the bootstrap error against the catalog period (1.7 sigma).',
     priorKnowledge: [
       'Lives of Stars (pulsation and the instability strip)',
       'Magnitudes as a brightness scale',
@@ -5445,7 +5445,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Depth',
-        text: 'Quantitative: the peak width P²/T, the 0.77-cycle drift, the alias by hand. Advanced: the shift of the refined period as a share of the peak width, and the sigma count against the catalogue.',
+        text: 'Quantitative: the peak width P²/T, the 0.77-cycle drift, the alias by hand. Advanced: the shift of the refined period as a share of the peak width, and the sigma count against the catalog.',
       },
     ],
     misconceptions: [
@@ -5471,11 +5471,11 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'A period search on an eclipsing binary lands on half its orbit; the Which Kind of Variable lesson meets the consequence.',
+      'A period search on an eclipsing binary lands on half its orbit; the Which Kind of Variable investigation meets the consequence.',
       'The data are PDCSAP flux from TESS in the TESS band, binned; the bootstrap treats points as independent so its error is a floor (TIME_DOMAIN_LADDER.md).',
-      'Eta Aquilae is saturated and half the cadences of sector 54 are flagged, hence sector 81; the run recovers 7.226 days against the catalogue 7.1766.',
+      'Eta Aquilae is saturated and half the cadences of sector 54 are flagged, hence sector 81; the run recovers 7.226 days against the catalog 7.1766.',
       'The nightly series keeps one bin from 0.3 to 0.4 day after each integer BTJD, a stand-in for a ground site.',
-      'Pulsar timing is out of scope here and is listed as not modelled on the model page.',
+      'Pulsar timing is out of scope here and is listed as not modeled on the model page.',
     ],
     discussion: [
       'Why does a longer run narrow the peak?',
@@ -5488,7 +5488,7 @@ export const INSTRUCTOR_CONTENT = {
       'Search the nightly series after thinning it further.',
     ],
     modelNotes:
-      'js/kernels/variables/period.js (Lomb-Scargle, width at half power, harmonic refinement, bootstrap, aliases) and fit.js. See TIME_DOMAIN_LADDER.md. The numbers a lesson asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
+      'js/kernels/variables/period.js (Lomb-Scargle, width at half power, harmonic refinement, bootstrap, aliases) and fit.js. See TIME_DOMAIN_LADDER.md. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
   },
   'leavitts-law': {
     topic:
@@ -5556,7 +5556,7 @@ export const INSTRUCTOR_CONTENT = {
       'The relation is fitted against log10 P minus 1, so the zero point is the magnitude at 10 days and is nearly independent of the slope.',
       'Data: Riess et al. 2022 Cepheid table (CC BY 4.0), 5 to 120 days, one 3.3 sigma clip; metallicity and crowding are not corrected and the table’s errors carry no covariance (D-LADDER-01).',
       'Wesenheit residual 0.040 uses the radiation kernel’s extinction law at R_V 3.3.',
-      'The Cloud’s distance modulus 18.477 ± 0.026 is Pietrzynski et al. 2019 and enters in the next lesson.',
+      'The Cloud’s distance modulus 18.477 ± 0.026 is Pietrzynski et al. 2019 and enters in the next investigation.',
     ],
     discussion: [
       'Why must the stars be at one distance to fit the relation?',
@@ -5568,7 +5568,7 @@ export const INSTRUCTOR_CONTENT = {
       'Continue with The First Rung.',
     ],
     modelNotes:
-      'js/kernels/variables/ladder.js: fitLine, fitLeavitt, wesenheitResidual. See TIME_DOMAIN_LADDER.md. The numbers a lesson asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
+      'js/kernels/variables/ladder.js: fitLine, fitLeavitt, wesenheitResidual. See TIME_DOMAIN_LADDER.md. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
   },
   'the-first-rung': {
     topic:
@@ -5637,7 +5637,7 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'The maser check is not a proof: the two distances agree to 0.1 of their combined error, which one galaxy cannot make a test of the whole ladder.',
       'Hosts are thinned to every fourth star in the shipped table; the host scatter stands in for the unpublished covariance.',
-      'The Hubble constant is not derived: Prompt 91’s packs are absent (TIME_DOMAIN_LADDER.md).',
+      'The Hubble constant is not derived: Prompt 91’s data are absent (TIME_DOMAIN_LADDER.md).',
       'Error-budget coverage over simulated hosts holds one sigma for 60 to 78 percent of the truths, so the budget is slightly optimistic.',
     ],
     discussion: [
@@ -5650,7 +5650,7 @@ export const INSTRUCTOR_CONTENT = {
       'Which Kind of Variable.',
     ],
     modelNotes:
-      'js/kernels/variables/ladder.js: ladderDistance with the budget of host, anchor, slope and anchor distance. The numbers a lesson asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
+      'js/kernels/variables/ladder.js: ladderDistance with the budget of host, anchor, slope and anchor distance. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
   },
   'which-kind-of-variable': {
     topic:
@@ -5659,7 +5659,7 @@ export const INSTRUCTOR_CONTENT = {
     placement:
       'After The Beat of a Star. It supports OpenStax Astronomy 2e chapter 19.',
     overview:
-      'A synthetic labeled sample of 120 stars (24 each of RRab, RRc, Cepheid, delta Scuti, eclipsing binary) is classified by five nearest neighbours, leave one out. Period alone: 83.3 percent, eclipsing binaries 29.2 (6 called RRab, 7 right). With amplitude 90.8 and 54.2; with the shape 99.2 and 100. The depths compute the accuracy from the table (100/120), the pulsator-only accuracy (96.9) and the accuracy under a skewed mix (48.5).',
+      'A synthetic labeled sample of 120 stars (24 each of RRab, RRc, Cepheid, delta Scuti, eclipsing binary) is classified by five nearest neighbors, leave one out. Period alone: 83.3 percent, eclipsing binaries 29.2 (6 called RRab, 7 right). With amplitude 90.8 and 54.2; with the shape 99.2 and 100. The depths compute the accuracy from the table (100/120), the pulsator-only accuracy (96.9) and the accuracy under a skewed mix (48.5).',
     priorKnowledge: [
       'Magnitudes and what a light curve is',
       'The Beat of a Star (period, amplitude, R21)',
@@ -5716,7 +5716,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Leave-one-out means each star is classified by the other 119, so no star is its own neighbour.',
+      'Leave-one-out means each star is classified by the other 119, so no star is its own neighbor.',
       'The sample is variables/class-sample.json, held to the kernel by a test; five classes only, no blends, outbursts or second periods.',
       'An eclipsing binary’s period search lands on half its orbit; its R21 is about 0.9, pulsators at most 0.56.',
       'Leave-one-out accuracy 0.82, 0.88, 0.99 for the three feature sets in the kernel tests (seed variables-sample).',
@@ -5731,7 +5731,7 @@ export const INSTRUCTOR_CONTENT = {
       'Return to The Beat of a Star and measure R21 for the two real stars.',
     ],
     modelNotes:
-      'js/kernels/variables/classify.js: five classes through the periodic forward model, measured by the same pipeline, kNN leave one out. The numbers a lesson asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
+      'js/kernels/variables/classify.js: five classes through the periodic forward model, measured by the same pipeline, kNN leave one out. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
   },
 };
 

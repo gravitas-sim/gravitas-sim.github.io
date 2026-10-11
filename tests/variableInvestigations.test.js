@@ -17,7 +17,7 @@ import {
   leavittView,
   classView,
   VARIABLES_WIDGETS,
-} from '../js/variableInstruments.js';
+} from '../js/variableWidgets.js';
 import { wesenheitResidual } from '../js/kernels/variables/index.js';
 import { LAW } from '../js/data/radiation/extinction.js';
 import BEAT_DEEP from '../js/data/investigations/depth/the-beat-of-a-star.js';

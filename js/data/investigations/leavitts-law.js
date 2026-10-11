@@ -8,7 +8,7 @@
 // move it, translate it, never change its sid.
 //
 // The instrument is the variable-star family's "leavitt-law" tool
-// (js/variableInstruments.js over js/kernels/variables/ladder.js): 339 Cepheids
+// (js/variableWidgets.js over js/kernels/variables/ladder.js): 339 Cepheids
 // of the Large Magellanic Cloud from the Hubble Space Telescope table of Riess
 // et al. 2022 (CC BY 4.0), as Wesenheit magnitudes, fitted by least squares
 // with one pass of sigma clipping. The numbers a student reads are checked
@@ -105,7 +105,12 @@ const LEAVITTS_LAW = {
              <strong>magnitude it gives at a period of 10 days</strong>, the
              relation’s zero point.`,
       fields: [
-        { id: 'slope', label: 'Slope', unit: 'mag/dex', hint: '-3.29' },
+        {
+          id: 'slope',
+          label: 'Slope, magnitudes per dex',
+          unit: '',
+          hint: '-3.29',
+        },
         {
           id: 'zero',
           label: 'Magnitude at 10 days',
