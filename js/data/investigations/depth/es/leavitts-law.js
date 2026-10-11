@@ -13,7 +13,7 @@ export default {
       feedback: {
         close: 'Casi. Resta 3,29 por (log₁₀ 30 − 1) al punto cero.',
         'wrong-order-of-magnitude':
-          'Se pasa una potencia de diez: la corrección es de unas 1,6 magnitudes, así que la respuesta ronda 11, no 1 ni 100.',
+          'Se pasa una potencia de diez: la corrección es de unas 1,6 magnitudes, así que la respuesta queda cerca del punto cero, no a una décima ni a diez veces.',
         off: '12,60 − 3,29 × (log₁₀ 30 − 1).',
       },
     },

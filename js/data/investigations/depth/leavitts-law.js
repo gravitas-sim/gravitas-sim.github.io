@@ -36,7 +36,7 @@ export default {
       feedback: {
         close: 'Close. Subtract 3.29 times (log₁₀ 30 − 1) from the zero point.',
         'wrong-order-of-magnitude':
-          'A power of ten out: the correction is about 1.6 magnitudes, so the answer is near 11, not near 1 or 100.',
+          'A power of ten out: the correction is about 1.6 magnitudes, so the answer is close to the zero point, not a tenth or ten times it.',
         off: '12.60 − 3.29 × (log₁₀ 30 − 1).',
       },
       tool: LEAVITT(LMC),

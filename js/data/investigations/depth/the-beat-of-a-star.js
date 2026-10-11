@@ -64,7 +64,7 @@ export default {
         close: 'Close. Multiply the cycles by the error per cycle.',
         'wrong-order-of-magnitude':
           'A power of ten out: 39 cycles at 0.02 each is under one cycle.',
-        off: '39.4 × 0.02 gives 0.79; dividing by 1.02 gives 0.77.',
+        off: '39.4 × 0.02, then allow for the fold period being 1.02 P, not P.',
       },
       tool: FOLD({ star: 0, view: 2, multiple: 1, offset: 2 }),
     },

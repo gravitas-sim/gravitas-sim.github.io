@@ -29,7 +29,7 @@ export default {
         close: 'Casi. Multiplica los ciclos por el error de cada ciclo.',
         'wrong-order-of-magnitude':
           'Se pasa una potencia de diez: 39 ciclos a 0,02 cada uno son menos de un ciclo.',
-        off: '39,4 × 0,02 da 0,79; dividir entre 1,02 da 0,77.',
+        off: '39,4 × 0,02, y luego tener en cuenta que el periodo de plegado es 1,02 P, no P.',
       },
     },
     {
