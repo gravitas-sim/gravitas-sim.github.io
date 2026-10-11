@@ -208,7 +208,7 @@ describe('the navigation', () => {
     // from the course builder's item for an instructor's investigation
     // (e2e/remixDelivery.spec.js holds that link).
     const adoption = p =>
-      /^\/teaching\/(investigation|activity|find|kit)\//.test(p) ||
+      /^\/teaching\/(investigation|activity|find|kit|alignment)\//.test(p) ||
       p === '/studio/course/packs/';
     expect([...served].filter(p => !adoption(p) && !hrefs.has(p))).toEqual([]);
   });

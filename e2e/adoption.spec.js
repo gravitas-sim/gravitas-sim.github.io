@@ -76,7 +76,11 @@ test.describe('the instructor path', () => {
     await expect(page.locator('.ad-facts')).toContainText(
       'OpenStax Astronomy 2e'
     );
-    await expect(page.locator('a[href^="/?assign="]')).toHaveCount(1);
+    // The activity builder, and the derived short route (Prompt 97).
+    await expect(page.locator('a[href^="/?assign="]')).toHaveCount(2);
+    await expect(
+      page.locator(`a[href="/?assign=${LESSON}&route=short"]`)
+    ).toHaveCount(1);
     const preview = page.locator('a[data-preview]');
     await expect(preview).toHaveAttribute(
       'href',

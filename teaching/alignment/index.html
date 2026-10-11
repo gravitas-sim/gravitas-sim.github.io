@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-7ZCVxjLLZLqvRF2g02GBtK4DxnOgefbFMlXjxruz+D0='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Textbook alignment | Gravitas</title>
+    <meta name="description" content="Every Gravitas investigation and activity by OpenStax Astronomy 2e chapter." />
+    <link rel="canonical" href="https://gravitas-sim.online/teaching/alignment/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Textbook alignment | Gravitas" />
+    <meta property="og:description" content="Every Gravitas investigation and activity by OpenStax Astronomy 2e chapter." />
+    <meta property="og:url" content="https://gravitas-sim.online/teaching/alignment/" />
+    <meta property="og:image" content="https://gravitas-sim.online/social-card.png" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to the adoption pages (ADOPTION.md). */
+      .ad-facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: var(--space-3) var(--space-5); margin: var(--space-5) 0; }
+      .ad-facts dt { font-size: var(--text-2xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); }
+      .ad-facts dd { margin: 0 0 var(--space-2); }
+      .ad-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin: var(--space-4) 0; }
+      .ad-steps { padding-left: var(--space-6); }
+      .ad-steps li { margin-bottom: var(--space-2); }
+      .ad-type { color: var(--text-secondary); font-size: var(--text-sm); }
+      .ad-deeper { font-size: var(--text-sm); color: var(--text-secondary); }
+      .ad-embed pre { overflow-x: auto; padding: var(--space-3); background: var(--surface-2); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: var(--text-sm); }
+      .ad-find { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--space-3); margin: var(--space-4) 0; }
+      .ad-find label { display: flex; flex-direction: column; gap: var(--space-1); font-size: var(--text-sm); }
+      .ad-crumb { font-size: var(--text-sm); margin: 0 0 var(--space-3); }
+    </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
+  </head>
+  <body class="doc-page">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<div class="gs-offline" role="status"><template><div class="gs-offline-box">
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
+</div></template></div>
+<!-- /shell:header -->
+    <main class="doc-main is-wide" id="main">
+<!-- Generated by tools/build-adoption-pages.mjs. Do not edit by hand: node tools/build-adoption-pages.mjs -->
+<p class="ad-crumb"><a href="/teaching/"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></a> / <a href="/teaching/find/"><span class="gs-en">Find content to teach</span><span class="gs-es" lang="es">Encontrar contenido para enseñar</span></a></p>
+<div class="doc-hero">
+<p class="doc-eyebrow"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></p>
+<h1><span class="gs-en">Textbook alignment</span><span class="gs-es" lang="es">Alineación con el libro de texto</span></h1>
+<p class="doc-lede"><span class="gs-en">Which investigations go with which chapter of OpenStax Astronomy 2e.</span><span class="gs-es" lang="es">Qué investigaciones van con cada capítulo de OpenStax Astronomy 2e.</span></p>
+</div>
+<p><span class="gs-en">The chapter is the claim; check it against the edition you teach from (the chapters were matched from the table of contents). Each link opens the investigation’s adoption page.</span><span class="gs-es" lang="es">El capítulo es la afirmación; compruébelo con la edición que usa (los capítulos se asociaron a partir del índice). Cada enlace abre la página de adopción de la investigación.</span></p>
+<section aria-labelledby="ch2-h">
+<h2 id="ch2-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 2: <span lang="en">Observing the Sky: The Birth of Astronomy</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/the-turning-sky/"><span class="gs-en">The Turning Sky</span><span class="gs-es" lang="es">El cielo que gira</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 10–20 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/the-sun-through-the-year/"><span class="gs-en">The Sun Through the Year</span><span class="gs-es" lang="es">El Sol a lo largo del año</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 10–20 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/phases-and-eclipses/"><span class="gs-en">Phases and Eclipses</span><span class="gs-es" lang="es">Fases y eclipses</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 10–20 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch3-h">
+<h2 id="ch3-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 3: <span lang="en">Orbits and Gravity</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/keplers-laws/"><span class="gs-en">Kepler's Laws</span><span class="gs-es" lang="es">Las leyes de Kepler</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 35–45 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/retrograde-motion/"><span class="gs-en">Why Mars Goes Backwards</span><span class="gs-es" lang="es">Por qué Marte va hacia atrás</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 35–45 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/orbital-energy/"><span class="gs-en">Bound, Unbound and Escape</span><span class="gs-es" lang="es">Ligado, no ligado y escape</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 35–45 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/butterfly-effect/"><span class="gs-en">The Butterfly Effect in Space</span><span class="gs-es" lang="es">El efecto mariposa en el espacio</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 55–70 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/gravity-assist/"><span class="gs-en">Where Does a Gravity Assist Get Its Speed?</span><span class="gs-es" lang="es">¿De dónde saca su velocidad una asistencia gravitatoria?</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 15–20 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/hohmann-transfer/"><span class="gs-en">Getting There From Here</span><span class="gs-es" lang="es">Llegar hasta allí desde aquí</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–25 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/lagrange-points/"><span class="gs-en">Where Can It Get To?</span><span class="gs-es" lang="es">¿Hasta dónde puede llegar?</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–30 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/power-law-gravity/"><span class="gs-en">What If Gravity Were Not Inverse Square?</span><span class="gs-es" lang="es">¿Y si la gravedad no fuera inversa al cuadrado?</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 45–60 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/wanderers-on-the-sky/"><span class="gs-en">Wanderers on the Sky</span><span class="gs-es" lang="es">Errantes en el cielo</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 12–22 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/l3-planes/"><span class="gs-en">An orbit’s plane</span><span class="gs-es" lang="es">El plano de una órbita</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–30 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/l3-mutual/"><span class="gs-en">Two orbits’ planes</span><span class="gs-es" lang="es">Los planos de dos órbitas</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–30 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/l3-kozai/"><span class="gs-en">A distant third body</span><span class="gs-es" lang="es">Un tercer cuerpo lejano</span></a> (<span class="gs-en">An upper-division course</span><span class="gs-es" lang="es">Un curso de nivel avanzado</span>, 25–35 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/ml-orbit/"><span class="gs-en">In Earth orbit: meeting the depot</span><span class="gs-es" lang="es">En órbita terrestre: el encuentro con el depósito</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 15–25 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/ml-window/"><span class="gs-en">Leaving for Mars: the launch window</span><span class="gs-es" lang="es">Rumbo a Marte: la ventana de lanzamiento</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–30 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/ml-cruise/"><span class="gs-en">On the way: the patched conic against the direct flight</span><span class="gs-es" lang="es">En el camino: la cónica empalmada frente al vuelo directo</span></a> (<span class="gs-en">An upper-division course</span><span class="gs-es" lang="es">Un curso de nivel avanzado</span>, 25–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/activity/orbital-speed/"><span class="gs-en">Orbital motion: why do planets change speed?</span><span class="gs-es" lang="es">Movimiento orbital: ¿por qué cambian de velocidad los planetas?</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 5–50 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch4-h">
+<h2 id="ch4-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 4: <span lang="en">Earth, Moon, and Sky</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/tides/"><span class="gs-en">Tides</span><span class="gs-es" lang="es">Mareas</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 35–45 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/twelve-nights/"><span class="gs-en">Twelve Nights</span><span class="gs-es" lang="es">Doce noches</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 40–50 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/plan-a-night/"><span class="gs-en">Plan a Night at the Telescope</span><span class="gs-es" lang="es">Planifica una noche en el telescopio</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 10–20 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch5-h">
+<h2 id="ch5-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 5: <span lang="en">Radiation and Spectra</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/color-and-temperature/"><span class="gs-en">Color and Temperature</span><span class="gs-es" lang="es">Color y temperatura</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 15–25 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/lines-and-motion/"><span class="gs-en">Lines and Motion</span><span class="gs-es" lang="es">Líneas y movimiento</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 15–25 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/what-a-spectrum-is-made-of/"><span class="gs-en">What a Spectrum Is Made Of</span><span class="gs-es" lang="es">De qué está hecho un espectro</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 15–25 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch12-h">
+<h2 id="ch12-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 12: <span lang="en">Rings, Moons, and Pluto</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/when-orbits-lock/"><span class="gs-en">When Orbits Lock</span><span class="gs-es" lang="es">Cuando las órbitas se enganchan</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 55–70 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch16-h">
+<h2 id="ch16-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 16: <span lang="en">The Sun: A Nuclear Powerhouse</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/inside-a-star/"><span class="gs-en">Inside a Star</span><span class="gs-es" lang="es">Dentro de una estrella</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 15–25 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch17-h">
+<h2 id="ch17-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 17: <span lang="en">Analyzing Starlight</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/pop-spectra/"><span class="gs-en">1. What a spectrum says</span><span class="gs-es" lang="es">1. Lo que dice un espectro</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 15–20 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch18-h">
+<h2 id="ch18-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 18: <span lang="en">The Stars: A Celestial Census</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/weighing-stars/"><span class="gs-en">Weighing the Stars</span><span class="gs-es" lang="es">Pesar las estrellas</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 35–45 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/a-universe-of-stars/"><span class="gs-en">A Universe of Stars</span><span class="gs-es" lang="es">Un universo de estrellas</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 70–90 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/scaling-the-main-sequence/"><span class="gs-en">Scaling the Main Sequence</span><span class="gs-es" lang="es">Escalar la secuencia principal</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–25 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/pop-cmd/"><span class="gs-en">2. A cluster’s color–magnitude diagram</span><span class="gs-es" lang="es">2. El diagrama color–magnitud de un cúmulo</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–30 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/activity/star-sizes/"><span class="gs-en">Two stars, one temperature: which one is bigger?</span><span class="gs-es" lang="es">Dos estrellas, una temperatura: ¿cuál es más grande?</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 4–4 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch19-h">
+<h2 id="ch19-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 19: <span lang="en">Celestial Distances</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/the-beat-of-a-star/"><span class="gs-en">The Beat of a Star</span><span class="gs-es" lang="es">El latido de una estrella</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/leavitts-law/"><span class="gs-en">Leavitt’s Law</span><span class="gs-es" lang="es">La ley de Leavitt</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 8–15 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/the-first-rung/"><span class="gs-en">The First Rung</span><span class="gs-es" lang="es">El primer peldaño</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 12–20 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/which-kind-of-variable/"><span class="gs-en">Which Kind of Variable</span><span class="gs-es" lang="es">Qué tipo de variable</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 12–22 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/who-gets-counted/"><span class="gs-en">Who Gets Counted</span><span class="gs-es" lang="es">Quién entra en la cuenta</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–35 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/why-the-bright-ones-win/"><span class="gs-en">Why the Bright Ones Win</span><span class="gs-es" lang="es">Por qué ganan las brillantes</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/the-completeness-curve/"><span class="gs-en">The Completeness Curve</span><span class="gs-es" lang="es">La curva de completitud</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/pop-variable/"><span class="gs-en">5. A star that varies</span><span class="gs-es" lang="es">5. Una estrella que varía</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 15–25 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch21-h">
+<h2 id="ch21-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 21: <span lang="en">The Birth of Stars and the Discovery of Planets outside the Solar System</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/transit-photometry/"><span class="gs-en">Finding Planets by Their Shadows</span><span class="gs-es" lang="es">Encontrar planetas por sus sombras</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 50–70 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/radial-velocity/"><span class="gs-en">Finding Planets by Their Tug</span><span class="gs-es" lang="es">Encontrar planetas por su tirón</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 45–55 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/detect-this-planet/"><span class="gs-en">Can You Detect This Planet?</span><span class="gs-es" lang="es">¿Puedes detectar este planeta?</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 30–35 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/design-the-schedule/"><span class="gs-en">Design the Schedule</span><span class="gs-es" lang="es">Diseña el calendario</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 35–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/binary-star-planets/"><span class="gs-en">Planets in Binary Stars</span><span class="gs-es" lang="es">Planetas en estrellas binarias</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 40–50 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/exo-star/"><span class="gs-en">1. Whose light is it?</span><span class="gs-es" lang="es">1. ¿De quién es la luz?</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 15–20 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/exo-find/"><span class="gs-en">2. Find the transit</span><span class="gs-es" lang="es">2. Encuentra el tránsito</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 15–25 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/exo-fit/"><span class="gs-en">3. Fit the transit</span><span class="gs-es" lang="es">3. Ajusta el tránsito</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–35 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/exo-dilution/"><span class="gs-en">4. A star that is not alone</span><span class="gs-es" lang="es">4. Una estrella que no está sola</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–35 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/exo-planet/"><span class="gs-en">5. Is it a planet?</span><span class="gs-es" lang="es">5. ¿Es un planeta?</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–25 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/l3-eclipse/"><span class="gs-en">Seen from outside</span><span class="gs-es" lang="es">Visto desde fuera</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–35 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/activity/binary-planets/"><span class="gs-en">Planets around two stars: where can an orbit survive?</span><span class="gs-es" lang="es">Planetas alrededor de dos estrellas: ¿dónde sobrevive una órbita?</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 5–5 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch22-h">
+<h2 id="ch22-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 22: <span lang="en">Stars from Adolescence to Old Age</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/lives-of-stars/"><span class="gs-en">Lives of Stars</span><span class="gs-es" lang="es">Vidas de las estrellas</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 80–100 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/cluster-membership/"><span class="gs-en">Cluster Membership by Motion</span><span class="gs-es" lang="es">Pertenencia a un cúmulo por movimiento</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/pop-members/"><span class="gs-en">3. Who belongs?</span><span class="gs-es" lang="es">3. ¿Quién pertenece?</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–30 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/pop-age/"><span class="gs-en">4. Ages from models</span><span class="gs-es" lang="es">4. Edades a partir de modelos</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch23-h">
+<h2 id="ch23-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 23: <span lang="en">The Death of Stars</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/the-limit/"><span class="gs-en">The Limit</span><span class="gs-es" lang="es">El límite</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 15–25 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch24-h">
+<h2 id="ch24-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 24: <span lang="en">Black Holes and Curved Spacetime</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/black-holes/"><span class="gs-en">Black Holes by the Numbers</span><span class="gs-es" lang="es">Agujeros negros en números</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 35–45 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/what-is-a-gravitational-wave/"><span class="gs-en">What Is a Gravitational Wave?</span><span class="gs-es" lang="es">¿Qué es una onda gravitacional?</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 30–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/listening-to-spacetime/"><span class="gs-en">Listening to Spacetime</span><span class="gs-es" lang="es">Escuchar el espacio-tiempo</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 75–90 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/bending-light/"><span class="gs-en">Bending Light</span><span class="gs-es" lang="es">La luz que se curva</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 20–30 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/einstein-rings-and-arcs/"><span class="gs-en">Einstein Rings and Arcs</span><span class="gs-es" lang="es">Anillos y arcos de Einstein</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/a-lens-passing-by/"><span class="gs-en">A Lens Passing By</span><span class="gs-es" lang="es">Una lente que pasa</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch25-h">
+<h2 id="ch25-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 25: <span lang="en">The Milky Way Galaxy</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/the-suns-motion/"><span class="gs-en">The Sun’s Motion</span><span class="gs-es" lang="es">El movimiento del Sol</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/the-rotating-disk/"><span class="gs-en">The Rotating Disk</span><span class="gs-es" lang="es">El disco que gira</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch26-h">
+<h2 id="ch26-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 26: <span lang="en">Galaxies</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/the-expanding-universe/"><span class="gs-en">The Expanding Universe</span><span class="gs-es" lang="es">El universo en expansión</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 12–20 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/standard-candles/"><span class="gs-en">Standard Candles</span><span class="gs-es" lang="es">Candelas estándar</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 12–20 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch28-h">
+<h2 id="ch28-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 28: <span lang="en">The Evolution and Distribution of Galaxies</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/missing-mass/"><span class="gs-en">The Missing Mass</span><span class="gs-es" lang="es">La masa que falta</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 45–60 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+<li><li><a href="/teaching/investigation/where-galaxies-live/"><span class="gs-en">Where Galaxies Live</span><span class="gs-es" lang="es">Dónde viven las galaxias</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 12–22 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch29-h">
+<h2 id="ch29-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 29: <span lang="en">The Big Bang</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/the-shape-of-expansion/"><span class="gs-en">The Shape of Expansion</span><span class="gs-es" lang="es">La forma de la expansión</span></a> (<span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span>, 25–40 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<section aria-labelledby="ch30-h">
+<h2 id="ch30-h"><span class="gs-en">chapter</span><span class="gs-es" lang="es">capítulo</span> 30: <span lang="en">Life in the Universe</span></h2>
+<ul>
+<li><li><a href="/teaching/investigation/goldilocks-question/"><span class="gs-en">The Goldilocks Question</span><span class="gs-es" lang="es">La cuestión de Ricitos de Oro</span></a> (<span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span>, 40–50 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>)</li></li>
+</ul>
+</section>
+<p><a href="/teaching/find/"><span class="gs-en">Back to Teach</span><span class="gs-es" lang="es">Volver a Enseñar</span></a></p>
+    </main>
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
+    <script type="module">
+      import { mountShell } from '/js/shell.js';
+      try {
+        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es'))
+          document.documentElement.lang = 'es';
+      } catch {
+        /* storage blocked: English */
+      }
+      const titles = {"en":"Textbook alignment | Gravitas","es":"Alineación con el libro de texto | Gravitas"};
+      const retitle = () => {
+        document.title =
+          titles[document.documentElement.lang === 'es' ? 'es' : 'en'];
+      };
+      retitle();
+      mountShell({
+        onLanguage: retitle,
+      });
+    </script>
+  </body>
+</html>

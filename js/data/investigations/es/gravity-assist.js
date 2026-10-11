@@ -229,6 +229,11 @@ export default {
                 tabla dice con qué precisión.`,
     },
     {
+      feedback: {
+        close:
+          'Cerca. Una inversión completa da la vuelta a la dirección de la velocidad relativa: ¿de qué tamaño es el cambio de un giro así?',
+        off: 'Lo máximo que puede hacer un sobrevuelo es invertir la velocidad relativa. Calcula el cambio que eso causa, en km/s.',
+      },
       title: '¿Cuánto hay que llevarse?',
       body: `Hay un límite duro a lo que puede hacer un solo sobrevuelo, y sale
              directamente de la imagen de la pantalla anterior. Lo máximo que

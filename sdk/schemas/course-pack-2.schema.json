@@ -55,6 +55,14 @@
         "compatible"
       ]
     },
+    "courseLevel": {
+      "description": "Who the course is for, in the Library's vocabulary: survey (introductory), majors or upper. A lesson item with no depth of its own opens at the depth of this level (core, quantitative, advanced).",
+      "enum": [
+        "survey",
+        "majors",
+        "upper"
+      ]
+    },
     "title": {
       "$ref": "#/$defs/text120"
     },

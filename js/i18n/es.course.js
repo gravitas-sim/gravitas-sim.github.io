@@ -306,6 +306,7 @@ export const ES_COURSE = {
   'course.error.pinRequired':
     'Un curso exacto fija cada investigación que nombra: actualízala para fijarla.',
   'course.error.pinning': 'Exacta o compatible.',
+  'course.error.courseLevel': 'General, especialistas o superior.',
   'course.error.plain': 'Solo texto sin formato: sin marcas ni entidades.',
   'course.error.prerequisite': 'Una investigación o un texto.',
   'course.error.scenario': 'Elige un escenario que tenga Gravitas.',

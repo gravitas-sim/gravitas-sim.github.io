@@ -98,6 +98,30 @@ export function calculationOf(entry) {
 /** The order they are offered in, least arithmetic first. */
 export const CALCULATIONS = ['none', 'some', 'lots'];
 
+/** The depths an investigation can be read at, shallowest first (DEPTH.md). */
+export const SEQUENCE_DEPTHS = ['core', 'quantitative', 'advanced'];
+
+/**
+ * One sequence: the lessons are [id, depth, needs] rows, and the reason each
+ * is here is the message `inv.seq.<key>.<id>`.
+ *
+ * `depth` is the depth the sequence assumes the lesson is read at (a lesson
+ * that offers one depth is `core`); `after` names the sequences it is better
+ * to have worked through first.
+ */
+const sequence = (id, key, after, rows) => ({
+  id,
+  titleId: `inv.seq.${key}.title`,
+  blurbId: `inv.seq.${key}.blurb`,
+  after,
+  lessons: rows.map(([lesson, depth, needs]) => ({
+    id: lesson,
+    whyId: `inv.seq.${key}.${lesson}`,
+    depth,
+    ...(needs ? { needs } : {}),
+  })),
+});
+
 /**
  * The sequences.
  *
@@ -108,141 +132,120 @@ export const CALCULATIONS = ['none', 'some', 'lots'];
  *
  * Message ids rather than prose, because the browser is translated and these
  * lines are read by students. They live with the rest of the inv.* family in
- * the deferred catalog.
+ * the deferred catalog. Six sequences (Roadmap II, Prompt 97), each ordered; a
+ * lesson that belongs to two (Transit Photometry, Lines and Motion) is in
+ * both, with its own reason in each. tests/investigationRegistry.test.js holds
+ * every `needs` to an earlier item, every depth to what the lesson offers, and
+ * every lesson to at least one sequence.
  */
 export const SEQUENCES = [
-  {
-    id: 'the-sky',
-    titleId: 'inv.seq.sky.title',
-    blurbId: 'inv.seq.sky.blurb',
-    lessons: [
-      { id: 'the-turning-sky', whyId: 'inv.seq.sky.the-turning-sky' },
-      {
-        id: 'the-sun-through-the-year',
-        whyId: 'inv.seq.sky.the-sun-through-the-year',
-        needs: ['the-turning-sky'],
-      },
-      {
-        id: 'phases-and-eclipses',
-        whyId: 'inv.seq.sky.phases-and-eclipses',
-        needs: ['the-sun-through-the-year'],
-      },
-      {
-        id: 'wanderers-on-the-sky',
-        whyId: 'inv.seq.sky.wanderers-on-the-sky',
-        needs: ['the-turning-sky'],
-      },
-      {
-        id: 'plan-a-night',
-        whyId: 'inv.seq.sky.plan-a-night',
-        needs: ['the-turning-sky', 'the-sun-through-the-year'],
-      },
-    ],
-  },
-  {
-    id: 'orbital-mechanics',
-    titleId: 'inv.seq.orbits.title',
-    blurbId: 'inv.seq.orbits.blurb',
-    lessons: [
-      { id: 'keplers-laws', whyId: 'inv.seq.orbits.keplers-laws' },
-      {
-        id: 'orbital-energy',
-        whyId: 'inv.seq.orbits.orbital-energy',
-        needs: ['keplers-laws'],
-      },
-      {
-        id: 'hohmann-transfer',
-        whyId: 'inv.seq.orbits.hohmann-transfer',
-        needs: ['orbital-energy'],
-      },
-      {
-        id: 'gravity-assist',
-        whyId: 'inv.seq.orbits.gravity-assist',
-        needs: ['orbital-energy'],
-      },
-      {
-        id: 'lagrange-points',
-        whyId: 'inv.seq.orbits.lagrange-points',
-        needs: ['hohmann-transfer'],
-      },
-    ],
-  },
-  {
-    id: 'exoplanet-detection',
-    titleId: 'inv.seq.exoplanets.title',
-    blurbId: 'inv.seq.exoplanets.blurb',
-    lessons: [
-      {
-        id: 'transit-photometry',
-        whyId: 'inv.seq.exoplanets.transit-photometry',
-      },
-      {
-        id: 'radial-velocity',
-        whyId: 'inv.seq.exoplanets.radial-velocity',
-        needs: ['transit-photometry'],
-      },
-      {
-        id: 'detect-this-planet',
-        whyId: 'inv.seq.exoplanets.detect-this-planet',
-        needs: ['transit-photometry', 'radial-velocity'],
-      },
-      {
-        id: 'design-the-schedule',
-        whyId: 'inv.seq.exoplanets.design-the-schedule',
-        needs: ['radial-velocity', 'detect-this-planet'],
-      },
-      {
-        id: 'goldilocks-question',
-        whyId: 'inv.seq.exoplanets.goldilocks-question',
-        needs: ['transit-photometry'],
-      },
-    ],
-  },
-  {
-    id: 'gravity-beyond-two-bodies',
-    titleId: 'inv.seq.threebody.title',
-    blurbId: 'inv.seq.threebody.blurb',
-    lessons: [
-      { id: 'when-orbits-lock', whyId: 'inv.seq.threebody.when-orbits-lock' },
-      {
-        id: 'lagrange-points',
-        whyId: 'inv.seq.threebody.lagrange-points',
-        needs: ['when-orbits-lock'],
-      },
-      {
-        id: 'butterfly-effect',
-        whyId: 'inv.seq.threebody.butterfly-effect',
-        needs: ['lagrange-points'],
-      },
-      {
-        id: 'binary-star-planets',
-        whyId: 'inv.seq.threebody.binary-star-planets',
-        needs: ['butterfly-effect'],
-      },
-    ],
-  },
-  {
-    // Two lessons rather than five, and the shortest sequence here, because
-    // the pair is the point: the advanced lesson assumes an answer to "what
-    // is the thing arriving" that it never gives, and the beginner one is
-    // that answer. `needs` is a recommendation the browser prints, not a
-    // lock - see the note above - so a reader who already knows what a
-    // gravitational wave is can open the second one directly.
-    id: 'gravitational-waves',
-    titleId: 'inv.seq.waves.title',
-    blurbId: 'inv.seq.waves.blurb',
-    lessons: [
-      {
-        id: 'what-is-a-gravitational-wave',
-        whyId: 'inv.seq.waves.what-is-a-gravitational-wave',
-      },
-      {
-        id: 'listening-to-spacetime',
-        whyId: 'inv.seq.waves.listening-to-spacetime',
-        needs: ['what-is-a-gravitational-wave'],
-      },
-    ],
-  },
+  sequence(
+    'the-sky',
+    'sky',
+    [],
+    [
+      ['the-turning-sky', 'core'],
+      ['the-sun-through-the-year', 'core', ['the-turning-sky']],
+      ['phases-and-eclipses', 'core', ['the-sun-through-the-year']],
+      ['wanderers-on-the-sky', 'core', ['the-turning-sky']],
+      [
+        'plan-a-night',
+        'quantitative',
+        ['the-turning-sky', 'the-sun-through-the-year'],
+      ],
+    ]
+  ),
+  sequence(
+    'gravity-and-orbits',
+    'gravity',
+    [],
+    [
+      ['keplers-laws', 'core'],
+      ['retrograde-motion', 'core'],
+      ['power-law-gravity', 'core'],
+      ['orbital-energy', 'core', ['keplers-laws']],
+      ['tides', 'core'],
+      ['hohmann-transfer', 'core', ['orbital-energy']],
+      ['gravity-assist', 'core', ['orbital-energy']],
+      ['when-orbits-lock', 'core'],
+      ['lagrange-points', 'core', ['hohmann-transfer', 'when-orbits-lock']],
+      ['butterfly-effect', 'core', ['lagrange-points']],
+      ['black-holes', 'core'],
+      ['what-is-a-gravitational-wave', 'core'],
+      ['listening-to-spacetime', 'core', ['what-is-a-gravitational-wave']],
+    ]
+  ),
+  sequence(
+    'light-and-stars',
+    'light',
+    [],
+    [
+      ['color-and-temperature', 'core'],
+      ['lines-and-motion', 'core', ['color-and-temperature']],
+      ['what-a-spectrum-is-made-of', 'core', ['lines-and-motion']],
+      ['a-universe-of-stars', 'core'],
+      ['weighing-stars', 'quantitative'],
+      ['lives-of-stars', 'core'],
+      ['inside-a-star', 'core', ['lives-of-stars']],
+      ['scaling-the-main-sequence', 'quantitative', ['inside-a-star']],
+      ['the-limit', 'core', ['inside-a-star']],
+      ['cluster-membership', 'quantitative', ['lives-of-stars']],
+    ]
+  ),
+  sequence(
+    'planets-and-exoplanets',
+    'planets',
+    ['gravity-and-orbits'],
+    [
+      ['transit-photometry', 'quantitative'],
+      ['radial-velocity', 'core', ['transit-photometry']],
+      ['detect-this-planet', 'core', ['transit-photometry', 'radial-velocity']],
+      [
+        'design-the-schedule',
+        'core',
+        ['radial-velocity', 'detect-this-planet'],
+      ],
+      ['goldilocks-question', 'core', ['transit-photometry']],
+      ['binary-star-planets', 'core'],
+    ]
+  ),
+  sequence(
+    'galaxies-and-the-universe',
+    'galaxies',
+    ['gravity-and-orbits', 'light-and-stars'],
+    [
+      ['the-suns-motion', 'core'],
+      ['the-rotating-disk', 'core', ['the-suns-motion']],
+      ['missing-mass', 'quantitative'],
+      ['bending-light', 'core'],
+      ['einstein-rings-and-arcs', 'core', ['bending-light']],
+      ['a-lens-passing-by', 'core', ['einstein-rings-and-arcs']],
+      ['the-beat-of-a-star', 'core'],
+      ['which-kind-of-variable', 'core', ['the-beat-of-a-star']],
+      ['leavitts-law', 'core', ['the-beat-of-a-star']],
+      ['the-first-rung', 'core', ['leavitts-law']],
+      ['the-expanding-universe', 'core'],
+      ['standard-candles', 'core', ['the-expanding-universe']],
+      ['the-shape-of-expansion', 'quantitative', ['standard-candles']],
+      ['where-galaxies-live', 'core', ['the-expanding-universe']],
+    ]
+  ),
+  sequence(
+    'observing-and-measuring',
+    'observing',
+    ['the-sky'],
+    [
+      ['plan-a-night', 'quantitative'],
+      ['twelve-nights', 'core'],
+      ['lines-and-motion', 'quantitative'],
+      ['what-a-spectrum-is-made-of', 'quantitative', ['lines-and-motion']],
+      ['transit-photometry', 'quantitative'],
+      ['design-the-schedule', 'core'],
+      ['who-gets-counted', 'core'],
+      ['why-the-bright-ones-win', 'quantitative', ['who-gets-counted']],
+      ['the-completeness-curve', 'quantitative', ['why-the-bright-ones-win']],
+    ]
+  ),
 ];
 
 /**

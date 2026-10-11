@@ -299,6 +299,7 @@ export const EN_COURSE = {
   'course.error.pinRequired':
     'An exact course pins every investigation it names: upgrade it to pin it.',
   'course.error.pinning': 'Exact or compatible.',
+  'course.error.courseLevel': 'Survey, majors or upper.',
   'course.error.plain': 'Plain text only: no markup or entities.',
   'course.error.prerequisite': 'An investigation or a text.',
   'course.error.scenario': 'Choose a scenario Gravitas has.',

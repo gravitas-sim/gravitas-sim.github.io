@@ -92,7 +92,7 @@ The eight most-used investigations by the Library's sequences (score = number
 of sequences it is in, plus the number of lessons that `needs` it, plus one
 when it opens a sequence; ties by numeric steps). Authored: a ladder on each
 numeric step and on a sample of choice steps, feedback on every numeric step,
-and named options on two steps. The rest are the inventory for Prompt 97.
+and named options on two steps. Prompt 97 then gave every numeric step of the ten inventory investigations that have one a two-rung ladder (or kept the existing one) and outcome-class feedback, in both languages; the six with no numeric step (design-the-schedule, listening-to-spacetime, a-universe-of-stars, lives-of-stars, twelve-nights, weighing-stars) and the choice-step ladders stay open.
 
 | Investigation | Library score | Numeric | Choice | With hints | With feedback | Status |
 |---|---:|---:|---:|---:|---:|---|
@@ -104,22 +104,22 @@ and named options on two steps. The rest are the inventory for Prompt 97.
 | orbital-energy | 3 | 0 | 5 | 5 | 0 | authored (Prompt 71) |
 | what-is-a-gravitational-wave | 3 | 0 | 4 | 4 | 0 | authored (Prompt 71) |
 | hohmann-transfer | 2 | 6 | 3 | 6 | 6 | authored (Prompt 71) |
-| butterfly-effect | 2 | 2 | 5 | 0 | 0 | inventory for Prompt 97 |
-| detect-this-planet | 2 | 2 | 4 | 1 | 0 | inventory for Prompt 97 |
-| binary-star-planets | 1 | 2 | 9 | 2 | 0 | inventory for Prompt 97 |
-| goldilocks-question | 1 | 2 | 10 | 0 | 0 | inventory for Prompt 97 |
-| gravity-assist | 1 | 1 | 6 | 1 | 0 | inventory for Prompt 97 |
-| design-the-schedule | 1 | 0 | 4 | 0 | 0 | inventory for Prompt 97 |
-| listening-to-spacetime | 1 | 0 | 1 | 0 | 0 | inventory for Prompt 97 |
-| missing-mass | 0 | 4 | 4 | 0 | 0 | inventory for Prompt 97 |
-| retrograde-motion | 0 | 3 | 7 | 0 | 0 | inventory for Prompt 97 |
-| tides | 0 | 2 | 4 | 0 | 0 | inventory for Prompt 97 |
-| black-holes | 0 | 1 | 11 | 0 | 0 | inventory for Prompt 97 |
-| power-law-gravity | 0 | 1 | 5 | 0 | 0 | inventory for Prompt 97 |
-| a-universe-of-stars | 0 | 0 | 4 | 0 | 0 | inventory for Prompt 97 |
-| lives-of-stars | 0 | 0 | 4 | 0 | 0 | inventory for Prompt 97 |
-| twelve-nights | 0 | 0 | 2 | 0 | 0 | inventory for Prompt 97 |
-| weighing-stars | 0 | 0 | 10 | 0 | 0 | inventory for Prompt 97 |
+| butterfly-effect | 2 | 2 | 5 | 0 | 0 | numeric steps authored (Prompt 97) |
+| detect-this-planet | 2 | 2 | 4 | 1 | 0 | numeric steps authored (Prompt 97) |
+| binary-star-planets | 1 | 2 | 9 | 2 | 0 | numeric steps authored (Prompt 97) |
+| goldilocks-question | 1 | 2 | 10 | 0 | 0 | numeric steps authored (Prompt 97) |
+| gravity-assist | 1 | 1 | 6 | 1 | 0 | numeric steps authored (Prompt 97) |
+| design-the-schedule | 1 | 0 | 4 | 0 | 0 | no numeric step; choice ladders still open |
+| listening-to-spacetime | 1 | 0 | 1 | 0 | 0 | no numeric step; choice ladders still open |
+| missing-mass | 0 | 4 | 4 | 0 | 0 | numeric steps authored (Prompt 97) |
+| retrograde-motion | 0 | 3 | 7 | 0 | 0 | numeric steps authored (Prompt 97) |
+| tides | 0 | 2 | 4 | 0 | 0 | numeric steps authored (Prompt 97) |
+| black-holes | 0 | 1 | 11 | 0 | 0 | numeric steps authored (Prompt 97) |
+| power-law-gravity | 0 | 1 | 5 | 0 | 0 | numeric steps authored (Prompt 97) |
+| a-universe-of-stars | 0 | 0 | 4 | 0 | 0 | no numeric step; choice ladders still open |
+| lives-of-stars | 0 | 0 | 4 | 0 | 0 | no numeric step; choice ladders still open |
+| twelve-nights | 0 | 0 | 2 | 0 | 0 | no numeric step; choice ladders still open |
+| weighing-stars | 0 | 0 | 10 | 0 | 0 | no numeric step; choice ladders still open |
 
 Not done in the eight: ladders on every choice step (orbital-energy and
 what-is-a-gravitational-wave have them on four to five; the others none), and

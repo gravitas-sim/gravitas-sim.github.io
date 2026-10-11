@@ -4326,6 +4326,7 @@ function sequenceStepHtml(step, index) {
         <span class="inv-seq-tags">
           <span class="inv-seq-time">${escape(inv.duration)}</span>
           <span class="inv-seq-fit is-${escape(step.fit)}">${escape(fit)}</span>
+          <span class="inv-seq-depth">${escape(t(`inv.seq.depth.${step.depth}`))}</span>
           ${complete ? `<span class="inv-seq-done">${escape(t('inv.card.complete'))}</span>` : ''}
         </span>
         <span class="inv-seq-why">${escape(t(step.whyId))}</span>

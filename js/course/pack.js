@@ -41,6 +41,13 @@ export const ITEM_KINDS = Object.freeze([
 /** The optional paths an item may be on; everything else is the core. */
 export const PATHS = Object.freeze(['core', 'intro', 'advanced']);
 export const PINNING = Object.freeze(['exact', 'compatible']);
+/** Who a course is for (the Library's vocabulary); each opens lessons at a depth. */
+export const COURSE_LEVELS = Object.freeze(['survey', 'majors', 'upper']);
+export const LEVEL_DEPTH = Object.freeze({
+  survey: 'core',
+  majors: 'quantitative',
+  upper: 'advanced',
+});
 export const ACCESS = Object.freeze(['open', 'library', 'print']);
 
 export const MAX_UNITS = 20;
@@ -77,6 +84,7 @@ const PACK_FIELDS = new Set([
   'gravitas',
   'locales',
   'pinning',
+  'courseLevel',
   'title',
   'summary',
   'audience',
@@ -256,6 +264,14 @@ export function validateCoursePack(c, api) {
     'pinning',
     'exact or compatible'
   );
+
+  if (c.courseLevel !== undefined)
+    need(
+      COURSE_LEVELS.includes(c.courseLevel),
+      'courseLevel',
+      'courseLevel',
+      'survey, majors or upper'
+    );
 
   text(c.title, 'title', true, 120);
   text(c.summary, 'summary', false);

@@ -1778,53 +1778,132 @@ export const EN_DEFERRED = {
   'inv.seq.sky.plan-a-night':
     'Put it to work: choose targets for a night at a telescope.',
 
-  'inv.seq.orbits.title': 'Orbital mechanics',
-  'inv.seq.orbits.blurb':
-    'From the shape of an orbit to moving between two of them. The first two measure what orbits do; the last three spend that understanding on getting somewhere.',
-  'inv.seq.orbits.keplers-laws':
+  'inv.seq.gravity.title': 'Gravity and orbits',
+  'inv.seq.gravity.blurb':
+    'From the shape of an orbit to moving between two of them, then a third body, black holes and gravitational waves. Start with Kepler’s Laws; everything after refers back to them.',
+  'inv.seq.gravity.keplers-laws':
     'The three laws, measured rather than recited. Everything after this refers back to the ellipse and the period–size relation you find here.',
-  'inv.seq.orbits.orbital-energy':
+  'inv.seq.gravity.retrograde-motion':
+    'Kepler’s period law used on a puzzle: why Mars appears to loop. A change of frame, not a change of physics.',
+  'inv.seq.gravity.power-law-gravity':
+    'What would orbits look like if gravity fell off differently? Shows which parts of Kepler’s laws are special to one inverse square.',
+  'inv.seq.gravity.orbital-energy':
     'Why a faster orbit is a lower one. The energy bookkeeping here is what makes a transfer burn make sense instead of looking backwards.',
-  'inv.seq.orbits.hohmann-transfer':
+  'inv.seq.gravity.tides':
+    'Gravity that changes across a body: why the oceans rise twice a day and why moons come to face their planets.',
+  'inv.seq.gravity.hohmann-transfer':
     'The cheapest way between two circular orbits, planned and flown. Short enough to run as a demonstration once the energy argument is in place.',
-  'inv.seq.orbits.gravity-assist':
+  'inv.seq.gravity.gravity-assist':
     'The other way to change orbit: borrow from a planet instead of burning fuel. Reads as a companion to the transfer investigation rather than a sequel.',
-  'inv.seq.orbits.lagrange-points':
-    'Where the two-body picture stops being enough. A natural place to end, and the doorway into the three-body sequence.',
-
-  'inv.seq.exoplanets.title': 'Detecting exoplanets',
-  'inv.seq.exoplanets.blurb':
-    'The two methods that have found nearly every known planet, then using them together on an unknown star. Longer investigations: plan on two sittings, or set part of one as homework.',
-  'inv.seq.exoplanets.transit-photometry':
-    'Depth, duration and noise, from a light curve you measure yourself. The vocabulary the rest of the sequence uses.',
-  'inv.seq.exoplanets.radial-velocity':
-    'The other half of the picture: what the star does. Transits give you size, this gives you mass, and neither alone gives you a density.',
-  'inv.seq.exoplanets.detect-this-planet':
-    'An unknown system with both instruments and no answer key. Worth doing only once both methods are familiar.',
-  'inv.seq.exoplanets.design-the-schedule':
-    'The same argument on the real instrument, where the run takes minutes and cannot be rewound. Do the analytic version first; this one asks you to plan the observing yourself.',
-  'inv.seq.exoplanets.goldilocks-question':
-    'What a detection does and does not tell you about whether anywhere is habitable. Needs the transit investigation; the radial-velocity one helps.',
-
-  'inv.seq.threebody.title': 'When two bodies are not enough',
-  'inv.seq.threebody.blurb':
-    'Resonance, equilibrium points and sensitivity to initial conditions — the three ways adding one more body changes the answer.',
-  'inv.seq.threebody.when-orbits-lock':
-    'The gentlest introduction to a third body: repeated small tugs that add up. No prior three-body work needed.',
-  'inv.seq.threebody.lagrange-points':
-    'The equilibrium points of the restricted problem, and the rotating frame they live in. Short, and the frame is what the next investigation leans on.',
-  'inv.seq.threebody.butterfly-effect':
+  'inv.seq.gravity.lagrange-points':
+    'The equilibrium points of the restricted problem, and the rotating frame they live in. The frame is what the next investigation leans on.',
+  'inv.seq.gravity.when-orbits-lock':
+    'The gentlest introduction to a third body: repeated small tugs that add up. Needs only the two-body picture.',
+  'inv.seq.gravity.butterfly-effect':
     'Sensitive dependence, measured with a separation you watch grow. Much more convincing once you have seen an orbit that stays put.',
-  'inv.seq.threebody.binary-star-planets':
-    'Everything above at once: stability, resonance and chaos deciding where a planet can survive around two stars.',
-
-  'inv.seq.waves.title': 'Gravitational waves, from nothing',
-  'inv.seq.waves.blurb':
-    'What the thing arriving actually is, and then what one signal can and cannot tell you about the source that sent it.',
-  'inv.seq.waves.what-is-a-gravitational-wave':
+  'inv.seq.gravity.black-holes':
+    'Orbital energy taken to its limit: how close can something orbit, and what does escape mean when nothing escapes?',
+  'inv.seq.gravity.what-is-a-gravitational-wave':
     'No physics assumed, and nothing to read first. What has to be moving, what travels, what stretches, and how an instrument notices.',
-  'inv.seq.waves.listening-to-spacetime':
+  'inv.seq.gravity.listening-to-spacetime':
     'The same instrument taken much further: measuring a source from its signal, and comparing a model with what two detectors actually recorded. Far easier if you have done the first one, but not gated on it.',
+
+  'inv.seq.light.title': 'Light and stars',
+  'inv.seq.light.blurb':
+    'What starlight carries: color and temperature, spectral lines and motion, then what the stars are, how they are weighed, how they work inside and how they end. The first three take 15 to 25 minutes each.',
+  'inv.seq.light.color-and-temperature':
+    'Start here: why a hot star is blue and a cool one red, and how to read a temperature from a color.',
+  'inv.seq.light.what-a-spectrum-is-made-of':
+    'A spectrum split into its kinds: continuous, emission and absorption, and what each says about the gas.',
+  'inv.seq.light.lines-and-motion':
+    'The same lines, shifted: speed along the line of sight from the Doppler shift.',
+  'inv.seq.light.a-universe-of-stars':
+    'Brightness, distance and luminosity put together: the Hertzsprung–Russell diagram, built from real stars. No other investigation needed first.',
+  'inv.seq.light.weighing-stars':
+    'Binary orbits turned into masses: the only direct way to weigh a star.',
+  'inv.seq.light.scaling-the-main-sequence':
+    'Why more massive stars are so much brighter: the scaling laws that follow from the balance inside a star.',
+  'inv.seq.light.inside-a-star':
+    'The balance that holds a star up, and what changes when it shifts. Needs the lives of stars first.',
+  'inv.seq.light.lives-of-stars':
+    'Follow stars of different masses from birth to death and read their ages off the diagram.',
+  'inv.seq.light.the-limit':
+    'Where stellar death ends: the mass limit for a white dwarf and what lies beyond it.',
+  'inv.seq.light.cluster-membership':
+    'Real data from a real cluster: which stars belong, from their motions. Uses the diagram and the idea of a population.',
+
+  'inv.seq.planets.title': 'Planets and exoplanets',
+  'inv.seq.planets.blurb':
+    'The two methods that have found nearly every known planet, then using them together on an unknown star, then whether anywhere is habitable and what two stars do to a planet. Longer investigations: plan on two sittings, or set part of one as homework. Better after Gravity and orbits.',
+  'inv.seq.planets.transit-photometry':
+    'Depth, duration and noise, from a light curve you measure yourself. The vocabulary the rest of the sequence uses.',
+  'inv.seq.planets.radial-velocity':
+    'The other half of the picture: what the star does. Transits give you size, this gives you mass, and neither alone gives you a density.',
+  'inv.seq.planets.detect-this-planet':
+    'An unknown system with both instruments and no answer key. Worth doing only once both methods are familiar.',
+  'inv.seq.planets.design-the-schedule':
+    'The same argument on the real instrument, where the run takes minutes and cannot be rewound. Do the analytic version first; this one asks you to plan the observing yourself.',
+  'inv.seq.planets.goldilocks-question':
+    'What a detection does and does not tell you about whether anywhere is habitable. Needs the transit investigation; the radial-velocity one helps.',
+  'inv.seq.planets.binary-star-planets':
+    'Stability, resonance and chaos at once, deciding where a planet can survive around two stars.',
+
+  'inv.seq.galaxies.title': 'Galaxies and the universe',
+  'inv.seq.galaxies.blurb':
+    'Our place in the Milky Way, the mass we cannot see, light bent by gravity, the distance ladder from variable stars, and the expanding universe. Short investigations in three groups. Better after Gravity and orbits and Light and stars.',
+  'inv.seq.galaxies.the-suns-motion':
+    'Start here: the Sun’s own motion through the Galaxy, from the stars around it.',
+  'inv.seq.galaxies.the-rotating-disk':
+    'How the whole disk turns, and why the rotation curve is not what the visible matter predicts.',
+  'inv.seq.galaxies.missing-mass':
+    'The rotation curve turned into a mass: the evidence for dark matter, with real galaxies.',
+  'inv.seq.galaxies.bending-light':
+    'Gravity bends light: the deflection angle, and what it takes to see it. The first of three on lensing.',
+  'inv.seq.galaxies.einstein-rings-and-arcs':
+    'A galaxy as the lens: rings and arcs, and a second way to weigh what we cannot see.',
+  'inv.seq.galaxies.a-lens-passing-by':
+    'A single star as the lens: the brightening that gives a lone planet or a dark object away.',
+  'inv.seq.galaxies.the-beat-of-a-star':
+    'Start of the distance ladder: a star whose light beats, and how to read its period.',
+  'inv.seq.galaxies.which-kind-of-variable':
+    'Not every variable is a standard candle: tell the kinds apart from the shape of the curve.',
+  'inv.seq.galaxies.leavitts-law':
+    'Period and luminosity tied together: the relation that turned Cepheids into rulers.',
+  'inv.seq.galaxies.the-first-rung':
+    'Calibrate the rung with a nearby Cepheid, then use it to reach another galaxy.',
+  'inv.seq.galaxies.standard-candles':
+    'Supernovae as standard candles: how far a bright, standard explosion can be seen, and what it says about the expansion.',
+  'inv.seq.galaxies.the-expanding-universe':
+    'Distances meet redshifts: Hubble’s law, the expansion and its rate, from real galaxies.',
+  'inv.seq.galaxies.the-shape-of-expansion':
+    'Fit the expansion history to see what the universe is made of. The most quantitative of the group.',
+  'inv.seq.galaxies.where-galaxies-live':
+    'The last view: galaxies in space, and what their clustering tells us. Needs the expansion, not the fit.',
+
+  'inv.seq.observing.title': 'Observing and measuring',
+  'inv.seq.observing.blurb':
+    'How to learn something true from a telescope: choose targets, schedule a run, measure spectra and light curves, and ask what a survey leaves out. Uses the quantitative depth where there is one. Better after The sky.',
+  'inv.seq.observing.plan-a-night':
+    'Start here: choose targets for a night at a telescope, with the Sky Lab’s time and place.',
+  'inv.seq.observing.twelve-nights':
+    'A real run of twelve nights: weather, the Moon and what the schedule costs you.',
+  'inv.seq.observing.what-a-spectrum-is-made-of':
+    'Read a spectrum quantitatively: where the lines are and how strong.',
+  'inv.seq.observing.lines-and-motion':
+    'Measure a shift in wavelength and turn it into a speed.',
+  'inv.seq.observing.transit-photometry':
+    'Measure depth, duration and noise on a light curve: the photometry the rest relies on.',
+  'inv.seq.observing.design-the-schedule':
+    'Plan an observing run for a planet: when to look, and for how long, given the nights you have.',
+  'inv.seq.observing.who-gets-counted':
+    'Start of the selection-effects group: a survey counts only what it can see.',
+  'inv.seq.observing.why-the-bright-ones-win':
+    'Brightness bias, made quantitative: why the sample is not the population.',
+  'inv.seq.observing.the-completeness-curve':
+    'Put a number on what a survey misses, and correct for it.',
+  'inv.seq.depth.core': 'Core depth',
+  'inv.seq.depth.quantitative': 'Quantitative depth',
+  'inv.seq.depth.advanced': 'Advanced depth',
 
   'inv.summary.about': 'about {h} hours',
   'inv.summary.range': '{l}–{h} hours',

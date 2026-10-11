@@ -178,6 +178,15 @@ export default {
       tip: 'Las cuatro distancias sugeridas son solo sugerencias. Sirven cuatro cualesquiera, siempre que cada intensidad se leyera a la distancia que tiene al lado.',
     },
     {
+      hints: [
+        'Una atracción ordinaria del inverso del cuadrado sube con el cuadrado del factor de distancia. Una marea depende de cuán rápido cambia la atracción a lo largo de un cuerpo.',
+        'Compara las dos filas de tu tabla: el estiramiento subió por una potencia mayor que dos de la razón de distancias.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Lee los dos estiramientos de tu propia tabla y divide el mayor entre el menor.',
+        off: 'Divide el estiramiento a la mitad de la distancia entre el estiramiento a la distancia completa, ambos de tu tabla.',
+      },
       title: '¿Con qué pendiente cae?',
       body: 'Mira las filas 2 y 3 de tu propia tabla: pasaste de 1,00 a 0,50 veces la distancia de la Luna, que es la mitad de la distancia.\n\nUna atracción corriente del inverso del cuadrado habría subido por cuatro. Una marea no es una atracción corriente.',
       prompt:
@@ -322,6 +331,15 @@ export default {
       tip: 'La barra verde no se mueve nunca al cambiar la distancia, y la barra roja no se mueve nunca al cambiar la densidad. Cada control mueve exactamente una barra, lo que hace fácil razonar sobre el equilibrio.',
     },
     {
+      hints: [
+        'Pon la densidad en el valor de la Luna y observa las dos barras.',
+        'Lee la distancia en la línea que dice que las dos son iguales, en radios terrestres.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Lee la distancia a la que las dos barras tienen la misma altura, en radios terrestres.',
+        off: 'La respuesta es la distancia a la que el estiramiento iguala al agarre; el panel la da en radios terrestres.',
+      },
       title: 'Dónde se inclina la balanza',
       body: 'Devuelve la densidad a la propia de la Luna, 3300 kg/m³, y lee la distancia a la que las dos barras se igualan. El panel la informa en radios terrestres, en la línea que dice que ambas son iguales.',
       prompt:

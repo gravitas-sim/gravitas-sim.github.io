@@ -29,6 +29,7 @@ manifest, and that is all.
 | `gravitas` | The version of Gravitas's platform (`PLATFORM_API`) the course was made with |
 | `locales` | `["en"]` or `["en", "es"]` |
 | `pinning` | `exact` or `compatible` (see Pins) |
+| `courseLevel` | Optional: `survey`, `majors` or `upper`. A lesson item with no `depth` of its own opens at this level's depth (core, quantitative, advanced); the Library's course filter reads it |
 | `title`, `summary`, `audience` | What the course home shows first |
 | `teacherGuide` | How to run the course, for another instructor |
 | `objectives` | Up to 12, each an id and a text |
@@ -288,6 +289,24 @@ What is left for an instructor who runs it:
   submission tools Gravitas already has;
 - the instructor guides, which are in English only and are behind the
   instructors' portal passphrase.
+
+## The courses that came with Prompt 97
+
+All three are `courseLevel`-declared, pinned compatibly and in both languages
+(the Spanish is unreviewed by a native speaker; the OpenStax chapters were
+matched from the table of contents, so check them against the edition in hand):
+
+| Course | Level | Core time | Units |
+|---|---|---|---|
+| `astronomy-semester`: introductory astronomy, one semester, with OpenStax Astronomy 2e | survey | about 11 to 15 hours | seven, each naming its chapters, with an optional reading and an advanced item |
+| `observing-lab`: observational astronomy lab | majors | about 11 to 14 hours | planning, spectra, photometry and time series, what a survey misses, authentic data |
+| `upper-level-modules`: seven short upper-level modules | upper | about 13 to 18 hours | celestial mechanics, stellar astrophysics, galactic dynamics, exoplanet science, time-domain, cosmology, statistics of surveys |
+
+They open as `/course/?course=<id>`. No detector or noise lesson exists yet, so
+the lab course does not claim one; the 3-D and mission guides are separate pages
+and cannot be course items. The catalog still lists /1 courses only, so these
+/2 courses are reached from the course home and the Library, not installed from
+the catalog.
 
 ## What authors may ask for that it does not do
 

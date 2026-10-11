@@ -243,6 +243,15 @@ export default {
                 que siempre da una respuesta no está midiendo nada.`,
     },
     {
+      hints: [
+        'El crecimiento proporcional significa que la separación escala con el tiempo, así que una carrera más larga da el mismo múltiplo de lo que tenías al empezar.',
+        'Compara el tiempo nuevo con el del ejemplo: ¿cuántas veces más largo es? Escala la separación por ese mismo factor.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Escala la separación del ejemplo por las veces que cuarenta órbitas son más que cuatro.',
+        off: 'Proporcional significa que al duplicar el tiempo se duplica la separación. Halla el factor entre los dos tiempos y aplícalo.',
+      },
       title: 'Lineal, en números',
       body: `Supón que la separación en tu binario creció de 1500 km a unos
              100 000 km a lo largo de cuatro órbitas, en proporción al tiempo.`,
@@ -368,6 +377,17 @@ export default {
              planos sería citar un ritmo más lento que el real.`,
     },
     {
+      hints: [
+        'Crecer por un factor fijo cada τ significa que la separación se multiplica por e una vez por τ. Necesitas el número de τ que alcanza el factor de crecimiento.',
+        'Ese número de τ es el logaritmo natural del factor de crecimiento. Multiplícalo por el τ que mediste.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Toma el logaritmo natural del factor de crecimiento y multiplícalo por tu τ medido.',
+        off: 'El crecimiento exponencial es separación ∝ e^(t/τ). Despeja t con un logaritmo, no dividiendo.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez; comprueba que usaste el logaritmo natural y tu τ en segundos simulados.',
+      },
       title: '¿Cuánto dura una predicción?',
       body: `Toma tu τ. Empiezas conociendo las posiciones de las estrellas con
              una precisión de 1500 km, y quieres saber cuándo las dos ejecuciones

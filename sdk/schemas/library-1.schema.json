@@ -87,6 +87,26 @@
             "items": {
               "$ref": "#/$defs/id"
             }
+          },
+          "depths": {
+            "description": "The depth each entry is read at in this sequence (core, quantitative or advanced), one per entry in the same order. Absent where a sequence does not say.",
+            "type": "array",
+            "items": {
+              "enum": [
+                "core",
+                "quantitative",
+                "advanced"
+              ]
+            }
+          },
+          "after": {
+            "description": "Sequences worth working through before this one.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]*$"
+            }
           }
         }
       }

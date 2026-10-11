@@ -27,6 +27,7 @@ import {
   validateSelection,
 } from './assignment.js';
 import { lessonProvider } from './provider.js';
+import { shortRoute } from './shortRoute.js';
 import { assignmentLink } from './assignmentLink.js';
 
 let root = null;
@@ -79,6 +80,9 @@ export async function openBuilder(loaded) {
     depth = 'core';
   } else lesson = loaded;
   chosen = new Set();
+  // ?route=short starts from the derived short route (./shortRoute.js).
+  if (/[?&]route=short\b/.test(location.search))
+    chosen = new Set(shortRoute(lesson).chosen);
   built = null;
   builtLink = null;
   mount();

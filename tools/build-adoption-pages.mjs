@@ -16,6 +16,7 @@
 //   teaching/investigation/<id>/index.html   one per investigation (41)
 //   teaching/activity/<id>/index.html        one per activity (3)
 //   teaching/find/index.html                 the index, with its filters
+//   teaching/alignment/index.html            the textbook alignment, by chapter
 //
 // The pages are static HTML: both languages, written as the shell writes them
 // (css/shell.css shows the one the page's <html lang> names), so a page costs
@@ -46,6 +47,8 @@ import { withPolicy } from './csp.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const load = rel => import(pathToFileURL(path.join(ROOT, rel)).href);
 const readJson = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
+
+const { shortRoute } = await load('js/assignments/shortRoute.js');
 
 export const BASE = 'teaching';
 export const SITE = 'https://gravitas-sim.online';
@@ -87,6 +90,8 @@ const W = {
   calc: ['Arithmetic', 'Aritmética'],
   subjects: ['Subjects', 'Temas'],
   steps: ['Steps', 'Pasos'],
+  about: ['about', 'unos'],
+  stepsLower: ['steps', 'pasos'],
   offline: ['Offline', 'Sin conexión'],
   start: ['Open it', 'Abrirla'],
   preview: ['Preview as a student', 'Vista previa como estudiante'],
@@ -179,6 +184,11 @@ const W = {
   assignBuilderNote: [
     'Choose steps, add a note and a roster name, and share one link; results come back as a token you can review.',
     'Elija pasos, añada una nota y un nombre de grupo, y comparta un enlace; los resultados vuelven como una ficha que puede revisar.',
+  ],
+  shortRoute: ['Short route', 'Ruta corta'],
+  shortRouteNote: [
+    'A default short route the activity builder derives from the steps: a prediction, a measurement, a number, a choice and an explanation, with whatever they need. The time is an estimate from the step types, not a measured class time.',
+    'Una ruta corta predeterminada que el constructor de actividades deriva de los pasos: una predicción, una medición, un número, una opción y una explicación, con lo que necesiten. El tiempo es una estimación según los tipos de paso, no un tiempo medido en clase.',
   ],
   assignNone: [
     'This one is handed out as its own link, from the lab it runs in.',
@@ -920,7 +930,7 @@ function investigationPage(S, entry) {
   const assignHtml = section(
     'assign',
     w('assign'),
-    `${lesson ? `<p><a class="ui-button" href="/?assign=${id}">${w('assignBuilder')}</a> <a class="ui-button" href="/studio/course/?add=${id}">${w('addCourse')}</a></p>\n<p>${w('assignBuilderNote')}</p>` : `<p>${w('assignNone')}</p>`}
+    `${lesson ? `<p><a class="ui-button" href="/?assign=${id}">${w('assignBuilder')}</a> <a class="ui-button" href="/studio/course/?add=${id}">${w('addCourse')}</a></p>\n<p>${w('assignBuilderNote')}</p>\n<p><a class="ui-button" href="/?assign=${id}&amp;route=short">${w('shortRoute')}</a> ${shortRoute(lesson).sids.length} ${bi(wt('stepsLower'))}, ${bi(wt('about'))} ${shortRoute(lesson).minutes} ${bi(wt('minutes'))}</p>\n<p>${w('shortRouteNote')}</p>` : `<p>${w('assignNone')}</p>`}
 ${templates.length ? `<h3>${w('templates')}</h3>\n${list(templates)}` : ''}`
   );
 
@@ -1217,6 +1227,50 @@ ${sel('f-offline', w('fOffline'), [opt('yes', wt('fOfflineOnly'))])}
   return { file, html: finish(file, text) };
 }
 
+/**
+ * The alignment page: every investigation and activity under the OpenStax
+ * Astronomy 2e chapter it declares (Prompt 97). Generated from the same rows
+ * the index filters, so a chapter can never be listed that no page declares.
+ */
+function alignmentPage(S, rows) {
+  const file = `${BASE}/alignment/index.html`;
+  const chapters = [...new Set(rows.map(r => r.chapter).filter(Boolean))].sort(
+    (a, b) => a - b
+  );
+  const one = r =>
+    `<li><a href="${html(r.url)}">${plain(r.title)}</a> (${bi(wt(CL_KEY[r.courseLevel]))}, ${r.duration ? `${r.duration.min}–${r.duration.max} ${bi(wt('minutes'))}` : ''})</li>`;
+  const body = `<p>${bi({ en: 'The chapter is the claim; check it against the edition you teach from (the chapters were matched from the table of contents). Each link opens the investigation’s adoption page.', es: 'El capítulo es la afirmación; compruébelo con la edición que usa (los capítulos se asociaron a partir del índice). Cada enlace abre la página de adopción de la investigación.' })}</p>
+${chapters
+  .map(ch => {
+    const here = rows.filter(r => r.chapter === ch);
+    return section(
+      `ch${ch}`,
+      `${bi(wt('chapter'))} ${ch}: <span lang="en">${html(S.curation.textbookChapters[String(ch)])}</span>`,
+      list(here.map(one))
+    );
+  })
+  .join('\n')}
+<p><a href="/teaching/find/">${w('back')}</a></p>`;
+  const title = {
+    en: 'Textbook alignment',
+    es: 'Alineación con el libro de texto',
+  };
+  const text = pageHtml({
+    file,
+    title: { ...title, html: plain(title) },
+    description:
+      'Every Gravitas investigation and activity by OpenStax Astronomy 2e chapter.',
+    eyebrow: w('crumbTeach'),
+    lede: bi({
+      en: 'Which investigations go with which chapter of OpenStax Astronomy 2e.',
+      es: 'Qué investigaciones van con cada capítulo de OpenStax Astronomy 2e.',
+    }),
+    body,
+    script: `    <script type="module">\n      import { mountShell } from '/js/shell.js';\n      try {\n        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es'))\n          document.documentElement.lang = 'es';\n      } catch {\n        /* storage blocked: English */\n      }\n      mountShell({ onLanguage: () => {} });\n    </script>\n`,
+  });
+  return { file, html: finish(file, text) };
+}
+
 /** Every page, in the order they are written. */
 export async function buildAdoption() {
   const S = await sources();
@@ -1233,12 +1287,13 @@ export async function buildAdoption() {
     rows.push(p.row);
   }
   pages.push(findPage(S, rows));
+  pages.push(alignmentPage(S, rows));
   return { pages, rows };
 }
 
 /** Where the generated pages live, for the checks that list them. */
 export const adoptionFiles = () => {
-  const out = [`${BASE}/find/index.html`];
+  const out = [`${BASE}/find/index.html`, `${BASE}/alignment/index.html`];
   for (const kind of ['investigation', 'activity']) {
     const dir = path.join(ROOT, BASE, kind);
     if (!existsSync(dir)) continue;

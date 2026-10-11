@@ -415,6 +415,15 @@ const POWER_LAW_GRAVITY = {
       tip: 'Your four points lie on a straight line. Work out what line before you go on.',
     },
     {
+      hints: [
+        'Your readings show the slope changing by a fixed amount for each step in n.',
+        'Extend the pattern from one of your readings to the new n, at the rate your readings show.',
+      ],
+      feedback: {
+        close:
+          'Close. The slope changes at half the rate of n: move from a reading you trust.',
+        off: 'Pick one of your readings and move from it to the new n, at half the rate that n changes.',
+      },
       sid: 'predict-the-slope',
       type: 'question',
       title: 'Use the pattern',

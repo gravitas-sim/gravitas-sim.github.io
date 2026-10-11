@@ -698,6 +698,15 @@ const DARK_MATTER = {
       tip: 'A good fit lands near 150 km/s and a core of about 6 kpc, with an average miss around 2 km/s. There is a genuine degeneracy between the two halo sliders, which is why real papers quote them together with a covariance.',
     },
     {
+      hints: [
+        'The headline number is a ratio of two masses, both given by the fit panel.',
+        'Divide the halo mass by the visible mass: the answer is how many times heavier the halo is.',
+      ],
+      feedback: {
+        close:
+          'Close. Divide the halo mass by the visible mass, both in the same units.',
+        off: 'The ratio compares the halo with what you can see: halo on top, visible below.',
+      },
       sid: 'how-much-of-it-is',
       bind: GALAXY_TRACERS,
       type: 'question',
@@ -852,6 +861,17 @@ const DARK_MATTER = {
       tip: 'One thousand simulation mass units is one solar mass, which is the conversion you will need at the end.',
     },
     {
+      hints: [
+        'Use 2K + U = 0, with the kinetic energy written from the spread of the speeds.',
+        'Solve for M: it comes out as a constant times the speed spread squared times the size, divided by G.',
+      ],
+      feedback: {
+        close:
+          'Close. Check the factor in front: it comes from 2K + U = 0 with the speeds’ spread.',
+        off: 'Rearrange the virial relation for M; the speed spread enters squared and the size enters once.',
+        'wrong-order-of-magnitude':
+          'A power of ten out; check the units of the size and of the speed.',
+      },
       sid: 'weigh-the-cluster-by-its',
       type: 'question',
       title: 'Weigh the cluster by its motion',
@@ -883,6 +903,14 @@ const DARK_MATTER = {
                 near 84,000 you used σ rather than σ².`,
     },
     {
+      hints: [
+        'Both masses are already worked out in this step and the one before.',
+        'Divide the dynamical mass by the visible mass.',
+      ],
+      feedback: {
+        close: 'Close. Dynamical mass on top, visible mass below.',
+        off: 'The ratio compares the mass from the motions with the mass you can add up.',
+      },
       sid: 'now-compare',
       type: 'question',
       title: 'Now compare',
@@ -959,6 +987,15 @@ const DARK_MATTER = {
       tip: 'MOND wants a lighter disc than the halo fit does — about two thirds. A rotation curve cannot measure the mass of the stars directly, so how heavy the disc is was never pinned down by the data in either picture.',
     },
     {
+      hints: [
+        'MOND gives v⁴ = G M a₀: the flat speed is the fourth root of G M a₀.',
+        'Add the disc and the bulge first, and use the units the instrument uses, before taking the fourth root.',
+      ],
+      feedback: {
+        close:
+          'Close. Take the fourth root, not the square root, and include the bulge.',
+        off: 'Total visible mass first (disc plus bulge), then v = (G M a₀)^(1/4).',
+      },
       sid: 'the-prediction-mond-makes',
       type: 'question',
       title: 'The prediction MOND makes',

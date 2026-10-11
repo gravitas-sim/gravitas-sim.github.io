@@ -478,7 +478,11 @@ let linkSeq = 0;
 async function fillLinks(pending) {
   const seq = ++linkSeq;
   for (const { item, open } of pending) {
-    const link = await itemLink(item, { root: ROOT, locale: language() });
+    const link = await itemLink(item, {
+      root: ROOT,
+      locale: language(),
+      level: pack?.courseLevel,
+    });
     if (seq !== linkSeq) return;
     if (!link) continue;
     open.href = link.href;

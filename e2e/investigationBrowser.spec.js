@@ -208,9 +208,15 @@ test.describe('the curated orders', () => {
     await expect(orbital.locator('.inv-seq-needs').first()).toHaveClass(
       /is-none/
     );
-    await expect(orbital.locator('.inv-seq-needs').nth(1)).toContainText(
-      'Kepler'
-    );
+    // Orbital Energy is the first one in the order that names Kepler.
+    await expect(
+      orbital
+        .locator('.inv-seq-step')
+        .filter({
+          has: page.locator('[data-sequence-lesson="orbital-energy"]'),
+        })
+        .locator('.inv-seq-needs')
+    ).toContainText('Kepler');
 
     await page.locator('#investigationSearch').fill('transit');
     await expect(sequences).toBeHidden();
@@ -431,7 +437,7 @@ test.describe('everyone can use it', () => {
       .locator('.inv-seq')
       .filter({ has: page.locator('[data-sequence-lesson="keplers-laws"]') });
     await expect(orbitalEs.locator('.inv-seq-title')).toHaveText(
-      'Mecánica orbital'
+      'Gravedad y órbitas'
     );
     await expect(orbitalEs.locator('.inv-seq-needs').first()).toHaveText(
       /No da nada por hecho/
