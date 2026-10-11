@@ -26,7 +26,7 @@
 // =============================================================================
 
 export const C_KMS = 299792.458;
-const MPC_KM = 3.0856775814913673e19;
+const MPC_KM = 3.085677581491367e19;
 const JULIAN_YEAR_S = 365.25 * 86400;
 /** (1/H0) in Gyr for H0 = 1 km/s/Mpc. */
 export const GYR_PER_INV_H0 = MPC_KM / JULIAN_YEAR_S / 1e9;

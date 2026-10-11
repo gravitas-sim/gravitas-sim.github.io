@@ -19,6 +19,7 @@
 
 import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
+import { URL } from 'node:url';
 import {
   createCosmology,
   closedForms,
