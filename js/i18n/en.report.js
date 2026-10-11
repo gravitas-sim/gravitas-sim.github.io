@@ -92,6 +92,7 @@ export const EN_REPORT = {
   'led.ctx.observatory': 'the Observatory',
   'led.ctx.experiments': 'the experiment bench',
   'led.ctx.sandbox': 'the sandbox',
+  'led.ctx.lab3d': 'the 3-D lab',
   'rp.outcome': 'Outcome',
   'rp.reached': 'reached',
   'rp.notReached': 'not reached',

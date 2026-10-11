@@ -378,6 +378,7 @@ export const ARTIFACT_SOURCES = [
   'sweep-analysis',
   'experiment-result',
   'derived-quantity',
+  'lab3d',
 ];
 
 /**

@@ -3621,6 +3621,18 @@ export const ES_DEFERRED = {
   'nb.source.comparison': 'Modelo frente a datos',
   'nb.source.sweep-analysis': 'Análisis de barrido',
   'nb.source.derived-quantity': 'Cantidad derivada',
+  'nb.source.lab3d': 'Medida del laboratorio 3-D',
+  'nb.flag.unbound': 'la órbita no está ligada, así que no tiene período',
+  'nb.flag.noRadii':
+    'un cuerpo no tiene tamaño en este sistema, así que no se puede juzgar un eclipse',
+  'nb.flag.osculating':
+    'las órbitas se leen en un instante, y una órbita real se desplaza',
+  'nb.flag.planetsDoNotInteract':
+    'se trata a los planetas como si no se atrajeran entre sí',
+  'nb.flag.assumedTeff':
+    'la temperatura de la estrella se supuso, no se leyó del sistema',
+  'nb.flag.assumedDistance':
+    'la distancia al sistema se supuso, no se leyó de él',
   'nb.formula.summary': 'Derivar una cantidad con una fórmula',
   'nb.source.experiment-result': 'Resultado de experimento',
   'nb.entry.cite': 'El resultado y de dónde viene',

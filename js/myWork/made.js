@@ -13,6 +13,10 @@
 //                      one made it, the scenario's identity (`derivedFrom`:
 //                      {id, version}, the identity a link carries in `x.pack`).
 //   kind 'experiment'  a run of the experiment runner: its manifest and result.
+//   kind 'system3d'    a system saved from the 3-D lab (Prompt 105): the
+//                      gravitas.system3d/1 itself, from its start or from the
+//                      moment it was saved. Not attachable to a report: the
+//                      token format has two kinds (submission-token/2).
 //
 // A record is data only: nothing in it is run. `attachedTo` names notebook
 // entries ("the system I measured"); the report, the submission token and the
@@ -130,6 +134,40 @@ export function experimentRecord(result, name, slim = false) {
 }
 
 /**
+ * A 3-D system record: the lab's own file, kept whole.
+ * @param {object} a
+ * @param {string} a.name
+ * @param {object} a.system - A gravitas.system3d/1, validated by the lab
+ * @param {'start'|'now'} [a.from] - Whether it is saved as started or as it is
+ * @param {?string} [a.app] - The build
+ * @returns {object} A record
+ */
+export function system3dRecord({
+  name,
+  system,
+  from = 'start',
+  app = buildOf(),
+}) {
+  return {
+    format: MADE_FORMAT,
+    formatVersion: MADE_VERSION,
+    id: newId(),
+    kind: 'system3d',
+    from: 'lab3d',
+    name: str(name, 120) || 'System',
+    savedAt: new Date().toISOString(),
+    app,
+    attachedTo: [],
+    system3d: {
+      from: from === 'now' ? 'now' : 'start',
+      units: str(system.units, 10),
+      bodies: system.bodies.length,
+      system: JSON.parse(JSON.stringify(system)),
+    },
+  };
+}
+
+/**
  * Whether a value is a record this build can read, with the reason if not.
  * @param {*} v
  * @returns {{ok: boolean, record?: object, reason?: string}}
@@ -193,6 +231,33 @@ export function readMade(v) {
               }
             : null,
           result: e.result,
+        },
+      },
+    };
+  }
+  if (v.kind === 'system3d') {
+    const s = v.system3d?.system;
+    if (
+      !isObj(s) ||
+      s.format !== 'gravitas.system3d' ||
+      s.formatVersion !== 1 ||
+      !Array.isArray(s.bodies) ||
+      s.bodies.length < 2 ||
+      s.bodies.length > 50
+    )
+      return { ok: false, reason: 'system3d' };
+    return {
+      ok: true,
+      record: {
+        ...base,
+        // Not attachable: nothing can have been attached to it.
+        attachedTo: [],
+        kind: 'system3d',
+        system3d: {
+          from: v.system3d.from === 'now' ? 'now' : 'start',
+          units: str(s.units, 10),
+          bodies: s.bodies.length,
+          system: s,
         },
       },
     };
@@ -268,9 +333,13 @@ export function listMade(storage) {
   return out.sort((a, b) => String(b.savedAt).localeCompare(String(a.savedAt)));
 }
 
-/** Where a record opens: the Sandbox on its link, or the experiment runner. */
+/** Where a record opens: the Sandbox on its link, the 3-D lab, or the runner. */
 export const hrefOf = r =>
-  r.kind === 'scenario' ? `/#${r.scenario.link}` : '/experiments/';
+  r.kind === 'scenario'
+    ? `/#${r.scenario.link}`
+    : r.kind === 'system3d'
+      ? `/3d/?open=${r.id}`
+      : '/experiments/';
 
 /** The file a record stands for: the builder's system file, or the result. */
 export function fileOf(r) {
@@ -285,6 +354,8 @@ export function fileOf(r) {
       name: `experiment-${r.experiment.hash || slug}.json`,
       json: r.experiment.result,
     };
+  if (r.kind === 'system3d')
+    return { name: `${slug}.system3d.json`, json: r.system3d.system };
   return r.scenario.system
     ? { name: `${slug}.gravitas-system.json`, json: r.scenario.system }
     : null;

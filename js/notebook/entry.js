@@ -77,6 +77,9 @@ export const SOURCE = Object.freeze({
   EXPERIMENT_RESULT: 'experiment-result',
   // A formula over numbers the notebook holds (js/notebook/derivedEntry.js).
   DERIVED_QUANTITY: 'derived-quantity',
+  // A reading, an event or a forward-model observation from the 3-D lab,
+  // kept as its envelope (js/lab3d/evidence.js).
+  LAB3D: 'lab3d',
 });
 
 /** The sources this build can capture from. */
@@ -95,6 +98,7 @@ export const SOURCES = [
   SOURCE.SWEEP_ANALYSIS,
   SOURCE.EXPERIMENT_RESULT,
   SOURCE.DERIVED_QUANTITY,
+  SOURCE.LAB3D,
 ];
 
 /** How long a student's prose may be, per field. */

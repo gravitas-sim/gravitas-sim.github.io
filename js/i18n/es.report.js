@@ -92,6 +92,7 @@ export const ES_REPORT = {
   'led.ctx.observatory': 'el Observatorio',
   'led.ctx.experiments': 'el banco de experimentos',
   'led.ctx.sandbox': 'el simulador libre',
+  'led.ctx.lab3d': 'el laboratorio 3-D',
   'rp.outcome': 'Resultado',
   'rp.reached': 'alcanzado',
   'rp.notReached': 'no alcanzado',
