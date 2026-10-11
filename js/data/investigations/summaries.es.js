@@ -80,6 +80,12 @@ export const SUMMARIES_ES = {
     'Las estrellas cercanas muestran la rotación de la Galaxia como una onda doble en sus movimientos propios, y su altura y centro son las constantes de Oort. Medirás A y B con Gaia, las convertirás en la rapidez circular del Sol y luego pondrás la curva de rotación medida de la Vía Láctea frente a un modelo de bulbo, disco y halo. Las estrellas y el gas solos la ajustan mal; un halo la ajusta diez veces mejor. Dirás qué supone esa comparación.',
   'cluster-membership':
     'Las estrellas de un cúmulo nacieron juntas y todavía se mueven juntas. Hallarás NGC 2420 en 993 estrellas de Gaia como un grupo compacto en movimiento propio, lo ajustarás frente al campo y darás a cada estrella una probabilidad de pertenecer, no una etiqueta. Moverás el umbral, comprobarás los miembros con un diagrama color-magnitud que el ajuste nunca usó y dirás qué deja fuera una distancia por el paralaje medio.',
+  'bending-light':
+    'La masa curva la luz, y un rayo que roza el Sol se desvía 1,75 segundos de arco, el doble de lo que da la gravedad de Newton. Medirás la desviación según la masa y la distancia de máximo acercamiento, verás qué decidieron las placas del eclipse de 1919 y hallarás el caso en que no se puede fiar de la fórmula.',
+  'einstein-rings-and-arcs':
+    'Cuando una fuente está detrás de una lente, la luz nos llega rodeándola como un anillo. Medirás el radio de Einstein de una estrella y de una galaxia, pesarás una galaxia por el tamaño de su anillo y hallarás las imágenes, los arcos y las amplificaciones cuando la fuente está a un lado, para una masa puntual y para una galaxia.',
+  'a-lens-passing-by':
+    'Cuando una lente pasa por delante de una estrella, esta se aviva y se apaga durante días o semanas. Leerás el máximo y la duración de un suceso de microlente, verás por qué una curva de luz no puede pesar la lente, qué hacen la luz mezclada y una estrella finita, y ajustarás un suceso sintético para ver qué puede y qué no puede recuperar el ajuste.',
   'who-gets-counted':
     'Un sondeo cuenta las estrellas que parecen brillantes, no las que son comunes. Contarás una población sintética con tres límites de magnitud, hallarás qué hay en la parte que se pierde y a qué distancia pueden estar una estrella como el Sol y una enana roja para ser contadas. Dirás por qué un catálogo de las estrellas más brillantes no es un censo.',
   'why-the-bright-ones-win':

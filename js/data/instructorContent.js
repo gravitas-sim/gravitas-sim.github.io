@@ -4682,6 +4682,248 @@ export const INSTRUCTOR_CONTENT = {
     modelNotes:
       'Two-component Gaussian mixture over proper motion and parallax by expectation-maximization (js/kernels/galactic/membership.js), each star’s own errors widening both components; the cluster’s intrinsic width uses the standard approximate update. See GALACTIC_DYNAMICS.md.',
   },
+  'bending-light': {
+    topic:
+      'How a mass bends a ray of light: the weak-field formula, the Sun’s 1.75 arcseconds and where the formula stops being true',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After What Is a Gravitational Wave (or any first work on general relativity). The first of three lensing investigations; it needs only proportional reasoning. It supports OpenStax Astronomy 2e chapter 24.',
+    overview:
+      'Students use a point-mass lens and a ray of light. A ray that grazes the Sun is turned by 1.75 arcseconds (4GM/(c²R), 1.7517 with the app’s constants), a ray 100 solar radii out by 0.0175, and the same ray past ten solar masses by 17.5. They compare the Newtonian half (0.88) with the 1.98 ± 0.12 and 1.61 ± 0.30 arcseconds Eddington’s 1919 expeditions measured, and find a black hole case (10^8 solar masses, ray at 2.4 Schwarzschild radii) where the formula gives 49 degrees and the model says it cannot be trusted.',
+    priorKnowledge: [
+      'Proportional and inverse reasoning',
+      'Angles in arcseconds',
+      'The idea that mass curves space (a sentence is enough)',
+    ],
+    keyConcepts: [
+      {
+        heading:
+          'The bending is in proportion to the mass and inverse to the distance',
+        body: 'Doubling the closest approach halves the angle; ten times the mass gives ten times the angle.',
+      },
+      {
+        heading: 'Twice the Newtonian value',
+        body: 'General relativity turns light by 4GM/(c²b), twice what Newton’s gravity gives a particle at the speed of light; the 1919 plates favored the larger.',
+      },
+      {
+        heading: 'A weak-field formula has a boundary',
+        body: 'The formula needs the ray to pass at many Schwarzschild radii; closer, it returns an angle that is not small and the model says so.',
+      },
+    ],
+    features: [
+      {
+        name: 'Light-bending instrument (lensing family)',
+        text: 'Bending against closest approach on logarithmic axes, with the Sun as a gray reference and the weak-field limit shaded; mass and closest approach controls; listed mass, closest approach, Schwarzschild radius, the ratio, the bending, the Newtonian half and whether the weak field holds.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the Sun’s bending by hand. Advanced: the distance at which rays from the limb cross, 548 au.',
+      },
+      {
+        name: 'Presets',
+        text: 'The Sun’s limb, a ray 100 solar radii out, a ten-solar-mass star and a black hole of 100 million Suns load in one click, each with its readout.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Light has no mass, so gravity cannot bend it.',
+        response:
+          'Mass curves space, and light follows the curve; the bending is real and measured.',
+      },
+      {
+        claim: 'The bending is the same at any distance.',
+        response:
+          'It falls as one over the closest approach: a hundred times farther, a hundredth the angle.',
+      },
+      {
+        claim: 'The formula works for a black hole’s edge.',
+        response:
+          'It is a weak-field result; at 2.4 Schwarzschild radii the instrument says it cannot be trusted.',
+      },
+      {
+        claim: 'Only a black hole can bend light.',
+        response:
+          'Any mass does: the Sun’s limb turns a ray by 1.75 arcseconds.',
+      },
+    ],
+    teachingNotes: [
+      'The model is a thin point lens in the weak field (GRAVITATIONAL_LENSING.md). Say so if a student asks about a ray that dips close to a black hole.',
+      'The 1919 values are from Dyson, Eddington and Davidson (1920): 1.98 ± 0.12 at Sobral and 1.61 ± 0.30 at Principe. Later reductions of the plates are debated; the investigation states only the published numbers.',
+      'The Sun’s bending uses the app’s constants, 1.7517 arcseconds; the rounded 1.75 is the textbook value.',
+      'The instrument’s closest approach is a log slider in solar radii, so the Sun’s limb is the left-hand preset; remind students the Newtonian row is half of the other.',
+    ],
+    discussion: [
+      'Why is a measurement that could have gone either way worth more than one that could not?',
+      'What would you need to measure to test the formula nearer a black hole?',
+      'A ray passes the Sun at twice the radius: what does the bending do, and where does it cross the axis?',
+    ],
+    extensions: [
+      'Continue with Einstein Rings and Arcs.',
+      'Compare with the black-hole lab’s photon ring.',
+    ],
+    modelNotes:
+      'js/kernels/lensing/lens.js: deflectionAngle = 4GM/(c²b), valid for b much greater than 2GM/c²; the instrument shades b below ten Schwarzschild radii. See GRAVITATIONAL_LENSING.md.',
+  },
+  'einstein-rings-and-arcs': {
+    topic:
+      'Strong lensing geometry: the Einstein radius of a star and of a galaxy, the mass inside a ring, and the images of an off-axis source',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Bending Light. It supports OpenStax Astronomy 2e chapter 24 and is a first look at how astronomers weigh galaxies and clusters without knowing what they are made of.',
+    overview:
+      'Students read the Einstein radius with the source straight behind the lens: 1.01 milliarcseconds for one solar mass at 4 kpc, 0.638 arcseconds (3.09 kpc at the lens) for 10^11 solar masses at 1 Gpc. They change the mass until the ring is 1.0 arcsecond (2.46 × 10^11), find the two images of a source half an Einstein radius off-axis for a point mass (1.28 and −0.78, total 2.18) and an isothermal galaxy (1.5 and −0.5, total 4), and explain why most lensed galaxies are arcs.',
+    priorKnowledge: [
+      'Bending Light (the deflection angle)',
+      'Angular size and the arcsecond',
+      'Square roots',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The ring is a mass scale',
+        body: 'The Einstein radius grows as the square root of the mass inside it, so a measured ring gives that mass whatever the lens is made of.',
+      },
+      {
+        heading: 'A star’s ring is too small to see',
+        body: 'About a milliarcsecond: stars lens by changing brightness; galaxies make arcsecond rings Hubble resolves.',
+      },
+      {
+        heading: 'The images depend on the lens',
+        body: 'The same ring and source position give 2.18 times the light for a point mass and 4 for an isothermal galaxy.',
+      },
+    ],
+    features: [
+      {
+        name: 'Lens-plane instrument (lensing family)',
+        text: 'The sky around a lens in units of the Einstein radius with the ring, the source disk and the lensed images; a point mass or a singular isothermal sphere; mass inside the ring, lens distance (source at twice the distance), source offset and radius; listed Einstein radius in mas and arcseconds, its size at the lens, the equivalent galaxy speed spread, the images and magnifications and the point-mass time delay.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the mass inside a 1-arcsecond ring by hand (2.46 × 10^11). Advanced: the speed spread of the galaxy that makes it, 263 km/s.',
+      },
+      {
+        name: 'Presets',
+        text: 'A Sun at 4 kpc, a galaxy at 1 Gpc with the source straight behind or off to one side, and an isothermal galaxy load in one click.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A ring needs a very special lens.',
+        response:
+          'It needs an alignment, not a special lens: any lens makes one when the source is exactly behind it.',
+      },
+      {
+        claim: 'The ring’s mass is the mass of the galaxy’s stars.',
+        response: 'It is all the mass inside the ring, dark matter included.',
+      },
+      {
+        claim: 'Lensed galaxies should be rings.',
+        response: 'Alignment is rarely exact; off-axis the images are arcs.',
+      },
+      {
+        claim: 'A bigger lens always makes a bigger ring on the sky.',
+        response:
+          'The ring grows as the square root of the mass and falls with distance; a star’s ring is a thousand times smaller than a galaxy’s.',
+      },
+    ],
+    teachingNotes: [
+      'Distances are Euclidean with the source at twice the lens distance: no cosmology, no ellipticity or external shear (GRAVITATIONAL_LENSING.md). Say so for a student who compares with a real lens such as the Einstein Cross.',
+      'The mass slider is the mass inside the Einstein radius; for the isothermal sphere the instrument gives the equivalent speed spread, 4π(σ/c)²Dls/Ds = θE.',
+      'The inner image’s magnification is negative because it is flipped; the totals use absolute values.',
+      'The source offset is a slider, not a draggable point (the widget framework has no pointer hook); it works from the keyboard.',
+    ],
+    discussion: [
+      'Why does a galaxy at a billion parsecs make a ring a thousand times larger than a star at four thousand?',
+      'What would a ring of 1 arcsecond around a galaxy with only 10^10 solar masses of stars tell you?',
+      'How would the picture change if the lens were not circular?',
+    ],
+    extensions: [
+      'Continue with A Lens Passing By.',
+      'Open the model page for the thin-lens assumptions.',
+    ],
+    modelNotes:
+      'js/kernels/lensing/lens.js: einsteinAngle, sisEinsteinAngle, pointImages (lens equation y = x − 1/x), sisImages (y = x − sign x) and pointTimeDelay. The mass is the mass inside the Einstein radius for either lens. See GRAVITATIONAL_LENSING.md.',
+  },
+  'a-lens-passing-by': {
+    topic:
+      'Microlensing light curves: the peak, the crossing time, the mass–distance–speed degeneracy, blended light, a finite source and a fit of a synthetic event',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Einstein Rings and Arcs. It connects lensing to time-domain astronomy and supports OpenStax Astronomy 2e chapter 24; the advanced depth uses the inference core’s fitter.',
+    overview:
+      'Students watch a star brighten as a 0.3 solar-mass lens 6 kpc away crosses in front of it at 200 km/s: a pass at 0.1 Einstein radii peaks at 10.04, the crossing time is 16.6 days and the star stays above 1.34 times its baseline for 33 days; at 400 km/s the time halves. A brown dwarf of 0.075 solar masses at 2 kpc and 100 km/s makes the same curve, as does 0.68 at 6 kpc and 300 km/s, so one curve cannot weigh the lens. Half the light blended lowers the peak to 5.5; a star of radius 0.1 Einstein radii at u0 = 0.01 peaks at 20, not 100. The advanced depth fits a synthetic event with the blend free (tE 25.2 ± 0.7 days) and held at none (chi-square 2.13, tE 17.4 ± 0.06).',
+    priorKnowledge: [
+      'Einstein Rings and Arcs (the Einstein radius)',
+      'Reading a light curve',
+      'Speed, distance and time',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The curve fixes one number for three unknowns',
+        body: 'The crossing time is the Einstein radius over the speed; mass, distance and speed are degenerate.',
+      },
+      {
+        heading: 'Blending and finite size change the peak',
+        body: 'Blended light dilutes the rise; a star with a size caps it near 2 over its radius in Einstein radii.',
+      },
+      {
+        heading: 'An error bar is conditional on the model',
+        body: 'The fit that assumes no blend has a small error bar and a wrong answer; the free fit’s larger bar is the honest one.',
+      },
+    ],
+    features: [
+      {
+        name: 'Lens-passing instrument (lensing family)',
+        text: 'The light curve of a point lens crossing a star: mass, lens distance (source at 8 kpc), speed, closest approach, source share of the light and source radius; listed Einstein angle and radius, crossing time, peak, time above 1.34 and the masses that make the same curve at other distances and speeds; a synthetic event with noise, with its fits.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the crossing time (16.6 days) and the magnification at u = 0.5 (2.18) by hand. Advanced: fit the synthetic event with the blend free and held.',
+      },
+      {
+        name: 'The synthetic event and the forward model',
+        text: 'The microlensing forward model (js/forward/models/microlensing.js) returns a gravitas.observation time series labeled synthetic with a truth manifest, for the inference core and the Observatory. No authentic event ships: its terms of use could not be confirmed (D-LENS-01).',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The light curve tells you the lens’s mass.',
+        response:
+          'It tells you the crossing time, one combination of mass, distance and speed.',
+      },
+      {
+        claim: 'A closer pass can brighten the star without limit.',
+        response:
+          'A real star has a size; at u0 = 0.01 and radius 0.1 the peak is 20, not 100.',
+      },
+      {
+        claim: 'A fit with a small error bar must be right.',
+        response:
+          'The no-blend fit’s bar is 0.06 days and its answer is 8 days short, with chi-square 2.1.',
+      },
+      {
+        claim: 'The star really brightens, so something is heating it.',
+        response:
+          'Its output is unchanged; the lens focuses more of the same light toward us, and the curve is symmetric.',
+      },
+    ],
+    teachingNotes: [
+      'The model is one point lens, a uniform source disk and straight constant-speed motion; no parallax, limb darkening, binary lens or second source (GRAVITATIONAL_LENSING.md).',
+      'The synthetic event has a fixed seed, so every student sees the same points, and the answer key is exact; the truth (t0 = 0, u0 = 0.15, tE = 25 days, source share 0.6) is in the investigation’s source file, not on screen.',
+      'The tolerance on the free fit is two standard errors; the held fit’s chi-square is read, not its tE, so a student cannot be marked wrong for a narrower reading.',
+      'Presets “A very close pass, finite source” and “Fit the synthetic event” are the two to rehearse; the fit rows appear only with the synthetic event switched on.',
+    ],
+    discussion: [
+      'Which of mass, distance and speed would you most like to measure independently, and how?',
+      'Why is a fit with an unstated assumption more dangerous than one with a big error bar?',
+      'What would a second observer in space change?',
+    ],
+    extensions: [
+      'Open the microlensing forward model in the Observatory’s synthetic observations.',
+      'Read the model page for the thin-lens and point-mass assumptions.',
+    ],
+    modelNotes:
+      'js/kernels/lensing/microlensing.js (Paczynski, uniform finite source by ring integration, blending) and fit.js (the inference core’s createProblem and refine, multi-start, source and blend fluxes solved exactly). Validated against closed forms and over 30 seeds in tests/lensingKernel.test.js. See GRAVITATIONAL_LENSING.md.',
+  },
   'who-gets-counted': {
     topic:
       'Selection by a magnitude limit: what a survey counts, what it misses and why a catalog is not a census',

@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 38 investigations and 828 steps: 778 steps
+Across 41 investigations and 855 steps: 805 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 389 show a prescribed model result, 136 draw
-on a stored dataset, 268 put a self-contained panel beside the text,
-151 keep something, and 30 are prose.
-Of 104 prediction loops, 104 are returned to,
-104 produce a measurement before they are answered, and
+running integration, 416 show a prescribed model result, 136 draw
+on a stored dataset, 295 put a self-contained panel beside the text,
+166 keep something, and 30 are prose.
+Of 107 prediction loops, 107 are returned to,
+107 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-104 hold their marking until the experiment settles them.
+107 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -510,6 +510,48 @@ Of 104 prediction loops, 104 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:cluster-members`, control cluster-members/threshold, measures the number of stars above a membership-probability threshold, and the cluster's proper motion, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Bending Light (`bending-light`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, record-values, commit-a-prediction, choose-an-option.
+- **Objects the steps declare:** lens, source.
+- **Instruments:** light-bending.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-far-ray → the-far-ray, ten-times-the-mass, what-1919-showed, where-the-formula-fails, what-you-worked-out → the-far-ray.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:light-bending`, control light-bending/logB, measures the bending of a ray of light, in arcseconds, as the closest approach changes, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Einstein Rings and Arcs (`einstein-rings-and-arcs`)
+
+- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** lens, source.
+- **Instruments:** lens-plane.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-ring → a-star-ring, a-galaxy-ring, weigh-the-lens, move-the-source, an-isothermal-galaxy, why-arcs, what-you-worked-out → a-star-ring.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:lens-plane`, control lens-plane/logM, measures the Einstein radius of a lens, in milliarcseconds, as the mass inside it changes, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## A Lens Passing By (`a-lens-passing-by`)
+
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** lens, source.
+- **Instruments:** lens-passing.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-peak → the-peak, how-long, a-faster-lens, one-curve-three-lenses, can-the-curve-weigh-the-lens, blended-light, a-star-with-a-size, what-you-worked-out → the-peak.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:lens-passing`, control lens-passing/u0, measures the peak brightening of a star as a lens passes, as the closest approach changes, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Who Gets Counted (`who-gets-counted`)
 

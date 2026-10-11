@@ -532,6 +532,45 @@
         "raw-against-truth"
       ],
       "evidenceFrom": "model"
+    },
+    "bending-light": {
+      "centralExperimentId": "ce.bending-light",
+      "object": "panel:light-bending",
+      "control": "light-bending/logB",
+      "quantity": "the bending of a ray of light, in arcseconds, as the closest approach changes",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-far-ray",
+        "the-far-ray"
+      ],
+      "evidenceFrom": "model"
+    },
+    "einstein-rings-and-arcs": {
+      "centralExperimentId": "ce.einstein-rings-and-arcs",
+      "object": "panel:lens-plane",
+      "control": "lens-plane/logM",
+      "quantity": "the Einstein radius of a lens, in milliarcseconds, as the mass inside it changes",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-ring",
+        "a-star-ring"
+      ],
+      "evidenceFrom": "model"
+    },
+    "a-lens-passing-by": {
+      "centralExperimentId": "ce.a-lens-passing-by",
+      "object": "panel:lens-passing",
+      "control": "lens-passing/u0",
+      "quantity": "the peak brightening of a star as a lens passes, as the closest approach changes",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-peak",
+        "the-peak"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }

@@ -114,6 +114,7 @@ describe('the registry', () => {
       'astrometry',
       'catalogue',
       'image',
+      'microlensing',
       'periodic',
       'radial-velocity',
       'spectrum',

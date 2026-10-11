@@ -1266,5 +1266,91 @@ export default {
         text: 'The close of the investigation, with what was worked out.',
       },
     ],
+    'bending-light': [
+      {
+        from: 'a-mass-turns-light',
+        to: 'the-suns-limb',
+        text: 'A mass turns light by 4GM/(c²b); the Sun’s limb bends it 1.75 arcseconds.',
+      },
+      {
+        from: 'predict-the-far-ray',
+        to: 'the-far-ray',
+        text: 'A ray a hundred times farther out: predicted, then measured at a hundredth the angle.',
+      },
+      {
+        from: 'ten-times-the-mass',
+        to: 'what-1919-showed',
+        text: 'Ten times the mass, ten times the bending, and what the 1919 eclipse decided between 1.75 and 0.88.',
+      },
+      {
+        from: 'where-the-formula-fails',
+        to: 'where-the-formula-fails',
+        text: 'A black hole case where the weak-field formula cannot be trusted.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: what was worked out and where it stops.',
+      },
+    ],
+    'einstein-rings-and-arcs': [
+      {
+        from: 'a-lens-makes-a-ring',
+        to: 'predict-the-ring',
+        text: 'A lens makes a ring; students predict the size of a star’s.',
+      },
+      {
+        from: 'a-star-ring',
+        to: 'a-galaxy-ring',
+        text: 'The Einstein radius of a star, about a milliarcsecond, and of a galaxy, about an arcsecond.',
+      },
+      {
+        from: 'weigh-the-lens',
+        to: 'weigh-the-lens',
+        text: 'A one-arcsecond ring at a gigaparsec holds 2.5 × 10^11 solar masses.',
+      },
+      {
+        from: 'move-the-source',
+        to: 'an-isothermal-galaxy',
+        text: 'Two images for a point mass (total 2.18) and for an isothermal galaxy (total 4).',
+      },
+      {
+        from: 'why-arcs',
+        to: 'why-arcs',
+        text: 'Why most lensed galaxies are arcs and not rings.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: a ring is a mass scale.',
+      },
+    ],
+    'a-lens-passing-by': [
+      {
+        from: 'a-star-brightens',
+        to: 'predict-the-peak',
+        text: 'A passing lens brightens a star; students predict the peak.',
+      },
+      {
+        from: 'the-peak',
+        to: 'a-faster-lens',
+        text: 'The peak (10.04), the crossing time (16.6 days) and what twice the speed does.',
+      },
+      {
+        from: 'one-curve-three-lenses',
+        to: 'can-the-curve-weigh-the-lens',
+        text: 'Three lenses, one curve: the light curve fixes the crossing time only.',
+      },
+      {
+        from: 'blended-light',
+        to: 'a-star-with-a-size',
+        text: 'Blended light lowers the peak to 5.5; a finite star caps it at 20.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: what a curve fixes and what it leaves open.',
+      },
+    ],
   },
 };

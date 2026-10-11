@@ -68,6 +68,12 @@ const EXTENSIONS = {
     import('../data/investigations/depth/the-rotating-disk.js'),
   'cluster-membership': () =>
     import('../data/investigations/depth/cluster-membership.js'),
+  'bending-light': () =>
+    import('../data/investigations/depth/bending-light.js'),
+  'einstein-rings-and-arcs': () =>
+    import('../data/investigations/depth/einstein-rings-and-arcs.js'),
+  'a-lens-passing-by': () =>
+    import('../data/investigations/depth/a-lens-passing-by.js'),
   'who-gets-counted': () =>
     import('../data/investigations/depth/who-gets-counted.js'),
   'why-the-bright-ones-win': () =>
@@ -97,6 +103,12 @@ const WORDS = {
       import('../data/investigations/depth/es/the-rotating-disk.js'),
     'cluster-membership': () =>
       import('../data/investigations/depth/es/cluster-membership.js'),
+    'bending-light': () =>
+      import('../data/investigations/depth/es/bending-light.js'),
+    'einstein-rings-and-arcs': () =>
+      import('../data/investigations/depth/es/einstein-rings-and-arcs.js'),
+    'a-lens-passing-by': () =>
+      import('../data/investigations/depth/es/a-lens-passing-by.js'),
     'who-gets-counted': () =>
       import('../data/investigations/depth/es/who-gets-counted.js'),
     'why-the-bright-ones-win': () =>
