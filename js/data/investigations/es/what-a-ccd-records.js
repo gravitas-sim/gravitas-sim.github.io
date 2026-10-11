@@ -59,10 +59,7 @@ export default {
     {
       title: 'El campo plano',
       body: `Elige «Un campo plano (luz pareja)». Es una imagen de una luz uniforme, así que cualquier estructura que tenga es de la cámara. Lee cuánto brilla la <strong>esquina como parte del centro</strong>, y la <strong>ganancia</strong>: los electrones que representa cada cuenta, que el instrumento halla con dos imágenes de sesgo y dos de campo plano.`,
-      fields: [
-        { label: 'Esquina, parte del centro' },
-        { label: 'Ganancia' },
-      ],
+      fields: [{ label: 'Esquina, parte del centro' }, { label: 'Ganancia' }],
     },
     {
       title: 'Dividir por el campo plano',
@@ -92,7 +89,8 @@ export default {
     {
       title: 'Dividir, no restar',
       body: `El sesgo y el oscuro se restan. El campo plano se divide.`,
-      prompt: '¿Por qué se divide la imagen por el campo plano en vez de restarlo?',
+      prompt:
+        '¿Por qué se divide la imagen por el campo plano en vez de restarlo?',
       options: [
         'Dividir es más rápido para el ordenador',
         'El campo plano es una sensibilidad: un píxel al 76 por ciento convierte la luz de cada estrella en el 76 por ciento de cuentas, así que multiplica la luz y la división lo deshace',
@@ -107,7 +105,9 @@ export default {
           say: 'Restar un número cercano a 0,76 cambiaría una estrella brillante casi nada y una débil nada en absoluto. Dividir cambia cada píxel en proporción a su luz, que es lo que hizo la atenuación.',
         },
       ],
-      hints: ['¿Qué hace un píxel al 76 por ciento a una estrella el doble de brillante?'],
+      hints: [
+        '¿Qué hace un píxel al 76 por ciento a una estrella el doble de brillante?',
+      ],
       because:
         'La sensibilidad multiplica: cuentas = sensibilidad × luz. Deshacer un producto es una división, píxel a píxel. El sesgo y el oscuro se suman a las cuentas, así que se restan primero, y el campo plano se divide al final, cuando ya no están; un campo plano dividido en una imagen que todavía tuviera bias escalaría también el bias.',
     },

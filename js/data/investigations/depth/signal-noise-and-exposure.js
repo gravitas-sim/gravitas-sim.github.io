@@ -51,11 +51,14 @@ export default {
       unit: '%',
       answer: 12.8,
       tolerance: 0.5,
-      hints: ['The read noise squared over the total noise squared, times 100.'],
+      hints: [
+        'The read noise squared over the total noise squared, times 100.',
+      ],
       worked:
         '6,223 ÷ 220.6² = 6,223 ÷ 48,664 = 0.128, or 12.8 percent. At 240 seconds the same 6,223 is 3.5 percent of a larger total, which is why the signal-to-noise came out slightly above twice, not exactly twice.',
       feedback: {
-        close: 'Close. Divide the read noise squared by the square of the total noise.',
+        close:
+          'Close. Divide the read noise squared by the square of the total noise.',
         'wrong-order-of-magnitude':
           'A share between zero and a hundred percent: one term of four.',
         off: '100 × read² ÷ noise².',
@@ -78,7 +81,8 @@ export default {
       worked:
         '2,001 ÷ 51.07² = 2,001 ÷ 2,608 = 0.767, or 77 percent: three quarters of the noise comes from reading the pixels, so a faint star in a short exposure is limited by the camera and not by the sky or the star.',
       feedback: {
-        close: 'Close. Divide the read noise squared by the square of the total noise.',
+        close:
+          'Close. Divide the read noise squared by the square of the total noise.',
         'wrong-order-of-magnitude':
           'A share between zero and a hundred percent.',
         off: '100 × read² ÷ noise².',
@@ -93,11 +97,14 @@ export default {
       kind: 'numeric',
       title: 'What the moon costs',
       body: `Read the exposure that reaches a signal-to-noise of 100 for this star at a dark site (the first sky choice) and under a bright moon, 89.4 seconds.`,
-      prompt: 'How many times longer is the exposure under the moon than at the dark site',
+      prompt:
+        'How many times longer is the exposure under the moon than at the dark site',
       unit: '',
       answer: 3.05,
       tolerance: 0.1,
-      hints: ['Choose “a dark site”, read the exposure for the target, and divide 89.4 by it.'],
+      hints: [
+        'Choose “a dark site”, read the exposure for the target, and divide 89.4 by it.',
+      ],
       worked:
         '89.4 ÷ 29.3 = 3.05: the moon triples the exposure. The same star gives the same signal; the sky’s extra photons add noise, and the only way to buy the lost quality back is time.',
       feedback: {
@@ -116,7 +123,8 @@ export default {
       kind: 'numeric',
       title: 'What the square-root law promises',
       body: `If the star’s own photons were the only noise, four times the exposure would give twice the signal-to-noise, and the faintest star reached would be fainter by the magnitude difference of a factor of two in brightness, 2.5 times the base-ten logarithm of 2.`,
-      prompt: 'The gain in limiting magnitude for four times the exposure under that law',
+      prompt:
+        'The gain in limiting magnitude for four times the exposure under that law',
       unit: 'mag',
       answer: 0.75,
       tolerance: 0.02,

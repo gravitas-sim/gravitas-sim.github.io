@@ -44,7 +44,9 @@ export default {
           say: 'El cielo de un sitio oscuro da 1,4 electrones por segundo y píxel; en 60 segundos y 79 píxeles, con la pequeña corrección del anillo, su término es de 8.200, una cuarta parte del de la estrella.',
         },
       ],
-      hints: ['La última línea de la tabla antes de «Qué lo limita» dice qué término es el mayor.'],
+      hints: [
+        'La última línea de la tabla antes de «Qué lo limita» dice qué término es el mayor.',
+      ],
       because:
         'El ruido de fotones de la propia estrella, la raíz cuadrada de sus electrones, es el mayor término. Una estrella en este régimen está limitada por fotones: nada de la cámara ni del cielo cambiaría mucho el resultado, solo más luz. Una estrella brillante es el caso al que se simplifica la fórmula de los libros.',
     },
@@ -84,7 +86,8 @@ export default {
     {
       title: 'Por qué más del doble',
       body: `A los 10 segundos la tabla dice que el ruido de lectura es el término que limita a esta estrella débil.`,
-      prompt: '¿Por qué cuatro veces la exposición dio tres veces la señal a ruido?',
+      prompt:
+        '¿Por qué cuatro veces la exposición dio tres veces la señal a ruido?',
       options: [
         'La estrella se hizo más brillante durante la exposición más larga',
         'El ruido de lectura se paga una vez por imagen sea cual sea su duración, así que no crece con la exposición y la señal le gana terreno',

@@ -145,7 +145,8 @@ const LOADERS = {
   'where-galaxies-live': () => import('./where-galaxies-live.js'),
   'what-a-ccd-records': () => import('./what-a-ccd-records.js'),
   'signal-noise-and-exposure': () => import('./signal-noise-and-exposure.js'),
-  'a-variable-star-from-frames': () => import('./a-variable-star-from-frames.js'),
+  'a-variable-star-from-frames': () =>
+    import('./a-variable-star-from-frames.js'),
   'the-beat-of-a-star': () => import('./the-beat-of-a-star.js'),
   'leavitts-law': () => import('./leavitts-law.js'),
   'the-first-rung': () => import('./the-first-rung.js'),
@@ -217,8 +218,10 @@ const TRANSLATIONS = {
     'the-shape-of-expansion': () => import('./es/the-shape-of-expansion.js'),
     'where-galaxies-live': () => import('./es/where-galaxies-live.js'),
     'what-a-ccd-records': () => import('./es/what-a-ccd-records.js'),
-    'signal-noise-and-exposure': () => import('./es/signal-noise-and-exposure.js'),
-    'a-variable-star-from-frames': () => import('./es/a-variable-star-from-frames.js'),
+    'signal-noise-and-exposure': () =>
+      import('./es/signal-noise-and-exposure.js'),
+    'a-variable-star-from-frames': () =>
+      import('./es/a-variable-star-from-frames.js'),
     'the-beat-of-a-star': () => import('./es/the-beat-of-a-star.js'),
     'leavitts-law': () => import('./es/leavitts-law.js'),
     'the-first-rung': () => import('./es/the-first-rung.js'),

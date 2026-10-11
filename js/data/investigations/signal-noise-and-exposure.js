@@ -12,7 +12,9 @@
 const STARS = {
   spacing: 150,
   fit: true,
-  stars: [{ role: 'star', name: 'A star to be measured', teffK: 5800, lumSun: 1 }],
+  stars: [
+    { role: 'star', name: 'A star to be measured', teffK: 5800, lumSun: 1 },
+  ],
 };
 const SNR = (values = {}) => ({
   id: 'ccd-snr',
@@ -77,7 +79,12 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
              site, read the <strong>star’s electrons in the aperture</strong>, the
              <strong>total noise</strong> and the <strong>signal-to-noise</strong>.`,
       fields: [
-        { id: 'signal', label: 'Star’s electrons', unit: 'count', hint: '33630' },
+        {
+          id: 'signal',
+          label: 'Star’s electrons',
+          unit: 'count',
+          hint: '33630',
+        },
         { id: 'noise', label: 'Total noise', unit: 'count', hint: '220.6' },
         { id: 'snr', label: 'Signal-to-noise', unit: '', hint: '152.5' },
       ],
@@ -130,7 +137,9 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
           say: 'The sky at a dark site gives 1.4 electrons a second a pixel; over 60 seconds and 79 pixels, with the small ring correction, its term is 8,200, a quarter of the star’s.',
         },
       ],
-      hints: ['The table’s last line before “What limits it” says which term is largest.'],
+      hints: [
+        'The table’s last line before “What limits it” says which term is largest.',
+      ],
       because:
         'The star’s own photon noise, the square root of its electrons, is the largest term. A star in this regime is photon-limited: nothing about the camera or the sky would change the result much, only more light. A bright star is the case the textbook formula simplifies to.',
       tool: SNR(),
@@ -143,7 +152,8 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
       title: 'Four times the exposure',
       body: `Keep V = 15 at a dark site and the 5 pixel aperture. Do not change the
              instrument yet.`,
-      prompt: 'Exposing four times as long (240 seconds), the signal-to-noise will be&hellip;',
+      prompt:
+        'Exposing four times as long (240 seconds), the signal-to-noise will be&hellip;',
       options: [
         'about four times as large',
         'about twice as large',
@@ -167,7 +177,12 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
              <strong>signal-to-noise</strong>, and work out the
              <strong>ratio</strong> to the 152.5 of a minute.`,
       fields: [
-        { id: 'snr', label: 'Signal-to-noise at 240 s', unit: '', hint: '320.7' },
+        {
+          id: 'snr',
+          label: 'Signal-to-noise at 240 s',
+          unit: '',
+          hint: '320.7',
+        },
         { id: 'ratio', label: 'Ratio to the first', unit: '', hint: '2.10' },
       ],
       validate: v => {
@@ -196,12 +211,25 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
              exposure to 10 seconds and read the <strong>signal-to-noise</strong>;
              then to 40 seconds, four times longer, and read it again.`,
       fields: [
-        { id: 'short', label: 'Signal-to-noise at 10 s', unit: '', hint: '2.64' },
-        { id: 'long', label: 'Signal-to-noise at 40 s', unit: '', hint: '8.11' },
+        {
+          id: 'short',
+          label: 'Signal-to-noise at 10 s',
+          unit: '',
+          hint: '2.64',
+        },
+        {
+          id: 'long',
+          label: 'Signal-to-noise at 40 s',
+          unit: '',
+          hint: '8.11',
+        },
       ],
       validate: v => {
         if (![v.short, v.long].every(Number.isFinite)) return null;
-        if (Math.abs(v.short - 2.64) <= 0.08 && Math.abs(v.long - 8.11) <= 0.15) {
+        if (
+          Math.abs(v.short - 2.64) <= 0.08 &&
+          Math.abs(v.long - 8.11) <= 0.15
+        ) {
           return {
             level: 'ok',
             message:
@@ -224,7 +252,8 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
       title: 'Why more than double',
       body: `At 10 seconds the table says the read noise is the term that limits
              this faint star.`,
-      prompt: 'Why did four times the exposure give three times the signal-to-noise?',
+      prompt:
+        'Why did four times the exposure give three times the signal-to-noise?',
       options: [
         'The star got brighter during the longer exposure',
         'The read noise is paid once per frame whatever its length, so it does not grow with the exposure and the signal gains on it',
@@ -244,9 +273,7 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
           say: 'The aperture is 3 pixels in both. Only the exposure changed.',
         },
       ],
-      hints: [
-        'Which of the four terms does not grow when you expose longer?',
-      ],
+      hints: ['Which of the four terms does not grow when you expose longer?'],
       because:
         'The star’s electrons, the sky’s and the dark’s all grow with time; the read noise squared is a fixed price per pixel for each frame. When it dominates, the noise barely grows and the signal-to-noise follows the signal. Once the sky or the star takes over, the square-root law returns, and one long frame beats many short ones for a faint star.',
       tool: SNR({ mag: 19, exposure: 40, radius: 3 }),
@@ -262,7 +289,12 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
              the target</strong>. Then choose “a bright moon” and read it again.`,
       fields: [
         { id: 'suburb', label: 'Exposure, a suburb', unit: 's', hint: '40.4' },
-        { id: 'moon', label: 'Exposure, a bright moon', unit: 's', hint: '89.4' },
+        {
+          id: 'moon',
+          label: 'Exposure, a bright moon',
+          unit: 's',
+          hint: '89.4',
+        },
       ],
       validate: v => {
         if (![v.suburb, v.moon].every(Number.isFinite)) return null;
@@ -291,12 +323,25 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
              exposure to 240 seconds and read it again, and give how many
              magnitudes fainter four times the exposure reaches.`,
       fields: [
-        { id: 'limit', label: 'Faintest star, 60 s', unit: 'mag', hint: '19.33' },
-        { id: 'gain', label: 'Gain, 240 s over 60 s', unit: 'mag', hint: '0.96' },
+        {
+          id: 'limit',
+          label: 'Faintest star, 60 s',
+          unit: 'mag',
+          hint: '19.33',
+        },
+        {
+          id: 'gain',
+          label: 'Gain, 240 s over 60 s',
+          unit: 'mag',
+          hint: '0.96',
+        },
       ],
       validate: v => {
         if (![v.limit, v.gain].every(Number.isFinite)) return null;
-        if (Math.abs(v.limit - 19.33) <= 0.1 && Math.abs(v.gain - 0.96) <= 0.05) {
+        if (
+          Math.abs(v.limit - 19.33) <= 0.1 &&
+          Math.abs(v.gain - 0.96) <= 0.05
+        ) {
           return {
             level: 'ok',
             message:

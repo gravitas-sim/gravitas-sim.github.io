@@ -1912,6 +1912,12 @@ export const ES_DEFERRED = {
     'Lee un espectro de forma cuantitativa: dónde están las líneas y qué tan intensas son.',
   'inv.seq.observing.lines-and-motion':
     'Mide un desplazamiento de longitud de onda y conviértelo en velocidad.',
+  'inv.seq.observing.what-a-ccd-records':
+    'Lo que añade la cámara antes de la medida: imágenes de sesgo, oscuras y de campo plano, un rayo cósmico y una estrella saturada, con imágenes sintéticas de verdad conocida.',
+  'inv.seq.observing.signal-noise-and-exposure':
+    'Cuánto exponer: el ruido de una medida, qué limita a una estrella brillante y a una débil, y qué cuesta un cielo brillante. Necesita las imágenes de calibración.',
+  'inv.seq.observing.a-variable-star-from-frames':
+    'Fotometría diferencial de cuarenta imágenes: una estrella de comparación quita la nube, y una estrella de control dice si una variación es real. Necesita las imágenes de calibración.',
   'inv.seq.observing.transit-photometry':
     'Mide profundidad, duración y ruido en una curva de luz: la fotometría de la que depende lo demás.',
   'inv.seq.observing.design-the-schedule':

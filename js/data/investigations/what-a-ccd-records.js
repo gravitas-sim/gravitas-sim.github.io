@@ -86,7 +86,12 @@ const WHAT_A_CCD_RECORDS = {
              difference of two bias frames (the offset cancels in the
              difference; the noise does not).`,
       fields: [
-        { id: 'level', label: 'Master bias level (counts)', unit: 'count', hint: '500.4' },
+        {
+          id: 'level',
+          label: 'Master bias level (counts)',
+          unit: 'count',
+          hint: '500.4',
+        },
         { id: 'read', label: 'Read noise (electrons)', unit: '', hint: '8.05' },
       ],
       validate: v => {
@@ -157,7 +162,12 @@ const WHAT_A_CCD_RECORDS = {
           unit: 'electron/s',
           hint: '0.100',
         },
-        { id: 'total', label: 'Electrons in 120 seconds (one pixel)', unit: 'count', hint: '12' },
+        {
+          id: 'total',
+          label: 'Electrons in 120 seconds (one pixel)',
+          unit: 'count',
+          hint: '12',
+        },
       ],
       validate: v => {
         if (![v.rate, v.total].every(Number.isFinite)) return null;
@@ -187,7 +197,12 @@ const WHAT_A_CCD_RECORDS = {
              <strong>gain</strong>: the electrons each count stands for, which
              the instrument finds from two bias and two flat frames.`,
       fields: [
-        { id: 'corner', label: 'Corner, share of the center', unit: '%', hint: '76.2' },
+        {
+          id: 'corner',
+          label: 'Corner, share of the center',
+          unit: '%',
+          hint: '76.2',
+        },
         { id: 'gain', label: 'Gain', unit: '', hint: '1.52' },
       ],
       validate: v => {
@@ -215,7 +230,8 @@ const WHAT_A_CCD_RECORDS = {
       title: 'Divide by the flat',
       body: `Star B sits near a corner of the frame, where the flat is dim. Do not
              change the instrument yet.`,
-      prompt: 'After the picture is divided by the flat, the light measured for star B will be&hellip;',
+      prompt:
+        'After the picture is divided by the flat, the light measured for star B will be&hellip;',
       options: [
         'smaller than before',
         'larger than before',
@@ -240,8 +256,18 @@ const WHAT_A_CCD_RECORDS = {
              “After dividing by the flat” and read it again. Both rows hold the
              <strong>truth</strong>, the light the model gave the star.`,
       fields: [
-        { id: 'raw', label: 'Star B, raw (electrons)', unit: 'count', hint: '47300' },
-        { id: 'cal', label: 'Star B, calibrated (electrons)', unit: 'count', hint: '54080' },
+        {
+          id: 'raw',
+          label: 'Star B, raw (electrons)',
+          unit: 'count',
+          hint: '47300',
+        },
+        {
+          id: 'cal',
+          label: 'Star B, calibrated (electrons)',
+          unit: 'count',
+          hint: '54080',
+        },
       ],
       validate: v => {
         if (![v.raw, v.cal].every(Number.isFinite)) return null;
@@ -303,8 +329,18 @@ const WHAT_A_CCD_RECORDS = {
              and the number of <strong>saturated pixels</strong> in the raw
              picture, the pixels of star D that reached the full well.`,
       fields: [
-        { id: 'flagged', label: 'Cosmic-ray pixels flagged', unit: 'count', hint: '4' },
-        { id: 'saturated', label: 'Saturated pixels', unit: 'count', hint: '13' },
+        {
+          id: 'flagged',
+          label: 'Cosmic-ray pixels flagged',
+          unit: 'count',
+          hint: '4',
+        },
+        {
+          id: 'saturated',
+          label: 'Saturated pixels',
+          unit: 'count',
+          hint: '13',
+        },
       ],
       validate: v => {
         if (![v.flagged, v.saturated].every(Number.isFinite)) return null;
@@ -332,7 +368,8 @@ const WHAT_A_CCD_RECORDS = {
       body: `Look at star D in the table. Its calibrated light is about 1.1 million
              electrons, against a truth of 1.8 million, and its error bar is the
              smallest of the four relative to its light.`,
-      prompt: 'Why is the measured light of star D 39 percent too low, with a tiny error bar?',
+      prompt:
+        'Why is the measured light of star D 39 percent too low, with a tiny error bar?',
       options: [
         'The flat was wrong at the star’s place',
         'The cosmic-ray mask removed part of the star',

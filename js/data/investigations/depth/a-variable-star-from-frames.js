@@ -23,7 +23,8 @@ export default {
       kind: 'numeric',
       title: 'A scatter as a share of the light',
       body: `A change of 0.0088 magnitude is a change in brightness by the factor 10<sup>0.4 × 0.0088</sup>. For a small change, one magnitude is 92.1 percent of the light, because 0.4 times the natural logarithm of 10 is 0.921.`,
-      prompt: 'The check star’s scatter of 0.0088 magnitude, as a percent of its light',
+      prompt:
+        'The check star’s scatter of 0.0088 magnitude, as a percent of its light',
       unit: '%',
       answer: 0.81,
       tolerance: 0.03,

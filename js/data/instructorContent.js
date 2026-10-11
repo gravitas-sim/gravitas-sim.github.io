@@ -6054,6 +6054,248 @@ export const INSTRUCTOR_CONTENT = {
     modelNotes:
       'js/kernels/cosmology/flrw.js: comovingDistance and wedgePoint; the strip is dataset sdss-dr18-redshift-slice. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
   },
+  'what-a-ccd-records': {
+    topic:
+      'What a CCD adds to a star’s light: bias, dark and flat frames, cosmic rays and saturation, on synthetic frames with a known truth',
+    difficulty: 'Introductory (calculation and synthetic data)',
+    placement:
+      'The first of the three observing investigations on detectors, before Signal, Noise and Exposure and A Variable Star From Frames, and a good lead-in to Transit Photometry. It supports OpenStax Astronomy 2e chapter 6.',
+    overview:
+      'Students read a calibration set from a synthetic CCD: a master bias of 500.4 counts and a read noise of 8.05 electrons, a dark current of 0.100 electron a second (12 electrons in 120 s), a flat whose corner is 76.2 percent of the center and a gain of 1.52 electrons per count. They predict, then see, that dividing by the flat raises star B from 47,296 to 54,083 electrons (truth 53,988), find the bias and dark are subtracted and the flat divided, read 4 cosmic-ray pixels flagged and 13 saturated pixels, and find star D’s light 39 percent low with an error bar that cannot see it. The depths convert counts to electrons, find where the dark current’s noise matches the read noise (648 s), and count the 663 error bars star D is short.',
+    priorKnowledge: [
+      'What a pixel is and what a count is',
+      'Averages and scatter',
+      'Percent',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Each calibration frame measures one thing the camera adds',
+        body: 'A bias is a zero-second exposure (the offset and read noise), a dark is a closed shutter over time (dark current), a flat is an even light (sensitivity of every pixel and the optics).',
+      },
+      {
+        heading: 'Subtract what adds, divide what multiplies',
+        body: 'The bias and dark add counts and are subtracted first; the flat is a sensitivity that multiplies the light and is divided last.',
+      },
+      {
+        heading: 'Some losses leave no trace in the error bar',
+        body: 'A saturated pixel stops counting; the error bar holds photon and read noise and cannot know about light that was never recorded.',
+      },
+    ],
+    features: [
+      {
+        name: 'CCD frames instrument (detector family)',
+        text: 'A bias, a dark, a flat and a raw picture of four stars, then the picture after each calibration step, with the master levels, the pair-method read noise and gain, and each star’s net light against the truth.',
+      },
+      {
+        name: 'Synthetic, with a truth manifest',
+        text: 'Every frame is made by a stated forward model of a CCD from a seed, so every number has a known truth and the table shows it. No authentic frames ship (D-CALIB-01).',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the bias in electrons, the exposure at which the dark’s noise equals the read noise, the size of the flat’s correction. Advanced: the share of star D’s light lost and the shortfall in error bars.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The bias is a light leak or the dark current.',
+        response:
+          'It is the same for zero seconds as for ten minutes and with the shutter closed: an offset the electronics add so noise never pushes a pixel below zero.',
+      },
+      {
+        claim: 'A flat can be subtracted like a bias.',
+        response:
+          'A flat is a sensitivity: a pixel at 76 percent turns every star’s light into 76 percent as many counts, which only division undoes.',
+      },
+      {
+        claim: 'A small error bar means a good measurement.',
+        response:
+          'The error bar counts noise only. Star D’s is the smallest relative to its light and it is 39 percent short.',
+      },
+      {
+        claim: 'The cosmic-ray mask can fix a saturated star.',
+        response:
+          'It replaces isolated sharp pixels; a star’s core is smooth over several pixels and its full pixels hold no information beyond the full well.',
+      },
+    ],
+    teachingNotes: [
+      'Every frame is synthetic, generated from a seed; the lesson says so in the first step and the instrument’s first row. Do not describe the numbers as measurements of a real camera.',
+      'The gain, read noise and dark current are those of the model (1.5, 8, 0.1); the instrument recovers them from the frames, which is what the numbers in the table show.',
+      'Left out, and stated in the instrument: blooming, nonlinearity, one flat for every color and a round Gaussian star. A saturated star in a real camera also bleeds along its column.',
+      'The error is shown only once the frame is calibrated, because before that the bias is in the sky level and the CCD equation does not apply.',
+    ],
+    discussion: [
+      'Why does a bias frame have to be taken with the same read-out settings as the science frames?',
+      'What would go wrong if the flat were taken at a different color from the stars?',
+      'How would you know that a star in your own data is saturated?',
+    ],
+    extensions: [
+      'Continue with Signal, Noise and Exposure, or with A Variable Star From Frames.',
+      'In the Observatory, compare a curated image with these synthetic ones and ask which calibration frames it came with.',
+    ],
+    modelNotes:
+      'js/kernels/detector/frame.js (the forward model) and reduce.js (master frames, calibration, cosmic-ray mask, aperture photometry); js/detectorWidgets.js (ccd-frames). The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/calibrationLessons.test.js.',
+  },
+  'signal-noise-and-exposure': {
+    topic:
+      'The CCD equation: the noise of a measurement from the star, the sky, the dark current and the read noise, and the exposure that reaches a target',
+    difficulty: 'Introductory (calculation)',
+    placement:
+      'After What a CCD Records. It can precede or follow A Variable Star From Frames. It supports OpenStax Astronomy 2e chapter 6.',
+    overview:
+      'Students use a stated 0.4 m telescope with a small CCD. A V = 15 star in 60 s at a dark site has 33,631 electrons in a 5-pixel aperture, a noise of 220.6 and a signal-to-noise of 152.5, limited by its own photons. They predict four times the exposure gives twice the quality; it gives 320.7, a ratio of 2.10. A V = 19 star in a 3-pixel aperture goes from 2.64 at 10 s to 8.11 at 40 s because the read noise (77 percent of the noise squared) is paid once per frame. A signal-to-noise of 100 takes 40.4 s in a suburb and 89.4 s under a bright moon (29.3 s at a dark site), and the faintest star at 5 is V = 19.33 in a minute and 0.96 magnitude fainter in four. The depths compute the photon-limited 183, the read noise shares, the 3.05 moon factor and the 0.75 magnitude of a pure square-root law.',
+    priorKnowledge: [
+      'What a Calibration Frame Is (What a CCD Records)',
+      'Squares and square roots',
+      'Magnitudes',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Noise adds as squares',
+        body: 'The star’s photon noise, the sky’s, the dark current’s and the read noise of every pixel add as variances, and the signal-to-noise is the star’s electrons over the square root of the sum.',
+      },
+      {
+        heading: 'Which term limits depends on the star and the exposure',
+        body: 'A bright star is limited by its own photons, a faint one in a short exposure by the read noise, and a faint one under a bright sky by the sky.',
+      },
+      {
+        heading: 'Time is how the lost quality is bought back',
+        body: 'The signal-to-noise grows as the square root of the exposure when the signal, sky and dark dominate, and faster while the read noise does.',
+      },
+    ],
+    features: [
+      {
+        name: 'Signal-to-noise instrument (detector family)',
+        text: 'The CCD equation for one star in a round aperture: the noise terms, the dominant term, the exposure that reaches a target, and the faintest star at a signal-to-noise of 5, with the curve against exposure.',
+      },
+      {
+        name: 'A calculation, not data',
+        text: 'The instrument says it is calculated for a stated 0.4 m telescope with 0.55 of the light reaching the detector. The star’s photon rate comes from the radiation kernel’s V band.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the photon-limited signal-to-noise and the read noise’s share for a bright and a faint star. Advanced: the cost of a moon in time and what a pure square-root law would promise in magnitudes.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Four times the exposure always gives four times the quality.',
+        response:
+          'It gives twice when the photons dominate, about three times while the read noise does, never four.',
+      },
+      {
+        claim: 'The read noise is the main limit of every measurement.',
+        response:
+          'It is 13 percent of the noise squared for the bright star and 77 percent for the faint one in a short exposure.',
+      },
+      {
+        claim: 'A bright moon changes the star.',
+        response:
+          'The signal is the same; the sky adds noise, and the only remedy is time.',
+      },
+      {
+        claim: 'The calculator is a prediction of a real exposure.',
+        response:
+          'It leaves out flat-field error, seeing and sky gradients; a real calculator adds a margin.',
+      },
+    ],
+    teachingNotes: [
+      'The sky in the instrument is a rate per pixel from a stated surface brightness; “a dark site” is V 21.5 per square arcsecond, a suburb V 20, a bright moon V 18.5.',
+      'The CCD equation carries the small factor for measuring the sky from a finite ring, so the sky’s term is slightly above n times the sky per pixel.',
+      'The photon rate is the radiation kernel’s V band for a star of V = 0 (1017 photons per second per square centimeter per angstrom, against a published 1005); see CALIBRATION_LAB.md.',
+      'No published exposure-time table for a named instrument was available offline to compare against; the validation is the closed forms and the many-seed photometry.',
+    ],
+    discussion: [
+      'When would you take many short frames instead of one long one?',
+      'What does a suburb cost a survey of a hundred stars?',
+      'Which term would you reduce first for a faint star, and how?',
+    ],
+    extensions: [
+      'Continue with A Variable Star From Frames.',
+      'Work out the exposure for your own telescope’s aperture by scaling the photon rate by the collecting area.',
+    ],
+    modelNotes:
+      'js/kernels/detector/snr.js (noise terms, signal-to-noise, the exact inverse for the exposure) and bands.js and lab.js (the V-band photon rate and the stated telescope); js/detectorWidgets.js (ccd-snr). The numbers an investigation asks for are recomputed in tests/calibrationLessons.test.js.',
+  },
+  'a-variable-star-from-frames': {
+    topic:
+      'Differential photometry of forty calibrated synthetic frames: removing the cloud with a comparison star, a check star as the precision, and a sine fit with an error',
+    difficulty: 'Introductory (synthetic data)',
+    placement:
+      'After What a CCD Records, in a unit on observing or variable stars. It supports OpenStax Astronomy 2e chapter 6.',
+    overview:
+      'Students see a variable star measured alone wander by 0.070 mag over forty frames because thin cloud dims every star at once (the comparison star alone wanders in step). Against the comparison, the check star scatters by 0.0088 mag, 8.0 times less. The variable against the comparison shows a smooth variation: period 0.1223 d, amplitude 0.0417 ± 0.0018 mag, more than twenty errors and four to five times the check star’s scatter. The depths turn 0.0088 mag into 0.81 percent, the period into 2.93 hours, count 23 errors, and compare the uncalibrated night with the truth manifest (mean 0.313 against 0.346 mag).',
+    priorKnowledge: [
+      'What a CCD Records',
+      'Magnitudes',
+      'The idea of a period',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A common factor cancels in a ratio',
+        body: 'Cloud multiplies every star in a frame by the same factor; a comparison star divides it out, which a star measured alone cannot do.',
+      },
+      {
+        heading: 'A check star measures the precision',
+        body: 'A star that does not vary, measured exactly like the target, shows how much scatter noise alone gives.',
+      },
+      {
+        heading: 'A detection is an amplitude against its noise',
+        body: 'The fitted amplitude is many errors from zero and several times the check star’s scatter, and it repeats with a period.',
+      },
+    ],
+    features: [
+      {
+        name: 'Differential photometry instrument (detector family)',
+        text: 'Forty synthetic frames reduced with the same camera’s calibration set: the variable alone, the comparison alone, the variable against the comparison with the sine fit, and the check star, with the truth manifest on request.',
+      },
+      {
+        name: 'Truth manifest',
+        text: 'The series’ true period (0.12 d), amplitude (0.04 mag) and mean difference are shown when asked, to compare each calibration level with the truth.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the scatter as a percent of the light and the period in hours. Advanced: the amplitude in errors and the uncalibrated night against the truth.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The comparison star cancels the variable star too.',
+        response:
+          'The cloud multiplies both stars; the variable’s own change belongs to it alone and stays in the ratio.',
+      },
+      {
+        claim: 'A fit always finds a real signal.',
+        response:
+          'A sine fit to noise returns a small amplitude; compare it with the check star’s scatter and its own error.',
+      },
+      {
+        claim: 'Calibration does not matter for differential photometry.',
+        response:
+          'The scatter hardly changes, but the mean is off by 0.03 mag without it, as the truth manifest shows.',
+      },
+      {
+        claim: 'The period is known exactly.',
+        response:
+          'The run holds two and a half cycles, so it is good to about two percent.',
+      },
+    ],
+    teachingNotes: [
+      'The frames are synthetic: the variable is a perfect sine, the comparison and check stars are perfectly steady, there are no color terms and no pointing drift, and the cloud has no color.',
+      'The comparison and check stars are not guaranteed steady in a real night; checking that is part of the method.',
+      'The cosmic-ray step changes nothing in this series, which has none; the instrument still offers the level.',
+    ],
+    discussion: [
+      'What if the comparison star turned out to vary?',
+      'Why is the check star a different star from the comparison?',
+      'How many more frames would halve the error of the period?',
+    ],
+    extensions: [
+      'Continue with Transit Photometry, the same method for a dip.',
+      'Fold the light curve on the fitted period and ask what shape the variable has.',
+    ],
+    modelNotes:
+      'js/kernels/detector/pipeline.js (reduceSeries) and lightcurve.js (the sine fit); js/detectorWidgets.js (diff-photometry). The numbers an investigation asks for are recomputed in tests/calibrationLessons.test.js.',
+  },
 };
 
 /** @returns {Object|null} The instructor content for an investigation id */

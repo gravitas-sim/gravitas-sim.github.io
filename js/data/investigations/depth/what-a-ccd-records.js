@@ -28,7 +28,9 @@ export default {
       unit: '',
       answer: 759,
       tolerance: 10,
-      hints: ['The bias level in counts times the gain in electrons per count.'],
+      hints: [
+        'The bias level in counts times the gain in electrons per count.',
+      ],
       worked:
         '500.4 × 1.516 = 759 electrons. The offset is large against the read noise of 8 electrons, which is the point of it: a count of 500 leaves room for the noise to go either way without reaching zero.',
       feedback: {
@@ -47,7 +49,8 @@ export default {
       kind: 'numeric',
       title: 'When the dark current matters',
       body: `A pixel’s dark current adds noise too: the electrons it collects in a time t have a variance equal to their number, 0.1 × t. The read noise adds a variance of its own square, once per read. Use a read noise of 8.05 electrons and a dark current of 0.100 electron a second.`,
-      prompt: 'The exposure at which the dark current’s variance equals the read noise’s, in seconds',
+      prompt:
+        'The exposure at which the dark current’s variance equals the read noise’s, in seconds',
       unit: 's',
       answer: 648,
       tolerance: 12,
@@ -55,7 +58,8 @@ export default {
       worked:
         '8.05² = 64.8 and 64.8 ÷ 0.100 = 648 seconds. Below about eleven minutes the read noise outweighs the dark current’s noise in an ordinary pixel, so for a short exposure the dark matters as an offset to subtract, not as noise.',
       feedback: {
-        close: 'Close. Divide the square of the read noise by the dark current.',
+        close:
+          'Close. Divide the square of the read noise by the dark current.',
         'wrong-order-of-magnitude':
           'A power of ten out: the square of the read noise is about 65 electrons squared, and the dark current makes a tenth of an electron a second.',
         off: 'read noise squared ÷ dark current.',
@@ -101,7 +105,8 @@ export default {
       worked:
         '1 − 1,097,121 ÷ 1,799,605 = 0.390, or 39 percent. The brightest pixels reached the full well and the rest of their light was not stored.',
       feedback: {
-        close: 'Close. Divide the measured light by the true light and take the rest.',
+        close:
+          'Close. Divide the measured light by the true light and take the rest.',
         'wrong-order-of-magnitude':
           'A fraction of the whole: a share of the star’s light, between none and all of it.',
         off: '100 × (truth − measured) ÷ truth.',

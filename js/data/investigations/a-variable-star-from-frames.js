@@ -77,7 +77,12 @@ const A_VARIABLE_STAR_FROM_FRAMES = {
       body: `With “The variable star alone” and every calibration applied, read the
              <strong>scatter of the variable star alone</strong>, in magnitudes.`,
       fields: [
-        { id: 'raw', label: 'Scatter of the star alone', unit: 'mag', hint: '0.070' },
+        {
+          id: 'raw',
+          label: 'Scatter of the star alone',
+          unit: 'mag',
+          hint: '0.070',
+        },
       ],
       validate: v => {
         if (!Number.isFinite(v.raw)) return null;
@@ -141,12 +146,20 @@ const A_VARIABLE_STAR_FROM_FRAMES = {
              differential measurement. Read it, and divide the scatter of the
              star alone (0.070) by it.`,
       fields: [
-        { id: 'check', label: 'Scatter of the check star', unit: 'mag', hint: '0.0088' },
+        {
+          id: 'check',
+          label: 'Scatter of the check star',
+          unit: 'mag',
+          hint: '0.0088',
+        },
         { id: 'factor', label: 'Improvement', unit: '', hint: '8.0' },
       ],
       validate: v => {
         if (![v.check, v.factor].every(Number.isFinite)) return null;
-        if (Math.abs(v.check - 0.0088) <= 0.001 && Math.abs(v.factor - 8) <= 0.8) {
+        if (
+          Math.abs(v.check - 0.0088) <= 0.001 &&
+          Math.abs(v.factor - 8) <= 0.8
+        ) {
           return {
             level: 'ok',
             message:
@@ -169,7 +182,8 @@ const A_VARIABLE_STAR_FROM_FRAMES = {
       title: 'The variable against the comparison',
       body: `The variable star changes by 0.04 magnitude, about four times the check
              star’s scatter. Do not change the instrument yet.`,
-      prompt: 'The variable star measured against the comparison will show&hellip;',
+      prompt:
+        'The variable star measured against the comparison will show&hellip;',
       options: [
         'the same ragged scatter as the star alone, since it is the same star',
         'a smooth rise and fall that repeats, with a scatter of about 0.009 around it',
@@ -199,7 +213,10 @@ const A_VARIABLE_STAR_FROM_FRAMES = {
       ],
       validate: v => {
         if (![v.period, v.amp].every(Number.isFinite)) return null;
-        if (Math.abs(v.period - 0.1223) <= 0.004 && Math.abs(v.amp - 0.0417) <= 0.004) {
+        if (
+          Math.abs(v.period - 0.1223) <= 0.004 &&
+          Math.abs(v.amp - 0.0417) <= 0.004
+        ) {
           return {
             level: 'ok',
             message:
@@ -222,7 +239,8 @@ const A_VARIABLE_STAR_FROM_FRAMES = {
       title: 'Is the variation real',
       body: `The amplitude is 0.042 ± 0.002 magnitude, and the check star’s scatter
              is 0.009.`,
-      prompt: 'How do you know the variable star’s variation is real and not noise?',
+      prompt:
+        'How do you know the variable star’s variation is real and not noise?',
       options: [
         'The amplitude is a tenth of a magnitude',
         'The amplitude is twenty times its error and several times the scatter of a star that does not vary, measured the same way',
