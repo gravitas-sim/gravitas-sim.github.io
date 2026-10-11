@@ -535,6 +535,45 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'what-a-ccd-records',
+    title: 'Qué registra un CCD',
+    subtitle:
+      'Imágenes de sesgo (bias), oscuras y de campo plano, y por qué la luz de una estrella necesita que se quiten las tres antes de ser una medida',
+    duration: '10-18 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-a-ccd-records.webp',
+    depths: 3,
+    stepCount: 11,
+    gradedCount: 9,
+    objectiveCount: 4,
+  },
+  {
+    id: 'signal-noise-and-exposure',
+    title: 'Señal, ruido y exposición',
+    subtitle:
+      'Cuánto exponer para alcanzar una señal a ruido, y por qué cuatro veces la luz no es cuatro veces la calidad',
+    duration: '10-18 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/signal-noise-and-exposure.webp',
+    depths: 3,
+    stepCount: 10,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
+  {
+    id: 'a-variable-star-from-frames',
+    title: 'Una estrella variable a partir de imágenes',
+    subtitle:
+      'Fotometría diferencial de cuarenta imágenes calibradas: por qué una estrella de comparación quita la nube, y cómo saber que una variación es real',
+    duration: '10-18 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/a-variable-star-from-frames.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
     id: 'the-beat-of-a-star',
     title: 'El latido de una estrella',
     subtitle:

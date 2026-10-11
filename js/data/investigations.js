@@ -92,6 +92,9 @@ import THE_EXPANDING_UNIVERSE from './investigations/the-expanding-universe.js';
 import STANDARD_CANDLES from './investigations/standard-candles.js';
 import THE_SHAPE_OF_EXPANSION from './investigations/the-shape-of-expansion.js';
 import WHERE_GALAXIES_LIVE from './investigations/where-galaxies-live.js';
+import WHAT_A_CCD_RECORDS from './investigations/what-a-ccd-records.js';
+import SIGNAL_NOISE_AND_EXPOSURE from './investigations/signal-noise-and-exposure.js';
+import A_VARIABLE_STAR_FROM_FRAMES from './investigations/a-variable-star-from-frames.js';
 import THE_BEAT_OF_A_STAR from './investigations/the-beat-of-a-star.js';
 import LEAVITTS_LAW from './investigations/leavitts-law.js';
 import THE_FIRST_RUNG from './investigations/the-first-rung.js';
@@ -164,6 +167,9 @@ export const INVESTIGATIONS = [
   STANDARD_CANDLES,
   THE_SHAPE_OF_EXPANSION,
   WHERE_GALAXIES_LIVE,
+  WHAT_A_CCD_RECORDS,
+  SIGNAL_NOISE_AND_EXPOSURE,
+  A_VARIABLE_STAR_FROM_FRAMES,
   THE_BEAT_OF_A_STAR,
   LEAVITTS_LAW,
   THE_FIRST_RUNG,

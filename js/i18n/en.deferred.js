@@ -1891,6 +1891,12 @@ export const EN_DEFERRED = {
     'Read a spectrum quantitatively: where the lines are and how strong.',
   'inv.seq.observing.lines-and-motion':
     'Measure a shift in wavelength and turn it into a speed.',
+  'inv.seq.observing.what-a-ccd-records':
+    'What the camera adds before the measurement: bias, dark and flat frames, a cosmic ray and a saturated star, on synthetic frames with a known truth.',
+  'inv.seq.observing.signal-noise-and-exposure':
+    'How long to expose: the noise of a measurement, what limits a bright and a faint star, and what a bright sky costs. Needs the calibration frames.',
+  'inv.seq.observing.a-variable-star-from-frames':
+    'Differential photometry of forty frames: a comparison star removes the cloud, and a check star says whether a variation is real. Needs the calibration frames.',
   'inv.seq.observing.transit-photometry':
     'Measure depth, duration and noise on a light curve: the photometry the rest relies on.',
   'inv.seq.observing.design-the-schedule':
@@ -3193,7 +3199,7 @@ export const EN_DEFERRED = {
     'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
   'welcomeAudience.instructors.title': 'For instructors',
   'welcomeAudience.instructors.text':
-    '52 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
+    '55 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
   'welcomeAudience.curious.title': 'For the curious',
   'welcomeAudience.curious.text':
     'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',

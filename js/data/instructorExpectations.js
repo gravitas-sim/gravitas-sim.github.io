@@ -800,5 +800,37 @@ export default {
       'a-star-with-a-size':
         'u0 = 0.01, source radius 0.1: peak 19.98 (within 0.3), against 100 for a point.',
     },
+    'what-a-ccd-records': {
+      'the-bias':
+        'Master bias 500.4 counts (within 1) and read noise 8.05 electrons (within 0.7).',
+      'the-dark':
+        'Dark current 0.100 electron a second (within 0.01) and 12 electrons in 120 s (within 1.5).',
+      'the-flat':
+        'Corner 76.2 percent of the center (within 2) and gain 1.52 (within 0.08).',
+      'what-the-flat-does':
+        'Star B raw 47,300 electrons (within 500) and calibrated 54,080 (within 900); the truth is 53,988.',
+      'cosmic-rays':
+        '4 cosmic-ray pixels flagged and 13 saturated, both exactly.',
+    },
+    'signal-noise-and-exposure': {
+      'one-star-one-minute':
+        'V = 15, 60 s, 5 pixels, dark site: 33,631 electrons (within 340), noise 220.6 (within 3), signal-to-noise 152.5 (within 2).',
+      'four-times-longer':
+        '240 s: signal-to-noise 320.7 (within 4) and a ratio of 2.10 (within 0.04).',
+      'a-faint-star':
+        'V = 19, 3 pixels: 2.64 at 10 s (within 0.08) and 8.11 at 40 s (within 0.15).',
+      'exposure-for-the-target':
+        'Target 100: 40.4 s in a suburb (within 1) and 89.4 s under a bright moon (within 2).',
+      'faintest-star':
+        'Faintest star at 5: V = 19.33 in 60 s (within 0.1) and a gain of 0.96 mag at 240 s (within 0.05).',
+    },
+    'a-variable-star-from-frames': {
+      'the-star-alone':
+        'Scatter of the variable alone 0.070 mag (within 0.005).',
+      'against-the-comparison':
+        'Check star scatter 0.0088 mag (within 0.001) and an improvement of 8.0 (within 0.8).',
+      'the-sine':
+        'Period 0.1223 d (within 0.004) and amplitude 0.0417 mag (within 0.004).',
+    },
   },
 };

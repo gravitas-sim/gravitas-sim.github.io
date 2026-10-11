@@ -306,6 +306,13 @@ export const LAZY_FAMILIES = Object.freeze({
     ['hubble-law', 'hubble-diagram', 'redshift-wedge'],
     'cosmologyReady'
   ),
+  // Synthetic frames and a calculation from the detector kernel: no data to wait for.
+  detector: familyEntry(
+    () => import('./detectorWidgets.js'),
+    './detectorWidgets.js',
+    'DETECTOR_WIDGETS',
+    ['ccd-frames', 'ccd-snr', 'diff-photometry']
+  ),
   // Its stars arrive behind a second import (the Sky Lab's sidecar).
   sky: familyEntry(
     () => import('./skyWidgets.js'),

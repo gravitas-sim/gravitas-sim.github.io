@@ -242,12 +242,12 @@ describe('the document inventory', () => {
     // 350 after the lensing (Prompt 94) and stellar-interior (Prompt 95) investigations.
     // 390 after the four variable-star investigations (Prompt 96);
     // 430 after the four cosmology investigations (Prompt 91).
-    expect(inv.documents).toBe(430);
-    expect(inv.byLocale).toEqual({ en: 224, es: 206 });
+    expect(inv.documents).toBe(460);
+    expect(inv.byLocale).toEqual({ en: 239, es: 221 });
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 192,
-      full: 208,
+      depth: 210,
+      full: 220,
       general: 18,
     });
   });
@@ -275,7 +275,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(32);
+    expect(withDepth.length).toBe(35);
     for (const id of withDepth)
       for (const d of ['core', 'quantitative', 'advanced'])
         for (const suffix of ['', '-es'])

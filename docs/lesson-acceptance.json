@@ -714,6 +714,45 @@
         "the-clumping"
       ],
       "evidenceFrom": "model"
+    },
+    "what-a-ccd-records": {
+      "centralExperimentId": "ce.what-a-ccd-records",
+      "object": "panel:ccd-frames",
+      "control": "ccd-frames/view",
+      "quantity": "the net light of star B in electrons, raw and after dividing by the flat, for the frame shown",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-flat",
+        "what-the-flat-does"
+      ],
+      "evidenceFrom": "model"
+    },
+    "signal-noise-and-exposure": {
+      "centralExperimentId": "ce.signal-noise-and-exposure",
+      "object": "panel:ccd-snr",
+      "control": "ccd-snr/exposure",
+      "quantity": "the signal-to-noise of a V = 15 star for the exposure you set",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-four-times",
+        "four-times-longer"
+      ],
+      "evidenceFrom": "model"
+    },
+    "a-variable-star-from-frames": {
+      "centralExperimentId": "ce.a-variable-star-from-frames",
+      "object": "panel:diff-photometry",
+      "control": "diff-photometry/reduction",
+      "quantity": "the scatter of the check star and the mean of the variable against the comparison, for the calibration applied",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-curve",
+        "the-sine"
+      ],
+      "evidenceFrom": "model"
     }
   }
 }
