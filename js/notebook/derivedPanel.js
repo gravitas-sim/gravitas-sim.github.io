@@ -9,15 +9,17 @@
 // =============================================================================
 
 import { compile } from '../formula/engine.js';
-import { FormulaError, useNumberReader } from '../formula/parse.js';
-import { parseNumber } from '../answerParse.js';
+import { FormulaError } from '../formula/parse.js';
 import { t, getLocale, registerMessages } from '../i18n/index.js';
 import { formatNumber } from '../format.js';
 import { EN_FORMULA } from '../i18n/en.formula.js';
 import { ES_FORMULA } from '../i18n/es.formula.js';
 import { derivedEntry, namedQuantities } from './derivedEntry.js';
 
-useNumberReader(parseNumber);
+// No number reader is registered here: the shared one (js/answerParse.js) would
+// give this lazy module another entry set in a chunk every lesson route shares,
+// one more request. A literal the grammar has already cut out of the text is
+// digits and one decimal mark, which parse.js's own reader turns into a number.
 registerMessages('en', EN_FORMULA);
 registerMessages('es', ES_FORMULA);
 
