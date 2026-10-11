@@ -121,6 +121,17 @@ export default {
       tip: 'La misma regla gobierna lo fuerte que suena un altavoz y lo brillante que se ve una farola. No es exclusiva de la astronomía; es lo que le ocurre a cualquier cosa que se reparte por igual en todas las direcciones.',
     },
     {
+      hints: [
+        'Usa la regla del paso anterior: la luz de la estrella cae como uno entre la distancia al cuadrado.',
+        'Pon la distancia en UA, elévala al cuadrado y toma uno entre el resultado.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Eleva la distancia al cuadrado antes de tomar uno entre ella.',
+        off: 'La luz de la estrella va como uno entre d al cuadrado, con d en UA: primero el cuadrado y luego la inversa.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez; comprueba que elevaste la distancia al cuadrado.',
+      },
       title: 'Escribirlo, y después usarlo',
       body: 'Las áreas que acabas de leer eran 1, 4, 9 y 16: los cuadrados de 1, 2, 3 y 4. Eso no es una casualidad de las cáscaras, es lo que hace la superficie de una esfera. Dobla el radio y el área sube por cuatro.\n\nLa misma energía, cuatro veces el área, la cuarta parte en cada metro cuadrado. Escrito:\n\n<strong>luz estelar ∝ 1 / d²</strong>\n\no, en su forma completa, F = L / (4πd²), donde L es la luminosidad de la estrella y 4πd² es el área de esa cáscara. No se te pedirá despejarla. Lo que importa es la frase: <strong>al doble de distancia, la cuarta parte</strong>.\n\nAsí que, sin el panel: un planeta está tres veces más lejos de su estrella que la Tierra del Sol. Tres al cuadrado es nueve.',
       prompt: 'Luz estelar a 3 UA, en Tierras',
@@ -301,6 +312,14 @@ export default {
         'Ninguno. Venus, a 0,72 UA, sigue quedando justo dentro del borde interior optimista de 0,75, y Ceres, a 2,77, no está ni cerca del borde exterior de 1,77. Marte ya estaba dentro de la zona conservadora. Así que las dos definiciones publicadas, que discrepan sobre los bordes por un margen amplio, coinciden por completo sobre nuestro propio Sistema Solar: dos mundos en la zona, y uno de ellos es Marte.',
     },
     {
+      hints: [
+        'Usa la misma regla, uno entre la distancia al cuadrado, con Venus a su propia distancia del Sol.',
+        'Primero eleva la distancia al cuadrado y luego invierte. Un planeta más cercano que la Tierra recibe más luz que ella.',
+      ],
+      feedback: {
+        close: 'Cerca. Eleva la distancia al cuadrado antes de invertirla.',
+        off: 'Venus está más cerca del Sol que la Tierra, así que la respuesta debe ser más que la de una Tierra: invierte la distancia al cuadrado.',
+      },
       title: 'Venus, con la regla que ya tienes',
       body: 'No necesitas un modelo climático para ver por qué Venus es un caso difícil. Venus orbita a 0,72 UA. Usa la regla de la primera mitad de esta investigación: la luz estelar va como 1 / d².\n\n0,72 al cuadrado es alrededor de 0,52.',
       prompt: 'Luz estelar en Venus, en Tierras',

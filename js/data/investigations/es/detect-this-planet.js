@@ -120,6 +120,15 @@ export default {
       ],
     },
     {
+      hints: [
+        'Divide el tiempo entre mediciones por el período orbital.',
+        'Ambos están en días. Cuenta las órbitas completas que caben; lo que sobra es una fracción de órbita.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Los dos tiempos son casi iguales: ¿a qué número entero de órbitas se redondea su cociente?',
+        off: 'Divide el intervalo entre mediciones por el período, en la misma unidad.',
+      },
       title: 'Por qué falló',
       body: 'El periodo orbital del planeta es de 3,5247 días. El calendario B toma una medida cada 3,52 días.',
       prompt:

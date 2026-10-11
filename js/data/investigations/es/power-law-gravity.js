@@ -282,6 +282,15 @@ export default {
       tip: 'Tus cuatro puntos caen sobre una recta. Averigua qué recta antes de continuar.',
     },
     {
+      hints: [
+        'Tus lecturas muestran que la pendiente cambia en una cantidad fija por cada paso de n.',
+        'Extiende el patrón desde una de tus lecturas hasta el nuevo n, al ritmo que muestran tus lecturas.',
+      ],
+      feedback: {
+        close:
+          'Cerca. La pendiente cambia a la mitad del ritmo de n: parte de una lectura de confianza.',
+        off: 'Elige una de tus lecturas y avanza hasta el nuevo n, a la mitad del ritmo al que cambia n.',
+      },
       title: 'Usa el patrón',
       body: `Mira tus cuatro lecturas. Con n = 2 la pendiente es 1,5; con
              n = 2,2 es 1,6; con n = 2,5 es 1,75; con n = 1,8 es 1,4.

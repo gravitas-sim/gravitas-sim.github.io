@@ -367,6 +367,16 @@ const GOLDILOCKS = {
       tip: 'The same rule governs how loud a speaker sounds and how bright a streetlight looks. It is not special to astronomy; it is what happens to anything that spreads out equally in all directions.',
     },
     {
+      hints: [
+        'Use the rule from the last step: starlight falls as one over the distance squared.',
+        'Put the distance in AU, square it, then take one over the result.',
+      ],
+      feedback: {
+        close: 'Close. Square the distance before taking one over it.',
+        off: 'Starlight goes as one over d squared, with d in AU: square first, then invert.',
+        'wrong-order-of-magnitude':
+          'A power of ten out; check that you squared the distance.',
+      },
       sid: 'writing-it-down-then-using',
       // "The areas you just read off" are the three recorded there.
       requires: ['write-the-three-down'],
@@ -720,6 +730,14 @@ const GOLDILOCKS = {
         'None. Venus at 0.72 AU still falls just inside the optimistic inner edge at 0.75, and Ceres at 2.77 is nowhere near the outer edge at 1.77. Mars was already inside the conservative zone. So the two published definitions, which disagree about the edges by a wide margin, agree completely about our own Solar System: two worlds in the zone, and one of them is Mars.',
     },
     {
+      hints: [
+        'Use the same rule, one over the distance squared, with Venus at its own distance from the Sun.',
+        'Square the distance first, then invert. A planet closer than Earth gets more light than Earth does.',
+      ],
+      feedback: {
+        close: 'Close. Square the distance before inverting it.',
+        off: 'Venus is nearer the Sun than Earth, so the answer should be more than one Earth’s worth: invert the squared distance.',
+      },
       sid: 'venus-by-the-rule-you',
       bind: SOLAR_WORLDS,
       type: 'question',

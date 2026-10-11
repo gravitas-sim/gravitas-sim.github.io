@@ -298,6 +298,14 @@ const RETROGRADE = {
              brightest.`,
     },
     {
+      hints: [
+        'Use 1/S = 1/P₁ − 1/P₂ with the shorter period first.',
+        'Subtract the two reciprocals, then take one over the result.',
+      ],
+      feedback: {
+        close: 'Close. Subtract the reciprocals first, and only then invert.',
+        off: 'The synodic period is one over the difference of the two rates, not the difference of the two periods.',
+      },
       sid: 'how-often-does-earth-catch',
       bind: INNER_PAIR,
       type: 'question',
@@ -315,6 +323,14 @@ const RETROGRADE = {
         'S = 780 days, about two years and seven weeks. That is why Mars is well placed for observing roughly every other year rather than every year: Earth needs 780 days to gain a full lap on it. Venus, being much faster, comes round to the same alignment every 584 days; Jupiter, being much slower, every 399, barely more than an Earth year, because Jupiter has hardly moved while Earth goes round.',
     },
     {
+      hints: [
+        'A full lap is 360 degrees, and the rate is in degrees per day.',
+        'Time equals the angle to gain divided by the rate.',
+      ],
+      feedback: {
+        close: 'Close. Divide 360 by the rate of gaining, in degrees per day.',
+        off: 'Time is the angle to be gained divided by how fast it is gained.',
+      },
       sid: 'a-lap-gained',
       bind: INNER_PAIR,
       // Checked against the gain rate worked out there.
@@ -665,6 +681,15 @@ const RETROGRADE = {
         'Every outer planet’s epicycle takes exactly one year. Ptolemy knew this and recorded it; the model gives no reason for it. In the heliocentric picture the reason is immediate: the epicycle is not the planet’s motion at all, it is Earth’s, reflected onto the planet’s apparent path. Three unrelated planets sharing one period is the sort of coincidence that should make you suspicious of a model, and it is the specific fact Copernicus pointed at.',
     },
     {
+      hints: [
+        'Each planet needs the same four devices.',
+        'Multiply the devices for one planet by the number of planets.',
+      ],
+      feedback: {
+        close:
+          'Close. Count the devices for one planet, then take that many for each planet.',
+        off: 'Multiply the devices for one planet by the number of planets.',
+      },
       sid: 'counting-the-machinery',
       bind: INNER_PAIR,
       type: 'question',

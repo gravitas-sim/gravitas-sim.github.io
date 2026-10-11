@@ -508,6 +508,15 @@ const TIDES = {
     },
 
     {
+      hints: [
+        'An ordinary inverse-square pull rises by the square of the distance factor. A tide depends on how fast the pull changes across a body.',
+        'Compare the two rows of your table: the stretch rose by a larger power of the distance ratio than two.',
+      ],
+      feedback: {
+        close:
+          'Close. Read the two stretches from your own table and divide the larger by the smaller.',
+        off: 'Divide the stretch at half the distance by the stretch at the full distance, both from your table.',
+      },
       sid: 'how-steeply-does-it-fall',
       bind: EARTH_MOON,
       type: 'question',
@@ -855,6 +864,15 @@ const TIDES = {
     },
 
     {
+      hints: [
+        'Set the density to the Moon’s value and watch the two bars.',
+        'Read the distance on the line that says the two are equal, in Earth radii.',
+      ],
+      feedback: {
+        close:
+          'Close. Read the distance where the two bars are the same height, in Earth radii.',
+        off: 'The answer is the distance at which the stretch equals the grip; the panel reports it in Earth radii.',
+      },
       sid: 'where-the-balance-tips',
       bind: EARTH_MOON,
       type: 'question',

@@ -237,6 +237,15 @@ export default {
       tip: 'Un buen ajuste cae cerca de 150 km/s y un núcleo de unos 6 kpc, con un error medio en torno a 2 km/s. Hay una degeneración real entre los dos deslizadores del halo, y por eso los artículos reales los citan juntos con una covarianza.',
     },
     {
+      hints: [
+        'El número principal es un cociente de dos masas, ambas dadas por el panel del ajuste.',
+        'Divide la masa del halo entre la masa visible: la respuesta es cuántas veces más pesado es el halo.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Divide la masa del halo entre la masa visible, ambas en las mismas unidades.',
+        off: 'El cociente compara el halo con lo que se ve: el halo arriba y lo visible abajo.',
+      },
       title: '¿Qué parte es oscura?',
       body: 'Ajustaste una galaxia. Divide la masa del halo dentro de 30 kpc entre la masa visible y tendrás la cifra estrella de cuarenta años de dinámica galáctica.',
       prompt: 'Masa del halo dentro de 30 kpc, dividida entre la masa visible',
@@ -299,6 +308,17 @@ export default {
       tip: 'Mil unidades de masa de simulación son una masa solar, que es la conversión que necesitarás al final.',
     },
     {
+      hints: [
+        'Usa 2K + U = 0, con la energía cinética escrita a partir de la dispersión de las velocidades.',
+        'Despeja M: sale como una constante por la dispersión de velocidades al cuadrado por el tamaño, dividido entre G.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Revisa el factor de delante: sale de 2K + U = 0 con la dispersión de las velocidades.',
+        off: 'Reordena la relación del virial para M; la dispersión de velocidades entra al cuadrado y el tamaño una vez.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez; revisa las unidades del tamaño y de la velocidad.',
+      },
       title: 'Pesa el cúmulo por su movimiento',
       body: 'Para cualquier sistema mantenido por su propia gravedad y ya asentado, las energías cinética y potencial están encadenadas en una proporción fija: 2K + U = 0. Este es el teorema del virial, y es lo que convierte una dispersión de velocidades en una masa.\n\nEscribe la energía cinética como K = ½·M·⟨v²⟩, y toma la energía potencial de una esfera uniforme, U = −(3/5)·G·M²/R. Sustituye, cancela un factor de M y despeja:\n\n<strong>M = (5/3)·R·⟨v²⟩ / G</strong>\n\nLa simulación es plana, así que sus velocidades se reparten en dos dimensiones y no en tres, y la dispersión que informa el panel ya es la bidimensional completa y no una proyección sobre la línea de visión. Así que ⟨v²⟩ es simplemente σ², y en unidades de simulación G vale 1 y desaparece. Queda M = (5/3)·R·σ², que da una masa en unidades de simulación. Divide entre 1000 para convertirla en masas solares.',
       tip: 'El supuesto de esfera uniforme es una aproximación y el estimador solo es bueno hasta un factor de orden uno. Con eso basta: la discrepancia que estás a punto de encontrar es muchísimo mayor que el error del método, que es exactamente por lo que el resultado sobrevivió.',
@@ -309,6 +329,14 @@ export default {
         'σ = 20,46 y R = 2516, así que ⟨v²⟩ = 418,7 y M = (5/3) × 2516 × 418,7 = 1,76 × 10⁶ unidades de masa de simulación, que son 1756 masas solares en este modelo. Si obtuviste algo mil veces mayor, olvidaste convertir; si obtuviste algo cercano a 84 000, usaste σ en lugar de σ².',
     },
     {
+      hints: [
+        'Ambas masas ya están calculadas en este paso y en el anterior.',
+        'Divide la masa dinámica entre la masa visible.',
+      ],
+      feedback: {
+        close: 'Cerca. La masa dinámica arriba y la visible abajo.',
+        off: 'El cociente compara la masa que dan los movimientos con la masa que se puede sumar.',
+      },
       title: 'Ahora compara',
       body: 'Has pesado el mismo cúmulo dos veces. Una sumando sus galaxias, que es la masa visible que informa el panel, y otra observando cómo se mueven esas galaxias.',
       prompt: 'Masa dinámica dividida entre masa visible',
@@ -333,6 +361,15 @@ export default {
       tip: 'MOND quiere un disco más ligero que el ajuste con halo, unas dos terceras partes. Una curva de rotación no puede medir directamente la masa de las estrellas, así que cuánto pesa el disco nunca quedó fijado por los datos en ninguna de las dos imágenes.',
     },
     {
+      hints: [
+        'MOND da v⁴ = G M a₀: la velocidad plana es la raíz cuarta de G M a₀.',
+        'Suma primero el disco y el bulbo, y usa las unidades del instrumento, antes de tomar la raíz cuarta.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Toma la raíz cuarta, no la cuadrada, e incluye el bulbo.',
+        off: 'Primero la masa visible total (disco más bulbo) y luego v = (G M a₀)^(1/4).',
+      },
       title: 'La predicción que hace MOND',
       body: 'La relación v⁴ = G M a₀ convierte una masa visible directamente en una velocidad plana, sin ajustar nada. Usa el disco que muestra el instrumento —2,1 × 10¹⁰ masas solares, más el pequeño bulbo de 0,05 × 10¹⁰— y el valor de a₀ de antes.\n\nEn las unidades en las que trabaja el instrumento, G a₀ = 0,0159 (km/s)⁴ por masa solar.',
       prompt: 'La velocidad plana que MOND predice para esta galaxia',

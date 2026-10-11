@@ -92,6 +92,14 @@ export default {
       body: 'Dos corredores en una pista circular, uno más rápido que el otro, vuelven a encontrarse a intervalos. No una vez por vuelta: el corredor más rápido tiene que sacarle una vuelta entera al más lento.\n\nPara los planetas este intervalo se llama <em>periodo sinódico</em>, y es el tiempo entre una alineación de Sol, Tierra y Marte y la siguiente. Como cuenta vueltas ganadas y no vueltas dadas, es más largo que el año propio de cualquiera de los dos planetas.\n\nSi el planeta más rápido gira en <em>P</em>₁ y el más lento en <em>P</em>₂, entonces en un periodo sinódico <em>S</em> el rápido completa exactamente una vuelta más que el lento:\n\n<strong>1/S = 1/P₁ − 1/P₂</strong>\n\nLa alineación que importa aquí es la <em>oposición</em>: la Tierra directamente entre el Sol y Marte, con Marte en el lado opuesto de nuestro cielo respecto al Sol. Es también cuando Marte está más cerca de nosotros y más brillante.',
     },
     {
+      hints: [
+        'Usa 1/S = 1/P₁ − 1/P₂ con el período más corto primero.',
+        'Resta los dos recíprocos y toma uno entre el resultado.',
+      ],
+      feedback: {
+        close: 'Cerca. Resta primero los recíprocos y solo después invierte.',
+        off: 'El período sinódico es uno entre la diferencia de las dos tasas, no la diferencia de los dos períodos.',
+      },
       title: '¿Cada cuánto alcanza la Tierra a Marte?',
       body: 'Usa tus dos periodos medidos en 1/S = 1/P₁ − 1/P₂, con P₁ el más corto. Trabaja en días.\n\nCon 365 y 687 la resta da 1/S = 0,00274 − 0,00146 = 0,00128 por día.',
       prompt:
@@ -101,6 +109,15 @@ export default {
         'S = 780 días, unos dos años y siete semanas. Por eso Marte está bien situado para observarlo aproximadamente cada dos años y no cada año: la Tierra necesita 780 días para sacarle una vuelta entera. Venus, que es mucho más rápido, vuelve a la misma alineación cada 584 días; Júpiter, que es mucho más lento, cada 399, apenas más que un año terrestre, porque Júpiter apenas se ha movido mientras la Tierra da la vuelta.',
     },
     {
+      hints: [
+        'Una vuelta completa son 360 grados y la tasa está en grados por día.',
+        'El tiempo es el ángulo a ganar dividido entre la tasa.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Divide 360 entre la tasa de ganancia, en grados por día.',
+        off: 'El tiempo es el ángulo que hay que ganar dividido entre la rapidez con que se gana.',
+      },
       title: 'Una vuelta ganada',
       body: 'Tienes el ritmo al que la Tierra le gana terreno a Marte, en grados por día. Una vuelta completa ganada son 360°.\n\nDivide uno entre el otro y tendrás otra vez el periodo sinódico, por un camino distinto. Debería coincidir con lo que obtuviste de los inversos.',
       prompt:
@@ -227,6 +244,15 @@ export default {
         'El epiciclo de todo planeta exterior tarda exactamente un año. Ptolomeo lo sabía y lo dejó registrado; el modelo no da ninguna razón para ello. En la imagen heliocéntrica la razón es inmediata: el epiciclo no es el movimiento del planeta en absoluto, es el de la Tierra, reflejado sobre la trayectoria aparente del planeta. Tres planetas sin relación compartiendo un periodo es la clase de coincidencia que debería hacerte sospechar de un modelo, y es el hecho concreto que señaló Copérnico.',
     },
     {
+      hints: [
+        'Cada planeta necesita los mismos cuatro dispositivos.',
+        'Multiplica los dispositivos de un planeta por el número de planetas.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Cuenta los dispositivos de un planeta y toma esa cantidad por cada planeta.',
+        off: 'Multiplica los dispositivos de un planeta por el número de planetas.',
+      },
       title: 'Contando la maquinaria',
       body: 'El modelo de Ptolomeo necesitaba, para cada uno de los cinco planetas visibles, un círculo deferente, un epiciclo montado sobre él, un desplazamiento excéntrico para el centro del deferente y un punto ecuante para los tiempos. Cuatro artificios por planeta.\n\nCuenta los artificios necesarios solo para los cinco planetas errantes, dejando fuera el Sol y la Luna.',
       prompt:

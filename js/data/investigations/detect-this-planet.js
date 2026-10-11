@@ -400,6 +400,15 @@ const DETECT_THIS_PLANET = {
       },
     },
     {
+      hints: [
+        'Divide the time between measurements by the orbital period.',
+        'Both are in days. Count the whole orbits that fit; what is left over is a fraction of an orbit.',
+      ],
+      feedback: {
+        close:
+          'Close. The two times are nearly the same: what does their ratio round to, as a whole number of orbits?',
+        off: 'Divide the interval between measurements by the period, in the same unit.',
+      },
       sid: 'why-it-failed',
       bind: TARGET,
       type: 'question',

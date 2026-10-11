@@ -245,6 +245,15 @@ export default {
       },
     },
     {
+      hints: [
+        'El volumen crece con el cubo del radio.',
+        'Si el radio gana algunos ceros, el volumen gana el triple.',
+      ],
+      feedback: {
+        close:
+          'Cerca. El volumen va como el cubo del radio, así que elevar al cubo multiplica los ceros.',
+        off: 'Piensa en el radio y el volumen: ¿cómo se convierte un número de ceros en el otro al elevar al cubo?',
+      },
       title: 'De dónde sale el sitio',
       body: 'Aquí está la razón, y se reduce a contar ceros.\n\nCuando la masa sube en cierto factor, el radio sube en el mismo factor: esa es la regla que mediste antes. Pero el volumen no es el radio. El volumen crece en las tres direcciones a la vez, así que una esfera con diez veces el radio tiene diez por diez por diez, mil veces, el sitio dentro.\n\nAsí que la masa gana unos cuantos ceros, y el volumen gana el triple. La densidad es masa dividida entre volumen, y pierde la diferencia.\n\nPon el deslizador del panel en <strong>×1000</strong> y lee las barras.',
       prompt:

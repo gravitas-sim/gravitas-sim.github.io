@@ -344,6 +344,15 @@ const BUTTERFLY_EFFECT = {
                 anything.`,
     },
     {
+      hints: [
+        'Proportional growth means the separation scales with time, so a longer run gives the same multiple of what you started with.',
+        'Compare the new time with the time in the example: how many times longer is it? Scale the separation by that same factor.',
+      ],
+      feedback: {
+        close:
+          'Close. Scale the separation from the example by how many times longer forty orbits is than four.',
+        off: 'Proportional means doubling the time doubles the separation. Find the factor between the two times and apply it.',
+      },
       sid: 'linear-in-numbers',
       bind: PAIR,
       type: 'question',
@@ -535,6 +544,17 @@ const BUTTERFLY_EFFECT = {
              real one.`,
     },
     {
+      hints: [
+        'Growth by a fixed factor every τ means the separation is multiplied by e once per τ. You need the number of τ that reaches the growth factor.',
+        'That number of τ is the natural logarithm of the growth factor. Multiply it by the τ you measured.',
+      ],
+      feedback: {
+        close:
+          'Close. Take the natural logarithm of the growth factor, then multiply by your measured τ.',
+        off: 'Exponential growth is separation ∝ e^(t/τ). Solve for t with a logarithm, not by dividing.',
+        'wrong-order-of-magnitude':
+          'A power of ten out; check that you used the natural logarithm and your τ in simulated seconds.',
+      },
       sid: 'how-long-does-a-prediction',
       bind: TRIPLE,
       // "Take tau from your measurement".

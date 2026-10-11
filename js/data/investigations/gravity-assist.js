@@ -491,6 +491,11 @@ const GRAVITY_ASSIST = {
                 closely.`,
     },
     {
+      feedback: {
+        close:
+          'Close. A full reversal flips the direction of the relative velocity: how big is the change in a flip?',
+        off: 'The most any flyby can do is reverse the relative velocity. Work out the change that causes, in km/s.',
+      },
       sid: 'the-ceiling',
       bind: ASSIST,
       type: 'question',

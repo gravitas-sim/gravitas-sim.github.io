@@ -612,6 +612,15 @@ const BLACK_HOLES = {
       },
     },
     {
+      hints: [
+        'Volume grows with the cube of the radius.',
+        'If the radius gains some zeros, the volume gains three times as many.',
+      ],
+      feedback: {
+        close:
+          'Close. Volume goes as the cube of the radius, so cubing multiplies the zeros.',
+        off: 'Think of the radius and the volume: how does one number of zeros turn into the other when you cube?',
+      },
       sid: 'where-the-room-comes-from',
       stage: HOLE,
       // "That is the rule you measured earlier" - the radius-mass rule from
