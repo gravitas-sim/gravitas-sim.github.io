@@ -45,7 +45,7 @@ const THE_FIRST_RUNG = {
   title: 'The First Rung',
   subtitle:
     'The distance to two galaxies from their Cepheids, with every error accounted for',
-  duration: '25-40 min',
+  duration: '12-20 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 19, section: null },

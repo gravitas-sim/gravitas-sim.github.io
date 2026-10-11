@@ -272,6 +272,26 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/the-beat-of-a-star/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/leavitts-law/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/the-first-rung/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/which-kind-of-variable/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://gravitas-sim.online/teaching/investigation/bending-light/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

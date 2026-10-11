@@ -500,7 +500,7 @@ export const MANIFEST = [
     title: 'La ley de Leavitt',
     subtitle:
       'Ajustar la relación periodo-luminosidad de las cefeidas de la Gran Nube de Magallanes',
-    duration: '25-40 min',
+    duration: '8-15 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/leavitts-law.webp',
     depths: 3,
@@ -513,7 +513,7 @@ export const MANIFEST = [
     title: 'El primer peldaño',
     subtitle:
       'La distancia a dos galaxias a partir de sus cefeidas, con cada error contabilizado',
-    duration: '25-40 min',
+    duration: '12-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-first-rung.webp',
     depths: 3,
@@ -526,7 +526,7 @@ export const MANIFEST = [
     title: 'Qué tipo de variable',
     subtitle:
       'Distinguir cinco tipos de estrella variable y leer una tabla de confusión en lugar de una sola respuesta',
-    duration: '25-40 min',
+    duration: '12-22 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/which-kind-of-variable.webp',
     depths: 3,

@@ -1521,7 +1521,7 @@ export default {
       {
         from: 'another-galaxy',
         to: 'another-galaxy',
-        text: 'M101 is 6.95 Mpc.',
+        text: 'M101 comes out at 6.95 megaparsecs, 8 percent nearer.',
       },
       {
         from: 'what-you-worked-out',

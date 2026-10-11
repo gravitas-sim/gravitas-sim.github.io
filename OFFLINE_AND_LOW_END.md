@@ -58,7 +58,7 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | Panel markup | 10 | 60 KB |
 | Pages | 9 | 270 KB |
 | Other | 10 | 400 KB |
-| **Total** | **901** | **15.6 MB** |
+| **Total** | **901** | **15.7 MB** |
 
 Of those, 747 are core (the install fails without them) and 154 optional (a missing one is reported and costs nothing).
 
@@ -87,11 +87,11 @@ catalog, the course home and the two labs (`model/`, `instructors/`,
 the `/validation/` page runs on demand; and `social-card.png` (only ever
 fetched by a link unfurler).
 
-### Which of the <!--fact:investigations-->44<!--/fact--> lessons
+### Which of the <!--fact:investigations-->48<!--/fact--> lessons
 
 Each lesson is one dynamically imported file, so this is a real decision.
 
-**All <!--fact:investigations-->44<!--/fact--> English bodies are precached**, about a tenth of the
+**All <!--fact:investigations-->48<!--/fact--> English bodies are precached**, about a tenth of the
 payload. The reasoning: the lesson a class is already in when the wifi dies is
 by definition already fetched, so precaching buys nothing there. What it buys is
 the teacher who *switches lesson after the drop*, which is exactly the moment a

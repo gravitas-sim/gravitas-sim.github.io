@@ -579,7 +579,7 @@ Of 115 prediction loops, 115 are returned to,
 - **Prediction loops:** predict-the-trend → the-calibration, how-tight, why-wesenheit, the-tenfold-step, why-one-galaxy, what-you-worked-out → the-calibration.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:leavitt-law`, control leavitt-law/host, measures the slope and zero point of the Cepheid relation, and the distance a galaxy’s Cepheids give, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:leavitt-law`, control the Galaxy selector, which slides the fitted line onto another galaxy’s Cepheids; the calibration itself has no control, measures the slope and zero point of the Cepheid relation, and the distance a galaxy’s Cepheids give, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The First Rung (`the-first-rung`)
 

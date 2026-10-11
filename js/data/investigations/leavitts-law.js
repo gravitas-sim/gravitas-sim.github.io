@@ -34,7 +34,7 @@ const LEAVITTS_LAW = {
   title: 'Leavitt’s Law',
   subtitle:
     'Fitting the period-luminosity relation of Cepheids in the Large Magellanic Cloud',
-  duration: '25-40 min',
+  duration: '8-15 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 19, section: null },

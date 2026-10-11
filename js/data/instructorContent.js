@@ -5436,6 +5436,10 @@ export const INSTRUCTOR_CONTENT = {
     ],
     features: [
       {
+        name: 'The error and the aliases',
+        text: 'The bootstrap error is a floor because it treats the points as independent; the aliases listed are the periods one cycle per day away in frequency, where a once-a-night search puts its false peaks.',
+      },
+      {
         name: 'Fold instrument (variables family)',
         text: 'Three series (SU Draconis, Eta Aquilae, SU Draconis kept once a night), three pictures (time, period search, fold), a fold on half, once or twice the period and an offset of up to 5 percent; the readout lists the peak, its width, the refined period, the bootstrap error, cycles, both aliases, amplitude and R21.',
       },
@@ -5467,10 +5471,11 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
+      'A period search on an eclipsing binary lands on half its orbit; the Which Kind of Variable lesson meets the consequence.',
       'The data are PDCSAP flux from TESS in the TESS band, binned; the bootstrap treats points as independent so its error is a floor (TIME_DOMAIN_LADDER.md).',
       'Eta Aquilae is saturated and half the cadences of sector 54 are flagged, hence sector 81; the run recovers 7.226 days against the catalogue 7.1766.',
       'The nightly series keeps one bin from 0.3 to 0.4 day after each integer BTJD, a stand-in for a ground site.',
-      'Pulsar timing is not modelled.',
+      'Pulsar timing is out of scope here and is listed as not modelled on the model page.',
     ],
     discussion: [
       'Why does a longer run narrow the peak?',
@@ -5478,11 +5483,12 @@ export const INSTRUCTOR_CONTENT = {
       'What would a period of exactly one day do to a once-a-night search?',
     ],
     extensions: [
+      'Thin the whole run of SU Draconis by hand to one point in four and watch the width of the peak grow only a little: the run, not the number of points, sets the width.',
       'Fit the Cepheid relation in Leavitt’s Law.',
       'Search the nightly series after thinning it further.',
     ],
     modelNotes:
-      'js/kernels/variables/period.js (Lomb-Scargle, width at half power, harmonic refinement, bootstrap, aliases) and fit.js. See TIME_DOMAIN_LADDER.md.',
+      'js/kernels/variables/period.js (Lomb-Scargle, width at half power, harmonic refinement, bootstrap, aliases) and fit.js. See TIME_DOMAIN_LADDER.md. The numbers a lesson asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
   },
   'leavitts-law': {
     topic:
@@ -5500,18 +5506,22 @@ export const INSTRUCTOR_CONTENT = {
     keyConcepts: [
       {
         heading: 'Longer period, brighter star',
-        body: 'The line rises to the right because magnitudes run backward.',
+        body: 'The line rises to the right because magnitudes run backward: a brighter star has a smaller magnitude, so the fitted slope is negative.',
       },
       {
         heading: 'One galaxy, one distance',
-        body: 'Fitting within the Cloud makes magnitude differences luminosity differences.',
+        body: 'Fitting within the Cloud makes differences in apparent magnitude into differences in luminosity, because every star is at nearly one distance.',
       },
       {
         heading: 'Wesenheit cancels dust',
-        body: 'A combination of one infrared and two visible bands leaves 0.04 of the dimming.',
+        body: 'A combination of one infrared and two visible bands leaves only 0.04 magnitudes per magnitude of A_V, where the infrared band alone leaves 0.21.',
       },
     ],
     features: [
+      {
+        name: 'What is authentic',
+        text: 'The 339 Cepheids are Hubble measurements (Riess et al. 2022, CC BY 4.0); the relation, the fit and the dust residual are computed in the browser by the variables kernel.',
+      },
       {
         name: 'Leavitt-law instrument (variables family)',
         text: 'The calibration galaxy with its fit; readout lists the stars kept, slope, zero point, scatter and the Wesenheit dust residual.',
@@ -5522,6 +5532,11 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     misconceptions: [
+      {
+        claim: 'The Large Magellanic Cloud is special for Cepheids.',
+        response:
+          'It is only a galaxy whose distance is independently known, so it can calibrate.',
+      },
       {
         claim: 'A brighter star has a larger magnitude.',
         response:
@@ -5538,6 +5553,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
+      'The relation is fitted against log10 P minus 1, so the zero point is the magnitude at 10 days and is nearly independent of the slope.',
       'Data: Riess et al. 2022 Cepheid table (CC BY 4.0), 5 to 120 days, one 3.3 sigma clip; metallicity and crowding are not corrected and the table’s errors carry no covariance (D-LADDER-01).',
       'Wesenheit residual 0.040 uses the radiation kernel’s extinction law at R_V 3.3.',
       'The Cloud’s distance modulus 18.477 ± 0.026 is Pietrzynski et al. 2019 and enters in the next lesson.',
@@ -5547,9 +5563,12 @@ export const INSTRUCTOR_CONTENT = {
       'What would change the dust residual?',
       'Why does the sign of the slope surprise students?',
     ],
-    extensions: ['Continue with The First Rung.'],
+    extensions: [
+      'Compare the relation’s slope with the scatter and ask how many Cepheids a galaxy needs for a distance good to five percent.',
+      'Continue with The First Rung.',
+    ],
     modelNotes:
-      'js/kernels/variables/ladder.js: fitLine, fitLeavitt, wesenheitResidual. See TIME_DOMAIN_LADDER.md.',
+      'js/kernels/variables/ladder.js: fitLine, fitLeavitt, wesenheitResidual. See TIME_DOMAIN_LADDER.md. The numbers a lesson asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
   },
   'the-first-rung': {
     topic:
@@ -5571,14 +5590,18 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Agreement with an independent method',
-        body: 'Masers give a geometric distance with no Cepheid in it.',
+        body: 'Masers give a geometric distance with no Cepheid in it, so agreement within the errors is a real check on the Cepheid distance of NGC 4258.',
       },
       {
         heading: 'Shared errors do not average away',
-        body: 'The anchor’s distance limits the whole ladder.',
+        body: 'The anchor’s distance is shared by every galaxy calibrated on it, so averaging many galaxies cannot shrink it, and it limits the whole ladder.',
       },
     ],
     features: [
+      {
+        name: 'The budget rows',
+        text: 'Four rows, host scatter, calibration scatter, slope and the Cloud’s distance, added in quadrature to the total; the maser modulus is listed for NGC 4258 only.',
+      },
       {
         name: 'Leavitt-law instrument on the host galaxies',
         text: 'The slid relation, modulus, distance in megaparsecs, four budget rows and the maser modulus for NGC 4258.',
@@ -5589,6 +5612,12 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     misconceptions: [
+      {
+        claim:
+          'The Cepheid distance is a measurement of the galaxy’s light only.',
+        response:
+          'It uses the period, the relation and the Cloud’s distance; each carries an error.',
+      },
       {
         claim: 'More Cepheids shrink every error.',
         response:
@@ -5606,6 +5635,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
+      'The maser check is not a proof: the two distances agree to 0.1 of their combined error, which one galaxy cannot make a test of the whole ladder.',
       'Hosts are thinned to every fourth star in the shipped table; the host scatter stands in for the unpublished covariance.',
       'The Hubble constant is not derived: Prompt 91’s packs are absent (TIME_DOMAIN_LADDER.md).',
       'Error-budget coverage over simulated hosts holds one sigma for 60 to 78 percent of the truths, so the budget is slightly optimistic.',
@@ -5615,9 +5645,12 @@ export const INSTRUCTOR_CONTENT = {
       'Why is the anchor’s distance so closely studied?',
       'What would a metallicity correction do?',
     ],
-    extensions: ['Which Kind of Variable.'],
+    extensions: [
+      'Ask which single new measurement, a better Cloud distance or more host Cepheids, would improve the distance more.',
+      'Which Kind of Variable.',
+    ],
     modelNotes:
-      'js/kernels/variables/ladder.js: ladderDistance with the budget of host, anchor, slope and anchor distance.',
+      'js/kernels/variables/ladder.js: ladderDistance with the budget of host, anchor, slope and anchor distance. The numbers a lesson asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
   },
   'which-kind-of-variable': {
     topic:
@@ -5628,24 +5661,29 @@ export const INSTRUCTOR_CONTENT = {
     overview:
       'A synthetic labeled sample of 120 stars (24 each of RRab, RRc, Cepheid, delta Scuti, eclipsing binary) is classified by five nearest neighbours, leave one out. Period alone: 83.3 percent, eclipsing binaries 29.2 (6 called RRab, 7 right). With amplitude 90.8 and 54.2; with the shape 99.2 and 100. The depths compute the accuracy from the table (100/120), the pulsator-only accuracy (96.9) and the accuracy under a skewed mix (48.5).',
     priorKnowledge: [
+      'Magnitudes and what a light curve is',
       'The Beat of a Star (period, amplitude, R21)',
       'Percentages and weighted averages',
     ],
     keyConcepts: [
       {
         heading: 'A confusion table shows who is mistaken for whom',
-        body: 'Accuracy averages over kinds and hides the weakest.',
+        body: 'Accuracy averages over the kinds and hides the weakest: 83 percent overall with the period alone, yet eclipsing binaries are found only 29 percent of the time.',
       },
       {
         heading: 'Each measurement buys something',
-        body: 'Amplitude lifts the binaries to 54 percent and shape to 100.',
+        body: 'Each added measurement buys something: the amplitude lifts the eclipsing binaries from 29 to 54 percent found, and the shape of the curve lifts them to 100.',
       },
       {
         heading: 'Accuracy depends on the mix',
-        body: 'The same classifier scores 48.5 percent when binaries are ten times as common.',
+        body: 'Accuracy depends on the mix of kinds: the same classifier scores 48.5 percent when binaries are ten times as common as each pulsator kind.',
       },
     ],
     features: [
+      {
+        name: 'The confusion rows',
+        text: 'One row per true kind, counting what it was called, and the share found of each kind; the picture can show amplitude or R21 against period.',
+      },
       {
         name: 'Variable-class instrument',
         text: 'Amplitude or shape against period with five marks, three feature sets, the confusion rows and per-kind shares found.',
@@ -5656,6 +5694,11 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     misconceptions: [
+      {
+        claim: 'The classifier learns the physics of each kind.',
+        response:
+          'It votes among the five nearest stars in a few measured numbers and knows nothing else.',
+      },
       {
         claim: '99 percent accuracy means the classifier is finished.',
         response:
@@ -5673,6 +5716,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
+      'Leave-one-out means each star is classified by the other 119, so no star is its own neighbour.',
       'The sample is variables/class-sample.json, held to the kernel by a test; five classes only, no blends, outbursts or second periods.',
       'An eclipsing binary’s period search lands on half its orbit; its R21 is about 0.9, pulsators at most 0.56.',
       'Leave-one-out accuracy 0.82, 0.88, 0.99 for the three feature sets in the kernel tests (seed variables-sample).',
@@ -5683,10 +5727,11 @@ export const INSTRUCTOR_CONTENT = {
       'What would blends do to the table?',
     ],
     extensions: [
+      'Switch the picture between amplitude and shape for each feature set and describe where the clusters of each kind overlap.',
       'Return to The Beat of a Star and measure R21 for the two real stars.',
     ],
     modelNotes:
-      'js/kernels/variables/classify.js: five classes through the periodic forward model, measured by the same pipeline, kNN leave one out.',
+      'js/kernels/variables/classify.js: five classes through the periodic forward model, measured by the same pipeline, kNN leave one out. The numbers a lesson asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
   },
 };
 

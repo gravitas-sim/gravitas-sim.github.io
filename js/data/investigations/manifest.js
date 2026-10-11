@@ -492,7 +492,7 @@ export const MANIFEST = [
     title: 'Leavitt’s Law',
     subtitle:
       'Fitting the period-luminosity relation of Cepheids in the Large Magellanic Cloud',
-    duration: '25-40 min',
+    duration: '8-15 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/leavitts-law.webp',
     depths: 3,
@@ -505,7 +505,7 @@ export const MANIFEST = [
     title: 'The First Rung',
     subtitle:
       'The distance to two galaxies from their Cepheids, with every error accounted for',
-    duration: '25-40 min',
+    duration: '12-20 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-first-rung.webp',
     depths: 3,
@@ -518,7 +518,7 @@ export const MANIFEST = [
     title: 'Which Kind of Variable',
     subtitle:
       'Telling five kinds of variable star apart, and reading a confusion table instead of one answer',
-    duration: '25-40 min',
+    duration: '12-22 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/which-kind-of-variable.webp',
     depths: 3,

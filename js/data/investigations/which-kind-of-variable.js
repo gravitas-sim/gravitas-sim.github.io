@@ -35,7 +35,7 @@ const WHICH_KIND_OF_VARIABLE = {
   title: 'Which Kind of Variable',
   subtitle:
     'Telling five kinds of variable star apart, and reading a confusion table instead of one answer',
-  duration: '25-40 min',
+  duration: '12-22 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 19, section: null },
