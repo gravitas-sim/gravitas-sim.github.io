@@ -124,6 +124,12 @@ export default {
     'Why the center is hot and dense, why a degenerate star has a limiting mass, and how far a scaling argument gets before the shape of real stars shows.',
     'A polytrope is a shape, not a star: no energy generation, opacity or convection; the white dwarf is cold and ideal; the main sequence is a MIST model, not a measurement.',
   ],
+  variables: [
+    'Real TESS light curves of two pulsating stars, a period search and a fold on a trial period; the Cepheid period-luminosity relation of the Large Magellanic Cloud and the distances it gives to two galaxies; or a labeled sample of five kinds of variable star and a confusion table.',
+    'How the period, its error, the aliases, the slope, the zero point, the distance and its error budget, or the share classified correctly change as the star, the fold period, the galaxy or the measurements a classifier may use change.',
+    'How a period is read from a light curve and what limits it, why a Cepheid’s period gives its luminosity and so a distance, and why one accuracy number hides which kinds of star are mistaken for which.',
+    'The light curves and Cepheids are real measurements in one band, with no metallicity or crowding correction; the bootstrap error is a floor; the classification sample is synthetic, balanced and stylised; pulsar timing is not modelled.',
+  ],
   lensing: [
     'Bending against closest approach (log scales); the lens plane in Einstein radii with the source and its images; or flux against time as a lens passes.',
     'How the bending, the ring, the images and the light curve change as the mass, the distance, the speed, the offset and the blend change.',

@@ -1,8 +1,9 @@
 # Time-domain astronomy and the first rung of the distance ladder (Roadmap II Prompt 96)
 
-**Status: partial.** The kernel, three data packs and three instruments are
-built and tested. The four investigations, their Spanish and depth text,
-instructor material and e2e are not (D-LADDER-02).
+**Status: complete except the cosmology link.** The kernel, three data
+packs and three instruments (#251), and the four investigations, their Spanish
+and depth text, instructor material and e2e (this slice, D-LADDER-02) are
+built and tested. The link to the Hubble constant is the advanced step of The First Rung and the Standard Candles investigation (COSMOLOGY.md).
 
 ## What is here
 
@@ -14,7 +15,7 @@ instructor material and e2e are not (D-LADDER-02).
 | Classification | `classify.js` | five synthetic classes through the periodic forward model, measured by the same pipeline, leave-one-out kNN, confusion table |
 | Packs | `tools/data-packs/variables.mjs` | `tess-su-dra-s15`, `tess-eta-aql-s81`, `shoes-r22-cepheids`; rows are sidecars in `variables/` |
 | Class sample | `variables/class-sample.json`, `tools/variables-sample.mjs` | the measured synthetic sample; a test holds it to the kernel |
-| Instruments | `js/variableInstruments.js` | `variable-fold`, `leavitt-law`, `variable-class`, English and Spanish words. Built and exercised by tests, but **not registered** in `js/widgets.js` (the registry requires every instrument to be used by a lesson); the registration is four lines in `widgets.js`, `composer/widgetIds.js`, `explainers.js` and `explain/*.js`, to land with the lessons |
+| Instruments | `js/variableWidgets.js` | `variable-fold`, `leavitt-law`, `variable-class`, English and Spanish words. Built and exercised by tests, registered as the `variables` family in `js/widgets.js`, `composer/widgetIds.js`, `explainers.js` and `explain/*.js`; the module is `js/variableWidgets.js` |
 
 ## Measured results
 
@@ -29,7 +30,7 @@ instructor material and e2e are not (D-LADDER-02).
 
 ## Not modelled
 
-Pulsar timing (out of scope, as the prompt says); metallicity and crowding corrections to the Cepheid relation; blends, outbursts and second periods in the classification sample; Blazhko modulation. The link to Prompt 91's Hubble-constant packs is absent because Prompt 91 has not landed.
+Pulsar timing (out of scope, as the prompt says); metallicity and crowding corrections to the Cepheid relation; blends, outbursts and second periods in the classification sample; Blazhko modulation. The link to the Hubble constant is the advanced step of The First Rung and the Standard Candles investigation (COSMOLOGY.md).
 
 ## Rights
 

@@ -76,6 +76,10 @@
       "en": "Where Can It Get To?",
       "es": "¿Hasta dónde puede llegar?"
     },
+    "leavitts-law": {
+      "en": "Leavitt’s Law",
+      "es": "La ley de Leavitt"
+    },
     "lines-and-motion": {
       "en": "Lines and Motion",
       "es": "Líneas y movimiento"
@@ -124,6 +128,10 @@
       "en": "Standard Candles",
       "es": "Candelas estándar"
     },
+    "the-beat-of-a-star": {
+      "en": "The Beat of a Star",
+      "es": "El latido de una estrella"
+    },
     "the-completeness-curve": {
       "en": "The Completeness Curve",
       "es": "La curva de completitud"
@@ -131,6 +139,10 @@
     "the-expanding-universe": {
       "en": "The Expanding Universe",
       "es": "El universo en expansión"
+    },
+    "the-first-rung": {
+      "en": "The First Rung",
+      "es": "El primer peldaño"
     },
     "the-limit": {
       "en": "The Limit",
@@ -191,6 +203,10 @@
     "where-galaxies-live": {
       "en": "Where Galaxies Live",
       "es": "Dónde viven las galaxias"
+    },
+    "which-kind-of-variable": {
+      "en": "Which Kind of Variable",
+      "es": "Qué tipo de variable"
     },
     "who-gets-counted": {
       "en": "Who Gets Counted",

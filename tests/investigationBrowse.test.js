@@ -198,9 +198,9 @@ describe('filtering', () => {
   });
 
   test('an impossible combination names the filter worth dropping', () => {
-    // No exoplanets lesson is short enough for a demonstration, and the empty
+    // No gravity lesson is short enough for a demonstration, and the empty
     // panel has to say which of the two choices is the obstacle.
-    const filters = { subject: 'exoplanets', length: LENGTH.DEMO };
+    const filters = { subject: 'gravity', length: LENGTH.DEMO };
     expect(filterCatalog(MANIFEST, filters, unread)).toHaveLength(0);
     const relax = loosening(MANIFEST, filters, unread);
     expect(relax.key).toBe('subject');

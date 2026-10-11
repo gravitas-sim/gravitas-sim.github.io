@@ -19,6 +19,7 @@ import { EN_COSMOLOGY } from '../js/i18n/en.cosmology.js';
 import { ES_COSMOLOGY } from '../js/i18n/es.cosmology.js';
 import EXPANDING_DEEP from '../js/data/investigations/depth/the-expanding-universe.js';
 import CANDLES_DEEP from '../js/data/investigations/depth/standard-candles.js';
+import RUNG_DEEP from '../js/data/investigations/depth/the-first-rung.js';
 import SHAPE_DEEP from '../js/data/investigations/depth/the-shape-of-expansion.js';
 import WHERE_DEEP from '../js/data/investigations/depth/where-galaxies-live.js';
 import ES from './cosmologyInvestigationsEs.js';
@@ -336,6 +337,16 @@ describe('Where Galaxies Live', () => {
       deep(WHERE_DEEP, 'that-in-magnitudes').answer,
       2.5 * Math.log10(9),
       0.005
+    );
+  });
+});
+
+describe('The First Rung, the Hubble-constant step', () => {
+  test('the answer is 70 times the distance error of 0.051 mag', () => {
+    near(
+      deep(RUNG_DEEP, 'from-the-rung-to-the-hubble-constant').answer,
+      70 * 0.4605 * 0.051,
+      0.01
     );
   });
 });

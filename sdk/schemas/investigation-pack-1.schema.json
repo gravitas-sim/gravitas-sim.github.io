@@ -74,6 +74,10 @@
           "standard-candles",
           "the-shape-of-expansion",
           "where-galaxies-live",
+          "the-beat-of-a-star",
+          "leavitts-law",
+          "the-first-rung",
+          "which-kind-of-variable",
           "bending-light",
           "einstein-rings-and-arcs",
           "a-lens-passing-by",
@@ -93,10 +97,7 @@
         "const": "en"
       },
       "items": {
-        "enum": [
-          "en",
-          "es"
-        ]
+        "enum": ["en", "es"]
       }
     },
     "title": {
@@ -254,9 +255,7 @@
         "anyOf": [
           {
             "type": "object",
-            "required": [
-              "lesson"
-            ],
+            "required": ["lesson"],
             "additionalProperties": false,
             "properties": {
               "lesson": {
@@ -303,6 +302,10 @@
                   "standard-candles",
                   "the-shape-of-expansion",
                   "where-galaxies-live",
+                  "the-beat-of-a-star",
+                  "leavitts-law",
+                  "the-first-rung",
+                  "which-kind-of-variable",
                   "bending-light",
                   "einstein-rings-and-arcs",
                   "a-lens-passing-by",
@@ -315,9 +318,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "text"
-            ],
+            "required": ["text"],
             "additionalProperties": false,
             "properties": {
               "text": {
@@ -330,9 +331,7 @@
     },
     "textbook": {
       "type": "object",
-      "required": [
-        "chapter"
-      ],
+      "required": ["chapter"],
       "additionalProperties": false,
       "properties": {
         "chapter": {
@@ -348,11 +347,7 @@
       "description": "The OpenStax Astronomy 2e chapter, and a section of it, that covers this investigation. The section must begin with the chapter's number."
     },
     "courseLevel": {
-      "enum": [
-        "survey",
-        "majors",
-        "upper"
-      ],
+      "enum": ["survey", "majors", "upper"],
       "description": "The course it suits: a survey for non-majors, an introductory course for science majors, or upper division."
     },
     "seed": {
@@ -364,11 +359,7 @@
       "description": "A remix: the built-in investigation it was made from, its version and a digest of its steps (js/platform/remix.js). A remix may reorder, remove, reword and translate steps, change hints, feedback, depth and instructions, and add read, explore and question steps; it may not change a step's scenario, seed, instrument or expected value. A step with an id of the original's keeps the original's code by reference, and may be a kind of step (ellipse, wedges) only the original's engine code knows.",
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "version",
-        "digest"
-      ],
+      "required": ["id", "version", "digest"],
       "properties": {
         "id": {
           "$ref": "#/$defs/publicId"
@@ -385,9 +376,7 @@
     },
     "bank": {
       "type": "object",
-      "required": [
-        "items"
-      ],
+      "required": ["items"],
       "additionalProperties": false,
       "properties": {
         "items": {
@@ -407,9 +396,7 @@
       "prefixItems": [
         {
           "$ref": "#/$defs/step",
-          "required": [
-            "setup"
-          ]
+          "required": ["setup"]
         }
       ],
       "items": {
@@ -431,9 +418,7 @@
     "text": {
       "description": "A text in every declared language: the English, required and not blank; the Spanish; and the digest of the English the Spanish was written from, so a stale translation is known. A key must be one of the file's own locales, which a schema cannot hold it to.",
       "type": "object",
-      "required": [
-        "en"
-      ],
+      "required": ["en"],
       "additionalProperties": false,
       "properties": {
         "en": {
@@ -456,10 +441,7 @@
       "maxItems": 6,
       "items": {
         "type": "object",
-        "required": [
-          "name",
-          "levels"
-        ],
+        "required": ["name", "levels"],
         "additionalProperties": false,
         "properties": {
           "name": {
@@ -471,10 +453,7 @@
             "maxItems": 5,
             "items": {
               "type": "object",
-              "required": [
-                "label",
-                "text"
-              ],
+              "required": ["label", "text"],
               "additionalProperties": false,
               "properties": {
                 "label": {
@@ -496,10 +475,7 @@
     "scoring": {
       "description": "How many points, and which attempt counts.",
       "type": "object",
-      "required": [
-        "points",
-        "attempts"
-      ],
+      "required": ["points", "attempts"],
       "additionalProperties": false,
       "properties": {
         "points": {
@@ -508,10 +484,7 @@
           "maximum": 10
         },
         "attempts": {
-          "enum": [
-            "first",
-            "best"
-          ]
+          "enum": ["first", "best"]
         }
       }
     },
@@ -541,15 +514,11 @@
           "anyOf": [
             {
               "not": {
-                "required": [
-                  "method"
-                ]
+                "required": ["method"]
               }
             },
             {
-              "required": [
-                "concept"
-              ]
+              "required": ["concept"]
             }
           ]
         }
@@ -558,9 +527,7 @@
     "a11y": {
       "description": "Whether the question can be answered from its text alone, and, when it cannot, a note for a reader who cannot use the simulation.",
       "type": "object",
-      "required": [
-        "textOnly"
-      ],
+      "required": ["textOnly"],
       "additionalProperties": false,
       "properties": {
         "textOnly": {
@@ -579,30 +546,18 @@
           }
         },
         {
-          "required": [
-            "note"
-          ]
+          "required": ["note"]
         }
       ]
     },
     "expect": {
       "description": "The answer parser's unit expectation: a dimension, the unit the answer is graded in, and the other units it accepts, each read whatever its case. The graded unit must be among those accepted, which a schema cannot say.",
       "type": "object",
-      "required": [
-        "dimension",
-        "unit"
-      ],
+      "required": ["dimension", "unit"],
       "additionalProperties": false,
       "properties": {
         "dimension": {
-          "enum": [
-            "time",
-            "length",
-            "speed",
-            "mass",
-            "density",
-            "angle"
-          ]
+          "enum": ["time", "length", "speed", "mass", "density", "angle"]
         },
         "unit": {
           "type": "string"
@@ -726,10 +681,7 @@
         {
           "description": "A wrong answer worth naming: either the factor it is off by or the number it equals, and what to say.",
           "type": "object",
-          "required": [
-            "id",
-            "say"
-          ],
+          "required": ["id", "say"],
           "additionalProperties": false,
           "properties": {
             "id": {
@@ -743,9 +695,7 @@
           },
           "anyOf": [
             {
-              "required": [
-                "factor"
-              ],
+              "required": ["factor"],
               "properties": {
                 "factor": {
                   "type": "number",
@@ -759,9 +709,7 @@
               }
             },
             {
-              "required": [
-                "equals"
-              ],
+              "required": ["equals"],
               "properties": {
                 "equals": {
                   "type": "number"
@@ -778,11 +726,7 @@
         },
         {
           "type": "object",
-          "required": [
-            "id",
-            "option",
-            "say"
-          ],
+          "required": ["id", "option", "say"],
           "additionalProperties": false,
           "properties": {
             "id": {
@@ -803,10 +747,7 @@
       "description": "A numeric question's inputs from a vetted relation (js/platform/relations.js), which computes every variant's answer; the tolerance is a share of it. No two variants may give answers within the tolerance of each other, and the prompt must say every input as {name}, which only the validator checks.",
       "anyOf": [
         {
-          "required": [
-            "variants",
-            "unit"
-          ],
+          "required": ["variants", "unit"],
           "properties": {
             "variants": {
               "properties": {
@@ -816,10 +757,7 @@
                 "values": {
                   "items": {
                     "type": "object",
-                    "required": [
-                      "a",
-                      "M"
-                    ],
+                    "required": ["a", "M"],
                     "additionalProperties": false,
                     "properties": {
                       "a": {
@@ -843,10 +781,7 @@
           }
         },
         {
-          "required": [
-            "variants",
-            "unit"
-          ],
+          "required": ["variants", "unit"],
           "properties": {
             "variants": {
               "properties": {
@@ -856,10 +791,7 @@
                 "values": {
                   "items": {
                     "type": "object",
-                    "required": [
-                      "a",
-                      "M"
-                    ],
+                    "required": ["a", "M"],
                     "additionalProperties": false,
                     "properties": {
                       "a": {
@@ -883,10 +815,7 @@
           }
         },
         {
-          "required": [
-            "variants",
-            "unit"
-          ],
+          "required": ["variants", "unit"],
           "properties": {
             "variants": {
               "properties": {
@@ -896,10 +825,7 @@
                 "values": {
                   "items": {
                     "type": "object",
-                    "required": [
-                      "a",
-                      "M"
-                    ],
+                    "required": ["a", "M"],
                     "additionalProperties": false,
                     "properties": {
                       "a": {
@@ -923,9 +849,7 @@
           }
         },
         {
-          "required": [
-            "variants"
-          ],
+          "required": ["variants"],
           "properties": {
             "variants": {
               "properties": {
@@ -935,10 +859,7 @@
                 "values": {
                   "items": {
                     "type": "object",
-                    "required": [
-                      "r1",
-                      "r2"
-                    ],
+                    "required": ["r1", "r2"],
                     "additionalProperties": false,
                     "properties": {
                       "r1": {
@@ -960,10 +881,7 @@
           }
         },
         {
-          "required": [
-            "variants",
-            "unit"
-          ],
+          "required": ["variants", "unit"],
           "properties": {
             "variants": {
               "properties": {
@@ -973,10 +891,7 @@
                 "values": {
                   "items": {
                     "type": "object",
-                    "required": [
-                      "Rp",
-                      "Rs"
-                    ],
+                    "required": ["Rp", "Rs"],
                     "additionalProperties": false,
                     "properties": {
                       "Rp": {
@@ -1032,9 +947,7 @@
             },
             "variants": {
               "type": "object",
-              "required": [
-                "shuffle"
-              ],
+              "required": ["shuffle"],
               "additionalProperties": false,
               "properties": {
                 "shuffle": {
@@ -1071,21 +984,13 @@
             "variants": {
               "type": "object",
               "not": {
-                "required": [
-                  "relation"
-                ]
+                "required": ["relation"]
               }
             }
           }
         },
         {
-          "required": [
-            "kind",
-            "prompt",
-            "because",
-            "variants",
-            "scoring"
-          ],
+          "required": ["kind", "prompt", "because", "variants", "scoring"],
           "properties": {
             "kind": {
               "const": "numeric"
@@ -1095,11 +1000,7 @@
             "tolerance": false,
             "variants": {
               "type": "object",
-              "required": [
-                "relation",
-                "values",
-                "tolerancePct"
-              ],
+              "required": ["relation", "values", "tolerancePct"],
               "additionalProperties": false,
               "properties": {
                 "relation": {
@@ -1127,12 +1028,7 @@
           "$ref": "#/$defs/relationVariants"
         },
         {
-          "required": [
-            "kind",
-            "prompt",
-            "rubric",
-            "scoring"
-          ],
+          "required": ["kind", "prompt", "rubric", "scoring"],
           "properties": {
             "kind": {
               "const": "short"
@@ -1151,12 +1047,7 @@
     "item": {
       "description": "One question a lesson can draw on, with a stable id and a version raised whenever a grade could change, its scoring, its accessibility, and controlled variants. Item ids are unique in their list, which only the validator checks.",
       "type": "object",
-      "required": [
-        "id",
-        "version",
-        "scoring",
-        "a11y"
-      ],
+      "required": ["id", "version", "scoring", "a11y"],
       "additionalProperties": false,
       "properties": {
         "id": {
@@ -1167,11 +1058,7 @@
           "minimum": 1
         },
         "kind": {
-          "enum": [
-            "choice",
-            "numeric",
-            "short"
-          ]
+          "enum": ["choice", "numeric", "short"]
         },
         "prompt": {
           "$ref": "#/$defs/text"
@@ -1238,9 +1125,7 @@
     "setup": {
       "description": "Where a step starts: a built-in scenario, its seed (a word a teacher can say aloud), and how it is framed.",
       "type": "object",
-      "required": [
-        "scenario"
-      ],
+      "required": ["scenario"],
       "additionalProperties": false,
       "properties": {
         "scenario": {
@@ -1383,9 +1268,7 @@
     "tool": {
       "description": "The instrument a step docks.",
       "type": "object",
-      "required": [
-        "id"
-      ],
+      "required": ["id"],
       "additionalProperties": false,
       "properties": {
         "id": {
@@ -1467,6 +1350,9 @@
             "polytrope",
             "wd-mass-radius",
             "ms-scaling",
+            "variable-fold",
+            "leavitt-law",
+            "variable-class",
             "light-bending",
             "lens-plane",
             "lens-passing",
@@ -1491,20 +1377,14 @@
     "when": {
       "description": "Remediation: shown only when an earlier graded step, one every student reaches, was answered this way; never the last step, and on a held prediction no earlier than where it is marked. Which steps qualify, only the validator can say.",
       "type": "object",
-      "required": [
-        "sid",
-        "is"
-      ],
+      "required": ["sid", "is"],
       "additionalProperties": false,
       "properties": {
         "sid": {
           "$ref": "#/$defs/sid"
         },
         "is": {
-          "enum": [
-            "incorrect",
-            "correct"
-          ]
+          "enum": ["incorrect", "correct"]
         }
       }
     },
@@ -1512,12 +1392,7 @@
       "anyOf": [
         {
           "type": "object",
-          "required": [
-            "sid",
-            "type",
-            "title",
-            "body"
-          ],
+          "required": ["sid", "type", "title", "body"],
           "additionalProperties": false,
           "properties": {
             "sid": {
@@ -1553,24 +1428,14 @@
               }
             },
             "depth": {
-              "enum": [
-                "core",
-                "quantitative",
-                "advanced"
-              ],
+              "enum": ["core", "quantitative", "advanced"],
               "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           }
         },
         {
           "type": "object",
-          "required": [
-            "sid",
-            "type",
-            "title",
-            "body",
-            "checklist"
-          ],
+          "required": ["sid", "type", "title", "body", "checklist"],
           "additionalProperties": false,
           "properties": {
             "sid": {
@@ -1614,24 +1479,14 @@
               }
             },
             "depth": {
-              "enum": [
-                "core",
-                "quantitative",
-                "advanced"
-              ],
+              "enum": ["core", "quantitative", "advanced"],
               "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           }
         },
         {
           "type": "object",
-          "required": [
-            "sid",
-            "type",
-            "title",
-            "body",
-            "fields"
-          ],
+          "required": ["sid", "type", "title", "body", "fields"],
           "additionalProperties": false,
           "properties": {
             "sid": {
@@ -1673,10 +1528,7 @@
               "maxItems": 6,
               "items": {
                 "type": "object",
-                "required": [
-                  "id",
-                  "label"
-                ],
+                "required": ["id", "label"],
                 "additionalProperties": false,
                 "properties": {
                   "id": {
@@ -1694,11 +1546,7 @@
               }
             },
             "depth": {
-              "enum": [
-                "core",
-                "quantitative",
-                "advanced"
-              ],
+              "enum": ["core", "quantitative", "advanced"],
               "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           }
@@ -1774,24 +1622,14 @@
               "$ref": "#/$defs/sid"
             },
             "depth": {
-              "enum": [
-                "core",
-                "quantitative",
-                "advanced"
-              ],
+              "enum": ["core", "quantitative", "advanced"],
               "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           }
         },
         {
           "type": "object",
-          "required": [
-            "sid",
-            "type",
-            "title",
-            "body",
-            "from"
-          ],
+          "required": ["sid", "type", "title", "body", "from"],
           "additionalProperties": false,
           "properties": {
             "sid": {
@@ -1831,24 +1669,14 @@
               "type": "string"
             },
             "depth": {
-              "enum": [
-                "core",
-                "quantitative",
-                "advanced"
-              ],
+              "enum": ["core", "quantitative", "advanced"],
               "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           }
         },
         {
           "type": "object",
-          "required": [
-            "sid",
-            "type",
-            "title",
-            "body",
-            "kind"
-          ],
+          "required": ["sid", "type", "title", "body", "kind"],
           "additionalProperties": false,
           "properties": {
             "sid": {
@@ -1884,11 +1712,7 @@
               }
             },
             "kind": {
-              "enum": [
-                "choice",
-                "numeric",
-                "short"
-              ]
+              "enum": ["choice", "numeric", "short"]
             },
             "prompt": {
               "$ref": "#/$defs/text"
@@ -1938,11 +1762,7 @@
               "$ref": "#/$defs/scoring"
             },
             "depth": {
-              "enum": [
-                "core",
-                "quantitative",
-                "advanced"
-              ],
+              "enum": ["core", "quantitative", "advanced"],
               "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           },

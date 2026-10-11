@@ -92,6 +92,10 @@ import THE_EXPANDING_UNIVERSE from './investigations/the-expanding-universe.js';
 import STANDARD_CANDLES from './investigations/standard-candles.js';
 import THE_SHAPE_OF_EXPANSION from './investigations/the-shape-of-expansion.js';
 import WHERE_GALAXIES_LIVE from './investigations/where-galaxies-live.js';
+import THE_BEAT_OF_A_STAR from './investigations/the-beat-of-a-star.js';
+import LEAVITTS_LAW from './investigations/leavitts-law.js';
+import THE_FIRST_RUNG from './investigations/the-first-rung.js';
+import WHICH_KIND_OF_VARIABLE from './investigations/which-kind-of-variable.js';
 import BENDING_LIGHT from './investigations/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS from './investigations/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY from './investigations/a-lens-passing-by.js';
@@ -160,6 +164,10 @@ export const INVESTIGATIONS = [
   STANDARD_CANDLES,
   THE_SHAPE_OF_EXPANSION,
   WHERE_GALAXIES_LIVE,
+  THE_BEAT_OF_A_STAR,
+  LEAVITTS_LAW,
+  THE_FIRST_RUNG,
+  WHICH_KIND_OF_VARIABLE,
   BENDING_LIGHT,
   EINSTEIN_RINGS_AND_ARCS,
   A_LENS_PASSING_BY,

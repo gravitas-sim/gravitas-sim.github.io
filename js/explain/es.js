@@ -121,6 +121,12 @@ export default {
     'Por qué el centro es caliente y denso, por qué una estrella degenerada tiene una masa límite y hasta dónde llega un argumento de escala antes de que se vea la forma de las estrellas reales.',
     'Un politropo es una forma, no una estrella: sin generación de energía, opacidad ni convección; la enana blanca es fría e ideal; la secuencia principal es un modelo MIST, no una medición.',
   ],
+  variables: [
+    'Curvas de luz reales de TESS de dos estrellas pulsantes, una búsqueda de periodo y un pliegue sobre un periodo de ensayo; la relación periodo-luminosidad de las cefeidas de la Gran Nube de Magallanes y las distancias que da a dos galaxias; o una muestra etiquetada de cinco tipos de estrella variable y una tabla de confusión.',
+    'Cómo cambian el periodo, su error, los alias, la pendiente, el punto cero, la distancia y su presupuesto de errores, o la proporción bien clasificada al cambiar la estrella, el periodo de plegado, la galaxia o las medidas que puede usar un clasificador.',
+    'Cómo se lee un periodo en una curva de luz y qué lo limita, por qué el periodo de una cefeida da su luminosidad y con ella una distancia, y por qué una sola cifra de exactitud oculta qué tipos de estrella se toman por cuáles.',
+    'Las curvas de luz y las cefeidas son mediciones reales en una banda, sin corrección de metalicidad ni de apiñamiento; el error del bootstrap es un mínimo; la muestra de clasificación es sintética, equilibrada y estilizada; la cronometría de púlsares no se modela.',
+  ],
   lensing: [
     'La desviación frente al máximo acercamiento (escalas logarítmicas); el plano de la lente en radios de Einstein con la fuente y sus imágenes; o el flujo frente al tiempo cuando pasa una lente.',
     'Cómo cambian la desviación, el anillo, las imágenes y la curva de luz al cambiar la masa, la distancia, la velocidad, el desplazamiento y la mezcla.',

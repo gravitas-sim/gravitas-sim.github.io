@@ -90,6 +90,14 @@ export const SUMMARIES = {
   'where-galaxies-live': `A redshift is a distance, and a sky position is a direction, so together they make a map. You will place 2,911 real galaxies of the Sloan survey in a wedge half a gigaparsec deep, measure how much more clumped they are than a random scatter, and find that the density falls with distance because the survey sees only the brightest galaxies far away, a selection effect and not a void.`,
   'the-limit':
     'A white dwarf is held up by electrons squeezed until they cannot be squeezed further, and a heavier one is a smaller one. You will measure the mass and radius of model white dwarfs from their central density, watch the mass climb toward a ceiling it never passes, find why relativistic electrons make that ceiling inevitable at 1.46 solar masses for carbon and oxygen, and see how the limit changes with composition.',
+  'the-beat-of-a-star':
+    'A pulsating star repeats, and its period is the first number to find. You will search real TESS light curves of an RR Lyrae star and a Cepheid for their periods, fold the light on the best period and on wrong ones, give each period an error from a bootstrap, and see why a telescope that looks once a night puts false peaks into the search and where they fall.',
+  'leavitts-law':
+    'Cepheids with longer periods are brighter, and that fact became the first rung of the distance ladder. You will fit the period-luminosity relation to 339 Cepheids of the Large Magellanic Cloud measured by Hubble, read its slope, zero point and scatter, see why a Wesenheit magnitude cancels almost all of the dust, and turn a tenfold step in period into a ratio of brightness.',
+  'the-first-rung':
+    'Slide the Cepheid relation onto another galaxy’s Cepheids and the slide is its distance. You will measure the distances of NGC 4258 and M101, check NGC 4258 against an independent distance from water masers, read the four-term error budget to see which term limits the answer, and find why averaging many galaxies cannot beat the error in the calibrating galaxy’s own distance.',
+  'which-kind-of-variable':
+    'A survey cannot look at every variable star, so a classifier sorts them by period, amplitude and light-curve shape. You will classify a labeled synthetic sample of five kinds of variable, add one measurement at a time, read the confusion table to see which kinds are mistaken for which, and find why a single accuracy figure hides the weakest kind and depends on the mix of stars in the sample.',
   'bending-light':
     'Mass bends light, and a ray that grazes the Sun is turned by 1.75 arcseconds, twice what Newton’s gravity gives. You will measure the bending against the mass and the distance of closest approach, see what the 1919 eclipse plates decided, and find the case where the formula cannot be trusted.',
   'einstein-rings-and-arcs':

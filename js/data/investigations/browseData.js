@@ -180,6 +180,22 @@ export const BROWSE_META = {
     tags: ['galaxies', 'observing'],
     numericCount: 0,
   },
+  'the-beat-of-a-star': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  'leavitts-law': {
+    tags: ['galaxies', 'observing', 'stars'],
+    numericCount: 0,
+  },
+  'the-first-rung': {
+    tags: ['galaxies', 'observing', 'stars'],
+    numericCount: 0,
+  },
+  'which-kind-of-variable': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
   'bending-light': {
     tags: ['gravity', 'observing'],
     numericCount: 0,

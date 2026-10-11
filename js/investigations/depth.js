@@ -81,6 +81,13 @@ const EXTENSIONS = {
     import('../data/investigations/depth/the-shape-of-expansion.js'),
   'where-galaxies-live': () =>
     import('../data/investigations/depth/where-galaxies-live.js'),
+  'the-beat-of-a-star': () =>
+    import('../data/investigations/depth/the-beat-of-a-star.js'),
+  'leavitts-law': () => import('../data/investigations/depth/leavitts-law.js'),
+  'the-first-rung': () =>
+    import('../data/investigations/depth/the-first-rung.js'),
+  'which-kind-of-variable': () =>
+    import('../data/investigations/depth/which-kind-of-variable.js'),
   'bending-light': () =>
     import('../data/investigations/depth/bending-light.js'),
   'einstein-rings-and-arcs': () =>
@@ -129,6 +136,14 @@ const WORDS = {
       import('../data/investigations/depth/es/the-shape-of-expansion.js'),
     'where-galaxies-live': () =>
       import('../data/investigations/depth/es/where-galaxies-live.js'),
+    'the-beat-of-a-star': () =>
+      import('../data/investigations/depth/es/the-beat-of-a-star.js'),
+    'leavitts-law': () =>
+      import('../data/investigations/depth/es/leavitts-law.js'),
+    'the-first-rung': () =>
+      import('../data/investigations/depth/es/the-first-rung.js'),
+    'which-kind-of-variable': () =>
+      import('../data/investigations/depth/es/which-kind-of-variable.js'),
     'bending-light': () =>
       import('../data/investigations/depth/es/bending-light.js'),
     'einstein-rings-and-arcs': () =>

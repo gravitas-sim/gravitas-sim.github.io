@@ -40,6 +40,10 @@ import THE_EXPANDING_UNIVERSE from './data/investigations/es/the-expanding-unive
 import STANDARD_CANDLES from './data/investigations/es/standard-candles.js';
 import THE_SHAPE_OF_EXPANSION from './data/investigations/es/the-shape-of-expansion.js';
 import WHERE_GALAXIES_LIVE from './data/investigations/es/where-galaxies-live.js';
+import THE_BEAT_OF_A_STAR from './data/investigations/es/the-beat-of-a-star.js';
+import LEAVITTS_LAW from './data/investigations/es/leavitts-law.js';
+import THE_FIRST_RUNG from './data/investigations/es/the-first-rung.js';
+import WHICH_KIND_OF_VARIABLE from './data/investigations/es/which-kind-of-variable.js';
 import BENDING_LIGHT from './data/investigations/es/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS from './data/investigations/es/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY from './data/investigations/es/a-lens-passing-by.js';
@@ -81,6 +85,10 @@ import THE_EXPANDING_UNIVERSE_DEEPER from './data/investigations/depth/es/the-ex
 import STANDARD_CANDLES_DEEPER from './data/investigations/depth/es/standard-candles.js';
 import THE_SHAPE_OF_EXPANSION_DEEPER from './data/investigations/depth/es/the-shape-of-expansion.js';
 import WHERE_GALAXIES_LIVE_DEEPER from './data/investigations/depth/es/where-galaxies-live.js';
+import THE_BEAT_OF_A_STAR_DEEPER from './data/investigations/depth/es/the-beat-of-a-star.js';
+import LEAVITTS_LAW_DEEPER from './data/investigations/depth/es/leavitts-law.js';
+import THE_FIRST_RUNG_DEEPER from './data/investigations/depth/es/the-first-rung.js';
+import WHICH_KIND_OF_VARIABLE_DEEPER from './data/investigations/depth/es/which-kind-of-variable.js';
 import BENDING_LIGHT_DEEPER from './data/investigations/depth/es/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS_DEEPER from './data/investigations/depth/es/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY_DEEPER from './data/investigations/depth/es/a-lens-passing-by.js';
@@ -119,6 +127,10 @@ export const SHADOWS = Object.freeze({
   'standard-candles': STANDARD_CANDLES,
   'the-shape-of-expansion': THE_SHAPE_OF_EXPANSION,
   'where-galaxies-live': WHERE_GALAXIES_LIVE,
+  'the-beat-of-a-star': THE_BEAT_OF_A_STAR,
+  'leavitts-law': LEAVITTS_LAW,
+  'the-first-rung': THE_FIRST_RUNG,
+  'which-kind-of-variable': WHICH_KIND_OF_VARIABLE,
   'bending-light': BENDING_LIGHT,
   'einstein-rings-and-arcs': EINSTEIN_RINGS_AND_ARCS,
   'a-lens-passing-by': A_LENS_PASSING_BY,
@@ -167,6 +179,10 @@ export const DEEPER_SHADOWS = Object.freeze({
   'standard-candles': STANDARD_CANDLES_DEEPER,
   'the-shape-of-expansion': THE_SHAPE_OF_EXPANSION_DEEPER,
   'where-galaxies-live': WHERE_GALAXIES_LIVE_DEEPER,
+  'the-beat-of-a-star': THE_BEAT_OF_A_STAR_DEEPER,
+  'leavitts-law': LEAVITTS_LAW_DEEPER,
+  'the-first-rung': THE_FIRST_RUNG_DEEPER,
+  'which-kind-of-variable': WHICH_KIND_OF_VARIABLE_DEEPER,
   'bending-light': BENDING_LIGHT_DEEPER,
   'einstein-rings-and-arcs': EINSTEIN_RINGS_AND_ARCS_DEEPER,
   'a-lens-passing-by': A_LENS_PASSING_BY_DEEPER,

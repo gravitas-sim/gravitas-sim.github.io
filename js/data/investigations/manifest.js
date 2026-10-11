@@ -527,6 +527,58 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'the-beat-of-a-star',
+    title: 'The Beat of a Star',
+    subtitle:
+      'Finding a pulsating star’s period, and the false periods of a telescope that looks once a night',
+    duration: '25-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/the-beat-of-a-star.webp',
+    depths: 3,
+    stepCount: 13,
+    gradedCount: 11,
+    objectiveCount: 4,
+  },
+  {
+    id: 'leavitts-law',
+    title: 'Leavitt’s Law',
+    subtitle:
+      'Fitting the period-luminosity relation of Cepheids in the Large Magellanic Cloud',
+    duration: '8-15 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/leavitts-law.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-first-rung',
+    title: 'The First Rung',
+    subtitle:
+      'The distance to two galaxies from their Cepheids, with every error accounted for',
+    duration: '12-20 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/the-first-rung.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'which-kind-of-variable',
+    title: 'Which Kind of Variable',
+    subtitle:
+      'Telling five kinds of variable star apart, and reading a confusion table instead of one answer',
+    duration: '12-22 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/which-kind-of-variable.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
     id: 'bending-light',
     title: 'Bending Light',
     subtitle:
