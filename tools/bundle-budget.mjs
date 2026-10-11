@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1973.8,
+    limit: 1987.9,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -601,8 +601,8 @@ const BUDGETS = [
       '\n\nRaised from 1986.2 to 1988.3 KB gzipped for the Pantheon+ pack record (js/data/observations/pantheonPlusHd.js, its citations and licence record, a lazy chunk behind loadPantheonPlus; D-RIGHTS-04 and D-BUDGET-27, the standing size-budget approval). Measured 2,035,956 bytes gzipped (1988.24 KB, 5400.9 KB raw) after merging v2 78f44b4, an overrun of 2.04 KB. The 1,701 rows are a fetched sidecar (cosmology/pantheon-plus-hd.json) and are in no bundle.' +
       '\n\nLowered from 1988.3 to 1973.8 KB gzipped by the budget-recovery pass (D-BUDGET-28): esbuild wrote a sourceMappingURL comment at the end of every chunk, a 40-byte hash that does not compress, about 36.8 bytes gzipped on each of the 401 deferred chunks. build.js now emits the maps without the comment (sourcemap: external); the .map files are still written. Measured 2,021,119 bytes gzipped (1973.75 KB, 5384.1 KB raw), 14,758 bytes fewer than the 2,035,877 of v2 707f278f. The initial download also fell, 789.0 to 786.8 KB; its 830 KB ceiling was not touched.' +
       '\n\n' +
-      'The formula language (Prompt 100) took the deferred total from 1988.3 ' +
-      'KB to 2002.4 KB gzipped (5434.6 KB raw), 14.1 KB: the ' +
+      'The formula language (Prompt 100) took the deferred total from 1973.8 ' +
+      'KB (D-BUDGET-28) to 1987.9 KB gzipped (5417.5 KB raw), 14.1 KB: the ' +
       'language itself is 5.8 KB (tools/formula-size.mjs), the question grader ' +
       '0.4 KB more, and the rest is its words in two languages, the ' +
       'Observatory and notebook forms, the composer field and the derived ' +
