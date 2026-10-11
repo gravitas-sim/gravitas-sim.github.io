@@ -8,7 +8,9 @@
 >
   <div class="obs-panel-toolbar">
     <div class="obs-panel-meta">
-      <span class="obs-panel-title" id="pauseEventTitle">Pause at Event</span>
+      <span class="obs-panel-title" id="pauseEventTitle"
+        >Pause at Event</span
+      >
       <span id="pauseEventStatus" class="obs-panel-status">Not armed</span>
     </div>
     <div class="obs-panel-actions">
@@ -67,7 +69,11 @@
       <select id="pauseEventPrimary"></select>
     </label>
 
-    <label class="pause-event-field" id="pauseEventSeparationField" hidden="">
+    <label
+      class="pause-event-field"
+      id="pauseEventSeparationField"
+      hidden=""
+    >
       <span data-i18n="pauseEvent.separation">Separation</span>
       <input
         type="number"
@@ -111,13 +117,17 @@
         <span class="rv-readout-label" data-i18n="pauseEvent.precision"
           >Located to within</span
         >
-        <span id="pauseEventPrecision" class="rv-readout-value numeric">—</span>
+        <span id="pauseEventPrecision" class="rv-readout-value numeric"
+          >—</span
+        >
       </div>
       <div class="rv-readout-cell">
         <span class="rv-readout-label" data-i18n="pauseEvent.overshoot"
           >Paused after it by</span
         >
-        <span id="pauseEventOvershoot" class="rv-readout-value numeric">—</span>
+        <span id="pauseEventOvershoot" class="rv-readout-value numeric"
+          >—</span
+        >
       </div>
     </div>
     <label class="pause-event-note">
@@ -133,9 +143,9 @@
   </div>
 
   <p class="obs-panel-hint" data-i18n="pauseEvent.hint">
-    Events are found from the integration steps, so the precision above is the
-    interval the event was localized to. The simulation stops just after the
-    event rather than winding back onto it, which would leave the recordings and
-    the timeline describing a moment that never happened.
+    Events are found from the integration steps, so the precision above is
+    the interval the event was localized to. The simulation stops just after
+    the event rather than winding back onto it, which would leave the
+    recordings and the timeline describing a moment that never happened.
   </p>
 </div>

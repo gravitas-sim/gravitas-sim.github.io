@@ -81,8 +81,15 @@
     }
   ],
   "selection": {
-    "metrics": ["separation", "energy_drift", "orbital_period"],
-    "objects": [3, 1],
+    "metrics": [
+      "separation",
+      "energy_drift",
+      "orbital_period"
+    ],
+    "objects": [
+      3,
+      1
+    ],
     "primary": 1
   },
   "version": 1
