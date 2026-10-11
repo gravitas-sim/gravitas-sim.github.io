@@ -100,9 +100,6 @@ say something different from them; NOTICE lists what each one cites.
 | `js/data/gw/gw150914.js` | GW150914: the published figure data (`gw150914-figure-data`) | observed | CC BY 4.0; see NOTICE |
 | `js/data/gw/gwoscEvents.js` | Five gravitational-wave events: whitened GWOSC strain (`gwosc-five-events`) | observed | CC BY 4.0; see NOTICE |
 | `js/data/observations/milkyWayRotationCurve.js` | The Milky Way's rotation curve (Bhattacharjee, Chaudhury and Kundu 2014) (`milky-way-rotation-curve`) | compilation | no license stated; see NOTICE |
-| `js/data/observations/tessSuDraS15.js` | SU Draconis: TESS sector 15 light curve (an RR Lyrae star) (`tess-su-dra-s15`) | observed | public domain; see NOTICE |
-| `js/data/observations/tessEtaAqlS81.js` | Eta Aquilae: TESS sector 81 light curve (a classical Cepheid) (`tess-eta-aql-s81`) | observed | public domain; see NOTICE |
-| `js/data/observations/shoesR22Cepheids.js` | Cepheids in the LMC, NGC 4258 and M101: periods and Wesenheit magnitudes (Riess et al. 2022) (`shoes-r22-cepheids`) | compilation | CC BY 4.0; see NOTICE |
 | `js/data/observations/mistSdssIsochrones.js` | MIST v1.2 isochrones in the SDSS bands (a model) (`mist-sdss-isochrones`) | model | no license stated; see NOTICE |
 | `js/data/stellar/mistTracks.js` | MIST v1.2 evolutionary tracks: eight model stars at solar metallicity (`mist-v12-tracks`) | model | no license stated; see NOTICE |
 | `js/data/ngc3198Synthetic.js` | NGC 3198: a synthetic rotation curve (`ngc3198-synthetic-curve`) | synthetic | CC BY 4.0; see NOTICE |
@@ -114,9 +111,12 @@ say something different from them; NOTICE lists what each one cites.
 | `js/data/observations/sdssNgc2420Photometry.js` | NGC 2420: SDSS DR18 photometry (`sdss-dr18-ngc2420-photometry`) | observed | public domain; see NOTICE |
 | `js/data/observations/sdssNgc2420Segue.js` | NGC 2420: SEGUE stellar parameters (`sdss-dr18-ngc2420-segue`) | observed | public domain; see NOTICE |
 | `js/data/spectra/sdssSpectra.js` | Four observed stellar spectra: SDSS DR18, one each of A, G, K and M (`sdss-dr18-stellar-spectra`) | observed | public domain; see NOTICE |
+| `js/data/observations/shoesR22Cepheids.js` | Cepheids in the LMC, NGC 4258 and M101: periods and Wesenheit magnitudes (Riess et al. 2022) (`shoes-r22-cepheids`) | compilation | CC BY 4.0; see NOTICE |
 | `js/data/sky/brightStars.js` | Bright stars to V 4.5 for the Sky Lab: the Yale Bright Star Catalogue (5th revised edition) (`sky-bright-stars`) | compilation | no license stated; see NOTICE |
+| `js/data/observations/tessEtaAqlS81.js` | Eta Aquilae: TESS sector 81 light curve (a classical Cepheid) (`tess-eta-aql-s81`) | observed | public domain; see NOTICE |
 | `js/data/observations/tessHd209458S56Aperture.js` | HD 209458: TESS sector 56 aperture mask (`tess-hd209458-s56-aperture`) | observed | public domain; see NOTICE |
 | `js/data/observations/tessHd209458S56.js` | HD 209458: TESS sector 56 light curve (`tess-hd209458-s56-lc`) | observed | public domain; see NOTICE |
+| `js/data/observations/tessSuDraS15.js` | SU Draconis: TESS sector 15 light curve (an RR Lyrae star) (`tess-su-dra-s15`) | observed | public domain; see NOTICE |
 | `js/data/trappist1.js` | TRAPPIST-1: the star and its seven planets, compiled from the literature (`trappist-1-system`) | compilation | no license; attribution requested; see NOTICE |
 <!--/fact-block-->
 

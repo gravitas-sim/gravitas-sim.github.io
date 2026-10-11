@@ -33,8 +33,7 @@ export const EN_VARIABLES = {
   'varW.f.axisP': 'trial period, days',
   'varW.f.axisPow': 'power',
   'varW.f.axisPhase': 'phase (two cycles)',
-  'varW.f.source.tess':
-    'Authentic: a TESS light curve (NASA), binned',
+  'varW.f.source.tess': 'Authentic: a TESS light curve (NASA), binned',
   'varW.f.source.nightly':
     'Authentic TESS data, kept only at one time of day each day, as a telescope on the ground would see it',
   'varW.f.row.points': 'Points',
@@ -65,7 +64,8 @@ export const EN_VARIABLES = {
   'varW.l.axisM': 'Wesenheit magnitude (brighter is up)',
   'varW.l.source':
     'Authentic: Hubble Space Telescope Cepheids (Riess et al. 2022), with a published distance for the Large Magellanic Cloud',
-  'varW.l.row.stars': 'Calibration stars kept (5 to 120 days, clipped at 3.3 sigma)',
+  'varW.l.row.stars':
+    'Calibration stars kept (5 to 120 days, clipped at 3.3 sigma)',
   'varW.l.row.slope': 'Slope',
   'varW.l.row.zero': 'Magnitude at a period of 10 days',
   'varW.l.row.scatter': 'Scatter about the relation',

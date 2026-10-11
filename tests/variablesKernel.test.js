@@ -1,12 +1,7 @@
 // The variable-star kernel (Roadmap II Prompt 96): Fourier fits, the period
 // search and its errors, aliases, Leavitt's law and its distance budget, the
 // extinction check, the classification exercise, and the data packs' numbers.
-import {
-  describe,
-  test,
-  expect,
-  beforeAll,
-} from '@jest/globals';
+import { describe, test, expect, beforeAll } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,12 +31,19 @@ import {
 } from '../js/kernels/variables/index.js';
 import { sampleJson } from '../tools/variables-sample.mjs';
 import { mulberry32, normalizeSeed } from '../js/rng.js';
-import { STARS, analysisOf, leavittView, classView, nightlyRows } from '../js/variablesWidgets.js';
+import {
+  STARS,
+  analysisOf,
+  leavittView,
+  classView,
+  nightlyRows,
+} from '../js/variablesWidgets.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fileFetch = async url => ({
   ok: true,
-  json: async () => JSON.parse(readFileSync(path.join(REPO, url.slice(1)), 'utf8')),
+  json: async () =>
+    JSON.parse(readFileSync(path.join(REPO, url.slice(1)), 'utf8')),
 });
 let data;
 beforeAll(async () => {
@@ -82,7 +84,9 @@ describe('the period search', () => {
       .filter(r => Math.abs(r.period / r.truthPeriod - 1) > 0.005);
     expect(bad.map(r => r.id)).toEqual([]);
     const eb = rows.filter(r => r.cls === 'eclipsing');
-    const half = eb.filter(r => Math.abs(r.period / r.truthPeriod - 0.5) < 0.01);
+    const half = eb.filter(
+      r => Math.abs(r.period / r.truthPeriod - 0.5) < 0.01
+    );
     expect(half.length).toBeGreaterThanOrEqual(8);
   });
   test('aliases of one-per-day sampling are 1/|1/P ± 1|', () => {
@@ -117,7 +121,9 @@ describe('the real stars', () => {
   });
   test('SU Dra seen once a night: the strongest peaks are the true period and its one-per-day aliases', () => {
     const a = analysisOf(2, data);
-    expect(nightlyRows(data.suDra.t).length).toBeLessThan(data.suDra.t.length / 10);
+    expect(nightlyRows(data.suDra.t).length).toBeLessThan(
+      data.suDra.t.length / 10
+    );
     const P = 0.66042;
     const near = (x, y) => Math.abs(x / y - 1) < 0.02;
     const candidates = [P, ...aliasPeriods(P, 1, 1).map(x => x.period)];
@@ -129,7 +135,11 @@ describe('the real stars', () => {
         0
       );
       let m = 0;
-      for (let i = Math.max(0, k - 3); i <= Math.min(a.found.grid.length - 1, k + 3); i++)
+      for (
+        let i = Math.max(0, k - 3);
+        i <= Math.min(a.found.grid.length - 1, k + 3);
+        i++
+      )
         m = Math.max(m, a.found.spectrum[i]);
       expect(m).toBeGreaterThan(0.5 * a.found.power);
     }
@@ -140,7 +150,10 @@ describe('the real stars', () => {
 describe("Leavitt's law and the ladder", () => {
   test('OLS is exact on a line and its slope error matches the closed form', () => {
     const x = [0, 1, 2, 3, 4];
-    const f = fitLine(x, x.map(v => 2 + 3 * v));
+    const f = fitLine(
+      x,
+      x.map(v => 2 + 3 * v)
+    );
     expect(f.b).toBeCloseTo(3, 12);
     expect(f.a).toBeCloseTo(2, 12);
     const g = fitLine(x, [2, 5.1, 7.9, 11.2, 13.8]);
@@ -157,7 +170,10 @@ describe("Leavitt's law and the ladder", () => {
   });
   test('a sample shifted by exactly one magnitude has a distance modulus one larger, with the anchor’s error', () => {
     const lmc = data.cepheids.lmc;
-    const shifted = { periods: lmc.periods, mags: Float64Array.from(lmc.mags, m => m + 1) };
+    const shifted = {
+      periods: lmc.periods,
+      mags: Float64Array.from(lmc.mags, m => m + 1),
+    };
     const r = ladderDistance(shifted, lmc, { mu: 18.5, sigma: 0.026 });
     expect(r.mu).toBeCloseTo(19.5, 10);
     expect(r.budget.find(b => b.id === 'anchorDistance').sigma).toBe(0.026);
@@ -166,19 +182,27 @@ describe("Leavitt's law and the ladder", () => {
   test('the error budget has the right coverage: 400 simulated hosts, the truth is within one sigma about 68 percent of the time', () => {
     const lmc = data.cepheids.lmc;
     const rand = mulberry32(normalizeSeed('coverage'));
-    const gauss = () => Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
+    const gauss = () =>
+      Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
     const trueMu = 29.4;
     let inside = 0;
     const N = 400;
     for (let k = 0; k < N; k++) {
       const n = 60;
-      const periods = Float64Array.from({ length: n }, () => 10 ** (0.8 + 0.8 * rand()));
+      const periods = Float64Array.from(
+        { length: n },
+        () => 10 ** (0.8 + 0.8 * rand())
+      );
       const mags = Float64Array.from(
         periods,
-        P => 12.6 - 3.29 * (Math.log10(P) - 1) + (trueMu - 18.477) + 0.4 * gauss()
+        P =>
+          12.6 - 3.29 * (Math.log10(P) - 1) + (trueMu - 18.477) + 0.4 * gauss()
       );
       const anchorMu = 18.477 + 0.026 * gauss();
-      const r = ladderDistance({ periods, mags }, lmc, { mu: anchorMu, sigma: 0.026 });
+      const r = ladderDistance({ periods, mags }, lmc, {
+        mu: anchorMu,
+        sigma: 0.026,
+      });
       if (Math.abs(r.mu - trueMu) <= r.sigma) inside++;
     }
     expect(inside / N).toBeGreaterThan(0.6);
@@ -203,7 +227,9 @@ describe("Leavitt's law and the ladder", () => {
 
 describe('the classification exercise', () => {
   test('the committed sample is what the kernel makes', () => {
-    expect(readFileSync(path.join(REPO, 'variables/class-sample.json'), 'utf8')).toBe(sampleJson());
+    expect(
+      readFileSync(path.join(REPO, 'variables/class-sample.json'), 'utf8')
+    ).toBe(sampleJson());
   });
   test('more features separate more classes: period alone is the worst, the shape the best', async () => {
     const rows = await loadClassSample(fileFetch);
@@ -224,22 +250,38 @@ describe('the classification exercise', () => {
 
 describe('the data packs', () => {
   test('the light curves and the Cepheid table are what their manifests say', () => {
-    for (const id of ['tess-su-dra-s15', 'tess-eta-aql-s81', 'shoes-r22-cepheids']) {
-      const m = JSON.parse(readFileSync(path.join(REPO, `data-packs/${id}.json`), 'utf8'));
+    for (const id of [
+      'tess-su-dra-s15',
+      'tess-eta-aql-s81',
+      'shoes-r22-cepheids',
+    ]) {
+      const m = JSON.parse(
+        readFileSync(path.join(REPO, `data-packs/${id}.json`), 'utf8')
+      );
       expect(m.validation.ok ?? true).toBe(true);
       expect(m.derived.sidecar.bytes).toBeGreaterThan(1000);
     }
     expect(data.suDra.t.length).toBe(1799);
     expect(data.etaAql.t.length).toBe(541);
-    expect(data.cepheids.lmc.periods.length + data.cepheids.n4258.periods.length + data.cepheids.m101.periods.length).toBe(515);
+    expect(
+      data.cepheids.lmc.periods.length +
+        data.cepheids.n4258.periods.length +
+        data.cepheids.m101.periods.length
+    ).toBe(515);
   });
   test('periodogram and refinement agree with the unrefined peak to the width', () => {
     const a = analysisOf(0, data);
-    expect(Math.abs(a.refined.period - a.found.period)).toBeLessThan(a.found.width);
+    expect(Math.abs(a.refined.period - a.found.period)).toBeLessThan(
+      a.found.width
+    );
     const P = a.found.period;
     const pw = periodogram(a.t, a.mag, [P, 1.37 * P]);
     expect(pw[0]).toBeGreaterThan(pw[1]);
     expect(refinePeriod(a.t, a.mag, P, 2).period).toBeGreaterThan(0);
-    expect(bootstrapPeriod(a.t.subarray(0, 300), a.mag.subarray(0, 300), P, { resamples: 4 }).resamples).toBe(4);
+    expect(
+      bootstrapPeriod(a.t.subarray(0, 300), a.mag.subarray(0, 300), P, {
+        resamples: 4,
+      }).resamples
+    ).toBe(4);
   });
 });

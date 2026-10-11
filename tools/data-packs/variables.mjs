@@ -23,10 +23,7 @@ import { sha256 } from './pinned.mjs';
 import { ENCODING, TABLE_VERSION, encodeTable } from './table-columns.mjs';
 import { observationOf } from '../../js/observation.js';
 import { tableOf } from '../../js/tableObservation.js';
-import {
-  findPeriod,
-  refinePeriod,
-} from '../../js/kernels/variables/period.js';
+import { findPeriod, refinePeriod } from '../../js/kernels/variables/period.js';
 import { fitLeavitt } from '../../js/kernels/variables/ladder.js';
 
 const REPO = path.resolve(
@@ -376,7 +373,12 @@ export const SHOES_CEPHEIDS = {
     const all = text
       .split('\n')
       .filter(l => l.includes('&') && !l.startsWith('\\'))
-      .map(l => l.replace(/\\\\.*$/, '').split('&').map(s => s.trim()))
+      .map(l =>
+        l
+          .replace(/\\\\.*$/, '')
+          .split('&')
+          .map(s => s.trim())
+      )
       .map(f => ({ host: f[0], P: f[4], col: +f[5], H: +f[7], oh: +f[9] }));
     const rows = [];
     for (const [name, [code, every]] of Object.entries(HOSTS))
@@ -423,7 +425,7 @@ export const SHOES_CEPHEIDS = {
       reductions: [
         `All ${count(1)} LMC rows, every fourth NGC 4258 row (${count(2)}) and every fourth M101 row (${count(3)}), in the table's order.`,
         "The Wesenheit magnitude is F160W - 0.386 (F555W - F814W) to 0.001 mag; coordinates, identifiers, the colour, the individual errors and the metallicity are not kept. The table's errors do not carry the covariance (the paper's own note), so the lessons fit the scatter about the relation instead.",
-        'Periods are the table\'s digits (to 0.001 d); the LMC and the two hosts are HST-only measurements, so the LMC slope is not the paper\'s, which leans on ground data.',
+        "Periods are the table's digits (to 0.001 d); the LMC and the two hosts are HST-only measurements, so the LMC slope is not the paper's, which leans on ground data.",
       ],
     };
     const manifestRest = {
@@ -465,7 +467,7 @@ export const SHOES_CEPHEIDS = {
         record: { rows: rows.length, columns: record },
       },
       assumptions: [
-        'The Wesenheit coefficient 0.386 is the paper\'s (R_V = 3.3); the lessons check it against the radiation kernel\'s extinction law.',
+        "The Wesenheit coefficient 0.386 is the paper's (R_V = 3.3); the lessons check it against the radiation kernel's extinction law.",
         'Anchor distance moduli are published values, not in this table: the LMC 18.477 +- 0.026 (Pietrzynski et al. 2019) and NGC 4258 29.397 +- 0.032 (Reid et al. 2019).',
       ],
       compatible: { widgets: [], investigations: [] },
