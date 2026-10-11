@@ -36,8 +36,14 @@
 // their own, one more request on every route. Until one is registered a plain
 // reader stands in, with the locale's decimal mark and no more.
 let readNumber = raw => {
-  const value = Number(String(raw).replace(',', '.'));
-  return Number.isFinite(value) ? { ok: true, value, rest: '' } : { ok: false };
+  try {
+    const value = JSON.parse(String(raw).replace(',', '.'));
+    return Number.isFinite(value)
+      ? { ok: true, value, rest: '' }
+      : { ok: false };
+  } catch {
+    return { ok: false };
+  }
 };
 export const useNumberReader = f => {
   readNumber = f;
