@@ -497,7 +497,9 @@ export function mountComparePanel(root, ctx) {
     } catch (err) {
       last = null;
       keep.disabled = true;
-      if (!(err instanceof CompareError)) throw err;
+      // A 3-D system the models cannot describe (an eccentric transit) is
+      // a refusal in the model's words, as a Builder system's is.
+      if (!(err instanceof CompareError) && !sys3d) throw err;
       status.textContent =
         err.code === 'result'
           ? err.message
