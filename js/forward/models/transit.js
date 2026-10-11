@@ -15,7 +15,7 @@ export function transitParameters(state, planetIndex = 0) {
   const star = state.star;
   const pl = state.planets[planetIndex];
   const o = orbitOf(star, pl);
-  const g = geometryOf(state);
+  const g = geometryOf(state, pl);
   const aRs = o.aM / (star.radiusSun * SOLAR_RADIUS_M);
   const k =
     (pl.radiusEarth * EARTH_RADIUS_M) / (star.radiusSun * SOLAR_RADIUS_M);
