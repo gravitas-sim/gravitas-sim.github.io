@@ -15,6 +15,8 @@
 
 import { mountShell } from './shell.js';
 import { sha256Hex } from './hash.js';
+import { fixed } from './format.js';
+import { parseNumber } from './answerParse.js';
 import { NOTEBOOKS, entryOf, paramsText } from './compute/catalogue.js';
 import {
   ComputeError,
@@ -131,12 +133,12 @@ const state = {
   busy: false,
 };
 
-const mb = bytes => `${(bytes / 1e6).toFixed(1)} MB`;
+const mb = bytes => `${fixed(bytes / 1e6, 1, es() ? 'es' : 'en')} MB`;
 const num = (v, digits = 8) =>
   new Intl.NumberFormat(es() ? 'es' : 'en', {
     maximumSignificantDigits: digits,
   }).format(v);
-const ms = v => `${(v / 1000).toFixed(1)} s`;
+const ms = v => `${fixed(v / 1000, 1, es() ? 'es' : 'en')} s`;
 
 function showFailure(err, extra = '') {
   const code = err instanceof ComputeError ? err.code : 'notebook-error';
@@ -270,11 +272,16 @@ function describeEntry() {
   $('cpFileLabel').hidden = $('cpInputKind').value !== 'file';
 }
 
+function numberOf(raw) {
+  const r = parseNumber(raw, es() ? 'es' : 'en');
+  return r.ok && r.rest === '' ? r.value : NaN;
+}
+
 function paramValues() {
   return Object.fromEntries(
     [...$('cpParams').querySelectorAll('input')].map(i => [
       i.dataset.id,
-      Number(i.value),
+      numberOf(i.value),
     ])
   );
 }

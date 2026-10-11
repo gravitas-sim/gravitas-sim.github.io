@@ -499,6 +499,7 @@ describe('the skip policy', () => {
     expect(ALLOWED_SKIPS.map(a => a.capability).sort()).toEqual([
       'MediaRecorder',
       'WebGL',
+      'a network route to the runtime CDN (cdn.jsdelivr.net)',
     ]);
   });
 });

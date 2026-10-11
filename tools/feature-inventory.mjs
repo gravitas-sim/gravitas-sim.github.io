@@ -95,6 +95,11 @@ export const FEATURES = [
         detect: /new Worker\(/,
         note: 'no fallback',
       },
+      {
+        file: 'js/compute/frame/runner.js',
+        detect: /new Worker\(/,
+        note: 'no fallback (the compute frame, opt-in)',
+      },
     ],
   },
   {
@@ -120,6 +125,11 @@ export const FEATURES = [
         file: 'js/archive/cache.js',
         detect: /typeof indexedDB === 'undefined'/,
         note: 'memory store',
+      },
+      {
+        file: 'js/compute/frame/runner.js',
+        detect: /indexedDB\.open\('probe'\)/,
+        note: 'a probe that records the sandbox refusing it',
       },
     ],
   },
@@ -279,6 +289,11 @@ export const FEATURES = [
         file: 'js/lab3d/kernel.js',
         detect: /crypto\.subtle\.digest/,
         note: 'no fallback',
+      },
+      {
+        file: 'js/compute/frame/runner.js',
+        detect: /crypto\.subtle\.digest/,
+        note: 'no fallback (the compute frame, opt-in)',
       },
     ],
   },
