@@ -26,6 +26,7 @@
 // =============================================================================
 
 import { makeChecker } from '../platform/checker.js';
+import { GUIDES_3D, GUIDE_DEPTHS } from './guides3d.js';
 
 export const FORMAT = 'gravitas.course-pack';
 export const FORMAT_VERSION = 2;
@@ -37,6 +38,7 @@ export const ITEM_KINDS = Object.freeze([
   'dataset',
   'reading',
   'pack',
+  'guide',
 ]);
 /** The optional paths an item may be on; everything else is the core. */
 export const PATHS = Object.freeze(['core', 'intro', 'advanced']);
@@ -119,6 +121,8 @@ const ITEM_FIELDS = {
   reading: ['title', 'cite', 'license', 'access'],
   // An investigation pack, carried in the item as its link (Prompt 78 (c)).
   pack: ['pack', 'version', 'link', 'title', 'pin'],
+  // One of the 3-D lab's guided investigations, at a depth (Prompt 105).
+  guide: ['guide', 'depth', 'title'],
 };
 /** Kinds whose time the builder derives from the lesson; the rest declare it. */
 const DERIVED_TIME = new Set(['lesson', 'assignment', 'pack']);
@@ -586,6 +590,23 @@ function checkKind(item, at, ctx) {
           `${at}.paused`,
           'boolean',
           'true or false'
+        );
+      text(item.title, `${at}.title`, false, 120);
+      return;
+    case 'guide':
+      need(
+        Object.hasOwn(GUIDES_3D, item.guide),
+        `${at}.guide`,
+        'guide',
+        `the 3-D lab has no investigation "${item.guide}"`,
+        { guide: item.guide }
+      );
+      if (item.depth !== undefined)
+        need(
+          Object.hasOwn(GUIDE_DEPTHS, item.depth),
+          `${at}.depth`,
+          'depth',
+          'core or advanced'
         );
       text(item.title, `${at}.title`, false, 120);
       return;

@@ -136,8 +136,8 @@ async function rowsOf(loc) {
     const name =
       item.kind === 'lesson'
         ? cardTitle(item.lesson, loc)
-        : item.kind === 'dataset'
-          ? item.dataset
+        : item.kind === 'dataset' || item.kind === 'guide'
+          ? (item.dataset ?? item.guide)
           : t || item.id;
     rows.push(
       `${text(unit.title, loc)}: ${T2(loc, `item.${item.kind}`, { title: name })}`

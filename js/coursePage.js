@@ -39,6 +39,7 @@ import { SCENARIO_INFO, scenarioId } from './data/scenarioInfo.js';
 import { scenarioTitle } from './i18n/scenario.js';
 import { loadInvestigation } from './data/investigations/registry.js';
 import { BUILTIN_COURSES } from './data/courses/index.js';
+import { GUIDES_3D, GUIDE_DEPTHS } from './course/guides3d.js';
 import {
   FORMAT,
   FORMAT_VERSION,
@@ -571,6 +572,7 @@ const itemName = item => {
   if (own) return own;
   if (item.lesson) return lessonTitle(item.lesson);
   if (item.kind === 'pack') return item.pack || item.id;
+  if (item.kind === 'guide') return item.guide;
   if (item.kind === 'dataset')
     return (
       datasetsOf(catalog).get(item.dataset)?.title?.[getLocale()] ||
@@ -617,6 +619,14 @@ function newItem(x, kind) {
         title: { en: scenarioTitle(scenario) },
       };
     }
+    case 'guide':
+      return {
+        ...base,
+        id: freshId(x, 'l3-planes'),
+        minutes: 20,
+        guide: 'l3-planes',
+        depth: 'core',
+      };
     case 'dataset':
       return {
         ...base,
@@ -1026,6 +1036,32 @@ function kindFields(d, item, base) {
           t('course.field.paused'),
           item.paused,
           on => commit(x => setAt(x, `${base}.paused`, on ? true : undefined))
+        ),
+        pair(`${base}.title`, t('course.field.title'), { required: false }),
+      ];
+    case 'guide':
+      return [
+        el(
+          'div',
+          { className: 'ui-grid' },
+          field(
+            idOf(`${base}.guide`),
+            t('course.field.guide'),
+            select(
+              Object.keys(GUIDES_3D).map(g => [g, g]),
+              item.guide,
+              v => commit(x => (getAt(x, base).guide = v))
+            )
+          ),
+          field(
+            idOf(`${base}.depth`),
+            t('course.field.depth'),
+            select(
+              Object.keys(GUIDE_DEPTHS).map(d => [d, t(`course.depth.${d}`)]),
+              item.depth ?? 'core',
+              v => commit(x => (getAt(x, base).depth = v))
+            )
+          )
         ),
         pair(`${base}.title`, t('course.field.title'), { required: false }),
       ];

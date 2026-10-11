@@ -103,6 +103,7 @@ function titleOf(item) {
   if (own) return own;
   if (item.lesson) return lessonMeta(item.lesson)?.title || item.lesson;
   if (item.kind === 'pack') return item.pack;
+  if (item.kind === 'guide') return item.guide;
   if (item.kind === 'dataset')
     return words(DATA.get(item.dataset)?.title) || item.dataset;
   return item.scenario || item.id;
