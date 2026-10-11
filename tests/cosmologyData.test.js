@@ -1,7 +1,7 @@
 // The cosmology packs (Roadmap II Prompt 91): the loader reads them back as
 // the sources say, the stored digits equal the raw files', and the Coma pack
 // is the scenario's own numbers.
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect, beforeAll } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { URL } from 'node:url';
 import { loadCosmologyData, COSMOLOGY_SIDECARS } from '../js/cosmologyData.js';

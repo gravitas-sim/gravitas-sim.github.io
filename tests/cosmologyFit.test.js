@@ -12,7 +12,7 @@
 // Jest's global lookups, which took the run from 43 s to 4).
 // =============================================================================
 
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect, beforeAll } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { URL } from 'node:url';
 import { loadCosmologyData } from '../js/cosmologyData.js';
