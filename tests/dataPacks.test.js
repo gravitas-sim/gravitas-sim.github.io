@@ -388,6 +388,10 @@ function copyForCheck() {
     'gaia',
     // The galactic packs' checks run the galactic kernel.
     'js/kernels/galactic',
+    // The variable-star packs' rows are sidecar files, and their checks run
+    // the period search and Leavitt fit.
+    'variables',
+    'js/kernels/variables',
     'js/data/radiation',
     // The Sky Lab's star pack checks its sidecar, and the colours it derives run the radiation kernel.
     'js/data/sky',

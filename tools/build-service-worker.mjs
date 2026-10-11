@@ -151,6 +151,10 @@ const FILES = [
   { path: 'gaia/solar-neighbourhood.json', core: false },
   { path: 'gaia/ngc2420.json', core: false },
   { path: 'gaia/milky-way-rotation-curve.json', core: false },
+  // The variable-star tables' rows (Roadmap II Prompt 96).
+  { path: 'variables/tess-su-dra-s15.json', core: false },
+  { path: 'variables/tess-eta-aql-s81.json', core: false },
+  { path: 'variables/shoes-r22-cepheids.json', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },
