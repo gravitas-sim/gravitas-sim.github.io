@@ -137,6 +137,34 @@
         border: 1px solid var(--border-strong);
         border-radius: var(--radius-sm);
       }
+      /* The embedded figure (js/lab3d/embed.js): the view, its legend and the
+         transport, and none of the page around them. */
+      html[data-embed] .gs-skip,
+      html[data-embed] .gs-shell,
+      html[data-embed] .gs-foot,
+      html[data-embed] main > :not(.l3-top):not(h1),
+      html[data-embed] .l3-keys,
+      html[data-embed] .l3-panel > :not(fieldset:first-of-type),
+      html[data-embed] .l3-panel > fieldset:first-of-type > :not(.ui-toolbar:nth-of-type(2)):not(legend) {
+        display: none;
+      }
+      html[data-embed] main > h1,
+      html[data-embed] .l3-panel > fieldset:first-of-type > legend {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+      }
+      html[data-embed][data-controls='none'] .l3-panel {
+        display: none;
+      }
+      html[data-embed] .l3-top {
+        display: block;
+      }
+      html[data-embed] .l3-wrap {
+        padding: var(--space-2);
+      }
     </style>
     <!-- shell:head -->
 <link rel="stylesheet" href="/css/shell.css" />

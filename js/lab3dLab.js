@@ -1298,14 +1298,25 @@ function openSaved(id) {
 }
 
 async function init() {
+  // An embedded figure (js/lab3d/embed.js, by URL): the page around the view
+  // removed, reduced quality and motion unless asked otherwise.
+  let embed = null;
+  if (new URL(location.href).searchParams.get('embed') === '1') {
+    const kit = await import(new URL('./lab3d/embed.js', import.meta.url).href);
+    embed = { kit, ...kit.embedSettings(location.search) };
+    kit.applyEmbed(embed.options);
+  }
   // A Spanish reader's catalog, before anything is written in it.
-  const lang = preferred();
+  const lang = embed?.options.lang ?? preferred();
   await loadLanguage(lang);
   setLanguage(lang);
-  $('l3-reduced').checked = Boolean(reducedQuery?.matches);
-  const weak =
-    (navigator.hardwareConcurrency || 8) <= 2 ||
-    (navigator.deviceMemory || 8) <= 2;
+  $('l3-reduced').checked = embed
+    ? embed.reduced
+    : Boolean(reducedQuery?.matches);
+  const weak = embed
+    ? embed.low
+    : (navigator.hardwareConcurrency || 8) <= 2 ||
+      (navigator.deviceMemory || 8) <= 2;
   $('l3-low').checked = weak;
   state.trailPoints = weak ? 400 : 2000;
   const asked = new URL(location.href).searchParams.get('system');
@@ -1417,6 +1428,14 @@ async function init() {
   else if (saved) openSaved(saved);
   else if (/^#sys\d/.test(location.hash)) openLink(location.hash);
   else open(state.choice);
+  embed?.kit.startBridge({
+    options: embed.options,
+    services: {
+      playing: () => state.playing,
+      play,
+      restart: () => open(state.choice),
+    },
+  });
 }
 
 init();

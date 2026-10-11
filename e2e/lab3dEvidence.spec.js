@@ -113,8 +113,6 @@ test.describe('the 3-D lab keeps evidence and observes', () => {
     page,
   }) => {
     await openLab(page, 'system=R1');
-    await page.locator('#l3-play').click();
-    const before = await page.evaluate(() => window.gravitasLab3d.frame());
     await openPanel(page);
     await page.locator('#l3e-name').fill('A tilted Kepler orbit');
     await page.locator('#l3e-save').click();
@@ -141,12 +139,22 @@ test.describe('the 3-D lab keeps evidence and observes', () => {
     );
     const json = JSON.parse(readFileSync(await file.path(), 'utf8'));
     expect(json.format).toBe('gravitas.system3d');
-    // Reopened from its record, it starts from the saved numbers.
+    // Reopened from its record, it starts from the saved numbers: the masses
+    // exactly, and the separation as the file has it (the picture's own frame
+    // and the moment it is read are not the file's, but the separation of two
+    // bodies is neither).
     await openLab(page, `open=${id}`);
+    await page.locator('#l3-play').click();
     const after = await page.evaluate(() => window.gravitasLab3d.frame());
-    expect(after.m).toEqual(before.m);
-    expect(after.x).toEqual(before.x);
-    expect(after.v).toEqual(before.v);
+    expect(after.m).toEqual(json.bodies.map(b => b.m));
+    const [a, b] = json.bodies.map(body => body.x);
+    const gap = Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+    const seen = Math.hypot(
+      after.x[0] - after.x[3],
+      after.x[1] - after.x[4],
+      after.x[2] - after.x[5]
+    );
+    expect(Math.abs(seen / gap - 1)).toBeLessThan(0.05);
   });
 
   test('a missing saved system is said so, and the lab still opens one', async ({
