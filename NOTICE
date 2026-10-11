@@ -479,6 +479,15 @@ ngc3198-synthetic-curve: NGC 3198: a synthetic rotation curve
     Freeman 1970, ApJ 160, 811 (the exponential disc), doi:10.1086/150474
     de Blok et al. 2008, AJ 136, 2648 (THINGS: a published NGC 3198 curve, not used here), doi:10.1088/0004-6256/136/6/2648
 
+pantheon-plus-hd: Type Ia supernova Hubble diagram: Pantheon+SH0ES, 1,701 light curves
+  File: js/data/observations/pantheonPlusHd.js (compilation)
+  Licence: no license stated. The release page (https://pantheonplussh0es.github.io/, read 2026-10-11) states no licence and says only "Please cite papers individually when referencing them." and that "Details on data release usage will be added upon journal acceptance"; the data repository (https://github.com/PantheonPlusSH0ES/DataRelease, commit 7fc6805) carries no LICENSE file and its READMEs state no terms of use. The table is public.
+  Basis: Shipped on the data-pack "no licence stated, credited" basis with the citations the release page requests, by Carl's instruction of 2026-10-11 (DECISION_REGISTER.md D-RIGHTS-04), the basis of D-SKY-02.
+  Cite:
+    Scolnic et al. 2022, ApJ 938, 113 (The Pantheon+ Analysis: The Full Data Set and Light-curve Release), https://arxiv.org/abs/2112.03863
+    Brout et al. 2022, ApJ 938, 110 (The Pantheon+ Analysis: Cosmological Constraints), https://arxiv.org/abs/2202.04077
+    Riess et al. 2022, ApJL 934, L7 (A Comprehensive Measurement of the Local Value of the Hubble Constant with 1 km/s/Mpc Uncertainty from the Hubble Space Telescope and the SH0ES Team), https://arxiv.org/abs/2112.04510
+
 radiation-bandpasses: Photometric bandpasses (Johnson-Cousins UBVRI, SDSS ugriz, TESS, 2MASS JHK) and their AB - Vega zero points
   File: js/data/radiation/bandpasses.js (compilation)
   Licence: no license; attribution requested. Response functions are measured, tabulated instrument properties published by their teams or archives (BM12 Table 1; the SDSS, TESS and 2MASS archives), shipped here resampled to a uniform grid with the AB - Vega offsets computed from the public-domain CALSPEC Vega spectrum. The TESS and 2MASS archives and the SDSS publish them for use with acknowledgement; no licence text accompanies the BM12 table or the SVO copy of the 2MASS curves.

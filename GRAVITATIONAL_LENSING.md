@@ -28,7 +28,7 @@ Bending Light (the Sun's 1.75 arcseconds, scaling, the 1919 plates, where the fo
 
 ## Authentic data
 
-None ships. The OGLE and MOA public event light curves were not downloaded and their terms of use were not confirmed in this run, so the prompt's stop condition applies: the lesson ships synthetic-only, labeled, with the truth in the lesson file and the fit in the instrument. See D-LENS-01 in the decision register.
+None ships. The OGLE and MOA public event light curves were not downloaded and their terms of use were not confirmed in this run, so the prompt's stop condition applies: the lesson ships synthetic-only, labeled, with the truth in the lesson file and the fit in the instrument. See D-LENS-01 in the decision register. By Carl's instruction of 2026-10-11 (D-RIGHTS-02) the survey data is linked and never bundled: the lessons stay on the labeled synthetic event, and the model page's "Survey archives" section (`model/index.html#survey-archives`) carries the links and the citation text. OGLE: https://ogle.astrouw.edu.pl/ogle4/ews/ews.html (cite Udalski et al. 2015, Acta Astron. 65, 1, with the web address; the page asks to be contacted before publication use); MOA: https://moaprime.massey.ac.nz/alerts (no citation request found; reference Bond et al. 2001, MNRAS 327, 868); ASAS-SN: https://asas-sn.osu.edu/ (cite Shappee et al. 2014, ApJ 788, 48 and Kochanek et al. 2017, PASP 129, 104502). Read 2026-10-11.
 
 ## Not done
 

@@ -15,8 +15,9 @@
 // counts JavaScript counts a table. The Cepheid table of the same gate is
 // tools/data-packs/variables.mjs's shoes-r22-cepheids (Prompt 96).
 //
-// Not built, and why (COSMOLOGY_GATE.md): Pantheon+ (no license statement),
-// SPARC (none), Faber-Jackson and the Coma dispersion from SDSS (the measured
+// Pantheon+ (pantheon-plus-hd) was not built in Prompt 91 (no licence statement,
+// D-COSMO-13) and is built since Carl's instruction of 2026-10-11 (D-RIGHTS-04).
+// Not built, and why (COSMOLOGY_GATE.md): SPARC (none), Faber-Jackson and the Coma dispersion from SDSS (the measured
 // numbers miss the published ones, and the bar was not moved).
 // =============================================================================
 
@@ -413,6 +414,231 @@ export const DES_SN5YR = {
   },
 };
 
+// --- Pantheon+ (Prompt 90's item 4, released by Carl's instruction of 2026-10-11) --
+
+const PPLUS_ID = 'pantheon-plus-hd';
+const PPLUS_COMMIT = '7fc680548d1ea9fe6ee983a89d8b5635bb5784a8';
+const PPLUS_URL = `https://raw.githubusercontent.com/PantheonPlusSH0ES/DataRelease/${PPLUS_COMMIT}/Pantheon%2B_Data/4_DISTANCES_AND_COVAR/Pantheon%2BSH0ES.dat`;
+const PPLUS_COLUMNS = [
+  col(
+    'z',
+    'redshift',
+    '',
+    1e-5,
+    'zHD, the Hubble-diagram redshift (CMB frame, corrected for peculiar velocity)'
+  ),
+  col(
+    'mu',
+    'distance modulus',
+    'mag',
+    1e-4,
+    "MU_SH0ES, on the release's scale: the supernova absolute magnitude fixed from the SH0ES Cepheid host distances (H0 near 73)"
+  ),
+  col(
+    'mu_err',
+    'distance modulus error',
+    'mag',
+    1e-6,
+    "MU_SH0ES_ERR_DIAG, the diagonal of the full covariance: for plotting only, the release's own warning",
+    'distance modulus'
+  ),
+  col(
+    'cal',
+    'Cepheid calibrator',
+    '',
+    1,
+    "IS_CALIBRATOR: 1 for a supernova in a host with a Cepheid distance (the release's calibrators), 0 otherwise"
+  ),
+  col(
+    'survey',
+    'survey code',
+    '',
+    1,
+    "IDSURVEY, the release's survey number (1 SDSS, 4 SNLS, 5 CSP, 10 DES, 15 PS1MD, 50 to 65 low-redshift samples, 100 to 106 HST, 150 FOUND)"
+  ),
+];
+
+export const PANTHEON_PLUS = {
+  ...base,
+  id: PPLUS_ID,
+  manifest: `data-packs/${PPLUS_ID}.json`,
+  module: modulePath(PPLUS_ID),
+  exportName: stem(PPLUS_ID),
+  namedBy: ['js/cosmologyData.js'],
+  sidecar: `cosmology/${PPLUS_ID}.json`,
+  cache: () => HERE,
+  refetch: `curl -L '${PPLUS_URL}' -o tools/data-packs/cosmology/Pantheon+SH0ES.dat`,
+  raw: [
+    {
+      file: 'Pantheon+SH0ES.dat',
+      url: PPLUS_URL,
+      bytes: 579283,
+      sha256:
+        '1cb0fc379ef066afdc2ffd1857681cc478024570d8a3eba284fb645775198cf8',
+    },
+  ],
+  columns: PPLUS_COLUMNS,
+  build(raw) {
+    const lines = text(raw[0])
+      .split('\n')
+      .map(l => l.trim())
+      .filter(l => l);
+    const head = lines[0].split(/\s+/);
+    const need = [
+      'CID',
+      'IDSURVEY',
+      'zHD',
+      'MU_SH0ES',
+      'MU_SH0ES_ERR_DIAG',
+      'IS_CALIBRATOR',
+    ];
+    for (const n of need)
+      if (!head.includes(n)) throw new Error(`the release has no ${n} column`);
+    const at = Object.fromEntries(head.map((h, i) => [h, i]));
+    const all = lines.slice(1).map(l => {
+      const f = l.split(/\s+/);
+      if (f.length !== head.length)
+        throw new Error(`a row has ${f.length} cells, not ${head.length}`);
+      return f;
+    });
+    const rows = all
+      .map(f => ({
+        cid: f[at.CID],
+        z: +f[at.zHD],
+        mu: +f[at.MU_SH0ES],
+        mu_err: +f[at.MU_SH0ES_ERR_DIAG],
+        cal: +f[at.IS_CALIBRATOR],
+        survey: +f[at.IDSURVEY],
+      }))
+      .sort(
+        (a, b) =>
+          a.z - b.z ||
+          (a.cid < b.cid ? -1 : a.cid > b.cid ? 1 : 0) ||
+          a.survey - b.survey
+      );
+    if (rows.length !== 1701)
+      throw new Error(`${rows.length} rows, not the release's 1701`);
+    const { series, record } = encodeTable(rows, this.columns);
+    const calibrators = rows.filter(r => r.cal === 1).length;
+    const near = rows.filter(r => r.z < 0.01).length;
+    const distinct = new Set(rows.map(r => r.cid)).size;
+    const rawZ = mean(all.map(f => +f[at.zHD]));
+    const rawMu = mean(all.map(f => +f[at.MU_SH0ES]));
+    const meta = {
+      id: PPLUS_ID,
+      version: '1.0.0',
+      title:
+        'Type Ia supernova Hubble diagram: Pantheon+SH0ES, 1,701 light curves',
+      object: {
+        name: `Type Ia supernovae of the Pantheon+ compilation (1,701 light curves of ${distinct.toLocaleString('en-US')} distinct supernovae) with the SH0ES Cepheid calibrators`,
+        identifiers: ['Pantheon+SH0ES'],
+        frame:
+          'redshift in the CMB frame; distance modulus on the SH0ES-calibrated scale',
+      },
+      facility: {
+        observatory:
+          'Surveys and samples (SDSS, SNLS, CSP, DES, Pan-STARRS, CfA, LOSS, HST and others), compiled by the Pantheon+ team',
+        pipeline:
+          'Pantheon+_Data/4_DISTANCES_AND_COVAR/Pantheon+SH0ES.dat of the public data release',
+      },
+      dataType: 'catalog',
+      origin: 'compilation',
+      credit:
+        'Scolnic et al. 2022 (ApJ 938, 113), Brout et al. 2022 (ApJ 938, 110), Riess et al. 2022 (ApJL 934, L7): the Pantheon+SH0ES data release, cited paper by paper as its release page asks',
+      license: {
+        status: 'no-license-stated',
+        statement:
+          'The release page (https://pantheonplussh0es.github.io/, read 2026-10-11) states no licence and says only "Please cite papers individually when referencing them." and that "Details on data release usage will be added upon journal acceptance"; the data repository (https://github.com/PantheonPlusSH0ES/DataRelease, commit 7fc6805) carries no LICENSE file and its READMEs state no terms of use. The table is public.',
+        basis:
+          'Shipped on the data-pack "no licence stated, credited" basis with the citations the release page requests, by Carl\'s instruction of 2026-10-11 (DECISION_REGISTER.md D-RIGHTS-04), the basis of D-SKY-02.',
+      },
+      retrieved: '2026-10-11',
+      columns: described(this.columns),
+      masks: [],
+      reductions: [
+        `All 1,701 rows of Pantheon+SH0ES.dat (commit ${PPLUS_COMMIT.slice(0, 7)}), sorted by redshift, then identifier, then survey code. A supernova observed by two surveys is two rows, as the release has it. Of the 47 columns, five are kept and the identifier is not; the other 41 columns (SALT2 parameters, host properties, positions, bias corrections) are left out.`,
+        `Errors are the diagonal of the full statistical-plus-systematic covariance, which the release says is for plotting only. The 33 MB covariance is not shipped, so a fit to this table is not the published fit and its Omega_m carries a larger scatter than the published error.`,
+        `The distance moduli sit on the SH0ES-calibrated scale, so H0 is not measured by the supernovae alone: they fix the shape of the curve, not its scale. ${calibrators} rows are Cepheid calibrators.`,
+        `${near} of the 1,701 rows have z below 0.01, where peculiar velocities dominate; the release keeps them and so does this table. Redshift is stored to 1e-5, the modulus to 1e-4 mag and its error to 1e-6, the raw file's digits: the stored table's mean redshift and mean modulus equal the raw file's to better than 1e-12 relative.`,
+      ],
+    };
+    const manifestRest = {
+      source: {
+        archive:
+          'Pantheon+SH0ES data release on GitHub (PantheonPlusSH0ES/DataRelease), file Pantheon+_Data/4_DISTANCES_AND_COVAR/Pantheon+SH0ES.dat',
+        urls: [
+          'https://pantheonplussh0es.github.io/',
+          'https://github.com/PantheonPlusSH0ES/DataRelease',
+          this.raw[0].url,
+        ],
+        citations: [
+          {
+            text: 'Scolnic et al. 2022, ApJ 938, 113 (The Pantheon+ Analysis: The Full Data Set and Light-curve Release)',
+            url: 'https://arxiv.org/abs/2112.03863',
+          },
+          {
+            text: 'Brout et al. 2022, ApJ 938, 110 (The Pantheon+ Analysis: Cosmological Constraints)',
+            url: 'https://arxiv.org/abs/2202.04077',
+          },
+          {
+            text: 'Riess et al. 2022, ApJL 934, L7 (A Comprehensive Measurement of the Local Value of the Hubble Constant with 1 km/s/Mpc Uncertainty from the Hubble Space Telescope and the SH0ES Team)',
+            url: 'https://arxiv.org/abs/2112.04510',
+          },
+        ],
+      },
+      raw: this.raw,
+      transformation: transformation(
+        { columns: this.columns.map(({ id, step }) => ({ id, step })) },
+        [
+          'Read zHD, MU_SH0ES, MU_SH0ES_ERR_DIAG, IS_CALIBRATOR and IDSURVEY from Pantheon+SH0ES.dat (whitespace-separated, as the release holds it).',
+          'Sort by zHD, then by identifier, then by survey code.',
+          `Store redshift, modulus, error, calibrator flag and survey code as ${ENCODING}.`,
+        ],
+        {
+          rows: rows.length,
+          calibrators,
+          rawMeanZ: rawZ,
+          rawMeanMu: rawMu,
+          columns: record,
+        }
+      ),
+      assumptions: [
+        'The errors are the covariance diagonal and treat the points as independent, which they are not (shared calibration and a common absolute-magnitude zero point); a lesson must say so.',
+        'The raw file is committed beside this tool (tools/data-packs/cosmology/Pantheon+SH0ES.dat, 579,283 bytes) at the commit named in its URL, so the build does not depend on a repository that may change.',
+      ],
+      compatible: { widgets: [], investigations: [] },
+      offline: 'optional',
+    };
+    return asSidecar(this, { meta, manifestRest, series });
+  },
+  validate(table) {
+    const fit = fitSupernovae({
+      x: column(table, 'z'),
+      y: column(table, 'mu'),
+      sigma: column(table, 'mu_err'),
+    });
+    return {
+      check:
+        'a flat Lambda-CDM fit with the offset solved gives Omega_m within 0.08 of the published flat value 0.334 +- 0.018 (covariance diagonal only here, the full covariance there)',
+      against: [
+        {
+          quantity: 'Omega_m, flat Lambda-CDM, supernovae only',
+          value: 0.334,
+          unit: '',
+          ref: 'Brout et al. 2022, ApJ 938, 110',
+        },
+      ],
+      result: {
+        Om: Number(fit.Om.toFixed(3)),
+        chi2: Number(fit.chi2.toFixed(1)),
+        dof: fit.dof,
+        supernovae: table.n,
+      },
+      ok: Math.abs(fit.Om - 0.334) <= 0.08,
+    };
+  },
+};
+
 // --- The SDSS redshift slice ---------------------------------------------------
 
 const SDSS_ID = 'sdss-dr18-redshift-slice';
@@ -733,6 +959,7 @@ export const COMA_QUOTED = {
 export const COSMOLOGY_PACKS = [
   HUBBLE_1929,
   DES_SN5YR,
+  PANTHEON_PLUS,
   SDSS_SLICE,
   COMA_QUOTED,
 ];

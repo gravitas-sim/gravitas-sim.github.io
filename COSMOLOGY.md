@@ -36,7 +36,7 @@ errors, H0 = 70 scale, 75 down-weighted rows kept), `sdss-dr18-redshift-slice`
 (public domain; flux-limited), `coma-cluster-quoted` (the scenario's four
 numbers; only the dispersion has a checked citation). The raw Hubble table and
 DES CSV are committed beside the tool. Loader: `js/cosmologyData.js`. Forward
-model: `hubble-diagram`. Not built: Pantheon+, SPARC, Faber-Jackson, Coma from SDSS.
+model: `hubble-diagram`. `pantheon-plus-hd` (the Pantheon+SH0ES table, 1,701 light curves, no licence stated, credited, D-RIGHTS-04; loader `loadPantheonPlus`, covariance diagonal only, so a fit to it is not the published fit). Not built: SPARC, Faber-Jackson, Coma from SDSS.
 
 ## Not done
 
@@ -44,5 +44,5 @@ Nothing from the original list: the instruments (hubble-law, hubble-diagram,
 redshift-wedge), the four investigations, their Spanish and depth files,
 instructor material and e2e landed in #254, which also gave The First Rung
 (#252) its Hubble-constant step. Still not built are the datasets named under
-Data packs (Pantheon+, SPARC, Faber-Jackson, Coma from SDSS); the Coma pack's
+Data packs (SPARC, Faber-Jackson, Coma from SDSS; Pantheon+ shipped later, D-RIGHTS-04, as a loadable pack with no instrument yet reading it); the Coma pack's
 radius and masses stay unsourced teaching values.
