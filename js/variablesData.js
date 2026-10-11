@@ -16,6 +16,7 @@ export const VARIABLES_SIDECARS = Object.freeze({
   suDra: '/variables/tess-su-dra-s15.json',
   etaAql: '/variables/tess-eta-aql-s81.json',
   cepheids: '/variables/shoes-r22-cepheids.json',
+  sample: '/variables/class-sample.json',
 });
 
 /** The anchors' distance moduli are published values, not rows: see the pack's manifest. */
@@ -80,9 +81,21 @@ export function cepheidsOf(pack) {
   };
 }
 
-/** Everything, from the sidecars. Resolves to {suDra, etaAql, cepheids}. */
+/** The synthetic labelled sample: rows of {id, cls, period, amplitude, r21, ...}. */
+export async function loadClassSample(fetchImpl = globalThis.fetch) {
+  const res = await fetchImpl(VARIABLES_SIDECARS.sample);
+  if (!res.ok) throw new Error(`${VARIABLES_SIDECARS.sample}: HTTP ${res.status}`);
+  const j = await res.json();
+  return j.rows.map(r => ({
+    ...r,
+    logP: Math.log10(r.period),
+    logAmp: Math.log10(Math.max(r.amplitude, 1e-4)),
+  }));
+}
+
+/** Everything, from the sidecars. Resolves to {suDra, etaAql, cepheids, sample}. */
 export async function loadVariablesData(fetchImpl = globalThis.fetch) {
-  const [a, b, c] = await Promise.all([
+  const [a, b, c, sample] = await Promise.all([
     packOf(
       () => import('./data/observations/tessSuDraS15.js'),
       VARIABLES_SIDECARS.suDra,
@@ -98,10 +111,12 @@ export async function loadVariablesData(fetchImpl = globalThis.fetch) {
       VARIABLES_SIDECARS.cepheids,
       fetchImpl
     ),
+    loadClassSample(fetchImpl),
   ]);
   return {
     suDra: lightCurveOf(a),
     etaAql: lightCurveOf(b),
     cepheids: cepheidsOf(c),
+    sample,
   };
 }

@@ -81,6 +81,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
   galactic: ['solar-motion', 'rotating-disk', 'cluster-members'],
   lensing: ['light-bending', 'lens-plane', 'lens-passing'],
+  variables: ['variable-fold', 'leavitt-law', 'variable-class'],
   survey: ['survey-counts', 'malmquist', 'completeness-lf'],
   sky: [
     'sky-turning',

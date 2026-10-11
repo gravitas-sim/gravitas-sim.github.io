@@ -155,6 +155,7 @@ const FILES = [
   { path: 'variables/tess-su-dra-s15.json', core: false },
   { path: 'variables/tess-eta-aql-s81.json', core: false },
   { path: 'variables/shoes-r22-cepheids.json', core: false },
+  { path: 'variables/class-sample.json', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },

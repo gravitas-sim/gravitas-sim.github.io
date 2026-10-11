@@ -52,6 +52,8 @@ const STATIC_FILES = [
   'variables/tess-su-dra-s15.json',
   'variables/tess-eta-aql-s81.json',
   'variables/shoes-r22-cepheids.json',
+  // The synthetic labelled sample of the classification instrument.
+  'variables/class-sample.json',
 ];
 
 // Directories copied whole. Lesson figures are photographs used under licenses
