@@ -1,8 +1,8 @@
 # Galactic dynamics with Gaia (Roadmap II Prompt 92)
 
-What is built, what is measured, and what is not yet. Status: **partial**. The kernel, the three data
-packs and their tests are done; the three investigations and the Observatory's proper-motion and
-Galactic-projection plots are not (see "Not built").
+What is built, what is measured, and what is not yet. Status: **built**. The kernel, the three data
+packs and their tests, the three investigations, the authentic Milky Way option in The Missing Mass and
+the Observatory's proper-motion and Galactic-projection plots landed in #245 and #246 (see "Not built").
 
 ## Rights (the gate)
 
@@ -59,8 +59,8 @@ cross-match); the near stratum is over-sampled on purpose.
 
 ## Not built (honest scope)
 
-1. The three investigations (The Sun's motion; The rotating disk; Cluster membership by motion), with their
-   bilingual lessons, depth variants, guides, keys, instructor materials, widgets and e2e.
-2. The authentic Milky Way option in The Missing Mass (the synthetic NGC 3198 curve stays, labelled).
-3. The Observatory's proper-motion vector plots and Galactic-coordinate projections (`hammerAitoff` is
-   ready for them).
+Nothing from the original list. The three investigations (The Sun's motion; The rotating disk; Cluster
+membership by motion) with their bilingual lessons, depth variants, instructor materials, widgets and e2e,
+the authentic Milky Way option in The Missing Mass (a depth step), and the Observatory's proper-motion
+vector plots and Galactic-coordinate projections (`js/observatory/skyPanel.js`) landed in #246. The
+synthetic NGC 3198 curve stays in The Missing Mass, labelled.

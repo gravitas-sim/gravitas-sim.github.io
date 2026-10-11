@@ -77,8 +77,10 @@ given overlaps the interval the tolerance allows and is no wider than
 The advanced Kepler step uses reference values for HD 209458 b that the
 transit and radial-velocity investigations already use, and names the
 radial-velocity analysis built into Gravitas, because the Observatory's
-comparison instrument (Prompt 85) has not landed. When it does, that step is the
-one to point at the TESS period.
+comparison instrument (Prompt 85) had not landed when it was written. It has
+since landed (#241) and is used by the advanced Transit Photometry step; the
+Kepler step has not been pointed at it, and is the one to point at the TESS
+period.
 
 ## What is not done
 
