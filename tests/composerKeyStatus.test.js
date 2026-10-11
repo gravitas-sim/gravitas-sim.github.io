@@ -93,7 +93,7 @@ describe('the remix, preview and link statuses during a language switch', () => 
     const { ctx, said, release } = make();
     const done = remix(ctx);
     // The failure is known while the language is still loading.
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise(r => globalThis.setTimeout(r, 100));
     expect(said).toEqual([]);
     release();
     await done;
@@ -106,7 +106,7 @@ describe('the remix, preview and link statuses during a language switch', () => 
     ctx.start = (pack, msg) => (started = msg);
     const done = remix(ctx);
     // The remix is built while the language is still loading.
-    await new Promise(r => setTimeout(r, 0));
+    await new Promise(r => globalThis.setTimeout(r, 0));
     expect(started).toBeUndefined();
     release();
     await done;
