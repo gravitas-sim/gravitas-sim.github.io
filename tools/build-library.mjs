@@ -214,6 +214,7 @@ export async function buildLibrary() {
   const { DISCOVERY } = await load('js/data/investigations/discovery.js');
   const {
     SEQUENCES,
+    SEQUENCE_ALIASES,
     LENGTH,
     lengthOf,
     calculationOf,
@@ -709,6 +710,8 @@ export async function buildLibrary() {
     kinds: [...KINDS],
     subjects,
     sequences,
+    // Old sequence ids a stored link may still carry, to the current id.
+    sequenceAliases: { ...SEQUENCE_ALIASES },
     entries,
   };
 }

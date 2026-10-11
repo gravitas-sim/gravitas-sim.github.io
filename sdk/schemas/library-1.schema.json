@@ -111,6 +111,14 @@
         }
       }
     },
+    "sequenceAliases": {
+      "description": "Sequence ids that were renamed or merged, to the id that took them over, so a stored or linked old id still resolves. Absent in files written before it existed.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$"
+      }
+    },
     "entries": {
       "type": "array",
       "minItems": 1,
