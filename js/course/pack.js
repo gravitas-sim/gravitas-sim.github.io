@@ -26,10 +26,28 @@
 // =============================================================================
 
 import { makeChecker } from '../platform/checker.js';
-import { GUIDES_3D, GUIDE_DEPTHS } from './guides3d.js';
 
 export const FORMAT = 'gravitas.course-pack';
 export const FORMAT_VERSION = 2;
+
+// The 3-D lab's guided investigations, as a `guide` item may name them
+// (Prompt 105). Kept here, small, so that no page needs a module of its own for
+// them; tests/course3d.test.js holds the table to the lab's guides. Depth is
+// the platform's vocabulary (DEPTH.md): the introductory path is the core, and
+// the advanced path is the advanced depth.
+/** The guide ids, with the minutes each of the guide's two paths takes. */
+export const GUIDES_3D = Object.freeze({
+  'l3-planes': Object.freeze({ intro: 20, advanced: 30 }),
+  'l3-eclipse': Object.freeze({ intro: 25, advanced: 35 }),
+  'l3-mutual': Object.freeze({ intro: 20, advanced: 30 }),
+  'l3-kozai': Object.freeze({ intro: 25, advanced: 35 }),
+});
+
+/** The depths a guide item may declare, and the guide path each opens. */
+export const GUIDE_DEPTHS = Object.freeze({
+  core: 'intro',
+  advanced: 'advanced',
+});
 
 export const ITEM_KINDS = Object.freeze([
   'lesson',

@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1987.9,
+    limit: 1989.1,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -607,7 +607,14 @@ const BUDGETS = [
       '0.4 KB more, and the rest is its words in two languages, the ' +
       'Observatory and notebook forms, the composer field and the derived ' +
       'entry. The initial download did not move (789.0 KB). D-BUDGET-29, under ' +
-      'the standing size-budget approval in the project CLAUDE.md.',
+      'the standing size-budget approval in the project CLAUDE.md.\n\n' +
+      'The 3-D lab on the platform (Prompt 105) took it from 1987.9 to 1989.1 ' +
+      "KB gzipped (5420.9 KB raw), 1.2 KB: the lab's evidence panel and its " +
+      'words, the scenario-pack link reader, the embed bridge, the forward ' +
+      "models' 3-D bridge, the course pack's guide items and the 3-D " +
+      'comparison source. The initial download did not move (786.8 KB). ' +
+      'D-BUDGET-30, under the standing size-budget approval in the project ' +
+      'CLAUDE.md.',
   },
 ];
 

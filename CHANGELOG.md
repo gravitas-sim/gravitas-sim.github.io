@@ -17,6 +17,8 @@ the release rather than in the tag.
 
 ### Added
 
+- **The 3-D lab on the platform** (Roadmap II P105). Evidence (`gravitas.artifact/1` envelopes for readings, events and observations; notebook source `lab3d`), saved 3-D systems in My work, the 3-D state as the forward models' input (`js/forward/system3d.js`), a 3-D system file in the comparison instrument, an optional `system3d` block in scenario packs with its link (`js/lab3d/link.js`) and Studio support, an embedded 3-D figure under `gravitas-embed/1` and a figure-builder path for it, 3-D reference systems in the Library, depths for the four investigations, and `guide` items in course packs (the celestial mechanics unit carries all four). `LAB3D.md` has the table.
+
 - **The forward-model loop** (Roadmap II P84). `gravitas.observing-setup/1` and seven pure forward models (transit, radial velocity, astrometry, periodic, spectrum, catalogue, image) return synthetic observations with a truth manifest; the Observatory labels them and compares a fit with the truth. See `FORWARD_MODELS.md`.
 - **A Package from the Composer** (Roadmap II P81, repair R-A5, SDK 1.10.0).
   `sdk init <type> <id> --from <pack>` now wraps an investigation pack (a

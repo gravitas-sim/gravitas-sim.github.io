@@ -37,8 +37,7 @@ import {
   ASSIGNMENT_TAG,
 } from '../assignments/assignment.js';
 import { formatSeed, parseSeed } from '../rng.js';
-import { FORMAT_VERSION, LEVEL_DEPTH } from './pack.js';
-import { GUIDE_DEPTHS } from './guides3d.js';
+import { FORMAT_VERSION, GUIDE_DEPTHS, LEVEL_DEPTH } from './pack.js';
 
 export { COMFORTABLE_URL_LENGTH };
 /** Where the builder leaves the draft the course home previews (?draft=1). */

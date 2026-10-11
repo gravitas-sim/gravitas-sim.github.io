@@ -40,8 +40,7 @@
 // =============================================================================
 
 import { shortHash } from '../assignments/assignment.js';
-import { itemsOf, lessonKeyOf, PATHS } from './pack.js';
-import { GUIDES_3D } from './guides3d.js';
+import { GUIDES_3D, itemsOf, lessonKeyOf, PATHS } from './pack.js';
 
 export { shortHash };
 

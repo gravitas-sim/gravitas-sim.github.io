@@ -14,9 +14,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { valid } from './jsonSchemaSubset.js';
 import { GUIDES } from '../js/lab3d/guides/curriculum.js';
-import { GUIDES_3D, GUIDE_DEPTHS } from '../js/course/guides3d.js';
 import { itemLink } from '../js/course/links.js';
-import { validateCoursePack } from '../js/course/pack.js';
+import {
+  GUIDES_3D,
+  GUIDE_DEPTHS,
+  validateCoursePack,
+} from '../js/course/pack.js';
 import { courseApi } from '../js/course/api.js';
 import { UPPER_LEVEL_MODULES } from '../js/data/courses/upper-level-modules.js';
 

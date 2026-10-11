@@ -39,10 +39,11 @@ import { SCENARIO_INFO, scenarioId } from './data/scenarioInfo.js';
 import { scenarioTitle } from './i18n/scenario.js';
 import { loadInvestigation } from './data/investigations/registry.js';
 import { BUILTIN_COURSES } from './data/courses/index.js';
-import { GUIDES_3D, GUIDE_DEPTHS } from './course/guides3d.js';
 import {
   FORMAT,
   FORMAT_VERSION,
+  GUIDES_3D,
+  GUIDE_DEPTHS,
   ITEM_KINDS,
   PATHS,
   PINNING,
