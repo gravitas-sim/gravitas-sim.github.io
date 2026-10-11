@@ -16,6 +16,7 @@ import * as image from './models/image.js';
 import * as microlensing from './models/microlensing.js';
 import * as survey from './models/survey.js';
 import * as hubble from './models/hubble.js';
+import * as ccd from './models/ccd.js';
 
 export const FORWARD_MODELS = Object.freeze({
   [transit.ID]: transit,
@@ -28,6 +29,7 @@ export const FORWARD_MODELS = Object.freeze({
   [microlensing.ID]: microlensing,
   [survey.ID]: survey,
   [hubble.ID]: hubble,
+  [ccd.ID]: ccd,
 });
 
 /**

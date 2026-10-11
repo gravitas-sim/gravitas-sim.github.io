@@ -109,10 +109,11 @@ const accepted = o => {
 };
 
 describe('the registry', () => {
-  test('lists the ten models and refuses an unknown one in words', () => {
+  test('lists the eleven models and refuses an unknown one in words', () => {
     expect(Object.keys(FORWARD_MODELS).sort()).toEqual([
       'astrometry',
       'catalogue',
+      'ccd',
       'hubble-diagram',
       'image',
       'microlensing',
