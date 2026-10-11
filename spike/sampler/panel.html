@@ -1,0 +1,24 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Sampler panel</title>
+<body>
+  <label>Problem <select id="p"><option>G</option><option>B</option><option>P</option></select></label>
+  <label>Steps <input id="s" value="3000" /></label>
+  <label>Language <select id="l"><option>en</option><option>es</option></select></label>
+  <button id="go">Sample</button>
+  <div id="out"></div>
+  <script type="module">
+    import { createRun } from './ensemble.js';
+    import { report } from './diagnostics.js';
+    import { problemG, problemB, problemP } from './problems.js';
+    import { renderSampler } from './panel.js';
+    document.getElementById('go').onclick = () => {
+      const id = document.getElementById('p').value;
+      const pr = id === 'G' ? problemG() : id === 'B' ? problemB() : problemP();
+      const run = createRun({ logProb: pr.logProb, d: pr.d, steps: Number(document.getElementById('s').value), seed: 'panel', center: pr.center, scale: pr.scale });
+      while (!run.done()) run.advance(250);
+      const out = document.getElementById('out');
+      out.replaceChildren(renderSampler(report(run, pr.names), document.getElementById('l').value));
+    };
+  </script>
+</body>

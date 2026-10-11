@@ -1,0 +1,43 @@
+// Prototype (spike): the sampler panel's words, English and Spanish.
+export const EN_SAMPLER = {
+  title: 'Posterior sample',
+  explain:
+    "The profile interval and the sampler's interval answer different questions. The profile interval comes from the least-squares fit: it holds every value of this parameter that raises chi-square by at most 1, and it uses no prior. The sampler's interval is a credible interval, the central 68% of a posterior that combines the data with the prior listed in the model manifest, so it changes when the prior changes. The two agree when the fit is well behaved and differ when it is degenerate, bounded or not Gaussian. The sampler never replaces the profile interval, and when its checks fail it reports no interval at all.",
+  refused: 'No interval is reported: these checks failed.',
+  parameter: 'Parameter',
+  rhatEnsembles: 'R-hat, ensembles',
+  rhatWalkers: 'R-hat, walkers',
+  ess: 'Effective samples',
+  tau: 'Autocorrelation time (steps)',
+  acceptance: 'Acceptance fraction',
+  trace: 'Trace of the ensemble mean, one line per ensemble',
+  traceTable: 'Trace values',
+  step: 'Step',
+  ensemble: 'Ensemble',
+  mean: 'Mean',
+  sd: 'Standard deviation',
+  q16: '16th percentile',
+  q50: 'Median',
+  q84: '84th percentile',
+};
+export const ES_SAMPLER = {
+  title: 'Muestra de la distribución posterior',
+  explain:
+    'El intervalo de perfil y el del muestreador responden preguntas distintas. El de perfil sale del ajuste por mínimos cuadrados: contiene los valores del parámetro que suben chi-cuadrado en 1 como máximo, y no usa ninguna distribución previa. El del muestreador es un intervalo creíble, el 68% central de una distribución posterior que combina los datos con la distribución previa anotada en el manifiesto del modelo, así que cambia con ella. Coinciden cuando el ajuste se porta bien y difieren cuando es degenerado, está acotado o no es gaussiano. El muestreador nunca reemplaza al intervalo de perfil, y si sus comprobaciones fallan no da ningún intervalo.',
+  refused: 'No se da ningún intervalo: fallaron estas comprobaciones.',
+  parameter: 'Parámetro',
+  rhatEnsembles: 'R-hat, conjuntos',
+  rhatWalkers: 'R-hat, caminantes',
+  ess: 'Muestras efectivas',
+  tau: 'Tiempo de autocorrelación (pasos)',
+  acceptance: 'Fracción de aceptación',
+  trace: 'Traza de la media del conjunto, una línea por conjunto',
+  traceTable: 'Valores de la traza',
+  step: 'Paso',
+  ensemble: 'Conjunto',
+  mean: 'Media',
+  sd: 'Desviación estándar',
+  q16: 'Percentil 16',
+  q50: 'Mediana',
+  q84: 'Percentil 84',
+};

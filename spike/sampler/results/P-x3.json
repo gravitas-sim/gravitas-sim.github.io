@@ -1,0 +1,457 @@
+{
+ "problem": "P",
+ "replicates": 10,
+ "passes": 10,
+ "results": [
+  {
+   "seed": 1,
+   "evals": 384064,
+   "ms": 1356.10123,
+   "retainedBytes": 3456000,
+   "diag": {
+    "status": "ok",
+    "reasons": [],
+    "maxRhatEnsembles": 1.007834829360238,
+    "maxRhatWalkers": 1.0107012895199277,
+    "minEss": 7125.625514073849,
+    "maxTau": 26.94500288020751,
+    "minStepsPerTau": 111.3378986574039,
+    "acceptance": 0.7154713541666666
+   },
+   "accuracy": {
+    "rows": [
+     {
+      "parameter": 0,
+      "meanErrorSd": 0.009973166407886013,
+      "sdRatio": 0.9972010411301812,
+      "quantileErrorSd": [
+       0.002256096031583362,
+       0.013172817781034418,
+       0.011700228723931465
+      ],
+      "pass": true
+     },
+     {
+      "parameter": 1,
+      "meanErrorSd": 0.009584368766707207,
+      "sdRatio": 1.0080321158301733,
+      "quantileErrorSd": [
+       0.003052779014045548,
+       0.009398821975229232,
+       0.017772030241945735
+      ],
+      "pass": true
+     }
+    ],
+    "extra": [],
+    "pass": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 2,
+   "evals": 384064,
+   "ms": 1364.792782,
+   "retainedBytes": 3456000,
+   "diag": {
+    "status": "ok",
+    "reasons": [],
+    "maxRhatEnsembles": 1.0130517676732431,
+    "maxRhatWalkers": 1.0112773026316635,
+    "minEss": 6104.591135379462,
+    "maxTau": 31.451737838305736,
+    "minStepsPerTau": 95.38423649030409,
+    "acceptance": 0.7141328125
+   },
+   "accuracy": {
+    "rows": [
+     {
+      "parameter": 0,
+      "meanErrorSd": 0.008848564266943613,
+      "sdRatio": 0.9982482051992028,
+      "quantileErrorSd": [
+       0.008559365059737244,
+       0.015405557703458181,
+       0.004601083477189353
+      ],
+      "pass": true
+     },
+     {
+      "parameter": 1,
+      "meanErrorSd": 0.04558577393088825,
+      "sdRatio": 0.9891633769410415,
+      "quantileErrorSd": [
+       0.03360098756549501,
+       0.045279318474215735,
+       0.05572789272148704
+      ],
+      "pass": true
+     }
+    ],
+    "extra": [],
+    "pass": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 3,
+   "evals": 384064,
+   "ms": 1363.069924,
+   "retainedBytes": 3456000,
+   "diag": {
+    "status": "ok",
+    "reasons": [],
+    "maxRhatEnsembles": 1.0075949062443081,
+    "maxRhatWalkers": 1.0126048252800592,
+    "minEss": 6554.977854386919,
+    "maxTau": 29.29071680562643,
+    "minStepsPerTau": 102.4215289747956,
+    "acceptance": 0.7148984375
+   },
+   "accuracy": {
+    "rows": [
+     {
+      "parameter": 0,
+      "meanErrorSd": 0.006604288401898781,
+      "sdRatio": 1.0024157566383272,
+      "quantileErrorSd": [
+       0.0013269085860216946,
+       0.0015488859419592097,
+       0.017943842226151963
+      ],
+      "pass": true
+     },
+     {
+      "parameter": 1,
+      "meanErrorSd": 0.013010474649262527,
+      "sdRatio": 1.0048992015195815,
+      "quantileErrorSd": [
+       0.022344926731441284,
+       0.01829083722777103,
+       0.0014689548095541127
+      ],
+      "pass": true
+     }
+    ],
+    "extra": [],
+    "pass": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 4,
+   "evals": 384064,
+   "ms": 1506.1349129999999,
+   "retainedBytes": 3456000,
+   "diag": {
+    "status": "ok",
+    "reasons": [],
+    "maxRhatEnsembles": 1.0110952434636933,
+    "maxRhatWalkers": 1.0111954110883088,
+    "minEss": 4940.467558972144,
+    "maxTau": 38.86271849945014,
+    "minStepsPerTau": 77.19480560893975,
+    "acceptance": 0.7147604166666667
+   },
+   "accuracy": {
+    "rows": [
+     {
+      "parameter": 0,
+      "meanErrorSd": 0.00025459044995659354,
+      "sdRatio": 0.9934148870545675,
+      "quantileErrorSd": [
+       0.016707609013769557,
+       0.0012694282549717169,
+       0.010970931126731491
+      ],
+      "pass": true
+     },
+     {
+      "parameter": 1,
+      "meanErrorSd": 0.006126101190174538,
+      "sdRatio": 0.9948725886920627,
+      "quantileErrorSd": [
+       0.0011160998634869301,
+       0.011609161992110373,
+       0.016255449758749485
+      ],
+      "pass": true
+     }
+    ],
+    "extra": [],
+    "pass": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 5,
+   "evals": 384064,
+   "ms": 1377.3299109999998,
+   "retainedBytes": 3456000,
+   "diag": {
+    "status": "ok",
+    "reasons": [],
+    "maxRhatEnsembles": 1.007795917333537,
+    "maxRhatWalkers": 1.010501151833982,
+    "minEss": 7440.346577327931,
+    "maxTau": 25.80524952763066,
+    "minStepsPerTau": 116.25541527074893,
+    "acceptance": 0.7148046875
+   },
+   "accuracy": {
+    "rows": [
+     {
+      "parameter": 0,
+      "meanErrorSd": 0.005204318007294766,
+      "sdRatio": 0.9972291354143498,
+      "quantileErrorSd": [
+       0.00446326531474084,
+       0.008530596762327034,
+       0.00005171606407529357
+      ],
+      "pass": true
+     },
+     {
+      "parameter": 1,
+      "meanErrorSd": 0.015530273969435626,
+      "sdRatio": 1.0008634364743305,
+      "quantileErrorSd": [
+       0.01749926810409619,
+       0.017543902511679477,
+       0.015259281538924085
+      ],
+      "pass": true
+     }
+    ],
+    "extra": [],
+    "pass": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 6,
+   "evals": 384064,
+   "ms": 1383.411317000001,
+   "retainedBytes": 3456000,
+   "diag": {
+    "status": "ok",
+    "reasons": [],
+    "maxRhatEnsembles": 1.011977101970304,
+    "maxRhatWalkers": 1.0121156780295428,
+    "minEss": 7603.826643105023,
+    "maxTau": 25.250444152892573,
+    "minStepsPerTau": 118.80979129851599,
+    "acceptance": 0.7156510416666667
+   },
+   "accuracy": {
+    "rows": [
+     {
+      "parameter": 0,
+      "meanErrorSd": 0.005642943859705948,
+      "sdRatio": 0.9961653262521073,
+      "quantileErrorSd": [
+       0.0004020131100148958,
+       0.008037325610768491,
+       0.0010106193962749936
+      ],
+      "pass": true
+     },
+     {
+      "parameter": 1,
+      "meanErrorSd": 0.03878270568434683,
+      "sdRatio": 0.9963301506103441,
+      "quantileErrorSd": [
+       0.03768934544465452,
+       0.04156414367456662,
+       0.03564820567712079
+      ],
+      "pass": true
+     }
+    ],
+    "extra": [],
+    "pass": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 7,
+   "evals": 384064,
+   "ms": 1328.728701,
+   "retainedBytes": 3456000,
+   "diag": {
+    "status": "ok",
+    "reasons": [],
+    "maxRhatEnsembles": 1.0137419262428193,
+    "maxRhatWalkers": 1.0118154307141163,
+    "minEss": 5722.941234082776,
+    "maxTau": 33.54918251764508,
+    "minStepsPerTau": 89.42095678254337,
+    "acceptance": 0.7159036458333333
+   },
+   "accuracy": {
+    "rows": [
+     {
+      "parameter": 0,
+      "meanErrorSd": 0.0011156986240052377,
+      "sdRatio": 1.001213761956924,
+      "quantileErrorSd": [
+       0.007412369863332952,
+       0.0032294214732212553,
+       0.0018489220615934548
+      ],
+      "pass": true
+     },
+     {
+      "parameter": 1,
+      "meanErrorSd": 0.012689435085952994,
+      "sdRatio": 0.9978512019090945,
+      "quantileErrorSd": [
+       0.009422820193854875,
+       0.012913545883432853,
+       0.01427842591770645
+      ],
+      "pass": true
+     }
+    ],
+    "extra": [],
+    "pass": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 8,
+   "evals": 384064,
+   "ms": 1344.5949359999995,
+   "retainedBytes": 3456000,
+   "diag": {
+    "status": "ok",
+    "reasons": [],
+    "maxRhatEnsembles": 1.0093731677926807,
+    "maxRhatWalkers": 1.0106630850069962,
+    "minEss": 6221.694863204528,
+    "maxTau": 30.8597583490472,
+    "minStepsPerTau": 97.21398223757075,
+    "acceptance": 0.7158385416666667
+   },
+   "accuracy": {
+    "rows": [
+     {
+      "parameter": 0,
+      "meanErrorSd": 0.01989544173345784,
+      "sdRatio": 0.9988827004088932,
+      "quantileErrorSd": [
+       0.017167807860906034,
+       0.020505651700643692,
+       0.018096698901415218
+      ],
+      "pass": true
+     },
+     {
+      "parameter": 1,
+      "meanErrorSd": 0.006018370593331213,
+      "sdRatio": 1.0006094363907572,
+      "quantileErrorSd": [
+       0.01269459052317945,
+       0.006326869907963939,
+       0.00047246932065103664
+      ],
+      "pass": true
+     }
+    ],
+    "extra": [],
+    "pass": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 9,
+   "evals": 384064,
+   "ms": 1331.2567799999997,
+   "retainedBytes": 3456000,
+   "diag": {
+    "status": "ok",
+    "reasons": [],
+    "maxRhatEnsembles": 1.0219281535404836,
+    "maxRhatWalkers": 1.0123137463305105,
+    "minEss": 6642.868173943212,
+    "maxTau": 28.903177810019468,
+    "minStepsPerTau": 103.79481521786269,
+    "acceptance": 0.71453125
+   },
+   "accuracy": {
+    "rows": [
+     {
+      "parameter": 0,
+      "meanErrorSd": 0.0011815850761698467,
+      "sdRatio": 1.0031147444230482,
+      "quantileErrorSd": [
+       0.0035951395218500335,
+       0.0045494463965200585,
+       0.002860474834797295
+      ],
+      "pass": true
+     },
+     {
+      "parameter": 1,
+      "meanErrorSd": 0.005672091081565078,
+      "sdRatio": 1.0030261505289944,
+      "quantileErrorSd": [
+       0.012260678532531877,
+       0.002030507993275421,
+       0.004587509567136827
+      ],
+      "pass": true
+     }
+    ],
+    "extra": [],
+    "pass": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 10,
+   "evals": 384064,
+   "ms": 1333.544749999999,
+   "retainedBytes": 3456000,
+   "diag": {
+    "status": "ok",
+    "reasons": [],
+    "maxRhatEnsembles": 1.0084996889710625,
+    "maxRhatWalkers": 1.0128493440511048,
+    "minEss": 5938.442029372832,
+    "maxTau": 32.33171243405695,
+    "minStepsPerTau": 92.7881567089505,
+    "acceptance": 0.7150677083333333
+   },
+   "accuracy": {
+    "rows": [
+     {
+      "parameter": 0,
+      "meanErrorSd": 0.01277114287127851,
+      "sdRatio": 1.0093080920541095,
+      "quantileErrorSd": [
+       0.003717037715045347,
+       0.01798490384201165,
+       0.024102446603153378
+      ],
+      "pass": true
+     },
+     {
+      "parameter": 1,
+      "meanErrorSd": 0.015399590366040883,
+      "sdRatio": 1.0006990176815145,
+      "quantileErrorSd": [
+       0.016759975883662293,
+       0.012102139846709825,
+       0.019890736115492302
+      ],
+      "pass": true
+     }
+    ],
+    "extra": [],
+    "pass": true
+   },
+   "accuracyIgnoringRefusal": true
+  }
+ ]
+}

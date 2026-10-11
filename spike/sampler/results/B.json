@@ -1,0 +1,271 @@
+{
+ "problem": "B",
+ "replicates": 10,
+ "passes": 0,
+ "results": [
+  {
+   "seed": 1,
+   "evals": 512064,
+   "ms": 60.213055999999995,
+   "retainedBytes": 4608000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "x1: R-hat of the walkers is 1.05, not below 1.05",
+     "x1: 4000 steps are under 50 autocorrelation times (94.9)",
+     "x2: 4000 steps are under 50 autocorrelation times (131)"
+    ],
+    "maxRhatEnsembles": 1.0356925836090598,
+    "maxRhatWalkers": 1.0514573543893508,
+    "minEss": 1950.9892049490124,
+    "maxTau": 131.21548768727828,
+    "minStepsPerTau": 30.48420632732832,
+    "acceptance": 0.535140625
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 2,
+   "evals": 512064,
+   "ms": 59.349625,
+   "retainedBytes": 4608000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "x1: R-hat of the walkers is 1.06, not below 1.05",
+     "x1: 4000 steps are under 50 autocorrelation times (155)",
+     "x2: R-hat of the ensembles is 1.05, not below 1.05",
+     "x2: 4000 steps are under 50 autocorrelation times (101)"
+    ],
+    "maxRhatEnsembles": 1.0530822397562578,
+    "maxRhatWalkers": 1.059721239265816,
+    "minEss": 1647.921299275675,
+    "maxTau": 155.3472244776021,
+    "minStepsPerTau": 25.74877030118242,
+    "acceptance": 0.51573046875
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 3,
+   "evals": 512064,
+   "ms": 45.47857799999997,
+   "retainedBytes": 4608000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "x1: 4000 steps are under 50 autocorrelation times (176)",
+     "x2: 4000 steps are under 50 autocorrelation times (139)"
+    ],
+    "maxRhatEnsembles": 1.0393012180426315,
+    "maxRhatWalkers": 1.0477944008028857,
+    "minEss": 1450.7347187304379,
+    "maxTau": 176.46231023134945,
+    "minStepsPerTau": 22.66772998016309,
+    "acceptance": 0.531830078125
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 4,
+   "evals": 512064,
+   "ms": 47.38224600000001,
+   "retainedBytes": 4608000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "x1: R-hat of the ensembles is 1.07, not below 1.05",
+     "x1: R-hat of the walkers is 1.06, not below 1.05",
+     "x1: 4000 steps are under 50 autocorrelation times (126)",
+     "x2: R-hat of the ensembles is 1.06, not below 1.05",
+     "x2: R-hat of the walkers is 1.07, not below 1.05",
+     "x2: 4000 steps are under 50 autocorrelation times (124)"
+    ],
+    "maxRhatEnsembles": 1.0674342662799867,
+    "maxRhatWalkers": 1.0721383660586954,
+    "minEss": 2032.4907399834929,
+    "maxTau": 125.95383337494523,
+    "minStepsPerTau": 31.757667812242076,
+    "acceptance": 0.535712890625
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 5,
+   "evals": 512064,
+   "ms": 46.329832000000124,
+   "retainedBytes": 4608000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "x1: R-hat of the walkers is 1.07, not below 1.05",
+     "x1: 4000 steps are under 50 autocorrelation times (123)",
+     "x2: R-hat of the ensembles is 1.07, not below 1.05",
+     "x2: R-hat of the walkers is 1.06, not below 1.05",
+     "x2: 4000 steps are under 50 autocorrelation times (152)"
+    ],
+    "maxRhatEnsembles": 1.0657945831715878,
+    "maxRhatWalkers": 1.073402984359119,
+    "minEss": 1681.8398923453024,
+    "maxTau": 152.21425128821957,
+    "minStepsPerTau": 26.27874831789535,
+    "acceptance": 0.523455078125
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 6,
+   "evals": 512064,
+   "ms": 45.61425299999996,
+   "retainedBytes": 4608000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "x1: R-hat of the ensembles is 1.07, not below 1.05",
+     "x1: R-hat of the walkers is 1.07, not below 1.05",
+     "x1: 4000 steps are under 50 autocorrelation times (128)",
+     "x2: R-hat of the ensembles is 1.09, not below 1.05",
+     "x2: R-hat of the walkers is 1.12, not below 1.05",
+     "x2: 4000 steps are under 50 autocorrelation times (230)"
+    ],
+    "maxRhatEnsembles": 1.0945116321956665,
+    "maxRhatWalkers": 1.1162205492438313,
+    "minEss": 1110.700158592046,
+    "maxTau": 230.48524664344393,
+    "minStepsPerTau": 17.354689978000717,
+    "acceptance": 0.527546875
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 7,
+   "evals": 512064,
+   "ms": 45.89535599999999,
+   "retainedBytes": 4608000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "x1: R-hat of the walkers is 1.06, not below 1.05",
+     "x1: 4000 steps are under 50 autocorrelation times (109)",
+     "x2: 4000 steps are under 50 autocorrelation times (114)"
+    ],
+    "maxRhatEnsembles": 1.0384009393884508,
+    "maxRhatWalkers": 1.0578489477660873,
+    "minEss": 2241.2159001074087,
+    "maxTau": 114.22371222144702,
+    "minStepsPerTau": 35.01899843917826,
+    "acceptance": 0.5304140625
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 8,
+   "evals": 512064,
+   "ms": 46.837788000000046,
+   "retainedBytes": 4608000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "x1: R-hat of the walkers is 1.07, not below 1.05",
+     "x1: 4000 steps are under 50 autocorrelation times (88.0)",
+     "x2: R-hat of the walkers is 1.05, not below 1.05",
+     "x2: 4000 steps are under 50 autocorrelation times (146)"
+    ],
+    "maxRhatEnsembles": 1.0495419410494784,
+    "maxRhatWalkers": 1.072670738767724,
+    "minEss": 1751.8784117224018,
+    "maxTau": 146.1288627606909,
+    "minStepsPerTau": 27.373100183162528,
+    "acceptance": 0.528107421875
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 9,
+   "evals": 512064,
+   "ms": 47.62801499999978,
+   "retainedBytes": 4608000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "x1: R-hat of the ensembles is 1.11, not below 1.05",
+     "x1: R-hat of the walkers is 1.13, not below 1.05",
+     "x1: 4000 steps are under 50 autocorrelation times (177)",
+     "x2: R-hat of the ensembles is 1.72, not below 1.05",
+     "x2: R-hat of the walkers is 1.76, not below 1.05",
+     "x2: 4000 steps are under 50 autocorrelation times (276)"
+    ],
+    "maxRhatEnsembles": 1.717107347740788,
+    "maxRhatWalkers": 1.7557249321530255,
+    "minEss": 927.1998421125602,
+    "maxTau": 276.1001332967463,
+    "minStepsPerTau": 14.487497533008753,
+    "acceptance": 0.51973828125
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": false
+  },
+  {
+   "seed": 10,
+   "evals": 512064,
+   "ms": 46.284321999999975,
+   "retainedBytes": 4608000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "x1: R-hat of the walkers is 1.06, not below 1.05",
+     "x1: 4000 steps are under 50 autocorrelation times (114)",
+     "x2: R-hat of the ensembles is 1.05, not below 1.05",
+     "x2: R-hat of the walkers is 1.06, not below 1.05",
+     "x2: 4000 steps are under 50 autocorrelation times (127)"
+    ],
+    "maxRhatEnsembles": 1.0514811474813677,
+    "maxRhatWalkers": 1.059405785200248,
+    "minEss": 2012.1836824620743,
+    "maxTau": 127.224965708281,
+    "minStepsPerTau": 31.44037003846991,
+    "acceptance": 0.524177734375
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  }
+ ]
+}

@@ -1,0 +1,45 @@
+{
+ "chromium": "151.0.7922.34",
+ "cpus": "Intel(R) Core(TM) i5-10500 CPU @ 3.10GHz",
+ "loadBefore": [
+  5.9443359375,
+  6.78759765625,
+  5.7236328125
+ ],
+ "problems": {
+  "T": {
+   "throttledMs": [
+    624188.3999999762,
+    588985.6999999285,
+    574367.7999999523
+   ],
+   "unthrottledMs": [
+    138625.39999997616
+   ],
+   "loads": [
+    6.26025390625,
+    4.2490234375,
+    4.67919921875
+   ],
+   "status": "refused",
+   "retainedBytes": 1152000,
+   "heapGrowthBytes": 5967692,
+   "medianThrottledS": 588.9856999999284,
+   "ceilingS": 120,
+   "timePass": false,
+   "worker": {
+    "wallMs": 155727.29999995232,
+    "maxProgressGapMs": 92.30000007152557,
+    "pageProgressGapMs": 301.7000000476837,
+    "retainedMB": 1.0986328125,
+    "status": "refused"
+   },
+   "memoryPass": true
+  }
+ },
+ "loadAfter": [
+  4.3193359375,
+  3.57373046875,
+  4.068359375
+ ]
+}

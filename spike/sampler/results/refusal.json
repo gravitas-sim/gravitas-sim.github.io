@@ -1,0 +1,206 @@
+{
+ "short": [
+  {
+   "seed": 1,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 2.23, not below 1.05",
+    "x1: R-hat of the walkers is 3.37, not below 1.05",
+    "x1: effective sample size 252 is under 400"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 2,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 4.65, not below 1.05",
+    "x1: R-hat of the walkers is 3.77, not below 1.05",
+    "x1: 50 steps are under 50 autocorrelation times (6.28)"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 3,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 1.66, not below 1.05",
+    "x1: R-hat of the walkers is 4.04, not below 1.05",
+    "x1: effective sample size 276 is under 400"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 4,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 6.13, not below 1.05",
+    "x1: R-hat of the walkers is 4.26, not below 1.05",
+    "x1: 50 steps are under 50 autocorrelation times (6.22)"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 5,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 3.90, not below 1.05",
+    "x1: R-hat of the walkers is 3.21, not below 1.05",
+    "x1: effective sample size 359 is under 400"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 6,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 5.76, not below 1.05",
+    "x1: R-hat of the walkers is 3.93, not below 1.05",
+    "x1: effective sample size 249 is under 400"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 7,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 3.05, not below 1.05",
+    "x1: R-hat of the walkers is 3.58, not below 1.05",
+    "x1: effective sample size 274 is under 400"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 8,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 2.58, not below 1.05",
+    "x1: R-hat of the walkers is 3.46, not below 1.05",
+    "x1: 50 steps are under 50 autocorrelation times (6.09)"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 9,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 3.07, not below 1.05",
+    "x1: R-hat of the walkers is 4.30, not below 1.05",
+    "x1: effective sample size 226 is under 400"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 10,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 4.70, not below 1.05",
+    "x1: R-hat of the walkers is 4.23, not below 1.05",
+    "x1: effective sample size 273 is under 400"
+   ],
+   "hasSummary": false
+  }
+ ],
+ "bimodal": [
+  {
+   "seed": 1,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 20.0, not below 1.05",
+    "x1: R-hat of the walkers is 5.29, not below 1.05",
+    "x1: 2000 steps are under 50 autocorrelation times (139)"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 2,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 21.5, not below 1.05",
+    "x1: R-hat of the walkers is 5.26, not below 1.05",
+    "x1: 2000 steps are under 50 autocorrelation times (109)"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 3,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 26.5, not below 1.05",
+    "x1: R-hat of the walkers is 6.21, not below 1.05"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 4,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 22.9, not below 1.05",
+    "x1: R-hat of the walkers is 5.75, not below 1.05",
+    "x1: 2000 steps are under 50 autocorrelation times (129)"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 5,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 19.5, not below 1.05",
+    "x1: R-hat of the walkers is 5.43, not below 1.05",
+    "x1: 2000 steps are under 50 autocorrelation times (102)"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 6,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 21.4, not below 1.05",
+    "x1: R-hat of the walkers is 5.48, not below 1.05",
+    "x1: 2000 steps are under 50 autocorrelation times (242)"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 7,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 21.7, not below 1.05",
+    "x1: R-hat of the walkers is 5.62, not below 1.05",
+    "x1: 2000 steps are under 50 autocorrelation times (53.3)"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 8,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 24.4, not below 1.05",
+    "x1: R-hat of the walkers is 5.55, not below 1.05",
+    "x1: 2000 steps are under 50 autocorrelation times (74.8)"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 9,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 25.3, not below 1.05",
+    "x1: R-hat of the walkers is 6.23, not below 1.05"
+   ],
+   "hasSummary": false
+  },
+  {
+   "seed": 10,
+   "status": "refused",
+   "reasons": [
+    "x1: R-hat of the ensembles is 22.4, not below 1.05",
+    "x1: R-hat of the walkers is 5.45, not below 1.05",
+    "x1: 2000 steps are under 50 autocorrelation times (103)"
+   ],
+   "hasSummary": false
+  }
+ ],
+ "shortRefused": 10,
+ "bimodalRefused": 10
+}

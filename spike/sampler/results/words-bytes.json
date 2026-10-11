@@ -1,0 +1,44 @@
+{
+ "text": {
+  "en": {
+   "words": 106,
+   "sentences": 5,
+   "meanSentenceWords": 21.2,
+   "lengthPass": true,
+   "claims": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "pass": true
+  },
+  "es": {
+   "words": 106,
+   "sentences": 5,
+   "meanSentenceWords": 21.2,
+   "lengthPass": true,
+   "claims": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "pass": true
+  }
+ },
+ "bytes": {
+  "core": {
+   "min": 6075,
+   "gz": 2958
+  },
+  "withWordsAndPanel": {
+   "min": 10575,
+   "gz": 4830
+  },
+  "coreCeilingGz": 5120,
+  "fullCeilingGz": 9216,
+  "corePass": true,
+  "fullPass": true
+ }
+}

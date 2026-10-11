@@ -1,0 +1,115 @@
+{
+ "chromium": "151.0.7922.34",
+ "cpus": "Intel(R) Core(TM) i5-10500 CPU @ 3.10GHz",
+ "loadBefore": [
+  2.10009765625,
+  2.49853515625,
+  3.201171875
+ ],
+ "problems": {
+  "G": {
+   "throttledMs": [
+    828.8000000715256,
+    875.2999999523163,
+    807.8999999761581
+   ],
+   "unthrottledMs": [
+    222.69999992847443
+   ],
+   "loads": [
+    2.10009765625,
+    2.171875,
+    2.171875
+   ],
+   "status": "refused",
+   "retainedBytes": 28800000,
+   "heapGrowthBytes": 28843064,
+   "medianThrottledS": 0.8288000000715255,
+   "ceilingS": 10,
+   "timePass": true,
+   "worker": {
+    "wallMs": 361.10000002384186,
+    "maxProgressGapMs": 46.89999997615814,
+    "pageProgressGapMs": 47.10000002384186,
+    "retainedMB": 27.4658203125,
+    "status": "refused"
+   },
+   "memoryPass": true,
+   "cancel": {
+    "type": "canceled",
+    "latencyMs": 5.900000095367432
+   }
+  },
+  "B": {
+   "throttledMs": [
+    265.39999997615814,
+    242.09999990463257,
+    256.10000002384186
+   ],
+   "unthrottledMs": [
+    66
+   ],
+   "loads": [
+    2.171875,
+    2.171875,
+    2.39794921875
+   ],
+   "status": "refused",
+   "retainedBytes": 4608000,
+   "heapGrowthBytes": 6177000,
+   "medianThrottledS": 0.25610000002384187,
+   "ceilingS": 10,
+   "timePass": true,
+   "worker": {
+    "wallMs": 227.69999992847443,
+    "maxProgressGapMs": 34.09999990463257,
+    "pageProgressGapMs": 132.5,
+    "retainedMB": 4.39453125,
+    "status": "refused"
+   },
+   "memoryPass": true,
+   "cancel": {
+    "type": "canceled",
+    "latencyMs": 6.200000047683716
+   }
+  },
+  "P": {
+   "throttledMs": [
+    1110.5,
+    1090.5,
+    1068.8999999761581
+   ],
+   "unthrottledMs": [
+    264
+   ],
+   "loads": [
+    2.39794921875,
+    2.39794921875,
+    2.39794921875
+   ],
+   "status": "refused",
+   "retainedBytes": 1152000,
+   "heapGrowthBytes": 2607356,
+   "medianThrottledS": 1.0905,
+   "ceilingS": 5,
+   "timePass": true,
+   "worker": {
+    "wallMs": 323.5,
+    "maxProgressGapMs": 32.199999928474426,
+    "pageProgressGapMs": 32.200000047683716,
+    "retainedMB": 1.0986328125,
+    "status": "refused"
+   },
+   "memoryPass": true,
+   "cancel": {
+    "type": "canceled",
+    "latencyMs": 6.100000023841858
+   }
+  }
+ },
+ "loadAfter": [
+  2.44580078125,
+  2.55517578125,
+  3.20849609375
+ ]
+}

@@ -1,0 +1,248 @@
+{
+ "problem": "P",
+ "replicates": 10,
+ "passes": 0,
+ "results": [
+  {
+   "seed": 1,
+   "evals": 128064,
+   "ms": 455.193618,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "c0: 1000 steps are under 50 autocorrelation times (30.2)"
+    ],
+    "maxRhatEnsembles": 1.03640386262881,
+    "maxRhatWalkers": 1.0434276537657654,
+    "minEss": 2117.319532185776,
+    "maxTau": 30.226897276071867,
+    "minStepsPerTau": 33.08311769040275,
+    "acceptance": 0.715703125
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 2,
+   "evals": 128064,
+   "ms": 456.338972,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "c0: 1000 steps are under 50 autocorrelation times (32.0)"
+    ],
+    "maxRhatEnsembles": 1.049625473284272,
+    "maxRhatWalkers": 1.035662450699747,
+    "minEss": 2002.5252134843172,
+    "maxTau": 31.95964753354713,
+    "minStepsPerTau": 31.289456460692456,
+    "acceptance": 0.713765625
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 3,
+   "evals": 128064,
+   "ms": 448.1637350000001,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "c0: R-hat of the ensembles is 1.06, not below 1.05",
+     "c0: 1000 steps are under 50 autocorrelation times (29.5)",
+     "c1: R-hat of the ensembles is 1.05, not below 1.05",
+     "c1: 1000 steps are under 50 autocorrelation times (25.9)"
+    ],
+    "maxRhatEnsembles": 1.0583620879277493,
+    "maxRhatWalkers": 1.0355798168271775,
+    "minEss": 2172.720954165382,
+    "maxTau": 29.45615260777224,
+    "minStepsPerTau": 33.94876490883409,
+    "acceptance": 0.7154609375
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 4,
+   "evals": 128064,
+   "ms": 444.8788360000001,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "c0: 1000 steps are under 50 autocorrelation times (33.8)",
+     "c1: R-hat of the ensembles is 1.08, not below 1.05",
+     "c1: 1000 steps are under 50 autocorrelation times (30.4)"
+    ],
+    "maxRhatEnsembles": 1.079601246516912,
+    "maxRhatWalkers": 1.0367844565247692,
+    "minEss": 1893.7959371933605,
+    "maxTau": 33.79455977440164,
+    "minStepsPerTau": 29.590561518646258,
+    "acceptance": 0.7136328125
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 5,
+   "evals": 128064,
+   "ms": 449.38910799999985,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "c0: 1000 steps are under 50 autocorrelation times (27.8)",
+     "c1: 1000 steps are under 50 autocorrelation times (24.5)"
+    ],
+    "maxRhatEnsembles": 1.0439144686055788,
+    "maxRhatWalkers": 1.0412382614085727,
+    "minEss": 2302.5328820525033,
+    "maxTau": 27.79547710213358,
+    "minStepsPerTau": 35.977076282070364,
+    "acceptance": 0.7148046875
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 6,
+   "evals": 128064,
+   "ms": 449.56241100000034,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "c1: 1000 steps are under 50 autocorrelation times (28.2)"
+    ],
+    "maxRhatEnsembles": 1.0323058639481064,
+    "maxRhatWalkers": 1.0362222286436513,
+    "minEss": 2271.1047733740843,
+    "maxTau": 28.18011777806178,
+    "minStepsPerTau": 35.48601208397007,
+    "acceptance": 0.7138671875
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 7,
+   "evals": 128064,
+   "ms": 446.35786700000017,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "c0: 1000 steps are under 50 autocorrelation times (29.5)",
+     "c1: 1000 steps are under 50 autocorrelation times (30.6)"
+    ],
+    "maxRhatEnsembles": 1.0453390933702376,
+    "maxRhatWalkers": 1.037938447733283,
+    "minEss": 2091.9259651677485,
+    "maxTau": 30.593816925479928,
+    "minStepsPerTau": 32.68634320574607,
+    "acceptance": 0.7165703125
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 8,
+   "evals": 128064,
+   "ms": 446.99278500000037,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "c0: R-hat of the ensembles is 1.07, not below 1.05",
+     "c0: 1000 steps are under 50 autocorrelation times (20.1)",
+     "c1: 1000 steps are under 50 autocorrelation times (20.2)"
+    ],
+    "maxRhatEnsembles": 1.0699615188555593,
+    "maxRhatWalkers": 1.0393490840896458,
+    "minEss": 3160.7350852315676,
+    "maxTau": 20.24845432286873,
+    "minStepsPerTau": 49.386485706743244,
+    "acceptance": 0.7158515625
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 9,
+   "evals": 128064,
+   "ms": 443.6378410000002,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "c1: 1000 steps are under 50 autocorrelation times (21.1)"
+    ],
+    "maxRhatEnsembles": 1.0461859530799176,
+    "maxRhatWalkers": 1.0320255083541479,
+    "minEss": 3027.2254062878574,
+    "maxTau": 21.141471615250534,
+    "minStepsPerTau": 47.30039697324777,
+    "acceptance": 0.7130078125
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  },
+  {
+   "seed": 10,
+   "evals": 128064,
+   "ms": 449.12822400000005,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "c0: 1000 steps are under 50 autocorrelation times (22.5)",
+     "c1: R-hat of the ensembles is 1.05, not below 1.05",
+     "c1: 1000 steps are under 50 autocorrelation times (29.6)"
+    ],
+    "maxRhatEnsembles": 1.0542876253335365,
+    "maxRhatWalkers": 1.0403774280443914,
+    "minEss": 2161.774960857788,
+    "maxTau": 29.60530173529484,
+    "minStepsPerTau": 33.777733763402935,
+    "acceptance": 0.7135703125
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true
+  }
+ ]
+}

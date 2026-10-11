@@ -1,0 +1,60 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Sampler bench</title>
+<script type="module">
+  import { createRun } from './ensemble.js';
+  import { report } from './diagnostics.js';
+  import { problemG, problemB, problemP, problemT } from './problems.js';
+  const make = id =>
+    id === 'G' ? problemG() : id === 'B' ? problemB() : id === 'P' ? problemP() : problemT('hd209458', 1);
+  // The same module as the Worker's, run in the page's main thread: CDP's CPU
+  // throttling reaches the page and not a dedicated Worker.
+  window.mainThreadRun = (id, steps) => {
+    const problem = make(id);
+    if (window.gc) window.gc();
+    const heap0 = performance.memory.usedJSHeapSize;
+    const run = createRun({
+      logProb: problem.logProb,
+      d: problem.d,
+      steps: steps ?? problem.steps,
+      seed: `p103-${id}-1`,
+      center: problem.center,
+      scale: problem.scale,
+      lo: problem.lo,
+      hi: problem.hi,
+    });
+    const t0 = performance.now();
+    while (!run.done()) run.advance(100);
+    const ms = performance.now() - t0;
+    // The heap right after the run, before any collection, less the heap before
+    // it: the run's growth, garbage included.
+    const heapGrowth = performance.memory.usedJSHeapSize - heap0;
+    const rep = report(run, problem.names);
+    return { ms, status: rep.status, retainedBytes: run.retainedBytes(), heapGrowth };
+  };
+  window.workerRun = (id, steps, cancelAfterMs) =>
+    new Promise(resolve => {
+      const w = new Worker('./sampler.worker.js', { type: 'module' });
+      const t0 = performance.now();
+      let cancelSent = 0;
+      let lastProgress = t0;
+      let gap = 0;
+      w.onmessage = e => {
+        const m = e.data;
+        if (m.type === 'progress') {
+          const now = performance.now();
+          gap = Math.max(gap, now - lastProgress);
+          lastProgress = now;
+          if (cancelAfterMs && !cancelSent && now - t0 > cancelAfterMs) {
+            cancelSent = now;
+            w.postMessage({ type: 'cancel' });
+          }
+        } else {
+          w.terminate();
+          resolve({ ...m, wallMs: performance.now() - t0, cancelLatencyMs: cancelSent ? performance.now() - cancelSent : null, pageProgressGapMs: gap });
+        }
+      };
+      w.postMessage({ type: 'run', problem: id, steps });
+    });
+  window.ready = true;
+</script>

@@ -1,0 +1,783 @@
+{
+ "problem": "T-hd209458",
+ "replicates": 10,
+ "passes": 1,
+ "profilePasses": 1,
+ "results": [
+  {
+   "seed": 1,
+   "gridMs": 55959.146097000004,
+   "gridEdgeMass": 1.8428037182742327e-15,
+   "gridSpan": 8,
+   "evals": 128064,
+   "ms": 80025.57764900001,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "k: 1000 steps are under 50 autocorrelation times (22.7)",
+     "b: R-hat of the ensembles is 1.05, not below 1.05",
+     "b: 1000 steps are under 50 autocorrelation times (27.6)"
+    ],
+    "maxRhatEnsembles": 1.0507562450674661,
+    "maxRhatWalkers": 1.036159413814977,
+    "minEss": 2316.0086199314005,
+    "maxTau": 27.63374861786812,
+    "minStepsPerTau": 36.18763468642813,
+    "acceptance": 0.7141953125
+   },
+   "reference": {
+    "parameters": [
+     {
+      "mean": 0.12088443064637634,
+      "sd": 0.0001386800081420523,
+      "quantiles": [
+       0.12074645083265441,
+       0.12088444987582309,
+       0.12102241846498407
+      ]
+     },
+     {
+      "mean": 0.5011317013181695,
+      "sd": 0.0021177296862021325,
+      "quantiles": [
+       0.49902559731414015,
+       0.5011400580207518,
+       0.5032382946330476
+      ]
+     }
+    ],
+    "correlation": 0.5770804428679371
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true,
+   "profile": {
+    "k": [
+     0.1207460226871275,
+     0.12102438912120894
+    ],
+    "b": [
+     0.49902164151097905,
+     0.5032701897345772
+    ]
+   },
+   "fit": {
+    "k": {
+     "value": 0.12088522183523348,
+     "sigma": 0.00013852730262913488,
+     "sigmaScaled": 0.00013907238991928573
+    },
+    "b": {
+     "value": 0.5011549023669903,
+     "sigma": 0.0021112308109276553,
+     "sigmaScaled": 0.002119538235238749
+    }
+   },
+   "profilePass": false
+  },
+  {
+   "seed": 2,
+   "gridMs": 56025.88103300001,
+   "gridEdgeMass": 1.5475733583171124e-15,
+   "gridSpan": 8,
+   "evals": 128064,
+   "ms": 79984.295277,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "k: 1000 steps are under 50 autocorrelation times (20.4)",
+     "b: R-hat of the ensembles is 1.06, not below 1.05",
+     "b: 1000 steps are under 50 autocorrelation times (26.9)"
+    ],
+    "maxRhatEnsembles": 1.0592142996818887,
+    "maxRhatWalkers": 1.0463707296113391,
+    "minEss": 2377.773605322985,
+    "maxTau": 26.91593508176173,
+    "minStepsPerTau": 37.15271258317164,
+    "acceptance": 0.713625
+   },
+   "reference": {
+    "parameters": [
+     {
+      "mean": 0.12080492216178815,
+      "sd": 0.00013855372143283505,
+      "quantiles": [
+       0.12066706426295809,
+       0.12080491970116741,
+       0.12094278999444377
+      ]
+     },
+     {
+      "mean": 0.5026676678022527,
+      "sd": 0.0020955762098463534,
+      "quantiles": [
+       0.5005825601303541,
+       0.5026744290526662,
+       0.5047526550244864
+      ]
+     }
+    ],
+    "correlation": 0.5742126094885067
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true,
+   "profile": {
+    "k": [
+     0.12066699529783376,
+     0.1209441275345331
+    ],
+    "b": [
+     0.500582700500368,
+     0.5047742254468963
+    ]
+   },
+   "fit": {
+    "k": {
+     "value": 0.1208056320149433,
+     "sigma": 0.000138781850557488,
+     "sigmaScaled": null
+    },
+    "b": {
+     "value": 0.5026885554470512,
+     "sigma": 0.002104904841641525,
+     "sigmaScaled": null
+    }
+   },
+   "profilePass": false
+  },
+  {
+   "seed": 3,
+   "gridMs": 56168.49998299999,
+   "gridEdgeMass": 4.720375330734125e-16,
+   "gridSpan": 8,
+   "evals": 128064,
+   "ms": 79676.68681400002,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "k: 1000 steps are under 50 autocorrelation times (27.7)"
+    ],
+    "maxRhatEnsembles": 1.0416659280000657,
+    "maxRhatWalkers": 1.0367005571192687,
+    "minEss": 2306.4761444148785,
+    "maxTau": 27.747956619874742,
+    "minStepsPerTau": 36.038689756482476,
+    "acceptance": 0.7146171875
+   },
+   "reference": {
+    "parameters": [
+     {
+      "mean": 0.12093985439149837,
+      "sd": 0.0001386170584832749,
+      "quantiles": [
+       0.12080193383925068,
+       0.12093984570246727,
+       0.12107776141628365
+      ]
+     },
+     {
+      "mean": 0.50385360767522,
+      "sd": 0.002088809831059782,
+      "quantiles": [
+       0.5017761199354549,
+       0.5038596243912562,
+       0.5059311425954194
+      ]
+     }
+    ],
+    "correlation": 0.5750449752307653
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true,
+   "profile": {
+    "k": [
+     0.12079862264751837,
+     0.12108216658315059
+    ],
+    "b": [
+     0.5017270974858686,
+     0.5059984840216534
+    ]
+   },
+   "fit": {
+    "k": {
+     "value": 0.12094037651185546,
+     "sigma": 0.00013878776195191736,
+     "sigmaScaled": 0.0001419563108872731
+    },
+    "b": {
+     "value": 0.5038697715499015,
+     "sigma": 0.0020938984583760306,
+     "sigmaScaled": 0.0021417025272486806
+    }
+   },
+   "profilePass": false
+  },
+  {
+   "seed": 4,
+   "gridMs": 55641.71450999996,
+   "gridEdgeMass": 1.8864289030656846e-15,
+   "gridSpan": 8,
+   "evals": 128064,
+   "ms": 79047.97214200004,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "k: 1000 steps are under 50 autocorrelation times (20.7)",
+     "b: 1000 steps are under 50 autocorrelation times (23.2)"
+    ],
+    "maxRhatEnsembles": 1.0418830719318337,
+    "maxRhatWalkers": 1.0475246121390362,
+    "minEss": 2761.9689831328888,
+    "maxTau": 23.17187498876439,
+    "minStepsPerTau": 43.15576536145139,
+    "acceptance": 0.7140859375
+   },
+   "reference": {
+    "parameters": [
+     {
+      "mean": 0.12117280440171849,
+      "sd": 0.00013904543669507463,
+      "quantiles": [
+       0.12103445835243794,
+       0.12117280693060804,
+       0.12131116056768751
+      ]
+     },
+     {
+      "mean": 0.5081742939264613,
+      "sd": 0.0020675563730773393,
+      "quantiles": [
+       0.5061172800786768,
+       0.5081804435609641,
+       0.5102315322715893
+      ]
+     }
+    ],
+    "correlation": 0.5774531320037815
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true,
+   "profile": {
+    "k": [
+     0.1210343575042235,
+     0.12131246428148654
+    ],
+    "b": [
+     0.5061164937597408,
+     0.5102521091532183
+    ]
+   },
+   "fit": {
+    "k": {
+     "value": 0.1211734445265077,
+     "sigma": 0.000139073096493508,
+     "sigmaScaled": null
+    },
+    "b": {
+     "value": 0.5081927703484376,
+     "sigma": 0.0020678656383009563,
+     "sigmaScaled": null
+    }
+   },
+   "profilePass": false
+  },
+  {
+   "seed": 5,
+   "gridMs": 55512.17890000006,
+   "gridEdgeMass": 7.764008107780316e-16,
+   "gridSpan": 8,
+   "evals": 128064,
+   "ms": 93096.00863499998,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "k: 1000 steps are under 50 autocorrelation times (24.2)",
+     "b: 1000 steps are under 50 autocorrelation times (32.3)"
+    ],
+    "maxRhatEnsembles": 1.0288508644779841,
+    "maxRhatWalkers": 1.0374878471212539,
+    "minEss": 1981.6721717463247,
+    "maxTau": 32.295957380075016,
+    "minStepsPerTau": 30.963627683536323,
+    "acceptance": 0.714703125
+   },
+   "reference": {
+    "parameters": [
+     {
+      "mean": 0.12092484487825682,
+      "sd": 0.00013868653502372336,
+      "quantiles": [
+       0.12078685089696874,
+       0.12092484747199206,
+       0.12106283044091444
+      ]
+     },
+     {
+      "mean": 0.503692450589954,
+      "sd": 0.002093172751678119,
+      "quantiles": [
+       0.5016107058578958,
+       0.5036991136201927,
+       0.5057741238404765
+      ]
+     }
+    ],
+    "correlation": 0.5755929237415062
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true,
+   "profile": {
+    "k": [
+     0.12078455470624247,
+     0.12106634996432308
+    ],
+    "b": [
+     0.5015792806083748,
+     0.5058279468852972
+    ]
+   },
+   "fit": {
+    "k": {
+     "value": 0.12092541105761807,
+     "sigma": 0.00013878434326041134,
+     "sigmaScaled": 0.00014108073602648187
+    },
+    "b": {
+     "value": 0.5037096318864885,
+     "sigma": 0.002095215786254815,
+     "sigmaScaled": 0.0021298842384870975
+    }
+   },
+   "profilePass": false
+  },
+  {
+   "seed": 6,
+   "gridMs": 57745.314631000045,
+   "gridEdgeMass": 2.7528456043052784e-15,
+   "gridSpan": 8,
+   "evals": 128064,
+   "ms": 94262.34866000002,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "k: 1000 steps are under 50 autocorrelation times (30.9)",
+     "b: R-hat of the ensembles is 1.05, not below 1.05",
+     "b: 1000 steps are under 50 autocorrelation times (22.4)"
+    ],
+    "maxRhatEnsembles": 1.054997365523223,
+    "maxRhatWalkers": 1.035453356184816,
+    "minEss": 2068.271473994082,
+    "maxTau": 30.94371353312158,
+    "minStepsPerTau": 32.31674178115753,
+    "acceptance": 0.71365625
+   },
+   "reference": {
+    "parameters": [
+     {
+      "mean": 0.12107492761857536,
+      "sd": 0.0001393061550752807,
+      "quantiles": [
+       0.12093632506175915,
+       0.12107492523270676,
+       0.12121354088670099
+      ]
+     },
+     {
+      "mean": 0.5068101198646162,
+      "sd": 0.0020898755295459953,
+      "quantiles": [
+       0.5047314663472634,
+       0.5068158324059601,
+       0.5088895221621433
+      ]
+     }
+    ],
+    "correlation": 0.5796538025045576
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true,
+   "profile": {
+    "k": [
+     0.12093616522965023,
+     0.12121475866848352
+    ],
+    "b": [
+     0.5047299801393551,
+     0.5089088830637324
+    ]
+   },
+   "fit": {
+    "k": {
+     "value": 0.12107545509587359,
+     "sigma": 0.0001390012950451966,
+     "sigmaScaled": null
+    },
+    "b": {
+     "value": 0.5068252425640714,
+     "sigma": 0.0020760722969238496,
+     "sigmaScaled": null
+    }
+   },
+   "profilePass": false
+  },
+  {
+   "seed": 7,
+   "gridMs": 60944.25983200001,
+   "gridEdgeMass": 1.5077664688732178e-15,
+   "gridSpan": 8,
+   "evals": 128064,
+   "ms": 83152.41865600005,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "k: 1000 steps are under 50 autocorrelation times (25.1)"
+    ],
+    "maxRhatEnsembles": 1.0259919037292915,
+    "maxRhatWalkers": 1.0382549286905558,
+    "minEss": 2553.0306498720815,
+    "maxTau": 25.0682458525152,
+    "minStepsPerTau": 39.891103904251274,
+    "acceptance": 0.712703125
+   },
+   "reference": {
+    "parameters": [
+     {
+      "mean": 0.12094053557992841,
+      "sd": 0.00013884533594613662,
+      "quantiles": [
+       0.12080238117779177,
+       0.12094052589654238,
+       0.12107869496555593
+      ]
+     },
+     {
+      "mean": 0.5055173835130492,
+      "sd": 0.0020819962744850744,
+      "quantiles": [
+       0.5034462720294447,
+       0.5055228760273821,
+       0.5075890370091738
+      ]
+     }
+    ],
+    "correlation": 0.575675982977971
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true,
+   "profile": {
+    "k": [
+     0.12080177519353462,
+     0.12108030512089915
+    ],
+    "b": [
+     0.5034384840888576,
+     0.5076134728847905
+    ]
+   },
+   "fit": {
+    "k": {
+     "value": 0.12094103175094842,
+     "sigma": 0.00013898265354723142,
+     "sigmaScaled": 0.00013941179355009687
+    },
+    "b": {
+     "value": 0.5055321663686151,
+     "sigma": 0.0020858184020473625,
+     "sigmaScaled": 0.0020922588325053065
+    }
+   },
+   "profilePass": false
+  },
+  {
+   "seed": 8,
+   "gridMs": 57824.62938099995,
+   "gridEdgeMass": 6.96124646855322e-16,
+   "gridSpan": 8,
+   "evals": 128064,
+   "ms": 136187.44835299999,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "k: R-hat of the ensembles is 1.07, not below 1.05",
+     "k: 1000 steps are under 50 autocorrelation times (29.4)",
+     "b: 1000 steps are under 50 autocorrelation times (26.3)"
+    ],
+    "maxRhatEnsembles": 1.0677118411484787,
+    "maxRhatWalkers": 1.0377119845289664,
+    "minEss": 2178.092827669376,
+    "maxTau": 29.38350431486517,
+    "minStepsPerTau": 34.032700432334,
+    "acceptance": 0.7135078125
+   },
+   "reference": {
+    "parameters": [
+     {
+      "mean": 0.12098216553105146,
+      "sd": 0.0001387224589688815,
+      "quantiles": [
+       0.1208441204704346,
+       0.1209821622645783,
+       0.12112019837669082
+      ]
+     },
+     {
+      "mean": 0.5033260793843888,
+      "sd": 0.002096426665473724,
+      "quantiles": [
+       0.5012393586166434,
+       0.5033330835198165,
+       0.5054119325252342
+      ]
+     }
+    ],
+    "correlation": 0.5767092235284798
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true,
+   "profile": {
+    "k": [
+     0.12084173688628862,
+     0.12112395253745041
+    ],
+    "b": [
+     0.5012041302811541,
+     0.5054700252624227
+    ]
+   },
+   "fit": {
+    "k": {
+     "value": 0.12098289664448209,
+     "sigma": 0.00013868401875921662,
+     "sigmaScaled": 0.0001410194353467885
+    },
+    "b": {
+     "value": 0.503347469297209,
+     "sigma": 0.002095292578988031,
+     "sigmaScaled": 0.002130576969277303
+    }
+   },
+   "profilePass": false
+  },
+  {
+   "seed": 9,
+   "gridMs": 58764.541480999906,
+   "gridEdgeMass": 1.9428872030209618e-15,
+   "gridSpan": 8,
+   "evals": 128064,
+   "ms": 91391.46352600004,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "refused",
+    "reasons": [
+     "k: 1000 steps are under 50 autocorrelation times (33.0)",
+     "b: 1000 steps are under 50 autocorrelation times (29.2)"
+    ],
+    "maxRhatEnsembles": 1.0307951611692068,
+    "maxRhatWalkers": 1.0292440434823587,
+    "minEss": 1938.849198632755,
+    "maxTau": 33.009271708770214,
+    "minStepsPerTau": 30.294518728636795,
+    "acceptance": 0.7148515625
+   },
+   "reference": {
+    "parameters": [
+     {
+      "mean": 0.12098173113671225,
+      "sd": 0.0001393935105687845,
+      "quantiles": [
+       0.12084302427190709,
+       0.12098173117378723,
+       0.12112043961918696
+      ]
+     },
+     {
+      "mean": 0.5035128150649536,
+      "sd": 0.002123558638603265,
+      "quantiles": [
+       0.501399836134862,
+       0.5035198503603651,
+       0.5056257381285508
+      ]
+     }
+    ],
+    "correlation": 0.5819305802426368
+   },
+   "accuracy": {
+    "pass": false,
+    "refused": true
+   },
+   "accuracyIgnoringRefusal": true,
+   "profile": {
+    "k": [
+     0.12084127807460271,
+     0.12112355563864112
+    ],
+    "b": [
+     0.501373855562898,
+     0.5056740064797572
+    ]
+   },
+   "fit": {
+    "k": {
+     "value": 0.12098246481059542,
+     "sigma": 0.0001387048273409321,
+     "sigmaScaled": 0.0001404151741752097
+    },
+    "b": {
+     "value": 0.5035340242568536,
+     "sigma": 0.0020942874814600873,
+     "sigmaScaled": 0.0021201118023049426
+    }
+   },
+   "profilePass": false
+  },
+  {
+   "seed": 10,
+   "gridMs": 61049.54463200015,
+   "gridEdgeMass": 5.126397653301759e-16,
+   "gridSpan": 8,
+   "evals": 128064,
+   "ms": 83619.011619,
+   "retainedBytes": 1152000,
+   "diag": {
+    "status": "ok",
+    "reasons": [],
+    "maxRhatEnsembles": 1.0365948303465025,
+    "maxRhatWalkers": 1.0394145376750292,
+    "minEss": 3202.5552203959696,
+    "maxTau": 19.98404261459914,
+    "minStepsPerTau": 50.039925318687025,
+    "acceptance": 0.715265625
+   },
+   "reference": {
+    "parameters": [
+     {
+      "mean": 0.12092638986336914,
+      "sd": 0.000138718803255641,
+      "quantiles": [
+       0.12078835774267407,
+       0.12092637477411163,
+       0.12106441454487811
+      ]
+     },
+     {
+      "mean": 0.5066856482303389,
+      "sd": 0.0020621520218164166,
+      "quantiles": [
+       0.5046344810865473,
+       0.5066900927912193,
+       0.5087369753347023
+      ]
+     }
+    ],
+    "correlation": 0.5737117066189505
+   },
+   "accuracy": {
+    "rows": [
+     {
+      "parameter": 0,
+      "meanErrorSd": 0.008259983508471186,
+      "sdRatio": 0.9862176903995773,
+      "quantileErrorSd": [
+       0.02719045518662547,
+       0.01099049693177943,
+       0.014690734893718615
+      ],
+      "pass": true
+     },
+     {
+      "parameter": 1,
+      "meanErrorSd": 0.0009464360775742651,
+      "sdRatio": 0.9918208343339452,
+      "quantileErrorSd": [
+       0.015655124793224343,
+       0.0032767915035410416,
+       0.02009567254242418
+      ],
+      "pass": true
+     }
+    ],
+    "extra": [],
+    "pass": true
+   },
+   "posterior": [
+    {
+     "name": "k",
+     "mean": 0.12092753567839634,
+     "sd": 0.00013680693776177164,
+     "q16": 0.12079212957007754,
+     "q50": 0.12092789936269319,
+     "q84": 0.12106237666371471
+    },
+    {
+     "name": "b",
+     "mean": 0.506683696535268,
+     "sd": 0.00204528533880139,
+     "q16": 0.5046667643337914,
+     "q50": 0.5066833355489953,
+     "q84": 0.5086955350029392
+    }
+   ],
+   "accuracyIgnoringRefusal": true,
+   "profile": {
+    "k": [
+     0.12078598551838997,
+     0.12106759595403357
+    ],
+    "b": [
+     0.5046005216295433,
+     0.5087843926764561
+    ]
+   },
+   "fit": {
+    "k": {
+     "value": 0.12092676575392045,
+     "sigma": 0.00013914105884830217,
+     "sigmaScaled": 0.00014129654323944882
+    },
+    "b": {
+     "value": 0.5066964914217047,
+     "sigma": 0.0020814188591711546,
+     "sigmaScaled": 0.0021136628703891016
+    }
+   },
+   "widthRatio": {
+    "k": 0.9596487183421769,
+    "b": 0.9629289774885488
+   },
+   "profilePass": true
+  }
+ ]
+}

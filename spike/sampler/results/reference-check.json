@@ -1,0 +1,110 @@
+{
+ "G": {
+  "sha256": "465e0ad10247c20a4a32e4f1eac320f1c2c7aa3e5aa90d5417239320fd68ebfb",
+  "emceeTau": [
+   66.51575374990958,
+   67.15945846916972,
+   66.59909946389239,
+   68.50766109731975,
+   67.66244410642686,
+   68.29360919653354
+  ],
+  "emceeStepsOverTau": [
+   225.51048667956184,
+   223.34903142326428,
+   225.22827066351633,
+   218.953614234348,
+   221.688710747817,
+   219.63987811558468
+  ],
+  "emceeVsTruthMaxQuantileErrorSd": [
+   0.004521721290620673,
+   0.00772569240772325,
+   0.016373100285665743,
+   0.0117424576372304,
+   0.006334836527789212,
+   0.008651495590097369
+  ],
+  "referenceValid": true,
+  "samplerStatus": "refused",
+  "samplerVsEmceeMaxQuantileErrorSd": [
+   0.009881750813142664,
+   0.010633401989333546,
+   0.009275471977834293,
+   0.00288073753151045,
+   0.014929022816443704,
+   0.0103177768025553
+  ],
+  "tolerance": 0.15,
+  "samplerWithinTolerance": true
+ },
+ "B": {
+  "sha256": "68dcd3672850c02a313103b0c943237318b49857846777a0d2eb0249e945a14d",
+  "emceeTau": [
+   177.8105257513669,
+   151.33511619894256
+  ],
+  "emceeStepsOverTau": [
+   84.35946036723695,
+   99.11777501978627
+  ],
+  "emceeVsTruthMaxQuantileErrorSd": [
+   0.04800172090878245,
+   0.06382787894956815
+  ],
+  "referenceValid": true,
+  "samplerStatus": "refused",
+  "samplerVsEmceeMaxQuantileErrorSd": [
+   0.05965833673640173,
+   0.14915911693917544
+  ],
+  "tolerance": 0.2,
+  "samplerWithinTolerance": true
+ },
+ "P": {
+  "sha256": "cb01af1ba7b2123f23e78a9dfba06a50b0aee5dfb967b759d52ef8d8350bbf93",
+  "emceeTau": [
+   32.129085327051385,
+   31.595811896643674
+  ],
+  "emceeStepsOverTau": [
+   466.8666987345142,
+   474.7464647867904
+  ],
+  "emceeVsTruthMaxQuantileErrorSd": [
+   0.009364970884199427,
+   0.003022577909532309
+  ],
+  "referenceValid": true,
+  "samplerStatus": "refused",
+  "samplerVsEmceeMaxQuantileErrorSd": [
+   0.05822902159993656,
+   0.01406737015619619
+  ],
+  "tolerance": 0.15,
+  "samplerWithinTolerance": true
+ },
+ "T-hd209458-1": {
+  "sha256": "bda9a71481ef2ec5a160354bff4e44ad9da1aded8be687ec5db4000c1dbba4f0",
+  "emceeTau": [
+   32.26056344418345,
+   32.03319334081896
+  ],
+  "emceeStepsOverTau": [
+   464.96398074239113,
+   468.2642732620085
+  ],
+  "emceeVsTruthMaxQuantileErrorSd": [
+   0.002124377697361479,
+   0.0021890981308636515
+  ],
+  "referenceValid": true,
+  "samplerStatus": "refused",
+  "samplerVsEmceeMaxQuantileErrorSd": [
+   0.014923282725975883,
+   0.015707766133937755
+  ],
+  "tolerance": 0.15,
+  "samplerWithinTolerance": true
+ }
+}
