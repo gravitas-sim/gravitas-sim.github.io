@@ -58,6 +58,7 @@ const STATIC_FILES = [
   // more, Roadmap II Prompt 91), fetched by the cosmology instruments.
   'cosmology/hubble-1929-table1.json',
   'cosmology/des-sn5yr-hd.json',
+  'cosmology/pantheon-plus-hd.json',
   'cosmology/sdss-dr18-redshift-slice.json',
   'cosmology/coma-cluster-quoted.json',
 ];

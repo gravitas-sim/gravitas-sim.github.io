@@ -126,6 +126,7 @@ export const DATASETS = Object.freeze([
 export const GUIDED = Object.freeze([
   'a-lens-passing-by',
   'a-universe-of-stars',
+  'a-variable-star-from-frames',
   'bending-light',
   'binary-star-planets',
   'black-holes',
@@ -153,6 +154,7 @@ export const GUIDED = Object.freeze([
   'radial-velocity',
   'retrograde-motion',
   'scaling-the-main-sequence',
+  'signal-noise-and-exposure',
   'standard-candles',
   'the-beat-of-a-star',
   'the-completeness-curve',
@@ -169,6 +171,7 @@ export const GUIDED = Object.freeze([
   'twelve-nights',
   'wanderers-on-the-sky',
   'weighing-stars',
+  'what-a-ccd-records',
   'what-a-spectrum-is-made-of',
   'what-is-a-gravitational-wave',
   'when-orbits-lock',

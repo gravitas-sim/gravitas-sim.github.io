@@ -2631,4 +2631,70 @@ test.describe('the central experiment of each investigation', () => {
       await expectVerdictRevealed(page, plan, predict);
     });
   }
+  // ---- The calibration investigations (Roadmap II, Prompt 86) ---------------------
+  const CALIBRATION = [
+    {
+      id: 'what-a-ccd-records',
+      title:
+        'what-a-ccd-records: dividing by the flat raises a corner star @accepts:ce.what-a-ccd-records',
+      row: /Star B: net light/,
+      values: [
+        [3, 47296, 30],
+        [6, 54083, 30],
+      ],
+    },
+    {
+      id: 'signal-noise-and-exposure',
+      title:
+        'signal-noise-and-exposure: four times the exposure gives twice the signal-to-noise @accepts:ce.signal-noise-and-exposure',
+      row: /^Signal-to-noise$/,
+      values: [
+        [60, 152.5, 0.6],
+        [240, 320.7, 0.8],
+      ],
+    },
+    {
+      id: 'a-variable-star-from-frames',
+      title:
+        'a-variable-star-from-frames: without calibration the mean is off the truth @accepts:ce.a-variable-star-from-frames',
+      row: /^Mean of the variable against the comparison$/,
+      values: [
+        [0, 0.313, 0.003],
+        [3, 0.345, 0.003],
+      ],
+    },
+  ];
+  for (const c of CALIBRATION) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(
+            async () => {
+              const got = reading(await readout(page), c.row);
+              return Number.isNaN(got) ? NaN : Math.abs(got - want);
+            },
+            { timeout: 8000 }
+          )
+          .toBeLessThan(tol);
+        seen.push(reading(await readout(page), c.row));
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
 });

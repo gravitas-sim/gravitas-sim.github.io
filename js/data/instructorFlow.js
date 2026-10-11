@@ -1669,5 +1669,86 @@ export default {
         text: 'The close, and what is not done.',
       },
     ],
+    'what-a-ccd-records': [
+      {
+        from: 'three-calibration-frames',
+        to: 'the-flat',
+        text: 'Bias 500.4 counts and read noise 8.05 electrons; dark 0.100 electron a second; flat corner 76.2 percent and gain 1.52.',
+      },
+      {
+        from: 'predict-the-flat',
+        to: 'what-the-flat-does',
+        text: 'Students predict the flat raises star B; 47,296 raw and 54,083 calibrated against a truth of 53,988.',
+      },
+      {
+        from: 'divide-not-subtract',
+        to: 'divide-not-subtract',
+        text: 'The flat is a sensitivity: it multiplies, so it is divided last.',
+      },
+      {
+        from: 'cosmic-rays',
+        to: 'the-saturated-star',
+        text: '4 cosmic-ray pixels flagged and 13 saturated; star D is 39 percent short with a small error bar.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: what each frame removes, and what the synthetic camera leaves out.',
+      },
+    ],
+    'signal-noise-and-exposure': [
+      {
+        from: 'the-ccd-equation',
+        to: 'what-limits-the-bright-star',
+        text: 'V = 15 in 60 s: 33,631 electrons, noise 220.6, signal-to-noise 152.5, limited by the star’s own photons.',
+      },
+      {
+        from: 'predict-four-times',
+        to: 'four-times-longer',
+        text: 'Students predict twice the quality for four times the exposure; 320.7, a ratio of 2.10.',
+      },
+      {
+        from: 'a-faint-star',
+        to: 'why-more-than-double',
+        text: 'V = 19 goes from 2.64 to 8.11 for four times the exposure: the read noise is paid once per frame.',
+      },
+      {
+        from: 'exposure-for-the-target',
+        to: 'faintest-star',
+        text: '40.4 s in a suburb and 89.4 s under a bright moon for a signal-to-noise of 100; faintest star V = 19.33, 0.96 mag fainter in four times the time.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close, and what the calculator leaves out.',
+      },
+    ],
+    'a-variable-star-from-frames': [
+      {
+        from: 'forty-frames',
+        to: 'where-the-wander-comes-from',
+        text: 'The star alone scatters by 0.070 mag; the comparison star wanders in step with it, so the cause is common to all stars.',
+      },
+      {
+        from: 'against-the-comparison',
+        to: 'against-the-comparison',
+        text: 'The check star against the comparison scatters by 0.0088 mag, 8.0 times less.',
+      },
+      {
+        from: 'predict-the-curve',
+        to: 'the-sine',
+        text: 'Students predict a smooth variation; period 0.1223 d and amplitude 0.0417 mag.',
+      },
+      {
+        from: 'is-it-real',
+        to: 'is-it-real',
+        text: 'The amplitude is more than twenty errors and about four times the check star’s scatter.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close, and what the synthetic series leaves out.',
+      },
+    ],
   },
 };

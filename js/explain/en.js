@@ -142,6 +142,12 @@ export default {
     'What a straight line of velocity against distance can and cannot say, why distant supernovae are fainter than a coasting universe predicts, why H0 and the supernovae\u2019s absolute brightness cannot be separated, and what a flux-limited survey of galaxies shows.',
     'The supernova distances are on the release scale (H0 = 70), the statistical errors only, the model is flat Lambda-CDM with w = -1 and no radiation, and the SDSS strip is flux limited, so its thinning with distance is selection and not structure.',
   ],
+  detector: [
+    'Synthetic CCD frames from a stated model: a bias, a dark, a flat field and a picture of four stars, a calculation of signal-to-noise for one star, or forty frames of a field with a variable star.',
+    'How the measured light, the noise, the exposure that reaches a target, and the scatter and fitted amplitude of a light curve change as the calibration steps, the exposure, the aperture, the sky or the comparison star change.',
+    'What each calibration frame removes, what limits the signal-to-noise of a bright and of a faint star, and why a comparison star removes thin cloud that a star measured alone cannot.',
+    'Everything is synthetic, from a forward model with a known truth, or a calculation for a stated 0.4 m telescope: no blooming, nonlinearity, color terms or seeing, so a real camera adds errors these frames do not show.',
+  ],
   survey: [
     'Synthetic stars of known brightness at known distances: counted and missed stars, the bias by shells of distance, or the luminosity function against its truth.',
     'How the counted share, the bias and the recovered luminosity function change as the magnitude limit, the completeness curve or the parallax cut changes.',

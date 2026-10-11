@@ -159,6 +159,7 @@ const FILES = [
   // The cosmology tables' rows (Roadmap II Prompt 91).
   { path: 'cosmology/hubble-1929-table1.json', core: false },
   { path: 'cosmology/des-sn5yr-hd.json', core: false },
+  { path: 'cosmology/pantheon-plus-hd.json', core: false },
   { path: 'cosmology/sdss-dr18-redshift-slice.json', core: false },
   { path: 'cosmology/coma-cluster-quoted.json', core: false },
   { path: 'favicon.ico', core: false },
@@ -187,6 +188,7 @@ const OBSERVATORY_ONLY = new Set([
   // The cosmology packs' records (js/cosmologyData.js); the rows are sidecars.
   'js/data/observations/hubble1929Table1.js',
   'js/data/observations/desSn5yrHd.js',
+  'js/data/observations/pantheonPlusHd.js',
   'js/data/observations/sdssDr18RedshiftSlice.js',
   'js/data/observations/comaClusterQuoted.js',
   // The radiation kernel's data (Roadmap II Prompt 82): loaded on demand by
