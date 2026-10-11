@@ -11,7 +11,7 @@
 // revision the whole arrangement exists to prevent. The 162 optional
 // entries are pictures; a missing one is reported and does not cost the reader
 // the version.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-ef083734370b';
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-d9d86307ab22';
 self.__GRAVITAS_PRECACHE_BYTES = 16902738;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
@@ -241,7 +241,6 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/data/investigations/registry.js',
   './js/data/investigations/retrograde-motion.js',
   './js/data/investigations/scaling-the-main-sequence.js',
-  './js/data/investigations/sequenceAliases.js',
   './js/data/investigations/sequences.js',
   './js/data/investigations/standard-candles.js',
   './js/data/investigations/summaries.es.js',
@@ -277,6 +276,7 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/data/realSystemSources.js',
   './js/data/scenarioInfo.js',
   './js/data/scenarioTags.js',
+  './js/data/sequenceAliases.js',
   './js/data/settingKeys.js',
   './js/data/sky/constellations.js',
   './js/data/spectra/sdssSpectra.js',
@@ -1268,7 +1268,6 @@ self.__GRAVITAS_PRECACHE = [
   './js/data/investigations/registry.js',
   './js/data/investigations/retrograde-motion.js',
   './js/data/investigations/scaling-the-main-sequence.js',
-  './js/data/investigations/sequenceAliases.js',
   './js/data/investigations/sequences.js',
   './js/data/investigations/standard-candles.js',
   './js/data/investigations/summaries.es.js',
@@ -1324,6 +1323,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/data/realSystemSources.js',
   './js/data/scenarioInfo.js',
   './js/data/scenarioTags.js',
+  './js/data/sequenceAliases.js',
   './js/data/settingKeys.js',
   './js/data/sky/brightStars.js',
   './js/data/sky/constellations.js',

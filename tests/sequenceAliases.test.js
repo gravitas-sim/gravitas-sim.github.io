@@ -3,7 +3,7 @@
 import { readFileSync } from 'node:fs';
 import { jest, describe, test, expect, beforeEach } from '@jest/globals';
 import { SEQUENCES } from '../js/data/investigations/sequences.js';
-import { SEQUENCE_ALIASES } from '../js/data/investigations/sequenceAliases.js';
+import { SEQUENCE_ALIASES } from '../js/data/sequenceAliases.js';
 import { whatNext, CONTEXT_KEY } from '../js/investigations/next.js';
 
 const library = JSON.parse(readFileSync('library/library.json', 'utf8'));
