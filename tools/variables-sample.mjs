@@ -40,7 +40,10 @@ export function sampleJson() {
   })}\n`;
 }
 
-if (process.argv[1] && import.meta.url.endsWith(path.basename(process.argv[1]))) {
+if (
+  process.argv[1] &&
+  import.meta.url.endsWith(path.basename(process.argv[1]))
+) {
   const text = sampleJson();
   if (process.argv.includes('--check')) {
     if (readFileSync(FILE, 'utf8') !== text) {

@@ -115,7 +115,9 @@ export function drawStar(cls, rand) {
   const harmonics = [{ amplitude: a1, phaseDeg: cls.phases[0] }];
   cls.r.forEach((r, k) =>
     harmonics.push({
-      amplitude: a1 * Math.max(0.01, r + cls.rScatter * (rand() - 0.5) * 2 * (k ? 0.5 : 1)),
+      amplitude:
+        a1 *
+        Math.max(0.01, r + cls.rScatter * (rand() - 0.5) * 2 * (k ? 0.5 : 1)),
       phaseDeg: cls.phases[k + 1] + 20 * (rand() - 0.5),
     })
   );
@@ -139,7 +141,11 @@ export const sampleSetup = (seed, nights = 60) => ({
  * @param {ArrayLike<number>} mag
  * @param {{minPeriod?: number, maxPeriod?: number, K?: number}} [opts]
  */
-export function measureLightCurve(t, mag, { minPeriod = 0.03, maxPeriod = 40, K = 4 } = {}) {
+export function measureLightCurve(
+  t,
+  mag,
+  { minPeriod = 0.03, maxPeriod = 40, K = 4 } = {}
+) {
   const found = findPeriod(t, mag, { minPeriod, maxPeriod, oversample: 4 });
   const P = refinePeriod(t, mag, found.period, K, 0.3 * found.width).period;
   const fit = harmonicFit(t, mag, P, K, { t0: t[0] });
@@ -177,7 +183,12 @@ export function makeSample({ perClass = 24, seed = 'variables-sample' } = {}) {
       const mag = magnitudesOf(col('value'));
       const m = measureLightCurve(t, mag);
       if (m)
-        rows.push({ id, cls: cls.id, truthPeriod: state.periodic.periodDays, ...m });
+        rows.push({
+          id,
+          cls: cls.id,
+          truthPeriod: state.periodic.periodDays,
+          ...m,
+        });
     }
   }
   return rows;
@@ -192,8 +203,11 @@ export function makeSample({ perClass = 24, seed = 'variables-sample' } = {}) {
 export function classifyLeaveOneOut(rows, features, k = 5) {
   const n = rows.length;
   const mean = features.map(f => rows.reduce((s, r) => s + r[f], 0) / n);
-  const sd = features.map((f, j) =>
-    Math.sqrt(rows.reduce((s, r) => s + (r[f] - mean[j]) ** 2, 0) / (n - 1)) || 1
+  const sd = features.map(
+    (f, j) =>
+      Math.sqrt(
+        rows.reduce((s, r) => s + (r[f] - mean[j]) ** 2, 0) / (n - 1)
+      ) || 1
   );
   const z = rows.map(r => features.map((f, j) => (r[f] - mean[j]) / sd[j]));
   return rows.map((_, i) => {
@@ -206,8 +220,11 @@ export function classifyLeaveOneOut(rows, features, k = 5) {
     }
     d.sort((a, b) => a.s - b.s);
     const votes = new Map();
-    for (const { cls } of d.slice(0, k)) votes.set(cls, (votes.get(cls) ?? 0) + 1);
-    return [...votes.entries()].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))[0][0];
+    for (const { cls } of d.slice(0, k))
+      votes.set(cls, (votes.get(cls) ?? 0) + 1);
+    return [...votes.entries()].sort(
+      (a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1)
+    )[0][0];
   });
 }
 
@@ -231,8 +248,11 @@ export function confusion(rows, predicted, classes = CLASSES.map(c => c.id)) {
     perClass: classes.map((cls, i) => {
       const row = matrix[i].reduce((s, v) => s + v, 0);
       const col = matrix.reduce((s, r) => s + r[i], 0);
-      return { cls, recall: row ? matrix[i][i] / row : NaN, precision: col ? matrix[i][i] / col : NaN };
+      return {
+        cls,
+        recall: row ? matrix[i][i] / row : NaN,
+        precision: col ? matrix[i][i] / col : NaN,
+      };
     }),
   };
 }
-

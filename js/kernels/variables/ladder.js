@@ -44,7 +44,10 @@ export const WESENHEIT_R = 0.386;
  */
 export function wesenheitResidual(law, rv = 3.3, r = WESENHEIT_R) {
   const A = Object.fromEntries(
-    Object.entries(WFC3_PIVOT_NM).map(([k, nm]) => [k, extinctionRatio(nm, rv, law)])
+    Object.entries(WFC3_PIVOT_NM).map(([k, nm]) => [
+      k,
+      extinctionRatio(nm, rv, law),
+    ])
   );
   return {
     A,
@@ -101,14 +104,26 @@ export function fitLine(x, y) {
  * @param {ArrayLike<number>} mags
  * @returns {ReturnType<typeof fitLine> & {kept: number[], clipped: number}}
  */
-export function fitLeavitt(periods, mags, { pMin = 5, pMax = 120, clip = 3.3 } = {}) {
+export function fitLeavitt(
+  periods,
+  mags,
+  { pMin = 5, pMax = 120, clip = 3.3 } = {}
+) {
   const rows = [];
   for (let i = 0; i < periods.length; i++)
     if (periods[i] > pMin && periods[i] < pMax)
       rows.push({ i, x: Math.log10(periods[i]) - 1, y: mags[i] });
-  let f = fitLine(rows.map(r => r.x), rows.map(r => r.y));
-  const keep = rows.filter(r => Math.abs(r.y - f.a - f.b * r.x) <= clip * f.rms);
-  f = fitLine(keep.map(r => r.x), keep.map(r => r.y));
+  let f = fitLine(
+    rows.map(r => r.x),
+    rows.map(r => r.y)
+  );
+  const keep = rows.filter(
+    r => Math.abs(r.y - f.a - f.b * r.x) <= clip * f.rms
+  );
+  f = fitLine(
+    keep.map(r => r.x),
+    keep.map(r => r.y)
+  );
   return { ...f, kept: keep.map(r => r.i), clipped: rows.length - keep.length };
 }
 
@@ -147,7 +162,10 @@ export function ladderDistance(host, anchor, anchorDistance, opts = {}) {
   // The scatter about the relation, not about the mean: remove the slope's trend.
   const resid = (s, idx, xm, ym) =>
     Math.sqrt(
-      idx.reduce((t, i) => t + (yOf(s, i) - ym - fa.b * (xOf(s, i) - xm)) ** 2, 0) /
+      idx.reduce(
+        (t, i) => t + (yOf(s, i) - ym - fa.b * (xOf(s, i) - xm)) ** 2,
+        0
+      ) /
         (idx.length - 1)
     );
   const sHost = resid(host, hi, xh, yh);

@@ -84,7 +84,8 @@ export function cepheidsOf(pack) {
 /** The synthetic labelled sample: rows of {id, cls, period, amplitude, r21, ...}. */
 export async function loadClassSample(fetchImpl = globalThis.fetch) {
   const res = await fetchImpl(VARIABLES_SIDECARS.sample);
-  if (!res.ok) throw new Error(`${VARIABLES_SIDECARS.sample}: HTTP ${res.status}`);
+  if (!res.ok)
+    throw new Error(`${VARIABLES_SIDECARS.sample}: HTTP ${res.status}`);
   const j = await res.json();
   return j.rows.map(r => ({
     ...r,

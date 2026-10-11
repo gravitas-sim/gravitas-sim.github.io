@@ -76,7 +76,7 @@ export function harmonicFit(t, y, P, K, { t0, dy = null } = {}) {
   const m = 2 * K + 1;
   if (!(P > 0) || !(K >= 1) || n < m + 1) return null;
   const ref = t0 ?? t[0];
-  const w = 2 * Math.PI / P;
+  const w = (2 * Math.PI) / P;
   const A = new Float64Array(m * m);
   const b = new Float64Array(m);
   const row = new Float64Array(m);
@@ -93,7 +93,8 @@ export function harmonicFit(t, y, P, K, { t0, dy = null } = {}) {
       for (let c = r; c < m; c++) A[r * m + c] += wt * row[r] * row[c];
     }
   }
-  for (let r = 0; r < m; r++) for (let c = 0; c < r; c++) A[r * m + c] = A[c * m + r];
+  for (let r = 0; r < m; r++)
+    for (let c = 0; c < r; c++) A[r * m + c] = A[c * m + r];
   const sol = invertAndSolve(A, b, m);
   if (!sol) return null;
   const { x: coef, inv } = sol;

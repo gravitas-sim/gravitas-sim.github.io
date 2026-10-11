@@ -107,7 +107,8 @@ export function findPeriod(t, y, { minPeriod, maxPeriod, oversample = 8 }) {
   const grid = periodGrid(minPeriod, maxPeriod, T, oversample);
   const spectrum = periodogram(t, y, grid);
   let best = 0;
-  for (let k = 1; k < spectrum.length; k++) if (spectrum[k] > spectrum[best]) best = k;
+  for (let k = 1; k < spectrum.length; k++)
+    if (spectrum[k] > spectrum[best]) best = k;
   // Golden-section refinement within one grid step on either side (in frequency).
   // Index k is frequency fmin + k df: the neighbours of the peak in frequency.
   let lo = 1 / grid[Math.max(0, best - 1)];
@@ -176,7 +177,12 @@ export function refinePeriod(t, y, P0, K = 4, halfWidth = null) {
  * The spread of the refined period over resamples of the points.
  * @returns {{sigma: number, mean: number, periods: number[], resamples: number}}
  */
-export function bootstrapPeriod(t, y, P0, { K = 3, resamples = 40, seed = 'bootstrap' } = {}) {
+export function bootstrapPeriod(
+  t,
+  y,
+  P0,
+  { K = 3, resamples = 40, seed = 'bootstrap' } = {}
+) {
   const n = t.length;
   const rand = mulberry32(normalizeSeed(`${seed}:${n}:${P0}`));
   const T = span(t);

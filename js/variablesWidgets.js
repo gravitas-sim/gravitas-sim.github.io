@@ -72,7 +72,9 @@ export const variablesReady = Promise.all([
 const num = (v, sig = 3) => formatNumber(v, { sig, sci: false });
 const signed = v => (v < 0 ? `−${num(-v)}` : num(v));
 const isOn = x => x >= 0.5;
-const loading = () => [{ label: t('varW.row.state'), value: t('varW.loading') }];
+const loading = () => [
+  { label: t('varW.row.state'), value: t('varW.loading') },
+];
 
 // -----------------------------------------------------------------------------
 // The stars
@@ -85,7 +87,6 @@ export const STARS = Object.freeze([
   { id: 'suDraNightly', source: 'suDra', range: [0.15, 5], nightly: true },
 ]);
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, Math.round(v)));
-const starAt = v => STARS[clamp(v.star, 0, STARS.length - 1)];
 
 /** One visit a night: the bins within 0.3 to 0.4 day after each integer BTJD. */
 export function nightlyRows(tt) {
@@ -121,7 +122,10 @@ export function analysisOf(index, source = data) {
   // The bootstrap on every third point of a long series: it assumes
   // independent points and is a floor, so thinning changes little.
   const step = tt.length > 700 ? Math.ceil(tt.length / 600) : 1;
-  const bt = Float64Array.from({ length: Math.ceil(tt.length / step) }, (_, i) => tt[i * step]);
+  const bt = Float64Array.from(
+    { length: Math.ceil(tt.length / step) },
+    (_, i) => tt[i * step]
+  );
   const bm = Float64Array.from({ length: bt.length }, (_, i) => mag[i * step]);
   const boot = bootstrapPeriod(bt, bm, refined.period, {
     K: 2,
@@ -228,15 +232,24 @@ function drawFold(canvas, v) {
   const pad = 0.05 * (hi - lo);
   const yr = [hi + pad, lo - pad]; // brighter is up
   if (clamp(v.view, 0, 2) === 0) {
-    const p = plot(canvas, [a.t[0], a.t.at(-1)], yr, ['varW.f.axisT', 'varW.f.axisM']);
+    const p = plot(canvas, [a.t[0], a.t.at(-1)], yr, [
+      'varW.f.axisT',
+      'varW.f.axisM',
+    ]);
     for (let i = 0; i < a.t.length; i++)
       dot(p.g, p.X(a.t[i]), p.Y(a.mag[i]), 1.8, p.colors.accent);
     p.done();
   } else if (clamp(v.view, 0, 2) === 1) {
     const f = a.found;
-    const p = plot(canvas, a.star.range, [1.05, -0.02], ['varW.f.axisP', 'varW.f.axisPow'], {
-      logX: true,
-    });
+    const p = plot(
+      canvas,
+      a.star.range,
+      [1.05, -0.02],
+      ['varW.f.axisP', 'varW.f.axisPow'],
+      {
+        logX: true,
+      }
+    );
     p.g.strokeStyle = p.colors.accent;
     p.g.lineWidth = 1.5;
     p.g.beginPath();
@@ -367,7 +380,9 @@ const FOLD = {
     const s = a.stats;
     const al = a.aliases;
     return [
-      sourceRow(a.star.nightly ? 'varW.f.source.nightly' : 'varW.f.source.tess'),
+      sourceRow(
+        a.star.nightly ? 'varW.f.source.nightly' : 'varW.f.source.tess'
+      ),
       { label: t('varW.f.row.points'), value: String(a.t.length) },
       {
         label: t('varW.f.row.peak'),
@@ -432,9 +447,7 @@ export function leavittView(v, source = data) {
   const calibration = fitLeavitt(anchor.periods, anchor.mags);
   const key = hostAt(v);
   const result =
-    key === 'lmc'
-      ? null
-      : ladderDistance(c[key], anchor, ANCHORS.lmc, {});
+    key === 'lmc' ? null : ladderDistance(c[key], anchor, ANCHORS.lmc, {});
   return {
     key,
     c,
@@ -569,9 +582,18 @@ const LEAVITT = {
           ),
           emphasis: true,
         },
-        { label: t('varW.l.row.budgetHost'), value: withUnit(num(term('host'), 2), 'mag') },
-        { label: t('varW.l.row.budgetAnchor'), value: withUnit(num(term('anchor'), 2), 'mag') },
-        { label: t('varW.l.row.budgetSlope'), value: withUnit(num(term('slope'), 2), 'mag') },
+        {
+          label: t('varW.l.row.budgetHost'),
+          value: withUnit(num(term('host'), 2), 'mag'),
+        },
+        {
+          label: t('varW.l.row.budgetAnchor'),
+          value: withUnit(num(term('anchor'), 2), 'mag'),
+        },
+        {
+          label: t('varW.l.row.budgetSlope'),
+          value: withUnit(num(term('slope'), 2), 'mag'),
+        },
         {
           label: t('varW.l.row.budgetDistance'),
           value: withUnit(num(term('anchorDistance'), 2), 'mag'),
@@ -580,7 +602,10 @@ const LEAVITT = {
       if (f.truth)
         rows.push({
           label: t('varW.l.row.maser'),
-          value: withUnit(`${num(f.truth.mu, 4)} ± ${num(f.truth.sigma, 2)}`, 'mag'),
+          value: withUnit(
+            `${num(f.truth.mu, 4)} ± ${num(f.truth.sigma, 2)}`,
+            'mag'
+          ),
           emphasis: true,
         });
     }

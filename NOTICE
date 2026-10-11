@@ -573,3 +573,31 @@ trappist-1-system: TRAPPIST-1: the star and its seven planets, compiled from the
     Christiansen et al. 2025, PSJ 6, 186 (the NASA Exoplanet Archive), doi:10.3847/psj/ade3c2
     Wenger et al. 2000, A&AS 143, 9 (SIMBAD), doi:10.1051/aas:2000332
 <!--/fact-block-->
+
+tess-su-dra-s15: SU Draconis: TESS sector 15 light curve (an RR Lyrae star)
+  File: js/data/observations/tessSuDraS15.js (observed)
+  Licence: public domain. NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive.
+  Basis: 
+  Cite:
+    TESS Light Curves - All Sectors, STScI/MAST, doi:10.17909/t9-nmc8-f686
+    Ricker et al. 2015, JATIS 1, 014003 (TESS), doi:10.1117/1.JATIS.1.1.014003
+    Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC), doi:10.1117/12.2233418
+
+tess-eta-aql-s81: Eta Aquilae: TESS sector 81 light curve (a classical Cepheid)
+  File: js/data/observations/tessEtaAqlS81.js (observed)
+  Licence: public domain. NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive.
+  Basis: 
+  Cite:
+    TESS Light Curves - All Sectors, STScI/MAST, doi:10.17909/t9-nmc8-f686
+    Ricker et al. 2015, JATIS 1, 014003 (TESS), doi:10.1117/1.JATIS.1.1.014003
+    Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC), doi:10.1117/12.2233418
+
+shoes-r22-cepheids: Cepheids in the LMC, NGC 4258 and M101: periods and Wesenheit magnitudes (Riess et al. 2022)
+  File: js/data/observations/shoesR22Cepheids.js (compilation)
+  Licence: CC BY 4.0. The paper's publisher page and Crossref record say original content may be used under CC BY 4.0 (read 2026-10-10); the repository copy of the table has no licence of its own, so the pack relies on the paper's. Attribute Riess et al. 2022, ApJ 934, L7.
+  Basis: A published table from a CC BY 4.0 article, reduced to periods and Wesenheit magnitudes with the paper cited and credited; the same finding as the cosmology gate (COSMOLOGY_GATE.md, D-COSMO-07), made again here because the pack does not depend on that delegated verdict (D-LADDER-01).
+  Cite:
+    Riess et al. 2022, ApJ 934, L7 (A comprehensive measurement of the local value of the Hubble constant), doi:10.3847/2041-8213/ac5c5b
+    Pietrzynski et al. 2019, Nature 567, 200 (the LMC distance from eclipsing binaries), doi:10.1038/s41586-019-0999-4
+    Reid, Pesce & Riess 2019, ApJ 886, L27 (the NGC 4258 maser distance), doi:10.3847/2041-8213/ab552d
+    Leavitt & Pickering 1912, Harvard College Observatory Circular 173

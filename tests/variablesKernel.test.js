@@ -1,6 +1,12 @@
 // The variable-star kernel (Roadmap II Prompt 96): Fourier fits, the period
 // search and its errors, aliases, Leavitt's law and its distance budget, the
 // extinction check, the classification exercise, and the data packs' numbers.
+import {
+  describe,
+  test,
+  expect,
+  beforeAll,
+} from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
