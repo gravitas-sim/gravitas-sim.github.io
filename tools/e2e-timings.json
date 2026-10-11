@@ -1815,5 +1815,15 @@
   "[chromium] › compute.spec.js › the published frame, really › a runtime that cannot be downloaded is said to be, and the frame is removed": 1.5,
   "[chromium] › compute.spec.js › the published frame, really › an unreachable compute origin is said to be, not a hang": 0.6,
   "[chromium] › compute.spec.js › the published frame, really › starts sandboxed: every storage refuses it and so does the page’s DOM": 0.4,
-  "[chromium] › compute.spec.js › the published frame, really › takes one port and ignores a second hello, and answers a malformed request by name": 1.5
+  "[chromium] › compute.spec.js › the published frame, really › takes one port and ignores a second hello, and answers a malformed request by name": 1.5,
+  "[chromium] › adopterGuide.spec.js › the adopter’s guide › every link on it resolves to the surface it names": 0.6,
+  "[chromium] › adopterGuide.spec.js › the adopter’s guide › its counts are the Library’s": 0.3,
+  "[chromium] › adopterGuide.spec.js › the adopter’s guide › the Spanish page is the one a Spanish reader sees": 0.4,
+  "[chromium] › adopterGuide.spec.js › the adopter’s guide › the first week, by the guide’s own links": 3.2,
+  "[chromium] › adopterGuide.spec.js › the guide at 1024 px › axe finds nothing, in en": 1.1,
+  "[chromium] › adopterGuide.spec.js › the guide at 1024 px › axe finds nothing, in es": 1.2,
+  "[chromium] › adopterGuide.spec.js › the guide at 1024 px › nothing scrolls sideways": 0.2,
+  "[chromium] › adopterGuide.spec.js › the guide at 375 px › axe finds nothing, in en": 1.4,
+  "[chromium] › adopterGuide.spec.js › the guide at 375 px › axe finds nothing, in es": 1.2,
+  "[chromium] › adopterGuide.spec.js › the guide at 375 px › nothing scrolls sideways": 0.3
 }

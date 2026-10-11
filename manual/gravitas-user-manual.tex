@@ -205,6 +205,61 @@ The complete list is in the \ui{Shortcuts} dialog, which is the authoritative
 copy; this table is the handful you will use in a first session.
 
 % =============================================================================
+\section{Finding your way around the site}
+
+The simulation is the front door of a site with many pages. They share one
+header, so the same menu, language switch and theme switch are on every page.
+
+\subsection{The menu}
+
+The header menu has five groups, and each opens to a short list.
+
+\begin{description}[style=nextline,leftmargin=1em]
+  \item[Learn] \ui{Library}, \ui{My work}, \ui{Investigations}, \ui{Courses},
+  \ui{Observatory} and \ui{Experiments}.
+  \item[Labs] \ui{Sandbox}, \ui{3-D lab}, \ui{Mission lab} and \ui{Sky Lab}.
+  \item[Make] \ui{Scenario Studio}, \ui{Investigation Composer},
+  \ui{Course builder}, \ui{Figure builder} and \ui{Catalog}.
+  \item[Teach] \ui{Teaching with Gravitas}, \ui{Instructor resources},
+  \ui{Submission review} and the \ui{Classroom evidence kit}.
+  \item[About] \ui{How the model works}, \ui{Physics validation}, \ui{Glossary},
+  the diagnostics pages for the 3-D kernel and the mission core, and this manual.
+\end{description}
+
+The menu also holds the \ui{Language} switch (English or Spanish) and the
+\ui{Theme} switch (Midnight, Deep space, Observatory red and Daylight). Both are
+remembered in the browser. When the network is down, the header says which pages
+are saved on the device; any other page works only if it was opened before.
+
+\subsection{The Library}
+
+\texttt{/library/} is one index of everything that can be opened: the
+\GravLibraryInvestigations{} investigations (\GravInvestigations{} that run in
+the simulation and \GravGuidedInvestigations{} guided investigations in the
+Observatory, the 3-D lab and the mission lab), the \GravScenarios{} scenarios,
+the datasets, the \GravLibraryCourses{} ready-made courses, the experiments and
+the classroom activities. Every entry has the same fields, so they can be
+compared and filtered by level, time, mathematics and subject. The index is
+written from the sources that own each item, so it cannot list one that is gone.
+
+\subsection{My work}
+
+\texttt{/my-work/} is the one page where a student sees and manages what they
+have made: progress in investigations, activities, the evidence notebook, experiments, the scenarios they built and their drafts. It
+needs no account and sends nothing; it reads this browser's own storage. Work
+exists only in this browser on this device, and nobody at Gravitas can see or
+recover it, so the page offers a backup: \ui{Download everything} writes one file
+that can be imported on another device after a preview of what it would change.
+Deleting asks for a copy to be downloaded first.
+
+\subsection{Courses}
+
+\texttt{/course/} opens a course: investigations, activities, simulations, data
+and readings in order and in units. A course is a link or a file made in the
+course builder (\texttt{/studio/course/}); the Library lists the ready-made ones.
+A student's place in a course is kept in the browser like everything else.
+
+% =============================================================================
 \section{The instruments}
 
 Gravitas is a measuring instrument before it is a display. Everything in this
@@ -370,9 +425,12 @@ same way every time, and a share link carries the seed with it.
 % =============================================================================
 \section{Guided investigations}
 
-\GravInvestigations{} investigations, \GravInvestigationSteps{} steps between
-them, \GravGradedSteps{} of those graded, against \GravObjectives{} stated
-learning objectives. Open them from \ui{Learn} in the rail.
+\GravInvestigations{} investigations run in the simulation, with
+\GravInvestigationSteps{} steps between them, \GravGradedSteps{} of those
+graded, against \GravObjectives{} stated learning objectives. Open them from
+\ui{Learn} in the rail or from the Library. The Observatory, the 3-D lab and the
+mission lab add \GravGuidedInvestigations{} guided investigations of their own,
+which is why the Library lists \GravLibraryInvestigations{} in all.
 
 Every investigation follows the same discipline:
 
@@ -535,6 +593,22 @@ suites use it: finding exoplanets in TESS light curves, and reading a star
 cluster's stellar populations. An optional panel imports one star's Gaia
 measurements live from the CDS archive; no guided suite depends on it.
 
+\subsection{The 3-D lab and the mission lab}
+
+\texttt{/3d/} plays a system of two to fifty bodies in three dimensions, drawn
+in WebGL, and measures it; every number is also in a table, and its guided
+investigations are opened from the same page. \texttt{/mission/lab/} is a
+mission to Mars in 2026 on JPL's DE441 ephemeris, in three guided parts: a
+rendezvous in Earth orbit, the departure window, and the trip itself. It is
+educational software, not operational mission design or navigation, and every
+page and file it writes says so.
+
+\subsection{The Sky Lab}
+
+\texttt{/sky/} shows the sky at a chosen time and place: a horizon view, an
+equatorial map and a table of what is up, with five instruments whose readings
+can be kept as evidence. Its approximations are stated on the page.
+
 \subsection{The experiment runner}
 
 \texttt{/experiments/} runs the bench's question at scale. It varies one or two
@@ -593,6 +667,39 @@ student who finds the URL. It is not protection against a determined attacker wh
 has the ciphertext. Instructors can request the passphrase through the contact
 link on that page.
 
+\subsection{From a first visit to a reviewed class}
+
+The adopter's guide at \texttt{/teaching/guide/} is the short version of this
+section, in English and Spanish. The path it describes:
+
+\begin{enumerate}
+  \item \textbf{Choose.} \texttt{/teaching/find/} has an adoption page for every
+  investigation and classroom activity: who it is for, how long it takes, what
+  students should know first, what is marked, the data it uses and how to hand it
+  out. \texttt{/teaching/alignment/} lists them by OpenStax Astronomy 2e chapter.
+  \item \textbf{Preview.} \ui{Preview as a student} opens an investigation clean,
+  without reading or writing the progress saved in your browser.
+  \item \textbf{Build an activity.} \ui{Make an activity from it} chooses the
+  steps, adds a note and a class code, and gives one link.
+  \item \textbf{Post the link.} The distribution kit at \texttt{/teaching/kit/}
+  makes a code to scan, a one-page handout in English, Spanish or both, markup
+  for a web page, and notes for Canvas, Moodle and Blackboard.
+  \item \textbf{Collect.} Students save their lab report as a PDF and hand it in
+  however the course already collects work.
+  \item \textbf{Review.} \texttt{/instructors/submissions/} reads the reports.
+\end{enumerate}
+
+Over a semester, the course builder orders investigations and activities into a
+course; many investigations offer core, quantitative and advanced depths; and the
+\ui{Classroom evidence kit} at \texttt{/evaluation/} has forms for finding out
+whether it worked. No classroom evaluation of Gravitas has been published, and
+the times on the adoption pages are estimates from the steps, not measured class
+times.
+
+What the software does not do: there are no accounts and no roster. A report's
+token shows which browser made the answers, not who typed them. Gravitas is not
+an LTI tool and sends no grades back to a learning platform.
+
 \subsection{Reading what students hand in}
 
 \texttt{/instructors/submissions/} needs no passphrase. Drop in the lab reports
@@ -600,9 +707,11 @@ students handed in --- the PDFs themselves, their JSON progress backups, or the
 token printed on a report's last page --- and it returns one table of how often
 each question was answered wrongly, hardest first. Each answer is graded in the
 language it was typed in, and a written answer is counted as unmarkable rather
-than wrong. What it reads can be downloaded as a spreadsheet or as JSON.
-Nothing leaves the browser and nothing is saved; there is no roster and no
-gradebook. It checks answers, not identity: a token made in a browser can be
+than wrong; the page shows it to you and you can enter a mark, which is labeled
+as yours. It writes gradebook files for Canvas, Moodle and D2L Brightspace, a
+file of your marks, and a spreadsheet or JSON of what it read, all for you to
+import or keep yourself. Nothing leaves the browser and nothing is saved; there
+is no roster. It checks answers, not identity: a token made in a browser can be
 forged.
 
 \subsection{Citing Gravitas}
@@ -618,7 +727,7 @@ Stated plainly, because a teaching tool that hides these is a teaching tool that
 will embarrass someone in front of a class:
 
 \begin{itemize}
-  \item The engine is \textbf{two-dimensional}. Inclination exists for the
+  \item The simulation's engine is \textbf{two-dimensional} (the 3-D lab is a separate small-body kernel, with its own limits stated on its page). Inclination exists for the
   observing panels as a viewing geometry, not as a third spatial dimension the
   bodies move in.
   \item It is \textbf{Newtonian}. There is no general relativity; the
@@ -671,6 +780,7 @@ better served by the web documentation, which is HTML.
   \item[The application] \url{https://gravitas-sim.online}
   \item[What the model does and does not claim]
   \url{https://gravitas-sim.online/model/}
+  \item[The adopter's guide] \url{https://gravitas-sim.online/teaching/guide/}
   \item[Instructor materials] \url{https://gravitas-sim.online/instructors/}
   \item[Source, issues and the technical documentation]
   \url{https://github.com/gravitas-sim/gravitas-sim.github.io}

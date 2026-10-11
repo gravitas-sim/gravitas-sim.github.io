@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-WJlRo96mZiMZ8oJdlbWWnqBw8UZsWp1stQxaqotM92o='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adopter’s guide | Gravitas</title>
+    <meta name="description" content="The first week and the first semester with Gravitas, what it does and does not do, accessibility, privacy, help and how to cite it." />
+    <link rel="canonical" href="https://gravitas-sim.online/teaching/guide/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Adopter’s guide | Gravitas" />
+    <meta property="og:description" content="The first week and the first semester with Gravitas, what it does and does not do, accessibility, privacy, help and how to cite it." />
+    <meta property="og:url" content="https://gravitas-sim.online/teaching/guide/" />
+    <meta property="og:image" content="https://gravitas-sim.online/social-card.png" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to the adoption pages (ADOPTION.md). */
+      .ad-facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: var(--space-3) var(--space-5); margin: var(--space-5) 0; }
+      .ad-facts dt { font-size: var(--text-2xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); }
+      .ad-facts dd { margin: 0 0 var(--space-2); }
+      .ad-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin: var(--space-4) 0; }
+      .ad-steps { padding-left: var(--space-6); }
+      .ad-steps li { margin-bottom: var(--space-2); }
+      .ad-type { color: var(--text-secondary); font-size: var(--text-sm); }
+      .ad-deeper { font-size: var(--text-sm); color: var(--text-secondary); }
+      .ad-embed pre { overflow-x: auto; padding: var(--space-3); background: var(--surface-2); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: var(--text-sm); }
+      .ad-find { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--space-3); margin: var(--space-4) 0; }
+      .ad-find label { display: flex; flex-direction: column; gap: var(--space-1); font-size: var(--text-sm); }
+      .ad-crumb { font-size: var(--text-sm); margin: 0 0 var(--space-3); }
+    </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
+  </head>
+  <body class="doc-page">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<div class="gs-offline" role="status"><template><div class="gs-offline-box">
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
+</div></template></div>
+<!-- /shell:header -->
+    <main class="doc-main is-wide" id="main">
+<!-- Generated by tools/build-adoption-pages.mjs. Do not edit by hand: node tools/build-adoption-pages.mjs -->
+<p class="ad-crumb"><a href="/teaching/"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></a></p>
+<div class="doc-hero">
+<p class="doc-eyebrow"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></p>
+<h1><span class="gs-en">Adopter’s guide</span><span class="gs-es" lang="es">Guía de adopción</span></h1>
+<p class="doc-lede"><span class="gs-en">Everything an instructor needs to start: the first week, the first semester, what the software does and does not do, access, privacy, help and how to cite it.</span><span class="gs-es" lang="es">Todo lo que necesita quien enseña para empezar: la primera semana, el primer semestre, qué hace y qué no hace el software, acceso, privacidad, ayuda y cómo citarlo.</span></p>
+</div>
+<p id="toc-h"><strong><span class="gs-en">On this page</span><span class="gs-es" lang="es">En esta página</span></strong></p>
+<nav class="ad-toc" aria-labelledby="toc-h"><ul>
+<li><a href="#what-h"><span class="gs-en">What you are adopting</span><span class="gs-es" lang="es">Qué va a adoptar</span></a></li>
+<li><a href="#week-h"><span class="gs-en">The first week</span><span class="gs-es" lang="es">La primera semana</span></a></li>
+<li><a href="#semester-h"><span class="gs-en">The first semester</span><span class="gs-es" lang="es">El primer semestre</span></a></li>
+<li><a href="#does-h"><span class="gs-en">What it does and does not do</span><span class="gs-es" lang="es">Qué hace y qué no hace</span></a></li>
+<li><a href="#access-h"><span class="gs-en">Accessibility</span><span class="gs-es" lang="es">Accesibilidad</span></a></li>
+<li><a href="#privacy-h"><span class="gs-en">Privacy</span><span class="gs-es" lang="es">Privacidad</span></a></li>
+<li><a href="#help-h"><span class="gs-en">Getting help and reporting a problem</span><span class="gs-es" lang="es">Obtener ayuda e informar de un problema</span></a></li>
+<li><a href="#cite-h"><span class="gs-en">How to cite</span><span class="gs-es" lang="es">Cómo citar</span></a></li>
+</ul></nav>
+<section aria-labelledby="what-h">
+<h2 id="what-h"><span class="gs-en">What you are adopting</span><span class="gs-es" lang="es">Qué va a adoptar</span></h2>
+<p><span class="gs-en">Gravitas is a browser-based gravity simulator with 72 guided investigations (55 that run in the simulation and 17 in the Observatory, the 3-D lab and the mission lab), 59 ready-made scenarios, 4 ready-made courses and 6 cuts of classroom activities. The software is MIT licensed and the teaching material is CC BY 4.0, both free. These counts are read from the Library when this page is built.</span><span class="gs-es" lang="es">Gravitas es un simulador de gravedad que funciona en el navegador, con 72 investigaciones guiadas (55 que se ejecutan en la simulación y 17 en el Observatorio, el laboratorio 3-D y el laboratorio de misiones), 59 escenarios ya preparados, 4 cursos ya preparados y 6 cortes de actividades de clase. El software tiene licencia MIT y el material docente CC BY 4.0, ambos gratuitos. Estos números se leen de la Biblioteca cuando se construye esta página.</span></p><p><span class="gs-en">No classroom evaluation of Gravitas has been published. This guide describes what the software does and how to use it; it makes no claim about what students gain from it. If you run it with a class, the classroom evidence kit (below) is how to find out.</span><span class="gs-es" lang="es">No se ha publicado ninguna evaluación en el aula de Gravitas. Esta guía describe lo que hace el software y cómo usarlo; no afirma nada sobre lo que el estudiantado obtiene de él. Si lo usa con un grupo, el kit de evidencia de aula (más abajo) es la forma de averiguarlo.</span></p>
+</section>
+<section aria-labelledby="week-h">
+<h2 id="week-h"><span class="gs-en">The first week</span><span class="gs-es" lang="es">La primera semana</span></h2>
+<p><span class="gs-en">Six steps, from nothing to reviewing a class’s work. Nothing needs an account, an install or a server.</span><span class="gs-es" lang="es">Seis pasos, desde cero hasta revisar el trabajo de un grupo. Nada requiere una cuenta, una instalación ni un servidor.</span></p><ol class="ad-steps">
+<li><strong><span class="gs-en">Choose a sequence.</span><span class="gs-es" lang="es">Elija una secuencia.</span></strong> <span class="gs-en">Open the index of adoption pages and filter by level, time, mathematics, subject, textbook chapter or kind of data; each page says who the investigation is for, how long it takes and what students should know first. The textbook alignment lists them by OpenStax Astronomy 2e chapter, and the Library offers ready-made courses.</span><span class="gs-es" lang="es">Abra el índice de páginas de adopción y filtre por nivel, tiempo, matemáticas, tema, capítulo del libro o tipo de datos; cada página dice a quién va dirigida la investigación, cuánto dura y qué debería saber antes el estudiantado. La alineación con el libro las enumera por capítulo de OpenStax Astronomy 2e, y la Biblioteca ofrece cursos ya preparados.</span> <a href="/teaching/find/"><span class="gs-en">Adoption pages</span><span class="gs-es" lang="es">Páginas de adopción</span></a>, <a href="/teaching/alignment/"><span class="gs-en">Textbook alignment</span><span class="gs-es" lang="es">Alineación con el libro</span></a>, <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>.</li>
+<li><strong><span class="gs-en">Preview it as a student.</span><span class="gs-es" lang="es">Véala como estudiante.</span></strong> <span class="gs-en">On an adoption page, “Preview as a student” opens the investigation clean, from the first step, and neither reads nor writes the progress saved in your browser. The Observatory, 3-D and mission investigations have no such mode: their link keeps only the record that it was opened. Do the investigation once yourself before anyone else does.</span><span class="gs-es" lang="es">En una página de adopción, «Vista previa como estudiante» abre la investigación limpia, desde el primer paso, y no lee ni escribe el progreso guardado en su navegador. Las investigaciones del Observatorio, 3-D y misiones no tienen ese modo: su enlace solo guarda el registro de que se abrió. Haga usted la investigación una vez antes que nadie.</span></li>
+<li><strong><span class="gs-en">Build an activity.</span><span class="gs-es" lang="es">Cree una actividad.</span></strong> <span class="gs-en">On the same page, “Make an activity from it” lets you choose the steps, add a note and a class code, and gives you one link. The class code is the same on every student’s link, so it names the class and not the student. The short route is a ready-made cut estimated at 25 minutes or less.</span><span class="gs-es" lang="es">En la misma página, «Crear una actividad a partir de ella» le permite elegir los pasos, añadir una nota y un código de grupo, y le da un enlace. El código de grupo es el mismo en el enlace de cada estudiante, así que nombra al grupo y no al estudiante. La ruta corta es un corte ya preparado, estimado en 25 minutos o menos.</span></li>
+<li><strong><span class="gs-en">Post the link.</span><span class="gs-es" lang="es">Publique el enlace.</span></strong> <span class="gs-en">The distribution kit turns the link into a code to scan, a one-page handout in English, Spanish or both, markup for a web page, and notes for Canvas, Moodle and Blackboard. The link carries the activity; students need nothing else.</span><span class="gs-es" lang="es">El kit de distribución convierte el enlace en un código para escanear, un folleto de una página en inglés, español o ambos, código para una página web y notas para Canvas, Moodle y Blackboard. El enlace lleva la actividad; el estudiantado no necesita nada más.</span> <a href="/teaching/kit/"><span class="gs-en">Distribution kit</span><span class="gs-es" lang="es">Kit de distribución</span></a>.</li>
+<li><strong><span class="gs-en">Collect the reports.</span><span class="gs-es" lang="es">Reúna los informes.</span></strong> <span class="gs-en">Students work in their own browsers and save their lab report as a PDF, which carries a token. They hand it in however you already collect work: your learning platform, email or paper. Ask them to type their login or student number where the report asks for a name; that is how review tells students apart.</span><span class="gs-es" lang="es">El estudiantado trabaja en su propio navegador y guarda su informe de laboratorio como PDF, que lleva una ficha. Lo entrega como usted ya recoge los trabajos: su plataforma de aprendizaje, el correo o el papel. Pídales que escriban su usuario o número de estudiante donde el informe pide un nombre; así distingue la revisión a unos estudiantes de otros.</span></li>
+<li><strong><span class="gs-en">Review the work.</span><span class="gs-es" lang="es">Revise el trabajo.</span></strong> <span class="gs-en">Drop the PDFs into submission review. It shows which questions the class found hardest, lets you mark written answers (your marks are labeled as yours) and writes gradebook files for Canvas, Moodle and D2L Brightspace. When one class code covers every report, it matches students by the name typed in the report and says so. It keeps nothing and sends nothing.</span><span class="gs-es" lang="es">Suelte los PDF en la revisión de entregas. Muestra qué preguntas le costaron más al grupo, le permite calificar las respuestas escritas (sus calificaciones se rotulan como suyas) y escribe archivos de calificaciones para Canvas, Moodle y D2L Brightspace. Cuando un solo código de grupo cubre todos los informes, empareja a los estudiantes por el nombre escrito en el informe y lo indica. No guarda nada y no envía nada.</span> <a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a>.</li>
+</ol><p><span class="gs-en">The times on adoption pages and in the kit are estimates reasoned from the steps. None of them has been timed with a class.</span><span class="gs-es" lang="es">Los tiempos de las páginas de adopción y del kit son estimaciones razonadas a partir de los pasos. Ninguno se ha medido con un grupo.</span></p>
+</section>
+<section aria-labelledby="semester-h">
+<h2 id="semester-h"><span class="gs-en">The first semester</span><span class="gs-es" lang="es">El primer semestre</span></h2>
+<ul>
+<li><strong><span class="gs-en">A course.</span><span class="gs-es" lang="es">Un curso.</span></strong> <span class="gs-en">The course builder orders investigations and activities into one course with one link, and the Library has ready-made courses to start from, including one aligned to OpenStax Astronomy 2e. A course can be saved as a file and reopened next term.</span><span class="gs-es" lang="es">El creador de cursos ordena investigaciones y actividades en un solo curso con un solo enlace, y la Biblioteca tiene cursos ya preparados para empezar, incluido uno alineado con OpenStax Astronomy 2e. Un curso puede guardarse como archivo y reabrirse el semestre siguiente.</span> <a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>.</li>
+<li><strong><span class="gs-en">Depth.</span><span class="gs-es" lang="es">Profundidad.</span></strong> <span class="gs-en">35 of the 72 investigations come at three depths: core, quantitative and advanced. You can set the depth in an activity or a course, and a student can choose it too. A deeper step never changes the scenario or the model, only what is asked.</span><span class="gs-es" lang="es">35 de las 72 investigaciones tienen tres profundidades: principal, cuantitativa y avanzada. Puede fijar la profundidad en una actividad o en un curso, y el estudiante también puede elegirla. Un paso más profundo nunca cambia el escenario ni el modelo, solo lo que se pregunta.</span></li>
+<li><strong><span class="gs-en">Materials.</span><span class="gs-es" lang="es">Materiales.</span></strong> <span class="gs-en">The instructor resources hold an instructor guide and an answer key for each investigation that runs in the simulation, keys cut to each format of a classroom activity, and student worksheets for the activities, in a bundle encrypted in the browser because the site is static. The passphrase is shared with instructors on request: write to the address in the citation file. The public parts (the topic, where it fits in a course, what students should already know and the wrong turns they take) are on each adoption page.</span><span class="gs-es" lang="es">Los recursos para docentes contienen una guía docente y una clave de respuestas para cada investigación que se ejecuta en la simulación, claves adaptadas a cada formato de una actividad de clase y hojas de trabajo para las actividades, en un paquete cifrado en el navegador porque el sitio es estático. La contraseña se comparte con docentes a petición: escriba a la dirección del archivo de citas. Las partes públicas (el tema, el lugar en el curso, lo que el estudiantado debería saber ya y los errores que comete) están en cada página de adopción.</span> <a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a>.</li>
+<li><strong><span class="gs-en">Evaluation.</span><span class="gs-es" lang="es">Evaluación.</span></strong> <span class="gs-en">The classroom evidence kit has a fidelity checklist, a twelve-item pilot pre/post assessment, a usability questionnaire and de-identified data templates. They are project-developed and unvalidated, and the kit says so. Research on students usually needs institutional review before any data is collected.</span><span class="gs-es" lang="es">El kit de evidencia de aula tiene una lista de verificación de fidelidad, una evaluación piloto previa y posterior de doce preguntas, un cuestionario de usabilidad y plantillas de datos sin identificar. Son de elaboración propia y no están validados, y el kit lo dice. La investigación con estudiantes suele requerir aprobación institucional antes de recoger datos.</span> <a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencia de aula</span></a>.</li>
+<li><strong><span class="gs-en">Make your own.</span><span class="gs-es" lang="es">Cree las suyas.</span></strong> <span class="gs-en">The Investigation Composer, the Scenario Studio and the figure builder make new material that travels as a link, with nothing to install and no pull request.</span><span class="gs-es" lang="es">El Compositor de investigaciones, el Estudio de escenarios y el creador de figuras producen material nuevo que viaja como un enlace, sin instalar nada y sin una solicitud de cambios.</span> <a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a>, <a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a>, <a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a>.</li>
+</ul>
+</section>
+<section aria-labelledby="does-h">
+<h2 id="does-h"><span class="gs-en">What it does and does not do</span><span class="gs-es" lang="es">Qué hace y qué no hace</span></h2>
+<dl class="ad-facts">
+<div><dt><span class="gs-en">Accounts</span><span class="gs-es" lang="es">Cuentas</span></dt><dd><span class="gs-en">There are none. Nobody signs in, and there is no roster to manage.</span><span class="gs-es" lang="es">No hay. Nadie inicia sesión y no hay lista de estudiantes que administrar.</span></dd></div>
+<div><dt><span class="gs-en">Identity</span><span class="gs-es" lang="es">Identidad</span></dt><dd><span class="gs-en">A report’s token shows which browser made the answers, not who typed them. You decide whether the link’s class code or a name typed in the report identifies a student; a report with no identifier is listed as left out, never guessed at.</span><span class="gs-es" lang="es">La ficha de un informe muestra qué navegador produjo las respuestas, no quién las escribió. Usted decide si el código de grupo del enlace o un nombre escrito en el informe identifica a un estudiante; un informe sin identificador se lista como excluido y nunca se adivina.</span></dd></div>
+<div><dt><span class="gs-en">Learning platforms</span><span class="gs-es" lang="es">Plataformas de aprendizaje</span></dt><dd><span class="gs-en">Gravitas is not an LTI tool and does not send grades back. The platform holds a link and receives a PDF; the review page writes files you import into the gradebook yourself.</span><span class="gs-es" lang="es">Gravitas no es una herramienta LTI y no devuelve calificaciones. La plataforma guarda un enlace y recibe un PDF; la página de revisión escribe archivos que usted importa al libro de calificaciones.</span></dd></div>
+<div><dt><span class="gs-en">Grading</span><span class="gs-es" lang="es">Calificación</span></dt><dd><span class="gs-en">A choice or a number is checked against the answer. A written answer is shown to you with the points to look for; the page never grades it. Predictions are recorded and not marked.</span><span class="gs-es" lang="es">Una opción o un número se compara con la respuesta. Una respuesta escrita se le muestra con los puntos que conviene buscar; la página nunca la califica. Las predicciones se registran y no se califican.</span></dd></div>
+<div><dt><span class="gs-en">Offline</span><span class="gs-es" lang="es">Sin conexión</span></dt><dd><span class="gs-en">Once a student has loaded the page it works with the network off. The Library, My work, Courses, Observatory, Sandbox, 3-D lab, Mission lab, Sky Lab and Catalog are saved on the device; any other page works offline only if it was opened before.</span><span class="gs-es" lang="es">Una vez que el estudiante ha cargado la página, funciona sin red. La Biblioteca, Mi trabajo, Cursos, el Observatorio, el Sandbox, el laboratorio 3-D, el laboratorio de misiones, Sky Lab y el Catálogo se guardan en el dispositivo; cualquier otra página funciona sin conexión solo si se abrió antes.</span></dd></div>
+<div><dt><span class="gs-en">Physics</span><span class="gs-es" lang="es">Física</span></dt><dd><span class="gs-en">The integrator is Newtonian, and some investigations place a body from a published model rather than integrating it; the screen says so. The validation page lists what was checked against what, with the error measured.</span><span class="gs-es" lang="es">El integrador es newtoniano, y algunas investigaciones colocan un cuerpo según un modelo publicado en lugar de integrarlo; la pantalla lo indica. La página de validación enumera qué se comprobó con qué, con el error medido.</span> <a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación de la física</span></a></dd></div>
+<div><dt><span class="gs-en">Languages</span><span class="gs-es" lang="es">Idiomas</span></dt><dd><span class="gs-en">Student-facing pages are in English and Spanish. The instructor materials are in English only.</span><span class="gs-es" lang="es">Las páginas para el estudiantado están en inglés y español. Los materiales docentes están solo en inglés.</span></dd></div>
+<div><dt><span class="gs-en">Browsers</span><span class="gs-es" lang="es">Navegadores</span></dt><dd><span class="gs-en">The two most recent major versions of Chrome and Edge, Firefox and Safari, on desktops, phones and tablets.</span><span class="gs-es" lang="es">Las dos versiones principales más recientes de Chrome y Edge, Firefox y Safari, en computadoras, teléfonos y tabletas.</span></dd></div>
+</dl>
+</section>
+<section aria-labelledby="access-h">
+<h2 id="access-h"><span class="gs-en">Accessibility for students who need it</span><span class="gs-es" lang="es">Accesibilidad para estudiantes que la necesitan</span></h2>
+<p><span class="gs-en">What follows describes what was built and tested, not a claim about how well it serves a particular student. If something does not work for your class, that is a defect worth reporting.</span><span class="gs-es" lang="es">Lo que sigue describe lo que se construyó y se probó, no una afirmación sobre lo bien que atiende a un estudiante en concreto. Si algo no funciona para su grupo, es un defecto que conviene informar.</span></p><ul>
+<li><span class="gs-en">The interface can be operated from the keyboard, including the investigations, the measuring tools and the dialogs, which trap focus and return it.</span><span class="gs-es" lang="es">La interfaz puede manejarse con el teclado, incluidas las investigaciones, las herramientas de medida y los diálogos, que retienen el foco y lo devuelven.</span></li>
+<li><span class="gs-en">Measurements and changes are announced through a live region for screen readers, and the simulation canvas carries a written description that follows what is on screen.</span><span class="gs-es" lang="es">Las mediciones y los cambios se anuncian mediante una región activa para lectores de pantalla, y el lienzo de la simulación lleva una descripción escrita que sigue lo que hay en pantalla.</span></li>
+<li><span class="gs-en">Every instrument prints its numbers as text beside the picture, and every plot is also a table.</span><span class="gs-es" lang="es">Cada instrumento escribe sus números como texto junto a la imagen, y cada gráfica es también una tabla.</span></li>
+<li><span class="gs-en">Animation follows the operating system’s reduced-motion setting. Four themes are provided, including a light one for projectors and a high-contrast dark one.</span><span class="gs-es" lang="es">La animación respeta el ajuste de movimiento reducido del sistema operativo. Hay cuatro temas, incluido uno claro para proyectores y uno oscuro de alto contraste.</span></li>
+<li><span class="gs-en">Not solved: a canvas cannot be explored by touch the way a tactile diagram can. A student who needs that will need the numbers read aloud or described.</span><span class="gs-es" lang="es">Sin resolver: un lienzo no puede explorarse al tacto como un diagrama táctil. Un estudiante que lo necesite necesitará que le lean o le describan los números.</span></li>
+</ul><p><span class="gs-en">The accessibility statement, with what was tested and how:</span><span class="gs-es" lang="es">La declaración de accesibilidad, con lo que se probó y cómo:</span> <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/ACCESSIBILITY.md">ACCESSIBILITY.md</a></p>
+</section>
+<section aria-labelledby="privacy-h">
+<h2 id="privacy-h"><span class="gs-en">Privacy, in plain words</span><span class="gs-es" lang="es">Privacidad, en palabras sencillas</span></h2>
+<ul>
+<li><span class="gs-en">Gravitas is a static site. There is no account, no login, no analytics, no telemetry and no server that receives anything.</span><span class="gs-es" lang="es">Gravitas es un sitio estático. No hay cuenta, ni inicio de sesión, ni analítica, ni telemetría, ni servidor que reciba nada.</span></li>
+<li><span class="gs-en">A student’s answers, notebook and progress stay in the browser they were made in. They leave it only when the student exports them: a PDF report, a progress file or a token.</span><span class="gs-es" lang="es">Las respuestas, el cuaderno y el progreso del estudiante permanecen en el navegador donde se hicieron. Salen de él solo cuando el estudiante los exporta: un informe en PDF, un archivo de progreso o una ficha.</span></li>
+<li><span class="gs-en">The report carries whatever name the student typed into it. Ask students to type what you want to see, and nothing more than that.</span><span class="gs-es" lang="es">El informe lleva el nombre que el estudiante haya escrito en él. Pida que escriban lo que usted quiere ver, y nada más.</span></li>
+<li><span class="gs-en">Submission review reads files in your browser, keeps nothing and sends nothing.</span><span class="gs-es" lang="es">La revisión de entregas lee archivos en su navegador, no guarda nada y no envía nada.</span></li>
+<li><span class="gs-en">Reading a live archive, where an investigation offers it, is opt-in and never on the path of an investigation.</span><span class="gs-es" lang="es">La lectura de un archivo en vivo, donde una investigación la ofrece, es opcional y nunca forma parte del recorrido de una investigación.</span></li>
+<li><span class="gs-en">Because nothing is collected, nobody here learns that something went wrong unless you say so.</span><span class="gs-es" lang="es">Como no se recoge nada, nadie aquí se entera de que algo falló a menos que usted lo diga.</span></li>
+</ul>
+</section>
+<section aria-labelledby="help-h">
+<h2 id="help-h"><span class="gs-en">Getting help and reporting a problem</span><span class="gs-es" lang="es">Obtener ayuda e informar de un problema</span></h2>
+<p><span class="gs-en">Gravitas is maintained by one person alongside a teaching load. Expect an answer within a week or two, usually.</span><span class="gs-es" lang="es">Gravitas lo mantiene una sola persona junto con su carga docente. Cuente con una respuesta en una o dos semanas, normalmente.</span></p><ul>
+<li><span class="gs-en">Something is wrong:</span><span class="gs-es" lang="es">Algo falla:</span> <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/issues/new"><span class="gs-en">open an issue</span><span class="gs-es" lang="es">abra una incidencia</span></a>. <span class="gs-en">Include a share link (press Share and paste the link, which reproduces the state), the browser and its version, and what you expected instead.</span><span class="gs-es" lang="es">Incluya un enlace para compartir (pulse Compartir y pegue el enlace, que reproduce el estado), el navegador y su versión, y lo que esperaba en su lugar.</span></li>
+<li><span class="gs-en">A number looks wrong:</span><span class="gs-es" lang="es">Un número parece incorrecto:</span> <a href="/validation/"><span class="gs-en">the validation page</span><span class="gs-es" lang="es">la página de validación</span></a> <span class="gs-en">may answer it; if it disagrees with what you see, that is a good report.</span><span class="gs-es" lang="es">puede responderlo; si no coincide con lo que ve, es un buen informe.</span></li>
+<li><span class="gs-en">A question that is not a bug, or how a class went:</span><span class="gs-es" lang="es">Una pregunta que no es un error, o cómo fue un grupo:</span> <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/SUPPORT.md">SUPPORT.md</a>.</li>
+<li><span class="gs-en">A security problem:</span><span class="gs-es" lang="es">Un problema de seguridad:</span> <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/SECURITY.md">SECURITY.md</a> <span class="gs-en">says how to report it. Do not open a public issue.</span><span class="gs-es" lang="es">dice cómo informarlo. No abra una incidencia pública.</span></li>
+</ul>
+</section>
+<section aria-labelledby="cite-h">
+<h2 id="cite-h"><span class="gs-en">How to cite</span><span class="gs-es" lang="es">Cómo citar</span></h2>
+<p><span class="gs-en">Use the citation file in the repository, which GitHub turns into BibTeX and APA. Every dataset an adoption page lists carries its own license and the citation its publisher asks for. The teaching material is CC BY 4.0: say where it came from.</span><span class="gs-es" lang="es">Use el archivo de citas del repositorio, que GitHub convierte en BibTeX y APA. Cada conjunto de datos que enumera una página de adopción lleva su propia licencia y la cita que pide su editor. El material docente es CC BY 4.0: indique de dónde procede.</span></p><p><a class="ui-button" href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">The citation file</span><span class="gs-es" lang="es">El archivo de citas</span></a></p>
+</section>
+<p><a href="/teaching/"><span class="gs-en">Back to Teach</span><span class="gs-es" lang="es">Volver a Enseñar</span></a></p>
+    </main>
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
+    <script type="module">
+      import { mountShell } from '/js/shell.js';
+      try {
+        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es'))
+          document.documentElement.lang = 'es';
+      } catch {
+        /* storage blocked: English */
+      }
+      const titles = {"en":"Adopter’s guide | Gravitas","es":"Guía de adopción | Gravitas"};
+      const retitle = () => {
+        document.title =
+          titles[document.documentElement.lang === 'es' ? 'es' : 'en'];
+      };
+      retitle();
+      mountShell({
+        onLanguage: retitle,
+      });
+    </script>
+  </body>
+</html>

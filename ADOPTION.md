@@ -13,7 +13,8 @@ fact on it is read from the sources that own it.
 |---|---|---|
 | [`/teaching/`](teaching/) | Teach: the eight-step instructor path (why and how it works; quick start; find content; build an activity or a course; collect and review work; materials and answer keys; embed and present; cite and evaluate). Its counts are read from the catalog when the page loads, as before | by hand, with the counts generated |
 | [`/teaching/find/`](teaching/find/) | The index of every adoption page, with filters | `tools/build-adoption-pages.mjs` |
-| `/teaching/investigation/<id>/` | One page for every investigation: the 24 lessons and the 17 guided investigations of the Observatory, the 3-D lab and the mission lab | the same |
+| [`/teaching/guide/`](teaching/guide/) | The adopter's guide (Prompt 114, `ADOPTER_GUIDE.md`): the first week, the first semester, what the software does and does not do, accessibility, privacy, help and citing, in both languages; its counts are read from the Library | the same |
+| `/teaching/investigation/<id>/` | One page for every investigation: the 55 lessons that run in the simulation and the 17 guided investigations of the Observatory, the 3-D lab and the mission lab (72 in the Library; the generator reads the count) | the same |
 | `/teaching/activity/<id>/` | One page for every classroom activity | the same |
 | [`/instructors/`](instructors/) | The public start (the adoption pages, the instructor path, submission review) and, behind the passphrase, only the answer keys, the instructor notes and the rest of the encrypted materials; each card links its adoption page | by hand |
 
@@ -95,7 +96,7 @@ no more than 25 minutes. It is derived, never stored, so it cannot go stale.
 
 ## Coverage per investigation
 
-Every one of the 41 investigations declares a summary, level, duration,
+Every investigation (41 when this section was written; the Library holds 72 now) declares a summary, level, duration,
 mathematics, calculation bucket, subjects, prerequisites (an empty list means
 none), textbook chapter and course level. Missing: a card picture for the 17
 guided investigations, and a textbook *section* for two lessons (Goldilocks,

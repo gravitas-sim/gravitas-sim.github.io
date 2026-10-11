@@ -664,7 +664,7 @@ and [`SCENARIO_FIXES.md`](SCENARIO_FIXES.md).
 | | |
 | --- | --- |
 | Something is wrong | [`SUPPORT.md`](SUPPORT.md) — what makes a bug report fixable here |
-| I want to use this in a class | [`SUPPORT.md`](SUPPORT.md), and [/teaching/](https://gravitas-sim.online/teaching/) |
+| I want to use this in a class | [`SUPPORT.md`](SUPPORT.md), the [adopter's guide](https://gravitas-sim.online/teaching/guide/) and [/teaching/](https://gravitas-sim.online/teaching/) |
 | Which browsers are supported | [`SUPPORT.md`](SUPPORT.md#supported-browsers-and-devices) — generated from what CI runs |
 | What happens if the maintainer is away | [`CONTINUITY.md`](CONTINUITY.md), and [`TOOLCHAIN.md`](TOOLCHAIN.md) for how versions move |
 | I want to change something | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
