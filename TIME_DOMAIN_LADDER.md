@@ -14,7 +14,7 @@ instructor material and e2e are not (D-LADDER-02).
 | Classification | `classify.js` | five synthetic classes through the periodic forward model, measured by the same pipeline, leave-one-out kNN, confusion table |
 | Packs | `tools/data-packs/variables.mjs` | `tess-su-dra-s15`, `tess-eta-aql-s81`, `shoes-r22-cepheids`; rows are sidecars in `variables/` |
 | Class sample | `variables/class-sample.json`, `tools/variables-sample.mjs` | the measured synthetic sample; a test holds it to the kernel |
-| Instruments | `js/variablesWidgets.js` | `variable-fold`, `leavitt-law`, `variable-class`, English and Spanish words. Built and exercised by tests, but **not registered** in `js/widgets.js` (the registry requires every instrument to be used by a lesson); the registration is four lines in `widgets.js`, `composer/widgetIds.js`, `explainers.js` and `explain/*.js`, to land with the lessons |
+| Instruments | `js/variableInstruments.js` | `variable-fold`, `leavitt-law`, `variable-class`, English and Spanish words. Built and exercised by tests, but **not registered** in `js/widgets.js` (the registry requires every instrument to be used by a lesson); the registration is four lines in `widgets.js`, `composer/widgetIds.js`, `explainers.js` and `explain/*.js`, to land with the lessons |
 
 ## Measured results
 

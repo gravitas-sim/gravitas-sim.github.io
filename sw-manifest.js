@@ -11,8 +11,8 @@
 // revision the whole arrangement exists to prevent. The 154 optional
 // entries are pictures; a missing one is reported and does not cost the reader
 // the version.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-87b93e118f65';
-self.__GRAVITAS_PRECACHE_BYTES = 16226722;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-019a49123f34';
+self.__GRAVITAS_PRECACHE_BYTES = 16226728;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',
@@ -718,8 +718,8 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/utils.js',
   './js/validationPage.js',
   './js/validationWorker.js',
+  './js/variableInstruments.js',
   './js/variablesData.js',
-  './js/variablesWidgets.js',
   './js/vectorOverlay.js',
   './js/view3d.js',
   './js/view3dBridge.js',
@@ -1746,8 +1746,8 @@ self.__GRAVITAS_PRECACHE = [
   './js/utils.js',
   './js/validationPage.js',
   './js/validationWorker.js',
+  './js/variableInstruments.js',
   './js/variablesData.js',
-  './js/variablesWidgets.js',
   './js/vectorOverlay.js',
   './js/view3d.js',
   './js/view3dBridge.js',

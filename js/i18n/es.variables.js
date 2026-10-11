@@ -1,7 +1,7 @@
 // =============================================================================
 // Las palabras de los instrumentos de estrellas variables, en español
 // -----------------------------------------------------------------------------
-// Las registra js/variablesWidgets.js al cargar la familia. Mismos ids que
+// Las registra js/variableInstruments.js al cargar la familia. Mismos ids que
 // en.variables.js.
 // =============================================================================
 

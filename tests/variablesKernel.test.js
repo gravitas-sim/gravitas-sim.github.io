@@ -37,7 +37,7 @@ import {
   leavittView,
   classView,
   nightlyRows,
-} from '../js/variablesWidgets.js';
+} from '../js/variableInstruments.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fileFetch = async url => ({
