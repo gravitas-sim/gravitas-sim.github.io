@@ -24,7 +24,7 @@ import { mulberry32, normalizeSeed } from '../../rng.js';
 import { harmonicFit, curveStats, magnitudesOf } from './fit.js';
 import { findPeriod, refinePeriod } from './period.js';
 
-const { Math, Float64Array } = globalThis;
+const { Math } = globalThis;
 
 export const VERSION = '1.0.0';
 
