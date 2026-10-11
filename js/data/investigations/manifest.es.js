@@ -449,7 +449,7 @@ export const MANIFEST = [
     title: 'Dentro de una estrella',
     subtitle:
       'Equilibrio hidrostático, un politropo y por qué el centro es caliente',
-    duration: '25-40 min',
+    duration: '15-25 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/inside-a-star.webp',
     depths: 3,
@@ -462,7 +462,7 @@ export const MANIFEST = [
     title: 'Escalar la secuencia principal',
     subtitle:
       'Lo que predice un argumento de escala y lo que dicen los modelos MIST',
-    duration: '30-40 min',
+    duration: '20-25 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/scaling-the-main-sequence.webp',
     depths: 3,
@@ -474,7 +474,7 @@ export const MANIFEST = [
     id: 'the-limit',
     title: 'El límite',
     subtitle: 'Masa y radio de las enanas blancas, y por qué 1,4 masas solares',
-    duration: '25-40 min',
+    duration: '15-25 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/the-limit.webp',
     depths: 3,

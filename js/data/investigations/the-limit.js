@@ -33,7 +33,7 @@ const THE_LIMIT = {
   thumbnail: 'images/investigations/the-limit.webp',
   title: 'The Limit',
   subtitle: 'White-dwarf mass and radius, and why 1.4 solar masses',
-  duration: '25-40 min',
+  duration: '15-25 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 23, section: null },

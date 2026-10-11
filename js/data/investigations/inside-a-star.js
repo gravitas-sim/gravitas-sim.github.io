@@ -32,7 +32,7 @@ const INSIDE_A_STAR = {
   thumbnail: 'images/investigations/inside-a-star.webp',
   title: 'Inside a Star',
   subtitle: 'Hydrostatic equilibrium, a polytrope, and why the center is hot',
-  duration: '25-40 min',
+  duration: '15-25 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 16, section: null },

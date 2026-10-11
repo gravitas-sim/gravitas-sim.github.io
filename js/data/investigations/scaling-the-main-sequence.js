@@ -32,7 +32,7 @@ const SCALING_THE_MAIN_SEQUENCE = {
   thumbnail: 'images/investigations/scaling-the-main-sequence.webp',
   title: 'Scaling the Main Sequence',
   subtitle: 'What a scaling argument predicts, and the MIST models say',
-  duration: '30-40 min',
+  duration: '20-25 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 18, section: null },
