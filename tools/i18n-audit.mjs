@@ -209,6 +209,16 @@ for (const m of readFileSync(join(ROOT, 'js/ui.js'), 'utf8').matchAll(
   }
 }
 
+// The formula language's refusals and its propagation notes are looked up by
+// the code they carry (js/formula/parse.js CODES), not written out.
+{
+  const { CODES } = await import(`${ROOT}js/formula/parse.js`);
+  for (const code of [...CODES, 'of', 'unitless'])
+    used.add(`formula.err.${code}`);
+  for (const rule of ['exact', 'none', 'shared', 'first-order'])
+    used.add(`obs.formula.why.${rule}`);
+}
+
 // Phantoms from comments are dropped here rather than at each capture site,
 // so every extractor above stays a one-liner.
 for (const id of [...used]) if (!looksLikeId(id)) used.delete(id);

@@ -242,6 +242,28 @@ const every = () => [
       }),
     })
   ),
+  // A derived quantity (js/notebook/derivedEntry.js, Prompt 100): its formula
+  // and inputs are covered in tests/formulaSurfaces.test.js; here only that it
+  // is an envelope the ledger can hold.
+  artifactEntry({
+    source: SOURCE.DERIVED_QUANTITY,
+    title: 'Derived quantity',
+    capturedAt: at,
+    context: { page: 'notebook' },
+    envelope: artifact({
+      id: 'derived-1',
+      source: { kind: 'analysis', id: 'formula', version: '1', digest },
+      quantities: [
+        {
+          id: 'q',
+          value: 2,
+          unit: 'm',
+          uncertainty: { kind: 'sigma', sigma: 0.1, basis: 'derived' },
+          origin: 'derived',
+        },
+      ],
+    }),
+  }),
 ];
 
 describe('every producer writes an envelope with where it was kept', () => {

@@ -36,6 +36,8 @@ export function checkAnswer(step, value, { locale = 'en' } = {}) {
     return Number(value) === step.answer;
   }
   if (step.kind === 'numeric') {
+    // Expected from the student's own numbers, which are not all there yet.
+    if (step.formula && !Number.isFinite(step.answer)) return null;
     const read = readValue(value, step, locale);
     // Unreadable is not correct. gradeAnswer() below is what a caller uses when
     // it wants to tell the student *why*; this keeps the boolean contract the
@@ -79,6 +81,7 @@ export function gradeAnswer(step, value, { locale = 'en' } = {}) {
   }
 
   if (step.kind !== 'numeric') return blank;
+  if (step.formula && !Number.isFinite(step.answer)) return blank;
 
   const read = readValue(value, step, locale);
   if (!read.ok) {

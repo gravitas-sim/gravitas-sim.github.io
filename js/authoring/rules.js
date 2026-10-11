@@ -1061,6 +1061,10 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       }
 
       if (kind === 'numeric') {
+        // Its expected value is a formula over the student's own numbers
+        // (js/formula/grade.js), computed at grading; the pack validator has
+        // already judged the formula against the units of its fields.
+        if (step.formula) return;
         if (!Number.isFinite(step.answer)) {
           E('answer/shape', 'a numeric question has no finite answer');
           return;

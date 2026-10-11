@@ -407,4 +407,18 @@ export const EN_COMPOSER = {
   'composer.error.inputRange': 'From {min} to {max} {unit}.',
   'composer.error.values': 'Each variant gives its inputs as numbers.',
   'composer.error.answer': 'These inputs give no usable answer.',
+  'composer.formula.legend': 'Expected value from a formula',
+  'composer.formula.hint':
+    'Instead of a fixed answer, the expected value is a formula over the numbers each student measured, worked out when the answer is checked. Name the fields it reads as name = step.field, separated by semicolons. Units are checked.',
+  'composer.formula.expr': "Formula, such as to(P^2 / a^3, 'yr^2/AU^3')",
+  'composer.formula.of':
+    'Measured fields it reads, such as P = orbit.period; a = orbit.axis',
+  'composer.formula.tolerance': 'Tolerance (percent)',
+  'composer.key.formula':
+    'Computed from each student’s own numbers: {expr} (within {pct} percent)',
+  'composer.error.formulaHere':
+    'A formula takes the place of an answer and a tolerance, on a numeric question.',
+  'composer.error.formulaShape':
+    'An expression, the measured fields it reads, and a tolerance of up to 100 percent.',
+  'composer.error.formula': 'The formula is refused.',
 };

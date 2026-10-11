@@ -86,7 +86,13 @@ export function entryFor(step, index) {
     entry.answerText = plainText(step.options[step.answer]);
   }
 
-  if (step.kind === 'numeric') {
+  if (step.kind === 'numeric' && step.formula) {
+    // Different for every student: the key gives the rule, not a number.
+    entry.answerFormula = step.formula.expr;
+    entry.formulaOf = { ...step.formula.of };
+    entry.tolerancePct = step.formula.tolerancePct ?? 5;
+    entry.unit = step.unit ?? null;
+  } else if (step.kind === 'numeric') {
     const tol = toleranceFor(step);
     entry.answerValue = step.answer;
     entry.tolerance = tol;

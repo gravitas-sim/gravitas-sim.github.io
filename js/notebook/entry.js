@@ -78,6 +78,8 @@ export const SOURCE = Object.freeze({
   // A run of a reviewed notebook on the compute page, kept as its envelope
   // (js/compute/keep.js).
   COMPUTE_CAPSULE: 'compute-capsule',
+  // A formula over numbers the notebook holds (js/notebook/derivedEntry.js).
+  DERIVED_QUANTITY: 'derived-quantity',
 });
 
 /** The sources this build can capture from. */
@@ -96,6 +98,7 @@ export const SOURCES = [
   SOURCE.SWEEP_ANALYSIS,
   SOURCE.EXPERIMENT_RESULT,
   SOURCE.COMPUTE_CAPSULE,
+  SOURCE.DERIVED_QUANTITY,
 ];
 
 /** How long a student's prose may be, per field. */

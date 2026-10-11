@@ -2062,6 +2062,8 @@ export const ES_DEFERRED = {
     'Eso parece el valor en años, y la pregunta pide días.',
   'inv.misconception.radiansForDegrees':
     'Eso parece el ángulo en radianes, y la pregunta pide grados.',
+  'inv.formula.needs':
+    'Esta respuesta se comprueba con tus propias medidas. Regístralas en los pasos anteriores y se podrá comprobar.',
   'inv.answer.check': 'Comprobar',
 
   // --- El modo didactico del problema restringido de tres cuerpos --------------
@@ -3618,6 +3620,8 @@ export const ES_DEFERRED = {
   'nb.source.inference-fit': 'Ajuste del núcleo de inferencia',
   'nb.source.comparison': 'Modelo frente a datos',
   'nb.source.sweep-analysis': 'Análisis de barrido',
+  'nb.source.derived-quantity': 'Cantidad derivada',
+  'nb.formula.summary': 'Derivar una cantidad con una fórmula',
   'nb.source.experiment-result': 'Resultado de experimento',
   'nb.source.compute-capsule': 'Ejecución de cuaderno (cápsula de cálculo)',
   'nb.entry.cite': 'El resultado y de dónde viene',

@@ -304,7 +304,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->9182<!--/fact--> strings, and
+of <!--fact:uiStrings-->9249<!--/fact--> strings, and
 all <!--fact:investigations-->55<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -340,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->11046<!--/fact--> tests across <!--fact:jestSuites-->327<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->11108<!--/fact--> tests across <!--fact:jestSuites-->330<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -366,7 +366,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->208<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->579<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->5384<!--/fact--> KB         | <!--fact:buildDeferredChunks-->401<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->5418<!--/fact--> KB         | <!--fact:buildDeferredChunks-->405<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->787<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -419,7 +419,6 @@ teaching/           the public showcase page for instructors
 instructors/        the instructor area; instructors/submissions/ reviews hand-ins
 evaluation/         printable pilot instruments for evaluating a section
 observatory/        the Observatory: data, measurement and the guided suites
-compute/            the compute page's reviewed notebooks and example inputs (compute-frame/ is the frame, published to its own origin)
 catalog/            the curated catalog of extensions, and its archives
 experiments/        the experiment runner
 figure/             the figure builder, and embeds
@@ -486,8 +485,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->2225<!--/fact--> tests
-in <!--fact:e2eFiles-->160<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->2228<!--/fact--> tests
+in <!--fact:e2eFiles-->162<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -634,7 +633,6 @@ part was built:
 | [`CHAOS_INVESTIGATION.md`](CHAOS_INVESTIGATION.md)                 | The chaos investigation: why the Lagrange equilateral configuration, the divergence definition, and the evidence it is not a timestep artifact |
 | [`RESONANCE_INVESTIGATION.md`](RESONANCE_INVESTIGATION.md)         | The resonance investigation: the resonant angles, the three verdicts and why one of them is a refusal, the four scenarios and their measured values |
 | [`EXOPLANET_OBSERVING.md`](EXOPLANET_OBSERVING.md)                 | The transit, radial-velocity and astrometry panels and the shared observer                                                                     |
-| [`COMPUTE.md`](COMPUTE.md)                                         | The opt-in, online-only compute page: reviewed Python notebooks in a sandboxed frame on its own origin, what is pinned, the capsule and how to publish the frame |
 | [`EXOPLANET_OBSERVATORY.md`](EXOPLANET_OBSERVATORY.md)             | Investigations with real TESS light curves in the Observatory: what each checks, the data and licenses, and the approximations left               |
 | [`STELLAR_POPULATIONS.md`](STELLAR_POPULATIONS.md)                 | Investigations with SDSS spectra and photometry, SEGUE, MIST and TESS: what each checks, the platform they reuse, the data and licenses           |
 | [`REFERENCE_FRAMES.md`](REFERENCE_FRAMES.md)                       | Re-expressing the scene in another body's frame                                                                                                |

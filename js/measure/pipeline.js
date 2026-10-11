@@ -79,6 +79,7 @@ export const CHANGE_CLASS = Object.freeze({
   bin: { stage: 'transformation', uncertainty: 'propagated' },
   restFrame: { stage: 'transformation', uncertainty: 'kept' },
   derive: { stage: 'transformation', uncertainty: 'propagated' },
+  formula: { stage: 'transformation', uncertainty: 'propagated' },
   annotate: { stage: 'annotation', uncertainty: 'kept' },
   unannotate: { stage: 'annotation', uncertainty: 'kept' },
 });
