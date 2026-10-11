@@ -121,12 +121,6 @@ export default {
     'Cuánto desvía la luz una masa, qué tamaño de anillo hace, y qué fija una curva de luz (el tiempo de cruce) y qué deja abierto (la masa, la distancia y la velocidad por separado).',
     'Una lente delgada en campo débil, una masa puntual o una galaxia circular, una estrella uniforme, sin cizalla ni segunda lente; el suceso sintético es un modelo con ruido, con una verdad que el cielo real nunca da.',
   ],
-  variables: [
-    'El brillo de una estrella en el tiempo, su búsqueda de periodo o la luz plegada con un periodo; la relación periodo-brillo de las cefeidas con las estrellas de una galaxia encima; o una muestra etiquetada de estrellas variables por periodo, amplitud y forma.',
-    'Cómo cambian el pliegue, los alias, la recta ajustada, la distancia y sus términos de error, y la tabla de confusión al cambiar la estrella, el periodo, la galaxia o los rasgos.',
-    'Qué periodo puede fijar una serie de luz y qué no (alias, medios periodos), cómo se obtiene una distancia de una relación calibrada con cada error nombrado, y qué clases no distinguen los rasgos elegidos.',
-    'Luz real de TESS en una banda, agrupada; cefeidas del Hubble sin corrección de metalicidad ni de amontonamiento; una muestra de clasificación sintética, con clases estilizadas.',
-  ],
   survey: [
     'Estrellas sintéticas de brillo conocido a distancias conocidas: estrellas contadas y perdidas, el sesgo por capas de distancia, o la función de luminosidad frente a su verdad.',
     'Cómo cambian la parte contada, el sesgo y la función de luminosidad recuperada al cambiar el límite de magnitud, la curva de completitud o el corte de paralaje.',

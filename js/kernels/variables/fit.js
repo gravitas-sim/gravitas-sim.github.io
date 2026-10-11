@@ -22,7 +22,7 @@
 // notes on global lookups).
 // =============================================================================
 
-const { Math, Float64Array, Number } = globalThis;
+const { Math, Float64Array } = globalThis;
 
 export const VERSION = '1.0.0';
 

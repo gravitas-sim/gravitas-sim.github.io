@@ -265,15 +265,6 @@ export const LAZY_FAMILIES = Object.freeze({
     'LENSING_WIDGETS',
     ['light-bending', 'lens-plane', 'lens-passing']
   ),
-  // Real TESS light curves and Cepheids arrive as sidecar tables;
-  // whenWidgetsReady() waits.
-  variables: familyEntry(
-    () => import('./variablesWidgets.js'),
-    './variablesWidgets.js',
-    'VARIABLES_WIDGETS',
-    ['variable-fold', 'leavitt-law', 'variable-class'],
-    'variablesReady'
-  ),
   // Its Gaia and rotation-curve packs arrive behind more imports;
   // whenWidgetsReady() waits.
   galactic: familyEntry(

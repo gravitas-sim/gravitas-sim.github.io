@@ -124,12 +124,6 @@ export default {
     'How far a mass bends light, how large a ring a mass makes, and what a light curve fixes (the crossing time) and what it leaves open (mass, distance and speed separately).',
     'One thin lens in the weak field, a point mass or a circular galaxy, a uniform star, no shear or second lens; the synthetic event is a model with noise, with a truth the real sky never gives.',
   ],
-  variables: [
-    'A star’s brightness against time, its period search, or the light folded on a period; the Cepheid period–brightness relation with a galaxy’s stars on it; or a labelled sample of variable stars by period, amplitude and shape.',
-    'How the fold, the aliases, the fitted line, the distance and its error terms, and the confusion table change as the star, the period, the galaxy or the features change.',
-    'What period a run of light can fix and what it cannot (aliases, half periods), how a distance follows from a calibrated relation with every error named, and which classes the chosen features cannot tell apart.',
-    'Real TESS light in one band, binned; Hubble Cepheids without a metallicity or crowding correction; a classification sample that is synthetic, with stylised classes.',
-  ],
   survey: [
     'Synthetic stars of known brightness at known distances: counted and missed stars, the bias by shells of distance, or the luminosity function against its truth.',
     'How the counted share, the bias and the recovered luminosity function change as the magnitude limit, the completeness curve or the parallax cut changes.',
