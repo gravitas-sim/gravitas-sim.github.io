@@ -676,6 +676,8 @@ export async function buildLibrary() {
     title: words(EN_DEFERRED, ES_DEFERRED, s.titleId),
     blurb: words(EN_DEFERRED, ES_DEFERRED, s.blurbId),
     entries: s.lessons.map(l => `investigation:${l.id}`),
+    depths: s.lessons.map(l => l.depth),
+    after: s.after,
   }));
   // The Observatory's suites are sequences too: each says to work through
   // its guides in order.

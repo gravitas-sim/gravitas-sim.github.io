@@ -1799,53 +1799,132 @@ export const ES_DEFERRED = {
   'inv.seq.sky.plan-a-night':
     'Ponlo a trabajar: elige objetivos para una noche en un telescopio.',
 
-  'inv.seq.orbits.title': 'Mecánica orbital',
-  'inv.seq.orbits.blurb':
-    'De la forma de una órbita a moverse entre dos. Las dos primeras miden lo que hacen las órbitas; las tres últimas usan eso para llegar a alguna parte.',
-  'inv.seq.orbits.keplers-laws':
+  'inv.seq.gravity.title': 'Gravedad y órbitas',
+  'inv.seq.gravity.blurb':
+    'De la forma de una órbita a moverse entre dos, y luego un tercer cuerpo, los agujeros negros y las ondas gravitacionales. Empieza con las leyes de Kepler: todo lo demás vuelve a ellas.',
+  'inv.seq.gravity.keplers-laws':
     'Las tres leyes, medidas en lugar de recitadas. Todo lo que viene después remite a la elipse y a la relación período–tamaño que encuentras aquí.',
-  'inv.seq.orbits.orbital-energy':
+  'inv.seq.gravity.retrograde-motion':
+    'La ley de los períodos de Kepler aplicada a un enigma: por qué Marte parece hacer un lazo. Un cambio de marco, no de física.',
+  'inv.seq.gravity.power-law-gravity':
+    '¿Cómo serían las órbitas si la gravedad decayera de otra manera? Muestra qué partes de las leyes de Kepler dependen del inverso del cuadrado.',
+  'inv.seq.gravity.orbital-energy':
     'Por qué una órbita más rápida es más baja. La contabilidad de energía de aquí es lo que hace que un impulso de transferencia tenga sentido en vez de parecer al revés.',
-  'inv.seq.orbits.hohmann-transfer':
+  'inv.seq.gravity.tides':
+    'Una gravedad que cambia a lo largo de un cuerpo: por qué los océanos suben dos veces al día y por qué las lunas acaban mirando a su planeta.',
+  'inv.seq.gravity.hohmann-transfer':
     'La forma más barata de pasar entre dos órbitas circulares, planificada y volada. Corta como para hacerla en demostración una vez asentado el argumento energético.',
-  'inv.seq.orbits.gravity-assist':
+  'inv.seq.gravity.gravity-assist':
     'La otra forma de cambiar de órbita: tomar prestado de un planeta en vez de gastar combustible. Acompaña a la investigación de transferencia más que continuarla.',
-  'inv.seq.orbits.lagrange-points':
-    'Donde el problema de dos cuerpos deja de bastar. Un final natural, y la puerta de entrada al recorrido de tres cuerpos.',
-
-  'inv.seq.exoplanets.title': 'Detección de exoplanetas',
-  'inv.seq.exoplanets.blurb':
-    'Los dos métodos que han encontrado casi todos los planetas conocidos, y luego usarlos juntos sobre una estrella desconocida. Investigaciones largas: cuenta con dos sesiones, o deja parte como actividad.',
-  'inv.seq.exoplanets.transit-photometry':
-    'Profundidad, duración y ruido, a partir de una curva de luz que mides tú. El vocabulario que usa el resto del recorrido.',
-  'inv.seq.exoplanets.radial-velocity':
-    'La otra mitad del cuadro: lo que hace la estrella. El tránsito da el tamaño, esto da la masa, y ninguno por separado da una densidad.',
-  'inv.seq.exoplanets.detect-this-planet':
-    'Un sistema desconocido con los dos instrumentos y sin solucionario. Vale la pena solo cuando ambos métodos resultan familiares.',
-  'inv.seq.exoplanets.design-the-schedule':
-    'El mismo argumento en el instrumento real, donde la campaña dura minutos y no se puede rebobinar. Haz antes la versión analítica; esta te pide planificar tú la observación.',
-  'inv.seq.exoplanets.goldilocks-question':
-    'Qué dice y qué no dice una detección sobre si algún sitio es habitable. Necesita la investigación de tránsitos; la de velocidad radial ayuda.',
-
-  'inv.seq.threebody.title': 'Cuando dos cuerpos no bastan',
-  'inv.seq.threebody.blurb':
-    'Resonancia, puntos de equilibrio y sensibilidad a las condiciones iniciales: las tres formas en que añadir un cuerpo más cambia la respuesta.',
-  'inv.seq.threebody.when-orbits-lock':
-    'La introducción más suave a un tercer cuerpo: tirones pequeños y repetidos que se acumulan. No hace falta nada previo de tres cuerpos.',
-  'inv.seq.threebody.lagrange-points':
-    'Los puntos de equilibrio del problema restringido, y el sistema rotante en el que viven. Corta, y ese sistema es en lo que se apoya la siguiente.',
-  'inv.seq.threebody.butterfly-effect':
+  'inv.seq.gravity.lagrange-points':
+    'Los puntos de equilibrio del problema restringido y el marco giratorio donde viven. Ese marco es en lo que se apoya la siguiente investigación.',
+  'inv.seq.gravity.when-orbits-lock':
+    'La introducción más suave a un tercer cuerpo: pequeños tirones repetidos que se suman. Solo necesita el modelo de dos cuerpos.',
+  'inv.seq.gravity.butterfly-effect':
     'Dependencia sensible, medida con una separación que ves crecer. Mucho más convincente después de haber visto una órbita que se queda donde está.',
-  'inv.seq.threebody.binary-star-planets':
-    'Todo lo anterior a la vez: estabilidad, resonancia y caos decidiendo dónde puede sobrevivir un planeta alrededor de dos estrellas.',
-
-  'inv.seq.waves.title': 'Ondas gravitacionales, desde cero',
-  'inv.seq.waves.blurb':
-    'Qué es de verdad lo que llega, y luego qué puede y qué no puede decirte una sola señal sobre la fuente que la emitió.',
-  'inv.seq.waves.what-is-a-gravitational-wave':
+  'inv.seq.gravity.black-holes':
+    'La energía orbital llevada al límite: ¿cuánto se puede acercar algo en órbita y qué significa escapar cuando nada escapa?',
+  'inv.seq.gravity.what-is-a-gravitational-wave':
     'No supone física previa y no hay nada que leer antes. Qué tiene que estar moviéndose, qué viaja, qué se estira y cómo lo nota un instrumento.',
-  'inv.seq.waves.listening-to-spacetime':
+  'inv.seq.gravity.listening-to-spacetime':
     'El mismo instrumento llevado mucho más lejos: medir una fuente a partir de su señal, y comparar un modelo con lo que dos detectores registraron de verdad. Mucho más fácil si has hecho la primera, pero no depende de ella.',
+
+  'inv.seq.light.title': 'Luz y estrellas',
+  'inv.seq.light.blurb':
+    'Lo que lleva la luz de las estrellas: color y temperatura, líneas espectrales y movimiento, y luego qué son las estrellas, cómo se pesan, cómo funcionan por dentro y cómo terminan. Diez investigaciones; las tres primeras duran de 15 a 25 minutos.',
+  'inv.seq.light.color-and-temperature':
+    'Empieza aquí: por qué una estrella caliente es azul y una fría roja, y cómo leer una temperatura en un color.',
+  'inv.seq.light.what-a-spectrum-is-made-of':
+    'Un espectro dividido en sus tipos: continuo, de emisión y de absorción, y lo que cada uno dice del gas.',
+  'inv.seq.light.lines-and-motion':
+    'Las mismas líneas, desplazadas: la velocidad en la línea de visión a partir del efecto Doppler.',
+  'inv.seq.light.a-universe-of-stars':
+    'Brillo, distancia y luminosidad juntos: el diagrama de Hertzsprung–Russell, hecho con estrellas reales. No hace falta otra investigación antes.',
+  'inv.seq.light.weighing-stars':
+    'Órbitas de binarias convertidas en masas: la única forma directa de pesar una estrella.',
+  'inv.seq.light.scaling-the-main-sequence':
+    'Por qué las estrellas más masivas brillan tanto más: las leyes de escala que salen del equilibrio interior de una estrella.',
+  'inv.seq.light.inside-a-star':
+    'El equilibrio que sostiene una estrella y lo que cambia cuando se rompe. Necesita antes Las vidas de las estrellas.',
+  'inv.seq.light.lives-of-stars':
+    'Sigue estrellas de distintas masas del nacimiento a la muerte y lee sus edades en el diagrama.',
+  'inv.seq.light.the-limit':
+    'Donde acaba la muerte de una estrella: el límite de masa de una enana blanca y lo que hay más allá.',
+  'inv.seq.light.cluster-membership':
+    'Datos reales de un cúmulo real: qué estrellas pertenecen a él, según sus movimientos. Usa el diagrama y la idea de población.',
+
+  'inv.seq.planets.title': 'Planetas y exoplanetas',
+  'inv.seq.planets.blurb':
+    'Los dos métodos que han encontrado casi todos los planetas conocidos, usados juntos en una estrella desconocida, y luego si algún lugar es habitable y qué hacen dos estrellas a un planeta. Investigaciones largas: planea dos sesiones o deja parte como tarea. Mejor después de Gravedad y órbitas.',
+  'inv.seq.planets.transit-photometry':
+    'Profundidad, duración y ruido, a partir de una curva de luz que mides tú. El vocabulario que usa el resto del recorrido.',
+  'inv.seq.planets.radial-velocity':
+    'La otra mitad del cuadro: lo que hace la estrella. El tránsito da el tamaño, esto da la masa, y ninguno por separado da una densidad.',
+  'inv.seq.planets.detect-this-planet':
+    'Un sistema desconocido con los dos instrumentos y sin solucionario. Vale la pena solo cuando ambos métodos resultan familiares.',
+  'inv.seq.planets.design-the-schedule':
+    'El mismo argumento en el instrumento real, donde la campaña dura minutos y no se puede rebobinar. Haz antes la versión analítica; esta te pide planificar tú la observación.',
+  'inv.seq.planets.goldilocks-question':
+    'Qué dice y qué no dice una detección sobre si algún sitio es habitable. Necesita la investigación de tránsitos; la de velocidad radial ayuda.',
+  'inv.seq.planets.binary-star-planets':
+    'Estabilidad, resonancia y caos a la vez, decidiendo dónde puede sobrevivir un planeta alrededor de dos estrellas.',
+
+  'inv.seq.galaxies.title': 'Galaxias y el universo',
+  'inv.seq.galaxies.blurb':
+    'Nuestro lugar en la Vía Láctea, la masa que no vemos, la luz curvada por la gravedad, la escalera de distancias desde las estrellas variables y el universo en expansión. Catorce investigaciones cortas en tres grupos. Mejor después de Gravedad y órbitas y de Luz y estrellas.',
+  'inv.seq.galaxies.the-suns-motion':
+    'Empieza aquí: el movimiento del propio Sol por la Galaxia, a partir de las estrellas que lo rodean.',
+  'inv.seq.galaxies.the-rotating-disk':
+    'Cómo gira todo el disco y por qué la curva de rotación no es la que predice la materia visible.',
+  'inv.seq.galaxies.missing-mass':
+    'La curva de rotación convertida en masa: la evidencia de la materia oscura, con galaxias reales.',
+  'inv.seq.galaxies.bending-light':
+    'La gravedad curva la luz: el ángulo de deflexión y lo que hace falta para verlo. La primera de tres sobre lentes.',
+  'inv.seq.galaxies.einstein-rings-and-arcs':
+    'Una galaxia como lente: anillos y arcos, y una segunda manera de pesar lo que no vemos.',
+  'inv.seq.galaxies.a-lens-passing-by':
+    'Una sola estrella como lente: el aumento de brillo que delata un planeta solitario o un objeto oscuro.',
+  'inv.seq.galaxies.the-beat-of-a-star':
+    'Comienzo de la escalera de distancias: una estrella cuya luz late, y cómo leer su período.',
+  'inv.seq.galaxies.which-kind-of-variable':
+    'No toda variable es una vela estándar: distingue los tipos por la forma de la curva.',
+  'inv.seq.galaxies.leavitts-law':
+    'Período y luminosidad unidos: la relación que convirtió a las cefeidas en reglas.',
+  'inv.seq.galaxies.the-first-rung':
+    'Calibra el peldaño con una cefeida cercana y úsalo para llegar a otra galaxia.',
+  'inv.seq.galaxies.standard-candles':
+    'Las supernovas como velas estándar: hasta dónde se ve una explosión brillante y uniforme, y lo que dice de la expansión.',
+  'inv.seq.galaxies.the-expanding-universe':
+    'Las distancias se encuentran con los corrimientos al rojo: la ley de Hubble, la expansión y su ritmo, con galaxias reales.',
+  'inv.seq.galaxies.the-shape-of-expansion':
+    'Ajusta la historia de la expansión para ver de qué está hecho el universo. La más cuantitativa del grupo.',
+  'inv.seq.galaxies.where-galaxies-live':
+    'La última vista: las galaxias en el espacio y lo que dice su agrupamiento. Necesita la expansión, no el ajuste.',
+
+  'inv.seq.observing.title': 'Observar y medir',
+  'inv.seq.observing.blurb':
+    'Cómo aprender algo cierto con un telescopio: elegir objetivos, programar una sesión, medir espectros y curvas de luz y preguntar qué deja fuera un sondeo. Usa la profundidad cuantitativa donde la hay. Mejor después de El cielo.',
+  'inv.seq.observing.plan-a-night':
+    'Empieza aquí: elige objetivos para una noche en un telescopio, con la hora y el lugar del Laboratorio del cielo.',
+  'inv.seq.observing.twelve-nights':
+    'Una campaña real de doce noches: el clima, la Luna y lo que te cuesta el calendario.',
+  'inv.seq.observing.what-a-spectrum-is-made-of':
+    'Lee un espectro de forma cuantitativa: dónde están las líneas y qué tan intensas son.',
+  'inv.seq.observing.lines-and-motion':
+    'Mide un desplazamiento de longitud de onda y conviértelo en velocidad.',
+  'inv.seq.observing.transit-photometry':
+    'Mide profundidad, duración y ruido en una curva de luz: la fotometría de la que depende lo demás.',
+  'inv.seq.observing.design-the-schedule':
+    'Planea una campaña de observación para un planeta: cuándo mirar y por cuánto tiempo, con las noches que tienes.',
+  'inv.seq.observing.who-gets-counted':
+    'Comienzo del grupo de efectos de selección: un sondeo cuenta solo lo que puede ver.',
+  'inv.seq.observing.why-the-bright-ones-win':
+    'El sesgo de brillo, hecho cuantitativo: por qué la muestra no es la población.',
+  'inv.seq.observing.the-completeness-curve':
+    'Pon un número a lo que un sondeo pierde y corrígelo.',
+  'inv.seq.depth.core': 'Profundidad básica',
+  'inv.seq.depth.quantitative': 'Profundidad cuantitativa',
+  'inv.seq.depth.advanced': 'Profundidad avanzada',
 
   'inv.summary.about': 'unas {h} horas',
   'inv.summary.range': '{l}–{h} horas',
