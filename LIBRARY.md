@@ -98,6 +98,15 @@ What is left unstated, and why:
 - A **catalog data pack's** subjects come from the curation file, because the
   catalog entry carries none.
 
+## The six sequences (Prompt 97)
+
+`sequences` carries six named orders over the investigations (The sky; Gravity
+and orbits; Light and stars; Planets and exoplanets; Galaxies and the universe;
+Observing and measuring), each with `depths` (the depth each entry is read at)
+and `after` (sequences worth doing first). Every investigation is in at least
+one, and every `needs` in `js/data/investigations/sequences.js` is an earlier
+item that the lesson declares as a prerequisite.
+
 ## What no source owns (Prompt 76, R-L)
 
 `tools/library-curation.json` holds the fields no source file declares: the

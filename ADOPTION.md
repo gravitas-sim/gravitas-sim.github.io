@@ -83,6 +83,16 @@ be fetched while this was written: the chapter is the claim, a section is given
 only where one fits, and an adopter should check them against the book in hand
 (D-ADOPT-01).
 
+## The alignment page and the short route (Prompt 97)
+
+`/teaching/alignment/` lists every investigation and activity under the OpenStax
+chapter it declares, generated from the same rows as the index. Each
+investigation's page also links a **default short route**: the assignment
+builder opened with a derived selection (`/?assign=<id>&route=short`, from
+`js/assignments/shortRoute.js`): the first prediction, measurement, number,
+choice and explanation at the core depth, plus the steps they need, estimated at
+no more than 25 minutes. It is derived, never stored, so it cannot go stale.
+
 ## Coverage per investigation
 
 Every one of the 41 investigations declares a summary, level, duration,
