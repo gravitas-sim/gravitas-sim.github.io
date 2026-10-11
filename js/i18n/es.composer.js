@@ -420,4 +420,18 @@ export const ES_COMPOSER = {
   'composer.error.inputRange': 'De {min} a {max} {unit}.',
   'composer.error.values': 'Cada variante da sus datos como números.',
   'composer.error.answer': 'Estos datos no dan una respuesta utilizable.',
+  'composer.formula.legend': 'Valor esperado con una fórmula',
+  'composer.formula.hint':
+    'En lugar de una respuesta fija, el valor esperado es una fórmula sobre los números que midió cada estudiante, calculada al comprobar la respuesta. Nombra los campos que lee como nombre = paso.campo, separados por punto y coma. Se comprueban las unidades.',
+  'composer.formula.expr': "Fórmula, como to(P^2 / a^3, 'yr^2/AU^3')",
+  'composer.formula.of':
+    'Campos medidos que lee, como P = orbit.period; a = orbit.axis',
+  'composer.formula.tolerance': 'Tolerancia (porcentaje)',
+  'composer.key.formula':
+    'Calculado con los números de cada estudiante: {expr} (dentro del {pct} por ciento)',
+  'composer.error.formulaHere':
+    'Una fórmula sustituye a la respuesta y a la tolerancia, en una pregunta numérica.',
+  'composer.error.formulaShape':
+    'Una expresión, los campos medidos que lee y una tolerancia de hasta 100 por ciento.',
+  'composer.error.formula': 'La fórmula se rechaza.',
 };

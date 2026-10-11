@@ -434,6 +434,10 @@ export function ensurePanel() {
       </div>
     </div>
     <p class="nb-intro">${esc(t('nb.intro'))}</p>
+    <details id="nbDerive" class="nb-derive">
+      <summary>${esc(t('nb.formula.summary'))}</summary>
+      <div id="nbDeriveHost"></div>
+    </details>
     <div id="nbBody" class="nb-body"></div>
     <input id="nbRestoreFile" type="file" accept="application/json,.json" hidden />
   `;
@@ -481,6 +485,18 @@ function subscribeToLocaleOnce() {
 /** Wire the panel's controls. Once, when it is built. */
 function wire() {
   $('nbClose')?.addEventListener('click', () => setNotebookEnabled(false));
+  // The formula form is a lazy module: nothing of it loads until it is opened.
+  let derive = null;
+  $('nbDerive')?.addEventListener('toggle', () => {
+    if (!$('nbDerive').open) return;
+    derive ??= import('./notebook/derivedPanel.js').then(m =>
+      m.mountDerivedPanel($('nbDeriveHost'), {
+        entries: () => entries,
+        offer: offerDraft,
+      })
+    );
+    derive.then(p => p.update());
+  });
 
   // Prose edits: on change rather than on every keystroke, so a save failure
   // is reported once per edit and not once per character.

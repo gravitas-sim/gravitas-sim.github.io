@@ -113,6 +113,7 @@ const STEP_FIELDS = {
     'unit',
     'tolerance',
     'expect',
+    'formula',
     'hints',
     'worked',
     'misconceptions',
@@ -574,6 +575,13 @@ function checkStep(s, path, index, ctx) {
       const item = { ...s, id: 'inline', version: 1 };
       for (const k of COMMON_STEP) delete item[k];
       delete item.from;
+      if (s.formula !== undefined) {
+        checkFormula(s, path, index, ctx);
+        // The bank-item rules want a number; the formula supplies it later.
+        delete item.formula;
+        item.answer = 1;
+        item.tolerance = 1;
+      }
       // Its complaints on the step's own paths, not on the list's.
       const onStep = at => at.replace(`${path}[0]`, path);
       checkItems(
@@ -594,6 +602,57 @@ function checkStep(s, path, index, ctx) {
       );
     }
   }
+}
+
+/**
+ * A numeric question's `formula` (js/formula/grade.js): its expected value is
+ * a formula over the student's own measured fields, computed when an answer is
+ * graded, in place of `answer` and `tolerance`. Here its shape, and, where the
+ * caller has the formula engine (`api.formula`), the formula itself against the
+ * units of the fields it names.
+ */
+function checkFormula(s, path, index, { need, api, steps }) {
+  const at = `${path}.formula`;
+  const f = s.formula;
+  need(s.kind === 'numeric', at, 'formulaHere', 'only a numeric question');
+  need(
+    s.answer === undefined && s.tolerance === undefined,
+    at,
+    'formulaHere',
+    'in place of an answer and a tolerance'
+  );
+  const names = isObject(f?.of) ? Object.keys(f.of) : [];
+  const shaped =
+    isObject(f) &&
+    Object.keys(f).every(k => ['expr', 'of', 'tolerancePct'].includes(k)) &&
+    typeof f.expr === 'string' &&
+    f.expr.trim() !== '' &&
+    f.expr.length <= 200 &&
+    names.length >= 1 &&
+    names.length <= 6 &&
+    names.every(
+      n =>
+        /^[A-Za-z_][A-Za-z0-9_]*$/.test(n) &&
+        /^[A-Za-z0-9][A-Za-z0-9-]*\.[A-Za-z][A-Za-z0-9_-]*$/.test(
+          String(f.of[n])
+        )
+    ) &&
+    (f.tolerancePct === undefined ||
+      (typeof f.tolerancePct === 'number' &&
+        f.tolerancePct > 0 &&
+        f.tolerancePct <= 100));
+  need(
+    shaped,
+    at,
+    'formulaShape',
+    'an expression, the measured fields it reads and a tolerance in percent'
+  );
+  if (!shaped || !api.formula) return;
+  const problem = api.formula(f, s.unit, steps.slice(0, index));
+  need(!problem, at, 'formula', 'a formula that checks', {
+    why: problem?.code,
+    ...problem?.vars,
+  });
 }
 
 /** Whether a pack names a built-in scenario, by its id or an older key. */

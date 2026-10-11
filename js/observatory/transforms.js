@@ -92,6 +92,12 @@ function keepRows(o, keep) {
 /** A column's unit, parsed; null when not stated. */
 const unitOf = c => parseUnit(c.unit).unit;
 
+/** The formula engine, once ./formulaPanel.js has loaded and registered it. */
+let engine = null;
+export const useFormulaEngine = e => {
+  engine = e;
+};
+
 /**
  * Every change the workspace can make. Each has the kinds it applies to, a
  * check that says why it cannot be made (or null), and the change itself,
@@ -548,6 +554,21 @@ export const OPS = {
         },
       };
     },
+  },
+
+  /**
+   * A new column from a formula over the others (js/formula/): arithmetic,
+   * a fixed list of functions and the pinned constants, every sum checked in
+   * units, the uncertainty propagated to first order. The engine is a lazy
+   * module that registers itself (./formulaPanel.js), so the page carries
+   * none of it until a reader asks for a formula; a saved session that holds
+   * one loads it before it is replayed.
+   */
+  formula: {
+    kinds: ['time-series', 'spectrum', 'table'],
+    check: (o, change) =>
+      engine ? engine.check(o, change) : 'the formula engine is not loaded',
+    apply: (o, change) => engine.apply(o, change, copy(o)),
   },
 
   /** Take a spectrum to its rest frame, given a redshift. */

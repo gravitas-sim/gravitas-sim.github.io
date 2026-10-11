@@ -75,6 +75,8 @@ export const SOURCE = Object.freeze({
   COMPARISON: 'comparison',
   SWEEP_ANALYSIS: 'sweep-analysis',
   EXPERIMENT_RESULT: 'experiment-result',
+  // A formula over numbers the notebook holds (js/notebook/derivedEntry.js).
+  DERIVED_QUANTITY: 'derived-quantity',
 });
 
 /** The sources this build can capture from. */
@@ -92,6 +94,7 @@ export const SOURCES = [
   SOURCE.COMPARISON,
   SOURCE.SWEEP_ANALYSIS,
   SOURCE.EXPERIMENT_RESULT,
+  SOURCE.DERIVED_QUANTITY,
 ];
 
 /** How long a student's prose may be, per field. */
