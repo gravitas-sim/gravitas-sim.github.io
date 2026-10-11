@@ -1751,5 +1751,17 @@
   "[tablet] › responsiveLayout.spec.js › the four layouts › the Observatory stacks its views and keeps them linked": 6.0,
   "[tablet] › responsiveLayout.spec.js › the four layouts › the Studio edits from the tablet up, and reads on a phone": 4.0,
   "[tablet] › responsiveLayout.spec.js › the four layouts › the application leaves every corner to one thing": 6.0,
-  "[tablet] › responsiveLayout.spec.js › the four layouts › the image of an observation fits the window": 4.0
+  "[tablet] › responsiveLayout.spec.js › the four layouts › the image of an observation fits the window": 4.0,
+  "[chromium] › cosmologyLessons.spec.js › the-expanding-universe: the instrument paints, lists its numbers and passes axe (en)": 16.2,
+  "[chromium] › cosmologyLessons.spec.js › the-expanding-universe: the instrument paints, lists its numbers and passes axe (es)": 20.1,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › where-galaxies-live: a deeper redshift limit shows many more galaxies @accepts:ce.where-galaxies-live": 23.2,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › the-expanding-universe: the supernova slope falls as the sample reaches farther @accepts:ce.the-expanding-universe": 31.7,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › standard-candles: an error in the absolute magnitude moves the Hubble constant @accepts:ce.standard-candles": 38.3,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › the-shape-of-expansion: a matter-only universe fits far worse than the best fit @accepts:ce.the-shape-of-expansion": 40.8,
+  "[chromium] › cosmologyLessons.spec.js › standard-candles: the instrument paints, lists its numbers and passes axe (en)": 29.1,
+  "[chromium] › cosmologyLessons.spec.js › standard-candles: the instrument paints, lists its numbers and passes axe (es)": 27.6,
+  "[chromium] › cosmologyLessons.spec.js › the-shape-of-expansion: the instrument paints, lists its numbers and passes axe (en)": 29.0,
+  "[chromium] › cosmologyLessons.spec.js › where-galaxies-live: the instrument paints, lists its numbers and passes axe (en)": 16.0,
+  "[chromium] › cosmologyLessons.spec.js › the-shape-of-expansion: the instrument paints, lists its numbers and passes axe (es)": 23.7,
+  "[chromium] › cosmologyLessons.spec.js › where-galaxies-live: the instrument paints, lists its numbers and passes axe (es)": 15.7
 }

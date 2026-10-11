@@ -5486,7 +5486,7 @@ export const INSTRUCTOR_CONTENT = {
       'Set the supernova range to a few values between 0.05 and 0.5 and plot the slope against the range.',
     ],
     modelNotes:
-      'js/kernels/cosmology/fit.js: fitHubbleLaw (weighted least squares through the origin, or with an intercept). Packs hubble-1929-table1 and des-sn5yr-hd (COSMOLOGY.md). The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
+      'js/kernels/cosmology/fit.js: fitHubbleLaw (weighted least squares through the origin, or with an intercept). Datasets hubble-1929-table1 and des-sn5yr-hd (COSMOLOGY.md). The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
   },
   'standard-candles': {
     topic:
@@ -5551,7 +5551,7 @@ export const INSTRUCTOR_CONTENT = {
     ],
     teachingNotes: [
       'The “error in the absolute magnitude” stands for whatever the calibration of the lower rungs would change; the instrument does not recompute the ladder.',
-      'The First Rung’s 0.051 mag is quoted, not computed here, so this lesson does not need that investigation to be taken first.',
+      'The First Rung’s 0.051 mag is quoted, not computed here, so this investigation does not need that one to be taken first.',
       'The DES moduli carry the statistical errors only; the covariance of a real analysis (calibration, selection, host mass) is not in the table (COSMOLOGY.md).',
       'The chi-square range over H0 50 to 90 is 2.5e-12 in the validation: the degeneracy is exact, not approximate.',
     ],
@@ -5708,10 +5708,10 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'The strip is the SDSS Legacy main sample at declination 0 to 0.5 degrees (pack sdss-dr18-redshift-slice); it is flux limited at r < 17.77, so its density falls with distance by selection (COSMOLOGY.md).',
+      'The strip is the SDSS Legacy main sample at declination 0 to 0.5 degrees (dataset sdss-dr18-redshift-slice); it is flux limited at r < 17.77, so its density falls with distance by selection (COSMOLOGY.md).',
       'The distances are comoving distances in a flat universe with H0 = 70 and the Ωm set by the control; changing Ωm from 0.1 to 0.5 moves the farthest galaxy by under 4 percent.',
       'The variance over mean is averaged over shells of 25 Mpc from 100 Mpc, with 24 cells of 5° in right ascension; a shell with no galaxies does not count.',
-      'The correction for the flux limit is the subject of the selection-effects investigations; this lesson only shows the need.',
+      'The correction for the flux limit is the subject of the selection-effects investigations; this investigation only shows the need.',
     ],
     discussion: [
       'What would a map of a volume-limited sample look like?',
@@ -5723,7 +5723,7 @@ export const INSTRUCTOR_CONTENT = {
       'Change the matter density and watch the farthest galaxy and the shell densities move.',
     ],
     modelNotes:
-      'js/kernels/cosmology/flrw.js: comovingDistance and wedgePoint; the strip is pack sdss-dr18-redshift-slice. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
+      'js/kernels/cosmology/flrw.js: comovingDistance and wedgePoint; the strip is dataset sdss-dr18-redshift-slice. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
   },
 };
 
