@@ -106,6 +106,21 @@ const PARSES = {
   'js/instructorPortal.js': [1, 'none', 'decrypted with the passphrase first'],
   // A file a student opens, not yet behind parseDocument: route room.
   'js/composerPage.js': [2, 'none', 'route room: a file and the raw box'],
+  'js/compute/capsule.js': [
+    2,
+    'none',
+    'a capsule file, read by readCapsule, and a notebook cell',
+  ],
+  'js/compute/check.js': [
+    4,
+    'none',
+    'the output texts, bounded before they are parsed',
+  ],
+  'js/compute/prepare.js': [
+    2,
+    'none',
+    'a notebook and an input, bounded and checked against the catalogue',
+  ],
   'js/lab3dPage.js': [1, 'none', 'route room: a system file'],
   'js/lab3dLab.js': [
     2,
@@ -188,6 +203,8 @@ const NEWER = /[^=-]>\s*[A-Z_]*(?:VERSION|SCHEMA|maxVersion)\b/g;
  * a request where it is not already loaded), and then leaves this table.
  */
 const OWN_REFUSAL = {
+  'js/compute/capsule.js':
+    'a capsule is refused by name and by version in its own checker (readCapsule)',
   'js/coursePage.js':
     'route room (course-builder); a missing version still opens',
   'js/shareState.js': 'link prefixes, on every start-up path, not documents',

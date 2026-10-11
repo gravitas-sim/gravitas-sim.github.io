@@ -377,6 +377,7 @@ export const ARTIFACT_SOURCES = [
   'comparison',
   'sweep-analysis',
   'experiment-result',
+  'compute-capsule',
   'derived-quantity',
   'lab3d',
 ];

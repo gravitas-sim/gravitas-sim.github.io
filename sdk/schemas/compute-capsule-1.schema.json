@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/compute-capsule-1.schema.json",
+  "title": "gravitas.compute-capsule/1",
+  "description": "One run of a reviewed notebook on the compute page, recorded so it can be checked again: the notebook by the SHA-256 of its cells, each input by the SHA-256 of its exact text, the settings, the runtime and frame, the notebook's answer as the exact text it returned with that text's SHA-256, timing and citations. digest covers the notebook, inputs, settings, runtime and each output's hash, and not the frame, timing, clock or citations. js/compute/capsule.js validateCapsule() and verifyCapsule() are the authority; the hashes and the notebook against the catalogue are checks no schema can state. FORMATS.md lists it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "formatVersion",
+    "digest",
+    "notebook",
+    "inputs",
+    "params",
+    "runtime",
+    "frame",
+    "outputs",
+    "timing",
+    "citations",
+    "made"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.compute-capsule"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "notebook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "title",
+        "cells",
+        "cellsSha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "cells": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cellsSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "format",
+          "sha256",
+          "bytes",
+          "source",
+          "title"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "format": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "source": {
+            "enum": [
+              "example",
+              "file"
+            ]
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "python",
+        "lockSha256",
+        "packages"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_-]{0,31}$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9A-Za-z.+_-]{1,32}$"
+        },
+        "python": {
+          "type": "string",
+          "pattern": "^[0-9A-Za-z.+_-]{1,32}$"
+        },
+        "lockSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "packages": {
+          "type": "object",
+          "maxProperties": 16,
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 32
+          }
+        }
+      }
+    },
+    "frame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "origin",
+        "build"
+      ],
+      "properties": {
+        "origin": {
+          "type": "string"
+        },
+        "build": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "format",
+          "sha256",
+          "bytes",
+          "text"
+        ],
+        "properties": {
+          "name": {
+            "enum": [
+              "envelope",
+              "table",
+              "figure"
+            ]
+          },
+          "format": {
+            "enum": [
+              "gravitas.artifact/1",
+              "gravitas.observation/1",
+              "image/png"
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "text": {
+            "type": "string",
+            "description": "The exact text the notebook returned for this output, which sha256 covers."
+          }
+        }
+      }
+    },
+    "timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtimeMs",
+        "packagesMs",
+        "cellsMs",
+        "totalMs",
+        "downloadBytes"
+      ],
+      "properties": {
+        "runtimeMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "packagesMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cellsMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "totalMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "downloadBytes": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "made": {
+      "type": "object",
+      "required": [
+        "app"
+      ],
+      "properties": {
+        "app": {
+          "type": "string"
+        },
+        "at": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

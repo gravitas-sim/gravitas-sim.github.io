@@ -209,7 +209,10 @@ describe('the navigation', () => {
     // (e2e/remixDelivery.spec.js holds that link).
     const adoption = p =>
       /^\/teaching\/(investigation|activity|find|kit|alignment)\//.test(p) ||
-      p === '/studio/course/packs/';
+      p === '/studio/course/packs/' ||
+      // The compute page is opt-in: reached by its address and from the
+      // documents that describe it (COMPUTE.md), not offered in every page's menu.
+      p === '/compute/';
     expect([...served].filter(p => !adoption(p) && !hrefs.has(p))).toEqual([]);
   });
 

@@ -75,6 +75,9 @@ export const SOURCE = Object.freeze({
   COMPARISON: 'comparison',
   SWEEP_ANALYSIS: 'sweep-analysis',
   EXPERIMENT_RESULT: 'experiment-result',
+  // A run of a reviewed notebook on the compute page, kept as its envelope
+  // (js/compute/keep.js).
+  COMPUTE_CAPSULE: 'compute-capsule',
   // A formula over numbers the notebook holds (js/notebook/derivedEntry.js).
   DERIVED_QUANTITY: 'derived-quantity',
   // A reading, an event or a forward-model observation from the 3-D lab,
@@ -97,6 +100,7 @@ export const SOURCES = [
   SOURCE.COMPARISON,
   SOURCE.SWEEP_ANALYSIS,
   SOURCE.EXPERIMENT_RESULT,
+  SOURCE.COMPUTE_CAPSULE,
   SOURCE.DERIVED_QUANTITY,
   SOURCE.LAB3D,
 ];

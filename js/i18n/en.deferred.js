@@ -3725,6 +3725,7 @@ export const EN_DEFERRED = {
     'the distance to the system was assumed, not read from it',
   'nb.formula.summary': 'Derive a quantity by a formula',
   'nb.source.experiment-result': 'Experiment result',
+  'nb.source.compute-capsule': 'Notebook run (compute capsule)',
   'nb.entry.cite': 'The result and where it came from',
   'nb.cite.source': 'Made by',
   'nb.cite.digest': 'Digest of its data',

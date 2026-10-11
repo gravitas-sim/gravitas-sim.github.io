@@ -90,3 +90,7 @@ Still direct, and why (`tests/studentStorage.test.js` lists them and fails on an
 - `js/myWork/made.js` (Prompt 74): reached from the Sandbox's share dialog and the builder, where a second importer would split `js/storage/local.js` into a chunk every lesson fetches. It states the collection's record limit itself (512 KB, equal to `ITEM.made`) and writes with `setItem`.
 - `js/studio/model.js` writes to the Storage a page hands it (the Studio hands a guarded one; the Composer and course builder hand the raw one).
 - `js/platform/resolver.js` (platform stamps), `js/instructorPortal.js` (sessionStorage), the notebook's availability probe; IndexedDB `gravitas-catalog` and `gravitas-archive`; `js/library/progress.js` and `js/authoring/preview.js` read only.
+
+## Names that look like keys and are not
+
+`gravitas_input`, `gravitas_params` and `gravitas_output` are Python names a compute notebook sees (`js/compute/frame/worker.js`); nothing is stored under them.

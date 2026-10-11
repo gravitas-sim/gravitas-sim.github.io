@@ -98,6 +98,7 @@ export const ROUTES = [
   { id: 'teach-kit', url: '/teaching/kit/', page: true },
   { id: 'my-work', url: '/my-work/', page: true },
   { id: 'sky', url: '/sky/', page: true },
+  { id: 'compute', url: '/compute/', page: true },
   { id: 'studio', url: '/studio/', page: true },
   { id: 'composer', url: '/studio/lesson/', page: true },
   { id: 'course-packs', url: '/studio/course/packs/', page: true },
