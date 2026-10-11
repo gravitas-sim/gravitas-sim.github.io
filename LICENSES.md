@@ -94,11 +94,14 @@ say something different from them; NOTICE lists what each one cites.
 <!--fact-block:dataPackLicenses-->
 | File | Pack | Origin | Status |
 | --- | --- | --- | --- |
+| `js/data/observations/comaClusterQuoted.js` | The Coma cluster: the four values the Coma scenario and its virial instrument quote (`coma-cluster-quoted`) | compilation | CC BY 4.0; see NOTICE |
+| `js/data/observations/desSn5yrHd.js` | Type Ia supernova Hubble diagram: DES-SN5YR, 1,829 supernovae (`des-sn5yr-hd`) | compilation | CC BY 4.0; see NOTICE |
 | `js/data/exoplanetSystems.js` | HD 209458 and the Sun and Jupiter: parameters compiled from the literature (`exoplanet-systems`) | compilation | no license; attribution requested; see NOTICE |
 | `js/data/observations/gaiaNgc2420.js` | NGC 2420: Gaia DR3 astrometry (`gaia-dr3-ngc2420`) | observed | CC BY-NC 3.0 IGO (non-commercial use only); see NOTICE |
 | `js/data/observations/gaiaSolarNeighbourhood.js` | The solar neighbourhood: 1,570 Gaia DR3 stars with radial velocities (`gaia-dr3-solar-neighbourhood`) | observed | CC BY-NC 3.0 IGO (non-commercial use only); see NOTICE |
 | `js/data/gw/gw150914.js` | GW150914: the published figure data (`gw150914-figure-data`) | observed | CC BY 4.0; see NOTICE |
 | `js/data/gw/gwoscEvents.js` | Five gravitational-wave events: whitened GWOSC strain (`gwosc-five-events`) | observed | CC BY 4.0; see NOTICE |
+| `js/data/observations/hubble1929Table1.js` | Hubble's 1929 distances and velocities of 24 nebulae (Table 1) (`hubble-1929-table1`) | compilation | public domain; see NOTICE |
 | `js/data/observations/milkyWayRotationCurve.js` | The Milky Way's rotation curve (Bhattacharjee, Chaudhury and Kundu 2014) (`milky-way-rotation-curve`) | compilation | no license stated; see NOTICE |
 | `js/data/observations/mistSdssIsochrones.js` | MIST v1.2 isochrones in the SDSS bands (a model) (`mist-sdss-isochrones`) | model | no license stated; see NOTICE |
 | `js/data/stellar/mistTracks.js` | MIST v1.2 evolutionary tracks: eight model stars at solar metallicity (`mist-v12-tracks`) | model | no license stated; see NOTICE |
@@ -110,6 +113,7 @@ say something different from them; NOTICE lists what each one cites.
 | `js/data/radiation/lines.js` | The strongest optical spectral lines: rest wavelengths in air and vacuum (`radiation-lines`) | compilation | public domain; see NOTICE |
 | `js/data/observations/sdssNgc2420Photometry.js` | NGC 2420: SDSS DR18 photometry (`sdss-dr18-ngc2420-photometry`) | observed | public domain; see NOTICE |
 | `js/data/observations/sdssNgc2420Segue.js` | NGC 2420: SEGUE stellar parameters (`sdss-dr18-ngc2420-segue`) | observed | public domain; see NOTICE |
+| `js/data/observations/sdssDr18RedshiftSlice.js` | SDSS DR18 galaxy redshifts in a 120 to 240 degree strip at declination 0 to 0.5 degrees (a wedge) (`sdss-dr18-redshift-slice`) | observed | public domain; see NOTICE |
 | `js/data/spectra/sdssSpectra.js` | Four observed stellar spectra: SDSS DR18, one each of A, G, K and M (`sdss-dr18-stellar-spectra`) | observed | public domain; see NOTICE |
 | `js/data/observations/shoesR22Cepheids.js` | Cepheids in the LMC, NGC 4258 and M101: periods and Wesenheit magnitudes (Riess et al. 2022) (`shoes-r22-cepheids`) | compilation | CC BY 4.0; see NOTICE |
 | `js/data/sky/brightStars.js` | Bright stars to V 4.5 for the Sky Lab: the Yale Bright Star Catalogue (5th revised edition) (`sky-bright-stars`) | compilation | no license stated; see NOTICE |

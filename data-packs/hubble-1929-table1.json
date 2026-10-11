@@ -1,0 +1,189 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "hubble-1929-table1",
+  "version": "1.0.0",
+  "title": "Hubble's 1929 distances and velocities of 24 nebulae (Table 1)",
+  "object": {
+    "name": "Twenty-four extra-galactic nebulae",
+    "identifiers": [
+      "S. Mag.",
+      "L. Mag.",
+      "N.G.C. 6822",
+      "N.G.C. 598",
+      "N.G.C. 221",
+      "N.G.C. 224",
+      "N.G.C. 5457",
+      "N.G.C. 4736",
+      "N.G.C. 5194",
+      "N.G.C. 4449",
+      "N.G.C. 4214",
+      "N.G.C. 3031",
+      "N.G.C. 3627",
+      "N.G.C. 4826",
+      "N.G.C. 5236",
+      "N.G.C. 1068",
+      "N.G.C. 5055",
+      "N.G.C. 7331",
+      "N.G.C. 4258",
+      "N.G.C. 4151",
+      "N.G.C. 4382",
+      "N.G.C. 4472",
+      "N.G.C. 4486",
+      "N.G.C. 4649"
+    ],
+    "frame": "distances in Mpc (the paper: 10^6 pc), velocities in km/s"
+  },
+  "facility": {
+    "observatory": "Mount Wilson (Hubble) and Lowell (Slipher) velocities, as compiled by the paper",
+    "pipeline": "Hubble 1929, PNAS 15, 168, Table 1, typed from the page image"
+  },
+  "dataType": "catalog",
+  "origin": "compilation",
+  "credit": "Hubble, E. 1929, PNAS 15, 168 (a United States work of 1929, public domain)",
+  "license": {
+    "status": "public-domain",
+    "statement": "Published in the United States in 1929. The US Copyright Office (Circular 15A) says every work published in the United States before 1 January 1931 is in the public domain."
+  },
+  "retrieved": "2026-10-10",
+  "columns": [
+    {
+      "id": "r",
+      "name": "distance",
+      "unit": "Mpc",
+      "description": "the paper's r, in megaparsecs (its unit is 10^6 pc)"
+    },
+    {
+      "id": "v",
+      "name": "velocity",
+      "unit": "km/s",
+      "description": "the paper's v, a radial velocity from the nebula's lines, km/s"
+    },
+    {
+      "id": "mt",
+      "name": "total visual magnitude",
+      "unit": "mag",
+      "description": "the paper's m_t"
+    }
+  ],
+  "masks": [],
+  "reductions": [
+    "All 24 rows of Table 1, typed from the page image (PMC522427; pnas01016-0007.png, sha256 cc3f720d...), in the paper's order. The nebulae's names are in object.identifiers, in row order.",
+    "Checked against the paper's own printed absolute-magnitude column: M_t recomputed from m_t and r for every row. 21 rows agree within rounding; 3 (NGC 5457, 3031 and 4826) differ by 0.066 to 0.071 mag, which is the paper's arithmetic, not a typing error. The printed mean, -15.5, is reproduced as -15.483.",
+    "The paper's m_s column (blank for nine rows) and its printed M_t are not kept. Distances, velocities and magnitudes keep the paper's digits."
+  ],
+  "source": {
+    "archive": "Proceedings of the National Academy of Sciences, via PubMed Central (PMC522427)",
+    "urls": [
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC522427/"
+    ],
+    "citations": [
+      {
+        "text": "Hubble, E. 1929, PNAS 15, 168 (A relation between distance and radial velocity among extra-galactic nebulae)",
+        "doi": "10.1073/pnas.15.3.168"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "hubble-1929-table1.tsv",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC522427/",
+      "bytes": 1302,
+      "sha256": "0b1952297bcd2d2b6dba46c4cc9f66e70cb6ed01a5b631c83ffda5a86af81aed"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/cosmology.mjs",
+    "version": "1.0.0",
+    "options": {
+      "columns": [
+        {
+          "id": "r",
+          "step": 0.001
+        },
+        {
+          "id": "v",
+          "step": 1
+        },
+        {
+          "id": "mt",
+          "step": 0.1
+        }
+      ]
+    },
+    "steps": [
+      "Read the 24 rows typed from Table 1 (name, r, v, m_t, printed M_t).",
+      "Recompute M_t = m_t + 5 - 5 log10(r in pc) and refuse a row more than 0.075 mag from the paper's.",
+      "Store distance, velocity and m_t as table-columns/1."
+    ],
+    "record": {
+      "rows": 24,
+      "worstPrintedMtDifference": 0.071,
+      "rowsPastRounding": 3,
+      "columns": [
+        {
+          "id": "r",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 2.22e-16
+        },
+        {
+          "id": "v",
+          "type": "int16",
+          "step": 1,
+          "missing": 0,
+          "maxRounding": 0
+        },
+        {
+          "id": "mt",
+          "type": "int16",
+          "step": 0.1,
+          "missing": 0,
+          "maxRounding": 1.78e-15
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    "The distances are Hubble's, which were about seven times too small (the Cepheid scale of 1929 was not yet corrected for Population II stars and dust); the slope they give is not the modern Hubble constant, and the lessons say why.",
+    "The paper's solar-motion solution cannot be reproduced: the table carries no positions. A plain straight line is what the pack supports."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/observations/hubble1929Table1.js",
+    "bytes": 3942,
+    "sha256": "5034189fe578d47ad5c9c27a227d5dee9e4c09d727d0f3171c93f07b86da1896",
+    "sidecar": {
+      "file": "cosmology/hubble-1929-table1.json",
+      "bytes": 397,
+      "sha256": "8ef48344ee1784e4682d14c5cee174a58fa94f015c604831e21411a88a3c5184"
+    }
+  },
+  "validation": {
+    "check": "a straight line through the 24 nebulae has Hubble's slope (465 +- 50 km/s/Mpc with solar motion) within the two errors, and the mean absolute magnitude is his printed -15.5 within 0.05",
+    "against": [
+      {
+        "quantity": "velocity-distance slope",
+        "value": 465,
+        "unit": "km/s/Mpc",
+        "ref": "Hubble 1929, PNAS 15, 168 (solar-motion solution)"
+      },
+      {
+        "quantity": "mean absolute magnitude",
+        "value": -15.5,
+        "unit": "mag",
+        "ref": "Hubble 1929, PNAS 15, 168 (printed mean)"
+      }
+    ],
+    "result": {
+      "slope": 454.16,
+      "meanMt": -15.483,
+      "rows": 24
+    }
+  }
+}

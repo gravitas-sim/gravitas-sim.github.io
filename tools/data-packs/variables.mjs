@@ -33,7 +33,7 @@ const REPO = path.resolve(
 const RETRIEVED = '2026-10-10';
 
 /** What a build() returns when the rows are a sidecar file (as tools/data-packs/gaia-dynamics.mjs). */
-function asSidecar(pack, { meta, manifestRest, series }) {
+export function asSidecar(pack, { meta, manifestRest, series }) {
   const sidecar = `${JSON.stringify(series)}\n`;
   return {
     meta,
@@ -44,7 +44,7 @@ function asSidecar(pack, { meta, manifestRest, series }) {
 // ${meta.title}
 // -----------------------------------------------------------------------------
 // GENERATED FILE. Do not edit. Written by tools/build-data-packs.mjs
-// (tools/data-packs/variables.mjs) from ${pack.raw.map(r => r.file).join(', ')};
+// (${pack.script ?? 'tools/data-packs/variables.mjs'}) from ${pack.raw.length ? pack.raw.map(r => r.file).join(', ') : 'its own record'};
 // \`npm run packs:check\` verifies it offline and \`npm run packs:provenance\`
 // rebuilds it from the pinned raw product and compares byte for byte. The full
 // record is ${pack.manifest}.
@@ -74,10 +74,10 @@ export const SIDECAR = ${JSON.stringify({
     },
   };
 }
-const decodeSidecar = mod =>
+export const decodeSidecar = mod =>
   tableOf({ PACK: mod.PACK, SERIES: JSON.parse(mod.SIDECAR_TEXT) });
 
-const col = (id, name, unit, step, description, uncertaintyOf) => ({
+export const col = (id, name, unit, step, description, uncertaintyOf) => ({
   id,
   name,
   unit,
@@ -85,7 +85,7 @@ const col = (id, name, unit, step, description, uncertaintyOf) => ({
   ...(uncertaintyOf ? { uncertaintyOf } : {}),
   description,
 });
-const described = columns =>
+export const described = columns =>
   columns.map(c =>
     Object.fromEntries(Object.entries(c).filter(([k]) => k !== 'step'))
   );
