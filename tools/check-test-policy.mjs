@@ -59,6 +59,17 @@ export const ALLOWED_SKIPS = [
       'a message rather than breaking the page.',
   },
   {
+    file: 'e2e/computeOnline.spec.js',
+    match: '!ONLINE',
+    capability: 'a network route to the runtime CDN (cdn.jsdelivr.net)',
+    why:
+      'The compute page runs a pinned Python runtime that is downloaded from a ' +
+      'CDN, 9 to 19 MB, so this spec needs the internet. It is online-only by ' +
+      'design (COMPUTE.md): it runs when COMPUTE_ONLINE=1, in its own job, ' +
+      'and no normal gate depends on it. Everything about the page that does ' +
+      'not need the runtime is in e2e/compute.spec.js, which runs always.',
+  },
+  {
     file: 'e2e/spacetime.spec.js',
     match: 'no WebGL in this browser',
     capability: 'WebGL',

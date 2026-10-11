@@ -330,8 +330,12 @@ export function createSession({
           runtime: result.runtime,
           frame: { origin: FRAME_ORIGIN, build: ready.build },
           timing: {
-            runtimeMs: m.runtime ?? 0,
-            packagesMs: Math.max(0, (m.packages ?? 0) - (m.runtime ?? 0)),
+            // The runtime and packages were loaded by "Start the runtime", before this run.
+            runtimeMs: loaded.marks.runtime ?? 0,
+            packagesMs: Math.max(
+              0,
+              (loaded.marks.packages ?? 0) - (loaded.marks.runtime ?? 0)
+            ),
             cellsMs: Math.max(0, (m.cells ?? 0) - (m.packages ?? 0)),
             totalMs: Math.round(now() - t0),
             downloadBytes: downloadBytes(entry.packages),

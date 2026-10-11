@@ -240,7 +240,8 @@ export function readCapsule(text) {
     const p = problems[0];
     return {
       ok: false,
-      code: JSON.parse(text).formatVersion > FORMAT_VERSION ? 'newer' : 'invalid',
+      code:
+        JSON.parse(text).formatVersion > FORMAT_VERSION ? 'newer' : 'invalid',
       message: `${p.path} ${p.message}`.trim(),
     };
   }

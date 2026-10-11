@@ -20,6 +20,7 @@
 
 import { message, readMessage } from '../messages.js';
 import { parentAllowed } from '../origin.js';
+import { RUNTIME } from '../runtime.js';
 
 /* global __BUILD__, __WORKER_SOURCE__, self, caches */
 const BUILD = __BUILD__;
@@ -29,6 +30,46 @@ let port = null;
 let worker = null;
 /** The id of the load or run in progress, or null. */
 let busy = null;
+/** The release's lock file, once fetched and checked against the pin. */
+let lock = null;
+
+const hex = buf =>
+  Array.from(new Uint8Array(buf), b => b.toString(16).padStart(2, '0')).join(
+    ''
+  );
+
+/**
+ * The lock file, fetched here and not in the Worker: this script has WebCrypto
+ * and a Worker made from a blob in an opaque-origin frame does not. Refused
+ * unless its SHA-256 is the pinned release's.
+ */
+async function ensureLock() {
+  if (lock) return lock;
+  let text;
+  try {
+    const r = await fetch(`${RUNTIME.base}pyodide-lock.json`, {
+      cache: 'no-store',
+    });
+    if (!r.ok) throw new Error(String(r.status));
+    text = await r.text();
+  } catch {
+    const e = new Error('the runtime could not be downloaded');
+    e.code = 'runtime-download';
+    throw e;
+  }
+  const digest = hex(
+    await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text))
+  );
+  if (digest !== RUNTIME.lockSha256) {
+    const e = new Error(
+      'the runtime release is not the one Gravitas pins (its lock file differs)'
+    );
+    e.code = 'runtime-version';
+    throw e;
+  }
+  lock = text;
+  return lock;
+}
 
 /** What this frame may reach, asked of the frame itself. */
 async function probes() {
@@ -116,7 +157,13 @@ function onPage({ data }) {
   if (!worker) startWorker();
   const job = { ...m.message, op: type };
   for (const k of ['protocol', 'version', 'type']) delete job[k];
-  worker.postMessage(job);
+  ensureLock().then(
+    text => worker?.postMessage({ ...job, lock: text }),
+    err => {
+      busy = null;
+      fail(id, err.code ?? 'runtime-download', err.message);
+    }
+  );
 }
 
 window.addEventListener('message', async e => {

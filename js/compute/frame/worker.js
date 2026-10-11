@@ -5,14 +5,15 @@
 // blob in Chromium), so Pyodide is loaded with importScripts. It does what the
 // frame's script sends it and nothing else:
 //
-//   load  fetch the release's lock file, check its SHA-256 against the pin,
-//         load Pyodide and the packages, each wheel checked against the lock
+//   load  load Pyodide with the lock file the frame checked, then the packages,
+//         each wheel checked against that lock
 //   run   run the notebook's cells in a fresh namespace, then return the
 //         notebook's `gravitas_output` as one text of texts
 //
 // What is pinned: the release by its versioned URL; the lock file by its
-// SHA-256 here; every wheel by the lock, which Pyodide checks as it loads
-// (checkIntegrity). What is not: the runtime core (the WebAssembly module and
+// SHA-256, in the frame's script; every wheel by the lock, which Pyodide checks as it loads
+// (checkIntegrity). The lock file's own SHA-256 is checked by the frame's
+// script, which has WebCrypto; this Worker does not. What is not: the runtime core (the WebAssembly module and
 // the standard library) is trusted by URL alone, since a Worker cannot check a
 // script it imports. COMPUTE.md says so.
 // =============================================================================
@@ -38,11 +39,6 @@ const post = (type, fields) =>
     ...fields,
   });
 
-const hex = buf =>
-  Array.from(new Uint8Array(buf), b => b.toString(16).padStart(2, '0')).join(
-    ''
-  );
-
 /** Why a thrown value is one of the frame's error codes. */
 function classify(err) {
   if (err instanceof Coded) return { code: err.code, text: err.message };
@@ -62,33 +58,20 @@ function classify(err) {
   return { code: 'notebook-error', text };
 }
 
-async function ensureRuntime(id, marks) {
+async function ensureRuntime(id, marks, lock) {
   if (py) return;
   post('progress', { id, phase: 'runtime' });
-  let lock;
-  try {
-    const r = await fetch(`${PIN.base}pyodide-lock.json`, {
-      cache: 'no-store',
-    });
-    if (!r.ok)
-      throw new Coded('runtime-download', `the lock file answered ${r.status}`);
-    lock = await r.text();
-  } catch (e) {
-    if (e instanceof Coded) throw e;
-    throw new Coded('runtime-download', 'the runtime could not be downloaded');
-  }
-  const digest = hex(
-    await crypto.subtle.digest('SHA-256', new TextEncoder().encode(lock))
-  );
-  if (digest !== PIN.lockSha256)
-    throw new Coded(
-      'runtime-version',
-      'the runtime release is not the one Gravitas pins (its lock file differs)'
-    );
-  lockSha256 = digest;
+  // The lock file arrives checked: this Worker has no WebCrypto (a Worker made
+  // from a blob in an opaque-origin frame is not a secure context), so the
+  // frame's own script fetched it and compared its SHA-256 with the pin.
+  lockSha256 = PIN.lockSha256;
   try {
     importScripts(`${PIN.base}pyodide.js`);
-    py = await loadPyodide({ indexURL: PIN.base, lockFileContents: lock });
+    py = await loadPyodide({
+      indexURL: PIN.base,
+      packageBaseUrl: PIN.base,
+      lockFileContents: lock,
+    });
   } catch {
     throw new Coded('runtime-download', 'the runtime could not be downloaded');
   }
@@ -153,7 +136,7 @@ self.onmessage = async ({ data: m }) => {
   const start = t0();
   const marks = {};
   try {
-    await ensureRuntime(m.id, marks);
+    await ensureRuntime(m.id, marks, m.lock);
     await ensurePackages(m.id, m.packages, marks);
     if (m.op === 'load') {
       post('loaded', {
