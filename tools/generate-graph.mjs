@@ -124,7 +124,12 @@ export const GRAPH = Object.freeze([
       'tools/csp.mjs',
       'tools/build-adoption-pages.mjs',
     ],
-    outputs: ['teaching/investigation', 'teaching/activity', 'teaching/find'],
+    outputs: [
+      'teaching/investigation',
+      'teaching/activity',
+      'teaching/find',
+      'teaching/alignment',
+    ],
     regions: ['sitemap.xml'],
     after: ['library', 'catalog', 'manifest'],
     notes:
