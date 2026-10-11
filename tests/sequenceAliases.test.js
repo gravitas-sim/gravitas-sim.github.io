@@ -2,11 +2,8 @@
 // the rename keeps offering the next step (js/investigations/next.js).
 import { readFileSync } from 'node:fs';
 import { jest, describe, test, expect, beforeEach } from '@jest/globals';
-import {
-  SEQUENCES,
-  SEQUENCE_ALIASES,
-  currentSequenceId,
-} from '../js/data/investigations/sequences.js';
+import { SEQUENCES } from '../js/data/investigations/sequences.js';
+import { SEQUENCE_ALIASES } from '../js/data/investigations/sequenceAliases.js';
 import { whatNext, CONTEXT_KEY } from '../js/investigations/next.js';
 
 const library = JSON.parse(readFileSync('library/library.json', 'utf8'));
@@ -20,12 +17,12 @@ describe('SEQUENCE_ALIASES', () => {
     }
   });
 
-  test('records the renames Prompt 97 made, and passes current ids through', () => {
-    expect(currentSequenceId('orbital-mechanics')).toBe('gravity-and-orbits');
-    expect(currentSequenceId('exoplanet-detection')).toBe(
+  test('records the renames Prompt 97 made and not a current id', () => {
+    expect(SEQUENCE_ALIASES['orbital-mechanics']).toBe('gravity-and-orbits');
+    expect(SEQUENCE_ALIASES['exoplanet-detection']).toBe(
       'planets-and-exoplanets'
     );
-    expect(currentSequenceId('the-sky')).toBe('the-sky');
+    expect(SEQUENCE_ALIASES['the-sky']).toBeUndefined();
   });
 
   test('the Library file carries the same map', () => {

@@ -214,13 +214,15 @@ export async function buildLibrary() {
   const { DISCOVERY } = await load('js/data/investigations/discovery.js');
   const {
     SEQUENCES,
-    SEQUENCE_ALIASES,
     LENGTH,
     lengthOf,
     calculationOf,
     DEMO_MINUTES,
     PERIOD_MINUTES,
   } = await load('js/data/investigations/sequences.js');
+  const { SEQUENCE_ALIASES } = await load(
+    'js/data/investigations/sequenceAliases.js'
+  );
   const { INVESTIGATIONS } = await load('js/data/investigations.js');
   const curation = JSON.parse(readFileSync(path.join(ROOT, CURATION), 'utf8'));
   const usedCuration = new Set();

@@ -249,26 +249,6 @@ export const SEQUENCES = [
 ];
 
 /**
- * Sequence ids that no longer exist, to the sequence that took them over.
- *
- * A student's browser can hold an old id (the "what next" record the Library
- * leaves, gravitas_next_context), so a rename that is not listed here quietly
- * takes the next-step offer away. When a sequence is renamed or merged, add
- * its old id: tests/sequenceAliases.test.js holds every target to a real
- * sequence and every old id to one that is not.
- * History: Prompt 97 replaced the five original sequences with six.
- */
-export const SEQUENCE_ALIASES = Object.freeze({
-  'orbital-mechanics': 'gravity-and-orbits',
-  'gravity-beyond-two-bodies': 'gravity-and-orbits',
-  'gravitational-waves': 'gravity-and-orbits',
-  'exoplanet-detection': 'planets-and-exoplanets',
-});
-
-/** The current id for a sequence id, old or new. */
-export const currentSequenceId = id => SEQUENCE_ALIASES[id] ?? id;
-
-/**
  * Resolve a sequence against the manifest.
  *
  * Returns the entries in order with their derived fit, dropping any lesson the
