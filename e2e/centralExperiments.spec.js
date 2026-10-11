@@ -2464,4 +2464,80 @@ test.describe('the central experiment of each investigation', () => {
       await expectVerdictRevealed(page, plan, predict);
     });
   }
+  // ---- The cosmology investigations (Roadmap II, Prompt 91) ------------------------
+  const COSMOLOGY = [
+    {
+      id: 'the-expanding-universe',
+      title:
+        'the-expanding-universe: the supernova slope falls as the sample reaches farther @accepts:ce.the-expanding-universe',
+      row: /Slope through the origin/,
+      values: [
+        [0.1, 66.33, 0.3],
+        [0.5, 59.35, 0.3],
+      ],
+    },
+    {
+      id: 'standard-candles',
+      title:
+        'standard-candles: an error in the absolute magnitude moves the Hubble constant @accepts:ce.standard-candles',
+      row: /Hubble constant implied/,
+      values: [
+        [0.1, 66.85, 0.2],
+        [0.2, 63.84, 0.2],
+      ],
+    },
+    {
+      id: 'the-shape-of-expansion',
+      title:
+        'the-shape-of-expansion: a matter-only universe fits far worse than the best fit @accepts:ce.the-shape-of-expansion',
+      row: /Chi-square above the best fit/,
+      values: [
+        [1, 1615.4, 6],
+        [0.5, 124.5, 3],
+      ],
+    },
+    {
+      id: 'where-galaxies-live',
+      title:
+        'where-galaxies-live: a deeper redshift limit shows many more galaxies @accepts:ce.where-galaxies-live',
+      row: /Galaxies shown/,
+      values: [
+        [0.04, 363, 1],
+        [0.12, 2911, 1],
+      ],
+    },
+  ];
+  for (const c of COSMOLOGY) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(
+            async () => {
+              const got = reading(await readout(page), c.row);
+              return Number.isNaN(got) ? NaN : Math.abs(got - want);
+            },
+            { timeout: 8000 }
+          )
+          .toBeLessThan(tol);
+        seen.push(reading(await readout(page), c.row));
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
 });

@@ -100,6 +100,14 @@ const DEEPER = {
   'scaling-the-main-sequence': () =>
     import('./data/investigations/depth/scaling-the-main-sequence.js'),
   'the-limit': () => import('./data/investigations/depth/the-limit.js'),
+  'the-expanding-universe': () =>
+    import('./data/investigations/depth/the-expanding-universe.js'),
+  'standard-candles': () =>
+    import('./data/investigations/depth/standard-candles.js'),
+  'the-shape-of-expansion': () =>
+    import('./data/investigations/depth/the-shape-of-expansion.js'),
+  'where-galaxies-live': () =>
+    import('./data/investigations/depth/where-galaxies-live.js'),
   'bending-light': () => import('./data/investigations/depth/bending-light.js'),
   'einstein-rings-and-arcs': () =>
     import('./data/investigations/depth/einstein-rings-and-arcs.js'),

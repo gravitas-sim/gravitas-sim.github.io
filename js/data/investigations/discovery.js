@@ -400,6 +400,46 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'the-expanding-universe': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: [],
+    textbook: {
+      chapter: 26,
+      section: '26.5',
+    },
+    courseLevel: 'majors',
+  },
+  'standard-candles': {
+    audience: 'intro',
+    mathematics: 'logarithms',
+    prerequisites: ['the-expanding-universe'],
+    textbook: {
+      chapter: 26,
+      section: '26.4',
+    },
+    courseLevel: 'majors',
+  },
+  'the-shape-of-expansion': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['standard-candles'],
+    textbook: {
+      chapter: 29,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'where-galaxies-live': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['the-expanding-universe'],
+    textbook: {
+      chapter: 28,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'bending-light': {
     audience: 'intro',
     mathematics: 'algebra',

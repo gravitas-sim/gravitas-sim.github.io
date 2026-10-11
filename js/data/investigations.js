@@ -88,6 +88,10 @@ import { SUMMARIES } from './investigations/summaries.js';
 import INSIDE_A_STAR from './investigations/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE from './investigations/scaling-the-main-sequence.js';
 import THE_LIMIT from './investigations/the-limit.js';
+import THE_EXPANDING_UNIVERSE from './investigations/the-expanding-universe.js';
+import STANDARD_CANDLES from './investigations/standard-candles.js';
+import THE_SHAPE_OF_EXPANSION from './investigations/the-shape-of-expansion.js';
+import WHERE_GALAXIES_LIVE from './investigations/where-galaxies-live.js';
 import BENDING_LIGHT from './investigations/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS from './investigations/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY from './investigations/a-lens-passing-by.js';
@@ -152,6 +156,10 @@ export const INVESTIGATIONS = [
   INSIDE_A_STAR,
   SCALING_THE_MAIN_SEQUENCE,
   THE_LIMIT,
+  THE_EXPANDING_UNIVERSE,
+  STANDARD_CANDLES,
+  THE_SHAPE_OF_EXPANSION,
+  WHERE_GALAXIES_LIVE,
   BENDING_LIGHT,
   EINSTEIN_RINGS_AND_ARCS,
   A_LENS_PASSING_BY,

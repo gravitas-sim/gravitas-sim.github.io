@@ -36,6 +36,10 @@ import CLUSTER_MEMBERSHIP from './data/investigations/es/cluster-membership.js';
 import INSIDE_A_STAR from './data/investigations/es/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE from './data/investigations/es/scaling-the-main-sequence.js';
 import THE_LIMIT from './data/investigations/es/the-limit.js';
+import THE_EXPANDING_UNIVERSE from './data/investigations/es/the-expanding-universe.js';
+import STANDARD_CANDLES from './data/investigations/es/standard-candles.js';
+import THE_SHAPE_OF_EXPANSION from './data/investigations/es/the-shape-of-expansion.js';
+import WHERE_GALAXIES_LIVE from './data/investigations/es/where-galaxies-live.js';
 import BENDING_LIGHT from './data/investigations/es/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS from './data/investigations/es/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY from './data/investigations/es/a-lens-passing-by.js';
@@ -73,6 +77,10 @@ import CLUSTER_MEMBERSHIP_DEEPER from './data/investigations/depth/es/cluster-me
 import INSIDE_A_STAR_DEEPER from './data/investigations/depth/es/inside-a-star.js';
 import SCALING_THE_MAIN_SEQUENCE_DEEPER from './data/investigations/depth/es/scaling-the-main-sequence.js';
 import THE_LIMIT_DEEPER from './data/investigations/depth/es/the-limit.js';
+import THE_EXPANDING_UNIVERSE_DEEPER from './data/investigations/depth/es/the-expanding-universe.js';
+import STANDARD_CANDLES_DEEPER from './data/investigations/depth/es/standard-candles.js';
+import THE_SHAPE_OF_EXPANSION_DEEPER from './data/investigations/depth/es/the-shape-of-expansion.js';
+import WHERE_GALAXIES_LIVE_DEEPER from './data/investigations/depth/es/where-galaxies-live.js';
 import BENDING_LIGHT_DEEPER from './data/investigations/depth/es/bending-light.js';
 import EINSTEIN_RINGS_AND_ARCS_DEEPER from './data/investigations/depth/es/einstein-rings-and-arcs.js';
 import A_LENS_PASSING_BY_DEEPER from './data/investigations/depth/es/a-lens-passing-by.js';
@@ -107,6 +115,10 @@ export const SHADOWS = Object.freeze({
   'inside-a-star': INSIDE_A_STAR,
   'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE,
   'the-limit': THE_LIMIT,
+  'the-expanding-universe': THE_EXPANDING_UNIVERSE,
+  'standard-candles': STANDARD_CANDLES,
+  'the-shape-of-expansion': THE_SHAPE_OF_EXPANSION,
+  'where-galaxies-live': WHERE_GALAXIES_LIVE,
   'bending-light': BENDING_LIGHT,
   'einstein-rings-and-arcs': EINSTEIN_RINGS_AND_ARCS,
   'a-lens-passing-by': A_LENS_PASSING_BY,
@@ -151,6 +163,10 @@ export const DEEPER_SHADOWS = Object.freeze({
   'inside-a-star': INSIDE_A_STAR_DEEPER,
   'scaling-the-main-sequence': SCALING_THE_MAIN_SEQUENCE_DEEPER,
   'the-limit': THE_LIMIT_DEEPER,
+  'the-expanding-universe': THE_EXPANDING_UNIVERSE_DEEPER,
+  'standard-candles': STANDARD_CANDLES_DEEPER,
+  'the-shape-of-expansion': THE_SHAPE_OF_EXPANSION_DEEPER,
+  'where-galaxies-live': WHERE_GALAXIES_LIVE_DEEPER,
   'bending-light': BENDING_LIGHT_DEEPER,
   'einstein-rings-and-arcs': EINSTEIN_RINGS_AND_ARCS_DEEPER,
   'a-lens-passing-by': A_LENS_PASSING_BY_DEEPER,

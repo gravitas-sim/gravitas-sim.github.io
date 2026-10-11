@@ -483,6 +483,58 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'the-expanding-universe',
+    title: 'El universo en expansión',
+    subtitle:
+      'La recta de Hubble de 1929, y lo que dice la misma recta de 955 supernovas modernas',
+    duration: '12-20 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/the-expanding-universe.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
+    id: 'standard-candles',
+    title: 'Candelas estándar',
+    subtitle:
+      'De las cefeidas a las supernovas: cómo un error en un peldaño se vuelve un error en la constante de Hubble',
+    duration: '12-20 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/standard-candles.webp',
+    depths: 3,
+    stepCount: 7,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'the-shape-of-expansion',
+    title: 'La forma de la expansión',
+    subtitle:
+      'Ajustar la densidad de materia a 1.829 supernovas, y lo que el ajuste puede y no puede decir',
+    duration: '25-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/the-shape-of-expansion.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
+    id: 'where-galaxies-live',
+    title: 'Dónde viven las galaxias',
+    subtitle:
+      'Una cuña del cielo del sondeo Sloan: la escala de la estructura, y un enrarecimiento que no es un vacío',
+    duration: '12-22 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/where-galaxies-live.webp',
+    depths: 3,
+    stepCount: 9,
+    gradedCount: 7,
+    objectiveCount: 4,
+  },
+  {
     id: 'bending-light',
     title: 'La luz que se curva',
     subtitle:

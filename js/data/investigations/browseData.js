@@ -164,6 +164,22 @@ export const BROWSE_META = {
     tags: ['compact-objects', 'stars'],
     numericCount: 0,
   },
+  'the-expanding-universe': {
+    tags: ['galaxies', 'observing'],
+    numericCount: 0,
+  },
+  'standard-candles': {
+    tags: ['galaxies', 'observing', 'stars'],
+    numericCount: 1,
+  },
+  'the-shape-of-expansion': {
+    tags: ['galaxies', 'observing'],
+    numericCount: 0,
+  },
+  'where-galaxies-live': {
+    tags: ['galaxies', 'observing'],
+    numericCount: 0,
+  },
   'bending-light': {
     tags: ['gravity', 'observing'],
     numericCount: 0,

@@ -127,6 +127,12 @@ export default {
     'Cuánto desvía la luz una masa, qué tamaño de anillo hace, y qué fija una curva de luz (el tiempo de cruce) y qué deja abierto (la masa, la distancia y la velocidad por separado).',
     'Una lente delgada en campo débil, una masa puntual o una galaxia circular, una estrella uniforme, sin cizalla ni segunda lente; el suceso sintético es un modelo con ruido, con una verdad que el cielo real nunca da.',
   ],
+  cosmology: [
+    'Las 24 nebulosas de Hubble de 1929 y las 1.829 supernovas del Dark Energy Survey, la recta de velocidad contra distancia, un diagrama de módulo de distancia con una curva Lambda-CDM plana, o 2.911 galaxias de SDSS dibujadas como una cuña del cielo.',
+    'Cómo cambian la constante de Hubble, la densidad de materia, su intervalo, el chi cuadrado y el agrupamiento y la densidad en cada capa al cambiar la muestra, el límite de corrimiento al rojo, la curva o el desfase de calibración.',
+    'Qué puede y qué no puede decir una recta de velocidad contra distancia, por qué las supernovas lejanas son más débiles de lo que predice un universo sin aceleración, por qué H0 y el brillo absoluto de las supernovas no se pueden separar, y qué muestra un sondeo de galaxias limitado por flujo.',
+    'Las distancias de las supernovas están en la escala de la publicación (H0 = 70), con solo los errores estadísticos; el modelo es Lambda-CDM plano con w = -1 y sin radiación, y la franja de SDSS está limitada por flujo, de modo que su enrarecimiento con la distancia es selección y no estructura.',
+  ],
   survey: [
     'Estrellas sintéticas de brillo conocido a distancias conocidas: estrellas contadas y perdidas, el sesgo por capas de distancia, o la función de luminosidad frente a su verdad.',
     'Cómo cambian la parte contada, el sesgo y la función de luminosidad recuperada al cambiar el límite de magnitud, la curva de completitud o el corte de paralaje.',

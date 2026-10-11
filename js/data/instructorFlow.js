@@ -1438,5 +1438,123 @@ export default {
         text: 'The close: heavier is smaller, and the limit emerges.',
       },
     ],
+    'the-expanding-universe': [
+      {
+        from: 'a-line-through-the-origin',
+        to: 'hubbles-slope',
+        text: 'A line through the origin; Hubble’s 24 nebulae give 424 ± 42 km/s/Mpc, six times today’s value.',
+      },
+      {
+        from: 'does-it-need-the-origin',
+        to: 'does-it-need-the-origin',
+        text: 'The free-intercept slope, 454 ± 75, differs by well under one error.',
+      },
+      {
+        from: 'a-modern-sample',
+        to: 'a-modern-sample',
+        text: '197 supernovae out to z = 0.1 give 66.33 ± 0.24.',
+      },
+      {
+        from: 'predict-further-out',
+        to: 'further-out',
+        text: 'Students predict the slope falls; out to z = 0.5 it is 59.35 ± 0.20 (955 objects).',
+      },
+      {
+        from: 'why-it-changes',
+        to: 'why-it-changes',
+        text: 'Twenty-two errors apart: a line is the wrong shape beyond small redshift.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close, and what is not done.',
+      },
+    ],
+    'standard-candles': [
+      {
+        from: 'a-candle-and-its-distance',
+        to: 'the-sample',
+        text: 'A candle and its distance; 1,829 supernovae, chi-square 1688 for 1827.',
+      },
+      {
+        from: 'predict-a-calibration-error',
+        to: 'a-calibration-error',
+        text: 'Students predict the Hubble constant falls; a tenth of a magnitude is 66.85, a 4.5 percent fall.',
+      },
+      {
+        from: 'the-degeneracy',
+        to: 'the-degeneracy',
+        text: 'The chi-square does not move: the supernovae cannot see the scale.',
+      },
+      {
+        from: 'the-rung-below',
+        to: 'the-rung-below',
+        text: 'An error of 0.051 mag in the rung below passes on 2.4 percent.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: errors are handed up the ladder.',
+      },
+    ],
+    'the-shape-of-expansion': [
+      {
+        from: 'a-curve-through-the-diagram',
+        to: 'a-curve-through-the-diagram',
+        text: 'The curve is the expansion’s history; the residual picture subtracts an empty universe.',
+      },
+      {
+        from: 'predict-matter-only',
+        to: 'a-matter-only-universe',
+        text: 'Students predict a matter-only curve lies below the supernovae; chi-square 3303, 1615 above the best fit.',
+      },
+      {
+        from: 'the-best-fit',
+        to: 'the-best-fit',
+        text: 'Ωm = 0.361, interval 0.349 to 0.372.',
+      },
+      {
+        from: 'the-usual-value',
+        to: 'what-the-interval-leaves-out',
+        text: '0.30 is 30.9 above (5.6 sigma); the interval leaves out the shared errors.',
+      },
+      {
+        from: 'predict-the-degeneracy',
+        to: 'the-degeneracy-check',
+        text: 'Moving the absolute magnitude by 0.15 mag leaves chi-square at 1687.9 and moves H0 to 65.33.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close, and the assumptions.',
+      },
+    ],
+    'where-galaxies-live': [
+      {
+        from: 'a-slice-of-the-universe',
+        to: 'the-whole-strip',
+        text: '363 galaxies out to 170 Mpc, 2,911 out to 500 Mpc.',
+      },
+      {
+        from: 'predict-the-clumping',
+        to: 'the-clumping',
+        text: 'Students predict clumping; the variance over mean is 9.79, where chance gives 1.',
+      },
+      {
+        from: 'predict-the-thinning',
+        to: 'the-thinning',
+        text: 'Students predict the far density is lower; 15,800 near and 4,860 far per million cubic Mpc.',
+      },
+      {
+        from: 'why-it-thins',
+        to: 'why-it-thins',
+        text: 'The thinning is the flux limit, not a void.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close, and what is not done.',
+      },
+    ],
   },
 };
