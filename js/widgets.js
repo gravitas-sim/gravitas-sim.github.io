@@ -265,6 +265,15 @@ export const LAZY_FAMILIES = Object.freeze({
     'INTERIORS_WIDGETS',
     ['polytrope', 'wd-mass-radius', 'ms-scaling']
   ),
+  // Two TESS light curves, the Cepheid table and the synthetic class sample are
+  // sidecar files; whenWidgetsReady() waits for variablesReady.
+  variables: familyEntry(
+    () => import('./variableInstruments.js'),
+    './variableInstruments.js',
+    'VARIABLES_WIDGETS',
+    ['variable-fold', 'leavitt-law', 'variable-class'],
+    'variablesReady'
+  ),
   // Pure model, no data to wait for: a lens, a source and a light curve.
   lensing: familyEntry(
     () => import('./lensingWidgets.js'),

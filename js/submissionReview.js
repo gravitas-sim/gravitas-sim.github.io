@@ -100,6 +100,13 @@ const DEEPER = {
   'scaling-the-main-sequence': () =>
     import('./data/investigations/depth/scaling-the-main-sequence.js'),
   'the-limit': () => import('./data/investigations/depth/the-limit.js'),
+  'the-beat-of-a-star': () =>
+    import('./data/investigations/depth/the-beat-of-a-star.js'),
+  'leavitts-law': () => import('./data/investigations/depth/leavitts-law.js'),
+  'the-first-rung': () =>
+    import('./data/investigations/depth/the-first-rung.js'),
+  'which-kind-of-variable': () =>
+    import('./data/investigations/depth/which-kind-of-variable.js'),
   'bending-light': () => import('./data/investigations/depth/bending-light.js'),
   'einstein-rings-and-arcs': () =>
     import('./data/investigations/depth/einstein-rings-and-arcs.js'),
