@@ -52,13 +52,13 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | | Files | Raw |
 | --- | ---: | ---: |
 | JavaScript | 803 | 13.7 MB |
-| Images | 62 | 610 KB |
+| Images | 62 | 710 KB |
 | Stylesheets | 10 | 490 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 9 | 270 KB |
 | Other | 10 | 400 KB |
-| **Total** | **913** | **15.7 MB** |
+| **Total** | **913** | **15.8 MB** |
 
 Of those, 759 are core (the install fails without them) and 154 optional (a missing one is reported and costs nothing).
 
