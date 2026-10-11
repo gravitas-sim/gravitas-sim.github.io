@@ -4,15 +4,15 @@
 // it changes when they do and only when they do - which is what makes the old
 // cache safe to delete on activate and safe to keep otherwise.
 //
-// Split two ways, and the split is what install enforces. The 729 core
+// Split two ways, and the split is what install enforces. The 726 core
 // entries are the shell, the modules, the stylesheets and the self-hosted
 // fonts and libraries: if any one of them cannot be fetched the install fails
 // and this version never activates, because a half-cached build is the mixed
-// revision the whole arrangement exists to prevent. The 151 optional
+// revision the whole arrangement exists to prevent. The 154 optional
 // entries are pictures; a missing one is reported and does not cost the reader
 // the version.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-077b316757e7';
-self.__GRAVITAS_PRECACHE_BYTES = 16228678;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-41a280870a70';
+self.__GRAVITAS_PRECACHE_BYTES = 16228717;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',
@@ -233,9 +233,6 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/data/missionLabKey.js',
   './js/data/ngc3198Synthetic.js',
   './js/data/objectNames.js',
-  './js/data/observations/shoesR22Cepheids.js',
-  './js/data/observations/tessEtaAqlS81.js',
-  './js/data/observations/tessSuDraS15.js',
   './js/data/populationsAnswerKey.js',
   './js/data/realSystemSources.js',
   './js/data/scenarioInfo.js',
@@ -822,8 +819,11 @@ self.__GRAVITAS_PRECACHE_OPTIONAL = [
   './js/data/observations/mistSdssIsochrones.js',
   './js/data/observations/sdssNgc2420Photometry.js',
   './js/data/observations/sdssNgc2420Segue.js',
+  './js/data/observations/shoesR22Cepheids.js',
+  './js/data/observations/tessEtaAqlS81.js',
   './js/data/observations/tessHd209458S56.js',
   './js/data/observations/tessHd209458S56Aperture.js',
+  './js/data/observations/tessSuDraS15.js',
   './js/data/radiation/bandpasses.js',
   './js/data/radiation/bolometric.js',
   './js/data/radiation/extinction.js',

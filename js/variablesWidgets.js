@@ -29,6 +29,7 @@ import {
   typeAt,
 } from './widgetCanvas.js';
 import { loadVariablesData, ANCHORS } from './variablesData.js';
+import { loadExtinction } from './kernels/radiation/packs.js';
 import {
   harmonicFit,
   curveStats,
@@ -57,7 +58,7 @@ let law = null;
  */
 export const variablesReady = Promise.all([
   loadVariablesData(),
-  import('./data/radiation/extinction.js'),
+  loadExtinction(),
 ])
   .then(([d, ext]) => {
     data = d;
