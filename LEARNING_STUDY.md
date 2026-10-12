@@ -359,7 +359,7 @@ On the calibration data (V2), pre-instruction, then again post-instruction:
     or to drop RQ2, and neither is decided here.
   - **Distractors.** Each is meant to be a documented misconception, and
     Appendix B.2 says, distractor by distractor, where it is documented and at
-    what level of evidence. Of the 48, **24 have no source I could verify**:
+    what level of evidence. Of the 48, **25 have no source I could verify**:
     they are plausible wrong answers, not documented misconceptions, and the
     think-aloud interviews are what is to confirm or replace them. They are
     not presented as documented.
@@ -714,7 +714,7 @@ card. Each of the sixteen has one item.
 | r04 | Kepler 4: predict a period, what the constant depends on | b | 42, 11, 58, 7 | yes |
 | r05 | Energy 1: path as speed rises past escape | a | 62, 83, 60, 57 | no |
 | r06 | Energy 2: total energy below zero means trapped | c | 46, 47, 47, 47 | yes |
-| r07 | Energy 3: escape speed at the Earth's surface | d | 49, 38, 57, 41 | yes |
+| r07 | Energy 3: escape speed at the Earth's surface | d | 49, 38, 48, 41 | yes |
 | r08 | Energy 4: escaping does not mean gravity stopped | b | 35, 63, 47, 69 | no |
 | r09 | Energy 5: escape speed against starting distance | b | 59, 61, 54, 66 | yes |
 | r10 | Energy 6: decide from a path whether an object is bound | d | 36, 39, 36, 47 | yes |
@@ -728,9 +728,20 @@ card. Each of the sixteen has one item.
 "Computed" items are recomputed in `tests/conceptV2.test.js` from the physics
 (Kepler's third law, vis-viva, the barycenter, escape speed), most also by a
 two-body integration, and each distractor is checked to differ from the key.
-The key is not printed on the page. Of these, r02 is computed only in the
-sense that the angular-momentum and energy relations behind the key are
-checked; r03 only in that the slope it states is checked.
+The key is not printed on the page. The flag is `computed: true` in the data
+and a test checks that the flagged ids are exactly these. Three are computed in
+a weaker sense than a number: r02, where the angular-momentum and energy
+relations behind the key are checked at both apsides; r03, where the slope it
+states is checked; and r10, where vis-viva for a path with a negative
+semi-major axis (a hyperbola) is checked to give a positive total energy, from
+which the keyed word "unbound" follows.
+
+r07's stem says the engine is off after launch. Without that, option c ("no
+minimum") is true for a rocket under continuous thrust, so the item had two
+defensible answers (found in review of PR #272). With it, escape speed is the
+speed at the end of the burn. Option c now reads "any speed will do, given
+enough time", which is rated N: the Force Concept Inventory's active-force
+category was a loose fit for it and no source was found.
 
 Two limits of coverage. Energy 5 has one item, on distance; it does not test
 mass. Stars 6 is a reasoning item whose key is a statement, not a number.
@@ -780,7 +791,7 @@ first:
 | r05 | d: a larger circular orbit | N |
 | r06 | a, b, d: gravity always pulls; negative potential means bound; mass is needed | N |
 | r07 | a: about 1 km/s; b: orbital speed taken for escape speed | N |
-| r07 | c: no minimum while the engine pushes | L (FCI, by analogy), G |
+| r07 | c: no minimum, any speed escapes given time | N |
 | r08 | a: no pull at all | L (NGCI), G |
 | r08 | c: the pull becomes a push | N |
 | r08 | d: the pull switches off beyond a critical distance | L (NGCI distance threshold), G |
@@ -801,7 +812,7 @@ first:
 | r16 | a: mass from brightness | G |
 | r16 | b: mass from color; c: binaries are heavier | N |
 
-The count by the strongest level: 7 L, 10 G, 7 A, 24 N, of 48 distractors.
+The count by the strongest level: 6 L, 10 G, 7 A, 25 N, of 48 distractors.
 **I could not verify, and do not claim, that half of the distractors are
 documented misconceptions.** The two papers' existence and subject were
 confirmed by a search; the NGCI and FCI statements above were read in the

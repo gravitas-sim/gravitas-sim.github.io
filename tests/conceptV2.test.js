@@ -283,6 +283,8 @@ describe('concept/2 is a labeled draft kept apart from version 1', () => {
   });
 });
 
+const item = id => CONCEPT_ITEMS_V2.find(i => i.id === id);
+
 describe('concept/2 alignment', () => {
   const objectivesOf = file => {
     const src = read(`js/data/investigations/${file}.js`);
@@ -325,6 +327,36 @@ describe('concept/2 alignment', () => {
     expect(section).not.toMatch(/\banswer\s*[:=]\s*\d/);
   });
 
+  test('the computed flags are exactly the items a recomputation test covers', () => {
+    // LEARNING_STUDY.md B.2 marks the same ids in its table.
+    expect(
+      CONCEPT_ITEMS_V2.filter(i => i.computed)
+        .map(i => i.id)
+        .sort()
+    ).toEqual(
+      [
+        'r02',
+        'r03',
+        'r04',
+        'r06',
+        'r07',
+        'r09',
+        'r10',
+        'r12',
+        'r13',
+        'r14',
+        'r15',
+      ].sort()
+    );
+  });
+
+  test('r07 states that the engine is off, so only one option is correct', () => {
+    expect(item('r07').stem).toMatch(/engine off after launch/);
+    expect(html).toContain('engine off after launch');
+    expect(html).toContain('motor apagado');
+    expect(item('r07').options.join(' ')).not.toMatch(/engine/);
+  });
+
   test('each item names a four-option key inside its list', () => {
     for (const item of CONCEPT_ITEMS_V2) {
       expect(item.options).toHaveLength(4);
@@ -339,7 +371,6 @@ describe('concept/2 alignment', () => {
 // Units: AU, year, solar mass, so that G = 4 pi^2. Every figure the key
 // states is recomputed from these, and every distractor is checked to differ.
 const G = 4 * Math.PI ** 2;
-const item = id => CONCEPT_ITEMS_V2.find(i => i.id === id);
 const keyOf = id => item(id).options[item(id).answer];
 
 /** Two bodies on a circular relative orbit, velocity Verlet, in AU/yr/Msun. */

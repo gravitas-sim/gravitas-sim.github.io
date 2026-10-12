@@ -277,8 +277,8 @@ export const CONCEPT_ITEMS = Object.freeze([
  * Draft version 2 of the concept items, `concept/2`.
  *
  * DRAFT. Written by the project to repair the three defects computed from
- * version 1 (LEARNING_STUDY.md 2.1): the key is three times each of a, b, c
- * and d; the correct option is the longest on no more than a quarter of the
+ * version 1 (LEARNING_STUDY.md 2.1): the key is four times each of a, b, c
+ * and d (version 1 has 1, 5, 6 and 0); the correct option is the longest on no more than a quarter of the
  * items, and no distractor was padded to get there; and every one of the
  * sixteen stated objectives of the three investigations has exactly one item.
  * It has had no expert review, no think-aloud interview and no calibration,
@@ -325,6 +325,7 @@ export const CONCEPT_ITEMS_V2 = Object.freeze([
       "It is fastest when farthest away, where the star's pull is weakest and holds it back least",
     ],
     answer: 0,
+    computed: true,
   },
   {
     id: 'r03',
@@ -338,6 +339,7 @@ export const CONCEPT_ITEMS_V2 = Object.freeze([
       'the period squared is proportional to the axis cubed',
     ],
     answer: 3,
+    computed: true,
   },
   {
     id: 'r04',
@@ -384,11 +386,11 @@ export const CONCEPT_ITEMS_V2 = Object.freeze([
     id: 'r07',
     domain: 'energy',
     objective: 'Energy 3',
-    stem: 'Ignoring the air, roughly how fast must a rocket be moving, relative to Earth, to leave Earth and never come back?',
+    stem: 'Ignoring the air, and with its engine off after launch, roughly how fast must a rocket be moving, relative to Earth, to leave Earth and never come back?',
     options: [
       'About 1 km/s, a little faster than a rifle bullet',
       'About 8 km/s, the speed of a low orbit',
-      'No minimum: any speed will do if the engine keeps pushing',
+      'No minimum: any speed will do, given enough time',
       'About 11 km/s, over 25,000 miles per hour',
     ],
     answer: 3,
@@ -433,6 +435,7 @@ export const CONCEPT_ITEMS_V2 = Object.freeze([
       'unbound, because its total energy is above zero',
     ],
     answer: 3,
+    computed: true,
   },
   {
     id: 'r11',
