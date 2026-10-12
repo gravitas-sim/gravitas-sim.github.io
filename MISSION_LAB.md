@@ -326,6 +326,15 @@ last step.
   design. It keeps the ideas a mission rests on and shows how large what it
   leaves out can be. Operational tools exist to remove exactly those limits.
 
+## On the platform (Prompt 106)
+
+- **Evidence.** The timeline, the maneuvers, the delta-v budget and the patched-conic design against the propagated flight can each be kept as a `gravitas.artifact/1` envelope (`js/mission/evidence.js`; notebook source `mission-lab`). What the plan chose is `assumed` and what the model computed from it is `derived`; none has an uncertainty, because the model has no navigation. The warnings are `missionModel` and `notOperational`, the source digest is the plan with the pack, and every result of one plan shares it. Units are registry units only, so there is no C3: the hyperbolic excess speed is in km/s.
+- **The comparison.** The patched design's arc is set against the spacecraft flown directly, with a residual at each of 61 days; the last residual is the direct flight's miss of Mars, to under a kilometer. The panel draws two logarithmic charts and a table, and the envelope holds the first, largest and last residuals and the day of the largest.
+- **My work.** A mission is saved as the plan file the lab writes (`<name>.mission-plan.json`), listed in My work, and opened by `/mission/lab/?open=<id>`. It cannot be attached to a report or token, which have two kinds of made work.
+- **A plan in a link.** `#plan1.` and the plan as base64url JSON (`js/mission/link.js`, at most 2000 characters); only the lab's own fields are read, so a link carries nothing else into the page.
+- **Embed.** `/mission/lab/?embed=1&ev=1` is the timeline slider and the views, under `gravitas-embed/1` (EMBEDDING.md). The panel and the address code are lazy modules, so the lab's own download did not grow beyond its stated ceiling.
+- **Courses.** The three guides declare depths (introductory path is core, advanced path is advanced), and the celestial mechanics unit carries them.
+
 ## Files
 
 | Path | What it is |

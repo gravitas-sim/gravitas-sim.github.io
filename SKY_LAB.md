@@ -22,6 +22,12 @@ instruments in lessons; nothing here changes a lesson.
 | Page | `sky/index.html`, `js/skyPage.js`, `js/sky/` | the route, drawings, instruments (lazy), evidence writer (lazy) |
 | Validation | `tests/skyKernel.test.js`, `tests/skyData.test.js`, `tests/fixtures/sky/`, `tools/sky/` | ERFA references pinned, ERFA not needed to run them |
 
+## Planet positions: the ephemeris pack (Prompt 106)
+
+Where the mission lab's ephemeris pack (`solar-system-2025-2045`, JPL DE441) covers the date, the Sky Lab takes Venus, Mars and Jupiter from it, and the Standish elements are the fallback everywhere else (Mercury and Saturn always, and every planet outside 2025-2045). The pack's file is read as JSON (`sky/ephemeris.json`, built by `tools/build-ephemeris.mjs --sidecar`), so it costs the route no JavaScript; `createPlanetSource` in `planets.js` is the one new piece of code. The geocenter is the pack's Earth, not the Earth-Moon barycenter, and a four-pass light-time solve gives the apparent place. The pack is read at TT as if TDB (under 2 ms).
+
+The page says which source each planet used, the pack's range and its stated bound in kilometers and in degrees, in English and Spanish, and a selector chooses the pack or the elements so a student can see the difference. Evidence from the Sky Lab names the pack when a planet came from it, and a planet from the pack is held to 1 arcminute, not the elements' 0.2 degree. The pack agrees with JPL Horizons' astrometric positions (14 TT epochs, `tests/fixtures/sky/horizons-astrometric.json`) to 0.011 arcsecond at worst; the test limit is 0.05 arcsecond.
+
 ## The stated approximations
 
 - UTC is used as UT1 (under 0.9 s, 0.004 degree of rotation). Delta-T after 2025

@@ -139,6 +139,14 @@ The 3-D lab embeds under the same contract, at its own address: `/3d/?embed=1&ev
 - Without a `parent` origin it announces `ready` with no requests and listens to nobody. With one, `ready` lists `ping`, `play`, `pause` and `reset`, which are answered as in the Sandbox figure, and `load` is refused with `unknown-type`, because a 3-D system arrives in the address and not in a message.
 - The figure builder makes the markup from a pasted link to the lab, either of a reference system or of one carried in the fragment; any other address is refused, and only the fragment or the reference id of a pasted link is ever kept.
 
+## The mission figure
+
+The mission lab embeds at `/mission/lab/?embed=1&ev=1`, optionally with a plan in the fragment (`#plan1.…`, `js/mission/link.js`) or `open=<id>` for the reader's own saved mission. It is the timeline's slider and the three views, and nothing of the page around them; the line saying the lab is not for flight use stays.
+
+- It opens paused. `ready` lists `ping`, `play`, `pause` and `reset` when a `parent` origin is given; play steps the day slider to arrival in a few seconds, and `reset` restarts the plan the figure opened with. `load` is refused with `unknown-type`.
+- `lang`, `theme` and `controls=none` (which removes the slider) do what they do in the other figures. Without a `parent` it listens to nobody.
+- The figure builder makes the markup from a pasted lab link, with or without a plan in the fragment; a link whose plan cannot be read is refused.
+
 ## Security model
 
 - **No `parent` option.** The figure tells whoever framed it that it is

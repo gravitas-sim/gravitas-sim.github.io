@@ -297,7 +297,7 @@ export const UPPER_LEVEL_MODULES = {
             esOf: 'd5296b9a',
           },
           objectives: ['mechanics'],
-          needs: ['ml-window'],
+          needs: ['hohmann-transfer'],
         },
       ],
     },
