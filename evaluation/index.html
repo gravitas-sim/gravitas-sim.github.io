@@ -41,6 +41,7 @@
       .ek-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin-top: 0.6rem; }
       .ek-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 1.05rem;
                  background: var(--surface-2); padding: 0.15rem 0.45rem; border-radius: 4px; }
+      .ek-review td { height: 2.6rem; min-width: 4.5rem; }
       @media print {
         .ek-noprint { display: none !important; }
         .ek-rule { border-bottom: 1px solid #999; }
@@ -123,6 +124,11 @@ try {
           <span class="gs-en">No study has been run on Gravitas. There is no measured learning gain.
           This page adds the paperwork somebody would need in order to change
           that; it changes nothing about what is currently known.</span><span class="gs-es" lang="es">No se ha hecho ningún estudio sobre Gravitas. No hay ninguna ganancia de aprendizaje medida. Esta página añade el papeleo que alguien necesitaría para cambiarlo; no cambia nada de lo que se sabe hoy.</span>
+        
+          <span class="gs-en">A design for a learning-outcome study and a plan for validating this
+          instrument is written (<code>LEARNING_STUDY.md</code> in the repository); it has not been carried out, reviewed by
+          an ethics board or registered, and no data has been collected under
+          it.</span><span class="gs-es" lang="es">Están escritos un diseño de estudio de resultados de aprendizaje y un plan para validar este instrumento (<code>LEARNING_STUDY.md</code> en el repositorio); no se han llevado a cabo, ni los ha revisado un comité de ética, ni están registrados, y no se ha recogido ningún dato con ellos.</span>
         </p>
       </div>
 
@@ -462,6 +468,77 @@ try {
         in, and a spreadsheet with a name in it is a spreadsheet that cannot be
         handed to anybody. Answers are stored as the zero-based index of the
         chosen option, or blank.</span><span class="gs-es" lang="es">No hay columna para un nombre, un correo electrónico, un número de estudiante ni una institución, y no la habrá: una columna que existe se rellena, y una hoja de cálculo con un nombre dentro es una hoja que no se puede entregar a nadie. Las respuestas se guardan como el índice, desde cero, de la opción elegida, o en blanco.</span>
+      </p>
+
+      <h2 id="review"><span class="gs-en">7. Expert review sheet</span><span class="gs-es" lang="es">7. Hoja de revisión por expertos</span></h2>
+      <p>
+        <span class="gs-en">For the validation plan in the study design (<code>LEARNING_STUDY.md</code>):
+        two astronomy educators who did not write the investigations each fill
+        in one copy alone, one row per item, using the scale below. Print this
+        page, or only this section. Nothing here is collected by this page.</span><span class="gs-es" lang="es">Para el plan de validación del diseño del estudio (<code>LEARNING_STUDY.md</code>): dos docentes de astronomía que no escribieron las investigaciones rellenan cada uno una copia por separado, una fila por ítem, con la escala de abajo. Imprime esta página, o solo esta sección. Esta página no recoge nada de esto.</span>
+      </p>
+      <p class="ek-hint">
+        <span class="gs-en">Scale for alignment and clarity: 1 not aligned or unclear, 2 weakly,
+        3 mostly, 4 fully. Key and distractors: write yes or no, and name any
+        distractor that is also correct.</span><span class="gs-es" lang="es">Escala para alineación y claridad: 1 no alineado o poco claro, 2 débilmente, 3 en su mayor parte, 4 por completo. Clave y distractores: escribe sí o no, y nombra cualquier distractor que también sea correcto.</span>
+      </p>
+      <div class="doc-table-wrap" tabindex="0" role="region" aria-labelledby="review">
+        <table class="doc-table ek-review">
+          <caption class="visually-hidden"><span class="gs-en">Expert review sheet, one row for each of the twelve items</span><span class="gs-es" lang="es">Hoja de revisión por expertos, una fila para cada uno de los doce ítems</span></caption>
+          <thead>
+            <tr>
+              <th scope="col"><span class="gs-en">Item</span><span class="gs-es" lang="es">Ítem</span></th>
+              <th scope="col"><span class="gs-en">Objective assessed</span><span class="gs-es" lang="es">Objetivo evaluado</span></th>
+              <th scope="col"><span class="gs-en">Alignment 1-4</span><span class="gs-es" lang="es">Alineación 1-4</span></th>
+              <th scope="col"><span class="gs-en">Key correct?</span><span class="gs-es" lang="es">¿Clave correcta?</span></th>
+              <th scope="col"><span class="gs-en">Another option correct?</span><span class="gs-es" lang="es">¿Otra opción correcta?</span></th>
+              <th scope="col"><span class="gs-en">Clarity 1-4</span><span class="gs-es" lang="es">Claridad 1-4</span></th>
+              <th scope="col"><span class="gs-en">Comment</span><span class="gs-es" lang="es">Comentario</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>q01</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q02</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q03</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q04</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q05</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q06</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q07</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q08</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q09</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q10</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q11</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q12</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        <span class="gs-en">After the twelve rows, list any objective of the three investigations
+        that the set should assess and does not.</span><span class="gs-es" lang="es">Después de las doce filas, enumera cualquier objetivo de las tres investigaciones que el conjunto debería evaluar y no evalúa.</span>
       </p>
 
       <hr />
