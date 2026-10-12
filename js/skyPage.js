@@ -23,8 +23,14 @@ import {
 } from './kernels/sky/packs.js';
 import { createEphemeris, dateOfJd } from './mission/ephemeris.js';
 import { mountShell } from './shell.js';
-import { createHorizon, drawEquatorial, svgFile } from './sky/view.js';
-import { fmt, round, prettyDesignation } from './sky/fmt.js';
+import {
+  createHorizon,
+  drawEquatorial,
+  svgFile,
+  fmt,
+  round,
+  prettyDesignation,
+} from './sky/view.js';
 
 const $ = id => document.getElementById(id);
 const es = () => document.documentElement.lang.startsWith('es');

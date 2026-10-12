@@ -185,9 +185,9 @@ describe('a plan in a link', () => {
       'tooLong'
     );
     expect(readPlanFragment(`#${PLAN_LINK}.%%%`).code).toBe('unreadable');
-    expect(readPlanFragment(`#${PLAN_LINK}.${btoa('{"a":1}')}`).code).toBe(
-      'notPlan'
-    );
+    expect(
+      readPlanFragment(`#${PLAN_LINK}.${globalThis.btoa('{"a":1}')}`).code
+    ).toBe('notPlan');
     expect(planFragment({})).toBeNull();
     const extra = { ...clone(PLAN), evil: '<script>' };
     expect(readPlan(extra)).not.toHaveProperty('evil');
@@ -284,8 +284,8 @@ describe('the figure bridge', () => {
     };
     const win = {
       Event: class {},
-      setInterval: (...a) => setInterval(...a),
-      clearInterval: id => clearInterval(id),
+      setInterval: (...a) => globalThis.setInterval(...a),
+      clearInterval: id => globalThis.clearInterval(id),
     };
     const restart = jest.fn(async () => {});
     const b = bridgeServices({ slider, restart }, win);
