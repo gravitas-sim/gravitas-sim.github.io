@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 2030.7,
+    limit: 2031.7,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -640,7 +640,14 @@ const BUDGETS = [
       'investigations with their Spanish shadows and instructor guides, and ' +
       'three course-pack items, in the deferred catalogs and lesson chunks. ' +
       '5533.5 KB raw. The initial download did not move.' +
-      '\n\nPrompt 106 (the mission lab and Sky Lab on the platform), measured on v2 at 65ee9c3, took it from 2030.3 to 2030.7 KB gzipped (5534.7 KB raw), 0.4 KB: the made-record, notebook, My work, course and figure-builder readers for a mission and the words for them, with the evidence panel and address code kept as lazy files of their own. The initial download did not move (787.5 KB). D-BUDGET-32, under the standing size-budget approval in the project CLAUDE.md.',
+      '\n\nPrompt 106 (the mission lab and Sky Lab on the platform), measured on v2 at 65ee9c3, took it from 2030.3 to 2030.7 KB gzipped (5534.7 KB raw), 0.4 KB: the made-record, notebook, My work, course and figure-builder readers for a mission and the words for them, with the evidence panel and address code kept as lazy files of their own. The initial download did not move (787.5 KB). D-BUDGET-32, under the standing size-budget approval in the project CLAUDE.md.' +
+      '\n\nPrompt 107 slice 2 (the finish flow and report moved to ' +
+      'js/investigations/finish.js, no behavior change), measured on v2 at ' +
+      '31320aa, took it from 2030.7 to 2031.7 KB gzipped (5536.1 KB raw), ' +
+      '1.0 KB: one more lazy chunk, and the report writer compresses apart from ' +
+      'its former neighbors. The initial download did not move (787.5 KB). ' +
+      'D-BUDGET-33, under the standing size-budget approval in the ' +
+      "project's CLAUDE.md.",
   },
 ];
 
