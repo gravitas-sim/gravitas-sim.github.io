@@ -44,8 +44,10 @@ export const secantAirmass = altDeg =>
 /**
  * Altitude-azimuth reader: where a target is, for a site and an instant.
  * @param {{type: 'sun'|'moon'|'planet'|'star'|'fixed', id?: string,
- *   star?: object, raDeg?: number, decDeg?: number}} target - A star is an
- *   unpacked catalogue star; a fixed target has its J2000 position
+ *   star?: object, raDeg?: number, decDeg?: number, source?: ?object}} target -
+ *   A star is an unpacked catalogue star; a fixed target has its J2000
+ *   position; a planet may carry a planet source (./planets.js), which
+ *   gives its place where it covers the date
  */
 export function altAzReading(target, jdUt, site) {
   const jdTt = ttFromUt(jdUt);
@@ -69,7 +71,8 @@ export function altAzReading(target, jdUt, site) {
     ha = wrap180(gastDeg(jdUt, jdTt) + site.lonDeg - m.raDeg);
   } else {
     let j2000 = target;
-    if (target.type === 'planet') j2000 = geocentricEquatorial(target.id, jdTt);
+    if (target.type === 'planet')
+      j2000 = geocentricEquatorial(target.id, jdTt, target.source);
     if (target.type === 'star') j2000 = starAtEpoch(target.star, jdTt);
     const o = observed(j2000, { jdUt, ...site, pressureHpa: 0 });
     eq = { raDeg: o.raAppDeg, decDeg: o.decAppDeg };
@@ -165,7 +168,7 @@ function observedAzimuth(target, jd, site) {
 }
 
 /** Phase and elongation: the Moon, with its next new and full, and the planets. */
-export function phaseReading(jdUt) {
+export function phaseReading(jdUt, source = null) {
   const jdTt = ttFromUt(jdUt);
   const ph = phase(jdTt);
   const sun = apparentSun(jdTt);
@@ -174,7 +177,7 @@ export function phaseReading(jdUt) {
   const next = nextSyzygies(jdUt);
   const planets = {};
   for (const id of ['mercury', 'venus', 'mars', 'jupiter', 'saturn'])
-    planets[id] = planetPhase(id, jdTt);
+    planets[id] = planetPhase(id, jdTt, source);
   return {
     jdUt,
     elongationDeg: ph.elongationDeg,
