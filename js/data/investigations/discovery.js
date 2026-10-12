@@ -590,4 +590,34 @@ export const DISCOVERY = {
     },
     courseLevel: 'upper',
   },
+  'refitting-a-transit': {
+    audience: 'intro',
+    mathematics: 'logarithms',
+    prerequisites: ['transit-photometry'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'upper',
+  },
+  'two-periodograms': {
+    audience: 'intro',
+    mathematics: 'logarithms',
+    prerequisites: ['transit-photometry'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'upper',
+  },
+  'sampling-a-posterior': {
+    audience: 'intro',
+    mathematics: 'logarithms',
+    prerequisites: ['transit-photometry'],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'upper',
+  },
 };

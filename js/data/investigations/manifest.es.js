@@ -724,4 +724,40 @@ export const MANIFEST = [
     gradedCount: 6,
     objectiveCount: 4,
   },
+  {
+    id: 'refitting-a-transit',
+    title: 'Reajustar un tránsito',
+    subtitle:
+      'El mismo modelo y la misma curva de luz que el panel de ajuste del Observatorio, ajustados otra vez por otro camino en Python, para ver qué cambia el camino',
+    duration: '35-45 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/transit-lab.webp',
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'two-periodograms',
+    title: 'Dos periodogramas',
+    subtitle:
+      'Un periodograma de Lomb-Scargle y uno de mínimos cuadrados de caja de la misma curva de luz, calculados con Astropy en Python, y qué puede afirmar un período sacado de un periodograma',
+    duration: '30-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/transit-lab.webp',
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'sampling-a-posterior',
+    title: 'Muestrear una posterior',
+    subtitle:
+      'El tamaño del planeta y el parámetro de impacto de un tránsito muestreados en Python, con la convergencia comprobada, y comparados con el intervalo de perfil del mismo problema',
+    duration: '40-50 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/transit-lab.webp',
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
 ];

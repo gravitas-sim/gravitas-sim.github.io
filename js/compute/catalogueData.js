@@ -18,6 +18,14 @@ const MATPLOTLIB = {
   text: 'Hunter 2007, Computing in Science & Engineering 9, 90 (Matplotlib)',
   url: 'https://doi.org/10.1109/MCSE.2007.55',
 };
+const SCIPY = {
+  text: 'Virtanen et al. 2020, Nature Methods 17, 261 (SciPy 1.0)',
+  url: 'https://doi.org/10.1038/s41592-019-0686-2',
+};
+const ASTROPY = {
+  text: 'Astropy Collaboration 2022, ApJ 935, 167 (Astropy)',
+  url: 'https://doi.org/10.3847/1538-4357/ac7c74',
+};
 
 export const CATALOGUE_DATA = [
   {
@@ -470,6 +478,517 @@ export const CATALOGUE_DATA = [
       PYODIDE,
       NUMPY,
       MATPLOTLIB,
+    ],
+  },
+  {
+    id: 'refit-transit',
+    version: 1,
+    title: {
+      en: 'Refit a transit with SciPy',
+      es: 'Reajustar un tránsito con SciPy',
+    },
+    summary: {
+      en: 'Fits the transit model of the Observatory’s fit panel to a light curve with SciPy’s bounded least squares, and returns the five fitted numbers with their scaled sigmas, the profile intervals of the planet’s size and the impact parameter, and the folded light curve with the fit. The same model, fitted by a different route, to set beside the panel’s own result.',
+      es: 'Ajusta a una curva de luz el modelo de tránsito del panel de ajuste del Observatorio con los mínimos cuadrados acotados de SciPy, y devuelve los cinco números ajustados con sus sigmas escalados, los intervalos de perfil del tamaño del planeta y del parámetro de impacto, y la curva de luz plegada con el ajuste. El mismo modelo, ajustado por otro camino, para ponerlo junto al resultado del panel.',
+    },
+    note: {
+      en: 'Fit the same light curve in the Observatory’s fit panel with the same bounds and compare every number. They should agree to a small fraction of a sigma. Where they differ, say which step of the route is responsible: the optimizer, the covariance, or how the profile’s crossing is found.',
+      es: 'Ajusta la misma curva de luz en el panel de ajuste del Observatorio con los mismos límites y compara cada número. Deben coincidir en una pequeña fracción de un sigma. Donde difieran, di qué paso del camino es el responsable: el optimizador, la covarianza o cómo se halla el cruce del perfil.',
+    },
+    notebook: 'compute/notebooks/refit-transit.ipynb',
+    packages: ['numpy', 'scipy'],
+    input: {
+      name: 'observation',
+      format: 'gravitas.observation',
+      version: 1,
+      kind: 'time-series',
+      example: {
+        path: 'compute/inputs/tess-hd209458-s56.observation.json',
+        title: {
+          en: 'HD 209458, TESS sector 56 light curve (the Observatory’s)',
+          es: 'HD 209458, curva de luz de TESS del sector 56 (la del Observatorio)',
+        },
+      },
+    },
+    params: [
+      {
+        id: 'limb',
+        label: {
+          en: 'Fit the limb darkening (1) or hold it at q1 = 0.36, q2 = 0.30 (0)',
+          es: 'Ajustar el oscurecimiento del limbo (1) o fijarlo en q1 = 0,36, q2 = 0,30 (0)',
+        },
+        min: 0,
+        max: 1,
+        step: 1,
+        default: 1,
+      },
+    ],
+    outputs: {
+      envelope: {
+        quantities: [
+          {
+            id: 't0',
+            unit: 'd',
+            label: {
+              en: 'Epoch of mid-transit',
+              es: 'Época del tránsito',
+            },
+          },
+          { id: 'P', unit: 'd', label: { en: 'Period', es: 'Período' } },
+          {
+            id: 'k',
+            unit: '',
+            label: {
+              en: 'Planet-to-star radius ratio, Rp/R*',
+              es: 'Cociente de radios planeta-estrella, Rp/R*',
+            },
+          },
+          {
+            id: 'aRs',
+            unit: '',
+            label: {
+              en: 'Orbit size in stellar radii, a/R*',
+              es: 'Tamaño de la órbita en radios estelares, a/R*',
+            },
+          },
+          {
+            id: 'b',
+            unit: '',
+            label: { en: 'Impact parameter', es: 'Parámetro de impacto' },
+          },
+          {
+            id: 'k.profile',
+            unit: '',
+            label: {
+              en: 'Rp/R* with its profile interval',
+              es: 'Rp/R* con su intervalo de perfil',
+            },
+          },
+          {
+            id: 'b.profile',
+            unit: '',
+            label: {
+              en: 'Impact parameter with its profile interval',
+              es: 'Parámetro de impacto con su intervalo de perfil',
+            },
+          },
+          {
+            id: 'chi2.reduced',
+            unit: '',
+            label: {
+              en: 'Reduced chi-square',
+              es: 'Chi cuadrado reducido',
+            },
+          },
+          {
+            id: 'points',
+            unit: 'count',
+            label: { en: 'Points fitted', es: 'Puntos ajustados' },
+          },
+        ],
+      },
+      table: true,
+      figure: false,
+    },
+    expected: [
+      { id: 't0', value: 2826.78164, tolerance: 0.0005 },
+      { id: 'P', value: 3.524541, tolerance: 0.00008 },
+      { id: 'k', value: 0.119262, tolerance: 0.0004 },
+      { id: 'aRs', value: 9.2096, tolerance: 0.08 },
+      { id: 'b', value: 0.43013, tolerance: 0.012 },
+      { id: 'chi2.reduced', value: 7.9814, tolerance: 0.05 },
+      { id: 'points', value: 1882, tolerance: 0 },
+    ],
+    citations: [
+      {
+        text: 'Mandel and Agol 2002, ApJ 580, L171 (the light blocked by a planet crossing a limb-darkened star)',
+        url: 'https://doi.org/10.1086/345520',
+      },
+      {
+        text: 'Kipping 2013, MNRAS 435, 2152 (the q1, q2 limb-darkening parameters)',
+        url: 'https://doi.org/10.1093/mnras/stt1435',
+      },
+      {
+        text: 'Winn et al. 2008, ApJ 683, 1076 (correlated noise in transit timing and depth, which this notebook does not count)',
+        url: 'https://doi.org/10.1086/589737',
+      },
+      PYODIDE,
+      NUMPY,
+      SCIPY,
+    ],
+  },
+  {
+    id: 'periodograms',
+    version: 1,
+    title: {
+      en: 'Two periodograms of one light curve',
+      es: 'Dos periodogramas de una curva de luz',
+    },
+    summary: {
+      en: 'Computes a Lomb-Scargle and a box least squares periodogram of a light curve with Astropy, returns each one’s best period, the box’s epoch, duration, depth and signal-to-noise ratio, how the two periods compare, and a table of both periodograms on one period axis. Says plainly that a periodogram’s period has no error bar.',
+      es: 'Calcula un periodograma de Lomb-Scargle y otro de mínimos cuadrados de caja de una curva de luz con Astropy, y devuelve el mejor período de cada uno, la época, duración, profundidad y relación señal-ruido de la caja, cómo se comparan los dos períodos y una tabla de ambos periodogramas en un mismo eje de períodos. Dice claramente que el período de un periodograma no tiene barra de error.',
+    },
+    note: {
+      en: 'Run the Observatory’s box search on the same light curve over the same range and compare its period with the box least squares one here, and then both with the fitted period. Then say why the Lomb-Scargle peak is at about half the planet’s period, and what a period “from a periodogram” can and cannot claim.',
+      es: 'Ejecuta la búsqueda de caja del Observatorio sobre la misma curva de luz en el mismo intervalo y compara su período con el de mínimos cuadrados de caja de aquí, y luego ambos con el período ajustado. Después explica por qué el pico de Lomb-Scargle está en cerca de la mitad del período del planeta, y qué puede y qué no puede afirmar un período “de un periodograma”.',
+    },
+    notebook: 'compute/notebooks/periodograms.ipynb',
+    packages: ['numpy', 'astropy'],
+    input: {
+      name: 'observation',
+      format: 'gravitas.observation',
+      version: 1,
+      kind: 'time-series',
+      example: {
+        path: 'compute/inputs/tess-hd209458-s56.observation.json',
+        title: {
+          en: 'HD 209458, TESS sector 56 light curve (the Observatory’s)',
+          es: 'HD 209458, curva de luz de TESS del sector 56 (la del Observatorio)',
+        },
+      },
+    },
+    params: [
+      {
+        id: 'max_period',
+        label: {
+          en: 'Longest period searched (days)',
+          es: 'Período más largo buscado (días)',
+        },
+        min: 5,
+        max: 20,
+        step: 1,
+        default: 15,
+      },
+      {
+        id: 'max_duration',
+        label: {
+          en: 'Longest box duration tried (hours)',
+          es: 'Duración de caja más larga probada (horas)',
+        },
+        min: 2,
+        max: 8,
+        step: 1,
+        default: 6,
+      },
+    ],
+    outputs: {
+      envelope: {
+        quantities: [
+          {
+            id: 'ls.period',
+            unit: 'd',
+            label: {
+              en: 'Lomb-Scargle best period',
+              es: 'Mejor período de Lomb-Scargle',
+            },
+          },
+          {
+            id: 'ls.power',
+            unit: '',
+            label: {
+              en: 'Lomb-Scargle peak power',
+              es: 'Potencia del pico de Lomb-Scargle',
+            },
+          },
+          {
+            id: 'ls.fap',
+            unit: '',
+            label: {
+              en: 'False-alarm probability of that peak',
+              es: 'Probabilidad de falsa alarma de ese pico',
+            },
+          },
+          {
+            id: 'bls.period',
+            unit: 'd',
+            label: {
+              en: 'Box least squares best period',
+              es: 'Mejor período de mínimos cuadrados de caja',
+            },
+          },
+          {
+            id: 'bls.epoch',
+            unit: 'd',
+            label: {
+              en: 'Epoch of the best box',
+              es: 'Época de la mejor caja',
+            },
+          },
+          {
+            id: 'bls.duration',
+            unit: 'h',
+            label: { en: 'Box duration', es: 'Duración de la caja' },
+          },
+          {
+            id: 'bls.depth',
+            unit: 'ppm',
+            label: { en: 'Box depth', es: 'Profundidad de la caja' },
+          },
+          {
+            id: 'bls.snr',
+            unit: '',
+            label: {
+              en: 'Box depth signal-to-noise ratio',
+              es: 'Relación señal-ruido de la profundidad de la caja',
+            },
+          },
+          {
+            id: 'period.ratio',
+            unit: '',
+            label: {
+              en: 'Lomb-Scargle period over box period',
+              es: 'Período de Lomb-Scargle sobre período de caja',
+            },
+          },
+        ],
+      },
+      table: true,
+      figure: false,
+    },
+    expected: [
+      { id: 'ls.period', value: 1.7689, tolerance: 0.01 },
+      { id: 'bls.period', value: 3.52396, tolerance: 0.002 },
+      { id: 'bls.duration', value: 2.5, tolerance: 0.3 },
+      { id: 'bls.depth', value: 14582, tolerance: 400 },
+      { id: 'period.ratio', value: 0.502, tolerance: 0.004 },
+    ],
+    citations: [
+      {
+        text: 'Lomb 1976, Astrophysics and Space Science 39, 447 (the periodogram for unevenly spaced data)',
+        url: 'https://doi.org/10.1007/BF00648343',
+      },
+      {
+        text: 'Scargle 1982, ApJ 263, 835 (its statistics and the false-alarm probability)',
+        url: 'https://doi.org/10.1086/160554',
+      },
+      {
+        text: 'Kovacs, Zucker and Mazeh 2002, A&A 391, 369 (box least squares, the method of the Observatory’s box search)',
+        url: 'https://doi.org/10.1051/0004-6361:20020802',
+      },
+      {
+        text: 'VanderPlas 2018, ApJS 236, 16 (understanding the Lomb-Scargle periodogram)',
+        url: 'https://doi.org/10.3847/1538-4365/aab766',
+      },
+      PYODIDE,
+      NUMPY,
+      ASTROPY,
+    ],
+  },
+  {
+    id: 'posterior-sampling',
+    version: 1,
+    title: {
+      en: 'Sampling a transit’s posterior',
+      es: 'Muestrear la posterior de un tránsito',
+    },
+    summary: {
+      en: 'Samples the posterior of a transit’s planet size and impact parameter with an affine-invariant ensemble sampler written in NumPy alone, checks it against a grid of the same posterior, reports the convergence diagnostics, refuses to report an interval from a run that has not converged, and compares the draws’ central interval with the profile interval of the same two-parameter problem.',
+      es: 'Muestrea la posterior del tamaño de un planeta y del parámetro de impacto de un tránsito con un muestreador de conjunto de invariancia afín escrito solo con NumPy, lo compara con una malla de la misma posterior, informa de los diagnósticos de convergencia, se niega a dar un intervalo de una corrida que no ha convergido, y compara el intervalo central de las muestras con el intervalo de perfil del mismo problema de dos parámetros.',
+    },
+    note: {
+      en: 'Only the planet’s size and the impact parameter are free here; the epoch, the period, a/R* and the limb darkening are held fixed. Compare the intervals with the fit panel’s, which refits all of them, and say why these are so much narrower and what that does and does not mean. Then lower the number of steps until the notebook refuses, and read why.',
+      es: 'Aquí solo son libres el tamaño del planeta y el parámetro de impacto; la época, el período, a/R* y el oscurecimiento del limbo están fijos. Compara los intervalos con los del panel de ajuste, que reajusta todos ellos, y explica por qué estos son mucho más estrechos y qué significa y qué no significa eso. Luego baja el número de pasos hasta que el cuaderno se niegue, y lee por qué.',
+    },
+    notebook: 'compute/notebooks/posterior-sampling.ipynb',
+    packages: ['numpy'],
+    input: {
+      name: 'observation',
+      format: 'gravitas.observation',
+      version: 1,
+      kind: 'time-series',
+      example: {
+        path: 'compute/inputs/tess-hd209458-s56.observation.json',
+        title: {
+          en: 'HD 209458, TESS sector 56 light curve (the Observatory’s)',
+          es: 'HD 209458, curva de luz de TESS del sector 56 (la del Observatorio)',
+        },
+      },
+    },
+    params: [
+      {
+        id: 'steps',
+        label: {
+          en: 'Steps per ensemble (the first half is discarded)',
+          es: 'Pasos por conjunto (la primera mitad se descarta)',
+        },
+        min: 1000,
+        max: 10000,
+        step: 500,
+        default: 8000,
+      },
+      {
+        id: 'epoch',
+        label: {
+          en: 'Epoch of mid-transit held fixed (days, in the light curve’s own time)',
+          es: 'Época del tránsito fija (días, en el tiempo propio de la curva de luz)',
+        },
+        min: 0,
+        max: 3000000,
+        step: 0.00001,
+        default: 2826.78164,
+      },
+      {
+        id: 'period',
+        label: {
+          en: 'Period held fixed (days)',
+          es: 'Período fijo (días)',
+        },
+        min: 0.5,
+        max: 30,
+        step: 0.00001,
+        default: 3.52454,
+      },
+      {
+        id: 'aRs',
+        label: {
+          en: 'Orbit size a/R* held fixed',
+          es: 'Tamaño de la órbita a/R* fijo',
+        },
+        min: 3,
+        max: 30,
+        step: 0.01,
+        default: 9.21,
+      },
+    ],
+    outputs: {
+      envelope: {
+        quantities: [
+          {
+            id: 'k',
+            unit: '',
+            label: {
+              en: 'Rp/R*, median of the draws with its 68 percent interval',
+              es: 'Rp/R*, mediana de las muestras con su intervalo del 68 por ciento',
+            },
+          },
+          {
+            id: 'b',
+            unit: '',
+            label: {
+              en: 'Impact parameter, median of the draws with its 68 percent interval',
+              es: 'Parámetro de impacto, mediana de las muestras con su intervalo del 68 por ciento',
+            },
+          },
+          {
+            id: 'k.profile',
+            unit: '',
+            label: {
+              en: 'Rp/R* with its profile interval (the same two-parameter problem)',
+              es: 'Rp/R* con su intervalo de perfil (el mismo problema de dos parámetros)',
+            },
+          },
+          {
+            id: 'b.profile',
+            unit: '',
+            label: {
+              en: 'Impact parameter with its profile interval',
+              es: 'Parámetro de impacto con su intervalo de perfil',
+            },
+          },
+          {
+            id: 'k.width.ratio',
+            unit: '',
+            label: {
+              en: 'Width of the draws’ interval over the profile’s, Rp/R*',
+              es: 'Anchura del intervalo de las muestras sobre la del perfil, Rp/R*',
+            },
+          },
+          {
+            id: 'b.width.ratio',
+            unit: '',
+            label: {
+              en: 'Width of the draws’ interval over the profile’s, impact parameter',
+              es: 'Anchura del intervalo de las muestras sobre la del perfil, parámetro de impacto',
+            },
+          },
+          {
+            id: 'grid.offset',
+            unit: '',
+            label: {
+              en: 'Largest gap between the draws’ median and the grid’s, in standard deviations',
+              es: 'Mayor diferencia entre la mediana de las muestras y la de la malla, en desviaciones estándar',
+            },
+          },
+          {
+            id: 'rhat.max',
+            unit: '',
+            label: {
+              en: 'Largest split R-hat',
+              es: 'Mayor R-hat dividido',
+            },
+          },
+          {
+            id: 'ess.min',
+            unit: 'count',
+            label: {
+              en: 'Smallest effective sample size',
+              es: 'Menor tamaño de muestra efectivo',
+            },
+          },
+          {
+            id: 'tau.max',
+            unit: 'count',
+            label: {
+              en: 'Longest autocorrelation time (steps)',
+              es: 'Mayor tiempo de autocorrelación (pasos)',
+            },
+          },
+          {
+            id: 'acceptance',
+            unit: '',
+            label: {
+              en: 'Acceptance fraction',
+              es: 'Fracción de aceptación',
+            },
+          },
+          {
+            id: 'chi2.reduced',
+            unit: '',
+            label: {
+              en: 'Reduced chi-square used as the likelihood’s scale',
+              es: 'Chi cuadrado reducido usado como escala de la verosimilitud',
+            },
+          },
+          {
+            id: 'steps',
+            unit: 'count',
+            label: { en: 'Steps per ensemble', es: 'Pasos por conjunto' },
+          },
+        ],
+      },
+      table: true,
+      figure: false,
+    },
+    expected: [
+      { id: 'k', value: 0.119262, tolerance: 0.0003 },
+      { id: 'b', value: 0.4301, tolerance: 0.008 },
+      { id: 'k.width.ratio', value: 1, tolerance: 0.15 },
+      { id: 'b.width.ratio', value: 1, tolerance: 0.15 },
+      { id: 'grid.offset', value: 0, tolerance: 0.15 },
+      { id: 'rhat.max', value: 1.01, tolerance: 0.04 },
+      { id: 'acceptance', value: 0.72, tolerance: 0.1 },
+      { id: 'chi2.reduced', value: 7.9814, tolerance: 0.05 },
+      { id: 'steps', value: 8000, tolerance: 0 },
+    ],
+    citations: [
+      {
+        text: 'Goodman and Weare 2010, Communications in Applied Mathematics and Computational Science 5, 65 (the affine-invariant ensemble sampler)',
+        url: 'https://doi.org/10.2140/camcos.2010.5.65',
+      },
+      {
+        text: 'Foreman-Mackey et al. 2013, PASP 125, 306 (emcee, and the parallel half-step form used here)',
+        url: 'https://doi.org/10.1086/670067',
+      },
+      {
+        text: 'Vehtari et al. 2021, Bayesian Analysis 16, 667 (the split R-hat)',
+        url: 'https://doi.org/10.1214/20-BA1221',
+      },
+      {
+        text: 'Mandel and Agol 2002, ApJ 580, L171 (the transit model)',
+        url: 'https://doi.org/10.1086/345520',
+      },
+      PYODIDE,
+      NUMPY,
     ],
   },
 ];

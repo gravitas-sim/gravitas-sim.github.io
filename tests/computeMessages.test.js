@@ -13,6 +13,7 @@ import { readFileSync } from 'node:fs';
 import { valid } from './jsonSchemaSubset.js';
 import { isItsRow } from './schemaCorpus.js';
 import * as M from '../js/compute/messages.js';
+import { RUNTIME } from '../js/compute/runtime.js';
 
 const schema = JSON.parse(
   readFileSync('sdk/schemas/compute-messages-1.schema.json', 'utf8')
@@ -83,6 +84,50 @@ describe('the schema', () => {
   });
 });
 
+describe('the package allow-list', () => {
+  const enums = [];
+  (function walk(o) {
+    if (o && typeof o === 'object') {
+      if (Array.isArray(o.enum) && o.enum.includes('numpy'))
+        enums.push([o.enum, null]);
+      for (const v of Object.values(o)) walk(v);
+    }
+  })(schema);
+
+  test('is numpy, matplotlib, scipy and astropy in the code, the schema and the runtime pin', () => {
+    expect([...M.PACKAGE_NAMES]).toEqual([
+      'numpy',
+      'matplotlib',
+      'scipy',
+      'astropy',
+    ]);
+    expect(enums).toHaveLength(2);
+    for (const [e] of enums) expect(e).toEqual([...M.PACKAGE_NAMES]);
+    expect(Object.keys(RUNTIME.packages)).toEqual([...M.PACKAGE_NAMES]);
+    expect(Object.keys(RUNTIME.bytes)).toEqual(['core', ...M.PACKAGE_NAMES]);
+  });
+  test('LIMITS.packages is the schema maxItems and holds every name once', () => {
+    const maxes = [];
+    (function walk(o) {
+      if (o && typeof o === 'object') {
+        if (o.maxItems && o.items?.enum?.includes('numpy'))
+          maxes.push(o.maxItems);
+        for (const v of Object.values(o)) walk(v);
+      }
+    })(schema);
+    expect(maxes).toEqual([M.LIMITS.packages, M.LIMITS.packages]);
+    expect(M.LIMITS.packages).toBeGreaterThanOrEqual(M.PACKAGE_NAMES.length);
+  });
+  test('a load of all four is accepted, and a fifth name or an unknown one is not', () => {
+    const load = m('load', { id: 'l', packages: [...M.PACKAGE_NAMES] });
+    expect(M.readMessage(load, 'page').ok).toBe(true);
+    expect(valid(schema, load)).toBe(true);
+    const five = { ...load, packages: [...M.PACKAGE_NAMES, 'numpy'] };
+    expect(M.readMessage(five, 'page').ok).toBe(false);
+    expect(valid(schema, five)).toBe(false);
+  });
+});
+
 describe('the reader', () => {
   const run = FIXTURES.page[2];
   const refused = (doc, from, code) => {
@@ -111,7 +156,8 @@ describe('the reader', () => {
     void cells;
     refused(noCells, 'page', 'bad-field');
     refused({ ...run, cells: 'x = 1' }, 'page', 'bad-field');
-    refused({ ...run, packages: ['scipy'] }, 'page', 'bad-field');
+    refused({ ...run, packages: ['emcee'] }, 'page', 'bad-field');
+    refused({ ...run, packages: ['pandas'] }, 'page', 'bad-field');
     refused({ ...run, id: 'has space' }, 'page', 'bad-field');
   });
   test('refuses a string past its bound, and accepts one at it', () => {

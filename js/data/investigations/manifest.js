@@ -715,4 +715,40 @@ export const MANIFEST = [
     gradedCount: 6,
     objectiveCount: 4,
   },
+  {
+    id: 'refitting-a-transit',
+    title: 'Refitting a Transit',
+    subtitle:
+      'The same model and the same light curve as the Observatory’s fit panel, fitted again by a different route in Python, to see what the route changes',
+    duration: '35-45 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/transit-lab.webp',
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'two-periodograms',
+    title: 'Two Periodograms',
+    subtitle:
+      'A Lomb-Scargle and a box least squares periodogram of the same light curve, computed with Astropy in Python, and what a period from a periodogram can claim',
+    duration: '30-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/transit-lab.webp',
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'sampling-a-posterior',
+    title: 'Sampling a Posterior',
+    subtitle:
+      'A transit’s planet size and impact parameter sampled in Python, checked for convergence, and compared with the profile interval of the same problem',
+    duration: '40-50 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/transit-lab.webp',
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
 ];
