@@ -14,6 +14,7 @@ import { HD209458, SUN_JUPITER } from '../../js/data/exoplanetSystems.js';
 import { TRAPPIST1_PLANETS, TRAPPIST1_STAR } from '../../js/data/trappist1.js';
 import { SOURCES } from '../../js/data/realSystemSources.js';
 import { SCENARIO_GEOMETRY } from '../../js/scenarios.js';
+import { ENGINE_GEOMETRY } from '../../js/world/build.js';
 
 const REPO = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -102,11 +103,13 @@ export async function loadRealSystems() {
   // Mars); the Habitable Zone Lab gives every world one Earth mass, a choice
   // that keeps them from perturbing anything, so only the distance is read.
   for (const [id, label, names, withMass] of REAL_GEOMETRY) {
-    for (const step of SCENARIO_GEOMETRY[id].steps) {
+    const inEngine = id in ENGINE_GEOMETRY;
+    const steps = (SCENARIO_GEOMETRY[id] ?? ENGINE_GEOMETRY[id]).steps;
+    for (const step of steps) {
       const b = step.body;
       if (!b || !names.includes(b.name)) continue;
       out.push({
-        where: `js/scenarios.js SCENARIO_GEOMETRY (${label}) ${b.name}`,
+        where: `${inEngine ? 'js/world/build.js ENGINE_GEOMETRY' : 'js/scenarios.js SCENARIO_GEOMETRY'} (${label}) ${b.name}`,
         object: {
           name: b.name,
           ...(withMass ? { earths: b.mass.earths } : {}),

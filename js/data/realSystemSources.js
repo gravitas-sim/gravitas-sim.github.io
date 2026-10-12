@@ -358,14 +358,14 @@ export const SOURCES = {
   'js/world/build.js kuiperBeltObjects Makemake': [UNSOURCED],
   'js/world/build.js kuiperBeltObjects Eris': [UNSOURCED],
   'js/world/build.js kuiperBeltObjects Sedna': [UNSOURCED],
-  'js/scenarios.js SCENARIO_GEOMETRY (Habitable Zone Lab) Venus': [
+  'js/world/build.js ENGINE_GEOMETRY (Habitable Zone Lab) Venus': [
     JPL_ELEMENTS,
   ],
-  'js/scenarios.js SCENARIO_GEOMETRY (Habitable Zone Lab) Earth': [
+  'js/world/build.js ENGINE_GEOMETRY (Habitable Zone Lab) Earth': [
     JPL_ELEMENTS,
   ],
-  'js/scenarios.js SCENARIO_GEOMETRY (Habitable Zone Lab) Mars': [JPL_ELEMENTS],
-  'js/scenarios.js SCENARIO_GEOMETRY (Habitable Zone Lab) Ceres': [SBDB],
+  'js/world/build.js ENGINE_GEOMETRY (Habitable Zone Lab) Mars': [JPL_ELEMENTS],
+  'js/world/build.js ENGINE_GEOMETRY (Habitable Zone Lab) Ceres': [SBDB],
   'js/scenarios.js SCENARIO_GEOMETRY (Retrograde Mars) Earth': [
     { ...FACT_SHEET.Earth, fields: ['earths'] },
     JPL_ELEMENTS,

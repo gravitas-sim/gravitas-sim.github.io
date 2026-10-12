@@ -90,6 +90,77 @@ import { populationCaps } from '../quality.js';
 import { SIM_UNITS_PER_AU } from '../units.js';
 
 /**
+ * Scenarios whose bodies are declared as data but are the engine's alone to
+ * build (SCENARIO_GEOMETRY.md, slice 2): they take the bodies the generator
+ * drew, read the drawn radius, draw a phase or set the engine's own
+ * properties, none of which a scenario pack may do. They live here, with the
+ * builder that reads them, and not in js/scenarios.js, which every route loads:
+ * the start-up download pays for what only the builder uses. tests/
+ * scenarioGeometry.test.js holds each to the world the code made.
+ */
+export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
+  // The bodies the seeded generator drew for the scenario's own counts are
+  // reused (`from`), so every id, every generated field and the generator's
+  // place in its sequence are what the hand-built blocks left; a type in
+  // `keep` leaves any further generated bodies of it in the world, as the
+  // blocks did when a pack asked for more stars than the scenario places.
+  // Nothing below is a pack's to carry: SCENARIO_GEOMETRY.md says why.
+  //
+  // Earth and the Moon, about their barycenter, at a phase the seeded
+  // generator draws when the Moon is placed. G here carries the schematic's
+  // exaggerated distance (js/scenarios.js, the scenario's settings).
+  // prettier-ignore
+  'earth-moon-system': { steps: [
+    { body: { type: 'Planet', name: 'Earth', mass: { earths: 1 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { diameter: 12742, orbital_period: 365, baseColor: '#4B7BE5', radius: 12, density: 'rocky', isEarth: true, temperature: 288, gravity: 9.81, rotation_period: 1, atmosphere: 'N2/O2', density_kg_m3: 5514, escape_velocity: 11.19, surface_pressure: 101325, magnetic_field: 25, albedo: 0.306 } } },
+    { body: { type: 'Planet', name: 'Luna', mass: { earths: 0.0123 }, orbit: { around: 'Earth', distance: { units: 35 }, barycentric: true, angle: { random: true } }, set: { diameter: 3474, orbital_period: 27.3, baseColor: '#8B8B8B', radius: 3, density: 'rocky', isMoon: true, temperature: 250, gravity: 1.62, rotation_period: 27.3, atmosphere: 'none', density_kg_m3: 3344, escape_velocity: 2.38, surface_pressure: 0, magnetic_field: 0, albedo: 0.136 } } },
+  ] },
+  // 1I/'Oumuamua on its measured hyperbolic orbit, with Earth for scale. The
+  // visitor's state is that orbit evaluated at four AU on the way in; its mass
+  // is a billionth of a simulation unit, 3.329460487e-7 Earth masses.
+  // prettier-ignore
+  'interstellar-visitor': { steps: [
+    { body: { type: 'Star', name: 'Sun', mass: { suns: 1 }, from: { generated: 0, ifMissing: 'make' }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { radiusInSuns: 1, luminosityInSuns: 1, radius: 9, temperature: 5772, spectralType: 'G2V', baseColor: '#ffd34d', persistent: true } } },
+    { body: { type: 'Planet', name: 'Earth', mass: { earths: 1 }, orbit: { around: 'Sun', distance: { au: 1 }, angle: { pi: 0.5 } }, set: { radiusInEarths: 1, radius: 3, baseColor: '#4b90e2', persistent: true } } },
+    { body: { type: 'Planet', name: "1I/'Oumuamua", mass: { earths: 3.329460487e-7 }, at: { x: -286.14, y: -279.48 }, velocity: { x: 2.9436, y: 2.0454 }, set: { radius: 2.2, baseColor: '#d96a4a', persistent: true } } },
+  ] },
+  // Two equal A stars about their common center, barycentric so the pair
+  // circles a fixed point.
+  // prettier-ignore
+  'binary-pair': { keep: ['Star'], steps: [
+    { body: { type: 'Star', name: 'Star A', mass: { suns: 2 }, from: { generated: 0 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { radiusInSuns: 1.6, luminosityInSuns: 10, radius: 9, temperature: 8000, spectralType: 'A5V', baseColor: '#ffd97d', persistent: true } } },
+    { body: { type: 'Star', name: 'Star B', mass: { suns: 2 }, from: { generated: 1 }, orbit: { around: 'Star A', distance: { au: 4 }, barycentric: true }, set: { radiusInSuns: 1.6, luminosityInSuns: 10, radius: 9, temperature: 8000, spectralType: 'A5V', baseColor: '#8fd4ff', persistent: true } } },
+  ] },
+  // One black hole and four planets on circular orbits at multiples of its
+  // drawn radius, so the orbits stay outside it at any mass a step asks for.
+  // Phases are i*pi/2 + 0.3 radians. Planet masses are explicit: the generator
+  // makes them a sizeable fraction of a solar mass.
+  // prettier-ignore
+  'black-hole-lab': { keep: ['BlackHole'], steps: [
+    { body: { type: 'BlackHole', name: 'Black Hole', from: { generated: 0 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Inner Orbiter', mass: { earths: 1 }, from: { generated: 0 }, orbit: { around: 'Black Hole', distance: { radii: 4.2 }, angle: { rad: 0.3 } }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Second Orbiter', mass: { earths: 3 }, from: { generated: 1 }, orbit: { around: 'Black Hole', distance: { radii: 6.4 }, angle: { rad: 1.8707963267948966 } }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Third Orbiter', mass: { earths: 0.5 }, from: { generated: 2 }, orbit: { around: 'Black Hole', distance: { radii: 9.2 }, angle: { rad: 3.441592653589793 } }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Outer Orbiter', mass: { earths: 8 }, from: { generated: 3 }, orbit: { around: 'Black Hole', distance: { radii: 12.6 }, angle: { rad: 5.0123889803846895 } }, set: { persistent: true } } },
+  ] },
+  // The inner Solar System with the habitable zone drawn: real semi-major
+  // axes (Mercury left out), phases i/4 * 2 pi + 0.4 radians, each world one
+  // Earth mass (too small to perturb anything) and drawn large enough to click.
+  // prettier-ignore
+  'habitable-zone-lab': { keep: ['Star'], steps: [
+    { body: { type: 'Star', name: 'Sun', mass: { suns: 1 }, from: { generated: 0 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { luminosityInSuns: 1, radiusInSuns: 1, temperature: 5772, spectralType: 'G2V', radius: 6, baseColor: '#ffd27f', showHabitableZone: true, persistent: true } } },
+    { body: { type: 'Planet', name: 'Venus', mass: { earths: 1 }, from: { generated: 0 }, orbit: { around: 'Sun', distance: { au: 0.723 }, angle: { rad: 0.4 } }, set: { radius: 4.6, baseColor: '#e8c39e', persistent: true } } },
+    { body: { type: 'Planet', name: 'Earth', mass: { earths: 1 }, from: { generated: 1 }, orbit: { around: 'Sun', distance: { au: 1 }, angle: { rad: 1.9707963267948965 } }, set: { radius: 4.8, baseColor: '#6ec6ff', persistent: true } } },
+    { body: { type: 'Planet', name: 'Mars', mass: { earths: 1 }, from: { generated: 2 }, orbit: { around: 'Sun', distance: { au: 1.524 }, angle: { rad: 3.541592653589793 } }, set: { radius: 3.6, baseColor: '#d9744a', persistent: true } } },
+    { body: { type: 'Planet', name: 'Ceres', mass: { earths: 1 }, from: { generated: 3 }, orbit: { around: 'Sun', distance: { au: 2.77 }, angle: { rad: 5.11238898038469 } }, set: { radius: 2.4, baseColor: '#9aa3b5', persistent: true } } },
+  ] },
+  // TRAPPIST-1 from js/data/trappist1.js, which the habitable zone
+  // instruments read too, so the scenario and the investigation cannot
+  // describe two different systems.
+  // prettier-ignore
+  'trappist-1-system': { keep: ['Star', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [{ rule: { name: 'published-system', params: { system: 'trappist-1' } } }] },
+});
+
+/**
  * What world construction needs from the UI module.
  *
  * Deliberately small, and deliberately all callbacks rather than values: the
@@ -2653,7 +2724,8 @@ export const buildWorld = ctx => {
   // declaration's order because each constructor draws from the generator, and
   // a body the declaration takes from the generated population (`from`) keeps
   // its id and everything else the generator gave it.
-  const declared = SCENARIO_GEOMETRY[starting_preset];
+  const declared =
+    SCENARIO_GEOMETRY[starting_preset] ?? ENGINE_GEOMETRY[starting_preset];
   if (declared) {
     const generated = {
       Star: [...stars],

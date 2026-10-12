@@ -28,6 +28,10 @@ import {
   expandGeometry,
 } from '../js/scenarios.js';
 import { withSeed } from '../js/rng.js';
+import { ENGINE_GEOMETRY } from '../js/world/build.js';
+
+/** Every declaration: a pack may carry some, only the engine builds the rest. */
+const ALL_GEOMETRY = { ...SCENARIO_GEOMETRY, ...ENGINE_GEOMETRY };
 import { validateScenarioPack } from '../js/platform/scenario.js';
 import {
   GEOMETRY_ENGINE_SET,
@@ -59,7 +63,7 @@ const GOLDEN = JSON.parse(
 
 describe('the declared scenarios build the world the code built', () => {
   test('the fixture covers every declared scenario at seven seeds', () => {
-    const keys = Object.keys(SCENARIO_GEOMETRY).sort();
+    const keys = Object.keys(ALL_GEOMETRY).sort();
     expect(keys).toEqual([
       'binary-pair',
       'black-hole-lab',
@@ -106,7 +110,7 @@ describe('the validator, construct by construct', () => {
     validateGeometry(g, opts).map(p => `${p.path}: ${p.why}`);
 
   test('every shipped declaration is valid', () => {
-    for (const [key, g] of Object.entries(SCENARIO_GEOMETRY)) {
+    for (const [key, g] of Object.entries(ALL_GEOMETRY)) {
       expect([key, validateGeometry(g)]).toEqual([key, []]);
     }
   });
@@ -446,7 +450,7 @@ describe('a pack carries the geometry', () => {
       const pack = asPack(name);
       expect(checkPack(pack)).toEqual([]);
       const { bodies } = packBodies(pack);
-      expect(bodies.length).toBe(SCENARIO_GEOMETRY[name].steps.length);
+      expect(bodies.length).toBe(ALL_GEOMETRY[name].steps.length);
       const built = digest(name, 1).rows.map(fields);
       expect(built.length).toBe(bodies.length);
       const world = buildPackWorld(pack);

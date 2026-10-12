@@ -43,6 +43,7 @@ describe('the real systems', () => {
       'js/world/build.js famousComets',
       'js/world/build.js kuiperBeltObjects',
       'js/scenarios.js SCENARIO_GEOMETRY',
+      'js/world/build.js ENGINE_GEOMETRY',
     ]) {
       expect(where).toContain(w);
     }
@@ -147,7 +148,7 @@ describe('the provenance line and the model page print them', () => {
         /^js\/world\/build\.js (solarSystemData|realAsteroids|famousComets) /,
       'kuiper-belt': /^js\/world\/build\.js kuiperBeltObjects /,
       'habitable-zone-lab':
-        /^js\/scenarios\.js SCENARIO_GEOMETRY \(Habitable Zone Lab\) /,
+        /^js\/world\/build\.js ENGINE_GEOMETRY \(Habitable Zone Lab\) /,
       'retrograde-mars':
         /^js\/scenarios\.js SCENARIO_GEOMETRY \(Retrograde Mars\) /,
       'trappist-1-system': /^js\/data\/trappist1\.js /,

@@ -15,7 +15,7 @@ Slices 1 and 2 are built. Twelve scenarios are declared; twenty-five are still c
 
 ## What a declaration is
 
-`SCENARIO_GEOMETRY` in `js/scenarios.js` maps a scenario's public id to `{steps: [...]}`. A geometry replaces the generated population: the application builds that population first, as it always did (the seeded generator is consumed in the same order), then empties every body list but the galaxies and makes the declared bodies. Each step holds exactly one construct.
+The six declarations only the engine can build (slice 2) are `ENGINE_GEOMETRY` in `js/world/build.js`, beside the builder that reads them, so the start-up download of the routes that load `js/scenarios.js` does not pay for them; the builder looks a scenario up in `SCENARIO_GEOMETRY` first and `ENGINE_GEOMETRY` second, and the rest of this section applies to both. `SCENARIO_GEOMETRY` in `js/scenarios.js` maps a scenario's public id to `{steps: [...]}`. A geometry replaces the generated population: the application builds that population first, as it always did (the seeded generator is consumed in the same order), then empties every body list but the galaxies and makes the declared bodies. Each step holds exactly one construct.
 
 | Construct | What it says | Validated by |
 |---|---|---|
