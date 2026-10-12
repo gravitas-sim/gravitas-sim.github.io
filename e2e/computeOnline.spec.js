@@ -82,7 +82,9 @@ for (const id of [
   });
 }
 
-test('the catalogue has the seven notebooks this spec runs', async ({ page }) => {
+test('the catalogue has the seven notebooks this spec runs', async ({
+  page,
+}) => {
   await open(page);
   const ids = await page.evaluate(async () => {
     const { NOTEBOOKS } = await import('/js/compute/catalogue.js');

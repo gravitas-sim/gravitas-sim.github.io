@@ -234,7 +234,8 @@ export const INSTRUCTOR_CONTENT = {
           'The step is a property of the grid. The box period is 19 fit sigmas from the fitted period.',
       },
       {
-        claim: 'A tall peak, or a tiny false-alarm probability, means the period is right.',
+        claim:
+          'A tall peak, or a tiny false-alarm probability, means the period is right.',
         response:
           'A tall peak means a periodic signal, not which period: here the tallest is the second harmonic, and the false-alarm probability says nothing about which harmonic.',
       },
