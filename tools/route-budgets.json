@@ -44,7 +44,7 @@
         "requests": 16
       },
       "figure": {
-        "kb": 2358.1,
+        "kb": 2353,
         "requests": 117
       },
       "experiments": {
@@ -68,7 +68,7 @@
         "requests": 9
       },
       "studio": {
-        "kb": 974.2,
+        "kb": 967.6,
         "requests": 40
       },
       "composer": {
@@ -76,11 +76,11 @@
         "requests": 30
       },
       "course-builder": {
-        "kb": 1051.1,
+        "kb": 1044.5,
         "requests": 46
       },
       "course-home": {
-        "kb": 261.4,
+        "kb": 254.8,
         "requests": 18
       },
       "lab3d": {
@@ -116,7 +116,7 @@
         "requests": 6
       },
       "course-packs": {
-        "kb": 627.2,
+        "kb": 620.7,
         "requests": 44
       },
       "sky": {
@@ -194,7 +194,7 @@
         "requests": 2
       },
       "studio": {
-        "kb": 226.1,
+        "kb": 222.2,
         "requests": 4
       },
       "composer": {
