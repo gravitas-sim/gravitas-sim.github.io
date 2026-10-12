@@ -2668,11 +2668,11 @@ export const buildWorld = ctx => {
     if (!keep.has('Planet')) planets.length = 0;
     if (!keep.has('GasGiant')) gas_giants.length = 0;
     if (!keep.has('BlackHole')) bh_list.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
+    if (!keep.has('Asteroid')) asteroids.length = 0;
+    if (!keep.has('Comet')) comets.length = 0;
+    if (!keep.has('NeutronStar')) neutron_stars.length = 0;
+    if (!keep.has('WhiteDwarf')) white_dwarfs.length = 0;
+    if (!keep.has('Debris')) debris.length = 0;
 
     // One body of a published system, whose masses are in simulation units. A
     // constructor derives the display masses from the mass it is handed, so all

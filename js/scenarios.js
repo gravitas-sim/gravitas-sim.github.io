@@ -1918,7 +1918,7 @@ export const SCENARIO_GEOMETRY = /* @__PURE__ */ Object.freeze({
   // instruments read too, so the scenario and the investigation cannot
   // describe two different systems.
   // prettier-ignore
-  'trappist-1-system': { keep: ['Star'], steps: [{ rule: { name: 'published-system', params: { system: 'trappist-1' } } }] },
+  'trappist-1-system': { keep: ['Star', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [{ rule: { name: 'published-system', params: { system: 'trappist-1' } } }] },
 });
 
 /** Where each type's mass is also kept, in the unit it reports. */

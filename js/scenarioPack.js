@@ -129,6 +129,19 @@ export const GEOMETRY_RULES = Object.freeze({
   }),
 });
 
+/** The types whose generated bodies a geometry may `keep`: every population. */
+export const GEOMETRY_KEEP_TYPES = Object.freeze([
+  'Star',
+  'Planet',
+  'GasGiant',
+  'BlackHole',
+  'Asteroid',
+  'Comet',
+  'NeutronStar',
+  'WhiteDwarf',
+  'Debris',
+]);
+
 /** The types a body can be reused as (`from`): the generator's own lists. */
 export const GEOMETRY_REUSE_TYPES = Object.freeze([
   'Star',
@@ -160,9 +173,9 @@ export function validateGeometry(g, { rules = true } = {}) {
     if (
       !Array.isArray(g.keep) ||
       new Set(g.keep).size !== g.keep.length ||
-      g.keep.some(k => !GEOMETRY_REUSE_TYPES.includes(k))
+      g.keep.some(k => !GEOMETRY_KEEP_TYPES.includes(k))
     )
-      bad('keep', `a list, once each, of ${GEOMETRY_REUSE_TYPES.join(', ')}`);
+      bad('keep', `a list, once each, of ${GEOMETRY_KEEP_TYPES.join(', ')}`);
   } else if (g.keep !== undefined) {
     bad('keep', 'a scenario pack may not use generated bodies left in place');
   }

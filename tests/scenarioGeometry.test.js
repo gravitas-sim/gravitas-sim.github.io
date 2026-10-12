@@ -653,7 +653,8 @@ describe('slice 2: the validator, construct by construct', () => {
     expect(why(g(['Star']))).toEqual([]);
     expect(why(g(['Star', 'BlackHole']))).toEqual([]);
     expect(why(g(['Star', 'Star']))[0]).toMatch(/keep/);
-    expect(why(g(['Comet']))[0]).toMatch(/keep/);
+    expect(why(g(['Comet', 'Debris']))).toEqual([]);
+    expect(why(g(['Galaxy']))[0]).toMatch(/keep/);
     expect(why(g('Star'))[0]).toMatch(/keep/);
     expect(why(g(['Star']), { rules: false })[0]).toMatch(/may not use/);
   });
@@ -1013,7 +1014,7 @@ describe('slice 2: a share link that changes a population count', () => {
     expect({ ...d, rows: d.rows.map(fnv) }).toEqual(EDGE[id]);
   });
 
-  // The one place the declarations narrow what the code did (D-GEOM-04): a
+  // The one place the declarations narrow what the code did (D-GEOM-05): a
   // planet that orbits a body that is not there is not made. The code left
   // Black Hole Lab's generated planets where the generator put them, and put
   // Habitable Zone Lab's four planets on orbits about nothing.
