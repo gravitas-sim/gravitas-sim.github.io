@@ -19,6 +19,9 @@ import {
   AGREE_POINTS,
   CONCEPT_COLUMNS,
   CONCEPT_IDS,
+  CONCEPT_V2_COLUMNS,
+  CONCEPT_V2_IDS,
+  CONCEPT_V2_INSTRUMENT,
   EVALUATION_KIND,
   EVALUATION_SCHEMA,
   FIDELITY_CHOICES,
@@ -156,6 +159,12 @@ function enhance() {
     if (!host) continue;
     host.append(radios(id, ['a', 'b', 'c', 'd'], draft, onChange));
   }
+  // The draft concept/2 items, by their own ids.
+  for (const id of CONCEPT_V2_IDS) {
+    const host = document.getElementById(id);
+    if (!host) continue;
+    host.append(radios(id, ['a', 'b', 'c', 'd'], draft, onChange));
+  }
 
   // Fidelity and usability are appended to their lists in order, because their
   // items carry no per-item id in the printed form.
@@ -197,13 +206,28 @@ function enhance() {
 // field is typed by a person.
 const csvCell = csvField;
 
-/** One concept row, in CONCEPT_COLUMNS order. */
+/**
+ * Which concept version an export is of: the `instrument` value, `concept`
+ * for the pilot or `concept/2` for the draft. Only that version's columns are
+ * written, so one export never carries both versions' answers.
+ */
+const versionChosen = () =>
+  $('ekVersion')?.value === CONCEPT_V2_INSTRUMENT
+    ? CONCEPT_V2_INSTRUMENT
+    : 'concept';
+const columnsOf = version =>
+  version === CONCEPT_V2_INSTRUMENT ? CONCEPT_V2_COLUMNS : CONCEPT_COLUMNS;
+const idsOf = version =>
+  version === CONCEPT_V2_INSTRUMENT ? CONCEPT_V2_IDS : CONCEPT_IDS;
+
+/** One concept row, in the chosen version's column order. */
 function conceptRow(draft) {
+  const version = versionChosen();
   const occasion = $('ekOccasion')?.value || 'pre';
   const participant = ($('ekParticipant')?.value || '').trim();
-  return CONCEPT_COLUMNS.map(col => {
+  return columnsOf(version).map(col => {
     if (col === 'schema') return EVALUATION_SCHEMA;
-    if (col === 'instrument') return 'concept';
+    if (col === 'instrument') return version;
     if (col === 'occasion') return occasion;
     if (col === 'participant') return participant;
     return draft[col] ?? '';
@@ -238,7 +262,7 @@ function wire(draft) {
   });
 
   $('ekCsv')?.addEventListener('click', () => {
-    const header = CONCEPT_COLUMNS.join(',');
+    const header = columnsOf(versionChosen()).join(',');
     const row = conceptRow(draft).map(csvCell).join(',');
     download(
       `gravitas-evaluation-${$('ekOccasion')?.value || 'pre'}-${stamp()}.csv`,
@@ -261,10 +285,10 @@ function wire(draft) {
       records: [
         {
           schema: EVALUATION_SCHEMA,
-          instrument: 'concept',
+          instrument: versionChosen(),
           occasion,
           participant,
-          ...pick(CONCEPT_IDS),
+          ...pick(idsOf(versionChosen())),
         },
         {
           schema: EVALUATION_SCHEMA,
@@ -290,9 +314,10 @@ function wire(draft) {
   });
 
   $('ekTemplate')?.addEventListener('click', () => {
+    const version = versionChosen();
     download(
-      `gravitas-evaluation-template-v${EVALUATION_SCHEMA}.csv`,
-      `${CONCEPT_COLUMNS.join(',')}\n`,
+      `gravitas-evaluation-template-v${EVALUATION_SCHEMA}${version === CONCEPT_V2_INSTRUMENT ? '-concept2-draft' : ''}.csv`,
+      `${columnsOf(version).join(',')}\n`,
       'text/csv'
     );
   });
@@ -315,6 +340,8 @@ function wire(draft) {
 
   const columns = $('ekColumns');
   if (columns) columns.textContent = CONCEPT_COLUMNS.join(', ');
+  const columnsV2 = $('ekColumnsV2');
+  if (columnsV2) columnsV2.textContent = CONCEPT_V2_COLUMNS.join(', ');
 }
 
 function start() {
