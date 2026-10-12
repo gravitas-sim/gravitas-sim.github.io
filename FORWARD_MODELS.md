@@ -32,6 +32,10 @@ Circular orbits only for the transit model (an eccentric planet is refused). Pla
 
 A lesson step's answer may be a measurement of a forward-modelled system. The declaration (model state, setup, forward model, the truth parameter, how the student measures) is in `tools/authoring/forwardSources.mjs`, not on the step, so no route pays for it. `modelChecked.mjs` turns each declaration into a MODELS entry whose value is the truth manifest's, so `tests/modelCheckedExpectations.test.js` proves the literal; `author:check` (rule `instructor/forward-source`) refuses a declaration whose setup is invalid, whose model or truth id is unknown, or whose measurement misses the truth. The first use is "From a depth to a size" in Transit Photometry. `gradeAgainstTruth` (js/forward) grades an answer against a manifest at run time.
 
+## A 3-D system as the state (Prompt 105)
+
+`js/forward/system3d.js` makes a forward-model state from a `gravitas.system3d/1` and an observer (a line of sight, or its two angles in the system's frame). Each planet carries its own `geometry`, the observer's inclination and position angle in that planet's orbital frame, which `geometryOf` prefers to the system's; a state with no planet geometry behaves exactly as before. The bridge keeps each period and derives the semi-major axis from it, so its constants differ from the kernel's by 8.7e-5; it takes the planets as non-interacting osculating orbits and says so. It refuses in words a system with no scale (code units), no heavy body, an eccentric transit or a transit with no radii. tests/forwardSystem3d.test.js holds it against a 3-D kernel run.
+
 ## Not done in this prompt
 
 Opening synthetic observations from a menu in the Observatory (they open as files; the label and the compare-with-truth table appear in the page); wiring the radial-velocity panel's live run to the setup module (the migration and equivalence are tested; the panel's code path is unchanged).

@@ -82,6 +82,10 @@ since landed (#241) and is used by the advanced Transit Photometry step; the
 Kepler step has not been pointed at it, and is the one to point at the TESS
 period.
 
+## The 3-D lab (Prompt 105)
+
+The four 3-D investigations declare `depths: ['core', 'advanced']`: the introductory path is the core and the advanced path is the advanced depth. The Library card says they can be read at two depths, and a course pack's `guide` item names the depth (COURSE_PACKS.md). The celestial mechanics unit of the upper-level modules carries them: orbit planes and eclipses at core depth on the introductory path, mutual events and the Kozai effect at advanced depth on the advanced path. They are not lessons, so the depth rules above are not run on them.
+
 ## What is not done
 
 The instructor materials bundle (`instructors/materials.enc.json`) is encrypted

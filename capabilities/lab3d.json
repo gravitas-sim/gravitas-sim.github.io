@@ -2,7 +2,7 @@
   "format": "gravitas.capability-package",
   "formatVersion": 1,
   "id": "gravitas.lab3d",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "kind": "built-in",
   "gravitas": "^1.0.0",
   "title": {
@@ -149,6 +149,41 @@
       "path": "js/i18n/es.lab3dGuides.js",
       "role": "code",
       "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/evidence.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/link.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/embed.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/evidencePanel.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/forward/system3d.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.lab3dEvidence.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.lab3dEvidence.js",
+      "role": "code",
+      "offline": "optional"
     }
   ],
   "citations": [],
@@ -182,6 +217,27 @@
     },
     {
       "check": "e2e:e2e/lab3dGuides.spec.js"
+    },
+    {
+      "check": "jest:tests/lab3dEvidence.test.js"
+    },
+    {
+      "check": "jest:tests/forwardSystem3d.test.js"
+    },
+    {
+      "check": "jest:tests/scenarioPack3d.test.js"
+    },
+    {
+      "check": "jest:tests/course3d.test.js"
+    },
+    {
+      "check": "e2e:e2e/lab3dEvidence.spec.js"
+    },
+    {
+      "check": "e2e:e2e/lab3dEmbed.spec.js"
+    },
+    {
+      "check": "e2e:e2e/lab3dCompare.spec.js"
     }
   ]
 }

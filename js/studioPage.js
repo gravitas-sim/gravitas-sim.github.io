@@ -665,6 +665,33 @@ function systemSection(d) {
     );
   }
   section.append(sys);
+  if (d.system3d) {
+    section.append(
+      el(
+        'div',
+        { id: 'st-system3d', className: 'st-subsection' },
+        el('h3', {}, t('studio.system3d.heading')),
+        el(
+          'p',
+          { className: 'ui-hint' },
+          t('studio.system3d.summary', {
+            n: d.system3d.bodies?.length ?? 0,
+            units: d.system3d.units ?? 'code',
+          })
+        ),
+        el(
+          'button',
+          {
+            type: 'button',
+            className: 'ui-button',
+            id: 'st-system3d-remove',
+            onclick: () => commit(x => delete x.system3d),
+          },
+          t('studio.system3d.remove')
+        )
+      )
+    );
+  }
 
   // Typed bodies, as precise placement takes them.
   const typed = el(
@@ -1029,7 +1056,15 @@ async function preview() {
     setStatus(t('studio.status.fixFirst'));
     return;
   }
-  $('st-preview').src = await linkFor(d, { embed: true });
+  if (d.system3d) {
+    const r = await (
+      await import('./scenarioPack3d.js')
+    ).labLink(d, {
+      embed: true,
+    });
+    if (!r.ok) return setStatus(t('studio.system3d.tooLong'));
+    $('st-preview').src = r.href;
+  } else $('st-preview').src = await linkFor(d, { embed: true });
   setStatus(t('studio.status.previewed'));
 }
 
@@ -1060,6 +1095,15 @@ function render() {
     $(id).disabled = !valid;
   $('st-open-app').hidden = !valid;
   if (valid) linkFor(d).then(href => ($('st-open-app').href = href));
+  const lab = $('st-open-3d');
+  lab.hidden = !(valid && d.system3d);
+  if (!lab.hidden)
+    import('./scenarioPack3d.js')
+      .then(m => m.labLink(d, { origin: location.origin }))
+      .then(r => {
+        lab.hidden = !r.ok;
+        if (r.ok) lab.href = r.href;
+      });
   $('st-undo').disabled = !history.canUndo();
   $('st-redo').disabled = !history.canRedo();
   $('st-raw-text').value = serialize(d);
@@ -1152,7 +1196,12 @@ async function openFile(file) {
     return;
   }
   let pack;
-  if (data?.format === SYSTEM_FORMAT) {
+  if (data?.format === 'gravitas.system3d') {
+    // A 3-D lab file: the pack carries it (js/scenarioPack3d.js, lazy).
+    const r = (await import('./scenarioPack3d.js')).packFromSystem3d(data);
+    if (!r.ok) return setStatus(t('studio.file.system3d', { why: r.code }));
+    pack = r.pack;
+  } else if (data?.format === SYSTEM_FORMAT) {
     const r = packFromOrbitalSystem(data);
     if (!r.ok) return setStatus(t(r.key, r.vars));
     pack = r.pack;

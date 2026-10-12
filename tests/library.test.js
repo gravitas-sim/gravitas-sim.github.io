@@ -71,7 +71,7 @@ describe('library/library.json', () => {
   });
 
   test('writes world links uncompressed, so every Node writes the same bytes', async () => {
-    const scenarios = library.entries.filter(e => e.kind === 'scenario');
+    const scenarios = library.entries.filter(e => e.format === 'sandbox');
     expect(scenarios.length).toBeGreaterThan(0);
     const { decodePayload } = await import('../js/shareState.js');
     for (const e of scenarios) {
@@ -374,5 +374,38 @@ describe('what is written beside it', () => {
     }
     for (const format of Object.values(FORMATS).flat())
       expect(EN_LIBRARY[`lib.format.${format}`]).toBeTruthy();
+  });
+});
+
+describe('the 3-D lab in the Library (Prompt 105)', () => {
+  test('its reference systems are scenarios that open in the lab, and each opens a system it has', async () => {
+    const { REFERENCES } = await import('../js/lab3d/references.js');
+    const systems = library.entries.filter(e => e.format === 'system3d');
+    expect(systems.map(e => e.route).sort()).toEqual(
+      REFERENCES.map(r => `/3d/?system=${r.id}`).sort()
+    );
+    const tables = await routeTables();
+    for (const e of systems) {
+      expect(e.kind).toBe('scenario');
+      expect(await routeProblem(e.route, tables)).toBeNull();
+    }
+    expect(await routeProblem('/3d/?system=R9', tables)).toMatch(
+      /no reference/
+    );
+  });
+
+  test('its guides are investigations with two depths and an adoption page each', () => {
+    const guides = library.entries.filter(e => e.format === 'lab3d');
+    expect(guides.length).toBe(4);
+    for (const g of guides) {
+      expect([g.id, g.depths]).toEqual([g.id, 2]);
+      const id = g.id.replace('investigation:', '');
+      expect(
+        readFileSync(
+          path.join(ROOT, `teaching/investigation/${id}/index.html`),
+          'utf8'
+        )
+      ).toContain('/3d/?guide=');
+    }
   });
 });

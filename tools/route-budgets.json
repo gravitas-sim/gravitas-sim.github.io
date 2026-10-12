@@ -12,23 +12,23 @@
         "requests": 102
       },
       "kepler": {
-        "kb": 3334.3,
+        "kb": 3335.5,
         "requests": 140
       },
       "transit": {
-        "kb": 3346.2,
+        "kb": 3347.4,
         "requests": 140,
-        "toolKb": 3554.3,
+        "toolKb": 3555.5,
         "toolRequests": 142
       },
       "power-law": {
-        "kb": 3311.6,
+        "kb": 3312.7,
         "requests": 140,
-        "toolKb": 3364.6,
+        "toolKb": 3365.8,
         "toolRequests": 143
       },
       "largest-lesson": {
-        "kb": 3443.8,
+        "kb": 3445.0,
         "requests": 142
       },
       "teaching": {
@@ -60,27 +60,27 @@
         "requests": 13
       },
       "library": {
-        "kb": 51.5,
+        "kb": 51.6,
         "requests": 12
       },
       "my-work": {
-        "kb": 79.5,
+        "kb": 79.6,
         "requests": 9
       },
       "studio": {
-        "kb": 940.7,
+        "kb": 943.1,
         "requests": 40
       },
       "composer": {
-        "kb": 491.1,
+        "kb": 491.6,
         "requests": 30
       },
       "course-builder": {
-        "kb": 1026.5,
+        "kb": 1030.2,
         "requests": 46
       },
       "course-home": {
-        "kb": 242.8,
+        "kb": 244.7,
         "requests": 18
       },
       "lab3d": {
@@ -112,11 +112,11 @@
         "requests": 3
       },
       "teach-kit": {
-        "kb": 36.9,
+        "kb": 37.1,
         "requests": 6
       },
       "course-packs": {
-        "kb": 605.6,
+        "kb": 607.1,
         "requests": 44
       },
       "sky": {
@@ -186,7 +186,7 @@
         "requests": 2
       },
       "library": {
-        "kb": 22.3,
+        "kb": 22.4,
         "requests": 2
       },
       "my-work": {
@@ -198,15 +198,15 @@
         "requests": 4
       },
       "composer": {
-        "kb": 258.3,
+        "kb": 258.8,
         "requests": 14
       },
       "course-builder": {
-        "kb": 597.4,
+        "kb": 599.4,
         "requests": 13
       },
       "course-home": {
-        "kb": 63.4,
+        "kb": 64.2,
         "requests": 4
       },
       "lab3d": {
@@ -242,7 +242,7 @@
         "requests": 2
       },
       "course-packs": {
-        "kb": 232.1,
+        "kb": 232.7,
         "requests": 12
       },
       "sky": {

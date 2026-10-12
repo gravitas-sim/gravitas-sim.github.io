@@ -3711,6 +3711,18 @@ export const EN_DEFERRED = {
   'nb.source.comparison': 'Model against data',
   'nb.source.sweep-analysis': 'Sweep analysis',
   'nb.source.derived-quantity': 'Derived quantity',
+  'nb.source.lab3d': '3-D lab measurement',
+  'nb.flag.unbound': 'the orbit is not bound, so it has no period',
+  'nb.flag.noRadii':
+    'a body has no size in this system, so no eclipse can be judged',
+  'nb.flag.osculating':
+    'orbits are read at one instant, and a real orbit drifts',
+  'nb.flag.planetsDoNotInteract':
+    'the planets are treated as not pulling on each other',
+  'nb.flag.assumedTeff':
+    'the star temperature was assumed, not read from the system',
+  'nb.flag.assumedDistance':
+    'the distance to the system was assumed, not read from it',
   'nb.formula.summary': 'Derive a quantity by a formula',
   'nb.source.experiment-result': 'Experiment result',
   'nb.source.compute-capsule': 'Notebook run (compute capsule)',

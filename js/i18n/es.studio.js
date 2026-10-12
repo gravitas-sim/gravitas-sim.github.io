@@ -20,6 +20,7 @@ export const ES_STUDIO = {
   'studio.action.save': 'Guardar como archivo',
   'studio.action.copy': 'Copiar el enlace',
   'studio.action.openApp': 'Abrir en Gravitas',
+  'studio.action.open3d': 'Abrir en el laboratorio 3D',
   'studio.action.preview': 'Vista previa',
   'studio.action.undo': 'Deshacer',
   'studio.action.redo': 'Rehacer',
@@ -91,6 +92,12 @@ export const ES_STUDIO = {
     'Una estrella y lo que la orbita, introducidos como órbitas y no como posiciones y velocidades.',
   'studio.system.add': 'Añadir un sistema orbital',
   'studio.system.remove': 'Quitar el sistema orbital',
+  'studio.system3d.heading': 'Un sistema 3D',
+  'studio.system3d.summary':
+    '{n} cuerpos en unidades {units}, para el laboratorio 3D. Ábrelo allí para ejecutarlo; el mundo propio del escenario en el Sandbox es aparte.',
+  'studio.system3d.remove': 'Quitar el sistema 3D',
+  'studio.system3d.tooLong':
+    'Este sistema 3D es demasiado largo para un enlace. Guarda el escenario y abre el archivo del sistema en el laboratorio 3D.',
   'studio.typed.heading': 'Cuerpos escritos',
   'studio.typed.body': 'Cuerpo {n}',
   'studio.typed.add': 'Añadir un cuerpo por posición y velocidad',
@@ -144,6 +151,7 @@ export const ES_STUDIO = {
   'studio.status.draftInUse':
     'Ese es el escenario que estás editando; abre otro primero.',
   'studio.file.unreadable': 'No se pudo leer ese archivo como JSON.',
+  'studio.file.system3d': 'Ese archivo de sistema 3D no es válido ({why}).',
   'studio.file.notPack':
     'Ese archivo no es ni un escenario de Gravitas ni un archivo del constructor de sistemas orbitales.',
   'studio.file.newer':
@@ -199,6 +207,7 @@ export const ES_STUDIO = {
   'studio.error.instrument': '«{id}» no está en el panel lateral.',
   'studio.error.listRepeat': 'Elegido dos veces.',
   'studio.error.system': 'El sistema orbital necesita una lista de cuerpos.',
+  'studio.error.system3d': 'El sistema 3D no es válido ({why}).',
   'studio.error.tooMany': 'Como mucho {max} cuerpos.',
   'studio.error.name': 'Un nombre sencillo de como mucho 40 caracteres.',
   'studio.error.populationWithBodies':

@@ -35,6 +35,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from './fixtures.js';
 import { checkPack } from '../js/scenarioPack.js';
 import { validateSystem, buildSystem, systemToFile } from '../js/systemSpec.js';
+import { REFERENCES } from '../js/lab3d/references.js';
 import { EN } from '../js/i18n/en.js';
 import { ES } from '../js/i18n/es.js';
 
@@ -624,6 +625,62 @@ test.describe('the Scenario Studio', () => {
         .map(([id]) => id),
     }));
     expect(overflow).toEqual({ page: 0, off: [] });
+  });
+
+  test('a 3-D system file becomes a pack that carries it, saves, reopens and links to the 3-D lab', async ({
+    page,
+  }) => {
+    const r3 = REFERENCES.find(r => r.id === 'R3').make().system;
+    await openStudio(page);
+    await openFile(page, 'r3.system3d.json', r3);
+    await expect(page.locator('#st-system3d')).toContainText('3-D system');
+    await enter(page, 'st-id', 'three-body-3d');
+    await enter(page, 'st-title-en', 'A three-body problem in 3-D');
+    await enter(page, 'st-summary-en', 'A star and two planets.');
+    await enter(page, 'st-title-es', 'Un problema de tres cuerpos 3D');
+    await enter(page, 'st-summary-es', 'Una estrella y dos planetas.');
+    await expect(page.locator('#st-checks-summary')).toHaveText(
+      'The scenario is valid.'
+    );
+    const lab = page.locator('#st-open-3d');
+    await expect(lab).toBeVisible();
+    await expect
+      .poll(() => lab.getAttribute('href'))
+      .toMatch(/\/3d\/#sys1[zr][A-Za-z0-9_-]+$/);
+    // Saved, the file carries the system unchanged, and opens again.
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#st-save').click(),
+    ]);
+    const text = readFileSync(await download.path(), 'utf8');
+    const saved = JSON.parse(text);
+    expect(saved.system3d).toEqual(r3);
+    expect(checkPack(saved)).toEqual([]);
+    await openFile(page, 'three-body-3d.scenario.json', text);
+    await expect(page.locator('#st-status')).toHaveText(
+      'Opened three-body-3d.'
+    );
+    // The preview is the lab's embed.
+    await page.locator('#st-preview-go').click();
+    await expect
+      .poll(() => page.locator('#st-preview').getAttribute('src'))
+      .toMatch(/\/3d\/\?embed=1&ev=1#sys1/);
+    // The link opens the system in the lab.
+    await page.goto(await lab.getAttribute('href'));
+    await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
+      timeout: 30_000,
+    });
+    await page.waitForFunction(() => window.gravitasLab3d?.frame);
+    const frame = await page.evaluate(() => window.gravitasLab3d.frame());
+    expect(frame.m).toEqual(r3.bodies.map(b => b.m));
+  });
+
+  test('a damaged 3-D system file is refused in a word', async ({ page }) => {
+    const r3 = REFERENCES.find(r => r.id === 'R3').make().system;
+    r3.bodies[1].m = -1;
+    await openStudio(page);
+    await openFile(page, 'bad.system3d.json', r3);
+    await expect(page.locator('#st-status')).toContainText('not valid (mass)');
   });
 });
 
