@@ -18,7 +18,7 @@ export const EN_FIGURE = {
   'fig.what.title': 'What it shows',
   'fig.what.link.label': 'A Gravitas link',
   'fig.what.link.hint':
-    'In Gravitas, set the simulation up, open Share and choose “Build a figure”, or copy the link and paste it here. A link to the 3-D lab, with a system in it, makes a 3-D figure.',
+    'In Gravitas, set the simulation up, open Share and choose “Build a figure”, or copy the link and paste it here. A link to the 3-D lab, with a system in it, makes a 3-D figure, and a link to the mission lab makes a mission figure.',
   'fig.what.or': 'or start from a scenario',
   'fig.what.scenario.label': 'Scenario',
   'fig.what.seed.label': 'Seed',
@@ -31,6 +31,10 @@ export const EN_FIGURE = {
   'fig.status.system3d': 'A 3-D system, carried in the link',
   'fig.status.reference3d': 'The 3-D lab, reference system {id}',
   'fig.frame.title3d': 'Gravitas 3-D lab',
+  'fig.status.mission': 'The mission lab, with its own plan',
+  'fig.status.missionPlan':
+    'The mission lab, with the plan carried in the link',
+  'fig.frame.titleMission': 'Gravitas mission lab',
   'fig.status.seeded': '{scenario}, built from seed {seed}',
   'fig.status.bodies.one': '1 object written out',
   'fig.status.bodies.many': '{n} objects written out',

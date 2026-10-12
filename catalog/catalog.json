@@ -665,7 +665,7 @@
     },
     {
       "id": "gravitas.mission",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "kind": "built-in",
       "delivery": "built-in",
       "title": {
@@ -708,7 +708,7 @@
         }
       ],
       "offline": "on-demand",
-      "bytes": 449296
+      "bytes": 505516
     },
     {
       "id": "gravitas.power-law-instruments",

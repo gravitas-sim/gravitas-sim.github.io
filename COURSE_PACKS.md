@@ -78,6 +78,10 @@ setting them is the instructor's job, in whatever they use to set them.
 
 A `guide` item opens one of the 3-D lab's guided investigations (`guide`: `l3-planes`, `l3-eclipse`, `l3-mutual` or `l3-kozai`) at a `depth` of `core` (the introductory path, the default) or `advanced` (the advanced path). It declares its own `minutes`, may be on any path, takes an optional title and carries no pin: the investigations are the lab's, not lessons. Its link is `/3d/?guide=<id>&path=<intro|advanced>`. The id table is `GUIDES_3D` in `js/course/pack.js`, held to the lab's guides by a test.
 
+### Mission lab investigations (Prompt 106)
+
+The same `guide` kind opens the mission lab's investigations (`ml-orbit`, `ml-window`, `ml-cruise`), at the same two depths, at `/mission/lab/?guide=<id>&path=<intro|advanced>`. `GUIDES_MISSION` in `js/course/pack.js` holds their minutes, `GUIDES` is the merged table a pack is checked against, and `guideRoute` says which lab a guide belongs to. A test holds the table to the lab's guides.
+
 ## Pins
 
 Every lesson and assignment item carries a pin. A pin is:

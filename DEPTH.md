@@ -86,6 +86,10 @@ period.
 
 The four 3-D investigations declare `depths: ['core', 'advanced']`: the introductory path is the core and the advanced path is the advanced depth. The Library card says they can be read at two depths, and a course pack's `guide` item names the depth (COURSE_PACKS.md). The celestial mechanics unit of the upper-level modules carries them: orbit planes and eclipses at core depth on the introductory path, mutual events and the Kozai effect at advanced depth on the advanced path. They are not lessons, so the depth rules above are not run on them.
 
+## The mission lab (Prompt 106)
+
+The three mission investigations (`ml-orbit`, `ml-window`, `ml-cruise`) declare `depths: ['core', 'advanced']`, the introductory path being core and the advanced path advanced. The celestial mechanics unit carries them; an advanced-path item may only need a core item or another advanced one, so the cruise needs the Hohmann item and not the window. They are not lessons, so the lesson depth rules are not run on them.
+
 ## What is not done
 
 The instructor materials bundle (`instructors/materials.enc.json`) is encrypted

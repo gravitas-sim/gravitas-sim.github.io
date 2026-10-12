@@ -41,6 +41,9 @@ const STATIC_FILES = [
   // The Sky Lab's star table (data-packs/sky-bright-stars.json): fetched by
   // /sky/ at run time, so no bundle holds it.
   'sky/bright-stars.json',
+  // The Sky Lab's planet positions (ephemeris-packs/solar-system-2025-2045.json,
+  // Prompt 106): the mission lab's pack as a JSON copy, fetched by /sky/.
+  'sky/ephemeris.json',
   // The galactic tables' rows (data-packs/gaia-dr3-*.json and
   // milky-way-rotation-curve.json), fetched by the galactic instruments and
   // the Observatory.
@@ -728,6 +731,31 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'mission-lab-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The mission lab's evidence panel and its address reader
+  // (js/mission/lab/evidencePanel.js and address.js, Prompt 106): a bundle of
+  // its own each, at the same path, which the lab loads by URL (the evidence
+  // panel when a reader presses its button, the address reader only when the
+  // address asks for a figure, a saved mission or a plan in the link). Built
+  // apart, each carries its own copy of what it needs and costs only the
+  // readers who use it. The panel carries the notebook writer and the My work
+  // writer, which a reader of the lab never downloads.
+  for (const file of [
+    'js/mission/lab/evidencePanel.js',
+    'js/mission/lab/address.js',
+  ]) {
+    if (!existsSync(file)) continue;
+    await esbuild.build({
+      entryPoints: [file],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, file),
       legalComments: 'none',
     });
   }

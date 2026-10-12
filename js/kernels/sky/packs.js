@@ -8,7 +8,9 @@
 //
 // The stars are a sidecar of the data pack sky-bright-stars (DATA_PACKS.md): a
 // JSON file fetched at run time, not a JavaScript module, so a route budget
-// that counts JavaScript does not count a star table, as for library.json.
+// that counts JavaScript does not count a star table, as for library.json. The
+// mission lab's ephemeris pack is a sidecar the same way (Roadmap II Prompt
+// 106), for the planets' positions.
 // =============================================================================
 
 /** Where the star rows are, from the site root (tools/build-data-packs.mjs). */
@@ -23,6 +25,23 @@ export const STARS_URL = '/sky/bright-stars.json';
 export async function loadStarFile(fetchImpl = globalThis.fetch) {
   const res = await fetchImpl(STARS_URL);
   if (!res.ok) throw new Error(`${STARS_URL}: HTTP ${res.status}`);
+  return res.json();
+}
+
+/** Where the ephemeris pack's coefficients are (tools/build-ephemeris.mjs). */
+export const EPHEMERIS_URL = '/sky/ephemeris.json';
+
+/**
+ * The ephemeris pack's sidecar: the mission lab's pack (MISSION_LAB.md) as a
+ * JSON file, so the Sky Lab reads it as it reads the stars and a route budget
+ * that counts JavaScript does not count a coefficient table. It is the pack
+ * module's own runtime part and data, byte for byte (`ephemeris:check`).
+ * @param {typeof fetch} [fetchImpl]
+ * @returns {Promise<{pack: object, data: object}>}
+ */
+export async function loadEphemerisFile(fetchImpl = globalThis.fetch) {
+  const res = await fetchImpl(EPHEMERIS_URL);
+  if (!res.ok) throw new Error(`${EPHEMERIS_URL}: HTTP ${res.status}`);
   return res.json();
 }
 

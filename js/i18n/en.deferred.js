@@ -3724,6 +3724,10 @@ export const EN_DEFERRED = {
   'nb.source.sweep-analysis': 'Sweep analysis',
   'nb.source.derived-quantity': 'Derived quantity',
   'nb.source.lab3d': '3-D lab measurement',
+  'nb.source.mission-lab': 'Mission lab result',
+  'nb.flag.missionModel':
+    'impulsive burns, patched conics and point masses: a teaching model of a mission',
+  'nb.flag.notOperational': 'not for operational mission design or navigation',
   'nb.flag.unbound': 'the orbit is not bound, so it has no period',
   'nb.flag.noRadii':
     'a body has no size in this system, so no eclipse can be judged',

@@ -44,6 +44,10 @@ Installed Packages are in IndexedDB (`js/catalog/store.js`), which the store doe
 
 The 3-D lab (`/3d/`) saves a system as a made record of kind `system3d`: its file is a `gravitas.system3d`, named `<name>.system3d.json`, and its "Open" link is `/3d/?open=<id>`. Evidence it keeps appears under Evidence with the source "3-D lab". A 3-D system cannot be attached to a report or a token.
 
+## Missions (Prompt 106)
+
+The mission lab saves a mission as a made record of kind `mission`: its file is the `gravitas.mission-plan/1` the lab writes, named `<name>.mission-plan.json`, and its "Open" link is `/mission/lab/?open=<id>`. Evidence it keeps appears under Evidence with the source "Mission lab". A mission cannot be attached to a report or a token.
+
 ## Scenarios and experiments (Prompt 74)
 
 What a student builds or runs has a home in the `made` collection (`gravitas_made_<id>`, `gravitas.made/1`, `js/myWork/made.js`). The page lists it in "Scenarios and experiments you made" (`js/myWork/madeView.js`, loaded only when something was made, so the page's route stays at its ceiling).

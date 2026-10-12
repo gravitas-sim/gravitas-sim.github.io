@@ -6,7 +6,8 @@
 //
 // Altitudes are apparent (refracted, in a standard atmosphere); the Moon is
 // topocentric (parallax applied). The Sun and Moon are the series of
-// ./solar.js, the planets Standish's elements (./planets.js), the stars the
+// ./solar.js, the planets Standish's elements (./planets.js) or, where a planet
+// source covers them (./planets.js), the ephemeris pack, the stars the
 // catalogue with linear proper motion (./stars.js). Pure: no DOM, no clock.
 // =============================================================================
 
@@ -40,17 +41,25 @@ const DEG = Math.PI / 180;
  * @property {number|null} mag
  * @property {number} raDeg - Of date, apparent
  * @property {number} decDeg
+ * @property {'ephemeris'|'elements'} [via] - A planet's position source
  */
 
 /**
  * @param {number} jdUt - Julian date, UT (UTC taken as UT1)
  * @param {{latDeg: number, lonDeg: number}} site - Longitude east positive
  * @param {object[]} stars - Unpacked stars (loadStars)
- * @param {{planets?: boolean}} [opts]
+ * @param {{planets?: boolean, source?: ?object}} [opts] - `source` is a
+ *   planet source (./planets.js): where it covers a planet and the
+ *   date the planet is read from it, elsewhere from the elements
  * @returns {{objects: SkyObject[], jdTt: number, lstDeg: number, gastDeg: number,
  *   sun: SkyObject, moon: SkyObject, planetsInRange: boolean}}
  */
-export function skyAt(jdUt, site, stars, { planets = true } = {}) {
+export function skyAt(
+  jdUt,
+  site,
+  stars,
+  { planets = true, source = null } = {}
+) {
   const jdTt = ttFromUt(jdUt);
   const frame = makeFastFrame({
     jdUt,
@@ -102,9 +111,10 @@ export function skyAt(jdUt, site, stars, { planets = true } = {}) {
     planets && jdTt >= PLANET_RANGE_JD[0] && jdTt <= PLANET_RANGE_JD[1];
   if (planetsInRange) {
     for (const id of PLANET_IDS) {
-      const p = geocentricEquatorial(id, jdTt);
+      const p = geocentricEquatorial(id, jdTt, source);
       const u = unitVector(p.raDeg, p.decDeg);
       add(id, 'planet', frame(u[0], u[1], u[2]), {
+        via: source?.covers(id, jdTt) ? 'ephemeris' : 'elements',
         mag: null,
         raDeg: p.raDeg,
         decDeg: p.decDeg,

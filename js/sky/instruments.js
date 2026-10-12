@@ -17,7 +17,8 @@ import {
   riseTransitSetReading,
   phaseReading,
 } from '../kernels/sky/readings.js';
-import { calendarDate } from '../kernels/sky/time.js';
+import { calendarDate, ttFromUt } from '../kernels/sky/time.js';
+import { planetProvenance } from '../kernels/sky/planets.js';
 import { PLANET_IDS } from '../kernels/sky/sky.js';
 import { fmt } from './fmt.js';
 
@@ -126,7 +127,8 @@ export function mountInstruments(host, ctx) {
   const targetOf = (sel, fixed) => {
     const v = sel.value;
     if (v === 'sun' || v === 'moon') return { type: v };
-    if (PLANET_IDS.includes(v)) return { type: 'planet', id: v };
+    if (PLANET_IDS.includes(v))
+      return { type: 'planet', id: v, source: ctx.state.planetSource };
     if (v === 'fixed') {
       const [ra, dec] = [...fixed.querySelectorAll('input')].map(
         i => i.valueAsNumber
@@ -136,11 +138,26 @@ export function mountInstruments(host, ctx) {
     const star = ctx.stars.find(s => `hr${s.hr}` === v);
     return { type: 'star', star };
   };
+  // Where the planets' positions came from, as data an envelope can keep
+  // (SKY_LAB.md, "Planet positions"): the source's pack, and per planet which
+  // source answered and how well it knows the planet.
+  const planetsOf = () => {
+    const jdTt = ttFromUt(ctx.state.jdUt);
+    const source = ctx.state.planetSource;
+    return {
+      pack: source ? `${source.info.pack}@${source.info.version}` : null,
+      by: Object.fromEntries(
+        PLANET_IDS.map(id => [id, planetProvenance(source, id, jdTt)])
+      ),
+    };
+  };
   const ctxOf = (target, key) => ({
     site: ctx.state.site,
     jdUt: ctx.state.jdUt,
     type: target.type,
     key,
+    planets: planetsOf(),
+    planet: target.type === 'planet' ? target.id : null,
   });
 
   // 1. Altitude-azimuth reader
@@ -409,7 +426,7 @@ export function mountInstruments(host, ctx) {
       body.append(out);
       let last = null;
       const update = () => {
-        const p = phaseReading(ctx.state.jdUt);
+        const p = phaseReading(ctx.state.jdUt, ctx.state.planetSource);
         last = p;
         out.innerHTML =
           rows([

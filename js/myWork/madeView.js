@@ -89,6 +89,20 @@ function facts(r) {
       when,
     ];
   }
+  if (r.kind === 'mission') {
+    const p = r.mission.file.inputs;
+    return [
+      L('Mission', 'Misión'),
+      p?.depart?.date
+        ? L(
+            `departs ${p.depart.date}, ${p.depart.tofDays} days`,
+            `sale el ${p.depart.date}, ${p.depart.tofDays} días`
+          )
+        : '',
+      r.app ? L(`build ${r.app}`, `versión ${r.app}`) : '',
+      when,
+    ];
+  }
   const s = r.scenario;
   const from = {
     builder: L(
@@ -175,7 +189,12 @@ async function made(page) {
                 ? L('Open in the Sandbox', 'Abrir en la simulación libre')
                 : r.kind === 'system3d'
                   ? L('Open in the 3-D lab', 'Abrir en el laboratorio 3-D')
-                  : L('Open the runner', 'Abrir el ejecutor'),
+                  : r.kind === 'mission'
+                    ? L(
+                        'Open in the mission lab',
+                        'Abrir en el laboratorio de misiones'
+                      )
+                    : L('Open the runner', 'Abrir el ejecutor'),
             ids: [`${MADE_PREFIX}${r.id}`],
             extra: `<div class="mw-actions">${
               r.kind === 'scenario'
@@ -185,7 +204,7 @@ async function made(page) {
               fileOf(r)
                 ? `<button type="button" class="ui-button is-small" data-made="file" data-key="${esc(`${MADE_PREFIX}${r.id}`)}" aria-label="${esc(`${L('Download file', 'Descargar archivo')}: ${r.name}`)}">${esc(L('Download file', 'Descargar archivo'))}</button>`
                 : ''
-            }</div>${r.kind === 'system3d' ? '' : attachControl(r, entries)}`,
+            }</div>${r.kind === 'system3d' || r.kind === 'mission' ? '' : attachControl(r, entries)}`,
           })
         )
         .join('')}</ul>`

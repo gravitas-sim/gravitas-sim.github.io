@@ -84,7 +84,9 @@ describe('a guide item', () => {
   });
 
   test('the celestial mechanics unit carries the four, with depths, on paths a student may take', () => {
-    const guides = celestial().items.filter(i => i.kind === 'guide');
+    const guides = celestial().items.filter(
+      i => i.kind === 'guide' && i.guide in GUIDES_3D
+    );
     expect(guides.map(g => g.guide).sort()).toEqual(
       Object.keys(GUIDES_3D).sort()
     );
