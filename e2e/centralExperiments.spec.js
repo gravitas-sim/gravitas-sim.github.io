@@ -2710,7 +2710,17 @@ test.describe('the central experiment of each investigation', () => {
       await readFile(`tests/fixtures/compute/${file}.answer.json`, 'utf8')
     );
     const all = JSON.parse(answer.envelope).quantities;
-    return Object.fromEntries(all.map(q => [q.id, q.value]));
+    return Object.fromEntries(
+      all.flatMap(q => [
+        [q.id, q.value],
+        ...(q.uncertainty?.lo !== undefined
+          ? [
+              [`${q.id}.lo`, q.uncertainty.lo],
+              [`${q.id}.hi`, q.uncertainty.hi],
+            ]
+          : []),
+      ])
+    );
   };
   const runs = async () =>
     JSON.parse(
@@ -2811,6 +2821,122 @@ test.describe('the central experiment of each investigation', () => {
     await accepted(page);
     await expectEvidenceRetained(page, id, moveSid, moved);
 
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('refitting-a-transit: a second optimizer finds the same minimum, and holding a parameter fixed narrows the sigma without making it known @accepts:ce.refitting-a-transit', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'refitting-a-transit';
+    const entry = declared(id);
+    const [predictSid, measureSid, relationSid] = entry.loop;
+    const main = await quantities('refit-transit');
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+    const fit = {
+      period: String(Number(main.P.toPrecision(6))),
+      k: four(main.k),
+      aRs: four(main.aRs),
+      b: four(main.b),
+      chi2: four(main['chi2.reduced']),
+    };
+    await recordFields(page, id, measureSid, fit);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, measureSid, fit);
+
+    // The relationship: holding the limb darkening fixed narrows the sigma and moves the value.
+    await walkToSid(page, plan, relationSid);
+    const held = (await runs())['refit-transit/limb0'].k;
+    const shift = Math.abs((held.value - main.k) / held.sigma);
+    expect(shift).toBeGreaterThan(3);
+    const moved = {
+      k: four(held.value),
+      kSigma: four(held.sigma),
+      shift: four(shift),
+    };
+    await recordFields(page, id, relationSid, moved);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, relationSid, moved);
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('two-periodograms: the tallest periodogram peak is a harmonic, and a periodogram period has no error bar of its own @accepts:ce.two-periodograms', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'two-periodograms';
+    const entry = declared(id);
+    const [predictSid, measureSid, relationSid] = entry.loop;
+    const main = await quantities('periodograms');
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+    const two = {
+      ls: four(main['ls.period']),
+      bls: four(main['bls.period']),
+      ratio: four(main['period.ratio']),
+    };
+    await recordFields(page, id, measureSid, two);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, measureSid, two);
+
+    // The relationship: the box period is many fit sigmas from the fitted one.
+    await walkToSid(page, plan, relationSid);
+    const gap = {
+      difference: four(main['bls.period'] - 3.52454),
+      sigmas: four((main['bls.period'] - 3.52454) / 0.00003),
+    };
+    expect(Math.abs(Number(gap.sigmas))).toBeGreaterThan(10);
+    await recordFields(page, id, relationSid, gap);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, relationSid, gap);
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('sampling-a-posterior: an interval from a sampler is conditional on what is held fixed and on its chain having converged @accepts:ce.sampling-a-posterior', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'sampling-a-posterior';
+    const entry = declared(id);
+    const [predictSid, measureSid, relationSid] = entry.loop;
+    const main = await quantities('posterior-sampling');
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+    const draws = {
+      k: four(main.k),
+      kWidth: four(main['k.hi'] - main['k.lo']),
+      b: four(main.b),
+      bWidth: four(main['b.hi'] - main['b.lo']),
+    };
+    await recordFields(page, id, measureSid, draws);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, measureSid, draws);
+
+    await walkToSid(page, plan, relationSid);
+    const diag = {
+      rhat: four(main['rhat.max']),
+      ess: four(main['ess.min']),
+      acceptance: four(main.acceptance),
+    };
+    await recordFields(page, id, relationSid, diag);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, relationSid, diag);
     await expectVerdictRevealed(page, plan, predict);
   });
 });

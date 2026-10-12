@@ -240,4 +240,16 @@ export const BROWSE_META = {
     tags: ['exoplanets'],
     numericCount: 0,
   },
+  'refitting-a-transit': {
+    tags: ['exoplanets'],
+    numericCount: 0,
+  },
+  'two-periodograms': {
+    tags: ['exoplanets'],
+    numericCount: 0,
+  },
+  'sampling-a-posterior': {
+    tags: ['exoplanets'],
+    numericCount: 0,
+  },
 };

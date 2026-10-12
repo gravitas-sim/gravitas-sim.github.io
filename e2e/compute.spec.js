@@ -168,8 +168,8 @@ test.describe('before anything is started', () => {
     await expect(page.locator('#cpStart')).toContainText(/about \d+\.\d MB/);
     await expect(page.locator('#cpCost')).toContainText('80 MB');
     await expect(page.locator('#cpRun')).toBeDisabled();
-    // The catalogue: four reviewed notebooks and no way to bring one's own.
-    await expect(page.locator('#cpNotebook option')).toHaveCount(4);
+    // The catalogue: seven reviewed notebooks and no way to bring one's own.
+    await expect(page.locator('#cpNotebook option')).toHaveCount(7);
     await expect(page.locator('input[type=file][accept*=ipynb]')).toHaveCount(
       0
     );

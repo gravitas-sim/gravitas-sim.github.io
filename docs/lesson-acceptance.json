@@ -777,6 +777,36 @@
         "move-the-definition"
       ],
       "evidenceFrom": "computation"
+    },
+    "refitting-a-transit": {
+      "centralExperimentId": "ce.refitting-a-transit",
+      "object": "compute:refit-transit",
+      "control": "the compute page's limb-darkening setting (not a lesson widget)",
+      "quantity": "the fitted period, planet-to-star radius ratio, orbit size, impact parameter and reduced chi-square, the covariance sigma and profile intervals, and how the radius ratio and its sigma change when the limb darkening is held fixed",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["how-close", "the-fit", "hold-the-limb-darkening"],
+      "evidenceFrom": "computation"
+    },
+    "two-periodograms": {
+      "centralExperimentId": "ce.two-periodograms",
+      "object": "compute:periodograms",
+      "control": "the compute page's maximum period and maximum duration settings (not a lesson widget)",
+      "quantity": "the best period of a Lomb-Scargle and of a box least squares periodogram of one light curve, their ratio, and the box period against the fitted period in the fit's uncertainties",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["the-tallest-peak", "the-two-periods", "against-the-fit"],
+      "evidenceFrom": "computation"
+    },
+    "sampling-a-posterior": {
+      "centralExperimentId": "ce.sampling-a-posterior",
+      "object": "compute:posterior-sampling",
+      "control": "the compute page's steps setting (not a lesson widget)",
+      "quantity": "the median and 68 percent interval width of the planet-to-star radius ratio and the impact parameter from an ensemble sampler, and the convergence diagnostics that let the interval be quoted",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["how-wide", "the-draws", "did-it-converge"],
+      "evidenceFrom": "computation"
     }
   }
 }

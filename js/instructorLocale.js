@@ -110,6 +110,9 @@ import WHY_THE_BRIGHT_ONES_WIN from './data/investigations/es/why-the-bright-one
 import THE_COMPLETENESS_CURVE from './data/investigations/es/the-completeness-curve.js';
 import INTEGRATORS_IN_PRACTICE from './data/investigations/es/integrators-in-practice.js';
 import EXTENDING_AN_EXPERIMENT from './data/investigations/es/extending-an-experiment.js';
+import REFITTING_A_TRANSIT from './data/investigations/es/refitting-a-transit.js';
+import TWO_PERIODOGRAMS from './data/investigations/es/two-periodograms.js';
+import SAMPLING_A_POSTERIOR from './data/investigations/es/sampling-a-posterior.js';
 
 /** The Spanish shadow of each lesson, by lesson id. */
 export const SHADOWS = Object.freeze({
@@ -150,6 +153,9 @@ export const SHADOWS = Object.freeze({
   'the-completeness-curve': THE_COMPLETENESS_CURVE,
   'integrators-in-practice': INTEGRATORS_IN_PRACTICE,
   'extending-an-experiment': EXTENDING_AN_EXPERIMENT,
+  'refitting-a-transit': REFITTING_A_TRANSIT,
+  'two-periodograms': TWO_PERIODOGRAMS,
+  'sampling-a-posterior': SAMPLING_A_POSTERIOR,
   'design-the-schedule': DESIGN_THE_SCHEDULE,
   'detect-this-planet': DETECT_THIS_PLANET,
   'goldilocks-question': GOLDILOCKS_QUESTION,

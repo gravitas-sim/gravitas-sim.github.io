@@ -159,6 +159,9 @@ const LOADERS = {
   'the-completeness-curve': () => import('./the-completeness-curve.js'),
   'integrators-in-practice': () => import('./integrators-in-practice.js'),
   'extending-an-experiment': () => import('./extending-an-experiment.js'),
+  'refitting-a-transit': () => import('./refitting-a-transit.js'),
+  'two-periodograms': () => import('./two-periodograms.js'),
+  'sampling-a-posterior': () => import('./sampling-a-posterior.js'),
 };
 
 /**
@@ -236,6 +239,9 @@ const TRANSLATIONS = {
     'the-completeness-curve': () => import('./es/the-completeness-curve.js'),
     'integrators-in-practice': () => import('./es/integrators-in-practice.js'),
     'extending-an-experiment': () => import('./es/extending-an-experiment.js'),
+    'refitting-a-transit': () => import('./es/refitting-a-transit.js'),
+    'two-periodograms': () => import('./es/two-periodograms.js'),
+    'sampling-a-posterior': () => import('./es/sampling-a-posterior.js'),
   },
 };
 

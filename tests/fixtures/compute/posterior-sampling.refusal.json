@@ -1,0 +1,4 @@
+{
+  "steps": 1000,
+  "message": "ValueError: the run is refused, so no interval is reported: parameter 0: R-hat 1.077 is not under 1.05; parameter 0: 27 autocorrelation times after the burn-in are fewer than 50; parameter 1: R-hat 1.072 is not under 1.05; parameter 1: 32 autocorrelation times after the burn-in are fewer than 50. Raise the number of steps."
+}

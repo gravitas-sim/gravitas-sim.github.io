@@ -692,7 +692,7 @@ export const UPPER_LEVEL_MODULES = {
           objectives: ['compute'],
           needs: ['orbital-energy'],
           pin: {
-            fp: 'f69fe076',
+            fp: '61d4a5f8',
             n: 8,
           },
         },
@@ -703,7 +703,43 @@ export const UPPER_LEVEL_MODULES = {
           depth: 'core',
           objectives: ['compute'],
           pin: {
-            fp: 'c2db3abe',
+            fp: 'db9e3b7b',
+            n: 8,
+          },
+        },
+        {
+          id: 'refitting-a-transit',
+          kind: 'lesson',
+          lesson: 'refitting-a-transit',
+          depth: 'core',
+          objectives: ['compute'],
+          needs: ['transit-photometry'],
+          pin: {
+            fp: '61ae825b',
+            n: 8,
+          },
+        },
+        {
+          id: 'two-periodograms',
+          kind: 'lesson',
+          lesson: 'two-periodograms',
+          depth: 'core',
+          objectives: ['compute'],
+          needs: ['transit-photometry'],
+          pin: {
+            fp: '6f20ef65',
+            n: 8,
+          },
+        },
+        {
+          id: 'sampling-a-posterior',
+          kind: 'lesson',
+          lesson: 'sampling-a-posterior',
+          depth: 'core',
+          objectives: ['compute'],
+          needs: ['refitting-a-transit'],
+          pin: {
+            fp: '8e4c5e51',
             n: 8,
           },
         },

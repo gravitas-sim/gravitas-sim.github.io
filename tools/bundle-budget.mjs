@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 2007.1,
+    limit: 2030.3,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -633,12 +633,13 @@ const BUDGETS = [
       'to 2006.8 KB gzipped (5469.0 KB raw), 0.4 KB: the new module boundary. ' +
       'The initial download did not move (787.5 KB). D-BUDGET-31, under the ' +
       "standing size-budget approval in the project's CLAUDE.md." +
-      '\n\nPrompt 106 (the mission lab and the Sky Lab on the platform) took it ' +
-      'from 2006.8 to 2007.1 KB gzipped (5470.2 KB raw), 0.3 KB: the made-record, ' +
-      'notebook, My work, course and figure-builder readers for a mission and the ' +
-      'words for them, with the evidence panel and the address code kept as lazy ' +
-      'files of their own. The initial download did not move (787.5 KB). ' +
-      "D-BUDGET-32, under the standing size-budget approval in the project's CLAUDE.md.",
+      '\n\n' +
+      'Raised from 2006.8 to 2030.3 KB gzipped for the compute packages ' +
+      '(D-BUDGET-COMPUTE-03, the standing size-budget approval, measured ' +
+      'overrun 23.5 KB): three notebooks and their catalogue entries, three ' +
+      'investigations with their Spanish shadows and instructor guides, and ' +
+      'three course-pack items, in the deferred catalogs and lesson chunks. ' +
+      '5533.5 KB raw. The initial download did not move.',
   },
 ];
 

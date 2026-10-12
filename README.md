@@ -26,8 +26,8 @@ tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
-**<!--fact:investigations-->57<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->1000<!--/fact--> steps between
+**<!--fact:investigations-->60<!--/fact--> guided
+investigations**, <!--fact:investigationSteps-->1024<!--/fact--> steps between
 them:
 
 | Investigation                    | What a student does                                                                             |
@@ -49,7 +49,7 @@ locally, and exports a lab report as a PDF that they submit through whatever LMS
 the course already uses.
 
 **Instructor materials.** An instructor guide and a generated answer key for each of
-the <!--fact:investigations-->57<!--/fact--> investigations — learning
+the <!--fact:investigations-->60<!--/fact--> investigations — learning
 objectives, expected observations, the numbers a student should get and the
 common wrong turns — plus an adopter's guide and a curriculum map, all rebuilt
 from the investigations themselves on every release so a key cannot disagree with the
@@ -304,8 +304,8 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->9495<!--/fact--> strings, and
-all <!--fact:investigations-->57<!--/fact--> investigations are translated. A
+of <!--fact:uiStrings-->9404<!--/fact--> strings, and
+all <!--fact:investigations-->60<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
 change what an investigation measures.
@@ -340,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->11445<!--/fact--> tests across <!--fact:jestSuites-->343<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->11579<!--/fact--> tests across <!--fact:jestSuites-->341<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -366,7 +366,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->208<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->580<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->5470<!--/fact--> KB         | <!--fact:buildDeferredChunks-->409<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->5534<!--/fact--> KB         | <!--fact:buildDeferredChunks-->415<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->788<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -485,8 +485,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->2278<!--/fact--> tests
-in <!--fact:e2eFiles-->168<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->2283<!--/fact--> tests
+in <!--fact:e2eFiles-->166<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -589,8 +589,8 @@ All <!--fact:instructorDocuments-->468<!--/fact--> documents are generated from
 the investigations at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 
-- <!--fact:investigations-->57<!--/fact--> instructor guides
-- <!--fact:investigations-->57<!--/fact--> answer keys
+- <!--fact:investigations-->60<!--/fact--> instructor guides
+- <!--fact:investigations-->60<!--/fact--> answer keys
 - <!--fact:activityDocuments-->8<!--/fact--> classroom-activity instructor guides and
   student worksheets, across <!--fact:activities-->3<!--/fact--> activities
 - an adopter's guide and a curriculum map
@@ -649,7 +649,7 @@ part was built:
 | [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md)                             | The shared controls: field, input, select, textarea, file, range, toolbar, buttons; their states, tokens and accessibility                     |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
-| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->57<!--/fact--> investigations, and what a 2019 Chromebook actually gets |
+| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->60<!--/fact--> investigations, and what a 2019 Chromebook actually gets |
 | [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
 Three documents are records of finished work rather than descriptions of the

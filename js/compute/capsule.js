@@ -320,6 +320,21 @@ const codeCell = text => ({
   source: lines(text),
 });
 
+const PACKAGE_WORDS = {
+  numpy: 'NumPy',
+  matplotlib: 'Matplotlib',
+  scipy: 'SciPy',
+  astropy: 'Astropy',
+};
+
+/** "NumPy", "NumPy and SciPy": the packages a local Python needs, in words. */
+const needs = names => {
+  const words = names.map(n => PACKAGE_WORDS[n] ?? n);
+  return words.length < 2
+    ? (words[0] ?? 'NumPy')
+    : `${words.slice(0, -1).join(', ')} and ${words.at(-1)}`;
+};
+
 /**
  * The "run it yourself" export: one notebook for a local Jupyter that holds
  * the inputs, the reviewed notebook's cells and a last cell that compares the
@@ -347,9 +362,7 @@ export function localNotebook({ capsule, cells, inputs, params }) {
     `- Capsule digest: \`${capsule.digest}\``,
     `- Notebook: \`${capsule.notebook.id}\`, version ${capsule.notebook.version}, cells hash \`${capsule.notebook.cellsSha256}\``,
     `- Gravitas ran it on Pyodide ${capsule.runtime.version} (Python ${capsule.runtime.python})${pkgs ? `, with ${pkgs}` : ''}.`,
-    '- You need Python 3 with NumPy' +
-      (capsule.runtime.packages.matplotlib ? ' and Matplotlib' : '') +
-      '. Run the cells in order.',
+    `- You need Python 3 with ${needs(Object.keys(capsule.runtime.packages))}. Run the cells in order.`,
     '',
     'The same bytes need the same package versions; a different NumPy can differ in the last digits, and the last cell says by how much.',
   ].join('\n');
