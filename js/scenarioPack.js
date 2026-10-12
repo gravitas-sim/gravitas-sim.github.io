@@ -349,15 +349,26 @@ export const checkPack = pack => validateScenarioPack(pack, scenarioApi());
  * kind is computed here with its own rule, because a link that left it out
  * would restore the giant as the kind its constructor drew at random.
  */
-function packedBody({ type, name, mass, radius, pos, vel }) {
+function packedBody({
+  type,
+  name,
+  mass,
+  radius,
+  pos,
+  vel,
+  baseColor,
+  persistent = true,
+}) {
   const out = {
     type: CLASS_OF[type],
     pos: { x: sig(pos.x), y: sig(pos.y) },
     vel: { x: sig(vel.x), y: sig(vel.y) },
     mass: sig(simMass(type, mass)),
     radius: sig(radius ?? defaultRadius(type, mass)),
-    persistent: true,
+    persistent,
   };
+  if (!persistent) delete out.persistent;
+  if (baseColor) out.baseColor = baseColor;
   if (name) out.name = name;
   if (REPORTED[type]) out[REPORTED[type]] = mass;
   if (type === 'GasGiant') {
@@ -421,6 +432,8 @@ export function packBodies(pack) {
             radius: assign.radius ?? null,
             pos,
             vel,
+            baseColor: assign.baseColor,
+            persistent: assign.persistent === true,
           })
         );
         return body;

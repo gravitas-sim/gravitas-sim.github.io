@@ -304,7 +304,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->9400<!--/fact--> strings, and
+of <!--fact:uiStrings-->9401<!--/fact--> strings, and
 all <!--fact:investigations-->57<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -366,7 +366,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->208<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->580<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->5468<!--/fact--> KB         | <!--fact:buildDeferredChunks-->409<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->5469<!--/fact--> KB         | <!--fact:buildDeferredChunks-->409<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->788<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -485,7 +485,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->2265<!--/fact--> tests
+The suite is <!--fact:e2eTests-->2266<!--/fact--> tests
 in <!--fact:e2eFiles-->166<!--/fact--> files and takes several minutes in
 Chromium.
 

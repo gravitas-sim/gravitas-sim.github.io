@@ -509,29 +509,31 @@ describe('a pack carries the geometry', () => {
       expect(rows.length).toBe(bodies.length);
       const world = buildPackWorld(pack);
       expect(world.bodies).toBe(bodies.length);
-      const snap = worldSnapshot();
+      // Every field the built-in's rows carry, by body name: class, name,
+      // contact radius, color, persistence, mass, position and velocity.
       const near = (a, b) =>
         Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(a), Math.abs(b));
-      rows.forEach((r, i) => {
-        const [, , , , , mass, , x, y, vx, vy] = r;
-        const [, , px, py, pvx, pvy, pmass] =
-          snap.find(
-            s =>
-              Math.abs(s[2] - Number(x)) < 1e-6 &&
-              Math.abs(s[3] - Number(y)) < 1e-6
-          ) ?? [];
-        expect([i, near(pmass, Number(mass))]).toEqual([i, true]);
-        expect([i, near(px, Number(x)), near(py, Number(y))]).toEqual([
-          i,
-          true,
-          true,
-        ]);
-        expect([i, near(pvx, Number(vx)), near(pvy, Number(vy))]).toEqual([
-          i,
-          true,
-          true,
-        ]);
-      });
+      const live = LISTS.flatMap(l => physics[l]);
+      expect(live.length).toBe(rows.length);
+      for (const r of rows) {
+        const [, , cls, , name, mass, radius, x, y, vx, vy, flag, color] = r;
+        const b = live.find(o => o.name === name);
+        expect([name, b?.constructor.name]).toEqual([name, cls]);
+        expect([name, near(b.radius, Number(radius))]).toEqual([name, true]);
+        expect([name, b.baseColor ?? '']).toEqual([name, color]);
+        expect([name, b.persistent ? 'P' : '']).toEqual([name, flag]);
+        expect([name, near(b.mass, Number(mass))]).toEqual([name, true]);
+        expect([
+          name,
+          near(b.pos.x, Number(x)),
+          near(b.pos.y, Number(y)),
+        ]).toEqual([name, true, true]);
+        expect([
+          name,
+          near(b.vel.x, Number(vx)),
+          near(b.vel.y, Number(vy)),
+        ]).toEqual([name, true, true]);
+      }
     }
   );
 

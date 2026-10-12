@@ -569,6 +569,21 @@ test.describe('the Scenario Studio', () => {
     expect(await census(page)).toEqual({ Stars: 1, Planets: 2 });
   });
 
+  test("a pack started from Kepler's 2nd Law says it does not carry the area-sweep overlay", async ({
+    page,
+  }) => {
+    await openStudio(page);
+    await page.locator('#st-from').selectOption('keplers-2nd-law');
+    await page.locator('#st-from-go').click();
+    await expect(page.locator('#st-geometry')).toBeVisible();
+    await expect(
+      page.locator('#st-checks li[data-level="caution"]')
+    ).toContainText('area-sweep overlay');
+    // Colors and persistence ride with the bodies.
+    const { geometry } = await current(page);
+    expect(geometry.steps[2].body.set.baseColor).toBe('#FF6B35');
+  });
+
   test('the Orbital System Builder points to it, and the link opens it', async ({
     page,
     app,

@@ -1597,6 +1597,7 @@
   "[chromium] › studio.spec.js › the Scenario Studio › a draft is kept in this browser and is back after a reload": 1.5,
   "[chromium] › studio.spec.js › the Scenario Studio › a file with the id of a different draft asks first, and each answer does what it says": 2.5,
   "[chromium] › studio.spec.js › the Scenario Studio › a new scenario says what it needs on each field, and a built-in becomes a valid one by keyboard": 2,
+  "[chromium] › studio.spec.js › the Scenario Studio › a pack started from Kepler's 2nd Law says it does not carry the area-sweep overlay": 2.5,
   "[chromium] › studio.spec.js › the Scenario Studio › a scenario with its own bodies opens with them, and Refresh builds them again": 6.5,
   "[chromium] › studio.spec.js › the Scenario Studio › an Orbital System Builder file opens as a scenario with its system": 1,
   "[chromium] › studio.spec.js › the Scenario Studio › fits a phone: nothing scrolls sideways, and every control is on screen": 1.2,

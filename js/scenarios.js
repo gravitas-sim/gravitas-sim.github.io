@@ -1867,7 +1867,8 @@ export const SCENARIO_GEOMETRY = /* @__PURE__ */ Object.freeze({
  * ({type, ctor, pos, vel, assign}) => body; `ctor` is the mass in the type's
  * own unit. One at a time, because a constructor draws from the seeded
  * generator and a world is the same only if the draws keep their order. The
- * arithmetic is the hand-built blocks' own, so the numbers match to the bit.
+ * arithmetic is the hand-built blocks' own, written the same way; the tests
+ * pin the result at 12 significant figures (the world golden's precision).
  *
  * @param {{steps: object[]}} g - A valid geometry
  * @param {{G: number, units: {AU: number}, create: Function, rules?: object}} env

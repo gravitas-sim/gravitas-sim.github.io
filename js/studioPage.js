@@ -1008,6 +1008,9 @@ function cautions(d) {
       t('studio.caution.handBuilt', { scenario: scenarioTitle(startedFrom) })
     );
   }
+  if (startedFrom === 'keplers-2nd-law' && d.geometry) {
+    out.push(t('studio.caution.areaSweep'));
+  }
   try {
     const { bodies } = packBodies(d);
     const first = bodies.length - (d.bodies?.length ?? 0);
