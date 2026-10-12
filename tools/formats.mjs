@@ -225,7 +225,8 @@ export const FORMATS = Object.freeze([
     owner: 'js/mission/link.js readPlan',
     persisted: 'download, My work',
     older: 'v1 only',
-    newer: 'fields it does not know are dropped; a plan with a wrong field is refused, in words',
+    newer:
+      'fields it does not know are dropped; a plan with a wrong field is refused, in words',
   },
   {
     name: 'gravitas.ephemeris-pack',
