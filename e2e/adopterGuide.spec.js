@@ -21,7 +21,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from './fixtures.js';
 
 const LIBRARY = JSON.parse(readFileSync('library/library.json', 'utf8'));
-const GUIDE = '/teaching/guide/';
+const GUIDE = '/teaching/adopt/';
 
 const quiet = page =>
   page.addInitScript(() => {

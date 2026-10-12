@@ -17,7 +17,7 @@
 //   teaching/activity/<id>/index.html        one per activity (3)
 //   teaching/find/index.html                 the index, with its filters
 //   teaching/alignment/index.html            the textbook alignment, by chapter
-//   teaching/guide/index.html                the adopter's guide (Prompt 114)
+//   teaching/adopt/index.html                the adopter's guide (Prompt 114)
 //
 // The pages are static HTML: both languages, written as the shell writes them
 // (css/shell.css shows the one the page's <html lang> names), so a page costs
@@ -1281,7 +1281,7 @@ ${chapters
  * names a surface that exists, and e2e/adopterGuide.spec.js follows each one.
  */
 function guidePage(S) {
-  const file = `${BASE}/guide/index.html`;
+  const file = `${BASE}/adopt/index.html`;
   const entries = S.library.entries;
   const n = kind => entries.filter(e => e.kind === kind);
   const lessons = n('investigation').filter(e => e.format === 'lesson').length;
@@ -1330,8 +1330,8 @@ function guidePage(S) {
         `Gravitas es un simulador de gravedad que funciona en el navegador, con ${total} investigaciones guiadas (${lessons} que se ejecutan en la simulación y ${guided} en el Observatorio, el laboratorio 3-D y el laboratorio de misiones), ${scenarios} escenarios ya preparados, ${courses} cursos ya preparados y ${cuts} cortes de actividades de clase. El software tiene licencia MIT y el material docente CC BY 4.0, ambos gratuitos. Estos números se leen de la Biblioteca cuando se construye esta página.`
       ) +
         P(
-          'No classroom evaluation of Gravitas has been published. This guide describes what the software does and how to use it; it makes no claim about what students gain from it. If you run it with a class, the classroom evidence kit (below) is how to find out.',
-          'No se ha publicado ninguna evaluación en el aula de Gravitas. Esta guía describe lo que hace el software y cómo usarlo; no afirma nada sobre lo que el estudiantado obtiene de él. Si lo usa con un grupo, el kit de evidencia de aula (más abajo) es la forma de averiguarlo.'
+          'No classroom evaluation of Gravitas has been published. This page describes what the software does and how to use it; it makes no claim about what students gain from it. If you run it with a class, the classroom evidence kit (below) is how to find out.',
+          'No se ha publicado ninguna evaluación en el aula de Gravitas. Esta página describe lo que hace el software y cómo usarlo; no afirma nada sobre lo que el estudiantado obtiene de él. Si lo usa con un grupo, el kit de evidencia de aula (más abajo) es la forma de averiguarlo.'
         )
     ),
     section(
@@ -1604,7 +1604,7 @@ export const adoptionFiles = () => {
   const out = [
     `${BASE}/find/index.html`,
     `${BASE}/alignment/index.html`,
-    `${BASE}/guide/index.html`,
+    `${BASE}/adopt/index.html`,
   ];
   for (const kind of ['investigation', 'activity']) {
     const dir = path.join(ROOT, BASE, kind);

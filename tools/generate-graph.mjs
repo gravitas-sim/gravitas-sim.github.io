@@ -150,7 +150,7 @@ export const GRAPH = Object.freeze([
       'teaching/activity',
       'teaching/find',
       'teaching/alignment',
-      'teaching/guide',
+      'teaching/adopt',
     ],
     regions: ['sitemap.xml'],
     after: ['library', 'catalog', 'manifest'],

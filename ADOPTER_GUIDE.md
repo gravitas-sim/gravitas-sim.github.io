@@ -10,7 +10,7 @@ README), and the user manual predated every v2 surface.
 
 | Piece | Where | Written by |
 |---|---|---|
-| The adopter's guide, in English and Spanish | [`/teaching/guide/`](teaching/guide/) | `tools/build-adoption-pages.mjs`, with its counts read from `library/library.json` |
+| The adopter's guide, in English and Spanish | [`/teaching/adopt/`](teaching/adopt/) | `tools/build-adoption-pages.mjs`, with its counts read from `library/library.json` |
 | The user manual, with the shell, the Library, My work, Courses, the 3-D lab, the mission lab, the Sky Lab and the instructor path | `Gravitas_User_Manual.pdf`, from `manual/` | by hand, with the counts as macros from `tools/docs-facts.mjs` |
 | The link and path check | `e2e/adopterGuide.spec.js`, `tests/adopterGuide.test.js` | by hand |
 | The newcomer test protocol (below) | this file | by hand |

@@ -208,7 +208,9 @@ describe('the navigation', () => {
     // from the course builder's item for an instructor's investigation
     // (e2e/remixDelivery.spec.js holds that link).
     const adoption = p =>
-      /^\/teaching\/(investigation|activity|find|kit|alignment)\//.test(p) ||
+      /^\/teaching\/(investigation|activity|find|kit|alignment|adopt)\//.test(
+        p
+      ) ||
       p === '/studio/course/packs/' ||
       // The compute page is opt-in: reached by its address and from the
       // documents that describe it (COMPUTE.md), not offered in every page's menu.

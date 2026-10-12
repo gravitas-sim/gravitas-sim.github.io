@@ -1,7 +1,7 @@
 // =============================================================================
 // The adopter's guide (Roadmap II Prompt 114, ADOPTER_GUIDE.md)
 // -----------------------------------------------------------------------------
-// teaching/guide/index.html is written by tools/build-adoption-pages.mjs and
+// teaching/adopt/index.html is written by tools/build-adoption-pages.mjs and
 // held to it by adoptionPages.test.js. This holds what the generator cannot:
 // that the words keep the project's vocabulary, that both languages say the
 // same things, that every claim a reader could act on is a claim the tree
@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = f => readFileSync(path.join(REPO, f), 'utf8');
-const page = read('teaching/guide/index.html');
+const page = read('teaching/adopt/index.html');
 const main = page.slice(page.indexOf('<main'), page.indexOf('</main>'));
 const library = JSON.parse(read('library/library.json'));
 

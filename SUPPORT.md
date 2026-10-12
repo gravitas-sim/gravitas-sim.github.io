@@ -38,7 +38,7 @@ No permission needed and nothing to ask for. The teaching material is CC BY 4.0
 pack, translate it, cut it in half, or build something else out of it, as long
 as you say where it came from.
 
-- [/teaching/guide/](https://gravitas-sim.online/teaching/guide/) is the adopter's
+- [/teaching/adopt/](https://gravitas-sim.online/teaching/adopt/) is the adopter's
   guide: the first week, the first semester, what the software does and does
   not do, access, privacy and how to get help.
 - [/teaching/](https://gravitas-sim.online/teaching/) is the page written for

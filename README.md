@@ -340,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->11112<!--/fact--> tests across <!--fact:jestSuites-->330<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->11121<!--/fact--> tests across <!--fact:jestSuites-->331<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -485,8 +485,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->2228<!--/fact--> tests
-in <!--fact:e2eFiles-->162<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->2238<!--/fact--> tests
+in <!--fact:e2eFiles-->163<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -664,7 +664,7 @@ and [`SCENARIO_FIXES.md`](SCENARIO_FIXES.md).
 | | |
 | --- | --- |
 | Something is wrong | [`SUPPORT.md`](SUPPORT.md) — what makes a bug report fixable here |
-| I want to use this in a class | [`SUPPORT.md`](SUPPORT.md), the [adopter's guide](https://gravitas-sim.online/teaching/guide/) and [/teaching/](https://gravitas-sim.online/teaching/) |
+| I want to use this in a class | [`SUPPORT.md`](SUPPORT.md), the [adopter's guide](https://gravitas-sim.online/teaching/adopt/) and [/teaching/](https://gravitas-sim.online/teaching/) |
 | Which browsers are supported | [`SUPPORT.md`](SUPPORT.md#supported-browsers-and-devices) — generated from what CI runs |
 | What happens if the maintainer is away | [`CONTINUITY.md`](CONTINUITY.md), and [`TOOLCHAIN.md`](TOOLCHAIN.md) for how versions move |
 | I want to change something | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
