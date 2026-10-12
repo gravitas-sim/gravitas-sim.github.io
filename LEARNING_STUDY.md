@@ -21,6 +21,12 @@ happened and the plan is written to be ready for them. Nothing below records an
 approval, a sign-off or a "reviewed by". Decision-register rows D-STUDY-01 to
 D-STUDY-04 say the same.
 
+**The draft `concept/2` (2026-10-11).** Carl approved a second version of the
+concept items that repairs the key and length defects and fills the alignment
+gap (D-STUDY-05). It is a DRAFT: no review, interview or calibration has
+touched it, its items may still change, and the conditions of D-STUDY-02
+stand as written. Sections 2.1 and 2.5 and Appendix B.2 describe it.
+
 Contents: [1 Research questions and design](#1-research-questions-and-design) ·
 [2 Instrument validation](#2-instrument-validation-plan) ·
 [3 Data handling](#3-data-handling-and-the-review-path) ·
@@ -247,6 +253,32 @@ Already measurable without a student (computed from `js/data/evaluation.js`):
 These are defects of a first draft and are expected. They are listed so the
 plan starts from them rather than from a hope.
 
+**Version 2, a draft (2026-10-11).** Carl approved repairing the first two
+defects and the alignment gap in the instrument itself while the outside
+steps stay skipped (D-STUDY-05). The result is `concept/2`, sixteen items in
+`CONCEPT_ITEMS_V2` of `js/data/evaluation.js`, printed in section 3b of
+`/evaluation/`:
+
+- **Key positions.** Exactly four each of a, b, c and d.
+- **Key length.** The correct option is the longest on 2 of 16 items (ties
+  counted, so the figure is the cautious one) and the shortest on 2 of 16. No
+  distractor was padded: the options were rewritten, and where a correct
+  option is short its distractors were left as short.
+- **Alignment.** All sixteen stated objectives of the three investigations
+  have exactly one item (Appendix B.2). The five model-page items of version 1
+  are not in it, so RQ2 has no items until a set for it is written (2.5).
+- **Checks.** `tests/conceptV2.test.js` fails if the key unbalances, if the
+  correct option is the longest or the shortest on more than a quarter of the
+  items, if an objective loses its item, if the two versions' ids stop being
+  disjoint, or if a computed key stops agreeing with a recomputation of the
+  physics. Version 1 stays readable and fails that rule on purpose.
+
+`concept/2` is a **DRAFT**. It has had no expert review, no student
+interview and no calibration, and its items may still change. The conditions
+of D-STUDY-02 for fixing an instrument stand exactly as written: two-educator
+review, think-aloud, a calibration of 150 or more students outside the trial,
+KR-20 at or above 0.60, corrected item-total correlation at or above 0.20.
+
 ### 2.2 Phased plan
 
 | Phase | Work | Who is needed | Output |
@@ -316,19 +348,51 @@ On the calibration data (V2), pre-instruction, then again post-instruction:
   distractors taken from the think-aloud interviews and from the published
   literature on orbital reasoning, with options in a randomized order and no
   option systematically longer than the rest.
+  - **Draft done, 2026-10-11 (`concept/2`).** Twenty-one candidates were
+    written or kept: the twelve of version 1 and nine new items, one for each
+    objective that had none. Sixteen are retained, chosen by alignment: the
+    seven version 1 items that assess an objective, rewritten, and the nine
+    new ones, so each of the sixteen objectives has one item. The five
+    model-page items were not retained because they assess no stated
+    objective. That leaves RQ2 (reading the model) without items; the
+    options are to write a model-reading set from the model page's statements
+    or to drop RQ2, and neither is decided here.
+  - **Distractors.** Each is meant to be a documented misconception, and
+    Appendix B.2 says, distractor by distractor, where it is documented and at
+    what level of evidence. Of the 48, **25 have no source I could verify**:
+    they are plausible wrong answers, not documented misconceptions, and the
+    think-aloud interviews are what is to confirm or replace them. They are
+    not presented as documented.
+  - **The key and the length.** Balanced at four each, and the correct option
+    is neither the longest nor the shortest on more than a quarter of the
+    items; both are enforced by a test. Options are in a fixed order in the
+    draft; randomizing the order per printed form remains below.
 - **Replace** an item that fails two of: difficulty, discrimination, expert
   accuracy or alignment. **Revise** one that fails one. Keep every decision in
   a revision log with the statistic that prompted it.
 - **Rebalance the key** across a, b, c and d, and print forms with option
   order randomized per form, so a position cue cannot work.
 - **Versions.** A changed item set is `concept/2`; `concept/1` stays readable.
+  The draft already carries that name, as a draft: its ids (`r01` to `r16`)
+  and export columns are disjoint from version 1's, an export names its version
+  in the `instrument` column, a score is only ever computed against the key of
+  the version the sheet was written for, and the summary tool reports the two
+  separately and never pairs across them. A participant code that appears on
+  both is reported as a problem. Whether any later revision is called
+  `concept/2` or `concept/3` is left to the review, since the name now belongs
+  to the draft.
   Scores from different versions are never pooled without at least six
   unchanged anchor items. A parallel form B built from the same blueprint
   reduces the testing effect and also keeps the form in use out of the public
   repository.
 - **Spanish.** A translation is not an equivalent instrument. The Spanish
   forms are not part of the first study and are not claimed valid; equivalence
-  needs its own review and calibration.
+  needs its own review and calibration. The page prints a Spanish text for the
+  sixteen draft items beside the English, consistent with the rest of the page,
+  and says on the page that it is a project draft translation, not reviewed by
+  a fluent reader, and not equivalent to the English. The page's Spanish is
+  inline in the markup, not a catalogue indexed by position, so appending a
+  section shifted nothing.
 
 ### 2.6 Relation to established concept inventories
 
@@ -636,6 +700,127 @@ binaries are how astronomers know what stars weigh).
 
 The consequence for the trial is the choice in 1.2: the primary outcome is the
 aligned items, not the twelve, until the item set covers the objectives.
+
+### B.2 The draft `concept/2` against the objectives
+
+Objectives are numbered in the order each investigation lists them on its own
+card. Each of the sixteen has one item.
+
+| Item | Objective | Key | Option lengths (a to d) | Computed |
+|---|---|---|---|---|
+| r01 | Kepler 1: where the primary sits | c | 28, 43, 39, 51 | no |
+| r02 | Kepler 2: fastest at periapsis, angular momentum | a | 92, 101, 96, 90 | yes |
+| r03 | Kepler 3: P^2 proportional to a^3 | d | 88, 34, 22, 52 | yes |
+| r04 | Kepler 4: predict a period, what the constant depends on | b | 42, 11, 58, 7 | yes |
+| r05 | Energy 1: path as speed rises past escape | a | 62, 83, 60, 57 | no |
+| r06 | Energy 2: total energy below zero means trapped | c | 46, 47, 47, 47 | yes |
+| r07 | Energy 3: escape speed at the Earth's surface | d | 49, 38, 48, 41 | yes |
+| r08 | Energy 4: escaping does not mean gravity stopped | b | 35, 63, 47, 69 | no |
+| r09 | Energy 5: escape speed against starting distance | b | 59, 61, 54, 66 | yes |
+| r10 | Energy 6: decide from a path whether an object is bound | d | 36, 39, 36, 47 | yes |
+| r11 | Stars 1: why both stars move | a | 58, 71, 55, 79 | no |
+| r12 | Stars 2: what the barycenter is and where it sits | c | 35, 29, 38, 47 | yes |
+| r13 | Stars 3: compare masses by barycenter distance | c | 31, 54, 31, 56 | yes |
+| r14 | Stars 4: total mass from orbit size and period | a | 14, 15, 14, 12 | yes |
+| r15 | Stars 5: split a measured total | b | 23, 23, 23, 27 | yes |
+| r16 | Stars 6: why binaries are how astronomers weigh stars | d | 88, 70, 71, 78 | no |
+
+"Computed" items are recomputed in `tests/conceptV2.test.js` from the physics
+(Kepler's third law, vis-viva, the barycenter, escape speed), most also by a
+two-body integration, and each distractor is checked to differ from the key.
+The key is not printed on the page. The flag is `computed: true` in the data
+and a test checks that the flagged ids are exactly these. Three are computed in
+a weaker sense than a number: r02, where the angular-momentum and energy
+relations behind the key are checked at both apsides; r03, where the slope it
+states is checked; and r10, where vis-viva for a path with a negative
+semi-major axis (a hyperbola) is checked to give a positive total energy, from
+which the keyed word "unbound" follows.
+
+r07's stem says the engine is off after launch. Without that, option c ("no
+minimum") is true for a rocket under continuous thrust, so the item had two
+defensible answers (found in review of PR #272). With it, escape speed is the
+speed at the end of the burn. Option c now reads "any speed will do, given
+enough time", which is rated N: the Force Concept Inventory's active-force
+category was a loose fit for it and no source was found.
+
+Two limits of coverage. Energy 5 has one item, on distance; it does not test
+mass. Stars 6 is a reasoning item whose key is a statement, not a number.
+
+**Where each distractor's misconception is documented.** Levels, strongest
+first:
+
+- **L**, in a published source I opened and read: Williamson, Willoughby and
+  Prather (2013), "Development of the Newtonian Gravity Concept Inventory",
+  *Astronomy Education Review* 12, 010107 (its Boundary model, in which
+  gravity ends at the edge of the atmosphere or at some distance; its
+  finding that students treat gravity as a property of one body rather than a
+  mutual attraction, and that only the larger mass matters; its
+  distance-against-distance-squared error, found for the force); and Hestenes,
+  Wells and Swackhamer (1992), "Force Concept Inventory", *The Physics
+  Teacher* 30, 141 (Table I: motion implies an active force, velocity
+  proportional to force, greater mass implies greater force). The Force
+  Concept Inventory's categories are about motion in general, so applying them
+  to an orbit is an analogy, not a finding about orbits.
+- **G**, in the project's own instructor guide for the investigation
+  (`js/data/instructorContent.js`, the misconceptions lists of Kepler's Laws,
+  Bound, Unbound and Escape, and Weighing the Stars). The guide names no outside
+  source for these, so G is the project's own classroom claim, not a
+  literature citation.
+- **A**, an arithmetic or proportional-reasoning slip (for example one over the
+  distance for one over its root). It is a predictable wrong answer, not a
+  documented misconception, and the Newtonian Gravity Concept Inventory
+  reports the analogous slip only for force.
+- **N**, no source located. A plausible wrong answer I wrote; to be confirmed
+  or replaced by the think-aloud interviews.
+
+| Item | Distractor (letter): misconception | Level |
+|---|---|---|
+| r01 | a: star at the center of the ellipse | G |
+| r01 | b: star at the point of greatest speed | N |
+| r01 | d: a second star at the other focus | G |
+| r02 | b: gravity stronger, so speed follows the force | L (FCI, by analogy) |
+| r02 | c: speed is constant | G |
+| r02 | d: fastest when farthest, where the pull is weakest | N |
+| r03 | a: period proportional to the axis | A |
+| r03 | b: same mass; c: circular orbits | N |
+| r04 | a: the constant is the same everywhere | G |
+| r04 | c: a heavier star makes it slower | N |
+| r04 | d: period proportional to the star's mass | A |
+| r05 | b: the orbit stays closed but larger | N |
+| r05 | c: gravity has stopped acting | L (NGCI boundary model) |
+| r05 | d: a larger circular orbit | N |
+| r06 | a, b, d: gravity always pulls; negative potential means bound; mass is needed | N |
+| r07 | a: about 1 km/s; b: orbital speed taken for escape speed | N |
+| r07 | c: no minimum, any speed escapes given time | N |
+| r08 | a: no pull at all | L (NGCI), G |
+| r08 | c: the pull becomes a push | N |
+| r08 | d: the pull switches off beyond a critical distance | L (NGCI distance threshold), G |
+| r09 | a: escape speed is one number for a planet | G |
+| r09 | c, d: one over the distance, one over its square | A |
+| r10 | a, b, c: bent path, close pass, long period, each taken to mean bound | N |
+| r11 | b: heavier star pulls harder, only the lighter moves | L (FCI, NGCI), G |
+| r11 | c: big star held by its own gravity | N |
+| r11 | d: heavier star feels more force so moves more | L (FCI), G |
+| r12 | a: halfway; d: at the heavier star | G |
+| r12 | b: 3 AU, the reversed distance | N |
+| r13 | a, b, d: reversed ratio; equal mass because one period; period needed | N |
+| r14 | b: one star's own distance used as a | G |
+| r14 | c, d: a^3 over P; a over P | A |
+| r15 | a: reversed split; | N |
+| r15 | c: equal split | G |
+| r15 | d: ratio squared | A |
+| r16 | a: mass from brightness | G |
+| r16 | b: mass from color; c: binaries are heavier | N |
+
+The count by the strongest level: 6 L, 10 G, 7 A, 25 N, of 48 distractors.
+**I could not verify, and do not claim, that half of the distractors are
+documented misconceptions.** The two papers' existence and subject were
+confirmed by a search; the NGCI and FCI statements above were read in the
+papers' own text. Sadler (1998), *Journal of Research in Science Teaching* 35,
+265, and Bailey and Slater (2003), *Astronomy Education Review* 2(2), 20, are
+the usual references for distractor-driven items in astronomy and a review of
+the field; their existence and topics were confirmed, but they were not read
+item by item here, so no distractor is attributed to them.
 
 ## Appendix C. Expert review sheet
 
