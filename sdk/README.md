@@ -296,8 +296,9 @@ four `tags`, a `seed`, and any of these:
   orbit | at, velocity, set } }] }`: a star, planet or gas giant with a mass in
   its type's own unit and either a place or an orbit round a body named
   earlier (SCENARIO_GEOMETRY.md). It replaces the generated population, so it
-  does not meet `system`, `bodies` or `scenario`, and a pack may not use the
-  named rules a built-in's declaration may.
+  does not meet `system`, `bodies` or `scenario`, and a pack may not use what
+  only a built-in's declaration may (a named rule, a body reused from the
+  generator, an engine property); a pack that wants one names the built-in.
 - **`open` and `tools`:** the instruments the scenario opens with, by the
   rail's ids.
 - **`camera`, `observer` and `paused`.**

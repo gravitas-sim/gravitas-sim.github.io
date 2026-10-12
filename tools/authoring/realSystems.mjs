@@ -14,6 +14,7 @@ import { HD209458, SUN_JUPITER } from '../../js/data/exoplanetSystems.js';
 import { TRAPPIST1_PLANETS, TRAPPIST1_STAR } from '../../js/data/trappist1.js';
 import { SOURCES } from '../../js/data/realSystemSources.js';
 import { SCENARIO_GEOMETRY } from '../../js/scenarios.js';
+import { ENGINE_GEOMETRY } from '../../js/world/build.js';
 
 const REPO = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -39,8 +40,6 @@ export const REAL_SYSTEM_TABLES = {
   realAsteroids: ['name'],
   famousComets: ['name'],
   kuiperBeltObjects: ['name'],
-  // The Habitable Zone Lab's (`radius` is its drawn size).
-  worlds: ['name', 'color', 'radius'],
 };
 
 /**
@@ -74,7 +73,6 @@ export async function loadRealSystems() {
   ];
   const file = 'js/world/build.js';
   const text = await readFile(path.join(REPO, file), 'utf8');
-  const seen = { worlds: 0 };
   for (const [table, ignore] of Object.entries(REAL_SYSTEM_TABLES)) {
     const marker = `const ${table} = [`;
     for (
@@ -90,10 +88,9 @@ export async function loadRealSystems() {
       if (end < 0) continue;
       // A literal from our own source, evaluated as one.
       const rows = new Function(`return ${text.slice(start, end + 1)};`)();
-      const label = table === 'worlds' ? ` (${WORLDS[seen.worlds++]})` : '';
       for (const row of rows) {
         out.push({
-          where: `${file} ${table}${label} ${row.name}`,
+          where: `${file} ${table} ${row.name}`,
           object: row,
           ignore,
         });
@@ -101,17 +98,21 @@ export async function loadRealSystems() {
     }
   }
   // Real worlds that a scenario's declared geometry (SCENARIO_GEOMETRY in
-  // js/scenarios.js) carries: each body's mass in Earth masses and its distance
-  // in AU are the parameters, read from the declaration as the table was.
-  for (const [id, label, names] of REAL_GEOMETRY) {
-    for (const step of SCENARIO_GEOMETRY[id].steps) {
+  // js/scenarios.js) carries: each body's distance in AU is a parameter, and
+  // so is its mass in Earth masses where the scenario means it (Retrograde
+  // Mars); the Habitable Zone Lab gives every world one Earth mass, a choice
+  // that keeps them from perturbing anything, so only the distance is read.
+  for (const [id, label, names, withMass] of REAL_GEOMETRY) {
+    const inEngine = id in ENGINE_GEOMETRY;
+    const steps = (SCENARIO_GEOMETRY[id] ?? ENGINE_GEOMETRY[id]).steps;
+    for (const step of steps) {
       const b = step.body;
       if (!b || !names.includes(b.name)) continue;
       out.push({
-        where: `js/scenarios.js SCENARIO_GEOMETRY (${label}) ${b.name}`,
+        where: `${inEngine ? 'js/world/build.js ENGINE_GEOMETRY' : 'js/scenarios.js SCENARIO_GEOMETRY'} (${label}) ${b.name}`,
         object: {
           name: b.name,
-          earths: b.mass.earths,
+          ...(withMass ? { earths: b.mass.earths } : {}),
           aAU: b.orbit.distance.au,
         },
         ignore: ['name'],
@@ -122,12 +123,18 @@ export async function loadRealSystems() {
   return out;
 }
 
-/** The scenario the `worlds` table of js/world/build.js builds. */
-const WORLDS = ['Habitable Zone Lab'];
-
-/** The scenarios whose declared geometry holds real worlds, and which bodies. */
+/**
+ * The scenarios whose declared geometry holds real worlds, which bodies, and
+ * whether the mass is a parameter.
+ */
 const REAL_GEOMETRY = [
-  ['retrograde-mars', 'Retrograde Mars', ['Earth', 'Mars']],
+  ['retrograde-mars', 'Retrograde Mars', ['Earth', 'Mars'], true],
+  [
+    'habitable-zone-lab',
+    'Habitable Zone Lab',
+    ['Venus', 'Earth', 'Mars', 'Ceres'],
+    false,
+  ],
 ];
 
 /**
