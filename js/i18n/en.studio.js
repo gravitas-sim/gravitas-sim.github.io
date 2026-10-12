@@ -118,7 +118,7 @@ export const EN_STUDIO = {
   'studio.checks.none': 'Nothing to fix.',
   'studio.checks.caution': 'Caution: {text}',
   'studio.caution.areaSweep':
-    'Kepler’s 2nd Law also turns on an area-sweep overlay for the eccentric orbiter. That overlay is behavior in the application, not geometry, so this pack carries the bodies and not the overlay.',
+    'Kepler’s 2nd Law also turns on an area-sweep overlay for the eccentric orbiter. That overlay is behavior in the application, not geometry, so this scenario file carries the bodies and not the overlay.',
   'studio.caution.handBuilt':
     '{scenario} places its bodies by code, so only its settings were copied. This scenario builds the world those settings generate, which is not the same one.',
   'studio.caution.unbound':

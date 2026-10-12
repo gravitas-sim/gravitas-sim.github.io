@@ -120,7 +120,7 @@ export const ES_STUDIO = {
   'studio.checks.none': 'Nada que resolver.',
   'studio.checks.caution': 'Atención: {text}',
   'studio.caution.areaSweep':
-    'La 2.ª ley de Kepler también activa una superposición de áreas barridas para el orbitador excéntrico. Esa superposición es un comportamiento de la aplicación, no geometría, así que este paquete lleva los cuerpos y no la superposición.',
+    'La 2.ª ley de Kepler también activa una superposición de áreas barridas para el orbitador excéntrico. Esa superposición es un comportamiento de la aplicación, no geometría, así que este archivo lleva los cuerpos y no la superposición.',
   'studio.caution.handBuilt':
     '{scenario} coloca sus cuerpos por código, así que solo se copiaron sus ajustes. Este escenario construye el mundo que esos ajustes generan, que no es el mismo.',
   'studio.caution.unbound':
