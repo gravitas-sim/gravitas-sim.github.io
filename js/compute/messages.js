@@ -42,7 +42,16 @@ export const LIMITS = Object.freeze({
   packages: 4,
 });
 
-export const PACKAGE_NAMES = Object.freeze(['numpy', 'matplotlib']);
+// The names a load or run may ask for: exactly the packages the pinned lock was
+// checked for (js/compute/runtime.js). Four names, so a list of LIMITS.packages
+// holds every one of them once; tests/computeMessages.test.js holds the two,
+// the schema's enum and its maxItems to each other.
+export const PACKAGE_NAMES = Object.freeze([
+  'numpy',
+  'matplotlib',
+  'scipy',
+  'astropy',
+]);
 export const PHASES = Object.freeze(['runtime', 'packages', 'cells']);
 
 /**

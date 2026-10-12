@@ -24,17 +24,23 @@ export const RUNTIME = Object.freeze({
   /**
    * What the lock pins for each package a notebook may ask for, with each
    * one's wheels (itself and what it needs), as served: bytes, compressed.
-   * numpy is one wheel; matplotlib's eleven wheels and numpy are the plot.
+   * numpy is one wheel; matplotlib's eleven wheels and numpy are the plot;
+   * scipy is one wheel over numpy; astropy brings pyerfa, pyyaml, packaging
+   * and the IERS tables (astropy-iers-data), five wheels over numpy.
    */
   packages: Object.freeze({
     numpy: Object.freeze({ version: '2.4.6' }),
     matplotlib: Object.freeze({ version: '3.10.8' }),
+    scipy: Object.freeze({ version: '1.18.0' }),
+    astropy: Object.freeze({ version: '7.2.0' }),
   }),
   /** Download sizes as served (compressed), measured by the gate, rounded up. */
   bytes: Object.freeze({
     core: 5_980_000,
     numpy: 2_930_000,
     matplotlib: 9_940_000,
+    scipy: 13_830_000,
+    astropy: 8_230_000,
   }),
 });
 
@@ -49,8 +55,10 @@ export const ALLOWED_PACKAGES = Object.freeze(Object.keys(RUNTIME.packages));
 export function downloadBytes(packages) {
   let n = RUNTIME.bytes.core;
   const all = new Set(packages);
-  // matplotlib's wheels need numpy's (the lock's dependency closure).
-  if (all.has('matplotlib')) all.add('numpy');
+  // matplotlib's, scipy's and astropy's wheels need numpy's (the lock's
+  // dependency closure); numpy is counted once.
+  for (const p of ['matplotlib', 'scipy', 'astropy'])
+    if (all.has(p)) all.add('numpy');
   for (const p of all) n += RUNTIME.bytes[p] ?? 0;
   return n;
 }

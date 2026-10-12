@@ -98,6 +98,254 @@ export const INSTRUCTOR_CONTENT = {
       'The notebook assumes a logistic chance of being bound in the setting, fitted on a grid of center and width, and gives each synthetic planet that chance; the bootstrap resamples the trials, with a seed.',
   },
 
+  'refitting-a-transit': {
+    topic:
+      'Fitting a transit model with a second optimizer, and reading what a covariance sigma, a profile interval and a held-fixed parameter each do and do not say about an uncertainty',
+    difficulty: 'Upper level (computational)',
+    placement:
+      'In a computational astrophysics or data analysis unit, after the Observatory fit panel or an introduction to least squares. It uses the compute page, so it needs a network connection and about 23 MB of download per student, once. It uses the TESS light curve of HD 209458 that the Observatory fits, so a student who has used the fit panel can compare the two directly.',
+    overview:
+      'Students run one reviewed notebook on the 1,882 points the fit panel uses. The notebook fits the same transit model with scipy.optimize.least_squares: period 3.52454 d, Rp/R* 0.11926 +/- 0.00164 (profile 0.11797 to 0.12043), a/R* 9.21, impact parameter 0.430 (profile 0.368 to 0.476), reduced chi-square 7.98. The minimum agrees with the panel to about 0.01 sigma. Holding the limb darkening at q1 0.36, q2 0.30 cuts the sigma of Rp/R* to 0.00050 and moves it to 0.11767, 3.2 of the new sigmas. The sigmas are scaled by the reduced chi-square and do not count the correlated noise the panel reports (red-noise factor 1.66).',
+    priorKnowledge: [
+      'Least squares and chi-square',
+      'What a covariance matrix of the fitted parameters is',
+      'The transit light curve and its parameters (the transit investigation)',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Same minimum, different route',
+        body: 'Two optimizers on one function find one minimum to a small fraction of an error bar. The disagreement students expect is not there; the differences are in the uncertainties.',
+      },
+      {
+        heading: 'A sigma is a parabola',
+        body: 'The covariance is the curvature of chi-square at the minimum, so it is symmetric. The profile interval follows the valley, so it can be lopsided.',
+      },
+      {
+        heading: 'Fixed is not known',
+        body: 'Holding the limb darkening narrowed Rp/R* to a third and moved it by three of the new sigmas: the uncertainty left the table without leaving the problem.',
+      },
+    ],
+    features: [
+      {
+        name: 'The compute page (/compute/)',
+        text: 'The notebook "Refit a transit with SciPy", in Pyodide 314.0.7 inside a sandboxed frame, with SciPy or Astropy fetched from the pinned runtime. The first run downloads about 23 MB, once. The run is kept as a compute capsule that a report can cite.',
+      },
+      {
+        name: 'The Observatory fit panel',
+        text: 'The comparison the investigation draws. The notebook does not call the application; its transit model was written again in NumPy and checked against the application to the last digit of a double.',
+      },
+      {
+        name: 'The answer key',
+        text: 'Every number a step checks is a declared output of the notebook, and a test holds each one to a run of the notebook under CPython and to an independent computation, so a different digit means a different setting or input file.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Two correct fits of one model must give different numbers.',
+        response:
+          'They give the same minimum. What differs is how each reports its uncertainty.',
+      },
+      {
+        claim: 'The profile interval and the sigma should be identical.',
+        response:
+          'They agree where chi-square is a parabola. The impact parameter lies in a curved valley with a/R* and the limb darkening, so its profile is 0.062 below and 0.046 above its best value.',
+      },
+      {
+        claim: 'A smaller error bar means a better measurement.',
+        response:
+          'Fixing the limb darkening gave a bar a third the size and an answer three of those bars away. The bar was smaller because less was free.',
+      },
+      {
+        claim: 'A reduced chi-square of 8 means the fit failed.',
+        response:
+          'The minimum is the best this model can do and agrees with the panel. It means the scatter is 2.8 times the error bars, which the scaling accounts for, and correlated, which it does not.',
+      },
+    ],
+    teachingNotes: [
+      'The fit is deterministic: every student should get the digits in the answer key, to the tolerances the steps allow.',
+      'The notebook downloads about 23 MB because it brings SciPy. A run takes a few seconds once the runtime has loaded.',
+      'Students who ask why the sigma is scaled by the reduced chi-square can be pointed to the last step: it is a repair for white noise only.',
+      'Capsule files open again without the runtime.',
+    ],
+    discussion: [
+      'What would you report as the uncertainty of Rp/R* if you had only the covariance sigma? Only the profile?',
+      'Which choices in the fit did the data not make for you?',
+      'How would you test whether the red noise matters here?',
+    ],
+    extensions: [
+      'Open the capsule in a local Jupyter (Run it yourself) and fit with a different optimizer, such as Nelder-Mead, and compare the minimum.',
+      'Add a red-noise term to the covariance and see how much the sigma of Rp/R* grows.',
+    ],
+    modelNotes:
+      'The model is a circular-orbit transit with quadratic limb darkening in the Kipping q1, q2 parameterization, exposure-integrated over five sub-exposures, with a flux baseline profiled out. The sigmas are scaled by the square root of the reduced chi-square.',
+  },
+
+  'two-periodograms': {
+    topic:
+      'Two periodograms of one light curve, why a Lomb-Scargle peak of a transit sits at a harmonic, and why a periodogram period has no error bar',
+    difficulty: 'Upper level (computational)',
+    placement:
+      "In a time-domain or exoplanet unit, after the transit investigation. It uses the compute page, so it needs a network connection and about 17 MB of download per student, once. It runs on the TESS light curve of HD 209458 that the Observatory's box search reads.",
+    overview:
+      "Students run one reviewed notebook that computes a Lomb-Scargle and a box least squares periodogram with Astropy. The Lomb-Scargle best period is 1.7689 d, and the box search finds 3.52396 d, 2.5 h long, 14,582 ppm deep, at S/N 191. The ratio is 0.502. The Lomb-Scargle powers at 3.5, 1.76, 1.17 and 0.88 d are 0.056, 0.073, 0.071 and 0.071: a narrow dip has power at every harmonic. The fit panel's period is 3.52454 +/- 0.00003 d, 19 of its sigmas from the box period, so the grid step of the periodogram is no uncertainty.",
+    priorKnowledge: [
+      'What a periodogram is, in outline',
+      'The transit light curve (the transit investigation)',
+      'Sine waves and harmonics',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The tallest peak is not the period',
+        body: 'A repeating narrow dip is a sum of harmonics, so Lomb-Scargle can peak at P/2, P/3 or P/4 and not at P itself.',
+      },
+      {
+        heading: 'A period is a grid point',
+        body: 'A box least squares period is the best point of a grid; its step says how fine the grid is, not how well the data fix the period.',
+      },
+      {
+        heading: 'A model gives an error bar',
+        body: 'To say how well the period is known, fit a transit model, as the Observatory panel does.',
+      },
+    ],
+    features: [
+      {
+        name: 'The compute page (/compute/)',
+        text: 'The notebook "Two periodograms of one light curve", in Pyodide 314.0.7 inside a sandboxed frame, with SciPy or Astropy fetched from the pinned runtime. The first run downloads about 17 MB, once. The run is kept as a compute capsule that a report can cite.',
+      },
+      {
+        name: 'Astropy',
+        text: 'astropy.timeseries LombScargle and BoxLeastSquares. The false-alarm probability uses the naive estimate because the Baluev one needs SciPy, which this notebook does not load.',
+      },
+      {
+        name: 'The answer key',
+        text: 'Every number a step checks is a declared output of the notebook, and a test holds each one to a run of the notebook under CPython and to an independent computation, so a different digit means a different setting or input file.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The tallest Lomb-Scargle peak is the period.',
+        response:
+          'For a transit it is often a harmonic. Here it is the second.',
+      },
+      {
+        claim:
+          'A box least squares period has an uncertainty equal to its grid step.',
+        response:
+          'The step is a property of the grid. The box period is 19 fit sigmas from the fitted period.',
+      },
+      {
+        claim:
+          'A tall peak, or a tiny false-alarm probability, means the period is right.',
+        response:
+          'A tall peak means a periodic signal, not which period: here the tallest is the second harmonic, and the false-alarm probability says nothing about which harmonic.',
+      },
+      {
+        claim: 'Lomb-Scargle has a bug that halves periods.',
+        response:
+          'It fits sine waves; a dip is not one, so the peak sits where a sine matches best.',
+      },
+    ],
+    teachingNotes: [
+      'The runs are deterministic: every student gets the digits in the answer key.',
+      'A run takes a few seconds once the runtime has loaded.',
+      "Students who check the box period against the panel will see 3.524 and 3.5245: they agree to a thousandth of a day and not to the fit's error bar, which is the point of the last question.",
+      'Capsule files open again without the runtime.',
+    ],
+    discussion: [
+      'Which would you use for a spotted star, and which for a transit? Why?',
+      'How would you decide between the period and its first harmonic if you did not know the planet transits?',
+      'What would make the box period closer to the fitted one?',
+    ],
+    extensions: [
+      'Open the capsule in a local Jupyter (Run it yourself) and vary the durations the box search tries.',
+      'Compute a Lomb-Scargle periodogram with more terms and see whether the harmonics collapse.',
+    ],
+    modelNotes:
+      'The Lomb-Scargle periodogram is the floating-mean, error-weighted one on a frequency grid; the box search tries durations to the maximum the student sets and reports a depth with a signal-to-noise ratio scaled by the scatter of the points.',
+  },
+
+  'sampling-a-posterior': {
+    topic:
+      'An ensemble sampler for a transit posterior, its convergence diagnostics, its agreement with a profile interval, and a refusal to report an unconverged chain',
+    difficulty: 'Upper level (computational)',
+    placement:
+      'In a computational statistics or astrophysics unit, after least squares fitting and an introduction to the posterior. It uses the compute page, so it needs a network connection and about 9 MB of download per student, once; a run takes about a minute. It uses the TESS light curve of HD 209458.',
+    overview:
+      'Students run one reviewed notebook: an affine-invariant ensemble sampler written in NumPy (four independent ensembles of eight walkers, 8,000 steps) on Rp/R* and the impact parameter, with the epoch, period, a/R* and limb darkening held fixed. Rp/R* is 0.11926 with a 68 percent interval 0.11913 to 0.11939; b is 0.4301, 0.4275 to 0.4327. The widths match the profile intervals to 2 percent and the draws agree with a grid of the exact posterior to 0.02 standard deviations. R-hat is under 1.03, there are 1,500 to 3,500 effective samples, and the acceptance is 0.72. With 1,000 steps the notebook refuses and reports no interval.',
+    priorKnowledge: [
+      'Least squares fitting and the covariance',
+      'What a posterior and a prior are, in outline',
+      'Why an interval is conditional on what is held fixed',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Convergence before an interval',
+        body: 'R-hat, the effective sample size and the chain length in autocorrelation times decide whether a chain may be quoted.',
+      },
+      {
+        heading: 'Posterior and profile can agree',
+        body: 'They do here because the problem is nearly Gaussian in two parameters; they would not for a lopsided or bounded posterior.',
+      },
+      {
+        heading: 'Narrow is not known',
+        body: "Holding four parameters fixed makes Rp/R* twelve times narrower than the fit panel's sigma without making them known.",
+      },
+    ],
+    features: [
+      {
+        name: 'The compute page (/compute/)',
+        text: 'The notebook "Sampling a transit\'s posterior", in Pyodide 314.0.7 inside a sandboxed frame, with SciPy or Astropy fetched from the pinned runtime. The first run downloads about 9 MB, once. The run is kept as a compute capsule that a report can cite.',
+      },
+      {
+        name: 'The sampler',
+        text: "Written in NumPy alone and held to Prompt 103's analytic cases (a correlated Gaussian, a banana, a conjugate line fit) by tests/computeSampler.test.js, with the refusal rules that gate fixed. There is no sampler in the application: sampling lives on the compute page.",
+      },
+      {
+        name: 'The answer key',
+        text: 'Every number a step checks is a declared output of the notebook, and a test holds each one to a run of the notebook under CPython and to an independent computation, so a different digit means a different setting or input file.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'More steps always narrow the interval.',
+        response:
+          'Steps lengthen the chain; the width belongs to the posterior. A short chain is unconverged, not narrower.',
+      },
+      {
+        claim: 'Agreement with a profile interval proves the sampler is right.',
+        response:
+          'It shows the problem is nearly Gaussian. The sampler is checked against a grid and against problems with exact answers.',
+      },
+      {
+        claim: 'A sampler is more precise than a fit.',
+        response:
+          'It explores a distribution; the width comes from the likelihood, the prior and what is free.',
+      },
+      {
+        claim: 'A refusal is a failure.',
+        response:
+          'It is the notebook working: an interval from an unconverged chain is a number with nothing behind it.',
+      },
+    ],
+    teachingNotes: [
+      'The sampler is seeded, but the digits of a run differ a little between Python builds, so the steps accept a range.',
+      'The 8,000-step run takes about a minute on the pinned runtime; a 1,000-step run takes about fifteen seconds.',
+      'A student who sets steps to 1000 sees the notebook stop with an error that names the failed limit. That is the intended outcome.',
+      'Capsule files open again without the runtime.',
+    ],
+    discussion: [
+      'Which of the three diagnostics would you trust least on its own?',
+      'What would you change in the model to make the posterior lopsided?',
+      'Why does the fit panel report a wider interval for the same parameter?',
+    ],
+    extensions: [
+      'Open the capsule in a local Jupyter (Run it yourself) and free the limb darkening in the sampler.',
+      'Run the notebook with a few thousand steps and see which diagnostic refuses first.',
+    ],
+    modelNotes:
+      'The posterior is the product of the transit likelihood (chi-square scaled by the reduced chi-square) and a uniform prior on Rp/R* and the impact parameter, with the epoch, period, a/R* and the Kipping q1, q2 fixed. The ensemble sampler is the stretch move of Goodman and Weare in the parallel half-step form.',
+  },
+
   'integrators-in-practice': {
     topic:
       'Numerical integrators compared by energy drift on a real three-body system, in Python, and why a symplectic method’s last number is not a property',

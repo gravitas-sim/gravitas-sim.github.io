@@ -54,7 +54,9 @@
           "items": {
             "enum": [
               "numpy",
-              "matplotlib"
+              "matplotlib",
+              "scipy",
+              "astropy"
             ]
           }
         }
@@ -109,7 +111,9 @@
           "items": {
             "enum": [
               "numpy",
-              "matplotlib"
+              "matplotlib",
+              "scipy",
+              "astropy"
             ]
           }
         }

@@ -2,15 +2,17 @@
 // The compute page against the real, pinned runtime: ONLINE ONLY
 // -----------------------------------------------------------------------------
 // Needs the network: it downloads Pyodide 314.0.7 and the packages from the
-// jsDelivr CDN (about 9 MB for the NumPy notebook, about 19 MB for the plotting
-// one). It therefore runs only when COMPUTE_ONLINE=1, by hand or in a job of
+// jsDelivr CDN (about 9 MB for a NumPy notebook, about 19 MB for a plotting
+// one, about 17 MB with Astropy and about 23 MB with SciPy). It therefore runs only when COMPUTE_ONLINE=1, by hand or in a job of
 // its own that a maintainer adds (the CI workflow is not changed here), and no
 // normal gate depends on it. The frame is the REAL built one, served at the compute origin
 // by Playwright, so this works before that origin is published and checks the
 // bytes that will be.
 //
-//   - every reviewed notebook runs to their expected values, and the capsule
-//     they make verifies;
+//   - every reviewed notebook (all seven of the catalogue) runs to its expected
+//     values, and the capsule it makes verifies;
+//   - the posterior-sampling notebook refuses a run that is too short, in the
+//     real Worker, and says which limit failed;
 //   - what a hostile cell can reach from inside the real Worker: nothing of the
 //     page's (storage, DOM, cookies), no fetch of this site's files or of
 //     another site, and a loop that never ends leaves the page responsive and
@@ -41,6 +43,9 @@ for (const id of [
   'transit-times',
   'integrators-compared',
   'population-at-scale',
+  'refit-transit',
+  'periodograms',
+  'posterior-sampling',
 ]) {
   test(`${id} runs on the pinned runtime and matches its expected values`, async ({
     page,
@@ -76,6 +81,42 @@ for (const id of [
     console.log(`TIMING ${id} ${JSON.stringify(out.timing)}`);
   });
 }
+
+test('the catalogue has the seven notebooks this spec runs', async ({
+  page,
+}) => {
+  await open(page);
+  const ids = await page.evaluate(async () => {
+    const { NOTEBOOKS } = await import('/js/compute/catalogue.js');
+    return NOTEBOOKS.map(e => e.id);
+  });
+  expect(ids).toEqual([
+    'transit-times',
+    'line-centroid',
+    'integrators-compared',
+    'population-at-scale',
+    'refit-transit',
+    'periodograms',
+    'posterior-sampling',
+  ]);
+});
+
+test('posterior-sampling refuses a run that is too short, and says which limit failed', async ({
+  page,
+}) => {
+  await open(page);
+  await page.locator('#cpNotebook').selectOption('posterior-sampling');
+  await page.locator('#cpParams input[data-id="steps"]').fill('1000');
+  await page.locator('#cpStart').click();
+  await expect(page.locator('#cpRun')).toBeEnabled({ timeout: 300_000 });
+  await page.locator('#cpRun').click();
+  const failure = page.locator('#cpState');
+  await expect(failure).toContainText(/the run is refused/, {
+    timeout: 300_000,
+  });
+  await expect(failure).toContainText(/Raise the number of steps/);
+  await expect(page.locator('#cpResult')).toBeHidden();
+});
 
 test('a hostile cell reaches nothing of the page’s, and a loop is ended by cancelling', async ({
   page,

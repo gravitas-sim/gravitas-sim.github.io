@@ -128,9 +128,17 @@
       "en": "Finding Planets by Their Tug",
       "es": "Encontrar planetas por su tirón"
     },
+    "refitting-a-transit": {
+      "en": "Refitting a Transit",
+      "es": "Reajustar un tránsito"
+    },
     "retrograde-motion": {
       "en": "Why Mars Goes Backwards",
       "es": "Por qué Marte va hacia atrás"
+    },
+    "sampling-a-posterior": {
+      "en": "Sampling a Posterior",
+      "es": "Muestrear una posterior"
     },
     "scaling-the-main-sequence": {
       "en": "Scaling the Main Sequence",
@@ -195,6 +203,10 @@
     "twelve-nights": {
       "en": "Twelve Nights",
       "es": "Doce noches"
+    },
+    "two-periodograms": {
+      "en": "Two Periodograms",
+      "es": "Dos periodogramas"
     },
     "wanderers-on-the-sky": {
       "en": "Wanderers on the Sky",

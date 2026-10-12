@@ -209,6 +209,9 @@ export const SEQUENCES = [
       ['goldilocks-question', 'core', ['transit-photometry']],
       ['binary-star-planets', 'core'],
       ['extending-an-experiment', 'core'],
+      ['refitting-a-transit', 'core', ['transit-photometry']],
+      ['two-periodograms', 'core', ['transit-photometry']],
+      ['sampling-a-posterior', 'core', ['refitting-a-transit']],
     ]
   ),
   sequence(

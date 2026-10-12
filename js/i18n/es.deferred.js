@@ -1870,6 +1870,12 @@ export const ES_DEFERRED = {
     'Qué dice y qué no dice una detección sobre si algún sitio es habitable. Necesita la investigación de tránsitos; la de velocidad radial ayuda.',
   'inv.seq.planets.extending-an-experiment':
     'Un experimento de veinte planetas ampliado en Python a una poblaci\u00f3n, con lo que cubre su intervalo y lo que no. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
+  'inv.seq.planets.refitting-a-transit':
+    'El modelo de tr\u00e1nsito del panel de ajuste, ajustado de nuevo por otro camino en Python, y qu\u00e9 cambia el camino. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
+  'inv.seq.planets.two-periodograms':
+    'Un periodograma de Lomb-Scargle y uno de m\u00ednimos cuadrados de caja de una curva de luz, y qu\u00e9 puede afirmar un per\u00edodo de un periodograma. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
+  'inv.seq.planets.sampling-a-posterior':
+    'La posterior de un tr\u00e1nsito muestreada en Python, con las comprobaciones de convergencia que deciden cu\u00e1ndo puede citarse su intervalo. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.gravity.integrators-in-practice':
     'Cuatro integradores comparados por la energ\u00eda que pierden en un sistema real, en Python. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.binary-star-planets':
@@ -3239,7 +3245,7 @@ export const ES_DEFERRED = {
     'Ve las relaciones que describe una ecuación. Aleja un planeta y observa cómo se alarga su año; estira una órbita y observa cómo oscila la luz estelar.',
   'welcomeAudience.instructors.title': 'Para el profesorado',
   'welcomeAudience.instructors.text':
-    '57 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
+    '60 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
   'welcomeAudience.curious.title': 'Para curiosos',
   'welcomeAudience.curious.text':
     'Sin cuenta, sin instalación, sin nada que leer antes. Carga una fusión de agujeros negros y obsérvala, o parte del espacio vacío y mira qué hace la gravedad.',

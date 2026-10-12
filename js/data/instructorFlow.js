@@ -157,6 +157,87 @@ export default {
         text: 'The close: what the interval covers and what it does not.',
       },
     ],
+    'refitting-a-transit': [
+      {
+        from: 'same-model-another-route',
+        to: 'how-close',
+        text: 'The same model on the same points by another route, and a prediction about how close the answer will be.',
+      },
+      {
+        from: 'the-fit',
+        to: 'sigma-and-profile',
+        text: 'Run the notebook and read the five fitted numbers; the sigma and the profile interval.',
+      },
+      {
+        from: 'why-they-differ',
+        to: 'why-they-differ',
+        text: 'Why a profile interval can be lopsided where a covariance sigma is symmetric.',
+      },
+      {
+        from: 'hold-the-limb-darkening',
+        to: 'what-is-not-counted',
+        text: 'Hold the limb darkening fixed and see the sigma fall and the value move; what the scaled sigmas do not count.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: what the route changes and what holding a parameter fixed does.',
+      },
+    ],
+    'two-periodograms': [
+      {
+        from: 'two-ways-to-look-for-a-period',
+        to: 'the-tallest-peak',
+        text: 'Lomb-Scargle and box least squares, and a prediction about the tallest peak.',
+      },
+      {
+        from: 'the-two-periods',
+        to: 'why-half',
+        text: 'Run the notebook and read the two best periods; why Lomb-Scargle peaks at a harmonic.',
+      },
+      {
+        from: 'the-box',
+        to: 'against-the-fit',
+        text: "The best box, and the box period against the fitted one in the fit's uncertainties.",
+      },
+      {
+        from: 'what-a-grid-step-is',
+        to: 'what-a-grid-step-is',
+        text: 'Why a grid step is not an uncertainty.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: what a periodogram answers and what it does not.',
+      },
+    ],
+    'sampling-a-posterior': [
+      {
+        from: 'what-a-sampler-does',
+        to: 'how-wide',
+        text: "What a posterior and a sampler are, and a prediction about the interval's width.",
+      },
+      {
+        from: 'the-draws',
+        to: 'did-it-converge',
+        text: 'Run the notebook, read the medians and widths, then the convergence diagnostics.',
+      },
+      {
+        from: 'profile-and-posterior',
+        to: 'why-narrower',
+        text: "Posterior against profile, and why both are narrower than the fit panel's sigma.",
+      },
+      {
+        from: 'refuse-a-short-run',
+        to: 'refuse-a-short-run',
+        text: 'A 1,000-step run is refused, and what the refusal says.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: what the interval is conditional on, and what a sampler that refuses is worth.',
+      },
+    ],
     'integrators-in-practice': [
       {
         from: 'one-system-four-steps',
