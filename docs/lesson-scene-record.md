@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 57 investigations and 1000 steps: 934 steps
+Across 60 investigations and 1024 steps: 934 steps
 declare a scene, 157 let a reader change one, 163 read the
 running integration, 545 show a prescribed model result, 146 draw
 on a stored dataset, 424 put a self-contained panel beside the text,
-231 keep something, and 40 are prose.
-Of 127 prediction loops, 127 are returned to,
-127 produce a measurement before they are answered, and
+239 keep something, and 56 are prose.
+Of 130 prediction loops, 130 are returned to,
+130 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-127 hold their marking until the experiment settles them.
+130 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -818,4 +818,46 @@ Of 127 prediction loops, 127 are returned to,
 - **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 1 step(s) on arrival (twenty-planets).
 - **Accepted central experiment** (reviewed 2026-09-11): object `compute:population-at-scale`, control the compute page's cutoff and slope settings (not a lesson widget), measures the half-way starting distance and the bound fraction of the twenty trials and of the synthetic population, for the settings run, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Refitting a Transit (`refitting-a-transit`)
+
+- **Steps:** 8. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
+- **What students do:** read, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** none.
+- **Instruments:** none.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** how-close → the-fit, sigma-and-profile, hold-the-limb-darkening → the-fit.
+- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** 1 step(s) on arrival (same-model-another-route).
+- **Accepted central experiment** (reviewed 2026-09-11): object `compute:refit-transit`, control the compute page's limb-darkening setting (not a lesson widget), measures the fitted period, planet-to-star radius ratio, orbit size, impact parameter and reduced chi-square, the covariance sigma and profile intervals, and how the radius ratio and its sigma change when the limb darkening is held fixed, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Two Periodograms (`two-periodograms`)
+
+- **Steps:** 8. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
+- **What students do:** read, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** none.
+- **Instruments:** none.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** the-tallest-peak → the-two-periods, the-box, against-the-fit → the-two-periods.
+- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** 1 step(s) on arrival (two-ways-to-look-for-a-period).
+- **Accepted central experiment** (reviewed 2026-09-11): object `compute:periodograms`, control the compute page's maximum period and maximum duration settings (not a lesson widget), measures the best period of a Lomb-Scargle and of a box least squares periodogram of one light curve, their ratio, and the box period against the fitted period in the fit's uncertainties, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Sampling a Posterior (`sampling-a-posterior`)
+
+- **Steps:** 8. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
+- **What students do:** read, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** none.
+- **Instruments:** none.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** how-wide → the-draws, did-it-converge → the-draws.
+- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** 1 step(s) on arrival (what-a-sampler-does).
+- **Accepted central experiment** (reviewed 2026-09-11): object `compute:posterior-sampling`, control the compute page's steps setting (not a lesson widget), measures the median and 68 percent interval width of the planet-to-star radius ratio and the impact parameter from an ensemble sampler, and the convergence diagnostics that let the interval be quoted, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

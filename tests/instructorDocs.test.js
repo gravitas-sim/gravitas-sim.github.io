@@ -243,12 +243,13 @@ describe('the document inventory', () => {
     // 390 after the four variable-star investigations (Prompt 96);
     // 430 after the four cosmology investigations (Prompt 91).
     // 468 after the two computational investigations (Prompt 102).
-    expect(inv.documents).toBe(468);
-    expect(inv.byLocale).toEqual({ en: 243, es: 225 });
+    // 480 after the three compute-package investigations (Prompt 102 follow-up).
+    expect(inv.documents).toBe(480);
+    expect(inv.byLocale).toEqual({ en: 249, es: 231 });
     expect(inv.byVariant).toEqual({
       activity: 12,
       depth: 210,
-      full: 228,
+      full: 240,
       general: 18,
     });
   });

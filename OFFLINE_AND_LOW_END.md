@@ -51,16 +51,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 875 | 14.5 MB |
+| JavaScript | 878 | 14.6 MB |
 | Images | 62 | 680 KB |
 | Stylesheets | 10 | 490 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 9 | 270 KB |
-| Other | 15 | 530 KB |
-| **Total** | **990** | **16.6 MB** |
+| Other | 15 | 540 KB |
+| **Total** | **993** | **16.7 MB** |
 
-Of those, 819 are core (the install fails without them) and 171 optional (a missing one is reported and costs nothing).
+Of those, 822 are core (the install fails without them) and 171 optional (a missing one is reported and costs nothing).
 
 Gzipped, as Pages serves it, the whole is about 5 MB.
 
@@ -87,11 +87,11 @@ catalog, the course home and the two labs (`model/`, `instructors/`,
 the `/validation/` page runs on demand; and `social-card.png` (only ever
 fetched by a link unfurler).
 
-### Which of the <!--fact:investigations-->57<!--/fact--> lessons
+### Which of the <!--fact:investigations-->60<!--/fact--> lessons
 
 Each lesson is one dynamically imported file, so this is a real decision.
 
-**All <!--fact:investigations-->57<!--/fact--> English bodies are precached**, about a tenth of the
+**All <!--fact:investigations-->60<!--/fact--> English bodies are precached**, about a tenth of the
 payload. The reasoning: the lesson a class is already in when the wifi dies is
 by definition already fetched, so precaching buys nothing there. What it buys is
 the teacher who *switches lesson after the drop*, which is exactly the moment a
@@ -99,7 +99,7 @@ runtime cache has nothing. A tenth of the payload to remove that cliff is worth
 it, and picking a favorite subset would be guessing which lesson a class is
 about to want.
 
-**The <!--fact:spanishShadows-->57<!--/fact--> Spanish shadows are not**: they are only ever fetched
+**The <!--fact:spanishShadows-->60<!--/fact--> Spanish shadows are not**: they are only ever fetched
 when the interface is in Spanish. They are runtime-cached on first use, and
 `js/offline.js` asks the worker to warm all of them the moment the language is
 switched. A Spanish classroom is therefore covered from when it chooses
