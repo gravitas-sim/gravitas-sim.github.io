@@ -60,7 +60,7 @@ The table is written from `tools/generate-graph.mjs`, the list that
 | `compute-frame`, `js/compute/framePin.js`, `js/compute/catalogueHashes.js` | `node tools/compute.mjs` |  |
 | `js/data/teachingGenerated.js` | `node tools/build-teaching-demos.mjs` |  |
 | `library/library.json` | `node tools/build-library.mjs` |  |
-| `teaching/investigation`, `teaching/activity`, `teaching/find`, `teaching/alignment` | `node tools/build-adoption-pages.mjs` | Whole files, each stamped with the shared shell and its policy as the repository holds it, so shell.mjs --write and csp.mjs --write find nothing to change. |
+| `teaching/investigation`, `teaching/activity`, `teaching/find`, `teaching/alignment`, `teaching/adopt` | `node tools/build-adoption-pages.mjs` | Whole files, each stamped with the shared shell and its policy as the repository holds it, so shell.mjs --write and csp.mjs --write find nothing to change. |
 | `images/scenarios` | `node tools/generate-scenario-thumbnails.mjs` |  |
 | `docs/lesson-scene-catalog.json`, `docs/lesson-scene-record.md`, `js/data/investigations/provenance.js` | `node tools/lesson-scene-audit.mjs --write` |  |
 | `js/data/irreversible.js` | `node tools/build-irreversibility-audit.mjs` |  |
