@@ -105,6 +105,7 @@ current, and the orchestrator checks it.
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
 | `shell.mjs` | The shared shell, stamped into every page |  |
+| `sky-horizons-astrometric.mjs` | Reference positions for the Sky Lab's ephemeris source (Prompt 106), from JPL Horizons |  |
 | `small-body-sweep.mjs` | Small-body scenario sweep |  |
 | `source-closure.mjs` | Which files a program actually reads |  |
 | `starfield-probe.mjs` | Starfield phase profile |  |

@@ -197,7 +197,9 @@ export function createEvidencePanel(root, lab) {
     });
     const line = (pts, color, dash) =>
       svg('polyline', {
-        points: pts.map(p => p.map(x => x.toFixed(1)).join(',')).join(' '),
+        points: pts
+          .map(p => p.map(x => Math.round(x * 10) / 10).join(','))
+          .join(' '),
         fill: 'none',
         stroke: color,
         'stroke-width': 1.8,

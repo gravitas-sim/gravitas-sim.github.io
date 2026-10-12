@@ -126,12 +126,12 @@ export function bridgeServices({ slider, restart }, win = window) {
     play(on) {
       stop();
       if (!on || slider.disabled) return;
-      const max = Number(slider.max);
-      if (Number(slider.value) >= max) move(0);
+      const max = +slider.max;
+      if (+slider.value >= max) move(0);
       timer = win.setInterval(() => {
         const next = Math.min(
           max,
-          Number(slider.value) + Math.max(1, max / PLAY_STEPS)
+          +slider.value + Math.max(1, max / PLAY_STEPS)
         );
         move(next);
         if (next >= max) stop();
