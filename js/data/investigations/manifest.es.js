@@ -700,4 +700,28 @@ export const MANIFEST = [
     gradedCount: 8,
     objectiveCount: 5,
   },
+  {
+    id: 'integrators-in-practice',
+    title: 'Integradores en la práctica',
+    subtitle:
+      'Cuatro maneras de dar un paso, comparadas por la energía que pierde cada una en un sistema real, en Python en la página de cálculo',
+    duration: '30-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/circumbinary-planet-lab.webp',
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'extending-an-experiment',
+    title: 'Ampliar un experimento',
+    subtitle:
+      'De veinte planetas que ejecutó el motor a una población de doscientos mil, con todas las incertidumbres, en Python en la página de cálculo',
+    duration: '30-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/binary-planet-lab.webp',
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
 ];

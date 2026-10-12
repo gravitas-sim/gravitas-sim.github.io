@@ -86,7 +86,9 @@
           "a-lens-passing-by",
           "who-gets-counted",
           "why-the-bright-ones-win",
-          "the-completeness-curve"
+          "the-completeness-curve",
+          "integrators-in-practice",
+          "extending-an-experiment"
         ]
       }
     },
@@ -317,7 +319,9 @@
                   "a-lens-passing-by",
                   "who-gets-counted",
                   "why-the-bright-ones-win",
-                  "the-completeness-curve"
+                  "the-completeness-curve",
+                  "integrators-in-practice",
+                  "extending-an-experiment"
                 ]
               }
             }

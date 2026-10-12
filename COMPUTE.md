@@ -1,6 +1,6 @@
 # The compute page
 
-Roadmap II Prompt 101. `/compute/` runs one of a few reviewed Python notebooks on a Gravitas observation, in the reader's browser, and records the run as a compute capsule. It is **opt-in and online only**, and it is a separate route with its own budget: it is not in the offline precache, not in any other route's download, and not in the menu.
+Roadmap II Prompt 101. `/compute/` runs one of a few reviewed Python notebooks on a document Gravitas writes (an observation, an orbital system, an experiment result), in the reader's browser, and records the run as a compute capsule. It is **opt-in and online only**, and it is a separate route with its own budget: it is not in the offline precache, not in any other route's download, and not in the menu.
 
 It is the advanced-teaching slice that the notebook-bridge gate accepted (D-NB-01, D-NB-02; [NOTEBOOK_BRIDGE_GATE.md](NOTEBOOK_BRIDGE_GATE.md)). General users get nothing Python-shaped (D-NB-03), and JupyterLite and same-origin notebooks are not offered to anyone (D-NB-04). The frame's origin is Carl's decision, D-COMPUTE-ORIGIN-01.
 
@@ -42,8 +42,23 @@ Opening a capsule file needs no runtime and runs nothing: it is checked, then sh
 |---|---|---|---|---|---|
 | `transit-times` | `gravitas.observation/1`, time series (the TESS light curve of HD 209458) | numpy, matplotlib | about 18.9 MB | period, epoch, mean depth, transits found; the table of transits; a folded plot | period 3.5238 d (0.0007), depth 15,831 ppm, 8 transits |
 | `line-centroid` | `gravitas.observation/1`, spectrum (an SDSS A star) | numpy | about 8.9 MB | line centroid, width at half depth, equivalent width, depth, Doppler velocity, each with an uncertainty from seeded noisy copies; the continuum-divided window | centroid 6560.78 A, equivalent width 8.30 A, velocity -175 km/s |
+| `integrators-compared` | `gravitas.orbital-system/1`, the Builder's file (its `initial` state; the example is the Kepler-16 template) | numpy, matplotlib | about 18.9 MB | the final energy drift in percent of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4, and the steps; the drift curves; a log plot | +49.75, -0.002317, +0.001768 and -6.47e-8 percent in 10,722 steps |
+| `population-at-scale` | `gravitas.experiment-result/1` (twenty Binary Planet Lab planets at seeded random distances) | numpy, matplotlib | about 18.9 MB | the half-way distance and its width, the bound fraction of the trials and of 200,000 synthetic planets, the count; ten bins; a plot | half-way 0.255 (0.024), 0.6 of the trials and 0.596 (0.076) of the synthetic planets bound |
 
 The notebooks' own prose and comments are English. To add one: add the file under `compute/notebooks/`, an example input under `compute/inputs/` if it needs one, the entry in `catalogueData.js`, run `node tools/compute.mjs`, and state in the pull request what it reads and returns; the entry's expected values are what the online check holds the runtime to.
+
+## The computational-astrophysics module (Prompt 102)
+
+Two of the notebooks, `integrators-compared` and `population-at-scale`, are the course module that makes the page teach computation, each with a companion investigation in both languages (`integrators-in-practice`, `extending-an-experiment`) that sets the task, sends the reader to `/compute/`, and grades the numbers the capsule's declared quantities hold. A step that does so declares `compute: '<notebook id>'`; the scene audit calls it `external-computation`, and `docs/lesson-acceptance.json` names the notebook as the central experiment's object (`compute:<id>`) with the dedicated `@accepts` test in `e2e/centralExperiments.spec.js`. Both investigations are in the Library, in the gravity-and-orbits and planets sequences and in the computation unit of the `upper-level-modules` course.
+
+What each notebook is held to:
+
+- `integrators-compared` against Gravitas's engine. Its symplectic Euler, velocity Verlet and RK4 are the engine's three schemes, so `tests/computeCurriculum.test.js` runs the engine in a fresh process on the builder's own system at the notebook's step for its number of steps and requires the same drift to a part in a million (absolute values: symplectic -0.0023168, Verlet +0.0017676, RK4 -6.47e-8 percent). The notebook's step and run length are worked out again in the test from the file. Explicit Euler is the notebook's own addition, not in the application. At the application's own step (0.0278 time units, 438 steps per period) velocity Verlet and RK4 agree with the engine to 0.2 and 0.4 percent; symplectic Euler's end-of-run drift does not (-0.000165 against -0.002188), which the investigation teaches as phase: its drift oscillates.
+- `population-at-scale` against its experiment: the bound fraction is counted again in the test from the trials, and the fitted edge is held between the last bound planet and the first of the unbroken run that left. The input is made by the engine's trial runner (`node tools/compute-examples.mjs`), with wall-clock fields zeroed and per-trial series left out.
+
+Not done, and why. The roadmap's notebooks 2 to 4 (a SciPy refit of an inference/1 export, Lomb-Scargle and BLS with astropy, an emcee posterior) need packages the published frame does not admit: the frame is pinned to numpy and matplotlib (`PACKAGE_NAMES` in `js/compute/messages.js` and `RUNTIME` are bundled into it), and adding a name changes the frame's bytes, which would mean republishing the `gravitas-compute` frame. That is outward-facing and was not done; whether the pinned Pyodide lock carries those packages is unchecked. Decision D-COMPUTE-CURRICULUM-02.
+
+`tools/compute-answers.mjs <id>` writes the answer fixtures from the vendored cells under the machine's CPython (and `--runs` the few other runs the investigations ask for); the pinned runtime itself is checked by `COMPUTE_ONLINE=1` `e2e/computeOnline.spec.js`, which now runs all four notebooks.
 
 ## The capsule
 
@@ -67,8 +82,8 @@ Every one has words in both languages, a block with `role="alert"` and a way for
 
 ## Checks
 
-`tests/computeMessages`, `computeCatalogue`, `computeCapsule`, `computeSession` and `computeFrame` (Jest); `e2e/compute.spec.js` (no network, always) and `e2e/computeOnline.spec.js` (`COMPUTE_ONLINE=1`).
+`tests/computeMessages`, `computeCatalogue`, `computeCapsule`, `computeSession`, `computeFrame`, `computeCurriculum` and `computeInvestigations` (Jest); `e2e/compute.spec.js` (no network, always) and `e2e/computeOnline.spec.js` (`COMPUTE_ONLINE=1`).
 
 ## Not done
 
-Notebooks over `gravitas.experiment-result/1`, `gravitas.inference/1` and `gravitas.analysis/1` (no authentic example of a result can be vendored without running the engine in a browser Worker; the catalogue format admits them, and Prompt 102 owns the curriculum); a phone measurement (T5 of the gate stays unmeasured); self-hosting the runtime; a link to the page from the menu.
+Notebooks over `gravitas.inference/1` and `gravitas.analysis/1` (the two over an orbital system and an experiment result are Prompt 102's; the others wait on the frame's package list, see above); a phone measurement (T5 of the gate stays unmeasured); self-hosting the runtime; a link to the page from the menu.

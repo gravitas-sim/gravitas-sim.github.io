@@ -570,4 +570,24 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'integrators-in-practice': {
+    audience: 'intro',
+    mathematics: 'logarithms',
+    prerequisites: ['orbital-energy'],
+    textbook: {
+      chapter: 3,
+      section: null,
+    },
+    courseLevel: 'upper',
+  },
+  'extending-an-experiment': {
+    audience: 'intro',
+    mathematics: 'logarithms',
+    prerequisites: [],
+    textbook: {
+      chapter: 21,
+      section: null,
+    },
+    courseLevel: 'upper',
+  },
 };

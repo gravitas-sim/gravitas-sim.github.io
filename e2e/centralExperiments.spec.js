@@ -33,6 +33,7 @@
 // the answer key.
 // =============================================================================
 
+import { readFile } from 'node:fs/promises';
 import { test, expect } from './fixtures.js';
 import {
   commitPredictionHeld,
@@ -2697,4 +2698,119 @@ test.describe('the central experiment of each investigation', () => {
       await expectVerdictRevealed(page, plan, predict);
     });
   }
+
+  // The two investigations whose experiment runs on the compute page
+  // (Roadmap II Prompt 102). The reader takes the numbers off the page by
+  // hand, so the test does too: it types the numbers the vendored notebook
+  // returned (the fixtures tools/compute-answers.mjs writes from its cells)
+  // as four significant digits, and checks that each graded step accepts them.
+  // The notebook itself runs in e2e/computeOnline.spec.js (online only).
+  const quantities = async file => {
+    const answer = JSON.parse(
+      await readFile(`tests/fixtures/compute/${file}.answer.json`, 'utf8')
+    );
+    const all = JSON.parse(answer.envelope).quantities;
+    return Object.fromEntries(all.map(q => [q.id, q.value]));
+  };
+  const runs = async () =>
+    JSON.parse(
+      await readFile('tests/fixtures/compute/investigation-runs.json', 'utf8')
+    );
+  const four = x => String(Number(x.toPrecision(4)));
+  const accepted = page =>
+    expect(page.locator('#investigationBody .inv-check.is-ok')).toBeVisible();
+
+  test('integrators-in-practice: four integrators lose energy at different rates on the same system @accepts:ce.integrators-in-practice', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'integrators-in-practice';
+    const entry = declared(id);
+    const [predictSid, measureSid, halveSid] = entry.loop;
+    const main = await quantities('integrators-compared');
+    const half = (await runs())['integrators-compared/steps1000'];
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the notebook's four drifts, typed in, and accepted
+    await walkToSid(page, plan, measureSid);
+    const drifts = {
+      euler: four(main['drift.euler']),
+      symplectic: four(main['drift.symplectic']),
+      verlet: four(main['drift.verlet']),
+      rk4: four(main['drift.rk4']),
+      steps: String(main.steps),
+    };
+    await recordFields(page, id, measureSid, drifts);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, measureSid, drifts);
+
+    // 3. the relationship the lesson is about: halving the step improves a
+    //    second-order method four times, and a fourth-order one far more.
+    await walkToSid(page, plan, halveSid);
+    const halved = {
+      verlet: four(half['drift.verlet'].value),
+      rk4: four(half['drift.rk4'].value),
+      ratioVerlet: four(main['drift.verlet'] / half['drift.verlet'].value),
+      ratioRk4: four(main['drift.rk4'] / half['drift.rk4'].value),
+    };
+    expect(Number(halved.ratioVerlet)).toBeGreaterThan(3.8);
+    expect(Number(halved.ratioVerlet)).toBeLessThan(4.2);
+    expect(Number(halved.ratioRk4)).toBeGreaterThan(Number(halved.ratioVerlet));
+    await recordFields(page, id, halveSid, halved);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, halveSid, halved);
+
+    // 4. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('extending-an-experiment: the edge of the bound region is placed no better than the trials allow @accepts:ce.extending-an-experiment', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'extending-an-experiment';
+    const entry = declared(id);
+    const [predictSid, measureSid, moveSid] = entry.loop;
+    const main = await quantities('population-at-scale');
+    const six = (await runs())['population-at-scale/cutoff6'];
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    await walkToSid(page, plan, measureSid);
+    const fit = {
+      edge: four(main['a.crit']),
+      edgeSigma: '0.0243',
+      sample: four(main['bound.sample']),
+      extended: four(main['bound.extended']),
+    };
+    await recordFields(page, id, measureSid, fit);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, measureSid, fit);
+
+    // The relationship: one reclassified planet moves the edge, because an
+    // outcome is a definition.
+    await walkToSid(page, plan, moveSid);
+    const moved = {
+      edge: four(six['a.crit'].value),
+      extended: four(six['bound.extended'].value),
+    };
+    expect(Number(moved.edge)).toBeGreaterThan(Number(fit.edge));
+    await recordFields(page, id, moveSid, moved);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, moveSid, moved);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
 });

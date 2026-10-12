@@ -135,6 +135,55 @@ export default {
         text: 'The close: both biases come from selection, not measurement.',
       },
     ],
+    'extending-an-experiment': [
+      {
+        from: 'twenty-planets',
+        to: 'how-well-can-twenty-place-an-edge',
+        text: 'The experiment’s twenty planets, how the notebook classifies them, and a prediction about the edge before anything runs.',
+      },
+      {
+        from: 'the-fit',
+        to: 'why-the-sample-differs',
+        text: 'Run the notebook, read the edge and two fractions; a uniform population and why the sample differs from it.',
+      },
+      {
+        from: 'move-the-definition',
+        to: 'what-moved-it',
+        text: 'Change the cutoff and see one reclassified planet move the edge.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: what the interval covers and what it does not.',
+      },
+    ],
+    'integrators-in-practice': [
+      {
+        from: 'one-system-four-steps',
+        to: 'which-loses-most',
+        text: 'The four methods, the energy drift, and a prediction before anything runs.',
+      },
+      {
+        from: 'four-drifts',
+        to: 'why-bounded',
+        text: 'Run the notebook on Kepler-16 and read four drifts; why the symplectic one stays bounded.',
+      },
+      {
+        from: 'halve-the-step',
+        to: 'halve-the-step',
+        text: 'Halve the step: fourfold for second order, far more for fourth order.',
+      },
+      {
+        from: 'the-engine',
+        to: 'phase-luck',
+        text: 'The same step as the application’s engine, and why one symplectic number is a point on a curve.',
+      },
+      {
+        from: 'what-you-worked-out',
+        to: 'what-you-worked-out',
+        text: 'The close: what the drifts say and what they do not.',
+      },
+    ],
     'the-completeness-curve': [
       {
         from: 'a-survey-that-fades',

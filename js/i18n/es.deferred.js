@@ -865,6 +865,8 @@ export const ES_DEFERRED = {
     'Aqu\u00ed tu evidencia viene de observaciones publicadas, reducidas y mostradas tal como las difundieron sus autores.',
   'inv.evidenceFrom.illustration':
     'Aqu\u00ed tu evidencia viene de un diagrama dibujado para explicar una relaci\u00f3n, no de una medici\u00f3n.',
+  'inv.evidenceFrom.computation':
+    'Aqu\u00ed tu evidencia viene de un cuaderno de Python que ejecutaste en la p\u00e1gina de c\u00e1lculo, sobre un archivo que escribi\u00f3 Gravitas: los n\u00fameros vienen del cuaderno, no de la simulaci\u00f3n.',
   'inv.answer.saysNothing':
     'Eso parece vac\u00edo. Escribe una o dos frases: qu\u00e9 mediste y c\u00f3mo se compara con lo que predijiste.',
   'inv.answer.recorded': 'Registrado.',
@@ -1866,6 +1868,10 @@ export const ES_DEFERRED = {
     'El mismo argumento en el instrumento real, donde la campaña dura minutos y no se puede rebobinar. Haz antes la versión analítica; esta te pide planificar tú la observación.',
   'inv.seq.planets.goldilocks-question':
     'Qué dice y qué no dice una detección sobre si algún sitio es habitable. Necesita la investigación de tránsitos; la de velocidad radial ayuda.',
+  'inv.seq.planets.extending-an-experiment':
+    'Un experimento de veinte planetas ampliado en Python a una poblaci\u00f3n, con lo que cubre su intervalo y lo que no. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
+  'inv.seq.gravity.integrators-in-practice':
+    'Cuatro integradores comparados por la energ\u00eda que pierden en un sistema real, en Python. Necesita la p\u00e1gina de c\u00e1lculo y conexi\u00f3n.',
   'inv.seq.planets.binary-star-planets':
     'Estabilidad, resonancia y caos a la vez, decidiendo dónde puede sobrevivir un planeta alrededor de dos estrellas.',
 
@@ -3233,7 +3239,7 @@ export const ES_DEFERRED = {
     'Ve las relaciones que describe una ecuación. Aleja un planeta y observa cómo se alarga su año; estira una órbita y observa cómo oscila la luz estelar.',
   'welcomeAudience.instructors.title': 'Para el profesorado',
   'welcomeAudience.instructors.text':
-    '55 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
+    '57 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
   'welcomeAudience.curious.title': 'Para curiosos',
   'welcomeAudience.curious.text':
     'Sin cuenta, sin instalación, sin nada que leer antes. Carga una fusión de agujeros negros y obsérvala, o parte del espacio vacío y mira qué hace la gravedad.',

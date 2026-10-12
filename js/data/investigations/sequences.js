@@ -173,6 +173,7 @@ export const SEQUENCES = [
       ['black-holes', 'core'],
       ['what-is-a-gravitational-wave', 'core'],
       ['listening-to-spacetime', 'core', ['what-is-a-gravitational-wave']],
+      ['integrators-in-practice', 'core', ['orbital-energy']],
     ]
   ),
   sequence(
@@ -207,6 +208,7 @@ export const SEQUENCES = [
       ],
       ['goldilocks-question', 'core', ['transit-photometry']],
       ['binary-star-planets', 'core'],
+      ['extending-an-experiment', 'core'],
     ]
   ),
   sequence(

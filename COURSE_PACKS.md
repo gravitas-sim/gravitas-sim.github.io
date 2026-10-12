@@ -300,7 +300,7 @@ matched from the table of contents, so check them against the edition in hand):
 |---|---|---|---|
 | `astronomy-semester`: introductory astronomy, one semester, with OpenStax Astronomy 2e | survey | about 11 to 15 hours | seven, each naming its chapters, with an optional reading and an advanced item |
 | `observing-lab`: observational astronomy lab | majors | about 11 to 14 hours | planning, spectra, photometry and time series, what a survey misses, authentic data |
-| `upper-level-modules`: seven short upper-level modules | upper | about 13 to 18 hours | celestial mechanics, stellar astrophysics, galactic dynamics, exoplanet science, time-domain, cosmology, statistics of surveys |
+| `upper-level-modules`: eight short upper-level modules | upper | about 14 to 20 hours | celestial mechanics, stellar astrophysics, galactic dynamics, exoplanet science, time-domain, cosmology, statistics of surveys, computation |
 
 They open as `/course/?course=<id>`. No detector or noise lesson exists yet, so
 the lab course does not claim one; the 3-D and mission guides are separate pages

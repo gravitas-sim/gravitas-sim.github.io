@@ -215,4 +215,261 @@ export const CATALOGUE_DATA = [
       NUMPY,
     ],
   },
+  {
+    id: 'integrators-compared',
+    version: 1,
+    title: {
+      en: 'Four integrators on one system',
+      es: 'Cuatro integradores en un mismo sistema',
+    },
+    summary: {
+      en: 'Integrates a system saved by the Orbital System Builder with explicit Euler, symplectic Euler (Gravitas’s default), velocity Verlet and fourth-order Runge-Kutta at one fixed step, and returns each method’s energy drift as Gravitas’s own readout defines it, with the drift curves and a plot.',
+      es: 'Integra un sistema guardado por el Constructor de sistemas orbitales con Euler explícito, Euler simpléctico (el de Gravitas), Verlet de velocidad y Runge-Kutta de cuarto orden con un mismo paso fijo, y devuelve la deriva de energía de cada método tal como la define el indicador de Gravitas, con las curvas de deriva y un gráfico.',
+    },
+    note: {
+      en: 'Open the same system in Gravitas, pick the same integrator and read the Energy tab’s drift after the same time: it is the number this notebook computes for that method. Halve the step and see which methods improve by how much.',
+      es: 'Abre el mismo sistema en Gravitas, elige el mismo integrador y lee la deriva de la pestaña Energía después del mismo tiempo: es el número que este cuaderno calcula para ese método. Reduce el paso a la mitad y observa qué métodos mejoran y cuánto.',
+    },
+    notebook: 'compute/notebooks/integrators-compared.ipynb',
+    packages: ['numpy', 'matplotlib'],
+    input: {
+      name: 'system',
+      format: 'gravitas.orbital-system',
+      version: 1,
+      example: {
+        path: 'compute/inputs/kepler-16.gravitas-system.json',
+        title: {
+          en: 'Kepler-16: two stars and a circumbinary planet (the builder’s template)',
+          es: 'Kepler-16: dos estrellas y un planeta circumbinario (la plantilla del constructor)',
+        },
+      },
+    },
+    params: [
+      {
+        id: 'orbits',
+        label: {
+          en: 'Periods of the widest orbit to integrate',
+          es: 'Períodos de la órbita más ancha a integrar',
+        },
+        min: 1,
+        max: 10,
+        step: 1,
+        default: 3,
+      },
+      {
+        id: 'steps',
+        label: {
+          en: 'Steps per period of the tightest pair',
+          es: 'Pasos por período del par más cercano',
+        },
+        min: 50,
+        max: 1000,
+        step: 10,
+        default: 500,
+      },
+    ],
+    outputs: {
+      envelope: {
+        quantities: [
+          {
+            id: 'drift.euler',
+            unit: '%',
+            label: {
+              en: 'Energy drift, explicit Euler',
+              es: 'Deriva de energía, Euler explícito',
+            },
+          },
+          {
+            id: 'drift.symplectic',
+            unit: '%',
+            label: {
+              en: 'Energy drift, symplectic Euler',
+              es: 'Deriva de energía, Euler simpléctico',
+            },
+          },
+          {
+            id: 'drift.verlet',
+            unit: '%',
+            label: {
+              en: 'Energy drift, velocity Verlet',
+              es: 'Deriva de energía, Verlet de velocidad',
+            },
+          },
+          {
+            id: 'drift.rk4',
+            unit: '%',
+            label: {
+              en: 'Energy drift, Runge-Kutta 4',
+              es: 'Deriva de energía, Runge-Kutta 4',
+            },
+          },
+          {
+            id: 'steps',
+            unit: 'count',
+            label: { en: 'Steps taken', es: 'Pasos dados' },
+          },
+        ],
+      },
+      table: true,
+      figure: true,
+    },
+    expected: [
+      { id: 'drift.euler', value: 49.7495, tolerance: 0.05 },
+      { id: 'drift.symplectic', value: -0.0023168, tolerance: 0.00002 },
+      { id: 'drift.verlet', value: 0.00176764, tolerance: 0.00002 },
+      { id: 'drift.rk4', value: -6.4726e-8, tolerance: 2e-9 },
+      { id: 'steps', value: 10722, tolerance: 0 },
+    ],
+    citations: [
+      {
+        text: 'Hairer, Lubich and Wanner 2006, Geometric Numerical Integration, 2nd ed., Springer (the methods and why a symplectic one keeps its energy bounded)',
+        url: 'https://doi.org/10.1007/3-540-30666-8',
+      },
+      {
+        text: 'Doyle et al. 2011, Science 333, 1602 (Kepler-16, the example system)',
+        url: 'https://doi.org/10.1126/science.1210923',
+      },
+      PYODIDE,
+      NUMPY,
+      MATPLOTLIB,
+    ],
+  },
+  {
+    id: 'population-at-scale',
+    version: 1,
+    title: {
+      en: 'A population of planets, extended',
+      es: 'Una población de planetas, ampliada',
+    },
+    summary: {
+      en: 'Reads an experiment result of planets started at seeded random distances in the Binary Planet Lab, classifies which stayed bound, fits the chance of staying bound with a bootstrap, and extends it to a synthetic population of hundreds of thousands, with every uncertainty.',
+      es: 'Lee un resultado de experimento de planetas lanzados a distancias aleatorias con semilla en el Laboratorio de planeta en binaria, clasifica cuáles siguieron ligados, ajusta la probabilidad de seguir ligado con bootstrap y la extiende a una población sintética de cientos de miles, con todas sus incertidumbres.',
+    },
+    note: {
+      en: 'The extension is a prediction from twenty trials and one assumed curve. Change the slope and the cutoff and say which of the three results moves most, and why the interval does not cover the choice of curve.',
+      es: 'La ampliación es una predicción a partir de veinte ensayos y una curva supuesta. Cambia la pendiente y el umbral y di cuál de los tres resultados se mueve más, y por qué el intervalo no cubre la elección de la curva.',
+    },
+    notebook: 'compute/notebooks/population-at-scale.ipynb',
+    packages: ['numpy', 'matplotlib'],
+    input: {
+      name: 'result',
+      format: 'gravitas.experiment-result',
+      version: 1,
+      example: {
+        path: 'compute/inputs/binary-planet-population.experiment-result.json',
+        title: {
+          en: 'Twenty planets of the Binary Planet Lab (an experiment result)',
+          es: 'Veinte planetas del Laboratorio de planeta en binaria (un resultado de experimento)',
+        },
+      },
+    },
+    params: [
+      {
+        id: 'slope',
+        label: {
+          en: 'Power-law slope of the synthetic population (number proportional to the setting to the minus slope)',
+          es: 'Pendiente de la ley de potencias de la población sintética (número proporcional al ajuste elevado a menos la pendiente)',
+        },
+        min: -1,
+        max: 3,
+        step: 0.5,
+        default: 1,
+      },
+      {
+        id: 'size',
+        label: {
+          en: 'Synthetic planets to draw',
+          es: 'Planetas sintéticos a generar',
+        },
+        min: 10000,
+        max: 500000,
+        step: 10000,
+        default: 200000,
+      },
+      {
+        id: 'cutoff',
+        label: {
+          en: 'Bound if the mean distance stays within this many starting distances',
+          es: 'Ligado si la distancia media se mantiene dentro de este número de distancias iniciales',
+        },
+        min: 1.5,
+        max: 10,
+        step: 0.5,
+        default: 3,
+      },
+    ],
+    outputs: {
+      envelope: {
+        quantities: [
+          {
+            id: 'a.crit',
+            unit: '',
+            label: {
+              en: 'Setting where the chance of staying bound is one half',
+              es: 'Ajuste donde la probabilidad de seguir ligado es un medio',
+            },
+          },
+          {
+            id: 'a.width',
+            unit: '',
+            label: {
+              en: 'Width of the transition',
+              es: 'Anchura de la transición',
+            },
+          },
+          {
+            id: 'bound.sample',
+            unit: '',
+            label: {
+              en: 'Fraction bound in the trials',
+              es: 'Fracción ligada en los ensayos',
+            },
+          },
+          {
+            id: 'bound.extended',
+            unit: '',
+            label: {
+              en: 'Fraction bound in the synthetic population',
+              es: 'Fracción ligada en la población sintética',
+            },
+          },
+          {
+            id: 'bound.count',
+            unit: 'count',
+            label: {
+              en: 'Synthetic planets bound',
+              es: 'Planetas sintéticos ligados',
+            },
+          },
+          {
+            id: 'trials',
+            unit: 'count',
+            label: { en: 'Trials used', es: 'Ensayos usados' },
+          },
+        ],
+      },
+      table: true,
+      figure: true,
+    },
+    expected: [
+      { id: 'a.crit', value: 0.255, tolerance: 0.002 },
+      { id: 'a.width', value: 0.0166, tolerance: 0.001 },
+      { id: 'bound.sample', value: 0.6, tolerance: 0 },
+      { id: 'bound.extended', value: 0.596, tolerance: 0.01 },
+      { id: 'trials', value: 20, tolerance: 0 },
+    ],
+    citations: [
+      {
+        text: 'Efron and Tibshirani 1993, An Introduction to the Bootstrap, Chapman and Hall (the resampling)',
+        url: 'https://doi.org/10.1201/9780429246593',
+      },
+      {
+        text: 'Holman and Wiegert 1999, AJ 117, 621 (the stability edge of planets in binaries, the physics the example probes)',
+        url: 'https://doi.org/10.1086/300695',
+      },
+      PYODIDE,
+      NUMPY,
+      MATPLOTLIB,
+    ],
+  },
 ];

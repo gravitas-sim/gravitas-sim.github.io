@@ -57,6 +57,22 @@ export default {
       'a-second-bias':
         'Limit 18, cut 3 sigma: parallaxes 18.1 percent too large (within 1.5) and absolute magnitudes 0.25 mag too faint (within 0.04).',
     },
+    'extending-an-experiment': {
+      'the-fit':
+        'Slope 1, 200,000 planets, cutoff 3: half-way distance 0.255 (within 0.003), its uncertainty 0.0243 (within 0.004), 0.6 of the trials bound (within 0.01) and 0.596 of the synthetic population (within 0.02).',
+      'a-uniform-population':
+        'Slope 0: 0.451 bound in the synthetic population (within 0.02), 0.149 below the trials’ 0.6 (within 0.03).',
+      'move-the-definition':
+        'Slope 1, cutoff 6: half-way distance 0.289 (within 0.004) and 0.701 of the synthetic population bound (within 0.02).',
+    },
+    'integrators-in-practice': {
+      'four-drifts':
+        'Kepler-16, 3 periods, 500 steps: explicit Euler +49.75 percent (within 0.5), symplectic Euler -0.002317, velocity Verlet +0.001768, Runge-Kutta 4 -6.47e-8 (each within 3 percent, with the sign) and 10,722 steps. Explicit Euler is about 50 because its orbit has changed, not because its error is small.',
+      'halve-the-step':
+        '1000 steps: velocity Verlet +0.000442 (within 5 percent) and Runge-Kutta 4 -2.44e-9; the improvement is 4.0 for Verlet (within 10 percent) and 26.5 for Runge-Kutta 4 (within 15).',
+      'the-engine':
+        '438 steps: velocity Verlet +0.002304 (within 5 percent), Runge-Kutta 4 -1.22e-7 (within 5) and symplectic Euler -0.0001646 (within 10); the application’s engine gave +0.002299 and -1.217e-7.',
+    },
     'the-completeness-curve': {
       'raw-against-truth':
         'First preset: raw count 96.2 percent of the truth in the 8-10 bin (within 2) and 56.7 in the 10-12 bin (within 3).',

@@ -10,7 +10,7 @@
     <title>Compute page | Gravitas</title>
     <meta
       name="description"
-      content="Run a reviewed Python notebook on a Gravitas observation, in your browser, and keep the result with a record of exactly what ran. Opt-in and online only: it downloads a Python runtime when you ask."
+      content="Run a reviewed Python notebook on a document Gravitas writes, in your browser, and keep the result with a record of exactly what ran. Opt-in and online only: it downloads a Python runtime when you ask."
     />
     <meta name="theme-color" content="#07080f" />
     <link rel="icon" href="/favicon.ico" />
@@ -134,7 +134,7 @@ try {
     <main id="main" class="ui-page is-wide" aria-labelledby="cpTitle">
       <h1 id="cpTitle"><span class="gs-en">Compute page</span><span class="gs-es" lang="es">Página de cálculo</span></h1>
       <p class="ui-alert" id="cpOnline"><span class="gs-en"><strong>Online and opt-in.</strong> Nothing on this page loads until you press "Start the runtime", which downloads a Python runtime from the internet. It does not work offline, and nothing about you or your data is sent anywhere: the notebook runs in a sandbox with no access to Gravitas, your work or your files.</span><span class="gs-es" lang="es"><strong>Solo en línea y opcional.</strong> Nada de esta página se carga hasta que pulsas "Iniciar el entorno", que descarga un entorno de Python de internet. No funciona sin conexión, y nada sobre ti ni sobre tus datos se envía a ningún sitio: el cuaderno se ejecuta en una zona aislada sin acceso a Gravitas, a tu trabajo ni a tus archivos.</span></p>
-      <p><span class="gs-en">Run one of a few reviewed Python notebooks on a Gravitas observation, and keep the result with a record, a compute capsule, of exactly what ran: the notebook by its hash, the input by its hash, the runtime release, the numbers it returned and how long it took. You cannot run a notebook of your own here; each one in the list was read and vendored with the site, and the page refuses any whose hash is not in its catalogue. Researchers can take the same run to their own Jupyter.</span><span class="gs-es" lang="es">Ejecuta uno de unos pocos cuadernos de Python revisados sobre una observación de Gravitas, y guarda el resultado con un registro, una cápsula de cálculo, de exactamente lo que se ejecutó: el cuaderno por su hash, la entrada por su hash, la versión del entorno, los números que devolvió y cuánto tardó. Aquí no puedes ejecutar un cuaderno propio; cada uno de la lista fue leído e incluido con el sitio, y la página rechaza cualquiera cuyo hash no esté en su catálogo. Los investigadores pueden llevar la misma ejecución a su propio Jupyter.</span></p>
+      <p><span class="gs-en">Run one of a few reviewed Python notebooks on a document Gravitas writes (an observation, an orbital system, an experiment result), and keep the result with a record, a compute capsule, of exactly what ran: the notebook by its hash, the input by its hash, the runtime release, the numbers it returned and how long it took. You cannot run a notebook of your own here; each one in the list was read and vendored with the site, and the page refuses any whose hash is not in its catalogue. Researchers can take the same run to their own Jupyter.</span><span class="gs-es" lang="es">Ejecuta uno de unos pocos cuadernos de Python revisados sobre un documento que escribe Gravitas (una observación, un sistema orbital, un resultado de experimento), y guarda el resultado con un registro, una cápsula de cálculo, de exactamente lo que se ejecutó: el cuaderno por su hash, la entrada por su hash, la versión del entorno, los números que devolvió y cuánto tardó. Aquí no puedes ejecutar un cuaderno propio; cada uno de la lista fue leído e incluido con el sitio, y la página rechaza cualquiera cuyo hash no esté en su catálogo. Los investigadores pueden llevar la misma ejecución a su propio Jupyter.</span></p>
       <p id="cpStatus" class="ui-hint" role="status" aria-live="polite"></p>
       <div id="cpState" class="ui-state is-error" role="alert" hidden></div>
 
@@ -143,7 +143,7 @@ try {
         <div class="cp-grid">
           <label><span class="gs-en">Notebook</span><span class="gs-es" lang="es">Cuaderno</span><select id="cpNotebook" class="ui-select"></select></label>
           <label><span class="gs-en">Input</span><span class="gs-es" lang="es">Entrada</span><select id="cpInputKind" class="ui-select"><option value="example"></option><option value="file"></option></select></label>
-          <label id="cpFileLabel" hidden><span class="gs-en">An observation file (gravitas.observation/1, JSON)</span><span class="gs-es" lang="es">Un archivo de observación (gravitas.observation/1, JSON)</span><input id="cpFile" class="ui-input" type="file" accept=".json,application/json" /></label>
+          <label id="cpFileLabel" hidden><span class="gs-en">A file this notebook reads (JSON; the document type is under “Reads”)</span><span class="gs-es" lang="es">Un archivo que lee este cuaderno (JSON; el tipo de documento está en «Lee»)</span><input id="cpFile" class="ui-input" type="file" accept=".json,application/json" /></label>
         </div>
         <p id="cpSummary"></p>
         <dl id="cpFacts" class="ui-meta"></dl>

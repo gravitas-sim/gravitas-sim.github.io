@@ -39,10 +39,12 @@ const answer = id =>
   JSON.parse(readFileSync(`tests/fixtures/compute/${id}.answer.json`, 'utf8'));
 
 describe('the catalogue', () => {
-  test('lists the two vendored notebooks', () => {
+  test('lists the vendored notebooks', () => {
     expect(NOTEBOOKS.map(e => e.id)).toEqual([
       'transit-times',
       'line-centroid',
+      'integrators-compared',
+      'population-at-scale',
     ]);
   });
 

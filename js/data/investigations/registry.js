@@ -157,6 +157,8 @@ const LOADERS = {
   'who-gets-counted': () => import('./who-gets-counted.js'),
   'why-the-bright-ones-win': () => import('./why-the-bright-ones-win.js'),
   'the-completeness-curve': () => import('./the-completeness-curve.js'),
+  'integrators-in-practice': () => import('./integrators-in-practice.js'),
+  'extending-an-experiment': () => import('./extending-an-experiment.js'),
 };
 
 /**
@@ -232,6 +234,8 @@ const TRANSLATIONS = {
     'who-gets-counted': () => import('./es/who-gets-counted.js'),
     'why-the-bright-ones-win': () => import('./es/why-the-bright-ones-win.js'),
     'the-completeness-curve': () => import('./es/the-completeness-curve.js'),
+    'integrators-in-practice': () => import('./es/integrators-in-practice.js'),
+    'extending-an-experiment': () => import('./es/extending-an-experiment.js'),
   },
 };
 

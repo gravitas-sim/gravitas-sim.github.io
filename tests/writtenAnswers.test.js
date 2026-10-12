@@ -73,8 +73,8 @@ describe('where the evidence came from', () => {
     expect(Object.keys(EVIDENCE_FROM)).toHaveLength(INVESTIGATIONS.length);
   });
 
-  test('every source is one of the four the interface can name', () => {
-    const allowed = ['engine', 'model', 'data', 'illustration'];
+  test('every source is one the interface can name', () => {
+    const allowed = ['engine', 'model', 'data', 'illustration', 'computation'];
     for (const [id, from] of Object.entries(EVIDENCE_FROM)) {
       expect({ id, from, known: allowed.includes(from) }).toEqual({
         id,

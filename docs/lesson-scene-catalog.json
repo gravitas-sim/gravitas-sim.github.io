@@ -7,7 +7,8 @@
   "model-result",
   "imported-data",
   "panel-diagram",
-  "captured-evidence"
+  "captured-evidence",
+  "external-computation"
  ],
  "instruments": {
   "astrometry-signature": {
@@ -3159,6 +3160,7 @@
     "data": 0,
     "diagram": 0,
     "evidence": 5,
+    "computation": 0,
     "declaredButInert": 16,
     "prose": 0,
     "mismatched": 0,
@@ -5462,6 +5464,7 @@
     "data": 0,
     "diagram": 0,
     "evidence": 5,
+    "computation": 0,
     "declaredButInert": 33,
     "prose": 0,
     "mismatched": 0,
@@ -7513,6 +7516,7 @@
     "data": 0,
     "diagram": 5,
     "evidence": 5,
+    "computation": 0,
     "declaredButInert": 24,
     "prose": 0,
     "mismatched": 0,
@@ -9273,6 +9277,7 @@
     "data": 0,
     "diagram": 8,
     "evidence": 1,
+    "computation": 0,
     "declaredButInert": 22,
     "prose": 0,
     "mismatched": 0,
@@ -11838,6 +11843,7 @@
     "data": 0,
     "diagram": 4,
     "evidence": 5,
+    "computation": 0,
     "declaredButInert": 31,
     "prose": 1,
     "mismatched": 0,
@@ -14049,6 +14055,7 @@
     "data": 0,
     "diagram": 19,
     "evidence": 1,
+    "computation": 0,
     "declaredButInert": 30,
     "prose": 0,
     "mismatched": 0,
@@ -16717,6 +16724,7 @@
     "data": 5,
     "diagram": 11,
     "evidence": 2,
+    "computation": 0,
     "declaredButInert": 35,
     "prose": 0,
     "mismatched": 0,
@@ -19308,6 +19316,7 @@
     "data": 2,
     "diagram": 14,
     "evidence": 2,
+    "computation": 0,
     "declaredButInert": 17,
     "prose": 8,
     "mismatched": 0,
@@ -21670,6 +21679,7 @@
     "data": 0,
     "diagram": 18,
     "evidence": 6,
+    "computation": 0,
     "declaredButInert": 19,
     "prose": 6,
     "mismatched": 0,
@@ -23856,6 +23866,7 @@
     "data": 0,
     "diagram": 13,
     "evidence": 2,
+    "computation": 0,
     "declaredButInert": 27,
     "prose": 0,
     "mismatched": 0,
@@ -25753,6 +25764,7 @@
     "data": 0,
     "diagram": 0,
     "evidence": 1,
+    "computation": 0,
     "declaredButInert": 28,
     "prose": 0,
     "mismatched": 0,
@@ -28226,6 +28238,7 @@
     "data": 0,
     "diagram": 0,
     "evidence": 4,
+    "computation": 0,
     "declaredButInert": 31,
     "prose": 0,
     "mismatched": 0,
@@ -30072,6 +30085,7 @@
     "data": 5,
     "diagram": 9,
     "evidence": 3,
+    "computation": 0,
     "declaredButInert": 23,
     "prose": 0,
     "mismatched": 0,
@@ -31149,6 +31163,7 @@
     "data": 0,
     "diagram": 0,
     "evidence": 1,
+    "computation": 0,
     "declaredButInert": 15,
     "prose": 0,
     "mismatched": 0,
@@ -33816,6 +33831,7 @@
     "data": 0,
     "diagram": 0,
     "evidence": 5,
+    "computation": 0,
     "declaredButInert": 37,
     "prose": 0,
     "mismatched": 0,
@@ -35347,6 +35363,7 @@
     "data": 0,
     "diagram": 0,
     "evidence": 4,
+    "computation": 0,
     "declaredButInert": 22,
     "prose": 0,
     "mismatched": 0,
@@ -36883,6 +36900,7 @@
     "data": 0,
     "diagram": 0,
     "evidence": 2,
+    "computation": 0,
     "declaredButInert": 20,
     "prose": 0,
     "mismatched": 0,
@@ -38307,6 +38325,7 @@
     "data": 0,
     "diagram": 0,
     "evidence": 1,
+    "computation": 0,
     "declaredButInert": 17,
     "prose": 0,
     "mismatched": 0,
@@ -40585,6 +40604,7 @@
     "data": 1,
     "diagram": 1,
     "evidence": 7,
+    "computation": 0,
     "declaredButInert": 2,
     "prose": 0,
     "mismatched": 0,
@@ -43184,6 +43204,7 @@
     "data": 9,
     "diagram": 9,
     "evidence": 11,
+    "computation": 0,
     "declaredButInert": 8,
     "prose": 0,
     "mismatched": 0,
@@ -46372,6 +46393,7 @@
     "data": 37,
     "diagram": 6,
     "evidence": 18,
+    "computation": 0,
     "declaredButInert": 6,
     "prose": 0,
     "mismatched": 0,
@@ -49385,6 +49407,7 @@
     "data": 35,
     "diagram": 0,
     "evidence": 17,
+    "computation": 0,
     "declaredButInert": 0,
     "prose": 0,
     "mismatched": 0,
@@ -50356,6 +50379,7 @@
     "data": 0,
     "diagram": 6,
     "evidence": 3,
+    "computation": 0,
     "declaredButInert": 13,
     "prose": 0,
     "mismatched": 0,
@@ -51611,6 +51635,7 @@
     "data": 0,
     "diagram": 6,
     "evidence": 4,
+    "computation": 0,
     "declaredButInert": 0,
     "prose": 15,
     "mismatched": 0,
@@ -52503,6 +52528,7 @@
     "data": 0,
     "diagram": 10,
     "evidence": 2,
+    "computation": 0,
     "declaredButInert": 11,
     "prose": 0,
     "mismatched": 0,
@@ -53298,6 +53324,7 @@
     "data": 0,
     "diagram": 9,
     "evidence": 2,
+    "computation": 0,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
@@ -54017,6 +54044,7 @@
     "data": 0,
     "diagram": 8,
     "evidence": 2,
+    "computation": 0,
     "declaredButInert": 9,
     "prose": 0,
     "mismatched": 0,
@@ -54828,6 +54856,7 @@
     "data": 0,
     "diagram": 9,
     "evidence": 2,
+    "computation": 0,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
@@ -55704,6 +55733,7 @@
     "data": 0,
     "diagram": 10,
     "evidence": 3,
+    "computation": 0,
     "declaredButInert": 11,
     "prose": 0,
     "mismatched": 0,
@@ -56489,6 +56519,7 @@
     "data": 0,
     "diagram": 9,
     "evidence": 2,
+    "computation": 0,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
@@ -57395,6 +57426,7 @@
     "data": 11,
     "diagram": 11,
     "evidence": 1,
+    "computation": 0,
     "declaredButInert": 11,
     "prose": 0,
     "mismatched": 0,
@@ -58208,6 +58240,7 @@
     "data": 1,
     "diagram": 10,
     "evidence": 1,
+    "computation": 0,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
@@ -59028,6 +59061,7 @@
     "data": 0,
     "diagram": 10,
     "evidence": 3,
+    "computation": 0,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
@@ -60023,6 +60057,7 @@
     "data": 0,
     "diagram": 12,
     "evidence": 4,
+    "computation": 0,
     "declaredButInert": 12,
     "prose": 0,
     "mismatched": 0,
@@ -60922,6 +60957,7 @@
     "data": 0,
     "diagram": 11,
     "evidence": 3,
+    "computation": 0,
     "declaredButInert": 11,
     "prose": 0,
     "mismatched": 0,
@@ -61677,6 +61713,7 @@
     "data": 0,
     "diagram": 9,
     "evidence": 5,
+    "computation": 0,
     "declaredButInert": 9,
     "prose": 0,
     "mismatched": 0,
@@ -62524,6 +62561,7 @@
     "data": 10,
     "diagram": 10,
     "evidence": 6,
+    "computation": 0,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
@@ -63276,6 +63314,7 @@
     "data": 0,
     "diagram": 9,
     "evidence": 5,
+    "computation": 0,
     "declaredButInert": 9,
     "prose": 0,
     "mismatched": 0,
@@ -64037,6 +64076,7 @@
     "data": 0,
     "diagram": 9,
     "evidence": 3,
+    "computation": 0,
     "declaredButInert": 9,
     "prose": 0,
     "mismatched": 0,
@@ -64620,6 +64660,7 @@
     "data": 0,
     "diagram": 7,
     "evidence": 2,
+    "computation": 0,
     "declaredButInert": 7,
     "prose": 0,
     "mismatched": 0,
@@ -65386,6 +65427,7 @@
     "data": 0,
     "diagram": 9,
     "evidence": 4,
+    "computation": 0,
     "declaredButInert": 9,
     "prose": 0,
     "mismatched": 0,
@@ -66146,6 +66188,7 @@
     "data": 0,
     "diagram": 9,
     "evidence": 4,
+    "computation": 0,
     "declaredButInert": 9,
     "prose": 0,
     "mismatched": 0,
@@ -67033,6 +67076,7 @@
     "data": 0,
     "diagram": 11,
     "evidence": 5,
+    "computation": 0,
     "declaredButInert": 11,
     "prose": 0,
     "mismatched": 0,
@@ -67850,6 +67894,7 @@
     "data": 0,
     "diagram": 10,
     "evidence": 5,
+    "computation": 0,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
@@ -68510,6 +68555,7 @@
     "data": 0,
     "diagram": 8,
     "evidence": 3,
+    "computation": 0,
     "declaredButInert": 8,
     "prose": 0,
     "mismatched": 0,
@@ -69593,6 +69639,7 @@
     "data": 0,
     "diagram": 13,
     "evidence": 7,
+    "computation": 0,
     "declaredButInert": 13,
     "prose": 0,
     "mismatched": 0,
@@ -70256,6 +70303,7 @@
     "data": 0,
     "diagram": 8,
     "evidence": 2,
+    "computation": 0,
     "declaredButInert": 8,
     "prose": 0,
     "mismatched": 0,
@@ -70926,6 +70974,7 @@
     "data": 0,
     "diagram": 8,
     "evidence": 4,
+    "computation": 0,
     "declaredButInert": 8,
     "prose": 0,
     "mismatched": 0,
@@ -71668,6 +71717,7 @@
     "data": 0,
     "diagram": 9,
     "evidence": 4,
+    "computation": 0,
     "declaredButInert": 9,
     "prose": 0,
     "mismatched": 0,
@@ -72338,6 +72388,7 @@
     "data": 0,
     "diagram": 8,
     "evidence": 4,
+    "computation": 0,
     "declaredButInert": 8,
     "prose": 0,
     "mismatched": 0,
@@ -73093,6 +73144,7 @@
     "data": 0,
     "diagram": 9,
     "evidence": 5,
+    "computation": 0,
     "declaredButInert": 9,
     "prose": 0,
     "mismatched": 0,
@@ -73930,6 +73982,7 @@
     "data": 0,
     "diagram": 10,
     "evidence": 6,
+    "computation": 0,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
@@ -74767,6 +74820,7 @@
     "data": 10,
     "diagram": 10,
     "evidence": 4,
+    "computation": 0,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
@@ -75599,6 +75653,7 @@
     "data": 10,
     "diagram": 10,
     "evidence": 3,
+    "computation": 0,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
@@ -76436,31 +76491,1031 @@
     "data": 10,
     "diagram": 10,
     "evidence": 4,
+    "computation": 0,
     "declaredButInert": 10,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
    }
+  },
+  {
+   "id": "integrators-in-practice",
+   "title": "Integrators in Practice",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "one-system-four-steps",
+     "index": 1,
+     "type": "read",
+     "title": "One system, four ways to take a step",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Circumbinary Planet Lab\" seed binary",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
+     "sid": "which-loses-most",
+     "index": 2,
+     "type": "predict",
+     "title": "Which loses the most",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "four-drifts",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "four-drifts",
+     "index": 3,
+     "type": "measure",
+     "title": "Run it: the four drifts",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "integrators-compared",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "why-bounded",
+     "index": 4,
+     "type": "question",
+     "title": "Why one stays small",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "halve-the-step",
+     "index": 5,
+     "type": "measure",
+     "title": "Halve the step",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "integrators-compared",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "the-engine",
+     "index": 6,
+     "type": "measure",
+     "title": "Against the application",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "integrators-compared",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "phase-luck",
+     "index": 7,
+     "type": "question",
+     "title": "A number that is not a property",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 8,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    }
+   ],
+   "loops": [
+    {
+     "predict": "which-loses-most",
+     "predictCollects": true,
+     "heldUntil": "four-drifts",
+     "experiment": [],
+     "measure": [
+      "four-drifts",
+      "halve-the-step",
+      "the-engine"
+     ],
+     "evidence": [
+      "four-drifts",
+      "halve-the-step",
+      "the-engine"
+     ],
+     "interpret": "four-drifts",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 8,
+    "declared": 0,
+    "student": 0,
+    "engine": 0,
+    "model": 0,
+    "data": 0,
+    "diagram": 0,
+    "evidence": 3,
+    "computation": 3,
+    "declaredButInert": 0,
+    "prose": 5,
+    "mismatched": 0,
+    "rebuilds": 1
+   }
+  },
+  {
+   "id": "extending-an-experiment",
+   "title": "Extending an Experiment",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "twenty-planets",
+     "index": 1,
+     "type": "read",
+     "title": "Twenty planets that the engine ran",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Binary Planet Lab\" seed binary",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
+     "sid": "how-well-can-twenty-place-an-edge",
+     "index": 2,
+     "type": "predict",
+     "title": "How well can twenty place an edge",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "the-fit",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "the-fit",
+     "index": 3,
+     "type": "measure",
+     "title": "Run it: the edge and the fractions",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "population-at-scale",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "a-uniform-population",
+     "index": 4,
+     "type": "measure",
+     "title": "A uniform population",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "population-at-scale",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "why-the-sample-differs",
+     "index": 5,
+     "type": "question",
+     "title": "Why the sample differs",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "move-the-definition",
+     "index": 6,
+     "type": "measure",
+     "title": "Move the definition",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "population-at-scale",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "what-moved-it",
+     "index": 7,
+     "type": "question",
+     "title": "What moved the edge",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 8,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    }
+   ],
+   "loops": [
+    {
+     "predict": "how-well-can-twenty-place-an-edge",
+     "predictCollects": true,
+     "heldUntil": "the-fit",
+     "experiment": [],
+     "measure": [
+      "the-fit",
+      "a-uniform-population",
+      "move-the-definition"
+     ],
+     "evidence": [
+      "the-fit",
+      "a-uniform-population",
+      "move-the-definition"
+     ],
+     "interpret": "the-fit",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 8,
+    "declared": 0,
+    "student": 0,
+    "engine": 0,
+    "model": 0,
+    "data": 0,
+    "diagram": 0,
+    "evidence": 3,
+    "computation": 3,
+    "declaredButInert": 0,
+    "prose": 5,
+    "mismatched": 0,
+    "rebuilds": 1
+   }
   }
  ],
  "totals": {
-  "steps": 984,
+  "steps": 1000,
   "declared": 934,
   "student": 157,
   "engine": 163,
   "model": 545,
   "data": 146,
   "diagram": 424,
-  "evidence": 225,
+  "evidence": 231,
+  "computation": 6,
   "declaredButInert": 777,
-  "prose": 30,
+  "prose": 40,
   "mismatched": 0,
-  "rebuilds": 71,
-  "lessons": 55,
-  "loops": 125,
-  "closedLoops": 125,
+  "rebuilds": 73,
+  "lessons": 57,
+  "loops": 127,
+  "closedLoops": 127,
   "explainedLoops": 0,
-  "heldLoops": 125,
-  "completeLoops": 125
+  "heldLoops": 127,
+  "completeLoops": 127
  }
 }

@@ -242,12 +242,13 @@ describe('the document inventory', () => {
     // 350 after the lensing (Prompt 94) and stellar-interior (Prompt 95) investigations.
     // 390 after the four variable-star investigations (Prompt 96);
     // 430 after the four cosmology investigations (Prompt 91).
-    expect(inv.documents).toBe(460);
-    expect(inv.byLocale).toEqual({ en: 239, es: 221 });
+    // 468 after the two computational investigations (Prompt 102).
+    expect(inv.documents).toBe(468);
+    expect(inv.byLocale).toEqual({ en: 243, es: 225 });
     expect(inv.byVariant).toEqual({
       activity: 12,
       depth: 210,
-      full: 220,
+      full: 228,
       general: 18,
     });
   });

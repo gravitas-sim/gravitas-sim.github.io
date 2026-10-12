@@ -1,0 +1,1186 @@
+{
+  "format": "gravitas.experiment-result",
+  "formatVersion": 1,
+  "hash": "16534f33",
+  "manifest": {
+    "format": "gravitas.experiment",
+    "formatVersion": 1,
+    "title": "Binary Planet Lab: twenty planets, seeded starting distances",
+    "model": {
+      "scenario": "binary-planet-lab",
+      "platform": "^1.0.0"
+    },
+    "initial": {
+      "settings": {}
+    },
+    "seeds": [
+      "population-102"
+    ],
+    "vary": [
+      {
+        "parameter": "binary_lab_planet_a",
+        "distribution": {
+          "kind": "uniform",
+          "min": 0.12,
+          "max": 0.42,
+          "samples": 20,
+          "seed": "population-102"
+        }
+      }
+    ],
+    "observables": {
+      "metrics": [
+        "distance_to_primary",
+        "energy_drift"
+      ],
+      "roles": {
+        "bodies": [
+          "planet"
+        ],
+        "primary": "Star A"
+      }
+    },
+    "stop": {
+      "duration": 100000,
+      "events": []
+    },
+    "numerics": {
+      "frameSeconds": 0.016666666666666666,
+      "sampleEvery": 1
+    },
+    "limits": {
+      "concurrency": 1,
+      "trialTimeoutMs": 120000,
+      "totalTimeoutMs": 1200000,
+      "maxSamplesPerTrial": 5000,
+      "maxResultBytes": 16000000
+    },
+    "summaries": [
+      "mean",
+      "min",
+      "max",
+      "status-counts"
+    ]
+  },
+  "engine": {
+    "fingerprint": "fd7beac7",
+    "app": "gravitas",
+    "platform": "1.0.0"
+  },
+  "environment": {
+    "profile": "desktop",
+    "concurrency": 1,
+    "cores": null
+  },
+  "startedAt": "2026-10-11T00:00:00.000Z",
+  "finishedAt": "2026-10-11T00:00:00.000Z",
+  "status": "complete",
+  "stopReason": null,
+  "resumedTrials": [],
+  "elapsedMs": 0,
+  "trials": [
+    {
+      "index": 0,
+      "params": {
+        "binary_lab_planet_a": 0.12263567443471401
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 1.2199723363386585,
+        "energy_drift": 0.00017026803386664913
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 1,
+      "params": {
+        "binary_lab_planet_a": 0.13697263908572493
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 1.3585122986199054,
+        "energy_drift": 0.00017029764219113352
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 2,
+      "params": {
+        "binary_lab_planet_a": 0.15515826074872166
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 1.527415181401006,
+        "energy_drift": 0.00017013889595984084
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 3,
+      "params": {
+        "binary_lab_planet_a": 0.15613668624311686
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 1.536508632314448,
+        "energy_drift": 0.00017016493934433782
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 4,
+      "params": {
+        "binary_lab_planet_a": 0.17099530254956335
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 1.6649028694717736,
+        "energy_drift": 0.00017022081540186255
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 5,
+      "params": {
+        "binary_lab_planet_a": 0.18113229193724692
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 1.7468524002746681,
+        "energy_drift": 0.00017021812933221364
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 6,
+      "params": {
+        "binary_lab_planet_a": 0.18543164695613085
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 1.782630095536729,
+        "energy_drift": 0.00017019135400344582
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 7,
+      "params": {
+        "binary_lab_planet_a": 0.19263046111911536
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 1.8351958134513324,
+        "energy_drift": 0.0001702183195690869
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 8,
+      "params": {
+        "binary_lab_planet_a": 0.2046892213448882
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 1.9351270389512867,
+        "energy_drift": 0.00017023935284686325
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 9,
+      "params": {
+        "binary_lab_planet_a": 0.20957663238979873
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 1.9546530747203532,
+        "energy_drift": 0.00017021043846270385
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 10,
+      "params": {
+        "binary_lab_planet_a": 0.23147327644284815
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 8.706785588758732,
+        "energy_drift": 0.0001702364593041132
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 11,
+      "params": {
+        "binary_lab_planet_a": 0.23725058003794403
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 2.0567513919579405,
+        "energy_drift": 0.00017023512235195325
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 12,
+      "params": {
+        "binary_lab_planet_a": 0.24684824396856128
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 5.078161676202136,
+        "energy_drift": 0.00017029501024651874
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 13,
+      "params": {
+        "binary_lab_planet_a": 0.3443290461134165
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 1287.7476440868556,
+        "energy_drift": 0.006476772387068343
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 14,
+      "params": {
+        "binary_lab_planet_a": 0.350555070634
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 2169.1957892087344,
+        "energy_drift": 0.013340364258201023
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 15,
+      "params": {
+        "binary_lab_planet_a": 0.3581107309833169
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 4194.924703801196,
+        "energy_drift": 0.04890717203715877
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 16,
+      "params": {
+        "binary_lab_planet_a": 0.3598608855670318
+      },
+      "seed": "population-102",
+      "status": "lostBody",
+      "results": {
+        "distance_to_primary": 42.47239130960172,
+        "energy_drift": 0.002880640594964468
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 573,
+      "steps": 36099,
+      "samples": 573,
+      "simTime": 35812.50000000381,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "lost-body"
+    },
+    {
+      "index": 17,
+      "params": {
+        "binary_lab_planet_a": 0.3883515815762803
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 2977.5052094939992,
+        "energy_drift": 0.018264369631918534
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 18,
+      "params": {
+        "binary_lab_planet_a": 0.41035823747981337
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 2414.124237893854,
+        "energy_drift": 0.027283304078634867
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    },
+    {
+      "index": 19,
+      "params": {
+        "binary_lab_planet_a": 0.4122758823260665
+      },
+      "seed": "population-102",
+      "status": "ok",
+      "results": {
+        "distance_to_primary": 5762.703690611133,
+        "energy_drift": 0.06936640527821757
+      },
+      "kinds": {
+        "distance_to_primary": "mean",
+        "energy_drift": "final"
+      },
+      "frames": 1600,
+      "steps": 100800,
+      "samples": 1601,
+      "simTime": 99999.99999975853,
+      "wallMs": 0,
+      "timing": null,
+      "numerics": {
+        "integrator": "Velocity Verlet",
+        "frameSeconds": 0.016666666666666666,
+        "frameAdvance": 62.5,
+        "step": 0.9920634920634921,
+        "substeps": 63
+      },
+      "stoppedBy": "duration"
+    }
+  ],
+  "summary": {
+    "statusCounts": {
+      "total": 20,
+      "ok": 19,
+      "buildFailed": 0,
+      "bodiesMissing": 0,
+      "notFinite": 0,
+      "lostBody": 1,
+      "canceled": 0,
+      "stalled": 0,
+      "capped": 0,
+      "timeout": 0,
+      "corrupt": 0,
+      "workerFailed": 0,
+      "resourceLimit": 0
+    },
+    "metrics": {
+      "distance_to_primary": [
+        {
+          "params": {
+            "binary_lab_planet_a": 0.12263567443471401
+          },
+          "n": 1,
+          "mean": 1.2199723363386585,
+          "min": 1.2199723363386585,
+          "max": 1.2199723363386585,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.13697263908572493
+          },
+          "n": 1,
+          "mean": 1.3585122986199054,
+          "min": 1.3585122986199054,
+          "max": 1.3585122986199054,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.15515826074872166
+          },
+          "n": 1,
+          "mean": 1.527415181401006,
+          "min": 1.527415181401006,
+          "max": 1.527415181401006,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.15613668624311686
+          },
+          "n": 1,
+          "mean": 1.536508632314448,
+          "min": 1.536508632314448,
+          "max": 1.536508632314448,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.17099530254956335
+          },
+          "n": 1,
+          "mean": 1.6649028694717736,
+          "min": 1.6649028694717736,
+          "max": 1.6649028694717736,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.18113229193724692
+          },
+          "n": 1,
+          "mean": 1.7468524002746681,
+          "min": 1.7468524002746681,
+          "max": 1.7468524002746681,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.18543164695613085
+          },
+          "n": 1,
+          "mean": 1.782630095536729,
+          "min": 1.782630095536729,
+          "max": 1.782630095536729,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.19263046111911536
+          },
+          "n": 1,
+          "mean": 1.8351958134513324,
+          "min": 1.8351958134513324,
+          "max": 1.8351958134513324,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.2046892213448882
+          },
+          "n": 1,
+          "mean": 1.9351270389512867,
+          "min": 1.9351270389512867,
+          "max": 1.9351270389512867,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.20957663238979873
+          },
+          "n": 1,
+          "mean": 1.9546530747203532,
+          "min": 1.9546530747203532,
+          "max": 1.9546530747203532,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.23147327644284815
+          },
+          "n": 1,
+          "mean": 8.706785588758732,
+          "min": 8.706785588758732,
+          "max": 8.706785588758732,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.23725058003794403
+          },
+          "n": 1,
+          "mean": 2.0567513919579405,
+          "min": 2.0567513919579405,
+          "max": 2.0567513919579405,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.24684824396856128
+          },
+          "n": 1,
+          "mean": 5.078161676202136,
+          "min": 5.078161676202136,
+          "max": 5.078161676202136,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.3443290461134165
+          },
+          "n": 1,
+          "mean": 1287.7476440868556,
+          "min": 1287.7476440868556,
+          "max": 1287.7476440868556,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.350555070634
+          },
+          "n": 1,
+          "mean": 2169.1957892087344,
+          "min": 2169.1957892087344,
+          "max": 2169.1957892087344,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.3581107309833169
+          },
+          "n": 1,
+          "mean": 4194.924703801196,
+          "min": 4194.924703801196,
+          "max": 4194.924703801196,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.3598608855670318
+          },
+          "n": 0,
+          "mean": null,
+          "min": null,
+          "max": null,
+          "spread": null,
+          "partial": 0,
+          "missing": 1
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.3883515815762803
+          },
+          "n": 1,
+          "mean": 2977.5052094939992,
+          "min": 2977.5052094939992,
+          "max": 2977.5052094939992,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.41035823747981337
+          },
+          "n": 1,
+          "mean": 2414.124237893854,
+          "min": 2414.124237893854,
+          "max": 2414.124237893854,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.4122758823260665
+          },
+          "n": 1,
+          "mean": 5762.703690611133,
+          "min": 5762.703690611133,
+          "max": 5762.703690611133,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        }
+      ],
+      "energy_drift": [
+        {
+          "params": {
+            "binary_lab_planet_a": 0.12263567443471401
+          },
+          "n": 1,
+          "mean": 0.00017026803386664913,
+          "min": 0.00017026803386664913,
+          "max": 0.00017026803386664913,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.13697263908572493
+          },
+          "n": 1,
+          "mean": 0.00017029764219113352,
+          "min": 0.00017029764219113352,
+          "max": 0.00017029764219113352,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.15515826074872166
+          },
+          "n": 1,
+          "mean": 0.00017013889595984084,
+          "min": 0.00017013889595984084,
+          "max": 0.00017013889595984084,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.15613668624311686
+          },
+          "n": 1,
+          "mean": 0.00017016493934433782,
+          "min": 0.00017016493934433782,
+          "max": 0.00017016493934433782,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.17099530254956335
+          },
+          "n": 1,
+          "mean": 0.00017022081540186255,
+          "min": 0.00017022081540186255,
+          "max": 0.00017022081540186255,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.18113229193724692
+          },
+          "n": 1,
+          "mean": 0.00017021812933221364,
+          "min": 0.00017021812933221364,
+          "max": 0.00017021812933221364,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.18543164695613085
+          },
+          "n": 1,
+          "mean": 0.00017019135400344582,
+          "min": 0.00017019135400344582,
+          "max": 0.00017019135400344582,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.19263046111911536
+          },
+          "n": 1,
+          "mean": 0.0001702183195690869,
+          "min": 0.0001702183195690869,
+          "max": 0.0001702183195690869,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.2046892213448882
+          },
+          "n": 1,
+          "mean": 0.00017023935284686325,
+          "min": 0.00017023935284686325,
+          "max": 0.00017023935284686325,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.20957663238979873
+          },
+          "n": 1,
+          "mean": 0.00017021043846270385,
+          "min": 0.00017021043846270385,
+          "max": 0.00017021043846270385,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.23147327644284815
+          },
+          "n": 1,
+          "mean": 0.0001702364593041132,
+          "min": 0.0001702364593041132,
+          "max": 0.0001702364593041132,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.23725058003794403
+          },
+          "n": 1,
+          "mean": 0.00017023512235195325,
+          "min": 0.00017023512235195325,
+          "max": 0.00017023512235195325,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.24684824396856128
+          },
+          "n": 1,
+          "mean": 0.00017029501024651874,
+          "min": 0.00017029501024651874,
+          "max": 0.00017029501024651874,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.3443290461134165
+          },
+          "n": 1,
+          "mean": 0.006476772387068343,
+          "min": 0.006476772387068343,
+          "max": 0.006476772387068343,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.350555070634
+          },
+          "n": 1,
+          "mean": 0.013340364258201023,
+          "min": 0.013340364258201023,
+          "max": 0.013340364258201023,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.3581107309833169
+          },
+          "n": 1,
+          "mean": 0.04890717203715877,
+          "min": 0.04890717203715877,
+          "max": 0.04890717203715877,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.3598608855670318
+          },
+          "n": 0,
+          "mean": null,
+          "min": null,
+          "max": null,
+          "spread": null,
+          "partial": 0,
+          "missing": 1
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.3883515815762803
+          },
+          "n": 1,
+          "mean": 0.018264369631918534,
+          "min": 0.018264369631918534,
+          "max": 0.018264369631918534,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.41035823747981337
+          },
+          "n": 1,
+          "mean": 0.027283304078634867,
+          "min": 0.027283304078634867,
+          "max": 0.027283304078634867,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        },
+        {
+          "params": {
+            "binary_lab_planet_a": 0.4122758823260665
+          },
+          "n": 1,
+          "mean": 0.06936640527821757,
+          "min": 0.06936640527821757,
+          "max": 0.06936640527821757,
+          "spread": null,
+          "partial": 0,
+          "missing": 0
+        }
+      ]
+    }
+  }
+}
