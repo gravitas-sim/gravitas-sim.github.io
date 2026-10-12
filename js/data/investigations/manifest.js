@@ -691,4 +691,28 @@ export const MANIFEST = [
     gradedCount: 8,
     objectiveCount: 5,
   },
+  {
+    id: 'integrators-in-practice',
+    title: 'Integrators in Practice',
+    subtitle:
+      'Four ways to take a step, compared by the energy each one loses on a real system, in Python on the compute page',
+    duration: '30-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/circumbinary-planet-lab.webp',
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
+    id: 'extending-an-experiment',
+    title: 'Extending an Experiment',
+    subtitle:
+      'From twenty planets that the engine ran to a population of two hundred thousand, with every uncertainty, in Python on the compute page',
+    duration: '30-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/binary-planet-lab.webp',
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
 ];

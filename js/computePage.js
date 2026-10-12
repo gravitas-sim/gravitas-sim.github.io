@@ -2,7 +2,7 @@
 // /compute/: the compute page
 // -----------------------------------------------------------------------------
 // Roadmap II Prompt 101 (COMPUTE.md). Runs one of a few reviewed Python
-// notebooks on a Gravitas observation, in a Worker inside a sandboxed frame
+// notebooks on a document Gravitas writes, in a Worker inside a sandboxed frame
 // served from the compute origin, and records the run as a compute capsule.
 // Opt-in and online only: nothing here fetches the frame or the runtime until
 // the reader presses "Start the runtime", after the page has said what it
@@ -213,7 +213,7 @@ function describeEntry() {
   fact(
     dl,
     L('Reads', 'Lee'),
-    `${e.input.format}/${e.input.version} (${e.input.kind})`
+    `${e.input.format}/${e.input.version}${e.input.kind ? ` (${e.input.kind})` : ''}`
   );
   fact(
     dl,

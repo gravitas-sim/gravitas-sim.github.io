@@ -9,7 +9,7 @@
 // by Playwright, so this works before that origin is published and checks the
 // bytes that will be.
 //
-//   - both reviewed notebooks run to their expected values, and the capsule
+//   - every reviewed notebook runs to their expected values, and the capsule
 //     they make verifies;
 //   - what a hostile cell can reach from inside the real Worker: nothing of the
 //     page's (storage, DOM, cookies), no fetch of this site's files or of
@@ -36,7 +36,12 @@ async function open(page) {
   await page.waitForFunction(() => window.computeReady === true);
 }
 
-for (const id of ['line-centroid', 'transit-times']) {
+for (const id of [
+  'line-centroid',
+  'transit-times',
+  'integrators-compared',
+  'population-at-scale',
+]) {
   test(`${id} runs on the pinned runtime and matches its expected values`, async ({
     page,
   }) => {

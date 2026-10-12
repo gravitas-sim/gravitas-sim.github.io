@@ -113,4 +113,8 @@ export const SUMMARIES = {
     'Far away, only the intrinsically bright stars reach a survey, so the stars it counts are brighter than the stars there are: Malmquist bias. You will measure it in shells of distance, compare it with its closed form for standard candles, and meet a second bias that comes from trusting only well-measured parallaxes. Each is checked against a truth you know.',
   'the-completeness-curve':
     'A real survey fades out before its limit. You will weight each counted star by the volume in which it could have been seen, recover the luminosity function that went in to within its Poisson error, see when a correction cannot help, and measure the bias that remains when the correction uses the catalog’s own magnitudes.',
+  'integrators-in-practice':
+    'Four integrators take the same ten thousand steps on Kepler-16, two stars and a circumbinary planet. You will run a reviewed Python notebook on the compute page, read each method’s energy drift, halve the step to see the order of each, and compare the notebook with Gravitas’s own engine, including why a symplectic method’s last number is not a property.',
+  'extending-an-experiment':
+    'Twenty planets, each run by the engine from a random starting distance, fix where the bound region ends. You will run a reviewed Python notebook on that experiment result, fit the chance of staying bound with a bootstrap, extend it to two hundred thousand synthetic planets, and see why the interval does not cover the definition of bound or the choice of curve.',
 };

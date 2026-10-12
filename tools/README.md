@@ -43,6 +43,8 @@ current, and the orchestrator checks it.
 | `check-links.mjs` | Internal link and asset checker | `npm run validate:links`, `npm run validate:links:dist` |
 | `check-test-policy.mjs` | A skip has to be a capability, and it has to be on the record | `npm run test:policy` |
 | `checks.mjs` | One list of what has to pass |  |
+| `compute-answers.mjs` | The answers the reviewed notebooks gave, as fixtures for the tests |  |
+| `compute-examples.mjs` | The compute page's two Gravitas-made example inputs |  |
 | `compute.mjs` | The compute page's generated files: the frame, its pin, the catalogue's hashes |  |
 | `cosmology-validate.mjs` | (no header) | `npm run cosmology:validate` |
 | `csp.mjs` | A Content-Security-Policy on every page |  |

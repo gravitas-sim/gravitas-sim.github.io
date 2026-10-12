@@ -858,6 +858,8 @@ export const EN_DEFERRED = {
     'Your evidence here comes from published observations, reduced and shown as their authors released them.',
   'inv.evidenceFrom.illustration':
     'Your evidence here comes from a diagram drawn to explain a relationship, not from a measurement.',
+  'inv.evidenceFrom.computation':
+    'Your evidence here comes from a Python notebook you ran on the compute page, on a file Gravitas wrote: the numbers come from the notebook, not from the simulation.',
   'inv.answer.saysNothing':
     'That looks empty. Write a sentence or two - what you measured, and how it compares with what you predicted.',
   'inv.answer.recorded': 'Recorded.',
@@ -1847,6 +1849,10 @@ export const EN_DEFERRED = {
     'What a detection does and does not tell you about whether anywhere is habitable. Needs the transit investigation; the radial-velocity one helps.',
   'inv.seq.planets.binary-star-planets':
     'Stability, resonance and chaos at once, deciding where a planet can survive around two stars.',
+  'inv.seq.planets.extending-an-experiment':
+    'An experiment of twenty planets extended in Python to a population, with what its interval covers and what it does not. Needs the compute page and a connection.',
+  'inv.seq.gravity.integrators-in-practice':
+    'Four integrators compared by the energy they lose on a real system, in Python. Needs the compute page and a connection.',
 
   'inv.seq.galaxies.title': 'Galaxies and the universe',
   'inv.seq.galaxies.blurb':
@@ -3201,7 +3207,7 @@ export const EN_DEFERRED = {
     'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
   'welcomeAudience.instructors.title': 'For instructors',
   'welcomeAudience.instructors.text':
-    '55 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
+    '57 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
   'welcomeAudience.curious.title': 'For the curious',
   'welcomeAudience.curious.text':
     'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',

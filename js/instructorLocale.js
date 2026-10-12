@@ -108,6 +108,8 @@ import THE_COMPLETENESS_CURVE_DEEPER from './data/investigations/depth/es/the-co
 import WHO_GETS_COUNTED from './data/investigations/es/who-gets-counted.js';
 import WHY_THE_BRIGHT_ONES_WIN from './data/investigations/es/why-the-bright-ones-win.js';
 import THE_COMPLETENESS_CURVE from './data/investigations/es/the-completeness-curve.js';
+import INTEGRATORS_IN_PRACTICE from './data/investigations/es/integrators-in-practice.js';
+import EXTENDING_AN_EXPERIMENT from './data/investigations/es/extending-an-experiment.js';
 
 /** The Spanish shadow of each lesson, by lesson id. */
 export const SHADOWS = Object.freeze({
@@ -146,6 +148,8 @@ export const SHADOWS = Object.freeze({
   'who-gets-counted': WHO_GETS_COUNTED,
   'why-the-bright-ones-win': WHY_THE_BRIGHT_ONES_WIN,
   'the-completeness-curve': THE_COMPLETENESS_CURVE,
+  'integrators-in-practice': INTEGRATORS_IN_PRACTICE,
+  'extending-an-experiment': EXTENDING_AN_EXPERIMENT,
   'design-the-schedule': DESIGN_THE_SCHEDULE,
   'detect-this-planet': DETECT_THIS_PLANET,
   'goldilocks-question': GOLDILOCKS_QUESTION,

@@ -243,12 +243,15 @@ test.describe('filtering', () => {
     await openBrowser(page, app);
     const search = page.locator('#investigationSearch');
 
-    // A title and a summary: two lessons name Kepler, and both belong here.
+    // A title and a summary: three lessons name Kepler, and all belong here.
+    // Integrators in Practice (Prompt 102) runs on the Kepler-16 system, which
+    // its summary names, so it legitimately matches.
     await search.fill('kepler');
-    await expect(page.locator('#investigationList .inv-card')).toHaveCount(2);
+    await expect(page.locator('#investigationList .inv-card')).toHaveCount(3);
     await expect
       .poll(() => shownIds(page))
-      .toEqual(['keplers-laws', 'weighing-stars']);
+
+      .toEqual(['keplers-laws', 'weighing-stars', 'integrators-in-practice']);
 
     // A tag nobody prints on a card is still searchable.
     await search.fill('resonance');

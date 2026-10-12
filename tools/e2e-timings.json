@@ -1838,5 +1838,15 @@
   "[chromium] › adopterGuide.spec.js › the guide at 1024 px › nothing scrolls sideways": 0.2,
   "[chromium] › adopterGuide.spec.js › the guide at 375 px › axe finds nothing, in en": 1.4,
   "[chromium] › adopterGuide.spec.js › the guide at 375 px › axe finds nothing, in es": 1.2,
-  "[chromium] › adopterGuide.spec.js › the guide at 375 px › nothing scrolls sideways": 0.3
+  "[chromium] › adopterGuide.spec.js › the guide at 375 px › nothing scrolls sideways": 0.3,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › integrators-in-practice: four integrators lose energy at different rates on the same system @accepts:ce.integrators-in-practice": 6.0,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › extending-an-experiment: the edge of the bound region is placed no better than the trials allow @accepts:ce.extending-an-experiment": 6.0,
+  "[chromium] › computeOnline.spec.js › integrators-compared runs on the pinned runtime and matches its expected values": 0.1,
+  "[chromium] › computeOnline.spec.js › population-at-scale runs on the pinned runtime and matches its expected values": 0.1,
+  "[chromium] › authorWalk.spec.js › walking integrators-in-practice › all 8 steps run, and the report opens": 10.2,
+  "[mobile-chrome] › authorWalk.spec.js › walking integrators-in-practice › all 8 steps run, and the report opens": 14.0,
+  "[chromium] › lazyInstruments.spec.js › every lesson fetches only the families its steps name › integrators-in-practice": 1.9,
+  "[chromium] › authorWalk.spec.js › walking extending-an-experiment › all 8 steps run, and the report opens": 10.2,
+  "[mobile-chrome] › authorWalk.spec.js › walking extending-an-experiment › all 8 steps run, and the report opens": 14.0,
+  "[chromium] › lazyInstruments.spec.js › every lesson fetches only the families its steps name › extending-an-experiment": 1.9
 }

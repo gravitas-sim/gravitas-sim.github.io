@@ -232,4 +232,12 @@ export const BROWSE_META = {
     tags: ['observing', 'stars'],
     numericCount: 0,
   },
+  'integrators-in-practice': {
+    tags: ['orbits'],
+    numericCount: 0,
+  },
+  'extending-an-experiment': {
+    tags: ['exoplanets'],
+    numericCount: 0,
+  },
 };
