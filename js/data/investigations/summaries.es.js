@@ -113,4 +113,8 @@ export const SUMMARIES_ES = {
     'Lejos, solo las estrellas intrínsecamente brillantes llegan a un sondeo, así que las que cuenta son más brillantes que las que hay: sesgo de Malmquist. Lo medirás en capas de distancia, lo compararás con su forma cerrada para candelas estándar y conocerás un segundo sesgo que viene de fiarse solo de paralajes bien medidas. Cada uno se comprueba contra una verdad que conoces.',
   'the-completeness-curve':
     'Un sondeo real se desvanece antes de su límite. Ponderarás cada estrella contada por el volumen en que pudo verse, recuperarás la función de luminosidad que entró dentro de su error de Poisson, verás cuándo una corrección no puede ayudar y medirás el sesgo que queda cuando la corrección usa las magnitudes del propio catálogo.',
+  'integrators-in-practice':
+    'Cuatro integradores dan los mismos diez mil pasos en Kepler-16, dos estrellas y un planeta circumbinario. Ejecutarás un cuaderno de Python revisado en la página de cálculo, leerás la deriva de energía de cada método, reducirás el paso a la mitad para ver el orden de cada uno y compararás el cuaderno con el motor de Gravitas, incluido por qué el último número de un método simpléctico no es una propiedad.',
+  'extending-an-experiment':
+    'Veinte planetas, cada uno ejecutado por el motor desde una distancia inicial al azar, fijan dónde termina la región ligada. Ejecutarás un cuaderno de Python revisado sobre ese resultado de experimento, ajustarás con bootstrap la probabilidad de seguir ligado, la extenderás a doscientos mil planetas sintéticos y verás por qué el intervalo no cubre la definición de ligado ni la elección de la curva.',
 };

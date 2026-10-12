@@ -16,6 +16,170 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'extending-an-experiment': {
+    topic:
+      'Classifying an experiment’s trials, fitting the chance of an outcome with a bootstrap, and extending it to a large synthetic population, in Python, with the limits of what the interval covers',
+    difficulty: 'Upper level (computational)',
+    placement:
+      'In a computational astrophysics or statistics unit, after an introduction to the bootstrap. It uses the compute page, so it needs a network connection and about 19 MB of download per student, once. It runs on an experiment result of the Binary Planet Lab; a student can run an experiment of their own on the experiment runner, save its result and choose it as the input file when it varies one setting over a seeded draw and observes the distance to the primary.',
+    overview:
+      'Students run one reviewed notebook on twenty planets of the Binary Planet Lab, each started at a seeded random distance between 0.12 and 0.42 of the binary separation and run by the engine for twenty binary orbits. Twelve stay bound (mean distance within three starting distances). The notebook fits the chance of staying bound as a logistic curve: half-way at 0.255 +/- 0.024. It extends the fit to 200,000 synthetic planets with equal numbers per factor of distance: 0.596 +/- 0.076 bound. A uniform extension gives 0.451 +/- 0.081, against 0.6 in the sample, which is under two binomial errors (0.11). With a cutoff of six the edge moves to 0.289 +/- 0.0096 and the extension to 0.701 +/- 0.028, because one planet is reclassified.',
+    priorKnowledge: [
+      'The bootstrap, in outline',
+      'A logistic curve',
+      'What a seeded random draw is',
+    ],
+    keyConcepts: [
+      {
+        heading: 'An outcome is a definition',
+        body: 'The edge moved by a third of its gap when one planet was reclassified, and no interval counts that.',
+      },
+      {
+        heading: 'More synthetic planets, same assumptions',
+        body: 'Two hundred thousand synthetic planets have a small sampling error and exactly the assumptions of the fit; the uncertainty comes from the twenty trials.',
+      },
+      {
+        heading: 'A sample is one draw',
+        body: 'The sample fraction 0.6 sits 1.4 binomial errors from the uniform population’s 0.45; unremarkable for twenty.',
+      },
+    ],
+    features: [
+      {
+        name: 'The compute page (/compute/)',
+        text: 'The notebook "A population of planets, extended", in Pyodide 314.0.7 inside a sandboxed frame, on the vendored experiment result. The run is kept as a compute capsule that a report can cite.',
+      },
+      {
+        name: 'The experiment runner',
+        text: 'The input is a gravitas.experiment-result/1; the file is made by the same code the experiment Workers run (tools/compute-examples.mjs), with wall-clock fields zeroed and series left out.',
+      },
+      {
+        name: 'The answer key',
+        text: 'Every number a step checks is a declared output of the notebook, and a test holds each one to the notebook’s own run, so a different digit means a different setting or input file.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A bigger synthetic population makes the answer better known.',
+        response:
+          'It shrinks the sampling error of the synthetic draw only; the uncertainty of the prediction is the twenty trials’, and the assumptions are the same.',
+      },
+      {
+        claim: 'The sample fraction is the population fraction.',
+        response:
+          'It is one draw of twenty, and here it is 0.15 above the model’s uniform-population value.',
+      },
+      {
+        claim: 'The interval includes everything uncertain.',
+        response:
+          'It includes the scatter of the twenty, not the logistic form, the definition of bound or the range of the draw.',
+      },
+      {
+        claim: 'A notebook result is a measurement, so it needs no check.',
+        response:
+          'It is a computation on twenty trials: a different cutoff or a different seed would give different digits, and the capsule records which was used.',
+      },
+    ],
+    teachingNotes: [
+      'The runs are seeded and deterministic: every student should get the digits in the answer key.',
+      'The half-way distance with the cutoff at 6 comes with a warning that the fitted width is at the grid’s floor: the data are a clean step.',
+      'The cold download is about 19 MB because the notebook plots. Capsule files open without the runtime.',
+      'The example has only twenty trials because an experiment’s parameter has at most twenty values and the lab’s outcome does not depend on the seed; the limit is the point of the investigation.',
+    ],
+    discussion: [
+      'What would you need to add to the interval so that it covered the choice of a logistic?',
+      'How would you design the next twenty trials?',
+      'Which of the three results (edge, sample fraction, extension) moved most when the cutoff changed, and why?',
+    ],
+    extensions: [
+      'Run an experiment of your own in the Binary Planet Lab on the experiment runner, save it, and use it as the input.',
+      'Take the capsule to a local Jupyter (Run it yourself) and replace the logistic with a step.',
+    ],
+    modelNotes:
+      'The notebook assumes a logistic chance of being bound in the setting, fitted on a grid of center and width, and gives each synthetic planet that chance; the bootstrap resamples the trials, with a seed.',
+  },
+
+  'integrators-in-practice': {
+    topic:
+      'Numerical integrators compared by energy drift on a real three-body system, in Python, and why a symplectic method’s last number is not a property',
+    difficulty: 'Upper level (computational)',
+    placement:
+      'In a computational astrophysics or celestial mechanics unit, after Bound, Unbound and Escape. It uses the compute page, so it needs a network connection and about 19 MB of download per student, once; the instructor guide of the compute page (COMPUTE.md) says what is and is not pinned. A student who prefers a local Jupyter can take the run from the capsule (Run it yourself).',
+    overview:
+      'Students run one reviewed notebook on the Orbital System Builder’s Kepler-16 file and read the energy drift of four integrators over three periods of the widest orbit at 500 steps per period of the tightest pair: explicit Euler +49.75 percent, symplectic Euler -0.002317, velocity Verlet +0.001768 and Runge-Kutta 4 -6.47e-8. At 1000 steps Verlet improves 4.0 times and Runge-Kutta 4 26.5 times. At 438 steps, the application’s own step of 0.0278, velocity Verlet and Runge-Kutta 4 agree with Gravitas’s engine to 0.2 and 0.4 percent (+0.002304 against +0.002299, -1.222e-7 against -1.217e-7), and symplectic Euler’s end-of-run drift (-0.000165 against -0.002188) shows why a bounded oscillation is not quoted from its last point.',
+    priorKnowledge: [
+      'Energy and angular momentum of a bound orbit (Bound, Unbound and Escape)',
+      'Newton’s law of gravitation and what a time step is',
+      'Reading a log scale',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Order and structure are different things',
+        body: 'Explicit Euler is first order and has no protective structure, so its error grows; symplectic Euler is also first order but keeps a nearby energy exactly, so its error is bounded.',
+      },
+      {
+        heading: 'Halving the step',
+        body: 'A method of order p improves about 2 to the p when the step is halved: 4 for velocity Verlet here. Runge-Kutta 4 improved 26.5, more than 16, because at 500 steps it is not yet purely fourth order.',
+      },
+      {
+        heading: 'A drift is a curve',
+        body: 'A single end-of-run value catches an oscillating drift at an arbitrary phase; the notebook’s table has the curve.',
+      },
+    ],
+    features: [
+      {
+        name: 'The compute page (/compute/)',
+        text: 'The notebook "Four integrators on one system", on the Orbital System Builder’s Kepler-16 file, in Pyodide 314.0.7 inside a sandboxed frame. The run is kept as a compute capsule that a report can cite.',
+      },
+      {
+        name: 'The Orbital System Builder',
+        text: 'The Kepler-16 template, saved with its initial state, is the input. Students who want their own system can save one and choose it as the input file.',
+      },
+      {
+        name: 'The answer key',
+        text: 'Every number a step checks is a declared output of the notebook, and a test holds each one to the notebook’s own run and the 438-step runs to the application’s engine.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A higher-order method always conserves energy better.',
+        response:
+          'Runge-Kutta 4 is the best here, but its drift grows, slowly; symplectic Euler is only first order and its error is bounded. Over a long enough run the symplectic scheme wins.',
+      },
+      {
+        claim: 'Two correct runs must give the same drift.',
+        response:
+          'Symplectic Euler gave -0.00016 percent at 438 steps and -0.0023 at 500: the drift oscillates and the last point lands at a different phase.',
+      },
+      {
+        claim: 'Small energy drift means an accurate orbit.',
+        response:
+          'It does not: a method can keep the energy and put a body in the wrong place along its orbit.',
+      },
+      {
+        claim: 'Explicit Euler is only a little worse than the others.',
+        response:
+          'Here it gains half the starting energy in three orbits of the widest star, +49.75 percent, against a few thousandths of a percent for the other three.',
+      },
+    ],
+    teachingNotes: [
+      'The runs are deterministic. Every student should get the digits in the answer key; a different number means a different setting or a different input file.',
+      'The cold download is about 19 MB because the notebook plots. If connections are poor, run the notebook once on the instructor’s machine and have students open the capsule file, which needs no runtime.',
+      'The engine comparison was checked headlessly at the Builder’s own step (tests/computeCurriculum.test.js): symplectic Euler -0.0023168 percent and velocity Verlet +0.0017676 at the notebook’s step, to seven digits.',
+      'Explicit Euler is not in the application; the notebook adds it as the method everyone writes first.',
+    ],
+    discussion: [
+      'Why would a planetary-system code that must run for a billion years choose a first-order symplectic method over Runge-Kutta 4?',
+      'What would you report as the drift of a symplectic run, and why not its last value?',
+      'What would a close encounter do to each of these four?',
+    ],
+    extensions: [
+      'Save a different system from the Orbital System Builder and run the same notebook on it, then say which method’s ranking changed.',
+      'Take the capsule to a local Jupyter (Run it yourself) and change the integrator to a leapfrog of your own.',
+    ],
+    modelNotes:
+      'The notebook integrates Newtonian point masses at the file’s G with no softening, merging or relativity, which the application can enable; the energy is the application’s own (kinetic plus the pairwise potential).',
+  },
+
   'the-turning-sky': {
     topic:
       'Horizon and equatorial coordinates, sidereal time and why stars rise about four minutes earlier each night',

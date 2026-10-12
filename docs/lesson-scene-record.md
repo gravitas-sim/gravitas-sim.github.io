@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 55 investigations and 984 steps: 934 steps
+Across 57 investigations and 1000 steps: 934 steps
 declare a scene, 157 let a reader change one, 163 read the
 running integration, 545 show a prescribed model result, 146 draw
 on a stored dataset, 424 put a self-contained panel beside the text,
-225 keep something, and 30 are prose.
-Of 125 prediction loops, 125 are returned to,
-125 produce a measurement before they are answered, and
+231 keep something, and 40 are prose.
+Of 127 prediction loops, 127 are returned to,
+127 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-125 hold their marking until the experiment settles them.
+127 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -790,4 +790,32 @@ Of 125 prediction loops, 125 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:completeness-lf`, control completeness-lf/m50, measures the share of the true luminosity function a raw count recovers, and the corrected value, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Integrators in Practice (`integrators-in-practice`)
+
+- **Steps:** 8. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
+- **What students do:** read, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** none.
+- **Instruments:** none.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** which-loses-most → four-drifts, halve-the-step, the-engine → four-drifts.
+- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** 1 step(s) on arrival (one-system-four-steps).
+- **Accepted central experiment** (reviewed 2026-09-11): object `compute:integrators-compared`, control the compute page's steps-per-period setting (not a lesson widget), measures the energy drift of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4 over three periods of the widest orbit, and how each changes when the step is halved, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Extending an Experiment (`extending-an-experiment`)
+
+- **Steps:** 8. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
+- **What students do:** read, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** none.
+- **Instruments:** none.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** how-well-can-twenty-place-an-edge → the-fit, a-uniform-population, move-the-definition → the-fit.
+- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** 1 step(s) on arrival (twenty-planets).
+- **Accepted central experiment** (reviewed 2026-09-11): object `compute:population-at-scale`, control the compute page's cutoff and slope settings (not a lesson widget), measures the half-way starting distance and the bound fraction of the twenty trials and of the synthetic population, for the settings run, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

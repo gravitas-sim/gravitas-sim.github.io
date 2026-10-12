@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1990.9,
+    limit: 2006.2,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -618,14 +618,16 @@ const BUDGETS = [
       "models' 3-D bridge, the course pack's guide items and the 3-D " +
       'comparison source. The initial download did not move (786.8 KB). ' +
       'D-BUDGET-30, under the standing size-budget approval in the project ' +
-      'CLAUDE.md.\n\n' +
-      'Declarative scenario geometry (Prompt 108, slice 1) took it from 1989.2 ' +
-      'to 1990.9 KB gzipped (5426.5 KB raw), 1.7 KB: the geometry validator ' +
-      'and the pack compiler for it (js/scenarioPack.js), the Studio words for ' +
-      'the block, and the table and expander in js/scenarios.js, less the ' +
-      'hand-built blocks they replace in js/world/build.js. The initial ' +
-      'download did not move (787.5 KB). D-BUDGET-GEOM-01, under the standing ' +
-      'size-budget approval in the project CLAUDE.md.',
+      'CLAUDE.md.' +
+      '\n\n' +
+      'Raised from 1989.2 to 2004.5 KB gzipped for Prompt 102 ' +
+      '(D-BUDGET-COMPUTE-02, the standing size-budget approval): two ' +
+      'notebooks and their inputs, two investigations with their Spanish ' +
+      'shadows and instructor guides, and one course-pack unit, in the ' +
+      'deferred catalogs and lesson chunks, measured after merging v2 at ' +
+      '4a7d3ed (5463.1 KB raw). The initial download did not move (786.8 KB).' +
+      '\n\nDeclarative scenario geometry (Prompt 108, slice 1) took it from 2004.5 ' +
+      'to 2006.2 KB gzipped (5468.4 KB raw), 1.7 KB: the geometry validator and the pack compiler for it (js/scenarioPack.js), the Studio words for the block, and the table and expander in js/scenarios.js, less the hand-built blocks they replace in js/world/build.js. The initial download did not move (787.5 KB). D-BUDGET-GEOM-01, under the standing size-budget approval in the project CLAUDE.md.',
   },
 ];
 

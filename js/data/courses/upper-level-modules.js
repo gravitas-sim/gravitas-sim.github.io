@@ -1,5 +1,5 @@
 // =============================================================================
-// Upper-level astrophysics modules: seven short units
+// Upper-level astrophysics modules: eight short units
 // -----------------------------------------------------------------------------
 // A gravitas.course-pack/2 (js/course/pack.js, COURSE_PACKS.md), pinned to the
 // investigations as they are now. Roadmap II, Prompt 97. Opened as
@@ -18,14 +18,14 @@ export const UPPER_LEVEL_MODULES = {
   pinning: 'compatible',
   courseLevel: 'upper',
   title: {
-    en: 'Upper-level astrophysics modules: seven short units',
-    es: 'Módulos de astrofísica de nivel superior: siete unidades breves',
-    esOf: 'f105d3ad',
+    en: 'Upper-level astrophysics modules: eight short units',
+    es: 'Módulos de astrofísica de nivel superior: ocho unidades breves',
+    esOf: '84609b2b',
   },
   summary: {
-    en: 'Seven stand-alone units for upper-level courses: celestial mechanics, stellar astrophysics, galactic dynamics, exoplanet science, time-domain astronomy, cosmology and the statistics of surveys. Each unit has its own objectives, runs at the advanced depth where an investigation offers one, and can be set alone or in any order after its prerequisite. The mission lab is a separate page; the celestial mechanics unit points to it by name, and takes four of the 3-D lab’s investigations as optional items.',
-    es: 'Siete unidades independientes para cursos de nivel superior: mecánica celeste, astrofísica estelar, dinámica galáctica, ciencia de exoplanetas, astronomía del dominio temporal, cosmología y estadística de sondeos. Cada unidad tiene sus propios objetivos, se hace en la profundidad avanzada donde la investigación la ofrece y puede asignarse sola o en cualquier orden tras su requisito. El laboratorio de misiones es una página aparte; la unidad de mecánica celeste lo nombra y toma cuatro investigaciones del laboratorio 3D como elementos opcionales.',
-    esOf: 'a32e372e',
+    en: 'Eight stand-alone units for upper-level courses: celestial mechanics, stellar astrophysics, galactic dynamics, exoplanet science, time-domain astronomy, cosmology, the statistics of surveys and computation. Each unit has its own objectives, runs at the advanced depth where an investigation offers one, and can be set alone or in any order after its prerequisite. The mission lab is a separate page; the celestial mechanics unit points to it by name, and takes four of the 3-D lab’s investigations as optional items.',
+    es: 'Ocho unidades independientes para cursos de nivel superior: mecánica celeste, astrofísica estelar, dinámica galáctica, ciencia de exoplanetas, astronomía del dominio temporal, cosmología, estadística de sondeos y cálculo. Cada unidad tiene sus propios objetivos, se hace en la profundidad avanzada donde la investigación la ofrece y puede asignarse sola o en cualquier orden tras su requisito. El laboratorio de misiones es una página aparte; la unidad de mecánica celeste lo nombra y toma cuatro investigaciones del laboratorio 3D como elementos opcionales.',
+    esOf: '3964e6a3',
   },
   audience: {
     en: 'Upper-level astronomy or physics majors with calculus and a first course in mechanics.',
@@ -33,9 +33,9 @@ export const UPPER_LEVEL_MODULES = {
     esOf: 'e908e7b7',
   },
   teacherGuide: {
-    en: 'Each unit takes about two to four hours and can be set on its own. Where an investigation has an advanced depth, items open at it. Students carry results between investigations, so keep each unit in order. The celestial mechanics unit offers the 3-D lab investigations on orbit planes and eclipses on the introductory path and those on mutual events and the Kozai effect on the advanced path; the mission lab investigations also suit it but are a separate page and not course items. Instructor notes and keys are in the portal.',
-    es: 'Cada unidad ocupa de dos a cuatro horas y puede asignarse sola. Donde una investigación tiene profundidad avanzada, los elementos se abren en ella. Los estudiantes llevan resultados de una investigación a otra, así que mantengan cada unidad en orden. La unidad de mecánica celeste ofrece las investigaciones del laboratorio 3D sobre planos orbitales y eclipses en la ruta introductoria y las de eventos mutuos y el efecto Kozai en la ruta avanzada; las del laboratorio de misiones también le sirven, pero son una página aparte y no elementos del curso. Las notas y las claves están en el portal.',
-    esOf: '246c8854',
+    en: 'Each unit takes about two to four hours and can be set on its own. Where an investigation has an advanced depth, items open at it. Students carry results between investigations, so keep each unit in order. The celestial mechanics unit offers the 3-D lab investigations on orbit planes and eclipses on the introductory path and those on mutual events and the Kozai effect on the advanced path; the mission lab investigations also suit it but are a separate page and not course items. The computation unit uses the compute page, which is online only and downloads about 19 MB of Python once per student; run its investigations in a room with a connection, or have students open a capsule you made. Instructor notes and keys are in the portal.',
+    es: 'Cada unidad ocupa de dos a cuatro horas y puede asignarse sola. Donde una investigación tiene profundidad avanzada, los elementos se abren en ella. Los estudiantes llevan resultados de una investigación a otra, así que mantengan cada unidad en orden. La unidad de mecánica celeste ofrece las investigaciones del laboratorio 3D sobre planos orbitales y eclipses en la ruta introductoria y las de eventos mutuos y el efecto Kozai en la ruta avanzada; las del laboratorio de misiones también le sirven, pero son una página aparte y no elementos del curso. La unidad de cálculo usa la página de cálculo, que solo funciona con conexión y descarga unos 19 MB de Python una vez por estudiante; hagan sus investigaciones en un aula con conexión, o pidan a los estudiantes que abran una cápsula que ustedes hayan hecho. Las notas y las claves están en el portal.',
+    esOf: 'a6dd79e7',
   },
   objectives: [
     {
@@ -92,6 +92,14 @@ export const UPPER_LEVEL_MODULES = {
         en: 'Correct a sample for the selection that made it.',
         es: 'Corregir una muestra por la selección que la produjo.',
         esOf: 'c5fa1871',
+      },
+    },
+    {
+      id: 'compute',
+      text: {
+        en: 'Run a reviewed notebook on a Gravitas document and say what its numbers do and do not cover.',
+        es: 'Ejecutar un cuaderno revisado sobre un documento de Gravitas y decir qué cubren y qué no cubren sus números.',
+        esOf: 'be19428c',
       },
     },
   ],
@@ -620,6 +628,39 @@ export const UPPER_LEVEL_MODULES = {
           minutes: 30,
           objectives: [],
           dataset: 'gaia-solar-neighbourhood',
+        },
+      ],
+    },
+    {
+      id: 'computation',
+      title: {
+        en: 'Computation',
+        es: 'Cálculo',
+        esOf: 'e59119f0',
+      },
+      items: [
+        {
+          id: 'integrators-in-practice',
+          kind: 'lesson',
+          lesson: 'integrators-in-practice',
+          depth: 'core',
+          objectives: ['compute'],
+          needs: ['orbital-energy'],
+          pin: {
+            fp: 'f69fe076',
+            n: 8,
+          },
+        },
+        {
+          id: 'extending-an-experiment',
+          kind: 'lesson',
+          lesson: 'extending-an-experiment',
+          depth: 'core',
+          objectives: ['compute'],
+          pin: {
+            fp: 'c2db3abe',
+            n: 8,
+          },
         },
       ],
     },

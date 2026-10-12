@@ -31,4 +31,28 @@ export const HASHES = Object.freeze({
       bytes: 71836,
     },
   },
+  'integrators-compared': {
+    cellsSha256:
+      '57ab87fad40c2446ff1742f1cfabe236c16d38d4c1267d60cb03349752897347',
+    fileSha256:
+      '451408567ab17e7af0188b28959d2337789bc21304960487fe6d493dfd54a29f',
+    cells: 4,
+    example: {
+      sha256:
+        '8a41e658859c8429b05bd6e590ff3b9581e37bc611ff4b9347aa6586aa510618',
+      bytes: 1114,
+    },
+  },
+  'population-at-scale': {
+    cellsSha256:
+      'e07073e00f8352a369a13095ae1275d16a624497484bbec1f505a138730f9be6',
+    fileSha256:
+      '29ecead6b406fd43bbee8724c56bb58847aa82f3d37320d4c8a1672b29fa09fe',
+    cells: 5,
+    example: {
+      sha256:
+        '491d54667318a0b1249601fed058797ea0bdd07f1ff956470f597ba0ba341faf',
+      bytes: 30020,
+    },
+  },
 });

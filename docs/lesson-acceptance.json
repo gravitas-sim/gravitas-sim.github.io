@@ -2,7 +2,7 @@
   "reviewed": "2026-09-11",
   "reviewer": "repository maintainer",
   "note": "Hand-written and human-reviewed. One central experiment per investigation: the object a reader acts on, the control they move, the quantity that comes back, where the evidence lands, the steps of the loop, and the browser test that drives it end to end. `npm run audit:scene:check` refuses to pass if any of those six names something the lesson no longer has. It cannot judge whether the experiment is a good one, and does not claim to. Nothing here is a claim about learning gains: no study has been run.",
-  "objectForms": "A role the lesson binds or stages, the literal \"the selected body\", or \"panel:<widget-id>\" for a lesson whose central experiment is a panel model with nothing on the canvas.",
+  "objectForms": "A role the lesson binds or stages, the literal \"the selected body\", or \"panel:<widget-id>\" for a lesson whose central experiment is a panel model with nothing on the canvas. It can also be \"compute:<notebook id>\" for a lesson whose experiment is run on the compute page; some step must then declare the same notebook with `compute: \"<notebook id>\"` (Roadmap II Prompt 102).",
   "controlForms": "\"<widget-id>/<control-id>\" is checked against the registry. Anything else is prose, for an affordance that lives in the application's own panels rather than in a lesson widget.",
   "lessons": {
     "keplers-laws": {
@@ -753,6 +753,30 @@
         "the-sine"
       ],
       "evidenceFrom": "model"
+    },
+    "integrators-in-practice": {
+      "centralExperimentId": "ce.integrators-in-practice",
+      "object": "compute:integrators-compared",
+      "control": "the compute page's steps-per-period setting (not a lesson widget)",
+      "quantity": "the energy drift of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4 over three periods of the widest orbit, and how each changes when the step is halved",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": ["which-loses-most", "four-drifts", "halve-the-step"],
+      "evidenceFrom": "computation"
+    },
+    "extending-an-experiment": {
+      "centralExperimentId": "ce.extending-an-experiment",
+      "object": "compute:population-at-scale",
+      "control": "the compute page's cutoff and slope settings (not a lesson widget)",
+      "quantity": "the half-way starting distance and the bound fraction of the twenty trials and of the synthetic population, for the settings run",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "how-well-can-twenty-place-an-edge",
+        "the-fit",
+        "move-the-definition"
+      ],
+      "evidenceFrom": "computation"
     }
   }
 }

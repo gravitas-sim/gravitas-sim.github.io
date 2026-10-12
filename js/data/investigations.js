@@ -83,6 +83,8 @@ import WHAT_A_SPECTRUM_IS_MADE_OF from './investigations/what-a-spectrum-is-made
 import THE_SUNS_MOTION from './investigations/the-suns-motion.js';
 import THE_ROTATING_DISK from './investigations/the-rotating-disk.js';
 import CLUSTER_MEMBERSHIP from './investigations/cluster-membership.js';
+import INTEGRATORS_IN_PRACTICE from './investigations/integrators-in-practice.js';
+import EXTENDING_AN_EXPERIMENT from './investigations/extending-an-experiment.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 import { SUMMARIES } from './investigations/summaries.js';
 import INSIDE_A_STAR from './investigations/inside-a-star.js';
@@ -180,6 +182,8 @@ export const INVESTIGATIONS = [
   WHO_GETS_COUNTED,
   WHY_THE_BRIGHT_ONES_WIN,
   THE_COMPLETENESS_CURVE,
+  INTEGRATORS_IN_PRACTICE,
+  EXTENDING_AN_EXPERIMENT,
 ];
 
 // The lessons carry no card summary; it is written once in summaries.js and

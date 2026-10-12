@@ -56,6 +56,10 @@
       "en": "Einstein Rings and Arcs",
       "es": "Anillos y arcos de Einstein"
     },
+    "extending-an-experiment": {
+      "en": "Extending an Experiment",
+      "es": "Ampliar un experimento"
+    },
     "goldilocks-question": {
       "en": "The Goldilocks Question",
       "es": "La cuestión de Ricitos de Oro"
@@ -71,6 +75,10 @@
     "inside-a-star": {
       "en": "Inside a Star",
       "es": "Dentro de una estrella"
+    },
+    "integrators-in-practice": {
+      "en": "Integrators in Practice",
+      "es": "Integradores en la práctica"
     },
     "keplers-laws": {
       "en": "Kepler's Laws",
