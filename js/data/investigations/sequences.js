@@ -164,6 +164,7 @@ export const SEQUENCES = [
       ['retrograde-motion', 'core'],
       ['power-law-gravity', 'core'],
       ['orbital-energy', 'core', ['keplers-laws']],
+      ['integrators-in-practice', 'core', ['orbital-energy']],
       ['tides', 'core'],
       ['hohmann-transfer', 'core', ['orbital-energy']],
       ['gravity-assist', 'core', ['orbital-energy']],
@@ -173,7 +174,6 @@ export const SEQUENCES = [
       ['black-holes', 'core'],
       ['what-is-a-gravitational-wave', 'core'],
       ['listening-to-spacetime', 'core', ['what-is-a-gravitational-wave']],
-      ['integrators-in-practice', 'core', ['orbital-energy']],
     ]
   ),
   sequence(
