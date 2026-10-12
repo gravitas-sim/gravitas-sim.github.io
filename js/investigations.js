@@ -130,7 +130,6 @@ import { normalizeSeed, formatSeed } from './rng.js';
 // every edge in it was lazy, a cycle that exists only because of a convenience
 // re-export is not one worth keeping.
 import { toast, announce, loadFailed } from './notify.js';
-import { buildLabReport, downloadPdf, reportMessages } from './labReport.js';
 import { setEvidenceContext } from './widgetRuntime.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
@@ -4134,66 +4133,6 @@ function closeFinish() {
   dialogs?.closeDialog(els.finishContent);
 }
 
-/**
- * The submission token for what is on record now, or '' if it cannot be made.
- * Both modules are dynamic imports, so a reader who hands nothing in never pays
- * for the encoder. The roster id comes off the assignment link's ?roster=
- * query, because the application keeps no roster.
- *
- * @param {string} name - The name the student typed
- * @returns {Promise<string>} The token
- */
-async function makeSubmissionToken(name) {
-  try {
-    const backupMod = await import('./investigations/progressBackup.js');
-    const tokenMod = await import('./submission/submissionToken.js');
-    // The evidence the report prints: its record and digest ride in the token.
-    const ledger = await (
-      await import('./notebook/report.js')
-    ).ledgerForReport();
-    const encoded = await tokenMod.encodeSubmission(
-      tokenMod.buildSubmission({
-        backup: backupMod.buildBackup({
-          lesson: active,
-          responses,
-          attempts,
-          visited,
-          stepSid: active.steps[stepIndex]?.sid ?? null,
-          startedAt,
-          studentName: name,
-        }),
-        assignmentId: assignment?.i ?? null,
-        rosterId: new URLSearchParams(location.search).get('roster') || null,
-        fallbackLocale: getLocale(),
-        record: ledger?.record,
-        digest: ledger?.digest,
-        depth: assignment?.d ?? (active.depths ? depth : null),
-      })
-    );
-    if (!encoded.comfortable) {
-      // Say so rather than hand over something that will be truncated at the
-      // far end, where the student cannot fix it.
-      console.warn(
-        `[gravitas] submission token is ${encoded.length} characters, over ` +
-          `the ${encoded.limit} this project treats as safely pasteable.`
-      );
-    }
-    return encoded.token;
-  } catch (err) {
-    // A report without a token is still a report. The completion code and
-    // every answer are on the page either way.
-    console.warn('[gravitas] could not build a submission token:', err);
-    return '';
-  }
-}
-
-/** The file name a student's report and token are saved under. */
-const reportSlug = name =>
-  `${name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')}-${active.id}`;
-
 /** A file the browser saves. */
 function saveFile(blob, name) {
   const url = URL.createObjectURL(blob);
@@ -4206,132 +4145,82 @@ function saveFile(blob, name) {
   URL.revokeObjectURL(url);
 }
 
-/** The name typed in the finish dialog, or null having asked for one. */
-function finishName() {
-  const name = els.nameInput.value.trim();
-  els.nameError.hidden = Boolean(name);
-  if (!name) {
-    els.nameInput.focus();
-    return null;
-  }
-  setStudentName(name);
-  return name;
-}
-
 /** Put a token in the finish dialog's field, or clear it. */
 function showToken(token) {
   els.token.value = token || '';
   els.tokenBody.hidden = !token;
 }
 
-/** The token alone, to paste into a text box. */
-async function revealToken() {
-  const name = finishName();
-  if (!name) return;
-  const token = await makeSubmissionToken(name);
-  if (!token) {
-    toast(t('inv.token.failed'));
-    return;
+/**
+ * What the finish flow's module needs of this one. Built on each call, so the
+ * variables this module reassigns are read when the module needs them.
+ * @returns {import('./investigations/finish.js').FinishHost} The host
+ */
+const finishHost = () => ({
+  state: () => ({
+    active,
+    stepIndex,
+    responses,
+    attempts,
+    visited,
+    startedAt,
+    assignment,
+    assignmentBinding,
+    depth,
+  }),
+  elements: () => els,
+  payloadFromSetup,
+  plotData: plotAnywhere,
+  stepId,
+  reportSlug,
+  setStudentName,
+  showToken,
+  lib: {
+    t,
+    getLocale,
+    toast,
+    announce,
+    decodeEntities,
+    checkAnswer,
+    localeOfAnswer,
+    helpStages,
+    helpTaken,
+    encodePayload,
+    shareUrl,
+  },
+});
+
+/**
+ * The finish flow runs from a module fetched on first use. If it cannot be
+ * fetched, say what the button was for rather than doing nothing.
+ */
+const finishAction = (name, failedKey) => () =>
+  import('./investigations/finish.js')
+    .then(m => m[name](finishHost()))
+    .catch(() => toast(t(failedKey)));
+
+/** The file name a student's report and token are saved under. */
+const reportSlug = name =>
+  `${name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')}-${active.id}`;
+
+/**
+ * The plot lives on whichever step owns it, so find it rather than relying on
+ * the student being parked there when they press Download.
+ */
+function plotAnywhere() {
+  let plot = null;
+  const here = stepIndex;
+  for (let i = 0; i < active.steps.length; i++) {
+    if (!active.steps[i].plot) continue;
+    stepIndex = i;
+    plot = currentPlotData();
+    if (plot) break;
   }
-  showToken(token);
-  els.token.focus();
-  els.token.select();
-}
-
-async function copyToken() {
-  let ok = true;
-  try {
-    await navigator.clipboard.writeText(els.token.value);
-  } catch {
-    // Selected, so the reader can copy it themselves.
-    els.token.select();
-    ok = false;
-  }
-  toast(t(ok ? 'inv.token.copied' : 'inv.token.noCopy'));
-}
-
-async function generateReport() {
-  const name = finishName();
-  if (!name) return;
-
-  els.downloadBtn.disabled = true;
-  els.downloadBtn.textContent = t('inv.report.building');
-  try {
-    // The setup states are turned into real links here rather than at authoring
-    // time, so a report always points at the encoding this build produces.
-    const links = [];
-    for (let i = 0; i < active.steps.length; i++) {
-      const setup = active.steps[i].setup;
-      if (!setup) continue;
-      const fragment = await encodePayload(payloadFromSetup(setup));
-      links.push({
-        step: i + 1,
-        title: active.steps[i].title,
-        url: shareUrl(fragment),
-      });
-    }
-
-    // The plot lives on whichever step owns it, so find it rather than relying
-    // on the student being parked there when they press Download.
-    let plot = null;
-    const here = stepIndex;
-    for (let i = 0; i < active.steps.length; i++) {
-      if (!active.steps[i].plot) continue;
-      stepIndex = i;
-      plot = currentPlotData();
-      if (plot) break;
-    }
-    stepIndex = here;
-
-    if (active.depths)
-      await (await import('./investigations/depth.js')).messages();
-    const submissionToken = await makeSubmissionToken(name);
-    showToken(submissionToken);
-    await reportMessages();
-    const ledger = await (
-      await import('./notebook/report.js')
-    ).ledgerForReport();
-
-    const bytes = buildLabReport({
-      helpFor: id => helpTaken(helpStages(responses[`${id}:help`])),
-      investigation: active,
-      plot,
-      name,
-      submissionToken,
-      responses,
-      attempts,
-      visited,
-      startedAt,
-      links,
-      stepIdFor: stepId,
-      assignment,
-      binding: assignmentBinding,
-      // Per answer, not per report. This used to be `checkAnswer` bare, which
-      // defaults to English, so every Spanish numeric answer was re-read under
-      // English rules on its way into the PDF and a student could be marked
-      // correct on screen and incorrect on the document they hand in.
-      depth: assignment?.d ?? (active.depths ? depth : null),
-      checkAnswer: (step, value, key) =>
-        checkAnswer(step, value, {
-          locale: localeOfAnswer(responses, key, getLocale()),
-        }),
-      decodeEntities,
-      t,
-      locale: getLocale(),
-      meta: ledger?.meta,
-      evidence: ledger?.print,
-    });
-
-    downloadPdf(bytes, `${reportSlug(name)}.pdf`);
-    toast(t('inv.report.done'));
-    announce(t('inv.report.done'));
-  } catch (err) {
-    console.error('Report generation failed:', err);
-    toast(t('inv.report.failed'));
-  } finally {
-    els.downloadBtn.disabled = false;
-    els.downloadBtn.textContent = t('inv.report.download');
-  }
+  stepIndex = here;
+  return plot;
 }
 
 function resetProgress() {
@@ -4660,12 +4549,15 @@ export function initInvestigations({ signal } = {}) {
 
   els.finishClose?.addEventListener('click', closeFinish);
   els.finishBack?.addEventListener('click', closeFinish);
-  els.downloadBtn?.addEventListener('click', generateReport);
+  els.downloadBtn?.addEventListener(
+    'click',
+    finishAction('generateReport', 'inv.report.failed')
+  );
   const on = (id, fn) =>
     document.getElementById(id)?.addEventListener('click', fn);
   els.finishProgress?.addEventListener('click', downloadProgressBackup);
-  on('investigationTokenShow', revealToken);
-  on('investigationTokenCopy', copyToken);
+  on('investigationTokenShow', finishAction('revealToken', 'inv.token.failed'));
+  on('investigationTokenCopy', finishAction('copyToken', 'inv.token.failed'));
   on('investigationTokenSave', () =>
     saveFile(
       new Blob([`${els.token.value}\n`], { type: 'text/plain' }),
