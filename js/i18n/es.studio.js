@@ -16,6 +16,14 @@ export const ES_STUDIO = {
   'studio.action.from': 'Empezar desde este',
   'studio.from.generated': 'Generados a partir de ajustes',
   'studio.from.handBuilt': 'Solo los ajustes (cuerpos colocados por código)',
+  'studio.from.geometry': 'Ajustes y geometría declarada',
+  'studio.geometry.heading': 'Geometría declarada',
+  'studio.geometry.summary':
+    '{n} pasos que construyen los cuerpos del escenario a partir de sus órbitas. Quítalos para añadir cuerpos propios.',
+  'studio.geometry.remove': 'Quitar la geometría declarada',
+  'studio.error.geometry': 'La geometría declarada no es válida ({why}).',
+  'studio.error.geometryExclusive':
+    'La geometría declarada sustituye a los cuerpos: un escenario tiene una o tiene cuerpos propios, no ambas cosas.',
   'studio.action.open': 'Abrir un archivo',
   'studio.action.save': 'Guardar como archivo',
   'studio.action.copy': 'Copiar el enlace',

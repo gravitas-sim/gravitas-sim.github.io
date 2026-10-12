@@ -1593,6 +1593,7 @@
   "[chromium] › storageLayer.spec.js › the storage module › uses IndexedDB, reports the quota where the browser can, and keeps a record across a reload": 0.9,
   "[chromium] › storageLayer.spec.js › the storage module › without IndexedDB it falls back to localStorage, and says so": 0.6,
   "[chromium] › studio.spec.js › the Scenario Studio › a bad value is explained on its field, and undo and redo walk the history": 2.7,
+  "[chromium] › studio.spec.js › the Scenario Studio › a built-in with declared geometry starts with it, and its link builds the same bodies": 5.2,
   "[chromium] › studio.spec.js › the Scenario Studio › a draft is kept in this browser and is back after a reload": 1.5,
   "[chromium] › studio.spec.js › the Scenario Studio › a file with the id of a different draft asks first, and each answer does what it says": 2.5,
   "[chromium] › studio.spec.js › the Scenario Studio › a new scenario says what it needs on each field, and a built-in becomes a valid one by keyboard": 2,

@@ -542,6 +542,33 @@ test.describe('the Scenario Studio', () => {
     expect(await census(page)).toEqual({ Stars: 3 });
   });
 
+  test('a built-in with declared geometry starts with it, and its link builds the same bodies', async ({
+    page,
+    app,
+  }) => {
+    await app.captureClipboard();
+    await openStudio(page);
+    await page.locator('#st-from').selectOption('retrograde-mars');
+    await page.locator('#st-from-go').click();
+    await expect(page.locator('#st-geometry')).toBeVisible();
+    // Declared geometry is not a hand-built caution: the bodies came across.
+    await expect(page.locator('#st-status')).not.toContainText('only');
+    await enter(page, 'st-title-es', 'Marte retrógrado (una copia)');
+    await enter(page, 'st-summary-es', 'El Sol, la Tierra y Marte.');
+    await expect(page.locator('#st-checks-summary')).toHaveText(
+      'The scenario is valid.'
+    );
+    const pack = await current(page);
+    expect(pack.geometry.steps.length).toBe(3);
+    expect(pack.settings.num_planets).toBe(0);
+    await page.locator('#st-copy').click();
+    await expect(page.locator('#st-status')).toHaveText(
+      'The link is on the clipboard.'
+    );
+    await app.boot({ url: await app.clipboardText() });
+    expect(await census(page)).toEqual({ Stars: 1, Planets: 2 });
+  });
+
   test('the Orbital System Builder points to it, and the link opens it', async ({
     page,
     app,
@@ -595,6 +622,11 @@ test.describe('the Scenario Studio', () => {
         const r = await new AxeBuilder({ page }).withTags(TAGS).analyze();
         expect(r.violations.map(v => `${v.id}: ${v.help}`)).toEqual([]);
       };
+      await scan();
+      // And with a built-in's declared geometry showing.
+      await page.locator('#st-from').selectOption('retrograde-mars');
+      await page.locator('#st-from-go').click();
+      await expect(page.locator('#st-geometry')).toBeVisible();
       await scan();
       await page.locator('#st-raw summary').click();
       await page.locator('#st-from').selectOption('star-cluster');

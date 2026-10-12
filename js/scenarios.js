@@ -10,8 +10,10 @@
 //
 // The table replaced an if-chain on the scenario's English name (Roadmap II
 // Prompt 63; "migration 1" of STUDIO_ROUNDTRIP_GATE.md). A row is data: the
-// settings the scenario runs under and nothing else. Hand-built geometry stays
-// in js/world/build.js, keyed on the same ids, until Prompt 108 moves it.
+// settings the scenario runs under and nothing else. A scenario's bodies are
+// either generated from those settings, declared in SCENARIO_GEOMETRY at the
+// end of this file (Roadmap II Prompt 108, SCENARIO_GEOMETRY.md), or still
+// placed by code in js/world/build.js, keyed on the same ids.
 // =============================================================================
 
 /**
@@ -1829,4 +1831,94 @@ export function applyPresetLayout(SETTINGS, bh_list) {
   // Jets point along the orbital axis: one up, one down
   bh_list[0].jet_orientation = Math.PI / 2;
   bh_list[1].jet_orientation = -Math.PI / 2;
+}
+
+/**
+ * Scenarios whose bodies are declared, not coded (SCENARIO_GEOMETRY.md; the
+ * constructs are judged by validateGeometry in js/scenarioPack.js).
+ * tests/scenarioGeometry.test.js holds each to the world the code made.
+ */
+export const SCENARIO_GEOMETRY = /* @__PURE__ */ Object.freeze({
+  // prettier-ignore
+  'retrograde-mars': { steps: [
+    { body: { type: 'Star', name: 'Sun', mass: { suns: 1 }, set: { baseColor: '#FFD86B', radius: 10 } } },
+    { body: { type: 'Planet', name: 'Earth', mass: { earths: 1 }, orbit: { around: 'Sun', distance: { au: 1 }, angle: { deg: 103 } }, set: { radius: 4, baseColor: '#5B8FF0', persistent: true } } },
+    { body: { type: 'Planet', name: 'Mars', mass: { earths: 0.107 }, orbit: { around: 'Sun', distance: { au: 1.523 }, angle: { deg: 198 } }, set: { radius: 3, baseColor: '#D06B4A', persistent: true } } },
+  ] },
+  // prettier-ignore
+  'keplers-2nd-law': { steps: [
+    { body: { type: 'Star', name: 'Kepler Star', mass: { suns: 1 }, set: { baseColor: '#FFFF00', radius: 14 } } },
+    { body: { type: 'Planet', name: 'Circular Orbiter', mass: { earths: 1 }, orbit: { around: 'Kepler Star', distance: { units: 320 }, eccentricity: 0.02 }, set: { baseColor: '#4B90E2', radius: 7 } } },
+    { body: { type: 'Planet', name: 'Eccentric Orbiter', mass: { earths: 0.3 }, orbit: { around: 'Kepler Star', distance: { units: 50 }, eccentricity: 0.65, angle: { pi: 0.6 } }, set: { baseColor: '#FF6B35', radius: 6 } } },
+  ] },
+  // The published resonant systems, from js/resonance/systems.js.
+  // prettier-ignore
+  'galilean-resonance': { steps: [{ rule: { name: 'published-system', params: { system: 'galilean' } } }] },
+  // prettier-ignore
+  'broken-laplace-resonance': { steps: [{ rule: { name: 'published-system', params: { system: 'galilean', detuned: true } } }] },
+  // prettier-ignore
+  'pluto-and-neptune': { steps: [{ rule: { name: 'published-system', params: { system: 'pluto-neptune' } } }] },
+  // prettier-ignore
+  'jupiter-trojans': { steps: [{ rule: { name: 'published-system', params: { system: 'jupiter-trojans' } } }] },
+});
+
+/**
+ * Make the bodies of a valid geometry, in order, through `env.create`
+ * ({type, ctor, pos, vel, assign}) => body; `ctor` is the mass in the type's
+ * own unit. One at a time, because a constructor draws from the seeded
+ * generator and a world is the same only if the draws keep their order. The
+ * arithmetic is the hand-built blocks' own, so the numbers match to the bit.
+ *
+ * @param {{steps: object[]}} g - A valid geometry
+ * @param {{G: number, units: {AU: number}, create: Function, rules?: object}} env
+ *   `rules[name](params, env)` gives a named rule's records
+ * @returns {object[]} The bodies
+ */
+export function expandGeometry(g, env) {
+  const made = [];
+  const byName = new Map();
+  const add = record => {
+    const body = env.create(record);
+    made.push(body);
+    byName.set(record.assign.name, body);
+  };
+  for (const { body: b, rule } of g.steps) {
+    if (rule) {
+      for (const r of env.rules[rule.name](rule.params ?? {}, env)) add(r);
+      continue;
+    }
+    let pos = b.at ? { x: b.at.x, y: b.at.y } : { x: 0, y: 0 };
+    let vel = b.velocity
+      ? { x: b.velocity.x, y: b.velocity.y }
+      : { x: 0, y: 0 };
+    const o = b.orbit;
+    if (o) {
+      const c = byName.get(o.around);
+      const r =
+        o.distance.au !== undefined
+          ? o.distance.au * env.units.AU
+          : o.distance.units;
+      const e = o.eccentricity ?? 0;
+      const a = r / (1 - e);
+      const an = o.angle ?? { rad: 0 };
+      const t =
+        an.deg !== undefined
+          ? (an.deg * Math.PI) / 180
+          : an.pi !== undefined
+            ? Math.PI * an.pi
+            : an.rad;
+      // Periapsis speed on the ellipse of semi-major axis a: circular at e = 0.
+      const v = Math.sqrt((((env.G * c.mass) / a) * (1 + e)) / (1 - e));
+      pos = { x: c.pos.x + r * Math.cos(t), y: c.pos.y + r * Math.sin(t) };
+      vel = { x: c.vel.x + -v * Math.sin(t), y: c.vel.y + v * Math.cos(t) };
+    }
+    add({
+      type: b.type,
+      ctor: Object.values(b.mass)[0],
+      pos,
+      vel,
+      assign: { name: b.name, ...(b.set || {}) },
+    });
+  }
+  return made;
 }
