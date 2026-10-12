@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 2031.7,
+    limit: 2032.6,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -647,7 +647,8 @@ const BUDGETS = [
       '1.0 KB: one more lazy chunk, and the report writer compresses apart from ' +
       'its former neighbors. The initial download did not move (787.5 KB). ' +
       'D-BUDGET-33, under the standing size-budget approval in the ' +
-      "project's CLAUDE.md.",
+      "project's CLAUDE.md." +
+      '\n\nPrompt 108, slice 2 (six scenarios declared as data), measured on v2 at dde3b92, took it from 2031.7 to 2032.6 KB gzipped (5538.6 KB raw, measured 2032.541), 0.9 KB (D-BUDGET-GEOM-02, the standing size-budget approval; measured on Node 24, CI on Node 20 reads lower). The declarations, validator branches and expander are in js/scenarios.js and js/scenarioPack.js; about 370 lines of hand-built blocks left js/world/build.js. No request ceiling moved.',
   },
 ];
 

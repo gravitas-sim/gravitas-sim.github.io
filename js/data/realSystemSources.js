@@ -83,9 +83,9 @@ const GILLON_2017 = {
 
 /**
  * Every real-system parameter object's sources, keyed by where it is: the
- * file, the export or table, and the object's name. The table named
- * `worlds` in js/world/build.js and the declared geometry of Retrograde Mars
- * are told apart by the scenario they build.
+ * file, the export or table, and the object's name. The declared geometry of
+ * Retrograde Mars and of the Habitable Zone Lab (whose worlds were the `worlds`
+ * table of js/world/build.js) is keyed by the scenario that holds it.
  */
 export const SOURCES = {
   'js/data/exoplanetSystems.js HD209458': [
@@ -358,10 +358,14 @@ export const SOURCES = {
   'js/world/build.js kuiperBeltObjects Makemake': [UNSOURCED],
   'js/world/build.js kuiperBeltObjects Eris': [UNSOURCED],
   'js/world/build.js kuiperBeltObjects Sedna': [UNSOURCED],
-  'js/world/build.js worlds (Habitable Zone Lab) Venus': [JPL_ELEMENTS],
-  'js/world/build.js worlds (Habitable Zone Lab) Earth': [JPL_ELEMENTS],
-  'js/world/build.js worlds (Habitable Zone Lab) Mars': [JPL_ELEMENTS],
-  'js/world/build.js worlds (Habitable Zone Lab) Ceres': [SBDB],
+  'js/world/build.js ENGINE_GEOMETRY (Habitable Zone Lab) Venus': [
+    JPL_ELEMENTS,
+  ],
+  'js/world/build.js ENGINE_GEOMETRY (Habitable Zone Lab) Earth': [
+    JPL_ELEMENTS,
+  ],
+  'js/world/build.js ENGINE_GEOMETRY (Habitable Zone Lab) Mars': [JPL_ELEMENTS],
+  'js/world/build.js ENGINE_GEOMETRY (Habitable Zone Lab) Ceres': [SBDB],
   'js/scenarios.js SCENARIO_GEOMETRY (Retrograde Mars) Earth': [
     { ...FACT_SHEET.Earth, fields: ['earths'] },
     JPL_ELEMENTS,

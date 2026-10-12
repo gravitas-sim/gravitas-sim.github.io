@@ -1862,17 +1862,59 @@ export const SCENARIO_GEOMETRY = /* @__PURE__ */ Object.freeze({
   'jupiter-trojans': { steps: [{ rule: { name: 'published-system', params: { system: 'jupiter-trojans' } } }] },
 });
 
+/** Where each type's mass is also kept, in the unit it reports. */
+const DISPLAY_MASS = Object.freeze({
+  Star: 'massInSuns',
+  Planet: 'massInEarths',
+  GasGiant: 'massInJupiters',
+});
+
+/**
+ * The cosine and sine of a declared angle: exact (0 or 1, not 6e-17) at a
+ * quarter turn, as a place written by hand ({x: 0, y: 100}) is.
+ * @param {{deg?: number, rad?: number, pi?: number, random?: boolean}} an
+ * @returns {[number, number]} [cos, sin]
+ */
+function angleTrig(an) {
+  const quarters =
+    an.deg !== undefined ? an.deg / 90 : an.pi !== undefined ? an.pi * 2 : null;
+  if (quarters !== null && Number.isInteger(quarters)) {
+    return [
+      [1, 0, -1, 0][((quarters % 4) + 4) % 4],
+      [0, 1, 0, -1][((quarters % 4) + 4) % 4],
+    ];
+  }
+  const t =
+    an.random !== undefined
+      ? Math.random() * 2 * Math.PI
+      : an.deg !== undefined
+        ? (an.deg * Math.PI) / 180
+        : an.pi !== undefined
+          ? Math.PI * an.pi
+          : an.rad;
+  return [Math.cos(t), Math.sin(t)];
+}
+
 /**
  * Make the bodies of a valid geometry, in order, through `env.create`
- * ({type, ctor, pos, vel, assign}) => body; `ctor` is the mass in the type's
- * own unit. One at a time, because a constructor draws from the seeded
- * generator and a world is the same only if the draws keep their order. The
+ * ({type, ctor, pos, vel, assign, from}) => body; `ctor` is the mass in the
+ * type's own unit. One at a time, because a constructor draws from the seeded
+ * generator and a world is the same only if the draws keep their order (a
+ * `random` angle is drawn at its step, before the body it places). The
  * arithmetic is the hand-built blocks' own, written the same way; the tests
  * pin the result at 12 significant figures (the world golden's precision).
  *
+ * A step with `from` reuses a body the generator already drew: `env.create`
+ * is handed `from` and `pos`/`vel` only when the step places the body, and
+ * returns the body (or null when the generator drew too few, so the step
+ * makes nothing, and an orbit round a body that is not there makes nothing
+ * either). Its `assign` then carries the mass in simulation units and in the
+ * type's own reported unit, as the hand-built blocks assigned both.
+ *
  * @param {{steps: object[]}} g - A valid geometry
- * @param {{G: number, units: {AU: number}, create: Function, rules?: object}} env
- *   `rules[name](params, env)` gives a named rule's records
+ * @param {{G: number, units: {AU: number}, create: Function, simMass?: Function, rules?: object}} env
+ *   `rules[name](params, env)` gives a named rule's records; `simMass(type,
+ *   ctor)` is a mass in simulation units
  * @returns {object[]} The bodies
  */
 export function expandGeometry(g, env) {
@@ -1880,6 +1922,7 @@ export function expandGeometry(g, env) {
   const byName = new Map();
   const add = record => {
     const body = env.create(record);
+    if (!body) return;
     made.push(body);
     byName.set(record.assign.name, body);
   };
@@ -1888,37 +1931,70 @@ export function expandGeometry(g, env) {
       for (const r of env.rules[rule.name](rule.params ?? {}, env)) add(r);
       continue;
     }
-    let pos = b.at ? { x: b.at.x, y: b.at.y } : { x: 0, y: 0 };
-    let vel = b.velocity
-      ? { x: b.velocity.x, y: b.velocity.y }
-      : { x: 0, y: 0 };
+    const ctor = b.mass ? Object.values(b.mass)[0] : undefined;
+    let pos = b.at ? { x: b.at.x, y: b.at.y } : undefined;
+    let vel = b.velocity ? { x: b.velocity.x, y: b.velocity.y } : undefined;
+    if (!b.from) {
+      pos ??= { x: 0, y: 0 };
+      vel ??= { x: 0, y: 0 };
+    }
     const o = b.orbit;
     if (o) {
       const c = byName.get(o.around);
+      if (!c) continue;
       const r =
         o.distance.au !== undefined
           ? o.distance.au * env.units.AU
-          : o.distance.units;
+          : o.distance.radii !== undefined
+            ? o.distance.radii * c.radius
+            : o.distance.units;
       const e = o.eccentricity ?? 0;
-      const a = r / (1 - e);
-      const an = o.angle ?? { rad: 0 };
-      const t =
-        an.deg !== undefined
-          ? (an.deg * Math.PI) / 180
-          : an.pi !== undefined
-            ? Math.PI * an.pi
-            : an.rad;
-      // Periapsis speed on the ellipse of semi-major axis a: circular at e = 0.
-      const v = Math.sqrt((((env.G * c.mass) / a) * (1 + e)) / (1 - e));
-      pos = { x: c.pos.x + r * Math.cos(t), y: c.pos.y + r * Math.sin(t) };
-      vel = { x: c.vel.x + -v * Math.sin(t), y: c.vel.y + v * Math.cos(t) };
+      const [cos, sin] = angleTrig(o.angle ?? { rad: 0 });
+      if (o.barycentric) {
+        // Both bodies about their common center, which is the central body's
+        // own place and velocity: the pair, not one of them, carries the
+        // motion, so it circles a fixed point and does not drift.
+        const m2 = env.simMass(b.type, ctor);
+        const total = c.mass + m2;
+        const rel = Math.sqrt((env.G * total) / r);
+        const speed = (rel * c.mass) / total;
+        const cSpeed = (rel * m2) / total;
+        pos = {
+          x: c.pos.x + ((r * c.mass) / total) * cos,
+          y: c.pos.y + ((r * c.mass) / total) * sin,
+        };
+        vel = {
+          x: c.vel.x + -speed * sin,
+          y: c.vel.y + speed * cos,
+        };
+        c.pos = {
+          x: c.pos.x + ((-r * m2) / total) * cos,
+          y: c.pos.y + ((-r * m2) / total) * sin,
+        };
+        c.vel = {
+          x: c.vel.x + cSpeed * sin,
+          y: c.vel.y + -cSpeed * cos,
+        };
+      } else {
+        const a = r / (1 - e);
+        // Periapsis speed on the ellipse of semi-major axis a: circular at e = 0.
+        const v = Math.sqrt((((env.G * c.mass) / a) * (1 + e)) / (1 - e));
+        pos = { x: c.pos.x + r * cos, y: c.pos.y + r * sin };
+        vel = { x: c.vel.x + -v * sin, y: c.vel.y + v * cos };
+      }
+    }
+    const assign = { name: b.name };
+    if (b.from && ctor !== undefined) {
+      assign.mass = env.simMass(b.type, ctor);
+      assign[DISPLAY_MASS[b.type]] = ctor;
     }
     add({
       type: b.type,
-      ctor: Object.values(b.mass)[0],
+      ctor,
       pos,
       vel,
-      assign: { name: b.name, ...(b.set || {}) },
+      assign: { ...assign, ...(b.set || {}) },
+      ...(b.from ? { from: b.from } : {}),
     });
   }
   return made;
