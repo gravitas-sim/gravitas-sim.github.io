@@ -30,6 +30,35 @@
         --ui-split-aside: 24rem;
         gap: var(--space-6);
       }
+      /* The embedded figure (js/mission/lab/address.js): the day slider, the
+         three views and their legend, and none of the page around them. */
+      html[data-embed] .gs-skip,
+      html[data-embed] .gs-shell,
+      html[data-embed] .gs-foot,
+      html[data-embed] .gs-offline,
+      html[data-embed] #langSwitch,
+      html[data-embed] main > p:not(.ui-alert),
+      html[data-embed] .ml-grid > aside,
+      html[data-embed] .ml-grid section:not([aria-labelledby='ml-timeline-h']):not([aria-labelledby='ml-views-h']),
+      html[data-embed] #ml-timeline,
+      html[data-embed] #ml-positions,
+      html[data-embed][data-controls='none'] .ml-slider-field {
+        display: none;
+      }
+      html[data-embed] main > h1,
+      html[data-embed] .ml-grid h2 {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+      }
+      html[data-embed] .ml-wrap {
+        padding: var(--space-2);
+      }
+      html[data-embed] .ml-wrap section {
+        margin: var(--space-2) 0;
+      }
       .ml-wrap fieldset {
         margin: var(--space-2) 0;
       }
@@ -204,13 +233,14 @@ try {
             <div class="ui-toolbar is-fields">
               <button id="ml-go" type="button" class="ui-button is-primary" data-i18n="ml.compute"></button>
               <button id="ml-save-plan" type="button" class="ui-button" data-i18n="ml.savePlan" disabled></button>
+              <button id="ml-evidence" type="button" class="ui-button" data-i18n="ml.ev.open" disabled></button>
             </div>
             <p id="ml-status" role="status" aria-live="polite"></p>
           </section>
 
           <section aria-labelledby="ml-timeline-h">
             <h2 id="ml-timeline-h" data-i18n="ml.timeline.heading"></h2>
-            <div class="ui-field">
+            <div class="ui-field ml-slider-field">
               <label for="ml-slider" data-i18n="ml.timeline.slider"></label>
               <div class="ui-range">
                 <input id="ml-slider" type="range" min="0" max="309" step="1" value="0" disabled />
@@ -231,6 +261,8 @@ try {
             <h2 id="ml-results-h" data-i18n="ml.results.heading"></h2>
             <div id="ml-results" class="ui-table-wrap" tabindex="0" role="region" aria-label="Results tables" data-i18n-aria-label="ml.results.table"></div>
           </section>
+
+          <section class="ui-card is-compact" id="ml-evidence-panel" aria-labelledby="mle-h" hidden></section>
 
           <section aria-labelledby="ml-window-h" class="ml-window">
             <h2 id="ml-window-h" data-i18n="ml.window.heading"></h2>

@@ -83,6 +83,10 @@ export const SOURCE = Object.freeze({
   // A reading, an event or a forward-model observation from the 3-D lab,
   // kept as its envelope (js/lab3d/evidence.js).
   LAB3D: 'lab3d',
+  // A result of the mission lab (a timeline, the maneuvers, the delta-v
+  // budget, the patched conic against the propagated flight), kept as its
+  // envelope (js/mission/evidence.js).
+  MISSION_LAB: 'mission-lab',
 });
 
 /** The sources this build can capture from. */
@@ -103,6 +107,7 @@ export const SOURCES = [
   SOURCE.COMPUTE_CAPSULE,
   SOURCE.DERIVED_QUANTITY,
   SOURCE.LAB3D,
+  SOURCE.MISSION_LAB,
 ];
 
 /** How long a student's prose may be, per field. */

@@ -735,6 +735,31 @@ async function buildDocPages() {
     });
   }
 
+  // The mission lab's evidence panel and its address reader
+  // (js/mission/lab/evidencePanel.js and address.js, Prompt 106): a bundle of
+  // its own each, at the same path, which the lab loads by URL (the evidence
+  // panel when a reader presses its button, the address reader only when the
+  // address asks for a figure, a saved mission or a plan in the link). Built
+  // apart, each carries its own copy of what it needs and costs only the
+  // readers who use it. The panel carries the notebook writer and the My work
+  // writer, which a reader of the lab never downloads.
+  for (const file of [
+    'js/mission/lab/evidencePanel.js',
+    'js/mission/lab/address.js',
+  ]) {
+    if (!existsSync(file)) continue;
+    await esbuild.build({
+      entryPoints: [file],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, file),
+      legalComments: 'none',
+    });
+  }
+
   // The Sky Lab (/sky/, SKY_LAB.md): its own entry. The instruments, the
   // evidence writer and the constellation figures are lazy chunks; the star
   // table is a JSON file the page fetches (STATIC_FILES), so no bundle holds it.

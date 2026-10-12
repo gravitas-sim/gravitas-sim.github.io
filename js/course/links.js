@@ -37,7 +37,12 @@ import {
   ASSIGNMENT_TAG,
 } from '../assignments/assignment.js';
 import { formatSeed, parseSeed } from '../rng.js';
-import { FORMAT_VERSION, GUIDE_DEPTHS, LEVEL_DEPTH } from './pack.js';
+import {
+  FORMAT_VERSION,
+  GUIDE_DEPTHS,
+  LEVEL_DEPTH,
+  guideRoute,
+} from './pack.js';
 
 export { COMFORTABLE_URL_LENGTH };
 /** Where the builder leaves the draft the course home previews (?draft=1). */
@@ -116,7 +121,7 @@ export async function itemLink(item, { root, locale = 'en', level }) {
       };
     case 'guide':
       return {
-        href: `${root}3d/?guide=${encodeURIComponent(item.guide)}&path=${GUIDE_DEPTHS[item.depth ?? 'core']}`,
+        href: `${root}${guideRoute(item.guide)}?guide=${encodeURIComponent(item.guide)}&path=${GUIDE_DEPTHS[item.depth ?? 'core']}`,
         kind: 'app',
       };
     case 'dataset':

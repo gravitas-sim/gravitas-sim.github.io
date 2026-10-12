@@ -42,7 +42,7 @@ import { BUILTIN_COURSES } from './data/courses/index.js';
 import {
   FORMAT,
   FORMAT_VERSION,
-  GUIDES_3D,
+  GUIDES,
   GUIDE_DEPTHS,
   ITEM_KINDS,
   PATHS,
@@ -1049,7 +1049,7 @@ function kindFields(d, item, base) {
             idOf(`${base}.guide`),
             t('course.field.guide'),
             select(
-              Object.keys(GUIDES_3D).map(g => [g, g]),
+              Object.keys(GUIDES).map(g => [g, g]),
               item.guide,
               v => commit(x => (getAt(x, base).guide = v))
             )

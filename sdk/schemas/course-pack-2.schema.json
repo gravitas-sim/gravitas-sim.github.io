@@ -866,12 +866,15 @@
           "$ref": "#/$defs/text120"
         },
         "guide": {
-          "description": "One of the 3-D lab's guided investigations (GUIDES_3D in js/course/pack.js).",
+          "description": "One of the 3-D lab's or the mission lab's guided investigations (GUIDES in js/course/pack.js).",
           "enum": [
             "l3-planes",
             "l3-eclipse",
             "l3-mutual",
-            "l3-kozai"
+            "l3-kozai",
+            "ml-orbit",
+            "ml-window",
+            "ml-cruise"
           ]
         },
         "depth": {

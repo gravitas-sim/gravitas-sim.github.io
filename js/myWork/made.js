@@ -17,6 +17,10 @@
 //                      gravitas.system3d/1 itself, from its start or from the
 //                      moment it was saved. Not attachable to a report: the
 //                      token format has two kinds (submission-token/2).
+//   kind 'mission'     a mission saved from the mission lab (Prompt 106): the
+//                      gravitas.mission-plan/1 file the lab writes (the plan it
+//                      was asked and what came of it). Not attachable, for the
+//                      same reason as a 3-D system.
 //
 // A record is data only: nothing in it is run. `attachedTo` names notebook
 // entries ("the system I measured"); the report, the submission token and the
@@ -46,7 +50,7 @@ export const identityOf = p =>
     ? { id: p.id.slice(0, 80), version: p.version.slice(0, 40) }
     : null;
 
-const newId = () =>
+export const newId = () =>
   `m${Date.now().toString(36)}${Math.floor(Math.random() * 46656)
     .toString(36)
     .padStart(3, '0')}`;
@@ -262,6 +266,25 @@ export function readMade(v) {
       },
     };
   }
+  if (v.kind === 'mission') {
+    const f = v.mission?.file;
+    if (
+      !isObj(f) ||
+      f.format !== 'gravitas.mission-plan' ||
+      f.kind !== 'missionLab' ||
+      !isObj(f.inputs)
+    )
+      return { ok: false, reason: 'mission' };
+    return {
+      ok: true,
+      record: {
+        ...base,
+        attachedTo: [],
+        kind: 'mission',
+        mission: { file: f },
+      },
+    };
+  }
   return { ok: false, reason: 'kind' };
 }
 
@@ -333,13 +356,15 @@ export function listMade(storage) {
   return out.sort((a, b) => String(b.savedAt).localeCompare(String(a.savedAt)));
 }
 
-/** Where a record opens: the Sandbox on its link, the 3-D lab, or the runner. */
+/** Where a record opens: the Sandbox on its link, a lab, or the runner. */
 export const hrefOf = r =>
   r.kind === 'scenario'
     ? `/#${r.scenario.link}`
     : r.kind === 'system3d'
       ? `/3d/?open=${r.id}`
-      : '/experiments/';
+      : r.kind === 'mission'
+        ? `/mission/lab/?open=${r.id}`
+        : '/experiments/';
 
 /** The file a record stands for: the builder's system file, or the result. */
 export function fileOf(r) {
@@ -356,6 +381,8 @@ export function fileOf(r) {
     };
   if (r.kind === 'system3d')
     return { name: `${slug}.system3d.json`, json: r.system3d.system };
+  if (r.kind === 'mission')
+    return { name: `${slug}.mission-plan.json`, json: r.mission.file };
   return r.scenario.system
     ? { name: `${slug}.gravitas-system.json`, json: r.scenario.system }
     : null;

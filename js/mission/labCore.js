@@ -135,7 +135,15 @@ export async function handle(msg, post, now = () => performance.now()) {
     const result = computeMission(ephemeris(), msg.problem.plan);
     if (!result.ok && result.problems)
       return post({ type: 'refused', id: msg.id, problems: result.problems });
-    return post({ type: 'result', id: msg.id, result });
+    // The pack the planets came from, named for the evidence and the plan file
+    // (./evidence.js): the same Worker holds the pack and answers.
+    return post({
+      type: 'result',
+      id: msg.id,
+      result: result.ok
+        ? { ...result, pack: { id: PACK.id, version: PACK.version } }
+        : result,
+    });
   } catch (err) {
     return post(errorOf(msg.id, err));
   }

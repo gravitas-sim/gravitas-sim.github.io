@@ -38,6 +38,7 @@ import { buildPayload, decodePayload, encodePayload } from './shareState.js';
 import { formatSeed, parseSeed, randomSeed } from './rng.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { readSystemFragment } from './lab3d/link.js';
+import { readPlanFragment } from './mission/link.js';
 
 const $ = id => document.getElementById(id);
 const els = {};
@@ -54,6 +55,29 @@ const FRAGMENT = /#(\d+[zr][A-Za-z0-9_-]+)\s*$/;
 const LAB3D =
   /^https?:\/\/[^/]+\/3d\/(?:\?([^#]*))?(?:#(sys1[zr][A-Za-z0-9_-]+))?\s*$/;
 
+// A pasted link to the mission lab (/mission/lab/), with a plan in its
+// fragment or without (js/mission/link.js). Only the fragment is kept.
+const MISSION =
+  /^https?:\/\/[^/]+\/mission\/lab\/(?:\?[^#]*)?(?:#(plan1\.[A-Za-z0-9_-]+))?\s*$/;
+
+/** The mission figure a pasted link describes: null when it is not one. */
+function readMission(pasted) {
+  const m = MISSION.exec(pasted);
+  if (!m) return null;
+  const path = 'mission/lab/';
+  const title = 'fig.frame.titleMission';
+  if (!m[1])
+    return { path, title, fragment: '', message: t('fig.status.mission') };
+  if (!readPlanFragment(m[1]).ok)
+    return { path, title, error: t('fig.error.link.unreadable') };
+  return {
+    path,
+    title,
+    fragment: m[1],
+    message: t('fig.status.missionPlan'),
+  };
+}
+
 /** The 3-D figure a pasted link describes: null when it is not one. */
 async function readLab3d(pasted) {
   const m = LAB3D.exec(pasted);
@@ -65,9 +89,19 @@ async function readLab3d(pasted) {
     const r = await readSystemFragment(m[2]);
     if (!r.ok || r.system?.format !== 'gravitas.system3d')
       return { error: t('fig.error.link.unreadable') };
-    return { fragment: m[2], message: t('fig.status.system3d') };
+    return {
+      path: '3d/',
+      title: 'fig.frame.title3d',
+      fragment: m[2],
+      message: t('fig.status.system3d'),
+    };
   }
-  return { ref, message: t('fig.status.reference3d', { id: ref || 'R1' }) };
+  return {
+    path: '3d/',
+    title: 'fig.frame.title3d',
+    ref,
+    message: t('fig.status.reference3d', { id: ref || 'R1' }),
+  };
 }
 
 /** Scenario names in Spanish, fetched the first time the page is in Spanish. */
@@ -194,7 +228,10 @@ let generation = 0;
 /** Everything on the right from everything on the left. */
 async function update() {
   const mine = ++generation;
-  const lab3d = await readLab3d(els.link.value.trim());
+  const pasted = els.link.value.trim();
+  // A link to the 3-D lab or the mission lab makes that lab's figure (the
+  // labs have no Sandbox payload); anything else is a Sandbox link.
+  const lab3d = (await readLab3d(pasted)) ?? readMission(pasted);
   const read = lab3d
     ? {
         payload: lab3d.error ? null : {},
@@ -242,7 +279,7 @@ async function update() {
     reset: els.reset.value,
     parent,
   };
-  const base = `${location.origin}/${lab3d ? '3d/' : ''}`;
+  const base = `${location.origin}/${lab3d ? lab3d.path : ''}`;
   const params = new URLSearchParams(embedParams(options));
   if (lab3d?.ref) params.set('system', lab3d.ref);
   const query = params.toString();
@@ -253,7 +290,7 @@ async function update() {
   const title =
     els.title.value.trim() ||
     (lab3d
-      ? t('fig.frame.title3d')
+      ? t(lab3d.title)
       : t('fig.frame.title', { scenario: scenarioTitle(payload.s) }));
 
   els.markup.value = figureMarkup({

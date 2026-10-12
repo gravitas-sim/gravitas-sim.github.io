@@ -87,6 +87,7 @@ const SURFACES = {
   observatory: ['Observatory', 'Observatorio'],
   experiments: ['Experiments', 'Experimentos'],
   lab3d: ['3-D lab', 'Laboratorio 3-D'],
+  mission: ['Mission lab', 'Laboratorio de misiones'],
   compute: ['Compute page', 'Página de cálculo'],
 };
 
