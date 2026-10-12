@@ -14,7 +14,20 @@
 import { describe, test, expect, jest } from '@jest/globals';
 import { PACK, DATA } from '../js/data/ephemeris/solarSystem2025.js';
 import { createEphemeris } from '../js/mission/ephemeris.js';
-import { DEFAULT_PLAN, computeMission, G0 } from '../js/mission/solar.js';
+import {
+  AIM_KM,
+  DAY_S,
+  DEFAULT_PLAN,
+  G0,
+  MAX_AIMS,
+  computeMission,
+  departurePeriapsis,
+  flyDirect,
+} from '../js/mission/solar.js';
+import { BODIES } from '../js/mission/bodies.js';
+import { lambert } from '../js/mission/lambert.js';
+import { add, norm, propagate, sub } from '../js/mission/twobody.js';
+import { jdOfDate } from '../js/mission/ephemeris.js';
 import {
   KINDS,
   missionEnvelope,
@@ -23,6 +36,7 @@ import {
   residualSeries,
   residualSummary,
   overlaySeries,
+  trackAt,
 } from '../js/mission/evidence.js';
 import { validateArtifact } from '../js/platform/artifact.js';
 import {
@@ -85,6 +99,7 @@ describe('a result is an envelope', () => {
       }
       expect(env.warnings).toEqual(['missionModel', 'notOperational']);
       expect(env.made.mission.pack).toBe(`${pack.id}@${pack.version}`);
+      expect(env.made.mission.timeScale).toBe('TDB');
       expect(q(env, 'depart.jd').origin).toBe('assumed');
     }
   );
@@ -108,6 +123,13 @@ describe('a result is an envelope', () => {
     expect(missionEnvelope('budget', null)).toBeNull();
     expect(missionEnvelope('orbit', result)).toBeNull();
     expect(missionQuantities('orbit', result)).toBeNull();
+  });
+
+  test('the dates say their time scale, in both languages', () => {
+    for (const k of ['q.depart.jd', 'q.event', 'q.burn.jd']) {
+      expect(EN_MISSIONEVIDENCE[`mle.${k}`]).toContain('TDB');
+      expect(ES_MISSIONEVIDENCE[`mle.${k}`]).toContain('TDB');
+    }
   });
 
   test('the envelope id changes with the numbers', () => {
@@ -166,6 +188,163 @@ describe('the comparison', () => {
       expect(r.direct).toBeGreaterThanOrEqual(0);
     }
     expect(residualSummary([])).toBeNull();
+  });
+});
+
+// -----------------------------------------------------------------------------
+// The residual, against a reference that shares none of the lab's sampling.
+//
+// How the reference is made: the test flies the same spacecraft again, with
+// the lab's own relations (departure hyperbola periapsis, a Lambert leg to
+// Mars, the corrective aim loop) but with the track sampled 4000 times on
+// each leg (0.0075 d on the first leg at day 30, 0.07 d on the second) instead
+// of the lab's 120 over the whole flight, and reads that dense track by
+// straight lines at each of the patched arc's 61 days (error a*h^2/8 with
+// a < 6e-6 km/s^2: under 30 km at 0.07 d, which the tolerances below allow). The patched arc is
+// propagated again here from the Lambert departure velocity. Nothing is read
+// from the lab's own 'direct' or 'arc' views, and nothing is paired by index.
+// -----------------------------------------------------------------------------
+// The reference's largest residual and its day at 4000 samples a leg (km, day),
+// pinned: 2059496 on arrival without a correction, 329190 on day 144.2 with
+// one on day 30, and 209174 on day 46.35 with one on day 45.
+const PINNED_MAX = {
+  0: { km: 2059495.8, day: 309 },
+  30: { km: 329190.2, day: 144.2 },
+  45: { km: 209174.4, day: 46.35 },
+};
+const DENSE = 4000;
+function referenceResiduals(plan) {
+  const E = BODIES.earth;
+  const muS = BODIES.sun.GM;
+  const jd0 = jdOfDate(plan.depart.date);
+  const tof = plan.depart.tofDays;
+  const A = eph.stateAt('earth', jd0);
+  const B = eph.stateAt('mars', jd0 + tof);
+  const tr = lambert({ mu: muS, r1: A.r, r2: B.r, tof: tof * DAY_S });
+  const peri = departurePeriapsis(
+    E.GM,
+    E.radius + plan.depot.altitude,
+    sub(tr.v1, A.v)
+  );
+  const ship = { r: add(A.r, peri.r), v: add(A.v, peri.v) };
+  const opts = { bodies: plan.direct.bodies };
+  let track;
+  if (!plan.correct) {
+    track = flyDirect(eph, ship, jd0, tof, {
+      ...opts,
+      samples: DENSE * 4,
+    }).track;
+  } else {
+    const d = plan.correct.day;
+    const first = flyDirect(eph, ship, jd0, d, { ...opts, samples: DENSE });
+    const aimOpts = { bodies: plan.direct.bodies.filter(b => b !== 'mars') };
+    let aim = [...B.r];
+    let second;
+    for (let k = 0; k < MAX_AIMS; k++) {
+      const re = lambert({
+        mu: muS,
+        r1: first.end.r,
+        r2: aim,
+        tof: (tof - d) * DAY_S,
+      });
+      second = flyDirect(eph, { r: first.end.r, v: re.v1 }, jd0 + d, tof - d, {
+        ...aimOpts,
+        samples: DENSE,
+      });
+      const miss = sub(second.end.r, B.r);
+      if (norm(miss) <= AIM_KM) break;
+      aim = sub(aim, miss);
+    }
+    track = [
+      ...first.track,
+      ...second.track.slice(1).map(t => ({ ...t, day: t.day + d })),
+    ];
+  }
+  const at = day => {
+    let i = track.findIndex(t => t.day >= day);
+    if (i <= 0) i = 1;
+    const a = track[i - 1];
+    const b = track[i];
+    const w = (day - a.day) / (b.day - a.day);
+    return a.r.map((c, k) => c + w * (b.r[k] - c));
+  };
+  const out = [];
+  for (let k = 0; k <= 60; k++) {
+    const day = (tof * k) / 60;
+    const p = propagate(muS, A.r, tr.v1, day * DAY_S);
+    const r = at(day);
+    out.push({
+      day,
+      km: Math.hypot(r[0] - p.r[0], r[1] - p.r[1], r[2] - p.r[2]),
+    });
+  }
+  return out;
+}
+
+describe('the residual is read by day, against an independent flight', () => {
+  // Reported by the review of the first version, which paired the arc's k-th
+  // point with the flight's 2k-th: at a correction on day 30 it reported
+  // 2.38e6 km for the largest residual, and at day 45 3.39e6 km. The values
+  // pinned here are the reference's: 3.29e5 km (day 30) and 1.91e5 km (day 45).
+  const CASES = [
+    ['no correction', null],
+    ['a correction on day 30', { day: 30 }],
+    ['a correction on day 45', { day: 45 }],
+  ];
+  test.each(CASES)(
+    '%s: the largest residual, its day and the overlay column',
+    (_, correct) => {
+      const plan = { ...clone(DEFAULT_PLAN), correct };
+      const solved = solve(plan);
+      expect(solved.ok).toBe(true);
+      const ref = referenceResiduals(plan);
+      const refMax = ref.reduce((a, b) => (b.km > a.km ? b : a));
+      const got = residualSeries(solved);
+      const summary = residualSummary(got);
+      // Absolute, in kilometers: the dense reference and the lab agree to a
+      // small fraction of the residual and to a few km at the smallest.
+      expect(got).toHaveLength(61);
+      for (let k = 0; k < 61; k++) {
+        expect(got[k].day).toBeCloseTo(ref[k].day, 9);
+        // Within the first ten days the flight is still curving round the
+        // Earth, which a reading from samples 2.6 days apart cannot follow
+        // closer than about 650 km (measured: 653 km on day 5.15 with a
+        // correction on day 45); after that it is a few tens of km.
+        const slack = ref[k].day < 10 ? 700 : 0;
+        expect(Math.abs(got[k].km - ref[k].km)).toBeLessThan(
+          40 + slack + 2e-4 * ref[k].km
+        );
+      }
+      expect(Math.abs(summary.max - refMax.km)).toBeLessThan(
+        40 + 2e-4 * refMax.km
+      );
+      expect(summary.maxDay).toBeCloseTo(refMax.day, 9);
+      const overlay = overlaySeries(solved);
+      expect(overlay.map(o => o.day)).toEqual(ref.map(r => r.day));
+      overlay.forEach((o, k) => {
+        expect(o.residual).toBe(got[k].km);
+        // Equal to the series just checked against the reference.
+      });
+      // The envelope holds the same numbers.
+      const env = missionEnvelope('comparison', solved);
+      expect(q(env, 'residual.max').value).toBe(summary.max);
+      expect(q(env, 'residual.max.day').value).toBe(summary.maxDay);
+      const pin = PINNED_MAX[String(correct?.day ?? 0)];
+      expect(Math.abs(summary.max - pin.km)).toBeLessThan(1e-3 * pin.km);
+      expect(summary.maxDay).toBeCloseTo(pin.day, 6);
+    }
+  );
+
+  test('trackAt reads each leg of a corrected flight from its own side of the kink', () => {
+    const track = [0, 10, 20, 30, 40, 50, 60].map(day => ({
+      day,
+      // Slope 1 before day 30 and slope 5 after it: a kink.
+      r: [day <= 30 ? day : 30 + 5 * (day - 30), 0, 0],
+    }));
+    expect(trackAt(track, 25, 30)[0]).toBeCloseTo(25, 9);
+    expect(trackAt(track, 45, 30)[0]).toBeCloseTo(105, 9);
+    expect(trackAt(track, 61, 30)).toBeNull();
+    expect(trackAt(track, -1, 30)).toBeNull();
   });
 });
 

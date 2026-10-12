@@ -319,8 +319,8 @@ function planetNote() {
     const km = Math.max(...eph.map(id => info.positionBoundKm(id)));
     parts.push(
       L(
-        `${list(eph)}: the JPL DE441 ephemeris pack (${info.pack} ${info.version}, ${dateOfJd(info.startJd)} to ${dateOfJd(info.stopJd)}), within ${f2(km)} km, which is under ${worst < 1e-4 ? '0.0001' : f2(worst)}° of position; the reading is limited by the sky chain's 1 arcminute.`,
-        `${list(eph)}: el paquete de efemérides JPL DE441 (${info.pack} ${info.version}, de ${dateOfJd(info.startJd)} a ${dateOfJd(info.stopJd)}), a menos de ${f2(km)} km, es decir, menos de ${worst < 1e-4 ? '0,0001' : f2(worst)}° de posición; la lectura la limita la cadena del cielo, de 1 minuto de arco.`
+        `${list(eph)}: the JPL DE441 ephemeris pack (${info.pack} ${info.version}, ${dateOfJd(info.startJd)} to ${dateOfJd(info.stopJd)}), within ${f2(km)} km, which is under ${worst < 1e-4 ? '0.0001' : f2(worst)}° of the point the pack describes${eph.includes('jupiter') ? ', and that point is the barycenter of the Jupiter system, up to 0.4 arcsecond (0.0001°) from the planet itself' : ''}; the reading is limited by the sky chain's 1 arcminute.`,
+        `${list(eph)}: el paquete de efemérides JPL DE441 (${info.pack} ${info.version}, de ${dateOfJd(info.startJd)} a ${dateOfJd(info.stopJd)}), a menos de ${f2(km)} km, es decir, menos de ${worst < 1e-4 ? '0,0001' : f2(worst)}° del punto que describe el paquete${eph.includes('jupiter') ? ', y ese punto es el baricentro del sistema de Júpiter, a hasta 0,4 segundos de arco (0,0001°) del planeta' : ''}; la lectura la limita la cadena del cielo, de 1 minuto de arco.`
       )
     );
   }

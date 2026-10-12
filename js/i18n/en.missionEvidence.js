@@ -32,7 +32,7 @@ export const EN_MISSIONEVIDENCE = {
   'mle.note.assumed': 'chosen in the plan',
 
   // --- What each quantity is called
-  'mle.q.depart.jd': 'Departure date (Julian date)',
+  'mle.q.depart.jd': 'Departure date (Julian date, TDB)',
   'mle.q.depart.tof': 'Time of flight',
   'mle.q.correct.day': 'Day of the correction burn',
   'mle.q.parking.altitude': 'Parking orbit altitude',
@@ -63,8 +63,8 @@ export const EN_MISSIONEVIDENCE = {
   'mle.q.mars.drift': 'Drift of Mars in the direct flight',
   'mle.q.correction.dv': 'Correction burn delta-v',
   'mle.q.correction.miss': 'Miss of Mars after the correction',
-  'mle.q.event': 'Event: {name} (Julian date)',
-  'mle.q.burn.jd': 'Burn: {name} (Julian date)',
+  'mle.q.event': 'Event: {name} (Julian date, TDB)',
+  'mle.q.burn.jd': 'Burn: {name} (Julian date, TDB)',
   'mle.q.burn.dv': 'Burn: {name}, delta-v',
   'mle.q.burn.propellant': 'Burn: {name}, propellant',
   'mle.q.burn.massBefore': 'Burn: {name}, mass before',

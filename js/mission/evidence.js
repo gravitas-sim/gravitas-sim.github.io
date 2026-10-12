@@ -92,9 +92,58 @@ function inputs(plan, kind) {
 }
 
 /**
+ * The propagated flight's heliocentric position on a day, read between its
+ * samples. The track is positions only, so the reading is a four-point
+ * cubic Lagrange interpolation on the (not evenly spaced) samples nearest the
+ * day. A mid-course correction is a kink in the velocity, so the track is
+ * read leg by leg: the leg before the correction day and the leg after it
+ * share the sample on that day, and a day is read from its own leg only.
+ *
+ * The error is the fourth-derivative term of the interpolation: a few tens of
+ * kilometers on the heliocentric orbit (samples 2.6 to 3.1 days apart, an
+ * acceleration under 6e-6 km/s^2), and up to about 650 km in the first days,
+ * while the flight is still curving round the Earth; the residual it serves
+ * is 6.8e3 km at departure and 1e5 to 2e6 km over the cruise.
+ * tests/missionEvidence.test.js holds the reading to a flight sampled thirty
+ * times more finely. Linear reading would be 4e4 km off at the same spacing,
+ * which is why it is not used.
+ * @param {{day: number, r: number[]}[]} track - Samples in time order
+ * @param {number} day
+ * @param {?number} kinkDay - The correction day, or null
+ * @returns {?number[]} The position, or null when the day is outside the track
+ */
+export function trackAt(track, day, kinkDay = null) {
+  const eps = 1e-9;
+  const last = track[track.length - 1].day;
+  if (day < -eps || day > last + eps) return null;
+  let pts = track;
+  if (kinkDay !== null) {
+    pts =
+      day <= kinkDay + eps
+        ? track.filter(p => p.day <= kinkDay + eps)
+        : track.filter(p => p.day >= kinkDay - eps);
+  }
+  // The index of the sample at or before the day, then four around it.
+  let i = pts.findIndex(p => p.day > day + eps) - 1;
+  if (i < 0) i = pts.length - 2;
+  const first = Math.min(Math.max(i - 1, 0), Math.max(pts.length - 4, 0));
+  const use = pts.slice(first, first + 4);
+  return [0, 1, 2].map(c =>
+    use.reduce((sum, a, m) => {
+      let w = 1;
+      use.forEach((b, n) => {
+        if (n !== m) w *= (day - b.day) / (a.day - b.day);
+      });
+      return sum + w * a.r[c];
+    }, 0)
+  );
+}
+
+/**
  * The patched design's heliocentric arc against the spacecraft flown directly,
- * at the days both were sampled: the arc has 61 points and the direct flight
- * 121, so the arc's k-th is the flight's 2k-th, on the same day.
+ * at each of the arc's 61 days: the direct flight is read at the arc's own
+ * day (`trackAt`), never matched by position in the list, because a plan with
+ * a mid-course correction samples its two legs at different spacings.
  *
  * The patched arc ends at Mars's center, so its last residual is the direct
  * flight's miss (to the Lambert solver's own miss, under a kilometer). The
@@ -102,50 +151,56 @@ function inputs(plan, kind) {
  * center, which the patched design takes as zero.
  *
  * @param {{views: {arc: {day: number, r: ?number[]}[],
- *   direct: {day: number, r: number[]}[]}}} result
+ *   direct: {day: number, r: number[]}[]}, correction?: {day: number}}} result
  * @returns {{day: number, km: number}[]} Residuals in time order
  */
 export function residualSeries(result) {
   const { arc, direct } = result.views;
+  const kink = result.correction ? result.correction.day : null;
   const out = [];
-  arc.forEach((a, k) => {
-    const d = direct[2 * k];
-    if (!a.r || !d?.r) return;
+  for (const a of arc) {
+    const d = a.r ? trackAt(direct, a.day, kink) : null;
+    if (!d) continue;
     out.push({
       day: a.day,
-      km: Math.hypot(d.r[0] - a.r[0], d.r[1] - a.r[1], d.r[2] - a.r[2]),
+      km: Math.hypot(d[0] - a.r[0], d[1] - a.r[1], d[2] - a.r[2]),
     });
-  });
+  }
   return out;
 }
 
 /**
  * The patched design and the flown spacecraft against Mars, day by day: the
  * overlay the comparison draws, with the residual under it. At each of the
- * arc's 61 days: each spacecraft's distance from Mars (Mars's own samples are
- * 91 over the same days, read between by a straight line, as the lab's slider
- * reads them) and the residual, the distance between the two spacecraft.
+ * arc's 61 days: each spacecraft's distance from Mars (Mars's own 91 samples
+ * are spread evenly over the same days and read at the arc's day by the same
+ * cubic reading as the flight) and the residual, the distance between the two
+ * spacecraft.
  * @returns {{day: number, patched: number, direct: number, residual: number}[]}
  */
 export function overlaySeries(result) {
   const { arc, direct, mars } = result.views;
+  const kink = result.correction ? result.correction.day : null;
   const res = residualSeries(result);
   const byDay = new Map(res.map(r => [r.day, r.km]));
+  const span = arc[arc.length - 1].day;
+  const marsTrack = mars.map((r, i) => ({
+    day: (span * i) / (mars.length - 1),
+    r,
+  }));
   const out = [];
-  arc.forEach((a, k) => {
-    const d = direct[2 * k];
-    if (!a.r || !d?.r || !byDay.has(a.day)) return;
-    const x = (k / (arc.length - 1)) * (mars.length - 1);
-    const i = Math.min(mars.length - 2, Math.floor(x));
-    const m = mars[i].map((c, j) => c + (mars[i + 1][j] - c) * (x - i));
+  for (const a of arc) {
+    const d = a.r ? trackAt(direct, a.day, kink) : null;
+    const m = d && trackAt(marsTrack, a.day);
+    if (!d || !m || !byDay.has(a.day)) continue;
     const dist = r => Math.hypot(r[0] - m[0], r[1] - m[1], r[2] - m[2]);
     out.push({
       day: a.day,
       patched: dist(a.r),
-      direct: dist(d.r),
+      direct: dist(d),
       residual: byDay.get(a.day),
     });
-  });
+  }
   return out;
 }
 
@@ -266,6 +321,10 @@ export function missionEnvelope(kind, result) {
       mission: {
         api: MISSION_API,
         lab: 'mission-lab',
+        // Every Julian date in the envelope (departure, events, burns, the
+        // closest approach) is on the ephemeris's time scale, TDB, to within
+        // the 69 s from the UTC midnight the plan's date names.
+        timeScale: 'TDB',
         kind,
         plan: result.plan,
         ...(pack ? { pack } : {}),
