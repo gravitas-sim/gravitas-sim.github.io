@@ -196,7 +196,8 @@ describe('the instructor expectations record', () => {
     // 333 after the four variable-star investigations (Prompt 96): 17 more;
     // 346 after the four cosmology investigations (Prompt 91): 13 more.
     // 359 after the three calibration investigations (Prompt 86): 13 more.
-    expect(total).toBe(359);
+    // 365 after the two computational investigations (Prompt 102): 6 more.
+    expect(total).toBe(365);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

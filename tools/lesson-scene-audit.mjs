@@ -25,7 +25,7 @@
 // did an experiment". Those are opposite ends of an activity. Standing an
 // object there is the author's work; changing it is the student's.
 //
-// So a step now carries a set drawn from seven kinds, and any step may have
+// So a step now carries a set drawn from eight kinds, and any step may have
 // several:
 //
 //   scene-declared          the lesson staged objects, or bound names to
@@ -49,13 +49,17 @@
 //   panel-diagram           the instrument on this step is self-contained: it
 //                           does not read the scene and the scene does not
 //                           read it.
+//   external-computation    the step sends the reader to the compute page, to
+//                           run a reviewed Python notebook (`compute: <id>`),
+//                           and the numbers come back from its capsule. Nothing
+//                           on this screen computed them.
 //   captured-evidence       something a reader produced is kept: a notebook
 //                           field, a plot, a pinned snapshot, an import from
 //                           the selection. Ticking a checklist box is not on
 //                           this list, deliberately - a checkbox records that
 //                           somebody clicked, not that anything was measured.
 //
-// A step with none of the seven is prose, and the catalog says so rather
+// A step with none of the eight is prose, and the catalog says so rather
 // than reaching for the nearest category.
 //
 // The loop
@@ -91,6 +95,7 @@ import { fileURLToPath } from 'node:url';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { allWidgets, whenWidgetsReady } from '../js/widgets.js';
 import { BUILTIN_SOURCES } from '../js/platform/builtins.js';
+import { CATALOGUE_DATA } from '../js/compute/catalogueData.js';
 import { auditBindings, parseCollected } from './acceptance-bindings.mjs';
 import { inOwnTransformCache } from './playwright-cache.mjs';
 
@@ -104,7 +109,7 @@ const args = process.argv.slice(2);
 const wantJson = args.includes('--json');
 const wantCheck = args.includes('--check');
 
-/** The seven kinds. A step's `kinds` is a subset; several is normal. */
+/** The eight kinds. A step's `kinds` is a subset; several is normal. */
 const KIND = {
   DECLARED: 'scene-declared',
   STUDENT: 'student-changes-scene',
@@ -113,6 +118,7 @@ const KIND = {
   DATA: 'imported-data',
   DIAGRAM: 'panel-diagram',
   EVIDENCE: 'captured-evidence',
+  COMPUTATION: 'external-computation',
 };
 
 /**
@@ -1063,7 +1069,7 @@ function actionsFor(step, widget, ctxOf, running, affordances) {
 }
 
 /**
- * Which of the seven kinds apply.
+ * Which of the eight kinds apply.
  *
  * The one rule worth stating out loud, because it decides most of the table:
  * a live widget with no controls and no presets has nothing of its own to
@@ -1110,6 +1116,12 @@ function kindsFor(step, widget, ctxOf, datasets) {
     if (!widget.live) out.add(KIND.DIAGRAM);
   }
   if (datasets.length) out.add(KIND.DATA);
+
+  // A step that sends the reader to the compute page (Roadmap II Prompt 102)
+  // names the reviewed notebook that makes its numbers. Declared, not inferred:
+  // nothing on this screen computes them, and the audit says so rather than
+  // reading a typed-in number as an engine measurement.
+  if (step.compute) out.add(KIND.COMPUTATION);
 
   if (
     step.fields?.length ||
@@ -1603,6 +1615,8 @@ async function audit() {
         instrument: step.tool
           ? { id: step.tool.id, capture: Boolean(step.tool.capture) }
           : null,
+        // Named only where a step sends the reader to the compute page.
+        ...(step.compute ? { compute: step.compute } : {}),
         evidence: evidenceFor(step, ctxOf),
         reset: resetFor(step, inv, index),
         recovery: recoveryFor(step, inv, index, ctxOf, source),
@@ -1696,6 +1710,7 @@ function totalsFor(steps) {
     data: has(KIND.DATA),
     diagram: has(KIND.DIAGRAM),
     evidence: has(KIND.EVIDENCE),
+    computation: has(KIND.COMPUTATION),
     // The number the previous version of this file could not tell apart from
     // "staged something": a scene stood up and nobody able to touch it.
     declaredButInert: count(
@@ -1743,7 +1758,7 @@ function report(data) {
       `${pad(t.diagram, 6)} ${pad(t.evidence, 5)} ` +
       `${pad(`${t.completeLoops}/${t.closedLoops}/${t.loops}`, 8)} ${t.mismatched}`
   );
-  lines.push(`\n${t.prose} step(s) carry none of the seven kinds: prose.`);
+  lines.push(`\n${t.prose} step(s) carry none of the eight kinds: prose.`);
 
   const mismatches = data.lessons.flatMap(l =>
     l.steps.filter(s => s.loop.mismatch).map(s => [l.id, s])
@@ -2020,6 +2035,7 @@ async function checkAcceptance(data) {
       model: 'model-result',
       data: 'imported-data',
       illustration: 'panel-diagram',
+      computation: 'external-computation',
     };
     if (entry.evidenceFrom) {
       const wanted = NEEDS[entry.evidenceFrom];
@@ -2071,7 +2087,21 @@ async function checkAcceptance(data) {
     // as `panel:<widget-id>`, which is checked against the registry and
     // against the lesson's own use of that instrument.
     const panel = String(entry.object || '').match(/^panel:([\w-]+)$/);
-    if (panel) {
+    // A lesson whose experiment is run on the compute page names the
+    // reviewed notebook as its object, `compute:<notebook id>`, and some step
+    // of the lesson has to declare that same notebook.
+    const notebook = String(entry.object || '').match(/^compute:([\w-]+)$/);
+    if (notebook) {
+      if (!lesson.steps.some(s => s.compute === notebook[1])) {
+        problems.push(
+          `${lesson.id}: acceptance object names notebook "${notebook[1]}", which no step of this lesson declares (compute: "${notebook[1]}")`
+        );
+      } else if (!CATALOGUE_DATA.some(e => e.id === notebook[1])) {
+        problems.push(
+          `${lesson.id}: acceptance object names notebook "${notebook[1]}", which is not in the compute catalogue`
+        );
+      }
+    } else if (panel) {
       if (!widgets.has(panel[1])) {
         problems.push(
           `${lesson.id}: acceptance object names widget "${panel[1]}", which is not registered`
@@ -2160,7 +2190,7 @@ function provenanceModule(acceptance) {
   return `// Generated by tools/lesson-scene-audit.mjs --write. Do not edit.
 //
 // Where each investigation's central experiment gets its number from, for the
-// line the explanation step shows a learner. Four sources, and the difference
+// line the explanation step shows a learner. Five sources, and the difference
 // matters: a Schwarzschild radius comes from a closed-form panel and a period
 // comes from the integrator, and a reader who thinks the first was simulated
 // has learned something false about what this application does.

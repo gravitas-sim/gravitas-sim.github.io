@@ -80,7 +80,12 @@ import {
   plutoBodies,
   trojanBodies,
 } from '../resonance/systems.js';
-import { applyPresetLayout, scenarioId } from '../scenarios.js';
+import {
+  SCENARIO_GEOMETRY,
+  applyPresetLayout,
+  expandGeometry,
+  scenarioId,
+} from '../scenarios.js';
 import { populationCaps } from '../quality.js';
 import { SIM_UNITS_PER_AU } from '../units.js';
 
@@ -3010,20 +3015,15 @@ export const buildWorld = ctx => {
     }
   }
 
-  // --- The three resonance scenarios ----------------------------------------
-  //
-  // All three are built from js/resonance/systems.js, which holds the published
-  // elements and the paper each came from. Nothing numeric is written here: the
-  // scenario, the validation suite in js/validation/physicsChecks.js and the unit
-  // tests all read the same table, so they cannot quote different values for
-  // the same moon.
-  //
-  // What this function contributes is the part only it can: turning a plain
-  // {name, mass, radius, pos, vel} into a live engine object with a stable
-  // identity, a fixed name and the persistence flag that keeps it out of the
-  // cull. The lesson perturbs bodies by name and matches them across runs by
-  // id, so a randomly generated or recycled body would break it.
-  const installResonanceSystem = spec => {
+  // --- Scenarios whose bodies are declared as data ------------------------------
+  // SCENARIO_GEOMETRY (js/scenarios.js) says what they are and expandGeometry
+  // builds them through what only this module can supply: a live engine object
+  // and the one named rule. The generated population has already been drawn (the
+  // seeded generator keeps its sequence); a geometry replaces it, emptying every
+  // list but the galaxies as the hand-built blocks did. Bodies are made in the
+  // declaration's order because each constructor draws from the generator.
+  const declared = SCENARIO_GEOMETRY[starting_preset];
+  if (declared) {
     stars.length = 0;
     planets.length = 0;
     gas_giants.length = 0;
@@ -3034,206 +3034,68 @@ export const buildWorld = ctx => {
     white_dwarfs.length = 0;
     debris.length = 0;
 
-    for (const d of [spec.primary, ...spec.bodies]) {
-      let body;
-      if (d.kind === 'star') {
-        body = new StarObject(
-          { ...d.pos },
-          { ...d.vel },
-          d.mass / SOLAR_MASS_UNIT
-        );
-        body.massInSuns = d.mass / SOLAR_MASS_UNIT;
-        body.intact = true;
-        stars.push(body);
-      } else if (d.kind === 'gasGiant') {
-        body = new GasGiant({ ...d.pos }, { ...d.vel }, 1);
-        gas_giants.push(body);
-      } else {
-        body = new Planet({ ...d.pos }, { ...d.vel }, 1);
-        planets.push(body);
-      }
-      body.mass = d.mass;
-      // The constructors derive their display masses from the mass they were
-      // handed, and every one of these bodies has its mass overwritten
-      // afterwards. Without this the inspector reports Ganymede as one Earth
-      // mass, which it inherited from the Planet constructor's default rather
-      // than from anything true.
-      body.mass = d.mass;
-      body.massInSuns = d.mass / SOLAR_MASS_UNIT;
-      body.massInEarths = d.mass / EARTH_MASS_UNIT;
-      body.massInJupiters = d.mass / JUPITER_MASS_UNIT;
-      body.name = d.name;
-      body.radius = d.radius;
-      body.baseColor = d.color;
-      // Never culled, never re-typed, never merged: every measurement in the
-      // lesson matches bodies between samples by identity.
-      body.persistent = true;
-    }
-  };
-
-  // Io, Europa, Ganymede and Callisto. The only scale model of the three, and
-  // the reason is arithmetic rather than taste: Io orbits 0.28 length units
-  // from Jupiter at true scale, which is smaller than the softening floor and a
-  // twentieth of the radius Jupiter would be drawn at. Distances are multiplied
-  // by GALILEAN.scale, which under Newtonian gravity is exactly equivalent to
-  // dividing every duration by scale^1.5, and leaves every ratio alone.
-  if (starting_preset === 'galilean-resonance') {
-    const spec = galileanBodies(SETTINGS.gravitational_constant);
-    balance([spec.primary, ...spec.bodies]);
-    installResonanceSystem(spec);
-  }
-
-  // The same four moons with Europa moved out by one percent. Everything else
-  // is identical, which is the point: one number changes and the Laplace
-  // argument stops librating and starts going round, once every forty-six Io
-  // orbits. The resonance's half-width in Europa's semi-major axis is between
-  // one and two parts in a thousand, so a percent is well outside it.
-  if (starting_preset === 'broken-laplace-resonance') {
-    const spec = galileanBodies(SETTINGS.gravitational_constant, {
-      detune: GALILEAN.detune,
+    // One body of a published system, whose masses are in simulation units. A
+    // constructor derives the display masses from the mass it is handed, so all
+    // four are set; each body is persistent because investigations match bodies
+    // between samples by identity.
+    const published = d => ({
+      type:
+        d.kind === 'star'
+          ? 'Star'
+          : d.kind === 'gasGiant'
+            ? 'GasGiant'
+            : 'Planet',
+      ctor: d.kind === 'star' ? d.mass / SOLAR_MASS_UNIT : 1,
+      pos: d.pos,
+      vel: d.vel,
+      assign: {
+        mass: d.mass,
+        massInSuns: d.mass / SOLAR_MASS_UNIT,
+        massInEarths: d.mass / EARTH_MASS_UNIT,
+        massInJupiters: d.mass / JUPITER_MASS_UNIT,
+        name: d.name,
+        radius: d.radius,
+        baseColor: d.color,
+        persistent: true,
+      },
     });
-    balance([spec.primary, ...spec.bodies]);
-    installResonanceSystem(spec);
+    const geometryRules = {
+      // The Trojans are built balanced already; the other two are balanced here.
+      'published-system': ({ system, detuned }, env) => {
+        const G = env.G;
+        let spec;
+        if (system === 'galilean') {
+          spec = galileanBodies(G, detuned ? { detune: GALILEAN.detune } : {});
+        } else if (system === 'pluto-neptune') spec = plutoBodies(G);
+        else spec = trojanBodies(G);
+        if (system !== 'jupiter-trojans')
+          balance([spec.primary, ...spec.bodies]);
+        return [spec.primary, ...spec.bodies].map(published);
+      },
+    };
+    expandGeometry(declared, {
+      G: SETTINGS.gravitational_constant,
+      units: { AU: SIM_UNITS_PER_AU },
+      rules: geometryRules,
+      create: ({ type, ctor, pos, vel, assign }) => {
+        const [Body, list] =
+          type === 'Star'
+            ? [StarObject, stars]
+            : type === 'GasGiant'
+              ? [GasGiant, gas_giants]
+              : [Planet, planets];
+        const body = new Body({ ...pos }, { ...vel }, ctor);
+        Object.assign(body, assign);
+        list.push(body);
+        return body;
+      },
+    });
   }
 
-  // Pluto, Neptune and a body on a Pluto-like orbit that is not in the 3:2.
-  // True scale, so every distance and period the interface reports is the real
-  // one.
-  if (starting_preset === 'pluto-and-neptune') {
-    const spec = plutoBodies(SETTINGS.gravitational_constant);
-    balance([spec.primary, ...spec.bodies]);
-    installResonanceSystem(spec);
-  }
-
-  // The Sun, Jupiter and four test bodies on Jupiter's orbit. Built in the
-  // circular restricted frame - both massive bodies turning about a barycenter
-  // at the origin - because the triangular points are only exact in that frame.
-  // Already balanced by construction, so no balance() call.
-  if (starting_preset === 'jupiter-trojans') {
-    installResonanceSystem(trojanBodies(SETTINGS.gravitational_constant));
-  }
-
-  // --- Retrograde Mars: the Sun, Earth and Mars, and nothing else -----------
-  if (starting_preset === 'retrograde-mars') {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const AU = SIM_UNITS_PER_AU;
-
-    const sun = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
-    sun.name = 'Sun';
-    sun.mass = SOLAR_MASS_UNIT;
-    sun.massInSuns = 1.0;
-    sun.baseColor = '#FFD86B';
-    sun.radius = 10;
-    stars.push(sun);
-
-    // Circular orbits at the true semi-major axes. Earth's real eccentricity is
-    // 0.017 and Mars's 0.093, and neither changes the shape of the loop: what
-    // draws it is the difference in angular speed, not the shape of either
-    // orbit. Circles keep the measurement clean.
-    const worlds = [
-      { name: 'Earth', aAU: 1.0, earths: 1.0, r: 4, color: '#5B8FF0' },
-      { name: 'Mars', aAU: 1.523, earths: 0.107, r: 3, color: '#D06B4A' },
-    ];
-
-    // Mars starts 95 degrees ahead of Earth. Earth gains on it at 0.46 degrees
-    // a day, so opposition arrives after about 205 days, and that number is
-    // chosen against how long the trail takes to fill rather than against
-    // anything astronomical: 300 samples cover roughly 150 days here, so an
-    // earlier opposition would happen while the trail was still growing and the
-    // loop would be half drawn when it passed. Any later and a student waits.
-    // The next opposition is a synodic period after this one.
-    const startAngle = { Earth: 103, Mars: 198 };
-
-    for (const w of worlds) {
-      const r = w.aAU * AU;
-      const theta = (startAngle[w.name] * Math.PI) / 180;
-      const v = Math.sqrt((G * sun.mass) / r);
-      const planet = new Planet(
-        { x: r * Math.cos(theta), y: r * Math.sin(theta) },
-        { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
-        w.earths
-      );
-      planet.name = w.name;
-      planet.radius = w.r;
-      planet.baseColor = w.color;
-      planet.persistent = true;
-      planets.push(planet);
-    }
-  }
-
-  // --- Kepler's 2nd Law scenario: star + nearly-circular planet + eccentric planet ---
+  // Kepler's 2nd Law: the bodies are declared; the overlay is behavior, not
+  // geometry, and stays here.
   if (starting_preset === 'keplers-2nd-law') {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-
-    // Central star - Sun-like, pinned at origin
-    const kStar = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
-    kStar.name = 'Kepler Star';
-    kStar.mass = SOLAR_MASS_UNIT;
-    kStar.massInSuns = 1.0;
-    kStar.baseColor = '#FFFF00';
-    kStar.radius = 14;
-    stars.push(kStar);
-
-    // Planet - nearly circular orbit (e ≈ 0.02)
-    // Well outside the eccentric body's apoapsis of about 236. These two orbits
-    // used to cross: the eccentric orbiter swept from 50 out to 236 while this
-    // one sat at 180, so once an orbit they collided. Merging is off for this
-    // scenario, so instead of combining they bounced, and each bounce kicked
-    // both orbits by several percent in energy and angular momentum. That is
-    // what made a scenario built to show a fixed ellipse visibly drift.
-    const planetDist = 320;
-    const eP = 0.02;
-    const aP = planetDist / (1 - eP);
-    const vPlanet = Math.sqrt((((G * kStar.mass) / aP) * (1 + eP)) / (1 - eP));
-    const kPlanet = new Planet(
-      { x: planetDist, y: 0 },
-      { x: 0, y: vPlanet },
-      1.0
-    );
-    kPlanet.name = 'Circular Orbiter';
-    kPlanet.mass = 1.0 * EARTH_MASS_UNIT;
-    kPlanet.baseColor = '#4B90E2';
-    kPlanet.radius = 7;
-    planets.push(kPlanet);
-
-    // Eccentric body - a Planet (not Comet) for visibility, bright orange,
-    // on a tighter eccentric orbit (e ≈ 0.65) that fits within the view
-    const eccPeri = 50;
-    const eC = 0.65;
-    const aC = eccPeri / (1 - eC);
-    const vEcc = Math.sqrt((((G * kStar.mass) / aC) * (1 + eC)) / (1 - eC));
-    const eccAngle = Math.PI * 0.6;
-    const eccPlanet = new Planet(
-      { x: eccPeri * Math.cos(eccAngle), y: eccPeri * Math.sin(eccAngle) },
-      { x: -vEcc * Math.sin(eccAngle), y: vEcc * Math.cos(eccAngle) },
-      0.3
-    );
-    eccPlanet.name = 'Eccentric Orbiter';
-    eccPlanet.mass = 0.3 * EARTH_MASS_UNIT;
-    eccPlanet.baseColor = '#FF6B35';
-    eccPlanet.radius = 6;
-    planets.push(eccPlanet);
-
+    const eccPlanet = planets.find(p => p.name === 'Eccentric Orbiter');
     // Auto-enable area sweep for the eccentric orbiter on startup
     setTimeout(() => {
       try {

@@ -16,6 +16,14 @@ export const ES_STUDIO = {
   'studio.action.from': 'Empezar desde este',
   'studio.from.generated': 'Generados a partir de ajustes',
   'studio.from.handBuilt': 'Solo los ajustes (cuerpos colocados por código)',
+  'studio.from.geometry': 'Ajustes y geometría declarada',
+  'studio.geometry.heading': 'Geometría declarada',
+  'studio.geometry.summary':
+    '{n} pasos que construyen los cuerpos del escenario a partir de sus órbitas. Quítalos para añadir cuerpos propios.',
+  'studio.geometry.remove': 'Quitar la geometría declarada',
+  'studio.error.geometry': 'La geometría declarada no es válida ({why}).',
+  'studio.error.geometryExclusive':
+    'La geometría declarada sustituye a los cuerpos: un escenario tiene una o tiene cuerpos propios, no ambas cosas.',
   'studio.action.open': 'Abrir un archivo',
   'studio.action.save': 'Guardar como archivo',
   'studio.action.copy': 'Copiar el enlace',
@@ -111,6 +119,8 @@ export const ES_STUDIO = {
     '{count} problema(s) que resolver antes de poder guardar el escenario.',
   'studio.checks.none': 'Nada que resolver.',
   'studio.checks.caution': 'Atención: {text}',
+  'studio.caution.areaSweep':
+    'La 2.ª ley de Kepler también activa una superposición de áreas barridas para el orbitador excéntrico. Esa superposición es un comportamiento de la aplicación, no geometría, así que este archivo lleva los cuerpos y no la superposición.',
   'studio.caution.handBuilt':
     '{scenario} coloca sus cuerpos por código, así que solo se copiaron sus ajustes. Este escenario construye el mundo que esos ajustes generan, que no es el mismo.',
   'studio.caution.unbound':

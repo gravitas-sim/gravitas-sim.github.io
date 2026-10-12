@@ -185,6 +185,27 @@ export interface ScenarioPack {
       retrograde?: boolean;
     }>;
   };
+  /** Declarative geometry (SCENARIO_GEOMETRY.md): bodies made by steps; replaces the generated population, so no system, bodies or scenario beside it. */
+  geometry?: {
+    steps: Array<{
+      body: {
+        type: 'Star' | 'Planet' | 'GasGiant';
+        name: string;
+        /** One key: suns for a Star, earths for a Planet, jupiters for a GasGiant. */
+        mass: { suns?: number; earths?: number; jupiters?: number };
+        at?: { x: number; y: number };
+        velocity?: { x: number; y: number };
+        /** Round a body named earlier; a periapsis start, a circle when e is 0. */
+        orbit?: {
+          around: string;
+          distance: { au?: number; units?: number };
+          eccentricity?: number;
+          angle?: { deg?: number; rad?: number; pi?: number };
+        };
+        set?: { radius?: number; baseColor?: string; persistent?: boolean };
+      };
+    }>;
+  };
   bodies?: Array<{
     name?: string;
     type: 'Star' | 'WhiteDwarf' | 'NeutronStar' | 'BlackHole' | 'GasGiant' | 'Planet';

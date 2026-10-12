@@ -164,6 +164,7 @@ export const SEQUENCES = [
       ['retrograde-motion', 'core'],
       ['power-law-gravity', 'core'],
       ['orbital-energy', 'core', ['keplers-laws']],
+      ['integrators-in-practice', 'core', ['orbital-energy']],
       ['tides', 'core'],
       ['hohmann-transfer', 'core', ['orbital-energy']],
       ['gravity-assist', 'core', ['orbital-energy']],
@@ -207,6 +208,7 @@ export const SEQUENCES = [
       ],
       ['goldilocks-question', 'core', ['transit-photometry']],
       ['binary-star-planets', 'core'],
+      ['extending-an-experiment', 'core'],
     ]
   ),
   sequence(
