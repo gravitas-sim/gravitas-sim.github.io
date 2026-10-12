@@ -19,6 +19,14 @@ export const EN_STUDIO = {
   'studio.action.from': 'Start from it',
   'studio.from.generated': 'Generated from settings',
   'studio.from.handBuilt': 'Settings only (bodies placed by code)',
+  'studio.from.geometry': 'Settings and declared geometry',
+  'studio.geometry.heading': 'Declared geometry',
+  'studio.geometry.summary':
+    '{n} steps that build the scenario’s bodies from their orbits. Remove them to add bodies of your own.',
+  'studio.geometry.remove': 'Remove the declared geometry',
+  'studio.error.geometry': 'The declared geometry is not valid ({why}).',
+  'studio.error.geometryExclusive':
+    'Declared geometry replaces the bodies: a scenario has it or its own bodies, not both.',
   'studio.action.open': 'Open a file',
   'studio.action.save': 'Save as a file',
   'studio.action.copy': 'Copy link',
@@ -109,6 +117,8 @@ export const EN_STUDIO = {
     '{count} problem(s) to fix before the scenario can be saved.',
   'studio.checks.none': 'Nothing to fix.',
   'studio.checks.caution': 'Caution: {text}',
+  'studio.caution.areaSweep':
+    'Kepler’s 2nd Law also turns on an area-sweep overlay for the eccentric orbiter. That overlay is behavior in the application, not geometry, so this scenario file carries the bodies and not the overlay.',
   'studio.caution.handBuilt':
     '{scenario} places its bodies by code, so only its settings were copied. This scenario builds the world those settings generate, which is not the same one.',
   'studio.caution.unbound':

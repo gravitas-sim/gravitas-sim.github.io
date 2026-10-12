@@ -1,9 +1,10 @@
 // =============================================================================
 // gravitas.scenario-pack/1: a scenario, as data
 // -----------------------------------------------------------------------------
-// A built-in scenario is a row of the preset table (js/scenarios.js), usually
-// with hand-built geometry in js/world/build.js as well: code, which only a
-// reviewed commit may add. A scenario pack is the part of a scenario that is
+// A built-in scenario is a row of the preset table (js/scenarios.js), often
+// with geometry too: declared as data (SCENARIO_GEOMETRY.md) or, for the
+// scenarios not yet moved, hand-built in js/world/build.js as code, which only
+// a reviewed commit may add. A scenario pack is the part of a scenario that is
 // content - the settings it runs under, the bodies it starts with, the seed
 // that makes it the same world every time, the instruments it opens with, and
 // a title and summary in every language it declares - and nothing else. It
@@ -192,6 +193,7 @@ const FIELDS = new Set([
   'system',
   'bodies',
   'system3d',
+  'geometry',
 ]);
 
 /**
@@ -243,6 +245,7 @@ function system3dShape(sys) {
  * @param {string[]} [api.scenarios] - The built-in scenarios' public ids
  * @param {Function} [api.validateSystem] - js/systemSpec.js's, for `system`
  * @param {Function} [api.validateBody] - For one entry of `bodies`
+ * @param {Function} [api.validateGeometry] - js/scenarioPack.js's, for `geometry`
  * @param {Function} [api.validateSystem3d] - The 3-D lab's, for `system3d`
  *   (js/lab3d/state.js); without it only the block's shape is checked
  * @param {Function} [api.explain] - A message key and its values, in English
@@ -585,6 +588,29 @@ export function validateScenarioPack(s, api) {
         { why: p.code, at: p.path ?? '', ...(p.vars ?? {}) }
       );
   }
+  // Declarative geometry replaces the generated population, as `bodies` does.
+  // The constructs' validator is the caller's (api.validateGeometry,
+  // js/scenarioPack.js), so a page that never checks a pack does not carry it.
+  const hasGeometry = s.geometry !== undefined && s.geometry !== null;
+  if (hasGeometry) {
+    need(
+      !hasSystem && !hasBodies && s.scenario === undefined,
+      'geometry',
+      'geometryExclusive',
+      'a pack with geometry has no system, no bodies and no built-in to start from'
+    );
+    const problems = api.validateGeometry
+      ? api.validateGeometry(s.geometry, { rules: false })
+      : [{ path: '', why: 'this build cannot check it' }];
+    for (const p of problems)
+      need(
+        false,
+        p.path ? `geometry.${p.path}` : 'geometry',
+        'geometry',
+        `the geometry: ${p.why}${p.path ? ` at ${p.path}` : ''}`,
+        { why: p.why, at: p.path }
+      );
+  }
   // A built-in to start from, by id: its world, geometry included, under the
   // pack's seed and settings. The bodies are its own, so the pack brings none.
   if (s.scenario !== undefined) {
@@ -596,7 +622,7 @@ export function validateScenarioPack(s, api) {
       { scenario: String(s.scenario) }
     );
   }
-  if (hasSystem || hasBodies) {
+  if (hasSystem || hasBodies || hasGeometry) {
     for (const key of POPULATION_COUNTS) {
       const set = key in settings;
       const n = set ? settings[key] : api.defaults[key];

@@ -57,6 +57,9 @@ import {
   packBodies,
   packCautions,
   GENERATED_SCENARIOS,
+  GEOMETRY_SCENARIOS,
+  geometryFromScenario,
+  settingsWithGeometry,
   BUILDER_TYPES,
   SYSTEM_TYPES,
 } from './scenarioPack.js';
@@ -131,14 +134,18 @@ function translateStatic() {
   const from = $('st-from');
   const chosen = from.value;
   const generated = el('optgroup', { label: t('studio.from.generated') });
+  const declared = el('optgroup', { label: t('studio.from.geometry') });
   const handBuilt = el('optgroup', { label: t('studio.from.handBuilt') });
   for (const name of Object.keys(SCENARIO_INFO)) {
-    (GENERATED_SCENARIOS.includes(name) ? generated : handBuilt).append(
-      el('option', { value: name }, scenarioTitle(name))
-    );
+    (GENERATED_SCENARIOS.includes(name)
+      ? generated
+      : GEOMETRY_SCENARIOS.includes(name)
+        ? declared
+        : handBuilt
+    ).append(el('option', { value: name }, scenarioTitle(name)));
   }
   from.textContent = '';
-  from.append(generated, handBuilt);
+  from.append(generated, declared, handBuilt);
   if (chosen) from.value = chosen;
   const host = $('langSwitch');
   host.textContent = '';
@@ -693,6 +700,31 @@ function systemSection(d) {
     );
   }
 
+  if (d.geometry) {
+    section.append(
+      el(
+        'div',
+        { id: 'st-geometry', className: 'st-subsection' },
+        el('h3', {}, t('studio.geometry.heading')),
+        el(
+          'p',
+          { className: 'ui-hint' },
+          t('studio.geometry.summary', { n: d.geometry.steps?.length ?? 0 })
+        ),
+        el(
+          'button',
+          {
+            type: 'button',
+            className: 'ui-button',
+            id: 'st-geometry-remove',
+            onclick: () => commit(x => delete x.geometry),
+          },
+          t('studio.geometry.remove')
+        )
+      )
+    );
+  }
+
   // Typed bodies, as precise placement takes them.
   const typed = el(
     'div',
@@ -967,10 +999,17 @@ function showErrors(errors) {
 /** Cautions about the system the pack builds, from the builder's own checks. */
 function cautions(d) {
   const out = [];
-  if (startedFrom && !GENERATED_SCENARIOS.includes(startedFrom)) {
+  if (
+    startedFrom &&
+    !GENERATED_SCENARIOS.includes(startedFrom) &&
+    !GEOMETRY_SCENARIOS.includes(startedFrom)
+  ) {
     out.push(
       t('studio.caution.handBuilt', { scenario: scenarioTitle(startedFrom) })
     );
+  }
+  if (startedFrom === 'keplers-2nd-law' && d.geometry) {
+    out.push(t('studio.caution.areaSweep'));
   }
   try {
     const { bodies } = packBodies(d);
@@ -1137,8 +1176,12 @@ function start(pack, { from = null, message } = {}) {
 
 function fromScenario(name) {
   const pack = blankPack(randomSeed());
-  const { settings, dropped } = settingsFromScenario(name);
+  const geometry = geometryFromScenario(name);
+  const { settings, dropped } = geometry
+    ? settingsWithGeometry(name)
+    : settingsFromScenario(name);
   pack.settings = settings;
+  if (geometry) pack.geometry = geometry;
   pack.id =
     name
       .toLowerCase()

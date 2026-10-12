@@ -29,7 +29,11 @@ import {
   pristineSettingsFor,
   settingsDelta,
 } from './shareState.js';
-import { SCENARIO_IDS } from './scenarios.js';
+import {
+  SCENARIO_IDS,
+  SCENARIO_GEOMETRY,
+  expandGeometry,
+} from './scenarios.js';
 import { formatSeed } from './rng.js';
 import {
   BUILDER_TYPES,
@@ -49,9 +53,199 @@ import { SIM_UNITS_PER_AU } from './constants.js';
 import {
   FORMAT,
   FORMAT_VERSION,
+  POPULATION_COUNTS,
   SETTING_RULES,
   validateScenarioPack,
 } from './platform/scenario.js';
+
+const isObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+const UNSAFE_KEY = new Set(['__proto__', 'constructor', 'prototype']);
+
+// --- Declarative geometry (SCENARIO_GEOMETRY.md) ------------------------------
+// {steps: [...]}, one construct a step: `body` (a type, a name, a mass in the
+// type's own unit, a place or an `orbit` round an earlier body) or `rule` (a
+// named rule with parameters; engine code, so a pack may not use one).
+// The arithmetic is js/scenarios.js expandGeometry().
+
+/** The most steps a geometry may hold. */
+export const GEOMETRY_MAX_STEPS = 40;
+
+/** The body types a geometry may make, and the unit each is massed in. */
+export const GEOMETRY_TYPES = Object.freeze({
+  Star: 'suns',
+  Planet: 'earths',
+  GasGiant: 'jupiters',
+});
+
+/** The look of a body, and nothing else, may be set after it is made. */
+export const GEOMETRY_SET = Object.freeze({
+  radius: 'positive',
+  baseColor: 'color',
+  persistent: 'bool',
+});
+
+/** The named rules, and what each takes. */
+export const GEOMETRY_RULES = Object.freeze({
+  'published-system': Object.freeze({
+    system: Object.freeze(['galilean', 'pluto-neptune', 'jupiter-trojans']),
+    detuned: 'bool',
+  }),
+});
+
+const GEOMETRY_LIMIT = 1e6;
+const GEOMETRY_COLOR = /^#[0-9a-fA-F]{6}$/;
+const GEOMETRY_NAME = /^[^<>\p{Cc}]{1,40}$/u;
+
+/**
+ * Every problem with a geometry, each naming its field; `rules: false` refuses
+ * the `rule` construct, as a pack must.
+ * @param {unknown} g - {steps: [...]}
+ * @param {{rules?: boolean}} [opts]
+ * @returns {Array<{path: string, why: string}>}
+ */
+export function validateGeometry(g, { rules = true } = {}) {
+  const out = [];
+  const bad = (path, why) => out.push({ path, why });
+  if (!isObject(g)) return [{ path: '', why: 'a geometry is {steps: [...]}' }];
+  for (const k of Object.keys(g))
+    if (k !== 'steps') bad(k, `"${k}" is not a geometry field`);
+  if (!Array.isArray(g.steps) || g.steps.length === 0) {
+    bad('steps', 'a list of at least one step');
+    return out;
+  }
+  if (g.steps.length > GEOMETRY_MAX_STEPS)
+    bad('steps', `at most ${GEOMETRY_MAX_STEPS} steps`);
+  const names = new Set();
+  const only = (o, path, allowed) => {
+    for (const k of Object.keys(o))
+      if (UNSAFE_KEY.has(k) || !allowed.includes(k))
+        bad(`${path}.${k}`, `"${k}" is not allowed here`);
+  };
+  const num = (v, path, min, max, open) => {
+    const ok =
+      typeof v === 'number' &&
+      Number.isFinite(v) &&
+      (open ? v > min : v >= min) &&
+      v <= max;
+    if (!ok) bad(path, `a number from ${min} to ${max}`);
+  };
+  const unit = (v, path, kinds, min, max, open) => {
+    if (!isObject(v) || Object.keys(v).length !== 1)
+      return bad(path, `exactly one of ${kinds.join(', ')}, with a number`);
+    const [k] = Object.keys(v);
+    if (!kinds.includes(k))
+      return bad(`${path}.${k}`, `one of ${kinds.join(', ')}`);
+    num(v[k], `${path}.${k}`, min, max, open);
+  };
+  const xy = (v, path) => {
+    if (!isObject(v)) return bad(path, 'an {x, y} pair');
+    only(v, path, ['x', 'y']);
+    num(v.x, `${path}.x`, -GEOMETRY_LIMIT, GEOMETRY_LIMIT);
+    num(v.y, `${path}.y`, -GEOMETRY_LIMIT, GEOMETRY_LIMIT);
+  };
+  const body = (b, p) => {
+    if (!isObject(b)) return bad(p, 'a body: {type, name, mass, ...}');
+    only(b, p, ['type', 'name', 'mass', 'at', 'velocity', 'orbit', 'set']);
+    const unitName = GEOMETRY_TYPES[b.type];
+    if (!unitName)
+      bad(`${p}.type`, `one of ${Object.keys(GEOMETRY_TYPES).join(', ')}`);
+    if (typeof b.name !== 'string' || !GEOMETRY_NAME.test(b.name))
+      bad(`${p}.name`, 'a plain name of 1 to 40 characters');
+    else if (names.has(b.name))
+      bad(`${p}.name`, `"${b.name}" names two bodies`);
+    unit(
+      b.mass,
+      `${p}.mass`,
+      unitName ? [unitName] : Object.values(GEOMETRY_TYPES),
+      0,
+      1e9,
+      true
+    );
+    if (b.orbit !== undefined) {
+      if (b.at !== undefined || b.velocity !== undefined)
+        bad(p, 'an orbit gives the place and velocity: no `at` or `velocity`');
+      const o = b.orbit;
+      const op = `${p}.orbit`;
+      if (!isObject(o)) bad(op, 'an orbit: {around, distance, ...}');
+      else {
+        only(o, op, ['around', 'distance', 'eccentricity', 'angle']);
+        if (typeof o.around !== 'string' || !names.has(o.around))
+          bad(`${op}.around`, 'the name of a body made earlier');
+        unit(
+          o.distance,
+          `${op}.distance`,
+          ['au', 'units'],
+          0,
+          GEOMETRY_LIMIT,
+          true
+        );
+        if (
+          o.eccentricity !== undefined &&
+          !(
+            typeof o.eccentricity === 'number' &&
+            o.eccentricity >= 0 &&
+            o.eccentricity < 1
+          )
+        )
+          bad(`${op}.eccentricity`, 'from 0 up to, not including, 1');
+        if (o.angle !== undefined)
+          unit(o.angle, `${op}.angle`, ['deg', 'rad', 'pi'], -1e4, 1e4);
+      }
+    } else {
+      if (b.at !== undefined) xy(b.at, `${p}.at`);
+      if (b.velocity !== undefined) xy(b.velocity, `${p}.velocity`);
+    }
+    if (b.set !== undefined) {
+      if (!isObject(b.set)) bad(`${p}.set`, 'an object');
+      else {
+        only(b.set, `${p}.set`, Object.keys(GEOMETRY_SET));
+        for (const [k, v] of Object.entries(b.set)) {
+          const kind = GEOMETRY_SET[k];
+          const at = `${p}.set.${k}`;
+          if (kind === 'bool' && typeof v !== 'boolean')
+            bad(at, 'true or false');
+          else if (kind === 'positive') num(v, at, 0, 1e4, true);
+          else if (
+            kind === 'color' &&
+            !(typeof v === 'string' && GEOMETRY_COLOR.test(v))
+          )
+            bad(at, 'a color such as #ffd86b');
+        }
+      }
+    }
+    if (typeof b.name === 'string') names.add(b.name);
+  };
+  const rule = (r, p) => {
+    if (!rules) return bad(p, 'a scenario pack may not use a named rule');
+    if (!isObject(r)) return bad(p, 'a rule: {name, params}');
+    only(r, p, ['name', 'params']);
+    const spec = GEOMETRY_RULES[r.name];
+    if (!spec)
+      return bad(
+        `${p}.name`,
+        `one of ${Object.keys(GEOMETRY_RULES).join(', ')}`
+      );
+    const params = r.params ?? {};
+    if (!isObject(params)) return bad(`${p}.params`, 'an object');
+    only(params, `${p}.params`, Object.keys(spec));
+    if (!spec.system.includes(params.system))
+      bad(`${p}.params.system`, `one of ${spec.system.join(', ')}`);
+    if (params.detuned !== undefined && typeof params.detuned !== 'boolean')
+      bad(`${p}.params.detuned`, 'true or false');
+    if (params.detuned && params.system !== 'galilean')
+      bad(`${p}.params.detuned`, 'only the Galilean system can be detuned');
+  };
+  g.steps.forEach((step, i) => {
+    const at = `steps[${i}]`;
+    if (!isObject(step) || Object.keys(step).length !== 1)
+      return bad(at, 'a step with exactly one construct: body or rule');
+    const [kind] = Object.keys(step);
+    if (kind === 'body') body(step.body, `${at}.body`);
+    else if (kind === 'rule') rule(step.rule, `${at}.rule`);
+    else bad(`${at}.${kind}`, 'a construct this build knows: body or rule');
+  });
+  return out;
+}
 
 /** The share link's class name for each body type a pack may hold. */
 const CLASS_OF = Object.freeze({
@@ -127,6 +321,7 @@ export function scenarioApi() {
     scenarios: [...SCENARIO_IDS],
     validateSystem,
     validateBody,
+    validateGeometry,
     explain,
   };
 }
@@ -154,15 +349,26 @@ export const checkPack = pack => validateScenarioPack(pack, scenarioApi());
  * kind is computed here with its own rule, because a link that left it out
  * would restore the giant as the kind its constructor drew at random.
  */
-function packedBody({ type, name, mass, radius, pos, vel }) {
+function packedBody({
+  type,
+  name,
+  mass,
+  radius,
+  pos,
+  vel,
+  baseColor,
+  persistent = true,
+}) {
   const out = {
     type: CLASS_OF[type],
     pos: { x: sig(pos.x), y: sig(pos.y) },
     vel: { x: sig(vel.x), y: sig(vel.y) },
     mass: sig(simMass(type, mass)),
     radius: sig(radius ?? defaultRadius(type, mass)),
-    persistent: true,
+    persistent,
   };
+  if (!persistent) delete out.persistent;
+  if (baseColor) out.baseColor = baseColor;
   if (name) out.name = name;
   if (REPORTED[type]) out[REPORTED[type]] = mass;
   if (type === 'GasGiant') {
@@ -202,6 +408,37 @@ export function packBodies(pack) {
         })
       );
     }
+  }
+  if (pack.geometry) {
+    const G =
+      pack.settings?.gravitational_constant ??
+      DEFAULT_SETTINGS.gravitational_constant;
+    expandGeometry(pack.geometry, {
+      G,
+      units: { AU: SIM_UNITS_PER_AU },
+      create: ({ type, ctor, pos, vel, assign }) => {
+        const body = {
+          type,
+          name: assign.name,
+          mass: simMass(type, ctor),
+          pos,
+          vel,
+        };
+        bodies.push(
+          packedBody({
+            type,
+            name: assign.name,
+            mass: ctor,
+            radius: assign.radius ?? null,
+            pos,
+            vel,
+            baseColor: assign.baseColor,
+            persistent: assign.persistent === true,
+          })
+        );
+        return body;
+      },
+    });
   }
   for (const b of pack.bodies || []) {
     bodies.push(
@@ -409,6 +646,38 @@ export function settingsFromScenario(name) {
     else dropped.push(key);
   }
   return { settings, dropped: dropped.sort() };
+}
+
+/**
+ * A built-in's declared geometry as a pack carries it, or null: generated,
+ * still coded, or declared with a named rule (a pack names that one in
+ * `scenario`).
+ * @param {string} name - A key of SCENARIO_INFO
+ * @returns {?{steps: object[]}} A copy
+ */
+export function geometryFromScenario(name) {
+  const g = SCENARIO_GEOMETRY[name];
+  if (!g || g.steps.some(step => step.rule)) return null;
+  return JSON.parse(JSON.stringify(g));
+}
+
+/** The built-ins whose declared geometry a pack can carry. */
+export const GEOMETRY_SCENARIOS = Object.freeze(
+  Object.keys(SCENARIO_GEOMETRY).filter(k => geometryFromScenario(k))
+);
+
+/**
+ * settingsFromScenario with every population count at 0: the geometry replaces
+ * the generated population.
+ * @param {string} name - A key of SCENARIO_INFO
+ * @returns {{settings: object, dropped: string[]}}
+ */
+export function settingsWithGeometry(name) {
+  const { settings, dropped } = settingsFromScenario(name);
+  for (const key of POPULATION_COUNTS) {
+    if ((settings[key] ?? DEFAULT_SETTINGS[key]) > 0) settings[key] = 0;
+  }
+  return { settings, dropped };
 }
 
 /**

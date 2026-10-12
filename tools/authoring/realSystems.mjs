@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { HD209458, SUN_JUPITER } from '../../js/data/exoplanetSystems.js';
 import { TRAPPIST1_PLANETS, TRAPPIST1_STAR } from '../../js/data/trappist1.js';
 import { SOURCES } from '../../js/data/realSystemSources.js';
+import { SCENARIO_GEOMETRY } from '../../js/scenarios.js';
 
 const REPO = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -38,9 +39,8 @@ export const REAL_SYSTEM_TABLES = {
   realAsteroids: ['name'],
   famousComets: ['name'],
   kuiperBeltObjects: ['name'],
-  // Two tables have this name: the Habitable Zone Lab's (`radius` is its
-  // drawn size) and the resonance scenarios' (`r` is).
-  worlds: ['name', 'color', 'radius', 'r'],
+  // The Habitable Zone Lab's (`radius` is its drawn size).
+  worlds: ['name', 'color', 'radius'],
 };
 
 /**
@@ -100,12 +100,35 @@ export async function loadRealSystems() {
       }
     }
   }
+  // Real worlds that a scenario's declared geometry (SCENARIO_GEOMETRY in
+  // js/scenarios.js) carries: each body's mass in Earth masses and its distance
+  // in AU are the parameters, read from the declaration as the table was.
+  for (const [id, label, names] of REAL_GEOMETRY) {
+    for (const step of SCENARIO_GEOMETRY[id].steps) {
+      const b = step.body;
+      if (!b || !names.includes(b.name)) continue;
+      out.push({
+        where: `js/scenarios.js SCENARIO_GEOMETRY (${label}) ${b.name}`,
+        object: {
+          name: b.name,
+          earths: b.mass.earths,
+          aAU: b.orbit.distance.au,
+        },
+        ignore: ['name'],
+      });
+    }
+  }
   for (const o of out) o.sources = SOURCES[o.where];
   return out;
 }
 
-/** The scenarios the two `worlds` tables of js/world/build.js build, in order. */
-const WORLDS = ['Habitable Zone Lab', 'Retrograde Mars'];
+/** The scenario the `worlds` table of js/world/build.js builds. */
+const WORLDS = ['Habitable Zone Lab'];
+
+/** The scenarios whose declared geometry holds real worlds, and which bodies. */
+const REAL_GEOMETRY = [
+  ['retrograde-mars', 'Retrograde Mars', ['Earth', 'Mars']],
+];
 
 /**
  * Every problem the attribution rule finds with the real systems: each

@@ -292,6 +292,12 @@ four `tags`, a `seed`, and any of these:
   (ORBITAL_SYSTEM_BUILDER.md).
 - **`bodies`:** typed bodies, `{ type, mass, x, y, vx, vy, radius?, name? }`,
   in simulation units and each type's mass unit.
+- **`geometry`:** bodies made by steps, `{ steps: [{ body: { type, name, mass,
+  orbit | at, velocity, set } }] }`: a star, planet or gas giant with a mass in
+  its type's own unit and either a place or an orbit round a body named
+  earlier (SCENARIO_GEOMETRY.md). It replaces the generated population, so it
+  does not meet `system`, `bodies` or `scenario`, and a pack may not use the
+  named rules a built-in's declaration may.
 - **`open` and `tools`:** the instruments the scenario opens with, by the
   rail's ids.
 - **`camera`, `observer` and `paused`.**
@@ -301,7 +307,7 @@ four `tags`, a `seed`, and any of these:
   scenario's own.
 
 A pack generates its population from its settings under its seed, or brings
-its own bodies; not both, because opening a world with its own bodies replaces
+its own bodies (as `system`, `bodies` or `geometry`); not both, because opening a world with its own bodies replaces
 the generated ones. A pack that names a built-in brings no bodies either. Text
 is plain: no markup and no URLs.
 

@@ -79,6 +79,13 @@ Cautions are heuristics, and they never block anything:
 - **A hand-built copy:** a scenario started from a built-in that places its
   bodies by code is told that only the settings came across.
 
+Start from a built-in has three groups. Generated scenarios come across whole.
+Scenarios with declared geometry (`SCENARIO_GEOMETRY.md`: Retrograde Mars and
+Kepler's 2nd Law so far) come across with their settings and their `geometry`,
+the steps that make their bodies, and the pack builds the same bodies. The rest
+place their bodies by code, or by a named rule a pack may not use, and only
+their settings come across.
+
 Unbound orbits in a system are not a caution. The builder refuses an
 eccentricity of 1 or more.
 

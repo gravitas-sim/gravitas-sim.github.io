@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gravitas-sim.online/sdk/schemas/scenario-pack-1.schema.json",
   "title": "gravitas.scenario-pack/1",
-  "description": "A scenario as data: settings Gravitas understands, a seed, the instruments it opens with, bodies as an orbital system or typed states, optionally a 3-D system for the 3-D lab, with text in every declared locale. Content only, never code. js/platform/scenario.js validateScenarioPack() is the authority: it also checks that every string is in every locale and free of markup, and that a pack with its own bodies generates no population. sdk/README.md, \"Scenario packs\".",
+  "description": "A scenario as data: settings Gravitas understands, a seed, the instruments it opens with, bodies as an orbital system, typed states or declarative geometry, optionally a 3-D system for the 3-D lab, with text in every declared locale. Content only, never code. js/platform/scenario.js validateScenarioPack() is the authority: it also checks that every string is in every locale and free of markup, and that a pack with its own bodies generates no population. sdk/README.md, \"Scenario packs\".",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -633,6 +633,177 @@
                 "maxItems": 3,
                 "items": {
                   "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "description": "Declarative geometry (Roadmap II Prompt 108): the pack's bodies as steps, each a body made from a mass and a place or an orbit round an earlier body, in order. It replaces the generated population, so the pack's population counts are 0 and it has no system, no bodies and no built-in to start from. A built-in scenario's declaration may also use a named rule; a pack may not. js/scenarioPack.js validateGeometry() is the authority; SCENARIO_GEOMETRY.md says what each construct means.",
+      "additionalProperties": false,
+      "required": [
+        "steps"
+      ],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 40,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "body"
+            ],
+            "properties": {
+              "body": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "type",
+                  "name",
+                  "mass"
+                ],
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "Star",
+                      "Planet",
+                      "GasGiant"
+                    ]
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 40
+                  },
+                  "mass": {
+                    "type": "object",
+                    "description": "One of suns (a Star), earths (a Planet) or jupiters (a GasGiant): the type's own unit, greater than 0.",
+                    "additionalProperties": false,
+                    "minProperties": 1,
+                    "maxProperties": 1,
+                    "properties": {
+                      "suns": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "earths": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "jupiters": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      }
+                    }
+                  },
+                  "at": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "x",
+                      "y"
+                    ],
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "velocity": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "x",
+                      "y"
+                    ],
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "orbit": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "around",
+                      "distance"
+                    ],
+                    "properties": {
+                      "around": {
+                        "type": "string",
+                        "description": "The name of a body made earlier in the geometry."
+                      },
+                      "distance": {
+                        "type": "object",
+                        "description": "The distance at the start, which is periapsis for an eccentric orbit: au, or units (simulation length units, 100 to the AU).",
+                        "additionalProperties": false,
+                        "minProperties": 1,
+                        "maxProperties": 1,
+                        "properties": {
+                          "au": {
+                            "type": "number",
+                            "exclusiveMinimum": 0
+                          },
+                          "units": {
+                            "type": "number",
+                            "exclusiveMinimum": 0
+                          }
+                        }
+                      },
+                      "eccentricity": {
+                        "type": "number",
+                        "minimum": 0,
+                        "exclusiveMaximum": 1
+                      },
+                      "angle": {
+                        "type": "object",
+                        "description": "Where on the circle the body starts: deg, rad, or pi (a multiple of pi).",
+                        "additionalProperties": false,
+                        "minProperties": 1,
+                        "maxProperties": 1,
+                        "properties": {
+                          "deg": {
+                            "type": "number"
+                          },
+                          "rad": {
+                            "type": "number"
+                          },
+                          "pi": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "set": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "radius": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "baseColor": {
+                        "type": "string",
+                        "pattern": "^#[0-9a-fA-F]{6}$"
+                      },
+                      "persistent": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
                 }
               }
             }
