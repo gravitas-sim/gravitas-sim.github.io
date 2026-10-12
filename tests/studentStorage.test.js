@@ -430,7 +430,7 @@ describe('no writer slips back to a direct write', () => {
     'js/courseHome.js':
       'gravitas_next_context: where a lesson was opened from, not student work (STORAGE.md)',
     'js/libraryPage.js': 'gravitas_next_context, as above',
-    'js/investigations.js': 'gravitas_next_context, as above',
+    'js/investigations/browser.js': 'gravitas_next_context, as above',
     'js/investigations/next.js': 'gravitas_next_context, as above',
   };
   test('the files that call setItem or removeItem on a Storage are exactly the listed ones', () => {
