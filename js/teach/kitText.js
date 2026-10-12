@@ -104,6 +104,7 @@ export const WORDS = {
     'item.assignment': 'Activity: {title}',
     'item.scenario': 'Simulation: {title}',
     'item.dataset': 'Data: {title}',
+    'item.guide': '3-D lab investigation: {title}',
     'item.reading': 'Reading: {title}',
   },
   es: {
@@ -195,6 +196,7 @@ export const WORDS = {
     'item.assignment': 'Actividad: {title}',
     'item.scenario': 'Simulación: {title}',
     'item.dataset': 'Datos: {title}',
+    'item.guide': 'Investigación del laboratorio 3D: {title}',
     'item.reading': 'Lectura: {title}',
   },
 };

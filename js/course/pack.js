@@ -30,6 +30,25 @@ import { makeChecker } from '../platform/checker.js';
 export const FORMAT = 'gravitas.course-pack';
 export const FORMAT_VERSION = 2;
 
+// The 3-D lab's guided investigations, as a `guide` item may name them
+// (Prompt 105). Kept here, small, so that no page needs a module of its own for
+// them; tests/course3d.test.js holds the table to the lab's guides. Depth is
+// the platform's vocabulary (DEPTH.md): the introductory path is the core, and
+// the advanced path is the advanced depth.
+/** The guide ids, with the minutes each of the guide's two paths takes. */
+export const GUIDES_3D = Object.freeze({
+  'l3-planes': Object.freeze({ intro: 20, advanced: 30 }),
+  'l3-eclipse': Object.freeze({ intro: 25, advanced: 35 }),
+  'l3-mutual': Object.freeze({ intro: 20, advanced: 30 }),
+  'l3-kozai': Object.freeze({ intro: 25, advanced: 35 }),
+});
+
+/** The depths a guide item may declare, and the guide path each opens. */
+export const GUIDE_DEPTHS = Object.freeze({
+  core: 'intro',
+  advanced: 'advanced',
+});
+
 export const ITEM_KINDS = Object.freeze([
   'lesson',
   'assignment',
@@ -37,6 +56,7 @@ export const ITEM_KINDS = Object.freeze([
   'dataset',
   'reading',
   'pack',
+  'guide',
 ]);
 /** The optional paths an item may be on; everything else is the core. */
 export const PATHS = Object.freeze(['core', 'intro', 'advanced']);
@@ -119,6 +139,8 @@ const ITEM_FIELDS = {
   reading: ['title', 'cite', 'license', 'access'],
   // An investigation pack, carried in the item as its link (Prompt 78 (c)).
   pack: ['pack', 'version', 'link', 'title', 'pin'],
+  // One of the 3-D lab's guided investigations, at a depth (Prompt 105).
+  guide: ['guide', 'depth', 'title'],
 };
 /** Kinds whose time the builder derives from the lesson; the rest declare it. */
 const DERIVED_TIME = new Set(['lesson', 'assignment', 'pack']);
@@ -586,6 +608,23 @@ function checkKind(item, at, ctx) {
           `${at}.paused`,
           'boolean',
           'true or false'
+        );
+      text(item.title, `${at}.title`, false, 120);
+      return;
+    case 'guide':
+      need(
+        Object.hasOwn(GUIDES_3D, item.guide),
+        `${at}.guide`,
+        'guide',
+        `the 3-D lab has no investigation "${item.guide}"`,
+        { guide: item.guide }
+      );
+      if (item.depth !== undefined)
+        need(
+          Object.hasOwn(GUIDE_DEPTHS, item.depth),
+          `${at}.depth`,
+          'depth',
+          'core or advanced'
         );
       text(item.title, `${at}.title`, false, 120);
       return;

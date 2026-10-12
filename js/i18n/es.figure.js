@@ -16,7 +16,7 @@ export const ES_FIGURE = {
   'fig.what.title': 'Qué muestra',
   'fig.what.link.label': 'Un enlace de Gravitas',
   'fig.what.link.hint':
-    'En Gravitas, prepara la simulación, abre Compartir y elige «Crear una figura», o copia el enlace y pégalo aquí.',
+    'En Gravitas, prepara la simulación, abre Compartir y elige «Crear una figura», o copia el enlace y pégalo aquí. Un enlace al laboratorio 3D, con un sistema, crea una figura 3D.',
   'fig.what.or': 'o empieza desde un escenario',
   'fig.what.scenario.label': 'Escenario',
   'fig.what.seed.label': 'Semilla',
@@ -26,6 +26,9 @@ export const ES_FIGURE = {
   'fig.what.start.running': 'en marcha',
   'fig.what.start.paused': 'en pausa',
   'fig.status.link': '{scenario}, {bodies}',
+  'fig.status.system3d': 'Un sistema 3D, llevado en el enlace',
+  'fig.status.reference3d': 'El laboratorio 3D, sistema de referencia {id}',
+  'fig.frame.title3d': 'Laboratorio 3D de Gravitas',
   'fig.status.seeded': '{scenario}, construido con la semilla {seed}',
   'fig.status.bodies.one': '1 objeto escrito en el enlace',
   'fig.status.bodies.many': '{n} objetos escritos en el enlace',

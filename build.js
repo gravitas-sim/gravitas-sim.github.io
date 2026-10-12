@@ -828,6 +828,38 @@ async function buildDocPages() {
     });
   }
 
+  // The lab's evidence and observing panel (js/lab3d/view/evidencePanel.js,
+  // Prompt 105): a bundle of its own at the same path, for the reason the
+  // guide panel is. It carries the forward models, the notebook writer and the
+  // observation exporter, which a reader of the lab never downloads.
+  if (existsSync('js/lab3d/view/evidencePanel.js')) {
+    await esbuild.build({
+      entryPoints: ['js/lab3d/view/evidencePanel.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js/lab3d/view/evidencePanel.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The 3-D lab's embed (js/lab3d/embed.js, Prompt 105): by URL, only when
+  // `embed=1` is asked for.
+  if (existsSync('js/lab3d/embed.js')) {
+    await esbuild.build({
+      entryPoints: ['js/lab3d/embed.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js/lab3d/embed.js'),
+      legalComments: 'none',
+    });
+  }
+
   // The figure builder. Its own entry for the reason the other document pages
   // have theirs: it reads the scenario catalog and the share encoder, and a
   // page only an author opens may not grow anybody's start-up download.

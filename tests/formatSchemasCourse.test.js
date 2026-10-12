@@ -60,7 +60,7 @@ describe('the course pack /2 schema', () => {
       INTRO_ASTRONOMY.units.flatMap(u => u.items.map(i => i.kind))
     );
     expect([...kinds].sort()).toEqual(
-      CP.ITEM_KINDS.filter(k => k !== 'pack').sort()
+      CP.ITEM_KINDS.filter(k => k !== 'pack' && k !== 'guide').sort()
     );
     // The SDK's example, an exact pack with every lesson pinned.
     const example = JSON.parse(

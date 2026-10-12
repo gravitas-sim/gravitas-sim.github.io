@@ -814,6 +814,73 @@
         }
       }
     },
+    "itemGuide": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "guide",
+        "minutes"
+      ],
+      "properties": {
+        "kind": {
+          "const": "guide"
+        },
+        "id": {
+          "$ref": "#/$defs/publicId"
+        },
+        "path": {
+          "enum": [
+            "core",
+            "intro",
+            "advanced"
+          ]
+        },
+        "minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "needs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "studentNote": {
+          "$ref": "#/$defs/text1200"
+        },
+        "teacherNote": {
+          "$ref": "#/$defs/text2000"
+        },
+        "title": {
+          "$ref": "#/$defs/text120"
+        },
+        "guide": {
+          "description": "One of the 3-D lab's guided investigations (GUIDES_3D in js/course/pack.js).",
+          "enum": [
+            "l3-planes",
+            "l3-eclipse",
+            "l3-mutual",
+            "l3-kozai"
+          ]
+        },
+        "depth": {
+          "description": "core opens the guide's introductory path, advanced its advanced path.",
+          "enum": [
+            "core",
+            "advanced"
+          ]
+        }
+      }
+    },
     "cite": {
       "description": "Who wrote a reading, when and where. An address is https, with a host and no credentials, in the canonical form (js/course/pack.js safeUrl); the pattern states the shape and the reader holds the rest.",
       "type": "object",
@@ -1002,7 +1069,7 @@
       "description": "An investigation pack carried in the course as its link (Prompt 78). The pin is the digest of its compiled steps, as a lesson's is."
     },
     "item": {
-      "description": "One thing a course asks of a student, of one of six kinds. Beyond this schema the reader holds the rules across fields: every id unique, an item's needs and objectives to ones that exist (and a path a student on its own path may take), a lesson named once as a lesson, a pin on every lesson in an exact pack, one step hash for each assigned step, and every reference to a lesson, scenario or dataset Gravitas has.",
+      "description": "One thing a course asks of a student, of one of seven kinds. Beyond this schema the reader holds the rules across fields: every id unique, an item's needs and objectives to ones that exist (and a path a student on its own path may take), a lesson named once as a lesson, a pin on every lesson in an exact pack, one step hash for each assigned step, and every reference to a lesson, scenario or dataset Gravitas has.",
       "anyOf": [
         {
           "$ref": "#/$defs/itemLesson"
@@ -1015,6 +1082,9 @@
         },
         {
           "$ref": "#/$defs/itemDataset"
+        },
+        {
+          "$ref": "#/$defs/itemGuide"
         },
         {
           "$ref": "#/$defs/itemReading"

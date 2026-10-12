@@ -304,7 +304,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->9249<!--/fact--> strings, and
+of <!--fact:uiStrings-->9391<!--/fact--> strings, and
 all <!--fact:investigations-->55<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -340,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->11112<!--/fact--> tests across <!--fact:jestSuites-->330<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->11209<!--/fact--> tests across <!--fact:jestSuites-->336<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -366,7 +366,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->208<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->579<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->5418<!--/fact--> KB         | <!--fact:buildDeferredChunks-->405<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->5421<!--/fact--> KB         | <!--fact:buildDeferredChunks-->405<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->787<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -485,8 +485,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->2228<!--/fact--> tests
-in <!--fact:e2eFiles-->162<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->2244<!--/fact--> tests
+in <!--fact:e2eFiles-->165<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -629,6 +629,7 @@ part was built:
 | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md)                   | Every validated claim, its tolerance, and the reason for that tolerance                                                                        |
 | [`SANDBOX_INSTRUMENTS.md`](SANDBOX_INSTRUMENTS.md)                 | Ruler, protractor, stopwatch, the always-on scale bar, screenshots and clip recording                                                          |
+| [`LEARNING_STUDY.md`](LEARNING_STUDY.md)                           | A design, not a study: the learning-outcome study a section could run, the validation plan for the twelve pilot items, data handling and what the platform would have to log. No data collected, no review held|
 | [`AB_EXPERIMENT_BENCH.md`](AB_EXPERIMENT_BENCH.md)                 | Controlled A/B experiments: the canonical captured state, why runs are sequential, alignment, storage and export                               |
 | [`CHAOS_INVESTIGATION.md`](CHAOS_INVESTIGATION.md)                 | The chaos investigation: why the Lagrange equilateral configuration, the divergence definition, and the evidence it is not a timestep artifact |
 | [`RESONANCE_INVESTIGATION.md`](RESONANCE_INVESTIGATION.md)         | The resonance investigation: the resonant angles, the three verdicts and why one of them is a refusal, the four scenarios and their measured values |
