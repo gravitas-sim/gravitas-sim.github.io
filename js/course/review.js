@@ -40,7 +40,7 @@
 // =============================================================================
 
 import { shortHash } from '../assignments/assignment.js';
-import { itemsOf, lessonKeyOf, PATHS } from './pack.js';
+import { GUIDES_3D, itemsOf, lessonKeyOf, PATHS } from './pack.js';
 
 export { shortHash };
 
@@ -109,6 +109,10 @@ export function reviewItem(item, facts, pinning) {
         facts.scenarios.has(scenarioOf(facts, item.scenario))
           ? STATUS.SAME
           : STATUS.MISSING
+      );
+    case 'guide':
+      return verdict(
+        Object.hasOwn(GUIDES_3D, item.guide) ? STATUS.SAME : STATUS.MISSING
       );
     case 'dataset':
       return verdict(

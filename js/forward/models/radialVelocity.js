@@ -19,13 +19,17 @@ const AU_PER_DAY_TO_MS = AU_METERS / SECONDS_PER_DAY;
 
 /** The semi-amplitude K, m/s, of one planet's reflex motion: exact. */
 export function semiAmplitude(state, planetIndex = 0) {
-  const o = orbitOf(state.star, state.planets[planetIndex]);
-  const sinI = geometryOf(state).sinI;
+  const pl = state.planets[planetIndex];
+  const o = orbitOf(state.star, pl);
+  const sinI = geometryOf(state, pl).sinI;
   return (o.n * o.a1AU * sinI * AU_PER_DAY_TO_MS) / Math.sqrt(1 - o.e * o.e);
 }
 
-/** The star's radial velocity, m/s, at time t, systemic velocity excluded. */
-export function starVelocity(state, t, g = geometryOf(state)) {
+/**
+ * The star's radial velocity, m/s, at time t, systemic velocity excluded.
+ * `g` stands in for every planet's geometry; left out, each planet's own.
+ */
+export function starVelocity(state, t, g) {
   let v = 0;
   for (const pl of state.planets) {
     const o = orbitOf(state.star, pl);
@@ -33,7 +37,7 @@ export function starVelocity(state, t, g = geometryOf(state)) {
     // The star moves opposite to the planet, scaled by the mass ratio.
     v += projectVelocityLOS(
       { x: -o.massRatio * vel.x, y: -o.massRatio * vel.y },
-      g
+      g ?? geometryOf(state, pl)
     );
   }
   return v * AU_PER_DAY_TO_MS;
@@ -42,18 +46,18 @@ export function starVelocity(state, t, g = geometryOf(state)) {
 export function run(state, rawSetup, opts = {}) {
   const setup = requireSetup(rawSetup, ['spectrograph']);
   const plan = epochsInDays(setup);
-  const g = geometryOf(state);
   const gamma = (state.star.systemicKmS ?? 0) * 1000;
   const n = setup.exposure.supersample;
   const clean = Float64Array.from(
     plan.times,
     t =>
       gamma +
-      overExposure(tt => starVelocity(state, tt, g), t, setup.exposure.time, n)
+      overExposure(tt => starVelocity(state, tt), t, setup.exposure.time, n)
   );
   const parameters = [];
   state.planets.forEach((pl, i) => {
     const o = orbitOf(state.star, pl);
+    const g = geometryOf(state, pl);
     // The inference core's omega is measured from the line of sight's node;
     // here the planet's periapsis is measured from the reference axis, so it is
     // moved by the position angle and a quarter turn (checked against

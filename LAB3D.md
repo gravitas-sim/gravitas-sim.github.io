@@ -482,9 +482,26 @@ it does less, this is why:
 | An object inspector | The tables and the orbit instrument | |
 | The energy chart | Conserved-quantity errors against the start, as text | The diagnostics page plots them |
 | Observing panels, sonification, the spacetime view | None | They are 2-D instruments on the 2-D engine. Bringing them here would be a separate design |
-| Lessons, share links, embeds, lecture mode, data export | Four guided investigations with reports (LAB3D_CURRICULUM.md); no share links, embeds or lecture mode yet | Roadmap II's integration prompts |
+| Lessons, share links, embeds, lecture mode, data export | Four guided investigations with reports (LAB3D_CURRICULUM.md); links, an embed, saved systems, evidence and observing ("On the platform" below); no lecture mode | Lecture mode is not built |
 | Spanish, keyboard, reduced motion, low-end mode | The same | |
 | Offline | Not yet | Like the diagnostics page, the page itself is not precached; its modules and three.js are, as optional, so they cost nothing to an install that fails to fetch them |
+
+## On the platform (Prompt 105)
+
+The lab is one surface among the others: what it makes can be kept, cited, observed, handed to a student and placed in a course, through the platform's own formats and without a format of its own.
+
+| Platform part | What the lab does |
+|---|---|
+| Shell, Library, Home | "3-D lab" is under Labs. The four investigations are Library investigations (format `lab3d`) with their adoption pages, and each declares two depths: the introductory path is core and the advanced path is advanced. The eight reference systems R1 to R8 are Library scenarios (format `system3d`, route `/3d/?system=R1`) |
+| Evidence | The "Evidence and observing" panel keeps a reading under the view (elements, a projection, a sky angle) or an event of the run as a `gravitas.artifact/1` envelope, source kind `simulation`, origin `derived`, with the system's digest (`js/lab3d/evidence.js`). The report cites it as any other evidence; the notebook source is `lab3d` |
+| My work | "Save this system" writes a `gravitas.system3d` as a made record (`<name>.system3d.json`), listed under "3-D systems", opened again by `/3d/?open=<id>`. A saved system is not attachable to a report or a token, which have two kinds of made work |
+| Forward models | The 3-D state feeds the transit, radial-velocity and astrometry models (`js/forward/system3d.js`): the observer is a line of sight in the system's frame, each planet's own inclination and node are physical, the period is kept and the planets are taken as non-interacting osculating orbits (said in a warning). An edge-on 3-D system reproduces the 2-D transit flux to rounding, and its star's radial velocity equals the kernel's own to 1.2e-4 of K. A system in code units has no length, time or mass and is refused in words; so is an eccentric transit |
+| Comparison instrument | A 3-D system file in solar units is a model source in the Observatory's comparison panel, with the observer's inclination and direction as its sliders; the planets' elements are the file's, so they have none (COMPARE_INSTRUMENT.md) |
+| Studio | A scenario pack may carry a `system3d` block (an optional field of `gravitas.scenario-pack/1`, checked by the lab's own `validateSystem` in the SDK and by shape in the page). The Studio opens a 3-D system file as a pack, and a 2-D Orbital System Builder file migrates as this document's migration says. A pack's link to the lab carries the system in the fragment (`#sys1z...`, `js/lab3d/link.js`), with the pack's identity as the system's provenance |
+| Embed | `/3d/?embed=1` is the lab without its page, at reduced quality and motion by default. With `ev=1` it takes the options of `gravitas-embed/1` (`lang`, `theme`, `controls`, `quality`, `parent`) and answers `ping`, `play`, `pause` and `reset`; `load` is refused as an unknown request. The figure builder makes the markup from a pasted lab link (EMBEDDING.md) |
+| Courses | A course pack item of kind `guide` opens one of the four investigations at a depth. The celestial mechanics unit of the upper-level modules carries all four: orbit planes and eclipses on the introductory path at core depth, mutual events and the Kozai effect on the advanced path at advanced depth |
+
+What it does not do: no lecture mode, no share link longer than a link (a longer system travels as a file), no live 3-D system in a Sandbox world (a pack's Sandbox world is empty beside it), and no fitting of a 3-D system to data.
 
 ## Where it lives
 

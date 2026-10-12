@@ -30,10 +30,11 @@
 
 import { readFile } from 'node:fs/promises';
 import {
-  CONCEPT_ITEMS,
+  CONCEPT_V2_INSTRUMENT,
   EVALUATION_KIND,
   EVALUATION_SCHEMA,
   scoreConcept,
+  versionOfInstrument,
 } from '../js/data/evaluation.js';
 
 const files = process.argv.slice(2).filter(a => !a.startsWith('--'));
@@ -202,96 +203,136 @@ for (const path of files) {
   for (const row of rows) all.push(row);
 }
 
-const concept = all.filter(r => (r.instrument || 'concept') === 'concept');
-const pre = concept.filter(r => r.occasion === 'pre');
-const post = concept.filter(r => r.occasion === 'post');
+// A sheet belongs to exactly one version of the concept items, named in its
+// `instrument` column, and each version is analysed on its own. Nothing below
+// adds a version 1 sheet to a version 2 count or pairs across them: the item
+// ids are disjoint, and a participant code that appears on both versions is
+// reported rather than paired.
+function analyse(instrument) {
+  const items = versionOfInstrument(instrument).items;
+  const concept = all.filter(r => (r.instrument || 'concept') === instrument);
+  const pre = concept.filter(r => r.occasion === 'pre');
+  const post = concept.filter(r => r.occasion === 'post');
 
-// --- Missing data, counted rather than dropped silently ----------------------
-const missing = { blankItems: 0, cells: 0, sheetsWithAny: 0 };
-for (const row of concept) {
-  let any = false;
-  for (const item of CONCEPT_ITEMS) {
-    missing.cells++;
-    const v = row[item.id];
-    if (v === undefined || v === null || String(v).trim() === '') {
-      missing.blankItems++;
-      any = true;
+  // --- Missing data, counted rather than dropped silently ------------------
+  const missing = { blankItems: 0, cells: 0, sheetsWithAny: 0 };
+  for (const row of concept) {
+    let any = false;
+    for (const item of items) {
+      missing.cells++;
+      const v = row[item.id];
+      if (v === undefined || v === null || String(v).trim() === '') {
+        missing.blankItems++;
+        any = true;
+      }
+    }
+    if (any) missing.sheetsWithAny++;
+  }
+
+  // --- Pairing -------------------------------------------------------------
+  const byCode = new Map();
+  for (const row of concept) {
+    const code = String(row.participant || '').trim();
+    if (!code) continue;
+    if (!byCode.has(code)) byCode.set(code, { pre: [], post: [] });
+    const slot = byCode.get(code)[row.occasion];
+    if (slot) slot.push(row);
+  }
+  const pairs = [];
+  const collisions = [];
+  for (const [code, sides] of byCode) {
+    if (sides.pre.length > 1 || sides.post.length > 1) {
+      collisions.push(
+        `${code}: ${sides.pre.length} pre and ${sides.post.length} post sheets`
+      );
+      continue;
+    }
+    if (sides.pre.length === 1 && sides.post.length === 1) {
+      pairs.push({
+        code,
+        pre: scoreConcept(sides.pre[0], instrument),
+        post: scoreConcept(sides.post[0], instrument),
+      });
     }
   }
-  if (any) missing.sheetsWithAny++;
+  const diffs = pairs.map(p => p.post.correct - p.pre.correct);
+  const itemRows = items.map(item => {
+    const rate = rows =>
+      rows.length
+        ? rows.filter(r => Number(r[item.id]) === item.answer).length /
+          rows.length
+        : null;
+    return {
+      id: item.id,
+      domain: item.domain,
+      preCorrect: rate(pre),
+      postCorrect: rate(post),
+      n: { pre: pre.length, post: post.length },
+    };
+  });
+  return {
+    total: items.length,
+    codes: byCode,
+    counts: {
+      sheets: concept.length,
+      pre: pre.length,
+      post: post.length,
+      withCode: [...byCode.keys()].length,
+      paired: pairs.length,
+      unpairedPre: pre.filter(r => !String(r.participant || '').trim()).length,
+      unpairedPost: post.filter(r => !String(r.participant || '').trim())
+        .length,
+    },
+    missing,
+    collisions,
+    items: itemRows,
+    paired: pairs.length
+      ? {
+          n: pairs.length,
+          meanPre: mean(pairs.map(p => p.pre.correct)),
+          meanPost: mean(pairs.map(p => p.post.correct)),
+          meanChange: mean(diffs),
+          sdChange: sd(diffs),
+          dz: sd(diffs) ? mean(diffs) / sd(diffs) : null,
+          interval: bootstrapInterval(diffs),
+        }
+      : null,
+  };
 }
 
-// --- Pairing -----------------------------------------------------------------
-const byCode = new Map();
-for (const row of concept) {
-  const code = String(row.participant || '').trim();
-  if (!code) continue;
-  if (!byCode.has(code)) byCode.set(code, { pre: [], post: [] });
-  const slot = byCode.get(code)[row.occasion];
-  if (slot) slot.push(row);
+const v1 = analyse('concept');
+const v2 = analyse(CONCEPT_V2_INSTRUMENT);
+const crossVersionCodes = [...v1.codes.keys()].filter(c => v2.codes.has(c));
+for (const c of crossVersionCodes) {
+  problems.push(
+    `code ${c} appears on both concept/1 and concept/2 sheets; the two are never paired or pooled`
+  );
 }
-const pairs = [];
-const collisions = [];
-for (const [code, sides] of byCode) {
-  if (sides.pre.length > 1 || sides.post.length > 1) {
-    collisions.push(
-      `${code}: ${sides.pre.length} pre and ${sides.post.length} post sheets`
-    );
-    continue;
-  }
-  if (sides.pre.length === 1 && sides.post.length === 1) {
-    pairs.push({
-      code,
-      pre: scoreConcept(sides.pre[0]),
-      post: scoreConcept(sides.post[0]),
-    });
-  }
-}
-const diffs = pairs.map(p => p.post.correct - p.pre.correct);
+const { counts, missing, collisions, items: itemRows, paired } = v1;
 
 // --- Output ------------------------------------------------------------------
 const pct = (a, b) => (b ? `${((a / b) * 100).toFixed(0)}%` : '-');
-const itemRows = CONCEPT_ITEMS.map(item => {
-  const rate = rows =>
-    rows.length
-      ? rows.filter(r => Number(r[item.id]) === item.answer).length /
-        rows.length
-      : null;
-  return {
-    id: item.id,
-    domain: item.domain,
-    preCorrect: rate(pre),
-    postCorrect: rate(post),
-    n: { pre: pre.length, post: post.length },
-  };
+
+const pub = a => ({
+  counts: a.counts,
+  missing: a.missing,
+  collisions: a.collisions,
+  items: a.items,
+  paired: a.paired,
 });
 
 const summary = {
   schema: EVALUATION_SCHEMA,
   files: files.length,
-  counts: {
-    sheets: concept.length,
-    pre: pre.length,
-    post: post.length,
-    withCode: [...byCode.keys()].length,
-    paired: pairs.length,
-    unpairedPre: pre.filter(r => !String(r.participant || '').trim()).length,
-    unpairedPost: post.filter(r => !String(r.participant || '').trim()).length,
-  },
+  counts,
   missing,
   collisions,
   items: itemRows,
-  paired: pairs.length
-    ? {
-        n: pairs.length,
-        meanPre: mean(pairs.map(p => p.pre.correct)),
-        meanPost: mean(pairs.map(p => p.post.correct)),
-        meanChange: mean(diffs),
-        sdChange: sd(diffs),
-        dz: sd(diffs) ? mean(diffs) / sd(diffs) : null,
-        interval: bootstrapInterval(diffs),
-      }
-    : null,
+  paired,
+  // The draft version 2 (concept/2) on its own. Never added to the figures
+  // above, and its items are not the same questions.
+  draftV2: pub(v2),
+  crossVersionCodes,
   problems,
 };
 
@@ -339,7 +380,7 @@ if (asJson) {
   if (summary.paired) {
     const p = summary.paired;
     L.push('');
-    L.push(`Paired sheets (n = ${p.n}), score out of ${CONCEPT_ITEMS.length}`);
+    L.push(`Paired sheets (n = ${p.n}), score out of ${v1.total}`);
     L.push(`  mean before         ${p.meanPre.toFixed(2)}`);
     L.push(`  mean after          ${p.meanPost.toFixed(2)}`);
     L.push(
@@ -364,6 +405,21 @@ if (asJson) {
   } else {
     L.push('');
     L.push('No paired sheets, so no change is reported.');
+  }
+  if (v2.counts.sheets) {
+    const d = v2;
+    L.push('');
+    L.push(
+      `Draft concept/2 (${d.total} items, reported on its own, never added to the figures above)`
+    );
+    L.push(
+      `  sheets ${d.counts.sheets}, pre / post ${d.counts.pre} / ${d.counts.post}, paired ${d.counts.paired}`
+    );
+    if (d.paired) {
+      L.push(
+        `  paired mean before ${d.paired.meanPre.toFixed(2)}, after ${d.paired.meanPost.toFixed(2)}, out of ${d.total}`
+      );
+    }
   }
   if (problems.length) {
     L.push('');

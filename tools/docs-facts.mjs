@@ -301,6 +301,27 @@ function stabilityScenarioCount() {
 }
 
 /**
+ * The Library's own counts: every investigation it lists, how many of them are
+ * guided investigations in the Observatory and the labs rather than lessons that
+ * run in the simulation, and the built-in courses.
+ *
+ * @returns {{libraryInvestigations: number, guidedInvestigations: number, libraryCourses: number}}
+ */
+function libraryFacts() {
+  const { entries } = JSON.parse(
+    readFileSync(new URL('../library/library.json', import.meta.url), 'utf8')
+  );
+  const inv = entries.filter(e => e.kind === 'investigation');
+  return {
+    libraryInvestigations: inv.length,
+    guidedInvestigations: inv.filter(e => e.format !== 'lesson').length,
+    libraryCourses: entries.filter(
+      e => e.kind === 'course' && !e.id.startsWith('course:community.')
+    ).length,
+  };
+}
+
+/**
  * How many documents the instructor bundle carries, and how many are activities.
  *
  * Read from instructors/materials.manifest.json, which the build writes, rather
@@ -513,6 +534,12 @@ async function cheapFacts() {
     instructorDocuments: bundle.documents,
     activityDocuments: activityDocumentCount(ACTIVITIES),
     activities: ACTIVITIES.length,
+    // What the Library lists, read from the file its generator writes
+    // (library/library.json). The guide, the manual and the listing kit quote
+    // these; "investigations" above counts only the lessons that run in the
+    // simulation, which is how the preprint came to say 22 and the Library 72
+    // (ADOPTER_GUIDE.md).
+    ...libraryFacts(),
     axeSurfaces: axe.surfaces,
     axeThemes: axe.themes,
     axeShellSurfaces: axe.shellSurfaces,

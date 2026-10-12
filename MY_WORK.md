@@ -40,6 +40,10 @@ Installed Packages are in IndexedDB (`js/catalog/store.js`), which the store doe
 | installs | IndexedDB `gravitas-catalog` | yes, listed | no | no (the Catalog removes them) |
 | not student work | `gravitas-archive` (cached archive answers), platform stamps, previews, sessionStorage key | no | no | no |
 
+## 3-D systems (Prompt 105)
+
+The 3-D lab (`/3d/`) saves a system as a made record of kind `system3d`: its file is a `gravitas.system3d`, named `<name>.system3d.json`, and its "Open" link is `/3d/?open=<id>`. Evidence it keeps appears under Evidence with the source "3-D lab". A 3-D system cannot be attached to a report or a token.
+
 ## Scenarios and experiments (Prompt 74)
 
 What a student builds or runs has a home in the `made` collection (`gravitas_made_<id>`, `gravitas.made/1`, `js/myWork/made.js`). The page lists it in "Scenarios and experiments you made" (`js/myWork/madeView.js`, loaded only when something was made, so the page's route stays at its ceiling).

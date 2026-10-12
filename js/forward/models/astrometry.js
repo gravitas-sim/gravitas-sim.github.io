@@ -11,8 +11,11 @@ import { epochsInDays, requireSetup } from './common.js';
 export const ID = 'astrometry';
 export const VERSION = '1.0.0';
 
-/** The star's sky offset from the barycentre, mas, at time t (days). */
-export function starOffsetMas(state, t, g = geometryOf(state)) {
+/**
+ * The star's sky offset from the barycentre, mas, at time t (days). `g` stands
+ * in for every planet's geometry; left out, each planet's own.
+ */
+export function starOffsetMas(state, t, g) {
   let x = 0;
   let y = 0;
   for (const pl of state.planets) {
@@ -20,7 +23,7 @@ export function starOffsetMas(state, t, g = geometryOf(state)) {
     const { pos } = relativeState(o, t);
     const sky = projectPositionToSky(
       { x: -o.massRatio * pos.x, y: -o.massRatio * pos.y },
-      g
+      g ?? geometryOf(state, pl)
     );
     x += sky.x;
     y += sky.y;
@@ -36,13 +39,12 @@ export const signatureMas = (state, i = 0) =>
 export function run(state, rawSetup, opts = {}) {
   const setup = requireSetup(rawSetup, ['astrometer']);
   const plan = epochsInDays(setup);
-  const g = geometryOf(state);
   const pm = state.star.properMotionMasPerYr ?? [0, 0];
   const t0 = plan.times[0];
   const n = setup.exposure.supersample;
   const at = (t, axis) =>
     overExposure(
-      tt => starOffsetMas(state, tt, g)[axis],
+      tt => starOffsetMas(state, tt)[axis],
       t,
       setup.exposure.time,
       n

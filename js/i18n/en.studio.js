@@ -23,6 +23,7 @@ export const EN_STUDIO = {
   'studio.action.save': 'Save as a file',
   'studio.action.copy': 'Copy link',
   'studio.action.openApp': 'Open in Gravitas',
+  'studio.action.open3d': 'Open in the 3-D lab',
   'studio.action.preview': 'Preview',
   'studio.action.undo': 'Undo',
   'studio.action.redo': 'Redo',
@@ -89,6 +90,12 @@ export const EN_STUDIO = {
     'A star, and what orbits it, entered as orbits rather than as positions and velocities.',
   'studio.system.add': 'Add an orbital system',
   'studio.system.remove': 'Remove the orbital system',
+  'studio.system3d.heading': 'A 3-D system',
+  'studio.system3d.summary':
+    '{n} bodies in {units} units, for the 3-D lab. Open it there to run it; the scenario’s own world in the Sandbox is separate.',
+  'studio.system3d.remove': 'Remove the 3-D system',
+  'studio.system3d.tooLong':
+    'This 3-D system is too long for a link. Save the scenario and open the system file in the 3-D lab.',
   'studio.typed.heading': 'Typed bodies',
   'studio.typed.body': 'Body {n}',
   'studio.typed.add': 'Add a body by position and velocity',
@@ -141,6 +148,7 @@ export const EN_STUDIO = {
   'studio.status.draftInUse':
     'That is the scenario you are editing; open another first.',
   'studio.file.unreadable': 'That file could not be read as JSON.',
+  'studio.file.system3d': 'That 3-D system file is not valid ({why}).',
   'studio.file.notPack':
     'That file is neither a Gravitas scenario nor an Orbital System Builder file.',
   'studio.file.newer':
@@ -195,6 +203,7 @@ export const EN_STUDIO = {
   'studio.error.instrument': '“{id}” is not on the rail.',
   'studio.error.listRepeat': 'Chosen twice.',
   'studio.error.system': 'The orbital system needs a list of bodies.',
+  'studio.error.system3d': 'The 3-D system is not valid ({why}).',
   'studio.error.tooMany': 'At most {max} bodies.',
   'studio.error.name': 'A plain name of at most 40 characters.',
   'studio.error.populationWithBodies':
