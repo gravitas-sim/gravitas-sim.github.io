@@ -3634,6 +3634,11 @@ export const ES_DEFERRED = {
   'nb.source.sweep-analysis': 'Análisis de barrido',
   'nb.source.derived-quantity': 'Cantidad derivada',
   'nb.source.lab3d': 'Medida del laboratorio 3-D',
+  'nb.source.mission-lab': 'Resultado del laboratorio de misiones',
+  'nb.flag.missionModel':
+    'impulsos instantáneos, cónicas empalmadas y masas puntuales: un modelo didáctico de una misión',
+  'nb.flag.notOperational':
+    'no sirve para el diseño operativo de misiones ni para la navegación',
   'nb.flag.unbound': 'la órbita no está ligada, así que no tiene período',
   'nb.flag.noRadii':
     'un cuerpo no tiene tamaño en este sistema, así que no se puede juzgar un eclipse',

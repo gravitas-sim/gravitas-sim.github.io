@@ -72,7 +72,11 @@ export function bodyTrack(target, site) {
       let ra = target.raDeg;
       let dec = target.decDeg;
       if (target.type === 'planet') {
-        const p = geocentricEquatorial(target.id, ttFromUt(jdUt));
+        const p = geocentricEquatorial(
+          target.id,
+          ttFromUt(jdUt),
+          target.source
+        );
         ra = p.raDeg;
         dec = p.decDeg;
       }

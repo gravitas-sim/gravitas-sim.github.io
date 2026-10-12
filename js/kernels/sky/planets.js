@@ -93,16 +93,33 @@ export function heliocentric(body, jdTt) {
   ];
 }
 
+/**
+ * Where a planet is, from one of two sources: Standish's elements, or an
+ * ephemeris source (createPlanetSource, below) where it covers the body and the
+ * date. `source` is the optional last argument everywhere below; null (the
+ * default) is the elements alone, so a caller that never heard of the source
+ * reads what it always read.
+ * @typedef {object} PlanetSource
+ * @property {(body: string, jdTt: number) => boolean} covers
+ * @property {(body: string, jdTt: number) => number[]} geocentric - au, ecliptic J2000, light-time corrected
+ * @property {(body: string, jdTt: number) => {p: number[], e: number[]}} helio - the planet as seen leaving it and the Earth, au
+ */
+
+/** Whether a source supplies this planet at this date. */
+export const sourceCovers = (source, body, jdTt) =>
+  Boolean(source) && source.covers(body, jdTt);
+
 /** Geocentric ecliptic (J2000) vector, au: the body less the Earth-Moon barycenter. */
-export function geocentricEcliptic(body, jdTt) {
+export function geocentricEcliptic(body, jdTt, source = null) {
+  if (sourceCovers(source, body, jdTt)) return source.geocentric(body, jdTt);
   const p = heliocentric(body, jdTt);
   const e = heliocentric('earth', jdTt);
   return [p[0] - e[0], p[1] - e[1], p[2] - e[2]];
 }
 
 /** Geocentric RA/Dec (J2000 mean equator), degrees, and distance in au. */
-export function geocentricEquatorial(body, jdTt) {
-  const [x, y, z] = geocentricEcliptic(body, jdTt);
+export function geocentricEquatorial(body, jdTt, source = null) {
+  const [x, y, z] = geocentricEcliptic(body, jdTt, source);
   const ce = Math.cos(EPS_J2000),
     se = Math.sin(EPS_J2000);
   const X = x,
@@ -118,15 +135,20 @@ export function geocentricEquatorial(body, jdTt) {
 
 /**
  * Elongation from the Sun, phase angle (Sun-planet-Earth) and illuminated
- * fraction, from the same elements, geometric and without light-time.
+ * fraction, from the same positions as the planet's place: the elements', or
+ * the source's where it covers the planet. Geometric; with a source the planet
+ * is where its light left it.
  * @param {string} body - A key of PLANETS
  * @param {number} jdTt - TT Julian date
+ * @param {PlanetSource|null} [source]
  * @returns {{elongationDeg: number, phaseAngleDeg: number,
  *   illuminated: number, distanceAu: number, sunDistanceAu: number}}
  */
-export function planetPhase(body, jdTt) {
-  const p = heliocentric(body, jdTt);
-  const e = heliocentric('earth', jdTt);
+export function planetPhase(body, jdTt, source = null) {
+  const viaSource = sourceCovers(source, body, jdTt);
+  const { p, e } = viaSource
+    ? source.helio(body, jdTt)
+    : { p: heliocentric(body, jdTt), e: heliocentric('earth', jdTt) };
   const r = Math.hypot(...p); // Sun - planet
   const R = Math.hypot(...e); // Sun - Earth
   const d = Math.hypot(p[0] - e[0], p[1] - e[1], p[2] - e[2]); // Earth - planet
@@ -140,4 +162,125 @@ export function planetPhase(body, jdTt) {
     distanceAu: d,
     sunDistanceAu: R,
   };
+}
+
+// -----------------------------------------------------------------------------
+// The ephemeris pack as a source of planet positions (Roadmap II Prompt 106,
+// SKY_LAB.md "Planet positions")
+// -----------------------------------------------------------------------------
+// The mission lab's pack (MISSION_LAB.md: JPL DE441, Venus, Earth, Mars and the
+// Jupiter system barycenter, 2025 to 2045, a few km) becomes the Sky Lab's
+// source of planet positions wherever it covers the date; elsewhere, and for
+// Mercury and Saturn, which the pack does not hold, the elements above stay,
+// and the page says which it used. What the source does that the elements do
+// not:
+//   - the Earth is the geocenter (Horizons 399), not the Earth-Moon barycenter
+//     the elements give, so the planets are not shifted by the Moon's 4,670 km
+//   - the planet is where its light left it: the light-time is solved from the
+//     pack's own positions (four passes; the planet's motion in the light-time
+//     changes the next pass by 1e-4 of itself)
+// What it does not do: stellar aberration and the Sun's light bending are not
+// applied here (the Sky Lab's frame adds the observer's aberration), and the
+// pack is read at a TT date as a TDB one (under 2 ms apart, 3e-8 degree of a
+// planet's motion). The pack's Jupiter is the Jupiter system barycenter, which
+// moves smoothly; the planet's center differs by up to about 1,000 km, 0.4
+// arcsecond at the nearest approach. Pure: a source is made from an ephemeris
+// (js/mission/ephemeris.js), and nothing here reads a file or a clock.
+// -----------------------------------------------------------------------------
+
+const AU_KM = 149597870.7;
+const C_KM_S = 299792.458;
+const DAY_S = 86400;
+/** Light-time margin at the start of the range, days (Jupiter's is 0.04). */
+const MARGIN_DAYS = 0.05;
+
+/** The sky planets the pack holds, by the Sky Lab's ids. */
+export const SOURCE_BODIES = Object.freeze(['venus', 'mars', 'jupiter']);
+
+const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const norm = a => Math.hypot(a[0], a[1], a[2]);
+
+/**
+ * A planet source from an ephemeris.
+ * @param {{pack: object, range: {startJd: number, stopJd: number},
+ *   stateAt: Function}} ephemeris - From createEphemeris
+ * @returns {object} A PlanetSource (./planets.js) with `info`
+ */
+export function createPlanetSource(ephemeris) {
+  const { startJd, stopJd } = ephemeris.range;
+  const earthAt = jd => ephemeris.stateAt('earth', jd).r;
+  /** The planet as seen from the geocenter, light-time corrected, km. */
+  function geometry(body, jd) {
+    const e = earthAt(jd);
+    let tau = 0;
+    let p = ephemeris.stateAt(body, jd).r;
+    for (let i = 0; i < 4; i++) {
+      p = ephemeris.stateAt(body, jd - tau / DAY_S).r;
+      tau = norm(sub(p, e)) / C_KM_S;
+    }
+    return { p, e, tauS: tau };
+  }
+  const bounds = Object.fromEntries(
+    ephemeris.pack.bodies.map(b => [b.id, b.maxError])
+  );
+  return {
+    id: 'ephemeris',
+    info: Object.freeze({
+      pack: ephemeris.pack.id,
+      version: ephemeris.pack.version,
+      title: ephemeris.pack.title,
+      credit: ephemeris.pack.credit,
+      frame: ephemeris.pack.frame,
+      startJd,
+      stopJd,
+      bodies: SOURCE_BODIES,
+      /**
+       * The pack's stated bound on a body's geocentric position, km: its own
+       * and the Earth's, which are subtracted.
+       */
+      positionBoundKm: id =>
+        bounds[id] && bounds.earth
+          ? bounds[id].positionKm + bounds.earth.positionKm
+          : null,
+    }),
+    covers: (body, jdTt) =>
+      SOURCE_BODIES.includes(body) &&
+      jdTt - MARGIN_DAYS >= startJd &&
+      jdTt <= stopJd,
+    /** Geocentric ecliptic J2000 vector, au. */
+    geocentric(body, jdTt) {
+      const { p, e } = geometry(body, jdTt);
+      return sub(p, e).map(x => x / AU_KM);
+    },
+    /** The planet and the Earth, heliocentric, au: for the phase. */
+    helio(body, jdTt) {
+      const { p, e } = geometry(body, jdTt);
+      return { p: p.map(x => x / AU_KM), e: e.map(x => x / AU_KM) };
+    },
+    /** The light-time to a planet, seconds. */
+    lightTimeSeconds: (body, jdTt) => geometry(body, jdTt).tauS,
+  };
+}
+
+/**
+ * Which source a planet at a date is drawn from, and how well.
+ * @param {object|null} source - A PlanetSource, or null for the elements alone
+ * @param {string} body - A sky planet's id
+ * @param {number} jdTt
+ * @returns {{via: 'ephemeris'|'elements', boundDeg: number,
+ *   positionBoundKm: ?number}} `boundDeg` is the planet's own position bound
+ *   (the pack's km at the planet's distance, or the elements' measured 0.2
+ *   degree), before the sky chain's.
+ */
+export function planetProvenance(source, body, jdTt) {
+  if (source?.covers(body, jdTt)) {
+    const km = source.info.positionBoundKm(body);
+    const d = norm(source.geocentric(body, jdTt)) * AU_KM;
+    return {
+      via: 'ephemeris',
+      positionBoundKm: km,
+      boundDeg: (Math.atan2(km, d) * 180) / Math.PI,
+    };
+  }
+  return { via: 'elements', boundDeg: 0.2, positionBoundKm: null };
 }

@@ -39,6 +39,9 @@ const clone = x => JSON.parse(JSON.stringify(x));
 const state = { plan: clone(DEFAULT_PLAN), mission: null, window: null };
 let windowRun = null;
 let guide = null;
+// What watches the lab (Prompt 106): the evidence panel redraws when a result
+// arrives, and the embed's player waits for the slider.
+const listeners = new Set();
 
 // --- Building blocks ------------------------------------------------------------
 
@@ -199,6 +202,7 @@ async function compute() {
       markProblems();
       $('ml-status').textContent = t('ml.status.done');
       $('ml-save-plan').disabled = false;
+      $('ml-evidence').disabled = false;
     }
   } catch (err) {
     state.plan = plan;
@@ -573,6 +577,7 @@ function render() {
   renderTimeline();
   renderResults();
   guide?.render();
+  for (const fn of listeners) fn();
   window.__missionLab = {
     plan: state.plan,
     mission: state.mission,
@@ -798,6 +803,52 @@ async function check() {
   }
 }
 
+// --- On the platform (Prompt 106) -------------------------------------------------
+
+/** What the evidence panel and the embed read of the lab; they never solve. */
+const labApi = Object.freeze({
+  plan: () => state.plan,
+  mission: () => state.mission,
+  language: () => language(),
+  t: (id, vars) => t(id, vars),
+  /** The plan file for the mission on the page, or null before one is computed. */
+  planFile: currentPlanFile,
+  /** Put a plan in the editor and compute it. */
+  async setPlan(plan) {
+    writePlan(plan);
+    await compute();
+  },
+  onChange: fn => listeners.add(fn),
+});
+let panel = null;
+$('ml-evidence').addEventListener('click', async () => {
+  if (!panel) {
+    // By URL, as the guide panel is not: a bundle of its own in dist/ (build.js).
+    const m = await import(
+      new URL('./mission/lab/evidencePanel.js', import.meta.url).href
+    );
+    panel = m.createEvidencePanel($('ml-evidence-panel'), labApi);
+    if (language() === 'es') await panel.loadLanguage('es');
+  }
+  panel.show();
+});
+
+/** What the address asks for besides a guide (./mission/lab/address.js), or null. */
+async function addressAsked() {
+  if (
+    !/[?&](embed|open)=/.test(location.search) &&
+    !/^#plan\d/.test(location.hash)
+  )
+    return null;
+  const m = await import(
+    new URL('./mission/lab/address.js', import.meta.url).href
+  );
+  const a = m.addressOf(location.search, location.hash);
+  if (!a.embed && !a.open && !a.link) return null;
+  if (a.embed) m.applyEmbed(a.embed);
+  return { m, a, plan: m.planOf(a) };
+}
+
 // --- Start-up --------------------------------------------------------------------
 
 const LIMITS = [
@@ -850,6 +901,7 @@ function languageSwitch() {
       b.setAttribute('aria-pressed', String(language() === id));
       b.addEventListener('click', async () => {
         await loadLanguage(id);
+        await panel?.loadLanguage(id);
         useLanguage(id);
       });
       return b;
@@ -872,12 +924,13 @@ $('ml-slider').addEventListener('input', moved);
 $('ml-window-go').addEventListener('click', () => computeWindow());
 $('ml-window-cancel').addEventListener('click', () => windowRun?.cancel());
 $('ml-check-go').addEventListener('click', check);
-$('ml-save-plan').addEventListener('click', () => {
-  if (!state.mission?.ok) return;
+/** The plan file for the mission on the page (MISSION.md): the plan and its results. */
+function currentPlanFile() {
+  if (!state.mission?.ok) return null;
   // The plan keeps the results; the views are for the page.
   const result = { ...state.mission };
   delete result.views;
-  const plan = planFile(
+  return planFile(
     'missionLab',
     state.plan,
     {
@@ -892,6 +945,10 @@ $('ml-save-plan').addEventListener('click', () => {
       version: MISSION_API,
     }
   );
+}
+$('ml-save-plan').addEventListener('click', () => {
+  const plan = currentPlanFile();
+  if (!plan) return;
   const blob = new Blob([planBytes(plan)], { type: 'application/json' });
   const a = el('a', {
     href: URL.createObjectURL(blob),
@@ -903,9 +960,12 @@ $('ml-save-plan').addEventListener('click', () => {
 });
 
 // A Spanish reader's catalog, before anything is written in it.
-loadLanguage(preferred()).then(() => {
-  setLanguage(preferred());
+addressAsked().then(async asked => {
+  const lang = asked?.a.embed?.lang ?? preferred();
+  await loadLanguage(lang);
+  setLanguage(lang);
   fillControls();
+  if (asked?.plan?.ok) state.plan = clone(asked.plan.plan);
   writePlan(state.plan);
   guide = createGuidePanel({
     els: {
@@ -924,5 +984,22 @@ loadLanguage(preferred()).then(() => {
     params.get('path') === 'advanced' ? 'advanced' : 'intro'
   );
   useLanguage(language());
-  compute().then(() => (document.documentElement.dataset.ready = 'true'));
+  compute().then(() => {
+    // A plan the address named but could not give is said in words.
+    if (asked?.plan && !asked.plan.ok)
+      $('ml-status').textContent = asked.m.problemText(
+        asked.plan.code,
+        language()
+      );
+    if (asked?.a.embed)
+      asked.m.startBridge({
+        options: asked.a.embed,
+        services: asked.m.bridgeServices({
+          slider: $('ml-slider'),
+          restart: () =>
+            labApi.setPlan(asked.plan?.ok ? asked.plan.plan : DEFAULT_PLAN),
+        }),
+      });
+    document.documentElement.dataset.ready = 'true';
+  });
 });

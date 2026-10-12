@@ -75,6 +75,12 @@ const PARSES = {
   'js/evaluationKit.js': [1, 'none', OWN],
   'js/investigations/next.js': [1, 'none', OWN],
   'js/myWork/made.js': [1, 'none', OWN + '; readMade checks it'],
+  'js/mission/link.js': [1, 'none', OWN + '; readPlan checks its shape'],
+  'js/mission/lab/address.js': [
+    1,
+    'none',
+    OWN + '; readMade and readPlan check it',
+  ],
   'js/library/progress.js': [1, 'none', OWN],
   'js/platform/resolver.js': [1, 'none', OWN],
   'js/authoring/preview.js': [1, 'none', OWN],

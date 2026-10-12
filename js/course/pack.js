@@ -43,6 +43,21 @@ export const GUIDES_3D = Object.freeze({
   'l3-kozai': Object.freeze({ intro: 25, advanced: 35 }),
 });
 
+// The mission lab's guided investigations, the same way (Prompt 106): the
+// introductory path is the core and the advanced path the advanced depth.
+export const GUIDES_MISSION = Object.freeze({
+  'ml-orbit': Object.freeze({ intro: 15, advanced: 25 }),
+  'ml-window': Object.freeze({ intro: 20, advanced: 30 }),
+  'ml-cruise': Object.freeze({ intro: 25, advanced: 40 }),
+});
+
+/** Every lab investigation a `guide` item may name, with its minutes. */
+export const GUIDES = Object.freeze({ ...GUIDES_3D, ...GUIDES_MISSION });
+
+/** The page a guide opens on, from the site root: the lab it belongs to. */
+export const guideRoute = id =>
+  Object.hasOwn(GUIDES_MISSION, id) ? 'mission/lab/' : '3d/';
+
 /** The depths a guide item may declare, and the guide path each opens. */
 export const GUIDE_DEPTHS = Object.freeze({
   core: 'intro',
@@ -139,7 +154,8 @@ const ITEM_FIELDS = {
   reading: ['title', 'cite', 'license', 'access'],
   // An investigation pack, carried in the item as its link (Prompt 78 (c)).
   pack: ['pack', 'version', 'link', 'title', 'pin'],
-  // One of the 3-D lab's guided investigations, at a depth (Prompt 105).
+  // One of the 3-D or mission lab's guided investigations, at a depth (Prompts
+  // 105 and 106).
   guide: ['guide', 'depth', 'title'],
 };
 /** Kinds whose time the builder derives from the lesson; the rest declare it. */
@@ -613,10 +629,10 @@ function checkKind(item, at, ctx) {
       return;
     case 'guide':
       need(
-        Object.hasOwn(GUIDES_3D, item.guide),
+        Object.hasOwn(GUIDES, item.guide),
         `${at}.guide`,
         'guide',
-        `the 3-D lab has no investigation "${item.guide}"`,
+        `the 3-D lab and the mission lab have no investigation "${item.guide}"`,
         { guide: item.guide }
       );
       if (item.depth !== undefined)

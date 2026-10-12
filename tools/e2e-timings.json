@@ -1862,5 +1862,17 @@
   "[chromium] › lazyInstruments.spec.js › every lesson fetches only the families its steps name › two-periodograms": 1.9,
   "[chromium] › authorWalk.spec.js › walking sampling-a-posterior › all 8 steps run, and the report opens": 10.2,
   "[mobile-chrome] › authorWalk.spec.js › walking sampling-a-posterior › all 8 steps run, and the report opens": 14,
-  "[chromium] › lazyInstruments.spec.js › every lesson fetches only the families its steps name › sampling-a-posterior": 1.9
+  "[chromium] › lazyInstruments.spec.js › every lesson fetches only the families its steps name › sampling-a-posterior": 1.9,
+  "[chromium] › missionEmbed.spec.js › the mission lab as an embedded figure › controls=none and lang=es do what they say": 0.7,
+  "[chromium] › missionEmbed.spec.js › the mission lab as an embedded figure › it is the slider and the views, and nothing of the page": 0.7,
+  "[chromium] › missionEmbed.spec.js › the mission lab as an embedded figure › the figure builder makes a mission figure from a lab link, and only from one": 1.6,
+  "[chromium] › missionEmbed.spec.js › the mission lab as an embedded figure › the frame passes axe": 1.5,
+  "[chromium] › missionEmbed.spec.js › the mission lab as an embedded figure › with a parent origin it answers ping, play, pause and reset, and refuses load": 0.9,
+  "[chromium] › missionEmbed.spec.js › the mission lab as an embedded figure › without a parent origin it says it is ready and listens to nobody": 0.8,
+  "[chromium] › missionEvidence.spec.js › the Sky Lab says where a planet’s place came from › the pack where it covers the date, the elements when asked": 0.6,
+  "[chromium] › missionEvidence.spec.js › the mission lab keeps evidence › Spanish, and no axe violations in either language": 4.4,
+  "[chromium] › missionEvidence.spec.js › the mission lab keeps evidence › a plan link opens the plan, and a damaged one is said so": 0.7,
+  "[chromium] › missionEvidence.spec.js › the mission lab keeps evidence › a result is kept as an envelope the report can cite": 0.8,
+  "[chromium] › missionEvidence.spec.js › the mission lab keeps evidence › a saved mission is listed in My work and reopens as the same plan": 1.4,
+  "[chromium] › missionEvidence.spec.js › the mission lab keeps evidence › the patched conic is drawn against the propagated flight": 0.7
 }
