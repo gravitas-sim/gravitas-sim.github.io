@@ -1815,5 +1815,15 @@
   "[chromium] › compute.spec.js › the published frame, really › a runtime that cannot be downloaded is said to be, and the frame is removed": 1.5,
   "[chromium] › compute.spec.js › the published frame, really › an unreachable compute origin is said to be, not a hang": 0.6,
   "[chromium] › compute.spec.js › the published frame, really › starts sandboxed: every storage refuses it and so does the page’s DOM": 0.4,
-  "[chromium] › compute.spec.js › the published frame, really › takes one port and ignores a second hello, and answers a malformed request by name": 1.5
+  "[chromium] › compute.spec.js › the published frame, really › takes one port and ignores a second hello, and answers a malformed request by name": 1.5,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › integrators-in-practice: four integrators lose energy at different rates on the same system @accepts:ce.integrators-in-practice": 6.0,
+  "[chromium] › centralExperiments.spec.js › the central experiment of each investigation › extending-an-experiment: the edge of the bound region is placed no better than the trials allow @accepts:ce.extending-an-experiment": 6.0,
+  "[chromium] › computeOnline.spec.js › integrators-compared runs on the pinned runtime and matches its expected values": 0.1,
+  "[chromium] › computeOnline.spec.js › population-at-scale runs on the pinned runtime and matches its expected values": 0.1,
+  "[chromium] › authorWalk.spec.js › walking integrators-in-practice › all 8 steps run, and the report opens": 10.2,
+  "[mobile-chrome] › authorWalk.spec.js › walking integrators-in-practice › all 8 steps run, and the report opens": 14.0,
+  "[chromium] › lazyInstruments.spec.js › every lesson fetches only the families its steps name › integrators-in-practice": 1.9,
+  "[chromium] › authorWalk.spec.js › walking extending-an-experiment › all 8 steps run, and the report opens": 10.2,
+  "[mobile-chrome] › authorWalk.spec.js › walking extending-an-experiment › all 8 steps run, and the report opens": 14.0,
+  "[chromium] › lazyInstruments.spec.js › every lesson fetches only the families its steps name › extending-an-experiment": 1.9
 }
