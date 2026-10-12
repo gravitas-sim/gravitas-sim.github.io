@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 1989.2,
+    limit: 1989.5,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -618,6 +618,13 @@ const BUDGETS = [
       "models' 3-D bridge, the course pack's guide items and the 3-D " +
       'comparison source. The initial download did not move (786.8 KB). ' +
       'D-BUDGET-30, under the standing size-budget approval in the project ' +
+      'CLAUDE.md.\n\n' +
+      'Prompt 107 slice 1 (the chooser moved out of js/investigations.js into ' +
+      'js/investigations/browser.js, no behavior change) took it from 1989.2 ' +
+      'to 1989.5 KB gzipped (5421.4 KB raw), 0.3 KB: the new module boundary ' +
+      '(its import list, the bind and setElements seam, a duplicated one-line ' +
+      'attribute escaper). The initial download did not move (786.8 KB). ' +
+      'D-BUDGET-31, under the standing size-budget approval in the project ' +
       'CLAUDE.md.',
   },
 ];
