@@ -32,6 +32,31 @@ export const CONCEPT_IDS = Object.freeze([
   'q12',
 ]);
 
+/**
+ * The draft version 2 concept items' ids (`concept/2`), each with four choices.
+ * Disjoint from CONCEPT_IDS on purpose: a sheet of one version has nothing in
+ * common with the other's columns, so the two cannot be scored or pooled as
+ * one. DRAFT: see LEARNING_STUDY.md 2.5.
+ */
+export const CONCEPT_V2_IDS = Object.freeze([
+  'r01',
+  'r02',
+  'r03',
+  'r04',
+  'r05',
+  'r06',
+  'r07',
+  'r08',
+  'r09',
+  'r10',
+  'r11',
+  'r12',
+  'r13',
+  'r14',
+  'r15',
+  'r16',
+]);
+
 /** The choices of each fidelity item that has them, by id. */
 export const FIDELITY_CHOICES = Object.freeze({
   setting: ['lecture', 'lab', 'recitation', 'homework', 'mixed', 'other'],
@@ -87,4 +112,16 @@ export const CONCEPT_COLUMNS = Object.freeze([
   'occasion',
   'participant',
   ...CONCEPT_IDS,
+]);
+
+/** The `instrument` value an export of the draft version 2 carries. */
+export const CONCEPT_V2_INSTRUMENT = 'concept/2';
+
+/** The columns of a draft version 2 concept CSV, in order. */
+export const CONCEPT_V2_COLUMNS = Object.freeze([
+  'schema',
+  'instrument',
+  'occasion',
+  'participant',
+  ...CONCEPT_V2_IDS,
 ]);

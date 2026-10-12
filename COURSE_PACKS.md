@@ -74,6 +74,10 @@ setting them is the instructor's job, in whatever they use to set them.
   unless it declares its minutes. Scenarios, datasets and readings declare
   theirs. A path takes the core's time plus its own items'.
 
+### 3-D lab investigations (Prompt 105)
+
+A `guide` item opens one of the 3-D lab's guided investigations (`guide`: `l3-planes`, `l3-eclipse`, `l3-mutual` or `l3-kozai`) at a `depth` of `core` (the introductory path, the default) or `advanced` (the advanced path). It declares its own `minutes`, may be on any path, takes an optional title and carries no pin: the investigations are the lab's, not lessons. Its link is `/3d/?guide=<id>&path=<intro|advanced>`. The id table is `GUIDES_3D` in `js/course/pack.js`, held to the lab's guides by a test.
+
 ## Pins
 
 Every lesson and assignment item carries a pin. A pin is:

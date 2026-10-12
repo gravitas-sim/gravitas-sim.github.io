@@ -12,6 +12,8 @@ A model's prediction laid over an observation, with residuals, chi-square and a 
 
 Not supported yet: astrometry, periodic, spectrum, catalogue and image forward models; several planets' separate sliders (planet 0 only); an unlisted scenario by id (the two exoplanet records and Builder bodies are the system sources).
 
+A fourth source is a 3-D system file (Prompt 105): the `system` source with a state from `js/forward/system3d.js`, the observer's inclination and direction as its two sliders, and the planets' elements the file's own (no slider for them). The file must be in solar, SI or astronomical units, with the star as its heaviest body and, for a transit, circular orbits and sizes; a file that cannot be observed is refused in words. tests/forwardSystem3d.test.js holds the model over its own data to rounding and a changed orientation to a measured misfit.
+
 ## What it never does
 
 It never fits. Nothing is searched and no linear parameter (baseline flux, velocity zero point) is solved for: each is a stated value. A parameter is `fitted` only when an inference result says so. Degrees of freedom count only those; a slider the student moves is reported `moved` and stays `assumed`.

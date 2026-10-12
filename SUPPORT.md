@@ -135,7 +135,7 @@ new use of one of these APIs with no row, fails the build.
 | WebGL | The 3-D view in the sandbox and the picture in the 3-D lab. | `js/view3d.js`, `js/lab3d/view/scene.js`, `js/lab3dLab.js` | The 3-D views say so and stay empty. Every number is still in the tables, and the 2-D sandbox does not use WebGL. |
 | OffscreenCanvas | Not used. | not used | Nothing to fall back from: Workers send numbers to the page and the page draws, so no canvas is ever transferred. |
 | Service Workers | The offline copy of the site. | `js/offline.js` | The site works online as usual and offers no offline copy. It is also skipped on file:// and on a page that opted out. |
-| Compression Streams | Shorter share links. | `js/shareState.js` | A link is made uncompressed (a marker byte says so) and still opens in every browser. Reading a compressed link needs DecompressionStream and says so if it is missing. |
+| Compression Streams | Shorter share links. | `js/shareState.js`, `js/lab3d/link.js` | A link is made uncompressed (a marker byte says so) and still opens in every browser. Reading a compressed link needs DecompressionStream and says so if it is missing. |
 | MediaRecorder and canvas captureStream | Recording a clip of the simulation. | `js/utils.js`, `js/capture.js`, `js/ui.js` | The record button is hidden. Nothing else depends on it, and Playwright’s WebKit is one build where it is hidden. |
 | Web Audio | Sonification and the optional sounds. | `js/audio.js`, `js/gwAudio.js` | No sound. Every sonification has a text equivalent on the page. |
 | BroadcastChannel | Telling other tabs that saved work changed. | `js/storage/index.js` | Other open tabs do not hear about a change until they reload; nothing is lost. |

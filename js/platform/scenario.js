@@ -191,7 +191,42 @@ const FIELDS = new Set([
   'tools',
   'system',
   'bodies',
+  'system3d',
 ]);
+
+/**
+ * What a pack's `system3d` must look like at the least, without the 3-D
+ * lab's own checks (js/lab3d/state.js validateSystem, which a caller that has
+ * them passes as `api.validateSystem3d` and which then decide): the format,
+ * the units, 2 to 50 bodies, and every number finite. The lab judges the rest
+ * when it opens the system, as it judges a file a reader chooses.
+ */
+function system3dShape(sys) {
+  const bad = (path, code) => [{ path, code }];
+  if (!isObject(sys)) return bad('', 'notSystem');
+  if (sys.format !== 'gravitas.system3d') return bad('format', 'format');
+  if (sys.formatVersion !== 1) return bad('formatVersion', 'version');
+  if (sys.units !== 'code' && sys.units !== 'solar')
+    return bad('units', 'units');
+  if (!isObject(sys.integrator)) return bad('integrator', 'integrator');
+  if (
+    !Array.isArray(sys.bodies) ||
+    sys.bodies.length < 2 ||
+    sys.bodies.length > 50
+  )
+    return bad('bodies', 'bodies');
+  const vec = v =>
+    Array.isArray(v) && v.length === 3 && v.every(Number.isFinite);
+  for (const [i, b] of sys.bodies.entries()) {
+    if (!isObject(b) || typeof b.id !== 'string' || UNSAFE_KEY.has(b.id))
+      return bad(`bodies[${i}].id`, 'body');
+    if (!Number.isFinite(b.m) || b.m < 0) return bad(`bodies[${i}].m`, 'mass');
+    if (!Number.isFinite(b.radius) || b.radius < 0)
+      return bad(`bodies[${i}].radius`, 'radius');
+    if (!vec(b.x) || !vec(b.v)) return bad(`bodies[${i}].x`, 'vector');
+  }
+  return [];
+}
 
 /**
  * Every problem with a scenario pack, each naming the field it is about.
@@ -208,6 +243,8 @@ const FIELDS = new Set([
  * @param {string[]} [api.scenarios] - The built-in scenarios' public ids
  * @param {Function} [api.validateSystem] - js/systemSpec.js's, for `system`
  * @param {Function} [api.validateBody] - For one entry of `bodies`
+ * @param {Function} [api.validateSystem3d] - The 3-D lab's, for `system3d`
+ *   (js/lab3d/state.js); without it only the block's shape is checked
  * @param {Function} [api.explain] - A message key and its values, in English
  * @returns {Array<{path: string, code: string, vars: object, message: string}>}
  */
@@ -532,6 +569,21 @@ export function validateScenarioPack(s, api) {
         }
       });
     }
+  }
+  // A 3-D system for the 3-D lab, beside whatever world the pack makes in the
+  // Sandbox: the lab's own file, validated by the lab's own checks.
+  if (s.system3d !== undefined) {
+    const problems = api.validateSystem3d
+      ? api.validateSystem3d(s.system3d)
+      : system3dShape(s.system3d);
+    for (const p of problems)
+      need(
+        false,
+        p.path ? `system3d.${p.path}` : 'system3d',
+        'system3d',
+        `the 3-D system: ${p.code}${p.path ? ` at ${p.path}` : ''}`,
+        { why: p.code, at: p.path ?? '', ...(p.vars ?? {}) }
+      );
   }
   // A built-in to start from, by id: its world, geometry included, under the
   // pack's seed and settings. The bodies are its own, so the pack brings none.

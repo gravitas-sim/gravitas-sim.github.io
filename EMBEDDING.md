@@ -130,6 +130,15 @@ function pause() {
 For that to work the figure's URL must name the page's origin:
 `…&ev=1&parent=https%3A%2F%2Fyour-course.example.edu#…`.
 
+## The 3-D figure
+
+The 3-D lab embeds under the same contract, at its own address: `/3d/?embed=1&ev=1`, with a system either named (`&system=R3`, one of the eight reference systems) or carried in the fragment (`#sys1z...`, the lab's own link, `js/lab3d/link.js`). It is the view, its legend and the transport, and nothing of the page around them.
+
+- It starts at reduced quality and reduced motion whatever the machine, so it opens paused and waits for Play; `quality=full` asks for the full tier, and there is no way to ask for more motion, as in the Sandbox figure.
+- `lang`, `theme` and `controls` do what they do there (`controls=none` removes the transport); `reset` has one meaning, which is to restart the system the figure opened with.
+- Without a `parent` origin it announces `ready` with no requests and listens to nobody. With one, `ready` lists `ping`, `play`, `pause` and `reset`, which are answered as in the Sandbox figure, and `load` is refused with `unknown-type`, because a 3-D system arrives in the address and not in a message.
+- The figure builder makes the markup from a pasted link to the lab, either of a reference system or of one carried in the fragment; any other address is refused, and only the fragment or the reference id of a pasted link is ever kept.
+
 ## Security model
 
 - **No `parent` option.** The figure tells whoever framed it that it is

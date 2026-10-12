@@ -61,7 +61,7 @@ export const KINDS = Object.freeze([
 export const FORMATS = Object.freeze({
   investigation: ['lesson', 'observatory', 'lab3d', 'mission'],
   activity: ['demonstration', 'route', 'guided', 'lab'],
-  scenario: ['sandbox'],
+  scenario: ['sandbox', 'system3d'],
   dataset: ['observation', 'data-pack'],
   course: ['course', 'course-pack'],
   experiment: ['sweep'],
@@ -350,6 +350,7 @@ export async function buildLibrary() {
           courseLevel: c.courseLevel,
           subjects: g.tags,
           steps: g.steps.length,
+          ...(g.depths ? { depths: g.depths.length } : {}),
           route: `${set.route}?guide=${g.id}`,
         })
       );
@@ -444,6 +445,33 @@ export async function buildLibrary() {
         subjects,
         thumbnail: info.thumbnail,
         route: `/#${rawWorldLink({ v: 1, s: key, seed })}`,
+      })
+    );
+  }
+
+  // --- The 3-D lab's reference systems (Prompt 105) -----------------------------
+  const { REFERENCES } = await load('js/lab3d/references.js');
+  const { EN_LAB3DLAB } = await load('js/i18n/en.lab3dLab.js');
+  const { ES_LAB3DLAB } = await load('js/i18n/es.lab3dLab.js');
+  for (const r of REFERENCES) {
+    const c = curated('systems3d', r.id);
+    const open = curation.scenarioDefaults;
+    entries.push(
+      entry({
+        id: `scenario:3d-${slug(r.id)}`,
+        kind: 'scenario',
+        format: 'system3d',
+        source: 'js/lab3d/references.js',
+        title: words(EN_LAB3DLAB, ES_LAB3DLAB, `l3.ref.${r.id}`),
+        summary: c.summary,
+        level: 'intro',
+        duration: open.duration,
+        length: lengthFor(open.duration),
+        mathematics: open.mathematics,
+        calculation: 'none',
+        prerequisites: open.prerequisites,
+        subjects: c.subjects,
+        route: `/3d/?system=${r.id}`,
       })
     );
   }

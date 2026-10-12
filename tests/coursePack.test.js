@@ -161,8 +161,9 @@ describe('the proving course', () => {
     const kinds = new Set(itemsOf(INTRO_ASTRONOMY).map(e => e.item.kind));
     // The proving course names no instructor's investigation: a pack item
     // carries its investigation, and tests/remixCourse.test.js proves that kind.
+    // Nor a 3-D guide: tests/course3d.test.js proves that kind.
     expect([...kinds].sort()).toEqual(
-      ITEM_KINDS.filter(k => k !== 'pack').sort()
+      ITEM_KINDS.filter(k => k !== 'pack' && k !== 'guide').sort()
     );
     expect(
       new Set(itemsOf(INTRO_ASTRONOMY).map(e => e.item.path || 'core'))

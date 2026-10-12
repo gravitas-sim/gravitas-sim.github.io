@@ -304,7 +304,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->9249<!--/fact--> strings, and
+of <!--fact:uiStrings-->9391<!--/fact--> strings, and
 all <!--fact:investigations-->55<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -340,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->11121<!--/fact--> tests across <!--fact:jestSuites-->331<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->11218<!--/fact--> tests across <!--fact:jestSuites-->337<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -485,8 +485,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->2238<!--/fact--> tests
-in <!--fact:e2eFiles-->163<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->2254<!--/fact--> tests
+in <!--fact:e2eFiles-->166<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -629,6 +629,7 @@ part was built:
 | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md)                   | Every validated claim, its tolerance, and the reason for that tolerance                                                                        |
 | [`SANDBOX_INSTRUMENTS.md`](SANDBOX_INSTRUMENTS.md)                 | Ruler, protractor, stopwatch, the always-on scale bar, screenshots and clip recording                                                          |
+| [`LEARNING_STUDY.md`](LEARNING_STUDY.md)                           | A design, not a study: the learning-outcome study a section could run, the validation plan for the twelve pilot items, data handling and what the platform would have to log. No data collected, no review held|
 | [`AB_EXPERIMENT_BENCH.md`](AB_EXPERIMENT_BENCH.md)                 | Controlled A/B experiments: the canonical captured state, why runs are sequential, alignment, storage and export                               |
 | [`CHAOS_INVESTIGATION.md`](CHAOS_INVESTIGATION.md)                 | The chaos investigation: why the Lagrange equilateral configuration, the divergence definition, and the evidence it is not a timestep artifact |
 | [`RESONANCE_INVESTIGATION.md`](RESONANCE_INVESTIGATION.md)         | The resonance investigation: the resonant angles, the three verdicts and why one of them is a refusal, the four scenarios and their measured values |
@@ -664,7 +665,7 @@ and [`SCENARIO_FIXES.md`](SCENARIO_FIXES.md).
 | | |
 | --- | --- |
 | Something is wrong | [`SUPPORT.md`](SUPPORT.md) — what makes a bug report fixable here |
-| I want to use this in a class | [`SUPPORT.md`](SUPPORT.md), the [adopter's guide](https://gravitas-sim.online/teaching/adopt/) and [/teaching/](https://gravitas-sim.online/teaching/) |
+| I want to use this in a class | [`SUPPORT.md`](SUPPORT.md), and [/teaching/](https://gravitas-sim.online/teaching/) |
 | Which browsers are supported | [`SUPPORT.md`](SUPPORT.md#supported-browsers-and-devices) — generated from what CI runs |
 | What happens if the maintainer is away | [`CONTINUITY.md`](CONTINUITY.md), and [`TOOLCHAIN.md`](TOOLCHAIN.md) for how versions move |
 | I want to change something | [`CONTRIBUTING.md`](CONTRIBUTING.md) |

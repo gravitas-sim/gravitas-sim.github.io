@@ -365,6 +365,9 @@ export const GUIDES = [
   {
     id: 'l3-planes',
     minutes: { intro: 20, advanced: 30 },
+    // The depths it can be read at (DEPTH.md): the introductory path is the
+    // core, the advanced path is the advanced depth.
+    depths: ['core', 'advanced'],
     level: 'intro',
     tags: ['orbits'],
     steps: [
@@ -458,6 +461,9 @@ export const GUIDES = [
   {
     id: 'l3-eclipse',
     minutes: { intro: 25, advanced: 35 },
+    // The depths it can be read at (DEPTH.md): the introductory path is the
+    // core, the advanced path is the advanced depth.
+    depths: ['core', 'advanced'],
     level: 'intro',
     tags: ['exoplanets', 'observing', 'orbits'],
     steps: [
@@ -578,6 +584,9 @@ export const GUIDES = [
   {
     id: 'l3-mutual',
     minutes: { intro: 20, advanced: 30 },
+    // The depths it can be read at (DEPTH.md): the introductory path is the
+    // core, the advanced path is the advanced depth.
+    depths: ['core', 'advanced'],
     level: 'intro',
     tags: ['exoplanets', 'orbits'],
     steps: [
@@ -683,6 +692,9 @@ export const GUIDES = [
   {
     id: 'l3-kozai',
     minutes: { intro: 25, advanced: 35 },
+    // The depths it can be read at (DEPTH.md): the introductory path is the
+    // core, the advanced path is the advanced depth.
+    depths: ['core', 'advanced'],
     level: 'intro',
     tags: ['gravity', 'orbits'],
     steps: [

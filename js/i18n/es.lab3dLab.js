@@ -175,6 +175,11 @@ export const ES_LAB3DLAB = {
   'l3.status.lost':
     'Se perdió el contexto gráfico. La integración y las tablas continúan, y la imagen vuelve cuando el navegador lo restaura.',
   'l3.guides': 'Investigaciones guiadas',
+  'l3.ev.open': 'Evidencia y observación',
+  'l3.status.badLink':
+    'Este enlace no contiene un sistema que el laboratorio pueda abrir ({why}). El laboratorio abrió un sistema de referencia.',
+  'l3.status.noSaved':
+    'En este navegador no hay un sistema guardado con ese nombre. Abre uno desde Mi trabajo.',
   'l3.tool.sky': 'En el cielo, visto desde aquí',
   'l3.tool.between': 'Entre dos órbitas',
   'l3.read.sky':

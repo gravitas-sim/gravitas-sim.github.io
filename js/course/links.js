@@ -37,7 +37,7 @@ import {
   ASSIGNMENT_TAG,
 } from '../assignments/assignment.js';
 import { formatSeed, parseSeed } from '../rng.js';
-import { FORMAT_VERSION, LEVEL_DEPTH } from './pack.js';
+import { FORMAT_VERSION, GUIDE_DEPTHS, LEVEL_DEPTH } from './pack.js';
 
 export { COMFORTABLE_URL_LENGTH };
 /** Where the builder leaves the draft the course home previews (?draft=1). */
@@ -112,6 +112,11 @@ export async function itemLink(item, { root, locale = 'en', level }) {
     case 'scenario':
       return {
         href: `${root}#${await encodeTagged('', LINK_VERSION, scenarioPayload(item))}`,
+        kind: 'app',
+      };
+    case 'guide':
+      return {
+        href: `${root}3d/?guide=${encodeURIComponent(item.guide)}&path=${GUIDE_DEPTHS[item.depth ?? 'core']}`,
         kind: 'app',
       };
     case 'dataset':

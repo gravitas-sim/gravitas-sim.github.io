@@ -31,6 +31,7 @@ export async function routeTables() {
   const { SCENARIO_INFO } = await load('js/data/scenarioInfo.js');
   const lab3d = await load('js/lab3d/guides/curriculum.js');
   const mission = await load('js/mission/lab/curriculum.js');
+  const { REFERENCES } = await load('js/lab3d/references.js');
   const observatory = new Set();
   for (const s of SUITES)
     for (const g of (await s.load()).GUIDES) observatory.add(g.id);
@@ -47,6 +48,7 @@ export async function routeTables() {
     },
     courses: new Set(Object.keys(BUILTIN_COURSES)),
     scenarios: new Set(Object.keys(SCENARIO_INFO)),
+    systems3d: ids(REFERENCES),
   };
 }
 
@@ -103,6 +105,10 @@ export async function routeProblem(route, tables, root = REPO) {
     return tables.guides[page].has(q('guide'))
       ? null
       : `${page} has no guide "${q('guide')}"`;
+  if (page === '/3d/' && query === 'system')
+    return tables.systems3d.has(q('system'))
+      ? null
+      : `the 3-D lab has no reference system "${q('system')}"`;
   if (page === '/observatory/' && query === 'open')
     return tables.fixtures.has(q('open'))
       ? null
