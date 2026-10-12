@@ -1851,6 +1851,12 @@ export const EN_DEFERRED = {
     'Stability, resonance and chaos at once, deciding where a planet can survive around two stars.',
   'inv.seq.planets.extending-an-experiment':
     'An experiment of twenty planets extended in Python to a population, with what its interval covers and what it does not. Needs the compute page and a connection.',
+  'inv.seq.planets.refitting-a-transit':
+    'The fit panel’s transit model fitted again by a different route in Python, and what the route changes. Needs the compute page and a connection.',
+  'inv.seq.planets.two-periodograms':
+    'A Lomb-Scargle and a box least squares periodogram of one light curve, and what a period from a periodogram can claim. Needs the compute page and a connection.',
+  'inv.seq.planets.sampling-a-posterior':
+    'A transit’s posterior sampled in Python, with the convergence checks that decide when its interval may be quoted. Needs the compute page and a connection.',
   'inv.seq.gravity.integrators-in-practice':
     'Four integrators compared by the energy they lose on a real system, in Python. Needs the compute page and a connection.',
 
@@ -3207,7 +3213,7 @@ export const EN_DEFERRED = {
     'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
   'welcomeAudience.instructors.title': 'For instructors',
   'welcomeAudience.instructors.text':
-    '57 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
+    '60 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
   'welcomeAudience.curious.title': 'For the curious',
   'welcomeAudience.curious.text':
     'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',
@@ -3718,6 +3724,10 @@ export const EN_DEFERRED = {
   'nb.source.sweep-analysis': 'Sweep analysis',
   'nb.source.derived-quantity': 'Derived quantity',
   'nb.source.lab3d': '3-D lab measurement',
+  'nb.source.mission-lab': 'Mission lab result',
+  'nb.flag.missionModel':
+    'impulsive burns, patched conics and point masses: a teaching model of a mission',
+  'nb.flag.notOperational': 'not for operational mission design or navigation',
   'nb.flag.unbound': 'the orbit is not bound, so it has no period',
   'nb.flag.noRadii':
     'a body has no size in this system, so no eclipse can be judged',

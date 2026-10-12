@@ -93,6 +93,7 @@ export const ES_REPORT = {
   'led.ctx.experiments': 'el banco de experimentos',
   'led.ctx.sandbox': 'el simulador libre',
   'led.ctx.lab3d': 'el laboratorio 3-D',
+  'led.ctx.mission': 'el laboratorio de misiones',
   'led.ctx.compute': 'la página de cálculo',
   'rp.outcome': 'Resultado',
   'rp.reached': 'alcanzado',

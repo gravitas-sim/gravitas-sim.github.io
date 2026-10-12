@@ -88,7 +88,10 @@
           "why-the-bright-ones-win",
           "the-completeness-curve",
           "integrators-in-practice",
-          "extending-an-experiment"
+          "extending-an-experiment",
+          "refitting-a-transit",
+          "two-periodograms",
+          "sampling-a-posterior"
         ]
       }
     },
@@ -321,7 +324,10 @@
                   "why-the-bright-ones-win",
                   "the-completeness-curve",
                   "integrators-in-practice",
-                  "extending-an-experiment"
+                  "extending-an-experiment",
+                  "refitting-a-transit",
+                  "two-periodograms",
+                  "sampling-a-posterior"
                 ]
               }
             }

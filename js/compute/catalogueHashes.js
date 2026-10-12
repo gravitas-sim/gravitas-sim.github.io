@@ -55,4 +55,40 @@ export const HASHES = Object.freeze({
       bytes: 30020,
     },
   },
+  'refit-transit': {
+    cellsSha256:
+      'fa7b6aba700115c0ff139c0c3a7a0913a60d7d7573770ecbcf1f20fac1e239bd',
+    fileSha256:
+      '92117fe629e3a28cdc9afd5ab9a66f9f94c987d0cd955dd1baecc9fc968fd1f5',
+    cells: 6,
+    example: {
+      sha256:
+        'cdec1936f69a2cdb1a0c8ae4e0e4cc641c38e433b2d44afadd032768036d1c4f',
+      bytes: 120926,
+    },
+  },
+  periodograms: {
+    cellsSha256:
+      '74d5786f6dc3f00f8dce8d0b0555e3f2884f580950d7920eb7d7d151933f1e17',
+    fileSha256:
+      'fa3c2c28e173c4969739ae23330a8c21f9e2975c73e57e582932b682837cb08d',
+    cells: 5,
+    example: {
+      sha256:
+        'cdec1936f69a2cdb1a0c8ae4e0e4cc641c38e433b2d44afadd032768036d1c4f',
+      bytes: 120926,
+    },
+  },
+  'posterior-sampling': {
+    cellsSha256:
+      '803c68a102453377c1a6025f7eba3bacf3762c69ea889a6a5238464ff6c38020',
+    fileSha256:
+      '72a486120845f6d2b7314f61044c980287286e4f313550509af213cc868a5ada',
+    cells: 6,
+    example: {
+      sha256:
+        'cdec1936f69a2cdb1a0c8ae4e0e4cc641c38e433b2d44afadd032768036d1c4f',
+      bytes: 120926,
+    },
+  },
 });

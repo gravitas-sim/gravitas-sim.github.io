@@ -218,6 +218,9 @@
     "check": "js/data/ephemeris/solarSystem2025Check.js",
     "moduleSha256": "34b784803056031641962d85fb4e8b9dca87075bf7dabaf470b0fd11f3d1bccf",
     "moduleBytes": 107129,
-    "checkSha256": "1e37fa0e4f2bfbb0310f20d22b726dadd5dcee3bfab361f281cf896ec614f4e3"
+    "checkSha256": "1e37fa0e4f2bfbb0310f20d22b726dadd5dcee3bfab361f281cf896ec614f4e3",
+    "sidecar": "sky/ephemeris.json",
+    "sidecarBytes": 106422,
+    "sidecarSha256": "55f8b0911d4ccf771fe1dbe246a195147339e15971863bbd5ca45911e8b7b0a6"
   }
 }

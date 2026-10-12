@@ -45,6 +45,9 @@ describe('the catalogue', () => {
       'line-centroid',
       'integrators-compared',
       'population-at-scale',
+      'refit-transit',
+      'periodograms',
+      'posterior-sampling',
     ]);
   });
 
@@ -103,6 +106,25 @@ describe('the catalogue', () => {
     expect(l).toBeLessThan(9_000_000);
     expect(t).toBeGreaterThan(18_000_000);
     expect(t).toBeLessThan(19_500_000);
+  });
+
+  test('the download shown before Start is the sum of the packages the notebook declares', () => {
+    // The runtime core, numpy once, and each package's own wheels, as served
+    // (js/compute/runtime.js): a package that needs numpy does not count it twice.
+    const mb = id => downloadBytes(entryOf(id).packages) / 1e6;
+    expect(mb('line-centroid')).toBeCloseTo(8.91, 2);
+    expect(mb('transit-times')).toBeCloseTo(18.85, 2);
+    expect(mb('refit-transit')).toBeCloseTo(22.74, 2);
+    expect(mb('periodograms')).toBeCloseTo(17.14, 2);
+    expect(mb('posterior-sampling')).toBeCloseTo(8.91, 2);
+    // SciPy is the heavy one; a notebook that needs only NumPy stays the lightest.
+    expect(mb('refit-transit')).toBeGreaterThan(mb('transit-times'));
+    expect(mb('posterior-sampling')).toBe(mb('line-centroid'));
+    // The dependency closure is counted: scipy and astropy each bring numpy.
+    expect(downloadBytes(['scipy'])).toBe(downloadBytes(['numpy', 'scipy']));
+    expect(downloadBytes(['astropy'])).toBe(
+      downloadBytes(['astropy', 'numpy'])
+    );
   });
 });
 

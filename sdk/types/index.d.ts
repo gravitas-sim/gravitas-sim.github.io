@@ -111,7 +111,7 @@ export type CourseItem = {
     }
   | { kind: 'scenario'; scenario: string; seed: string; paused?: boolean; title?: PlainText }
   | { kind: 'dataset'; dataset: string; title?: PlainText }
-  | { kind: 'guide'; guide: 'l3-planes' | 'l3-eclipse' | 'l3-mutual' | 'l3-kozai'; depth?: 'core' | 'advanced'; title?: PlainText }
+  | { kind: 'guide'; guide: 'l3-planes' | 'l3-eclipse' | 'l3-mutual' | 'l3-kozai' | 'ml-orbit' | 'ml-window' | 'ml-cruise'; depth?: 'core' | 'advanced'; title?: PlainText }
   | {
       /** An investigation pack, carried as its link (the fragment after #). Pinned by the digest of its compiled steps. */
       kind: 'pack';

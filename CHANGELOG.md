@@ -26,6 +26,7 @@ the release rather than in the tag.
   `geometry` (`body`, `orbit`, `set`; never a named rule), the Scenario Studio
   starts from the two scenarios whose geometry a pack can carry with it, and
   the pack schema, validator, SDK types and `FORMATS.md` describe the field.
+- **The mission lab on the platform, and the ephemeris pack in the Sky Lab** (Roadmap II P106). The Sky Lab takes Venus, Mars and Jupiter from the DE441 pack where it covers the date, shows each planet's source and bound, and offers the elements as a choice; the mission lab's timeline, maneuvers, delta-v budget and patched-conic-against-propagated comparison can be kept as evidence envelopes (notebook source `mission-lab`), a mission is saved to My work and opened by `?open=`, a plan travels in a `#plan1.` link, the lab embeds under `gravitas-embed/1`, the figure builder takes a lab link, and the celestial mechanics unit carries the three mission investigations. `MISSION_LAB.md`, `SKY_LAB.md` and `EMBEDDING.md` have the details.
 - **The 3-D lab on the platform** (Roadmap II P105). Evidence (`gravitas.artifact/1` envelopes for readings, events and observations; notebook source `lab3d`), saved 3-D systems in My work, the 3-D state as the forward models' input (`js/forward/system3d.js`), a 3-D system file in the comparison instrument, an optional `system3d` block in scenario packs with its link (`js/lab3d/link.js`) and Studio support, an embedded 3-D figure under `gravitas-embed/1` and a figure-builder path for it, 3-D reference systems in the Library, depths for the four investigations, and `guide` items in course packs (the celestial mechanics unit carries all four). `LAB3D.md` has the table.
 - **The compute page** (Roadmap II P101, `COMPUTE.md`). `/compute/` runs one of two reviewed Python notebooks (transit times; a spectral line's centroid, width and velocity) on a Gravitas observation, in Pyodide in a Worker inside an opaque-origin sandboxed frame served from its own origin (https://gravitas-compute.github.io, `compute-frame/`, published verbatim; D-COMPUTE-ORIGIN-01). Opt-in and online only, never precached, with its own route budget; the cold download (about 8.9 or 18.9 MB) is stated before "Start the runtime". The page checks the frame's bytes against a pin, exchanges only typed, size-bounded messages (`gravitas-compute/1`) and checks every answer before drawing it. Each run is a `gravitas.compute-capsule/1`: notebook, inputs and outputs by hash, runtime, timing, citations; it can be kept in My work (notebook source `compute-capsule`), reopened and verified without a runtime, or exported as one notebook for a local Jupyter that checks its outputs against the capsule. `node tools/compute.mjs` builds the frame, its pin and the catalogue hashes; Jest suites for the messages, catalogue, capsule, session and frame; `e2e/compute.spec.js` (no network) and `e2e/computeOnline.spec.js` (`COMPUTE_ONLINE=1`).
 - **The forward-model loop** (Roadmap II P84). `gravitas.observing-setup/1` and seven pure forward models (transit, radial velocity, astrometry, periodic, spectrum, catalogue, image) return synthetic observations with a truth manifest; the Observatory labels them and compares a fit with the truth. See `FORWARD_MODELS.md`.
@@ -1603,7 +1604,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->59<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->57<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->60<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -1612,7 +1613,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->1000<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->1024<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

@@ -13,12 +13,24 @@
 
 import { julianDate, calendarDate } from './kernels/sky/time.js';
 import { meanObliquityDeg } from './kernels/sky/time.js';
-import { skyAt } from './kernels/sky/sky.js';
+import { skyAt, PLANET_IDS } from './kernels/sky/sky.js';
+import { createPlanetSource, planetProvenance } from './kernels/sky/planets.js';
 import { loadStars } from './kernels/sky/stars.js';
-import { loadStarFile, loadConstellations } from './kernels/sky/packs.js';
+import {
+  loadStarFile,
+  loadEphemerisFile,
+  loadConstellations,
+} from './kernels/sky/packs.js';
+import { createEphemeris, dateOfJd } from './mission/ephemeris.js';
 import { mountShell } from './shell.js';
-import { createHorizon, drawEquatorial, svgFile } from './sky/view.js';
-import { fmt, round, prettyDesignation } from './sky/fmt.js';
+import {
+  createHorizon,
+  drawEquatorial,
+  svgFile,
+  fmt,
+  round,
+  prettyDesignation,
+} from './sky/view.js';
 
 const $ = id => document.getElementById(id);
 const es = () => document.documentElement.lang.startsWith('es');
@@ -102,6 +114,15 @@ const state = {
   layers: { lines: true, names: true, magLimit: 4.0 },
   instruments: null,
   built: false,
+  // The planet positions (SKY_LAB.md): the ephemeris pack's source where it
+  // covers the date, or null when it did not load; and whether the reader has
+  // asked for the elements alone.
+  ephemeris: null,
+  elementsOnly: false,
+  /** The source the kernel is given: null means the elements. */
+  get planetSource() {
+    return this.elementsOnly ? null : this.ephemeris;
+  },
 };
 let horizon = null;
 let timer = null;
@@ -144,7 +165,9 @@ function visibleStars() {
 function compute() {
   const stars = visibleStars();
   state.byId = new Map(state.all.map(s => [`hr${s.hr}`, s]));
-  state.model = skyAt(state.jdUt, state.site, stars);
+  state.model = skyAt(state.jdUt, state.site, stars, {
+    source: state.planetSource,
+  });
   return state.model;
 }
 
@@ -262,6 +285,62 @@ function readout() {
         'Las posiciones de los planetas solo se dibujan de 1800 a 2050, donde la serie es válida.'
       );
   $('skyNote').textContent = note;
+  planetNote();
+}
+
+/**
+ * Which source each planet is drawn from now, and how well that source knows
+ * it (SKY_LAB.md, "Planet positions"). The pack's bound is its own, in km, at
+ * the planet's distance; the elements' is the 0.2 degree the Sky Lab gate
+ * measured.
+ */
+function planetNote() {
+  if (!state.model.planetsInRange) {
+    $('skyPlanetNote').textContent = '';
+    return;
+  }
+  const names = via =>
+    PLANET_IDS.filter(
+      id =>
+        planetProvenance(state.planetSource, id, state.model.jdTt).via === via
+    );
+  const list = ids => ids.map(planetName).join(', ');
+  const eph = names('ephemeris');
+  const el = names('elements');
+  const parts = [];
+  if (eph.length) {
+    const info = state.ephemeris.info;
+    const worst = Math.max(
+      ...eph.map(
+        id =>
+          planetProvenance(state.planetSource, id, state.model.jdTt).boundDeg
+      )
+    );
+    const km = Math.max(...eph.map(id => info.positionBoundKm(id)));
+    parts.push(
+      L(
+        `${list(eph)}: the JPL DE441 ephemeris pack (${info.pack} ${info.version}, ${dateOfJd(info.startJd)} to ${dateOfJd(info.stopJd)}), within ${f2(km)} km, which is under ${worst < 1e-4 ? '0.0001' : f2(worst)}° of the point the pack describes${eph.includes('jupiter') ? ', and that point is the barycenter of the Jupiter system, up to 0.4 arcsecond (0.0001°) from the planet itself' : ''}; the reading is limited by the sky chain's 1 arcminute.`,
+        `${list(eph)}: el paquete de efemérides JPL DE441 (${info.pack} ${info.version}, de ${dateOfJd(info.startJd)} a ${dateOfJd(info.stopJd)}), a menos de ${f2(km)} km, es decir, menos de ${worst < 1e-4 ? '0,0001' : f2(worst)}° del punto que describe el paquete${eph.includes('jupiter') ? ', y ese punto es el baricentro del sistema de Júpiter, a hasta 0,4 segundos de arco (0,0001°) del planeta' : ''}; la lectura la limita la cadena del cielo, de 1 minuto de arco.`
+      )
+    );
+  }
+  if (el.length)
+    parts.push(
+      L(
+        `${list(el)}: low-precision orbital elements (Standish), within 0.2°${
+          state.ephemeris && !state.elementsOnly && !eph.length
+            ? ' (the date is outside the ephemeris pack)'
+            : ''
+        }.`,
+        `${list(el)}: elementos orbitales de baja precisión (Standish), a menos de 0,2°${
+          state.ephemeris && !state.elementsOnly && !eph.length
+            ? ' (la fecha está fuera del paquete de efemérides)'
+            : ''
+        }.`
+      )
+    );
+  $('skyPlanetNote').textContent =
+    `${L('Planet positions now', 'Posiciones de los planetas ahora')}. ${parts.join(' ')}`;
 }
 
 /** The per-frame update: positions only. */
@@ -327,6 +406,12 @@ function setPlaying(on) {
   $('skyPlay').setAttribute('aria-pressed', String(on));
   if (on) requestAnimationFrame(loop);
   else settle();
+}
+
+/** The planet-source choice's words in the page's language. */
+function sourceOptions() {
+  for (const o of $('skyPlanetSource').options)
+    o.textContent = es() ? o.dataset.es : o.dataset.en;
 }
 
 function fillSites() {
@@ -516,6 +601,7 @@ async function init() {
     onLanguage: () => {
       if (!state.built) return;
       fillSitesKeep();
+      sourceOptions();
       setupHeaders();
       buildHorizon();
       settle();
@@ -523,6 +609,7 @@ async function init() {
     },
   });
   fillSites();
+  sourceOptions();
   siteFromSelect();
   setupHeaders();
   fit();
@@ -543,6 +630,16 @@ async function init() {
       'No se pudo cargar el catálogo de estrellas. El Sol, la Luna y los planetas se dibujan igual.'
     );
     doc = { stars: [] };
+  }
+  // The ephemeris pack: if it cannot be had the planets come from the
+  // elements, as before, and the note says so.
+  try {
+    const file = await loadEphemerisFile();
+    state.ephemeris = createPlanetSource(createEphemeris(file.pack, file.data));
+  } catch {
+    state.ephemeris = null;
+    $('skyPlanetSource').disabled = true;
+    $('skyPlanetSource').value = 'elements';
   }
   state.all = loadStars(doc);
   state.byId = new Map(state.all.map(s => [`hr${s.hr}`, s]));
@@ -589,6 +686,10 @@ function wire() {
   $('skyLines').addEventListener('change', () => {
     state.layers.lines = $('skyLines').checked;
     horizon.setLayers(state.layers);
+    update();
+  });
+  $('skyPlanetSource').addEventListener('change', () => {
+    state.elementsOnly = $('skyPlanetSource').value === 'elements';
     update();
   });
   $('skyNames').addEventListener('change', () => {

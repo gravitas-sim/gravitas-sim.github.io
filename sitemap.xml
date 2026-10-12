@@ -367,6 +367,21 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/refitting-a-transit/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/two-periodograms/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/sampling-a-posterior/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://gravitas-sim.online/teaching/investigation/exo-star/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

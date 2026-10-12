@@ -18,6 +18,7 @@ export const EN_MISSIONLAB = {
   'ml.compute': 'Compute the mission',
   'ml.cancel': 'Cancel',
   'ml.savePlan': 'Save the plan as a file',
+  'ml.ev.open': 'Evidence and My work',
 
   'ml.plan.heading': 'The plan',
   'ml.plan.hint':

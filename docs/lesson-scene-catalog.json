@@ -77495,27 +77495,1512 @@
     "mismatched": 0,
     "rebuilds": 1
    }
+  },
+  {
+   "id": "refitting-a-transit",
+   "title": "Refitting a Transit",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "same-model-another-route",
+     "index": 1,
+     "type": "read",
+     "title": "The same model, another route",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Transit Lab\" seed transit-lab",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
+     "sid": "how-close",
+     "index": 2,
+     "type": "predict",
+     "title": "How close will they be",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "the-fit",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "the-fit",
+     "index": 3,
+     "type": "measure",
+     "title": "Run it: five numbers and the chi-square",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "refit-transit",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "sigma-and-profile",
+     "index": 4,
+     "type": "measure",
+     "title": "Two kinds of uncertainty",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "refit-transit",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "why-they-differ",
+     "index": 5,
+     "type": "question",
+     "title": "Why the interval is lopsided",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "hold-the-limb-darkening",
+     "index": 6,
+     "type": "measure",
+     "title": "Hold the limb darkening",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "refit-transit",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "what-is-not-counted",
+     "index": 7,
+     "type": "question",
+     "title": "What the sigmas do not count",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 8,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    }
+   ],
+   "loops": [
+    {
+     "predict": "how-close",
+     "predictCollects": true,
+     "heldUntil": "the-fit",
+     "experiment": [],
+     "measure": [
+      "the-fit",
+      "sigma-and-profile",
+      "hold-the-limb-darkening"
+     ],
+     "evidence": [
+      "the-fit",
+      "sigma-and-profile",
+      "hold-the-limb-darkening"
+     ],
+     "interpret": "the-fit",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 8,
+    "declared": 0,
+    "student": 0,
+    "engine": 0,
+    "model": 0,
+    "data": 0,
+    "diagram": 0,
+    "evidence": 3,
+    "computation": 3,
+    "declaredButInert": 0,
+    "prose": 5,
+    "mismatched": 0,
+    "rebuilds": 1
+   }
+  },
+  {
+   "id": "two-periodograms",
+   "title": "Two Periodograms",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "two-ways-to-look-for-a-period",
+     "index": 1,
+     "type": "read",
+     "title": "Two ways to look for a period",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Transit Lab\" seed transit-lab",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
+     "sid": "the-tallest-peak",
+     "index": 2,
+     "type": "predict",
+     "title": "Where the tallest peak will be",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "the-two-periods",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "the-two-periods",
+     "index": 3,
+     "type": "measure",
+     "title": "Run it: the two best periods",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "periodograms",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "why-half",
+     "index": 4,
+     "type": "question",
+     "title": "Why half",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "the-box",
+     "index": 5,
+     "type": "measure",
+     "title": "The best box",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "periodograms",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "against-the-fit",
+     "index": 6,
+     "type": "measure",
+     "title": "Against the fit",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "periodograms",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "what-a-grid-step-is",
+     "index": 7,
+     "type": "question",
+     "title": "What a grid step is",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 8,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    }
+   ],
+   "loops": [
+    {
+     "predict": "the-tallest-peak",
+     "predictCollects": true,
+     "heldUntil": "the-two-periods",
+     "experiment": [],
+     "measure": [
+      "the-two-periods",
+      "the-box",
+      "against-the-fit"
+     ],
+     "evidence": [
+      "the-two-periods",
+      "the-box",
+      "against-the-fit"
+     ],
+     "interpret": "the-two-periods",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 8,
+    "declared": 0,
+    "student": 0,
+    "engine": 0,
+    "model": 0,
+    "data": 0,
+    "diagram": 0,
+    "evidence": 3,
+    "computation": 3,
+    "declaredButInert": 0,
+    "prose": 5,
+    "mismatched": 0,
+    "rebuilds": 1
+   }
+  },
+  {
+   "id": "sampling-a-posterior",
+   "title": "Sampling a Posterior",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "what-a-sampler-does",
+     "index": 1,
+     "type": "read",
+     "title": "What a sampler does",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Transit Lab\" seed transit-lab",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
+     "sid": "how-wide",
+     "index": 2,
+     "type": "predict",
+     "title": "How wide will it be",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "the-draws",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "the-draws",
+     "index": 3,
+     "type": "measure",
+     "title": "Run it: the draws",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "posterior-sampling",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "did-it-converge",
+     "index": 4,
+     "type": "measure",
+     "title": "Did it converge",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "external-computation",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "compute": "posterior-sampling",
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "profile-and-posterior",
+     "index": 5,
+     "type": "question",
+     "title": "Posterior and profile",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "why-narrower",
+     "index": 6,
+     "type": "question",
+     "title": "Why so much narrower",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "refuse-a-short-run",
+     "index": 7,
+     "type": "question",
+     "title": "A run that is too short",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 8,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    }
+   ],
+   "loops": [
+    {
+     "predict": "how-wide",
+     "predictCollects": true,
+     "heldUntil": "the-draws",
+     "experiment": [],
+     "measure": [
+      "the-draws",
+      "did-it-converge"
+     ],
+     "evidence": [
+      "the-draws",
+      "did-it-converge"
+     ],
+     "interpret": "the-draws",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 8,
+    "declared": 0,
+    "student": 0,
+    "engine": 0,
+    "model": 0,
+    "data": 0,
+    "diagram": 0,
+    "evidence": 2,
+    "computation": 2,
+    "declaredButInert": 0,
+    "prose": 6,
+    "mismatched": 0,
+    "rebuilds": 1
+   }
   }
  ],
  "totals": {
-  "steps": 1000,
+  "steps": 1024,
   "declared": 934,
   "student": 157,
   "engine": 163,
   "model": 545,
   "data": 146,
   "diagram": 424,
-  "evidence": 231,
-  "computation": 6,
+  "evidence": 239,
+  "computation": 14,
   "declaredButInert": 777,
-  "prose": 40,
+  "prose": 56,
   "mismatched": 0,
-  "rebuilds": 73,
-  "lessons": 57,
-  "loops": 127,
-  "closedLoops": 127,
+  "rebuilds": 76,
+  "lessons": 60,
+  "loops": 130,
+  "closedLoops": 130,
   "explainedLoops": 0,
-  "heldLoops": 127,
-  "completeLoops": 127
+  "heldLoops": 130,
+  "completeLoops": 130
  }
 }

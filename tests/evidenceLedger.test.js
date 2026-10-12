@@ -290,6 +290,33 @@ const every = () => [
       ],
     }),
   }),
+  // A mission lab result (js/mission/evidence.js, Prompt 106): its envelopes
+  // are covered in tests/missionEvidence.test.js; here only that the ledger
+  // holds one.
+  artifactEntry({
+    source: SOURCE.MISSION_LAB,
+    title: 'Mission budget',
+    capturedAt: at,
+    context: { page: 'mission' },
+    envelope: artifact({
+      id: 'mission:budget:0a1b2c3d:1',
+      source: {
+        kind: 'simulation',
+        id: 'mission-lab',
+        version: '1',
+        digest,
+      },
+      quantities: [
+        {
+          id: 'dv.total',
+          value: 5400,
+          unit: 'm/s',
+          uncertainty: { kind: 'none' },
+          origin: 'derived',
+        },
+      ],
+    }),
+  }),
 ];
 
 describe('every producer writes an envelope with where it was kept', () => {

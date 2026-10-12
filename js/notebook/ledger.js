@@ -380,6 +380,7 @@ export const ARTIFACT_SOURCES = [
   'compute-capsule',
   'derived-quantity',
   'lab3d',
+  'mission-lab',
 ];
 
 /**

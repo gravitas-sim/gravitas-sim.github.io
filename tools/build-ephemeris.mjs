@@ -10,6 +10,9 @@
 //   node tools/build-ephemeris.mjs --write      rebuild the pack from the cache:
 //                                               the module, the held-out check
 //                                               set and the manifest's measures
+//   node tools/build-ephemeris.mjs --sidecar    the Sky Lab's JSON copy of the
+//                                               committed module (no cache
+//                                               needed; --write makes it too)
 //   node tools/build-ephemeris.mjs --check      offline: the committed module
 //                                               against its manifest and the
 //                                               held-out check set
@@ -328,6 +331,20 @@ export function runtimeMeta(m) {
   };
 }
 
+/**
+ * The Sky Lab's sidecar: the module's runtime part and data as one JSON file
+ * (js/kernels/sky/packs.js reads it), so a route budget that counts
+ * JavaScript does not count a coefficient table. Compact, with a final newline.
+ */
+const sidecarText = (meta, data) => `${JSON.stringify({ pack: meta, data })}\n`;
+
+/** Record the sidecar in the manifest: where it is, its size and checksum. */
+function noteSidecar(m, text) {
+  m.output.sidecar = 'sky/ephemeris.json';
+  m.output.sidecarBytes = Buffer.byteLength(text);
+  m.output.sidecarSha256 = sha256(Buffer.from(text));
+}
+
 async function prettierFormat(source, file) {
   const prettier = await import('prettier');
   const options = (await prettier.resolveConfig(file)) || {};
@@ -419,7 +436,16 @@ async function build(m) {
   m.output.moduleSha256 = sha256(Buffer.from(source));
   m.output.moduleBytes = Buffer.byteLength(source);
   m.output.checkSha256 = sha256(Buffer.from(checkSource));
-  return { source, file, checkSource, checkFile };
+  const sidecar = sidecarText(meta, data);
+  noteSidecar(m, sidecar);
+  return {
+    source,
+    file,
+    checkSource,
+    checkFile,
+    sidecar,
+    sidecarFile: path.join(ROOT, m.output.sidecar),
+  };
 }
 
 async function check(m, requireSources) {
@@ -445,6 +471,13 @@ async function check(m, requireSources) {
   const checkBytes = readFileSync(path.join(ROOT, m.output.check));
   if (sha256(checkBytes) !== m.output.checkSha256)
     problems.push(`${m.output.check}: its SHA-256 is not the manifest's`);
+  if (m.output.sidecar) {
+    const text = readFileSync(path.join(ROOT, m.output.sidecar), 'utf8');
+    if (sha256(Buffer.from(text)) !== m.output.sidecarSha256)
+      problems.push(`${m.output.sidecar}: its SHA-256 is not the manifest's`);
+    if (text !== sidecarText(mod.PACK, mod.DATA))
+      problems.push(`${m.output.sidecar} is not the module's pack and data`);
+  } else problems.push('the manifest names no sidecar (--sidecar makes it)');
   const { CHECK } = await import(
     `${path.join(ROOT, m.output.check)}?t=${Date.now()}`
   );
@@ -473,6 +506,10 @@ async function check(m, requireSources) {
         );
       if (rebuilt.checkSource !== checkBytes.toString('utf8'))
         problems.push(`${m.output.check} is not what the cached sources build`);
+      if (rebuilt.sidecar !== readFileSync(rebuilt.sidecarFile, 'utf8'))
+        problems.push(
+          `${m.output.sidecar} is not what the cached sources build`
+        );
       if (JSON.stringify(copy) !== JSON.stringify(m))
         problems.push(
           `${path.relative(ROOT, MANIFEST)}: its measures are not what the cached sources give`
@@ -498,12 +535,23 @@ if (has('--write')) {
   mkdirSync(path.dirname(out.file), { recursive: true });
   writeFileSync(out.file, out.source);
   writeFileSync(out.checkFile, out.checkSource);
+  mkdirSync(path.dirname(out.sidecarFile), { recursive: true });
+  writeFileSync(out.sidecarFile, out.sidecar);
   writeFileSync(MANIFEST, `${JSON.stringify(m, null, 2)}\n`);
   for (const b of m.bodies)
     console.log(
       `${b.id.padEnd(8)} ${String(b.segments).padStart(4)} segments of ${String(b.segmentDays).padStart(3)} d, degree ${b.degree}: ${b.bytes} bytes, held out ${b.measured.heldOut.positionKm.toExponential(2)} km, ${b.measured.heldOut.velocityKmS.toExponential(2)} km/s`
     );
   console.log(`${m.output.module}: ${m.output.moduleBytes} bytes`);
+}
+if (has('--sidecar')) {
+  const mod = await import(path.join(ROOT, m.output.module));
+  const text = sidecarText(mod.PACK, mod.DATA);
+  noteSidecar(m, text);
+  mkdirSync(path.join(ROOT, 'sky'), { recursive: true });
+  writeFileSync(path.join(ROOT, m.output.sidecar), text);
+  writeFileSync(MANIFEST, `${JSON.stringify(m, null, 2)}\n`);
+  console.log(`${m.output.sidecar}: ${m.output.sidecarBytes} bytes`);
 }
 if (has('--check')) {
   const problems = await check(m, has('--require-sources'));

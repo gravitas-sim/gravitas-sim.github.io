@@ -117,4 +117,10 @@ export const SUMMARIES = {
     'Four integrators take the same ten thousand steps on Kepler-16, two stars and a circumbinary planet. You will run a reviewed Python notebook on the compute page, read each method’s energy drift, halve the step to see the order of each, and compare the notebook with Gravitas’s own engine, including why a symplectic method’s last number is not a property.',
   'extending-an-experiment':
     'Twenty planets, each run by the engine from a random starting distance, fix where the bound region ends. You will run a reviewed Python notebook on that experiment result, fit the chance of staying bound with a bootstrap, extend it to two hundred thousand synthetic planets, and see why the interval does not cover the definition of bound or the choice of curve.',
+  'refitting-a-transit':
+    'The Observatory’s fit panel fitted a transit to a TESS light curve. You will fit the same model to the same points by a different route, with SciPy, in a reviewed Python notebook on the compute page, and ask what the route changes: the minimum agrees to a few thousandths of an error bar, but a covariance’s sigma and a profile interval do not, and holding the limb darkening fixed narrows the answer without making it known.',
+  'two-periodograms':
+    'A Lomb-Scargle and a box least squares periodogram of the same light curve disagree by a factor of two. You will compute both with Astropy in a reviewed Python notebook, see why the sine-wave peak sits at a harmonic of the planet’s period, and learn why a period read off a periodogram has no error bar of its own.',
+  'sampling-a-posterior':
+    'A sampler draws from a posterior instead of fitting its peak. You will run an ensemble sampler written in NumPy on a transit’s planet size and impact parameter, check its convergence diagnostics, compare its interval with a profile interval, and watch it refuse a run that is too short.',
 };

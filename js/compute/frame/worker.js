@@ -169,7 +169,13 @@ self.onmessage = async ({ data: m }) => {
         ].join('\n')
       );
     } finally {
-      py.globals.delete('_gravitas_ns');
+      // Absent when a cell raised before the name was set: that error is the
+      // one to report, so a missing name must not replace it.
+      try {
+        py.globals.delete('_gravitas_ns');
+      } catch {
+        /* never set */
+      }
       ns.destroy();
     }
     if (output.length > 4_000_000)

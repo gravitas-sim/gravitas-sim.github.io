@@ -2,7 +2,7 @@
   "format": "gravitas.capability-package",
   "formatVersion": 1,
   "id": "gravitas.mission",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "built-in",
   "gravitas": "^1.0.0",
   "title": {
@@ -190,6 +190,36 @@
       "path": "js/data/ephemeris/solarSystem2025Check.js",
       "role": "data",
       "offline": "optional"
+    },
+    {
+      "path": "js/mission/evidence.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/link.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/lab/address.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/lab/evidencePanel.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.missionEvidence.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.missionEvidence.js",
+      "role": "code",
+      "offline": "optional"
     }
   ],
   "citations": [
@@ -229,6 +259,21 @@
     },
     {
       "check": "e2e:e2e/missionLab.spec.js"
+    },
+    {
+      "check": "jest:tests/missionEvidence.test.js"
+    },
+    {
+      "check": "jest:tests/courseMission.test.js"
+    },
+    {
+      "check": "jest:tests/skyEphemeris.test.js"
+    },
+    {
+      "check": "e2e:e2e/missionEvidence.spec.js"
+    },
+    {
+      "check": "e2e:e2e/missionEmbed.spec.js"
     }
   ]
 }

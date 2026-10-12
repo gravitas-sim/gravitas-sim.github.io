@@ -22,16 +22,29 @@ const CITATIONS = [
 ];
 const NONE = { kind: 'none' };
 
-/** The angular bound on a position, degrees, and where it comes from. */
-export function positionBoundDeg(type, altGeomDeg) {
+/**
+ * The angular bound on a position, degrees, and where it comes from.
+ * @param {string} type
+ * @param {number} altGeomDeg
+ * @param {'ephemeris'|'elements'} [via] - A planet's position source: a planet
+ *   from the ephemeris pack is held to the sky chain's 1 arcminute (the pack's
+ *   own few kilometers are under 0.0001 degree), one from the elements to the
+ *   0.2 degree the gate measured
+ */
+export function positionBoundDeg(type, altGeomDeg, via = 'elements') {
   if (altGeomDeg < 5)
     return {
       deg: 20 / 60,
       note: "below 5 degrees the refraction is the weather's: the kernel and ERFA differ by up to 20 arcminutes there",
     };
   const deg =
-    { star: 1 / 60, fixed: 1 / 60, sun: 0.01, moon: 0.02, planet: 0.2 }[type] ??
-    0.2;
+    {
+      star: 1 / 60,
+      fixed: 1 / 60,
+      sun: 0.01,
+      moon: 0.02,
+      planet: via === 'ephemeris' ? 1 / 60 : 0.2,
+    }[type] ?? 0.2;
   return { deg, note: null };
 }
 
@@ -44,7 +57,21 @@ const interval = (v, half, basis = 'model') => ({
 
 function build(id, instrument, ctx, quantities, warnings = []) {
   const env = artifact({
-    id: `sky-lab:${instrument}:${ctx.jdUt}:${ctx.site.latDeg}:${ctx.site.lonDeg}:${ctx.key ?? ''}`,
+    id: `sky-lab:${instrument}:${ctx.jdUt}:${ctx.site.latDeg}:${ctx.site.lonDeg}:${ctx.key ?? ''}${ctx.planets?.pack ? `:${planetVias(ctx)}` : ''}`,
+    // Where the planets' places came from is part of what made the result
+    // (SKY_LAB.md): the pack and version, and each planet's source.
+    ...(ctx.planets
+      ? {
+          made: {
+            sky: {
+              planets: Object.fromEntries(
+                Object.entries(ctx.planets.by).map(([k, v]) => [k, v.via])
+              ),
+              ...(ctx.planets.pack ? { pack: ctx.planets.pack } : {}),
+            },
+          },
+        }
+      : {}),
     source: { kind: 'analysis', id: `sky-lab/${instrument}`, version: '1' },
     provenance: { citations: CITATIONS },
     quantities: quantities.filter(q => Number.isFinite(q.value)),
@@ -55,6 +82,16 @@ function build(id, instrument, ctx, quantities, warnings = []) {
     throw new Error(`${id}: ${problems[0].path} ${problems[0].message}`);
   return env;
 }
+/** A short code of which planets came from the pack, for an id. */
+const planetVias = ctx =>
+  Object.values(ctx.planets.by)
+    .map(v => (v.via === 'ephemeris' ? 'e' : 'o'))
+    .join('');
+/** The planets whose places came from the ephemeris pack. */
+const viaList = ctx =>
+  Object.entries(ctx.planets?.by ?? {})
+    .filter(([, v]) => v.via === 'ephemeris')
+    .map(([k]) => k);
 const assumed = (id, value, unit) => ({
   id,
   value,
@@ -77,7 +114,11 @@ const siteQ = c => [
 
 /** Altitude-azimuth reader. @param {object} r - From altAzReading; ctx {site, jdUt, type, key} */
 export function altAzEnvelope(r, ctx) {
-  const b = positionBoundDeg(ctx.type, r.altGeomDeg);
+  const b = positionBoundDeg(
+    ctx.type,
+    r.altGeomDeg,
+    ctx.planet ? ctx.planets?.by[ctx.planet]?.via : undefined
+  );
   return build(
     'altaz',
     'altaz',
@@ -214,7 +255,9 @@ export function phaseEnvelope(p, ctx) {
       ]),
     ],
     [
-      'planet phase and elongation are geometric, from the same elements as the planet positions (0.2 degree)',
+      viaList(ctx).length
+        ? `planet phase and elongation are geometric, from the same places as the planet positions: the ephemeris pack for ${viaList(ctx).join(', ')}, the elements (0.2 degree) for the rest`
+        : 'planet phase and elongation are geometric, from the same elements as the planet positions (0.2 degree)',
     ]
   );
 }
