@@ -320,7 +320,7 @@ describe('the sidecar', () => {
     );
     expect(MANIFEST.output.sidecar).toBe('sky/ephemeris.json');
     expect(MANIFEST.output.sidecarBytes).toBe(
-      new TextEncoder().encode(SIDECAR_TEXT).length
+      globalThis.Buffer.byteLength(SIDECAR_TEXT)
     );
   });
   test('reads to the same states as the module', () => {
