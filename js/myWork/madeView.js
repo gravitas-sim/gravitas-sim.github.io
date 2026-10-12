@@ -74,6 +74,21 @@ function facts(r) {
       when,
     ];
   }
+  if (r.kind === 'system3d') {
+    const s = r.system3d;
+    return [
+      L('3-D system', 'Sistema 3-D'),
+      L(`${s.bodies} bodies`, `${s.bodies} cuerpos`),
+      s.from === 'now'
+        ? L(
+            'saved as it was at the time',
+            'guardado como estaba en ese momento'
+          )
+        : L('saved from its start', 'guardado desde su inicio'),
+      r.app ? L(`build ${r.app}`, `versión ${r.app}`) : '',
+      when,
+    ];
+  }
   const s = r.scenario;
   const from = {
     builder: L(
@@ -158,7 +173,9 @@ async function made(page) {
             open:
               r.kind === 'scenario'
                 ? L('Open in the Sandbox', 'Abrir en la simulación libre')
-                : L('Open the runner', 'Abrir el ejecutor'),
+                : r.kind === 'system3d'
+                  ? L('Open in the 3-D lab', 'Abrir en el laboratorio 3-D')
+                  : L('Open the runner', 'Abrir el ejecutor'),
             ids: [`${MADE_PREFIX}${r.id}`],
             extra: `<div class="mw-actions">${
               r.kind === 'scenario'
@@ -168,7 +185,7 @@ async function made(page) {
               fileOf(r)
                 ? `<button type="button" class="ui-button is-small" data-made="file" data-key="${esc(`${MADE_PREFIX}${r.id}`)}" aria-label="${esc(`${L('Download file', 'Descargar archivo')}: ${r.name}`)}">${esc(L('Download file', 'Descargar archivo'))}</button>`
                 : ''
-            }</div>${attachControl(r, entries)}`,
+            }</div>${r.kind === 'system3d' ? '' : attachControl(r, entries)}`,
           })
         )
         .join('')}</ul>`

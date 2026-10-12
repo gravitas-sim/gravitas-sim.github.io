@@ -254,6 +254,10 @@ pack cannot do any of them:
 - **The engine itself.** New forces, body classes, integrators or collision
   rules belong in `js/physics.js`.
 
+## A 3-D system in a scenario (Prompt 105)
+
+A scenario file may carry a `system3d` block: a `gravitas.system3d/1`, the 3-D lab's own file, beside whatever world the scenario makes in the Sandbox (which, for a scenario made from a 3-D file, is empty). The block is optional and `gravitas.scenario-pack/1` stays version 1; a build from before it reports the field as unknown. The Studio checks its shape as the file is edited and the SDK (`checkPack`) holds it to the lab's own `validateSystem`. Opening a `gravitas.system3d` file in the Studio makes a scenario of it, and a 2-D Orbital System Builder file migrates to the 3-D system its numbers give, in the plane z = 0. "Open in the 3-D lab" and the preview use the lab's link (`#sys1z...`), which names the scenario in the system's provenance so evidence made from it cites the scenario; a system too long for a link is saved and handed over as a file.
+
 ## Where it lives
 
 - `studio/index.html` is the page. It is a document page of its own with its

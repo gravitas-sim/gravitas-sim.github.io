@@ -15,6 +15,9 @@
 //     geometry?: { positionAngleDeg, inclinationDeg }     default edge-on
 //   }
 //
+// A planet may also carry `geometry` of its own, which then wins for that
+// planet (a system read from the 3-D lab, ./system3d.js).
+//
 // The orbit's semi-major axis comes from the period and the masses (Kepler's
 // third law with the constants of js/constants.js). Each planet is treated as
 // a two-body orbit with the star; several planets' reflex motions add, which is
@@ -37,12 +40,16 @@ import { geometryFor } from '../observerGeometry.js';
 
 const DEG = Math.PI / 180;
 
-/** The observer's geometry for a state; edge-on from the reference direction. */
-export const geometryOf = state =>
-  geometryFor(
-    state.geometry?.positionAngleDeg ?? 0,
-    state.geometry?.inclinationDeg ?? 90
-  );
+/**
+ * The observer's geometry for a state; edge-on from the reference direction.
+ * A planet may carry its own (`planet.geometry`, the same two angles): a
+ * system read from the 3-D lab has an orbit plane of its own for each planet
+ * (./system3d.js), and the observer stands at one place relative to each.
+ */
+export const geometryOf = (state, planet) => {
+  const g = planet?.geometry ?? state.geometry;
+  return geometryFor(g?.positionAngleDeg ?? 0, g?.inclinationDeg ?? 90);
+};
 
 /**
  * One planet's orbit about the star.

@@ -264,6 +264,32 @@ const every = () => [
       ],
     }),
   }),
+  // A 3-D lab reading (js/lab3d/evidence.js, Prompt 105): its envelopes are
+  // covered in tests/lab3dEvidence.test.js; here only that the ledger holds one.
+  artifactEntry({
+    source: SOURCE.LAB3D,
+    title: '3-D lab reading',
+    capturedAt: at,
+    context: { page: 'lab3d' },
+    envelope: artifact({
+      id: 'lab3d:elements:0a1b2c3d:1',
+      source: {
+        kind: 'simulation',
+        id: 'lab3d:system',
+        version: '1.1.0',
+        digest,
+      },
+      quantities: [
+        {
+          id: 'i',
+          value: 12.5,
+          unit: 'deg',
+          uncertainty: { kind: 'none' },
+          origin: 'derived',
+        },
+      ],
+    }),
+  }),
 ];
 
 describe('every producer writes an envelope with where it was kept', () => {

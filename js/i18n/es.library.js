@@ -59,6 +59,7 @@ export const ES_LIBRARY = {
   'lib.format.guided': 'Una actividad guiada',
   'lib.format.lab': 'Un laboratorio completo',
   'lib.format.sandbox': 'En la simulación libre',
+  'lib.format.system3d': 'En el laboratorio 3D',
   'lib.format.observation': 'Una observación',
   'lib.format.data-pack': 'Un paquete de datos para instalar',
   'lib.format.course': 'Un curso incluido',

@@ -36,6 +36,7 @@ export function licenseOf(item, facts) {
   switch (item.kind) {
     case 'lesson':
     case 'assignment':
+    case 'guide':
       return 'CC BY 4.0 (Gravitas teaching material)';
     case 'scenario':
       return 'MIT (Gravitas software)';
@@ -55,14 +56,16 @@ const refOf = item =>
     ? { lesson: item.lesson, ...(item.steps ? { steps: item.steps } : {}) }
     : item.kind === 'scenario'
       ? { scenario: item.scenario, seed: item.seed }
-      : item.kind === 'dataset'
-        ? { dataset: item.dataset }
-        : {
-            reading: {
-              ...item.cite,
-              ...(item.access ? { access: item.access } : {}),
-            },
-          };
+      : item.kind === 'guide'
+        ? { guide: item.guide, depth: item.depth ?? 'core' }
+        : item.kind === 'dataset'
+          ? { dataset: item.dataset }
+          : {
+              reading: {
+                ...item.cite,
+                ...(item.access ? { access: item.access } : {}),
+              },
+            };
 
 /**
  * @param {object} pack - A valid /2 pack

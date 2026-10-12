@@ -62,6 +62,7 @@ export const EN_LIBRARY = {
   'lib.format.guided': 'A guided activity',
   'lib.format.lab': 'A full lab',
   'lib.format.sandbox': 'In the sandbox',
+  'lib.format.system3d': 'In the 3-D lab',
   'lib.format.observation': 'An observation',
   'lib.format.data-pack': 'A dataset package to install',
   'lib.format.course': 'A built-in course',
