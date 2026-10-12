@@ -165,7 +165,7 @@ export const INSTRUCTOR_CONTENT = {
       'The fit is deterministic: every student should get the digits in the answer key, to the tolerances the steps allow.',
       'The notebook downloads about 23 MB because it brings SciPy. A run takes a few seconds once the runtime has loaded.',
       'Students who ask why the sigma is scaled by the reduced chi-square can be pointed to the last step: it is a repair for white noise only.',
-      'Capsule files open without the runtime.',
+      'Capsule files open again without the runtime.',
     ],
     discussion: [
       'What would you report as the uncertainty of Rp/R* if you had only the covariance sigma? Only the profile?',
@@ -196,7 +196,7 @@ export const INSTRUCTOR_CONTENT = {
     keyConcepts: [
       {
         heading: 'The tallest peak is not the period',
-        body: 'A repeating narrow dip is a sum of harmonics, so Lomb-Scargle can peak at P/2.',
+        body: 'A repeating narrow dip is a sum of harmonics, so Lomb-Scargle can peak at P/2, P/3 or P/4 and not at P itself.',
       },
       {
         heading: 'A period is a grid point',
@@ -234,6 +234,11 @@ export const INSTRUCTOR_CONTENT = {
           'The step is a property of the grid. The box period is 19 fit sigmas from the fitted period.',
       },
       {
+        claim: 'A tall peak, or a tiny false-alarm probability, means the period is right.',
+        response:
+          'A tall peak means a periodic signal, not which period: here the tallest is the second harmonic, and the false-alarm probability says nothing about which harmonic.',
+      },
+      {
         claim: 'Lomb-Scargle has a bug that halves periods.',
         response:
           'It fits sine waves; a dip is not one, so the peak sits where a sine matches best.',
@@ -243,7 +248,7 @@ export const INSTRUCTOR_CONTENT = {
       'The runs are deterministic: every student gets the digits in the answer key.',
       'A run takes a few seconds once the runtime has loaded.',
       "Students who check the box period against the panel will see 3.524 and 3.5245: they agree to a thousandth of a day and not to the fit's error bar, which is the point of the last question.",
-      'Capsule files open without the runtime.',
+      'Capsule files open again without the runtime.',
     ],
     discussion: [
       'Which would you use for a spotted star, and which for a transit? Why?',
@@ -325,7 +330,7 @@ export const INSTRUCTOR_CONTENT = {
       'The sampler is seeded, but the digits of a run differ a little between Python builds, so the steps accept a range.',
       'The 8,000-step run takes about a minute on the pinned runtime; a 1,000-step run takes about fifteen seconds.',
       'A student who sets steps to 1000 sees the notebook stop with an error that names the failed limit. That is the intended outcome.',
-      'Capsule files open without the runtime.',
+      'Capsule files open again without the runtime.',
     ],
     discussion: [
       'Which of the three diagnostics would you trust least on its own?',

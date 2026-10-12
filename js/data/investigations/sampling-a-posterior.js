@@ -29,13 +29,13 @@ const SAMPLING_A_POSTERIOR = {
   title: 'Sampling a Posterior',
   subtitle:
     'A transit’s planet size and impact parameter sampled in Python, checked for convergence, and compared with the profile interval of the same problem',
-  duration: '40-50 min',
+  duration: '20-30 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 21, section: null },
   courseLevel: 'upper',
   mathematics: 'logarithms',
-  prerequisites: ['transit-photometry'],
+  prerequisites: ['transit-photometry', 'refitting-a-transit'],
   tags: ['exoplanets'],
   lock: { placement: true, inspector: true },
   objectives: [

@@ -729,7 +729,7 @@ export const MANIFEST = [
     title: 'Reajustar un tránsito',
     subtitle:
       'El mismo modelo y la misma curva de luz que el panel de ajuste del Observatorio, ajustados otra vez por otro camino en Python, para ver qué cambia el camino',
-    duration: '35-45 min',
+    duration: '30-40 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/transit-lab.webp',
     stepCount: 8,
@@ -753,7 +753,7 @@ export const MANIFEST = [
     title: 'Muestrear una posterior',
     subtitle:
       'El tamaño del planeta y el parámetro de impacto de un tránsito muestreados en Python, con la convergencia comprobada, y comparados con el intervalo de perfil del mismo problema',
-    duration: '40-50 min',
+    duration: '20-30 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/transit-lab.webp',
     stepCount: 8,

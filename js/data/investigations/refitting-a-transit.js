@@ -27,7 +27,7 @@ const REFITTING_A_TRANSIT = {
   title: 'Refitting a Transit',
   subtitle:
     'The same model and the same light curve as the Observatory’s fit panel, fitted again by a different route in Python, to see what the route changes',
-  duration: '35-45 min',
+  duration: '30-40 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 21, section: null },

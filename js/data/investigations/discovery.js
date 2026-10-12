@@ -613,7 +613,7 @@ export const DISCOVERY = {
   'sampling-a-posterior': {
     audience: 'intro',
     mathematics: 'logarithms',
-    prerequisites: ['transit-photometry'],
+    prerequisites: ['transit-photometry', 'refitting-a-transit'],
     textbook: {
       chapter: 21,
       section: null,

@@ -720,7 +720,7 @@ export const MANIFEST = [
     title: 'Refitting a Transit',
     subtitle:
       'The same model and the same light curve as the Observatory’s fit panel, fitted again by a different route in Python, to see what the route changes',
-    duration: '35-45 min',
+    duration: '30-40 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/transit-lab.webp',
     stepCount: 8,
@@ -744,7 +744,7 @@ export const MANIFEST = [
     title: 'Sampling a Posterior',
     subtitle:
       'A transit’s planet size and impact parameter sampled in Python, checked for convergence, and compared with the profile interval of the same problem',
-    duration: '40-50 min',
+    duration: '20-30 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/transit-lab.webp',
     stepCount: 8,
