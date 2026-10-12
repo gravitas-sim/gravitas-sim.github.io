@@ -1783,99 +1783,6 @@ export const buildWorld = ctx => {
       neutron_stars[0].name = 'GW170817-A';
       neutron_stars[1].name = 'GW170817-B';
     }
-  } else if (starting_preset === 'earth-moon-system') {
-    // Clear any existing objects and create Earth-Moon system
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0; // Clear any black holes
-    neutron_stars.length = 0; // Clear any neutron stars
-    white_dwarfs.length = 0; // Clear any white dwarfs
-    debris.length = 0; // Clear any debris
-
-    // Create Earth at the center (we'll treat it as the primary body)
-    const earth = new Planet({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
-    earth.name = 'Earth';
-    earth.mass = 1.0 * EARTH_MASS_UNIT; // 1 Earth mass
-    earth.diameter = 12742; // km
-    earth.orbital_period = 365; // days (Earth's orbital period around Sun)
-    earth.baseColor = '#4B7BE5'; // More accurate Earth blue color
-    earth.radius = 12; // Make Earth larger for visibility
-    earth.density = 'rocky';
-    earth.isEarth = true; // Flag for custom Earth rendering
-    // Accurate Earth properties
-    earth.temperature = 288; // Kelvin (average surface temperature)
-    earth.gravity = 9.81; // m/s²
-    earth.rotation_period = 1.0; // days
-    earth.atmosphere = 'N2/O2';
-    earth.density_kg_m3 = 5514; // kg/m³
-    earth.escape_velocity = 11.19; // km/s
-    earth.surface_pressure = 101325; // Pa (1 bar)
-    earth.magnetic_field = 25; // μT (microtesla)
-    earth.albedo = 0.306; // Bond albedo
-    planets.push(earth);
-
-    // Create Moon orbiting Earth
-    const moonDistance = 35; // Distance from Earth (scaled for better visibility)
-    const moonMass = 0.0123 * EARTH_MASS_UNIT;
-    // The relative circular speed uses both masses. Using the Earth's alone
-    // understates it by the Moon's 1.2% share, which starts the orbit at an
-    // eccentricity of 0.012 rather than zero.
-    const relativeSpeed = Math.sqrt(
-      (SETTINGS.gravitational_constant * (earth.mass + moonMass)) / moonDistance
-    );
-    const moonTheta = Math.random() * 2 * Math.PI;
-    const totalMass = earth.mass + moonMass;
-    // Barycentric, and this matters more here than anywhere else in the app:
-    // the Earth-Moon barycenter is the standard example of a barycenter inside
-    // the larger body, and the reference-frame panel exists to show it. Given
-    // the Moon all of the momentum, the pair would circle its barycenter and
-    // drift off the screen at the same time. Split between them, the barycenter
-    // stays put and the Earth visibly wobbles about it.
-    const moonPos = {
-      x: ((moonDistance * earth.mass) / totalMass) * Math.cos(moonTheta),
-      y: ((moonDistance * earth.mass) / totalMass) * Math.sin(moonTheta),
-    };
-    const moonSpeed = (relativeSpeed * earth.mass) / totalMass;
-    const moonVel = {
-      x: -moonSpeed * Math.sin(moonTheta),
-      y: moonSpeed * Math.cos(moonTheta),
-    };
-    // Earth takes the balancing share, so the total momentum is zero.
-    earth.pos.x =
-      ((-moonDistance * moonMass) / totalMass) * Math.cos(moonTheta);
-    earth.pos.y =
-      ((-moonDistance * moonMass) / totalMass) * Math.sin(moonTheta);
-    const earthSpeed = (relativeSpeed * moonMass) / totalMass;
-    earth.vel.x = earthSpeed * Math.sin(moonTheta);
-    earth.vel.y = -earthSpeed * Math.cos(moonTheta);
-
-    const moon = new Planet(moonPos, moonVel, 0.0123); // Moon is 0.0123 Earth masses
-    moon.name = 'Luna';
-    moon.mass = 0.0123 * EARTH_MASS_UNIT; // Moon mass
-    moon.diameter = 3474; // km
-    moon.orbital_period = 27.3; // days (Moon's orbital period around Earth)
-    moon.baseColor = '#8B8B8B'; // More accurate Moon gray color
-    moon.radius = 3; // Moon is smaller than Earth but visible
-    moon.density = 'rocky';
-    moon.isMoon = true; // Flag for custom Moon rendering
-    // Accurate Moon properties
-    moon.temperature = 250; // Kelvin (average surface temperature)
-    moon.gravity = 1.62; // m/s²
-    moon.rotation_period = 27.3; // days (tidally locked)
-    moon.atmosphere = 'none';
-    moon.density_kg_m3 = 3344; // kg/m³
-    moon.escape_velocity = 2.38; // km/s
-    moon.surface_pressure = 0; // Pa (no atmosphere)
-    moon.magnetic_field = 0; // μT (no significant magnetic field)
-    moon.albedo = 0.136; // Bond albedo
-    planets.push(moon);
-
-    // Set up zoom and pan to focus on the Earth-Moon system
-    // This will be handled by the camera system to show both objects clearly
-    SETTINGS.sim_size = 'Small'; // Use small simulation size for better zoom
   }
   // --- Fix for Binary BH scenario: two black holes in mutual orbit, planets orbiting center of mass ---
   else if (starting_preset === 'binary-bh') {
@@ -1935,284 +1842,6 @@ export const buildWorld = ctx => {
         }
       }
     }
-  } else if (starting_preset === 'trappist-1-system') {
-    // Clear planets array
-    planets.length = 0;
-    // Every number here comes from js/data/trappist1.js, which the habitable
-    // zone instruments read too, so the scenario and the lesson cannot end up
-    // describing two different systems.
-    if (stars.length > 0) {
-      const star = stars[0];
-      star.name = TRAPPIST1_STAR.name;
-      star.mass = TRAPPIST1_STAR.massInSuns * SOLAR_MASS_UNIT;
-      star.baseColor = TRAPPIST1_STAR.baseColor;
-      // TRAPPIST-1 is barely larger than Jupiter. At 100 units per AU its true
-      // radius is 0.054 units; 0.4 keeps it comfortably inside the innermost
-      // orbit at 1.15 units, where the old value of 7 swallowed three planets.
-      star.radius = 0.4;
-      // The true radius and luminosity, so the light curve reports the real
-      // transit depths even though the star is drawn seven times oversized to
-      // keep the planets clickable.
-      star.radiusInSuns = TRAPPIST1_STAR.radiusInSuns;
-      star.luminosityInSuns = TRAPPIST1_STAR.luminosityInSuns;
-      star.massInSuns = TRAPPIST1_STAR.massInSuns;
-      star.temperature = TRAPPIST1_STAR.temperatureK;
-      star.spectralType = TRAPPIST1_STAR.spectralType;
-      // The one scenario in the app where the habitable zone lands in the
-      // middle of the planets rather than off past the edge of the view, so
-      // the ring is on by default here.
-      star.showHabitableZone = true;
-    }
-
-    // 100 units per AU, the scale units.js fixes and every other scenario now
-    // uses. The old 400 put the displayed semi-major axes at four times the
-    // real values, so the periods came out eight times too long.
-    const AU = SIM_UNITS_PER_AU;
-    const starMass = TRAPPIST1_STAR.massInSuns * SOLAR_MASS_UNIT;
-    if (stars.length > 0) stars[0].mass = starMass;
-
-    // Adjacent orbits here are as little as 0.0043 AU apart, which is 0.43
-    // units. Bodies have to be small enough that neighbors cannot touch: the
-    // largest sum of radii below is 0.26, leaving a clear margin on the
-    // tightest pair. The screen-space draw floor keeps them visible anyway.
-    const RADIUS_UNITS_PER_EARTH = 0.115;
-
-    for (let i = 0; i < TRAPPIST1_PLANETS.length; i++) {
-      const p = TRAPPIST1_PLANETS[i];
-      const r = p.a * AU;
-      // Evenly spaced in phase so no two start near each other.
-      const theta = (i / TRAPPIST1_PLANETS.length) * 2 * Math.PI;
-      const v = Math.sqrt((SETTINGS.gravitational_constant * starMass) / r);
-      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-      const planet = new Planet(pos, vel, p.mass);
-      planet.name = `TRAPPIST-1${p.name}`;
-      // Gravitationally negligible against an 0.0898 solar-mass star, so the
-      // two-body period of each planet is set by the star alone and every
-      // planet returns the same a^3/P^2.
-      planet.mass = Math.max(p.mass * EARTH_MASS_UNIT, 1e-7);
-      planet.massInEarths = p.mass;
-      planet.baseColor = '#6ec6ff';
-      planet.radius = p.radius * RADIUS_UNITS_PER_EARTH;
-      // Drawn oversized, measured true: the transit depth comes from this.
-      planet.radiusInEarths = p.radius;
-      planet.isTrappist = true;
-      planets.push(planet);
-    }
-  }
-
-  // --- Binary Pair: two equal stars round their common center ---
-  if (starting_preset === 'binary-pair') {
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const AU = 100;
-    const SEP = 4 * AU;
-    const M = 2 * SOLAR_MASS_UNIT;
-    const total = 2 * M;
-    // Barycentric, so the pair genuinely circles a fixed point rather than
-    // drifting across the view: the fixed point is the thing being taught.
-    const vRel = Math.sqrt((G * total) / SEP);
-    const v1 = vRel * (M / total);
-
-    for (const [i, star] of [stars[0], stars[1]].entries()) {
-      if (!star) continue;
-      const side = i === 0 ? -1 : 1;
-      star.name = i === 0 ? 'Star A' : 'Star B';
-      star.pos = { x: (side * SEP) / 2, y: 0 };
-      star.vel = { x: 0, y: side * v1 };
-      star.mass = M;
-      star.massInSuns = 2;
-      star.radiusInSuns = 1.6;
-      star.luminosityInSuns = 10;
-      star.radius = 9;
-      star.temperature = 8000;
-      star.spectralType = 'A5V';
-      star.baseColor = i === 0 ? '#ffd97d' : '#8fd4ff';
-      star.persistent = true;
-    }
-  }
-
-  // --- Black Hole Lab: one hole, four things happily orbiting it ---
-  if (starting_preset === 'black-hole-lab') {
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    stars.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const bh = bh_list[0];
-    if (bh) {
-      bh.pos = { x: 0, y: 0 };
-      bh.vel = { x: 0, y: 0 };
-      bh.name = 'Black Hole';
-      bh.persistent = true;
-      // Radii are set from the hole's own drawn size, so the four orbits stay
-      // outside it and stay on screen whatever mass a lesson step asks for.
-      const spacing = [4.2, 6.4, 9.2, 12.6];
-      const orbiters = [
-        { name: 'Inner Orbiter', earths: 1 },
-        { name: 'Second Orbiter', earths: 3 },
-        { name: 'Third Orbiter', earths: 0.5 },
-        { name: 'Outer Orbiter', earths: 8 },
-      ];
-      for (const [i, planet] of planets.entries()) {
-        if (i >= spacing.length) {
-          planet.alive = false;
-          continue;
-        }
-        const r = bh.radius * spacing[i];
-        const theta = (i * Math.PI) / 2 + 0.3;
-        const v = Math.sqrt((G * bh.mass) / r);
-        planet.name = orbiters[i].name;
-        // Explicit planet-sized masses. The default generator makes these a
-        // sizeable fraction of a solar mass, and a label reading "0.3 M☉"
-        // beside a planet is a distraction in a lesson about what masses mean.
-        planet.mass = orbiters[i].earths * EARTH_MASS_UNIT;
-        planet.massInEarths = orbiters[i].earths;
-        planet.pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        planet.vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-        planet.persistent = true;
-      }
-      planets.length = Math.min(planets.length, spacing.length);
-    }
-  }
-
-  // --- Habitable Zone Lab: the inner Solar System, with the zone drawn ---
-  if (starting_preset === 'habitable-zone-lab') {
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    bh_list.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const AU = SIM_UNITS_PER_AU;
-    const sun = stars[0];
-    if (sun) {
-      sun.name = 'Sun';
-      sun.pos = { x: 0, y: 0 };
-      sun.vel = { x: 0, y: 0 };
-      sun.mass = SOLAR_MASS_UNIT;
-      sun.massInSuns = 1;
-      sun.luminosityInSuns = 1;
-      sun.radiusInSuns = 1;
-      sun.temperature = 5772;
-      sun.spectralType = 'G2V';
-      sun.radius = 6;
-      sun.baseColor = '#ffd27f';
-      // On by default: the ring is the instrument this scenario exists for.
-      sun.showHabitableZone = true;
-      sun.persistent = true;
-    }
-
-    // Real semi-major axes. Mercury is left out: it is so far inside the zone
-    // that including it compresses everything else against the star.
-    const worlds = [
-      { name: 'Venus', a: 0.723, color: '#e8c39e', radius: 4.6 },
-      { name: 'Earth', a: 1.0, color: '#6ec6ff', radius: 4.8 },
-      { name: 'Mars', a: 1.524, color: '#d9744a', radius: 3.6 },
-      { name: 'Ceres', a: 2.77, color: '#9aa3b5', radius: 2.4 },
-    ];
-    for (const [i, planet] of planets.entries()) {
-      if (i >= worlds.length) {
-        planet.alive = false;
-        continue;
-      }
-      const w = worlds[i];
-      const r = w.a * AU;
-      // Spread in phase so no two start on top of each other.
-      const theta = (i / worlds.length) * 2 * Math.PI + 0.4;
-      const v = Math.sqrt((G * SOLAR_MASS_UNIT) / r);
-      planet.name = w.name;
-      planet.pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      planet.vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-      // Small enough not to perturb anything, drawn large enough to click.
-      planet.mass = EARTH_MASS_UNIT;
-      planet.massInEarths = 1;
-      planet.radius = w.radius;
-      planet.baseColor = w.color;
-      planet.persistent = true;
-    }
-    planets.length = Math.min(planets.length, worlds.length);
-  }
-
-  // --- Interstellar Visitor: 1I/'Oumuamua on its measured hyperbolic orbit ---
-  if (starting_preset === 'interstellar-visitor') {
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const AU = 100;
-    const sun = stars[0] || new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1);
-    if (!stars.length) stars.push(sun);
-    stars.length = 1;
-    sun.name = 'Sun';
-    sun.pos = { x: 0, y: 0 };
-    sun.vel = { x: 0, y: 0 };
-    sun.mass = SOLAR_MASS_UNIT;
-    sun.massInSuns = 1;
-    sun.radiusInSuns = 1;
-    sun.luminosityInSuns = 1;
-    // Drawn far larger than life: at this zoom the true radius is a third of a
-    // pixel, and the scenario is about the shape of a path, not about the Sun.
-    sun.radius = 9;
-    sun.temperature = 5772;
-    sun.spectralType = 'G2V';
-    sun.baseColor = '#ffd34d';
-    sun.persistent = true;
-
-    // Earth, for scale: one AU, one year.
-    const earth = new Planet(
-      { x: 0, y: AU },
-      { x: -Math.sqrt((G * sun.mass) / AU), y: 0 },
-      1.0
-    );
-    earth.name = 'Earth';
-    earth.mass = EARTH_MASS_UNIT;
-    earth.massInEarths = 1;
-    earth.radiusInEarths = 1;
-    earth.radius = 3;
-    earth.baseColor = '#4b90e2';
-    earth.persistent = true;
-    planets.push(earth);
-
-    // 1I/'Oumuamua. Perihelion 0.2559 AU, eccentricity 1.2011: the first
-    // object ever seen on an orbit that is not merely eccentric but open. The
-    // state below is that orbit evaluated at four AU on the way in, so the
-    // simulation reproduces the real 87.7 km/s perihelion speed.
-    const visitor = new Planet(
-      { x: -286.14, y: -279.48 },
-      { x: 2.9436, y: 2.0454 },
-      1.0
-    );
-    visitor.name = "1I/'Oumuamua";
-    // Small enough to leave the Sun and Earth entirely undisturbed, which is
-    // true of the real thing as well.
-    visitor.mass = 1e-9;
-    visitor.massInEarths = visitor.mass / EARTH_MASS_UNIT;
-    visitor.radius = 2.2;
-    visitor.baseColor = '#d96a4a';
-    visitor.persistent = true;
-    planets.push(visitor);
   }
 
   // --- Exoplanet Characterization Lab: the same star, now allowed to move ---
@@ -3018,18 +2647,29 @@ export const buildWorld = ctx => {
   // --- Scenarios whose bodies are declared as data ------------------------------
   // SCENARIO_GEOMETRY (js/scenarios.js) says what they are and expandGeometry
   // builds them through what only this module can supply: a live engine object
-  // and the one named rule. The generated population has already been drawn (the
+  // and the named rules. The generated population has already been drawn (the
   // seeded generator keeps its sequence); a geometry replaces it, emptying every
   // list but the galaxies as the hand-built blocks did. Bodies are made in the
-  // declaration's order because each constructor draws from the generator.
+  // declaration's order because each constructor draws from the generator, and
+  // a body the declaration takes from the generated population (`from`) keeps
+  // its id and everything else the generator gave it.
   const declared = SCENARIO_GEOMETRY[starting_preset];
   if (declared) {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
+    const generated = {
+      Star: [...stars],
+      Planet: [...planets],
+      GasGiant: [...gas_giants],
+      BlackHole: [...bh_list],
+    };
+    // The generated bodies of a type the declaration keeps stay where they
+    // are; the rest are emptied, as the hand-built blocks emptied them.
+    const keep = new Set(declared.keep);
+    if (!keep.has('Star')) stars.length = 0;
+    if (!keep.has('Planet')) planets.length = 0;
+    if (!keep.has('GasGiant')) gas_giants.length = 0;
+    if (!keep.has('BlackHole')) bh_list.length = 0;
     asteroids.length = 0;
     comets.length = 0;
-    bh_list.length = 0;
     neutron_stars.length = 0;
     white_dwarfs.length = 0;
     debris.length = 0;
@@ -3064,6 +2704,7 @@ export const buildWorld = ctx => {
       'published-system': ({ system, detuned }, env) => {
         const G = env.G;
         let spec;
+        if (system === 'trappist-1') return trappist(G);
         if (system === 'galilean') {
           spec = galileanBodies(G, detuned ? { detune: GALILEAN.detune } : {});
         } else if (system === 'pluto-neptune') spec = plutoBodies(G);
@@ -3073,23 +2714,113 @@ export const buildWorld = ctx => {
         return [spec.primary, ...spec.bodies].map(published);
       },
     };
+    // TRAPPIST-1: the star the generator drew (kept, with its id, and skipped if
+    // there is none) and seven planets, every number from js/data/trappist1.js,
+    // which the habitable zone instruments read too.
+    const trappist = G => {
+      const starMass = TRAPPIST1_STAR.massInSuns * SOLAR_MASS_UNIT;
+      const records = [
+        {
+          type: 'Star',
+          from: { generated: 0 },
+          assign: {
+            name: TRAPPIST1_STAR.name,
+            mass: starMass,
+            baseColor: TRAPPIST1_STAR.baseColor,
+            // TRAPPIST-1 is barely larger than Jupiter. At 100 units per AU its
+            // true radius is 0.054 units; 0.4 keeps it comfortably inside the
+            // innermost orbit at 1.15 units, where the old value of 7 swallowed
+            // three planets.
+            radius: 0.4,
+            // The true radius and luminosity, so the light curve reports the
+            // real transit depths even though the star is drawn oversized to
+            // keep the planets clickable.
+            radiusInSuns: TRAPPIST1_STAR.radiusInSuns,
+            luminosityInSuns: TRAPPIST1_STAR.luminosityInSuns,
+            massInSuns: TRAPPIST1_STAR.massInSuns,
+            temperature: TRAPPIST1_STAR.temperatureK,
+            spectralType: TRAPPIST1_STAR.spectralType,
+            // The one scenario where the habitable zone lands in the middle of
+            // the planets, so the ring is on by default here.
+            showHabitableZone: true,
+          },
+        },
+      ];
+      // Adjacent orbits are as little as 0.43 units apart, so the bodies have
+      // to be small enough that neighbors cannot touch; the screen-space draw
+      // floor keeps them visible anyway.
+      const RADIUS_UNITS_PER_EARTH = 0.115;
+      TRAPPIST1_PLANETS.forEach((p, i) => {
+        const r = p.a * SIM_UNITS_PER_AU;
+        // Evenly spaced in phase so no two start near each other.
+        const theta = (i / TRAPPIST1_PLANETS.length) * 2 * Math.PI;
+        const v = Math.sqrt((G * starMass) / r);
+        records.push({
+          type: 'Planet',
+          ctor: p.mass,
+          pos: { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+          vel: { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
+          assign: {
+            name: `TRAPPIST-1${p.name}`,
+            // Gravitationally negligible against a 0.0898 solar-mass star, so
+            // each planet's two-body period is the star's alone.
+            mass: Math.max(p.mass * EARTH_MASS_UNIT, 1e-7),
+            massInEarths: p.mass,
+            baseColor: '#6ec6ff',
+            radius: p.radius * RADIUS_UNITS_PER_EARTH,
+            // Drawn oversized, measured true: the transit depth comes from this.
+            radiusInEarths: p.radius,
+            isTrappist: true,
+          },
+        });
+      });
+      return records;
+    };
     expandGeometry(declared, {
       G: SETTINGS.gravitational_constant,
       units: { AU: SIM_UNITS_PER_AU },
       rules: geometryRules,
-      create: ({ type, ctor, pos, vel, assign }) => {
+      simMass: (type, ctor) =>
+        ctor *
+        (type === 'Star'
+          ? SOLAR_MASS_UNIT
+          : type === 'GasGiant'
+            ? JUPITER_MASS_UNIT
+            : EARTH_MASS_UNIT),
+      create: ({ type, ctor, pos, vel, assign, from }) => {
         const [Body, list] =
           type === 'Star'
             ? [StarObject, stars]
             : type === 'GasGiant'
               ? [GasGiant, gas_giants]
-              : [Planet, planets];
-        const body = new Body({ ...pos }, { ...vel }, ctor);
+              : type === 'BlackHole'
+                ? [null, bh_list]
+                : [Planet, planets];
+        let body = from ? generated[type][from.generated] : undefined;
+        if (body) {
+          // Placed only if the step places it; everything else is the
+          // generator's, as the hand-built blocks left it. A kept type's body
+          // is still in its list.
+          if (pos) body.pos = { ...pos };
+          if (vel) body.vel = { ...vel };
+          Object.assign(body, assign);
+          if (!keep.has(type)) list.push(body);
+          return body;
+        }
+        if (from && from.ifMissing !== 'make') return null;
+        body = new Body({ ...pos }, { ...vel }, ctor);
         Object.assign(body, assign);
         list.push(body);
         return body;
       },
     });
+  }
+
+  // Earth and the Moon are declared; the size of the simulated space is a
+  // setting the scenario sets once the world exists, not geometry, and stays
+  // here.
+  if (starting_preset === 'earth-moon-system') {
+    SETTINGS.sim_size = 'Small';
   }
 
   // Kepler's 2nd Law: the bodies are declared; the overlay is behavior, not

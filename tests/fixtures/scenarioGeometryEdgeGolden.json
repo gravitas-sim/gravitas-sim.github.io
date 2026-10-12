@@ -1,0 +1,273 @@
+{
+ "binary-pair@{\"num_stars\":1}": {
+  "rows": [
+   "5cbd0a0e"
+  ],
+  "settings": "3c152699",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5274470399599522
+ },
+ "binary-pair@{\"num_stars\":3}": {
+  "rows": [
+   "5cbd0a0e",
+   "41ce6027",
+   "6a145c1e"
+  ],
+  "settings": "dfdaee43",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6128388606011868
+ },
+ "binary-pair@{\"num_stars\":0}": {
+  "rows": [],
+  "settings": "58774bf0",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6270739405881613
+ },
+ "black-hole-lab@{\"num_black_holes\":2}": {
+  "rows": [
+   "ce3b235e",
+   "6f6257c7",
+   "319492ee",
+   "abe0c054",
+   "f8df5890",
+   "817bf035"
+  ],
+  "settings": "31c6085d",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.45527112716808915
+ },
+ "black-hole-lab@{\"num_planets\":6}": {
+  "rows": [
+   "ce3b235e",
+   "5d4dda54",
+   "5269679a",
+   "3eb381d4",
+   "2a5a899b"
+  ],
+  "settings": "478ff8b2",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.40374476509168744
+ },
+ "black-hole-lab@{\"num_planets\":2}": {
+  "rows": [
+   "ce3b235e",
+   "5d4dda54",
+   "5269679a"
+  ],
+  "settings": "f2a5b236",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.281103502959013
+ },
+ "habitable-zone-lab@{\"num_stars\":3}": {
+  "rows": [
+   "8f7c5212",
+   "e66e88c9",
+   "6a145c1e",
+   "19958ba7",
+   "b30e49ac",
+   "7ed6a848",
+   "d94ce650"
+  ],
+  "settings": "05303aca",
+  "zoom": 1.9,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.24752389639616013
+ },
+ "habitable-zone-lab@{\"num_planets\":2}": {
+  "rows": [
+   "8f7c5212",
+   "4c99361d",
+   "44f84ce2"
+  ],
+  "settings": "45cfd73a",
+  "zoom": 1.9,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6128388606011868
+ },
+ "habitable-zone-lab@{\"num_planets\":6}": {
+  "rows": [
+   "8f7c5212",
+   "4c99361d",
+   "44f84ce2",
+   "4dbf44e6",
+   "a614bc62"
+  ],
+  "settings": "f7db5f66",
+  "zoom": 1.9,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.24752389639616013
+ },
+ "interstellar-visitor@{\"num_stars\":0}": {
+  "rows": [
+   "5d6b86ff",
+   "0133f546",
+   "d80fd67a"
+  ],
+  "settings": "28fc9e66",
+  "zoom": 1.1,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7207431411370635
+ },
+ "interstellar-visitor@{\"num_stars\":2}": {
+  "rows": [
+   "887c4134",
+   "b8291855",
+   "b089e67f"
+  ],
+  "settings": "a28f1944",
+  "zoom": 1.1,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.45527112716808915
+ },
+ "trappist-1-system@{\"num_stars\":0}": {
+  "rows": [
+   "a4c83181",
+   "11708e28",
+   "5da03218",
+   "ca9d6dc7",
+   "288f2815",
+   "52dcaa57",
+   "6e8e3b06"
+  ],
+  "settings": "ec050c28",
+  "zoom": 55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.19087357842363417
+ },
+ "trappist-1-system@{\"num_stars\":2}": {
+  "rows": [
+   "0f9c86c6",
+   "e66e88c9",
+   "9030c44b",
+   "16d55013",
+   "05049735",
+   "d10b0fe9",
+   "8d6c88c3",
+   "5d21ec1d",
+   "7cc33650"
+  ],
+  "settings": "0bf2e7b2",
+  "zoom": 55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7986842156387866
+ },
+ "trappist-1-system@{\"num_planets\":3}": {
+  "rows": [
+   "0f9c86c6",
+   "59a5c926",
+   "076636ef",
+   "4a121341",
+   "7f3656d9",
+   "68d11ec3",
+   "08d480c9",
+   "7433bcf5"
+  ],
+  "settings": "7fc901e9",
+  "zoom": 55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.15449313493445516
+ },
+ "earth-moon-system@{\"num_stars\":2}": {
+  "rows": [
+   "4d0f01ed",
+   "9beae969"
+  ],
+  "settings": "0de2b68f",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.9948229456786066
+ },
+ "earth-moon-system@{\"num_planets\":3}": {
+  "rows": [
+   "4d0f01ed",
+   "9beae969"
+  ],
+  "settings": "0bb01273",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.9948229456786066
+ },
+ "black-hole-lab@{\"num_stars\":1}": {
+  "rows": [
+   "e03c0abf",
+   "4aa11f2f",
+   "83361aea",
+   "3b92be9f",
+   "1a4c228f"
+  ],
+  "settings": "d1ef549b",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.48878831742331386
+ },
+ "binary-pair@{\"num_planets\":3,\"num_black_holes\":1}": {
+  "rows": [
+   "5cbd0a0e",
+   "41ce6027"
+  ],
+  "settings": "0ad2d79c",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.48878831742331386
+ }
+}

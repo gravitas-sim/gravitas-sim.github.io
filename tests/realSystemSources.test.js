@@ -42,14 +42,14 @@ describe('the real systems', () => {
       'js/world/build.js realAsteroids',
       'js/world/build.js famousComets',
       'js/world/build.js kuiperBeltObjects',
-      'js/world/build.js worlds',
       'js/scenarios.js SCENARIO_GEOMETRY',
     ]) {
       expect(where).toContain(w);
     }
     // Eight planets, sixteen asteroids, twelve comets, eight Kuiper belt
-    // objects, four in the `worlds` table, two real worlds in a scenario's
-    // declared geometry, and ten compiled objects.
+    // objects, six real worlds in scenarios' declared geometry (two in
+    // Retrograde Mars, four in the Habitable Zone Lab), and ten compiled
+    // objects.
     expect(systems).toHaveLength(60);
   });
 
@@ -147,7 +147,7 @@ describe('the provenance line and the model page print them', () => {
         /^js\/world\/build\.js (solarSystemData|realAsteroids|famousComets) /,
       'kuiper-belt': /^js\/world\/build\.js kuiperBeltObjects /,
       'habitable-zone-lab':
-        /^js\/world\/build\.js worlds \(Habitable Zone Lab\) /,
+        /^js\/scenarios\.js SCENARIO_GEOMETRY \(Habitable Zone Lab\) /,
       'retrograde-mars':
         /^js\/scenarios\.js SCENARIO_GEOMETRY \(Retrograde Mars\) /,
       'trappist-1-system': /^js\/data\/trappist1\.js /,

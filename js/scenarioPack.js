@@ -64,7 +64,11 @@ const UNSAFE_KEY = new Set(['__proto__', 'constructor', 'prototype']);
 // --- Declarative geometry (SCENARIO_GEOMETRY.md) ------------------------------
 // {steps: [...]}, one construct a step: `body` (a type, a name, a mass in the
 // type's own unit, a place or an `orbit` round an earlier body) or `rule` (a
-// named rule with parameters; engine code, so a pack may not use one).
+// named rule with parameters). A pack carries only the plain `body`; the rest
+// (a rule, a body reused from the generator, a distance in drawn radii, a
+// barycentric or random-phase orbit, the engine's own body properties) is
+// engine code or reads engine state, so `validateGeometry(g, {rules: false})`
+// refuses it and a pack that wants one names the built-in in `scenario`.
 // The arithmetic is js/scenarios.js expandGeometry().
 
 /** The most steps a geometry may hold. */
@@ -84,13 +88,54 @@ export const GEOMETRY_SET = Object.freeze({
   persistent: 'bool',
 });
 
+/**
+ * What a built-in may also set: the properties the engine's bodies carry and
+ * the readouts, labels and renderers read (a star's true radius and
+ * luminosity, a world's gravity and atmosphere). A kind is `positive` (a
+ * number above 0), `nonneg` (0 or more), `text` or `bool`.
+ */
+export const GEOMETRY_ENGINE_SET = Object.freeze({
+  radiusInSuns: 'positive',
+  radiusInEarths: 'positive',
+  luminosityInSuns: 'positive',
+  temperature: 'positive',
+  spectralType: 'text',
+  showHabitableZone: 'bool',
+  isEarth: 'bool',
+  isMoon: 'bool',
+  diameter: 'positive',
+  orbital_period: 'positive',
+  rotation_period: 'positive',
+  density: 'text',
+  density_kg_m3: 'positive',
+  gravity: 'positive',
+  escape_velocity: 'positive',
+  atmosphere: 'text',
+  surface_pressure: 'nonneg',
+  magnetic_field: 'nonneg',
+  albedo: 'nonneg',
+});
+
 /** The named rules, and what each takes. */
 export const GEOMETRY_RULES = Object.freeze({
   'published-system': Object.freeze({
-    system: Object.freeze(['galilean', 'pluto-neptune', 'jupiter-trojans']),
+    system: Object.freeze([
+      'galilean',
+      'pluto-neptune',
+      'jupiter-trojans',
+      'trappist-1',
+    ]),
     detuned: 'bool',
   }),
 });
+
+/** The types a body can be reused as (`from`): the generator's own lists. */
+export const GEOMETRY_REUSE_TYPES = Object.freeze([
+  'Star',
+  'Planet',
+  'GasGiant',
+  'BlackHole',
+]);
 
 const GEOMETRY_LIMIT = 1e6;
 const GEOMETRY_COLOR = /^#[0-9a-fA-F]{6}$/;
@@ -108,7 +153,19 @@ export function validateGeometry(g, { rules = true } = {}) {
   const bad = (path, why) => out.push({ path, why });
   if (!isObject(g)) return [{ path: '', why: 'a geometry is {steps: [...]}' }];
   for (const k of Object.keys(g))
-    if (k !== 'steps') bad(k, `"${k}" is not a geometry field`);
+    if (k !== 'steps' && k !== 'keep') bad(k, `"${k}" is not a geometry field`);
+  // `keep`: generated bodies of these types that no step reuses stay in the
+  // world as the generator drew them, instead of being dropped.
+  if (g.keep !== undefined && rules) {
+    if (
+      !Array.isArray(g.keep) ||
+      new Set(g.keep).size !== g.keep.length ||
+      g.keep.some(k => !GEOMETRY_REUSE_TYPES.includes(k))
+    )
+      bad('keep', `a list, once each, of ${GEOMETRY_REUSE_TYPES.join(', ')}`);
+  } else if (g.keep !== undefined) {
+    bad('keep', 'a scenario pack may not use generated bodies left in place');
+  }
   if (!Array.isArray(g.steps) || g.steps.length === 0) {
     bad('steps', 'a list of at least one step');
     return out;
@@ -143,24 +200,68 @@ export function validateGeometry(g, { rules = true } = {}) {
     num(v.x, `${path}.x`, -GEOMETRY_LIMIT, GEOMETRY_LIMIT);
     num(v.y, `${path}.y`, -GEOMETRY_LIMIT, GEOMETRY_LIMIT);
   };
+  // What only a built-in may use: engine code or engine state.
+  const engine = (path, what) => {
+    if (!rules) bad(path, `a scenario pack may not use ${what}`);
+    return rules;
+  };
   const body = (b, p) => {
     if (!isObject(b)) return bad(p, 'a body: {type, name, mass, ...}');
-    only(b, p, ['type', 'name', 'mass', 'at', 'velocity', 'orbit', 'set']);
+    only(b, p, [
+      'type',
+      'name',
+      'mass',
+      'from',
+      'at',
+      'velocity',
+      'orbit',
+      'set',
+    ]);
+    // `from` reuses a body the generator drew; a black hole can only be reused.
+    let reuse = false;
+    if (b.from !== undefined) {
+      const f = b.from;
+      reuse = engine(`${p}.from`, 'a body reused from the generator');
+      if (!isObject(f)) bad(`${p}.from`, 'an object: {generated: index}');
+      else if (reuse) {
+        only(f, `${p}.from`, ['generated', 'ifMissing']);
+        if (!Number.isInteger(f.generated) || f.generated < 0)
+          bad(`${p}.from.generated`, 'the index of a generated body, from 0');
+        if (
+          f.ifMissing !== undefined &&
+          !['make', 'skip'].includes(f.ifMissing)
+        )
+          bad(`${p}.from.ifMissing`, 'make or skip');
+        if (f.ifMissing === 'make' && b.mass === undefined)
+          bad(`${p}.from.ifMissing`, 'make needs a mass to make the body with');
+      }
+    }
     const unitName = GEOMETRY_TYPES[b.type];
-    if (!unitName)
-      bad(`${p}.type`, `one of ${Object.keys(GEOMETRY_TYPES).join(', ')}`);
+    if (!unitName && !(reuse && GEOMETRY_REUSE_TYPES.includes(b.type)))
+      bad(
+        `${p}.type`,
+        `one of ${(reuse ? GEOMETRY_REUSE_TYPES : Object.keys(GEOMETRY_TYPES)).join(', ')}`
+      );
     if (typeof b.name !== 'string' || !GEOMETRY_NAME.test(b.name))
       bad(`${p}.name`, 'a plain name of 1 to 40 characters');
     else if (names.has(b.name))
       bad(`${p}.name`, `"${b.name}" names two bodies`);
-    unit(
-      b.mass,
-      `${p}.mass`,
-      unitName ? [unitName] : Object.values(GEOMETRY_TYPES),
-      0,
-      1e9,
-      true
-    );
+    if (b.type === 'BlackHole') {
+      if (b.mass !== undefined)
+        bad(
+          `${p}.mass`,
+          'a reused black hole keeps the mass it was drawn with'
+        );
+    } else if (b.mass !== undefined || !reuse) {
+      unit(
+        b.mass,
+        `${p}.mass`,
+        unitName ? [unitName] : Object.values(GEOMETRY_TYPES),
+        0,
+        1e9,
+        true
+      );
+    }
     if (b.orbit !== undefined) {
       if (b.at !== undefined || b.velocity !== undefined)
         bad(p, 'an orbit gives the place and velocity: no `at` or `velocity`');
@@ -168,17 +269,37 @@ export function validateGeometry(g, { rules = true } = {}) {
       const op = `${p}.orbit`;
       if (!isObject(o)) bad(op, 'an orbit: {around, distance, ...}');
       else {
-        only(o, op, ['around', 'distance', 'eccentricity', 'angle']);
+        only(o, op, [
+          'around',
+          'distance',
+          'eccentricity',
+          'angle',
+          'barycentric',
+        ]);
         if (typeof o.around !== 'string' || !names.has(o.around))
           bad(`${op}.around`, 'the name of a body made earlier');
-        unit(
-          o.distance,
-          `${op}.distance`,
-          ['au', 'units'],
-          0,
-          GEOMETRY_LIMIT,
-          true
-        );
+        const radii = isObject(o.distance) && 'radii' in o.distance;
+        if (radii && engine(`${op}.distance`, 'a distance in drawn radii'))
+          unit(o.distance, `${op}.distance`, ['radii'], 0, 1e4, true);
+        else if (!radii)
+          unit(
+            o.distance,
+            `${op}.distance`,
+            ['au', 'units'],
+            0,
+            GEOMETRY_LIMIT,
+            true
+          );
+        if (o.barycentric !== undefined) {
+          if (typeof o.barycentric !== 'boolean')
+            bad(`${op}.barycentric`, 'true or false');
+          else if (
+            o.barycentric &&
+            engine(`${op}.barycentric`, 'a barycentric orbit') &&
+            o.eccentricity
+          )
+            bad(`${op}.eccentricity`, 'a barycentric orbit is circular');
+        }
         if (
           o.eccentricity !== undefined &&
           !(
@@ -188,7 +309,13 @@ export function validateGeometry(g, { rules = true } = {}) {
           )
         )
           bad(`${op}.eccentricity`, 'from 0 up to, not including, 1');
-        if (o.angle !== undefined)
+        if (isObject(o.angle) && 'random' in o.angle) {
+          if (
+            engine(`${op}.angle`, 'a random angle') &&
+            !(Object.keys(o.angle).length === 1 && o.angle.random === true)
+          )
+            bad(`${op}.angle`, 'exactly {random: true}');
+        } else if (o.angle !== undefined)
           unit(o.angle, `${op}.angle`, ['deg', 'rad', 'pi'], -1e4, 1e4);
       }
     } else {
@@ -198,13 +325,31 @@ export function validateGeometry(g, { rules = true } = {}) {
     if (b.set !== undefined) {
       if (!isObject(b.set)) bad(`${p}.set`, 'an object');
       else {
-        only(b.set, `${p}.set`, Object.keys(GEOMETRY_SET));
-        for (const [k, v] of Object.entries(b.set)) {
-          const kind = GEOMETRY_SET[k];
+        // An engine property is refused for a pack by name; any other key is
+        // refused as not allowed here.
+        for (const k of Object.keys(b.set)) {
           const at = `${p}.set.${k}`;
+          if (UNSAFE_KEY.has(k)) bad(at, `"${k}" is not allowed here`);
+          else if (Object.hasOwn(GEOMETRY_ENGINE_SET, k))
+            engine(at, `an engine property (${k})`);
+          else if (!Object.hasOwn(GEOMETRY_SET, k))
+            bad(at, `"${k}" is not allowed here`);
+        }
+        for (const [k, v] of Object.entries(b.set)) {
+          const engineKind = Object.hasOwn(GEOMETRY_ENGINE_SET, k);
+          const kind = engineKind ? GEOMETRY_ENGINE_SET[k] : GEOMETRY_SET[k];
+          const at = `${p}.set.${k}`;
+          if (!kind || (engineKind && !rules)) continue;
           if (kind === 'bool' && typeof v !== 'boolean')
             bad(at, 'true or false');
-          else if (kind === 'positive') num(v, at, 0, 1e4, true);
+          else if (kind === 'positive')
+            num(v, at, 0, engineKind ? 1e9 : 1e4, true);
+          else if (kind === 'nonneg') num(v, at, 0, 1e9);
+          else if (
+            kind === 'text' &&
+            !(typeof v === 'string' && GEOMETRY_NAME.test(v))
+          )
+            bad(at, 'a short plain text');
           else if (
             kind === 'color' &&
             !(typeof v === 'string' && GEOMETRY_COLOR.test(v))
@@ -650,14 +795,15 @@ export function settingsFromScenario(name) {
 
 /**
  * A built-in's declared geometry as a pack carries it, or null: generated,
- * still coded, or declared with a named rule (a pack names that one in
- * `scenario`).
+ * still coded, or declared with a construct only a built-in may use (a named
+ * rule, a body reused from the generator, an engine property; a pack names
+ * that built-in in `scenario`).
  * @param {string} name - A key of SCENARIO_INFO
  * @returns {?{steps: object[]}} A copy
  */
 export function geometryFromScenario(name) {
   const g = SCENARIO_GEOMETRY[name];
-  if (!g || g.steps.some(step => step.rule)) return null;
+  if (!g || validateGeometry(g, { rules: false }).length) return null;
   return JSON.parse(JSON.stringify(g));
 }
 

@@ -1860,19 +1860,120 @@ export const SCENARIO_GEOMETRY = /* @__PURE__ */ Object.freeze({
   'pluto-and-neptune': { steps: [{ rule: { name: 'published-system', params: { system: 'pluto-neptune' } } }] },
   // prettier-ignore
   'jupiter-trojans': { steps: [{ rule: { name: 'published-system', params: { system: 'jupiter-trojans' } } }] },
+  // The bodies the seeded generator drew for the scenario's own counts are
+  // reused (`from`), so every id, every generated field and the generator's
+  // place in its sequence are what the hand-built blocks left; a type in
+  // `keep` leaves any further generated bodies of it in the world, as the
+  // blocks did when a pack asked for more stars than the scenario places.
+  // Nothing below is a pack's to carry: SCENARIO_GEOMETRY.md says why.
+  //
+  // Earth and the Moon, about their barycenter, at a phase the seeded
+  // generator draws when the Moon is placed. G here carries the schematic's
+  // exaggerated distance (js/scenarios.js, the scenario's settings).
+  // prettier-ignore
+  'earth-moon-system': { steps: [
+    { body: { type: 'Planet', name: 'Earth', mass: { earths: 1 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { diameter: 12742, orbital_period: 365, baseColor: '#4B7BE5', radius: 12, density: 'rocky', isEarth: true, temperature: 288, gravity: 9.81, rotation_period: 1, atmosphere: 'N2/O2', density_kg_m3: 5514, escape_velocity: 11.19, surface_pressure: 101325, magnetic_field: 25, albedo: 0.306 } } },
+    { body: { type: 'Planet', name: 'Luna', mass: { earths: 0.0123 }, orbit: { around: 'Earth', distance: { units: 35 }, barycentric: true, angle: { random: true } }, set: { diameter: 3474, orbital_period: 27.3, baseColor: '#8B8B8B', radius: 3, density: 'rocky', isMoon: true, temperature: 250, gravity: 1.62, rotation_period: 27.3, atmosphere: 'none', density_kg_m3: 3344, escape_velocity: 2.38, surface_pressure: 0, magnetic_field: 0, albedo: 0.136 } } },
+  ] },
+  // 1I/'Oumuamua on its measured hyperbolic orbit, with Earth for scale. The
+  // visitor's state is that orbit evaluated at four AU on the way in; its mass
+  // is a billionth of a simulation unit, 3.329460487e-7 Earth masses.
+  // prettier-ignore
+  'interstellar-visitor': { steps: [
+    { body: { type: 'Star', name: 'Sun', mass: { suns: 1 }, from: { generated: 0, ifMissing: 'make' }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { radiusInSuns: 1, luminosityInSuns: 1, radius: 9, temperature: 5772, spectralType: 'G2V', baseColor: '#ffd34d', persistent: true } } },
+    { body: { type: 'Planet', name: 'Earth', mass: { earths: 1 }, orbit: { around: 'Sun', distance: { au: 1 }, angle: { pi: 0.5 } }, set: { radiusInEarths: 1, radius: 3, baseColor: '#4b90e2', persistent: true } } },
+    { body: { type: 'Planet', name: "1I/'Oumuamua", mass: { earths: 3.329460487e-7 }, at: { x: -286.14, y: -279.48 }, velocity: { x: 2.9436, y: 2.0454 }, set: { radius: 2.2, baseColor: '#d96a4a', persistent: true } } },
+  ] },
+  // Two equal A stars about their common center, barycentric so the pair
+  // circles a fixed point.
+  // prettier-ignore
+  'binary-pair': { keep: ['Star'], steps: [
+    { body: { type: 'Star', name: 'Star A', mass: { suns: 2 }, from: { generated: 0 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { radiusInSuns: 1.6, luminosityInSuns: 10, radius: 9, temperature: 8000, spectralType: 'A5V', baseColor: '#ffd97d', persistent: true } } },
+    { body: { type: 'Star', name: 'Star B', mass: { suns: 2 }, from: { generated: 1 }, orbit: { around: 'Star A', distance: { au: 4 }, barycentric: true }, set: { radiusInSuns: 1.6, luminosityInSuns: 10, radius: 9, temperature: 8000, spectralType: 'A5V', baseColor: '#8fd4ff', persistent: true } } },
+  ] },
+  // One black hole and four planets on circular orbits at multiples of its
+  // drawn radius, so the orbits stay outside it at any mass a step asks for.
+  // Phases are i*pi/2 + 0.3 radians. Planet masses are explicit: the generator
+  // makes them a sizeable fraction of a solar mass.
+  // prettier-ignore
+  'black-hole-lab': { keep: ['BlackHole'], steps: [
+    { body: { type: 'BlackHole', name: 'Black Hole', from: { generated: 0 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Inner Orbiter', mass: { earths: 1 }, from: { generated: 0 }, orbit: { around: 'Black Hole', distance: { radii: 4.2 }, angle: { rad: 0.3 } }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Second Orbiter', mass: { earths: 3 }, from: { generated: 1 }, orbit: { around: 'Black Hole', distance: { radii: 6.4 }, angle: { rad: 1.8707963267948966 } }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Third Orbiter', mass: { earths: 0.5 }, from: { generated: 2 }, orbit: { around: 'Black Hole', distance: { radii: 9.2 }, angle: { rad: 3.441592653589793 } }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Outer Orbiter', mass: { earths: 8 }, from: { generated: 3 }, orbit: { around: 'Black Hole', distance: { radii: 12.6 }, angle: { rad: 5.0123889803846895 } }, set: { persistent: true } } },
+  ] },
+  // The inner Solar System with the habitable zone drawn: real semi-major
+  // axes (Mercury left out), phases i/4 * 2 pi + 0.4 radians, each world one
+  // Earth mass (too small to perturb anything) and drawn large enough to click.
+  // prettier-ignore
+  'habitable-zone-lab': { keep: ['Star'], steps: [
+    { body: { type: 'Star', name: 'Sun', mass: { suns: 1 }, from: { generated: 0 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { luminosityInSuns: 1, radiusInSuns: 1, temperature: 5772, spectralType: 'G2V', radius: 6, baseColor: '#ffd27f', showHabitableZone: true, persistent: true } } },
+    { body: { type: 'Planet', name: 'Venus', mass: { earths: 1 }, from: { generated: 0 }, orbit: { around: 'Sun', distance: { au: 0.723 }, angle: { rad: 0.4 } }, set: { radius: 4.6, baseColor: '#e8c39e', persistent: true } } },
+    { body: { type: 'Planet', name: 'Earth', mass: { earths: 1 }, from: { generated: 1 }, orbit: { around: 'Sun', distance: { au: 1 }, angle: { rad: 1.9707963267948965 } }, set: { radius: 4.8, baseColor: '#6ec6ff', persistent: true } } },
+    { body: { type: 'Planet', name: 'Mars', mass: { earths: 1 }, from: { generated: 2 }, orbit: { around: 'Sun', distance: { au: 1.524 }, angle: { rad: 3.541592653589793 } }, set: { radius: 3.6, baseColor: '#d9744a', persistent: true } } },
+    { body: { type: 'Planet', name: 'Ceres', mass: { earths: 1 }, from: { generated: 3 }, orbit: { around: 'Sun', distance: { au: 2.77 }, angle: { rad: 5.11238898038469 } }, set: { radius: 2.4, baseColor: '#9aa3b5', persistent: true } } },
+  ] },
+  // TRAPPIST-1 from js/data/trappist1.js, which the habitable zone
+  // instruments read too, so the scenario and the investigation cannot
+  // describe two different systems.
+  // prettier-ignore
+  'trappist-1-system': { keep: ['Star'], steps: [{ rule: { name: 'published-system', params: { system: 'trappist-1' } } }] },
+});
+
+/** Where each type's mass is also kept, in the unit it reports. */
+const DISPLAY_MASS = Object.freeze({
+  Star: 'massInSuns',
+  Planet: 'massInEarths',
+  GasGiant: 'massInJupiters',
 });
 
 /**
+ * The cosine and sine of a declared angle: exact (0 or 1, not 6e-17) at a
+ * quarter turn, as a place written by hand ({x: 0, y: 100}) is.
+ * @param {{deg?: number, rad?: number, pi?: number, random?: boolean}} an
+ * @returns {[number, number]} [cos, sin]
+ */
+function angleTrig(an) {
+  const quarters =
+    an.deg !== undefined ? an.deg / 90 : an.pi !== undefined ? an.pi * 2 : null;
+  if (quarters !== null && Number.isInteger(quarters)) {
+    return [
+      [1, 0, -1, 0][((quarters % 4) + 4) % 4],
+      [0, 1, 0, -1][((quarters % 4) + 4) % 4],
+    ];
+  }
+  const t =
+    an.random !== undefined
+      ? Math.random() * 2 * Math.PI
+      : an.deg !== undefined
+        ? (an.deg * Math.PI) / 180
+        : an.pi !== undefined
+          ? Math.PI * an.pi
+          : an.rad;
+  return [Math.cos(t), Math.sin(t)];
+}
+
+/**
  * Make the bodies of a valid geometry, in order, through `env.create`
- * ({type, ctor, pos, vel, assign}) => body; `ctor` is the mass in the type's
- * own unit. One at a time, because a constructor draws from the seeded
- * generator and a world is the same only if the draws keep their order. The
+ * ({type, ctor, pos, vel, assign, from}) => body; `ctor` is the mass in the
+ * type's own unit. One at a time, because a constructor draws from the seeded
+ * generator and a world is the same only if the draws keep their order (a
+ * `random` angle is drawn at its step, before the body it places). The
  * arithmetic is the hand-built blocks' own, written the same way; the tests
  * pin the result at 12 significant figures (the world golden's precision).
  *
+ * A step with `from` reuses a body the generator already drew: `env.create`
+ * is handed `from` and `pos`/`vel` only when the step places the body, and
+ * returns the body (or null when the generator drew too few, so the step
+ * makes nothing, and an orbit round a body that is not there makes nothing
+ * either). Its `assign` then carries the mass in simulation units and in the
+ * type's own reported unit, as the hand-built blocks assigned both.
+ *
  * @param {{steps: object[]}} g - A valid geometry
- * @param {{G: number, units: {AU: number}, create: Function, rules?: object}} env
- *   `rules[name](params, env)` gives a named rule's records
+ * @param {{G: number, units: {AU: number}, create: Function, simMass?: Function, rules?: object}} env
+ *   `rules[name](params, env)` gives a named rule's records; `simMass(type,
+ *   ctor)` is a mass in simulation units
  * @returns {object[]} The bodies
  */
 export function expandGeometry(g, env) {
@@ -1880,6 +1981,7 @@ export function expandGeometry(g, env) {
   const byName = new Map();
   const add = record => {
     const body = env.create(record);
+    if (!body) return;
     made.push(body);
     byName.set(record.assign.name, body);
   };
@@ -1888,37 +1990,70 @@ export function expandGeometry(g, env) {
       for (const r of env.rules[rule.name](rule.params ?? {}, env)) add(r);
       continue;
     }
-    let pos = b.at ? { x: b.at.x, y: b.at.y } : { x: 0, y: 0 };
-    let vel = b.velocity
-      ? { x: b.velocity.x, y: b.velocity.y }
-      : { x: 0, y: 0 };
+    const ctor = b.mass ? Object.values(b.mass)[0] : undefined;
+    let pos = b.at ? { x: b.at.x, y: b.at.y } : undefined;
+    let vel = b.velocity ? { x: b.velocity.x, y: b.velocity.y } : undefined;
+    if (!b.from) {
+      pos ??= { x: 0, y: 0 };
+      vel ??= { x: 0, y: 0 };
+    }
     const o = b.orbit;
     if (o) {
       const c = byName.get(o.around);
+      if (!c) continue;
       const r =
         o.distance.au !== undefined
           ? o.distance.au * env.units.AU
-          : o.distance.units;
+          : o.distance.radii !== undefined
+            ? o.distance.radii * c.radius
+            : o.distance.units;
       const e = o.eccentricity ?? 0;
-      const a = r / (1 - e);
-      const an = o.angle ?? { rad: 0 };
-      const t =
-        an.deg !== undefined
-          ? (an.deg * Math.PI) / 180
-          : an.pi !== undefined
-            ? Math.PI * an.pi
-            : an.rad;
-      // Periapsis speed on the ellipse of semi-major axis a: circular at e = 0.
-      const v = Math.sqrt((((env.G * c.mass) / a) * (1 + e)) / (1 - e));
-      pos = { x: c.pos.x + r * Math.cos(t), y: c.pos.y + r * Math.sin(t) };
-      vel = { x: c.vel.x + -v * Math.sin(t), y: c.vel.y + v * Math.cos(t) };
+      const [cos, sin] = angleTrig(o.angle ?? { rad: 0 });
+      if (o.barycentric) {
+        // Both bodies about their common center, which is the central body's
+        // own place and velocity: the pair, not one of them, carries the
+        // motion, so it circles a fixed point and does not drift.
+        const m2 = env.simMass(b.type, ctor);
+        const total = c.mass + m2;
+        const rel = Math.sqrt((env.G * total) / r);
+        const speed = (rel * c.mass) / total;
+        const cSpeed = (rel * m2) / total;
+        pos = {
+          x: c.pos.x + ((r * c.mass) / total) * cos,
+          y: c.pos.y + ((r * c.mass) / total) * sin,
+        };
+        vel = {
+          x: c.vel.x + -speed * sin,
+          y: c.vel.y + speed * cos,
+        };
+        c.pos = {
+          x: c.pos.x + ((-r * m2) / total) * cos,
+          y: c.pos.y + ((-r * m2) / total) * sin,
+        };
+        c.vel = {
+          x: c.vel.x + cSpeed * sin,
+          y: c.vel.y + -cSpeed * cos,
+        };
+      } else {
+        const a = r / (1 - e);
+        // Periapsis speed on the ellipse of semi-major axis a: circular at e = 0.
+        const v = Math.sqrt((((env.G * c.mass) / a) * (1 + e)) / (1 - e));
+        pos = { x: c.pos.x + r * cos, y: c.pos.y + r * sin };
+        vel = { x: c.vel.x + -v * sin, y: c.vel.y + v * cos };
+      }
+    }
+    const assign = { name: b.name };
+    if (b.from && ctor !== undefined) {
+      assign.mass = env.simMass(b.type, ctor);
+      assign[DISPLAY_MASS[b.type]] = ctor;
     }
     add({
       type: b.type,
-      ctor: Object.values(b.mass)[0],
+      ctor,
       pos,
       vel,
-      assign: { name: b.name, ...(b.set || {}) },
+      assign: { ...assign, ...(b.set || {}) },
+      ...(b.from ? { from: b.from } : {}),
     });
   }
   return made;

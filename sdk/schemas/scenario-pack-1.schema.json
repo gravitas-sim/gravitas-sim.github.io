@@ -642,7 +642,7 @@
     },
     "geometry": {
       "type": "object",
-      "description": "Declarative geometry (Roadmap II Prompt 108): the pack's bodies as steps, each a body made from a mass and a place or an orbit round an earlier body, in order. It replaces the generated population, so the pack's population counts are 0 and it has no system, no bodies and no built-in to start from. A built-in scenario's declaration may also use a named rule; a pack may not. js/scenarioPack.js validateGeometry() is the authority; SCENARIO_GEOMETRY.md says what each construct means.",
+      "description": "Declarative geometry (Roadmap II Prompt 108): the pack's bodies as steps, each a body made from a mass and a place or an orbit round an earlier body, in order. It replaces the generated population, so the pack's population counts are 0 and it has no system, no bodies and no built-in to start from. A built-in scenario's declaration may also use constructs a pack may not (a named rule, a body reused from the generator, an engine property); js/scenarioPack.js validateGeometry() refuses each for a pack. js/scenarioPack.js validateGeometry() is the authority; SCENARIO_GEOMETRY.md says what each construct means.",
       "additionalProperties": false,
       "required": [
         "steps"
