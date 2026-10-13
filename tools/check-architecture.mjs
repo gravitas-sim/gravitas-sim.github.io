@@ -40,6 +40,12 @@
  * Raising a ceiling is a hand edit of that file with a DECISION_REGISTER row;
  * --record-sizes only ever lowers them.
  *
+ * A fourth is about listeners (Prompt 107, step 3): a module that exports a
+ * mount function and registers listeners must do it through the helper in
+ * js/listeners.js, which removes them when the module unmounts. The modules that
+ * do not yet are in tools/listener-helper-allowlist.json; the list may only
+ * shrink (a module that adopts the helper, or stops mounting, must leave it).
+ *
  * The first two rules are enforced against a recorded baseline rather than against zero,
  * because the graph did not start clean and a check that fails on day one is a
  * check that gets commented out. The baseline may only shrink: ARCHITECTURE
@@ -564,6 +570,51 @@ export function findSizeProblems(sizes, ceilings) {
   return problems;
 }
 
+export const LISTENER_ALLOWLIST_FILE = 'tools/listener-helper-allowlist.json';
+
+const MOUNTS = /^export\s+(?:async\s+)?function\s+mount[A-Z]/m;
+const REGISTERS = /\.addEventListener\(/;
+const USES_HELPER = /from\s+['"](?:\.{1,2}\/)+listeners\.js['"]/;
+
+/**
+ * Listener problems: a module that exports a mount function and registers
+ * listeners directly, without the helper and without being recorded.
+ * @param {Map<string, string>} sources - file -> source text
+ * @param {string[]} allowlist - modules recorded as not adopting it yet
+ * @returns {string[]} Problems, empty when all is well
+ */
+export function findListenerProblems(sources, allowlist) {
+  const problems = [];
+  const recorded = new Set(allowlist);
+  const bare = new Set();
+  for (const [file, src] of sources) {
+    if (!MOUNTS.test(src) || !REGISTERS.test(src) || USES_HELPER.test(src))
+      continue;
+    bare.add(file);
+    if (!recorded.has(file)) {
+      problems.push(
+        `Mounting module without the listener helper: ${file} exports a ` +
+          `mount function and calls addEventListener. Register through ` +
+          `listeners() from js/listeners.js and call off() on unmount, or ` +
+          `(if it cannot yet) record it in ${LISTENER_ALLOWLIST_FILE}.`
+      );
+    }
+  }
+  for (const file of recorded) {
+    if (!bare.has(file)) {
+      problems.push(
+        `Stale listener exemption: ${file} is in ${LISTENER_ALLOWLIST_FILE} ` +
+          `but it uses the helper, no longer mounts, or is gone. Delete the entry.`
+      );
+    }
+  }
+  return problems;
+}
+
+async function readListenerAllowlist() {
+  return JSON.parse(await readFile(LISTENER_ALLOWLIST_FILE, 'utf8')).modules;
+}
+
 export async function readCeilings() {
   return JSON.parse(await readFile(SIZE_CEILINGS_FILE, 'utf8')).ceilings;
 }
@@ -702,6 +753,14 @@ async function main() {
     ...findSizeProblems(await moduleSizes(graph), await readCeilings())
   );
 
+  // Listeners: mounting modules go through js/listeners.js, or are recorded.
+  const sources = new Map();
+  for (const file of graph.keys())
+    sources.set(file, await readFile(file, 'utf8'));
+  problems.push(
+    ...findListenerProblems(sources, await readListenerAllowlist())
+  );
+
   if (problems.length) {
     console.error(
       `Architecture check failed with ${problems.length} problem(s):\n`
@@ -714,7 +773,8 @@ async function main() {
   console.log(
     `Architecture OK: ${graph.size} modules, no cycles, ` +
       `${ALLOWED_UPWARD.size} recorded upward imports and no new ones, ` +
-      `every module within its size ceiling.`
+      `every module within its size ceiling, ` +
+      `every mounting module on the listener helper or recorded.`
   );
 }
 
