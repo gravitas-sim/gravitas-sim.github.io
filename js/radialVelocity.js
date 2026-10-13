@@ -1300,14 +1300,14 @@ function maybeCompare() {
   const armB = compareSurvey;
 
   loadCompareLib()
-    .then(lib => {
+    .then(async lib => {
       if (generation !== surveyGeneration || survey !== armA) return;
       const bounds = controlsLib.comparisonBounds([
         armA.measurements(),
         armB.measurements(),
       ]);
       compareBounds = bounds;
-      const report = controlsLib.buildComparison({
+      const report = await controlsLib.buildComparison({
         lib,
         armA,
         armB,

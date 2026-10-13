@@ -278,7 +278,10 @@ whether it happened are both part of the record._
 - ~~**Extract the object inspector from `ui.js`**, once the energy-chart and drag
   couplings are understood.~~ **Done.** It is `js/inspectorPanel.js`; see
   [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md).
-- **Measure the compositor**, not just the main thread. Still open. Nothing here
-  can distinguish a saving in rasterisation from one in JavaScript, which is why
-  the page-filter removal is reported as dead-code removal rather than a
-  speed-up.
+- ~~**Measure the compositor**, not just the main thread.~~ **Done** (Prompt 112).
+  `npm run perf -- --trace` separates script, layout, paint and commit from the
+  compositor, raster and GPU-process time and reports how busy each thread was;
+  what it can and cannot show is in
+  [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md). It could not tell the
+  page-filter removal above from a saving in script then, and the removal is
+  still reported as dead-code removal, since the measurement was made after it.
