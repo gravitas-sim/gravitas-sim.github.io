@@ -1,5 +1,5 @@
 {
-  "_note": "Prompt 112. Advisory frame-time and heap thresholds per profile, recorded so a change can be compared with them by hand. NOT enforced by CI or by any test: a shared runner measures its own load (the documented rule). frameMs is the mean time between animation frames with the frame-rate cap lifted, so it is a throughput figure for light scenes (compositor and GPU bound, see OFFLINE_AND_LOW_END.md) and a script figure for heavy ones. A threshold is the measured value times 1.5, rounded up to 0.5 ms. Real-device profiles are empty until someone fills them from real hardware.",
+  "_note": "Prompt 112. Advisory frame-time and heap thresholds per profile, recorded so a change can be compared with them by hand. NOT enforced by CI or by any test: a shared runner measures its own load (the documented rule). frameMs is the mean time between animation frames with the frame-rate cap lifted, so it is a throughput figure for light scenes (compositor and GPU bound, see OFFLINE_AND_LOW_END.md) and a script figure for heavy ones. A frame threshold is the measured value times 1.5, rounded up to 0.5 ms; a heap threshold is the measured used heap after a forced collection times 1.5, rounded up to 1 MB (a scenario's first visit loads its code, so compare the used heap, not the growth). Real-device profiles are empty until someone fills them from real hardware.",
   "measured": {
     "date": "2026-10-13",
     "machine": "Intel Core i5-10500 (UHD 630), 24 GB, macOS, headless Chromium (Playwright 1.62) with GPU rasterisation through ANGLE, one other heavy job running",
@@ -15,37 +15,37 @@
           "measuredFrameMs": 2.09,
           "frameMsThreshold": 3.5,
           "measuredHeapAfterMB": 5.0,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 8
         },
         "solar-system": {
           "measuredFrameMs": 1.58,
           "frameMsThreshold": 2.5,
           "measuredHeapAfterMB": 9.3,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 14
         },
         "trappist-1-system": {
           "measuredFrameMs": 1.76,
           "frameMsThreshold": 3.0,
           "measuredHeapAfterMB": 6.0,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 9
         },
         "star-cluster": {
           "measuredFrameMs": 19.55,
           "frameMsThreshold": 29.5,
           "measuredHeapAfterMB": 6.3,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 10
         },
         "gw150914": {
           "measuredFrameMs": 0.64,
           "frameMsThreshold": 1.0,
           "measuredHeapAfterMB": 5.8,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 9
         },
         "tidal-disruption-event": {
           "measuredFrameMs": 2.67,
           "frameMsThreshold": 4.5,
           "measuredHeapAfterMB": 5.7,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 9
         }
       }
     },
@@ -58,37 +58,37 @@
           "measuredFrameMs": 5.01,
           "frameMsThreshold": 8.0,
           "measuredHeapAfterMB": 4.4,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 7
         },
         "solar-system": {
           "measuredFrameMs": 7.56,
           "frameMsThreshold": 11.5,
           "measuredHeapAfterMB": 4.7,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 8
         },
         "trappist-1-system": {
           "measuredFrameMs": 8.43,
           "frameMsThreshold": 13.0,
           "measuredHeapAfterMB": 4.5,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 7
         },
         "star-cluster": {
           "measuredFrameMs": 15.25,
           "frameMsThreshold": 23.0,
           "measuredHeapAfterMB": 4.8,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 8
         },
         "gw150914": {
           "measuredFrameMs": 4.68,
           "frameMsThreshold": 7.5,
           "measuredHeapAfterMB": 4.7,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 8
         },
         "tidal-disruption-event": {
           "measuredFrameMs": 5.57,
           "frameMsThreshold": 8.5,
           "measuredHeapAfterMB": 4.8,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 8
         }
       }
     },
@@ -101,37 +101,37 @@
           "measuredFrameMs": 3.18,
           "frameMsThreshold": 5.0,
           "measuredHeapAfterMB": 4.5,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 7
         },
         "solar-system": {
           "measuredFrameMs": 5.29,
           "frameMsThreshold": 8.0,
           "measuredHeapAfterMB": 4.9,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 8
         },
         "trappist-1-system": {
           "measuredFrameMs": 5.69,
           "frameMsThreshold": 9.0,
           "measuredHeapAfterMB": 4.6,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 7
         },
         "star-cluster": {
           "measuredFrameMs": 10.41,
           "frameMsThreshold": 16.0,
           "measuredHeapAfterMB": 4.9,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 8
         },
         "gw150914": {
           "measuredFrameMs": 2.73,
           "frameMsThreshold": 4.5,
           "measuredHeapAfterMB": 4.8,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 8
         },
         "tidal-disruption-event": {
           "measuredFrameMs": 4.32,
           "frameMsThreshold": 6.5,
           "measuredHeapAfterMB": 5.0,
-          "heapGrowthMBThreshold": 2.0
+          "heapAfterMBThreshold": 8
         }
       }
     },

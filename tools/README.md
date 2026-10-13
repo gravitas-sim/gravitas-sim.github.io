@@ -99,6 +99,7 @@ current, and the orchestrator checks it.
 | `playwright-cache.mjs` | A Playwright transform cache that no other process is writing |  |
 | `populations-reference.mjs` | Stars and their populations: the reference run, and its answer key | `npm run guides:populations-key` |
 | `precache-inventory.mjs` | What the service worker precaches, measured |  |
+| `precache-tour.mjs` | What a visit actually fetches, against what the precache holds (Prompt 112) |  |
 | `prepare-pages.mjs` | Assemble the tree that gets published |  |
 | `project-metadata.mjs` | The project's own description of itself |  |
 | `prose-whitespace.mjs` | Prose whitespace: write a lesson's line wrapping once, in the source only |  |
