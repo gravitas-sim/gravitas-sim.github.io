@@ -173,13 +173,11 @@ export function describeArm(arm, opts = {}) {
   // parameters is not a measurement, it is an interpolation, so the floor is
   // one clear of the model.
   const search =
-    usable.length > MODEL_PARAMETERS
-      ? periodSearch(usable, {
-          minPeriod: opts.minPeriod,
-          maxPeriod: opts.maxPeriod,
-          samples: opts.samples,
-        })
-      : null;
+    opts.search !== undefined
+      ? opts.search
+      : usable.length > MODEL_PARAMETERS
+        ? periodSearch(usable, opts)
+        : null;
 
   // The runner-up matters more than the winner. A search whose second-best
   // minimum is nearly as good has not identified a period; it has identified
@@ -391,12 +389,12 @@ export function aliasExplains(verdict, a, b) {
  *
  * @param {object} armA - {label, kind, plan, measurements}
  * @param {object} armB - The other one
- * @param {object} [opts] - {minPeriod, maxPeriod, samples, held}
+ * @param {object} [opts] - {minPeriod, maxPeriod, samples, held, searches}; searches is [A, B] from searchArms
  * @returns {object} The comparison
  */
 export function compareSchedules(armA, armB, opts = {}) {
-  const a = describeArm(armA, opts);
-  const b = describeArm(armB, opts);
+  const a = describeArm(armA, { ...opts, search: opts.searches?.[0] });
+  const b = describeArm(armB, { ...opts, search: opts.searches?.[1] });
   const controls = checkControls(a, b, opts.held || {});
   const periods = comparePeriods(a, b);
   const alias = aliasExplains(periods, a, b);
