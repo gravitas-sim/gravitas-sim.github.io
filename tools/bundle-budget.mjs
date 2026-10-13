@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 2034,
+    limit: 2034.2,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -651,7 +651,8 @@ const BUDGETS = [
       '\n\nPrompt 108, slice 2 (six scenarios declared as data), measured on v2 at dde3b92, took it from 2031.7 to 2032.6 KB gzipped (5538.6 KB raw, measured 2032.541), 0.9 KB (D-BUDGET-GEOM-02, the standing size-budget approval; measured on Node 24, CI on Node 20 reads lower). The declarations, validator branches and expander are in js/scenarios.js and js/scenarioPack.js; about 370 lines of hand-built blocks left js/world/build.js. No request ceiling moved.' +
       '\n\nPrompt 108, slice 3 (ten laboratory scenarios declared as data), measured on v2 at 5eaf6ef8, took it from 2032.6 to 2033.2 KB gzipped (5540.8 KB raw, measured 2033.168 on Node 24 against 2032.533 for v2 itself; CI on Node 20 reads lower), 0.6 KB (D-BUDGET-GEOM-03, the standing size-budget approval). The rule parameters, the declaration rows and the expander changes are in js/world/build.js, js/scenarios.js and js/scenarioPack.js; about 650 lines of hand-built blocks left js/world/build.js. No request ceiling moved.' +
       '\n\nPrompt 108, slice 4 (nine scenarios declared as data: the galaxy discs, the cluster, the belts, a tidal disruption and two black hole scenarios), measured on v2 at d065a21, took it from 2033.2 to 2033.4 KB gzipped (5540.7 KB raw, measured 2033.379 on Node 24 after a fresh node build.js; v2 itself measures 2032.971; CI on Node 20 reads lower), 0.2 KB (D-BUDGET-GEOM-04, the standing size-budget approval). Seven named rules and their parameters are in js/world/build.js and js/scenarioGeometry.js; about 470 lines of hand-built blocks left js/world/build.js. No request ceiling moved.' +
-      '\n\nPrompt 112 (the schedule comparison searches in the inference Worker, js/rvCompareSearch.js), measured on v2 at e8ea9a2, took it from 2033.4 to 2034.0 KB gzipped (5541.3 KB raw, measured 2033.919 on Node 24), one new lazy module and the call into it. The initial download is 792.7 KB of 830.0. D-BUDGET-PERF-01, under the standing size-budget approval in the project CLAUDE.md.',
+      '\n\nPrompt 112 (the schedule comparison searches in the inference Worker, js/rvCompareSearch.js), measured on v2 at e8ea9a2, took it from 2033.4 to 2034.0 KB gzipped (5541.3 KB raw, measured 2033.919 on Node 24), one new lazy module and the call into it. The initial download is 792.7 KB of 830.0. D-BUDGET-PERF-01, under the standing size-budget approval in the project CLAUDE.md.' +
+      '\n\nPrompt 108, slice 5 (five placement-entangled scenarios declared as data: a place stage, three rules, the validator for both), measured on v2 at bf27e4a, took it from 2034.0 to 2034.2 KB gzipped (5542.1 KB raw, measured 2034.111 on Node 24 after a fresh node build.js; v2 itself measures 2033.893 the same way; CI on Node 20 reads lower), 0.2 KB (D-BUDGET-GEOM-05, the standing size-budget approval). About 90 lines of hand-built blocks left js/world/build.js, which the application loads at start-up (initial download 792.7 KB, down from 792.9); the validator and the rule schemas are in js/scenarioGeometry.js, which the Studio loads. No request ceiling moved.',
   },
 ];
 

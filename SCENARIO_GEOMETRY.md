@@ -2,7 +2,7 @@
 
 Fifty-nine scenarios ship with Gravitas. Twenty-two are generated from their settings alone, and the Scenario Studio can start from any of those and build the same world. Thirty-seven placed their bodies by code in `js/world/build.js`: the Studio could import their settings and nothing else, and the catalog could not say what the bodies were. This is the staged move of that geometry into data (Roadmap II Prompt 108): one slice per pull request, each judged by the world golden.
 
-Slices 1 to 4 are built. Thirty-one scenarios are declared; six are still code.
+Slices 1 to 5 are built. Thirty-six scenarios are declared; one is still code (the Solar System).
 
 ## The rules of the move
 
@@ -147,16 +147,42 @@ No behavior differs from the code. The draws are the code's: each scenario draws
 
 What stayed code, and why: the tidal disruption's old placement code, about a dozen lines in `applyPlacement`, which moves a hole and a planet before the generic placement's momentum balance. At the scenario's own layout (`Empty`) it never runs, but a reader who changes the layout in Settings and applies reaches it, and with a neutron star, a white dwarf or a second black hole in the world the balance takes a different share from them without it (found by the fuzz: removing it moved two of 2,185 worlds). Deleting it would change a world, so it stays, as a documented residue. Everything else each block did is in its declaration.
 
+## Slice 5
+
+Five scenarios the earlier slices could not take: Binary Black Hole, Slingshot, Triple Black Hole System, Neutron Star Collision and White Dwarf Binary. They did not place their bodies after the generic placement; they placed them inside `applyPlacement`, between the layout and the momentum balance, so a declaration run at the end of `buildWorld` would have balanced a different state and moved every body that was not placed absolutely. The slice's one construct answers that.
+
+**`place`.** A declaration may carry `place: [rule steps]` beside `steps`. The engine runs those rules at the point the code ran: inside `applyPlacement`, after the layout and before the balance (so at layout `Empty`, which returns before it, they do not run, as the code did not). A rule gives generated bodies a place and a velocity and draws nothing from the seeded generator; each is applied in place to the body the generator drew (`from`). A `place` step may name only a rule that places (`inspiral-pair`, `pin-pair`, `triangle-holes`); a geometry of `place` steps alone has no `steps`, and its end-of-build block does not run. A pack may not carry `place` (the schema has none; `validateGeometry(g, {rules: false})` refuses it).
+
+| Rule | What it makes | Reads |
+|---|---|---|
+| `inspiral-pair` (slice 4) | Also used here as a `place` step: the first two black holes about their center of mass, 100 apart at 0.9 of the circular speed (Slingshot) or 120 apart at 0.95 (Binary Black Hole) | `gravitational_constant`, the holes' masses |
+| `pin-pair` | The first two neutron stars or white dwarfs at (-x, 0) and (x, 0), moving at `speed` in opposite directions along y, when there are two | none |
+| `triangle-holes` | The first three black holes on a circle of `radius`, a third of a turn apart, each at `speed` along the circle, when there are three | none |
+| `name-pair` | Names for the first two neutron stars or white dwarfs, when there are two | none |
+| `orbital-population` (slice 4) | Takes `centralHoles` (the first n generated black holes set the speed) instead of `centralStars`; exactly one of them | `gravitational_constant` |
+
+| Scenario | Stage | Constructs | World golden | Seven seeds | Share-link cases | In a pack |
+|---|---|---|---|---|---|---|
+| `binary-bh` | `place`, then end of build | `inspiral-pair` (120, 0.95) twice, `orbital-population` (`centralHoles: 2`), every type kept | unchanged | identical | identical | names the built-in |
+| `slingshot` | `place` | `inspiral-pair` (100, 0.9) | unchanged | identical | identical | names the built-in |
+| `triple-bh-system` | `place` | `triangle-holes` (150, 15) | unchanged | identical | identical | names the built-in |
+| `neutron-star-collision` | `place`, then end of build | `pin-pair` (50, 15), `name-pair`, every type kept | unchanged | identical | identical | names the built-in |
+| `white-dwarf-binary` | `place` | `pin-pair` (80, 20) | unchanged | identical | identical | names the built-in |
+
+Binary Black Hole is placed twice, as the code placed it: its pair in `applyPlacement` (which feeds the balance for every other body), and again at the end of the build after everything else, followed by the planets, gas giants and asteroids on circular orbits about the pair, each at a phase drawn there. Neutron Star Collision is named at the end of the build whatever the layout, which `place` (skipped at `Empty`) could not do, so it has both stages.
+
+No behavior differs from the code. `tests/scenarioGeometrySlice5.test.js` holds the five at seven seeds (`tests/fixtures/scenarioGeometrySlice5Golden.json`) and 174 share-link cases (`tests/fixtures/scenarioGeometrySlice5EdgeGolden.json`, from `tests/scenarioSlice5Cases.js`: every population count at 0 and 3, the settings the placement reads, every layout), both captured from the code before it was changed, and pins the draw counts (129, 458, 88, 43 and 89 numbers at the default settings) and the generator's next number. A base-versus-head fuzz over all 59 scenarios (every population kind at 0 and 3 including the micro-star cloud, every layout, three seeds, 160 random combinations of counts, layout, masses and settings for each of the nine scenarios that place by hand and 24 for each other; 4,171 worlds, 3,750 distinct) found no difference, and a deliberate one-digit change to Slingshot's perturbation moved 149 of them, so the fuzz can see these placements.
+
+What stayed code, and why: the tidal disruption's stub in `applyPlacement` (D-GEOM-07; deleting it moves two worlds) and the Solar System.
+
 ## Still code
 
-Six scenarios have hand-built geometry, and three more name generated bodies.
+One scenario has hand-built geometry, and three more name generated bodies.
 
 | Scenario | Why it stays |
 |---|---|
 | `solar-system` | A published table of eight planets, sixteen asteroids and twelve comets, whose bodies carry engine state a row would have to name (Saturn's rings are sized from the radius the constructor derived; asteroid masses are re-synchronized with their reported counts; comets carry orbital elements). It needs `Asteroid` and `Comet` as made bodies, a jittered radius and a derived-size ring, and its three tables are the model page's sources; a slice of its own. |
-| `binary-bh`, `slingshot`, `triple-bh-system` | Placed inside `applyPlacement`, before its momentum balance (and `binary-bh` a second time after it, with a fresh draw of every phase): a declaration run at the end of `buildWorld` would balance a different state and move every body that is not placed absolutely. They need a declaration that runs at the end of the generic placement, and for `binary-bh` two of them. |
-| `neutron-star-collision`, `white-dwarf-binary` | The same: their pair is placed inside `applyPlacement`; `neutron-star-collision` also names its stars in `buildWorld`, regardless of layout, so it needs both stages. |
-| `sagittarius-a`, `galactic-center`, `pulsar-system` | Only names: they rename generated bodies from lists of real object names and place nothing. |
+| `sagittarius-a`, `galactic-center`, `pulsar-system` | Only names: they rename generated bodies from lists of real object names and place nothing. They are among the generated scenarios (`GENERATED_SCENARIOS`), which the Studio and the SDK already build from settings, so declaring them would change no world and no catalog entry; the rename stays code (and would need a rename that keeps what fewer than the listed bodies get, which `name-pair` does not). |
 
 The generic code that is not a scenario's geometry also stays: the micro-star cloud (`num_micro_stars`), the slingshot test star (`test_star_slingshot`) and the Pinwheel flyby in `applyPresetLayout`, which read settings and not scenario ids.
 
@@ -164,4 +190,4 @@ Documented exceptions: none yet. A scenario that cannot be expressed without cod
 
 ## For the next slice
 
-Branch `refactor/declarative-geometry-<slice>` from the integration branch. Read this file, `SCENARIO_GEOMETRY`, `ENGINE_GEOMETRY` and `expandGeometry` first; add a construct or a rule only with its schema entry, its validator branch and its test; capture the fixture from the code before deleting it (`tests/scenarioDigest.js` run over the scenarios at the seven seeds, in a worktree at the commit before the change, is all it takes; also capture the share-link cases, including every layout, and run a base-versus-head fuzz, which found a regression in slice 2 and the tidal disruption's residue in slice 4); and regenerate the golden never. If the golden moves, the slice stops. Every module has a line ceiling (`tools/module-size-ceilings.json`); the rule schemas are written compactly for that reason.
+Branch `refactor/declarative-geometry-<slice>` from the integration branch. Read this file, `SCENARIO_GEOMETRY`, `ENGINE_GEOMETRY` and `expandGeometry` first; add a construct or a rule only with its schema entry, its validator branch and its test; capture the fixture from the code before deleting it (`tests/scenarioDigest.js` run over the scenarios at the seven seeds, in a worktree at the commit before the change, is all it takes; also capture the share-link cases, including every layout, and run a base-versus-head fuzz, which found a regression in slice 2 and the tidal disruption's residue in slice 4); and regenerate the golden never. If the golden moves, the slice stops. Every module has a line ceiling (`tools/module-size-ceilings.json`); the rule schemas are written compactly for that reason. Slice 6 is the Solar System: a published table plus engine state (rings sized from the radius the constructor derived, asteroid masses re-synchronized with their reported counts, comets that carry orbital elements).
