@@ -500,6 +500,7 @@ import {
   setSettings,
   current_scenario_name,
   setScenarioName as setCurrentScenarioName,
+  registerCommands,
 } from './appState.js';
 import { resetFollowCamera } from './followCamera.js';
 import {
@@ -3425,8 +3426,7 @@ const show_enhanced_scenario_info = scenarioName => {
   // full-screen layer would burn the whole eighteen seconds where nobody can
   // read it: a first-time visitor would enter the sandbox to find the card that
   // names their scenario already gone. Both start-up layers are checked, and
-  // the welcome screen through a body class rather than an import, because
-  // welcome.js imports this module to load scenarios.
+  // the welcome screen through a body class, which needs no import of it.
   const onboardingLayerUp = () => {
     const splash = document.getElementById('splash');
     const splashUp =
@@ -4894,8 +4894,6 @@ window.addEventListener('mouseup', e => {
   }
 });
 
-// Merge toast removed per request
-
 window.addEventListener(
   'wheel',
   e => {
@@ -5038,11 +5036,9 @@ document.getElementById('inspectorDelete').onclick = deleteSelectedObject;
 // abstract. Lazy - most visitors never plan one.
 const inspectorManeuverBtn = document.getElementById('inspectorManeuver');
 if (inspectorManeuverBtn) {
-  // An event rather than an import. ui.js is the coordinator and the bridge
-  // reaches back into it for captureShareState and the settings, so importing
-  // the bridge from here - even lazily - puts the two in a cycle. The bridge
-  // listens for this instead, which is the same shape as the bench's rail
-  // button and leaves the dependency pointing one way.
+  // An event rather than an import: the bridge reaches the coordinator through
+  // the command bus, so importing it from here would put the two in a cycle.
+  // It listens for this instead, like the bench's rail button.
   inspectorManeuverBtn.onclick = () => {
     const target = state.selectedObject?.object;
     if (!target) return;
@@ -6600,6 +6596,22 @@ canvas.addEventListener(
   { passive: false }
 );
 
+// What the modules below this one ask of it (the command bus, js/appState.js).
+registerCommands({
+  captureShareState,
+  applyShareState,
+  initialize_simulation,
+  show_enhanced_scenario_info,
+  loadScenarioByKey,
+  setInspectorSuppressed,
+  hideObjectInspector,
+  setAreaSweepWedges,
+  getAreaSweepWedges,
+  showAreaSweepFor,
+  setAreaSweepSuppressed,
+  syncPlacementAvailability,
+});
+
 // Export functions and variables
 export {
   showObjectInspector,
@@ -6620,17 +6632,11 @@ export {
   buildSettingsMenu,
   save_simulation_state,
   load_simulation_state,
-  setAreaSweepWedges,
-  getAreaSweepWedges,
-  showAreaSweepFor,
-  setAreaSweepSuppressed,
   isAreaSweepSuppressed,
   checkAreaSweepValidity,
   captureShareState,
   applyShareState,
   markWorldTouched,
-  setInspectorSuppressed,
-  syncPlacementAvailability,
   updateSpeedDisplay,
   takeScreenshot,
   updateObjectTypeButton,
@@ -6642,12 +6648,6 @@ export {
   localSettings,
 };
 // Tutorial lives in js/tutorial.js - see initTutorial(), wired from main.js.
-
-// Helper: Ensure no two objects are initialized within a minimum separation distance
-// Removed unused ensureMinSeparation helper
-
-// Helper: Place an object with minimum separation, retrying up to maxTries
-// (Removed unused placeWithSeparation helper)
 
 // Helper: Get tooltip text for object properties
 function getStatTooltip(statLabel, _objectType, key) {

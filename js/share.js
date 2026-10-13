@@ -1,18 +1,13 @@
 // =============================================================================
 // The share dialog, and opening a link someone sent you
 // -----------------------------------------------------------------------------
-// This is the UI layer over shareState.js. It sits above both ui.js and
-// timeline.js and imports from each, which is what lets captureShareState()
+// This is the UI layer over shareState.js. It reaches ui.js through the
+// command bus and imports timeline.js, which is what lets captureShareState()
 // stay free of a timeline import: the elapsed clock is read here and passed
 // down, rather than ui.js reaching for a module that already imports it.
 // =============================================================================
 
-import {
-  captureShareState,
-  applyShareState,
-  initialize_simulation,
-  show_enhanced_scenario_info,
-} from './ui.js';
+import { command } from './appState.js';
 import { getSimClock } from './timeline.js';
 import {
   encodePayload,
@@ -30,6 +25,11 @@ import {
 } from './investigationsLoader.js';
 import { t } from './i18n/index.js';
 import { scenarioTitle } from './i18n/scenario.js';
+
+const captureShareState = command('captureShareState');
+const applyShareState = command('applyShareState');
+const initialize_simulation = command('initialize_simulation');
+const show_enhanced_scenario_info = command('show_enhanced_scenario_info');
 
 /** A scenario as a reader says it: its title, or 'None' for a hand-built world. */
 const said = s => (s && s !== 'None' ? scenarioTitle(s) : s);

@@ -185,7 +185,7 @@ what the A/B bench hashes.
 
 ### When you need something from a layer above
 
-Three options, in order of preference:
+Four options, in order of preference:
 
 1. **Move it down.** Usually the right answer, and usually smaller than it
    looks. `SOLAR_MASS_UNIT` lived in `physics.js`, so `units.js` imported the
@@ -194,16 +194,24 @@ Three options, in order of preference:
 2. **Pass it in.** `buildWorld` gets `regenerateStarfield` through its context
    rather than importing `render.js`. That single edge was closing five of the
    eleven cycles the graph used to have.
-3. **Record it.** If it is genuinely unavoidable, add it to `ALLOWED_UPWARD` in
+3. **Ask for it.** If what you need is coordinator *behavior* (load this
+   scenario, rebuild that world, restore a share link), call it through the
+   command bus in `js/appState.js`: `const loadScenarioByKey =
+   command('loadScenarioByKey')` in your module, and `ui.js` registers the
+   handler once at start-up. A command is a plain synchronous call, so timing
+   and order are those of the direct call. Asking for a command nobody
+   registered throws.
+4. **Record it.** If it is genuinely unavoidable, add it to `ALLOWED_UPWARD` in
    `tools/check-architecture.mjs` with a reason saying why. The list is
    shrink-only: the check also fails on an entry whose import no longer exists,
    so a fixed edge cannot quietly stay on the books.
 
-There are three recorded entries, all of them `-> ui.js`, and all for the same
-reason: `investigations.js`, `share.js` and `experimentsBridge.js` want
-coordinator *behavior* — load this scenario, rebuild that world — rather than
-shared data. Removing them needs a command interface that does not exist yet.
-Adding a fourth should feel harder than fixing the third.
+No upward import is recorded now: the four that were (`investigations.js`,
+`share.js` and the two lazy bridges, each importing `ui.js`) go through the bus,
+and `welcome.js` with them. The check also fails on any other file that names
+`ui.js` in a relative path, in any form, which closes the gap for a dynamic
+import in the middle of a line.
+Adding one should feel harder than fixing the last.
 
 ---
 
