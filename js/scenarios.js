@@ -1862,13 +1862,6 @@ export const SCENARIO_GEOMETRY = /* @__PURE__ */ Object.freeze({
   'jupiter-trojans': { steps: [{ rule: { name: 'published-system', params: { system: 'jupiter-trojans' } } }] },
 });
 
-/** Where each type's mass is also kept, in the unit it reports. */
-const DISPLAY_MASS = Object.freeze({
-  Star: 'massInSuns',
-  Planet: 'massInEarths',
-  GasGiant: 'massInJupiters',
-});
-
 /**
  * The cosine and sine of a declared angle: exact (0 or 1, not 6e-17) at a
  * quarter turn, as a place written by hand ({x: 0, y: 100}) is.
@@ -1931,7 +1924,8 @@ export function expandGeometry(g, env) {
       for (const r of env.rules[rule.name](rule.params ?? {}, env)) add(r);
       continue;
     }
-    const ctor = b.mass ? Object.values(b.mass)[0] : undefined;
+    const [unit, ctor] = b.mass ? Object.entries(b.mass)[0] : [];
+    const made = b.born ? Object.values(b.born)[0] : ctor;
     let pos = b.at ? { x: b.at.x, y: b.at.y } : undefined;
     let vel = b.velocity ? { x: b.velocity.x, y: b.velocity.y } : undefined;
     if (!b.from) {
@@ -1954,7 +1948,7 @@ export function expandGeometry(g, env) {
         // Both bodies about their common center, which is the central body's
         // own place and velocity: the pair, not one of them, carries the
         // motion, so it circles a fixed point and does not drift.
-        const m2 = env.simMass(b.type, ctor);
+        const m2 = env.simMass(b.type, ctor, unit);
         const total = c.mass + m2;
         const rel = Math.sqrt((env.G * total) / r);
         const speed = (rel * c.mass) / total;
@@ -1978,19 +1972,24 @@ export function expandGeometry(g, env) {
       } else {
         const a = r / (1 - e);
         // Periapsis speed on the ellipse of semi-major axis a: circular at e = 0.
-        const v = Math.sqrt((((env.G * c.mass) / a) * (1 + e)) / (1 - e));
+        const pull = c.mass + (o.mutual ? env.simMass(b.type, ctor, unit) : 0);
+        const v =
+          (o.retrograde ? -1 : 1) *
+          Math.sqrt((((env.G * pull) / a) * (1 + e)) / (1 - e));
         pos = { x: c.pos.x + r * cos, y: c.pos.y + r * sin };
         vel = { x: c.vel.x + -v * sin, y: c.vel.y + v * cos };
       }
     }
     const assign = { name: b.name };
-    if (b.from && ctor !== undefined) {
-      assign.mass = env.simMass(b.type, ctor);
-      assign[DISPLAY_MASS[b.type]] = ctor;
+    if ((b.from || b.born) && ctor !== undefined) {
+      assign.mass = env.simMass(b.type, ctor, unit);
+      // Kept, too, where it is reported: massInSuns, massInEarths or
+      // massInJupiters, by the unit it was given in.
+      assign[`massIn${unit[0].toUpperCase()}${unit.slice(1)}`] = ctor;
     }
     add({
       type: b.type,
-      ctor,
+      ctor: made,
       pos,
       vel,
       assign: { ...assign, ...(b.set || {}) },

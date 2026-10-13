@@ -1279,5 +1279,964 @@
    0
   ],
   "tail": 0.12376309768296778
+ },
+ "lagrange-point-lab@1": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd27f\",\"id\":2,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Primary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-23.3009708738,\"y\":0},\"radius\":13.95141,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.0467382714637}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#9fd0ff\",\"id\":3,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":30,\"massInSuns\":0.03,\"model_owned\":false,\"name\":\"Secondary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":776.699029126,\"y\":0},\"radius\":9.83197540035,\"radiusInSuns\":0.35,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.55794238212}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#f07f7f\",\"density\":\"rocky\",\"id\":4,\"intact\":true,\"mass\":0.00000103,\"massInEarths\":0.000342934430161,\"model_owned\":false,\"name\":\"Tracer\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":480,\"y\":0},\"radius\":0.8,\"trail\":[],\"vel\":{\"x\":0,\"y\":0.962808392153}}"
+  ],
+  "settings": "2fce969f",
+  "zoom": 0.42,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.13893358339555562
+ },
+ "lagrange-point-lab@42": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd27f\",\"id\":2,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Primary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-23.3009708738,\"y\":0},\"radius\":13.95141,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.0467382714637}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#9fd0ff\",\"id\":3,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":30,\"massInSuns\":0.03,\"model_owned\":false,\"name\":\"Secondary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":776.699029126,\"y\":0},\"radius\":9.83197540035,\"radiusInSuns\":0.35,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.55794238212}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#f07f7f\",\"density\":\"rocky\",\"id\":4,\"intact\":true,\"mass\":0.00000103,\"massInEarths\":0.000342934430161,\"model_owned\":false,\"name\":\"Tracer\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":480,\"y\":0},\"radius\":0.8,\"trail\":[],\"vel\":{\"x\":0,\"y\":0.962808392153}}"
+  ],
+  "settings": "74a11eb2",
+  "zoom": 0.42,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7457375649828464
+ },
+ "lagrange-point-lab@1554098974": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd27f\",\"id\":2,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Primary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-23.3009708738,\"y\":0},\"radius\":13.95141,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.0467382714637}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#9fd0ff\",\"id\":3,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":30,\"massInSuns\":0.03,\"model_owned\":false,\"name\":\"Secondary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":776.699029126,\"y\":0},\"radius\":9.83197540035,\"radiusInSuns\":0.35,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.55794238212}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#f07f7f\",\"density\":\"rocky\",\"id\":4,\"intact\":true,\"mass\":0.00000103,\"massInEarths\":0.000342934430161,\"model_owned\":false,\"name\":\"Tracer\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":480,\"y\":0},\"radius\":0.8,\"trail\":[],\"vel\":{\"x\":0,\"y\":0.962808392153}}"
+  ],
+  "settings": "74a11eb2",
+  "zoom": 0.42,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.8148772905115038
+ },
+ "lagrange-point-lab@123456789": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd27f\",\"id\":2,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Primary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-23.3009708738,\"y\":0},\"radius\":13.95141,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.0467382714637}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#9fd0ff\",\"id\":3,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":30,\"massInSuns\":0.03,\"model_owned\":false,\"name\":\"Secondary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":776.699029126,\"y\":0},\"radius\":9.83197540035,\"radiusInSuns\":0.35,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.55794238212}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#f07f7f\",\"density\":\"rocky\",\"id\":4,\"intact\":true,\"mass\":0.00000103,\"massInEarths\":0.000342934430161,\"model_owned\":false,\"name\":\"Tracer\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":480,\"y\":0},\"radius\":0.8,\"trail\":[],\"vel\":{\"x\":0,\"y\":0.962808392153}}"
+  ],
+  "settings": "74a11eb2",
+  "zoom": 0.42,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.567488876869902
+ },
+ "lagrange-point-lab@4000000000": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd27f\",\"id\":2,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Primary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-23.3009708738,\"y\":0},\"radius\":13.95141,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.0467382714637}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#9fd0ff\",\"id\":3,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":30,\"massInSuns\":0.03,\"model_owned\":false,\"name\":\"Secondary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":776.699029126,\"y\":0},\"radius\":9.83197540035,\"radiusInSuns\":0.35,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.55794238212}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#f07f7f\",\"density\":\"rocky\",\"id\":4,\"intact\":true,\"mass\":0.00000103,\"massInEarths\":0.000342934430161,\"model_owned\":false,\"name\":\"Tracer\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":480,\"y\":0},\"radius\":0.8,\"trail\":[],\"vel\":{\"x\":0,\"y\":0.962808392153}}"
+  ],
+  "settings": "74a11eb2",
+  "zoom": 0.42,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7358601684682071
+ },
+ "lagrange-point-lab@7": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd27f\",\"id\":2,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Primary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-23.3009708738,\"y\":0},\"radius\":13.95141,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.0467382714637}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#9fd0ff\",\"id\":3,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":30,\"massInSuns\":0.03,\"model_owned\":false,\"name\":\"Secondary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":776.699029126,\"y\":0},\"radius\":9.83197540035,\"radiusInSuns\":0.35,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.55794238212}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#f07f7f\",\"density\":\"rocky\",\"id\":4,\"intact\":true,\"mass\":0.00000103,\"massInEarths\":0.000342934430161,\"model_owned\":false,\"name\":\"Tracer\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":480,\"y\":0},\"radius\":0.8,\"trail\":[],\"vel\":{\"x\":0,\"y\":0.962808392153}}"
+  ],
+  "settings": "74a11eb2",
+  "zoom": 0.42,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7640898865647614
+ },
+ "lagrange-point-lab@99991": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd27f\",\"id\":2,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Primary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-23.3009708738,\"y\":0},\"radius\":13.95141,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.0467382714637}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#9fd0ff\",\"id\":3,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":30,\"massInSuns\":0.03,\"model_owned\":false,\"name\":\"Secondary\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":776.699029126,\"y\":0},\"radius\":9.83197540035,\"radiusInSuns\":0.35,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.55794238212}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#f07f7f\",\"density\":\"rocky\",\"id\":4,\"intact\":true,\"mass\":0.00000103,\"massInEarths\":0.000342934430161,\"model_owned\":false,\"name\":\"Tracer\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":480,\"y\":0},\"radius\":0.8,\"trail\":[],\"vel\":{\"x\":0,\"y\":0.962808392153}}"
+  ],
+  "settings": "74a11eb2",
+  "zoom": 0.42,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6147931281011552
+ },
+ "orbital-transfer-lab@1": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":null,\"id\":1,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Sol\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-3.27564069858e-8}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.000001,\"massInEarths\":0.0003329460487,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":100,\"y\":0},\"radius\":0.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":4.47213592448}}",
+   "planets|1|Planet|{\"alive\":true,\"baseColor\":\"#f4c86a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00001,\"massInEarths\":0.003329460487,\"model_owned\":false,\"name\":\"Target Station\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":250,\"y\":0},\"radius\":0.9,\"trail\":[],\"vel\":{\"x\":0,\"y\":2.82842710613}}"
+  ],
+  "settings": "a2f69e9c",
+  "zoom": 0.55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.281103502959013
+ },
+ "orbital-transfer-lab@42": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":null,\"id\":1,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Sol\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-3.27564069858e-8}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.000001,\"massInEarths\":0.0003329460487,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":100,\"y\":0},\"radius\":0.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":4.47213592448}}",
+   "planets|1|Planet|{\"alive\":true,\"baseColor\":\"#f4c86a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00001,\"massInEarths\":0.003329460487,\"model_owned\":false,\"name\":\"Target Station\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":250,\"y\":0},\"radius\":0.9,\"trail\":[],\"vel\":{\"x\":0,\"y\":2.82842710613}}"
+  ],
+  "settings": "8d38adf2",
+  "zoom": 0.55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5265925421845168
+ },
+ "orbital-transfer-lab@1554098974": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":null,\"id\":1,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Sol\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-3.27564069858e-8}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.000001,\"massInEarths\":0.0003329460487,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":100,\"y\":0},\"radius\":0.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":4.47213592448}}",
+   "planets|1|Planet|{\"alive\":true,\"baseColor\":\"#f4c86a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00001,\"massInEarths\":0.003329460487,\"model_owned\":false,\"name\":\"Target Station\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":250,\"y\":0},\"radius\":0.9,\"trail\":[],\"vel\":{\"x\":0,\"y\":2.82842710613}}"
+  ],
+  "settings": "8d38adf2",
+  "zoom": 0.55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5257369114551693
+ },
+ "orbital-transfer-lab@123456789": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":null,\"id\":1,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Sol\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-3.27564069858e-8}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.000001,\"massInEarths\":0.0003329460487,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":100,\"y\":0},\"radius\":0.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":4.47213592448}}",
+   "planets|1|Planet|{\"alive\":true,\"baseColor\":\"#f4c86a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00001,\"massInEarths\":0.003329460487,\"model_owned\":false,\"name\":\"Target Station\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":250,\"y\":0},\"radius\":0.9,\"trail\":[],\"vel\":{\"x\":0,\"y\":2.82842710613}}"
+  ],
+  "settings": "8d38adf2",
+  "zoom": 0.55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7470660470426083
+ },
+ "orbital-transfer-lab@4000000000": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":null,\"id\":1,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Sol\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-3.27564069858e-8}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.000001,\"massInEarths\":0.0003329460487,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":100,\"y\":0},\"radius\":0.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":4.47213592448}}",
+   "planets|1|Planet|{\"alive\":true,\"baseColor\":\"#f4c86a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00001,\"massInEarths\":0.003329460487,\"model_owned\":false,\"name\":\"Target Station\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":250,\"y\":0},\"radius\":0.9,\"trail\":[],\"vel\":{\"x\":0,\"y\":2.82842710613}}"
+  ],
+  "settings": "8d38adf2",
+  "zoom": 0.55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6100729207973927
+ },
+ "orbital-transfer-lab@7": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":null,\"id\":1,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Sol\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-3.27564069858e-8}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.000001,\"massInEarths\":0.0003329460487,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":100,\"y\":0},\"radius\":0.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":4.47213592448}}",
+   "planets|1|Planet|{\"alive\":true,\"baseColor\":\"#f4c86a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00001,\"massInEarths\":0.003329460487,\"model_owned\":false,\"name\":\"Target Station\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":250,\"y\":0},\"radius\":0.9,\"trail\":[],\"vel\":{\"x\":0,\"y\":2.82842710613}}"
+  ],
+  "settings": "8d38adf2",
+  "zoom": 0.55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.4055216880515218
+ },
+ "orbital-transfer-lab@99991": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":null,\"id\":1,\"initialMassInSuns\":0,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Sol\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-3.27564069858e-8}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.000001,\"massInEarths\":0.0003329460487,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":100,\"y\":0},\"radius\":0.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":4.47213592448}}",
+   "planets|1|Planet|{\"alive\":true,\"baseColor\":\"#f4c86a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00001,\"massInEarths\":0.003329460487,\"model_owned\":false,\"name\":\"Target Station\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":250,\"y\":0},\"radius\":0.9,\"trail\":[],\"vel\":{\"x\":0,\"y\":2.82842710613}}"
+  ],
+  "settings": "8d38adf2",
+  "zoom": 0.55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5976316411979496
+ },
+ "binary-planet-lab@1": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623613485777}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721520761}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":-50,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.95837928918}}"
+  ],
+  "settings": "d0ee92a5",
+  "zoom": 0.6,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.9948229456786066
+ },
+ "binary-planet-lab@42": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623613485777}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721520761}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":-50,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.95837928918}}"
+  ],
+  "settings": "503b55b8",
+  "zoom": 0.6,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.4723170551005751
+ },
+ "binary-planet-lab@1554098974": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623613485777}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721520761}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":-50,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.95837928918}}"
+  ],
+  "settings": "503b55b8",
+  "zoom": 0.6,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.926003732951358
+ },
+ "binary-planet-lab@123456789": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623613485777}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721520761}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":-50,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.95837928918}}"
+  ],
+  "settings": "503b55b8",
+  "zoom": 0.6,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.1614646923262626
+ },
+ "binary-planet-lab@4000000000": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623613485777}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721520761}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":-50,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.95837928918}}"
+  ],
+  "settings": "503b55b8",
+  "zoom": 0.6,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.8507923004217446
+ },
+ "binary-planet-lab@7": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623613485777}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721520761}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":-50,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.95837928918}}"
+  ],
+  "settings": "503b55b8",
+  "zoom": 0.6,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.729822089895606
+ },
+ "binary-planet-lab@99991": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623613485777}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721520761}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":-50,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.95837928918}}"
+  ],
+  "settings": "503b55b8",
+  "zoom": 0.6,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.3541718106716871
+ },
+ "circumbinary-planet-lab@1": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623610790631}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721790276}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":4000,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":0.612371822612}}"
+  ],
+  "settings": "4aded4f4",
+  "zoom": 0.11,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.9948229456786066
+ },
+ "circumbinary-planet-lab@42": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623615896368}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721279702}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":150,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":3.16227449422}}"
+  ],
+  "settings": "7287f18a",
+  "zoom": 0.11,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.4723170551005751
+ },
+ "circumbinary-planet-lab@1554098974": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623615896368}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721279702}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":150,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":3.16227449422}}"
+  ],
+  "settings": "7287f18a",
+  "zoom": 0.11,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.926003732951358
+ },
+ "circumbinary-planet-lab@123456789": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623615896368}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721279702}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":150,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":3.16227449422}}"
+  ],
+  "settings": "7287f18a",
+  "zoom": 0.11,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.1614646923262626
+ },
+ "circumbinary-planet-lab@4000000000": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623615896368}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721279702}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":150,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":3.16227449422}}"
+  ],
+  "settings": "7287f18a",
+  "zoom": 0.11,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.8507923004217446
+ },
+ "circumbinary-planet-lab@7": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623615896368}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721279702}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":150,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":3.16227449422}}"
+  ],
+  "settings": "7287f18a",
+  "zoom": 0.11,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.729822089895606
+ },
+ "circumbinary-planet-lab@99991": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff0d0\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star A\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-200,\"y\":0},\"radius\":4.65047,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.623615896368}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffc898\",\"id\":4,\"initialMassInSuns\":0.5,\"intact\":true,\"luminosityInSuns\":null,\"mass\":500,\"massInSuns\":0.5,\"model_owned\":false,\"name\":\"Star B\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":400,\"y\":0},\"radius\":2.67099361948,\"radiusInSuns\":0.574349177499,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.24721279702}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#7ec8ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00300348961612,\"massInEarths\":1,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":150,\"y\":0},\"radius\":1.5,\"trail\":[],\"vel\":{\"x\":0,\"y\":3.16227449422}}"
+  ],
+  "settings": "7287f18a",
+  "zoom": 0.11,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.3541718106716871
+ },
+ "exoplanet-characterization-lab@1": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"distancePc\":48.3,\"id\":2,\"initialMassInSuns\":1.148,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-0.00272261354724,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.00892180397332}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":4.74427738645,\"y\":0},\"radius\":0.0659496823082,\"radiusInSuns\":0.14181294,\"trail\":[],\"vel\":{\"x\":0,\"y\":15.5466474042}}"
+  ],
+  "settings": "466f5403",
+  "zoom": 55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7207431411370635
+ },
+ "exoplanet-characterization-lab@42": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"distancePc\":48.3,\"id\":2,\"initialMassInSuns\":1.148,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-0.00272261354724,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.00892180397332}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":4.74427738645,\"y\":0},\"radius\":0.0659496823082,\"radiusInSuns\":0.14181294,\"trail\":[],\"vel\":{\"x\":0,\"y\":15.5466474042}}"
+  ],
+  "settings": "466f5403",
+  "zoom": 55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6247446539346129
+ },
+ "exoplanet-characterization-lab@1554098974": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"distancePc\":48.3,\"id\":2,\"initialMassInSuns\":1.148,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-0.00272261354724,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.00892180397332}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":4.74427738645,\"y\":0},\"radius\":0.0659496823082,\"radiusInSuns\":0.14181294,\"trail\":[],\"vel\":{\"x\":0,\"y\":15.5466474042}}"
+  ],
+  "settings": "466f5403",
+  "zoom": 55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.18396632373332977
+ },
+ "exoplanet-characterization-lab@123456789": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"distancePc\":48.3,\"id\":2,\"initialMassInSuns\":1.148,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-0.00272261354724,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.00892180397332}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"super_jupiter\",\"hasRings\":false,\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":4.74427738645,\"y\":0},\"radius\":0.0659496823082,\"radiusInSuns\":0.14181294,\"trail\":[],\"vel\":{\"x\":0,\"y\":15.5466474042}}"
+  ],
+  "settings": "466f5403",
+  "zoom": 55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.2845096290111542
+ },
+ "exoplanet-characterization-lab@4000000000": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"distancePc\":48.3,\"id\":2,\"initialMassInSuns\":1.148,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-0.00272261354724,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.00892180397332}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":4.74427738645,\"y\":0},\"radius\":0.0659496823082,\"radiusInSuns\":0.14181294,\"trail\":[],\"vel\":{\"x\":0,\"y\":15.5466474042}}"
+  ],
+  "settings": "466f5403",
+  "zoom": 55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5724152734037489
+ },
+ "exoplanet-characterization-lab@7": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"distancePc\":48.3,\"id\":2,\"initialMassInSuns\":1.148,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-0.00272261354724,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.00892180397332}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":4.74427738645,\"y\":0},\"radius\":0.0659496823082,\"radiusInSuns\":0.14181294,\"trail\":[],\"vel\":{\"x\":0,\"y\":15.5466474042}}"
+  ],
+  "settings": "466f5403",
+  "zoom": 55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.23992518591694534
+ },
+ "exoplanet-characterization-lab@99991": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"distancePc\":48.3,\"id\":2,\"initialMassInSuns\":1.148,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-0.00272261354724,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.00892180397332}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":4.74427738645,\"y\":0},\"radius\":0.0659496823082,\"radiusInSuns\":0.14181294,\"trail\":[],\"vel\":{\"x\":0,\"y\":15.5466474042}}"
+  ],
+  "settings": "466f5403",
+  "zoom": 55,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.03458648081868887
+ },
+ "transit-lab@1": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":1.74024706863,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "1a319226",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.281103502959013
+ },
+ "transit-lab@42": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":1.59094669176,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "1a319226",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5265925421845168
+ },
+ "transit-lab@1554098974": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":0.43084269588,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "1a319226",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5257369114551693
+ },
+ "transit-lab@123456789": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":0.48605578424,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "1a319226",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7470660470426083
+ },
+ "transit-lab@4000000000": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":2.17700904388,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "1a319226",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6100729207973927
+ },
+ "transit-lab@7": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":0.207757700467,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "1a319226",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.4055216880515218
+ },
+ "transit-lab@99991": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":0.400778958434,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":2,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "1a319226",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5976316411979496
+ },
+ "blended-binary@1": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":1.74024706863,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffe9c4\",\"id\":1,\"initialMassInSuns\":1.23358920409,\"intact\":true,\"luminosityInSuns\":1.11679449973,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"HD 209458 B (companion)\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":30000,\"y\":0},\"radius\":0.44179465,\"radiusInSuns\":0.95,\"showHabitableZone\":false,\"spectralType\":\"G5V\",\"stellarPhase\":null,\"temperature\":5700,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.267581763205}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "36be38d1",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7207431411370635
+ },
+ "blended-binary@42": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":1.59094669176,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffe9c4\",\"id\":1,\"initialMassInSuns\":3.7905191078,\"intact\":true,\"luminosityInSuns\":1.11679449973,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"HD 209458 B (companion)\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":30000,\"y\":0},\"radius\":0.44179465,\"radiusInSuns\":0.95,\"showHabitableZone\":false,\"spectralType\":\"G5V\",\"stellarPhase\":null,\"temperature\":5700,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.267581763205}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "36be38d1",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6247446539346129
+ },
+ "blended-binary@1554098974": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":0.43084269588,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffe9c4\",\"id\":1,\"initialMassInSuns\":1.62761819034,\"intact\":true,\"luminosityInSuns\":1.11679449973,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"HD 209458 B (companion)\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":30000,\"y\":0},\"radius\":0.44179465,\"radiusInSuns\":0.95,\"showHabitableZone\":false,\"spectralType\":\"G5V\",\"stellarPhase\":null,\"temperature\":5700,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.267581763205}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "36be38d1",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.18396632373332977
+ },
+ "blended-binary@123456789": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":0.48605578424,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffe9c4\",\"id\":1,\"initialMassInSuns\":3.00602107751,\"intact\":true,\"luminosityInSuns\":1.11679449973,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"HD 209458 B (companion)\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":30000,\"y\":0},\"radius\":0.44179465,\"radiusInSuns\":0.95,\"showHabitableZone\":false,\"spectralType\":\"G5V\",\"stellarPhase\":null,\"temperature\":5700,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.267581763205}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "36be38d1",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.2845096290111542
+ },
+ "blended-binary@4000000000": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":2.17700904388,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffe9c4\",\"id\":1,\"initialMassInSuns\":1.99222999898,\"intact\":true,\"luminosityInSuns\":1.11679449973,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"HD 209458 B (companion)\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":30000,\"y\":0},\"radius\":0.44179465,\"radiusInSuns\":0.95,\"showHabitableZone\":false,\"spectralType\":\"G5V\",\"stellarPhase\":null,\"temperature\":5700,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.267581763205}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "36be38d1",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5724152734037489
+ },
+ "blended-binary@7": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":0.207757700467,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffe9c4\",\"id\":1,\"initialMassInSuns\":5.82587885001,\"intact\":true,\"luminosityInSuns\":1.11679449973,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"HD 209458 B (companion)\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":30000,\"y\":0},\"radius\":0.44179465,\"radiusInSuns\":0.95,\"showHabitableZone\":false,\"spectralType\":\"G5V\",\"stellarPhase\":null,\"temperature\":5700,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.267581763205}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "36be38d1",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.23992518591694534
+ },
+ "blended-binary@99991": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#fff3df\",\"id\":0,\"initialMassInSuns\":0.400778958434,\"intact\":true,\"luminosityInSuns\":1.77,\"mass\":1148,\"massInSuns\":1.148,\"model_owned\":false,\"name\":\"HD 209458\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":0.537129285,\"radiusInSuns\":1.155,\"showHabitableZone\":false,\"spectralType\":\"G0V\",\"stellarPhase\":null,\"temperature\":6065,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffe9c4\",\"id\":1,\"initialMassInSuns\":1.80093294949,\"intact\":true,\"luminosityInSuns\":1.11679449973,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"HD 209458 B (companion)\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":30000,\"y\":0},\"radius\":0.44179465,\"radiusInSuns\":0.95,\"showHabitableZone\":false,\"spectralType\":\"G5V\",\"stellarPhase\":null,\"temperature\":5700,\"trail\":[],\"vel\":{\"x\":0,\"y\":-0.267581763205}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#b8875a\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.658806409836,\"massInEarths\":219.30132,\"massInJupiters\":0.69,\"model_owned\":false,\"name\":\"HD 209458 b\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2.90669917778e-16,\"y\":-4.747},\"radius\":0.0659496823082,\"radiusInJupiters\":1.38,\"trail\":[],\"vel\":{\"x\":15.5511076664,\"y\":9.52230711344e-16}}"
+  ],
+  "settings": "36be38d1",
+  "zoom": 60,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.03458648081868887
+ },
+ "three-body-sensitivity-lab@1": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#FFD86B\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Alpha\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":50,\"y\":0},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":11.7713238255}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#7FB2F0\",\"id\":4,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Beta\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":-10.1942654691,\"y\":-5.88566191277}}",
+   "stars|2|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#F08A6B\",\"id\":5,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Gamma\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":-43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":10.1942654691,\"y\":-5.88566191277}}"
+  ],
+  "settings": "bb44e4d4",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.9948229456786066
+ },
+ "three-body-sensitivity-lab@42": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#FFD86B\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Alpha\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":50,\"y\":0},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":11.7713238255}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#7FB2F0\",\"id\":4,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Beta\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":-10.1942654691,\"y\":-5.88566191277}}",
+   "stars|2|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#F08A6B\",\"id\":5,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Gamma\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":-43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":10.1942654691,\"y\":-5.88566191277}}"
+  ],
+  "settings": "bb44e4d4",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.4723170551005751
+ },
+ "three-body-sensitivity-lab@1554098974": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#FFD86B\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Alpha\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":50,\"y\":0},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":11.7713238255}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#7FB2F0\",\"id\":4,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Beta\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":-10.1942654691,\"y\":-5.88566191277}}",
+   "stars|2|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#F08A6B\",\"id\":5,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Gamma\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":-43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":10.1942654691,\"y\":-5.88566191277}}"
+  ],
+  "settings": "bb44e4d4",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.926003732951358
+ },
+ "three-body-sensitivity-lab@123456789": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#FFD86B\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Alpha\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":50,\"y\":0},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":11.7713238255}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#7FB2F0\",\"id\":4,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Beta\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":-10.1942654691,\"y\":-5.88566191277}}",
+   "stars|2|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#F08A6B\",\"id\":5,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Gamma\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":-43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":10.1942654691,\"y\":-5.88566191277}}"
+  ],
+  "settings": "bb44e4d4",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.1614646923262626
+ },
+ "three-body-sensitivity-lab@4000000000": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#FFD86B\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Alpha\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":50,\"y\":0},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":11.7713238255}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#7FB2F0\",\"id\":4,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Beta\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":-10.1942654691,\"y\":-5.88566191277}}",
+   "stars|2|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#F08A6B\",\"id\":5,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Gamma\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":-43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":10.1942654691,\"y\":-5.88566191277}}"
+  ],
+  "settings": "bb44e4d4",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.8507923004217446
+ },
+ "three-body-sensitivity-lab@7": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#FFD86B\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Alpha\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":50,\"y\":0},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":11.7713238255}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#7FB2F0\",\"id\":4,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Beta\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":-10.1942654691,\"y\":-5.88566191277}}",
+   "stars|2|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#F08A6B\",\"id\":5,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Gamma\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":-43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":10.1942654691,\"y\":-5.88566191277}}"
+  ],
+  "settings": "bb44e4d4",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.729822089895606
+ },
+ "three-body-sensitivity-lab@99991": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#FFD86B\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Alpha\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":50,\"y\":0},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":0,\"y\":11.7713238255}}",
+   "stars|1|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#7FB2F0\",\"id\":4,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Beta\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":-10.1942654691,\"y\":-5.88566191277}}",
+   "stars|2|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#F08A6B\",\"id\":5,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":null,\"mass\":6000,\"massInSuns\":6,\"model_owned\":false,\"name\":\"Gamma\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":-25,\"y\":-43.3012701892},\"radius\":8,\"radiusInSuns\":null,\"showHabitableZone\":false,\"spectralType\":null,\"stellarPhase\":null,\"temperature\":null,\"trail\":[],\"vel\":{\"x\":10.1942654691,\"y\":-5.88566191277}}"
+  ],
+  "settings": "bb44e4d4",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.3541718106716871
+ },
+ "gravity-assist-lab@1": {
+  "rows": [
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2572.68139043,\"y\":-3062.89249947},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.00167723495955,\"y\":0.351992649998}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"brown_dwarf\",\"hasRings\":false,\"id\":2,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0.3,\"y\":0}}"
+  ],
+  "settings": "5c69c45a",
+  "zoom": 0.14,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7207431411370635
+ },
+ "gravity-assist-lab@42": {
+  "rows": [
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2572.68139043,\"y\":-3062.89249947},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.00167723495955,\"y\":0.351992649998}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"neptune_like\",\"hasRings\":false,\"id\":2,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0.3,\"y\":0}}"
+  ],
+  "settings": "a0186531",
+  "zoom": 0.14,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6247446539346129
+ },
+ "gravity-assist-lab@1554098974": {
+  "rows": [
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2572.68139043,\"y\":-3062.89249947},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.00167723495955,\"y\":0.351992649998}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":2,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0.3,\"y\":0}}"
+  ],
+  "settings": "a0186531",
+  "zoom": 0.14,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.18396632373332977
+ },
+ "gravity-assist-lab@123456789": {
+  "rows": [
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2572.68139043,\"y\":-3062.89249947},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.00167723495955,\"y\":0.351992649998}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":2,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0.3,\"y\":0}}"
+  ],
+  "settings": "a0186531",
+  "zoom": 0.14,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.2845096290111542
+ },
+ "gravity-assist-lab@4000000000": {
+  "rows": [
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2572.68139043,\"y\":-3062.89249947},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.00167723495955,\"y\":0.351992649998}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"neptune_like\",\"hasRings\":false,\"id\":2,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0.3,\"y\":0}}"
+  ],
+  "settings": "a0186531",
+  "zoom": 0.14,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5724152734037489
+ },
+ "gravity-assist-lab@7": {
+  "rows": [
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2572.68139043,\"y\":-3062.89249947},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.00167723495955,\"y\":0.351992649998}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":2,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0.3,\"y\":0}}"
+  ],
+  "settings": "a0186531",
+  "zoom": 0.14,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.23992518591694534
+ },
+ "gravity-assist-lab@99991": {
+  "rows": [
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":3,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":2572.68139043,\"y\":-3062.89249947},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.00167723495955,\"y\":0.351992649998}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"neptune_like\",\"hasRings\":false,\"id\":2,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0.3,\"y\":0}}"
+  ],
+  "settings": "a0186531",
+  "zoom": 0.14,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.03458648081868887
+ },
+ "gravity-assist-heliocentric@1": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd34d\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":1,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":8,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":\"G2V\",\"stellarPhase\":null,\"temperature\":5772,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":544.970217745,\"y\":-1.63692270636},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.957232503591,\"y\":1.09219023386}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"super_jupiter\",\"hasRings\":false,\"id\":4,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":500,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.41758524223}}"
+  ],
+  "settings": "3b5f6d18",
+  "zoom": 0.9,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.45527112716808915
+ },
+ "gravity-assist-heliocentric@42": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd34d\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":1,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":8,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":\"G2V\",\"stellarPhase\":null,\"temperature\":5772,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":540.480256822,\"y\":-19.6557576205},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.634826828654,\"y\":1.27030362415}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":4,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":500,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.41758524223}}"
+  ],
+  "settings": "692e14c6",
+  "zoom": 0.9,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.24992373422719538
+ },
+ "gravity-assist-heliocentric@1554098974": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd34d\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":1,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":8,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":\"G2V\",\"stellarPhase\":null,\"temperature\":5772,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":540.480256822,\"y\":-19.6557576205},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.634826828654,\"y\":1.27030362415}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"neptune_like\",\"hasRings\":false,\"id\":4,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":500,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.41758524223}}"
+  ],
+  "settings": "692e14c6",
+  "zoom": 0.9,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.28495712322182953
+ },
+ "gravity-assist-heliocentric@123456789": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd34d\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":1,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":8,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":\"G2V\",\"stellarPhase\":null,\"temperature\":5772,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":540.480256822,\"y\":-19.6557576205},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.634826828654,\"y\":1.27030362415}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":4,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":500,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.41758524223}}"
+  ],
+  "settings": "692e14c6",
+  "zoom": 0.9,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.36590091581456363
+ },
+ "gravity-assist-heliocentric@4000000000": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd34d\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":1,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":8,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":\"G2V\",\"stellarPhase\":null,\"temperature\":5772,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":540.480256822,\"y\":-19.6557576205},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.634826828654,\"y\":1.27030362415}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"jupiter_like\",\"hasRings\":false,\"id\":4,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":500,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.41758524223}}"
+  ],
+  "settings": "692e14c6",
+  "zoom": 0.9,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7340694714803249
+ },
+ "gravity-assist-heliocentric@7": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd34d\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":1,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":8,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":\"G2V\",\"stellarPhase\":null,\"temperature\":5772,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":540.480256822,\"y\":-19.6557576205},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.634826828654,\"y\":1.27030362415}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"neptune_like\",\"hasRings\":false,\"id\":4,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":500,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.41758524223}}"
+  ],
+  "settings": "692e14c6",
+  "zoom": 0.9,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.2578155610244721
+ },
+ "gravity-assist-heliocentric@99991": {
+  "rows": [
+   "stars|0|StarObject|{\"age\":null,\"ageYr\":null,\"alive\":true,\"baseColor\":\"#ffd34d\",\"id\":3,\"initialMassInSuns\":1,\"intact\":true,\"luminosityInSuns\":1,\"mass\":1000,\"massInSuns\":1,\"model_owned\":false,\"name\":\"Star\",\"obj_type\":\"StarObject\",\"persistent\":true,\"pos\":{\"x\":0,\"y\":0},\"radius\":8,\"radiusInSuns\":1,\"showHabitableZone\":false,\"spectralType\":\"G2V\",\"stellarPhase\":null,\"temperature\":5772,\"trail\":[],\"vel\":{\"x\":0,\"y\":0}}",
+   "planets|0|Planet|{\"alive\":true,\"baseColor\":\"#e8f4ff\",\"density\":\"rocky\",\"id\":5,\"intact\":true,\"mass\":0.00000477395949156,\"massInEarths\":0.00158947094937,\"model_owned\":false,\"name\":\"Spacecraft\",\"obj_type\":\"Planet\",\"persistent\":true,\"pos\":{\"x\":540.480256822,\"y\":-19.6557576205},\"radius\":0.4,\"trail\":[],\"vel\":{\"x\":-0.634826828654,\"y\":1.27030362415}}",
+   "gas_giants|0|GasGiant|{\"alive\":true,\"baseColor\":\"#c9a882\",\"giantType\":\"mini_neptune\",\"hasRings\":false,\"id\":4,\"intact\":true,\"mass\":4.77395949156,\"massInJupiters\":5,\"model_owned\":false,\"name\":\"Planet\",\"obj_type\":\"GasGiant\",\"persistent\":true,\"pos\":{\"x\":500,\"y\":0},\"radius\":2,\"radiusInSuns\":0.102763,\"trail\":[],\"vel\":{\"x\":0,\"y\":1.41758524223}}"
+  ],
+  "settings": "692e14c6",
+  "zoom": 0.9,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.03915317635983229
  }
 }

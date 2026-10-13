@@ -1,7 +1,7 @@
 // =============================================================================
-// Declarative scenario geometry (Roadmap II Prompt 108, slices 1 and 2)
+// Declarative scenario geometry (Roadmap II Prompt 108, slices 1 to 3)
 // -----------------------------------------------------------------------------
-// Twelve built-in scenarios are no longer placed by code in js/world/build.js:
+// Twenty-two built-in scenarios are no longer placed by code in js/world/build.js:
 // SCENARIO_GEOMETRY (js/scenarios.js) declares their bodies, and this holds the
 // declaration to the world the code made.
 //
@@ -25,8 +25,10 @@ import { readFileSync } from 'node:fs';
 import {
   SCENARIO_GEOMETRY,
   SCENARIO_IDS,
+  SCENARIO_PRESETS,
   expandGeometry,
 } from '../js/scenarios.js';
+import { DEFAULT_SETTINGS } from '../js/appState.js';
 import { withSeed } from '../js/rng.js';
 import { ENGINE_GEOMETRY } from '../js/world/build.js';
 
@@ -52,6 +54,7 @@ import {
 import { migrateScenarioPack } from '../js/platform/scenario.js';
 import * as physics from '../js/physics.js';
 import { LISTS, bodyRecord, digest, fnv } from './scenarioDigest.js';
+import { LAB_EDGE_IDS, LAB_SCENARIOS } from './scenarioLabCases.js';
 
 /** The data of one body, from a digest row. */
 const fields = row => JSON.parse(row.split('|').slice(3).join('|'));
@@ -66,16 +69,26 @@ describe('the declared scenarios build the world the code built', () => {
     const keys = Object.keys(ALL_GEOMETRY).sort();
     expect(keys).toEqual([
       'binary-pair',
+      'binary-planet-lab',
       'black-hole-lab',
+      'blended-binary',
       'broken-laplace-resonance',
+      'circumbinary-planet-lab',
       'earth-moon-system',
+      'exoplanet-characterization-lab',
       'galilean-resonance',
+      'gravity-assist-heliocentric',
+      'gravity-assist-lab',
       'habitable-zone-lab',
       'interstellar-visitor',
       'jupiter-trojans',
       'keplers-2nd-law',
+      'lagrange-point-lab',
+      'orbital-transfer-lab',
       'pluto-and-neptune',
       'retrograde-mars',
+      'three-body-sensitivity-lab',
+      'transit-lab',
       'trappist-1-system',
     ]);
     expect(Object.keys(GOLDEN).length).toBe(keys.length * 7);
@@ -124,7 +137,14 @@ describe('the validator, construct by construct', () => {
     expect(Object.keys(b.properties.set.properties).sort()).toEqual(
       Object.keys(GEOMETRY_SET).sort()
     );
-    expect(Object.keys(GEOMETRY_RULES)).toEqual(['published-system']);
+    expect(Object.keys(GEOMETRY_RULES)).toEqual([
+      'published-system',
+      'restricted-three-body',
+      'circular-transfer',
+      'binary-lab',
+      'equilateral-stars',
+      'gravity-assist',
+    ]);
   });
 
   test('body: a type, a name, a mass in the type’s own unit', () => {
@@ -1028,5 +1048,459 @@ describe('slice 2: a share link that changes a population count', () => {
       0
     );
     expect(planets(digest('habitable-zone-lab', 1, { num_stars: 0 }))).toBe(0);
+  });
+});
+
+describe('slice 3: the validator, construct by construct', () => {
+  const star = (extra = {}) => ({
+    type: 'Star',
+    name: 'Sun',
+    mass: { suns: 1 },
+    ...extra,
+  });
+  const planet = (extra = {}, orbit = {}) => ({
+    type: 'Planet',
+    name: 'Earth',
+    mass: { earths: 1 },
+    orbit: { around: 'Sun', distance: { au: 1 }, ...orbit },
+    ...extra,
+  });
+  const geo = (...bodies) => ({ steps: bodies.map(b => ({ body: b })) });
+  const why = (g, opts) =>
+    validateGeometry(g, opts).map(p => `${p.path}: ${p.why}`);
+
+  test('born: the mass the constructor is handed, a built-in’s, in any unit', () => {
+    expect(why(geo(star({ born: { suns: 1 } })))).toEqual([]);
+    expect(why(geo(star({ born: { suns: 0 } })))).toEqual([]);
+    expect(why(geo(star({ born: { earths: 1 } })))).toEqual([]);
+    expect(why(geo(star({ born: { suns: -1 } })))[0]).toMatch(/born/);
+    expect(why(geo(star({ born: { suns: 1, earths: 1 } })))[0]).toMatch(/born/);
+    expect(why(geo(star({ born: 1 })))[0]).toMatch(/born/);
+    expect(
+      why(geo({ type: 'Star', name: 'A', born: { suns: 1 } }))
+        .join()
+        .includes('born')
+    ).toBe(true);
+    expect(why(geo(star({ born: { suns: 1 } })), { rules: false })[0]).toMatch(
+      /a body built from another mass/
+    );
+  });
+
+  test('mass: a body that is born from another mass may be massed in any unit', () => {
+    const jup = { mass: { jupiters: 0.69 } };
+    expect(why(geo(star(), planet({ ...jup, born: { earths: 1 } })))).toEqual(
+      []
+    );
+    // Without `born` it is still the type's own unit, as before.
+    expect(why(geo(star(), planet(jup)))[0]).toMatch(/mass/);
+  });
+
+  test('orbit: mutual and retrograde are booleans, a built-in’s, and mutual is not barycentric', () => {
+    expect(
+      why(geo(star(), planet({}, { mutual: true, retrograde: true })))
+    ).toEqual([]);
+    expect(why(geo(star(), planet({}, { mutual: 1 })))[0]).toMatch(/mutual/);
+    expect(why(geo(star(), planet({}, { retrograde: 'no' })))[0]).toMatch(
+      /retrograde/
+    );
+    expect(
+      why(geo(star(), planet({}, { mutual: true, barycentric: true })))[0]
+    ).toMatch(/barycentric/);
+    // False is the default and a pack may say so; true is the engine's.
+    expect(
+      why(geo(star(), planet({}, { mutual: false, retrograde: false })), {
+        rules: false,
+      })
+    ).toEqual([]);
+    expect(
+      why(geo(star(), planet({}, { mutual: true })), { rules: false })[0]
+    ).toMatch(/mutual orbit/);
+    expect(
+      why(geo(star(), planet({}, { retrograde: true })), { rules: false })[0]
+    ).toMatch(/retrograde orbit/);
+  });
+
+  test('set: a world’s radius in Jupiters and its mass in Earths are the engine’s', () => {
+    expect(
+      why(geo(star({ set: { radiusInJupiters: 1.38, massInEarths: 219 } })))
+    ).toEqual([]);
+    expect(why(geo(star({ set: { radiusInJupiters: 0 } })))[0]).toMatch(
+      /radiusInJupiters/
+    );
+    expect(
+      why(geo(star({ set: { massInEarths: 1 } })), { rules: false })[0]
+    ).toMatch(/engine property \(massInEarths\)/);
+  });
+
+  test('recenter: a boolean, a built-in’s', () => {
+    const g = recenter => ({ ...geo(star()), recenter });
+    expect(why(g(true))).toEqual([]);
+    expect(why(g(false))).toEqual([]);
+    expect(why(g('yes'))[0]).toMatch(/recenter/);
+    expect(why(g(true), { rules: false })[0]).toMatch(/may not recenter/);
+  });
+
+  test('rule: each laboratory rule needs every parameter, by kind, and nothing else', () => {
+    for (const [name, spec] of Object.entries(GEOMETRY_RULES)) {
+      const found = Object.entries(ALL_GEOMETRY).find(([, g]) =>
+        g.steps.some(s => s.rule?.name === name)
+      );
+      expect(found).toBeTruthy();
+      const params = found[1].steps.find(s => s.rule?.name === name).rule
+        .params;
+      const rule = p => ({ steps: [{ rule: { name, params: p } }] });
+      expect(why(rule(params))).toEqual([]);
+      // Every required parameter is required, by name.
+      for (const k of Object.keys(spec)) {
+        if (spec[k] === 'bool') continue;
+        const { [k]: _gone, ...rest } = params;
+        expect(why(rule(rest)).join()).toMatch(new RegExp(`params.${k}\\b`));
+      }
+      expect(why(rule({ ...params, extra: 1 }))[0]).toMatch(/extra/);
+    }
+    const rule = (name, params) => ({ steps: [{ rule: { name, params } }] });
+    const t = ENGINE_GEOMETRY['lagrange-point-lab'].steps[0].rule.params;
+    expect(
+      why(rule('restricted-three-body', { ...t, primaryColor: 'gold' }))[0]
+    ).toMatch(/primaryColor.*color/);
+    expect(
+      why(rule('restricted-three-body', { ...t, tracerRadius: -1 }))[0]
+    ).toMatch(/tracerRadius/);
+    expect(
+      why(rule('restricted-three-body', { ...t, primaryName: '<b>' }))[0]
+    ).toMatch(/primaryName/);
+    const eq =
+      ENGINE_GEOMETRY['three-body-sensitivity-lab'].steps[0].rule.params;
+    expect(
+      why(rule('equilateral-stars', { ...eq, names: ['A', 'B'] }))[0]
+    ).toMatch(/a list of 3/);
+    expect(
+      why(rule('equilateral-stars', { ...eq, colors: ['#fff', 'b', 'c'] }))[0]
+    ).toMatch(/colors\[0\]/);
+    const bl = ENGINE_GEOMETRY['binary-planet-lab'].steps[0].rule.params;
+    expect(why(rule('binary-lab', { ...bl, mode: 'tight' }))[0]).toMatch(
+      /one of circumstellar, circumbinary/
+    );
+    expect(why(rule('published-system', { system: 'hd209458' }))).toEqual([]);
+    expect(why(rule('restricted-three-body', t), { rules: false })[0]).toMatch(
+      /may not use a named rule/
+    );
+  });
+});
+
+describe('slice 3: the arithmetic of the constructs', () => {
+  const units = { AU: 100 };
+  const simMass = (type, ctor, unit) =>
+    ctor *
+    { suns: 1000, earths: 3, jupiters: 100 }[
+      unit ?? { Star: 'suns', Planet: 'earths', GasGiant: 'jupiters' }[type]
+    ];
+  const run = (steps, generated = {}) => {
+    const made = [];
+    const seen = [];
+    expandGeometry(
+      { steps },
+      {
+        G: 2,
+        units,
+        simMass,
+        create: rec => {
+          seen.push(rec);
+          const b = {
+            ctor: rec.ctor,
+            mass: simMass(rec.type, rec.ctor ?? 1),
+            radius: 1,
+            pos: rec.pos,
+            vel: rec.vel,
+            ...(generated[rec.type] ?? {}),
+          };
+          Object.assign(b, rec.assign);
+          made.push(b);
+          return b;
+        },
+      }
+    );
+    return { made, seen };
+  };
+  const sun = {
+    body: {
+      type: 'Star',
+      name: 'Sun',
+      mass: { suns: 1 },
+      at: { x: 0, y: 0 },
+      velocity: { x: 0, y: 0 },
+    },
+  };
+  const orbiter = orbit => ({
+    body: {
+      type: 'Planet',
+      name: 'P',
+      mass: { earths: 2 },
+      orbit: { around: 'Sun', distance: { units: 10 }, ...orbit },
+    },
+  });
+
+  test('a mutual orbit moves at the speed for the pair’s mass, a plain one at the central body’s', () => {
+    const plain = run([sun, orbiter({})]).made[1];
+    const mutual = run([sun, orbiter({ mutual: true })]).made[1];
+    // G = 2, r = 10: sqrt(G M / r) with M the star's 1000, or the pair's 1006.
+    expect(Math.hypot(plain.vel.x, plain.vel.y)).toBeCloseTo(
+      Math.sqrt((2 * 1000) / 10),
+      12
+    );
+    expect(Math.hypot(mutual.vel.x, mutual.vel.y)).toBeCloseTo(
+      Math.sqrt((2 * 1006) / 10),
+      12
+    );
+    // The star is not moved by it: the pair circles the star’s own place.
+    expect(mutual.pos).toEqual({ x: 10, y: 0 });
+  });
+
+  test('a retrograde orbit is the same speed the other way round', () => {
+    for (const angle of [{ rad: 0 }, { deg: 33 }]) {
+      const a = run([sun, orbiter({ angle })]).made[1];
+      const b = run([sun, orbiter({ angle, retrograde: true })]).made[1];
+      expect(b.pos).toEqual(a.pos);
+      expect(b.vel.x).toBeCloseTo(-a.vel.x, 14);
+      expect(b.vel.y).toBeCloseTo(-a.vel.y, 14);
+      // Angular momentum about the star changes sign.
+      const l = p => p.pos.x * p.vel.y - p.pos.y * p.vel.x;
+      expect(l(a)).toBeGreaterThan(0);
+      expect(l(b)).toBeLessThan(0);
+    }
+  });
+
+  test('born: the constructor is handed one mass and the body is given another', () => {
+    const { seen, made } = run([
+      {
+        body: {
+          type: 'Planet',
+          name: 'Hot',
+          mass: { jupiters: 0.5 },
+          born: { earths: 1 },
+          at: { x: 1, y: 2 },
+        },
+      },
+    ]);
+    // What the constructor draws from and derives its radius from.
+    expect(seen[0].ctor).toBe(1);
+    // The body's own mass in simulation units and in the unit it was given
+    // in; the type's own figure is the step's `set`.
+    expect(made[0].mass).toBe(50);
+    expect(made[0].massInJupiters).toBe(0.5);
+    expect(made[0].massInEarths).toBeUndefined();
+  });
+
+  test('born: a body without it is built from its mass, as before', () => {
+    const { seen, made } = run([
+      {
+        body: {
+          type: 'Star',
+          name: 'S',
+          mass: { suns: 2 },
+          at: { x: 0, y: 0 },
+        },
+      },
+    ]);
+    expect(seen[0].ctor).toBe(2);
+    expect(made[0].massInSuns).toBeUndefined();
+  });
+});
+
+describe('slice 3: the laboratory worlds against their closed forms', () => {
+  // The constant the scenario runs under: its own, or the application's.
+  let G = 1;
+  const world = (key, pending = null, seed = 1) => {
+    G =
+      pending?.gravitational_constant ??
+      SCENARIO_PRESETS[key].gravitational_constant ??
+      DEFAULT_SETTINGS.gravitational_constant;
+    digest(key, seed, pending);
+    const byName = {};
+    for (const list of ['stars', 'planets', 'gas_giants'])
+      for (const b of physics[list]) byName[b.name] = b;
+    return byName;
+  };
+  const speed = b => Math.hypot(b.vel.x, b.vel.y);
+
+  test('Lagrange: the pair circles its barycenter at the angular speed Kepler gives', () => {
+    const w = world('lagrange-point-lab');
+    const { Primary: a, Secondary: b } = w;
+    const sep = b.pos.x - a.pos.x;
+    expect(sep).toBeCloseTo(8 * 100, 9);
+    // The barycenter is the origin and does not move.
+    expect(
+      (a.mass * a.pos.x + b.mass * b.pos.x) / (a.mass + b.mass)
+    ).toBeCloseTo(0, 9);
+    expect(a.mass * a.vel.y + b.mass * b.vel.y).toBeCloseTo(0, 9);
+    // n^2 a^3 = G (M1 + M2), and both move at n times their distance.
+    const n = a.vel.y / a.pos.x;
+    expect(n * n * sep ** 3).toBeCloseTo(G * (a.mass + b.mass), 6);
+    expect(b.vel.y / b.pos.x).toBeCloseTo(n, 12);
+    // The tracer is at rest in the rotating frame: its inertial velocity is
+    // omega x r.
+    const t = w.Tracer;
+    expect(t.vel.x).toBeCloseTo(-n * t.pos.y, 12);
+    expect(t.vel.y).toBeCloseTo(n * t.pos.x, 12);
+    expect(t.pos.x).toBeCloseTo(0.6 * sep, 9);
+  });
+
+  test('Orbital Transfer: circular orbits, the spacecraft’s mass in the pull', () => {
+    const w = world('orbital-transfer-lab');
+    const sol = w.Sol;
+    for (const [name, r] of [
+      ['Spacecraft', 100],
+      ['Target Station', 250],
+    ]) {
+      const b = w[name];
+      expect(Math.hypot(b.pos.x, b.pos.y)).toBeCloseTo(r, 9);
+      // To the net-momentum balance the build ends with, which moves every
+      // body by the barycenter's own speed (about 1e-9 of the circular speed).
+      expect(speed(b)).toBeCloseTo(Math.sqrt((G * (sol.mass + b.mass)) / r), 6);
+      expect(b.pos.x * b.vel.x + b.pos.y * b.vel.y).toBeCloseTo(0, 6);
+    }
+    const turned = world('orbital-transfer-lab', {
+      transfer_target_phase_deg: 90,
+    });
+    expect(turned['Target Station'].pos.x).toBeCloseTo(0, 9);
+    expect(turned['Target Station'].pos.y).toBeCloseTo(250, 9);
+  });
+
+  test('the Binary Planet Lab: a planet round one star, the stars about a fixed barycenter', () => {
+    const w = world('binary-planet-lab');
+    const a = w['Star A'];
+    const b = w['Star B'];
+    // The system was recentered: no net momentum.
+    const px =
+      a.mass * a.vel.x + b.mass * b.vel.x + w.Planet.mass * w.Planet.vel.x;
+    const py =
+      a.mass * a.vel.y + b.mass * b.vel.y + w.Planet.mass * w.Planet.vel.y;
+    expect(px).toBeCloseTo(0, 9);
+    expect(py).toBeCloseTo(0, 9);
+    // The stars start at periapsis of an e = 0.4 orbit, 10 AU semi-major axis.
+    expect(Math.hypot(b.pos.x - a.pos.x, b.pos.y - a.pos.y)).toBeCloseTo(
+      10 * 100 * (1 - 0.4),
+      6
+    );
+  });
+
+  test('Exoplanet Characterization: HD 209458 and its planet about their center of mass', () => {
+    const w = world('exoplanet-characterization-lab');
+    const s = w['HD 209458'];
+    const p = w['HD 209458 b'];
+    const a = 0.04747 * 100;
+    expect(p.pos.x - s.pos.x).toBeCloseTo(a, 12);
+    expect(
+      (s.mass * s.pos.x + p.mass * p.pos.x) / (s.mass + p.mass)
+    ).toBeCloseTo(0, 12);
+    expect(Math.hypot(p.vel.x - s.vel.x, p.vel.y - s.vel.y)).toBeCloseTo(
+      Math.sqrt((G * (s.mass + p.mass)) / a),
+      12
+    );
+    expect(s.mass * s.vel.y + p.mass * p.vel.y).toBeCloseTo(0, 12);
+  });
+
+  test('Transit Lab: a circular orbit about the star from a quarter turn before transit', () => {
+    const w = world('transit-lab');
+    const s = w['HD 209458'];
+    const p = w['HD 209458 b'];
+    const a = 0.04747 * 100;
+    expect(p.pos.y).toBeCloseTo(-a, 12);
+    expect(speed(p)).toBeCloseTo(Math.sqrt((G * s.mass) / a), 12);
+    expect(p.vel.x).toBeGreaterThan(0);
+    expect(p.massInJupiters).toBe(0.69);
+    expect(p.radius / s.radius).toBeCloseTo((1.38 * 0.102763) / 1.155, 12);
+  });
+
+  test('Blended Binary: the companion circles the primary retrograde, 300 AU out', () => {
+    const w = world('blended-binary');
+    const s = w['HD 209458'];
+    const c = w['HD 209458 B (companion)'];
+    expect(c.pos.x).toBeCloseTo(300 * 100, 9);
+    expect(c.vel.y).toBeCloseTo(
+      -Math.sqrt((G * (s.mass + c.mass)) / (300 * 100)),
+      12
+    );
+    expect(c.mass).toBe(1000);
+    expect(physics.stars.length).toBe(2);
+  });
+
+  test('Three-Body Sensitivity: three equal stars on a rigidly rotating triangle', () => {
+    const w = world('three-body-sensitivity-lab');
+    const [a, b, c] = [w.Alpha, w.Beta, w.Gamma];
+    const side = x =>
+      Math.hypot(x[0].pos.x - x[1].pos.x, x[0].pos.y - x[1].pos.y);
+    expect(side([a, b])).toBeCloseTo(50 * Math.sqrt(3), 12);
+    expect(side([b, c])).toBeCloseTo(50 * Math.sqrt(3), 12);
+    expect(side([c, a])).toBeCloseTo(50 * Math.sqrt(3), 12);
+    // omega^2 L^3 = G * 3m; each star moves at omega times its radius.
+    const omega = speed(a) / 50;
+    expect(omega * omega * (50 * Math.sqrt(3)) ** 3).toBeCloseTo(
+      G * 3 * a.mass,
+      6
+    );
+    expect(a.vel.x + b.vel.x + c.vel.x).toBeCloseTo(0, 9);
+    expect(a.mass).toBe(6000);
+  });
+
+  test('Gravity Assist: the spacecraft is on the hyperbola the settings ask for', () => {
+    for (const key of ['gravity-assist-lab', 'gravity-assist-heliocentric']) {
+      const w = world(key);
+      const planet = w.Planet;
+      const craft = w.Spacecraft;
+      const mu = G * planet.mass;
+      const rx = craft.pos.x - planet.pos.x;
+      const ry = craft.pos.y - planet.pos.y;
+      const vx = craft.vel.x - planet.vel.x;
+      const vy = craft.vel.y - planet.vel.y;
+      const dist = Math.hypot(rx, ry);
+      const vInf = key === 'gravity-assist-lab' ? 0.461 : 0.9;
+      const b = key === 'gravity-assist-lab' ? 40 : 18;
+      expect(dist).toBeCloseTo(key === 'gravity-assist-lab' ? 4000 : 45, 6);
+      // Energy and angular momentum of the encounter: v^2/2 - mu/r = vInf^2/2,
+      // and |r x v| = b * vInf.
+      expect(0.5 * (vx * vx + vy * vy) - mu / dist).toBeCloseTo(
+        0.5 * vInf * vInf,
+        9
+      );
+      expect(Math.abs(rx * vy - ry * vx)).toBeCloseTo(b * vInf, 6);
+    }
+    // With a star the planet circles it; without one it drifts.
+    const helio = world('gravity-assist-heliocentric');
+    expect(speed(helio.Planet)).toBeCloseTo(
+      Math.sqrt((G * (helio.Star.mass + helio.Planet.mass)) / 500),
+      12
+    );
+    expect(world('gravity-assist-lab').Star).toBeUndefined();
+  });
+});
+
+describe('slice 3: the laboratories under a share link', () => {
+  // A link's settings land after the preset, so a lab can be asked for other
+  // masses, separations or phases, a gate closer than periapsis (no spacecraft
+  // is made), or a population count the scenario does not use. The fixture
+  // holds the world the hand-built blocks made then, one row per body hashed.
+  const EDGE = JSON.parse(
+    readFileSync('tests/fixtures/scenarioGeometryLabGolden.json', 'utf8')
+  );
+
+  test('the cases cover every laboratory, each population count at 0 and 3', () => {
+    expect(Object.keys(EDGE).sort()).toEqual([...LAB_EDGE_IDS].sort());
+    for (const key of LAB_SCENARIOS)
+      expect(
+        LAB_EDGE_IDS.filter(id => id.startsWith(`${key}@`)).length
+      ).toBeGreaterThanOrEqual(16);
+  });
+
+  test.each(LAB_EDGE_IDS)('%s is the world the code made', id => {
+    const at = id.indexOf('@');
+    const d = digest(id.slice(0, at), 1, JSON.parse(id.slice(at + 1)));
+    expect({ ...d, rows: d.rows.map(fnv) }).toEqual(EDGE[id]);
+  });
+
+  test('a gate closer than periapsis makes no spacecraft', () => {
+    const d = digest('gravity-assist-lab', 1, { assist_gate: 1 });
+    expect(d.rows.filter(r => r.startsWith('planets|')).length).toBe(0);
+    expect(d.rows.filter(r => r.startsWith('gas_giants|')).length).toBe(1);
   });
 });
