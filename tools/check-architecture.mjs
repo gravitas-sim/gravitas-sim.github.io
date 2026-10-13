@@ -5,6 +5,11 @@
  *   node tools/check-architecture.mjs           check, and fail on a violation
  *   node tools/check-architecture.mjs --report  print the graph and stop
  *   node tools/check-architecture.mjs --cycles  print every cycle and stop
+ *   node tools/check-architecture.mjs --sizes   print the largest modules, with
+ *                                               their ceilings, and stop
+ *   node tools/check-architecture.mjs --record-sizes
+ *                                               lower the recorded ceilings to
+ *                                               today's sizes (never raises one)
  *
  * What this is for
  * -----------------------------------------------------------------------------
@@ -26,14 +31,23 @@
  *   may import anything; nothing may import them. That is what makes ui.js a
  *   coordinator rather than a container.
  *
- * Both rules are enforced against a recorded baseline rather than against zero,
+ * A third rule is about size (Prompt 107, step 4): each module has a ceiling in
+ * tools/module-size-ceilings.json, in lines, recorded from its size on the day
+ * the check was written. A module may not grow past its ceiling, and the
+ * ceiling of a module larger than DEFAULT_SIZE_CEILING must equal its size, so
+ * that every slice of the decomposition lowers it in the same commit. A module
+ * with no entry is held to DEFAULT_SIZE_CEILING, the roadmap's slice limit.
+ * Raising a ceiling is a hand edit of that file with a DECISION_REGISTER row;
+ * --record-sizes only ever lowers them.
+ *
+ * The first two rules are enforced against a recorded baseline rather than against zero,
  * because the graph did not start clean and a check that fails on day one is a
  * check that gets commented out. The baseline may only shrink: ARCHITECTURE
  * below lists what is still wrong, every entry has a reason, and adding to it
  * requires editing this file deliberately.
  */
 
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const ROOT = 'js';
@@ -488,11 +502,132 @@ export async function findDeadExports() {
   return dead;
 }
 
+export const SIZE_CEILINGS_FILE = 'tools/module-size-ceilings.json';
+
+/** Lines a module without a recorded ceiling may have: the slice limit. */
+export const DEFAULT_SIZE_CEILING = 1500;
+
+/**
+ * Line count of every module in the graph (the newline count, as wc -l).
+ * @param {Map<string, Set<string>>} graph - The import graph
+ * @returns {Promise<Map<string, number>>} file -> lines
+ */
+export async function moduleSizes(graph) {
+  const sizes = new Map();
+  for (const file of graph.keys()) {
+    const src = await readFile(file, 'utf8');
+    sizes.set(file, (src.match(/\n/g) || []).length);
+  }
+  return sizes;
+}
+
+/**
+ * The size problems for a set of sizes against recorded ceilings.
+ * @param {Map<string, number>} sizes - file -> lines
+ * @param {Record<string, number>} ceilings - file -> recorded ceiling
+ * @returns {string[]} Problems, empty when all is well
+ */
+export function findSizeProblems(sizes, ceilings) {
+  const problems = [];
+  for (const [file, lines] of sizes) {
+    const ceiling = ceilings[file];
+    if (ceiling === undefined) {
+      if (lines > DEFAULT_SIZE_CEILING) {
+        problems.push(
+          `Module too large: ${file} has ${lines} lines and no recorded ` +
+            `ceiling; the limit for a new module is ${DEFAULT_SIZE_CEILING}. ` +
+            `Split it.`
+        );
+      }
+    } else if (lines > ceiling) {
+      problems.push(
+        `Module grew past its ceiling: ${file} has ${lines} lines, ` +
+          `ceiling ${ceiling}. Move code out rather than raising the ceiling ` +
+          `in ${SIZE_CEILINGS_FILE} (a raise needs a DECISION_REGISTER row).`
+      );
+    } else if (ceiling > DEFAULT_SIZE_CEILING && lines < ceiling) {
+      problems.push(
+        `Ceiling not lowered: ${file} has ${lines} lines, ceiling ${ceiling}. ` +
+          `Run npm run check:architecture -- --record-sizes so the ` +
+          `decomposition's progress is recorded.`
+      );
+    }
+  }
+  for (const file of Object.keys(ceilings)) {
+    if (!sizes.has(file)) {
+      problems.push(
+        `Stale ceiling: ${file} is in ${SIZE_CEILINGS_FILE} but is not a ` +
+          `module any more. Delete the entry.`
+      );
+    }
+  }
+  return problems;
+}
+
+async function readCeilings() {
+  return JSON.parse(await readFile(SIZE_CEILINGS_FILE, 'utf8')).ceilings;
+}
+
+function serializeCeilings(ceilings) {
+  const sorted = {};
+  for (const k of Object.keys(ceilings).sort()) sorted[k] = ceilings[k];
+  return (
+    JSON.stringify(
+      {
+        _note:
+          'Line ceilings per module, read by tools/check-architecture.mjs. ' +
+          'A module larger than 1,500 lines must sit exactly at its ceiling; ' +
+          'run check:architecture -- --record-sizes after moving code out. ' +
+          'Never raised without a DECISION_REGISTER row.',
+        ceilings: sorted,
+      },
+      null,
+      2
+    ) + '\n'
+  );
+}
+
 async function main() {
   const graph = await buildGraph();
 
   if (process.argv.includes('--report')) {
     report(graph);
+    return;
+  }
+
+  if (
+    process.argv.includes('--sizes') ||
+    process.argv.includes('--record-sizes')
+  ) {
+    const sizes = await moduleSizes(graph);
+    let ceilings = {};
+    try {
+      ceilings = await readCeilings();
+    } catch {
+      /* first recording */
+    }
+    if (process.argv.includes('--record-sizes')) {
+      const next = {};
+      for (const [file, lines] of sizes) {
+        next[file] = Math.min(lines, ceilings[file] ?? lines);
+      }
+      await writeFile(SIZE_CEILINGS_FILE, serializeCeilings(next));
+      const over = [...sizes].filter(([f, n]) => n > next[f]);
+      console.log(`Recorded ${Object.keys(next).length} ceilings.`);
+      if (over.length) {
+        console.log(
+          `Over their ceilings (not raised): ${over.map(([f]) => f).join(', ')}`
+        );
+      }
+      return;
+    }
+    const top = [...sizes].sort((a, b) => b[1] - a[1]).slice(0, 12);
+    console.log('Largest modules (lines, ceiling):');
+    for (const [file, n] of top) {
+      console.log(
+        `  ${String(n).padStart(6)}  ${String(ceilings[file] ?? '-').padStart(6)}  ${file}`
+      );
+    }
     return;
   }
 
@@ -562,6 +697,11 @@ async function main() {
     }
   }
 
+  // Sizes: a ceiling per module, recorded in tools/module-size-ceilings.json.
+  problems.push(
+    ...findSizeProblems(await moduleSizes(graph), await readCeilings())
+  );
+
   if (problems.length) {
     console.error(
       `Architecture check failed with ${problems.length} problem(s):\n`
@@ -573,7 +713,8 @@ async function main() {
 
   console.log(
     `Architecture OK: ${graph.size} modules, no cycles, ` +
-      `${ALLOWED_UPWARD.size} recorded upward imports and no new ones.`
+      `${ALLOWED_UPWARD.size} recorded upward imports and no new ones, ` +
+      `every module within its size ceiling.`
   );
 }
 
