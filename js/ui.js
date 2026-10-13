@@ -1323,20 +1323,6 @@ const setupInspectorDragging = () => {
   document.addEventListener('touchend', endDrag);
 };
 
-// REMOVED: Energy tab setup function
-
-// REMOVED: Energy chart readiness function
-
-// REMOVED: Energy tab event listeners function
-
-// REMOVED: Energy chart update function
-
-// REMOVED: Energy statistics update function
-
-// REMOVED: Energy chart export function
-
-// REMOVED: Energy chart clear function
-
 // ===== ENERGY TAB FUNCTIONALITY =====
 
 // Chart state tracking
@@ -1345,6 +1331,11 @@ let currentObjectId = null;
 let autoRefreshInterval = null;
 let autoRefreshEnabled = true;
 const AUTO_REFRESH_INTERVAL = 2000; // 2 seconds
+
+// The tabs and the document outlive the inspector's selection and the setup
+// runs for every selection, so each run takes the previous run's registrations
+// back (one abort) before it makes its own.
+let energyAbort = null;
 
 /**
  * Set up the energy tab with chart and controls
@@ -1362,13 +1353,18 @@ const setupEnergyTab = () => {
     return;
   }
 
+  energyAbort?.abort();
+  energyAbort = new AbortController();
+  const on = (target, type, fn) =>
+    target.addEventListener(type, fn, { signal: energyAbort.signal });
+
   debugLog('Setting up energy tab system');
 
   // Build energy tab HTML structure
   energyTabContent.innerHTML = renderEnergy();
 
   // Set up tab switching
-  energyTab.addEventListener('click', () => {
+  on(energyTab, 'click', () => {
     // The chart was built while this tab was hidden, so it measured a
     // zero-height parent. Now that it is visible, let it size itself.
     requestAnimationFrame(() => resizeChart());
@@ -1400,7 +1396,7 @@ const setupEnergyTab = () => {
     }, 50);
   });
 
-  detailsTab.addEventListener('click', () => {
+  on(detailsTab, 'click', () => {
     detailsTab.classList.add('active');
     energyTab.classList.remove('active');
     detailsTabContent.classList.add('active');
@@ -1413,13 +1409,13 @@ const setupEnergyTab = () => {
   // Set up export button
   const exportButton = document.getElementById('exportEnergyChart');
   if (exportButton) {
-    exportButton.addEventListener('click', handleExportChart);
+    on(exportButton, 'click', handleExportChart);
   }
 
   // Set up refresh button
   const refreshButton = document.getElementById('refreshEnergyChart');
   if (refreshButton) {
-    refreshButton.addEventListener('click', handleRefreshChart);
+    on(refreshButton, 'click', handleRefreshChart);
     debugLog('Refresh button event listener attached');
   } else {
     console.warn('Refresh button not found during setup');
@@ -1429,7 +1425,7 @@ const setupEnergyTab = () => {
 
   // Add a global click handler as a fallback for the refresh button
   // This ensures the refresh button works even if the event listener wasn't properly attached
-  document.addEventListener('click', event => {
+  on(document, 'click', event => {
     if (event.target && event.target.id === 'refreshEnergyChart') {
       debugLog('Refresh button clicked via global handler');
       handleRefreshChart();
@@ -1917,21 +1913,25 @@ const endDrag = () => {
   }
 };
 
-// Overlay minimize/maximize functionality
+// Overlay minimize/maximize functionality. Run at start-up and again for every
+// selection; the registrations of the run before are taken back each time.
+let overlayAbort = null;
 const setupOverlayMinimize = () => {
   const overlay = document.getElementById('overlay');
   const minimizeBtn = document.getElementById('overlayMinimize');
 
   if (!overlay || !minimizeBtn) return;
 
-  // Remove existing listeners to prevent duplicates
-  minimizeBtn.removeEventListener('click', toggleOverlayMinimize);
+  overlayAbort?.abort();
+  overlayAbort = new AbortController();
+  const on = (target, type, fn) =>
+    target.addEventListener(type, fn, { signal: overlayAbort.signal });
 
   // Add minimize/maximize handler
-  minimizeBtn.addEventListener('click', toggleOverlayMinimize);
+  on(minimizeBtn, 'click', toggleOverlayMinimize);
 
   // The whole collapsed panel is the target for re-opening, not just the chip
-  overlay.addEventListener('click', e => {
+  on(overlay, 'click', e => {
     if (!overlay.classList.contains('minimized')) return;
     if (minimizeBtn.contains(e.target)) return;
     setOverlayMinimized(overlay, minimizeBtn, false);
