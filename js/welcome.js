@@ -27,6 +27,7 @@ import {
 } from './data/welcome.js';
 import { scenarioShotHtml, wireThumbnailFallbacks } from './scenarioBrowser.js';
 import { t } from './i18n/index.js';
+import { command } from './appState.js';
 
 // The four functions that decide whether this layer is needed live in
 // js/welcomeGate.js, so that deciding can happen without downloading this. They
@@ -392,8 +393,7 @@ async function runAction(action, key) {
 
     case 'scenario': {
       // One authoritative scenario loader, shared with the scenario browser.
-      const { loadScenarioByKey } = await import('./ui.js');
-      const loaded = loadScenarioByKey(key);
+      const loaded = command('loadScenarioByKey')(key);
       closeWelcome();
       if (!loaded) {
         const { toast } = await import('./controls.js');
