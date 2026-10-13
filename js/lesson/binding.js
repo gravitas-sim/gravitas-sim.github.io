@@ -152,7 +152,7 @@ export function bindingMatches(binding, body, generation) {
  */
 export function kindOf(body) {
   if (!body) return null;
-  const raw = body.obj_type || body.constructor?.name || null;
+  const raw = body.obj_type || body.kind || null;
   if (!raw) return null;
   return raw.endsWith('Object') && raw.length > 6 ? raw.slice(0, -6) : raw;
 }

@@ -119,7 +119,7 @@ const newest = (page, list) =>
     const b = arr[arr.length - 1];
     if (!b) return null;
     return {
-      cls: b.constructor?.name ?? null,
+      cls: b.kind ?? null,
       x: b.pos.x,
       y: b.pos.y,
       vx: b.vel.x,

@@ -148,7 +148,7 @@ async function digestCatalog(page) {
       [
         list,
         index,
-        b?.constructor?.name,
+        b?.kind,
         b?.id,
         b?.name ?? '',
         num(b?.mass),
@@ -183,7 +183,7 @@ async function digestCatalog(page) {
         const arr = p[list] || [];
         arr.forEach((b, i) => {
           rows.push(describe(b, list, i));
-          const t = b?.constructor?.name || 'unknown';
+          const t = b?.kind || 'unknown';
           byType[t] = (byType[t] || 0) + 1;
           totalMass += b?.mass || 0;
           px += (b?.mass || 0) * (b?.vel?.x || 0);

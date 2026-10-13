@@ -212,10 +212,6 @@ async function buildCss() {
   const result = await esbuild.transform(combined, {
     loader: 'css',
     minify: true,
-    // physics.js branches on constructor.name in fifteen places. Without
-    // this, minification renames the classes and every one of those branches
-    // is false in production and true in development.
-    keepNames: true,
     legalComments: 'none',
   });
   await writeFile(path.join(OUT, 'css', 'app.css'), result.code);
@@ -230,7 +226,6 @@ async function buildCss() {
     const one = await esbuild.transform(await readFile(file, 'utf8'), {
       loader: 'css',
       minify: true,
-      keepNames: true,
       legalComments: 'none',
     });
     await writeFile(path.join(OUT, file), one.code);
@@ -244,10 +239,10 @@ async function buildJs() {
     entryPoints: [{ in: 'js/main.js', out: 'app' }],
     bundle: true,
     minify: true,
-    // Names may be minified here. physics.js compares body classes by
-    // identity (className), and nothing the application bundles reads a
-    // constructor's name; tests/buildIntegrity.test.js holds both. Keeping
-    // them cost the deferred budget 63 KB.
+    // Names may be minified here. physics.js tells its body classes apart by
+    // the `kind` string each carries, and nothing the application bundles
+    // reads a function's name; tests/buildIntegrity.test.js holds both.
+    // Keeping them cost the deferred budget 63 KB.
     keepNames: false,
     format: 'esm',
     target: ['es2022'],
@@ -300,7 +295,7 @@ async function buildJs() {
     ],
     bundle: true,
     minify: true,
-    // As for the application: physics.js no longer needs class names.
+    // As for the application: nothing a worker bundles reads a function's name.
     keepNames: false,
     format: 'esm',
     target: ['es2022'],
@@ -468,10 +463,10 @@ async function buildDocPages() {
       entryPoints: ['js/instructorPortal.js'],
       bundle: true,
       minify: true,
-      // physics.js branches on constructor.name in fifteen places. Without
-      // this, minification renames the classes and every one of those branches
-      // is false in production and true in development.
-      keepNames: true,
+      // No keepNames: nothing this bundle includes reads a function's name.
+      // physics.js tells its body classes apart by their `kind` strings, which
+      // minification cannot rename (tests/buildIntegrity.test.js).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'instructorPortal.js'),
@@ -500,10 +495,10 @@ async function buildDocPages() {
       entryPoints: ['js/validationWorker.js'],
       bundle: true,
       minify: true,
-      // physics.js branches on constructor.name in fifteen places. Without
-      // this, minification renames the classes and every one of those branches
-      // is false in production and true in development.
-      keepNames: true,
+      // No keepNames: nothing this bundle includes reads a function's name.
+      // physics.js tells its body classes apart by their `kind` strings, which
+      // minification cannot rename (tests/buildIntegrity.test.js).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'validationWorker.js'),
@@ -897,7 +892,7 @@ async function buildDocPages() {
       entryPoints: ['js/figureBuilder.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),
@@ -1011,10 +1006,10 @@ async function buildDocPages() {
       entryPoints: ['js/submissionReview.js'],
       bundle: true,
       minify: true,
-      // physics.js branches on constructor.name in fifteen places. Without
-      // this, minification renames the classes and every one of those branches
-      // is false in production and true in development.
-      keepNames: true,
+      // No keepNames: nothing this bundle includes reads a function's name.
+      // physics.js tells its body classes apart by their `kind` strings, which
+      // minification cannot rename (tests/buildIntegrity.test.js).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'submissionReview.js'),
@@ -1028,10 +1023,10 @@ async function buildDocPages() {
       entryPoints: ['js/validationPage.js'],
       bundle: true,
       minify: true,
-      // physics.js branches on constructor.name in fifteen places. Without
-      // this, minification renames the classes and every one of those branches
-      // is false in production and true in development.
-      keepNames: true,
+      // No keepNames: nothing this bundle includes reads a function's name.
+      // physics.js tells its body classes apart by their `kind` strings, which
+      // minification cannot rename (tests/buildIntegrity.test.js).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'validationPage.js'),

@@ -73,7 +73,7 @@ function canon(v, depth, seen) {
 
 /** One body: its list, its place in it, its class and all of its own data. */
 export function bodyRecord(list, i, b) {
-  return `${list}|${i}|${b.constructor.name}|${JSON.stringify(canon(b, 0, new Set()))}`;
+  return `${list}|${i}|${b.kind}|${JSON.stringify(canon(b, 0, new Set()))}`;
 }
 
 /**

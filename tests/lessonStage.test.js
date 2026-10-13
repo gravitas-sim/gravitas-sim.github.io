@@ -994,7 +994,7 @@ describe('a remnant replaces its star rather than joining it', () => {
     });
     expect(white_dwarfs).toHaveLength(0);
     expect(stars).toHaveLength(1);
-    expect(stars[0].constructor.name).toBe('StarObject');
+    expect(stars[0].kind).toBe('StarObject');
     expect(remnantKindOf('sun')).toBeNull();
     expect(stagedStars()[0].star).toBe(stars[0]);
   });

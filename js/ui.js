@@ -898,7 +898,7 @@ const inspectorTypeFor = body => {
     Asteroid: 'Asteroid',
     Galaxy: 'Galaxy',
   };
-  return byClass[body?.constructor?.name] || body?.obj_type || 'Planet';
+  return byClass[body?.kind] || body?.obj_type || 'Planet';
 };
 
 /**
@@ -4139,9 +4139,8 @@ const typeName = type => t(OBJECT_NAME_KEY[type] || 'objectName.star');
 /**
  * Which of the eight an object is.
  *
- * By instanceof rather than by obj_type or constructor.name: only four of the
- * eight classes pass an obj_type to the base constructor, and constructor.name
- * is whatever the minifier decided in the production build.
+ * By instanceof rather than by obj_type: only four of the eight classes pass
+ * an obj_type to the base constructor.
  *
  * @param {object} obj - A physics body
  * @returns {?string} A type key, or null for something not on the list
