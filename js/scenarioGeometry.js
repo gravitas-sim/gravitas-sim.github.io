@@ -164,9 +164,9 @@ export function validateGeometry(g, { rules = true } = {}) {
     bad('place', 'a scenario pack may not place bodies by rule');
   else if (
     g.place !== undefined &&
-    !(Array.isArray(g.place) && g.place.length <= 4)
+    !(Array.isArray(g.place) && g.place.length >= 1 && g.place.length <= 4)
   )
-    bad('place', 'a list of up to 4 rule steps');
+    bad('place', 'a list of 1 to 4 rule steps (leave it out for none)');
   const steps = g.steps ?? (g.place === undefined ? undefined : []);
   if (!Array.isArray(steps) || (steps.length === 0 && g.steps)) {
     bad('steps', 'a list of at least one step');
