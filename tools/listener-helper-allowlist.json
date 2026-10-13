@@ -1,0 +1,20 @@
+{
+  "_note": "Modules that export a mount function and register listeners directly, read by tools/check-architecture.mjs. A module that adopts js/listeners.js (or stops mounting) must be deleted from this list; nothing is added without a DECISION_REGISTER row. Every module-size ceiling is exact, so a module takes the helper in the slice that makes room for its few lines.",
+  "modules": [
+    "js/authoring/preview.js",
+    "js/experiments/analysisPanel.js",
+    "js/lecture.js",
+    "js/notebook/derivedPanel.js",
+    "js/observatory/archivePanel.js",
+    "js/observatory/comparePanel.js",
+    "js/observatory/formulaPanel.js",
+    "js/observatory/guidePanel.js",
+    "js/observatory/measurePanel.js",
+    "js/observatory/skyPanel.js",
+    "js/observerControls.js",
+    "js/precisePlacement.js",
+    "js/shell.js",
+    "js/sky/instruments.js",
+    "js/teach/find.js"
+  ]
+}

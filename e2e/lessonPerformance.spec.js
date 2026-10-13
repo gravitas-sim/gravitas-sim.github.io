@@ -45,10 +45,19 @@ const INSTRUMENT = () => {
   const add = target.addEventListener;
   const remove = target.removeEventListener;
   target.addEventListener = function (...args) {
-    try {
-      window.__entries.push({ ref: new WeakRef(this), type: args[0] });
-    } catch {
-      /* a target that cannot be weakly held is not a leak this can see */
+    // A listener added with a signal is gone when the signal aborts: that is
+    // how a mounting module's helper removes everything it registered.
+    const signal = typeof args[2] === 'object' ? args[2]?.signal : undefined;
+    if (!signal?.aborted) {
+      try {
+        window.__entries.push({
+          ref: new WeakRef(this),
+          type: args[0],
+          signal,
+        });
+      } catch {
+        /* a target that cannot be weakly held is not a leak this can see */
+      }
     }
     return add.apply(this, args);
   };
@@ -68,6 +77,7 @@ const INSTRUMENT = () => {
    */
   window.__liveListeners = () =>
     window.__entries.filter(e => {
+      if (e.signal?.aborted) return false;
       const node = e.ref.deref();
       if (!node) return false;
       if (node === window || node === document) return true;
@@ -229,5 +239,139 @@ test.describe('a lesson cleans up after itself', () => {
       states.filter(s => s === 'running'),
       'audio contexts left running'
     ).toEqual([]);
+  });
+});
+
+// =============================================================================
+// What a page's panels leave behind when they open and close (Prompt 107, step 3)
+// -----------------------------------------------------------------------------
+// The same census, run on the three pages whose panels mount and rebuild: the
+// Observatory (six disclosure panels, each mounted on its first opening and
+// fed again on every later one), the Investigation Composer and the Scenario
+// Studio (the whole editor is rebuilt for every New, every opened file and
+// every starting point). The Observatory's cycle includes a language change,
+// which rebuilds every mounted panel in place: the fit panel once put a
+// listener on its host for each rebuild and never took it back. The allowance
+// is four, for a panel's first-open registrations; growth per cycle would be
+// twenty or more.
+// =============================================================================
+
+/** Wait until the count stops moving: lazy panels register a beat late. */
+async function settled(page) {
+  let last = -1;
+  await expect
+    .poll(
+      async () => {
+        const now = await page.evaluate(() => window.__liveListeners());
+        const same = now === last;
+        last = now;
+        return same;
+      },
+      { intervals: [100, 100, 200, 300], timeout: 8_000 }
+    )
+    .toBe(true);
+  return last;
+}
+
+/** Cycle `cycle` once, count, cycle twenty more times, count again. */
+async function growth(page, cycle) {
+  await cycle();
+  const before = await settled(page);
+  for (let i = 0; i < 20; i++) await cycle();
+  const after = await settled(page);
+  return { before, after, grew: after - before };
+}
+
+test.describe('a page cleans up its panels', () => {
+  test('the Observatory leaves nothing behind when its panels open and close', async ({
+    page,
+  }) => {
+    test.slow();
+    await page.addInitScript(INSTRUMENT);
+    await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
+      timeout: 30_000,
+    });
+    await page.locator('#obsFixture').selectOption({ index: 0 });
+    await page.locator('#obsOpen').click();
+    await expect(page.locator('#obsTable tbody tr').first()).toBeVisible({
+      timeout: 30_000,
+    });
+    const panels = [
+      'obsArchivePanel',
+      'obsGuidePanel',
+      'obsMeasurePanel',
+      'obsFitPanel',
+      'obsComparePanel',
+      'obsSkyPanel',
+    ];
+    const cycle = async () => {
+      for (const id of panels) {
+        const box = page.locator(`#${id}`);
+        if (!(await box.isVisible())) continue;
+        await box.locator('summary').first().click();
+        await expect(box).toHaveJSProperty('open', true);
+        // Mounted: its first control is in the page (the panel loads lazily).
+        await expect(
+          box.locator('button, select, input').first()
+        ).toBeAttached();
+        await box.locator('summary').first().click();
+        await expect(box).toHaveJSProperty('open', false);
+      }
+      // A language change rebuilds every mounted panel in place: the mount
+      // and unmount a panel does most often.
+      for (const id of ['es', 'en']) {
+        const label = await page.locator('#obsOpen').textContent();
+        await page.locator('[data-gs-lang]').selectOption(id);
+        await expect(page.locator('#obsOpen')).not.toHaveText(label);
+      }
+      // The observation is opened again too: every view is redrawn for it.
+      await page.locator('#obsOpen').click();
+      await expect(page.locator('#obsTable tbody tr').first()).toBeVisible();
+    };
+    const { grew } = await growth(page, cycle);
+    expect(
+      grew,
+      'listeners added across twenty panel cycles'
+    ).toBeLessThanOrEqual(4);
+  });
+
+  test('the Composer leaves nothing behind when its editor is rebuilt', async ({
+    page,
+  }) => {
+    test.slow();
+    await page.addInitScript(INSTRUMENT);
+    await page.goto('/studio/lesson/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('body')).toHaveAttribute('data-ready', 'true', {
+      timeout: 30_000,
+    });
+    const cycle = async () => {
+      await page.locator('#cp-new').click();
+    };
+    const { grew } = await growth(page, cycle);
+    expect(
+      grew,
+      'listeners added across twenty editor rebuilds'
+    ).toBeLessThanOrEqual(4);
+  });
+
+  test('the Studio leaves nothing behind when its editor is rebuilt', async ({
+    page,
+  }) => {
+    test.slow();
+    await page.addInitScript(INSTRUMENT);
+    await page.goto('/studio/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('body')).toHaveAttribute('data-ready', 'true', {
+      timeout: 30_000,
+    });
+    const cycle = async () => {
+      await page.locator('#st-new').click();
+      await page.locator('#st-from-go').click();
+    };
+    const { grew } = await growth(page, cycle);
+    expect(
+      grew,
+      'listeners added across twenty editor rebuilds'
+    ).toBeLessThanOrEqual(4);
   });
 });
