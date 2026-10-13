@@ -107,7 +107,7 @@ const look = page =>
       hideStar: scene?.hideStar ?? null,
       fronts: scene?.fronts.length ?? 0,
       shells: scene?.shells.length ?? 0,
-      kind: body ? body.constructor.name : null,
+      kind: body ? body.kind : null,
       radiusSun: body?.radiusInSuns ?? null,
       playPos: play?.position ?? null,
       trackId: play?.trackId ?? null,

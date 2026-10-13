@@ -61,7 +61,7 @@ function namedBodies(page) {
         out.push({
           list: key,
           name: b.name,
-          type: b.constructor?.name ?? null,
+          type: b.kind ?? null,
           mass: b.mass,
           massInEarths: b.massInEarths ?? null,
           semiMajorAxisAu: b.semi_major_axis_au ?? null,

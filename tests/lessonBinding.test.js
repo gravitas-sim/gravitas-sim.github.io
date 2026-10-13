@@ -132,10 +132,8 @@ describe('the two vocabularies for a kind', () => {
     expect(kindOf(body(3, 'x', 'Comet'))).toBe('Comet');
   });
 
-  test('a constructor name is the fallback, and null is null', () => {
-    class Asteroid {}
-    const rock = new Asteroid();
-    rock.id = 7;
+  test('the body kind is the fallback, and null is null', () => {
+    const rock = { id: 7, kind: 'Asteroid' };
     expect(kindOf(rock)).toBe('Asteroid');
     expect(kindOf(null)).toBe(null);
   });

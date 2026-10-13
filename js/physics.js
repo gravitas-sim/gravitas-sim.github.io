@@ -299,8 +299,8 @@ const buildImpactPayload = (source, target, impactType) => {
   );
   return {
     impactType,
-    sourceType: source?.obj_type || source?.constructor?.name || 'Unknown',
-    targetType: target?.obj_type || target?.constructor?.name || impactType,
+    sourceType: source?.obj_type || source?.kind || 'Unknown',
+    targetType: target?.obj_type || target?.kind || impactType,
     relativeSpeed,
     masses: [source?.mass || 0, target?.mass || 0],
     position: avgPos,
@@ -349,6 +349,10 @@ let state = null;
 const setStateReference = stateRef => {
   state = stateRef;
 };
+
+// Halos and coronas draw where js/render.js says (it notes the glow); no one, no glow.
+let bloomLayer = () => null;
+const setBloomLayer = provider => (bloomLayer = provider);
 
 // Physics settings that can be updated from UI.
 //
@@ -845,17 +849,17 @@ const completeMerger = (a, b, result, { remove } = {}) => {
     primaryId: a.id,
     secondaryId: b.id,
     resultId: result ? result.id : null,
-    // Class names, which is what the merger branches decide on. `keepNames` in
-    // build.js is what makes them survive minification.
+    // Body kinds (the class names, set below), which the merger branches
+    // decide on; the minifier cannot rename them.
     //
     // `resultObjType` is separate and is not a synonym: a transformed body
     // carries the obj_type of what it became and the class of what it was, and
     // js/ui.js renders the inspector by obj_type. Both are here so that no
     // consumer has to guess which one it wanted.
     types: {
-      primary: a.constructor?.name ?? null,
-      secondary: b.constructor?.name ?? null,
-      result: result ? (result.constructor?.name ?? null) : null,
+      primary: a.kind ?? null,
+      secondary: b.kind ?? null,
+      result: result ? (result.kind ?? null) : null,
       resultObjType: result ? (result.obj_type ?? null) : null,
     },
     masses: {
@@ -1302,7 +1306,7 @@ const accelerationBreakdown = body => {
     sources.push({
       id: s.id ?? -1,
       label: s.name || s.obj_type || 'source',
-      type: s.obj_type || s.constructor?.name || 'source',
+      type: s.obj_type || s.kind || 'source',
       mass: s.mass,
       ax,
       ay,
@@ -3268,6 +3272,14 @@ export function onPhysicsStep(fn) {
  * Base class for all physics objects in the simulation
  */
 class PhysicsObject {
+  // A body's kind: its class's static `kind`, a string minifying cannot rename.
+  // An accessor, so it is not state: not enumerated, not saved, and a saved
+  // state that names a `kind` cannot replace it. Not obj_type (see below).
+  get kind() {
+    return this.constructor.kind;
+  }
+  set kind(_) {}
+
   /**
    * Create a physics object
    * @param {Object} pos - Initial position with x, y properties
@@ -3424,6 +3436,7 @@ class PhysicsObject {
  * @extends PhysicsObject
  */
 class Planet extends PhysicsObject {
+  static kind = 'Planet';
   /**
    * Create a planet object
    * @param {Object} pos - Initial position with x, y properties
@@ -3525,29 +3538,24 @@ class Planet extends PhysicsObject {
     }
 
     // Soft bloom, into the offscreen layer js/render.js composites additively.
+    // One pass, in the planet's own color. Two blocks used to paint the same
+    // gradient, the second in a fixed pale blue at more than twice the alpha,
+    // so every planet wore the same bluish halo and paid for two gradients. The
+    // alphas below are the two sets summed: the brightness is what it was.
     //
-    // One pass. There used to be two consecutive blocks here, identical in
-    // geometry and differing only in color: the first in the planet's own
-    // base color at 0.15/0.06, the second in a fixed pale blue at 0.35/0.15.
-    // Added together, the fixed blue was more than twice the weight of the
-    // planet's own color, so a red planet and a blue one wore the same halo -
-    // and every planet paid for two full-size radial gradients a frame to be
-    // told the wrong color. The alphas below are the two sets summed, so the
-    // brightness is what it always was; only the hue is now correct.
-    //
-    // Reading window.bloomCtx is what arms the composite (see the getter in
-    // js/render.js), so the tier check has to come first: at the low tier the
-    // layer must not be touched at all, which is what js/quality.js means when
-    // it lists the bloom canvas among the passes that tier exists to skip.
+    // Asking for the bloom layer arms the composite (see setBloomLayer), so the
+    // tier check comes first: js/quality.js lists the bloom canvas among the
+    // passes the low tier skips, and the layer must not be touched there.
     try {
-      if (currentTier() !== 'low' && typeof window !== 'undefined') {
+      if (currentTier() !== 'low') {
         // The halo follows the drawn body, not the model radius.
         const screenR = r * state.zoom;
-        if (screenR > 1 && window.bloomCtx) {
+        const bloom = screenR > 1 && bloomLayer();
+        if (bloom) {
           const { x: screenX, y: screenY } = world_to_screen(world_pos);
           const rgbPlanet = hexToRgb(baseColor) || { r: 200, g: 220, b: 255 };
           const { r, g, b } = rgbPlanet;
-          const grad = window.bloomCtx.createRadialGradient(
+          const grad = bloom.createRadialGradient(
             screenX,
             screenY,
             0,
@@ -3558,10 +3566,10 @@ class Planet extends PhysicsObject {
           grad.addColorStop(0, `rgba(${r},${g},${b},0.5)`);
           grad.addColorStop(0.6, `rgba(${r},${g},${b},0.21)`);
           grad.addColorStop(1, 'rgba(0,0,0,0)');
-          window.bloomCtx.fillStyle = grad;
-          window.bloomCtx.beginPath();
-          window.bloomCtx.arc(screenX, screenY, screenR * 2.5, 0, 2 * Math.PI);
-          window.bloomCtx.fill();
+          bloom.fillStyle = grad;
+          bloom.beginPath();
+          bloom.arc(screenX, screenY, screenR * 2.5, 0, 2 * Math.PI);
+          bloom.fill();
         }
       }
     } catch {
@@ -3942,6 +3950,7 @@ class Planet extends PhysicsObject {
 
 // GasGiant class
 class GasGiant extends PhysicsObject {
+  static kind = 'GasGiant';
   constructor(pos, vel, massInJupiters = null) {
     let finalMassInJupiters;
     if (massInJupiters !== null) {
@@ -4445,6 +4454,7 @@ class GasGiant extends PhysicsObject {
  * @extends PhysicsObject
  */
 class Asteroid extends PhysicsObject {
+  static kind = 'Asteroid';
   /**
    * @param {Object} pos - Initial position
    * @param {Object} vel - Initial velocity
@@ -4544,6 +4554,7 @@ class Asteroid extends PhysicsObject {
  * @extends PhysicsObject
  */
 class Debris extends PhysicsObject {
+  static kind = 'Debris';
   /**
    * @param {Object} pos - Initial position
    * @param {Object} vel - Initial velocity
@@ -4582,6 +4593,7 @@ class Debris extends PhysicsObject {
  * Represents individual particles in black hole accretion disks
  */
 class AccretionDiskParticle extends PhysicsObject {
+  static kind = 'AccretionDiskParticle';
   constructor(pos, vel, parentBlackHole) {
     const mass = 0.0005; // Even smaller mass for disk particles
     const radius = 0.4; // Much smaller visual radius for more numerous, smaller particles
@@ -4851,6 +4863,11 @@ class AccretionDiskParticle extends PhysicsObject {
  * Black hole physics object with gravitational effects
  */
 class BlackHole {
+  get kind() {
+    return 'BlackHole';
+  }
+  set kind(_) {}
+
   /**
    * Create a black hole object
    * @param {Object} pos - Initial position with x, y properties
@@ -5359,6 +5376,7 @@ class BlackHole {
 
 // StarObject class
 class StarObject extends PhysicsObject {
+  static kind = 'StarObject';
   constructor(pos, vel, massInSuns = null) {
     let finalMassInSuns;
     if (massInSuns !== null) {
@@ -5486,12 +5504,8 @@ class StarObject extends PhysicsObject {
     // inside the photosphere. Restrained, and cached as a sprite rather than
     // built as a gradient per star per frame.
     try {
-      if (
-        lodAtLeast(level, LOD.SHADED) &&
-        screenR > 2 &&
-        typeof window !== 'undefined' &&
-        window.bloomCtx
-      ) {
+      const glow = lodAtLeast(level, LOD.SHADED) && screenR > 2 && bloomLayer();
+      if (glow) {
         const coronaR = screenR * CORONA_SCALE;
         const halo = spriteFor('star-corona', rgb, coronaR, (sctx, size, c) => {
           const half = size / 2;
@@ -5506,7 +5520,7 @@ class StarObject extends PhysicsObject {
         });
         const { x: screenX, y: screenY } = world_to_screen(world_pos);
         if (halo) {
-          window.bloomCtx.drawImage(
+          glow.drawImage(
             halo,
             screenX - coronaR,
             screenY - coronaR,
@@ -5654,6 +5668,7 @@ class StarObject extends PhysicsObject {
 
 // NeutronStar class
 class NeutronStar extends PhysicsObject {
+  static kind = 'NeutronStar';
   constructor(pos, vel, massInSuns = null, isPulsar = null) {
     let finalMassInSuns;
     if (massInSuns !== null) {
@@ -5812,6 +5827,7 @@ class NeutronStar extends PhysicsObject {
 
 // WhiteDwarf class
 class WhiteDwarf extends PhysicsObject {
+  static kind = 'WhiteDwarf';
   constructor(pos, vel, massInSuns = null) {
     let finalMassInSuns;
     if (massInSuns !== null) {
@@ -5989,6 +6005,7 @@ const galaxyTilt = id => (id % 8) * (Math.PI / 8);
  * not care what the units were.
  */
 class Galaxy extends PhysicsObject {
+  static kind = 'Galaxy';
   /**
    * @param {Object} pos - Initial position
    * @param {Object} vel - Initial velocity
@@ -6366,6 +6383,7 @@ const findObjectAtPosition = worldPos => {
 
 // Comet class from original
 class Comet extends PhysicsObject {
+  static kind = 'Comet';
   constructor(pos, vel, massInComets = null) {
     let finalMassInComets;
     if (massInComets !== null) {
@@ -7117,22 +7135,6 @@ const purgeDead = list =>
     return false;
   });
 
-/** A body's class by name; minifying renames classes. Not obj_type (see below). */
-const CLASS_NAMES = new Map([
-  [Planet, 'Planet'],
-  [GasGiant, 'GasGiant'],
-  [Asteroid, 'Asteroid'],
-  [Comet, 'Comet'],
-  [Debris, 'Debris'],
-  [BlackHole, 'BlackHole'],
-  [StarObject, 'StarObject'],
-  [NeutronStar, 'NeutronStar'],
-  [WhiteDwarf, 'WhiteDwarf'],
-  [Galaxy, 'Galaxy'],
-  [AccretionDiskParticle, 'AccretionDiskParticle'],
-]);
-export const className = o => CLASS_NAMES.get(o?.constructor) ?? '';
-
 // Handle star merging - stars combining into more massive objects
 /**
  * Handle merging between stars, neutron stars, and white dwarfs
@@ -7165,8 +7167,8 @@ const handle_star_merging = stars_list => {
         if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
           // By class, never obj_type: a transformed body carries the obj_type
           // of what it became and the class of what it was.
-          const star1_type = className(star1);
-          const star2_type = className(star2);
+          const star1_type = star1.kind;
+          const star2_type = star2.kind;
 
           // Skip BH-BH pairs here; dedicated BH-BH merger runs separately
           if (star1_type === 'BlackHole' && star2_type === 'BlackHole') {
@@ -7244,12 +7246,11 @@ const handle_star_merging = stars_list => {
             // Mark only the non-BH as dead
             other.alive = false;
             // Remove the non-BH from its global list
-            if (other.constructor === StarObject)
+            if (other.kind === 'StarObject')
               stars = stars.filter(s => s !== other);
-            if (other.constructor === WhiteDwarf)
-              clearObjectEnergyHistory(other.id);
+            if (other.kind === 'WhiteDwarf') clearObjectEnergyHistory(other.id);
             white_dwarfs = white_dwarfs.filter(wd => wd !== other);
-            if (other.constructor === NeutronStar)
+            if (other.kind === 'NeutronStar')
               clearObjectEnergyHistory(other.id);
             neutron_stars = neutron_stars.filter(ns => ns !== other);
             // No new black hole is created, and the existing one remains in
@@ -7525,11 +7526,11 @@ const handle_star_object_collisions = () => {
         star.mass += planet.mass;
 
         // Update star properties based on type
-        if (star.constructor === NeutronStar) {
+        if (star.kind === 'NeutronStar') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor === WhiteDwarf) {
+        } else if (star.kind === 'WhiteDwarf') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor === StarObject) {
+        } else if (star.kind === 'StarObject') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
@@ -7573,11 +7574,11 @@ const handle_star_object_collisions = () => {
         star.mass += gasGiant.mass;
 
         // Update star properties based on type
-        if (star.constructor === NeutronStar) {
+        if (star.kind === 'NeutronStar') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor === WhiteDwarf) {
+        } else if (star.kind === 'WhiteDwarf') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor === StarObject) {
+        } else if (star.kind === 'StarObject') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
@@ -7622,11 +7623,11 @@ const handle_star_object_collisions = () => {
         star.mass += asteroid.mass;
 
         // Update star properties based on type
-        if (star.constructor === NeutronStar) {
+        if (star.kind === 'NeutronStar') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor === WhiteDwarf) {
+        } else if (star.kind === 'WhiteDwarf') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor === StarObject) {
+        } else if (star.kind === 'StarObject') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
@@ -7667,9 +7668,7 @@ const ROCKY_TYPES = new Set(['Planet', 'Asteroid', 'Comet']);
 const handle_rocky_collisions = objects_list => {
   // Comets are included: they are solid bodies and were previously able to fly
   // straight through planets and asteroids because this filter excluded them.
-  const rocky_objects = objects_list.filter(obj =>
-    ROCKY_TYPES.has(className(obj))
-  );
+  const rocky_objects = objects_list.filter(obj => ROCKY_TYPES.has(obj.kind));
 
   // This is the densest pairwise pass in the frame - the Kuiper Belt scenario
   // alone puts 300+ rocky bodies through it - so it gets the broad phase.
@@ -8168,6 +8167,7 @@ export {
   setDetailScale,
   getDetailScale,
   setStateReference,
+  setBloomLayer,
   // Energy calculation functions
   calculateKineticEnergy,
   calculateGravitationalPotentialEnergy,
@@ -8197,7 +8197,7 @@ function asPhysicsObject(bh) {
     mass: bh.mass,
     radius: bh.radius,
     alive: true,
-    constructor: BlackHole,
+    kind: 'BlackHole',
     _bh_ref: bh, // Keep reference to real BlackHole
   };
 }

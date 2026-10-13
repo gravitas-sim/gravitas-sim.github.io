@@ -19,8 +19,8 @@ test.describe('the object inspector', () => {
       await app.waitForFrames(10);
 
       const picked = await app.selectFirstObject('StarObject');
-      // The constructor is StarObject; the inspector calls it a Star.
-      expect(picked.constructor).toBe('StarObject');
+      // The kind is StarObject; the inspector calls it a Star.
+      expect(picked.kind).toBe('StarObject');
       expect(picked.type).toBe('Star');
 
       const inspector = page.locator('#objectInspector');

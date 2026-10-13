@@ -69,15 +69,7 @@ function snapshot() {
   const out = [];
   for (const list of LISTS) {
     for (const b of physics[list]) {
-      out.push([
-        list,
-        b.constructor.name,
-        b.pos.x,
-        b.pos.y,
-        b.vel.x,
-        b.vel.y,
-        b.mass,
-      ]);
+      out.push([list, b.kind, b.pos.x, b.pos.y, b.vel.x, b.vel.y, b.mass]);
     }
   }
   return out;

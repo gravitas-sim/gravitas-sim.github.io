@@ -99,7 +99,7 @@ function fillBodies() {
     select.innerHTML = bodies
       .map(
         b =>
-          `<option value="${b.id}">${escapeText(b.name || `${b.constructor?.name || 'Object'} ${b.id}`)}</option>`
+          `<option value="${b.id}">${escapeText(b.name || `${b.kind || 'Object'} ${b.id}`)}</option>`
       )
       .join('');
     if (bodies.some(b => String(b.id) === wanted)) select.value = wanted;

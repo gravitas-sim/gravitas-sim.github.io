@@ -29,6 +29,7 @@ import {
   world_to_screen,
   findObjectAtPosition,
   setDetailScale,
+  setBloomLayer,
   getTrailTick,
   trailBudget,
   barycenterBodies,
@@ -410,21 +411,15 @@ const bloomCtx = bloomCanvas.getContext('2d');
 // Most scenarios have no bloom content at all, so most of the time that was
 // two full-screen operations to add nothing.
 //
-// The flag is set by the getter rather than by eighteen call sites across
-// physics.js, all of which read `window.bloomCtx` immediately before drawing
-// into it. Reading it is the intent to draw, so the getter is the one place
-// that cannot be forgotten when a new glow is added.
+// The flag is set by the function physics.js asks for the layer through
+// (setBloomLayer), not by each call site: asking is the intent to draw, so it
+// is the one place that cannot be forgotten when a new glow is added.
 let bloomDirty = false;
 
-if (typeof window !== 'undefined') {
-  Object.defineProperty(window, 'bloomCtx', {
-    configurable: true,
-    get() {
-      bloomDirty = true;
-      return bloomCtx;
-    },
-  });
-}
+setBloomLayer(() => {
+  bloomDirty = true;
+  return bloomCtx;
+});
 // ---------------------------------------------------------------------------
 // Trail glow sprites
 // ---------------------------------------------------------------------------
