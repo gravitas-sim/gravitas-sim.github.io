@@ -94,6 +94,7 @@ current, and the orchestrator checks it.
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
 | `output-excerpt.mjs` | The part of a failing command's output worth printing |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |
+| `perf-trace.mjs` | Compositor measurement: what a Chromium trace says about where a frame went |  |
 | `playwright-cache.mjs` | A Playwright transform cache that no other process is writing |  |
 | `populations-reference.mjs` | Stars and their populations: the reference run, and its answer key | `npm run guides:populations-key` |
 | `precache-inventory.mjs` | What the service worker precaches, measured |  |

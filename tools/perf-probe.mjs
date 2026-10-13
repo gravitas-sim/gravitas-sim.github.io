@@ -13,6 +13,15 @@
 //   npm run perf -- --cpu 4          throttle the CPU by that factor
 //   npm run perf -- --viewport 375x812   another window size (default 1440x900)
 //   npm run perf -- --json out.json  also write the numbers, for a comparison
+//   npm run perf -- --trace          separate raster and composite from script
+//
+// --trace (Prompt 112) records a Chromium trace and the Performance API's
+// long-animation-frame entries over each sample and reports, in milliseconds
+// a second, the main thread's script, layout, paint and commit time and the
+// compositor, raster and GPU threads' busy time (tools/perf-trace.mjs; what it
+// can and cannot show is in OFFLINE_AND_LOW_END.md). The heap is always
+// sampled: used JavaScript heap after a forced collection, before and after
+// each scenario, so a scenario that leaves memory behind shows as growth.
 //
 // --dpr and --cpu exist because a resolution change cannot be judged on the
 // machine that is comfortable already. The question a backing-store change has
@@ -43,6 +52,13 @@ import { writeFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveStatic } from './static-server.mjs';
+import {
+  MAX_TRACE_BYTES,
+  TRACE_CATEGORIES,
+  summarizeLoaf,
+  summarizeTrace,
+  traceEvents,
+} from './perf-trace.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = 8126;
@@ -60,6 +76,35 @@ const DEFAULT_SCENARIOS = [
 ];
 
 const ms = n => `${n.toFixed(2)}ms`;
+
+/**
+ * The trace as milliseconds per animation frame, and how busy each thread was.
+ *
+ * Per frame, not per second: an uncapped loop runs as fast as its slowest
+ * thread allows, so a per-second figure measures how many frames fit. The busy
+ * fractions are the answer to "what limits this loop": a thread near 100% is
+ * the limit.
+ */
+function describeTrace(row) {
+  const t = row.trace;
+  if (!t)
+    return `${pad('', 24)} trace: none read (${(row.traceBytes / 1048576).toFixed(0)} MB; use a shorter --seconds)`;
+  const b = t.buckets;
+  const frames = Math.max(1, (t.windowMs * row.fps) / 1000);
+  const f = v => ms(v / frames);
+  const busy = k =>
+    `${(((t.threadBusyMs[k] || 0) / t.windowMs) * 100).toFixed(0)}%`;
+  const l = row.loaf;
+  return (
+    `${pad('', 24)} per frame: script ${f(b.script)}, layout ${f(b.layout)}, ` +
+    `paint ${f(b.paint)}, commit ${f(b.commit)}; compositor+viz ` +
+    `${f(b.composite)}, raster ${f(b.raster)}, GPU ${f(b.gpu)}\n` +
+    `${pad('', 24)} busy: main ${busy('main')}, compositor ${busy('compositor')}, ` +
+    `viz ${busy('viz')}, GPU ${busy('gpu')}; long animation frames ${l.frames} ` +
+    `(script ${ms(l.scriptMs)}, render ${ms(l.renderMs)}, worst ${ms(l.worstMs)})`
+  );
+}
+
 const pad = (s, n) => String(s).padEnd(n);
 
 async function main() {
@@ -87,6 +132,7 @@ async function main() {
   if (!(width > 0 && height > 0)) {
     throw new Error(`--viewport ${args[vi + 1]} is not WIDTHxHEIGHT`);
   }
+  const trace = args.includes('--trace');
   const valueIndexes = new Set(
     [si, ti, ji, di, ci, vi].filter(i => i >= 0).map(i => i + 1)
   );
@@ -121,10 +167,18 @@ async function main() {
   // CPU throttling is a CDP-only control; Playwright has no wrapper for it.
   // Applied before the first navigation so page construction is throttled too,
   // which is where a slow machine actually hurts.
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('Performance.enable');
   if (cpu > 1) {
-    const cdp = await page.context().newCDPSession(page);
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: cpu });
   }
+  // Used JavaScript heap in MB, after a forced collection when asked: what is
+  // still reachable, not what the allocator has not yet got round to freeing.
+  const heapMB = async collect => {
+    if (collect) await cdp.send('HeapProfiler.collectGarbage');
+    const { metrics } = await cdp.send('Performance.getMetrics');
+    return metrics.find(m => m.name === 'JSHeapUsedSize').value / 1048576;
+  };
   console.log(
     `profile: viewport ${width}x${height}, dpr ${dpr}, cpu x${cpu}, tier ${tier}`
   );
@@ -153,10 +207,10 @@ async function main() {
 
   const results = [];
   for (const key of scenarios) {
-    const row = await page.evaluate(
-      async ({ key, seconds, tier }) => {
+    const heapBefore = await heapMB(true);
+    await page.evaluate(
+      async ({ key, tier }) => {
         const ui = await import('/js/ui.js');
-        const render = await import('/js/render.js');
         const quality = await import('/js/quality.js');
 
         ui.SETTINGS.preset_scenario = key;
@@ -168,6 +222,30 @@ async function main() {
           ui.SETTINGS.quality_tier = tier;
           quality.setTier(tier);
         }
+      },
+      { key, tier }
+    );
+    // Observers go in after the build, so the entries are the sample's.
+    await page.evaluate(() => {
+      window.__loaf = [];
+      window.__longTasks = [];
+      const watch = (type, into) => {
+        try {
+          new window.PerformanceObserver(list =>
+            into.push(...list.getEntries())
+          ).observe({ type });
+        } catch {
+          /* the entry type is not supported by this browser */
+        }
+      };
+      watch('long-animation-frame', window.__loaf);
+      watch('longtask', window.__longTasks);
+    });
+    if (trace)
+      await browser.startTracing(page, { categories: TRACE_CATEGORIES });
+    const row = await page.evaluate(
+      async ({ key, seconds }) => {
+        const render = await import('/js/render.js');
 
         // The renderer keeps its own per-phase counters, off by default.
         render.perf.reset();
@@ -204,8 +282,34 @@ async function main() {
           bodies: (await import('/js/physics.js')).allBodies?.().length ?? 0,
         };
       },
-      { key, seconds, tier }
+      { key, seconds }
     );
+    if (trace) {
+      const raw = await browser.stopTracing();
+      // A busy uncapped loop writes hundreds of megabytes a minute; a trace
+      // that cannot be parsed is reported, and a shorter --seconds fixes it.
+      const events = raw.length > MAX_TRACE_BYTES ? [] : traceEvents(raw);
+      row.trace = summarizeTrace(events);
+      row.traceBytes = raw.length;
+      row.loaf = summarizeLoaf(
+        await page.evaluate(() =>
+          window.__loaf.map(e => ({
+            startTime: e.startTime,
+            duration: e.duration,
+            renderStart: e.renderStart,
+            styleAndLayoutStart: e.styleAndLayoutStart,
+            blockingDuration: e.blockingDuration,
+            scripts: e.scripts.map(x => ({ duration: x.duration })),
+          }))
+        )
+      );
+    }
+    row.longTasks = await page.evaluate(() => ({
+      count: window.__longTasks.length,
+      worstMs: Math.max(0, ...window.__longTasks.map(t => t.duration)),
+    }));
+    row.heapBeforeMB = heapBefore;
+    row.heapAfterMB = await heapMB(true);
 
     results.push(row);
     console.log(
@@ -213,6 +317,12 @@ async function main() {
         `${pad(ms(row.star), 11)} ${pad(row.starPct.toFixed(0) + '%', 7)} ` +
         `${pad(ms(row.scene), 9)} ${pad(ms(row.bloom), 9)} ${row.bloomPct.toFixed(0)}%`
     );
+    console.log(
+      `${pad('', 24)} heap ${row.heapBeforeMB.toFixed(1)} -> ` +
+        `${row.heapAfterMB.toFixed(1)} MB, ${row.longTasks.count} long tasks ` +
+        `(worst ${ms(row.longTasks.worstMs)})`
+    );
+    if (row.trace) console.log(describeTrace(row, seconds));
   }
 
   // Idle cost matters as much as the busy case: a tab left open on a paused
@@ -266,7 +376,7 @@ async function main() {
     // pair taken at different tiers is not a comparison of anything.
     await writeFile(
       jsonPath,
-      `${JSON.stringify({ tier, seconds, results, idle }, null, 2)}\n`
+      `${JSON.stringify({ tier, seconds, cpu, dpr, viewport: [width, height], results, idle }, null, 2)}\n`
     );
     console.log(`\nWrote ${jsonPath}`);
   }
