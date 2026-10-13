@@ -276,7 +276,7 @@ whether it happened are both part of the record._
 - ~~**Retire the dead scenario-browser CSS** in `styles.css`.~~ **Done.** No
   `scenario-browser` rules remain in the stylesheets.
 - ~~**Extract the object inspector from `ui.js`**, once the energy-chart and drag
-  couplings are understood.~~ **Done.** It is `js/objectInspector.js`; see
+  couplings are understood.~~ **Done.** It is `js/inspectorPanel.js`; see
   [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md).
 - ~~**Measure the compositor**, not just the main thread.~~ **Done** (Prompt 112).
   `npm run perf -- --trace` separates script, layout, paint and commit from the

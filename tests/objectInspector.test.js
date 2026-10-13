@@ -8,7 +8,7 @@ import {
   patchDetails,
   renderEnergy,
   splitIdentity,
-} from '../js/objectInspector.js';
+} from '../js/inspectorPanel.js';
 
 const view = (overrides = {}) => ({
   icon: '🪐',

@@ -80,7 +80,7 @@ alignment is the whole point.
   `^30` for the standard PDF fonts, which it already did correctly. A non-breaking
   space is now measured as a space rather than as a letter, so a bound value and
   unit no longer read as wider than they print.
-- `js/energyChartNew.js` and `js/investigations.js` format chart axes and
+- `js/inspectorPanel.js` and `js/investigations.js` format chart axes and
   tooltips.
 
 ## What was deliberately left alone
