@@ -51,16 +51,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 888 | 14.6 MB |
+| JavaScript | 889 | 14.6 MB |
 | Images | 62 | 680 KB |
 | Stylesheets | 10 | 490 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 9 | 280 KB |
 | Other | 16 | 640 KB |
-| **Total** | **1004** | **16.9 MB** |
+| **Total** | **1005** | **16.9 MB** |
 
-Of those, 826 are core (the install fails without them) and 178 optional (a missing one is reported and costs nothing).
+Of those, 827 are core (the install fails without them) and 178 optional (a missing one is reported and costs nothing).
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -333,11 +333,297 @@ experience.
 
 Whether the 32 fps demotion threshold is in the right place for a machine whose
 *ceiling* may be near it; whether the 0.7× cap is too soft on a UHD 600, where
-0.5× may be the honest setting; and whether 4 GB of RAM makes the 5.5 MB
-precache itself a problem under memory pressure. All three are answerable in
+0.5× may be the honest setting; and whether 4 GB of RAM makes the precache
+itself (about 6 MB gzipped) a problem under memory pressure. All three are answerable in
 twenty minutes with the actual device, and none of them are answerable here.
 
 ---
+
+## Real hardware: not measured, and how to measure it
+
+**No device measurement exists.** Part 1 of Prompt 112 (one period-appropriate
+Chromebook and one mid-range phone, run through the probe, a full
+investigation walk, an Observatory session and an experiment) needs a physical
+device, so it is skipped under D-PLAN-02 and recorded as D-PERF-01 in
+DECISION_REGISTER.md. Every number in this document is a throttled desktop
+proxy or a count of bytes. The tables below are for the device and are empty on
+purpose.
+
+### What the proxy cannot show
+
+- CPU throttling slows the page's main thread and nothing else. It does not
+  reach Workers (the kernel gate measured this: a Worker's compute under a 4x
+  throttle was its unthrottled speed, SCIENTIFIC_KERNEL_GATE.md), the
+  compositor, the GPU process, memory bandwidth or storage. The compositor
+  measurement below shows the same thing from the inside: under a 4x throttle
+  the main thread's script time per frame rose 4.6x on the Solar System while
+  the GPU process's time per frame rose 1.6x, and only because the low tier
+  draws into a smaller backing store.
+- The i5-10500's UHD 630 has about three to four times the fill rate of a
+  Celeron's UHD 600 (see above), so a fill-rate-bound scene is slower on the
+  device than any row here.
+- The probe lifts the frame-rate cap and vsync, so it reports throughput, not
+  what a display presents. Headless Chromium has no window compositor, no
+  thermal limit, no battery governor and no other tabs.
+- Memory pressure (a 4 GB device with several tabs open) cannot be produced
+  by the proxy.
+- One machine, one Chromium version. A figure is the median of nothing: each
+  was measured once, on a machine with another heavy job running.
+
+### Protocol (for whoever has the device)
+
+1. Close every other application and tab. Plug in. Record the device, the
+   browser and version, the screen size and device pixel ratio, and the
+   RAM.
+2. Serve the repository (`npm run serve`) or open the published site. For the
+   probe on a device that cannot run Node, use remote debugging from a laptop
+   and run the probe's page function through the console; the quality tier's
+   own decision is `quality.getTier()` after 30 seconds of the first scenario.
+3. Frame times: for each probe scenario (binary-pair, solar-system,
+   trappist-1-system, star-cluster, gw150914, tidal-disruption-event) record
+   the mean interval between animation frames over 12 seconds at the tier the
+   device chooses by itself (`auto`) and at `low`.
+4. Time to first interaction: from a cold load (cache cleared) to the first
+   scenario button responding; then the same with the service worker's cache
+   warm and the network off.
+5. An investigation walk (Kepler's Laws, every step), an Observatory session
+   (open a fixture, run the measure and fit panels) and one experiment
+   (Experiments, default trials): record the longest single freeze you can see
+   or feel, and the long animation frames the console reports.
+6. Memory: the used JavaScript heap (DevTools Memory, after a collection) at
+   the start and after the walk.
+7. Fill the two tables, put the raw notes beside them, and compare with the
+   chromebook-proxy and phone-proxy profiles in tools/perf-thresholds.json.
+   Correct the "honest estimate" above wherever a row disagrees.
+
+| Chromebook (to be filled from real hardware) | Mean frame, auto tier | Mean frame, low tier | Tier chosen | Time to first interaction (cold / warm offline) | Used heap (start / after walk) |
+|---|---|---|---|---|---|
+| binary-pair | | | | | |
+| solar-system | | | | | |
+| trappist-1-system | | | | | |
+| star-cluster | | | | | |
+| gw150914 | | | | | |
+| tidal-disruption-event | | | | | |
+| Kepler's Laws walk, longest freeze | | | | | |
+| Observatory session, longest freeze | | | | | |
+| Experiment, longest freeze | | | | | |
+
+| Phone (to be filled from real hardware) | Mean frame, auto tier | Mean frame, low tier | Tier chosen | Time to first interaction (cold / warm offline) | Used heap (start / after walk) |
+|---|---|---|---|---|---|
+| binary-pair | | | | | |
+| solar-system | | | | | |
+| trappist-1-system | | | | | |
+| star-cluster | | | | | |
+| gw150914 | | | | | |
+| tidal-disruption-event | | | | | |
+| Kepler's Laws walk, longest freeze | | | | | |
+| Observatory session, longest freeze | | | | | |
+| Experiment, longest freeze | | | | | |
+
+---
+
+## Where a frame goes: raster and composite apart from script
+
+`npm run perf -- --trace` (Prompt 112, part 3) records a Chromium trace with
+Playwright and the browser's long-animation-frame entries over each sample.
+`tools/perf-trace.mjs` reads them: milliseconds per animation frame in the main
+thread's script, layout, paint and commit, and in the compositor and Viz
+threads, the raster tasks and the GPU process; and how busy each thread was.
+The trace bucket rules are unit-tested on synthetic traces
+(`tests/perfTrace.test.js`).
+
+Measured on the i5-10500 with GPU rasterisation through ANGLE, 1440x900,
+5-second samples (milliseconds per animation frame; busy is the share of the
+window):
+
+| Profile and scenario | Frame | Script | Layout + paint + commit | Compositor + Viz | Raster tasks | GPU process | Main busy | GPU busy |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| desktop, full: Solar System | 1.58 | 0.83 | 0.34 | 0.82 | 0.00 | 1.53 | 95% | 97% |
+| desktop, full: Star Cluster | 19.55 | 11.46 | 2.42 | 1.98 | 0.01 | 8.39 | 99% | 43% |
+| desktop, full: GW150914 | 0.64 | 0.32 | 0.20 | 0.63 | 0.00 | 0.61 | 89% | 95% |
+| 4x CPU, low: Solar System | 7.56 | 3.83 | 2.44 | 1.59 | 0.01 | 2.44 | 95% | 32% |
+| 4x CPU, low: Star Cluster | 15.25 | 9.55 | 3.45 | 1.75 | 0.01 | 2.80 | 97% | 18% |
+| phone proxy (375x812, dpr 2, 4x, low): Solar System | 5.29 | 3.30 | 0.81 | 1.22 | 0.00 | 1.94 | 94% | 37% |
+| phone proxy: Star Cluster | 10.41 | 8.23 | 1.31 | 1.28 | 0.00 | 1.93 | 97% | 19% |
+
+What it shows:
+
+- **Light scenes are not script-bound on the desktop profile.** On the Solar
+  System and GW150914 the main thread and the GPU process are both about 90 to
+  97% busy: the loop's rate is the pipeline's, and the 0.6 to 1.6 ms frame
+  times in the probe are a presentation throughput number. A saving in the
+  scene's JavaScript there would move the figure much less than its share of
+  the frame suggests. Star Cluster is script-bound (11.5 of 19.6 ms; the GPU
+  is 43% busy).
+- **Raster tasks are zero.** Canvas drawing is executed in the GPU process, not
+  as compositor tile raster, so the "GPU process" column is where canvas cost
+  sits and the raster column measures only DOM and CSS surfaces, which are
+  negligible.
+- **A throttle that scales only the main thread.** The 4x profile multiplies
+  script by 4.6 and layout and paint by about 9 on the Solar System (the low
+  tier's smaller canvas is in those rows too), and leaves the compositor and GPU
+  nearly where they were. On a real device the second group slows too.
+- **Style, layout and paint** are a third of the script cost under the throttle
+  (2.4 ms of 7.6 on the Solar System, 1440x900): the readout and panels
+  restyle in the animation loop. Not acted on here; it is where the next
+  measured saving on this profile would come from.
+
+What it can and cannot show. It can say which thread a frame is waiting for,
+whether a change moved script, layout or GPU time, and whether a long
+animation frame was script or render (the long-animation-frame entries carry
+each script's duration and the frame's render start). It cannot say what a
+display presents (vsync is disabled), what another GPU's fill rate does (there
+is one, integrated, and it is not the device's), anything about thermal or
+power limits, or compositor cost for content the page does not have: DOM
+surfaces are almost absent from the measured scenes. In headless Chromium
+without a GPU the GPU process is software rasterisation, so the GPU column
+becomes a CPU number. The long-animation-frame entries need a frame of 50 ms or
+more, which an uncapped loop on this machine rarely produces; they are for the
+throttled profiles and for the census below. A trace of an uncapped light
+scene is hundreds of megabytes a minute, so the probe refuses to parse one
+over 400 MB (use a shorter `--seconds`). Chromium's trace event names are not
+a stable interface: the thread totals are the figure to trust, the buckets by
+event name are a reading of today's vocabulary.
+
+---
+
+## Memory
+
+The probe samples the used JavaScript heap after a forced collection before and
+after every scenario (`heap` in each row). On this machine the heap sits at 4.4
+to 9.3 MB across the six scenarios and the three profiles with no growth from
+scenario to scenario (a scenario's first visit loads its code: the first Solar
+System visit on the desktop profile went from 4.9 to 9.3 MB and the next
+scenario's collection brought it back to 6.0).
+
+Panels are checked for leaks by the census in `e2e/lessonPerformance.spec.js`:
+each of fifteen application panels is opened and closed twenty times; the
+listeners on anything still in the document may not grow, and after a forced
+collection (a DevTools command, so Chromium only) no removed panel may be held
+in memory beyond the first cycles' count. A control in the same file proves the
+memory check sees a removed element that something still holds and lets go of
+one nothing does. Result: no growth on the fifteen panels. The census did find
+one leak outside them: selecting a body in the object inspector registers four
+listeners that are never removed (the two inspector tabs, the overlay and the
+document, in `setupEnergyTab` and `setupOverlayMinimize` in `js/ui.js`), 80 over
+twenty selections, so each click on the Energy tab runs every handler stacked
+so far. It is not fixed in this change because `js/ui.js` was off limits to it
+(other pull requests edit that file); the repair and its regression test are
+specified in the follow-up task, and the object inspector is deliberately not in
+the passing list.
+
+---
+
+## Main-thread work above a budget
+
+Two budgets, on the 4x proxy: work that recurs every frame gets 8 ms of script
+(half of a 60 fps frame), and one task started by the reader gets 50 ms, the
+browser's own long-task threshold. Anything over has to yield to the page or run
+in a Worker. `node tools/longtask-census.mjs --cpu 4` drives the application,
+the Observatory and the Studio through a short session and lists the long
+animation frames with the scripts that ran in them.
+
+On the 4x proxy it finds start-up (the document-ready handler, 595 ms: the
+start-up budget's concern, not a computation), first mounts of lazily loaded
+panels (the Observatory's measure and compare panels, 155 and 256 ms, module
+evaluation and the first draw of a panel, with nothing to hand to a Worker), and
+the simulation's own frames in the heaviest scenarios (110 to 150 ms in
+Star Cluster, which the quality tier exists for). It found one computation that
+belongs in a Worker and was not in one: the schedule comparison in the radial
+velocity panel searched both arms' periods on the page.
+
+- The sandbox RV workspace (period search, fit and Monte Carlo) was moved by
+  Prompt 66 and already runs in the inference Worker (`js/inference/rvClient.js`).
+- The schedule comparison (`js/rvCompare.js`) now runs its two period searches
+  in that Worker, side by side (`js/rvCompareSearch.js`, through
+  `buildComparison`), and falls back to searching on the page if a Worker cannot
+  start. The numbers are the page's own: the unit test compares the two
+  comparisons as JSON, digit for digit. Longest gap between animation frames
+  while the comparison was computed, in the page:
+
+| Schedule | 1x, on the page | 1x, in the Worker | 4x, on the page | 4x, in the Worker |
+|---|---:|---:|---:|---:|
+| 12 epochs over 60 days | 50 ms | 50 ms | 100 ms | 67 ms |
+| 100 epochs over a year | 83 ms | 50 ms | 300 ms | 133 ms |
+| 400 epochs over ten years | 650 ms | 83 ms | 2600 ms | 383 ms |
+
+The time to the answer rises for the small schedules (a Worker costs about a
+hundred milliseconds to start and fetch its module: 19 to 116 ms at 12 epochs
+unthrottled) and falls at the largest, from 2.6 s to 1.0 s on the 4x proxy and
+from 0.63 s to 0.56 s unthrottled (the proxy slows the page, not the Worker).
+What falls most is the freeze. The remainder at the largest size is the arms'
+window calculation and the copy of the 20,000-point result, both still on the
+page.
+
+The GLS and BLS period searches in the Observatory's measure panel stay where
+they are: D-KERNEL-06 decided that neither moves to a Worker, because both
+already yield to the page every 12 ms. The race the move could open (a result
+arriving after the reader changed a setting) is guarded by the same generation
+counter, which is checked again after the await; the radial velocity and
+schedule specs pass unchanged. The clock-dilation method was not needed: the
+order is by counter, not by time.
+
+---
+
+## The precache, in tiers
+
+Today (`tools/build-service-worker.mjs`): the install fetches the core list and
+then the optional list in the same install, 1,004 files and 17.7 MB raw, about
+6.0 MB gzipped, of which 4.6 MB is core and 1.4 MB optional. Core is fatal (one
+missing file and the version does not activate); optional is tolerated; the
+Spanish lesson bodies are not precached and are warmed when the interface
+language is switched; some paths are never precached.
+
+What a visit touches, from `node tools/precache-tour.mjs` (service workers
+blocked, six short tours; gzipped):
+
+| Tour | Requests | Of them in core | In optional | Not precached |
+|---|---:|---:|---:|---|
+| Application: four scenarios, three investigations, Spanish | 174 | 174 | 0 | none |
+| Observatory, fixture and six panels | 147 | 145 | 1 | the directory URL (the page is an optional entry) |
+| Studio | 46 | 45 | 0 | the directory URL: the page is not precached |
+| Composer | 35 | 34 | 0 | the directory URL: the page is not precached |
+| Course page | 23 | 22 | 0 | the directory URL (the page is an optional entry) |
+| 3-D lab | 31 | 10 | 20 | the directory URL (the page is an optional entry) |
+
+The application tour touched 1.5 MB of the 4.6 MB of core and all six tours
+together 2.1 MB. Never touched by any tour: the lesson bodies not opened
+(0.6 MB: every English body is precached on purpose, see above), the
+instructor content, expectations and flow modules (0.22 MB, imported by the
+answer-key and activity-document paths and by the instructor page, which is
+not precached), three.js (0.12 MB, the 3-D view) and Chart.js (0.06 MB, the
+inspector's energy chart, which this tour never opened), the sky and
+gravitational-wave data modules, and the course, experiments-bench and
+dark-matter modules.
+
+What a first offline visit needs is therefore the shell, the stylesheets, the
+fonts, the module graph of the page being used and the data that page opens;
+nothing the tours fetched fell outside the precache. The document pages other
+than the application (the Studio, the Composer, the course page, and the rest)
+not in the list (the Studio, the Composer, the course builder, the model page and
+others) are runtime-cached, so a first offline visit to the Studio or the
+Composer that was never opened online fails even though its modules are core.
+
+**Decision: no change to the precache in this pass.** The tiers stay as they
+are (core, optional, locale-warmed, never) and are the ones documented above.
+Moving entries is a change to the service worker's lists, which every reader's
+install depends on; the evidence supports two candidates and neither is
+settled enough to ship without a decision:
+
+1. Make the Studio, Composer and course builder pages optional entries, as the
+   Observatory, the catalog and the course home already are. They are 4.6, 5.1
+   and 5.0 KB gzipped and their modules are already core, so a class that
+   installed the application could open them offline.
+2. A third tier, installed after activation when the browser is idle, for what
+   the tours never touch and a student rarely needs in the first minute: the
+   instructor modules (0.22 MB), three.js (0.12 MB) and the optional 3-D lab,
+   mission, sky, Library and data-table entries (about 0.55 MB). About 0.9 MB of
+   the 6.0 MB (15%) would leave the install, at the cost that the 3-D view and
+   the instructor documents are not offline until the tier has finished. The
+   scenario thumbnails (0.64 MB) stay in the install: the offline spec depends
+   on them.
+
+Both are proposed as D-PERF-02 for Carl rather than implemented.
 
 ## Running the tests
 
@@ -345,6 +631,10 @@ twenty minutes with the actual device, and none of them are answerable here.
 npm test -- tests/quality.test.js          # the classifier, 24 tests
 npm test -- tests/buildIntegrity.test.js   # the precache manifest is current
 npx playwright test offline --project=chromium   # offline and throttled, 7 tests
+npm test -- tests/perfTrace.test.js        # the trace buckets and the recorded thresholds
+npm run perf -- --trace --tier low --cpu 4 # frame times with raster and composite apart from script
+node tools/longtask-census.mjs --cpu 4     # main-thread work above the budgets
+node tools/precache-tour.mjs               # what a visit fetches against the precache
 ```
 
 The offline spec opts back in to service workers; the rest of the suite blocks

@@ -83,6 +83,7 @@ current, and the orchestrator checks it.
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
 | `lesson-scene-audit.mjs` | What every lesson step does with the main scene | `npm run audit:scene` |
 | `library-routes.mjs` | Does a Library route open what it names? |  |
+| `longtask-census.mjs` | Main-thread work above a stated budget (Prompt 112, part 2) |  |
 | `make-social-card.js` | Generate social-card.png (1200x630) for the Open Graph / Twitter preview. | `npm run build`, `npm run social-card`, `npm run build:ci` |
 | `measure-validate.mjs` | The measurement tools' recovery and residual tables | `npm run measure:validate` |
 | `migrate-expectations.mjs` | One-off: move the instructor expectations out of instructorContent.js into |  |
@@ -94,9 +95,11 @@ current, and the orchestrator checks it.
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
 | `output-excerpt.mjs` | The part of a failing command's output worth printing |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |
+| `perf-trace.mjs` | Compositor measurement: what a Chromium trace says about where a frame went |  |
 | `playwright-cache.mjs` | A Playwright transform cache that no other process is writing |  |
 | `populations-reference.mjs` | Stars and their populations: the reference run, and its answer key | `npm run guides:populations-key` |
 | `precache-inventory.mjs` | What the service worker precaches, measured |  |
+| `precache-tour.mjs` | What a visit actually fetches, against what the precache holds (Prompt 112) |  |
 | `prepare-pages.mjs` | Assemble the tree that gets published |  |
 | `project-metadata.mjs` | The project's own description of itself |  |
 | `prose-whitespace.mjs` | Prose whitespace: write a lesson's line wrapping once, in the source only |  |

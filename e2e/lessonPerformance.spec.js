@@ -84,6 +84,22 @@ const INSTRUMENT = () => {
       return node.isConnected === true;
     }).length;
 
+  /**
+   * Listener targets that have left the document and are still in memory.
+   *
+   * Meaningful only after a collection (the test forces one over CDP): a
+   * detached node is garbage the moment nothing holds it, so one that is still
+   * here is held by something, and that something is the leak.
+   */
+  window.__detachedHeld = () =>
+    window.__entries.filter(e => {
+      if (e.signal?.aborted) return false;
+      const node = e.ref.deref();
+      return Boolean(node) && node !== window && node !== document
+        ? node.isConnected === false
+        : false;
+    }).length;
+
   const raf = window.requestAnimationFrame;
   const cancel = window.cancelAnimationFrame;
   window.__live = new Set();
@@ -373,5 +389,260 @@ test.describe('a page cleans up its panels', () => {
       grew,
       'listeners added across twenty editor rebuilds'
     ).toBeLessThanOrEqual(4);
+  });
+});
+
+// =============================================================================
+// Every panel of the application, opened and closed (Prompt 112, part 4)
+// -----------------------------------------------------------------------------
+// The first suite above covers the lesson panel and the second the three
+// pages that mount panels. This one cycles each other panel the application
+// opens: the dialogs, the sound panel, the object picker, the lecture mode and
+// the rail's sections, and the interface language, which rebuilds them all.
+// Two numbers for each, after a forced collection: listeners still on
+// something in the document (the census above), and listener targets that
+// have left the document and are still in memory (what a leak is, seen from
+// the memory side: a removed panel something still holds).
+// =============================================================================
+
+/**
+ * Force a collection so a detached node is gone if nothing holds it.
+ *
+ * A DevTools command, so Chromium only: the other engines return false and the
+ * memory-side check is left to Chromium, while the listener census still runs.
+ */
+async function collect(page) {
+  try {
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send('HeapProfiler.collectGarbage');
+    await cdp.detach();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const PANELS = {
+  settings: {
+    open: async page => {
+      await page.evaluate(() => document.getElementById('settingsBtn').click());
+      await expect(page.locator('#settingsPanel')).toBeVisible();
+    },
+    close: async page => {
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#settingsPanel')).toBeHidden();
+    },
+  },
+  'export dialog': {
+    rail: 'exportDataBtn',
+    open: async page => {
+      await page.locator('#exportDataBtn').click();
+      await expect(page.locator('#dataExport')).toBeVisible();
+    },
+    close: async page => {
+      await page.locator('#dataExportClose').click();
+      await expect(page.locator('#dataExport')).toBeHidden();
+    },
+  },
+  'precise placement': {
+    rail: 'precisePlaceBtn',
+    open: async page => {
+      await page.locator('#precisePlaceBtn').click();
+      await expect(page.locator('#precisePlaceDialog')).toBeVisible();
+    },
+    close: async page => {
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#precisePlaceDialog')).toBeHidden();
+    },
+  },
+  'system builder': {
+    rail: 'systemBuilderBtn',
+    open: async page => {
+      await page.locator('#systemBuilderBtn').click();
+      await expect(page.locator('#systemBuilderDialog')).toBeVisible();
+    },
+    close: async page => {
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#systemBuilderDialog')).toBeHidden();
+    },
+  },
+  'sound panel': {
+    open: async page => {
+      await page.locator('#sonificationToggle').click();
+      await expect(page.locator('#soundPanel')).toBeVisible();
+    },
+    close: async page => {
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#soundPanel')).toBeHidden();
+    },
+  },
+  'object picker': {
+    rail: 'objectTypeBtn',
+    open: async page => {
+      await page.locator('#objectTypeBtn').click();
+      await expect(page.locator('#objectTypePicker')).toBeVisible();
+    },
+    close: async page => {
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#objectTypePicker')).toBeHidden();
+    },
+  },
+  'lecture mode': {
+    rail: 'lectureBtn',
+    open: async page => {
+      await page.locator('#lectureBtn').click();
+      await expect(page.locator('body')).toHaveClass(/presentation-lecture/);
+    },
+    close: async page => {
+      await page.locator('#lectureExitBtn').click();
+      await expect(page.locator('body')).not.toHaveClass(
+        /presentation-lecture/
+      );
+    },
+  },
+  'rail sections': {
+    open: async page => {
+      await page.locator('#railTools').click();
+    },
+    close: async page => {
+      await page.locator('#railScenario').click();
+    },
+  },
+  'interface language': {
+    open: async page => {
+      await page.locator('[data-gs-lang]').first().selectOption('es');
+      await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+    },
+    close: async page => {
+      await page.locator('[data-gs-lang]').first().selectOption('en');
+      await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    },
+  },
+};
+
+/** The docked observing panels: opened from a toggle and closed from it. */
+const docked = (toggle, container, scenario) => ({
+  scenario,
+  rail: toggle,
+  open: async (page, app) => {
+    await app.openPanel(toggle, container);
+  },
+  close: async page => {
+    await page.locator(`#${toggle}`).click();
+    await expect(page.locator(`#${container}`)).toBeHidden();
+  },
+});
+Object.assign(PANELS, {
+  // Opening and closing, for a world: every scenario change rebuilds the
+  // readout, the object list and each docked panel that watches the bodies.
+  'scenario change': {
+    open: async (page, app) => {
+      await app.loadScenario('solar-system');
+    },
+    close: async (page, app) => {
+      await app.loadScenario('binary-pair');
+    },
+  },
+  'radial velocity panel': docked(
+    'toggleRadialVelocity',
+    'rvContainer',
+    'exoplanet-characterization-lab'
+  ),
+  'light curve panel': docked(
+    'toggleLightCurve',
+    'lightCurveContainer',
+    'exoplanet-characterization-lab'
+  ),
+  'astrometry panel': docked(
+    'toggleAstrometry',
+    'astrometryContainer',
+    'exoplanet-characterization-lab'
+  ),
+  'evidence notebook': docked(
+    'toggleNotebook',
+    'evidenceNotebook',
+    'exoplanet-characterization-lab'
+  ),
+  'pause at event panel': docked(
+    'togglePauseAtEvent',
+    'pauseEventContainer',
+    'solar-system'
+  ),
+});
+
+test.describe('the application cleans up its panels', () => {
+  for (const [name, panel] of Object.entries(PANELS)) {
+    test(`${name}: twenty open/close cycles add no listeners and strand no panel`, async ({
+      page,
+      app,
+    }) => {
+      test.slow();
+      await page.addInitScript(INSTRUMENT);
+      await app.boot({ url: '/' });
+      if (panel.scenario) await app.loadScenario(panel.scenario);
+      await settled(page);
+      const cycle = async () => {
+        if (panel.rail) await app.railControl(panel.rail);
+        await panel.open(page, app);
+        await panel.close(page, app);
+      };
+      const { before, after, grew } = await growth(page, cycle);
+      expect(
+        grew,
+        `${name}: listeners added across twenty cycles`
+      ).toBeLessThanOrEqual(4);
+
+      // Memory side: what is still in memory after a collection and has left
+      // the document. The first cycle's and the last cycle's counts are
+      // compared, so what the page holds for its own lifetime is not growth.
+      const early = (await collect(page))
+        ? await page.evaluate(() => window.__detachedHeld())
+        : 0;
+      for (let i = 0; i < 10; i++) await cycle();
+      const late = (await collect(page))
+        ? await page.evaluate(() => window.__detachedHeld())
+        : 0;
+      expect(
+        late - early,
+        `${name}: detached listener targets held after ten more cycles`
+      ).toBeLessThanOrEqual(4);
+      test.info().annotations.push({
+        type: 'census',
+        description: `listeners ${before} to ${after}; detached held ${early} to ${late}`,
+      });
+    });
+  }
+
+  test('the check sees a removed panel that something still holds, and lets go of one that nothing does', async ({
+    page,
+    app,
+  }) => {
+    await page.addInitScript(INSTRUMENT);
+    await app.boot({ url: '/' });
+    await page.evaluate(() => {
+      const mount = held => {
+        const panel = document.createElement('div');
+        panel.addEventListener('click', () => {});
+        document.body.append(panel);
+        panel.remove();
+        if (held) window.__strand = panel;
+      };
+      mount(true);
+      mount(false);
+    });
+    await collect(page);
+    const held = await page.evaluate(() => window.__detachedHeld());
+    expect(
+      held,
+      'one removed panel is still referenced'
+    ).toBeGreaterThanOrEqual(1);
+    await page.evaluate(() => {
+      window.__strand = null;
+    });
+    await collect(page);
+    const released = await page.evaluate(() => window.__detachedHeld());
+    expect(released, 'the same panel after the reference is dropped').toBe(
+      held - 1
+    );
   });
 });

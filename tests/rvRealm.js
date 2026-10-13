@@ -2,6 +2,7 @@
 // run in this thread behind the same message interface, so a test goes through
 // the scheduler and the realm's own message handling (js/inference/rvClient.js
 // setRvSpawn). Messages are delivered a macrotask later, as a Worker's are.
+// A task answers within the microtasks that follow its delivery.
 
 import { setRvSpawn } from '../js/inference/rvClient.js';
 
@@ -14,6 +15,9 @@ const factory = () => {
     terminated: false,
     postMessage: data =>
       setTimeout(() => {
+        // A reply is routed to the realm whose message is being handled, so
+        // two realms can run at once (the schedule comparison's two arms).
+        current = realm;
         if (!realm.terminated) globalThis.self.onmessage({ data });
       }, 0),
     terminate() {
@@ -29,7 +33,10 @@ export const reinstallRealm = () => setRvSpawn(factory);
 export function installRealm() {
   ready ??= (async () => {
     globalThis.self = {
-      postMessage: data => setTimeout(() => current?.onmessage?.({ data }), 0),
+      postMessage: data => {
+        const to = current;
+        setTimeout(() => to?.onmessage?.({ data }), 0);
+      },
     };
     await import('../js/inference/inferenceWorker.js');
   })();

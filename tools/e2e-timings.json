@@ -1877,5 +1877,21 @@
   "[chromium] › missionEvidence.spec.js › the mission lab keeps evidence › the patched conic is drawn against the propagated flight": 0.7,
   "[chromium] › lessonPerformance.spec.js › a page cleans up its panels › the Observatory leaves nothing behind when its panels open and close": 62.0,
   "[chromium] › lessonPerformance.spec.js › a page cleans up its panels › the Composer leaves nothing behind when its editor is rebuilt": 6.5,
-  "[chromium] › lessonPerformance.spec.js › a page cleans up its panels › the Studio leaves nothing behind when its editor is rebuilt": 6.5
+  "[chromium] › lessonPerformance.spec.js › a page cleans up its panels › the Studio leaves nothing behind when its editor is rebuilt": 6.5,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › astrometry panel: twenty open/close cycles add no listeners and strand no panel": 17.8,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › evidence notebook: twenty open/close cycles add no listeners and strand no panel": 19.3,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › export dialog: twenty open/close cycles add no listeners and strand no panel": 19.3,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › interface language: twenty open/close cycles add no listeners and strand no panel": 16.3,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › lecture mode: twenty open/close cycles add no listeners and strand no panel": 20.1,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › light curve panel: twenty open/close cycles add no listeners and strand no panel": 16.8,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › object picker: twenty open/close cycles add no listeners and strand no panel": 13.3,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › pause at event panel: twenty open/close cycles add no listeners and strand no panel": 13.7,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › precise placement: twenty open/close cycles add no listeners and strand no panel": 14.3,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › radial velocity panel: twenty open/close cycles add no listeners and strand no panel": 17.2,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › rail sections: twenty open/close cycles add no listeners and strand no panel": 15.2,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › scenario change: twenty open/close cycles add no listeners and strand no panel": 11,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › settings: twenty open/close cycles add no listeners and strand no panel": 8.3,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › sound panel: twenty open/close cycles add no listeners and strand no panel": 15.3,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › system builder: twenty open/close cycles add no listeners and strand no panel": 15.7,
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › the check sees a removed panel that something still holds, and lets go of one that nothing does": 4.6
 }
