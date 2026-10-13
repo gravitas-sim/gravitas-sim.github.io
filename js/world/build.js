@@ -89,6 +89,10 @@ import {
 import { populationCaps } from '../quality.js';
 import { SIM_UNITS_PER_AU } from '../units.js';
 
+// Every type, for a declaration that replaces none of the generated population.
+// prettier-ignore
+const KEEP_ALL = ['Star', 'Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'];
+
 /**
  * Scenarios whose bodies are declared as data but are the engine's alone to
  * build (SCENARIO_GEOMETRY.md, slice 2): they take the bodies the generator
@@ -283,6 +287,27 @@ export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
   // spiral in.
   // prettier-ignore
   'gw150914': { keep: ['Star', 'Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [{ rule: { name: 'inspiral-pair', params: { separation: 90, perturbation: 0.92 } } }] },
+  //
+  // Slice 5: five scenarios that placed bodies inside applyPlacement. `place`
+  // steps run there, between the layout and the momentum balance; `steps` run
+  // at the end of the build, as the other declarations do, and with every type
+  // kept (nothing here replaces the generated population). Binary Black Hole
+  // is placed twice, as the code placed it: its pair again after everything
+  // else, then the planets and the asteroids on circular orbits about the pair.
+  // prettier-ignore
+  'binary-bh': { keep: KEEP_ALL, place: [{ rule: { name: 'inspiral-pair', params: { separation: 120, perturbation: 0.95 } } }], steps: [
+    { rule: { name: 'inspiral-pair', params: { separation: 120, perturbation: 0.95 } } },
+    { rule: { name: 'orbital-population', params: { centralHoles: 2, planetInner: 180, planetStep: 30, giantInner: 350, giantStep: 50, asteroidInner: 500, asteroidSpan: 100 } } },
+  ] },
+  // prettier-ignore
+  'slingshot': { place: [{ rule: { name: 'inspiral-pair', params: { separation: 100, perturbation: 0.9 } } }] },
+  // prettier-ignore
+  'triple-bh-system': { place: [{ rule: { name: 'triangle-holes', params: { radius: 150, speed: 15 } } }] },
+  // The two stars are placed in the layout and named at the end, whatever the layout.
+  // prettier-ignore
+  'neutron-star-collision': { keep: KEEP_ALL, place: [{ rule: { name: 'pin-pair', params: { type: 'NeutronStar', x: 50, speed: 15 } } }], steps: [{ rule: { name: 'name-pair', params: { type: 'NeutronStar', names: ['GW170817-A', 'GW170817-B'] } } }] },
+  // prettier-ignore
+  'white-dwarf-binary': { place: [{ rule: { name: 'pin-pair', params: { type: 'WhiteDwarf', x: 80, speed: 20 } } }] },
 });
 
 /**
@@ -740,7 +765,13 @@ const populationRules = {
   // generator's own body (`from`): placed, and given a name if the rule has one.
   'orbital-population': (p, { G, generated }) => {
     let centralMass = 0;
-    for (const star of stars.slice(0, p.centralStars)) centralMass += star.mass;
+    // The first `centralHoles` black holes set the speed instead of stars; with
+    // fewer than that there is nothing to circle and nothing is placed.
+    const center = p.centralHoles
+      ? generated.BlackHole.slice(0, p.centralHoles)
+      : stars.slice(0, p.centralStars);
+    if (center.length < (p.centralHoles ?? 0)) return [];
+    for (const body of center) centralMass += body.mass;
     const out = [];
     const place = (type, i, r, name) => {
       const theta = Math.random() * 2 * Math.PI;
@@ -796,6 +827,46 @@ const populationRules = {
     });
     return [place(0, -r1, v1), place(1, r2, v2)];
   },
+
+  // The first two bodies of a type at (-x, 0) and (x, 0), moving at `speed` in
+  // opposite directions along y, when there are two.
+  'pin-pair': (p, { generated }) => {
+    if (generated[p.type].length < 2) return [];
+    const at = (i, x, vy) => ({
+      type: p.type,
+      from: { generated: i },
+      pos: { x, y: 0 },
+      vel: { x: 0, y: vy },
+      assign: {},
+    });
+    return [at(0, -p.x, p.speed), at(1, p.x, -p.speed)];
+  },
+
+  // Three black holes on a circle of `radius`, a third of a turn apart, each
+  // at `speed` along the circle, when there are three.
+  'triangle-holes': (p, { generated }) => {
+    if (generated.BlackHole.length < 3) return [];
+    return [0, 1, 2].map(i => {
+      const angle = (i / 3) * 2 * Math.PI;
+      return {
+        type: 'BlackHole',
+        from: { generated: i },
+        pos: { x: Math.cos(angle) * p.radius, y: Math.sin(angle) * p.radius },
+        vel: { x: -Math.sin(angle) * p.speed, y: Math.cos(angle) * p.speed },
+        assign: {},
+      };
+    });
+  },
+
+  // Names for the first two bodies of a type, when there are two.
+  'name-pair': (p, { generated }) =>
+    generated[p.type].length < 2
+      ? []
+      : p.names.map((name, i) => ({
+          type: p.type,
+          from: { generated: i },
+          assign: { name },
+        })),
 
   // The heavy hole at rest at the origin, the light ones on staggered circular
   // orbits about it, so the scene opens as something in motion.
@@ -996,6 +1067,32 @@ export const zeroNetMomentum = () => {
     b.vel.x -= vx;
     b.vel.y -= vy;
   }
+};
+
+/** The bodies the seeded generator drew, by type: what a rule reuses (`from`). */
+const generatedBodies = () => ({
+  Star: [...stars],
+  Planet: [...planets],
+  GasGiant: [...gas_giants],
+  BlackHole: [...bh_list],
+  Asteroid: [...asteroids],
+  NeutronStar: [...neutron_stars],
+  WhiteDwarf: [...white_dwarfs],
+});
+
+/**
+ * A declaration's `place` steps: rules that give generated bodies a place and
+ * a velocity, run inside applyPlacement (see there). Applied in place, as the
+ * code they replace did, and drawing nothing from the seeded generator.
+ */
+const placeDeclared = (steps, G) => {
+  const generated = generatedBodies();
+  for (const { rule } of steps)
+    for (const r of populationRules[rule.name](rule.params, { G, generated })) {
+      const body = generated[r.type][r.from.generated];
+      Object.assign(body.pos, r.pos);
+      Object.assign(body.vel, r.vel);
+    }
 };
 
 /**
@@ -1241,37 +1338,8 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
     }
   }
 
-  // Special positioning for various scenarios
-  if (
-    current_scenario_name === 'neutron-star-collision' &&
-    neutron_stars.length >= 2
-  ) {
-    neutron_stars[0].pos.x = -50;
-    neutron_stars[0].pos.y = 0;
-    neutron_stars[0].vel.x = 0;
-    neutron_stars[0].vel.y = 15;
-
-    neutron_stars[1].pos.x = 50;
-    neutron_stars[1].pos.y = 0;
-    neutron_stars[1].vel.x = 0;
-    neutron_stars[1].vel.y = -15;
-  }
-
-  if (
-    current_scenario_name === 'white-dwarf-binary' &&
-    white_dwarfs.length >= 2
-  ) {
-    white_dwarfs[0].pos.x = -80;
-    white_dwarfs[0].pos.y = 0;
-    white_dwarfs[0].vel.x = 0;
-    white_dwarfs[0].vel.y = 20;
-
-    white_dwarfs[1].pos.x = 80;
-    white_dwarfs[1].pos.y = 0;
-    white_dwarfs[1].vel.x = 0;
-    white_dwarfs[1].vel.y = -20;
-  }
-
+  // What the tidal disruption's code placed here before it was declared: dead
+  // at its own layout, live when Settings changes it (D-GEOM-07), so it stays.
   if (
     current_scenario_name === 'tidal-disruption-event' &&
     bh_list.length >= 1 &&
@@ -1288,100 +1356,11 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
     planets[0].vel.y = 80;
   }
 
-  // Special positioning for black holes in specific scenarios
-  if (bh_list.length > 1) {
-    switch (current_scenario_name) {
-      case 'slingshot':
-        if (bh_list.length >= 2) {
-          // Create a binary black hole system with proper orbital parameters
-          const separation = 100; // Initial separation distance
-          const m1 = bh_list[0].mass; // Mass of first black hole (60 M☉)
-          const m2 = bh_list[1].mass; // Mass of second black hole (3 M☉)
-          const totalMass = m1 + m2;
-
-          // Calculate center of mass positions
-          const r1 = separation * (m2 / totalMass); // Distance from BH1 to center of mass
-          const r2 = separation * (m1 / totalMass); // Distance from BH2 to center of mass
-
-          // Position black holes around center of mass
-          bh_list[0].pos.x = -r1;
-          bh_list[0].pos.y = 0;
-          bh_list[1].pos.x = r2;
-          bh_list[1].pos.y = 0;
-
-          // Calculate orbital velocity for circular orbit
-          const G = SETTINGS.gravitational_constant;
-          const orbitalSpeed = Math.sqrt((G * totalMass) / separation);
-
-          // Apply velocities for circular orbit (perpendicular to separation)
-          bh_list[0].vel.x = 0;
-          bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass); // Reduced velocity based on mass ratio
-          bh_list[1].vel.x = 0;
-          bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass); // Opposite direction
-
-          // Add slight perturbation to make it more interesting
-          const perturbation = 0.9; // Reduce velocity slightly to create more dynamic orbits
-          bh_list[0].vel.y *= perturbation;
-          bh_list[1].vel.y *= perturbation;
-        }
-        break;
-
-      case 'binary-bh':
-        if (bh_list.length >= 2) {
-          // Calculate proper orbital parameters for binary black holes
-          const separation = 120; // Initial separation distance
-          const m1 = bh_list[0].mass; // Mass of first black hole
-          const m2 = bh_list[1].mass; // Mass of second black hole
-          const totalMass = m1 + m2;
-
-          // Calculate center of mass positions
-          const r1 = separation * (m2 / totalMass); // Distance from BH1 to center of mass
-          const r2 = separation * (m1 / totalMass); // Distance from BH2 to center of mass
-
-          // Position black holes around center of mass
-          bh_list[0].pos.x = -r1;
-          bh_list[0].pos.y = 0;
-          bh_list[1].pos.x = r2;
-          bh_list[1].pos.y = 0;
-
-          // Calculate orbital velocity for circular orbit
-          // v = sqrt(G * M_total / separation) for reduced mass system
-          const G = SETTINGS.gravitational_constant;
-          const orbitalSpeed = Math.sqrt((G * totalMass) / separation);
-
-          // Apply velocities for circular orbit (perpendicular to separation)
-          bh_list[0].vel.x = 0;
-          bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass); // Reduced velocity based on mass ratio
-          bh_list[1].vel.x = 0;
-          bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass); // Opposite direction
-
-          // Add slight perturbation to start gravitational wave inspiral
-          const perturbation = 0.95; // Slightly reduce velocity to start inspiral
-          bh_list[0].vel.y *= perturbation;
-          bh_list[1].vel.y *= perturbation;
-        }
-        break;
-
-      case 'triple-bh-system':
-        if (bh_list.length >= 3) {
-          // Triangle formation
-          const radius = 150;
-          for (let i = 0; i < 3; i++) {
-            const angle = (i / 3) * 2 * Math.PI;
-            bh_list[i].pos.x = Math.cos(angle) * radius;
-            bh_list[i].pos.y = Math.sin(angle) * radius;
-
-            // Orbital velocity
-            const vel_mag = 15;
-            bh_list[i].vel.x = -Math.sin(angle) * vel_mag;
-            bh_list[i].vel.y = Math.cos(angle) * vel_mag;
-          }
-        }
-        break;
-
-      // Duplicate 'Slingshot' case removed (handled earlier)
-    }
-  }
+  // The pairs and triangle a scenario places by hand are its declaration's
+  // `place` steps (SCENARIO_GEOMETRY.md, slice 5), run here: after the layout
+  // and before the balance below, as the code they replace ran.
+  const place = ENGINE_GEOMETRY[current_scenario_name]?.place;
+  if (place) placeDeclared(place, SETTINGS.gravitational_constant);
 
   zeroNetMomentum();
 };
@@ -2288,71 +2267,6 @@ export const buildWorld = ctx => {
     for (let i = 0; i < Math.min(planets.length, pulsarPlanets.length); i++) {
       planets[i].name = pulsarPlanets[i];
     }
-  } else if (starting_preset === 'neutron-star-collision') {
-    // Set up neutron star collision based on GW170817
-    if (neutron_stars.length >= 2) {
-      neutron_stars[0].name = 'GW170817-A';
-      neutron_stars[1].name = 'GW170817-B';
-    }
-  }
-  // --- Fix for Binary BH scenario: two black holes in mutual orbit, planets orbiting center of mass ---
-  else if (starting_preset === 'binary-bh') {
-    if (bh_list.length >= 2) {
-      const separation = 120;
-      const m1 = bh_list[0].mass;
-      const m2 = bh_list[1].mass;
-      const totalMass = m1 + m2;
-      // Center of mass positions
-      const r1 = separation * (m2 / totalMass);
-      const r2 = separation * (m1 / totalMass);
-      bh_list[0].pos.x = -r1;
-      bh_list[0].pos.y = 0;
-      bh_list[1].pos.x = r2;
-      bh_list[1].pos.y = 0;
-      // Orbital velocities
-      const G = SETTINGS.gravitational_constant;
-      const orbitalSpeed = Math.sqrt((G * totalMass) / separation);
-      bh_list[0].vel.x = 0;
-      bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass);
-      bh_list[1].vel.x = 0;
-      bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass);
-      // Add slight perturbation to start inspiral
-      const perturbation = 0.95;
-      bh_list[0].vel.y *= perturbation;
-      bh_list[1].vel.y *= perturbation;
-      // Place planets in orbits around the binary's center of mass
-      for (let i = 0; i < planets.length; i++) {
-        const r = 180 + i * 30;
-        const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((G * totalMass) / r);
-        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-        planets[i].pos = pos;
-        planets[i].vel = vel;
-      }
-      // Place gas giants
-      for (let i = 0; i < gas_giants.length; i++) {
-        const r = 350 + i * 50;
-        const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((G * totalMass) / r);
-        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-        gas_giants[i].pos = pos;
-        gas_giants[i].vel = vel;
-      }
-      // Place asteroids
-      if (SETTINGS.enable_asteroids) {
-        for (let i = 0; i < asteroids.length; i++) {
-          const r = 500 + Math.random() * 100;
-          const theta = Math.random() * 2 * Math.PI;
-          const v = Math.sqrt((G * totalMass) / r);
-          const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-          const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-          asteroids[i].pos = pos;
-          asteroids[i].vel = vel;
-        }
-      }
-    }
   }
 
   // --- Scenarios whose bodies are declared as data ------------------------------
@@ -2366,14 +2280,9 @@ export const buildWorld = ctx => {
   // its id and everything else the generator gave it.
   const declared =
     SCENARIO_GEOMETRY[starting_preset] ?? ENGINE_GEOMETRY[starting_preset];
-  if (declared) {
-    const generated = {
-      Star: [...stars],
-      Planet: [...planets],
-      GasGiant: [...gas_giants],
-      BlackHole: [...bh_list],
-      Asteroid: [...asteroids],
-    };
+  // A declaration with only `place` steps has nothing to build here.
+  if (declared?.steps) {
+    const generated = generatedBodies();
     // The generated bodies of a type the declaration keeps stay where they
     // are; the rest are emptied, as the hand-built blocks emptied them.
     const keep = new Set(declared.keep);
@@ -2611,6 +2520,8 @@ export const buildWorld = ctx => {
           Asteroid: [Asteroid, asteroids],
           Galaxy: [Galaxy, galaxies],
           Planet: [Planet, planets],
+          NeutronStar: [NeutronStar, neutron_stars],
+          WhiteDwarf: [WhiteDwarf, white_dwarfs],
         }[type];
         let body = from ? generated[type][from.generated] : undefined;
         if (body) {
