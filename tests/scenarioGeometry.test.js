@@ -1,5 +1,6 @@
 // =============================================================================
 // Declarative scenario geometry (Roadmap II Prompt 108, slices 1 to 3)
+// Slice 4 is held in tests/scenarioGeometrySlice4.test.js.
 // -----------------------------------------------------------------------------
 // Twenty-two built-in scenarios are no longer placed by code in js/world/build.js:
 // SCENARIO_GEOMETRY (js/scenarios.js) declares their bodies, and this holds the
@@ -55,6 +56,7 @@ import { migrateScenarioPack } from '../js/platform/scenario.js';
 import * as physics from '../js/physics.js';
 import { LISTS, bodyRecord, digest, fnv } from './scenarioDigest.js';
 import { LAB_EDGE_IDS, LAB_SCENARIOS } from './scenarioLabCases.js';
+import { SLICE4_SCENARIOS } from './scenarioSlice4Cases.js';
 
 /** The data of one body, from a digest row. */
 const fields = row => JSON.parse(row.split('|').slice(3).join('|'));
@@ -67,31 +69,38 @@ const GOLDEN = JSON.parse(
 describe('the declared scenarios build the world the code built', () => {
   test('the fixture covers every declared scenario at seven seeds', () => {
     const keys = Object.keys(ALL_GEOMETRY).sort();
-    expect(keys).toEqual([
-      'binary-pair',
-      'binary-planet-lab',
-      'black-hole-lab',
-      'blended-binary',
-      'broken-laplace-resonance',
-      'circumbinary-planet-lab',
-      'earth-moon-system',
-      'exoplanet-characterization-lab',
-      'galilean-resonance',
-      'gravity-assist-heliocentric',
-      'gravity-assist-lab',
-      'habitable-zone-lab',
-      'interstellar-visitor',
-      'jupiter-trojans',
-      'keplers-2nd-law',
-      'lagrange-point-lab',
-      'orbital-transfer-lab',
-      'pluto-and-neptune',
-      'retrograde-mars',
-      'three-body-sensitivity-lab',
-      'transit-lab',
-      'trappist-1-system',
-    ]);
-    expect(Object.keys(GOLDEN).length).toBe(keys.length * 7);
+    expect(keys).toEqual(
+      [
+        'binary-pair',
+        'binary-planet-lab',
+        'black-hole-lab',
+        'blended-binary',
+        'broken-laplace-resonance',
+        'circumbinary-planet-lab',
+        'earth-moon-system',
+        'exoplanet-characterization-lab',
+        'galilean-resonance',
+        'gravity-assist-heliocentric',
+        'gravity-assist-lab',
+        'habitable-zone-lab',
+        'interstellar-visitor',
+        'jupiter-trojans',
+        'keplers-2nd-law',
+        'lagrange-point-lab',
+        'orbital-transfer-lab',
+        'pluto-and-neptune',
+        'retrograde-mars',
+        'three-body-sensitivity-lab',
+        'transit-lab',
+        'trappist-1-system',
+        // Slice 4's nine are held to their own fixture
+        // (tests/scenarioGeometrySlice4.test.js).
+        ...SLICE4_SCENARIOS,
+      ].sort()
+    );
+    expect(Object.keys(GOLDEN).length).toBe(
+      (keys.length - SLICE4_SCENARIOS.length) * 7
+    );
     for (const key of keys) expect(SCENARIO_IDS).toContain(key);
   });
 
@@ -144,6 +153,13 @@ describe('the validator, construct by construct', () => {
       'binary-lab',
       'equilateral-stars',
       'gravity-assist',
+      'tracer-disc',
+      'bound-cluster',
+      'orbital-population',
+      'inspiral-pair',
+      'staggered-orbits',
+      'tidal-infall',
+      'circular-binary-stars',
     ]);
   });
 
@@ -1152,7 +1168,7 @@ describe('slice 3: the validator, construct by construct', () => {
       expect(why(rule(params))).toEqual([]);
       // Every required parameter is required, by name.
       for (const k of Object.keys(spec)) {
-        if (spec[k] === 'bool') continue;
+        if (spec[k] === 'bool' || spec[k].optional) continue;
         const { [k]: _gone, ...rest } = params;
         expect(why(rule(rest)).join()).toMatch(new RegExp(`params.${k}\\b`));
       }

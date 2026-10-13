@@ -878,7 +878,7 @@
     "js/rvWorkspacePanel.js": 941,
     "js/sandboxTools.js": 847,
     "js/scenarioBrowser.js": 509,
-    "js/scenarioGeometry.js": 467,
+    "js/scenarioGeometry.js": 462,
     "js/scenarioPack.js": 569,
     "js/scenarioPack3d.js": 75,
     "js/scenarioPackWorld.js": 133,
@@ -961,6 +961,6 @@
     "js/widgetCanvas.js": 132,
     "js/widgetRuntime.js": 260,
     "js/widgets.js": 542,
-    "js/world/build.js": 2793
+    "js/world/build.js": 2699
   }
 }
