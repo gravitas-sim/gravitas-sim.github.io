@@ -3279,7 +3279,6 @@ class PhysicsObject {
     return this.constructor.kind;
   }
   set kind(_) {}
-
   /**
    * Create a physics object
    * @param {Object} pos - Initial position with x, y properties
@@ -4867,7 +4866,6 @@ class BlackHole {
     return 'BlackHole';
   }
   set kind(_) {}
-
   /**
    * Create a black hole object
    * @param {Object} pos - Initial position with x, y properties
@@ -7134,6 +7132,8 @@ const purgeDead = list =>
     clearObjectEnergyHistory(o.id);
     return false;
   });
+
+export const className = o => o?.kind ?? '';
 
 // Handle star merging - stars combining into more massive objects
 /**

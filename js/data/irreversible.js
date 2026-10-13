@@ -144,7 +144,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'damping:orbit_decay',
     kind: 'damping',
-    line: 5043,
+    line: 5041,
     detail: Object.freeze({
       what: 'each velocity component is multiplied by (1 - orbit_decay_rate * dt), so energy leaves the orbit and nothing records how much',
     }),
