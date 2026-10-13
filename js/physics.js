@@ -3995,7 +3995,6 @@ class AccretionDiskParticle extends PhysicsObject {
  * Black hole physics object with gravitational effects
  */
 class BlackHole {
-  // As PhysicsObject.kind: an accessor whose setter drops the write.
   get kind() {
     return 'BlackHole';
   }
