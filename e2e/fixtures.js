@@ -501,25 +501,24 @@ function makeApp(page) {
         const all = lists
           .flatMap(k => p[k] || [])
           .filter(b => b && b.alive !== false);
-        const pick =
-          (wanted && all.find(b => b.constructor?.name === wanted)) || all[0];
+        const pick = (wanted && all.find(b => b.kind === wanted)) || all[0];
         if (!pick) return null;
 
-        // The type string the inspector dispatches on is not the constructor
-        // name - a StarObject is a 'Star' there - and the mapping lives in
+        // The type string the inspector dispatches on is not the kind
+        // string - a StarObject is a 'Star' there - and the mapping lives in
         // findObjectAtPosition, which is what the canvas click handler calls.
         // Asking it about the body's own position gets the exact {object, type}
         // pair a click would produce, so this test uses the application's
         // vocabulary rather than inventing a parallel one that would drift.
         const hit = p.findObjectAtPosition(pick.pos);
         const target = hit?.object === pick ? hit : null;
-        if (!target) return { missed: pick.constructor?.name ?? 'unknown' };
+        if (!target) return { missed: pick.kind ?? 'unknown' };
 
         ui.showObjectInspector(target.object, target.type);
         return {
           id: target.object.id,
           type: target.type,
-          constructor: target.object.constructor?.name,
+          kind: target.object.kind,
           name: target.object.name ?? null,
           mass: target.object.mass,
         };

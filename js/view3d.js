@@ -801,7 +801,7 @@ function getScaleForObject(obj) {
 }
 
 function getType(obj) {
-  return obj?.obj_type || obj?.constructor?.name || 'object';
+  return obj?.obj_type || obj?.kind || 'object';
 }
 
 function getGeometryForType(type) {

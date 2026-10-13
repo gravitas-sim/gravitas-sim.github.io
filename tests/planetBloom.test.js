@@ -13,7 +13,7 @@
 // =============================================================================
 
 import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
-import { Planet, setStateReference } from '../js/physics.js';
+import { Planet, setStateReference, setBloomLayer } from '../js/physics.js';
 import { setTier } from '../js/quality.js';
 import { displayRadius } from '../js/bodyVisuals.js';
 
@@ -74,21 +74,15 @@ const nullContext = () => ({
 
 const view = { paused: true, zoom: 4, pan: { x: 0, y: 0 } };
 let recorder;
-let previousBloom;
 
 beforeEach(() => {
   setStateReference(view);
   recorder = bloomRecorder();
-  previousBloom = Object.getOwnPropertyDescriptor(window, 'bloomCtx');
-  Object.defineProperty(window, 'bloomCtx', {
-    configurable: true,
-    get: () => recorder.ctx,
-  });
+  setBloomLayer(() => recorder.ctx);
 });
 
 afterEach(() => {
-  if (previousBloom) Object.defineProperty(window, 'bloomCtx', previousBloom);
-  else delete window.bloomCtx;
+  setBloomLayer(null);
 });
 
 describe('the bloom pass', () => {
@@ -146,8 +140,8 @@ describe('the bloom pass', () => {
   test('does nothing at the low quality tier', () => {
     // The bloom layer is a second full-size canvas composited every frame, and
     // js/quality.js already names it as one of the passes the low tier exists
-    // to skip. Reading window.bloomCtx is what arms that composite, so not
-    // reading it is what switches it off.
+    // to skip. Asking for the layer is what arms that composite, so not
+    // asking is what switches it off.
     const planet = new Planet({ x: 0, y: 0 }, { x: 0, y: 0 });
     setTier('low');
     try {

@@ -141,12 +141,9 @@ function sunAt(x = 0, y = 0) {
 /**
  * Which family a body belongs to, for the display policy.
  *
- * constructor.name is fine here and nowhere else: these tests run the sources
- * through Jest, not the minified bundle, and the production code that needs
- * the same answer is handed it as a literal.
+ * By kind, the string every body class carries.
  */
-const familyOf = body =>
-  ({ StarObject: 'Star' })[body.constructor.name] ?? body.constructor.name;
+const familyOf = body => ({ StarObject: 'Star' })[body.kind] ?? body.kind;
 
 /**
  * Draw a body at a chosen on-screen size by setting the zoom to suit.

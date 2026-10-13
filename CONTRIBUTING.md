@@ -150,11 +150,11 @@ ceilings:
 | `js/physics.js` | 8,665 | 8,665 |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/validation/physicsChecks.js` | 6,621 | 6,621 |
-| `js/ui.js` | 6,309 | 6,309 |
+| `js/ui.js` | 6,308 | 6,308 |
 | `js/investigations.js` | 4,754 | 4,754 |
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
 | `js/i18n/en.deferred.js` | 3,845 | 3,845 |
-| `js/render.js` | 3,033 | 3,033 |
+| `js/render.js` | 3,028 | 3,028 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |
