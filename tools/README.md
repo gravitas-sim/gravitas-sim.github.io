@@ -83,6 +83,7 @@ current, and the orchestrator checks it.
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
 | `lesson-scene-audit.mjs` | What every lesson step does with the main scene | `npm run audit:scene` |
 | `library-routes.mjs` | Does a Library route open what it names? |  |
+| `longtask-census.mjs` | Main-thread work above a stated budget (Prompt 112, part 2) |  |
 | `make-social-card.js` | Generate social-card.png (1200x630) for the Open Graph / Twitter preview. | `npm run build`, `npm run social-card`, `npm run build:ci` |
 | `measure-validate.mjs` | The measurement tools' recovery and residual tables | `npm run measure:validate` |
 | `migrate-expectations.mjs` | One-off: move the instructor expectations out of instructorContent.js into |  |
