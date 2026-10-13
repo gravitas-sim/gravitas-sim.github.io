@@ -166,7 +166,7 @@ export function validateGeometry(g, { rules = true } = {}) {
     g.place !== undefined &&
     !(Array.isArray(g.place) && g.place.length >= 1 && g.place.length <= 4)
   )
-    bad('place', 'a list of 1 to 4 rule steps (leave it out for none)');
+    bad('place', 'a list of 1 to 4 rule steps');
   const steps = g.steps ?? (g.place === undefined ? undefined : []);
   if (!Array.isArray(steps) || (steps.length === 0 && g.steps)) {
     bad('steps', 'a list of at least one step');
