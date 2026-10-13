@@ -7,7 +7,6 @@
     "js/notebook/derivedPanel.js",
     "js/observatory/archivePanel.js",
     "js/observatory/comparePanel.js",
-    "js/observatory/fitPanel.js",
     "js/observatory/formulaPanel.js",
     "js/observatory/guidePanel.js",
     "js/observatory/measurePanel.js",

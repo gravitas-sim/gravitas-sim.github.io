@@ -20,6 +20,7 @@
 // =============================================================================
 
 import { parseNumber } from '../answerParse.js';
+import { listeners } from '../listeners.js';
 import { dataFrom } from '../inference/infer.js';
 import { fitArtifact, modelUnit, rowsDigest } from '../analysis/seams.js';
 import { observationDigest } from './identity.js';
@@ -149,6 +150,7 @@ export function mountFitPanel(root, ctx) {
   let o = ctx.observation;
   let job = null;
   let last = null;
+  const listen = listeners();
   /**
    * Every fit this panel made, for comparing: its request, the rows it saw
    * and its document. A fit to other rows stays listed, and the comparison
@@ -494,12 +496,12 @@ export function mountFitPanel(root, ctx) {
     return { m, reasons };
   }
 
-  root.addEventListener('change', e => {
+  listen(root, 'change', e => {
     if (e.target === modelSelect) renderParams();
     else price();
   });
 
-  run.addEventListener('click', () => {
+  listen(run, 'click', () => {
     const { m, reasons } = price();
     if (reasons.length) return;
     const d = data();
@@ -583,7 +585,7 @@ export function mountFitPanel(root, ctx) {
     });
   });
 
-  cancel.addEventListener('click', () => job?.cancel(t('obs.fit.canceled')));
+  listen(cancel, 'click', () => job?.cancel(t('obs.fit.canceled')));
 
   // --- Comparing the fits ------------------------------------------------------------
   const compare = el('section', {
@@ -847,7 +849,7 @@ export function mountFitPanel(root, ctx) {
     };
   }
 
-  keepBtn.addEventListener('click', () => {
+  listen(keepBtn, 'click', () => {
     if (!last) return;
     try {
       const doc = exported();
@@ -877,7 +879,7 @@ export function mountFitPanel(root, ctx) {
     }
   });
 
-  exportBtn.addEventListener('click', () => {
+  listen(exportBtn, 'click', () => {
     if (!last) return;
     const doc = exported();
     const url = URL.createObjectURL(
@@ -1189,9 +1191,7 @@ export function mountFitPanel(root, ctx) {
 
   return {
     /** Before the panel is replaced: stop what it started. */
-    destroy() {
-      job?.cancel('the panel was rebuilt');
-    },
+    destroy: () => (job?.cancel('the panel was rebuilt'), listen.off()),
     /** A new observation (or the same one after a change). */
     update(next) {
       // A change to the data - a fold, a mask, another observation - leaves
