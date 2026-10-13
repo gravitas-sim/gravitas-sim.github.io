@@ -47,19 +47,8 @@ import {
 // Lessons provided by capability packages load through the platform resolver,
 // which installs their loaders in the registry when it is imported.
 import { migrateSavedProgress } from './platform/resolver.js';
-import {
-  applyShareState,
-  captureShareState,
-  state,
-  SETTINGS,
-  setInspectorSuppressed,
-  hideObjectInspector,
-  setAreaSweepWedges,
-  getAreaSweepWedges,
-  showAreaSweepFor,
-  setAreaSweepSuppressed,
-  syncPlacementAvailability,
-} from './ui.js';
+import { state, SETTINGS, command } from './appState.js';
+
 import {
   bh_list,
   stars,
@@ -220,6 +209,16 @@ export {
   openBrowser,
   resetBrowserFilters,
 } from './investigations/browser.js';
+
+const applyShareState = command('applyShareState');
+const captureShareState = command('captureShareState');
+const setInspectorSuppressed = command('setInspectorSuppressed');
+const hideObjectInspector = command('hideObjectInspector');
+const setAreaSweepWedges = command('setAreaSweepWedges');
+const getAreaSweepWedges = command('getAreaSweepWedges');
+const showAreaSweepFor = command('showAreaSweepFor');
+const setAreaSweepSuppressed = command('setAreaSweepSuppressed');
+const syncPlacementAvailability = command('syncPlacementAvailability');
 
 const STORAGE_PREFIX = 'gravitas_investigation_';
 const NAME_KEY = 'gravitas_student_name';

@@ -179,7 +179,8 @@ const LAYERS = [
     name: 'state',
     blurb:
       'The objects the interface shares: view state, live settings, current ' +
-      'scenario. Below everything that reads them, above the engine, which ' +
+      'scenario, and the command bus through which modules below ui.js ask ' +
+      'it to act (both in js/appState.js). Below everything that reads them, above the engine, which ' +
       'is handed what it needs rather than reaching for it.',
     match: [/^js\/appState\.js$/],
   },
@@ -209,34 +210,12 @@ const RANK = Object.fromEntries(LAYERS.map((l, i) => [l.name, i]));
  * entry is `from -> to`, and a cycle is recorded by its lowest-sorting member
  * pair so that the same cycle reported from two directions is one entry.
  */
-const ALLOWED_UPWARD = new Map([
-  [
-    'js/experimentsBridge.js -> js/ui.js',
-    'A deliberate lazy edge: the bridge dynamic-imports ui.js inside the path ' +
-      'that loads the A/B bench, so the bench and everything it pulls in stay ' +
-      'out of the initial download. Making it static to satisfy the layering ' +
-      'would undo the lazy load, which is the point of the module.',
-  ],
-  [
-    'js/maneuverBridge.js -> js/ui.js',
-    'The same deliberate lazy edge as the bench bridge above: ui.js is dynamic-' +
-      'imported inside the path that loads the maneuver planner, so the ' +
-      'planner and its prose stay out of the initial download. A static import ' +
-      'would satisfy the layering and undo the lazy load.',
-  ],
-  [
-    'js/investigations.js -> js/ui.js',
-    'A lesson steps the world: it loads scenarios, suppresses the inspector, ' +
-      'draws area-sweep wedges and restores share state. That is coordinator ' +
-      'behavior rather than shared data, so a state module does not help - ' +
-      'it needs a command interface, which is a larger change than this pass.',
-  ],
-  [
-    'js/share.js -> js/ui.js',
-    'Restoring a shared link means rebuilding a world and repainting a card, ' +
-      'both of which live in ui.js. The same shape of problem as ' +
-      'investigations.js, and the same answer.',
-  ],
+export const ALLOWED_UPWARD = new Map([
+  // Empty since Prompt 107 step 2d. The four edges that stood here (the
+  // investigation engine, the share dialog and the two lazy bridges, each
+  // importing js/ui.js) now go through the command bus in js/appState.js,
+  // which ui.js fills at start-up. A new entry needs a reason a bus cannot
+  // answer, and a register row.
 ]);
 
 /** Files that are workers or otherwise not part of the page graph. */
@@ -384,6 +363,35 @@ export function findUpwardImports(graph) {
   return out.sort((a, b) =>
     `${a.from}${a.to}`.localeCompare(`${b.from}${b.to}`)
   );
+}
+
+/**
+ * Files other than the coordinators that name js/ui.js in a relative string.
+ *
+ * buildGraph() reads a dynamic import only at the start of a line, so
+ * `await import('./ui.js')` in the middle of one is invisible to the layer
+ * rule. For ui.js that gap is closed here: any quoted relative path that
+ * resolves to it, however it is written, is reported. What a module needs of
+ * the interface goes through the command bus in js/appState.js.
+ *
+ * @param {Map<string, string>} sources - file -> text
+ * @returns {string[]} Offending files
+ */
+export function findCoordinatorImports(sources) {
+  const out = [];
+  for (const [file, src] of sources) {
+    if (layerOf(file) === 'coordinator') continue;
+    for (const m of src.matchAll(/['"](\.[^'"\n]*)['"]/g)) {
+      const resolved = path.posix.normalize(
+        path.posix.join(path.posix.dirname(file), m[1])
+      );
+      if (resolved === 'js/ui.js') {
+        out.push(file);
+        break;
+      }
+    }
+  }
+  return out.sort();
 }
 
 function report(graph) {
@@ -748,17 +756,26 @@ async function main() {
     }
   }
 
+  // js/ui.js is the coordinator: nothing below it names it, in any form.
+  const uiSources = new Map();
+  for (const file of graph.keys())
+    uiSources.set(file, await readFile(file, 'utf8'));
+  for (const file of findCoordinatorImports(uiSources)) {
+    problems.push(
+      `${file} imports js/ui.js. Ask for what you need through ` +
+        `command() in js/appState.js (ui.js registers the handler), or read ` +
+        `shared state from there.`
+    );
+  }
+
   // Sizes: a ceiling per module, recorded in tools/module-size-ceilings.json.
   problems.push(
     ...findSizeProblems(await moduleSizes(graph), await readCeilings())
   );
 
   // Listeners: mounting modules go through js/listeners.js, or are recorded.
-  const sources = new Map();
-  for (const file of graph.keys())
-    sources.set(file, await readFile(file, 'utf8'));
   problems.push(
-    ...findListenerProblems(sources, await readListenerAllowlist())
+    ...findListenerProblems(uiSources, await readListenerAllowlist())
   );
 
   if (problems.length) {
@@ -773,6 +790,7 @@ async function main() {
   console.log(
     `Architecture OK: ${graph.size} modules, no cycles, ` +
       `${ALLOWED_UPWARD.size} recorded upward imports and no new ones, ` +
+      `nothing below the coordinator names js/ui.js, ` +
       `every module within its size ceiling, ` +
       `every mounting module on the listener helper or recorded.`
   );

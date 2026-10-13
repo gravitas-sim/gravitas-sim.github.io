@@ -5,32 +5,31 @@
 // prose. This is what the start-up path sees instead: one function, and an
 // import that happens the first time somebody asks for it from the inspector.
 //
-// The same shape as js/experimentsBridge.js, and for the same reason: ui.js is
-// imported inside the lazy path rather than at the top, because a static
-// import would pull the whole application into this chunk and undo the point.
+// The same shape as js/experimentsBridge.js; the application is reached through
+// the command bus in js/appState.js, not by importing ui.js.
 // =============================================================================
 
+import * as app from './appState.js';
 let loading = null;
 
 /**
- * Load the planner and hand it the parts of ui.js it needs.
+ * Load the planner and hand it what it needs of the application.
  *
  * @returns {Promise<object>} The planner module
  */
 export function ensureManeuverPlanner() {
   if (!loading) {
     loading = (async () => {
-      const [planner, ui, i18n] = await Promise.all([
+      const [planner, i18n] = await Promise.all([
         import('./maneuverPlanner.js'),
-        import('./ui.js'),
         import('./i18n/deferredMessages.js'),
       ]);
       await i18n.ensureDeferredMessages().catch(() => {});
       planner.initManeuver({
-        captureShareState: ui.captureShareState,
-        applyShareState: ui.applyShareState,
-        getSettings: () => ui.SETTINGS,
-        getScenario: () => ui.current_scenario_name,
+        captureShareState: app.command('captureShareState'),
+        applyShareState: app.command('applyShareState'),
+        getSettings: () => app.SETTINGS,
+        getScenario: () => app.current_scenario_name,
       });
       // A rebuilt world is a different set of bodies, so the burns recorded
       // against the old ones are not a log of anything that is on screen.
