@@ -67,78 +67,66 @@ export const GEOMETRY_ENGINE_SET = Object.freeze({
   albedo: 'nonneg',
 });
 
+/** A parameter a rule may leave out, and a list of `length` of a kind. */
+const optional = kind => Object.freeze({ optional: kind });
+const list = (kind, length) => Object.freeze({ list: kind, length });
+const spec = o => Object.freeze(o);
+const [T, C, P, N] = ['text', 'color', 'positive', 'count'];
+
 /**
  * The named rules, and what each takes. A parameter is a list of the values it
- * may have, `bool` (the only optional kind), `text`, `color`, `positive` (a
- * number above 0), or `{list: kind, length: n}`. The rule's arithmetic is in
- * js/world/build.js; its names, colors, drawn sizes and published numbers are
- * the parameters, and the settings a laboratory reads are the ones
- * SCENARIO_GEOMETRY.md lists for it.
+ * may have, `bool` (optional), `text`, `color`, `positive` (a number above 0),
+ * `count` (a whole number from 1 to 1000), a list of one of those, or
+ * optional(one of those). The rule's arithmetic is in js/world/build.js; its
+ * names, colors, drawn sizes and published numbers are the parameters, and the
+ * settings a laboratory reads are the ones SCENARIO_GEOMETRY.md lists for it.
+ * Slice 4's rules (from tracer-disc on) place a disc, a cluster, generated
+ * bodies on circular orbits, a tidal infall and two black hole pairs.
  */
+// prettier-ignore
 export const GEOMETRY_RULES = Object.freeze({
-  'published-system': Object.freeze({
-    system: Object.freeze([
-      'galilean',
-      'pluto-neptune',
-      'jupiter-trojans',
-      'trappist-1',
-      'hd209458',
-    ]),
-    detuned: 'bool',
-  }),
-  'restricted-three-body': Object.freeze({
-    primaryName: 'text',
-    primaryColor: 'color',
-    primaryRadiusInSuns: 'positive',
-    secondaryName: 'text',
-    secondaryColor: 'color',
-    secondaryRadiusInSuns: 'positive',
-    drawnSolarRadii: 'positive',
-    tracerName: 'text',
-    tracerColor: 'color',
-    tracerRadius: 'positive',
-  }),
-  'circular-transfer': Object.freeze({
-    starName: 'text',
-    starDrawnSolarRadii: 'positive',
-    probeName: 'text',
-    probeColor: 'color',
-    probeRadius: 'positive',
-    targetName: 'text',
-    targetColor: 'color',
-    targetRadius: 'positive',
-    targetMassRatio: 'positive',
-  }),
-  'binary-lab': Object.freeze({
-    mode: Object.freeze(['circumstellar', 'circumbinary']),
-    drawExaggeration: 'positive',
-    starAName: 'text',
-    starAColor: 'color',
-    starBName: 'text',
-    starBColor: 'color',
-    planetName: 'text',
-    planetColor: 'color',
-    planetRadius: 'positive',
-  }),
-  'equilateral-stars': Object.freeze({
-    circumradius: 'positive',
-    massSuns: 'positive',
-    starRadius: 'positive',
-    names: Object.freeze({ list: 'text', length: 3 }),
-    colors: Object.freeze({ list: 'color', length: 3 }),
-  }),
-  'gravity-assist': Object.freeze({
-    starName: 'text',
-    starColor: 'color',
-    starRadius: 'positive',
-    planetName: 'text',
-    planetColor: 'color',
-    planetRadius: 'positive',
-    planetRadiusInSuns: 'positive',
-    probeName: 'text',
-    probeColor: 'color',
-    probeRadius: 'positive',
-  }),
+  'published-system': spec({ detuned: 'bool',
+    system: Object.freeze(['galilean', 'pluto-neptune', 'jupiter-trojans', 'trappist-1', 'hd209458', 'kuiper-belt']) }),
+  'restricted-three-body': spec({ primaryName: T, primaryColor: C, primaryRadiusInSuns: P,
+    secondaryName: T, secondaryColor: C, secondaryRadiusInSuns: P, drawnSolarRadii: P,
+    tracerName: T, tracerColor: C, tracerRadius: P }),
+  'circular-transfer': spec({ starName: T, starDrawnSolarRadii: P, probeName: T, probeColor: C, probeRadius: P,
+    targetName: T, targetColor: C, targetRadius: P, targetMassRatio: P }),
+  'binary-lab': spec({ mode: Object.freeze(['circumstellar', 'circumbinary']), drawExaggeration: P,
+    starAName: T, starAColor: C, starBName: T, starBColor: C, planetName: T, planetColor: C, planetRadius: P }),
+  'equilateral-stars': spec({ circumradius: P, massSuns: P, starRadius: P, names: list(T, 3), colors: list(C, 3) }),
+  'gravity-assist': spec({ starName: T, starColor: C, starRadius: P, planetName: T, planetColor: C,
+    planetRadius: P, planetRadiusInSuns: P, probeName: T, probeColor: C, probeRadius: P }),
+  // A disc of equal tracer stars about a bulge, even in log radius, each on the
+  // circular speed the visible mass inside it implies (`keplerian`) or on one
+  // speed at every radius (`flat`).
+  'tracer-disc': spec({ curve: Object.freeze(['keplerian', 'flat']), bulgeName: T, bulgeColor: C,
+    bulgeMassSuns: P, count: N, innerRadius: P, outerRadius: P, starMassSuns: P, flatSpeed: P,
+    namePrefix: T, starColor: C }),
+  // Members of a bound cluster in a halo, centrally concentrated, on random
+  // orbits at a share of the speed the cluster's total mass sets.
+  'bound-cluster': spec({ members: N, radius: P, memberMassSuns: P, ellipticals: N,
+    concentration: P, speedFloor: P, speedSpread: P }),
+  // The generated planets, gas giants and asteroids on circular orbits about the
+  // origin, at the speed for the mass of the first `centralStars` stars: planets
+  // and giants on a ladder (inner, then step), asteroids anywhere in a band
+  // (inner, then span). A population left out is left where it was.
+  'orbital-population': spec({ centralStars: N, planetInner: optional(P), planetStep: optional(P),
+    giantInner: optional(P), giantStep: optional(P), asteroidInner: optional(P), asteroidSpan: optional(P),
+    asteroidNames: optional(list(T, 12)) }),
+  // The first two generated black holes about their center of mass at the
+  // circular speed for the pair, slowed by `perturbation` so they spiral in.
+  'inspiral-pair': spec({ separation: P, perturbation: P }),
+  // The first generated black hole at rest at the origin and the others on
+  // circular orbits about it, spaced in its drawn radii and even in phase.
+  'staggered-orbits': spec({ innerRadii: P, stepRadii: P }),
+  // A star on a plunging ellipse about the first generated black hole, begun
+  // part way down the infall; apoapsis is the larger of a floor and a multiple
+  // of the hole's drawn radius, periapsis a multiple of it.
+  'tidal-infall': spec({ starName: T, starMassSuns: P, periapsisRadii: P, apoapsisRadii: P,
+    apoapsisFloor: P, startFraction: P, startPeriapsisFactor: P }),
+  // Two stars of unequal mass on a circular orbit about a stationary center.
+  'circular-binary-stars': spec({ massesSuns: list(P, 2), separation: P }),
 });
 
 /** The types whose generated bodies a geometry may `keep`: every population. */
@@ -257,7 +245,7 @@ export function validateGeometry(g, { rules = true } = {}) {
       reuse = engine(`${p}.from`, 'a body reused from the generator');
       if (!isObject(f)) bad(`${p}.from`, 'an object: {generated: index}');
       else if (reuse) {
-        only(f, `${p}.from`, ['generated', 'ifMissing']);
+        only(f, `${p}.from`, ['generated', 'ifMissing', 'keepName']);
         if (!Number.isInteger(f.generated) || f.generated < 0)
           bad(`${p}.from.generated`, 'the index of a generated body, from 0');
         if (
@@ -265,6 +253,8 @@ export function validateGeometry(g, { rules = true } = {}) {
           !['make', 'skip'].includes(f.ifMissing)
         )
           bad(`${p}.from.ifMissing`, 'make or skip');
+        if (f.keepName !== undefined && typeof f.keepName !== 'boolean')
+          bad(`${p}.from.keepName`, 'true or false');
         if (f.ifMissing === 'make' && b.mass === undefined)
           bad(`${p}.from.ifMissing`, 'make needs a mass to make the body with');
       }
@@ -431,12 +421,16 @@ export function validateGeometry(g, { rules = true } = {}) {
     // One parameter against its kind: a list of values, a kind, or a list of
     // a kind.
     const check = (v, kind, at) => {
-      if (Array.isArray(kind)) {
+      if (kind.optional) check(v, kind.optional, at);
+      else if (Array.isArray(kind)) {
         if (!kind.includes(v)) bad(at, `one of ${kind.join(', ')}`);
       } else if (kind === 'bool') {
         if (typeof v !== 'boolean') bad(at, 'true or false');
       } else if (kind === 'positive') num(v, at, 0, 1e9, true);
-      else if (kind === 'text') {
+      else if (kind === 'count') {
+        if (!(Number.isInteger(v) && v >= 1 && v <= 1000))
+          bad(at, 'a whole number from 1 to 1000');
+      } else if (kind === 'text') {
         if (!(typeof v === 'string' && GEOMETRY_NAME.test(v)))
           bad(at, 'a short plain text');
       } else if (kind === 'color') {
@@ -448,7 +442,8 @@ export function validateGeometry(g, { rules = true } = {}) {
     };
     for (const [k, kind] of Object.entries(spec)) {
       if (params[k] === undefined) {
-        if (kind !== 'bool') bad(`${p}.params.${k}`, 'is required');
+        if (kind !== 'bool' && !kind.optional)
+          bad(`${p}.params.${k}`, 'is required');
       } else check(params[k], kind, `${p}.params.${k}`);
     }
     if (params.detuned && params.system !== 'galilean')
