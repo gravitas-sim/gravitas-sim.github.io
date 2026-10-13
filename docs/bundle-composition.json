@@ -1,21 +1,21 @@
 {
- "total": 591890,
+ "total": 594404,
  "modules": [
   {
    "module": "js/i18n/en.js",
    "bytes": 84084
   },
   {
-   "module": "js/ui.js",
-   "bytes": 78326
-  },
-  {
    "module": "js/physics.js",
    "bytes": 73841
   },
   {
+   "module": "js/ui.js",
+   "bytes": 73272
+  },
+  {
    "module": "js/world/build.js",
-   "bytes": 35593
+   "bytes": 37398
   },
   {
    "module": "js/render.js",
@@ -28,6 +28,10 @@
   {
    "module": "js/radialVelocity.js",
    "bytes": 15799
+  },
+  {
+   "module": "js/inspectorPanel.js",
+   "bytes": 15789
   },
   {
    "module": "js/settingsPanel.js",
@@ -62,10 +66,6 @@
    "bytes": 7330
   },
   {
-   "module": "js/objectInspector.js",
-   "bytes": 6601
-  },
-  {
    "module": "js/settingsSchema.js",
    "bytes": 6567
   },
@@ -83,11 +83,11 @@
   },
   {
    "module": "js/main.js",
-   "bytes": 5526
+   "bytes": 5527
   },
   {
    "module": "js/share.js",
-   "bytes": 5338
+   "bytes": 5452
   },
   {
    "module": "js/resonance/systems.js",
@@ -118,16 +118,12 @@
    "bytes": 4019
   },
   {
-   "module": "js/energyChartNew.js",
-   "bytes": 3799
+   "module": "js/appState.js",
+   "bytes": 3828
   },
   {
    "module": "js/preview.js",
    "bytes": 3668
-  },
-  {
-   "module": "js/appState.js",
-   "bytes": 3641
   },
   {
    "module": "js/experiments/canonicalState.js",
@@ -206,10 +202,6 @@
    "bytes": 1791
   },
   {
-   "module": "js/experimentsBridge.js",
-   "bytes": 1766
-  },
-  {
    "module": "js/shell.js",
    "bytes": 1722
   },
@@ -220,6 +212,10 @@
   {
    "module": "js/observationLayout.js",
    "bytes": 1704
+  },
+  {
+   "module": "js/experimentsBridge.js",
+   "bytes": 1692
   },
   {
    "module": "js/quality.js",
@@ -306,12 +302,12 @@
    "bytes": 771
   },
   {
-   "module": "js/maneuverBridge.js",
-   "bytes": 723
-  },
-  {
    "module": "js/data/exoplanetSystems.js",
    "bytes": 685
+  },
+  {
+   "module": "js/maneuverBridge.js",
+   "bytes": 669
   },
   {
    "module": "js/welcomeGate.js",
@@ -368,6 +364,10 @@
   {
    "module": "js/timestep.js",
    "bytes": 233
+  },
+  {
+   "module": "js/listeners.js",
+   "bytes": 200
   },
   {
    "module": "js/stellar/mainSequence.js",
