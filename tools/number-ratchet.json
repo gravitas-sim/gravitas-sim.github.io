@@ -85,6 +85,7 @@
     "js/scenarioPack.js": 1,
     "js/settingsPanel.js": 4,
     "js/shareState.js": 1,
+    "js/soundPanel.js": 2,
     "js/stellarEvolutionWidgets.js": 10,
     "js/stellarSpectraWidgets.js": 1,
     "js/stellarWidgets.js": 9,
@@ -93,7 +94,7 @@
     "js/tidalPhysics.js": 6,
     "js/tidalWidgets.js": 17,
     "js/transitWidgets.js": 24,
-    "js/ui.js": 12,
+    "js/ui.js": 10,
     "js/utils.js": 5,
     "js/validationPage.js": 11,
     "js/vectorOverlay.js": 7

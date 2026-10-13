@@ -193,19 +193,19 @@ export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
   // transit. Worked in the primary's rest frame: the companion (Blended Binary
   // only: 300 AU out, half a magnitude fainter, 1.0 solar mass) circles it
   // retrograde at the two-body speed for the pair. The planet's Earth-mass
-  // figure is 0.69 x 317.828, as the hand-built block computed it; the
-  // gravitating mass is 0.02% less than that, because js/physics.js converts
-  // Jupiter masses with its own constant. Kept, not corrected (D-GEOM-06).
+  // figure is 0.69 x 317.828 to the last digit (219.30131999999998, as the
+  // hand-built block computed it; 219.30132 is an ulp away). The gravitating
+  // mass is 0.02% less (physics.js's own constant). Kept (D-GEOM-06).
   // prettier-ignore
   'transit-lab': { steps: [
     { body: { type: 'Star', name: 'HD 209458', mass: { suns: 1.148 }, born: { suns: 1 }, from: { generated: 0, ifMissing: 'make' }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { radiusInSuns: 1.155, luminosityInSuns: 1.77, radius: 0.537129285, temperature: 6065, spectralType: 'G0V', baseColor: '#fff3df', persistent: true } } },
-    { body: { type: 'Planet', name: 'HD 209458 b', mass: { jupiters: 0.69 }, born: { earths: 1 }, orbit: { around: 'HD 209458', distance: { au: 0.04747 }, angle: { rad: -1.5707963267948966 } }, set: { massInEarths: 219.30132, radiusInJupiters: 1.38, radius: 0.06594968230817999, baseColor: '#b8875a', persistent: true } } },
+    { body: { type: 'Planet', name: 'HD 209458 b', mass: { jupiters: 0.69 }, born: { earths: 1 }, orbit: { around: 'HD 209458', distance: { au: 0.04747 }, angle: { rad: -1.5707963267948966 } }, set: { massInEarths: 219.30131999999998, radiusInJupiters: 1.38, radius: 0.06594968230817999, baseColor: '#b8875a', persistent: true } } },
   ] },
   // prettier-ignore
   'blended-binary': { steps: [
     { body: { type: 'Star', name: 'HD 209458', mass: { suns: 1.148 }, born: { suns: 1 }, from: { generated: 0, ifMissing: 'make' }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { radiusInSuns: 1.155, luminosityInSuns: 1.77, radius: 0.537129285, temperature: 6065, spectralType: 'G0V', baseColor: '#fff3df', persistent: true } } },
     { body: { type: 'Star', name: 'HD 209458 B (companion)', mass: { suns: 1 }, from: { generated: 1, ifMissing: 'make' }, orbit: { around: 'HD 209458', distance: { au: 300 }, angle: { rad: 0 }, mutual: true, retrograde: true }, set: { radiusInSuns: 0.95, luminosityInSuns: 1.1167944997299422, radius: 0.44179465, temperature: 5700, spectralType: 'G5V', baseColor: '#ffe9c4', persistent: true } } },
-    { body: { type: 'Planet', name: 'HD 209458 b', mass: { jupiters: 0.69 }, born: { earths: 1 }, orbit: { around: 'HD 209458', distance: { au: 0.04747 }, angle: { rad: -1.5707963267948966 } }, set: { massInEarths: 219.30132, radiusInJupiters: 1.38, radius: 0.06594968230817999, baseColor: '#b8875a', persistent: true } } },
+    { body: { type: 'Planet', name: 'HD 209458 b', mass: { jupiters: 0.69 }, born: { earths: 1 }, orbit: { around: 'HD 209458', distance: { au: 0.04747 }, angle: { rad: -1.5707963267948966 } }, set: { massInEarths: 219.30131999999998, radiusInJupiters: 1.38, radius: 0.06594968230817999, baseColor: '#b8875a', persistent: true } } },
   ] },
   // Lagrange's equilateral solution: three equal stars rigidly rotating about
   // their center, linearly unstable (Gascheau), which is what the investigation

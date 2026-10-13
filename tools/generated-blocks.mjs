@@ -542,6 +542,33 @@ export function parameterSourceRows(systems) {
     .join('\n');
 }
 
+/**
+ * The largest modules, with the line ceiling each is held to.
+ *
+ * The ceilings come from tools/module-size-ceilings.json (the architecture
+ * check's size rule); the sizes are the files as they stand, so the table says
+ * the same thing the check would measure.
+ *
+ * @param {Map<string, number>} sizes - file -> lines
+ * @param {Record<string, number>} ceilings - file -> recorded ceiling
+ * @param {number} [count] - How many rows
+ * @returns {string} A Markdown table, between newlines
+ */
+export function moduleSizeTable(sizes, ceilings, count = 8) {
+  const rows = [...sizes.entries()]
+    .sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))
+    .slice(0, count)
+    .map(
+      ([file, lines]) =>
+        `| \`${file}\` | ${lines.toLocaleString('en-US')} | ${
+          ceilings[file] === undefined
+            ? '1,500 (default)'
+            : ceilings[file].toLocaleString('en-US')
+        } |`
+    );
+  return `\n| Module | Lines | Ceiling |\n| --- | ---: | ---: |\n${rows.join('\n')}\n`;
+}
+
 export function generatedBlocks({
   manifest,
   instructor,
@@ -551,6 +578,7 @@ export function generatedBlocks({
   precache = null,
   dataPacks = null,
   realSystems = null,
+  moduleSizes = null,
 }) {
   return {
     ...(dataPacks
@@ -566,6 +594,11 @@ export function generatedBlocks({
         }
       : {}),
     ...(graph ? { generatedArtifacts: generatedArtifactsTable(graph) } : {}),
+    ...(moduleSizes
+      ? {
+          moduleSizes: moduleSizeTable(moduleSizes.sizes, moduleSizes.ceilings),
+        }
+      : {}),
     doiBadge: doiBadgeBlock(),
     // OFFLINE_AND_LOW_END.md's table, from the committed sw-manifest.js.
     ...(precache ? { precache } : {}),

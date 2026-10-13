@@ -647,7 +647,7 @@ const processGravityRipples = () => {
  * Exactly what the oscillators are following, for the readers who cannot hear it.
  *
  * This returns cachedVoiceTargets itself rather than recomputing anything, and
- * that is the point: js/sonify/voiceReadout.js turns these into the periods the
+ * that is the point: js/soundPanel.js turns these into the periods the
  * sound panel prints, so the printed number and the played pitch cannot drift
  * apart - there is only one derivation of the frequency and this is it.
  *

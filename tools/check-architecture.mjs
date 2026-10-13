@@ -564,7 +564,7 @@ export function findSizeProblems(sizes, ceilings) {
   return problems;
 }
 
-async function readCeilings() {
+export async function readCeilings() {
   return JSON.parse(await readFile(SIZE_CEILINGS_FILE, 'utf8')).ceilings;
 }
 

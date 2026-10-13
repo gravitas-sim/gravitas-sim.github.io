@@ -835,7 +835,17 @@ export async function gatherBlocks({ physics = null } = {}) {
   const { loadRealSystems } = await import(
     new URL('./authoring/realSystems.mjs', import.meta.url)
   );
+  // The largest modules against their line ceilings: reading files and one
+  // JSON, the same measurement the architecture check makes.
+  const architecture = await import(
+    new URL('./check-architecture.mjs', import.meta.url)
+  );
+  const moduleSizes = {
+    sizes: await architecture.moduleSizes(await architecture.buildGraph()),
+    ceilings: await architecture.readCeilings(),
+  };
   return generatedBlocks({
+    moduleSizes,
     dataPacks,
     realSystems: await loadRealSystems(),
     graph: GRAPH,
