@@ -801,7 +801,7 @@ function getScaleForObject(obj) {
 }
 
 function getType(obj) {
-  return obj?.obj_type || obj?.kind || 'object';
+  return obj.obj_type || (typeof obj.kind === 'string' && obj.kind) || 'Object';
 }
 
 function getGeometryForType(type) {

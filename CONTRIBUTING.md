@@ -159,11 +159,12 @@ ceilings:
 
 | Layer | What lives there | Examples |
 | --- | --- | --- |
-| `foundation` | Pure helpers and constants. No application state, no DOM. | `constants.js`, `utils.js`, `units.js`, `rng.js`, `spatialHash.js`, `i18n/` |
+| `foundation` | Pure helpers and constants. No application state, no DOM. | `constants.js`, `utils.js`, `units.js`, `rng.js`, `i18n/` |
 | `domain` | The science, as pure functions over numbers. What the validation suite imports directly. | `orbital.js`, `mond.js`, `darkMatter.js`, `chaos/`, `resonance/` |
 | `services` | Stateful cross-cutting machinery with no opinion about the interface. | `quality.js`, `offline.js`, `referenceFrame.js` |
 | `engine` | The simulation, and the world it is built into. | `physics.js`, `scenarios.js`, `world/build.js` |
 | `state` | The objects the interface shares. | `appState.js` |
+| `render` | What a body looks like on the canvas: the drawers and the black hole renderer. The engine never imports them. | `bodyDraw.js`, `blackHole/render.js` |
 | `feature` | Everything that draws or is driven. | `render.js`, `controls.js`, `investigations.js`, `experiments/` |
 | `coordinator` | Wires the rest together. Nothing may import these. | `ui.js`, `main.js` |
 
@@ -182,6 +183,24 @@ argument list, so a test can hold it fixed. It is also why the quality tier's
 population caps are *read* during construction and never written back —
 `SETTINGS` is the reader's document, and it is what a share link serializes and
 what the A/B bench hashes.
+
+**The engine paints nothing.** A body class's `draw(ctx)` looks its kind up in a
+table of drawers (`registerBodyDrawers` in `js/physics.js`), and the render
+layer (`js/bodyDraw.js`) imports the engine and fills the table. The engine
+reaches the render layer only that way, so an engine to render import fails
+`check:architecture`, including a dynamic `import()` in the middle of a line.
+A body with no drawer draws nothing, which is what a Worker, where there is no
+canvas, wants.
+
+**A body's `kind` is a static string, not state.** Every body class carries
+`static kind` (a string no minifier renames) and reads it through an accessor,
+and the engine branches on `kind`, never on `constructor.name`. The accessor has
+a setter that does nothing, on purpose: `set_state()` and an investigation's
+`assign` copy fields onto a body with `Object.assign`, and a getter alone would
+throw there in strict mode, while a saved `kind` must never change what a body
+is. The class decides; the data cannot. For an object that is not a body (a
+test double, a plain record), the readers (`className`, `kindOf`) answer
+`'Object'` unless it states a string `kind` or an `obj_type`.
 
 ### When you need something from a layer above
 

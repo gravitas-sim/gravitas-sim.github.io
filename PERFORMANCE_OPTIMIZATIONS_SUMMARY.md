@@ -196,8 +196,8 @@ remain open.*
    when the body count justifies it", which described a behaviour the code has
    never had.
 3. ~~**Spatial Partitioning**: Implement quadtree for collision detection~~ —
-   **done**: `js/spatialHash.js` is a uniform spatial hash used for broad-phase
-   collision detection. The Barnes–Hut tree covers the gravity side, subject to
+   **done**: a uniform spatial hash, in `js/physics.js` (once
+   `js/spatialHash.js`), is used for broad-phase collision detection. The Barnes–Hut tree covers the gravity side, subject to
    the opt-in above.
 4. **Level of Detail**: Reduce complexity for distant objects — still open.
 5. **Instanced Rendering**: Batch similar objects in single draw calls — still
