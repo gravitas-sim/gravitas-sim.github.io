@@ -11,25 +11,23 @@
 // student has pressed anything.
 // =============================================================================
 
+import * as app from './appState.js';
+
 let loading = null;
 
 /**
- * Load the bench and hand it the parts of ui.js it needs.
- *
- * ui.js is imported here, inside the lazy path, rather than at the top of
- * bench.js: a static import would pull the whole application into the bench's
- * chunk and undo the point of deferring it.
+ * Load the bench and hand it the parts of the application it needs, through
+ * the shared state and the command bus, so its chunk never imports ui.js.
  *
  * @returns {Promise<{bench:Object, panel:Object}>} The loaded modules
  */
 export function ensureBench() {
   if (!loading) {
     loading = (async () => {
-      const [bench, panel, ui, share, render, timestep, physics] =
+      const [bench, panel, share, render, timestep, physics] =
         await Promise.all([
           import('./experiments/bench.js'),
           import('./experiments/panel.js'),
-          import('./ui.js'),
           import('./share.js'),
           import('./render.js'),
           import('./timestep.js'),
@@ -42,15 +40,16 @@ export function ensureBench() {
           ),
         ]);
       bench.initBench({
-        captureShareState: ui.captureShareState,
-        applyShareState: ui.applyShareState,
-        getSettings: () => ui.SETTINGS,
-        getScenario: () => ui.current_scenario_name,
+        captureShareState: app.command('captureShareState'),
+        applyShareState: app.command('applyShareState'),
+        getSettings: () => app.SETTINGS,
+        getScenario: () => app.current_scenario_name,
         // A sweep rebuilds the world per trial rather than restoring one, so it
         // needs the builder itself. Seeded, so a trial is reproducible.
-        initializeSimulation: opts => ui.initialize_simulation(opts),
-        getState: () => ui.state,
-        getDefaults: () => ui.DEFAULT_SETTINGS,
+        initializeSimulation: opts =>
+          app.command('initialize_simulation')(opts),
+        getState: () => app.state,
+        getDefaults: () => app.DEFAULT_SETTINGS,
         setFixedStep: render.setFixedStep,
         // The engine's own stepping arithmetic, not a copy of it. The
         // reliability check has to halve the step the loop is really taking,

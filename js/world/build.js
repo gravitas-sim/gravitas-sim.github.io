@@ -683,7 +683,9 @@ const populationRules = {
     };
     const N = p.count;
     for (let i = 0; i < N; i++) {
-      const t = i / (N - 1);
+      // One tracer sits at the inner radius (the hand-built disc always had 90,
+      // so i / (N - 1) was never 0 / 0).
+      const t = N > 1 ? i / (N - 1) : 0;
       const r = p.innerRadius * Math.pow(p.outerRadius / p.innerRadius, t);
       const theta = Math.random() * 2 * Math.PI;
       // The bulge plus the share of the disc inside this radius.

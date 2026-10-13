@@ -19,12 +19,6 @@ const encodePayload = jest.fn(
 );
 const saved = [];
 
-jest.unstable_mockModule('../js/ui.js', () => ({
-  captureShareState: () => ({ v: 2, s: 'None', seed: '7' }),
-  applyShareState: () => {},
-  initialize_simulation: () => {},
-  show_enhanced_scenario_info: () => {},
-}));
 jest.unstable_mockModule('../js/timeline.js', () => ({ getSimClock: () => 0 }));
 jest.unstable_mockModule('../js/shareState.js', () => ({
   encodePayload,
@@ -67,6 +61,14 @@ describe('share dialog name field', () => {
         <a id="shareFigureLink"></a><button id="shareCloseBtn"></button>
         <button id="shareCloseChip"></button>
       </div></div>`;
+    // ui.js registers these in the app; the test registers its own stand-ins.
+    const { registerCommands } = await import('../js/appState.js');
+    registerCommands({
+      captureShareState: () => ({ v: 2, s: 'None', seed: '7' }),
+      applyShareState: () => {},
+      initialize_simulation: () => {},
+      show_enhanced_scenario_info: () => {},
+    });
     const share = await import('../js/share.js');
     share.initShare();
     await share.openShareDialog();

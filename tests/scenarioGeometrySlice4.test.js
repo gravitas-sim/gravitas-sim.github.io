@@ -471,6 +471,35 @@ describe('slice 4: the worlds against their closed forms', () => {
   });
 });
 
+describe('slice 4: a disc of one tracer', () => {
+  // The hand-built disc always had 90 tracers, so there is no base world for
+  // a count of one: the rule defines it as a single tracer at the inner radius
+  // (i / (count - 1) would be 0 / 0, which put NaN in the world).
+  test.each([1, 2, 3])(
+    'count %i makes finite bodies, the first at the inner radius',
+    count => {
+      const params = ENGINE_GEOMETRY['spiral-galaxy'].steps[0].rule.params;
+      const was = params.count;
+      params.count = count;
+      try {
+        digest('spiral-galaxy', 1);
+      } finally {
+        params.count = was;
+      }
+      expect(physics.stars).toHaveLength(1 + count);
+      for (const s of physics.stars)
+        for (const v of [s.pos.x, s.pos.y, s.vel.x, s.vel.y, s.mass])
+          expect(Number.isFinite(v)).toBe(true);
+      const first = physics.stars[1];
+      expect(Math.hypot(first.pos.x, first.pos.y)).toBeCloseTo(150, 9);
+      if (count > 1)
+        expect(
+          Math.hypot(physics.stars[count].pos.x, physics.stars[count].pos.y)
+        ).toBeCloseTo(900, 9);
+    }
+  );
+});
+
 describe('slice 4: what a link or the Settings panel can still do to them', () => {
   test('a link with fewer black holes than the scenario places leaves the rest alone', () => {
     // One hole: nothing is moved (the code required two), and for the tidal
