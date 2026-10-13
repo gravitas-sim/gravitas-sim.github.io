@@ -4,15 +4,21 @@ import {
   computeDockPosition,
   renderDetails,
   patchDetails,
-  renderEnergy,
   renderPinnedCard,
   splitIdentity,
-} from './objectInspector.js';
+  setupEnergyTab,
+  ensureChartReady,
+  updateCurrentEnergyValues,
+  updateEnergyChart,
+  energyChartReady,
+  clearEnergyChart,
+  releaseEnergyChart,
+} from './inspectorPanel.js';
 import {
   JUPITER_MASSES_PER_SOLAR_MASS,
   EARTH_MASSES_PER_JUPITER_MASS,
 } from './constants.js';
-import { formatNumber, withUnit } from './format.js';
+import { formatNumber } from './format.js';
 import { ENVIRONMENT, ENVIRONMENTS } from './blackHole/appearance.js';
 import {
   screen_to_world,
@@ -58,10 +64,8 @@ import {
   particlePool,
   findObjectAtPosition,
   // Energy calculation functions
-  getObjectEnergyHistory,
   clearObjectEnergyHistory,
   clearAllEnergyHistory,
-  getObjectEnergyStats,
   // Orbit preview helpers
 } from './physics.js';
 
@@ -171,13 +175,6 @@ import {
 } from './settingsSchema.js';
 
 initCourseLevel();
-import {
-  initChart,
-  updateChart,
-  clearChart,
-  exportChart,
-  resizeChart,
-} from './energyChartNew.js';
 
 // -----------------------------------------------------------------------------
 // The three panels this module binds at load, and the markup they bind to.
@@ -1258,12 +1255,8 @@ const hideObjectInspector = () => {
     state.inspectorUpdateInterval = null;
   }
 
-  // Stop auto-refresh
-  stopAutoRefresh();
-
-  // Reset chart state
-  chartInitialized = false;
-  currentObjectId = null;
+  // Stop auto-refresh, reset chart state
+  releaseEnergyChart();
 
   state.selectedObject = null;
   paintFrameControls();
@@ -1321,445 +1314,6 @@ const setupInspectorDragging = () => {
   }); // passive: false is required because startDragTouch calls preventDefault
   document.addEventListener('touchmove', dragTouch);
   document.addEventListener('touchend', endDrag);
-};
-
-// ===== ENERGY TAB FUNCTIONALITY =====
-
-// Chart state tracking
-let chartInitialized = false;
-let currentObjectId = null;
-let autoRefreshInterval = null;
-let autoRefreshEnabled = true;
-const AUTO_REFRESH_INTERVAL = 2000; // 2 seconds
-
-// The tabs and the document outlive the inspector's selection and the setup
-// runs for every selection, so each run takes the previous run's registrations
-// back (one abort) before it makes its own.
-let energyAbort = null;
-
-/**
- * Set up the energy tab with chart and controls
- */
-const setupEnergyTab = () => {
-  const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
-  const detailsTab = document.querySelector(
-    '.inspector-tab[data-tab="details"]'
-  );
-  const energyTabContent = document.getElementById('energyTab');
-  const detailsTabContent = document.getElementById('detailsTab');
-
-  if (!energyTab || !detailsTab || !energyTabContent || !detailsTabContent) {
-    // Silently return instead of logging error - elements may not exist during initialization
-    return;
-  }
-
-  energyAbort?.abort();
-  energyAbort = new AbortController();
-  const on = (target, type, fn) =>
-    target.addEventListener(type, fn, { signal: energyAbort.signal });
-
-  debugLog('Setting up energy tab system');
-
-  // Build energy tab HTML structure
-  energyTabContent.innerHTML = renderEnergy();
-
-  // Set up tab switching
-  on(energyTab, 'click', () => {
-    // The chart was built while this tab was hidden, so it measured a
-    // zero-height parent. Now that it is visible, let it size itself.
-    requestAnimationFrame(() => resizeChart());
-    debugLog('Energy tab clicked');
-    energyTab.classList.add('active');
-    detailsTab.classList.remove('active');
-    energyTabContent.classList.add('active');
-    detailsTabContent.classList.remove('active');
-
-    // Initialize chart if needed
-    ensureChartReady();
-
-    // Update current energy values immediately
-    updateCurrentEnergyValues();
-
-    // Update chart with current object data
-    updateEnergyChart();
-
-    // Start auto-refresh for this tab
-    startAutoRefresh();
-
-    // Force a chart update to ensure it's visible
-    setTimeout(() => {
-      if (state.selectedObject) {
-        debugLog('Forcing chart update after tab activation');
-        updateEnergyChart();
-        updateCurrentEnergyValues();
-      }
-    }, 50);
-  });
-
-  on(detailsTab, 'click', () => {
-    detailsTab.classList.add('active');
-    energyTab.classList.remove('active');
-    detailsTabContent.classList.add('active');
-    energyTabContent.classList.remove('active');
-
-    // Stop auto-refresh when switching away from energy tab
-    stopAutoRefresh();
-  });
-
-  // Set up export button
-  const exportButton = document.getElementById('exportEnergyChart');
-  if (exportButton) {
-    on(exportButton, 'click', handleExportChart);
-  }
-
-  // Set up refresh button
-  const refreshButton = document.getElementById('refreshEnergyChart');
-  if (refreshButton) {
-    on(refreshButton, 'click', handleRefreshChart);
-    debugLog('Refresh button event listener attached');
-  } else {
-    console.warn('Refresh button not found during setup');
-  }
-
-  debugLog('Energy tab setup complete');
-
-  // Add a global click handler as a fallback for the refresh button
-  // This ensures the refresh button works even if the event listener wasn't properly attached
-  on(document, 'click', event => {
-    if (event.target && event.target.id === 'refreshEnergyChart') {
-      debugLog('Refresh button clicked via global handler');
-      handleRefreshChart();
-    }
-  });
-};
-
-/**
- * Ensure chart is initialized and ready
- */
-const ensureChartReady = async () => {
-  const canvas = document.getElementById('energyChart');
-  if (!canvas || chartInitialized) return;
-
-  // Chart.js is fetched the first time a chart is actually wanted rather than
-  // on every page load. initChart() reads the global, so it has to wait for it.
-  const { ensureChartJs } = await import('./chartjs.js');
-  if (!(await ensureChartJs())) return;
-  if (chartInitialized) return;
-
-  debugLog('Initializing energy chart');
-  if (initChart(canvas)) {
-    chartInitialized = true;
-    debugLog('Energy chart initialized successfully');
-  } else {
-    console.error('Failed to initialize energy chart');
-  }
-};
-
-/**
- * Update the current energy values display
- */
-const updateCurrentEnergyValues = () => {
-  if (!state.selectedObject) {
-    // Clear all energy value displays
-    const elements = [
-      'currentKineticEnergy',
-      'currentPotentialEnergy',
-      'currentTotalEnergy',
-      'currentDataPoints',
-    ];
-    elements.forEach(id => {
-      const element = document.getElementById(id);
-      if (element) {
-        element.textContent = id === 'currentDataPoints' ? '0' : '0 J';
-      }
-    });
-    return;
-  }
-
-  const objectId = state.selectedObject.object.id;
-  const energyStats = getObjectEnergyStats(objectId);
-
-  // Format energy values for display
-  const formatEnergyValue = value => {
-    if (value === 0) return '0 J';
-
-    const absValue = Math.abs(value);
-    if (absValue >= 1e6 || absValue < 1e-3) {
-      return withUnit(value, 'J');
-    } else if (absValue >= 1000) {
-      return withUnit(value, 'J');
-    } else if (absValue >= 1) {
-      return withUnit(value, 'J');
-    } else {
-      return withUnit(value, 'J');
-    }
-  };
-
-  // Update kinetic energy
-  const kineticElement = document.getElementById('currentKineticEnergy');
-  if (kineticElement && energyStats.latest) {
-    kineticElement.textContent = formatEnergyValue(energyStats.latest.ke);
-  }
-
-  // Update potential energy
-  const potentialElement = document.getElementById('currentPotentialEnergy');
-  if (potentialElement && energyStats.latest) {
-    potentialElement.textContent = formatEnergyValue(energyStats.latest.pe);
-  }
-
-  // Update total energy
-  const totalElement = document.getElementById('currentTotalEnergy');
-  if (totalElement && energyStats.latest) {
-    totalElement.textContent = formatEnergyValue(energyStats.latest.total);
-  }
-
-  // Update data points count
-  const dataPointsElement = document.getElementById('currentDataPoints');
-  if (dataPointsElement) {
-    dataPointsElement.textContent = energyStats.dataPoints.toString();
-  }
-};
-
-/**
- * Update the energy chart with current object data
- */
-const updateEnergyChart = () => {
-  debugLog('updateEnergyChart called');
-
-  if (!state.selectedObject) {
-    debugLog('No selected object, skipping chart update');
-    return;
-  }
-
-  const objectId = state.selectedObject.object.id;
-  debugLog('Updating chart for object ID:', objectId);
-
-  // Clear chart if switching to a different object
-  if (currentObjectId !== null && currentObjectId !== objectId) {
-    debugLog('Switching objects, clearing chart');
-    clearChart();
-  }
-
-  currentObjectId = objectId;
-
-  // Get energy history for the selected object
-  const energyHistory = getObjectEnergyHistory(objectId);
-  debugLog('Energy history length:', energyHistory.length);
-
-  if (energyHistory.length === 0) {
-    debugLog('No energy data available for object:', objectId);
-    // Clear chart and show collecting message
-    clearChart();
-    showCollectingMessage();
-    // Start auto-refresh to check for new data
-    startAutoRefresh();
-    return;
-  }
-
-  debugLog(
-    'Updating chart with',
-    energyHistory.length,
-    'data points for object:',
-    objectId
-  );
-
-  // Ensure chart is ready before updating
-  ensureChartReady();
-
-  // Worker-decimated update
-  try {
-    if (window._chartWorker === false) throw new Error('failed');
-    if (!window._chartWorker) {
-      const workerUrl = new URL('./chartWorker.js', import.meta.url);
-      window._chartWorker = new Worker(workerUrl, { type: 'module' });
-      const desiredHz = SETTINGS.chart_update_hz || 8;
-      window._chartWorker.postMessage({
-        type: 'config',
-        desiredHz,
-        maxPoints: 200,
-      });
-      window._chartWorker.onerror = window._chartWorker.onmessageerror = () => {
-        window._chartWorker.terminate();
-        window._chartWorker = false; // and the direct update takes over
-      };
-      window._chartWorker.onmessage = evt => {
-        if (evt.data && evt.data.type === 'update') {
-          const payload = evt.data.data;
-          // Schedule non-critical chart update in idle time to avoid jank
-          const run = () => updateChart(payload, SETTINGS.chart_update_hz);
-          if (typeof window.requestIdleCallback === 'function') {
-            window.requestIdleCallback(() => run());
-          } else {
-            setTimeout(run, 0);
-          }
-        }
-      };
-    }
-    window._chartWorker.postMessage({ type: 'data', data: energyHistory });
-  } catch {
-    // Fallback: direct update if worker fails
-    const run = () => updateChart(energyHistory, SETTINGS.chart_update_hz);
-    if (typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(() => run());
-    } else {
-      setTimeout(run, 0);
-    }
-  }
-  hideCollectingMessage();
-
-  // Stop auto-refresh since we have data
-  stopAutoRefresh();
-};
-
-/**
- * Show collecting data message in energy tab
- */
-const showCollectingMessage = () => {
-  const energyTabContent = document.getElementById('energyTab');
-  if (!energyTabContent) return;
-
-  // Find or create the collecting message element
-  let collectingMessage = energyTabContent.querySelector('.collecting-message');
-  if (!collectingMessage) {
-    collectingMessage = document.createElement('div');
-    collectingMessage.className = 'collecting-message';
-    collectingMessage.innerHTML = `
-            <div class="collecting-content">
-                <div class="collecting-spinner"></div>
-                <div class="collecting-text">Collecting data...</div>
-            </div>
-        `;
-
-    // Insert after the chart container
-    const chartContainer = energyTabContent.querySelector(
-      '.energy-chart-container'
-    );
-    if (chartContainer) {
-      chartContainer.parentNode.insertBefore(
-        collectingMessage,
-        chartContainer.nextSibling
-      );
-    } else {
-      energyTabContent.appendChild(collectingMessage);
-    }
-  }
-
-  collectingMessage.style.display = 'block';
-};
-
-/**
- * Hide collecting data message in energy tab
- */
-const hideCollectingMessage = () => {
-  const energyTabContent = document.getElementById('energyTab');
-  if (!energyTabContent) return;
-
-  const collectingMessage = energyTabContent.querySelector(
-    '.collecting-message'
-  );
-  if (collectingMessage) {
-    collectingMessage.style.display = 'none';
-  }
-};
-
-/**
- * Start auto-refresh for energy chart
- */
-const startAutoRefresh = () => {
-  if (autoRefreshInterval) {
-    clearInterval(autoRefreshInterval);
-  }
-
-  autoRefreshInterval = setInterval(() => {
-    if (autoRefreshEnabled && state.selectedObject) {
-      const energyTab = document.querySelector(
-        '.inspector-tab[data-tab="energy"]'
-      );
-      if (energyTab && energyTab.classList.contains('active')) {
-        updateEnergyChart();
-        updateCurrentEnergyValues();
-      }
-    }
-  }, AUTO_REFRESH_INTERVAL);
-
-  // Update refresh button to show auto-refresh is active
-  const refreshButton = document.getElementById('refreshEnergyChart');
-  if (refreshButton) {
-    refreshButton.title = t('chart.autoRefresh');
-    refreshButton.classList.add('auto-refresh-active');
-  }
-
-  debugLog('Auto-refresh started for energy chart');
-};
-
-/**
- * Stop auto-refresh for energy chart
- */
-const stopAutoRefresh = () => {
-  if (autoRefreshInterval) {
-    clearInterval(autoRefreshInterval);
-    autoRefreshInterval = null;
-
-    // Update refresh button to show auto-refresh is inactive
-    const refreshButton = document.getElementById('refreshEnergyChart');
-    if (refreshButton) {
-      refreshButton.title = t('chart.refresh');
-      refreshButton.classList.remove('auto-refresh-active');
-    }
-
-    debugLog('Auto-refresh stopped for energy chart');
-  }
-};
-
-/**
- * Handle chart refresh
- */
-const handleRefreshChart = () => {
-  debugLog('Manual chart refresh requested');
-
-  // Ensure chart is ready before updating
-  ensureChartReady();
-
-  // Update the chart
-  updateEnergyChart();
-
-  // Update current energy values
-  updateCurrentEnergyValues();
-
-  // Provide visual feedback
-  const refreshButton = document.getElementById('refreshEnergyChart');
-  if (refreshButton) {
-    // Add a brief visual feedback
-    refreshButton.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-      refreshButton.style.transform = '';
-    }, 150);
-  }
-};
-
-/**
- * Handle chart export
- */
-const handleExportChart = () => {
-  const dataUrl = exportChart();
-  if (!dataUrl) {
-    toast(t('chart.notReady'));
-    return;
-  }
-
-  try {
-    const link = document.createElement('a');
-    const objectId = state.selectedObject
-      ? state.selectedObject.object.id
-      : 'unknown';
-    link.download = `energy-chart-${objectId}-${Date.now()}.png`;
-    link.href = dataUrl;
-    link.click();
-    debugLog('Energy chart exported successfully');
-  } catch (error) {
-    console.error('Failed to export energy chart:', error);
-    toast(t('chart.exportFailed'));
-  }
 };
 
 // The inspector once had a minimize button. Nothing has referenced
@@ -2779,10 +2333,9 @@ const setupMassSliderListeners = () => {
 
     // Clear the energy chart since mass change invalidates energy history
     // This ensures the chart shows fresh data with the new mass
-    if (chartInitialized) {
+    if (energyChartReady()) {
       debugLog('Clearing energy chart due to mass change');
-      clearChart();
-      showCollectingMessage();
+      clearEnergyChart();
     }
 
     // If object type changed, refresh the entire inspector and stop processing
@@ -2842,7 +2395,7 @@ const setupMassSliderListeners = () => {
 
         // Energy tab should still be intact since we only updated details tab
         // Just ensure chart is ready for the new object
-        if (chartInitialized) {
+        if (energyChartReady()) {
           debugLog('Ensuring chart is ready for transformed object');
           ensureChartReady();
           updateEnergyChart();
@@ -3320,10 +2873,9 @@ const transformCometToAsteroid = object => {
  */
 const showTransformationNotification = (oldType, newType) => {
   // Clear energy chart when object transforms
-  if (chartInitialized) {
+  if (energyChartReady()) {
     debugLog('Clearing energy chart due to object transformation');
-    clearChart();
-    showCollectingMessage();
+    clearEnergyChart();
   }
 
   // Create notification element

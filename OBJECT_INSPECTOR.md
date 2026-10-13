@@ -53,7 +53,7 @@ wide screen and not on a narrow one: between roughly 620 and 760 pixels of width
 the panel's left edge crosses the readout and lands on top of it again.
 
 So the position is measured rather than assumed.
-[`computeDockPosition`](js/objectInspector.js) takes the rectangles of the
+[`computeDockPosition`](js/inspectorPanel.js) takes the rectangles of the
 readout and the control rail and returns a point:
 
 - dock right, against the rail when the rail is a right-hand column and against
