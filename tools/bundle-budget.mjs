@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 2033.2,
+    limit: 2033.6,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -649,7 +649,8 @@ const BUDGETS = [
       'D-BUDGET-33, under the standing size-budget approval in the ' +
       "project's CLAUDE.md." +
       '\n\nPrompt 108, slice 2 (six scenarios declared as data), measured on v2 at dde3b92, took it from 2031.7 to 2032.6 KB gzipped (5538.6 KB raw, measured 2032.541), 0.9 KB (D-BUDGET-GEOM-02, the standing size-budget approval; measured on Node 24, CI on Node 20 reads lower). The declarations, validator branches and expander are in js/scenarios.js and js/scenarioPack.js; about 370 lines of hand-built blocks left js/world/build.js. No request ceiling moved.' +
-      '\n\nPrompt 108, slice 3 (ten laboratory scenarios declared as data), measured on v2 at 5eaf6ef8, took it from 2032.6 to 2033.2 KB gzipped (5540.8 KB raw, measured 2033.168 on Node 24 against 2032.533 for v2 itself; CI on Node 20 reads lower), 0.6 KB (D-BUDGET-GEOM-03, the standing size-budget approval). The rule parameters, the declaration rows and the expander changes are in js/world/build.js, js/scenarios.js and js/scenarioPack.js; about 650 lines of hand-built blocks left js/world/build.js. No request ceiling moved.',
+      '\n\nPrompt 108, slice 3 (ten laboratory scenarios declared as data), measured on v2 at 5eaf6ef8, took it from 2032.6 to 2033.2 KB gzipped (5540.8 KB raw, measured 2033.168 on Node 24 against 2032.533 for v2 itself; CI on Node 20 reads lower), 0.6 KB (D-BUDGET-GEOM-03, the standing size-budget approval). The rule parameters, the declaration rows and the expander changes are in js/world/build.js, js/scenarios.js and js/scenarioPack.js; about 650 lines of hand-built blocks left js/world/build.js. No request ceiling moved.' +
+      '\n\nPrompt 108, slice 4 (nine scenarios declared as data: the galaxy discs, the cluster, the belts, a tidal disruption and two black hole scenarios), measured on v2 at e2a97d4c, took it from 2033.2 to 2033.6 KB gzipped (5541.6 KB raw, measured 2033.566 on Node 24 after a fresh node build.js; CI on Node 20 reads lower), 0.4 KB (D-BUDGET-GEOM-04, the standing size-budget approval). Seven named rules and their parameters are in js/world/build.js and js/scenarioGeometry.js; about 470 lines of hand-built blocks left js/world/build.js. No request ceiling moved.',
   },
 ];
 
