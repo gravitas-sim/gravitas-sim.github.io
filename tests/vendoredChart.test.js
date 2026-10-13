@@ -94,7 +94,7 @@ describe('every chart the application makes', () => {
   test('is found, so that the checks below are about something', () => {
     // The light curve, the RV curve, the energy chart and the bench's two.
     expect(modules.map(m => path.basename(m.at)).sort()).toEqual([
-      'energyChartNew.js',
+      'inspectorPanel.js',
       'lightCurve.js',
       'panel.js',
       'radialVelocity.js',
