@@ -18,8 +18,8 @@ import {
   DISPLAY_FACTOR,
   displayFactorFor,
   displayRadius,
-  drawnRadius,
-  drawnRadiusPx,
+  starRadius,
+  starRadiusPx,
   markerFloorPx,
   hitRadius,
   HIT_MIN_PX,
@@ -122,14 +122,14 @@ describe('within a family, bigger is bigger', () => {
 describe('the visibility floor', () => {
   test('a body too small to see is drawn at the floor', () => {
     // An Earth at a whole-system zoom is a fifth of a pixel.
-    const px = drawnRadiusPx(EARTH, 'Planet', 0.25);
+    const px = starRadiusPx(EARTH, 'Planet', 0.25);
     expect(px).toBeCloseTo(DISPLAY_MIN_PX, 6);
   });
 
   test('and grows out of it smoothly as the view zooms in', () => {
     let last = 0;
     for (let zoom = 0.1; zoom < 20; zoom *= 1.15) {
-      const px = drawnRadiusPx(EARTH, 'Planet', zoom);
+      const px = starRadiusPx(EARTH, 'Planet', zoom);
       // Never smaller than the floor, never a step, never going backwards.
       expect(px).toBeGreaterThanOrEqual(DISPLAY_MIN_PX - 1e-9);
       expect(px).toBeGreaterThanOrEqual(last - 1e-9);
@@ -141,9 +141,9 @@ describe('the visibility floor', () => {
   test('above the floor the ratios are the ones that were promised', () => {
     // Zoomed in far enough that nothing is floored, the hierarchy is exact.
     const zoom = 4;
-    const sun = drawnRadiusPx(SOL, 'Star', zoom);
-    const earth = drawnRadiusPx(EARTH, 'Planet', zoom);
-    const jup = drawnRadiusPx(JUPITER, 'GasGiant', zoom);
+    const sun = starRadiusPx(SOL, 'Star', zoom);
+    const earth = starRadiusPx(EARTH, 'Planet', zoom);
+    const jup = starRadiusPx(JUPITER, 'GasGiant', zoom);
     expect(earth).toBeGreaterThan(DISPLAY_MIN_PX);
     expect(sun / earth).toBeCloseTo(8, 1);
     expect(sun / jup).toBeCloseTo(4, 1);
@@ -182,7 +182,7 @@ describe('the visibility floor', () => {
       [2, 'Asteroid'],
       [1.6, 'Comet'],
     ]) {
-      expect(drawnRadiusPx(r, type, 1)).toBeCloseTo(DISPLAY_MIN_PX, 6);
+      expect(starRadiusPx(r, type, 1)).toBeCloseTo(DISPLAY_MIN_PX, 6);
     }
   });
 });
@@ -190,7 +190,7 @@ describe('the visibility floor', () => {
 describe('the hit target is a different number', () => {
   test('a shrunken planet is no harder to click', () => {
     const zoom = 1;
-    const drawn = drawnRadius(EARTH, 'Planet', zoom);
+    const drawn = starRadius(EARTH, 'Planet', zoom);
     const hit = hitRadius(EARTH, 'Planet', zoom);
     expect(hit).toBeGreaterThan(drawn);
     // Exactly what it was before the display policy existed: the model radius
@@ -220,13 +220,13 @@ describe('the display functions cannot change a body', () => {
     // Stated as a test because it is the guarantee: there is no argument here
     // that could be mutated, so no draw path can write to a body through this
     // module however carelessly it is called.
-    for (const fn of [displayRadius, drawnRadius, drawnRadiusPx, hitRadius]) {
+    for (const fn of [displayRadius, starRadius, starRadiusPx, hitRadius]) {
       expect(typeof fn).toBe('function');
     }
     const body = Object.freeze({ radius: 5, id: 3 });
     // A frozen body would throw on assignment; passing its radius cannot.
     expect(() => displayRadius(body.radius, 'Planet')).not.toThrow();
-    expect(() => drawnRadius(body.radius, 'Planet', 2, 10)).not.toThrow();
+    expect(() => starRadius(body.radius, 'Planet', 2, 10)).not.toThrow();
     expect(() => hitRadius(body.radius, 'Planet', 2)).not.toThrow();
     expect(body.radius).toBe(5);
   });

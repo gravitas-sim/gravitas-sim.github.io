@@ -66,9 +66,10 @@ const UNSAFE_KEY = new Set(['__proto__', 'constructor', 'prototype']);
 // type's own unit, a place or an `orbit` round an earlier body) or `rule` (a
 // named rule with parameters). A pack carries only the plain `body`; the rest
 // (a rule, a body reused from the generator, a distance in drawn radii, a
-// barycentric or random-phase orbit, the engine's own body properties) is
-// engine code or reads engine state, so `validateGeometry(g, {rules: false})`
-// refuses it and a pack that wants one names the built-in in `scenario`.
+// barycentric, mutual, retrograde or random-phase orbit, a body built from a
+// mass other than its own, the engine's own body properties) is engine code or
+// reads engine state, so `validateGeometry(g, {rules: false})` refuses it and a
+// pack that wants one names the built-in in `scenario`.
 // The arithmetic is js/scenarios.js expandGeometry().
 
 /** The most steps a geometry may hold. */
@@ -96,7 +97,9 @@ export const GEOMETRY_SET = Object.freeze({
  */
 export const GEOMETRY_ENGINE_SET = Object.freeze({
   radiusInSuns: 'positive',
+  massInEarths: 'positive',
   radiusInEarths: 'positive',
+  radiusInJupiters: 'positive',
   luminosityInSuns: 'positive',
   temperature: 'positive',
   spectralType: 'text',
@@ -116,7 +119,14 @@ export const GEOMETRY_ENGINE_SET = Object.freeze({
   albedo: 'nonneg',
 });
 
-/** The named rules, and what each takes. */
+/**
+ * The named rules, and what each takes. A parameter is a list of the values it
+ * may have, `bool` (the only optional kind), `text`, `color`, `positive` (a
+ * number above 0), or `{list: kind, length: n}`. The rule's arithmetic is in
+ * js/world/build.js; its names, colors, drawn sizes and published numbers are
+ * the parameters, and the settings a laboratory reads are the ones
+ * SCENARIO_GEOMETRY.md lists for it.
+ */
 export const GEOMETRY_RULES = Object.freeze({
   'published-system': Object.freeze({
     system: Object.freeze([
@@ -124,8 +134,62 @@ export const GEOMETRY_RULES = Object.freeze({
       'pluto-neptune',
       'jupiter-trojans',
       'trappist-1',
+      'hd209458',
     ]),
     detuned: 'bool',
+  }),
+  'restricted-three-body': Object.freeze({
+    primaryName: 'text',
+    primaryColor: 'color',
+    primaryRadiusInSuns: 'positive',
+    secondaryName: 'text',
+    secondaryColor: 'color',
+    secondaryRadiusInSuns: 'positive',
+    drawnSolarRadii: 'positive',
+    tracerName: 'text',
+    tracerColor: 'color',
+    tracerRadius: 'positive',
+  }),
+  'circular-transfer': Object.freeze({
+    starName: 'text',
+    starDrawnSolarRadii: 'positive',
+    probeName: 'text',
+    probeColor: 'color',
+    probeRadius: 'positive',
+    targetName: 'text',
+    targetColor: 'color',
+    targetRadius: 'positive',
+    targetMassRatio: 'positive',
+  }),
+  'binary-lab': Object.freeze({
+    mode: Object.freeze(['circumstellar', 'circumbinary']),
+    drawExaggeration: 'positive',
+    starAName: 'text',
+    starAColor: 'color',
+    starBName: 'text',
+    starBColor: 'color',
+    planetName: 'text',
+    planetColor: 'color',
+    planetRadius: 'positive',
+  }),
+  'equilateral-stars': Object.freeze({
+    circumradius: 'positive',
+    massSuns: 'positive',
+    starRadius: 'positive',
+    names: Object.freeze({ list: 'text', length: 3 }),
+    colors: Object.freeze({ list: 'color', length: 3 }),
+  }),
+  'gravity-assist': Object.freeze({
+    starName: 'text',
+    starColor: 'color',
+    starRadius: 'positive',
+    planetName: 'text',
+    planetColor: 'color',
+    planetRadius: 'positive',
+    planetRadiusInSuns: 'positive',
+    probeName: 'text',
+    probeColor: 'color',
+    probeRadius: 'positive',
   }),
 });
 
@@ -166,7 +230,14 @@ export function validateGeometry(g, { rules = true } = {}) {
   const bad = (path, why) => out.push({ path, why });
   if (!isObject(g)) return [{ path: '', why: 'a geometry is {steps: [...]}' }];
   for (const k of Object.keys(g))
-    if (k !== 'steps' && k !== 'keep') bad(k, `"${k}" is not a geometry field`);
+    if (k !== 'steps' && k !== 'keep' && k !== 'recenter')
+      bad(k, `"${k}" is not a geometry field`);
+  // `recenter`: move the whole system into its center-of-mass frame once built.
+  if (g.recenter !== undefined) {
+    if (typeof g.recenter !== 'boolean') bad('recenter', 'true or false');
+    else if (!rules)
+      bad('recenter', 'a scenario pack may not recenter the system');
+  }
   // `keep`: generated bodies of these types that no step reuses stay in the
   // world as the generator drew them, instead of being dropped.
   if (g.keep !== undefined && rules) {
@@ -225,6 +296,7 @@ export function validateGeometry(g, { rules = true } = {}) {
       'name',
       'mass',
       'from',
+      'born',
       'at',
       'velocity',
       'orbit',
@@ -266,14 +338,25 @@ export function validateGeometry(g, { rules = true } = {}) {
           'a reused black hole keeps the mass it was drawn with'
         );
     } else if (b.mass !== undefined || !reuse) {
+      // A body built from another mass (`born`) may be massed in any unit, as
+      // the literature gives it (a hot Jupiter, in Jupiter masses).
+      const wide = b.born !== undefined && rules;
       unit(
         b.mass,
         `${p}.mass`,
-        unitName ? [unitName] : Object.values(GEOMETRY_TYPES),
+        unitName && !wide ? [unitName] : Object.values(GEOMETRY_TYPES),
         0,
         1e9,
         true
       );
+    }
+    // `born`: the mass the constructor is handed, when it is not the body's own
+    // (a constructor derives a radius and a density from it, and draws from the
+    // generator for some), so a built-in's world is the one the code made.
+    if (b.born !== undefined) {
+      if (engine(`${p}.born`, 'a body built from another mass'))
+        unit(b.born, `${p}.born`, Object.values(GEOMETRY_TYPES), 0, 1e9);
+      if (b.mass === undefined) bad(`${p}.born`, 'needs a mass for the body');
     }
     if (b.orbit !== undefined) {
       if (b.at !== undefined || b.velocity !== undefined)
@@ -288,6 +371,8 @@ export function validateGeometry(g, { rules = true } = {}) {
           'eccentricity',
           'angle',
           'barycentric',
+          'mutual',
+          'retrograde',
         ]);
         if (typeof o.around !== 'string' || !names.has(o.around))
           bad(`${op}.around`, 'the name of a body made earlier');
@@ -313,6 +398,15 @@ export function validateGeometry(g, { rules = true } = {}) {
           )
             bad(`${op}.eccentricity`, 'a barycentric orbit is circular');
         }
+        // The pair's mass in the pull, and the other way round: a built-in's.
+        for (const k of ['mutual', 'retrograde'])
+          if (o[k] !== undefined) {
+            if (typeof o[k] !== 'boolean') bad(`${op}.${k}`, 'true or false');
+            else if (o[k] && engine(`${op}.${k}`, `a ${k} orbit`)) {
+              if (k === 'mutual' && o.barycentric)
+                bad(`${op}.mutual`, 'a barycentric orbit already counts both');
+            }
+          }
         if (
           o.eccentricity !== undefined &&
           !(
@@ -386,10 +480,29 @@ export function validateGeometry(g, { rules = true } = {}) {
     const params = r.params ?? {};
     if (!isObject(params)) return bad(`${p}.params`, 'an object');
     only(params, `${p}.params`, Object.keys(spec));
-    if (!spec.system.includes(params.system))
-      bad(`${p}.params.system`, `one of ${spec.system.join(', ')}`);
-    if (params.detuned !== undefined && typeof params.detuned !== 'boolean')
-      bad(`${p}.params.detuned`, 'true or false');
+    // One parameter against its kind: a list of values, a kind, or a list of
+    // a kind.
+    const check = (v, kind, at) => {
+      if (Array.isArray(kind)) {
+        if (!kind.includes(v)) bad(at, `one of ${kind.join(', ')}`);
+      } else if (kind === 'bool') {
+        if (typeof v !== 'boolean') bad(at, 'true or false');
+      } else if (kind === 'positive') num(v, at, 0, 1e9, true);
+      else if (kind === 'text') {
+        if (!(typeof v === 'string' && GEOMETRY_NAME.test(v)))
+          bad(at, 'a short plain text');
+      } else if (kind === 'color') {
+        if (!(typeof v === 'string' && GEOMETRY_COLOR.test(v)))
+          bad(at, 'a color such as #ffd86b');
+      } else if (!Array.isArray(v) || v.length !== kind.length)
+        bad(at, `a list of ${kind.length}`);
+      else v.forEach((x, i) => check(x, kind.list, `${at}[${i}]`));
+    };
+    for (const [k, kind] of Object.entries(spec)) {
+      if (params[k] === undefined) {
+        if (kind !== 'bool') bad(`${p}.params.${k}`, 'is required');
+      } else check(params[k], kind, `${p}.params.${k}`);
+    }
     if (params.detuned && params.system !== 'galilean')
       bad(`${p}.params.detuned`, 'only the Galilean system can be detuned');
   };

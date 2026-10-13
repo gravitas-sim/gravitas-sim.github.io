@@ -75,7 +75,7 @@ import {
   ionTailDirection,
   dustTailDirection,
   spriteFor,
-  drawnRadius,
+  starRadius,
   displayRadius,
   markerFloorPx,
   hitRadius,
@@ -1496,7 +1496,7 @@ const drawRadius = (obj, type) =>
         obj.stageRadius,
         markerFloorPx(liveBodyCount) / ((state && state.zoom) || 1)
       )
-    : drawnRadius(obj.radius, type, (state && state.zoom) || 1, liveBodyCount);
+    : starRadius(obj.radius, type, (state && state.zoom) || 1, liveBodyCount);
 
 /**
  * How much detail this body is worth, at its current size on screen.
