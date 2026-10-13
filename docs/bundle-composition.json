@@ -1,5 +1,5 @@
 {
- "total": 594404,
+ "total": 594416,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -27,7 +27,7 @@
   },
   {
    "module": "js/radialVelocity.js",
-   "bytes": 15799
+   "bytes": 15811
   },
   {
    "module": "js/inspectorPanel.js",
