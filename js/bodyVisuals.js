@@ -200,7 +200,7 @@ export function markerFloorPx(bodyCount) {
  * @param {number} [bodyCount] - Live bodies, for the crowded floor
  * @returns {number} World units
  */
-export function starRadius(modelRadius, type, zoom, bodyCount = 0) {
+export function drawnRadius(modelRadius, type, zoom, bodyCount = 0) {
   const z = Number(zoom) > 0 ? Number(zoom) : 1;
   const wanted = displayRadius(modelRadius, type);
   const floor = markerFloorPx(bodyCount) / z;
@@ -208,9 +208,9 @@ export function starRadius(modelRadius, type, zoom, bodyCount = 0) {
 }
 
 /** The same thing in screen pixels, which is what a LOD decision wants. */
-export function starRadiusPx(modelRadius, type, zoom, bodyCount = 0) {
+export function drawnRadiusPx(modelRadius, type, zoom, bodyCount = 0) {
   const z = Number(zoom) > 0 ? Number(zoom) : 1;
-  return starRadius(modelRadius, type, z, bodyCount) * z;
+  return drawnRadius(modelRadius, type, z, bodyCount) * z;
 }
 
 /**

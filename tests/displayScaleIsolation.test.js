@@ -182,7 +182,7 @@ describe('no physics module imports the display policy', () => {
       const src = fs.readFileSync(full, 'utf8');
       expect([
         file,
-        /displayRadius|starRadius|DISPLAY_FACTOR/.test(src),
+        /displayRadius|drawnRadius|DISPLAY_FACTOR/.test(src),
       ]).toEqual([file, false]);
     }
   });

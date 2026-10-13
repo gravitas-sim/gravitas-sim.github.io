@@ -46,6 +46,7 @@
     "js/hash.js": 1,
     "js/inference/manifest.js": 1,
     "js/inference/rvMonteCarlo.js": 1,
+    "js/inspectorInfo.js": 19,
     "js/instruments.js": 1,
     "js/investigations.js": 9,
     "js/lab3d/view/guidePanel.js": 2,
@@ -92,7 +93,7 @@
     "js/tidalPhysics.js": 6,
     "js/tidalWidgets.js": 17,
     "js/transitWidgets.js": 24,
-    "js/ui.js": 31,
+    "js/ui.js": 12,
     "js/utils.js": 5,
     "js/validationPage.js": 11,
     "js/vectorOverlay.js": 7
