@@ -148,9 +148,9 @@ ceilings:
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
 | `js/physics.js` | 8,665 | 8,665 |
-| `js/ui.js` | 6,757 | 6,757 |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/validation/physicsChecks.js` | 6,621 | 6,621 |
+| `js/ui.js` | 6,309 | 6,309 |
 | `js/investigations.js` | 4,754 | 4,754 |
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
 | `js/i18n/en.deferred.js` | 3,845 | 3,845 |

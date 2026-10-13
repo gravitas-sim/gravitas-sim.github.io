@@ -390,6 +390,39 @@ test.describe('a page cleans up its panels', () => {
       'listeners added across twenty editor rebuilds'
     ).toBeLessThanOrEqual(4);
   });
+
+  // The object inspector set up its energy tab and the readout's minimize
+  // control on every selection and never took them back: four listeners a
+  // selection (the two tabs, the readout and the document), eighty over
+  // twenty. The setup now replaces its own registrations.
+  test('the object inspector leaves nothing behind when bodies are selected and closed', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await page.addInitScript(INSTRUMENT);
+    await app.boot({ url: '/' });
+    await app.loadScenario('solar-system');
+    await app.waitForFrames(10);
+    const cycle = async () => {
+      await app.selectFirstObject('StarObject');
+      await expect(page.locator('#objectInspector')).toBeVisible();
+      // The energy chart is built a beat after the selection; closing before
+      // it is built is a different (and unrelated) race.
+      await expect
+        .poll(() =>
+          page.evaluate(() => Boolean(window.Chart?.getChart('energyChart')))
+        )
+        .toBe(true);
+      await page.locator('#inspectorClose').click();
+      await expect(page.locator('#objectInspector')).toBeHidden();
+    };
+    const { grew } = await growth(page, cycle);
+    expect(
+      grew,
+      'listeners added across twenty inspector selections'
+    ).toBeLessThanOrEqual(4);
+  });
 });
 
 // =============================================================================

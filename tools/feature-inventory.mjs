@@ -46,7 +46,7 @@ export const FEATURES = [
         note: 'falls back to the main thread',
       },
       {
-        file: 'js/ui.js',
+        file: 'js/inspectorPanel.js',
         detect: /_chartWorker === false/,
         note: 'falls back to direct chart updates',
       },
