@@ -1,0 +1,856 @@
+{
+ "spiral-galaxy@1": {
+  "rows": {
+   "stars": "91:fa5f90b9"
+  },
+  "settings": "f3e8ec6a",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7105702327098697
+ },
+ "spiral-galaxy@42": {
+  "rows": {
+   "stars": "91:e9892afc"
+  },
+  "settings": "f3e8ec6a",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.4501027949154377
+ },
+ "spiral-galaxy@1554098974": {
+  "rows": {
+   "stars": "91:0a71eabd"
+  },
+  "settings": "f3e8ec6a",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7976670467760414
+ },
+ "spiral-galaxy@123456789": {
+  "rows": {
+   "stars": "91:845514c2"
+  },
+  "settings": "f3e8ec6a",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.9881909359246492
+ },
+ "spiral-galaxy@4000000000": {
+  "rows": {
+   "stars": "91:47e2a393"
+  },
+  "settings": "f3e8ec6a",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.09193518478423357
+ },
+ "spiral-galaxy@7": {
+  "rows": {
+   "stars": "91:f03cc019"
+  },
+  "settings": "f3e8ec6a",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.986039919545874
+ },
+ "spiral-galaxy@99991": {
+  "rows": {
+   "stars": "91:1a1e5eef"
+  },
+  "settings": "f3e8ec6a",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6128350191283971
+ },
+ "milky-way-rotation@1": {
+  "rows": {
+   "stars": "91:8192aaec"
+  },
+  "settings": "ced2e86f",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7105702327098697
+ },
+ "milky-way-rotation@42": {
+  "rows": {
+   "stars": "91:9aa184c0"
+  },
+  "settings": "ced2e86f",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.4501027949154377
+ },
+ "milky-way-rotation@1554098974": {
+  "rows": {
+   "stars": "91:0ba204df"
+  },
+  "settings": "ced2e86f",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7976670467760414
+ },
+ "milky-way-rotation@123456789": {
+  "rows": {
+   "stars": "91:329162ad"
+  },
+  "settings": "ced2e86f",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.9881909359246492
+ },
+ "milky-way-rotation@4000000000": {
+  "rows": {
+   "stars": "91:20ddd8e4"
+  },
+  "settings": "ced2e86f",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.09193518478423357
+ },
+ "milky-way-rotation@7": {
+  "rows": {
+   "stars": "91:c729deb5"
+  },
+  "settings": "ced2e86f",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.986039919545874
+ },
+ "milky-way-rotation@99991": {
+  "rows": {
+   "stars": "91:ef1b66f5"
+  },
+  "settings": "ced2e86f",
+  "zoom": 0.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6128350191283971
+ },
+ "coma-cluster@1": {
+  "rows": {
+   "galaxies": "24:a5231988"
+  },
+  "settings": "d2467e59",
+  "zoom": 0.16,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7952138101682067
+ },
+ "coma-cluster@42": {
+  "rows": {
+   "galaxies": "24:7fc1daaf"
+  },
+  "settings": "d2467e59",
+  "zoom": 0.16,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.009526386857032776
+ },
+ "coma-cluster@1554098974": {
+  "rows": {
+   "galaxies": "24:75067a26"
+  },
+  "settings": "d2467e59",
+  "zoom": 0.16,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.8046154153998941
+ },
+ "coma-cluster@123456789": {
+  "rows": {
+   "galaxies": "24:45c71fd5"
+  },
+  "settings": "d2467e59",
+  "zoom": 0.16,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.2648470946587622
+ },
+ "coma-cluster@4000000000": {
+  "rows": {
+   "galaxies": "24:e0f3035e"
+  },
+  "settings": "d2467e59",
+  "zoom": 0.16,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5087056132033467
+ },
+ "coma-cluster@7": {
+  "rows": {
+   "galaxies": "24:2b3537a8"
+  },
+  "settings": "d2467e59",
+  "zoom": 0.16,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6093099669087678
+ },
+ "coma-cluster@99991": {
+  "rows": {
+   "galaxies": "24:c1f256cc"
+  },
+  "settings": "d2467e59",
+  "zoom": 0.16,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.24564485787414014
+ },
+ "binary-star-system@1": {
+  "rows": {
+   "stars": "2:e5b2ea23",
+   "planets": "5:aa1bb16e",
+   "gas_giants": "2:f7ff9671",
+   "asteroids": "20:518b5c2c"
+  },
+  "settings": "9d5a5cfd",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.1642689702566713
+ },
+ "binary-star-system@42": {
+  "rows": {
+   "stars": "2:6c2beb1f",
+   "planets": "5:6bd2c951",
+   "gas_giants": "2:2497cd16",
+   "asteroids": "20:b573a1ee"
+  },
+  "settings": "9d5a5cfd",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6950652054511011
+ },
+ "binary-star-system@1554098974": {
+  "rows": {
+   "stars": "2:7c43b047",
+   "planets": "5:fe2f6bbd",
+   "gas_giants": "2:6e90414d",
+   "asteroids": "20:c9699a24"
+  },
+  "settings": "9d5a5cfd",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7968181855976582
+ },
+ "binary-star-system@123456789": {
+  "rows": {
+   "stars": "2:bab86441",
+   "planets": "5:5f826c40",
+   "gas_giants": "2:19b8a9fb",
+   "asteroids": "20:6c281888"
+  },
+  "settings": "9d5a5cfd",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7590075370389968
+ },
+ "binary-star-system@4000000000": {
+  "rows": {
+   "stars": "2:be6c574e",
+   "planets": "5:619e1e01",
+   "gas_giants": "2:3a28eed8",
+   "asteroids": "20:d895b765"
+  },
+  "settings": "9d5a5cfd",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5770928005222231
+ },
+ "binary-star-system@7": {
+  "rows": {
+   "stars": "2:bf45d083",
+   "planets": "5:0569f6fa",
+   "gas_giants": "2:9a2b585c",
+   "asteroids": "20:6625f198"
+  },
+  "settings": "9d5a5cfd",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6423514001071453
+ },
+ "binary-star-system@99991": {
+  "rows": {
+   "stars": "2:cde241cb",
+   "planets": "5:3ec90262",
+   "gas_giants": "2:475a1dbc",
+   "asteroids": "20:89e2f2c7"
+  },
+  "settings": "9d5a5cfd",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5551569191738963
+ },
+ "rogue-encounter@1": {
+  "rows": {
+   "bh_list": "1:0ae1b82a",
+   "stars": "1:ffcdb837",
+   "planets": "12:f074daba",
+   "gas_giants": "4:62f9ae04",
+   "asteroids": "80:2b35040c"
+  },
+  "settings": "e619ab8b",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6475499526131898
+ },
+ "rogue-encounter@42": {
+  "rows": {
+   "bh_list": "1:6dc9a349",
+   "stars": "1:81276f79",
+   "planets": "12:2c63b877",
+   "gas_giants": "4:317761ba",
+   "asteroids": "80:b152399d"
+  },
+  "settings": "e619ab8b",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.9520978422369808
+ },
+ "rogue-encounter@1554098974": {
+  "rows": {
+   "bh_list": "1:46dc015b",
+   "stars": "1:1aaf62ab",
+   "planets": "12:d889f50b",
+   "gas_giants": "4:fa7a4566",
+   "asteroids": "80:44303f59"
+  },
+  "settings": "e619ab8b",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.012732024071738124
+ },
+ "rogue-encounter@123456789": {
+  "rows": {
+   "bh_list": "1:99598b1b",
+   "stars": "1:5a3d4c5b",
+   "planets": "12:88b97e0c",
+   "gas_giants": "4:06f1fc63",
+   "asteroids": "80:4f3e956e"
+  },
+  "settings": "e619ab8b",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.4655328581575304
+ },
+ "rogue-encounter@4000000000": {
+  "rows": {
+   "bh_list": "1:85a6ac01",
+   "stars": "1:7dab84f0",
+   "planets": "12:436b470a",
+   "gas_giants": "4:c2b6c36d",
+   "asteroids": "80:7eca9bea"
+  },
+  "settings": "e619ab8b",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.18988179066218436
+ },
+ "rogue-encounter@7": {
+  "rows": {
+   "bh_list": "1:3947a598",
+   "stars": "1:369b7a30",
+   "planets": "12:7f95b99a",
+   "gas_giants": "4:e7e61fc9",
+   "asteroids": "80:cace411a"
+  },
+  "settings": "e619ab8b",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5179386297240853
+ },
+ "rogue-encounter@99991": {
+  "rows": {
+   "bh_list": "1:1087c494",
+   "stars": "1:eda1259f",
+   "planets": "12:02ba2995",
+   "gas_giants": "4:3e91e257",
+   "asteroids": "80:a2a51553"
+  },
+  "settings": "e619ab8b",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.0170894933398813
+ },
+ "kuiper-belt@1": {
+  "rows": {
+   "stars": "1:4800ccd5",
+   "planets": "8:65a4a2f9",
+   "asteroids": "300:25c46ac2"
+  },
+  "settings": "801ed6fc",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.906352398218587
+ },
+ "kuiper-belt@42": {
+  "rows": {
+   "stars": "1:d73240a0",
+   "planets": "8:99578d2b",
+   "asteroids": "300:e3e0fffa"
+  },
+  "settings": "801ed6fc",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7000233291182667
+ },
+ "kuiper-belt@1554098974": {
+  "rows": {
+   "stars": "1:5bceee48",
+   "planets": "8:3f255df4",
+   "asteroids": "300:6824b50f"
+  },
+  "settings": "801ed6fc",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7297112515661865
+ },
+ "kuiper-belt@123456789": {
+  "rows": {
+   "stars": "1:fab32ed0",
+   "planets": "8:3e1536a6",
+   "asteroids": "300:f79d8c1f"
+  },
+  "settings": "801ed6fc",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.80204116133973
+ },
+ "kuiper-belt@4000000000": {
+  "rows": {
+   "stars": "1:32e03ddb",
+   "planets": "8:9a3d316f",
+   "asteroids": "300:61a8c82f"
+  },
+  "settings": "801ed6fc",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.9788877530954778
+ },
+ "kuiper-belt@7": {
+  "rows": {
+   "stars": "1:ccb779d6",
+   "planets": "8:ee178809",
+   "asteroids": "300:66c67907"
+  },
+  "settings": "801ed6fc",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.51184007152915
+ },
+ "kuiper-belt@99991": {
+  "rows": {
+   "stars": "1:05158e7e",
+   "planets": "8:1b2068bb",
+   "asteroids": "300:9298c2bc"
+  },
+  "settings": "801ed6fc",
+  "zoom": 1.5,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6080690403468907
+ },
+ "tidal-disruption-event@1": {
+  "rows": {
+   "bh_list": "1:5a7becbd",
+   "stars": "1:9b7a0854"
+  },
+  "settings": "9524f58a",
+  "zoom": 0.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.9683778982143849
+ },
+ "tidal-disruption-event@42": {
+  "rows": {
+   "bh_list": "1:3f7aeff6",
+   "stars": "1:9b7a0854"
+  },
+  "settings": "9524f58a",
+  "zoom": 0.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.17481389874592423
+ },
+ "tidal-disruption-event@1554098974": {
+  "rows": {
+   "bh_list": "1:de8d7c3f",
+   "stars": "1:9b7a0854"
+  },
+  "settings": "9524f58a",
+  "zoom": 0.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5303245196118951
+ },
+ "tidal-disruption-event@123456789": {
+  "rows": {
+   "bh_list": "1:8b16afc4",
+   "stars": "1:9b7a0854"
+  },
+  "settings": "9524f58a",
+  "zoom": 0.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.30307188746519387
+ },
+ "tidal-disruption-event@4000000000": {
+  "rows": {
+   "bh_list": "1:04ca2834",
+   "stars": "1:9b7a0854"
+  },
+  "settings": "9524f58a",
+  "zoom": 0.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.18911777553148568
+ },
+ "tidal-disruption-event@7": {
+  "rows": {
+   "bh_list": "1:af2f2398",
+   "stars": "1:9b7a0854"
+  },
+  "settings": "9524f58a",
+  "zoom": 0.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5214452685322613
+ },
+ "tidal-disruption-event@99991": {
+  "rows": {
+   "bh_list": "1:c3f95c1b",
+   "stars": "1:9b7a0854"
+  },
+  "settings": "9524f58a",
+  "zoom": 0.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.12561203725636005
+ },
+ "black-hole-billiards@1": {
+  "rows": {
+   "bh_list": "4:2cf62bde",
+   "stars": "14:de2a9115",
+   "planets": "15:0be6923e",
+   "gas_giants": "2:003e87d7",
+   "asteroids": "10:78929ce3"
+  },
+  "settings": "7f4c2da8",
+  "zoom": 0.85,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5681850332766771
+ },
+ "black-hole-billiards@42": {
+  "rows": {
+   "bh_list": "4:242c04a1",
+   "stars": "14:6e03fb79",
+   "planets": "15:fec9e817",
+   "gas_giants": "2:bd60d7fc",
+   "asteroids": "10:ca146ead"
+  },
+  "settings": "7f4c2da8",
+  "zoom": 0.85,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5685361055657268
+ },
+ "black-hole-billiards@1554098974": {
+  "rows": {
+   "bh_list": "4:6a82d1a4",
+   "stars": "14:6fb1d669",
+   "planets": "15:f728690a",
+   "gas_giants": "2:21245610",
+   "asteroids": "10:8ecbe0c6"
+  },
+  "settings": "7f4c2da8",
+  "zoom": 0.85,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.17993146181106567
+ },
+ "black-hole-billiards@123456789": {
+  "rows": {
+   "bh_list": "4:b360f524",
+   "stars": "14:9f87faa7",
+   "planets": "15:28109695",
+   "gas_giants": "2:bd05b2a3",
+   "asteroids": "10:876453c6"
+  },
+  "settings": "7f4c2da8",
+  "zoom": 0.85,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.2235861853696406
+ },
+ "black-hole-billiards@4000000000": {
+  "rows": {
+   "bh_list": "4:1298cec9",
+   "stars": "14:2e666e42",
+   "planets": "15:7626b722",
+   "gas_giants": "2:06d56f1d",
+   "asteroids": "10:b0ad51fc"
+  },
+  "settings": "7f4c2da8",
+  "zoom": 0.85,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.1585254732053727
+ },
+ "black-hole-billiards@7": {
+  "rows": {
+   "bh_list": "4:e5af785e",
+   "stars": "14:de9f0416",
+   "planets": "15:2a9afb67",
+   "gas_giants": "2:a82aae7a",
+   "asteroids": "10:aa8dffb9"
+  },
+  "settings": "7f4c2da8",
+  "zoom": 0.85,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7411542292684317
+ },
+ "black-hole-billiards@99991": {
+  "rows": {
+   "bh_list": "4:99006d18",
+   "stars": "14:d2a8e1a1",
+   "planets": "15:53167271",
+   "gas_giants": "2:c23cdc3a",
+   "asteroids": "10:559e1f5b"
+  },
+  "settings": "7f4c2da8",
+  "zoom": 0.85,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.3473764988593757
+ },
+ "gw150914@1": {
+  "rows": {
+   "bh_list": "2:462a5d7e"
+  },
+  "settings": "957a63a5",
+  "zoom": 1.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.5274470399599522
+ },
+ "gw150914@42": {
+  "rows": {
+   "bh_list": "2:23cdefe3"
+  },
+  "settings": "957a63a5",
+  "zoom": 1.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.8524657934904099
+ },
+ "gw150914@1554098974": {
+  "rows": {
+   "bh_list": "2:08dea8c5"
+  },
+  "settings": "957a63a5",
+  "zoom": 1.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6077016899362206
+ },
+ "gw150914@123456789": {
+  "rows": {
+   "bh_list": "2:268ef42d"
+  },
+  "settings": "957a63a5",
+  "zoom": 1.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.7853280142880976
+ },
+ "gw150914@4000000000": {
+  "rows": {
+   "bh_list": "2:28e6fdae"
+  },
+  "settings": "957a63a5",
+  "zoom": 1.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.666226316941902
+ },
+ "gw150914@7": {
+  "rows": {
+   "bh_list": "2:dd2c827e"
+  },
+  "settings": "957a63a5",
+  "zoom": 1.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.97690763277933
+ },
+ "gw150914@99991": {
+  "rows": {
+   "bh_list": "2:f8f52410"
+  },
+  "settings": "957a63a5",
+  "zoom": 1.7,
+  "pan": [
+   0,
+   0
+  ],
+  "tail": 0.6369983626063913
+ }
+}
