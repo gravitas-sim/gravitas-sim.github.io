@@ -1,9 +1,9 @@
 {
- "total": 588991,
+ "total": 590161,
  "modules": [
   {
    "module": "js/ui.js",
-   "bytes": 97197
+   "bytes": 84276
   },
   {
    "module": "js/i18n/en.js",
@@ -15,15 +15,15 @@
   },
   {
    "module": "js/world/build.js",
-   "bytes": 33581
+   "bytes": 33967
   },
   {
    "module": "js/render.js",
-   "bytes": 29433
+   "bytes": 29865
   },
   {
    "module": "js/scenarios.js",
-   "bytes": 24565
+   "bytes": 25361
   },
   {
    "module": "js/radialVelocity.js",
@@ -31,7 +31,11 @@
   },
   {
    "module": "js/settingsPanel.js",
-   "bytes": 15087
+   "bytes": 15063
+  },
+  {
+   "module": "js/inspectorInfo.js",
+   "bytes": 12933
   },
   {
    "module": "js/rotationCurve.js",
@@ -336,10 +340,6 @@
   {
    "module": "js/i18n/deferredMessages.js",
    "bytes": 478
-  },
-  {
-   "module": "js/palette.js",
-   "bytes": 432
   },
   {
    "module": "js/data/scenarioTags.js",
