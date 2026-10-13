@@ -57,6 +57,7 @@ import * as physics from '../js/physics.js';
 import { LISTS, bodyRecord, digest, fnv } from './scenarioDigest.js';
 import { LAB_EDGE_IDS, LAB_SCENARIOS } from './scenarioLabCases.js';
 import { SLICE4_SCENARIOS } from './scenarioSlice4Cases.js';
+import { SLICE5_SCENARIOS } from './scenarioSlice5Cases.js';
 
 /** The data of one body, from a digest row. */
 const fields = row => JSON.parse(row.split('|').slice(3).join('|'));
@@ -96,10 +97,12 @@ describe('the declared scenarios build the world the code built', () => {
         // Slice 4's nine are held to their own fixture
         // (tests/scenarioGeometrySlice4.test.js).
         ...SLICE4_SCENARIOS,
+        // Slice 5's five, to theirs (tests/scenarioGeometrySlice5.test.js).
+        ...SLICE5_SCENARIOS,
       ].sort()
     );
     expect(Object.keys(GOLDEN).length).toBe(
-      (keys.length - SLICE4_SCENARIOS.length) * 7
+      (keys.length - SLICE4_SCENARIOS.length - SLICE5_SCENARIOS.length) * 7
     );
     for (const key of keys) expect(SCENARIO_IDS).toContain(key);
   });
@@ -160,6 +163,9 @@ describe('the validator, construct by construct', () => {
       'staggered-orbits',
       'tidal-infall',
       'circular-binary-stars',
+      'pin-pair',
+      'triangle-holes',
+      'name-pair',
     ]);
   });
 
@@ -1158,12 +1164,12 @@ describe('slice 3: the validator, construct by construct', () => {
 
   test('rule: each laboratory rule needs every parameter, by kind, and nothing else', () => {
     for (const [name, spec] of Object.entries(GEOMETRY_RULES)) {
+      const all = g => [...(g.steps ?? []), ...(g.place ?? [])];
       const found = Object.entries(ALL_GEOMETRY).find(([, g]) =>
-        g.steps.some(s => s.rule?.name === name)
+        all(g).some(s => s.rule?.name === name)
       );
       expect(found).toBeTruthy();
-      const params = found[1].steps.find(s => s.rule?.name === name).rule
-        .params;
+      const params = all(found[1]).find(s => s.rule?.name === name).rule.params;
       const rule = p => ({ steps: [{ rule: { name, params: p } }] });
       expect(why(rule(params))).toEqual([]);
       // Every required parameter is required, by name.

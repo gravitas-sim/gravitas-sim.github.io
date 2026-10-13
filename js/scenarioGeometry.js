@@ -10,15 +10,13 @@ const isObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const UNSAFE_KEY = new Set(['__proto__', 'constructor', 'prototype']);
 
 // --- Declarative geometry (SCENARIO_GEOMETRY.md) ------------------------------
-// {steps: [...]}, one construct a step: `body` (a type, a name, a mass in the
+// {steps: [...], place: [...]}: a step is `body` (a type, a name, a mass in the
 // type's own unit, a place or an `orbit` round an earlier body) or `rule` (a
-// named rule with parameters). A pack carries only the plain `body`; the rest
-// (a rule, a body reused from the generator, a distance in drawn radii, a
-// barycentric, mutual, retrograde or random-phase orbit, a body built from a
-// mass other than its own, the engine's own body properties) is engine code or
-// reads engine state, so `validateGeometry(g, {rules: false})` refuses it and a
-// pack that wants one names the built-in in `scenario`.
-// The arithmetic is js/scenarios.js expandGeometry().
+// named rule with parameters); `place` steps are rules run inside the layout.
+// A pack carries only the plain `body`: the rest is engine code or reads engine
+// state, so `validateGeometry(g, {rules: false})` refuses it and a pack that
+// wants one names the built-in in `scenario`. The arithmetic is js/scenarios.js
+// expandGeometry().
 
 /** The most steps a geometry may hold. */
 export const GEOMETRY_MAX_STEPS = 40;
@@ -43,28 +41,13 @@ export const GEOMETRY_SET = Object.freeze({
  * luminosity, a world's gravity and atmosphere). A kind is `positive` (a
  * number above 0), `nonneg` (0 or more), `text` or `bool`.
  */
+// prettier-ignore
 export const GEOMETRY_ENGINE_SET = Object.freeze({
-  radiusInSuns: 'positive',
-  massInEarths: 'positive',
-  radiusInEarths: 'positive',
-  radiusInJupiters: 'positive',
-  luminosityInSuns: 'positive',
-  temperature: 'positive',
-  spectralType: 'text',
-  showHabitableZone: 'bool',
-  isEarth: 'bool',
-  isMoon: 'bool',
-  diameter: 'positive',
-  orbital_period: 'positive',
-  rotation_period: 'positive',
-  density: 'text',
-  density_kg_m3: 'positive',
-  gravity: 'positive',
-  escape_velocity: 'positive',
-  atmosphere: 'text',
-  surface_pressure: 'nonneg',
-  magnetic_field: 'nonneg',
-  albedo: 'nonneg',
+  radiusInSuns: 'positive', massInEarths: 'positive', radiusInEarths: 'positive', radiusInJupiters: 'positive',
+  luminosityInSuns: 'positive', temperature: 'positive', spectralType: 'text', showHabitableZone: 'bool',
+  isEarth: 'bool', isMoon: 'bool', diameter: 'positive', orbital_period: 'positive', rotation_period: 'positive',
+  density: 'text', density_kg_m3: 'positive', gravity: 'positive', escape_velocity: 'positive', atmosphere: 'text',
+  surface_pressure: 'nonneg', magnetic_field: 'nonneg', albedo: 'nonneg',
 });
 
 /** A parameter a rule may leave out, and a list of `length` of a kind. */
@@ -80,8 +63,6 @@ const [T, C, P, N] = ['text', 'color', 'positive', 'count'];
  * optional(one of those). The rule's arithmetic is in js/world/build.js; its
  * names, colors, drawn sizes and published numbers are the parameters, and the
  * settings a laboratory reads are the ones SCENARIO_GEOMETRY.md lists for it.
- * Slice 4's rules (from tracer-disc on) place a disc, a cluster, generated
- * bodies on circular orbits, a tidal infall and two black hole pairs.
  */
 // prettier-ignore
 export const GEOMETRY_RULES = Object.freeze({
@@ -97,58 +78,49 @@ export const GEOMETRY_RULES = Object.freeze({
   'equilateral-stars': spec({ circumradius: P, massSuns: P, starRadius: P, names: list(T, 3), colors: list(C, 3) }),
   'gravity-assist': spec({ starName: T, starColor: C, starRadius: P, planetName: T, planetColor: C,
     planetRadius: P, planetRadiusInSuns: P, probeName: T, probeColor: C, probeRadius: P }),
-  // A disc of equal tracer stars about a bulge, even in log radius, each on the
-  // circular speed the visible mass inside it implies (`keplerian`) or on one
-  // speed at every radius (`flat`).
+  // A bulge and equal tracer stars, even in log radius, on a falling or flat curve.
   'tracer-disc': spec({ curve: Object.freeze(['keplerian', 'flat']), bulgeName: T, bulgeColor: C,
     bulgeMassSuns: P, count: N, innerRadius: P, outerRadius: P, starMassSuns: P, flatSpeed: P,
     namePrefix: T, starColor: C }),
-  // Members of a bound cluster in a halo, centrally concentrated, on random
-  // orbits at a share of the speed the cluster's total mass sets.
+  // Members of a bound cluster in a halo, on random orbits.
   'bound-cluster': spec({ members: N, radius: P, memberMassSuns: P, ellipticals: N,
     concentration: P, speedFloor: P, speedSpread: P }),
   // The generated planets, gas giants and asteroids on circular orbits about the
-  // origin, at the speed for the mass of the first `centralStars` stars: planets
+  // origin, at the speed for the mass of the first `centralStars` stars (or the
+  // first `centralHoles` black holes): planets
   // and giants on a ladder (inner, then step), asteroids anywhere in a band
   // (inner, then span). A population left out is left where it was.
-  'orbital-population': spec({ centralStars: N, planetInner: optional(P), planetStep: optional(P),
+  'orbital-population': spec({ centralStars: optional(N), centralHoles: optional(N), planetInner: optional(P), planetStep: optional(P),
     giantInner: optional(P), giantStep: optional(P), asteroidInner: optional(P), asteroidSpan: optional(P),
     asteroidNames: optional(list(T, 12)) }),
-  // The first two generated black holes about their center of mass at the
-  // circular speed for the pair, slowed by `perturbation` so they spiral in.
+  // The first two generated black holes about their center of mass, slowed to spiral in.
   'inspiral-pair': spec({ separation: P, perturbation: P }),
-  // The first generated black hole at rest at the origin and the others on
-  // circular orbits about it, spaced in its drawn radii and even in phase.
+  // The first generated black hole at rest, the others on circular orbits about it.
   'staggered-orbits': spec({ innerRadii: P, stepRadii: P }),
-  // A star on a plunging ellipse about the first generated black hole, begun
-  // part way down the infall; apoapsis is the larger of a floor and a multiple
-  // of the hole's drawn radius, periapsis a multiple of it.
+  // A star on a plunging ellipse about the first generated black hole.
   'tidal-infall': spec({ starName: T, starMassSuns: P, periapsisRadii: P, apoapsisRadii: P,
     apoapsisFloor: P, startFraction: P, startPeriapsisFactor: P }),
   // Two stars of unequal mass on a circular orbit about a stationary center.
   'circular-binary-stars': spec({ massesSuns: list(P, 2), separation: P }),
+  // The first two neutron stars or white dwarfs at (-x, 0) and (x, 0), at `speed`
+  // in opposite directions along y; the first three black holes on a circle.
+  'pin-pair': spec({ type: Object.freeze(['NeutronStar', 'WhiteDwarf']), x: P, speed: P }),
+  'triangle-holes': spec({ radius: P, speed: P }),
+  // Names for the first two neutron stars or white dwarfs.
+  'name-pair': spec({ type: Object.freeze(['NeutronStar', 'WhiteDwarf']), names: list(T, 2) }),
 });
 
+/** The rules a `place` step may name: they give generated bodies a place. */
+// prettier-ignore
+export const GEOMETRY_PLACE_RULES = Object.freeze(['inspiral-pair', 'pin-pair', 'triangle-holes']);
+
 /** The types whose generated bodies a geometry may `keep`: every population. */
-export const GEOMETRY_KEEP_TYPES = Object.freeze([
-  'Star',
-  'Planet',
-  'GasGiant',
-  'BlackHole',
-  'Asteroid',
-  'Comet',
-  'NeutronStar',
-  'WhiteDwarf',
-  'Debris',
-]);
+// prettier-ignore
+export const GEOMETRY_KEEP_TYPES = Object.freeze(['Star', 'Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris']);
 
 /** The types a body can be reused as (`from`): the generator's own lists. */
-export const GEOMETRY_REUSE_TYPES = Object.freeze([
-  'Star',
-  'Planet',
-  'GasGiant',
-  'BlackHole',
-]);
+// prettier-ignore
+export const GEOMETRY_REUSE_TYPES = Object.freeze(['Star', 'Planet', 'GasGiant', 'BlackHole']);
 
 const GEOMETRY_LIMIT = 1e6;
 const GEOMETRY_COLOR = /^#[0-9a-fA-F]{6}$/;
@@ -166,7 +138,7 @@ export function validateGeometry(g, { rules = true } = {}) {
   const bad = (path, why) => out.push({ path, why });
   if (!isObject(g)) return [{ path: '', why: 'a geometry is {steps: [...]}' }];
   for (const k of Object.keys(g))
-    if (k !== 'steps' && k !== 'keep' && k !== 'recenter')
+    if (!['steps', 'keep', 'recenter', 'place'].includes(k))
       bad(k, `"${k}" is not a geometry field`);
   // `recenter`: move the whole system into its center-of-mass frame once built.
   if (g.recenter !== undefined) {
@@ -186,11 +158,21 @@ export function validateGeometry(g, { rules = true } = {}) {
   } else if (g.keep !== undefined) {
     bad('keep', 'a scenario pack may not use generated bodies left in place');
   }
-  if (!Array.isArray(g.steps) || g.steps.length === 0) {
+  // `place`: rules run inside the layout, before the momentum balance; a
+  // geometry of those alone has no `steps`.
+  if (g.place !== undefined && !rules)
+    bad('place', 'a scenario pack may not place bodies by rule');
+  else if (
+    g.place !== undefined &&
+    !(Array.isArray(g.place) && g.place.length <= 4)
+  )
+    bad('place', 'a list of up to 4 rule steps');
+  const steps = g.steps ?? (g.place === undefined ? undefined : []);
+  if (!Array.isArray(steps) || (steps.length === 0 && g.steps)) {
     bad('steps', 'a list of at least one step');
     return out;
   }
-  if (g.steps.length > GEOMETRY_MAX_STEPS)
+  if (steps.length > GEOMETRY_MAX_STEPS)
     bad('steps', `at most ${GEOMETRY_MAX_STEPS} steps`);
   const names = new Set();
   const only = (o, path, allowed) => {
@@ -448,8 +430,14 @@ export function validateGeometry(g, { rules = true } = {}) {
     }
     if (params.detuned && params.system !== 'galilean')
       bad(`${p}.params.detuned`, 'only the Galilean system can be detuned');
+    if (
+      r.name === 'orbital-population' &&
+      (params.centralStars === undefined) ===
+        (params.centralHoles === undefined)
+    )
+      bad(`${p}.params`, 'exactly one of centralStars and centralHoles');
   };
-  g.steps.forEach((step, i) => {
+  steps.forEach((step, i) => {
     const at = `steps[${i}]`;
     if (!isObject(step) || Object.keys(step).length !== 1)
       return bad(at, 'a step with exactly one construct: body or rule');
@@ -458,5 +446,16 @@ export function validateGeometry(g, { rules = true } = {}) {
     else if (kind === 'rule') rule(step.rule, `${at}.rule`);
     else bad(`${at}.${kind}`, 'a construct this build knows: body or rule');
   });
+  if (rules && Array.isArray(g.place))
+    g.place.forEach((step, i) => {
+      const r = isObject(step) && Object.keys(step).length === 1 && step.rule;
+      if (r && GEOMETRY_PLACE_RULES.includes(r.name))
+        rule(r, `place[${i}].rule`);
+      else
+        bad(
+          `place[${i}]`,
+          `a rule step naming ${GEOMETRY_PLACE_RULES.join(', ')}`
+        );
+    });
   return out;
 }
