@@ -172,7 +172,7 @@ test.describe('the text and the audio are the same numbers', () => {
     const { expected, printed } = await page.evaluate(async () => {
       const audio = await import('/js/audio.js');
       const units = await import('/js/units.js');
-      const { describeVoices } = await import('/js/sonify/voiceReadout.js');
+      const { describeVoices } = await import('/js/soundPanel.js');
       return {
         // Straight from the array updateVoices() consumed.
         expected: describeVoices(audio.getVoicedBodies()).rows.map(r => ({

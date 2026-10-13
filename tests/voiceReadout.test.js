@@ -16,7 +16,7 @@ import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { describeVoices } from '../js/sonify/voiceReadout.js';
+import { describeVoices } from '../js/soundPanel.js';
 import { periodToCents } from '../js/sonify/law.js';
 import { assembledIndexHtml } from '../tools/index-fragments.mjs';
 
@@ -109,7 +109,8 @@ describe('what the tones stand for', () => {
 });
 
 describe('the readout and the audio cannot drift apart', () => {
-  const ui = read('js/ui.js');
+  // The panel moved out of js/ui.js into js/soundPanel.js (Prompt 107).
+  const ui = read('js/soundPanel.js');
   const audio = read('js/audio.js');
 
   test('the published name is a type key, not a class name', () => {
@@ -139,7 +140,7 @@ describe('the readout and the audio cannot drift apart', () => {
     );
   });
 
-  test('js/ui.js reads the voices only through that accessor', () => {
+  test('the sound panel reads the voices only through that accessor', () => {
     expect(ui).toMatch(/getVoicedBodies\b/);
     // The failure this guards: someone computes speed/(2*PI*r) in the panel
     // because it is three lines, and the printed period silently stops being
@@ -147,7 +148,9 @@ describe('the readout and the audio cannot drift apart', () => {
     const withoutComments = ui
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .replace(/^\s*\/\/.*$/gm, '');
-    expect(withoutComments).not.toMatch(/orbitalFrequency\s*=/);
+    // An assignment, not a comparison: describeVoices (folded into this
+    // file) checks the field it is handed with ===.
+    expect(withoutComments).not.toMatch(/orbitalFrequency\s*=(?!=)/);
   });
 
   test('the readout is not announced continuously', () => {
@@ -220,12 +223,12 @@ describe('ACCESSIBILITY.md tells the truth about the sound', () => {
 
   test('it says the readout cannot drift, and names how', () => {
     expect(doc).toMatch(/getVoicedBodies\(\)` in `js\/audio\.js`/);
-    expect(doc).toMatch(/js\/sonify\/voiceReadout\.js/);
+    expect(doc).toMatch(/js\/soundPanel\.js/);
     // Every file the section points at has to exist. A section citing its own
     // evidence is only worth the citations resolving.
     for (const file of [
       'js/audio.js',
-      'js/sonify/voiceReadout.js',
+      'js/soundPanel.js',
       'js/ui.js',
       'tests/voiceReadout.test.js',
       'e2e/sonifyTextEquivalent.spec.js',

@@ -139,7 +139,23 @@ than once.
 The JavaScript is layered. A module may import from its own layer or any layer
 below it, never above. `npm run check:architecture` enforces this and fails the
 build on a violation; `npm run check:architecture:report` prints the layers and
-the widest fan-out.
+the widest fan-out. The same check holds every module to a line ceiling
+(`tools/module-size-ceilings.json`; a module without an entry may have 1,500
+lines, and an entry above that only ever falls). The largest modules and their
+ceilings:
+
+<!--fact-block:moduleSizes-->
+| Module | Lines | Ceiling |
+| --- | ---: | ---: |
+| `js/physics.js` | 8,665 | 8,665 |
+| `js/ui.js` | 6,757 | 6,757 |
+| `js/data/instructorContent.js` | 6,715 | 6,715 |
+| `js/validation/physicsChecks.js` | 6,621 | 6,621 |
+| `js/investigations.js` | 4,755 | 4,755 |
+| `js/i18n/es.deferred.js` | 4,092 | 4,092 |
+| `js/i18n/en.deferred.js` | 3,845 | 3,845 |
+| `js/render.js` | 3,033 | 3,033 |
+<!--/fact-block-->
 
 | Layer | What lives there | Examples |
 | --- | --- | --- |

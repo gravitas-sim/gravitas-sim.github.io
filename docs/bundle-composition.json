@@ -1,13 +1,13 @@
 {
- "total": 590161,
+ "total": 591890,
  "modules": [
-  {
-   "module": "js/ui.js",
-   "bytes": 84276
-  },
   {
    "module": "js/i18n/en.js",
    "bytes": 84084
+  },
+  {
+   "module": "js/ui.js",
+   "bytes": 78326
   },
   {
    "module": "js/physics.js",
@@ -15,7 +15,7 @@
   },
   {
    "module": "js/world/build.js",
-   "bytes": 33967
+   "bytes": 35593
   },
   {
    "module": "js/render.js",
@@ -23,7 +23,7 @@
   },
   {
    "module": "js/scenarios.js",
-   "bytes": 25361
+   "bytes": 25418
   },
   {
    "module": "js/radialVelocity.js",
@@ -35,7 +35,7 @@
   },
   {
    "module": "js/inspectorInfo.js",
-   "bytes": 12933
+   "bytes": 12931
   },
   {
    "module": "js/rotationCurve.js",
@@ -63,11 +63,15 @@
   },
   {
    "module": "js/objectInspector.js",
-   "bytes": 6624
+   "bytes": 6601
   },
   {
    "module": "js/settingsSchema.js",
    "bytes": 6567
+  },
+  {
+   "module": "js/soundPanel.js",
+   "bytes": 6525
   },
   {
    "module": "js/data/objectNames.js",
@@ -95,7 +99,7 @@
   },
   {
    "module": "js/shareState.js",
-   "bytes": 5023
+   "bytes": 5025
   },
   {
    "module": "js/bodyVisuals.js",
@@ -328,10 +332,6 @@
   {
    "module": "js/exportBridge.js",
    "bytes": 532
-  },
-  {
-   "module": "js/sonify/voiceReadout.js",
-   "bytes": 506
   },
   {
    "module": "js/blackHole/appearance.js",

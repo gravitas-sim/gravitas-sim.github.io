@@ -193,9 +193,9 @@ description of the sound; it is the thing the sound is about, delivered
 losslessly.
 
 It cannot drift away from what is playing. `getVoicedBodies()` in `js/audio.js`
-returns the same array the oscillators are following, `js/sonify/voiceReadout.js`
-turns it into periods and intervals, and `js/ui.js` renders that and computes
-nothing of its own. `tests/voiceReadout.test.js` fails if it ever starts to,
+returns the same array the oscillators are following, `describeVoices` in
+`js/soundPanel.js` turns it into periods and intervals, and that panel (wired
+by `js/ui.js`) renders it and computes nothing of its own. `tests/voiceReadout.test.js` fails if it ever starts to,
 and `e2e/sonifyTextEquivalent.spec.js` compares the printed periods and
 intervals against the live array in the browser.
 
