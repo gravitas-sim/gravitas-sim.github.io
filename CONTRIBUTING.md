@@ -154,7 +154,7 @@ ceilings:
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
 | `js/i18n/en.deferred.js` | 3,845 | 3,845 |
 | `js/render.js` | 3,028 | 3,028 |
-| `js/ui.js` | 2,832 | 2,832 |
+| `js/world/build.js` | 2,599 | 2,599 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |
@@ -227,6 +227,11 @@ and key listeners where `ui.js` ran them, and `initObjectPicker()` wires the
 picker, so listener order is unchanged; `ui.js` re-exports the public names so no
 caller moved. Such a module touches no element when it is imported, because `ui.js`
 mounts the panels' markup after every import has run.
+`js/captureMeasure.js` (the area sweep, speed, screenshot and clip buttons, the
+measurement tools, demo mode and the bottom dock) is the second:
+`initCaptureMeasure({canvas, starfieldCanvas})` takes the two canvases and
+nothing else; the demo cycle rebuilds a world and shows its card through
+`command('initialize_simulation')` and `command('show_enhanced_scenario_info')`.
 
 ### When you need something from a layer above
 

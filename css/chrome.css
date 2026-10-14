@@ -365,7 +365,7 @@
     /* Centered on the window, which is where the eye goes looking for it, and
        narrowed rather than shifted when the footer would be in the way.
        --transport-max is the widest it can be and still stop short of the
-       footer; js/bottomDock.js works it out from the footer's measured width. */
+       footer; js/captureMeasure.js works it out from the footer's measured width. */
     .timeline-bar {
       left: 50%;
       right: auto;
@@ -415,7 +415,7 @@
     /* Into the corner. The inset that used to be here reserved the control
        rail's full width on every screen, which put the footer a quarter of the
        way across a wide window to avoid a rail that stops nowhere near it.
-       js/bottomDock.js measures whether the rail actually reaches this corner
+       js/captureMeasure.js measures whether the rail actually reaches this corner
        and reserves the width only when it does. */
     .attribution {
       right: calc(var(--space-3) + var(--rail-footer-inset, 0px));
@@ -2075,7 +2075,7 @@
    least 44 by 44 CSS pixels (WCAG 2.2, 2.5.5), whatever the width: a tablet
    in landscape is as much a finger as a phone. Where a control grows, what is
    placed around it reads the size rather than assuming it: the transport
-   bar's height is measured (js/bottomDock.js) and the lesson's sheets stand
+   bar's height is measured (js/captureMeasure.js) and the lesson's sheets stand
    on what it reports. Links inside a line of text, the footer's, are the
    inline exception the criterion makes, and stay text. The shell's bar has
    its own rule in css/shell.css.

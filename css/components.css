@@ -3536,7 +3536,7 @@
        This was 88px, written as "the bar's 48px plus its 16px offset plus a
        gap". The bar is only 48px tall while it fits on one row; between about
        640px and 1000px of window it wraps to 62px and 88px was short.
-       js/bottomDock.js measures it and publishes the answer. The constant
+       js/captureMeasure.js measures it and publishes the answer. The constant
        remains as the fallback for the frame before the first measurement. */
     bottom: var(--transport-reserve, 88px);
     z-index: var(--z-panel);
