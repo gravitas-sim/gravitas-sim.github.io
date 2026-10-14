@@ -1,5 +1,5 @@
 {
- "total": 594305,
+ "total": 594593,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -7,7 +7,7 @@
   },
   {
    "module": "js/physics.js",
-   "bytes": 57571
+   "bytes": 52856
   },
   {
    "module": "js/ui.js",
@@ -19,7 +19,7 @@
   },
   {
    "module": "js/render.js",
-   "bytes": 29807
+   "bytes": 29810
   },
   {
    "module": "js/scenarios.js",
@@ -51,7 +51,7 @@
   },
   {
    "module": "js/bodyDraw.js",
-   "bytes": 11290
+   "bytes": 11289
   },
   {
    "module": "js/rotationCurve.js",
@@ -62,16 +62,16 @@
    "bytes": 9112
   },
   {
-   "module": "js/bodyDrawSky.js",
-   "bytes": 8522
-  },
-  {
    "module": "js/controls.js",
    "bytes": 8172
   },
   {
+   "module": "js/bodyDrawSky.js",
+   "bytes": 8094
+  },
+  {
    "module": "js/sandboxTools.js",
-   "bytes": 7605
+   "bytes": 7606
   },
   {
    "module": "js/audio.js",
@@ -90,6 +90,10 @@
    "bytes": 6525
   },
   {
+   "module": "js/bodyEffects.js",
+   "bytes": 6308
+  },
+  {
    "module": "js/data/objectNames.js",
    "bytes": 6197
   },
@@ -99,7 +103,7 @@
   },
   {
    "module": "js/main.js",
-   "bytes": 5525
+   "bytes": 5524
   },
   {
    "module": "js/share.js",
@@ -139,7 +143,7 @@
   },
   {
    "module": "js/preview.js",
-   "bytes": 3681
+   "bytes": 3683
   },
   {
    "module": "js/experiments/canonicalState.js",
@@ -175,7 +179,7 @@
   },
   {
    "module": "js/canvasSummary.js",
-   "bytes": 2353
+   "bytes": 2354
   },
   {
    "module": "js/format.js",
@@ -288,10 +292,6 @@
   {
    "module": "js/widgetCanvas.js",
    "bytes": 969
-  },
-  {
-   "module": "js/gestures.js",
-   "bytes": 882
   },
   {
    "module": "js/scenarioPanelBridge.js",
