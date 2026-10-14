@@ -32,7 +32,7 @@ import {
   watchForAssignments,
 } from './investigationsLoader.js';
 import { initExportBridge } from './exportBridge.js';
-import { watchForManeuver } from './maneuverBridge.js';
+import { watchForManeuver } from './inspectorWindow.js';
 import { watchForInvestigations } from './investigationsLoader.js';
 import { shouldShowWelcome } from './welcomeGate.js';
 
