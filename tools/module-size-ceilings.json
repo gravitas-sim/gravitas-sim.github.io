@@ -379,7 +379,6 @@
     "js/dataExport.js": 823,
     "js/detectorWidgets.js": 973,
     "js/dialog.js": 371,
-    "js/embed.js": 148,
     "js/embedBridge.js": 177,
     "js/embedMarkup.js": 145,
     "js/embedMessages.js": 107,
@@ -943,7 +942,7 @@
     "js/timestep.js": 85,
     "js/transitWidgets.js": 1360,
     "js/tutorial.js": 336,
-    "js/ui.js": 2102,
+    "js/ui.js": 1181,
     "js/units.js": 208,
     "js/units/registry.js": 342,
     "js/utils.js": 490,
@@ -960,6 +959,7 @@
     "js/widgetCanvas.js": 132,
     "js/widgetRuntime.js": 260,
     "js/widgets.js": 542,
+    "js/world.js": 1159,
     "js/world/build.js": 2599
   }
 }

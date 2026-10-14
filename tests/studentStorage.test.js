@@ -417,7 +417,7 @@ describe('no writer slips back to a direct write', () => {
     'js/composerPage.js': 'route at its request ceiling (STORAGE.md)',
     'js/coursePage.js': 'route at its request ceiling (STORAGE.md)',
     'js/evaluationKit.js': 'route has 0.7 KB of room (STORAGE.md)',
-    'js/ui.js':
+    'js/world.js':
       'a new shared chunk costs every lesson route a request (STORAGE.md)',
     'js/controls.js': 'preference, same chunk cost',
     'js/lecture.js': 'preference, same chunk cost',

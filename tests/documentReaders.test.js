@@ -69,7 +69,7 @@ const PARSES = {
   'js/measure/pipeline.js': [2, 'plainDataProblem'],
   // Not a document anyone opens.
   'js/lecture.js': [1, 'none', OWN],
-  'js/ui.js': [1, 'none', OWN],
+  'js/world.js': [1, 'none', OWN],
   'js/settingsPanel.js': [1, 'none', OWN],
   'js/controls.js': [1, 'none', OWN],
   'js/welcome.js': [1, 'none', OWN],

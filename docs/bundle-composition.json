@@ -1,5 +1,5 @@
 {
- "total": 594852,
+ "total": 594339,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -7,7 +7,7 @@
   },
   {
    "module": "js/physics.js",
-   "bytes": 56315
+   "bytes": 54503
   },
   {
    "module": "js/world/build.js",
@@ -20,10 +20,6 @@
   {
    "module": "js/scenarios.js",
    "bytes": 25418
-  },
-  {
-   "module": "js/ui.js",
-   "bytes": 22953
   },
   {
    "module": "js/inspectorView.js",
@@ -40,6 +36,10 @@
   {
    "module": "js/settingsPanel.js",
    "bytes": 15063
+  },
+  {
+   "module": "js/ui.js",
+   "bytes": 14752
   },
   {
    "module": "js/placement.js",
@@ -62,6 +62,10 @@
    "bytes": 10031
   },
   {
+   "module": "js/world.js",
+   "bytes": 9522
+  },
+  {
    "module": "js/captureMeasure.js",
    "bytes": 9222
   },
@@ -75,7 +79,7 @@
   },
   {
    "module": "js/bodyDrawSky.js",
-   "bytes": 8096
+   "bytes": 8078
   },
   {
    "module": "js/sandboxTools.js",
@@ -107,7 +111,7 @@
   },
   {
    "module": "js/main.js",
-   "bytes": 5518
+   "bytes": 5515
   },
   {
    "module": "js/share.js",
@@ -142,6 +146,10 @@
    "bytes": 4019
   },
   {
+   "module": "js/bodyEffects.js",
+   "bytes": 3907
+  },
+  {
    "module": "js/appState.js",
    "bytes": 3828
   },
@@ -164,10 +172,6 @@
   {
    "module": "js/utils.js",
    "bytes": 2691
-  },
-  {
-   "module": "js/bodyEffects.js",
-   "bytes": 2628
   },
   {
    "module": "js/exoplanetObservables.js",
@@ -252,10 +256,6 @@
   {
    "module": "js/observingSession.js",
    "bytes": 1310
-  },
-  {
-   "module": "js/embed.js",
-   "bytes": 1280
   },
   {
    "module": "js/orbital.js",

@@ -41,7 +41,7 @@ import { decodePayload } from './shareState.js';
 //
 // This is a feature module and those live in the coordinator and the modules
 // it wires; importing them would point this one upward and close a loop back
-// through js/embed.js.
+// through js/world.js.
 
 /** How often the figure checks whether its reader paused or resumed it. */
 const STATUS_MS = 400;
