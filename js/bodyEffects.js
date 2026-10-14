@@ -177,7 +177,7 @@ const burstLooks = {
 };
 /** The color of a disk tracer and of its absorption burst (an rgb() string). */
 const tracerColor = o => {
-  // Enhanced temperature-based color with dramatic effects
+  // R and G may pass 255, as in the original; CSS clamps rgb() channels.
   const temp = o.temperature;
   const brightness = o.brightness_multiplier;
 

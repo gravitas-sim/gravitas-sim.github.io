@@ -7,7 +7,7 @@
 //                    export read back), never changed
 //   state.history    the list of changes, with undo and redo (./history.js)
 //   state.view       replay(source, changes): what every view shows
-//   state.selection  one set of rows every view shares (./selection.js)
+//   state.selection  one set of rows every view shares (./plot/select.js)
 //
 // A change goes through whyNot() first, so the list never holds one that
 // fails, and every view is redrawn from the replay. A change that renumbers

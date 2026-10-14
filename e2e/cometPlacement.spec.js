@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // Two halves of one report - "hand-placed comets do not appear" - and the
 // second half is why a count assertion alone would not have caught it.
-// js/ui.js put the new Comet into `comets`, correctly; js/render.js never
+// js/placement.js put the new Comet into `comets`, correctly; js/render.js never
 // imported that collection, so nothing ever called Comet.draw(). The object was
 // there, gravitating, invisible. A test that only counted bodies would have
 // passed throughout.
@@ -25,7 +25,7 @@ import { test, expect } from './fixtures.js';
  *
  * Reads the canvas the application actually painted, converting the CSS point
  * the mouse was at into the backing store's own pixels - the same conversion
- * canvasPoint() does in js/ui.js, and the reason this works at either tier.
+ * canvasPoint() does in js/placement.js, and the reason this works at either tier.
  */
 async function brightnessAt(page, cssX, cssY, halfCss = 26) {
   return page.evaluate(
