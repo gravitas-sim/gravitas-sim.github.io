@@ -53,6 +53,7 @@ current, and the orchestrator checks it.
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
 | `draw-trace.mjs` | The canvas calls a body makes, recorded and hashed |  |
 | `e2e-shards.mjs` | Splitting the source browser suite into shards of equal duration |  |
+| `effects-trace.mjs` | The effects an engine event spawns, counted and hashed |  |
 | `empty-world.mjs` | A world with nothing in it |  |
 | `evaluation-summary.mjs` | npm run evaluation:summary -- <files...> | `npm run evaluation:summary` |
 | `exoplanet-reference.mjs` | The Exoplanet Observatory's reference run, and its answer key | `npm run guides:key` |
