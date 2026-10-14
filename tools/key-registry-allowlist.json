@@ -36,7 +36,7 @@
       "gravitasRequestRebuild": 1,
       "gravitasSimulationReset": 1
     },
-    "js/bottomDock.js": {
+    "js/captureMeasure.js": {
       "gravitasLocaleChanged": 1
     },
     "js/catalog/i18n.js": {

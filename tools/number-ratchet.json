@@ -8,6 +8,7 @@
     "js/blackHolePhysics.js": 11,
     "js/blackHoleWidgets.js": 9,
     "js/bodyDraw.js": 1,
+    "js/captureMeasure.js": 6,
     "js/chaosWidgets.js": 11,
     "js/computePage.js": 2,
     "js/coursePage.js": 1,
@@ -96,7 +97,6 @@
     "js/tidalPhysics.js": 6,
     "js/tidalWidgets.js": 17,
     "js/transitWidgets.js": 24,
-    "js/ui.js": 6,
     "js/utils.js": 5,
     "js/validationPage.js": 11,
     "js/vectorOverlay.js": 7

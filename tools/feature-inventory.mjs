@@ -221,7 +221,7 @@ export const FEATURES = [
         note: 'refuses to start',
       },
       {
-        file: 'js/ui.js',
+        file: 'js/captureMeasure.js',
         detect: /if \(!canRecordClips\(\)\) recordBtn\.hidden = true/,
         note: 'hides the button',
       },

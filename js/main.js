@@ -85,7 +85,7 @@ import { setRequestedLessonLocale } from './lessonLocale.js';
 import { resetFollowCamera } from './followCamera.js';
 import { mountShell } from './shell.js';
 import { setTheme } from './theme.js';
-import { initBottomDock } from './bottomDock.js';
+import { initBottomDock } from './captureMeasure.js';
 import {
   initEmbedMode,
   initEmbedChrome,

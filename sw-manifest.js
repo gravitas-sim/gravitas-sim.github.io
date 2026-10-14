@@ -11,8 +11,8 @@
 // revision the whole arrangement exists to prevent. The 178 optional
 // entries are pictures; a missing one is reported and does not cost the reader
 // the version.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-69cd53e880d8';
-self.__GRAVITAS_PRECACHE_BYTES = 17706406;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-329323e907c0';
+self.__GRAVITAS_PRECACHE_BYTES = 17705614;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',
@@ -72,9 +72,9 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/bodyDrawSky.js',
   './js/bodyEffects.js',
   './js/bodyVisuals.js',
-  './js/bottomDock.js',
   './js/canvasSummary.js',
   './js/capture.js',
+  './js/captureMeasure.js',
   './js/catalog/archive.js',
   './js/catalog/i18n.js',
   './js/catalog/install.js',
@@ -1156,9 +1156,9 @@ self.__GRAVITAS_PRECACHE = [
   './js/bodyDrawSky.js',
   './js/bodyEffects.js',
   './js/bodyVisuals.js',
-  './js/bottomDock.js',
   './js/canvasSummary.js',
   './js/capture.js',
+  './js/captureMeasure.js',
   './js/catalog/archive.js',
   './js/catalog/i18n.js',
   './js/catalog/install.js',

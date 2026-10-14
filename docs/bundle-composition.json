@@ -1,5 +1,5 @@
 {
- "total": 594626,
+ "total": 594852,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -14,16 +14,16 @@
    "bytes": 37102
   },
   {
-   "module": "js/ui.js",
-   "bytes": 30590
-  },
-  {
    "module": "js/render.js",
    "bytes": 29807
   },
   {
    "module": "js/scenarios.js",
    "bytes": 25418
+  },
+  {
+   "module": "js/ui.js",
+   "bytes": 22953
   },
   {
    "module": "js/inspectorView.js",
@@ -60,6 +60,10 @@
   {
    "module": "js/rotationCurve.js",
    "bytes": 10031
+  },
+  {
+   "module": "js/captureMeasure.js",
+   "bytes": 9222
   },
   {
    "module": "js/lightCurve.js",
@@ -103,7 +107,7 @@
   },
   {
    "module": "js/main.js",
-   "bytes": 5520
+   "bytes": 5518
   },
   {
    "module": "js/share.js",
@@ -244,10 +248,6 @@
   {
    "module": "js/gravityAssist.js",
    "bytes": 1422
-  },
-  {
-   "module": "js/bottomDock.js",
-   "bytes": 1357
   },
   {
    "module": "js/observingSession.js",
