@@ -46,7 +46,7 @@ import {
   STAR_PALETTE,
   generateStarfield as buildStarfield,
   indexStarfield,
-} from './starfield.js';
+} from './bodyDrawSky.js';
 import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
 import { setBloomLayer } from './bodyDraw.js';
 import { getWorldSeed } from './rng.js';

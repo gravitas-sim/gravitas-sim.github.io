@@ -225,7 +225,7 @@ machine dipped below the threshold.
 
 **The sky** — the background starfield is generated per square pixel rather
 than as a fixed count, at 2600 stars per megapixel at the full tier and 1000 at
-the low one (`STARS_PER_MEGAPIXEL` in `js/starfield.js`). Because the low tier
+the low one (`STARS_PER_MEGAPIXEL` in `js/bodyDrawSky.js`). Because the low tier
 also renders into a backing store at 0.7 scale, the two compound: a 1440x900
 window gets 3370 stars at the full tier and 635 at the low one. The field is
 pre-rendered onto three parallax layers and blitted, so its per-frame cost is

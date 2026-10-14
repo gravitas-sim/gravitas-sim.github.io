@@ -321,7 +321,7 @@ describe('what the tier actually changes', () => {
 
   test('the tier does not also override star_density', () => {
     // The low tier reduces the sky through STARS_PER_MEGAPIXEL in
-    // js/starfield.js, where it scales with the window too. star_density is
+    // js/bodyDrawSky.js, where it scales with the window too. star_density is
     // now read as a proportion of whatever that gives, so an override here
     // would multiply the two reductions together.
     setTier('low');

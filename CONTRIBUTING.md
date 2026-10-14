@@ -147,7 +147,7 @@ ceilings:
 <!--fact-block:moduleSizes-->
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
-| `js/physics.js` | 7,610 | 7,610 |
+| `js/physics.js` | 6,919 | 6,919 |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/validation/physicsChecks.js` | 6,621 | 6,621 |
 | `js/investigations.js` | 4,754 | 4,754 |
@@ -164,7 +164,7 @@ ceilings:
 | `services` | Stateful cross-cutting machinery with no opinion about the interface. | `quality.js`, `offline.js`, `referenceFrame.js` |
 | `engine` | The simulation, and the world it is built into. | `physics.js`, `scenarios.js`, `world/build.js` |
 | `state` | The objects the interface shares. | `appState.js` |
-| `render` | What a body looks like on the canvas: the drawers and the black hole renderer. The engine never imports them. | `bodyDraw.js`, `blackHole/render.js` |
+| `render` | What a body looks like on the canvas: the drawers, what they share and the black hole renderer. The engine never imports them. | `bodyDraw.js`, `bodyDrawSky.js`, `blackHole/render.js` |
 | `feature` | Everything that draws or is driven. | `render.js`, `controls.js`, `investigations.js`, `experiments/` |
 | `coordinator` | Wires the rest together. Nothing may import these. | `ui.js`, `main.js` |
 
@@ -186,11 +186,11 @@ what the A/B bench hashes.
 
 **The engine paints nothing.** A body class's `draw(ctx)` looks its kind up in a
 table of drawers (`registerBodyDrawers` in `js/physics.js`), and the render
-layer (`js/bodyDraw.js`) imports the engine and fills the table. The engine
-reaches the render layer only that way, so an engine to render import fails
-`check:architecture`, including a dynamic `import()` in the middle of a line.
-A body with no drawer draws nothing, which is what a Worker, where there is no
-canvas, wants.
+layer (`js/bodyDraw.js` and `js/bodyDrawSky.js`) imports the engine and fills
+the table. The engine reaches the render layer only that way, so an engine to
+render import fails `check:architecture`, including a dynamic `import()` in the
+middle of a line. A body with no drawer draws nothing, which is what a Worker,
+where there is no canvas, wants.
 
 **A body's `kind` is a static string, not state.** Every body class carries
 `static kind` (a string no minifier renames) and reads it through an accessor,
