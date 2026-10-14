@@ -1,5 +1,5 @@
 {
- "total": 594207,
+ "total": 594305,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -7,7 +7,7 @@
   },
   {
    "module": "js/physics.js",
-   "bytes": 63588
+   "bytes": 57571
   },
   {
    "module": "js/ui.js",
@@ -51,7 +51,7 @@
   },
   {
    "module": "js/bodyDraw.js",
-   "bytes": 11292
+   "bytes": 11290
   },
   {
    "module": "js/rotationCurve.js",
@@ -60,6 +60,10 @@
   {
    "module": "js/lightCurve.js",
    "bytes": 9112
+  },
+  {
+   "module": "js/bodyDrawSky.js",
+   "bytes": 8522
   },
   {
    "module": "js/controls.js",
@@ -164,10 +168,6 @@
   {
    "module": "js/instruments.js",
    "bytes": 2444
-  },
-  {
-   "module": "js/starfield.js",
-   "bytes": 2405
   },
   {
    "module": "js/observerControls.js",

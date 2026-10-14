@@ -147,7 +147,7 @@ ceilings:
 <!--fact-block:moduleSizes-->
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
-| `js/physics.js` | 6,925 | 6,925 |
+| `js/physics.js` | 6,921 | 6,921 |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/validation/physicsChecks.js` | 6,621 | 6,621 |
 | `js/investigations.js` | 4,754 | 4,754 |
