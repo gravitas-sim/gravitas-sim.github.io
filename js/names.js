@@ -1,9 +1,13 @@
-// =============================================================================
-// Object name pools
-// -----------------------------------------------------------------------------
-// Pure data, extracted from ui.js so the UI module holds behavior rather than
-// 370 lines of string tables.
-// =============================================================================
+// Names (P107 2c, D-DECOMP-14): KEY_ storage keys, EV_ window events, ID_ format
+// ids, spelled once; values never change. tests/keyRegistry.test.js pins them,
+// tools/key-registry-allowlist.json lists those not yet moved. A leaf module.
+
+export const KEY_UNITS = 'gravitas_units';
+
+export const EV_SIMULATION_RESET = 'gravitasSimulationReset';
+export const EV_UNITS_CHANGED = 'gravitasUnitsChanged';
+
+// Object name pools, formerly js/data/objectNames.js: pure data.
 
 export const SPACE_OBJECT_NAMES = {
   blackHoles: [

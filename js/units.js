@@ -22,6 +22,7 @@ import {
   EARTH_MASS_UNIT,
   SIM_UNITS_PER_AU,
 } from './constants.js';
+import { EV_UNITS_CHANGED, KEY_UNITS } from './names.js';
 
 // The simulation's gravitational constant, pushed down from js/physics.js
 // rather than read back out of it.
@@ -59,7 +60,7 @@ export { SIM_UNITS_PER_AU, auToSim, simToAu } from './constants.js';
 const DISTANCE_UNIT_TO_M = AU_METERS / SIM_UNITS_PER_AU; // 1 unit = 0.01 AU
 
 const MODES = ['physical', 'simulation'];
-const STORAGE_KEY = 'gravitas_units';
+const STORAGE_KEY = KEY_UNITS;
 
 let mode = 'physical';
 // A readout's significant figures when its caller does not say.
@@ -84,9 +85,7 @@ export function setUnitMode(next) {
   } catch {
     /* storage unavailable (private mode, sandboxed iframe) */
   }
-  window.dispatchEvent(
-    new CustomEvent('gravitasUnitsChanged', { detail: { mode } })
-  );
+  window.dispatchEvent(new CustomEvent(EV_UNITS_CHANGED, { detail: { mode } }));
 }
 
 /** Cycle between the two modes. @returns {string} The new mode */
