@@ -69,8 +69,8 @@ describe('effects after the move', () => {
   });
 
   test('the tracer color is by temperature, brightness and pulse, as the class method was', () => {
-    // Recorded from AccretionDiskParticle.getTemperatureColor on the commit
-    // before it moved; the channels may pass 255 (the original does not clamp
+    // Recorded from the class method (AccretionDiskParticle's temperature color,
+    // now tracerColor in js/bodyEffects.js) on the commit before it moved; the channels may pass 255 (the original does not clamp
     // them all), so they are kept as they were.
     const rows = [
       [2000, 1, 0, 'rgb(120, 36, 0)'],

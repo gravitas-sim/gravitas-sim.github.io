@@ -1048,7 +1048,7 @@ export {
   validateScenarioData,
 };
 
-// The embed shell (js/embed.js until slice 11).
+// The embed shell: embed mode from the URL, its ready signal and its chrome.
 /**
  * Enter embed mode if the URL asked for it.
  *
