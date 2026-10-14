@@ -32,10 +32,36 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { ALL_GROUPS, FACT_GROUPS } from '../tools/docs-facts.mjs';
+import { inOwnTransformCache } from '../tools/playwright-cache.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 let cache;
+
+// The browser suite's listing, taken once for the whole file. Every run of the
+// tests group would otherwise compile every spec from cold to produce this same
+// text - ten to twenty seconds a time on a busy runner, and the suite ran the
+// group five times. tools/docs-facts.mjs reads it from the cache directory the
+// way it reads the other two reports, so the e2e counts it reports here are
+// still the real ones, from a real listing, and the listing is still run.
+let playwrightListing;
+
+beforeAll(() => {
+  // Playwright refuses to start when it sees the markers Jest leaves in the
+  // environment; this is a listing in a child process, so they are removed,
+  // as tests/shardInventory.test.js does for its own listings.
+  const env = { ...process.env, GRAVITAS_E2E_PORT: '4399' };
+  delete env.JEST_WORKER_ID;
+  delete env.NODE_OPTIONS;
+  playwrightListing = inOwnTransformCache(cacheEnv =>
+    execFileSync('npx', ['playwright', 'test', '--list', '--reporter=list'], {
+      cwd: REPO,
+      encoding: 'utf8',
+      env: { ...env, ...cacheEnv },
+      maxBuffer: 128 * 1024 * 1024,
+    })
+  );
+}, 120000);
 
 /** A reports directory whose numbers are deliberately impossible. */
 function lyingCache() {
@@ -48,6 +74,7 @@ function lyingCache() {
       numFailedTests: 0,
     })
   );
+  writeFileSync(path.join(dir, 'playwright-list.txt'), playwrightListing);
   // A build summary, so the `build` group has something to read without a
   // dist/. The numbers are impossible for the same reason as the others.
   writeFileSync(
