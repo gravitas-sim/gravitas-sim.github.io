@@ -301,11 +301,21 @@ const setStateReference = stateRef => {
 };
 
 // How a body is painted lives in js/bodyDraw.js and js/bodyDrawSky.js,
-// registered here by kind so that this module never imports anything that
-// paints. A kind with no drawer draws nothing, which is
-// what a worker, where no canvas exists, needs.
+// registered by kind so this module imports nothing that paints. A kind with
+// no drawer draws nothing (a worker has no canvas); a page with a canvas and no
+// drawers at all gets one warning, the mark of a missing import.
 const bodyDrawers = Object.create(null);
-const registerBodyDrawers = table => Object.assign(bodyDrawers, table);
+let drawersSeen = false; // registered, or already warned about
+const registerBodyDrawers = table => {
+  drawersSeen = true;
+  return Object.assign(bodyDrawers, table);
+};
+const paintBody = (o, ctx, kind) => {
+  if (bodyDrawers[kind]) return bodyDrawers[kind](o, ctx);
+  if (drawersSeen || typeof document === 'undefined') return;
+  drawersSeen = true;
+  console.warn('No body drawers are registered: import js/bodyDraw.js.');
+};
 
 // Physics settings that can be updated from UI.
 //
@@ -1579,7 +1589,6 @@ const trailBudget = () => {
 
 const getDetailScale = () => detailScale;
 
-// Utility functions
 /**
  * Reset the physics object ID counter to 0
  */
@@ -1634,7 +1643,6 @@ const is_offscreen = (pos, buffer_factor = 10.0) => {
   return isOffscreen(pos, state, canvas, zoom_adjusted_buffer);
 };
 
-// Core physics function
 /**
  * Calculate gravitational acceleration at a target position from multiple sources
  * @param {Object} target_pos - Target position with x, y properties
@@ -3220,11 +3228,10 @@ class PhysicsObject {
   }
 
   draw(ctx) {
-    bodyDrawers[this.kind]?.(this, ctx);
+    paintBody(this, ctx, this.kind);
   }
 }
 
-// Planet class
 /**
  * Planet physics object with Earth-like properties
  * @extends PhysicsObject
@@ -3330,7 +3337,6 @@ class Planet extends PhysicsObject {
   }
 }
 
-// GasGiant class
 class GasGiant extends PhysicsObject {
   static kind = 'GasGiant';
   constructor(pos, vel, massInJupiters = null) {
@@ -3471,7 +3477,6 @@ class GasGiant extends PhysicsObject {
   }
 }
 
-// Asteroid class
 /**
  * A minor planet, massed in Ceres masses.
  *
@@ -3504,7 +3509,6 @@ class Asteroid extends PhysicsObject {
   }
 }
 
-// Debris class
 /**
  * Collision and tidal ejecta, massed in kilometer-scale rocky fragments.
  *
@@ -3529,7 +3533,6 @@ class Debris extends PhysicsObject {
   }
 }
 
-// AccretionDiskParticle class
 /**
  * Represents individual particles in black hole accretion disks
  */
@@ -3759,7 +3762,6 @@ class AccretionDiskParticle extends PhysicsObject {
   }
 }
 
-// BlackHole class
 /**
  * Black hole physics object with gravitational effects
  */
@@ -4089,7 +4091,7 @@ class BlackHole {
   }
 
   draw(ctx) {
-    bodyDrawers.BlackHole?.(this, ctx);
+    paintBody(this, ctx, 'BlackHole');
   }
 
   get_state() {
@@ -4157,7 +4159,6 @@ class BlackHole {
 
 // Star color function is now imported from utils.js
 
-// StarObject class
 class StarObject extends PhysicsObject {
   static kind = 'StarObject';
   constructor(pos, vel, massInSuns = null) {
@@ -4288,7 +4289,6 @@ class StarObject extends PhysicsObject {
   }
 }
 
-// NeutronStar class
 class NeutronStar extends PhysicsObject {
   static kind = 'NeutronStar';
   constructor(pos, vel, massInSuns = null, isPulsar = null) {
@@ -4337,7 +4337,6 @@ class NeutronStar extends PhysicsObject {
   }
 }
 
-// WhiteDwarf class
 class WhiteDwarf extends PhysicsObject {
   static kind = 'WhiteDwarf';
   constructor(pos, vel, massInSuns = null) {
@@ -4570,14 +4569,13 @@ class Particle {
   }
 
   draw(ctx) {
-    bodyDrawers.Particle?.(this, ctx);
+    paintBody(this, ctx, 'Particle');
   }
 }
 
 // Initialize particle pool after Particle class is defined
 particlePool = new ParticlePool(200);
 
-// Add missing utility functions from original
 const findObjectAtPosition = worldPos => {
   // Check black holes first (they're usually the most important)
   for (const bh of bh_list) {
@@ -4715,7 +4713,6 @@ const findObjectAtPosition = worldPos => {
   return null;
 };
 
-// Comet class from original
 class Comet extends PhysicsObject {
   static kind = 'Comet';
   constructor(pos, vel, massInComets = null) {
@@ -6326,7 +6323,6 @@ const simulation = {
   },
 };
 
-// Export classes and functions for use in other modules
 export {
   PhysicsObject,
   Planet,

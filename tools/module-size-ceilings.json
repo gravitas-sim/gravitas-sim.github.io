@@ -591,6 +591,7 @@
     "js/inspectorInfo.js": 722,
     "js/inspectorPanel.js": 1244,
     "js/inspectorView.js": 1376,
+    "js/inspectorWindow.js": 1221,
     "js/instructorDocs.js": 579,
     "js/instructorExpectations.js": 61,
     "js/instructorFacts.js": 47,
@@ -724,7 +725,6 @@
     "js/listeners.js": 37,
     "js/main.js": 611,
     "js/maneuver.js": 257,
-    "js/maneuverBridge.js": 74,
     "js/maneuverPlanner.js": 485,
     "js/measure/aperture.js": 224,
     "js/measure/bandIndex.js": 167,
@@ -823,7 +823,7 @@
     "js/pauseAtEventBridge.js": 110,
     "js/pauseAtEventPanel.js": 553,
     "js/pdf.js": 1309,
-    "js/physics.js": 6925,
+    "js/physics.js": 6921,
     "js/physicsKinds.js": 66,
     "js/place/preciseFields.js": 214,
     "js/platform/artifact.js": 261,
@@ -879,7 +879,7 @@
     "js/rvWorkspacePanel.js": 941,
     "js/sandboxTools.js": 847,
     "js/scenarioBrowser.js": 509,
-    "js/scenarioGeometry.js": 461,
+    "js/scenarioGeometry.js": 460,
     "js/scenarioPack.js": 569,
     "js/scenarioPack3d.js": 75,
     "js/scenarioPackWorld.js": 133,
@@ -943,7 +943,7 @@
     "js/timestep.js": 85,
     "js/transitWidgets.js": 1360,
     "js/tutorial.js": 336,
-    "js/ui.js": 5153,
+    "js/ui.js": 4054,
     "js/units.js": 209,
     "js/units/registry.js": 342,
     "js/utils.js": 490,
@@ -960,6 +960,6 @@
     "js/widgetCanvas.js": 132,
     "js/widgetRuntime.js": 260,
     "js/widgets.js": 542,
-    "js/world/build.js": 2609
+    "js/world/build.js": 2599
   }
 }

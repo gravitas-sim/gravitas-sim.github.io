@@ -150,9 +150,9 @@ ceilings:
 | `js/physics.js` | 6,925 | 6,925 |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/validation/physicsChecks.js` | 6,621 | 6,621 |
-| `js/ui.js` | 5,153 | 5,153 |
 | `js/investigations.js` | 4,754 | 4,754 |
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
+| `js/ui.js` | 4,054 | 4,054 |
 | `js/i18n/en.deferred.js` | 3,845 | 3,845 |
 | `js/render.js` | 3,028 | 3,028 |
 <!--/fact-block-->
@@ -201,6 +201,20 @@ throw there in strict mode, while a saved `kind` must never change what a body
 is. The class decides; the data cannot. For an object that is not a body (a
 test double, a plain record), the readers (`className`, `kindOf`) answer
 `'Object'` unless it states a string `kind` or an `obj_type`.
+
+**A module carved out of `ui.js` is handed nothing it can ask for.** The slices
+of Prompt 107 follow one rule: an extracted module never imports `ui.js`, and
+what it needs of the coordinator it either owns (state moves with the code) or
+asks for through the command bus. `js/inspectorWindow.js` needs no application
+context object: it owns the inspector's suppression flag, `ui.js` registers its
+`hideObjectInspector` and `setInspectorSuppressed` on the bus, and the
+header buttons are wired by one call (`wireInspectorControls()`) made where
+`ui.js`'s own start-up code ran them. A module that does need several local
+values of `ui.js` (the placement system is the example) takes **one** small
+context object, built once in `ui.js` and passed to an `init...(ctx)` function;
+the module's header lists every member, and adding one is a design decision, not
+an edit. Such a module touches no element when it is imported, because `ui.js`
+mounts the panels' markup after every import has run.
 
 ### When you need something from a layer above
 

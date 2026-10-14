@@ -15,7 +15,7 @@ export const ES_STUDIO = {
   'studio.action.fromLabel': 'Empezar desde un escenario incluido',
   'studio.action.from': 'Empezar desde este',
   'studio.from.generated': 'Generados a partir de ajustes',
-  'studio.from.handBuilt': 'Solo los ajustes (cuerpos colocados por código)',
+  'studio.from.handBuilt': 'Solo los ajustes (el motor construye los cuerpos)',
   'studio.from.geometry': 'Ajustes y geometría declarada',
   'studio.geometry.heading': 'Geometría declarada',
   'studio.geometry.summary':
@@ -122,7 +122,7 @@ export const ES_STUDIO = {
   'studio.caution.areaSweep':
     'La 2.ª ley de Kepler también activa una superposición de áreas barridas para el orbitador excéntrico. Esa superposición es un comportamiento de la aplicación, no geometría, así que este archivo lleva los cuerpos y no la superposición.',
   'studio.caution.handBuilt':
-    '{scenario} coloca sus cuerpos por código, así que solo se copiaron sus ajustes. Este escenario construye el mundo que esos ajustes generan, que no es el mismo.',
+    'El motor construye los cuerpos de {scenario} y un archivo de escenario no puede llevarlos, así que solo se copiaron sus ajustes. Este escenario construye el mundo que esos ajustes generan, que no es el mismo.',
   'studio.caution.unbound':
     '{name} se mueve a {speed} respecto al resto, más que los {escape} que bastan para escapar de ellos (unidades de simulación por unidad de tiempo), así que probablemente se irá. Trata todo lo demás como una sola masa en su baricentro: una estimación, no una prueba.',
   'studio.caution.step':

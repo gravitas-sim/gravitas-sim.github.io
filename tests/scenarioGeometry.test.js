@@ -172,6 +172,7 @@ describe('the validator, construct by construct', () => {
       'circular-binary-stars',
       'pin-pair',
       'triangle-holes',
+      'hole-and-planet',
       'name-pair',
     ]);
   });

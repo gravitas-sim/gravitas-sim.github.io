@@ -102,17 +102,16 @@ export const GEOMETRY_RULES = Object.freeze({
     apoapsisFloor: P, startFraction: P, startPeriapsisFactor: P }),
   // Two stars of unequal mass on a circular orbit about a stationary center.
   'circular-binary-stars': spec({ massesSuns: list(P, 2), separation: P }),
-  // The first two neutron stars or white dwarfs at (-x, 0) and (x, 0), at `speed`
-  // in opposite directions along y; the first three black holes on a circle.
+  // The first two neutron stars or white dwarfs at (-x, 0) and (x, 0), at `speed` in opposite directions along y; three black holes on a circle; a black hole at rest at the origin and a planet at (planetX, 0) moving at planetSpeed along y.
   'pin-pair': spec({ type: Object.freeze(['NeutronStar', 'WhiteDwarf']), x: P, speed: P }),
-  'triangle-holes': spec({ radius: P, speed: P }),
+  'triangle-holes': spec({ radius: P, speed: P }), 'hole-and-planet': spec({ planetX: P, planetSpeed: P }),
   // Names for the first two neutron stars or white dwarfs.
   'name-pair': spec({ type: Object.freeze(['NeutronStar', 'WhiteDwarf']), names: list(T, 2) }),
 });
 
 /** The rules a `place` step may name: they give generated bodies a place. */
 // prettier-ignore
-export const GEOMETRY_PLACE_RULES = Object.freeze(['inspiral-pair', 'pin-pair', 'triangle-holes']);
+export const GEOMETRY_PLACE_RULES = Object.freeze(['inspiral-pair', 'pin-pair', 'triangle-holes', 'hole-and-planet']);
 
 /** The types whose generated bodies a geometry may `keep`: every population. */
 // prettier-ignore

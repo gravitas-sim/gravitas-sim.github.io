@@ -15,6 +15,7 @@ import { readFileSync } from 'node:fs';
 
 import {
   loadRealSystems,
+  tableRows,
   realSystemFindings,
   realSystemSourceProblems,
 } from '../tools/authoring/realSystems.mjs';
@@ -27,6 +28,38 @@ import { ES_CAPTURE as ES } from '../js/i18n/es.capture.js';
 
 const systems = await loadRealSystems();
 const clone = v => JSON.parse(JSON.stringify(v));
+
+describe('tableRows', () => {
+  test('finds a table that closes at any indent, with no later indented bracket to lean on', () => {
+    const top = "const t = [\n  { name: 'A' },\n  { name: 'B' },\n];\n";
+    expect(tableRows(top, 't').map(r => r.name)).toEqual(['A', 'B']);
+    const deep = "function f() {\n  const t = [\n    { name: 'C' },\n  ];\n}\n";
+    expect(tableRows(deep, 't').map(r => r.name)).toEqual(['C']);
+  });
+
+  test('skips a literal whose brackets never close, and finds none for an absent table', () => {
+    expect(tableRows("const t = [ { name: 'A' ", 't')).toEqual([]);
+    expect(tableRows('const u = [];', 't')).toEqual([]);
+  });
+
+  test('skips comments: an apostrophe, a block comment and a bracket in a line comment', () => {
+    const rows = c =>
+      tableRows(
+        `const t = [\n  { name: 'A' }, ${c}\n  { name: 'B' },\n];\n`,
+        't'
+      );
+    expect(rows("// Earth's orbit").map(r => r.name)).toEqual(['A', 'B']);
+    expect(rows("/* it's */").map(r => r.name)).toEqual(['A', 'B']);
+    expect(rows('// see ]').map(r => r.name)).toEqual(['A', 'B']);
+    expect(rows('/* see ] and [ */').map(r => r.name)).toEqual(['A', 'B']);
+    expect(tableRows('const t = [ // never closes', 't')).toEqual([]);
+  });
+
+  test('reads brackets inside strings as text', () => {
+    const t = "const t = [{ name: 'a ] b' }];\n";
+    expect(tableRows(t, 't')[0].name).toBe('a ] b');
+  });
+});
 
 describe('the real systems', () => {
   test('are found: the compiled modules and every table js/world/build.js keeps', () => {
