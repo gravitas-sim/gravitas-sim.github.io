@@ -409,10 +409,10 @@ export const CHECKS = [
     tier: 'quick',
     ci: null,
     why:
-      'CI holds the same facts as code, not text, in ' +
+      'CI runs the same facts as code, not text, in ' +
       'tests/capabilityRegistries.test.js (Prettier does not load under ' +
-      'Jest); the workflow is not changed for the formatting check, which the ' +
-      'merge queue runs through `generate --check`',
+      "Jest); the formatting check is the merge queue's and the gate's, " +
+      'through `generate --check`',
     group: 'correctness',
   },
   // The curated catalog (CATALOG.md): its archives, the extensions they come
