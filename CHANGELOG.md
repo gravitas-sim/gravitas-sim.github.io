@@ -17,6 +17,17 @@ the release rather than in the tag.
 
 ### Added
 
+- **The series chart, stage 3a of removing Chart.js** (D-PLOT-02, `PLOT_COMPONENT.md`).
+  `js/plot/chart.js` draws connected series with a color, a width and a dash,
+  points, a filled area, error bars with caps, a legend that hides and shows
+  series from the keyboard, a tooltip and a keyboard readout that is also
+  spoken, and updates the nodes it has when it is drawn again, over plain
+  arrays with no unit ids; `js/plot/export.js` makes the PNG. Nothing imports
+  them yet, so no route moved. The five Chart.js charts are recorded as data
+  (`tests/fixtures/chart-parity.json`, `tests/fixtures/chart-limits.json`,
+  read from the running application by `e2e/chartParity.spec.js`) for the
+  stages that port them, and `tools/plot-live-bench.mjs` measures a live
+  update at their caps and rates.
 - **Declarative scenario geometry, first slice** (Roadmap II P108, `SCENARIO_GEOMETRY.md`).
   Retrograde Mars, Kepler's 2nd Law and the four resonance scenarios (Galilean
   moons, broken Laplace resonance, Pluto and Neptune, Jupiter's Trojans) are

@@ -15,9 +15,10 @@
 // that changes on purpose changes in the fixture in that pull request, with the
 // reason in PLOT_COMPONENT.md's documented equivalents.
 //
-//   CHART_PARITY_RECORD=1 npx playwright test e2e/chartParity.spec.js
+// CHART_PARITY_RECORD=1 rewrites the fixture from the running application
+// instead of comparing (then `npx prettier --write` the fixture):
 //
-// rewrites the fixture from the running application instead of comparing.
+//   CHART_PARITY_RECORD=1 npx playwright test e2e/chartParity.spec.js
 // =============================================================================
 
 import { readFileSync, writeFileSync } from 'node:fs';

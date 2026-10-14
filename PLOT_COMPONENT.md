@@ -474,6 +474,12 @@ download, which is at 779.6 of 830 KB.
      component draws. It is not simply deleted.
    - This is the step the deferred budget forces to be indivisible.
    - Its package change is Carl's to approve.
+   - **Refined by D-PLOT-02:** the step stopped at its parity gate, because
+     the component had no equivalent for the five charts. It is now four
+     stages (3a features, 3b A1-A3, 3c A4 and A5, 4 the parity harness and
+     the removal); see "Stage 3a" below. The deferred budget no longer
+     forces one pull request: each of 3b and 3c adds the component's bytes
+     before 4 removes Chart.js's, under the standing size-budget approval.
 5. **The application's hand-drawn panels: B1-B8.** Each one only removes
    code once the component is in the graph.
    - B4 needs an equal-aspect mode.
@@ -581,7 +587,10 @@ budget's.
 | 1 | D1-D4 | on `feat/plot-component` | Observatory −411 B, 16 → 16 requests / −764 B, 2 → 2. Every other route unchanged | 0 (4170.7 KB); the experiment runner's analysis chunk −754 B, outside that budget | D1-D4 migrated: see below |
 | 2 | D5-D7 | on `feat/plot-component` | Experiment runner −2742 B, 47 → 47 requests / −1540 B, 3 → 3. Observatory +319 B / +144 B against step 1, still −92 B / −620 B against the base. Every other route unchanged | 0 (4170.7 KB) | D5-D7 migrated: see below |
 | 3 | D8-D12 | | | | |
-| 4 | A1-A5, Chart.js removed | | | | |
+| 3a | the features the five Chart.js charts need (D-PLOT-02) | on `feat/plot-stage-3a` | none: no route imports the new modules | 0 (2034.2 of 2034.4 KB gzipped); no chart ported | none ported: see "Stage 3a" |
+| 3b | A1-A3, the live charts | | | | |
+| 3c | A4, A5, the bench charts | | | | |
+| 4 | A1-A5 judged by the parity harness; Chart.js removed | | | | |
 | 5 | B1-B8 | | | | |
 | 6 | C1-C56, by family | | | | |
 
@@ -726,4 +735,163 @@ other test of these four charts in all three engines.
   before.
 - **D7's height.** The histogram is drawn in the component's 720 × 380 frame
   instead of 640 × 220.
+
+### Stage 3a: the series chart for the five Chart.js charts (D-PLOT-02)
+
+**Why.** Stage 4, removing Chart.js, stopped at its parity gate. *js/plot/*
+drew observation tables (columns with unit ids), and the five charts are
+none of that: a time series that grows while the simulation runs, two runs
+against each other, a trace with error bars. Carl decided to build what is
+missing as staged pull requests, then port, then run a parity harness, then
+remove the library (the register row quotes him):
+
+| Stage | What | State |
+|---|---|---|
+| 3a | The features, and the characterization of the five charts. No chart ported, Chart.js untouched | this pull request |
+| 3b | Port A1, A2, A3 (the live charts) | |
+| 3c | Port A4, A5 (the bench charts) | |
+| 4 | The parity harness over all five, then Chart.js, `ensureChartJs`, the vendor entry and the package dependency removed | |
+
+**Characterization first.** What the five charts are today is data, recorded
+before anything was built:
+
+- `tests/fixtures/chart-parity.json`: for each chart, the series (label,
+  color as a design token where one supplies it, width, dash, fill, order,
+  hidden), the axes (type, title, tick text, sizes), the legend (shown,
+  toggles), the tooltip (mode, text), and A3's error bars, plain and during a
+  survey. Recorded from the real application by `e2e/chartParity.spec.js`,
+  which reads each chart through Chart.js's own registry and compares to the
+  fixture on every run (`CHART_PARITY_RECORD=1` rewrites it).
+- `tests/fixtures/chart-limits.json`: what lives in source constants (200,
+  2000 and 900 points; 8, 10 and 15 Hz; the light curve's y rule; the 3 px
+  caps), each pinned to its line of source by `tests/chartParity.test.js`.
+- A3's error-bar plugin is run against a recording context, so the bar, its
+  two caps and the color are asserted as drawing calls.
+
+The stage that ports a chart replaces the reader in `e2e/chartParity.spec.js`
+with the component's own description of the same chart and compares it to the
+same fixture. A fact that changes on purpose changes in the fixture in that
+pull request, under "Documented equivalents" below.
+
+**What was built.** Two modules, both free of imports. *js/plot/chart.js*
+(14.0 KB minified, 6.2 KB gzipped) is the chart; *js/plot/export.js* (2.3 KB,
+1.3 KB gzipped) is the PNG, fetched when one is asked for.
+
+| # | Feature | Where | Tests |
+|---|---|---|---|
+| 1 | Connected series with a color, a width and a dash; points; a filled area; gaps where a value is not a number; draw order | `createChart().draw()`, `series[]` | `tests/plotChart.test.js`: "connected series" |
+| 2 | A legend that hides and shows series; real buttons, so Tab and Enter or Space work, `aria-pressed`, focus kept across a toggle and a redraw, the change spoken | the legend | "the legend"; `e2e/plotChart.spec.js` |
+| 3 | A tooltip (every series at the pointer, or the nearest point) and a keyboard readout: arrow keys step along a series, Up and Down change series, Home, End, Page Up and Down, Escape; the same words in a polite status | the readout | "the tooltip and the keyboard readout"; the e2e spec; axe |
+| 4 | A draw that updates in place, with a point cap | `draw()`, `maxPoints` | "a draw that updates, with a cap"; `tools/plot-live-bench.mjs` |
+| 5 | PNG export of the SVG, legend included | `chart.toPNG()`, `export.js` | "the image"; the e2e spec decodes a real PNG |
+| 6 | Error bars, plus and minus sigma, with caps (3 px each side by default) | `series[].sigma`, `capPx` | "error bars" |
+| 7 | Theme repaint | colors as functions, `repaint()`, `gravitasThemeChanged` | "theme"; the e2e spec |
+| 8 | Raw arrays and plain strings; no unit id, no import | the whole module | "raw arrays, no registered units" |
+
+Using it:
+
+```js
+import { createChart } from './plot/chart.js';
+
+const chart = createChart(host, {
+  height: 'fill', // or a number of pixels
+  maxPoints: 200,
+  number: v => format(v), // ticks and readouts; per axis: draw({xNumber, yNumber})
+  tooltip: { mode: 'index', title: x => `${x} s`, format: ({ label, y }) => `${label}: ${y} J` },
+  labels: { legend: 'Series', toggled: (label, shown) => `${label} ${shown ? 'shown' : 'hidden'}` },
+});
+chart.draw({
+  label: 'Energy over time',
+  xTitle: 'Time (s)',
+  yTitle: 'Energy (J)',
+  yRange: [lo, hi], // optional; otherwise the data, padded 5%
+  series: [
+    { id: 'ke', label: 'Kinetic', x: times, y: kinetic, color: () => tokens.accent, width: 2 },
+    { id: 'pe', label: 'Potential', x: times, y: potential, color: '#ff8800', dash: [5, 3] },
+    { id: 'm', label: 'Measurements', mode: 'points', x: days, y: rv, sigma, order: 1 },
+  ],
+});
+chart.draw(sameSpec); // again, as often as the data changes
+const png = await chart.toPNG(); // a Blob
+```
+
+- The chart builds its own DOM inside `host` (a legend, an `<svg>`, a tooltip
+  and a status line) and styles it from CSS variables with fallbacks, so it
+  needs no stylesheet and follows a theme without a draw.
+- A series' x values must ascend: the readout finds the point under the pointer
+  by bisection.
+- A spec that changes a series' `hidden` is obeyed; one that merely repeats it
+  does not undo what the reader chose.
+- The page labels the chart: `chart.element` is the `<svg>` (a focusable
+  group), so `aria-describedby` and a `data-i18n` role go on it.
+
+**Live updates, measured.** `node tools/plot-live-bench.mjs` draws the three
+live charts at their caps and rates in headless Chromium with the component
+and, beside it, with the vendored Chart.js on the same data and schedule
+(100 updates after 20 of warm-up; the Mac was shared, so the 6x column is
+noisy). Milliseconds per update:
+
+| Chart, cap, rate | 1x draw | 1x + layout p95 | 4x + layout median / p95 | Chart.js at 4x, median / p95 |
+|---|---|---|---|---|
+| Energy: 3 series x 200 points, 8 Hz | 0.5 | 0.9 | 1.7 / 2.2 | 6.3 / 8.1 |
+| Light curve: 2000 points, filled, 10 Hz | 1.0 | 1.5 | 3.0 / 4.0 | 7.2 / 8.4 |
+| Radial velocity: 900 points and 60 error bars, 15 Hz | 1.2 | 1.8 | 2.9 / 3.6 | 5.8 / 7.1 |
+
+The bar is OFFLINE_AND_LOW_END.md's: 8 ms of script a frame on the 4x proxy.
+All three hold, at rates of one frame in four to seven, and the two runs
+made (Chart.js beside it each time) agree to a tenth of a millisecond.
+Two caveats, measured and not hidden. The main thread's whole busy time
+(script, style, layout and recording the paint) per update is level with
+Chart.js's for the energy chart and up to 40% more for the others: 3.3 to 4.0
+ms at 1x against 2.9 to 3.6, and 9.7 to 11.1 at 4x against 8.0 to 10.0. The
+SVG is cheaper to draw and dearer to show, because its paint is a main-thread
+cost and the canvas's is not. At the highest rate that is 15 Hz x 11 ms, about
+a sixth of one core on a machine four times slower than this one. And raster
+is on other threads, which CPU throttling does not reach, so it is in no
+column. The light curve's 2000 points are drawn as at most two per pixel
+column (the lowest and highest, as the Observatory's plot does), so its path
+is the width of the chart and not the length of the recording.
+
+**Documented equivalents** (the parity table's rule 1, in advance, for the
+stages that port):
+
+- **x axes.** A2's and A4's category axes of strings become numeric. The
+  tooltip's title is the caller's `title(x)`, so "0.16" is still "0.16".
+- **Smoothing.** `tension` (0.1 to 0.25) is not drawn. A line through 200
+  to 2000 points differs by less than a pixel; A4 and A5 had none.
+- **Error bars widen the range.** Chart.js's scale ignored them (the plugin
+  drew past it); the component includes plus and minus sigma, so the bars are
+  never clipped.
+- **PNG is asynchronous.** `toBase64Image` returned a string at once;
+  `toPNG()` returns a Promise of a Blob, because an SVG has to be decoded
+  into a canvas. A1's export handler awaits it.
+- **Colors.** A1's fixed dark-theme literals become tokens (the parity table
+  already said so). The legend sits above the plot and is centered.
+- **A hover finds the nearest point in x** (`index`) or in the plane
+  (`nearest`); Chart.js's A5 default of "under the pointer only" becomes
+  `nearest`.
+- **The keyboard readout is new.** Chart.js had none; A1's row asks for one.
+
+**Not built, because no chart needs it:** per-point colors, secondary axes,
+log axes on this chart (the table plot has them), legends other than above the
+plot, `time` scales, animation, and any touch gesture (a finger's pointer move
+reads as a hover does; nothing else is promised on a touch screen).
+
+**Size, and the budget.** No route imports the new modules, so no route and no
+bundle moved: the deferred total is 2034.2 of 2034.4 KB gzipped, the initial
+download 793.0 of 830.0 KB, and every route is within its ceiling. The
+deferred ceiling has 0.2 KB of room, so stage 3b, which brings the component
+into the application while Chart.js is still there, needs a raise of about
+its own 7.5 KB gzipped (chart and export) less whatever the ported charts'
+code frees, under the standing size-budget approval (the measured overrun,
+rounded up to 0.1 KB, with a register row citing it). Stage 4 returns
+Chart.js's gzipped chunk and more.
+
+**What stands in for a gallery.** There is no gallery page for the component
+(its documentation is this file and its tests), and adding a route would add a
+page for the deploy rehearsal, axe, the sitemap and the route budgets. The
+spec above mounts the chart on an existing page, in all three engines for the
+two engine-sensitive tests (CSS variables as attributes, and the PNG), and
+the markup it draws was looked at in both a dark and a light page with all
+five chart shapes at once.
 

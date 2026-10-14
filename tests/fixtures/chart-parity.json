@@ -67,14 +67,7 @@
       "tickSize": 12,
       "maxTicks": null,
       "gridColor": "rgba(255, 255, 255, 0.1)",
-      "customTickLabels": [
-        "0",
-        "1.5",
-        "120",
-        "12,000",
-        "10⁶",
-        "−0.0025"
-      ]
+      "customTickLabels": ["0", "1.5", "120", "12,000", "10⁶", "−0.0025"]
     },
     "legend": {
       "shown": true,
@@ -221,9 +214,7 @@
         "intersect": true,
         "custom": false
       },
-      "plugins": [
-        "rvErrorBars"
-      ]
+      "plugins": ["rvErrorBars"]
     },
     "survey": {
       "type": "line",
@@ -238,10 +229,7 @@
           "color": "token:label",
           "fillColor": null,
           "width": 1.5,
-          "dash": [
-            4,
-            4
-          ],
+          "dash": [4, 4],
           "fill": false,
           "tension": 0.25,
           "pointRadius": 0,
@@ -297,9 +285,7 @@
         "intersect": true,
         "custom": false
       },
-      "plugins": [
-        "rvErrorBars"
-      ],
+      "plugins": ["rvErrorBars"],
       "errorBars": {
         "plugin": "rvErrorBars",
         "sigmaBothWays": true,
@@ -335,10 +321,7 @@
         "color": "token:warm",
         "fillColor": null,
         "width": 2,
-        "dash": [
-          5,
-          3
-        ],
+        "dash": [5, 3],
         "fill": false,
         "tension": 0,
         "pointRadius": 0,
