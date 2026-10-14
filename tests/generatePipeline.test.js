@@ -25,10 +25,15 @@ describe('the generate graph', () => {
 
   test('keeps the order the artifacts need', () => {
     expect(before('capabilities', 'catalog')).toBe(true);
+    // The registries are written into files the capability check imports, and
+    // the scene audit reads the instrument families through one of them.
+    expect(before('registries', 'capabilities')).toBe(true);
+    expect(before('registries', 'scene')).toBe(true);
     expect(before('manifest', 'cards')).toBe(true);
     expect(before('build', 'docs')).toBe(true);
     // Everything that rewrites a precached file comes before its manifest.
     for (const id of [
+      'registries',
       'capabilities',
       'catalog',
       'manifest',
@@ -120,6 +125,18 @@ describe('the merge tripwire', () => {
       'keep\n<!--fact-block:x-->\nrow 1\nrow 2\n<!--/fact-block-->\nsaid <!--fact:n-->3<!--/fact--> times\n'
     );
     expect([...m.keys()]).toEqual(['keep', 'said  times']);
+  });
+  test('the lazy registries are generated regions too, in their own markers', () => {
+    const m = handWritten(
+      "keep\n// <generated:loaders> by a tool; do not edit\nconst L = {\n  a: () => import('./a.js'),\n};\n// </generated:loaders>\nalso keep\n"
+    );
+    expect([...m.keys()]).toEqual(['keep', 'also keep']);
+    for (const f of [
+      'js/widgets.js',
+      'js/platform/builtins.js',
+      'js/data/investigations/registry.js',
+    ])
+      expect(WATCHED).toContain(f);
   });
   test('it watches the files the history named', () => {
     for (const f of [

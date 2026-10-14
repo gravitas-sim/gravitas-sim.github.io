@@ -53,6 +53,7 @@ The table is written from `tools/generate-graph.mjs`, the list that
 <!--fact-block:generatedArtifacts-->
 | File | Made by | Notes |
 | --- | --- | --- |
+| `js/widgets.js` (regions), `js/platform/builtins.js` (regions), `js/data/investigations/registry.js` (regions) | `node tools/capability-registries.mjs` | Regions between `// <generated:NAME>` and `// </generated:NAME>`; the rest of each file is hand-written. A conflict inside one is resolved by regenerating, never by taking a side. |
 | `js/platform/catalog.generated.js`, `docs/capabilities.md` | `node tools/capabilities.mjs generate` |  |
 | `catalog/catalog.json` | `node tools/catalog.mjs generate` |  |
 | `js/data/investigations/manifest.js`, `js/data/investigations/manifest.es.js`, `js/data/investigations/browseData.js` | `node tools/build-investigation-manifest.js` |  |
@@ -89,6 +90,7 @@ never be resolved with a whole-file choice:
 | `model/index.html` | The public physics-model page, with generated blocks inside it |
 | `ACCESSIBILITY.md`, `paper.md`, `index.html`, `js/i18n/en.js`, `js/i18n/es.js` | Prose and code around generated facts and attributes |
 | `js/validation/physicsChecks.js` | Hand-written, and the file two branches will both append a validation group to |
+| `js/widgets.js`, `js/platform/builtins.js`, `js/data/investigations/registry.js` | Hand-written code around the lazy registries (`// <generated:NAME>` regions); a conflict inside a region is resolved by `npm run registries`, not by a side |
 
 **`git checkout --ours/--theirs <path>` does not mean "take my side of these
 hunks."** It restores the whole file from that stage and discards every

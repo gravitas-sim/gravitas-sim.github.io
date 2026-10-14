@@ -6,18 +6,18 @@
 // instructor-guide stub, and every registration a lesson needs to exist.
 //
 // It exists because a lesson is not one file. Adding one by hand means touching
-// six places, and forgetting any of them fails in a different way: leave it out
-// of registry.js and the card is there but nothing opens; leave it out of
-// investigations.js and the site is fine while the answer keys and the
-// instructor PDFs quietly omit it; leave out the instructor stub and the guide
-// builds with a hole in it. All six are mechanical, so they are done here.
+// several places, and forgetting any of them fails in a different way: leave it
+// out of investigations.js and the card has nothing behind it while the answer
+// keys and the instructor PDFs quietly omit it; leave out the instructor stub
+// and the guide builds with a hole in it. The mechanical ones are done here.
 //
 //   js/data/investigations/<id>.js         the lesson
 //   js/data/investigations/es/<id>.js      the Spanish shadow
-//   js/data/investigations/registry.js     the lazy loader, and the translation
-//   js/data/investigations.js              the synchronous barrel
+//   js/data/investigations.js              the synchronous barrel and catalog
 //   js/data/instructorContent.js           the guide stub
 //   then: npm run manifest                 manifests and filter metadata
+//   then: npm run registries               the lazy loader and the translation
+//                                          in registry.js, from the catalog
 //
 // Nothing is overwritten. Re-running after an edit reports what is already in
 // place and touches nothing else, so it is safe to run twice.
@@ -332,25 +332,6 @@ for (const [file, text] of [
   }
 }
 
-// The two registry maps, each before its closing brace.
-{
-  const file = 'js/data/investigations/registry.js';
-  const text = await readFile(file, 'utf8');
-  if (text.includes(`'${id}': () => import('./${id}.js')`)) {
-    skipped.push(`${file} (already registered)`);
-  } else {
-    const loaderLine = `  '${id}': () => import('./${id}.js'),\n`;
-    const translationLine = `    '${id}': () => import('./es/${id}.js'),\n`;
-    const loadersEnd = text.indexOf('};', text.indexOf('const LOADERS = {'));
-    let next = text.slice(0, loadersEnd) + loaderLine + text.slice(loadersEnd);
-    const transStart = next.indexOf('const TRANSLATIONS = {');
-    const esEnd = next.indexOf('  },', transStart);
-    next = next.slice(0, esEnd) + translationLine + next.slice(esEnd);
-    if (!dryRun) await writeFile(file, next);
-    done.push(`${file} (loader + translation)`);
-  }
-}
-
 await insertOnce(
   'js/data/investigations.js',
   "\nimport { gradedSteps, positionIn } from './investigations/catalog.js';",
@@ -406,6 +387,7 @@ console.log(
   `
 Next:
   npm run manifest          regenerate the manifests and the filter metadata
+  npm run registries        add the lesson's lazy loaders (registry.js)
   npm run author:check      validate the new lesson, and every other one
   npm run format            the scaffold is written plainly, prettier owns it
 

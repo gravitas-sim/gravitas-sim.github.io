@@ -304,7 +304,7 @@
     "js/data/investigations/provenance.js": 78,
     "js/data/investigations/radial-velocity.js": 947,
     "js/data/investigations/refitting-a-transit.js": 330,
-    "js/data/investigations/registry.js": 461,
+    "js/data/investigations/registry.js": 459,
     "js/data/investigations/retrograde-motion.js": 948,
     "js/data/investigations/sampling-a-posterior.js": 314,
     "js/data/investigations/scaling-the-main-sequence.js": 364,
@@ -958,7 +958,7 @@
     "js/welcomeGate.js": 111,
     "js/widgetCanvas.js": 132,
     "js/widgetRuntime.js": 260,
-    "js/widgets.js": 542,
+    "js/widgets.js": 528,
     "js/world.js": 1159,
     "js/world/build.js": 2599
   }

@@ -13,8 +13,10 @@
 //   new work    a lesson or a family added to the sources reaches the registry
 //               with no other edit
 //
-// The first commit of this file passes against the hand-written registries,
-// which the generator replaces in the next one.
+// The first run of the equality checks was against the hand-written registries
+// they replaced, at the commit before the replacement: every entry the same,
+// the lesson loaders differing only in where power-law-gravity sits (catalog
+// order now, import order before; nothing reads the order).
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
@@ -45,6 +47,7 @@ import {
   readManifests,
   sourceOf,
   splice,
+  staleRegions,
 } from '../tools/capability-registries.mjs';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -145,10 +148,16 @@ const committedLessons = () => {
 };
 
 describe('the committed registries', () => {
+  test('say what the generator says, region by region', async () => {
+    // As code, not text: Prettier does not load under Jest, and
+    // \`node tools/capability-registries.mjs --check\` holds the formatting.
+    expect(await staleRegions()).toEqual([]);
+  });
+
   test('lessons: one loader per lesson in the catalog, in its order, and a Spanish shadow where there is a file', () => {
     const ids = MANIFEST.map(m => m.id);
     const { loaders, translations } = committedLessons();
-    expect(Object.keys(loaders).sort()).toEqual([...ids].sort());
+    expect(Object.keys(loaders)).toEqual(ids);
     for (const id of ids) {
       expect(loaders[id]).toBe(`./${id}.js`);
       expect(
@@ -158,7 +167,7 @@ describe('the committed registries', () => {
     const spanish = ids.filter(id =>
       existsSync(path.join(ROOT, `js/data/investigations/es/${id}.js`))
     );
-    expect(Object.keys(translations.es).sort()).toEqual([...spanish].sort());
+    expect(Object.keys(translations.es)).toEqual(spanish);
     for (const id of spanish) expect(translations.es[id]).toBe(`./es/${id}.js`);
     // Every locale directory is a locale of the registry.
     const locales = readdirSync(path.join(ROOT, 'js/data/investigations'), {
@@ -391,6 +400,36 @@ describe('what the generator cannot express is refused', () => {
       key: 'a',
       familyId: 'a',
       ids: ['real'],
+    });
+  });
+
+  test('a family it cannot read keeps a hand manifest: the package that owns it says what it holds', () => {
+    const tmp = mkdtempSync(path.join(tmpdir(), 'registries-'));
+    mkdirSync(path.join(tmp, 'js'));
+    writeFileSync(
+      path.join(tmp, 'js/aWidgets.js'),
+      'export const A_WIDGETS = [...somethingElse];\n'
+    );
+    const manifest = {
+      id: 'pkg',
+      provides: {
+        widgetFamilies: [
+          {
+            id: 'a',
+            entry: 'builtin:widgets/a',
+            pick: 'A_WIDGETS',
+            widgets: ['one', 'two'],
+          },
+        ],
+      },
+    };
+    // Unowned, it is an error; owned, the manifest's list is the family's.
+    expect(() => familyEntries([], tmp, [])).toThrow(/cannot read the id/);
+    expect(familyEntries([manifest], tmp, [])[0]).toMatchObject({
+      key: 'a',
+      familyId: 'a',
+      exportName: 'A_WIDGETS',
+      ids: ['one', 'two'],
     });
   });
 

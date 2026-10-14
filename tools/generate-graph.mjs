@@ -23,12 +23,38 @@
 
 export const GRAPH = Object.freeze([
   {
+    // D-CAP-01 (CAPABILITY_RUNTIME.md): the three lazy registries, written from
+    // what describes them - the capability manifests, the lesson catalog and
+    // the instrument family modules - as regions inside the files that read
+    // them, so the literal import() each one needs is still where the bundler
+    // sees it.
+    id: 'registries',
+    generate: 'node tools/capability-registries.mjs',
+    check: 'node tools/capability-registries.mjs --check',
+    inputs: [
+      'capabilities',
+      'js/data/investigations.js',
+      'js/data/investigations/es',
+      'js',
+      'tools/capability-registries.mjs',
+    ],
+    outputs: [],
+    regions: [
+      'js/widgets.js',
+      'js/platform/builtins.js',
+      'js/data/investigations/registry.js',
+    ],
+    after: [],
+    notes:
+      'Regions between `// <generated:NAME>` and `// </generated:NAME>`; the rest of each file is hand-written. A conflict inside one is resolved by regenerating, never by taking a side.',
+  },
+  {
     id: 'capabilities',
     generate: 'node tools/capabilities.mjs generate',
     check: 'node tools/capabilities.mjs check',
     inputs: ['capabilities', 'tools/capabilities.mjs'],
     outputs: ['js/platform/catalog.generated.js', 'docs/capabilities.md'],
-    after: [],
+    after: ['registries'],
   },
   {
     id: 'catalog',
@@ -183,7 +209,7 @@ export const GRAPH = Object.freeze([
       'docs/lesson-scene-record.md',
       'js/data/investigations/provenance.js',
     ],
-    after: ['manifest'],
+    after: ['manifest', 'registries'],
   },
   {
     id: 'irreversible',

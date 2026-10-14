@@ -345,9 +345,23 @@ export function familyEntries(manifests, root = REPO, order = FAMILY_ORDER) {
     .sort();
   const byKey = new Map();
   for (const file of files) {
-    const read1 = readFamily(file, read(root, `js/${file}`));
     const own = owned.get(`js/${file}`);
-    if (own) {
+    let read1;
+    try {
+      read1 = readFamily(file, read(root, `js/${file}`));
+    } catch (error) {
+      // A module the reading cannot follow keeps a hand manifest: a package
+      // that owns the family says what it holds, and the generator trusts it
+      // (tests/lazyWidgets.test.js holds that to the module at run time).
+      if (!own) throw error;
+      read1 = {
+        exportName: own.family.pick,
+        ids: [...own.family.widgets],
+        ready: null,
+      };
+      own.trusted = true;
+    }
+    if (own && !own.trusted) {
       const f = own.family;
       if (f.pick !== read1.exportName || f.widgets.join() !== read1.ids.join())
         throw new Error(

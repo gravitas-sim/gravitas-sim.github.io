@@ -32,10 +32,10 @@ saved or linked to changes.
   `npm run capabilities`: each package's version, platform range and
   requirements, each public id's builtin entry and owner, and any declared
   migrations. Titles, assets and licenses never ship.
-- **Builtins** - `js/platform/builtins.js`, the reviewed list of modules a
-  manifest may name, one literal `import()` each, and only for what the runtime
-  loads by id: an entry for a module a family already imports would split it
-  out of the family's chunk.
+- **Builtins** - `js/platform/builtins.js`, the list of modules a manifest may
+  name, one literal `import()` each, and only for what the runtime loads by id:
+  an entry for a module a family already imports would split it out of the
+  family's chunk. Generated: see [The registries are generated](#the-registries-are-generated).
 - **Runtime** - `js/platform/resolver.js`:
   `resolve()` orders a package after what it needs, checking the platform API
   and every range and refusing cycles; `loadBuiltin()` loads a module once for
@@ -68,8 +68,44 @@ saved or linked to changes.
   `audit:scene:check` is where the loss shows, and it runs in the release gate,
   not in CI.
 - **The core** - an instrument family, lesson or dataset without a package is
-  found where it always was. Moving one is a manifest, a builtin entry and a
-  registry line; nothing about the others changes.
+  found where it always was. Moving one is a manifest; its builtin entry and
+  its registry line are generated from it, and nothing about the others
+  changes.
+
+## The registries are generated
+
+Decision D-CAP-01, from D-R7-05: the capability runtime is folded into a
+generator rather than extended to a hand-written manifest for each of about
+eighty-five capabilities, and the runtime stays for installed packages. The
+three registries that were written by hand are now regions that
+`tools/capability-registries.mjs` writes (`npm run registries`; the
+`registries` node of `tools/generate-graph.mjs`, so `generate --check` covers
+it, and `npm run capabilities:check` fails on a stale one):
+
+| Registry | Lives in | Written from |
+| -------- | -------- | ------------ |
+| `BUILTINS`, `BUILTIN_SOURCES` | `js/platform/builtins.js` | the `builtin:` references in `capabilities/*.json`; the module an id names is found by its prefix (`investigation/`, `widgets/`, `data/`) |
+| `LOADERS`, `TRANSLATIONS` | `js/data/investigations/registry.js` | the lessons in `INVESTIGATIONS` (`js/data/investigations.js`), in catalog order, and a Spanish shadow wherever `es/<id>.js` exists |
+| `LAZY_FAMILIES` | `js/widgets.js` | every `js/*Widgets.js` module, read with acorn: its exported `*_WIDGETS` array, the instrument ids in it and the one `*Ready` promise it exports; a family a capability package owns is written as `fromPackage()` |
+
+The text is what the bundler needs - a literal `import()` per entry - and it
+is the text that was there: the generator's first run, against the hand-written
+registries at the commit before they were replaced, gave every entry the same
+(27 families, 6 builtins, 60 lessons and 60 Spanish shadows); the lesson loaders
+differ only in where `power-law-gravity` sits, which nothing reads. Adding a
+lesson is now its files and its place in the catalog, then `npm run registries`;
+adding an instrument family is its module. Moving a family or a lesson into a
+package is its manifest.
+
+Still written by hand, because nothing describes it: the order the families are
+listed in (`allWidgets()` returns the catalog in that order and the audits print
+it) and the three family names that are not their module's, both in
+`tools/capability-registries.mjs`. A family on neither list is appended in file
+order. A family the generator cannot read (an instrument array it cannot follow,
+a second readiness promise) is an error that names the module; give it a hand
+manifest (a package in `capabilities/` whose `widgetFamilies` entry lists its
+ids, as the power-law instruments' does), which the generator then trusts for
+that module, or teach the generator its shape. None needs either today.
 
 ## One requirement deferred, and why
 
