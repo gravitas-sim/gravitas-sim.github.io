@@ -2,7 +2,7 @@
 
 Fifty-nine scenarios ship with Gravitas. Twenty-two are generated from their settings alone, and the Scenario Studio can start from any of those and build the same world. Thirty-seven placed their bodies by code in `js/world/build.js`: the Studio could import their settings and nothing else, and the catalog could not say what the bodies were. This is the staged move of that geometry into data (Roadmap II Prompt 108): one slice per pull request, each judged by the world golden.
 
-Slices 1 to 6 are built. All thirty-seven are declared, and the Solar System, the last, closed the move. What is still code in `js/world/build.js` is a short residue of behavior and generic population code, listed with a recommendation for each under "What stays code" at the end.
+Slices 1 to 6 are built, and a cleanup (slice 7) followed. All thirty-seven are declared, and the Solar System, the last, closed the move. What is still code in `js/world/build.js` is a short residue of behavior and generic population code, listed with a recommendation for each under "What stays code" at the end.
 
 ## The rules of the move
 
@@ -139,25 +139,26 @@ Where a rule places the generator's own bodies it hands back a record with `from
 | `binary-star-system` | `rule` circular-binary-stars, `rule` orbital-population, `keep`, `recenter` | unchanged | identical | identical | names the built-in |
 | `rogue-encounter` | `rule` orbital-population, `body` `from` with `keepName`, `keep` | unchanged | identical | identical | names the built-in |
 | `kuiper-belt` | `body` `from`, `rule` published-system (kuiper-belt), `rule` orbital-population, `keep` | unchanged | identical | identical | names the built-in |
-| `tidal-disruption-event` | `body` `from` with `keepName`, `rule` tidal-infall, `keep` | unchanged | identical | identical | names the built-in |
+| `tidal-disruption-event` | `body` `from` with `keepName`, `rule` tidal-infall, `keep`; since slice 7 also `place` `hole-and-planet` | unchanged | identical | identical | names the built-in |
 | `black-hole-billiards` | `rule` staggered-orbits, `keep` | unchanged | identical | identical | names the built-in |
 | `gw150914` | `rule` inspiral-pair, `keep` | unchanged | identical | identical | names the built-in |
 
 No behavior differs from the code. The draws are the code's: each scenario draws the same number of numbers from the seeded generator, in the same order (a rule that makes bodies is a generator, so a body is made before the next body's draws), and the generator's next number after the build is part of every row of the fixture (`tail`); `tests/scenarioGeometrySlice4.test.js` pins the counts (182 for the two discs, 121 for the cluster, 88, 291 and 358 for the three belts, 5, 297 and 3 for the rest) and checks each world against its closed form. `tests/fixtures/scenarioGeometrySlice4Golden.json` holds the nine at seven seeds (every own field of every body, the settings, the camera and the generator's next draw, hashed per body list); `tests/fixtures/scenarioGeometrySlice4EdgeGolden.json` holds 227 share-link cases (`tests/scenarioSlice4Cases.js`: every population count at 0 and 3, the settings each formula reads, a count far above the scenario's own, and every layout the Settings panel offers, because a rebuild after Apply carries `placement` too). A base-versus-head fuzz over all thirty-one declared scenarios (every population count at 0 and 3 singly, every layout, 40 random combinations of counts, layout and settings each, and the cases above; 2,185 worlds, 1,955 distinct, 713 of them these nine) found no difference.
 
-What stayed code, and why: the tidal disruption's old placement code, about a dozen lines in `applyPlacement`, which moves a hole and a planet before the generic placement's momentum balance. At the scenario's own layout (`Empty`) it never runs, but a reader who changes the layout in Settings and applies reaches it, and with a neutron star, a white dwarf or a second black hole in the world the balance takes a different share from them without it (found by the fuzz: removing it moved two of 2,185 worlds). Deleting it would change a world, so it stays, as a documented residue. Everything else each block did is in its declaration.
+What stayed code, and why: slice 4 left the tidal disruption's old placement code (about a dozen lines in `applyPlacement`, which moved a hole and a planet before the generic placement's momentum balance) because deleting it moved two of 2,185 worlds; slice 7 converted it, unchanged in effect, into one `place` step (`hole-and-planet`, below). Everything else each block did is in its declaration.
 
 ## Slice 5
 
 Five scenarios the earlier slices could not take: Binary Black Hole, Slingshot, Triple Black Hole System, Neutron Star Collision and White Dwarf Binary. They did not place their bodies after the generic placement; they placed them inside `applyPlacement`, between the layout and the momentum balance, so a declaration run at the end of `buildWorld` would have balanced a different state and moved every body that was not placed absolutely. The slice's one construct answers that.
 
-**`place`.** A declaration may carry `place: [rule steps]` beside `steps`. The engine runs those rules at the point the code ran: inside `applyPlacement`, after the layout and before the balance (so at layout `Empty`, which returns before it, they do not run, as the code did not). A rule gives generated bodies a place and a velocity and draws nothing from the seeded generator; each is applied in place to the body the generator drew (`from`). A `place` step may name only a rule that places (`inspiral-pair`, `pin-pair`, `triangle-holes`); a geometry of `place` steps alone has no `steps`, and its end-of-build block does not run. A pack may not carry `place` (the schema has none; `validateGeometry(g, {rules: false})` refuses it).
+**`place`.** A declaration may carry `place: [rule steps]` beside `steps`. The engine runs those rules at the point the code ran: inside `applyPlacement`, after the layout and before the balance (so at layout `Empty`, which returns before it, they do not run, as the code did not). A rule gives generated bodies a place and a velocity and draws nothing from the seeded generator; each is applied in place to the body the generator drew (`from`). A `place` step may name only a rule that places (`inspiral-pair`, `pin-pair`, `triangle-holes`, `hole-and-planet`); a geometry of `place` steps alone has no `steps`, and its end-of-build block does not run. A pack may not carry `place` (the schema has none; `validateGeometry(g, {rules: false})` refuses it).
 
 | Rule | What it makes | Reads |
 |---|---|---|
 | `inspiral-pair` (slice 4) | Also used here as a `place` step: the first two black holes about their center of mass, 100 apart at 0.9 of the circular speed (Slingshot) or 120 apart at 0.95 (Binary Black Hole) | `gravitational_constant`, the holes' masses |
 | `pin-pair` | The first two neutron stars or white dwarfs at (-x, 0) and (x, 0), moving at `speed` in opposite directions along y, when there are two | none |
 | `triangle-holes` | The first three black holes on a circle of `radius`, a third of a turn apart, each at `speed` along the circle, when there are three | none |
+| `hole-and-planet` (slice 7) | The first black hole at rest at the origin and the first planet at (`planetX`, 0) moving at `planetSpeed` along y, when there is one of each (Tidal Disruption Event: 150 and 80; live only when Settings changes the layout from `Empty`) | none |
 | `name-pair` | Names for the first two neutron stars or white dwarfs, when there are two | none |
 | `orbital-population` (slice 4) | Takes `centralHoles` (the first n generated black holes set the speed) instead of `centralStars`; exactly one of them | `gravitational_constant` |
 
@@ -173,7 +174,7 @@ Binary Black Hole is placed twice, as the code placed it: its pair in `applyPlac
 
 No behavior differs from the code. `tests/scenarioGeometrySlice5.test.js` holds the five at seven seeds (`tests/fixtures/scenarioGeometrySlice5Golden.json`) and 174 share-link cases (`tests/fixtures/scenarioGeometrySlice5EdgeGolden.json`, from `tests/scenarioSlice5Cases.js`: every population count at 0 and 3, the settings the placement reads, every layout), both captured from the code before it was changed, and pins the draw counts (129, 458, 88, 43 and 89 numbers at the default settings) and the generator's next number. A base-versus-head fuzz over all 59 scenarios (every population kind at 0 and 3 including the micro-star cloud, every layout, three seeds, 160 random combinations of counts, layout, masses and settings for each of the nine scenarios that place by hand and 24 for each other; 4,171 worlds, 3,750 distinct) found no difference, and a deliberate one-digit change to Slingshot's perturbation moved 149 of them, so the fuzz can see these placements.
 
-What stayed code, and why: the tidal disruption's stub in `applyPlacement` (D-GEOM-07; deleting it moves two worlds) and the Solar System.
+What stayed code, and why: the tidal disruption's stub in `applyPlacement` (D-GEOM-07; deleting it moved two worlds), converted in slice 7 to a `place` step at the same point, and the Solar System (slice 6).
 
 ## Slice 6
 
@@ -195,14 +196,13 @@ No scenario's geometry needed code the constructs could not express, so there ar
 
 | What | Where | Why it is code | Recommendation |
 |---|---|---|---|
-| The tidal disruption's placement stub (a hole and a planet moved before the momentum balance; dead at the scenario's own layout, live when Settings changes it; D-GEOM-07) | `applyPlacement` | Deleting it moves two of 2,185 fuzzed worlds | Convert: it sits immediately before the `place` stage, so one `place` rule with the planet's distance and speed as parameters runs at exactly the same point; no world changes. Left out of this slice to keep it to one scenario. Delete only if Carl accepts the two-world change. |
 | Names for generated bodies in `sagittarius-a`, `galactic-center`, `pulsar-system` | `buildWorld`, before the declared block | They place nothing; they are already generated scenarios the Studio builds from settings | Leave. Declaring them would add a rename rule and a schema for three names lists and change no world and no catalog entry. |
 | The central star added before generation for `kuiper-belt`, `rogue-encounter` and `solar-system` (a named anchor, `isCentralBody`) | `buildWorld` | It is part of the generated population: it takes the first star's place and draws from the seeded generator, so removing it, even for the Solar System, which replaces it, changes the draws and the worlds | Leave. |
 | The micro-star cloud (`num_micro_stars`) and the slingshot test star (`test_star_slingshot`) | `buildWorld` | Settings a student turns on in any scenario, not a scenario's geometry | Leave. |
 | The Pinwheel flyby | `applyPresetLayout` in `js/scenarios.js` | Reads a setting the preset records, not a scenario id | Leave. |
 | Earth-Moon's `sim_size` and Kepler's 2nd Law's area-sweep overlay | `buildWorld` | A setting and a behavior, not geometry (slices 1 and 2) | Leave. |
 
-Two things the move did not do, because they are not geometry. The Scenario Studio still lists thirty-five scenarios (the thirty-one engine-only ones and the four resonance systems, whose rule a pack may not carry) under "Settings only (bodies placed by code)", which is no longer true of how they are built; a pack cannot carry their constructs (D-GEOM-05), so the group's label and its caution (`studio.caution.handBuilt`) want rewording in both languages ("the engine builds the bodies"), a student-facing text change for its own small PR. And the catalog has no field that describes a built-in's declared bodies: nothing in Prompt 108 specifies one beyond the Studio and the validators, so it is listed here and not built.
+The Scenario Studio's group of thirty-five scenarios (the thirty-one engine-only ones and the four resonance systems, whose rule a pack may not carry; D-GEOM-05) was labeled "Settings only (bodies placed by code)", which stopped being true of how they are built; slice 7 rewords the label and its caution (`studio.caution.handBuilt`) in both languages ("the engine builds the bodies"; the Spanish wording has not had a native review, D-PLAN-02). The catalog has no field that describes a built-in's declared bodies: nothing in Prompt 108 specifies one beyond the Studio and the validators, so it is listed here and not built.
 
 ## If the move continues
 

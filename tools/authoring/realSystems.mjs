@@ -74,27 +74,12 @@ export async function loadRealSystems() {
   const file = 'js/world/build.js';
   const text = await readFile(path.join(REPO, file), 'utf8');
   for (const [table, ignore] of Object.entries(REAL_SYSTEM_TABLES)) {
-    const marker = `const ${table} = [`;
-    for (
-      let at = text.indexOf(marker);
-      at >= 0;
-      at = text.indexOf(marker, at + 1)
-    ) {
-      const start = at + marker.length - 1;
-      const end =
-        text.indexOf('\n    ];', start) >= 0
-          ? matchingBracket(text, start)
-          : -1;
-      if (end < 0) continue;
-      // A literal from our own source, evaluated as one.
-      const rows = new Function(`return ${text.slice(start, end + 1)};`)();
-      for (const row of rows) {
-        out.push({
-          where: `${file} ${table} ${row.name}`,
-          object: row,
-          ignore,
-        });
-      }
+    for (const row of tableRows(text, table)) {
+      out.push({
+        where: `${file} ${table} ${row.name}`,
+        object: row,
+        ignore,
+      });
     }
   }
   // Real worlds that a scenario's declared geometry (SCENARIO_GEOMETRY in
@@ -165,6 +150,28 @@ export async function realSystemFindings() {
     }
   }
   return found;
+}
+
+/**
+ * The rows of every `const <table> = [...]` literal in `text`, at any indent:
+ * the closing bracket is found by matching, not by guessing how it is
+ * indented. (A literal is read as one only if its brackets close.)
+ */
+export function tableRows(text, table) {
+  const marker = `const ${table} = [`;
+  const rows = [];
+  for (
+    let at = text.indexOf(marker);
+    at >= 0;
+    at = text.indexOf(marker, at + 1)
+  ) {
+    const start = at + marker.length - 1;
+    const end = matchingBracket(text, start);
+    if (end < 0) continue;
+    // A literal from our own source, evaluated as one.
+    rows.push(...new Function(`return ${text.slice(start, end + 1)};`)());
+  }
+  return rows;
 }
 
 /** The index of the bracket that closes the one at `open`. */
