@@ -31,7 +31,7 @@ const golden = JSON.parse(
 describe('the engine without effects', () => {
   test('every event takes the draws, the next draw and the ripples of the registered engine', async () => {
     // Nineteen events, covering all four explosions and all thirteen bursts:
-    // the stream must not depend on the module being there (D-DECOMP-17).
+    // the stream must not depend on the module being there (D-DECOMP-18).
     // Keep this first: the test below leaves bodies behind that move the pinned
     // clock the ripples are stamped with.
     const bare = JSON.parse(

@@ -147,9 +147,9 @@ ceilings:
 <!--fact-block:moduleSizes-->
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
-| `js/physics.js` | 6,763 | 6,763 |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/validation/physicsChecks.js` | 6,621 | 6,621 |
+| `js/physics.js` | 6,594 | 6,594 |
 | `js/investigations.js` | 4,754 | 4,754 |
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
 | `js/ui.js` | 4,054 | 4,054 |
@@ -221,11 +221,11 @@ builders stay whole. `tests/effectsMissing.test.js` runs nineteen engine events
 with no module and compares draws, the next draw and the ripples with the
 registered engine.
 
-**The engine split is planned, not begun** (D-DECOMP-17). Target: `js/engine/`
-holding the state, events, conservation and energy, forces, integrator, bodies,
+**The engine split is planned, not begun** (D-DECOMP-18). Target: an engine
+folder inside `js` holding the state, events, conservation and energy, forces, integrator, bodies,
 collisions, mergers and the step, with `js/physics.js` kept as the one facade so
 no importer changes, and a Worker-safe rule (no `document`, `window` or
-`CustomEvent` under `js/engine/` except its host module). Order, risks and the
+`CustomEvent` in that folder except its host module). Order, risks and the
 test that proves each slice are in the register row; the first slice is the
 module that owns the engine's singletons (the 14 body lists, the settings, the
 clocks, the id counter), because nothing else can leave `physics.js` without a

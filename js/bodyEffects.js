@@ -5,7 +5,7 @@
 // drawing, and the looks of the bursts. Filed with the engine by registerEffects
 // on import; a realm that never imports this has an empty pool that spawns
 // nothing. Every random draw stays in the engine, so the stream is the same with
-// or without this module (D-DECOMP-16, D-DECOMP-17). Also here: the color tables
+// or without this module (D-DECOMP-16, D-DECOMP-18). Also here: the color tables
 // (white dwarf, disk tracer) and the double-tap recognizer js/gestures.js held.
 // =============================================================================
 
