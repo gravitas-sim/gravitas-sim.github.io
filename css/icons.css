@@ -18,7 +18,7 @@
    Every use is aria-hidden and sits beside words, or on a control with an
    aria-label: an icon is never the only name a control has. Size and color
    are tokens (--icon-size, --icon-color in css/tokens.css) that a context can
-   override. A .object-glyph (js/objectGlyphs.js) is the other kind of picture:
+   override. A .object-glyph (js/inspectorView.js) is the other kind of picture:
    the eight things a reader can add, in their own class hues.
    ========================================================================== */
 
