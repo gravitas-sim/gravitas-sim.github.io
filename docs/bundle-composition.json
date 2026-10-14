@@ -1,5 +1,5 @@
 {
- "total": 594593,
+ "total": 594386,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -7,7 +7,7 @@
   },
   {
    "module": "js/physics.js",
-   "bytes": 52856
+   "bytes": 56315
   },
   {
    "module": "js/ui.js",
@@ -19,7 +19,7 @@
   },
   {
    "module": "js/render.js",
-   "bytes": 29810
+   "bytes": 29807
   },
   {
    "module": "js/scenarios.js",
@@ -30,12 +30,12 @@
    "bytes": 19117
   },
   {
-   "module": "js/radialVelocity.js",
-   "bytes": 15811
-  },
-  {
    "module": "js/inspectorPanel.js",
    "bytes": 15789
+  },
+  {
+   "module": "js/radialVelocity.js",
+   "bytes": 15788
   },
   {
    "module": "js/settingsPanel.js",
@@ -51,7 +51,7 @@
   },
   {
    "module": "js/bodyDraw.js",
-   "bytes": 11289
+   "bytes": 11290
   },
   {
    "module": "js/rotationCurve.js",
@@ -67,11 +67,11 @@
   },
   {
    "module": "js/bodyDrawSky.js",
-   "bytes": 8094
+   "bytes": 8096
   },
   {
    "module": "js/sandboxTools.js",
-   "bytes": 7606
+   "bytes": 7605
   },
   {
    "module": "js/audio.js",
@@ -90,12 +90,8 @@
    "bytes": 6525
   },
   {
-   "module": "js/bodyEffects.js",
-   "bytes": 6308
-  },
-  {
-   "module": "js/data/objectNames.js",
-   "bytes": 6197
+   "module": "js/names.js",
+   "bytes": 6272
   },
   {
    "module": "js/astrometry.js",
@@ -143,7 +139,7 @@
   },
   {
    "module": "js/preview.js",
-   "bytes": 3683
+   "bytes": 3681
   },
   {
    "module": "js/experiments/canonicalState.js",
@@ -160,6 +156,10 @@
   {
    "module": "js/utils.js",
    "bytes": 2691
+  },
+  {
+   "module": "js/bodyEffects.js",
+   "bytes": 2628
   },
   {
    "module": "js/exoplanetObservables.js",
@@ -179,7 +179,7 @@
   },
   {
    "module": "js/canvasSummary.js",
-   "bytes": 2354
+   "bytes": 2353
   },
   {
    "module": "js/format.js",
@@ -235,7 +235,7 @@
   },
   {
    "module": "js/units.js",
-   "bytes": 1458
+   "bytes": 1424
   },
   {
    "module": "js/gravityAssist.js",

@@ -147,9 +147,9 @@ ceilings:
 <!--fact-block:moduleSizes-->
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
+| `js/physics.js` | 6,763 | 6,763 |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/validation/physicsChecks.js` | 6,621 | 6,621 |
-| `js/physics.js` | 6,436 | 6,436 |
 | `js/investigations.js` | 4,754 | 4,754 |
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
 | `js/ui.js` | 4,054 | 4,054 |
@@ -167,6 +167,14 @@ ceilings:
 | `render` | What a body looks like on the canvas: the drawers, what they share and the black hole renderer. The engine never imports them. | `bodyDraw.js`, `bodyDrawSky.js`, `blackHole/render.js` |
 | `feature` | Everything that draws or is driven. | `render.js`, `controls.js`, `investigations.js`, `experiments/` |
 | `coordinator` | Wires the rest together. Nothing may import these. | `ui.js`, `main.js` |
+
+**Names.** A storage key, a window event name or a format id is spelled once,
+in `js/names.js` (`KEY_*`, `EV_*`, `ID_*`), and a module imports it. The
+`gravitas*` literals still written inline are listed in
+`tools/key-registry-allowlist.json`; `tests/keyRegistry.test.js` fails on a new
+one and on a stale entry, so the list only shrinks (run
+`node tools/key-registry-scan.mjs --record` after moving one). A value never
+changes: saved games, share links and student storage hold the exact strings.
 
 Two rules do the real work.
 

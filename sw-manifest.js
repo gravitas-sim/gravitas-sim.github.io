@@ -11,8 +11,8 @@
 // revision the whole arrangement exists to prevent. The 178 optional
 // entries are pictures; a missing one is reported and does not cost the reader
 // the version.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-9dae42e631c7';
-self.__GRAVITAS_PRECACHE_BYTES = 17711354;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-d9a4ea59cfc6';
+self.__GRAVITAS_PRECACHE_BYTES = 17711307;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',
@@ -288,7 +288,6 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/data/lab3dAnswerKey.js',
   './js/data/missionLabKey.js',
   './js/data/ngc3198Synthetic.js',
-  './js/data/objectNames.js',
   './js/data/populationsAnswerKey.js',
   './js/data/realSystemSources.js',
   './js/data/scenarioInfo.js',
@@ -638,6 +637,7 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/myWork/model.js',
   './js/myWork/transfer.js',
   './js/myWorkPage.js',
+  './js/names.js',
   './js/notebook/artifactEntry.js',
   './js/notebook/capture.js',
   './js/notebook/derivedEntry.js',
@@ -1374,7 +1374,6 @@ self.__GRAVITAS_PRECACHE = [
   './js/data/lab3dAnswerKey.js',
   './js/data/missionLabKey.js',
   './js/data/ngc3198Synthetic.js',
-  './js/data/objectNames.js',
   './js/data/observations/comaClusterQuoted.js',
   './js/data/observations/desSn5yrHd.js',
   './js/data/observations/gaiaNgc2420.js',
@@ -1813,6 +1812,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/myWork/model.js',
   './js/myWork/transfer.js',
   './js/myWorkPage.js',
+  './js/names.js',
   './js/notebook/artifactEntry.js',
   './js/notebook/capture.js',
   './js/notebook/derivedEntry.js',

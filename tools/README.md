@@ -82,6 +82,7 @@ current, and the orchestrator checks it.
 | `instrument-families.mjs` | Which instrument families a script the page fetched contains |  |
 | `key-groups-check.mjs` | Key groups: does the rewritten catalog equal its source? |  |
 | `key-groups.mjs` | Key groups: write a shared key prefix once, in the bundle only |  |
+| `key-registry-scan.mjs` | Which 'gravitas*' string literals are still loose in js/ (Prompt 107, step 2c) |  |
 | `lab3d-bench.mjs` | The 3-D kernel's throughput, desktop measured and low-end modelled |  |
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
 | `lesson-scene-audit.mjs` | What every lesson step does with the main scene | `npm run audit:scene` |
@@ -110,6 +111,7 @@ current, and the orchestrator checks it.
 | `reversibility-probe.mjs` | Does the engine run backwards? | `npm run probe:reversibility` |
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
+| `seeded-step.mjs` | A preset world stepped under a seed, every body kept at full precision |  |
 | `shell.mjs` | The shared shell, stamped into every page |  |
 | `sky-horizons-astrometric.mjs` | Reference positions for the Sky Lab's ephemeris source (Prompt 106), from JPL Horizons |  |
 | `small-body-sweep.mjs` | Small-body scenario sweep |  |

@@ -77,6 +77,9 @@ const LAYERS = [
     blurb: 'Pure helpers and constants. No application state, no DOM.',
     match: [
       /^js\/constants\.js$/,
+      // The names the application stores and announces itself under: strings
+      // only, no imports, safe in a Worker.
+      /^js\/names\.js$/,
       /^js\/utils\.js$/,
       /^js\/format\.js$/,
       /^js\/units\.js$/,

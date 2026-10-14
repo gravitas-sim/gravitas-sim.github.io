@@ -62,6 +62,7 @@ import {
   layoutObservationPanels,
   noteObservationPanelUsed,
 } from './observationLayout.js';
+import { EV_SIMULATION_RESET } from './names.js';
 
 // How often a sample is taken, in milliseconds of wall clock. A real
 // spectrograph produces one measurement per exposure, not sixty per second, and
@@ -1602,9 +1603,7 @@ export function initRadialVelocity() {
 
   // A rebuilt world is a different star. Anything recorded from the old one is
   // not evidence about the new one.
-  window.addEventListener('gravitasSimulationReset', () =>
-    clearRadialVelocity()
-  );
+  window.addEventListener(EV_SIMULATION_RESET, () => clearRadialVelocity());
 
   if (e.container) e.container.style.display = 'none';
 }
