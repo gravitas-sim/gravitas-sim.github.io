@@ -58,6 +58,7 @@ import { LISTS, bodyRecord, digest, fnv } from './scenarioDigest.js';
 import { LAB_EDGE_IDS, LAB_SCENARIOS } from './scenarioLabCases.js';
 import { SLICE4_SCENARIOS } from './scenarioSlice4Cases.js';
 import { SLICE5_SCENARIOS } from './scenarioSlice5Cases.js';
+import { SLICE6_SCENARIOS } from './scenarioSlice6Cases.js';
 
 /** The data of one body, from a digest row. */
 const fields = row => JSON.parse(row.split('|').slice(3).join('|'));
@@ -99,10 +100,16 @@ describe('the declared scenarios build the world the code built', () => {
         ...SLICE4_SCENARIOS,
         // Slice 5's five, to theirs (tests/scenarioGeometrySlice5.test.js).
         ...SLICE5_SCENARIOS,
+        // Slice 6's one, to its (tests/scenarioGeometrySlice6.test.js).
+        ...SLICE6_SCENARIOS,
       ].sort()
     );
     expect(Object.keys(GOLDEN).length).toBe(
-      (keys.length - SLICE4_SCENARIOS.length - SLICE5_SCENARIOS.length) * 7
+      (keys.length -
+        SLICE4_SCENARIOS.length -
+        SLICE5_SCENARIOS.length -
+        SLICE6_SCENARIOS.length) *
+        7
     );
     for (const key of keys) expect(SCENARIO_IDS).toContain(key);
   });
