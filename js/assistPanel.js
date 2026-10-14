@@ -1124,7 +1124,7 @@ let unsubscribeLocale = null;
 
 /**
  * @param {{signal?: AbortSignal}} [options] - Aborted when the panel's markup
- *   is unmounted (js/scenarioPanelBridge.js); removes the one listener this
+ *   is unmounted (js/placement.js); removes the one listener this
  *   adds outside it
  */
 export function initAssist({ signal } = {}) {
@@ -1242,7 +1242,7 @@ export function teardownAssist() {
 /**
  * Show the panel for a scenario that has already finished loading.
  *
- * The chunk is fetched by js/scenarioPanelBridge.js in response to the reset
+ * The chunk is fetched by js/placement.js in response to the reset
  * event, so by the time init() subscribes to that event it has been and gone.
  * This is the one-off catch-up for the load that caused the import; every
  * later rebuild is handled by the subscription. It shows the panel directly

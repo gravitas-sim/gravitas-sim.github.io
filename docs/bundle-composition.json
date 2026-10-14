@@ -1,5 +1,5 @@
 {
- "total": 594323,
+ "total": 594563,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -10,12 +10,12 @@
    "bytes": 57571
   },
   {
-   "module": "js/ui.js",
-   "bytes": 43758
-  },
-  {
    "module": "js/world/build.js",
    "bytes": 37102
+  },
+  {
+   "module": "js/ui.js",
+   "bytes": 30590
   },
   {
    "module": "js/render.js",
@@ -27,7 +27,7 @@
   },
   {
    "module": "js/inspectorView.js",
-   "bytes": 19117
+   "bytes": 19116
   },
   {
    "module": "js/inspectorPanel.js",
@@ -42,8 +42,12 @@
    "bytes": 15063
   },
   {
+   "module": "js/placement.js",
+   "bytes": 14272
+  },
+  {
    "module": "js/inspectorWindow.js",
-   "bytes": 13411
+   "bytes": 13410
   },
   {
    "module": "js/inspectorInfo.js",
@@ -99,7 +103,7 @@
   },
   {
    "module": "js/main.js",
-   "bytes": 5525
+   "bytes": 5521
   },
   {
    "module": "js/share.js",
@@ -292,10 +296,6 @@
   {
    "module": "js/gestures.js",
    "bytes": 882
-  },
-  {
-   "module": "js/scenarioPanelBridge.js",
-   "bytes": 858
   },
   {
    "module": "js/observerGeometry.js",

@@ -42,13 +42,14 @@ const read = f => readFileSync(path.join(root, f), 'utf8');
 
 describe('the precise-placement schema', () => {
   test('it covers exactly the eight types placeBody() builds', () => {
-    // The list in js/ui.js is the authority. A ninth type added there and not
-    // here would be placeable by pointer and not by keyboard, which is the
+    // The list in js/placement.js is the authority. A ninth type added there
+    // and not here would be placeable by pointer and not by keyboard, which is the
     // asymmetry this whole slice exists to remove.
-    const ui = read('js/ui.js');
+    const ui = read('js/placement.js');
     const built = [...ui.matchAll(/type === '(\w+)'\) \{?\s*obj = new/g)].map(
       m => m[1]
     );
+    expect(built.length).toBeGreaterThan(0);
     for (const type of built) expect(PLACEABLE_TYPES).toContain(type);
     expect(PLACEABLE_TYPES).toHaveLength(8);
   });
@@ -159,7 +160,7 @@ describe('the precise-placement schema', () => {
 });
 
 describe('the precise form and the pointer path are one path', () => {
-  const ui = read('js/ui.js');
+  const ui = read('js/placement.js');
   const dialog = read('js/precisePlacement.js');
 
   test('the dialog calls placeBody and constructs nothing itself', () => {
@@ -398,7 +399,7 @@ describe('the plot tables come from the plots', () => {
     // The deferred bundle has very little room. A reader who only downloads
     // files should not pay for the table renderer.
     expect(exportDialog).toMatch(/await import\('\.\/seriesTable\.js'\)/);
-    expect(read('js/ui.js')).toMatch(
+    expect(read('js/placement.js')).toMatch(
       /await import\('\.\/precisePlacement\.js'\)/
     );
   });
