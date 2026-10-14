@@ -251,7 +251,18 @@ describe('bounds', () => {
       speed: 8,
       mode: 'pitch',
     });
-    for (const v of r.samples) expect(Number.isFinite(v)).toBe(true);
+    // One expect() per sample was two million calls and nearly a minute. The
+    // scan still looks at every sample; it reports the first one that is not
+    // finite, which is more than a bare true/false said.
+    let firstBad = -1;
+    for (let i = 0; i < r.samples.length; i++) {
+      if (!Number.isFinite(r.samples[i])) {
+        firstBad = i;
+        break;
+      }
+    }
+    expect(r.samples.length).toBeGreaterThan(0);
+    expect(firstBad).toBe(-1);
   });
 });
 

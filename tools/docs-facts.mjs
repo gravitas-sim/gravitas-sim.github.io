@@ -648,11 +648,20 @@ function testFacts(report, physics) {
   // transform cache of its own, because under Jest this runs beside
   // tests/shardInventory.test.js's listings and a shared one lets either of
   // them delete a source map the other is about to read.
-  const list = inOwnTransformCache(cacheEnv =>
-    run('npx', ['playwright', 'test', '--list', '--reporter=list'], {
-      env: { ...process.env, GRAVITAS_E2E_PORT: '4399', ...cacheEnv },
-    })
-  );
+  //
+  // The listing is taken from the cache first, like the two reports above, when
+  // a caller that already has one passes it as playwright-list.txt. Listing
+  // compiles every spec from cold and costs a second and a half on a quiet
+  // machine and ten to twenty on a loaded one, and a caller that gathers this
+  // group several times (tests/docsFactsScope.test.js, eight runs) paid for it
+  // each time. The count is read from the same text either way.
+  const list =
+    cached('playwright-list.txt', report) ||
+    inOwnTransformCache(cacheEnv =>
+      run('npx', ['playwright', 'test', '--list', '--reporter=list'], {
+        env: { ...process.env, GRAVITAS_E2E_PORT: '4399', ...cacheEnv },
+      })
+    );
   const listed =
     list && list.match(/Total:\s+(\d+)\s+tests?\s+in\s+(\d+)\s+file/);
   if (listed) {
