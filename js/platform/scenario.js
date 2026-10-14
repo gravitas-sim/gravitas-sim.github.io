@@ -2,9 +2,9 @@
 // gravitas.scenario-pack/1: a scenario, as data
 // -----------------------------------------------------------------------------
 // A built-in scenario is a row of the preset table (js/scenarios.js), often
-// with geometry too: declared as data (SCENARIO_GEOMETRY.md) or, for the
-// scenarios not yet moved, hand-built in js/world/build.js as code, which only
-// a reviewed commit may add. A scenario pack is the part of a scenario that is
+// with geometry too, declared as data (SCENARIO_GEOMETRY.md): in the table
+// where a pack can carry it, in js/world/build.js where only the engine can
+// build it, which only a reviewed commit may add. A scenario pack is the part of a scenario that is
 // content - the settings it runs under, the bodies it starts with, the seed
 // that makes it the same world every time, the instruments it opens with, and
 // a title and summary in every language it declares - and nothing else. It

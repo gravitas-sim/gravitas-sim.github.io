@@ -67,7 +67,7 @@ const [T, C, P, N] = ['text', 'color', 'positive', 'count'];
 // prettier-ignore
 export const GEOMETRY_RULES = Object.freeze({
   'published-system': spec({ detuned: 'bool',
-    system: Object.freeze(['galilean', 'pluto-neptune', 'jupiter-trojans', 'trappist-1', 'hd209458', 'kuiper-belt']) }),
+    system: Object.freeze(['galilean', 'pluto-neptune', 'jupiter-trojans', 'trappist-1', 'hd209458', 'kuiper-belt', 'solar-system']) }),
   'restricted-three-body': spec({ primaryName: T, primaryColor: C, primaryRadiusInSuns: P,
     secondaryName: T, secondaryColor: C, secondaryRadiusInSuns: P, drawnSolarRadii: P,
     tracerName: T, tracerColor: C, tracerRadius: P }),
@@ -164,9 +164,9 @@ export function validateGeometry(g, { rules = true } = {}) {
     bad('place', 'a scenario pack may not place bodies by rule');
   else if (
     g.place !== undefined &&
-    !(Array.isArray(g.place) && g.place.length <= 4)
+    !(Array.isArray(g.place) && g.place.length >= 1 && g.place.length <= 4)
   )
-    bad('place', 'a list of up to 4 rule steps');
+    bad('place', 'a list of 1 to 4 rule steps');
   const steps = g.steps ?? (g.place === undefined ? undefined : []);
   if (!Array.isArray(steps) || (steps.length === 0 && g.steps)) {
     bad('steps', 'a list of at least one step');
