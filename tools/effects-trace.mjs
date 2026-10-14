@@ -22,11 +22,12 @@
 import { writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-export async function traceEffects() {
+export async function traceEffects({ effects = true } = {}) {
   const physics = await import('../js/physics.js');
-  await import('../js/bodyEffects.js').catch(e => {
-    if (!/Cannot find|not found|ENOENT/i.test(String(e?.message))) throw e;
-  });
+  if (effects)
+    await import('../js/bodyEffects.js').catch(e => {
+      if (!/Cannot find|not found|ENOENT/i.test(String(e?.message))) throw e;
+    });
   const {
     NeutronStar,
     WhiteDwarf,
@@ -36,6 +37,7 @@ export async function traceEffects() {
     GasGiant,
     Asteroid,
     Comet,
+    AccretionDiskParticle,
     SOLAR_MASS_UNIT,
   } = physics;
 
@@ -174,6 +176,29 @@ export async function traceEffects() {
         new BlackHole(at(0), suns(20), still(), false),
         new BlackHole(at(0.5), suns(20), still(), false)
       );
+    },
+    'black hole absorbs a planet with no usable color': () => {
+      const planet = new Planet(at(0.3), still(), 1);
+      planet.baseColor = 'not a color';
+      physics.bh_list.push(new BlackHole(at(0), suns(1000), still(), false));
+      physics.planets.push(planet);
+    },
+    'gas giant sweeps up a planet (plume)': () => {
+      physics.gas_giants.push(new GasGiant(at(0), still(), 1));
+      physics.planets.push(new Planet(at(3, 1), still(), 1));
+    },
+    'two gas giants merge into a star': () => {
+      physics.gas_giants.push(
+        new GasGiant(at(0), still(), 50),
+        new GasGiant(at(0.5), still(), 50)
+      );
+    },
+    'disk tracer falls into a black hole': () => {
+      const bh = new BlackHole(at(0), suns(1000), still(), false);
+      physics.bh_list.push(bh);
+      const tracer = new AccretionDiskParticle(at(bh.radius + 1), still(), bh);
+      bh.disk_particles.push(tracer);
+      physics.accretion_disk_particles.push(tracer);
     },
   };
 

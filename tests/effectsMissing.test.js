@@ -11,6 +11,7 @@
 
 import { describe, test, expect, jest } from '@jest/globals';
 import { readFileSync } from 'node:fs';
+import { traceEffects } from '../tools/effects-trace.mjs';
 import {
   NeutronStar,
   neutron_stars,
@@ -28,6 +29,34 @@ const golden = JSON.parse(
 );
 
 describe('the engine without effects', () => {
+  test('every event takes the draws, the next draw and the ripples of the registered engine', async () => {
+    // Nineteen events, covering all four explosions and all thirteen bursts:
+    // the stream must not depend on the module being there (D-DECOMP-18).
+    // Keep this first: the test below leaves bodies behind that move the pinned
+    // clock the ripples are stamped with.
+    const bare = JSON.parse(
+      JSON.stringify(await traceEffects({ effects: false }))
+    );
+    for (const name of Object.keys(golden)) {
+      const want = golden[name];
+      expect({
+        name,
+        draws: bare[name].rows.map(r => r.draws),
+        ripples: bare[name].rows.map(r => r.ripples),
+        kinds: bare[name].kinds,
+        next: bare[name].next,
+        spawned: bare[name].rows.map(r => r.particles),
+      }).toEqual({
+        name,
+        draws: want.rows.map(r => r.draws),
+        ripples: want.rows.map(r => r.ripples),
+        kinds: want.kinds,
+        next: want.next,
+        spawned: want.rows.map(() => 0),
+      });
+    }
+  });
+
   test('a neutron star merger merges, spawns nothing, and takes every draw', () => {
     neutron_stars.push(
       new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.3, false),

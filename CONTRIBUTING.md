@@ -147,9 +147,9 @@ ceilings:
 <!--fact-block:moduleSizes-->
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
-| `js/physics.js` | 6,763 | 6,763 |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/validation/physicsChecks.js` | 6,621 | 6,621 |
+| `js/physics.js` | 6,594 | 6,594 |
 | `js/investigations.js` | 4,754 | 4,754 |
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
 | `js/i18n/en.deferred.js` | 3,845 | 3,845 |
@@ -209,6 +209,32 @@ throw there in strict mode, while a saved `kind` must never change what a body
 is. The class decides; the data cannot. For an object that is not a body (a
 test double, a plain record), the readers (`className`, `kindOf`) answer
 `'Object'` unless it states a string `kind` or an `obj_type`.
+
+**Every random draw stays in the engine.** Seeded stepping exists, and a
+collision draws from the same stream as the effects before it, so a realm that
+never imports `js/bodyEffects.js` (a Worker, a Node script) must take the same
+draws in the same order. The thirteen particle bursts are one table
+(`BURSTS` in `js/physics.js`: count, speed and lifetime, which are draws) and one
+helper (`burst`); what a burst looks like (size, color) and the disk tracer's
+color are the effects module's, filed by `registerEffects`. The four explosion
+builders stay whole. `tests/effectsMissing.test.js` runs nineteen engine events
+with no module and compares draws, the next draw and the ripples with the
+registered engine.
+
+**The engine split is planned, not begun** (D-DECOMP-18). Target: an engine
+folder inside `js` holding the state, events, conservation and energy, forces, integrator, bodies,
+collisions, mergers and the step, with `js/physics.js` kept as the one facade so
+no importer changes, and a Worker-safe rule (no `document`, `window` or
+`CustomEvent` in that folder except its host module). Order, risks and the
+test that proves each slice are in the register row; the first slice is the
+module that owns the engine's singletons (the 14 body lists, the settings, the
+clocks, the id counter), because nothing else can leave `physics.js` without a
+cycle until it exists. Two things must be decided before the second slice: how
+the sources routes count the new files (each is a request on every route that
+loads the engine, and the request ceilings may not rise), and what replaces two
+live dependencies the engine has today on the page (the canvas size that culls
+off-screen bodies, and the wall clock that a new black hole's grace period
+reads).
 
 **A module carved out of `ui.js` is handed nothing it can ask for.** The slices
 of Prompt 107 follow one rule: an extracted module never imports `ui.js`, and

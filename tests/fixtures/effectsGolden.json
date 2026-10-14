@@ -568,5 +568,157 @@
    "ripples": 1
   },
   "next": 0.7443064509425312
+ },
+ "black hole absorbs a planet with no usable color": {
+  "rows": [
+   {
+    "draws": 30,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 30,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 30,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 30,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 1,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.7595051995012909
+ },
+ "gas giant sweeps up a planet (plume)": {
+  "rows": [
+   {
+    "draws": 24,
+    "particles": 8,
+    "hash": "a5d0058ea6c2348e:1747",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 24,
+    "particles": 8,
+    "hash": "8bfd4d835932b66b:1749",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 24,
+    "particles": 8,
+    "hash": "d321043796222d23:1751",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 24,
+    "particles": 8,
+    "hash": "6f6605e498629a40:1745",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 1,
+   "ripples": 0
+  },
+  "next": 0.2858405006118119
+ },
+ "two gas giants merge into a star": {
+  "rows": [
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "424d09564e375784:5538",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "b14bbe399863656d:5527",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "82893674799835f0:5518",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "ab0c08c0395202b2:5511",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 0,
+   "wd": 0,
+   "stars": 1,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.4525250690057874
+ },
+ "disk tracer falls into a black hole": {
+  "rows": [
+   {
+    "draws": 18,
+    "particles": 6,
+    "hash": "a4da645bbef25057:1170",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 18,
+    "particles": 6,
+    "hash": "440b492c659f5fc:1293",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 18,
+    "particles": 6,
+    "hash": "466303f5131a52f9:1293",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 18,
+    "particles": 6,
+    "hash": "a5ad76aa8623d816:1293",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 1,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.8810090185143054
  }
 }
