@@ -3,7 +3,6 @@
 // tools/key-registry-allowlist.json lists those not yet moved. A leaf module.
 
 export const KEY_UNITS = 'gravitas_units';
-
 export const EV_SIMULATION_RESET = 'gravitasSimulationReset';
 export const EV_UNITS_CHANGED = 'gravitasUnitsChanged';
 export const EV_THEME_CHANGED = 'gravitasThemeChanged';
