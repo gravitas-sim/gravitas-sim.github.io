@@ -71,6 +71,7 @@
     "js/observingWidgets.js": 10,
     "js/pauseAtEventPanel.js": 3,
     "js/pdf.js": 22,
+    "js/placement.js": 1,
     "js/platform/relations.js": 1,
     "js/plot/plot.js": 2,
     "js/powerLawLab.js": 11,
@@ -95,7 +96,7 @@
     "js/tidalPhysics.js": 6,
     "js/tidalWidgets.js": 17,
     "js/transitWidgets.js": 24,
-    "js/ui.js": 7,
+    "js/ui.js": 6,
     "js/utils.js": 5,
     "js/validationPage.js": 11,
     "js/vectorOverlay.js": 7

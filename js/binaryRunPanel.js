@@ -943,7 +943,7 @@ export function initBinaryRun() {
 /**
  * Show the panel for a scenario that has already finished loading.
  *
- * The chunk is fetched by js/scenarioPanelBridge.js in response to the reset
+ * The chunk is fetched by js/placement.js in response to the reset
  * event, so by the time init() subscribes to that event it has been and gone.
  * This is the one-off catch-up for the load that caused the import; every
  * later rebuild is handled by the subscription. It shows the panel directly

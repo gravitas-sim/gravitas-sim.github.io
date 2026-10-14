@@ -16,7 +16,7 @@ import { initRadialVelocity } from './radialVelocity.js';
 import { initRotationCurve } from './rotationCurve.js';
 import { initAstrometry } from './astrometry.js';
 import { watchForPauseAtEvent } from './pauseAtEventBridge.js';
-import { initScenarioPanels } from './scenarioPanelBridge.js';
+import { initScenarioPanels } from './placement.js';
 import { initObservationLayout } from './observationLayout.js';
 import { initControls, setPlaying } from './controls.js';
 import { initTutorial } from './tutorial.js';

@@ -103,9 +103,7 @@ const FAMILIES = [
     ids: ['assistContainer'],
     scenario: 'Gravity Assist Lab',
     unmount: async () =>
-      (await import('/js/scenarioPanelBridge.js')).unmountScenarioPanel(
-        'assist'
-      ),
+      (await import('/js/placement.js')).unmountScenarioPanel('assist'),
   },
   {
     name: 'precise placement',

@@ -152,9 +152,9 @@ ceilings:
 | `js/physics.js` | 6,594 | 6,594 |
 | `js/investigations.js` | 4,754 | 4,754 |
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
-| `js/ui.js` | 4,054 | 4,054 |
 | `js/i18n/en.deferred.js` | 3,845 | 3,845 |
 | `js/render.js` | 3,028 | 3,028 |
+| `js/ui.js` | 2,832 | 2,832 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |
@@ -244,10 +244,14 @@ context object: it owns the inspector's suppression flag, `ui.js` registers its
 `hideObjectInspector` and `setInspectorSuppressed` on the bus, and the
 header buttons are wired by one call (`wireInspectorControls()`) made where
 `ui.js`'s own start-up code ran them. A module that does need several local
-values of `ui.js` (the placement system is the example) takes **one** small
-context object, built once in `ui.js` and passed to an `init...(ctx)` function;
-the module's header lists every member, and adding one is a design decision, not
-an edit. Such a module touches no element when it is imported, because `ui.js`
+values of `ui.js` takes **one** small context object, built once in `ui.js` and
+passed to an `init...(ctx)` function; the module's header lists every member, and
+adding one is a design decision, not an edit. `js/placement.js` (placement by
+pointer and keyboard, the object picker) is the example: `initPlacement({canvas,
+adjustSimSpeed, updateSpeedDisplay, takeScreenshot})` registers the pointer, wheel
+and key listeners where `ui.js` ran them, and `initObjectPicker()` wires the
+picker, so listener order is unchanged; `ui.js` re-exports the public names so no
+caller moved. Such a module touches no element when it is imported, because `ui.js`
 mounts the panels' markup after every import has run.
 
 ### When you need something from a layer above
