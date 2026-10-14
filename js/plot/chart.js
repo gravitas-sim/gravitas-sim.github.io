@@ -4,9 +4,9 @@
 // Connected series, points and filled areas over plain arrays: the shape the
 // application's five charts have (a time series that grows while the
 // simulation runs; two runs drawn against each other; a trace with error bars
-// and a survey's measurements). It imports nothing, so a route that draws one
-// pays for this file and not for the observation table's readers, the units
-// registry or ./plot.js.
+// and a survey's measurements). It imports one name (the theme event, from the
+// leaf registry js/names.js), so a route that draws one pays for this file and
+// not for the observation table's readers, the units registry or ./plot.js.
 //
 // - **Raw arrays.** A series is two arrays and a few words: the axis titles
 //   are the caller's strings, the numbers are written by the caller's
@@ -32,6 +32,8 @@
 //
 // ./export.js is the PNG, fetched when it is asked for.
 // =============================================================================
+
+import { EV_THEME_CHANGED } from '../names.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const TICK = 10;
@@ -935,8 +937,7 @@ export function createChart(host, opts = {}) {
     ro.observe(host);
   }
   const themed = () => render();
-  if (opts.theme !== false)
-    window.addEventListener('gravitasThemeChanged', themed);
+  if (opts.theme !== false) window.addEventListener(EV_THEME_CHANGED, themed);
 
   return {
     draw,
@@ -975,7 +976,7 @@ export function createChart(host, opts = {}) {
     destroy() {
       dead = true;
       ro?.disconnect();
-      window.removeEventListener('gravitasThemeChanged', themed);
+      window.removeEventListener(EV_THEME_CHANGED, themed);
       host.replaceChildren();
     },
   };

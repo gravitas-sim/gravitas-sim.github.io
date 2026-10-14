@@ -6,6 +6,7 @@ export const KEY_UNITS = 'gravitas_units';
 
 export const EV_SIMULATION_RESET = 'gravitasSimulationReset';
 export const EV_UNITS_CHANGED = 'gravitasUnitsChanged';
+export const EV_THEME_CHANGED = 'gravitasThemeChanged';
 
 // Object name pools, formerly js/data/objectNames.js: pure data.
 

@@ -125,13 +125,16 @@ describe('raw arrays, no registered units', () => {
     expect(texts).toContain('Distance from primary');
   });
 
-  test('imports nothing: the file holds no static import', () => {
+  test('imports only the name registry: no table readers, no units, no plot core', () => {
     const src = readFileSync('js/plot/chart.js', 'utf8');
-    expect(src).not.toMatch(/^import\s/m);
+    expect(src.match(/^import\s.*$/gm)).toEqual([
+      "import { EV_THEME_CHANGED } from '../names.js';",
+    ]);
     // The one thing it fetches, and only when asked: the PNG.
     expect(src.match(/import\(['"][^'"]+['"]\)/g)).toEqual([
       "import('./export.js')",
     ]);
+    expect(readFileSync('js/plot/export.js', 'utf8')).not.toMatch(/^import\s/m);
   });
 
   test('draws nothing without data, and says it is a plot of nothing yet', () => {

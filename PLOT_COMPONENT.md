@@ -773,7 +773,7 @@ with the component's own description of the same chart and compares it to the
 same fixture. A fact that changes on purpose changes in the fixture in that
 pull request, under "Documented equivalents" below.
 
-**What was built.** Two modules, both free of imports. *js/plot/chart.js*
+**What was built.** Two modules, free of imports but one (`chart.js` takes the theme event's name from the leaf registry `js/names.js`, which the application already loads). *js/plot/chart.js*
 (14.0 KB minified, 6.2 KB gzipped) is the chart; *js/plot/export.js* (2.3 KB,
 1.3 KB gzipped) is the PNG, fetched when one is asked for.
 
@@ -786,7 +786,7 @@ pull request, under "Documented equivalents" below.
 | 5 | PNG export of the SVG, legend included | `chart.toPNG()`, `export.js` | "the image"; the e2e spec decodes a real PNG |
 | 6 | Error bars, plus and minus sigma, with caps (3 px each side by default) | `series[].sigma`, `capPx` | "error bars" |
 | 7 | Theme repaint | colors as functions, `repaint()`, `gravitasThemeChanged` | "theme"; the e2e spec |
-| 8 | Raw arrays and plain strings; no unit id, no import | the whole module | "raw arrays, no registered units" |
+| 8 | Raw arrays and plain strings; no unit id, no table readers | the whole module | "raw arrays, no registered units" |
 
 Using it:
 
