@@ -174,7 +174,7 @@ export function tableRows(text, table) {
   return rows;
 }
 
-/** The index of the bracket that closes the one at `open`. */
+/** The index of the bracket that closes the one at `open`; strings and comments are skipped. */
 function matchingBracket(text, open) {
   let depth = 0;
   let quote = null;
@@ -183,6 +183,15 @@ function matchingBracket(text, open) {
     if (quote) {
       if (ch === '\\') i++;
       else if (ch === quote) quote = null;
+    } else if (ch === '/' && text[i + 1] === '/') {
+      // A line comment: its apostrophes and brackets are prose.
+      const eol = text.indexOf('\n', i);
+      if (eol < 0) return -1;
+      i = eol;
+    } else if (ch === '/' && text[i + 1] === '*') {
+      const close = text.indexOf('*/', i + 2);
+      if (close < 0) return -1;
+      i = close + 1;
     } else if (ch === "'" || ch === '"' || ch === '`') quote = ch;
     else if (ch === '[' || ch === '{') depth++;
     else if (ch === ']' || ch === '}') {

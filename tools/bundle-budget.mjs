@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 2034.4,
+    limit: 2034.3,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -653,8 +653,7 @@ const BUDGETS = [
       '\n\nPrompt 108, slice 4 (nine scenarios declared as data: the galaxy discs, the cluster, the belts, a tidal disruption and two black hole scenarios), measured on v2 at d065a21, took it from 2033.2 to 2033.4 KB gzipped (5540.7 KB raw, measured 2033.379 on Node 24 after a fresh node build.js; v2 itself measures 2032.971; CI on Node 20 reads lower), 0.2 KB (D-BUDGET-GEOM-04, the standing size-budget approval). Seven named rules and their parameters are in js/world/build.js and js/scenarioGeometry.js; about 470 lines of hand-built blocks left js/world/build.js. No request ceiling moved.' +
       '\n\nPrompt 112 (the schedule comparison searches in the inference Worker, js/rvCompareSearch.js), measured on v2 at e8ea9a2, took it from 2033.4 to 2034.0 KB gzipped (5541.3 KB raw, measured 2033.919 on Node 24), one new lazy module and the call into it. The initial download is 792.7 KB of 830.0. D-BUDGET-PERF-01, under the standing size-budget approval in the project CLAUDE.md.' +
       '\n\nPrompt 108, slice 5 (five placement-entangled scenarios declared as data: a place stage, three rules, the validator for both), measured on v2 at 73c8290, took it from 2034.0 to 2034.2 KB gzipped (5542.1 KB raw, measured 2034.127 on Node 24 after a fresh node build.js on the branch merged with v2 at 73c8290; v2 itself measures 2033.865 the same way; CI on Node 20 reads lower), 0.2 KB (D-BUDGET-GEOM-05, the standing size-budget approval). About 90 lines of hand-built blocks left js/world/build.js, which the application loads at start-up (initial download 792.6 KB); the validator and the rule schemas are in js/scenarioGeometry.js, which the Studio loads. No request ceiling moved.' +
-      '\n\nPrompt 107 step 2b slice 2 (the planet, gas giant, asteroid, debris, comet and black hole drawers moved out of js/physics.js into js/bodyDraw.js; the spatial hash folded into js/physics.js), measured on v2 at 5cb03b4, took it from 2034.2 to 2034.3 KB gzipped (5542.4 KB raw, measured 2034.263 on Node 24 after a fresh node build.js on the branch merged with v2; v2 itself measures 2034.110; CI on Node 20 reads lower), 0.1 KB (D-DECOMP-11, the standing size-budget approval in the project CLAUDE.md). The initial download is 792.7 KB of 830.0; no request ceiling moved.' +
-      "\n\nPrompt 108, slice 7 (the tidal disruption's stub as a place rule, the Studio group's reworded label and caution in both languages), measured on v2 at 4585a83, took it from 2034.3 to 2034.4 KB gzipped (5542.5 KB raw, measured 2034.366 on Node 24 after a fresh node build.js on the branch merged with v2; v2 itself measures 2034.266; CI on Node 20 reads lower), 0.1 KB (D-BUDGET-GEOM-07, the standing size-budget approval in the project CLAUDE.md). The initial download is 792.8 KB of 830.0; no request ceiling moved.",
+      '\n\nPrompt 107 step 2b slice 2 (the planet, gas giant, asteroid, debris, comet and black hole drawers moved out of js/physics.js into js/bodyDraw.js; the spatial hash folded into js/physics.js), measured on v2 at 5cb03b4, took it from 2034.2 to 2034.3 KB gzipped (5542.4 KB raw, measured 2034.263 on Node 24 after a fresh node build.js on the branch merged with v2; v2 itself measures 2034.110; CI on Node 20 reads lower), 0.1 KB (D-DECOMP-11, the standing size-budget approval in the project CLAUDE.md). The initial download is 792.7 KB of 830.0; no request ceiling moved.',
   },
 ];
 

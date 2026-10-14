@@ -42,6 +42,19 @@ describe('tableRows', () => {
     expect(tableRows('const u = [];', 't')).toEqual([]);
   });
 
+  test('skips comments: an apostrophe, a block comment and a bracket in a line comment', () => {
+    const rows = c =>
+      tableRows(
+        `const t = [\n  { name: 'A' }, ${c}\n  { name: 'B' },\n];\n`,
+        't'
+      );
+    expect(rows("// Earth's orbit").map(r => r.name)).toEqual(['A', 'B']);
+    expect(rows("/* it's */").map(r => r.name)).toEqual(['A', 'B']);
+    expect(rows('// see ]').map(r => r.name)).toEqual(['A', 'B']);
+    expect(rows('/* see ] and [ */').map(r => r.name)).toEqual(['A', 'B']);
+    expect(tableRows('const t = [ // never closes', 't')).toEqual([]);
+  });
+
   test('reads brackets inside strings as text', () => {
     const t = "const t = [{ name: 'a ] b' }];\n";
     expect(tableRows(t, 't')[0].name).toBe('a ] b');
