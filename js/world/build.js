@@ -287,6 +287,11 @@ export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
   // spiral in.
   // prettier-ignore
   'gw150914': { keep: ['Star', 'Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [{ rule: { name: 'inspiral-pair', params: { separation: 90, perturbation: 0.92 } } }] },
+  // The Sun and its published tables (js/world/build.js: solarSystemData,
+  // realAsteroids, famousComets). Only the compact objects the generator drew
+  // stay; the stars, planets, giants, asteroids and comets are replaced.
+  // prettier-ignore
+  'solar-system': { keep: ['BlackHole', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [{ rule: { name: 'published-system', params: { system: 'solar-system' } } }] },
   //
   // Slice 5: five scenarios that placed bodies inside applyPlacement. `place`
   // steps run there, between the layout and the momentum balance; `steps` run
@@ -1021,6 +1026,265 @@ const kuiperBeltObjects = [
   { name: 'Sedna', mass: 0.00017, semiMajorAxisAu: 506.8 },
 ];
 
+// The Solar System's published tables: eight planets and giants (mass in Earth
+// masses, distance in simulation units at 100 per AU, phase in degrees), sixteen
+// named asteroids and twelve named comets. The model page lists each row with
+// its sources, so the names stay as they are. `published-system` (solar-system)
+// builds them.
+const solarSystemData = [
+  {
+    name: 'Mercury',
+    mass: 0.055, // 0.055 Earth masses
+    distance: 38.7, // 0.387 AU at 100 units per AU
+    phase_deg: 0,
+    diameter: 4879, // km
+    orbital_period: 88, // days
+    type: 'terrestrial',
+    color: '#9E9E9E', // Mercury gray/rocky
+    density: 'rocky',
+    temperature: 440, // Kelvin (daytime surface temperature)
+    gravity: 3.7, // m/s²
+    rotation_period: 58.6, // days (slow rotation)
+    atmosphere: 'none',
+    density_kg_m3: 5427, // kg/m³
+    escape_velocity: 4.25, // km/s
+    surface_pressure: 0, // Pa (no atmosphere)
+  },
+  {
+    name: 'Venus',
+    mass: 0.815, // 0.815 Earth masses
+    distance: 72.3, // 0.723 AU at 100 units per AU
+    phase_deg: 45,
+    diameter: 12104, // km
+    orbital_period: 225, // days
+    type: 'terrestrial',
+    color: '#E6BE8A', // Venus's actual color (creamy yellow-brown)
+    density: 'rocky',
+    temperature: 737, // Kelvin (surface temperature)
+    gravity: 8.87, // m/s²
+    rotation_period: -243, // days (retrograde rotation)
+    atmosphere: 'CO2',
+    density_kg_m3: 5243, // kg/m³
+    escape_velocity: 10.36, // km/s
+    surface_pressure: 9200000, // Pa (92 bar)
+  },
+  {
+    name: 'Earth',
+    mass: 1.0, // 1 Earth mass
+    distance: 100.0, // 1.000 AU at 100 units per AU
+    phase_deg: 90,
+    diameter: 12742, // km
+    orbital_period: 365, // days
+    type: 'terrestrial',
+    color: '#3FA7D6', // Earth blue-greenish
+    density: 'rocky',
+    temperature: 288, // Kelvin (average surface temperature)
+    gravity: 9.81, // m/s²
+    rotation_period: 1.0, // days
+    atmosphere: 'N2/O2',
+    density_kg_m3: 5514, // kg/m³
+    escape_velocity: 11.19, // km/s
+    surface_pressure: 101325, // Pa (1 bar)
+  },
+  {
+    name: 'Mars',
+    mass: 0.107, // 0.107 Earth masses
+    distance: 152.4, // 1.524 AU at 100 units per AU
+    phase_deg: 135,
+    diameter: 6779, // km
+    orbital_period: 687, // days
+    type: 'terrestrial',
+    color: '#C1440E', // Mars's actual color (reddish-orange)
+    density: 'rocky',
+    temperature: 210, // Kelvin (average surface temperature)
+    gravity: 3.71, // m/s²
+    rotation_period: 1.03, // days
+    atmosphere: 'CO2',
+    density_kg_m3: 3933, // kg/m³
+    escape_velocity: 5.03, // km/s
+    surface_pressure: 636, // Pa (0.006 bar)
+  },
+  {
+    name: 'Jupiter',
+    mass: 317.8, // 317.8 Earth masses
+    distance: 520.4, // 5.204 AU at 100 units per AU
+    phase_deg: 210,
+    diameter: 139822, // km
+    orbital_period: 4333, // days
+    type: 'gas_giant',
+    color: '#D2B48C', // Jupiter tan/beige with bands
+    giantType: 'jupiter_like',
+    temperature: 165, // Kelvin (cloud top temperature)
+    gravity: 24.79, // m/s²
+    rotation_period: 0.41, // days (fast rotation)
+    atmosphere: 'H2/He',
+    density_kg_m3: 1326, // kg/m³
+    escape_velocity: 59.5, // km/s
+    surface_pressure: 100000, // Pa (1 bar at cloud tops)
+  },
+  {
+    name: 'Saturn',
+    mass: 95.2, // 95.2 Earth masses
+    distance: 958.3, // 9.583 AU at 100 units per AU
+    phase_deg: 260,
+    diameter: 116464, // km
+    orbital_period: 10759, // days
+    type: 'gas_giant',
+    color: '#F5DE8A', // Saturn pale yellow
+    giantType: 'jupiter_like',
+    temperature: 134, // Kelvin (cloud top temperature)
+    gravity: 10.44, // m/s²
+    rotation_period: 0.45, // days (fast rotation)
+    atmosphere: 'H2/He',
+    density_kg_m3: 687, // kg/m³
+    escape_velocity: 35.5, // km/s
+    surface_pressure: 100000, // Pa (1 bar at cloud tops)
+  },
+  {
+    name: 'Uranus',
+    mass: 14.5, // 14.5 Earth masses
+    distance: 1919.1, // 19.191 AU at 100 units per AU
+    phase_deg: 310,
+    diameter: 50724, // km
+    orbital_period: 30687, // days
+    type: 'ice_giant',
+    color: '#A7E3F1', // Uranus cyan
+    giantType: 'neptune_like',
+    temperature: 76, // Kelvin (cloud top temperature)
+    gravity: 8.69, // m/s²
+    rotation_period: -0.72, // days (retrograde rotation)
+    atmosphere: 'H2/He/CH4',
+    density_kg_m3: 1271, // kg/m³
+    escape_velocity: 21.3, // km/s
+    surface_pressure: 100000, // Pa (1 bar at cloud tops)
+  },
+  {
+    name: 'Neptune',
+    mass: 17.1, // 17.1 Earth masses
+    distance: 3007.0, // 30.070 AU at 100 units per AU
+    phase_deg: 350,
+    diameter: 49244, // km
+    orbital_period: 60190, // days
+    type: 'ice_giant',
+    color: '#4B70DD', // Neptune deep blue
+    giantType: 'neptune_like',
+    temperature: 72, // Kelvin (cloud top temperature)
+    gravity: 11.15, // m/s²
+    rotation_period: 0.67, // days
+    atmosphere: 'H2/He/CH4',
+    density_kg_m3: 1638, // kg/m³
+    escape_velocity: 23.5, // km/s
+    surface_pressure: 100000, // Pa (1 bar at cloud tops)
+  },
+  // Dwarf planet beyond Neptune
+];
+
+const realAsteroids = [
+  { name: 'Ceres', diameter: 939, distance: 277, mass: 0.00016 }, // Dwarf planet - between Mars and Jupiter
+  { name: 'Vesta', diameter: 525, distance: 236, mass: 0.00004 },
+  { name: 'Pallas', diameter: 512, distance: 277, mass: 0.00003 },
+  { name: 'Hygiea', diameter: 434, distance: 314, mass: 0.00002 },
+  { name: 'Interamnia', diameter: 350, distance: 306, mass: 0.00001 },
+  { name: 'Europa', diameter: 315, distance: 310, mass: 0.000008 },
+  { name: 'Davida', diameter: 289, distance: 316, mass: 0.000006 },
+  { name: 'Sylvia', diameter: 286, distance: 321, mass: 0.000006 },
+  { name: 'Hektor', diameter: 225, distance: 524, mass: 0.000003 },
+  { name: 'Juno', diameter: 257, distance: 267, mass: 0.000004 },
+  { name: 'Iris', diameter: 200, distance: 239, mass: 0.000002 },
+  { name: 'Eunomia', diameter: 255, distance: 335, mass: 0.000004 },
+  { name: 'Psyche', diameter: 226, distance: 340, mass: 0.000003 },
+  { name: 'Themis', diameter: 198, distance: 345, mass: 0.000002 },
+  { name: 'Bamberga', diameter: 229, distance: 350, mass: 0.000003 },
+  { name: 'Patientia', diameter: 225, distance: 355, mass: 0.000003 },
+];
+
+const famousComets = [
+  {
+    name: 'Halley',
+    period: 76,
+    perihelion: 0.586,
+    aphelion: 35.1,
+    diameter: 11,
+  },
+  {
+    name: 'Hale-Bopp',
+    period: 2533,
+    perihelion: 0.914,
+    aphelion: 370.8,
+    diameter: 60,
+  },
+  {
+    name: 'Hyakutake',
+    period: 113783,
+    perihelion: 0.23,
+    aphelion: 4698.77,
+    diameter: 4.2,
+  },
+  {
+    name: 'Shoemaker-Levy 9',
+    period: 11.3,
+    perihelion: 5.4,
+    aphelion: 7.8,
+    diameter: 1.8,
+  },
+  {
+    name: 'Comet ISON',
+    period: 400000,
+    perihelion: 0.012,
+    aphelion: 73000,
+    diameter: 2,
+  },
+  {
+    name: 'Lovejoy',
+    period: 314,
+    perihelion: 0.005,
+    aphelion: 157,
+    diameter: 0.5,
+  },
+  {
+    name: 'McNaught',
+    period: 92,
+    perihelion: 0.17,
+    aphelion: 67,
+    diameter: 19,
+  },
+  {
+    name: 'Pan-STARRS',
+    period: 110000,
+    perihelion: 0.3,
+    aphelion: 16000,
+    diameter: 1,
+  },
+  {
+    name: 'Swift-Tuttle',
+    period: 133,
+    perihelion: 0.96,
+    aphelion: 51.2,
+    diameter: 26,
+  },
+  {
+    name: 'Tempel-Tuttle',
+    period: 33,
+    perihelion: 0.98,
+    aphelion: 19.7,
+    diameter: 3.6,
+  },
+  {
+    name: 'Wild 2',
+    period: 6.4,
+    perihelion: 1.59,
+    aphelion: 5.3,
+    diameter: 5.5,
+  },
+  {
+    name: 'Hartley 2',
+    period: 6.46,
+    perihelion: 1.05,
+    aphelion: 5.87,
+    diameter: 1.2,
+  },
+];
+
 /**
  * Move the whole system into its own center-of-mass frame.
  *
@@ -1724,433 +1988,7 @@ export const buildWorld = ctx => {
   show_enhanced_scenario_info(starting_preset);
 
   // Special scenario setups
-  if (starting_preset === 'solar-system') {
-    // Clear any existing objects
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-
-    // Create the Sun as a proper G-type main sequence star with accurate properties
-    const sun = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
-    sun.name = 'Sol'; // Real name of our sun
-    sun.mass = SOLAR_MASS_UNIT; // 1 solar mass = 1000 units
-    sun.massInSuns = 1.0; // Exactly 1 solar mass
-    sun.baseColor = '#FFFF00'; // G-type star color (yellow, like our Sun)
-    sun.radius = 15; // Make sun larger for visibility
-    sun.temperature = 5778; // Kelvin (real solar effective temperature)
-    sun.spectralType = 'G2V'; // Real spectral classification
-    sun.age = 4.6; // Billion years (middle-aged G-type star)
-    sun.luminosity = 1.0; // Solar luminosity (3.828×10²⁶ W)
-    sun.solarRadius = 1.0; // 1.0 solar radii (696,340 km)
-    sun.metallicity = 0.02; // Solar metallicity (Z = 0.02)
-    sun.rotationPeriod = 25.4; // Days (solar rotation period at equator)
-    sun.surfaceGravity = 274; // m/s² (solar surface gravity)
-    sun.density = 1408; // kg/m³ (solar density)
-    sun.isSolarSystemSun = true; // Flag for Solar System sun
-    // Measured, so the habitable-zone model uses it rather than a fallback.
-    sun.massInSuns = 1.0;
-    sun.luminosityInSuns = 1.0;
-    sun.radiusInSuns = 1.0;
-    sun.temperature = 5772; // K, effective temperature
-    stars.push(sun);
-
-    // Real Solar System data with accurate properties
-    // Distances in AU (scaled down for simulation), masses in Earth masses, diameters in km
-    const solarSystemData = [
-      {
-        name: 'Mercury',
-        mass: 0.055, // 0.055 Earth masses
-        distance: 38.7, // 0.387 AU at 100 units per AU
-        phase_deg: 0,
-        diameter: 4879, // km
-        orbital_period: 88, // days
-        type: 'terrestrial',
-        color: '#9E9E9E', // Mercury gray/rocky
-        density: 'rocky',
-        temperature: 440, // Kelvin (daytime surface temperature)
-        gravity: 3.7, // m/s²
-        rotation_period: 58.6, // days (slow rotation)
-        atmosphere: 'none',
-        density_kg_m3: 5427, // kg/m³
-        escape_velocity: 4.25, // km/s
-        surface_pressure: 0, // Pa (no atmosphere)
-      },
-      {
-        name: 'Venus',
-        mass: 0.815, // 0.815 Earth masses
-        distance: 72.3, // 0.723 AU at 100 units per AU
-        phase_deg: 45,
-        diameter: 12104, // km
-        orbital_period: 225, // days
-        type: 'terrestrial',
-        color: '#E6BE8A', // Venus's actual color (creamy yellow-brown)
-        density: 'rocky',
-        temperature: 737, // Kelvin (surface temperature)
-        gravity: 8.87, // m/s²
-        rotation_period: -243, // days (retrograde rotation)
-        atmosphere: 'CO2',
-        density_kg_m3: 5243, // kg/m³
-        escape_velocity: 10.36, // km/s
-        surface_pressure: 9200000, // Pa (92 bar)
-      },
-      {
-        name: 'Earth',
-        mass: 1.0, // 1 Earth mass
-        distance: 100.0, // 1.000 AU at 100 units per AU
-        phase_deg: 90,
-        diameter: 12742, // km
-        orbital_period: 365, // days
-        type: 'terrestrial',
-        color: '#3FA7D6', // Earth blue-greenish
-        density: 'rocky',
-        temperature: 288, // Kelvin (average surface temperature)
-        gravity: 9.81, // m/s²
-        rotation_period: 1.0, // days
-        atmosphere: 'N2/O2',
-        density_kg_m3: 5514, // kg/m³
-        escape_velocity: 11.19, // km/s
-        surface_pressure: 101325, // Pa (1 bar)
-      },
-      {
-        name: 'Mars',
-        mass: 0.107, // 0.107 Earth masses
-        distance: 152.4, // 1.524 AU at 100 units per AU
-        phase_deg: 135,
-        diameter: 6779, // km
-        orbital_period: 687, // days
-        type: 'terrestrial',
-        color: '#C1440E', // Mars's actual color (reddish-orange)
-        density: 'rocky',
-        temperature: 210, // Kelvin (average surface temperature)
-        gravity: 3.71, // m/s²
-        rotation_period: 1.03, // days
-        atmosphere: 'CO2',
-        density_kg_m3: 3933, // kg/m³
-        escape_velocity: 5.03, // km/s
-        surface_pressure: 636, // Pa (0.006 bar)
-      },
-      {
-        name: 'Jupiter',
-        mass: 317.8, // 317.8 Earth masses
-        distance: 520.4, // 5.204 AU at 100 units per AU
-        phase_deg: 210,
-        diameter: 139822, // km
-        orbital_period: 4333, // days
-        type: 'gas_giant',
-        color: '#D2B48C', // Jupiter tan/beige with bands
-        giantType: 'jupiter_like',
-        temperature: 165, // Kelvin (cloud top temperature)
-        gravity: 24.79, // m/s²
-        rotation_period: 0.41, // days (fast rotation)
-        atmosphere: 'H2/He',
-        density_kg_m3: 1326, // kg/m³
-        escape_velocity: 59.5, // km/s
-        surface_pressure: 100000, // Pa (1 bar at cloud tops)
-      },
-      {
-        name: 'Saturn',
-        mass: 95.2, // 95.2 Earth masses
-        distance: 958.3, // 9.583 AU at 100 units per AU
-        phase_deg: 260,
-        diameter: 116464, // km
-        orbital_period: 10759, // days
-        type: 'gas_giant',
-        color: '#F5DE8A', // Saturn pale yellow
-        giantType: 'jupiter_like',
-        temperature: 134, // Kelvin (cloud top temperature)
-        gravity: 10.44, // m/s²
-        rotation_period: 0.45, // days (fast rotation)
-        atmosphere: 'H2/He',
-        density_kg_m3: 687, // kg/m³
-        escape_velocity: 35.5, // km/s
-        surface_pressure: 100000, // Pa (1 bar at cloud tops)
-      },
-      {
-        name: 'Uranus',
-        mass: 14.5, // 14.5 Earth masses
-        distance: 1919.1, // 19.191 AU at 100 units per AU
-        phase_deg: 310,
-        diameter: 50724, // km
-        orbital_period: 30687, // days
-        type: 'ice_giant',
-        color: '#A7E3F1', // Uranus cyan
-        giantType: 'neptune_like',
-        temperature: 76, // Kelvin (cloud top temperature)
-        gravity: 8.69, // m/s²
-        rotation_period: -0.72, // days (retrograde rotation)
-        atmosphere: 'H2/He/CH4',
-        density_kg_m3: 1271, // kg/m³
-        escape_velocity: 21.3, // km/s
-        surface_pressure: 100000, // Pa (1 bar at cloud tops)
-      },
-      {
-        name: 'Neptune',
-        mass: 17.1, // 17.1 Earth masses
-        distance: 3007.0, // 30.070 AU at 100 units per AU
-        phase_deg: 350,
-        diameter: 49244, // km
-        orbital_period: 60190, // days
-        type: 'ice_giant',
-        color: '#4B70DD', // Neptune deep blue
-        giantType: 'neptune_like',
-        temperature: 72, // Kelvin (cloud top temperature)
-        gravity: 11.15, // m/s²
-        rotation_period: 0.67, // days
-        atmosphere: 'H2/He/CH4',
-        density_kg_m3: 1638, // kg/m³
-        escape_velocity: 23.5, // km/s
-        surface_pressure: 100000, // Pa (1 bar at cloud tops)
-      },
-      // Dwarf planet beyond Neptune
-    ];
-
-    // Create planets with realistic properties
-    const DEG2RAD = Math.PI / 180;
-
-    for (let i = 0; i < solarSystemData.length; i++) {
-      const planetData = solarSystemData[i];
-      const r = planetData.distance;
-      const theta =
-        typeof planetData.phase_deg === 'number'
-          ? planetData.phase_deg * DEG2RAD
-          : (i * 45 * DEG2RAD) % (2 * Math.PI);
-      // Calculate orbital velocity based on real orbital periods
-      const orbitalVelocity = Math.sqrt(
-        (SETTINGS.gravitational_constant * sun.mass) / r
-      );
-      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      const vel = {
-        x: -orbitalVelocity * Math.sin(theta),
-        y: orbitalVelocity * Math.cos(theta),
-      };
-
-      if (planetData.type === 'gas_giant' || planetData.type === 'ice_giant') {
-        // Create new gas giant objects
-        // planetData.mass is in Earth masses, so the conversion to the
-        // constructor's Jupiter masses goes through the Earth/Jupiter ratio.
-        // Dividing by 50 here made Jupiter report 6.4 M_J in the inspector.
-        const gasGiant = new GasGiant(
-          pos,
-          vel,
-          planetData.mass / EARTH_MASSES_PER_JUPITER_MASS
-        );
-        gasGiant.name = planetData.name;
-        gasGiant.diameter = planetData.diameter;
-        gasGiant.orbital_period = planetData.orbital_period;
-        gasGiant.baseColor = planetData.color;
-        gasGiant.giantType = planetData.giantType;
-        // Add accurate physical properties
-        gasGiant.temperature = planetData.temperature;
-        gasGiant.gravity = planetData.gravity;
-        gasGiant.rotation_period = planetData.rotation_period;
-        gasGiant.atmosphere = planetData.atmosphere;
-        gasGiant.density_kg_m3 = planetData.density_kg_m3;
-        gasGiant.escape_velocity = planetData.escape_velocity;
-        gasGiant.surface_pressure = planetData.surface_pressure;
-        gasGiant.isSolarSystemPlanet = true; // Flag for Solar System planets
-        // Jupiter lands at 0.955 units against a 1000-unit Sun, which is the
-        // real ratio. The floor is here only for the smallest bodies.
-        gasGiant.mass = Math.max(planetData.mass * EARTH_MASS_UNIT, 1e-7);
-        // Ensure Saturn has visible rings; other giants do not
-        if (gasGiant.name === 'Saturn') {
-          gasGiant.hasRings = true;
-          // Set consistent, prominent ring parameters
-          gasGiant.ringInnerRadius = gasGiant.radius * 1.3;
-          gasGiant.ringOuterRadius = gasGiant.radius * 2.2;
-          gasGiant.ringAngle = 0.25; // slight tilt
-          gasGiant.ringOpacity = 0.65;
-        } else {
-          gasGiant.hasRings = false;
-        }
-        gas_giants.push(gasGiant);
-      } else {
-        // Create new terrestrial planet objects
-        const planet = new Planet(pos, vel, planetData.mass);
-        planet.name = planetData.name;
-        planet.massInEarths = planetData.mass;
-        planet.diameter = planetData.diameter;
-        planet.orbital_period = planetData.orbital_period;
-        planet.baseColor = planetData.color;
-        planet.density = planetData.density;
-        // Add accurate physical properties
-        planet.temperature = planetData.temperature;
-        planet.gravity = planetData.gravity;
-        planet.rotation_period = planetData.rotation_period;
-        planet.atmosphere = planetData.atmosphere;
-        planet.density_kg_m3 = planetData.density_kg_m3;
-        planet.escape_velocity = planetData.escape_velocity;
-        planet.surface_pressure = planetData.surface_pressure;
-        planet.isSolarSystemPlanet = true; // Flag for Solar System planets
-        planet.mass = Math.max(planetData.mass * EARTH_MASS_UNIT, 1e-7);
-        planets.push(planet);
-      }
-    }
-
-    // Add asteroid belt between Mars and Jupiter with real asteroids
-    if (SETTINGS.enable_asteroids) {
-      const realAsteroids = [
-        { name: 'Ceres', diameter: 939, distance: 277, mass: 0.00016 }, // Dwarf planet - between Mars and Jupiter
-        { name: 'Vesta', diameter: 525, distance: 236, mass: 0.00004 },
-        { name: 'Pallas', diameter: 512, distance: 277, mass: 0.00003 },
-        { name: 'Hygiea', diameter: 434, distance: 314, mass: 0.00002 },
-        { name: 'Interamnia', diameter: 350, distance: 306, mass: 0.00001 },
-        { name: 'Europa', diameter: 315, distance: 310, mass: 0.000008 },
-        { name: 'Davida', diameter: 289, distance: 316, mass: 0.000006 },
-        { name: 'Sylvia', diameter: 286, distance: 321, mass: 0.000006 },
-        { name: 'Hektor', diameter: 225, distance: 524, mass: 0.000003 },
-        { name: 'Juno', diameter: 257, distance: 267, mass: 0.000004 },
-        { name: 'Iris', diameter: 200, distance: 239, mass: 0.000002 },
-        { name: 'Eunomia', diameter: 255, distance: 335, mass: 0.000004 },
-        { name: 'Psyche', diameter: 226, distance: 340, mass: 0.000003 },
-        { name: 'Themis', diameter: 198, distance: 345, mass: 0.000002 },
-        { name: 'Bamberga', diameter: 229, distance: 350, mass: 0.000003 },
-        { name: 'Patientia', diameter: 225, distance: 355, mass: 0.000003 },
-      ];
-
-      for (
-        let i = 0;
-        i < Math.min(pop('num_asteroids'), realAsteroids.length);
-        i++
-      ) {
-        const asteroidData = realAsteroids[i];
-        const r = asteroidData.distance + (Math.random() - 0.5) * 20; // Add some variation for wider spacing
-        const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r);
-        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-
-        // Create new asteroid object
-        const asteroid = new Asteroid(pos, vel);
-        asteroid.name = asteroidData.name;
-        asteroid.diameter = asteroidData.diameter;
-        // Same unit the planets use, so relative masses stay true to life
-        asteroid.mass = Math.max(asteroidData.mass * EARTH_MASS_UNIT, 1e-12);
-        // These are real asteroids with real, individual masses, so the Ceres
-        // count the class carries has to follow the mass rather than keep the
-        // constructor's default of one. Vesta is a quarter of a Ceres and the
-        // inspector has to say so.
-        syncReportedMass(asteroid);
-        asteroids.push(asteroid);
-      }
-    }
-
-    // Add famous comets in distant orbits with real properties
-    if (pop('num_comets')) {
-      const famousComets = [
-        {
-          name: 'Halley',
-          period: 76,
-          perihelion: 0.586,
-          aphelion: 35.1,
-          diameter: 11,
-        },
-        {
-          name: 'Hale-Bopp',
-          period: 2533,
-          perihelion: 0.914,
-          aphelion: 370.8,
-          diameter: 60,
-        },
-        {
-          name: 'Hyakutake',
-          period: 113783,
-          perihelion: 0.23,
-          aphelion: 4698.77,
-          diameter: 4.2,
-        },
-        {
-          name: 'Shoemaker-Levy 9',
-          period: 11.3,
-          perihelion: 5.4,
-          aphelion: 7.8,
-          diameter: 1.8,
-        },
-        {
-          name: 'Comet ISON',
-          period: 400000,
-          perihelion: 0.012,
-          aphelion: 73000,
-          diameter: 2,
-        },
-        {
-          name: 'Lovejoy',
-          period: 314,
-          perihelion: 0.005,
-          aphelion: 157,
-          diameter: 0.5,
-        },
-        {
-          name: 'McNaught',
-          period: 92,
-          perihelion: 0.17,
-          aphelion: 67,
-          diameter: 19,
-        },
-        {
-          name: 'Pan-STARRS',
-          period: 110000,
-          perihelion: 0.3,
-          aphelion: 16000,
-          diameter: 1,
-        },
-        {
-          name: 'Swift-Tuttle',
-          period: 133,
-          perihelion: 0.96,
-          aphelion: 51.2,
-          diameter: 26,
-        },
-        {
-          name: 'Tempel-Tuttle',
-          period: 33,
-          perihelion: 0.98,
-          aphelion: 19.7,
-          diameter: 3.6,
-        },
-        {
-          name: 'Wild 2',
-          period: 6.4,
-          perihelion: 1.59,
-          aphelion: 5.3,
-          diameter: 5.5,
-        },
-        {
-          name: 'Hartley 2',
-          period: 6.46,
-          perihelion: 1.05,
-          aphelion: 5.87,
-          diameter: 1.2,
-        },
-      ];
-
-      for (
-        let i = 0;
-        i < Math.min(pop('num_comets'), famousComets.length);
-        i++
-      ) {
-        const cometData = famousComets[i];
-        // Use semi-major axis for distance (average of perihelion and aphelion)
-        const semiMajorAxis = (cometData.perihelion + cometData.aphelion) / 2;
-        const r = semiMajorAxis * 100; // 100 units per AU, as everywhere else
-        const theta = Math.random() * 2 * Math.PI;
-        const v =
-          Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r) * 0.7; // Comets are slower
-        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-
-        // Create new comet object with real properties
-        const comet = new Comet(pos, vel);
-        comet.name = cometData.name;
-        comet.period = cometData.period;
-        comet.perihelion = cometData.perihelion;
-        comet.aphelion = cometData.aphelion;
-        comet.diameter = cometData.diameter;
-        comets.push(comet);
-      }
-    }
-  } else if (starting_preset === 'sagittarius-a') {
+  if (starting_preset === 'sagittarius-a') {
     // Set up Sagittarius A* with correct name
     if (bh_list.length > 0) {
       bh_list[0].name = 'Sagittarius A*';
@@ -2331,6 +2169,7 @@ export const buildWorld = ctx => {
         if (system === 'trappist-1') return trappist(G);
         if (system === 'hd209458') return hd209458(G);
         if (system === 'kuiper-belt') return kuiperBelt(G);
+        if (system === 'solar-system') return solarSystem(G);
         if (system === 'galilean') {
           spec = galileanBodies(G, detuned ? { detune: GALILEAN.detune } : {});
         } else if (system === 'pluto-neptune') spec = plutoBodies(G);
@@ -2369,6 +2208,164 @@ export const buildWorld = ctx => {
             isKuiperBeltObject: true,
           },
         };
+      }
+    };
+    // The Sun, the eight planets and giants of solarSystemData, and as many of
+    // the named asteroids and comets as the counts ask for. A planet's phase is
+    // the table's; an asteroid's distance and phase and a comet's phase are
+    // drawn from the seeded generator before the body is made, as the
+    // hand-built loops drew them (Math.random, which a seeded build replaces).
+    // Two things a row cannot hold are `finish` steps run once the body exists:
+    // Saturn's rings are sized from the radius its constructor derived, and an
+    // asteroid's reported Ceres count follows the mass it was given.
+    const solarSystem = function* (G) {
+      yield {
+        type: 'Star',
+        ctor: 1.0,
+        pos: { x: 0, y: 0 },
+        vel: { x: 0, y: 0 },
+        assign: {
+          name: 'Sol',
+          mass: SOLAR_MASS_UNIT,
+          massInSuns: 1.0,
+          baseColor: '#FFFF00',
+          radius: 15, // larger than life, for visibility
+          temperature: 5772, // K, effective; the habitable-zone model reads it
+          spectralType: 'G2V',
+          age: 4.6, // billion years
+          luminosity: 1.0,
+          solarRadius: 1.0,
+          metallicity: 0.02,
+          rotationPeriod: 25.4, // days, at the equator
+          surfaceGravity: 274, // m/s^2
+          density: 1408, // kg/m^3
+          isSolarSystemSun: true,
+          luminosityInSuns: 1.0,
+          radiusInSuns: 1.0,
+        },
+      };
+      const DEG2RAD = Math.PI / 180;
+      for (let i = 0; i < solarSystemData.length; i++) {
+        const d = solarSystemData[i];
+        const r = d.distance;
+        const theta =
+          typeof d.phase_deg === 'number'
+            ? d.phase_deg * DEG2RAD
+            : (i * 45 * DEG2RAD) % (2 * Math.PI);
+        const orbitalVelocity = Math.sqrt((G * stars[0].mass) / r);
+        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+        const vel = {
+          x: -orbitalVelocity * Math.sin(theta),
+          y: orbitalVelocity * Math.cos(theta),
+        };
+        const common = {
+          name: d.name,
+          diameter: d.diameter,
+          orbital_period: d.orbital_period,
+          baseColor: d.color,
+        };
+        const physical = {
+          temperature: d.temperature,
+          gravity: d.gravity,
+          rotation_period: d.rotation_period,
+          atmosphere: d.atmosphere,
+          density_kg_m3: d.density_kg_m3,
+          escape_velocity: d.escape_velocity,
+          surface_pressure: d.surface_pressure,
+          isSolarSystemPlanet: true,
+        };
+        if (d.type === 'gas_giant' || d.type === 'ice_giant') {
+          // d.mass is in Earth masses and the constructor takes Jupiter masses;
+          // dividing by 50 once made Jupiter report 6.4 M_J in the inspector.
+          // Jupiter lands at 0.955 units against a 1000-unit Sun, the real
+          // ratio; the floor is only for the smallest bodies.
+          yield {
+            type: 'GasGiant',
+            ctor: d.mass / EARTH_MASSES_PER_JUPITER_MASS,
+            pos,
+            vel,
+            assign: {
+              ...common,
+              giantType: d.giantType,
+              ...physical,
+              mass: Math.max(d.mass * EARTH_MASS_UNIT, 1e-7),
+              hasRings: d.name === 'Saturn',
+            },
+            finish: g => {
+              if (!g.hasRings) return;
+              g.ringInnerRadius = g.radius * 1.3;
+              g.ringOuterRadius = g.radius * 2.2;
+              g.ringAngle = 0.25; // slight tilt
+              g.ringOpacity = 0.65;
+            },
+          };
+        } else {
+          yield {
+            type: 'Planet',
+            ctor: d.mass,
+            pos,
+            vel,
+            assign: {
+              ...common,
+              massInEarths: d.mass,
+              density: d.density,
+              ...physical,
+              mass: Math.max(d.mass * EARTH_MASS_UNIT, 1e-7),
+            },
+          };
+        }
+      }
+      if (SETTINGS.enable_asteroids) {
+        for (
+          let i = 0;
+          i < Math.min(pop('num_asteroids'), realAsteroids.length);
+          i++
+        ) {
+          const a = realAsteroids[i];
+          const r = a.distance + (Math.random() - 0.5) * 20; // wider spacing
+          const theta = Math.random() * 2 * Math.PI;
+          const v = Math.sqrt((G * stars[0].mass) / r);
+          yield {
+            type: 'Asteroid',
+            pos: { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+            vel: { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
+            assign: {
+              name: a.name,
+              diameter: a.diameter,
+              // The planets' unit, so relative masses stay true to life.
+              mass: Math.max(a.mass * EARTH_MASS_UNIT, 1e-12),
+            },
+            // Real asteroids have individual masses, so the Ceres count the
+            // class carries has to follow the mass rather than keep the
+            // constructor's default of one.
+            finish: syncReportedMass,
+          };
+        }
+      }
+      if (pop('num_comets')) {
+        for (
+          let i = 0;
+          i < Math.min(pop('num_comets'), famousComets.length);
+          i++
+        ) {
+          const c = famousComets[i];
+          // The semi-major axis, 100 units per AU as everywhere else.
+          const r = ((c.perihelion + c.aphelion) / 2) * 100;
+          const theta = Math.random() * 2 * Math.PI;
+          const v = Math.sqrt((G * stars[0].mass) / r) * 0.7; // slower
+          yield {
+            type: 'Comet',
+            pos: { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+            vel: { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
+            assign: {
+              name: c.name,
+              period: c.period,
+              perihelion: c.perihelion,
+              aphelion: c.aphelion,
+              diameter: c.diameter,
+            },
+          };
+        }
       }
     };
     // HD 209458 and its planet about their common center, from js/data/
@@ -2512,12 +2509,13 @@ export const buildWorld = ctx => {
                 ? 'jupiters'
                 : 'earths')
         ],
-      create: ({ type, ctor, pos, vel, assign, from, args }) => {
+      create: ({ type, ctor, pos, vel, assign, from, args, finish }) => {
         const [Body, list] = {
           Star: [StarObject, stars],
           GasGiant: [GasGiant, gas_giants],
           BlackHole: [null, bh_list],
           Asteroid: [Asteroid, asteroids],
+          Comet: [Comet, comets],
           Galaxy: [Galaxy, galaxies],
           Planet: [Planet, planets],
           NeutronStar: [NeutronStar, neutron_stars],
@@ -2545,6 +2543,7 @@ export const buildWorld = ctx => {
         if (from && from.ifMissing !== 'make') return null;
         body = new Body({ ...pos }, { ...vel }, ctor, ...(args ?? []));
         Object.assign(body, assign);
+        finish?.(body);
         list.push(body);
         return body;
       },

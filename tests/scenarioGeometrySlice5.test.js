@@ -215,7 +215,9 @@ describe('slice 5: the validator for the place stage', () => {
     ).toMatch(/place\[0\].*pin-pair/);
     expect(why({ place: [{ body: {} }] })[0]).toMatch(/place\[0\]/);
     expect(why({ place: 'x' })[0]).toMatch(/place/);
-    expect(why({ place: Array(5).fill({ rule: pin }) })[0]).toMatch(/up to 4/);
+    expect(why({ place: Array(5).fill({ rule: pin }) })[0]).toMatch(/1 to 4/);
+    // An empty list says nothing and is refused (review of #295).
+    expect(why({ place: [], steps: [{ rule: pin }] })[0]).toMatch(/1 to 4/);
     expect(
       why({
         place: [{ rule: { ...pin, params: { ...pin.params, x: -1 } } }],
