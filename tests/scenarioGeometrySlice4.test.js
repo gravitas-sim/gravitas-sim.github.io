@@ -518,7 +518,8 @@ describe('slice 4: what a link or the Settings panel can still do to them', () =
   test('the layout a reader picks in Settings still runs the generic placement, as before', () => {
     // The tidal disruption's old code moved a hole and a planet inside the
     // generic placement when it ran (it is unreachable at the scenario's own
-    // layout, Empty). That code stays, so the world under any other layout is
+    // layout, Empty). It is now the declaration's `place` step
+    // (`hole-and-planet`, slice 7), so the world under any other layout is
     // the code's: the cases above hold it, and this names the two that moved
     // when it was removed.
     for (const id of [
