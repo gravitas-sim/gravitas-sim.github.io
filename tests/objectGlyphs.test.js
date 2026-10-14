@@ -13,7 +13,7 @@ import {
   hasGlyph,
   glyphMarkup,
   glyphElement,
-} from '../js/objectGlyphs.js';
+} from '../js/inspectorView.js';
 
 /** The eight the picker offers. Kept here rather than imported, deliberately:
  *  if js/ui.js grows a ninth type this test should fail, not follow along. */
