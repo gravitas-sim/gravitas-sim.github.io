@@ -40,6 +40,10 @@
  * Raising a ceiling is a hand edit of that file with a DECISION_REGISTER row;
  * --record-sizes only ever lowers them.
  *
+ * The render layer (Prompt 107, step 2b) holds what paints a body: js/bodyDraw.js
+ * and the black hole renderer. The engine and the layers below never import it,
+ * in any form; they hold a table of drawers that the render layer fills.
+ *
  * A fourth is about listeners (Prompt 107, step 3): a module that exports a
  * mount function and registers listeners must do it through the helper in
  * js/listeners.js, which removes them when the module unmounts. The modules that
@@ -77,7 +81,6 @@ const LAYERS = [
       /^js\/rng\.js$/,
       /^js\/theme\.js$/,
       /^js\/i18n\//,
-      /^js\/spatialHash\.js$/,
       // Pure geometry over values handed in: the follow camera's arithmetic and
       // the touch-gesture state machine. Neither reaches for the view state,
       // the DOM or a clock of its own, which is what makes both of them
@@ -91,12 +94,11 @@ const LAYERS = [
       // no more, the same way js/i18n/dom.js is a leaf that happens to touch
       // the DOM. Down here because every body class in the engine reads it.
       /^js\/bodyVisuals\.js$/,
-      // What a black hole looks like, and the code that draws it. The same
-      // standing as bodyVisuals above: pure geometry over values handed in,
-      // plus one module whose only side effect is painting into a context it
-      // was given. No application state, no clock of its own - the time it
-      // animates against is passed in - and nothing in it can move a body.
-      /^js\/blackHole\//,
+      // What a black hole looks like: the appearance record a hole carries as
+      // state (environment, seed, spin, tilt), values in and values out. The
+      // engine builds and saves one, so it has to sit down here; the code that
+      // paints one is js/blackHole/render.js, in the render layer below.
+      /^js\/blackHole\/appearance\.js$/,
       // One string and two functions, imported by both the coordinator and the
       // lesson registry so that a deferred registry can read the language the
       // application already chose. Imports nothing itself.
@@ -183,6 +185,17 @@ const LAYERS = [
       'it to act (both in js/appState.js). Below everything that reads them, above the engine, which ' +
       'is handed what it needs rather than reaching for it.',
     match: [/^js\/appState\.js$/],
+  },
+  {
+    name: 'render',
+    blurb:
+      'What the bodies look like on the canvas: the drawers the engine calls ' +
+      'through a table and never imports, and the black hole renderer. They ' +
+      'read the engine and paint into a context they are handed; the engine ' +
+      'reaches them only by registration (registerBodyDrawers in ' +
+      'js/physics.js), so an engine -> render import fails this check. Prompt ' +
+      '107, step 2b.',
+    match: [/^js\/bodyDraw\.js$/, /^js\/blackHole\//],
   },
   {
     name: 'feature',
@@ -389,6 +402,35 @@ export function findCoordinatorImports(sources) {
         out.push(file);
         break;
       }
+    }
+  }
+  return out.sort();
+}
+
+/**
+ * Files below the render layer that name a render-layer file in a quoted
+ * relative path, in any form.
+ *
+ * The layer rule already fails a static import and a dynamic one that starts
+ * its line, and misses `x = import('./bodyDraw.js')` for the reason buildGraph
+ * explains. The engine is the module that most needs the guarantee (it runs in
+ * a Worker, where there is no canvas and nothing that paints should be
+ * fetched), so this closes the gap for the whole render layer: what the engine
+ * wants painted it registers a drawer for (registerBodyDrawers in
+ * js/physics.js), and the render layer fills the table.
+ *
+ * @param {Map<string, string>} sources - file -> text
+ * @returns {string[]} Offending "from -> to" pairs
+ */
+export function findRenderImports(sources) {
+  const out = [];
+  for (const [file, src] of sources) {
+    if (RANK[layerOf(file)] >= RANK.render) continue;
+    for (const m of src.matchAll(/['"](\.[^'"\n]*)['"]/g)) {
+      const resolved = path.posix.normalize(
+        path.posix.join(path.posix.dirname(file), m[1])
+      );
+      if (layerOf(resolved) === 'render') out.push(`${file} -> ${resolved}`);
     }
   }
   return out.sort();
@@ -765,6 +807,15 @@ async function main() {
       `${file} imports js/ui.js. Ask for what you need through ` +
         `command() in js/appState.js (ui.js registers the handler), or read ` +
         `shared state from there.`
+    );
+  }
+
+  // The engine and everything below it never name a render-layer file.
+  for (const edge of findRenderImports(uiSources)) {
+    problems.push(
+      `${edge}: the render layer paints and the layers below it never load ` +
+        `it. Register a drawer instead (registerBodyDrawers in js/physics.js); ` +
+        `the render layer imports the engine and fills the table.`
     );
   }
 

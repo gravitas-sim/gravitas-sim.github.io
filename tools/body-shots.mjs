@@ -6,6 +6,7 @@
 //
 //   node tools/body-shots.mjs --out shots/before
 //   node tools/body-shots.mjs --out shots/after --only comet
+//   node tools/body-shots.mjs --out shots/still --reduced-motion --tier low --deterministic
 //
 // A visual change needs a picture on each side of it, and a picture is only
 // evidence if the two were taken of the same thing. Everything that could
@@ -125,6 +126,7 @@ async function main() {
   const only = args.includes('--only')
     ? args[args.indexOf('--only') + 1]
     : null;
+  const deterministic = args.includes('--deterministic');
   const tier = args.includes('--tier')
     ? args[args.indexOf('--tier') + 1]
     : 'full';
@@ -140,6 +142,9 @@ async function main() {
   });
   const page = await browser.newPage({
     viewport: { width: 1280, height: 800 },
+    reducedMotion: args.includes('--reduced-motion')
+      ? 'reduce'
+      : 'no-preference',
   });
   page.on('pageerror', e => console.warn(`  ! ${e.message}`));
 
@@ -166,11 +171,28 @@ async function main() {
     if (only && scene.id !== only) continue;
 
     const info = await page.evaluate(
-      async ({ scene, seed, tier }) => {
+      async ({ scene, seed, tier, deterministic }) => {
         const ui = await import('/js/ui.js');
         const physics = await import('/js/physics.js');
         const quality = await import('/js/quality.js');
 
+        // --deterministic: some scenes draw on Math.random while they are built
+        // or stepped (the star cluster's field, a disk's spiral factor), and
+        // the live loop may step the world once between the build and the
+        // pause, so two captures of one build differ by whole fields of stars.
+        // Replacing Math.random with a fixed stream and pausing first makes a
+        // capture a function of the code alone, which is what a comparison
+        // between two builds needs.
+        if (deterministic) {
+          let a = 0x9e3779b9;
+          Math.random = () => {
+            a = (a + 0x6d2b79f5) | 0;
+            let t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+          ui.state.paused = true;
+        }
         ui.SETTINGS.preset_scenario = scene.scenario;
         ui.initialize_simulation({ seed });
         ui.SETTINGS.quality_tier = tier;
@@ -263,7 +285,7 @@ async function main() {
           center,
         };
       },
-      { scene, seed: SEED, tier }
+      { scene, seed: SEED, tier, deterministic }
     );
 
     // The world that was actually built, before anything is written. A capture

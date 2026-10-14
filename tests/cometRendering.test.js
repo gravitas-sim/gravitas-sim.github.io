@@ -27,6 +27,8 @@ import {
   findObjectAtPosition,
   setStateReference,
 } from '../js/physics.js';
+// Registers the drawers the body classes call; the engine never imports them.
+import '../js/bodyDraw.js';
 
 /**
  * A 2D context that records what was asked of it.

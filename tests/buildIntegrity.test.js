@@ -134,7 +134,9 @@ describe('the production build preserves what the physics reads', () => {
       /get kind\(\) \{\s+return this\.constructor\.kind;/
     );
     expect(bodies.sort()).toEqual([...BODY_CLASSES].sort());
-    expect(physics).toMatch(/export const className = o => o\?\.kind \?\? ''/);
+    expect(physics).toMatch(
+      /export const className = o =>\s+\(typeof o\?\.kind === 'string' && o\.kind\) \|\| \(o \? 'Object' : ''\)/
+    );
   });
 
   test('a kind is not state: not enumerated, not replaced by a saved state', async () => {
