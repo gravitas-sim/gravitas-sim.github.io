@@ -71,7 +71,6 @@ import {
 import {
   initCaptureMeasure,
   updateSpeedDisplay,
-  adjustSimSpeed,
   takeScreenshot,
   computeAreaSweep,
   isAreaSweepSuppressed,
@@ -540,7 +539,7 @@ onLocaleChange(() => {
   }
 });
 
-initPlacement({ canvas, adjustSimSpeed, updateSpeedDisplay, takeScreenshot });
+initPlacement({ canvas });
 
 // The inspector header buttons and the resize handler (js/inspectorWindow.js).
 wireInspectorControls();

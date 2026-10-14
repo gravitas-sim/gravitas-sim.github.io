@@ -180,9 +180,9 @@
     flex-wrap: wrap;
     gap: var(--space-2);
   }
-  /* The figure. 16:10, which is the ratio js/embed.js offers for the reason it
-     documents there: an orbit is as tall as it is wide, and 16:9 crops the top
-     and bottom of an eccentric one. */
+  /* The figure. 16:10, which is the ratio the embed shell in js/world.js offers
+     for the reason it documents there: an orbit is as tall as it is wide, and
+     16:9 crops the top and bottom of an eccentric one. */
   .teach-figure {
     margin-top: var(--space-4);
     aspect-ratio: 16 / 10;

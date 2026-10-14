@@ -7,10 +7,10 @@
 // Part two (below) is the scenario panel loader, folded in to pay for this
 // file's request.
 //
-// Never imports ui.js. What it needs of the coordinator comes in as one context
-// object, built once in ui.js and passed to initPlacement(ctx): canvas,
-// adjustSimSpeed, updateSpeedDisplay, takeScreenshot (CONTRIBUTING.md, Module
-// boundaries). Nothing touches an element at import: initPlacement(ctx) and
+// Never imports ui.js. The one thing it needs of it, the canvas, comes in as a
+// context object passed to initPlacement(ctx) (CONTRIBUTING.md, Module
+// boundaries); the speed and screenshot keys call js/captureMeasure.js.
+// Nothing touches an element at import: initPlacement(ctx) and
 // initObjectPicker() register the listeners where ui.js's own start-up code ran
 // them, so listener order is unchanged. They live as long as the page, so there
 // is no mount and no js/listeners.js.
@@ -51,17 +51,18 @@ import { showObjectInspector, hideObjectInspector } from './inspectorWindow.js';
 import { worldToScreen, debugLog } from './utils.js';
 import { resetFollowCamera } from './followCamera.js';
 import {
+  adjustSimSpeed,
+  updateSpeedDisplay,
+  takeScreenshot,
+} from './captureMeasure.js';
+import {
   ensureDeferredMessages,
   loadFragment,
   mountFragment,
   unmountFragment,
 } from './i18n/deferredMessages.js';
 
-// The context ui.js hands to initPlacement (see the header).
-let canvas = null;
-let adjustSimSpeed = null;
-let updateSpeedDisplay = null;
-let takeScreenshot = null;
+let canvas = null; // set by initPlacement(ctx)
 
 // No global annotation helpers in clean state
 // Return attractors sorted by gravitational influence m/r^2
@@ -815,11 +816,10 @@ const buildObjectPicker = () => {
  * Register the pointer, wheel and key listeners and the keyboard-placement
  * shortcut. Called once by ui.js, where its own start-up code ran them.
  *
- * @param {{canvas: HTMLCanvasElement, adjustSimSpeed: Function,
- *   updateSpeedDisplay: Function, takeScreenshot: Function}} ctx - From ui.js
+ * @param {{canvas: HTMLCanvasElement}} ctx - From ui.js
  */
 export function initPlacement(ctx) {
-  ({ canvas, adjustSimSpeed, updateSpeedDisplay, takeScreenshot } = ctx);
+  ({ canvas } = ctx);
 
   // Its own listener, in the capture phase and before the general shortcut
   // handler, because while a placement is being aimed the arrow keys belong to it

@@ -183,7 +183,7 @@ test.describe('capture', () => {
   );
 
   // Most visits never record, so the recorder is not part of start-up: it is
-  // fetched on the first press of the button (js/ui.js). captureCapability()
+  // fetched on the first press of the button (js/captureMeasure.js). captureCapability()
   // imports it, so this asks js/utils.js instead, which start-up has loaded.
   test('the recorder is fetched on the first press, not at start-up', async ({
     page,

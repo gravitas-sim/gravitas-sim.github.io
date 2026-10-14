@@ -276,7 +276,7 @@ export const wireInspectorOverlayToggles = () => {
  * @param {object} object - The selected body
  * @param {string} type - Its type name
  * @param {object} info - Output of the per-type info function
- * @returns {object|null} A view model for js/objectInspector.js
+ * @returns {object|null} A view model for js/inspectorPanel.js
  */
 export const buildInspectorView = (object, type, info) => {
   if (!info) return null;
@@ -417,7 +417,7 @@ export const buildInspectorView = (object, type, info) => {
  * computed from the mass, and nothing offered here can change one of them.
  *
  * @param {object} bh - The selected black hole
- * @returns {object} The model js/objectInspector.js renders
+ * @returns {object} The model js/inspectorPanel.js renders
  */
 const appearanceModel = bh => {
   const a = bh.appearance || {};
@@ -531,7 +531,7 @@ const massControlModel = (object, type) => {
       return null;
   }
 
-  // Returns a view model rather than markup: js/objectInspector.js owns the
+  // Returns a view model rather than markup: js/inspectorPanel.js owns the
   // HTML now, and the ranges and units are the part that belongs here, next to
   // the object types they describe. massLabel is no longer rendered - the
   // control is labeled "Mass" in one compact row - but the switch above still
