@@ -315,6 +315,21 @@ const paintBody = (o, ctx, kind) => {
   console.warn('No body drawers are registered: import js/bodyDraw.js.');
 };
 
+// The particle pool and the merger explosions are filed by js/bodyEffects.js
+// (registerEffects); until then the pool is empty and there are none.
+const emptyPool = {
+  getParticle: () => null,
+  updateAndCleanup() {},
+  getActiveParticles: () => [],
+  clear() {},
+};
+let particlePool = emptyPool;
+const explosions = Object.create(null);
+const registerEffects = ({ pool, ...table }) => {
+  if (pool) particlePool = pool;
+  return Object.assign(explosions, table);
+};
+
 // Physics settings that can be updated from UI.
 //
 // Twenty-six of these twenty-seven keys also appear in DEFAULT_SETTINGS in
@@ -4355,17 +4370,6 @@ class WhiteDwarf extends PhysicsObject {
     this.name = getRandomName('whiteDwarfs');
   }
 
-  getTemperatureColor() {
-    // Color based on temperature
-    if (this.temperature > 15000)
-      return '#9BB0FF'; // Blue-white
-    else if (this.temperature > 10000)
-      return '#CAD7FF'; // White
-    else if (this.temperature > 7500)
-      return '#F8F7FF'; // Yellow-white
-    else return '#FFE4B5'; // Orange-white
-  }
-
   get_state() {
     const baseState = super.get_state();
     return {
@@ -4384,7 +4388,6 @@ class WhiteDwarf extends PhysicsObject {
   }
 }
 
-// Particle object pool for memory optimization
 // Visual radius of a galaxy. Drawing size only: as far as the dynamics are
 // concerned a member of a cluster is a point mass, which is exactly how Zwicky
 // treated them.
@@ -4455,124 +4458,6 @@ class Galaxy extends PhysicsObject {
     this.tilt = galaxyTilt(this.id);
   }
 }
-
-class ParticlePool {
-  constructor(initialSize = 100) {
-    this.pool = [];
-    this.activeParticles = [];
-    this.maxPoolSize = initialSize;
-
-    // Don't pre-allocate particles to avoid initialization issues
-    // They will be created as needed and pooled when they die
-  }
-
-  getParticle(
-    pos,
-    vel,
-    lifetime = 0.8,
-    start_size = 5,
-    end_size = 1,
-    color = 'rgb(255,255,100)'
-  ) {
-    let particle;
-    if (this.pool.length > 0) {
-      particle = this.pool.pop();
-      if (particle.reset) {
-        particle.reset(pos, vel, lifetime, start_size, end_size, color);
-      } else {
-        // Fallback for particles created before reset method was added
-        if (!particle.pos) particle.pos = { x: 0, y: 0 };
-        if (!particle.vel) particle.vel = { x: 0, y: 0 };
-        particle.pos.x = pos.x;
-        particle.pos.y = pos.y;
-        particle.vel.x = vel.x;
-        particle.vel.y = vel.y;
-        particle.lifetime = Math.max(0.1, lifetime);
-        particle.age = 0;
-        particle.start_size = start_size;
-        particle.end_size = end_size;
-        particle.color = color;
-      }
-    } else {
-      particle = new Particle(pos, vel, lifetime, start_size, end_size, color);
-    }
-    this.activeParticles.push(particle);
-    return particle;
-  }
-
-  updateAndCleanup(dt) {
-    for (let i = this.activeParticles.length - 1; i >= 0; i--) {
-      const particle = this.activeParticles[i];
-      particle.update(dt);
-
-      if (!particle.is_alive()) {
-        // Return to pool if not at max capacity
-        this.activeParticles.splice(i, 1);
-        if (this.pool.length < this.maxPoolSize) {
-          this.pool.push(particle);
-        }
-        // Otherwise let it be garbage collected
-      }
-    }
-  }
-
-  getActiveParticles() {
-    return this.activeParticles;
-  }
-
-  clear() {
-    this.pool.push(...this.activeParticles);
-    this.activeParticles.length = 0;
-  }
-}
-
-// Global particle pool - initialize after Particle class is defined
-let particlePool;
-
-// Particle class for visual effects - optimized with reset method
-class Particle {
-  constructor(
-    pos,
-    vel,
-    lifetime = 0.8,
-    start_size = 5,
-    end_size = 1,
-    color = 'rgb(255,255,100)'
-  ) {
-    this.pos = { x: 0, y: 0 };
-    this.vel = { x: 0, y: 0 };
-    this.reset(pos, vel, lifetime, start_size, end_size, color);
-  }
-
-  reset(pos, vel, lifetime, start_size, end_size, color) {
-    this.pos.x = pos.x;
-    this.pos.y = pos.y;
-    this.vel.x = vel.x;
-    this.vel.y = vel.y;
-    this.lifetime = Math.max(0.1, lifetime);
-    this.age = 0;
-    this.start_size = start_size;
-    this.end_size = end_size;
-    this.color = color;
-  }
-
-  update(dt) {
-    this.pos.x += this.vel.x * dt;
-    this.pos.y += this.vel.y * dt;
-    this.age += dt;
-  }
-
-  is_alive() {
-    return this.age < this.lifetime;
-  }
-
-  draw(ctx) {
-    paintBody(this, ctx, 'Particle');
-  }
-}
-
-// Initialize particle pool after Particle class is defined
-particlePool = new ParticlePool(200);
 
 const findObjectAtPosition = worldPos => {
   // Check black holes first (they're usually the most important)
@@ -5000,373 +4885,6 @@ const handle_collisions = objects_list => {
   });
 };
 
-// Create kilonova explosion effect
-/**
- * Create a spectacular kilonova explosion when neutron stars merge
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging neutron stars
- */
-const createKilonovaExplosion = (pos, mass) => {
-  // Kilonova parameters based on mass
-  const massInSuns = mass / SOLAR_MASS_UNIT;
-  const explosionIntensity = Math.min(2.0, massInSuns / 2.0); // Scale with mass
-
-  // Create massive particle explosion
-  const particleCount = Math.floor(200 + massInSuns * 50); // 200-400 particles based on mass
-
-  for (let i = 0; i < particleCount; i++) {
-    // Random angle and speed for explosion
-    const angle = Math.random() * 2 * Math.PI;
-    const speed = (Math.random() * 300 + 200) * explosionIntensity; // 200-500 speed units
-
-    const vel = {
-      x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle),
-    };
-
-    // Random position within explosion radius
-    const radius = Math.random() * 50;
-    const spawnAngle = Math.random() * 2 * Math.PI;
-    const spawnPos = {
-      x: pos.x + radius * Math.cos(spawnAngle),
-      y: pos.y + radius * Math.sin(spawnAngle),
-    };
-
-    // Kilonova colors: bright blue-white to orange-red
-    const colors = [
-      'rgb(255, 255, 255)', // Pure white
-      'rgb(255, 255, 200)', // Bright yellow
-      'rgb(255, 200, 100)', // Orange
-      'rgb(255, 150, 50)', // Bright orange
-      'rgb(255, 100, 0)', // Red-orange
-      'rgb(200, 100, 255)', // Purple (r-process elements)
-      'rgb(100, 200, 255)', // Blue (gamma rays)
-    ];
-
-    const color = colors[Math.floor(Math.random() * colors.length)];
-
-    // Create particle with kilonova properties
-    const particle = particlePool.getParticle(
-      spawnPos,
-      vel,
-      Math.random() * 3.0 + 2.0, // 2-5 second lifetime
-      Math.random() * 15 + 10, // 10-25 start size
-      Math.random() * 3 + 1, // 1-4 end size
-      color
-    );
-
-    // Add special kilonova glow effect
-    if (particle) {
-      particle.kilonova_glow = true;
-      particle.glow_intensity = Math.random() * 0.5 + 0.5;
-    }
-  }
-
-  // Create gravitational wave ripple effect
-  gravity_ripples.push({
-    x: pos.x,
-    y: pos.y,
-    time: Date.now(),
-    created: performance.now(),
-    duration: 3000, // 3 seconds - reduced from 5 seconds
-    mass: massInSuns,
-    gw_strength: 0.4, // Reduced strength from 1.0 to 0.4
-    kilonova: true, // Special flag for kilonova GW
-  });
-
-  // Create shockwave effect
-  for (let i = 0; i < 50; i++) {
-    const angle = (i / 50) * 2 * Math.PI;
-    const speed = 150 + Math.random() * 100;
-    const vel = {
-      x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle),
-    };
-
-    particlePool.getParticle(
-      pos,
-      vel,
-      Math.random() * 2.0 + 1.0, // 1-3 second lifetime
-      Math.random() * 8 + 5, // 5-13 start size
-      Math.random() * 2 + 1, // 1-3 end size
-      'rgb(255, 255, 255)' // White shockwave
-    );
-  }
-};
-
-// Create smaller kilonova explosion for neutron star mergers that don't form black holes
-/**
- * Create a smaller kilonova explosion when neutron stars merge but don't form a black hole
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging neutron stars
- */
-const createSmallKilonovaExplosion = (pos, mass) => {
-  // Kilonova parameters based on mass (reduced intensity)
-  const massInSuns = mass / SOLAR_MASS_UNIT;
-  const explosionIntensity = Math.min(1.0, massInSuns / 3.0); // Reduced intensity for smaller explosions
-
-  // Create smaller particle explosion
-  const particleCount = Math.floor(100 + massInSuns * 25); // 100-200 particles (half of full kilonova)
-
-  for (let i = 0; i < particleCount; i++) {
-    // Random angle and speed for explosion
-    const angle = Math.random() * 2 * Math.PI;
-    const speed = (Math.random() * 200 + 150) * explosionIntensity; // 150-350 speed units (reduced)
-
-    const vel = {
-      x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle),
-    };
-
-    // Random position within explosion radius (smaller)
-    const radius = Math.random() * 30;
-    const spawnAngle = Math.random() * 2 * Math.PI;
-    const spawnPos = {
-      x: pos.x + radius * Math.cos(spawnAngle),
-      y: pos.y + radius * Math.sin(spawnAngle),
-    };
-
-    // Kilonova colors: bright blue-white to orange-red (same as full kilonova)
-    const colors = [
-      'rgb(255, 255, 255)', // Pure white
-      'rgb(255, 255, 200)', // Bright yellow
-      'rgb(255, 200, 100)', // Orange
-      'rgb(255, 150, 50)', // Bright orange
-      'rgb(255, 100, 0)', // Red-orange
-      'rgb(200, 100, 255)', // Purple (r-process elements)
-      'rgb(100, 200, 255)', // Blue (gamma rays)
-    ];
-
-    const color = colors[Math.floor(Math.random() * colors.length)];
-
-    // Create particle with kilonova properties (smaller sizes)
-    const particle = particlePool.getParticle(
-      spawnPos,
-      vel,
-      Math.random() * 2.0 + 1.5, // 1.5-3.5 second lifetime (shorter)
-      Math.random() * 10 + 6, // 6-16 start size (smaller)
-      Math.random() * 2 + 1, // 1-3 end size (smaller)
-      color
-    );
-
-    // Add special kilonova glow effect (reduced intensity)
-    if (particle) {
-      particle.kilonova_glow = true;
-      particle.glow_intensity = Math.random() * 0.3 + 0.3; // Reduced glow
-    }
-  }
-
-  // Create gravitational wave ripple effect (smaller)
-  gravity_ripples.push({
-    x: pos.x,
-    y: pos.y,
-    time: Date.now(),
-    created: performance.now(),
-    duration: 2000, // 2 seconds (shorter than full kilonova)
-    mass: massInSuns,
-    gw_strength: 0.2, // Reduced strength
-    kilonova: true, // Special flag for kilonova GW
-  });
-
-  // Create smaller shockwave effect
-  for (let i = 0; i < 25; i++) {
-    // Half the shockwave particles
-    const angle = (i / 25) * 2 * Math.PI;
-    const speed = 100 + Math.random() * 75; // Reduced speed
-    const vel = {
-      x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle),
-    };
-
-    particlePool.getParticle(
-      pos,
-      vel,
-      Math.random() * 1.5 + 0.8, // 0.8-2.3 second lifetime (shorter)
-      Math.random() * 6 + 3, // 3-9 start size (smaller)
-      Math.random() * 1.5 + 0.5, // 0.5-2 end size (smaller)
-      'rgb(255, 255, 255)' // White shockwave
-    );
-  }
-};
-
-// Create neutron star-white dwarf merger explosion
-/**
- * Create a moderate explosion when neutron star and white dwarf merge
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging objects
- */
-const createNSWDExplosion = (pos, mass) => {
-  const massInSuns = mass / SOLAR_MASS_UNIT;
-  const explosionIntensity = Math.min(1.5, massInSuns / 1.5); // Moderate intensity
-
-  // Create moderate particle explosion
-  const particleCount = Math.floor(80 + massInSuns * 30); // 80-150 particles
-
-  for (let i = 0; i < particleCount; i++) {
-    const angle = Math.random() * 2 * Math.PI;
-    const speed = (Math.random() * 200 + 150) * explosionIntensity; // 150-350 speed units
-
-    const vel = {
-      x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle),
-    };
-
-    const radius = Math.random() * 30;
-    const spawnAngle = Math.random() * 2 * Math.PI;
-    const spawnPos = {
-      x: pos.x + radius * Math.cos(spawnAngle),
-      y: pos.y + radius * Math.sin(spawnAngle),
-    };
-
-    // NS-WD colors: white to blue-white
-    const colors = [
-      'rgb(255, 255, 255)', // Pure white
-      'rgb(255, 255, 220)', // Bright white-yellow
-      'rgb(220, 255, 255)', // Cyan-white
-      'rgb(200, 220, 255)', // Blue-white
-      'rgb(255, 220, 200)', // Pink-white
-      'rgb(180, 200, 255)', // Light blue
-    ];
-
-    const color = colors[Math.floor(Math.random() * colors.length)];
-
-    const particle = particlePool.getParticle(
-      spawnPos,
-      vel,
-      Math.random() * 2.0 + 1.5, // 1.5-3.5 second lifetime
-      Math.random() * 10 + 6, // 6-16 start size
-      Math.random() * 2 + 1, // 1-3 end size
-      color
-    );
-
-    // Add moderate glow effect
-    if (particle) {
-      particle.kilonova_glow = true;
-      particle.glow_intensity = Math.random() * 0.3 + 0.3; // Moderate glow
-    }
-  }
-
-  // Create gravitational wave ripple effect
-  gravity_ripples.push({
-    x: pos.x,
-    y: pos.y,
-    time: Date.now(),
-    created: performance.now(),
-    duration: 3000, // 3 seconds
-    mass: massInSuns,
-    gw_strength: 0.6, // Moderate strength
-    nswd_merger: true, // Special flag for NS-WD merger
-  });
-
-  // Create moderate shockwave effect
-  for (let i = 0; i < 25; i++) {
-    const angle = (i / 25) * 2 * Math.PI;
-    const speed = 120 + Math.random() * 80;
-    const vel = {
-      x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle),
-    };
-
-    particlePool.getParticle(
-      pos,
-      vel,
-      Math.random() * 1.5 + 0.8, // 0.8-2.3 second lifetime
-      Math.random() * 6 + 4, // 4-10 start size
-      Math.random() * 2 + 1, // 1-3 end size
-      'rgb(255, 255, 255)' // White shockwave
-    );
-  }
-};
-
-// Create white dwarf-white dwarf merger explosion (Type Ia supernova precursor)
-/**
- * Create a smaller explosion when white dwarfs merge
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging white dwarfs
- */
-const createWDWDExplosion = (pos, mass) => {
-  const massInSuns = mass / SOLAR_MASS_UNIT;
-  const explosionIntensity = Math.min(1.0, massInSuns / 1.0); // Smaller intensity
-
-  // Create smaller particle explosion
-  const particleCount = Math.floor(40 + massInSuns * 20); // 40-80 particles
-
-  for (let i = 0; i < particleCount; i++) {
-    const angle = Math.random() * 2 * Math.PI;
-    const speed = (Math.random() * 150 + 100) * explosionIntensity; // 100-250 speed units
-
-    const vel = {
-      x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle),
-    };
-
-    const radius = Math.random() * 20;
-    const spawnAngle = Math.random() * 2 * Math.PI;
-    const spawnPos = {
-      x: pos.x + radius * Math.cos(spawnAngle),
-      y: pos.y + radius * Math.sin(spawnAngle),
-    };
-
-    // WD-WD colors: white to yellow
-    const colors = [
-      'rgb(255, 255, 255)', // Pure white
-      'rgb(255, 255, 240)', // Off-white
-      'rgb(255, 250, 220)', // Cream
-      'rgb(255, 240, 200)', // Light yellow
-      'rgb(255, 230, 180)', // Pale yellow
-      'rgb(240, 240, 255)', // Very light blue
-    ];
-
-    const color = colors[Math.floor(Math.random() * colors.length)];
-
-    const particle = particlePool.getParticle(
-      spawnPos,
-      vel,
-      Math.random() * 1.5 + 1.0, // 1-2.5 second lifetime
-      Math.random() * 6 + 4, // 4-10 start size
-      Math.random() * 2 + 1, // 1-3 end size
-      color
-    );
-
-    // Add subtle glow effect
-    if (particle) {
-      particle.kilonova_glow = true;
-      particle.glow_intensity = Math.random() * 0.2 + 0.2; // Subtle glow
-    }
-  }
-
-  // Create gravitational wave ripple effect
-  gravity_ripples.push({
-    x: pos.x,
-    y: pos.y,
-    time: Date.now(),
-    created: performance.now(),
-    duration: 2000, // 2 seconds
-    mass: massInSuns,
-    gw_strength: 0.3, // Smaller strength
-    wdwd_merger: true, // Special flag for WD-WD merger
-  });
-
-  // Create small shockwave effect
-  for (let i = 0; i < 15; i++) {
-    const angle = (i / 15) * 2 * Math.PI;
-    const speed = 80 + Math.random() * 60;
-    const vel = {
-      x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle),
-    };
-
-    particlePool.getParticle(
-      pos,
-      vel,
-      Math.random() * 1.0 + 0.5, // 0.5-1.5 second lifetime
-      Math.random() * 4 + 3, // 3-7 start size
-      Math.random() * 1 + 1, // 1-2 end size
-      'rgb(255, 255, 255)' // White shockwave
-    );
-  }
-};
-
 /**
  * Drop objects that are no longer alive, releasing their energy history.
  * A plain `.filter(o => o.alive)` at a removal site silently orphans the
@@ -5564,7 +5082,7 @@ const handle_star_merging = stars_list => {
 
               if (is_ns_ns_merger) {
                 // Create spectacular kilonova explosion for black hole formation
-                createKilonovaExplosion(new_pos, new_mass);
+                explosions.kilonova?.(new_pos, new_mass);
               }
 
               new_object = new BlackHole(new_pos, new_mass, new_vel, true);
@@ -5596,7 +5114,7 @@ const handle_star_merging = stars_list => {
 
               if (is_ns_ns_merger) {
                 // Create smaller kilonova explosion for neutron star formation
-                createSmallKilonovaExplosion(new_pos, new_mass);
+                explosions.smallKilonova?.(new_pos, new_mass);
               } else {
                 // Check if this is a neutron star-white dwarf merger
                 const is_ns_wd_merger =
@@ -5611,7 +5129,7 @@ const handle_star_merging = stars_list => {
                     new_mass_in_suns,
                     'solar masses'
                   );
-                  createNSWDExplosion(new_pos, new_mass);
+                  explosions.neutronStarWhiteDwarf?.(new_pos, new_mass);
                 }
               }
 
@@ -5643,10 +5161,10 @@ const handle_star_merging = stars_list => {
                   new_mass_in_suns,
                   'solar masses'
                 );
-                createNSWDExplosion(new_pos, new_mass);
+                explosions.neutronStarWhiteDwarf?.(new_pos, new_mass);
               } else if (is_wd_wd_merger) {
                 // Create white dwarf-white dwarf merger explosion (results in neutron star)
-                createWDWDExplosion(new_pos, new_mass);
+                explosions.whiteDwarfPair?.(new_pos, new_mass);
               }
 
               new_object = new NeutronStar(
@@ -6333,8 +5851,6 @@ export {
   NeutronStar,
   WhiteDwarf,
   Galaxy,
-  Particle,
-  ParticlePool,
   AccretionDiskParticle,
   particlePool,
   gravitational_acceleration,
@@ -6415,6 +5931,7 @@ export {
   getDetailScale,
   setStateReference,
   registerBodyDrawers,
+  registerEffects,
   // The live values the drawers read (js/bodyDraw.js, js/bodyDrawSky.js). The
   // engine keeps them because it owns them: it reassigns the settings, sets
   // the count of bodies on screen each step and builds the black hole's

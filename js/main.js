@@ -80,7 +80,7 @@ import {
 } from './i18n/index.js';
 import { announce } from './notify.js';
 import { initI18nDom } from './i18n/dom.js';
-import { createDoubleTapRecognizer } from './gestures.js';
+import { createDoubleTapRecognizer } from './bodyEffects.js';
 import { setRequestedLessonLocale } from './lessonLocale.js';
 import { resetFollowCamera } from './followCamera.js';
 import { mountShell } from './shell.js';
@@ -405,8 +405,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // milliseconds apart, so every pinch snapped the view home - the "the view
   // jumps" report, on a touchscreen. So did a drag then a tap, a placement
   // then a tap, and two fingers touching at once. The recognizer in
-  // js/gestures.js requires two actual taps: one finger, brief, still, close
-  // together in space as well as in time.
+  // js/bodyEffects.js requires two actual taps: one finger, brief, still,
+  // close together in space as well as in time.
   const doubleTap = createDoubleTapRecognizer({
     onDoubleTap: () => {
       state.zoom = 1.0;
