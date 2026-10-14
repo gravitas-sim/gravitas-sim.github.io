@@ -36,6 +36,7 @@ import * as acorn from 'acorn';
 import { MANIFEST } from '../js/data/investigations/manifest.js';
 import { LAZY_FAMILIES } from '../js/widgets.js';
 import {
+  FAMILY_FILE,
   FAMILY_ORDER,
   FILES,
   builtinEntries,
@@ -203,7 +204,7 @@ describe('the committed registries', () => {
   test('families: one entry per js/*Widgets.js module, in the written order, each loading its own module', async () => {
     const committed = committedFamilies();
     const files = readdirSync(path.join(ROOT, 'js'))
-      .filter(f => /^[A-Za-z]+Widgets\.js$/.test(f))
+      .filter(f => FAMILY_FILE.test(f))
       .sort();
     expect(
       Object.values(committed)
@@ -494,6 +495,20 @@ describe('new work reaches the registries with no other edit', () => {
       ['a', null],
       ['b', null],
     ]);
+  });
+
+  test('a family module with a digit or a hyphen in its name is found, and one it cannot read stops the run', () => {
+    const dir = tree({
+      'js/lab3dWidgets.js': "export const LAB3D_WIDGETS = [{ id: 'l3' }];",
+    });
+    expect(familyEntries([], dir, []).map(f => f.key)).toEqual(['lab3d']);
+    expect(FAMILY_FILE.test('lab3dWidgets.js')).toBe(true);
+    expect(FAMILY_FILE.test('my-extraWidgets.js')).toBe(true);
+    expect(FAMILY_FILE.test('widgets.js')).toBe(false);
+    const odd = tree({
+      'js/my-extraWidgets.js': 'export const A_WIDGETS = f();',
+    });
+    expect(() => familyEntries([], odd, [])).toThrow(/not an array literal/);
   });
 
   test('the regions come out as literal imports a bundler can see', async () => {

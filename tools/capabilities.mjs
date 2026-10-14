@@ -201,14 +201,6 @@ export async function checkRepository(packages) {
       'js/platform/catalog.generated.js is stale: run `node tools/capabilities.mjs generate`'
     );
   }
-  // The lazy registries are written from these manifests, and this is the check
-  // CI runs (D-CAP-01): a manifest edit that left one stale fails here.
-  const { staleRegions } = await import('./capability-registries.mjs');
-  for (const region of await staleRegions()) {
-    problems.push(
-      `${region} is stale: run \`node tools/capability-registries.mjs\``
-    );
-  }
   return problems;
 }
 

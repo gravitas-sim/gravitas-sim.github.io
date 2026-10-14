@@ -328,6 +328,12 @@ export function readFamily(file, source) {
   return { exportName: arrays[0], ids, ready: ready[0] || null };
 }
 
+/**
+ * A family module: any js/*Widgets.js, digits and hyphens included. One the
+ * reader cannot follow is an error, never a file that is quietly left out.
+ */
+export const FAMILY_FILE = /.Widgets\.js$/;
+
 /** The key a family is listed under. */
 export const keyOf = file =>
   FAMILY_KEYS[file] || lowerFirst(file.replace(/Widgets\.js$/, ''));
@@ -341,7 +347,7 @@ export function familyEntries(manifests, root = REPO, order = FAMILY_ORDER) {
       owned.set(sourceOf(id, m), { pkg: m.id, family: f });
     }
   const files = readdirSync(path.join(root, 'js'))
-    .filter(f => /^[A-Za-z]+Widgets\.js$/.test(f))
+    .filter(f => FAMILY_FILE.test(f))
     .sort();
   const byKey = new Map();
   for (const file of files) {
@@ -395,6 +401,12 @@ const key = k => (/^[A-Za-z_$][\w$]*$/.test(k) ? k : str(k));
 
 const renderFamilies = families =>
   [
+    `// ${families
+      .filter(f => f.ready)
+      .map(f => f.key)
+      .join(
+        ', '
+      )} wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.`,
     'export const LAZY_FAMILIES = Object.freeze({',
     ...families.map(f =>
       f.familyId

@@ -399,6 +399,22 @@ export const CHECKS = [
     ci: 'checks',
     group: 'correctness',
   },
+  // The lazy registries (LAZY_FAMILIES, BUILTINS, the lesson loaders) are
+  // regions written by tools/capability-registries.mjs, so this is the check
+  // of their text, Prettier's formatting included.
+  {
+    id: 'registries',
+    label: 'the lazy registries are what the manifests and modules say',
+    command: ['npm', 'run', 'registries:check'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI holds the same facts as code, not text, in ' +
+      'tests/capabilityRegistries.test.js (Prettier does not load under ' +
+      'Jest); the workflow is not changed for the formatting check, which the ' +
+      'merge queue runs through `generate --check`',
+    group: 'correctness',
+  },
   // The curated catalog (CATALOG.md): its archives, the extensions they come
   // from, their licenses and catalog.json itself, against the repository.
   {

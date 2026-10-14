@@ -93,9 +93,7 @@ function fromPackage(familyId, path) {
  * than the module - their prose, or data behind a second import - the promise
  * whenWidgetsReady() waits for. LAZY_FAMILIES below is written by
  * tools/capability-registries.mjs: from each js/*Widgets.js module its exported
- * array, the instrument ids in it and the one `...Ready` promise it exports
- * (the tidal and dark-matter prose; the spectra's flux, the GWOSC strain, the
- * Sky Lab's stars and the other data that arrive behind a second import).
+ * array, the instrument ids in it and the one `...Ready` promise it exports.
  */
 const familyEntry = (load, path, exportName, ids, ready) => ({
   ids,
@@ -106,6 +104,7 @@ const familyEntry = (load, path, exportName, ids, ready) => ({
 });
 
 // <generated:lazy-families>
+// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
 export const LAZY_FAMILIES = Object.freeze({
   energy: familyEntry(
     () => import('./energyWidgets.js'),

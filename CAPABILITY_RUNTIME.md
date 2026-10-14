@@ -80,7 +80,8 @@ eighty-five capabilities, and the runtime stays for installed packages. The
 three registries that were written by hand are now regions that
 `tools/capability-registries.mjs` writes (`npm run registries`; the
 `registries` node of `tools/generate-graph.mjs`, so `generate --check` covers
-it, and `npm run capabilities:check` fails on a stale one):
+it, `npm run registries:check` fails on a stale one, and a Jest suite holds the
+same facts as code):
 
 | Registry | Lives in | Written from |
 | -------- | -------- | ------------ |
