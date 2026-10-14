@@ -41,9 +41,10 @@
  * --record-sizes only ever lowers them.
  *
  * The render layer (Prompt 107, step 2b) holds what paints a body: js/bodyDraw.js
- * and js/bodyDrawSky.js (the drawers and what they share) and the black hole
- * renderer. The engine and the layers below never import it,
- * in any form; they hold a table of drawers that the render layer fills.
+ * and js/bodyDrawSky.js (the drawers and what they share), js/bodyEffects.js (the
+ * particles and the merger explosions) and the black hole renderer. The engine
+ * and the layers below never import it, in any form; they hold a table of
+ * drawers and of effects that the render layer fills.
  *
  * A fourth is about listeners (Prompt 107, step 3): a module that exports a
  * mount function and registers listeners must do it through the helper in
@@ -194,12 +195,13 @@ const LAYERS = [
     name: 'render',
     blurb:
       'What the bodies look like on the canvas: the drawers the engine calls ' +
-      'through a table and never imports, and the black hole renderer. They ' +
-      'read the engine and paint into a context they are handed; the engine ' +
-      'reaches them only by registration (registerBodyDrawers in ' +
+      'through a table and never imports, the particles and explosions it ' +
+      'spawns at an event, and the black hole renderer. They read the engine ' +
+      'and paint into a context they are handed; the engine reaches them only ' +
+      'by registration (registerBodyDrawers and registerEffects in ' +
       'js/physics.js), so an engine -> render import fails this check. Prompt ' +
       '107, step 2b.',
-    match: [/^js\/bodyDraw(Sky)?\.js$/, /^js\/blackHole\//],
+    match: [/^js\/body(Draw(Sky)?|Effects)\.js$/, /^js\/blackHole\//],
   },
   {
     name: 'feature',

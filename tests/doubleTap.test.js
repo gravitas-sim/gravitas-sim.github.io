@@ -20,7 +20,7 @@ import {
   DOUBLE_TAP_SLOP_PX,
   TAP_MAX_MS,
   TAP_MOVE_PX,
-} from '../js/gestures.js';
+} from '../js/bodyEffects.js';
 
 /** A TouchEvent-shaped object: `touches` is what is still down. */
 const ev = (down, changed) => ({

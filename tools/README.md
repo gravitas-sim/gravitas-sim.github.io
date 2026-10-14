@@ -53,6 +53,7 @@ current, and the orchestrator checks it.
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
 | `draw-trace.mjs` | The canvas calls a body makes, recorded and hashed |  |
 | `e2e-shards.mjs` | Splitting the source browser suite into shards of equal duration |  |
+| `effects-trace.mjs` | The effects an engine event spawns, counted and hashed |  |
 | `empty-world.mjs` | A world with nothing in it |  |
 | `evaluation-summary.mjs` | npm run evaluation:summary -- <files...> | `npm run evaluation:summary` |
 | `exoplanet-reference.mjs` | The Exoplanet Observatory's reference run, and its answer key | `npm run guides:key` |
@@ -110,6 +111,7 @@ current, and the orchestrator checks it.
 | `reversibility-probe.mjs` | Does the engine run backwards? | `npm run probe:reversibility` |
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
+| `seeded-step.mjs` | A preset world stepped under a seed, every body kept at full precision |  |
 | `shell.mjs` | The shared shell, stamped into every page |  |
 | `sky-horizons-astrometric.mjs` | Reference positions for the Sky Lab's ephemeris source (Prompt 106), from JPL Horizons |  |
 | `small-body-sweep.mjs` | Small-body scenario sweep |  |
