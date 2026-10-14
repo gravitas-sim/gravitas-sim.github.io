@@ -1875,7 +1875,7 @@
   "[chromium] › missionEvidence.spec.js › the mission lab keeps evidence › a result is kept as an envelope the report can cite": 0.8,
   "[chromium] › missionEvidence.spec.js › the mission lab keeps evidence › a saved mission is listed in My work and reopens as the same plan": 1.4,
   "[chromium] › missionEvidence.spec.js › the mission lab keeps evidence › the patched conic is drawn against the propagated flight": 0.7,
-  "[chromium] › lessonPerformance.spec.js › a page cleans up its panels › the Observatory leaves nothing behind when its panels open and close": 62.0,
+  "[chromium] › lessonPerformance.spec.js › a page cleans up its panels › the Observatory leaves nothing behind when its panels open and close": 62,
   "[chromium] › lessonPerformance.spec.js › a page cleans up its panels › the Composer leaves nothing behind when its editor is rebuilt": 6.5,
   "[chromium] › lessonPerformance.spec.js › a page cleans up its panels › the Studio leaves nothing behind when its editor is rebuilt": 6.5,
   "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › astrometry panel: twenty open/close cycles add no listeners and strand no panel": 17.8,
@@ -1893,5 +1893,10 @@
   "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › settings: twenty open/close cycles add no listeners and strand no panel": 8.3,
   "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › sound panel: twenty open/close cycles add no listeners and strand no panel": 15.3,
   "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › system builder: twenty open/close cycles add no listeners and strand no panel": 15.7,
-  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › the check sees a removed panel that something still holds, and lets go of one that nothing does": 4.6
+  "[chromium] › lessonPerformance.spec.js › the application cleans up its panels › the check sees a removed panel that something still holds, and lets go of one that nothing does": 4.6,
+  "[chromium] › worldLifecycle.spec.js › the world lifecycle › Load with nothing saved says so and leaves the world alone": 5.2,
+  "[chromium] › worldLifecycle.spec.js › the world lifecycle › Reset all returns to the default settings and the Binary BH world, running": 5.1,
+  "[chromium] › worldLifecycle.spec.js › the world lifecycle › Save keeps the world and Load puts back the same bodies and view": 5.9,
+  "[chromium] › worldLifecycle.spec.js › the world lifecycle › a rebuild request from a panel rebuilds the scenario on a new seed and runs": 4.6,
+  "[chromium] › worldLifecycle.spec.js › the world lifecycle › placing a body or changing galaxy gravity makes a link carry the bodies": 4.3
 }

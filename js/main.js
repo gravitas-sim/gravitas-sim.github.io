@@ -91,7 +91,7 @@ import {
   initEmbedChrome,
   embedRequest,
   embedWorldBuilt,
-} from './embed.js';
+} from './world.js';
 
 // Add global flag to track splash screen status
 window.isSplashActive = true;

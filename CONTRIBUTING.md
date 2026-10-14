@@ -258,6 +258,17 @@ measurement tools, demo mode and the bottom dock) is the second:
 `initCaptureMeasure({canvas, starfieldCanvas})` takes the two canvases and
 nothing else; the demo cycle rebuilds a world and shows its card through
 `command('initialize_simulation')` and `command('show_enhanced_scenario_info')`.
+`js/world.js` (world build, clear, rebuild, save, load, share capture and apply,
+the scenario card, scenario loading) is the third, and needs **no** context
+object: its five pieces of live state (`builtSystem`, `worldPack`,
+`generationSettings`, `worldTouched`, `pendingSettingsOverride`) are its own
+module-level bindings (the sixth the slice 10 count named, `allBodies`, is a
+function of the physics lists), so there is one holder
+and nothing to hand in. `ui.js` still writes two of them, through
+`setBuiltSystem()` (Blank Simulation) and `setPendingSettings()` (Apply); a third
+writer is a design decision. `initWorld()` wires the listeners where `ui.js` ran
+them. The embed shell (`initEmbedMode()`, `embedWorldBuilt()`) lives in the same
+module, to pay for its request.
 
 ### When you need something from a layer above
 

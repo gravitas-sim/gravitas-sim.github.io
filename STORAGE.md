@@ -21,7 +21,7 @@ These are the student's own work, and what an "export everything" would carry:
 | `gravitas_evidence_notebook` | The evidence notebook: entries, their snapshots and fingerprints | `js/notebook/store.js` | notebook store 1, entry snapshots 1 | none; a newer store is left unopened and not overwritten |
 | `gravitas_experiment_<id>` and `gravitas_experiments_index` | The A/B bench's saved experiments and their index | `js/experiments/store.js` | experiment store 3 | reads 1 and 2; version 3 withdrew drift values recorded before #49, with a notice |
 | `gravitas_experiment_checkpoint_<hash>` | A running experiment's checkpoint, to resume after a reload | `js/experimentsPage.js` | experiment result 1 | none |
-| `gravitas_simulation_save` | The sandbox's saved world | `js/ui.js` | unversioned: settings, view, bodies | setting names renamed since are rewritten on load |
+| `gravitas_simulation_save` | The sandbox's saved world | `js/world.js` | unversioned: settings, view, bodies | setting names renamed since are rewritten on load |
 | `gravitas_guides` | The Observatory guides' answers | `js/observatory/guidePanel.js` | guide record `1.0.0` | a record of another version is dropped |
 | `gravitas_lab3d_guide_<id>` | The 3-D lab guides' answers | `js/lab3d/view/guidePanel.js` | guide answers | none |
 | `gravitas_missionlab_<id>` | The mission lab's answers | `js/mission/lab/guidePanel.js` | guide answers | none |
@@ -85,7 +85,7 @@ Moved: lesson progress, assignment progress, the student's name and the objects-
 Still direct, and why (`tests/studentStorage.test.js` lists them and fails on any other):
 - `js/experiments/store.js`, `js/experimentsPage.js`, `js/composerPage.js`, `js/coursePage.js`: their source routes sit at their request ceiling, and the module is a request.
 - `js/evaluationKit.js`: 0.7 KB of room on its route; the module is 1.4 KB.
-- `js/ui.js` (saved world), `js/controls.js`, `js/lecture.js`, `js/main.js`, `js/welcomeGate.js`, `js/settingsSchema.js`: reached from the start-up entry as well as from lazy chunks, which makes the module a shared chunk and costs every lesson route one request (0 free).
+- `js/world.js` (saved world), `js/controls.js`, `js/lecture.js`, `js/main.js`, `js/welcomeGate.js`, `js/settingsSchema.js`: reached from the start-up entry as well as from lazy chunks, which makes the module a shared chunk and costs every lesson route one request (0 free).
 - `js/theme.js`, `js/units.js`, `js/shell.js` and the per-page `i18n.js` files (locale, theme, units): preferences on every route.
 - `js/myWork/made.js` (Prompt 74): reached from the Sandbox's share dialog and the builder, where a second importer would split `js/storage/local.js` into a chunk every lesson fetches. It states the collection's record limit itself (512 KB, equal to `ITEM.made`) and writes with `setItem`.
 - `js/studio/model.js` writes to the Storage a page hands it (the Studio hands a guarded one; the Composer and course builder hand the raw one).

@@ -309,7 +309,7 @@ const fragmentFor = demo => `#${DEMO_LINKS[demo.id]}`;
  * Where a demonstration opens.
  *
  * Embed mode is a query parameter and the state is a fragment, which is the
- * whole reason the two compose: see the header of js/embed.js. Built here
+ * whole reason the two compose: see the header of js/world.js. Built here
  * rather than written into the markup because the fragment is generated.
  *
  * @param {Object} demo - An entry of DEMOS
