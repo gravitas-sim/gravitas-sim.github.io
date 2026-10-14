@@ -800,9 +800,8 @@ function getScaleForObject(obj) {
   }
 }
 
-function getType(obj) {
-  return obj.obj_type || (typeof obj.kind === 'string' && obj.kind) || 'Object';
-}
+const getType = obj =>
+  obj?.obj_type || (typeof obj?.kind === 'string' && obj.kind) || 'Object';
 
 function getGeometryForType(type) {
   switch (type) {
