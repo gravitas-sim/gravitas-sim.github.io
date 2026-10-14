@@ -142,29 +142,40 @@ describe('BlackHole.can_move grace period', () => {
     expect(hole.pos.x).toBeCloseTo(plain[1].x, 9);
   });
 
-  test('the window is a function of the simulated clock, and rewinds with it', () => {
+  test('the window is counted in integrated time, ten seconds of play at 1x', () => {
     resetSimulationTime();
     const hole = new BlackHole({ x: 0, y: 0 }, 100, { x: 1, y: 0 }, true);
     // Ten seconds of play at 1x, which is 50 simulated units (5 per second).
     expect(hole.movementGracePeriod).toBe(10);
-    // The stamp is not an own enumerable key, so the world goldens, which
-    // serialize every own key, are unchanged by this.
-    expect(Object.keys(hole)).not.toContain('creationSimTime');
-    setSimulationTime(49.99);
+    // The counter is not an own enumerable key, so the world goldens, which
+    // serialize every own key, are unchanged by it.
+    expect(Object.keys(hole)).not.toContain('graceUsed');
+    bh_list.push(hole);
+    for (let i = 0; i < 49; i++) updatePhysics(1);
     expect(hole.can_move()).toBe(true);
-    setSimulationTime(50);
+    for (let i = 0; i < 2; i++) updatePhysics(1);
     expect(hole.can_move()).toBe(false);
-    setSimulationTime(10);
+  });
+
+  test('stepping backward gives the window back, so a reversed run retraces the forward one', () => {
+    resetSimulationTime();
+    const hole = new BlackHole({ x: 0, y: 0 }, 100, { x: 1, y: 0 }, true);
+    bh_list.push(hole);
+    for (let i = 0; i < 60; i++) updatePhysics(1);
+    expect(hole.can_move()).toBe(false);
+    for (let i = 0; i < 20; i++) updatePhysics(-1);
     expect(hole.can_move()).toBe(true);
   });
 
-  test('a hole made later on the clock gets its own full window', () => {
+  test('the window does not read the clock, so moving the clock moves nothing', () => {
     resetSimulationTime();
-    setSimulationTime(1000);
     const hole = new BlackHole({ x: 0, y: 0 }, 100, { x: 1, y: 0 }, true);
-    setSimulationTime(1049);
+    bh_list.push(hole);
+    setSimulationTime(5000);
     expect(hole.can_move()).toBe(true);
-    setSimulationTime(1051);
+    for (let i = 0; i < 51; i++) updatePhysics(1);
+    expect(hole.can_move()).toBe(false);
+    setSimulationTime(0);
     expect(hole.can_move()).toBe(false);
   });
 
@@ -172,8 +183,9 @@ describe('BlackHole.can_move grace period', () => {
     resetSimulationTime();
     const old = new BlackHole({ x: 0, y: 0 }, 100, { x: 1, y: 0 }, false);
     expect(old.can_move()).toBe(false);
-    const fresh = new BlackHole({ x: 0, y: 0 }, 100, { x: 1, y: 0 }, true);
-    setSimulationTime(5000);
+    const fresh = new BlackHole({ x: 900, y: 0 }, 100, { x: 1, y: 0 }, true);
+    bh_list.push(old, fresh);
+    for (let i = 0; i < 60; i++) updatePhysics(1);
     expect(fresh.can_move()).toBe(false);
     updatePhysicsSettings({ bh_behavior: 'Orbiting' });
     expect(old.can_move()).toBe(true);

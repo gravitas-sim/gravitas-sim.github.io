@@ -3804,8 +3804,8 @@ class BlackHole {
 
     // Track if this black hole is newly created (spawned by user or from merger)
     this.isNewlyCreated = isNewlyCreated;
-    this.creationTime = Date.now(); // a stamp; can_move reads the sim clock
-    Object.defineProperty(this, 'creationSimTime', { value: simulationTime });
+    this.creationTime = Date.now(); // a stamp; the grace counts steps
+    Object.defineProperty(this, 'graceUsed', { value: 0, writable: true });
     this.movementGracePeriod = 10.0; // seconds of play at 1x, in simulated time
 
     this.accretion_intensity = 0.0;
@@ -3894,10 +3894,9 @@ class BlackHole {
    * @returns {boolean} True when the hole integrates its own motion
    */
   can_move() {
-    const elapsed = (simulationTime - this.creationSimTime) / (50 * DT);
     return (
       physicsSettings.bh_behavior === 'Orbiting' ||
-      (this.isNewlyCreated && elapsed < this.movementGracePeriod)
+      (this.isNewlyCreated && this.graceUsed < this.movementGracePeriod)
     );
   }
 
@@ -3961,6 +3960,7 @@ class BlackHole {
   }
 
   update_dynamic_effects(dt) {
+    this.graceUsed += dt / (50 * DT); // seconds of play at 1x; backward steps give it back
     if (this.mass > this.last_mass) {
       const mass_gain = this.mass - this.last_mass;
       const mass_ratio = mass_gain / this.mass;
