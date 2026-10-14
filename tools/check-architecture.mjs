@@ -8,8 +8,11 @@
  *   node tools/check-architecture.mjs --sizes   print the largest modules, with
  *                                               their ceilings, and stop
  *   node tools/check-architecture.mjs --record-sizes
- *                                               lower the recorded ceilings to
- *                                               today's sizes (never raises one)
+ *                                               lower the listed ceilings to
+ *                                               today's sizes and drop the
+ *                                               entries of modules that fell to
+ *                                               1,500 lines or fewer (never
+ *                                               raises or adds one)
  *
  * What this is for
  * -----------------------------------------------------------------------------
@@ -31,14 +34,16 @@
  *   may import anything; nothing may import them. That is what makes ui.js a
  *   coordinator rather than a container.
  *
- * A third rule is about size (Prompt 107, step 4): each module has a ceiling in
- * tools/module-size-ceilings.json, in lines, recorded from its size on the day
- * the check was written. A module may not grow past its ceiling, and the
- * ceiling of a module larger than DEFAULT_SIZE_CEILING must equal its size, so
- * that every slice of the decomposition lowers it in the same commit. A module
- * with no entry is held to DEFAULT_SIZE_CEILING, the roadmap's slice limit.
- * Raising a ceiling is a hand edit of that file with a DECISION_REGISTER row;
- * --record-sizes only ever lowers them.
+ * A third rule is about size (Prompt 107, step 4; model changed by D-DECOMP-22):
+ * no module may have more than DEFAULT_SIZE_CEILING (1,500) lines, the roadmap's
+ * slice limit, unless it is listed in tools/module-size-ceilings.json. A module
+ * at or under the limit needs no entry and may grow freely up to it. A module
+ * over the limit must be listed, and its ceiling must equal its size, so that
+ * every slice of the decomposition lowers it in the same commit. An entry for
+ * a module that has fallen to the limit or below is stale and is removed.
+ * Crossing the limit is a decision: split the module, or add an entry by hand
+ * with a DECISION_REGISTER row. Raising an entry is the same hand edit;
+ * --record-sizes only ever lowers entries and removes them, and never adds one.
  *
  * The render layer (Prompt 107, step 2b) holds what paints a body: js/bodyDraw.js
  * and js/bodyDrawSky.js (the drawers and what they share), js/bodyEffects.js (the
@@ -566,8 +571,12 @@ export async function findDeadExports() {
 
 export const SIZE_CEILINGS_FILE = 'tools/module-size-ceilings.json';
 
-/** Lines a module without a recorded ceiling may have: the slice limit. */
+/**
+ * Lines a module may have without an entry in the ceilings file: the slice
+ * limit. Only a module over it is listed, each exactly at its ceiling.
+ */
 export const DEFAULT_SIZE_CEILING = 1500;
+const LIMIT = DEFAULT_SIZE_CEILING.toLocaleString('en-US');
 
 /**
  * Line count of every module in the graph (the newline count, as wc -l).
@@ -585,6 +594,9 @@ export async function moduleSizes(graph) {
 
 /**
  * The size problems for a set of sizes against recorded ceilings.
+ *
+ * A module at or under DEFAULT_SIZE_CEILING needs no entry and has none. A
+ * module over it has an entry, exactly at its size.
  * @param {Map<string, number>} sizes - file -> lines
  * @param {Record<string, number>} ceilings - file -> recorded ceiling
  * @returns {string[]} Problems, empty when all is well
@@ -596,18 +608,28 @@ export function findSizeProblems(sizes, ceilings) {
     if (ceiling === undefined) {
       if (lines > DEFAULT_SIZE_CEILING) {
         problems.push(
-          `Module too large: ${file} has ${lines} lines and no recorded ` +
-            `ceiling; the limit for a new module is ${DEFAULT_SIZE_CEILING}. ` +
-            `Split it.`
+          `Module crossed ${LIMIT} lines: ${file} has ${lines} ` +
+            `lines and no entry in ${SIZE_CEILINGS_FILE}. Split it, or add an ` +
+            `entry at ${lines} with a DECISION_REGISTER row that says why.`
         );
       }
+    } else if (
+      ceiling <= DEFAULT_SIZE_CEILING ||
+      lines <= DEFAULT_SIZE_CEILING
+    ) {
+      problems.push(
+        `Stale ceiling: ${file} has ${lines} lines and an entry of ` +
+          `${ceiling} in ${SIZE_CEILINGS_FILE}, but only a module over ` +
+          `${LIMIT} lines is listed. Run npm run ` +
+          `check:architecture -- --record-sizes, or delete the entry.`
+      );
     } else if (lines > ceiling) {
       problems.push(
         `Module grew past its ceiling: ${file} has ${lines} lines, ` +
           `ceiling ${ceiling}. Move code out rather than raising the ceiling ` +
           `in ${SIZE_CEILINGS_FILE} (a raise needs a DECISION_REGISTER row).`
       );
-    } else if (ceiling > DEFAULT_SIZE_CEILING && lines < ceiling) {
+    } else if (lines < ceiling) {
       problems.push(
         `Ceiling not lowered: ${file} has ${lines} lines, ceiling ${ceiling}. ` +
           `Run npm run check:architecture -- --record-sizes so the ` +
@@ -624,6 +646,38 @@ export function findSizeProblems(sizes, ceilings) {
     }
   }
   return problems;
+}
+
+/**
+ * What --record-sizes writes: each listed module's ceiling lowered to its size,
+ * and the entry dropped once the module is at DEFAULT_SIZE_CEILING or fewer
+ * lines (or gone). Never raises a ceiling and never adds an entry, so a module
+ * that crossed the limit is reported, not recorded.
+ * @param {Map<string, number>} sizes - file -> lines
+ * @param {Record<string, number>} ceilings - file -> recorded ceiling
+ * @returns {{next: Record<string, number>, removed: string[], lowered: string[], over: string[], unlisted: string[]}}
+ */
+export function recordSizes(sizes, ceilings) {
+  const next = {};
+  const removed = [];
+  const lowered = [];
+  const over = [];
+  const unlisted = [];
+  for (const [file, ceiling] of Object.entries(ceilings)) {
+    const lines = sizes.get(file);
+    if (lines === undefined || lines <= DEFAULT_SIZE_CEILING) {
+      removed.push(file);
+      continue;
+    }
+    next[file] = Math.min(lines, ceiling);
+    if (next[file] < ceiling) lowered.push(file);
+    if (lines > next[file]) over.push(file);
+  }
+  for (const [file, lines] of sizes) {
+    if (lines > DEFAULT_SIZE_CEILING && ceilings[file] === undefined)
+      unlisted.push(file);
+  }
+  return { next, removed, lowered, over, unlisted };
 }
 
 export const LISTENER_ALLOWLIST_FILE = 'tools/listener-helper-allowlist.json';
@@ -682,9 +736,11 @@ function serializeCeilings(ceilings) {
     JSON.stringify(
       {
         _note:
-          'Line ceilings per module, read by tools/check-architecture.mjs. ' +
-          'A module larger than 1,500 lines must sit exactly at its ceiling; ' +
-          'run check:architecture -- --record-sizes after moving code out. ' +
+          'Line ceilings, read by tools/check-architecture.mjs. Only a module ' +
+          'over 1,500 lines is listed, and it must sit exactly at its ceiling; ' +
+          'run check:architecture -- --record-sizes after moving code out. A ' +
+          'module at or under 1,500 lines needs no entry. A module that ' +
+          'crosses 1,500 is split, or listed with a DECISION_REGISTER row. ' +
           'Never raised without a DECISION_REGISTER row.',
         ceilings: sorted,
       },
@@ -714,16 +770,24 @@ async function main() {
       /* first recording */
     }
     if (process.argv.includes('--record-sizes')) {
-      const next = {};
-      for (const [file, lines] of sizes) {
-        next[file] = Math.min(lines, ceilings[file] ?? lines);
-      }
+      const { next, removed, lowered, over, unlisted } = recordSizes(
+        sizes,
+        ceilings
+      );
       await writeFile(SIZE_CEILINGS_FILE, serializeCeilings(next));
-      const over = [...sizes].filter(([f, n]) => n > next[f]);
-      console.log(`Recorded ${Object.keys(next).length} ceilings.`);
+      console.log(
+        `Recorded ${Object.keys(next).length} ceilings: ${lowered.length} ` +
+          `lowered, ${removed.length} removed (${LIMIT} lines ` +
+          `or fewer, or gone).`
+      );
       if (over.length) {
+        console.log(`Over their ceilings (not raised): ${over.join(', ')}`);
+      }
+      if (unlisted.length) {
         console.log(
-          `Over their ceilings (not raised): ${over.map(([f]) => f).join(', ')}`
+          `Over ${LIMIT} lines and not listed (not added; ` +
+            `split, or add an entry with a DECISION_REGISTER row): ` +
+            unlisted.join(', ')
         );
       }
       return;
@@ -825,7 +889,7 @@ async function main() {
     );
   }
 
-  // Sizes: a ceiling per module, recorded in tools/module-size-ceilings.json.
+  // Sizes: 1,500 lines, or a listed ceiling (tools/module-size-ceilings.json).
   problems.push(
     ...findSizeProblems(await moduleSizes(graph), await readCeilings())
   );
@@ -848,7 +912,7 @@ async function main() {
     `Architecture OK: ${graph.size} modules, no cycles, ` +
       `${ALLOWED_UPWARD.size} recorded upward imports and no new ones, ` +
       `nothing below the coordinator names js/ui.js, ` +
-      `every module within its size ceiling, ` +
+      `every module within ${LIMIT} lines or exactly at its listed ceiling, ` +
       `every mounting module on the listener helper or recorded.`
   );
 }
