@@ -398,6 +398,10 @@
       "gravitasWorkerFailed": 1,
       "gravitasMerge": 1
     },
+    "js/placement.js": {
+      "gravitasObjectPlaced": 1,
+      "gravitasSimulationReset": 1
+    },
     "js/platform/artifact.js": {
       "gravitas.artifact": 1,
       "gravitas": 1
@@ -440,9 +444,6 @@
     },
     "js/scenarioBrowser.js": {
       "gravitasEscape": 1
-    },
-    "js/scenarioPanelBridge.js": {
-      "gravitasSimulationReset": 1
     },
     "js/settingsSchema.js": {
       "gravitas_course_level": 1
@@ -536,7 +537,7 @@
     "js/ui.js": {
       "gravitas_simulation_save": 1,
       "gravitasMerge": 1,
-      "gravitasObjectPlaced": 3,
+      "gravitasObjectPlaced": 2,
       "gravitasGalaxyGravityChanged": 1,
       "gravitasSimulationReset": 1,
       "gravitasRequestRebuild": 1,

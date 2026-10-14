@@ -141,7 +141,7 @@ describe('the fragments', () => {
         'js/view3d.js': 'js/view3dBridge.js',
         'js/pauseAtEventPanel.js': 'js/pauseAtEventBridge.js',
         'js/rvWorkspacePanel.js': 'js/rvWorkspaceBridge.js',
-        'js/assistPanel.js': 'js/scenarioPanelBridge.js',
+        'js/assistPanel.js': 'js/placement.js',
         'js/exportDialog.js': 'js/exportBridge.js',
         'js/investigations.js': 'js/investigationsLoader.js',
       };
