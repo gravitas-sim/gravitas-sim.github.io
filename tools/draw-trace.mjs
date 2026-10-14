@@ -220,6 +220,10 @@ async function record(args) {
       'event-bh-feast',
       'event-impacts',
       'event-bh-merger',
+      'event-bh-nocolor',
+      'event-gas-plume',
+      'event-gas-star',
+      'event-tracer-fall',
     ];
     for (const sc of scenes) {
       ui.state.paused = true;
@@ -310,6 +314,32 @@ async function record(args) {
               new P.BlackHole(at(0), suns(20), still, false),
               new P.BlackHole(at(0.5), suns(20), still, false)
             ),
+          'event-bh-nocolor': () => {
+            const planet = new P.Planet(at(0.3), still, 1);
+            planet.baseColor = 'not a color';
+            P.bh_list.push(new P.BlackHole(at(0), suns(1000), still, false));
+            P.planets.push(planet);
+          },
+          'event-gas-plume': () => {
+            P.gas_giants.push(new P.GasGiant(at(0), still, 1));
+            P.planets.push(new P.Planet(at(3, 1), still, 1));
+          },
+          'event-gas-star': () =>
+            P.gas_giants.push(
+              new P.GasGiant(at(0), still, 50),
+              new P.GasGiant(at(0.5), still, 50)
+            ),
+          'event-tracer-fall': () => {
+            const bh = new P.BlackHole(at(0), suns(1000), still, false);
+            P.bh_list.push(bh);
+            const tr = new P.AccretionDiskParticle(
+              at(bh.radius + 1),
+              still,
+              bh
+            );
+            bh.disk_particles.push(tr);
+            P.accretion_disk_particles.push(tr);
+          },
         };
         built[sc]();
         const first = draws;

@@ -327,8 +327,60 @@ const emptyPool = {
   clear() {},
 };
 let particlePool = emptyPool;
-const registerEffects = ({ pool }) => {
+
+// What a burst looks like (size and color) and the tracer's color are filed by
+// js/bodyEffects.js with the pool. How many particles a burst throws, how fast
+// and for how long is not appearance: it is the random draws, so it stays here
+// and an engine with no module takes them all the same (a look is then empty
+// and nothing reads it).
+let effectLooks = {};
+let tracerColor = () => undefined;
+const registerEffects = ({ pool, looks, tracer }) => {
   if (pool) particlePool = pool;
+  if (looks) effectLooks = looks;
+  if (tracer) tracerColor = tracer;
+};
+
+// The thirteen bursts: count, speed (range, floor) and lifetime (range, floor).
+// One draw for the direction, one for the speed, then one for the lifetime, in
+// that order, count times; a plume (`aim`) draws its direction within 0.6 of the
+// aim, and a null color (an absorbed body with no usable color) draws the first
+// two and spawns nothing, as the absorption burst always did.
+const BURSTS = {
+  absorb: { n: 15, v: [50, 30], t: [0.6, 0.4] },
+  tracer: { n: 6, v: [60, 40], t: [1.2, 0.8] },
+  starMerge: { n: 20, v: [40, 20], t: [0.8, 0.6] },
+  starPlanet: { n: 5, v: [20, 10], t: [0.5, 0.3] },
+  starGas: { n: 8, v: [30, 15], t: [0.6, 0.4] },
+  starAsteroid: { n: 3, v: [15, 8], t: [0.4, 0.2] },
+  rocky: { n: 10, v: [30, 20], t: [0.6, 0.4] },
+  collapseStar: { n: 30, v: [60, 40], t: [1.2, 0.8] },
+  collapseNS: { n: 25, v: [80, 60], t: [1.0, 0.6] },
+  collapseWD: { n: 20, v: [70, 50], t: [0.8, 0.5] },
+  gasAccretion: { n: 8, v: [25, 15], t: [0.5, 0.3] },
+  gasMerge: { n: 15, v: [35, 15], t: [0.7, 0.5] },
+  gasStar: { n: 10, v: [50, 25], t: [1.0, 0.8] },
+};
+const NO_LOOK = {};
+const burst = (name, pos, color, aim) => {
+  const { n, v, t } = BURSTS[name];
+  const look = effectLooks[name] || NO_LOOK;
+  for (let k = 0; k < n; k++) {
+    const angle =
+      aim === undefined
+        ? Math.random() * 2 * Math.PI
+        : aim + (Math.random() - 0.5) * 1.2;
+    const speed = Math.random() * v[0] + v[1];
+    if (color === null) continue;
+    particlePool.getParticle(
+      pos,
+      { x: speed * Math.cos(angle), y: speed * Math.sin(angle) },
+      Math.random() * t[0] + t[1],
+      look.start,
+      look.end,
+      color === undefined ? look.color : color
+    );
+  }
 };
 
 // Physics settings that can be updated from UI.
@@ -2674,31 +2726,18 @@ const updatePhysics = dt => {
     return obj_list.filter(obj => {
       if (obj.alive && obj.check_absorption(bh_list)) {
         // Create absorption particles matching original
-        for (let i = 0; i < 15; i++) {
-          const angle = Math.random() * 2 * Math.PI;
-          const speed = Math.random() * 50 + 30;
-          const p_vel = {
-            x: speed * Math.cos(angle),
-            y: speed * Math.sin(angle),
-          };
-          const baseColor =
-            (obj && obj.baseColor) ||
-            (obj && obj.obj_type
-              ? physicsSettings[`${obj.obj_type.toLowerCase()}_base_color`]
-              : undefined) ||
-            '#c8c8c8';
-          const rgb = hexToRgb(baseColor);
-          if (rgb) {
-            particlePool.getParticle(
-              obj.pos,
-              p_vel,
-              Math.random() * 0.6 + 0.4,
-              5,
-              1,
-              `rgb(${rgb.r},${rgb.g},${rgb.b})`
-            );
-          }
-        }
+        const baseColor =
+          (obj && obj.baseColor) ||
+          (obj && obj.obj_type
+            ? physicsSettings[`${obj.obj_type.toLowerCase()}_base_color`]
+            : undefined) ||
+          '#c8c8c8';
+        const rgb = hexToRgb(baseColor);
+        burst(
+          'absorb',
+          obj.pos,
+          rgb ? `rgb(${rgb.r},${rgb.g},${rgb.b})` : null
+        );
         // (event system removed)
         return false;
       }
@@ -3627,22 +3666,7 @@ class AccretionDiskParticle extends PhysicsObject {
       }
 
       // Create absorption effect with temperature-based colors
-      for (let i = 0; i < 6; i++) {
-        const angle = Math.random() * 2 * Math.PI;
-        const speed = Math.random() * 60 + 40;
-        const p_vel = {
-          x: speed * Math.cos(angle),
-          y: speed * Math.sin(angle),
-        };
-        particlePool.getParticle(
-          this.pos,
-          p_vel,
-          Math.random() * 1.2 + 0.8,
-          8,
-          2,
-          this.getTemperatureColor()
-        );
-      }
+      burst('tracer', this.pos, tracerColor(this));
       return;
     }
 
@@ -3709,38 +3733,6 @@ class AccretionDiskParticle extends PhysicsObject {
 
     // Add pulsing effect based on orbital motion and heating
     this.pulse_phase += dt * (1 + this.heating_intensity * 3); // Standard pulsing when hotter
-  }
-
-  getTemperatureColor() {
-    // Enhanced temperature-based color with dramatic effects
-    const temp = this.temperature;
-    const brightness = this.brightness_multiplier;
-
-    // Pulsing effect
-    const pulse_factor = 0.8 + 0.4 * Math.sin(this.pulse_phase);
-    const final_brightness = brightness * pulse_factor;
-
-    if (temp < 3000) {
-      // Deep red-orange
-      const intensity = Math.floor(final_brightness * 150);
-      return `rgb(${Math.min(255, intensity)}, ${Math.floor(intensity * 0.3)}, 0)`;
-    } else if (temp < 8000) {
-      // Orange to yellow
-      const intensity = Math.floor(final_brightness * 200);
-      return `rgb(${Math.min(255, intensity)}, ${Math.floor(intensity * 0.8)}, ${Math.floor(intensity * 0.2)})`;
-    } else if (temp < 15000) {
-      // Yellow-white
-      const intensity = Math.floor(final_brightness * 220);
-      return `rgb(${Math.min(255, intensity)}, ${Math.min(255, intensity)}, ${Math.floor(intensity * 0.6)})`;
-    } else if (temp < 30000) {
-      // White-hot
-      const intensity = Math.floor(final_brightness * 240);
-      return `rgb(${Math.min(255, intensity)}, ${Math.min(255, intensity)}, ${Math.min(255, intensity)})`;
-    } else {
-      // Blue-white plasma
-      const intensity = Math.floor(final_brightness * 250);
-      return `rgb(${Math.floor(intensity * 0.8)}, ${Math.floor(intensity * 0.9)}, ${Math.min(255, intensity)})`;
-    }
   }
 
   /**
@@ -5285,22 +5277,7 @@ const handle_star_merging = stars_list => {
           };
 
           // Create merger particles
-          for (let k = 0; k < 20; k++) {
-            const angle = Math.random() * 2 * Math.PI;
-            const speed = Math.random() * 40 + 20;
-            const p_vel = {
-              x: speed * Math.cos(angle),
-              y: speed * Math.sin(angle),
-            };
-            particlePool.getParticle(
-              new_pos,
-              p_vel,
-              Math.random() * 0.8 + 0.6,
-              8,
-              2,
-              'rgb(255, 220, 100)'
-            );
-          }
+          burst('starMerge', new_pos);
 
           // Special handling for black hole merging with regular star or white dwarf
           if (
@@ -5631,22 +5608,7 @@ const handle_star_object_collisions = () => {
         }
 
         // Create absorption particles
-        for (let k = 0; k < 5; k++) {
-          const angle = Math.random() * 2 * Math.PI;
-          const speed = Math.random() * 20 + 10;
-          const p_vel = {
-            x: speed * Math.cos(angle),
-            y: speed * Math.sin(angle),
-          };
-          particlePool.getParticle(
-            planet.pos,
-            p_vel,
-            Math.random() * 0.5 + 0.3,
-            4,
-            1,
-            'rgb(255, 200, 100)'
-          );
-        }
+        burst('starPlanet', planet.pos);
 
         planet.alive = false;
         broadcastImpact(star, planet, 'stellar-absorption');
@@ -5679,22 +5641,7 @@ const handle_star_object_collisions = () => {
         }
 
         // Create more dramatic absorption particles for gas giant
-        for (let k = 0; k < 8; k++) {
-          const angle = Math.random() * 2 * Math.PI;
-          const speed = Math.random() * 30 + 15;
-          const p_vel = {
-            x: speed * Math.cos(angle),
-            y: speed * Math.sin(angle),
-          };
-          particlePool.getParticle(
-            gasGiant.pos,
-            p_vel,
-            Math.random() * 0.6 + 0.4,
-            6,
-            2,
-            'rgb(135, 206, 235)'
-          );
-        }
+        burst('starGas', gasGiant.pos);
 
         gasGiant.alive = false;
         broadcastImpact(star, gasGiant, 'stellar-absorption');
@@ -5728,22 +5675,7 @@ const handle_star_object_collisions = () => {
         }
 
         // Create small absorption particles
-        for (let k = 0; k < 3; k++) {
-          const angle = Math.random() * 2 * Math.PI;
-          const speed = Math.random() * 15 + 8;
-          const p_vel = {
-            x: speed * Math.cos(angle),
-            y: speed * Math.sin(angle),
-          };
-          particlePool.getParticle(
-            asteroid.pos,
-            p_vel,
-            Math.random() * 0.4 + 0.2,
-            3,
-            1,
-            'rgb(200, 150, 100)'
-          );
-        }
+        burst('starAsteroid', asteroid.pos);
 
         asteroid.alive = false;
         broadcastImpact(star, asteroid, 'stellar-absorption');
@@ -5813,25 +5745,10 @@ const handle_rocky_collisions = objects_list => {
           }
 
           // Create collision particles
-          for (let k = 0; k < 10; k++) {
-            const angle = Math.random() * 2 * Math.PI;
-            const speed = Math.random() * 30 + 20;
-            const p_vel = {
-              x: speed * Math.cos(angle),
-              y: speed * Math.sin(angle),
-            };
-            particlePool.getParticle(
-              {
-                x: (obj1.pos.x + obj2.pos.x) * 0.5,
-                y: (obj1.pos.y + obj2.pos.y) * 0.5,
-              },
-              p_vel,
-              Math.random() * 0.6 + 0.4,
-              5,
-              1,
-              'rgb(255, 100, 50)'
-            );
-          }
+          burst('rocky', {
+            x: (obj1.pos.x + obj2.pos.x) * 0.5,
+            y: (obj1.pos.y + obj2.pos.y) * 0.5,
+          });
 
           broadcastImpact(obj1, obj2, 'rocky-collision');
         }
@@ -5887,22 +5804,7 @@ const check_stellar_collapse = () => {
       bh_list.push(new_bh);
 
       // Create collapse particles
-      for (let k = 0; k < 30; k++) {
-        const angle = Math.random() * 2 * Math.PI;
-        const speed = Math.random() * 60 + 40;
-        const p_vel = {
-          x: speed * Math.cos(angle),
-          y: speed * Math.sin(angle),
-        };
-        particlePool.getParticle(
-          star.pos,
-          p_vel,
-          Math.random() * 1.2 + 0.8,
-          12,
-          3,
-          'rgb(255, 255, 255)'
-        );
-      }
+      burst('collapseStar', star.pos);
 
       // Remove the star
       star.alive = false;
@@ -5924,22 +5826,7 @@ const check_stellar_collapse = () => {
       bh_list.push(new_bh);
 
       // Create collapse particles
-      for (let k = 0; k < 25; k++) {
-        const angle = Math.random() * 2 * Math.PI;
-        const speed = Math.random() * 80 + 60;
-        const p_vel = {
-          x: speed * Math.cos(angle),
-          y: speed * Math.sin(angle),
-        };
-        particlePool.getParticle(
-          ns.pos,
-          p_vel,
-          Math.random() * 1.0 + 0.6,
-          10,
-          2,
-          'rgb(200, 200, 255)'
-        );
-      }
+      burst('collapseNS', ns.pos);
 
       // Remove the neutron star
       ns.alive = false;
@@ -5961,22 +5848,7 @@ const check_stellar_collapse = () => {
       neutron_stars.push(new_ns);
 
       // Create collapse particles
-      for (let k = 0; k < 20; k++) {
-        const angle = Math.random() * 2 * Math.PI;
-        const speed = Math.random() * 70 + 50;
-        const p_vel = {
-          x: speed * Math.cos(angle),
-          y: speed * Math.sin(angle),
-        };
-        particlePool.getParticle(
-          wd.pos,
-          p_vel,
-          Math.random() * 0.8 + 0.5,
-          8,
-          2,
-          'rgb(255, 200, 200)'
-        );
-      }
+      burst('collapseWD', wd.pos);
 
       // Remove the white dwarf
       wd.alive = false;
@@ -6028,18 +5900,7 @@ const handle_gas_giant_accretion = () => {
 
         // Impact plume thrown back along the approach direction
         const approach = Math.atan2(dy, dx);
-        for (let k = 0; k < 8; k++) {
-          const angle = approach + (Math.random() - 0.5) * 1.2;
-          const speed = Math.random() * 25 + 15;
-          particlePool.getParticle(
-            body.pos,
-            { x: speed * Math.cos(angle), y: speed * Math.sin(angle) },
-            Math.random() * 0.5 + 0.3,
-            4,
-            1,
-            'rgb(255, 190, 120)'
-          );
-        }
+        burst('gasAccretion', body.pos, undefined, approach);
 
         body.alive = false;
         clearObjectEnergyHistory(body.id);
@@ -6085,22 +5946,7 @@ const handle_gas_giant_merging = () => {
           const new_mass_in_jupiters = new_mass / JUPITER_MASS_UNIT;
 
           // Create merger particles
-          for (let k = 0; k < 15; k++) {
-            const angle = Math.random() * 2 * Math.PI;
-            const speed = Math.random() * 35 + 15;
-            const p_vel = {
-              x: speed * Math.cos(angle),
-              y: speed * Math.sin(angle),
-            };
-            particlePool.getParticle(
-              new_pos,
-              p_vel,
-              Math.random() * 0.7 + 0.5,
-              6,
-              2,
-              'rgb(135, 206, 235)'
-            );
-          }
+          burst('gasMerge', new_pos);
 
           // Remove the two original gas giants
           gasGiant1.alive = false;
@@ -6118,22 +5964,7 @@ const handle_gas_giant_merging = () => {
             stars.push(new_object);
 
             // Create extra particles for star formation
-            for (let k = 0; k < 10; k++) {
-              const angle = Math.random() * 2 * Math.PI;
-              const speed = Math.random() * 50 + 25;
-              const p_vel = {
-                x: speed * Math.cos(angle),
-                y: speed * Math.sin(angle),
-              };
-              particlePool.getParticle(
-                new_pos,
-                p_vel,
-                Math.random() * 1.0 + 0.8,
-                10,
-                3,
-                'rgb(255, 255, 0)'
-              );
-            }
+            burst('gasStar', new_pos);
           } else {
             // Create a larger gas giant
             new_object = new GasGiant(new_pos, new_vel, new_mass_in_jupiters);

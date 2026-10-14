@@ -12,7 +12,7 @@ import { SOLAR_MASS_UNIT } from './constants.js';
 import { formatNumber } from './format.js';
 import { drawSolarLabel, hexToRgb, computeDynamicColor } from './utils.js';
 import { mulberry32 } from './rng.js';
-import { whiteDwarfColor } from './bodyEffects.js';
+import { whiteDwarfColor, tracerColor } from './bodyEffects.js';
 import {
   LOD,
   lodFor,
@@ -632,7 +632,7 @@ function drawAccretionDiskParticle(o, ctx) {
   if (!o.alive || o.absorbed) return;
 
   const world_pos = o.pos;
-  const color = o.getTemperatureColor();
+  const color = tracerColor(o);
   const beam = o.getDopplerFactor();
 
   // Enhanced drawing with glow effect for hot particles
