@@ -275,7 +275,7 @@ export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
   // drawn radii at periapsis). Everything else the generator drew but the
   // compact objects is replaced.
   // prettier-ignore
-  'tidal-disruption-event': { keep: ['BlackHole', 'NeutronStar', 'WhiteDwarf'], steps: [
+  'tidal-disruption-event': { keep: ['BlackHole', 'NeutronStar', 'WhiteDwarf'], place: [{ rule: { name: 'hole-and-planet', params: { planetX: 150, planetSpeed: 80 } } }], steps: [
     { body: { type: 'BlackHole', name: 'Hole', from: { generated: 0, keepName: true }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 } } },
     { rule: { name: 'tidal-infall', params: { starName: 'Doomed star', starMassSuns: 1, periapsisRadii: 1.5, apoapsisRadii: 11, apoapsisFloor: 900, startFraction: 0.45, startPeriapsisFactor: 2.5 } } },
   ] },
@@ -862,6 +862,14 @@ const populationRules = {
       };
     });
   },
+
+  // The first black hole at rest at the origin and the first planet at
+  // (planetX, 0) moving at planetSpeed along y, when there is one of each.
+  // prettier-ignore
+  'hole-and-planet': (p, { generated: g }) => g.BlackHole.length < 1 || g.Planet.length < 1 ? [] : [
+    { type: 'BlackHole', from: { generated: 0 }, pos: { x: 0, y: 0 }, vel: { x: 0, y: 0 }, assign: {} },
+    { type: 'Planet', from: { generated: 0 }, pos: { x: p.planetX, y: 0 }, vel: { x: 0, y: p.planetSpeed }, assign: {} },
+  ],
 
   // Names for the first two bodies of a type, when there are two.
   'name-pair': (p, { generated }) =>
@@ -1600,24 +1608,6 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
       });
       break;
     }
-  }
-
-  // What the tidal disruption's code placed here before it was declared: dead
-  // at its own layout, live when Settings changes it (D-GEOM-07), so it stays.
-  if (
-    current_scenario_name === 'tidal-disruption-event' &&
-    bh_list.length >= 1 &&
-    planets.length >= 1
-  ) {
-    bh_list[0].pos.x = 0;
-    bh_list[0].pos.y = 0;
-    bh_list[0].vel.x = 0;
-    bh_list[0].vel.y = 0;
-
-    planets[0].pos.x = 150;
-    planets[0].pos.y = 0;
-    planets[0].vel.x = 0;
-    planets[0].vel.y = 80;
   }
 
   // The pairs and triangle a scenario places by hand are its declaration's

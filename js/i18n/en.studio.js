@@ -18,7 +18,7 @@ export const EN_STUDIO = {
   'studio.action.fromLabel': 'Start from a built-in scenario',
   'studio.action.from': 'Start from it',
   'studio.from.generated': 'Generated from settings',
-  'studio.from.handBuilt': 'Settings only (bodies placed by code)',
+  'studio.from.handBuilt': 'Settings only (the engine builds the bodies)',
   'studio.from.geometry': 'Settings and declared geometry',
   'studio.geometry.heading': 'Declared geometry',
   'studio.geometry.summary':
@@ -120,7 +120,7 @@ export const EN_STUDIO = {
   'studio.caution.areaSweep':
     'Kepler’s 2nd Law also turns on an area-sweep overlay for the eccentric orbiter. That overlay is behavior in the application, not geometry, so this scenario file carries the bodies and not the overlay.',
   'studio.caution.handBuilt':
-    '{scenario} places its bodies by code, so only its settings were copied. This scenario builds the world those settings generate, which is not the same one.',
+    'The engine builds {scenario}’s bodies, and a scenario file cannot carry them, so only its settings were copied. This scenario builds the world those settings generate, which is not the same one.',
   'studio.caution.unbound':
     '{name} moves at {speed} against the rest, more than the {escape} that is enough to escape them (simulation units per time unit), so it will probably leave. This treats everything else as one mass at its barycenter: an estimate, not a proof.',
   'studio.caution.step':

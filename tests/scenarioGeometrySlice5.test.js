@@ -225,6 +225,17 @@ describe('slice 5: the validator for the place stage', () => {
     ).toMatch(/place\[0\].rule.params.x/);
   });
 
+  test('hole-and-planet (slice 7) takes a distance and a speed, and the tidal disruption declares it at the numbers of the old stub', () => {
+    const hp = (params = { planetX: 150, planetSpeed: 80 }) => ({
+      place: [{ rule: { name: 'hole-and-planet', params } }],
+    });
+    expect(why(hp())).toEqual([]);
+    expect(why(hp({ planetX: 150 }))[0]).toMatch(/planetSpeed/);
+    expect(why(hp({ planetX: 0, planetSpeed: 80 }))[0]).toMatch(/planetX/);
+    expect(why(hp(), { rules: false })[0]).toMatch(/may not place bodies/);
+    expect(ENGINE_GEOMETRY['tidal-disruption-event'].place).toEqual(hp().place);
+  });
+
   test('a pack may not carry a place stage', () => {
     expect(why({ place: [{ rule: pin }] }, { rules: false })[0]).toMatch(
       /may not place bodies/
