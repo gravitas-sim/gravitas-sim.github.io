@@ -1,47 +1,13 @@
-// =============================================================================
-// Names: what Gravitas stores and announces itself under, and what its
-// bodies are called
-// -----------------------------------------------------------------------------
-// Roadmap II Prompt 107, step 2c. A storage key, an event name and a format id
-// are each spelled in two places at least (the writer and the reader, the
-// dispatcher and the listener), and a one-letter slip in either is a setting
-// that is never found or an event nobody hears, with no error to say so. This is
-// the one module that spells them; a module imports the name it means.
-//
-//   KEY_*  a browser storage key           (STORAGE.md lists every one)
-//   EV_*   a window event name             (CustomEvent type)
-//   ID_*   a format or package identifier  (the `format` of a saved document)
-//
-// Values never change: a saved world, a share link and a student's storage all
-// hold these exact strings, so renaming one loses what was kept under it.
-// tests/keyRegistry.test.js pins every value to the string it had before this
-// module existed.
-//
-// Not every literal is here yet, on purpose. tools/key-registry-allowlist.json
-// lists the 'gravitas*' strings still written inline, by module, and the test
-// fails when one is added or when an entry is stale, so the list only shrinks
-// (node tools/key-registry-scan.mjs shows it). Moving a module over costs an
-// import line, and every module sits exactly at its size ceiling
-// (tools/module-size-ceilings.json), so a module moves when its edit is
-// line-neutral or when the same change takes a line out. No import, no DOM:
-// this module is a leaf, safe in a Worker and in plain Node.
-//
-// It also holds the object name pools (SPACE_OBJECT_NAMES, formerly
-// js/data/objectNames.js): pure data, also names, and moving it here is what
-// pays the one request this module costs (figure 117 of 117), because both of
-// its importers were already on every route that now loads this module.
-// =============================================================================
+// Names (P107 2c, D-DECOMP-14): KEY_ storage keys, EV_ window events, ID_ format
+// ids, spelled once; values never change. tests/keyRegistry.test.js pins them,
+// tools/key-registry-allowlist.json lists those not yet moved. A leaf module.
 
-// --- Storage keys ------------------------------------------------------------
 export const KEY_UNITS = 'gravitas_units';
 
-// --- Window events -----------------------------------------------------------
 export const EV_SIMULATION_RESET = 'gravitasSimulationReset';
 export const EV_UNITS_CHANGED = 'gravitasUnitsChanged';
 
-// --- Object name pools -------------------------------------------------------
-// Pure data, extracted from ui.js so the UI module holds behavior rather than
-// 370 lines of string tables.
+// Object name pools, formerly js/data/objectNames.js: pure data.
 
 export const SPACE_OBJECT_NAMES = {
   blackHoles: [
