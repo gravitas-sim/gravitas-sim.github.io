@@ -2,12 +2,11 @@
 // The effects: the particle pool and the particle
 // -----------------------------------------------------------------------------
 // What the engine spawns for the eye: the particle pool, the particle and its
-// drawing, as they were in js/physics.js. Filed with the engine by
-// registerEffects on import; a realm that never imports this has an empty pool
-// that spawns nothing. The merger explosions' builders stay in the engine, so
-// the random stream is the same with or without this module (D-DECOMP-16).
-// Also here: the white dwarf color table (only its drawer reads it) and, to pay
-// for this module's request, the double-tap recognizer js/gestures.js held.
+// drawing, and the looks of the bursts. Filed with the engine by registerEffects
+// on import; a realm that never imports this has an empty pool that spawns
+// nothing. Every random draw stays in the engine, so the stream is the same with
+// or without this module (D-DECOMP-16, D-DECOMP-17). Also here: the color tables
+// (white dwarf, disk tracer) and the double-tap recognizer js/gestures.js held.
 // =============================================================================
 
 import { state, registerEffects } from './physics.js';
@@ -33,7 +32,6 @@ class ParticlePool {
       if (particle.reset) {
         particle.reset(pos, vel, lifetime, start_size, end_size, color);
       } else {
-        // Fallback for particles created before reset method was added
         if (!particle.pos) particle.pos = { x: 0, y: 0 };
         if (!particle.vel) particle.vel = { x: 0, y: 0 };
         particle.pos.x = pos.x;
@@ -147,11 +145,7 @@ function drawParticle(o, ctx) {
   ctx.globalAlpha = 1; // Reset alpha
 }
 
-/**
- * The color a white dwarf is drawn in, from its temperature.
- * @param {number} temperature - Kelvin
- * @returns {string} A hex color
- */
+/** The color a white dwarf is drawn in, from its temperature (Kelvin). */
 const whiteDwarfColor = temperature => {
   if (temperature > 15000)
     return '#9BB0FF'; // Blue-white
@@ -164,54 +158,66 @@ const whiteDwarfColor = temperature => {
 
 const particlePool = new ParticlePool(200);
 
+// The size and color of each burst the engine throws (counts, speeds and
+// lifetimes are random draws, so js/physics.js BURSTS keeps them).
+const burstLooks = {
+  absorb: { start: 5, end: 1 },
+  tracer: { start: 8, end: 2 },
+  starMerge: { start: 8, end: 2, color: 'rgb(255, 220, 100)' },
+  starPlanet: { start: 4, end: 1, color: 'rgb(255, 200, 100)' },
+  starGas: { start: 6, end: 2, color: 'rgb(135, 206, 235)' },
+  starAsteroid: { start: 3, end: 1, color: 'rgb(200, 150, 100)' },
+  rocky: { start: 5, end: 1, color: 'rgb(255, 100, 50)' },
+  collapseStar: { start: 12, end: 3, color: 'rgb(255, 255, 255)' },
+  collapseNS: { start: 10, end: 2, color: 'rgb(200, 200, 255)' },
+  collapseWD: { start: 8, end: 2, color: 'rgb(255, 200, 200)' },
+  gasAccretion: { start: 4, end: 1, color: 'rgb(255, 190, 120)' },
+  gasMerge: { start: 6, end: 2, color: 'rgb(135, 206, 235)' },
+  gasStar: { start: 10, end: 3, color: 'rgb(255, 255, 0)' },
+};
+/** The color of a disk tracer and of its absorption burst (an rgb() string). */
+const tracerColor = o => {
+  // Enhanced temperature-based color with dramatic effects
+  const temp = o.temperature;
+  const brightness = o.brightness_multiplier;
+
+  // Pulsing effect
+  const pulse_factor = 0.8 + 0.4 * Math.sin(o.pulse_phase);
+  const final_brightness = brightness * pulse_factor;
+
+  if (temp < 3000) {
+    const intensity = Math.floor(final_brightness * 150);
+    return `rgb(${Math.min(255, intensity)}, ${Math.floor(intensity * 0.3)}, 0)`;
+  } else if (temp < 8000) {
+    const intensity = Math.floor(final_brightness * 200);
+    return `rgb(${Math.min(255, intensity)}, ${Math.floor(intensity * 0.8)}, ${Math.floor(intensity * 0.2)})`;
+  } else if (temp < 15000) {
+    const intensity = Math.floor(final_brightness * 220);
+    return `rgb(${Math.min(255, intensity)}, ${Math.min(255, intensity)}, ${Math.floor(intensity * 0.6)})`;
+  } else if (temp < 30000) {
+    const intensity = Math.floor(final_brightness * 240);
+    return `rgb(${Math.min(255, intensity)}, ${Math.min(255, intensity)}, ${Math.min(255, intensity)})`;
+  } else {
+    const intensity = Math.floor(final_brightness * 250);
+    return `rgb(${Math.floor(intensity * 0.8)}, ${Math.floor(intensity * 0.9)}, ${Math.min(255, intensity)})`;
+  }
+};
+
 // -----------------------------------------------------------------------------
 // Touch gesture recognition (was js/gestures.js)
 // -----------------------------------------------------------------------------
-// One recognizer so far, and it exists because the thing it replaces was not a
-// recognizer at all. js/main.js held a single timestamp and reset the camera
-// whenever two `touchend` events arrived less than half a second apart:
-//
-//     if (currentTime - lastTap < 500) { state.zoom = 1; state.pan = {x:0,y:0}; }
-//
-// A pinch ends with two touchend events milliseconds apart, so every pinch
-// finished by throwing the reader's view away. So did a drag followed by a tap,
-// a placement followed by a tap, and two people touching the screen at once.
-// The report was "the view sometimes jumps"; the surprising part is that it did
-// not jump more often.
-//
-// A tap is one finger, briefly, without moving. A double tap is two of those,
-// close together in time AND in space, with nothing in between. Everything
-// else - a second finger at any point, a drag, a hold, a cancel from the
-// application - ends the sequence.
-//
-// Pure and injectable: it takes its clock as a parameter and touches no DOM, so
-// the whole state machine is testable without a browser. See
-// tests/doubleTap.test.js.
+// A double tap is two brief one-finger taps, close in time and in space, with
+// nothing in between; a second finger, a drag, a hold or a cancel ends the
+// sequence (a pinch's two touchend events must not reset the camera). Pure and
+// injectable: it takes its clock and touches no DOM (tests/doubleTap.test.js).
 // -----------------------------------------------------------------------------
 
-/** Longest gap between two taps that still reads as one gesture, in ms. */
-export const DOUBLE_TAP_MS = 320;
+export const DOUBLE_TAP_MS = 320; // longest gap between two taps, ms
+export const DOUBLE_TAP_SLOP_PX = 32; // furthest apart two taps may land, px
+export const TAP_MAX_MS = 250; // longest a finger may stay down, ms
+export const TAP_MOVE_PX = 12; // furthest a finger may travel, px
 
-/** Furthest apart two taps may land and still be the same gesture, in CSS px. */
-export const DOUBLE_TAP_SLOP_PX = 32;
-
-/** Longest a finger may stay down and still count as a tap, in ms. */
-export const TAP_MAX_MS = 250;
-
-/** Furthest a finger may travel during a tap, in CSS px. */
-export const TAP_MOVE_PX = 12;
-
-/**
- * The first touch point of an event, in CSS pixels.
- *
- * CSS pixels on purpose: this compares one touch against another and never
- * against the canvas backing store, so converting would add a dependency on
- * the canvas for no gain. Anything that needs canvas pixels converts at its
- * own boundary - see canvasPoint() in js/ui.js.
- *
- * @param {{touches: Array, changedTouches: Array}} e - A touch event
- * @returns {?{x: number, y: number}} The point, or null if there is none
- */
+/** The first touch point of an event, in CSS pixels, or null. */
 function pointOf(e) {
   const list = e?.changedTouches?.length ? e.changedTouches : e?.touches;
   const touch = list && list[0];
@@ -220,14 +226,11 @@ function pointOf(e) {
 }
 
 /**
- * A double-tap recognizer.
- *
+ * A double-tap recognizer: feed it the touch events, call cancel() when
+ * something else claims the interaction.
  * @param {object} options
  * @param {Function} options.onDoubleTap - Called with the tap point
  * @param {Function} [options.now] - Clock, for tests
- * @returns {{start: Function, move: Function, end: Function, cancel: Function}}
- *   Feed it the three touch events; call cancel() when something else has
- *   claimed the interaction.
  */
 export function createDoubleTapRecognizer({ onDoubleTap, now } = {}) {
   const clock =
@@ -249,14 +252,8 @@ export function createDoubleTapRecognizer({ onDoubleTap, now } = {}) {
   };
 
   return {
-    /**
-     * A finger went down.
-     * @param {object} e - touchstart
-     */
     start(e) {
-      // A second finger means a pinch, a two-finger pan, or a stray palm. None
-      // of those is a tap, and none of them should leave a half-finished tap
-      // behind to pair with the next one.
+      // A second finger is a pinch, a pan or a stray palm, not a tap.
       if ((e?.touches?.length || 0) > 1) {
         cancel();
         return;
@@ -269,10 +266,6 @@ export function createDoubleTapRecognizer({ onDoubleTap, now } = {}) {
       press = { at, downAt: clock(), moved: false };
     },
 
-    /**
-     * A finger moved.
-     * @param {object} e - touchmove
-     */
     move(e) {
       if ((e?.touches?.length || 0) > 1) {
         cancel();
@@ -286,18 +279,12 @@ export function createDoubleTapRecognizer({ onDoubleTap, now } = {}) {
       }
     },
 
-    /**
-     * A finger came up.
-     * @param {object} e - touchend
-     */
     end(e) {
       const current = press;
       press = null;
 
-      // Fingers still down: this is one finger leaving a multi-touch gesture,
-      // not a tap ending. The `start` guard has already cleared `press`, and
-      // clearing `pending` here is what stops the *other* finger's touchend
-      // from pairing with a legitimate tap that came before the pinch.
+      // Fingers still down: one finger leaving a multi-touch gesture. Clearing
+      // `pending` stops the other finger's touchend pairing with an earlier tap.
       if ((e?.touches?.length || 0) > 0) {
         pending = null;
         return;
@@ -338,6 +325,17 @@ export function createDoubleTapRecognizer({ onDoubleTap, now } = {}) {
   };
 }
 
-registerEffects({ pool: particlePool });
+registerEffects({
+  pool: particlePool,
+  looks: burstLooks,
+  tracer: tracerColor,
+});
 
-export { Particle, ParticlePool, particlePool, whiteDwarfColor };
+export {
+  Particle,
+  ParticlePool,
+  particlePool,
+  whiteDwarfColor,
+  tracerColor,
+  burstLooks,
+};

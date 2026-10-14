@@ -298,6 +298,10 @@ async function main() {
 
     const info = await page.evaluate(
       async ({ scene, seed, tier, deterministic }) => {
+        // The clocks an event scene holds are given back here.
+        window.__clocks ??= { perf: performance.now, date: Date.now };
+        performance.now = window.__clocks.perf;
+        Date.now = window.__clocks.date;
         const ui = await import('/js/ui.js');
         const physics = await import('/js/physics.js');
         const quality = await import('/js/quality.js');
@@ -460,6 +464,14 @@ async function main() {
             }
             P.bumpWorldGeneration();
             P.updatePhysics(0.01);
+            // A gravitational wave ripple is drawn at its age by the wall
+            // clock, so two captures of one build differed by a few pixels at
+            // the merger. Held at a tenth of a second after the event for the
+            // capture (restored at the start of the next scene).
+            const t0 = performance.now();
+            const d0 = Date.now();
+            performance.now = () => t0 + 100;
+            Date.now = () => d0 + 100;
           } else if (scene.synthetic === 'particles') {
             const hole = new physics.BlackHole({ x: 0, y: 0 }, still, 5);
             physics.bh_list.push(hole);
