@@ -315,6 +315,22 @@ const paintBody = (o, ctx, kind) => {
   console.warn('No body drawers are registered: import js/bodyDraw.js.');
 };
 
+// The particle pool is filed by js/bodyEffects.js (registerEffects). Until then
+// the pool spawns nothing, but it hands back a scratch particle, so every
+// explosion builder below takes the same random draws in any realm: the stream
+// the collisions draw from must not depend on what was imported.
+const scratchParticle = {};
+const emptyPool = {
+  getParticle: () => scratchParticle,
+  updateAndCleanup() {},
+  getActiveParticles: () => [],
+  clear() {},
+};
+let particlePool = emptyPool;
+const registerEffects = ({ pool }) => {
+  if (pool) particlePool = pool;
+};
+
 // Physics settings that can be updated from UI.
 //
 // Twenty-six of these twenty-seven keys also appear in DEFAULT_SETTINGS in
@@ -4355,17 +4371,6 @@ class WhiteDwarf extends PhysicsObject {
     this.name = getRandomName('whiteDwarfs');
   }
 
-  getTemperatureColor() {
-    // Color based on temperature
-    if (this.temperature > 15000)
-      return '#9BB0FF'; // Blue-white
-    else if (this.temperature > 10000)
-      return '#CAD7FF'; // White
-    else if (this.temperature > 7500)
-      return '#F8F7FF'; // Yellow-white
-    else return '#FFE4B5'; // Orange-white
-  }
-
   get_state() {
     const baseState = super.get_state();
     return {
@@ -4384,7 +4389,6 @@ class WhiteDwarf extends PhysicsObject {
   }
 }
 
-// Particle object pool for memory optimization
 // Visual radius of a galaxy. Drawing size only: as far as the dynamics are
 // concerned a member of a cluster is a point mass, which is exactly how Zwicky
 // treated them.
@@ -4455,124 +4459,6 @@ class Galaxy extends PhysicsObject {
     this.tilt = galaxyTilt(this.id);
   }
 }
-
-class ParticlePool {
-  constructor(initialSize = 100) {
-    this.pool = [];
-    this.activeParticles = [];
-    this.maxPoolSize = initialSize;
-
-    // Don't pre-allocate particles to avoid initialization issues
-    // They will be created as needed and pooled when they die
-  }
-
-  getParticle(
-    pos,
-    vel,
-    lifetime = 0.8,
-    start_size = 5,
-    end_size = 1,
-    color = 'rgb(255,255,100)'
-  ) {
-    let particle;
-    if (this.pool.length > 0) {
-      particle = this.pool.pop();
-      if (particle.reset) {
-        particle.reset(pos, vel, lifetime, start_size, end_size, color);
-      } else {
-        // Fallback for particles created before reset method was added
-        if (!particle.pos) particle.pos = { x: 0, y: 0 };
-        if (!particle.vel) particle.vel = { x: 0, y: 0 };
-        particle.pos.x = pos.x;
-        particle.pos.y = pos.y;
-        particle.vel.x = vel.x;
-        particle.vel.y = vel.y;
-        particle.lifetime = Math.max(0.1, lifetime);
-        particle.age = 0;
-        particle.start_size = start_size;
-        particle.end_size = end_size;
-        particle.color = color;
-      }
-    } else {
-      particle = new Particle(pos, vel, lifetime, start_size, end_size, color);
-    }
-    this.activeParticles.push(particle);
-    return particle;
-  }
-
-  updateAndCleanup(dt) {
-    for (let i = this.activeParticles.length - 1; i >= 0; i--) {
-      const particle = this.activeParticles[i];
-      particle.update(dt);
-
-      if (!particle.is_alive()) {
-        // Return to pool if not at max capacity
-        this.activeParticles.splice(i, 1);
-        if (this.pool.length < this.maxPoolSize) {
-          this.pool.push(particle);
-        }
-        // Otherwise let it be garbage collected
-      }
-    }
-  }
-
-  getActiveParticles() {
-    return this.activeParticles;
-  }
-
-  clear() {
-    this.pool.push(...this.activeParticles);
-    this.activeParticles.length = 0;
-  }
-}
-
-// Global particle pool - initialize after Particle class is defined
-let particlePool;
-
-// Particle class for visual effects - optimized with reset method
-class Particle {
-  constructor(
-    pos,
-    vel,
-    lifetime = 0.8,
-    start_size = 5,
-    end_size = 1,
-    color = 'rgb(255,255,100)'
-  ) {
-    this.pos = { x: 0, y: 0 };
-    this.vel = { x: 0, y: 0 };
-    this.reset(pos, vel, lifetime, start_size, end_size, color);
-  }
-
-  reset(pos, vel, lifetime, start_size, end_size, color) {
-    this.pos.x = pos.x;
-    this.pos.y = pos.y;
-    this.vel.x = vel.x;
-    this.vel.y = vel.y;
-    this.lifetime = Math.max(0.1, lifetime);
-    this.age = 0;
-    this.start_size = start_size;
-    this.end_size = end_size;
-    this.color = color;
-  }
-
-  update(dt) {
-    this.pos.x += this.vel.x * dt;
-    this.pos.y += this.vel.y * dt;
-    this.age += dt;
-  }
-
-  is_alive() {
-    return this.age < this.lifetime;
-  }
-
-  draw(ctx) {
-    paintBody(this, ctx, 'Particle');
-  }
-}
-
-// Initialize particle pool after Particle class is defined
-particlePool = new ParticlePool(200);
 
 const findObjectAtPosition = worldPos => {
   // Check black holes first (they're usually the most important)
@@ -5000,22 +4886,15 @@ const handle_collisions = objects_list => {
   });
 };
 
-// Create kilonova explosion effect
-/**
- * Create a spectacular kilonova explosion when neutron stars merge
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging neutron stars
- */
+/** Create a spectacular kilonova explosion when neutron stars merge (pos, mass). */
 const createKilonovaExplosion = (pos, mass) => {
   // Kilonova parameters based on mass
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(2.0, massInSuns / 2.0); // Scale with mass
 
-  // Create massive particle explosion
   const particleCount = Math.floor(200 + massInSuns * 50); // 200-400 particles based on mass
 
   for (let i = 0; i < particleCount; i++) {
-    // Random angle and speed for explosion
     const angle = Math.random() * 2 * Math.PI;
     const speed = (Math.random() * 300 + 200) * explosionIntensity; // 200-500 speed units
 
@@ -5045,7 +4924,6 @@ const createKilonovaExplosion = (pos, mass) => {
 
     const color = colors[Math.floor(Math.random() * colors.length)];
 
-    // Create particle with kilonova properties
     const particle = particlePool.getParticle(
       spawnPos,
       vel,
@@ -5055,14 +4933,12 @@ const createKilonovaExplosion = (pos, mass) => {
       color
     );
 
-    // Add special kilonova glow effect
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.5 + 0.5;
     }
   }
 
-  // Create gravitational wave ripple effect
   gravity_ripples.push({
     x: pos.x,
     y: pos.y,
@@ -5074,7 +4950,6 @@ const createKilonovaExplosion = (pos, mass) => {
     kilonova: true, // Special flag for kilonova GW
   });
 
-  // Create shockwave effect
   for (let i = 0; i < 50; i++) {
     const angle = (i / 50) * 2 * Math.PI;
     const speed = 150 + Math.random() * 100;
@@ -5094,22 +4969,15 @@ const createKilonovaExplosion = (pos, mass) => {
   }
 };
 
-// Create smaller kilonova explosion for neutron star mergers that don't form black holes
-/**
- * Create a smaller kilonova explosion when neutron stars merge but don't form a black hole
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging neutron stars
- */
+/** Create a smaller kilonova explosion when neutron stars merge but don't form a black hole (pos, mass). */
 const createSmallKilonovaExplosion = (pos, mass) => {
   // Kilonova parameters based on mass (reduced intensity)
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(1.0, massInSuns / 3.0); // Reduced intensity for smaller explosions
 
-  // Create smaller particle explosion
   const particleCount = Math.floor(100 + massInSuns * 25); // 100-200 particles (half of full kilonova)
 
   for (let i = 0; i < particleCount; i++) {
-    // Random angle and speed for explosion
     const angle = Math.random() * 2 * Math.PI;
     const speed = (Math.random() * 200 + 150) * explosionIntensity; // 150-350 speed units (reduced)
 
@@ -5139,7 +5007,6 @@ const createSmallKilonovaExplosion = (pos, mass) => {
 
     const color = colors[Math.floor(Math.random() * colors.length)];
 
-    // Create particle with kilonova properties (smaller sizes)
     const particle = particlePool.getParticle(
       spawnPos,
       vel,
@@ -5149,14 +5016,12 @@ const createSmallKilonovaExplosion = (pos, mass) => {
       color
     );
 
-    // Add special kilonova glow effect (reduced intensity)
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.3 + 0.3; // Reduced glow
     }
   }
 
-  // Create gravitational wave ripple effect (smaller)
   gravity_ripples.push({
     x: pos.x,
     y: pos.y,
@@ -5168,9 +5033,7 @@ const createSmallKilonovaExplosion = (pos, mass) => {
     kilonova: true, // Special flag for kilonova GW
   });
 
-  // Create smaller shockwave effect
   for (let i = 0; i < 25; i++) {
-    // Half the shockwave particles
     const angle = (i / 25) * 2 * Math.PI;
     const speed = 100 + Math.random() * 75; // Reduced speed
     const vel = {
@@ -5189,17 +5052,11 @@ const createSmallKilonovaExplosion = (pos, mass) => {
   }
 };
 
-// Create neutron star-white dwarf merger explosion
-/**
- * Create a moderate explosion when neutron star and white dwarf merge
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging objects
- */
+/** Create a moderate explosion when neutron star and white dwarf merge (pos, mass). */
 const createNSWDExplosion = (pos, mass) => {
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(1.5, massInSuns / 1.5); // Moderate intensity
 
-  // Create moderate particle explosion
   const particleCount = Math.floor(80 + massInSuns * 30); // 80-150 particles
 
   for (let i = 0; i < particleCount; i++) {
@@ -5239,14 +5096,12 @@ const createNSWDExplosion = (pos, mass) => {
       color
     );
 
-    // Add moderate glow effect
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.3 + 0.3; // Moderate glow
     }
   }
 
-  // Create gravitational wave ripple effect
   gravity_ripples.push({
     x: pos.x,
     y: pos.y,
@@ -5258,7 +5113,6 @@ const createNSWDExplosion = (pos, mass) => {
     nswd_merger: true, // Special flag for NS-WD merger
   });
 
-  // Create moderate shockwave effect
   for (let i = 0; i < 25; i++) {
     const angle = (i / 25) * 2 * Math.PI;
     const speed = 120 + Math.random() * 80;
@@ -5278,17 +5132,11 @@ const createNSWDExplosion = (pos, mass) => {
   }
 };
 
-// Create white dwarf-white dwarf merger explosion (Type Ia supernova precursor)
-/**
- * Create a smaller explosion when white dwarfs merge
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging white dwarfs
- */
+/** Create a smaller explosion when white dwarfs merge (pos, mass). */
 const createWDWDExplosion = (pos, mass) => {
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(1.0, massInSuns / 1.0); // Smaller intensity
 
-  // Create smaller particle explosion
   const particleCount = Math.floor(40 + massInSuns * 20); // 40-80 particles
 
   for (let i = 0; i < particleCount; i++) {
@@ -5328,14 +5176,12 @@ const createWDWDExplosion = (pos, mass) => {
       color
     );
 
-    // Add subtle glow effect
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.2 + 0.2; // Subtle glow
     }
   }
 
-  // Create gravitational wave ripple effect
   gravity_ripples.push({
     x: pos.x,
     y: pos.y,
@@ -5347,7 +5193,6 @@ const createWDWDExplosion = (pos, mass) => {
     wdwd_merger: true, // Special flag for WD-WD merger
   });
 
-  // Create small shockwave effect
   for (let i = 0; i < 15; i++) {
     const angle = (i / 15) * 2 * Math.PI;
     const speed = 80 + Math.random() * 60;
@@ -6333,8 +6178,6 @@ export {
   NeutronStar,
   WhiteDwarf,
   Galaxy,
-  Particle,
-  ParticlePool,
   AccretionDiskParticle,
   particlePool,
   gravitational_acceleration,
@@ -6415,6 +6258,7 @@ export {
   getDetailScale,
   setStateReference,
   registerBodyDrawers,
+  registerEffects,
   // The live values the drawers read (js/bodyDraw.js, js/bodyDrawSky.js). The
   // engine keeps them because it owns them: it reassigns the settings, sets
   // the count of bodies on screen each step and builds the black hole's

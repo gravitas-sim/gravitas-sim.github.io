@@ -11,8 +11,8 @@
 // revision the whole arrangement exists to prevent. The 178 optional
 // entries are pictures; a missing one is reported and does not cost the reader
 // the version.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-34e2a4e1bb54';
-self.__GRAVITAS_PRECACHE_BYTES = 17711359;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-d9a4ea59cfc6';
+self.__GRAVITAS_PRECACHE_BYTES = 17711307;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',
@@ -70,6 +70,7 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/blackHoleWidgets.js',
   './js/bodyDraw.js',
   './js/bodyDrawSky.js',
+  './js/bodyEffects.js',
   './js/bodyVisuals.js',
   './js/bottomDock.js',
   './js/canvasSummary.js',
@@ -383,7 +384,6 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/fragments/view3d.html',
   './js/galactic/model.js',
   './js/galacticWidgets.js',
-  './js/gestures.js',
   './js/gradebook/canvas.js',
   './js/gradebook/d2l.js',
   './js/gradebook/index.js',
@@ -695,7 +695,6 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/physicsKinds.js',
   './js/physicsWorker.js',
   './js/place/preciseFields.js',
-  './js/placement.js',
   './js/platform/artifact.js',
   './js/platform/builtins.js',
   './js/platform/catalog.generated.js',
@@ -753,6 +752,7 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/scenarioPack.js',
   './js/scenarioPack3d.js',
   './js/scenarioPackWorld.js',
+  './js/scenarioPanelBridge.js',
   './js/scenarios.js',
   './js/seriesTable.js',
   './js/settingsPanel.js',
@@ -1154,6 +1154,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/blackHoleWidgets.js',
   './js/bodyDraw.js',
   './js/bodyDrawSky.js',
+  './js/bodyEffects.js',
   './js/bodyVisuals.js',
   './js/bottomDock.js',
   './js/canvasSummary.js',
@@ -1492,7 +1493,6 @@ self.__GRAVITAS_PRECACHE = [
   './js/fragments/view3d.html',
   './js/galactic/model.js',
   './js/galacticWidgets.js',
-  './js/gestures.js',
   './js/gradebook/canvas.js',
   './js/gradebook/d2l.js',
   './js/gradebook/index.js',
@@ -1870,7 +1870,6 @@ self.__GRAVITAS_PRECACHE = [
   './js/physicsKinds.js',
   './js/physicsWorker.js',
   './js/place/preciseFields.js',
-  './js/placement.js',
   './js/platform/artifact.js',
   './js/platform/builtins.js',
   './js/platform/catalog.generated.js',
@@ -1928,6 +1927,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/scenarioPack.js',
   './js/scenarioPack3d.js',
   './js/scenarioPackWorld.js',
+  './js/scenarioPanelBridge.js',
   './js/scenarios.js',
   './js/seriesTable.js',
   './js/settingsPanel.js',

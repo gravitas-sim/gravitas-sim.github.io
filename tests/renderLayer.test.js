@@ -11,8 +11,10 @@ import {
 } from '../tools/check-architecture.mjs';
 
 describe('the render layer', () => {
-  test('the drawers and the black hole renderer sit in it', () => {
+  test('the drawers, the effects and the black hole renderer sit in it', () => {
     expect(layerOf('js/bodyDraw.js')).toBe('render');
+    expect(layerOf('js/bodyDrawSky.js')).toBe('render');
+    expect(layerOf('js/bodyEffects.js')).toBe('render');
     expect(layerOf('js/blackHole/render.js')).toBe('render');
     expect(layerOf('js/blackHole/geometry.js')).toBe('render');
   });

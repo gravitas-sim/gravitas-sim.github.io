@@ -17,6 +17,9 @@ import {
   StarObject,
   PhysicsObject,
 } from '../js/physics.js';
+// The particle pool is filed with the engine by this module; without it an
+// absorption spawns nothing (tests/effectsMissing.test.js).
+import '../js/bodyEffects.js';
 
 describe('updatePhysics', () => {
   let mockState;

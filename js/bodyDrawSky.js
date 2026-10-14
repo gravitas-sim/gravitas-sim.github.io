@@ -1,8 +1,8 @@
 // =============================================================================
-// How the stars, their remnants, galaxies and particles are painted
+// How the stars, their remnants and galaxies are painted
 // -----------------------------------------------------------------------------
 // The other drawers (planets to black holes) are in js/bodyDraw.js. Here: the
-// star, neutron star, white dwarf, galaxy, accretion tracer and particle, each
+// star, neutron star, white dwarf, galaxy and accretion tracer, each
 // the old draw(ctx) method with `this` passed as `o`, filed in the engine's
 // table (registerBodyDrawers) on import; what every drawer shares (drawn radius,
 // level of detail, lighting, bloom layer, visual clock); and the starfield model.
@@ -12,6 +12,7 @@ import { SOLAR_MASS_UNIT } from './constants.js';
 import { formatNumber } from './format.js';
 import { drawSolarLabel, hexToRgb, computeDynamicColor } from './utils.js';
 import { mulberry32 } from './rng.js';
+import { whiteDwarfColor } from './bodyEffects.js';
 import {
   LOD,
   lodFor,
@@ -490,7 +491,7 @@ function drawWhiteDwarf(o, ctx) {
   const world_pos = o.pos; // Use direct world coordinates since canvas is already transformed
 
   // Core with temperature-based color
-  const temp_color = o.getTemperatureColor();
+  const temp_color = whiteDwarfColor(o.temperature);
   ctx.fillStyle = compute_dynamic_color(temp_color, o.pos, bh_list, 200.0, {
     r: 255,
     g: 255,
@@ -627,38 +628,6 @@ function drawGalaxy(o, ctx) {
   ctx.fill();
 }
 
-function drawParticle(o, ctx) {
-  const life_fraction = o.age / o.lifetime;
-  const current_size =
-    o.start_size * (1 - life_fraction) + o.end_size * life_fraction;
-  const alpha = 1 - life_fraction;
-
-  if (current_size < 1 || alpha < 0.05) return;
-
-  const world_pos = o.pos; // Use direct world coordinates since canvas is already transformed
-
-  // Special kilonova glow effect
-  if (o.kilonova_glow && o.glow_intensity) {
-    const glow_size = current_size * 3 * o.glow_intensity;
-    const glow_alpha = alpha * 0.3 * o.glow_intensity;
-
-    // Draw glow
-    ctx.fillStyle = o.color;
-    ctx.globalAlpha = glow_alpha;
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, glow_size / state.zoom, 0, 2 * Math.PI);
-    ctx.fill();
-  }
-
-  // Draw main particle
-  ctx.fillStyle = o.color;
-  ctx.globalAlpha = alpha;
-  ctx.beginPath();
-  ctx.arc(world_pos.x, world_pos.y, current_size / state.zoom, 0, 2 * Math.PI);
-  ctx.fill();
-  ctx.globalAlpha = 1; // Reset alpha
-}
-
 function drawAccretionDiskParticle(o, ctx) {
   if (!o.alive || o.absorbed) return;
 
@@ -705,7 +674,6 @@ registerBodyDrawers({
   WhiteDwarf: drawWhiteDwarf,
   Galaxy: drawGalaxy,
   AccretionDiskParticle: drawAccretionDiskParticle,
-  Particle: drawParticle,
 });
 
 export {

@@ -85,6 +85,9 @@ async function record(args) {
     const ui = await import('/js/ui.js');
     const physics = await import('/js/physics.js');
     const quality = await import('/js/quality.js');
+    // The particle class lives in the effects module once there is one.
+    const fx = await import('/js/bodyEffects.js').catch(() => null);
+    const Particle = (fx || physics).Particle;
     const sky = await import('/js/bodyDrawSky.js').catch(() => null);
     const setBloom = (sky || physics).setBloomLayer;
     // recording context
@@ -164,7 +167,9 @@ async function record(args) {
       return bloomCtx;
     });
     let a = 0x9e3779b9;
+    let draws = 0;
     Math.random = () => {
+      draws++;
       a = (a + 0x6d2b79f5) | 0;
       let t = Math.imul(a ^ (a >>> 15), 1 | a);
       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
@@ -203,19 +208,118 @@ async function record(args) {
       'synthetic-remnants',
       'synthetic-galaxies',
       'synthetic-particles',
+      // What the engine spawns at an event, by its own rules: bodies in contact
+      // and two steps. The draws taken, the draw that comes next and the ripples
+      // are recorded beside the picture, with the clocks pinned.
+      'event-kilonova',
+      'event-small-kilonova',
+      'event-ns-wd',
+      'event-wd-wd',
+      'event-supernova',
+      'event-type-ia',
+      'event-bh-feast',
+      'event-impacts',
+      'event-bh-merger',
     ];
     for (const sc of scenes) {
       ui.state.paused = true;
       ui.SETTINGS.adaptive_detail = false;
       physics.setDetailScale(1);
       const synth = sc.startsWith('synthetic-');
-      ui.SETTINGS.preset_scenario = synth ? 'solar-system' : sc;
+      const event = sc.startsWith('event-');
+      ui.SETTINGS.preset_scenario = synth || event ? 'solar-system' : sc;
       ui.initialize_simulation({ seed: 'trace' });
       ui.state.paused = true;
       ui.SETTINGS.adaptive_detail = false;
       physics.setDetailScale(1);
-      if (!synth) for (let i = 0; i < 150; i++) physics.updatePhysics(0.01);
+      if (!synth && !event)
+        for (let i = 0; i < 150; i++) physics.updatePhysics(0.01);
       const still = { x: 0, y: 0 };
+      let eventRow = null;
+      if (event) {
+        for (const list of [
+          physics.bh_list,
+          physics.planets,
+          physics.stars,
+          physics.gas_giants,
+          physics.asteroids,
+          physics.comets,
+          physics.debris,
+          physics.particles,
+          physics.neutron_stars,
+          physics.white_dwarfs,
+          physics.galaxies,
+          physics.accretion_disk_particles,
+          physics.gravity_ripples,
+        ])
+          list.length = 0;
+        physics.particlePool.clear();
+        a = 0x1234567 + sc.length * 977;
+        let tick = 0;
+        Date.now = () => 1.7e12 + tick++;
+        performance.now = () => 5000 + tick++;
+        const P = physics;
+        const at = (x, y = 0) => ({ x, y });
+        const suns = m => m * P.SOLAR_MASS_UNIT;
+        const built = {
+          'event-kilonova': () =>
+            P.neutron_stars.push(
+              new P.NeutronStar(at(0), still, 1.8, false),
+              new P.NeutronStar(at(0.5), still, 1.8, false)
+            ),
+          'event-small-kilonova': () =>
+            P.neutron_stars.push(
+              new P.NeutronStar(at(0), still, 1.3, false),
+              new P.NeutronStar(at(0.5), still, 1.3, false)
+            ),
+          'event-ns-wd': () => {
+            P.neutron_stars.push(new P.NeutronStar(at(0), still, 1.4, false));
+            P.white_dwarfs.push(new P.WhiteDwarf(at(0.5), still, 0.9));
+          },
+          'event-wd-wd': () =>
+            P.white_dwarfs.push(
+              new P.WhiteDwarf(at(0), still, 0.9),
+              new P.WhiteDwarf(at(0.5), still, 0.8)
+            ),
+          'event-supernova': () =>
+            P.stars.push(new P.StarObject(at(0), still, 400)),
+          'event-type-ia': () =>
+            P.white_dwarfs.push(new P.WhiteDwarf(at(0), still, 1.5)),
+          'event-bh-feast': () => {
+            P.bh_list.push(new P.BlackHole(at(0), suns(1000), still, false));
+            P.stars.push(new P.StarObject(at(0.2), still, 1));
+            P.comets.push(new P.Comet(at(0.3, 0.1), still));
+            P.asteroids.push(new P.Asteroid(at(-0.3), still));
+            P.planets.push(new P.Planet(at(0, 0.3), still, 1));
+          },
+          'event-impacts': () => {
+            P.stars.push(new P.StarObject(at(0, 40), still, 1));
+            P.planets.push(
+              new P.Planet(at(40), { x: 40, y: 0 }, 1),
+              new P.Planet(at(40.3), { x: -40, y: 0 }, 1),
+              new P.Planet(at(0, 40.2), still, 1)
+            );
+            P.gas_giants.push(
+              new P.GasGiant(at(-40), still, 1),
+              new P.GasGiant(at(-39.5), still, 1)
+            );
+            P.asteroids.push(new P.Asteroid(at(0.1, 40.1), still));
+          },
+          'event-bh-merger': () =>
+            P.bh_list.push(
+              new P.BlackHole(at(0), suns(20), still, false),
+              new P.BlackHole(at(0.5), suns(20), still, false)
+            ),
+        };
+        built[sc]();
+        const first = draws;
+        physics.bumpWorldGeneration();
+        for (let i = 0; i < 2; i++) physics.updatePhysics(0.01);
+        eventRow = {
+          draws: draws - first,
+          ripples: JSON.stringify(physics.gravity_ripples),
+        };
+      }
       if (synth) {
         for (const list of [
           physics.bh_list,
@@ -301,7 +405,7 @@ async function record(args) {
             physics.accretion_disk_particles.push(p);
           });
           for (let i = 0; i < 14; i++) {
-            const p = new physics.Particle(
+            const p = new Particle(
               { x: -80 + i * 14, y: -40 },
               still,
               1.0,
@@ -368,6 +472,17 @@ async function record(args) {
           }
           rows.push({ tier, zoom, ops, bloomAsked, h: hashLog() });
         }
+      }
+      if (eventRow) {
+        // the draws the event took, the draw that comes next, and its ripples
+        const next = Math.random();
+        rows.push({
+          tier: 'event',
+          zoom: 0,
+          ops: 0,
+          bloomAsked: 0,
+          h: `${eventRow.draws}:${next}:${eventRow.ripples}`,
+        });
       }
       out[sc] = { counts, rows };
     }

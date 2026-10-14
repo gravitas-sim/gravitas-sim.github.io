@@ -165,6 +165,23 @@ const SCENES = [
     zoom: 3,
     synthetic: 'particles',
   },
+  // The explosions the engine spawns at a merger, driven by the engine's own
+  // rules: two compact objects placed in contact and one fixed step (the
+  // random stream is the tool's fixed one), then the world paused.
+  ...[
+    ['kilonova', 0.25],
+    ['small-kilonova', 0.25],
+    ['ns-wd', 0.25],
+    ['wd-wd', 0.5],
+    ['supernova', 0.5],
+  ].map(([event, zoom]) => ({
+    id: `event-${event}`,
+    scenario: 'solar-system',
+    steps: 0,
+    zoom,
+    synthetic: 'event',
+    event,
+  })),
   // One rocky planet, large, so the shading and the limb are legible.
   {
     id: 'planet-closeup',
@@ -284,6 +301,9 @@ async function main() {
         const ui = await import('/js/ui.js');
         const physics = await import('/js/physics.js');
         const quality = await import('/js/quality.js');
+        // The particle class lives in the effects module once there is one.
+        const fx = await import('/js/bodyEffects.js').catch(() => null);
+        const Particle = (fx || physics).Particle;
 
         // --deterministic: some scenes draw on Math.random while they are built
         // or stepped (the star cluster's field, a disk's spiral factor), and
@@ -414,6 +434,32 @@ async function main() {
               );
               physics.galaxies.push(g);
             }
+          } else if (scene.synthetic === 'event') {
+            const at = x => ({ x, y: 0 });
+            const P = physics;
+            if (scene.event === 'kilonova') {
+              P.neutron_stars.push(
+                new P.NeutronStar(at(0), still, 1.8, false),
+                new P.NeutronStar(at(0.5), still, 1.8, false)
+              );
+            } else if (scene.event === 'small-kilonova') {
+              P.neutron_stars.push(
+                new P.NeutronStar(at(0), still, 1.3, false),
+                new P.NeutronStar(at(0.5), still, 1.3, false)
+              );
+            } else if (scene.event === 'ns-wd') {
+              P.neutron_stars.push(new P.NeutronStar(at(0), still, 1.4, false));
+              P.white_dwarfs.push(new P.WhiteDwarf(at(0.5), still, 0.9));
+            } else if (scene.event === 'wd-wd') {
+              P.white_dwarfs.push(
+                new P.WhiteDwarf(at(0), still, 0.9),
+                new P.WhiteDwarf(at(0.5), still, 0.8)
+              );
+            } else {
+              P.stars.push(new P.StarObject(at(0), still, 400));
+            }
+            P.bumpWorldGeneration();
+            P.updatePhysics(0.01);
           } else if (scene.synthetic === 'particles') {
             const hole = new physics.BlackHole({ x: 0, y: 0 }, still, 5);
             physics.bh_list.push(hole);
@@ -428,7 +474,7 @@ async function main() {
               physics.accretion_disk_particles.push(p);
             });
             for (let i = 0; i < 12; i++) {
-              const p = new physics.Particle(
+              const p = new Particle(
                 { x: -80 + i * 14, y: -40 },
                 still,
                 1.0,
