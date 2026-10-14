@@ -1,0 +1,448 @@
+{
+  "A1": {
+    "type": "line",
+    "responsive": true,
+    "keepsAspect": false,
+    "animation": "none",
+    "parsing": "objects",
+    "categoryX": false,
+    "series": [
+      {
+        "label": "Kinetic Energy",
+        "color": "#00ff88",
+        "fillColor": null,
+        "width": 2,
+        "dash": [],
+        "fill": false,
+        "tension": 0.1,
+        "pointRadius": 0,
+        "line": true,
+        "hidden": false,
+        "order": 0
+      },
+      {
+        "label": "Potential Energy",
+        "color": "#ff8800",
+        "fillColor": null,
+        "width": 2,
+        "dash": [],
+        "fill": false,
+        "tension": 0.1,
+        "pointRadius": 0,
+        "line": true,
+        "hidden": false,
+        "order": 0
+      },
+      {
+        "label": "Total Energy",
+        "color": "#0088ff",
+        "fillColor": null,
+        "width": 3,
+        "dash": [],
+        "fill": false,
+        "tension": 0.1,
+        "pointRadius": 0,
+        "line": true,
+        "hidden": false,
+        "order": 0
+      }
+    ],
+    "x": {
+      "type": "linear",
+      "title": "Time (s)",
+      "titleColor": "#e0e0e0",
+      "titleSize": 14,
+      "tickColor": "#e0e0e0",
+      "tickSize": 12,
+      "maxTicks": null,
+      "gridColor": "rgba(255, 255, 255, 0.1)",
+      "customTickLabels": null
+    },
+    "y": {
+      "type": "linear",
+      "title": "Energy (J)",
+      "titleColor": "#e0e0e0",
+      "titleSize": 14,
+      "tickColor": "#e0e0e0",
+      "tickSize": 12,
+      "maxTicks": null,
+      "gridColor": "rgba(255, 255, 255, 0.1)",
+      "customTickLabels": [
+        "0",
+        "1.5",
+        "120",
+        "12,000",
+        "10⁶",
+        "−0.0025"
+      ]
+    },
+    "legend": {
+      "shown": true,
+      "position": "top",
+      "textColor": "#e0e0e0",
+      "togglesSeries": true
+    },
+    "tooltip": {
+      "enabled": true,
+      "mode": "index",
+      "intersect": false,
+      "custom": true,
+      "sample": "Kinetic: 1,230 J"
+    },
+    "plugins": []
+  },
+  "A2": {
+    "type": "line",
+    "responsive": true,
+    "keepsAspect": false,
+    "animation": "none",
+    "parsing": "default",
+    "categoryX": true,
+    "series": [
+      {
+        "label": "Relative Brightness",
+        "color": "token:accent",
+        "fillColor": "token:accentSoft",
+        "width": 1.5,
+        "dash": [],
+        "fill": true,
+        "tension": 0.25,
+        "pointRadius": 0,
+        "line": true,
+        "hidden": false,
+        "order": 0
+      }
+    ],
+    "x": {
+      "type": "category",
+      "title": "Time (days)",
+      "titleColor": "token:label",
+      "titleSize": 10,
+      "tickColor": "token:tick|neutral",
+      "tickSize": 9,
+      "maxTicks": 6,
+      "gridColor": "token:grid",
+      "customTickLabels": null
+    },
+    "y": {
+      "type": "linear",
+      "title": "Brightness",
+      "titleColor": "token:label",
+      "titleSize": 10,
+      "tickColor": "token:tick|neutral",
+      "tickSize": 9,
+      "maxTicks": null,
+      "gridColor": "token:grid",
+      "customTickLabels": null
+    },
+    "legend": {
+      "shown": false,
+      "position": "top",
+      "textColor": null,
+      "togglesSeries": true
+    },
+    "tooltip": {
+      "enabled": true,
+      "mode": "nearest",
+      "intersect": false,
+      "custom": true
+    },
+    "plugins": [],
+    "tooltipSample": "Brightness: 0.998765",
+    "xLabelIsDays": true
+  },
+  "A3": {
+    "plain": {
+      "type": "line",
+      "responsive": true,
+      "keepsAspect": false,
+      "animation": "none",
+      "parsing": "objects",
+      "categoryX": false,
+      "series": [
+        {
+          "label": "Radial velocity",
+          "color": "token:accent",
+          "fillColor": null,
+          "width": 2,
+          "dash": [],
+          "fill": false,
+          "tension": 0.25,
+          "pointRadius": 0,
+          "line": true,
+          "hidden": false,
+          "order": 0
+        },
+        {
+          "label": "Measurements",
+          "color": "token:warm",
+          "fillColor": null,
+          "width": null,
+          "dash": [],
+          "fill": false,
+          "tension": 0,
+          "pointRadius": 3,
+          "line": false,
+          "hidden": true,
+          "order": 0
+        }
+      ],
+      "x": {
+        "type": "linear",
+        "title": "Time (days)",
+        "titleColor": "token:label",
+        "titleSize": 10,
+        "tickColor": "token:tick|neutral",
+        "tickSize": 9,
+        "maxTicks": 6,
+        "gridColor": "token:grid",
+        "customTickLabels": null
+      },
+      "y": {
+        "type": "linear",
+        "title": "Radial velocity (m/s)",
+        "titleColor": "token:label",
+        "titleSize": 10,
+        "tickColor": "token:tick|neutral",
+        "tickSize": 9,
+        "maxTicks": 6,
+        "gridColor": "token:grid",
+        "customTickLabels": null
+      },
+      "legend": {
+        "shown": false,
+        "position": "top",
+        "textColor": null,
+        "togglesSeries": true
+      },
+      "tooltip": {
+        "enabled": true,
+        "mode": "nearest",
+        "intersect": true,
+        "custom": false
+      },
+      "plugins": [
+        "rvErrorBars"
+      ]
+    },
+    "survey": {
+      "type": "line",
+      "responsive": true,
+      "keepsAspect": false,
+      "animation": "none",
+      "parsing": "objects",
+      "categoryX": false,
+      "series": [
+        {
+          "label": "Ideal signal (teaching overlay, not data)",
+          "color": "token:label",
+          "fillColor": null,
+          "width": 1.5,
+          "dash": [
+            4,
+            4
+          ],
+          "fill": false,
+          "tension": 0.25,
+          "pointRadius": 0,
+          "line": true,
+          "hidden": false,
+          "order": 2
+        },
+        {
+          "label": "Measurements",
+          "color": "token:warm",
+          "fillColor": null,
+          "width": null,
+          "dash": [],
+          "fill": false,
+          "tension": 0,
+          "pointRadius": 3,
+          "line": false,
+          "hidden": false,
+          "order": 1
+        }
+      ],
+      "x": {
+        "type": "linear",
+        "title": "Time (days)",
+        "titleColor": "token:label",
+        "titleSize": 10,
+        "tickColor": "token:tick|neutral",
+        "tickSize": 9,
+        "maxTicks": 6,
+        "gridColor": "token:grid",
+        "customTickLabels": null
+      },
+      "y": {
+        "type": "linear",
+        "title": "Radial velocity (m/s)",
+        "titleColor": "token:label",
+        "titleSize": 10,
+        "tickColor": "token:tick|neutral",
+        "tickSize": 9,
+        "maxTicks": 6,
+        "gridColor": "token:grid",
+        "customTickLabels": null
+      },
+      "legend": {
+        "shown": true,
+        "position": "top",
+        "textColor": null,
+        "togglesSeries": true
+      },
+      "tooltip": {
+        "enabled": true,
+        "mode": "nearest",
+        "intersect": true,
+        "custom": false
+      },
+      "plugins": [
+        "rvErrorBars"
+      ],
+      "errorBars": {
+        "plugin": "rvErrorBars",
+        "sigmaBothWays": true,
+        "lineWidth": 1,
+        "capHalfWidth": 3,
+        "color": "the measurements series border color"
+      }
+    }
+  },
+  "A4": {
+    "type": "line",
+    "responsive": true,
+    "keepsAspect": false,
+    "animation": "none",
+    "parsing": "default",
+    "categoryX": true,
+    "series": [
+      {
+        "label": "Run A",
+        "color": "token:cool",
+        "fillColor": null,
+        "width": 2,
+        "dash": [],
+        "fill": false,
+        "tension": 0,
+        "pointRadius": 0,
+        "line": true,
+        "hidden": false,
+        "order": 0
+      },
+      {
+        "label": "Run B",
+        "color": "token:warm",
+        "fillColor": null,
+        "width": 2,
+        "dash": [
+          5,
+          3
+        ],
+        "fill": false,
+        "tension": 0,
+        "pointRadius": 0,
+        "line": true,
+        "hidden": false,
+        "order": 0
+      }
+    ],
+    "x": {
+      "type": "category",
+      "title": "Simulated time (s)",
+      "titleColor": "token:label",
+      "titleSize": null,
+      "tickColor": "token:tick|neutral",
+      "tickSize": null,
+      "maxTicks": 8,
+      "gridColor": "token:grid",
+      "customTickLabels": null
+    },
+    "y": {
+      "type": "linear",
+      "title": "Separation (AU)",
+      "titleColor": "token:label",
+      "titleSize": null,
+      "tickColor": "token:tick|neutral",
+      "tickSize": null,
+      "maxTicks": null,
+      "gridColor": "token:grid",
+      "customTickLabels": null
+    },
+    "legend": {
+      "shown": true,
+      "position": "top",
+      "textColor": "token:label",
+      "togglesSeries": true
+    },
+    "tooltip": {
+      "enabled": true,
+      "mode": "nearest",
+      "intersect": false,
+      "custom": false
+    },
+    "plugins": [],
+    "metricChoices": true,
+    "xValuesAreTimes": true
+  },
+  "A5": {
+    "type": "scatter",
+    "responsive": true,
+    "keepsAspect": false,
+    "animation": "none",
+    "parsing": "default",
+    "categoryX": false,
+    "series": [
+      {
+        "label": "Distance from primary",
+        "color": "token:cool",
+        "fillColor": null,
+        "width": 2,
+        "dash": [],
+        "fill": false,
+        "tension": 0,
+        "pointRadius": 3,
+        "line": true,
+        "hidden": false,
+        "order": 0
+      }
+    ],
+    "x": {
+      "type": "linear",
+      "title": "Planet’s starting orbit (binary separations)",
+      "titleColor": "token:label",
+      "titleSize": null,
+      "tickColor": "token:tick|neutral",
+      "tickSize": null,
+      "maxTicks": 8,
+      "gridColor": "token:grid",
+      "customTickLabels": null
+    },
+    "y": {
+      "type": "linear",
+      "title": "Distance from primary",
+      "titleColor": "token:label",
+      "titleSize": null,
+      "tickColor": "token:tick|neutral",
+      "tickSize": null,
+      "maxTicks": null,
+      "gridColor": "token:grid",
+      "customTickLabels": null
+    },
+    "legend": {
+      "shown": true,
+      "position": "top",
+      "textColor": "token:label",
+      "togglesSeries": true
+    },
+    "tooltip": {
+      "enabled": true,
+      "mode": "point",
+      "intersect": true,
+      "custom": false
+    },
+    "plugins": [],
+    "pointsAreXY": true,
+    "xTitleNamesTheParameter": true
+  }
+}
