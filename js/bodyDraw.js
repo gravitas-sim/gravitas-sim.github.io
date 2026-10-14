@@ -6,9 +6,8 @@
 // js/physics.js. The engine holds a table of drawers (registerBodyDrawers) and
 // this module fills it, so the engine imports nothing that paints; the render
 // layer rule in check:architecture holds it to that. Each function is the old
-// method with `this` passed as `o`, unchanged otherwise. The stars, neutron
-// stars, white dwarfs, galaxies and particles still draw from the engine, and
-// the helpers imported from it below follow them in a later slice.
+// method with `this` passed as `o`, unchanged otherwise. The stars, their
+// remnants, galaxies, particles and the shared helpers: js/bodyDrawSky.js.
 // =============================================================================
 
 import { EARTH_MASSES_PER_JUPITER_MASS, SOLAR_MASS_UNIT } from './constants.js';
@@ -35,18 +34,19 @@ import {
   state,
   bh_list,
   world_to_screen,
-  compute_dynamic_color,
   physicsSettings,
+  defaultAppearance,
+  registerBodyDrawers,
+} from './physics.js';
+import {
+  compute_dynamic_color,
   drawRadius,
   lodOf,
   dominantStarFor,
   rgba,
   bloomLayer,
   visualClockSeconds,
-  defaultAppearance,
-  registerBodyDrawers,
-  setBloomLayer,
-} from './physics.js';
+} from './bodyDrawSky.js';
 
 // Fetched the first time a black hole is drawn, not at start-up. A scenario
 // with no black holes in it never asks for the renderer at all, and the four
@@ -1236,7 +1236,7 @@ function drawTails(o, ctx, at, r, z, sun, activity) {
 
 // Where the glow goes is the page's to say (js/render.js), passed through here so
 // that importing the drawers is what registers them.
-export { setBloomLayer };
+export { setBloomLayer } from './bodyDrawSky.js';
 
 registerBodyDrawers({
   Planet: drawPlanet,

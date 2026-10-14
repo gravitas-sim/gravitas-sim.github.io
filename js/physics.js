@@ -12,12 +12,9 @@ import {
 } from './constants.js';
 import { setSimGravitationalConstant } from './units.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
-import { formatNumber } from './format.js';
 import {
-  drawSolarLabel,
   debugLog,
   hexToRgb,
-  computeDynamicColor,
   worldToScreen,
   screenToWorld,
   isOffscreen,
@@ -25,9 +22,6 @@ import {
 import { recordBarycenter, clearFrameHistory } from './referenceFrame.js';
 import { haloAcceleration } from './darkMatter.js';
 import { a0InSimUnits, mondVector } from './mond.js';
-// The render tier, for the passes a body can skip on a slow machine. Services
-// sit below the engine, so this is a downward import like the two above it.
-import { currentTier } from './quality.js';
 import { ENVIRONMENT, createAppearance } from './blackHole/appearance.js';
 import { followCamera, resetFollowCamera } from './followCamera.js';
 // The shared drawing policy: level of detail, deterministic per-object
@@ -35,24 +29,12 @@ import { followCamera, resetFollowCamera } from './followCamera.js';
 // arithmetic, so all of it is tested without a canvas - see
 // tests/bodyVisuals.test.js.
 import {
-  LOD,
-  lodFor,
-  lodAtLeast,
   visualSeed,
-  dominantLight,
-  starColor,
-  paintStarDisc,
-  spriteFor,
-  drawnRadius,
-  displayRadius,
-  markerFloorPx,
   hitRadius,
   DISPLAY_MIN_PX,
-  CROWD_SOFT_START,
   hasRingsForSeed,
   ringGeometryFor,
 } from './bodyVisuals.js';
-import { stellarPropertiesFor } from './habitability.js';
 
 // Import the getRandomName function from ui.js
 
@@ -318,18 +300,9 @@ const setStateReference = stateRef => {
   state = stateRef;
 };
 
-// Halos and coronas draw where js/render.js says (it notes the glow); no one, no glow.
-let bloomLayer = () => null;
-const setBloomLayer = provider => {
-  // A provider is a function or nothing: anything else would make the next
-  // glow throw, and the draw sites' try/catch would swallow it into a glow that
-  // silently never appears.
-  bloomLayer = typeof provider === 'function' ? provider : () => null;
-};
-
-// How a body is painted lives in js/bodyDraw.js (and, for the kinds that have
-// not moved yet, below), registered here by kind so that this module never
-// imports anything that paints. A kind with no drawer draws nothing, which is
+// How a body is painted lives in js/bodyDraw.js and js/bodyDrawSky.js,
+// registered here by kind so that this module never imports anything that
+// paints. A kind with no drawer draws nothing, which is
 // what a worker, where no canvas exists, needs.
 const bodyDrawers = Object.create(null);
 const registerBodyDrawers = table => Object.assign(bodyDrawers, table);
@@ -452,22 +425,6 @@ const resetSimulationTime = () => {
 const setSimulationTime = t => {
   simulationTime = Number.isFinite(t) && t >= 0 ? t : 0;
 };
-
-/**
- * The clock the black-hole drawing animates against.
- *
- * The simulated clock, so a paused world draws the same frame for as long as
- * it stays paused and two runs of one scenario draw the same picture at the
- * same time. It used to be Date.now(), which meant the flow kept turning while
- * the simulation was frozen and no two screenshots ever matched.
- *
- * Under reduced motion it returns a constant: the picture is complete and
- * legible, it simply does not move.
- *
- * @returns {number} Seconds
- */
-const visualClockSeconds = () =>
-  prefersReducedMotion() ? 0 : getSimulationTime();
 
 /**
  * An appearance for a black hole that has not got one.
@@ -1460,133 +1417,6 @@ const setLiveBodyCount = n => {
   liveBodyCount = n;
 };
 
-/**
- * Radius to draw a body at, in world units.
- *
- * @param {Object} obj - Body with a model radius
- * @param {string} type - Which family, for the display policy
- * @returns {number} Radius to draw, never below a few screen pixels
- */
-const drawRadius = (obj, type) =>
-  // `stageRadius` is a presentation override: a lesson comparing stellar sizes
-  // sets it to say how big to draw this body and nothing else. It is used
-  // *instead of* the model radius rather than as well as it, so the family
-  // display factor cannot compress a size the lesson has already chosen -
-  // two scalings fighting each other is how a true-scale comparison stopped
-  // being to scale. The engine radius is untouched, so collisions, tides and
-  // every measured orbital property are the same whichever scale is showing.
-  Number.isFinite(obj.stageRadius) && obj.stageRadius > 0
-    ? Math.max(
-        obj.stageRadius,
-        markerFloorPx(liveBodyCount) / ((state && state.zoom) || 1)
-      )
-    : drawnRadius(obj.radius, type, (state && state.zoom) || 1, liveBodyCount);
-
-/**
- * How much detail this body is worth, at its current size on screen.
- *
- * One call, so every family draws at the same thresholds and a reader zooming
- * out watches the whole scene simplify together rather than one class at a
- * time.
- *
- * Measured on the *display* radius before the floor, which is the size the
- * body is about to be drawn at, and deliberately not on the model radius. When
- * the two were the same number this distinction did not exist; now that a
- * planet is drawn at three eighths of its model radius, asking the model would
- * put surface marks and cloud bands on a body occupying three pixels. Before
- * the floor, because a body held at the floor is a marker standing in for
- * something too small to see, and drawing weather on it would be a fiction.
- *
- * @param {Object} obj - Body with a radius
- * @param {string} type - Which family, for the display policy
- * @returns {string} One of LOD
- */
-const lodOf = (obj, type) => {
-  const z = (state && state.zoom) || 1;
-  return lodFor(displayRadius(obj.radius, type) * z, {
-    tier: currentTier(),
-    crowded: liveBodyCount > CROWD_SOFT_START,
-  });
-};
-
-/**
- * The luminous bodies in the scene, as light sources, recomputed once a frame.
- *
- * Positions are held by reference, so a moving star needs no refresh; what is
- * cached is the array and the luminosity, which is the part that would
- * otherwise be recomputed once per lit body per frame. A hundred planets in a
- * two-star system asked for this two hundred times a frame before it was
- * memoised.
- *
- * @returns {Array<{pos: Object, luminosity: number}>} Sources, possibly empty
- */
-let lightCacheFrame = -1;
-let lightCacheList = [];
-const luminousSources = () => {
-  const frame = (state && state.frame_count) || 0;
-  if (frame === lightCacheFrame && lightCacheList.length === stars.length) {
-    return lightCacheList;
-  }
-  lightCacheFrame = frame;
-  lightCacheList = [];
-  for (const star of stars) {
-    if (!star || star.alive === false) continue;
-    const props = stellarPropertiesFor(star, SOLAR_MASS_UNIT);
-    if (!(props.luminositySolar > 0)) continue;
-    lightCacheList.push({
-      pos: star.pos,
-      luminosity: props.luminositySolar,
-      teffK: props.teffK,
-      star,
-    });
-  }
-  return lightCacheList;
-};
-
-/**
- * The star that lights this body, or null in a scene with none.
- * @param {{x: number, y: number}} pos - Where the light is received
- * @returns {?Object} A light source
- */
-const dominantStarFor = pos => dominantLight(pos, luminousSources());
-
-/**
- * Does the reader want animation held still?
- *
- * Read through matchMedia rather than from a setting, because it is an
- * operating-system preference and the rest of the interface already honors it
- * that way (see the reduced-motion block in css/tokens.css). Cached: matchMedia
- * is not free and this is asked once per pulsar per frame.
- *
- * @returns {boolean} True when animation should be held
- */
-let reducedMotionQuery = null;
-const prefersReducedMotion = () => {
-  if (typeof window === 'undefined' || !window.matchMedia) return false;
-  if (!reducedMotionQuery) {
-    try {
-      reducedMotionQuery = window.matchMedia(
-        '(prefers-reduced-motion: reduce)'
-      );
-    } catch {
-      return false;
-    }
-  }
-  return Boolean(reducedMotionQuery.matches);
-};
-
-/**
- * How far a star's corona reaches, in stellar radii.
- *
- * Was three, at more than twice this alpha. A corona that wide is not a
- * corona; it is a glow that hides whatever is orbiting inside it, and on a
- * zoomed-in star it covered the inner planets entirely.
- */
-const CORONA_SCALE = 1.9;
-
-/** `rgba(...)` from a channel triple and an alpha. Avoids a template per call site. */
-const rgba = (c, a) => `rgba(${c.r},${c.g},${c.b},${a})`;
-
 // The click minimums moved to js/bodyVisuals.js, beside the display policy and
 // pointedly separate from it: hitRadius() takes the *model* radius, so a body
 // drawn at three eighths of it is exactly as easy to select as it was before.
@@ -1803,27 +1633,6 @@ const is_offscreen = (pos, buffer_factor = 10.0) => {
   const zoom_adjusted_buffer = buffer_factor * Math.max(1.0, state.zoom);
   return isOffscreen(pos, state, canvas, zoom_adjusted_buffer);
 };
-
-// Color utilities (using utils)
-/**
- * Compute dynamic color based on proximity to black holes
- * @param {string} base_color_hex - Base color in hex format
- * @param {Object} pos - Position object with x, y properties
- * @param {Array} bh_list - Array of black hole objects
- * @param {number} threshold - Distance threshold for color change
- * @param {Object} target_color - Target RGB color to blend towards
- * @returns {string} RGB color string
- * With the engine's own settings, so "Dynamic Object Properties" works.
- */
-const compute_dynamic_color = (hex, pos, bh_list, threshold, target_color) =>
-  computeDynamicColor(
-    hex,
-    pos,
-    bh_list,
-    threshold,
-    target_color,
-    physicsSettings
-  );
 
 // Core physics function
 /**
@@ -3948,46 +3757,6 @@ class AccretionDiskParticle extends PhysicsObject {
     const doppler = 1 / (gamma * (1 - beta * losFraction));
     return Math.max(0.25, Math.min(3.2, doppler ** 3));
   }
-
-  draw(ctx) {
-    if (!this.alive || this.absorbed) return;
-
-    const world_pos = this.pos;
-    const color = this.getTemperatureColor();
-    const beam = this.getDopplerFactor();
-
-    // Enhanced drawing with glow effect for hot particles
-    const glow_radius =
-      this.radius * (1 + this.heating_intensity * 2) * (0.8 + beam * 0.25);
-    const core_radius = this.radius * 0.6;
-
-    // Draw glow effect for hot particles
-    if (this.heating_intensity > 0.1) {
-      const glow_alpha = Math.min(0.9, this.heating_intensity * 0.6 * beam);
-      ctx.globalAlpha = glow_alpha;
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, glow_radius, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-
-    // Draw core particle
-    ctx.fillStyle = color;
-    ctx.globalAlpha = Math.max(0.15, Math.min(1, 0.9 * beam));
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, core_radius, 0, 2 * Math.PI);
-    ctx.fill();
-
-    // Draw bright center for very hot particles
-    if (this.heating_intensity > 0.5) {
-      ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, 0.8 * beam)})`;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, core_radius * 0.4, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-
-    ctx.globalAlpha = 1.0;
-  }
 }
 
 // BlackHole class
@@ -4437,167 +4206,6 @@ class StarObject extends PhysicsObject {
     this.showHabitableZone = false;
   }
 
-  draw(ctx) {
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    const r = drawRadius(this, 'Star');
-    const z = (state && state.zoom) || 1;
-    const screenR = r * z;
-    const level = lodOf(this, 'Star');
-
-    // Color from the temperature, not from the mass directly.
-    //
-    // The two agree for a main-sequence star, because the temperature is
-    // estimated from the mass when a star does not carry one - but a star that
-    // DOES carry one, which is every star a scenario builds from real data, was
-    // being colored from a mass-to-color table that knew nothing about it.
-    // stellarPropertiesFor is the same function the habitable-zone ring and the
-    // light curve read, so the color on screen and the physics in the panels
-    // now come from one number. An explicit baseColor still wins: a scenario
-    // that names a color means it.
-    // Memoised on the star, keyed on the mass it was computed from.
-    //
-    // The color only changes when the star does, which is on accretion or a
-    // merger - not sixty times a second. A cluster of five hundred stars was
-    // otherwise running stellarPropertiesFor, which allocates, once per star
-    // per frame to arrive at the same answer it gave on the previous one.
-    if (
-      !this._visual ||
-      this._visual.mass !== this.mass ||
-      this._visual.base !== this.baseColor ||
-      this._visual.teff !== this.temperature ||
-      this._visual.lum !== this.luminosityInSuns
-    ) {
-      const props = stellarPropertiesFor(this, SOLAR_MASS_UNIT);
-      this._visual = {
-        mass: this.mass,
-        base: this.baseColor,
-        // The temperature is part of the key, not just an input. Without it a
-        // star whose temperature changed while its mass did not kept the
-        // color it was memoised with - which is every star in an evolutionary
-        // track, where the mass barely moves and the temperature moves by a
-        // factor of ten.
-        teff: this.temperature,
-        lum: this.luminosityInSuns,
-        rgb: this.baseColor
-          ? hexToRgb(this.baseColor) || starColor(props.teffK)
-          : starColor(props.teffK),
-      };
-    }
-    const rgb = this._visual.rgb;
-
-    if (level === LOD.POINT) {
-      // A crisp, high-contrast dot and nothing else. No gradient, no bloom: at
-      // three pixels a corona is one lighter ring of pixels that reads as blur.
-      ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
-      ctx.fill();
-    } else {
-      // A limb-darkened disc from a cached sprite. The sprite is radially
-      // symmetric, so the render pass's flipped Y axis does not matter, and it
-      // is keyed on color and size buckets - a cluster of similar stars shares
-      // one rather than building a gradient each, every frame.
-      // The painter is in js/bodyVisuals.js so that the Stellar Lab's preview
-      // and this draw the same star.
-      const disc = spriteFor('star-disc', rgb, screenR, paintStarDisc);
-      if (disc) {
-        ctx.drawImage(disc, world_pos.x - r, world_pos.y - r, r * 2, r * 2);
-      } else {
-        ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
-        ctx.beginPath();
-        ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
-        ctx.fill();
-      }
-    }
-
-    // The corona, into the offscreen layer js/render.js composites additively.
-    //
-    // Tighter than what was here: the old bloom ran to three times the stellar
-    // radius at 0.35 alpha, which on a zoomed-in star swallowed everything
-    // near it and made a planet at half an astronomical unit look like it was
-    // inside the photosphere. Restrained, and cached as a sprite rather than
-    // built as a gradient per star per frame.
-    try {
-      const glow = lodAtLeast(level, LOD.SHADED) && screenR > 2 && bloomLayer();
-      if (glow) {
-        const coronaR = screenR * CORONA_SCALE;
-        const halo = spriteFor('star-corona', rgb, coronaR, (sctx, size, c) => {
-          const half = size / 2;
-          const g = sctx.createRadialGradient(half, half, 0, half, half, half);
-          g.addColorStop(0, `rgba(${c.r},${c.g},${c.b},0.34)`);
-          g.addColorStop(0.35, `rgba(${c.r},${c.g},${c.b},0.16)`);
-          g.addColorStop(1, 'rgba(0,0,0,0)');
-          sctx.fillStyle = g;
-          sctx.beginPath();
-          sctx.arc(half, half, half, 0, 2 * Math.PI);
-          sctx.fill();
-        });
-        const { x: screenX, y: screenY } = world_to_screen(world_pos);
-        if (halo) {
-          glow.drawImage(
-            halo,
-            screenX - coronaR,
-            screenY - coronaR,
-            coronaR * 2,
-            coronaR * 2
-          );
-        }
-      }
-    } catch {
-      // no-op
-    }
-
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = world_to_screen(world_pos);
-    // Two different sizes, on purpose.
-    //
-    // The offset follows the *drawn* body, so a label sits just off the disc
-    // the reader can see. Whether to label at all follows the *model* radius,
-    // which is the size this decision has always been made on: gating on the
-    // drawn size instead would have taken the names off every planet in the
-    // Solar System the moment the displayed-size policy shrank them, which is
-    // a labeling change nobody asked for.
-    const screen_radius = r * state.zoom;
-    const label_size = this.radius * state.zoom;
-
-    if (label_size > 5) {
-      const label_y_offset = screen_radius + 12;
-      ctx.font = '12px Roboto Mono';
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'black';
-      ctx.shadowBlur = 4;
-
-      // Show name for Solar System sun, mass for others - unless a lesson has
-      // asked for neither. A step that puts three unlabeled stars up and asks
-      // a reader to judge them by eye is undone by a mass printed under each
-      // one, and that is the first screen of A Universe of Stars. The flag is
-      // set by js/lessonStage.js from the step's own declaration and cleared
-      // with the stage, so nothing else can leave a star anonymous.
-      if (this.anonymous) {
-        // Nothing. The lesson's object list still names it, so it is still
-        // selectable and still reachable from the keyboard.
-      } else if (this.isSolarSystemSun) {
-        ctx.fillText(
-          this.name,
-          true_screen_pos.x,
-          true_screen_pos.y + label_y_offset
-        );
-      } else {
-        drawSolarLabel(
-          ctx,
-          formatNumber(this.massInSuns),
-          true_screen_pos.x,
-          true_screen_pos.y + label_y_offset
-        );
-        // Remove subscript 'sun' drawing
-      }
-    }
-    ctx.restore();
-  }
-
   tidal_mass_loss(bh_list, dt) {
     if (!this.intact || !bh_list || bh_list.length === 0)
       return { debris_count: 0, fraction: 0 };
@@ -4705,116 +4313,6 @@ class NeutronStar extends PhysicsObject {
     this.pulsar = this.isPulsar; // For inspector compatibility
   }
 
-  draw(ctx) {
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    // The drawn radius, which everything below is proportioned to. A neutron
-    // star is twenty kilometers across, so this is the marker floor at any
-    // zoom a scenario is actually viewed at.
-    const nsR = drawRadius(this, 'NeutronStar');
-
-    // Pulsar effect
-    this.pulsar_phase += 0.1;
-    // The pulse, held still when the reader has asked for that.
-    //
-    // A pulsar beam sweeping at a few hertz is exactly the kind of repeating
-    // motion prefers-reduced-motion exists for, and it is the only animation
-    // in the body drawing that runs on its own whether or not the simulation
-    // is playing. Held at its mid-brightness rather than switched off: the
-    // beam is what says "this is a pulsar", and removing it would remove the
-    // information along with the movement.
-    const pulse_intensity = prefersReducedMotion()
-      ? 0.65
-      : 0.5 + 0.5 * Math.sin(this.pulsar_phase / this.pulsar_period);
-
-    // Core
-    ctx.fillStyle = compute_dynamic_color('#E6E6FA', this.pos, bh_list, 300.0, {
-      r: 255,
-      g: 255,
-      b: 255,
-    });
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, nsR, 0, 2 * Math.PI);
-    ctx.fill();
-
-    // The magnetosphere ring: the cue that says "neutron star" rather than
-    // "white dwarf". Both are small, bright and dense; this is a stated
-    // boundary at a distance rather than a glow, which is the visual
-    // difference between a magnetic field and an atmosphere.
-    //
-    // Gated on the level of detail like everything else, and its reach is
-    // capped: magnetic_field_strength is unbounded in the constructor, and a
-    // strongly magnetised star drew a ring several times its own size.
-    const nsLevel = lodOf(this, 'NeutronStar');
-    if (lodAtLeast(nsLevel, LOD.SHADED) && nsR * state.zoom > 2) {
-      const field_radius =
-        nsR * Math.min(3.0, 2 + (this.magnetic_field_strength || 0));
-      const field_intensity = pulse_intensity * 0.3;
-
-      ctx.strokeStyle = `rgba(0, 255, 255, ${field_intensity})`;
-      ctx.lineWidth = 1 / state.zoom;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, field_radius, 0, 2 * Math.PI);
-      ctx.stroke();
-    }
-
-    // Pulsar beams (only if isPulsar)
-    if (this.isPulsar && nsR * state.zoom > 1) {
-      const beam_length = nsR * 8;
-      const beam_width = Math.max(0.5 / state.zoom, nsR * 0.3);
-
-      ctx.strokeStyle = `rgba(255, 255, 255, ${pulse_intensity * 0.8})`;
-      ctx.lineWidth = beam_width;
-      ctx.lineCap = 'round';
-
-      // Two beams at opposing angles
-      for (let i = 0; i < 2; i++) {
-        const angle = this.pulsar_phase + i * Math.PI;
-        const beam_start_x = world_pos.x + Math.cos(angle) * nsR;
-        const beam_start_y = world_pos.y + Math.sin(angle) * nsR;
-        const beam_end_x = world_pos.x + Math.cos(angle) * beam_length;
-        const beam_end_y = world_pos.y + Math.sin(angle) * beam_length;
-
-        ctx.beginPath();
-        ctx.moveTo(beam_start_x, beam_start_y);
-        ctx.lineTo(beam_end_x, beam_end_y);
-        ctx.stroke();
-      }
-    }
-
-    // Label
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = world_to_screen(world_pos);
-    // Two different sizes, on purpose.
-    //
-    // The offset follows the *drawn* body, so a label sits just off the disc
-    // the reader can see. Whether to label at all follows the *model* radius,
-    // which is the size this decision has always been made on: gating on the
-    // drawn size instead would have taken the names off every planet in the
-    // Solar System the moment the displayed-size policy shrank them, which is
-    // a labeling change nobody asked for.
-    const screen_radius = nsR * state.zoom;
-    const label_size = this.radius * state.zoom;
-
-    if (label_size > 2) {
-      const label_y_offset = screen_radius * 8 + 12;
-      ctx.font = '12px Roboto Mono';
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'black';
-      ctx.shadowBlur = 4;
-      drawSolarLabel(
-        ctx,
-        formatNumber(this.massInSuns),
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset,
-        { suffix: ' NS' }
-      );
-    }
-    ctx.restore();
-  }
-
   get_state() {
     const baseState = super.get_state();
     return {
@@ -4869,101 +4367,6 @@ class WhiteDwarf extends PhysicsObject {
     else if (this.temperature > 7500)
       return '#F8F7FF'; // Yellow-white
     else return '#FFE4B5'; // Orange-white
-  }
-
-  draw(ctx) {
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-
-    // Core with temperature-based color
-    const temp_color = this.getTemperatureColor();
-    ctx.fillStyle = compute_dynamic_color(
-      temp_color,
-      this.pos,
-      bh_list,
-      200.0,
-      { r: 255, g: 255, b: 255 }
-    );
-    const wdR = drawRadius(this, 'WhiteDwarf');
-    const wdZ = (state && state.zoom) || 1;
-    const wdLevel = lodOf(this, 'WhiteDwarf');
-
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, wdR, 0, 2 * Math.PI);
-    ctx.fill();
-
-    // Glow, bounded and gated.
-    //
-    // The reach used to be 1.5 + T/20000 stellar radii, which for a hot young
-    // dwarf is two and a half times the body and reads as a small star rather
-    // than as the Earth-sized cinder it is. Capped, and skipped entirely at
-    // the point level where a halo is one lighter ring of pixels.
-    if (lodAtLeast(wdLevel, LOD.SHADED) && wdR * wdZ > 3) {
-      const glow_radius =
-        wdR * Math.min(2.0, 1.3 + (this.temperature || 0) / 40000);
-      const glow_intensity = Math.min(0.32, (this.temperature / 20000) * 0.3);
-
-      const grad = ctx.createRadialGradient(
-        world_pos.x,
-        world_pos.y,
-        wdR,
-        world_pos.x,
-        world_pos.y,
-        glow_radius
-      );
-      grad.addColorStop(0, `rgba(255, 255, 255, ${glow_intensity})`);
-      grad.addColorStop(1, `rgba(255, 255, 255, 0)`);
-
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, glow_radius, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-
-    // The cue that says "white dwarf" rather than "small hot star": a hard,
-    // bright edge. A degenerate body has no atmosphere to soften its limb, and
-    // this is the one place a picture can say that without making the object
-    // bigger than it is. One screen pixel wide at any zoom, so it does not
-    // grow into a second disc.
-    if (lodAtLeast(wdLevel, LOD.DETAILED)) {
-      ctx.strokeStyle = 'rgba(255,255,255,0.85)';
-      ctx.lineWidth = 1 / wdZ;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, wdR * 0.94, 0, 2 * Math.PI);
-      ctx.stroke();
-    }
-
-    // Label
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = world_to_screen(world_pos);
-    // Two different sizes, on purpose.
-    //
-    // The offset follows the *drawn* body, so a label sits just off the disc
-    // the reader can see. Whether to label at all follows the *model* radius,
-    // which is the size this decision has always been made on: gating on the
-    // drawn size instead would have taken the names off every planet in the
-    // Solar System the moment the displayed-size policy shrank them, which is
-    // a labeling change nobody asked for.
-    const screen_radius = wdR * state.zoom;
-    const label_size = this.radius * state.zoom;
-
-    if (label_size > 3) {
-      const label_y_offset = screen_radius * 2 + 12;
-      ctx.font = '12px Roboto Mono';
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'black';
-      ctx.shadowBlur = 4;
-      drawSolarLabel(
-        ctx,
-        formatNumber(this.massInSuns),
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset,
-        { suffix: ' WD' }
-      );
-    }
-    ctx.restore();
   }
 
   get_state() {
@@ -5053,55 +4456,6 @@ class Galaxy extends PhysicsObject {
     // set_state may have replaced the id the constructor minted with the saved
     // one, and the tilt follows the id.
     this.tilt = galaxyTilt(this.id);
-  }
-
-  draw(ctx) {
-    const { x, y } = this.pos;
-    const r = drawRadius(this, 'Galaxy');
-
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(this.tilt);
-    // Spirals are seen at some angle; ellipticals are round enough that
-    // squashing them would just look like a spiral.
-    if (this.galaxyType === 'spiral') ctx.scale(1, 0.42);
-
-    const halo = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
-    halo.addColorStop(0, 'rgba(255, 246, 224, 0.95)');
-    halo.addColorStop(0.28, 'rgba(255, 220, 170, 0.55)');
-    halo.addColorStop(1, 'rgba(150, 170, 255, 0)');
-    ctx.fillStyle = halo;
-    ctx.beginPath();
-    ctx.arc(0, 0, r, 0, 2 * Math.PI);
-    ctx.fill();
-
-    if (this.galaxyType === 'spiral') {
-      ctx.strokeStyle = 'rgba(186, 210, 255, 0.45)';
-      ctx.lineWidth = Math.max(0.4, r * 0.05);
-      ctx.lineCap = 'round';
-      for (let arm = 0; arm < 2; arm++) {
-        ctx.beginPath();
-        for (let t = 0.3; t <= 1.02; t += 0.04) {
-          // A logarithmic spiral, which is what real arms approximate: the
-          // angle grows with the log of the radius rather than with the radius.
-          const a = arm * Math.PI + Math.log(t / 0.3) * 2.4;
-          const rr = r * t;
-          const px = rr * Math.cos(a);
-          const py = rr * Math.sin(a);
-          if (t === 0.3) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-        ctx.stroke();
-      }
-    }
-
-    // The bright core, drawn round: it is the one part of a tilted disc that
-    // is not foreshortened.
-    ctx.restore();
-    ctx.fillStyle = 'rgba(255, 252, 238, 0.9)';
-    ctx.beginPath();
-    ctx.arc(x, y, Math.max(0.6, r * 0.11), 0, 2 * Math.PI);
-    ctx.fill();
   }
 }
 
@@ -5216,41 +4570,7 @@ class Particle {
   }
 
   draw(ctx) {
-    const life_fraction = this.age / this.lifetime;
-    const current_size =
-      this.start_size * (1 - life_fraction) + this.end_size * life_fraction;
-    const alpha = 1 - life_fraction;
-
-    if (current_size < 1 || alpha < 0.05) return;
-
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-
-    // Special kilonova glow effect
-    if (this.kilonova_glow && this.glow_intensity) {
-      const glow_size = current_size * 3 * this.glow_intensity;
-      const glow_alpha = alpha * 0.3 * this.glow_intensity;
-
-      // Draw glow
-      ctx.fillStyle = this.color;
-      ctx.globalAlpha = glow_alpha;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, glow_size / state.zoom, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-
-    // Draw main particle
-    ctx.fillStyle = this.color;
-    ctx.globalAlpha = alpha;
-    ctx.beginPath();
-    ctx.arc(
-      world_pos.x,
-      world_pos.y,
-      current_size / state.zoom,
-      0,
-      2 * Math.PI
-    );
-    ctx.fill();
-    ctx.globalAlpha = 1; // Reset alpha
+    bodyDrawers.Particle?.(this, ctx);
   }
 }
 
@@ -7027,7 +6347,6 @@ export {
   world_to_screen,
   screen_to_world,
   is_offscreen,
-  compute_dynamic_color,
   updatePhysics,
   handle_collisions,
   handle_star_merging,
@@ -7101,17 +6420,13 @@ export {
   setDetailScale,
   getDetailScale,
   setStateReference,
-  setBloomLayer,
   registerBodyDrawers,
-  // Read by js/bodyDraw.js until the stars, neutron stars, white dwarfs and
-  // galaxies move there too and these go with them.
+  // The live values the drawers read (js/bodyDraw.js, js/bodyDrawSky.js). The
+  // engine keeps them because it owns them: it reassigns the settings, sets
+  // the count of bodies on screen each step and builds the black hole's
+  // appearance from the same default.
   physicsSettings,
-  drawRadius,
-  lodOf,
-  dominantStarFor,
-  rgba,
-  bloomLayer,
-  visualClockSeconds,
+  liveBodyCount,
   defaultAppearance,
   // Energy calculation functions
   calculateKineticEnergy,

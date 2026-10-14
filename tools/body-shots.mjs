@@ -7,6 +7,18 @@
 //   node tools/body-shots.mjs --out shots/before
 //   node tools/body-shots.mjs --out shots/after --only comet
 //   node tools/body-shots.mjs --out shots/still --reduced-motion --tier low --deterministic
+//   node tools/body-shots.mjs --out shots/other --deterministic --port 47961 --no-sky
+//
+// --no-sky hides the starfield canvas behind the simulation. Its repaint is
+// timing dependent in a crowded scene at the full tier (two captures of one
+// build differ by a few specks of sky) and none of the bodies is in it, so a
+// comparison of drawers wants it out and a comparison of the sky wants the
+// scenes where it is stable.
+// --port lets two checkouts be captured at once (the default is 8127).
+// Scenes marked `pinPulsars` hold each neutron star's pulse phase, which the
+// drawing advances on every frame it paints. Scenes marked `synthetic` clear
+// the world and place bodies by hand, which is how every spectral type,
+// remnant, galaxy and particle gets drawn.
 //
 // A visual change needs a picture on each side of it, and a picture is only
 // evidence if the two were taken of the same thing. Everything that could
@@ -68,6 +80,91 @@ const SCENES = [
     cometAtAu: 0.8,
   },
   { id: 'star-cluster', scenario: 'star-cluster', steps: 150, zoom: 1.0 },
+  // Stars, remnants, galaxies and particles (the drawers of js/bodyDrawSky.js).
+  { id: 'binary-stars', scenario: 'binary-star-system', steps: 200, zoom: 2.0 },
+  {
+    id: 'stars-sun-close',
+    scenario: 'solar-system',
+    steps: 200,
+    zoom: 14,
+    centerOnName: 'Sun',
+  },
+  {
+    id: 'pulsar',
+    scenario: 'pulsar-system',
+    steps: 150,
+    zoom: 4,
+    pinPulsars: true,
+  },
+  {
+    id: 'compact-zoo',
+    scenario: 'compact-object-zoo',
+    steps: 150,
+    zoom: 1.2,
+    pinPulsars: true,
+  },
+  { id: 'wd-binary', scenario: 'white-dwarf-binary', steps: 150, zoom: 4 },
+  {
+    id: 'ns-collision',
+    scenario: 'neutron-star-collision',
+    steps: 150,
+    zoom: 4,
+    pinPulsars: true,
+  },
+  { id: 'spiral-galaxy', scenario: 'spiral-galaxy', steps: 100, zoom: 0.6 },
+  { id: 'coma-cluster', scenario: 'coma-cluster', steps: 100, zoom: 0.2 },
+  {
+    id: 'tidal-disruption',
+    scenario: 'tidal-disruption-event',
+    steps: 150,
+    zoom: 2.0,
+  },
+  { id: 'supermassive-bh', scenario: 'supermassive-bh', steps: 150, zoom: 1.0 },
+  // By hand: a row of each kind, so the cases a scenario never reaches are drawn.
+  {
+    id: 'synthetic-stars',
+    scenario: 'solar-system',
+    steps: 0,
+    zoom: 0.9,
+    synthetic: 'stars',
+  },
+  {
+    id: 'synthetic-stars-far',
+    scenario: 'solar-system',
+    steps: 0,
+    zoom: 0.05,
+    synthetic: 'stars',
+  },
+  {
+    id: 'synthetic-remnants',
+    scenario: 'solar-system',
+    steps: 0,
+    zoom: 4.5,
+    synthetic: 'remnants',
+    pinPulsars: true,
+  },
+  {
+    id: 'synthetic-remnants-far',
+    scenario: 'solar-system',
+    steps: 0,
+    zoom: 0.4,
+    synthetic: 'remnants',
+    pinPulsars: true,
+  },
+  {
+    id: 'synthetic-galaxies',
+    scenario: 'solar-system',
+    steps: 0,
+    zoom: 0.5,
+    synthetic: 'galaxies',
+  },
+  {
+    id: 'synthetic-particles',
+    scenario: 'solar-system',
+    steps: 0,
+    zoom: 3,
+    synthetic: 'particles',
+  },
   // One rocky planet, large, so the shading and the limb are legible.
   {
     id: 'planet-closeup',
@@ -127,12 +224,15 @@ async function main() {
     ? args[args.indexOf('--only') + 1]
     : null;
   const deterministic = args.includes('--deterministic');
+  const port = args.includes('--port')
+    ? Number(args[args.indexOf('--port') + 1])
+    : PORT;
   const tier = args.includes('--tier')
     ? args[args.indexOf('--tier') + 1]
     : 'full';
 
   await mkdir(outDir, { recursive: true });
-  const server = await serveStatic({ root: ROOT, port: PORT });
+  const server = await serveStatic({ root: ROOT, port });
   const browser = await chromium.launch({
     args: [
       '--use-gl=angle',
@@ -148,7 +248,7 @@ async function main() {
   });
   page.on('pageerror', e => console.warn(`  ! ${e.message}`));
 
-  await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'load' });
+  await page.goto(`http://localhost:${port}/`, { waitUntil: 'load' });
   await page.evaluate(() => {
     try {
       localStorage.setItem('gravitas_welcome_seen_v1', '1');
@@ -165,10 +265,19 @@ async function main() {
   // half-faded page, which is a difference between two runs that has nothing
   // to do with the drawing being compared.
   await page.waitForTimeout(1500);
+  if (args.includes('--no-sky')) {
+    await page.addStyleTag({
+      content: '#starfieldCanvas { visibility: hidden !important; }',
+    });
+  }
 
   const manifest = [];
-  for (const scene of SCENES) {
-    if (only && scene.id !== only) continue;
+  // The first scene drawn after a page loads is caught still settling (the
+  // render tier and the first frames), and came out two ways between runs of
+  // one build. Drawn once and not kept, it is the same every time after.
+  const WARM_UP = { ...SCENES[0], id: 'warm-up', warmUp: true };
+  for (const scene of [WARM_UP, ...SCENES]) {
+    if (only && scene.id !== only && !scene.warmUp) continue;
 
     const info = await page.evaluate(
       async ({ scene, seed, tier, deterministic }) => {
@@ -192,16 +301,164 @@ async function main() {
             return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
           };
           ui.state.paused = true;
+          // The render loop scales trail length by how long its last frames
+          // took (SETTINGS.adaptive_detail), so a crowded scene at the full
+          // tier was drawn with different trails on every run, and was taken
+          // to be chaotic. Off, and at full detail, it is a function of the
+          // code. It is set again after the build because a scenario's own
+          // settings are stamped over it.
+          ui.SETTINGS.adaptive_detail = false;
+          physics.setDetailScale(1);
         }
         ui.SETTINGS.preset_scenario = scene.scenario;
         ui.initialize_simulation({ seed });
         ui.SETTINGS.quality_tier = tier;
         quality.setTier(tier);
+        if (deterministic) {
+          ui.SETTINGS.adaptive_detail = false;
+          physics.setDetailScale(1);
+        }
         ui.state.paused = true;
 
         // A fixed number of fixed steps. Not a wall-clock run: how far the
         // world gets in a second is a property of the machine.
         for (let i = 0; i < scene.steps; i++) physics.updatePhysics(0.01);
+
+        // By-hand bodies, placed after the steps and drawn without any being
+        // taken. Every number is written down here and every random field a
+        // constructor draws is overwritten, so the picture is a function of
+        // the drawing code alone.
+        if (scene.synthetic) {
+          for (const list of [
+            physics.bh_list,
+            physics.planets,
+            physics.stars,
+            physics.gas_giants,
+            physics.asteroids,
+            physics.comets,
+            physics.debris,
+            physics.particles,
+            physics.neutron_stars,
+            physics.white_dwarfs,
+            physics.galaxies,
+            physics.accretion_disk_particles,
+          ]) {
+            list.length = 0;
+          }
+          const at = (i, n, gap) => ({ x: (i - (n - 1) / 2) * gap, y: 0 });
+          const still = { x: 0, y: 0 };
+          if (scene.synthetic === 'stars') {
+            // O to M by temperature and mass, then the cases the drawing
+            // branches on: an authored color, an anonymous star, the Sun's
+            // name label, a lesson's stageRadius override.
+            const spec = [
+              [35000, 20],
+              [15000, 5],
+              [9000, 2.2],
+              [6800, 1.4],
+              [5800, 1.0],
+              [4400, 0.7],
+              [3200, 0.2],
+              [5800, 1.0, { baseColor: '#ff8844' }],
+              [5800, 1.0, { anonymous: true }],
+              [5800, 1.0, { isSolarSystemSun: true, name: 'Sol' }],
+              [5800, 1.0, { stageRadius: 25 }],
+            ];
+            spec.forEach(([teff, m, extra], i) => {
+              const star = new physics.StarObject(
+                at(i, spec.length, 70),
+                still,
+                m
+              );
+              star.temperature = teff;
+              Object.assign(star, extra);
+              physics.stars.push(star);
+            });
+          } else if (scene.synthetic === 'remnants') {
+            const ns = [true, false, true];
+            ns.forEach((pulsar, i) => {
+              const b = new physics.NeutronStar(
+                { x: -40 + i * 20, y: 12 },
+                still,
+                1.4 + i * 0.3,
+                pulsar
+              );
+              b.magnetic_field_strength = 0.3 + i * 0.4;
+              b.pulsar_period = 0.4 + i * 0.5;
+              physics.neutron_stars.push(b);
+            });
+            [4000, 8000, 12000, 18000].forEach((temperature, i) => {
+              const w = new physics.WhiteDwarf(
+                { x: 20 + i * 20, y: 12 },
+                still,
+                0.6 + i * 0.15
+              );
+              w.temperature = temperature;
+              physics.white_dwarfs.push(w);
+            });
+            const lone = new physics.NeutronStar(
+              { x: 0, y: -14 },
+              still,
+              1.6,
+              true
+            );
+            lone.pulsar_period = 1.3;
+            physics.neutron_stars.push(lone);
+          } else if (scene.synthetic === 'galaxies') {
+            for (let i = 0; i < 8; i++) {
+              const g = new physics.Galaxy(
+                { x: (i % 4) * 420 - 630, y: i < 4 ? 180 : -180 },
+                still,
+                1e5,
+                i % 2 === 0 ? 'spiral' : 'elliptical'
+              );
+              physics.galaxies.push(g);
+            }
+          } else if (scene.synthetic === 'particles') {
+            const hole = new physics.BlackHole({ x: 0, y: 0 }, still, 5);
+            physics.bh_list.push(hole);
+            [0.05, 0.3, 0.8].forEach((heating, i) => {
+              const p = new physics.AccretionDiskParticle(
+                { x: 30 + i * 12, y: 20 - i * 15 },
+                { x: 0, y: -30 },
+                hole
+              );
+              p.heating_intensity = heating;
+              p.radius = 3;
+              physics.accretion_disk_particles.push(p);
+            });
+            for (let i = 0; i < 12; i++) {
+              const p = new physics.Particle(
+                { x: -80 + i * 14, y: -40 },
+                still,
+                1.0,
+                9,
+                2,
+                `rgb(${255 - i * 10}, ${120 + i * 8}, ${60 + i * 12})`
+              );
+              p.age = (i / 12) * 0.9;
+              if (i % 3 === 0) {
+                p.kilonova_glow = true;
+                p.glow_intensity = 0.6 + (i % 2) * 0.4;
+              }
+              physics.particles.push(p);
+            }
+          }
+        }
+
+        // Hold every neutron star's pulse phase. The drawing advances it on
+        // each frame it paints, so after a few frames of unknown count the
+        // beams point wherever the page's frame timing left them.
+        if (scene.pinPulsars) {
+          physics.neutron_stars.forEach((b, i) => {
+            const phase = 0.7 + i * 0.9;
+            Object.defineProperty(b, 'pulsar_phase', {
+              get: () => phase,
+              set: () => {},
+              configurable: true,
+            });
+          });
+        }
 
         // For the warm-comet picture only: put one comet where a comet with a
         // tail would be. Nothing here is measured, and the scene is rebuilt
@@ -281,6 +538,11 @@ async function main() {
             planets: physics.planets.length,
             gasGiants: physics.gas_giants.length,
             blackHoles: physics.bh_list.length,
+            neutronStars: physics.neutron_stars.length,
+            whiteDwarfs: physics.white_dwarfs.length,
+            galaxies: physics.galaxies.length,
+            particles: physics.particles.length,
+            diskParticles: physics.accretion_disk_particles.length,
           },
           center,
         };
@@ -296,6 +558,8 @@ async function main() {
         `${scene.id}: captured at zoom ${info.zoom}, asked for ${scene.zoom}`
       );
     }
+
+    if (scene.warmUp) continue;
 
     const file = join(outDir, `${scene.id}.png`);
     await page.locator('#simulationCanvas').screenshot({ path: file });
