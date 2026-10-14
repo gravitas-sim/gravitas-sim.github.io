@@ -1,5 +1,5 @@
 {
- "total": 594045,
+ "total": 594207,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -15,7 +15,7 @@
   },
   {
    "module": "js/world/build.js",
-   "bytes": 36940
+   "bytes": 37102
   },
   {
    "module": "js/render.js",
