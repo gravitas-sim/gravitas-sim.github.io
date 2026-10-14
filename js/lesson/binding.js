@@ -152,8 +152,8 @@ export function bindingMatches(binding, body, generation) {
  */
 export function kindOf(body) {
   if (!body) return null;
-  const raw = body.obj_type || body.kind || null;
-  if (!raw) return null;
+  const k = body.kind;
+  const raw = body.obj_type || (typeof k === 'string' && k) || 'Object';
   return raw.endsWith('Object') && raw.length > 6 ? raw.slice(0, -6) : raw;
 }
 
