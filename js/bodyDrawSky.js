@@ -24,7 +24,6 @@
 import { SOLAR_MASS_UNIT } from './constants.js';
 import { formatNumber } from './format.js';
 import { drawSolarLabel, hexToRgb, computeDynamicColor } from './utils.js';
-import { currentTier } from './quality.js';
 import { mulberry32 } from './rng.js';
 import {
   LOD,
@@ -39,7 +38,6 @@ import {
   markerFloorPx,
   CROWD_SOFT_START,
 } from './bodyVisuals.js';
-import { stellarPropertiesFor } from './habitability.js';
 import {
   state,
   stars,
@@ -49,6 +47,8 @@ import {
   world_to_screen,
   getSimulationTime,
   registerBodyDrawers,
+  currentTier,
+  stellarPropertiesFor,
 } from './physics.js';
 
 // --- What every drawer shares -------------------------------------------------

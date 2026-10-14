@@ -24,10 +24,7 @@ import { haloAcceleration } from './darkMatter.js';
 import { a0InSimUnits, mondVector } from './mond.js';
 import { ENVIRONMENT, createAppearance } from './blackHole/appearance.js';
 import { followCamera, resetFollowCamera } from './followCamera.js';
-// The shared drawing policy: level of detail, deterministic per-object
-// variation, star color, light direction and comet-tail geometry. Pure
-// arithmetic, so all of it is tested without a canvas - see
-// tests/bodyVisuals.test.js.
+// The drawing policy, as far as the engine reads it (tests/bodyVisuals.test.js).
 import {
   visualSeed,
   hitRadius,
@@ -35,10 +32,13 @@ import {
   hasRingsForSeed,
   ringGeometryFor,
 } from './bodyVisuals.js';
+// Two services the drawers read (js/bodyDrawSky.js takes them from here). The
+// engine still reaches them, so the bundler groups its lazy chunks as before:
+// by the entries that reach a module, and engine-only entries that stopped
+// reaching these two cost three more requests on every route of the build.
+export { currentTier } from './quality.js';
+export { stellarPropertiesFor } from './habitability.js';
 
-// Import the getRandomName function from ui.js
-
-// Local getRandomName function since it's not exported from ui.js
 /**
  * Pick a random display name for a new object of the given type.
  *
