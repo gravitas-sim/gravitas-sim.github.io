@@ -139,10 +139,20 @@ than once.
 The JavaScript is layered. A module may import from its own layer or any layer
 below it, never above. `npm run check:architecture` enforces this and fails the
 build on a violation; `npm run check:architecture:report` prints the layers and
-the widest fan-out. The same check holds every module to a line ceiling
-(`tools/module-size-ceilings.json`; a module without an entry may have 1,500
-lines, and an entry above that only ever falls). The largest modules and their
-ceilings:
+the widest fan-out. The same check holds every module to a size rule:
+
+- A module of 1,500 lines or fewer needs no entry and may grow freely.
+- A module over 1,500 lines must be listed in `tools/module-size-ceilings.json`
+  and sit exactly at its ceiling, so each slice of the decomposition lowers the
+  entry in the same commit. `npm run check:architecture -- --record-sizes`
+  lowers entries to today's sizes and removes those of modules that fell to
+  1,500 lines or fewer; it never raises or adds one.
+- A module that crosses 1,500 lines fails the check. Split it, or add an entry
+  by hand with a DECISION_REGISTER row that says why. Raising an entry needs a
+  row too.
+
+`node tools/check-architecture.mjs --sizes` prints the largest modules. They and
+their ceilings:
 
 <!--fact-block:moduleSizes-->
 | Module | Lines | Ceiling |
