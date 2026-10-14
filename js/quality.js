@@ -372,7 +372,7 @@ export function renderOverrides() {
     // place and the only one that has any effect.
     //
     // star_density was here too and is deliberately not any more. The tier now
-    // reaches the sky through js/starfield.js's STARS_PER_MEGAPIXEL, which is
+    // reaches the sky through js/bodyDrawSky.js's STARS_PER_MEGAPIXEL, which is
     // a better lever - it scales with the window as well as the tier - and
     // star_density has become a proportion of that. Two reductions for one
     // purpose would compound into an almost empty sky.

@@ -147,12 +147,12 @@ ceilings:
 <!--fact-block:moduleSizes-->
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
-| `js/physics.js` | 7,610 | 7,610 |
+| `js/physics.js` | 6,919 | 6,919 |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/validation/physicsChecks.js` | 6,621 | 6,621 |
-| `js/ui.js` | 5,153 | 5,153 |
 | `js/investigations.js` | 4,754 | 4,754 |
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
+| `js/ui.js` | 4,054 | 4,054 |
 | `js/i18n/en.deferred.js` | 3,845 | 3,845 |
 | `js/render.js` | 3,028 | 3,028 |
 <!--/fact-block-->
@@ -164,7 +164,7 @@ ceilings:
 | `services` | Stateful cross-cutting machinery with no opinion about the interface. | `quality.js`, `offline.js`, `referenceFrame.js` |
 | `engine` | The simulation, and the world it is built into. | `physics.js`, `scenarios.js`, `world/build.js` |
 | `state` | The objects the interface shares. | `appState.js` |
-| `render` | What a body looks like on the canvas: the drawers and the black hole renderer. The engine never imports them. | `bodyDraw.js`, `blackHole/render.js` |
+| `render` | What a body looks like on the canvas: the drawers, what they share and the black hole renderer. The engine never imports them. | `bodyDraw.js`, `bodyDrawSky.js`, `blackHole/render.js` |
 | `feature` | Everything that draws or is driven. | `render.js`, `controls.js`, `investigations.js`, `experiments/` |
 | `coordinator` | Wires the rest together. Nothing may import these. | `ui.js`, `main.js` |
 
@@ -194,11 +194,11 @@ what the A/B bench hashes.
 
 **The engine paints nothing.** A body class's `draw(ctx)` looks its kind up in a
 table of drawers (`registerBodyDrawers` in `js/physics.js`), and the render
-layer (`js/bodyDraw.js`) imports the engine and fills the table. The engine
-reaches the render layer only that way, so an engine to render import fails
-`check:architecture`, including a dynamic `import()` in the middle of a line.
-A body with no drawer draws nothing, which is what a Worker, where there is no
-canvas, wants.
+layer (`js/bodyDraw.js` and `js/bodyDrawSky.js`) imports the engine and fills
+the table. The engine reaches the render layer only that way, so an engine to
+render import fails `check:architecture`, including a dynamic `import()` in the
+middle of a line. A body with no drawer draws nothing, which is what a Worker,
+where there is no canvas, wants.
 
 **A body's `kind` is a static string, not state.** Every body class carries
 `static kind` (a string no minifier renames) and reads it through an accessor,
@@ -209,6 +209,20 @@ throw there in strict mode, while a saved `kind` must never change what a body
 is. The class decides; the data cannot. For an object that is not a body (a
 test double, a plain record), the readers (`className`, `kindOf`) answer
 `'Object'` unless it states a string `kind` or an `obj_type`.
+
+**A module carved out of `ui.js` is handed nothing it can ask for.** The slices
+of Prompt 107 follow one rule: an extracted module never imports `ui.js`, and
+what it needs of the coordinator it either owns (state moves with the code) or
+asks for through the command bus. `js/inspectorWindow.js` needs no application
+context object: it owns the inspector's suppression flag, `ui.js` registers its
+`hideObjectInspector` and `setInspectorSuppressed` on the bus, and the
+header buttons are wired by one call (`wireInspectorControls()`) made where
+`ui.js`'s own start-up code ran them. A module that does need several local
+values of `ui.js` (the placement system is the example) takes **one** small
+context object, built once in `ui.js` and passed to an `init...(ctx)` function;
+the module's header lists every member, and adding one is a design decision, not
+an edit. Such a module touches no element when it is imported, because `ui.js`
+mounts the panels' markup after every import has run.
 
 ### When you need something from a layer above
 

@@ -204,6 +204,10 @@
     "js/inference/manifest.js": {
       "gravitas.inference": 1
     },
+    "js/inspectorWindow.js": {
+      "gravitasManeuverRequested": 2,
+      "gravitasSimulationReset": 1
+    },
     "js/instructorExpectations.js": {
       "gravitas.instructor-expectations": 1
     },
@@ -288,10 +292,6 @@
       "gravitasEscape": 1,
       "gravitasPlacementArmed": 1,
       "gravitasObjectPlaced": 1
-    },
-    "js/maneuverBridge.js": {
-      "gravitasSimulationReset": 1,
-      "gravitasManeuverRequested": 1
     },
     "js/maneuverPlanner.js": {
       "gravitas-maneuver-log": 1
@@ -539,7 +539,6 @@
       "gravitasObjectPlaced": 3,
       "gravitasGalaxyGravityChanged": 1,
       "gravitasSimulationReset": 1,
-      "gravitasManeuverRequested": 1,
       "gravitasRequestRebuild": 1,
       "gravitasSettingsApplied": 1,
       "gravitasEscape": 2,

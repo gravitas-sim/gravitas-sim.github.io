@@ -41,7 +41,8 @@
  * --record-sizes only ever lowers them.
  *
  * The render layer (Prompt 107, step 2b) holds what paints a body: js/bodyDraw.js
- * and the black hole renderer. The engine and the layers below never import it,
+ * and js/bodyDrawSky.js (the drawers and what they share) and the black hole
+ * renderer. The engine and the layers below never import it,
  * in any form; they hold a table of drawers that the render layer fills.
  *
  * A fourth is about listeners (Prompt 107, step 3): a module that exports a
@@ -198,7 +199,7 @@ const LAYERS = [
       'reaches them only by registration (registerBodyDrawers in ' +
       'js/physics.js), so an engine -> render import fails this check. Prompt ' +
       '107, step 2b.',
-    match: [/^js\/bodyDraw\.js$/, /^js\/blackHole\//],
+    match: [/^js\/bodyDraw(Sky)?\.js$/, /^js\/blackHole\//],
   },
   {
     name: 'feature',

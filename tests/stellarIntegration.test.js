@@ -28,6 +28,8 @@ import {
   setStateReference,
   SOLAR_MASS_UNIT,
 } from '../js/physics.js';
+// Registers the drawers the body classes call; the engine never imports them.
+import '../js/bodyDrawSky.js';
 import { clearVisualCaches, starColor } from '../js/bodyVisuals.js';
 import { stellarPropertiesFor } from '../js/habitability.js';
 import { stellarStateFor } from '../js/stellar/state.js';

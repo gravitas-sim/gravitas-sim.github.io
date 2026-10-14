@@ -51,6 +51,7 @@ current, and the orchestrator checks it.
 | `deps-audit.mjs` | The dependency audit | `npm run deps:audit` |
 | `design-ratchet.mjs` | Four migrations to the design system that may only go one way |  |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
+| `draw-trace.mjs` | The canvas calls a body makes, recorded and hashed |  |
 | `e2e-shards.mjs` | Splitting the source browser suite into shards of equal duration |  |
 | `empty-world.mjs` | A world with nothing in it |  |
 | `evaluation-summary.mjs` | npm run evaluation:summary -- <files...> | `npm run evaluation:summary` |

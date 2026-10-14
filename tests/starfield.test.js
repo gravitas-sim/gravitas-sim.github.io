@@ -30,7 +30,7 @@ import {
   generateStarfield,
   indexStarfield,
   DEFAULT_STAR_DENSITY,
-} from '../js/starfield.js';
+} from '../js/bodyDrawSky.js';
 
 /** Every star in a field, whatever layer it is in. */
 const allStars = field => LAYERS.flatMap(l => field.layers[l]);

@@ -13,14 +13,10 @@
 // =============================================================================
 
 import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
-import {
-  Planet,
-  setStateReference,
-  setBloomLayer,
-  bloomLayer,
-} from '../js/physics.js';
+import { Planet, setStateReference } from '../js/physics.js';
 // Registers the drawers the body classes call; the engine never imports them.
 import '../js/bodyDraw.js';
+import { setBloomLayer, bloomLayer } from '../js/bodyDrawSky.js';
 import { setTier } from '../js/quality.js';
 import { displayRadius } from '../js/bodyVisuals.js';
 

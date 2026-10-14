@@ -48,7 +48,7 @@ describe('command()', () => {
       'js/share.js',
       'js/welcome.js',
       'js/experimentsBridge.js',
-      'js/maneuverBridge.js',
+      'js/inspectorWindow.js',
     ]) {
       const src = readFileSync(file, 'utf8');
       for (const m of src.matchAll(/command\('(\w+)'\)/g)) asked.add(m[1]);

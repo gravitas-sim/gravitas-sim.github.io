@@ -122,7 +122,7 @@ async function main() {
           const render = await import('/js/render.js');
           const physics = await import('/js/physics.js');
           const quality = await import('/js/quality.js');
-          const starfield = await import('/js/starfield.js');
+          const starfield = await import('/js/bodyDrawSky.js');
 
           if (scene.scenario) {
             ui.SETTINGS.preset_scenario = scene.scenario;
