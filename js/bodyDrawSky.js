@@ -1,24 +1,11 @@
 // =============================================================================
 // How the stars, their remnants, galaxies and particles are painted
 // -----------------------------------------------------------------------------
-// The second half of the render layer's drawers (js/bodyDraw.js holds the
-// planets, gas giants, asteroids, debris, comets and black holes): the star,
-// neutron star, white dwarf, galaxy, accretion tracer and particle drawers,
-// formerly a `draw(ctx)` method on each class in js/physics.js. Each function
-// is the old method with `this` passed as `o`, unchanged otherwise, filed in the
-// engine's table of drawers (registerBodyDrawers) by kind when this module is
-// imported. The engine imports nothing that paints; the render layer rule in
-// check:architecture holds it to that.
-//
-// It also holds what every drawer shares and the engine no longer needs: the
-// radius a body is drawn at, its level of detail, the star that lights it, the
-// bloom layer, the visual clock and the color it takes near a black hole. They
-// read the engine's live bindings (`state`, `stars`, `liveBodyCount`), so they
-// follow the arrays and the camera as they are reassigned.
-//
-// The background starfield's model sits at the end of the file, folded in from
-// js/starfield.js (one importer, js/render.js) so that the render layer's second
-// module costs no extra request.
+// The other drawers (planets to black holes) are in js/bodyDraw.js. Here: the
+// star, neutron star, white dwarf, galaxy, accretion tracer and particle, each
+// the old draw(ctx) method with `this` passed as `o`, filed in the engine's
+// table (registerBodyDrawers) on import; what every drawer shares (drawn radius,
+// level of detail, lighting, bloom layer, visual clock); and the starfield model.
 // =============================================================================
 
 import { SOLAR_MASS_UNIT } from './constants.js';
@@ -732,8 +719,7 @@ export {
   compute_dynamic_color,
 };
 
-// --- The background starfield ----------------------------------------------------
-// Folded in from js/starfield.js. Its own header follows, unchanged.
+// --- The background starfield (its own header follows) -----------------------
 
 // =============================================================================
 // The background sky: what is in it, and where

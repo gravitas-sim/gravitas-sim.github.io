@@ -32,10 +32,8 @@ import {
   hasRingsForSeed,
   ringGeometryFor,
 } from './bodyVisuals.js';
-// Two services the drawers read (js/bodyDrawSky.js takes them from here). The
-// engine still reaches them, so the bundler groups its lazy chunks as before:
-// by the entries that reach a module, and engine-only entries that stopped
-// reaching these two cost three more requests on every route of the build.
+// Re-exported for the drawers: the engine still reaching these keeps the build's
+// chunk groups, and every route's request count, as they were.
 export { currentTier } from './quality.js';
 export { stellarPropertiesFor } from './habitability.js';
 
