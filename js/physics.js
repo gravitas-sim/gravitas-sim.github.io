@@ -3804,8 +3804,9 @@ class BlackHole {
 
     // Track if this black hole is newly created (spawned by user or from merger)
     this.isNewlyCreated = isNewlyCreated;
-    this.creationTime = Date.now();
-    this.movementGracePeriod = 10.0; // 10 seconds of movement even in static mode
+    this.creationTime = Date.now(); // a stamp; the grace counts steps
+    Object.defineProperty(this, 'graceUsed', { value: 0, writable: true });
+    this.movementGracePeriod = 10.0; // seconds of play at 1x, in simulated time
 
     this.accretion_intensity = 0.0;
     this.jet_intensity = 0.0;
@@ -3831,9 +3832,8 @@ class BlackHole {
     // physics randomness and shift every body placed afterwards.
     //
     // `jet_orientation` is kept and honored where a scenario or an old save
-    // supplied one: it becomes the disk's position angle, which is the same
-    // quantity it always meant on screen, and the jets come out along that
-    // disk's normal instead of being an angle of their own.
+    // supplied one: it becomes the disk's position angle (what it always
+    // meant on screen), and the jets come out along the disk's normal.
     this.jet_orientation = jet_orientation;
     this.appearance = createAppearance({
       seed: `bh:${this.id}`,
@@ -3888,16 +3888,15 @@ class BlackHole {
    * Whether this hole is allowed to move this step.
    *
    * Static holes are a deliberate model: a fixed potential well a student can
-   * fly things past. A newly created hole gets a short grace period so a merger
-   * product does not freeze in place mid-flight.
+   * fly things past. A new hole's short grace period, in simulated time so no
+   * frame rate changes it, stops a merger product freezing mid-flight.
    *
    * @returns {boolean} True when the hole integrates its own motion
    */
   can_move() {
-    const timeSinceCreation = (Date.now() - this.creationTime) / 1000;
     return (
       physicsSettings.bh_behavior === 'Orbiting' ||
-      (this.isNewlyCreated && timeSinceCreation < this.movementGracePeriod)
+      (this.isNewlyCreated && this.graceUsed < this.movementGracePeriod)
     );
   }
 
@@ -3961,6 +3960,7 @@ class BlackHole {
   }
 
   update_dynamic_effects(dt) {
+    this.graceUsed += dt / (50 * DT); // seconds of play at 1x; backward steps give it back
     if (this.mass > this.last_mass) {
       const mass_gain = this.mass - this.last_mass;
       const mass_ratio = mass_gain / this.mass;
