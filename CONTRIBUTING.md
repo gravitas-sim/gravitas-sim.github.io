@@ -11,7 +11,7 @@ wanted, open an issue first — it is cheaper than a rejected branch.
 
 ## Getting set up
 
-Node 20 or newer. `.nvmrc` pins the major version CI tests against, so
+Node 22 or newer. `.nvmrc` pins the major version CI tests against, so
 `nvm use` in the repository root gets you the same one; development is on 24.
 
 ```bash
