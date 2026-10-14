@@ -1,5 +1,5 @@
 {
- "total": 594028,
+ "total": 594045,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -11,7 +11,7 @@
   },
   {
    "module": "js/ui.js",
-   "bytes": 56481
+   "bytes": 43758
   },
   {
    "module": "js/world/build.js",
@@ -40,6 +40,10 @@
   {
    "module": "js/settingsPanel.js",
    "bytes": 15063
+  },
+  {
+   "module": "js/inspectorWindow.js",
+   "bytes": 13411
   },
   {
    "module": "js/inspectorInfo.js",
@@ -91,7 +95,7 @@
   },
   {
    "module": "js/main.js",
-   "bytes": 5527
+   "bytes": 5525
   },
   {
    "module": "js/share.js",
@@ -304,10 +308,6 @@
   {
    "module": "js/data/exoplanetSystems.js",
    "bytes": 685
-  },
-  {
-   "module": "js/maneuverBridge.js",
-   "bytes": 669
   },
   {
    "module": "js/welcomeGate.js",
