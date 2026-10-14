@@ -1,33 +1,29 @@
 {
- "total": 593928,
+ "total": 594396,
  "modules": [
   {
    "module": "js/i18n/en.js",
    "bytes": 84084
   },
   {
-   "module": "js/physics.js",
-   "bytes": 73816
+   "module": "js/ui.js",
+   "bytes": 73259
   },
   {
-   "module": "js/ui.js",
-   "bytes": 56481
+   "module": "js/physics.js",
+   "bytes": 63588
   },
   {
    "module": "js/world/build.js",
-   "bytes": 36940
+   "bytes": 37398
   },
   {
    "module": "js/render.js",
-   "bytes": 29783
+   "bytes": 29807
   },
   {
    "module": "js/scenarios.js",
    "bytes": 25418
-  },
-  {
-   "module": "js/inspectorView.js",
-   "bytes": 19117
   },
   {
    "module": "js/radialVelocity.js",
@@ -46,6 +42,10 @@
    "bytes": 12931
   },
   {
+   "module": "js/bodyDraw.js",
+   "bytes": 11292
+  },
+  {
    "module": "js/rotationCurve.js",
    "bytes": 10031
   },
@@ -59,7 +59,7 @@
   },
   {
    "module": "js/sandboxTools.js",
-   "bytes": 7607
+   "bytes": 7605
   },
   {
    "module": "js/audio.js",
@@ -83,7 +83,7 @@
   },
   {
    "module": "js/astrometry.js",
-   "bytes": 5733
+   "bytes": 5728
   },
   {
    "module": "js/main.js",
@@ -111,7 +111,7 @@
   },
   {
    "module": "js/vectorOverlay.js",
-   "bytes": 4272
+   "bytes": 4289
   },
   {
    "module": "js/data/scenarioInfo.js",
@@ -127,7 +127,7 @@
   },
   {
    "module": "js/preview.js",
-   "bytes": 3668
+   "bytes": 3681
   },
   {
    "module": "js/experiments/canonicalState.js",
@@ -172,6 +172,10 @@
   {
    "module": "js/format.js",
    "bytes": 2279
+  },
+  {
+   "module": "js/objectGlyphs.js",
+   "bytes": 2249
   },
   {
    "module": "js/notebookBridge.js",
@@ -272,10 +276,6 @@
   {
    "module": "js/notify.js",
    "bytes": 1027
-  },
-  {
-   "module": "js/spatialHash.js",
-   "bytes": 1011
   },
   {
    "module": "js/presentation.js",

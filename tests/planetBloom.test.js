@@ -13,7 +13,14 @@
 // =============================================================================
 
 import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
-import { Planet, setStateReference, setBloomLayer } from '../js/physics.js';
+import {
+  Planet,
+  setStateReference,
+  setBloomLayer,
+  bloomLayer,
+} from '../js/physics.js';
+// Registers the drawers the body classes call; the engine never imports them.
+import '../js/bodyDraw.js';
 import { setTier } from '../js/quality.js';
 import { displayRadius } from '../js/bodyVisuals.js';
 
@@ -83,6 +90,24 @@ beforeEach(() => {
 
 afterEach(() => {
   setBloomLayer(null);
+});
+
+describe('the bloom provider', () => {
+  test('anything but a function is ignored, not stored', () => {
+    for (const bad of [null, undefined, 0, 'layer', {}, { getContext() {} }]) {
+      setBloomLayer(() => recorder.ctx);
+      setBloomLayer(bad);
+      // Stored as-is, the next call would throw and a draw site's try/catch
+      // would turn that into a glow that never appears.
+      expect(() => bloomLayer()).not.toThrow();
+      expect(bloomLayer()).toBeNull();
+    }
+  });
+
+  test('a function provider is used', () => {
+    setBloomLayer(() => recorder.ctx);
+    expect(bloomLayer()).toBe(recorder.ctx);
+  });
 });
 
 describe('the bloom pass', () => {

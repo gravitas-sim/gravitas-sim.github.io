@@ -35,6 +35,8 @@ import {
   asteroids,
   setStateReference,
 } from '../js/physics.js';
+// Registers the drawers the body classes call; the engine never imports them.
+import '../js/bodyDraw.js';
 import { setTier } from '../js/quality.js';
 import { clearVisualCaches, displayFactorFor } from '../js/bodyVisuals.js';
 import { auToSim } from '../js/units.js';

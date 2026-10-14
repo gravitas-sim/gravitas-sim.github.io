@@ -29,7 +29,6 @@ import {
   world_to_screen,
   findObjectAtPosition,
   setDetailScale,
-  setBloomLayer,
   getTrailTick,
   trailBudget,
   barycenterBodies,
@@ -49,6 +48,7 @@ import {
   indexStarfield,
 } from './starfield.js';
 import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
+import { setBloomLayer } from './bodyDraw.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS } from './appState.js';
 import { barycenterOf } from './lesson/barycenter.js';
