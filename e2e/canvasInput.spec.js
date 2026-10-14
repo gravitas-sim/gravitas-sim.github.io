@@ -21,6 +21,17 @@ const camera = page =>
     };
   });
 
+/** Let the page handle everything already dispatched, and draw twice. */
+const settle = page =>
+  page.evaluate(
+    () =>
+      new Promise(done =>
+        window.requestAnimationFrame(() =>
+          window.requestAnimationFrame(() => done())
+        )
+      )
+  );
+
 /** The world point under a canvas pixel, in the camera as it stands. */
 const worldAt = (page, point) =>
   page.evaluate(async point => {
@@ -76,7 +87,7 @@ test('the wheel zooms about the pointer and stops at its limits', async ({
     (await import('/js/ui.js')).state.zoom = 100;
   });
   await page.mouse.wheel(0, -100);
-  await page.waitForTimeout(100);
+  await settle(page);
   expect((await camera(page)).zoom).toBe(100);
 });
 
@@ -124,7 +135,7 @@ test('typing in a field does not pan the view', async ({ page, app }) => {
     field.focus();
   });
   await page.keyboard.type('dddwww');
-  await page.waitForTimeout(100);
+  await settle(page);
   const c = await camera(page);
   expect([c.x, c.y]).toEqual([0, 0]);
 });
