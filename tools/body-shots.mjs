@@ -350,7 +350,7 @@ async function main() {
           if (scene.synthetic === 'stars') {
             // O to M by temperature and mass, then the cases the drawing
             // branches on: an authored color, an anonymous star, the Sun's
-            // name label, a lesson's stageRadius override.
+            // name label, an investigation's stageRadius override.
             const spec = [
               [35000, 20],
               [15000, 5],
