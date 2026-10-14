@@ -80,6 +80,7 @@ current, and the orchestrator checks it.
 | `instructor-fixture.mjs` | Is the disposable instructor fixture the one these sources would build? |  |
 | `instructor-freshness.mjs` | Was the committed instructor bundle built from these sources? |  |
 | `instrument-families.mjs` | Which instrument families a script the page fetched contains |  |
+| `jest-sequencer.mjs` | Start the slowest suites first |  |
 | `key-groups-check.mjs` | Key groups: does the rewritten catalog equal its source? |  |
 | `key-groups.mjs` | Key groups: write a shared key prefix once, in the bundle only |  |
 | `key-registry-scan.mjs` | Which 'gravitas*' string literals are still loose in js/ (Prompt 107, step 2c) |  |
