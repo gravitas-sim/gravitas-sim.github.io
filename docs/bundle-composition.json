@@ -1,5 +1,5 @@
 {
- "total": 594028,
+ "total": 594046,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -30,12 +30,12 @@
    "bytes": 19117
   },
   {
-   "module": "js/radialVelocity.js",
-   "bytes": 15811
-  },
-  {
    "module": "js/inspectorPanel.js",
    "bytes": 15789
+  },
+  {
+   "module": "js/radialVelocity.js",
+   "bytes": 15788
   },
   {
    "module": "js/settingsPanel.js",
@@ -82,8 +82,8 @@
    "bytes": 6525
   },
   {
-   "module": "js/data/objectNames.js",
-   "bytes": 6197
+   "module": "js/names.js",
+   "bytes": 6272
   },
   {
    "module": "js/astrometry.js",
@@ -227,7 +227,7 @@
   },
   {
    "module": "js/units.js",
-   "bytes": 1458
+   "bytes": 1424
   },
   {
    "module": "js/gravityAssist.js",

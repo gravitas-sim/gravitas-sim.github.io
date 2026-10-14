@@ -11,7 +11,7 @@ import {
   EARTH_MASS_UNIT,
 } from './constants.js';
 import { setSimGravitationalConstant } from './units.js';
-import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
+import { SPACE_OBJECT_NAMES } from './names.js';
 import { formatNumber } from './format.js';
 import {
   drawSolarLabel,
@@ -61,7 +61,7 @@ import { stellarPropertiesFor } from './habitability.js';
  * Pick a random display name for a new object of the given type.
  *
  * The pools used to be written out again here, all 355 of them, byte for byte
- * identical to js/data/objectNames.js. Two copies of a table is one copy too
+ * identical to js/names.js. Two copies of a table is one copy too
  * many: adding a ninth pool meant adding it twice, and the moment one edit
  * missed the other the same object would be named from two different lists
  * depending on which module made it.

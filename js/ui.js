@@ -86,7 +86,7 @@ import {
   setAssumedDistance,
 } from './astrometry.js';
 import { lastEvent } from './pauseAtEventBridge.js';
-import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
+import { SPACE_OBJECT_NAMES } from './names.js';
 import {
   getBlackHoleInfo,
   getStarInfo,

@@ -43,7 +43,7 @@ commercially, provided you give credit.
 | `js/data/instructorContent.js` | instructor guides, expectations, rubrics and answer keys |
 | `js/data/courses/**` | the courses Gravitas ships |
 | `js/data/teaching.js`, `js/data/activities.js`, `js/data/activityTeaching.js` | the teaching page and the classroom activities |
-| `js/data/welcome.js`, `js/data/scenarioInfo.js`, `js/data/scenarioTags.js`, `js/data/objectNames.js` | scenario descriptions and catalog prose |
+| `js/data/welcome.js`, `js/data/scenarioInfo.js`, `js/data/scenarioTags.js`, `js/names.js` | scenario descriptions and catalog prose |
 | `js/i18n/**` | every user-facing string, in both languages |
 | `manual/**`, `Gravitas_User_Manual.pdf` | the user manual |
 | `instructors/materials.enc.json` | the instructor bundle, once decrypted |
