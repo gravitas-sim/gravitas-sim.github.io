@@ -1035,6 +1035,4 @@ cramped (its canvas was 90 px with a legend over it), and the component no
 longer overflows the stage. (2) The light curve's x axis is numeric, so a
 rewind of the simulation clock draws the curve doubling back (the category
 axis marched on by index); the module does not drop samples on a rewind
-(radial velocity does), and the hover assumes ascending x. (3) A1's live
-feed rides `requestIdleCallback` with no timeout, as before. None of the
-three is new in kind; the first and third are as shipped.
+(radial velocity does), and the hover assumes ascending x. The first is as shipped.
