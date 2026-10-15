@@ -10,7 +10,6 @@ import {
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
 } from './constants.js';
-import { setSimGravitationalConstant } from './units.js';
 import { SPACE_OBJECT_NAMES } from './names.js';
 import {
   debugLog,
@@ -19,7 +18,7 @@ import {
   screenToWorld,
   isOffscreen,
 } from './utils.js';
-import { recordBarycenter, clearFrameHistory } from './referenceFrame.js';
+import { recordBarycenter } from './referenceFrame.js';
 import { haloAcceleration } from './darkMatter.js';
 import { a0InSimUnits, mondVector } from './mond.js';
 import { ENVIRONMENT, createAppearance } from './blackHole/appearance.js';
@@ -36,6 +35,61 @@ import {
 // chunk groups, and every route's request count, as they were.
 export { currentTier } from './quality.js';
 export { stellarPropertiesFor } from './habitability.js';
+// The state the rest of the engine reads (D-DECOMP-18, slice S1). The names the
+// facade used to export are re-exported below, live, so no importer changes.
+import {
+  bh_list,
+  planets,
+  stars,
+  gas_giants,
+  asteroids,
+  comets,
+  debris,
+  particles,
+  gwaves,
+  gravity_ripples,
+  neutron_stars,
+  white_dwarfs,
+  galaxies,
+  accretion_disk_particles,
+  setBodyList,
+  PhysicsObject_id_counter,
+  nextPhysicsObjectId,
+  resetPhysicsObjectCounter,
+  setPhysicsObjectCounter,
+  state,
+  setStateReference,
+  registerBodyDrawers,
+  paintBody,
+  particlePool,
+  effectLooks,
+  tracerColor,
+  registerEffects,
+  physicsSettings,
+  updatePhysicsSettings,
+  getPhysicsSetting,
+  simulationTime,
+  getSimulationTime,
+  resetSimulationTime,
+  setSimulationTime,
+  advanceSimulationTime,
+  liveBodyCount,
+  setLiveBodyCount,
+  setDetailScale,
+  getDetailScale,
+  trailTick,
+  getTrailTick,
+  resetTrailTick,
+  advanceTrailTick,
+  trailBudget,
+  worldGeneration,
+  bumpWorldGeneration,
+} from './engine/state.js';
+export {
+  getWorldGeneration,
+  getInterventionEpoch,
+  noteIntervention,
+} from './engine/state.js';
 
 /**
  * Pick a random display name for a new object of the given type.
@@ -204,22 +258,6 @@ const canvas = (typeof document !== 'undefined' &&
   height: 0,
 };
 
-// Global state variables
-let bh_list = [],
-  planets = [],
-  stars = [],
-  gas_giants = [],
-  asteroids = [],
-  comets = [],
-  debris = [],
-  particles = [],
-  gwaves = [],
-  gravity_ripples = [],
-  neutron_stars = [],
-  white_dwarfs = [],
-  galaxies = [],
-  accretion_disk_particles = [];
-
 const dispatchSimulationEvent = (name, detail = {}) => {
   if (
     typeof window !== 'undefined' &&
@@ -288,59 +326,6 @@ const failPhysicsWorker = why => {
   );
 };
 
-let PhysicsObject_id_counter = 0;
-
-// Import state from ui.js to ensure single source of truth
-let state = null;
-
-// Function to set state reference from ui.js
-const setStateReference = stateRef => {
-  state = stateRef;
-};
-
-// How a body is painted lives in js/bodyDraw.js and js/bodyDrawSky.js,
-// registered by kind so this module imports nothing that paints. A kind with
-// no drawer draws nothing (a worker has no canvas); a page with a canvas and no
-// drawers at all gets one warning, the mark of a missing import.
-const bodyDrawers = Object.create(null);
-let drawersSeen = false; // registered, or already warned about
-const registerBodyDrawers = table => {
-  drawersSeen = true;
-  return Object.assign(bodyDrawers, table);
-};
-const paintBody = (o, ctx, kind) => {
-  if (bodyDrawers[kind]) return bodyDrawers[kind](o, ctx);
-  if (drawersSeen || typeof document === 'undefined') return;
-  drawersSeen = true;
-  console.warn('No body drawers are registered: import js/bodyDraw.js.');
-};
-
-// The particle pool is filed by js/bodyEffects.js (registerEffects). Until then
-// the pool spawns nothing, but it hands back a scratch particle, so every
-// explosion builder below takes the same random draws in any realm: the stream
-// the collisions draw from must not depend on what was imported.
-const scratchParticle = {};
-const emptyPool = {
-  getParticle: () => scratchParticle,
-  updateAndCleanup() {},
-  getActiveParticles: () => [],
-  clear() {},
-};
-let particlePool = emptyPool;
-
-// What a burst looks like (size and color) and the tracer's color are filed by
-// js/bodyEffects.js with the pool. How many particles a burst throws, how fast
-// and for how long is not appearance: it is the random draws, so it stays here
-// and an engine with no module takes them all the same (a look is then empty
-// and nothing reads it).
-let effectLooks = {};
-let tracerColor = () => undefined;
-const registerEffects = ({ pool, looks, tracer }) => {
-  if (pool) particlePool = pool;
-  if (looks) effectLooks = looks;
-  if (tracer) tracerColor = tracer;
-};
-
 // The thirteen bursts: count, speed (range, floor) and lifetime (range, floor).
 // One draw for the direction, one for the speed, then one for the lifetime, in
 // that order, count times; a plume (`aim`) draws its direction within 0.6 of the
@@ -381,125 +366,6 @@ const burst = (name, pos, color, aim) => {
       color === undefined ? look.color : color
     );
   }
-};
-
-// Physics settings that can be updated from UI.
-//
-// Twenty-six of these twenty-seven keys also appear in DEFAULT_SETTINGS in
-// js/appState.js, and two of them disagree with it: gravitational_constant is
-// 2.0 there and 1.0 here, trail_length is 15 there and 100 here. That is not a
-// bug, but it is a trap, so it is written down.
-//
-// These are bootstrap values only. Every path that runs the simulation calls
-// updatePhysicsSettings(SETTINGS) first - js/world/build.js does it on every
-// world build - which merges the real settings over the top. Nothing integrates
-// an orbit at G = 1. The values here are what the module answers with in the
-// window before any world exists, and js/units.js is seeded from the same 1 so
-// that its conversions agree with whatever this object says at the time.
-//
-// They are deliberately not imported from js/appState.js: that would make the
-// engine depend on the interface's state module, which is the dependency this
-// file has spent this pass getting rid of.
-let physicsSettings = {
-  gravitational_constant: 1.0,
-  mutual_gravity: false,
-  enable_star_merging: true,
-  show_bh_glow: true,
-  show_accretion_disk: true,
-  realistic_disk_physics: true,
-  show_bh_jets: false,
-  trail_length: 100,
-  dynamic_object_properties: true,
-  star_base_color: '#ffff00',
-  planet_base_color: '#6495ed',
-  bh_behavior: 'Static',
-  orbit_decay_rate: 0.005,
-  max_timestep: 0,
-  min_interaction_distance: 0,
-  habitable_zone_optimism: 1.0,
-  star_only_gravity: false,
-  disk_doppler: true,
-  use_barnes_hut: false,
-  // Calibrated against the direct N^2 solver on a 78-body cluster:
-  //   theta 0.3 -> 0.20% mean / 2.6% worst error
-  //   theta 0.4 -> 0.46% mean / 3.4% worst   <- default
-  //   theta 0.7 -> 3.74% mean / 75.5% worst
-  // 0.7 is the textbook default but costs the same here as 0.4 while being an
-  // order of magnitude less accurate, so it is not worth the error budget.
-  barnes_hut_theta: 0.4,
-
-  // A dark-matter halo added to the force law as a smooth background field.
-  // Off by default: the halo is a claim about the universe, and a student
-  // should switch it on deliberately and watch what changes.
-  //
-  // The halo is a field, not a body. It has no position of its own to
-  // integrate, it never merges or is captured, and it does not appear in the
-  // object counts, because nothing about it is visible. That is the point.
-  // Which law governs a galaxy's outskirts. One setting with three values
-  // rather than two booleans, because the halo and MOND are competing
-  // explanations for the same observation and applying both at once would be
-  // physically meaningless. An enum cannot express that mistake.
-  //
-  //   'newtonian'  visible matter only, and the curve falls
-  //   'halo'       Newtonian gravity plus the pseudo-isothermal halo
-  //   'mond'       Milgrom's law applied to the visible matter's own field
-  //
-  // `dark_matter_halo` is kept alongside it as a mirror, not as a second source
-  // of truth: scenarios, saved games and shared links written before this
-  // existed all set the boolean, and normalizeGalaxyGravity() below keeps the
-  // two in step whichever one a caller writes.
-  galaxy_gravity: 'newtonian',
-  dark_matter_halo: false,
-  halo_v_flat: 6.0,
-  halo_core_radius: 300,
-  // What one simulation unit represents, for the scenarios that are scale
-  // models of a galaxy. Zero means "this is not a galaxy", and MOND refuses to
-  // run: there is no defensible acceleration scale for a planetary system or a
-  // black-hole encounter, and applying one silently would be worse than
-  // refusing. See js/mond.js.
-  galaxy_kpc_per_unit: 0,
-  galaxy_msun_per_unit: 0,
-
-  // The numerical scheme the bodies are advanced with. Symplectic Euler is the
-  // default, and has to stay the default: every shipped scenario was laid out,
-  // timed and tuned against its particular error, and quietly moving them to a
-  // more accurate scheme would change the dynamics of all of them at once.
-  // See INTEGRATORS below for what the other two are for.
-  integrator: 'Symplectic Euler',
-};
-
-// =============================================================================
-// Simulated time, and the accelerations the last step actually used
-// -----------------------------------------------------------------------------
-// Both exist so that something outside the physics can report on it without
-// recomputing it. A readout that recalculated the acceleration on a body would
-// be a second implementation of the force law, free to disagree with the one
-// the integrator used; the point of publishing it is that it cannot.
-// =============================================================================
-
-let simulationTime = 0;
-
-/** @returns {number} Simulated time since the world was built, in sim units */
-const getSimulationTime = () => simulationTime;
-
-/** Put the simulated clock back to zero. Called when a world is built. */
-const resetSimulationTime = () => {
-  simulationTime = 0;
-};
-
-/**
- * Set the simulated clock, for a state that is being restored rather than built.
- *
- * The A/B bench needs this: Run B has to resume from the same point on the
- * clock Run A started from, or the two runs cannot be put on one time axis
- * without a fudge factor. Nothing in the integrator reads the clock - it is a
- * readout, and the conservation baseline's own timestamp - so setting it moves
- * the reported time and nothing else.
- *
- * @param {number} t - Simulated seconds
- */
-const setSimulationTime = t => {
-  simulationTime = Number.isFinite(t) && t >= 0 ? t : 0;
 };
 
 /**
@@ -1485,190 +1351,10 @@ const clearCachedGravity = () => {
  */
 export { DISPLAY_MIN_PX as DRAW_MIN_RADIUS_PX };
 
-/** How many bodies are on screen, for the crowded-field marker floor. */
-let liveBodyCount = 0;
-
-/** Record how many bodies are on screen, for the crowding rule above. */
-const setLiveBodyCount = n => {
-  liveBodyCount = n;
-};
-
 // The click minimums moved to js/bodyVisuals.js, beside the display policy and
 // pointedly separate from it: hitRadius() takes the *model* radius, so a body
 // drawn at three eighths of it is exactly as easy to select as it was before.
 // They are the same numbers they have always been.
-
-// Function to update physics settings
-const updatePhysicsSettings = settings => {
-  physicsSettings = normalizeGalaxyGravity(
-    {
-      ...physicsSettings,
-      ...settings,
-    },
-    settings
-  );
-  // js/units.js derives the length of a time unit from G, and used to import
-  // getPhysicsSetting to read it - which made the foundation layer depend on
-  // the engine. It is pushed from here instead, which is the one place
-  // physicsSettings is ever written.
-  setSimGravitationalConstant(physicsSettings.gravitational_constant);
-};
-
-/**
- * Keep the galaxy-gravity mode and the legacy halo boolean in step.
- *
- * There is one rule and it is enforced here rather than at every call site:
- * the halo and MOND are alternatives, so at most one of them can be in the
- * force law. Expressing the mode as an enum makes "both at once" unsayable;
- * this function is what stops the old boolean from saying it anyway.
- *
- * Which one wins when a caller writes both is decided by what the caller
- * actually asked for in this patch, not by what was already there - so
- * `updatePhysicsSettings({ galaxy_gravity: 'mond' })` turns the halo off, and
- * a saved game that only knows about `dark_matter_halo` still works.
- *
- * @param {object} next - The merged settings
- * @param {object} patch - Only the keys this call supplied
- * @returns {object} The merged settings, made self-consistent
- */
-const normalizeGalaxyGravity = (next, patch = {}) => {
-  const wroteMode = Object.hasOwn(patch, 'galaxy_gravity');
-  const wroteHalo = Object.hasOwn(patch, 'dark_matter_halo');
-
-  let mode = next.galaxy_gravity;
-
-  // Both named in one patch, and disagreeing. This happens when a caller merges
-  // a baseline that says 'newtonian' with an override that says the halo is on
-  // - which is exactly what the validation harness does, and it silently
-  // switched the halo off until this branch existed.
-  //
-  // Resolved toward the positive assertion: `dark_matter_halo: true` is
-  // somebody asking for something, where 'newtonian' is usually a baseline with
-  // no opinion. The state that comes out is consistent either way; this only
-  // decides which of two contradictory requests is honored.
-  if (wroteHalo && wroteMode && patch.dark_matter_halo === true) {
-    mode = 'halo';
-  } else if (wroteHalo && !wroteMode) {
-    // A caller that only knows the boolean. Turning the halo on means the halo;
-    // turning it off means plain Newtonian - but not if MOND is what is
-    // running, because then the boolean was already false and saying so again
-    // should not silently switch the mode.
-    if (patch.dark_matter_halo === true) mode = 'halo';
-    else if (mode === 'halo') mode = 'newtonian';
-  }
-  if (mode !== 'halo' && mode !== 'mond') mode = 'newtonian';
-
-  // MOND needs a scale to convert a0 into. Without one it is not applied, and
-  // the mode falls back rather than pretending.
-  if (
-    mode === 'mond' &&
-    !(next.galaxy_kpc_per_unit > 0 && next.galaxy_msun_per_unit > 0)
-  ) {
-    mode = 'newtonian';
-  }
-
-  next.galaxy_gravity = mode;
-  next.dark_matter_halo = mode === 'halo';
-  return next;
-};
-
-/**
- * Read a single physics setting. Lets other modules observe the live physics
- * configuration without importing the mutable object itself.
- * @param {string} key - Setting name
- * @returns {any} Current value
- */
-const getPhysicsSetting = key => physicsSettings[key];
-
-// Adaptive level-of-detail multiplier owned by the renderer (see render.js).
-// Kept separate from physicsSettings so it can never be persisted to a save
-// file or written back over a user setting.
-let detailScale = 1;
-
-/**
- * Set the adaptive level-of-detail multiplier.
- * @param {number} scale - Multiplier applied to detail budgets (clamped 0.5-1.5)
- */
-const setDetailScale = scale => {
-  // Capped at 1: adaptive detail may only trim below what the user asked for,
-  // never inflate past it.
-  detailScale =
-    typeof scale === 'number' && isFinite(scale)
-      ? Math.max(0.5, Math.min(1, scale))
-      : 1;
-};
-
-/**
- * Get the current adaptive level-of-detail multiplier.
- * @returns {number} Current detail scale
- */
-/**
- * Sample counter for trails.
- *
- * Every live body appends one trail point per physics step, so a shared counter
- * is enough to say which samples were taken at the same moment. That is what
- * lets one body's trail be re-expressed in another body's frame: without a
- * common clock the two arrays are just two lists of coordinates, and lining them
- * up by array index breaks the moment one body is younger than the other.
- */
-let trailTick = 0;
-
-/** @returns {number} The tick of the most recent trail sample */
-const getTrailTick = () => trailTick;
-
-/** Restart the trail clock and drop frame history. Called when the world is rebuilt. */
-const resetTrailTick = () => {
-  trailTick = 0;
-  clearFrameHistory();
-};
-
-/**
- * How many trail samples a body keeps.
- *
- * Extracted from update_trail so the barycenter history can be kept to exactly
- * the same length. A barycenter history shorter than the trails would silently
- * truncate the re-expressed trails; one longer would just waste memory.
- *
- * @returns {number} Sample budget, at least 1
- */
-const trailBudget = () => {
-  // Zoom-based budget: fewer points when zoomed out, more when zoomed in
-  const zoom = state ? state.zoom : 1.0;
-  // detailScale is the renderer's adaptive-quality multiplier. It is applied
-  // here, at read time, so the user's configured trail_length is never
-  // overwritten.
-  const baseLen = Math.max(
-    1,
-    Math.round(physicsSettings.trail_length * detailScale)
-  );
-  if (baseLen < 10) {
-    // Preserve exact behavior for small budgets (tests rely on this)
-    return baseLen;
-  }
-  const minLen = Math.max(10, Math.floor(baseLen * 0.4));
-  const maxLen = Math.max(baseLen, 10);
-  return Math.max(
-    minLen,
-    Math.min(maxLen, Math.floor(baseLen * Math.min(1.5, Math.max(0.6, zoom))))
-  );
-};
-
-const getDetailScale = () => detailScale;
-
-/**
- * Reset the physics object ID counter to 0
- */
-const resetPhysicsObjectCounter = () => {
-  PhysicsObject_id_counter = 0;
-};
-
-/**
- * Set the physics object ID counter to a specific value
- * @param {number} value - The new counter value
- */
-const setPhysicsObjectCounter = value => {
-  PhysicsObject_id_counter = value;
-};
 
 // Coordinate transformation functions (using utils)
 /**
@@ -2216,60 +1902,11 @@ let lastObjectCounts = {
 // Barnes–Hut tree gravity lives in physicsWorker.js; the main thread only
 // ships positions to it and reads accelerations back.
 
+let lastWorldGeneration = -1;
+
 /**
  * Update cached arrays only when object counts change
  */
-// Bumped whenever the object lists are repopulated. The cache below keyed only
-// off list *lengths*, so rebuilding a scenario into the same shape (Refresh
-// Scenario, or a lesson re-applying its setup) left cachedAllPhysicsObjects
-// holding the discarded objects: the integrator went on advancing bodies that
-// were no longer in the simulation while the renderer drew the new ones.
-let worldGeneration = 0;
-let lastWorldGeneration = -1;
-let interventionEpoch = 0;
-
-/** Invalidate the physics caches. Call after repopulating the object lists. */
-const bumpWorldGeneration = () => {
-  worldGeneration++;
-};
-
-/**
- * Which world this is.
- *
- * Bumped on every repopulation of the object lists, so it distinguishes two
- * worlds that a body id cannot: ids restart from a counter, and a rebuilt
- * scenario hands the same id to a different star. The observing panels put this
- * in a recording's identity for exactly that reason - without it, a recording
- * of one star could be continued against its replacement.
- *
- * @returns {number} A counter, meaningful only by comparison
- */
-export const getWorldGeneration = () => worldGeneration;
-
-/**
- * How many times a body's state has been changed by hand.
- *
- * Distinct from the world generation, which counts rebuilds. This counts
- * interventions: a maneuver burn, a bench perturbation - the same objects,
- * moving differently because somebody made them. An observing session cannot
- * see the difference from the target's identity, and it matters to one: a
- * radial-velocity curve recorded before a burn is a recording of an orbit the
- * planet is no longer on, and continuing it afterwards would splice two
- * different systems into one dataset.
- *
- * @returns {number} A counter, meaningful only by comparison
- */
-export const getInterventionEpoch = () => interventionEpoch;
-
-/**
- * Record that a body's state was changed by hand rather than by integration.
- *
- * @returns {number} The new epoch
- */
-export function noteIntervention() {
-  return ++interventionEpoch;
-}
-
 const updateCachedArrays = () => {
   const currentCounts = {
     bh: bh_list.length,
@@ -2381,7 +2018,7 @@ const updatePhysics = dt => {
   // here rather than in the render loop so that it counts what was actually
   // integrated: a scenario that substeps takes several calls per frame, and a
   // paused or scrubbing frame takes none.
-  simulationTime += dt;
+  advanceSimulationTime(dt);
   // If simulation is effectively empty, clear particle pool and exported array
   try {
     const totalObjects =
@@ -2571,7 +2208,7 @@ const updatePhysics = dt => {
 
   // One tick per step, before anything appends: every point pushed below shares
   // this number, which is what makes cross-body frame changes possible.
-  trailTick++;
+  advanceTrailTick();
 
   // One place for the halo, applied before whichever gravity solver runs.
   //
@@ -2753,14 +2390,14 @@ const updatePhysics = dt => {
   };
 
   // Apply absorption check to all object types
-  planets = check_and_absorb(planets);
-  stars = check_and_absorb(stars);
-  gas_giants = check_and_absorb(gas_giants);
-  asteroids = check_and_absorb(asteroids);
-  comets = check_and_absorb(comets);
-  debris = check_and_absorb(debris);
-  neutron_stars = check_and_absorb(neutron_stars);
-  white_dwarfs = check_and_absorb(white_dwarfs);
+  setBodyList('planets', check_and_absorb(planets));
+  setBodyList('stars', check_and_absorb(stars));
+  setBodyList('gas_giants', check_and_absorb(gas_giants));
+  setBodyList('asteroids', check_and_absorb(asteroids));
+  setBodyList('comets', check_and_absorb(comets));
+  setBodyList('debris', check_and_absorb(debris));
+  setBodyList('neutron_stars', check_and_absorb(neutron_stars));
+  setBodyList('white_dwarfs', check_and_absorb(white_dwarfs));
 
   // Update particles
   // Legacy test compatibility: if external tests pushed mock particles with is_alive/update,
@@ -2785,7 +2422,7 @@ const updatePhysics = dt => {
   } else {
     // Default: use the particle pool system
     particlePool.updateAndCleanup(dt);
-    particles = particlePool.getActiveParticles();
+    setBodyList('particles', particlePool.getActiveParticles());
   }
 
   // The one place an accretion-disk tracer moves (see updateDiskParticles).
@@ -2796,7 +2433,10 @@ const updatePhysics = dt => {
   }
 
   // Clean up dead accretion disk particles
-  accretion_disk_particles = accretion_disk_particles.filter(p => p.alive);
+  setBodyList(
+    'accretion_disk_particles',
+    accretion_disk_particles.filter(p => p.alive)
+  );
 
   // Black hole merging logic - enhanced with accretion disk transfer
   let merged_this_step = true;
@@ -2960,51 +2600,75 @@ const updatePhysics = dt => {
   const kept = obj => obj.persistent === true;
 
   // More conservative filtering for important objects - only remove if truly far away
-  planets = filterAndClearEnergy(
-    planets,
-    p => p.alive && (kept(p) || !is_offscreen(p.pos, 20.0))
+  setBodyList(
+    'planets',
+    filterAndClearEnergy(
+      planets,
+      p => p.alive && (kept(p) || !is_offscreen(p.pos, 20.0))
+    )
   );
-  stars = filterAndClearEnergy(
-    stars,
-    s => s.alive && (kept(s) || !is_offscreen(s.pos, 20.0))
+  setBodyList(
+    'stars',
+    filterAndClearEnergy(
+      stars,
+      s => s.alive && (kept(s) || !is_offscreen(s.pos, 20.0))
+    )
   );
-  gas_giants = filterAndClearEnergy(
-    gas_giants,
-    g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
+  setBodyList(
+    'gas_giants',
+    filterAndClearEnergy(
+      gas_giants,
+      g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
+    )
   );
-  neutron_stars = filterAndClearEnergy(
-    neutron_stars,
-    ns => ns.alive && (kept(ns) || !is_offscreen(ns.pos, 20.0))
+  setBodyList(
+    'neutron_stars',
+    filterAndClearEnergy(
+      neutron_stars,
+      ns => ns.alive && (kept(ns) || !is_offscreen(ns.pos, 20.0))
+    )
   );
-  white_dwarfs = filterAndClearEnergy(
-    white_dwarfs,
-    wd => wd.alive && (kept(wd) || !is_offscreen(wd.pos, 20.0))
+  setBodyList(
+    'white_dwarfs',
+    filterAndClearEnergy(
+      white_dwarfs,
+      wd => wd.alive && (kept(wd) || !is_offscreen(wd.pos, 20.0))
+    )
   );
-  galaxies = filterAndClearEnergy(
-    galaxies,
-    g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
+  setBodyList(
+    'galaxies',
+    filterAndClearEnergy(
+      galaxies,
+      g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
+    )
   );
-  bh_list = filterAndClearEnergy(
-    bh_list,
-    bh => bh.alive !== false && !is_offscreen(bh.pos, 50.0)
+  setBodyList(
+    'bh_list',
+    filterAndClearEnergy(
+      bh_list,
+      bh => bh.alive !== false && !is_offscreen(bh.pos, 50.0)
+    )
   ); // Black holes should never be removed
 
   // More aggressive filtering for smaller/less important objects
-  asteroids = filterAndClearEnergy(
-    asteroids,
-    a => a.alive && !is_offscreen(a.pos, 5.0)
+  setBodyList(
+    'asteroids',
+    filterAndClearEnergy(asteroids, a => a.alive && !is_offscreen(a.pos, 5.0))
   );
-  comets = filterAndClearEnergy(
-    comets,
-    c => c.alive && !is_offscreen(c.pos, 20.0)
+  setBodyList(
+    'comets',
+    filterAndClearEnergy(comets, c => c.alive && !is_offscreen(c.pos, 20.0))
   );
-  debris = filterAndClearEnergy(
-    debris,
-    d => d.alive && !is_offscreen(d.pos, 3.0)
+  setBodyList(
+    'debris',
+    filterAndClearEnergy(debris, d => d.alive && !is_offscreen(d.pos, 3.0))
   );
-  accretion_disk_particles = filterAndClearEnergy(
-    accretion_disk_particles,
-    ap => ap.alive && !is_offscreen(ap.pos, 2.0)
+  setBodyList(
+    'accretion_disk_particles',
+    filterAndClearEnergy(
+      accretion_disk_particles,
+      ap => ap.alive && !is_offscreen(ap.pos, 2.0)
+    )
   );
 
   // Follow mode logic
@@ -3142,7 +2806,7 @@ class PhysicsObject {
    * @param {string} obj_type - Type identifier for the object
    */
   constructor(pos, vel, mass, radius, obj_type = 'object') {
-    this.id = PhysicsObject_id_counter++;
+    this.id = nextPhysicsObjectId();
     /**
      * Whether a prescribed scientific model owns this body's state.
      *
@@ -3791,7 +3455,7 @@ class BlackHole {
     isNewlyCreated = false,
     jet_orientation = null
   ) {
-    this.id = PhysicsObject_id_counter++; // Add unique ID for energy tracking
+    this.id = nextPhysicsObjectId(); // Add unique ID for energy tracking
     // See PhysicsObject: a black hole is not one, and needs its own copy.
     this.model_owned = false;
     this.pos = { ...pos };
@@ -4127,7 +3791,7 @@ class BlackHole {
     // falsy check hands it a brand-new id on every restore. Nothing noticed
     // while ids were only used for energy bookkeeping; the A/B bench compares
     // "body 0" across a restore and would have measured a different object.
-    this.id = s.id ?? PhysicsObject_id_counter++;
+    this.id = s.id ?? nextPhysicsObjectId();
     this.pos = s.pos;
     this.vel = s.vel;
     this.mass = s.mass;
@@ -5318,12 +4982,21 @@ const handle_star_merging = stars_list => {
             other.alive = false;
             // Remove the non-BH from its global list
             if (other.kind === 'StarObject')
-              stars = stars.filter(s => s !== other);
+              setBodyList(
+                'stars',
+                stars.filter(s => s !== other)
+              );
             if (other.kind === 'WhiteDwarf') clearObjectEnergyHistory(other.id);
-            white_dwarfs = white_dwarfs.filter(wd => wd !== other);
+            setBodyList(
+              'white_dwarfs',
+              white_dwarfs.filter(wd => wd !== other)
+            );
             if (other.kind === 'NeutronStar')
               clearObjectEnergyHistory(other.id);
-            neutron_stars = neutron_stars.filter(ns => ns !== other);
+            setBodyList(
+              'neutron_stars',
+              neutron_stars.filter(ns => ns !== other)
+            );
             // No new black hole is created, and the existing one remains in
             // bh_list - so it is the result. completeMerger declines to retire
             // a progenitor that is also the result, and a reader following the
@@ -5358,16 +5031,23 @@ const handle_star_merging = stars_list => {
               bh_list.push(new_object);
               clearObjectEnergyHistory(star1.id);
               clearObjectEnergyHistory(star2.id);
-              neutron_stars = neutron_stars.filter(
-                ns => ns !== star1 && ns !== star2
+              setBodyList(
+                'neutron_stars',
+                neutron_stars.filter(ns => ns !== star1 && ns !== star2)
               );
               if (star1_type === 'BlackHole' && star1._bh_ref) {
                 star1._bh_ref.alive = false;
-                bh_list = bh_list.filter(bh => bh !== star1._bh_ref);
+                setBodyList(
+                  'bh_list',
+                  bh_list.filter(bh => bh !== star1._bh_ref)
+                );
               }
               if (star2_type === 'BlackHole' && star2._bh_ref) {
                 star2._bh_ref.alive = false;
-                bh_list = bh_list.filter(bh => bh !== star2._bh_ref);
+                setBodyList(
+                  'bh_list',
+                  bh_list.filter(bh => bh !== star2._bh_ref)
+                );
               }
               gravity_ripples.push({
                 x: new_pos.x,
@@ -5394,8 +5074,9 @@ const handle_star_merging = stars_list => {
               // Remove merged neutron star from global list
               clearObjectEnergyHistory(star1.id);
               clearObjectEnergyHistory(star2.id);
-              neutron_stars = neutron_stars.filter(
-                ns => ns !== star1 && ns !== star2
+              setBodyList(
+                'neutron_stars',
+                neutron_stars.filter(ns => ns !== star1 && ns !== star2)
               );
 
               // Only add regular GW ripple if not a kilonova (kilonova creates its own)
@@ -5554,9 +5235,9 @@ const handle_star_merging = stars_list => {
 
     // Purge dead objects from global arrays so subsequent iterations
     // and later collision handlers never see stale references.
-    stars = purgeDead(stars);
-    neutron_stars = purgeDead(neutron_stars);
-    white_dwarfs = purgeDead(white_dwarfs);
+    setBodyList('stars', purgeDead(stars));
+    setBodyList('neutron_stars', purgeDead(neutron_stars));
+    setBodyList('white_dwarfs', purgeDead(white_dwarfs));
 
     // Rebuild stars_list from global lists (wrap BHs for consistent _bh_ref access)
     stars_list = [
@@ -5985,7 +5666,7 @@ const handle_gas_giant_merging = () => {
     }
 
     // Filter out dead gas giants after processing all collisions
-    gas_giants = purgeDead(gas_giants);
+    setBodyList('gas_giants', purgeDead(gas_giants));
   }
 };
 

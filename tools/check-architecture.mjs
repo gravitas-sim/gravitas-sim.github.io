@@ -185,7 +185,14 @@ const LAYERS = [
   {
     name: 'engine',
     blurb: 'The simulation itself, and the world it is built into.',
-    match: [/^js\/physics\.js$/, /^js\/world\//, /^js\/scenarios\.js$/],
+    match: [
+      /^js\/physics\.js$/,
+      // The engine's own modules (D-DECOMP-18): js/physics.js stays the facade
+      // that re-exports them.
+      /^js\/engine\//,
+      /^js\/world\//,
+      /^js\/scenarios\.js$/,
+    ],
   },
   {
     name: 'state',
