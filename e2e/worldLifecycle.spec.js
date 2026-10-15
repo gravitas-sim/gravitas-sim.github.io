@@ -154,22 +154,46 @@ test.describe('the world lifecycle', () => {
       return k;
     });
 
+    // Reset all builds on a fresh random seed and leaves the world running, so
+    // the bodies it holds a frame later are not the bodies it built: a planet
+    // a seed happens to put near one of the holes is absorbed within a few
+    // frames, and a slow runner takes several simulated steps per frame. The
+    // count is therefore read in the click's own task, after the button's
+    // handler and before any frame, and the world is held there so the
+    // snapshot below reads what was built. The state the button leaves is
+    // read in the same task, which is also where "running" is true.
+    await page.evaluate(
+      async ({ k }) => {
+        const ui = await import('/js/ui.js');
+        const p = await import('/js/physics.js');
+        window.__resetAll = null;
+        const generation = p.getWorldGeneration();
+        document.getElementById('resetAllBtn').addEventListener(
+          'click',
+          () => {
+            window.__resetAll = {
+              rebuilt: p.getWorldGeneration() > generation,
+              scenario: ui.current_scenario_name,
+              setting: ui.SETTINGS[k],
+              wanted: ui.DEFAULT_SETTINGS[k],
+              paused: ui.state.paused,
+            };
+            ui.state.paused = true;
+          },
+          { once: true }
+        );
+      },
+      { k: key }
+    );
     await app.railControl('resetAllBtn');
     await page.locator('#resetAllBtn').click();
 
-    const result = await page.evaluate(async k => {
-      const ui = await import('/js/ui.js');
-      return {
-        scenario: ui.current_scenario_name,
-        setting: ui.SETTINGS[k],
-        wanted: ui.DEFAULT_SETTINGS[k],
-        paused: ui.state.paused,
-      };
-    }, key);
+    const result = await page.evaluate(() => window.__resetAll);
+    expect(result).not.toBeNull();
+    expect(result.rebuilt).toBe(true);
     expect(result.scenario).toBe('binary-bh');
     expect(result.setting).toBe(result.wanted);
     expect(result.paused).toBe(false);
-    await app.waitForBodies();
     expect((await app.bodySnapshot()).count).toBe(binary);
   });
 
