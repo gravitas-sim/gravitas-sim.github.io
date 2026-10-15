@@ -120,7 +120,7 @@ scan({
   // predicate. The first version matched five of eleven and the scanner
   // refused to write a short list, which is what it is for.
   pattern:
-    /(\w+) = filterAndClearEnergy\(\s*\w+,\s*[\s\S]*?is_offscreen\(\w+\.pos, ([\d.]+)\)/gs,
+    /setBodyList\(\s*'(\w+)',\s*filterAndClearEnergy\(\s*\w+,\s*[\s\S]*?is_offscreen\(\w+\.pos, ([\d.]+)\)/gs,
   id: m => `cull:${m[1]}`,
   describe: m => ({
     list: m[1],

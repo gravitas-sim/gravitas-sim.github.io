@@ -897,6 +897,14 @@ the release rather than in the tag.
 
 ### Changed
 
+- **Toolchain checkpoint, October 2026** (D-R7-06, `TOOLCHAIN.md`). Node 22
+  replaces Node 20, which reached its end of life in April 2026: CI, `.nvmrc`
+  and the `engines` floor now say 22. Moved: Jest and its environment 30.5.1 to
+  30.5.2 (the jest group), Prettier 3.9.6 to 3.9.9, and Playwright with
+  `@playwright/test` 1.62.1 to 1.63.0, which moves the suite's browser builds
+  to Chromium 153 and Firefox 155 (`SUPPORT.md` and the teaching page are
+  regenerated from it). Held: nothing. No test, threshold or size ceiling
+  changed. Supersedes the open Dependabot pull requests #154, #155 and #156.
 - **CI runs what the release gate runs.**
   - Ten quick checks that only `release:check` ran now run in CI. The SDK
     extensions, the classroom activities, the scene catalog, the

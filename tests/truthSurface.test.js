@@ -38,6 +38,8 @@ import path from 'node:path';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const read = f => readFileSync(path.join(here, '..', f), 'utf8');
+// The engine's settings defaults moved with its state (D-DECOMP-23).
+const engineState = () => read('js/engine/state.js');
 
 describe('the integrators the documentation names', () => {
   const physics = read('js/physics.js');
@@ -51,7 +53,7 @@ describe('the integrators the documentation names', () => {
     expect(physics).toMatch(
       /INTEGRATORS\.includes\(want\) \? want : 'Symplectic Euler'/
     );
-    expect(physics).toMatch(/integrator: 'Symplectic Euler'/);
+    expect(engineState()).toMatch(/integrator: 'Symplectic Euler'/);
     expect(read('js/appState.js')).toMatch(/integrator: 'Symplectic Euler'/);
   });
 
@@ -89,7 +91,7 @@ describe('what the performance summary claims is adopted', () => {
 
   test('Barnes-Hut is opt-in, with no body-count heuristic', () => {
     // If this ever becomes automatic, the summary's wording has to change back.
-    expect(physics).toMatch(/use_barnes_hut: false/);
+    expect(engineState()).toMatch(/use_barnes_hut: false/);
     expect(read('js/appState.js')).toMatch(/use_barnes_hut: false/);
     const active = /const isBarnesHutActive = \(\) =>([\s\S]*?);/.exec(
       physics
