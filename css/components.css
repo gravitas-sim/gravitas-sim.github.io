@@ -783,6 +783,12 @@
     height: 100% !important;
     display: block;
   }
+  /* A series chart (js/plot/chart.js) fills the stage and takes its size from
+     it, so the host is pinned and never sizes the stage. */
+  .obs-panel-stage > .plot-host {
+    position: absolute;
+    inset: 0;
+  }
   .obs-panel-hint {
     margin: 0 var(--space-3);
     font-size: var(--text-xs);
@@ -6483,16 +6489,15 @@
 
   .insp-energy-chart {
     position: relative;
-    height: 190px;
+    height: 220px;
     margin-top: var(--space-2);
   }
   /* Pinned to the container so the chart can never push the panel taller than
-     the box it was given. Chart.js still owns the bitmap size and the device
-     pixel ratio; this only fixes the box it draws into. */
-  .insp-energy-chart canvas {
+     the box it was given: the chart fills this host and takes its size from
+     it, so the host must not take its size from the chart. */
+  .insp-energy-chart > div {
     position: absolute;
     inset: 0;
-    display: block;
   }
 
   /* Between a wide desktop and a phone - a small laptop, or a big window at

@@ -251,12 +251,17 @@ describe('renderEnergy', () => {
     }
   });
 
-  test('the chart canvas carries no hardcoded size', () => {
+  test('the chart host carries no hardcoded size', () => {
     // It was width="500" height="300" inside a panel that is now 420px wide.
+    // The chart is the series chart of js/plot/chart.js, which fills a plain
+    // host and takes its size from it (D-PLOT-02), so the host is a div with
+    // nothing that fixes its size.
     document.body.innerHTML = renderEnergy();
-    const canvas = document.getElementById('energyChart');
-    expect(canvas.getAttribute('width')).toBeNull();
-    expect(canvas.getAttribute('height')).toBeNull();
+    const host = document.getElementById('energyChart');
+    expect(host.tagName).toBe('DIV');
+    expect(host.getAttribute('width')).toBeNull();
+    expect(host.getAttribute('height')).toBeNull();
+    expect(host.getAttribute('style')).toBeNull();
   });
 
   test('the actions are labeled for assistive technology', () => {

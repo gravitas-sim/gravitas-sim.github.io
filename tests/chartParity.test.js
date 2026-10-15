@@ -1,5 +1,5 @@
 import { describe, test, expect } from '@jest/globals';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 
 // =============================================================================
 // The five Chart.js charts: what they are, as data (D-PLOT-02, stage 3a)
@@ -140,6 +140,8 @@ describe('the caps and rates in source', () => {
   const rv = read('js/radialVelocity.js');
   const panel = read('js/experiments/panel.js');
   const settings = read('js/appState.js');
+  const names = read('js/names.js');
+  const chartModule = read('js/plot/chart.js');
 
   test('A1: 200 points a series, 8 Hz, a PNG from the chart', () => {
     expect(inspector).toContain(
@@ -149,7 +151,9 @@ describe('the caps and rates in source', () => {
       `updateHz > 0 ? updateHz : ${limits.A1.updateHz}`
     );
     expect(settings).toContain(`chart_update_hz: ${limits.A1.updateHz},`);
-    expect(inspector).toContain("toBase64Image('image/png'");
+    // The export is the component's PNG (js/plot/export.js), awaited.
+    expect(inspector).toContain('await chart.toPNG()');
+    expect(inspector).toContain(`maxPoints,\n`);
   });
 
   test('A2: 2000 points, a repaint every 6th sample, the y rule, the theme repaint', () => {
@@ -162,11 +166,13 @@ describe('the caps and rates in source', () => {
     expect(lightCurve).toContain(
       `Math.max(range * ${limits.A2.yMarginOfRange}, ${limits.A2.yMarginFloor})`
     );
-    expect(lightCurve).toContain('scales.y.min = Math.max(0, minB - margin)');
-    expect(lightCurve).toContain('scales.y.max = maxB + margin');
     expect(lightCurve).toContain(
-      `addEventListener('${limits.A2.themeRepaintEvent}', repaintChart)`
+      'yRange = [Math.max(0, minB - margin), maxB + margin]'
     );
+    // The repaint on a theme change is the component's, on the same event.
+    expect(names).toContain(`'${limits.A2.themeRepaintEvent}'`);
+    expect(chartModule).toContain('window.addEventListener(EV_THEME_CHANGED');
+    expect(lightCurve).toContain('maxPoints: MAX_DATA_POINTS');
   });
 
   test('A3: 900 samples, one every 60 ms, thinned two to one in a survey', () => {
@@ -175,8 +181,16 @@ describe('the caps and rates in source', () => {
       `const SAMPLE_INTERVAL_MS = ${limits.A3.sampleIntervalMs};`
     );
     expect(rv).toContain('series.filter((_, i) => i % 2 === 0)');
-    expect(rv).toContain(`el.x - ${limits.A3.errorBarCapHalfWidthPx}`);
-    expect(rv).toContain(`el.x + ${limits.A3.errorBarCapHalfWidthPx}`);
+    // The error-bar caps: this module's constant is handed to the component,
+    // whose own default is the same number.
+    expect(rv).toContain(
+      `const ERROR_BAR_CAP_PX = ${limits.A3.errorBarCapHalfWidthPx};`
+    );
+    expect(rv).toContain('capPx: ERROR_BAR_CAP_PX');
+    expect(chartModule).toContain(
+      `opts.capPx ?? ${limits.A3.errorBarCapHalfWidthPx}`
+    );
+    expect(rv).toContain('maxPoints: MAX_SAMPLES');
   });
 
   test('A4 and A5: the metric switch, the rounded time axis, failed trials left out', () => {
@@ -191,5 +205,32 @@ describe('the caps and rates in source', () => {
       '.filter(tr => Number.isFinite(tr.results?.[metric]))'
     );
     expect(panel).toContain('.sort((a, b) => a.x - b.x)');
+  });
+});
+
+describe('which charts still load Chart.js', () => {
+  test('only the bench comparison and sweep (A4, A5): the live charts are ported', () => {
+    // D-PLOT-02 stage 3b: the energy chart, the light curve and the radial-
+    // velocity trace draw with js/plot/chart.js, fetched on first use, so the
+    // pages that show them never load the vendored library.
+    const files = readdirSync('js', { recursive: true })
+      .filter(f => f.endsWith('.js'))
+      .map(f => `js/${f}`);
+    const loaders = files.filter(f =>
+      /from '(\.\.?\/)+chartjs\.js'/.test(read(f))
+    );
+    expect(loaders).toEqual(['js/experiments/panel.js']);
+    for (const ported of [
+      'js/inspectorPanel.js',
+      'js/lightCurve.js',
+      'js/radialVelocity.js',
+    ]) {
+      expect(read(ported)).not.toMatch(/window\.Chart|ensureChartJs/);
+      // Through the one mount, which fetches the component on first use.
+      expect(read(ported)).toContain('mountChart');
+    }
+    expect(read('js/observationChart.js')).toContain(
+      "await import('./plot/chart.js')"
+    );
   });
 });

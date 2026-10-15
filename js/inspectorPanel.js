@@ -22,7 +22,8 @@
 // numbers beside it keep moving.
 // =============================================================================
 
-import { tickLabel, withUnit } from './format.js';
+import { withUnit } from './format.js';
+import { chartColor, chartTick, mountChart } from './observationChart.js';
 import { debugLog } from './utils.js';
 import { t } from './i18n/index.js';
 import { toast } from './notify.js';
@@ -442,7 +443,7 @@ export function renderEnergy() {
       </span>
     </div>
     <div class="insp-energy-chart">
-      <canvas id="energyChart"></canvas>
+      <div id="energyChart"></div>
     </div>`;
 }
 
@@ -451,202 +452,92 @@ export function renderEnergy() {
 // is its only user)
 // =============================================================================
 // ===== ENERGY CHART MODULE =====
-// Chart.js-based energy visualization system
+// The series chart of js/plot/chart.js (D-PLOT-02, stage 3b), which replaced the
+// Chart.js line chart: three connected series on a numeric time axis, a legend
+// that hides and shows them, a tooltip and a keyboard readout, and a PNG.
 
-// Chart instance reference
+// The chart, once the component has arrived and been mounted on the tab.
 let chart = null;
-// Rollback: remove all event overlay/annotation logic to restore previous working chart
+// The element it was mounted on, so a re-rendered tab does not keep a chart
+// that is drawing into a detached copy.
+let chartHost = null;
+// The mount in flight, so two callers share one chart.
+let building = null;
 
-// Chart configuration
-const chartConfig = {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [
-      {
-        get label() {
-          return t('energyChart.kineticEnergy');
-        },
-        data: [],
-        borderColor: '#00ff88',
-        backgroundColor: 'rgba(0, 255, 136, 0.1)',
-        borderWidth: 2,
-        fill: false,
-        tension: 0.1,
-        pointRadius: 0,
-        pointHoverRadius: 4,
-      },
-      {
-        get label() {
-          return t('energyChart.potentialEnergy');
-        },
-        data: [],
-        borderColor: '#ff8800',
-        backgroundColor: 'rgba(255, 136, 0, 0.1)',
-        borderWidth: 2,
-        fill: false,
-        tension: 0.1,
-        pointRadius: 0,
-        pointHoverRadius: 4,
-      },
-      {
-        get label() {
-          return t('energyChart.totalEnergy');
-        },
-        data: [],
-        borderColor: '#0088ff',
-        backgroundColor: 'rgba(0, 136, 255, 0.1)',
-        borderWidth: 3,
-        fill: false,
-        tension: 0.1,
-        pointRadius: 0,
-        pointHoverRadius: 4,
-      },
-    ],
-  },
-  options: {
-    // Responsive, so the chart fills whatever box the inspector gives it and
-    // Chart.js handles the device pixel ratio itself. It was false, which made
-    // the chart read its size from width/height attributes on the canvas - a
-    // hardcoded 500x300 inside a panel that is now 420px wide.
-    responsive: true,
-    maintainAspectRatio: false,
-    parsing: false,
-    animation: {
-      duration: 0,
+// Today's caps and rates (tests/fixtures/chart-limits.json).
+const maxPoints = 200;
+
+// The tabs' series, in the order the legend lists them. The colors are design
+// tokens read again on every theme change; they were fixed dark-theme literals.
+const energySpec = (x, ke, pe, total) => ({
+  label: t('energyChart.label'),
+  xTitle: 'Time (s)',
+  yTitle: 'Energy (J)',
+  series: [
+    {
+      id: 'ke',
+      label: t('energyChart.kineticEnergy'),
+      x,
+      y: ke,
+      color: () => chartColor('alt'),
+      width: 2,
     },
-    interaction: {
-      intersect: false,
-      mode: 'index',
+    {
+      id: 'pe',
+      label: t('energyChart.potentialEnergy'),
+      x,
+      y: pe,
+      color: () => chartColor('caution'),
+      width: 2,
     },
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-        labels: {
-          color: '#e0e0e0',
-          font: {
-            size: 12,
-          },
-          usePointStyle: true,
-        },
-      },
-      tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: '#ffffff',
-        bodyColor: '#e0e0e0',
-        borderColor: '#333333',
-        borderWidth: 1,
-        cornerRadius: 6,
-        displayColors: true,
-        callbacks: {
-          label: function (context) {
-            return `${context.dataset.label}: ${withUnit(context.parsed.y, 'J')}`;
-          },
-        },
-      },
+    {
+      id: 'total',
+      label: t('energyChart.totalEnergy'),
+      x,
+      y: total,
+      color: () => chartColor('accent'),
+      width: 3,
     },
-    scales: {
-      x: {
-        type: 'linear',
-        display: true,
-        title: {
-          display: true,
-          text: 'Time (s)',
-          color: '#e0e0e0',
-          font: {
-            size: 14,
-            weight: 'bold',
-          },
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
-          drawBorder: true,
-        },
-        ticks: {
-          color: '#e0e0e0',
-          font: {
-            size: 12,
-          },
-        },
-      },
-      y: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Energy (J)',
-          color: '#e0e0e0',
-          font: {
-            size: 14,
-            weight: 'bold',
-          },
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
-          drawBorder: true,
-        },
-        ticks: {
-          color: '#e0e0e0',
-          font: {
-            size: 12,
-          },
-          callback: function (value) {
-            return tickLabel(value);
-          },
-        },
-      },
-    },
-  },
-};
+  ],
+});
+
+/** One tooltip row: a series' name and its energy, with the unit attached. */
+export const energyReadout = ({ label, y }) => `${label}: ${withUnit(y, 'J')}`;
+
+/** The chart as data (its axes, legend and series as drawn), for the tests. */
+export const energyChartParts = () => chart?.parts() ?? null;
 
 /**
- * Initialize the energy chart
- * @param {HTMLCanvasElement} canvas - The canvas element to use for the chart
- * @returns {boolean} True if initialization was successful
+ * Build the energy chart on its host
+ * @param {HTMLElement} host - The element to draw into
+ * @returns {Promise<boolean>} True if the chart was made
  */
-export function initChart(canvas) {
-  if (!canvas) {
-    console.error('Canvas element is required for chart initialization');
+export async function initChart(host) {
+  if (!host) {
+    console.error('A host element is required for chart initialization');
     return false;
   }
-
-  if (!(canvas instanceof HTMLCanvasElement)) {
-    console.error(
-      'Invalid canvas element provided - expected HTMLCanvasElement'
-    );
-    return false;
-  }
-
-  // Check if Chart.js is available
-  if (typeof window !== 'undefined' && typeof window.Chart === 'undefined') {
-    console.error(
-      'Chart.js is not loaded. Please include Chart.js before using energy charts.'
-    );
-    return false;
-  }
-
   try {
-    // Set canvas dimensions
-    const container = canvas.parentElement;
-    let containerWidth = container ? container.clientWidth - 30 : 500;
-    let containerHeight = container ? container.clientHeight - 30 : 300;
-
-    // Use minimum dimensions if container has no size
-    if (containerWidth <= 0) containerWidth = 500;
-    if (containerHeight <= 0) containerHeight = 300;
-
-    canvas.width = containerWidth;
-    canvas.height = containerHeight;
-    canvas.style.width = containerWidth + 'px';
-    canvas.style.height = containerHeight + 'px';
-
-    // Create new chart instance
-    const ChartCtor = typeof window !== 'undefined' ? window.Chart : undefined;
-    if (!ChartCtor) {
-      console.error('Chart.js is not available');
+    const made = await mountChart(host, {
+      height: 'fill',
+      maxPoints,
+      number: chartTick,
+      tooltip: {
+        mode: 'index',
+        title: x => withUnit(x, 's'),
+        format: energyReadout,
+      },
+    });
+    // The tab was rendered again, or closed, while the component was on its
+    // way: this chart would draw into a copy nobody sees.
+    if (!host.isConnected) {
+      made.destroy();
       return false;
     }
-    chart = new ChartCtor(canvas.getContext('2d'), chartConfig);
+    chart?.destroy();
+    chart = made;
+    chartHost = host;
+    chart.draw(energySpec([], [], [], []));
     debugLog('Energy chart initialized successfully');
     return true;
   } catch (error) {
@@ -699,32 +590,20 @@ export function updateChart(data, updateHz) {
       return;
     }
 
-    // Convert energy data to Chart.js format
+    // Seconds since the first sample passed in, and the three energies, as the
+    // component's arrays. The newest maxPoints are drawn; slicing first keeps
+    // a full history passed repeatedly from being copied whole.
     const startTime = firstPoint.timestamp;
-    const chartData = data.map(point => ({
-      x: (point.timestamp - startTime) / 1000, // Convert to seconds
-      y: point.ke || 0,
-    }));
-
-    const potentialData = data.map(point => ({
-      x: (point.timestamp - startTime) / 1000,
-      y: point.pe || 0,
-    }));
-
-    const totalData = data.map(point => ({
-      x: (point.timestamp - startTime) / 1000,
-      y: point.total || 0,
-    }));
-
-    // Replace data to avoid duplicate lines when full history is passed repeatedly
-    const maxPoints = 200;
-    const trim = arr =>
-      arr.length > maxPoints ? arr.slice(arr.length - maxPoints) : arr;
-    chart.data.datasets[0].data = trim(chartData);
-    chart.data.datasets[1].data = trim(potentialData);
-    chart.data.datasets[2].data = trim(totalData);
-    // Update the chart
-    chart.update('none');
+    const recent =
+      data.length > maxPoints ? data.slice(data.length - maxPoints) : data;
+    chart.draw(
+      energySpec(
+        recent.map(point => (point.timestamp - startTime) / 1000),
+        recent.map(point => point.ke || 0),
+        recent.map(point => point.pe || 0),
+        recent.map(point => point.total || 0)
+      )
+    );
     debugLog('Chart updated with', data.length, 'data points');
   } catch (error) {
     console.error('Failed to update chart:', error);
@@ -732,19 +611,19 @@ export function updateChart(data, updateHz) {
 }
 
 /**
- * Clear all chart data
- */
-/**
  * Re-measure the chart against its container.
  *
- * The chart is built while the Energy tab is still hidden, so Chart.js reads a
- * parent of zero height and falls back to its own default. One resize once the
- * tab is actually on screen is what makes the responsive sizing take.
+ * The chart is built while the Energy tab is still hidden, so it measures a
+ * host of zero size. Its own size observer redraws once the tab is on screen;
+ * this is the explicit nudge the tab's click gives it as well.
  */
 export function resizeChart() {
   if (chart) chart.resize();
 }
 
+/**
+ * Clear all chart data
+ */
 export function clearChart() {
   if (!chart) {
     console.warn('Chart not initialized - cannot clear data');
@@ -752,10 +631,7 @@ export function clearChart() {
   }
 
   try {
-    chart.data.datasets.forEach(dataset => {
-      dataset.data = [];
-    });
-    chart.update('none');
+    chart.draw(energySpec([], [], [], []));
     debugLog('Chart data cleared');
   } catch (error) {
     console.error('Failed to clear chart:', error);
@@ -763,26 +639,19 @@ export function clearChart() {
 }
 
 /**
- * Push an annotation event for the energy chart.
- * Consumers should pass timestamps from the same clock as energy sampling (performance.now()).
- * @param {{timestamp:number, type:string, label?:string, color?:string}} evt
+ * Export the chart as a PNG
+ * @returns {Promise<Blob|null>} The image, or null if the chart is not ready
  */
-// Rollback: no annotation API in clean state
-
-/**
- * Export the chart as a base64 image
- * @returns {string|null} Base64 image data or null if chart not initialized
- */
-export function exportChart() {
+export async function exportChart() {
   if (!chart) {
     console.warn('Chart not initialized - cannot export');
     return null;
   }
 
   try {
-    const dataUrl = chart.toBase64Image('image/png', 1);
+    const blob = await chart.toPNG();
     debugLog('Chart exported successfully');
-    return dataUrl;
+    return blob;
   } catch (error) {
     console.error('Failed to export chart:', error);
     return null;
@@ -902,22 +771,28 @@ export const setupEnergyTab = () => {
  * Ensure chart is initialized and ready
  */
 export const ensureChartReady = async () => {
-  const canvas = document.getElementById('energyChart');
-  if (!canvas || chartInitialized) return;
-
-  // Chart.js is fetched the first time a chart is actually wanted rather than
-  // on every page load. initChart() reads the global, so it has to wait for it.
-  const { ensureChartJs } = await import('./chartjs.js');
-  if (!(await ensureChartJs())) return;
+  const host = document.getElementById('energyChart');
+  if (!host) return;
+  // A tab that was rendered again has a new host; the old chart draws into the
+  // detached one, so it is let go and a new one is made.
+  if (chart && chartHost !== host) {
+    chart.destroy();
+    chart = null;
+    chartInitialized = false;
+  }
   if (chartInitialized) return;
 
-  debugLog('Initializing energy chart');
-  if (initChart(canvas)) {
-    chartInitialized = true;
-    debugLog('Energy chart initialized successfully');
-  } else {
-    console.error('Failed to initialize energy chart');
-  }
+  // The component is fetched the first time a chart is actually wanted rather
+  // than on every page load; callers in the same breath share one mount.
+  building ??= initChart(host)
+    .then(ok => {
+      chartInitialized = ok && chart !== null;
+      if (!chartInitialized) console.error('Failed to initialize energy chart');
+    })
+    .finally(() => {
+      building = null;
+    });
+  await building;
 };
 
 /**
@@ -1205,9 +1080,9 @@ const handleRefreshChart = () => {
 /**
  * Handle chart export
  */
-const handleExportChart = () => {
-  const dataUrl = exportChart();
-  if (!dataUrl) {
+const handleExportChart = async () => {
+  const blob = await exportChart();
+  if (!blob) {
     toast(t('chart.notReady'));
     return;
   }
@@ -1218,8 +1093,9 @@ const handleExportChart = () => {
       ? state.selectedObject.object.id
       : 'unknown';
     link.download = `energy-chart-${objectId}-${Date.now()}.png`;
-    link.href = dataUrl;
+    link.href = URL.createObjectURL(blob);
     link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
     debugLog('Energy chart exported successfully');
   } catch (error) {
     console.error('Failed to export energy chart:', error);
@@ -1239,6 +1115,9 @@ export const clearEnergyChart = () => {
 /** The inspector closed: stop refreshing and forget the chart and the body. */
 export const releaseEnergyChart = () => {
   stopAutoRefresh();
+  chart?.destroy();
+  chart = null;
+  chartHost = null;
   chartInitialized = false;
   currentObjectId = null;
 };

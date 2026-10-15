@@ -588,7 +588,7 @@ budget's.
 | 2 | D5-D7 | on `feat/plot-component` | Experiment runner −2742 B, 47 → 47 requests / −1540 B, 3 → 3. Observatory +319 B / +144 B against step 1, still −92 B / −620 B against the base. Every other route unchanged | 0 (4170.7 KB) | D5-D7 migrated: see below |
 | 3 | D8-D12 | | | | |
 | 3a | the features the five Chart.js charts need (D-PLOT-02) | on `feat/plot-stage-3a` | none: no route imports the new modules | 0 (2034.2 of 2034.4 KB gzipped); no chart ported | none ported: see "Stage 3a" |
-| 3b | A1-A3, the live charts | | | | |
+| 3b | A1-A3, the live charts (D-PLOT-02) | on `feat/plot-stage-3b` | Ten routes smaller (the three lesson and sandbox routes by 2.5 to 3.1 KB, the lesson instrument route by 137.5 KB sources / 156.5 KB build: Chart.js is no longer fetched for the light curve); eight routes +0.4 to +0.5 KB (the new strings), ceilings raised under D-PLOT-05 | +7.8 KB gzipped (2034.2 to 2042.0 of 2034.4: ceiling raised under D-PLOT-04); initial download −2.2 KB (793.7 to 791.5) | A1, A2, A3 ported: see "Stage 3b" |
 | 3c | A4, A5, the bench charts | | | | |
 | 4 | A1-A5 judged by the parity harness; Chart.js removed | | | | |
 | 5 | B1-B8 | | | | |
@@ -748,7 +748,7 @@ remove the library (the register row quotes him):
 | Stage | What | State |
 |---|---|---|
 | 3a | The features, and the characterization of the five charts. No chart ported, Chart.js untouched | this pull request |
-| 3b | Port A1, A2, A3 (the live charts) | |
+| 3b | Port A1, A2, A3 (the live charts) | this pull request |
 | 3c | Port A4, A5 (the bench charts) | |
 | 4 | The parity harness over all five, then Chart.js, `ensureChartJs`, the vendor entry and the package dependency removed | |
 
@@ -895,3 +895,138 @@ two engine-sensitive tests (CSS variables as attributes, and the PNG), and
 the markup it draws was looked at in both a dark and a light page with all
 five chart shapes at once.
 
+### Stage 3b: the three live charts ported (D-PLOT-02)
+
+**What changed.** The energy chart (A1, `js/inspectorPanel.js`), the light
+curve (A2, `js/lightCurve.js`) and the radial-velocity trace (A3,
+`js/radialVelocity.js`) draw with `js/plot/chart.js`. Chart.js is no longer
+fetched for any of them: `ensureChartJs` is called only by the bench
+comparison and the sweep (A4, A5), and `tests/chartParity.test.js` pins that.
+The three charts are built through one function, `mountChart()` in
+`js/observationChart.js`, which fetches the component the first time a chart
+is built (so a page whose chart panels are closed never downloads it), passes
+the catalogue's words for the roledescription, the legend and the spoken
+toggle, and is the one place the observing charts' design tokens are read
+(`chartColor(name)`; `chartColors()` is the same table). Each chart is built
+from the module's own state on every draw, so a clear, a rewind or a new
+schedule is a redraw and nothing is kept in step by hand.
+
+| Chart | Host | Series (as Chart.js had them) | Kept |
+|---|---|---|---|
+| A1 | `#energyChart`, a `<div>` in the inspector's Energy tab (was a canvas) | kinetic, potential, total; widths 2, 2, 3 | 200 points a series, 8 Hz through the worker and `updateChart`; legend toggles; the tooltip's words (`energyReadout`); the PNG, now `chart.toPNG()` awaited and downloaded from an object URL; the refresh and export buttons |
+| A2 | `#lightCurveChart` | relative brightness, filled | 2000 points, a redraw every 6th sample, the y rule (30% of the range, at least 1e-4, floored at zero) as the chart's exact `yRange`, the theme repaint, the tooltip's six decimals (`brightnessReadout`) |
+| A3 | `#rvChart` | the continuous curve, or the dashed teaching overlay in a survey, behind the measurements | 900 samples, 60 ms, thinned 2:1 in a survey; the overlay dashed `[4,4]`, hideable from the checkbox and the legend; error bars of plus and minus sigma with 3 px caps in the measurements' color; the legend in a survey only |
+
+The canvases became hosts (`.plot-host`, pinned to their stage so the chart
+takes its size from the stage and never sizes it), and the ids lost
+"Canvas" (`lightCurveChart`, `rvChart`). Screen-reader text is more than it
+was: the `<svg>` is a focusable group with a translated `aria-label` and
+`aria-roledescription`, arrow keys read the values and say them in a polite
+status, the legend is real buttons with `aria-pressed`, and a toggle is
+spoken. The Chart.js canvases had none of this. Seven strings were added to
+both catalogues (`chart.role`, `chart.legend`, `chart.shown`, `chart.hidden`,
+`energyChart.label`, `lightCurve.chartLabel`, `rv.chartLabel`).
+
+**What the component gained for them** (small, in `js/plot/chart.js`, all
+covered in `tests/plotChart.test.js`): `parts()` now says what the chart is as
+data (the words and numbers of its axes and legend, every tick with its
+value, each series as drawn), which is what the parity test reads;
+`maxTicks` (A2 and A3 asked for 6 along x); y ticks about one a 24 px with at
+least four asked for (two often left one tick on a short chart); `niceTicks`
+keeps a step that is the raw one to within float error (a range of 2e-4 went
+to a 1e-4 step and two ticks); a host shorter than the old 120 px minimum is
+filled and not overflowed (the light curve's stage is 103 px).
+
+**Documented equivalents** (the parity table's rule 1; each is listed with
+its reason in `portedExpectation()` in `e2e/chartParity.spec.js`, and the
+fixture stays the Chart.js record):
+
+- Everything stage 3a listed (numeric x for A2, no smoothing, bars widen the
+  range, an asynchronous PNG, nearest-point hover, a new keyboard readout).
+- **A1's colors and text are tokens.** Kinetic, potential and total are the
+  success, warning and accent tokens (`alt`, `caution`, `accent` in
+  `chartColors()`), the title, tick and grid colors are the page's; they were
+  light-on-dark literals and so unreadable on the daylight theme.
+- **Type sizes** are the component's, 11 px for a title and 10 for a tick
+  (14 and 12 for A1; 10 and 9 for A2 and A3).
+- **Tick text keeps the figures a tick needs** (`chartTick`: "0.1", "12.5",
+  "1.25 × 10³⁹", a true minus sign, grouped thousands) where A1 rounded every
+  tick to two figures, which would label 12.5 as 13. The recorded samples
+  `[0, 1.5, 123.456, 12345, 1e6, -0.0025]` are now `0, 1.5, 123.456, 12,345,
+  10⁶, −0.0025`.
+- **`intersect` and the error-bar plugin** have no counterpart: the nearest
+  point in x (or in the plane) is read, and the bars are the series' sigma.
+  What `rvErrorBars` drew is read back from the paths the component draws (a
+  bar centered on its point, one sigma either way, a 3 px cap each side, one
+  pixel wide, in the series' color), which is a stronger check than the
+  recording context was.
+- **A1's chart is 30 px taller** (the host went from 190 to 220 px) so that a
+  legend that wraps to two rows leaves a plot.
+
+**Live updates, measured in the application.** A wrapper around `draw()`
+(removed again) timed the real code paths at the charts' caps, in headless
+Chromium, with the vendored Chart.js timed the same way in a checkout of
+`v2` (its `update('none')`, the same data, the same page) beside it. The
+machine was shared (load average 7 to 11), so the 4x columns carry that
+noise; the comparison is what is reliable. Milliseconds, median / p95:
+
+| Chart, cap | Component 1x | Component 1x + layout | Component 4x | Component 4x + layout | Chart.js 4x |
+|---|---|---|---|---|---|
+| A1 energy, 3 x 200 (calling `updateChart` at 8 Hz) | 1.1 / 2.1 | 1.4 / 2.3 | 4.7 / 12.1 | 6.2 / 14.3 | 18.7 / 43.6 |
+| A2 light curve, 2000 filled (the app's own frame loop) | 0.6 / 1.1 | 0.8 / 1.3 | 4.2 / 10.6 | 5.8 / 15.4 | 22.5 / 65.9 |
+| A3 radial velocity, 900 (the app's own 60 ms sampling) | 1.0 / 1.8 | 1.3 / 2.2 | 4.8 / 9.5 | 6.2 / 11.2 | 10.9 / 32.0 |
+
+So the ports are 2.3 to 6 times cheaper than what ships at the median and 3
+to 6 times at p95. Against the 8 ms bar (OFFLINE_AND_LOW_END.md) on the 4x
+proxy the medians are under it and the p95 is over it by 1.5 to 4 ms in this
+shared session, where `node tools/plot-live-bench.mjs --cpu 1,4` run beside
+them reads 4.4, 4.5 and 7.7 ms p95 for the draw (and 12.1 for the radial
+velocity's draw with layout); stage 3a's quieter run read 2.2 to 3.6. The 1x
+columns, which carry no throttle, are 1.1 to 2.1 ms at p95, and 4 times that
+is the bar. The charts redraw at 8 to 15 Hz, not every frame, and every one
+is well under what it replaces. Two things in these numbers are not the
+component's: in headless Chromium the worker's results reach `updateChart`
+through `requestIdleCallback`, which never ran while the simulation held the
+frame loop (the shipped chart did not update either, 0 updates in 20 s), so
+A1 was measured by calling `updateChart` at 8 Hz; and the achieved rate at 4x
+(1.7 to 8 Hz) is the page's, not the chart's.
+
+**Tests.** The three that read Chart.js internals read the component
+instead, asserting at least as much:
+`e2e/inspector.spec.js` (the chart is made, with the three energies as
+legend buttons all pressed, both axis titles, a connected path of several
+points in every series, and no `window.Chart`),
+`e2e/detectPlanet.spec.js` (the survey's overlay and measurements from the
+legend's buttons, swatch dash and `aria-pressed`, the overlay drawn first and
+the only dashed path, hidden and shown by the checkbox) and
+`e2e/lessonPerformance.spec.js` (the chart's `<svg>` exists). `selfContained`
+asserts the lazy chunk drew the axes with third-party requests blocked;
+`observing.spec.js` asserts the light curve and the radial-velocity trace are
+connected paths of more than five points. `e2e/chartParity.spec.js` reads A1
+to A3 through `parts()` and the markup (colors as the design tokens the page
+resolves them to, the hovered tooltip, a legend click, the error-bar paths, a
+theme switch) and compares the facts to the same fixture with the equivalents
+above applied; A4 and A5 are unchanged. `tests/chartParity.test.js` pins the
+ported sources' caps and the fact that only the bench loads Chart.js.
+
+**Size.** Deferred JavaScript, gzipped, from a fresh `node build.js`: 2034.2
+to 2042.0 KB, 7.8 KB: the component is 7.5 and the strings and the glue the
+rest, less what the ported charts' own code freed. Raised from 2034.4 to
+2042.0 under the standing size-budget approval (D-PLOT-04); stage 4 returns
+Chart.js's chunk and more. The initial download fell, 793.7 to 791.5 KB, the
+modules being lazy. Sources and build routes that loaded the light curve
+lost Chart.js: the transit lesson's instrument route −137.5 KB (sources) and
+−156.5 KB (build), and every route that imports the application −3 KB. Eight
+routes whose catalogue now carries the seven strings (about 0.45 KB) read
+0.4 to 0.5 KB higher: their ceilings are raised by the measured overrun
+(D-PLOT-05). No request, module-size or initial ceiling was raised.
+
+**Open.** (1) In a survey the radial-velocity stage is at its 90 px minimum
+and the legend takes two rows, so the plot is about 30 px; Chart.js was as
+cramped (its canvas was 90 px with a legend over it), and the component no
+longer overflows the stage. (2) The light curve's x axis is numeric, so a
+rewind of the simulation clock draws the curve doubling back (the category
+axis marched on by index); the module does not drop samples on a rewind
+(radial velocity does), and the hover assumes ascending x. (3) A1's live
+feed rides `requestIdleCallback` with no timeout, as before. None of the
+three is new in kind; the first and third are as shipped.
