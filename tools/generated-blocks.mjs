@@ -409,7 +409,12 @@ export function generatedArtifactsTable(graph) {
     .map(n => {
       const by = n.generate ? code(n.generate) : `needs ${n.needs}`;
       const note = n.notes || '';
-      return `| ${n.outputs.map(code).join(', ')} | ${by} | ${note} |`;
+      // A node that writes only regions inside hand-written files has no
+      // output of its own: name the files instead of leaving the cell empty.
+      const files = n.outputs.length
+        ? n.outputs.map(code)
+        : (n.regions || []).map(r => `${code(r)} (regions)`);
+      return `| ${files.join(', ')} | ${by} | ${note} |`;
     });
   return [
     '',
