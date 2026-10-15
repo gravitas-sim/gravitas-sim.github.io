@@ -1,0 +1,282 @@
+{
+  "neutron-star-collision:3": {
+    "counts": {
+      "gravitasSimulationReset": 1,
+      "gravitasMerge": 1,
+      "listener": 150
+    },
+    "order": [
+      "gravitasSimulationReset",
+      "gravitasMerge"
+    ],
+    "mergeLog": 1,
+    "listenerCalls": 1500,
+    "first": {
+      "gravitasSimulationReset": null,
+      "gravitasMerge": {
+        "engineOwned": true,
+        "masses": {
+          "primary": "1400000",
+          "result": "2800000",
+          "secondary": "1400000",
+          "units": "sim"
+        },
+        "mergedMass": "2800000",
+        "modelOwned": false,
+        "position": {
+          "x": "-5.258187225886754e-7",
+          "y": "-8.480508449844949e-7"
+        },
+        "primaryId": "28",
+        "resultId": "30",
+        "secondaryId": "29",
+        "simTime": "0.01",
+        "simTimeUnits": "sim",
+        "time": "5033",
+        "type": "merge",
+        "types": {
+          "primary": "BlackHole",
+          "result": "BlackHole",
+          "resultObjType": "BlackHole",
+          "secondary": "BlackHole"
+        },
+        "velocity": {
+          "x": "-0.000052581872944553784",
+          "y": "-0.00008480508449886526"
+        }
+      }
+    },
+    "sha256": "9b8dc0b1352fcf555108a131299a6fbb6a5b7860aa607477f598d68ecd87d8de"
+  },
+  "white-dwarf-binary:3": {
+    "counts": {
+      "gravitasSimulationReset": 1,
+      "listener": 150,
+      "gravitasCollision": 3
+    },
+    "order": [
+      "gravitasSimulationReset",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision"
+    ],
+    "mergeLog": 0,
+    "listenerCalls": 1500,
+    "first": {
+      "gravitasSimulationReset": null,
+      "gravitasCollision": {
+        "impactType": "stellar-absorption",
+        "masses": [
+          "957.8032343709458",
+          "4.7176973353443944e-7"
+        ],
+        "position": {
+          "x": "74.74467599607665",
+          "y": "-187.75286968733192"
+        },
+        "relativeSpeed": "26.158506242466636",
+        "sourceType": "WhiteDwarf",
+        "targetType": "Asteroid"
+      }
+    },
+    "sha256": "795aaca4d899a84d6ea50fd1ac3a9439e1d24dca6a0316bfe99de702e71d3e04"
+  },
+  "supernova-remnant:3": {
+    "counts": {
+      "gravitasSimulationReset": 1,
+      "gravitasCollision": 18,
+      "listener": 150,
+      "gravitasMerge": 1
+    },
+    "order": [
+      "gravitasSimulationReset",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasMerge",
+      "gravitasCollision",
+      "gravitasCollision"
+    ],
+    "mergeLog": 1,
+    "listenerCalls": 1500,
+    "first": {
+      "gravitasSimulationReset": null,
+      "gravitasCollision": {
+        "impactType": "gas-giant-accretion",
+        "masses": [
+          "0.9909543681124713",
+          "4.7176973353443944e-7"
+        ],
+        "position": {
+          "x": "209.65884100779493",
+          "y": "-163.58400027792794"
+        },
+        "relativeSpeed": "0.6688865201973181",
+        "sourceType": "GasGiant",
+        "targetType": "Asteroid"
+      },
+      "gravitasMerge": {
+        "engineOwned": true,
+        "masses": {
+          "primary": "1.154600335858502",
+          "result": "2.1455547039709733",
+          "secondary": "0.9909543681124713",
+          "units": "sim"
+        },
+        "mergedMass": "2.1455547039709733",
+        "modelOwned": false,
+        "position": {
+          "x": "217.43808788458622",
+          "y": "-156.1108999904395"
+        },
+        "primaryId": "6",
+        "resultId": "235",
+        "secondaryId": "7",
+        "simTime": "13.84999999999975",
+        "simTimeUnits": "sim",
+        "time": "304049",
+        "type": "merge",
+        "types": {
+          "primary": "GasGiant",
+          "result": "GasGiant",
+          "resultObjType": "GasGiant",
+          "secondary": "GasGiant"
+        },
+        "velocity": {
+          "x": "3.405395329955043",
+          "y": "2.3046826623769774"
+        }
+      }
+    },
+    "sha256": "d725cb55644909602d9342064d92384384c06ce57005119191915f0690dba967"
+  },
+  "hungry-hungry-holes:3": {
+    "counts": {
+      "gravitasSimulationReset": 1,
+      "gravitasMerge": 45,
+      "gravitasCollision": 8,
+      "listener": 150
+    },
+    "order": [
+      "gravitasSimulationReset",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasCollision",
+      "gravitasMerge",
+      "gravitasCollision",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge"
+    ],
+    "mergeLog": 45,
+    "listenerCalls": 1500,
+    "first": {
+      "gravitasSimulationReset": null,
+      "gravitasMerge": {
+        "engineOwned": true,
+        "masses": {
+          "primary": "2400.7126210880797",
+          "result": "3902.2641321494093",
+          "secondary": "1501.5515110613298",
+          "units": "sim"
+        },
+        "mergedMass": "3902.2641321494093",
+        "modelOwned": false,
+        "position": {
+          "x": "-228.48358121048767",
+          "y": "155.72510005349915"
+        },
+        "primaryId": "0",
+        "resultId": "81",
+        "secondaryId": "20",
+        "simTime": "0.01",
+        "simTimeUnits": "sim",
+        "time": "5081",
+        "type": "merge",
+        "types": {
+          "primary": "StarObject",
+          "result": "StarObject",
+          "resultObjType": "StarObject",
+          "secondary": "StarObject"
+        },
+        "velocity": {
+          "x": "-8.146407490177188",
+          "y": "1.5148105217354737"
+        }
+      },
+      "gravitasCollision": {
+        "impactType": "stellar-absorption",
+        "masses": [
+          "3094.554153653765",
+          "4.7176973353443944e-7"
+        ],
+        "position": {
+          "x": "-228.24667946056536",
+          "y": "-61.90867528922926"
+        },
+        "relativeSpeed": "2.5513617752026714",
+        "sourceType": "StarObject",
+        "targetType": "Asteroid"
+      }
+    },
+    "sha256": "936a4609998646b025249e028d27248a644720d79b6809b5647069915a466b3e"
+  }
+}

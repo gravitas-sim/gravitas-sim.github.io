@@ -5,31 +5,31 @@
     "sources": {
       "front-door": {
         "kb": 2103.3,
-        "requests": 103
+        "requests": 104
       },
       "sandbox": {
         "kb": 2103.3,
-        "requests": 103
+        "requests": 104
       },
       "kepler": {
         "kb": 3342.9,
-        "requests": 141
+        "requests": 142
       },
       "transit": {
         "kb": 3354.9,
-        "requests": 141,
+        "requests": 142,
         "toolKb": 3562.9,
-        "toolRequests": 143
+        "toolRequests": 144
       },
       "power-law": {
         "kb": 3320.2,
-        "requests": 141,
+        "requests": 142,
         "toolKb": 3373.2,
-        "toolRequests": 144
+        "toolRequests": 145
       },
       "largest-lesson": {
         "kb": 3452.4,
-        "requests": 143
+        "requests": 144
       },
       "teaching": {
         "kb": 246.4,
@@ -44,12 +44,12 @@
         "requests": 16
       },
       "figure": {
-        "kb": 2356.3,
-        "requests": 118
+        "kb": 2357.7,
+        "requests": 119
       },
       "experiments": {
         "kb": 1109,
-        "requests": 48
+        "requests": 49
       },
       "observatory": {
         "kb": 179.9,
@@ -69,7 +69,7 @@
       },
       "studio": {
         "kb": 975.6,
-        "requests": 41
+        "requests": 42
       },
       "composer": {
         "kb": 494.5,
