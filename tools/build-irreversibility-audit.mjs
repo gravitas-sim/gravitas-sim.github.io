@@ -153,7 +153,8 @@ scan({
 // --- Merging -----------------------------------------------------------------
 scan({
   kind: 'merge',
-  pattern: /absorbedSpinAngularMomentum \+=/g,
+  // The site that banks the spin; the ledger itself is js/engine/conservation.js.
+  pattern: /bankAbsorbedSpin\(spin\)/g,
   id: 'merge:absorption',
   describe: () => ({
     what: 'a body absorbed by a black hole is deleted and its mass, momentum and spin folded into one object; two histories become one state',
