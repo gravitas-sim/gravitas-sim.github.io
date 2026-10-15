@@ -38,11 +38,12 @@ import path from 'node:path';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const read = f => readFileSync(path.join(here, '..', f), 'utf8');
-// The engine's settings defaults moved with its state (D-DECOMP-23).
+// The engine's settings defaults moved with its state (D-DECOMP-23), and with
+// them the settings readers the later slices share (D-DECOMP-25).
 const engineState = () => read('js/engine/state.js');
 
 describe('the integrators the documentation names', () => {
-  const physics = read('js/physics.js');
+  const physics = engineState();
 
   test('there are exactly three, and the default is symplectic Euler', () => {
     const list = /const INTEGRATORS = \[([^\]]+)\]/.exec(physics)?.[1];
@@ -69,7 +70,7 @@ describe('the integrators the documentation names', () => {
 });
 
 describe('the softening floor the model page quotes', () => {
-  const physics = read('js/physics.js');
+  const physics = engineState();
 
   test('the effective default really is five length units', () => {
     expect(physics).toMatch(/const MIN_INTERACTION_DISTANCE = 5\.0;/);
@@ -87,7 +88,7 @@ describe('the softening floor the model page quotes', () => {
 });
 
 describe('what the performance summary claims is adopted', () => {
-  const physics = read('js/physics.js');
+  const physics = engineState();
 
   test('Barnes-Hut is opt-in, with no body-count heuristic', () => {
     // If this ever becomes automatic, the summary's wording has to change back.
