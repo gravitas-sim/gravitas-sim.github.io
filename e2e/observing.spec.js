@@ -32,7 +32,7 @@ test.describe('the light curve', () => {
       await app.loadScenario('transit-lab');
       await app.openPanel('toggleLightCurve', 'lightCurveContainer');
 
-      await expect(page.locator('#lightCurveCanvas')).toBeVisible();
+      await expect(page.locator('#lightCurveChart')).toBeVisible();
       await expect(page.locator('#lightCurveStatus')).not.toBeEmpty();
 
       // It has to actually accumulate samples, not merely appear. A panel that
@@ -54,6 +54,23 @@ test.describe('the light curve', () => {
         return lc.currentBrightness();
       });
       expect(Number.isFinite(brightness)).toBe(true);
+
+      // And it is on the chart: the recording is a connected path of points,
+      // with the series chart's axis titles around it.
+      await expect
+        .poll(() =>
+          page
+            .locator('#lightCurveChart svg g[clip-path] > path')
+            .evaluateAll(paths =>
+              Math.max(
+                ...paths.map(p => (p.getAttribute('d') || '').split('L').length)
+              )
+            )
+        )
+        .toBeGreaterThan(5);
+      await expect(
+        page.locator('#lightCurveChart svg[role="group"]')
+      ).toContainText('Brightness');
     }
   );
 
@@ -85,7 +102,7 @@ test.describe('radial velocity', () => {
     await app.waitForFrames(10);
     await app.openPanel('toggleRadialVelocity', 'rvContainer');
 
-    await expect(page.locator('#rvCanvas')).toBeVisible();
+    await expect(page.locator('#rvChart')).toBeVisible();
     await expect(page.locator('#rvTarget')).not.toBeEmpty();
 
     // This scenario deliberately lets the star move, so a reflex velocity is
@@ -100,6 +117,21 @@ test.describe('radial velocity', () => {
         { timeout: 20_000 }
       )
       .not.toBeNull();
+
+    // And the trace is on the chart, not only in the readout.
+    await expect
+      .poll(
+        () =>
+          page
+            .locator('#rvChart svg g[clip-path] > path')
+            .evaluateAll(paths =>
+              Math.max(
+                ...paths.map(p => (p.getAttribute('d') || '').split('L').length)
+              )
+            ),
+        { timeout: 20_000 }
+      )
+      .toBeGreaterThan(5);
   });
 
   test('says nothing rather than inventing a signal when the star is pinned', async ({

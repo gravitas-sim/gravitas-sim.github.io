@@ -1917,6 +1917,12 @@
     display: block;
   }
 
+  /* The series chart fills the stage's padded box and takes its size from it. */
+  .light-curve-stage > .plot-host {
+    position: absolute;
+    inset: 6px 8px;
+  }
+
   .light-curve-hint {
     text-align: center;
     background: var(--surface-inset);
