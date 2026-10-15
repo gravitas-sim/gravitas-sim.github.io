@@ -39,12 +39,16 @@ const LISTS = [
 // Where the engine is when something fires: the clock and every list's length,
 // so the golden pins an event's timing relative to the physics step.
 const where = () => ({
-  simTime: String(physics.getSimulationTime()),
+  simTime: round(physics.getSimulationTime()),
   lengths: LISTS.map(l => physics[l].length),
 });
 
+// 12 significant figures: V8's Math and `**` differ in the last digit between
+// Node versions, and a record that must hold on Node 22 and 24 cannot pin it.
+const round = v => String(Number.isFinite(v) ? Number(v.toPrecision(12)) : v);
+
 function canon(v, depth = 0) {
-  if (typeof v === 'number') return String(v);
+  if (typeof v === 'number') return round(v);
   if (v === null || typeof v !== 'object') return v ?? null;
   if (depth > 6) return '[deep]';
   if (Array.isArray(v)) return v.map(x => canon(x, depth + 1));
@@ -91,7 +95,7 @@ export function trace(key, seed, frames) {
       events.push({
         at: 'step',
         name: 'listener',
-        detail: [dt, String(t)],
+        detail: [round(dt), round(t)],
         ...where(),
       });
   });
