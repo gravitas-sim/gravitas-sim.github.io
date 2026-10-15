@@ -1,0 +1,31 @@
+{
+  "_note": "The caps, rates and rules of the five Chart.js charts that live in source constants rather than in the chart's config (D-PLOT-02). tests/chartParity.test.js pins each to the source line named; tests/fixtures/chart-parity.json holds what the running charts are. A later stage compares the component's own numbers to these.",
+  "A1": {
+    "pointsPerSeries": 200,
+    "updateHz": 8,
+    "export": "PNG, from the chart's own image"
+  },
+  "A2": {
+    "pointsPerSeries": 2000,
+    "redrawEverySamples": 6,
+    "yMarginOfRange": 0.3,
+    "yMarginFloor": 0.0001,
+    "yFloorAtZero": true,
+    "themeRepaintEvent": "gravitasThemeChanged"
+  },
+  "A3": {
+    "pointsPerSeries": 900,
+    "sampleIntervalMs": 60,
+    "thinnedEveryOtherSampleInSurvey": true,
+    "errorBarCapHalfWidthPx": 3
+  },
+  "A4": {
+    "metricSwitch": true,
+    "timeAxisRoundedTo": 6
+  },
+  "A5": {
+    "metricSwitch": true,
+    "failedTrialsLeftOut": true,
+    "pointsSortedByParameter": true
+  }
+}

@@ -1,5 +1,5 @@
 {
- "total": 594339,
+ "total": 595026,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -7,7 +7,7 @@
   },
   {
    "module": "js/physics.js",
-   "bytes": 54503
+   "bytes": 52948
   },
   {
    "module": "js/world/build.js",
@@ -39,11 +39,11 @@
   },
   {
    "module": "js/ui.js",
-   "bytes": 14752
+   "bytes": 14694
   },
   {
    "module": "js/placement.js",
-   "bytes": 14272
+   "bytes": 14190
   },
   {
    "module": "js/inspectorWindow.js",
@@ -184,6 +184,10 @@
   {
    "module": "js/instruments.js",
    "bytes": 2444
+  },
+  {
+   "module": "js/engine/state.js",
+   "bytes": 2382
   },
   {
    "module": "js/observerControls.js",
