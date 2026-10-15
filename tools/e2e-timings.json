@@ -545,7 +545,7 @@
   "[chromium] › chartParity.spec.js › the five Chart.js charts, as they are today › A2: the light curve": 6.1,
   "[chromium] › chartParity.spec.js › the five Chart.js charts, as they are today › A3: the radial-velocity trace, plain and during a survey": 5.9,
   "[chromium] › chartParity.spec.js › the five Chart.js charts, as they are today › A4: the bench comparison, and A5: the sweep": 12.1,
-  "[chromium] › chartParity.spec.js › the five Chart.js charts, as they are today › they are what the fixture says they are": 0.1,
+  "[chromium] › chartParity.spec.js › the five Chart.js charts, as they are today › the fixture holds the five charts and nothing else": 0.1,
   "[chromium] › cometPlacement.spec.js › a comet is big enough on screen to select by clicking it": 5.6,
   "[chromium] › cometPlacement.spec.js › a comet placed by touch is added and drawn (full quality)": 5.9,
   "[chromium] › cometPlacement.spec.js › a comet placed by touch is added and drawn (low quality)": 5.8,

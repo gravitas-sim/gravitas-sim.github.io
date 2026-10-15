@@ -141,11 +141,25 @@ async function chartOf(page, canvasId, custom = []) {
   return read(page, canvasId, custom);
 }
 
-const facts = {};
+/**
+ * Each test checks its own chart against its own key of the fixture, so every
+ * test runs alone, in any order, and in any shard. With RECORD set it merges
+ * its key into the fixture instead.
+ */
+function settle(key, value) {
+  const fixture = JSON.parse(readFileSync(FIXTURE, 'utf8'));
+  if (RECORD) {
+    fixture[key] = value;
+    const sorted = Object.fromEntries(
+      Object.entries(fixture).sort(([a], [b]) => (a < b ? -1 : 1))
+    );
+    writeFileSync(FIXTURE, JSON.stringify(sorted, null, 2) + '\n');
+    return;
+  }
+  expect(value).toEqual(fixture[key]);
+}
 
 test.describe('the five Chart.js charts, as they are today', () => {
-  test.describe.configure({ mode: 'serial' });
-
   test('A1: the energy chart in the object inspector', async ({
     page,
     app,
@@ -162,7 +176,7 @@ test.describe('the five Chart.js charts, as they are today', () => {
       const cb = c.options.plugins.tooltip.callbacks.label;
       return cb({ dataset: { label: 'Kinetic' }, parsed: { y: 1234.5 } });
     });
-    facts.A1 = chart;
+    settle('A1', chart);
   });
 
   test('A2: the light curve', async ({ page, app }) => {
@@ -192,7 +206,7 @@ test.describe('the five Chart.js charts, as they are today', () => {
         };
       })
     );
-    facts.A2 = chart;
+    settle('A2', chart);
   });
 
   test('A3: the radial-velocity trace, plain and during a survey', async ({
@@ -271,7 +285,7 @@ test.describe('the five Chart.js charts, as they are today', () => {
       capHalfWidth: 3,
       color: 'the measurements series border color',
     };
-    facts.A3 = { plain, survey };
+    settle('A3', { plain, survey });
   });
 
   test('A4: the bench comparison, and A5: the sweep', async ({
@@ -328,7 +342,7 @@ test.describe('the five Chart.js charts, as they are today', () => {
       const c = window.Chart.getChart(document.getElementById('benchChart'));
       return c.data.labels.every(v => Number.isFinite(v));
     });
-    facts.A4 = comparison;
+    settle('A4', comparison);
 
     // The sweep, through the bench's own entry point, then the panel.
     const swept = await page.evaluate(async () => {
@@ -365,16 +379,11 @@ test.describe('the five Chart.js charts, as they are today', () => {
       );
       return /\(.+\)/.test(c.options.scales.x.title.text);
     });
-    facts.A5 = sweep;
+    settle('A5', sweep);
   });
 
-  test('they are what the fixture says they are', async () => {
-    expect(Object.keys(facts).sort()).toEqual(['A1', 'A2', 'A3', 'A4', 'A5']);
-    const text = JSON.stringify(facts, null, 2) + '\n';
-    if (RECORD) {
-      writeFileSync(FIXTURE, text);
-      return;
-    }
-    expect(facts).toEqual(JSON.parse(readFileSync(FIXTURE, 'utf8')));
+  test('the fixture holds the five charts and nothing else', async () => {
+    const fixture = JSON.parse(readFileSync(FIXTURE, 'utf8'));
+    expect(Object.keys(fixture).sort()).toEqual(['A1', 'A2', 'A3', 'A4', 'A5']);
   });
 });
