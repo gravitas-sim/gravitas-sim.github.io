@@ -1,15 +1,6 @@
-// The engine's events: the collision and merger announcements, the worker
-// failure notice and the step listeners (D-DECOMP-18, slice S2). Moved from
-// js/physics.js verbatim; the facade re-exports `onPhysicsStep` and
-// `simulation`, so no importer changes.
-//
-// Nothing here draws a random number or reads engine state, so the stream and
-// the physics are the same whether anything listens. The three window
-// dispatches stay behind their guards: a Worker, a test with no DOM and the
-// headless validation runner have no `window` to tell, and the engine runs
-// there unchanged. This module imports nothing.
+// The engine's events and step listeners (D-DECOMP-18, S2). No window, no
+// event: a Worker or the validation runner has none to tell.
 
-/** Tell the page, if there is one, that something happened. */
 export const dispatchSimulationEvent = (name, detail = {}) => {
   if (
     typeof window !== 'undefined' &&
@@ -49,14 +40,12 @@ export const broadcastImpact = (source, target, impactType) => {
   emitCollisionEvent(buildImpactPayload(source, target, impactType));
 };
 
-/** The physics Worker died or went silent (`gravitasWorkerFailed`). */
 export const announceWorkerFailed = () => {
   globalThis.dispatchEvent?.(
     new CustomEvent('gravitasWorkerFailed', { detail: { worker: 'physics' } })
   );
 };
 
-// Public simulation object for lightweight event access
 export const simulation = {
   eventLog: [],
   getLatestEvents(count = 20) {
@@ -64,7 +53,6 @@ export const simulation = {
   },
 };
 
-/** Log a merger (the last 1000 are kept) and announce it (`gravitasMerge`). */
 export const announceMerge = detail => {
   if (!simulation.eventLog) simulation.eventLog = [];
   simulation.eventLog.push(detail);
@@ -83,35 +71,17 @@ export const announceMerge = detail => {
   }
 };
 
-/**
- * Things to run after every integration step.
- *
- * Not after every frame: a scenario that substeps takes several of these per
- * frame, and a paused or scrubbing frame takes none. Anything that has to see
- * the states the integrator actually produced - event detection, in particular,
- * which has to be able to say how finely it localised something - belongs here
- * and not in the render loop.
- *
- * Inverted deliberately. The engine is the bottom of the module graph and must
- * not import the things that care about it, so they subscribe instead.
- *
- * @type {Set<Function>}
- */
+// Run after every integration step. Subscribers, not imports: the engine is the
+// bottom of the module graph.
 const stepListeners = new Set();
 
-/**
- * Subscribe to integration steps.
- *
- * @param {Function} fn - Called with (dt, simulationTime) after each step
- * @returns {Function} Unsubscribe
- */
+// Subscribe to steps: fn(dt, simulationTime). Returns the unsubscribe.
 export function onPhysicsStep(fn) {
   if (typeof fn !== 'function') return () => {};
   stepListeners.add(fn);
   return () => stepListeners.delete(fn);
 }
 
-/** After the step is complete; the set is empty unless something armed a watch. */
 export const runStepListeners = (dt, simulationTime) => {
   if (stepListeners.size) {
     for (const listen of stepListeners) {
