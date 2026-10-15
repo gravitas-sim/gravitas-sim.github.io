@@ -325,9 +325,8 @@ system; a student can send one back as their answer. Nothing touches a server.
 
 ## Running it locally
 
-Requires Node 20 or newer — the pinned Playwright declares `node: >=20`,
-and it is the only dependency that constrains this. CI runs 20, which is
-the version in `.nvmrc`; development is on 24.
+Requires Node 22 or newer (`engines` in `package.json`). CI runs 22, which
+is the version in `.nvmrc`; development is on 24.
 
 ```bash
 npm install

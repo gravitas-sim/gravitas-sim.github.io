@@ -17,12 +17,13 @@ that can be checked by a program are checked
   of `.github/workflows/ci.yml`, and `engines.node` in `package.json` (a floor,
   so `>=`). The test fails if `.nvmrc` and CI disagree, or if the floor is above
   either.
-- **Where it stands (2026-10-06).** All three say 20. Node 20 reached its
-  scheduled end of life in April 2026, so the floor now trails the policy.
-  Moving CI, `.nvmrc` and the floor to 22 is the first item of the next
-  checkpoint rather than part of this document, because it changes what CI
-  proves and the Node 20 and 24 differences above are exactly what a move can
-  expose. It should not wait for the calendar if a security advisory names 20.
+- **Where it stands (2026-10-14).** All three say 22, the oldest maintained
+  line now that Node 20 reached its scheduled end of life in April 2026 (D-R7-06).
+  The move was one pull request with the toolchain bumps, and the complete gate
+  was its acceptance test. The development machine is on 24, so the 22 and 24
+  differences above are still live: check anything byte-exact on CI's version.
+  Move the floor again when Node 22 reaches its own end of life, or sooner if a
+  security advisory names it.
 
 ## Exact pins
 
