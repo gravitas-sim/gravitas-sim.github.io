@@ -91,7 +91,9 @@ function fromPackage(familyId, path) {
  * retry (retryImport() below); `exportName` is the array of instruments it
  * exports, and `ready`, for a family whose instruments need something more
  * than the module - their prose, or data behind a second import - the promise
- * whenWidgetsReady() waits for.
+ * whenWidgetsReady() waits for. LAZY_FAMILIES below is written by
+ * tools/capability-registries.mjs: from each js/*Widgets.js module its exported
+ * array, the instrument ids in it and the one `...Ready` promise it exports.
  */
 const familyEntry = (load, path, exportName, ids, ready) => ({
   ids,
@@ -101,6 +103,8 @@ const familyEntry = (load, path, exportName, ids, ready) => ({
   ready: ready && (m => m[ready]),
 });
 
+// <generated:lazy-families>
+// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
 export const LAZY_FAMILIES = Object.freeze({
   energy: familyEntry(
     () => import('./energyWidgets.js'),
@@ -159,8 +163,6 @@ export const LAZY_FAMILIES = Object.freeze({
       'transit-noise',
     ]
   ),
-  // Its prose is in the deferred catalog, and its labels are only right once
-  // that has arrived; whenWidgetsReady() waits for it (see below).
   tidal: familyEntry(
     () => import('./tidalWidgets.js'),
     './tidalWidgets.js',
@@ -225,8 +227,6 @@ export const LAZY_FAMILIES = Object.freeze({
     'OBSERVING_WIDGETS',
     ['observing-planner']
   ),
-  // Its observed flux arrives behind a second import, through the SDSS data
-  // package; whenWidgetsReady() waits for it.
   spectra: familyEntry(
     () => import('./stellarSpectraWidgets.js'),
     './stellarSpectraWidgets.js',
@@ -240,8 +240,6 @@ export const LAZY_FAMILIES = Object.freeze({
     'TRANSIT_WIDGETS',
     ['depth-size', 'geometry', 'spectrum', 'dilution', 'resolve']
   ),
-  // Declared by its capability package (capabilities/power-law-instruments.json)
-  // and loaded through the resolver - the platform package gate's prototype.
   powerLaw: fromPackage('power-law', './powerLawWidgets.js'),
   gw: familyEntry(
     () => import('./gwWidgets.js'),
@@ -249,8 +247,6 @@ export const LAZY_FAMILIES = Object.freeze({
     'GW_WIDGETS',
     ['gw-lab', 'gw-real']
   ),
-  // Its bandpasses, line list and spectra arrive behind more imports;
-  // whenWidgetsReady() waits.
   light: familyEntry(
     () => import('./lightWidgets.js'),
     './lightWidgets.js',
@@ -258,15 +254,12 @@ export const LAZY_FAMILIES = Object.freeze({
     ['blackbody', 'spectrum-viewer', 'kirchhoff'],
     'lightReady'
   ),
-  // Pure model plus the MIST zero-age models the main sequence is scaled against.
   interiors: familyEntry(
     () => import('./interiorsWidgets.js'),
     './interiorsWidgets.js',
     'INTERIORS_WIDGETS',
     ['polytrope', 'wd-mass-radius', 'ms-scaling']
   ),
-  // Two TESS light curves, the Cepheid table and the synthetic class sample are
-  // sidecar files; whenWidgetsReady() waits for variablesReady.
   variables: familyEntry(
     () => import('./variableWidgets.js'),
     './variableWidgets.js',
@@ -274,15 +267,12 @@ export const LAZY_FAMILIES = Object.freeze({
     ['variable-fold', 'leavitt-law', 'variable-class'],
     'variablesReady'
   ),
-  // Pure model, no data to wait for: a lens, a source and a light curve.
   lensing: familyEntry(
     () => import('./lensingWidgets.js'),
     './lensingWidgets.js',
     'LENSING_WIDGETS',
     ['light-bending', 'lens-plane', 'lens-passing']
   ),
-  // Its Gaia and rotation-curve packs arrive behind more imports;
-  // whenWidgetsReady() waits.
   galactic: familyEntry(
     () => import('./galacticWidgets.js'),
     './galacticWidgets.js',
@@ -290,15 +280,12 @@ export const LAZY_FAMILIES = Object.freeze({
     ['solar-motion', 'rotating-disk', 'cluster-members'],
     'galacticReady'
   ),
-  // Synthetic stars, observed by a model survey: no data to wait for.
   survey: familyEntry(
     () => import('./surveyWidgets.js'),
     './surveyWidgets.js',
     'SURVEY_WIDGETS',
     ['survey-counts', 'malmquist', 'completeness-lf']
   ),
-  // The supernova, Hubble and SDSS tables are sidecar files;
-  // whenWidgetsReady() waits for cosmologyReady.
   cosmology: familyEntry(
     () => import('./cosmologyWidgets.js'),
     './cosmologyWidgets.js',
@@ -306,14 +293,12 @@ export const LAZY_FAMILIES = Object.freeze({
     ['hubble-law', 'hubble-diagram', 'redshift-wedge'],
     'cosmologyReady'
   ),
-  // Synthetic frames and a calculation from the detector kernel: no data to wait for.
   detector: familyEntry(
     () => import('./detectorWidgets.js'),
     './detectorWidgets.js',
     'DETECTOR_WIDGETS',
     ['ccd-frames', 'ccd-snr', 'diff-photometry']
   ),
-  // Its stars arrive behind a second import (the Sky Lab's sidecar).
   sky: familyEntry(
     () => import('./skyWidgets.js'),
     './skyWidgets.js',
@@ -334,7 +319,6 @@ export const LAZY_FAMILIES = Object.freeze({
     'COMPARE_WIDGETS',
     ['compare-transit']
   ),
-  // Its strain arrives behind a second import, like the spectra's flux.
   gwEvents: familyEntry(
     () => import('./gwEventWidgets.js'),
     './gwEventWidgets.js',
@@ -343,6 +327,7 @@ export const LAZY_FAMILIES = Object.freeze({
     'eventsReady'
   ),
 });
+// </generated:lazy-families>
 
 /** The family that owns an id. */
 const lazyFamilyOf = id =>

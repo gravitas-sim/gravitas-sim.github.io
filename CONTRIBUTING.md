@@ -413,10 +413,10 @@ Rules that are not obvious:
 
 ### The authoring toolchain
 
-A lesson is not one file. It is a module, a translation shadow, two registry
-entries, an entry in the synchronous barrel, an instructor-guide stub and two
-generated manifests — and a broken reference between any of them is invisible
-until a class hits it. Three commands cover that.
+A lesson is not one file. It is a module, a translation shadow, an entry in the
+synchronous barrel, an instructor-guide stub, two generated manifests and the
+generated lazy registry (`npm run registries`) — and a broken reference between
+any of them is invisible until a class hits it. Three commands cover that.
 
 ```bash
 npm run author:new -- --id=tidal-heating --title="Tidal Heating"
@@ -424,9 +424,10 @@ npm run author:check
 npm run author:walk
 ```
 
-**`author:new`** scaffolds all six registration points and prints what to do
-next. It never overwrites, so it is safe to re-run. The scaffold deliberately
-does not pass `author:check` yet: the placeholder summary, objectives and
+**`author:new`** scaffolds the hand-written registration points and prints what
+to do next (`npm run manifest`, then `npm run registries` for the lazy loaders).
+It never overwrites, so it is safe to re-run. The scaffold deliberately does not
+pass `author:check` yet: the placeholder summary, objectives and
 guide sections are there to be replaced, and the checker is the to-do list.
 
 **`author:check`** validates every investigation and every step — ids, required

@@ -16,7 +16,9 @@ slice moved the transit and power-law families; the GWOSC lab moved the
 gravitational-wave family and added its event family lazily; the last thirteen
 moved together. None is part of the engine now:
 
-- **A synchronous manifest.** `LAZY_FAMILIES` in `js/widgets.js` lists, for each
+- **A synchronous manifest.** `LAZY_FAMILIES` in `js/widgets.js` (written by
+  `tools/capability-registries.mjs` from the family modules since D-CAP-01; see
+  [CAPABILITY_RUNTIME.md](CAPABILITY_RUNTIME.md)) lists, for each
   of the seventeen families, the widget ids it owns, a literal `import()` a
   bundler can see and chunk, and the module path a retry needs - and, for a
   family whose instruments need more than their module, what to wait for: the

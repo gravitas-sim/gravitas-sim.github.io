@@ -38,9 +38,9 @@ export function handWritten(text) {
   const out = new Map();
   let inBlock = false;
   for (const raw of String(text).split('\n')) {
-    if (/<!--fact-block:/.test(raw)) inBlock = true;
+    if (/<!--fact-block:|^\/\/ <generated:/.test(raw)) inBlock = true;
     if (inBlock) {
-      if (/<!--\/fact-block-->/.test(raw)) inBlock = false;
+      if (/<!--\/fact-block-->|^\/\/ <\/generated:/.test(raw)) inBlock = false;
       continue;
     }
     const line = raw.replace(/<!--fact:[^>]*-->.*?<!--\/fact-->/g, '').trim();
