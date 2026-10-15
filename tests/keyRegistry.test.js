@@ -28,6 +28,7 @@ const PINNED = {
   KEY_UNITS: 'gravitas_units',
   EV_SIMULATION_RESET: 'gravitasSimulationReset',
   EV_UNITS_CHANGED: 'gravitasUnitsChanged',
+  EV_THEME_CHANGED: 'gravitasThemeChanged',
 };
 
 const NAME_EXPORT = /^(KEY|EV|ID)_[A-Z0-9_]+$/;
