@@ -85,6 +85,14 @@ import {
   worldGeneration,
   bumpWorldGeneration,
 } from './engine/state.js';
+// The events and the step listeners (slice S2), re-exported live.
+import {
+  broadcastImpact,
+  announceWorkerFailed,
+  announceMerge,
+  runStepListeners,
+} from './engine/events.js';
+export { simulation, onPhysicsStep } from './engine/events.js';
 export {
   getWorldGeneration,
   getInterventionEpoch,
@@ -258,45 +266,6 @@ const canvas = (typeof document !== 'undefined' &&
   height: 0,
 };
 
-const dispatchSimulationEvent = (name, detail = {}) => {
-  if (
-    typeof window !== 'undefined' &&
-    typeof window.dispatchEvent === 'function' &&
-    typeof window.CustomEvent === 'function'
-  ) {
-    window.dispatchEvent(new window.CustomEvent(name, { detail }));
-  }
-};
-
-const emitCollisionEvent = detail => {
-  dispatchSimulationEvent('gravitasCollision', detail);
-};
-
-const buildImpactPayload = (source, target, impactType) => {
-  const sourcePos = source?.pos || target?.pos || { x: 0, y: 0 };
-  const targetPos = target?.pos || sourcePos;
-  const avgPos = {
-    x: (sourcePos.x + targetPos.x) / 2,
-    y: (sourcePos.y + targetPos.y) / 2,
-  };
-  const relativeSpeed = Math.hypot(
-    (source?.vel?.x || 0) - (target?.vel?.x || 0),
-    (source?.vel?.y || 0) - (target?.vel?.y || 0)
-  );
-  return {
-    impactType,
-    sourceType: source?.obj_type || source?.kind || 'Unknown',
-    targetType: target?.obj_type || target?.kind || impactType,
-    relativeSpeed,
-    masses: [source?.mass || 0, target?.mass || 0],
-    position: avgPos,
-  };
-};
-
-const broadcastImpact = (source, target, impactType) => {
-  emitCollisionEvent(buildImpactPayload(source, target, impactType));
-};
-
 // Worker state
 let physicsWorker = null;
 let workerBusy = false;
@@ -321,9 +290,7 @@ const failPhysicsWorker = why => {
   workerFailed = why;
   workerBusy = false;
   workerJobObjects = [];
-  globalThis.dispatchEvent?.(
-    new CustomEvent('gravitasWorkerFailed', { detail: { worker: 'physics' } })
-  );
+  announceWorkerFailed();
 };
 
 // The thirteen bursts: count, speed (range, floor) and lifetime (range, floor).
@@ -761,21 +728,7 @@ const completeMerger = (a, b, result, { remove } = {}) => {
     engineOwned: !result?.model_owned,
   };
 
-  if (!simulation.eventLog) simulation.eventLog = [];
-  simulation.eventLog.push(detail);
-  if (simulation.eventLog.length > 1000) simulation.eventLog.shift();
-
-  try {
-    if (
-      typeof window !== 'undefined' &&
-      window.dispatchEvent &&
-      typeof window.CustomEvent === 'function'
-    ) {
-      window.dispatchEvent(new window.CustomEvent('gravitasMerge', { detail }));
-    }
-  } catch {
-    // no-op: event dispatch not supported in this environment
-  }
+  announceMerge(detail);
 
   return detail;
 };
@@ -2741,45 +2694,8 @@ const updatePhysics = dt => {
   // Anything watching the integration itself, after the step is complete. The
   // set is empty unless something armed a watch, so the ordinary cost is one
   // size check per step. See onPhysicsStep().
-  if (stepListeners.size) {
-    for (const listen of stepListeners) {
-      try {
-        listen(dt, simulationTime);
-      } catch (err) {
-        // A listener must never be able to stop the integrator.
-        console.warn('A physics-step listener threw:', err);
-      }
-    }
-  }
+  runStepListeners(dt, simulationTime);
 };
-
-/**
- * Things to run after every integration step.
- *
- * Not after every frame: a scenario that substeps takes several of these per
- * frame, and a paused or scrubbing frame takes none. Anything that has to see
- * the states the integrator actually produced - event detection, in particular,
- * which has to be able to say how finely it localised something - belongs here
- * and not in the render loop.
- *
- * Inverted deliberately. physics.js is the bottom of the module graph and must
- * not import the things that care about it, so they subscribe instead.
- *
- * @type {Set<Function>}
- */
-const stepListeners = new Set();
-
-/**
- * Subscribe to integration steps.
- *
- * @param {Function} fn - Called with (dt, simulationTime) after each step
- * @returns {Function} Unsubscribe
- */
-export function onPhysicsStep(fn) {
-  if (typeof fn !== 'function') return () => {};
-  stepListeners.add(fn);
-  return () => stepListeners.delete(fn);
-}
 
 // Base PhysicsObject class
 /**
@@ -5670,14 +5586,6 @@ const handle_gas_giant_merging = () => {
   }
 };
 
-// Public simulation object for lightweight event access
-const simulation = {
-  eventLog: [],
-  getLatestEvents(count = 20) {
-    return (this.eventLog || []).slice(-count);
-  },
-};
-
 export {
   PhysicsObject,
   Planet,
@@ -5793,7 +5701,6 @@ export {
   getEnergySystemMemoryStats,
   trimAllEnergyHistory,
   updateEnergySystemConfig,
-  simulation,
   // Orbit preview helpers
   getMostMassiveBody,
   sampleTwoBodyOrbit,

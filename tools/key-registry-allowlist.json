@@ -150,6 +150,11 @@
     "js/embedMessages.js": {
       "gravitas-embed": 1
     },
+    "js/engine/events.js": {
+      "gravitasCollision": 1,
+      "gravitasWorkerFailed": 1,
+      "gravitasMerge": 1
+    },
     "js/evaluationKit.js": {
       "gravitas_evaluation_draft_v1": 1
     },
@@ -392,11 +397,6 @@
     },
     "js/pauseAtEventPanel.js": {
       "gravitasSimulationReset": 1
-    },
-    "js/physics.js": {
-      "gravitasCollision": 1,
-      "gravitasWorkerFailed": 1,
-      "gravitasMerge": 1
     },
     "js/placement.js": {
       "gravitasObjectPlaced": 1,

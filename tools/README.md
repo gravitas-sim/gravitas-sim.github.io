@@ -57,6 +57,7 @@ current, and the orchestrator checks it.
 | `effects-trace.mjs` | The effects an engine event spawns, counted and hashed |  |
 | `empty-world.mjs` | A world with nothing in it |  |
 | `evaluation-summary.mjs` | npm run evaluation:summary -- <files...> | `npm run evaluation:summary` |
+| `events-trace.mjs` | The engine's events, in the order they fire, with their payloads |  |
 | `exoplanet-reference.mjs` | The Exoplanet Observatory's reference run, and its answer key | `npm run guides:key` |
 | `experiment-bench.mjs` | npm run bench:experiments - how fast experiments run, and what they cost | `npm run bench:experiments` |
 | `feature-inventory.mjs` | The feature-detection inventory (Prompt 111) |  |
