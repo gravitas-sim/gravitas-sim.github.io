@@ -51,26 +51,26 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 889 | 14.6 MB |
-| Images | 62 | 680 KB |
+| JavaScript | 891 | 14.7 MB |
+| Images | 62 | 570 KB |
 | Stylesheets | 10 | 490 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 9 | 280 KB |
 | Other | 16 | 640 KB |
-| **Total** | **1005** | **16.9 MB** |
+| **Total** | **1007** | **16.8 MB** |
 
-Of those, 827 are core (the install fails without them) and 178 optional (a missing one is reported and costs nothing).
+Of those, 829 are core (the install fails without them) and 178 optional (a missing one is reported and costs nothing).
 
-Gzipped, as Pages serves it, the whole is about 6 MB.
+Gzipped, as Pages serves it, the whole is about 5 MB.
 
 | Link | Precache transfer |
 | --- | --- |
-| 10 Mbps | ~5 s |
-| 3 Mbps | ~17 s |
-| 1.5 Mbps | ~34 s |
+| 10 Mbps | ~4 s |
+| 3 Mbps | ~14 s |
+| 1.5 Mbps | ~28 s |
 <!--/fact-block-->
-Pages serves gzip, so the real transfer is more than <!--fact:precacheGzipMB-->6<!--/fact--> MB. The images barely
+Pages serves gzip, so the real transfer is more than <!--fact:precacheGzipMB-->5<!--/fact--> MB. The images barely
 compress, being WebP already.
 
 The transfer times are computed from that payload rather than measured: CDP
