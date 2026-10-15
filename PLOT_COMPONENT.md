@@ -985,11 +985,13 @@ velocity's draw with layout); stage 3a's quieter run read 2.2 to 3.6. The 1x
 columns, which carry no throttle, are 1.1 to 2.1 ms at p95, and 4 times that
 is the bar. The charts redraw at 8 to 15 Hz, not every frame, and every one
 is well under what it replaces. Two things in these numbers are not the
-component's: in headless Chromium the worker's results reach `updateChart`
-through `requestIdleCallback`, which never ran while the simulation held the
-frame loop (the shipped chart did not update either, 0 updates in 20 s), so
-A1 was measured by calling `updateChart` at 8 Hz; and the achieved rate at 4x
-(1.7 to 8 Hz) is the page's, not the chart's.
+component's: A1's live feed is the worker's result handed to `updateChart`
+through `requestIdleCallback`, which had no deadline and so never ran while
+the simulation held the frame loop (the shipped chart did not update either,
+0 updates in 20 s of headless Chromium; the full e2e suite under load found it
+too); it now has a 250 ms deadline (`IDLE_BY_MS`), and the A1 numbers above
+were taken before that by calling `updateChart` at 8 Hz; and the achieved rate
+at 4x (1.7 to 8 Hz) is the page's, not the chart's.
 
 **Tests.** The three that read Chart.js internals read the component
 instead, asserting at least as much:

@@ -466,6 +466,10 @@ let building = null;
 
 // Today's caps and rates (tests/fixtures/chart-limits.json).
 const maxPoints = 200;
+// A chart update waits for an idle moment, but not longer than this: while the
+// simulation holds every frame the browser never calls an idle callback that
+// has no deadline, and the chart stopped moving.
+const IDLE_BY_MS = 250;
 
 // The tabs' series, in the order the legend lists them. The colors are design
 // tokens read again on every theme change; they were fixed dark-theme literals.
@@ -928,7 +932,7 @@ export const updateEnergyChart = () => {
           // Schedule non-critical chart update in idle time to avoid jank
           const run = () => updateChart(payload, SETTINGS.chart_update_hz);
           if (typeof window.requestIdleCallback === 'function') {
-            window.requestIdleCallback(() => run());
+            window.requestIdleCallback(() => run(), { timeout: IDLE_BY_MS });
           } else {
             setTimeout(run, 0);
           }
@@ -940,7 +944,7 @@ export const updateEnergyChart = () => {
     // Fallback: direct update if worker fails
     const run = () => updateChart(energyHistory, SETTINGS.chart_update_hz);
     if (typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(() => run());
+      window.requestIdleCallback(() => run(), { timeout: IDLE_BY_MS });
     } else {
       setTimeout(run, 0);
     }
