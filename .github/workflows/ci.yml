@@ -128,7 +128,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: '22'
   # The suite is noisy about color codes in a log that has none.
   NO_COLOR: '1'
 
