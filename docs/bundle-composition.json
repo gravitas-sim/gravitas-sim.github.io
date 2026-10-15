@@ -1,5 +1,5 @@
 {
- "total": 595026,
+ "total": 595135,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -7,7 +7,7 @@
   },
   {
    "module": "js/physics.js",
-   "bytes": 52948
+   "bytes": 45849
   },
   {
    "module": "js/world/build.js",
@@ -103,11 +103,15 @@
   },
   {
    "module": "js/names.js",
-   "bytes": 6272
+   "bytes": 6276
   },
   {
    "module": "js/astrometry.js",
    "bytes": 5728
+  },
+  {
+   "module": "js/engine/conservation.js",
+   "bytes": 5703
   },
   {
    "module": "js/main.js",
@@ -174,6 +178,10 @@
    "bytes": 2691
   },
   {
+   "module": "js/engine/state.js",
+   "bytes": 2672
+  },
+  {
    "module": "js/exoplanetObservables.js",
    "bytes": 2607
   },
@@ -184,10 +192,6 @@
   {
    "module": "js/instruments.js",
    "bytes": 2444
-  },
-  {
-   "module": "js/engine/state.js",
-   "bytes": 2382
   },
   {
    "module": "js/observerControls.js",
@@ -264,6 +268,10 @@
   {
    "module": "js/orbital.js",
    "bytes": 1216
+  },
+  {
+   "module": "js/engine/events.js",
+   "bytes": 1211
   },
   {
    "module": "js/rng.js",

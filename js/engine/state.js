@@ -14,6 +14,7 @@
 // This module imports nothing that paints and nothing above the services layer.
 import { setSimGravitationalConstant } from '../units.js';
 import { clearFrameHistory } from '../referenceFrame.js';
+import { SOLAR_MASS_KG, SOLAR_MASS_UNIT } from '../constants.js';
 
 // Global state variables
 export let bh_list = [],
@@ -468,3 +469,75 @@ export const getInterventionEpoch = () => interventionEpoch;
 export function noteIntervention() {
   return ++interventionEpoch;
 }
+
+// What the engine reads of the settings, for the conservation and energy module
+// (S3) and the slices after it: pure readers over `physicsSettings`, the mass
+// anchor, and the Barnes-Hut failure flag with its one writer.
+// Softening floor on the gravity calculation, to keep a near-miss from
+// producing a singular force. Five units is right for scenarios laid out at
+// hundreds of units, and completely wrong for a compact one: TRAPPIST-1's seven
+// planets orbit between 1.15 and 6.19 units of their star, so six of them sat
+// inside the floor, felt a fraction of the gravity they should, and left on
+// hyperbolic orbits within a few hundred circuits regardless of timestep. A
+// scenario can lower it to suit its own scale.
+export const MIN_INTERACTION_DISTANCE = 5.0;
+
+/**
+ * The softening floor currently in force.
+ *
+ * The one authority on the question, and exported because there was briefly a
+ * second. `min_interaction_distance` is zero in DEFAULT_SETTINGS and zero here
+ * means "no scenario has an opinion, use the default" - it does not mean "no
+ * floor". js/cr3bpPanel.js read the raw setting and took the zero at face
+ * value, so a compact system sitting well inside the five-unit default was
+ * validated as Newtonian while the engine was clamping every force in it.
+ *
+ * Anything that needs to know what the force law is actually doing - the
+ * integrator, the potential, or a teaching overlay deciding whether its
+ * closed-form claims hold - asks this. Nothing re-reads the setting and
+ * nothing else carries the fallback.
+ *
+ * @returns {number} The floor, in simulation length units
+ */
+export const minInteractionDistance = () => {
+  const v = physicsSettings.min_interaction_distance;
+  return Number.isFinite(v) && v > 0 ? v : MIN_INTERACTION_DISTANCE;
+};
+
+// Kilograms in one simulation mass unit. The solar mass is the anchor, so this
+// is the one conversion the small-body units below are allowed to go through:
+// a second route from kilograms to simulation units would be a second chance
+// to disagree with the anchor, which is the failure JUPITER_MASS_UNIT and
+// EARTH_MASS_UNIT both had.
+export const MASS_UNIT_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT;
+
+/** The schemes, by the label the settings dropdown uses. */
+export const INTEGRATORS = ['Symplectic Euler', 'Velocity Verlet', 'RK4'];
+
+/**
+ * The scheme in force, always one of INTEGRATORS.
+ *
+ * Anything unrecognized resolves to symplectic Euler rather than throwing: a
+ * saved link or an old scenario file naming a scheme that no longer exists
+ * should load into the default, not into a broken simulation.
+ *
+ * @returns {string} The active scheme's label
+ */
+export const activeIntegrator = () => {
+  const want = physicsSettings.integrator;
+  return INTEGRATORS.includes(want) ? want : 'Symplectic Euler';
+};
+
+let workerFailed = null;
+export const setWorkerFailed = why => {
+  workerFailed = why;
+};
+
+/**
+ * Whether the Barnes-Hut worker path is currently driving gravity.
+ * @returns {boolean} True when approximate tree gravity is active
+ */
+export const isBarnesHutActive = () =>
+  physicsSettings.mutual_gravity === true &&
+  physicsSettings.use_barnes_hut === true &&
+  !workerFailed;
