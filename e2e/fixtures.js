@@ -55,6 +55,9 @@ const IGNORED_CONSOLE = [
 
 const isIgnorable = text => IGNORED_CONSOLE.some(re => re.test(text));
 
+/** How long the app-state waits give a condition before they throw. */
+const WAIT_TIMEOUT = 20_000;
+
 /**
  * Refuse a name that is not a scenario key, before it reaches the application.
  *
@@ -328,57 +331,104 @@ function makeApp(page) {
       expect(left, 'bodies left in the empty world').toEqual({});
     },
 
-    /** Wait until the world actually contains something. */
-    async waitForBodies(min = 1) {
-      await page.waitForFunction(
-        async least => {
-          const p = await import('/js/physics.js');
-          const n =
-            p.bh_list.length +
-            p.stars.length +
-            p.planets.length +
-            p.gas_giants.length +
-            p.asteroids.length +
-            p.comets.length +
-            p.neutron_stars.length +
-            p.white_dwarfs.length +
-            p.galaxies.length;
-          return n >= least;
-        },
-        min,
-        { timeout: 20_000 }
-      );
-    },
-
-    /** Wait for the simulation to advance, proving the loop is alive. */
-    async waitForFrames(count = 10) {
-      const start = await this.frameCount();
-      await page.waitForFunction(
-        async ([from, n]) => {
-          const ui = await import('/js/ui.js');
-          return (ui.state?.frame_count ?? 0) >= from + n;
-        },
-        [start, count],
-        { timeout: 20_000 }
-      );
+    /**
+     * Wait until the world actually contains at least `min` bodies.
+     *
+     * A real wait: the predicate is synchronous, reading the physics module
+     * through a handle taken first, so Playwright polls it on every animation
+     * frame until it holds. It must not be written as an async function that
+     * imports the module itself - a promise is truthy, so waitForFunction takes
+     * that for success on its first poll whatever the lists hold. On timeout
+     * it throws, naming the count it saw.
+     *
+     * @param {number} [min] - Bodies to wait for, across the nine lists
+     * @param {object} [options]
+     * @param {number} [options.timeout] - Milliseconds before giving up
+     */
+    async waitForBodies(min = 1, { timeout = WAIT_TIMEOUT } = {}) {
+      const physics = await page.evaluateHandle(() => import('/js/physics.js'));
+      try {
+        await page.waitForFunction(
+          ([p, least, lists]) =>
+            lists.reduce((n, k) => n + (p[k]?.length ?? 0), 0) >= least,
+          [physics, min, BODY_LISTS],
+          { timeout }
+        );
+      } catch (err) {
+        if (err?.name !== 'TimeoutError') throw err;
+        const seen = await page
+          .evaluate(
+            ([p, lists]) => lists.reduce((n, k) => n + (p[k]?.length ?? 0), 0),
+            [physics, BODY_LISTS]
+          )
+          .catch(() => 'unreadable');
+        throw new Error(
+          `waitForBodies(${min}): the body count was ${seen} after ` +
+            `${timeout} ms (wanted ${min})`
+        );
+      } finally {
+        await physics.dispose().catch(() => {});
+      }
     },
 
     /**
-     * Let the simulation run, and be sure it did.
+     * Wait for the simulation to advance by `count` of the counter's own
+     * steps, proving the loop is alive. The unit is the counter's: one
+     * physics step, of which a rendered frame takes several on a heavy
+     * scenario.
      *
-     * Unlike waitForFrames, which hands waitForFunction an async predicate (a
-     * promise is truthy, so that wait passes on its first poll whatever the
-     * counter says), this polls the counter from the test side. The unit is
-     * the counter's own: one physics step, of which a rendered frame takes
-     * several on a heavy scenario.
+     * A real wait, built like waitForBodies: a synchronous predicate over a
+     * module handle, so the counter has to get there. (This used to hand
+     * waitForFunction an async predicate, which passed on its first poll:
+     * waitForFrames(200) returned after 5 steps in 41 ms.) It fails, naming
+     * the counter and whether the loop is paused, when the steps do not come.
+     * A paused simulation never advances, so a caller that waits on a paused
+     * world has to resume it first.
+     *
+     * @param {number} [count] - Steps to wait for
+     * @param {object} [options]
+     * @param {number} [options.timeout] - Milliseconds before giving up
+     */
+    async waitForFrames(count = 10, { timeout = WAIT_TIMEOUT } = {}) {
+      const ui = await page.evaluateHandle(() => import('/js/ui.js'));
+      try {
+        const start = await page.evaluate(m => m.state?.frame_count ?? 0, ui);
+        try {
+          await page.waitForFunction(
+            ([m, from, n]) => (m.state?.frame_count ?? 0) >= from + n,
+            [ui, start, count],
+            { timeout }
+          );
+        } catch (err) {
+          if (err?.name !== 'TimeoutError') throw err;
+          const now = await page
+            .evaluate(
+              m => ({
+                frames: m.state?.frame_count ?? 0,
+                paused: m.state?.paused,
+              }),
+              ui
+            )
+            .catch(() => ({ frames: 'unreadable', paused: 'unreadable' }));
+          throw new Error(
+            `waitForFrames(${count}): the frame counter went from ${start} ` +
+              `to ${now.frames} in ${timeout} ms (paused: ${now.paused})`
+          );
+        }
+      } finally {
+        await ui.dispose().catch(() => {});
+      }
+    },
+
+    /**
+     * Let the simulation run, and be sure it did. The same wait as
+     * waitForFrames, which is now a real one; kept under its name for the
+     * specs that adopted it while that was not.
      *
      * @param {number} [count] - Steps to wait for
      */
     async advanceFrames(count = 10) {
-      const start = await this.frameCount();
-      await expect
-        .poll(() => this.frameCount(), { timeout: 20_000 })
-        .toBeGreaterThanOrEqual(start + count);
+      await this.waitForFrames(count);
     },
 
     /**

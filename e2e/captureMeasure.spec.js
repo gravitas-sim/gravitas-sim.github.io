@@ -202,15 +202,21 @@ test('demo mode starts on a scenario, relabels its button and stops again', asyn
     label: 'settings.demoMode.stop',
   });
   // It started a scenario at once, and the simulation is running.
-  await page.waitForFunction(async () => {
-    const ui = await import('/js/ui.js');
-    const { SCENARIO_INFO } = await import('/js/data/scenarioInfo.js');
-    return (
-      ui.state.paused === false &&
-      ui.SETTINGS.preset_scenario in SCENARIO_INFO &&
-      ui.SETTINGS.preset_scenario !== 'None'
-    );
-  });
+  // (expect.poll, not waitForFunction: an async predicate passes that on its
+  // first poll, whatever it resolves to.)
+  await expect
+    .poll(() =>
+      page.evaluate(async () => {
+        const ui = await import('/js/ui.js');
+        const { SCENARIO_INFO } = await import('/js/data/scenarioInfo.js');
+        return (
+          ui.state.paused === false &&
+          ui.SETTINGS.preset_scenario in SCENARIO_INFO &&
+          ui.SETTINGS.preset_scenario !== 'None'
+        );
+      })
+    )
+    .toBe(true);
 
   await button.evaluate(b => b.click());
   await expect.poll(state).toMatchObject({
