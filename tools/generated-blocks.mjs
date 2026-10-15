@@ -409,7 +409,12 @@ export function generatedArtifactsTable(graph) {
     .map(n => {
       const by = n.generate ? code(n.generate) : `needs ${n.needs}`;
       const note = n.notes || '';
-      return `| ${n.outputs.map(code).join(', ')} | ${by} | ${note} |`;
+      // A node that writes only regions inside hand-written files has no
+      // output of its own: name the files instead of leaving the cell empty.
+      const files = n.outputs.length
+        ? n.outputs.map(code)
+        : (n.regions || []).map(r => `${code(r)} (regions)`);
+      return `| ${files.join(', ')} | ${by} | ${note} |`;
     });
   return [
     '',
@@ -546,8 +551,9 @@ export function parameterSourceRows(systems) {
  * The largest modules, with the line ceiling each is held to.
  *
  * The ceilings come from tools/module-size-ceilings.json (the architecture
- * check's size rule); the sizes are the files as they stand, so the table says
- * the same thing the check would measure.
+ * check's size rule, which lists only modules over 1,500 lines; a module with
+ * no entry shows the 1,500 limit); the sizes are the files as they stand, so
+ * the table says the same thing the check would measure.
  *
  * @param {Map<string, number>} sizes - file -> lines
  * @param {Record<string, number>} ceilings - file -> recorded ceiling
@@ -562,7 +568,7 @@ export function moduleSizeTable(sizes, ceilings, count = 8) {
       ([file, lines]) =>
         `| \`${file}\` | ${lines.toLocaleString('en-US')} | ${
           ceilings[file] === undefined
-            ? '1,500 (default)'
+            ? '1,500 (limit)'
             : ceilings[file].toLocaleString('en-US')
         } |`
     );

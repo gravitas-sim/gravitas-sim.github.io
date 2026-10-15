@@ -92,13 +92,12 @@ const MANIFESTS = {
 };
 
 /**
- * The lesson loaders, by id.
- *
- * Written out rather than built from a template string because a bundler has to
- * see a static specifier to split a chunk for it: `import('./' + id + '.js')`
- * either bundles all ten into one chunk or fails outright, which is the exact
- * thing this module exists to avoid.
+ * The lesson loaders, by id. Literal specifiers, because a bundler has to see
+ * one to split a chunk for it: `import('./' + id + '.js')` bundles every lesson
+ * into one chunk, the thing this module exists to avoid. Generated
+ * (tools/capability-registries.mjs).
  */
+// <generated:loaders>
 const LOADERS = {
   'keplers-laws': () => import('./keplers-laws.js'),
   'retrograde-motion': () => import('./retrograde-motion.js'),
@@ -112,7 +111,6 @@ const LOADERS = {
   tides: () => import('./tides.js'),
   'butterfly-effect': () => import('./butterfly-effect.js'),
   'when-orbits-lock': () => import('./when-orbits-lock.js'),
-  'power-law-gravity': () => import('./power-law-gravity.js'),
   'detect-this-planet': () => import('./detect-this-planet.js'),
   'design-the-schedule': () => import('./design-the-schedule.js'),
   'binary-star-planets': () => import('./binary-star-planets.js'),
@@ -125,6 +123,7 @@ const LOADERS = {
   'a-universe-of-stars': () => import('./a-universe-of-stars.js'),
   'lives-of-stars': () => import('./lives-of-stars.js'),
   'twelve-nights': () => import('./twelve-nights.js'),
+  'power-law-gravity': () => import('./power-law-gravity.js'),
   'color-and-temperature': () => import('./color-and-temperature.js'),
   'the-turning-sky': () => import('./the-turning-sky.js'),
   'the-sun-through-the-year': () => import('./the-sun-through-the-year.js'),
@@ -163,17 +162,14 @@ const LOADERS = {
   'two-periodograms': () => import('./two-periodograms.js'),
   'sampling-a-posterior': () => import('./sampling-a-posterior.js'),
 };
+// </generated:loaders>
 
 /**
- * The translations, by locale and then by lesson.
- *
- * A translation is a shadow of a lesson carrying only its words - see ./i18n.js
- * - so it is a fraction of the size of the lesson and is fetched alongside it
- * only when the interface is in that language. English needs none: it is what
- * the lessons are written in.
- *
- * Static specifiers again, for the same reason as above.
+ * The translations, by locale and then by lesson: a shadow of a lesson carrying
+ * only its words (./i18n.js), fetched alongside it when the interface is in that
+ * language. English needs none. Static specifiers again, and generated too.
  */
+// <generated:translations>
 const TRANSLATIONS = {
   es: {
     'keplers-laws': () => import('./es/keplers-laws.js'),
@@ -188,7 +184,6 @@ const TRANSLATIONS = {
     tides: () => import('./es/tides.js'),
     'butterfly-effect': () => import('./es/butterfly-effect.js'),
     'when-orbits-lock': () => import('./es/when-orbits-lock.js'),
-    'power-law-gravity': () => import('./es/power-law-gravity.js'),
     'detect-this-planet': () => import('./es/detect-this-planet.js'),
     'design-the-schedule': () => import('./es/design-the-schedule.js'),
     'binary-star-planets': () => import('./es/binary-star-planets.js'),
@@ -201,6 +196,7 @@ const TRANSLATIONS = {
     'a-universe-of-stars': () => import('./es/a-universe-of-stars.js'),
     'lives-of-stars': () => import('./es/lives-of-stars.js'),
     'twelve-nights': () => import('./es/twelve-nights.js'),
+    'power-law-gravity': () => import('./es/power-law-gravity.js'),
     'color-and-temperature': () => import('./es/color-and-temperature.js'),
     'the-turning-sky': () => import('./es/the-turning-sky.js'),
     'the-sun-through-the-year': () =>
@@ -244,6 +240,7 @@ const TRANSLATIONS = {
     'sampling-a-posterior': () => import('./es/sampling-a-posterior.js'),
   },
 };
+// </generated:translations>
 
 // Keyed by `${locale}:${id}`, so switching language and switching back does not
 // re-merge, and so a lesson open in Spanish and the same lesson opened again in

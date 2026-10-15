@@ -139,10 +139,20 @@ than once.
 The JavaScript is layered. A module may import from its own layer or any layer
 below it, never above. `npm run check:architecture` enforces this and fails the
 build on a violation; `npm run check:architecture:report` prints the layers and
-the widest fan-out. The same check holds every module to a line ceiling
-(`tools/module-size-ceilings.json`; a module without an entry may have 1,500
-lines, and an entry above that only ever falls). The largest modules and their
-ceilings:
+the widest fan-out. The same check holds every module to a size rule:
+
+- A module of 1,500 lines or fewer needs no entry and may grow freely.
+- A module over 1,500 lines must be listed in `tools/module-size-ceilings.json`
+  and sit exactly at its ceiling, so each slice of the decomposition lowers the
+  entry in the same commit. `npm run check:architecture -- --record-sizes`
+  lowers entries to today's sizes and removes those of modules that fell to
+  1,500 lines or fewer; it never raises or adds one.
+- A module that crosses 1,500 lines fails the check. Split it, or add an entry
+  by hand with a DECISION_REGISTER row that says why. Raising an entry needs a
+  row too.
+
+`node tools/check-architecture.mjs --sizes` prints the largest modules. They and
+their ceilings:
 
 <!--fact-block:moduleSizes-->
 | Module | Lines | Ceiling |
@@ -403,10 +413,10 @@ Rules that are not obvious:
 
 ### The authoring toolchain
 
-A lesson is not one file. It is a module, a translation shadow, two registry
-entries, an entry in the synchronous barrel, an instructor-guide stub and two
-generated manifests — and a broken reference between any of them is invisible
-until a class hits it. Three commands cover that.
+A lesson is not one file. It is a module, a translation shadow, an entry in the
+synchronous barrel, an instructor-guide stub, two generated manifests and the
+generated lazy registry (`npm run registries`) — and a broken reference between
+any of them is invisible until a class hits it. Three commands cover that.
 
 ```bash
 npm run author:new -- --id=tidal-heating --title="Tidal Heating"
@@ -414,9 +424,10 @@ npm run author:check
 npm run author:walk
 ```
 
-**`author:new`** scaffolds all six registration points and prints what to do
-next. It never overwrites, so it is safe to re-run. The scaffold deliberately
-does not pass `author:check` yet: the placeholder summary, objectives and
+**`author:new`** scaffolds the hand-written registration points and prints what
+to do next (`npm run manifest`, then `npm run registries` for the lazy loaders).
+It never overwrites, so it is safe to re-run. The scaffold deliberately does not
+pass `author:check` yet: the placeholder summary, objectives and
 guide sections are there to be replaced, and the checker is the to-do list.
 
 **`author:check`** validates every investigation and every step — ids, required

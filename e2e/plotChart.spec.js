@@ -20,6 +20,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { stepKey } from './keyboard.js';
 import AxeBuilder from '@axe-core/playwright';
 
 const TAGS = [
@@ -152,10 +153,11 @@ test.describe('the series chart', () => {
 
   test('the legend works from the keyboard, and says what it did', async ({
     page,
+    browserName,
   }) => {
     await mount(page);
     await page.locator('#before').focus();
-    await page.keyboard.press('Tab');
+    await page.keyboard.press(stepKey(browserName));
     await expect(page.locator('#host ul button').first()).toBeFocused();
     await page.keyboard.press('Space');
     await expect(page.locator('#host path[stroke-linejoin]')).toHaveCount(1);
@@ -177,10 +179,11 @@ test.describe('the series chart', () => {
 
   test('the readout is reachable and operable from the keyboard', async ({
     page,
+    browserName,
   }) => {
     await mount(page);
     await page.locator('#host ul button').last().focus();
-    await page.keyboard.press('Tab');
+    await page.keyboard.press(stepKey(browserName));
     const plot = page.locator('#host svg[aria-roledescription=plot]');
     await expect(plot).toBeFocused();
     await expect(plot).toHaveAttribute('aria-label', 'Energy over time');

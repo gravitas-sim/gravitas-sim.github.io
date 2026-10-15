@@ -249,7 +249,6 @@ describe('npm run author:new', () => {
   /** The files the generator reads and writes, all relative to its cwd. */
   const TOUCHES = [
     'js/data/investigations.js',
-    'js/data/investigations/registry.js',
     'js/data/investigations/summaries.js',
     'js/data/investigations/summaries.es.js',
     'js/data/instructorContent.js',
@@ -394,16 +393,14 @@ describe('npm run author:new', () => {
     expect(again.split(/^\s*SCRATCH_DEMO,$/m)).toHaveLength(2);
   }, 90_000);
 
-  test('the registry and the guide are registered once each too', async () => {
+  test('the guide is registered once, and the generated registry is left to its generator', async () => {
     dir = await scratchTree();
     await scaffold(dir, 'scratch-demo', 'Scratch Demo');
-    await scaffold(dir, 'scratch-demo', 'Scratch Demo');
+    const { stdout } = await scaffold(dir, 'scratch-demo', 'Scratch Demo');
 
-    const registry = await readFile(
-      path.join(dir, 'js/data/investigations/registry.js'),
-      'utf8'
-    );
-    expect(registry.split("'scratch-demo': () =>")).toHaveLength(3); // loader + translation
+    // registry.js is written by tools/capability-registries.mjs from the
+    // catalog; the scaffold neither reads nor writes it, and says what to run.
+    expect(stdout).toMatch(/npm run registries/);
     const guide = await readFile(
       path.join(dir, 'js/data/instructorContent.js'),
       'utf8'
