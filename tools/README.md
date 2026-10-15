@@ -47,6 +47,7 @@ current, and the orchestrator checks it.
 | `compute-answers.mjs` | The answers the reviewed notebooks gave, as fixtures for the tests |  |
 | `compute-examples.mjs` | The compute page's two Gravitas-made example inputs |  |
 | `compute.mjs` | The compute page's generated files: the frame, its pin, the catalogue's hashes |  |
+| `conservation-trace.mjs` | The engine's conservation and energy numbers along a seeded run |  |
 | `cosmology-validate.mjs` | (no header) | `npm run cosmology:validate` |
 | `csp.mjs` | A Content-Security-Policy on every page |  |
 | `deps-audit.mjs` | The dependency audit | `npm run deps:audit` |
