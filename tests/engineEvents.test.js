@@ -7,8 +7,9 @@
 // fire with the same payloads in the same order as before the move.
 // tests/fixtures/engineEventsGolden.json was recorded on the commit before the
 // move from tools/events-trace.mjs (four scenarios, seeded, 1,500 steps, the
-// clocks pinned): the order of the window events, the counts, the first
-// payload of each kind and a hash of the whole trace.
+// clocks pinned): the order of the window events, the simulation clock and
+// every body list's length when each fired (so the timing against the step is
+// pinned), the counts, the first payload of each kind and a hash of the trace.
 // =============================================================================
 
 import { describe, test, expect, jest, afterEach } from '@jest/globals';
@@ -53,6 +54,9 @@ describe('the events fire as they did before the move', () => {
       expect(t.events.filter(e => e.at === 'window').map(e => e.name)).toEqual(
         want.order
       );
+      expect(
+        t.events.filter(e => e.at === 'window').map(e => [e.simTime, e.lengths])
+      ).toEqual(want.when);
       expect(counts).toEqual(want.counts);
       expect(t.merges.length).toBe(want.mergeLog);
       expect(t.listenerCalls).toBe(want.listenerCalls);

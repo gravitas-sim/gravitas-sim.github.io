@@ -6,7 +6,8 @@
 // seed with a stand-in `window` that records every CustomEvent dispatched to
 // it, subscribes a step listener, steps the world, and prints the sequence:
 // each window event (name and payload at full precision), each tenth step
-// listener call (dt and the simulation clock), the listener count and the
+// listener call (dt and the simulation clock), both with the simulation clock
+// and the length of every body list at that moment, the listener count and the
 // engine's own merge log. The clocks are pinned, so the merge event's
 // wall-clock `time` is the same on every run. The output depends only on the
 // engine, so it can be compared across checkouts: run it on the commit before
@@ -22,6 +23,25 @@ import { DEFAULT_SETTINGS, setScenarioName } from '../js/appState.js';
 import { withSeed } from '../js/rng.js';
 
 const noop = () => {};
+
+const LISTS = [
+  'bh_list',
+  'stars',
+  'planets',
+  'gas_giants',
+  'asteroids',
+  'comets',
+  'neutron_stars',
+  'white_dwarfs',
+  'galaxies',
+  'debris',
+];
+// Where the engine is when something fires: the clock and every list's length,
+// so the golden pins an event's timing relative to the physics step.
+const where = () => ({
+  simTime: String(physics.getSimulationTime()),
+  lengths: LISTS.map(l => physics[l].length),
+});
 
 function canon(v, depth = 0) {
   if (typeof v === 'number') return String(v);
@@ -49,7 +69,12 @@ export function trace(key, seed, frames) {
       }
     },
     dispatchEvent(e) {
-      events.push({ at: 'window', name: e.type, detail: canon(e.detail) });
+      events.push({
+        at: 'window',
+        name: e.type,
+        detail: canon(e.detail),
+        ...where(),
+      });
       return true;
     },
   };
@@ -63,7 +88,12 @@ export function trace(key, seed, frames) {
   let calls = 0;
   const off = physics.onPhysicsStep((dt, t) => {
     if (calls++ % 10 === 0)
-      events.push({ at: 'step', name: 'listener', detail: [dt, String(t)] });
+      events.push({
+        at: 'step',
+        name: 'listener',
+        detail: [dt, String(t)],
+        ...where(),
+      });
   });
   withSeed(seed, () => {
     buildWorld({

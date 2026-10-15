@@ -1,5 +1,5 @@
-// The engine's events and step listeners (D-DECOMP-18, S2). No window, no
-// event: a Worker or the validation runner has none to tell.
+// The engine's events and step listeners (D-DECOMP-18, S2). Collisions and
+// mergers go to `window` when there is one; the worker notice goes to globalThis.
 
 export const dispatchSimulationEvent = (name, detail = {}) => {
   if (
