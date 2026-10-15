@@ -461,8 +461,14 @@ let chart = null;
 // The element it was mounted on, so a re-rendered tab does not keep a chart
 // that is drawing into a detached copy.
 let chartHost = null;
-// The mount in flight, so two callers share one chart.
+// The mount in flight, so two callers share one chart, and the element it is
+// for: a caller whose tab has been rendered again is not served by it.
 let building = null;
+let buildingHost = null;
+// Counts the times the chart was let go. A mount that was started before a
+// release finishes after it, and must not leave a live chart behind (a size
+// observer and a theme listener) for a tab nobody has open.
+let released = 0;
 
 // Today's caps and rates (tests/fixtures/chart-limits.json).
 const maxPoints = 200;
@@ -521,6 +527,7 @@ export async function initChart(host) {
     console.error('A host element is required for chart initialization');
     return false;
   }
+  const bornAt = released;
   try {
     const made = await mountChart(host, {
       height: 'fill',
@@ -532,9 +539,10 @@ export async function initChart(host) {
         format: energyReadout,
       },
     });
-    // The tab was rendered again, or closed, while the component was on its
-    // way: this chart would draw into a copy nobody sees.
-    if (!host.isConnected) {
+    // The tab was rendered again, or the inspector released, while the
+    // component was on its way: this chart would draw into a copy nobody sees,
+    // or outlive the panel it was for.
+    if (!host.isConnected || released !== bornAt) {
       made.destroy();
       return false;
     }
@@ -775,28 +783,45 @@ export const setupEnergyTab = () => {
  * Ensure chart is initialized and ready
  */
 export const ensureChartReady = async () => {
-  const host = document.getElementById('energyChart');
-  if (!host) return;
-  // A tab that was rendered again has a new host; the old chart draws into the
-  // detached one, so it is let go and a new one is made.
-  if (chart && chartHost !== host) {
-    chart.destroy();
-    chart = null;
-    chartInitialized = false;
-  }
-  if (chartInitialized) return;
+  // A second pass is for a tab that was rendered again while the first mount
+  // was on its way: the mount in flight is for the old element and is
+  // discarded when it lands, so the new element needs its own.
+  for (let pass = 0; pass < 3; pass++) {
+    const host = document.getElementById('energyChart');
+    if (!host) return;
+    // A tab that was rendered again has a new host; the old chart draws into
+    // the detached one, so it is let go and a new one is made.
+    if (chart && chartHost !== host) {
+      chart.destroy();
+      chart = null;
+      chartInitialized = false;
+    }
+    if (chartInitialized) return;
 
-  // The component is fetched the first time a chart is actually wanted rather
-  // than on every page load; callers in the same breath share one mount.
-  building ??= initChart(host)
-    .then(ok => {
-      chartInitialized = ok && chart !== null;
-      if (!chartInitialized) console.error('Failed to initialize energy chart');
-    })
-    .finally(() => {
-      building = null;
-    });
-  await building;
+    if (building && buildingHost !== host) {
+      await building;
+      continue;
+    }
+    // The component is fetched the first time a chart is actually wanted
+    // rather than on every page load; callers in the same breath share one
+    // mount.
+    const bornAt = released;
+    buildingHost = host;
+    building ??= initChart(host)
+      .then(ok => {
+        chartInitialized = ok && chart !== null;
+        if (!chartInitialized && released === bornAt && host.isConnected)
+          console.error('Failed to initialize energy chart');
+      })
+      .finally(() => {
+        building = null;
+        buildingHost = null;
+      });
+    await building;
+    // Let go while it was being built: nothing is wanted any more.
+    if (released !== bornAt) return;
+    if (chartInitialized) return;
+  }
 };
 
 /**
@@ -1118,6 +1143,7 @@ export const clearEnergyChart = () => {
 
 /** The inspector closed: stop refreshing and forget the chart and the body. */
 export const releaseEnergyChart = () => {
+  released++;
   stopAutoRefresh();
   chart?.destroy();
   chart = null;

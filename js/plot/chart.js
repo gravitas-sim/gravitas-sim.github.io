@@ -144,8 +144,8 @@ const color = c => (typeof c === 'function' ? c() : c);
  * @param {number} [opts.maxPoints] - Draw only the newest n of each series
  * @param {boolean} [opts.theme] - Repaint on the page's theme change
  * @param {number} [opts.capPx] - Error-bar caps, in screen pixels per side
- * @param {number} [opts.maxTicks] - Most ticks drawn along x (by default the
- *   width decides, up to about nine)
+ * @param {number} [opts.maxTicks] - Most ticks drawn along either axis (by
+ *   default the size decides: up to about nine along x, seven along y)
  * @param {{mode?: 'index'|'nearest', title?: Function, format?: Function}}
  *   [opts.tooltip] - mode picks every series at the pointer or the one
  *   nearest; title(x) and format({label, x, y, i, id}) write the words
@@ -366,10 +366,14 @@ export function createChart(host, opts = {}) {
     // The frame: its left edge makes room for the widest y tick.
     // About one a 24 px, and at least four asked for: a small chart with two
     // would often hold one.
+    // A maxTicks ceiling holds along y too, as the old maxTicksLimit did.
     const yTicks = niceTicks(
       y0,
       y1,
-      Math.max(4, Math.min(7, Math.round((h - 44) / 24)))
+      Math.min(
+        opts.maxTicks ? opts.maxTicks - 1 : 7,
+        Math.max(4, Math.round((h - 44) / 24))
+      )
     );
     const yWords = yTicks.map(spec.yNumber ?? number);
     const widest = yWords.reduce((m, t) => Math.max(m, t.length), 0);

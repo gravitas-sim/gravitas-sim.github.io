@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { jest } from '@jest/globals';
 import {
   computeDockPosition,
   renderPinnedCard,
@@ -435,5 +436,81 @@ describe('renderPinnedCard', () => {
     expect(root.querySelector('.inspector-title').textContent).toBe(
       '<img onerror=x>'
     );
+  });
+});
+
+describe('the energy chart is built once, for the element that is on screen', () => {
+  let inspector;
+  beforeEach(async () => {
+    document.body.innerHTML = '';
+    inspector = await import('../js/inspectorPanel.js');
+    inspector.releaseEnergyChart();
+  });
+  afterEach(() => {
+    inspector.releaseEnergyChart();
+  });
+  const host = () => {
+    const el = document.createElement('div');
+    el.id = 'energyChart';
+    document.body.replaceChildren(el);
+    return el;
+  };
+  // The theme listener is the part of a chart that outlives its host.
+  const themeListeners = () => {
+    const add = jest.spyOn(window, 'addEventListener');
+    const remove = jest.spyOn(window, 'removeEventListener');
+    return {
+      live: () =>
+        add.mock.calls.filter(c => c[0] === 'gravitasThemeChanged').length -
+        remove.mock.calls.filter(c => c[0] === 'gravitasThemeChanged').length,
+      stop: () => {
+        add.mockRestore();
+        remove.mockRestore();
+      },
+    };
+  };
+
+  test('a tab rendered again while the component loads still ends with a chart', async () => {
+    const first = host();
+    const early = inspector.ensureChartReady();
+    // The tab is rendered again before the import has landed.
+    const second = host();
+    const late = inspector.ensureChartReady();
+    await Promise.all([early, late]);
+    expect(first.isConnected).toBe(false);
+    expect(first.querySelector('svg')).toBeNull();
+    expect(second.querySelector('svg')).not.toBeNull();
+    expect(inspector.energyChartReady()).toBe(true);
+    expect(inspector.energyChartParts()).not.toBeNull();
+  });
+
+  test('a release while the component loads leaves no chart and no listener', async () => {
+    const spy = themeListeners();
+    try {
+      const el = host();
+      const pending = inspector.ensureChartReady();
+      inspector.releaseEnergyChart();
+      await pending;
+      expect(inspector.energyChartReady()).toBe(false);
+      expect(inspector.energyChartParts()).toBeNull();
+      expect(el.querySelector('svg')).toBeNull();
+      expect(spy.live()).toBe(0);
+    } finally {
+      spy.stop();
+    }
+  });
+
+  test('a chart that was built is let go by a release, with its listener', async () => {
+    const spy = themeListeners();
+    try {
+      const el = host();
+      await inspector.ensureChartReady();
+      expect(el.querySelector('svg')).not.toBeNull();
+      inspector.releaseEnergyChart();
+      expect(el.querySelector('svg')).toBeNull();
+      expect(spy.live()).toBe(0);
+    } finally {
+      spy.stop();
+    }
   });
 });

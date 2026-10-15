@@ -588,7 +588,7 @@ budget's.
 | 2 | D5-D7 | on `feat/plot-component` | Experiment runner −2742 B, 47 → 47 requests / −1540 B, 3 → 3. Observatory +319 B / +144 B against step 1, still −92 B / −620 B against the base. Every other route unchanged | 0 (4170.7 KB) | D5-D7 migrated: see below |
 | 3 | D8-D12 | | | | |
 | 3a | the features the five Chart.js charts need (D-PLOT-02) | on `feat/plot-stage-3a` | none: no route imports the new modules | 0 (2034.2 of 2034.4 KB gzipped); no chart ported | none ported: see "Stage 3a" |
-| 3b | A1-A3, the live charts (D-PLOT-02) | on `feat/plot-stage-3b` | Routes that load the application 2.3 to 3.1 KB smaller; the lesson instrument route 137.5 KB sources / 156.5 KB build smaller (Chart.js is no longer fetched for the light curve); no route ceiling raised | +7.9 KB gzipped (2034.2 to 2042.2 of 2034.4: ceiling raised to 2042.3 under D-PLOT-04); initial download −2.5 KB (793.7 to 791.2) | A1, A2, A3 ported: see "Stage 3b" |
+| 3b | A1-A3, the live charts (D-PLOT-02) | on `feat/plot-stage-3b` | Routes that load the application 2.3 to 3.1 KB smaller; the lesson instrument route 137.5 KB sources / 156.5 KB build smaller (Chart.js is no longer fetched for the light curve); no route ceiling raised | +7.9 KB gzipped (2034.2 to 2042.2 of 2034.4: ceiling raised to 2042.3 under D-PLOT-04); initial download −2.5 KB (793.7 to 791.4) | A1, A2, A3 ported: see "Stage 3b" |
 | 3c | A4, A5, the bench charts | | | | |
 | 4 | A1-A5 judged by the parity harness; Chart.js removed | | | | |
 | 5 | B1-B8 | | | | |
@@ -931,8 +931,12 @@ their own catalogues `js/i18n/en.chart.js` and `es.chart.js` (`chart.role`, `cha
 covered in `tests/plotChart.test.js`): `parts()` now says what the chart is as
 data (the words and numbers of its axes and legend, every tick with its
 value, each series as drawn), which is what the parity test reads;
-`maxTicks` (A2 and A3 asked for 6 along x); y ticks about one a 24 px with at
-least four asked for (two often left one tick on a short chart); `niceTicks`
+`maxTicks` (A2 and A3 ask for 6, a ceiling on both axes, as `maxTicksLimit`
+was; along y it also makes the count the same whatever the panel's height);
+y ticks about one a 24 px, seven at most and four at least (two often left one
+tick on a short chart; the change reaches every chart built by the component,
+which today is these three, and `tests/plotChart.test.js` is the only place
+that pinned a value, now updated); `niceTicks`
 keeps a step that is the raw one to within float error (a range of 2e-4 went
 to a 1e-4 step and two ticks); a host shorter than the old 120 px minimum is
 filled and not overflowed (the light curve's stage is 103 px).
@@ -962,6 +966,14 @@ fixture stays the Chart.js record):
   recording context was.
 - **A1's chart is 30 px taller** (the host went from 190 to 220 px) so that a
   legend that wraps to two rows leaves a plot.
+- **A1's redraw has a deadline.** `updateChart` still runs at 8 Hz and its
+  draw still waits for an idle moment, but not longer than 250 ms
+  (`requestIdleCallback(..., { timeout: 250 })`). Chart.js drew inside the
+  update; an idle callback never fires while the simulation holds every frame,
+  and the chart then stood still. Under load the draw is therefore forced at
+  most every 250 ms instead of being deferred without bound, a cadence the
+  parity table did not have: it costs one draw (1.1 to 2.1 ms here) in a
+  frame that was already late, and keeps the live feed alive.
 
 **Live updates, measured in the application.** A wrapper around `draw()`
 (removed again) timed the real code paths at the charts' caps, in headless
@@ -1016,7 +1028,7 @@ to 2042.2 KB (measured 2042.244), 7.9 KB: the component is 7.5 and the glue,
 the mount and the words the rest, less what the ported charts' own code freed.
 Raised from 2034.4 to 2042.3 under the standing size-budget approval
 (D-PLOT-04); stage 4 returns Chart.js's chunk and more. The initial download
-fell, 793.7 to 791.2 KB. The chart's words (seven strings in both languages:
+fell, 793.7 to 791.4 KB. The chart's words (seven strings in both languages:
 `chart.role`, `chart.legend`, `chart.shown`, `chart.hidden`,
 `energyChart.label`, `lightCurve.chartLabel`, `rv.chartLabel`) are
 `js/i18n/en.chart.js` and `es.chart.js`, registered by `js/plot/mount.js` in

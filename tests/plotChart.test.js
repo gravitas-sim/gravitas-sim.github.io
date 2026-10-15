@@ -1013,9 +1013,9 @@ describe('the chart as data (parts), for the ports and their parity test', () =>
     expect(chart.parts().legend).toBe(true);
   });
 
-  test('maxTicks limits the x ticks, and the y axis always has at least two', () => {
-    const ticksOf = opts => {
-      const { chart, host } = make(opts);
+  test('maxTicks limits the ticks on both axes, and the y axis always has at least two', () => {
+    const ticksOf = (opts, axis = 'x') => {
+      const { chart, host } = make({ height: 300, ...opts });
       Object.defineProperty(host.querySelector('div'), 'clientWidth', {
         get: () => 900,
       });
@@ -1024,10 +1024,15 @@ describe('the chart as data (parts), for the ports and their parity test', () =>
           { id: 'a', x: [0, 10, 20, 30, 40, 50, 60], y: [1, 2, 3, 4, 5, 6, 7] },
         ],
       });
-      return chart.parts().ticks.x.length;
+      return chart.parts().ticks[axis].length;
     };
     expect(ticksOf({})).toBeGreaterThan(5);
     expect(ticksOf({ maxTicks: 3 })).toBeLessThanOrEqual(3);
+    // A tall host asks for seven along y; the ceiling is honored there too
+    // (A3's recorded 6 on both axes, whatever the panel's height).
+    expect(ticksOf({}, 'y')).toBeGreaterThan(6);
+    expect(ticksOf({ maxTicks: 6 }, 'y')).toBeLessThanOrEqual(6);
+    expect(ticksOf({ maxTicks: 3 }, 'y')).toBeLessThanOrEqual(3);
     // A short chart whose range does not straddle a round value still has ticks.
     const small = make({ height: 90 });
     small.chart.draw({

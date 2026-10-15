@@ -390,10 +390,10 @@ const TOKEN_COLORS = {
  * with each documented equivalent applied (PLOT_COMPONENT.md, "Documented
  * equivalents"). Everything not listed here is compared as recorded.
  * @param {object} f - One chart's entry from chart-parity.json
- * @param {object} read - What readComponent() returned for it
+ * @param {number} lineCount - How many lines the hover's tooltip shows
  * @returns {object}
  */
-function portedExpectation(f, read) {
+function portedExpectation(f, lineCount) {
   const e = JSON.parse(JSON.stringify(f));
   // Raw arrays: Chart.js's `parsing` option has no counterpart.
   delete e.parsing;
@@ -429,8 +429,11 @@ function portedExpectation(f, read) {
   delete e.tooltip.intersect;
   delete e.tooltip.custom;
   delete e.tooltip.sample;
-  // The tooltip's lines are read by hovering; the comparison is on shape.
-  e.tooltip.lines = read.tooltip.lines;
+  // The tooltip's lines are read by hovering. What is compared is how many
+  // there are: a title and one row for each series the hover names (A1 names
+  // all three, A2 and A3 the one nearest). The words are asserted apart, from
+  // the recorded sample.
+  e.tooltip.lines = lineCount;
   // An error-bar plugin is not a plugin: the bars are the series' sigma, and
   // what they draw is compared apart, from the paths.
   e.plugins = [];
@@ -474,11 +477,14 @@ function portedFacts(read, f) {
     tooltip: {
       enabled: read.tooltip.enabled,
       mode: read.tooltip.mode,
-      lines: read.tooltip.lines,
+      lines: read.tooltip.lines.length,
     },
     plugins: [],
   };
 }
+
+/** The tooltip's line count at the probe's hover, by chart. */
+const TIP_LINES = { A1: 4, A2: 2, A3: 2 };
 
 /**
  * Compare a ported chart to the fixture: every recorded fact the component can
@@ -490,7 +496,7 @@ function portedFacts(read, f) {
 function compareToFixture(key, read, sub) {
   const fixture = JSON.parse(readFileSync(FIXTURE, 'utf8'))[key];
   const f = sub ? fixture[sub] : fixture;
-  expect(portedFacts(read, f)).toEqual(portedExpectation(f, read));
+  expect(portedFacts(read, f)).toEqual(portedExpectation(f, TIP_LINES[key]));
 }
 
 test.describe('the five Chart.js charts, as they are today', () => {
@@ -573,7 +579,23 @@ test.describe('the five Chart.js charts, as they are today', () => {
     ).toBe(fixture.tooltipSample);
 
     // The y range rule: the series' extremes with a margin of 30% of the range
-    // (at least 1e-4), floored at zero, drawn as the chart's exact edges.
+    // (at least 1e-4), floored at zero, drawn as the chart's exact edges. The
+    // run is paused first, so the recording stops growing; the chart redraws
+    // every sixth sample, so its last draw can trail the recording by up to
+    // five, and the tolerance is the one the rule can drift by in that time
+    // (a twentieth of the span) plus one tick step.
+    await app.setPaused(true);
+    // Two frames on: the pause has taken, and the last redraw has landed.
+    await page.evaluate(
+      () =>
+        new Promise(done =>
+          window.requestAnimationFrame(() =>
+            window.requestAnimationFrame(() =>
+              window.requestAnimationFrame(done)
+            )
+          )
+        )
+    );
     const rule = await page.evaluate(async () => {
       const lc = await import('/js/lightCurve.js');
       const { flux } = lc.lightCurveSeries();
@@ -586,10 +608,28 @@ test.describe('the five Chart.js charts, as they are today', () => {
         ticks: parts.ticks.y.map(([v]) => v),
       };
     });
-    // The recording grows between the chart's last draw and this read, so the
-    // check is that the ticks sit within a rule-shaped window.
-    expect(Math.min(...rule.ticks)).toBeGreaterThanOrEqual(0);
+    const [wantLo, wantHi] = rule.want;
+    const tickLo = Math.min(...rule.ticks);
+    const tickHi = Math.max(...rule.ticks);
+    expect(rule.ticks.length).toBeGreaterThanOrEqual(2);
     expect(rule.ticks.every(Number.isFinite)).toBe(true);
+    const step = (tickHi - tickLo) / (rule.ticks.length - 1);
+    const tol = 0.05 * (wantHi - wantLo) + step;
+    // The floor at zero: no tick below it.
+    expect(tickLo).toBeGreaterThanOrEqual(0);
+    // The ticks sit inside the range and reach to within a step of each edge:
+    // they bracket the rule's range.
+    expect(tickLo).toBeGreaterThanOrEqual(wantLo - tol);
+    expect(tickLo).toBeLessThanOrEqual(wantLo + tol);
+    expect(tickHi).toBeLessThanOrEqual(wantHi + tol);
+    expect(tickHi).toBeGreaterThanOrEqual(wantHi - tol);
+    // And the range is wider than the data alone: the margin is drawn.
+    const lows = await page.evaluate(async () => {
+      const { flux } = (await import('/js/lightCurve.js')).lightCurveSeries();
+      return [Math.min(...flux), Math.max(...flux)];
+    });
+    expect(wantHi).toBeGreaterThan(lows[1]);
+    await app.setPaused(false);
 
     // The theme repaint: the series' stroke and fill follow the page's theme,
     // with no new data.
@@ -669,6 +709,31 @@ test.describe('the five Chart.js charts, as they are today', () => {
     expect(bars.color).toBe(survey.series[1].color);
     // The bar is one sigma either way: 5 m/s in this survey, in pixels.
     expect(bars.halfLengthPx / bars.pxPerUnit).toBeCloseTo(5, 0);
+
+    // The tooltip on a measurement: the row the old chart's default tooltip
+    // gave, with the bar's size added ("Measurements: 12.3 ± 5 m/s"), and a
+    // title in days. Hovered on the dot itself, so the nearest point is it.
+    const tip = await page.evaluate(() => {
+      const svg = document.querySelector('#rvChart svg[role="group"]');
+      const dot = svg.querySelector('g[clip-path] circle');
+      const r = dot.getBoundingClientRect();
+      svg.dispatchEvent(
+        new window.PointerEvent('pointermove', {
+          bubbles: true,
+          clientX: r.left + r.width / 2,
+          clientY: r.top + r.height / 2,
+        })
+      );
+      const box = svg.nextElementSibling;
+      const lines = [...box.children].map(d => d.textContent);
+      svg.dispatchEvent(
+        new window.PointerEvent('pointerleave', { bubbles: true })
+      );
+      return lines;
+    });
+    expect(tip).toHaveLength(2);
+    expect(tip[0]).toMatch(/^[−-]?[\d.,]+\s?d$/);
+    expect(tip[1]).toMatch(/^.+: [+−-]?[\d.,]+ ± 5(?:\.0+)?\s?m\/s$/);
   });
 
   test('A4: the bench comparison, and A5: the sweep', async ({
@@ -768,5 +833,110 @@ test.describe('the five Chart.js charts, as they are today', () => {
   test('the fixture holds the five charts and nothing else', async () => {
     const fixture = JSON.parse(readFileSync(FIXTURE, 'utf8'));
     expect(Object.keys(fixture).sort()).toEqual(['A1', 'A2', 'A3', 'A4', 'A5']);
+  });
+});
+
+// The caps, on the live paths. tests/chartParity.test.js holds each number to
+// the line of source that sets it; these feed more than the cap through the
+// real update functions and count what the chart is given.
+test.describe('the point caps hold on the live paths', () => {
+  test('A1: 250 samples through updateChart draw the newest 200', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await app.loadScenario('binary-pair');
+    await app.selectFirstObject('StarObject');
+    await page.locator('#inspectorTabEnergy').click();
+    await expect(page.locator('#energyTab')).toBeVisible();
+    await portedChart(page, 'A1');
+    const drawn = await page.evaluate(async () => {
+      const m = await import('/js/inspectorPanel.js');
+      // The running inspector feeds the same function; take its rate gate and
+      // read back in the same task, so no other call can redraw in between.
+      m.updateChart._last = 0;
+      const data = Array.from({ length: 250 }, (_, i) => ({
+        timestamp: 1000 + i * 100,
+        ke: 10 + (i % 7),
+        pe: -20 - (i % 5),
+        total: -10 + (i % 3),
+      }));
+      m.updateChart(data, 1e6);
+      const counts = [
+        ...document.querySelectorAll('#energyChart svg g[clip-path] > path'),
+      ]
+        .map(p => (p.getAttribute('d') || '').split('L').length)
+        .filter(n => n > 1);
+      return { counts, ticks: m.energyChartParts().ticks.x.map(([v]) => v) };
+    });
+    // Three series, each exactly the cap: 200 points, not 250.
+    expect(drawn.counts).toEqual([200, 200, 200]);
+    // And they are the newest: time is counted from the first sample passed
+    // in, so the window is 5.0 to 24.9 s. Had the oldest 200 been kept, it
+    // would end at 19.9.
+    expect(Math.min(...drawn.ticks)).toBeGreaterThanOrEqual(5 - 1e-9);
+    expect(Math.max(...drawn.ticks)).toBeGreaterThan(19.9);
+    expect(Math.max(...drawn.ticks)).toBeLessThanOrEqual(24.9 + 1e-9);
+  });
+
+  test('A2: 2050 samples through updateLightCurve leave a recording of 2000', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await app.loadScenario('transit-lab');
+    await app.openPanel('toggleLightCurve', 'lightCurveContainer');
+    await portedChart(page, 'A2', 3);
+    const out = await page.evaluate(async () => {
+      const lc = await import('/js/lightCurve.js');
+      for (let i = 0; i < 2050; i++) lc.updateLightCurve();
+      const { days, flux } = lc.lightCurveSeries();
+      return { days: days.length, flux: flux.length };
+    });
+    expect(out).toEqual({ days: 2000, flux: 2000 });
+  });
+
+  test('A3: more than 900 samples leave a recording of 900, never more', async ({
+    page,
+    app,
+  }) => {
+    test.setTimeout(240_000);
+    await app.boot();
+    await app.loadScenario('exoplanet-characterization-lab');
+    await app.waitForFrames(10);
+    await app.openPanel('toggleRadialVelocity', 'rvContainer');
+    await portedChart(page, 'A3');
+    // The panel samples once a wall-clock 60 ms, which would take a minute for
+    // a thousand. A clock that runs thirty times faster makes every frame a
+    // sampling frame; the integration step is clamped, so the physics is the
+    // same one, only reached sooner.
+    await page.evaluate(() => {
+      window.__realNow = performance.now.bind(performance);
+      performance.now = () => window.__realNow() * 30;
+      window.__rvMax = 0;
+      window.__rvAtCap = 0;
+      window.__rvWatch = window.setInterval(async () => {
+        const rv = await import('/js/radialVelocity.js');
+        const n = rv.radialVelocitySeries().length;
+        window.__rvMax = Math.max(window.__rvMax, n);
+        if (n >= 900) window.__rvAtCap++;
+      }, 20);
+    });
+    try {
+      // At the cap, and watched there for forty readings while the new
+      // samples displace the old: it holds, and does not creep past it.
+      await expect
+        .poll(() => page.evaluate(() => window.__rvAtCap), {
+          timeout: 200_000,
+          message: 'the recording never reached its cap',
+        })
+        .toBeGreaterThanOrEqual(40);
+    } finally {
+      await page.evaluate(() => {
+        window.clearInterval(window.__rvWatch);
+        performance.now = window.__realNow;
+      });
+    }
+    expect(await page.evaluate(() => window.__rvMax)).toBe(900);
   });
 });
