@@ -22,33 +22,29 @@ test.describe('a shared link', () => {
       await app.loadScenario('trappist-1-system');
       await app.waitForFrames(20);
 
-      const before = await app.bodySnapshot();
-      expect(before.count).toBeGreaterThan(5);
+      // Encode through the application's own codec. The count and mass the
+      // link carries are read in the same task as the capture: this world is
+      // running, and a body merged or lost a few steps later is not one the
+      // link left out.
+      const sent = await app.captureLink({ kind: 'full' });
+      expect(sent.count).toBeGreaterThan(5);
+      expect(typeof sent.fragment).toBe('string');
+      expect(sent.fragment.length).toBeGreaterThan(10);
 
-      // Capture and encode through the application's own codec.
-      const fragment = await page.evaluate(async () => {
-        const ui = await import('/js/ui.js');
-        const share = await import('/js/shareState.js');
-        const payload = ui.captureShareState({ kind: 'full' });
-        return share.encodePayload(payload);
-      });
-      expect(typeof fragment).toBe('string');
-      expect(fragment.length).toBeGreaterThan(10);
-
-      // Open it in a genuinely fresh page, the way a student receiving the link
-      // would: new context, nothing in storage, no prior world.
-      const url = fragment.startsWith('#') ? fragment : `#${fragment}`;
-      await app.boot({ url: `/${url}` });
-
-      // The link is applied asynchronously after boot, so wait for a world.
-      await app.waitForBodies(5);
-      await app.waitForFrames(20);
-
-      const after = await app.bodySnapshot();
-      expect(after.nonFinite).toBe(0);
+      // Open it the way a student pasting it into an open tab would: only the
+      // fragment changes, so the world already on screen stays until the link
+      // is decoded and its own is built. The wait is for that world, and what
+      // comes back was read in the task that built it.
+      const built = await app.bootLink(sent.fragment);
+      expect(built.nonFinite).toBe(0);
       // The same system, not merely some system.
-      expect(after.count).toBe(before.count);
-      expect(after.totalMass).toBeCloseTo(before.totalMass, 3);
+      expect(built.count).toBe(sent.count);
+      expect(built.totalMass).toBeCloseTo(sent.totalMass, 3);
+      expect(built.scenario).toMatch(/TRAPPIST/i);
+
+      // And it runs.
+      await app.advanceFrames(20);
+      expect((await app.bodySnapshot()).nonFinite).toBe(0);
 
       const scenario = await page.evaluate(async () => {
         const ui = await import('/js/ui.js');

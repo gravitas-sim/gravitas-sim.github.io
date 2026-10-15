@@ -104,6 +104,19 @@ export async function requireScenarioKey(page, key) {
   );
 }
 
+/** The body lists in physics.js, in the order the snapshots read them. */
+const BODY_LISTS = [
+  'bh_list',
+  'stars',
+  'planets',
+  'gas_giants',
+  'asteroids',
+  'comets',
+  'neutron_stars',
+  'white_dwarfs',
+  'galaxies',
+];
+
 /**
  * Everything a spec needs to drive the application.
  *
@@ -351,6 +364,157 @@ function makeApp(page) {
     },
 
     /**
+     * Let the simulation run, and be sure it did.
+     *
+     * Unlike waitForFrames, which hands waitForFunction an async predicate (a
+     * promise is truthy, so that wait passes on its first poll whatever the
+     * counter says), this polls the counter from the test side. The unit is
+     * the counter's own: one physics step, of which a rendered frame takes
+     * several on a heavy scenario.
+     *
+     * @param {number} [count] - Steps to wait for
+     */
+    async advanceFrames(count = 10) {
+      const start = await this.frameCount();
+      await expect
+        .poll(() => this.frameCount(), { timeout: 20_000 })
+        .toBeGreaterThanOrEqual(start + count);
+    },
+
+    /**
+     * Encode the world on screen as a share link, and arm the wait for the
+     * world that link will build.
+     *
+     * Call it on the page that is about to open the link: the tab, not a new
+     * one. What is armed is a world generation (the counter bumped whenever the
+     * lists are repopulated) and an observer that notices the first one past
+     * it. Opening a link in a tab that already has a world is a hashchange, so
+     * the old world is still there, running and identical in count, until the
+     * link's own is built after an asynchronous decode; a body count or a
+     * frame counter cannot tell the two apart. See bootLink().
+     *
+     * The body count and mass are read in the same task as the capture, so
+     * they describe exactly the bodies the link carries: a running world loses
+     * a body to a merge or a hole a few steps later, and a count read after
+     * another round trip is not the count that was encoded.
+     *
+     * @param {object} [options]
+     * @param {string} [options.kind] - 'full' (default) or 'seeded'
+     * @returns {Promise<{fragment: string, count: number, totalMass: number}>}
+     */
+    async captureLink({ kind = 'full' } = {}) {
+      return page.evaluate(
+        async ({ kind, lists }) => {
+          const ui = await import('/js/ui.js');
+          const p = await import('/js/physics.js');
+          const share = await import('/js/shareState.js');
+          const summarize = () => {
+            const bodies = lists
+              .flatMap(k => p[k] || [])
+              .filter(b => b && b.alive !== false);
+            return {
+              count: bodies.length,
+              totalMass: bodies.reduce((s, b) => s + (b.mass || 0), 0),
+              nonFinite: bodies.filter(
+                b =>
+                  !Number.isFinite(b.pos?.x) ||
+                  !Number.isFinite(b.pos?.y) ||
+                  !Number.isFinite(b.vel?.x) ||
+                  !Number.isFinite(b.vel?.y) ||
+                  !Number.isFinite(b.mass)
+              ).length,
+            };
+          };
+
+          const world = { generation: p.getWorldGeneration(), record: null };
+          window.__linkWorld = world;
+          // The link is applied inside one task: decode, rebuild, scenario
+          // card, announcement. A MutationObserver callback is a microtask, so
+          // the first one after the generation moves runs when that task's
+          // script ends and before any frame can step the new world. The
+          // announcement writes the DOM on every link, so one always comes.
+          const watcher = new window.MutationObserver(() => {
+            if (world.record || p.getWorldGeneration() === world.generation) {
+              return;
+            }
+            world.record = {
+              generation: p.getWorldGeneration(),
+              scenario: ui.current_scenario_name,
+              frame: ui.state.frame_count,
+              ...summarize(),
+            };
+            watcher.disconnect();
+          });
+          watcher.observe(document, {
+            subtree: true,
+            childList: true,
+            attributes: true,
+            characterData: true,
+          });
+
+          const sent = summarize();
+          const fragment = await share.encodePayload(
+            ui.captureShareState({ kind })
+          );
+          return {
+            fragment,
+            count: sent.count,
+            totalMass: sent.totalMass,
+          };
+        },
+        { kind, lists: BODY_LISTS }
+      );
+    },
+
+    /**
+     * Open a link in this tab and wait for the world it builds.
+     *
+     * The wait is on the world generation armed by captureLink(), not on a
+     * minimum body count: the world that was on screen already satisfies a
+     * count, which is how a test of a link passed with the link never applied
+     * (the hashchange handler held back for ten minutes, 15 of 15 green).
+     *
+     * @param {string} fragment - From captureLink()
+     * @param {object} [options]
+     * @param {number} [options.timeout] - Milliseconds to wait for the world
+     * @returns {Promise<{generation: number, scenario: string, frame: number,
+     *   count: number, totalMass: number, nonFinite: number}>} The link's
+     *   world, read in the task that built it
+     */
+    async bootLink(fragment, { timeout = 20_000 } = {}) {
+      await this.boot({ url: `/#${fragment.replace(/^#/, '')}` });
+      return page.evaluate(
+        ms =>
+          new Promise((resolve, reject) => {
+            const world = window.__linkWorld;
+            if (!world) {
+              reject(
+                new Error(
+                  'No wait is armed: captureLink() has to run on this page ' +
+                    'first, and a reload in between loses it.'
+                )
+              );
+              return;
+            }
+            const started = performance.now();
+            const poll = () => {
+              if (world.record) resolve(world.record);
+              else if (performance.now() - started > ms) {
+                reject(
+                  new Error(
+                    `The link built no world within ${ms} ms ` +
+                      `(world generation stayed at ${world.generation}).`
+                  )
+                );
+              } else setTimeout(poll, 20);
+            };
+            poll();
+          }),
+        timeout
+      );
+    },
+
+    /**
      * Click something, and be sure the click was delivered.
      *
      * WebKit under a saturated machine delivers a whole press to an element -
@@ -444,19 +608,8 @@ function makeApp(page) {
 
     /** A snapshot of every body's state, for NaN hunting and drift checks. */
     bodySnapshot() {
-      return page.evaluate(async () => {
+      return page.evaluate(async lists => {
         const p = await import('/js/physics.js');
-        const lists = [
-          'bh_list',
-          'stars',
-          'planets',
-          'gas_giants',
-          'asteroids',
-          'comets',
-          'neutron_stars',
-          'white_dwarfs',
-          'galaxies',
-        ];
         const bodies = lists
           .flatMap(k => p[k] || [])
           .filter(b => b && b.alive !== false);
@@ -472,7 +625,7 @@ function makeApp(page) {
           ).length,
           totalMass: bodies.reduce((s, b) => s + (b.mass || 0), 0),
         };
-      });
+      }, BODY_LISTS);
     },
 
     /**
