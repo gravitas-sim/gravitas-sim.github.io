@@ -13,7 +13,7 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
-import { tickLabel } from './format.js';
+import { roundSig, tickLabel } from './format.js';
 
 /**
  * The design tokens the observing charts draw with, each with the fallback a
@@ -101,7 +101,7 @@ export function chartColors() {
  */
 export function chartTick(v) {
   let sig = 1;
-  while (sig < 6 && Number(v.toPrecision(sig)) !== v) sig++;
+  while (sig < 6 && roundSig(v, sig) !== v) sig++;
   return tickLabel(v, sig);
 }
 
