@@ -158,7 +158,7 @@ describe('importers hold live bindings', () => {
       follow_mode: 'None',
       bh_behavior: 'Static',
     });
-    for (const list of ['planets', 'stars', 'bh_list', 'debris'])
+    for (const list of ['planets', 'stars', 'bh_list', 'debris', 'galaxies'])
       physics[list].length = 0;
   });
 
@@ -186,6 +186,16 @@ describe('importers hold live bindings', () => {
     expect(physics.planets).toBe(engineState.planets);
     expect(physics.planets).not.toBe(captured);
     expect(physics.planets).toContain(planet);
+  });
+
+  test('a galaxy goes through the off-screen filter and the new list is the facade list', () => {
+    const galaxy = new physics.Galaxy({ x: 0, y: 0 }, { x: 0, y: 0 }, 1000);
+    physics.galaxies.push(galaxy);
+    const captured = physics.galaxies;
+    physics.updatePhysics(0.1);
+    expect(physics.galaxies).toBe(engineState.galaxies);
+    expect(physics.galaxies).not.toBe(captured);
+    expect(physics.galaxies).toContain(galaxy);
   });
 
   test('the settings, the clock and the id counter are live', () => {
