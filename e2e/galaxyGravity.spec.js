@@ -130,16 +130,13 @@ test.describe('the mode travels with a shared link', () => {
     expect(await setMode(page, 'mond')).toBe('mond');
     await app.waitForFrames(20);
 
-    const fragment = await page.evaluate(async () => {
-      const ui = await import('/js/ui.js');
-      const share = await import('/js/shareState.js');
-      return share.encodePayload(ui.captureShareState({ kind: 'full' }));
-    });
+    const { fragment } = await app.captureLink({ kind: 'full' });
     expect(typeof fragment).toBe('string');
 
-    await app.boot({ url: `/#${fragment.replace(/^#/, '')}` });
-    await app.waitForBodies(5);
-    await app.waitForFrames(20);
+    // Wait for the link's own world: the one on screen already has bodies, and
+    // already has this mode.
+    await app.bootLink(fragment);
+    await app.advanceFrames(20);
 
     const restored = await modeOf(page);
     expect(restored.mode).toBe('mond');
@@ -156,15 +153,12 @@ test.describe('the mode travels with a shared link', () => {
     expect(await setMode(page, 'halo')).toBe('halo');
     await app.waitForFrames(20);
 
-    const fragment = await page.evaluate(async () => {
-      const ui = await import('/js/ui.js');
-      const share = await import('/js/shareState.js');
-      return share.encodePayload(ui.captureShareState({ kind: 'full' }));
-    });
+    const { fragment } = await app.captureLink({ kind: 'full' });
 
-    await app.boot({ url: `/#${fragment.replace(/^#/, '')}` });
-    await app.waitForBodies(5);
-    await app.waitForFrames(20);
+    // Wait for the link's own world: the one on screen already has bodies, and
+    // already has this mode.
+    await app.bootLink(fragment);
+    await app.advanceFrames(20);
 
     const restored = await modeOf(page);
     expect(restored.mode).toBe('halo');
