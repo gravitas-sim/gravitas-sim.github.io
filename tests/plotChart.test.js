@@ -286,8 +286,8 @@ describe('axes from the arrays', () => {
         '<0>',
         '<2>',
         '<4>',
-        '<-5>',
-        '<5>',
+        '<-4>',
+        '<4>',
         'Time (s)',
         'Energy (J)',
       ])
@@ -300,7 +300,7 @@ describe('axes from the arrays', () => {
     chart.draw({ ...spec, xNumber: v => `${v} s`, yNumber: v => `${v} J` });
     let texts = [...svg.querySelectorAll('text')].map(t => t.textContent);
     expect(texts).toEqual(
-      expect.arrayContaining(['2 s', '4 s', '-2.5 J', '2.5 J'])
+      expect.arrayContaining(['2 s', '4 s', '-2 J', '2 J'])
     );
     // The same ticks in another language: the axes follow the words.
     chart.draw({ ...spec, xNumber: v => `${v} seg`, yNumber: v => `${v} J` });
@@ -968,5 +968,93 @@ describe('the image', () => {
     chart.draw(SPEC());
     const out = exportSvg(chart.parts(), { legend: false, background: '#fff' });
     expect(out.height).toBe(220);
+  });
+});
+
+describe('the chart as data (parts), for the ports and their parity test', () => {
+  test('say what the chart is: words, legend, ticks with their values, series as drawn', () => {
+    const { chart } = make({ tooltip: { mode: 'nearest' } });
+    const spec = SPEC();
+    spec.series[0].fill = '#223344';
+    spec.series[1].order = 2;
+    spec.series[1].mode = 'both';
+    spec.series[1].radius = 4;
+    chart.draw(spec);
+    const p = chart.parts();
+    expect(p).toMatchObject({
+      label: 'Energy over time',
+      xTitle: 'Time (s)',
+      yTitle: 'Energy (J)',
+      legend: true,
+      tooltip: 'nearest',
+      capPx: 3,
+    });
+    // A tick is its value and its words, so a test can check the two agree.
+    expect(p.ticks.x.length).toBeGreaterThan(1);
+    for (const [v, text] of [...p.ticks.x, ...p.ticks.y]) {
+      expect(Number.isFinite(v)).toBe(true);
+      expect(text).toBe(String(Math.round(v * 1000) / 1000));
+    }
+    expect(
+      p.series.map(s => [s.id, s.fill, s.order, s.mode, s.radius])
+    ).toEqual([
+      ['ke', '#223344', 0, 'line', 3],
+      ['pe', null, 2, 'both', 4],
+    ]);
+  });
+
+  test('a single series has no legend, unless the spec asks', () => {
+    const { chart } = make();
+    const one = SPEC();
+    one.series.pop();
+    chart.draw(one);
+    expect(chart.parts().legend).toBe(false);
+    chart.draw({ ...one, legend: true });
+    expect(chart.parts().legend).toBe(true);
+  });
+
+  test('maxTicks limits the ticks on both axes, and the y axis always has at least two', () => {
+    const ticksOf = (opts, axis = 'x') => {
+      const { chart, host } = make({ height: 300, ...opts });
+      Object.defineProperty(host.querySelector('div'), 'clientWidth', {
+        get: () => 900,
+      });
+      chart.draw({
+        series: [
+          { id: 'a', x: [0, 10, 20, 30, 40, 50, 60], y: [1, 2, 3, 4, 5, 6, 7] },
+        ],
+      });
+      return chart.parts().ticks[axis].length;
+    };
+    expect(ticksOf({})).toBeGreaterThan(5);
+    expect(ticksOf({ maxTicks: 3 })).toBeLessThanOrEqual(3);
+    // A tall host asks for seven along y; the ceiling is honored there too
+    // (A3's recorded 6 on both axes, whatever the panel's height).
+    expect(ticksOf({}, 'y')).toBeGreaterThan(6);
+    expect(ticksOf({ maxTicks: 6 }, 'y')).toBeLessThanOrEqual(6);
+    expect(ticksOf({ maxTicks: 3 }, 'y')).toBeLessThanOrEqual(3);
+    // A short chart whose range does not straddle a round value still has ticks.
+    const small = make({ height: 90 });
+    small.chart.draw({
+      series: [{ id: 'a', x: [0, 1, 2], y: [-3.2, 0.4, 4.1] }],
+    });
+    expect(small.chart.parts().ticks.y.length).toBeGreaterThanOrEqual(2);
+  });
+
+  test('a host shorter than the old minimum is filled, not overflowed', () => {
+    const { chart, host, svg } = make({ height: 'fill' });
+    Object.defineProperty(host, 'clientHeight', { get: () => 90 });
+    chart.draw(SPEC());
+    expect(Number(svg.getAttribute('height'))).toBeLessThanOrEqual(90);
+  });
+});
+
+describe('round ticks near a constant', () => {
+  test('a range whose width is a round step to within float error keeps that step', () => {
+    // 1.00018 - 0.99998 is 0.00020000000000009: a fifth of it is a hair over
+    // 5e-5, and the step used to jump to 1e-4 and leave two ticks.
+    expect(niceTicks(0.99998, 1.00018, 4)).toEqual([
+      1, 1.00005, 1.0001, 1.00015,
+    ]);
   });
 });

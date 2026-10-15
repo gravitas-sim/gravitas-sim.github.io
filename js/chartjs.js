@@ -1,8 +1,10 @@
 // =============================================================================
 // Loading Chart.js on demand
 // -----------------------------------------------------------------------------
-// Two panels use it - the light curve and the energy chart in the object
-// inspector - and both start closed, so it is loaded the first time one opens.
+// Two panels use it - the experiment bench's comparison and its sweep - and
+// both start closed, so it is loaded the first time one opens. (The light
+// curve, the radial-velocity trace and the energy chart in the object
+// inspector were ported to js/plot/chart.js in D-PLOT-02 stage 3b.)
 //
 // It used to be a <script> tag injected at that moment, pointing at jsdelivr.
 // That made a third-party request during ordinary use, could not be pinned by

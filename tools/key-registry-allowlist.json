@@ -289,7 +289,6 @@
     },
     "js/lightCurve.js": {
       "gravitasSimulationReset": 1,
-      "gravitasThemeChanged": 1,
       "gravitasLightCurveToggled": 1
     },
     "js/main.js": {

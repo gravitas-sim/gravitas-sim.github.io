@@ -74,21 +74,45 @@ test.describe('the object inspector', () => {
 
     await energyTab.click();
     await expect(page.locator('#energyTab')).toBeVisible();
-    // Its chart is made: a line chart on a linear time axis, from the Chart.js
-    // build that registers only what Gravitas draws (tools/vendor-deps.mjs).
-    // A type that build does not register throws when the chart is made, and
-    // there would be no chart here to find.
+    // Its chart is made: the series chart of js/plot/chart.js (the Chart.js
+    // line chart it replaced is no longer on the page), with the three energies
+    // as its series and a numeric time axis. A chart that failed to build
+    // leaves an empty host.
+    const chart = page.locator('#energyChart');
+    await expect(
+      chart.locator('svg[role="group"]'),
+      'the energy chart was never made'
+    ).toBeVisible({ timeout: 30_000 });
+    await expect(chart.locator('button[data-series]')).toHaveText([
+      'Kinetic Energy',
+      'Potential Energy',
+      'Total Energy',
+    ]);
+    await expect(
+      chart.locator('button[data-series][aria-pressed="true"]')
+    ).toHaveCount(3);
+    await expect(chart.locator('svg[role="group"]')).toContainText('Time (s)');
+    await expect(chart.locator('svg[role="group"]')).toContainText(
+      'Energy (J)'
+    );
+    // It is drawing the object's energy history: a connected path of several
+    // points in every series.
     await expect
       .poll(
         () =>
-          page.evaluate(
-            () =>
-              window.Chart?.getChart?.(document.getElementById('energyChart'))
-                ?.config.type ?? null
-          ),
-        { timeout: 30_000, message: 'the energy chart was never made' }
+          chart
+            .locator('svg g[clip-path] > path[stroke-width]')
+            .evaluateAll(
+              paths =>
+                paths
+                  .map(p => p.getAttribute('d') || '')
+                  .filter(d => (d.match(/L/g) || []).length >= 2).length
+            ),
+        { timeout: 30_000, message: 'the energy chart drew no history' }
       )
-      .toBe('line');
+      .toBeGreaterThanOrEqual(3);
+    // The Chart.js build is not what drew it.
+    expect(await page.evaluate(() => typeof window.Chart)).toBe('undefined');
 
     await detailsTab.click();
     await expect(page.locator('#detailsTab')).toBeVisible();

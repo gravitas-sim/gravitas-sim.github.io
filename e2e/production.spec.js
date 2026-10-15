@@ -98,7 +98,7 @@ test.describe('the built site', () => {
 
     await page.locator('#toggleLightCurve').click();
     await expect(page.locator('#lightCurveContainer')).toBeVisible();
-    await expect(page.locator('#lightCurveCanvas')).toBeVisible();
+    await expect(page.locator('#lightCurveChart')).toBeVisible();
 
     // The chart library is a deferred chunk in the built bundle, so this is the
     // check that the split actually resolves.
