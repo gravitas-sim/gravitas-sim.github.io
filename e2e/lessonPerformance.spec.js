@@ -411,7 +411,9 @@ test.describe('a page cleans up its panels', () => {
       // it is built is a different (and unrelated) race.
       await expect
         .poll(() =>
-          page.evaluate(() => Boolean(window.Chart?.getChart('energyChart')))
+          page.evaluate(() =>
+            Boolean(document.querySelector('#energyChart svg'))
+          )
         )
         .toBe(true);
       await page.locator('#inspectorClose').click();

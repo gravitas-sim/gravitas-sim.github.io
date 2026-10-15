@@ -25,7 +25,7 @@ async function openRv(page, app) {
   await app.loadScenario('exoplanet-characterization-lab');
   await app.waitForFrames(10);
   await app.openPanel('toggleRadialVelocity', 'rvContainer');
-  await expect(page.locator('#rvCanvas')).toBeVisible();
+  await expect(page.locator('#rvChart')).toBeVisible();
 }
 
 /** Switch the synthetic run on, with a schedule. */

@@ -324,7 +324,7 @@ try {
       </div>
 
       <div class="obs-panel-stage">
-        <canvas id="rvCanvas"></canvas>
+        <div id="rvChart" class="plot-host"></div>
       </div>
 
       <div id="rvObserverControls" class="obs-controls"></div>
@@ -1132,7 +1132,7 @@ try {
       </div>
       <div id="lightCurveObserverControls" class="obs-controls"></div>
       <div class="light-curve-stage">
-        <canvas id="lightCurveCanvas"></canvas>
+        <div id="lightCurveChart" class="plot-host"></div>
       </div>
       <div class="light-curve-hint">
         Drag the observer handle on the simulation or use the slider above
@@ -2564,9 +2564,9 @@ try {
 
     <!-- JavaScript modules in dependency order -->
     <!--
-      Chart.js is not loaded here any more. It is 70KB and only two panels use
-      it, both of which start closed; js/chartjs.js fetches it the first time
-      one of them is opened.
+      Chart.js is not loaded here any more. It is 70KB and only the bench's
+      two charts use it, which start closed; js/chartjs.js fetches it the
+      first time one is opened. The live charts are js/plot/chart.js.
     -->
     <script type="module" src="js/utils.js"></script>
     <script type="module" src="js/physics.js"></script>

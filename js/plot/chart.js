@@ -68,7 +68,11 @@ export function niceTicks(lo, hi, count = 5) {
   if (!(hi > lo)) return [lo];
   const raw = (hi - lo) / count;
   const mag = 10 ** Math.floor(Math.log10(raw));
-  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw) || raw;
+  // A step that is the raw one to within the float error of subtracting two
+  // nearby values is that step, not the next one up.
+  const step =
+    [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw * (1 - 1e-9)) ||
+    raw;
   // Whole multiples of the step, written without the float noise of adding.
   const places = 10 ** Math.max(0, 2 - Math.floor(Math.log10(step)));
   const out = [];
@@ -140,6 +144,8 @@ const color = c => (typeof c === 'function' ? c() : c);
  * @param {number} [opts.maxPoints] - Draw only the newest n of each series
  * @param {boolean} [opts.theme] - Repaint on the page's theme change
  * @param {number} [opts.capPx] - Error-bar caps, in screen pixels per side
+ * @param {number} [opts.maxTicks] - Most ticks drawn along either axis (by
+ *   default the size decides: up to about nine along x, seven along y)
  * @param {{mode?: 'index'|'nearest', title?: Function, format?: Function}}
  *   [opts.tooltip] - mode picks every series at the pointer or the one
  *   nearest; title(x) and format({label, x, y, i, id}) write the words
@@ -263,7 +269,7 @@ export function createChart(host, opts = {}) {
     let h = opts.height ?? FALLBACK.height;
     if (h === 'fill') {
       h = Math.max(
-        120,
+        36,
         Math.round(
           host.clientHeight - (legendEl.hidden ? 0 : legendEl.offsetHeight)
         )
@@ -358,10 +364,16 @@ export function createChart(host, opts = {}) {
     }
 
     // The frame: its left edge makes room for the widest y tick.
+    // About one a 24 px, and at least four asked for: a small chart with two
+    // would often hold one.
+    // A maxTicks ceiling holds along y too, as the old maxTicksLimit did.
     const yTicks = niceTicks(
       y0,
       y1,
-      Math.max(2, Math.min(6, Math.round((h - 60) / 36)))
+      Math.min(
+        opts.maxTicks ? opts.maxTicks - 1 : 7,
+        Math.max(4, Math.round((h - 44) / 24))
+      )
     );
     const yWords = yTicks.map(spec.yNumber ?? number);
     const widest = yWords.reduce((m, t) => Math.max(m, t.length), 0);
@@ -374,7 +386,10 @@ export function createChart(host, opts = {}) {
     const xTicks = niceTicks(
       x0,
       x1,
-      Math.max(2, Math.min(8, Math.round(fw / 80)))
+      Math.max(
+        2,
+        Math.min(opts.maxTicks ? opts.maxTicks - 1 : 8, Math.round(fw / 80))
+      )
     );
     const xWords = xTicks.map(spec.xNumber ?? number);
     const geo = { x0, x1, y0, y1, w, h, fw, fh, frame, sx, sy };
@@ -585,6 +600,7 @@ export function createChart(host, opts = {}) {
     xTicks.forEach((v, i) => {
       const u = axisX[i];
       const x = r1(sx(v));
+      u.value = v;
       line(u.grid, x, frame.top, x, bottom);
       line(u.mark, x, bottom, x, bottom + 4);
       put(u.label, 'x', x);
@@ -595,6 +611,7 @@ export function createChart(host, opts = {}) {
     yTicks.forEach((v, i) => {
       const u = axisY[i];
       const y = r1(sy(v));
+      u.value = v;
       line(u.grid, frame.left, y, frame.left + fw, y);
       line(u.mark, frame.left - 4, y, frame.left, y);
       put(u.label, 'x', frame.left - 7);
@@ -955,17 +972,35 @@ export function createChart(host, opts = {}) {
     stats: () => ({ rebuilds, drawn: drawn.length, geometry: geoNow }),
     /** The chart's <svg>, for the page to label and describe. */
     element: svg,
-    /** What ./export.js needs. */
+    /**
+     * What ./export.js needs, and what the chart is as data (the words and
+     * numbers of its axes and legend, and its series as drawn), so a test reads
+     * the component's description and not its markup.
+     */
     parts: () => ({
       svg,
       width: geoNow?.w ?? FALLBACK.width,
       height: geoNow?.h ?? FALLBACK.height,
+      label: spec?.label ?? '',
+      xTitle: spec?.xTitle ?? '',
+      yTitle: spec?.yTitle ?? '',
+      legend: !legendEl.hidden,
+      tooltip: T.mode ?? 'index',
+      capPx,
+      ticks: {
+        x: axisX.map(u => [u.value, u.label.textContent]),
+        y: axisY.map(u => [u.value, u.label.textContent]),
+      },
       series: (spec?.series ?? []).map((s, k) => ({
+        id: idOf(s, k),
         label: String(s.label ?? idOf(s, k)),
         color: color(s.color) ?? 'currentColor',
+        fill: s.fill ? (s.fill === true ? 'same' : color(s.fill)) : null,
         dash: s.dash ?? [],
         width: s.width ?? 2,
         mode: s.mode ?? 'line',
+        radius: s.radius ?? 3,
+        order: s.order ?? 0,
         hidden: isHidden(s, k),
       })),
     }),
