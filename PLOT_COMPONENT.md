@@ -588,7 +588,7 @@ budget's.
 | 2 | D5-D7 | on `feat/plot-component` | Experiment runner −2742 B, 47 → 47 requests / −1540 B, 3 → 3. Observatory +319 B / +144 B against step 1, still −92 B / −620 B against the base. Every other route unchanged | 0 (4170.7 KB) | D5-D7 migrated: see below |
 | 3 | D8-D12 | | | | |
 | 3a | the features the five Chart.js charts need (D-PLOT-02) | on `feat/plot-stage-3a` | none: no route imports the new modules | 0 (2034.2 of 2034.4 KB gzipped); no chart ported | none ported: see "Stage 3a" |
-| 3b | A1-A3, the live charts (D-PLOT-02) | on `feat/plot-stage-3b` | Ten routes smaller (the three lesson and sandbox routes by 2.5 to 3.1 KB, the lesson instrument route by 137.5 KB sources / 156.5 KB build: Chart.js is no longer fetched for the light curve); eight routes +0.4 to +0.5 KB (the new strings), ceilings raised under D-PLOT-05 | +7.8 KB gzipped (2034.2 to 2042.0 of 2034.4: ceiling raised under D-PLOT-04); initial download −2.2 KB (793.7 to 791.5) | A1, A2, A3 ported: see "Stage 3b" |
+| 3b | A1-A3, the live charts (D-PLOT-02) | on `feat/plot-stage-3b` | Ten routes smaller (the three lesson and sandbox routes by 2.5 to 3.1 KB, the lesson instrument route by 137.5 KB sources / 156.5 KB build: Chart.js is no longer fetched for the light curve); eight routes +0.4 to +0.5 KB (the new strings), ceilings raised under D-PLOT-05 | +7.7 KB gzipped (2034.2 to 2042.0 of 2034.4: ceiling raised to 2042.1 under D-PLOT-04); initial download −2.2 KB (793.7 to 791.5) | A1, A2, A3 ported: see "Stage 3b" |
 | 3c | A4, A5, the bench charts | | | | |
 | 4 | A1-A5 judged by the parity harness; Chart.js removed | | | | |
 | 5 | B1-B8 | | | | |
@@ -1010,9 +1010,9 @@ above applied; A4 and A5 are unchanged. `tests/chartParity.test.js` pins the
 ported sources' caps and the fact that only the bench loads Chart.js.
 
 **Size.** Deferred JavaScript, gzipped, from a fresh `node build.js`: 2034.2
-to 2042.0 KB, 7.8 KB: the component is 7.5 and the strings and the glue the
+to 2042.0 KB, 7.7 KB: the component is 7.5 and the strings and the glue the
 rest, less what the ported charts' own code freed. Raised from 2034.4 to
-2042.0 under the standing size-budget approval (D-PLOT-04); stage 4 returns
+2042.1 under the standing size-budget approval (D-PLOT-04); stage 4 returns
 Chart.js's chunk and more. The initial download fell, 793.7 to 791.5 KB, the
 modules being lazy. Sources and build routes that loaded the light curve
 lost Chart.js: the transit lesson's instrument route −137.5 KB (sources) and

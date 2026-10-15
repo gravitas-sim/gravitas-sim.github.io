@@ -40,7 +40,7 @@
         "requests": 4
       },
       "instructors": {
-        "kb": 845.3,
+        "kb": 845.7,
         "requests": 16
       },
       "figure": {
@@ -72,11 +72,11 @@
         "requests": 42
       },
       "composer": {
-        "kb": 494.5,
+        "kb": 494.9,
         "requests": 30
       },
       "course-builder": {
-        "kb": 1044.7,
+        "kb": 1045.1,
         "requests": 46
       },
       "course-home": {
@@ -116,7 +116,7 @@
         "requests": 6
       },
       "course-packs": {
-        "kb": 620.8,
+        "kb": 621.2,
         "requests": 44
       },
       "sky": {
@@ -166,7 +166,7 @@
         "requests": 2
       },
       "instructors": {
-        "kb": 754.7,
+        "kb": 755.1,
         "requests": 2
       },
       "figure": {
@@ -198,11 +198,11 @@
         "requests": 4
       },
       "composer": {
-        "kb": 261.3,
+        "kb": 261.7,
         "requests": 14
       },
       "course-builder": {
-        "kb": 605.1,
+        "kb": 605.5,
         "requests": 13
       },
       "course-home": {
@@ -242,7 +242,7 @@
         "requests": 2
       },
       "course-packs": {
-        "kb": 237.6,
+        "kb": 237.9,
         "requests": 12
       },
       "sky": {
