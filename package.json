@@ -98,6 +98,8 @@
     "generate:check": "node tools/generate.mjs --check",
     "tools:index:check": "node tools/generate.mjs --check --only tools-index",
     "sw:check": "node tools/generate.mjs --check --only sw",
+    "registries": "node tools/capability-registries.mjs",
+    "registries:check": "node tools/generate.mjs --check --only registries",
     "capabilities": "node tools/capabilities.mjs generate",
     "capabilities:check": "node tools/generate.mjs --check --only capabilities",
     "vendor": "node tools/vendor-deps.mjs",

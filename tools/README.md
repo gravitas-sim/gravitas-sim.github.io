@@ -36,6 +36,7 @@ current, and the orchestrator checks it.
 | `bundle-budget.mjs` | npm run budget  /  npm run budget:check | `npm run budget`, `npm run budget:check` |
 | `bundle-composition.mjs` | What is in the bundle, module by module | `npm run budget:composition` |
 | `capabilities.mjs` | Capability packages at build time | `npm run capabilities` |
+| `capability-registries.mjs` | The lazy registries, generated from what describes them | `npm run registries` |
 | `catalog-review.mjs` | `sdk review` on the archives a pull request adds to catalog/packages | `npm run catalog:review` |
 | `catalog.mjs` | The curated catalog: generated at release time, checked on every change | `npm run packs:data`, `npm run packs:provenance`, `npm run catalog` |
 | `check-activities.mjs` | Are the classroom activities coherent? | `npm run activities:check` |
@@ -64,7 +65,7 @@ current, and the orchestrator checks it.
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
 | `generate-scenario-thumbnails.mjs` | Scenario thumbnail generator | `npm run thumbnails` |
-| `generate.mjs` | Regenerate what is stale, in the order it has to happen | `npm run instructors:check`, `npm run thumbnails:check`, `npm run teaching:check`, `npm run cards:check`, `npm run audit:scene:check`, `npm run audit:irreversible:check`, `npm run docs:check:full`, `npm run manual:check`, `npm run validation:check`, `npm run catalog:check`, `npm run generate`, `npm run generate:check`, `npm run tools:index:check`, `npm run sw:check`, `npm run capabilities:check` |
+| `generate.mjs` | Regenerate what is stale, in the order it has to happen | `npm run instructors:check`, `npm run thumbnails:check`, `npm run teaching:check`, `npm run cards:check`, `npm run audit:scene:check`, `npm run audit:irreversible:check`, `npm run docs:check:full`, `npm run manual:check`, `npm run validation:check`, `npm run catalog:check`, `npm run generate`, `npm run generate:check`, `npm run tools:index:check`, `npm run sw:check`, `npm run registries:check`, `npm run capabilities:check` |
 | `generated-blocks.mjs` | Generated files and generated regions |  |
 | `generated-tripwire.mjs` | A merge must not drop what one side wrote into a file with generated regions |  |
 | `geometry-fuzz.mjs` | Base-versus-head fuzz of every scenario's world (Roadmap II Prompt 108) |  |
