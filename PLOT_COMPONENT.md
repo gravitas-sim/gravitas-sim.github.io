@@ -588,7 +588,7 @@ budget's.
 | 2 | D5-D7 | on `feat/plot-component` | Experiment runner −2742 B, 47 → 47 requests / −1540 B, 3 → 3. Observatory +319 B / +144 B against step 1, still −92 B / −620 B against the base. Every other route unchanged | 0 (4170.7 KB) | D5-D7 migrated: see below |
 | 3 | D8-D12 | | | | |
 | 3a | the features the five Chart.js charts need (D-PLOT-02) | on `feat/plot-stage-3a` | none: no route imports the new modules | 0 (2034.2 of 2034.4 KB gzipped); no chart ported | none ported: see "Stage 3a" |
-| 3b | A1-A3, the live charts (D-PLOT-02) | on `feat/plot-stage-3b` | Ten routes smaller (the three lesson and sandbox routes by 2.5 to 3.1 KB, the lesson instrument route by 137.5 KB sources / 156.5 KB build: Chart.js is no longer fetched for the light curve); eight routes +0.4 to +0.5 KB (the new strings), ceilings raised under D-PLOT-05 | +7.7 KB gzipped (2034.2 to 2042.0 of 2034.4: ceiling raised to 2042.1 under D-PLOT-04); initial download −2.2 KB (793.7 to 791.5) | A1, A2, A3 ported: see "Stage 3b" |
+| 3b | A1-A3, the live charts (D-PLOT-02) | on `feat/plot-stage-3b` | Routes that load the application 2.3 to 3.1 KB smaller; the lesson instrument route 137.5 KB sources / 156.5 KB build smaller (Chart.js is no longer fetched for the light curve); no route ceiling raised | +7.9 KB gzipped (2034.2 to 2042.2 of 2034.4: ceiling raised to 2042.3 under D-PLOT-04); initial download −2.5 KB (793.7 to 791.2) | A1, A2, A3 ported: see "Stage 3b" |
 | 3c | A4, A5, the bench charts | | | | |
 | 4 | A1-A5 judged by the parity harness; Chart.js removed | | | | |
 | 5 | B1-B8 | | | | |
@@ -923,8 +923,8 @@ takes its size from the stage and never sizes it), and the ids lost
 was: the `<svg>` is a focusable group with a translated `aria-label` and
 `aria-roledescription`, arrow keys read the values and say them in a polite
 status, the legend is real buttons with `aria-pressed`, and a toggle is
-spoken. The Chart.js canvases had none of this. Seven strings were added to
-both catalogues (`chart.role`, `chart.legend`, `chart.shown`, `chart.hidden`,
+spoken. The Chart.js canvases had none of this. Seven strings were added, in
+their own catalogues `js/i18n/en.chart.js` and `es.chart.js` (`chart.role`, `chart.legend`, `chart.shown`, `chart.hidden`,
 `energyChart.label`, `lightCurve.chartLabel`, `rv.chartLabel`).
 
 **What the component gained for them** (small, in `js/plot/chart.js`, all
@@ -1010,16 +1010,22 @@ above applied; A4 and A5 are unchanged. `tests/chartParity.test.js` pins the
 ported sources' caps and the fact that only the bench loads Chart.js.
 
 **Size.** Deferred JavaScript, gzipped, from a fresh `node build.js`: 2034.2
-to 2042.0 KB, 7.7 KB: the component is 7.5 and the strings and the glue the
-rest, less what the ported charts' own code freed. Raised from 2034.4 to
-2042.1 under the standing size-budget approval (D-PLOT-04); stage 4 returns
-Chart.js's chunk and more. The initial download fell, 793.7 to 791.5 KB, the
-modules being lazy. Sources and build routes that loaded the light curve
-lost Chart.js: the transit lesson's instrument route −137.5 KB (sources) and
-−156.5 KB (build), and every route that imports the application −3 KB. Eight
-routes whose catalogue now carries the seven strings (about 0.45 KB) read
-0.4 to 0.5 KB higher: their ceilings are raised by the measured overrun
-(D-PLOT-05). No request, module-size or initial ceiling was raised.
+to 2042.2 KB (measured 2042.244), 7.9 KB: the component is 7.5 and the glue,
+the mount and the words the rest, less what the ported charts' own code freed.
+Raised from 2034.4 to 2042.3 under the standing size-budget approval
+(D-PLOT-04); stage 4 returns Chart.js's chunk and more. The initial download
+fell, 793.7 to 791.2 KB. The chart's words (seven strings in both languages:
+`chart.role`, `chart.legend`, `chart.shown`, `chart.hidden`,
+`energyChart.label`, `lightCurve.chartLabel`, `rv.chartLabel`) are
+`js/i18n/en.chart.js` and `es.chart.js`, registered by `js/plot/mount.js` in
+the chart's own lazy chunk: not in `js/i18n/en.js`, which the instructor
+materials read (a string added there made their bundle stale, and rebuilding
+it needs the passphrase), and not in a chunk of their own (two more lazy
+files put the lesson instrument route at 78 build requests against a ceiling
+of 76). Routes that loaded the light curve lost Chart.js: the transit
+lesson's instrument route is 137.5 KB smaller in the sources and 156.5 KB in
+the build, and every route that imports the application about 3 KB. No route,
+request, module-size or initial ceiling was raised.
 
 **Open.** (1) In a survey the radial-velocity stage is at its 90 px minimum
 and the legend takes two rows, so the plot is about 30 px; Chart.js was as

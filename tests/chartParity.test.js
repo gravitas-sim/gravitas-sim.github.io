@@ -230,7 +230,7 @@ describe('which charts still load Chart.js', () => {
       expect(read(ported)).toContain('mountChart');
     }
     expect(read('js/observationChart.js')).toContain(
-      "await import('./plot/chart.js')"
+      "import('./plot/mount.js')"
     );
   });
 });

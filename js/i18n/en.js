@@ -1185,12 +1185,6 @@ export const EN = {
   'capture.screenshotFailed': 'The screenshot could not be saved',
   'chart.notReady': 'The chart is not ready yet',
   'chart.exportFailed': 'Could not export the chart',
-  'chart.role': 'line chart',
-  'chart.legend': 'Series',
-  'chart.shown': '{label} shown',
-  'chart.hidden': '{label} hidden',
-  'energyChart.label':
-    'Energy against time: kinetic, potential and total. Arrow keys read the values.',
   'easter.colorsRandomized': 'Colors randomized - see the settings panel',
   'placement.place': 'Click or drag to place',
   'placement.cancel': 'Esc to cancel',
@@ -1303,10 +1297,6 @@ export const EN = {
   'rv.survey.measurementsLabel': 'Measurements',
   'astrometry.keepObserving': 'Keep observing…',
   'lightCurve.relativeBrightness': 'Relative Brightness',
-  'lightCurve.chartLabel':
-    'Relative brightness against time in days. Arrow keys read the values.',
-  'rv.chartLabel':
-    'Radial velocity in meters per second against time in days. Arrow keys read the values.',
   'frame.barycenter': 'Barycenter',
   'chrome.canvas.label': 'Gravitational simulation',
   'summary.scenario': 'Scenario: {name}.',

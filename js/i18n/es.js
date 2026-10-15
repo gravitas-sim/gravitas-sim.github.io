@@ -1165,12 +1165,6 @@ export const ES = {
   'capture.screenshotFailed': 'No se pudo guardar la captura',
   'chart.notReady': 'El gráfico aún no está listo',
   'chart.exportFailed': 'No se pudo exportar el gráfico',
-  'chart.role': 'gráfico de líneas',
-  'chart.legend': 'Series',
-  'chart.shown': 'Se muestra: {label}',
-  'chart.hidden': 'Se oculta: {label}',
-  'energyChart.label':
-    'Energía frente al tiempo: cinética, potencial y total. Las flechas leen los valores.',
   'easter.colorsRandomized': 'Colores aleatorios: mira el panel de ajustes',
   'placement.place': 'Haz clic o arrastra para colocar',
   'placement.cancel': 'Esc para cancelar',
@@ -1286,10 +1280,6 @@ export const ES = {
   'rv.survey.measurementsLabel': 'Medidas',
   'astrometry.keepObserving': 'Sigue observando…',
   'lightCurve.relativeBrightness': 'Brillo relativo',
-  'lightCurve.chartLabel':
-    'Brillo relativo frente al tiempo en días. Las flechas leen los valores.',
-  'rv.chartLabel':
-    'Velocidad radial en metros por segundo frente al tiempo en días. Las flechas leen los valores.',
   'frame.barycenter': 'Baricentro',
   'chrome.canvas.label': 'Simulación gravitatoria',
   'summary.scenario': 'Escenario: {name}.',

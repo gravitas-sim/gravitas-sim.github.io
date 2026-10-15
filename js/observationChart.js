@@ -108,8 +108,9 @@ export function chartTick(v) {
 /**
  * A series chart (js/plot/chart.js) in `host`, in the application's words.
  *
- * The component is fetched here, the first time a chart is wanted, so a page
- * whose chart panels are closed never downloads it. The words a screen reader
+ * The component and its words (./plot/mount.js) are fetched here, the first
+ * time a chart is wanted, so a page whose chart panels are closed never
+ * downloads them. The words a screen reader
  * hears (what the chart is, what the legend is, what a toggle said) come from
  * the catalogue as getters, so a chart built before the language changed
  * speaks the language the page has now.
@@ -119,7 +120,7 @@ export function chartTick(v) {
  * @returns {Promise<object>} The chart (draw, resize, toPNG, destroy)
  */
 export async function mountChart(host, options = {}) {
-  const { createChart } = await import('./plot/chart.js');
+  const { createChart } = await import('./plot/mount.js');
   return createChart(host, {
     ...options,
     labels: {
