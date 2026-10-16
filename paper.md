@@ -240,12 +240,8 @@ own licenses, recorded in `NOTICE`.
 
 Releases are archived on Zenodo: all versions share one DOI,
 <https://doi.org/10.5281/zenodo.22800609>, and each release has its own.
-Version 1.0.0 is archived at <https://doi.org/10.5281/zenodo.22800610>. The
-counts in this paper are those of the current development version, not of that
-archive.
-<!-- OWNER: before this paper is submitted, name here the *version* DOI of the
-     release it describes, once that release is archived (not the concept DOI,
-     and not a placeholder). See RELEASING.md, "Two DOIs". This sentence must
-     not be published with a DOI-shaped string that does not resolve. -->
+Version 1.0.0 is archived at <https://doi.org/10.5281/zenodo.22800610> and
+version 2.0.0 at <https://doi.org/10.5281/zenodo.23425533>. The counts in this
+paper are those of 1.0.0, not of 2.0.0.
 
 # References

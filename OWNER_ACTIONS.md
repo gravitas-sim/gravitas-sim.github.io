@@ -5,6 +5,8 @@ project owner has. None of it can be done by a script or by a contributor, which
 is why it is a separate file from [`RELEASING.md`](RELEASING.md) — that one is
 the procedure, this one is the set of things the procedure waits on.
 
+**v2.0.0 is released** (2026-10-16): tag `v2.0.0` on commit `a71f73f50f30ec6a81d398d2cd54f474e87ddd85`, version DOI [10.5281/zenodo.23425533](https://doi.org/10.5281/zenodo.23425533), under the same concept DOI. "What 2.0.0 produced" in [`RELEASING.md`](RELEASING.md) has the rest.
+
 **v1.0.0 is released.** Tagged, published and archived on 2026-09-16:
 
 | | |

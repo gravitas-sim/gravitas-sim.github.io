@@ -704,12 +704,13 @@ If you use Gravitas in teaching or research, please cite it. Every release is
 archived on Zenodo.
 
 <!--fact-block:citation-->
-Version 2.0.0 has no version DOI yet. Zenodo mints it when the release is published,
-and it is recorded here afterwards (see [RELEASING.md](RELEASING.md)). Until then,
-cite the concept DOI and name the version you used.
+> Ziegler, C. (2026). *Gravitas: an interactive astrophysics sandbox for teaching*
+> (Version 2.0.0) [Computer software]. Zenodo.
+> <https://doi.org/10.5281/zenodo.23425533>
 
 | | |
 | --- | --- |
+| **This version (2.0.0)** | [10.5281/zenodo.23425533](https://doi.org/10.5281/zenodo.23425533) |
 | **All versions** | [10.5281/zenodo.22800609](https://doi.org/10.5281/zenodo.22800609) |
 
 The paper describing Gravitas is *Gravitas: A Browser-Based Astrophysics Laboratory for Prediction, Measurement, and Discovery*
