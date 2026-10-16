@@ -23,12 +23,14 @@ bibliography: paper.bib
 
 Gravitas is a browser-based gravitational sandbox and a suite of guided
 investigations for introductory and general-education astronomy. It ships 59
-configurable scenarios drawn from real and idealized systems, and 60
-investigations totalling 1024 steps in which a student predicts an outcome,
-changes one thing, measures the result, and revises the prediction against what
-they measured. It runs entirely client-side as a static site, requires no
-account and no installation, works offline after a first visit, and encodes any
-simulation state into a shareable URL.
+configurable scenarios drawn from real and idealized systems, and 77 guided
+investigations (60 that run in the simulation and 17 in the Observatory, the
+3-D lab and the mission lab). The 60 that run in the simulation have 1024 steps
+in which a student predicts an outcome, changes one thing, measures the result,
+and revises the prediction against what they measured. It runs entirely
+client-side as a static site, requires no account and no installation, works
+offline after a first visit, and encodes any simulation state into a shareable
+URL.
 
 The distinguishing commitment is that the software says what it is doing. A
 public validation page reports 304 checks of the physics engine against
@@ -236,9 +238,14 @@ Gravitas is developed at
 educational text and figures are CC BY 4.0. Third-party components retain their
 own licenses, recorded in `NOTICE`.
 
-Version 1.0.0 is archived at
-<!-- OWNER: insert the Zenodo *version* DOI once minted — not the concept DOI,
-     and not a placeholder. See RELEASING.md, "Two DOIs". This sentence must not
-     be published with a DOI-shaped string that does not resolve. -->
+Releases are archived on Zenodo: all versions share one DOI,
+<https://doi.org/10.5281/zenodo.22800609>, and each release has its own.
+Version 1.0.0 is archived at <https://doi.org/10.5281/zenodo.22800610>. The
+counts in this paper are those of the current development version, not of that
+archive.
+<!-- OWNER: before this paper is submitted, name here the *version* DOI of the
+     release it describes, once that release is archived (not the concept DOI,
+     and not a placeholder). See RELEASING.md, "Two DOIs". This sentence must
+     not be published with a DOI-shaped string that does not resolve. -->
 
 # References

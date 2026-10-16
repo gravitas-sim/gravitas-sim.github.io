@@ -26,9 +26,11 @@ tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
-**<!--fact:investigations-->60<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->1024<!--/fact--> steps between
-them:
+**<!--fact:libraryInvestigations-->77<!--/fact--> guided
+investigations**: <!--fact:investigations-->60<!--/fact--> that run in the
+simulation, <!--fact:investigationSteps-->1024<!--/fact--> steps between them
+(the table below), and <!--fact:guidedInvestigations-->17<!--/fact--> in the
+Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
 | Investigation                    | What a student does                                                                             |
 | -------------------------------- | ----------------------------------------------------------------------------------------------- |
@@ -49,7 +51,7 @@ locally, and exports a lab report as a PDF that they submit through whatever LMS
 the course already uses.
 
 **Instructor materials.** An instructor guide and a generated answer key for each of
-the <!--fact:investigations-->60<!--/fact--> investigations — learning
+the <!--fact:investigations-->60<!--/fact--> investigations that run in the simulation — learning
 objectives, expected observations, the numbers a student should get and the
 common wrong turns — plus an adopter's guide and a curriculum map, all rebuilt
 from the investigations themselves on every release so a key cannot disagree with the

@@ -623,7 +623,8 @@ settled enough to ship without a decision:
    scenario thumbnails (0.64 MB) stay in the install: the offline spec depends
    on them.
 
-Both are proposed as D-PERF-02 for Carl rather than implemented.
+Both were proposed as D-PERF-02. Carl approved them on 2026-10-14, to be
+implemented later with the offline specs green; neither is implemented yet.
 
 ## Running the tests
 

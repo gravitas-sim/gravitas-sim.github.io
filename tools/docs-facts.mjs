@@ -110,6 +110,9 @@ const loadCatalogs = () => (catalogs ??= completeCatalogs());
 // carry markers; it just will not be found by --sync or --check.
 const DOCS = [
   'README.md',
+  // The adopter's guide and the adoption inventory quote the Library's counts.
+  'ADOPTER_GUIDE.md',
+  'ADOPTION.md',
   // The licence inventory: LICENSES.md's data-pack table and NOTICE's list of
   // what each data pack cites, both generated from data-packs/*.json.
   'LICENSES.md',
@@ -211,14 +214,24 @@ const ATTRIBUTE_FACTS = [
   },
   {
     file: 'paper.md',
-    key: 'investigations',
+    key: 'libraryInvestigations',
     pattern:
-      /(real and idealized systems, and )(\d+)(\s+investigations totalling)/,
+      /(real and idealized systems, and )(\d+)(\s+guided\s+investigations \()/,
+  },
+  {
+    file: 'paper.md',
+    key: 'investigations',
+    pattern: /(guided\s+investigations \()(\d+)(\s+that run in the simulation)/,
+  },
+  {
+    file: 'paper.md',
+    key: 'guidedInvestigations',
+    pattern: /(simulation and )(\d+)(\s+in the Observatory)/,
   },
   {
     file: 'paper.md',
     key: 'investigationSteps',
-    pattern: /(investigations totalling )(\d+)( steps)/,
+    pattern: /(simulation have )(\d+)( steps)/,
   },
   // The same suite size a second time, in the Summary, where it had stayed at
   // 243 while the generated copy further down moved to 286.
@@ -1145,10 +1158,23 @@ async function checkCitationMetadata(facts) {
   const problems = [];
   const wanted = [
     ['scenarios', /(\d+)\s+configurable scenarios/, 'configurable scenarios'],
+    // The first count is the Library's: every guided investigation, the
+    // lessons that run in the simulation and the ones in the Observatory and
+    // the labs. The parenthesis after it carries the two parts.
     [
-      'investigations',
+      'libraryInvestigations',
       /(\d+)\s+guided investigations/,
       'guided investigations',
+    ],
+    [
+      'investigations',
+      /guided investigations \((\d+)\s+that run in the simulation/,
+      'guided investigations that run in the simulation',
+    ],
+    [
+      'guidedInvestigations',
+      /that run in the simulation and (\d+)\s+in the Observatory/,
+      'guided investigations in the Observatory and the labs',
     ],
   ];
   for (const file of ['CITATION.cff', '.zenodo.json']) {

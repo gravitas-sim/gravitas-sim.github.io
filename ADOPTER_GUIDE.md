@@ -39,23 +39,29 @@ test holds it to that.
 
 ## The counts, once
 
-The preprint says 22 investigations and the Library says 72. Both are right
-about different things:
+The preprint says 22 investigations and the Library says <!--fact:libraryInvestigations-->77<!--/fact-->. Both are right about different things:
 
 - 22 was the number of lessons at v1.0.0.
-- The Library lists **72 investigations**: **55** lessons that run in the
-  simulation and **17** guided investigations (10 in the Observatory, 4 in the
-  3-D lab, 3 in the mission lab), plus 59 scenarios, 4 ready-made courses and 6
-  cuts of 3 classroom activities.
-- `tools/docs-facts.mjs` keeps `investigations` as the 55 lessons (the keys and
-  the manual's table are per lesson) and adds `libraryInvestigations`,
-  `guidedInvestigations` and `libraryCourses`, so a document can quote either.
+- The Library lists **<!--fact:libraryInvestigations-->77<!--/fact--> guided
+  investigations**: **<!--fact:investigations-->60<!--/fact-->** that run in the
+  simulation and **<!--fact:guidedInvestigations-->17<!--/fact-->** in the
+  Observatory (10), the 3-D lab (4) and the mission lab (3). It also lists
+  scenarios, courses, classroom activities and data sets, which are other
+  counts.
+- `tools/docs-facts.mjs` keeps `investigations` as the lessons that run in the
+  simulation (the keys, the step counts and the manual's table are per lesson)
+  and adds `libraryInvestigations`, `guidedInvestigations` and
+  `libraryCourses`, so a document can quote either. The citation metadata
+  (`CITATION.cff`, `.zenodo.json`), the paper's Summary, the README and the
+  adopter's page all say the Library's number first and the split after it, from
+  `tools/project-metadata.mjs` and these facts, so one count holds everywhere
+  and each statement names what it counts.
 
-A sentence for the paper, in the Library's terms: "Gravitas offers 72 guided
-investigations (55 in the simulation, 17 in the Observatory and the 3-D and
-mission labs) and 59 scenarios." `CITATION.cff`, `.zenodo.json` and `paper.md`
-still say 55 investigations, which is the lesson count; whether to reword them
-is Carl's (D-ADOPT-05).
+A sentence for the paper, in the Library's terms: "Gravitas offers <!--fact:libraryInvestigations-->77<!--/fact--> guided investigations
+(<!--fact:investigations-->60<!--/fact--> in the simulation, 17 in the
+Observatory and the 3-D and mission labs)." `CITATION.cff`, `.zenodo.json` and
+`paper.md` now say it (D-ADOPT-05 left the rewording to Carl; D-R8-01 records
+it).
 
 ## The newcomer docs test: protocol, and why it has not run
 

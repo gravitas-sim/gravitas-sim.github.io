@@ -193,8 +193,10 @@ export const KEYWORDS = [
 /**
  * The abstract, as paragraphs, with the counts left as placeholders.
  *
- * `{scenarios}` and `{investigations}` are filled from the live catalog by
- * the generator. Written as digits in the output so that a reader - and the
+ * `{scenarios}`, `{libraryInvestigations}` (every guided investigation the
+ * Library lists), `{investigations}` (the ones that run in the simulation) and
+ * `{guidedInvestigations}` (the rest, in the Observatory and the labs) are
+ * filled from the live catalog by the generator. Written as digits in the output so that a reader - and the
  * checker - can see the number.
  *
  * @param {object} facts - From tools/docs-facts.mjs
@@ -216,7 +218,10 @@ export function abstractParagraphs(facts) {
     'Gravitas is a browser-based N-body gravity sandbox and astronomy ' +
       `teaching tool. It ships ${facts.scenarios} configurable scenarios ` +
       'drawn from real and idealized systems, ' +
-      `${facts.investigations} guided investigations in which undergraduate ` +
+      `${facts.libraryInvestigations} guided investigations ` +
+      `(${facts.investigations} that run in the simulation and ` +
+      `${facts.guidedInvestigations} in the Observatory, the 3-D lab and the ` +
+      'mission lab) in which undergraduate ' +
       'students predict, measure and plot their own data, instructor ' +
       'materials with answer keys, and a public account of what the ' +
       'underlying model does and does not represent.',
@@ -224,7 +229,8 @@ export function abstractParagraphs(facts) {
       'activities — shorter formats built from the same lesson steps, from a ' +
       'five-minute demonstration to a full lab — and ' +
       `${facts.instructorDocuments} generated instructor documents: a guide ` +
-      'and an answer key for every investigation, activity guides and student ' +
+      'and an answer key for every investigation that runs in the simulation, ' +
+      'activity guides and student ' +
       'worksheets, an adopter\u2019s guide and a curriculum map. Answer keys ' +
       'are derived from the lesson definitions and verified against the same ' +
       'function that marks student work, so they cannot disagree with what a ' +

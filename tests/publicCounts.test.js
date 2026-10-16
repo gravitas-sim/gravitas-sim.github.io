@@ -164,6 +164,14 @@ describe('the public investigation count', () => {
     // released sections and the "Historical record" reports are right to
     // quote the counts of their day, and are deliberately not swept.
     const { MANIFEST } = await import('../js/data/investigations/manifest.js');
+    // Two counts are true of two different things: the lessons that run in the
+    // simulation (the manifest) and every guided investigation the Library
+    // lists, which adds the Observatory and the labs. A document may say
+    // either, with its noun; nothing else is right.
+    const library = JSON.parse(
+      readFileSync(path.join(REPO, 'library/library.json'), 'utf8')
+    ).entries.filter(e => e.kind === 'investigation').length;
+    expect(library).toBeGreaterThan(MANIFEST.length);
     const found = [];
     for (const doc of [
       'README.md',
@@ -180,7 +188,7 @@ describe('the public investigation count', () => {
     expect(found.length).toBeGreaterThan(0);
     expect(
       found
-        .filter(c => c.said !== MANIFEST.length)
+        .filter(c => c.said !== MANIFEST.length && c.said !== library)
         .map(c => `${c.where}: "${c.text}"`)
     ).toEqual([]);
   });
