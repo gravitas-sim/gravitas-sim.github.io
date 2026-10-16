@@ -46,8 +46,8 @@ The preprint says 22 investigations and the Library says <!--fact:libraryInvesti
   investigations**: **<!--fact:investigations-->60<!--/fact-->** that run in the
   simulation and **<!--fact:guidedInvestigations-->17<!--/fact-->** in the
   Observatory (10), the 3-D lab (4) and the mission lab (3). It also lists
-  scenarios, courses, classroom activities and data sets, which are other
-  counts.
+  courses, classroom activities and data sets, which are other counts.
+- Scenarios are the same kind of case. The Library lists **<!--fact:libraryScenarios-->67<!--/fact--> scenarios**: the <!--fact:scenarios-->59<!--/fact--> sandbox scenarios that the README and the citation metadata call configurable scenarios, and <!--fact:systems3dScenarios-->8<!--/fact--> reference systems of the 3-D lab.
 - `tools/docs-facts.mjs` keeps `investigations` as the lessons that run in the
   simulation (the keys, the step counts and the manual's table are per lesson)
   and adds `libraryInvestigations`, `guidedInvestigations` and

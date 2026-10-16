@@ -318,7 +318,7 @@ function stabilityScenarioCount() {
  * guided investigations in the Observatory and the labs rather than lessons that
  * run in the simulation, and the built-in courses.
  *
- * @returns {{libraryInvestigations: number, guidedInvestigations: number, libraryCourses: number}}
+ * @returns {{libraryInvestigations: number, guidedInvestigations: number, libraryScenarios: number, systems3dScenarios: number, libraryCourses: number}}
  */
 function libraryFacts() {
   const { entries } = JSON.parse(
@@ -328,6 +328,12 @@ function libraryFacts() {
   return {
     libraryInvestigations: inv.length,
     guidedInvestigations: inv.filter(e => e.format !== 'lesson').length,
+    // The Library's scenario entries are the sandbox's scenarios (`scenarios`
+    // above) and the 3-D lab's reference systems, which are not sandbox
+    // scenarios: 67 entries beside 59 scenarios is two things, not a drift.
+    libraryScenarios: entries.filter(e => e.kind === 'scenario').length,
+    systems3dScenarios: entries.filter(e => e.id.startsWith('scenario:3d-'))
+      .length,
     libraryCourses: entries.filter(
       e => e.kind === 'course' && !e.id.startsWith('course:community.')
     ).length,
