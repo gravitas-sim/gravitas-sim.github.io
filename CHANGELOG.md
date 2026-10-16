@@ -16,21 +16,20 @@ the release rather than in the tag.
 ## [2.0.0] - 2026-10-16
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
-investigations into a browser laboratory with the following. Sandbox
-scenarios: <!--fact:scenarios-->59<!--/fact-->. Guided
-investigations: <!--fact:libraryInvestigations-->77<!--/fact--> in all, of
-which <!--fact:investigations-->60<!--/fact--> run in the simulation
-and <!--fact:guidedInvestigations-->17<!--/fact--> are in the Observatory, the
-3-D lab and the mission lab. Also a shared shell, a Library, a workspace for
-each student's own work, an instructor path from adoption page to gradebook
-file, <!--fact:instructorDocuments-->480<!--/fact--> generated instructor
-documents, a public validation suite of <!--fact:physicsChecks-->304<!--/fact-->
-checks, and authoring tools (Scenario Studio, Investigation Composer, course
-packs and an extension SDK). The Library
-lists <!--fact:libraryScenarios-->67<!--/fact--> ready-made scenarios: the 59 in
-the sandbox and <!--fact:systems3dScenarios-->8<!--/fact--> reference systems in
-the 3-D lab. Gravitas still runs entirely in the browser, with no account, no
-server and no analytics.
+investigations into a browser laboratory: <!--fact:scenarios-->59<!--/fact-->
+sandbox scenarios, <!--fact:libraryInvestigations-->77<!--/fact--> guided
+investigations (<!--fact:investigations-->60<!--/fact--> that run in the
+simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
+Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
+workspace for each student's own work, an instructor path from adoption page to
+gradebook file, <!--fact:instructorDocuments-->480<!--/fact--> generated
+instructor documents, a public validation suite
+of <!--fact:physicsChecks-->304<!--/fact--> checks, and authoring tools
+(Scenario Studio, Investigation Composer, course packs and an extension SDK).
+The Library lists <!--fact:libraryScenarios-->67<!--/fact--> ready-made
+scenarios: the 59 in the sandbox and <!--fact:systems3dScenarios-->8<!--/fact-->
+reference systems in the 3-D lab. Gravitas still runs entirely in the browser,
+with no account, no server and no analytics.
 
 **What this release does and does not establish.**
 
@@ -52,8 +51,7 @@ server and no analytics.
 
 **Established and stable.** The main path, most of it already in 1.0.0 and all of
 it covered by the automated suites above: the sandbox and its 59 scenarios; the
-original 22 investigations and the in-simulation investigations built on the
-same validated engine; share links and the embed contract; the notebook and lab
+original 22 investigations; share links and the embed contract; the notebook and lab
 report; the shell, the Library, My work and onboarding; assignments, courses and
 submission review; `/teaching/`, the adoption pages and the adopter's guide; the
 instructor portal and materials; `/model/` and `/validation/`; and the figure
@@ -111,9 +109,9 @@ again.
 **Known issue.** The Save State and Load State buttons on `/history/original/`,
 the preserved first prototype, do nothing.
 
-- Prompt 85: the model-versus-data comparison instrument (`js/compare/`, Observatory panel, `COMPARE_INSTRUMENT.md`); artifact source kind `comparison`; notebook source `comparison`. One lesson step uses it (the advanced Transit Photometry step); the exoplanet Observatory guides do not open the panel.
-
 ### Added
+
+- Prompt 85: the model-versus-data comparison instrument (`js/compare/`, Observatory panel, `COMPARE_INSTRUMENT.md`); artifact source kind `comparison`; notebook source `comparison`. One lesson step uses it (the advanced Transit Photometry step); the exoplanet Observatory guides do not open the panel.
 
 - **The series chart, stage 3a of removing Chart.js** (D-PLOT-02, `PLOT_COMPONENT.md`).
   `js/plot/chart.js` draws connected series with a color, a width and a dash,
