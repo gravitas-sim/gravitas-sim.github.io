@@ -16,20 +16,29 @@
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
-import { execFileSync } from 'node:child_process';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 
-const run = (key, seed, withEffects) =>
-  execFileSync(
-    process.execPath,
-    [
-      new URL('../tools/seeded-step.mjs', import.meta.url).pathname,
-      key,
-      String(seed),
-      '300',
-      ...(withEffects ? ['--effects'] : []),
-    ],
-    { maxBuffer: 1 << 28, encoding: 'utf8' }
-  );
+const execFileAsync = promisify(execFile);
+
+// The two processes of a pair do not depend on each other, so they run side by
+// side. A process that exits non-zero rejects, with its stderr in the message,
+// and Promise.all passes the first rejection to the test, so a failing child
+// fails the test loudly rather than reading as an empty result.
+const run = async (key, seed, withEffects) =>
+  (
+    await execFileAsync(
+      process.execPath,
+      [
+        new URL('../tools/seeded-step.mjs', import.meta.url).pathname,
+        key,
+        String(seed),
+        '300',
+        ...(withEffects ? ['--effects'] : []),
+      ],
+      { maxBuffer: 1 << 28, encoding: 'utf8' }
+    )
+  ).stdout;
 
 describe('a realm without the effects module steps the same world', () => {
   for (const [key, seed] of [
@@ -37,9 +46,13 @@ describe('a realm without the effects module steps the same world', () => {
     ['stellar-graveyard', 9],
     ['galactic-collision', 1],
   ]) {
-    test(`${key}, seed ${seed}: every body, the debris and the next draw`, () => {
-      const without = JSON.parse(run(key, seed, false));
-      const withIt = JSON.parse(run(key, seed, true));
+    test(`${key}, seed ${seed}: every body, the debris and the next draw`, async () => {
+      const [outWithout, outWith] = await Promise.all([
+        run(key, seed, false),
+        run(key, seed, true),
+      ]);
+      const without = JSON.parse(outWithout);
+      const withIt = JSON.parse(outWith);
       expect(without.counts).toEqual(withIt.counts);
       expect(without.next).toBe(withIt.next);
       expect(without.rows.length).toBe(withIt.rows.length);

@@ -12,6 +12,7 @@
 // rather than a model of it.
 // =============================================================================
 
+import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import {
   appendFileSync,
@@ -26,6 +27,7 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { promisify } from 'node:util';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import * as real from '../tools/instructor-fixture.mjs';
@@ -76,11 +78,89 @@ const { ensureFixture, expectedStamp, fixtureState, stampPathFor } =
 /** A fixture path in its own directory, not yet built. */
 const freshPath = () => path.join(tempDir(), 'materials.enc.json');
 
+// One real build, made on first use. A test that only needs a built, stamped
+// fixture as its starting point gets a byte copy of it (the fixture and its
+// stamp, which names the fixture's hash, so the pair is as valid as the
+// original); every test that is about building still runs the builder itself.
+let builtTemplate = null;
+
 /** A fixture that has been built and stamped. */
 function builtFixture() {
+  if (!builtTemplate) {
+    builtTemplate = freshPath();
+    ensureFixture({ fixture: builtTemplate });
+  }
   const fixture = freshPath();
-  ensureFixture({ fixture });
+  copyFileSync(builtTemplate, fixture);
+  copyFileSync(stampPathFor(builtTemplate), stampPathFor(fixture));
   return fixture;
+}
+
+const execFileAsync = promisify(execFile);
+
+// The loop that changes each covered file in turn is the slow part of this
+// suite: a stamp walks the import closure and hashes it, about 55 ms in Node
+// and about twice that under Jest's vm, for each of the 268 files. It runs
+// here as the same loop, calling the same expectedStamp, in plain Node child
+// processes that each own a private copy of the sources, two at a time. A child
+// that fails (exit code or stderr) fails the test with its output.
+const SHARD_SCRIPT = `
+import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+const [moduleUrl, root, ...files] = process.argv.slice(1);
+const { expectedStamp } = await import(moduleUrl);
+const baseline = expectedStamp(root).sourceDigest;
+const unnoticed = [];
+for (const file of files) {
+  const at = path.join(root, file);
+  const original = readFileSync(at);
+  appendFileSync(at, '\\n');
+  if (expectedStamp(root).sourceDigest === baseline) unnoticed.push(file);
+  writeFileSync(at, original);
+}
+process.stdout.write(JSON.stringify({ baseline, unnoticed }));
+`;
+
+/**
+ * Change each of `files` by one byte, one at a time, in its own private copy of
+ * the sources, and report the ones whose change the stamp did not notice.
+ *
+ * @param {string[]} files - Covered files, repo-relative
+ * @param {number} shards - Child processes to share the loop between
+ * @returns {Promise<{baselines: string[], unnoticed: string[]}>} The verdicts
+ */
+async function unnoticedChanges(files, shards) {
+  const moduleUrl = pathToFileURL(
+    path.join(SANDBOX, 'tools', 'instructor-fixture.mjs')
+  ).href;
+  const runs = Array.from({ length: shards }, (_, k) =>
+    execFileAsync(
+      process.execPath,
+      [
+        '--input-type=module',
+        '-e',
+        SHARD_SCRIPT,
+        moduleUrl,
+        copyOfClosure(),
+        ...files.filter((_file, i) => i % shards === k),
+      ],
+      { maxBuffer: 1 << 24, encoding: 'utf8' }
+    ).then(
+      ({ stdout }) => JSON.parse(stdout),
+      error => {
+        throw new Error(
+          `A shard of the one-byte-change loop failed: ${error.message}\n${
+            error.stderr ?? ''
+          }`
+        );
+      }
+    )
+  );
+  const results = await Promise.all(runs);
+  return {
+    baselines: results.map(r => r.baseline),
+    unnoticed: results.flatMap(r => r.unnoticed).sort(),
+  };
 }
 
 /** Rewrite a stamp's fields. */
@@ -198,27 +278,25 @@ describe('the digest the stamp records', () => {
     expect(copy.sources).toEqual(a.sources);
   });
 
-  test('omits no input: changing any covered file makes the fixture stale', () => {
+  test('omits no input: changing any covered file makes the fixture stale', async () => {
     const fixture = builtFixture();
     const root = copyOfClosure();
     // Judged against an identical copy of the sources, it is fresh...
     expect(fixtureState({ root, fixture }).state).toBe('fresh');
     // ...and a one-byte change to any one of them, each in turn, is noticed.
     const baseline = expectedStamp(root).sourceDigest;
-    const unnoticed = [];
-    for (const file of sourcePathsFor(REPO)) {
-      const at = path.join(root, file);
-      const original = readFileSync(at);
-      appendFileSync(at, '\n');
-      if (expectedStamp(root).sourceDigest === baseline) unnoticed.push(file);
-      writeFileSync(at, original);
-    }
+    const { baselines, unnoticed } = await unnoticedChanges(
+      sourcePathsFor(REPO),
+      2
+    );
+    // Every shard measured against the same digest the verdict above used.
+    expect(baselines).toEqual([baseline, baseline]);
     expect(unnoticed).toEqual([]);
     appendFileSync(path.join(root, 'js/data/instructorContent.js'), '\n');
     const found = fixtureState({ root, fixture });
     expect(found.state).toBe('stale');
     expect(found.reasons.join('\n')).toContain('js/data/instructorContent.js');
-  });
+  }, 120000);
 });
 
 describe('the boundary with the real bundle', () => {

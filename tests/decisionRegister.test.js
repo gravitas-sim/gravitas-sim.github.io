@@ -26,6 +26,16 @@ const STATUSES = [
 ];
 const text = readFileSync('DECISION_REGISTER.md', 'utf8');
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8' });
+// One git process answers for every name in `input` (one per line), instead of
+// one process per row: each line of the answer is "<oid> commit <size>" when
+// the name resolves to a commit, and "<name> missing" (or ambiguous) when not.
+const gitBatchCheck = input =>
+  execFileSync('git', ['cat-file', '--batch-check'], {
+    encoding: 'utf8',
+    input,
+  })
+    .trimEnd()
+    .split('\n');
 
 /** Every row of every table whose first cell is a register id. */
 function rows() {
@@ -102,6 +112,7 @@ describe('the decision register', () => {
 
   test('every source is a file in the repository or the roadmap, at a commit in history', () => {
     const files = new Set(git('ls-files').split('\n'));
+    const commits = [];
     for (const r of all) {
       const m = /^`([^`]+)` \((-|[0-9a-f]{7,40})\)$/.exec(r.source);
       expect([r.id, !!m]).toEqual([r.id, true]);
@@ -113,8 +124,21 @@ describe('the decision register', () => {
         continue;
       }
       expect([r.id, files.has(file)]).toEqual([r.id, true]);
-      expect(() => git('cat-file', '-e', `${sha}^{commit}`)).not.toThrow();
+      commits.push([r.id, `${sha}^{commit}`]);
     }
+    // Every named commit, resolved by one process. A line that is not
+    // "<oid> commit <size>" is a commit that is not in history, a name that
+    // matches more than one object, or an object that is not a commit.
+    const answers = gitBatchCheck(
+      commits.map(([, name]) => `${name}\n`).join('')
+    );
+    expect(answers.length).toBe(commits.length);
+    commits.forEach(([id], i) =>
+      expect([id, /^[0-9a-f]{40} commit \d+$/.test(answers[i])]).toEqual([
+        id,
+        true,
+      ])
+    );
   });
 
   test('every Roadmap II prompt a row names is between 44 and 121', () => {
