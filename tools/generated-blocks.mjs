@@ -340,21 +340,35 @@ function physicsCoverageTable(inventory) {
  * @returns {string} Markdown, or a note when there is no DOI yet
  */
 function citationBlock() {
-  if (!RELEASE.doi) {
-    return '\nNot archived yet: there is no release, so there is no DOI. See\n[RELEASING.md](RELEASING.md).\n';
-  }
   const v = RELEASE.doi;
   const c = RELEASE.conceptDoi;
-  const lines = [
-    '',
-    `> Ziegler, C. (${(RELEASE.dateReleased || '').slice(0, 4)}). *${TITLE}*`,
-    `> (Version ${RELEASE.version}) [Computer software]. Zenodo.`,
-    `> <https://doi.org/${v}>`,
-    '',
-    '| | |',
-    '| --- | --- |',
-    `| **This version (${RELEASE.version})** | [${v}](https://doi.org/${v}) |`,
-  ];
+  if (!v && !c) {
+    return '\nNot archived yet: there is no release, so there is no DOI. See\n[RELEASING.md](RELEASING.md).\n';
+  }
+  const lines = [''];
+  if (v) {
+    lines.push(
+      `> Ziegler, C. (${(RELEASE.dateReleased || '').slice(0, 4)}). *${TITLE}*`,
+      `> (Version ${RELEASE.version}) [Computer software]. Zenodo.`,
+      `> <https://doi.org/${v}>`,
+      '',
+      '| | |',
+      '| --- | --- |',
+      `| **This version (${RELEASE.version})** | [${v}](https://doi.org/${v}) |`
+    );
+  } else {
+    // A release that is declared but not yet archived: an earlier version's DOI
+    // is not this one's, so none is written. The concept DOI is the one
+    // identifier that is true of every release.
+    lines.push(
+      `Version ${RELEASE.version} has no version DOI yet. Zenodo mints it when the release is published,`,
+      'and it is recorded here afterwards (see [RELEASING.md](RELEASING.md)). Until then,',
+      'cite the concept DOI and name the version you used.',
+      '',
+      '| | |',
+      '| --- | --- |'
+    );
+  }
   if (c) {
     lines.push(`| **All versions** | [${c}](https://doi.org/${c}) |`);
   }

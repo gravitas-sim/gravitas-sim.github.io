@@ -50,13 +50,11 @@ describe('the deploy job only runs behind the gate', () => {
     expect(deploy.if).toContain("github.ref == 'refs/heads/main'");
   });
 
-  test('the integration branch gets the full suite on every push, and cannot deploy', () => {
-    // INTEGRATION.md: v2 integrates everything until the final release. Its
-    // pushes run CI (so the engine jobs, which run on pushes, cover it), and
-    // the deploy condition names main alone, so none of them publishes.
-    expect(workflow.on.push.branches).toEqual(
-      expect.arrayContaining(['main', 'v2'])
-    );
+  test('pushes run CI on main alone, and only main can deploy', () => {
+    // v2, the integration branch, left the push list when it was released
+    // (BRANCHING.md, "Rolling out", step 3): a branch of that name would
+    // otherwise run CI silently. The deploy condition names main alone.
+    expect(workflow.on.push.branches).toEqual(['main']);
     expect(String(deploy.if)).not.toContain('v2');
   });
 

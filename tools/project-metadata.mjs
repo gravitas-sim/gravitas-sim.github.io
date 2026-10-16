@@ -77,21 +77,23 @@ export const COPYRIGHT = { year: 2025, holder: 'Carl Ziegler' };
  */
 export const RELEASE = {
   // Set by RELEASING.md when a tag is cut. `null` means unreleased.
-  version: '1.0.0',
+  version: '2.0.0',
   // ISO date of the GitHub release, not the day the file was edited. If the
   // tag slips past this date, change this and regenerate before tagging: a
   // citation that names the wrong day is a citation nobody can check against
   // the archive.
-  dateReleased: '2026-09-16',
+  dateReleased: '2026-10-16',
   // Minted by Zenodo when the release is archived, and copied from the record
-  // rather than composed by hand. It could not be inside the v1.0.0 tag: with
-  // the GitHub-Zenodo workflow the identifier does not exist until the release
-  // is published, so this was recorded afterwards and the archived v1.0.0 does
-  // not contain it. That is expected - see RELEASING.md.
+  // rather than composed by hand. It cannot be inside the tag: with the
+  // GitHub-Zenodo workflow the identifier does not exist until the release is
+  // published, so it is recorded afterwards and the archive does not contain
+  // it. That is expected - see RELEASING.md.
   //
-  // This one names the 1.0.0 release specifically. Cite it when the exact
-  // version matters, which for a reproducible result it always does.
-  doi: '10.5281/zenodo.22800610',
+  // `null` until Zenodo has minted the 2.0.0 version DOI. The 1.0.0 version DOI
+  // (10.5281/zenodo.22800610) is not this release's and stays out of every file
+  // generated from this constant; RELEASING.md and OWNER_ACTIONS.md record it
+  // as what 1.0.0 produced.
+  doi: null,
   // The concept DOI, which is stable across versions: it resolves to whichever
   // release is newest. Right for a badge or a "cite the software" link, wrong
   // for citing the version somebody actually ran.
