@@ -508,6 +508,42 @@ describe('the skip policy', () => {
 // checker a spec's source rather than pointing it at e2e/: the question is
 // whether it tells the category apart from application behavior, and a
 // synthetic file can hold both side by side.
+// A wait that cannot wait: waitForFunction takes an async predicate's promise
+// for success on the first poll. Two helpers and a spec did this unnoticed.
+describe('the test policy refuses an async waitForFunction predicate', () => {
+  async function problemsOf(...lines) {
+    const { checkSpecSource } = await import('../tools/check-test-policy.mjs');
+    return checkSpecSource('e2e/example.spec.js', lines.join('\n')).problems;
+  }
+
+  test('an async arrow, on the call line or the next, is reported with its line', async () => {
+    const problems = await problemsOf(
+      "import { test } from './fixtures.js';",
+      "test('x', async ({ page }) => {",
+      '  await page.waitForFunction(async () => (await import("/js/ui.js")).ok);',
+      '  await page.waitForFunction(',
+      '    async () => true',
+      '  );',
+      '});'
+    );
+    expect(problems).toHaveLength(2);
+    expect(problems[0]).toMatch(/^e2e\/example\.spec\.js:3: waitForFunction/);
+    expect(problems[1]).toMatch(/^e2e\/example\.spec\.js:4: waitForFunction/);
+  });
+
+  test('a synchronous predicate, and a mention in a comment, are fine', async () => {
+    expect(
+      await problemsOf(
+        "test('x', async ({ page }) => {",
+        '  // waitForFunction(async () => ...) never waits',
+        '  await page.waitForFunction(() => window.ready === true);',
+        '  await page.waitForFunction(([m]) => m.ok, [handle]);',
+        '});'
+      )
+    ).toEqual([]);
+  });
+});
+
 describe('the skip policy knows a build target from application behavior', () => {
   const HEAD = [
     "import { test, expect } from './fixtures.js';",
