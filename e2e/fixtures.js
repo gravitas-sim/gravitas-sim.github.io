@@ -59,6 +59,21 @@ const isIgnorable = text => IGNORED_CONSOLE.some(re => re.test(text));
 const WAIT_TIMEOUT = 20_000;
 
 /**
+ * How long waitForFrames gives `count` steps before it throws.
+ *
+ * The counter is physics steps, not wall time: the largest scenarios step
+ * about eleven times a second on an idle laptop and a CI runner is slower, so a
+ * fixed 20 seconds fails a healthy 240-step wait that way. A quarter second a
+ * step (four steps a second) with a 30 second floor, and 80 seconds at most so
+ * the wait still fails inside the suite's 90-second test timeout.
+ *
+ * @param {number} count - Steps to wait for
+ * @returns {number} Milliseconds
+ */
+const frameWaitTimeout = count =>
+  Math.min(80_000, Math.max(30_000, count * 250));
+
+/**
  * Refuse a name that is not a scenario key, before it reaches the application.
  *
  * `SETTINGS.preset_scenario` takes any string. For one it does not know,
@@ -387,9 +402,14 @@ function makeApp(page) {
      *
      * @param {number} [count] - Steps to wait for
      * @param {object} [options]
-     * @param {number} [options.timeout] - Milliseconds before giving up
+     * @param {number} [options.timeout] - Milliseconds before giving up;
+     *   by default long enough for a quarter of a heavy scenario's step rate
+     *   (see frameWaitTimeout)
      */
-    async waitForFrames(count = 10, { timeout = WAIT_TIMEOUT } = {}) {
+    async waitForFrames(
+      count = 10,
+      { timeout = frameWaitTimeout(count) } = {}
+    ) {
       const ui = await page.evaluateHandle(() => import('/js/ui.js'));
       try {
         const start = await page.evaluate(m => m.state?.frame_count ?? 0, ui);
@@ -417,6 +437,45 @@ function makeApp(page) {
         }
       } finally {
         await ui.dispose().catch(() => {});
+      }
+    },
+
+    /**
+     * Wait for the page to paint `count` frames, whatever the simulation is
+     * doing. waitForFrames counts physics steps, and a paused world takes
+     * none, so a test that pauses and then changes how the world is drawn
+     * waits on this instead: it resolves after `count` animation frames, and
+     * the application's draw loop runs on every one of them, paused or not.
+     * Throws if they do not come, naming how many did.
+     *
+     * @param {number} [count] - Animation frames to wait for
+     * @param {object} [options]
+     * @param {number} [options.timeout] - Milliseconds before giving up
+     */
+    async waitForPaintedFrames(count = 3, { timeout = WAIT_TIMEOUT } = {}) {
+      const seen = await page.evaluate(
+        ([n, limit]) =>
+          new Promise(resolve => {
+            let frames = 0;
+            const deadline = window.setTimeout(() => resolve(frames), limit);
+            const tick = () => {
+              frames += 1;
+              if (frames >= n) {
+                window.clearTimeout(deadline);
+                resolve(frames);
+              } else {
+                window.requestAnimationFrame(tick);
+              }
+            };
+            window.requestAnimationFrame(tick);
+          }),
+        [count, timeout]
+      );
+      if (seen < count) {
+        throw new Error(
+          `waitForPaintedFrames(${count}): the page painted ${seen} frames ` +
+            `in ${timeout} ms`
+        );
       }
     },
 

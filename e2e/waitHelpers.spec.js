@@ -183,3 +183,40 @@ test.describe('waitForBodies', () => {
     );
   });
 });
+
+test.describe('waitForPaintedFrames', () => {
+  test('returns only after the page has painted that many frames, paused or not', async ({
+    page,
+    app,
+  }) => {
+    await serveFixture(page, { ui: STALLED, physics: NO_PHYSICS });
+    // An independent count of the page's frames, started before the wait.
+    await page.evaluate(() => {
+      window.__painted = 0;
+      const tick = () => {
+        window.__painted += 1;
+        window.requestAnimationFrame(tick);
+      };
+      window.requestAnimationFrame(tick);
+    });
+    const start = await page.evaluate(() => window.__painted);
+    await app.waitForPaintedFrames(6);
+    const end = await page.evaluate(() => window.__painted);
+    // Six frames of its own, taken after the call began: the counter above
+    // ticks once in each of them.
+    expect(end - start).toBeGreaterThanOrEqual(5);
+  });
+
+  test('throws, naming how many frames came, when the page paints none', async ({
+    page,
+    app,
+  }) => {
+    await page.addInitScript(() => {
+      window.requestAnimationFrame = () => 0;
+    });
+    await serveFixture(page, { ui: STALLED, physics: NO_PHYSICS });
+    await expect(app.waitForPaintedFrames(4, { timeout: 300 })).rejects.toThrow(
+      /waitForPaintedFrames\(4\): the page painted 0 frames in 300 ms/
+    );
+  });
+});

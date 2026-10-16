@@ -377,7 +377,9 @@ test.describe('a picture cannot reach into the physics', () => {
     await app.boot();
     await app.loadScenario('binary-bh', 'bh-visual-isolation');
     await app.setPaused(true);
-    await app.waitForFrames(2);
+    // Paused, so the physics takes no steps: wait on the draw loop, which still
+    // runs, rather than on a step counter that cannot move.
+    await app.waitForPaintedFrames(2);
 
     const before = await physicsOf(page);
     expect(before.length).toBeGreaterThan(0);
@@ -400,7 +402,7 @@ test.describe('a picture cannot reach into the physics', () => {
         physics.updatePhysicsSettings(ui.SETTINGS);
       }
     });
-    await app.waitForFrames(5);
+    await app.waitForPaintedFrames(5);
 
     expect(await physicsOf(page)).toEqual(before);
   });
@@ -413,7 +415,9 @@ test.describe('a picture cannot reach into the physics', () => {
     await app.boot();
     await app.loadScenario('sagittarius-a', 'bh-tier-isolation');
     await app.setPaused(true);
-    await app.waitForFrames(2);
+    // Paused, so the physics takes no steps: wait on the draw loop, which still
+    // runs, rather than on a step counter that cannot move.
+    await app.waitForPaintedFrames(2);
     const before = await physicsOf(page);
 
     for (const tier of ['low', 'full', 'low', 'full']) {
@@ -421,7 +425,7 @@ test.describe('a picture cannot reach into the physics', () => {
         const ui = await import('/js/ui.js');
         ui.SETTINGS.quality_tier = t;
       }, tier);
-      await app.waitForFrames(3);
+      await app.waitForPaintedFrames(3);
     }
     expect(await physicsOf(page)).toEqual(before);
   });
