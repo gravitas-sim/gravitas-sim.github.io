@@ -201,16 +201,25 @@ test('demo mode starts on a scenario, relabels its button and stops again', asyn
     icon: 'icon icon-stop',
     label: 'settings.demoMode.stop',
   });
-  // It started a scenario at once, and the simulation is running.
-  await page.waitForFunction(async () => {
-    const ui = await import('/js/ui.js');
-    const { SCENARIO_INFO } = await import('/js/data/scenarioInfo.js');
-    return (
-      ui.state.paused === false &&
-      ui.SETTINGS.preset_scenario in SCENARIO_INFO &&
-      ui.SETTINGS.preset_scenario !== 'None'
-    );
-  });
+  // It started a scenario at once, and the simulation is running. The scenario
+  // is the one the world records as loaded: SETTINGS.preset_scenario is spent
+  // (reset to 'None') as soon as the world is built, so it names nothing here.
+  // (expect.poll, not waitForFunction: an async predicate passes that on its
+  // first poll, whatever it resolves to.)
+  await expect
+    .poll(() =>
+      page.evaluate(async () => {
+        const ui = await import('/js/ui.js');
+        const { current_scenario_name } = await import('/js/appState.js');
+        const { SCENARIO_INFO } = await import('/js/data/scenarioInfo.js');
+        return (
+          ui.state.paused === false &&
+          current_scenario_name in SCENARIO_INFO &&
+          current_scenario_name !== 'None'
+        );
+      })
+    )
+    .toBe(true);
 
   await button.evaluate(b => b.click());
   await expect.poll(state).toMatchObject({
