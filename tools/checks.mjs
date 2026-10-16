@@ -507,7 +507,10 @@ export const CHECKS = [
   {
     id: 'e2e-dist',
     label: 'browser suite (production build)',
-    command: ['npm', 'run', 'e2e:dist', '--', '--retries=0'],
+    // Two workers like e2e-sources and CI: the gate must judge the build the
+    // way CI does, not by the machine's core count (six workers on a 12-core
+    // laptop fail the wall-clock 3-D guide test).
+    command: ['npm', 'run', 'e2e:dist', '--', '--retries=0', '--workers=2'],
     tier: 'slow',
     ci: 'e2e-build',
     group: 'correctness',
