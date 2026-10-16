@@ -1,6 +1,6 @@
 # Integration
 
-**Status, 2026-10-16: `v2` was released as 2.0.0** (merge commit `a71f73f50f30ec6a81d398d2cd54f474e87ddd85` on `main`, tag `v2.0.0`). `main` now holds everything `v2` held. New work branches from `main`. `v2` is kept only until the owner deletes it (BRANCHING.md, step 7); do not branch from it or merge into it.
+**Status, 2026-10-16: `v2` was released as 2.0.0** (merge commit `a71f73f50f30ec6a81d398d2cd54f474e87ddd85` on `main`, tag `v2.0.0`). `main` now holds everything `v2` held. New work branches from `main`. `v2` was deleted on 2026-10-17 (BRANCHING.md, step 7). Do not recreate it.
 
 **The integration branch is `v2`.** Every change in Roadmap II merges into it
 by pull request, and there is **one public release at the end**, when Prompt
