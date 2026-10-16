@@ -257,6 +257,20 @@ export function checkSpecSource(rel, src) {
     }
   });
 
+  // An async predicate is a promise, a promise is truthy, and so the wait
+  // passes on its first poll whatever the page holds. Spread over the whole
+  // source because prettier puts the predicate on the line after the call.
+  const joined = code.join('\n');
+  for (const m of joined.matchAll(/\bwaitForFunction\s*\(\s*async\b/g)) {
+    const line = joined.slice(0, m.index).split('\n').length;
+    problems.push(
+      `${rel}:${line}: waitForFunction with an async predicate is not a ` +
+        'wait: a promise is truthy, so it passes on its first poll. Read the ' +
+        'module through page.evaluateHandle and use a synchronous predicate, ' +
+        'or use expect.poll (e2e/README.md, "Rules that keep it from becoming flaky").'
+    );
+  }
+
   return { problems, allowed, buildTarget };
 }
 

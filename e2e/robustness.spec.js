@@ -14,11 +14,25 @@
 
 import { test, expect } from './fixtures.js';
 
-/** Run a scenario hard and report what came out. */
-async function stress(app, key, { frames = 300, seed = 'stress' } = {}) {
+/**
+ * Run a scenario hard and report what came out.
+ *
+ * The wait is for real physics steps, so its length is the scenario's: the
+ * largest one steps about eleven times a second on an idle laptop, and a CI
+ * runner is slower. The allowance is 400 ms a step (2.5 steps a second, a
+ * quarter of that rate) and the test's own timeout grows with it.
+ */
+async function stress(
+  app,
+  testInfo,
+  key,
+  { frames = 300, seed = 'stress' } = {}
+) {
+  const timeout = Math.max(20_000, frames * 400);
+  testInfo.setTimeout(timeout + 60_000);
   await app.loadScenario(key, seed);
   const before = await app.bodySnapshot();
-  await app.waitForFrames(frames);
+  await app.waitForFrames(frames, { timeout });
   const after = await app.bodySnapshot();
   return { before, after };
 }
@@ -26,13 +40,18 @@ async function stress(app, key, { frames = 300, seed = 'stress' } = {}) {
 test.describe('heavy scenarios stay finite', () => {
   test('the largest scenario in the catalog runs without producing a NaN', async ({
     app,
-  }) => {
+  }, testInfo) => {
     // Galactic Collision is the biggest thing here: two galaxies, hundreds of
     // bodies, mutual gravity and mergers all at once.
     await app.boot();
-    const { before, after } = await stress(app, 'galactic-collision', {
-      frames: 240,
-    });
+    const { before, after } = await stress(
+      app,
+      testInfo,
+      'galactic-collision',
+      {
+        frames: 240,
+      }
+    );
 
     expect(before.count).toBeGreaterThan(100);
     expect(before.nonFinite).toBe(0);
@@ -42,12 +61,14 @@ test.describe('heavy scenarios stay finite', () => {
     expect(after.count).toBeGreaterThan(10);
   });
 
-  test('a tightly packed system holds its orbits', async ({ app }) => {
+  test('a tightly packed system holds its orbits', async ({
+    app,
+  }, testInfo) => {
     // TRAPPIST-1's seven planets orbit between 1.15 and 6.19 simulation units,
     // which is the regime where a softening floor set for a scenario a hundred
     // times larger used to starve them of gravity and throw them out.
     await app.boot();
-    const { before, after } = await stress(app, 'trappist-1-system', {
+    const { before, after } = await stress(app, testInfo, 'trappist-1-system', {
       frames: 400,
     });
 
@@ -59,9 +80,11 @@ test.describe('heavy scenarios stay finite', () => {
 
   test('a merger removes bodies without corrupting the survivors', async ({
     app,
-  }) => {
+  }, testInfo) => {
     await app.boot();
-    const { before, after } = await stress(app, 'gw150914', { frames: 300 });
+    const { before, after } = await stress(app, testInfo, 'gw150914', {
+      frames: 300,
+    });
 
     expect(before.nonFinite).toBe(0);
     expect(after.nonFinite).toBe(0);

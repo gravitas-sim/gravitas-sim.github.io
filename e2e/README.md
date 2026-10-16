@@ -449,6 +449,7 @@ The screenshot test runs in every browser: it needs no codec.
 | `production.spec.js`             | The built `dist/` — DOM only, and the only spec that runs against the bundle alone                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `shell.spec.js`                  | The shared shell (Prompt 50) on the pages that carry it: a group opens one at a time and closes on Escape or a click elsewhere, every page two activations away by mouse and by keyboard, the skip link, a theme and a language chosen on one page holding on the next two, a page without the module still navigating, and the Menu fold on a phone                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `storageLayer.spec.js`           | The storage module (Prompt 65) in a real browser: IndexedDB with a quota estimate and its reserve, a record kept across a reload, a write in one tab heard in another, the localStorage fallback when IndexedDB is missing, and the student's own keys exported and imported unchanged with a full browser refusing a write without losing the old one                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `waitHelpers.spec.js`            | The `waitForFrames`, `waitForPaintedFrames` and `waitForBodies` helpers against a fixture page whose state changes only after a delay: they do not return early, and they throw, naming what they saw, on timeout |
 
 `fixtures.js` holds the shared machinery: the error trap and the `app` helper.
 
@@ -470,7 +471,8 @@ test('something', async ({ page, app }) => {
 Every test gets two fixtures automatically:
 
 - **`app`** — `boot`, `loadScenario`, `emptyWorld`, `waitForBodies`,
-  `waitForFrames`, `bodySnapshot`, `selectFirstObject`, `openPanel`,
+  `waitForFrames` (physics steps; a paused world takes none, so after a pause
+  use `waitForPaintedFrames`), `bodySnapshot`, `selectFirstObject`, `openPanel`,
   `setObserver` and the rest. Read the file; it is short.
 - **an error trap** — uncaught exceptions and `console.error` output fail the
   test that was on screen when they happened. This is the highest-value check in
@@ -493,6 +495,14 @@ A file that loses some fails too, until its ceiling is lowered with
 **Wait on a positive.** "The panel is not there" passes before the panel has
 had a chance to appear. Wait for something that proves the redraw happened,
 then assert the absence.
+
+**Never give `waitForFunction` an async predicate.** A promise is truthy, so
+the wait passes on its first poll whatever the application holds; before this
+was fixed, `waitForFrames(200)` returned after five steps. Read a module with
+`page.evaluateHandle(() => import(...))` and pass the handle to a synchronous
+predicate, as `waitForFrames` and `waitForBodies` do, or poll from the test
+with `expect.poll(() => page.evaluate(...))`. `waitHelpers.spec.js` holds the
+two helpers to this.
 
 **Dilate the clock, not the CPU.** For a race against a fixed interval in the
 page, slow `performance.now()` inside the page. CPU throttling makes the race
