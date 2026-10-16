@@ -261,7 +261,7 @@ The first release, as a worked example of the above.
 | Tag | `v1.0.0`, annotated, on commit `9148f9e4296f6010293056303e7c6b10d87add1f` |
 | GitHub release | <https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v1.0.0>, published 2026-09-16 |
 | Zenodo record | <https://zenodo.org/records/22800610> |
-| Version DOI | <!--fact:doi-->10.5281/zenodo.22800610<!--/fact--> |
+| Version DOI | 10.5281/zenodo.22800610 |
 | Concept DOI | <!--fact:conceptDoi-->10.5281/zenodo.22800609<!--/fact--> |
 | Archived file | `gravitas-sim/gravitas-sim.github.io-v1.0.0.zip`, byte-identical to GitHub's zipball for the tag |
 

@@ -13,7 +13,81 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
-- Prompt 85: the model-versus-data comparison instrument (`js/compare/`, Observatory panel, `COMPARE_INSTRUMENT.md`); artifact source kind `comparison`; notebook source `comparison`. One lesson step uses it (the advanced Transit Photometry step); the exoplanet Observatory guides do not open the panel.
+## [2.0.0] - 2026-10-16
+
+**Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
+investigations into a browser laboratory with the following. Sandbox
+scenarios: <!--fact:scenarios-->59<!--/fact-->. Guided
+investigations: <!--fact:libraryInvestigations-->77<!--/fact--> in all, of
+which <!--fact:investigations-->60<!--/fact--> run in the simulation
+and <!--fact:guidedInvestigations-->17<!--/fact--> are in the Observatory, the
+3-D lab and the mission lab. Also a shared shell, a Library, a workspace for
+each student's own work, an instructor path from adoption page to gradebook
+file, <!--fact:instructorDocuments-->480<!--/fact--> generated instructor
+documents, a public validation suite of <!--fact:physicsChecks-->304<!--/fact-->
+checks, and authoring tools (Scenario Studio, Investigation Composer, course
+packs and an extension SDK). The Library
+lists <!--fact:libraryScenarios-->67<!--/fact--> ready-made scenarios: the 59 in
+the sandbox and <!--fact:systems3dScenarios-->8<!--/fact--> reference systems in
+the 3-D lab. Gravitas still runs entirely in the browser, with no account, no
+server and no analytics.
+
+**What this release does and does not establish.**
+
+- The software has extensive automated validation: unit tests, the public
+  physics suite, and browser tests in three engines (Chromium, Firefox and
+  WebKit).
+- The scientific kernels have internal validation against cited references,
+  with tolerances fixed beforehand and documented.
+- No external scientist has reviewed those suites.
+- No instructor outside the project has adopted Gravitas.
+- No learning gain has been measured.
+- Spanish has not been read by a fluent reader. Computed validation messages,
+  the instructor guides and answer keys, `/model/`, `/validation/`, the user
+  manual and the SDK documentation are English only.
+- Real phones and low-end devices have not been measured. Every figure for them
+  is a proxy from a throttled desktop browser.
+- Accessibility targets WCAG 2.2 AA with automated checks; it is not a claim of
+  conformance, and no external audit has been done.
+
+**Established and stable.** The main path, most of it already in 1.0.0 and all of
+it covered by the automated suites above: the sandbox and its 59 scenarios; the
+original 22 investigations and the in-simulation investigations built on the
+same validated engine; share links and the embed contract; the notebook and lab
+report; the shell, the Library, My work and onboarding; assignments, courses and
+submission review; `/teaching/`, the adoption pages and the adopter's guide; the
+instructor portal and materials; `/model/` and `/validation/`; and the figure
+builder.
+
+**New in 2.0 and not yet used in a class.** The Observatory and its two guide
+suites; the curated catalog and the extension SDK; the experiment runner, the
+analysis lab and the inference core; the opt-in CDS archive import (it sends the
+star name you type to CDS); the compute page (online only, opt-in, loaded from a
+third-party CDN); the forward-model loop, the model-versus-data comparison and
+the calibration lab (synthetic data only); the Sky Lab; the 38 lessons added
+since 1.0.0 (their kernels are checked against cited references, but no external
+scientist has reviewed them and their Spanish is unreviewed); the 3-D lab and
+the mission lab; the formula language; the Gaia, Pantheon+ and other
+rights-labelled data packs (some are non-commercial, as labelled, and can be
+removed as files; see `NOTICE` and `LICENSES.md`); Scenario Studio packs
+delivered by link; and `/evaluation/`, an instrument whose pre/post questions
+are unvalidated (the page says so). Nine of these pages carry a "New in 2.0"
+badge.
+
+**Does not ship.** Any live service (live sessions, accounts, LTI); in-app MCMC
+sampling; WebAssembly kernels; JupyterLite or any same-origin notebook;
+instructor-side or student-facing AI help; the external pilots, reviews and
+audits; real-device performance tables; and the instructor passphrase. Chart.js
+is still shipped (its replacement is partly done and finishes after this release).
+`spike/`, `tests/`, `e2e/` and `tools/` stay in the repository and the archive
+but are not published on the site.
+
+**Upgrading.** A browser that visited the old site keeps running the old code
+until the visitor accepts the "update available" chip or closes every Gravitas
+tab. Until then, a link made with 2.0.0 may be refused with "made by a newer
+version"; accepting the chip, or closing the tabs and reopening, fixes it. Two
+investigations gained steps (A Universe of Stars, Listening to Spacetime), so a
+student who finished one in 1.0.0 will see the new steps unanswered.
 
 **Compatibility with 1.0.0.** v2 reads everything 1.0.0 wrote. Three things v2
 writes, 1.0.0 cannot read: a world share link (now version 2, which names the
@@ -22,6 +96,22 @@ link that carries a package pin or a non-core depth. After the deploy `main`
 serves v2, and a stale cached 1.0.0 tab gets the update chip before it can read
 a v2 share link, so v2 does not write 1.0.0-format share links (D-R8-01 records
 the choice).
+
+**What that rests on.** Every storage key 1.0.0 used is still read, and the
+readers for the formats that changed (experiment records, assignment links,
+investigation progress, share links and submission tokens) are pinned by unit
+tests. This was checked in source and in tests, not on a real 1.0.0 browser
+profile upgraded in place. 1.0.0 ignores the other new data 2.0.0 writes.
+
+**If this release is rolled back.** Share links, pinned or non-core-depth
+assignment links and experiment records made while 2.0.0 was live cannot be
+read by 1.0.0. The experiment records stay in the browser and 2.0.0 reads them
+again.
+
+**Known issue.** The Save State and Load State buttons on `/history/original/`,
+the preserved first prototype, do nothing.
+
+- Prompt 85: the model-versus-data comparison instrument (`js/compare/`, Observatory panel, `COMPARE_INSTRUMENT.md`); artifact source kind `comparison`; notebook source `comparison`. One lesson step uses it (the advanced Transit Photometry step); the exoplanet Observatory guides do not open the panel.
 
 ### Added
 
@@ -1729,5 +1819,6 @@ listed here because this is the release that first carries it.
 - `aria-hidden="true"` from the 3-D viewport, which had been hiding two
   focusable buttons from assistive technology.
 
-[Unreleased]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v1.0.0
