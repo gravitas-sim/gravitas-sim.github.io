@@ -5,12 +5,13 @@ serves, and every merge is live. A *release* is a different thing — a tagged,
 archived, citable point in that history — and this is the checklist for making
 one.
 
-**There has been one release, `v1.0.0`** (2026-09-16): a tag, a GitHub
-release and a Zenodo archive with its version and concept DOIs. "What 1.0.0
-produced" below has every identifier. `CITATION.cff` and `.zenodo.json` name
-that version, because it is the one a reader can check out.
+**There have been two releases, `v1.0.0`** (2026-09-16) **and `v2.0.0`**
+(2026-10-16): each a tag, a GitHub release and a Zenodo archive with its version
+DOI, under one concept DOI. "What 1.0.0 produced" and "What 2.0.0 produced"
+below have every identifier. `CITATION.cff` and `.zenodo.json` name the newest
+version, because it is the one a reader can check out.
 
-**The next is the release of `v2`,** the integration branch of the next major
+**The second, `v2.0.0`,** was the release of `v2`, the integration branch of the next major
 version. It is one release at the end, decided by Carl after Roadmap II's
 Prompt 121 returns GO ([`INTEGRATION.md`](INTEGRATION.md)). Until then, `main`
 and the live site stay at what was last deployed, and nothing merged into
@@ -251,6 +252,16 @@ workflow" above for why, and say so rather than letting a reader discover it.
 
 Then put the *version* DOI into the papers, not the concept DOI. See the two
 DOIs section for the reason and for the form of the citation.
+
+## What 2.0.0 produced
+
+| | |
+| --- | --- |
+| Tag | `v2.0.0`, annotated, on commit `a71f73f50f30ec6a81d398d2cd54f474e87ddd85`, the merge commit of the release pull request (`git revert -m 1` is the rollback) |
+| GitHub release | <https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v2.0.0>, published 2026-10-16 |
+| Zenodo record | <https://zenodo.org/records/23425533> |
+| Version DOI | 10.5281/zenodo.23425533 |
+| Archived file | `gravitas-sim/gravitas-sim.github.io-v2.0.0.zip` |
 
 ## What 1.0.0 produced
 
