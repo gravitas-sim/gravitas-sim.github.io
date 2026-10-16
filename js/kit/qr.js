@@ -18,6 +18,11 @@
 // No DOM, no storage, no network.
 // =============================================================================
 
+// Bound once, not read as globals: in Jest's vm context every free global read
+// goes through the context, which made these loops several times slower than
+// in Node.
+const { Math, Number, Array, Uint8Array } = globalThis;
+
 /** Error-correction codewords per block, then blocks, for versions 1 to 40. */
 const LEVELS = {
   L: {

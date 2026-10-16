@@ -11,6 +11,11 @@ import {
   qrSvg,
 } from '../js/kit/qr.js';
 
+// Bound once, not read as globals: in Jest's vm context every free global read
+// goes through the context, which makes the decoder's per-module loops several
+// times slower than in Node.
+const { Math, Uint8Array } = globalThis;
+
 // Byte capacities printed in the standard (ISO/IEC 18004, table 7).
 const CAPACITY = {
   L: {
@@ -85,7 +90,29 @@ function decode(code) {
       if (formatBits(level, mask) === word) found = { level, mask };
   if (!found) return { error: 'format' };
 
-  // Function modules by formula, written separately from the encoder.
+  // Function modules by formula, written separately from the encoder. The
+  // alignment-pattern centers depend only on the version, so they are worked
+  // out once here and not again for each of the matrix's modules.
+  const alignmentCenters = [];
+  if (version >= 2) {
+    const n = Math.floor(version / 7) + 2;
+    const first = 6;
+    const last = size - 7;
+    const step =
+      version === 32 ? 26 : Math.ceil((version * 4 + 4) / (n * 2 - 2)) * 2;
+    const pos = [first];
+    for (let p = last; pos.length < n; p -= step) pos.splice(1, 0, p);
+    for (const cx of pos)
+      for (const cy of pos) {
+        if (
+          (cx === 6 && cy === 6) ||
+          (cx === 6 && cy === last) ||
+          (cx === last && cy === 6)
+        )
+          continue;
+        alignmentCenters.push([cx, cy]);
+      }
+  }
   const isFunction = (x, y) => {
     if (x === 6 || y === 6) return true;
     if (x < 9 && y < 9) return true;
@@ -96,25 +123,8 @@ function decode(code) {
       ((x < 6 && y >= size - 11) || (y < 6 && x >= size - 11))
     )
       return true;
-    if (version >= 2) {
-      const n = Math.floor(version / 7) + 2;
-      const first = 6;
-      const last = size - 7;
-      const step =
-        version === 32 ? 26 : Math.ceil((version * 4 + 4) / (n * 2 - 2)) * 2;
-      const pos = [first];
-      for (let p = last; pos.length < n; p -= step) pos.splice(1, 0, p);
-      for (const cx of pos)
-        for (const cy of pos) {
-          if (
-            (cx === 6 && cy === 6) ||
-            (cx === 6 && cy === last) ||
-            (cx === last && cy === 6)
-          )
-            continue;
-          if (Math.abs(x - cx) <= 2 && Math.abs(y - cy) <= 2) return true;
-        }
-    }
+    for (const [cx, cy] of alignmentCenters)
+      if (Math.abs(x - cx) <= 2 && Math.abs(y - cy) <= 2) return true;
     return false;
   };
   const maskFns = [
