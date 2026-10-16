@@ -15,6 +15,14 @@ the release rather than in the tag.
 
 - Prompt 85: the model-versus-data comparison instrument (`js/compare/`, Observatory panel, `COMPARE_INSTRUMENT.md`); artifact source kind `comparison`; notebook source `comparison`. One lesson step uses it (the advanced Transit Photometry step); the exoplanet Observatory guides do not open the panel.
 
+**Compatibility with 1.0.0.** v2 reads everything 1.0.0 wrote. Three things v2
+writes, 1.0.0 cannot read: a world share link (now version 2, which names the
+scenario by its public id), an experiment record (schema 3) and an assignment
+link that carries a package pin or a non-core depth. After the deploy `main`
+serves v2, and a stale cached 1.0.0 tab gets the update chip before it can read
+a v2 share link, so v2 does not write 1.0.0-format share links (D-R8-01 records
+the choice).
+
 ### Added
 
 - **The series chart, stage 3a of removing Chart.js** (D-PLOT-02, `PLOT_COMPONENT.md`).

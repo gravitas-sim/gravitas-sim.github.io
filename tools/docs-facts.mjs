@@ -110,6 +110,9 @@ const loadCatalogs = () => (catalogs ??= completeCatalogs());
 // carry markers; it just will not be found by --sync or --check.
 const DOCS = [
   'README.md',
+  // The adopter's guide and the adoption inventory quote the Library's counts.
+  'ADOPTER_GUIDE.md',
+  'ADOPTION.md',
   // The licence inventory: LICENSES.md's data-pack table and NOTICE's list of
   // what each data pack cites, both generated from data-packs/*.json.
   'LICENSES.md',
@@ -211,14 +214,24 @@ const ATTRIBUTE_FACTS = [
   },
   {
     file: 'paper.md',
-    key: 'investigations',
+    key: 'libraryInvestigations',
     pattern:
-      /(real and idealized systems, and )(\d+)(\s+investigations totalling)/,
+      /(real and idealized systems, and )(\d+)(\s+guided\s+investigations \()/,
+  },
+  {
+    file: 'paper.md',
+    key: 'investigations',
+    pattern: /(guided\s+investigations \()(\d+)(\s+that run in the simulation)/,
+  },
+  {
+    file: 'paper.md',
+    key: 'guidedInvestigations',
+    pattern: /(simulation and )(\d+)(\s+in the Observatory)/,
   },
   {
     file: 'paper.md',
     key: 'investigationSteps',
-    pattern: /(investigations totalling )(\d+)( steps)/,
+    pattern: /(simulation have )(\d+)( steps)/,
   },
   // The same suite size a second time, in the Summary, where it had stayed at
   // 243 while the generated copy further down moved to 286.
@@ -305,7 +318,7 @@ function stabilityScenarioCount() {
  * guided investigations in the Observatory and the labs rather than lessons that
  * run in the simulation, and the built-in courses.
  *
- * @returns {{libraryInvestigations: number, guidedInvestigations: number, libraryCourses: number}}
+ * @returns {{libraryInvestigations: number, guidedInvestigations: number, libraryScenarios: number, systems3dScenarios: number, libraryCourses: number}}
  */
 function libraryFacts() {
   const { entries } = JSON.parse(
@@ -315,6 +328,12 @@ function libraryFacts() {
   return {
     libraryInvestigations: inv.length,
     guidedInvestigations: inv.filter(e => e.format !== 'lesson').length,
+    // The Library's scenario entries are the sandbox's scenarios (`scenarios`
+    // above) and the 3-D lab's reference systems, which are not sandbox
+    // scenarios: 67 entries beside 59 scenarios is two things, not a drift.
+    libraryScenarios: entries.filter(e => e.kind === 'scenario').length,
+    systems3dScenarios: entries.filter(e => e.id.startsWith('scenario:3d-'))
+      .length,
     libraryCourses: entries.filter(
       e => e.kind === 'course' && !e.id.startsWith('course:community.')
     ).length,
@@ -1145,10 +1164,23 @@ async function checkCitationMetadata(facts) {
   const problems = [];
   const wanted = [
     ['scenarios', /(\d+)\s+configurable scenarios/, 'configurable scenarios'],
+    // The first count is the Library's: every guided investigation, the
+    // lessons that run in the simulation and the ones in the Observatory and
+    // the labs. The parenthesis after it carries the two parts.
     [
-      'investigations',
+      'libraryInvestigations',
       /(\d+)\s+guided investigations/,
       'guided investigations',
+    ],
+    [
+      'investigations',
+      /guided investigations \((\d+)\s+that run in the simulation/,
+      'guided investigations that run in the simulation',
+    ],
+    [
+      'guidedInvestigations',
+      /that run in the simulation and (\d+)\s+in the Observatory/,
+      'guided investigations in the Observatory and the labs',
     ],
   ];
   for (const file of ['CITATION.cff', '.zenodo.json']) {

@@ -1288,6 +1288,10 @@ function guidePage(S) {
   const total = n('investigation').length;
   const guided = total - lessons;
   const scenarios = n('scenario').length;
+  const scenarios3d = n('scenario').filter(e =>
+    e.id.startsWith('scenario:3d-')
+  ).length;
+  const sandbox = scenarios - scenarios3d;
   const deep = n('investigation').filter(e => e.depths).length;
   const courses = n('course').filter(
     e => !e.id.startsWith('course:community.')
@@ -1326,8 +1330,8 @@ function guidePage(S) {
       'what',
       T('What you are adopting', 'Qué va a adoptar'),
       P(
-        `Gravitas is a browser-based gravity simulator with ${total} guided investigations (${lessons} that run in the simulation and ${guided} in the Observatory, the 3-D lab and the mission lab), ${scenarios} ready-made scenarios, ${courses} ready-made courses and ${cuts} cuts of classroom activities. The software is MIT licensed and the teaching material is CC BY 4.0, both free. These counts are read from the Library when this page is built.`,
-        `Gravitas es un simulador de gravedad que funciona en el navegador, con ${total} investigaciones guiadas (${lessons} que se ejecutan en la simulación y ${guided} en el Observatorio, el laboratorio 3-D y el laboratorio de misiones), ${scenarios} escenarios ya preparados, ${courses} cursos ya preparados y ${cuts} cortes de actividades de clase. El software tiene licencia MIT y el material docente CC BY 4.0, ambos gratuitos. Estos números se leen de la Biblioteca cuando se construye esta página.`
+        `Gravitas is a browser-based gravity simulator with ${total} guided investigations (${lessons} that run in the simulation and ${guided} in the Observatory, the 3-D lab and the mission lab), ${scenarios} ready-made scenarios (${sandbox} in the sandbox and ${scenarios3d} reference systems in the 3-D lab), ${courses} ready-made courses and ${cuts} cuts of classroom activities. The software is MIT licensed and the teaching material is CC BY 4.0, both free. These counts are read from the Library when this page is built.`,
+        `Gravitas es un simulador de gravedad que funciona en el navegador, con ${total} investigaciones guiadas (${lessons} que se ejecutan en la simulación y ${guided} en el Observatorio, el laboratorio 3-D y el laboratorio de misiones), ${scenarios} escenarios ya preparados (${sandbox} en la simulación libre y ${scenarios3d} sistemas de referencia del laboratorio 3-D), ${courses} cursos ya preparados y ${cuts} cortes de actividades de clase. El software tiene licencia MIT y el material docente CC BY 4.0, ambos gratuitos. Estos números se leen de la Biblioteca cuando se construye esta página.`
       ) +
         P(
           'No classroom evaluation of Gravitas has been published. This page describes what the software does and how to use it; it makes no claim about what students gain from it. If you run it with a class, the classroom evidence kit (below) is how to find out.',
