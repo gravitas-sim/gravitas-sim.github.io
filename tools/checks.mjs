@@ -321,7 +321,8 @@ export const CHECKS = [
     label: 'physics validation',
     command: ['npm', 'run', 'validate:physics'],
     tier: 'slow',
-    ci: 'checks',
+    ci: null,
+    why: 'CI runs the same suite inside npm test (tests/physicsValidation.test.js), which also writes the report the documentation step reads (D-CI-02)',
     group: 'correctness',
   },
   {
