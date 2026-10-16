@@ -122,9 +122,6 @@ export function closeManeuverPlanner() {
   if (root) root.hidden = true;
 }
 
-/** @returns {boolean} Whether it is on screen */
-export const isManeuverPlannerOpen = () => Boolean(root && !root.hidden);
-
 /** @returns {Array<object>} Every burn applied this session */
 export const burnLog = () => log.map(entry => ({ ...entry }));
 
@@ -383,9 +380,6 @@ function applyBurn() {
  * the second undo with nothing to pop and the world stranded one burn in.
  */
 let restoring = false;
-
-/** @returns {boolean} Whether an undo is in progress */
-export const isRestoringManeuver = () => restoring;
 
 /** @returns {number} How many burns can still be undone */
 export const undoDepth = () => undoStack.length;

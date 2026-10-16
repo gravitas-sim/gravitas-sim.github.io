@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Course-package builder | Gravitas</title>
+    <meta
+      name="description"
+      content="Assemble a Gravitas course from its investigations, activities, simulations, data and readings, with objectives, time, optional paths and notes in English and Spanish; pin its investigations, check what it depends on, and make its links, manifest and syllabus."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page, and the same as the Investigation Composer's
+         (studio/lesson/): the editor's spacing, its paired fields, a step's
+         state and the conflict dialog. The layout, cards, lists and tables
+         are css/page.css's. */
+      .st-wrap h2 {
+        margin: 0 0 var(--space-2);
+      }
+      .st-wrap h3 {
+        margin: var(--space-3) 0 var(--space-2);
+      }
+      /* Fields stack with room between them; toolbars keep room below. */
+      .st-wrap .ui-field {
+        margin: var(--space-2) 0 0;
+      }
+      .st-wrap .ui-grid {
+        gap: var(--space-1) var(--space-4);
+      }
+      .st-wrap .ui-toolbar {
+        margin-bottom: var(--space-3);
+      }
+      .st-wrap .ui-choice {
+        margin-block: var(--space-1);
+      }
+      .st-preview {
+        aspect-ratio: 4 / 3;
+      }
+      #st-raw-text {
+        min-height: 18rem;
+      }
+      /* The conflict dialog. js/dialog.js and Prompt 52 own dialogs; this one
+         is still the page's own. */
+      .st-wrap dialog {
+        max-width: 36rem;
+        color: inherit;
+        background: var(--surface-1);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius);
+      }
+      .st-wrap dialog::backdrop {
+        background: color-mix(in srgb, var(--space-far) 60%, transparent);
+      }
+      .st-pair {
+        display: grid;
+        gap: var(--space-1) var(--space-4);
+        grid-template-columns: minmax(0, 1fr);
+      }
+      @media (min-width: 768px) {
+        .st-pair {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+      }
+      .st-state {
+        font-size: var(--text-sm);
+        font-weight: var(--weight-semibold);
+      }
+      .st-state[data-state='missing'] {
+        color: var(--warning);
+      }
+      .st-state[data-state='stale'] {
+        color: var(--danger);
+      }
+      .st-state[data-state='done'] {
+        color: var(--success);
+      }
+      /* A link alone in a cell is a target, and WCAG 2.2 wants 24px of it. */
+      .st-wrap .ui-table a {
+        display: inline-block;
+        min-height: 24px;
+        line-height: 24px;
+      }
+      .cb-steps {
+        max-height: 22rem;
+        margin: var(--space-1) 0 0;
+        padding-left: var(--space-6);
+        overflow-y: auto;
+      }
+      .st-preview.cb-home {
+        aspect-ratio: 3 / 4;
+      }
+    </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
+  </head>
+  <body class="doc-page">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/" aria-current="page"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<div class="gs-offline" role="status"><template><div class="gs-offline-box">
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
+</div></template></div>
+<!-- /shell:header -->
+    <main
+      id="main"
+      class="ui-page is-full st-wrap"
+      aria-label="Course-package builder"
+      data-i18n-aria-label="course.title"
+    >
+      <h1 data-i18n="course.title">Course-package builder</h1>
+      <p data-i18n="course.intro"></p>
+      <p class="ui-alert st-narrow" role="note">
+        <span class="gs-en">The Studio edits on a screen at least 768 pixels wide. On this one it is
+        read-only: it shows the checks, the preview and the differences of what it holds, and
+        changes nothing.</span>
+        <span class="gs-es" lang="es">El Estudio edita en una pantalla de al menos 768 píxeles de
+        ancho. En esta es de solo lectura: muestra las comprobaciones, la vista previa y las
+        diferencias de lo que contiene, y no cambia nada.</span>
+      </p>
+
+      <div
+        class="ui-toolbar"
+        role="group"
+        aria-label="Course file"
+        data-i18n-aria-label="course.toolbar.label"
+      >
+        <button id="cb-new" type="button" class="ui-button" data-i18n="course.action.new"></button>
+        <button id="cb-example" type="button" class="ui-button" data-i18n="course.action.example"></button>
+        <button id="cb-open" type="button" class="ui-button" data-i18n="studio.action.open"></button>
+        <input class="ui-file" id="cb-file" type="file" accept="application/json,.json" hidden />
+        <button id="cb-save" type="button" class="ui-button is-primary" data-i18n="studio.action.save"></button>
+        <button id="cb-manifest" type="button" class="ui-button" data-i18n="course.action.manifest"></button>
+        <button id="cb-syllabus" type="button" class="ui-button" data-i18n="course.action.syllabus"></button>
+        <span class="ui-button-group">
+          <button id="cb-undo" type="button" class="ui-button" data-i18n="studio.action.undo"></button>
+          <button id="cb-redo" type="button" class="ui-button" data-i18n="studio.action.redo"></button>
+        </span>
+      </div>
+      <div class="ui-toolbar">
+        <label for="cb-drafts" data-i18n="studio.drafts.label"></label>
+        <select class="ui-select" id="cb-drafts"></select>
+        <button id="cb-drafts-open" type="button" class="ui-button" data-i18n="studio.drafts.open"></button>
+        <button id="cb-drafts-delete" type="button" class="ui-button" data-i18n="studio.drafts.delete"></button>
+      </div>
+      <p id="cb-storage" class="ui-error" data-i18n="studio.storage.failed" hidden></p>
+      <p id="cb-status" class="ui-status" role="status" aria-live="polite"></p>
+
+      <div class="ui-split">
+        <div>
+          <div id="cb-editor"></div>
+          <details id="cb-raw" class="ui-card ui-disclosure">
+            <summary data-i18n="studio.raw.heading"></summary>
+            <label for="st-raw-text" data-i18n="course.raw.label"></label>
+            <textarea class="ui-textarea is-code" id="st-raw-text" spellcheck="false" aria-describedby="cb-raw-error"></textarea>
+            <p id="cb-raw-error" class="ui-error" role="alert" hidden></p>
+            <div class="ui-toolbar">
+              <button id="cb-raw-apply" type="button" class="ui-button" data-i18n="studio.raw.apply"></button>
+              <button id="cb-raw-revert" type="button" class="ui-button" data-i18n="studio.raw.revert"></button>
+            </div>
+          </details>
+        </div>
+        <div class="ui-split-aside is-scroll">
+          <section class="ui-card" aria-labelledby="cb-checks-h">
+            <h2 id="cb-checks-h" data-i18n="studio.checks.heading"></h2>
+            <p id="cb-checks-summary" class="ui-hint"></p>
+            <ul id="cb-checks" class="ui-issues"></ul>
+          </section>
+          <section class="ui-card" aria-labelledby="cb-review-h">
+            <h2 id="cb-review-h" data-i18n="course.review.heading"></h2>
+            <p class="ui-hint" data-i18n="course.review.hint"></p>
+            <p id="cb-review-summary" class="ui-hint"></p>
+            <ul id="cb-review" class="ui-issues"></ul>
+            <div class="ui-toolbar">
+              <button id="cb-upgrade" type="button" class="ui-button" data-i18n="course.action.upgrade" disabled></button>
+            </div>
+          </section>
+          <section class="ui-card" aria-labelledby="cb-estimate-h">
+            <h2 id="cb-estimate-h" data-i18n="course.estimate.heading"></h2>
+            <ul id="cb-estimate" class="ui-issues"></ul>
+          </section>
+          <section class="ui-card" aria-labelledby="cb-translation-h">
+            <h2 id="cb-translation-h" data-i18n="course.translation.heading"></h2>
+            <p id="cb-translation-summary" class="ui-hint"></p>
+            <ul id="cb-translation" class="ui-issues"></ul>
+          </section>
+          <section class="ui-card" aria-labelledby="cb-graph-h">
+            <h2 id="cb-graph-h" data-i18n="course.graph.heading"></h2>
+            <div id="cb-graph"></div>
+          </section>
+          <section class="ui-card" aria-labelledby="cb-links-h">
+            <h2 id="cb-links-h" data-i18n="course.links.heading"></h2>
+            <p class="ui-hint" data-i18n="course.links.hint"></p>
+            <div id="cb-links"></div>
+          </section>
+          <section class="ui-card" aria-labelledby="cb-preview-h">
+            <h2 id="cb-preview-h" data-i18n="studio.preview.heading"></h2>
+            <p class="ui-hint" data-i18n="course.preview.hint"></p>
+            <div class="ui-toolbar">
+              <button id="cb-preview-go" type="button" class="ui-button" data-i18n="course.preview.go"></button>
+            </div>
+            <iframe
+              id="cb-preview"
+              class="ui-plot ui-sky st-preview cb-home"
+              title="The course home, as a student sees it"
+              data-i18n-aria-label="course.preview.frame"
+            ></iframe>
+          </section>
+          <section class="ui-card" aria-labelledby="cb-diff-h">
+            <h2 id="cb-diff-h" data-i18n="studio.diff.heading"></h2>
+            <p id="cb-diff-summary" class="ui-hint"></p>
+            <ul id="cb-diff" class="ui-issues"></ul>
+          </section>
+        </div>
+      </div>
+
+      <dialog id="cb-conflict" aria-labelledby="cb-conflict-h">
+        <h2 id="cb-conflict-h" data-i18n="studio.conflict.heading"></h2>
+        <p id="cb-conflict-text"></p>
+        <ul id="cb-conflict-diff" class="ui-issues"></ul>
+        <div class="ui-toolbar">
+          <button id="cb-conflict-replace" type="button" class="ui-button" data-i18n="studio.conflict.replace"></button>
+          <button id="cb-conflict-both" type="button" class="ui-button" data-i18n="studio.conflict.both"></button>
+          <button id="cb-conflict-cancel" type="button" class="ui-button" data-i18n="studio.conflict.cancel" autofocus></button>
+        </div>
+      </dialog>
+    </main>
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
+    <script type="module" src="/js/coursePage.js"></script>
+  </body>
+</html>

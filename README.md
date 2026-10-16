@@ -26,9 +26,11 @@ tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
-**<!--fact:investigations-->22<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->636<!--/fact--> steps between
-them:
+**<!--fact:libraryInvestigations-->77<!--/fact--> guided
+investigations**: <!--fact:investigations-->60<!--/fact--> that run in the
+simulation, <!--fact:investigationSteps-->1024<!--/fact--> steps between them
+(the table below), and <!--fact:guidedInvestigations-->17<!--/fact--> in the
+Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
 | Investigation                    | What a student does                                                                             |
 | -------------------------------- | ----------------------------------------------------------------------------------------------- |
@@ -48,12 +50,12 @@ instrument to measure with, plots their own readings back to them, saves progres
 locally, and exports a lab report as a PDF that they submit through whatever LMS
 the course already uses.
 
-**Instructor materials.** A guide and a generated answer key for each of
-the <!--fact:investigations-->22<!--/fact--> investigations — learning
+**Instructor materials.** An instructor guide and a generated answer key for each of
+the <!--fact:investigations-->60<!--/fact--> investigations that run in the simulation — learning
 objectives, expected observations, the numbers a student should get and the
 common wrong turns — plus an adopter's guide and a curriculum map, all rebuilt
-from the lessons themselves on every release so a key cannot disagree with the
-lesson it answers. See [Instructor resources](#instructor-resources).
+from the investigations themselves on every release so a key cannot disagree with the
+investigation it answers. See [Instructor resources](#instructor-resources).
 
 **A showcase page for instructors** at
 [/teaching/](https://gravitas-sim.online/teaching/): the predict-test-measure-
@@ -62,6 +64,23 @@ prediction to a submitted report, what each instrument is for, five realistic
 course-use patterns, and six demonstrations that open a real reproducible state
 as an embedded figure. Public, indexed, and in English and Spanish; every count
 on it is read from the catalog and the validation results when it loads.
+
+**Tools for evaluating a section** at
+[/evaluation/](https://gravitas-sim.online/evaluation/): an implementation and
+fidelity checklist, a twelve-item pilot pre/post concept assessment written
+against a three-investigation introductory sequence, a usability questionnaire,
+an anonymous participant-code workflow for paired data, and de-identified CSV
+and JSON templates with a versioned schema. `npm run evaluation:summary` reads
+the exports back and prints counts, missing-data accounting, per-item before and
+after, and paired change.
+
+These are tools, and that is all they are. **No evaluation of Gravitas has been
+run and no learning gain has been measured.** The assessment is
+project-developed and has not been through item analysis, reliability testing or
+validation against an existing concept inventory; a score on it is a score on
+those twelve questions. The page collects no names, no email addresses and no
+institution, transmits nothing anywhere, and says on its own surface that
+institutional review is the instructor's responsibility rather than ours.
 
 **A public account of the model** at
 [/model/](https://gravitas-sim.online/model/): what the simulation calculates,
@@ -75,7 +94,7 @@ model page sets out the four different radii a body has under _Displayed
 sizes_.
 
 **A validation suite.** `npm run validate:physics` prints a PASS/FAIL table
-of <!--fact:physicsChecks-->243<!--/fact--> checks with measured error against a
+of <!--fact:physicsChecks-->304<!--/fact--> checks with measured error against a
 stated tolerance: orbital periods and Kepler's laws, conservation of momentum,
 angular momentum and energy, the convergence order of each selectable
 integrator, escape velocity, transit depth, radial-velocity semi-amplitude,
@@ -175,17 +194,123 @@ dipping around each mass, framed to whatever scenario is loaded.
 
 **Embed mode and lecture mode.** `?embed=1` on any share link gives a chrome-free
 figure that drops into a course page or an LMS in an iframe, sized to its frame
-and carrying its own scale bar. Lecture mode fills the screen for projection:
+and carrying its own scale bar. The figure builder at `/figure/` makes one
+without editing a URL: how it opens and looks, a title and caption, a live
+preview and markup to copy. A page can play, pause, reset or load a figure
+through a small versioned message contract that obeys only the origin it was
+told to ([EMBEDDING.md](EMBEDDING.md)). Lecture mode fills the screen for
+projection:
 larger type, the Daylight theme, a spotlight pointer, and arrow keys that step
 through a prepared sequence of links.
 
+**The Observatory.** `/observatory/` works with authentic data rather than
+simulated worlds:
+- observation dataset packages, pinned and checksummed, with their records;
+- a measurement pipeline;
+- model fits with uncertainties;
+- a notebook that keeps the evidence;
+- two guided suites: finding exoplanets in TESS light curves, and reading a
+  cluster's stellar populations.
+
+An opt-in panel imports a star's Gaia epochs live from CDS. No investigation depends on
+it. See [`EXOPLANET_OBSERVATORY.md`](EXOPLANET_OBSERVATORY.md) and
+[`STELLAR_POPULATIONS.md`](STELLAR_POPULATIONS.md).
+
+**An experiment runner.** `/experiments/` varies one or two settings over a
+range, runs every value with several seeds, each in a Worker of its own, and
+reports what changed, with a manifest that runs it again ([`EXPERIMENTS.md`](EXPERIMENTS.md)).
+
+**A catalog.** `/catalog/` lists what Gravitas offers beyond its investigations (data,
+courses and instruments), each reviewed before it was listed. An installed
+one works offline
+([`CATALOG.md`](CATALOG.md)).
+
+**A scenario studio.** `/studio/` makes a scenario as data rather than code:
+its settings, its bodies as an orbital system or as positions and velocities,
+its seed, and the panels and tools it opens with, in English and Spanish. Every
+field is checked where it is typed, with undo, drafts kept in the browser and a
+raw JSON view, and the result is a file the SDK validates and packages or a
+link Gravitas opens ([STUDIO.md](STUDIO.md)).
+
+**An investigation composer.** `/studio/lesson/` composes a guided investigation
+as data: predictions marked at a later step, explorations, measurements,
+questions written in place or drawn from a versioned bank with scored,
+controlled variants, and remediation shown only after a wrong answer, every
+word in English and Spanish side by side. It is judged by the same checker as
+every investigation Gravitas ships and previews in the real investigation engine
+([COMPOSER.md](COMPOSER.md)).
+
+**Course packages.** `/studio/course/` assembles a course from what Gravitas has:
+investigations, activities cut from them, simulations, data and readings, in units,
+with objectives, prerequisites, time and optional introductory and advanced
+paths, in English and Spanish. It pins every investigation so an archived course can
+say what it was made with, reviews what has changed since, and makes the
+course's links, embeds, manifest and printable syllabus. `/course/` is what
+students open, and it works offline. Gravitas ships an introductory astronomy
+course made this way ([COURSE_PACKS.md](COURSE_PACKS.md)).
+
+**A 3-D dynamics kernel.** A small-N Newtonian engine in 3-D, 2 to 50 bodies
+and test particles, run only in Worker realms of its own:
+- symplectic fourth-order integration by default, and an adaptive scheme for
+  close approaches;
+- mergers, orbital elements and frames;
+- the same bytes in every browser from the same numbers;
+- validation against analytic and published reference problems in the check
+  registry.
+
+**The 3-D lab** at `/3d/` plays those systems as they run, in WebGL:
+- orbit, pan and zoom, face-on and edge-on looks at any orbit, and
+  perspective or orthographic projection;
+- barycentric, body-centered and rotating frames;
+- trails, height lines to the reference plane, and velocity arrows;
+- distances, angles and orbital elements measured from the numbers.
+
+A legend under the view states every scale the picture could suggest. Every
+number is also in tables that work without WebGL, and the keyboard does
+everything the pointer does. `/lab3d/` is the kernel's diagnostic page
+([LAB3D.md](LAB3D.md)).
+
+The lab's investigations each ask what a flat model cannot hold:
+- an orbit's plane;
+- whether a tilted orbit eclipses its star;
+- two orbits' planes;
+- the Kozai-Lidov cycle a distant third body drives.
+
+Each takes a prediction, a measurement and a statement of where the model
+stops, and ends in a report file ([LAB3D_CURRICULUM.md](LAB3D_CURRICULUM.md)).
+
+**The mission-design core** at `/mission/` is a diagnostic page for
+educational astrodynamics on the same engine:
+- impulsive transfers between circular orbits, and plane changes;
+- rendezvous and phasing;
+- Lambert's problem;
+- patched-conic transfers between the planets, and transfer windows;
+- unpowered flybys.
+
+Every solver reports how it converged, or refuses a problem it cannot
+answer with confidence. The 3-D kernel checks every answer independently.
+Answers save as plan files that keep inputs, model and results apart. It
+is not operational mission design or navigation ([MISSION.md](MISSION.md)).
+
+**The mission lab** at `/mission/lab/` flies one mission to Mars on JPL's
+DE441 ephemeris, in three guided parts:
+- a rendezvous with a depot in Earth orbit;
+- the 2026 launch window and its trade-offs;
+- the patched-conic design against the same spacecraft flown directly
+  under the Sun and the planets.
+
+Students measure why the design misses Mars by millions of kilometers, and
+explain it. The ephemeris is a compact package built once from JPL Horizons,
+with every request and checksum recorded, so the lab needs no remote
+service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
+
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->3607<!--/fact--> strings, and
-all <!--fact:investigations-->22<!--/fact--> investigations are translated. A
+of <!--fact:uiStrings-->9505<!--/fact--> strings, and
+all <!--fact:investigations-->60<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
-change what a lesson measures.
+change what an investigation measures.
 
 **Data export.** The recorded timeline as CSV, plus the light curve, with a
 companion Colab notebook in [`notebooks/`](notebooks/) that reads it. Every
@@ -195,16 +320,15 @@ the Kepler relation and measure the slope without first having to ask what the
 numbers mean.
 
 **Shareable links.** Any configuration encodes into the URL. Hand out
-`gravitas-sim.online/#<state>` as an assignment and every student opens the same
+`gravitas-sim.online/#<state>` as an activity and every student opens the same
 system; a student can send one back as their answer. Nothing touches a server.
 
 ---
 
 ## Running it locally
 
-Requires Node 20 or newer — the pinned Playwright declares `node: >=20`,
-and it is the only dependency that constrains this. CI runs 20, which is
-the version in `.nvmrc`; development is on 24.
+Requires Node 22 or newer (`engines` in `package.json`). CI runs 22, which
+is the version in `.nvmrc`; development is on 24.
 
 ```bash
 npm install
@@ -217,13 +341,13 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->5299<!--/fact--> tests across <!--fact:jestSuites-->149<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->12890<!--/fact--> tests across <!--fact:jestSuites-->368<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
 npm run format:check      # prettier
 npm run build             # bundle + minify into dist/
-npm run preview           # build, then serve dist/ at :8004
+npm run preview           # build, then serve dist/ at :8004 (needs the passphrase)
 npm run docs:check        # the counts in the docs still match the source
 npm run manual            # rebuild the user manual PDF from manual/*.tex
 ```
@@ -231,7 +355,7 @@ npm run manual            # rebuild the user manual PDF from manual/*.tex
 `npm run build` needs the instructor passphrase, because it re-encrypts the
 teaching materials on the way past. Without one it stops and says so, which is
 what a fresh clone or a release archive will see. Build with `npm run build:ci`
-instead: it renders every guide and answer key for real and encrypts them with a
+instead: it renders every instructor guide and answer key for real and encrypts them with a
 random throwaway secret, so the site builds and the materials in it cannot be
 opened by anyone — including us. `npm run archive:check` restores the archive
 into a temporary directory and does exactly this, end to end.
@@ -241,10 +365,10 @@ reports what the browser downloads at start-up separately from what is deferred:
 
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->199<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->612<!--/fact--> KB           | <!--fact:buildStartupFiles-->50<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->3874<!--/fact--> KB         | <!--fact:buildDeferredChunks-->137<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->811<!--/fact--> KB** |                                               |
+| CSS                    | <!--fact:buildCss-->208<!--/fact--> KB                 | 1                                             |
+| JavaScript at start-up | <!--fact:buildStartupJs-->584<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->5560<!--/fact--> KB         | <!--fact:buildDeferredChunks-->420<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->791<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -293,13 +417,32 @@ js/
   *Widgets.js       the instruments lessons measure with
 model/              the public physics-model page
 teaching/           the public showcase page for instructors
-instructors/        the instructor area
+instructors/        the instructor area; instructors/submissions/ reviews hand-ins
+evaluation/         printable pilot instruments for evaluating a section
+observatory/        the Observatory: data, measurement and the guided suites
+catalog/            the curated catalog of extensions, and its archives
+experiments/        the experiment runner
+figure/             the figure builder, and embeds
+studio/             the Scenario Studio; lesson/ the composer, course/ the course builder
+course/             the course home students open
+lab3d/              the 3-D kernel's diagnostic page
+3d/                 the 3-D lab and its guides
+mission/            the mission-design core; lab/ the mission lab
+capabilities/       the capability-package manifests
+data-packs/         observation data-pack manifests (pinned sources)
+ephemeris-packs/    the ephemeris pack's manifest (pinned JPL Horizons answers)
+sdk/                the extension SDK: a command line, a library, four schemas
+extensions/         extensions built with the SDK outside the core
+vendor/             three.js, Chart.js and the fonts, vendored
+history/            the first Gravitas, kept as it was
+docs/               generated inventories (capabilities, lesson scenes)
 manual/             LaTeX source for the user manual PDF
 notebooks/          the Colab notebook that reads an exported CSV
-tools/              build and development tooling
-tests/              jest
-e2e/                the Playwright browser suite
 validation/         the physics validation page and its data
+spike/              a prototype kept as evidence (MULTI_WORLD_DECISION.md); not published
+tools/              build and development tooling; not published
+tests/              jest; not published
+e2e/                the Playwright browser suite; not published
 ```
 
 Two conventions worth knowing before changing anything:
@@ -310,7 +453,7 @@ overrides`. Component rules win on layer order alone, which is why they need
   hex value.
 - **One source of truth per fact.** Scenario titles, summaries, concept tags and
   thumbnails all live in `js/data/scenarioInfo.js` and every surface reads from
-  it. The same goes for lesson content and the habitable-zone model. Tests
+  it. The same goes for investigation content and the habitable-zone model. Tests
   enforce this in several places, and the counts in this file are written by
   `npm run docs:sync` from the catalog rather than typed.
 - **User-visible text is a message id.** Interface strings live in
@@ -318,7 +461,7 @@ overrides`. Component rules win on layer order alone, which is why they need
   attribute; `js/i18n/es.js` carries the Spanish. A string added to one catalog
   and not the other fails `npm test`.
 
-The guided-lesson system is roughly half the application by weight and loads only
+The guided-investigation system is roughly half the application by weight and loads only
 when someone asks for it; so do Three.js and Chart.js, which back the spacetime
 view and the chart panels.
 
@@ -330,7 +473,7 @@ view and the chart panels.
 application still works. That is what the Playwright suite in [`e2e/`](e2e/) is
 for. It drives a real browser through the workflows that matter — loading a
 scenario, inspecting an object, opening the three observing panels and moving the
-shared observer, walking a guided lesson and generating its PDF report, restoring
+shared observer, walking a guided investigation and generating its PDF report, restoring
 a shared link, taking a screenshot and recording a clip, opening the spacetime
 view, embed and lecture modes, and a phone layout — and fails on any uncaught
 exception or `console.error` along the way.
@@ -343,8 +486,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1177<!--/fact--> tests
-in <!--fact:e2eFiles-->85<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->2360<!--/fact--> tests
+in <!--fact:e2eFiles-->175<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -357,15 +500,18 @@ obvious:
 - **So the built site gets its own spec.** `e2e/production.spec.js` touches
   nothing but the DOM and runs against `dist/`, defending what the source suite
   structurally cannot reach: chunk splitting, deferred imports, and assets the
-  build forgot to copy.
+  build forgot to copy. The self-containment, accessibility-parity and
+  sonification-text specs run there too, minus the tests that compare against
+  a module's own arrays.
 
   ```bash
-  npm run build && npm run e2e:dist   # the production spec against dist/
+  npm run build:ci && npm run e2e:dist   # the dist/ specs against dist/
   npm run e2e:all                     # both targets
   ```
 
-Chromium runs on every change. Firefox and WebKit are run by CI on pushes to
-`main` and weekly, and can be run locally:
+Chromium runs on every change. Firefox and WebKit are run by CI on every push
+to `main` and `v2`, weekly, and when the workflow is started by hand - not on a
+pull request - and can be run locally:
 
 ```bash
 npx playwright install firefox webkit
@@ -383,8 +529,9 @@ nobody could act on.
 Every pull request runs [`.github/workflows/ci.yml`](.github/workflows/ci.yml):
 formatting, lint, the jest suite, the physics validation table, the link checker
 and the thumbnail manifest; a production build; and the browser suite against
-both the sources and the built artifact. Firefox and WebKit are added on pushes
-to `main` and on a weekly schedule.
+both the sources and the built artifact. Firefox and WebKit are added on every
+push to `main` and `v2`, on the weekly schedule and on a manual run, but not on
+a pull request.
 
 Two things worth knowing if you are working on CI itself:
 
@@ -392,7 +539,7 @@ Two things worth knowing if you are working on CI itself:
   difference is the instructor materials, which are normally encrypted with a
   passphrase that is not in the repository — and a pull request from a fork
   cannot read repository secrets, so every external contribution would fail.
-  `build:ci` renders every guide and answer key for real, which is where
+  `build:ci` renders every instructor guide and answer key for real, which is where
   breakage actually happens, and encrypts them with a random throwaway secret.
   The result is deliberately undecryptable and is never published.
 - Branch protection should require the single `CI` job rather than the
@@ -411,8 +558,8 @@ and against what.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->243<!--/fact--> deterministic checks, about
-fifteen seconds, printed as a table of measured value, expected value, error and
+That is <!--fact:physicsChecks-->304<!--/fact--> deterministic checks, about
+two minutes, printed as a table of measured value, expected value, error and
 tolerance. Five kinds, and the table labels each: closed-form arithmetic,
 quantities measured by running the N-body engine, literature values with their
 sources named, educational approximations validated against the equation they
@@ -439,13 +586,13 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-All <!--fact:instructorDocuments-->54<!--/fact--> documents are generated from
-the lessons at build time and live at
+All <!--fact:instructorDocuments-->480<!--/fact--> documents are generated from
+the investigations at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 
-- <!--fact:investigations-->22<!--/fact--> instructor guides
-- <!--fact:investigations-->22<!--/fact--> answer keys
-- <!--fact:activityDocuments-->8<!--/fact--> classroom-activity guides and
+- <!--fact:investigations-->60<!--/fact--> instructor guides
+- <!--fact:investigations-->60<!--/fact--> answer keys
+- <!--fact:activityDocuments-->8<!--/fact--> classroom-activity instructor guides and
   student worksheets, across <!--fact:activities-->3<!--/fact--> activities
 - an adopter's guide and a curriculum map
 
@@ -483,17 +630,27 @@ part was built:
 | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md)                   | Every validated claim, its tolerance, and the reason for that tolerance                                                                        |
 | [`SANDBOX_INSTRUMENTS.md`](SANDBOX_INSTRUMENTS.md)                 | Ruler, protractor, stopwatch, the always-on scale bar, screenshots and clip recording                                                          |
+| [`LEARNING_STUDY.md`](LEARNING_STUDY.md)                           | A design, not a study: the learning-outcome study a section could run, the validation plan for the twelve pilot items, data handling and what the platform would have to log. No data collected, no review held|
 | [`AB_EXPERIMENT_BENCH.md`](AB_EXPERIMENT_BENCH.md)                 | Controlled A/B experiments: the canonical captured state, why runs are sequential, alignment, storage and export                               |
 | [`CHAOS_INVESTIGATION.md`](CHAOS_INVESTIGATION.md)                 | The chaos investigation: why the Lagrange equilateral configuration, the divergence definition, and the evidence it is not a timestep artifact |
 | [`RESONANCE_INVESTIGATION.md`](RESONANCE_INVESTIGATION.md)         | The resonance investigation: the resonant angles, the three verdicts and why one of them is a refusal, the four scenarios and their measured values |
 | [`EXOPLANET_OBSERVING.md`](EXOPLANET_OBSERVING.md)                 | The transit, radial-velocity and astrometry panels and the shared observer                                                                     |
+| [`EXOPLANET_OBSERVATORY.md`](EXOPLANET_OBSERVATORY.md)             | Investigations with real TESS light curves in the Observatory: what each checks, the data and licenses, and the approximations left               |
+| [`STELLAR_POPULATIONS.md`](STELLAR_POPULATIONS.md)                 | Investigations with SDSS spectra and photometry, SEGUE, MIST and TESS: what each checks, the platform they reuse, the data and licenses           |
 | [`REFERENCE_FRAMES.md`](REFERENCE_FRAMES.md)                       | Re-expressing the scene in another body's frame                                                                                                |
-| [`DARK_MATTER.md`](DARK_MATTER.md)                                 | The halo, the rotation-curve panel and the lesson built on them                                                                                |
+| [`DARK_MATTER.md`](DARK_MATTER.md)                                 | The halo, the rotation-curve panel and the investigation built on them                                                                                |
 | [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md)                       | The per-body readout and its orbital elements                                                                                                  |
+| [`ORBITAL_SYSTEM_BUILDER.md`](ORBITAL_SYSTEM_BUILDER.md)           | Building a hierarchical system from orbital elements: the construction, its checks, and the file it saves                                      |
+| [`STUDIO.md`](STUDIO.md)                                           | The Scenario Studio: what a scenario file holds, its checks and cautions, how it opens, and what still needs the source                        |
+| [`COMPOSER.md`](COMPOSER.md)                                       | The Investigation Composer: the package and bank formats, variants from vetted relations, remediation, translation, and what it does not do     |
+| [`COURSE_PACKS.md`](COURSE_PACKS.md)                               | Course packages: the format, pins and the reviewed upgrade, the checks, links, the course home, the manifest and the course Gravitas ships      |
+| [`LAB3D.md`](LAB3D.md)                                             | The 3-D small-N kernel: its state format, integrators, runs, API, experiments, validation and limits                                         |
+| [`LAB3D_CURRICULUM.md`](LAB3D_CURRICULUM.md)                       | Orbits in three dimensions: the 3-D lab's investigations, their concept map, the physics that checks them and the model's limits              |
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
+| [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md)                             | The shared controls: field, input, select, textarea, file, range, toolbar, buttons; their states, tokens and accessibility                     |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
-| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->22<!--/fact--> lessons, and what a 2019 Chromebook actually gets |
+| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->60<!--/fact--> investigations, and what a 2019 Chromebook actually gets |
 | [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
 Three documents are records of finished work rather than descriptions of the
@@ -510,6 +667,8 @@ and [`SCENARIO_FIXES.md`](SCENARIO_FIXES.md).
 | --- | --- |
 | Something is wrong | [`SUPPORT.md`](SUPPORT.md) — what makes a bug report fixable here |
 | I want to use this in a class | [`SUPPORT.md`](SUPPORT.md), and [/teaching/](https://gravitas-sim.online/teaching/) |
+| Which browsers are supported | [`SUPPORT.md`](SUPPORT.md#supported-browsers-and-devices) — generated from what CI runs |
+| What happens if the maintainer is away | [`CONTINUITY.md`](CONTINUITY.md), and [`TOOLCHAIN.md`](TOOLCHAIN.md) for how versions move |
 | I want to change something | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | I found a security problem | [`SECURITY.md`](SECURITY.md) — please do not open an issue |
 | How people are expected to behave | [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) |
@@ -521,18 +680,19 @@ and [`SCENARIO_FIXES.md`](SCENARIO_FIXES.md).
 checks a pull request has to pass. Issues and pull requests are welcome,
 particularly:
 
-- **New investigations.** The lesson format is declarative and reasonably
+- **New investigations.** The investigation format is declarative and reasonably
   pleasant to write against; `CONTRIBUTING.md` describes its shape.
 - **Translations.** The interface is fully extracted into message catalogs and
   Spanish is shipped, so a new language is now a copy of `js/i18n/en.js` with
-  its values translated, plus a row in `LOCALES`. Lesson translations are
-  separate, per-lesson, and optional.
+  its values translated, plus a row in `LOCALES`. Investigation translations are
+  separate, per-investigation, and optional.
 - **Scenarios.** New ones, or better initial conditions for an existing one:
   every scenario is a data entry in `js/data/scenarioInfo.js` plus its settings.
 
 Before opening a PR: `npm test`, `npm run lint`, `npm run format:check`,
-`npm run docs:check` and `npm run build` should all pass, and CI runs all of them
-plus the browser suite. If the change touches physics, run
+`npm run docs:check` and `npm run build:ci` should all pass, and CI runs all of
+them plus the browser suite. (`npm run build` is the same build with the real
+instructor passphrase, which only a release needs.) If the change touches physics, run
 `npm run validate:physics` and say what moved. If it touches the interface, run
 `npm run e2e`.
 
@@ -544,13 +704,12 @@ If you use Gravitas in teaching or research, please cite it. Every release is
 archived on Zenodo.
 
 <!--fact-block:citation-->
-> Ziegler, C. (2026). *Gravitas: an interactive astrophysics sandbox for teaching*
-> (Version 1.0.0) [Computer software]. Zenodo.
-> <https://doi.org/10.5281/zenodo.22800610>
+Version 2.0.0 has no version DOI yet. Zenodo mints it when the release is published,
+and it is recorded here afterwards (see [RELEASING.md](RELEASING.md)). Until then,
+cite the concept DOI and name the version you used.
 
 | | |
 | --- | --- |
-| **This version (1.0.0)** | [10.5281/zenodo.22800610](https://doi.org/10.5281/zenodo.22800610) |
 | **All versions** | [10.5281/zenodo.22800609](https://doi.org/10.5281/zenodo.22800609) |
 
 The paper describing Gravitas is *Gravitas: A Browser-Based Astrophysics Laboratory for Prediction, Measurement, and Discovery*
@@ -583,15 +742,22 @@ funded by the SFA COSM.
 Two licenses, because this is two kinds of work.
 
 - **The software is MIT.** See [`LICENSE`](LICENSE).
-- **The original teaching material is CC BY 4.0** — the 22 investigations, the
+- **The original teaching material is CC BY 4.0** — every investigation, the
   instructor guides, the manual, the documentation and the original figures.
   See [`LICENSE-CC-BY-4.0.md`](LICENSE-CC-BY-4.0.md). Put an investigation in a
-  course pack, translate it, cut it down: no permission needed, just credit.
+  course package, translate it, cut it down: no permission needed, just credit.
 
 [`LICENSES.md`](LICENSES.md) says exactly which files each one covers.
-[`NOTICE`](NOTICE) carries the third-party attributions — three.js, Chart.js,
-three font families, the Transit of Venus photograph, the GWOSC strain data and
-the MIST tracks, each under its own license.
+[`NOTICE`](NOTICE) carries the third-party attributions, each under its own
+license:
+- three.js, Chart.js and three font families;
+- the Transit of Venus photograph;
+- the GWOSC strain data;
+- the MIST tracks and isochrones;
+- SDSS spectra, photometry and SEGUE parameters;
+- TESS light curves from MAST;
+- a Gaia DR3 answer kept for tests;
+- the JPL Horizons (DE441) planetary states.
 
 Scenario data uses published values for real systems; sources are noted at
 [/model/](https://gravitas-sim.online/model/).

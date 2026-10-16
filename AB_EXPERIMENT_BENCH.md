@@ -59,8 +59,10 @@ If `physics.js` ever grows a real instance API, the change is confined to
 ### The force law is not duplicated
 
 Total energy and angular momentum come from `physics.js:conservedQuantities()`;
-drift comes from `conservationDrift()`. Nothing in `js/experiments/` re-derives
-them. A bench that recomputed the physics could report a system as conserving
+drift comes from `conservationDrift()`, as the `energyDrift` and `angularDrift`
+percentages it computes. The `energy` and `angular` beside them in that object
+are the totals, and reading those as the drift is the bug that shipped with the
+bench in 1.0.0. Nothing in `js/experiments/` re-derives them. A bench that recomputed the physics could report a system as conserving
 beautifully while the engine that actually moved the bodies did something else.
 
 ### One canonical state, not a second serializer
@@ -144,6 +146,17 @@ passages, found from three consecutive radius samples), closest approach
 (minimum over the run), total energy, angular momentum, and the numerical drift
 in both.
 
+The totals and the drift in a sample are one measurement, taken at that
+sample. `conservationDrift()` normally reads the totals from a cache that the
+engine refreshes at most every 100 ms, for the on-screen readout. The bench
+asks for them fresh (`conservationDrift(true)`) and records the totals that
+call measured, so a sample's `energy_drift` is exactly
+`100 × (total_energy − E₀) / |E₀|` for that sample's own `total_energy`. It
+costs no extra O(N²) sum: the bench already measured the totals for every
+sample, and it now skips them when no conserved quantity is selected. Before
+this, a series recorded at 60 fps was a staircase of about six equal drift
+values per step, and a run's final drift could be several frames old.
+
 Each metric declares its arity and its unit once, in `js/experiments/metrics.js`,
 and the panel, the chart, the results table and the CSV all read that
 declaration.
@@ -198,6 +211,9 @@ the panel can offer the thing that actually helps, which is exporting to a file.
   selected objects and metrics, the parameter change, and the build version —
   and deliberately _not_ the samples. A manifest small enough to paste into a
   lab report is worth more than one carrying a megabyte the CSV already has.
+  The manifest is `gravitas.experiment/1` of `kind: comparison`; the retired
+  name `gravitas-experiment` still opens, as version 0, and the experiment
+  runner opens a comparison of one setting as a two-value sweep.
   Reopening a manifest restores the definition and the setup, not the results:
   enough to re-run the experiment, not enough to hand in someone else's
   measurements.

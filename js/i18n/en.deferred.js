@@ -169,7 +169,7 @@ export const EN_DEFERRED = {
   'assist.sweep.caveat.held':
     'Held for every pass: approach speed {vinf} km/s, integration step {step}, seed {seed}. Only the impact parameter changed.',
   // --- The chaos lesson's controlled pair ----------------------------------
-  'bench.chaos.title': 'The lesson\u2019s controlled pair',
+  'bench.chaos.title': 'The investigation\u2019s controlled pair',
   'bench.chaos.hint':
     'Sets the comparison up and runs both arms over the same stretch of simulated time: capture, Run A, back to the start, the nudge, Run B. Everything it does is what you would have done by hand, in the order you would have done it.',
   'bench.chaos.run': 'Set up and run both',
@@ -184,7 +184,7 @@ export const EN_DEFERRED = {
   'bench.chaos.name.binary': 'Binary control pair',
   'bench.chaos.name.triple': 'Three-body pair',
   'bench.chaos.wrongScenario':
-    'This is for the chaos lesson\u2019s two scenarios. Load the Binary Pair or the Three-Body Sensitivity Lab.',
+    'This is for the chaos investigation\u2019s two scenarios. Load the Binary Pair or the Three-Body Sensitivity Lab.',
   'bench.chaos.benchBusy':
     'The bench is holding \u201c{name}\u201d with runs recorded in it. Save it or capture a new start before running this, so nothing of yours is lost.',
   'bench.chaos.running': 'Recording run {arm}\u2026',
@@ -365,8 +365,6 @@ export const EN_DEFERRED = {
   'reliability.run': 'Check against a halved step',
   'reliability.cancel': 'Stop',
   'reliability.running': 'Running {phase} of 2, {percent}% of the way',
-  'reliability.phase.coarse': 'the run at the current step',
-  'reliability.phase.fine': 'the run at half the step',
   'reliability.cost':
     'Two runs of {duration} simulated units took {seconds}s: {coarseSub} substeps per frame, then {fineSub}.',
   'reliability.steps': 'Step {coarse} against {fine}',
@@ -440,7 +438,7 @@ export const EN_DEFERRED = {
   // Moved out of the start-up catalog. The bench is loaded on first press
   // and most visitors never press it, so its prose has no business being
   // downloaded by everyone; js/experimentsBridge.js registers this before the
-  // panel builds its markup. bench.error.load stays in the base catalog,
+  // panel builds its markup. failure.load stays in the base catalog,
   // because it is what the bridge says when this very import fails.
   'bench.title': 'A/B Experiment',
   'bench.untitled': 'Untitled experiment',
@@ -553,6 +551,8 @@ export const EN_DEFERRED = {
   'bench.error.unavailable':
     'This browser has no local storage available, so experiments cannot be kept between visits. Export to a file instead.',
   'bench.error.open': 'That experiment could not be opened ({reason}).',
+  'bench.driftWithdrawn':
+    'An earlier version recorded the energy and angular momentum drift in this experiment wrongly, as the totals times a hundred. Those values have been removed. Record the runs again to measure the drift.',
   'bench.error.import': 'That file could not be read ({reason}).',
 
   // --- The parameter sweep ----------------------------------------------------
@@ -639,20 +639,21 @@ export const EN_DEFERRED = {
   // bridge, or the lesson panel with an assignment open - so none of them has
   // any business in a first-time visitor's download. Registered by
   // ensureDeferredMessages() before any of those render.
-  'assign.title': 'Build an assignment',
+  'assign.title': 'Build an activity',
   'assign.hint':
     'Choose the steps to set. Steps that build the world another step is about are added for you, and shown below where they land.',
   'assign.close': 'Close',
-  'assign.name': 'Assignment name',
+  'assign.name': 'Activity name',
   'assign.intro': 'Instructions for students (optional)',
+  'assign.roster': 'Class or roster code (optional)',
   'assign.selectAll': 'Select all',
   'assign.selectNone': 'Clear',
   'assign.count':
-    '{chosen} chosen, {included} included, of {total} in the lesson',
+    '{chosen} chosen, {included} included, of {total} in the investigation',
   'assign.build': 'Make the link',
   'assign.print': 'Printable instructions',
   'assign.download': 'Save as a file',
-  'assign.link': 'Assignment link',
+  'assign.link': 'Activity link',
   'assign.link.ok': 'A comfortable {n} characters.',
   'assign.link.long':
     'This link is {n} characters, above the {limit} that mail clients and course systems reliably carry. Fewer steps would shorten it; a truncated link fails at the student\u2019s end, where nobody can fix it.',
@@ -662,42 +663,54 @@ export const EN_DEFERRED = {
     'Added: \u201c{step}\u201d uses what this step produces.',
   'assign.added.summary':
     '{n} step(s) were added because the steps you chose are about the worlds they build.',
-  'assign.subtitle': '{n} steps of {lesson} ({total} in the full lesson)',
+  'assign.subtitle':
+    '{n} steps of {lesson} ({total} in the full investigation)',
   'assign.print.steps': '{n} steps',
-  'assign.print.open': 'Open the assignment at this address:',
-  'assign.print.id': 'Assignment {id}, issued {date}.',
+  'assign.print.open': 'Open the activity at this address:',
+  'assign.print.id': 'Activity {id}, issued {date}.',
+  'assign.print.roster': 'Class code: {code}',
 
+  'assign.depth': 'Depth',
   'assign.error.nothingSelected': 'Choose at least one step.',
-  'assign.error.noLesson': 'That lesson could not be read.',
+  'assign.error.noLesson': 'That investigation could not be read.',
   'assign.error.unknownSteps':
-    'This assignment names steps the lesson does not have.',
-  'assign.error.tooManySteps': 'An assignment can hold at most {max} steps.',
+    'This activity names steps the investigation does not have.',
+  'assign.error.tooManySteps': 'An activity can hold at most {max} steps.',
   'assign.error.titleTooLong': 'That name is too long.',
   'assign.error.introTooLong': 'Those instructions are too long.',
-  'assign.error.notAnObject': 'That link does not contain an assignment.',
-  'assign.error.wrongKind': 'That link is not an assignment link.',
-  'assign.error.badVersion': 'That assignment link is malformed.',
+  'assign.error.notAnObject': 'That link does not contain an activity.',
+  'assign.error.wrongKind': 'That link is not an activity link.',
+  'assign.error.badVersion': 'That activity link is malformed.',
   'assign.error.newerVersion':
-    'That assignment was made by a newer version of Gravitas. Reload the page and try again.',
-  'assign.error.badLesson': 'That assignment does not name a lesson.',
-  'assign.error.badId': 'That assignment has no usable identifier.',
-  'assign.error.noSteps': 'That assignment contains no steps.',
+    'That activity was made by a newer version of Gravitas. Reload the page and try again.',
+  'assign.error.badLesson': 'That activity does not name an investigation.',
+  'assign.error.badId': 'That activity has no usable identifier.',
+  'assign.error.noSteps': 'That activity contains no steps.',
   'assign.error.badStepId':
-    'That assignment names a step in a form we cannot use.',
-  'assign.error.duplicateSteps': 'That assignment lists the same step twice.',
-  'assign.error.fingerprintMismatch': 'That assignment link is incomplete.',
-  'assign.error.badText': 'That assignment link is malformed.',
+    'That activity names a step in a form we cannot use.',
+  'assign.error.duplicateSteps': 'That activity lists the same step twice.',
+  'assign.error.fingerprintMismatch': 'That activity link is incomplete.',
+  'assign.error.badText': 'That activity link is malformed.',
   'assign.error.unexpectedField':
-    'That file carries a \u201c{field}\u201d field, which an assignment never has. It was not made by this tool and has not been opened.',
-  'assign.error.notJson': 'That file is not an assignment.',
+    'That file carries a \u201c{field}\u201d field, which an activity never has. It was not made by this tool and has not been opened.',
+  'assign.error.notJson': 'That file is not an activity.',
+  'assign.error.tooLarge':
+    'That link holds more than a link can carry, so it was not opened. Ask for the activity as a file.',
   'assign.error.corrupt':
     'That link looks incomplete. Mail clients sometimes break long links across lines.',
   'assign.error.noStepsLeft':
-    'None of this assignment\u2019s steps are in the lesson any more. It was probably set against an older version.',
+    'None of this activity\u2019s steps are in the investigation any more. It was probably set against an older version.',
   'assign.notice.changed':
     '{n} step(s) have been rewritten since this was set. Those start blank rather than showing an answer to a question that is no longer being asked.',
   'assign.notice.missing':
-    '{n} step(s) are no longer in the lesson and have been left out.',
+    '{n} step(s) are no longer in the investigation and have been left out.',
+  'assign.notice.unpinned':
+    'This activity was made before investigations came in versioned packages. It opens with {current}, and any step rewritten since is shown blank.',
+  'assign.notice.major':
+    'This activity was made with {pinned}; this Gravitas has {current}, a new major version. Its steps may have been rewritten, and any that were are shown blank.',
+  'assign.notice.moved':
+    'This activity was made with {pinned}, which this Gravitas no longer provides the investigation from. It opens with the investigation as it is now.',
+  'assign.error.badPackage': 'That activity link names its package wrongly.',
 
   // --- The maneuver planner ---------------------------------------------------
   'burn.title': 'Maneuver planner',
@@ -752,6 +765,13 @@ export const EN_DEFERRED = {
   'inv.objects.many':
     '{count} objects on the canvas. Click one to select it; the list returns when a step names a few.',
   'inv.objects.empty': 'Nothing in this activity names an object.',
+  'inv.tool.loading': 'Loading this instrument…',
+  'inv.tool.failed':
+    'This instrument could not be loaded. Check the connection and try again.',
+  'inv.tool.retry': 'Try again',
+  'inv.tool.reloadNeeded':
+    'This instrument still could not be loaded. Reload the page to try again; your answers are kept.',
+  'inv.tool.reload': 'Reload the page',
   'inv.tool.pickable':
     'Diagram you can point at. Click or drag to move the cursor; the arrow keys move it too, and the sliders below do the same thing with numbers.',
   'inv.error.scenario': 'Could not load this step’s scenario.',
@@ -838,6 +858,8 @@ export const EN_DEFERRED = {
     'Your evidence here comes from published observations, reduced and shown as their authors released them.',
   'inv.evidenceFrom.illustration':
     'Your evidence here comes from a diagram drawn to explain a relationship, not from a measurement.',
+  'inv.evidenceFrom.computation':
+    'Your evidence here comes from a Python notebook you ran on the compute page, on a file Gravitas wrote: the numbers come from the notebook, not from the simulation.',
   'inv.answer.saysNothing':
     'That looks empty. Write a sentence or two - what you measured, and how it compares with what you predicted.',
   'inv.answer.recorded': 'Recorded.',
@@ -856,17 +878,51 @@ export const EN_DEFERRED = {
   'inv.report.done': 'Lab report downloaded',
   'inv.report.failed': 'Could not build the report.',
   'inv.report.download': 'Download lab report (PDF)',
+  'inv.finish.title': 'Finished',
+  'inv.finish.close': 'Close without downloading',
+  'inv.finish.summary':
+    'You have opened <strong>{visited} of {steps}</strong> steps and answered <strong>{answered} of {graded}</strong> questions.',
+  'inv.finish.note':
+    'A report is only needed if you are submitting this for credit. If you are here for your own interest, you can simply close the panel: your progress is saved either way.',
+  'inv.finish.name': 'Your name, as it should appear on the report',
+  'inv.finish.namePh': 'e.g. Ada Lovelace',
+  'inv.finish.nameErr': 'Enter a name so the report can be attributed to you.',
+  'inv.finish.back': 'Keep working',
+  'inv.finish.fine':
+    'The report lists every question, your answers, and which of the automatically checked ones matched. It also carries links that reopen the exact simulations you used.',
+  'inv.finish.progress': 'Download a progress file',
+  'inv.token.show': 'Show the submission token',
+  'inv.token.label':
+    'Submission token. Paste it where your instructor asks for it.',
+  'inv.token.copy': 'Copy',
+  'inv.token.copied': 'Submission token copied.',
+  'inv.token.noCopy': 'Could not copy. Select the text and copy it yourself.',
+  'inv.token.save': 'Download as a text file',
+  'inv.token.failed':
+    'The submission token could not be made. The PDF report still carries every answer.',
+  'inv.field.auto': 'worked out for you',
+  'inv.model.compare': 'Compare with a model answer',
+  'inv.model.writeFirst': 'Write your own answer first.',
+  'inv.answer.change': 'Change answer',
+  'inv.answer.changed': 'Answer cleared. Your first answer is still on record.',
+  'inv.wedge.readout':
+    "Each slice is <strong>{share}%</strong> of the orbit's area, and the planet spends <strong>{time}</strong> traversing every one of them.",
+  'inv.import.added': 'Added {value}.',
   'inv.progress.cleared': 'Progress cleared',
+  'inv.depth.deeper': 'Go deeper',
+  'inv.depth.shallower': 'Fewer steps',
+  'inv.answer.needsUncertainty':
+    'Give your value and its uncertainty, for example 8.1 ± 0.2.',
   'inv.progress.steps': '{done} of {total} steps',
   'inv.scenario.reset': 'Scenario reset',
   'inv.card.loading': 'Loading…',
-  'inv.card.review': 'Review lesson',
-  'inv.card.start': 'Start lesson',
+  'inv.card.review': 'Review investigation',
+  'inv.card.start': 'Start investigation',
   'inv.card.resume': 'Resume at step {n}',
   'inv.card.complete': 'Complete',
   'inv.card.seen': '{done} of {total} steps seen',
   'inv.card.report': 'Lab report',
-  'inv.card.series': '{label}, lesson {index} of {of}',
+  'inv.card.series': '{label}, investigation {index} of {of}',
   // Habitability, binary and tidal widget prose. Same boundary and same
   // reasoning as the resW/chaosW/energyW families above: js/widgets.js is
   // reached only from the lazy js/investigations.js, and each of these three
@@ -877,9 +933,9 @@ export const EN_DEFERRED = {
     'Both stars are moving. Watch them for a few seconds before reading anything off.',
   'binW.massOfStarA': 'Mass of Star A',
   'binW.massOfStarB': 'Mass of Star B',
-  'binW.mark': '⚑ Mark',
+  'binW.mark': 'Mark',
   'binW.stop': '■ Stop',
-  'binW.runPause': '▶ Run / Pause',
+  'binW.runPause': 'Run / Pause',
   'binW.capture': 'Capture this orbit',
   'binW.reset': '↺ Reset',
   'binW.starADistanceFromThe': 'Star A, distance from the barycenter',
@@ -917,7 +973,7 @@ export const EN_DEFERRED = {
     'Twice as far again, so twice as heavy again. Only the ratio of the two distances matters, not the distances themselves.',
   'binW.equal2AuEach': 'Equal, 2 AU each',
   'binW.equalDistancesMeanEqualMasses':
-    'Equal distances mean equal masses. This is the case you started the lesson with.',
+    'Equal distances mean equal masses. This is the case you started the investigation with.',
   'binW.starAIsThisFar': 'Star A is this far from the middle',
   'binW.starBIsThisFar': 'Star B is this far from the middle',
   'binW.theHeavierStarAndBy': 'The heavier star, and by how much',
@@ -1048,7 +1104,7 @@ export const EN_DEFERRED = {
   'hzW.aYearOnAnEccentric': 'A year on an eccentric orbit',
   'hzW.eccentricity': 'Eccentricity',
   'hzW.semiMajorAxis': 'Semi-major axis',
-  'hzW.runPause': '▶ Run / Pause',
+  'hzW.runPause': 'Run / Pause',
   'hzW.reset': '↺ Reset',
   'hzW.distanceRightNow': 'Distance right now',
   'hzW.starlightRightNow': 'Starlight right now',
@@ -1083,11 +1139,11 @@ export const EN_DEFERRED = {
   'rvfit.mc.cancel': 'Cancel',
   'rvfit.mc.running': 'Trial {done} of {total}…',
   'rvfit.mc.idle': 'Not run yet.',
-  'rvfit.mc.stale':
-    'The recording, the fit or the search range has changed since this analysis ran, so its intervals no longer describe what is on screen. Run it again.',
   'rvfit.mc.outcome.complete': 'Every trial ran and produced a fit.',
   'rvfit.mc.outcome.canceled': 'Stopped by you after {done} of {total} trials.',
   'rvfit.mc.outcome.partial': '{done} of {total} trials produced a fit.',
+  'rvfit.mc.stale':
+    'The recording, the fit or the search range has changed since this analysis ran, so its intervals no longer describe what is on screen. Run it again.',
 
   'rvfit.mc.refused.noFit':
     'There is no fit on screen to resample around. Set a period first.',
@@ -1146,7 +1202,6 @@ export const EN_DEFERRED = {
   'rvfit.mc.plot.amplitude': 'Recovered amplitudes',
   'rvfit.mc.plot.periodAxis': 'Period (days)',
   'rvfit.mc.plot.amplitudeAxis': 'K (m/s)',
-  'rvfit.mc.plot.count': 'Trials per bin',
   'rvfit.mc.plot.none': 'Nothing to plot yet.',
 
   // The guidance the whole feature exists for. Printed under the results, not
@@ -1322,7 +1377,7 @@ export const EN_DEFERRED = {
   'energyW.fast14KmS': 'Fast: 14 km/s',
   'energyW.clearlyGoneItLeavesAlong':
     'Clearly gone. It leaves along an open path and still has speed to spare when it is far away.',
-  'energyW.run': '▶ Run',
+  'energyW.run': 'Run',
   'energyW.reset': '↺ Reset',
   'energyW.totalEnergy': 'Total energy',
   'energyW.escapeSpeedFromHere': 'Escape speed from here',
@@ -1408,6 +1463,7 @@ export const EN_DEFERRED = {
 
   'nb.entry.results': 'What was recorded',
   'nb.entry.conditions': 'Conditions it was taken under',
+  'nb.entry.data': 'The data and what was done to them',
   'nb.entry.checksum': 'checksum {code}',
   'nb.entry.figure': {
     one: 'Figure: {title} ({n} series, drawn in the report)',
@@ -1430,7 +1486,13 @@ export const EN_DEFERRED = {
   'nb.save.from-a-newer-version':
     'The stored notebook was written by a newer Gravitas and has not been opened, so nothing has been overwritten.',
   'nb.save.unreadable':
-    'The stored notebook could not be read. Nothing has been overwritten; restore from a file if you have one.',
+    'The stored notebook could not be read. It is untouched; new entries are not saved until you decide.',
+  'failure.corrupt.title': 'Saved data cannot be read',
+  'failure.corrupt.body':
+    'It has not been changed. Keep it, export a copy, or discard it once exported.',
+  'failure.corrupt.keep': 'Keep it',
+  'failure.corrupt.export': 'Export a copy',
+  'failure.corrupt.discard': 'Discard',
   'nb.save.tooLarge': 'That file is too large to be a notebook.',
   'nb.save.notJson': 'That file is not readable as a notebook.',
   'nb.save.notAnObject': 'That file is not a notebook.',
@@ -1629,6 +1691,7 @@ export const EN_DEFERRED = {
   'nb.report.entryTampered':
     'This entry does not match its own checksum: its numbers were changed outside Gravitas.',
   'nb.report.results': 'What was recorded',
+  'nb.report.data': 'The data and what was done to them',
   'nb.report.colQuantity': 'Quantity',
   'nb.report.colValue': 'Value',
   'nb.report.colKind': 'Kind',
@@ -1664,8 +1727,8 @@ export const EN_DEFERRED = {
   'inv.filter.progress.done': 'Finished',
   'inv.filter.clear': 'Clear filters',
   'inv.filter.count': {
-    one: '{n} of {total} lessons matches',
-    other: '{n} of {total} lessons match',
+    one: '{n} of {total} investigations matches',
+    other: '{n} of {total} investigations match',
   },
 
   'inv.tag.chaos': 'Chaos',
@@ -1684,83 +1747,196 @@ export const EN_DEFERRED = {
   'inv.tag.stars': 'Stars',
 
   'inv.empty.search': 'Nothing matches “{query}”.',
-  'inv.empty.filters': 'No lesson matches all of those at once.',
+  'inv.empty.filters': 'No investigation matches all of those at once.',
   'inv.empty.relax': {
-    one: 'Ignore {filter}: {n} lesson',
-    other: 'Ignore {filter}: {n} lessons',
+    one: 'Ignore {filter}: {n} investigation',
+    other: 'Ignore {filter}: {n} investigations',
   },
 
   // --- The curated orders -----------------------------------------------------
   'inv.seq.heading': 'Ways through',
   'inv.seq.intro':
-    'Lessons stand alone, but some build on each other. These are orders that work, with what each one assumes you have already done.',
-  'inv.seq.all': 'Every lesson',
+    'Investigations stand alone, but some build on each other. These are orders that work, with what each one assumes you have already done.',
+  'inv.seq.all': 'Every investigation',
   'inv.seq.needs': 'Assumes you have done: {lessons}.',
   'inv.seq.needs.none': 'Nothing assumed. Start here.',
   'inv.seq.fit.demo': 'Fits a demonstration',
   'inv.seq.fit.period': 'Fits a class period',
   'inv.seq.fit.long': 'Longer than a period',
   'inv.seq.assign':
-    'Cut a shorter activity out of this lesson with the assignment builder',
+    'Cut a shorter activity out of this investigation with the activity builder',
 
-  'inv.seq.orbits.title': 'Orbital mechanics',
-  'inv.seq.orbits.blurb':
-    'From the shape of an orbit to moving between two of them. The first two lessons measure what orbits do; the last three spend that understanding on getting somewhere.',
-  'inv.seq.orbits.keplers-laws':
+  'inv.seq.sky.title': 'The sky',
+  'inv.seq.sky.blurb':
+    'Where things are in the sky and why they move: the turning of the stars, the Sun’s year, the Moon’s phases and eclipses, the planets’ loops, and then planning a night at a telescope. The first sequence for an introductory course; each takes 10 to 20 minutes.',
+  'inv.seq.sky.the-turning-sky':
+    'Start here: coordinates, sidereal time and the four minutes.',
+  'inv.seq.sky.the-sun-through-the-year':
+    'The Sun’s height and the day’s length through the year, and the seasons.',
+  'inv.seq.sky.phases-and-eclipses':
+    'The Moon’s phases, and why eclipses are rare.',
+  'inv.seq.sky.wanderers-on-the-sky':
+    'The planets’ loops, from the sky and from above; pairs with Why Mars Goes Backwards.',
+  'inv.seq.sky.plan-a-night':
+    'Put it to work: choose targets for a night at a telescope.',
+
+  'inv.seq.gravity.title': 'Gravity and orbits',
+  'inv.seq.gravity.blurb':
+    'From the shape of an orbit to moving between two of them, then a third body, black holes and gravitational waves. Start with Kepler’s Laws; everything after refers back to them.',
+  'inv.seq.gravity.keplers-laws':
     'The three laws, measured rather than recited. Everything after this refers back to the ellipse and the period–size relation you find here.',
-  'inv.seq.orbits.orbital-energy':
+  'inv.seq.gravity.retrograde-motion':
+    'Kepler’s period law used on a puzzle: why Mars appears to loop. A change of frame, not a change of physics.',
+  'inv.seq.gravity.power-law-gravity':
+    'What would orbits look like if gravity fell off differently? Shows which parts of Kepler’s laws are special to one inverse square.',
+  'inv.seq.gravity.orbital-energy':
     'Why a faster orbit is a lower one. The energy bookkeeping here is what makes a transfer burn make sense instead of looking backwards.',
-  'inv.seq.orbits.hohmann-transfer':
+  'inv.seq.gravity.tides':
+    'Gravity that changes across a body: why the oceans rise twice a day and why moons come to face their planets.',
+  'inv.seq.gravity.hohmann-transfer':
     'The cheapest way between two circular orbits, planned and flown. Short enough to run as a demonstration once the energy argument is in place.',
-  'inv.seq.orbits.gravity-assist':
-    'The other way to change orbit: borrow from a planet instead of burning fuel. Reads as a companion to the transfer lesson rather than a sequel.',
-  'inv.seq.orbits.lagrange-points':
-    'Where the two-body picture stops being enough. A natural place to end, and the doorway into the three-body sequence.',
-
-  'inv.seq.exoplanets.title': 'Detecting exoplanets',
-  'inv.seq.exoplanets.blurb':
-    'The two methods that have found nearly every known planet, then using them together on an unknown star. Longer lessons: plan on two sittings, or set part of one as homework.',
-  'inv.seq.exoplanets.transit-photometry':
-    'Depth, duration and noise, from a light curve you measure yourself. The vocabulary the rest of the sequence uses.',
-  'inv.seq.exoplanets.radial-velocity':
-    'The other half of the picture: what the star does. Transits give you size, this gives you mass, and neither alone gives you a density.',
-  'inv.seq.exoplanets.detect-this-planet':
-    'An unknown system with both instruments and no answer key. Worth doing only once both methods are familiar.',
-  'inv.seq.exoplanets.design-the-schedule':
-    'The same argument on the real instrument, where the run takes minutes and cannot be rewound. Do the analytic version first; this one asks you to plan the observing yourself.',
-  'inv.seq.exoplanets.goldilocks-question':
-    'What a detection does and does not tell you about whether anywhere is habitable. Needs the transit lesson; the radial-velocity one helps.',
-
-  'inv.seq.threebody.title': 'When two bodies are not enough',
-  'inv.seq.threebody.blurb':
-    'Resonance, equilibrium points and sensitivity to initial conditions — the three ways adding one more body changes the answer.',
-  'inv.seq.threebody.when-orbits-lock':
-    'The gentlest introduction to a third body: repeated small tugs that add up. No prior three-body work needed.',
-  'inv.seq.threebody.lagrange-points':
-    'The equilibrium points of the restricted problem, and the rotating frame they live in. Short, and the frame is what the next lesson leans on.',
-  'inv.seq.threebody.butterfly-effect':
+  'inv.seq.gravity.gravity-assist':
+    'The other way to change orbit: borrow from a planet instead of burning fuel. Reads as a companion to the transfer investigation rather than a sequel.',
+  'inv.seq.gravity.lagrange-points':
+    'The equilibrium points of the restricted problem, and the rotating frame they live in. The frame is what the next investigation leans on.',
+  'inv.seq.gravity.when-orbits-lock':
+    'The gentlest introduction to a third body: repeated small tugs that add up. Needs only the two-body picture.',
+  'inv.seq.gravity.butterfly-effect':
     'Sensitive dependence, measured with a separation you watch grow. Much more convincing once you have seen an orbit that stays put.',
-  'inv.seq.threebody.binary-star-planets':
-    'Everything above at once: stability, resonance and chaos deciding where a planet can survive around two stars.',
-
-  'inv.seq.waves.title': 'Gravitational waves, from nothing',
-  'inv.seq.waves.blurb':
-    'What the thing arriving actually is, and then what one signal can and cannot tell you about the source that sent it.',
-  'inv.seq.waves.what-is-a-gravitational-wave':
+  'inv.seq.gravity.black-holes':
+    'Orbital energy taken to its limit: how close can something orbit, and what does escape mean when nothing escapes?',
+  'inv.seq.gravity.what-is-a-gravitational-wave':
     'No physics assumed, and nothing to read first. What has to be moving, what travels, what stretches, and how an instrument notices.',
-  'inv.seq.waves.listening-to-spacetime':
+  'inv.seq.gravity.listening-to-spacetime':
     'The same instrument taken much further: measuring a source from its signal, and comparing a model with what two detectors actually recorded. Far easier if you have done the first one, but not gated on it.',
+
+  'inv.seq.light.title': 'Light and stars',
+  'inv.seq.light.blurb':
+    'What starlight carries: color and temperature, spectral lines and motion, then what the stars are, how they are weighed, how they work inside and how they end. The first three take 15 to 25 minutes each.',
+  'inv.seq.light.color-and-temperature':
+    'Start here: why a hot star is blue and a cool one red, and how to read a temperature from a color.',
+  'inv.seq.light.what-a-spectrum-is-made-of':
+    'A spectrum split into its kinds: continuous, emission and absorption, and what each says about the gas.',
+  'inv.seq.light.lines-and-motion':
+    'The same lines, shifted: speed along the line of sight from the Doppler shift.',
+  'inv.seq.light.a-universe-of-stars':
+    'Brightness, distance and luminosity put together: the Hertzsprung–Russell diagram, built from real stars. No other investigation needed first.',
+  'inv.seq.light.weighing-stars':
+    'Binary orbits turned into masses: the only direct way to weigh a star.',
+  'inv.seq.light.scaling-the-main-sequence':
+    'Why more massive stars are so much brighter: the scaling laws that follow from the balance inside a star.',
+  'inv.seq.light.inside-a-star':
+    'The balance that holds a star up, and what changes when it shifts. Needs the lives of stars first.',
+  'inv.seq.light.lives-of-stars':
+    'Follow stars of different masses from birth to death and read their ages off the diagram.',
+  'inv.seq.light.the-limit':
+    'Where stellar death ends: the mass limit for a white dwarf and what lies beyond it.',
+  'inv.seq.light.cluster-membership':
+    'Real data from a real cluster: which stars belong, from their motions. Uses the diagram and the idea of a population.',
+
+  'inv.seq.planets.title': 'Planets and exoplanets',
+  'inv.seq.planets.blurb':
+    'The two methods that have found nearly every known planet, then using them together on an unknown star, then whether anywhere is habitable and what two stars do to a planet. Longer investigations: plan on two sittings, or set part of one as homework. Better after Gravity and orbits.',
+  'inv.seq.planets.transit-photometry':
+    'Depth, duration and noise, from a light curve you measure yourself. The vocabulary the rest of the sequence uses.',
+  'inv.seq.planets.radial-velocity':
+    'The other half of the picture: what the star does. Transits give you size, this gives you mass, and neither alone gives you a density.',
+  'inv.seq.planets.detect-this-planet':
+    'An unknown system with both instruments and no answer key. Worth doing only once both methods are familiar.',
+  'inv.seq.planets.design-the-schedule':
+    'The same argument on the real instrument, where the run takes minutes and cannot be rewound. Do the analytic version first; this one asks you to plan the observing yourself.',
+  'inv.seq.planets.goldilocks-question':
+    'What a detection does and does not tell you about whether anywhere is habitable. Needs the transit investigation; the radial-velocity one helps.',
+  'inv.seq.planets.binary-star-planets':
+    'Stability, resonance and chaos at once, deciding where a planet can survive around two stars.',
+  'inv.seq.planets.extending-an-experiment':
+    'An experiment of twenty planets extended in Python to a population, with what its interval covers and what it does not. Needs the compute page and a connection.',
+  'inv.seq.planets.refitting-a-transit':
+    'The fit panel’s transit model fitted again by a different route in Python, and what the route changes. Needs the compute page and a connection.',
+  'inv.seq.planets.two-periodograms':
+    'A Lomb-Scargle and a box least squares periodogram of one light curve, and what a period from a periodogram can claim. Needs the compute page and a connection.',
+  'inv.seq.planets.sampling-a-posterior':
+    'A transit’s posterior sampled in Python, with the convergence checks that decide when its interval may be quoted. Needs the compute page and a connection.',
+  'inv.seq.gravity.integrators-in-practice':
+    'Four integrators compared by the energy they lose on a real system, in Python. Needs the compute page and a connection.',
+
+  'inv.seq.galaxies.title': 'Galaxies and the universe',
+  'inv.seq.galaxies.blurb':
+    'Our place in the Milky Way, the mass we cannot see, light bent by gravity, the distance ladder from variable stars, and the expanding universe. Short investigations in three groups. Better after Gravity and orbits and Light and stars.',
+  'inv.seq.galaxies.the-suns-motion':
+    'Start here: the Sun’s own motion through the Galaxy, from the stars around it.',
+  'inv.seq.galaxies.the-rotating-disk':
+    'How the whole disk turns, and why the rotation curve is not what the visible matter predicts.',
+  'inv.seq.galaxies.missing-mass':
+    'The rotation curve turned into a mass: the evidence for dark matter, with real galaxies.',
+  'inv.seq.galaxies.bending-light':
+    'Gravity bends light: the deflection angle, and what it takes to see it. The first of three on lensing.',
+  'inv.seq.galaxies.einstein-rings-and-arcs':
+    'A galaxy as the lens: rings and arcs, and a second way to weigh what we cannot see.',
+  'inv.seq.galaxies.a-lens-passing-by':
+    'A single star as the lens: the brightening that gives a lone planet or a dark object away.',
+  'inv.seq.galaxies.the-beat-of-a-star':
+    'Start of the distance ladder: a star whose light beats, and how to read its period.',
+  'inv.seq.galaxies.which-kind-of-variable':
+    'Not every variable is a standard candle: tell the kinds apart from the shape of the curve.',
+  'inv.seq.galaxies.leavitts-law':
+    'Period and luminosity tied together: the relation that turned Cepheids into rulers.',
+  'inv.seq.galaxies.the-first-rung':
+    'Calibrate the rung with a nearby Cepheid, then use it to reach another galaxy.',
+  'inv.seq.galaxies.standard-candles':
+    'Supernovae as standard candles: how far a bright, standard explosion can be seen, and what it says about the expansion.',
+  'inv.seq.galaxies.the-expanding-universe':
+    'Distances meet redshifts: Hubble’s law, the expansion and its rate, from real galaxies.',
+  'inv.seq.galaxies.the-shape-of-expansion':
+    'Fit the expansion history to see what the universe is made of. The most quantitative of the group.',
+  'inv.seq.galaxies.where-galaxies-live':
+    'The last view: galaxies in space, and what their clustering tells us. Needs the expansion, not the fit.',
+
+  'inv.seq.observing.title': 'Observing and measuring',
+  'inv.seq.observing.blurb':
+    'How to learn something true from a telescope: choose targets, schedule a run, measure spectra and light curves, and ask what a survey leaves out. Uses the quantitative depth where there is one. Better after The sky.',
+  'inv.seq.observing.plan-a-night':
+    'Start here: choose targets for a night at a telescope, with the Sky Lab’s time and place.',
+  'inv.seq.observing.twelve-nights':
+    'A real run of twelve nights: weather, the Moon and what the schedule costs you.',
+  'inv.seq.observing.what-a-spectrum-is-made-of':
+    'Read a spectrum quantitatively: where the lines are and how strong.',
+  'inv.seq.observing.lines-and-motion':
+    'Measure a shift in wavelength and turn it into a speed.',
+  'inv.seq.observing.what-a-ccd-records':
+    'What the camera adds before the measurement: bias, dark and flat frames, a cosmic ray and a saturated star, on synthetic frames with a known truth.',
+  'inv.seq.observing.signal-noise-and-exposure':
+    'How long to expose: the noise of a measurement, what limits a bright and a faint star, and what a bright sky costs. Needs the calibration frames.',
+  'inv.seq.observing.a-variable-star-from-frames':
+    'Differential photometry of forty frames: a comparison star removes the cloud, and a check star says whether a variation is real. Needs the calibration frames.',
+  'inv.seq.observing.transit-photometry':
+    'Measure depth, duration and noise on a light curve: the photometry the rest relies on.',
+  'inv.seq.observing.design-the-schedule':
+    'Plan an observing run for a planet: when to look, and for how long, given the nights you have.',
+  'inv.seq.observing.who-gets-counted':
+    'Start of the selection-effects group: a survey counts only what it can see.',
+  'inv.seq.observing.why-the-bright-ones-win':
+    'Brightness bias, made quantitative: why the sample is not the population.',
+  'inv.seq.observing.the-completeness-curve':
+    'Put a number on what a survey misses, and correct for it.',
+  'inv.seq.depth.core': 'Core depth',
+  'inv.seq.depth.quantitative': 'Quantitative depth',
+  'inv.seq.depth.advanced': 'Advanced depth',
 
   'inv.summary.about': 'about {h} hours',
   'inv.summary.range': '{l}–{h} hours',
   'inv.summary.work': '{hours} of work',
   'inv.summary.level': 'All at {level} level.',
-  'inv.summary.lessons': { one: '{n} lesson', other: '{n} lessons' },
+  'inv.summary.lessons': {
+    one: '{n} investigation',
+    other: '{n} investigations',
+  },
   'inv.summary.steps': { one: '{n} step', other: '{n} steps' },
   'inv.summary.complete': '{n} complete',
   'inv.summary.going': '{n} in progress',
   'inv.card.objectives': { one: '{n} objective', other: '{n} objectives' },
 
+  'inv.card.objectivesShow': 'Learning objectives',
   'inv.step.counter': 'Step {n} of {total}',
   'inv.step.kind.read': 'read',
   'inv.step.kind.predict': 'predict',
@@ -1769,6 +1945,7 @@ export const EN_DEFERRED = {
   'inv.step.kind.question': 'question',
   'inv.step.kind.ellipse': 'explore',
   'inv.step.kind.wedges': 'explore',
+  'inv.save.link': 'See everything in My work',
   'inv.save.saved': 'Progress saved on this device',
   'inv.save.full':
     'Progress could not be saved: this browser\u2019s storage is full. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
@@ -1779,17 +1956,17 @@ export const EN_DEFERRED = {
   'inv.save.foreign':
     'Saved progress from a newer version of Gravitas was found and left untouched. Your answers work here but are not being saved.',
   'inv.progress.migrated':
-    'Carried {n} saved answers over from an older format, matched by position. If this lesson has changed since you last opened it, check that each answer is on the question you meant.',
+    'Carried {n} saved answers over from an older format, matched by position. If this investigation has changed since you last opened it, check that each answer is on the question you meant.',
   'inv.progress.removedSteps':
-    'Discarded {n} saved answers for steps this lesson no longer has.',
+    'Discarded {n} saved answers for steps this investigation no longer has.',
   'inv.progress.foreign':
-    'Your saved progress for this lesson was written by a newer version of Gravitas and could not be read. It has been left where it is rather than overwritten.',
+    'Your saved progress for this investigation was written by a newer version of Gravitas and could not be read. It has been left where it is rather than overwritten.',
   'inv.backup.downloaded': 'Progress backup downloaded.',
   'inv.backup.restored': 'Progress restored.',
   'inv.backup.restoredMoved':
     'Progress restored. {moved} answers were matched to steps that have moved since the backup was made.',
   'inv.backup.restoredPartly':
-    'Progress restored, but {dropped} steps in the backup are no longer in this lesson and their answers were left out.',
+    'Progress restored, but {dropped} steps in the backup are no longer in this investigation and their answers were left out.',
   'inv.backup.restoredUncertain':
     'Restored {applied} answers. {n} could not be placed because their steps have changed since the backup was made; they are still in the file you restored from.',
   'inv.backup.tooLarge': 'That file is too large to be a progress backup.',
@@ -1851,6 +2028,10 @@ export const EN_DEFERRED = {
   'inv.hint.concept': 'Think about:',
   'inv.hint.method': 'How to get at it:',
   'inv.hint.worked': 'Worked through:',
+  'inv.explain.open': 'What am I looking at?',
+  'inv.hint.n': 'Hint {n} of {total}:',
+  'inv.reflect.note':
+    'Not marked. It is kept with your work for you and your instructor to read.',
   'inv.hint.given': 'Hint shown.',
   'inv.hint.revealed': 'Worked explanation shown.',
   'inv.hint.taken': '{n} hint(s) taken',
@@ -1869,6 +2050,8 @@ export const EN_DEFERRED = {
     'That looks like the value in years, and the question asks for days.',
   'inv.misconception.radiansForDegrees':
     'That looks like the angle in radians, and the question asks for degrees.',
+  'inv.formula.needs':
+    'This answer is checked against your own measurements. Record them in the steps before it, and it can be checked.',
   'inv.answer.check': 'Check',
 
   // --- The restricted three-body teaching mode ---------------------------------
@@ -2000,7 +2183,7 @@ export const EN_DEFERRED = {
   'exoW.starSLuminosity': 'Star’s luminosity',
   'exoW.starSTemperature': 'Star’s temperature',
   'exoW.thePlanetThisLessonMeasured':
-    'The planet this lesson measured. Large, light, and far too close to its star for the zone.',
+    'The planet this investigation measured. Large, light, and far too close to its star for the zone.',
   'exoW.planetAARockyCandidate': 'Planet A: a rocky candidate',
   'exoW.planetBPuffy': 'Planet B: puffy',
   'exoW.planetCRockyTooHot': 'Planet C: rocky, too hot',
@@ -2037,8 +2220,6 @@ export const EN_DEFERRED = {
   'exoW.row.whatYouAreLookingAt': 'The two panels',
   'exoW.value.twoPanels':
     'Left: your measurements against date, with the ideal signal dashed over them as a teaching overlay — that dashed line is not data. Right: the same measurements folded on the true period, which is what a search would produce only if it already knew the period.',
-  'exoW.idealSignalOverlay': 'dashed: ideal signal (teaching overlay)',
-  'exoW.foldedOnTheTruePeriod': 'folded on the true period',
   'exoW.measurementsTaken': 'Measurements',
   'exoW.phaseCoverage': 'Phase coverage',
   'exoW.binsOfTheCycle': 'bins of the cycle',
@@ -2456,7 +2637,6 @@ export const EN_DEFERRED = {
   'gwW.axis.merger': 'merger',
   'gwW.plot.isco': 'the model stops here',
   'gwW.local.span': '{ms} ms across',
-  'gwW.source.notToScale': 'schematic: separation is modeled, sizes are not',
   'gwW.overlay.legend':
     'Each ring is one wave crest, where it would be now after leaving the source. The outer ones left earlier, when the orbit was slower, so they are further apart. Distances compressed, amplitude exaggerated, propagation slowed and rescaled as the frequency climbs. The center is left out: a far-field formula does not describe it.',
   'gwW.overlay.legendStill':
@@ -2565,7 +2745,7 @@ export const EN_DEFERRED = {
   'gwW.audio.refused.muted':
     'Sound is off. Turn it on with the speaker at the top of the screen, then press Listen again.',
   'gwW.audio.refused.unsupported':
-    'This browser will not give the page an audio output. Everything in this lesson can be done from the plots.',
+    'This browser will not give the page an audio output. Everything in this investigation can be done from the plots.',
   'gwW.audio.refused.empty': 'There is nothing in this window to play.',
   // ---------------------------------------------------------------------------
   // The sound panel (js/ui.js). The button's own labels are in the eager
@@ -2592,6 +2772,15 @@ export const EN_DEFERRED = {
   'sound.now.nothing': 'Nothing',
   'sound.now.sandbox': 'Orbiting bodies, as tones',
   'sound.now.signal': 'A gravitational-wave signal, {seconds} s',
+  'sound.voices.title': 'What the tones stand for',
+  'sound.voices.reference':
+    'Highest voice, {label}. Period {period}. Every interval below is measured from this one.',
+  'sound.voices.row':
+    '{label}. Period {period}, {ratio}\u00d7 the highest voice, {cents} cents below it.',
+  'sound.voices.none':
+    'Nothing is being voiced. Sound is off, or no body in view is orbiting.',
+  'sound.voices.note':
+    'These are the periods the tones are computed from, not a description of the tones. The audio rounds each pitch onto a five-note scale, so two of these bodies can sound alike when their periods are not; the numbers here do not round.',
   'sound.preview': 'Play an example',
   'sound.stop': 'Stop',
   'sound.preview.note':
@@ -2612,7 +2801,7 @@ export const EN_DEFERRED = {
   // strings.
   'dmW.mondTitle': 'The same curve, two explanations',
   'dmW.mondNote':
-    'The halo fit and MOND, scored against the same measurements. Switch between them, and adjust the disc until each one matches. Watch what each of them needed to be told.',
+    'The halo fit and MOND, scored against the same points. Switch between them, and adjust the disc until each one matches. Watch what each of them needed to be told.',
   'dmW.mondModel': 'Explanation',
   'dmW.mondHaloOption': 'Dark matter halo',
   'dmW.mondMondOption': 'MOND',
@@ -2633,10 +2822,11 @@ export const EN_DEFERRED = {
   'dmW.mondClose': 'close',
   'dmW.mondOff': 'off',
   'dmW.mondBothFit':
-    'This explanation reproduces the measurements. So does the other one — at its own disc mass, and with a different number of fitted parameters. The curve alone does not decide between them.',
+    'This explanation reproduces the points. So does the other one — at its own disc mass, and with a different number of fitted parameters. The curve alone does not decide between them.',
   'dmW.mondKeepAdjusting':
     'Not matching yet. Adjust the disc until this explanation reproduces the points, then try the other one.',
-  'dmW.mondSynthetic': 'synthetic curve, NGC 3198 parameters',
+  // Drawn on both panels that plot the NGC 3198 points, dm-fit and dm-mond.
+  'dmW.syntheticCurve': 'synthetic curve, NGC 3198 parameters',
   'bhW.acrossTheEventHorizon': 'across the event horizon',
   'bhW.aMarathon': 'a marathon',
   'bhW.manhattanEndToEnd': 'Manhattan, end to end',
@@ -2727,6 +2917,7 @@ export const EN_DEFERRED = {
   'dmW.aRealStellarDiscIt':
     'A real stellar disc. It rises, peaks at about 2.2 scale lengths, and then falls away. Still not flat.',
   'dmW.whatGalaxiesDo': 'What galaxies do',
+  'dmW.radiusKpc': 'radius (kpc)',
   'dmW.speedKms': 'speed (km/s)',
   'dmW.speedAt30Kpc': 'Speed at 30 kpc',
   'dmW.outerSlopeVR': 'Outer slope (v ∝ rⁿ)',
@@ -2750,7 +2941,7 @@ export const EN_DEFERRED = {
   'dmW.maximumDisc': 'Maximum disc',
   'dmW.wrongScaleLength': 'Wrong scale length',
   'dmW.publishedDecomposition': 'Published decomposition',
-  'dmW.fitARealGalaxy': 'Fit a real galaxy',
+  'dmW.fitARealGalaxy': 'Fit NGC 3198 (synthetic data)',
   'dmW.discMassTheStarsYou': 'Disc mass (the stars you can see)',
   'dmW.discScaleLength': 'Disc scale length',
   'dmW.haloStrengthItsFlatSpeed': 'Halo strength (its flat speed)',
@@ -2763,7 +2954,7 @@ export const EN_DEFERRED = {
   'dmW.whatTheHaloIsHolding': 'What the halo is holding',
   'dmW.launchRadius': 'Launch radius',
   'dmW.darkMatterHalo': 'Dark matter halo',
-  'dmW.runPause': '▶ Run / Pause',
+  'dmW.runPause': 'Run / Pause',
   'dmW.relaunch': '↺ Relaunch',
   'dmW.haloOn': 'Halo on',
   'dmW.theStarHoldsItsOrbit':
@@ -2800,6 +2991,26 @@ export const EN_DEFERRED = {
   'dmW.darkMatterForEveryUnit': 'Dark matter for every unit of ordinary matter',
   'dmW.darkEnergy2': 'dark energy',
   'dmW.darkMatter2': 'dark matter',
+  'obsW.twelveNightsOnOneStar': 'Twelve nights on one star',
+  'obsW.theBarsAreTheNights':
+    'Each row is one night of the allocation. The dim bar is astronomical night; the bright part is when the target is also above the airmass limit. The ticks are the twelve measurements your plan would take. Underneath is the spectral window of those twelve times - a property of the schedule alone, with no data in it.',
+  'obsW.spreadTheTwelveOver': 'Spread the twelve over',
+  'obsW.nights': 'nights',
+  'obsW.useThisMuchOfEachWindow': 'Use this much of each window',
+  'obsW.airmassLimit': 'Airmass limit',
+  'obsW.twelveNightsInARow': 'Twelve nights in a row',
+  'obsW.spreadOutBestMoment': 'Spread out, best moment',
+  'obsW.spreadOutBothEnds': 'Spread out, both ends',
+  'obsW.usableWindowPerNight': 'Usable window per night',
+  'obsW.theWindowOpensEarlierBy': 'The window opens earlier by',
+  'obsW.baseline': 'Baseline',
+  'obsW.powerAtTheSiderealDay': 'Window power at the sidereal day',
+  'obsW.strongestAlias': 'Strongest alias',
+  'obsW.theEpochList': 'The epoch list, for the Explicit field',
+  'obsW.eachRowIsANight':
+    'night  |  astronomical night, target above the limit, and your twelve visits',
+  'obsW.siderealDay': 'sidereal day',
+  'obsW.cyclesPerDay': 'cycles per day',
   'transitW.howBigAShadow': 'How big a shadow?',
   'transitW.theSilhouetteOnTheLeft':
     'The silhouette on the left is drawn to scale. The curve on the right is the transit it produces.',
@@ -2850,7 +3061,7 @@ export const EN_DEFERRED = {
   'transitW.companionContrastM': 'Companion contrast Δm',
   'transitW.radiusYouMeasured': 'Radius you measured',
   'transitW.equalTwinM0': 'Equal twin, Δm = 0',
-  'transitW.theLessonSBinaryM': 'The lesson’s binary, Δm = 0.5',
+  'transitW.theLessonSBinaryM': 'The investigation’s binary, Δm = 0.5',
   'transitW.theCompanionInTheBlended':
     'The companion in the Blended Binary scenario. It supplies 39% of the light and shrinks the measured planet by 22%.',
   'transitW.roboAoMedianM3': 'Robo-AO median, Δm = 3',
@@ -2967,8 +3178,9 @@ export const EN_DEFERRED = {
   'export.done': { one: 'Exported {n} row.', other: 'Exported {n} rows.' },
   'export.truncated':
     'Exported the first {n} rows: the recording was larger than one file.',
-  'inv.link.unknown': 'That investigation link does not match a lesson.',
-  'inv.load.failed': 'That lesson could not be loaded. Try again.',
+  'inv.load.failed': 'That investigation could not be loaded. Try again.',
+  'inv.link.unknown':
+    'That investigation link does not match an investigation.',
   'activity.error.noActivity':
     'There is no classroom activity called “{id}”. The teaching page lists the ones that exist.',
   'activity.error.noFormat':
@@ -2978,13 +3190,15 @@ export const EN_DEFERRED = {
   'welcome.scenarioGone': 'That scenario is no longer available.',
   'welcome.shownAgain': 'It will be shown again next time',
   'welcome.showAgain': 'Show this again on my next visit',
+  'export.viewTable': 'View as table',
+  'export.hideTable': 'Hide table',
   'export.downloadCsv': 'Download CSV',
   'welcomeCard.sandbox.eyebrow': 'Free exploration',
   'welcomeCard.sandbox.title': 'Sandbox',
   'welcomeCard.sandbox.text':
     'Build a system from nothing, or load one of the built-in scenarios and change it. Drag to place an object; the drag sets its velocity.',
   'welcomeCard.sandbox.cta': 'Enter the sandbox',
-  'welcomeCard.investigations.eyebrow': 'Guided lessons',
+  'welcomeCard.investigations.eyebrow': 'Guided investigations',
   'welcomeCard.investigations.title': 'Investigations',
   'welcomeCard.investigations.text':
     'Structured astronomy activities inside the simulation: predict, experiment, measure, answer, and export a lab report.',
@@ -2999,7 +3213,7 @@ export const EN_DEFERRED = {
     'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
   'welcomeAudience.instructors.title': 'For instructors',
   'welcomeAudience.instructors.text':
-    '22 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
+    '60 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
   'welcomeAudience.curious.title': 'For the curious',
   'welcomeAudience.curious.text':
     'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',
@@ -3009,7 +3223,8 @@ export const EN_DEFERRED = {
   'welcomeLink.model.label': 'How Gravitas models the universe',
   'welcomeLink.model.note':
     'What is calculated, what is approximated, and what is only drawn.',
-  'welcomeLink.instructors.note': 'Guides, answer keys and a curriculum map.',
+  'welcomeLink.instructors.note':
+    'Instructor guides, answer keys and a curriculum map.',
   'tideP.moonOnEarth': 'the Moon, on the Earth',
   'tideP.sunOnEarth': 'the Sun, on the Earth',
   'tideP.earthOnMoon': 'the Earth, on the Moon',
@@ -3104,21 +3319,21 @@ export const EN_DEFERRED = {
   'stelE.value.mass': '{now} now, {born} at birth — {lost} lost to its wind',
   'stelE.row.spectral': 'Spectral type',
   'summary.life.cloud':
-    'A lesson is showing this star before it formed: the canvas has a contracting cloud of gas with a brightening center, and no star, because there is not one yet.',
+    'An investigation is showing this star before it formed: the canvas has a contracting cloud of gas with a brightening center, and no star, because there is not one yet.',
   'summary.life.star':
-    'A lesson is running this star through its life; the canvas shows the star at the model age given in the instrument readout.',
+    'An investigation is running this star through its life; the canvas shows the star at the model age given in the instrument readout.',
   'summary.life.wind':
-    'A lesson is running this star through its life. Dashed shells around it stand for material it has shed — about {pct} per cent of the mass it was born with, so far.',
+    'An investigation is running this star through its life. Dashed shells around it stand for material it has shed — about {pct} per cent of the mass it was born with, so far.',
   'summary.life.explosion':
-    'A lesson has run this star to the end. Expanding rings stand for an explosion the endpoint model expects, and what is left at the center is a {kind}.',
+    'An investigation has run this star to the end. Expanding rings stand for an explosion the endpoint model expects, and what is left at the center is a {kind}.',
   'summary.life.remnant':
-    'A lesson has run this star to the end. What is left is a {kind}; there was no explosion in this model.',
+    'An investigation has run this star to the end. What is left is a {kind}; there was no explosion in this model.',
   'stelE.row.grid': 'The models behind this',
   'stelE.value.grid':
     'MIST v1.2: single stars, solar composition, no rotation, no companion. Every number here follows from those choices, and a star with a different composition or a companion does not follow this track.',
   'stelE.row.notOnlyMass': 'Mass is not the whole story',
   'stelE.value.notOnlyMass':
-    'On this grid the birth mass fixes the endpoint, because everything else was held constant. In the sky it does not: composition, rotation and above all a close companion can change what a star of a given mass leaves behind. This lesson varies one thing, which is what makes it readable and what makes it incomplete.',
+    'On this grid the birth mass fixes the endpoint, because everything else was held constant. In the sky it does not: composition, rotation and above all a close companion can change what a star of a given mass leaves behind. This investigation varies one thing, which is what makes it readable and what makes it incomplete.',
   'stelE.row.whatThisIs': 'What you are looking at',
   'stelE.value.whatThisIs.sample':
     'A stored row of the published model — numbers MIST computed and this application read in, not computed here.',
@@ -3253,6 +3468,15 @@ export const EN_DEFERRED = {
   'stelW.value.mass': '{now} now, {born} at birth',
   'stelW.row.age': 'Age',
   'stelW.row.phase': 'Phase',
+  'stelW.row.interior': 'Interior (a model)',
+  'stelW.value.interior.convective':
+    'A polytrope with n = 3/2, as for a fully convective star: center {rho} g/cm³ and {temp}',
+  'stelW.value.interior.radiative':
+    'A polytrope with n = 3 (Eddington’s standard model): center {rho} g/cm³ and {temp}',
+  'stelW.value.interior.white-dwarf':
+    'Degenerate electrons hold it up: see the white-dwarf mass and radius',
+  'stelW.value.interior.none':
+    'A dense core in a tenuous envelope, which no single polytrope describes',
   'stelW.action.pace': 'Change what the age slider paces',
   'stelW.row.pace': 'The age slider',
   'stelW.value.paceTime':
@@ -3360,9 +3584,176 @@ export const EN_DEFERRED = {
   'stelW.pop.row.limits': 'What it leaves out',
   'stelW.pop.value.limits':
     'Stars that have left the main sequence, interstellar dust, binaries, and any composition but solar. All four matter for a real survey and none of them is here.',
+  // -- Five real mergers, compared (js/gwEventWidgets.js) --------------------
+  'gwE.title': 'Five mergers, compared',
+  'gwE.note':
+    'Real strain from one LIGO detector per event, whitened by that detector’s own noise and drawn as frequency against time. Brighter means more energy than the noise. Every number is in the readout, and each is labeled with what kind of number it is.',
+  'gwE.loading': 'Fetching the five events…',
+  'gwE.failed':
+    'The events could not be fetched. Reload the page; nothing else on this screen needs them.',
+  'gwE.missing': 'not published',
+  'gwE.axis.time': 'seconds from the catalog time',
+  'gwE.axis.freq': 'frequency / Hz',
+  'gwE.control.event': 'Event',
+  'gwE.control.catalog': 'Catalog values',
+  'gwE.control.model': 'Model track',
+  'gwE.shown': 'shown',
+  'gwE.held': 'held',
+  'gwE.on': 'on',
+  'gwE.off': 'off',
+  'gwE.row.state': 'Instrument',
+  'gwE.head.observed': 'Observed strain',
+  'gwE.row.event': 'Event',
+  'gwE.value.event':
+    '{id}, {det} detector, catalog time GPS {gps} (published to 0.1 s)',
+  'gwE.row.drawn': 'What is drawn',
+  'gwE.value.drawn':
+    '{det}’s strain, whitened by Gravitas with the noise that detector had in the same 32 seconds, 20 to 400 Hz',
+  'gwE.head.measured': 'Measured by Gravitas from the strain',
+  'gwE.row.end': 'End of the chirp',
+  'gwE.value.end': '{s} from the catalog time',
+  'gwE.value.noEnd':
+    'nothing clears the noise within 0.1 s of the catalog time, so there is no end to measure from',
+  'gwE.row.slices':
+    'Loudest frequency before the end (— is nothing louder than noise)',
+  'gwE.row.noise': 'Detector noise at 100 Hz',
+  'gwE.value.noise':
+    '{asd} strain per root hertz, estimated from this detector’s own data',
+  'gwE.row.compare': 'All five, {tau} s before the end',
+  'gwE.head.catalog': 'GWOSC catalog values (not measured here)',
+  'gwE.row.version': 'From',
+  'gwE.value.version': 'values from {values}; strain from {strain}',
+  'gwE.row.chirp': 'Chirp mass, source frame',
+  'gwE.row.masses': 'Component masses, source frame',
+  'gwE.row.distance': 'Luminosity distance',
+  'gwE.row.snr': 'Network signal-to-noise ratio',
+  'gwE.value.snr':
+    '{snr}, from the catalog’s matched filter, which this instrument does not run',
+  'gwE.row.held': 'Held',
+  'gwE.value.held':
+    'The catalog values are held until you turn them on. Decide what the measurement tells you first.',
+  'gwE.head.model': 'Model',
+  'gwE.row.model': 'Leading-order track (dashed)',
+  'gwE.value.modelHeld':
+    'The model needs the catalog chirp mass. Turn the catalog values on to draw it.',
+  'gwE.value.model':
+    'for a detector-frame chirp mass of {mc} M☉ (catalog chirp mass × (1 + catalog redshift)), ending {at}: {f1} at 0.1 s and {f2} at 0.05 s. Not fitted to the data, and it ignores the merger.',
+  'gwE.anchor.end': 'at the measured end',
+  'gwE.anchor.catalog': 'at the catalog time, since no end was measured',
+  'gwE.row.inBand': 'Model: time in band from 30 Hz',
+  'gwE.value.inBand': '{s} s',
+  'gwE.row.source': 'Source',
+  'gwE.row.limits': 'What five events are',
+  'gwE.value.limits':
+    'Five events, chosen because their chirps are visible. Not a sample of the catalog, and nothing here is a detection, a significance or a parameter estimate.',
+
+  // -- Four observed spectra (js/stellarSpectraWidgets.js) --------------------
+  // Two instruments over four real SDSS spectra. Every label here is careful
+  // about one thing: these are observations, and the lesson runs them beside
+  // an instrument that draws models.
+  'specW.compare.title': 'Four spectra',
+  'specW.compare.note':
+    'Four stars, observed by SDSS in 2008 and drawn without a fit of any kind. The curves are not drawn in their stars’ colors — that would answer the question being asked — so tell them apart by the dash pattern, the label, or the numbers underneath.',
+  'specW.identify.title': 'Which star is this?',
+  'specW.identify.note':
+    'One spectrum, named only by a letter, shown over a stretch of wavelength too narrow to see a color in. Everything you need is in the dips.',
+  'specW.control.window': 'Wavelength shown',
+  'specW.control.focus': 'Pick one out',
+  'specW.control.named': 'Names',
+  'specW.control.star': 'Star',
+  'specW.control.reveal': 'Archive’s answer',
+  'specW.window.full': 'all of it, 3,815–9,170 Å',
+  'specW.window.cak': 'calcium, 3,860–4,010 Å',
+  'specW.window.hbeta': 'hydrogen β, 4,780–4,950 Å',
+  'specW.window.nad': 'sodium, 5,820–5,965 Å',
+  'specW.window.tio': 'titanium oxide, 6,950–7,250 Å',
+  'specW.focus.all': 'all four',
+  'specW.focus.one': 'star {tag}',
+  'specW.named.on': 'the archive’s classes',
+  'specW.named.off': 'letters only',
+  'specW.reveal.on': 'shown',
+  'specW.reveal.off': 'held',
+  'specW.star.nth': 'star {tag}',
+  'specW.name.class': '{letter} ({sub})',
+  'specW.name.tag': 'star {tag}',
+  'specW.name.idTag': 'star {tag}',
+  'specW.feature.cak': 'Ca II K',
+  'specW.feature.hbeta': 'Hβ',
+  'specW.feature.nad': 'Na I D',
+  'specW.feature.tio': 'TiO',
+  'specW.axis.wavelength': 'wavelength / Å',
+  'specW.axis.flux': 'flux, each scaled to its own peak here',
+  'specW.loading': 'Fetching the four spectra…',
+  'specW.failed':
+    'The spectra could not be fetched. Reload the page; nothing else on this screen needs them.',
+  'specW.row.state': 'Instrument',
+  'specW.row.kind': 'What these are',
+  'specW.value.kind':
+    'Observations. Four real stars, measured by the SDSS spectrograph — not models, not fits, not synthetic spectra.',
+  'specW.row.window': 'Showing',
+  'specW.value.window':
+    '{name}. Wavelengths are quoted in air, as a table quotes them.',
+  'specW.row.source': 'This one',
+  'specW.value.source':
+    'SDSS plate {plate}, MJD {mjd}, fiber {fiber}, observed {date}',
+  'specW.row.classified': 'Classified by SDSS as',
+  'specW.value.classified':
+    '{sub} by the pipeline, {elodie} by the template match',
+  'specW.row.answer': 'Archive’s classification',
+  'specW.value.answer': '{sub} by the pipeline, {elodie} by the template match',
+  'specW.value.held':
+    'Held until you turn it on. Decide from the features first.',
+  'specW.value.depth': '{depth} deep, centered near {at} Å',
+  'specW.row.cite': 'Source',
+  'specW.row.measured': 'How the {feature} number is measured',
+  'specW.value.region':
+    'measured over {line} Å, against the mean of {blue} and {red} Å (in air)',
+  'specW.value.regionHead':
+    'measured over {line} Å, against {ref} Å just before the band head (in air)',
+  'specW.row.limits': 'What four spectra are',
+  'specW.value.limits':
+    'Four examples, one per letter. Not an atlas, not a survey, and not a representative sample of anything — four stars that happened to be observed.',
+
   // The Stellar Lab's evidence
   'nb.source.stellar-lab': 'Stellar Lab',
   'nb.source.binary-orbit': 'Binary orbit',
+  'nb.source.observatory': 'Observatory measurement',
+  // --- A fit, an analysis or an experiment result kept as its envelope -----
+  'nb.source.inference-fit': 'Inference-core fit',
+  'nb.source.comparison': 'Model against data',
+  'nb.source.sweep-analysis': 'Sweep analysis',
+  'nb.source.derived-quantity': 'Derived quantity',
+  'nb.source.lab3d': '3-D lab measurement',
+  'nb.source.mission-lab': 'Mission lab result',
+  'nb.flag.missionModel':
+    'impulsive burns, patched conics and point masses: a teaching model of a mission',
+  'nb.flag.notOperational': 'not for operational mission design or navigation',
+  'nb.flag.unbound': 'the orbit is not bound, so it has no period',
+  'nb.flag.noRadii':
+    'a body has no size in this system, so no eclipse can be judged',
+  'nb.flag.osculating':
+    'orbits are read at one instant, and a real orbit drifts',
+  'nb.flag.planetsDoNotInteract':
+    'the planets are treated as not pulling on each other',
+  'nb.flag.assumedTeff':
+    'the star temperature was assumed, not read from the system',
+  'nb.flag.assumedDistance':
+    'the distance to the system was assumed, not read from it',
+  'nb.formula.summary': 'Derive a quantity by a formula',
+  'nb.source.experiment-result': 'Experiment result',
+  'nb.source.compute-capsule': 'Notebook run (compute capsule)',
+  'nb.entry.cite': 'The result and where it came from',
+  'nb.cite.source': 'Made by',
+  'nb.cite.digest': 'Digest of its data',
+  'nb.cite.engine': 'Engine fingerprint',
+  'nb.cite.envelope': 'Envelope',
+  'nb.cite.count': 'Quantities',
+  'nb.cite.countAll': '{n}',
+  'nb.cite.countSome':
+    '{n} of {total}; the rest are in the source, which the digest identifies',
+  'nb.cite.cite': 'Cite as',
+  'nb.cite.citeValue': 'Gravitas {kind} {id}, data digest {digest}',
+  'nb.cite.warnings': 'What it does not say (codes)',
   'nb.stellar.title.comparison': '{n} stars compared',
   'nb.stellar.title.model': 'A modeled star',
   'nb.stellar.title.point': 'A point on the H–R diagram',
@@ -3409,7 +3800,6 @@ export const EN_DEFERRED = {
   'nb.stellar.initialMass': 'Initial mass',
   'nb.stellar.age': 'Age',
   'nb.stellar.mainSequence': 'Total main-sequence lifetime',
-  'nb.stellar.pinnedRadius': 'Pinned star {n}: radius',
   'nb.stellar.pinnedNth': 'star {n}',
   'nb.stellar.pinnedRadiusOf': '{name}: radius',
   'nb.stellar.pinnedTeffOf': '{name}: temperature',
@@ -3418,7 +3808,6 @@ export const EN_DEFERRED = {
     'The compared stars are {n} of the {of} standing on the canvas for this step, read from the scene rather than pinned by hand.',
   'nb.stellar.limit.someHypothetical':
     'Not every star here is a model. {names} ({n}) are points chosen on the diagram: their temperature and luminosity are chosen, their radius follows from those two, and they have no mass, no age and no lifetime.',
-  'nb.stellar.pinnedTeff': 'Pinned star {n}: temperature',
   'nb.stellar.limit.model':
     'A model, not an observation: {grid}. No rotation, no binarity, no magnetic fields, and one composition.',
   'nb.stellar.limit.incomplete':
@@ -3436,205 +3825,21 @@ export const EN_DEFERRED = {
   'nb.stellar.limit.fitted':
     'The comparison was drawn with each star fitted to its own box, so the apparent sizes in it are not comparable.',
 
+  // --- Failures (js/failures.js) --------------------------------------------
+  'failure.error': 'Something went wrong: {message}',
+  'failure.worker.physics':
+    'The gravity worker stopped, so gravity is now worked out on the main thread. The simulation is still correct, but may run more slowly.',
+
   // --- Words a lesson computes ----------------------------------------------
-  // Here rather than in the start-up catalog because js/i18n/lesson.js is
-  // the only module that reads them and js/investigations.js is the only
-  // module that imports it: a visitor who never opens a lesson was
-  // downloading a hundred and thirty-three answer-checking sentences in
-  // order to never render one. js/investigationsLoader.js awaits this
-  // catalog before initInvestigations(), so the lookup cannot outrun it.
-  //
-  // Probe rows and answer-checking messages come out of functions inside the
-  // lesson files, which a translation shadow cannot reach. js/i18n/lesson.js
-  // looks them up by what they say. See that file.
-  'lessonFn.distancesHaveToBePositiveNumbers38':
-    'Distances have to be positive numbers.',
-  'lessonFn.closestApproachIsLargerThanFurthest70':
-    'Closest approach is larger than furthest distance: these look swapped.',
-  'lessonFn.eccentric9': 'Eccentric',
-  'lessonFn.semiMajorAxis15': 'semi-major axis',
-  'lessonFn.clickAPlanetToSelectIt27': 'Click a planet to select it',
-  'lessonFn.body4': 'Body',
-  'lessonFn.noOrbitFound14': 'no orbit found',
-  'lessonFn.selected8': 'Selected',
-  'lessonFn.eccentricityE14': 'Eccentricity e',
-  'lessonFn.closestPeriapsis19': 'Closest (periapsis)',
-  'lessonFn.furthestApoapsis19': 'Furthest (apoapsis)',
-  'lessonFn.currentSpeed13': 'Current speed',
-  'lessonFn.selectTheEccentricOrbiter28': 'Select the Eccentric Orbiter',
-  'lessonFn.distanceFromStar18': 'Distance from star',
-  'lessonFn.speedNow9': 'Speed now',
-  'lessonFn.speedsHaveToBePositiveRead77':
-    'Speeds have to be positive. Read the "Speed now" value, which is a magnitude.',
-  'lessonFn.yourClosestSpeedIsLowerThan181':
-    'Your "closest" speed is lower than your "furthest" speed. That is the wrong way round for any bound orbit. Check which reading you took where, using the distance to tell them apart.',
-  'lessonFn.selectAPlanet15': 'Select a planet',
-  'lessonFn.atAnExtreme14': 'At an extreme?',
-  'lessonFn.closestReadNow17': 'closest: read now',
-  'lessonFn.furthestReadNow18': 'furthest: read now',
-  'lessonFn.inBetween10': 'in between',
-  'lessonFn.closestThisOrbit18': 'Closest this orbit',
-  'lessonFn.furthestThisOrbit19': 'Furthest this orbit',
-  'lessonFn.planet6': 'Planet',
-  'lessonFn.distancesAndPeriodsMustBothBe44':
-    'Distances and periods must both be positive.',
-  'lessonFn.clickAPlanetToMeasureIt28': 'Click a planet to measure it',
-  'lessonFn.bothValuesMustBePositive29': 'Both values must be positive.',
-  'lessonFn.clickAPlanetToReRead28': 'Click a planet to re-read it',
-  'lessonFn.clickAPlanet14': 'Click a planet',
-  'lessonFn.noOrbit8': 'no orbit',
-  'lessonFn.tooHigh8': 'too high',
-  'lessonFn.checkThatAAndPCame45':
-    'Check that a and P came from the same planet.',
-  'lessonFn.theSemiMajorAxisLooksToo112':
-    'The semi-major axis looks too large. Every orbit here is under 0.07 AU, so the value should start 0.0 something.',
-  'lessonFn.thePeriodLooksTooSmallFor119':
-    'The period looks too small for days. The readout gives days, and the shortest year in this system is about 1.5 of them.',
-  'lessonFn.thePeriodLooksTooLargeFor79':
-    'The period looks too large for days. The longest year here is about 19 of them.',
-  'lessonFn.outByMoreThanAFactor97':
-    'Out by more than a factor of three, which usually means a and P were read from different planets.',
-  'lessonFn.clickAPlanetToReadIt25': 'Click a planet to read it',
-  'lessonFn.notFound9': 'not found',
-  'lessonFn.referenceFrame15': 'Reference frame',
-  'lessonFn.worldNotSwitchedYet23': 'World, not switched yet',
-  'lessonFn.marsDistanceFromEarth25': 'Mars: distance from Earth',
-  'lessonFn.marsDirectionFromEarth26': 'Mars: direction from Earth',
-  'lessonFn.selectMars11': 'Select Mars',
-  'lessonFn.world5': 'World',
-  'lessonFn.aBody6': 'A body',
-  'lessonFn.sunDistanceFromEarth24': 'Sun: distance from Earth',
-  'lessonFn.sunDirectionFromEarth25': 'Sun: direction from Earth',
-  'lessonFn.baselineOutOfTransit24': 'Baseline, out of transit',
-  'lessonFn.completeTransitsRecorded26': 'Complete transits recorded',
-  'lessonFn.waitingForACompleteTransit30': 'Waiting for a complete transit',
-  'lessonFn.clock5': 'Clock',
-  'lessonFn.theBottomOfATransitSits137':
-    'The bottom of a transit sits <em>below</em> the baseline, so the depth has to come out positive. Check that you have not swapped the two.',
-  'lessonFn.a20DipWouldBeA153':
-    'A 20% dip would be a stellar eclipse, not a planet. If you entered numbers like 98.2 and 100, enter the brightness itself rather than a percentage of it.',
-  'lessonFn.thatIsShallowerThanThisSystem156':
-    'That is shallower than this system can produce. Make sure the bottom value really is from the lowest point of a dip and not from the shoulder on the way in.',
-  'lessonFn.goodAbout18GivingA152':
-    'Good: about 1.8%, giving a radius ratio near 0.135. Hold on to that number, because the next step is going to tell you it is about 10% too big, and why.',
-  'lessonFn.expectedSomewhereNear0018For153':
-    'Expected somewhere near 0.018 for this system. Read the baseline from a flat stretch well away from any dip, and the bottom from the lowest point of one.',
-  'lessonFn.theStarRadiusGoesInSolar93':
-    'The star radius goes in solar radii, not in kilometers or in Jupiters. HD 209458 is 1.155 R☉.',
-  'lessonFn.theDepthIsAFractionNot65':
-    'The depth is a fraction, not a percentage: 1.8% goes in as 0.018.',
-  'lessonFn.thatIsItAbout138218':
-    'That is it: about 1.38 Jupiter radii, or 15.5 Earth radii. The published value from a decade of Hubble transits is 1.38 R_Jupiter. You just measured a planet 160 light years away by watching a star get slightly dimmer.',
-  'lessonFn.tooLargeCheckThatYouDivided170':
-    'Too large. Check that you divided the depth by 1.215 before taking the square root rather than after, and that the depth is the one you measured rather than a percentage.',
-  'lessonFn.tooSmallTheMostCommonCause121':
-    'Too small. The most common cause is reading the bottom of the dip from the ingress shoulder rather than the lowest point.',
-  'lessonFn.theSecondStampHasToCome78':
-    'The second stamp has to come after the first. Swap them, or take a fresh pair.',
-  'lessonFn.atLeastOneOrbitHasTo52':
-    'At least one orbit has to pass between two transits.',
-  'lessonFn.countTheGapsBetweenTheTransits65':
-    'Count the gaps between the transits, not the transits themselves.',
-  'lessonFn.about35DaysThePublished138':
-    'About 3.5 days. The published period of HD 209458 b is 3.5247 days, known to better than a tenth of a second from two decades of transits.',
-  'lessonFn.thatIsTwiceThePeriodA113':
-    'That is twice the period: a transit went by between your two stamps and was not counted. Put 2 in the orbits box.',
-  'lessonFn.thatIsAboutHalfThePeriod166':
-    'That is about half the period. Check that both stamps were taken at the bottom of a transit and not one at a transit and one at the secondary eclipse halfway between.',
-  'lessonFn.expectedSomethingNear35Days131':
-    'Expected something near 3.5 days. Check that the orbit count matches the difference between the two transit numbers in the readout.',
-  'lessonFn.thePeriodGoesInDaysNot102':
-    'The period goes in days, not years. Three and a half days, not three and a half thousandths of a year.',
-  'lessonFn.theMassGoesInSolarMasses58':
-    'The mass goes in solar masses. HD 209458 is 1.148 of them.',
-  'lessonFn.about0047AuOneEighth372':
-    'About 0.047 AU: one eighth of Mercury’s distance from the Sun, and roughly nine stellar radii out. At 1,450 K the planet’s day side is hot enough to glow dull red on its own. Nothing in planet formation theory before 1995 put a gas giant there, and working out how it arrived is still an active argument between migration through the disk and scattering off other planets.',
-  'lessonFn.expectedRoughly0047AuCheck84':
-    'Expected roughly 0.047 AU. Check the period is in days and the mass in solar masses.',
-  'lessonFn.bothDepthsAreFractionsNotPercentages66':
-    'Both depths are fractions, not percentages: 1.1% goes in as 0.011.',
-  'lessonFn.theBlendedDepthHasToBe110':
-    'The blended depth has to be the <em>shallower</em> of the two. Check you have not put them in the wrong boxes.',
-  'lessonFn.thatIsTheResultTheBlended291':
-    'That is the result. The blended curve says about 12 Earth radii; the correction of roughly ×1.28 takes it back to about 15.5, which is the 1.38 Jupiter radii you measured before the companion was there. The implied contrast should land near Δm = 0.5, which is what the companion actually is.',
-  'lessonFn.theRatioIsLargerThanThis135':
-    'The ratio is larger than this companion can produce. Re-read the blended depth: it should be near 0.011, not near half the clean value.',
-  'lessonFn.expectedARatioNear163135':
-    'Expected a ratio near 1.63 and a corrected radius near 15.5 R⊕. Check both depths came from the bottom of a dip rather than a shoulder.',
-  'lessonFn.clickABodyInTheSimulation30': 'Click a body in the simulation',
-  'lessonFn.nothingToOrbit16': 'nothing to orbit',
-  'lessonFn.distanceFromTheStar22': 'Distance from the star',
-  'lessonFn.speed5': 'Speed',
-  'lessonFn.totalEnergy12': 'Total energy',
-  'lessonFn.belowZero10': 'below zero',
-  'lessonFn.aboveZero10': 'above zero',
-  'lessonFn.boundOrUnbound16': 'Bound or unbound',
-  'lessonFn.boundItComesBack20': 'bound: it comes back',
-  'lessonFn.unboundItIsLeaving22': 'unbound: it is leaving',
-  'lessonFn.furthestItGets16': 'furthest it gets',
-  'lessonFn.forThisPracticeRunPut293':
-    'For this practice run, put 2 in both boxes. You can experiment with other numbers afterwards.',
-  'lessonFn.222Is8And204':
-    '2 × 2 × 2 is 8, and 2 × 2 is 4, and 8 divided by 4 is 2. The pair weighs <strong>2 solar masses</strong> between them. Nobody went there. Nobody weighed anything. Two measurements of an orbit were enough.',
-  'lessonFn.bothMeasurementsHaveToBePositive46':
-    'Both measurements have to be positive numbers.',
-  'lessonFn.thatLooksLikeOneStarS187':
-    'That looks like one star’s distance from the balance point rather than the whole orbit. The orbit size is measured from one star <em>across to the other</em>: add both distances together.',
-  'lessonFn.checkTheOrbitSizeAgainstThe137':
-    'Check the orbit size against the rings. Star A sits on one ring and Star B on another, and the number you want is the two added together.',
-  'lessonFn.checkThePeriodTimeStarA106':
-    'Check the period. Time Star A from the dotted line all the way round until it crosses the same line again.',
-  'lessonFn.youHaveThemTheWrongWay130':
-    'You have them the wrong way round. Star A is the one that stays close to the balance point, which makes it the heavier of the two.',
-  'lessonFn.threeSolarMassesAndOneSolar125':
-    'Three solar masses and one solar mass. You have just weighed two individual stars, separately, using a ruler and a stopwatch.',
-  'lessonFn.theTwoAddUpCorrectlyBut126':
-    'The two add up correctly, but not in a three to one ratio. Count the blocks: three on Star A’s side for every one on Star B’s.',
-  'lessonFn.put3InBothBoxesThe65':
-    'Put 3 in both boxes: the pair is 3 AU apart with a 3 year period.',
-  'lessonFn.333Is27And102':
-    '3 × 3 × 3 is 27, and 3 × 3 is 9, and 27 divided by 9 is 3. Three solar masses between the two of them.',
-  'lessonFn.isProportionalTo18': 'is proportional to',
-  'lessonFn.howConcentratedIsThisThingOn63':
-    'how concentrated is this thing, on the scale of its own horizon',
-  'lessonFn.whatEarthGets15': 'what Earth gets',
-  'lessonFn.distancesAndStarlightAreBothPositive50':
-    'Distances and starlight are both positive numbers.',
-  'lessonFn.theseDoNotAllSitOn114':
-    'These do not all sit on the same relationship. Check that each starlight value was read at the distance beside it.',
-  'lessonFn.everyOneOfYourReadingsSatisfies123':
-    'Every one of your readings satisfies starlight x distance x distance = 1. That is the pattern, already in your own numbers.',
-  'lessonFn.thoseMatchNowSayItIn298':
-    'Those match. Now say it in words, and say it carefully: e, f and g lie within the modeled habitable zone. That is a statement about their orbits and their star, and it is the correct thing to say. It is not a statement that any of them has water, an atmosphere, or a surface anyone would recognize.',
-  'lessonFn.rotationCurve14': 'Rotation curve',
-  'lessonFn.openThePanel14': 'open the panel',
-  'lessonFn.bodiesPlotted14': 'Bodies plotted',
-  'lessonFn.innermost9': 'Innermost',
-  'lessonFn.outermost9': 'Outermost',
-  'lessonFn.fittedSlope12': 'Fitted slope',
-  'lessonFn.proportionalToRadius22': 'proportional to radius',
-  'lessonFn.halo4': 'Halo',
-  'lessonFn.outermostStar14': 'Outermost star',
-  'lessonFn.slope5': 'Slope',
-  'lessonFn.luna4': 'Luna',
-  'lessonFn.bodiesOnScreen16': 'Bodies on screen',
-  'lessonFn.earthAndTheMoon19': 'Earth, and the Moon',
-  'lessonFn.moonSDistanceNow19': 'Moon’s distance now',
-  'lessonFn.buildingTheSystem20': 'building the system…',
-  'lessonFn.realSeparation15': 'Real separation',
-  'lessonFn.384400KmOnAverage22': '384,400 km, on average',
-  'lessonFn.distancesAndTidalStrengthsAreBoth56':
-    'Distances and tidal strengths are both positive numbers.',
-  'lessonFn.theseDoNotAllSitOn185':
-    'These do not all sit on one relationship. The usual cause is a strength read at a different distance from the one beside it: check each row against the slider position that produced it.',
-  'lessonFn.massesAndTidalStrengthsAreBoth53':
-    'Masses and tidal strengths are both positive numbers.',
-  'lessonFn.stretchMassIsNotComingOut190':
-    'Stretch ÷ mass is not coming out the same for every row. Check that the distance slider stayed put while you changed the mass: moving both at once hides the relationship you are looking for.',
-  'lessonFn.bodiesBeingTracked20': 'Bodies being tracked',
-  'lessonFn.whatIsSimulated17': 'What is simulated',
-  'lessonFn.newtonianGravityBetweenPointMasses38':
-    'Newtonian gravity between point masses',
-  'lessonFn.whatIsNot11': 'What is not',
-  'lessonFn.fluidFlowPressureRadiation31': 'Fluid flow, pressure, radiation',
+  // None in English, on purpose. js/i18n/lesson.js looks a computed sentence
+  // up by an id made from what it says, and returns the sentence itself when
+  // the locale has no entry - so an English entry could only ever repeat its
+  // own source, which is what all 139 of them did. The Spanish catalog keeps
+  // its translations under the same ids (js/i18n/es.deferred.js), and
+  // tools/i18n-audit.mjs does not count them as orphans.
+  'assign.roster.help':
+    'The code rides on the link into every report, so one code can cover a whole class; it does not say which student made a report. To tell students apart, ask them to type their login or student number where the report asks for a name, or make one link per student.',
+  'assign.kit': 'Open the distribution kit',
+  'assign.preview': 'Open as a student',
+  'assign.addCourse': 'Add to a course',
 };

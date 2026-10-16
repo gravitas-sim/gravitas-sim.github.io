@@ -12,8 +12,8 @@
 // itself. This one validates the forty-odd shipped scenarios, as the
 // application actually assembles them: real presets, real settings, real
 // substepping, real object lists. That is the difference between "the
-// integrator conserves momentum" and "the Binary Star scenario a student is
-// about to be assigned conserves momentum".
+// integrator conserves momentum" and "the Binary Star System scenario a
+// student is about to be assigned conserves momentum".
 //
 // It exists because of a specific bug. The engine used to advance bodies one at
 // a time, so each body felt the previous one at its already-updated position.
@@ -25,7 +25,7 @@
 // needed an answer with numbers in it.
 //
 //   npm run validate:scenarios
-//   node tools/scenario-stability.mjs "Binary Star" --seconds 30
+//   node tools/scenario-stability.mjs 'binary-star-system' --seconds 30
 //   node tools/scenario-stability.mjs --all
 //
 // Reported per scenario, over a simulated run at the scenario's own sim_speed:
@@ -59,23 +59,23 @@ const PORT = 8127;
 // gravity, a binary, or a tightly packed system. Ordered roughly by how much a
 // lesson depends on them being right.
 const DEFAULT_SCENARIOS = [
-  'Solar System',
-  'TRAPPIST-1 System',
-  'Binary Star',
-  'Binary Pair',
-  'Earth-Moon System',
-  'Transit Lab',
-  'Star Cluster',
-  'GW150914',
-  'Kuiper Belt',
+  'solar-system',
+  'trappist-1-system',
+  'binary-star-system',
+  'binary-pair',
+  'earth-moon-system',
+  'transit-lab',
+  'star-cluster',
+  'gw150914',
+  'kuiper-belt',
   // The three resonance scenarios. They belong here more than most: each one
   // asks a student to conclude something from an angle measured over hundreds
   // of orbits, so a slow drift in a semi-major axis that no other scenario
   // would notice is exactly what would spoil them. The fourth, Broken Laplace
   // Resonance, is deliberately unstable and is left out.
-  'Galilean Resonance',
-  'Pluto and Neptune',
-  'Jupiter Trojans',
+  'galilean-resonance',
+  'pluto-and-neptune',
+  'jupiter-trojans',
 ];
 
 const pad = (s, n) => String(s).padEnd(n);
@@ -117,6 +117,27 @@ async function main() {
       const cat = info.SCENARIO_INFO || info.default || {};
       return Object.keys(cat);
     });
+  }
+
+  // SETTINGS.preset_scenario takes any string, and for one it does not know the
+  // application builds its default population instead - a black hole, fifteen
+  // planets, two gas giants and ten asteroids. A misspelled name would be
+  // measured as that world and reported under the name it was given, which is
+  // what 'Binary Star' in the list above was until the key was checked.
+  const unknown = await page.evaluate(async names => {
+    const info = await import('/js/data/scenarioInfo.js');
+    const keys = Object.keys(info.SCENARIO_INFO);
+    return names.filter(name => !keys.includes(name));
+  }, scenarios);
+  if (unknown.length) {
+    console.error(
+      'Not scenario keys in js/data/scenarioInfo.js: ' +
+        unknown.map(name => JSON.stringify(name)).join(', ')
+    );
+    await browser.close();
+    server.close();
+    process.exitCode = 2;
+    return;
   }
 
   console.log(

@@ -152,8 +152,8 @@ export function bindingMatches(binding, body, generation) {
  */
 export function kindOf(body) {
   if (!body) return null;
-  const raw = body.obj_type || body.constructor?.name || null;
-  if (!raw) return null;
+  const k = body.kind;
+  const raw = body.obj_type || (typeof k === 'string' && k) || 'Object';
   return raw.endsWith('Object') && raw.length > 6 ? raw.slice(0, -6) : raw;
 }
 
@@ -237,7 +237,7 @@ export function resolveMatcher(bodies, matcher = {}) {
         .slice(0, 4)
         .map(b => `${kindOf(b)} "${b.name}" #${b.id}`)
         .join(', ')}${found.length > 4 ? ', …' : ''}). ` +
-      'A lesson role has to name exactly one; add a kind, or an index if the ' +
+      'An investigation role has to name exactly one; add a kind, or an index if the ' +
       'order is part of what is being taught.',
   };
 }
@@ -419,19 +419,4 @@ export function leaveScope(scope) {
   scope.entered = false;
   scope.saved.clear();
   return out;
-}
-
-/**
- * Forget a scope without restoring it.
- *
- * For the case where the thing that was saved no longer exists to be put back:
- * a camera belonging to a world that has been torn down, a selection of a body
- * that has merged. Putting those back is worse than not.
- *
- * @param {object} scope - A scope
- * @returns {void}
- */
-export function abandonScope(scope) {
-  scope.entered = false;
-  scope.saved.clear();
 }

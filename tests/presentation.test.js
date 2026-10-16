@@ -10,7 +10,7 @@ import {
   embedRequested,
   withEmbedParam,
 } from '../js/presentation.js';
-import { embedSnippet, EMBED_ASPECT } from '../js/embed.js';
+import { embedSnippet, EMBED_ASPECT } from '../js/embedMarkup.js';
 import { parseSequence } from '../js/lecture.js';
 import { setLocale } from '../js/i18n/index.js';
 

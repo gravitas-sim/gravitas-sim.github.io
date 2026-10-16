@@ -36,6 +36,8 @@
 // lives of their own anywhere in this file.
 // =============================================================================
 
+// Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
+import './instrumentStartup.js';
 import { t } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import {
@@ -416,11 +418,6 @@ function firstSampleOf(trackId) {
     phase: t2.phase[0],
   };
 }
-
-/** Forget which stage the protagonist was last written at. Tests only. */
-export const resetProtagonistForTests = () => {
-  boundStage = null;
-};
 
 /** The live playback, for tests. @returns {?object} state */
 export const activePlayback = () => play;

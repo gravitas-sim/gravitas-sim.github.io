@@ -52,20 +52,76 @@ const TARGETS = [
     package: 'three',
     out: 'vendor/three/three.module.js',
     license: 'vendor/three/LICENSE',
+    // Only what js/view3d.js builds its scene from. `export *` re-exported
+    // the whole library - every loader, material, geometry, helper and
+    // animation class - and esbuild kept 529 KB of it in the 3-D view's
+    // chunk, because a pre-bundled file has lost the package's
+    // side-effect-free hint and nothing in it can be proven unused. Naming
+    // the seventeen classes and constants the view uses lets esbuild drop
+    // the rest while it still knows which modules are pure.
+    //
+    // A 3-D feature that needs something else adds it here.
+    // tests/vendoredThree.test.js reads every `THREE.X` the application
+    // writes and holds each to this file's exports, because a missing one
+    // is `undefined` in a reader's browser and nothing here would notice.
     entry: [
-      "export * from 'three';",
+      'export {',
+      '  AmbientLight, BufferGeometry, Color, DirectionalLight, Group,',
+      '  HemisphereLight, LineBasicMaterial, LineSegments, MathUtils, Mesh,',
+      '  MeshStandardMaterial, PerspectiveCamera, SRGBColorSpace, Scene,',
+      '  SphereGeometry, Vector3, WebGLRenderer,',
+      "} from 'three';",
+      "export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';",
+    ].join('\n'),
+  },
+  {
+    // The 3-D lab (/3d/) draws with its own copy, so nothing it needs can
+    // grow the application's 3-D view: that chunk is in the app's deferred
+    // bundle, which has little room, and a pre-bundled file's unused
+    // exports cannot be dropped from it. This one is on the lab's route only.
+    // tests/vendoredThree.test.js holds js/lab3d/view/ to these exports.
+    package: 'three',
+    out: 'vendor/three/lab3d.module.js',
+    license: 'vendor/three/LICENSE',
+    entry: [
+      'export {',
+      '  AmbientLight, BufferAttribute, BufferGeometry, Color, DirectionalLight,',
+      '  GridHelper, Group, Line, LineBasicMaterial, Mesh, MeshStandardMaterial,',
+      '  OrthographicCamera, PerspectiveCamera, SRGBColorSpace, Scene,',
+      '  SphereGeometry, Vector3, WebGLRenderer,',
+      "} from 'three';",
       "export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';",
     ].join('\n'),
   },
   {
     package: 'chart.js',
-    out: 'vendor/chartjs/chart.auto.js',
+    out: 'vendor/chartjs/chart.js',
     license: 'vendor/chartjs/LICENSE.md',
+    // Only what Gravitas draws. chart.js/auto registers every controller,
+    // scale, element and plugin - bars, doughnuts, radar and polar charts,
+    // time and logarithmic axes, decimation, titles - and exported the rest
+    // of the library beside it, 200 KB that every reader who opened a chart
+    // downloaded to draw lines and points. The five charts (the light curve,
+    // the radial-velocity curve, the energy chart and the bench's sweep and
+    // comparison) are line and scatter charts on category and linear axes,
+    // one filled, with legends and tooltips; that is 170.
+    //
+    // A chart that needs something else adds it here. An unregistered chart
+    // or axis type throws when the chart is made, and
+    // tests/vendoredChart.test.js reads every chart the application makes for
+    // the types it names; an unregistered plugin is ignored without a word,
+    // which is why the plugins every chart relies on are listed there too.
     entry: [
-      // chart.js/auto registers every controller, scale and element, which is
-      // what the CDN build did and what both consumers assume.
-      "export { default as Chart } from 'chart.js/auto';",
-      "export * from 'chart.js';",
+      'import {',
+      '  Chart, LineController, ScatterController, LineElement, PointElement,',
+      '  CategoryScale, LinearScale, Filler, Legend, Tooltip,',
+      "} from 'chart.js';",
+      'Chart.register(',
+      '  LineController, ScatterController, LineElement, PointElement,',
+      '  CategoryScale, LinearScale, Filler, Legend, Tooltip,',
+      ');',
+      'export { Chart };',
+      'export default Chart;',
     ].join('\n'),
   },
 ];

@@ -126,13 +126,17 @@ const TRANSITS = {
     'Measure a transit, weigh what it tells you, and find what is hiding',
   duration: '50-70 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 21, section: '21.4' },
+  courseLevel: 'survey',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'algebra',
+  prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
-  summary:
-    'Work through the transit method from first principles on HD 209458 b, the first planet ever caught crossing its star: measure a depth and turn it into a radius, correct it for limb darkening, time two transits to get a period, read an atmosphere out of the color of the dip, and finish by finding the hidden companion star that makes the planet look smaller than it is.',
   objectives: [
     'Explain why almost every known exoplanet was found indirectly, and what each method actually measures',
     'Derive the relation between transit depth and radius ratio, and use it on a measured light curve',
@@ -170,7 +174,7 @@ const TRANSITS = {
              Pegasus, with a planet on a three and a half day orbit. The star and
              the planet are drawn at their true relative sizes, which is why the
              view is zoomed so far in.`,
-      tip: 'Everything in this lesson is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
+      tip: 'Everything in this investigation is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
       setup: TRANSIT_LAB,
     },
     {
@@ -230,7 +234,7 @@ const TRANSITS = {
       ],
       answer: 1,
       because:
-        'It drops by a small amount and recovers. The planet blocks a fraction of the star’s disk equal to the ratio of their areas, and even a Jupiter in front of a Sun-like star only covers about 1% of it. Everything in this lesson follows from that one number being small but perfectly measurable.',
+        'It drops by a small amount and recovers. The planet blocks a fraction of the star’s disk equal to the ratio of their areas, and even a Jupiter in front of a Sun-like star only covers about 1% of it. Everything in this investigation follows from that one number being small but perfectly measurable.',
     },
     {
       sid: 'your-first-transit',
@@ -312,7 +316,7 @@ const TRANSITS = {
       body: `The instrument on the right draws the silhouette to scale on the
              left and the transit it produces on the right, on a fixed vertical
              scale so that changes read as changes.
-             \n\nWork through the presets. The lesson is in the two extremes: an
+             \n\nWork through the presets. The investigation is in the two extremes: an
              Earth in front of the Sun is 84 parts per million, a depth that took
              a dedicated space telescope to reach, while the same Earth in front
              of TRAPPIST-1 is nearly 1%, easily within reach of a small ground
@@ -342,6 +346,20 @@ const TRANSITS = {
       tolerance: 0.015,
       because:
         'The square root of 0.01 is 0.1: the planet is a tenth of the star’s radius. Around a Sun-like star that is roughly Jupiter-sized, which is exactly why every transiting planet found before about 2005 was a hot Jupiter. They were the only ones anybody could see.',
+      hints: [
+        'The depth is the fraction of the starlight that is blocked. What part of the star’s disc does the planet cover?',
+        'Blocked light goes as area, and area goes as the square of a radius.',
+        'So the depth is the radius ratio squared. Undo that to get the ratio.',
+      ],
+      feedback: {
+        close:
+          'Near, but outside the tolerance. Square your answer and compare it with the depth you were given.',
+        'wrong-order-of-magnitude':
+          'A power of ten out. Check whether you used the depth itself as the radius ratio, or squared where a root was needed.',
+        off: 'Test it: square your radius ratio. If that does not return the depth, work backwards from the depth with the opposite operation.',
+        correct:
+          'To check a result like this, square it and see that the depth comes back.',
+      },
     },
     {
       sid: 'measure-the-dip',
@@ -677,6 +695,18 @@ const TRANSITS = {
       tolerance: 40,
       because:
         'R★/a = 0.00465, or about 1 in 215. That is the single hardest fact about the transit method: even a survey with perfect photometry watching every star in the sky forever would find fewer than one in two hundred of the Earth-like planets out there. Everything the method reports about how common planets are has to be divided by this geometric factor before it means anything.',
+      hints: [
+        'The chance is a ratio of two lengths that the step gives you.',
+        'Divide the star’s radius by the size of the orbit, in the same unit.',
+        'That gives a fraction. The question asks one chance in how many, so think about what to do to a fraction to get that.',
+      ],
+      feedback: {
+        close:
+          'Close. Re-check the division, and that both lengths are in the same unit.',
+        'wrong-order-of-magnitude':
+          'Out by a large factor. If you have 0.00465, that is the chance as a fraction; the question asks one chance in how many, so turn it over. Otherwise check both lengths are in AU.',
+        off: 'Write the chance as a fraction first, then ask how many of them make one.',
+      },
     },
     {
       sid: 'what-the-method-misses',
@@ -938,7 +968,7 @@ const TRANSITS = {
              gap is thought to be carved by atmospheric escape, and it is a
              feature nobody predicted before the data showed it. Finding it
              required thousands of planet radii to be accurate, which is where the
-             last section of this lesson goes.`,
+             last section of this investigation goes.`,
       tip: 'The TRAPPIST-1 planets got their masses a third way: they perturb each other enough to shift each other’s transits by minutes, and those transit timing variations are a mass measurement.',
     },
     {

@@ -13,6 +13,24 @@
 
 import { test, expect } from './fixtures.js';
 import { SEQUENCES } from '../js/data/investigations/sequences.js';
+import { BROWSE_META } from '../js/data/investigations/browseData.js';
+
+/**
+ * The lessons a subject filter should show, from the data the filter reads.
+ *
+ * Derived rather than counted. This was a literal 9, which was a fact about
+ * the catalog on the day it was written and not about the filter: adding a
+ * lesson tagged `orbits` failed it here, in a file about the browser, for a
+ * reason that had nothing to do with the browser.
+ *
+ * @param {string} tag - Subject tag
+ * @returns {string[]} Lesson ids carrying it, sorted
+ */
+const taggedWith = tag =>
+  Object.entries(BROWSE_META)
+    .filter(([, meta]) => meta.tags.includes(tag))
+    .map(([id]) => id)
+    .sort();
 
 /** Get to the browser, with the deferred strings loaded. */
 async function openBrowser(page, app) {
@@ -182,11 +200,22 @@ test.describe('the curated orders', () => {
 
     // The first lesson of a sequence assumes nothing; a later one names what
     // it assumes.
+    // Named by a lesson it holds, so the order the sequences are listed in
+    // (The sky is first) is not what this checks.
+    const orbital = page
+      .locator('.inv-seq')
+      .filter({ has: page.locator('[data-sequence-lesson="keplers-laws"]') });
+    await expect(orbital.locator('.inv-seq-needs').first()).toHaveClass(
+      /is-none/
+    );
+    // Orbital Energy is the first one in the order that names Kepler.
     await expect(
-      page.locator('.inv-seq').first().locator('.inv-seq-needs').first()
-    ).toHaveClass(/is-none/);
-    await expect(
-      page.locator('.inv-seq').first().locator('.inv-seq-needs').nth(1)
+      orbital
+        .locator('.inv-seq-step')
+        .filter({
+          has: page.locator('[data-sequence-lesson="orbital-energy"]'),
+        })
+        .locator('.inv-seq-needs')
     ).toContainText('Kepler');
 
     await page.locator('#investigationSearch').fill('transit');
@@ -214,12 +243,15 @@ test.describe('filtering', () => {
     await openBrowser(page, app);
     const search = page.locator('#investigationSearch');
 
-    // A title and a summary: two lessons name Kepler, and both belong here.
+    // A title and a summary: three lessons name Kepler, and all belong here.
+    // Integrators in Practice (Prompt 102) runs on the Kepler-16 system, which
+    // its summary names, so it legitimately matches.
     await search.fill('kepler');
-    await expect(page.locator('#investigationList .inv-card')).toHaveCount(2);
+    await expect(page.locator('#investigationList .inv-card')).toHaveCount(3);
     await expect
       .poll(() => shownIds(page))
-      .toEqual(['keplers-laws', 'weighing-stars']);
+
+      .toEqual(['keplers-laws', 'weighing-stars', 'integrators-in-practice']);
 
     // A tag nobody prints on a card is still searchable.
     await search.fill('resonance');
@@ -241,7 +273,11 @@ test.describe('filtering', () => {
   }) => {
     await openBrowser(page, app);
     await page.locator('#investigationFilterSubject').selectOption('orbits');
-    await expect.poll(() => shownIds(page)).toHaveLength(9);
+    // The set, not just its size: a count alone passes when the filter shows
+    // the right number of the wrong lessons.
+    await expect
+      .poll(async () => (await shownIds(page)).slice().sort())
+      .toEqual(taggedWith('orbits'));
 
     // Each menu only narrows: adding one never brings a lesson back.
     const shortOrbits = await idsOfLength(page, 'demo', 'orbits');
@@ -265,7 +301,7 @@ test.describe('filtering', () => {
     app,
   }) => {
     await openBrowser(page, app);
-    await page.locator('#investigationFilterSubject').selectOption('galaxies');
+    await page.locator('#investigationFilterSubject').selectOption('gravity');
     await page.locator('#investigationFilterLength').selectOption('demo');
 
     const short = await idsOfLength(page, 'demo');
@@ -400,10 +436,13 @@ test.describe('everyone can use it', () => {
     await expect(
       page.locator('#investigationFilterSubject option').first()
     ).toHaveText('Cualquier materia');
-    await expect(page.locator('.inv-seq-title').first()).toHaveText(
-      'Mecánica orbital'
+    const orbitalEs = page
+      .locator('.inv-seq')
+      .filter({ has: page.locator('[data-sequence-lesson="keplers-laws"]') });
+    await expect(orbitalEs.locator('.inv-seq-title')).toHaveText(
+      'Gravedad y órbitas'
     );
-    await expect(page.locator('.inv-seq-needs').first()).toHaveText(
+    await expect(orbitalEs.locator('.inv-seq-needs').first()).toHaveText(
       /No da nada por hecho/
     );
 
@@ -462,5 +501,35 @@ test.describe('everyone can use it', () => {
 
     await page.locator('#investigationSearch').fill('tides');
     await expect.poll(() => shownIds(page)).toEqual(['tides']);
+  });
+});
+
+test.describe('a card says what the lesson teaches', () => {
+  test('its objectives open under it, fetched only when asked for', async ({
+    page,
+    app,
+  }) => {
+    await openBrowser(page, app);
+    const box = page.locator('[data-objectives="keplers-laws"]');
+    // Not a control inside the card: the card is one button, and a disclosure
+    // inside a button is not a disclosure.
+    await expect(
+      page.locator('.inv-card [data-objectives], .inv-card details')
+    ).toHaveCount(0);
+    const fetched = () =>
+      page.evaluate(() =>
+        performance
+          .getEntriesByType('resource')
+          .some(r => /\/investigations\/keplers-laws\.js/.test(r.name))
+      );
+    expect(await fetched()).toBe(false);
+
+    await box.locator('summary').click();
+    const want = await page.evaluate(async () => {
+      const { MANIFEST } = await import('/js/data/investigations/registry.js');
+      return MANIFEST.find(m => m.id === 'keplers-laws').objectiveCount;
+    });
+    await expect(box.locator('li')).toHaveCount(want);
+    expect(await fetched()).toBe(true);
   });
 });

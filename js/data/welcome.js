@@ -25,12 +25,12 @@
  * dynamics. Every key must exist in SCENARIO_INFO, which a test enforces.
  */
 export const FEATURED_SCENARIO_KEYS = [
-  'Solar System',
-  'TRAPPIST-1 System',
-  'Binary Star System',
-  'GW150914',
-  'Neutron Star Collision',
-  'Slingshot',
+  'solar-system',
+  'trappist-1-system',
+  'binary-star-system',
+  'gw150914',
+  'neutron-star-collision',
+  'slingshot',
 ];
 
 /**

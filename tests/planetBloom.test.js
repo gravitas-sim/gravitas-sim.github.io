@@ -14,6 +14,9 @@
 
 import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 import { Planet, setStateReference } from '../js/physics.js';
+// Registers the drawers the body classes call; the engine never imports them.
+import '../js/bodyDraw.js';
+import { setBloomLayer, bloomLayer } from '../js/bodyDrawSky.js';
 import { setTier } from '../js/quality.js';
 import { displayRadius } from '../js/bodyVisuals.js';
 
@@ -74,21 +77,33 @@ const nullContext = () => ({
 
 const view = { paused: true, zoom: 4, pan: { x: 0, y: 0 } };
 let recorder;
-let previousBloom;
 
 beforeEach(() => {
   setStateReference(view);
   recorder = bloomRecorder();
-  previousBloom = Object.getOwnPropertyDescriptor(window, 'bloomCtx');
-  Object.defineProperty(window, 'bloomCtx', {
-    configurable: true,
-    get: () => recorder.ctx,
-  });
+  setBloomLayer(() => recorder.ctx);
 });
 
 afterEach(() => {
-  if (previousBloom) Object.defineProperty(window, 'bloomCtx', previousBloom);
-  else delete window.bloomCtx;
+  setBloomLayer(null);
+});
+
+describe('the bloom provider', () => {
+  test('anything but a function is ignored, not stored', () => {
+    for (const bad of [null, undefined, 0, 'layer', {}, { getContext() {} }]) {
+      setBloomLayer(() => recorder.ctx);
+      setBloomLayer(bad);
+      // Stored as-is, the next call would throw and a draw site's try/catch
+      // would turn that into a glow that never appears.
+      expect(() => bloomLayer()).not.toThrow();
+      expect(bloomLayer()).toBeNull();
+    }
+  });
+
+  test('a function provider is used', () => {
+    setBloomLayer(() => recorder.ctx);
+    expect(bloomLayer()).toBe(recorder.ctx);
+  });
 });
 
 describe('the bloom pass', () => {
@@ -146,8 +161,8 @@ describe('the bloom pass', () => {
   test('does nothing at the low quality tier', () => {
     // The bloom layer is a second full-size canvas composited every frame, and
     // js/quality.js already names it as one of the passes the low tier exists
-    // to skip. Reading window.bloomCtx is what arms that composite, so not
-    // reading it is what switches it off.
+    // to skip. Asking for the layer is what arms that composite, so not
+    // asking is what switches it off.
     const planet = new Planet({ x: 0, y: 0 }, { x: 0, y: 0 });
     setTier('low');
     try {

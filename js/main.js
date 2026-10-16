@@ -2,6 +2,8 @@
 import { resizeCanvas, gameLoop, generateStarfield } from './render.js';
 import {
   initialize_simulation,
+  loadScenarioByKey,
+  SETTINGS,
   state,
   updateSpeedDisplay,
   updateObjectTypeButton,
@@ -13,20 +15,35 @@ import { initLightCurve } from './lightCurve.js';
 import { initRadialVelocity } from './radialVelocity.js';
 import { initRotationCurve } from './rotationCurve.js';
 import { initAstrometry } from './astrometry.js';
-import { initPauseAtEvent } from './pauseAtEventPanel.js';
-import { initScenarioPanels } from './scenarioPanelBridge.js';
+import { watchForPauseAtEvent } from './pauseAtEventBridge.js';
+import { initScenarioPanels } from './placement.js';
 import { initObservationLayout } from './observationLayout.js';
-import { initControls } from './controls.js';
+import { initControls, setPlaying } from './controls.js';
 import { initTutorial } from './tutorial.js';
-import { initShare, hasSharedLink, applySharedLinkFromUrl } from './share.js';
+import {
+  initShare,
+  hasSharedLink,
+  applySharedLinkFromUrl,
+  applySharePayload,
+} from './share.js';
 import {
   assignmentInHash,
+  packInHash,
   watchForAssignments,
 } from './investigationsLoader.js';
 import { initExportBridge } from './exportBridge.js';
-import { watchForManeuver } from './maneuverBridge.js';
+import { watchForManeuver } from './inspectorWindow.js';
 import { watchForInvestigations } from './investigationsLoader.js';
 import { shouldShowWelcome } from './welcomeGate.js';
+
+// Failures go to #srStatus too, by js/failures.js, fetched only then.
+for (const type of ['error', 'unhandledrejection', 'gravitasWorkerFailed'])
+  window.addEventListener(type, e =>
+    import('./failures.js').then(
+      m => m.record(e),
+      () => {}
+    )
+  );
 
 /**
  * Load the front door, once, and wire its own listeners the first time.
@@ -54,14 +71,27 @@ async function loadWelcome() {
   return welcomeModule;
 }
 import { initScenarioBrowser } from './scenarioBrowser.js';
-import { initI18n, getLocale, onLocaleChange } from './i18n/index.js';
+import {
+  initI18n,
+  getLocale,
+  onLocaleChange,
+  setLocale,
+  t,
+} from './i18n/index.js';
+import { announce } from './notify.js';
 import { initI18nDom } from './i18n/dom.js';
-import { createDoubleTapRecognizer } from './gestures.js';
+import { createDoubleTapRecognizer } from './bodyEffects.js';
 import { setRequestedLessonLocale } from './lessonLocale.js';
 import { resetFollowCamera } from './followCamera.js';
-import { initLocalePicker } from './i18n/picker.js';
-import { initBottomDock } from './bottomDock.js';
-import { initEmbedMode, initEmbedChrome } from './embed.js';
+import { mountShell } from './shell.js';
+import { setTheme } from './theme.js';
+import { initBottomDock } from './captureMeasure.js';
+import {
+  initEmbedMode,
+  initEmbedChrome,
+  embedRequest,
+  embedWorldBuilt,
+} from './world.js';
 
 // Add global flag to track splash screen status
 window.isSplashActive = true;
@@ -74,6 +104,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // Embed mode has to be entered here rather than after the splash: a rail that
   // appears for one frame and then vanishes reads as a bug in the host page.
   const embedded = initEmbedMode();
+  // A gravitas-embed/1 figure may name its language and quality tier
+  // (js/embedOptions.js). Its options arrive behind the splash; neither is
+  // remembered - the locale is not persisted, and SETTINGS is saved only when
+  // a reader saves it.
+  embedRequest().then(({ version, options }) => {
+    if (!version) return;
+    if (options.lang) setLocale(options.lang, { persist: false });
+    if (options.quality) SETTINGS.quality_tier = options.quality;
+  });
+  // The state a figure was made from, kept before anything can rebuild the
+  // world and drop the fragment: its Reset and its page's messages return to
+  // it (js/embedBridge.js).
+  const authored = embedded && hasSharedLink() ? location.hash : null;
 
   const canvas = document.getElementById('simulationCanvas');
   const starfieldCanvas = document.getElementById('starfieldCanvas');
@@ -105,7 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // An embed is a figure in somebody else's page. The front door is a
   // first-visit introduction to *this application*, which is not what the
   // reader came to that page for, and it would cover the figure entirely.
-  const frontDoorPending = !embedded && shouldShowWelcome();
+  // `#home` is Home asked for by name - the shell's GRAVITAS link - and opens
+  // it for a returning visitor too (PLATFORM_MODEL.md, "The surfaces").
+  const frontDoorPending =
+    !embedded && (location.hash === '#home' || shouldShowWelcome());
 
   const revealApp = () => {
     if (revealed) return;
@@ -139,6 +185,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // blank screen behind a removed splash. A front door that fails to load
       // is a missing introduction; an interface that never appears is a broken
       // application.
+      //
+      // Until the door is open nothing else may take the screen. The scenario
+      // card waited for the door, but the door was not up yet while its module
+      // loaded, so on a first visit the card rose first and sat under it.
+      document.body.classList.add('welcome-pending');
       loadWelcome()
         .then(mod =>
           mod.openWelcome({ automatic: true, onEnter: revealInterface })
@@ -146,7 +197,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => {
           console.warn('Front door unavailable:', err);
           revealInterface();
-        });
+        })
+        .finally(() => document.body.classList.remove('welcome-pending'));
     } else {
       revealInterface();
     }
@@ -181,10 +233,17 @@ document.addEventListener('DOMContentLoaded', () => {
       // Show scenario info box after splash ends, unless a lesson has already
       // started: a deep link straight into an investigation opens the panel
       // before this fires, and the card lands on top of its instruments.
+      // Nor if the reader has already closed it: this runs 200 ms after the
+      // door closes, and a quick Escape in between used to be undone.
       const scenarioInfoBox = document.getElementById('scenarioInfoBox');
       if (
         scenarioInfoBox &&
-        !document.body.classList.contains('investigation-open')
+        !document.body.classList.contains('investigation-open') &&
+        !(
+          scenarioInfoBox.dataset.dismissed &&
+          scenarioInfoBox.dataset.dismissed ===
+            scenarioInfoBox.dataset.scenarioKey
+        )
       ) {
         scenarioInfoBox.classList.add('showUI');
       }
@@ -216,8 +275,43 @@ document.addEventListener('DOMContentLoaded', () => {
         objectInspector.classList.add('showUI');
       }
 
-      showMobileInstructionsOnce();
+      armTouchTips();
     }, 200);
+  }
+
+  /**
+   * Whether another first-run overlay has the screen: Home, or the card that
+   * names the scenario. PLATFORM_MODEL.md, "First run": one at a time.
+   */
+  const anotherOverlayUp = () =>
+    document.body.classList.contains('welcome-open') ||
+    document.body.classList.contains('welcome-pending') ||
+    Boolean(document.querySelector('#scenarioInfoBox.showUI'));
+
+  /**
+   * The touch tips wait for the first touch on the simulation, and for the
+   * screen to be clear. They used to rise with the interface, which on a first
+   * visit is the moment the scenario card rises too, and the two stood one on
+   * top of the other over the readout. A touch made while something else is up
+   * is passed over and the next one asked again.
+   */
+  function armTouchTips() {
+    try {
+      if (localStorage.getItem('mobile_instructions_shown')) return;
+    } catch {
+      /* storage refused: armed for this load */
+    }
+    const onTouch = event => {
+      if (event.pointerType !== 'touch' || anotherOverlayUp()) return;
+      canvas.removeEventListener('pointerdown', onTouch);
+      showMobileInstructionsOnce();
+    };
+    canvas.addEventListener('pointerdown', onTouch);
+    // Escape dismisses them like any other overlay.
+    window.addEventListener('gravitasEscape', () => {
+      const tips = document.getElementById('mobileInstructions');
+      if (tips) tips.style.display = 'none';
+    });
   }
 
   /**
@@ -235,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       );
-    if (!isMobile || window.innerWidth > 768) return;
+    if (!isMobile || window.innerWidth > 900) return;
 
     const mobileInstructions = document.getElementById('mobileInstructions');
     if (!mobileInstructions) return;
@@ -248,6 +342,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     mobileInstructions.style.display = 'block';
+    // Said as well as shown: the last of the first-run overlays, in order.
+    announce(t('readout.mobileInstructions'), false);
     setTimeout(() => {
       if (mobileInstructions.style.display === 'block') {
         mobileInstructions.style.display = 'none';
@@ -309,8 +405,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // milliseconds apart, so every pinch snapped the view home - the "the view
   // jumps" report, on a touchscreen. So did a drag then a tap, a placement
   // then a tap, and two fingers touching at once. The recognizer in
-  // js/gestures.js requires two actual taps: one finger, brief, still, close
-  // together in space as well as in time.
+  // js/bodyEffects.js requires two actual taps: one finger, brief, still,
+  // close together in space as well as in time.
   const doubleTap = createDoubleTapRecognizer({
     onDoubleTap: () => {
       state.zoom = 1.0;
@@ -349,13 +445,14 @@ document.addEventListener('DOMContentLoaded', () => {
     watchForBench();
     // And the evidence notebook, on the same terms.
     watchForNotebook();
+    // And pause-at-event.
+    watchForPauseAtEvent();
     // An optional panel must never take the simulation down with it.
     try {
       initLightCurve();
       initRadialVelocity();
       initRotationCurve();
       initAstrometry();
-      initPauseAtEvent();
       initScenarioPanels();
       initObservationLayout();
     } catch (err) {
@@ -374,7 +471,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // The markup sweep runs after the dialogs exist but before the interface is
     // revealed, so nothing is ever seen in the wrong language.
     initI18nDom();
-    initLocalePicker();
+    // The shared shell's switches (tools/shell.mjs), through the application's
+    // own setters, so a language change re-translates in place and a theme
+    // change repaints the canvas.
+    mountShell({
+      onLanguage: id => setLocale(id),
+      onTheme: id => setTheme(id),
+    });
     initBottomDock();
     // The lesson registry imports nothing, so it cannot read the locale for
     // itself; the two are connected here. Lessons are content and are fetched
@@ -419,6 +522,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'click',
       async () => {
         const lecture = await import('./lecture.js');
+        // Its bar arrives with it (js/fragments/lecture.html).
+        await lecture.lectureReady;
         // initLecture() runs on load and attaches this button's own handler for
         // every later press; this first press has to be passed on by hand, or
         // the click that fetched the module would be the one that did nothing.
@@ -426,20 +531,29 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       { once: true }
     );
-    initEmbedChrome();
+    initEmbedChrome({
+      authored,
+      // What a gravitas-embed/1 figure's Reset and its page's messages act
+      // on, handed down from here (js/embedBridge.js says why).
+      services: {
+        setPlaying,
+        applySharePayload,
+        loadScenarioByKey,
+        isPaused: () => state.paused,
+        scenario: () => SETTINGS.preset_scenario,
+      },
+    });
     // Not initInvestigations(): the lesson system is half the bundle and is
     // loaded the first time somebody asks for it. See investigationsLoader.js.
     watchForInvestigations();
-    // The reopen button waits for its own module rather than pulling it into
-    // start-up: it is in the footer, and most visits never touch it.
-    document
-      .getElementById('aboutGravitasBtn')
-      ?.addEventListener('click', event => {
-        event.preventDefault();
-        loadWelcome()
-          .then(mod => mod.openWelcome({ automatic: false }))
-          .catch(err => console.warn('Front door unavailable:', err));
-      });
+    // Home reopens from the shell's GRAVITAS link, which on this page changes
+    // only the hash. The module waits until then rather than joining start-up.
+    window.addEventListener('hashchange', () => {
+      if (embedded || location.hash !== '#home') return;
+      loadWelcome()
+        .then(mod => mod.openWelcome({ automatic: false }))
+        .catch(err => console.warn('Front door unavailable:', err));
+    });
     // The gallery does not load scenarios itself: it hands the chosen key to
     // the one authoritative loader, the same one the front door's featured
     // cards use.
@@ -461,8 +575,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // machinery that reads one is behind a dynamic import in the loader.
     watchForAssignments();
 
-    if (assignmentInHash()) {
+    if (assignmentInHash() || packInHash()) {
       initialize_simulation();
+      embedWorldBuilt();
     } else if (hasSharedLink()) {
       // A link names its own scenario, so building the default one first would
       // be work thrown away — and on a heavy scenario that is a visible stall.
@@ -470,9 +585,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // empty world for a frame or two, behind the splash.
       applySharedLinkFromUrl().then(applied => {
         if (!applied) initialize_simulation();
+        embedWorldBuilt();
       });
     } else {
       initialize_simulation();
+      embedWorldBuilt();
     }
     requestAnimationFrame(gameLoop);
 

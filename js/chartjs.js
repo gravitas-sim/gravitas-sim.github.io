@@ -1,13 +1,15 @@
 // =============================================================================
 // Loading Chart.js on demand
 // -----------------------------------------------------------------------------
-// Two panels use it - the light curve and the energy chart in the object
-// inspector - and both start closed, so it is loaded the first time one opens.
+// Two panels use it - the experiment bench's comparison and its sweep - and
+// both start closed, so it is loaded the first time one opens. (The light
+// curve, the radial-velocity trace and the energy chart in the object
+// inspector were ported to js/plot/chart.js in D-PLOT-02 stage 3b.)
 //
 // It used to be a <script> tag injected at that moment, pointing at jsdelivr.
 // That made a third-party request during ordinary use, could not be pinned by
 // the lockfile, and could not be served offline. It is now a dynamic import of
-// vendor/chartjs/chart.auto.js, bundled from the pinned package by
+// vendor/chartjs/chart.js, bundled from the pinned package by
 // tools/vendor-deps.mjs - so esbuild puts it in its own deferred chunk and the
 // service worker can precache it.
 //
@@ -29,7 +31,7 @@ export function ensureChartJs() {
   if (window.Chart) return Promise.resolve(window.Chart);
 
   if (!loading) {
-    loading = import('../vendor/chartjs/chart.auto.js')
+    loading = import('../vendor/chartjs/chart.js')
       .then(mod => {
         const Chart = mod.Chart ?? mod.default ?? null;
         if (Chart) window.Chart = Chart;

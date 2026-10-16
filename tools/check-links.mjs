@@ -118,6 +118,14 @@ const isExternal = value =>
 // opens, the lesson does not, and nothing says why. So a route is resolved
 // against the catalog it names.
 const ROUTES = [
+  // Two routes the shared shell links with nothing to resolve: Home, which its
+  // GRAVITAS link opens by name, and the lesson chooser, its Investigations
+  // entry.
+  {
+    pattern: /^(home|investigations)$/,
+    what: 'route',
+    load: async () => ['home', 'investigations'],
+  },
   {
     pattern: /^investigation=([\w-]+)$/,
     what: 'investigation',
@@ -127,6 +135,16 @@ const ROUTES = [
           pathToFileURL(join(REPO, 'js/data/investigations/manifest.js')).href
         )
       ).MANIFEST.map(entry => entry.id),
+  },
+  // An activity launch link (`#activity=<activity>/<format>`, which the
+  // adoption pages carry): resolved against the activities and their formats.
+  {
+    pattern: /^activity=([\w-]+\/\w+)$/,
+    what: 'activity format',
+    load: async () =>
+      (
+        await import(pathToFileURL(join(REPO, 'js/data/activities.js')).href)
+      ).ACTIVITIES.flatMap(a => a.formats.map(f => `${a.id}/${f.id}`)),
   },
 ];
 
@@ -264,6 +282,22 @@ async function main() {
           });
         }
       }
+    }
+  }
+
+  // The Library's routes (LIBRARY.md): not hrefs in a page but links the
+  // Library page and Home render from library/library.json, each resolved
+  // against the source its page reads it from (tools/library-routes.mjs).
+  const index = join(root, 'library', 'library.json');
+  if (existsSync(index)) {
+    const { routeTables, routeProblem } = await import(
+      pathToFileURL(join(REPO, 'tools', 'library-routes.mjs')).href
+    );
+    const tables = await routeTables();
+    for (const e of JSON.parse(await readFile(index, 'utf8')).entries) {
+      checked++;
+      const why = await routeProblem(e.route, tables, root);
+      if (why) broken.push({ file: index, value: `${e.id} ${e.route}`, why });
     }
   }
 

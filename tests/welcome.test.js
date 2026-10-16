@@ -144,6 +144,9 @@ describe('deep links are never intercepted', () => {
   test('an investigation link is recognized', () => {
     expect(hasDeepLinkDestination(lesson)).toBe(true);
     expect(hasDeepLinkDestination('#investigation=keplers-laws')).toBe(true);
+    // The shell's Investigations entry names the chooser, not a lesson.
+    expect(hasDeepLinkDestination('#investigations')).toBe(true);
+    expect(hasDeepLinkDestination('#investigationsx')).toBe(false);
   });
 
   test('an ordinary root visit is not a deep link', () => {

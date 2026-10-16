@@ -26,16 +26,42 @@
 // Cheap and expensive facts
 // -----------------------------------------------------------------------------
 // Most facts are read straight out of the source modules and cost milliseconds,
-// so `--check` verifies them on every run and in the fast CI job. Four of them -
-// the Jest counts, the browser-suite count, the physics-check count and the
-// build sizes - can only be had by running something that takes minutes. Those
-// are gathered only under `--full`, which CI runs in the job where those
-// commands have already been paid for. A `--check` without `--full` reports the
-// ones it skipped rather than passing silently over them.
+// so `--check` verifies them on every run and in the fast CI job. The rest - the
+// Jest counts, the browser-suite count, the physics-check count and the build
+// sizes - can only be had by running something that takes minutes.
+//
+// That comment used to say those were gathered under `--full`, "which CI runs
+// in the job where those commands have already been paid for". CI never ran it.
+// Its "Documentation counts and links" step ran the cheap check, which reports
+// the expensive facts as *not measured* and then prints "Documentation matches
+// the source" - so a pull request could move the test count and go green over a
+// README that now said something untrue. It did, repeatedly: README.md claimed
+// 3608 jest tests against 4844 and 579 browser tests against 1061, and at the
+// time of writing three open pull requests were each carrying stale counts
+// behind a green tick.
+//
+// The fix is not to run the whole suite twice. It is to notice that the facts
+// differ in WHAT they cost, and that CI has already paid for most of it:
+//
+//   tests   The jest counts, the browser-suite listing and the physics total.
+//           CI's `checks` job already runs jest and the physics suite, so it
+//           writes their reports to a cache directory and this reads them back
+//           instead of running them again. What is left is the playwright
+//           listing, which takes four seconds.
+//
+//   build   The bundle sizes, read from dist/build-summary.json. Only the
+//           `build` job has a dist/, and it has one already - so that job
+//           checks them, rather than `checks` waiting for a build it does not
+//           otherwise need.
+//
+// Between them the two groups cover every deferred fact, and
+// tests/releaseGate.test.js fails if they ever stop doing so. `--full` still
+// means all of them, so `npm run docs:check:full` and the release gate are
+// unchanged and remain the strictest form.
 // =============================================================================
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join, resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -47,15 +73,51 @@ import {
   generatedBlocks,
   zenodoJson,
 } from './generated-blocks.mjs';
-import { RELEASE } from './project-metadata.mjs';
+import { COPYRIGHT, RELEASE } from './project-metadata.mjs';
+import {
+  precacheInventory,
+  precacheTable,
+  gzipMB,
+} from './precache-inventory.mjs';
+import { CHECKS } from './checks.mjs';
+import {
+  catalogLayout,
+  completeCatalogs,
+  registeredLocales,
+} from './i18n-catalog.mjs';
+import { inOwnTransformCache } from './playwright-cache.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const rel = p => relative(REPO, p) || '.';
+
+/**
+ * Every message-catalog file, by the one rule tools/i18n-catalog.mjs applies.
+ *
+ * Both of this tool's catalog readers used to list files by hand: the document
+ * list named four of the ten, and `uiStrings` counted two, so README.md
+ * published 3691 strings over a catalog of 4017 - every id in the activities,
+ * teaching and placement fragments was missing from the count.
+ */
+const CATALOG_FILES = catalogLayout({
+  locales: await registeredLocales(),
+}).files.map(f => `js/i18n/${f.file}`);
+
+/** The merged catalogs, loaded once however many facts and checks ask. */
+let catalogs;
+const loadCatalogs = () => (catalogs ??= completeCatalogs());
 
 // The documents this tool is responsible for. A file not listed here can still
 // carry markers; it just will not be found by --sync or --check.
 const DOCS = [
   'README.md',
+  // The adopter's guide and the adoption inventory quote the Library's counts.
+  'ADOPTER_GUIDE.md',
+  'ADOPTION.md',
+  // The licence inventory: LICENSES.md's data-pack table and NOTICE's list of
+  // what each data pack cites, both generated from data-packs/*.json.
+  'LICENSES.md',
+  'NOTICE',
+  'BRANCHING.md',
   'CONTRIBUTING.md',
   'DARK_MATTER.md',
   'EXOPLANET_OBSERVING.md',
@@ -65,6 +127,12 @@ const DOCS = [
   'PHYSICS_VALIDATION.md',
   'MASS_UNITS.md',
   'NUMBER_TYPOGRAPHY.md',
+  // The component language (Prompt 51): no counts, but its links to the
+  // stylesheets and tools it documents are checked.
+  'DESIGN_SYSTEM.md',
+  // The plotting component's parity table and thresholds (Prompt 64): no
+  // counts, but its links are checked.
+  'PLOT_COMPONENT.md',
   'OBJECT_INSPECTOR.md',
   'PERFORMANCE_PROFILING_GUIDE.md',
   'PERFORMANCE_OPTIMIZATIONS_SUMMARY.md',
@@ -82,17 +150,27 @@ const DOCS = [
   // The locale catalogs make the same claim the pages do, in two languages,
   // and were the last place still saying 135 when the suite had reached 243.
   // A marker cannot go in a translated string - it would be rendered to the
-  // reader - so these are matched by pattern below instead.
-  'js/i18n/en.js',
-  'js/i18n/es.js',
-  'js/i18n/en.deferred.js',
-  'js/i18n/es.deferred.js',
+  // reader - so these are matched by pattern below instead. Every fragment,
+  // not the four that were listed here, so a claim written into the teaching
+  // or placement catalog is held to the source like any other.
+  ...CATALOG_FILES,
   'validation/index.html',
   'instructors/index.html',
   'CHANGELOG.md',
   'RELEASING.md',
   'ACCESSIBILITY.md',
   'OFFLINE_AND_LOW_END.md',
+  // The decision register (Prompt 45): no counts, but its links to the gate
+  // documents and their headings are checked with everyone else's.
+  'DECISION_REGISTER.md',
+  // And the integration model (Prompt 46), whose links name the protocol files.
+  'INTEGRATION.md',
+  // The paper. Typeset by pandoc, so it carries no `<!--fact:-->` markers - a
+  // comment would either reach the PDF or need another tool to strip it - and
+  // is matched by pattern in ATTRIBUTE_FACTS instead. It was not listed here at
+  // all, so the two suite sizes it quotes were transcribed once and checked by
+  // nobody.
+  'paper.md',
 ];
 
 const MARKER = /<!--fact:([a-zA-Z0-9_:.-]+)-->([\s\S]*?)<!--\/fact-->/g;
@@ -112,6 +190,68 @@ const MARKER = /<!--fact:([a-zA-Z0-9_:.-]+)-->([\s\S]*?)<!--\/fact-->/g;
  * number that was not a count.
  */
 const ATTRIBUTE_FACTS = [
+  // The paper. It is typeset by pandoc, so a `<!--fact:-->` marker would either
+  // reach the PDF or have to be stripped by another tool; a pattern keeps the
+  // source readable and the number generated. Both of these were transcribed by
+  // hand and both describe suites that grow.
+  {
+    file: 'paper.md',
+    key: 'physicsChecks',
+    pattern: /(A physics validation suite runs )(\d+)( checks)/,
+  },
+  {
+    file: 'paper.md',
+    key: 'releaseChecks',
+    pattern: /(A release gate runs )(\d+)( checks)/,
+  },
+  // The Summary's opening sentence, which is what a reviewer reads first. It
+  // was transcribed at 22 investigations and 636 steps and still said so two
+  // lessons later; the scenario count beside them happened to be right.
+  {
+    file: 'paper.md',
+    key: 'scenarios',
+    pattern: /(It ships )(\d+)(\s+configurable scenarios)/,
+  },
+  {
+    file: 'paper.md',
+    key: 'libraryInvestigations',
+    pattern:
+      /(real and idealized systems, and )(\d+)(\s+guided\s+investigations \()/,
+  },
+  {
+    file: 'paper.md',
+    key: 'investigations',
+    pattern: /(guided\s+investigations \()(\d+)(\s+that run in the simulation)/,
+  },
+  {
+    file: 'paper.md',
+    key: 'guidedInvestigations',
+    pattern: /(simulation and )(\d+)(\s+in the Observatory)/,
+  },
+  {
+    file: 'paper.md',
+    key: 'investigationSteps',
+    pattern: /(simulation have )(\d+)( steps)/,
+  },
+  // The same suite size a second time, in the Summary, where it had stayed at
+  // 243 while the generated copy further down moved to 286.
+  {
+    file: 'paper.md',
+    key: 'physicsChecks',
+    pattern: /(public validation page reports )(\d+)( checks of the physics)/,
+  },
+  // The accessibility sweep's size. Right when this was written, and typed by
+  // hand beside counts that were not.
+  {
+    file: 'paper.md',
+    key: 'axeSurfaces',
+    pattern: /(axe-core sweep runs over\s+)(\d+)(\s+surfaces)/,
+  },
+  {
+    file: 'paper.md',
+    key: 'axeRuns',
+    pattern: /(themes and the rest in two — )(\d+)( runs)/,
+  },
   {
     file: 'validation/index.html',
     key: 'physicsChecks',
@@ -174,6 +314,33 @@ function stabilityScenarioCount() {
 }
 
 /**
+ * The Library's own counts: every investigation it lists, how many of them are
+ * guided investigations in the Observatory and the labs rather than lessons that
+ * run in the simulation, and the built-in courses.
+ *
+ * @returns {{libraryInvestigations: number, guidedInvestigations: number, libraryScenarios: number, systems3dScenarios: number, libraryCourses: number}}
+ */
+function libraryFacts() {
+  const { entries } = JSON.parse(
+    readFileSync(new URL('../library/library.json', import.meta.url), 'utf8')
+  );
+  const inv = entries.filter(e => e.kind === 'investigation');
+  return {
+    libraryInvestigations: inv.length,
+    guidedInvestigations: inv.filter(e => e.format !== 'lesson').length,
+    // The Library's scenario entries are the sandbox's scenarios (`scenarios`
+    // above) and the 3-D lab's reference systems, which are not sandbox
+    // scenarios: 67 entries beside 59 scenarios is two things, not a drift.
+    libraryScenarios: entries.filter(e => e.kind === 'scenario').length,
+    systems3dScenarios: entries.filter(e => e.id.startsWith('scenario:3d-'))
+      .length,
+    libraryCourses: entries.filter(
+      e => e.kind === 'course' && !e.id.startsWith('course:community.')
+    ).length,
+  };
+}
+
+/**
  * How many documents the instructor bundle carries, and how many are activities.
  *
  * Read from instructors/materials.manifest.json, which the build writes, rather
@@ -229,7 +396,14 @@ function activityDocumentCount(activities) {
  */
 function axeMatrix() {
   const path = join(REPO, 'e2e', 'accessibility.spec.js');
-  const empty = { surfaces: 0, locales: 0, themes: 0, runs: 0 };
+  const empty = {
+    surfaces: 0,
+    locales: 0,
+    themes: 0,
+    shellSurfaces: 0,
+    allThemes: 0,
+    runs: 0,
+  };
   if (!existsSync(path)) return empty;
   const text = readFileSync(path, 'utf8');
   /** Entries in a top-level `const NAME = [ ... ];` array of objects. */
@@ -245,7 +419,15 @@ function axeMatrix() {
   const surfaces = lengthOf('SURFACES', 'name');
   const locales = lengthOf('LOCALES', 'id');
   const themes = lengthOf('THEMES', 'id');
-  return { surfaces, locales, themes, runs: surfaces * locales * themes };
+  // The standalone pages carry the shared shell and its theme switch, so
+  // they run in every theme: THEMES plus the ones ALL_THEMES adds to it.
+  const start = text.indexOf('const SURFACES = [');
+  const body = text.slice(start, text.indexOf('\n];', start));
+  const shellSurfaces = (body.match(/^\s+standalone: true,/gm) || []).length;
+  const allThemes = themes + lengthOf('ALL_THEMES', 'id');
+  const runs =
+    ((surfaces - shellSurfaces) * themes + shellSurfaces * allThemes) * locales;
+  return { surfaces, locales, themes, shellSurfaces, allThemes, runs };
 }
 
 /**
@@ -293,15 +475,16 @@ async function cheapFacts() {
   const { LOCALES } = await import(
     new URL('../js/i18n/index.js', import.meta.url)
   );
-  const { EN } = await import(new URL('../js/i18n/en.js', import.meta.url));
-  // The other half of the same catalog. Imported here rather than at the top
-  // of the file so that a failure to read it is a failure of this fact and not
-  // of the whole tool.
-  const { EN_DEFERRED } = await import(
-    new URL('../js/i18n/en.deferred.js', import.meta.url)
-  );
+  // The whole catalog of the source locale, every fragment merged. Read here
+  // rather than at the top of the file so that a failure to read it is a
+  // failure of this fact and not of the whole tool.
+  const { catalogs: byLocale } = await loadCatalogs();
+  const sourceCatalog = byLocale.get(LOCALES[0].id).merged;
   const { INVESTIGATIONS } = await import(
     new URL('../js/data/investigations.js', import.meta.url)
+  );
+  const { TRACK_IDS } = await import(
+    new URL('../js/stellar/tracks.js', import.meta.url)
   );
   const { ACTIVITIES } = await import(
     new URL('../js/data/activities.js', import.meta.url)
@@ -318,10 +501,22 @@ async function cheapFacts() {
     // changes at every release while the concept DOI never does - exactly the
     // pair a reader would never notice going stale.
     version: RELEASE.version ?? '',
+    // The footer's copyright year, from the notice the licences carry.
+    copyrightYear: COPYRIGHT.year,
     doi: RELEASE.doi ?? '',
     conceptDoi: RELEASE.conceptDoi ?? '',
     scenarios: Object.keys(SCENARIO_INFO).length,
     investigations: MANIFEST.length,
+    // What the service worker installs (OFFLINE_AND_LOW_END.md), read from the
+    // committed sw-manifest.js and the files it lists.
+    ...(() => {
+      const p = precacheInventory(REPO);
+      return {
+        precacheFiles: p.files,
+        precacheGzipMB: String(gzipMB(p)),
+        spanishShadows: p.localeWarm.es ?? 0,
+      };
+    })(),
     // From the manifest rather than by walking the lessons: the manifest is
     // itself generated from them and is what the lesson browser draws, so a
     // number quoted from here is the number a reader sees on the cards.
@@ -330,16 +525,19 @@ async function cheapFacts() {
     objectives: MANIFEST.reduce((sum, l) => sum + l.objectiveCount, 0),
     locales: LOCALES.length,
     localeNames: LOCALES.map(l => l.endonym).join(', '),
-    // Base plus deferred, de-duplicated.
+    // Every fragment of the source locale's catalog, each id counted once.
     //
     // This counted the base catalog alone, so every string moved out of the
     // start-up path to keep the download budget silently left the total: the
     // widget and panel families that went deferred took the reported figure
-    // from 1620 down to 1295 while the application gained strings. The two
-    // halves are one catalog as far as a reader is concerned, and
-    // tests/i18n.test.js already guarantees no id is in both, so a union is
-    // the right count and the Set is a guard rather than a fix.
-    uiStrings: new Set([...Object.keys(EN), ...Object.keys(EN_DEFERRED)]).size,
+    // from 1620 down to 1295 while the application gained strings. The fix
+    // then named the deferred half, and the same thing happened again three
+    // splits later: activities, teaching and placement were 326 strings the
+    // count could not see. The fragments now come from the directory, an id
+    // that a fragment only passes on (teaching re-exports activities) is
+    // counted where it is defined, and an id defined twice is a failure of
+    // checkCatalogs() below rather than something a Set quietly absorbs.
+    uiStrings: Object.keys(sourceCatalog).length,
     // How many scenarios the stability audit actually covers. Read out of the
     // tool's own list rather than assumed to be all of them: /model/ claimed
     // the audit ran over "all 48 shipped scenarios" when it runs over twelve
@@ -355,9 +553,27 @@ async function cheapFacts() {
     instructorDocuments: bundle.documents,
     activityDocuments: activityDocumentCount(ACTIVITIES),
     activities: ACTIVITIES.length,
+    // What the Library lists, read from the file its generator writes
+    // (library/library.json). The guide, the manual and the listing kit quote
+    // these; "investigations" above counts only the lessons that run in the
+    // simulation, which is how the preprint came to say 22 and the Library 72
+    // (ADOPTER_GUIDE.md).
+    ...libraryFacts(),
     axeSurfaces: axe.surfaces,
     axeThemes: axe.themes,
+    axeShellSurfaces: axe.shellSurfaces,
+    axeAllThemes: axe.allThemes,
     axeRuns: axe.runs,
+    // How many MIST evolutionary tracks are bundled, counted from the grid
+    // itself. /model/ said "Seven tracks are bundled" directly above a list of
+    // eight of them: the 40 solar-mass track was added and the sentence was
+    // not. A count nobody derives is a count that drifts the moment the thing
+    // it counts changes.
+    stellarTracks: TRACK_IDS.length,
+    // How many checks the release gate runs, from the registry that runs them.
+    // paper.md quoted this by hand, which is a number that goes stale the first
+    // time anyone adds a step.
+    releaseChecks: CHECKS.length,
   };
 
   // Per-lesson step counts and durations, for the topic documents that name a
@@ -368,6 +584,34 @@ async function cheapFacts() {
     if (lesson.duration) facts[`duration:${lesson.id}`] = lesson.duration;
   }
   return facts;
+}
+
+/**
+ * A report an earlier CI step already produced, if it left one.
+ *
+ * GRAVITAS_FACTS_CACHE names a directory; a file in it stands in for running
+ * the command that would have produced it. The point is not speed for its own
+ * sake - it is that the `checks` job runs jest and the physics suite anyway,
+ * and asking it to run them a second time so the documentation can be checked
+ * is how "CI runs the full facts check" came to be a comment rather than a
+ * step.
+ *
+ * Only CI sets it, and CI writes the files in the same job, from the same
+ * commands, moments earlier. A cache that were somehow stale would make this
+ * check agree with a run that did not happen, so nothing sets it by default and
+ * the tool says when it used one.
+ *
+ * @param {string} name - File name inside the cache directory
+ * @param {string[]} report - Notes, appended to when a cache is used
+ * @returns {string|null} The file's contents, or null
+ */
+function cached(name, report) {
+  const dir = process.env.GRAVITAS_FACTS_CACHE;
+  if (!dir) return null;
+  const at = join(dir, name);
+  if (!existsSync(at)) return null;
+  report.push(`reused ${rel(at)} rather than running it again`);
+  return readFileSync(at, 'utf8');
 }
 
 /** Run a command and return its stdout, or null if it fails. */
@@ -387,17 +631,28 @@ function run(cmd, args, opts = {}) {
   }
 }
 
-/** Facts that cost a full run of something. */
-function fullFacts(report) {
+/**
+ * The facts in the `tests` group: what a run of the suites counts.
+ *
+ * @param {string[]} report - Notes about anything that could not be measured
+ * @param {object|null} physics - A physics report, when one has been read already
+ * @returns {object} Facts
+ */
+function testFacts(report, physics) {
   const facts = {};
 
   // Jest, via its own JSON report rather than by parsing a summary line.
-  const out = join(tmpdir(), `gravitas-jest-${process.pid}.json`);
-  run('npx', ['jest', '--json', `--outputFile=${out}`, '--silent'], {
-    env: { ...process.env, NODE_OPTIONS: '--experimental-vm-modules' },
-  });
-  if (existsSync(out)) {
-    const jest = JSON.parse(readFileSync(out, 'utf8'));
+  const fromCache = cached('jest.json', report);
+  let jestJson = fromCache;
+  if (!jestJson) {
+    const out = join(tmpdir(), `gravitas-jest-${process.pid}.json`);
+    run('npx', ['jest', '--json', `--outputFile=${out}`, '--silent'], {
+      env: { ...process.env, NODE_OPTIONS: '--experimental-vm-modules' },
+    });
+    if (existsSync(out)) jestJson = readFileSync(out, 'utf8');
+  }
+  if (jestJson) {
+    const jest = JSON.parse(jestJson);
     facts.jestTests = jest.numTotalTests;
     facts.jestSuites = jest.numTotalTestSuites;
     if (jest.numFailedTests) {
@@ -408,10 +663,24 @@ function fullFacts(report) {
   }
 
   // The browser suite, listed rather than run: the count is what the docs
-  // quote, and listing takes a second where running takes minutes.
-  const list = run('npx', ['playwright', 'test', '--list', '--reporter=list'], {
-    env: { ...process.env, GRAVITAS_E2E_PORT: '4399' },
-  });
+  // quote, and listing takes a second where running takes minutes. In a
+  // transform cache of its own, because under Jest this runs beside
+  // tests/shardInventory.test.js's listings and a shared one lets either of
+  // them delete a source map the other is about to read.
+  //
+  // The listing is taken from the cache first, like the two reports above, when
+  // a caller that already has one passes it as playwright-list.txt. Listing
+  // compiles every spec from cold and costs a second and a half on a quiet
+  // machine and ten to twenty on a loaded one, and a caller that gathers this
+  // group several times (tests/docsFactsScope.test.js, eight runs) paid for it
+  // each time. The count is read from the same text either way.
+  const list =
+    cached('playwright-list.txt', report) ||
+    inOwnTransformCache(cacheEnv =>
+      run('npx', ['playwright', 'test', '--list', '--reporter=list'], {
+        env: { ...process.env, GRAVITAS_E2E_PORT: '4399', ...cacheEnv },
+      })
+    );
   const listed =
     list && list.match(/Total:\s+(\d+)\s+tests?\s+in\s+(\d+)\s+file/);
   if (listed) {
@@ -421,16 +690,16 @@ function fullFacts(report) {
     report.push('could not list the browser suite');
   }
 
-  // The physics validation table prints its own totals.
-  const physics = run('node', ['tools/validate-physics.mjs']);
-  const checks =
-    physics &&
-    physics.match(/(\d+)\s+checks:\s+(\d+)\s+passed,\s+(\d+)\s+failed/);
-  if (checks) {
-    facts.physicsChecks = Number(checks[1]);
-    if (Number(checks[3])) {
-      report.push(`${checks[3]} physics check(s) failing`);
-    }
+  // The physics total, taken from the same JSON report the coverage block is
+  // built from rather than by parsing the human table. It used to be both: one
+  // run of tools/validate-physics.mjs for the total and a second, with --json,
+  // for the inventory. Two runs of a two-minute suite for two views of one
+  // answer, every time, and nobody had reason to notice because nothing ran
+  // this in CI.
+  if (physics) {
+    facts.physicsChecks = (physics.checks || []).length;
+    const failing = (physics.checks || []).filter(c => c.pass === false).length;
+    if (failing) report.push(`${failing} physics check(s) failing`);
   } else {
     report.push('could not read the physics validation totals');
   }
@@ -445,14 +714,20 @@ function fullFacts(report) {
  * numbers in the README are quotations of its output.
  */
 function buildFacts(report) {
+  // From the cache first, for the same reason as the other two: a job that has
+  // already measured this should not be asked to build again. It also makes
+  // tests/docsFactsScope.test.js hermetic - it used to pass on a machine that
+  // happened to have a dist/ lying around and fail in CI's `checks` job, which
+  // has none, which is precisely the kind of check this file exists to stop.
+  const fromCache = cached('build-summary.json', report);
   const summary = join(REPO, 'dist', 'build-summary.json');
-  if (!existsSync(summary)) {
+  if (!fromCache && !existsSync(summary)) {
     report.push(
       'no dist/build-summary.json - run `npm run build` for build sizes'
     );
     return {};
   }
-  const built = JSON.parse(readFileSync(summary, 'utf8'));
+  const built = JSON.parse(fromCache || readFileSync(summary, 'utf8'));
   return {
     buildCss: built.cssKB,
     buildStartupJs: built.startupKB,
@@ -479,21 +754,85 @@ function buildFacts(report) {
  * would call the block unknown, which reads as "somebody wrote a marker nobody
  * generates" rather than "not measured on this run".
  */
-const DEFERRED_BLOCKS = ['physicsCoverage'];
+const DEFERRED_BLOCKS_LEGACY = ['physicsCoverage'];
 
-const DEFERRED_KEYS = [
-  'jestTests',
-  'jestSuites',
-  'e2eTests',
-  'e2eFiles',
-  'physicsChecks',
-  'buildCss',
-  'buildStartupJs',
-  'buildStartupFiles',
-  'buildDeferredJs',
-  'buildDeferredChunks',
-  'buildInitialDownload',
-];
+/**
+ * The facts that cost something, grouped by what they cost.
+ *
+ * A group is the unit CI can afford in one job: everything in `tests` comes
+ * from commands the `checks` job already runs, everything in `build` comes from
+ * the artifact the `build` job already produces. Nothing may be in neither -
+ * tests/releaseGate.test.js checks that the groups CI runs cover every key and
+ * block this tool knows how to produce, which is the property that was missing
+ * when "full" was a single flag nobody ran.
+ */
+export const FACT_GROUPS = Object.freeze({
+  tests: Object.freeze({
+    keys: Object.freeze([
+      'jestTests',
+      'jestSuites',
+      'e2eTests',
+      'e2eFiles',
+      'physicsChecks',
+    ]),
+    blocks: Object.freeze(['physicsCoverage']),
+    // CITATION.cff and .zenodo.json quote physicsChecks in their abstract, so
+    // they can be judged exactly when that group has been gathered and not
+    // before. A cheap run that rewrote them replaced the check total with a
+    // placeholder, silently, in the two artifacts a DOI is minted from.
+    generated: true,
+  }),
+  build: Object.freeze({
+    keys: Object.freeze([
+      'buildCss',
+      'buildStartupJs',
+      'buildStartupFiles',
+      'buildDeferredJs',
+      'buildDeferredChunks',
+      'buildInitialDownload',
+    ]),
+    blocks: Object.freeze([]),
+    generated: false,
+  }),
+});
+
+/** Every group name, which is what `--full` means. */
+export const ALL_GROUPS = Object.freeze(Object.keys(FACT_GROUPS));
+
+const DEFERRED_KEYS = ALL_GROUPS.flatMap(g => [...FACT_GROUPS[g].keys]);
+const DEFERRED_BLOCKS = ALL_GROUPS.flatMap(g => [...FACT_GROUPS[g].blocks]);
+
+// The list this replaced, kept only to fail loudly if a block is ever added to
+// a group and forgotten here. Two lists of the same thing is how this file's
+// predecessor drifted.
+if (DEFERRED_BLOCKS_LEGACY.some(b => !DEFERRED_BLOCKS.includes(b))) {
+  throw new Error('a deferred block belongs to no fact group');
+}
+
+/**
+ * Which groups a run gathers, from its flags.
+ *
+ * @param {string[]} argv - Command-line arguments
+ * @returns {Set<string>} Group names
+ */
+export function groupsFrom(argv) {
+  if (argv.includes('--full')) return new Set(ALL_GROUPS);
+  const flag = argv.find(a => a.startsWith('--groups='));
+  if (!flag) return new Set();
+  const asked = flag
+    .slice('--groups='.length)
+    .split(',')
+    .map(g => g.trim())
+    .filter(Boolean);
+  const unknown = asked.filter(g => !ALL_GROUPS.includes(g));
+  if (unknown.length) {
+    throw new Error(
+      `Unknown fact group(s): ${unknown.join(', ')}. ` +
+        `Known groups: ${ALL_GROUPS.join(', ')}.`
+    );
+  }
+  return new Set(asked);
+}
 
 /**
  * The generated regions, from the same modules the application uses.
@@ -503,38 +842,84 @@ const DEFERRED_KEYS = [
  *
  * @returns {Promise<Object<string, string>>} Marker name -> replacement text
  */
-export async function gatherBlocks({ full = false } = {}) {
+export async function gatherBlocks({ physics = null } = {}) {
   const { MANIFEST } = await import(
     new URL('../js/data/investigations/manifest.js', import.meta.url)
   );
   const { INSTRUCTOR_CONTENT } = await import(
     new URL('../js/data/instructorContent.js', import.meta.url)
   );
+  const { IRREVERSIBLE } = await import(
+    new URL('../js/data/irreversible.js', import.meta.url)
+  );
+  const { GRAPH } = await import(
+    new URL('./generate-graph.mjs', import.meta.url)
+  );
+  // The data-pack licence inventory, from the manifests themselves.
+  const packDir = join(REPO, 'data-packs');
+  const dataPacks = readdirSync(packDir)
+    .filter(f => f.endsWith('.json'))
+    .map(f => JSON.parse(readFileSync(join(packDir, f), 'utf8')));
+  const { loadRealSystems } = await import(
+    new URL('./authoring/realSystems.mjs', import.meta.url)
+  );
+  // The largest modules against their line ceilings: reading files and one
+  // JSON, the same measurement the architecture check makes.
+  const architecture = await import(
+    new URL('./check-architecture.mjs', import.meta.url)
+  );
+  const moduleSizes = {
+    sizes: await architecture.moduleSizes(await architecture.buildGraph()),
+    ceilings: await architecture.readCeilings(),
+  };
   return generatedBlocks({
+    moduleSizes,
+    dataPacks,
+    realSystems: await loadRealSystems(),
+    graph: GRAPH,
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,
-    physics: full ? physicsInventory() : null,
+    precache: precacheTable(precacheInventory(REPO)),
+    physics: physics ? physicsInventory(physics) : null,
+    // Cheap: reading a generated data module, not running anything. The audit
+    // it comes from is itself checked by `npm run audit:irreversible -- --check`.
+    irreversible: IRREVERSIBLE,
   });
+}
+
+/**
+ * The physics suite's report, run once or read from what CI already ran.
+ *
+ * @param {string[]} report - Notes, for a run that could not be read
+ * @returns {object|null} The parsed report
+ */
+function physicsReport(report) {
+  const out =
+    cached('physics.json', report) ||
+    run('node', ['tools/validate-physics.mjs', '--json']);
+  if (!out) {
+    report.push('could not run the physics validation suite');
+    return null;
+  }
+  try {
+    return JSON.parse(out);
+  } catch {
+    report.push('the physics validation report was not readable JSON');
+    return null;
+  }
 }
 
 /**
  * The physics suite's own count of itself, by group and by kind.
  *
- * Counted from a real run, because that is the only thing that knows. It takes
- * about two minutes, which is why it is behind `--full` with the other facts
- * that cost a test run.
+ * Takes the report rather than producing one, so the total and the inventory
+ * come from a single run of a two-minute suite instead of two.
  *
+ * @param {object} report - A parsed `validate-physics.mjs --json` report
  * @returns {{total: number, byKind: object, groups: Array}|null} The inventory
  */
-function physicsInventory() {
-  const out = run('node', ['tools/validate-physics.mjs', '--json']);
-  if (!out) return null;
-  let report;
-  try {
-    report = JSON.parse(out);
-  } catch {
-    return null;
-  }
+function physicsInventory(report) {
+  if (!report) return null;
   const byKind = {};
   const groups = [];
   const index = new Map();
@@ -551,14 +936,24 @@ function physicsInventory() {
   return { total: (report.checks || []).length, byKind, groups };
 }
 
-/** Everything, according to the flags. */
-export async function gatherFacts({ full = false } = {}) {
+/**
+ * Everything the asked-for groups can produce.
+ *
+ * Returns the physics report alongside the facts so the caller can build the
+ * coverage block from the same run rather than paying for a second one.
+ *
+ * @param {object} [options] - `groups`, a Set of group names
+ * @returns {Promise<{facts: object, notes: string[], physics: object|null}>} The facts
+ */
+export async function gatherFacts({ groups = new Set() } = {}) {
   const notes = [];
+  const physics = groups.has('tests') ? physicsReport(notes) : null;
   const facts = {
     ...(await cheapFacts()),
-    ...(full ? { ...buildFacts(notes), ...fullFacts(notes) } : {}),
+    ...(groups.has('build') ? buildFacts(notes) : {}),
+    ...(groups.has('tests') ? testFacts(notes, physics) : {}),
   };
-  return { facts, notes };
+  return { facts, notes, physics };
 }
 
 // --- documents ---------------------------------------------------------------
@@ -769,10 +1164,23 @@ async function checkCitationMetadata(facts) {
   const problems = [];
   const wanted = [
     ['scenarios', /(\d+)\s+configurable scenarios/, 'configurable scenarios'],
+    // The first count is the Library's: every guided investigation, the
+    // lessons that run in the simulation and the ones in the Observatory and
+    // the labs. The parenthesis after it carries the two parts.
     [
-      'investigations',
+      'libraryInvestigations',
       /(\d+)\s+guided investigations/,
       'guided investigations',
+    ],
+    [
+      'investigations',
+      /guided investigations \((\d+)\s+that run in the simulation/,
+      'guided investigations that run in the simulation',
+    ],
+    [
+      'guidedInvestigations',
+      /that run in the simulation and (\d+)\s+in the Observatory/,
+      'guided investigations in the Observatory and the labs',
     ],
   ];
   for (const file of ['CITATION.cff', '.zenodo.json']) {
@@ -815,7 +1223,7 @@ async function checkCitationMetadata(facts) {
  */
 async function checkModelNoteClaims() {
   const problems = [];
-  const checksPath = join(REPO, 'tools', 'physics-checks.mjs');
+  const checksPath = join(REPO, 'js', 'validation', 'physicsChecks.js');
   if (!existsSync(checksPath)) return problems;
 
   const source = readFileSync(checksPath, 'utf8');
@@ -889,6 +1297,23 @@ async function checkModelNoteClaims() {
     }
   }
   return problems;
+}
+
+/**
+ * Whether the catalog `uiStrings` counts is one catalog at all.
+ *
+ * A fragment in one language only, an id defined in two fragments or a
+ * fragment that exports under the wrong name each make the count describe
+ * something other than what a reader can load, so a count taken over a broken
+ * layout is a failure here rather than a number written into README.md.
+ * tools/i18n-audit.mjs reports the same problems; this is the half that stops
+ * `docs:sync` from publishing over them.
+ *
+ * @returns {Promise<string[]>} Problems, prefixed with where they are
+ */
+async function checkCatalogs() {
+  const { problems } = await loadCatalogs();
+  return problems.map(p => `js/i18n: ${p}`);
 }
 
 async function checkSpecIndex() {
@@ -991,8 +1416,14 @@ async function main() {
   const argv = process.argv.slice(2);
   const has = flag => argv.includes(flag);
   const mode = has('--sync') ? 'sync' : has('--check') ? 'check' : 'print';
-  const full = has('--full');
-  const { facts, notes } = await gatherFacts({ full });
+  let groups;
+  try {
+    groups = groupsFrom(argv);
+  } catch (err) {
+    process.stderr.write(`${err.message}\n`);
+    return 2;
+  }
+  const { facts, notes, physics } = await gatherFacts({ groups });
 
   if (has('--json')) {
     process.stdout.write(JSON.stringify(facts, null, 2) + '\n');
@@ -1008,7 +1439,7 @@ async function main() {
     return 0;
   }
 
-  const blocks = await gatherBlocks({ full });
+  const blocks = await gatherBlocks({ physics });
   const present = DOCS.filter(d => existsSync(join(REPO, d)));
   const results = [];
   for (const doc of present) {
@@ -1032,7 +1463,7 @@ async function main() {
   // skipped note says so.
   const generatedStale = [];
   const generatedSkipped = [];
-  if (full) {
+  if (groups.has('tests')) {
     for (const [name, wanted] of [
       ['CITATION.cff', citationCff(facts)],
       ['.zenodo.json', zenodoJson(facts)],
@@ -1064,6 +1495,7 @@ async function main() {
     ...(await checkSpecIndex()),
     ...(await checkCitationMetadata(facts)),
     ...(await checkModelNoteClaims()),
+    ...(await checkCatalogs()),
   ];
   const stale = results.flatMap(r => r.stale.map(s => ({ ...s, doc: r.path })));
   const unknown = results.flatMap(r =>
@@ -1088,7 +1520,7 @@ async function main() {
     }
     if (generatedSkipped.length) {
       process.stdout.write(
-        `note: not regenerated without --full: ${generatedSkipped.join(', ')}\n`
+        `note: not regenerated without --groups=tests: ${generatedSkipped.join(', ')}\n`
       );
     }
     for (const u of unknown) {
@@ -1118,14 +1550,30 @@ async function main() {
   for (const note of notes) process.stdout.write(`note: ${note}\n`);
   if (generatedSkipped.length) {
     process.stdout.write(
-      `note: not checked without --full: ${generatedSkipped.join(', ')}\n`
+      `note: needs --groups=tests or --full: ${generatedSkipped.join(', ')}\n`
     );
   }
   const skipped = [...new Set(results.flatMap(r => r.skipped))];
   if (skipped.length) {
-    process.stdout.write(
-      `note: not checked without --full: ${skipped.join(', ')}\n`
-    );
+    // Name the group that would have measured each one, so a reader of a green
+    // run can see what this run did not establish and what to pass to get it.
+    const byGroup = new Map();
+    for (const key of skipped) {
+      const bare = key.replace(/^block:/, '');
+      const group =
+        ALL_GROUPS.find(
+          g =>
+            FACT_GROUPS[g].keys.includes(bare) ||
+            FACT_GROUPS[g].blocks.includes(bare)
+        ) || 'unknown';
+      if (!byGroup.has(group)) byGroup.set(group, []);
+      byGroup.get(group).push(key);
+    }
+    for (const [group, keys] of [...byGroup].sort()) {
+      process.stdout.write(
+        `note: needs --groups=${group}: ${keys.join(', ')}\n`
+      );
+    }
   }
 
   const bad =

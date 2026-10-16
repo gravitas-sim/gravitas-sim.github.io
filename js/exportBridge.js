@@ -11,8 +11,16 @@
 // =============================================================================
 
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import {
+  loadFragment,
+  mountFragment,
+  unmountFragment,
+} from './i18n/deferredMessages.js';
 
 let loading = null;
+
+/** Whether the first press has been handed to the dialog's own toggle. */
+let handedOver = false;
 
 /**
  * Fetch the dialog and wire it up, once.
@@ -24,13 +32,18 @@ function ensureDialog() {
     // The prose is nice to have; the dialog is the point. A failure to fetch
     // the strings must not stop the dialog opening - it would show message ids,
     // which is visible and recoverable, where not opening is neither.
+    // Its markup is js/fragments/export.html (INDEX_DECOMPOSITION.md).
     loading = ensureDeferredMessages()
       .catch(() => {})
-      .then(() => import('./exportDialog.js'))
-      .then(mod => {
-        mod.initExportDialog();
+      .then(() =>
+        Promise.all([import('./exportDialog.js'), loadFragment('export')])
+      )
+      .then(([mod, html]) => {
+        const signal = mountFragment('export', html);
+        mod.initExportDialog({ signal: signal ?? undefined });
         return mod;
       });
+    loading.catch(() => (loading = null));
   }
   return loading;
 }
@@ -45,11 +58,20 @@ function ensureDialog() {
  *
  * @returns {void}
  */
+/**
+ * Open the export dialog from anywhere - the E shortcut - initialising it
+ * first. Importing the dialog's module and calling open, as the shortcut did,
+ * opened nothing until Export had been pressed once.
+ * @returns {Promise<void>}
+ */
+export async function openExport() {
+  (await ensureDialog()).openExportDialog();
+}
+
 export function initExportBridge() {
   const button = document.getElementById('exportDataBtn');
   if (!button) return;
 
-  let handedOver = false;
   button.addEventListener('click', async () => {
     if (handedOver) return;
     handedOver = true;
@@ -59,11 +81,14 @@ export function initExportBridge() {
 }
 
 /**
- * Whether the dialog has been loaded.
- *
- * Asked by anything that wants to publish into the export catalog without
- * pulling the chunk in for somebody who has never opened it.
- *
- * @returns {boolean} True once the chunk has been fetched
+ * Unmount the dialog; the button's next press loads it afresh.
+ * @returns {Promise<boolean>} Whether it was mounted
  */
-export const exportDialogLoaded = () => loading !== null;
+export async function unmountExport() {
+  if (!loading) return false;
+  const mod = await loading;
+  mod.teardownExportDialog();
+  loading = null;
+  handedOver = false;
+  return unmountFragment('export');
+}

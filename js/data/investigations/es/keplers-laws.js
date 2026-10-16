@@ -15,8 +15,6 @@ export default {
   subtitle: 'Mide la forma, el ritmo y la duración de órbitas reales',
   duration: '35-45 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Recorre las tres leyes de Kepler midiendo órbitas en lugar de que te las enseñen: encuentra el foco de una elipse, observa cómo se barren áreas iguales en tiempos iguales y recupera la ley de la potencia tres medios trazándola tú mismo.',
   objectives: [
     'Indicar dónde se sitúa el cuerpo principal en una órbita elíptica, y respaldarlo con una medida',
     'Explicar por qué un cuerpo en órbita se mueve más rápido en el periastro, en términos de momento angular',
@@ -31,7 +29,7 @@ export default {
         text: 'Puesto que estos ocho minutos no podían ignorarse, ellos solos han abierto el camino a la reforma de toda la astronomía.',
         by: 'Johannes Kepler, Astronomia Nova, 1609',
       },
-      tip: 'Mientras una lección está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.',
+      tip: 'Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.',
     },
     {
       title: 'Lo que estás mirando',
@@ -276,6 +274,17 @@ export default {
       },
       worked:
         'a = 4, así que a³ = 64. P² = 64, luego P = √64 = 8 años. La comprobación de que es de verdad una ley: Júpiter está a 5,204 UA, lo que da a³ = 141,0 y P = 11,87 años, frente a los 11,86 medidos.',
+      feedback: {
+        close:
+          'Cerca, pero fuera de la tolerancia. Revisa por separado el cubo y la raíz cuadrada.',
+        'wrong-unit':
+          'Eso parece días. Con la distancia en UA la ley da años, así que convierte antes de responder.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez. Eleva primero la distancia al cubo y luego saca la raíz cuadrada.',
+        off: 'Revisa el orden: eleva a al cubo para obtener P al cuadrado, y solo después deshaz el cuadrado.',
+        correct:
+          'Para poner a prueba una ley así, aplícala a un planeta cuyo año conozcas y comprueba que coincide.',
+      },
     },
     {
       title: 'De qué depende la constante',
@@ -341,6 +350,13 @@ export default {
       },
       worked:
         'a = 0,24, así que a³ = 0,0138. P = 0,123 años, luego P² = 0,01513. 0,0138 / 0,01513 = 0,91 masas solares, dentro de un pequeño porcentaje del valor publicado.',
+      feedback: {
+        close:
+          'Cerca. Revisa por separado el cubo y el cuadrado, y el redondeo de cada uno.',
+        'wrong-order-of-magnitude':
+          'Te pasas en potencias de diez. Asegúrate de que el periodo esté en años, no en días: la cifra en días es mucho mayor que el mismo tiempo en años.',
+        off: 'Hazlo en tres partes: a al cubo, luego P al cuadrado, y divide la primera entre la segunda.',
+      },
     },
     {
       title: 'Dónde falla la versión de Kepler',
@@ -358,7 +374,7 @@ export default {
     {
       title: 'Dónde te deja esto',
       body: 'Has medido la forma de una órbita, has visto a un planeta cambiar velocidad por distancia conservando el momento angular, y has recuperado una ley de potencias a partir de ocho medidas que tomaste tú mismo. Después la has usado para pesar una estrella que nunca visitarás.\n\nTodo esto salió de posiciones a simple vista registradas antes de que existiera el telescopio, por un observador que se negó a redondear ocho minutos de arco.',
-      tip: 'Si vas a entregar esto para una calificación, pulsa Siguiente una vez más para introducir tu nombre y descargar tu informe de laboratorio. Si no, simplemente puedes cerrar el panel.',
+      tip: 'Si vas a entregar esto para una calificación, pulsa Terminar para introducir tu nombre y descargar tu informe de laboratorio. Si no, simplemente puedes cerrar el panel.',
     },
   ],
 };

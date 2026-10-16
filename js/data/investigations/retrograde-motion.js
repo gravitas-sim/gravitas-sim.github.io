@@ -35,13 +35,16 @@ const RETROGRADE = {
   subtitle: 'Change the frame, and fourteen centuries of epicycles fall away',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 3, section: '3.1' },
+  courseLevel: 'survey',
+  mathematics: 'algebra',
+  prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'solar-system', 'observing'],
   lock: { placement: true, inspector: false },
-  summary:
-    'Twice every three years Mars stops in the sky, reverses, and loops back on itself. Watched from outside, nothing of the sort happens: Earth and Mars both go round the Sun the same way and never turn back. You will measure both orbits, predict what Mars does when seen from Earth, then switch the reference frame and watch the loop draw itself. Nothing in the physics changes when you do. That is the entire point, and it is what took astronomy from Ptolemy to Copernicus.',
   objectives: [
     'Describe retrograde motion as an observation, separately from any explanation of it',
     'Compute a synodic period from two orbital periods and say what it counts',
@@ -75,7 +78,7 @@ const RETROGRADE = {
         text: 'The planets appear sometimes to move forward, sometimes backward, and sometimes to stand still.',
         by: 'Claudius Ptolemy, Almagest, c. 150 CE',
       },
-      tip: 'This lesson leaves the inspector switched on: you will need it to read numbers off Earth and Mars. Placing new objects is off, so a stray click cannot alter the system you are measuring.',
+      tip: 'This investigation leaves the inspector switched on: you will need it to read numbers off Earth and Mars. Placing new objects is off, so a stray click cannot alter the system you are measuring.',
       setup: {
         scenario: 'Retrograde Mars',
         seed: 'retrograde-lab',
@@ -295,6 +298,14 @@ const RETROGRADE = {
              brightest.`,
     },
     {
+      hints: [
+        'Use 1/S = 1/P₁ − 1/P₂ with the shorter period first.',
+        'Subtract the two reciprocals, then take one over the result.',
+      ],
+      feedback: {
+        close: 'Close. Subtract the reciprocals first, and only then invert.',
+        off: 'The synodic period is one over the difference of the two rates, not the difference of the two periods.',
+      },
       sid: 'how-often-does-earth-catch',
       bind: INNER_PAIR,
       type: 'question',
@@ -312,6 +323,14 @@ const RETROGRADE = {
         'S = 780 days, about two years and seven weeks. That is why Mars is well placed for observing roughly every other year rather than every year: Earth needs 780 days to gain a full lap on it. Venus, being much faster, comes round to the same alignment every 584 days; Jupiter, being much slower, every 399, barely more than an Earth year, because Jupiter has hardly moved while Earth goes round.',
     },
     {
+      hints: [
+        'A full lap is 360 degrees, and the rate is in degrees per day.',
+        'Time equals the angle to gain divided by the rate.',
+      ],
+      feedback: {
+        close: 'Close. Divide 360 by the rate of gaining, in degrees per day.',
+        off: 'Time is the angle to be gained divided by how fast it is gained.',
+      },
       sid: 'a-lap-gained',
       bind: INNER_PAIR,
       // Checked against the gain rate worked out there.
@@ -612,7 +631,7 @@ const RETROGRADE = {
       prompt:
         'In two or three sentences, explain why Mars appears to reverse, without saying anything about what Mars does differently during those weeks.',
       rubric:
-        'A good answer says that Mars moves steadily throughout, and that the reversal is produced by the observer’s own motion: Earth is on a smaller, faster orbit, and near opposition it overtakes Mars, so the direction from Earth to Mars swings backwards against the distant stars. Credit for naming opposition, for connecting it to Earth passing between the Sun and Mars, and for noting that this also makes Mars closest and brightest at that time. An answer that has Mars slowing down, stopping or being pulled back has missed the point of the lesson.',
+        'A good answer says that Mars moves steadily throughout, and that the reversal is produced by the observer’s own motion: Earth is on a smaller, faster orbit, and near opposition it overtakes Mars, so the direction from Earth to Mars swings backwards against the distant stars. Credit for naming opposition, for connecting it to Earth passing between the Sun and Mars, and for noting that this also makes Mars closest and brightest at that time. An answer that has Mars slowing down, stopping or being pulled back has missed the point of the investigation.',
     },
     {
       sid: 'what-it-cost-to-explain',
@@ -662,6 +681,15 @@ const RETROGRADE = {
         'Every outer planet’s epicycle takes exactly one year. Ptolemy knew this and recorded it; the model gives no reason for it. In the heliocentric picture the reason is immediate: the epicycle is not the planet’s motion at all, it is Earth’s, reflected onto the planet’s apparent path. Three unrelated planets sharing one period is the sort of coincidence that should make you suspicious of a model, and it is the specific fact Copernicus pointed at.',
     },
     {
+      hints: [
+        'Each planet needs the same four devices.',
+        'Multiply the devices for one planet by the number of planets.',
+      ],
+      feedback: {
+        close:
+          'Close. Count the devices for one planet, then take that many for each planet.',
+        off: 'Multiply the devices for one planet by the number of planets.',
+      },
       sid: 'counting-the-machinery',
       bind: INNER_PAIR,
       type: 'question',
@@ -835,7 +863,7 @@ const RETROGRADE = {
       ],
       answer: 2,
       because:
-        'A null result from an instrument eighty times too coarse tells you nothing about the effect. Tycho’s reasoning was sound and his data were excellent; what he lacked was any way to know how far away the stars were, so he could not tell a small effect from an absent one. This is a general hazard worth carrying out of the lesson: a measurement that finds nothing constrains a theory only once you know what the measurement could have detected.',
+        'A null result from an instrument eighty times too coarse tells you nothing about the effect. Tycho’s reasoning was sound and his data were excellent; what he lacked was any way to know how far away the stars were, so he could not tell a small effect from an absent one. This is a general hazard worth carrying out of the investigation: a measurement that finds nothing constrains a theory only once you know what the measurement could have detected.',
     },
     {
       sid: 'how-long-does-a-loop',
@@ -909,7 +937,7 @@ const RETROGRADE = {
              planets on circular orbits, under an inverse-square force from a
              star. Every loop, cusp and reversal came out of subtracting one
              body's position from another's.
-             \n\nThat is worth holding onto beyond this lesson. A great many
+             \n\nThat is worth holding onto beyond this investigation. A great many
              things that look like anomalies in the sky turn out to be statements
              about where the observer is standing, and the first question to ask
              of a strange motion is always: measured against what?`,

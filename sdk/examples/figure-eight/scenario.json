@@ -1,0 +1,72 @@
+{
+  "format": "gravitas.scenario-pack",
+  "formatVersion": 1,
+  "id": "figure-eight",
+  "version": "1.0.0",
+  "locales": [
+    "en",
+    "es"
+  ],
+  "title": {
+    "en": "Three stars on one figure eight",
+    "es": "Tres estrellas en un solo ocho"
+  },
+  "summary": {
+    "en": "Three equal stars chase each other round a single figure-eight orbit, the choreography Chenciner and Montgomery proved exists in 2000. It is stable, but only just.",
+    "es": "Tres estrellas iguales se persiguen por una sola órbita en forma de ocho, la coreografía cuya existencia demostraron Chenciner y Montgomery en 2000. Es estable, pero por poco."
+  },
+  "tags": [
+    "chaos",
+    "orbits-kepler"
+  ],
+  "seed": 8,
+  "settings": {
+    "placement": "Empty",
+    "num_black_holes": 0,
+    "num_planets": 0,
+    "num_gas_giants": 0,
+    "num_asteroids": 0,
+    "enable_asteroids": false,
+    "mutual_gravity": true,
+    "max_timestep": 0.0707258684,
+    "min_interaction_distance": 1,
+    "trail_length": 900,
+    "enable_star_merging": false
+  },
+  "camera": {
+    "zoom": 3.5
+  },
+  "open": [],
+  "bodies": [
+    {
+      "name": "Alpha",
+      "type": "Star",
+      "mass": 1,
+      "radius": 5,
+      "x": -97.000436,
+      "y": 24.308753,
+      "vx": 2.08492626,
+      "vy": 1.93359833
+    },
+    {
+      "name": "Beta",
+      "type": "Star",
+      "mass": 1,
+      "radius": 5,
+      "x": 97.000436,
+      "y": -24.308753,
+      "vx": 2.08492626,
+      "vy": 1.93359833
+    },
+    {
+      "name": "Gamma",
+      "type": "Star",
+      "mass": 1,
+      "radius": 5,
+      "x": 0,
+      "y": 0,
+      "vx": -4.16985252,
+      "vy": -3.86719665
+    }
+  ]
+}

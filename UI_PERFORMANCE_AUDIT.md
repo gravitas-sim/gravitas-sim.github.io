@@ -272,13 +272,16 @@ whether it happened are both part of the record._
   **Done.** Lessons are one module each under `js/data/investigations/`, loaded
   on demand, with a generated `manifest.js` carrying the card-level fields so
   the browser can draw the grid without loading any lesson text. There are now
-  <!--fact:investigations-->22<!--/fact--> of them.
+  <!--fact:investigations-->60<!--/fact--> of them.
 - ~~**Retire the dead scenario-browser CSS** in `styles.css`.~~ **Done.** No
   `scenario-browser` rules remain in the stylesheets.
 - ~~**Extract the object inspector from `ui.js`**, once the energy-chart and drag
-  couplings are understood.~~ **Done.** It is `js/objectInspector.js`; see
+  couplings are understood.~~ **Done.** It is `js/inspectorPanel.js`; see
   [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md).
-- **Measure the compositor**, not just the main thread. Still open. Nothing here
-  can distinguish a saving in rasterisation from one in JavaScript, which is why
-  the page-filter removal is reported as dead-code removal rather than a
-  speed-up.
+- ~~**Measure the compositor**, not just the main thread.~~ **Done** (Prompt 112).
+  `npm run perf -- --trace` separates script, layout, paint and commit from the
+  compositor, raster and GPU-process time and reports how busy each thread was;
+  what it can and cannot show is in
+  [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md). It could not tell the
+  page-filter removal above from a saving in script then, and the removal is
+  still reported as dead-code removal, since the measurement was made after it.

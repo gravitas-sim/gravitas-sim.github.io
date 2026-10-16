@@ -1,0 +1,43 @@
+{
+  "format": "gravitas.course-pack",
+  "formatVersion": 1,
+  "id": "finding-exoplanets",
+  "version": "1.0.0",
+  "locales": [
+    "en",
+    "es"
+  ],
+  "title": {
+    "en": "Finding exoplanets",
+    "es": "Encontrar exoplanetas"
+  },
+  "summary": {
+    "en": "Five lessons on how planets around other stars are found: by the shadow a planet casts, by the tug it gives its star, by planning when to look, and by asking what a planet found that way could be like.",
+    "es": "Cinco lecciones sobre cómo se encuentran planetas alrededor de otras estrellas: por la sombra que proyecta un planeta, por el tirón que le da a su estrella, planificando cuándo mirar y preguntando cómo podría ser un planeta encontrado así."
+  },
+  "units": [
+    {
+      "id": "two-methods",
+      "title": {
+        "en": "Two ways to see a planet you cannot see",
+        "es": "Dos maneras de ver un planeta que no se ve"
+      },
+      "lessons": [
+        {
+          "lesson": "transit-photometry",
+          "teacherNote": {
+            "en": "The transit method first: the dip is the most direct evidence students will meet.",
+            "es": "Primero el método de tránsito: la caída de brillo es la evidencia más directa que verán."
+          }
+        },
+        {
+          "lesson": "radial-velocity",
+          "teacherNote": {
+            "en": "Compare the two methods explicitly: what each measures, and what each cannot.",
+            "es": "Comparen los dos métodos de forma explícita: qué mide cada uno y qué no puede medir."
+          }
+        }
+      ]
+    }
+  ]
+}

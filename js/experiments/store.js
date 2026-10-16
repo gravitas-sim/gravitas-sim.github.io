@@ -24,8 +24,34 @@
 //   alert that says "failed".
 // =============================================================================
 
+/**
+ * A record is a gravitas.experiment-result/1 of kind `comparison`, with `v`
+ * kept beside it: `v` is the store's own version, and migrate() reads it, so a
+ * record from before the format had an id and one from after open the same way.
+ */
+/** A read that found nothing usable, and why. */
+const refuse = reason => ({ ok: false, record: null, reason });
+
+/** A write that did not happen, and why. */
+const failed = (reason, bytes, limit) => ({ ok: false, reason, bytes, limit });
+
+const STAMP = {
+  format: 'gravitas.experiment-result',
+  formatVersion: 1,
+  kind: 'comparison',
+};
+
 /** Bumped when the record shape changes. See migrate(). */
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
+
+/**
+ * The metrics every record before version 3 recorded wrongly.
+ *
+ * The bench read physics.js:conservationDrift()'s `energy` and `angular` as
+ * fractional drifts, and they are the current totals, so every value stored
+ * under these two ids is a total times a hundred.
+ */
+const MISRECORDED = ['energy_drift', 'angular_drift'];
 
 /** One key per experiment, so a large one cannot slow down reading a small one. */
 export const KEY_PREFIX = 'gravitas_experiment_';
@@ -125,7 +151,8 @@ export function usedBytes() {
  * Version 1 stored the two runs as `runA`/`runB` with bare sample arrays and
  * no units block. Version 2 names them `runs` keyed by label and records the
  * unit each metric was sampled in, because a file that does not say its units
- * is a file that will be misread.
+ * is a file that will be misread. Version 3 withdraws the two drifts earlier
+ * versions recorded wrongly; see withdrawMisrecordedDrift().
  *
  * A record from the future is refused rather than guessed at: better to tell a
  * student their experiment needs a newer Gravitas than to open it wrongly.
@@ -135,11 +162,11 @@ export function usedBytes() {
  */
 export function migrate(record) {
   if (!record || typeof record !== 'object') {
-    return { ok: false, record: null, reason: 'not-an-experiment' };
+    return refuse('not-an-experiment');
   }
   const v = Number(record.v) || 1;
-  if (v > SCHEMA_VERSION) {
-    return { ok: false, record: null, reason: 'from-a-newer-version' };
+  if (v > SCHEMA_VERSION || record.formatVersion > 1) {
+    return refuse('from-a-newer-version');
   }
   let out = record;
   if (v < 2) {
@@ -153,7 +180,70 @@ export function migrate(record) {
       units: out.units || {},
     };
   }
-  return { ok: true, record: { ...out, v: SCHEMA_VERSION }, reason: '' };
+  if (v < 3) out = withdrawMisrecordedDrift(out);
+  return {
+    ok: true,
+    record: { ...out, ...STAMP, v: SCHEMA_VERSION },
+    reason: '',
+  };
+}
+
+/**
+ * Take the wrongly recorded drifts out of an older record.
+ *
+ * Withdrawn rather than converted. Turning a total back into a drift needs the
+ * baseline it would be measured from, which the record does not hold, and a
+ * run's first sample is not always that baseline: Run A starts wherever the
+ * capture left the world. The captured start is in the record, so recording
+ * the runs again measures the drift properly. A run that lost values is
+ * marked, and recording it again replaces the run and the mark with it.
+ *
+ * The saved comparison and reliability check lose their drift rows too, and a
+ * reliability check whose path was a drift is dropped entirely: its verdict
+ * was a comparison of two totals.
+ *
+ * @param {Object} record - A record from before version 3
+ * @returns {Object} A copy without them
+ */
+function withdrawMisrecordedDrift(record) {
+  const wrong = id => MISRECORDED.includes(id);
+  const without = obj =>
+    Object.fromEntries(Object.entries(obj || {}).filter(([k]) => !wrong(k)));
+
+  const runs = {};
+  for (const [label, run] of Object.entries(record.runs || {})) {
+    const samples = Array.isArray(run?.samples) ? run.samples : [];
+    const had =
+      samples.some(s => MISRECORDED.some(id => id in (s || {}))) ||
+      MISRECORDED.some(id => id in (run?.results || {}));
+    runs[label] = had
+      ? {
+          ...run,
+          samples: samples.map(without),
+          ...(run.results ? { results: without(run.results) } : {}),
+          driftWithdrawn: true,
+        }
+      : run;
+  }
+
+  const out = { ...record, runs };
+  if (Array.isArray(out.comparison?.rows)) {
+    out.comparison = {
+      ...out.comparison,
+      rows: out.comparison.rows.filter(r => !wrong(r?.metric)),
+    };
+  }
+  if (out.reliability) {
+    out.reliability = wrong(out.reliability.pathMetric)
+      ? null
+      : {
+          ...out.reliability,
+          metrics: (out.reliability.metrics || []).filter(
+            m => !wrong(m?.metric)
+          ),
+        };
+  }
+  return out;
 }
 
 function normalizeRun(run) {
@@ -174,13 +264,13 @@ function normalizeRun(run) {
  */
 export function loadExperiment(id) {
   const s = storage();
-  if (!s) return { ok: false, record: null, reason: FAILURE.UNAVAILABLE };
+  if (!s) return refuse(FAILURE.UNAVAILABLE);
   try {
     const raw = s.getItem(KEY_PREFIX + id);
-    if (!raw) return { ok: false, record: null, reason: 'not-found' };
+    if (!raw) return refuse('not-found');
     return migrate(JSON.parse(raw));
   } catch (err) {
-    return { ok: false, record: null, reason: err.message || 'unreadable' };
+    return refuse(err.message || 'unreadable');
   }
 }
 
@@ -198,39 +288,29 @@ export function loadExperiment(id) {
 export function saveExperiment(record) {
   const s = storage();
   if (!s) {
-    return { ok: false, reason: FAILURE.UNAVAILABLE, bytes: 0, limit: 0 };
+    return failed(FAILURE.UNAVAILABLE, 0, 0);
   }
-  const stamped = { ...record, v: SCHEMA_VERSION, updated: Date.now() };
+  const stamped = {
+    ...record,
+    ...STAMP,
+    v: SCHEMA_VERSION,
+    updated: Date.now(),
+  };
   const text = JSON.stringify(stamped);
   const bytes = text.length;
 
   if (bytes > LIMITS.perExperiment) {
-    return {
-      ok: false,
-      reason: FAILURE.TOO_LARGE,
-      bytes,
-      limit: LIMITS.perExperiment,
-    };
+    return failed(FAILURE.TOO_LARGE, bytes, LIMITS.perExperiment);
   }
 
   const index = listExperiments();
   const existing = index.find(e => e.id === record.id);
   if (!existing && index.length >= LIMITS.maxExperiments) {
-    return {
-      ok: false,
-      reason: FAILURE.TOO_MANY,
-      bytes,
-      limit: LIMITS.maxExperiments,
-    };
+    return failed(FAILURE.TOO_MANY, bytes, LIMITS.maxExperiments);
   }
   const after = usedBytes() - (existing?.bytes || 0) + bytes;
   if (after > LIMITS.total) {
-    return {
-      ok: false,
-      reason: FAILURE.TOTAL_EXCEEDED,
-      bytes: after,
-      limit: LIMITS.total,
-    };
+    return failed(FAILURE.TOTAL_EXCEEDED, after, LIMITS.total);
   }
 
   try {
@@ -262,7 +342,7 @@ export function saveExperiment(record) {
     } catch {
       /* nothing further to try */
     }
-    return { ok: false, reason: FAILURE.QUOTA, bytes, limit: LIMITS.total };
+    return failed(FAILURE.QUOTA, bytes, LIMITS.total);
   }
 
   return { ok: true, reason: FAILURE.OK, bytes, limit: LIMITS.perExperiment };

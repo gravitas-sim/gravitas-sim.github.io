@@ -56,7 +56,7 @@ real control, a real measurement, or a real dataset.
 | #   | Criterion                                                                                                                                              | Where it is checked                  |
 | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
 | A1  | Waveform model reproduces published closed-form limits (chirp mass, `f(tau)`, ISCO, amplitude scaling) against independently computed reference values | `tests/gwWaveform.test.js`           |
-| A2  | Sandbox physics, sandbox audio and merger ripples are unchanged and still labeled illustrative                                                        | `tools/physics-checks.mjs`, `tests/` |
+| A2  | Sandbox physics, sandbox audio and merger ripples are unchanged and still labeled illustrative                                                        | `js/validation/physicsChecks.js`, `tests/` |
 | A3  | One canonical timeline drives plots, audio, source phase and captures                                                                                  | `tests/gwTimeline.test.js`           |
 | A4  | Audio is generated from the signal at a signal sample rate, never from the animation loop                                                              | `tests/gwAudio.test.js`              |
 | A5  | No audio without an explicit user gesture; no duplicate merger audio                                                                                   | `e2e/gwAudio.spec.js`                |

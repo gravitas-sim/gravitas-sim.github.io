@@ -206,15 +206,20 @@ for (const shot of SHOTS) {
     host.appendChild(rows);
     document.body.appendChild(host);
 
-    const [{ getWidget, widgetDefaults }, { ensureDeferredMessages }] =
-      await Promise.all([
-        import('/js/widgets.js'),
-        import('/js/i18n/deferredMessages.js'),
-      ]);
+    const [
+      { ensureWidget, getWidget, widgetDefaults },
+      { ensureDeferredMessages },
+    ] = await Promise.all([
+      import('/js/widgets.js'),
+      import('/js/i18n/deferredMessages.js'),
+    ]);
     await ensureDeferredMessages();
 
     const stepSpec = { capture: false, ...(spec.spec || {}) };
-    const w = getWidget(spec.widget || 'stellar-lab');
+    // Fetched on demand, the way a lesson step fetches it; the lab and the
+    // comparison below are the same family, so they are there once this is.
+    const w = await ensureWidget(spec.widget || 'stellar-lab');
+    await ensureWidget('stellar-lab');
 
     // Anything pinned is pinned through the lab widget, the way a student
     // would, so the comparison stage sees exactly what a lesson would give it.

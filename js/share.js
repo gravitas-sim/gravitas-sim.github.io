@@ -1,18 +1,13 @@
 // =============================================================================
 // The share dialog, and opening a link someone sent you
 // -----------------------------------------------------------------------------
-// This is the UI layer over shareState.js. It sits above both ui.js and
-// timeline.js and imports from each, which is what lets captureShareState()
+// This is the UI layer over shareState.js. It reaches ui.js through the
+// command bus and imports timeline.js, which is what lets captureShareState()
 // stay free of a timeline import: the elapsed clock is read here and passed
 // down, rather than ui.js reaching for a module that already imports it.
 // =============================================================================
 
-import {
-  captureShareState,
-  applyShareState,
-  initialize_simulation,
-  show_enhanced_scenario_info,
-} from './ui.js';
+import { command } from './appState.js';
 import { getSimClock } from './timeline.js';
 import {
   encodePayload,
@@ -22,17 +17,31 @@ import {
 } from './shareState.js';
 import { getWorldSeed, formatSeed, parseSeed } from './rng.js';
 import { toast, announce } from './notify.js';
-import { trapFocus } from './focusTrap.js';
-import { embedSnippet } from './embed.js';
 import {
   activityInHash,
   assignmentInHash,
   lessonInHash,
+  packInHash,
 } from './investigationsLoader.js';
 import { t } from './i18n/index.js';
+import { scenarioTitle } from './i18n/scenario.js';
 
-/** Releases the focus trap; set while the dialog is open. */
-let releaseFocus = null;
+const captureShareState = command('captureShareState');
+const applyShareState = command('applyShareState');
+const initialize_simulation = command('initialize_simulation');
+const show_enhanced_scenario_info = command('show_enhanced_scenario_info');
+
+/** A scenario as a reader says it: its title, or 'None' for a hand-built world. */
+const said = s => (s && s !== 'None' ? scenarioTitle(s) : s);
+
+/**
+ * js/dialog.js, fetched on the first open: this module is on the start-up
+ * path, the dialog machinery is not. Primed when a reader points at or focuses
+ * the Share button, so the press finds it here.
+ */
+let dialogs = null;
+const loadDialogs = async () => (dialogs ??= await import('./dialog.js'));
+const primeDialogs = () => loadDialogs().catch(() => {});
 
 let els = {};
 let kind = 'auto';
@@ -41,6 +50,9 @@ let lastUrl = '';
 // from the payload rather than from the live simulation so the title always
 // names what the iframe will actually show.
 let lastScenario = '';
+// What the dialog shows, as My work keeps it (js/myWork/made.js).
+let lastPayload = null;
+let lastFragment = '';
 
 // True only while a link is being applied. The rebuild a link performs fires
 // the same reset event as a user changing scenario, and the two have to be
@@ -69,13 +81,7 @@ export async function applySharedLinkFromUrl() {
   if (!hasSharedLink()) return false;
   try {
     const payload = await decodePayload(location.hash);
-    applyingLink = true;
-    let result;
-    try {
-      result = applyShareState(payload);
-    } finally {
-      applyingLink = false;
-    }
+    const result = applySharePayload(payload);
 
     // The scenario card explains what the student is looking at, and someone
     // arriving from a link has had none of the context of choosing it.
@@ -98,14 +104,44 @@ export async function applySharedLinkFromUrl() {
       }
     }
 
+    // The instruments a scenario pack starts with (js/startingPanels.js).
+    if (payload.x?.open || payload.x?.tools) {
+      import('./startingPanels.js')
+        .then(m => m.openStartingPanels(payload.x))
+        .catch(() => {});
+    }
+
     announce(
-      t('share.link.opened', { scenario: result.scenario, n: result.bodies })
+      t('share.link.opened', {
+        scenario: said(result.scenario),
+        n: result.bodies,
+      })
     );
     return true;
   } catch (err) {
     console.warn('Could not open shared link:', err);
     toast(err.message || t('share.link.failed'));
     return false;
+  }
+}
+
+/**
+ * Build the world a decoded payload describes, as arriving on its link does.
+ *
+ * Also what an embed's Reset and its page's `load` message use
+ * (js/embedBridge.js): the rebuild is a link being applied, not the world
+ * moving away from one, so the fragment in the frame's address stays and a
+ * reload still opens the figure its author made.
+ *
+ * @param {Object} payload - From decodePayload
+ * @returns {{scenario: string, bodies: number}} What was built
+ */
+export function applySharePayload(payload) {
+  applyingLink = true;
+  try {
+    return applyShareState(payload);
+  } finally {
+    applyingLink = false;
   }
 }
 
@@ -142,6 +178,7 @@ function watchForDivergence() {
     // js/investigationsLoader.js so that a fourth kind has somewhere obvious
     // to be added.
     if (activityInHash()) return;
+    if (packInHash()) return;
     if (location.hash) {
       history.replaceState(null, '', location.pathname + location.search);
     }
@@ -189,8 +226,13 @@ async function refresh() {
   });
 
   const fragment = await encodePayload(payload);
+  lastPayload = payload;
+  lastFragment = fragment;
   lastUrl = shareUrl(fragment);
-  lastScenario = payload.s || '';
+  lastScenario = said(payload.s) || '';
+  // The figure builder opens on the state the dialog is showing.
+  if (els.figure)
+    els.figure.href = new URL(`figure/#${fragment}`, location.href).href;
   els.url.value = lastUrl;
   // Show the front of the link. Setting .value leaves the caret at the end, so
   // the field opens on a meaningless tail of base64 rather than the domain: // which makes a correct link look like a corrupted one.
@@ -247,6 +289,28 @@ async function copyLink() {
   }
 }
 
+/** Keep the world the dialog shows in My work, under the name typed. */
+async function saveMine() {
+  if (!lastFragment) return;
+  const name = els.mineName.value.trim() || lastScenario;
+  const [payload, fragment] = [lastPayload, lastFragment]; // as pressed
+  const made = await import('./myWork/made.js');
+  const done = made.saveMade(
+    made.scenarioRecord({ name, from: 'sandbox', payload, fragment })
+  ).ok;
+  const message = t(done ? 'share.mine.saved' : 'share.mine.failed');
+  toast(message);
+  announce(message);
+}
+
+/**
+ * The embed markup module, fetched when the dialog opens: by the time Copy
+ * embed code is pressed it has arrived, so the copy still happens inside the
+ * press, which the clipboard fallback below needs.
+ */
+let markupModule = null;
+const markup = () => (markupModule ||= import('./embedMarkup.js'));
+
 /**
  * Put an iframe for the current state on the clipboard.
  *
@@ -259,6 +323,7 @@ async function copyLink() {
  */
 async function copyEmbed() {
   if (!lastUrl) return;
+  const { embedSnippet } = await markup();
   const snippet = embedSnippet({ url: lastUrl, scenario: lastScenario });
   try {
     await navigator.clipboard.writeText(snippet);
@@ -310,33 +375,34 @@ function applyTypedSeed() {
 }
 
 /** Show the dialog, with the link already computed. */
-export function openShareDialog() {
-  if (!els.modal) return;
+export async function openShareDialog() {
+  if (!els.modal || isShareDialogOpen()) return;
+  const { openDialog } = await loadDialogs();
+  if (isShareDialogOpen()) return;
   kind = 'auto';
-  els.modal.classList.remove('hidden');
-  // The dialog declares aria-modal="true" and, until this, did not behave like
-  // one: Tab walked straight out of it into the control rail behind. The trap
-  // also marks the rest of the page inert, which is what stops a screen reader
-  // browsing the page underneath, and remembers where focus came from.
-  releaseFocus = trapFocus(document.getElementById('shareContent'), {
+  // Modal, with the rest of the page inert so a screen reader cannot browse
+  // the rail behind it, Tab kept inside, Escape and the backdrop closing it,
+  // and focus back on the Share button however it was opened: js/dialog.js.
+  openDialog(document.getElementById('shareContent'), {
+    backdrop: els.modal,
+    isolate: true,
+    trigger: document.getElementById('shareBtn'),
     initialFocus: els.url,
-    returnFocusTo: document.getElementById('shareBtn'),
   });
-  refresh().then(() => els.url?.focus());
+  // Not if the student is already typing in another field.
+  refresh().then(() => {
+    if (!document.activeElement?.matches('input:not([readonly])'))
+      els.url?.focus();
+  });
+  markup().catch(() => {
+    markupModule = null; // fetched again on the press, which says if it fails
+  });
 }
 
 /** Hide the dialog. */
 export function closeShareDialog() {
-  if (!els.modal) return;
-  els.modal.classList.add('hidden');
-  // Releasing restores focus to the button that opened it, so this no longer
-  // has to do it by hand.
-  if (releaseFocus) {
-    releaseFocus();
-    releaseFocus = null;
-  } else {
-    document.getElementById('shareBtn')?.focus();
-  }
+  // Loaded by definition: the dialog cannot be open without it.
+  dialogs?.closeDialog(document.getElementById('shareContent'));
 }
 
 /** @returns {boolean} True while the dialog is showing */
@@ -359,16 +425,23 @@ export function initShare() {
     seedRow: document.getElementById('shareSeedRow'),
     reroll: document.getElementById('shareRerollBtn'),
     embed: document.getElementById('shareEmbedBtn'),
+    mine: document.getElementById('shareMineBtn'),
+    mineName: document.getElementById('shareMineName'),
+    figure: document.getElementById('shareFigureLink'),
     close: document.getElementById('shareCloseBtn'),
     chip: document.getElementById('shareCloseChip'),
   };
   if (!els.modal || !els.url) return;
 
-  document.getElementById('shareBtn')?.addEventListener('click', () => {
+  const button = document.getElementById('shareBtn');
+  button?.addEventListener('click', () => {
     isShareDialogOpen() ? closeShareDialog() : openShareDialog();
   });
+  button?.addEventListener('pointerenter', primeDialogs, { once: true });
+  button?.addEventListener('focus', primeDialogs, { once: true });
   els.copy?.addEventListener('click', copyLink);
   els.embed?.addEventListener('click', copyEmbed);
+  els.mine?.addEventListener('click', saveMine);
   els.close?.addEventListener('click', closeShareDialog);
   els.chip?.addEventListener('click', closeShareDialog);
   els.seeded?.addEventListener('click', () => setKind('seeded'));
@@ -384,10 +457,8 @@ export function initShare() {
   els.seed?.addEventListener('blur', applyTypedSeed);
   els.reroll?.addEventListener('click', () => rebuildWithSeed());
 
-  // Clicking the backdrop closes, the same as every other panel here.
-  els.modal.addEventListener('click', e => {
-    if (e.target === els.modal) closeShareDialog();
-  });
+  // js/dialog.js takes an Escape pressed inside the dialog; this is one
+  // pressed with focus on <body>.
   window.addEventListener('gravitasEscape', () => {
     if (isShareDialogOpen()) closeShareDialog();
   });

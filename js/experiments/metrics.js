@@ -109,7 +109,10 @@ export const UNITS_PER_AU = 100;
  * @param {Array<Object>} ctx.bodies - Selected bodies, {id, pos, vel, mass}
  * @param {Object|null} ctx.primary - The body distances are measured from
  * @param {Object|null} ctx.conserved - {energy, angular} in simulation units
- * @param {Object|null} ctx.drift - {energy, angular} as fractions
+ * @param {Object|null} ctx.drift - physics.js:conservationDrift() as it
+ *   returns it: {energyDrift, angularDrift} are percentages of the baseline,
+ *   NaN where the baseline was too ill-conditioned to divide by. Its `energy`
+ *   and `angular` are the current totals, and are not read here.
  * @param {number} ctx.secondsPerUnit - Simulated seconds in one time unit
  * @param {Array<string>} ctx.metrics - Metric ids to sample
  * @returns {Object} metric id -> number, and `t`
@@ -171,11 +174,19 @@ export function sampleFrame({
       case METRICS.ANGULAR_MOMENTUM:
         if (conserved) out[id] = conserved.angular;
         break;
+      // Already percentages, so passed through untouched. The bench used to
+      // read `energy` and `angular` from this object as fractions, but those
+      // are the engine's totals: every drift it recorded was the total energy
+      // or angular momentum times a hundred. A NaN stays NaN, a gap in the
+      // series, and a field that is missing records nothing - a zero would
+      // claim perfect conservation for a run that was never measured.
       case METRICS.ENERGY_DRIFT:
-        if (drift) out[id] = (drift.energy ?? 0) * 100;
+        if (typeof drift?.energyDrift === 'number') out[id] = drift.energyDrift;
         break;
       case METRICS.ANGULAR_DRIFT:
-        if (drift) out[id] = (drift.angular ?? 0) * 100;
+        if (typeof drift?.angularDrift === 'number') {
+          out[id] = drift.angularDrift;
+        }
         break;
       // Period and closest approach are derived from the whole series; see
       // reduceRun(). Nothing to sample here beyond what the others already

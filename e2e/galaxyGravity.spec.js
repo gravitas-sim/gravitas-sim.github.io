@@ -37,7 +37,7 @@ test.describe('the three modes in the running application', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Milky Way Rotation');
+    await app.loadScenario('milky-way-rotation');
     await app.waitForFrames(10);
 
     for (const mode of ['newtonian', 'mond', 'halo', 'mond', 'newtonian']) {
@@ -54,7 +54,7 @@ test.describe('the three modes in the running application', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(10);
 
     // The request is refused, not silently honored.
@@ -80,12 +80,12 @@ test.describe('the three modes in the running application', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Milky Way Rotation');
+    await app.loadScenario('milky-way-rotation');
     expect(await setMode(page, 'mond')).toBe('mond');
     expect((await modeOf(page)).mode).toBe('mond');
 
     // The leak this test exists for.
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(10);
     const after = await modeOf(page);
     expect(after.mode).toBe('newtonian');
@@ -97,12 +97,12 @@ test.describe('the three modes in the running application', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Milky Way Rotation');
+    await app.loadScenario('milky-way-rotation');
     // Ships with the halo, because it is the scenario that needs explaining.
     expect((await modeOf(page)).mode).toBe('halo');
 
     expect(await setMode(page, 'mond')).toBe('mond');
-    await app.loadScenario('Milky Way Rotation');
+    await app.loadScenario('milky-way-rotation');
     await app.waitForFrames(10);
     expect((await modeOf(page)).mode).toBe('halo');
   });
@@ -112,7 +112,7 @@ test.describe('the three modes in the running application', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Spiral Galaxy');
+    await app.loadScenario('spiral-galaxy');
     await app.waitForFrames(10);
     const s = await modeOf(page);
     expect(s.mode).toBe('newtonian');
@@ -126,20 +126,17 @@ test.describe('the three modes in the running application', () => {
 test.describe('the mode travels with a shared link', () => {
   test('a link made under MOND reopens under MOND', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Milky Way Rotation');
+    await app.loadScenario('milky-way-rotation');
     expect(await setMode(page, 'mond')).toBe('mond');
     await app.waitForFrames(20);
 
-    const fragment = await page.evaluate(async () => {
-      const ui = await import('/js/ui.js');
-      const share = await import('/js/shareState.js');
-      return share.encodePayload(ui.captureShareState({ kind: 'full' }));
-    });
+    const { fragment } = await app.captureLink({ kind: 'full' });
     expect(typeof fragment).toBe('string');
 
-    await app.boot({ url: `/#${fragment.replace(/^#/, '')}` });
-    await app.waitForBodies(5);
-    await app.waitForFrames(20);
+    // Wait for the link's own world: the one on screen already has bodies, and
+    // already has this mode.
+    await app.bootLink(fragment);
+    await app.advanceFrames(20);
 
     const restored = await modeOf(page);
     expect(restored.mode).toBe('mond');
@@ -152,19 +149,16 @@ test.describe('the mode travels with a shared link', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Milky Way Rotation');
+    await app.loadScenario('milky-way-rotation');
     expect(await setMode(page, 'halo')).toBe('halo');
     await app.waitForFrames(20);
 
-    const fragment = await page.evaluate(async () => {
-      const ui = await import('/js/ui.js');
-      const share = await import('/js/shareState.js');
-      return share.encodePayload(ui.captureShareState({ kind: 'full' }));
-    });
+    const { fragment } = await app.captureLink({ kind: 'full' });
 
-    await app.boot({ url: `/#${fragment.replace(/^#/, '')}` });
-    await app.waitForBodies(5);
-    await app.waitForFrames(20);
+    // Wait for the link's own world: the one on screen already has bodies, and
+    // already has this mode.
+    await app.bootLink(fragment);
+    await app.advanceFrames(20);
 
     const restored = await modeOf(page);
     expect(restored.mode).toBe('halo');
@@ -178,7 +172,7 @@ test.describe('the A/B bench treats the mode as a variable', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Milky Way Rotation');
+    await app.loadScenario('milky-way-rotation');
     await app.waitForFrames(10);
 
     // The bench hashes the canonical share payload. Two worlds that differ only

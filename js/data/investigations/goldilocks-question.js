@@ -148,13 +148,16 @@ const GOLDILOCKS = {
     "Move a planet, change its star, and decide what 'habitable' really means",
   duration: '40-50 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 30, section: null },
+  courseLevel: 'survey',
+  mathematics: 'algebra',
+  prerequisites: ['transit-photometry'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'habitability'],
   lock: { placement: true, inspector: true, areaSweep: false },
-  summary:
-    'Work out for yourself why a planet twice as far from its star receives a quarter as much energy, why dim stars have their habitable zones tucked in close, and why an eccentric orbit means a planet does not receive one steady amount of light all year. Then finish with the harder question the phrase "habitable zone" invites people to skip: what does being inside it actually tell you?',
   objectives: [
     'Explain why the starlight reaching a planet falls off rapidly with distance, and use the twice-as-far, one-quarter rule',
     'Explain why a dim star’s habitable zone lies close in and a luminous star’s lies far out',
@@ -189,7 +192,7 @@ const GOLDILOCKS = {
       sid: 'one-earth-of-starlight',
       type: 'read',
       title: 'One Earth of starlight',
-      body: `Rather than carrying watts per square meter around, this lesson
+      body: `Rather than carrying watts per square meter around, this investigation
              uses Earth itself as the ruler. Earth sits one astronomical unit
              from the Sun, which is 150 million kilometers, and receives what we
              will call <strong>one Earth</strong> of starlight.
@@ -364,6 +367,16 @@ const GOLDILOCKS = {
       tip: 'The same rule governs how loud a speaker sounds and how bright a streetlight looks. It is not special to astronomy; it is what happens to anything that spreads out equally in all directions.',
     },
     {
+      hints: [
+        'Use the rule from the last step: starlight falls as one over the distance squared.',
+        'Put the distance in AU, square it, then take one over the result.',
+      ],
+      feedback: {
+        close: 'Close. Square the distance before taking one over it.',
+        off: 'Starlight goes as one over d squared, with d in AU: square first, then invert.',
+        'wrong-order-of-magnitude':
+          'A power of ten out; check that you squared the distance.',
+      },
       sid: 'writing-it-down-then-using',
       // "The areas you just read off" are the three recorded there.
       requires: ['write-the-three-down'],
@@ -568,7 +581,7 @@ const GOLDILOCKS = {
       ],
       answer: 1,
       because:
-        'Earth and Mars. Venus at 0.72 AU is inside the inner edge, receiving about 1.9 Earths of starlight; Ceres at 2.77 AU is far beyond the outer edge. Mars, at 1.52 AU, is comfortably within the conservative zone. That last one usually comes as a surprise, and it is the most useful fact in this lesson.',
+        'Earth and Mars. Venus at 0.72 AU is inside the inner edge, receiving about 1.9 Earths of starlight; Ceres at 2.77 AU is far beyond the outer edge. Mars, at 1.52 AU, is comfortably within the conservative zone. That last one usually comes as a surprise, and it is the most useful fact in this investigation.',
     },
     {
       sid: 'the-mars-problem',
@@ -717,6 +730,14 @@ const GOLDILOCKS = {
         'None. Venus at 0.72 AU still falls just inside the optimistic inner edge at 0.75, and Ceres at 2.77 is nowhere near the outer edge at 1.77. Mars was already inside the conservative zone. So the two published definitions, which disagree about the edges by a wide margin, agree completely about our own Solar System: two worlds in the zone, and one of them is Mars.',
     },
     {
+      hints: [
+        'Use the same rule, one over the distance squared, with Venus at its own distance from the Sun.',
+        'Square the distance first, then invert. A planet closer than Earth gets more light than Earth does.',
+      ],
+      feedback: {
+        close: 'Close. Square the distance before inverting it.',
+        off: 'Venus is nearer the Sun than Earth, so the answer should be more than one Earth’s worth: invert the squared distance.',
+      },
       sid: 'venus-by-the-rule-you',
       bind: SOLAR_WORLDS,
       type: 'question',
@@ -724,7 +745,7 @@ const GOLDILOCKS = {
       kind: 'numeric',
       body: `You do not need a climate model to see why Venus is a hard case.
              Venus orbits at 0.72 AU. Use the rule from the first half of this
-             lesson: starlight goes as 1 / d².
+             investigation: starlight goes as 1 / d².
              \n\n0.72 squared is about 0.52.`,
       prompt: 'Starlight at Venus, in Earths',
       unit: 'Earths',
@@ -740,7 +761,7 @@ const GOLDILOCKS = {
       title: 'A year on a circular orbit',
       body: `One thing has been quietly assumed so far: that a planet has
              <em>a</em> distance from its star. Most of the planets you have met
-             in these lessons are on nearly circular orbits, and for those it is
+             in these investigations are on nearly circular orbits, and for those it is
              very nearly true.
              \n\nThe panel shows a planet on a perfectly circular orbit at
              1.2 AU. Underneath it is a graph of the starlight it receives
@@ -903,7 +924,7 @@ const GOLDILOCKS = {
       type: 'explore',
       title: 'All seven planets',
       body: `Here is the real system, with the habitable zone from the same
-             model you have been using all lesson, calculated from TRAPPIST-1's
+             model you have been using all investigation, calculated from TRAPPIST-1's
              measured luminosity and temperature.
              \n\nThe distance axis is compressed, because otherwise the inner
              planets would pile up on top of the star. Read the numbers, not the
@@ -1057,7 +1078,7 @@ const GOLDILOCKS = {
       body: `To see how much room that leaves, consider three planets that all
              receive close to one Earth of starlight and all sit inside their
              star's habitable zone.
-             \n\nOn the one number this lesson has spent forty minutes on, they
+             \n\nOn the one number this investigation has spent forty minutes on, they
              are identical. Look at what else is known about each.
              \n\nFor context from our own system: Venus and Earth are nearly the
              same size and receive starlight within a factor of two of each

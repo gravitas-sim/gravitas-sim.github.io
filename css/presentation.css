@@ -68,6 +68,12 @@
     gap: var(--space-2);
   }
 
+  /* A gravitas-embed/1 figure whose author asked for no transport
+     (js/embedOptions.js): a picture that moves, controlled from its page. */
+  body.presentation-embed.embed-no-transport .timeline-bar {
+    display: none;
+  }
+
   /* The way out to the sandbox: small, in the corner, and the only thing embed
      mode adds rather than removes. */
   .embed-open-full {
@@ -122,14 +128,14 @@
      reading its mass is most of what makes the figure interactive. It becomes a
      sheet against the edge rather than a floating window, because at 320px
      there is no "beside" for it to float in. */
-  @media (max-width: 560px) {
+  @media (max-width: 767px) {
     body.presentation-embed #objectInspector {
       left: 0 !important;
       right: 0 !important;
       top: auto !important;
       bottom: 44px !important;
       width: auto !important;
-      max-width: none !important;
+      max-width: none;
       max-height: 52vh;
       border-radius: var(--radius-md) var(--radius-md) 0 0;
     }
@@ -139,7 +145,7 @@
      Blackboard's Ultra content frame is often around 700px; below about 560 the
      transport bar's labels are what overflow first, so they go and the icons
      stay. */
-  @media (max-width: 560px) {
+  @media (max-width: 767px) {
     body.presentation-embed .timeline-bar {
       padding: var(--space-1) var(--space-2);
     }
@@ -165,9 +171,7 @@
      this width it is a stub that reads as a progress bar nobody can use. Play,
      step and the clock survive, which is enough to make the figure a figure
      rather than a picture. */
-  @media (max-width: 400px) {
-    body.presentation-embed .timeline-bar #timelineRange,
-    body.presentation-embed .timeline-bar .timeline-range,
+  @media (max-width: 375px) {
     body.presentation-embed .timeline-bar input[type='range'] {
       display: none;
     }
@@ -245,12 +249,6 @@
     background: color-mix(in srgb, var(--surface-1) 92%, transparent);
     border: 1px solid var(--border-subtle);
     box-shadow: var(--shadow);
-    /* The readout's color is a hard-coded light gray with a dark text-shadow,
-       which is right over its usual dark translucent panel and invisible once
-       that panel is the light surface Daylight gives it. Both have to move
-       together, so the token comes with the background. */
-    color: var(--text-primary);
-    text-shadow: none;
   }
 
   /* Every descendant, deliberately. The readout's spans carry four different
@@ -291,8 +289,7 @@
   }
 
   body.presentation-lecture #scenarioInfoBox h2,
-  body.presentation-lecture #scenarioInfoBox h3,
-  body.presentation-lecture .scenario-info-title {
+  body.presentation-lecture #scenarioInfoBox h3 {
     font-size: var(--text-2xl);
     line-height: var(--leading-tight);
   }
@@ -552,55 +549,11 @@
 
   /* Narrow projectors and 4:3 in portrait: the bar wraps onto two rows rather
      than overflowing the viewport, which is why it carries flex-wrap above. */
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     body.presentation-lecture .lecture-bar {
       width: auto;
       border-radius: var(--radius-lg);
     }
-  }
-
-  /* ===========================================================================
-     3. The language picker
-     =========================================================================== */
-
-  .locale-dock-glyph {
-    display: grid;
-    place-items: center;
-    font-size: 0.75em;
-    font-weight: var(--weight-semibold);
-    line-height: 1;
-    background: var(--surface-2);
-    color: var(--text-secondary);
-  }
-
-  /* Two rows of a code and a word. It was three times this wide when each
-     option carried a sentence of coverage text under it. */
-  .locale-menu {
-    min-width: 11rem;
-  }
-
-  .locale-menu-item.is-compact {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-  }
-
-  .locale-menu-code {
-    display: grid;
-    place-items: center;
-    min-width: 2.25em;
-    padding: 0.15em 0.35em;
-    border-radius: var(--radius-sm);
-    background: var(--surface-2);
-    border: 1px solid var(--border-subtle);
-    font-family: var(--font-mono);
-    font-size: var(--text-2xs);
-    font-weight: var(--weight-semibold);
-    color: var(--text-secondary);
-  }
-
-  .locale-menu-item.is-compact .theme-menu-label {
-    font-size: var(--text-xs);
   }
 
   /* ===========================================================================
@@ -757,7 +710,7 @@
     text-overflow: ellipsis;
   }
 
-  @media (max-width: 620px) {
+  @media (max-width: 767px) {
     .settings-grid {
       grid-template-columns: 1fr;
       gap: var(--space-2) 0;
@@ -814,13 +767,8 @@
      two half-sentences rather than as one list.
      =========================================================================== */
 
-  @media (max-width: 620px) {
+  @media (max-width: 767px) {
     .attribution {
-      left: var(--space-2);
-      right: var(--space-2);
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      white-space: normal;
       row-gap: 2px;
     }
 
@@ -838,7 +786,7 @@
 
      Two rules were disagreeing across a cascade layer. css/styles.css, in the
      `legacy` layer, pins the card with `left: 10px; right: 10px;
-     transform: none` below 1025px. css/components.css, in `components`, gives
+     transform: none` below 1201px. css/components.css, in `components`, gives
      it `left: 50%` and a transform that centers it in the band between the
      readout and the rail. Layer order means the component transform wins while
      the legacy `left` also applies, so the card was translated by half its own
@@ -848,7 +796,7 @@
      whole fix; the insets that were always intended then apply.
      =========================================================================== */
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     #scenarioInfoBox,
     .scenario-info-box {
       transform: none;

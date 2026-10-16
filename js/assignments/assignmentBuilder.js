@@ -16,7 +16,8 @@
 // built from the same payload, so there is one thing to check rather than two.
 // =============================================================================
 
-import { t } from '../i18n/index.js';
+import { closeDialog, openDialog, releaseDialog } from '../dialog.js';
+import { getLocale, t } from '../i18n/index.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import {
   MAX_INTRO,
@@ -25,10 +26,14 @@ import {
   resolveSelection,
   validateSelection,
 } from './assignment.js';
+import { lessonProvider } from './provider.js';
+import { shortRoute } from './shortRoute.js';
 import { assignmentLink } from './assignmentLink.js';
 
 let root = null;
 let lesson = null;
+/** The depth being set, or null for a lesson with one. */
+let depth = null;
 let chosen = new Set();
 let built = null;
 /** The encoded link for the assignment just built, for the printable page. */
@@ -47,6 +52,13 @@ const esc = text =>
       })[c]
   );
 
+const RANK = ['core', 'quantitative', 'advanced'];
+const inDepth = (s, d = 'core') =>
+  Math.max(0, RANK.indexOf(s.depth)) <= RANK.indexOf(d);
+
+/** The steps at the depth being set: all of them for a lesson with one depth. */
+const shown = () => lesson.steps.filter(s => inDepth(s, depth ?? undefined));
+
 const $ = id => root?.querySelector(`#${id}`);
 
 /**
@@ -55,9 +67,22 @@ const $ = id => root?.querySelector(`#${id}`);
  * @param {object} loaded - The merged lesson
  * @returns {void}
  */
-export function openBuilder(loaded) {
-  lesson = loaded;
+export async function openBuilder(loaded) {
+  // A lesson with deeper steps is set at one depth: they are laid in so the
+  // instructor sees what each depth adds.
+  depth = null;
+  if (loaded.depths) {
+    const m = await import('../investigations/depth.js');
+    [lesson] = await Promise.all([
+      m.withDepth(loaded, getLocale()),
+      m.messages(),
+    ]);
+    depth = 'core';
+  } else lesson = loaded;
   chosen = new Set();
+  // ?route=short starts from the derived short route (./shortRoute.js).
+  if (/[?&]route=short\b/.test(location.search))
+    chosen = new Set(shortRoute(lesson).chosen);
   built = null;
   builtLink = null;
   mount();
@@ -72,11 +97,14 @@ function mount() {
   root.className = 'assignment-builder';
   root.setAttribute('role', 'dialog');
   root.setAttribute('aria-labelledby', 'assignTitle');
+  // Hidden until the shared dialog opens it: openDialog() does nothing for a
+  // panel that is already shown.
+  root.hidden = true;
   root.innerHTML = `
     <div class="assignment-inner">
       <div class="assignment-head">
         <h2 id="assignTitle">${esc(t('assign.title'))}</h2>
-        <button id="assignClose" class="ui-button" title="${esc(t('assign.close'))}">✕</button>
+        <button id="assignClose" class="ui-button" title="${esc(t('assign.close'))}" aria-label="${esc(t('assign.close'))}">✕</button>
       </div>
       <p class="assignment-hint">${esc(t('assign.hint'))}</p>
 
@@ -88,6 +116,15 @@ function mount() {
         <span>${esc(t('assign.intro'))}</span>
         <textarea id="assignIntro" rows="3" maxlength="${MAX_INTRO}"></textarea>
       </label>
+      <label class="assignment-field" id="assignDepthRow" hidden>
+        <span>${esc(t('assign.depth'))}</span>
+        <select id="assignDepth"></select>
+      </label>
+      <label class="assignment-field">
+        <span>${esc(t('assign.roster'))}</span>
+        <input id="assignRoster" type="text" maxlength="120" aria-describedby="assignRosterHelp" />
+      </label>
+      <p id="assignRosterHelp" class="assignment-hint">${esc(t('assign.roster.help'))}</p>
 
       <div class="assignment-row">
         <button id="assignAll" class="ui-button">${esc(t('assign.selectAll'))}</button>
@@ -111,13 +148,40 @@ function mount() {
           <input id="assignLink" type="text" readonly />
         </label>
         <p id="assignLinkNote" class="assignment-hint"></p>
+        <div class="assignment-row">
+          <a id="assignKit" class="ui-button" target="_blank" rel="noopener">${esc(t('assign.kit'))}</a>
+          <a id="assignPreview" class="ui-button" target="_blank" rel="noopener">${esc(t('assign.preview'))}</a>
+          <a id="assignCourse" class="ui-button" target="_blank" rel="noopener">${esc(t('assign.addCourse'))}</a>
+        </div>
       </div>
     </div>`;
   document.body.appendChild(root);
+  // The shared dialog behaviour (js/dialog.js): focus moves to the name field,
+  // Tab stays inside, Escape closes, the page behind is inert, and focus goes
+  // back to what opened it. The builder used to open behind a focus that
+  // stayed on the page, so a keyboard or screen-reader instructor worked in a
+  // dialog they were never moved into (P81 K-1).
+  openDialog(root, {
+    initialFocus: '#assignName',
+    isolate: true,
+    onClose: () => {
+      const gone = root;
+      root = null;
+      if (gone) releaseDialog(gone);
+      gone?.remove();
+    },
+  });
 
   $('assignClose').onclick = () => close();
+  $('assignDepth').onchange = e => {
+    depth = e.target.value;
+    chosen = new Set(
+      [...chosen].filter(sid => shown().some(s => s.sid === sid))
+    );
+    render();
+  };
   $('assignAll').onclick = () => {
-    chosen = new Set(lesson.steps.map(s => s.sid));
+    chosen = new Set(shown().map(s => s.sid));
     render();
   };
   $('assignNone').onclick = () => {
@@ -131,20 +195,27 @@ function mount() {
 
 /** Take the builder off the screen. @returns {void} */
 export function close() {
-  root?.remove();
-  root = null;
+  if (root) closeDialog(root, 'close');
 }
 
 /** Redraw the list, the additions and the counts. */
 function render() {
   if (!root) return;
-  const resolved = resolveSelection(lesson, [...chosen]);
+  const picker = $('assignDepth');
+  $('assignDepthRow').hidden = !depth;
+  if (depth && picker.value !== depth) {
+    picker.innerHTML = lesson.depths
+      .map(d => `<option value="${d}">${esc(t(`inv.depth.${d}`))}</option>`)
+      .join('');
+    picker.value = depth;
+  }
+  const resolved = resolveSelection(lesson, [...chosen], depth ?? undefined);
   const included = new Set(resolved.sids);
   const addedFor = new Map(resolved.added.map(a => [a.sid, a]));
 
   const list = $('assignSteps');
   list.innerHTML = '';
-  lesson.steps.forEach((step, i) => {
+  shown().forEach((step, i) => {
     const li = document.createElement('li');
     li.className = 'assignment-step';
     if (included.has(step.sid)) li.dataset.included = 'true';
@@ -199,7 +270,7 @@ function render() {
   $('assignCount').textContent = t('assign.count', {
     chosen: chosen.size,
     included: resolved.sids.length,
-    total: lesson.steps.length,
+    total: shown().length,
   });
 
   const added = $('assignAdded');
@@ -209,6 +280,7 @@ function render() {
 
   const check = validateSelection(lesson, {
     chosen: [...chosen],
+    depth: depth ?? undefined,
     title: $('assignName').value,
     intro: $('assignIntro').value,
   });
@@ -222,6 +294,7 @@ function render() {
 async function build() {
   const check = validateSelection(lesson, {
     chosen: [...chosen],
+    depth: depth ?? undefined,
     title: $('assignName').value,
     intro: $('assignIntro').value,
   });
@@ -245,10 +318,32 @@ async function build() {
     title: $('assignName').value,
     intro: $('assignIntro').value,
     fingerprint: stepFingerprint,
+    provider: lessonProvider(lesson.id),
+    depth,
   });
 
   const link = await assignmentLink(built);
+  // The class code rides on the query string, where the lesson puts it in
+  // the submission token, so the review page can sort by it.
+  const roster = $('assignRoster').value.trim();
+  if (roster) {
+    const u = new URL(link.url);
+    u.searchParams.set('roster', roster);
+    link.url = u.href;
+    link.length = link.url.length;
+    link.comfortable = link.length <= link.limit;
+  }
   builtLink = link;
+  // What to do with the link: the kit that hands it out, the student's view of
+  // it, and the course builder with this activity already in it.
+  const kit = new URL('/teaching/kit/', location.origin);
+  if (roster) kit.searchParams.set('roster', roster);
+  kit.hash = link.fragment;
+  $('assignKit').href = kit.href;
+  $('assignPreview').href = link.url;
+  const course = new URL('/studio/course/', location.origin);
+  course.searchParams.set('activity', link.fragment);
+  $('assignCourse').href = course.href;
   $('assignResult').hidden = false;
   $('assignLink').value = link.url;
   // Said while the instructor can still act on it. A link that a mail client
@@ -274,6 +369,7 @@ async function build() {
  */
 function printInstructions() {
   if (!built) return;
+  const roster = builtLink && new URL(builtLink.url).searchParams.get('roster');
   const byId = new Map(lesson.steps.map(s => [s.sid, s]));
   const rows = built.s
     .map(sid => {
@@ -302,13 +398,14 @@ function printInstructions() {
       code { word-break: break-all; font-size: 10px; }
     </style></head><body>
     <h1>${esc(built.t || t('assign.title'))}</h1>
-    <p class="sub">${esc(lesson.title)} — ${esc(t('assign.print.steps', { n: built.s.length }))}</p>
+    <p class="sub">${esc(lesson.title)} — ${esc(t('assign.print.steps', { n: built.s.length }))}${built.d ? ` — ${esc(t('inv.depth.state', { depth: t(`inv.depth.${built.d}`) }))}` : ''}</p>
     ${built.n ? `<p>${esc(built.n)}</p>` : ''}
     <ol>${rows}</ol>
     <div class="meta">
       <p>${esc(t('assign.print.open'))}</p>
       <p><code>${esc(builtLink?.url || '')}</code></p>
       <p>${esc(t('assign.print.id', { id: built.i, date: built.c }))}</p>
+      ${roster ? `<p>${esc(t('assign.print.roster', { code: roster }))}</p>` : ''}
     </div></body></html>`);
   win.document.close();
   win.focus();

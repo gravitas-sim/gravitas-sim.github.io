@@ -22,8 +22,18 @@
 
 import { describe, test, expect } from '@jest/globals';
 import { INVESTIGATIONS, getInvestigation } from '../js/data/investigations.js';
-import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
-import { allWidgets, getWidget, widgetDefaults } from '../js/widgets.js';
+import { DEPTH_LESSONS, loadDepthSteps } from '../js/investigations/depth.js';
+import { SCENARIO_INFO, scenarioId } from '../js/data/scenarioInfo.js';
+import {
+  allWidgets,
+  getWidget,
+  whenWidgetsReady,
+  widgetDefaults,
+} from '../js/widgets.js';
+
+// Some instrument families are fetched on demand (js/widgets.js,
+// LAZY_FAMILIES), so the whole catalog is awaited before any lookup.
+await whenWidgetsReady();
 
 /** Every (lesson, step number, step) triple, for tests that want them all. */
 const EVERY_STEP = INVESTIGATIONS.flatMap(inv =>
@@ -232,10 +242,13 @@ describe('instrument references', () => {
     expect(bad).toEqual([]);
   });
 
-  test('every registered widget is used by some lesson', () => {
+  test('every registered widget is used by some lesson', async () => {
     // A widget nobody reaches is either a mistake in a lesson or dead weight in
     // the bundle, and both are worth knowing about.
     const used = new Set(TOOL_STEPS.map(s => s.step.tool.id));
+    // A depth step may dock an instrument no lesson step does (Prompt 85).
+    for (const id of DEPTH_LESSONS)
+      for (const s of await loadDepthSteps(id)) if (s.tool) used.add(s.tool.id);
     const orphans = allWidgets()
       .map(w => w.id)
       .filter(id => !used.has(id));
@@ -394,9 +407,12 @@ describe('instrument references', () => {
 describe('scenario references', () => {
   test('every scenario a step sets up is in the catalog', () => {
     // A renamed scenario key leaves the lesson showing whatever was on screen
-    // before, which reads to a student as "the step did nothing".
+    // before, which reads to a student as "the step did nothing". By id, or
+    // by the English key a lesson written before ids keeps.
     const bad = EVERY_STEP.filter(
-      s => s.step.setup?.scenario && !SCENARIO_INFO[s.step.setup.scenario]
+      s =>
+        s.step.setup?.scenario &&
+        !SCENARIO_INFO[scenarioId(s.step.setup.scenario)]
     ).map(
       s => `${where(s)} sets up "${s.step.setup.scenario}", not in the catalog`
     );

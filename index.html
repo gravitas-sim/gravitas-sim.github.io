@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
@@ -77,14 +81,61 @@
     <link rel="stylesheet" href="css/components.css?v=3" />
     <link rel="stylesheet" href="css/presentation.css?v=3" />
     <link rel="stylesheet" href="css/chrome.css?v=3" />
+    <link rel="stylesheet" href="css/icons.css?v=3" />
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
   </head>
   <body>
     <a class="skip-link" href="#mainControls" data-i18n="chrome.text1"
       >Skip to controls</a
     >
+    <!-- shell:header main=mainControls -->
+<header class="gs-shell gs-app">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/" aria-current="page"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<!-- /shell:header -->
 
     <!--
       The document's one top-level heading. The splash carries a visible
@@ -170,7 +221,7 @@
         id="updateBadgeApply"
         class="update-badge-apply"
         data-i18n="update.apply"
-        title="Reload to finish updating. Your place in the lesson is kept."
+        title="Reload to finish updating. Your place in the investigation is kept."
         data-i18n-title="update.apply.hint"
       >
         Reload
@@ -196,51 +247,7 @@
       aria-live="polite"
     ></p>
 
-    <!-- ⚙️ Spacetime viewport -->
-    <div
-      id="threeViewportContainer"
-      class="three-view-container"
-      role="region"
-      aria-labelledby="threeViewTitle"
-      style="display: none"
-    >
-      <!-- This carried aria-hidden="true", which hid a panel containing two
-           real buttons. They stayed in the tab order, so a keyboard reader
-           could focus the close button and be told nothing about it at all.
-           The panel is hidden from everyone by display:none when it is shut,
-           which is the correct mechanism and the only one needed. -->
-      <div class="three-view-toolbar">
-        <div class="three-view-meta">
-          <span class="three-view-title" id="threeViewTitle"
-            >Spacetime View</span
-          >
-          <span id="threeViewStatus" class="three-view-status">Hidden</span>
-        </div>
-        <div class="three-toolbar-actions">
-          <button
-            id="reset3DCameraBtn"
-            class="three-toolbar-btn"
-            title="Reframe around active system"
-          >
-            Reset
-          </button>
-          <button
-            id="close3DViewBtn"
-            class="three-toolbar-btn"
-            title="Hide the spacetime viewport"
-            aria-label="Close the spacetime view"
-            data-i18n-aria-label="view3d.close.label"
-          >
-            <span aria-hidden="true">✕</span>
-          </button>
-        </div>
-      </div>
-      <div id="threeViewport" class="three-view-stage"></div>
-      <div class="three-view-hint">
-        Drag to orbit • Scroll to zoom • Right-click or two-finger drag to pan
-      </div>
-      <div id="threeViewResizeHandle" class="three-view-resize-handle"></div>
-    </div>
+    <template data-host="view3d"></template>
 
     <!-- 🔭 Radial Velocity panel -->
     <div
@@ -317,7 +324,7 @@
       </div>
 
       <div class="obs-panel-stage">
-        <canvas id="rvCanvas"></canvas>
+        <div id="rvChart" class="plot-host"></div>
       </div>
 
       <div id="rvObserverControls" class="obs-controls"></div>
@@ -535,541 +542,11 @@
       </p>
     </div>
 
-    <!-- ⏱ Pause at event -->
-    <div
-      id="pauseEventContainer"
-      class="obs-panel pause-event-container"
-      style="display: none"
-      role="region"
-      aria-labelledby="pauseEventTitle"
-    >
-      <div class="obs-panel-toolbar">
-        <div class="obs-panel-meta">
-          <span class="obs-panel-title" id="pauseEventTitle"
-            >Pause at Event</span
-          >
-          <span id="pauseEventStatus" class="obs-panel-status">Not armed</span>
-        </div>
-        <div class="obs-panel-actions">
-          <button
-            id="pauseEventClose"
-            class="obs-panel-btn"
-            title="Hide the pause-at-event panel"
-            data-i18n-title="pauseEvent.close.hint"
-          >
-            ✕
-          </button>
-        </div>
-      </div>
+    <template data-host="pause-event"></template>
 
-      <div class="pause-event-form">
-        <label class="pause-event-field">
-          <span data-i18n="pauseEvent.kind">Event</span>
-          <select id="pauseEventKind">
-            <option value="periapsis" data-i18n="pauseEvent.kind.periapsis">
-              Next periapsis
-            </option>
-            <option value="apoapsis" data-i18n="pauseEvent.kind.apoapsis">
-              Next apoapsis
-            </option>
-            <option
-              value="separationInward"
-              data-i18n="pauseEvent.kind.separationInward"
-            >
-              Crossing inward through…
-            </option>
-            <option
-              value="separationOutward"
-              data-i18n="pauseEvent.kind.separationOutward"
-            >
-              Crossing outward through…
-            </option>
-            <option value="transit" data-i18n="pauseEvent.kind.transit">
-              Next transit midpoint
-            </option>
-            <option value="rvMinimum" data-i18n="pauseEvent.kind.rvMinimum">
-              Radial velocity at its most negative
-            </option>
-            <option value="rvMaximum" data-i18n="pauseEvent.kind.rvMaximum">
-              Radial velocity at its most positive
-            </option>
-          </select>
-        </label>
+    <template data-host="rv-workspace"></template>
 
-        <label class="pause-event-field" id="pauseEventBodyField">
-          <span data-i18n="pauseEvent.body">Body</span>
-          <select id="pauseEventBody"></select>
-        </label>
-
-        <label class="pause-event-field" id="pauseEventPrimaryField">
-          <span data-i18n="pauseEvent.primary">Around</span>
-          <select id="pauseEventPrimary"></select>
-        </label>
-
-        <label
-          class="pause-event-field"
-          id="pauseEventSeparationField"
-          hidden=""
-        >
-          <span data-i18n="pauseEvent.separation">Separation</span>
-          <input
-            type="number"
-            id="pauseEventSeparation"
-            min="0"
-            step="0.01"
-            inputmode="decimal"
-          />
-          <span class="pause-event-unit">AU</span>
-        </label>
-
-        <div class="pause-event-actions">
-          <button id="pauseEventArm" class="ui-button primary">
-            <span data-i18n="pauseEvent.arm">Arm</span>
-          </button>
-          <button id="pauseEventDisarm" class="ui-button subtle" disabled="">
-            <span data-i18n="pauseEvent.disarm">Disarm</span>
-          </button>
-        </div>
-      </div>
-
-      <p
-        id="pauseEventMessage"
-        class="pause-event-message"
-        role="status"
-        hidden=""
-      ></p>
-
-      <!-- What fired, and how precisely it was located. The simulation is not
-           rewound onto the event, so the overshoot is shown rather than hidden:
-           see the header of js/pauseAtEvent.js. -->
-      <div id="pauseEventResult" class="pause-event-result" hidden="">
-        <div class="pause-event-readout">
-          <div class="rv-readout-cell">
-            <span class="rv-readout-label" data-i18n="pauseEvent.eventTime"
-              >Event at</span
-            >
-            <span id="pauseEventTime" class="rv-readout-value numeric">—</span>
-          </div>
-          <div class="rv-readout-cell">
-            <span class="rv-readout-label" data-i18n="pauseEvent.precision"
-              >Located to within</span
-            >
-            <span id="pauseEventPrecision" class="rv-readout-value numeric"
-              >—</span
-            >
-          </div>
-          <div class="rv-readout-cell">
-            <span class="rv-readout-label" data-i18n="pauseEvent.overshoot"
-              >Paused after it by</span
-            >
-            <span id="pauseEventOvershoot" class="rv-readout-value numeric"
-              >—</span
-            >
-          </div>
-        </div>
-        <label class="pause-event-note">
-          <span data-i18n="pauseEvent.note">Your note</span>
-          <input
-            type="text"
-            id="pauseEventNote"
-            maxlength="280"
-            placeholder="What did you notice?"
-            data-i18n-placeholder="pauseEvent.note.placeholder"
-          />
-        </label>
-      </div>
-
-      <p class="obs-panel-hint" data-i18n="pauseEvent.hint">
-        Events are found from the integration steps, so the precision above is
-        the interval the event was localized to. The simulation stops just after
-        the event rather than winding back onto it, which would leave the
-        recordings and the timeline describing a moment that never happened.
-      </p>
-    </div>
-
-    <!-- 📉 Radial velocity analysis workspace -->
-    <div
-      id="rvFitContainer"
-      class="obs-panel rvfit-container"
-      style="display: none"
-      role="region"
-      aria-labelledby="rvFitTitle"
-    >
-      <div class="obs-panel-toolbar">
-        <div class="obs-panel-meta">
-          <span class="obs-panel-title" id="rvFitTitle">RV Analysis</span>
-          <span id="rvFitStatus" class="obs-panel-status">No recording</span>
-        </div>
-        <div class="obs-panel-actions">
-          <button
-            id="rvFitClose"
-            class="obs-panel-btn"
-            title="Hide the analysis workspace"
-            data-i18n-title="rvfit.close.hint"
-          >
-            ✕
-          </button>
-        </div>
-      </div>
-
-      <canvas id="rvFitCanvas" class="rvfit-canvas"></canvas>
-
-      <div class="rvfit-sliders">
-        <label class="rvfit-field">
-          <span data-i18n="rvfit.period">Period</span>
-          <input type="range" id="rvFit_period" />
-          <span class="rvfit-value" id="rvFitValue_period">—</span>
-        </label>
-        <label class="rvfit-field">
-          <span data-i18n="rvfit.amplitude">Amplitude K</span>
-          <input type="range" id="rvFit_K" />
-          <span class="rvfit-value" id="rvFitValue_K">—</span>
-        </label>
-        <label class="rvfit-field">
-          <span data-i18n="rvfit.phase">Phase</span>
-          <input type="range" id="rvFit_phase" />
-          <span class="rvfit-value" id="rvFitValue_phase">—</span>
-        </label>
-        <label class="rvfit-field">
-          <span data-i18n="rvfit.gamma">Systemic velocity</span>
-          <input type="range" id="rvFit_gamma" />
-          <span class="rvfit-value" id="rvFitValue_gamma">—</span>
-        </label>
-      </div>
-
-      <p id="rvFitStats" class="rvfit-stats"></p>
-      <p id="rvFitStructure" class="rvfit-structure"></p>
-
-      <div class="pause-event-form">
-        <label class="pause-event-field">
-          <span data-i18n="rvfit.minPeriod">Search from</span>
-          <input type="number" id="rvFitMinPeriod" step="0.01" value="0.5" />
-        </label>
-        <label class="pause-event-field">
-          <span data-i18n="rvfit.maxPeriod">to</span>
-          <input type="number" id="rvFitMaxPeriod" step="0.1" value="20" />
-        </label>
-        <div class="pause-event-actions">
-          <button id="rvFitSnap" class="obs-panel-btn" type="button">
-            <span data-i18n="rvfit.snap">Best fit at this period</span>
-          </button>
-          <button id="rvFitSearch" class="obs-panel-btn" type="button">
-            <span data-i18n="rvfit.search">Search this range</span>
-          </button>
-        </div>
-      </div>
-
-      <canvas id="rvFitPeriodogram" class="rvfit-canvas"></canvas>
-      <p id="rvFitRivals" class="rvfit-rivals"></p>
-
-      <div class="pause-event-actions">
-        <button id="rvFitReveal" class="obs-panel-btn" type="button">
-          <span data-i18n="rvfit.reveal">Reveal simulation truth</span>
-        </button>
-        <!--
-          Saves the fit as it stands into the evidence notebook: the
-          parameters, the folded curve, and the conditions the recording was
-          made under. Whether the truth has been revealed travels with it.
-        -->
-        <button id="rvFitNotebook" class="obs-panel-btn" type="button">
-          <span data-i18n="nb.action.save">Save to notebook</span>
-        </button>
-      </div>
-      <p id="rvFitTruth" class="rvfit-truth" role="status"></p>
-
-      <!--
-        The optional uncertainty analysis. Everything inside is written by
-        js/rvWorkspacePanel.js from the report js/rvUncertainty.js returns: no
-        interval, no family and no assumption is spelled out here, so nothing
-        in this file can disagree with the analysis that produced it. Closed by
-        default because it is an extra step, not part of reading the fit.
-      -->
-      <details id="rvMcSection" class="rvfit-mc">
-        <summary data-i18n="rvfit.mc.title">
-          Uncertainty analysis (optional)
-        </summary>
-        <p class="obs-panel-hint" data-i18n="rvfit.mc.hint">
-          Simulates this observing run again and again — the same epochs, the
-          same stated uncertainties, a fresh noise draw each time — and refits
-          every one with the search you just ran.
-        </p>
-        <div class="rvfit-mc-controls">
-          <label class="rvfit-mc-field" for="rvMcTrials">
-            <span data-i18n="rvfit.mc.trials">Trials</span>
-            <input id="rvMcTrials" type="number" value="400" />
-          </label>
-          <label class="rvfit-mc-field" for="rvMcSeed">
-            <span data-i18n="rvfit.mc.seed">Noise seed</span>
-            <input id="rvMcSeed" type="text" value="mc-1" autocomplete="off" />
-          </label>
-          <button id="rvMcRun" class="obs-panel-btn" type="button">
-            <span data-i18n="rvfit.mc.run">Run analysis</span>
-          </button>
-          <button id="rvMcCancel" class="obs-panel-btn" type="button" hidden="">
-            <span data-i18n="rvfit.mc.cancel">Cancel</span>
-          </button>
-        </div>
-        <p class="rvfit-mc-seedhint" data-i18n="rvfit.mc.seedHint">
-          The same seed reproduces the same intervals exactly, and the export
-          carries it.
-        </p>
-        <p
-          id="rvMcStatus"
-          class="rvfit-mc-status"
-          role="status"
-          aria-live="polite"
-        ></p>
-        <div id="rvMcResult" class="rvfit-mc-result"></div>
-        <canvas id="rvMcPeriodHist" class="rvfit-canvas"></canvas>
-        <canvas id="rvMcAmplitudeHist" class="rvfit-canvas"></canvas>
-        <div id="rvMcAssumptions" class="rvfit-mc-assume"></div>
-        <div id="rvMcGuidance" class="rvfit-mc-guidance"></div>
-      </details>
-
-      <p class="obs-panel-hint" data-i18n="rvfit.hint">
-        A circular single-planet model: period, amplitude, phase and systemic
-        velocity, and nothing else. When it does not fit, the residuals will
-        show a shape rather than absorbing the problem into a parameter — which
-        is the reason for keeping the model this restrictive. The lowest point
-        on the periodogram is not an answer: on sparsely sampled data several
-        periods routinely fit equally well, and the ones that do are listed
-        beneath it.
-      </p>
-    </div>
-
-    <!-- 🛰 Gravity assist -->
-    <div
-      id="assistContainer"
-      class="obs-panel assist-container"
-      style="display: none"
-      role="region"
-      aria-labelledby="assistTitle"
-    >
-      <div class="obs-panel-toolbar">
-        <div class="obs-panel-meta">
-          <span class="obs-panel-title" id="assistTitle">Gravity Assist</span>
-          <span id="assistStatus" class="obs-panel-status">Not started</span>
-        </div>
-        <div class="obs-panel-actions">
-          <button
-            id="assistClose"
-            class="obs-panel-btn"
-            title="Hide the gravity assist panel"
-            data-i18n-title="assist.close.hint"
-          >
-            ✕
-          </button>
-        </div>
-      </div>
-
-      <div class="pause-event-form">
-        <label class="pause-event-field">
-          <span data-i18n="assist.impact"
-            >Impact parameter (+ behind, − ahead)</span
-          >
-          <input type="number" id="assistImpact" step="1" />
-        </label>
-        <div class="pause-event-actions">
-          <button id="assistRun" class="obs-panel-btn" type="button">
-            <span data-i18n="assist.run">Fly it</span>
-          </button>
-          <button id="assistFlip" class="obs-panel-btn" type="button">
-            <span data-i18n="assist.flip">Other side</span>
-          </button>
-          <button
-            id="assistPlanetFrame"
-            class="obs-panel-btn"
-            type="button"
-            aria-pressed="false"
-          >
-            <span data-i18n="assist.planetFrame">Planet's frame</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="pause-event-readout">
-        <div class="rv-readout-cell">
-          <span class="rv-readout-label" data-i18n="assist.side">Passed</span>
-          <span id="assistSide" class="rv-readout-value">—</span>
-        </div>
-        <div class="rv-readout-cell">
-          <span class="rv-readout-label" data-i18n="assist.closest"
-            >Closest approach</span
-          >
-          <span id="assistClosest" class="rv-readout-value numeric">—</span>
-        </div>
-        <div class="rv-readout-cell">
-          <span class="rv-readout-label" data-i18n="assist.deflection"
-            >Turned by</span
-          >
-          <span id="assistDeflection" class="rv-readout-value numeric">—</span>
-        </div>
-      </div>
-
-      <!-- The two columns are the explanation. Same encounter, same instants,
-           two answers, side by side rather than one after the other. -->
-      <div class="assist-frames">
-        <div class="assist-frame">
-          <h4 class="assist-frame-title" data-i18n="assist.frame.planet">
-            Relative to the planet
-          </h4>
-          <div class="rv-readout-cell">
-            <span class="rv-readout-label" data-i18n="assist.before"
-              >Before</span
-            >
-            <span id="assistRelBefore" class="rv-readout-value numeric">—</span>
-          </div>
-          <div class="rv-readout-cell">
-            <span class="rv-readout-label" data-i18n="assist.after">After</span>
-            <span id="assistRelAfter" class="rv-readout-value numeric">—</span>
-          </div>
-          <div class="rv-readout-cell">
-            <span class="rv-readout-label" data-i18n="assist.change"
-              >Change</span
-            >
-            <span id="assistRelChange" class="rv-readout-value numeric">—</span>
-          </div>
-        </div>
-        <div class="assist-frame">
-          <h4 class="assist-frame-title" data-i18n="assist.frame.inertial">
-            Relative to everything else
-          </h4>
-          <div class="rv-readout-cell">
-            <span class="rv-readout-label" data-i18n="assist.before"
-              >Before</span
-            >
-            <span id="assistInertBefore" class="rv-readout-value numeric"
-              >—</span
-            >
-          </div>
-          <div class="rv-readout-cell">
-            <span class="rv-readout-label" data-i18n="assist.after">After</span>
-            <span id="assistInertAfter" class="rv-readout-value numeric"
-              >—</span
-            >
-          </div>
-          <div class="rv-readout-cell">
-            <span class="rv-readout-label" data-i18n="assist.change"
-              >Change</span
-            >
-            <span id="assistInertChange" class="rv-readout-value numeric"
-              >—</span
-            >
-          </div>
-        </div>
-      </div>
-
-      <div class="pause-event-readout">
-        <div class="rv-readout-cell">
-          <span class="rv-readout-label" data-i18n="assist.recoil"
-            >What it cost the planet</span
-          >
-          <span id="assistRecoil" class="rv-readout-value numeric">—</span>
-        </div>
-      </div>
-
-      <p id="assistLedger" class="assist-ledger" role="status"></p>
-      <p id="assistCaveat" class="assist-caveat"></p>
-
-      <!-- Both passes, kept. Collapsed, because the lesson wants one flyby
-           flown and read by hand first: this exists to replace the part where
-           a student had to remember four numbers while the panel showed four
-           others, not the part where they learn to read the panel. -->
-      <details id="assistCompareSection" class="assist-experiment" hidden="">
-        <summary data-i18n="assist.ab.title">
-          Both sides, kept side by side
-        </summary>
-        <p class="obs-panel-hint" data-i18n="assist.ab.hint">
-          The same encounter twice, at +40 and −40, rebuilt from the same
-          baseline each time so that the sign of the impact parameter is the
-          only difference between them.
-        </p>
-        <div class="pause-event-actions">
-          <button
-            id="assistCompareRun"
-            class="obs-panel-btn"
-            type="button"
-            data-i18n="assist.ab.run"
-          >
-            Run both passes
-          </button>
-          <button
-            id="assistCompareCancel"
-            class="obs-panel-btn"
-            type="button"
-            hidden=""
-            data-i18n="assist.exp.cancel"
-          >
-            Stop
-          </button>
-          <button
-            id="assistCompareKeep"
-            class="obs-panel-btn"
-            type="button"
-            disabled=""
-            data-i18n="assist.exp.keep"
-          >
-            Keep in the notebook
-          </button>
-        </div>
-        <p id="assistCompareStatus" class="obs-panel-hint" role="status"></p>
-        <div id="assistCompareTable"></div>
-        <p id="assistCompareCaveat" class="obs-panel-hint"></p>
-      </details>
-
-      <!-- The optional sweep. One side of the planet, five distances. -->
-      <details id="assistSweepSection" class="assist-experiment" hidden="">
-        <summary data-i18n="assist.sweep.title">
-          Optional: sweep how close it passes
-        </summary>
-        <p class="obs-panel-hint" data-i18n="assist.sweep.hint">
-          Five passes on the gaining side, from 20 to 90, with the approach
-          speed and everything else held. All five clear the planet by at least
-          three of its radii.
-        </p>
-        <div class="pause-event-actions">
-          <button
-            id="assistSweepRun"
-            class="obs-panel-btn"
-            type="button"
-            data-i18n="assist.sweep.run"
-          >
-            Run the sweep
-          </button>
-          <button
-            id="assistSweepCancel"
-            class="obs-panel-btn"
-            type="button"
-            hidden=""
-            data-i18n="assist.exp.cancel"
-          >
-            Stop
-          </button>
-          <button
-            id="assistSweepKeep"
-            class="obs-panel-btn"
-            type="button"
-            disabled=""
-            data-i18n="assist.exp.keep"
-          >
-            Keep in the notebook
-          </button>
-        </div>
-        <p id="assistSweepStatus" class="obs-panel-hint" role="status"></p>
-        <div id="assistSweepTable"></div>
-        <canvas id="assistSweepPlot" width="380" height="170"></canvas>
-        <p id="assistSweepCaveat" class="obs-panel-hint"></p>
-      </details>
-
-      <p class="obs-panel-hint" data-i18n="assist.hint">
-        The two columns describe the same encounter at the same two moments. The
-        left one cannot change, because the planet does no work on the
-        spacecraft in the planet's own frame. The right one changes because a
-        vector of fixed length has been rotated and then added to the planet's
-        velocity. Nothing is created: the planet is slowed by exactly the
-        momentum the spacecraft gains.
-      </p>
-    </div>
+    <template data-host="assist"></template>
 
     <!-- 🪐 Binary planet run -->
     <div
@@ -1655,7 +1132,7 @@
       </div>
       <div id="lightCurveObserverControls" class="obs-controls"></div>
       <div class="light-curve-stage">
-        <canvas id="lightCurveCanvas"></canvas>
+        <div id="lightCurveChart" class="plot-host"></div>
       </div>
       <div class="light-curve-hint">
         Drag the observer handle on the simulation or use the slider above
@@ -1726,7 +1203,6 @@
         id="welcomeDialog"
         class="welcome-dialog"
         role="dialog"
-        aria-modal="true"
         aria-labelledby="welcomeTitle"
         tabindex="-1"
       >
@@ -1744,6 +1220,7 @@
         <div id="welcomeBody" class="welcome-body"></div>
       </div>
     </div>
+    <template data-host="home"></template>
 
     <!--
       The live readout. A header row that says what the simulation is doing and
@@ -1789,7 +1266,10 @@
             data-i18n-aria-label="sound.button.label"
             aria-label="Sound settings"
           >
-            <span class="readout-icon-glyph" aria-hidden="true">🔇</span>
+            <span
+              class="readout-icon-glyph icon icon-sound-off"
+              aria-hidden="true"
+            ></span>
           </button>
           <button
             id="overlayMinimize"
@@ -1921,11 +1401,11 @@
           <button
             id="investigationsBtn"
             class="ui-button"
-            title="Guided lessons that walk you through a concept step by step, with questions and an optional lab report you can submit"
+            title="Guided investigations that walk you through a concept step by step, with questions and an optional lab report you can submit"
             data-i18n-title="rail.investigations.hint"
-            data-i18n="rail.investigations"
           >
-            🎓 Investigations
+            <span class="icon icon-cap" aria-hidden="true"></span>
+            <span data-i18n="rail.investigations">Investigations</span>
           </button>
           <button
             id="settingsBtn"
@@ -1962,6 +1442,18 @@
             data-i18n="rail.cleanSim"
           >
             Blank Simulation
+          </button>
+          <!-- js/systemBuilder.js mounts its own dialog. -->
+          <button
+            id="systemBuilderBtn"
+            class="ui-button"
+            type="button"
+            aria-haspopup="dialog"
+            title="Build a whole system from orbital elements, with its center of mass at rest"
+            data-i18n-title="rail.systemBuilder.hint"
+            data-i18n="rail.systemBuilder"
+          >
+            Orbital System Builder
           </button>
         </div>
       </div>
@@ -2016,20 +1508,20 @@
           <button
             id="shareBtn"
             class="ui-button"
-            title="Create a link that reopens this exact simulation: hand it out as an assignment, or send back what you built (K)"
+            title="Create a link that reopens this exact simulation: hand it out as an activity, or send back what you built (K)"
             data-i18n-title="rail.share.hint"
-            data-i18n="rail.share"
           >
-            🔗 Share Link
+            <span class="icon icon-link" aria-hidden="true"></span>
+            <span data-i18n="rail.share">Share Link</span>
           </button>
           <button
             id="exportDataBtn"
             class="ui-button"
             title="Download the recorded simulation as CSV: positions, velocities and energies over time, and the light curve if it is running. Open them in Excel, or in the companion Python notebook (E)"
             data-i18n-title="rail.exportData.hint"
-            data-i18n="rail.exportData"
           >
-            📊 Export Data
+            <span class="icon icon-chart" aria-hidden="true"></span>
+            <span data-i18n="rail.exportData">Export Data</span>
           </button>
         </div>
       </div>
@@ -2073,9 +1565,9 @@
               aria-pressed="false"
               title="Lay a ruler across the scene. Drag either end onto whatever you want the distance between; the reading is given in AU and in kilometers, and it is anchored to the world, so panning and zooming move the ruler with the things it is measuring rather than changing what it says."
               data-i18n-title="rail.toggleRuler.hint"
-              data-i18n="rail.toggleRuler"
             >
-              📏 Ruler
+              <span class="icon icon-ruler" aria-hidden="true"></span>
+              <span data-i18n="rail.toggleRuler">Ruler</span>
             </button>
             <button
               id="toggleProtractor"
@@ -2083,9 +1575,9 @@
               aria-pressed="false"
               title="Measure an angle. Drag the middle handle onto the corner and the two outer handles along the directions you want the angle between - a velocity and a line to the star, say, which on an eccentric orbit is ninety degrees only at periapsis and apoapsis."
               data-i18n-title="rail.toggleProtractor.hint"
-              data-i18n="rail.toggleProtractor"
             >
-              📐 Protractor
+              <span class="icon icon-angle" aria-hidden="true"></span>
+              <span data-i18n="rail.toggleProtractor">Protractor</span>
             </button>
             <button
               id="toggleStopwatch"
@@ -2093,9 +1585,9 @@
               aria-pressed="false"
               title="Time things in simulated time, so pausing pauses the clock and the simulation speed does not change what you measure. With a body selected you can latch it to that body's periapsis passages and read its period off directly."
               data-i18n-title="rail.toggleStopwatch.hint"
-              data-i18n="rail.toggleStopwatch"
             >
-              ⏱ Stopwatch
+              <span class="icon icon-stopwatch" aria-hidden="true"></span>
+              <span data-i18n="rail.toggleStopwatch">Stopwatch</span>
             </button>
           </div>
           <div id="stopwatchControls" class="measure-tools" hidden="">
@@ -2104,9 +1596,9 @@
               class="ui-button secondary measure-btn"
               title="Start timing from now"
               data-i18n-title="rail.stopwatchMark.hint"
-              data-i18n="rail.stopwatchMark"
             >
-              ⚑ Mark
+              <span class="icon icon-flag" aria-hidden="true"></span>
+              <span data-i18n="rail.stopwatchMark">Mark</span>
             </button>
             <button
               id="stopwatchStop"
@@ -2286,9 +1778,9 @@
               aria-label="Decrease speed"
               data-i18n-title="rail.slowDown.hint"
               data-i18n-aria-label="rail.slowDown.label"
-              data-i18n="rail.slowDown"
             >
-              ⏪ Slow
+              <span class="icon icon-rewind" aria-hidden="true"></span>
+              <span data-i18n="rail.slowDown">Slow</span>
             </button>
             <span id="speedDisplay" class="speed-display">1.0x</span>
             <button
@@ -2298,9 +1790,9 @@
               aria-label="Increase speed"
               data-i18n-title="rail.speedUp.hint"
               data-i18n-aria-label="rail.speedUp.label"
-              data-i18n="rail.speedUp"
             >
-              Fast ⏩
+              <span data-i18n="rail.speedUp">Fast</span>
+              <span class="icon icon-fast-forward" aria-hidden="true"></span>
             </button>
           </div>
 
@@ -2317,29 +1809,29 @@
               class="ui-button"
               title="Take a screenshot (or press P). The scale bar, the elapsed simulated time and any measurement tools you have out are drawn on the canvas itself, so the image documents its own scale and its own clock."
               data-i18n-title="rail.screenshot.hint"
-              data-i18n="rail.screenshot"
             >
-              📸 Screenshot
+              <span class="icon icon-camera" aria-hidden="true"></span>
+              <span data-i18n="rail.screenshot">Screenshot</span>
             </button>
             <button
               id="recordBtn"
               class="ui-button"
               title="Record a clip of the simulation as it runs: an MP4 where the browser can encode one, a WebM where it cannot. The scenario name, the scale bar and the simulated clock are burned into every frame, so the clip documents itself in a slide. Recording stops itself at 3 minutes or 80 MB, whichever comes first."
               data-i18n-title="rail.record.hint"
-              data-i18n="rail.record"
               aria-pressed="false"
             >
-              🎬 Record Clip
+              <span class="icon icon-video" aria-hidden="true"></span>
+              <span data-i18n="rail.record">Record Clip</span>
             </button>
           </div>
           <button
             id="lectureBtn"
             class="ui-button"
             data-i18n-title="lecture.action.enter.hint"
-            data-i18n="lecture.action.enter"
             title="Fill the screen for projection: larger type and controls, the Daylight theme, a spotlight pointer, and arrow keys to step through a prepared sequence of links. Escape leaves."
           >
-            🎦 Lecture Mode
+            <span class="icon icon-present" aria-hidden="true"></span>
+            <span data-i18n="lecture.action.enter">Lecture Mode</span>
           </button>
           <div class="rail-grid">
             <button
@@ -2364,70 +1856,6 @@
         </div>
       </div>
 
-      <!--
-        Where Gravitas explains itself. Deliberately text links rather than
-        buttons: these are navigation away from the simulation, not controls
-        for it, and a fifth block of full-width buttons would compete with the
-        ones that actually do something.
-      -->
-      <div class="rail-group rail-group-learn">
-        <button
-          type="button"
-          class="rail-label rail-section-toggle"
-          id="railLearn"
-          aria-expanded="true"
-          aria-controls="railLearnBody"
-          title="Show or hide the learn controls"
-          data-i18n-title="rail.railLearn.hint"
-        >
-          <span data-i18n="rail.railLearn">Learn</span>
-          <span class="rail-chevron" aria-hidden="true"></span>
-        </button>
-        <div
-          id="railLearnBody"
-          class="rail-links rail-section"
-          role="group"
-          aria-labelledby="railLearn"
-        >
-          <button
-            type="button"
-            id="aboutGravitasBtn"
-            class="rail-link"
-            title="What Gravitas is, what you can do here, and where to start"
-            data-i18n-title="rail.aboutGravitas.hint"
-            data-i18n="rail.aboutGravitas"
-          >
-            About Gravitas
-          </button>
-          <a
-            class="rail-link"
-            href="/model/"
-            title="How Gravitas models the universe: what the simulation calculates, approximates and visualizes"
-            data-i18n-title="rail.railLearnBody.hint"
-            data-i18n="rail.railLearnBody"
-            >How the model works</a
-          >
-          <a
-            class="rail-link"
-            href="/instructors/"
-            title="Teaching guides, answer keys and a curriculum map for instructors"
-            data-i18n-title="rail.railLearnBody.hint.2"
-            data-i18n="rail.railLearnBody.2"
-            >Instructor resources</a
-          >
-          <a
-            class="rail-link"
-            href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/Gravitas_User_Manual.pdf"
-            target="_blank"
-            rel="noopener"
-            title="Open the Gravitas user manual (PDF)"
-            data-i18n-title="rail.railLearnBody.hint.3"
-            data-i18n="rail.railLearnBody.3"
-            >User manual (PDF)</a
-          >
-        </div>
-      </div>
-
       <div class="object-add" id="objectAdd">
         <button
           id="objectTypeBtn"
@@ -2440,7 +1868,8 @@
           data-i18n-title="rail.objectType.hint"
           data-i18n-aria-label="rail.objectType.label"
         >
-          ⭐ Add object
+          <span class="icon icon-star" aria-hidden="true"></span>
+          <span>Add object</span>
         </button>
         <div
           id="objectTypePicker"
@@ -2449,75 +1878,29 @@
           aria-labelledby="objectTypeBtn"
           hidden
         ></div>
+        <!--
+          The keyboard path to the same thing. Placing by pointer gives a
+          position and a velocity at once and a mass not at all; this asks for
+          all three as numbers and hands them to the same placeBody().
+        -->
+        <button
+          id="precisePlaceBtn"
+          class="ui-button rail-icon-btn"
+          type="button"
+          aria-haspopup="dialog"
+          data-i18n-aria-label="rail.precisePlace"
+          data-i18n-title="rail.precisePlace.hint"
+          aria-label="Precise placement"
+          title="Type a position, a velocity and a mass instead of clicking"
+        >
+          <span aria-hidden="true">123</span>
+        </button>
       </div>
     </div>
 
-    <!--
-      The sound panel. Moved to <body> at start-up and positioned from the
-      speaker button, for the same reason the object picker is: the readout is
-      an overflow container and clips its absolutely positioned descendants.
-    -->
-    <div
-      id="soundPanel"
-      class="sound-panel"
-      role="dialog"
-      aria-modal="false"
-      aria-labelledby="soundPanelTitle"
-      hidden
-    >
-      <h2 id="soundPanelTitle" class="sound-panel-title"></h2>
-      <p id="soundPanelState" class="sound-panel-state" aria-live="polite"></p>
-      <button
-        id="soundPanelToggle"
-        type="button"
-        class="sound-panel-switch"
-        aria-pressed="false"
-      ></button>
-      <p id="soundPanelPermission" class="sound-panel-note"></p>
-      <dl class="sound-panel-rows">
-        <div class="sound-panel-row">
-          <dt id="soundPanelModeLabel"></dt>
-          <dd id="soundPanelMode"></dd>
-        </div>
-        <div class="sound-panel-row">
-          <dt id="soundPanelNowLabel"></dt>
-          <dd id="soundPanelNow"></dd>
-        </div>
-      </dl>
-      <label class="sound-panel-volume" for="soundPanelVolume">
-        <span id="soundPanelVolumeLabel"></span>
-        <input
-          id="soundPanelVolume"
-          type="range"
-          min="0"
-          max="1"
-          step="0.05"
-          value="0.65"
-        />
-        <output id="soundPanelVolumeOut">65%</output>
-      </label>
-      <div class="sound-panel-actions">
-        <button
-          id="soundPanelPreview"
-          type="button"
-          class="sound-panel-btn"
-        ></button>
-        <button
-          id="soundPanelStop"
-          type="button"
-          class="sound-panel-btn"
-        ></button>
-      </div>
-      <p id="soundPanelPreviewNote" class="sound-panel-note"></p>
-      <p class="sound-panel-link">
-        <!--
-          The href is set from js/ui.js along with the label. A static
-          "#investigation=..." here is a route rather than an anchor, and
-          tools/check-links.mjs is right to say that no element has that id.
-        -->
-        <a id="soundPanelLesson"></a>
-      </p>
-    </div>
+    <template data-host="precise-placement"></template>
+
+    <template data-host="sound"></template>
 
     <!--
       Placement status. Shown only while placement is armed, and never over the
@@ -2564,7 +1947,7 @@
         data-i18n-title="transport.timelinePlay.hint"
         data-i18n-aria-label="transport.timelinePlay.label"
       >
-        ❚❚
+        <span class="icon icon-pause" aria-hidden="true"></span>
       </button>
       <button
         id="timelineStepBack"
@@ -2574,7 +1957,7 @@
         data-i18n-title="transport.timelineStepBack.hint"
         data-i18n-aria-label="transport.timelineStepBack.label"
       >
-        ⏮
+        <span class="icon icon-step-back" aria-hidden="true"></span>
       </button>
       <button
         id="timelineStepFwd"
@@ -2584,7 +1967,20 @@
         data-i18n-title="transport.timelineStepFwd.hint"
         data-i18n-aria-label="transport.timelineStepFwd.label"
       >
-        ⏭
+        <span class="icon icon-step-fwd" aria-hidden="true"></span>
+      </button>
+      <!-- Only in a gravitas-embed/1 figure (js/embed.js): back to what the
+           figure's author made, or to its scenario, as its URL says. -->
+      <button
+        id="embedReset"
+        class="timeline-btn"
+        hidden
+        aria-label="Reset the figure"
+        title="Reset the figure"
+        data-i18n-title="embed.action.reset.hint"
+        data-i18n-aria-label="embed.action.reset"
+      >
+        ↺
       </button>
 
       <!-- The scrubber and anything drawn over its track share a positioning
@@ -2644,97 +2040,7 @@
       <span class="hamburger"></span>
     </button>
 
-    <!--
-      Scenario gallery. Cards, concept chips, counts and the result line are all
-      written by js/scenarioBrowser.js from the catalog in
-      js/data/scenarioInfo.js: no scenario title, summary, tag or count is
-      spelled out here, so nothing in this file can go stale.
-    -->
-    <div id="scenarioListModal" class="hidden">
-      <div
-        id="scenarioListContent"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="scenarioBrowserTitle"
-      >
-        <div class="sc-head">
-          <div class="sc-head-text">
-            <h3
-              id="scenarioBrowserTitle"
-              data-i18n="gallery.scenarioBrowserTitle"
-            >
-              Explore scenarios
-            </h3>
-            <p id="scenarioBrowserSubtitle" class="sc-subtitle"></p>
-          </div>
-          <button
-            id="closeScenarioList"
-            class="ui-button"
-            title="Close the scenario gallery"
-            data-i18n-title="gallery.closeScenarioList.hint"
-          >
-            ×
-          </button>
-        </div>
-        <button
-          class="floating-close-chip"
-          id="scenarioListCloseChip"
-          aria-label="Close"
-          title="Close the scenario gallery"
-          data-i18n-title="gallery.scenarioListCloseChip.hint"
-          data-i18n-aria-label="gallery.scenarioListCloseChip.label"
-        >
-          ✕
-        </button>
-
-        <div class="scenario-search-wrap">
-          <span class="scenario-search-icon" aria-hidden="true">⌕</span>
-          <input
-            type="search"
-            id="scenarioSearch"
-            placeholder="Search scenarios, objects, or concepts…"
-            autocomplete="off"
-            aria-label="Search scenarios"
-            title='Filter by name, description or concept. Try "neutron", "merger", "tides" or "kepler". Enter loads the first result.'
-            data-i18n-title="gallery.scenarioSearch.hint"
-            data-i18n-aria-label="gallery.scenarioSearch.label"
-            data-i18n-placeholder="gallery.scenarioSearch.placeholder"
-          />
-        </div>
-
-        <div class="sc-concepts">
-          <p
-            class="sc-concepts-label"
-            id="scenarioConceptsLabel"
-            data-i18n="gallery.scenarioConceptsLabel"
-          >
-            Browse by concept
-          </p>
-          <div
-            id="scenarioTagChips"
-            class="sc-chips"
-            role="group"
-            aria-labelledby="scenarioConceptsLabel"
-          ></div>
-          <p id="scenarioConceptNote" class="sc-concept-note" hidden=""></p>
-        </div>
-
-        <p
-          id="scenarioResultCount"
-          class="sc-count"
-          role="status"
-          aria-live="polite"
-        ></p>
-
-        <div id="scenarioListScroll" class="sc-scroll">
-          <div id="scenarioListItems" class="sc-grid"></div>
-          <p id="scenarioSearchEmpty" class="scenario-search-empty" hidden="">
-            No scenarios match that search. Try a different word, or choose
-            <strong data-i18n="gallery.scenarioSearchEmpty">All</strong> above.
-          </p>
-        </div>
-      </div>
-    </div>
+    <template data-host="scenario-list"></template>
 
     <!--
       Investigations: the lesson browser. A sibling of the scenario gallery
@@ -2747,7 +2053,7 @@
       lessons themselves are a file each in that directory, and only the one a
       student opens is fetched.
     -->
-    <div id="investigationBrowser" class="hidden">
+    <div id="investigationBrowser" class="hidden" hidden inert>
       <div
         id="investigationBrowserContent"
         role="dialog"
@@ -2758,7 +2064,7 @@
           <div>
             <h3 id="investigationBrowserTitle">Investigations</h3>
             <p class="inv-browser-sub">
-              Guided lessons you work through beside the simulation, each one a
+              Guided investigations you work through beside the simulation, each one a
               sitting's worth of measuring and writing down. Progress saves as
               you go, and finishing one gets you a lab report with your answers.
             </p>
@@ -2766,6 +2072,12 @@
               <a href="/model/">About the physics model</a>
               <span aria-hidden="true">·</span>
               <a href="/instructors/">Instructor resources</a>
+              <span aria-hidden="true">·</span>
+              <!-- Both languages, as the shell's labels: LIBRARY.md -->
+              <a href="/library/" id="investigationBrowserLibrary"
+                ><span class="gs-en">Everything in the Library</span
+                ><span class="gs-es" lang="es">Todo en la Biblioteca</span></a
+              >
             </p>
             <!--
               The other door into the same content. These are the complete
@@ -2834,7 +2146,7 @@
         <div class="inv-browser-tools">
           <div class="inv-search">
             <label class="visually-hidden" for="investigationSearch"
-              >Search lessons</label
+              >Search investigations</label
             >
             <input
               id="investigationSearch"
@@ -2896,7 +2208,7 @@
               Ways through
             </h4>
             <p class="inv-seq-intro" data-i18n="inv.seq.intro">
-              Lessons stand alone, but some build on each other. These are
+              Investigations stand alone, but some build on each other. These are
               orders that work, with what each one assumes you have already
               done.
             </p>
@@ -2908,7 +2220,7 @@
             data-i18n="inv.seq.all"
             hidden=""
           >
-            Every lesson
+            Every investigation
           </h4>
           <div id="investigationList" class="inv-grid"></div>
           <p id="investigationEmpty" class="inv-empty" hidden="" role="status">
@@ -2924,451 +2236,13 @@
       </div>
     </div>
 
-    <!-- Investigations: the working panel -->
-    <aside
-      id="investigationPanel"
-      class="investigation-panel"
-      hidden=""
-      aria-label="Investigation"
-    >
-      <header class="inv-header">
-        <div class="inv-header-text">
-          <!-- tabindex="-1" so choosing a lesson can move focus in here
-               rather than leaving it on the card the browser just destroyed. -->
-          <h2 id="investigationTitle" tabindex="-1">Investigation</h2>
-          <p id="investigationSubtitle"></p>
-        </div>
-        <button
-          id="investigationClose"
-          class="ui-button"
-          title="Close this lesson. Your progress is saved."
-        >
-          ×
-        </button>
-      </header>
+    <template data-host="lesson"></template>
 
-      <div class="inv-progress">
-        <div
-          class="inv-progress-track"
-          role="progressbar"
-          aria-label="Lesson progress"
-        >
-          <div id="investigationProgressBar"></div>
-        </div>
-        <span id="investigationProgressText"></span>
-        <button
-          id="investigationResetScenario"
-          class="inv-reset-scenario"
-          title="Put this step's system back the way it started. Useful once objects have drifted, merged or left the view."
-          aria-label="Reset the scenario for this step"
-        >
-          ↺
-        </button>
-      </div>
+    <template data-host="export"></template>
 
-      <!-- Authoring preview only: hidden unless ?author= put the panel in it.
-           See js/authoring/preview.js. -->
-      <div id="investigationAuthorBar" class="inv-author-bar" hidden="">
-        <div class="inv-author-jump">
-          <span class="inv-author-badge">AUTHORING</span>
-          <label for="investigationAuthorStep">Step</label>
-          <input
-            id="investigationAuthorStep"
-            type="number"
-            min="1"
-            step="1"
-            aria-label="Jump to step"
-          />
-          <span id="investigationAuthorOf"></span>
-          <button
-            id="investigationAuthorPrev"
-            class="ui-button subtle"
-            title="Previous step"
-          >
-            ◀
-          </button>
-          <button
-            id="investigationAuthorNext"
-            class="ui-button subtle"
-            title="Next step"
-          >
-            ▶
-          </button>
-        </div>
-        <div id="investigationAuthorDiag" class="inv-author-diag"></div>
-      </div>
+    <template data-host="lesson-finish"></template>
 
-      <!-- tabindex="0" because this scrolls. A lesson step is often longer
-           than the panel, and a keyboard reader with no pointer had no way to
-           scroll it: the panel's own controls are above and below it, so Tab
-           went straight past the text. -->
-      <div
-        id="investigationBody"
-        class="inv-body"
-        tabindex="0"
-        role="region"
-        aria-label="Lesson step"
-        data-i18n-aria-label="inv.body.label"
-      ></div>
-
-      <div id="investigationProbeWrap" class="inv-probe-wrap" hidden="">
-        <p class="inv-probe-title" data-i18n="inv.probe.title">Live readout</p>
-        <div id="investigationProbe" class="inv-probe"></div>
-      </div>
-
-      <!-- The keyboard's way to do what a click on the canvas does. A step
-           that names objects gets a list of them here, in the same order the
-           canvas hit-testing walks, with the lesson's own word for each where
-           it has one. Direct manipulation had no keyboard equivalent at all
-           before this, which ACCESSIBILITY.md records as a known gap; this
-           closes it for the objects a lesson is actually about. -->
-      <div id="investigationObjectsWrap" class="inv-probe-wrap" hidden="">
-        <p class="inv-probe-title" data-i18n="inv.objects.title">
-          Objects in this activity
-        </p>
-        <div
-          id="investigationObjects"
-          class="inv-objects"
-          role="group"
-          data-i18n-aria-label="inv.objects.label"
-          aria-label="Objects in this activity"
-        ></div>
-        <!-- Camera and scale, for a step that stands objects on the canvas.
-             Both cameras act once, on request: a view that re-framed itself
-             every frame would take the scene back every time a reader looked
-             somewhere else. -->
-        <div id="investigationStageTools" class="inv-objects" hidden="">
-          <button type="button" id="investigationFit" class="inv-stage-btn">
-            <span data-i18n="inv.stage.fit">Fit comparison</span>
-          </button>
-          <button type="button" id="investigationFollow" class="inv-stage-btn">
-            <span data-i18n="inv.stage.follow">Follow selected</span>
-          </button>
-          <button
-            type="button"
-            id="investigationScale"
-            class="inv-stage-btn"
-            aria-pressed="false"
-          >
-            <span data-i18n="inv.stage.scale">True scale</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Progress safety. The save status is a standing statement rather than
-           a toast: a storage failure needs a message that persists until it is
-           resolved, and a toast on every keystroke would be unusable. The two
-           buttons are recovery, not submission - the PDF report is still what
-           gets handed in. -->
-      <div class="inv-progress-safety">
-        <p
-          id="investigationSaveStatus"
-          class="inv-save-status"
-          role="status"
-          aria-live="off"
-          hidden=""
-        ></p>
-        <!-- What reading the saved progress had to say: a migration from the
-             pre-sid format, answers for steps that no longer exist, or a
-             payload a newer build wrote. All three mean an answer may not be
-             where the reader left it, so this stays on screen rather than
-             passing as a toast. -->
-        <p
-          id="investigationProgressNotice"
-          class="inv-progress-notice"
-          role="status"
-          aria-live="polite"
-          hidden=""
-        ></p>
-        <div class="inv-backup-actions">
-          <button
-            id="investigationBackupDownload"
-            class="ui-button subtle"
-            title="Save a copy of your answers to a file you keep"
-            data-i18n-title="inv.backup.download.hint"
-            data-i18n="inv.backup.download"
-          >
-            Download progress backup
-          </button>
-          <button
-            id="investigationBackupRestore"
-            class="ui-button subtle"
-            title="Load answers back from a file you saved earlier"
-            data-i18n-title="inv.backup.restore.hint"
-            data-i18n="inv.backup.restore"
-          >
-            Restore progress backup
-          </button>
-          <input
-            id="investigationBackupFile"
-            type="file"
-            accept="application/json,.json"
-            hidden=""
-          />
-        </div>
-      </div>
-
-      <footer class="inv-footer">
-        <button
-          id="investigationReset"
-          class="ui-button subtle"
-          title="Clear every answer and start this lesson again"
-          data-i18n-title="inv.action.restart.hint"
-          data-i18n="inv.action.restart"
-        >
-          Restart
-        </button>
-        <div class="inv-footer-nav">
-          <button
-            id="investigationPrev"
-            class="ui-button"
-            title="Previous step (Shift + Left arrow)"
-            data-i18n-title="inv.action.back.hint"
-            data-i18n="inv.action.back"
-          >
-            Back
-          </button>
-          <button
-            id="investigationNext"
-            class="ui-button primary"
-            title="Next step (Shift + Right arrow)"
-          >
-            Next
-          </button>
-        </div>
-      </footer>
-    </aside>
-
-    <!-- Investigations: the measurement plot, docked beside the lesson -->
-    <aside
-      id="investigationPlot"
-      class="inv-plot-panel"
-      hidden=""
-      aria-label="Measurement plot"
-    >
-      <header class="inv-plot-panel-head">
-        <span id="investigationPlotTitle" class="inv-plot-title"
-          >Your measurements</span
-        >
-        <div class="inv-plot-actions">
-          <button
-            type="button"
-            id="investigationPlotLog"
-            class="inv-plot-toggle"
-            aria-pressed="false"
-            title="Plot both axes logarithmically. On a log-log plot a power law is a straight line whatever its exponent, and the inner planets stop being squashed into the corner."
-          >
-            Log axes
-          </button>
-          <button
-            type="button"
-            id="investigationPlotToggle"
-            class="inv-plot-toggle"
-            aria-pressed="false"
-          ></button>
-        </div>
-      </header>
-      <canvas
-        id="investigationPlotCanvas"
-        role="img"
-        aria-describedby="investigationPlotTableWrap"
-      ></canvas>
-      <p id="investigationPlotNote" class="inv-plot-note"></p>
-      <!-- The plot as numbers. A scatter of points is a picture of a
-           relationship, and the position of a dot is not available to a reader
-           using a screen reader, or to one who cannot separate two colors.
-           Every point the canvas draws is in this table, in the order the
-           student recorded them. Kept in step by js/investigations.js. -->
-      <div
-        id="investigationPlotTableWrap"
-        class="inv-plot-table-wrap"
-        hidden=""
-      >
-        <table id="investigationPlotTable" class="inv-plot-table"></table>
-      </div>
-    </aside>
-
-    <!-- Investigations: the ellipse explorer, in its own panel -->
-    <aside
-      id="investigationEllipse"
-      class="inv-plot-panel"
-      hidden=""
-      aria-label="Ellipse explorer"
-    >
-      <header class="inv-plot-panel-head">
-        <span class="inv-plot-title">Anatomy of an ellipse</span>
-      </header>
-      <canvas id="investigationEllipseCanvas"></canvas>
-      <div class="inv-ellipse-key">
-        <span class="k-a">a: semi-major axis, the orbit's size</span>
-        <span class="k-c">c = a×e: focus offset from center</span>
-        <span class="k-b">b: semi-minor axis</span>
-        <span class="k-star">focus holding the star</span>
-        <span class="k-empty">the empty focus</span>
-      </div>
-      <label class="inv-ecc-row" for="investigationEcc">
-        <span>Eccentricity</span>
-        <input
-          type="range"
-          id="investigationEcc"
-          min="0"
-          max="0.98"
-          step="0.001"
-          value="0.017"
-        />
-        <output id="investigationEccOut">0.017</output>
-      </label>
-      <div id="investigationPresets" class="inv-presets"></div>
-      <p id="investigationPresetNote" class="inv-preset-note"></p>
-    </aside>
-
-    <!-- Investigations: the interactive instrument for the current step -->
-    <aside
-      id="investigationTool"
-      class="inv-plot-panel inv-tool-panel"
-      hidden=""
-      aria-label="Interactive tool"
-    >
-      <header class="inv-plot-panel-head">
-        <span id="investigationToolTitle" class="inv-plot-title"></span>
-      </header>
-      <canvas
-        id="investigationToolCanvas"
-        role="img"
-        aria-describedby="investigationToolReadout"
-      ></canvas>
-      <p id="investigationToolNote" class="inv-plot-note"></p>
-      <!-- A description list rather than rows of divs: every number this
-           instrument computes is a labeled value, and a screen reader should
-           hear which label goes with which number rather than an undifferentiated
-           run of text. This is also the canvas's text equivalent, which is why
-           the canvas points at it. -->
-      <dl id="investigationToolReadout" class="inv-tool-readout"></dl>
-      <div id="investigationToolControls" class="inv-tool-controls"></div>
-      <div
-        id="investigationToolActions"
-        class="inv-tool-actions"
-        hidden=""
-      ></div>
-      <div id="investigationToolPresets" class="inv-presets"></div>
-      <p id="investigationToolPresetNote" class="inv-preset-note"></p>
-    </aside>
-
-    <!-- Data export -->
-    <div id="dataExport" class="hidden">
-      <div
-        id="dataExportContent"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="dataExportTitle"
-      >
-        <div class="inv-finish-header">
-          <h3 id="dataExportTitle" data-i18n="export.dataExportTitle">
-            Export data
-          </h3>
-          <button
-            id="dataExportClose"
-            class="ui-button"
-            title="Close"
-            data-i18n-title="export.dataExportClose.hint"
-          >
-            ×
-          </button>
-        </div>
-        <p class="export-intro" data-i18n="export.dataExportContent">
-          Everything the simulation has recorded, as CSV. Open it in a
-          spreadsheet, or read it straight into pandas.
-        </p>
-
-        <fieldset class="export-scope" id="dataExportScope">
-          <legend data-i18n="export.dataExportScope">Which objects</legend>
-          <label>
-            <input type="radio" name="exportScope" value="selected" />
-            <span
-              id="dataExportSelectedLabel"
-              data-i18n="export.dataExportSelectedLabel"
-              >Selected object only</span
-            >
-          </label>
-          <label>
-            <input type="radio" name="exportScope" value="all" checked="" />
-            <span data-i18n="export.dataExportScope.2">Every object</span>
-          </label>
-        </fieldset>
-
-        <div class="export-files" id="dataExportFiles"></div>
-
-        <p class="export-fineprint" data-i18n="export.dataExportContent.2">
-          Columns carry their units in the name: distances in AU, times in days,
-          speeds in km/s, energies in joules. Positions are recorded ten times a
-          second of real time, and the history holds the last several hundred
-          frames.
-        </p>
-        <p class="export-fineprint">
-          <a
-            id="dataExportNotebook"
-            href="https://colab.research.google.com/github/gravitas-sim/gravitas-sim.github.io/blob/main/notebooks/gravitas_analysis.ipynb"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-i18n="export.dataExportNotebook"
-            >Open the companion notebook in Colab</a
-          >
-          to plot the orbits, fit a period and recover the central mass from
-          these files. No installation: it runs in a browser tab.
-        </p>
-      </div>
-    </div>
-
-    <!-- Investigations: finish and report -->
-    <div id="investigationFinish" class="hidden">
-      <div
-        id="investigationFinishContent"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="investigationFinishTitle"
-      >
-        <div class="inv-finish-header">
-          <h3 id="investigationFinishTitle">Finished</h3>
-          <button
-            id="investigationFinishClose"
-            class="ui-button"
-            title="Close without downloading"
-          >
-            ×
-          </button>
-        </div>
-        <div id="investigationFinishSummary" class="inv-finish-summary"></div>
-
-        <label class="inv-name-field" for="investigationName">
-          <span>Your name, as it should appear on the report</span>
-          <input
-            type="text"
-            id="investigationName"
-            autocomplete="name"
-            placeholder="e.g. Ada Lovelace"
-          />
-        </label>
-        <p id="investigationNameError" class="inv-name-error" hidden="">
-          Enter a name so the report can be attributed to you.
-        </p>
-
-        <div class="inv-finish-actions">
-          <button id="investigationFinishBack" class="ui-button">
-            Keep working
-          </button>
-          <button id="investigationDownload" class="ui-button primary">
-            Download lab report (PDF)
-          </button>
-        </div>
-        <p class="inv-finish-fineprint">
-          The report lists every question, your answers, and which of the
-          automatically checked ones matched. It also carries links that reopen
-          the exact simulations you used.
-        </p>
-      </div>
-    </div>
-
-    <div id="shareModal" class="hidden">
+    <div id="shareModal" class="hidden" hidden inert>
       <div
         id="shareContent"
         role="dialog"
@@ -3491,10 +2365,28 @@
           >
             <span data-i18n="share.action.copyEmbed">Copy embed code</span>
           </button>
+          <!-- The same state, handed to the figure builder: /figure/ reads the
+               fragment this link carries. -->
+          <a
+            id="shareFigureLink"
+            class="ui-button secondary"
+            href="figure/"
+            target="_blank"
+            rel="noopener"
+            data-i18n-title="share.action.buildFigure.hint"
+            title="Choose how the figure opens and looks, then copy it"
+          >
+            <span data-i18n="share.action.buildFigure">Build a figure</span>
+          </a>
           <p class="share-embed-note" data-i18n="share.embed.note">
             Paste into the HTML editor of a course page. The figure stays
             interactive.
           </p>
+        </div>
+        <div class="share-embed-row">
+          <label for="shareMineName" data-i18n="share.mine.name">Name in My work</label>
+          <input type="text" id="shareMineName" maxlength="120" />
+          <button type="button" id="shareMineBtn" class="ui-button secondary" data-i18n="share.mine.save">Save to My work</button>
         </div>
         <p id="shareMeta" class="share-meta" role="status"></p>
         <p id="shareStale" class="share-note" hidden="">
@@ -3639,195 +2531,16 @@
           class="ui-button footer-button demo-mode-btn"
           title="Start demo mode - cycles through scenarios automatically"
           data-i18n-title="settings.demoMode.hint"
-          data-i18n="settings.demoMode"
         >
-          🎬 Demo Mode
+          <span class="icon icon-clapper" aria-hidden="true"></span>
+          <span data-i18n="settings.demoMode">Demo Mode</span>
         </button>
       </div>
     </div>
 
-    <div
-      id="bhMassesModal"
-      class="hidden"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="bhMassesHeading"
-    >
-      <div class="bh-masses-header" id="bhMassesHeading">
-        Set Individual Black Hole Masses (M<sub class="solar-sub">☉</sub>)
-      </div>
-      <button
-        class="floating-close-chip"
-        id="bhMassesCloseChip"
-        aria-label="Close"
-        title="Close without changing the masses"
-        data-i18n-title="settings.bhMassesCloseChip.hint"
-        data-i18n-aria-label="settings.bhMassesCloseChip.label"
-      >
-        ✕
-      </button>
-      <div id="bhMassesContent" class="bh-masses-content"></div>
-      <div class="bh-masses-footer">
-        <button
-          id="bhMassesDone"
-          class="ui-button"
-          title="Confirm these black hole masses and close"
-          data-i18n-title="settings.bhMassesDone.hint"
-          data-i18n="settings.bhMassesDone"
-        >
-          Done
-        </button>
-      </div>
-    </div>
+    <template data-host="bh-masses"></template>
 
-    <!-- Object Inspector Modal -->
-    <!-- Object inspector: a compact instrument readout, not a modal -->
-    <div
-      id="objectInspector"
-      role="dialog"
-      aria-labelledby="inspectorTitle"
-      aria-modal="false"
-    >
-      <div class="inspector-header" id="inspectorDragHandle">
-        <span
-          class="inspector-icon"
-          id="inspectorIcon"
-          aria-hidden="true"
-        ></span>
-        <span class="inspector-identity">
-          <span
-            class="inspector-title"
-            id="inspectorTitle"
-            data-i18n="inspector.inspectorTitle"
-            >Object</span
-          >
-          <span class="inspector-kind" id="inspectorKind"></span>
-        </span>
-        <span class="inspector-controls">
-          <button
-            class="inspector-pin"
-            id="inspectorPin"
-            type="button"
-            aria-label="Pin a copy of this object for comparison"
-            title="Pin a copy for comparison"
-            data-i18n-title="inspector.inspectorPin.hint"
-            data-i18n-aria-label="inspector.inspectorPin.label"
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 16 16"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M6 1.8h4l-.6 3.3 2.1 2.3H4.5l2.1-2.3zM8 7.4v6.8"
-              ></path>
-            </svg>
-          </button>
-          <button
-            class="inspector-icon-btn"
-            id="inspectorManeuver"
-            type="button"
-            title="Plan an impulsive burn for this body: set a radial and transverse delta-v, see the orbit it would produce, and apply it only if you mean to"
-            data-i18n-title="burn.open.hint"
-            aria-label="Plan a burn"
-            data-i18n-aria-label="burn.open.label"
-            hidden
-          >
-            &#9650;
-          </button>
-          <button
-            class="inspector-delete"
-            id="inspectorDelete"
-            type="button"
-            aria-label="Delete this object"
-            title="Delete this object"
-            data-i18n-title="inspector.inspectorDelete.hint"
-            data-i18n-aria-label="inspector.inspectorDelete.label"
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 16 16"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.4"
-                stroke-linecap="round"
-                d="M2.5 4h11M6.5 4V2.6h3V4M4 4l.7 9.4h6.6L12 4M6.6 6.6v4.4M9.4 6.6v4.4"
-              ></path>
-            </svg>
-          </button>
-          <button
-            class="inspector-close"
-            id="inspectorClose"
-            type="button"
-            aria-label="Close the inspector"
-            title="Close (Esc)"
-            data-i18n-title="inspector.inspectorClose.hint"
-            data-i18n-aria-label="inspector.inspectorClose.label"
-          >
-            ×
-          </button>
-        </span>
-      </div>
-
-      <div
-        class="inspector-tabs"
-        role="tablist"
-        aria-label="Inspector views"
-        data-i18n-aria-label="inspector.objectInspector.label"
-      >
-        <button
-          class="inspector-tab active"
-          id="inspectorTabDetails"
-          data-tab="details"
-          role="tab"
-          type="button"
-          aria-selected="true"
-          aria-controls="detailsTab"
-          data-i18n="inspector.inspectorTabDetails"
-        >
-          Details
-        </button>
-        <button
-          class="inspector-tab"
-          id="inspectorTabEnergy"
-          data-tab="energy"
-          role="tab"
-          type="button"
-          aria-selected="false"
-          aria-controls="energyTab"
-          data-i18n="inspector.inspectorTabEnergy"
-        >
-          Energy
-        </button>
-      </div>
-
-      <div class="inspector-content" id="inspectorContent">
-        <div
-          class="inspector-tab-content active"
-          id="detailsTab"
-          role="tabpanel"
-          aria-labelledby="inspectorTabDetails"
-        ></div>
-        <div
-          class="inspector-tab-content"
-          id="energyTab"
-          role="tabpanel"
-          aria-labelledby="inspectorTabEnergy"
-        ></div>
-      </div>
-    </div>
+    <template data-host="inspector"></template>
 
     <!-- Pinned comparison cards, one per pinned object -->
     <div
@@ -3847,79 +2560,13 @@
       ?
     </button>
 
-    <!-- Guided tour (initially hidden) -->
-    <div
-      id="tutorialPopup"
-      class="tutorial-popup"
-      role="dialog"
-      aria-modal="false"
-      aria-label="Guided tour"
-      aria-hidden="true"
-      style="display: none"
-      data-i18n-aria-label="tour.tutorialPopup.label"
-    >
-      <div class="tutorial-header">
-        <span class="tutorial-eyebrow" data-i18n="tour.tutorialPopup"
-          >Guided tour</span
-        >
-        <button
-          id="tutorialCloseBtn"
-          class="tutorial-close"
-          aria-label="Close the tour"
-          title="Close the tour (Esc)"
-          data-i18n-title="tour.tutorialClose.hint"
-          data-i18n-aria-label="tour.tutorialClose.label"
-        >
-          ✕
-        </button>
-      </div>
-      <div id="tutorialPopupBody" class="tutorial-body"></div>
-      <div class="tutorial-footer">
-        <button
-          id="tutorialPrevBtn"
-          class="ui-button"
-          title="Back to the previous step (left arrow)"
-          data-i18n-title="tour.tutorialPrev.hint"
-          data-i18n="tour.tutorialPrev"
-        >
-          Back
-        </button>
-        <button
-          id="tutorialNextBtn"
-          class="ui-button is-primary"
-          title="On to the next step (right arrow)"
-          data-i18n-title="tour.tutorialNext.hint"
-          data-i18n="tour.tutorialNext"
-        >
-          Next
-        </button>
-      </div>
-    </div>
+    <template data-host="tutorial"></template>
 
-    <!-- Immediately hide object inspector before any other scripts load -->
-    <script>
-      (function () {
-        // Hide object inspector immediately when page loads
-        const objectInspector = document.getElementById('objectInspector');
-        if (objectInspector) {
-          objectInspector.style.display = 'none';
-          objectInspector.style.opacity = '0';
-          objectInspector.style.visibility = 'hidden';
-          objectInspector.style.pointerEvents = 'none';
-          objectInspector.style.position = 'absolute';
-          objectInspector.style.left = '-9999px';
-          objectInspector.style.top = '-9999px';
-          objectInspector.style.zIndex = '-9999';
-          objectInspector.classList.remove('visible');
-          objectInspector.classList.remove('showUI');
-        }
-      })();
-    </script>
     <!-- JavaScript modules in dependency order -->
     <!--
-      Chart.js is not loaded here any more. It is 70KB and only two panels use
-      it, both of which start closed; js/chartjs.js fetches it the first time
-      one of them is opened.
+      Chart.js is not loaded here any more. It is 70KB and only the bench's
+      two charts use it, which start closed; js/chartjs.js fetches it the
+      first time one is opened. The live charts are js/plot/chart.js.
     -->
     <script type="module" src="js/utils.js"></script>
     <script type="module" src="js/physics.js"></script>
@@ -3935,123 +2582,7 @@
       the strip between the transport bar and the rail, so it had been pushed up
       above the scrubber where it read as a floating panel rather than a footer.
     -->
-    <!--
-      Lecture Mode's own chrome. Present in the document at all times and shown
-      by CSS on body.presentation-lecture, the same way every other mode in this
-      application is expressed: there is no second layout engine, and nothing
-      here is built at runtime.
-    -->
-    <!-- role="region", not "toolbar", for the same reason as the control rail:
-         a toolbar promises that the arrow keys move focus between its buttons,
-         and in Lecture Mode the arrow keys step the sequence instead. Claiming
-         the role would have told a screen-reader user to expect the one
-         behavior the mode deliberately does not have. -->
-    <div
-      id="lectureBar"
-      class="lecture-bar"
-      role="region"
-      aria-label="Lecture"
-      data-i18n-aria-label="lecture.lectureBar.label"
-    >
-      <button
-        type="button"
-        id="lecturePrevBtn"
-        class="lecture-btn"
-        data-i18n-title="lecture.action.previous.hint"
-        data-i18n-aria-label="lecture.action.previous"
-        title="Go to the previous prepared state (Left Arrow)"
-        aria-label="Previous"
-      >
-        <span aria-hidden="true">←</span>
-      </button>
-      <span
-        id="lecturePosition"
-        class="lecture-position"
-        role="status"
-        aria-live="polite"
-        >No sequence loaded</span
-      >
-      <button
-        type="button"
-        id="lectureNextBtn"
-        class="lecture-btn"
-        data-i18n-title="lecture.action.next.hint"
-        data-i18n-aria-label="lecture.action.next"
-        title="Go to the next prepared state (Right Arrow)"
-        aria-label="Next"
-      >
-        <span aria-hidden="true">→</span>
-      </button>
-      <span class="lecture-sep" aria-hidden="true"></span>
-      <button
-        type="button"
-        id="lectureSequenceBtn"
-        class="lecture-btn lecture-btn-wide"
-        data-i18n-title="lecture.action.sequence.hint"
-        title="Prepare or load an ordered list of links"
-      >
-        <span data-i18n="lecture.action.sequence">Sequence</span>
-      </button>
-      <button
-        type="button"
-        id="lectureSpotlightBtn"
-        class="lecture-btn lecture-btn-wide"
-        aria-pressed="false"
-        data-i18n-title="lecture.action.spotlight.hint"
-        title="Dim everything but a circle around the pointer"
-      >
-        <span data-i18n="lecture.action.spotlight">Spotlight</span>
-      </button>
-      <button
-        type="button"
-        id="lectureExitBtn"
-        class="lecture-btn lecture-btn-wide lecture-btn-exit"
-        data-i18n-title="lecture.action.exit.hint"
-        title="Return to the normal interface (Escape)"
-      >
-        <span data-i18n="lecture.action.exit">Exit Lecture Mode</span>
-      </button>
-    </div>
-
-    <div id="lectureSequenceSheet" class="lecture-sheet" hidden="">
-      <div
-        class="lecture-sheet-panel"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="lectureSequenceHeading"
-      >
-        <h2 id="lectureSequenceHeading" data-i18n="lecture.sequence.heading">
-          Lecture sequence
-        </h2>
-        <p data-i18n="lecture.sequence.intro">
-          Paste Gravitas share links, one per line, in the order you will
-          present them. The arrow keys step through them without leaving Lecture
-          Mode.
-        </p>
-        <textarea
-          id="lectureSequenceText"
-          class="lecture-sequence-text"
-          rows="8"
-          spellcheck="false"
-          data-i18n-placeholder="lecture.sequence.placeholder"
-          placeholder="https://gravitas-sim.online/#…"
-          data-i18n-aria-label="lecture.sequence.heading"
-          aria-label="Lecture sequence"
-        ></textarea>
-        <div class="lecture-sheet-actions">
-          <button type="button" id="lectureSequenceLoad" class="ui-button">
-            <span data-i18n="lecture.sequence.load">Load sequence</span>
-          </button>
-          <button
-            type="button"
-            id="lectureSequenceClear"
-            class="ui-button secondary"
-          >
-            <span data-i18n="lecture.sequence.clear">Clear</span>
-          </button>
-        </div>
-      </div>
-    </div>
+    <template data-host="lecture"></template>
 
     <!--
       Embed mode's single affordance. Everything else in embed mode is removed;
@@ -4070,70 +2601,7 @@
     </a>
 
     <footer id="attribution" class="attribution attribution-fade">
-      <!--
-        The theme picker lives here rather than in the rail: it is a preference
-        for the whole page, not a simulation control, and it was one of the
-        taller rows in a rail that had outgrown the screen. Options are written
-        by controls.js from the THEMES registry so the list cannot drift.
-      -->
-      <div class="theme-dock">
-        <button
-          type="button"
-          id="themeButton"
-          class="theme-dock-btn"
-          aria-haspopup="true"
-          aria-expanded="false"
-          aria-controls="themeMenu"
-          title="Change the interface color scheme. Observatory uses red chrome to preserve night vision; Daylight suits bright rooms and projectors (T cycles)."
-          data-i18n-title="footer.theme.hint"
-        >
-          <span class="theme-dock-swatch" aria-hidden="true"></span>
-          <span class="theme-dock-name" id="themeButtonName">Theme</span>
-        </button>
-        <div
-          id="themeMenu"
-          class="theme-menu"
-          role="menu"
-          aria-labelledby="themeButton"
-          hidden=""
-        ></div>
-      </div>
-      <!--
-        The language picker sits beside the theme picker for the same reason the
-        theme picker is here rather than in the rail: both are preferences for
-        the whole page, not controls on the simulation. Options are written by
-        js/i18n/picker.js from the LOCALES registry, so the list cannot drift
-        from what the build actually ships.
-      -->
-      <div class="theme-dock locale-dock">
-        <button
-          type="button"
-          id="localeButton"
-          class="theme-dock-btn"
-          aria-haspopup="true"
-          aria-expanded="false"
-          aria-controls="localeMenu"
-          data-i18n-title="locale.picker.hint"
-          title="Change the interface language"
-        >
-          <span
-            class="theme-dock-swatch locale-dock-glyph"
-            id="localeButtonCode"
-            aria-hidden="true"
-            >EN</span
-          >
-          <span class="theme-dock-name" id="localeButtonName">English</span>
-        </button>
-        <div
-          id="localeMenu"
-          class="theme-menu locale-menu"
-          role="menu"
-          aria-labelledby="localeButton"
-          hidden=""
-        ></div>
-      </div>
-      <span class="attribution-sep" aria-hidden="true">·</span>
-      <span>©&nbsp;<span class="attribution-year">2025</span></span>
+      <span>©&nbsp;<span class="attribution-year"><!--fact:copyrightYear-->2025<!--/fact--></span></span>
       <a
         href="https://carlziegler.space/"
         target="_blank"
@@ -4152,7 +2620,7 @@
       -->
       <a
         href="/validation/"
-        title="What the physics engine has been checked against: 243 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
+        title="What the physics engine has been checked against: 304 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
         data-i18n-title="footer.attribution.hint.2"
         data-i18n="footer.attribution"
         >Validated</a

@@ -1,0 +1,128 @@
+{
+  "format": "gravitas.course-pack",
+  "formatVersion": 2,
+  "id": "orbits-first-week",
+  "version": "1.0.0",
+  "gravitas": "1.0.0",
+  "locales": ["en", "es"],
+  "pinning": "exact",
+  "title": {
+    "en": "Orbits: a first week",
+    "es": "Órbitas: una primera semana",
+    "esOf": "d6fe0889"
+  },
+  "summary": {
+    "en": "One unit for the first week of an astronomy course: read about orbits, watch the solar system, then take Kepler's laws and retrograde motion as investigations.",
+    "es": "Una unidad para la primera semana de un curso de astronomía: leer sobre las órbitas, mirar el sistema solar y estudiar después las leyes de Kepler y el movimiento retrógrado como investigaciones.",
+    "esOf": "7d32a885"
+  },
+  "objectives": [
+    {
+      "id": "orbits",
+      "text": {
+        "en": "Describe the orbits of the planets with Kepler's three laws, and explain them with gravity.",
+        "es": "Describir las órbitas de los planetas con las tres leyes de Kepler y explicarlas con la gravedad.",
+        "esOf": "1b609aad"
+      }
+    },
+    {
+      "id": "frames",
+      "text": {
+        "en": "Explain an apparent motion in the sky, such as retrograde motion, as the result of where it is seen from.",
+        "es": "Explicar un movimiento aparente en el cielo, como el movimiento retrógrado, como resultado del lugar desde donde se ve.",
+        "esOf": "97f82dff"
+      }
+    }
+  ],
+  "units": [
+    {
+      "id": "motions-in-the-sky",
+      "title": {
+        "en": "Motions in the sky",
+        "es": "Movimientos en el cielo",
+        "esOf": "82023efd"
+      },
+      "summary": {
+        "en": "What the planets do, seen from outside and seen from Earth.",
+        "es": "Lo que hacen los planetas, vistos desde fuera y vistos desde la Tierra.",
+        "esOf": "14d7cf94"
+      },
+      "items": [
+        {
+          "id": "reading-orbits-and-gravity",
+          "kind": "reading",
+          "path": "intro",
+          "minutes": 30,
+          "objectives": ["orbits"],
+          "title": {
+            "en": "Astronomy 2e, chapter 3: Orbits and Gravity",
+            "es": "Astronomy 2e, capítulo 3: órbitas y gravedad (en inglés)",
+            "esOf": "58a3b8aa"
+          },
+          "cite": {
+            "authors": "Andrew Fraknoi, David Morrison, Sidney C. Wolff and others",
+            "year": 2022,
+            "source": "OpenStax, Rice University",
+            "url": "https://openstax.org/details/books/astronomy-2e"
+          },
+          "license": "CC BY 4.0",
+          "access": "open",
+          "studentNote": {
+            "en": "Read sections 3.1 to 3.3 before the first investigation if Kepler's laws are new to you.",
+            "es": "Lee las secciones 3.1 a 3.3 antes de la primera investigación si las leyes de Kepler son nuevas para ti.",
+            "esOf": "1064c9cb"
+          }
+        },
+        {
+          "id": "watch-the-solar-system",
+          "kind": "scenario",
+          "minutes": 10,
+          "objectives": ["orbits"],
+          "scenario": "solar-system",
+          "seed": "sky-1",
+          "title": {
+            "en": "The Solar System, to explore",
+            "es": "El sistema solar, para explorar",
+            "esOf": "1b16920c"
+          },
+          "studentNote": {
+            "en": "Speed time up until the outer planets move. Which planets go round fastest? Keep your answer for Kepler's Laws.",
+            "es": "Acelera el tiempo hasta que se muevan los planetas exteriores. ¿Qué planetas giran más rápido? Guarda tu respuesta para Las leyes de Kepler.",
+            "esOf": "baf4a11c"
+          },
+          "teacherNote": {
+            "en": "Ten minutes at the start of the first meeting. The question has no wrong answer yet; the next one makes it quantitative.",
+            "es": "Diez minutos al principio de la primera clase. La pregunta todavía no tiene respuesta incorrecta; la siguiente la vuelve cuantitativa.",
+            "esOf": "b1605353"
+          }
+        },
+        {
+          "id": "keplers-laws",
+          "kind": "lesson",
+          "lesson": "keplers-laws",
+          "objectives": ["orbits"],
+          "needs": ["watch-the-solar-system"],
+          "pin": {
+            "fp": "475986c2",
+            "n": 23
+          }
+        },
+        {
+          "id": "retrograde-motion",
+          "kind": "lesson",
+          "lesson": "retrograde-motion",
+          "objectives": ["frames"],
+          "teacherNote": {
+            "en": "Students measure both orbits first, which uses the period and distance ideas from Kepler's Laws.",
+            "es": "Los estudiantes miden primero las dos órbitas, lo que usa las ideas de período y distancia de Las leyes de Kepler.",
+            "esOf": "74113130"
+          },
+          "pin": {
+            "fp": "db2663fb",
+            "n": 33
+          }
+        }
+      ]
+    }
+  ]
+}

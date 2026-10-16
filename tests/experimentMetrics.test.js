@@ -66,12 +66,25 @@ describe('sampling one frame', () => {
     expect(s[METRICS.DISTANCE_TO_PRIMARY]).toBeUndefined();
   });
 
+  // The drift argument is shaped the way physics.js:conservationDrift()
+  // returns it, totals and all, because that object is what every caller
+  // passes. Energy went from -12.5 to -12.505 (-0.04%), angular momentum from
+  // 3.25 to 3.250325 (+0.01%).
+  const engineDrift = {
+    energy: -12.505,
+    angular: 3.250325,
+    baselineEnergy: -12.5,
+    baselineAngular: 3.25,
+    energyDrift: -0.04,
+    angularDrift: 0.01,
+  };
+
   test('energy and angular momentum come from the engine, not from here', () => {
     const s = sampleFrame({
       t: 2,
       bodies: [body(1, 0, 0)],
-      conserved: { energy: -12.5, angular: 3.25 },
-      drift: { energy: -0.0004, angular: 0.0001 },
+      conserved: { energy: -12.505, angular: 3.250325 },
+      drift: engineDrift,
       metrics: [
         METRICS.TOTAL_ENERGY,
         METRICS.ANGULAR_MOMENTUM,
@@ -79,11 +92,56 @@ describe('sampling one frame', () => {
         METRICS.ANGULAR_DRIFT,
       ],
     });
-    expect(s[METRICS.TOTAL_ENERGY]).toBe(-12.5);
-    expect(s[METRICS.ANGULAR_MOMENTUM]).toBe(3.25);
-    // Drift is a fraction at the source and a percentage on screen.
+    expect(s[METRICS.TOTAL_ENERGY]).toBe(-12.505);
+    expect(s[METRICS.ANGULAR_MOMENTUM]).toBe(3.250325);
+    // Drift is a percentage at the source and a percentage on screen.
     expect(s[METRICS.ENERGY_DRIFT]).toBeCloseTo(-0.04, 9);
     expect(s[METRICS.ANGULAR_DRIFT]).toBeCloseTo(0.01, 9);
+  });
+
+  test('a drift is never the total it sits beside', () => {
+    // The bug this pins: `energy` read as a fraction and multiplied by a
+    // hundred, which recorded -1250.5 "%" here.
+    const s = sampleFrame({
+      t: 2,
+      drift: engineDrift,
+      metrics: [METRICS.ENERGY_DRIFT, METRICS.ANGULAR_DRIFT],
+    });
+    expect(s[METRICS.ENERGY_DRIFT]).not.toBeCloseTo(engineDrift.energy * 100);
+    expect(s[METRICS.ANGULAR_DRIFT]).not.toBeCloseTo(engineDrift.angular * 100);
+  });
+
+  test('an unusable baseline stays NaN rather than becoming a perfect zero', () => {
+    const s = sampleFrame({
+      t: 2,
+      drift: {
+        ...engineDrift,
+        energyDrift: NaN,
+        angularDrift: NaN,
+        energyConditioned: false,
+        angularConditioned: false,
+      },
+      metrics: [METRICS.ENERGY_DRIFT, METRICS.ANGULAR_DRIFT],
+    });
+    expect(s[METRICS.ENERGY_DRIFT]).toBeNaN();
+    expect(s[METRICS.ANGULAR_DRIFT]).toBeNaN();
+  });
+
+  test('an object without the drift fields records nothing, not zero', () => {
+    // The shape the old contract asked for, and the shape of
+    // conservedQuantities(): neither says what the drift was.
+    for (const drift of [
+      { energy: -0.0004, angular: 0.0001 },
+      { energy: -12.5, angular: 3.25, count: 2 },
+    ]) {
+      const s = sampleFrame({
+        t: 2,
+        drift,
+        metrics: [METRICS.ENERGY_DRIFT, METRICS.ANGULAR_DRIFT],
+      });
+      expect(s).not.toHaveProperty(METRICS.ENERGY_DRIFT);
+      expect(s).not.toHaveProperty(METRICS.ANGULAR_DRIFT);
+    }
   });
 
   test('separation and radius are always recorded, so a minimum can be found later', () => {

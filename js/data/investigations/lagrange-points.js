@@ -103,13 +103,16 @@ const LAGRANGE_POINTS = {
   // while nobody types.
   duration: '25-30 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 3, section: '3.6' },
+  courseLevel: 'majors',
+  mathematics: 'algebra',
+  prerequisites: ['hohmann-transfer', 'when-orbits-lock'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'gravity', 'spaceflight'],
   lock: { placement: true },
-  summary:
-    'Two stars on a circular orbit and a speck of dust that feels them both. There is one number you can compute about the speck that tells you where it is forbidden to be — and as you make it go faster, walls open one at a time in a fixed order. Find the five places where the speck could sit still, work out which of them it can reach, and then find out why "can reach" is three different questions wearing the same coat.',
   objectives: [
     'State the normalization and sign convention of the Jacobi constant',
     'Predict how the forbidden region changes as the tracer speeds up',
@@ -136,7 +139,7 @@ const LAGRANGE_POINTS = {
              is the simplest system in which the two-body answers stop working,
              and almost everything interesting about it was worked out by
              Euler, Lagrange and Jacobi before 1840.`,
-      tip: 'The Restricted Three-Body panel opened with the scenario. Everything this lesson asks you to read is in it.',
+      tip: 'The Restricted Three-Body panel opened with the scenario. Everything this investigation asks you to read is in it.',
     },
     {
       sid: 'the-rotating-frame',
@@ -267,10 +270,18 @@ const LAGRANGE_POINTS = {
       tolerance: 0.02,
       hints: [
         'Equilateral means all three sides are the same length.',
-        'The side joining the two stars has length 1.',
+        'The side joining the two stars is one of the three sides. Compare it with the distance you want.',
       ],
       worked:
         'All three sides of an equilateral triangle are equal, and the side between the stars is 1 by definition of the units — so L4 is 1 from each. It is not on the line between them, and it is not at the midpoint.',
+      feedback: {
+        close:
+          'Near. In an equilateral triangle, how does each side compare with the side between the stars?',
+        'wrong-sign': 'A distance cannot be negative: give its size.',
+        'wrong-order-of-magnitude':
+          'Out by a large factor. The answer is a ratio of two lengths of the same triangle, so it should be modest in size.',
+        off: 'Sketch the triangle of two stars and L4. Which sides are equal, and what is the length of the side you were given?',
+      },
     },
     {
       sid: 'critical-order',

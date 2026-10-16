@@ -20,6 +20,7 @@ import {
   transitTableCsv,
   radialVelocityCsv,
   rvFitCsv,
+  rotationCurveCsv,
   exportSummary,
   downloadCsv,
   csvFilename,
@@ -35,8 +36,11 @@ import {
   neutron_stars,
   white_dwarfs,
 } from './physics.js';
-import { toast } from './notify.js';
+import { toast, announce } from './notify.js';
 import { t } from './i18n/index.js';
+// Statically: this module is itself fetched on the first press of Export
+// (js/exportBridge.js), so the dialog machinery costs start-up nothing here.
+import { openDialog, closeDialog, releaseDialog } from './dialog.js';
 
 // This module's prose lives in the deferred half of the catalog - see the
 // note in js/i18n/en.deferred.js. Registered from here rather than left to the
@@ -145,6 +149,18 @@ function files() {
       build: rvFitCsv,
     },
     {
+      key: 'rotationcurve',
+      name: 'Rotation curve',
+      // The tracers the panel is plotting right now, not a recording: a
+      // rotation curve is a snapshot of a disc rather than a time series, so
+      // there is nothing to accumulate and nothing to wait for.
+      detail: s.rotationPoints
+        ? `${plural(s.rotationPoints, 'tracer')}: radius, orbital speed, tangential component and mass.`
+        : 'No rotation curve. Open the Rotation Curve tool on a scenario with a disc.',
+      ready: s.rotationPoints > 0,
+      build: rotationCurveCsv,
+    },
+    {
       key: 'transits',
       name: 'Transit measurements',
       detail: s.transits
@@ -154,6 +170,77 @@ function files() {
       build: transitTableCsv,
     },
   ];
+}
+
+/**
+ * The series behind a plot, as a table, fetched the first time one is asked for.
+ *
+ * js/seriesTable.js is loaded on demand: a reader who only ever downloads files
+ * should not pay for the renderer, and the deferred bundle has little room to
+ * spare. It renders row.build().csv - the very string the download button
+ * writes - so the table cannot disagree with the file or with the plot they
+ * both come from.
+ *
+ * @param {object} row - An entry from files()
+ * @param {HTMLButtonElement} button - The control, whose aria-expanded follows
+ * @param {HTMLElement} host - Where the table goes
+ */
+let seriesTableModule = null;
+async function toggleTable(row, button, host) {
+  const open = button.getAttribute('aria-expanded') === 'true';
+  if (open) {
+    host.hidden = true;
+    host.textContent = '';
+    button.setAttribute('aria-expanded', 'false');
+    button.textContent = t('export.viewTable');
+    return;
+  }
+
+  seriesTableModule ??= await import('./seriesTable.js');
+  // The column names and the caption live with the placement strings, out of
+  // the deferred catalog and behind this same lazy load. See
+  // ensurePlacementMessages() for why.
+  await seriesTableModule.ensurePlacementMessages().catch(() => {});
+
+  // Opening a table needs a dynamic import and a catalog fetch, and a
+  // simulation reset during either of those re-renders the dialog - which
+  // replaces this `host` with a fresh one. Writing the table into the old node
+  // would put it nowhere, so stop instead: a row the reader can press again
+  // beats a silent no-op against a node that left the document.
+  if (!host.isConnected) return;
+  const { buildSeriesTable, describeTable } = seriesTableModule;
+  let built;
+  try {
+    built = buildSeriesTable(row.build().csv);
+  } catch (error) {
+    console.error('Could not build the table for', row.key, error);
+    return;
+  }
+
+  host.textContent = '';
+  const caption = document.createElement('p');
+  caption.className = 'export-table-caption';
+  caption.textContent = describeTable(row.name, built);
+  host.append(caption);
+
+  if (built.table) {
+    // A labelled, scrollable region: a wide table needs to scroll sideways, and
+    // a scrollable box that cannot be focused cannot be scrolled from a
+    // keyboard. tabindex and a role are what make it reachable.
+    const scroller = document.createElement('div');
+    scroller.className = 'export-table-scroll';
+    scroller.tabIndex = 0;
+    scroller.setAttribute('role', 'region');
+    scroller.setAttribute('aria-label', caption.textContent);
+    built.table.setAttribute('aria-label', caption.textContent);
+    scroller.append(built.table);
+    host.append(scroller);
+  }
+
+  host.hidden = false;
+  button.setAttribute('aria-expanded', 'true');
+  button.textContent = t('export.hideTable');
+  announce(caption.textContent);
 }
 
 /** Write one file out, and say what happened. */
@@ -221,40 +308,80 @@ function render() {
     detail.className = 'export-file-detail';
     detail.textContent = row.detail;
     text.append(title, detail);
+    const actions = document.createElement('div');
+    actions.className = 'export-file-actions';
+    // The table first. For a reader who cannot see the plot this is the way in
+    // to the data, and a download is a file they then have to open in
+    // something else; putting it second is not a detail.
+    const tableBtn = document.createElement('button');
+    tableBtn.type = 'button';
+    tableBtn.className = 'ui-button';
+    // Named, because there are two buttons in this row now and both of them
+    // are `.ui-button` with translated labels. A test that reaches for "the
+    // button in the radial-velocity row" was unambiguous until the table
+    // arrived beside the download, and a label-based locator would pass in
+    // English and fail in Spanish.
+    tableBtn.dataset.action = 'table';
+    tableBtn.textContent = t('export.viewTable');
+    tableBtn.disabled = !row.ready;
+    tableBtn.setAttribute('aria-expanded', 'false');
+    tableBtn.setAttribute('aria-controls', `export-table-${row.key}`);
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'ui-button';
+    btn.dataset.action = 'download';
     btn.textContent = t('export.downloadCsv');
     btn.disabled = !row.ready;
     btn.addEventListener('click', () => download(row));
-    div.append(text, btn);
-    els.files.append(div);
+    actions.append(tableBtn, btn);
+
+    // The table lands after the row rather than inside it, so a reader who
+    // opens one does not have to tab back out through the buttons to read it.
+    const host = document.createElement('div');
+    host.id = `export-table-${row.key}`;
+    host.className = 'export-table-host';
+    host.hidden = true;
+    tableBtn.addEventListener('click', () => toggleTable(row, tableBtn, host));
+
+    div.append(text, actions);
+    els.files.append(div, host);
   }
 }
 
 /** Show the dialog. */
 export function openExportDialog() {
-  if (!els.modal) return;
-  els.modal.classList.remove('hidden');
+  if (!els.modal || isExportDialogOpen()) return;
   render();
-  els.close?.focus();
+  // Modal: the page behind it inert, Tab kept inside, Escape and the backdrop
+  // closing it, and focus back on Export however it was opened.
+  openDialog(els.content, {
+    backdrop: els.modal,
+    isolate: true,
+    trigger: document.getElementById('exportDataBtn'),
+    initialFocus: els.close,
+  });
 }
 
 /** Hide the dialog. */
 export function closeExportDialog() {
-  if (!els.modal) return;
-  els.modal.classList.add('hidden');
-  document.getElementById('exportDataBtn')?.focus();
+  closeDialog(els.content);
 }
 
 /** @returns {boolean} True while the dialog is showing */
 export const isExportDialogOpen = () =>
   Boolean(els.modal) && !els.modal.classList.contains('hidden');
 
-/** Wire up the dialog. Safe to call once, from init. */
-export function initExportDialog() {
+/**
+ * Wire up the dialog. Safe to call once, from init.
+ * @param {{signal?: AbortSignal}} [options] - Aborted when the dialog's
+ *   markup is unmounted (js/exportBridge.js); removes every listener this
+ *   adds outside it
+ */
+export function initExportDialog({ signal } = {}) {
+  const opts = signal ? { signal } : undefined;
   els = {
     modal: document.getElementById('dataExport'),
+    content: document.getElementById('dataExportContent'),
     files: document.getElementById('dataExportFiles'),
     scope: document.getElementById('dataExportScope'),
     selectedLabel: document.getElementById('dataExportSelectedLabel'),
@@ -262,24 +389,44 @@ export function initExportDialog() {
   };
   if (!els.modal || !els.files) return;
 
-  document.getElementById('exportDataBtn')?.addEventListener('click', () => {
-    isExportDialogOpen() ? closeExportDialog() : openExportDialog();
-  });
+  document.getElementById('exportDataBtn')?.addEventListener(
+    'click',
+    () => {
+      isExportDialogOpen() ? closeExportDialog() : openExportDialog();
+    },
+    opts
+  );
   els.close?.addEventListener('click', closeExportDialog);
   els.scope?.addEventListener('change', e => {
     if (e.target.name !== 'exportScope') return;
     scope = e.target.value;
     render();
   });
-  els.modal.addEventListener('click', e => {
-    if (e.target === els.modal) closeExportDialog();
-  });
-  window.addEventListener('gravitasEscape', () => {
-    if (isExportDialogOpen()) closeExportDialog();
-  });
+  // js/dialog.js takes an Escape pressed inside the dialog; this is one
+  // pressed with focus on <body>.
+  window.addEventListener(
+    'gravitasEscape',
+    () => {
+      if (isExportDialogOpen()) closeExportDialog();
+    },
+    opts
+  );
   // A rebuild throws the ring buffer away, so a dialog left open would be
   // offering to export a recording that no longer exists.
-  window.addEventListener('gravitasSimulationReset', () => {
-    if (isExportDialogOpen()) render();
-  });
+  window.addEventListener(
+    'gravitasSimulationReset',
+    () => {
+      if (isExportDialogOpen()) render();
+    },
+    opts
+  );
+}
+
+/**
+ * Undo initExportDialog(), for when the dialog's markup leaves the page.
+ */
+export function teardownExportDialog() {
+  if (isExportDialogOpen()) closeExportDialog();
+  releaseDialog(els.content);
+  els = {};
 }

@@ -1,0 +1,243 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "gravitas.lab3d",
+  "version": "1.3.0",
+  "kind": "built-in",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "The 3-D small-N dynamics kernel",
+    "es": "El núcleo de dinámica de pocos cuerpos en 3-D"
+  },
+  "provides": {
+    "routes": [
+      {
+        "path": "/lab3d/"
+      },
+      {
+        "path": "/3d/"
+      }
+    ],
+    "models": [
+      {
+        "id": "lab3d-small-n"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "js/lab3d/kernel.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/elements.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/state.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/engine.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/worker.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/api.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/experiment.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/references.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/liveClient.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/live.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/snapshot.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/projection.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/instruments.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/frames.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/scene.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/i18n.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "vendor/three/lab3d.module.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3dLab.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.lab3dLab.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.lab3dLab.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/tick.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/guidePanel.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/guides/curriculum.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.lab3dGuides.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.lab3dGuides.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/evidence.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/link.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/embed.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/evidencePanel.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/forward/system3d.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.lab3dEvidence.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.lab3dEvidence.js",
+      "role": "code",
+      "offline": "optional"
+    }
+  ],
+  "citations": [],
+  "licenses": [
+    {
+      "scope": "js/lab3d/**",
+      "license": "MIT"
+    }
+  ],
+  "offline": {
+    "policy": "on-demand"
+  },
+  "validation": [
+    {
+      "check": "registry:lab3d"
+    },
+    {
+      "check": "jest:tests/lab3d.test.js"
+    },
+    {
+      "check": "e2e:e2e/lab3d.spec.js"
+    },
+    {
+      "check": "jest:tests/lab3dView.test.js"
+    },
+    {
+      "check": "e2e:e2e/lab3dView.spec.js"
+    },
+    {
+      "check": "jest:tests/lab3dGuides.test.js"
+    },
+    {
+      "check": "e2e:e2e/lab3dGuides.spec.js"
+    },
+    {
+      "check": "jest:tests/lab3dEvidence.test.js"
+    },
+    {
+      "check": "jest:tests/forwardSystem3d.test.js"
+    },
+    {
+      "check": "jest:tests/scenarioPack3d.test.js"
+    },
+    {
+      "check": "jest:tests/course3d.test.js"
+    },
+    {
+      "check": "e2e:e2e/lab3dEvidence.spec.js"
+    },
+    {
+      "check": "e2e:e2e/lab3dEmbed.spec.js"
+    },
+    {
+      "check": "e2e:e2e/lab3dCompare.spec.js"
+    }
+  ]
+}

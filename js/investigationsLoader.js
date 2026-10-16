@@ -15,6 +15,12 @@
 // resolves, so callers never have to think about ordering.
 // =============================================================================
 
+import {
+  loadFragment,
+  mountFragment,
+  unmountFragment,
+} from './i18n/deferredMessages.js';
+
 let loading = null;
 
 /** Run once, when the system is first requested, whichever route asked. */
@@ -38,21 +44,40 @@ export function ensureInvestigations() {
     // is the only module that reads it, it is the largest family of strings in
     // the application, and a visitor who never opens a lesson was downloading
     // all of it. Registered here, before initInvestigations() renders anything.
+    // The engine's markup is two js/fragments/ files, mounted before it binds
+    // and after the deferred words, so it goes in translated
+    // (INDEX_DECOMPOSITION.md).
     loading = Promise.all([
       import('./investigations.js'),
       import('./i18n/deferredMessages.js').then(m =>
         m.ensureDeferredMessages().catch(() => {})
       ),
-    ]).then(([mod]) => {
-      mod.initInvestigations();
+      loadFragment('lesson'),
+      loadFragment('lesson-finish'),
+    ]).then(([mod, , lesson, finish]) => {
+      const signal = mountFragment('lesson', lesson);
+      mountFragment('lesson-finish', finish);
+      mod.initInvestigations({ signal: signal ?? undefined });
       return mod;
     });
   }
   return loading;
 }
 
-/** @returns {boolean} True once the system has been asked for */
-export const investigationsRequested = () => loading !== null;
+/**
+ * Unmount the engine's markup; the Lessons button loads it afresh.
+ * @returns {Promise<boolean>} Whether it was mounted
+ */
+export async function unmountInvestigations() {
+  if (!loading) return false;
+  const mod = await loading;
+  mod.teardownInvestigations();
+  loading = null;
+  unmountFragment('lesson-finish');
+  const was = unmountFragment('lesson');
+  armLessonsButton();
+  return was;
+}
 
 /**
  * Whether the address bar names a lesson.
@@ -63,19 +88,8 @@ export const investigationsRequested = () => loading !== null;
  * @returns {boolean} True for a `#investigation=<id>` fragment
  */
 export const lessonInHash = () =>
-  /^#investigation=[\w-]+$/.test(window.location.hash || '');
+  /^#investigation=[\w-]+(\/\w+)?$/.test(window.location.hash || '');
 
-/**
- * Whether the address bar is asking for the authoring preview.
- *
- * `?author=<lesson>` is a lesson link like any other as far as loading goes:
- * the system is wanted immediately, and js/investigations.js decides what to do
- * with it. Kept here rather than in the preview module because this is the file
- * that stays resident, and it is a regular-expression test rather than an
- * import.
- *
- * @returns {boolean} True for an authoring request in the query or the hash
- */
 /**
  * Whether the URL asks for the assignment builder.
  *
@@ -99,6 +113,9 @@ export const assignmentInUrl = () =>
  */
 export const assignmentInHash = () => /^#a\d+[zr]./.test(location.hash || '');
 
+/** An investigation link (#i1z..., js/composer/packLink.js). */
+export const packInHash = () => /^#i\d+[zr]./.test(location.hash || '');
+
 /**
  * Does the address bar name a classroom activity?
  *
@@ -113,19 +130,10 @@ export const activityInHash = () =>
   /^#activity=[a-z0-9-]+(\/[a-z0-9-]+)?$/i.test(location.hash || '');
 
 /**
- * Open whatever assignment the address bar names, now or later.
- *
- * The predicates live here and the machinery does not: keeping the bridge out
- * of the start-up graph is worth the indirection, because a first-time visitor
- * who has never been handed an assignment should not download the codec that
- * reads one.
- *
- * The hashchange half is not optional. Pasting a link into a tab that is
- * already on the site changes the fragment and navigates nothing, so a
- * boot-time check alone leaves that student with no assignment and no
- * explanation - the same trap js/share.js documents for lesson links.
- *
- * @returns {void}
+ * Open whatever assignment, activity or investigation link the address bar
+ * names, now or later. The predicates live here and the machinery does not, so
+ * a first-time visitor never downloads the codecs. The hashchange half is
+ * needed: pasting a link into an open tab navigates nothing.
  */
 export function watchForAssignments() {
   // The engine first, then the bridge. Doing it in this order is what lets the
@@ -148,8 +156,15 @@ export function watchForAssignments() {
         console.warn('That activity link could not be opened:', err)
       );
 
+  const openPack = () =>
+    ensureInvestigations()
+      .then(() => import('./remix/open.js'))
+      .then(m => m.openPackFromUrl())
+      .catch(() => {});
+
   if (assignmentInHash()) open();
   else if (activityInHash()) openActivity();
+  else if (packInHash()) openPack();
 
   let last = location.hash;
   window.addEventListener('hashchange', () => {
@@ -157,11 +172,24 @@ export function watchForAssignments() {
     last = location.hash;
     if (assignmentInHash()) open();
     else if (activityInHash()) openActivity();
+    else if (packInHash()) openPack();
   });
 }
 
 export const authoringInUrl = () =>
   /[?&#]author=[\w-]+/.test(window.location.href || '');
+
+/** The Lessons button's first press loads the engine, then stands down. */
+function armLessonsButton() {
+  const btn = document.getElementById('investigationsBtn');
+  if (!btn) return;
+  const firstClick = async () => {
+    const mod = await ensureInvestigations();
+    mod.openBrowser();
+  };
+  btn.addEventListener('click', firstClick);
+  onFirstLoad.add(() => btn.removeEventListener('click', firstClick));
+}
 
 /**
  * Watch for the first sign that a lesson is wanted.
@@ -175,15 +203,16 @@ export function watchForInvestigations() {
   // both stayed attached the next click would open and immediately close it, so
   // this one handles the first activation and then stands down - however the
   // system came to be loaded.
-  const btn = document.getElementById('investigationsBtn');
-  if (btn) {
-    const firstClick = async () => {
-      const mod = await ensureInvestigations();
-      mod.openBrowser();
-    };
-    btn.addEventListener('click', firstClick);
-    onFirstLoad.add(() => btn.removeEventListener('click', firstClick));
-  }
+  armLessonsButton();
+
+  // `#investigations` is the shared shell's Investigations entry, which opens
+  // the chooser until Prompt 54's Library replaces it.
+  const browse = () => {
+    if (location.hash === '#investigations')
+      ensureInvestigations().then(mod => mod.openBrowser());
+  };
+  browse();
+  window.addEventListener('hashchange', browse);
 
   // An assignment link names a lesson, so the system is needed immediately.
   // initInvestigations() reads the hash itself and opens the right lesson.

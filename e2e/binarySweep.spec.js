@@ -16,7 +16,7 @@
 import { test, expect } from './fixtures.js';
 
 /** Open the lab with the run panel showing and the sweep section open. */
-async function openLab(page, app, scenario = 'Binary Planet Lab') {
+async function openLab(page, app, scenario = 'binary-planet-lab') {
   await app.boot();
   await app.loadScenario(scenario, 'e2e', { run: false });
   await expect(page.locator('#binaryRunContainer')).toBeVisible();

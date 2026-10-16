@@ -37,6 +37,14 @@ box here means the thing is done and verified, not merely decided.
       Documented in [`RELEASING.md`](RELEASING.md), including the consequence:
       the commit that records the DOI is not inside the archived tag.
 
+- [ ] **A non-commercial test fixture in the archive.** One CC BY-NC 3.0 IGO
+      Gaia answer, `tests/fixtures/archive/gaia-epphot-su-dra.vot`, is in the
+      repository and so in every release archive, under its own license and
+      credited (LICENSES.md, NOTICE). It is no longer on the site. Keep it, as
+      now, or replace it with a synthetic answer of the same shape before the
+      release so the archive carries nothing non-commercial. (Prompt 47 left it
+      as it is: removing test evidence is not a repair.)
+
 ## Zenodo
 
 - [x] **Verify the GitHub–Zenodo integration is live.** Confirmed on Zenodo's
@@ -73,8 +81,10 @@ box here means the thing is done and verified, not merely decided.
 
 - [ ] **Description.** Still empty. Something a person scanning search
       results can act on.
-      Suggested: *An interactive astrophysics sandbox and 22 guided
+      Suggested: *An interactive astrophysics sandbox with guided
       investigations for introductory astronomy. Runs in a browser, no install.*
+      (No count: a number pasted into a repository setting is one nothing can
+      regenerate.)
 - [x] **Homepage.** Set to `https://gravitas-sim.online/`.
 - [ ] **Topics.** Still empty. Suggested: `astronomy`, `astronomy-education`,
       `physics-education`, `science-education`, `simulation`,
@@ -91,6 +101,133 @@ box here means the thing is done and verified, not merely decided.
 - [ ] **Decide whether to enable Discussions.** [`SUPPORT.md`](SUPPORT.md) says
       "if discussions are enabled"; either enable them or edit that sentence.
       They are off, so that sentence currently describes nothing.
+
+### The settings plan for the integration model (Prompt 46)
+
+For Carl, and not done by any session: a repository setting is a governance
+change, made by hand. The boxes above that are still unchecked stay as they
+are, and each is given here with its exact path.
+
+- [ ] **Protect `main` behind the aggregate check.** Settings → Rules →
+      Rulesets → New ruleset → New branch ruleset.
+      - Name it `main`, set Enforcement status to Active, and under Target
+        branches choose Add target → Include default branch.
+      - Tick **Require a pull request before merging**.
+      - Tick **Require status checks to pass**, then Add checks → `CI`. This is
+        the aggregate job, which fails if any job it needs fails.
+      - Tick **Block force pushes**, then Create.
+      - Leave `v2` unprotected: the merge-queue session merges into it by pull
+        request, and `v2` requires no checks. (A required check on `v2` would
+        make GitHub refuse auto-merge as "unstable", which the queue already
+        works around.)
+- [ ] **Keep the `github-pages` environment restricted to `main`.** It already
+      is: the one deployment branch policy names `main`. To confirm:
+      Settings → Environments → `github-pages` → Deployment branches and tags
+      → Selected branches and tags → only `main` is listed. Do not add `v2`.
+- [ ] **Turn on private vulnerability reporting.** Settings → Advanced Security
+      (Code security) → Private vulnerability reporting → Enable.
+- [ ] **Discussions, or SUPPORT.md's sentence.** Either Settings → General →
+      Features → tick Discussions, or edit SUPPORT.md so it does not say "if
+      discussions are enabled". Discussions are off.
+- [ ] **Description and topics.** On the repository's main page, the gear
+      beside **About** → Description (the suggested text above) and Topics (the
+      suggested list above) → Save changes.
+
+### Settings status, read from the API (Prompt 111, 2026-10-06)
+
+Read-only `gh api` calls against the repository, restated here so the plan
+above is judged against what is true today. Nothing was changed. Re-read it
+before acting: a setting can move between this line and your click.
+
+| Setting | Status | Read with | Plan above |
+| --- | --- | --- | --- |
+| Description | empty | `repos/{repo}` `.description` | Description and topics |
+| Homepage | `https://gravitas-sim.online/` | `repos/{repo}` `.homepage` | done |
+| Topics | none | `repos/{repo}` `.topics` | Description and topics |
+| Branch protection on `main` | none (`Branch not protected`) | `repos/{repo}/branches/main/protection` | Protect `main` |
+| Repository rulesets | none | `repos/{repo}/rulesets` | Protect `main` |
+| Branch protection on `v2` | none, as intended | `repos/{repo}/branches/v2` `.protected` | leave unprotected |
+| `github-pages` environment | custom branch policies; one policy, `main` | `repos/{repo}/environments`, `.../deployment-branch-policies` | already as planned |
+| Private vulnerability reporting | disabled | `repos/{repo}/private-vulnerability-reporting` | Turn it on |
+| Discussions | disabled | `repos/{repo}` `.has_discussions` | Discussions, or edit SUPPORT.md |
+| Secret scanning, push protection | enabled | `repos/{repo}` `.security_and_analysis` | nothing to do |
+| Dependabot security updates | disabled | `repos/{repo}` `.security_and_analysis` | not in the plan; worth enabling beside the monthly version updates |
+| Pages | served from `main`, `/`; custom domain `gravitas-sim.online`; HTTPS enforced | `repos/{repo}/pages` | nothing to do |
+| Collaborators | 1 | `repos/{repo}/collaborators` | see the bus-factor checklist |
+| Actions secrets | none stored in the repository | `repos/{repo}/actions/secrets` (names only) | nothing to do |
+
+## Bus factor: what only Carl holds
+
+For [`CONTINUITY.md`](CONTINUITY.md). A checklist, documentation only: each
+line names a thing and what to arrange, **never the thing itself**. No
+password, passphrase, recovery code or token belongs in this file, in the
+repository, or in a session's conversation. Tick a box when the arrangement
+exists, not when it is planned.
+
+- [ ] **Organization owner.** The GitHub organization `gravitas-sim` has one
+      account that can change anything. Add a second owner who is trusted with
+      that (a colleague or the co-maintainer), or write down who would be asked.
+- [ ] **GitHub account recovery.** The owner account's two-factor recovery
+      codes and a recovery email that is not only the work address (the
+      university can close it). Store them where a named person can reach them
+      if you cannot (a password manager's emergency access, or a sealed copy).
+- [ ] **The domain `gravitas-sim.online`.** The registrar account, its renewal
+      date and whether auto-renew is on, and who holds the DNS. If the domain
+      lapses the site still serves at `gravitas-sim.github.io` once the
+      `CNAME` is removed, and every link that uses the domain breaks: renewal is
+      the single date that hurts most.
+- [ ] **The instructor passphrase.** Where it is kept (the git-ignored
+      `.instructor-password` file on one machine, and whatever else), and who can
+      get it. It is also what [`SUPPORT.md`](SUPPORT.md) says to email you for:
+      the email address is part of this item. A second holder, or an emergency
+      copy, is the whole point.
+- [ ] **Zenodo.** The account that holds the integration and the record's
+      ownership, and a second person added as an owner of the record if
+      Zenodo's settings allow. Without it nobody else can publish a version to
+      the concept DOI.
+- [ ] **ORCID and the citation identity.** The ORCID in `CITATION.cff` and
+      `.zenodo.json` is yours; note who could correct a record if it needed
+      correcting.
+- [ ] **Repository secrets.** None are stored today (the list above was read
+      by name only). If one is ever added, add it here by name, with what it is
+      for and where the value can be regenerated.
+- [ ] **A named contact.** One person who is told this file exists and what it
+      is for. Everything above is only useful if someone knows to look.
+
+## Contributed content (Prompt 80)
+
+The rules for accepting a package someone else wrote. They are
+recommendations adopted by delegation (D-CONTRIB-01) and stay yours to change.
+The author-facing side is [`CONTRIBUTING_CONTENT.md`](CONTRIBUTING_CONTENT.md).
+
+- [ ] **Who may accept.** You, and one named co-maintainer you appoint. One
+      maintainer accepts by adding the entry to `catalog/curation.json`. A
+      second maintainer must accept when the first is the author, or is
+      affiliated with the author, or has any other interest in the package.
+      Until you name a second person, such a package waits for you.
+- [ ] **How long review takes.** Published, so contributors can plan: an
+      acknowledgment within 7 days, a decision within 30. A package that needs
+      changes starts the 30 days again. A package unanswered after 30 days may
+      be closed with a note, and resubmitted.
+- [ ] **Conflict of interest.** The reviewer states it in the acceptance
+      record (`review.interest`: `none` or what it is). Affiliation, a
+      collaboration in the last three years, a financial tie, or a
+      supervisory relationship each count. Stating one does not bar a package;
+      it moves the decision to the second maintainer.
+- [ ] **Attribution.** Printed as the author wrote it, in the catalog, the
+      archive's manifest and the archive's README. A name or an organization
+      only; no email or phone number is ever published. An author may change
+      their attribution by a new version, and may ask for it to be removed
+      from the page (the package then lists as "Anonymous" in the author's
+      words); the archived copy cannot change.
+- [ ] **The archival consequence.** An accepted package is part of the
+      repository at the next release, so the Zenodo archive (Workflow A) holds
+      it, with its attribution, permanently. Withdrawal removes it from the
+      site, not from an archived release. Before accepting, confirm the author
+      has read that paragraph of CONTRIBUTING_CONTENT.md ("What acceptance
+      means") and agreed in the pull request.
+- [ ] **A withdrawal request** is handled as in CONTRIBUTING_CONTENT.md; a
+      withdrawal for a license or privacy reason is done the same day.
 
 ## The release itself
 
@@ -132,5 +269,14 @@ box here means the thing is done and verified, not merely decided.
 Standing, not a box to tick: **rebuild and commit the instructor bundle**
 whenever instructional content changes. `npm run instructors:check` says
 whether it is current and needs no passphrase; rebuilding needs the real one.
-The gate runs that check, so a stale bundle fails the release rather than
-shipping quietly.
+The gate runs that check, `tools/verify-release.mjs` runs it again on the tree
+about to be published, and CI runs it on a release ref - so a stale bundle
+fails the release rather than shipping quietly.
+
+Not on a pull request into `v2`, though, and that is deliberate: see
+[`RELEASE.md`](RELEASE.md). Asking it of every parallel lesson branch would
+make each of them red until you rebuilt, and each rebuild conflicts with the
+last. If the check says stale after a change that moved no instructional
+content, `npm run instructors:restamp` re-states the record without the
+passphrase and without touching the ciphertext - it proves the documents are
+unchanged first, and refuses if they are not.

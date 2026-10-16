@@ -1,0 +1,32 @@
+{
+  "note": "Written by tools/compute.mjs in the Gravitas application repository. Do not edit.",
+  "origin": "https://gravitas-compute.github.io",
+  "build": "e880d4ee23205b2816b61e8a63a9d7991b0665a500e71ac823b9d65d9316543b",
+  "indexSha256": "99804535bc4019a60f2fc57fa4f4c501643ece1c6b7fdd281e407f80771b46f9",
+  "scriptSha256Base64": "pXl3EK7/ICwBPtEN9XbcX59BDt/fHntcL0Big70fUso=",
+  "csp": "default-src 'none'; script-src 'sha256-pXl3EK7/ICwBPtEN9XbcX59BDt/fHntcL0Big70fUso=' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; connect-src https://cdn.jsdelivr.net; worker-src blob:; base-uri 'none'; form-action 'none'",
+  "answers": [
+    "https://gravitas-sim.online"
+  ],
+  "runtime": {
+    "name": "pyodide",
+    "version": "314.0.7",
+    "python": "3.14.2",
+    "base": "https://cdn.jsdelivr.net/pyodide/v314.0.7/full/",
+    "lockSha256": "5dc2fc119108bc148c7457dc86e7675b5c87e1cafd420b9c34c1eaef7b36c010",
+    "packages": {
+      "numpy": {
+        "version": "2.4.6"
+      },
+      "matplotlib": {
+        "version": "3.10.8"
+      },
+      "scipy": {
+        "version": "1.18.0"
+      },
+      "astropy": {
+        "version": "7.2.0"
+      }
+    }
+  }
+}

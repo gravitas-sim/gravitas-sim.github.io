@@ -1,0 +1,49 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "fixture.names-code",
+  "version": "1.0.0",
+  "kind": "declarative",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "Finding exoplanets: a five-lesson sequence",
+    "es": "Encontrar exoplanetas: una secuencia de cinco lecciones"
+  },
+  "provides": {
+    "courses": [
+      {
+        "id": "finding-exoplanets",
+        "file": "course.json",
+        "entry": "builtin:widgets/power-law"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "course.json",
+      "role": "data",
+      "offline": "optional"
+    },
+    {
+      "path": "hook.js",
+      "role": "code",
+      "offline": "optional"
+    }
+  ],
+  "citations": [],
+  "licenses": [
+    {
+      "scope": "**",
+      "license": "MIT"
+    }
+  ],
+  "offline": {
+    "policy": "precache"
+  },
+  "validation": [
+    {
+      "check": "registry:sdk-extensions"
+    }
+  ],
+  "migrations": []
+}

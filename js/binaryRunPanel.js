@@ -56,13 +56,11 @@ let tickUnsub = null;
 // and honored within a scenario so it does not reappear on every rebuild
 // after being told to go away.
 let dismissed = false;
-/** The previous finished run, kept so a halved-step repeat can be compared. */
-let previous = null;
 
 /** The two scenarios this panel is for. */
 const SCENARIOS = {
-  'Binary Planet Lab': CIRCUMSTELLAR,
-  'Circumbinary Planet Lab': CIRCUMBINARY,
+  'binary-planet-lab': CIRCUMSTELLAR,
+  'circumbinary-planet-lab': CIRCUMBINARY,
 };
 
 /**
@@ -136,9 +134,9 @@ function beginRun() {
   if (!mode) return;
   const e = cacheElements();
 
-  const planetA = Number(e.planetA?.value);
-  const periods = Number(e.periods?.value);
-  const timestep = Number(e.timestep?.value);
+  const planetA = Number(e.planetA?.valueAsNumber);
+  const periods = Number(e.periods?.valueAsNumber);
+  const timestep = Number(e.timestep?.valueAsNumber);
   if (planetA > 0) SETTINGS.binary_lab_planet_a = planetA;
   if (periods >= 1) SETTINGS.binary_lab_periods = Math.round(periods);
   if (timestep > 0) SETTINGS.max_timestep = timestep;
@@ -186,8 +184,7 @@ export function armBinaryRun() {
       onStep: onPhysicsStep,
       bodies,
       G,
-      onFinish: run => {
-        previous = run;
+      onFinish: () => {
         state.paused = true;
         render();
       },
@@ -199,7 +196,8 @@ export function armBinaryRun() {
 /** Repeat the run exactly, at half the integration step. */
 function halveAndRepeat() {
   const e = cacheElements();
-  const current = Number(e.timestep?.value) || SETTINGS.max_timestep || 1;
+  const current =
+    Number(e.timestep?.valueAsNumber) || SETTINGS.max_timestep || 1;
   if (e.timestep) e.timestep.value = String(current / 2);
   beginRun();
 }
@@ -400,12 +398,6 @@ export function setBinaryRunEnabled(on) {
   layoutObservationPanels();
 }
 
-/** @returns {boolean} Whether the panel is open */
-export const isBinaryRunEnabled = () => enabled;
-
-/** @returns {?object} The last finished run, for the lesson and the bench */
-export const lastFinishedRun = () => (previous ? { ...previous } : null);
-
 /**
  * Match the panel to whatever scenario is loaded now.
  *
@@ -470,8 +462,8 @@ let sweepRecheck = null;
 
 /** @returns {?string} Which sweep this scenario offers, if any */
 function sweepKindFor(scenario) {
-  if (scenario === 'Binary Planet Lab') return 'circumstellar';
-  if (scenario === 'Circumbinary Planet Lab') return 'circumbinary';
+  if (scenario === 'binary-planet-lab') return 'circumstellar';
+  if (scenario === 'circumbinary-planet-lab') return 'circumbinary';
   return null;
 }
 
@@ -925,7 +917,7 @@ export function initBinaryRun() {
   });
 
   e.sweepRecheckRun?.addEventListener('click', () => {
-    const value = Number(e.sweepRecheck?.value);
+    const value = +e.sweepRecheck?.value;
     if (!Number.isFinite(value)) return;
     // Half the step the sweep itself ran at, which is the check the lesson
     // already makes by hand for a single configuration.
@@ -951,7 +943,7 @@ export function initBinaryRun() {
 /**
  * Show the panel for a scenario that has already finished loading.
  *
- * The chunk is fetched by js/scenarioPanelBridge.js in response to the reset
+ * The chunk is fetched by js/placement.js in response to the reset
  * event, so by the time init() subscribes to that event it has been and gone.
  * This is the one-off catch-up for the load that caused the import; every
  * later rebuild is handled by the subscription. It shows the panel directly

@@ -60,6 +60,7 @@ import DARK_MATTER from './investigations/missing-mass.js';
 import TIDES from './investigations/tides.js';
 import BUTTERFLY from './investigations/butterfly-effect.js';
 import RESONANCE from './investigations/when-orbits-lock.js';
+import POWER_LAW from './investigations/power-law-gravity.js';
 import DETECT_THIS_PLANET from './investigations/detect-this-planet.js';
 import DESIGN_THE_SCHEDULE from './investigations/design-the-schedule.js';
 import BINARY_PLANETS from './investigations/binary-star-planets.js';
@@ -70,7 +71,45 @@ import WHAT_IS_A_GRAVITATIONAL_WAVE from './investigations/what-is-a-gravitation
 import LISTENING_TO_SPACETIME from './investigations/listening-to-spacetime.js';
 import A_UNIVERSE_OF_STARS from './investigations/a-universe-of-stars.js';
 import LIVES_OF_STARS from './investigations/lives-of-stars.js';
+import TWELVE_NIGHTS from './investigations/twelve-nights.js';
+import COLOR_AND_TEMPERATURE from './investigations/color-and-temperature.js';
+import THE_TURNING_SKY from './investigations/the-turning-sky.js';
+import THE_SUN_THROUGH_THE_YEAR from './investigations/the-sun-through-the-year.js';
+import PHASES_AND_ECLIPSES from './investigations/phases-and-eclipses.js';
+import WANDERERS_ON_THE_SKY from './investigations/wanderers-on-the-sky.js';
+import PLAN_A_NIGHT from './investigations/plan-a-night.js';
+import LINES_AND_MOTION from './investigations/lines-and-motion.js';
+import WHAT_A_SPECTRUM_IS_MADE_OF from './investigations/what-a-spectrum-is-made-of.js';
+import THE_SUNS_MOTION from './investigations/the-suns-motion.js';
+import THE_ROTATING_DISK from './investigations/the-rotating-disk.js';
+import CLUSTER_MEMBERSHIP from './investigations/cluster-membership.js';
+import INTEGRATORS_IN_PRACTICE from './investigations/integrators-in-practice.js';
+import EXTENDING_AN_EXPERIMENT from './investigations/extending-an-experiment.js';
+import REFITTING_A_TRANSIT from './investigations/refitting-a-transit.js';
+import TWO_PERIODOGRAMS from './investigations/two-periodograms.js';
+import SAMPLING_A_POSTERIOR from './investigations/sampling-a-posterior.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
+import { SUMMARIES } from './investigations/summaries.js';
+import INSIDE_A_STAR from './investigations/inside-a-star.js';
+import SCALING_THE_MAIN_SEQUENCE from './investigations/scaling-the-main-sequence.js';
+import THE_LIMIT from './investigations/the-limit.js';
+import THE_EXPANDING_UNIVERSE from './investigations/the-expanding-universe.js';
+import STANDARD_CANDLES from './investigations/standard-candles.js';
+import THE_SHAPE_OF_EXPANSION from './investigations/the-shape-of-expansion.js';
+import WHERE_GALAXIES_LIVE from './investigations/where-galaxies-live.js';
+import WHAT_A_CCD_RECORDS from './investigations/what-a-ccd-records.js';
+import SIGNAL_NOISE_AND_EXPOSURE from './investigations/signal-noise-and-exposure.js';
+import A_VARIABLE_STAR_FROM_FRAMES from './investigations/a-variable-star-from-frames.js';
+import THE_BEAT_OF_A_STAR from './investigations/the-beat-of-a-star.js';
+import LEAVITTS_LAW from './investigations/leavitts-law.js';
+import THE_FIRST_RUNG from './investigations/the-first-rung.js';
+import WHICH_KIND_OF_VARIABLE from './investigations/which-kind-of-variable.js';
+import BENDING_LIGHT from './investigations/bending-light.js';
+import EINSTEIN_RINGS_AND_ARCS from './investigations/einstein-rings-and-arcs.js';
+import A_LENS_PASSING_BY from './investigations/a-lens-passing-by.js';
+import WHO_GETS_COUNTED from './investigations/who-gets-counted.js';
+import WHY_THE_BRIGHT_ONES_WIN from './investigations/why-the-bright-ones-win.js';
+import THE_COMPLETENESS_CURVE from './investigations/the-completeness-curve.js';
 
 // Order matters: the browser lists them in this order, and the three exoplanet
 // lessons form a sequence. Shadows measures a radius, Tug measures a mass and
@@ -111,7 +150,51 @@ export const INVESTIGATIONS = [
   LISTENING_TO_SPACETIME,
   A_UNIVERSE_OF_STARS,
   LIVES_OF_STARS,
+  TWELVE_NIGHTS,
+  // The force law itself, after the lessons that assume it. Kepler's laws are
+  // the thing this one takes apart, so it cannot come before them.
+  POWER_LAW,
+  COLOR_AND_TEMPERATURE,
+  THE_TURNING_SKY,
+  THE_SUN_THROUGH_THE_YEAR,
+  PHASES_AND_ECLIPSES,
+  WANDERERS_ON_THE_SKY,
+  PLAN_A_NIGHT,
+  LINES_AND_MOTION,
+  WHAT_A_SPECTRUM_IS_MADE_OF,
+  THE_SUNS_MOTION,
+  THE_ROTATING_DISK,
+  CLUSTER_MEMBERSHIP,
+  INSIDE_A_STAR,
+  SCALING_THE_MAIN_SEQUENCE,
+  THE_LIMIT,
+  THE_EXPANDING_UNIVERSE,
+  STANDARD_CANDLES,
+  THE_SHAPE_OF_EXPANSION,
+  WHERE_GALAXIES_LIVE,
+  WHAT_A_CCD_RECORDS,
+  SIGNAL_NOISE_AND_EXPOSURE,
+  A_VARIABLE_STAR_FROM_FRAMES,
+  THE_BEAT_OF_A_STAR,
+  LEAVITTS_LAW,
+  THE_FIRST_RUNG,
+  WHICH_KIND_OF_VARIABLE,
+  BENDING_LIGHT,
+  EINSTEIN_RINGS_AND_ARCS,
+  A_LENS_PASSING_BY,
+  WHO_GETS_COUNTED,
+  WHY_THE_BRIGHT_ONES_WIN,
+  THE_COMPLETENESS_CURVE,
+  INTEGRATORS_IN_PRACTICE,
+  EXTENDING_AN_EXPERIMENT,
+  REFITTING_A_TRANSIT,
+  TWO_PERIODOGRAMS,
+  SAMPLING_A_POSTERIOR,
 ];
+
+// The lessons carry no card summary; it is written once in summaries.js and
+// attached here for the build tools and tests that read lessons statically.
+for (const inv of INVESTIGATIONS) inv.summary = SUMMARIES[inv.id];
 
 /**
  * Find an investigation by id.

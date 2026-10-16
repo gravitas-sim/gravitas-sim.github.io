@@ -64,8 +64,20 @@
  */
 
 import { readFile, writeFile, readdir } from 'node:fs/promises';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+
+import { LOCALES } from '../js/i18n/index.js';
+
+/**
+ * Where the translated lesson bodies live, one directory per locale.
+ *
+ * English is the base and has no shadow directory; every other locale has one
+ * named for its id.
+ */
+const SHADOW_ROOT = 'js/data/investigations';
+const SHADOW_LOCALES = LOCALES.map(l => l.id).filter(id => id !== 'en');
 
 const OUT = 'sw-manifest.js';
 
@@ -86,6 +98,10 @@ const OUT = 'sw-manifest.js';
  */
 const TREES = [
   { dir: 'js', ext: ['.js'], core: true },
+  // The panels' markup, which each family fetches as it mounts. Core for the
+  // same reason its modules are: a family that loads offline and cannot find
+  // its markup is a family that does not open (INDEX_DECOMPOSITION.md).
+  { dir: 'js/fragments', ext: ['.html'], core: true },
   { dir: 'css', ext: ['.css'], core: true },
   // The self-hosted fonts and the two vendored libraries. These used to come
   // from Google and jsdelivr, which meant the interface lost its typography
@@ -98,17 +114,149 @@ const TREES = [
 /** Individually named files. */
 const FILES = [
   { path: 'index.html', core: true },
+  // The one document page that is meant to work offline: the observatory
+  // opens observations the reader has already been given, and its modules are
+  // all under js/, precached with the rest. Optional, so a page that fails to
+  // fetch costs this page offline and nothing else. sw.js serves it for its
+  // directory URL.
+  { path: 'observatory/index.html', core: false },
+  // The catalog: the page and its index, so a reader offline can still see and
+  // remove what they installed. The archives are not precached: installing one
+  // keeps it in IndexedDB, which is what makes it work offline
+  // (js/catalog/store.js), and one not installed is not wanted offline.
+  { path: 'catalog/index.html', core: false },
+  { path: 'catalog/catalog.json', core: false },
+  // The Library and its index (LIBRARY.md): optional, as the catalog is. What
+  // it links to is precached, or not, by the page that runs it.
+  { path: 'library/index.html', core: false },
+  { path: 'library/library.json', core: false },
+  // My work: the page, to open offline what the student made on this device.
+  { path: 'my-work/index.html', core: false },
+  // The course home: a course link opens offline once Gravitas has been
+  // opened, since the pack is in the link and the page's modules are under
+  // js/. Optional, as the catalog is. The builder (studio/course/) is not.
+  { path: 'course/index.html', core: false },
+  // The 3-D lab and its guided investigations (LAB3D_CURRICULUM.md): the
+  // page, its modules, three.js and the kernel are all optional, so a class
+  // that has opened it once can work offline, and an install that cannot
+  // fetch them loses only the lab.
+  { path: '3d/index.html', core: false },
+  // The mission lab (MISSION_LAB.md): the page, its modules, the ephemeris
+  // pack and the solvers, optional as the 3-D lab's are.
+  { path: 'mission/lab/index.html', core: false },
+  // The Sky Lab and its star table (data-packs/sky-bright-stars.json).
+  { path: 'sky/index.html', core: false },
+  { path: 'sky/bright-stars.json', core: false },
+  { path: 'sky/ephemeris.json', core: false },
+  // The galactic tables' rows (data-packs/gaia-dr3-*.json, milky-way-rotation-curve.json).
+  { path: 'gaia/solar-neighbourhood.json', core: false },
+  { path: 'gaia/ngc2420.json', core: false },
+  { path: 'gaia/milky-way-rotation-curve.json', core: false },
+  // The variable-star tables' rows (Roadmap II Prompt 96).
+  { path: 'variables/tess-su-dra-s15.json', core: false },
+  { path: 'variables/tess-eta-aql-s81.json', core: false },
+  { path: 'variables/shoes-r22-cepheids.json', core: false },
+  { path: 'variables/class-sample.json', core: false },
+  // The cosmology tables' rows (Roadmap II Prompt 91).
+  { path: 'cosmology/hubble-1929-table1.json', core: false },
+  { path: 'cosmology/des-sn5yr-hd.json', core: false },
+  { path: 'cosmology/pantheon-plus-hd.json', core: false },
+  { path: 'cosmology/sdss-dr18-redshift-slice.json', core: false },
+  { path: 'cosmology/coma-cluster-quoted.json', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },
 ];
 
 /**
+ * Data only the Observatory opens: the packs tools/build-data-packs.mjs builds
+ * with no capability package (`capability: null`), so no package declares
+ * their offline class. Optional, like the page that opens them, rather than
+ * core as the walk of js/ would make them. Named rather than inferred;
+ * tests/dataPacks.test.js fails for a pack left off.
+ */
+const OBSERVATORY_ONLY = new Set([
+  'js/data/observations/sdssNgc2420Photometry.js',
+  'js/data/observations/sdssNgc2420Segue.js',
+  'js/data/observations/mistSdssIsochrones.js',
+  'js/data/observations/gaiaSolarNeighbourhood.js',
+  'js/data/observations/gaiaNgc2420.js',
+  'js/data/observations/milkyWayRotationCurve.js',
+  // The variable-star packs' records (js/variablesData.js); the rows are sidecars.
+  'js/data/observations/tessSuDraS15.js',
+  'js/data/observations/tessEtaAqlS81.js',
+  'js/data/observations/shoesR22Cepheids.js',
+  // The cosmology packs' records (js/cosmologyData.js); the rows are sidecars.
+  'js/data/observations/hubble1929Table1.js',
+  'js/data/observations/desSn5yrHd.js',
+  'js/data/observations/pantheonPlusHd.js',
+  'js/data/observations/sdssDr18RedshiftSlice.js',
+  'js/data/observations/comaClusterQuoted.js',
+  // The radiation kernel's data (Roadmap II Prompt 82): loaded on demand by
+  // js/kernels/radiation/packs.js, and by no page's start-up.
+  'js/data/radiation/bandpasses.js',
+  'js/data/radiation/lines.js',
+  'js/data/radiation/extinction.js',
+  'js/data/radiation/bolometric.js',
+  'js/data/radiation/gaiaBandpasses.js',
+  // The Sky Lab's star pack (js/kernels/sky/packs.js): the rows are a fetched
+  // file, and this module is read only for its hash.
+  'js/data/sky/brightStars.js',
+]);
+
+/**
+ * The physics validation suite and its DOM stand-in, which the /validation/
+ * page's live run loads in its Worker on demand. They lived in tools/, which
+ * was never precached, until tools/ stopped being published (Roadmap II,
+ * Prompt 47); under js/ the walk would make them core, adding 290 KB to every
+ * reader's install for a page one reader in many opens. Kept out, as before:
+ * the live run needs the network either way.
+ */
+/**
+ * The compute page (COMPUTE.md) is online only and opt-in: its page, its
+ * modules, its notebooks and its example inputs are never precached, so no
+ * install downloads them and no offline reader is promised them.
+ */
+const NEVER_PRECACHED = [
+  /^js\/compute\//,
+  /^js\/computePage\.js$/,
+  /^compute\//,
+  /^compute-frame\//,
+];
+
+const ON_DEMAND_ONLY = new Set([
+  'js/validation/physicsChecks.js',
+  'js/validation/domShim.js',
+]);
+
+/**
  * Paths kept out of the precache. Matched against the repo-relative path.
  *
- * The Spanish lesson shadows are the deliberate exclusion; see the header.
+ * The translated lesson shadows are the deliberate exclusion; see the header.
+ *
+ * This matches ANY locale-shaped subdirectory rather than the locales that
+ * happen to be registered, and that difference is the whole point. The
+ * directories are walked by `{ dir: 'js', core: true }` above, so anything not
+ * excluded here is precached as CORE - and one 404 among core assets makes
+ * sw.js delete the cache and reject the install, for every reader on earth
+ * rather than only for readers of that language. A pattern keyed to LOCALES
+ * would put an unregistered directory straight into that failure; a pattern
+ * keyed to the shape of the path cannot. `assertShadowsMatchLocales()` then
+ * refuses the build if the two ever disagree, so neither an unregistered
+ * directory nor a registered locale with no directory can pass quietly.
  */
-const EXCLUDE = [/^js\/data\/investigations\/es\//];
+const EXCLUDE = [new RegExp(`^${SHADOW_ROOT}/[a-z]{2}(-[A-Za-z]{2,4})?/`)];
+
+/**
+ * Whether a repo-relative path is a translated lesson body.
+ *
+ * Exported so the property can be asserted directly rather than inferred from
+ * a manifest that happens to contain only the locales on disk today.
+ *
+ * @param {string} p - Repo-relative path
+ * @returns {boolean} Whether it is a locale shadow
+ */
+export const isLocaleShadow = p => EXCLUDE.some(re => re.test(p));
 
 /**
  * Every file under a directory, recursively, with the wanted extensions.
@@ -128,6 +276,81 @@ async function walk(dir, ext) {
 }
 
 /**
+ * The offline class each capability package declares for its assets.
+ *
+ * A package says, per file, whether a reader needs it offline to use the
+ * capability at all (`core`), whether it is worth having (`optional`), whether
+ * it is a translation warmed for readers of that locale (`locale`), or whether
+ * it is never cached (`none`). The directory walk above gives every file a
+ * default; a declaration overrides it, and one the precache cannot honor - a
+ * core file the walk excludes, a `locale` file that is not a lesson shadow -
+ * refuses the build rather than shipping a precache that disagrees with the
+ * package.
+ *
+ * @returns {Map<string, string>} Repo-relative path -> offline class
+ */
+export function capabilityOffline(dir = 'capabilities') {
+  const declared = new Map();
+  if (!existsSync(dir)) return declared;
+  for (const name of readdirSync(dir)
+    .filter(f => f.endsWith('.json'))
+    .sort()) {
+    const m = JSON.parse(readFileSync(path.posix.join(dir, name), 'utf8'));
+    for (const a of m.assets || []) declared.set(a.path, a.offline);
+  }
+  return declared;
+}
+
+function applyCapabilityOffline(entries) {
+  const declared = capabilityOffline();
+  const byPath = new Map(entries.map(e => [e.path, e]));
+  const problems = [];
+  for (const [p, offline] of declared) {
+    const shadow = isLocaleShadow(p);
+    if (offline === 'locale') {
+      if (!shadow)
+        problems.push(`${p} is declared locale but is not a lesson shadow`);
+      continue;
+    }
+    if (shadow && offline !== 'none') {
+      problems.push(
+        `${p} is a lesson shadow, warmed per locale; declare it locale`
+      );
+      continue;
+    }
+    if (offline === 'none') {
+      byPath.delete(p);
+    } else if (byPath.has(p)) {
+      byPath.get(p).core = offline === 'core';
+    } else if (existsSync(p)) {
+      byPath.set(p, { path: p, core: offline === 'core' });
+    } else {
+      problems.push(`${p} is declared ${offline} but does not exist`);
+    }
+  }
+  if (problems.length) {
+    throw new Error(
+      'Capability packages declare offline classes the precache cannot honor:\n  ' +
+        problems.join('\n  ')
+    );
+  }
+  return [...byPath.values()];
+}
+
+/**
+ * The three lists a reader's browser caches, as the worker will receive them.
+ * @returns {Promise<{core: string[], optional: string[], localeWarm: Map<string, string[]>}>}
+ */
+export async function precacheLists() {
+  const { core, optional } = await buildManifest();
+  const onDisk = await shadowsOnDisk();
+  const localeWarm = new Map(
+    SHADOW_LOCALES.map(id => [id, onDisk.get(id) || []])
+  );
+  return { core, optional, localeWarm };
+}
+
+/**
  * The precache list and the version its contents imply.
  *
  * @returns {Promise<{paths: string[], version: string, bytes: number}>} Manifest
@@ -136,12 +359,20 @@ export async function buildManifest() {
   const collected = FILES.map(f => ({ path: f.path, core: f.core }));
   for (const { dir, ext, core } of TREES) {
     for (const path_ of await walk(dir, ext))
-      collected.push({ path: path_, core });
+      collected.push({
+        path: path_,
+        core: core && !OBSERVATORY_ONLY.has(path_),
+      });
   }
 
-  const kept = collected
-    .filter(f => !EXCLUDE.some(re => re.test(f.path)))
-    .sort((a, b) => a.path.localeCompare(b.path));
+  const kept = applyCapabilityOffline(
+    collected.filter(
+      f =>
+        !EXCLUDE.some(re => re.test(f.path)) &&
+        !NEVER_PRECACHED.some(re => re.test(f.path)) &&
+        !ON_DEMAND_ONLY.has(f.path)
+    )
+  ).sort((a, b) => a.path.localeCompare(b.path));
   const paths = kept.map(f => f.path);
   const core = kept.filter(f => f.core).map(f => f.path);
   const optional = kept.filter(f => !f.core).map(f => f.path);
@@ -174,6 +405,19 @@ export function renderManifest(
   { paths, core, optional, version, bytes },
   localeWarm
 ) {
+  // A Map keyed by locale id. Accepts the older array-of-Spanish-paths shape
+  // too, so a caller that has not been updated still produces a correct file
+  // rather than a silently empty warm list.
+  const warm =
+    localeWarm instanceof Map
+      ? localeWarm
+      : new Map([['es', localeWarm || []]]);
+  const warmBlock = [...warm.entries()]
+    .map(
+      ([id, files]) =>
+        `  ${id}: [\n${files.map(p => `    './${p}',`).join('\n')}\n  ],`
+    )
+    .join('\n');
   const kb = Math.round(bytes / 1024);
   return `// Generated by tools/build-service-worker.mjs. Do not edit.
 //
@@ -203,23 +447,81 @@ ${paths.map(p => `  './${p}',`).join('\n')}
 ];
 
 // Not precached: fetched on demand, and warmed deliberately when the interface
-// switches to Spanish. See the header of the generator for why these are
-// treated differently from the English bodies.
+// switches to that language. See the header of the generator for why these are
+// treated differently from the English bodies - and note that being absent from
+// both precache lists is what makes a missing translated lesson unable to fail
+// an install.
 self.__GRAVITAS_LOCALE_WARM = {
-  es: [
-${localeWarm.map(p => `    './${p}',`).join('\n')}
-  ],
+${warmBlock}
 };
 `;
+}
+
+/**
+ * The shadow directories actually on disk, locale id -> sorted paths.
+ *
+ * @returns {Promise<Map<string, string[]>>} What is there
+ */
+async function shadowsOnDisk() {
+  const found = new Map();
+  for (const entry of await readdir(SHADOW_ROOT, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    if (!/^[a-z]{2}(-[A-Za-z]{2,4})?$/.test(entry.name)) continue;
+    const files = (
+      await walk(path.posix.join(SHADOW_ROOT, entry.name), ['.js'])
+    ).sort((a, b) => a.localeCompare(b));
+    found.set(entry.name, files);
+  }
+  return found;
+}
+
+/**
+ * Refuse to build when the shadow directories and the locale registry disagree.
+ *
+ * An unregistered directory is the dangerous half: it would be warmed by
+ * nothing and, but for the shape-based exclusion above, precached as core. A
+ * registered locale with no directory is the harmless half, and still a bug
+ * worth failing on, because the picker would offer a language whose lessons do
+ * not exist.
+ *
+ * @param {Map<string, string[]>} onDisk - From shadowsOnDisk()
+ */
+function assertShadowsMatchLocales(onDisk) {
+  const registered = new Set(SHADOW_LOCALES);
+  const orphaned = [...onDisk.keys()].filter(id => !registered.has(id));
+  const missing = SHADOW_LOCALES.filter(id => !onDisk.has(id));
+  if (!orphaned.length && !missing.length) return;
+
+  const lines = [];
+  if (orphaned.length) {
+    lines.push(
+      `  ${SHADOW_ROOT}/ has ${orphaned.join(', ')} with no entry in LOCALES ` +
+        '(js/i18n/index.js). Register the locale, or remove the directory.'
+    );
+  }
+  if (missing.length) {
+    lines.push(
+      `  LOCALES registers ${missing.join(', ')} with no ${SHADOW_ROOT}/<id>/ ` +
+        'directory. Add the shadows, or remove the locale.'
+    );
+  }
+  throw new Error(
+    'The lesson shadow directories and the locale registry disagree:\n' +
+      lines.join('\n')
+  );
 }
 
 /** @returns {Promise<string>} What the file should contain right now */
 export async function expectedFile() {
   const manifest = await buildManifest();
-  const es = (await walk('js/data/investigations/es', ['.js'])).sort((a, b) =>
-    a.localeCompare(b)
+  const onDisk = await shadowsOnDisk();
+  assertShadowsMatchLocales(onDisk);
+  // Registry order, not directory order, so the generated file does not change
+  // because a filesystem enumerated differently.
+  const localeWarm = new Map(
+    SHADOW_LOCALES.map(id => [id, onDisk.get(id) || []])
   );
-  return renderManifest(manifest, es);
+  return renderManifest(manifest, localeWarm);
 }
 
 async function main() {

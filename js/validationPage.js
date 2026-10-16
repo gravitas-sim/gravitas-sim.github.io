@@ -214,10 +214,12 @@ function paintChart(checks) {
         .map(c => {
           const m = margin(c);
           const pct = m >= 0.5 ? ' is-tight' : '';
+          // Drawn, not controls: the chart is one image with a summary label,
+          // and every check's number is in the tables below. As focusable
+          // buttons that did nothing, the dots were some 280 tab stops inside
+          // that image. A pointer still gets the name on hover.
           return `<span class="val-dot${pct}" style="left:${chartX(m).toFixed(2)}%"
-                    tabindex="0" role="button"
-                    aria-label="${esc(c.name)}: used ${esc((m * 100).toPrecision(2))} percent of its tolerance"
-                    data-tip="${esc(c.name)} — ${esc(num(m))}× tolerance"></span>`;
+                    title="${esc(c.name)} — ${esc(num(m))}× tolerance"></span>`;
         })
         .join('');
       return `
@@ -355,8 +357,10 @@ function paintGroups(checks) {
 function barFor(m) {
   const pct = Math.max(0, Math.min(100, m * 100));
   const tight = m >= 0.5 ? ' is-tight' : '';
-  return `<span class="val-bar${tight}" title="${(m * 100).toPrecision(3)}% of the allowed tolerance">
+  const used = `${(m * 100).toPrecision(3)}% of the allowed tolerance`;
+  return `<span class="val-bar${tight}" title="${used}">
             <span style="width:${pct.toFixed(1)}%"></span>
+            <span class="visually-hidden">${used}</span>
           </span>`;
 }
 
@@ -498,6 +502,6 @@ fetch(DATA_URL)
     $('valScore').innerHTML = '<span class="is-fail">—</span>';
     $('valScoreLabel').textContent = 'results could not be loaded';
     $('valGroups2').innerHTML =
-      `<p class="doc-note">The committed results file could not be read (${esc(err.message)}). Running the suite here will still work if your browser allows module workers.</p>`;
+      `<p class="ui-state is-empty"><span class="gs-en">The committed results file could not be read (${esc(err.message)}). Press Run all checks above to produce them in this browser, which works offline if your browser allows module workers.</span><span class="gs-es" lang="es">No se pudo leer el archivo de resultados. Pulsa Ejecutar todas las comprobaciones arriba para producirlos en este navegador, lo que funciona sin conexión si tu navegador admite módulos en Workers.</span></p>`;
     setupLiveRun();
   });

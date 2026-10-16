@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Classroom evidence kit | Gravitas</title>
+    <meta
+      name="description"
+      content="Printable pilot instruments for evaluating a Gravitas sequence: a fidelity checklist, a project-developed pre/post assessment, a usability questionnaire, and de-identified export templates."
+    />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local, and print-first. Everything on this page has to come out of a
+         school printer on a machine with JavaScript switched off, because that
+         is the machine a lot of instructors actually have. */
+      .ek-item { margin: 0 0 1.1rem; }
+      .ek-q { margin: 0 0 0.25rem; font-weight: 600; }
+      .ek-hint { margin: 0 0 0.3rem; font-size: 0.85rem; color: var(--text-secondary); }
+      .ek-opts { margin: 0; font-size: 0.9rem; display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+      .ek-rule { border-bottom: 1px solid var(--border-strong); height: 1.6rem; margin: 0; }
+      .ek-choices { margin: 0.2rem 0 0 1.2rem; padding: 0; }
+      .ek-choices li { margin: 0.1rem 0; }
+      /* No opacity here. Dimming a small uppercase label to 0.6 took it to a
+         contrast axe reports as serious, on nine separate badges. The border
+         and the size already say "this is a tag". */
+      .ek-aud { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+                border: 1px solid currentColor; border-radius: 3px; padding: 0 0.3rem; }
+      .ek-warn { border-left: 3px solid #e0a458; padding: 0.6rem 0 0.6rem 0.9rem; margin: 1.2rem 0; }
+      .ek-tools { border: 1px dashed var(--border-strong); border-radius: 8px; padding: 1rem; margin: 1.5rem 0; }
+      .ek-tools[hidden] { display: none; }
+      .ek-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin-top: 0.6rem; }
+      .ek-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 1.05rem;
+                 background: var(--surface-2); padding: 0.15rem 0.45rem; border-radius: 4px; }
+      .ek-review td { height: 2.6rem; min-width: 4.5rem; }
+      @media print {
+        .ek-noprint { display: none !important; }
+        .ek-rule { border-bottom: 1px solid #999; }
+        a[href]::after { content: ""; }
+      }
+    </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
+  </head>
+  <body class="doc-page">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/" aria-current="page"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<div class="gs-offline" role="status"><template><div class="gs-offline-box">
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
+</div></template></div>
+<!-- /shell:header -->
+
+    <main class="doc-main is-wide" id="main">
+      <h1><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencia para el aula</span></h1>
+      <p class="ui-note"><span class="ui-badge is-accent"><span class="gs-en">New in 2.0</span><span class="gs-es" lang="es">Nuevo en 2.0</span></span> <span class="gs-en">Not yet used in a class.</span><span class="gs-es" lang="es">Aún no se ha usado en un grupo.</span></p>
+      <p>
+        <span class="gs-en">Everything an instructor needs to run one section on Gravitas, take a
+        defensible pilot measurement, and hand a researcher a de-identified
+        dataset &mdash; without an account, a server, or sending anything
+        anywhere.</span><span class="gs-es" lang="es">Todo lo que un docente necesita para dar una sección con Gravitas, tomar una medición piloto defendible y entregar a un investigador un conjunto de datos sin identificar &mdash; sin cuenta, sin servidor y sin enviar nada a ningún sitio.</span>
+      </p>
+
+      <div class="ek-warn">
+        <p>
+          <span class="gs-en"><strong>These are pilot instruments, developed for this project.</strong>
+          The pre/post assessment below has not been through item analysis,
+          reliability testing, or validation against an existing concept
+          inventory, because none of that has been done. A score on it is a
+          score on these twelve questions. It is not a measure of astronomy
+          learning, and it should not be reported as one.</span><span class="gs-es" lang="es"><strong>Estos son instrumentos piloto, desarrollados para este proyecto.</strong> La evaluación previa y posterior de abajo no ha pasado por análisis de ítems, pruebas de fiabilidad ni validación frente a un inventario de conceptos existente, porque nada de eso se ha hecho. Una puntuación en ella es una puntuación en estas doce preguntas. No mide el aprendizaje de astronomía y no debería presentarse como si lo hiciera.</span>
+        </p>
+        <p>
+          <span class="gs-en">No study has been run on Gravitas. There is no measured learning gain.
+          This page adds the paperwork somebody would need in order to change
+          that; it changes nothing about what is currently known.</span><span class="gs-es" lang="es">No se ha hecho ningún estudio sobre Gravitas. No hay ninguna ganancia de aprendizaje medida. Esta página añade el papeleo que alguien necesitaría para cambiarlo; no cambia nada de lo que se sabe hoy.</span>
+        
+          <span class="gs-en">A design for a learning-outcome study and a plan for validating this
+          instrument is written (<code>LEARNING_STUDY.md</code> in the repository); it has not been carried out, reviewed by
+          an ethics board or registered, and no data has been collected under
+          it.</span><span class="gs-es" lang="es">Están escritos un diseño de estudio de resultados de aprendizaje y un plan para validar este instrumento (<code>LEARNING_STUDY.md</code> en el repositorio); no se han llevado a cabo, ni los ha revisado un comité de ética, ni están registrados, y no se ha recogido ningún dato con ellos.</span>
+        </p>
+      </div>
+
+      <h2 id="ethics"><span class="gs-en">Before you collect anything</span><span class="gs-es" lang="es">Antes de recoger nada</span></h2>
+      <p>
+        <span class="gs-en">Using these to improve your own teaching is one thing. Collecting data
+        from students with the intention of publishing it is another, and the
+        line between them is drawn by your institution rather than by us.</span><span class="gs-es" lang="es">Usar esto para mejorar tu propia enseñanza es una cosa. Recoger datos de estudiantes con la intención de publicarlos es otra, y la línea entre ambas la traza tu institución, no nosotros.</span>
+      </p>
+      <ul>
+        <li>
+          <span class="gs-en"><strong>Classroom improvement is not automatically research.</strong>
+          Running a pre/post to decide whether to use Gravitas again next term
+          is ordinary teaching practice. Running the same pre/post intending to
+          write it up generally is research.</span><span class="gs-es" lang="es"><strong>Mejorar el aula no es automáticamente investigar.</strong> Hacer una evaluación previa y posterior para decidir si vuelves a usar Gravitas el próximo periodo es práctica docente ordinaria. Hacer la misma evaluación con la intención de escribirla suele ser investigación.</span>
+        </li>
+        <li>
+          <span class="gs-en"><strong>Institutional review is your responsibility.</strong> Research
+          on students &mdash; including classroom research by their own
+          instructor &mdash; usually needs approval before any data is
+          collected, and consent that is genuinely optional when the person
+          asking also assigns the grade. Retrospective approval is usually not
+          available.</span><span class="gs-es" lang="es"><strong>La revisión institucional es responsabilidad tuya.</strong> La investigación con estudiantes &mdash; incluida la que hace en el aula su propio docente &mdash; suele necesitar aprobación antes de recoger ningún dato, y un consentimiento realmente opcional cuando quien lo pide también pone la nota. La aprobación retroactiva normalmente no está disponible.</span>
+        </li>
+        <li>
+          <span class="gs-en"><strong>Gravitas transmits nothing.</strong> This page has no
+          analytics, no telemetry and no submission endpoint. What you type
+          stays in your own browser until you export it, and the export lands
+          in your downloads folder. Nobody here receives your students' work or
+          knows you ran this.</span><span class="gs-es" lang="es"><strong>Gravitas no transmite nada.</strong> Esta página no tiene analítica, telemetría ni punto de envío. Lo que escribes permanece en tu propio navegador hasta que lo exportas, y la exportación llega a tu carpeta de descargas. Nadie aquí recibe el trabajo de tus estudiantes ni sabe que lo hiciste.</span>
+        </li>
+      </ul>
+
+      <h2 id="sequence"><span class="gs-en">The sequence these items are written against</span><span class="gs-es" lang="es">La secuencia para la que se escribieron estos ítems</span></h2>
+      <p>
+        <span class="gs-en">Three introductory investigations, thirty-five to forty-five minutes
+        each, which is two or three class meetings:
+        <strong>Kepler&rsquo;s Laws</strong>, then
+        <strong>Bound, Unbound and Escape</strong>, then
+        <strong>Weighing the Stars</strong>. The assessment items are tied to
+        the objectives those three state on their own cards. Run a different
+        sequence and the items stop matching what was taught, which is the
+        commonest way an instrument like this ends up measuring nothing.</span><span class="gs-es" lang="es">Tres investigaciones introductorias, de treinta y cinco a cuarenta y cinco minutos cada una, es decir, dos o tres clases: <strong>Las leyes de Kepler</strong>, luego <strong>Ligado, no ligado y escape</strong>, luego <strong>Pesar las estrellas</strong>. Los ítems de la evaluación están vinculados a los objetivos que esas tres enuncian en sus propias tarjetas. Si ejecutas otra secuencia, los ítems dejan de corresponderse con lo enseñado, que es la forma más común de que un instrumento como este acabe sin medir nada.</span>
+      </p>
+
+      <h2 id="fidelity"><span class="gs-en">1. Implementation and fidelity checklist</span><span class="gs-es" lang="es">1. Lista de verificación de implementación y fidelidad</span></h2>
+      <p>
+        <span class="gs-en">Filled in by the instructor, once, after the sessions. Without it a
+        reader cannot tell a result from a deviation: a class where you worked
+        three answers on the board is a different intervention from one where
+        you did not.</span><span class="gs-es" lang="es">La rellena el docente, una sola vez, después de las sesiones. Sin ella, un lector no distingue un resultado de una desviación: un grupo en el que resolviste tres respuestas en la pizarra es una intervención distinta de uno en el que no lo hiciste.</span>
+      </p>
+      <ol class="ek-list">
+<!--FIDELITY-->
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en">Which investigations were used, in order</span><span class="gs-es" lang="es">Qué investigaciones se usaron, en orden</span></p>
+          <p class="ek-hint"><span class="gs-en">Ids or titles. If you ran only part of one, say which steps.</span><span class="gs-es" lang="es">Identificadores o títulos. Si solo hiciste parte de una, indica qué pasos.</span></p>
+          <p class="ek-rule"></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en">Instructional setting</span><span class="gs-es" lang="es">Contexto de enseñanza</span></p>
+          <p class="ek-opts"><span class="gs-en"><span>&#9744; lecture</span> <span>&#9744; lab</span> <span>&#9744; recitation</span> <span>&#9744; homework</span> <span>&#9744; mixed</span> <span>&#9744; other</span></span><span class="gs-es" lang="es"><span>&#9744; clase magistral</span> <span>&#9744; laboratorio</span> <span>&#9744; sesión de ejercicios</span> <span>&#9744; trabajo en casa</span> <span>&#9744; mixto</span> <span>&#9744; otro</span></span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en">Approximate contact time on Gravitas, in minutes</span><span class="gs-es" lang="es">Tiempo de contacto aproximado con Gravitas, en minutos</span></p>
+          <p class="ek-hint"><span class="gs-en">Total across all sessions. An estimate is fine; leave blank if unsure.</span><span class="gs-es" lang="es">Total de todas las sesiones. Una estimación basta; déjalo en blanco si no estás seguro.</span></p>
+          <p class="ek-rule"></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en">How students worked</span><span class="gs-es" lang="es">Cómo trabajaron los estudiantes</span></p>
+          <p class="ek-opts"><span class="gs-en"><span>&#9744; alone</span> <span>&#9744; pairs</span> <span>&#9744; small groups</span> <span>&#9744; mixed</span></span><span class="gs-es" lang="es"><span>&#9744; individualmente</span> <span>&#9744; en parejas</span> <span>&#9744; en grupos pequeños</span> <span>&#9744; mixto</span></span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en">Did you demonstrate or work through answers?</span><span class="gs-es" lang="es">¿Demostraste o resolviste respuestas?</span></p>
+          <p class="ek-hint"><span class="gs-en">This changes what the scores mean. It is not a failing to say yes.</span><span class="gs-es" lang="es">Esto cambia lo que significan las puntuaciones. Decir que sí no es un defecto.</span></p>
+          <p class="ek-opts"><span class="gs-en"><span>&#9744; no</span> <span>&#9744; demonstrated the interface only</span> <span>&#9744; worked some answers</span> <span>&#9744; worked most answers</span></span><span class="gs-es" lang="es"><span>&#9744; no</span> <span>&#9744; solo demostré la interfaz</span> <span>&#9744; resolví algunas respuestas</span> <span>&#9744; resolví la mayoría de las respuestas</span></span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en">Major deviations from the intended procedure</span><span class="gs-es" lang="es">Desviaciones importantes del procedimiento previsto</span></p>
+          <p class="ek-hint"><span class="gs-en">Skipped steps, technical failures, a fire drill, anything that would change how a reader reads the result.</span><span class="gs-es" lang="es">Pasos omitidos, fallos técnicos, un simulacro de incendio, cualquier cosa que cambie cómo se lee el resultado.</span></p>
+          <p class="ek-rule"></p>
+        </li>
+      </ol>
+
+      <h2 id="codes"><span class="gs-en">2. Anonymous participant codes</span><span class="gs-es" lang="es">2. Códigos anónimos de participante</span></h2>
+      <p>
+        <span class="gs-en">Only needed if you want to compare each student&rsquo;s own before and
+        after. Skip it and you still get per-item before and after across the
+        class.</span><span class="gs-es" lang="es">Solo hacen falta si quieres comparar el antes y el después de cada estudiante. Si lo omites, sigues teniendo el antes y el después por ítem en todo el grupo.</span>
+      </p>
+      <p>
+        <span class="gs-en"><strong>How it works.</strong> Each student gets a code, writes it on a
+        slip of paper they keep, and writes the same code on both sheets. You
+        never hold a list linking codes to names, so there is nothing to lose.</span><span class="gs-es" lang="es"><strong>Cómo funciona.</strong> Cada estudiante recibe un código, lo anota en un papel que se queda y escribe el mismo código en ambas hojas. Tú nunca tienes una lista que vincule códigos con nombres, así que no hay nada que perder.</span>
+      </p>
+      <p><span class="gs-en"><strong>What it costs, said plainly:</strong></span><span class="gs-es" lang="es"><strong>Lo que cuesta, dicho claramente:</strong></span></p>
+      <ul>
+        <li>
+          <span class="gs-en">A student who loses the slip cannot be paired. Count them as unpaired
+          rather than guessing &mdash; the summary tool does this for you.</span><span class="gs-es" lang="es">Un estudiante que pierde el papel no puede emparejarse. Cuéntalo como no emparejado en lugar de adivinar &mdash; la herramienta de resumen lo hace por ti.</span>
+        </li>
+        <li>
+          <span class="gs-en">Two students can pick the same code. The tool reports a collision
+          instead of silently merging them.</span><span class="gs-es" lang="es">Dos estudiantes pueden elegir el mismo código. La herramienta informa de la colisión en lugar de fusionarlos en silencio.</span>
+        </li>
+        <li>
+          <span class="gs-en">Do <em>not</em> build codes from personal facts &mdash; initials, birth
+          dates, mother&rsquo;s maiden name. Those recipes are common and they
+          are quasi-identifiers: in a class of twenty they can often be run
+          backwards to a person, which is exactly what the code was for
+          avoiding.</span><span class="gs-es" lang="es"><em>No</em> construyas códigos con datos personales &mdash; iniciales, fechas de nacimiento, apellido de soltera de la madre. Esas recetas son comunes y son cuasi-identificadores: en una clase de veinte se pueden a menudo recorrer al revés hasta una persona, que es justo lo que el código quería evitar.</span>
+        </li>
+      </ul>
+
+      <h2 id="concept"><span class="gs-en">3. Pilot pre/post concept assessment</span><span class="gs-es" lang="es">3. Evaluación piloto de conceptos, previa y posterior</span></h2>
+      <p>
+        <span class="gs-en">Twelve multiple-choice items, about ten minutes. Administer the same
+        twelve before the sequence and after it. Three items each on orbital
+        reasoning, measurement and inference, reading the model, and telling an
+        illustration from a measurement.</span><span class="gs-es" lang="es">Doce ítems de opción múltiple, unos diez minutos. Aplica los mismos doce antes de la secuencia y después. Tres ítems cada uno sobre razonamiento orbital, medición e inferencia, lectura del modelo y distinguir una ilustración de una medición.</span>
+      </p>
+      <p>
+        <span class="gs-en">The answer key is in
+        <code>js/data/evaluation.js</code> and in the exported JSON template. It
+        is deliberately not printed here, so this page can be handed to a class.</span><span class="gs-es" lang="es">La clave de respuestas está en <code>js/data/evaluation.js</code> y en la plantilla JSON exportada. A propósito no se imprime aquí, para que esta página pueda entregarse a un grupo.</span>
+      </p>
+      <ol class="ek-list">
+        <li class="ek-item" id="q01">
+          <p class="ek-q"><span class="gs-en">A planet moves on a noticeably elliptical orbit around a star. Where is the star?</span><span class="gs-es" lang="es">Un planeta se mueve en una órbita claramente elíptica alrededor de una estrella. ¿Dónde está la estrella?</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">At the centre of the ellipse</span><span class="gs-es" lang="es">En el centro de la elipse</span></li>
+            <li><span class="gs-en">At one focus of the ellipse, off centre</span><span class="gs-es" lang="es">En un foco de la elipse, fuera del centro</span></li>
+            <li><span class="gs-en">At the point where the planet moves fastest</span><span class="gs-es" lang="es">En el punto donde el planeta se mueve más rápido</span></li>
+            <li><span class="gs-en">At a point that shifts as the planet moves</span><span class="gs-es" lang="es">En un punto que cambia a medida que el planeta se mueve</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q02">
+          <p class="ek-q"><span class="gs-en">The same planet moves fastest when it is closest to the star. The best reason is that</span><span class="gs-es" lang="es">El mismo planeta se mueve más rápido cuando está más cerca de la estrella. La mejor razón es que</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">gravity is stronger there, so it is pushed along faster</span><span class="gs-es" lang="es">la gravedad es más fuerte allí, así que lo empuja más rápido</span></li>
+            <li><span class="gs-en">it is falling downhill and gravity has had longer to act</span><span class="gs-es" lang="es">está cayendo cuesta abajo y la gravedad ha tenido más tiempo para actuar</span></li>
+            <li><span class="gs-en">the product of its distance and its sideways speed stays the same</span><span class="gs-es" lang="es">el producto de su distancia y su velocidad lateral se mantiene igual</span></li>
+            <li><span class="gs-en">the star heats it and the extra energy speeds it up</span><span class="gs-es" lang="es">la estrella lo calienta y la energía extra lo acelera</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q03">
+          <p class="ek-q"><span class="gs-en">A probe is launched fast enough to escape a planet and never return. After it escapes,</span><span class="gs-es" lang="es">Se lanza una sonda con rapidez suficiente para escapar de un planeta y no volver. Después de escapar,</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">the planet no longer pulls on it</span><span class="gs-es" lang="es">el planeta ya no tira de ella</span></li>
+            <li><span class="gs-en">the planet still pulls on it, but never enough to bring it back</span><span class="gs-es" lang="es">el planeta todavía tira de ella, pero nunca lo bastante para traerla de vuelta</span></li>
+            <li><span class="gs-en">the pull reverses and pushes it away</span><span class="gs-es" lang="es">la atracción se invierte y la empuja hacia fuera</span></li>
+            <li><span class="gs-en">the pull stops once the probe passes the escape distance</span><span class="gs-es" lang="es">la atracción cesa cuando la sonda pasa la distancia de escape</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q04">
+          <p class="ek-q"><span class="gs-en">You measure the period and the semi-major axis of four planets around one star and plot log P against log a. A straight line of slope 1.5 tells you</span><span class="gs-es" lang="es">Mides el periodo y el semieje mayor de cuatro planetas alrededor de una estrella y representas log P frente a log a. Una recta de pendiente 1,5 te dice que</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">the orbits are circles</span><span class="gs-es" lang="es">las órbitas son círculos</span></li>
+            <li><span class="gs-en">the planets all have the same mass</span><span class="gs-es" lang="es">todos los planetas tienen la misma masa</span></li>
+            <li><span class="gs-en">the period squared is proportional to the axis cubed</span><span class="gs-es" lang="es">el periodo al cuadrado es proporcional al semieje al cubo</span></li>
+            <li><span class="gs-en">the star is at the centre of each orbit</span><span class="gs-es" lang="es">la estrella está en el centro de cada órbita</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q05">
+          <p class="ek-q"><span class="gs-en">To find the total mass of a binary pair from a simulation, the two quantities you most need to measure are</span><span class="gs-es" lang="es">Para hallar la masa total de un par binario a partir de una simulación, las dos magnitudes que más necesitas medir son</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">the brightness of each star and their colours</span><span class="gs-es" lang="es">el brillo de cada estrella y sus colores</span></li>
+            <li><span class="gs-en">the size of the orbit and the time to go round once</span><span class="gs-es" lang="es">el tamaño de la órbita y el tiempo en dar una vuelta</span></li>
+            <li><span class="gs-en">the temperature of each star and their separation</span><span class="gs-es" lang="es">la temperatura de cada estrella y su separación</span></li>
+            <li><span class="gs-en">the speed of the brighter star and its radius</span><span class="gs-es" lang="es">la velocidad de la estrella más brillante y su radio</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q06">
+          <p class="ek-q"><span class="gs-en">In a binary, the heavier star sits closer to the barycenter. If one star is three times further from the barycenter than the other, then</span><span class="gs-es" lang="es">En una binaria, la estrella más pesada queda más cerca del baricentro. Si una estrella está tres veces más lejos del baricentro que la otra, entonces</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">the nearer star is three times heavier</span><span class="gs-es" lang="es">la estrella más cercana es tres veces más pesada</span></li>
+            <li><span class="gs-en">the further star is three times heavier</span><span class="gs-es" lang="es">la estrella más lejana es tres veces más pesada</span></li>
+            <li><span class="gs-en">the two stars have equal mass</span><span class="gs-es" lang="es">las dos estrellas tienen la misma masa</span></li>
+            <li><span class="gs-en">nothing can be said without knowing the period</span><span class="gs-es" lang="es">no se puede decir nada sin conocer el periodo</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q07">
+          <p class="ek-q"><span class="gs-en">In Gravitas the bodies are drawn much larger than they would be to scale. The main consequence for a measurement is that</span><span class="gs-es" lang="es">En Gravitas los cuerpos se dibujan mucho más grandes que a escala. La consecuencia principal para una medición es que</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">distances between bodies are also wrong</span><span class="gs-es" lang="es">las distancias entre los cuerpos también son erróneas</span></li>
+            <li><span class="gs-en">the drawn size cannot be used to judge how big anything is</span><span class="gs-es" lang="es">el tamaño dibujado no sirve para juzgar lo grande que es algo</span></li>
+            <li><span class="gs-en">the masses are wrong by the same factor</span><span class="gs-es" lang="es">las masas son erróneas en el mismo factor</span></li>
+            <li><span class="gs-en">orbital periods come out too short</span><span class="gs-es" lang="es">los periodos orbitales salen demasiado cortos</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q08">
+          <p class="ek-q"><span class="gs-en">The Gravitas engine is two-dimensional. Which conclusion does that make unsafe?</span><span class="gs-es" lang="es">El motor de Gravitas es bidimensional. ¿Qué conclusión hace insegura?</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">that a single planet orbits its star on an ellipse</span><span class="gs-es" lang="es">que un único planeta orbita su estrella en una elipse</span></li>
+            <li><span class="gs-en">that a heavier star produces a shorter orbital period at fixed distance</span><span class="gs-es" lang="es">que una estrella más pesada produce un periodo orbital más corto a distancia fija</span></li>
+            <li><span class="gs-en">that two planets whose orbits appear to cross would actually collide</span><span class="gs-es" lang="es">que dos planetas cuyas órbitas parecen cruzarse chocarían de verdad</span></li>
+            <li><span class="gs-en">that a body below zero total energy is bound</span><span class="gs-es" lang="es">que un cuerpo con energía total negativa está ligado</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q09">
+          <p class="ek-q"><span class="gs-en">A body has kinetic energy 5 units and gravitational potential energy -8 units. It is</span><span class="gs-es" lang="es">Un cuerpo tiene energía cinética de 5 unidades y energía potencial gravitatoria de -8 unidades. Está</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">unbound, because the kinetic energy is positive</span><span class="gs-es" lang="es">no ligado, porque la energía cinética es positiva</span></li>
+            <li><span class="gs-en">bound, because the total is negative</span><span class="gs-es" lang="es">ligado, porque el total es negativo</span></li>
+            <li><span class="gs-en">exactly at escape</span><span class="gs-es" lang="es">justo en el escape</span></li>
+            <li><span class="gs-en">impossible to classify without its mass</span><span class="gs-es" lang="es">imposible de clasificar sin su masa</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q10">
+          <p class="ek-q"><span class="gs-en">Some things on the Gravitas screen are computed from the physics and some are drawn to illustrate. Which of these is computed?</span><span class="gs-es" lang="es">Algunas cosas de la pantalla de Gravitas se calculan a partir de la física y otras se dibujan para ilustrar. ¿Cuál de estas se calcula?</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">the glow around a star</span><span class="gs-es" lang="es">el resplandor alrededor de una estrella</span></li>
+            <li><span class="gs-en">the jet drawn from a black hole</span><span class="gs-es" lang="es">el chorro dibujado desde un agujero negro</span></li>
+            <li><span class="gs-en">the position of an orbiting body at each step</span><span class="gs-es" lang="es">la posición de un cuerpo en órbita en cada paso</span></li>
+            <li><span class="gs-en">the ripple animation after a merger</span><span class="gs-es" lang="es">la animación de ondas tras una fusión</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q11">
+          <p class="ek-q"><span class="gs-en">The three-dimensional &quot;spacetime&quot; sheet dips beneath a massive body. A student says the depth of the dip is the curvature of spacetime near that body. The best response is</span><span class="gs-es" lang="es">La lámina tridimensional del &quot;espaciotiempo&quot; se hunde bajo un cuerpo masivo. Un estudiante dice que la profundidad del hundimiento es la curvatura del espaciotiempo cerca de ese cuerpo. La mejor respuesta es</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">correct, that is what the view shows</span><span class="gs-es" lang="es">correcto, eso es lo que muestra la vista</span></li>
+            <li><span class="gs-en">correct, though only for black holes</span><span class="gs-es" lang="es">correcto, aunque solo para agujeros negros</span></li>
+            <li><span class="gs-en">it is a drawing of the Newtonian gravitational potential, not a curvature</span><span class="gs-es" lang="es">es un dibujo del potencial gravitatorio newtoniano, no una curvatura</span></li>
+            <li><span class="gs-en">it is meaningless and should be ignored</span><span class="gs-es" lang="es">no tiene sentido y debe ignorarse</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q12">
+          <p class="ek-q"><span class="gs-en">Which of these numbers would you trust to two significant figures from Gravitas?</span><span class="gs-es" lang="es">¿En cuál de estos números confiarías con dos cifras significativas en Gravitas?</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">the depth of the spacetime sheet under a star</span><span class="gs-es" lang="es">la profundidad de la lámina de espaciotiempo bajo una estrella</span></li>
+            <li><span class="gs-en">the width of a drawn accretion disk</span><span class="gs-es" lang="es">el ancho de un disco de acreción dibujado</span></li>
+            <li><span class="gs-en">the orbital period measured with the on-screen timer</span><span class="gs-es" lang="es">el periodo orbital medido con el cronómetro en pantalla</span></li>
+            <li><span class="gs-en">the apparent size of a planet on screen</span><span class="gs-es" lang="es">el tamaño aparente de un planeta en pantalla</span></li>
+          </ol>
+        </li>
+      </ol>
+
+      <h2 id="conceptV2"><span class="gs-en">3b. Draft concept/2: sixteen items, one for each stated objective</span><span class="gs-es" lang="es">3b. Borrador concept/2: dieciséis ítems, uno por cada objetivo declarado</span></h2>
+      <p>
+        <span class="gs-en"><strong>DRAFT.</strong> A second version of the concept items, written to
+        repair three defects of the first (the key letters, the length of the
+        correct option, and nine objectives with no item). It has had no expert
+        review, no student interviews and no calibration, and its items
+        may still change: it is a candidate set, to be reviewed before any
+        trial. It is a different instrument from the twelve above, not a
+        replacement scored on the same scale. Scores from the two are never
+        pooled, and an export names the version it came from (the
+        <code>instrument</code> column reads <code>concept/2</code>).</span><span class="gs-es" lang="es"><strong>BORRADOR.</strong> Una segunda versión de los ítems de conceptos, escrita para reparar tres defectos de la primera (las letras de la clave, la longitud de la opción correcta y nueve objetivos sin ítem). No ha tenido revisión por expertos, ni entrevistas con estudiantes, ni calibración, y sus ítems aún pueden cambiar: es un conjunto candidato que debe revisarse antes de cualquier ensayo. Es un instrumento distinto de los doce anteriores, no un reemplazo puntuado en la misma escala. Las puntuaciones de ambos nunca se combinan, y una exportación indica la versión de la que procede (la columna <code>instrument</code> dice <code>concept/2</code>).</span>
+      </p>
+      <p>
+        <span class="gs-en">The Spanish text of these sixteen items is a draft translation by the
+        project and is not equivalent to the English. It has not been reviewed
+        by a fluent reader and is not part of any study. The key is in
+        <code>js/data/evaluation.js</code> and is not printed here.</span><span class="gs-es" lang="es">El texto en español de estos dieciséis ítems es una traducción de borrador hecha por el proyecto y no es equivalente al inglés. No la ha revisado un lector con dominio del idioma y no forma parte de ningún estudio. La clave está en <code>js/data/evaluation.js</code> y no se imprime aquí.</span>
+      </p>
+      <ol class="ek-list">
+        <li class="ek-item" id="r01">
+          <p class="ek-q"><span class="gs-en">A planet moves on a noticeably elliptical orbit around a star. Where is the star?</span><span class="gs-es" lang="es">Un planeta se mueve en una órbita claramente elíptica alrededor de una estrella. ¿Dónde está la estrella?</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">At the center of the ellipse</span><span class="gs-es" lang="es">En el centro de la elipse</span></li>
+            <li><span class="gs-en">At the point where the planet moves fastest</span><span class="gs-es" lang="es">En el punto donde el planeta se mueve más rápido</span></li>
+            <li><span class="gs-en">At one focus of the ellipse, off center</span><span class="gs-es" lang="es">En un foco de la elipse, fuera del centro</span></li>
+            <li><span class="gs-en">At one focus, with a second star at the other focus</span><span class="gs-es" lang="es">En un foco, con una segunda estrella en el otro foco</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r02">
+          <p class="ek-q"><span class="gs-en">Measurements show that a planet's speed varies around its elliptical orbit. Which statement is correct?</span><span class="gs-es" lang="es">Las mediciones muestran que la rapidez de un planeta varía a lo largo de su órbita elíptica. ¿Qué afirmación es correcta?</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">It is fastest when closest to the star, because distance times sideways speed stays the same</span><span class="gs-es" lang="es">Es máxima cuando está más cerca de la estrella, porque la distancia por la velocidad lateral se mantiene igual</span></li>
+            <li><span class="gs-en">It is fastest when closest to the star, because gravity is stronger there and speed follows the force</span><span class="gs-es" lang="es">Es máxima cuando está más cerca de la estrella, porque allí la gravedad es más fuerte y la rapidez sigue a la fuerza</span></li>
+            <li><span class="gs-en">The speed is constant; the planet only looks faster when nearer because it sweeps a bigger angle</span><span class="gs-es" lang="es">La rapidez es constante; el planeta solo parece más rápido cuando está más cerca porque barre un ángulo mayor</span></li>
+            <li><span class="gs-en">It is fastest when farthest away, where the star's pull is weakest and holds it back least</span><span class="gs-es" lang="es">Es máxima cuando está más lejos, donde la atracción de la estrella es más débil y lo frena menos</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r03">
+          <p class="ek-q"><span class="gs-en">You measure the period and the semi-major axis of four planets around one star and plot log P against log a. A straight line of slope 1.5 tells you</span><span class="gs-es" lang="es">Mides el periodo y el semieje mayor de cuatro planetas alrededor de una estrella y representas log P frente a log a. Una recta de pendiente 1,5 te dice que</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">the period is proportional to the axis, so a planet twice as far out takes twice as long</span><span class="gs-es" lang="es">el periodo es proporcional al semieje, así que un planeta al doble de distancia tarda el doble</span></li>
+            <li><span class="gs-en">the planets all have the same mass</span><span class="gs-es" lang="es">todos los planetas tienen la misma masa</span></li>
+            <li><span class="gs-en">the orbits are circles</span><span class="gs-es" lang="es">las órbitas son círculos</span></li>
+            <li><span class="gs-en">the period squared is proportional to the axis cubed</span><span class="gs-es" lang="es">el periodo al cuadrado es proporcional al semieje al cubo</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r04">
+          <p class="ek-q"><span class="gs-en">A star has four times the Sun&rsquo;s mass. A planet orbits it at 1 AU. Its period is</span><span class="gs-es" lang="es">Una estrella tiene cuatro veces la masa del Sol. Un planeta la orbita a 1 UA. Su periodo es</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">1 year, because 1 AU is where Earth orbits</span><span class="gs-es" lang="es">1 año, porque 1 UA es donde orbita la Tierra</span></li>
+            <li><span class="gs-en">half a year</span><span class="gs-es" lang="es">medio año</span></li>
+            <li><span class="gs-en">2 years, because a heavier star pulls it round more slowly</span><span class="gs-es" lang="es">2 años, porque una estrella más pesada lo hace girar más despacio</span></li>
+            <li><span class="gs-en">4 years</span><span class="gs-es" lang="es">4 años</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r05">
+          <p class="ek-q"><span class="gs-en">A cannonball is fired sideways from a very tall mountain, a little faster each time. When the speed rises from just below the escape speed to just above it, what changes about the path?</span><span class="gs-es" lang="es">Se dispara una bala de cañón en horizontal desde una montaña muy alta, un poco más rápido cada vez. Cuando la rapidez pasa de un poco por debajo de la de escape a un poco por encima, ¿qué cambia en la trayectoria?</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">The closed orbit turns into an open path that never comes back</span><span class="gs-es" lang="es">La órbita cerrada se convierte en un camino abierto que no vuelve nunca</span></li>
+            <li><span class="gs-en">The orbit stays closed but becomes much larger, so it takes far longer to come back</span><span class="gs-es" lang="es">La órbita sigue cerrada pero es mucho mayor, así que tarda mucho más en volver</span></li>
+            <li><span class="gs-en">The path straightens out, because gravity has stopped acting</span><span class="gs-es" lang="es">La trayectoria se endereza, porque la gravedad ha dejado de actuar</span></li>
+            <li><span class="gs-en">The ball settles into a circular orbit at a larger radius</span><span class="gs-es" lang="es">La bala pasa a una órbita circular de mayor radio</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r06">
+          <p class="ek-q"><span class="gs-en">A body has kinetic energy 6 units and gravitational potential energy &minus;4 units. It is</span><span class="gs-es" lang="es">Un cuerpo tiene energía cinética de 6 unidades y energía potencial gravitatoria de &minus;4 unidades. Está</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">bound, because gravity is always pulling on it</span><span class="gs-es" lang="es">ligado, porque la gravedad siempre tira de él</span></li>
+            <li><span class="gs-en">bound, because its potential energy is negative</span><span class="gs-es" lang="es">ligado, porque su energía potencial es negativa</span></li>
+            <li><span class="gs-en">unbound, because its total energy is above zero</span><span class="gs-es" lang="es">no ligado, porque su energía total es mayor que cero</span></li>
+            <li><span class="gs-en">impossible to classify without knowing its mass</span><span class="gs-es" lang="es">imposible de clasificar sin conocer su masa</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r07">
+          <p class="ek-q"><span class="gs-en">Ignoring the air, and with its engine off after launch, roughly how fast must a rocket be moving, relative to Earth, to leave Earth and never come back?</span><span class="gs-es" lang="es">Sin tener en cuenta el aire, y con el motor apagado después del lanzamiento, ¿aproximadamente a qué rapidez debe moverse un cohete, respecto de la Tierra, para dejar la Tierra y no volver?</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">About 1 km/s, a little faster than a rifle bullet</span><span class="gs-es" lang="es">Unos 1 km/s, algo más rápido que una bala de fusil</span></li>
+            <li><span class="gs-en">About 8 km/s, the speed of a low orbit</span><span class="gs-es" lang="es">Unos 8 km/s, la rapidez de una órbita baja</span></li>
+            <li><span class="gs-en">No minimum: any speed will do, given enough time</span><span class="gs-es" lang="es">No hay mínimo: cualquier rapidez sirve, con tiempo suficiente</span></li>
+            <li><span class="gs-en">About 11 km/s, over 25,000 miles per hour</span><span class="gs-es" lang="es">Unos 11 km/s, más de 25 000 millas por hora</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r08">
+          <p class="ek-q"><span class="gs-en">A probe is launched fast enough to escape a planet and never return. Once it is very far away,</span><span class="gs-es" lang="es">Una sonda se lanza con rapidez suficiente para escapar de un planeta y no volver. Cuando está muy lejos,</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">the planet has no pull on it at all</span><span class="gs-es" lang="es">el planeta no tira de ella en absoluto</span></li>
+            <li><span class="gs-en">the planet still pulls on it, but never enough to bring it back</span><span class="gs-es" lang="es">el planeta todavía tira de ella, pero nunca lo bastante para traerla de vuelta</span></li>
+            <li><span class="gs-en">the pull has become a push away from the planet</span><span class="gs-es" lang="es">la atracción se ha convertido en un empuje que la aleja del planeta</span></li>
+            <li><span class="gs-en">the pull switches off once the probe is beyond some critical distance</span><span class="gs-es" lang="es">la atracción se apaga cuando la sonda supera cierta distancia crítica</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r09">
+          <p class="ek-q"><span class="gs-en">Compare escape from a point four Earth radii from Earth's center with escape from the surface. The escape speed at the farther point is</span><span class="gs-es" lang="es">Compara escapar desde un punto a cuatro radios terrestres del centro de la Tierra con escapar desde la superficie. La rapidez de escape en el punto más lejano es</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">the same: it is a property of Earth, not of where you start</span><span class="gs-es" lang="es">la misma: es una propiedad de la Tierra, no de dónde se parte</span></li>
+            <li><span class="gs-en">half as large: it varies as one over the root of the distance</span><span class="gs-es" lang="es">la mitad: varía como uno sobre la raíz de la distancia</span></li>
+            <li><span class="gs-en">a quarter as large: it varies as one over the distance</span><span class="gs-es" lang="es">una cuarta parte: varía como uno sobre la distancia</span></li>
+            <li><span class="gs-en">one sixteenth as large: it varies as one over the distance squared</span><span class="gs-es" lang="es">una dieciseisava parte: varía como uno sobre la distancia al cuadrado</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r10">
+          <p class="ek-q"><span class="gs-en">A comet comes in from far away, swings past the Sun and heads out again. The path astronomers fit to its motion is a hyperbola. The comet is</span><span class="gs-es" lang="es">Un cometa llega desde muy lejos, pasa junto al Sol y se aleja otra vez. La trayectoria que los astrónomos ajustan a su movimiento es una hipérbola. El cometa está</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">bound, because the Sun bent its path</span><span class="gs-es" lang="es">ligado, porque el Sol curvó su trayectoria</span></li>
+            <li><span class="gs-en">bound, because it came close to the Sun</span><span class="gs-es" lang="es">ligado, porque pasó cerca del Sol</span></li>
+            <li><span class="gs-en">bound, with a period too long to see</span><span class="gs-es" lang="es">ligado, con un periodo demasiado largo para verlo</span></li>
+            <li><span class="gs-en">unbound, because its total energy is above zero</span><span class="gs-es" lang="es">no ligado, porque su energía total es mayor que cero</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r11">
+          <p class="ek-q"><span class="gs-en">A diagram shows the bigger star of a binary staying still while the smaller star circles it. A student says this is because the bigger star pulls on the smaller one but is not pulled back. The best response is</span><span class="gs-es" lang="es">Un diagrama muestra a la estrella mayor de un sistema binario quieta mientras la menor gira a su alrededor. Un estudiante dice que es porque la mayor tira de la menor pero nada tira de ella. La mejor respuesta es</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">the pulls are equal and opposite, so both stars accelerate</span><span class="gs-es" lang="es">las atracciones son iguales y opuestas, así que ambas estrellas aceleran</span></li>
+            <li><span class="gs-en">right: the heavier star pulls harder, so only the lighter star is moved</span><span class="gs-es" lang="es">correcto: la estrella pesada tira más fuerte, así que solo se mueve la ligera</span></li>
+            <li><span class="gs-en">right: the big star is held in place by its own gravity</span><span class="gs-es" lang="es">correcto: la estrella grande se mantiene en su sitio por su propia gravedad</span></li>
+            <li><span class="gs-en">wrong: the heavier star feels more force, so it moves more than the lighter one</span><span class="gs-es" lang="es">incorrecto: la estrella pesada siente más fuerza, así que se mueve más que la ligera</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r12">
+          <p class="ek-q"><span class="gs-en">Two stars of 3 and 1 solar masses are 4 AU apart. How far from the heavier star is their balance point, the barycenter?</span><span class="gs-es" lang="es">Dos estrellas de 3 y 1 masas solares están a 4 UA una de otra. ¿A qué distancia de la estrella más pesada está su punto de equilibrio, el baricentro?</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">2 AU, halfway between the two stars</span><span class="gs-es" lang="es">2 UA, a mitad de camino entre las dos estrellas</span></li>
+            <li><span class="gs-en">3 AU, nearer the lighter star</span><span class="gs-es" lang="es">3 UA, más cerca de la estrella más ligera</span></li>
+            <li><span class="gs-en">1 AU, which is nearer the heavier star</span><span class="gs-es" lang="es">1 UA, que está más cerca de la estrella más pesada</span></li>
+            <li><span class="gs-en">0 AU: it sits at the center of the heavier star</span><span class="gs-es" lang="es">0 UA: está en el centro de la estrella más pesada</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r13">
+          <p class="ek-q"><span class="gs-en">In a binary, star P is three times further from the barycenter than star Q. Then</span><span class="gs-es" lang="es">En un sistema binario, la estrella P está tres veces más lejos del baricentro que la estrella Q. Entonces</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">P is three times heavier than Q</span><span class="gs-es" lang="es">P es tres veces más pesada que Q</span></li>
+            <li><span class="gs-en">P and Q have equal mass, because they share one period</span><span class="gs-es" lang="es">P y Q tienen la misma masa, porque comparten un periodo</span></li>
+            <li><span class="gs-en">Q is three times heavier than P</span><span class="gs-es" lang="es">Q es tres veces más pesada que P</span></li>
+            <li><span class="gs-en">the masses cannot be compared without knowing the period</span><span class="gs-es" lang="es">las masas no se pueden comparar sin conocer el periodo</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r14">
+          <p class="ek-q"><span class="gs-en">Two stars are 2 AU apart and take 2 years to go round each other. Their total mass is</span><span class="gs-es" lang="es">Dos estrellas están a 2 UA una de otra y tardan 2 años en dar una vuelta una alrededor de la otra. Su masa total es</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">2 solar masses</span><span class="gs-es" lang="es">2 masas solares</span></li>
+            <li><span class="gs-en">0.25 solar mass</span><span class="gs-es" lang="es">0,25 masas solares</span></li>
+            <li><span class="gs-en">4 solar masses</span><span class="gs-es" lang="es">4 masas solares</span></li>
+            <li><span class="gs-en">1 solar mass</span><span class="gs-es" lang="es">1 masa solar</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r15">
+          <p class="ek-q"><span class="gs-en">The total mass of a binary is 4 solar masses. Star A is three times further from the barycenter than star B. The masses of A and B are</span><span class="gs-es" lang="es">La masa total de un sistema binario es de 4 masas solares. La estrella A está tres veces más lejos del baricentro que la estrella B. Las masas de A y B son</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">A 3, B 1 (solar masses)</span><span class="gs-es" lang="es">A 3, B 1 (masas solares)</span></li>
+            <li><span class="gs-en">A 1, B 3 (solar masses)</span><span class="gs-es" lang="es">A 1, B 3 (masas solares)</span></li>
+            <li><span class="gs-en">A 2, B 2 (solar masses)</span><span class="gs-es" lang="es">A 2, B 2 (masas solares)</span></li>
+            <li><span class="gs-en">A 0.4, B 3.6 (solar masses)</span><span class="gs-es" lang="es">A 0,4, B 3,6 (masas solares)</span></li>
+          </ol>
+        </li>
+        <li class="ek-item" id="r16">
+          <p class="ek-q"><span class="gs-en">Why do astronomers rely on binary stars to find the masses of stars?</span><span class="gs-es" lang="es">¿Por qué los astrónomos recurren a las estrellas binarias para hallar las masas de las estrellas?</span></p>
+          <ol class="ek-choices" type="a">
+            <li><span class="gs-en">A star's mass can be read from how bright it looks, and binaries are the brightest stars</span><span class="gs-es" lang="es">La masa de una estrella se lee de lo brillante que se ve, y las binarias son las más brillantes</span></li>
+            <li><span class="gs-en">A star's color gives its mass, and binary stars show their colors best</span><span class="gs-es" lang="es">El color de una estrella da su masa, y las estrellas binarias muestran mejor sus colores</span></li>
+            <li><span class="gs-en">Binary stars are heavier than single stars, so they are easier to weigh</span><span class="gs-es" lang="es">Las estrellas binarias son más pesadas que las solitarias, así que es más fácil pesarlas</span></li>
+            <li><span class="gs-en">The orbit of a pair reveals the masses directly, through the pull between them</span><span class="gs-es" lang="es">La órbita de un par revela las masas directamente, por la atracción entre ambas</span></li>
+          </ol>
+        </li>
+      </ol>
+
+      <h2 id="usability"><span class="gs-en">4. Usability and adoption questionnaire</span><span class="gs-es" lang="es">4. Cuestionario de usabilidad y adopción</span></h2>
+      <p>
+        <span class="gs-en">Project-developed, like the rest. If you want a System Usability Scale
+        score, administer the actual System Usability Scale &mdash; it is ten
+        specific items with a specific scoring procedure, and a score quoted
+        from anything else is not a SUS score.</span><span class="gs-es" lang="es">Desarrollado por el proyecto, como el resto. Si quieres una puntuación de la Escala de Usabilidad del Sistema, aplica la Escala de Usabilidad del Sistema de verdad &mdash; son diez ítems concretos con un procedimiento de puntuación concreto, y una puntuación citada de cualquier otra cosa no es una puntuación SUS.</span>
+      </p>
+      <ol class="ek-list">
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en"><span class="ek-aud">student</span> I could tell what the investigation was asking me to do.</span><span class="gs-es" lang="es"><span class="ek-aud">estudiante</span> Pude saber qué me pedía la investigación.</span></p>
+          <p class="ek-opts"><span class="gs-en"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></span><span class="gs-es" lang="es"><span>&#9744; 1 muy en desacuerdo</span> <span>&#9744; 2 en desacuerdo</span> <span>&#9744; 3 ni de acuerdo ni en desacuerdo</span> <span>&#9744; 4 de acuerdo</span> <span>&#9744; 5 muy de acuerdo</span></span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en"><span class="ek-aud">student</span> I could find the control or reading each step referred to.</span><span class="gs-es" lang="es"><span class="ek-aud">estudiante</span> Pude encontrar el control o la lectura a los que se refería cada paso.</span></p>
+          <p class="ek-opts"><span class="gs-en"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></span><span class="gs-es" lang="es"><span>&#9744; 1 muy en desacuerdo</span> <span>&#9744; 2 en desacuerdo</span> <span>&#9744; 3 ni de acuerdo ni en desacuerdo</span> <span>&#9744; 4 de acuerdo</span> <span>&#9744; 5 muy de acuerdo</span></span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en"><span class="ek-aud">student</span> When I got something wrong, the feedback helped me work out why.</span><span class="gs-es" lang="es"><span class="ek-aud">estudiante</span> Cuando me equivoqué, la retroalimentación me ayudó a averiguar por qué.</span></p>
+          <p class="ek-opts"><span class="gs-en"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></span><span class="gs-es" lang="es"><span>&#9744; 1 muy en desacuerdo</span> <span>&#9744; 2 en desacuerdo</span> <span>&#9744; 3 ni de acuerdo ni en desacuerdo</span> <span>&#9744; 4 de acuerdo</span> <span>&#9744; 5 muy de acuerdo</span></span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en"><span class="ek-aud">student</span> The simulation ran smoothly enough on the machine I used.</span><span class="gs-es" lang="es"><span class="ek-aud">estudiante</span> La simulación fue lo bastante fluida en el equipo que usé.</span></p>
+          <p class="ek-opts"><span class="gs-en"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></span><span class="gs-es" lang="es"><span>&#9744; 1 muy en desacuerdo</span> <span>&#9744; 2 en desacuerdo</span> <span>&#9744; 3 ni de acuerdo ni en desacuerdo</span> <span>&#9744; 4 de acuerdo</span> <span>&#9744; 5 muy de acuerdo</span></span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en"><span class="ek-aud">student</span> I would be willing to use this again for another topic.</span><span class="gs-es" lang="es"><span class="ek-aud">estudiante</span> Estaría dispuesto a usar esto otra vez para otro tema.</span></p>
+          <p class="ek-opts"><span class="gs-en"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></span><span class="gs-es" lang="es"><span>&#9744; 1 muy en desacuerdo</span> <span>&#9744; 2 en desacuerdo</span> <span>&#9744; 3 ni de acuerdo ni en desacuerdo</span> <span>&#9744; 4 de acuerdo</span> <span>&#9744; 5 muy de acuerdo</span></span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en"><span class="ek-aud">instructor</span> Preparing this for a class took an amount of time I could repeat.</span><span class="gs-es" lang="es"><span class="ek-aud">docente</span> Preparar esto para una clase me llevó un tiempo que podría repetir.</span></p>
+          <p class="ek-opts"><span class="gs-en"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></span><span class="gs-es" lang="es"><span>&#9744; 1 muy en desacuerdo</span> <span>&#9744; 2 en desacuerdo</span> <span>&#9744; 3 ni de acuerdo ni en desacuerdo</span> <span>&#9744; 4 de acuerdo</span> <span>&#9744; 5 muy de acuerdo</span></span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en"><span class="ek-aud">instructor</span> The documentation told me what the model does and does not do.</span><span class="gs-es" lang="es"><span class="ek-aud">docente</span> La documentación me dijo qué hace y qué no hace el modelo.</span></p>
+          <p class="ek-opts"><span class="gs-en"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></span><span class="gs-es" lang="es"><span>&#9744; 1 muy en desacuerdo</span> <span>&#9744; 2 en desacuerdo</span> <span>&#9744; 3 ni de acuerdo ni en desacuerdo</span> <span>&#9744; 4 de acuerdo</span> <span>&#9744; 5 muy de acuerdo</span></span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en"><span class="ek-aud">both</span> Where did you get stuck, if anywhere?</span><span class="gs-es" lang="es"><span class="ek-aud">ambos</span> ¿Dónde te atascaste, si te atascaste?</span></p>
+          <p class="ek-rule"></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="gs-en"><span class="ek-aud">both</span> What would you change first?</span><span class="gs-es" lang="es"><span class="ek-aud">ambos</span> ¿Qué cambiarías primero?</span></p>
+          <p class="ek-rule"></p>
+        </li>
+      </ol>
+
+      <h2 id="export"><span class="gs-en">5. Exports and analysis</span><span class="gs-es" lang="es">5. Exportación y análisis</span></h2>
+      <p>
+        <span class="gs-en">The tools below need JavaScript. Everything above does not: print this
+        page and the three instruments come out as paper forms.</span><span class="gs-es" lang="es">Las herramientas de abajo necesitan JavaScript. Todo lo anterior no: imprime esta página y los tres instrumentos salen como formularios en papel.</span>
+      </p>
+
+      <div class="ek-tools ek-noprint" id="ekTools" hidden>
+        <p><span class="gs-en"><strong>Fill in and export</strong></span><span class="gs-es" lang="es"><strong>Rellenar y exportar</strong></span></p>
+        <p class="ek-hint">
+          <span class="gs-en">Nothing is sent anywhere. Responses are held in this browser until you
+          export or clear them.</span><span class="gs-es" lang="es">No se envía nada a ningún sitio. Las respuestas se guardan en este navegador hasta que las exportes o las borres.</span>
+        </p>
+        <div class="ek-actions">
+          <label for="ekVersion"><span class="gs-en">Concept items</span><span class="gs-es" lang="es">Ítems de conceptos</span></label>
+          <select id="ekVersion">
+            <option value="concept">concept/1 (pilot, 12 items)</option>
+            <option value="concept/2">concept/2 (DRAFT, 16 items)</option>
+          </select>
+          <label for="ekOccasion"><span class="gs-en">Occasion</span><span class="gs-es" lang="es">Ocasión</span></label>
+          <select id="ekOccasion">
+            <option value="pre">pre</option>
+            <option value="post">post</option>
+          </select>
+          <label for="ekParticipant"><span class="gs-en">Participant code</span><span class="gs-es" lang="es">Código de participante</span></label>
+          <input id="ekParticipant" type="text" size="18" autocomplete="off"
+                 spellcheck="false" placeholder="optional" />
+          <button type="button" class="ui-button" id="ekSuggest"><span class="gs-en">Suggest a code</span><span class="gs-es" lang="es">Sugerir un código</span></button>
+          <span class="ek-code" id="ekCode"></span>
+        </div>
+        <div class="ek-actions">
+          <button type="button" class="ui-button" id="ekCsv"><span class="gs-en">Export CSV</span><span class="gs-es" lang="es">Exportar CSV</span></button>
+          <button type="button" class="ui-button" id="ekJson"><span class="gs-en">Export JSON</span><span class="gs-es" lang="es">Exportar JSON</span></button>
+          <button type="button" class="ui-button" id="ekTemplate"><span class="gs-en">Blank CSV template</span><span class="gs-es" lang="es">Plantilla CSV en blanco</span></button>
+          <button type="button" class="ui-button" id="ekClear"><span class="gs-en">Clear this browser</span><span class="gs-es" lang="es">Borrar este navegador</span></button>
+          <span id="ekSaid" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+
+      <p>
+        <span class="gs-en">Once you have the files, the repository has a reader for them:</span><span class="gs-es" lang="es">Una vez que tengas los archivos, el repositorio tiene un lector para ellos:</span>
+      </p>
+      <p class="doc-eq-block">npm run evaluation:summary -- pre.csv post.csv</p>
+      <p>
+        <span class="gs-en">It prints sample counts, how much is missing, the per-item before and
+        after, and the paired change where codes allow pairing. It prints no
+        p-value and no verdict, because a convenience sample from one section
+        measured with an unvalidated instrument supports a description and
+        nothing else.</span><span class="gs-es" lang="es">Imprime los recuentos de la muestra, cuántos datos faltan, el antes y el después por ítem y el cambio emparejado cuando los códigos lo permiten. No imprime valor p ni veredicto, porque una muestra de conveniencia de una sección medida con un instrumento no validado sostiene una descripción y nada más.</span>
+      </p>
+
+      <h2 id="schema"><span class="gs-en">6. What the files look like</span><span class="gs-es" lang="es">6. Cómo son los archivos</span></h2>
+      <p>
+        <span class="gs-en">Schema version <strong>1</strong>. CSV columns, in order:</span><span class="gs-es" lang="es">Versión de esquema <strong>1</strong>. Columnas del CSV, en orden:</span>
+      </p>
+      <p class="doc-eq-block" id="ekColumns">schema, instrument, occasion, participant, q01 &hellip; q12</p>
+      <p>
+        <span class="gs-en">The draft concept/2 items have their own columns, <code>r01</code> to <code>r16</code>, and its sheets carry <code>concept/2</code> in the <code>instrument</code> column, so a sheet of one version is never read as the other:</span><span class="gs-es" lang="es">Los ítems del borrador concept/2 tienen sus propias columnas, <code>r01</code> a <code>r16</code>, y sus hojas llevan <code>concept/2</code> en la columna <code>instrument</code>, de modo que una hoja de una versión nunca se lee como la otra:</span>
+      </p>
+      <p class="doc-eq-block" id="ekColumnsV2">schema, instrument, occasion, participant, r01 &hellip; r16</p>
+      <p>
+        <span class="gs-en">There is no column for a name, an email address, a student number or an
+        institution, and there will not be one: a column that exists gets filled
+        in, and a spreadsheet with a name in it is a spreadsheet that cannot be
+        handed to anybody. Answers are stored as the zero-based index of the
+        chosen option, or blank.</span><span class="gs-es" lang="es">No hay columna para un nombre, un correo electrónico, un número de estudiante ni una institución, y no la habrá: una columna que existe se rellena, y una hoja de cálculo con un nombre dentro es una hoja que no se puede entregar a nadie. Las respuestas se guardan como el índice, desde cero, de la opción elegida, o en blanco.</span>
+      </p>
+
+      <h2 id="review"><span class="gs-en">7. Expert review sheet</span><span class="gs-es" lang="es">7. Hoja de revisión por expertos</span></h2>
+      <p>
+        <span class="gs-en">For the validation plan in the study design (<code>LEARNING_STUDY.md</code>):
+        two astronomy educators who did not write the investigations each fill
+        in one copy alone, one row per item, using the scale below. Print this
+        page, or only this section. Nothing here is collected by this page.</span><span class="gs-es" lang="es">Para el plan de validación del diseño del estudio (<code>LEARNING_STUDY.md</code>): dos docentes de astronomía que no escribieron las investigaciones rellenan cada uno una copia por separado, una fila por ítem, con la escala de abajo. Imprime esta página, o solo esta sección. Esta página no recoge nada de esto.</span>
+      </p>
+      <p class="ek-hint">
+        <span class="gs-en">Scale for alignment and clarity: 1 not aligned or unclear, 2 weakly,
+        3 mostly, 4 fully. Key and distractors: write yes or no, and name any
+        distractor that is also correct.</span><span class="gs-es" lang="es">Escala para alineación y claridad: 1 no alineado o poco claro, 2 débilmente, 3 en su mayor parte, 4 por completo. Clave y distractores: escribe sí o no, y nombra cualquier distractor que también sea correcto.</span>
+      </p>
+      <div class="doc-table-wrap" tabindex="0" role="region" aria-labelledby="review">
+        <table class="doc-table ek-review">
+          <caption class="visually-hidden"><span class="gs-en">Expert review sheet, one row for each of the twelve items</span><span class="gs-es" lang="es">Hoja de revisión por expertos, una fila para cada uno de los doce ítems</span></caption>
+          <thead>
+            <tr>
+              <th scope="col"><span class="gs-en">Item</span><span class="gs-es" lang="es">Ítem</span></th>
+              <th scope="col"><span class="gs-en">Objective assessed</span><span class="gs-es" lang="es">Objetivo evaluado</span></th>
+              <th scope="col"><span class="gs-en">Alignment 1-4</span><span class="gs-es" lang="es">Alineación 1-4</span></th>
+              <th scope="col"><span class="gs-en">Key correct?</span><span class="gs-es" lang="es">¿Clave correcta?</span></th>
+              <th scope="col"><span class="gs-en">Another option correct?</span><span class="gs-es" lang="es">¿Otra opción correcta?</span></th>
+              <th scope="col"><span class="gs-en">Clarity 1-4</span><span class="gs-es" lang="es">Claridad 1-4</span></th>
+              <th scope="col"><span class="gs-en">Comment</span><span class="gs-es" lang="es">Comentario</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>q01</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q02</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q03</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q04</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q05</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q06</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q07</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q08</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q09</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q10</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q11</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>q12</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        <span class="gs-en">After the twelve rows, list any objective of the three investigations
+        that the set should assess and does not.</span><span class="gs-es" lang="es">Después de las doce filas, enumera cualquier objetivo de las tres investigaciones que el conjunto debería evaluar y no evalúa.</span>
+      </p>
+
+      <hr />
+      <p class="ek-hint">
+        <span class="gs-en">Part of <a href="/teaching/">Teaching with Gravitas</a> and the
+        <a href="/instructors/">instructor resources</a>. The model page states
+        <a href="/model/">what the simulation does and does not represent</a>,
+        which is worth reading before designing an item of your own.</span><span class="gs-es" lang="es">Parte de <a href="/teaching/">Enseñar con Gravitas</a> y de los <a href="/instructors/">recursos para docentes</a>. La página del modelo explica <a href="/model/">qué representa y qué no representa la simulación</a>, lo cual conviene leer antes de diseñar un ítem propio.</span>
+      </p>
+    </main>
+
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
+    <script type="module" src="/js/evaluationKit.js"></script>
+  </body>
+</html>

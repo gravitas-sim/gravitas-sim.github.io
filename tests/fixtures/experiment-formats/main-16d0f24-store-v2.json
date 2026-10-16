@@ -1,0 +1,138 @@
+{
+  "id": "xfixture-0",
+  "name": "Planet a doubled",
+  "created": 1700000000000,
+  "notes": "Does a wider orbit change the period?",
+  "objects": [
+    3,
+    1
+  ],
+  "primary": 1,
+  "metrics": [
+    "separation",
+    "energy_drift",
+    "orbital_period"
+  ],
+  "initialState": {
+    "v": 1,
+    "s": "Binary Planet Lab",
+    "seed": "2a"
+  },
+  "provenance": {
+    "scenario": "Binary Planet Lab",
+    "seed": "2a",
+    "integrator": "Symplectic Euler",
+    "timestep": 0,
+    "simSpeed": 1,
+    "units": {
+      "length": "AU",
+      "speed": "km/s",
+      "time": "days"
+    },
+    "initialStateHash": "deadbeef",
+    "referenceFrame": {
+      "mode": "world",
+      "objectId": null
+    },
+    "observer": {
+      "positionAngle": 0,
+      "inclination": 90
+    }
+  },
+  "diff": {
+    "variables": [
+      {
+        "key": "binary_lab_planet_a",
+        "from": 0.1,
+        "to": 0.2
+      }
+    ],
+    "incidental": [],
+    "context": [],
+    "multivariable": false
+  },
+  "multivariableConfirmed": false,
+  "perturbation": null,
+  "numericalControls": [],
+  "recordBodies": false,
+  "runs": {
+    "A": {
+      "recordedAt": 1700000001000,
+      "samples": [
+        {
+          "t": 0,
+          "separation": 0.1,
+          "energy_drift": 0
+        },
+        {
+          "t": 125,
+          "separation": 0.1,
+          "energy_drift": 0.001
+        }
+      ],
+      "results": {
+        "separation": {
+          "value": 0.1,
+          "kind": "mean"
+        }
+      }
+    },
+    "B": {
+      "recordedAt": 1700000002000,
+      "samples": [
+        {
+          "t": 0,
+          "separation": 0.2,
+          "energy_drift": 0
+        },
+        {
+          "t": 125,
+          "separation": 0.2,
+          "energy_drift": 0.002
+        }
+      ],
+      "results": {
+        "separation": {
+          "value": 0.2,
+          "kind": "mean"
+        }
+      }
+    }
+  },
+  "comparison": {
+    "rows": [],
+    "diff": {},
+    "warnings": []
+  },
+  "reliability": {
+    "ok": true,
+    "ranAt": 1700000003000,
+    "integrator": "Symplectic Euler",
+    "duration": 125,
+    "tolerance": 0.05,
+    "steps": {
+      "full": 0.0166,
+      "half": 0.0083
+    },
+    "cost": {
+      "substeps": 4
+    },
+    "verdict": "converging",
+    "reason": "halving the step moved the outcome by 0.2%",
+    "outcomeMetric": "separation",
+    "pathMetric": "separation",
+    "metrics": [
+      {
+        "metric": "separation",
+        "agreement": 0.998
+      }
+    ],
+    "conservation": {
+      "energy": 0.001
+    },
+    "series": [],
+    "explanation": "fixture"
+  },
+  "v": 2,
+  "updated": 1700000009000
+}

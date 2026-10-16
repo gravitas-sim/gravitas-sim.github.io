@@ -34,8 +34,9 @@
 // =============================================================================
 
 import { MANIFEST as MANIFEST_EN } from './data/investigations/manifest.js';
-import { MANIFEST as MANIFEST_ES } from './data/investigations/manifest.es.js';
 import { lengthOf } from './data/investigations/sequences.js';
+import { ACTIVITIES } from './data/activities.js';
+import { routeFor, routeTo } from './activities/activities.js';
 import {
   CYCLE,
   JOURNEY,
@@ -48,10 +49,13 @@ import {
   EVIDENCE,
 } from './data/teaching.js';
 import { DEMO_LINKS, SCENARIO_COUNT } from './data/teachingGenerated.js';
+import { drop, readJson, writeJson } from './storage/local.js';
+import { mountShell } from './shell.js';
 import {
   LANGUAGES,
   applyTranslations,
   language,
+  loadLanguage,
   preferred,
   setLanguage,
   tr,
@@ -59,8 +63,29 @@ import {
 
 const $ = id => document.getElementById(id);
 
+/** The Spanish lesson catalog, fetched with the Spanish strings. */
+let manifestEs = null;
+
 /** The catalog in the language the page is being read in. */
-const manifest = () => (language() === 'es' ? MANIFEST_ES : MANIFEST_EN);
+const manifest = () =>
+  language() === 'es' && manifestEs ? manifestEs : MANIFEST_EN;
+
+/**
+ * Switch to a language, fetching what it needs first. A catalog that failed
+ * to arrive renders in English, and setLanguage does not remember that.
+ */
+async function useLanguage(id) {
+  await Promise.all([
+    loadLanguage(id),
+    id === 'es' && !manifestEs
+      ? import('./data/investigations/manifest.es.js').then(
+          m => (manifestEs = m.MANIFEST),
+          () => null
+        )
+      : null,
+  ]);
+  setLanguage(id);
+}
 
 /** A manifest entry by id, in the current language. */
 const lessonMeta = id => manifest().find(entry => entry.id === id) ?? null;
@@ -284,7 +309,7 @@ const fragmentFor = demo => `#${DEMO_LINKS[demo.id]}`;
  * Where a demonstration opens.
  *
  * Embed mode is a query parameter and the state is a fragment, which is the
- * whole reason the two compose: see the header of js/embed.js. Built here
+ * whole reason the two compose: see the header of js/world.js. Built here
  * rather than written into the markup because the fragment is generated.
  *
  * @param {Object} demo - An entry of DEMOS
@@ -495,16 +520,13 @@ export function lessonsFitting(fit, entries = manifest()) {
 // chosen by objective and by how long the class is. This section is the second
 // door, and it says so, with a link to the first.
 //
-// The definitions are imported on demand. They are prose for instructors and
-// they are not needed to paint anything above this section, so they stay out of
-// the page's first parse - and out of the sandbox's start-up graph entirely,
-// which is the same bargain the lesson registry makes.
+// The definitions are imported with the page. They were fetched after the
+// first paint, but they arrive before the page is idle either way, and in the
+// build a lazy import is a request of its own where a static one is free: the
+// room that paid for the Spanish chunks.
 
-/** The definitions, once. */
-let activityData = null;
+/** Which activity and format the address asks for; read once, at start. */
 let activityRoute = null;
-/** Bound from js/activities/activities.js once it has loaded. */
-let routeTo = () => '';
 
 /** A definition list row, for the audience and prerequisite blocks. */
 function activityField(labelId, text) {
@@ -648,10 +670,9 @@ function activityCard(activity, activeFormat) {
 function renderActivities() {
   const host = document.getElementById('teachActivities');
   const fallback = document.getElementById('activityFallback');
-  if (!host || !activityData) return;
+  if (!host) return;
   host.replaceChildren();
 
-  const { ACTIVITIES } = activityData;
   const route = activityRoute || { activity: null, format: null, reason: null };
 
   if (fallback) {
@@ -769,31 +790,6 @@ function renderEvidence() {
 
 // --- The language switch ------------------------------------------------------
 
-function renderLanguageSwitch() {
-  const group = $('teachLang');
-  if (!group) return;
-  clear(group);
-  for (const lang of LANGUAGES) {
-    const active = lang.id === language();
-    const button = el('button', {
-      className: 'ui-button is-quiet',
-      text: lang.endonym,
-      attrs: {
-        type: 'button',
-        lang: lang.id,
-        'aria-pressed': String(active),
-      },
-    });
-    button.addEventListener('click', () => {
-      if (lang.id === language()) return;
-      setLanguage(lang.id);
-      renderAll();
-      announce(tr('teach.lang.switched'));
-    });
-    group.append(button);
-  }
-}
-
 // --- Assembly -----------------------------------------------------------------
 
 /**
@@ -890,23 +886,10 @@ function renderFeedbackRoutes() {
 const FEEDBACK_KEY = 'gravitas_teaching_notes_v1';
 
 /** Read the notes, tolerating a browser that refuses storage. */
-function readNotes() {
-  try {
-    return JSON.parse(window.localStorage.getItem(FEEDBACK_KEY) || '{}') || {};
-  } catch {
-    return {};
-  }
-}
+const readNotes = () => readJson(FEEDBACK_KEY, {});
 
 /** Write them back, and say nothing if storage is unavailable. */
-function writeNotes(notes) {
-  try {
-    window.localStorage.setItem(FEEDBACK_KEY, JSON.stringify(notes));
-    return true;
-  } catch {
-    return false;
-  }
-}
+const writeNotes = notes => writeJson(FEEDBACK_KEY, notes, 'drafts');
 
 /**
  * The classroom feedback form.
@@ -1003,7 +986,7 @@ function renderFeedbackForm() {
     clearBtn.textContent = tr('teach.feedback.form.clear');
     clearBtn.onclick = () => {
       try {
-        window.localStorage.removeItem(FEEDBACK_KEY);
+        drop(FEEDBACK_KEY);
       } catch {
         /* nothing was stored, so nothing needs removing */
       }
@@ -1019,13 +1002,14 @@ function renderFeedbackForm() {
 function renderAll() {
   document.documentElement.setAttribute('lang', language());
   applyTranslations();
+  // The tab title, which the sweep above cannot reach (P81 T-1).
+  document.title = tr('teach.title');
   // The <meta> description is what a link preview and a search result show, and
   // a reader who has chosen Spanish should get a Spanish one. Set here rather
   // than swept, because a meta element has no text node to translate.
   const description = document.querySelector('meta[name="description"]');
   if (description)
     description.setAttribute('content', tr('teach.meta.description'));
-  renderLanguageSwitch();
   renderGlance();
   renderValidation();
   renderCycle();
@@ -1043,24 +1027,16 @@ function renderAll() {
 
 /** Wire the page up. */
 export async function initTeachingPage() {
-  setLanguage(preferred());
+  activityRoute = routeFor(location.search);
+  await useLanguage(preferred());
   renderAll();
-
-  // On demand: instructor prose that nothing above this section needs, and
-  // that the sandbox never loads at all.
-  try {
-    const [data, logic] = await Promise.all([
-      import('./data/activities.js'),
-      import('./activities/activities.js'),
-    ]);
-    activityData = data;
-    activityRoute = logic.routeFor(location.search);
-    routeTo = logic.routeTo;
-    renderActivities();
-  } catch (err) {
-    // A section that will not load is a missing section, not a broken page.
-    console.warn('Classroom activities unavailable:', err);
-  }
+  mountShell({
+    onLanguage: async id => {
+      await useLanguage(id);
+      renderAll();
+      announce(tr('teach.lang.switched'));
+    },
+  });
 
   // After the first paint. The results are one number in a strip of five and
   // one line at the bottom; nothing above them should wait on a fetch.

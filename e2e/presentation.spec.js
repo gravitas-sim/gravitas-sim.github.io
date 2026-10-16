@@ -12,7 +12,7 @@
 // is a question about layout. All three are checked at real sizes.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 /** Sizes an embedded figure actually meets in a course page. */
 const LMS_SIZES = [
@@ -25,6 +25,7 @@ const LMS_SIZES = [
 
 /** Build a real share link through the codec the application itself uses. */
 async function shareLinkFor(page, scenario, seed = 'e2e-presentation') {
+  await requireScenarioKey(page, scenario);
   return page.evaluate(
     async ({ scenario, seed }) => {
       const ui = await import('/js/ui.js');
@@ -198,7 +199,7 @@ test.describe('embed mode', () => {
     app,
   }) => {
     await app.boot();
-    const link = await shareLinkFor(page, 'Kuiper Belt');
+    const link = await shareLinkFor(page, 'kuiper-belt');
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
       ui.state.zoom = 2.25;
@@ -236,7 +237,7 @@ test.describe('embed mode', () => {
     // app.captureClipboard() for why granting the permissions is not portable.
     await app.captureClipboard();
     await app.boot();
-    await app.loadScenario('Kuiper Belt', 'embed-copy');
+    await app.loadScenario('kuiper-belt', 'embed-copy');
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
       ui.state.zoom = 1.75;
@@ -298,7 +299,7 @@ test.describe('embed mode', () => {
       };
     });
     await app.boot();
-    await app.loadScenario('Kuiper Belt', 'embed-fallback');
+    await app.loadScenario('kuiper-belt', 'embed-fallback');
 
     await app.railControl('shareBtn');
     await page.locator('#shareBtn').click();
@@ -449,7 +450,7 @@ test.describe('lecture mode', () => {
   }) => {
     await app.boot();
     const links = [];
-    for (const key of ['Solar System', 'Kuiper Belt', 'Binary Star System']) {
+    for (const key of ['solar-system', 'kuiper-belt', 'binary-star-system']) {
       links.push(await shareLinkFor(page, key, `seq-${key}`));
     }
 
@@ -483,19 +484,19 @@ test.describe('lecture mode', () => {
 
     // The non-link line was dropped rather than failing the whole paste.
     expect((await read()).length).toBe(3);
-    expect((await read()).scenario).toBe('Solar System');
+    expect((await read()).scenario).toBe('solar-system');
 
     await page.keyboard.press('ArrowRight');
     await expect.poll(async () => (await read()).position).toBe(1);
-    expect((await read()).scenario).toBe('Kuiper Belt');
+    expect((await read()).scenario).toBe('kuiper-belt');
 
     await page.keyboard.press('ArrowRight');
     await expect.poll(async () => (await read()).position).toBe(2);
-    expect((await read()).scenario).toBe('Binary Star System');
+    expect((await read()).scenario).toBe('binary-star-system');
 
     await page.keyboard.press('ArrowLeft');
     await expect.poll(async () => (await read()).position).toBe(1);
-    expect((await read()).scenario).toBe('Kuiper Belt');
+    expect((await read()).scenario).toBe('kuiper-belt');
 
     // Changing share state does not drop out of the presentation.
     const now = await read();
@@ -508,7 +509,7 @@ test.describe('lecture mode', () => {
     app,
   }) => {
     await app.boot();
-    const link = await shareLinkFor(page, 'Solar System');
+    const link = await shareLinkFor(page, 'solar-system');
     await enterLecture(page);
     await page.locator('#lectureSequenceBtn').click();
     await page.locator('#lectureSequenceText').fill(`${link}\n${link}`);
@@ -533,7 +534,7 @@ test.describe('lecture mode', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Star System', 'spotlight');
+    await app.loadScenario('binary-star-system', 'spotlight');
     await enterLecture(page);
     const before = await worldState(page);
 
@@ -619,9 +620,11 @@ test.describe('language', () => {
   }) => {
     await app.boot();
     expect(await localeOf(page)).toBe('en');
-    await page.locator('#localeButton').click();
-    await expect(page.locator('#localeMenu')).toBeVisible();
-    await expect(page.locator('[data-locale-option="es"]')).toBeVisible();
+    // The shared shell's switch (tools/shell.mjs), which replaced the footer's.
+    const pick = page.locator('[data-gs-lang]');
+    await expect(pick).toBeVisible();
+    await expect(pick).toHaveValue('en');
+    await expect(pick.locator('option[value="es"]')).toHaveCount(1);
   });
 
   test('the picker is a code and a language, and nothing else', async ({
@@ -633,16 +636,16 @@ test.describe('language', () => {
     // translated now, so the sentence describes nothing and a menu of two
     // languages does not need three lines to say so.
     await app.boot();
-    await page.locator('#localeButton').click();
-    const option = page.locator('[data-locale-option="es"]');
-    await expect(option).toBeVisible();
-    await expect(option.locator('.locale-menu-code')).toHaveText('ES');
+    const options = page.locator('[data-gs-lang] option');
+    await expect(options).toHaveCount(2);
     // The endonym, not the English name: somebody looking for Spanish is
-    // looking for the word they use for their own language.
-    await expect(option.locator('.theme-menu-label')).toHaveText('Español');
-    await expect(option.locator('.theme-menu-hint')).toHaveCount(0);
-    // And the button itself says which language is on without opening anything.
-    await expect(page.locator('#localeButtonCode')).toHaveText('EN');
+    // looking for the word they use for their own language - and marked as
+    // Spanish, so a screen reader says it in a Spanish voice.
+    const es = page.locator('[data-gs-lang] option[value="es"]');
+    await expect(es).toHaveText('Español');
+    await expect(es).toHaveAttribute('lang', 'es');
+    // And the switch itself says which language is on without opening it.
+    await expect(page.locator('[data-gs-lang]')).toHaveValue('en');
   });
 
   test(
@@ -650,8 +653,7 @@ test.describe('language', () => {
     { tag: '@cross-browser' },
     async ({ page, app }) => {
       await app.boot();
-      await page.locator('#localeButton').click();
-      await page.locator('[data-locale-option="es"]').click();
+      await page.locator('[data-gs-lang]').selectOption('es');
       await page.waitForTimeout(300);
 
       await expect(page.locator('#loadScenarioBtn')).toContainText(
@@ -811,7 +813,7 @@ test.describe('language', () => {
     // it has to be repainted rather than swept. It said "Paso 2 de 3" after a
     // switch back to English until it was.
     await app.boot();
-    const link = await shareLinkFor(page, 'Solar System', 'locale-mid-lecture');
+    const link = await shareLinkFor(page, 'solar-system', 'locale-mid-lecture');
     await enterLecture(page);
     await page.locator('#lectureSequenceBtn').click();
     await page.locator('#lectureSequenceText').fill(`${link}\n${link}`);
@@ -838,7 +840,7 @@ test.describe('language', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Kuiper Belt', 'locale-stability');
+    await app.loadScenario('kuiper-belt', 'locale-stability');
     await app.waitForFrames(5);
     await app.setPaused(true);
     const before = await worldState(page);
@@ -984,6 +986,10 @@ test.describe('the bottom dock', () => {
         barWidth: Math.round(b.width),
         footerInset: Math.round(window.innerWidth - f.right),
         gap: Math.round(f.left - b.right),
+        // From 768 to 1200 px the bar stands above the footer instead of
+        // beside it (css/chrome.css, the laptop tier), so clearance is
+        // whichever of the two it has.
+        clear: Math.round(Math.max(f.left - b.right, f.top - b.bottom)),
         railOverFooter: r ? r.bottom > f.top && r.left < f.right : false,
         banded: document.body.classList.contains('dock-banded'),
       };
@@ -1015,7 +1021,7 @@ test.describe('the bottom dock', () => {
           await page.evaluate(async () =>
             (await import('/js/i18n/index.js')).setLocale('es')
           );
-          await expect(page.locator('#localeButtonCode')).toHaveText('ES');
+          await expect(page.locator('html')).toHaveAttribute('lang', 'es');
         }
         await expect(page.locator('.timeline-bar')).toBeVisible();
         await expect(page.locator('#attribution')).toBeVisible();
@@ -1028,7 +1034,7 @@ test.describe('the bottom dock', () => {
         // immediately afterwards. This asserts the real requirement, and gives
         // the layout the time it takes rather than a fixed delay.
         await expect
-          .poll(async () => (await read(page)).gap, {
+          .poll(async () => (await read(page)).clear, {
             message: `bar-to-footer gap at ${size.width}px in ${locale}`,
           })
           .toBeGreaterThanOrEqual(12); // A clear gap, not merely no overlap.
@@ -1055,30 +1061,35 @@ test.describe('the bottom dock', () => {
     expect(m.barWidth).toBe(680);
   });
 
-  test('it narrows rather than shifting, until narrowing stops paying', async ({
+  test('it stays centered and clear of the footer, and stands above it below 1201', async ({
     page,
     app,
   }) => {
-    // Between the width where the full bar no longer fits and the width where
-    // the slider would be too short to use, the bar gives up width and keeps
-    // the center. Below that it keeps its width and gives up the center.
-    await page.setViewportSize({ width: 1600, height: 900 });
+    // From 1201 px the bar sits beside the footer and, where the full bar no
+    // longer fits, gives up width and keeps the center. Below 1201 (the
+    // laptop tier) there is no beside: the bar stands above the footer, so
+    // the footer's width costs it nothing, and both halves are asserted where
+    // they hold.
+    await page.setViewportSize({ width: 1201, height: 900 });
     await app.boot();
     const narrowed = await read(page);
     expect(narrowed.banded).toBe(false);
     expect(Math.abs(narrowed.offCenter)).toBeLessThanOrEqual(1);
-    expect(narrowed.barWidth).toBeLessThan(680);
+    // The footer is a third of its old width (Prompt 50), so at the tier's
+    // first width the full bar still fits: the narrowing is there for a
+    // longer footer (Spanish) and is never wider than the bar.
+    expect(narrowed.barWidth).toBeLessThanOrEqual(680);
     expect(narrowed.barWidth).toBeGreaterThanOrEqual(420);
+    expect(narrowed.gap).toBeGreaterThanOrEqual(12);
 
     await page.setViewportSize({ width: 1100, height: 900 });
     await expect
-      .poll(() =>
-        page.evaluate(() => document.body.classList.contains('dock-banded'))
-      )
-      .toBe(true);
-    const banded = await read(page);
-    expect(Math.abs(banded.offCenter)).toBeGreaterThan(1);
-    expect(banded.gap).toBeGreaterThanOrEqual(12);
+      .poll(async () => (await read(page)).barWidth)
+      .toBeGreaterThanOrEqual(narrowed.barWidth);
+    const above = await read(page);
+    expect(above.banded).toBe(false);
+    expect(Math.abs(above.offCenter)).toBeLessThanOrEqual(1);
+    expect(above.clear).toBeGreaterThanOrEqual(12);
   });
 
   test('the footer keeps the corner unless the rail comes down into it', async ({

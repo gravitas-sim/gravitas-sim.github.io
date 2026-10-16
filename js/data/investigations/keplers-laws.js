@@ -56,13 +56,17 @@ const KEPLER = {
   subtitle: 'Measure the shape, pacing and timing of real orbits',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 3, section: '3.1' },
+  courseLevel: 'survey',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'logarithms',
+  prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'solar-system'],
   lock: { placement: true, inspector: true },
-  summary:
-    'Work through all three of Kepler’s laws by measuring orbits rather than being shown them: find the focus of an ellipse, watch equal areas sweep out in equal times, and recover the three-halves power law by plotting it yourself.',
   objectives: [
     'State where the primary sits in an elliptical orbit, and support it with a measurement',
     'Explain why an orbiting body moves fastest at periapsis, in terms of angular momentum',
@@ -93,7 +97,7 @@ const KEPLER = {
         text: 'Because these eight minutes could not be ignored, they alone have led the way toward reforming the whole of astronomy.',
         by: 'Johannes Kepler, Astronomia Nova, 1609',
       },
-      tip: 'While a lesson is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
+      tip: 'While an investigation is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
       setup: {
         scenario: "Kepler's 2nd Law",
         seed: 'kepler-lab',
@@ -853,6 +857,17 @@ const KEPLER = {
                and P = 11.87 years, against a measured 11.86.`,
       because:
         "P = 8 years. Now try it on a planet you did measure: Jupiter sits at 5.204 AU, so a³ = 141.0 and P = √141.0 = 11.87 years. The table says 11.86. You have just predicted a real planet's year from nothing but its distance.",
+      feedback: {
+        close:
+          'Close, but outside the tolerance. Re-check the cube and the square root separately.',
+        'wrong-unit':
+          'That looks like days. With the distance in AU the law gives years, so convert before you answer.',
+        'wrong-order-of-magnitude':
+          'Out by a power of ten. Cube the distance first, then take the square root.',
+        off: 'Check the order of operations: cube a to get P squared, and only then undo the square.',
+        correct:
+          'To test a law like this, apply it to a planet whose year you know and see that it agrees.',
+      },
     },
     {
       sid: 'what-the-constant-depends-on',
@@ -1095,6 +1110,13 @@ const KEPLER = {
                the published value.`,
       because:
         'About 0.91 solar masses, which is within a few percent of the published value of 0.91. You have just weighed a star 600 light years away using nothing but a distance, a period, and a relation Kepler found by fitting Mars. This is the standard method: essentially every stellar mass in the exoplanet literature comes from some version of this calculation.',
+      feedback: {
+        close:
+          'Close. Check the cube and the square separately, and the rounding in each.',
+        'wrong-order-of-magnitude':
+          'Out by powers of ten. Make sure the period is in years, not days: the days figure is far larger than the same time in years.',
+        off: 'Work in three parts: a cubed, then P squared, then divide the first by the second.',
+      },
     },
     {
       sid: 'where-kepler-s-version-breaks',
@@ -1127,7 +1149,7 @@ const KEPLER = {
              \n\nEverything here came out of naked-eye positions recorded before
              the telescope existed, by an observer who refused to round away eight
              minutes of arc.`,
-      tip: 'If you are submitting this for credit, press Next once more to enter your name and download your lab report. Otherwise you can simply close the panel.',
+      tip: 'If you are submitting this for credit, press Finish to enter your name and download your lab report. Otherwise you can simply close the panel.',
     },
   ],
 };

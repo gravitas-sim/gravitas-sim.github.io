@@ -8,10 +8,10 @@
 //
 // Content only, no imports, in the same spirit as the rest of js/data.
 //
-// Sources: Agol et al. (2021), Planet. Sci. J. 2, 1 for the planetary masses,
-// radii and semi-major axes; Ducrot et al. (2020) and Gillon et al. (2017) for
-// the stellar properties. Values rounded to the precision the simulation and
-// the lessons actually use.
+// Sources, value by value, are in js/data/realSystemSources.js: mostly Agol et
+// al. (2021), Planet. Sci. J. 2, 1 - the star, and the planets' masses and
+// radii - with most periods from Gillon et al. (2017). Values rounded to the
+// precision the simulation and the lessons actually use.
 // =============================================================================
 
 /** The star. */

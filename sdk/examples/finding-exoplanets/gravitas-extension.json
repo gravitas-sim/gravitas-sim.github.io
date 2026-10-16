@@ -1,0 +1,21 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "example.finding-exoplanets",
+  "version": "1.0.0",
+  "kind": "declarative",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "Finding exoplanets: a five-lesson sequence",
+    "es": "Encontrar exoplanetas: una secuencia de cinco lecciones"
+  },
+  "provides": {
+    "courses": [{ "id": "finding-exoplanets", "file": "course.json" }]
+  },
+  "assets": [{ "path": "course.json", "role": "data", "offline": "optional" }],
+  "citations": [],
+  "licenses": [{ "scope": "course.json", "license": "CC-BY-4.0" }],
+  "offline": { "policy": "precache" },
+  "validation": [{ "check": "registry:sdk-extensions" }],
+  "migrations": []
+}

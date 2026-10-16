@@ -11,7 +11,7 @@ wanted, open an issue first — it is cheaper than a rejected branch.
 
 ## Getting set up
 
-Node 20 or newer. `.nvmrc` pins the major version CI tests against, so
+Node 22 or newer. `.nvmrc` pins the major version CI tests against, so
 `nvm use` in the repository root gets you the same one; development is on 24.
 
 ```bash
@@ -20,7 +20,10 @@ npm run dev          # serves the repository root at http://localhost:8003
 ```
 
 The unbundled ES modules run straight from disk, so there is no build step in
-the development loop. `npm run build` exists for publishing, not for working.
+the development loop. `npm run build` exists for publishing, not for working,
+and it needs the instructor passphrase, which a contributor does not have and
+does not need: `npm run build:ci` is the same build with a throwaway key, and it
+is the one CI runs.
 
 ---
 
@@ -32,11 +35,11 @@ Everything CI runs, you can run:
 npm test                  # jest: physics, data, formatting of numbers, i18n parity
 npm run lint              # eslint (prettier runs inside it)
 npm run format:check      # prettier, for the files it owns
-npm run docs:check        # the counts in the docs still match the source
+npm run docs:check:full   # every count in the docs matches the source, the test counts too
 npm run check:architecture  # no import cycles, no low-level module importing up
 npm run vendor:check      # vendor/ matches the pinned three.js, Chart.js and fonts
 npm run a11y              # axe over every surface, plus the keyboard checks
-npm run build             # a production bundle must still build
+npm run build:ci          # a production bundle must still build (no passphrase)
 ```
 
 Depending on what you touched:
@@ -116,9 +119,11 @@ Three things to know when adding an interface:
   3-D viewport carried `aria-hidden="true"` over two focusable buttons, so a
   keyboard reader could focus a close button and hear nothing. That is a worse
   defect than the one it silenced.
-- **A modal must actually be modal.** If it declares `aria-modal="true"`, wrap
-  it with `trapFocus()` from `js/focusTrap.js`, which cycles Tab inside it,
-  marks the rest of the page `inert` and restores focus on release.
+- **A modal must actually be modal.** Open it with `openDialog()` from
+  `js/dialog.js`, which keeps Tab inside it, closes it on Escape, puts focus
+  back on what opened it and, with `isolate`, marks the rest of the page
+  `inert`. `tests/dialogInventory.test.js` fails on a `role="dialog"` that does
+  not, unless it is on that file's list of the ones that are not modal.
 
 The canvas has a textual equivalent (`js/canvasSummary.js`) reached through
 `aria-describedby`. It is deliberately **not** a live region: the simulation
@@ -134,17 +139,52 @@ than once.
 The JavaScript is layered. A module may import from its own layer or any layer
 below it, never above. `npm run check:architecture` enforces this and fails the
 build on a violation; `npm run check:architecture:report` prints the layers and
-the widest fan-out.
+the widest fan-out. The same check holds every module to a size rule:
+
+- A module of 1,500 lines or fewer needs no entry and may grow freely.
+- A module over 1,500 lines must be listed in `tools/module-size-ceilings.json`
+  and sit exactly at its ceiling, so each slice of the decomposition lowers the
+  entry in the same commit. `npm run check:architecture -- --record-sizes`
+  lowers entries to today's sizes and removes those of modules that fell to
+  1,500 lines or fewer; it never raises or adds one.
+- A module that crosses 1,500 lines fails the check. Split it, or add an entry
+  by hand with a DECISION_REGISTER row that says why. Raising an entry needs a
+  row too.
+
+`node tools/check-architecture.mjs --sizes` prints the largest modules. They and
+their ceilings:
+
+<!--fact-block:moduleSizes-->
+| Module | Lines | Ceiling |
+| --- | ---: | ---: |
+| `js/data/instructorContent.js` | 6,715 | 6,715 |
+| `js/validation/physicsChecks.js` | 6,621 | 6,621 |
+| `js/physics.js` | 5,320 | 5,320 |
+| `js/investigations.js` | 4,754 | 4,754 |
+| `js/i18n/es.deferred.js` | 4,092 | 4,092 |
+| `js/i18n/en.deferred.js` | 3,845 | 3,845 |
+| `js/render.js` | 3,028 | 3,028 |
+| `js/world/build.js` | 2,599 | 2,599 |
+<!--/fact-block-->
 
 | Layer | What lives there | Examples |
 | --- | --- | --- |
-| `foundation` | Pure helpers and constants. No application state, no DOM. | `constants.js`, `utils.js`, `units.js`, `rng.js`, `spatialHash.js`, `i18n/` |
+| `foundation` | Pure helpers and constants. No application state, no DOM. | `constants.js`, `utils.js`, `units.js`, `rng.js`, `i18n/` |
 | `domain` | The science, as pure functions over numbers. What the validation suite imports directly. | `orbital.js`, `mond.js`, `darkMatter.js`, `chaos/`, `resonance/` |
 | `services` | Stateful cross-cutting machinery with no opinion about the interface. | `quality.js`, `offline.js`, `referenceFrame.js` |
 | `engine` | The simulation, and the world it is built into. | `physics.js`, `scenarios.js`, `world/build.js` |
 | `state` | The objects the interface shares. | `appState.js` |
+| `render` | What a body looks like on the canvas: the drawers, what they share and the black hole renderer. The engine never imports them. | `bodyDraw.js`, `bodyDrawSky.js`, `blackHole/render.js` |
 | `feature` | Everything that draws or is driven. | `render.js`, `controls.js`, `investigations.js`, `experiments/` |
 | `coordinator` | Wires the rest together. Nothing may import these. | `ui.js`, `main.js` |
+
+**Names.** A storage key, a window event name or a format id is spelled once,
+in `js/names.js` (`KEY_*`, `EV_*`, `ID_*`), and a module imports it. The
+`gravitas*` literals still written inline are listed in
+`tools/key-registry-allowlist.json`; `tests/keyRegistry.test.js` fails on a new
+one and on a stale entry, so the list only shrinks (run
+`node tools/key-registry-scan.mjs --record` after moving one). A value never
+changes: saved games, share links and student storage hold the exact strings.
 
 Two rules do the real work.
 
@@ -162,9 +202,86 @@ population caps are *read* during construction and never written back —
 `SETTINGS` is the reader's document, and it is what a share link serializes and
 what the A/B bench hashes.
 
+**The engine paints nothing.** A body class's `draw(ctx)` looks its kind up in a
+table of drawers (`registerBodyDrawers` in `js/physics.js`), and the render
+layer (`js/bodyDraw.js` and `js/bodyDrawSky.js`) imports the engine and fills
+the table. The engine reaches the render layer only that way, so an engine to
+render import fails `check:architecture`, including a dynamic `import()` in the
+middle of a line. A body with no drawer draws nothing, which is what a Worker,
+where there is no canvas, wants.
+
+**A body's `kind` is a static string, not state.** Every body class carries
+`static kind` (a string no minifier renames) and reads it through an accessor,
+and the engine branches on `kind`, never on `constructor.name`. The accessor has
+a setter that does nothing, on purpose: `set_state()` and an investigation's
+`assign` copy fields onto a body with `Object.assign`, and a getter alone would
+throw there in strict mode, while a saved `kind` must never change what a body
+is. The class decides; the data cannot. For an object that is not a body (a
+test double, a plain record), the readers (`className`, `kindOf`) answer
+`'Object'` unless it states a string `kind` or an `obj_type`.
+
+**Every random draw stays in the engine.** Seeded stepping exists, and a
+collision draws from the same stream as the effects before it, so a realm that
+never imports `js/bodyEffects.js` (a Worker, a Node script) must take the same
+draws in the same order. The thirteen particle bursts are one table
+(`BURSTS` in `js/physics.js`: count, speed and lifetime, which are draws) and one
+helper (`burst`); what a burst looks like (size, color) and the disk tracer's
+color are the effects module's, filed by `registerEffects`. The four explosion
+builders stay whole. `tests/effectsMissing.test.js` runs nineteen engine events
+with no module and compares draws, the next draw and the ripples with the
+registered engine.
+
+**The engine split is planned, not begun** (D-DECOMP-18). Target: an engine
+folder inside `js` holding the state, events, conservation and energy, forces, integrator, bodies,
+collisions, mergers and the step, with `js/physics.js` kept as the one facade so
+no importer changes, and a Worker-safe rule (no `document`, `window` or
+`CustomEvent` in that folder except its host module). Order, risks and the
+test that proves each slice are in the register row; the first slice is the
+module that owns the engine's singletons (the 14 body lists, the settings, the
+clocks, the id counter), because nothing else can leave `physics.js` without a
+cycle until it exists. Two things must be decided before the second slice: how
+the sources routes count the new files (each is a request on every route that
+loads the engine, and the request ceilings may not rise), and what replaces two
+live dependencies the engine has today on the page (the canvas size that culls
+off-screen bodies, and the wall clock that a new black hole's grace period
+reads).
+
+**A module carved out of `ui.js` is handed nothing it can ask for.** The slices
+of Prompt 107 follow one rule: an extracted module never imports `ui.js`, and
+what it needs of the coordinator it either owns (state moves with the code) or
+asks for through the command bus. `js/inspectorWindow.js` needs no application
+context object: it owns the inspector's suppression flag, `ui.js` registers its
+`hideObjectInspector` and `setInspectorSuppressed` on the bus, and the
+header buttons are wired by one call (`wireInspectorControls()`) made where
+`ui.js`'s own start-up code ran them. A module that does need several local
+values of `ui.js` takes **one** small context object, built once in `ui.js` and
+passed to an `init...(ctx)` function; the module's header lists every member, and
+adding one is a design decision, not an edit. `js/placement.js` (placement by
+pointer and keyboard, the object picker) is the example: `initPlacement({canvas})`
+registers the pointer, wheel and key listeners where `ui.js` ran them, and `initObjectPicker()` wires the
+picker, so listener order is unchanged; `ui.js` re-exports the public names so no
+caller moved. Such a module touches no element when it is imported, because `ui.js`
+mounts the panels' markup after every import has run.
+`js/captureMeasure.js` (the area sweep, speed, screenshot and clip buttons, the
+measurement tools, demo mode and the bottom dock) is the second:
+`initCaptureMeasure({canvas, starfieldCanvas})` takes the two canvases and
+nothing else; the demo cycle rebuilds a world and shows its card through
+`command('initialize_simulation')` and `command('show_enhanced_scenario_info')`.
+`js/world.js` (world build, clear, rebuild, save, load, share capture and apply,
+the scenario card, scenario loading) is the third, and needs **no** context
+object: its five pieces of live state (`builtSystem`, `worldPack`,
+`generationSettings`, `worldTouched`, `pendingSettingsOverride`) are its own
+module-level bindings (the sixth the slice 10 count named, `allBodies`, is a
+function of the physics lists), so there is one holder
+and nothing to hand in. `ui.js` still writes two of them, through
+`setBuiltSystem()` (Blank Simulation) and `setPendingSettings()` (Apply); a third
+writer is a design decision. `initWorld()` wires the listeners where `ui.js` ran
+them. The embed shell (`initEmbedMode()`, `embedWorldBuilt()`) lives in the same
+module, to pay for its request.
+
 ### When you need something from a layer above
 
-Three options, in order of preference:
+Four options, in order of preference:
 
 1. **Move it down.** Usually the right answer, and usually smaller than it
    looks. `SOLAR_MASS_UNIT` lived in `physics.js`, so `units.js` imported the
@@ -173,16 +290,24 @@ Three options, in order of preference:
 2. **Pass it in.** `buildWorld` gets `regenerateStarfield` through its context
    rather than importing `render.js`. That single edge was closing five of the
    eleven cycles the graph used to have.
-3. **Record it.** If it is genuinely unavoidable, add it to `ALLOWED_UPWARD` in
+3. **Ask for it.** If what you need is coordinator *behavior* (load this
+   scenario, rebuild that world, restore a share link), call it through the
+   command bus in `js/appState.js`: `const loadScenarioByKey =
+   command('loadScenarioByKey')` in your module, and `ui.js` registers the
+   handler once at start-up. A command is a plain synchronous call, so timing
+   and order are those of the direct call. Asking for a command nobody
+   registered throws.
+4. **Record it.** If it is genuinely unavoidable, add it to `ALLOWED_UPWARD` in
    `tools/check-architecture.mjs` with a reason saying why. The list is
    shrink-only: the check also fails on an entry whose import no longer exists,
    so a fixed edge cannot quietly stay on the books.
 
-There are three recorded entries, all of them `-> ui.js`, and all for the same
-reason: `investigations.js`, `share.js` and `experimentsBridge.js` want
-coordinator *behavior* — load this scenario, rebuild that world — rather than
-shared data. Removing them needs a command interface that does not exist yet.
-Adding a fourth should feel harder than fixing the third.
+No upward import is recorded now: the four that were (`investigations.js`,
+`share.js` and the two lazy bridges, each importing `ui.js`) go through the bus,
+and `welcome.js` with them. The check also fails on any other file that names
+`ui.js` in a relative path, in any form, which closes the gap for a dynamic
+import in the middle of a line.
+Adding one should feel harder than fixing the last.
 
 ---
 
@@ -216,13 +341,23 @@ restates the line below it will be asked about in review.
 
 ## Adding a scenario
 
+A scenario is named by its **id**: lower case, words joined by hyphens
+(`binary-planet-lab`), and permanent once it ships, because share links,
+lessons, course packs and experiments name it by that id. Its title is a
+translation of the id and may be reworded at any time; the id may not. (Until
+Roadmap II Prompt 63 a scenario was keyed by its English name. Those 59 names
+still read, through the rule in `scenarioId()`; a new scenario has no such
+name.)
+
 Two places, both data:
 
-1. **`js/data/scenarioInfo.js`** — the title, the summary a student reads, one
-   to four concept tags from the fixed tag list, and a thumbnail path.
-2. **`js/scenarios.js`** — a branch in `applyPreset` that transforms the
-   settings object. It is a pure function of settings: it may not reach into
-   the UI.
+1. **`js/data/scenarioInfo.js`** — an entry under the id with one to four
+   concept tags from the fixed tag list. Its title and summary are
+   `scenario.<id>.title` and `scenario.<id>.summary` in `js/i18n/en.js` and
+   `js/i18n/es.js`, and its thumbnail is `images/scenarios/<id>.webp`.
+2. **`js/scenarios.js`** — a row of `SCENARIO_PRESETS` under the same id: the
+   settings the scenario runs under, as data. Geometry that settings cannot
+   describe is a branch on the id in `js/world/build.js`.
 
 Then:
 
@@ -278,10 +413,10 @@ Rules that are not obvious:
 
 ### The authoring toolchain
 
-A lesson is not one file. It is a module, a translation shadow, two registry
-entries, an entry in the synchronous barrel, an instructor-guide stub and two
-generated manifests — and a broken reference between any of them is invisible
-until a class hits it. Three commands cover that.
+A lesson is not one file. It is a module, a translation shadow, an entry in the
+synchronous barrel, an instructor-guide stub, two generated manifests and the
+generated lazy registry (`npm run registries`) — and a broken reference between
+any of them is invisible until a class hits it. Three commands cover that.
 
 ```bash
 npm run author:new -- --id=tidal-heating --title="Tidal Heating"
@@ -289,9 +424,10 @@ npm run author:check
 npm run author:walk
 ```
 
-**`author:new`** scaffolds all six registration points and prints what to do
-next. It never overwrites, so it is safe to re-run. The scaffold deliberately
-does not pass `author:check` yet: the placeholder summary, objectives and
+**`author:new`** scaffolds the hand-written registration points and prints what
+to do next (`npm run manifest`, then `npm run registries` for the lazy loaders).
+It never overwrites, so it is safe to re-run. The scaffold deliberately does not
+pass `author:check` yet: the placeholder summary, objectives and
 guide sections are there to be replaced, and the checker is the to-do list.
 
 **`author:check`** validates every investigation and every step — ids, required
@@ -316,8 +452,8 @@ npm run author:check -- --json            # for an editor
 **`author:walk`** is the part that cannot be done as data. The checker can see
 that a step names a widget and that the widget has a control called `mass`; it
 cannot see that the widget painted, that the scenario built, that a probe
-produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->22<!--/fact--> investigations in
-a browser and takes all <!--fact:investigationSteps-->636<!--/fact--> steps,
+produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->60<!--/fact--> investigations in
+a browser and takes all <!--fact:investigationSteps-->1024<!--/fact--> steps,
 sharded one lesson per test so contexts are reused and a failure names its lesson. It takes about two
 minutes and runs as part of `npm run e2e`.
 
@@ -360,6 +496,16 @@ the key prints; `author:check` fails if one points past the end of a lesson,
 which is what happens when a step is inserted above it.
 
 ---
+
+## Adding a data pack, a course or an instrument as an extension
+
+The Extension SDK ([sdk/README.md](sdk/README.md)) scaffolds, validates, tests
+and packs the three kinds of extension: an observation data pack, a course
+(a sequence of existing lessons), and an instrument family. Its checks tell
+you what is wrong by file, line and field, without your having to read the
+code underneath. Start with `npm run sdk -- init <type> <id>`. An accepted
+extension is reviewed and vendored into the application; nothing is
+installed into a running copy.
 
 ## Adding a language
 

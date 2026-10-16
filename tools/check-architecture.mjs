@@ -5,6 +5,14 @@
  *   node tools/check-architecture.mjs           check, and fail on a violation
  *   node tools/check-architecture.mjs --report  print the graph and stop
  *   node tools/check-architecture.mjs --cycles  print every cycle and stop
+ *   node tools/check-architecture.mjs --sizes   print the largest modules, with
+ *                                               their ceilings, and stop
+ *   node tools/check-architecture.mjs --record-sizes
+ *                                               lower the listed ceilings to
+ *                                               today's sizes and drop the
+ *                                               entries of modules that fell to
+ *                                               1,500 lines or fewer (never
+ *                                               raises or adds one)
  *
  * What this is for
  * -----------------------------------------------------------------------------
@@ -26,14 +34,37 @@
  *   may import anything; nothing may import them. That is what makes ui.js a
  *   coordinator rather than a container.
  *
- * Both rules are enforced against a recorded baseline rather than against zero,
+ * A third rule is about size (Prompt 107, step 4; model changed by D-DECOMP-22):
+ * no module may have more than DEFAULT_SIZE_CEILING (1,500) lines, the roadmap's
+ * slice limit, unless it is listed in tools/module-size-ceilings.json. A module
+ * at or under the limit needs no entry and may grow freely up to it. A module
+ * over the limit must be listed, and its ceiling must equal its size, so that
+ * every slice of the decomposition lowers it in the same commit. An entry for
+ * a module that has fallen to the limit or below is stale and is removed.
+ * Crossing the limit is a decision: split the module, or add an entry by hand
+ * with a DECISION_REGISTER row. Raising an entry is the same hand edit;
+ * --record-sizes only ever lowers entries and removes them, and never adds one.
+ *
+ * The render layer (Prompt 107, step 2b) holds what paints a body: js/bodyDraw.js
+ * and js/bodyDrawSky.js (the drawers and what they share), js/bodyEffects.js (the
+ * particles and the merger explosions) and the black hole renderer. The engine
+ * and the layers below never import it, in any form; they hold a table of
+ * drawers and of effects that the render layer fills.
+ *
+ * A fourth is about listeners (Prompt 107, step 3): a module that exports a
+ * mount function and registers listeners must do it through the helper in
+ * js/listeners.js, which removes them when the module unmounts. The modules that
+ * do not yet are in tools/listener-helper-allowlist.json; the list may only
+ * shrink (a module that adopts the helper, or stops mounting, must leave it).
+ *
+ * The first two rules are enforced against a recorded baseline rather than against zero,
  * because the graph did not start clean and a check that fails on day one is a
  * check that gets commented out. The baseline may only shrink: ARCHITECTURE
  * below lists what is still wrong, every entry has a reason, and adding to it
  * requires editing this file deliberately.
  */
 
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const ROOT = 'js';
@@ -51,13 +82,15 @@ const LAYERS = [
     blurb: 'Pure helpers and constants. No application state, no DOM.',
     match: [
       /^js\/constants\.js$/,
+      // The names the application stores and announces itself under: strings
+      // only, no imports, safe in a Worker.
+      /^js\/names\.js$/,
       /^js\/utils\.js$/,
       /^js\/format\.js$/,
       /^js\/units\.js$/,
       /^js\/rng\.js$/,
       /^js\/theme\.js$/,
       /^js\/i18n\//,
-      /^js\/spatialHash\.js$/,
       // Pure geometry over values handed in: the follow camera's arithmetic and
       // the touch-gesture state machine. Neither reaches for the view state,
       // the DOM or a clock of its own, which is what makes both of them
@@ -71,22 +104,33 @@ const LAYERS = [
       // no more, the same way js/i18n/dom.js is a leaf that happens to touch
       // the DOM. Down here because every body class in the engine reads it.
       /^js\/bodyVisuals\.js$/,
-      // What a black hole looks like, and the code that draws it. The same
-      // standing as bodyVisuals above: pure geometry over values handed in,
-      // plus one module whose only side effect is painting into a context it
-      // was given. No application state, no clock of its own - the time it
-      // animates against is passed in - and nothing in it can move a body.
-      /^js\/blackHole\//,
+      // What a black hole looks like: the appearance record a hole carries as
+      // state (environment, seed, spin, tilt), values in and values out. The
+      // engine builds and saves one, so it has to sit down here; the code that
+      // paints one is js/blackHole/render.js, in the render layer below.
+      /^js\/blackHole\/appearance\.js$/,
       // One string and two functions, imported by both the coordinator and the
       // lesson registry so that a deferred registry can read the language the
       // application already chose. Imports nothing itself.
       /^js\/lessonLocale\.js$/,
+      // The period-to-pitch law. Arithmetic over two numbers handed in - no
+      // AudioContext, no oscillator, no state and no clock - which is what
+      // makes it checkable from js/validation/physicsChecks.js in plain Node. The
+      // existing sound, js/audio.js, is a feature-layer module that owns an
+      // AudioContext and reads the body lists; this is deliberately not that,
+      // and keeping the law down here is what stops it acquiring either.
+      /^js\/sonify\//,
       // Which object a lesson means, and what it borrowed. Identity rules over
       // values handed in - no object lists, no DOM, no clock - which is what
       // lets the authoring tools and the tests reason about a lesson's
       // bindings in plain Node. js/lessonScene.js is the half that knows where
       // the bodies are, and it lives in the feature layer where it belongs.
       /^js\/lesson\//,
+      // Which fields a body type needs and whether what was typed is usable.
+      // Values in, verdict out - no DOM, no catalog, no physics - which is
+      // what lets the placement form be tested without a browser and what
+      // keeps the schema in one place instead of once per input.
+      /^js\/place\//,
     ],
   },
   {
@@ -121,6 +165,9 @@ const LAYERS = [
       // js/habitability.js and the inspector both have to agree with.
       /^js\/stellar\//,
       /^js\/data\//,
+      // A measured series and its one decoder: numbers in, numbers out, for
+      // every data pack in js/data/observations/ (DATA_PACKS.md).
+      /^js\/observation\.js$/,
     ],
   },
   {
@@ -138,15 +185,35 @@ const LAYERS = [
   {
     name: 'engine',
     blurb: 'The simulation itself, and the world it is built into.',
-    match: [/^js\/physics\.js$/, /^js\/world\//, /^js\/scenarios\.js$/],
+    match: [
+      /^js\/physics\.js$/,
+      // The engine's own modules (D-DECOMP-18): js/physics.js stays the facade
+      // that re-exports them.
+      /^js\/engine\//,
+      /^js\/world\//,
+      /^js\/scenarios\.js$/,
+    ],
   },
   {
     name: 'state',
     blurb:
       'The objects the interface shares: view state, live settings, current ' +
-      'scenario. Below everything that reads them, above the engine, which ' +
+      'scenario, and the command bus through which modules below ui.js ask ' +
+      'it to act (both in js/appState.js). Below everything that reads them, above the engine, which ' +
       'is handed what it needs rather than reaching for it.',
     match: [/^js\/appState\.js$/],
+  },
+  {
+    name: 'render',
+    blurb:
+      'What the bodies look like on the canvas: the drawers the engine calls ' +
+      'through a table and never imports, the particles and explosions it ' +
+      'spawns at an event, and the black hole renderer. They read the engine ' +
+      'and paint into a context they are handed; the engine reaches them only ' +
+      'by registration (registerBodyDrawers and registerEffects in ' +
+      'js/physics.js), so an engine -> render import fails this check. Prompt ' +
+      '107, step 2b.',
+    match: [/^js\/body(Draw(Sky)?|Effects)\.js$/, /^js\/blackHole\//],
   },
   {
     name: 'feature',
@@ -174,34 +241,12 @@ const RANK = Object.fromEntries(LAYERS.map((l, i) => [l.name, i]));
  * entry is `from -> to`, and a cycle is recorded by its lowest-sorting member
  * pair so that the same cycle reported from two directions is one entry.
  */
-const ALLOWED_UPWARD = new Map([
-  [
-    'js/experimentsBridge.js -> js/ui.js',
-    'A deliberate lazy edge: the bridge dynamic-imports ui.js inside the path ' +
-      'that loads the A/B bench, so the bench and everything it pulls in stay ' +
-      'out of the initial download. Making it static to satisfy the layering ' +
-      'would undo the lazy load, which is the point of the module.',
-  ],
-  [
-    'js/maneuverBridge.js -> js/ui.js',
-    'The same deliberate lazy edge as the bench bridge above: ui.js is dynamic-' +
-      'imported inside the path that loads the maneuver planner, so the ' +
-      'planner and its prose stay out of the initial download. A static import ' +
-      'would satisfy the layering and undo the lazy load.',
-  ],
-  [
-    'js/investigations.js -> js/ui.js',
-    'A lesson steps the world: it loads scenarios, suppresses the inspector, ' +
-      'draws area-sweep wedges and restores share state. That is coordinator ' +
-      'behavior rather than shared data, so a state module does not help - ' +
-      'it needs a command interface, which is a larger change than this pass.',
-  ],
-  [
-    'js/share.js -> js/ui.js',
-    'Restoring a shared link means rebuilding a world and repainting a card, ' +
-      'both of which live in ui.js. The same shape of problem as ' +
-      'investigations.js, and the same answer.',
-  ],
+export const ALLOWED_UPWARD = new Map([
+  // Empty since Prompt 107 step 2d. The four edges that stood here (the
+  // investigation engine, the share dialog and the two lazy bridges, each
+  // importing js/ui.js) now go through the command bus in js/appState.js,
+  // which ui.js fills at start-up. A new entry needs a reason a bus cannot
+  // answer, and a register row.
 ]);
 
 /** Files that are workers or otherwise not part of the page graph. */
@@ -351,6 +396,64 @@ export function findUpwardImports(graph) {
   );
 }
 
+/**
+ * Files other than the coordinators that name js/ui.js in a relative string.
+ *
+ * buildGraph() reads a dynamic import only at the start of a line, so
+ * `await import('./ui.js')` in the middle of one is invisible to the layer
+ * rule. For ui.js that gap is closed here: any quoted relative path that
+ * resolves to it, however it is written, is reported. What a module needs of
+ * the interface goes through the command bus in js/appState.js.
+ *
+ * @param {Map<string, string>} sources - file -> text
+ * @returns {string[]} Offending files
+ */
+export function findCoordinatorImports(sources) {
+  const out = [];
+  for (const [file, src] of sources) {
+    if (layerOf(file) === 'coordinator') continue;
+    for (const m of src.matchAll(/['"](\.[^'"\n]*)['"]/g)) {
+      const resolved = path.posix.normalize(
+        path.posix.join(path.posix.dirname(file), m[1])
+      );
+      if (resolved === 'js/ui.js') {
+        out.push(file);
+        break;
+      }
+    }
+  }
+  return out.sort();
+}
+
+/**
+ * Files below the render layer that name a render-layer file in a quoted
+ * relative path, in any form.
+ *
+ * The layer rule already fails a static import and a dynamic one that starts
+ * its line, and misses `x = import('./bodyDraw.js')` for the reason buildGraph
+ * explains. The engine is the module that most needs the guarantee (it runs in
+ * a Worker, where there is no canvas and nothing that paints should be
+ * fetched), so this closes the gap for the whole render layer: what the engine
+ * wants painted it registers a drawer for (registerBodyDrawers in
+ * js/physics.js), and the render layer fills the table.
+ *
+ * @param {Map<string, string>} sources - file -> text
+ * @returns {string[]} Offending "from -> to" pairs
+ */
+export function findRenderImports(sources) {
+  const out = [];
+  for (const [file, src] of sources) {
+    if (RANK[layerOf(file)] >= RANK.render) continue;
+    for (const m of src.matchAll(/['"](\.[^'"\n]*)['"]/g)) {
+      const resolved = path.posix.normalize(
+        path.posix.join(path.posix.dirname(file), m[1])
+      );
+      if (layerOf(resolved) === 'render') out.push(`${file} -> ${resolved}`);
+    }
+  }
+  return out.sort();
+}
+
 function report(graph) {
   const byLayer = new Map(LAYERS.map(l => [l.name, []]));
   for (const file of [...graph.keys()].sort())
@@ -473,11 +576,236 @@ export async function findDeadExports() {
   return dead;
 }
 
+export const SIZE_CEILINGS_FILE = 'tools/module-size-ceilings.json';
+
+/**
+ * Lines a module may have without an entry in the ceilings file: the slice
+ * limit. Only a module over it is listed, each exactly at its ceiling.
+ */
+export const DEFAULT_SIZE_CEILING = 1500;
+const LIMIT = DEFAULT_SIZE_CEILING.toLocaleString('en-US');
+
+/**
+ * Line count of every module in the graph (the newline count, as wc -l).
+ * @param {Map<string, Set<string>>} graph - The import graph
+ * @returns {Promise<Map<string, number>>} file -> lines
+ */
+export async function moduleSizes(graph) {
+  const sizes = new Map();
+  for (const file of graph.keys()) {
+    const src = await readFile(file, 'utf8');
+    sizes.set(file, (src.match(/\n/g) || []).length);
+  }
+  return sizes;
+}
+
+/**
+ * The size problems for a set of sizes against recorded ceilings.
+ *
+ * A module at or under DEFAULT_SIZE_CEILING needs no entry and has none. A
+ * module over it has an entry, exactly at its size.
+ * @param {Map<string, number>} sizes - file -> lines
+ * @param {Record<string, number>} ceilings - file -> recorded ceiling
+ * @returns {string[]} Problems, empty when all is well
+ */
+export function findSizeProblems(sizes, ceilings) {
+  const problems = [];
+  for (const [file, lines] of sizes) {
+    const ceiling = ceilings[file];
+    if (ceiling === undefined) {
+      if (lines > DEFAULT_SIZE_CEILING) {
+        problems.push(
+          `Module crossed ${LIMIT} lines: ${file} has ${lines} ` +
+            `lines and no entry in ${SIZE_CEILINGS_FILE}. Split it, or add an ` +
+            `entry at ${lines} with a DECISION_REGISTER row that says why.`
+        );
+      }
+    } else if (
+      ceiling <= DEFAULT_SIZE_CEILING ||
+      lines <= DEFAULT_SIZE_CEILING
+    ) {
+      problems.push(
+        `Stale ceiling: ${file} has ${lines} lines and an entry of ` +
+          `${ceiling} in ${SIZE_CEILINGS_FILE}, but only a module over ` +
+          `${LIMIT} lines is listed. Run npm run ` +
+          `check:architecture -- --record-sizes, or delete the entry.`
+      );
+    } else if (lines > ceiling) {
+      problems.push(
+        `Module grew past its ceiling: ${file} has ${lines} lines, ` +
+          `ceiling ${ceiling}. Move code out rather than raising the ceiling ` +
+          `in ${SIZE_CEILINGS_FILE} (a raise needs a DECISION_REGISTER row).`
+      );
+    } else if (lines < ceiling) {
+      problems.push(
+        `Ceiling not lowered: ${file} has ${lines} lines, ceiling ${ceiling}. ` +
+          `Run npm run check:architecture -- --record-sizes so the ` +
+          `decomposition's progress is recorded.`
+      );
+    }
+  }
+  for (const file of Object.keys(ceilings)) {
+    if (!sizes.has(file)) {
+      problems.push(
+        `Stale ceiling: ${file} is in ${SIZE_CEILINGS_FILE} but is not a ` +
+          `module any more. Delete the entry.`
+      );
+    }
+  }
+  return problems;
+}
+
+/**
+ * What --record-sizes writes: each listed module's ceiling lowered to its size,
+ * and the entry dropped once the module is at DEFAULT_SIZE_CEILING or fewer
+ * lines (or gone). Never raises a ceiling and never adds an entry, so a module
+ * that crossed the limit is reported, not recorded.
+ * @param {Map<string, number>} sizes - file -> lines
+ * @param {Record<string, number>} ceilings - file -> recorded ceiling
+ * @returns {{next: Record<string, number>, removed: string[], lowered: string[], over: string[], unlisted: string[]}}
+ */
+export function recordSizes(sizes, ceilings) {
+  const next = {};
+  const removed = [];
+  const lowered = [];
+  const over = [];
+  const unlisted = [];
+  for (const [file, ceiling] of Object.entries(ceilings)) {
+    const lines = sizes.get(file);
+    if (lines === undefined || lines <= DEFAULT_SIZE_CEILING) {
+      removed.push(file);
+      continue;
+    }
+    next[file] = Math.min(lines, ceiling);
+    if (next[file] < ceiling) lowered.push(file);
+    if (lines > next[file]) over.push(file);
+  }
+  for (const [file, lines] of sizes) {
+    if (lines > DEFAULT_SIZE_CEILING && ceilings[file] === undefined)
+      unlisted.push(file);
+  }
+  return { next, removed, lowered, over, unlisted };
+}
+
+export const LISTENER_ALLOWLIST_FILE = 'tools/listener-helper-allowlist.json';
+
+const MOUNTS = /^export\s+(?:async\s+)?function\s+mount[A-Z]/m;
+const REGISTERS = /\.addEventListener\(/;
+const USES_HELPER = /from\s+['"](?:\.{1,2}\/)+listeners\.js['"]/;
+
+/**
+ * Listener problems: a module that exports a mount function and registers
+ * listeners directly, without the helper and without being recorded.
+ * @param {Map<string, string>} sources - file -> source text
+ * @param {string[]} allowlist - modules recorded as not adopting it yet
+ * @returns {string[]} Problems, empty when all is well
+ */
+export function findListenerProblems(sources, allowlist) {
+  const problems = [];
+  const recorded = new Set(allowlist);
+  const bare = new Set();
+  for (const [file, src] of sources) {
+    if (!MOUNTS.test(src) || !REGISTERS.test(src) || USES_HELPER.test(src))
+      continue;
+    bare.add(file);
+    if (!recorded.has(file)) {
+      problems.push(
+        `Mounting module without the listener helper: ${file} exports a ` +
+          `mount function and calls addEventListener. Register through ` +
+          `listeners() from js/listeners.js and call off() on unmount, or ` +
+          `(if it cannot yet) record it in ${LISTENER_ALLOWLIST_FILE}.`
+      );
+    }
+  }
+  for (const file of recorded) {
+    if (!bare.has(file)) {
+      problems.push(
+        `Stale listener exemption: ${file} is in ${LISTENER_ALLOWLIST_FILE} ` +
+          `but it uses the helper, no longer mounts, or is gone. Delete the entry.`
+      );
+    }
+  }
+  return problems;
+}
+
+async function readListenerAllowlist() {
+  return JSON.parse(await readFile(LISTENER_ALLOWLIST_FILE, 'utf8')).modules;
+}
+
+export async function readCeilings() {
+  return JSON.parse(await readFile(SIZE_CEILINGS_FILE, 'utf8')).ceilings;
+}
+
+function serializeCeilings(ceilings) {
+  const sorted = {};
+  for (const k of Object.keys(ceilings).sort()) sorted[k] = ceilings[k];
+  return (
+    JSON.stringify(
+      {
+        _note:
+          'Line ceilings, read by tools/check-architecture.mjs. Only a module ' +
+          'over 1,500 lines is listed, and it must sit exactly at its ceiling; ' +
+          'run check:architecture -- --record-sizes after moving code out. A ' +
+          'module at or under 1,500 lines needs no entry. A module that ' +
+          'crosses 1,500 is split, or listed with a DECISION_REGISTER row. ' +
+          'Never raised without a DECISION_REGISTER row.',
+        ceilings: sorted,
+      },
+      null,
+      2
+    ) + '\n'
+  );
+}
+
 async function main() {
   const graph = await buildGraph();
 
   if (process.argv.includes('--report')) {
     report(graph);
+    return;
+  }
+
+  if (
+    process.argv.includes('--sizes') ||
+    process.argv.includes('--record-sizes')
+  ) {
+    const sizes = await moduleSizes(graph);
+    let ceilings = {};
+    try {
+      ceilings = await readCeilings();
+    } catch {
+      /* first recording */
+    }
+    if (process.argv.includes('--record-sizes')) {
+      const { next, removed, lowered, over, unlisted } = recordSizes(
+        sizes,
+        ceilings
+      );
+      await writeFile(SIZE_CEILINGS_FILE, serializeCeilings(next));
+      console.log(
+        `Recorded ${Object.keys(next).length} ceilings: ${lowered.length} ` +
+          `lowered, ${removed.length} removed (${LIMIT} lines ` +
+          `or fewer, or gone).`
+      );
+      if (over.length) {
+        console.log(`Over their ceilings (not raised): ${over.join(', ')}`);
+      }
+      if (unlisted.length) {
+        console.log(
+          `Over ${LIMIT} lines and not listed (not added; ` +
+            `split, or add an entry with a DECISION_REGISTER row): ` +
+            unlisted.join(', ')
+        );
+      }
+      return;
+    }
+    const top = [...sizes].sort((a, b) => b[1] - a[1]).slice(0, 12);
+    console.log('Largest modules (lines, ceiling):');
+    for (const [file, n] of top) {
+      console.log(
+        `  ${String(n).padStart(6)}  ${String(ceilings[file] ?? '-').padStart(6)}  ${file}`
+      );
+    }
     return;
   }
 
@@ -547,6 +875,37 @@ async function main() {
     }
   }
 
+  // js/ui.js is the coordinator: nothing below it names it, in any form.
+  const uiSources = new Map();
+  for (const file of graph.keys())
+    uiSources.set(file, await readFile(file, 'utf8'));
+  for (const file of findCoordinatorImports(uiSources)) {
+    problems.push(
+      `${file} imports js/ui.js. Ask for what you need through ` +
+        `command() in js/appState.js (ui.js registers the handler), or read ` +
+        `shared state from there.`
+    );
+  }
+
+  // The engine and everything below it never name a render-layer file.
+  for (const edge of findRenderImports(uiSources)) {
+    problems.push(
+      `${edge}: the render layer paints and the layers below it never load ` +
+        `it. Register a drawer instead (registerBodyDrawers in js/physics.js); ` +
+        `the render layer imports the engine and fills the table.`
+    );
+  }
+
+  // Sizes: 1,500 lines, or a listed ceiling (tools/module-size-ceilings.json).
+  problems.push(
+    ...findSizeProblems(await moduleSizes(graph), await readCeilings())
+  );
+
+  // Listeners: mounting modules go through js/listeners.js, or are recorded.
+  problems.push(
+    ...findListenerProblems(uiSources, await readListenerAllowlist())
+  );
+
   if (problems.length) {
     console.error(
       `Architecture check failed with ${problems.length} problem(s):\n`
@@ -558,7 +917,10 @@ async function main() {
 
   console.log(
     `Architecture OK: ${graph.size} modules, no cycles, ` +
-      `${ALLOWED_UPWARD.size} recorded upward imports and no new ones.`
+      `${ALLOWED_UPWARD.size} recorded upward imports and no new ones, ` +
+      `nothing below the coordinator names js/ui.js, ` +
+      `every module within ${LIMIT} lines or exactly at its listed ceiling, ` +
+      `every mounting module on the listener helper or recorded.`
   );
 }
 

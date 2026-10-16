@@ -8,7 +8,7 @@ simulation cannot offer regardless of effort.
 
 | Check | Covers |
 | --- | --- |
-| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->15<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages × <!--fact:axeThemes-->2<!--/fact--> themes — <!--fact:axeRuns-->60<!--/fact--> runs |
+| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->36<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages: the <!--fact:axeShellSurfaces-->24<!--/fact--> pages with the shared shell in all <!--fact:axeAllThemes-->4<!--/fact--> themes, the application's surfaces in <!--fact:axeThemes-->2<!--/fact--> — <!--fact:axeRuns-->240<!--/fact--> runs |
 | `e2e/accessibilityManual.spec.js` | Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description |
 
 Both run in CI. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
@@ -19,15 +19,23 @@ a real defect with a real fix.
 The surfaces, named as the spec names them: front door, sandbox, settings rail,
 scenario gallery, object inspector, investigations browser, active
 investigation, lesson measurement screen, share dialog, A/B bench, observing
-panels, lecture mode, model page, instructor portal, teaching page. That list
+panels, lecture mode, model page, instructor portal, teaching page, figure
+builder, evaluation kit, glossary, validation report, observatory, catalog, library,
+library by sequence, my work, experiment runner, scenario studio, investigation composer, course builder,
+investigations in a course, course home, 3-D kernel diagnostics, 3-D lab, 3-D lab guide, mission
+diagnostics, mission lab, submission review. (The figure builder is checked
+without its live preview, which is the application in a frame and is
+checked as the surfaces above.) That list
 and the count above both come from the `SURFACES` array in the spec — the count through `npm run docs:sync`, the names by hand,
 and `tests/accessibilityDocs.test.js` fails if a surface is in the array and
 not in the prose.
 
 Both languages, because a Spanish string is often longer than its English
 original and because `lang` has to follow the interface or a screen reader
-pronounces Spanish with an English voice. Both themes, because contrast is a
-property of the palette and passing in Midnight says nothing about Daylight.
+pronounces Spanish with an English voice. More than one theme, because
+contrast is a property of the palette and passing in Midnight says nothing
+about Daylight: the pages with the shared shell offer all four in their
+theme switch, so all four are checked there (Prompt 50).
 
 ## What was wrong, and what changed
 
@@ -73,14 +81,42 @@ already did.
 **Three modals did not trap focus.** The gallery, the share dialog and the
 investigations browser all declared `aria-modal="true"` and let Tab walk out
 into a control rail the reader could not see. The front door had a correct
-implementation; it is now `js/focusTrap.js` and all four use it. It cycles Tab
-within the dialog, marks the rest of the page `inert`, and restores focus to
-whatever opened it.
+implementation, and it became a shared trap that cycled Tab within the dialog,
+marked the rest of the page `inert` and restored focus to whatever opened it.
+
+**One module for every modal (Prompt 52).** That trap was a second one beside
+`js/dialog.js`, and six more modals had neither: export, the lesson finish, the
+black-hole masses, the lecture sequence and the shortcut list kept focus
+nowhere in particular, and none of them gave it back. Every modal now opens
+through `js/dialog.js`, and `tests/dialogInventory.test.js` fails on one that
+does not. Its `isolate` option is the old trap's inert background, except that
+it leaves live regions alone, so what `#srStatus` says over a dialog is heard,
+and on the way out it puts back only what it changed: the old release took
+`inert` off every child of `<body>`, closed dialogs included. The modules on
+the start-up path fetch `js/dialog.js` on the first open, primed when the
+pointer reaches the button or focus does, so it costs no route anything.
+
+**Two ways out of Settings and the System Builder.** Both are opened by
+`js/dialog.js`, which listens for Escape and Tab on the panel itself. A click on
+the panel's text put focus on `<body>` in every browser, and so did a click on
+any of its buttons in Safari, which does not focus a clicked button. From there
+Escape did nothing and Shift+Tab walked into the page behind. The panel now
+takes focus itself. Separately, Safari's default Tab leaves a dialog for the
+toolbar after the last field it stops on, and its next Tab comes back in at the
+first text field on the page. Over a lesson that was the lesson's answer boxes,
+behind the modal. Until 2026-09-28 nothing stopped it; that return now goes to
+the start of the dialog.
 
 **Target size.** Sliders presented a 7-pixel-tall target across their whole
 width; the inspector's help affordances were 16px and checkboxes 15px. All are
 at least 24×24 now. The sliders keep their thin visual track — the element grew
-and its background is clipped to the content box.
+and its background is clipped to the content box. On a touch screen
+(`pointer: coarse`) every control the application, the shell and the page
+components draw is at least 44×44, the AAA size of 2.5.5, and
+`e2e/responsiveLayout.spec.js` measures it on the phone and tablet projects.
+A pinch on the canvas zooms the simulation, which takes the gesture for itself
+(`touch-action: none`); anywhere else it zooms the page, and the viewport tag
+never forbids that.
 
 **Reduced motion.** `css/tokens.css` collapsed the duration tokens, which
 covered `components.css`. It did not cover `styles.css`, which animates with
@@ -88,6 +124,19 @@ literal durations and had four loops that never stopped. It does now.
 
 **Two headings competing for the top level.** The splash wordmark was an `h1`
 alongside the page's own. It is a paragraph.
+
+**Empty and offline states (Prompt 57, F and G).** An empty list now says what
+to press: the Observatory archive and fit panel, the experiments results, a
+catalog search that finds nothing, the instructor filter, the validation page
+when its results file cannot be read, and the teaching notes export. They are
+`.ui-state.is-empty` blocks in both languages, static text a reader meets in
+place, not announced. The offline note is one block the shell stamps into every
+page: when the connection drops it is inserted once into a `role="status"`
+region (so a screen reader hears it once), it lists the pages the service worker
+precaches (read from `sw-manifest.js`, not hand-written), says other pages work
+only if opened before, and goes when the connection returns. Its Dismiss button
+and Escape close it. `e2e/offlineStates.spec.js` and `e2e/emptyStates.spec.js`
+induce each state; `e2e/accessibility.spec.js` covers the touched pages.
 
 ## The canvas
 
@@ -111,6 +160,99 @@ a separate polite live region, and only when the reader caused them.
 `e2e/accessibilityManual.spec.js` watches that region for six seconds of
 ordinary running and fails if it is written to more than once.
 
+## The sound
+
+The sandbox makes sound, and it is worth being exact about what kind of thing
+that sound is, because "the simulation is sonified" is routinely read as a
+claim about accessibility and here it is not one.
+
+`js/audio.js` maps a body's orbital frequency to a pitch, compresses it through
+`log2(1 + f * 40)`, and then **quantizes the result onto a five-note scale** so
+that an arbitrary collection of orbits sounds like music rather than like a
+siren. That is the right design for an ambient soundtrack and it disqualifies
+the sound as a measuring instrument: the quantization is not invertible, so two
+orbits several percent apart can arrive at the same note. Nobody can get a
+number back out of it, sighted or not, because the number is no longer in
+there.
+
+**What was added.** The sound panel now prints the quantity the tones are
+computed from. Opening it on the default scenario gives:
+
+> **What the tones stand for**
+>
+> - Highest voice, Black hole. Period 61.4 d. Every interval below is measured
+>   from this one.
+> - Black hole. Period 61.5 d, 1.001× the highest voice, 1.1 cents below it.
+> - Rocky planet. Period 131 d, 2.125× the highest voice, 1304.9 cents below
+>   it.
+
+Those two black holes are 1.1 cents apart. No five-note scale preserves that
+and no listener could hear it, which is the clearest possible statement of why
+the printed version is not a transcription of the audible one. It is not a
+description of the sound; it is the thing the sound is about, delivered
+losslessly.
+
+It cannot drift away from what is playing. `getVoicedBodies()` in `js/audio.js`
+returns the same array the oscillators are following, `describeVoices` in
+`js/soundPanel.js` turns it into periods and intervals, and that panel (wired
+by `js/ui.js`) renders it and computes nothing of its own. `tests/voiceReadout.test.js` fails if it ever starts to,
+and `e2e/sonifyTextEquivalent.spec.js` compares the printed periods and
+intervals against the live array in the browser.
+
+**It is deliberately not a live region**, for the same reason the canvas
+description is not. The voices are re-chosen several times a second; a polite
+live region over them would interrupt a screen reader without pause and make
+the panel unusable for exactly the reader it exists for. It is plain content
+that holds still while it is read — the panel fills it when it opens and does
+nothing at all while it is closed.
+
+### What none of this establishes
+
+**The sonification has never been tested with a screen reader or with a blind
+or low-vision user.** Not with NVDA, not with JAWS, not with VoiceOver, and not
+with a student. No claim is made anywhere in this project that a blind student
+can use the sandbox, and this section exists so that the absence of such a
+claim is deliberate and visible rather than an oversight a reader has to infer.
+
+What is actually established, and the limit of each:
+
+| claim | evidence | what it does not show |
+| --- | --- | --- |
+| The period-to-pitch encoding preserves the quantity | 5 checks in `js/validation/physicsChecks.js`, "Sonification law" | Nothing about the audible sound, which is quantized and lossy |
+| A non-audio path to the same facts exists | `e2e/sonifyTextEquivalent.spec.js` | Nothing about whether it is findable, readable or useful |
+| The panel has no machine-detectable violation | axe-core, no rules disabled | Nothing about whether a screen reader user can operate it |
+
+There is also no automated check that *could* establish the missing thing. axe
+has no rule for sonification and WCAG has no success criterion that says an
+audio encoding of a quantity must be invertible — 1.1.1 and 1.2.1 are about
+alternatives existing, not about how much information an encoding throws away.
+So the gap here is not one more test away; it needs people.
+
+**What would count as evidence**, cheapest first: the author with the monitor
+off and VoiceOver on, for an hour; the three screen readers on the platforms
+they actually run on, which disagree with each other in ways that matter; a
+paid expert assistive-technology user doing a think-aloud walkthrough, which is
+the single highest-value step on this list; and finally task-based sessions
+with students, measuring whether a task was completed rather than whether the
+audio was liked. The instruments for the last of those belong with the rest of
+the evaluation kit in `evaluation/`, not here.
+
+Until that happens, the honest sentence — the one that may be used in a paper,
+a grant or a course description — is this: *the sandbox's sonification is
+implemented and is deliberately lossy; a separate period-to-cents law is
+verified to be information-preserving and is not what the speakers play; a text
+equivalent of the underlying periods exists and is checked against the array the
+oscillators are actually following; and none of it has been tested with
+screen-reader users.*
+
+The previous version of that sentence said "its encoding is verified to be
+information-preserving", which is true of `js/sonify/law.js` and false of the
+thing a listener hears. The rest of this section is careful about that
+distinction — the table above says in as many words that the five validation
+checks establish "nothing about the audible sound, which is quantized and
+lossy" — and the one sentence written to be quoted outside the project was the
+one that blurred it.
+
 ## Honest limitations
 
 These are real and are not going to be fixed by more ARIA.
@@ -127,25 +269,57 @@ the content, not decoration; a planetarium that will not move is a picture.
 Every decorative animation stops, and the simulation can be paused from the
 transport bar or the space bar — a real control rather than a media query.
 
-**Some measurements are only available by reading a chart.** The light curve,
-the rotation curve and the radial-velocity trace are drawn to a canvas. Their
-*numbers* are available as text in the readout and in the investigation
-probes, and the lessons that depend on them ask for typed values rather than
-for a visual judgment — but the shape of a curve is not currently narrated.
-Investigation steps state their instructions and their expected measurements as
-text, so a lesson is followable; the aesthetic reading of a curve is not.
+**The shape of a curve is not narrated.** The light curve, the rotation curve
+and the radial-velocity trace are drawn to a canvas. Their numbers are no
+longer only available by reading it: the export dialog offers each series as a
+table — proper column headings with units, the independent variable as a row
+header, reachable and scrollable from a keyboard — beside the CSV download that
+was already there. Every table is rendered from the bytes the exporter writes,
+so the table, the file and the plot cannot be three derivations that disagree,
+and a long series is evenly sampled with the sampling stated in the caption
+rather than silently truncated. What is still missing is *narration*: nothing
+says "the curve is flat out to 8 AU and then falls". That is a judgment about a
+shape, this project will not have a heuristic guess at it, and the tables are
+what a reader has instead.
 
-**Direct manipulation has no keyboard equivalent.** Placing a body by clicking,
-and dragging to set its velocity, are pointer gestures. The same systems can be
-loaded from the gallery, from a share link, and from a lesson's own setup, and
-every scenario in the catalog is reachable without the canvas — but building
-an arbitrary system by hand is not currently a keyboard task.
+**Direct manipulation has a keyboard equivalent, but not a pointer's.** Two
+different things were wrong here and only one has been fixed. Placing a body
+from the keyboard has worked for some time — `A` arms it, the arrow keys aim,
+Enter commits — but it is an *aiming* interface: the aim is in canvas pixels,
+so where the body lands depends on the zoom and the pan, and there was no way
+to set a mass at all. Operable without a pointer is not the same as usable
+without sight. **Precise placement**, beside Add object, is the other half: a
+form that takes a type, a position, a velocity and a mass as numbers, with the
+unit named on every field and each error attached to the field it is about. It
+calls the same `placeBody()` the canvas does, so a typed body is
+indistinguishable from a clicked one — same list, same share link, same undo
+button — and `e2e/accessibilityParity.spec.js` asserts that by comparing the
+two share payloads.
+
+In Safari, Tab moves only between text fields and menus unless "Press Tab to
+highlight each item" is turned on, so the rail's buttons, Precise placement
+among them, are reached with Option+Tab. Inside the form, Enter in any of the
+number fields adds the body and Escape closes it, so plain Tab is enough there.
+Until 2026-09-28 Tab from the last field in Safari left the form for the page
+behind it, and over a lesson that meant its answer boxes; `js/dialog.js` now
+sends that move back to the start of the form.
+
+The **Orbital System Builder**, in the Scenario section, takes a whole system the same way:
+each companion's primary, mass and orbit as labeled fields, with every error
+on its own field and a table of the orbits as the text equivalent of its
+preview drawing. `e2e/systemBuilder.spec.js` runs axe over it, checks that
+Escape returns focus to its button and that it fits a 375-pixel screen, and
+reads its labels in Spanish.
+
+What remains is the gesture itself. Dragging to *feel* how fast a throw is,
+and seeing the velocity arrow grow as you drag, has no keyboard equivalent and
+will not get one; the form gives you the number instead of the feel.
 
 **The attribution links in the footer are under 24×24.** They are inline text
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would
 mean changing a line of running text into a row of buttons.
 
-**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->60<!--/fact--> clean axe runs mean no
+**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->240<!--/fact--> clean axe runs mean no
 machine-detectable violation on those surfaces in those states. They do not
 mean the application is pleasant to use with a screen reader, and nothing here
 substitutes for testing with one. Nothing in this pass was made to pass by
@@ -191,6 +365,6 @@ only route to the material.
 
 ```bash
 npm run a11y            # both suites
-npm run a11y:axe        # axe only, all 60 combinations
+npm run a11y:axe        # axe only, all <!--fact:axeRuns-->240<!--/fact--> combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 ```

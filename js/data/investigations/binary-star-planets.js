@@ -111,13 +111,16 @@ const BINARY_STAR_PLANETS = {
   subtitle: 'What survives around two stars, and how you would know',
   duration: '40-50 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 21, section: '21.5' },
+  courseLevel: 'majors',
+  mathematics: 'algebra',
+  prerequisites: ['butterfly-effect'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'stars', 'chaos'],
   lock: { placement: true },
-  summary:
-    'Most stars come in pairs, so most planets have to make a living in a system with two suns. Some orbits work and some do not, and the line between them is sharper than you would guess. Find it twice — once for a planet around one star, once for a planet around both — and then find out how much of what you just measured was the physics and how much was the arithmetic.',
   objectives: [
     'Predict which planetary orbits in a binary survive an integration, for a planet around one star and for a planet around both',
     'Distinguish a physical outcome — ejection, collision, survival — from a numerical failure of the integration that produced it',
@@ -177,7 +180,7 @@ const BINARY_STAR_PLANETS = {
              other at their closest. A planet going round Star A has to live
              somewhere inside that.
              \n\nCommit to a number now. You will be measuring against it for the
-             rest of the lesson.`,
+             rest of the investigation.`,
       prompt:
         'How far from Star A do you think a planet can be and still survive, as a fraction of the 10 AU separation?',
       options: [
@@ -189,7 +192,7 @@ const BINARY_STAR_PLANETS = {
       answer: 2,
       because: `About a fifth, and for this pair it turns out to be a little
                 under. The stable zone is much smaller than the space that looks
-                available, which is the first surprise in this lesson and not
+                available, which is the first surprise in this investigation and not
                 the last.`,
     },
     {
@@ -199,7 +202,7 @@ const BINARY_STAR_PLANETS = {
       title: 'What "survived" is going to mean',
       body: `One piece of vocabulary before any measuring, because it decides
              what you are allowed to say at the end.
-             \n\nEvery run in this lesson has a stated length — twenty binary
+             \n\nEvery run in this investigation has a stated length — twenty binary
              periods, or forty. When a planet is still in orbit at the end, the
              panel will say it <strong>survived this integration</strong>. It
              will never say the orbit is stable, and neither should you.
@@ -468,7 +471,7 @@ const BINARY_STAR_PLANETS = {
                happened.`,
       because: `About 0.177 separations, or 1.77 AU for these stars. Your two
                 runs sit on either side of it, which is the fit and the
-                simulation agreeing — the only place in this lesson where they
+                simulation agreeing — the only place in this investigation where they
                 do so without argument.`,
       tip: 'Holman, M. J. & Wiegert, P. A. 1999, The Astronomical Journal, 117, 621: "Long-Term Stability of Planets in Binary Systems".',
     },
@@ -752,7 +755,7 @@ This is the same test you did by hand at 0.25, applied to the
         'Halve to 0.25 — record the same three',
         'Ask yourself which of the three runs you would put in a paper',
       ],
-      tip: 'Each halving doubles the wall-clock time. The last one takes a couple of minutes; it is the most important run in the lesson.',
+      tip: 'Each halving doubles the wall-clock time. The last one takes a couple of minutes; it is the most important run in the investigation.',
     },
     {
       sid: 'the-drift-was-tiny',
@@ -817,6 +820,15 @@ This is the same test you did by hand at 0.25, applied to the
         'That the simulation is broken and the runs should be discarded',
       ],
       answer: 2,
+      misconceptions: [
+        {
+          id: 'finerAlwaysRight',
+          option: 1,
+          say: `A finer step is more accurate, but a changing answer means the
+                answer is still moving. You would have to know the run had
+                converged before trusting it, and nothing here says so.`,
+        },
+      ],
       because: `Neither run establishes anything on its own. The finer step is
                 more accurate and that is a reason to prefer it, not a reason to
                 trust it: what a changing answer tells you is that the answer is
@@ -955,7 +967,7 @@ This is the same test you did by hand at 0.25, applied to the
         'At 2.0: read the encounter count when it finishes — it may surprise you',
         'At 2.0: read when it left',
       ],
-      tip: 'Nothing came near anything in the second run. This is a different way of losing a planet from the one you saw in the first half of the lesson.',
+      tip: 'Nothing came near anything in the second run. This is a different way of losing a planet from the one you saw in the first half of the investigation.',
     },
     {
       sid: 'no-encounter-at-all',
@@ -1061,7 +1073,7 @@ This is the same test you did by hand at 0.25, applied to the
         {
           id: 'usedSType',
           equals: 0.177,
-          say: `That is the circumstellar boundary from earlier in the lesson.
+          say: `That is the circumstellar boundary from earlier in the investigation.
                 The circumbinary case has its own formula with quite different
                 coefficients — and it is a floor rather than a ceiling.`,
         },

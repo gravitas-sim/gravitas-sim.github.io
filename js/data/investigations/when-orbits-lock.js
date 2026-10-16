@@ -36,7 +36,7 @@
 // The scenarios, the published parameters they were built from, and the
 // measurements that justify every number quoted below are in
 // js/resonance/systems.js and the "Orbital resonance" group of
-// tools/physics-checks.mjs.
+// js/validation/physicsChecks.js.
 // =============================================================================
 
 /**
@@ -117,12 +117,15 @@ const WHEN_ORBITS_LOCK = {
   subtitle: 'A ratio is a hint. Find out what counts as proof',
   duration: '55-70 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 12, section: null },
+  courseLevel: 'survey',
+  mathematics: 'algebra',
+  prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'resonance', 'solar-system'],
-  summary:
-    'Three of Jupiter’s moons keep time with each other, Pluto crosses Neptune’s orbit and has never come near it, and thousands of asteroids sit sixty degrees ahead of Jupiter and stay there. All three are the same phenomenon, and none of them is explained by the thing everybody quotes: the ratio of the periods. You will measure the ratios, find that the tidiest one in the system belongs to a moon in no resonance at all, and then measure the quantity that actually settles it — an angle that either swings or goes round.',
   objectives: [
     'Measure orbital periods and period ratios from the orbits themselves, and find the nearest small-integer ratio to each',
     'Explain why a near-rational period ratio is weak evidence, using a case where the closest ratio in the system belongs to a body in no resonance',
@@ -217,7 +220,7 @@ const WHEN_ORBITS_LOCK = {
              \n\nPay attention to the last figure on each row. It says how much
              closer the measured ratio is to a small whole-number ratio than an
              arbitrary number would have been. That figure is the one this
-             lesson is about.`,
+             investigation is about.`,
       checklist: [
         'Let the simulation run for about 150 Io orbits',
         'Read the four periods',
@@ -591,7 +594,7 @@ const WHEN_ORBITS_LOCK = {
              not the same as a resonance.
 
              \n\nHold on to this. In a few steps you are going to meet a body
-             whose angle stays inconclusive for the whole lesson, and the
+             whose angle stays inconclusive for the whole investigation, and the
              temptation to call it resonant will be considerable.`,
     },
     {
@@ -693,6 +696,20 @@ const WHEN_ORBITS_LOCK = {
                 every time it happened, and the configuration would not
                 survive. The resonance is the arrangement that makes the meeting
                 impossible.`,
+      hints: [
+        'After the substitution only two longitudes are left. What combination of them remains?',
+        'The expression is twice the angle between Ganymede and Europa.',
+        'It must equal the angle φ holds. Divide by whatever multiplies the angle you want.',
+      ],
+      feedback: {
+        close:
+          'Close, but this one is exact. Substitute your angle back: does it give the angle φ must hold?',
+        'wrong-sign': 'Give the size of the angle, not its direction.',
+        'wrong-unit': 'That looks like radians. The question wants degrees.',
+        'wrong-order-of-magnitude':
+          'Out by a power of ten. An angle between two bodies in orbit is at most a few hundred degrees.',
+        off: 'Look at the collapsed expression: it is a multiple of one angle. Set it equal to the value φ holds and solve for the angle.',
+      },
     },
 
     // --- Act 4: breaking it, and the awkward case ----------------------------
@@ -842,7 +859,7 @@ const WHEN_ORBITS_LOCK = {
 
              \n\nOver a long enough run, Callisto's 7:3 argument completes a
              circuit: it circulates, with a period of roughly three thousand Io
-             orbits. Within a lesson-length run the instrument cannot see that
+             orbits. Within a class-length run the instrument cannot see that
              and says so.`,
       prompt:
         'A colleague says the instrument should have called Callisto resonant, because its angle stayed within 100° for the whole run. What is the best reply?',

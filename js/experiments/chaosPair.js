@@ -45,7 +45,7 @@ import { refinementVerdict } from '../chaos/divergence.js';
  */
 export const CONFIGURATIONS = Object.freeze({
   binary: Object.freeze({
-    scenario: 'Binary Pair',
+    scenario: 'binary-pair',
     seed: 'chaos-binary',
     /** The body to nudge, by the name the world builder gives it. */
     body: null,
@@ -57,7 +57,7 @@ export const CONFIGURATIONS = Object.freeze({
     expect: 'linear',
   }),
   triple: Object.freeze({
-    scenario: 'Three-Body Sensitivity Lab',
+    scenario: 'three-body-sensitivity-lab',
     seed: 'chaos-lab',
     body: 'Alpha',
     axis: 'x',

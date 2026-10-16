@@ -94,6 +94,10 @@ async function permitSound(page) {
       })
     )
     .toBe(false);
+  // Closed again, as a reader would: the panel is a popover under the readout,
+  // and left open it lies over the lesson's column, Next included.
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#soundPanel')).toBeHidden();
 }
 
 /** The lab's own state, and what the audio layer says it is playing. */

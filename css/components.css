@@ -157,7 +157,7 @@
   .floating-close-chip {
     display: none;
     position: fixed;
-    top: var(--space-3);
+    top: calc(var(--space-3) + var(--shell-height, 0px));
     right: var(--space-3);
     z-index: var(--z-toast);
 
@@ -178,7 +178,7 @@
     box-shadow: var(--shadow);
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     .floating-close-chip {
       display: flex;
     }
@@ -350,6 +350,77 @@
     transform: rotate(-90deg);
   }
 
+  /* The heading's button: the section's name and its chevron, as plain as the
+     heading it replaced. The generic button rule above would otherwise give it
+     a fill and a border of its own inside the header's. */
+  .settings-section-fold {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 24px;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .settings-section-fold:hover {
+    background: none;
+    transform: none;
+  }
+
+  .settings-section-fold:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .settings-section-reset {
+    flex: none;
+    min-height: 24px;
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-sm);
+  }
+
+  /* The course level: one select above the sections, and what it sets. */
+  .settings-level {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .settings-level label {
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+
+  .settings-level-hint {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+  }
+
+  /* Numerical accuracy and performance, closed until asked for. */
+  .settings-advanced > summary {
+    margin-bottom: var(--space-4);
+    padding: var(--space-2) var(--space-3);
+    min-height: 24px;
+    color: var(--text-secondary);
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+  }
+
+  .settings-advanced > summary:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
   .settings-section-content {
     padding: var(--space-4);
     max-height: 1400px;
@@ -416,8 +487,8 @@
       to right,
       var(--accent) 0%,
       var(--accent) var(--range-fill, 0%),
-      var(--range-track, #2b3245) var(--range-fill, 0%),
-      var(--range-track, #2b3245) 100%
+      var(--range-track) var(--range-fill, 0%),
+      var(--range-track) 100%
     );
     border: 1px solid var(--border-strong);
     outline: none;
@@ -431,8 +502,6 @@
   input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 18px;
-    height: 18px;
     border-radius: var(--radius-full);
     background: var(--accent);
     /* A ring in the panel color separates the thumb from the filled track it
@@ -440,7 +509,7 @@
     border: 2px solid var(--panel-bg);
     box-shadow:
       0 0 0 1px var(--accent),
-      0 1px 4px rgb(0 0 0 / 45%);
+      var(--shadow-sm);
     cursor: pointer;
     transition: transform var(--duration-fast) var(--ease);
   }
@@ -450,8 +519,6 @@
   }
 
   input[type='range']::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
     border-radius: var(--radius-full);
     background: var(--accent);
     border: 2px solid var(--panel-bg);
@@ -575,9 +642,6 @@
      had been missed, chiefly the object inspector and the live HUD.
      ====================================================================== */
   #overlayStats,
-  .stat-row,
-  .stat-value,
-  .energy-value-display,
   .inv-wedge-readout,
   .inv-answer-num {
     font-variant-numeric: tabular-nums;
@@ -596,10 +660,10 @@
     left: 20px;
     bottom: 120px;
     width: 420px;
-    background: var(--surface-1, rgba(5, 9, 22, 0.95));
-    border: 1px solid var(--border-subtle, rgba(0, 180, 255, 0.3));
+    background: var(--surface-1);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg, 12px);
-    box-shadow: var(--shadow-lg, 0 12px 48px rgba(0, 0, 0, 0.5));
+    box-shadow: var(--shadow-lg);
     backdrop-filter: blur(6px);
     z-index: 160;
     display: flex;
@@ -632,7 +696,7 @@
     position: sticky;
     top: 0;
     z-index: 1;
-    background: var(--surface-1, rgba(5, 9, 22, 0.95));
+    background: var(--surface-1);
   }
 
   /* Collapsed: the title bar and nothing else. Three instruments will not fit
@@ -719,6 +783,12 @@
     height: 100% !important;
     display: block;
   }
+  /* A series chart (js/plot/chart.js) fills the stage and takes its size from
+     it, so the host is pinned and never sizes the stage. */
+  .obs-panel-stage > .plot-host {
+    position: absolute;
+    inset: 0;
+  }
   .obs-panel-hint {
     margin: 0 var(--space-3);
     font-size: var(--text-xs);
@@ -735,7 +805,7 @@
     line-height: 1.4;
     color: var(--text-secondary);
     background: var(--surface-2);
-    border-left: 3px solid var(--warning, #e0a458);
+    border-left: 3px solid var(--warning);
     border-radius: var(--radius-sm, 4px);
   }
 
@@ -773,10 +843,10 @@
     color: var(--text-muted);
   }
   .rv-direction.is-receding {
-    color: var(--danger, #e2725b);
+    color: var(--danger);
   }
   .rv-direction.is-approaching {
-    color: var(--info, #5b9bd5);
+    color: var(--info, var(--c7));
   }
   .rv-direction.is-zero {
     color: var(--text-muted);
@@ -805,10 +875,10 @@
     border-radius: 3px;
     background: linear-gradient(
       90deg,
-      var(--info, #5b9bd5) 0%,
+      var(--info, var(--c7)) 0%,
       var(--surface-2) 45%,
       var(--surface-2) 55%,
-      var(--danger, #e2725b) 100%
+      var(--danger) 100%
     );
     opacity: 0.5;
   }
@@ -904,7 +974,7 @@
     flex: 1 1 100%;
   }
 
-  @media (max-width: 620px) {
+  @media (max-width: 767px) {
     .astrometry-body {
       grid-template-columns: minmax(0, 1fr);
     }
@@ -985,12 +1055,8 @@
   /* ==========================================================================
      HUD overlay (top-left readout)
      ====================================================================== */
-  #overlay {
-    z-index: var(--z-overlay);
-  }
 
-  #overlayStats,
-  #overlay .overlay-panel {
+  #overlayStats {
     font-family: var(--font-sans);
     font-size: var(--text-xs);
     line-height: var(--leading-normal);
@@ -1036,7 +1102,7 @@
   }
 
   /* Below the rail's breakpoint the HUD and rail no longer flank it. */
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     #scenarioInfoBox,
     .scenario-info-box {
       --side-left: var(--space-4);
@@ -1066,26 +1132,6 @@
     color: var(--text-secondary);
   }
 
-  .scenario-info-close {
-    min-height: 26px;
-    min-width: 26px;
-    padding: 0;
-    background: transparent;
-    border-color: transparent;
-    box-shadow: none;
-    color: var(--text-muted);
-    font-size: var(--text-md);
-    line-height: 1;
-  }
-
-  .scenario-info-close:hover {
-    background: var(--surface-2);
-    border-color: transparent;
-    color: var(--text-primary);
-    transform: none;
-  }
-
-  .scenario-info-title,
   #scenarioInfoBox h3 {
     color: var(--accent);
     font-size: var(--text-lg);
@@ -1120,42 +1166,22 @@
   }
 
   .tutorial-popup {
-    position: fixed;
-    left: var(--space-4);
-    bottom: calc(var(--space-10) + var(--space-6));
-    width: min(360px, calc(100vw - var(--space-8)));
-    max-height: 80vh;
-    background: var(--surface-1);
     color: var(--text-primary);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
-    font-family: var(--font-sans);
     font-size: var(--text-base);
     line-height: var(--leading-normal);
-    z-index: var(--z-modal);
     touch-action: none;
-    user-select: none;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 767px) {
     .tutorial-btn {
       left: var(--space-3);
       bottom: var(--space-3);
-    }
-
-    .tutorial-popup {
-      left: var(--space-3);
-      width: calc(100vw - var(--space-6));
-      max-height: 70vh;
     }
   }
 
   /* ==========================================================================
      Speed control cluster
      ====================================================================== */
-  .speed-control,
   .speed-controls {
     display: flex;
     align-items: center;
@@ -1183,11 +1209,6 @@
       padding: var(--space-1) var(--space-3);
       font-size: var(--text-xs);
     }
-
-    .rail-group + .rail-group {
-      margin-top: var(--space-2);
-      padding-top: var(--space-2);
-    }
   }
 
   /* The two buttons mirror each other so the arrows point outward: "rewind
@@ -1195,7 +1216,6 @@
      when both stay on one line and take the same width - at the rail's width
      "Slow" was wrapping under its own arrow while "Fast" stayed beside its own,
      which made the two look like different kinds of control. */
-  .speed-control .ui-button,
   .speed-controls .ui-button {
     flex: 1 1 0;
     justify-content: center;
@@ -1234,7 +1254,7 @@
   .mobile-menu-toggle {
     display: none;
     position: fixed;
-    top: var(--space-4);
+    top: calc(var(--space-4) + var(--shell-height, 0px));
     right: var(--space-4);
     z-index: calc(var(--z-chrome) + 1);
 
@@ -1284,7 +1304,7 @@
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     .mobile-menu-toggle {
       display: flex;
     }
@@ -1292,7 +1312,7 @@
     /* The rail becomes the dropdown the hamburger opens. */
     .ui-container {
       display: flex;
-      top: calc(var(--space-4) + 52px);
+      top: calc(var(--space-4) + 52px + var(--shell-height, 0px));
       right: var(--space-3);
       left: var(--space-3);
       width: auto;
@@ -1300,7 +1320,7 @@
          top of its lower edge, so whichever control landed in the last fifty
          pixels was underneath the playback controls. This is the width where
          the reservation is needed and the only one where it is. */
-      max-height: calc(100vh - var(--space-10) - 64px - var(--transport-space));
+      max-height: calc(100vh - var(--space-10) - 64px - var(--transport-space) - var(--shell-height, 0px));
 
       opacity: 0;
       visibility: hidden;
@@ -1333,9 +1353,7 @@
 
     /* Two columns of controls on tablets, so the sheet is not a long scroll */
     .rail-group > [role='group'] {
-      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: var(--space-1);
     }
 
     .rail-field,
@@ -1345,7 +1363,7 @@
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     .rail-group > [role='group'] {
       grid-template-columns: 1fr;
     }
@@ -1429,46 +1447,6 @@
     }
   }
 
-  /* --- Rail: the Learn group ------------------------------------------------
-     Text links, not buttons. Everything else in the rail acts on the
-     simulation; these navigate away from it, and giving them button chrome
-     would put four more full-width controls in front of the ones that matter.
-     The group sits last for the same reason. */
-  .rail-group-learn {
-    margin-top: var(--space-1);
-  }
-
-  .rail-links {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-    padding: 0 var(--space-3);
-  }
-
-  .rail-link {
-    padding: var(--space-1) 0;
-    font: inherit;
-    font-size: var(--text-xs);
-    line-height: 1.4;
-    text-align: left;
-    text-decoration: none;
-    color: var(--text-secondary);
-    background: none;
-    border: 0;
-    border-bottom: 1px solid transparent;
-    cursor: pointer;
-    transition:
-      color var(--duration) var(--ease),
-      border-color var(--duration) var(--ease);
-  }
-
-  .rail-link:hover,
-  .rail-link:focus-visible {
-    color: var(--accent);
-    border-bottom-color: currentColor;
-  }
-
   .rail-field {
     display: flex;
     align-items: center;
@@ -1547,7 +1525,7 @@
      into the only corner the footer can occupy. Shifting it by half the rail
      puts it where the eye expects it and opens that corner. The scenario card
      above already frames itself against the same band. */
-  @media (min-width: 1025px) {
+  @media (min-width: 1201px) {
     .timeline-bar {
       transform: translateX(
         calc(-50% - (var(--rail-width) + var(--space-4)) / 2)
@@ -1606,7 +1584,7 @@
     letter-spacing: 0.05em;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 767px) {
     .timeline-bar {
       width: calc(100vw - var(--space-4));
       bottom: var(--space-2);
@@ -1648,6 +1626,11 @@
   .toast.is-visible {
     opacity: 1;
     transform: translate(-50%, 0);
+  }
+
+  /* A toast with a button in it has to be clickable. */
+  .toast:has(button) {
+    pointer-events: auto;
   }
 
   /* ==========================================================================
@@ -1796,7 +1779,7 @@
 @layer components {
   #overlay {
     position: fixed;
-    top: var(--space-4);
+    top: calc(var(--space-4) + var(--shell-height, 0px));
     left: var(--space-4);
     z-index: var(--z-overlay);
     width: min(var(--hud-width), calc(100vw - var(--space-8)));
@@ -1832,7 +1815,6 @@
     right: var(--space-2);
     z-index: 1;
 
-    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-1);
@@ -1909,9 +1891,9 @@
     border-top: 1px solid var(--hud-border);
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 767px) {
     #overlay {
-      top: var(--space-2);
+      top: calc(var(--space-2) + var(--shell-height, 0px));
       left: var(--space-2);
       width: calc(100vw - var(--space-4));
       font-size: var(--text-2xs);
@@ -2120,155 +2102,6 @@
     opacity: 0.7;
   }
 
-  /* --- Theme dock -----------------------------------------------------------
-     Docked in the footer pill, left of the copyright. Closed it is a swatch and
-     a word; the list opens upward, because there is nothing below it. */
-  .theme-dock {
-    position: relative;
-    display: flex;
-    pointer-events: auto;
-  }
-
-  .theme-dock-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    /* Padding, not zero: collapsed to a swatch this is a 14px-wide control, and
-       a 14px target is not one most people can hit. The negative margin keeps
-       the extra area from pushing the row wider. */
-    padding: var(--space-2);
-    margin: calc(var(--space-2) * -1) 0 calc(var(--space-2) * -1)
-      calc(var(--space-2) * -1);
-    font: inherit;
-    color: var(--hud-text);
-    background: none;
-    border: 0;
-    cursor: pointer;
-    transition: color var(--duration) var(--ease);
-  }
-
-  .theme-dock-btn:hover,
-  .theme-dock-btn:focus-visible {
-    color: var(--accent);
-  }
-
-  /* The swatch is the theme itself: page ground, panel and accent, in the three
-     bands the interface actually uses. It recolors with the tokens, so it
-     cannot fall out of step with what it is describing. */
-  .theme-dock-swatch,
-  .theme-menu-swatch {
-    flex: none;
-    width: 14px;
-    height: 14px;
-    border-radius: var(--radius-full);
-    border: 1px solid var(--border);
-    background: linear-gradient(
-      135deg,
-      var(--surface-0) 0 40%,
-      var(--surface-2) 40% 70%,
-      var(--accent) 70% 100%
-    );
-  }
-
-  .theme-menu {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + var(--space-3));
-    z-index: 1;
-
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    width: max-content;
-    min-width: 13rem;
-    padding: var(--space-2);
-
-    background: var(--surface-1);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .theme-menu-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-2) var(--space-3);
-    font: inherit;
-    font-size: var(--text-xs);
-    text-align: left;
-    color: var(--text-secondary);
-    background: none;
-    border: 0;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition:
-      color var(--duration) var(--ease),
-      background-color var(--duration) var(--ease);
-  }
-
-  .theme-menu-item:hover,
-  .theme-menu-item:focus-visible {
-    color: var(--text-primary);
-    background: var(--surface-2);
-  }
-
-  .theme-menu-item.is-active {
-    color: var(--text-primary);
-    background: var(--accent-soft);
-  }
-
-  /* Each row previews its own theme rather than the active one, which is the
-     only way a swatch helps before you have switched. */
-  .theme-menu-swatch[data-swatch='midnight'] {
-    background: linear-gradient(
-      135deg,
-      #000105 0 40%,
-      #0d111c 40% 70%,
-      #22d3ee 70% 100%
-    );
-  }
-  .theme-menu-swatch[data-swatch='deep'] {
-    background: linear-gradient(
-      135deg,
-      #070a16 0 40%,
-      #161a2c 40% 70%,
-      #38bdf8 70% 100%
-    );
-  }
-  .theme-menu-swatch[data-swatch='observatory'] {
-    background: linear-gradient(
-      135deg,
-      #0a0304 0 40%,
-      #221310 40% 70%,
-      #fb7185 70% 100%
-    );
-  }
-  .theme-menu-swatch[data-swatch='daylight'] {
-    background: linear-gradient(
-      135deg,
-      #eef2f9 0 40%,
-      #f1f5fb 40% 70%,
-      #0284c7 70% 100%
-    );
-  }
-
-  .theme-menu-text {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
-
-  .theme-menu-label {
-    font-weight: var(--weight-semibold);
-  }
-
-  .theme-menu-hint {
-    font-size: var(--text-2xs);
-    line-height: 1.4;
-    color: var(--text-muted);
-  }
-
   /* Where the footer sits once the control rail is docked.
 
      The rail is docked against the right edge and painted above the footer, so
@@ -2292,7 +2125,7 @@
      smaller, closer, and without the separator dots, which is enough to keep it
      clear of the elapsed-time readout down to the width where the rail stops
      being docked at all. */
-  @media (min-width: 1321px) and (max-width: 1599px) {
+  @media (min-width: 1201px) {
     .attribution {
       gap: var(--space-1);
       padding: 2px var(--space-2);
@@ -2303,18 +2136,17 @@
       display: none;
     }
 
-    /* The last pixels. The symbol carries the notice and the swatch carries the
-       theme; the words beside them are what a reader can lose without losing
-       the meaning, and both come back as soon as there is room. */
-    .attribution-year,
-    .theme-dock-name {
+    /* The last pixels. The symbol carries the notice; the year beside it is
+       what a reader can lose without losing the meaning, and it comes back as
+       soon as there is room. */
+    .attribution-year {
       display: none;
     }
   }
 
   /* Below the rail's breakpoint there is no rail to clear, so the footer goes
      back to the viewport edge. */
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     .attribution {
       right: var(--space-2);
     }
@@ -2325,7 +2157,7 @@
      lift clear of the bar: it is the last resort, not the default, because a
      footer floating above the scrubber reads as a panel someone forgot to close
      rather than as a footer. */
-  @media (max-width: 1320px) {
+  @media (max-width: 1200px) {
     .attribution {
       bottom: calc(var(--space-10) + var(--space-6));
       font-size: 10px;
@@ -2495,7 +2327,7 @@
     pointer-events: none;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 767px) {
     .tutorial-popup {
       left: var(--space-3);
       right: var(--space-3);
@@ -2522,7 +2354,7 @@
    ========================================================================== */
 
 @layer components {
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     /* --- Safe areas: content must clear the notch and home indicator ------ */
     .timeline-bar {
       left: var(--space-2);
@@ -2562,7 +2394,7 @@
 
     /* --- Readout: collapsed by default, tap to expand -------------------- */
     #overlay {
-      top: calc(var(--space-2) + env(safe-area-inset-top, 0px));
+      top: calc(var(--space-2) + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
       left: calc(var(--space-2) + env(safe-area-inset-left, 0px));
       right: auto;
       width: auto;
@@ -2585,7 +2417,7 @@
 
     /* --- Menu button clears the notch ------------------------------------ */
     .mobile-menu-toggle {
-      top: calc(var(--space-2) + env(safe-area-inset-top, 0px));
+      top: calc(var(--space-2) + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
       right: calc(var(--space-2) + env(safe-area-inset-right, 0px));
       width: 44px;
       height: 44px;
@@ -2593,7 +2425,7 @@
     }
 
     .ui-container {
-      top: calc(var(--space-2) + 52px + env(safe-area-inset-top, 0px));
+      top: calc(var(--space-2) + 52px + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
       left: var(--space-2);
       right: var(--space-2);
       max-height: calc(100vh - 200px - env(safe-area-inset-top, 0px));
@@ -2661,15 +2493,6 @@
       justify-content: stretch;
     }
 
-    #scenarioListContent {
-      width: 100%;
-      min-width: 0;
-      max-width: none;
-      max-height: 100%;
-      padding: var(--space-4) var(--space-3);
-      border-radius: var(--radius-lg);
-    }
-
     #objectInspector,
     #settingsPanel {
       top: calc(var(--space-2) + env(safe-area-inset-top, 0px));
@@ -2688,7 +2511,6 @@
     }
 
     .inspector-tab,
-    .scenario-list-item,
     .settings-section-header,
     #scenarioSearch,
     input[type='text'],
@@ -2701,16 +2523,6 @@
     /* A 4px range track is unhittable with a fingertip */
     input[type='range'] {
       height: 6px;
-    }
-
-    input[type='range']::-webkit-slider-thumb {
-      width: 24px;
-      height: 24px;
-    }
-
-    input[type='range']::-moz-range-thumb {
-      width: 24px;
-      height: 24px;
     }
 
     .settings-footer,
@@ -2731,10 +2543,18 @@
       grid-template-columns: 1fr;
     }
 
-    /* --- Scenario info card sits under the top chrome -------------------- */
+    /* --- Scenario info card sits just above the transport bar ------------
+       It sat under the top chrome, which on a phone is where the readout chip
+       is, and the chip's height changes with what it shows. Above the
+       transport reserve and the 44px help button that stands on it, it
+       covers none of the three. */
     #scenarioInfoBox,
     .scenario-info-box {
-      top: calc(64px + env(safe-area-inset-top, 0px));
+      top: auto;
+      bottom: calc(
+        var(--transport-reserve, 76px) + env(safe-area-inset-bottom, 0px) +
+          44px + var(--space-3)
+      );
       left: var(--space-2);
       right: var(--space-2);
       width: auto;
@@ -2746,7 +2566,7 @@
   .placement-armed-hint {
     position: fixed;
     left: 50%;
-    top: calc(var(--space-8) + env(safe-area-inset-top, 0px));
+    top: calc(var(--space-8) + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
     transform: translateX(-50%);
     z-index: var(--z-toast);
 
@@ -2765,37 +2585,6 @@
 
   .placement-armed-hint.is-visible {
     opacity: 1;
-  }
-}
-
-/* =============================================================================
-   Scenario browser surface
-   ========================================================================== */
-
-@layer components {
-  #scenarioListContent {
-    background: var(--surface-1);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    color: var(--text-primary);
-  }
-
-  .scenario-list-item {
-    background: var(--surface-2);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition:
-      background var(--duration) var(--ease),
-      border-color var(--duration) var(--ease);
-  }
-
-  .scenario-list-item:hover,
-  .scenario-list-item:focus-visible {
-    background: var(--surface-3);
-    border-color: var(--border-strong);
   }
 }
 
@@ -2928,7 +2717,8 @@
     gap: var(--space-2);
     align-items: stretch;
   }
-  #shareUrl {
+  #shareUrl,
+  #investigationToken {
     flex: 1 1 auto;
     min-width: 0;
     padding: var(--space-2) var(--space-3);
@@ -2942,7 +2732,8 @@
        tell a truncated link from a complete one. */
     text-overflow: ellipsis;
   }
-  #shareUrl:focus {
+  #shareUrl:focus,
+  #investigationToken:focus {
     outline: var(--focus-ring);
     outline-offset: 1px;
   }
@@ -3013,20 +2804,18 @@
     color: var(--text-muted);
   }
 
-  @media (max-width: 560px) {
+  @media (max-width: 767px) {
     #shareContent {
       padding: var(--space-4);
     }
     .share-kind {
       grid-template-columns: 1fr;
     }
-    /* Below 480px the floating close chip appears; showing the header button
+    /* On a phone the floating close chip appears; showing the header button
        as well leaves two X controls a few pixels apart, which is exactly the
        duplication the rest of the interface was cleaned up to avoid. */
-    @media (max-width: 480px) {
-      .share-header .ui-button {
-        display: none;
-      }
+    .share-header .ui-button {
+      display: none;
     }
     /* Stacked, the Copy button gets a full-width target instead of a 74px one
        squeezed against a field that already cannot show the whole link. */
@@ -3173,7 +2962,7 @@
     padding: var(--space-2) var(--space-3);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    background: rgb(0 0 0 / 18%);
+    background: var(--c5);
     color: var(--text);
     font: inherit;
     font-size: var(--text-sm);
@@ -3215,7 +3004,7 @@
     padding: var(--space-1) var(--space-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    background: rgb(0 0 0 / 18%);
+    background: var(--c5);
     color: var(--text);
     font: inherit;
     font-size: var(--text-sm);
@@ -3288,7 +3077,7 @@
     padding: var(--space-4);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    background: rgb(255 255 255 / 2%);
+    background: var(--surface-2);
   }
   .inv-seq-title {
     margin: 0 0 var(--space-1);
@@ -3412,6 +3201,31 @@
   }
 
   /* --- The card ------------------------------------------------------------- */
+
+  /* A card and its objectives: the disclosure sits under the card's button
+     because it cannot sit inside it. */
+  .inv-card-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  /* Its own height, not the row's: a neighbour's open objectives make the
+     row taller, and the card would stretch to fill it. */
+  .inv-card-wrap > .inv-card {
+    flex: 0 0 auto;
+  }
+  .inv-card-objectives {
+    padding: 0 var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+  .inv-card-objectives summary {
+    cursor: pointer;
+  }
+  .inv-card-objectives ul {
+    margin: var(--space-1) 0 0;
+    padding-left: var(--space-5);
+  }
 
   .inv-card {
     display: flex;
@@ -3574,6 +3388,7 @@
   .inv-card-summary {
     font-size: var(--text-xs);
     line-height: 1.55;
+    min-height: calc(3 * 1.55em);
     color: var(--text-muted);
     /* Clamped, not rewritten: the full summary stays in the catalog and reaches
        the card's title attribute. */
@@ -3661,7 +3476,7 @@
 
   /* --- Narrow screens -------------------------------------------------------- */
 
-  @media (max-width: 760px) {
+  @media (max-width: 767px) {
     .inv-grid {
       grid-template-columns: 1fr;
     }
@@ -3683,7 +3498,7 @@
   /* Below this the split card stops working: the thumbnail is either too narrow
      to show anything or steals the width the text needs, so the card stacks and
      becomes a taller version of a gallery tile. */
-  @media (max-width: 560px) {
+  @media (max-width: 767px) {
     .inv-card {
       flex-direction: column;
     }
@@ -3711,9 +3526,14 @@
   }
 
   /* --- The working panel -------------------------------------------------- */
+  /* Its width, which every panel docked beside it reads to stand clear of it
+     (css/chrome.css narrows it on a laptop). */
+  :root {
+    --lesson-width: min(396px, 40vw);
+  }
   .investigation-panel {
     position: fixed;
-    top: var(--space-3);
+    top: calc(var(--space-3) + var(--shell-height, 0px));
     left: var(--space-3);
     /* Clears the transport bar, which is fixed to the bottom at a higher
        z-index: overlapping it would put the Next button underneath the
@@ -3722,13 +3542,13 @@
        This was 88px, written as "the bar's 48px plus its 16px offset plus a
        gap". The bar is only 48px tall while it fits on one row; between about
        640px and 1000px of window it wraps to 62px and 88px was short.
-       js/bottomDock.js measures it and publishes the answer. The constant
+       js/captureMeasure.js measures it and publishes the answer. The constant
        remains as the fallback for the frame before the first measurement. */
     bottom: var(--transport-reserve, 88px);
     z-index: var(--z-panel);
     display: flex;
     flex-direction: column;
-    width: min(396px, 40vw);
+    width: var(--lesson-width);
     background: var(--panel-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -3765,6 +3585,21 @@
     min-width: 0;
     padding: 0 8px;
     font-size: var(--text-lg);
+  }
+
+  .inv-where-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: 0 var(--space-4);
+  }
+
+  .inv-where {
+    margin: 0;
+    padding: var(--space-1) 0;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
   }
 
   .inv-progress {
@@ -4217,6 +4052,20 @@
     display: flex;
     gap: var(--space-2);
   }
+  .inv-depth {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+    font-size: var(--text-2xs, 11px);
+    color: var(--text-muted);
+  }
+  .inv-depth[hidden],
+  .inv-depth [hidden] {
+    display: none;
+  }
   .inv-footer .ui-button.subtle {
     color: var(--text-muted);
     background: transparent;
@@ -4346,7 +4195,7 @@
 
   /* On a phone the file rows stop being a row: the button goes underneath its
      description rather than squeezing it to two words a line. */
-  @media (max-width: 560px) {
+  @media (max-width: 767px) {
     .export-file {
       flex-direction: column;
       align-items: stretch;
@@ -4436,6 +4285,7 @@
   }
   .inv-finish-actions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
     gap: var(--space-2);
     margin-top: var(--space-4);
@@ -4476,6 +4326,17 @@
       bottom: var(--transport-reserve, 76px);
       width: auto;
       max-height: min(52vh, 420px);
+      /* The sheet scrolls as a whole, and only the footer stays put.
+         On the wide panel the step body is the one part that gives way, and
+         everything else keeps its height. A sheet capped at 300px cannot
+         afford that: the header, the progress bar, the object list, the
+         backup buttons and the footer came to 420px at 390px wide, so the
+         step body got nothing at all - no question, no answer boxes - and
+         Next was cut off below the sheet's own edge. `overflow: hidden`
+         meant no finger could scroll to it, and only a test that scrolled
+         the sheet from script ever reached it. */
+      overflow-y: auto;
+      overscroll-behavior: contain;
     }
     .inv-footer,
     .inv-progress,
@@ -4484,7 +4345,14 @@
       padding-right: var(--space-3);
     }
     .inv-body {
+      flex: none;
+      overflow-y: visible;
       padding: var(--space-3);
+    }
+    .inv-footer {
+      position: sticky;
+      bottom: 0;
+      background: var(--panel-bg);
     }
   }
   @media (max-width: 900px) {
@@ -4498,7 +4366,7 @@
      the count - took nearly half the panel and stayed there. The gallery pins
      its header because the filters have to stay reachable; there are no filters
      here, so the whole panel scrolls and the intro gets out of the way. */
-  @media (max-width: 560px) {
+  @media (max-width: 767px) {
     #investigationBrowserContent {
       display: block;
       overflow-y: auto;
@@ -4508,7 +4376,7 @@
       overflow: visible;
     }
   }
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     /* The bottom stays zero: the scroller below the header carries the bottom
        padding, so the last card can scroll clear of the panel edge. */
     #investigationBrowserContent {
@@ -4519,6 +4387,11 @@
     }
     .inv-browser-header .ui-button {
       display: none;
+    }
+    /* The floating close chip is pinned over this corner: keep the heading
+       and the paragraphs out from under it. */
+    .inv-browser-header {
+      padding-inline-end: calc(34px + var(--space-2));
     }
     .inv-finish-actions {
       flex-direction: column-reverse;
@@ -4639,14 +4512,14 @@
      column it went unnoticed until the last value went in. */
   .inv-plot-panel {
     position: fixed;
-    top: var(--space-3);
-    left: calc(min(396px, 40vw) + var(--space-3) * 2);
+    top: calc(var(--space-3) + var(--shell-height, 0px));
+    left: calc(var(--lesson-width) + var(--space-3) * 2);
     z-index: var(--z-panel);
     width: min(460px, 42vw);
     /* Clears the transport bar, same as the lesson panel. Anything taller than
        the window scrolls inside the panel rather than off the bottom of it,
        which is what the widgets with three sliders and five presets need. */
-    max-height: calc(100vh - var(--space-3) - 88px);
+    max-height: calc(100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px));
     overflow-y: auto;
     overscroll-behavior: contain;
     padding: var(--space-3) var(--space-4) var(--space-4);
@@ -4711,9 +4584,9 @@
      rather than a child of it, so what actually happened was that it landed at
      the bottom of a body with `overflow: hidden` and could not be reached at
      all. */
-  @media (max-width: 1180px) {
+  @media (max-width: 1200px) {
     .inv-plot-panel {
-      left: calc(min(396px, 40vw) + var(--space-3) * 2);
+      left: calc(var(--lesson-width) + var(--space-3) * 2);
       right: var(--space-3);
       width: auto;
     }
@@ -4727,11 +4600,11 @@
      diagram until it cannot be read. */
   @media (max-width: 900px) {
     .inv-plot-panel {
-      top: var(--space-2);
+      top: calc(var(--space-2) + var(--shell-height, 0px));
       left: var(--space-2);
       right: var(--space-2);
       max-height: calc(
-        100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
           var(--space-2) * 3
       );
     }
@@ -4950,7 +4823,7 @@
      which is the widest free space on the screen and the right shape for a
      light curve. The rail is content-sized and measures 208px; 240 clears it. */
   body.investigation-open .light-curve-container {
-    left: calc(min(396px, 40vw) + var(--space-3) * 2);
+    left: calc(var(--lesson-width) + var(--space-3) * 2);
     right: 240px;
     bottom: 88px;
     width: auto;
@@ -4968,7 +4841,7 @@
     height: 168px;
   }
   body.investigation-lightcurve .inv-plot-panel {
-    max-height: calc(100vh - var(--space-3) - 88px - 184px);
+    max-height: calc(100vh - var(--space-3) - var(--shell-height, 0px) - 88px - 184px);
   }
 
   /* --- A step that carries both an instrument and a plot ------------------- */
@@ -4981,11 +4854,11 @@
      a caption. At 0.56 the slider a measurement step tells students to move
      ended up below the fold. */
   body.investigation-split #investigationTool {
-    max-height: calc((100vh - var(--space-3) - 88px) * 0.62);
+    max-height: calc((100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px)) * 0.62);
   }
   body.investigation-split #investigationPlot {
-    top: calc((100vh - var(--space-3) - 88px) * 0.62 + var(--space-3) * 2);
-    max-height: calc((100vh - var(--space-3) - 88px) * 0.38 - var(--space-3));
+    top: calc((100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px)) * 0.62 + var(--space-3) * 2 + var(--shell-height, 0px));
+    max-height: calc((100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px)) * 0.38 - var(--space-3));
   }
   @media (max-width: 900px) {
     /* Two panels above a bottom sheet, sharing the band between them in the
@@ -5003,7 +4876,7 @@
     body.investigation-split #investigationTool {
       max-height: calc(
         (
-            100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
               var(--space-2) * 3
           ) *
           0.62
@@ -5012,23 +4885,23 @@
     body.investigation-split #investigationPlot {
       top: calc(
         (
-            100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
               var(--space-2) * 3
           ) *
-          0.62 + var(--space-2) * 2
+          0.62 + var(--space-2) * 2 + var(--shell-height, 0px)
       );
       max-height: calc(
         (
-            100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
               var(--space-2) * 3
           ) *
           0.38
       );
     }
   }
-  @media (max-width: 1100px) {
+  @media (max-width: 1200px) {
     body.investigation-open .light-curve-container {
-      left: calc(min(396px, 40vw) + var(--space-2) * 2);
+      left: calc(var(--lesson-width) + var(--space-2) * 2);
       right: var(--space-2);
       bottom: var(--transport-reserve, 76px);
       height: 240px;
@@ -5147,7 +5020,7 @@
     color: #8de08a;
   }
   .inv-ellipse-key .k-c {
-    color: #f2a65a;
+    color: var(--c12);
   }
   .inv-ellipse-key .k-star {
     color: #ffd34d;
@@ -5222,7 +5095,8 @@
 @layer components {
   .welcome-screen {
     position: fixed;
-    inset: 0;
+    /* Home is a page of the shell: below its bar, which stays in use. */
+    inset: var(--shell-height, 0px) 0 0 0;
     z-index: var(--z-welcome);
 
     overflow-y: auto;
@@ -5267,7 +5141,9 @@
 
   .welcome-close {
     position: fixed;
-    top: var(--space-4);
+    /* Below the shell bar, not under it: the bar's Menu button sits at the
+       same corner and the close button used to cover most of it. */
+    top: calc(var(--shell-height, 0px) + var(--space-3));
     right: var(--space-4);
     z-index: 1;
 
@@ -5298,6 +5174,18 @@
   }
 
   /* --- Hero ---------------------------------------------------------------- */
+
+  /* First-run introduction: nothing else on Home until it ends. */
+  .wel-orienting .wel-hero,
+  .wel-orienting #welcomeSections > :not(.wel-orient) {
+    display: none;
+  }
+
+  .wel-orient {
+    max-width: 40rem;
+    margin-inline: auto;
+    text-align: center;
+  }
 
   .wel-hero {
     padding: clamp(var(--space-6), 6vh, var(--space-10)) 0
@@ -5588,6 +5476,12 @@
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   }
 
+  /* A lesson to continue (Home): the title is the button. */
+  .wel-lesson > .wel-quiet {
+    align-self: flex-start;
+    text-align: start;
+  }
+
   .wel-lesson-title {
     font-size: var(--text-sm);
     font-weight: var(--weight-semibold);
@@ -5691,7 +5585,7 @@
 
   /* --- Narrow screens -------------------------------------------------------- */
 
-  @media (max-width: 700px) {
+  @media (max-width: 767px) {
     .welcome-dialog {
       width: calc(100% - var(--space-4) * 2);
       padding-top: var(--space-8);
@@ -5770,7 +5664,7 @@
     }
 
     .welcome-close {
-      top: var(--space-2);
+      top: calc(var(--shell-height, 0px) + var(--space-2));
       right: var(--space-2);
     }
   }
@@ -6159,7 +6053,7 @@
     }
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 767px) {
     .sc-grid {
       grid-template-columns: 1fr;
     }
@@ -6195,7 +6089,7 @@
      ====================================================================== */
   #objectInspector {
     position: fixed;
-    top: 96px;
+    top: calc(96px + var(--shell-height, 0px));
     right: 300px;
     width: 420px;
     max-width: calc(100vw - 2 * var(--space-4));
@@ -6318,7 +6212,7 @@
   .inspector-tab.active {
     color: var(--text-primary);
     background: var(--surface-3, var(--surface-1));
-    box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.3));
+    box-shadow: var(--shadow-sm, 0 1px 2px var(--c1));
   }
   .inspector-tab:focus-visible {
     outline: var(--focus-ring);
@@ -6497,14 +6391,10 @@
 
   /* --- Help and disclosure ------------------------------------------------ */
   .insp-help {
-    width: 16px;
-    height: 16px;
-    min-height: 16px;
     padding: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
     line-height: 1;
     color: var(--text-muted);
     background: transparent;
@@ -6599,22 +6489,21 @@
 
   .insp-energy-chart {
     position: relative;
-    height: 190px;
+    height: 220px;
     margin-top: var(--space-2);
   }
   /* Pinned to the container so the chart can never push the panel taller than
-     the box it was given. Chart.js still owns the bitmap size and the device
-     pixel ratio; this only fixes the box it draws into. */
-  .insp-energy-chart canvas {
+     the box it was given: the chart fills this host and takes its size from
+     it, so the host must not take its size from the chart. */
+  .insp-energy-chart > div {
     position: absolute;
     inset: 0;
-    display: block;
   }
 
   /* Between a wide desktop and a phone - a small laptop, or a big window at
      200% browser zoom - the control rail takes a bigger share of the width, so
      the panel docks nearer the edge rather than sitting on top of it. */
-  @media (max-width: 1180px) {
+  @media (max-width: 1200px) {
     #objectInspector {
       right: var(--space-3);
       width: min(400px, calc(100vw - 2 * var(--space-3)));
@@ -6622,7 +6511,7 @@
   }
 
   /* --- Narrow screens: a sheet, but only as tall as it needs to be -------- */
-  @media (max-width: 620px) {
+  @media (max-width: 767px) {
     #objectInspector {
       top: auto;
       right: var(--space-2);
@@ -6774,7 +6663,7 @@
   font-size: var(--text-xs);
 }
 
-@media (max-width: 620px) {
+@media (max-width: 767px) {
   /* One narrow column of cards would leave no room for the panel they are
      being compared against, so on a phone they span the width and stack. */
   .insp-pin {
@@ -6868,11 +6757,11 @@
    series would be worse than no legend. */
 .rc-key-visible {
   height: 0;
-  border-top: 2px dashed var(--danger, #e2725b);
+  border-top: 2px dashed var(--danger);
 }
 
 .rc-key-total {
-  background: var(--info, #5b9bd5);
+  background: var(--info, var(--c7));
 }
 
 .rc-toggle-row {
@@ -7038,9 +6927,11 @@
  * ------------------------------------------------------------------------- */
 @layer components {
   .inv-author-bar {
-    border-bottom: 1px solid var(--border, #2a2f3a);
-    background: color-mix(in srgb, var(--accent, #4dd0e1) 8%, transparent);
-    padding: var(--space-2, 8px) var(--space-3, 12px);
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    /* The top padding keeps the step buttons clear of the shell's open menu,
+       which reaches down over the top of the panel. */
+    padding: var(--space-8, 40px) var(--space-3, 12px) var(--space-2, 8px);
     font-size: 11px;
     display: flex;
     flex-direction: column;
@@ -7066,8 +6957,8 @@
     font-size: 9px;
     padding: 2px 6px;
     border-radius: 3px;
-    background: var(--accent, #4dd0e1);
-    color: var(--bg, #10131a);
+    background: var(--accent);
+    color: var(--accent-contrast);
   }
 
   .inv-author-jump input {
@@ -7118,11 +7009,11 @@
   }
 
   .inv-author-finding.is-error {
-    border-left-color: var(--danger, #ef5350);
+    border-left-color: var(--danger);
   }
 
   .inv-author-finding.is-warn {
-    border-left-color: var(--warning, #ffb74d);
+    border-left-color: var(--warning);
   }
 
   .inv-author-level {
@@ -7184,9 +7075,7 @@
 
   /* A bare checkbox is 13-15px in every engine. The label beside it is part of
      the same target, but the box itself is what a finger aims at. */
-  .share-check input[type='checkbox'],
-  .settings-panel input[type='checkbox'],
-  input[type='checkbox'].ui-checkbox {
+  .share-check input[type='checkbox'] {
     width: 24px;
     height: 24px;
     accent-color: var(--accent);
@@ -7204,7 +7093,7 @@
 @layer components {
   .inv-progress-safety {
     padding: var(--space-2, 8px) var(--space-3, 12px);
-    border-top: 1px solid var(--border-subtle, #232a38);
+    border-top: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
     gap: var(--space-2, 8px);
@@ -7238,8 +7127,14 @@
     gap: var(--space-2, 8px);
   }
 
-  .inv-backup-actions[hidden] {
-    display: none !important;
+  /* The two backup buttons, behind one disclosure. An authoring preview
+     hides the disclosure itself: it has nothing to back up. */
+  .inv-backup > summary {
+    min-height: 24px;
+    margin-bottom: var(--space-2, 8px);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    cursor: pointer;
   }
 
   .inv-backup-actions .ui-button {
@@ -7259,7 +7154,7 @@
    ========================================================================== */
 @layer components {
   .rv-survey {
-    border-top: 1px solid var(--border, rgb(255 255 255 / 12%));
+    border-top: 1px solid var(--border);
     margin-top: 0.5rem;
     padding-top: 0.5rem;
   }
@@ -7279,7 +7174,7 @@
   }
 
   .rv-survey-hint {
-    color: var(--text-dim, #9aa4b2);
+    color: var(--text-dim, var(--c2));
     font-size: 0.72rem;
     line-height: 1.4;
     margin: 0;
@@ -7299,15 +7194,15 @@
   }
 
   .rv-survey-field > span:first-child {
-    color: var(--text-dim, #9aa4b2);
+    color: var(--text-dim, var(--c2));
     flex: 1 1 auto;
   }
 
   .rv-survey-field input,
   .rv-survey-list textarea,
   .rv-survey-list input {
-    background: var(--input-bg, rgb(255 255 255 / 6%));
-    border: 1px solid var(--border, rgb(255 255 255 / 15%));
+    background: var(--input-bg, var(--c8));
+    border: 1px solid var(--border);
     border-radius: 4px;
     color: inherit;
     font: inherit;
@@ -7318,7 +7213,7 @@
   }
 
   .rv-survey-unit {
-    color: var(--text-dim, #9aa4b2);
+    color: var(--text-dim, var(--c2));
     flex: 0 0 auto;
   }
 
@@ -7361,13 +7256,13 @@
   .binary-sweep,
   /* The assist lesson's two experiments: same furniture, same rule. */
   .assist-experiment {
-    border-top: 1px solid var(--border-subtle, rgb(255 255 255 / 10%));
+    border-top: 1px solid var(--border-subtle);
     padding-top: 0.5rem;
   }
 
   .rv-survey-field select {
-    background: var(--input-bg, rgb(255 255 255 / 6%));
-    border: 1px solid var(--border, rgb(255 255 255 / 15%));
+    background: var(--input-bg, var(--c8));
+    border: 1px solid var(--border);
     border-radius: 4px;
     color: inherit;
     font: inherit;
@@ -7385,7 +7280,7 @@
   }
 
   .rv-survey-list > span {
-    color: var(--text-dim, #9aa4b2);
+    color: var(--text-dim, var(--c2));
   }
 
   /* A list of times is prose-shaped, so it overrides the width and the face
@@ -7412,7 +7307,7 @@
 
   .rv-survey-note[data-state='warn'],
   .rv-survey-compare-report[data-state='warn'] {
-    border-left: 3px solid var(--warning, #e0a458);
+    border-left: 3px solid var(--warning);
     padding-left: 0.5rem;
   }
 
@@ -7445,14 +7340,14 @@
   }
 
   .pause-event-field > span:first-child {
-    color: var(--text-dim, #9aa4b2);
+    color: var(--text-dim, var(--c2));
     flex: 0 0 5.5rem;
   }
 
   .pause-event-field select,
   .pause-event-field input {
-    background: var(--input-bg, rgb(255 255 255 / 6%));
-    border: 1px solid var(--border, rgb(255 255 255 / 15%));
+    background: var(--input-bg, var(--c8));
+    border: 1px solid var(--border);
     border-radius: 4px;
     color: inherit;
     flex: 1 1 auto;
@@ -7463,7 +7358,7 @@
   }
 
   .pause-event-unit {
-    color: var(--text-dim, #9aa4b2);
+    color: var(--text-dim, var(--c2));
     flex: 0 0 auto;
   }
 
@@ -7481,11 +7376,11 @@
   }
 
   .pause-event-message[data-kind='refused'] {
-    border-left-color: var(--warning, #e0a458);
+    border-left-color: var(--warning);
   }
 
   .pause-event-message[data-kind='fired'] {
-    border-left-color: var(--accent, #6fb1ff);
+    border-left-color: var(--accent);
   }
 
   .pause-event-readout {
@@ -7503,12 +7398,12 @@
   }
 
   .pause-event-note span {
-    color: var(--text-dim, #9aa4b2);
+    color: var(--text-dim, var(--c2));
   }
 
   .pause-event-note input {
-    background: var(--input-bg, rgb(255 255 255 / 6%));
-    border: 1px solid var(--border, rgb(255 255 255 / 15%));
+    background: var(--input-bg, var(--c8));
+    border: 1px solid var(--border);
     border-radius: 4px;
     color: inherit;
     font: inherit;
@@ -7536,7 +7431,7 @@
   }
 
   .timeline-event-marker {
-    background: var(--accent, #6fb1ff);
+    background: var(--accent);
     border-radius: 1px;
     height: 1rem;
     pointer-events: none;
@@ -7569,10 +7464,11 @@
    ========================================================================== */
 @layer components {
   .inv-feedback.is-unreadable {
-    border-left: 3px solid var(--info, #5b9bd5);
+    border-left: 3px solid var(--info, var(--c7));
     padding-left: 0.5rem;
   }
 
+  .inv-class,
   .inv-misconception {
     display: inline-block;
     margin-top: 0.3rem;
@@ -7585,7 +7481,7 @@
   }
 
   .inv-hint {
-    border-left: 3px solid var(--border, rgb(255 255 255 / 20%));
+    border-left: 3px solid var(--border);
     font-size: 0.85rem;
     line-height: 1.5;
     margin: 0;
@@ -7593,7 +7489,35 @@
   }
 
   .inv-hint.is-worked {
-    border-left-color: var(--accent, #6fb1ff);
+    border-left-color: var(--accent);
+  }
+
+  .inv-hint:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .explainer {
+    border-left: 3px solid var(--accent);
+    font-size: 0.8rem;
+    line-height: 1.45;
+    margin: 0.4rem 0;
+    padding: 0.2rem 0 0.2rem 0.6rem;
+  }
+
+  .explainer dt {
+    font-weight: 600;
+    margin-top: 0.3rem;
+  }
+
+  .explainer dd {
+    margin: 0;
+  }
+
+  .inv-reflect-note {
+    color: var(--text-dim, var(--c2));
+    font-size: 0.8rem;
+    margin: 0 0 0.4rem;
   }
 
   .inv-hint-row {
@@ -7603,7 +7527,7 @@
   }
 
   .inv-hint-tally {
-    color: var(--text-dim, #9aa4b2);
+    color: var(--text-dim, var(--c2));
     font-size: 0.75rem;
   }
 }
@@ -7618,7 +7542,7 @@
     position: fixed;
     inset: 0;
     z-index: 300;
-    background: var(--surface-0, rgba(3, 6, 16, 0.97));
+    background: var(--surface-0);
     overflow-y: auto;
     padding: var(--space-4, 20px);
   }
@@ -7645,8 +7569,8 @@
     width: 100%;
     font: inherit;
     padding: 6px 8px;
-    background: var(--surface-2, rgba(255, 255, 255, 0.06));
-    border: 1px solid var(--border-subtle, rgba(0, 180, 255, 0.3));
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sm, 6px);
     color: inherit;
   }
@@ -7660,7 +7584,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    border: 1px solid var(--border-subtle, rgba(0, 180, 255, 0.3));
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sm, 6px);
     max-height: 46vh;
     overflow-y: auto;
@@ -7671,7 +7595,7 @@
     gap: var(--space-2, 8px);
     flex-wrap: wrap;
     padding: 5px 10px;
-    border-bottom: 1px solid var(--border-faint, rgba(255, 255, 255, 0.07));
+    border-bottom: 1px solid var(--border-subtle);
   }
   .assignment-step label {
     display: flex;
@@ -7685,28 +7609,28 @@
      included without looking chosen: the instructor did not tick it, and the
      interface should not pretend they did. */
   .assignment-step[data-included='true'] {
-    background: var(--surface-2, rgba(255, 255, 255, 0.05));
+    background: var(--surface-2);
   }
   .assignment-kind,
   .assignment-why {
     font-size: 0.82em;
-    color: var(--text-muted, rgba(255, 255, 255, 0.6));
+    color: var(--text-muted);
   }
   .assignment-why {
     flex-basis: 100%;
     padding-left: 26px;
-    color: var(--accent-warm, #e8b04b);
+    color: var(--accent-warm, var(--c6));
   }
   .assignment-problem:not(:empty) {
-    color: var(--accent-warm, #e8b04b);
+    color: var(--accent-warm, var(--c6));
   }
   .assignment-hint {
     font-size: 0.88em;
-    color: var(--text-muted, rgba(255, 255, 255, 0.65));
+    color: var(--text-muted);
     margin: 0;
   }
   #assignLinkNote[data-state='long'] {
-    color: var(--accent-warm, #e8b04b);
+    color: var(--accent-warm, var(--c6));
   }
 }
 
@@ -7738,13 +7662,13 @@
      distinct from the numbers so it does not read as one of them. */
   .maneuver-caveat {
     font-size: 0.85em;
-    color: var(--text-muted, rgba(255, 255, 255, 0.66));
-    border-left: 2px solid var(--border-subtle, rgba(0, 180, 255, 0.35));
+    color: var(--text-muted);
+    border-left: 2px solid var(--border-subtle);
     padding-left: var(--space-2, 8px);
     margin: 0;
   }
   .maneuver-unbound {
-    color: var(--accent-warm, #e8b04b);
+    color: var(--accent-warm, var(--c6));
     font-weight: 600;
     margin: 4px 0 0;
   }
@@ -7776,10 +7700,10 @@
     font-size: 0.88em;
   }
   .cr3bp-validity[data-state='ok'] {
-    color: var(--text-muted, rgba(255, 255, 255, 0.65));
+    color: var(--text-muted);
   }
   .cr3bp-validity[data-state='invalid'] {
-    color: var(--accent-warm, #e8b04b);
+    color: var(--accent-warm, var(--c6));
     font-weight: 600;
   }
   .cr3bp-jacobi {
@@ -7788,8 +7712,8 @@
   }
   .cr3bp-convention {
     font-size: 0.82em;
-    color: var(--text-muted, rgba(255, 255, 255, 0.6));
-    border-left: 2px solid var(--border-subtle, rgba(0, 180, 255, 0.35));
+    color: var(--text-muted);
+    border-left: 2px solid var(--border-subtle);
     padding-left: var(--space-2, 8px);
     margin: 0;
   }

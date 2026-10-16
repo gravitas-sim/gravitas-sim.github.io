@@ -22,10 +22,10 @@ const OUT = join(process.cwd(), 'test-results', 'rv-launch');
 /** Open the RV panel on a scenario whose star is free to move. */
 async function openRv(page, app) {
   await app.boot();
-  await app.loadScenario('Exoplanet Characterization Lab');
+  await app.loadScenario('exoplanet-characterization-lab');
   await app.waitForFrames(10);
   await app.openPanel('toggleRadialVelocity', 'rvContainer');
-  await expect(page.locator('#rvCanvas')).toBeVisible();
+  await expect(page.locator('#rvChart')).toBeVisible();
 }
 
 /** Switch the synthetic run on, with a schedule. */
@@ -196,7 +196,16 @@ test.describe('the sliders and the file', () => {
       const slider = page.locator(`#rvFit_${key}`);
       await expect(slider).toBeVisible();
 
+      // The search runs in a Worker and answers later. The button is
+      // aria-busy until it has, and the answer is on screen by the time the
+      // next check can run; reading the RMS before that read the previous
+      // fit, and the search then landed over the slider move below.
       await page.locator('#rvFitSearch').click();
+      await expect(page.locator('#rvFitSearch')).not.toHaveAttribute(
+        'aria-busy',
+        'true',
+        { timeout: 60000 }
+      );
       await expect.poll(shownRms, { timeout: 20000 }).not.toBeNull();
       const rmsBefore = await shownRms();
 
@@ -250,7 +259,7 @@ test.describe('the sliders and the file', () => {
     await expect(row).toBeVisible();
 
     const download = page.waitForEvent('download');
-    await row.locator('button').click();
+    await row.locator('[data-action="download"]').click();
     const path = join(OUT, 'fit.csv');
     await (await download).saveAs(path);
 
@@ -374,7 +383,7 @@ test.describe('recordings that are not clean', () => {
         config: {},
       });
       const ws = await import('/js/rvWorkspace.js');
-      ws.snapToBestAtPeriod();
+      await ws.snapToBestAtPeriod();
       const a = ws.analysis();
       return {
         finitePeriod: Number.isFinite(ws.trialParameters().period),

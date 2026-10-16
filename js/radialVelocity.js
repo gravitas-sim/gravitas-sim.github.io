@@ -1,11 +1,9 @@
 // =============================================================================
 // The radial-velocity instrument
 // -----------------------------------------------------------------------------
-// A spectrograph, roughly. It watches one star, projects that star's actual
-// simulated velocity onto the shared line of sight, and plots the result
-// against time. The number on screen is the same quantity an astronomer means
-// by radial velocity: the component of the *star's* motion toward or away from
-// us, not the planet's orbital speed and not the planet's mass.
+// A spectrograph, roughly: it projects one star's simulated velocity onto the
+// shared line of sight and plots it against time - the *star's* motion toward
+// or away from us, not the planet's speed or mass.
 //
 // Two decisions worth stating, because both are places this could quietly
 // teach something false:
@@ -40,11 +38,13 @@ import {
   onObserverChange,
   getInclination,
 } from './observerGeometry.js';
-import { chartColors, observationAxis } from './observationChart.js';
+import { chartColor, chartTick, mountChart } from './observationChart.js';
 import { mountObserverControls } from './observerControls.js';
-import { ensureChartJs } from './chartjs.js';
 import { formatNumber, withUnit } from './format.js';
-import { halfRangeOfSeries } from './exoplanetObservables.js';
+import {
+  halfRangeOfSeries,
+  rvSemiAmplitudeFromAxis,
+} from './exoplanetObservables.js';
 import { orbitalElements } from './orbital.js';
 import { SETTINGS, current_scenario_name } from './appState.js';
 import {
@@ -61,6 +61,7 @@ import {
   layoutObservationPanels,
   noteObservationPanelUsed,
 } from './observationLayout.js';
+import { EV_SIMULATION_RESET } from './names.js';
 
 // How often a sample is taken, in milliseconds of wall clock. A real
 // spectrograph produces one measurement per exposure, not sixty per second, and
@@ -70,6 +71,10 @@ const SAMPLE_INTERVAL_MS = 60;
 // The series is bounded. An observing run left open for an hour must not grow
 // without limit; the oldest samples fall off the front.
 const MAX_SAMPLES = 900;
+
+// Each measurement's error bar ends in a cap this many screen pixels wide to
+// each side, whatever the size of the chart.
+const ERROR_BAR_CAP_PX = 3;
 
 /**
  * Fewest samples before a half-range is worth quoting at all.
@@ -81,6 +86,8 @@ const MIN_SAMPLES_FOR_RANGE = 12;
 
 let enabled = false;
 let chart = null;
+// The mount in flight, so opening the panel twice does not make two charts.
+let building = false;
 let els = null;
 let series = [];
 let lastSampleAt = 0;
@@ -217,9 +224,12 @@ function computeTruth() {
     if (!(el.e >= 0) || el.e >= 1) return null;
     const total = star.mass + body.mass;
     const aStar = (el.a * body.mass) / total;
-    const k =
-      (2 * Math.PI * aStar * Math.sin(inclination)) /
-      (el.period * Math.sqrt(1 - el.e * el.e));
+    const k = rvSemiAmplitudeFromAxis(
+      aStar,
+      el.period,
+      Math.sin(inclination),
+      el.e
+    );
     return { el, k: k * velocityUnitToMs() };
   };
 
@@ -536,21 +546,15 @@ export function clearRadialVelocity() {
   lastSampleTime = null;
   sessionNotice = null;
   recordedSession = currentSessionKey();
-  if (chart) {
-    chart.data.datasets[0].data = [];
-    chart.update('none');
-  }
+  drawChart();
   renderReadout();
 }
-
-/** @returns {boolean} Whether the panel is open */
-export const isRadialVelocityEnabled = () => enabled;
 
 function cacheElements() {
   if (els) return els;
   els = {
     container: document.getElementById('rvContainer'),
-    canvas: document.getElementById('rvCanvas'),
+    chartHost: document.getElementById('rvChart'),
     status: document.getElementById('rvStatus'),
     target: document.getElementById('rvTarget'),
     current: document.getElementById('rvCurrent'),
@@ -595,106 +599,99 @@ function cacheElements() {
   return els;
 }
 
+/** The chart as data (its axes, legend and series as drawn), for the tests. */
+export const radialVelocityChartParts = () => chart?.parts() ?? null;
+
 /**
- * Vertical error bars on the measurement dataset.
+ * The chart (js/plot/chart.js, D-PLOT-02 stage 3b; it was Chart.js, which has no
+ * error bar, so a plugin drew them).
  *
- * Chart.js has no error bar, and the alternatives are a plugin package or
- * leaving them off. Leaving them off is not an option here: a scatter of points
- * with no uncertainty is exactly the picture that makes a nondetection look
- * like a detection, and the size of the bar against the size of the wobble is
- * the comparison the lesson is built on.
+ * Each measurement carries its own sigma, drawn as a bar of plus and minus one
+ * sigma with a cap at each end. Leaving the bars off is not an option here: a
+ * scatter of points with no uncertainty is exactly the picture that makes a
+ * nondetection look like a detection, and the size of the bar against the size
+ * of the wobble is the comparison the lesson is built on. A run whose precision
+ * changed mid-way would draw correctly; today they are all the same.
  *
- * Each point carries its own `sigma`, so a run whose precision changed mid-way
- * would draw correctly; today they are all the same.
+ * Two series, drawn from the module's own state each time, so a clear, a
+ * rewind or a new schedule is a redraw and nothing has to be kept in step.
+ *   0: the continuous recording. On its own it is the measurement; with a
+ *      survey running it becomes the teaching overlay behind the points: dashed,
+ *      faded, pushed behind and renamed, so the two can never be confused for
+ *      each other.
+ *   1: the measurements a schedule produced. Points, never a line: a line drawn
+ *      between two measurements a month apart shows a student a curve nobody
+ *      observed, which is the exact error this whole mode exists to teach
+ *      against.
+ * The legend is on during a survey for the same reason: two series that are
+ * different kinds of thing have to be labeled.
  */
-const errorBarPlugin = {
-  id: 'rvErrorBars',
-  afterDatasetsDraw(c) {
-    const meta = c.getDatasetMeta(1);
-    if (!meta || meta.hidden) return;
-    const points = c.data.datasets[1]?.data || [];
-    if (!points.length) return;
-    const y = c.scales.y;
-    const ctx = c.ctx;
-    ctx.save();
-    ctx.strokeStyle = c.data.datasets[1].borderColor;
-    ctx.lineWidth = 1;
-    for (let i = 0; i < points.length; i++) {
-      const p = points[i];
-      const el = meta.data[i];
-      if (!el || !Number.isFinite(p?.sigma) || p.sigma <= 0) continue;
-      const top = y.getPixelForValue(p.y + p.sigma);
-      const bottom = y.getPixelForValue(p.y - p.sigma);
-      ctx.beginPath();
-      ctx.moveTo(el.x, top);
-      ctx.lineTo(el.x, bottom);
-      ctx.moveTo(el.x - 3, top);
-      ctx.lineTo(el.x + 3, top);
-      ctx.moveTo(el.x - 3, bottom);
-      ctx.lineTo(el.x + 3, bottom);
-      ctx.stroke();
-    }
-    ctx.restore();
-  },
-};
+function drawChart() {
+  if (!chart) return;
+  const on = survey !== null;
+  const measured = surveyChartPoints();
+  chart.draw({
+    label: t('rv.chartLabel'),
+    xTitle: 'Time (days)',
+    yTitle: 'Radial velocity (m/s)',
+    legend: on,
+    series: [
+      {
+        id: 'velocity',
+        label: on ? t('rv.survey.idealLabel') : t('rv.survey.velocityLabel'),
+        x: series.map(p => p.x),
+        y: series.map(p => p.y),
+        color: () => chartColor(on ? 'label' : 'accent'),
+        width: on ? 1.5 : 2,
+        dash: on ? [4, 4] : [],
+        order: on ? 2 : 0,
+        hidden: on && !showIdeal,
+      },
+      {
+        id: 'measurements',
+        label: t('rv.survey.measurementsLabel'),
+        mode: 'points',
+        x: measured.map(m => m.x),
+        y: measured.map(m => m.y),
+        sigma: measured.map(m => m.sigma),
+        color: () => chartColor('warm'),
+        order: on ? 1 : 0,
+        hidden: !on,
+      },
+    ],
+  });
+}
 
 async function buildChart() {
   const e = cacheElements();
-  if (chart || !e.canvas) return;
-  const Chart = await ensureChartJs();
-  if (!Chart) return;
-  const t = chartColors();
-  chart = new Chart(e.canvas.getContext('2d'), {
-    type: 'line',
-    data: {
-      datasets: [
-        // 0: the continuous recording. On its own it is the measurement; with a
-        // survey running it becomes the teaching overlay behind the points, and
-        // is restyled and relabeled in applySurveyStyling() so the two can
-        // never be confused for each other.
-        {
-          label: 'Radial velocity',
-          data: [],
-          borderColor: t.accent,
-          backgroundColor: t.accentSoft,
-          borderWidth: 2,
-          pointRadius: 0,
-          tension: 0.25,
-          fill: false,
+  if (chart || building || !e.chartHost) return;
+  building = true;
+  try {
+    const made = await mountChart(e.chartHost, {
+      height: 'fill',
+      maxPoints: MAX_SAMPLES,
+      maxTicks: 6,
+      capPx: ERROR_BAR_CAP_PX,
+      number: chartTick,
+      tooltip: {
+        mode: 'nearest',
+        title: x => `${chartTick(x)} d`,
+        format: ({ label, y, i, id }) => {
+          const m = id === 'measurements' ? surveyChartPoints()[i] : null;
+          const bar = m && m.sigma > 0 ? ` ± ${chartTick(m.sigma)}` : '';
+          return `${label}: ${withUnit(chartTick(y) + bar, 'm/s')}`;
         },
-        // 1: the measurements a schedule produced. Points, never a line: a line
-        // drawn between two measurements a month apart shows a student a curve
-        // nobody observed, which is the exact error this whole mode exists to
-        // teach against.
-        {
-          label: 'Measurements',
-          data: [],
-          showLine: false,
-          borderColor: t.warm,
-          backgroundColor: t.warm,
-          pointRadius: 3,
-          pointHoverRadius: 4,
-          hidden: true,
-        },
-      ],
-    },
-    plugins: [errorBarPlugin],
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: false,
-      parsing: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: observationAxis('Time (days)', { type: 'linear' }),
-        y: observationAxis('Radial velocity (m/s)', {
-          // A zero line the eye can find: the systemic reference the wobble
-          // swings about.
-          grid: { color: t.grid, z: 1 },
-        }),
       },
-    },
-  });
+    });
+    chart = made;
+    drawChart();
+  } catch (error) {
+    // A panel without its chart is a worse panel, not a broken application;
+    // the next open tries again.
+    console.error('The radial-velocity chart could not be built.', error);
+  } finally {
+    building = false;
+  }
 }
 
 /**
@@ -861,10 +858,7 @@ export function updateRadialVelocity() {
         time: formatNumber(simTime, { sig: 3 }),
       });
     }
-    if (chart) {
-      chart.data.datasets[0].data = series;
-      chart.update('none');
-    }
+    drawChart();
   } else if (decision.invalidate) {
     // A different star, a different direction, a different world, a different
     // ruler. The samples already taken measure something else, so they are not
@@ -901,8 +895,6 @@ export function updateRadialVelocity() {
     const addedB = compareSurvey ? compareSurvey.observe(simTime, rv) : [];
     if (addedB.length) compareStale = true;
     if (added.length || addedB.length) {
-      if (added.length && chart)
-        chart.data.datasets[1].data = surveyChartPoints();
       renderSurveyStatus();
       maybeCompare();
     }
@@ -932,10 +924,8 @@ export function updateRadialVelocity() {
   lastSampleTime = simTime;
   targetStarId = current.starId;
 
-  if (chart) {
-    chart.data.datasets[0].data = series;
-    chart.update('none');
-  }
+  // The newly taken measurements are drawn with the curve, at its rate.
+  drawChart();
   renderReadout();
 }
 
@@ -982,10 +972,7 @@ function startNewSession(session, reason, star) {
   recordedSession = session;
   targetStarId = session.starId;
   sessionNotice = !discarded ? null : sessionNoticeFor(reason, star);
-  if (chart) {
-    chart.data.datasets[0].data = series;
-    chart.update('none');
-  }
+  drawChart();
 }
 
 // --- The synthetic observing run ---------------------------------------------
@@ -1036,9 +1023,9 @@ export function radialVelocitySurvey() {
 function readSurveyControls(kindOverride = null) {
   const e = cacheElements();
   const base = {
-    cadenceDays: Number(e.surveyCadence?.value ?? 0.32),
-    baselineDays: Number(e.surveyBaseline?.value ?? 3.52),
-    sigmaMs: Number(e.surveySigma?.value ?? 8),
+    cadenceDays: (e.surveyCadence?.valueAsNumber ?? 0.32) || 0,
+    baselineDays: (e.surveyBaseline?.valueAsNumber ?? 3.52) || 0,
+    sigmaMs: (e.surveySigma?.valueAsNumber ?? 8) || 0,
     seed: String(e.surveySeed?.value ?? 'survey-1'),
   };
 
@@ -1185,7 +1172,7 @@ function resetSurvey() {
   compareSurvey?.reset();
   compareReport = null;
   compareStale = true;
-  if (chart) chart.data.datasets[1].data = [];
+  drawChart();
   renderSurveyStatus();
   renderCompareReport();
 }
@@ -1208,31 +1195,11 @@ function stopSurvey() {
  *
  * The continuous curve does not disappear when a run starts - watching the
  * measurements land on the signal is most of the point - but it stops being the
- * measurement, so it is dashed, faded, pushed behind the points and renamed.
- * The legend is turned on for the same reason: two datasets that are different
- * kinds of thing have to be labeled.
+ * measurement; drawChart() restyles it, and this is what a run starting,
+ * stopping or showing the overlay asks for.
  */
 function applySurveyStyling() {
-  if (!chart) return;
-  const th = chartColors();
-  const ideal = chart.data.datasets[0];
-  const points = chart.data.datasets[1];
-  const on = survey !== null;
-
-  ideal.label = on ? t('rv.survey.idealLabel') : t('rv.survey.velocityLabel');
-  ideal.borderDash = on ? [4, 4] : [];
-  ideal.borderWidth = on ? 1.5 : 2;
-  ideal.borderColor = on ? th.label : th.accent;
-  ideal.order = 2;
-  ideal.hidden = on && !showIdeal;
-
-  points.label = t('rv.survey.measurementsLabel');
-  points.hidden = !on;
-  points.order = 1;
-  points.data = on ? surveyChartPoints() : [];
-
-  chart.options.plugins.legend.display = on;
-  chart.update('none');
+  drawChart();
 }
 
 /** @returns {Array<object>} The measurements in the shape the chart parses */
@@ -1299,14 +1266,14 @@ function maybeCompare() {
   const armB = compareSurvey;
 
   loadCompareLib()
-    .then(lib => {
+    .then(async lib => {
       if (generation !== surveyGeneration || survey !== armA) return;
       const bounds = controlsLib.comparisonBounds([
         armA.measurements(),
         armB.measurements(),
       ]);
       compareBounds = bounds;
-      const report = controlsLib.buildComparison({
+      const report = await controlsLib.buildComparison({
         lib,
         armA,
         armB,
@@ -1416,8 +1383,8 @@ function syncScheduleFields() {
   if (e.surveyEpochs && !e.surveyEpochs.value) {
     e.surveyEpochs.value = String(
       controlsLib.epochCount({
-        cadenceDays: Number(e.surveyCadence?.value ?? 0.32),
-        baselineDays: Number(e.surveyBaseline?.value ?? 3.52),
+        cadenceDays: (e.surveyCadence?.valueAsNumber ?? 0.32) || 0,
+        baselineDays: (e.surveyBaseline?.valueAsNumber ?? 3.52) || 0,
       })
     );
   }
@@ -1514,8 +1481,12 @@ function initSurveyControls() {
 async function openWorkspaceOnCurrentRun() {
   const run = radialVelocitySurvey();
   if (!run.measurements.length) return;
-  const { openRvWorkspace } = await import('./rvWorkspaceBridge.js');
-  await openRvWorkspace(recordingPayload(run));
+  try {
+    const { openRvWorkspace } = await import('./rvWorkspaceBridge.js');
+    await openRvWorkspace(recordingPayload(run));
+  } catch {
+    (await import('./notify.js')).loadFailed(openWorkspaceOnCurrentRun);
+  }
 }
 
 /**
@@ -1597,12 +1568,7 @@ export function initRadialVelocity() {
 
   // A rebuilt world is a different star. Anything recorded from the old one is
   // not evidence about the new one.
-  window.addEventListener('gravitasSimulationReset', () =>
-    clearRadialVelocity()
-  );
+  window.addEventListener(EV_SIMULATION_RESET, () => clearRadialVelocity());
 
   if (e.container) e.container.style.display = 'none';
 }
-
-/** @returns {number} Current inclination, for panels that report geometry */
-export const observerInclination = () => getInclination();

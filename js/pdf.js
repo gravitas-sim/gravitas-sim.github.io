@@ -139,7 +139,10 @@ const TRANSLITERATE = new Map(
     // A multiplication dot, not a separator: rendering "m·v·r" as "m-v-r"
     // turns a product into a subtraction in a document about physics.
     '·': '*',
-    '∝': ' proportional to ',
+    // A symbol, not a word: this table is the only text a Spanish report
+    // gets from it, and "proportional to" is English. "~" is how a physicist
+    // writes it in plain text.
+    '∝': '~',
     // Ensemble-average brackets. <v^2> is the conventional ASCII form and is
     // what a physicist writes when the angle brackets are unavailable.
     '⟨': '<',
@@ -218,6 +221,9 @@ const TRANSLITERATE = new Map(
     // Reduced Planck constant, which the black hole lesson names in passing.
     '\u210f': 'hbar',
     ħ: 'hbar',
+    // The angstrom sign, which &#8491; decodes to. WinAnsi has no code for it
+    // (it printed as '?'), but has one for the letter it normalizes to.
+    '\u212b': '\u00c5',
     ν: 'nu',
     τ: 'tau',
     ε: 'epsilon',
@@ -269,6 +275,27 @@ export function toWinAnsi(text) {
 }
 
 /**
+ * Reduce a value to the base64url alphabet, for /Keywords.
+ *
+ * Deliberately not toWinAnsi(). That function ends by collapsing runs of
+ * underscores, because in prose "R__star" is the seam between a subscript
+ * marker and a symbol name and never something a writer meant - and in
+ * base64url "__" is two significant characters. A token carrying a double
+ * underscore came back one character short and decoded to nothing, which at
+ * about one token in two is most of them.
+ *
+ * Stripping rather than transliterating: everything this carries is already
+ * A-Za-z0-9-_, so nothing is lost, and anything else has no business in a
+ * machine-readable field.
+ *
+ * @param {string} text - The token
+ * @returns {string} The same characters, minus anything outside the alphabet
+ */
+function tokenSafe(text) {
+  return String(text ?? '').replace(/[^A-Za-z0-9\-_]/g, '');
+}
+
+/**
  * Short numeric label for an axis tick.
  *
  * Superscripts survive as far as toWinAnsi, which folds a run of them into
@@ -298,17 +325,66 @@ export function createDocument({
   author = 'Carl Ziegler',
   subject = '',
   lang = 'en-US',
+  keywords = '',
+  tagged = false,
 } = {}) {
   const pages = [];
   let ops = [];
   let links = [];
+  let parents = [];
   let y = PAGE_H - MARGIN;
 
   const startPage = () => {
-    pages.push({ ops, links });
+    pages.push({ ops, links, parents });
     ops = [];
     links = [];
+    parents = [];
     y = PAGE_H - MARGIN;
+  };
+
+  // --- Tags --------------------------------------------------------------------
+  // A tagged document says what each piece of text is - a heading, a paragraph,
+  // a table header, a cell, a figure - so a screen reader can move through it
+  // by structure. Opt-in, because the instructor documents are generated
+  // byte-for-byte and are checked against their sources. `cur` is the block
+  // text is being drawn into; `put` marks every text operation as content of it
+  // and everything else (rules, shading, the graphics of a figure) as artifact.
+  const root = { role: 'Document', kids: [], children: [] };
+  let cur = root;
+  let figure = null;
+  const node = (role, parent = root, attrs = '') => {
+    const n = { role, kids: [], children: [], attrs };
+    parent.children.push(n);
+    return n;
+  };
+  const block = (role, parent) => {
+    if (tagged) cur = node(role, parent);
+    return cur;
+  };
+  const put = (...list) => {
+    for (const op of list) {
+      if (!tagged || figure) ops.push(op);
+      else if (op.startsWith('BT')) {
+        const id = parents.length;
+        parents.push(cur);
+        cur.kids.push({ page: pages.length, mcid: id });
+        ops.push(`/${cur.role} <</MCID ${id}>> BDC\n${op}\nEMC`);
+      } else ops.push(`/Artifact BMC\n${op}\nEMC`);
+    }
+  };
+  /** Draw a figure's operators as one tagged unit with a text alternative. */
+  const inFigure = (alt, draw) => {
+    if (!tagged) return draw();
+    const start = ops.length;
+    const n = node('Figure', root, ` /Alt (${pdfString(toWinAnsi(alt))})`);
+    figure = n;
+    draw();
+    figure = null;
+    const id = parents.length;
+    parents.push(n);
+    n.kids.push({ page: pages.length, mcid: id });
+    ops.splice(start, 0, `/Figure <</MCID ${id}>> BDC`);
+    ops.push('EMC');
   };
 
   /** Reserve vertical space, starting a new page if it will not fit. */
@@ -321,7 +397,7 @@ export function createDocument({
     const safe = toWinAnsi(text);
     const font = bold ? '/F2' : '/F1';
     const fill = color ? `${color} rg\n` : '0 0 0 rg\n';
-    ops.push(
+    put(
       `BT\n${fill}${font} ${size} Tf\n1 0 0 1 ${MARGIN + indent} ${y} Tm\n(${pdfString(safe)}) Tj\nET`
     );
   };
@@ -341,6 +417,7 @@ export function createDocument({
       // Reserve room for the first lines of whatever follows as well, so a
       // heading cannot be left stranded alone at the foot of a page.
       need(lines.length * (size + 3) + 6 + keepWith);
+      block(size >= 18 ? 'H1' : size >= 14 ? 'H2' : 'H3');
       for (const line of lines) {
         drawText(line, size, true);
         y -= size + 3;
@@ -357,6 +434,7 @@ export function createDocument({
     paragraph(text, { size = 10, indent = 0, gap = 8, color = null } = {}) {
       const lines = wrapText(toWinAnsi(text), CONTENT_W - indent, size, false);
       const lead = size * 1.42;
+      block('P');
       for (const line of lines) {
         need(lead);
         drawText(line, size, false, indent, color);
@@ -381,13 +459,14 @@ export function createDocument({
      */
     writingSpace(label, { lines = 3, gap = 18 } = {}) {
       need(20 + lines * gap);
+      block('P');
       if (label) {
         drawText(toWinAnsi(label), 9, true, 0, '0.35 0.35 0.4');
         y -= 15;
       }
       for (let i = 0; i < lines; i++) {
         y -= gap;
-        ops.push(
+        put(
           '0.78 0.78 0.82 RG 0.6 w',
           `${MARGIN + 10} ${y.toFixed(2)} m ${(MARGIN + CONTENT_W).toFixed(2)} ${y.toFixed(2)} l S`
         );
@@ -403,6 +482,7 @@ export function createDocument({
      */
     field(label, value) {
       need(38);
+      block('P');
       drawText(toWinAnsi(label), 9, true, 0, '0.35 0.35 0.4');
       y -= 13;
       const text = String(value ?? '').trim();
@@ -425,6 +505,7 @@ export function createDocument({
       const v = toWinAnsi(String(value));
       const labelW = textWidth(l, 10, false);
       const valueW = textWidth(v, 10, true);
+      block('P');
       // A value too long to sit beside its label used to be right-aligned from
       // the right margin regardless, which pushed it off the left edge of the
       // page. When it will not fit, it wraps underneath instead.
@@ -442,7 +523,7 @@ export function createDocument({
       }
       need(16);
       drawText(l, 10, false);
-      ops.push(
+      put(
         `BT\n0 0 0 rg\n/F2 10 Tf\n1 0 0 1 ${PAGE_W - MARGIN - valueW} ${y} Tm\n(${pdfString(v)}) Tj\nET`
       );
       y -= 16;
@@ -453,7 +534,7 @@ export function createDocument({
     rule({ gap = 10, shade = 0.8 } = {}) {
       need(gap * 2);
       y -= gap;
-      ops.push(
+      put(
         `${shade} ${shade} ${shade} RG\n0.7 w\n${MARGIN} ${y} m\n${PAGE_W - MARGIN} ${y} l\nS`
       );
       y -= gap;
@@ -474,6 +555,7 @@ export function createDocument({
     link(label, url) {
       const size = 8.5;
       const lines = wrapText(toWinAnsi(label), CONTENT_W, size, false);
+      block('P');
       for (const line of lines) {
         need(size * 1.5);
         drawText(line, size, false, 0, '0.13 0.35 0.6');
@@ -523,77 +605,81 @@ export function createDocument({
       const bottom = y - height + padB;
       const plotW = CONTENT_W - padL;
       const plotH = height - padB;
+      inFigure(`${yLabel} / ${xLabel}`, () => {
+        const maxX = Math.max(...pts.map(p => p.x), 0) * 1.08 || 1;
+        const maxY = Math.max(...pts.map(p => p.y), 0) * 1.08 || 1;
+        const X = v => MARGIN + padL + (v / maxX) * plotW;
+        const Y = v => bottom + (v / maxY) * plotH;
 
-      const maxX = Math.max(...pts.map(p => p.x), 0) * 1.08 || 1;
-      const maxY = Math.max(...pts.map(p => p.y), 0) * 1.08 || 1;
-      const X = v => MARGIN + padL + (v / maxX) * plotW;
-      const Y = v => bottom + (v / maxY) * plotH;
-
-      const path = [];
-      // Axes
-      path.push(
-        `0.55 0.55 0.6 RG`,
-        `0.8 w`,
-        `${MARGIN + padL} ${bottom} m`,
-        `${MARGIN + padL + plotW} ${bottom} l`,
-        `${MARGIN + padL} ${bottom} m`,
-        `${MARGIN + padL} ${bottom + plotH} l`,
-        `S`
-      );
-      // Fitted line through the origin
-      if (Number.isFinite(slope) && slope > 0) {
-        const xEnd = Math.min(maxX, maxY / slope);
+        const path = [];
+        // Axes
         path.push(
-          `0.13 0.45 0.7 RG`,
+          `0.55 0.55 0.6 RG`,
           `0.8 w`,
-          `[3 2] 0 d`,
-          `${X(0)} ${Y(0)} m`,
-          `${X(xEnd)} ${Y(slope * xEnd)} l`,
-          `S`,
-          `[] 0 d`
+          `${MARGIN + padL} ${bottom} m`,
+          `${MARGIN + padL + plotW} ${bottom} l`,
+          `${MARGIN + padL} ${bottom} m`,
+          `${MARGIN + padL} ${bottom + plotH} l`,
+          `S`
         );
-      }
-      // Points
-      path.push(`0.13 0.45 0.7 rg`);
-      for (const p of pts) {
-        const cxp = X(p.x);
-        const cyp = Y(p.y);
-        // A small square: circles need bezier curves and a dot this size reads
-        // identically either way.
-        path.push(
-          `${(cxp - 2).toFixed(2)} ${(cyp - 2).toFixed(2)} 4 4 re`,
-          `f`
-        );
-      }
-      ops.push(path.join('\n'));
+        // Fitted line through the origin
+        if (Number.isFinite(slope) && slope > 0) {
+          const xEnd = Math.min(maxX, maxY / slope);
+          path.push(
+            `0.13 0.45 0.7 RG`,
+            `0.8 w`,
+            `[3 2] 0 d`,
+            `${X(0)} ${Y(0)} m`,
+            `${X(xEnd)} ${Y(slope * xEnd)} l`,
+            `S`,
+            `[] 0 d`
+          );
+        }
+        // Points
+        path.push(`0.13 0.45 0.7 rg`);
+        for (const p of pts) {
+          const cxp = X(p.x);
+          const cyp = Y(p.y);
+          // A small square: circles need bezier curves and a dot this size reads
+          // identically either way.
+          path.push(
+            `${(cxp - 2).toFixed(2)} ${(cyp - 2).toFixed(2)} 4 4 re`,
+            `f`
+          );
+        }
+        put(path.join('\n'));
 
-      // Labels
-      const label = (text, lx, ly, size = 7.5, align = 'left') => {
-        const t = toWinAnsi(text);
-        const wpx = textWidth(t, size, false);
-        const x0 =
-          align === 'right' ? lx - wpx : align === 'center' ? lx - wpx / 2 : lx;
-        ops.push(
-          `BT\n0.35 0.35 0.42 rg\n/F1 ${size} Tf\n1 0 0 1 ${x0.toFixed(2)} ${ly.toFixed(2)} Tm\n(${pdfString(t)}) Tj\nET`
-        );
-      };
-      label(`0`, MARGIN + padL - 4, bottom - 2, 7, 'right');
-      label(sigText(maxX), MARGIN + padL + plotW, bottom - 10, 7, 'right');
-      label(sigText(maxY), MARGIN + padL - 4, bottom + plotH - 3, 7, 'right');
-      label(xLabel, MARGIN + padL + plotW / 2, bottom - 19, 8, 'center');
-      label(yLabel, MARGIN, bottom + plotH + 6, 8, 'left');
-      for (const p of pts) {
-        if (p.label) label(String(p.label), X(p.x) + 4, Y(p.y) + 3, 6.5);
-      }
-      if (Number.isFinite(slope)) {
-        label(
-          `fitted slope ${slope.toFixed(3)}`,
-          MARGIN + padL + 6,
-          bottom + plotH - 3,
-          7.5
-        );
-      }
-
+        // Labels
+        const label = (text, lx, ly, size = 7.5, align = 'left') => {
+          const t = toWinAnsi(text);
+          const wpx = textWidth(t, size, false);
+          const x0 =
+            align === 'right'
+              ? lx - wpx
+              : align === 'center'
+                ? lx - wpx / 2
+                : lx;
+          put(
+            `BT\n0.35 0.35 0.42 rg\n/F1 ${size} Tf\n1 0 0 1 ${x0.toFixed(2)} ${ly.toFixed(2)} Tm\n(${pdfString(t)}) Tj\nET`
+          );
+        };
+        label(`0`, MARGIN + padL - 4, bottom - 2, 7, 'right');
+        label(sigText(maxX), MARGIN + padL + plotW, bottom - 10, 7, 'right');
+        label(sigText(maxY), MARGIN + padL - 4, bottom + plotH - 3, 7, 'right');
+        label(xLabel, MARGIN + padL + plotW / 2, bottom - 19, 8, 'center');
+        label(yLabel, MARGIN, bottom + plotH + 6, 8, 'left');
+        for (const p of pts) {
+          if (p.label) label(String(p.label), X(p.x) + 4, Y(p.y) + 3, 6.5);
+        }
+        if (Number.isFinite(slope)) {
+          label(
+            `fitted slope ${slope.toFixed(3)}`,
+            MARGIN + padL + 6,
+            bottom + plotH - 3,
+            7.5
+          );
+        }
+      });
       y = bottom - padB;
       return api;
     },
@@ -671,134 +757,152 @@ export function createDocument({
       const bottom = y - height + padB;
       const plotW = CONTENT_W - padL;
       const plotH = height - padB;
-      const X = v => MARGIN + padL + ((fx(v) - x0) / (x1 - x0)) * plotW;
-      const Y = v => bottom + ((v - y0) / (y1 - y0)) * plotH;
+      let ly = 0;
+      inFigure(
+        `${yLabel} / ${xLabel}: ${kept.map(s => s.label).join(', ')}`,
+        () => {
+          const X = v => MARGIN + padL + ((fx(v) - x0) / (x1 - x0)) * plotW;
+          const Y = v => bottom + ((v - y0) / (y1 - y0)) * plotH;
 
-      const path = [];
-      // Frame and a zero line where zero is inside the vertical range: a
-      // velocity curve is read against it.
-      path.push(
-        `0.55 0.55 0.6 RG`,
-        `0.8 w`,
-        `${MARGIN + padL} ${bottom} m`,
-        `${MARGIN + padL + plotW} ${bottom} l`,
-        `${MARGIN + padL} ${bottom} m`,
-        `${MARGIN + padL} ${bottom + plotH} l`,
-        `S`
-      );
-      if (y0 < 0 && y1 > 0) {
-        path.push(
-          `0.82 0.82 0.85 RG`,
-          `0.5 w`,
-          `[2 2] 0 d`,
-          `${MARGIN + padL} ${Y(0).toFixed(2)} m`,
-          `${MARGIN + padL + plotW} ${Y(0).toFixed(2)} l`,
-          `S`,
-          `[] 0 d`
-        );
-      }
-
-      // Four inks, cycled. Chosen to stay apart when printed in gray, because
-      // a marked lab report is usually printed.
-      const INKS = [
-        '0.13 0.45 0.70',
-        '0.72 0.28 0.14',
-        '0.20 0.52 0.32',
-        '0.42 0.32 0.62',
-      ];
-      // Solid measured, dashed analytic, dotted revealed truth.
-      const DASH = {
-        measured: '[] 0 d',
-        analytic: '[4 2] 0 d',
-        truth: '[1 2] 0 d',
-      };
-
-      kept.forEach((s, i) => {
-        const ink = INKS[i % INKS.length];
-        const pts = s.points.filter(
-          ([x, yv]) => Number.isFinite(x) && Number.isFinite(yv)
-        );
-        if (!pts.length) return;
-
-        if (s.errors) {
-          path.push(`${ink} RG`, `0.6 w`, `[] 0 d`);
-          pts.forEach(([x, yv], j) => {
-            const e = Math.abs(s.errors[j] || 0);
-            if (!(e > 0)) return;
-            const cx = X(x).toFixed(2);
+          const path = [];
+          // Frame and a zero line where zero is inside the vertical range: a
+          // velocity curve is read against it.
+          path.push(
+            `0.55 0.55 0.6 RG`,
+            `0.8 w`,
+            `${MARGIN + padL} ${bottom} m`,
+            `${MARGIN + padL + plotW} ${bottom} l`,
+            `${MARGIN + padL} ${bottom} m`,
+            `${MARGIN + padL} ${bottom + plotH} l`,
+            `S`
+          );
+          if (y0 < 0 && y1 > 0) {
             path.push(
-              `${cx} ${Y(yv - e).toFixed(2)} m`,
-              `${cx} ${Y(yv + e).toFixed(2)} l`,
-              `S`
-            );
-          });
-        }
-
-        if (s.style === 'points') {
-          path.push(`${ink} rg`);
-          for (const [x, yv] of pts) {
-            path.push(
-              `${(X(x) - 1.7).toFixed(2)} ${(Y(yv) - 1.7).toFixed(2)} 3.4 3.4 re`,
-              `f`
+              `0.82 0.82 0.85 RG`,
+              `0.5 w`,
+              `[2 2] 0 d`,
+              `${MARGIN + padL} ${Y(0).toFixed(2)} m`,
+              `${MARGIN + padL + plotW} ${Y(0).toFixed(2)} l`,
+              `S`,
+              `[] 0 d`
             );
           }
-        } else {
-          path.push(`${ink} RG`, `1 w`, DASH[s.kind] || DASH.measured);
-          pts.forEach(([x, yv], j) => {
-            path.push(
-              `${X(x).toFixed(2)} ${Y(yv).toFixed(2)} ${j ? 'l' : 'm'}`
+
+          // Four inks, cycled. Chosen to stay apart when printed in gray, because
+          // a marked lab report is usually printed.
+          const INKS = [
+            '0.13 0.45 0.70',
+            '0.72 0.28 0.14',
+            '0.20 0.52 0.32',
+            '0.42 0.32 0.62',
+          ];
+          // Solid measured, dashed analytic, dotted revealed truth.
+          const DASH = {
+            measured: '[] 0 d',
+            analytic: '[4 2] 0 d',
+            truth: '[1 2] 0 d',
+          };
+
+          kept.forEach((s, i) => {
+            const ink = INKS[i % INKS.length];
+            const pts = s.points.filter(
+              ([x, yv]) => Number.isFinite(x) && Number.isFinite(yv)
             );
+            if (!pts.length) return;
+
+            if (s.errors) {
+              path.push(`${ink} RG`, `0.6 w`, `[] 0 d`);
+              pts.forEach(([x, yv], j) => {
+                const e = Math.abs(s.errors[j] || 0);
+                if (!(e > 0)) return;
+                const cx = X(x).toFixed(2);
+                path.push(
+                  `${cx} ${Y(yv - e).toFixed(2)} m`,
+                  `${cx} ${Y(yv + e).toFixed(2)} l`,
+                  `S`
+                );
+              });
+            }
+
+            if (s.style === 'points') {
+              path.push(`${ink} rg`);
+              for (const [x, yv] of pts) {
+                path.push(
+                  `${(X(x) - 1.7).toFixed(2)} ${(Y(yv) - 1.7).toFixed(2)} 3.4 3.4 re`,
+                  `f`
+                );
+              }
+            } else {
+              path.push(`${ink} RG`, `1 w`, DASH[s.kind] || DASH.measured);
+              pts.forEach(([x, yv], j) => {
+                path.push(
+                  `${X(x).toFixed(2)} ${Y(yv).toFixed(2)} ${j ? 'l' : 'm'}`
+                );
+              });
+              path.push(`S`, `[] 0 d`);
+            }
           });
-          path.push(`S`, `[] 0 d`);
+          put(path.join('\n'));
+
+          const label = (
+            text,
+            lx,
+            ly,
+            size = 7,
+            align = 'left',
+            ink = null
+          ) => {
+            const tt = toWinAnsi(text);
+            const wpx = textWidth(tt, size, false);
+            const px =
+              align === 'right'
+                ? lx - wpx
+                : align === 'center'
+                  ? lx - wpx / 2
+                  : lx;
+            put(
+              `BT\n${ink || '0.35 0.35 0.42'} rg\n/F1 ${size} Tf\n` +
+                `1 0 0 1 ${px.toFixed(2)} ${ly.toFixed(2)} Tm\n(${pdfString(tt)}) Tj\nET`
+            );
+          };
+
+          const axisValue = v => (useLog ? sigText(10 ** v) : sigText(v));
+          label(axisValue(x0), MARGIN + padL, bottom - 10, 7, 'left');
+          label(axisValue(x1), MARGIN + padL + plotW, bottom - 10, 7, 'right');
+          label(sigText(y1), MARGIN + padL - 4, bottom + plotH - 3, 7, 'right');
+          label(sigText(y0), MARGIN + padL - 4, bottom + 1, 7, 'right');
+          label(
+            useLog ? `${xLabel} (log)` : xLabel,
+            MARGIN + padL + plotW / 2,
+            bottom - 21,
+            8,
+            'center'
+          );
+          label(yLabel, MARGIN, bottom + plotH + 6, 8, 'left');
+
+          // The legend says the kind as well as the name, because that is the
+          // distinction the whole figure exists to keep.
+          let lx = MARGIN + padL;
+          ly = bottom - padB + 2;
+          kept.forEach((s, i) => {
+            const ink = INKS[i % INKS.length];
+            const caption =
+              s.kind && s.kind !== 'measured'
+                ? `${s.label} (${s.kind})`
+                : s.label;
+            put(
+              `${ink} RG\n1 w\n${DASH[s.kind] || DASH.measured}\n` +
+                `${lx} ${(ly + 2.5).toFixed(2)} m ${lx + 12} ${(ly + 2.5).toFixed(2)} l S\n[] 0 d`
+            );
+            label(caption, lx + 16, ly, 7, 'left', ink);
+            lx += 20 + textWidth(toWinAnsi(caption), 7, false);
+            if ((i + 1) % 3 === 0) {
+              lx = MARGIN + padL;
+              ly -= 11;
+            }
+          });
         }
-      });
-      ops.push(path.join('\n'));
-
-      const label = (text, lx, ly, size = 7, align = 'left', ink = null) => {
-        const tt = toWinAnsi(text);
-        const wpx = textWidth(tt, size, false);
-        const px =
-          align === 'right' ? lx - wpx : align === 'center' ? lx - wpx / 2 : lx;
-        ops.push(
-          `BT\n${ink || '0.35 0.35 0.42'} rg\n/F1 ${size} Tf\n` +
-            `1 0 0 1 ${px.toFixed(2)} ${ly.toFixed(2)} Tm\n(${pdfString(tt)}) Tj\nET`
-        );
-      };
-
-      const axisValue = v => (useLog ? sigText(10 ** v) : sigText(v));
-      label(axisValue(x0), MARGIN + padL, bottom - 10, 7, 'left');
-      label(axisValue(x1), MARGIN + padL + plotW, bottom - 10, 7, 'right');
-      label(sigText(y1), MARGIN + padL - 4, bottom + plotH - 3, 7, 'right');
-      label(sigText(y0), MARGIN + padL - 4, bottom + 1, 7, 'right');
-      label(
-        useLog ? `${xLabel} (log)` : xLabel,
-        MARGIN + padL + plotW / 2,
-        bottom - 21,
-        8,
-        'center'
       );
-      label(yLabel, MARGIN, bottom + plotH + 6, 8, 'left');
-
-      // The legend says the kind as well as the name, because that is the
-      // distinction the whole figure exists to keep.
-      let lx = MARGIN + padL;
-      let ly = bottom - padB + 2;
-      kept.forEach((s, i) => {
-        const ink = INKS[i % INKS.length];
-        const caption =
-          s.kind && s.kind !== 'measured' ? `${s.label} (${s.kind})` : s.label;
-        ops.push(
-          `${ink} RG\n1 w\n${DASH[s.kind] || DASH.measured}\n` +
-            `${lx} ${(ly + 2.5).toFixed(2)} m ${lx + 12} ${(ly + 2.5).toFixed(2)} l S\n[] 0 d`
-        );
-        label(caption, lx + 16, ly, 7, 'left', ink);
-        lx += 20 + textWidth(toWinAnsi(caption), 7, false);
-        if ((i + 1) % 3 === 0) {
-          lx = MARGIN + padL;
-          ly -= 11;
-        }
-      });
-
       y = ly - 10;
       return api;
     },
@@ -815,8 +919,10 @@ export function createDocument({
       { size = 10, indent = 12, gap = 4, marker = '\u2022' } = {}
     ) {
       const hang = indent + 12;
+      const list = tagged ? node('L') : null;
       for (const item of items) {
         if (!item) continue;
+        if (tagged) cur = node('LBody', node('LI', list));
         const lines = wrapText(
           toWinAnsi(String(item)),
           CONTENT_W - hang,
@@ -873,25 +979,33 @@ export function createDocument({
           )
         );
 
+      const grid = tagged ? node('Table') : null;
       const paint = (cells, bold, shade) => {
         const lines = cellLines(cells);
+        const tr = tagged ? node('TR', grid) : null;
         const height = Math.max(...lines.map(l => l.length)) * lead + pad * 2;
         if (shade) {
-          ops.push(
+          put(
             `${shade} ${shade} ${shade} rg\n${MARGIN} ${y - height} ${CONTENT_W} ${height} re\nf`
           );
         }
         const top = y - pad;
         lines.forEach((col, i) => {
+          if (tagged)
+            cur = node(
+              bold ? 'TH' : 'TD',
+              tr,
+              bold ? ' /A << /O /Table /Scope /Column >>' : ''
+            );
           col.forEach((line, j) => {
             const ty = top - (j + 1) * lead + lead * 0.25;
-            ops.push(
+            put(
               `BT\n0 0 0 rg\n/${bold ? 'F2' : 'F1'} ${size} Tf\n1 0 0 1 ${xs[i] + pad} ${ty} Tm\n(${pdfString(line)}) Tj\nET`
             );
           });
         });
         y -= height;
-        ops.push(
+        put(
           `0.82 0.82 0.85 RG\n0.5 w\n${MARGIN} ${y} m\n${MARGIN + CONTENT_W} ${y} l\nS`
         );
         return api;
@@ -936,7 +1050,8 @@ export function createDocument({
     titleBlock({ kicker = '', title = '', subtitle = '' } = {}) {
       // A thin accent bar rather than a filled banner: the same identity on
       // screen and on paper, without a page of toner behind it.
-      ops.push(`0.13 0.55 0.75 rg\n${MARGIN} ${y - 4} 52 3 re\nf`);
+      put(`0.13 0.55 0.75 rg\n${MARGIN} ${y - 4} 52 3 re\nf`);
+      block('H1');
       y -= 22;
       if (kicker) {
         drawText(
@@ -971,7 +1086,16 @@ export function createDocument({
      */
     build() {
       startPage();
-      return assemble(pages, { title, footer, author, subject, lang });
+      return assemble(pages, {
+        tagged,
+        root,
+        title,
+        footer,
+        author,
+        subject,
+        lang,
+        keywords,
+      });
     },
   };
 
@@ -985,7 +1109,10 @@ export function createDocument({
  * cross-reference table at the end is what a reader uses to find anything at
  * all: an offset that is wrong by one byte makes the whole file unopenable.
  */
-function assemble(pages, { title, footer, author, subject, lang }) {
+function assemble(
+  pages,
+  { tagged, root, title, footer, author, subject, lang, keywords }
+) {
   const objects = [];
   const add = body => {
     objects.push(body);
@@ -1007,11 +1134,16 @@ function assemble(pages, { title, footer, author, subject, lang }) {
     const footerText = footer
       ? `BT\n0.45 0.45 0.5 rg\n/F1 8 Tf\n1 0 0 1 ${MARGIN} ${MARGIN - 14} Tm\n(${pdfString(toWinAnsi(footer))}) Tj\nET`
       : '';
-    const label = `Page ${index + 1} of ${pages.length}`;
+    const label = /^es\b/i.test(lang)
+      ? `P\u00e1gina ${index + 1} de ${pages.length}`
+      : `Page ${index + 1} of ${pages.length}`;
     const labelW = textWidth(label, 8, false);
-    const pageNum = `BT\n0.45 0.45 0.5 rg\n/F1 8 Tf\n1 0 0 1 ${PAGE_W - MARGIN - labelW} ${MARGIN - 14} Tm\n(${pdfString(label)}) Tj\nET`;
+    const pageNum = `BT\n0.45 0.45 0.5 rg\n/F1 8 Tf\n1 0 0 1 ${PAGE_W - MARGIN - labelW} ${MARGIN - 14} Tm\n(${pdfString(toWinAnsi(label))}) Tj\nET`;
 
-    const stream = [...page.ops, footerText, pageNum]
+    // Running footers are not content: a reader of the structure skips them.
+    const mark = op =>
+      tagged && op ? `/Artifact <</Type /Pagination>> BDC\n${op}\nEMC` : op;
+    const stream = [...page.ops, mark(footerText), mark(pageNum)]
       .filter(Boolean)
       .join('\n');
     const contentId = add(
@@ -1035,13 +1167,51 @@ function assemble(pages, { title, footer, author, subject, lang }) {
       add(
         `<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${PAGE_W} ${PAGE_H}] ` +
           `/Resources << /Font << /F1 ${fontRegular} 0 R /F2 ${fontBold} 0 R >> >> ` +
-          `/Contents ${contentId} 0 R${annots} >>`
+          `/Contents ${contentId} 0 R${annots}${
+            tagged ? ` /StructParents ${index} /Tabs /S` : ''
+          } >>`
       )
     );
   });
 
   objects[pagesId - 1] =
     `<< /Type /Pages /Kids [${pageIds.map(i => `${i} 0 R`).join(' ')}] /Count ${pageIds.length} >>`;
+
+  // The structure tree: each node a marked-content run points at, and for each
+  // page the list that goes the other way (ParentTree), as tagged PDF asks.
+  let structRoot = 0;
+  if (tagged) {
+    structRoot = add(null);
+    const docId = add(null);
+    const owner = new Map();
+    const emit = (n, parentId) => {
+      const id = n === root ? docId : add(null);
+      owner.set(n, id);
+      const kids = [
+        ...n.kids.map(
+          k => `<< /Type /MCR /Pg ${pageIds[k.page]} 0 R /MCID ${k.mcid} >>`
+        ),
+        ...n.children.map(c => emit(c, id)).filter(Boolean),
+      ];
+      if (!kids.length) {
+        if (n !== root) objects[id - 1] = null;
+        return n === root ? id : 0;
+      }
+      objects[id - 1] =
+        `<< /Type /StructElem /S /${n.role} /P ${parentId} 0 R${n.attrs} ` +
+        `/K [${kids.join(' ')}] >>`;
+      return `${id} 0 R`;
+    };
+    emit(root, structRoot);
+    const nums = pages
+      .map(
+        (pg, i) =>
+          `${i} [${pg.parents.map(n => `${owner.get(n)} 0 R`).join(' ')}]`
+      )
+      .join(' ');
+    objects[structRoot - 1] =
+      `<< /Type /StructTreeRoot /K ${docId} 0 R /ParentTree << /Nums [${nums}] >> >>`;
+  }
 
   // Document properties, which is what a reader's "Get Info" panel shows and
   // what a library catalog reads. Without /Author and /Subject a downloaded
@@ -1058,15 +1228,33 @@ function assemble(pages, { title, footer, author, subject, lang }) {
     `D:${made.getFullYear()}` +
     String(made.getMonth() + 1).padStart(2, '0') +
     '01000000Z';
+  // /Keywords carries the submission token when there is one. A reader shows it
+  // in Get Info and ignores it otherwise; what it is really for is the
+  // instructor page, which reads the PDF's own bytes and pulls the token from
+  // here rather than from the printed block. Text extracted from a page is at
+  // the mercy of whatever did the extracting, and base64url has no character
+  // to spare: '-' and '_' are alphabet, so a reader that inserted a hyphen at a
+  // line break would produce a token that decodes to something else. The bytes
+  // in here cannot be mangled that way.
+  //
+  // Escaping matters and is already handled: pdfString() escapes the three
+  // characters a PDF literal string cannot carry raw, and base64url contains
+  // none of them, so the token goes in unchanged and comes out unchanged.
   const infoId = add(
     `<< /Title (${pdfString(toWinAnsi(title))})` +
       ` /Author (${pdfString(toWinAnsi(author))})` +
       (subject ? ` /Subject (${pdfString(toWinAnsi(subject))})` : '') +
+      (keywords ? ` /Keywords (${pdfString(tokenSafe(keywords))})` : '') +
       ` /Producer (Gravitas) /Creator (Gravitas)` +
       ` /CreationDate (${stamp}) /ModDate (${stamp}) >>`
   );
   const catalogId = add(
-    `<< /Type /Catalog /Pages ${pagesId} 0 R /Lang (${pdfString(lang)}) >>`
+    `<< /Type /Catalog /Pages ${pagesId} 0 R /Lang (${pdfString(lang)})${
+      tagged
+        ? ` /MarkInfo << /Marked true >> /StructTreeRoot ${structRoot} 0 R` +
+          ' /ViewerPreferences << /DisplayDocTitle true >>'
+        : ''
+    } >>`
   );
 
   // --- Serialize -------------------------------------------------------------
@@ -1119,5 +1307,3 @@ function encodeLatin1(text) {
   for (let i = 0; i < text.length; i++) out[i] = text.charCodeAt(i) & 0xff;
   return out;
 }
-
-export const PAGE_METRICS = { PAGE_W, PAGE_H, MARGIN, CONTENT_W };

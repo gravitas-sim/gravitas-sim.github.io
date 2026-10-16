@@ -54,13 +54,17 @@ const WEIGHING = {
   subtitle: 'Use an orbit to measure something you cannot put on a scale',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 18, section: '18.2' },
+  courseLevel: 'survey',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'arithmetic',
+  prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['stars', 'gravity', 'orbits'],
   lock: { placement: true, inspector: true, areaSweep: false },
-  summary:
-    'Kepler’s laws end with Newton’s correction, and this is what that correction is for. Watch two stars circle each other, find the balance point they are both going round, and use nothing but the size and the timing of their orbit to work out how much each one weighs. No telescope has ever put a star on a scale; this is how it is actually done.',
   objectives: [
     'Explain why both stars in a binary move, rather than one going round the other',
     'Say what the barycenter is and where it sits when one star is heavier',
@@ -88,7 +92,7 @@ const WEIGHING = {
              together. Newton found that the <em>mass</em> of whatever is doing
              the pulling belongs in that relationship too, and once you know
              that, an orbit becomes a measuring instrument.
-             \n\nThis lesson is about pointing that instrument at a pair of
+             \n\nThis investigation is about pointing that instrument at a pair of
              stars.`,
       tip: 'Nothing here needs algebra. You will read two numbers off a screen and do one division.',
     },
@@ -271,7 +275,7 @@ const WEIGHING = {
              a star heavier in mid-orbit - it starts the pair again with the new
              masses. A star whose mass changed half way round would be on a path
              that no longer closes, and you would be watching a slow spiral
-             while this lesson called it a circle.`,
+             while this investigation called it a circle.`,
       showBarycenter: true,
       allowInspector: true,
       tool: {
@@ -781,7 +785,7 @@ const WEIGHING = {
              \n\nThere is one thing left. You know what the pair weighs
              <em>together</em>. You do not yet know how that weight is divided
              between them, and for that you need the other idea from earlier in
-             this lesson.`,
+             this investigation.`,
     },
     {
       sid: 'back-to-the-balance-point',
@@ -936,7 +940,7 @@ const WEIGHING = {
              every five years. Slide forward through the decades and watch the
              orbit appear one dot at a time.
              \n\nThese dots are of a different kind from everything else in
-             this lesson. Every number you have measured so far came off the
+             this investigation. Every number you have measured so far came off the
              simulation on the canvas, which is still running behind this panel
              and is still the pair you weighed. These are <strong>observations
              of a real star</strong>, made by real telescopes over a hundred and
@@ -959,7 +963,7 @@ const WEIGHING = {
       title: 'And stars are not the only things that do it',
       body: `One last thought, because it connects to something you may have met
              already.
-             \n\nNothing in this lesson required both objects to be stars. A star
+             \n\nNothing in this investigation required both objects to be stars. A star
              with a <em>planet</em> also goes round a shared balance point. The
              planet is thousands of times lighter, so the balance point sits very
              nearly at the middle of the star, and the star's own circle is

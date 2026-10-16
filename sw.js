@@ -272,9 +272,14 @@ self.addEventListener('fetch', event => {
           if (cached) return cached;
         }
 
-        // A page this worker did precache, if there ever is one: serve that
-        // rather than the network, for the same coherence reason.
-        const exact = await cache.match(request, { ignoreSearch: true });
+        // A page this worker did precache - the observatory is the one -
+        // served rather than the network, for the same coherence reason. A
+        // page is asked for by its directory, and precached as its index.
+        const exact =
+          (await cache.match(request, { ignoreSearch: true })) ||
+          (path.endsWith('/')
+            ? await cache.match(`${path}index.html`)
+            : undefined);
         if (exact) return exact;
 
         try {

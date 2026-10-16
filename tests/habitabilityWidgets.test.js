@@ -25,10 +25,15 @@ import {
   candidatePlanets,
   comparisonStars,
 } from '../js/habitabilityWidgets.js';
-import { getWidget, widgetDefaults } from '../js/widgets.js';
+import { getWidget, widgetDefaults, whenWidgetsReady } from '../js/widgets.js';
 import { INVESTIGATIONS, getInvestigation } from '../js/data/investigations.js';
 import { SIM_UNITS_PER_AU, auToSim, simToAu } from '../js/units.js';
-import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
+import { SCENARIO_INFO, scenarioId } from '../js/data/scenarioInfo.js';
+
+// Every instrument family is fetched on demand (js/widgets.js), the way a
+// lesson fetches one when a step names it; this suite reads the catalog, so
+// it waits for it first, as every reader of the whole catalog does.
+await whenWidgetsReady();
 
 const SUN = { luminositySolar: 1, teffK: 5772 };
 const TRAPPIST = {
@@ -587,7 +592,8 @@ describe('the Goldilocks investigation', () => {
     // the lesson would leave a step showing whatever was on screen before it.
     expect(scenarios.has('Habitable Zone Lab')).toBe(true);
     expect(scenarios.has('TRAPPIST-1 System')).toBe(true);
-    for (const name of scenarios) expect(SCENARIO_INFO[name]).toBeTruthy();
+    for (const name of scenarios)
+      expect(SCENARIO_INFO[scenarioId(name)]).toBeTruthy();
   });
 
   test('the numeric answer is the inverse-square value', () => {

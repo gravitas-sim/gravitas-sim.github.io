@@ -1,8 +1,9 @@
 // =============================================================================
 // Generated files and generated regions
 // -----------------------------------------------------------------------------
-// Three things that are derived rather than written, and so are produced here
-// and checked for staleness by tools/docs-facts.mjs:
+// Things that are derived rather than written, and so are produced here and
+// checked for staleness by tools/docs-facts.mjs (among them, the data-pack
+// licence inventory in LICENSES.md and NOTICE, from the pack manifests):
 //
 //   CITATION.cff        from tools/project-metadata.mjs plus the live counts
 //   .zenodo.json        the same source, in Zenodo's shape
@@ -253,6 +254,43 @@ export function investigationModelRows({ manifest, instructor }) {
 }
 
 /**
+ * One model-page row per operation that destroys information.
+ *
+ * Built from js/data/irreversible.js, which is itself scanned out of
+ * js/physics.js, so the table cannot describe a simulation the engine no
+ * longer is. The order is source order: a reader following the table is
+ * reading down the file.
+ *
+ * @param {ReadonlyArray<object>} operations - IRREVERSIBLE
+ * @returns {string} Table rows
+ */
+export function irreversibleRows(operations) {
+  const KIND_LABEL = {
+    cull: 'Deleted when far away',
+    merge: 'Merged',
+    collapse: 'Replaced',
+    damping: 'Damped',
+    fragment: 'Fragmented',
+  };
+  return operations
+    .map(op => {
+      const what = escapeHtml(String(op.detail?.what || ''));
+      const where = `${escapeHtml(IRREVERSIBLE_SOURCE_NAME)}:${op.line}`;
+      return (
+        `            <tr>\n` +
+        `              <td>${escapeHtml(KIND_LABEL[op.kind] || op.kind)}</td>\n` +
+        `              <td>${what}</td>\n` +
+        `              <td><code>${where}</code></td>\n` +
+        `            </tr>`
+      );
+    })
+    .join('\n');
+}
+
+/** Named here so the row builder does not have to import the data module. */
+const IRREVERSIBLE_SOURCE_NAME = 'js/physics.js';
+
+/**
  * Every generated region, by marker name.
  *
  * @param {object} deps - {facts, manifest, instructor}
@@ -302,21 +340,35 @@ function physicsCoverageTable(inventory) {
  * @returns {string} Markdown, or a note when there is no DOI yet
  */
 function citationBlock() {
-  if (!RELEASE.doi) {
-    return '\nNot archived yet: there is no release, so there is no DOI. See\n[RELEASING.md](RELEASING.md).\n';
-  }
   const v = RELEASE.doi;
   const c = RELEASE.conceptDoi;
-  const lines = [
-    '',
-    `> Ziegler, C. (${(RELEASE.dateReleased || '').slice(0, 4)}). *${TITLE}*`,
-    `> (Version ${RELEASE.version}) [Computer software]. Zenodo.`,
-    `> <https://doi.org/${v}>`,
-    '',
-    '| | |',
-    '| --- | --- |',
-    `| **This version (${RELEASE.version})** | [${v}](https://doi.org/${v}) |`,
-  ];
+  if (!v && !c) {
+    return '\nNot archived yet: there is no release, so there is no DOI. See\n[RELEASING.md](RELEASING.md).\n';
+  }
+  const lines = [''];
+  if (v) {
+    lines.push(
+      `> Ziegler, C. (${(RELEASE.dateReleased || '').slice(0, 4)}). *${TITLE}*`,
+      `> (Version ${RELEASE.version}) [Computer software]. Zenodo.`,
+      `> <https://doi.org/${v}>`,
+      '',
+      '| | |',
+      '| --- | --- |',
+      `| **This version (${RELEASE.version})** | [${v}](https://doi.org/${v}) |`
+    );
+  } else {
+    // A release that is declared but not yet archived: an earlier version's DOI
+    // is not this one's, so none is written. The concept DOI is the one
+    // identifier that is true of every release.
+    lines.push(
+      `Version ${RELEASE.version} has no version DOI yet. Zenodo mints it when the release is published,`,
+      'and it is recorded here afterwards (see [RELEASING.md](RELEASING.md)). Until then,',
+      'cite the concept DOI and name the version you used.',
+      '',
+      '| | |',
+      '| --- | --- |'
+    );
+  }
   if (c) {
     lines.push(`| **All versions** | [${c}](https://doi.org/${c}) |`);
   }
@@ -356,10 +408,226 @@ function doiBadgeBlock() {
   return `\n[![DOI](https://zenodo.org/badge/DOI/${d}.svg)](https://doi.org/${d})\n`;
 }
 
-export function generatedBlocks({ manifest, instructor, physics = null }) {
+/**
+ * BRANCHING.md's table of generated artifacts, from tools/generate-graph.mjs:
+ * every committed output, what makes it, and what a person resolving a
+ * conflict in it needs to know.
+ *
+ * @param {ReadonlyArray<object>} graph - The generate graph
+ * @returns {string} Markdown table
+ */
+export function generatedArtifactsTable(graph) {
+  const code = s => `\`${s}\``;
+  const rows = graph
+    .filter(n => !n.uncommitted)
+    .map(n => {
+      const by = n.generate ? code(n.generate) : `needs ${n.needs}`;
+      const note = n.notes || '';
+      // A node that writes only regions inside hand-written files has no
+      // output of its own: name the files instead of leaving the cell empty.
+      const files = n.outputs.length
+        ? n.outputs.map(code)
+        : (n.regions || []).map(r => `${code(r)} (regions)`);
+      return `| ${files.join(', ')} | ${by} | ${note} |`;
+    });
+  return [
+    '',
+    '| File | Made by | Notes |',
+    '| --- | --- | --- |',
+    ...rows,
+    '',
+  ].join('\n');
+}
+
+/** A licence status, as LICENSES.md says it. */
+const STATUS_WORDS = {
+  'public-domain': 'public domain',
+  cc0: 'CC0',
+  'cc-by-4.0': 'CC BY 4.0',
+  'attribution-requested': 'no license; attribution requested',
+  'no-license-stated': 'no license stated',
+  'cc-by-nc-3.0-igo': 'CC BY-NC 3.0 IGO (non-commercial use only)',
+};
+
+/** What a citation points at, as plain text. */
+const citationRef = c =>
+  c.doi ? `doi:${c.doi}` : c.bibcode ? `bibcode ${c.bibcode}` : c.url || '';
+
+/**
+ * LICENSES.md's data-pack table: every pack's derived file, what it is, and
+ * the status and basis its manifest records. One row per pack, in id order.
+ * @param {object[]} packs - Parsed manifests from data-packs/
+ */
+export function dataPackLicenseRows(packs) {
+  const cell = s => String(s).replace(/\|/g, '\\|').replace(/\s+/g, ' ');
+  return [
+    '| File | Pack | Origin | Status |',
+    '| --- | --- | --- | --- |',
+    ...[...packs]
+      .sort((a, b) => a.id.localeCompare(b.id))
+      .map(
+        m =>
+          `| \`${m.derived.file}\` | ${cell(m.title)} (\`${m.id}\`) | ${m.origin} | ${cell(STATUS_WORDS[m.license.status] || m.license.status)}; see NOTICE |`
+      ),
+  ].join('\n');
+}
+
+/**
+ * NOTICE's data-pack inventory: for each pack, its file, its licence status
+ * and statement, the basis where the status is not a licence, and every
+ * citation with its DOI, bibcode or URL - from the manifests, so it cannot say
+ * something different from them.
+ * @param {object[]} packs - Parsed manifests from data-packs/
+ */
+export function dataPackNoticeText(packs) {
+  const out = [];
+  for (const m of [...packs].sort((a, b) => a.id.localeCompare(b.id))) {
+    out.push(`${m.id}: ${m.title}`);
+    out.push(`  File: ${m.derived.file} (${m.origin})`);
+    out.push(
+      `  Licence: ${STATUS_WORDS[m.license.status] || m.license.status}. ${m.license.statement}`
+    );
+    if (m.license.basis) out.push(`  Basis: ${m.license.basis}`);
+    out.push('  Cite:');
+    for (const c of m.source.citations)
+      out.push(`    ${c.text}${citationRef(c) ? `, ${citationRef(c)}` : ''}`);
+    out.push('');
+  }
+  return out.join('\n').trimEnd();
+}
+
+/** A data pack's origin, as the model page's badge says it. */
+const ORIGIN_BADGE = {
+  observed: ['is-measured', 'Measured'],
+  compilation: ['is-measured', 'Compiled from papers'],
+  model: ['is-analytic', 'Model'],
+  synthetic: ['is-illustrative', 'Synthetic'],
+};
+
+/**
+ * The model page's data-pack table: every pack, its badge read from its
+ * manifest's origin, its file and its credit.
+ * @param {object[]} packs - Parsed manifests from data-packs/
+ */
+export function dataPackRows(packs) {
+  return [...packs]
+    .sort((a, b) => a.title.localeCompare(b.title))
+    .map(m => {
+      const [cls, label] = ORIGIN_BADGE[m.origin] || [
+        'is-approximate',
+        m.origin,
+      ];
+      return [
+        '            <tr>',
+        `              <td>${escapeHtml(m.title)}</td>`,
+        `              <td><span class="doc-badge ${cls}">${label}</span></td>`,
+        `              <td><code>${escapeHtml(m.derived.file)}</code></td>`,
+        `              <td>${escapeHtml(m.credit)}</td>`,
+        '            </tr>',
+      ].join('\n');
+    })
+    .join('\n');
+}
+
+/**
+ * The model page's parameter-sources table: every real-system parameter
+ * object, each of its sources with the fields it gives, and the fields that
+ * are approximate and unsourced, said as such.
+ * @param {Array<{where: string, sources: object[]}>} systems - From
+ *   tools/authoring/realSystems.mjs loadRealSystems()
+ */
+export function parameterSourceRows(systems) {
+  const cite = s => {
+    const href = s.url || (s.doi ? `https://doi.org/${s.doi}` : null);
+    const words = escapeHtml(s.text);
+    return href ? `<a href="${escapeHtml(href)}">${words}</a>` : words;
+  };
+  return systems
+    .map(({ where, sources: list }) => {
+      const [file, ...rest] = where.split(' ');
+      const sources = list
+        .map(
+          s =>
+            `${s.text === 'approximate, unsourced' ? '<strong>approximate, unsourced</strong>' : cite(s)}: ${s.fields ? s.fields.map(f => `<code>${escapeHtml(f)}</code>`).join(', ') : list.length > 1 ? 'every other value' : 'every value'}`
+        )
+        .join('<br />');
+      return [
+        '            <tr>',
+        `              <td>${escapeHtml(rest.join(' '))} <small>(<code>${escapeHtml(file)}</code>)</small></td>`,
+        `              <td>${sources}</td>`,
+        '            </tr>',
+      ].join('\n');
+    })
+    .join('\n');
+}
+
+/**
+ * The largest modules, with the line ceiling each is held to.
+ *
+ * The ceilings come from tools/module-size-ceilings.json (the architecture
+ * check's size rule, which lists only modules over 1,500 lines; a module with
+ * no entry shows the 1,500 limit); the sizes are the files as they stand, so
+ * the table says the same thing the check would measure.
+ *
+ * @param {Map<string, number>} sizes - file -> lines
+ * @param {Record<string, number>} ceilings - file -> recorded ceiling
+ * @param {number} [count] - How many rows
+ * @returns {string} A Markdown table, between newlines
+ */
+export function moduleSizeTable(sizes, ceilings, count = 8) {
+  const rows = [...sizes.entries()]
+    .sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))
+    .slice(0, count)
+    .map(
+      ([file, lines]) =>
+        `| \`${file}\` | ${lines.toLocaleString('en-US')} | ${
+          ceilings[file] === undefined
+            ? '1,500 (limit)'
+            : ceilings[file].toLocaleString('en-US')
+        } |`
+    );
+  return `\n| Module | Lines | Ceiling |\n| --- | ---: | ---: |\n${rows.join('\n')}\n`;
+}
+
+export function generatedBlocks({
+  manifest,
+  instructor,
+  physics = null,
+  irreversible = null,
+  graph = null,
+  precache = null,
+  dataPacks = null,
+  realSystems = null,
+  moduleSizes = null,
+}) {
   return {
+    ...(dataPacks
+      ? {
+          dataPackLicenses: `\n${dataPackLicenseRows(dataPacks)}\n`,
+          dataPackNotices: `\n${dataPackNoticeText(dataPacks)}\n`,
+          dataPacks: `\n${dataPackRows(dataPacks)}\n          `,
+        }
+      : {}),
+    ...(realSystems
+      ? {
+          parameterSources: `\n${parameterSourceRows(realSystems)}\n          `,
+        }
+      : {}),
+    ...(graph ? { generatedArtifacts: generatedArtifactsTable(graph) } : {}),
+    ...(moduleSizes
+      ? {
+          moduleSizes: moduleSizeTable(moduleSizes.sizes, moduleSizes.ceilings),
+        }
+      : {}),
     doiBadge: doiBadgeBlock(),
+    // OFFLINE_AND_LOW_END.md's table, from the committed sw-manifest.js.
+    ...(precache ? { precache } : {}),
     citation: citationBlock(),
+    ...(irreversible
+      ? {
+          irreversibleOperations: `\n${irreversibleRows(irreversible)}\n          `,
+        }
+      : {}),
     investigationModels: `\n${investigationModelRows({ manifest, instructor })}\n          `,
     // Only a run of the suite can produce this, so a cheap docs check leaves
     // the block alone rather than claiming nobody generates it.

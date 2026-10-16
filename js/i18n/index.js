@@ -30,7 +30,81 @@
 // =============================================================================
 
 import { EN } from './en.js';
-import { mayBeDeferred } from './deferredNamespaces.js';
+
+// -----------------------------------------------------------------------------
+// Which message ids are allowed to be late
+// -----------------------------------------------------------------------------
+// A clean start-up used to print dozens of `[i18n] no message for ...` warnings
+// for ids that exist: data-i18n attributes of panels whose strings were split
+// into ./en.deferred.js, which is not fetched until a panel asks for it. The
+// catalog cannot say "is this id real?" before it has loaded, but the
+// namespaces the deferred catalog covers can be listed, and that is enough: an
+// id in one of them is held rather than reported, and re-checked once the
+// catalog settles. Ten of these also appear in the eager catalog, which does
+// not matter: an eager id resolves and never reaches the warning path.
+//
+// It lives here and not in a module of its own because this is its only
+// reader, and in the published sources a module is a request on every page
+// that loads this one (tools/route-budgets.json). Kept honest by
+// tests/i18nDeferredNamespaces.test.js, which regenerates the list from the
+// two deferred catalogs and fails if it has drifted.
+// -----------------------------------------------------------------------------
+
+/** Namespaces whose strings arrive with a lazily imported panel. */
+export const DEFERRED_NAMESPACES = Object.freeze([
+  'activity',
+  'assign',
+  'assist',
+  'bench',
+  'bhW',
+  'binW',
+  'binaryRun',
+  'binarySweep',
+  'burn',
+  'chaosW',
+  'cr3bp',
+  'dmW',
+  'energyW',
+  'exoW',
+  'export',
+  'failure',
+  'gwE',
+  'gwW',
+  'hzW',
+  'inv',
+  'lessonFn',
+  'nb',
+  'obsW',
+  'reliability',
+  'resW',
+  'rv',
+  'rvfit',
+  'rvsched',
+  'sound',
+  'specW',
+  'stelE',
+  'stelW',
+  'stellar',
+  'summary',
+  'sweep',
+  'tideP',
+  'tideW',
+  'transitW',
+  'welcome',
+  'welcomeAudience',
+  'welcomeCard',
+  'welcomeLink',
+]);
+
+const SET = new Set(DEFERRED_NAMESPACES);
+
+/**
+ * Could this id still be on its way?
+ *
+ * @param {string} id - A message id
+ * @returns {boolean} Whether it belongs to a deferred namespace
+ */
+export const mayBeDeferred = id => SET.has(String(id).split('.')[0]);
 
 const STORAGE_KEY = 'gravitas_locale';
 

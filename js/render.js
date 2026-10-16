@@ -46,12 +46,13 @@ import {
   STAR_PALETTE,
   generateStarfield as buildStarfield,
   indexStarfield,
-} from './starfield.js';
+} from './bodyDrawSky.js';
 import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
+import { setBloomLayer } from './bodyDraw.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS } from './appState.js';
 import { barycenterOf } from './lesson/barycenter.js';
-import { extentOf, sceneFor } from './lesson/evolutionScene.js';
+import { sceneFor } from './lesson/evolutionScene.js';
 import { updateCanvasSummary } from './canvasSummary.js';
 
 /**
@@ -263,18 +264,6 @@ function drawEvolutionScene(ctx) {
   ctx.restore();
 }
 
-/** How far the current illustration reaches, in screen pixels. For tests. */
-export function evolutionSceneExtent() {
-  const overlay = state.evolutionOverlay;
-  if (!overlay?.active || !overlay.frame) return 0;
-  return extentOf(
-    sceneFor(overlay.frame, {
-      seed: overlay.seed,
-      stillFrame: Boolean(overlay.stillFrame),
-      lostFraction: overlay.lostFraction,
-    })
-  );
-}
 import {
   getDragPreview,
   getOrbitPreview,
@@ -293,7 +282,6 @@ import { tickTimeline } from './timeline.js';
 import { MAX_SUBSTEPS, substepPlan, frameAdvance } from './timestep.js';
 import { drawOverlays } from './overlays.js';
 import { readToken, onThemeChange } from './theme.js';
-import { speedTrailColor } from './palette.js';
 import { auToSim, formatTime } from './units.js';
 import { habitableZoneBounds, stellarPropertiesFor } from './habitability.js';
 import {
@@ -315,6 +303,54 @@ import {
 } from './vectorOverlay.js';
 import { isEmbed } from './presentation.js';
 import { t, onLocaleChange } from './i18n/index.js';
+
+// -----------------------------------------------------------------------------
+// Palette: perceptual ramps for encoding physical quantities as color
+// Speed is a continuous scalar, so it gets a sequential ramp that increases
+// monotonically in lightness: readable in grayscale and for viewers with color
+// vision deficiency, which a rainbow ramp is not. Folded in from js/palette.js
+// (Prompt 107, slice 4) so the module extracted from js/ui.js adds no request.
+// -----------------------------------------------------------------------------
+
+// Viridis-like: dark blue → teal → green → yellow. Uniform in lightness, safe
+// for every common form of color blindness.
+const SPEED_STOPS = [
+  [68, 1, 84],
+  [59, 82, 139],
+  [33, 145, 140],
+  [94, 201, 98],
+  [253, 231, 37],
+];
+
+function sample(stops, t) {
+  const x = Math.max(0, Math.min(1, t)) * (stops.length - 1);
+  const i = Math.min(stops.length - 2, Math.floor(x));
+  const f = x - i;
+  const a = stops[i];
+  const b = stops[i + 1];
+  return {
+    r: Math.round(a[0] + (b[0] - a[0]) * f),
+    g: Math.round(a[1] + (b[1] - a[1]) * f),
+    b: Math.round(a[2] + (b[2] - a[2]) * f),
+  };
+}
+
+// Speeds span orders of magnitude between a Kuiper-belt object and a body
+// whipping past a black hole, so the ramp is logarithmic.
+const SPEED_MIN = 2;
+const SPEED_MAX = 260;
+const LOG_MIN = Math.log(SPEED_MIN);
+const LOG_SPAN = Math.log(SPEED_MAX) - LOG_MIN;
+
+/**
+ * Map an orbital speed onto the sequential ramp.
+ * @param {number} speed - Speed in simulation units
+ * @returns {{r:number,g:number,b:number}} RGB color
+ */
+function speedTrailColor(speed) {
+  const s = Math.max(SPEED_MIN, Math.abs(speed) || SPEED_MIN);
+  return sample(SPEED_STOPS, (Math.log(s) - LOG_MIN) / LOG_SPAN);
+}
 
 /**
  * Translate the legacy "habitable zone optimism" setting into a model name.
@@ -349,7 +385,7 @@ const starCtx = starfieldCanvas.getContext('2d');
 //
 // Nothing about a star changes between repaints - not its position, not its
 // color, not its brightness - so painting all of them every repaint was
-// redrawing an unchanging picture twenty-eight times a second. Each parallax
+// redrawing an unchanging picture twenty or more times a second. Each parallax
 // layer is now rendered to its own offscreen canvas when something that
 // actually affects it changes, and a repaint is three blits.
 //
@@ -375,21 +411,15 @@ const bloomCtx = bloomCanvas.getContext('2d');
 // Most scenarios have no bloom content at all, so most of the time that was
 // two full-screen operations to add nothing.
 //
-// The flag is set by the getter rather than by eighteen call sites across
-// physics.js, all of which read `window.bloomCtx` immediately before drawing
-// into it. Reading it is the intent to draw, so the getter is the one place
-// that cannot be forgotten when a new glow is added.
+// The flag is set by the function physics.js asks for the layer through
+// (setBloomLayer), not by each call site: asking is the intent to draw, so it
+// is the one place that cannot be forgotten when a new glow is added.
 let bloomDirty = false;
 
-if (typeof window !== 'undefined') {
-  Object.defineProperty(window, 'bloomCtx', {
-    configurable: true,
-    get() {
-      bloomDirty = true;
-      return bloomCtx;
-    },
-  });
-}
+setBloomLayer(() => {
+  bloomDirty = true;
+  return bloomCtx;
+});
 // ---------------------------------------------------------------------------
 // Trail glow sprites
 // ---------------------------------------------------------------------------
@@ -2760,9 +2790,6 @@ export function setFixedStep(seconds) {
   fixedStepSeconds = Number.isFinite(seconds) && seconds > 0 ? seconds : 0;
 }
 
-/** @returns {boolean} Whether the loop is stepping deterministically */
-export const isFixedStep = () => fixedStepSeconds > 0;
-
 export { MAX_SUBSTEPS, substepPlan };
 
 // Original gameLoop function from index.html
@@ -2930,16 +2957,20 @@ function resizeCanvas() {
   // Never fall to zero: a 0x0 canvas makes every drawing and culling
   // calculation degenerate. Browsers can report 0 for a page that is not
   // being presented yet (background tab, hidden container).
-  // The backing store, which at the low quality tier is deliberately smaller
-  // than the CSS box the compositor stretches it over. The canvas has never
-  // applied devicePixelRatio, so on the machines that tier is for this is the
-  // only pixel budget there is to give back - and at 0.7 it is half of them.
+  // The backing store. renderScale() folds the quality tier, the display's
+  // device-pixel ratio and a per-tier pixel budget into one multiplier on the
+  // CSS box, so this function does not need to know which of the three moved.
+  // At the low tier it is still deliberately smaller than the box the
+  // compositor stretches it over; above it, a HiDPI display now gets the
+  // resolution it has always been able to show.
   //
   // js/ui.js converts pointer events through the same ratio, which is what
   // keeps a click landing on the body underneath it.
-  const scale = renderScale();
-  const W = Math.max(1, Math.round((window.innerWidth || 0) * scale));
-  const H = Math.max(1, Math.round((window.innerHeight || 0) * scale));
+  const cssW = window.innerWidth || 0;
+  const cssH = window.innerHeight || 0;
+  const scale = renderScale(cssW, cssH);
+  const W = Math.max(1, Math.round(cssW * scale));
+  const H = Math.max(1, Math.round(cssH * scale));
   if (canvas.width === W && canvas.height === H) return;
   canvas.width = W;
   canvas.height = H; // sim layer

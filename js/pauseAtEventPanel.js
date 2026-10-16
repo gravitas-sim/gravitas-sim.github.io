@@ -99,7 +99,7 @@ function fillBodies() {
     select.innerHTML = bodies
       .map(
         b =>
-          `<option value="${b.id}">${escapeText(b.name || `${b.constructor?.name || 'Object'} ${b.id}`)}</option>`
+          `<option value="${b.id}">${escapeText(b.name || `${b.kind || 'Object'} ${b.id}`)}</option>`
       )
       .join('');
     if (bodies.some(b => String(b.id) === wanted)) select.value = wanted;
@@ -213,7 +213,7 @@ function arm() {
     separation:
       kind === EVENT_KINDS.SEPARATION_INWARD ||
       kind === EVENT_KINDS.SEPARATION_OUTWARD
-        ? auToSim(Number(e.separation?.value))
+        ? auToSim(Number(e.separation?.valueAsNumber))
         : null,
   };
 
@@ -401,9 +401,6 @@ export function setPauseAtEventEnabled(on) {
   layoutObservationPanels();
 }
 
-/** @returns {boolean} Whether the panel is open */
-export const isPauseAtEventEnabled = () => enabled;
-
 /** What the watcher has to say. */
 function handleEvent(payload) {
   if (payload.type === 'fired') {
@@ -485,12 +482,28 @@ function simToDaysApprox(simTime) {
   return (simTime * now) / clock;
 }
 
-/** Wire the panel up. Called once at start-up. */
-export function initPauseAtEvent() {
-  const e = cacheElements();
-  if (!e.container) return;
+let wired = false;
 
-  e.toggle?.addEventListener('click', () => setPauseAtEventEnabled(!enabled));
+/**
+ * Wire the panel up, once: js/pauseAtEventBridge.js calls it when the tool is
+ * first needed.
+ */
+export function initPauseAtEvent({ signal } = {}) {
+  // Anything that asked for the elements before the markup was mounted cached
+  // nothing; ask again now that it is there.
+  if (!wired) els = null;
+  const e = cacheElements();
+  if (!e.container || wired) return;
+  wired = true;
+  // The toggle is the rail's and the window is everyone's: both outlive the
+  // panel's markup, so their listeners go when the mount's signal does.
+  const opts = signal ? { signal } : undefined;
+
+  e.toggle?.addEventListener(
+    'click',
+    () => setPauseAtEventEnabled(!enabled),
+    opts
+  );
   e.close?.addEventListener('click', () => setPauseAtEventEnabled(false));
   e.arm?.addEventListener('click', arm);
   e.disarm?.addEventListener('click', () => {
@@ -510,16 +523,31 @@ export function initPauseAtEvent() {
 
   // A rebuilt world reuses body ids for different objects, so a watch that
   // survived would be watching something else under the same name.
-  window.addEventListener('gravitasSimulationReset', () => {
-    resetPauseAtEvent();
-    if (enabled) {
-      // The selects hold ids that no longer mean what they did.
-      if (e.body) delete e.body.dataset.touched;
-      fillBodies();
-      syncFields();
-      render();
-    }
-  });
+  window.addEventListener(
+    'gravitasSimulationReset',
+    () => {
+      resetPauseAtEvent();
+      if (enabled) {
+        // The selects hold ids that no longer mean what they did.
+        if (e.body) delete e.body.dataset.touched;
+        fillBodies();
+        syncFields();
+        render();
+      }
+    },
+    opts
+  );
 
   e.container.style.display = 'none';
+}
+
+/**
+ * Undo initPauseAtEvent(), for when the panel's markup leaves the document
+ * (js/pauseAtEventBridge.js): close it, and forget the elements it bound.
+ */
+export function teardownPauseAtEvent() {
+  if (!wired) return;
+  setPauseAtEventEnabled(false);
+  wired = false;
+  els = null;
 }

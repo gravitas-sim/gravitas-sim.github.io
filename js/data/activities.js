@@ -65,7 +65,7 @@ export const ACTIVITIES = Object.freeze([
     /** The investigation every format is cut from. */
     lesson: 'keplers-laws',
     /** Where the full lesson can be opened, and the scenario formats land in. */
-    scenario: "Kepler's 2nd Law",
+    scenario: 'keplers-2nd-law',
 
     // --- What it is about ---------------------------------------------------
     // Message ids rather than prose: everything a student or instructor reads
@@ -222,7 +222,7 @@ export const ACTIVITIES = Object.freeze([
   Object.freeze({
     id: 'binary-planets',
     lesson: 'binary-star-planets',
-    scenario: 'Binary Planet Lab',
+    scenario: 'binary-planet-lab',
 
     titleId: 'teach.activity.binary-planets.title',
     questionId: 'teach.activity.binary-planets.question',

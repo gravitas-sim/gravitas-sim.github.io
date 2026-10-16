@@ -15,8 +15,6 @@ export default {
   subtitle: 'Descubre qué decide si algo vuelve o no',
   duration: '35-45 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Lanza algo desde un planeta y descubre qué decide si vuelve a caer, gira para siempre o se marcha y no regresa jamás. Avanza desde el experimento hasta la idea que hay detrás: todo objeto cercano a una estrella lleva consigo una cantidad de energía, y el signo de ese único número resuelve la cuestión. Termina con un visitante interestelar real y decide por ti mismo si volverá.',
   objectives: [
     'Describir qué le ocurre a un objeto lanzado a medida que su velocidad supera el punto de escape',
     'Explicar con tus propias palabras por qué una energía total menor que cero significa que un objeto está atrapado',
@@ -28,7 +26,7 @@ export default {
   steps: [
     {
       title: '¿Con cuánta fuerza habría que lanzarlo?',
-      body: 'Lanza una pelota y cae. Lánzala con más fuerza y cae más lejos. Newton se hizo la pregunta obvia que venía después, en un experimento mental que dibujó en 1687: pon un cañón en una montaña tan alta que esté por encima del aire y dispáralo horizontalmente. ¿Qué ocurre si sigues cargando más pólvora?\n\nSu respuesta fue que, en algún momento, el suelo se curva y se aleja por debajo de la bala tan deprisa como la bala cae, y esta deja de caer del todo. Da la vuelta entera y te golpea por la espalda. Eso es una órbita, y es la razón por la que un satélite se mantiene arriba: no porque haya escapado de la gravedad, sino porque está cayendo y fallando continuamente.\n\n¿Y si cargas aún más pólvora? A cierta velocidad se marcha y no vuelve. En algún punto entre esos dos desenlaces hay una línea divisoria. Encontrar esa línea, y entender qué decide de qué lado cae cada cosa, es todo el contenido de esta lección.\n\nEn los siguientes pasos dispararás tú mismo el cañón de Newton.',
+      body: 'Lanza una pelota y cae. Lánzala con más fuerza y cae más lejos. Newton se hizo la pregunta obvia que venía después, en un experimento mental que dibujó en 1687: pon un cañón en una montaña tan alta que esté por encima del aire y dispáralo horizontalmente. ¿Qué ocurre si sigues cargando más pólvora?\n\nSu respuesta fue que, en algún momento, el suelo se curva y se aleja por debajo de la bala tan deprisa como la bala cae, y esta deja de caer del todo. Da la vuelta entera y te golpea por la espalda. Eso es una órbita, y es la razón por la que un satélite se mantiene arriba: no porque haya escapado de la gravedad, sino porque está cayendo y fallando continuamente.\n\n¿Y si cargas aún más pólvora? A cierta velocidad se marcha y no vuelve. En algún punto entre esos dos desenlaces hay una línea divisoria. Encontrar esa línea, y entender qué decide de qué lado cae cada cosa, es todo el contenido de esta investigación.\n\nEn los siguientes pasos dispararás tú mismo el cañón de Newton.',
       tip: 'Todavía no hay que medir nada. El panel de la derecha aparecerá en un momento con un cañón en él.',
     },
     {
@@ -111,6 +109,10 @@ export default {
       options: ['8 km/s', '12 km/s', '20 km/s', '40 km/s'],
       because:
         'Desde el cañón es 10,9 km/s, así que 12 es con diferencia la más próxima. Desde el suelo mismo es 11,2 km/s, y ese es el número que merece la pena llevar encima: unas 25.000 millas por hora, o unas cuarenta veces la velocidad del sonido. Toda nave espacial que haya partido hacia otro planeta tuvo que recibir al menos esto. Fíjate en que ambas cifras difieren, y en que el cañón sobre su torre necesita algo menos. Esa es una pista a la que volverás.',
+      hints: [
+        'La velocidad de escape depende de lo fuerte que es la gravedad donde empiezas y de lo lejos que debes llegar.',
+        'Es rápida para lo cotidiano: compárala con un avión de pasajeros y con una bala de fusil.',
+      ],
     },
     {
       title: '¿Qué es lo que decide esto en realidad?',
@@ -141,6 +143,10 @@ export default {
       ],
       because:
         'Menor que cero significa ligado. Para llegar infinitamente lejos, un objeto necesitaría un total de al menos cero, porque eso es en lo que se convierte la energía de posición allí fuera y la energía de movimiento no puede ser negativa para compensar la diferencia. Por debajo de cero simplemente no puede llegar, así que la gravedad acaba ganando siempre y le da la vuelta.',
+      hints: [
+        'Piensa en en qué se convierte la energía de posición infinitamente lejos.',
+        'Si el total es menor que eso, ¿puede el objeto llegar alguna vez?',
+      ],
     },
     {
       title: 'Alrededor de una órbita real',
@@ -167,6 +173,10 @@ export default {
       ],
       because:
         'El total. Las otras dos se intercambiaron cantidades grandes de un lado a otro y su suma no se movió, que es lo que te permitió leer un único número y saber que la órbita era cerrada. Una órbita no puede decidir por sí sola volverse no ligada: algo tendría que llegar y añadirle energía.',
+      hints: [
+        'Observa la lectura de energía durante una órbita completa.',
+        'Dos de las tres se intercambian energía. ¿Qué dejaría sin cambiar un intercambio?',
+      ],
     },
     {
       title: 'Velocidad de escape',
@@ -185,6 +195,18 @@ export default {
       ],
       because:
         'Sigue tirando, y sigue frenándola. Escapar no apaga la gravedad, y no hay ninguna distancia a la que la gravedad se detenga. Lo que escapar significa es que la nave tiene energía suficiente para que ese frenado nunca llegue a detenerla del todo: sigue perdiendo velocidad para siempre y nunca se le acaba. Por debajo de la velocidad de escape, ese mismo frenado sí la detiene, y entonces todo ocurre al revés.',
+      hints: [
+        '¿Tiene la gravedad una distancia más allá de la cual es cero?',
+        'Escapar es que el frenado nunca llegue a detener la nave.',
+      ],
+      misconceptions: [
+        {
+          say: 'La gravedad no tiene alcance límite: se debilita con la distancia pero nunca llega a cero.',
+        },
+        {
+          say: 'La gravedad solo tira hacia la masa. Escapar significa que el tirón nunca gana, no que se invierta.',
+        },
+      ],
     },
     {
       title: 'En otro lugar completamente distinto',
@@ -231,6 +253,15 @@ export default {
       ],
       because:
         'Menos. La velocidad de escape no es una propiedad de un planeta por sí solo, es una propiedad de un planeta y de un lugar. Cuanto más alto empieces, menos subida queda, así que menos velocidad necesitas para terminarla. Esta es una razón por la que las misiones interplanetarias a menudo se ensamblan en órbita en lugar de lanzarse de una vez.',
+      hints: [
+        'La velocidad de escape depende de dónde empiezas, no solo de qué planeta.',
+        'Empezando más alto, ¿cuánto queda de la subida fuera de la gravedad?',
+      ],
+      misconceptions: [
+        {
+          say: 'La gravedad es más débil allí, no cero: la estación espacial sigue sujeta por la atracción de la Tierra.',
+        },
+      ],
     },
     {
       title: 'Tres formas, una sola ley',
@@ -266,6 +297,34 @@ export default {
         '¿Acabará ʻOumuamua por frenarse hasta detenerse, dar la vuelta y entrar en órbita alrededor del Sol? Di por qué sí o por qué no, usando lo que has medido.',
       rubric:
         'No. Su energía total es mayor que cero, así que no está ligado: la atracción del Sol lo sigue frenando pero no puede detenerlo nunca, y seguirá alejándose cuando esté arbitrariamente lejos. Se valora señalar que su trayectoria es abierta en lugar de un bucle cerrado, o que su excentricidad es mayor que 1. Una respuesta errónea frecuente es que la gravedad deja de actuar sobre él una vez que está lo bastante lejos, y merece la pena corregirla: la gravedad sigue tirando para siempre, y el objeto escapa de todos modos.',
+      rubricCriteria: [
+        {
+          name: 'Llega a la respuesta correcta',
+          levels: [
+            {
+              label: 'Completo',
+              text: 'No: la energía total es mayor que cero, así que el visitante no está ligado.',
+            },
+            {
+              label: 'Aún no',
+              text: 'Dice que volverá, o no da respuesta.',
+            },
+          ],
+        },
+        {
+          name: 'Usa lo que se midió',
+          levels: [
+            {
+              label: 'Completo',
+              text: 'Cita la energía o la velocidad medidas, o que la trayectoria es abierta.',
+            },
+            {
+              label: 'Aún no',
+              text: 'Argumenta solo con la atracción del Sol.',
+            },
+          ],
+        },
+      ],
     },
     {
       title: 'Lo que has deducido',

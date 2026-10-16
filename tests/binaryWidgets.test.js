@@ -1,6 +1,11 @@
 import { describe, test, expect } from '@jest/globals';
 import { binaryFacts } from '../js/binaryWidgets.js';
-import { getWidget, widgetDefaults } from '../js/widgets.js';
+import { getWidget, widgetDefaults, whenWidgetsReady } from '../js/widgets.js';
+
+// Every instrument family is fetched on demand (js/widgets.js), the way a
+// lesson fetches one when a step names it; this suite reads the catalog, so
+// it waits for it first, as every reader of the whole catalog does.
+await whenWidgetsReady();
 
 describe('the binary the lesson is built on', () => {
   test('the barycenter sits halfway between two equal stars', () => {

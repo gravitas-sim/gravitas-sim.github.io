@@ -12,7 +12,7 @@ reason for every tolerance.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->243<!--/fact--> checks, about 15 seconds, and a
+That is <!--fact:physicsChecks-->304<!--/fact--> checks, about two minutes, and a
 PASS/FAIL table with measured error against stated tolerance. Add `--verbose` to print the rationale for each tolerance,
 `--json` for machine-readable output, or `--group "Conservation"` to run one
 section. Exit status is 0 only if everything passes, so it works in CI unchanged.
@@ -22,7 +22,7 @@ The same checks run as part of `npm test`
 physics regression fails a pull request rather than waiting for someone to
 remember to print the table.
 
-Everything lives in [`tools/physics-checks.mjs`](tools/physics-checks.mjs). There
+Everything lives in [`js/validation/physicsChecks.js`](js/validation/physicsChecks.js). There
 is one copy of every expected value; the command-line table and the jest suite
 are two front ends onto it.
 
@@ -55,10 +55,13 @@ are two front ends onto it.
 | Three-body sensitivity | 10 | 10 integrated |
 | Inspiral (approximation) | 4 | 4 approximation |
 | Real systems | 11 | 11 published |
-| Orbital resonance | 35 | 1 analytic, 33 integrated, 1 published |
+| Orbital resonance | 35 | 1 analytic, 34 integrated |
 | Planets in binary stars | 15 | 1 analytic, 10 integrated, 4 published |
 | Gravity assist | 10 | 1 analytic, 9 integrated |
-| **Total** | **243** | 87 analytic, 109 integrated, 34 published, 12 approximation, 1 empirical |
+| Sonification law | 5 | 5 analytic |
+| Observing windows | 38 | 17 analytic, 17 published, 4 approximation |
+| Radiation and photometry | 18 | 5 analytic, 1 integrated, 11 published, 1 approximation |
+| **Total** | **304** | 114 analytic, 111 integrated, 61 published, 17 approximation, 1 empirical |
 <!--/fact-block-->
 
 Nothing here reads a pixel. Every check is a deterministic number-in,
@@ -858,7 +861,7 @@ Stated plainly, because a coverage claim is only useful with an edge.
 
 ## Adding or changing a check
 
-Checks live in [`tools/physics-checks.mjs`](tools/physics-checks.mjs) as records:
+Checks live in [`js/validation/physicsChecks.js`](js/validation/physicsChecks.js) as records:
 
 ```js
 add({

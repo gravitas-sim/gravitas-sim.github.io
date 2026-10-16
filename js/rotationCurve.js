@@ -166,11 +166,6 @@ function mondA0() {
   );
 }
 
-/** @returns {boolean} Whether this scenario is one MOND may be applied to */
-export function mondAvailable() {
-  return mondA0() > 0;
-}
-
 /**
  * The current state of the plot: points, center, fit, and the two predictions.
  *
@@ -798,11 +793,11 @@ export function initRotationCurve() {
   e.modeMond?.addEventListener('click', () => setGalaxyGravity('mond'));
 
   e.vFlat?.addEventListener('input', () => {
-    updatePhysicsSettings({ halo_v_flat: Number(e.vFlat.value) });
+    updatePhysicsSettings({ halo_v_flat: e.vFlat.valueAsNumber });
     updateRotationCurve();
   });
   e.core?.addEventListener('input', () => {
-    updatePhysicsSettings({ halo_core_radius: Number(e.core.value) });
+    updatePhysicsSettings({ halo_core_radius: e.core.valueAsNumber });
     updateRotationCurve();
   });
 

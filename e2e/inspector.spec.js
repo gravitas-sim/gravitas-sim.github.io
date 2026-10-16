@@ -15,12 +15,12 @@ test.describe('the object inspector', () => {
     { tag: '@cross-browser' },
     async ({ page, app }) => {
       await app.boot();
-      await app.loadScenario('Solar System');
+      await app.loadScenario('solar-system');
       await app.waitForFrames(10);
 
       const picked = await app.selectFirstObject('StarObject');
-      // The constructor is StarObject; the inspector calls it a Star.
-      expect(picked.constructor).toBe('StarObject');
+      // The kind is StarObject; the inspector calls it a Star.
+      expect(picked.kind).toBe('StarObject');
       expect(picked.type).toBe('Star');
 
       const inspector = page.locator('#objectInspector');
@@ -36,7 +36,7 @@ test.describe('the object inspector', () => {
 
   test('the readout keeps up with a moving body', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.selectFirstObject('StarObject');
 
     const content = page.locator('#inspectorContent');
@@ -58,7 +58,7 @@ test.describe('the object inspector', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.selectFirstObject('StarObject');
 
     const energyTab = page.locator('#inspectorTabEnergy');
@@ -74,6 +74,45 @@ test.describe('the object inspector', () => {
 
     await energyTab.click();
     await expect(page.locator('#energyTab')).toBeVisible();
+    // Its chart is made: the series chart of js/plot/chart.js (the Chart.js
+    // line chart it replaced is no longer on the page), with the three energies
+    // as its series and a numeric time axis. A chart that failed to build
+    // leaves an empty host.
+    const chart = page.locator('#energyChart');
+    await expect(
+      chart.locator('svg[role="group"]'),
+      'the energy chart was never made'
+    ).toBeVisible({ timeout: 30_000 });
+    await expect(chart.locator('button[data-series]')).toHaveText([
+      'Kinetic Energy',
+      'Potential Energy',
+      'Total Energy',
+    ]);
+    await expect(
+      chart.locator('button[data-series][aria-pressed="true"]')
+    ).toHaveCount(3);
+    await expect(chart.locator('svg[role="group"]')).toContainText('Time (s)');
+    await expect(chart.locator('svg[role="group"]')).toContainText(
+      'Energy (J)'
+    );
+    // It is drawing the object's energy history: a connected path of several
+    // points in every series.
+    await expect
+      .poll(
+        () =>
+          chart
+            .locator('svg g[clip-path] > path[stroke-width]')
+            .evaluateAll(
+              paths =>
+                paths
+                  .map(p => p.getAttribute('d') || '')
+                  .filter(d => (d.match(/L/g) || []).length >= 2).length
+            ),
+        { timeout: 30_000, message: 'the energy chart drew no history' }
+      )
+      .toBeGreaterThanOrEqual(3);
+    // The Chart.js build is not what drew it.
+    expect(await page.evaluate(() => typeof window.Chart)).toBe('undefined');
 
     await detailsTab.click();
     await expect(page.locator('#detailsTab')).toBeVisible();
@@ -82,7 +121,7 @@ test.describe('the object inspector', () => {
 
   test('closing the inspector clears the selection', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.selectFirstObject();
 
     await expect(page.locator('#objectInspector')).toBeVisible();
@@ -97,7 +136,7 @@ test.describe('changing a physical property', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.waitForFrames(10);
 
     const picked = await app.selectFirstObject('StarObject');
@@ -137,7 +176,7 @@ test.describe('changing a physical property', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
 
     const gravityOf = () =>
       page.evaluate(async () => {
@@ -163,7 +202,7 @@ test.describe('changing a physical property', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.selectFirstObject('StarObject');
 
     const content = page.locator('#inspectorContent');

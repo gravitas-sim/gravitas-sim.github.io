@@ -1,0 +1,190 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "des-sn5yr-hd",
+  "version": "1.0.0",
+  "title": "Type Ia supernova Hubble diagram: DES-SN5YR, 1,829 supernovae",
+  "object": {
+    "name": "Type Ia supernovae of the Dark Energy Survey five-year sample and its low-redshift companions",
+    "identifiers": [
+      "DES-SN5YR"
+    ],
+    "frame": "redshift in the CMB frame; distance modulus on the release scale (H0 = 70)"
+  },
+  "facility": {
+    "observatory": "Dark Energy Survey (CTIO) with low-redshift supernovae from other surveys",
+    "pipeline": "DES-SN5YR-1.2, 4_DISTANCES_COVMAT/DES-SN5YR_HD.csv"
+  },
+  "dataType": "catalog",
+  "origin": "compilation",
+  "credit": "Sanchez et al. 2024 and DES Collaboration 2024 (the record asks for both), Zenodo 10.5281/zenodo.12720778, CC BY 4.0",
+  "license": {
+    "status": "cc-by-4.0",
+    "statement": "The Zenodo record's metadata gives CC BY 4.0, whose Share clause permits reproducing the material with attribution (read 2026-10-09). Cite Sanchez et al. 2024 (arXiv:2406.05046) and DES Collaboration 2024, ApJL 973, L14.",
+    "basis": "COSMOLOGY_GATE.md section 1: the license as read from the record, kept with its legal code; D-COSMO-02 (delegated)."
+  },
+  "retrieved": "2026-10-10",
+  "columns": [
+    {
+      "id": "z",
+      "name": "redshift",
+      "unit": "",
+      "description": "zHD, the redshift corrected to the CMB frame and for peculiar velocity"
+    },
+    {
+      "id": "mu",
+      "name": "distance modulus",
+      "unit": "mag",
+      "description": "MU, on the release's scale: H0 = 70 and its fixed absolute magnitude"
+    },
+    {
+      "id": "mu_err",
+      "name": "distance modulus error",
+      "unit": "mag",
+      "uncertaintyOf": "distance modulus",
+      "description": "MUERR_FINAL, statistical, with the intrinsic scatter included"
+    },
+    {
+      "id": "des",
+      "name": "survey",
+      "unit": "",
+      "description": "1 for a supernova found by the Dark Energy Survey, 0 for the low-redshift compilation"
+    }
+  ],
+  "masks": [],
+  "reductions": [
+    "All 1,829 rows of DES-SN5YR_HD.csv, sorted by redshift (then identifier). The identifier, the CMB-frame and heliocentric redshifts are not kept; IDSURVEY is reduced to one flag (10 is the Dark Energy Survey).",
+    "Statistical errors only: the published cosmology uses the full systematic covariance matrix (16 MB compressed), which is not shipped, and the statistical covariance in the release is all zeros. A fit to this table is therefore not the published fit.",
+    "The distance moduli are on a scale fixed to H0 = 70 and the survey's absolute magnitude, so H0 is not measured by these supernovae alone: they fix the shape of the curve, not its scale.",
+    "75 of the 1,829 rows have an error above 1 mag (the largest 450): the survey's down-weighted candidates. They are kept, as the release keeps them, and carry almost no weight in a weighted fit.",
+    "Redshift is stored to 1e-5 and the modulus and its error to 1e-4 mag, the raw file's own digits: the mean redshift and mean modulus of the stored table equal the raw file's to better than 1e-12 relative (the manifest records the rounding)."
+  ],
+  "source": {
+    "archive": "Zenodo (record 10.5281/zenodo.12720778, DES-SN5YR-1.2.zip, md5 9019a6ddc569553bc323e9e1b68a55bf)",
+    "urls": [
+      "https://doi.org/10.5281/zenodo.12720778"
+    ],
+    "citations": [
+      {
+        "text": "Sanchez et al. 2024 (The Dark Energy Survey Supernova Program: cosmological analysis and systematic uncertainties)",
+        "url": "https://arxiv.org/abs/2406.05046"
+      },
+      {
+        "text": "DES Collaboration 2024, ApJL 973, L14 (The Dark Energy Survey: cosmology results with ~1500 new high-redshift type Ia supernovae using the full 5-year dataset)",
+        "doi": "10.3847/2041-8213/ad6f9f"
+      },
+      {
+        "text": "Zenodo record, DES-SN5YR-1.2 data release",
+        "doi": "10.5281/zenodo.12720778"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "DES-SN5YR_HD.csv",
+      "url": "https://doi.org/10.5281/zenodo.12720778",
+      "bytes": 91860,
+      "sha256": "95ab1e9f5460a056de37d2b4e28df73ce0c7fd471baba9fb37f1667f41b7901c"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/cosmology.mjs",
+    "version": "1.0.0",
+    "options": {
+      "columns": [
+        {
+          "id": "z",
+          "step": 0.00001
+        },
+        {
+          "id": "mu",
+          "step": 0.0001
+        },
+        {
+          "id": "mu_err",
+          "step": 0.0001
+        },
+        {
+          "id": "des",
+          "step": 1
+        }
+      ]
+    },
+    "steps": [
+      "Read zHD, MU, MUERR_FINAL and IDSURVEY from DES-SN5YR_HD.csv (the file as the zip holds it).",
+      "Sort by zHD, then by identifier.",
+      "Store redshift, modulus, error and the survey flag as table-columns/1."
+    ],
+    "record": {
+      "rows": 1829,
+      "rawMeanZ": 0.46896943138326985,
+      "rawMeanMu": 41.58381984691087,
+      "columns": [
+        {
+          "id": "z",
+          "type": "int32",
+          "step": 0.00001,
+          "missing": 0,
+          "maxRounding": 2.22e-16
+        },
+        {
+          "id": "mu",
+          "type": "int32",
+          "step": 0.0001,
+          "missing": 0,
+          "maxRounding": 7.11e-15
+        },
+        {
+          "id": "mu_err",
+          "type": "int32",
+          "step": 0.0001,
+          "missing": 0,
+          "maxRounding": 2.84e-14
+        },
+        {
+          "id": "des",
+          "type": "int16",
+          "step": 1,
+          "missing": 0,
+          "maxRounding": 0
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    "The errors are statistical and include an intrinsic-scatter term; they are treated as independent Gaussians.",
+    "The raw file is committed beside this tool (tools/data-packs/cosmology/DES-SN5YR_HD.csv, 91,860 bytes, CC BY 4.0, from the zip member named in the record): the zip is too large to fetch for a 92 KB table."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/observations/desSn5yrHd.js",
+    "bytes": 4844,
+    "sha256": "c07457a09159a43dc0663527952b1c29f273c1e166b1fae0d42a2fca6b756fae",
+    "sidecar": {
+      "file": "cosmology/des-sn5yr-hd.json",
+      "bytes": 34423,
+      "sha256": "882fac34a4c4b4c73b72a22238410daa9cb0c686d209af4b7c9ad7763c75f76f"
+    }
+  },
+  "validation": {
+    "check": "a flat Lambda-CDM fit with the offset solved gives Omega_m within 0.08 of the published flat value 0.352 +- 0.017 (statistical errors only here, the full covariance there)",
+    "against": [
+      {
+        "quantity": "Omega_m, flat Lambda-CDM, supernovae only",
+        "value": 0.352,
+        "unit": "",
+        "ref": "DES Collaboration 2024, ApJL 973, L14"
+      }
+    ],
+    "result": {
+      "Om": 0.361,
+      "chi2": 1687.9,
+      "dof": 1827,
+      "supernovae": 1829
+    }
+  }
+}

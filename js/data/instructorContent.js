@@ -16,19 +16,1241 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'extending-an-experiment': {
+    topic:
+      'Classifying an experiment’s trials, fitting the chance of an outcome with a bootstrap, and extending it to a large synthetic population, in Python, with the limits of what the interval covers',
+    difficulty: 'Upper level (computational)',
+    placement:
+      'In a computational astrophysics or statistics unit, after an introduction to the bootstrap. It uses the compute page, so it needs a network connection and about 19 MB of download per student, once. It runs on an experiment result of the Binary Planet Lab; a student can run an experiment of their own on the experiment runner, save its result and choose it as the input file when it varies one setting over a seeded draw and observes the distance to the primary.',
+    overview:
+      'Students run one reviewed notebook on twenty planets of the Binary Planet Lab, each started at a seeded random distance between 0.12 and 0.42 of the binary separation and run by the engine for twenty binary orbits. Twelve stay bound (mean distance within three starting distances). The notebook fits the chance of staying bound as a logistic curve: half-way at 0.255 +/- 0.024. It extends the fit to 200,000 synthetic planets with equal numbers per factor of distance: 0.596 +/- 0.076 bound. A uniform extension gives 0.451 +/- 0.081, against 0.6 in the sample, which is under two binomial errors (0.11). With a cutoff of six the edge moves to 0.289 +/- 0.0096 and the extension to 0.701 +/- 0.028, because one planet is reclassified.',
+    priorKnowledge: [
+      'The bootstrap, in outline',
+      'A logistic curve',
+      'What a seeded random draw is',
+    ],
+    keyConcepts: [
+      {
+        heading: 'An outcome is a definition',
+        body: 'The edge moved by a third of its gap when one planet was reclassified, and no interval counts that.',
+      },
+      {
+        heading: 'More synthetic planets, same assumptions',
+        body: 'Two hundred thousand synthetic planets have a small sampling error and exactly the assumptions of the fit; the uncertainty comes from the twenty trials.',
+      },
+      {
+        heading: 'A sample is one draw',
+        body: 'The sample fraction 0.6 sits 1.4 binomial errors from the uniform population’s 0.45; unremarkable for twenty.',
+      },
+    ],
+    features: [
+      {
+        name: 'The compute page (/compute/)',
+        text: 'The notebook "A population of planets, extended", in Pyodide 314.0.7 inside a sandboxed frame, on the vendored experiment result. The run is kept as a compute capsule that a report can cite.',
+      },
+      {
+        name: 'The experiment runner',
+        text: 'The input is a gravitas.experiment-result/1; the file is made by the same code the experiment Workers run (tools/compute-examples.mjs), with wall-clock fields zeroed and series left out.',
+      },
+      {
+        name: 'The answer key',
+        text: 'Every number a step checks is a declared output of the notebook, and a test holds each one to the notebook’s own run, so a different digit means a different setting or input file.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A bigger synthetic population makes the answer better known.',
+        response:
+          'It shrinks the sampling error of the synthetic draw only; the uncertainty of the prediction is the twenty trials’, and the assumptions are the same.',
+      },
+      {
+        claim: 'The sample fraction is the population fraction.',
+        response:
+          'It is one draw of twenty, and here it is 0.15 above the model’s uniform-population value.',
+      },
+      {
+        claim: 'The interval includes everything uncertain.',
+        response:
+          'It includes the scatter of the twenty, not the logistic form, the definition of bound or the range of the draw.',
+      },
+      {
+        claim: 'A notebook result is a measurement, so it needs no check.',
+        response:
+          'It is a computation on twenty trials: a different cutoff or a different seed would give different digits, and the capsule records which was used.',
+      },
+    ],
+    teachingNotes: [
+      'The runs are seeded and deterministic: every student should get the digits in the answer key.',
+      'The half-way distance with the cutoff at 6 comes with a warning that the fitted width is at the grid’s floor: the data are a clean step.',
+      'The cold download is about 19 MB because the notebook plots. Capsule files open without the runtime.',
+      'The example has only twenty trials because an experiment’s parameter has at most twenty values and the lab’s outcome does not depend on the seed; the limit is the point of the investigation.',
+    ],
+    discussion: [
+      'What would you need to add to the interval so that it covered the choice of a logistic?',
+      'How would you design the next twenty trials?',
+      'Which of the three results (edge, sample fraction, extension) moved most when the cutoff changed, and why?',
+    ],
+    extensions: [
+      'Run an experiment of your own in the Binary Planet Lab on the experiment runner, save it, and use it as the input.',
+      'Take the capsule to a local Jupyter (Run it yourself) and replace the logistic with a step.',
+    ],
+    modelNotes:
+      'The notebook assumes a logistic chance of being bound in the setting, fitted on a grid of center and width, and gives each synthetic planet that chance; the bootstrap resamples the trials, with a seed.',
+  },
+
+  'refitting-a-transit': {
+    topic:
+      'Fitting a transit model with a second optimizer, and reading what a covariance sigma, a profile interval and a held-fixed parameter each do and do not say about an uncertainty',
+    difficulty: 'Upper level (computational)',
+    placement:
+      'In a computational astrophysics or data analysis unit, after the Observatory fit panel or an introduction to least squares. It uses the compute page, so it needs a network connection and about 23 MB of download per student, once. It uses the TESS light curve of HD 209458 that the Observatory fits, so a student who has used the fit panel can compare the two directly.',
+    overview:
+      'Students run one reviewed notebook on the 1,882 points the fit panel uses. The notebook fits the same transit model with scipy.optimize.least_squares: period 3.52454 d, Rp/R* 0.11926 +/- 0.00164 (profile 0.11797 to 0.12043), a/R* 9.21, impact parameter 0.430 (profile 0.368 to 0.476), reduced chi-square 7.98. The minimum agrees with the panel to about 0.01 sigma. Holding the limb darkening at q1 0.36, q2 0.30 cuts the sigma of Rp/R* to 0.00050 and moves it to 0.11767, 3.2 of the new sigmas. The sigmas are scaled by the reduced chi-square and do not count the correlated noise the panel reports (red-noise factor 1.66).',
+    priorKnowledge: [
+      'Least squares and chi-square',
+      'What a covariance matrix of the fitted parameters is',
+      'The transit light curve and its parameters (the transit investigation)',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Same minimum, different route',
+        body: 'Two optimizers on one function find one minimum to a small fraction of an error bar. The disagreement students expect is not there; the differences are in the uncertainties.',
+      },
+      {
+        heading: 'A sigma is a parabola',
+        body: 'The covariance is the curvature of chi-square at the minimum, so it is symmetric. The profile interval follows the valley, so it can be lopsided.',
+      },
+      {
+        heading: 'Fixed is not known',
+        body: 'Holding the limb darkening narrowed Rp/R* to a third and moved it by three of the new sigmas: the uncertainty left the table without leaving the problem.',
+      },
+    ],
+    features: [
+      {
+        name: 'The compute page (/compute/)',
+        text: 'The notebook "Refit a transit with SciPy", in Pyodide 314.0.7 inside a sandboxed frame, with SciPy or Astropy fetched from the pinned runtime. The first run downloads about 23 MB, once. The run is kept as a compute capsule that a report can cite.',
+      },
+      {
+        name: 'The Observatory fit panel',
+        text: 'The comparison the investigation draws. The notebook does not call the application; its transit model was written again in NumPy and checked against the application to the last digit of a double.',
+      },
+      {
+        name: 'The answer key',
+        text: 'Every number a step checks is a declared output of the notebook, and a test holds each one to a run of the notebook under CPython and to an independent computation, so a different digit means a different setting or input file.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Two correct fits of one model must give different numbers.',
+        response:
+          'They give the same minimum. What differs is how each reports its uncertainty.',
+      },
+      {
+        claim: 'The profile interval and the sigma should be identical.',
+        response:
+          'They agree where chi-square is a parabola. The impact parameter lies in a curved valley with a/R* and the limb darkening, so its profile is 0.062 below and 0.046 above its best value.',
+      },
+      {
+        claim: 'A smaller error bar means a better measurement.',
+        response:
+          'Fixing the limb darkening gave a bar a third the size and an answer three of those bars away. The bar was smaller because less was free.',
+      },
+      {
+        claim: 'A reduced chi-square of 8 means the fit failed.',
+        response:
+          'The minimum is the best this model can do and agrees with the panel. It means the scatter is 2.8 times the error bars, which the scaling accounts for, and correlated, which it does not.',
+      },
+    ],
+    teachingNotes: [
+      'The fit is deterministic: every student should get the digits in the answer key, to the tolerances the steps allow.',
+      'The notebook downloads about 23 MB because it brings SciPy. A run takes a few seconds once the runtime has loaded.',
+      'Students who ask why the sigma is scaled by the reduced chi-square can be pointed to the last step: it is a repair for white noise only.',
+      'Capsule files open again without the runtime.',
+    ],
+    discussion: [
+      'What would you report as the uncertainty of Rp/R* if you had only the covariance sigma? Only the profile?',
+      'Which choices in the fit did the data not make for you?',
+      'How would you test whether the red noise matters here?',
+    ],
+    extensions: [
+      'Open the capsule in a local Jupyter (Run it yourself) and fit with a different optimizer, such as Nelder-Mead, and compare the minimum.',
+      'Add a red-noise term to the covariance and see how much the sigma of Rp/R* grows.',
+    ],
+    modelNotes:
+      'The model is a circular-orbit transit with quadratic limb darkening in the Kipping q1, q2 parameterization, exposure-integrated over five sub-exposures, with a flux baseline profiled out. The sigmas are scaled by the square root of the reduced chi-square.',
+  },
+
+  'two-periodograms': {
+    topic:
+      'Two periodograms of one light curve, why a Lomb-Scargle peak of a transit sits at a harmonic, and why a periodogram period has no error bar',
+    difficulty: 'Upper level (computational)',
+    placement:
+      "In a time-domain or exoplanet unit, after the transit investigation. It uses the compute page, so it needs a network connection and about 17 MB of download per student, once. It runs on the TESS light curve of HD 209458 that the Observatory's box search reads.",
+    overview:
+      "Students run one reviewed notebook that computes a Lomb-Scargle and a box least squares periodogram with Astropy. The Lomb-Scargle best period is 1.7689 d, and the box search finds 3.52396 d, 2.5 h long, 14,582 ppm deep, at S/N 191. The ratio is 0.502. The Lomb-Scargle powers at 3.5, 1.76, 1.17 and 0.88 d are 0.056, 0.073, 0.071 and 0.071: a narrow dip has power at every harmonic. The fit panel's period is 3.52454 +/- 0.00003 d, 19 of its sigmas from the box period, so the grid step of the periodogram is no uncertainty.",
+    priorKnowledge: [
+      'What a periodogram is, in outline',
+      'The transit light curve (the transit investigation)',
+      'Sine waves and harmonics',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The tallest peak is not the period',
+        body: 'A repeating narrow dip is a sum of harmonics, so Lomb-Scargle can peak at P/2, P/3 or P/4 and not at P itself.',
+      },
+      {
+        heading: 'A period is a grid point',
+        body: 'A box least squares period is the best point of a grid; its step says how fine the grid is, not how well the data fix the period.',
+      },
+      {
+        heading: 'A model gives an error bar',
+        body: 'To say how well the period is known, fit a transit model, as the Observatory panel does.',
+      },
+    ],
+    features: [
+      {
+        name: 'The compute page (/compute/)',
+        text: 'The notebook "Two periodograms of one light curve", in Pyodide 314.0.7 inside a sandboxed frame, with SciPy or Astropy fetched from the pinned runtime. The first run downloads about 17 MB, once. The run is kept as a compute capsule that a report can cite.',
+      },
+      {
+        name: 'Astropy',
+        text: 'astropy.timeseries LombScargle and BoxLeastSquares. The false-alarm probability uses the naive estimate because the Baluev one needs SciPy, which this notebook does not load.',
+      },
+      {
+        name: 'The answer key',
+        text: 'Every number a step checks is a declared output of the notebook, and a test holds each one to a run of the notebook under CPython and to an independent computation, so a different digit means a different setting or input file.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The tallest Lomb-Scargle peak is the period.',
+        response:
+          'For a transit it is often a harmonic. Here it is the second.',
+      },
+      {
+        claim:
+          'A box least squares period has an uncertainty equal to its grid step.',
+        response:
+          'The step is a property of the grid. The box period is 19 fit sigmas from the fitted period.',
+      },
+      {
+        claim:
+          'A tall peak, or a tiny false-alarm probability, means the period is right.',
+        response:
+          'A tall peak means a periodic signal, not which period: here the tallest is the second harmonic, and the false-alarm probability says nothing about which harmonic.',
+      },
+      {
+        claim: 'Lomb-Scargle has a bug that halves periods.',
+        response:
+          'It fits sine waves; a dip is not one, so the peak sits where a sine matches best.',
+      },
+    ],
+    teachingNotes: [
+      'The runs are deterministic: every student gets the digits in the answer key.',
+      'A run takes a few seconds once the runtime has loaded.',
+      "Students who check the box period against the panel will see 3.524 and 3.5245: they agree to a thousandth of a day and not to the fit's error bar, which is the point of the last question.",
+      'Capsule files open again without the runtime.',
+    ],
+    discussion: [
+      'Which would you use for a spotted star, and which for a transit? Why?',
+      'How would you decide between the period and its first harmonic if you did not know the planet transits?',
+      'What would make the box period closer to the fitted one?',
+    ],
+    extensions: [
+      'Open the capsule in a local Jupyter (Run it yourself) and vary the durations the box search tries.',
+      'Compute a Lomb-Scargle periodogram with more terms and see whether the harmonics collapse.',
+    ],
+    modelNotes:
+      'The Lomb-Scargle periodogram is the floating-mean, error-weighted one on a frequency grid; the box search tries durations to the maximum the student sets and reports a depth with a signal-to-noise ratio scaled by the scatter of the points.',
+  },
+
+  'sampling-a-posterior': {
+    topic:
+      'An ensemble sampler for a transit posterior, its convergence diagnostics, its agreement with a profile interval, and a refusal to report an unconverged chain',
+    difficulty: 'Upper level (computational)',
+    placement:
+      'In a computational statistics or astrophysics unit, after least squares fitting and an introduction to the posterior. It uses the compute page, so it needs a network connection and about 9 MB of download per student, once; a run takes about a minute. It uses the TESS light curve of HD 209458.',
+    overview:
+      'Students run one reviewed notebook: an affine-invariant ensemble sampler written in NumPy (four independent ensembles of eight walkers, 8,000 steps) on Rp/R* and the impact parameter, with the epoch, period, a/R* and limb darkening held fixed. Rp/R* is 0.11926 with a 68 percent interval 0.11913 to 0.11939; b is 0.4301, 0.4275 to 0.4327. The widths match the profile intervals to 2 percent and the draws agree with a grid of the exact posterior to 0.02 standard deviations. R-hat is under 1.03, there are 1,500 to 3,500 effective samples, and the acceptance is 0.72. With 1,000 steps the notebook refuses and reports no interval.',
+    priorKnowledge: [
+      'Least squares fitting and the covariance',
+      'What a posterior and a prior are, in outline',
+      'Why an interval is conditional on what is held fixed',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Convergence before an interval',
+        body: 'R-hat, the effective sample size and the chain length in autocorrelation times decide whether a chain may be quoted.',
+      },
+      {
+        heading: 'Posterior and profile can agree',
+        body: 'They do here because the problem is nearly Gaussian in two parameters; they would not for a lopsided or bounded posterior.',
+      },
+      {
+        heading: 'Narrow is not known',
+        body: "Holding four parameters fixed makes Rp/R* twelve times narrower than the fit panel's sigma without making them known.",
+      },
+    ],
+    features: [
+      {
+        name: 'The compute page (/compute/)',
+        text: 'The notebook "Sampling a transit\'s posterior", in Pyodide 314.0.7 inside a sandboxed frame, with SciPy or Astropy fetched from the pinned runtime. The first run downloads about 9 MB, once. The run is kept as a compute capsule that a report can cite.',
+      },
+      {
+        name: 'The sampler',
+        text: "Written in NumPy alone and held to Prompt 103's analytic cases (a correlated Gaussian, a banana, a conjugate line fit) by tests/computeSampler.test.js, with the refusal rules that gate fixed. There is no sampler in the application: sampling lives on the compute page.",
+      },
+      {
+        name: 'The answer key',
+        text: 'Every number a step checks is a declared output of the notebook, and a test holds each one to a run of the notebook under CPython and to an independent computation, so a different digit means a different setting or input file.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'More steps always narrow the interval.',
+        response:
+          'Steps lengthen the chain; the width belongs to the posterior. A short chain is unconverged, not narrower.',
+      },
+      {
+        claim: 'Agreement with a profile interval proves the sampler is right.',
+        response:
+          'It shows the problem is nearly Gaussian. The sampler is checked against a grid and against problems with exact answers.',
+      },
+      {
+        claim: 'A sampler is more precise than a fit.',
+        response:
+          'It explores a distribution; the width comes from the likelihood, the prior and what is free.',
+      },
+      {
+        claim: 'A refusal is a failure.',
+        response:
+          'It is the notebook working: an interval from an unconverged chain is a number with nothing behind it.',
+      },
+    ],
+    teachingNotes: [
+      'The sampler is seeded, but the digits of a run differ a little between Python builds, so the steps accept a range.',
+      'The 8,000-step run takes about a minute on the pinned runtime; a 1,000-step run takes about fifteen seconds.',
+      'A student who sets steps to 1000 sees the notebook stop with an error that names the failed limit. That is the intended outcome.',
+      'Capsule files open again without the runtime.',
+    ],
+    discussion: [
+      'Which of the three diagnostics would you trust least on its own?',
+      'What would you change in the model to make the posterior lopsided?',
+      'Why does the fit panel report a wider interval for the same parameter?',
+    ],
+    extensions: [
+      'Open the capsule in a local Jupyter (Run it yourself) and free the limb darkening in the sampler.',
+      'Run the notebook with a few thousand steps and see which diagnostic refuses first.',
+    ],
+    modelNotes:
+      'The posterior is the product of the transit likelihood (chi-square scaled by the reduced chi-square) and a uniform prior on Rp/R* and the impact parameter, with the epoch, period, a/R* and the Kipping q1, q2 fixed. The ensemble sampler is the stretch move of Goodman and Weare in the parallel half-step form.',
+  },
+
+  'integrators-in-practice': {
+    topic:
+      'Numerical integrators compared by energy drift on a real three-body system, in Python, and why a symplectic method’s last number is not a property',
+    difficulty: 'Upper level (computational)',
+    placement:
+      'In a computational astrophysics or celestial mechanics unit, after Bound, Unbound and Escape. It uses the compute page, so it needs a network connection and about 19 MB of download per student, once; the instructor guide of the compute page (COMPUTE.md) says what is and is not pinned. A student who prefers a local Jupyter can take the run from the capsule (Run it yourself).',
+    overview:
+      'Students run one reviewed notebook on the Orbital System Builder’s Kepler-16 file and read the energy drift of four integrators over three periods of the widest orbit at 500 steps per period of the tightest pair: explicit Euler +49.75 percent, symplectic Euler -0.002317, velocity Verlet +0.001768 and Runge-Kutta 4 -6.47e-8. At 1000 steps Verlet improves 4.0 times and Runge-Kutta 4 26.5 times. At 438 steps, the application’s own step of 0.0278, velocity Verlet and Runge-Kutta 4 agree with Gravitas’s engine to 0.2 and 0.4 percent (+0.002304 against +0.002299, -1.222e-7 against -1.217e-7), and symplectic Euler’s end-of-run drift (-0.000165 against -0.002188) shows why a bounded oscillation is not quoted from its last point.',
+    priorKnowledge: [
+      'Energy and angular momentum of a bound orbit (Bound, Unbound and Escape)',
+      'Newton’s law of gravitation and what a time step is',
+      'Reading a log scale',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Order and structure are different things',
+        body: 'Explicit Euler is first order and has no protective structure, so its error grows; symplectic Euler is also first order but keeps a nearby energy exactly, so its error is bounded.',
+      },
+      {
+        heading: 'Halving the step',
+        body: 'A method of order p improves about 2 to the p when the step is halved: 4 for velocity Verlet here. Runge-Kutta 4 improved 26.5, more than 16, because at 500 steps it is not yet purely fourth order.',
+      },
+      {
+        heading: 'A drift is a curve',
+        body: 'A single end-of-run value catches an oscillating drift at an arbitrary phase; the notebook’s table has the curve.',
+      },
+    ],
+    features: [
+      {
+        name: 'The compute page (/compute/)',
+        text: 'The notebook "Four integrators on one system", on the Orbital System Builder’s Kepler-16 file, in Pyodide 314.0.7 inside a sandboxed frame. The run is kept as a compute capsule that a report can cite.',
+      },
+      {
+        name: 'The Orbital System Builder',
+        text: 'The Kepler-16 template, saved with its initial state, is the input. Students who want their own system can save one and choose it as the input file.',
+      },
+      {
+        name: 'The answer key',
+        text: 'Every number a step checks is a declared output of the notebook, and a test holds each one to the notebook’s own run and the 438-step runs to the application’s engine.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A higher-order method always conserves energy better.',
+        response:
+          'Runge-Kutta 4 is the best here, but its drift grows, slowly; symplectic Euler is only first order and its error is bounded. Over a long enough run the symplectic scheme wins.',
+      },
+      {
+        claim: 'Two correct runs must give the same drift.',
+        response:
+          'Symplectic Euler gave -0.00016 percent at 438 steps and -0.0023 at 500: the drift oscillates and the last point lands at a different phase.',
+      },
+      {
+        claim: 'Small energy drift means an accurate orbit.',
+        response:
+          'It does not: a method can keep the energy and put a body in the wrong place along its orbit.',
+      },
+      {
+        claim: 'Explicit Euler is only a little worse than the others.',
+        response:
+          'Here it gains half the starting energy in three orbits of the widest star, +49.75 percent, against a few thousandths of a percent for the other three.',
+      },
+    ],
+    teachingNotes: [
+      'The runs are deterministic. Every student should get the digits in the answer key; a different number means a different setting or a different input file.',
+      'The cold download is about 19 MB because the notebook plots. If connections are poor, run the notebook once on the instructor’s machine and have students open the capsule file, which needs no runtime.',
+      'The engine comparison was checked headlessly at the Builder’s own step (tests/computeCurriculum.test.js): symplectic Euler -0.0023168 percent and velocity Verlet +0.0017676 at the notebook’s step, to seven digits.',
+      'Explicit Euler is not in the application; the notebook adds it as the method everyone writes first.',
+    ],
+    discussion: [
+      'Why would a planetary-system code that must run for a billion years choose a first-order symplectic method over Runge-Kutta 4?',
+      'What would you report as the drift of a symplectic run, and why not its last value?',
+      'What would a close encounter do to each of these four?',
+    ],
+    extensions: [
+      'Save a different system from the Orbital System Builder and run the same notebook on it, then say which method’s ranking changed.',
+      'Take the capsule to a local Jupyter (Run it yourself) and change the integrator to a leapfrog of your own.',
+    ],
+    modelNotes:
+      'The notebook integrates Newtonian point masses at the file’s G with no softening, merging or relativity, which the application can enable; the energy is the application’s own (kinetic plus the pairwise potential).',
+  },
+
+  'the-turning-sky': {
+    topic:
+      'Horizon and equatorial coordinates, sidereal time and why stars rise about four minutes earlier each night',
+    difficulty: 'Introductory',
+    placement:
+      'First of the sky sequence, after any course introduction to the celestial sphere. It needs nothing earlier and the next three investigations reuse its instrument.',
+    overview:
+      'Students follow one star through a night and through a month on a computed sky. They predict, then measure, that a star rises about four minutes earlier each night, read a sidereal clock to see the same four minutes from the other side, and work out how high a star climbs and which stars never set. The aim is the difference between a star’s fixed equatorial coordinates and its changing horizon coordinates, and the sidereal day.',
+    priorKnowledge: [
+      'Altitude and azimuth as angles on the sky',
+      'That the Earth turns once a day and orbits the Sun once a year',
+      'Reading a time of day as hours and minutes',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Two coordinate systems',
+        body: 'Horizon coordinates change with time and place; equatorial coordinates are fixed on the sky, so a star keeps its right ascension and declination from night to night.',
+      },
+      {
+        heading: 'The sidereal day',
+        body: 'The Earth turns once against the stars in about 23 h 56 min, four minutes less than the solar day, so every star rises about four minutes earlier each night.',
+      },
+      {
+        heading: 'Sidereal time',
+        body: 'Local sidereal time is the right ascension on the meridian; at midnight it advances about two hours in thirty nights.',
+      },
+      {
+        heading: 'Meridian altitude and circumpolar stars',
+        body: 'A star crosses the meridian at 90° minus latitude plus declination, and never sets when its declination exceeds 90° minus the latitude.',
+      },
+    ],
+    features: [
+      {
+        name: 'Turning-sky instrument (sky-turning)',
+        text: 'Latitude, night and star controls; the star’s altitude through the day, its rising, meridian and setting times, and the sidereal time at midnight, all listed beneath the canvas.',
+      },
+      {
+        name: 'Held prediction and measurement',
+        text: 'Students commit to tomorrow’s rising time and keep the evidence in their notebook fields, with a computed shift per night.',
+      },
+      {
+        name: 'The Sky Lab kernel',
+        text: 'The same pure kernel the Sky Lab page (/sky/) uses; a reading here can be reproduced there with the rise, transit and set tool.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The stars move about from night to night.',
+        response:
+          'Step 3 and step 5. The shift is identical for every star and comes from the clock following the Sun, not from the stars.',
+      },
+      {
+        claim: 'The Earth’s rotation is not steady, so the times drift.',
+        response:
+          'The rotation is steady; the sidereal day is a fixed length, four minutes shorter than the solar day.',
+      },
+      {
+        claim: 'Circumpolar stars are only near the pole.',
+        response:
+          'Step 8. A star is circumpolar when its declination exceeds 90° minus the latitude, which depends on where you stand.',
+      },
+      {
+        claim: 'Horizon coordinates are properties of the star.',
+        response:
+          'Step 1. Altitude and azimuth change through the night and differ between observers; right ascension and declination do not.',
+      },
+    ],
+    teachingNotes: [
+      'Have students set night 0 and night 30 and say aloud what the clock did and what the stars did; the two statements are the point.',
+      'A night starts at noon so that a rising time never wraps through midnight. This is a modeling choice; tell students so.',
+      'The validator messages are in English only in this release; the step text, prompts, hints and answers are translated.',
+      'The instrument fixes the site on the Greenwich meridian so that local time is UT; the four-minute shift is the same at any longitude.',
+    ],
+    discussion: [
+      'Why is a constellation overhead at 9 pm in December not overhead at 9 pm in June?',
+      'What would the shift be on a planet whose year lasted 100 days?',
+      'Why does the rising time of the Sun not shift by four minutes a day?',
+    ],
+    extensions: [
+      'Open the Sky Lab at /sky/ and reproduce a rising time with the rise, transit and set tool.',
+      'Follow Vega at latitude 60 and at latitude 20 and compare how long it is above the horizon.',
+    ],
+    modelNotes:
+      'The rising times use each star’s catalog position and neglect proper motion and annual aberration (under 0.1 degree here; the Sky Lab’s accurate chain includes them). The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+  'the-sun-through-the-year': {
+    topic:
+      'The ecliptic and obliquity, the Sun’s noon altitude and the length of the day through the year, and why the seasons are not about distance',
+    difficulty: 'Introductory',
+    placement:
+      'Second in the sky sequence, after The Turning Sky. It stands alone for a course that starts with seasons.',
+    overview:
+      'Students measure the Sun’s noon altitude at the equinoxes and solstices at 40 degrees north, the length of the day at three latitudes, and change the tilt of the axis to see the seasons disappear. They meet the distance trap: the Earth is farther from the Sun in June. Quantitative depth computes the daily sunlight on a square meter from the radiation kernel’s solar constant and the effect of the distance in percent; advanced compares a high latitude with the equator.',
+    priorKnowledge: [
+      'Latitude and the celestial equator',
+      'The idea of an orbit and a year',
+      'Reading a value from a plotted curve',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The ecliptic and the obliquity',
+        body: 'The Sun’s yearly path is a great circle tilted 23.4° from the celestial equator; that tilt is the obliquity and sets how far north and south the Sun gets.',
+      },
+      {
+        heading: 'Noon altitude',
+        body: 'At noon the Sun’s altitude is 90° minus the latitude plus its declination, so it swings through twice the obliquity over the year.',
+      },
+      {
+        heading: 'Day length',
+        body: 'The length of the day depends on declination and latitude together: near 12 hours at the equator all year and 22 hours at 65° north in June.',
+      },
+      {
+        heading: 'Seasons are not distance',
+        body: 'The Earth is farther from the Sun in June than in December; the tilt, through the Sun’s height and the day’s length, makes the seasons.',
+      },
+    ],
+    features: [
+      {
+        name: 'Seasons instrument (sky-seasons)',
+        text: 'Latitude, date and tilt controls; the noon altitude and the day length plotted through the year, with the readings, distance and daily sunlight listed beneath.',
+      },
+      {
+        name: 'A tilt control',
+        text: 'Students change the obliquity as a what-if to see the seasons shrink to nothing with no tilt.',
+      },
+      {
+        name: 'Radiation-kernel sunlight',
+        text: 'Quantitative depth uses the solar constant from the radiation kernel to compute the daily sunlight on a square meter.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'It is warmer in summer because the Earth is closer to the Sun.',
+        response:
+          'Step 6. The readout shows the Sun farther away in June, and the southern hemisphere has winter then.',
+      },
+      {
+        claim: 'The seasons are the same everywhere.',
+        response:
+          'Step 5. The day’s length differs strongly with latitude, from about 12 hours at the equator to more than 22 at 65° north.',
+      },
+      {
+        claim: 'The Sun is overhead at noon everywhere in summer.',
+        response:
+          'Steps 3 and 4. The noon altitude is 90° minus the latitude plus the declination; it reaches 90° only in the tropics.',
+      },
+      {
+        claim: 'A larger tilt would make no difference to the year.',
+        response:
+          'Step 4. With a smaller tilt the noon altitude range shrinks; with none the Sun never leaves the equator and there are no seasons.',
+      },
+    ],
+    teachingNotes: [
+      'The No tilt and Real tilt presets are the experiment; let students step through the year with each and say what changed.',
+      'Noon altitude is geometric, with no refraction, so a student who reads a printed almanac will differ by a fraction of a degree.',
+      'The tilt slider replaces the obliquity in the Sun’s declination only; the Earth’s distance and orbit are unchanged. Say so if asked.',
+      'At latitude 65 the June day is about 22 hours; the validator accepts a fifth of an hour either way.',
+    ],
+    discussion: [
+      'What would the seasons be on a planet with a tilt of 80 degrees?',
+      'Why does the equator have almost no change in day length through the year?',
+      'If the distance does not matter much, why is the southern summer slightly more intense?',
+    ],
+    extensions: [
+      'Compare the sunlight at 65 degrees north and at the equator over the year with the sunlight row.',
+      'Use the Sky Lab’s rise, transit and set tool to check a day length.',
+    ],
+    modelNotes:
+      'The Sun is the kernel’s apparent Sun (Meeus, with nutation and aberration). The tilt control replaces the obliquity in the Sun’s declination, a what-if. Day length uses a horizon of minus 0.83 degrees (refraction and the Sun’s radius) and the sunlight uses the geometric horizon. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+  'phases-and-eclipses': {
+    topic:
+      'Moon phases from elongation, the tilted lunar orbit and eclipse seasons',
+    difficulty: 'Introductory',
+    placement:
+      'Third in the sky sequence, after The Sun Through the Year, or on its own in a unit on the Moon.',
+    overview:
+      'Students measure the lit fraction of the Moon at four days after new Moon and turn the angle between Moon and Sun into a fraction with (1 - cos E)/2. They predict how often eclipses happen, tabulate the new and full Moons of two half years of 2025 against the Moon’s ecliptic latitude, and find the four that can make an eclipse. The model is the kernel’s positions of the Sun and Moon; the 3-D lab’s system is not used. Quantitative depth derives the eclipse year; advanced the saros.',
+    priorKnowledge: [
+      'Phases of the Moon as a matter of viewing angle',
+      'The idea of a plane of the orbit',
+      'Taking the cosine of an angle on a calculator',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Elongation sets the phase',
+        body: 'The Moon is always half lit; how much of that half is seen depends on its angle from the Sun, with lit fraction (1 − cos E)/2.',
+      },
+      {
+        heading: 'The tilted orbit',
+        body: 'The Moon’s orbit is tilted about 5 degrees from the ecliptic, so most new and full Moons pass above or below the Sun and the Earth’s shadow.',
+      },
+      {
+        heading: 'Nodes and eclipse seasons',
+        body: 'An eclipse needs a new or full Moon near one of the two nodes; the Sun passes each about every half year, so eclipses come in seasons.',
+      },
+      {
+        heading: 'Pairs of eclipses',
+        body: 'A solar and a lunar eclipse come about two weeks apart in a season, as in March and September 2025.',
+      },
+    ],
+    features: [
+      {
+        name: 'Phase instrument (sky-phases)',
+        text: 'A top view of the Sun, Earth and Moon beside the Moon’s disc as seen from Earth, with the elongation, phase angle and lit fraction listed.',
+      },
+      {
+        name: 'Eclipse list (sky-eclipses)',
+        text: 'Every new and full Moon of a half year with the Moon’s ecliptic latitude, flagged when within 1.5 degrees; the plot shows the latitude through the half year.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative derives the eclipse year from the regression of the nodes; advanced shows the saros as a coincidence of two kinds of month.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The phases come from the Earth’s shadow.',
+        response:
+          'Step 1 and step 3. The shadow causes eclipses only; phases are the changing view of the lit half.',
+      },
+      {
+        claim: 'A quarter Moon is a quarter lit.',
+        response:
+          'Step 2. “Quarter” counts how far round its orbit the Moon is; half the disc is lit.',
+      },
+      {
+        claim: 'There should be an eclipse every month.',
+        response:
+          'Steps 5 to 8. The Moon’s tilted orbit usually carries it above or below the line to the Sun.',
+      },
+      {
+        claim: 'Solar and lunar eclipses are unrelated events.',
+        response:
+          'Step 6. They come in pairs, two weeks apart, because the same node crossing allows both.',
+      },
+    ],
+    teachingNotes: [
+      'The 1.5-degree limit is a rough rule for the investigation; it flags the four 2025 eclipses (14 and 29 March, 7 and 21 September) and not the near misses in February and August.',
+      'The list says whether an eclipse is possible, not where it can be seen; do not let students quote it as a forecast.',
+      'The Moon’s disc is drawn for the northern hemisphere; a southern student sees it turned over.',
+      'The model is the kernel’s positions of the Sun and Moon; the 3-D lab’s Earth, Moon and Sun system is not used.',
+    ],
+    discussion: [
+      'Why are a solar and a lunar eclipse paired two weeks apart?',
+      'Why is a total solar eclipse seen from a narrow track while a lunar eclipse is seen from a whole hemisphere?',
+      'Which would change more if the Moon’s orbit were tilted 10 degrees instead of 5: the number of eclipses or their timing?',
+    ],
+    extensions: [
+      'Switch to the 2026 preset and find the February and March eclipses.',
+      'Look up the saros series of the 2025 eclipses.',
+    ],
+    modelNotes:
+      'Phases use the geometric phase angle from the kernel; the lit-fraction formula ignores the Moon’s finite distance, a difference of about 0.2 percent. The eclipse limit is a rough rule of 1.5 degrees of ecliptic latitude, and the list is of geocentric new and full Moons. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+  'wanderers-on-the-sky': {
+    topic:
+      'Planetary configurations, elongations and retrograde loops, seen on the sky and from above the orbits',
+    difficulty: 'Introductory',
+    placement:
+      'Fourth in the sky sequence, and a natural partner for Why Mars Goes Backwards, which shows the same event in the orbit view. It does not require it.',
+    overview:
+      'Students find the start and end of Mars’s retrograde loop from December 2024 to February 2025, read its elongation at its fastest westward motion, and see the same date from above the orbits. They measure the greatest elongation of Venus, compute the circular-orbit limit, and time Jupiter’s loop. The central idea is relative motion: no planet reverses its orbit.',
+    priorKnowledge: [
+      'That the planets orbit the Sun in the same direction',
+      'Elongation as the angle from the Sun on the sky',
+      'Reading a date and a day number off a slider',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Retrograde is overtaking',
+        body: 'A planet’s orbital motion never reverses; Earth overtakes a slower outer planet and the line of sight swings backward against the stars for a while.',
+      },
+      {
+        heading: 'Loops are centered on opposition',
+        body: 'An outer planet moves westward fastest at opposition, when it is opposite the Sun, and the loop repeats every synodic period.',
+      },
+      {
+        heading: 'Inner planets have a limit',
+        body: 'Venus and Mercury never stray far from the Sun: the greatest elongation is the inverse sine of the orbit radius for circular orbits.',
+      },
+      {
+        heading: 'The synodic period',
+        body: 'The time between repeats is set by the two orbital periods: 1/S = 1/P Earth − 1/P Mars, about 780 days for Mars.',
+      },
+    ],
+    features: [
+      {
+        name: 'Wanderers instrument (sky-wanderers)',
+        text: 'A planet and date control, the planet’s path across the sky for 120 days either side, and the orbits seen from above with the line of sight.',
+      },
+      {
+        name: 'Companion investigation',
+        text: 'Why Mars Goes Backwards shows the same event in the orbit view by switching the reference frame; this one measures it from the sky.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative computes the synodic period; advanced estimates the westward rate at opposition from circular orbits and compares the instrument’s.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Mars goes backward in its orbit.',
+        response:
+          'Steps 5 and 11. The orbit panel shows Mars always moving the same way; only the line of sight swings back.',
+      },
+      {
+        claim: 'Retrograde happens at a fixed date each year.',
+        response:
+          'Step 8 and the synodic period. The loops come about every 26 months for Mars and 13 for Jupiter.',
+      },
+      {
+        claim: 'Venus can be seen at midnight.',
+        response:
+          'Step 6. Its elongation never exceeds about 47 degrees, so it sets within a few hours of the Sun.',
+      },
+      {
+        claim: 'A planet stops because it slows down.',
+        response:
+          'Step 3. The station is where the line of sight’s motion changes sign; the planet’s speed hardly changes.',
+      },
+    ],
+    teachingNotes: [
+      'Ask students to step the slider day by day near each station; the slider shows the day number and the date, and the row says retrograde or direct.',
+      'The planet model is good to about 0.2 degrees, so station dates may differ by a day from an almanac.',
+      'The Mars loop of 2024 to 2025 is a real event; students can compare it with a published ephemeris.',
+      'Run Why Mars Goes Backwards first or afterwards; either order works, and the two share no state.',
+    ],
+    discussion: [
+      'How would Ptolemy and Copernicus each have explained the loop?',
+      'Why can Mercury and Venus never be at opposition?',
+      'Why is Jupiter’s loop longer than Mars’s?',
+    ],
+    extensions: [
+      'Run Why Mars Goes Backwards and compare its frame switch with the right-hand panel.',
+      'Compare Saturn’s loop with Jupiter’s.',
+    ],
+    modelNotes:
+      'Planet positions are Standish’s Table 1 elements for 1800 to 2050, geometric without light time, accurate to about 0.2 degrees; the investigation uses 2024 to 2026. Rates are central differences over two days. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+  'plan-a-night': {
+    topic: 'Observing plans: astronomical dark, airmass and Moon constraints',
+    difficulty: 'Introductory',
+    placement:
+      'Fifth in the sky sequence, and a step before Design the Schedule and Twelve Nights in the exoplanet sequence, which take the target as given.',
+    overview:
+      'Students plan one night at latitude 30 degrees north among eight bright stars. They measure the hours of astronomical dark in winter and summer, compute an airmass, see that a full Moon in Leo removes Regulus entirely, count the targets worth the night under two airmass limits, and write a plan with reasons. Quantitative depth looks at the error of the flat-layer airmass; advanced explains why 60 degrees north has no astronomical dark in June.',
+    priorKnowledge: [
+      'Altitude and the idea of twilight',
+      'The Moon’s phases',
+      'Counting rows of a list against a threshold',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Astronomical dark',
+        body: 'Observing faint objects needs the Sun more than 18 degrees below the horizon; the length of that dark changes by hours across the year and vanishes at high latitude in summer.',
+      },
+      {
+        heading: 'Airmass',
+        body: 'Airmass is about 1/sin of the altitude; low stars are dimmer, redder and blurrier, so observers set a limit near 2.',
+      },
+      {
+        heading: 'The Moon',
+        body: 'A bright Moon near a target washes out the sky; in the instrument the full Moon of February removes Regulus for the whole night.',
+      },
+      {
+        heading: 'A plan is windows and reasons',
+        body: 'Each target has a usable window inside the dark, below the airmass limit and clear of the Moon; the plan orders them and says which constraint decides.',
+      },
+    ],
+    features: [
+      {
+        name: 'Planning instrument (sky-plan)',
+        text: 'Bars per star across the night with a Moon row, and a list of usable hours and best airmass for each of eight bright stars.',
+      },
+      {
+        name: 'Adjustable limits',
+        text: 'Students change the airmass limit and the least Moon distance and watch the windows move.',
+      },
+      {
+        name: 'Written plan',
+        text: 'The last question is a written plan graded by rubric; it is never marked right or wrong by the application.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The brightest star is always the best target.',
+        response:
+          'Step 5 and step 6. The Moon and the airmass decide the usable hours; Sirius loses time at a stricter limit.',
+      },
+      {
+        claim: 'Summer nights are best for observing.',
+        response:
+          'Steps 2 and 3. At middle latitudes the June dark is nearly four hours shorter than in January.',
+      },
+      {
+        claim: 'Airmass is just the altitude.',
+        response:
+          'Step 4. It grows steeply as a star gets low, which is why a limit of 2 corresponds to 30 degrees.',
+      },
+      {
+        claim: 'The Moon only matters at full phase.',
+        response:
+          'Step 5. The constraint applies while the Moon is up and near the target, so a crescent far away costs nothing and a gibbous nearby may cost a lot.',
+      },
+    ],
+    teachingNotes: [
+      'The three-hour threshold and the 30-degree Moon limit are the investigation’s choices, not rules; invite students to change them and say what they would do.',
+      'The eight stars are bright stars of the Sky Lab catalog; a star the Moon sits near is lost for the night.',
+      'Compare with Design the Schedule and Twelve Nights: there the target is given, here it is chosen.',
+      'The Moon constraint applies only while the Moon is above the horizon, which the bottom row shows.',
+    ],
+    discussion: [
+      'Which constraint would you relax first for a bright target, and which never?',
+      'How would the plan change at latitude minus 30?',
+      'What would you add to the list of constraints for a real proposal?',
+    ],
+    extensions: [
+      'Do the same plan on the Sky Lab page with the airmass and twilight calculator.',
+      'Take one chosen star into Design the Schedule.',
+    ],
+    modelNotes:
+      'Windows are sampled every quarter of an hour on the kernel’s positions with refraction; star proper motion is neglected. The Moon constraint applies only while the Moon is above the horizon. Refraction below 5 degrees carries no accuracy claim, so airmass limits below about 11 are safe. The instruments are computed from the Sky Lab kernel (SKY_LAB.md): accurate to a fraction of an arcminute for the Sun, Moon and stars between 1900 and 2100, to about 0.2 degrees for the planets, with refraction approximated below 5 degrees of altitude. Time is Universal Time on the Greenwich meridian, and UTC is used as UT1.',
+  },
+  'what-a-spectrum-is-made-of': {
+    topic:
+      'Kirchhoff’s three kinds of spectrum: why one gas makes dark lines, bright lines or none, depending on what is behind it',
+    difficulty: 'Introductory',
+    placement:
+      'After Lines and Motion, once students can name a star’s lines and know a blackbody’s smooth curve, and before any investigation that reads a star’s temperature or composition from its spectrum. It supports OpenStax Astronomy 2e section 5.3 (spectroscopy in astronomy).',
+    overview:
+      'Students predict what a cloud of thin hydrogen does to the light of a hotter source behind it, then measure it in a model that puts a blackbody, a cloud and a detector in one line. They find that the same gas makes dark lines when it is cooler than the source, bright lines when it is hotter and alone, and none at the same temperature, and say why: the cloud takes light out of the beam and also glows at its own temperature. They apply it to the Sun’s dark lines and to the flash spectrum at an eclipse. The quantitative depth adds the Planck ratio that sets how dark a thick line gets, the equivalent width and where it changes sign, and the Boltzmann factor as a stated model; the advanced depth sets that model against two real stars.',
+    priorKnowledge: [
+      'That a hot dense source makes a smooth blackbody continuum, and that a star’s spectrum has lines in it',
+      'That each kind of atom has its own wavelengths',
+      'Comparing two numbers as a ratio or a percentage',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Three kinds of spectrum',
+        body: 'A hot dense source makes a continuum. A hot thin gas seen alone makes bright emission lines. A cooler gas in front of a hotter source makes dark absorption lines. They are one piece of physics met in three arrangements, not three kinds of matter.',
+      },
+      {
+        heading: 'The cloud also glows',
+        body: 'The cloud removes light from the source and adds its own, at its own temperature. At a line’s center a thick cloud puts back only the brightness of a blackbody at the cloud’s temperature, so the line is dark when the cloud is cooler than the source, bright when hotter, and absent when equal.',
+      },
+      {
+        heading: 'Temperature, not the gas, sets the sign',
+        body: 'The wavelengths belong to the atoms; whether the lines are dark or bright belongs to the temperatures. The same hydrogen is shown absorbing, emitting and doing neither by moving one slider.',
+      },
+      {
+        heading: 'A model of excitation, and its limit',
+        body: 'The Boltzmann factor counts how many atoms are in the level that makes the Balmer lines. It rises steeply with temperature and is stated as a model: it leaves out ionization and saturation, which is why the real stars’ lines differ by a factor of 2, not thousands.',
+      },
+    ],
+    features: [
+      {
+        name: 'Kirchhoff demonstrator (the Light Lab)',
+        text: 'A blackbody source, a uniform cloud of hydrogen and a detector, with the source seen through the cloud, the cloud alone or the source alone; sliders for both temperatures and the amount of gas; a whole-spectrum view and a zoom on H-alpha; and a list under the plot of what the detector sees, the brightness at the line center, where a thick line ends, the equivalent width and the Boltzmann ratio.',
+      },
+      {
+        name: 'The measurement node',
+        text: 'The equivalent width is the same line measurement as the spectrum viewer and the Measurement pipeline (js/measure/spectrumLine.js), run on the model’s noise-free spectrum. A negative width is an emission line.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the Planck ratio of a thick line’s floor, the equivalent width, its sign change at equal temperatures and the Boltzmann ratio between 6,000 and 10,000 K. Advanced: the part of the width that depends only on the gas, and the Boltzmann model set against the A and G stars’ H-alpha widths.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim:
+          'A gas always absorbs, so a cloud in front of a source always makes dark lines.',
+        response:
+          'Steps 3 to 6. The cloud also glows. Hotter than the source it makes bright lines on the continuum, and at the same temperature it makes none.',
+      },
+      {
+        claim: 'The gas decides whether a spectrum has dark or bright lines.',
+        response:
+          'Step 4 and the eclipse flash. The same hydrogen makes both; the sign depends on the temperatures and on what is behind it.',
+      },
+      {
+        claim: 'A thicker cloud makes a line go to zero.',
+        response:
+          'The first quantitative step. A thick line goes to the cloud’s own blackbody brightness, not to zero, and it does so whichever way the cloud lies against the source.',
+      },
+      {
+        claim: 'More atoms in the right level always means a stronger line.',
+        response:
+          'The advanced steps. The Boltzmann factor alone predicts a ratio near 2,800 between an A and a G star; the stars give about 2.3, because ionization removes atoms and a thick line saturates.',
+      },
+    ],
+    teachingNotes: [
+      'The demonstrator is a model with no noise, so every student sees the same numbers. The core measurement accepts 19.9 percent within 1.5 and 251.6 percent within 8; anything below 100 percent is a dark line.',
+      'The lines are drawn with one width (5 Å, wider than a real gas’s thermal width, so that they can be seen) and equal strength for all three, so their depths in the whole-spectrum view are a teaching choice and not a prediction for any star.',
+      'The Boltzmann ratio uses 10.2 eV (Lyman-alpha’s energy to one digit) and statistical weights 2n²; it is introductory by design and stated as a model on screen. Ionization (the Saha equation) is not in it.',
+      'The effective temperatures of the A and G stars in the advanced steps (about 9,500 and 5,800 K) are typical for their spectral types, not fitted to those spectra.',
+    ],
+    discussion: [
+      'A student says the Sun’s dark lines mean the Sun is cold. What would you answer?',
+      'Why does it matter that the gas in the eclipse flash is the same gas that makes the Sun’s dark lines?',
+      'What would the spectrum of a hot cloud in front of a cooler source look like, and where might you find one?',
+    ],
+    extensions: [
+      'Lines and Motion measures a Doppler shift on the same lines.',
+      'Measure the H-alpha equivalent width of all four SDSS stars in the spectrum viewer and say how it changes with temperature.',
+    ],
+    modelNotes:
+      'A uniform slab with no scattering, by the equation of transfer I = B(T_s) e^(−τ) + B(T_c) (1 − e^(−τ)), with the Planck function from the Gravitas radiation kernel. The optical depth is zero between the lines and τ0 times a Gaussian of width 5 Å at H-alpha, H-beta and H-gamma (vacuum wavelengths from the line list), the same τ0 for all three. Real lines differ in strength and take their widths from temperature and pressure, and a real atmosphere is not one slab at one temperature. The spectrum is sampled every 0.5 Å without noise, and the equivalent width is the measurement node’s.',
+  },
+
+  'lines-and-motion': {
+    topic:
+      'Spectral lines and the Doppler shift: naming a star’s lines, and a velocity from a shift with its uncertainty',
+    difficulty: 'Introductory',
+    placement:
+      'After Color and Temperature, once students know a blackbody’s smooth curve, and before any investigation that uses a radial velocity (Radial Velocity, the exoplanet investigations). It supports OpenStax Astronomy 2e sections 5.3 (spectroscopy) and 5.4 (the Doppler effect).',
+    overview:
+      'Students read the deepest dips in two real SDSS spectra against the line list, predict what a motion along the line of sight does to a line, and measure the shift on synthetic spectra whose velocity the viewer does not show. They turn a shift into a speed with its sign and its uncertainty, and meet a star whose shift is smaller than its uncertainty and so cannot be called a motion. They end on why a spectrum gives only the motion toward or away from us. Quantitative depth adds the relativistic form, the weighted mean of two lines and the equivalent width; advanced depth measures a real star’s velocity from two of its own lines and compares it with the SDSS catalog value.',
+    priorKnowledge: [
+      'That a spectrum is light spread out by wavelength, and that a blackbody’s is smooth',
+      'Dividing one number by another, and the idea of a fraction of a wavelength',
+      'What “toward us” and “away from us” mean for a moving source, as with a siren',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Lines belong to atoms',
+        body: 'Each kind of atom absorbs at its own wavelengths, so the dark lines in a star’s spectrum name what is in its atmosphere. Which lines show depends on temperature: hydrogen is deepest in the A star and calcium in the G star.',
+      },
+      {
+        heading: 'A motion moves every line by the same fraction',
+        body: 'The shift Δλ ÷ λ is v ÷ c for speeds far below the speed of light, to longer wavelengths when the source recedes and shorter when it approaches. Students measure it on synthetic stars before they are given the formula.',
+      },
+      {
+        heading: 'A result needs its uncertainty',
+        body: 'The viewer prints each velocity with a ± . Synthetic star 3 is noisy on purpose: its shift is smaller than its uncertainty, so the data cannot say whether it moves. A small number is not a zero.',
+      },
+      {
+        heading: 'Only the line of sight',
+        body: 'A line moves for the part of the motion along the line of sight. A sideways motion leaves no first-order mark, so a spectrum cannot give a star’s speed across the sky.',
+      },
+    ],
+    features: [
+      {
+        name: 'Spectrum viewer (the Light Lab)',
+        text: 'Four observed SDSS DR18 spectra (one each of A, G, K and M) and three synthetic ones, a line list laid over the spectrum, a zoom on one line with the continuum fit and its windows shaded, and a list under the plot of the measured center, shift, velocity, equivalent width and depth, each with its uncertainty. The list is the viewer’s text equivalent: every number on the canvas is in it.',
+      },
+      {
+        name: 'The measurement node',
+        text: 'The viewer runs the same line measurement the Measurement pipeline offers (js/measure/spectrumLine.js): a straight-line continuum from two windows, an equivalent width, a depth-weighted center and a velocity. Its uncertainties assume white noise as large as the continuum’s scatter; for the real SDSS spectra, which are not white, they are only an indication.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the relativistic Doppler formula, the weighted mean of two lines and the equivalent width. Advanced: the velocity of a real star from H-alpha and H-beta, its comparison with the SDSS catalog z, and why the spectra are heliocentric.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A star that is moving fast has lines that disappear or split.',
+        response:
+          'Step 4. The lines keep their shape and move together, each by the same fraction of its wavelength. Splitting is a different effect (two stars, or a magnetic field).',
+      },
+      {
+        claim: 'A small measured shift means the star is at rest.',
+        response:
+          'Step 8. The uncertainty is larger than the shift, so rest is as consistent with the data as the number shown. A measurement is a value and how well it is known.',
+      },
+      {
+        claim: 'A spectrum gives a star’s whole velocity.',
+        response:
+          'Step 9. Only the part along the line of sight shifts the lines; the motion across the sky leaves a second-order effect near one part in 10⁸.',
+      },
+      {
+        claim: 'A redshift always means moving away at v = c z.',
+        response:
+          'The first quantitative step. The simple form holds far below the speed of light; at z = 0.1 it is 5 percent off, and at that size most of a galaxy’s shift is the stretching of space.',
+      },
+    ],
+    teachingNotes: [
+      'The synthetic spectra are models with a fixed noise realisation, so every student sees the same numbers. The truth (+85, −142 and +12 km/s) is in the answer key and the validator accepts within 12 km/s of it for stars 1 and 2.',
+      'The real SDSS spectra are not white-noise and have blended lines: the A star’s H-alpha and H-beta agree within about two of their uncertainties, and the G star’s H-beta is blended and measures poorly. The viewer reports what it measures; do not grade a student on a real line the node cannot fit.',
+      'The SDSS spectra are thinned to about 4.5 Å per pixel at H-alpha, so a 100 km/s shift (2 Å) is under half a pixel. That is why the shift is measured on the synthetic spectra, which are sampled every 0.5 Å.',
+      'The SDSS catalog z used in the advanced steps is the pipeline’s template fit over the whole spectrum. The comparison instrument that overlays a measurement on a catalog does not exist yet, so the investigation compares by number.',
+    ],
+    discussion: [
+      'Two stars show the same shift. What would you need to know to say they move at the same speed?',
+      'Why does a longer exposure make a velocity more certain, and what does it cost the observer?',
+      'What could you learn from a spectrum that a color index (the last investigation) cannot give?',
+    ],
+    extensions: [
+      'Radial Velocity uses the same shift, measured over weeks, to find a planet.',
+      'Measure the equivalent width of H-beta in each of the four SDSS stars and say how it changes with temperature.',
+    ],
+    modelNotes:
+      'The synthetic spectra are a 5,800 K Planck continuum with four Gaussian absorption lines (H-alpha, H-beta, H-gamma, Ca II K) at the line list’s vacuum wavelengths, shifted by the relativistic Doppler formula, sampled every 0.5 Å and given seeded Gaussian noise; the depths and widths are round numbers, not a fit to any star. The measurement is a straight-line continuum, an equivalent-width sum and a depth-weighted center, with velocity c × shift ÷ rest (non-relativistic, stated on screen). The real spectra are SDSS DR18 wavelengths in vacuum and in the Sun’s frame.',
+  },
+
+  'color-and-temperature': {
+    topic:
+      'Blackbody radiation: Wien’s law, color indices, and where a blackbody stops being a star',
+    difficulty: 'Introductory',
+    placement:
+      'After students have met the idea of a star’s temperature (the H-R diagram) and before they read spectral lines (Lines and Motion). It supports OpenStax Astronomy 2e section 5.2 (radiation laws) and section 17.2 (colors of stars).',
+    overview:
+      'Students predict how a blackbody’s peak wavelength moves with temperature, measure it on a computed Planck curve, and use Wien’s law in both directions. They then measure a B − V color index, recover a temperature from it, and are asked why the Sun’s green peak does not make it look green and how far a blackbody is a model of a star. Every value comes from the radiation kernel (RADIATION.md); the curve is computed and never presented as an observation. Quantitative depth adds the Stefan–Boltzmann law and the size of a star from its light; advanced depth adds synthetic photometry in two real filter systems.',
+    priorKnowledge: [
+      'That hot objects glow, and that a star has a surface temperature',
+      'Dividing one number by another, and raising a ratio to a power',
+      'Reading a logarithmic wavelength axis, at the level of “each tick is ten times the last”',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Wien’s law',
+        body: 'Peak wavelength times temperature is a constant, about 2.898 million nm·K. Students measure it at three temperatures before they are given it, so the constant is a result and not a formula to memorize.',
+      },
+      {
+        heading: 'The peak is not the color',
+        body: 'The Sun’s peak is green and the Sun does not look green: the curve is broad, and the eye adds up the whole visible range. A peak wavelength says where the most light is per unit wavelength and nothing more.',
+      },
+      {
+        heading: 'A color index is a thermometer',
+        body: 'B − V is a difference of two magnitudes through two filters. It falls steadily as temperature rises, and it needs only two ordinary brightness measurements, where a peak needs a spectrum.',
+      },
+      {
+        heading: 'A color temperature is the matching blackbody’s',
+        body: 'It is the temperature of the blackbody that would have this color, close to a star’s effective temperature for many stars and different from it by the effect of the real spectrum’s lines and edges.',
+      },
+    ],
+    features: [
+      {
+        name: 'Blackbody explorer (the Light Lab)',
+        text: 'A temperature slider, the Planck curve on a log wavelength axis scaled to its own peak, two bandpasses overlaid, the Wien peak in wavelength and in frequency, the power radiated, and a displayed color. Every number is in the list under the plot.',
+      },
+      {
+        name: 'Real filter curves',
+        text: 'B and V from Bessell and Murphy 2012 (Vega system) and g and r from the SDSS 2001 curves (AB system), integrated photon-counting against the blackbody by the radiation kernel.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the Stefan–Boltzmann law and the luminosity–radius–temperature relation. Advanced: synthetic photometry in two real systems and why the numbers differ for one blackbody.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The peak wavelength is the color a thing looks.',
+        response:
+          'Step 6. The Sun’s peak is green and it is white; the curve is broad and the eye mixes the whole visible range. The peak says where the most light is, not what color it is.',
+      },
+      {
+        claim:
+          'The peak per unit frequency is the speed of light divided by the peak per unit wavelength.',
+        response:
+          'The readout gives both and says they differ: a spectrum per unit frequency is a different curve, so its peak is at a different place.',
+      },
+      {
+        claim: 'A color temperature is the star’s surface temperature.',
+        response:
+          'Step 9. It is the temperature of the blackbody that matches the color. The lines and edges of a real spectrum move it away from the effective temperature, by a small amount for many stars and a large one for cool ones.',
+      },
+      {
+        claim: 'Hotter means redder, because a hot stove ring glows red.',
+        response:
+          'Steps 2 and 3. A stove ring is glowing red because it is cool; raising the temperature moves the peak to shorter wavelengths, through yellow and white to blue.',
+      },
+    ],
+    teachingNotes: [
+      'The swatch is a display aid computed from the CIE 1931 curves; a blackbody hotter than about 9,000 K is bluer than sRGB can show, and the readout says so. Do not grade on a shade.',
+      'The explorer is a model. Do not let students quote its numbers as measurements of a star; the instrument’s own first row says it is computed.',
+      'The slider moves in one-kelvin steps and the plot is scaled to its own peak on purpose, so the curve’s height is not a brightness. The power radiated is the row labeled σT⁴.',
+      'Step 8 is the only step where students tune a value to a target. Accept anything within 250 K; the color index changes by about 0.1 per 160 K near 5,000 K.',
+    ],
+    discussion: [
+      'Why does a color index need only two ordinary brightness measurements, while a peak wavelength needs a whole spectrum?',
+      'Two stars have the same B − V in different filter systems. Are they the same color?',
+      'What would you expect a real star’s color to do that a blackbody’s cannot?',
+    ],
+    extensions: [
+      'Lines and Motion reads the lines a blackbody does not have.',
+      'Compare the blackbody g − r of the Sun with a measured value and say what the lines do to it.',
+    ],
+    modelNotes:
+      'Planck’s law with the exact SI constants; colors by integrating the blackbody through the Bessell & Murphy 2012 B and V and the SDSS g and r curves, photon-counting, with the Vega and AB zero points stated in RADIATION.md. The displayed color uses the Wyman, Sloan and Shirley 2013 fit to the CIE 1931 curves. A real star has absorption lines and edges that this model leaves out, and the investigation says so.',
+  },
+
+  'twelve-nights': {
+    topic:
+      'Observability, the sidereal day, and why a once-a-night schedule aliases',
+    difficulty: 'Introductory, one arithmetic step, no calculus',
+    placement:
+      'Forty to fifty minutes, after "Can You Detect This Planet?" and ideally after "Design the Schedule". That investigation establishes that the placement of observations decides the result; this one shows that most of the placement is decided by the site and the target before the student gets a say. It is the only investigation in the catalog that computes anything about the real sky.',
+    overview: `Students are given twelve nights on HD 209458 from La Silla and told to plan the
+      run. The target is at declination +18.9 and the site at latitude -29.3, so it culminates at
+      41.9 degrees, never gets below airmass 1.5, and is above the airmass 2 limit for 4.96 hours
+      a night. One window a night, and the window opens 3.9 minutes earlier each time because it
+      is anchored to the target's hour angle rather than to the clock.
+      \n\nThe consequence is a comb with a spacing of one sidereal day and a spectral window
+      peak at 1.00274 cycles a day. Under that comb the 3.5247-day planet has aliases at 1.391 d
+      and 0.777 d, and the run comes back with one of them. The student then discovers that the
+      one decision genuinely theirs - where inside the five-hour window to observe - moves the
+      recovery rate from 1 in 16 to 13 in 16 on exactly the same twelve nights.
+      \n\nThe investigation closes on the thing that is usually left out: the peak never falls below
+      about 0.7 however many nights are added, so the fix is a second longitude and not more
+      time. The four-row table in step 11 was measured rather than argued, and the header comment
+      of the investigation file records how.`,
+    priorKnowledge: [
+      'What right ascension and declination are, at the level of "coordinates on the sky"',
+      'That a radial-velocity curve is sampled rather than continuous',
+      'Helpful but not required: having met a periodogram or a spectral window in "Design the Schedule"',
+      'No trigonometry is asked for. The altitude relation is described and computed by the planner, never derived',
+    ],
+    keyConcepts: [
+      {
+        heading:
+          'Observability is three constraints, and only one is about the target',
+        body: 'The sky has to be dark, the target has to be high enough, and the Moon has to be somewhere else. Students reliably think of the second only. The planner draws all three and the investigation asks which is binding, because the answer changes through the season: in September the target sets the limit, and by December the Sun does.',
+      },
+      {
+        heading: 'A sidereal day is not a rounding error',
+        body: 'The four minutes is the whole reason the alias sits at 1.00274 rather than 1.000, and it is the cleanest evidence a student will ever get that the comb was imposed by the Earth rather than by their own choices. Step 7 is built entirely on it and is worth not rushing.',
+      },
+      {
+        heading: 'The spectral window contains no data',
+        body: 'It is computable before the telescope opens, which is exactly the situation a time allocation puts an observer in. The planner deliberately never shows a period or a velocity, so everything the student learns while planning is something they could have known in advance.',
+      },
+      {
+        heading:
+          'An alias is a property of the sampling, so more sampling of the same pattern does not remove it',
+        body: 'This is the step that does not survive intuition. Sixty epochs at the center of the window do no better than twelve at its edges. The window power at the sidereal day is 0.70 at twelve epochs and 0.81 at sixty - it goes up, not down. The remedy is a different longitude, which changes the pattern.',
+      },
+    ],
+    features: [
+      {
+        name: 'The observing planner',
+        text: 'An investigation widget that computes real windows for a real site from js/observingWindow.js, and draws the spectral window of the twelve epochs it places. It deliberately never shows a period or a velocity.',
+      },
+      {
+        name: 'The Radial Velocity panel',
+        text: 'In synthetic-observing-run mode with an explicit epoch list, which is how the plan written in the planner is committed to the simulation.',
+      },
+      {
+        name: 'The spectral window',
+        text: 'js/rvSchedule.js computes it from the observation times alone. It carries no data, so everything the student learns while planning is something they could have known before the telescope opened.',
+      },
+      {
+        name: 'The evidence notebook',
+        text: 'The two measure steps write their fields to it, so the window powers and the two recovered periods can be read back and marked.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The simulation is modeling the Earth turning',
+        response:
+          'It is not, and step 1 says so. The windows are computed separately against published ephemerides for real dates in September 2026; the velocities are simulated. The only thing that crosses the seam is a list of numbers. Worth restating if a student asks why the planet is on screen while the planner is open.',
+      },
+      {
+        claim: 'An alias means the fit failed',
+        response:
+          'The fit did not fail. The alias is the best-fitting period, and it fits as well as the truth does because the schedule cannot tell them apart. Students who treat 0.777 d as a bug go looking for a mistake in the run rather than in the plan.',
+      },
+      {
+        claim: 'More data always helps',
+        response:
+          'Step 11 exists for this. Sixty epochs at the center of the window do no better than twelve at its edges, and the window power at the sidereal day goes up rather than down. It is the single most useful thing in the investigation for a student who will go on to write an observing proposal.',
+      },
+      {
+        claim: 'You should always observe at the best airmass',
+        response:
+          'Correct for photometric precision on one night, and wrong for the program. The investigation makes them pay a real cost in airmass to buy a better window, which is a trade real programs make and rarely explain.',
+      },
+      {
+        claim: 'The four-minute drift is the Sun moving',
+        response:
+          'It is the most common wrong answer to step 7 and it is option D there. Twilight does move through the season, but what opens the window is the target reaching the airmass limit, and that is kept by the stars.',
+      },
+    ],
+    teachingNotes: [
+      'Step 3 is worth doing as a class. Ask where the four minutes comes from before revealing it; the guess is almost always "the Sun moves".',
+      'If the class is short of time, steps 1-7 stand alone and deliver the central point without the spectrograph run. Steps 8-10 are what make it stick.',
+      'A student whose both-ends run also returns an alias has not made a mistake: that plan misses about one time in five, and the validator says so. Have them change the seed rather than re-plan.',
+      'The recovery rates quoted in step 11 come from sixteen noise draws per row and are reproducible; the method is in the header comment of js/data/investigations/twelve-nights.js.',
+      'Step 11 is a reading-comprehension trap as much as a physics one: students who pick option A have read the recovered column and not the window-power column beside it. Ask what the four window-power numbers do before asking what the recovered ones do.',
+      'The answer wanted at step 12 is a second longitude, or anything that removes the once-a-night constraint rather than sampling it more often - a space telescope and a circumpolar target both earn full credit. Watch for "more nights", which step 11 has just ruled out, and for "a bigger telescope", which addresses the noise and not the window.',
+    ],
+    discussion: [
+      'The plan that gets the right answer takes every measurement at worse airmass than it could have. What is being traded for what?',
+      'The committee gave twelve nights. If you could exchange them for six nights on two telescopes eight hours apart in longitude, would you?',
+      'Step 13 says a period should be quoted with its window peak. What else do we routinely quote without the thing that would let somebody check it?',
+    ],
+    extensions: [
+      'Work out the aliases of a 1.03-day planet under the same comb, and say why a hot Jupiter near one day is the hardest case for a single-site program',
+      'Take the airmass limit to 3 and see how much window width it buys, then decide whether the extra hour is worth observing through three atmospheres',
+      'Run "Design the Schedule" afterwards and say which of its two arms corresponds to which plan here',
+    ],
+    modelNotes: `The observing geometry is real and the star is not, and the two are computed by
+      different code that shares nothing but a list of times. js/observingWindow.js takes a
+      Julian Date as an argument and never reads a clock, so every student on every machine
+      computes the same windows for the same night; js/validation/physicsChecks.js holds it against the
+      Astronomical Almanac's Sun, two published lunations, the gammas of two total lunar eclipses
+      and Kasten & Young's airmass fit, with thirty-eight checks in the "Observing windows" group.
+      \n\nWhat it does not model: atmospheric refraction, lunar parallax, and the difference
+      between UT and TT. The first two are under a degree and the third is about seventy seconds,
+      and none of them moves a window boundary by as much as the two-minute grid the sampler uses.
+      \n\nThe velocities come from the same Exoplanet Characterization Lab the other
+      radial-velocity investigations use, integrated in the plane with the star free to move. The
+      simulation has no Earth, no rotation and no atmosphere, and the airmass a measurement was
+      taken at does not degrade it - every epoch carries the same 8 m/s whether it was booked at
+      airmass 1.5 or airmass 2. That is a simplification the investigation leans on rather than hides:
+      it is what makes the comparison between the two plans clean, because the only thing that
+      differs between them is the times.`,
+  },
   'lagrange-points': {
     topic:
       'The circular restricted three-body problem: Jacobi constant, zero-velocity curves and Lagrange points',
     difficulty: 'Introductory, conceptual, with one arithmetic step',
     placement:
-      'Twenty to twenty-five minutes, after students have met orbits and ideally after the Hohmann-transfer lesson, which introduces the maneuver planner this one uses. It is the most conceptually demanding lesson in the catalog and the least computational: almost all the work is distinguishing three claims that sound identical.',
+      'Twenty to twenty-five minutes, after students have met orbits and ideally after the Hohmann-transfer investigation, which introduces the maneuver planner this one uses. It is the most conceptually demanding investigation in the catalog and the least computational: almost all the work is distinguishing three claims that sound identical.',
     overview: `Students meet a conserved quantity that buys a boundary rather than a solution.
       The three-body problem has no closed-form trajectory, but the Jacobi constant is exact, and
-      from it comes a wall the tracer can never cross. The lesson has them read the constant,
+      from it comes a wall the tracer can never cross. The investigation has them read the constant,
       watch it hold, speed the tracer up, and see the walls open in a fixed order.
       \n\nIts spine is a distinction, not a calculation. Energetically accessible, actually
       reachable, and stable are three different statements about the same diagram, and students
-      reliably collapse them into one. The lesson meets them one at a time and separated by
+      reliably collapse them into one. The investigation meets them one at a time and separated by
       screens: energy through screen 9, then a deliberately inconclusive experiment at screen 11
       where the neck is open and the tracer may simply not go through, then stability introduced
       at screen 13 as an explicitly third thing.
@@ -48,7 +1270,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'The sign convention runs backwards',
-        body: 'C = 2*Omega - v^2, so a faster tracer has a smaller C. Larger C means more confined. Expect this to be got wrong at least once by most of the class; the panel states it under every reading and the lesson repeats it at screens 4, 5 and 9.',
+        body: 'C = 2*Omega - v^2, so a faster tracer has a smaller C. Larger C means more confined. Expect this to be got wrong at least once by most of the class; the panel states it under every reading and the investigation repeats it at screens 4, 5 and 9.',
       },
       {
         heading: 'The walls open in a fixed order',
@@ -60,37 +1282,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'L4 and L5 are stable at maxima, which sounds impossible',
-        body: 'They sit at maxima of the effective potential and are nonetheless stable below Routh\u2019s ratio, because the Coriolis force turns a departing tracer into a small orbit about the point. Worth drawing: it is the least intuitive true thing in the lesson, and it is why the Trojan asteroids exist.',
-      },
-    ],
-    flow: [
-      {
-        steps: '1-3',
-        text: 'The system, the rotating frame, the normalization, and a prediction about whether speeding up opens or closes the forbidden region. Set the units carefully here - every number later is in them.',
-      },
-      {
-        steps: '4-6',
-        text: 'The Jacobi constant, reading it twice to see it hold, and what a conserved quantity is worth when the trajectory is unsolvable. Screen 6 is the conceptual center of the first half.',
-      },
-      {
-        steps: '7-9',
-        text: 'The five points, the equilateral geometry of L4, and the ordering of the critical values. Brisk; the arithmetic is one line.',
-      },
-      {
-        steps: '10-11',
-        text: 'Open the L1 neck with a burn, and predict what an open neck licenses. Everyone opens it differently, which is deliberate and is why the next two screens exist.',
-      },
-      {
-        steps: '12-13',
-        text: 'The controlled version, and the heart of the second act: one tracer, one place, one speed, two directions, so the accessible region is identical by construction and the trajectory is the only thing left that can differ. About a minute of running. Budget time here and resist resolving the ambiguity beyond what the runs show - "did not cross in two periods" is the whole finding.',
-      },
-      {
-        steps: '14-16',
-        text: 'Stability as a third question, the surprise that L4 and L5 are stable at maxima, and the Trojans. This is the part students remember.',
-      },
-      {
-        steps: '17-20',
-        text: 'Break the assumptions deliberately and watch the overlay refuse, then the eccentric case, then the three claims restated side by side. Leave time for the last screen.',
+        body: 'They sit at maxima of the effective potential and are nonetheless stable below Routh\u2019s ratio, because the Coriolis force turns a departing tracer into a small orbit about the point. Worth drawing: it is the least intuitive true thing in the investigation, and it is why the Trojan asteroids exist.',
       },
     ],
     features: [
@@ -138,7 +1330,7 @@ export const INSTRUCTOR_CONTENT = {
       'This system has mu = 0.0291 against Routh\u2019s 0.03852 - close enough that raising the small star\u2019s mass a little makes L4 and L5 unstable, which is a good live demonstration if a class has time. The panel says which side of the line the system is on.',
       'The critical values here are C1 = 3.313, C2 = 3.274, C3 = 3.029 and C4 = C5 = 2.971. A student comparing them against a textbook may find the last differs: this application omits the mu(1-mu)/2 term some texts add to Omega, so C4 is 3 - mu + mu^2 rather than 3. The panel states this and it is worth pre-empting.',
       'Screen 5 asks students to read C twice and see it unchanged. It holds to about four parts in a hundred thousand over several orbits, which is the Velocity Verlet integrator rather than the physics; the scenario chooses that integrator for this reason. If a class asks, that is a good moment to talk about what a numerical result can and cannot establish.',
-      'Screen 11 is the one that decides whether the lesson worked. Do not tell students what will happen. If several groups get different outcomes from different burns, that is the best possible result and worth collecting on a board.',
+      'Screen 11 is the one that decides whether the investigation worked. Do not tell students what will happen. If several groups get different outcomes from different burns, that is the best possible result and worth collecting on a board.',
       'The overlay disables itself if a class adds a third body while exploring. That is intended, and the message names the assumption that failed - it is not a fault to work around.',
     ],
     discussion: [
@@ -153,14 +1345,8 @@ export const INSTRUCTOR_CONTENT = {
       'Compute the Sun-Earth mass ratio and work out where L1 and L2 are, then compare against the real distances to SOHO and JWST.',
       'Use the A/B experiment bench to record the same tracer at two timesteps and check that the Jacobi constant\u2019s drift is the integrator rather than the system.',
     ],
-    expectations: {
-      5: 'Two readings of C agreeing to four or five figures. A difference in the fourth figure over a long run is the integrator; a large difference means something was changed between the readings.',
-      10: 'C falls as the burn is applied and the shaded region visibly retreats. The neck opens when C passes 3.313. Students who see C rise have burned retrograde, which is a useful mistake to have made.',
-      13: 'About a minute of running, and the same answer for everybody, which is what separates this from screen 10. The control rows should read: both arms started at (0.600, 0.000) at a rotating-frame speed of 0.565, both with a Jacobi constant of 3.28426 - identical to every digit shown, because C is fixed by position and speed and neither differs - both with the L1 neck open and L2 still closed, and both integrated at the same measured step. Then the outcome rows diverge: 30 degrees crosses the neck 0.11 periods in and comes within 0.008 of L1; 130 degrees never crosses, never gets nearer than 0.172, and its x never passes the 0.600 it started at. The sentence to insist on is "same accessible region, different paths"; the sentence to catch is "B can never cross", which the window cannot support and the caveat says so.',
-      17: 'The overlay switches off and names the assumption: "this needs exactly two massive bodies" for an added star, or the tracer being heavy enough to move the others. Removing the change brings it straight back.',
-    },
     modelNotes: `Two massive bodies on a circular orbit, integrated with Velocity Verlet rather
-      than the catalog\u2019s default symplectic Euler, because the lesson asks students to
+      than the catalog\u2019s default symplectic Euler, because the investigation asks students to
       watch a conserved quantity hold and first-order drift would make that a claim about the
       integrator. Measured eccentricity is 2.4e-9 and the tracer is a billionth of the pair.
       \n\nThe world is built to the convention the analysis uses: barycenter at the origin,
@@ -177,12 +1363,12 @@ export const INSTRUCTOR_CONTENT = {
     topic: 'Orbital transfers: two burns, a coast, and the vis-viva equation',
     difficulty: 'Introductory, with arithmetic and one square root',
     placement:
-      'Twenty to twenty-five minutes, best placed after students have met circular orbital speed and Kepler\u2019s third law. It pairs naturally with the gravity-assist lesson - that one is about borrowing momentum, this one about buying it - and either order works. It is the most quantitative lesson in the catalog that still needs no calculus.',
+      'Twenty to twenty-five minutes, best placed after students have met circular orbital speed and Kepler\u2019s third law. It pairs naturally with the gravity-assist investigation - that one is about borrowing momentum, this one about buying it - and either order works. It is the most quantitative investigation in the catalog that still needs no calculus.',
     overview: `Students plan a Hohmann transfer from 1 AU to 2.5 AU with a pencil, then fly it
       with the maneuver planner and find that the engine agrees with them. Both burns and the
       coast between them are computed from vis-viva and Kepler\u2019s third law before anything
       is applied, which is what makes the flight a test rather than a demonstration.
-      \n\nThe lesson is built around two results that students reliably get wrong. The first is
+      \n\nThe investigation is built around two results that students reliably get wrong. The first is
       that a burn changes the orbit half a revolution away from where it is made: push at 1 AU
       and the far side climbs to 2.5 while the near side does not move. The second is that
       arriving is not staying - at the top of the arc the spacecraft is on a closed ellipse
@@ -209,41 +1395,15 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Vis-viva gives the speed anywhere on any orbit',
-        body: 'v\u00b2 = GM(2/r \u2212 1/a) is the only equation the lesson needs, used four times: circular speed at each radius with a = r, and transfer speed at each end with a = 1.75 AU. Working in units of the local circular speed - v/v_circ = sqrt(2 \u2212 r/a) - keeps the arithmetic to one square root and is worth showing on a board.',
+        body: 'v\u00b2 = GM(2/r \u2212 1/a) is the only equation the investigation needs, used four times: circular speed at each radius with a = r, and transfer speed at each end with a = 1.75 AU. Working in units of the local circular speed - v/v_circ = sqrt(2 \u2212 r/a) - keeps the arithmetic to one square root and is worth showing on a board.',
       },
       {
         heading: 'Arriving and staying are different achievements',
-        body: 'This is the half students forget, and the lesson makes them predict it before it happens. The spacecraft reaches 2.5 AU on an ellipse whose periapsis is at 1 AU; with no second burn it returns to where it started every 2.3 years indefinitely. Real missions that miss this burn do not orbit their destination, they fly past it.',
+        body: 'This is the half students forget, and the investigation makes them predict it before it happens. The spacecraft reaches 2.5 AU on an ellipse whose periapsis is at 1 AU; with no second burn it returns to where it started every 2.3 years indefinitely. Real missions that miss this burn do not orbit their destination, they fly past it.',
       },
       {
         heading: 'Faster twice, slower overall',
-        body: 'Both burns are accelerations and the spacecraft ends up slower than it began, 18.8 km/s against 29.8. The energy went into height rather than speed. Students who can say that clearly have understood the difference between speed and orbital energy, which is the deepest thing in the lesson.',
-      },
-    ],
-    flow: [
-      {
-        steps: '1-3',
-        text: 'The problem, then a prediction about pushing straight outward, then a preview of a radial burn that leaves the angular momentum untouched. Nothing is applied yet; the planner previews without changing the world.',
-      },
-      {
-        steps: '4-6',
-        text: 'Why transverse is the lever and why the change appears on the far side, then measuring the two circular speeds and asking why the outer body is slower. Straightforward, and worth moving through briskly.',
-      },
-      {
-        steps: '7-10',
-        text: 'The transfer ellipse, its semi-major axis, the departure speed from vis-viva, and the size of the first burn. This is the arithmetic core - budget half the lesson time here and let students check each other.',
-      },
-      {
-        steps: '11-12',
-        text: 'Applying the first burn and reading where the orbit changed. The preview should show apoapsis at 2.5 AU before they press Apply; a student whose preview disagrees has mistyped, and Undo restores the whole world.',
-      },
-      {
-        steps: '13-16',
-        text: 'The transfer time from Kepler\u2019s third law, the coast itself, and the prediction about doing nothing on arrival. The coast takes about 423 simulated days; use the speed control rather than waiting.',
-      },
-      {
-        steps: '17-22',
-        text: 'The second burn, circularizing, the total cost, why both burns were accelerations, and what the whole answer depended on. The last screen is the one to leave time for.',
+        body: 'Both burns are accelerations and the spacecraft ends up slower than it began, 18.8 km/s against 29.8. The energy went into height rather than speed. Students who can say that clearly have understood the difference between speed and orbital energy, which is the deepest thing in the investigation.',
       },
     ],
     features: [
@@ -253,7 +1413,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'The Orbital Transfer Lab',
-        text: 'One sunlike star, a spacecraft on a circular orbit at 1 AU and a station at 2.5 AU, with nothing else in the system and eccentricities of about 1e-4. Integrated with Velocity Verlet rather than the catalog default, because the lesson checks a transfer time against a closed form to a per cent.',
+        text: 'One sunlike star, a spacecraft on a circular orbit at 1 AU and a station at 2.5 AU, with nothing else in the system and eccentricities of about 1e-4. Integrated with Velocity Verlet rather than the catalog default, because the investigation checks a transfer time against a closed form to a per cent.',
       },
       {
         name: 'The burn log and its export',
@@ -275,7 +1435,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'The orbit changes where the burn happens.',
         response:
-          'The burn point stays on the new orbit, so it becomes an apsis. The change is entirely on the opposite side. The preview table makes this visible before anything is applied, which is why the lesson has students read it rather than describing it.',
+          'The burn point stays on the new orbit, so it becomes an apsis. The change is entirely on the opposite side. The preview table makes this visible before anything is applied, which is why the investigation has students read it rather than describing it.',
       },
       {
         claim: 'Once the spacecraft reaches 2.5 AU it is at the station.',
@@ -290,15 +1450,15 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'These numbers would work for a real mission to Mars.',
         response:
-          'They are where a real calculation starts. Mars\u2019s orbit is eccentric and slightly inclined, and the transfer has to arrive when Mars is there. The lesson\u2019s last screen names all three omissions; the planner\u2019s own preview names the two-body assumption on every burn.',
+          'They are where a real calculation starts. Mars\u2019s orbit is eccentric and slightly inclined, and the transfer has to arrive when Mars is there. The investigation\u2019s last screen names all three omissions; the planner\u2019s own preview names the two-body assumption on every burn.',
       },
     ],
     teachingNotes: [
-      'The planner works in simulation velocity units and the arithmetic is done in km/s. One simulation unit is 6.661 km/s, and the lesson gives the converted figures (0.873 and 0.690) at the point of use. If students are computing their own conversions, check the first one as a class - a factor error here produces a wildly wrong orbit and an easy diagnosis.',
+      'The planner works in simulation velocity units and the arithmetic is done in km/s. One simulation unit is 6.661 km/s, and the investigation gives the converted figures (0.873 and 0.690) at the point of use. If students are computing their own conversions, check the first one as a class - a factor error here produces a wildly wrong orbit and an easy diagnosis.',
       'The inner orbit runs at 29.787 km/s, which is Earth\u2019s actual orbital speed. Worth pointing out: the scenario is a genuine Solar System analogue rather than an arbitrary set of numbers, and a student who knows Earth\u2019s orbital speed has a free check on the unit scale.',
-      'Timing the second burn matters and the lesson says so. A burn made partway up the arc rather than at apoapsis produces a different orbit, because a burn changes the far side and the far side depends on where you are. If a class is short of time, pausing at apoapsis is legitimate and worth saying out loud.',
+      'Timing the second burn matters and the investigation says so. A burn made partway up the arc rather than at apoapsis produces a different orbit, because a burn changes the far side and the far side depends on where you are. If a class is short of time, pausing at apoapsis is legitimate and worth saying out loud.',
       'Screen 5 is a measurement step with no automatic check. Students reading 29.8 and 18.8 km/s are set up correctly; anything else usually means the unit toggle is on simulation units.',
-      'Applying a burn deliberately invalidates any running radial-velocity or astrometry recording, because the orbit those measurements describe no longer exists. If a class has both panels open, expect the recordings to restart and say why - it is the correct behavior and a small lesson in itself.',
+      'Applying a burn deliberately invalidates any running radial-velocity or astrometry recording, because the orbit those measurements describe no longer exists. If a class has both panels open, expect the recordings to restart and say why - it is the correct behavior and a small investigation in itself.',
     ],
     discussion: [
       'Both burns were accelerations and the spacecraft ended up slower. Where did the energy go?',
@@ -312,23 +1472,15 @@ export const INSTRUCTOR_CONTENT = {
       'Use the A/B experiment bench to record the transfer twice at different timesteps, or the bench\u2019s reliability check to ask whether the measured transfer time is about the system or about the integration.',
       'Have students plan the transfer for a real destination - Mars at 1.52 AU, Jupiter at 5.20 - and compare their \u0394v against the published figures for a real mission.',
     ],
-    expectations: {
-      3: 'The preview shows periapsis falling, apoapsis rising, and the specific angular momentum unchanged to every digit shown. Students should set the field back to zero without applying; if somebody applies it, Undo restores the world exactly.',
-      5: 'About 29.8 km/s for the spacecraft and 18.8 for the station. Anything an order of magnitude off is the unit toggle rather than the student.',
-      11: 'The previewed apoapsis reads 250 simulation units, which is 2.5 AU, and the periapsis stays at 100. After applying, the trail visibly climbs away from the inner circle. A student whose apoapsis is wildly wrong has entered the km/s figure rather than the converted one.',
-      15: 'The coast takes about 423 simulated days and the speed falls from 35.6 km/s to 14.2 as the spacecraft climbs. At normal speed this is a long wait; the transport control is the intended route.',
-      16: 'The top of the arc reads about 250 simulation units, which is 2.5 AU, and the bottom still reads about 100, which is 1 AU. The bottom is the number that answers the previous screen: the first burn moved the far side of the orbit and left the near side exactly where it was, so with no second burn the spacecraft returns. A student whose bottom figure has changed has applied a burn somewhere other than at periapsis.',
-      18: 'The eccentricity in the preview falls to a few thousandths, and the periapsis and apoapsis both read about 250 simulation units. A residual eccentricity above about 0.05 means the burn was made away from apoapsis rather than at it.',
-    },
     modelNotes: `Two-body motion about a single dominant mass, integrated with Velocity Verlet
-      rather than the catalog\u2019s default symplectic Euler, because the lesson checks a
+      rather than the catalog\u2019s default symplectic Euler, because the investigation checks a
       transfer time against pi*sqrt(a^3/mu) and first-order period error is too coarse for that.
       \n\nThe scenario is built circular by construction: each body is placed at sqrt(mu/r) with
       the orbiting body\u2019s own mass included in mu, the same mu the readout uses, so the
       orbits open at eccentricities of about 1e-4 rather than at some value the setup and the
       inspector disagree about. The spacecraft is a billionth of the star\u2019s mass - not zero,
       because a massless body drops out of the barycenter and out of the conservation
-      diagnostics, and small enough that the two-body formulae the lesson uses are right well
+      diagnostics, and small enough that the two-body formulae the investigation uses are right well
       past the precision anybody reads.
       \n\nThe maneuver planner\u2019s preview is the osculating two-body orbit computed by the
       same orbitalElements() the inspector uses. In this scenario that is exact to the precision
@@ -342,16 +1494,16 @@ export const INSTRUCTOR_CONTENT = {
     topic: 'Reference frames, and where a gravity assist gets its energy',
     difficulty: 'Introductory, no mathematics beyond arithmetic',
     placement:
-      'A short lesson, 15 to 20 minutes, that fits anywhere after students have met the idea of an orbit. It is the most self-contained thing in the catalog and works well as a lab-period opener or as the practical half of a lecture on reference frames. It needs no prerequisites and leaves students with a result they will meet again in every outer-solar-system mission they read about.',
+      'A short investigation, 15 to 20 minutes, that fits anywhere after students have met the idea of an orbit. It is the most self-contained thing in the catalog and works well as a lab-period opener or as the practical half of a lecture on reference frames. It needs no prerequisites and leaves students with a result they will meet again in every outer-solar-system mission they read about.',
     overview: `Students fly the same flyby twice, once on each side of a planet, and read the
       result in two frames at once. In the planet's frame the spacecraft leaves at exactly the
       speed it arrived; in an inertial frame it leaves 78 per cent faster. Both numbers are on
-      screen simultaneously, in two columns, and the lesson is the question of how they can both
+      screen simultaneously, in two columns, and the investigation is the question of how they can both
       be true.
       \n\nThe first pass is flown by hand, so students learn to read the instrument. The pair
       is then run as one retained experiment: both sides at once, from the same starting
       configuration, differing only in the sign of the impact parameter, with both results kept
-      on screen. That replaces the part of the lesson where students had to hold four numbers in
+      on screen. That replaces the part of the investigation where students had to hold four numbers in
       their heads while the panel showed four others - and it is what makes the central
       comparison possible, because what they are being asked to notice is that the change in
       VELOCITY is identical on both sides while the change in SPEED is not.
@@ -360,7 +1512,7 @@ export const INSTRUCTOR_CONTENT = {
       frame is genuinely inertial, and the measured change in relative speed is three parts in
       a hundred billion - zero to any precision anyone cares about. Only once that exact version
       is established does a star appear, at which point the same quantity changes by a third of
-      a per cent and the lesson can name that residual as the patched-conic approximation and
+      a per cent and the investigation can name that residual as the patched-conic approximation and
       quote its size.
       \n\nThe isolated case is also the only one in which the momentum ledger is legible. On an
       orbit the planet's velocity changes far more from its own turning than from the
@@ -368,7 +1520,7 @@ export const INSTRUCTOR_CONTENT = {
       the two momentum changes agreeing rather than assert that they do. How closely depends on the
       integration step, which the application sizes from the frame rate: a part in 10^9 at a fixed
       step of 0.5, and a part in 10^5 on a machine busy enough to make its own step three times
-      coarser. Both are far tighter than the argument needs, and the lesson quotes a bound.`,
+      coarser. Both are far tighter than the argument needs, and the investigation quotes a bound.`,
     priorKnowledge: [
       'That gravity pulls, and that a planet moves',
       'Reading a number off a panel',
@@ -382,7 +1534,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'A flyby can only turn the velocity, not lengthen it',
-        body: 'In the planet frame the spacecraft falls in and climbs back out by the same depth, so it leaves at the speed it arrived. That is the conservation statement, and it is exact when the planet frame is inertial. Everything else in the lesson follows from it.',
+        body: 'In the planet frame the spacecraft falls in and climbs back out by the same depth, so it leaves at the speed it arrived. That is the conservation statement, and it is exact when the planet frame is inertial. Everything else in the investigation follows from it.',
       },
       {
         heading: 'The gain is a vector sum, not a push',
@@ -398,41 +1550,15 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Frame-dependent speed, frame-independent everything else',
-        body: 'The fourteenth screen, and the sharpest statement of the lesson. Speed disagrees between the two columns. The CHANGE IN VELOCITY does not - it is the same vector in every inertial frame, which is why both passes report the same 4.28 km/s. Nor does the system\u2019s total momentum. The spacecraft has a finite mass here, so the planet recoils and "the planet\u2019s frame" strictly names one inertial frame before the encounter and a slightly different one after; the panel checks that the recoil equals the mass ratio times the spacecraft\u2019s own velocity change, which is momentum conservation written as a division. The unchanged relative speed is exact anyway, at any mass ratio, because the relative motion is a Kepler problem - and students who assume it is an approximation good to one part in a million have found a plausible wrong answer worth discussing.',
+        body: 'The fourteenth screen, and the sharpest statement of the investigation. Speed disagrees between the two columns. The CHANGE IN VELOCITY does not - it is the same vector in every inertial frame, which is why both passes report the same 4.28 km/s. Nor does the system\u2019s total momentum. The spacecraft has a finite mass here, so the planet recoils and "the planet\u2019s frame" strictly names one inertial frame before the encounter and a slightly different one after; the panel checks that the recoil equals the mass ratio times the spacecraft\u2019s own velocity change, which is momentum conservation written as a division. The unchanged relative speed is exact anyway, at any mass ratio, because the relative motion is a Kepler problem - and students who assume it is an approximation good to one part in a million have found a plausible wrong answer worth discussing.',
       },
       {
         heading: 'The planet pays, in momentum',
-        body: 'Equal and opposite, always. The spacecraft here is an Earth mass rather than a tonne, chosen so the recoil is a readable number; the physics is identical and the size is not, and the lesson says so.',
+        body: 'Equal and opposite, always. The spacecraft here is an Earth mass rather than a tonne, chosen so the recoil is a readable number; the physics is identical and the size is not, and the investigation says so.',
       },
       {
         heading: 'Patched conics, and its measured error',
         body: 'Treating a flyby as an isolated two-body encounter spliced into a heliocentric orbit is what mission designers do for a first pass. With a star present the relative speed changes by 0.34 per cent and the deflection misses the two-body prediction by six per cent. Those residuals are the approximation, and the closing question exists to stop students reading them as numerical error.',
-      },
-    ],
-    flow: [
-      {
-        steps: '1-3',
-        text: 'Voyager 2 arriving at Jupiter at 10 km/s and leaving at 26 with its engines off, then the stripped-down version on screen and why it has no star. Students commit to which side of the planet gains before running anything.',
-      },
-      {
-        steps: '4-7',
-        text: 'The gaining pass, flown by hand, about nine seconds of wall clock. Students record all four speeds, face the central question, and are given the vector addition. This is the part to slow down for.',
-      },
-      {
-        steps: '8-10',
-        text: 'The retained comparison: both sides at once, about a minute of wall clock, both results kept on screen. Then three numbers off the table, then why the loss is smaller than the gain - which is geometry rather than physics and catches almost everybody.',
-      },
-      {
-        steps: '11-14',
-        text: 'The ceiling of twice the approach speed, the recoil and the momentum ledger, where the energy actually came from, and then the sharpest screen in the lesson: whose frame, exactly, and what survives a change of one.',
-      },
-      {
-        steps: '15-18',
-        text: 'Optional, about five minutes, three of them the sweep running. Five impact parameters on the gaining side, and the question of whether the biggest turn must give the biggest gain. Skip the whole block if the period is short; nothing after it depends on it.',
-      },
-      {
-        steps: '19-22',
-        text: 'The same encounter with a star, the residuals it introduces, what they mean, and the three things the model leaves out.',
       },
     ],
     features: [
@@ -450,7 +1576,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'The vis-viva correction',
-        text: 'Speeds "at infinity" are read at a stated distance and corrected for the potential there, because at the gate the spacecraft is still traveling 0.6 per cent faster than its asymptotic speed - ten times the accuracy the rest of the lesson works to. Both legs are read at the same distance so the correction is the same size on each.',
+        text: 'Speeds "at infinity" are read at a stated distance and corrected for the potential there, because at the gate the spacecraft is still traveling 0.6 per cent faster than its asymptotic speed - ten times the accuracy the rest of the investigation works to. Both legs are read at the same distance so the correction is the same size on each.',
       },
       {
         name: 'The retained comparison',
@@ -458,7 +1584,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'The optional impact-parameter sweep',
-        text: 'Five passes on the gaining side - 20, 30, 40, 60 and 90 - plotted as turn and signed speed change against impact parameter, points only. The range is chosen so every pass clears the planet: the closest passes 3.8 planet radii out, and the pass that would maximize the gain would pass inside the planet, which is why the sweep can show the approach to a turnover and not the turnover itself. About three minutes of wall clock, measured. The lesson labels it optional and nothing after it depends on it.',
+        text: 'Five passes on the gaining side - 20, 30, 40, 60 and 90 - plotted as turn and signed speed change against impact parameter, points only. The range is chosen so every pass clears the planet: the closest passes 3.8 planet radii out, and the pass that would maximize the gain would pass inside the planet, which is why the sweep can show the approach to a turnover and not the turnover itself. About three minutes of wall clock, measured. The investigation labels it optional and nothing after it depends on it.',
       },
       {
         name: 'The A/B experiment bench',
@@ -503,7 +1629,7 @@ export const INSTRUCTOR_CONTENT = {
         claim:
           'The unchanged relative speed only works because the spacecraft is so much lighter than the planet.',
         response:
-          'The fourteenth screen, and the most sophisticated wrong answer in the lesson - it is wrong for a good reason and worth taking seriously. The relative motion of two bodies is a Kepler problem in one coordinate, and it returns the same relative speed at the same separation for any pair of masses at all. What the finite mass does change is that the planet recoils, so "the planet\u2019s frame" names two slightly different inertial frames. Ask what the left-hand column would do if the spacecraft were as heavy as the planet: nothing.',
+          'The fourteenth screen, and the most sophisticated wrong answer in the investigation - it is wrong for a good reason and worth taking seriously. The relative motion of two bodies is a Kepler problem in one coordinate, and it returns the same relative speed at the same separation for any pair of masses at all. What the finite mass does change is that the planet recoils, so "the planet\u2019s frame" names two slightly different inertial frames. Ask what the left-hand column would do if the spacecraft were as heavy as the planet: nothing.',
       },
       {
         claim: 'Passing closer always gains more speed.',
@@ -514,7 +1640,7 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'Collect the third screen’s prediction as a show of hands and write the tally on the board. In most classes a clear majority chooses "in front".',
       'The fourth screen is the one to run at the front of the room. Nine seconds of wall clock, and the moment to press "Planet’s frame" is right after the readings are taken: the same encounter redrawn as a hyperbola about a stationary planet makes the left-hand column obvious.',
-      'The sixth screen is the hinge of the lesson. If a class is going to stall anywhere it is here, and the productive move is to ask what the spacecraft’s speed is "really" - which has no answer, and is the point.',
+      'The sixth screen is the hinge of the investigation. If a class is going to stall anywhere it is here, and the productive move is to ask what the spacecraft’s speed is "really" - which has no answer, and is the point.',
       'The tennis-ball-and-train analogy at the seventh screen is exact, not a loose comparison. A ball thrown at 10 m/s at a train approaching at 20 leaves the train at 10 m/s in the train’s frame and 50 m/s in the station’s. It is worth doing on the board with numbers.',
       'The tenth screen catches almost everyone, including people who got everything before it right. Let them be wrong out loud before resolving it.',
       'The eighth screen runs for about a minute with nobody typing, which makes it the natural place to take the third screen\u2019s show of hands off the board and ask the room to commit again. Both results are kept, so nothing is lost by talking over it.',
@@ -526,7 +1652,7 @@ export const INSTRUCTOR_CONTENT = {
       'Voyager 2 gained about 16 km/s at Jupiter. Jupiter lost the corresponding momentum. Is there any measurement that could ever detect that?',
       'The Parker Solar Probe uses seven flybys of Venus on the leading side to lose speed and fall closer to the Sun. Why is losing speed hard, and why does it take seven?',
       'Every assist is capped at twice the approach speed. What does that imply about missions to the outer solar system, and about why they are so often routed past Jupiter?',
-      'The lesson uses an Earth-mass spacecraft so the recoil is readable. Does using an unrealistic mass weaken the demonstration, and what would you have done instead?',
+      'The investigation uses an Earth-mass spacecraft so the recoil is readable. Does using an unrealistic mass weaken the demonstration, and what would you have done instead?',
       'The heliocentric residual is a third of a per cent. If you were designing a real mission, would that be good enough, and what would you do about it?',
     ],
     extensions: [
@@ -534,22 +1660,12 @@ export const INSTRUCTOR_CONTENT = {
       'Work out where the gain would peak for this geometry: the turn that lines the outgoing relative velocity up with the planet\u2019s motion, which is 131 degrees here. Invert tan(delta/2) = mu / (b v^2) for the impact parameter that produces it, then compute the periapsis at that value and compare it with the planet\u2019s radius. The answer is why the sweep stops where it does.',
       'Work out the tennis-ball-and-train problem on paper for the actual numbers on screen: 2.83 km/s for the planet, 4.34 for the approach, 58.6 degrees of turn. The answer should be the number in the panel.',
       'The retained comparison keeps two passes. Use the A/B experiment bench directly to record them as a time series instead, and chart speed against simulated time rather than as a before and an after.',
-      'Look up the Voyager 2 Jupiter encounter parameters and compute the deflection with the formula this lesson uses. Jupiter’s GM is 1.267e17 m^3/s^2 and the closest approach was about 722,000 km.',
+      'Look up the Voyager 2 Jupiter encounter parameters and compute the deflection with the formula this investigation uses. Jupiter’s GM is 1.267e17 m^3/s^2 and the closest approach was about 722,000 km.',
       'For a class with trigonometry: derive the ceiling. Show that the change in velocity has magnitude 2 v sin(delta/2), and that this is maximized at delta = 180 degrees.',
     ],
-    expectations: {
-      4: 'About nine seconds of wall clock. The trail bends visibly as the spacecraft rounds the planet, closest approach is 0.234 AU which is twelve planet radii, and the deflection is 58.63 degrees against a two-body prediction of 58.63 - they agree to a hundredth of a degree, which is worth pointing at. The "Planet\u2019s frame" button is the moment: press it after the readings and the same path is redrawn as a clean hyperbola about a stationary planet.',
-      5: 'Relative to the planet, 4.343 km/s both before and after - the panel reports the change as roughly minus three parts in a hundred billion, which is zero. Relative to everything else, 3.32 km/s before and 5.89 after, a gain of 78 per cent. A student whose left column differs is reading the wrong column; the field check says so. A student whose right column shrank has the impact parameter negative.',
-      8: 'About a minute of wall clock for both passes, measured. The table fills with two columns and the same left column in each: 4.343 km/s in and out on both sides. The rows that matter are the last three. Change in speed: +2.57 km/s behind, -1.67 in front. Change in velocity: 4.28 km/s in both columns. Encounter: "read in and out" in both. The caveat beneath reports the two velocity changes agreeing to a part in 10^13, the deflections to a part in 10^12 and the closest approaches to a part in 10^12, and then says the speed changes are not mirror images and were never going to be. Do not resolve that before the tenth screen.',
-      9: 'A gain of about 2.57, a loss of about 1.67 and a velocity change of about 4.28, all in km/s. Two ways to get this wrong, and the field check catches both: reading the velocity-change row for both of the first two answers, which makes them equal, and entering the loss as a negative number. The ratio 1.67 / 2.57 is 0.65 and is worth writing on the board before the next screen.',
-      12: 'The planet slows by about 4.3 mm/s, which is 1.5 parts per million of its own 2.83 km/s. Expect the ledger figure to differ between machines and say so if it does: it is around 0.002 per cent on a laptop under load and four orders of magnitude smaller when the encounter is integrated in fine steps, because the application sizes its integration step from the frame rate and the residual is a finite-gate effect that shrinks with the step. Every one of those numbers is far tighter than anything the thirteenth screen needs, which is the point to make - not the digits.',
-      15: 'Optional, and about three minutes of wall clock, measured. Five passes, all reported as complete encounters. Turn: 96.6, 73.6, 58.6, 41.0 and 28.0 degrees at b = 20, 30, 40, 60 and 90. Speed change: 3.58, 3.05, 2.57, 1.90 and 1.34 km/s. Closest approach runs from 0.076 AU - about 3.8 planet radii - out to 0.70 AU. The plot draws points and no line, and the caveat states which pass turned most, which gained most, and that the answer is not a rule.',
-      16: 'Turn 96.6 degrees and speed change 3.58 km/s at b = 20; 3.05 km/s at b = 30. The field check catches the two common misreadings - reading the table upside down, so that the widest pass is entered as the closest, and reading the turn from the wrong row. The subtraction they will need next is 3.58 minus 3.05 against 96.6 minus 73.6: about 0.023 km/s per degree, against 0.043 per degree at the wide end.',
-      20: 'A few seconds only. Relative to the star the spacecraft goes from about 13.7 to about 19.8 km/s, a gain of 45 per cent. Relative to the planet it goes from 8.48 to 8.51, a change of 0.34 per cent where the isolated version gave 3e-12. The measured deflection is 34.2 degrees against a two-body prediction of 36.3, a six per cent miss. Both residuals are physical. Reading the gate distance of 0.45 AU against the quoted Hill radius of 0.58 AU is worth doing with a class: the encounter is being measured only just inside the region where the planet is what matters. The comparison and the sweep are deliberately not offered here - with a star present their two arms would differ in two ways rather than one.',
-    },
     modelNotes: `The encounter is a Newtonian three-body problem in a plane - two bodies in the
       isolated scenario - integrated with Velocity Verlet rather than the catalog's default
-      symplectic Euler. The lesson asks students to believe that a speed is unchanged to a part
+      symplectic Euler. The investigation asks students to believe that a speed is unchanged to a part
       in ten million, and first-order phase error is far too coarse to support that claim.
       \n\nThe spacecraft is placed on its encounter hyperbola from the orbital elements rather
       than pointed at the planet from a distance, so the impact parameter and the speed at
@@ -559,18 +1675,18 @@ export const INSTRUCTOR_CONTENT = {
       \n\nSpeeds relative to the planet are quoted at infinity, computed from the local speed and
       distance through vis-viva. At the gate the spacecraft is still traveling about 0.6 per
       cent faster than its asymptotic speed, which is ten times the accuracy the rest of the
-      lesson works to; the alternative was to start the encounter absurdly far out and integrate
+      investigation works to; the alternative was to start the encounter absurdly far out and integrate
       empty space. Both legs are read at the same distance, so whatever the correction is worth,
       it is worth the same on each side.
       \n\nThe spacecraft is one Earth mass, about 10^22 times a real probe. This is the one
-      deliberately unrealistic number in the lesson and it is called out at the closing screen.
+      deliberately unrealistic number in the investigation and it is called out at the closing screen.
       It is chosen so the planet's recoil is 4 mm/s - ten orders of magnitude above floating
       point noise, and therefore a number a student can read - rather than 10^-25 m/s, which is
       true, unreadable, and would reduce the momentum ledger to an assertion. At a mass ratio of
       10^-6 the test-particle scattering formula still holds to far better than anything here is
       measured to.
       \n\nEverything is coplanar. Real flybys are aimed in three dimensions and the out-of-plane
-      component is most of the design problem; nothing in this lesson can show that.
+      component is most of the design problem; nothing in this investigation can show that.
       \n\nIn the heliocentric scenario the planet's own velocity change is dominated by its
       orbital turning rather than by the spacecraft, which is why the momentum ledger is
       demonstrated in the isolated scenario and not there. The panel does not report a recoil
@@ -594,28 +1710,28 @@ export const INSTRUCTOR_CONTENT = {
       maximize the gain is about 10.3, whose periapsis is 2.26 units - inside the collision
       radius. So the turnover in gain against turn is real, is where the geometry says it is,
       and cannot be reached in this laboratory: the sweep shows the approach to it and the
-      lesson says so rather than implying the curve rises for ever.`,
+      investigation says so rather than implying the curve rises for ever.`,
   },
 
   'binary-star-planets': {
     topic:
       'Orbital stability in binaries, and the difference between a physical result and a numerical one',
     difficulty:
-      'Introductory, but the second half is a genuine numerical-methods lesson and works in a computational course as well as an astronomy one',
+      'Introductory, but the second half is a genuine numerical-methods investigation and works in a computational course as well as an astronomy one',
     placement:
-      'A long lesson, 40 to 50 minutes, that needs a full lab period. It has no prerequisites beyond knowing that gravity holds orbits together, and it sits naturally after any lesson that has established Kepler orbits. In a computational physics or scientific-computing course it can be run for its second half alone: steps 13 to 20 are a self-contained convergence study that happens to be about planets.',
+      'A long investigation, 40 to 50 minutes, that needs a full lab period. It has no prerequisites beyond knowing that gravity holds orbits together, and it sits naturally after any investigation that has established Kepler orbits. In a computational physics or scientific-computing course it can be run for its second half alone: steps 13 to 20 are a self-contained convergence study that happens to be about planets.',
     overview: `Students run a controlled three-body system - two stars of stated mass on a stated
       orbit, plus one Earth-mass planet - and find the distance at which the planet stops
       surviving. They do it twice: once for a planet orbiting one star of the pair, once for a
       planet orbiting both. Both boundaries are compared against the published Holman & Wiegert
       (1999) fits, which the panel prints along with the assumptions behind them.
-      \n\nThe second half is the part that makes this more than a stability lesson. At 0.25 binary
+      \n\nThe second half is the part that makes this more than a stability investigation. At 0.25 binary
       separations the planet survives twenty binary periods at one timestep and is ejected at a
       quarter of that step, with energy conserved to better than a part in a million in both
       runs. Students meet the case, are caught by it, and are led to the rule that actually
       licenses a claim: an outcome counts when halving the step leaves it unchanged. Energy
       conservation is shown to be a screen that catches disasters and cannot certify a result.
-      \n\nNothing in the lesson is ever called stable. Every finished run is reported as having
+      \n\nNothing in the investigation is ever called stable. Every finished run is reported as having
       "survived this integration" for a stated number of binary periods, and steps 27 and 28
       make that distinction do real work: two circumbinary configurations that the published fit
       calls unstable survive forty periods here, while being flung fourteen and twenty-five
@@ -645,57 +1761,15 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Convergence, not conservation, is the test',
-        body: 'This is the lesson’s hardest idea and its most transferable. Energy conservation is necessary and nowhere near sufficient: energy is one number and a three-body encounter can be resolved badly in ways that do not disturb it. The only test that licenses an outcome is repeating the run at half the step and getting the same answer. Step 16 is where students meet a case that passes the energy screen at both steps and gives two different answers.',
+        body: 'This is the investigation’s hardest idea and its most transferable. Energy conservation is necessary and nowhere near sufficient: energy is one number and a three-body encounter can be resolved badly in ways that do not disturb it. The only test that licenses an outcome is repeating the run at half the step and getting the same answer. Step 16 is where students meet a case that passes the energy screen at both steps and gives two different answers.',
       },
       {
         heading: '"Survived this integration" is not "stable"',
-        body: 'Instability in these systems is often slow: eccentricity is pumped a little on each pass and a planet can circle quietly for hundreds of periods before leaving. Holman & Wiegert integrated for 10⁴ binary periods; this lesson integrates for 20 or 40. Steps 27 and 28 show two configurations the fit calls unstable surviving the run, with maximum excursions of 14 and 25 separations that make clear they are on their way out.',
+        body: 'Instability in these systems is often slow: eccentricity is pumped a little on each pass and a planet can circle quietly for hundreds of periods before leaving. Holman & Wiegert integrated for 10⁴ binary periods; this investigation integrates for 20 or 40. Steps 27 and 28 show two configurations the fit calls unstable surviving the run, with maximum excursions of 14 and 25 separations that make clear they are on their way out.',
       },
       {
         heading: 'An empirical fit is a fit',
         body: 'The Holman & Wiegert formulae are polynomial fits to where a transition mostly sat across a grid of integrations. They carry assumptions - massless planet, coplanar, prograde, initially circular - a validity range in mass ratio and eccentricity, and a coefficient uncertainty of about 0.02 separations. The paper itself reports islands of instability inside the boundary and of stability outside it. The panel declines to predict at all within the fit’s own uncertainty, which is worth pointing at.',
-      },
-    ],
-    flow: [
-      {
-        steps: '1-4',
-        text: 'The system and the vocabulary. Two stars of 1.0 and 0.5 solar masses, 10 AU apart at e = 0.4, every parameter stated rather than generated. Students commit to a prediction for the stable radius, and are told before measuring anything that a finished run will be reported as "survived this integration" and why that is not "stable".',
-      },
-      {
-        steps: '5-7',
-        text: 'The quiet run: the planet at 0.15 separations for twenty binary periods, about half a minute of wall clock. Students record four numbers and answer why the companion barely matters at that radius - proximity, not mass.',
-      },
-      {
-        steps: '8-11',
-        text: 'The planet moved to 0.30. It is ejected within about three binary periods after one close pass. Students predict first, then measure when it left, then work out why positive energy alone is not enough to call something an ejection.',
-      },
-      {
-        steps: '12-13',
-        text: 'The published boundary. Students compute a_c = 0.177 separations from the fit and find their two runs on either side of it, then answer which of four departures from the fit’s assumptions would most clearly put a real system outside its scope. (Inclination, because the fit is two-dimensional and Kozai-Lidov is not in it.)',
-      },
-      {
-        steps: '20-21',
-        text: 'The turn. What a timestep is, why a close approach is where it fails, and the energy screen - demonstrated by running 0.50 separations, which starts the planet almost on top of the companion and produces a refusal rather than a result.',
-      },
-      {
-        steps: '14-19',
-        text: 'The sweep. Students predict the trend, run the same twenty-period experiment at five radii with everything else held fixed, read the outcomes off the table and the plot, and then re-run the trial at the change of outcome at half the step. It replaces three manual runs and the copying that went with them: the machine time is about the same, four to seven minutes, and it is spent discussing the prediction rather than typing. The plot deliberately draws no line through the points.',
-      },
-      {
-        steps: '22-26',
-        text: 'The case the lesson is built around. 0.25 separations, run at timesteps of 1.0, 0.5 and 0.25. The outcome changes; the energy drift stays under a part in a million throughout. Students record all three, choose what to report, meet the convergence rule, and write two or three sentences reporting the configuration honestly. This is the longest stretch and should not be rushed.',
-      },
-      {
-        steps: '27-31',
-        text: 'Circumbinary planets. Kepler-16b as the real example, a prediction about which direction the danger lies, then one explore covering 4.0 separations (survives) and 2.0 (ejected in about 3.4 periods with no close encounter at all), a measurement of both, and the question about what drove it out.',
-      },
-      {
-        steps: '32-35',
-        text: 'The circumbinary boundary at 3.6 separations, then the deliberate disagreement: 3.0 and 2.5 both survive forty periods although the fit excludes them, with excursions to 14 and 25 separations. Students are asked who is wrong, and the answer is neither - forty periods is four thousandths of what the fit was calibrated on.',
-      },
-      {
-        steps: '36-37',
-        text: 'The strongest claim the work supports, written out in full so students can see how long an honest one is, and a closing summary of every result together with the three things the model leaves out: it is flat, the planet is a test particle, and the stars are points drawn ten times life size.',
       },
     ],
     features: [
@@ -713,7 +1787,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'The energy-drift screen',
-        text: 'Past a tenth of a per cent the panel declines to report an outcome at all. The threshold was measured rather than chosen: across the configurations this lesson uses, every run that drifted more than that gave an outcome that changed when the step was halved. It is presented to students as a screen and not a certificate, which is the honest description.',
+        text: 'Past a tenth of a per cent the panel declines to report an outcome at all. The threshold was measured rather than chosen: across the configurations this investigation uses, every run that drifted more than that gave an outcome that changed when the step was halved. It is presented to students as a screen and not a certificate, which is the honest description.',
       },
       {
         name: 'The published boundary readout',
@@ -721,11 +1795,11 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Step size actually used',
-        text: 'Not the step requested. The render loop sizes its substeps from the frame time, so a machine under load silently integrates coarser than the scenario asked for. In a lesson about whether a result is numerical, that could not be left unsaid; the panel reports the mean and the largest step the run was actually given.',
+        text: 'Not the step requested. The render loop sizes its substeps from the frame time, so a machine under load silently integrates coarser than the scenario asked for. In an investigation about whether a result is numerical, that could not be left unsaid; the panel reports the mean and the largest step the run was actually given.',
       },
       {
         name: 'The A/B experiment bench',
-        text: 'Not required by the lesson, but the natural next tool: it will record two runs on the same simulated-time axis and difference them, which turns "0.15 survives and 0.30 does not" into a chart. Worth offering to students who finish early.',
+        text: 'Not required by the investigation, but the natural next tool: it will record two runs on the same simulated-time axis and difference them, which turns "0.15 survives and 0.30 does not" into a chart. Worth offering to students who finish early.',
       },
     ],
     misconceptions: [
@@ -759,7 +1833,7 @@ export const INSTRUCTOR_CONTENT = {
         claim:
           'The finer timestep is more accurate, so the fine answer is the answer.',
         response:
-          'The most interesting wrong answer in the lesson, and the one to draw out at step 18. It is more accurate, and that is not the same as converged: the next halving might move it again. What a changing answer establishes is that the answer is still moving. Students who make this error have understood the numerics and drawn the wrong conclusion, which is worth more class time than students who have not.',
+          'The most interesting wrong answer in the investigation, and the one to draw out at step 18. It is more accurate, and that is not the same as converged: the next halving might move it again. What a changing answer establishes is that the answer is still moving. Students who make this error have understood the numerics and drawn the wrong conclusion, which is worth more class time than students who have not.',
       },
       {
         claim: 'A run that gives no answer is a failed run.',
@@ -779,7 +1853,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Budget the time backwards from step 16. Steps 1 to 13 are a brisk stability lesson and can be done in twenty minutes; steps 14 to 20 are the part that is hard to teach anywhere else and need at least as long again.',
+      'Budget the time backwards from step 16. Steps 1 to 13 are a brisk stability investigation and can be done in twenty minutes; steps 14 to 20 are the part that is hard to teach anywhere else and need at least as long again.',
       'Take the step 3 prediction as a show of hands and write the tally on the board before anyone runs anything. Coming back to it after step 12 - when they have computed 0.177 - is the strongest moment in the first half.',
       'Each run is about half a minute of wall clock at the scenario’s own speed. Halving the step doubles it, so the third run at a timestep of 0.25 takes roughly two minutes. Warn students, and consider having different groups run different steps and pool the results rather than each doing all three.',
       'At step 15, the 0.50 configuration starts the planet almost on top of the companion star, which is why it fails so spectacularly. That is deliberate: it is the easiest possible demonstration of the energy screen, and it is not subtle. The subtle case is step 16.',
@@ -788,14 +1862,14 @@ export const INSTRUCTOR_CONTENT = {
       'Step 20 is a written answer and takes most of the remaining time. Its rubric has four parts and the fourth - offering no verdict - is the one to mark hardest. If time is short, set it as the exit ticket.',
       'The circumbinary half is faster than it looks because the two disruption cases resolve in three or four binary periods. Steps 21 to 28 fit in fifteen minutes if the first half has run long.',
       'Step 27 asks students to run configurations the fit says should fail, and they do not fail. Some students will assume they have made a mistake. Tell them in advance that this is the intended result and the question is why.',
-      'Everything in steps 14 to 20 transfers to any N-body work. If any of your students go on to a computational project, this is the lesson they will use again, and it is worth saying so.',
+      'Everything in steps 14 to 20 transfers to any N-body work. If any of your students go on to a computational project, this is the investigation they will use again, and it is worth saying so.',
     ],
     discussion: [
       'A run that gives different answers at different timesteps has told you something. What, exactly, and how would you write it in a paper?',
       'Holman & Wiegert integrated 10⁴ binary periods per configuration across a grid in mass ratio and eccentricity. What would that cost today, and what would you do with the result that a formula does not already give you?',
-      'The formula in this lesson assumes a coplanar, prograde, initially circular, massless planet. Which of those four is most likely to be violated by a real system, and what would you do about it?',
+      'The formula in this investigation assumes a coplanar, prograde, initially circular, massless planet. Which of those four is most likely to be violated by a real system, and what would you do about it?',
       'Alpha Centauri A and B are 23.5 AU apart at e = 0.52. Work out the circumstellar boundary for that pair. What does the answer say about the prospects for a habitable-zone planet around either star?',
-      'This lesson calls nothing stable. Is that excessive caution, or is "stable" a word that should not be used about a numerical result at all?',
+      'This investigation calls nothing stable. Is that excessive caution, or is "stable" a word that should not be used about a numerical result at all?',
       'Two thirds of Sun-like stars have companions, and the excluded band here is wide. What does that imply about how many planetary systems could exist, and does the exoplanet census bear it out?',
     ],
     extensions: [
@@ -805,25 +1879,9 @@ export const INSTRUCTOR_CONTENT = {
       'Use the A/B experiment bench to record 0.15 and 0.30 as two arms of one experiment and chart the distance to the primary against simulated time. The divergence is visible long before the ejection.',
       'For a computational course: reproduce the convergence study at 0.25 separations in a language of your choice, with your own integrator, and see whether the step at which the answer settles is the same. It should not be, and why not is the exercise.',
     ],
-    expectations: {
-      5: 'The planet at 0.15 separations, twenty binary periods, about half a minute of wall clock. The trail band holds its shape throughout - it widens and narrows slightly as the stars swing through periapsis, and it never stops being a ring. Energy drift settles around 0.00017% and stays there. If a machine is struggling, the "Step actually used" row will report a mean larger than 1.0; that is worth pointing out rather than ignoring, because it is the same effect the second half of the lesson is about.',
-      6: 'Twenty periods completed, farthest out about 0.62 separations, zero close encounters, energy drift about 0.00017%. A student reporting fewer than twenty periods has the starting radius wrong - the panel prints the value it actually used. A farthest-out figure above 2 usually means they have read the row in AU rather than in separations.',
-      9: 'The planet at 0.30 separations is ejected after about 2.5 binary periods, following one close pass with the companion. Energy drift around 0.0005%, comfortably inside the screen, so this is a physical result and not a numerical one. The run ends itself once the planet is unbound and past ten separations. Exact timing varies with the step: at a timestep of 1.0 it leaves around 2.5 periods and at 0.25 nearer 5, which is expected in a chaotic system and is the subject of step 19 - the runs must agree on whether, not on when.',
-      10: 'About 2.5 binary periods and one close encounter. Any answer of twenty periods means the planet did not leave; check the starting radius. The encounter count is the interesting number here, because the circumbinary case at step 24 records zero and loses its planet anyway.',
-      15: 'The sweep takes four to seven minutes for five trials of twenty periods. Expect 0.12 through 0.22 to survive the window and 0.30 to be ejected after about five periods, with a farthest distance of ten separations and a handful of close passes. The exact ejection time is not reproducible between machines and does not need to be.',
-      16: 'Four survived; the largest surviving radius is 0.22 and the smallest ejecting one is 0.30. A class that reads 0.22 as "the boundary" has read a gap between two samples as a measurement, which is what the next question is for.',
-      18: 'The re-run at the change of outcome with half the step gives the same answer, so the ejection is not an artifact of the step. If it disagrees, that is the better lesson: neither run has measured that configuration.',
-      21: 'At 0.50 separations the planet starts about 1 AU from the companion, which is not really an orbit at all. At a timestep of 1.0 the drift is about 0.18%, past the 0.1% screen, and the panel refuses to name an outcome; the eccentricity readout comes out above 100, which is a useful thing for students to see a number do. The first halving is the instructive part: the drift goes to 0.17%, essentially unchanged, and is still refused. The second, to a timestep of 0.25, takes it to 0.0023% and produces an answer - the planet collided with a star after 0.010 binary periods. Two points to draw out: resolving an encounter is not a matter of doing gradually better, and the outcome turned out to be a collision rather than the ejection most students will have assumed. This is the blunt demonstration; the subtle one is next.',
-      22: 'This is the run to do at the front of the room. At 0.25 separations with a timestep of 1.0 the planet survives all twenty periods while the encounter counter climbs into the dozens - around seventy by the end - and the drift readout sits at about 0.00018%. At a timestep of 0.25 the same configuration is ejected, after roughly thirteen periods, with drift near 0.0000034%. Both runs pass the energy screen and they disagree. Wall clock is about half a minute, one minute and two minutes for the three timesteps; consider splitting them across groups.',
-      23: 'Drift about 0.00018% at a timestep of 1.0 and about 0.0000034% at 0.25 - both several orders of magnitude inside the screen. The third field has no single right answer and is meant to be uncomfortable: students who ran all three steps will usually find two agreeing and one not, and the point is that "two out of three" is not how convergence works. Take the count they report and ask what it would take to make it three.',
-      29: 'At 4.0 separations the planet holds its ring for all forty binary periods, with a farthest-out figure of about 4.03 and zero encounters. At 2.0 it is ejected after about 3.4 periods, still with zero encounters and a closest approach of about 0.22 separations - it never comes near either star. Energy drift is around 0.0007% in both, so neither result is numerical. Each run is about half a minute.',
-      30: 'About 3.4 binary periods, zero close encounters, drift about 0.0007%. The zero is the point of the step. A student reporting a nonzero encounter count has the radius smaller than 2.0.',
-      33: 'Optional, eight to twelve minutes. Expect the outer radii to hold and the inner ones to be disrupted, with the change not falling neatly at the published 3.61 - which is the disagreement the next two screens are about.',
-      34: 'Both should report that the planet survived the integration, which is not what the fit predicts. What separates them from the genuine survivor at 4.0 is the farthest-out figure: about 14 separations from the run at 3.0 and about 25 from the run at 2.5, against 4.03 for the 4.0 run. Those excursions are the answer to step 28 - the planets are being pumped outward and forty periods is not long enough to see where it ends. Expect some students to assume they have made a mistake; tell them in advance that this is the intended result.',
-    },
     modelNotes: `The three bodies are integrated as a Newtonian point-mass system in a plane, with
       Velocity Verlet rather than the catalog's default symplectic Euler. That choice is part of
-      the lesson's subject matter: symplectic Euler's O(dt) phase error puts a spurious
+      the investigation's subject matter: symplectic Euler's O(dt) phase error puts a spurious
       eccentricity on the planet within a few orbits, which a student would then read as the
       binary perturbing it. Verlet's error is O(dt²) and bounded, so a quiet run holds energy to
       about a part in a million and the drift readout rises only when something real is
@@ -843,20 +1901,20 @@ export const INSTRUCTOR_CONTENT = {
       \n\nEverything is coplanar, and both the simulation and the fit are two-dimensional. This is
       the model's largest simplification and step 13 makes it explicit. A planet inclined out of
       the binary's plane can exchange inclination for eccentricity through the Kozai-Lidov
-      mechanism, which destabilizes orbits that are safe in the plane; no part of this lesson
+      mechanism, which destabilizes orbits that are safe in the plane; no part of this investigation
       can show that.
       \n\nThe stars are drawn ten times their main-sequence radii, because at a 10 AU separation a
       true solar radius is about a third of a pixel. js/physics.js collides on the drawn radius,
       so the exaggeration sets the collision threshold at roughly 0.06 AU. This is stated in the
-      lesson's closing screen and in the panel's own wording, and it affects the split between
+      investigation's closing screen and in the panel's own wording, and it affects the split between
       recorded collisions and recorded ejections among the disrupted configurations. It does not
       affect the split between disrupted and survived: every surviving configuration in this
-      lesson keeps the planet at least 400 simulation units from the perturbing star, about
+      investigation keeps the planet at least 400 simulation units from the perturbing star, about
       seventy times the threshold.
       \n\nOne further limit worth naming to a class that asks. The runs here are 20 and 40 binary
-      periods. That is short enough that the lesson's own results and the published fit disagree
-      in two places, which the lesson uses rather than hides - but it also means every "survived"
-      in this lesson is a much weaker claim than the ones in the paper, and no claim at all about
+      periods. That is short enough that the investigation's own results and the published fit disagree
+      in two places, which the investigation uses rather than hides - but it also means every "survived"
+      in this investigation is a much weaker claim than the ones in the paper, and no claim at all about
       the real systems the paper's readers care about.`,
   },
   'design-the-schedule': {
@@ -864,7 +1922,7 @@ export const INSTRUCTOR_CONTENT = {
       'Observing design on the live instrument, and what a result has to carry',
     difficulty: 'Introductory, written for non-science majors',
     placement:
-      'The hands-on companion to Can You Detect This Planet?, and best run immediately after it in the following lab period. That lesson makes the argument with an analytic planner in seconds; this one makes students do it for real on the live spectrograph, where a run takes minutes and cannot be rewound. It needs 35 to 40 minutes, most of which is observing time that a class can spend discussing predictions. It also works as a standalone experimental-design lab for any course that needs one, because everything it demonstrates is about the schedule rather than about exoplanets.',
+      'The hands-on companion to Can You Detect This Planet?, and best run immediately after it in the following lab period. That investigation makes the argument with an analytic planner in seconds; this one makes students do it for real on the live spectrograph, where a run takes minutes and cannot be rewound. It needs 35 to 40 minutes, most of which is observing time that a class can spend discussing predictions. It also works as a standalone experimental-design lab for any course that needs one, because everything it demonstrates is about the schedule rather than about exoplanets.',
     overview: `Students plan an eight-night radial-velocity run themselves in the live Radial
       Velocity panel, commit to a prediction, and then observe two schedules side by side
       against the same simulated star. The panel's Compare mode runs both arms over the same
@@ -904,33 +1962,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Phase coverage and amplitude bias',
-        body: 'The winning arm here typically returns K near 100 m/s against a true 84, because eight points with a two-thirds phase hole overestimate an amplitude. This is worth naming out loud: recovering the right period is not the same as measuring the orbit, and the lesson deliberately does not tune the configuration to hide it.',
-      },
-    ],
-    flow: [
-      {
-        steps: '1-2',
-        text: 'The framing - eight nights, one star, the times to be decided in advance - and the setup of the live panel: baseline 24.673 d, uncertainty 8 m/s, seed schedule-1, regular cadence, eight observations. Have students write down the schedule checksum the note prints.',
-      },
-      {
-        steps: '3-4',
-        text: 'The prediction, collected before anything is observed, then the comparison run itself. This is the long screen: about seven simulated orbits. It is a good moment to poll the room on the prediction and to point out that the second arm is not a second run.',
-      },
-      {
-        steps: '5-7',
-        text: 'Reading the two arms, then the two questions that decide what the reading is worth: what a window peak of 100% means, and what one draw of each schedule does and does not establish. The second is the harder one and the one worth discussing aloud.',
-      },
-      {
-        steps: '8',
-        text: 'Changing the noise seed and running again, to separate the geometric failure of the comb from the luck in the irregular arm.',
-      },
-      {
-        steps: '9-11',
-        text: 'The run as it actually arrives: a weather gap typed into the panel, which drops epochs and can break the control, and then a hand-typed list of times, which is also where students discover that unreadable entries are reported rather than dropped.',
-      },
-      {
-        steps: '12-15',
-        text: 'What a number has to be quoted with - the range searched, the schedule, the seed - and the closing statement that a schedule is not administration around a sampled measurement but the measurement itself.',
+        body: 'The winning arm here typically returns K near 100 m/s against a true 84, because eight points with a two-thirds phase hole overestimate an amplitude. This is worth naming out loud: recovering the right period is not the same as measuring the orbit, and the investigation deliberately does not tune the configuration to hide it.',
       },
     ],
     features: [
@@ -952,7 +1984,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Exoplanet Characterization Lab scenario (steps 1-11)',
-        text: 'HD 209458 with the star free to move: P = 3.5247 d, K = 84 m/s, the same system the other radial-velocity lessons use. One orbit is about thirteen seconds of wall clock at normal speed, so the 24.673-day run is a few minutes unless the simulation speed is raised.',
+        text: 'HD 209458 with the star free to move: P = 3.5247 d, K = 84 m/s, the same system the other radial-velocity investigations use. One orbit is about thirteen seconds of wall clock at normal speed, so the 24.673-day run is a few minutes unless the simulation speed is raised.',
       },
     ],
     misconceptions: [
@@ -984,9 +2016,9 @@ export const INSTRUCTOR_CONTENT = {
     ],
     teachingNotes: [
       'The observing at step 4 takes a few minutes of wall clock. Raise the simulation speed rather than shortening the baseline - but watch for the panel\u2019s warning that frames are too far apart for the schedule, which means measurements are being read across the curve instead of on it, and is a real defect in the data rather than a cosmetic complaint.',
-      'Collect the step 3 prediction as a show of hands before anybody runs anything. The lesson\u2019s whole structure depends on the prediction existing before the result does, and the reading step declares the prediction as a prerequisite so an assignment cannot include one without the other.',
+      'Collect the step 3 prediction as a show of hands before anybody runs anything. The investigation\u2019s whole structure depends on the prediction existing before the result does, and the reading step declares the prediction as a prerequisite so an activity cannot include one without the other.',
       'Numbers will differ slightly between machines: the frames land differently at different simulation speeds, so the fitted values move. The story does not - the comb sees a nearly constant velocity on every machine and every seed.',
-      'Step 11 is the one to let run long if there is time. Students who know the period can design a list of times that beats both built-in shapes, which is the most useful thing in the lesson and the closest to what a real second season of observing does.',
+      'Step 11 is the one to let run long if there is time. Students who know the period can design a list of times that beats both built-in shapes, which is the most useful thing in the investigation and the closest to what a real second season of observing does.',
       'If a class is short of time, steps 9 and 10 can be dropped without breaking anything later; steps 12 and 13 cannot, because they are where the result becomes reportable.',
     ],
     discussion: [
@@ -1009,27 +2041,19 @@ export const INSTRUCTOR_CONTENT = {
       than two independent ones. The period search is the same weighted circular fit the analysis
       workspace uses, run over one range for both arms; the reported window function is computed from
       the times alone and uses no velocities at all.`,
-    expectations: {
-      2: 'The note under the controls should read eight observations over 24.673 days with a schedule checksum. If it shows a different count, the Observations field has been left at its default rather than set to 8.',
-      4: 'Both arms observe together and the comparison appears only when both have finished; before that the panel reports progress as two counts. Expect a few minutes at normal speed, or under a minute at high speed.',
-      5: 'The regular arm lands somewhere well away from 3.5 days with an amplitude of a few m/s - it has seen essentially no variation - while the irregular arm recovers about 3.52 days with an amplitude near 100 m/s against a true 84. The exact figures move with the simulation speed and the seed; the pattern does not.',
-      8: 'The regular arm fails on every seed, because its failure is geometric. The irregular arm recovers the period on most seeds, with the amplitude varying more than the period does.',
-      10: 'The note reports how many epochs fell inside the 8-16 day gap. If the two arms lose different numbers, the comparison block says it is no longer a comparison of scheduling alone and lists what stopped being equal.',
-      11: 'Unreadable entries and duplicate times are reported in the note rather than dropped silently, and a list that cannot be read at all falls back to a regular cadence and says so.',
-    },
   },
   'detect-this-planet': {
     topic: 'Observational design and the limits of a measurement',
     difficulty: 'Introductory, written for non-science majors',
     placement:
-      'A short lesson, 15 to 20 minutes, meant to sit immediately after Finding Planets by Their Tug, which is where students learn to read a radial-velocity curve. It works as a standalone lab-period opener and as the bridge from "here is a signal, what does it mean" to "here is a telescope allocation, what will you get". It is also the only exoplanet lesson that is about the observer rather than the system, so it doubles as an introduction to experimental design in any course that needs one.',
+      'A short investigation, 15 to 20 minutes, meant to sit immediately after Finding Planets by Their Tug, which is where students learn to read a radial-velocity curve. It works as a standalone lab-period opener and as the bridge from "here is a signal, what does it mean" to "here is a telescope allocation, what will you get". It is also the only exoplanet investigation that is about the observer rather than the system, so it doubles as an introduction to experimental design in any course that needs one.',
     overview: `Students plan two radial-velocity observing runs of the same star, with the same
       instrument and the same twelve measurements, and find that one of them detects a hot
       Jupiter unambiguously while the other - eleven times the baseline, not one measurement
       fewer - returns a result nobody could publish either way. The planet is identical in both.
       What differs is the cadence: Schedule B samples every 3.52 days against a 3.5247-day
       period, so every measurement lands at the same orbital phase.
-      \n\nThe lesson then separates the three things a run can get wrong - cadence, baseline and
+      \n\nThe investigation then separates the three things a run can get wrong - cadence, baseline and
       precision - by holding two fixed and moving the third, and closes on two questions about
       what the evidence supports: what a marginal chi-square excess actually licenses you to
       say, and what a completely flat dataset does and does not rule out. It deliberately never
@@ -1048,7 +2072,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Cadence, baseline and precision are independent',
-        body: 'Baseline sets the longest period that could be seen at all. Cadence sets which phases of a given period get looked at, and can destroy a signal at any baseline. Precision sets how small a signal survives the noise. A run can be ruined by any one of the three while the other two are excellent, and the lesson demonstrates each failure separately.',
+        body: 'Baseline sets the longest period that could be seen at all. Cadence sets which phases of a given period get looked at, and can destroy a signal at any baseline. Precision sets how small a signal survives the noise. A run can be ruined by any one of the three while the other two are excellent, and the investigation demonstrates each failure separately.',
       },
       {
         heading: 'Aliasing',
@@ -1068,64 +2092,14 @@ export const INSTRUCTOR_CONTENT = {
         body: 'A flat dataset excludes planets above a mass that depends on period, inclination and the schedule itself. It never excludes "a planet". Published radial-velocity nondetections are always presented as sensitivity curves for this reason.',
       },
     ],
-    flow: [
-      {
-        steps: '1-2',
-        text: 'The framing: twelve nights, one star, and the question of whether the schedule would find a planet rather than whether one is there. Students commit to which of four choices matters most before seeing any data.',
-      },
-      {
-        steps: '3-5',
-        text: 'Schedule A - twelve measurements across one orbit - in the survey-schedule instrument. Students read phase coverage, scatter and chi-square, then face the key question: the most this establishes is that the velocity is not constant.',
-      },
-      {
-        steps: '6-9',
-        text: 'Schedule B, the same twelve measurements at 3.52-day intervals. Students predict, observe the folded panel collapse into two bins, record the numbers, and work out that the cadence is one orbital period.',
-      },
-      {
-        steps: '10-11',
-        text: 'Precision isolated: a Neptune on the good schedule is invisible at 8 m/s and obvious at 1 m/s. Then the ambiguous-evidence question, which is the lesson’s hardest and the one most worth discussing aloud.',
-      },
-      {
-        steps: '12-13',
-        text: 'The synthetic observing run in the live Radial Velocity panel, against the simulated star, followed by the CSV export. Schedule A completes in about thirteen seconds of wall clock.',
-      },
-      {
-        steps: '14',
-        text: 'A written question on the limits of a nondetection: what a flat dataset excludes, and what it leaves open.',
-      },
-      {
-        steps: '15-16',
-        text: 'The turn to transits. The depth of a transit is a ratio of areas, and students compute the 84 ppm an Earth would make across the Sun - a number that comes back at step 23 as a planet TESS cannot reach.',
-      },
-      {
-        steps: '17-19',
-        text: 'The noise budget instrument, opening on a Kepler hot Jupiter at a depth-over-noise of 587. Students predict what the same planet does from three nights on the ground, then watch it fall to about 4 - and then find that three hundred nights take it to 31, but no further than a ceiling of 49.',
-      },
-      {
-        steps: '20-21',
-        text: 'Three noise terms rather than two and why they scale differently, then what the model is pretending - the middle term is treated as perfectly correlated within a transit and perfectly independent between them, and reality is neither. The second of these is the screen to slow down on.',
-      },
-      {
-        steps: '22-23',
-        text: 'A measurement of both budgets side by side, then the question that names the ceiling: two of the three terms average down and one does not, which is why three hundred nights bought a factor of eight rather than ten and why it stops at 49.',
-      },
-      {
-        steps: '24-25',
-        text: 'Three real TESS cases in order of difficulty: Pi Mensae c at 10.5, TOI-700 d at 2.7 after a year of sectors, and an Earth twin at 0.6 whose ceiling is 2.8 - unreachable however long anyone observes. Then what would actually have to change.',
-      },
-      {
-        steps: '26',
-        text: 'The closing statement, now covering both halves: the radial-velocity failure could have been repaired by observing differently, and the photometric one only by lowering the persistent floor.',
-      },
-    ],
     features: [
       {
         name: 'survey-schedule instrument (steps 3-11)',
-        text: 'An analytic planner: it computes the radial-velocity curve for a chosen planet mass, samples it on a chosen cadence, adds Gaussian noise from a seeded generator, and reports phase coverage, scatter and chi-square against a constant velocity. Analytic rather than integrated so a student can compare two schedules in seconds; the four presets are the four cases the lesson uses.',
+        text: 'An analytic planner: it computes the radial-velocity curve for a chosen planet mass, samples it on a chosen cadence, adds Gaussian noise from a seeded generator, and reports phase coverage, scatter and chi-square against a constant velocity. Analytic rather than integrated so a student can compare two schedules in seconds; the four presets are the four cases the investigation uses.',
       },
       {
         name: 'Ideal-signal overlay',
-        text: 'The dashed curve on both panels is the noiseless signal, drawn to teach and labeled as such on the plot itself. It has no counterpart in a real observing run and the lesson says so at step 3. It can be switched off in the live panel, which is worth doing with a class.',
+        text: 'The dashed curve on both panels is the noiseless signal, drawn to teach and labeled as such on the plot itself. It has no counterpart in a real observing run and the investigation says so at step 3. It can be switched off in the live panel, which is worth doing with a class.',
       },
       {
         name: 'Synthetic observing run (step 12)',
@@ -1141,7 +2115,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Exoplanet Characterization Lab scenario (steps 1, 12)',
-        text: 'HD 209458 with the star free to move, the same scenario the other radial-velocity lesson uses. One orbit takes about thirteen seconds of wall clock, so Schedule A completes live in about that time.',
+        text: 'HD 209458 with the star free to move, the same scenario the other radial-velocity investigation uses. One orbit takes about thirteen seconds of wall clock, so Schedule A completes live in about that time.',
       },
     ],
     misconceptions: [
@@ -1149,7 +2123,7 @@ export const INSTRUCTOR_CONTENT = {
         claim:
           'More data is always better, so a longer run beats a shorter one.',
         response:
-          'Schedule B is the counterexample and it is the point of the lesson. Collect the step 6 prediction before revealing it - in most classes a clear majority chooses the longer baseline.',
+          'Schedule B is the counterexample and it is the point of the investigation. Collect the step 6 prediction before revealing it - in most classes a clear majority chooses the longer baseline.',
       },
       {
         claim:
@@ -1180,15 +2154,15 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Take the step 2 prediction as a show of hands before anyone opens the instrument, and write the tally on the board. Coming back to it after step 8 is the strongest moment in the lesson.',
+      'Take the step 2 prediction as a show of hands before anyone opens the instrument, and write the tally on the board. Coming back to it after step 8 is the strongest moment in the investigation.',
       'The chi-square readout is introduced in words, not symbols: "how surprising is this much scatter if the velocity never changed". Classes without statistics can work entirely from phase coverage and the comparison of scatter against the error bar, and the numbers still separate cleanly.',
-      'Step 5 is the question students most often get wrong for a good reason: they know there is a planet because the lesson told them. Ask what they would have concluded from the twelve numbers alone.',
+      'Step 5 is the question students most often get wrong for a good reason: they know there is a planet because the investigation told them. Ask what they would have concluded from the twelve numbers alone.',
       'On Schedule B, have someone set the uncertainty to zero. The measurements become perfect and the run still fails, which decouples "noisy" from "uninformative" better than any explanation.',
       'The seed field is worth using deliberately: give different groups different seeds on Schedule B and collect their chi-square values. The spread across groups is itself the argument against reading too much into a single marginal result.',
       'Step 14 is a written answer and takes most of the time in a 20-minute run. If time is short it can be set as the exit ticket instead.',
-      'Step 5 has one instructive wrong answer: choosing "a planet orbits this star" rather than "the velocity is not constant". It is the exact overreach the step tests for, and students make it because the lesson has already told them there is a planet. Ask what they would have concluded from the twelve numbers alone.',
+      'Step 5 has one instructive wrong answer: choosing "a planet orbits this star" rather than "the velocity is not constant". It is the exact overreach the step tests for, and students make it because the investigation has already told them there is a planet. Ask what they would have concluded from the twelve numbers alone.',
       'Step 9 is the arithmetic: 3.52 / 3.5247 = 0.9987 orbits, accepted within 0.06. A student answering near 0.28 has divided the wrong way round.',
-      'Step 11 is the hardest question in the lesson and the one most worth reading aloud. The fourth option - "the amplitude is twice the noise, so the detection is significant" - attracts students who have correctly seen the excess and incorrectly turned it into a significance. Both it and the first option deserve a sentence.',
+      'Step 11 is the hardest question in the investigation and the one most worth reading aloud. The fourth option - "the amplitude is twice the noise, so the detection is significant" - attracts students who have correctly seen the excess and incorrectly turned it into a significance. Both it and the first option deserve a sentence.',
       'Step 14 answers that say "there is no planet" should be handed back with the question "at what period, and above what mass?". Answers that say "we learned nothing" should be told that a nondetection with a stated sensitivity is publishable, and is how upper limits appear in the literature.',
       'If the class has done Finding Planets by Their Tug, connect step 9 back to the period they measured there: the planet was easy to find because the observing was continuous, which no real program is.',
     ],
@@ -1197,7 +2171,7 @@ export const INSTRUCTOR_CONTENT = {
       'Telescope time is awarded by committee, months ahead, on the basis of a written plan. What should a committee ask about a proposed cadence?',
       'The first exoplanet surveys found overwhelmingly hot Jupiters on short periods. How much of that is about planetary systems and how much is about schedules?',
       'If you had a thirteenth night to add to Schedule B, when would you use it, and what would you be able to say afterwards that you cannot say now?',
-      'Every measurement in this lesson has the same uncertainty. Real ones do not - weather, airmass and exposure time all vary. Does a run with mixed precision help or hurt?',
+      'Every measurement in this investigation has the same uncertainty. Real ones do not - weather, airmass and exposure time all vary. Does a run with mixed precision help or hurt?',
     ],
     extensions: [
       'Export a Schedule A run and a Schedule B run and hand both files to students without saying which is which. Ask them to decide, from the data alone, whether the star has a planet.',
@@ -1212,12 +2186,12 @@ export const INSTRUCTOR_CONTENT = {
       single-planet velocity curve from js/exoplanetObservables.js, which is exact for the
       near-circular orbit of HD 209458 b and would not be for an eccentric one. Real
       radial-velocity curves of eccentric planets are not sinusoids, and the phase-coverage
-      argument the lesson makes is unchanged by that but the shape of the curve is not.
+      argument the investigation makes is unchanged by that but the shape of the curve is not.
       \n\nThe noise is Gaussian, identically distributed, and independent between measurements.
       Real radial-velocity errors are none of the three: they include correlated systematics from
       the instrument and the atmosphere, and stellar jitter from spots and granulation that is
       correlated on the star's rotation period and is often the dominant term for an active star.
-      The lesson names underestimated error bars at step 11 as the leading alternative explanation
+      The investigation names underestimated error bars at step 11 as the leading alternative explanation
       for a marginal excess, which is the honest version of this simplification, but a class that
       goes on to real data should be told that jitter is why a 1 m/s spectrograph does not deliver
       1 m/s planet sensitivity.
@@ -1234,7 +2208,7 @@ export const INSTRUCTOR_CONTENT = {
       the interpolation is exact to well under a meter per second.
 
       The folded panel is folded on the true period, which a real survey does not know. It is an
-      explanatory diagram and not part of the detection procedure, and the lesson says so on the
+      explanatory diagram and not part of the detection procedure, and the investigation says so on the
       screen where it first appears; finding the period is itself most of the work in practice.
 
       The star on the canvas is in genuine barycentric motion, and the live readout gives its
@@ -1246,19 +2220,6 @@ export const INSTRUCTOR_CONTENT = {
     // explore screens, the two measure screens and the live run. Guidance on
     // the graded questions is in teachingNotes, because an expectation on a
     // pure-question screen is a mistake the tests catch.
-    expectations: {
-      1: 'Have them actually select the star before going on: the instruments measure whichever star is selected, and a run planned against nothing is the commonest way this lesson stalls.',
-      3: 'Schedule A, seed 1, 8 m/s. The left panel shows twelve points tracing one full sine cycle; the right panel has at least one point in every phase bin. The readout gives phase coverage 10 of 10, scatter about 55.8 m/s against an expected 8, and chi-square per degree of freedom about 48.7. With the uncertainty dragged to zero the points sit exactly on the dashed curve, which is worth doing once with the class. Schedule A covers 9 or 10 of the ten phase bins. The readout underneath gives the live star\'s phase, which is what a phase bin is a bin of - worth pointing at, because students read "phase coverage" as an abstraction otherwise.',
-      4: 'Coverage 10 of 10, scatter about 55.8 m/s, chi-square per degree of freedom about 48.7. A student reporting coverage below 10 has not loaded the preset; one reporting a chi-square near 1 has left the uncertainty far too high. The field check warns below 5.',
-      7: 'Schedule B. The left panel spans 38.7 days and looks almost flat; the folded panel shows all twelve points stacked in two adjacent bins. Coverage drops to 2 of 10 and chi-square per degree of freedom to about 1.9. Moving the cadence to 3.0 or 4.2 restores most of the coverage immediately, which is the cleanest way to show that the failure is the cadence and nothing else. Schedule B covers 2 bins of ten. Be exact about what is controlled: same star, same planet, same instrument precision, same twelve nights, same random draw. Only the cadence differs, so every conclusion here is a conclusion about cadence.',
-      8: 'Coverage 2 of 10, scatter about 11 m/s, chi-square per degree of freedom about 1.9. The scatter being close to the 8 m/s error bar is the whole result. Setting the uncertainty to zero here is worth doing: the run still fails, which separates "noisy" from "uninformative".',
-      10: 'The Neptune preset at 8 m/s gives K near 7.3 m/s, full phase coverage and chi-square per degree of freedom near 1.7 - a perfect schedule that still fails. Switching to 1 m/s leaves the planet and the schedule untouched and takes chi-square per degree of freedom to about 22.8.',
-      12: 'The live panel completes Schedule A in about thirteen seconds of wall clock at normal speed, laying down twelve points on the dashed overlay. Untick the overlay and what is left is what an observer has. If a student runs the simulation fast, the panel warns that the frames are too coarse for the cadence and the extremes may be flattened; that warning is real and the answer is to slow down and restart.',
-      17: 'The instrument opens on HAT-P-7 b: a measured depth of 5,900 ppm, a four-hour transit, six hundred of them, and a depth-over-noise of about 587. The green depth line sits far beyond every noise bar. Dragging the transit count down barely moves the ratio, because at six hundred transits almost the entire remaining budget is the persistent term - the white and within-transit rows are both well under one part per million. This is the floor-limited case, and it is worth naming as such before the ground-based one arrives.',
-      19: 'The same planet from three nights on the ground: white noise about 260 ppm, the within-transit term about 1,440, the persistent term 120, and a ratio of about 4. Dragging the transit count to 300 takes it to about 31 - a real factor of eight, not the factor of ten a pure square-root law would give, because part of the budget was already persistent. Keep dragging and it approaches 49 and stops. Both halves matter: more observing does help, and it stops helping, and the ceiling row says where before any nights are spent.',
-      22: 'About 587 with Kepler and about 4 from three nights on the ground, a factor of 150 on the same planet. The largest ground-based term is the within-transit bar at about 1,440 ppm after three transits. A student who reports the two ratios the other way round has read the columns backwards; the field check says so.',
-      24: 'Pi Mensae c about 10.5, TOI-700 d about 2.7, the Earth twin about 0.6. Two things to draw out. The Earth twin has by far the longest transit - thirteen hours against under two for TOI-700 d - and it is still the least detectable, which cuts against the intuition that a longer transit is an easier one. And two hundred transits take it to about 2.5 against a ceiling of 2.8, so even unlimited TESS observing of this system does not produce a detection: the honest answer, and a more useful one than implying it is a few more sectors away.',
-    },
   },
 
   'keplers-laws': {
@@ -1294,7 +2255,7 @@ export const INSTRUCTOR_CONTENT = {
         body: `Equal areas in equal times is conservation of angular momentum in disguise. Gravity
           is a central force, acting along the line joining the two bodies, so it exerts no torque
           about the star and L = m·v·r·sin(θ) cannot change. When r falls, v must rise. This is the
-          single most useful reframing in the lesson, and it is what step 12 asks for in writing.`,
+          single most useful reframing in the investigation, and it is what step 12 asks for in writing.`,
       },
       {
         heading: 'The third law, and what Newton added',
@@ -1303,28 +2264,6 @@ export const INSTRUCTOR_CONTENT = {
           for the Solar System the constant is 1 only because the Sun is one solar mass. Around
           TRAPPIST-1 it is not 1, and that is precisely what makes the relation a way to measure
           mass rather than a coincidence.`,
-      },
-    ],
-    flow: [
-      {
-        steps: '1–6',
-        text: 'Tycho’s data and Kepler’s problem, then the anatomy of an ellipse with an eccentricity slider. Ends with the empty second focus.',
-      },
-      {
-        steps: '7–12',
-        text: 'The second law. Students measure both orbits, watch the equal-area wedges, then measure speed at periapsis and apoapsis and write down why it changes.',
-      },
-      {
-        steps: '13–17',
-        text: 'The third law. Four planets are tabulated from the live Solar System, plotted automatically, and the constant is worked out and then used to predict a period.',
-      },
-      {
-        steps: '18–22',
-        text: 'Newton’s correction. Students weigh TRAPPIST-1 from one planet’s orbit, then weigh a second star, and identify where Kepler’s version breaks.',
-      },
-      {
-        steps: '23',
-        text: 'A closing summary rather than a question: the shape of an orbit, the speed-for-distance trade, the power law recovered from the students’ own eight measurements, and a star weighed from naked-eye positions recorded before the telescope.',
       },
     ],
     features: [
@@ -1379,7 +2318,7 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'Steps 1–6 move quickly. If time is short this is the section to compress, not the third-law section.',
       'Step 7 is the first import. Demonstrate the click-then-import gesture once for the whole room; it saves ten minutes of individual questions.',
-      'Step 12 is the only written answer in the lesson and the one worth grading by hand. Look for "angular momentum is conserved because gravity exerts no torque", not merely "it speeds up because it is closer".',
+      'Step 12 is the only written answer in the investigation and the one worth grading by hand. Look for "angular momentum is conserved because gravity exerts no torque", not merely "it speeds up because it is closer".',
       'Step 14 accepts up to eight planets but two are enough for the plot and three make the trend convincing. Students who fill all eight will spend fifteen minutes on one screen.',
       'Step 15 shows the intermediate powers. If a student’s P²/a³ is not near 1, the usual cause is a period read in days rather than years.',
       'Step 20 is the payoff. Give the class a moment on it: they have just measured the mass of a star from two numbers, and most will not notice unless it is pointed out.',
@@ -1399,15 +2338,8 @@ export const INSTRUCTOR_CONTENT = {
       for it: the concepts being measured are exactly the ones Newtonian gravity describes. The
       simulation is two-dimensional, so every orbit here is coplanar and inclination never enters.
       Perturbations between planets are present when mutual gravity is on but are far too small over
-      a lesson to affect any measurement. Precession from general relativity is not modeled and is
+      an investigation to affect any measurement. Precession from general relativity is not modeled and is
       not needed at this level.`,
-    expectations: {
-      7: 'The Circular Orbiter comes out at e near 0.02; the Eccentric Orbiter at roughly e = 0.6–0.7. The derived semi-major axis is the mean of the periapsis and apoapsis distances, and the validator warns if the two are entered the wrong way round.',
-      11: 'Speed at periapsis should exceed speed at apoapsis by roughly the inverse ratio of the distances. The validator warns if the two are swapped, which is the common error.',
-      14: 'Any two or more Solar System planets. P²/a³ should come out near 1 for every row when a is in AU and P in years; the validator flags a spread greater than 50%, which almost always means a period entered in days.',
-      15: 'P² ÷ a³ = 1 within reading error. The star in this scenario is exactly one solar mass, so the constant is exactly 1 by construction, and the validator says so.',
-      20: 'TRAPPIST-1 comes out at 0.0898 solar masses. The validator accepts within 0.008 and names the published value when a student lands on it.',
-    },
   },
 
   'transit-photometry': {
@@ -1465,36 +2397,6 @@ export const INSTRUCTOR_CONTENT = {
           high-resolution imaging surveys of planet hosts exist.`,
       },
     ],
-    flow: [
-      {
-        steps: '1–5',
-        text: 'Why planets are found indirectly, the five main methods, and a first transit watched live on HD 209458.',
-      },
-      {
-        steps: '6–10',
-        text: 'Depth to radius. Students explore the depth–size relation, measure the real dip, discover the naive radius is too big, and correct it for limb darkening.',
-      },
-      {
-        steps: '11–15',
-        text: 'The shape of the dip, viewing geometry and transit probability, ending in a written answer about survey bias.',
-      },
-      {
-        steps: '16–19',
-        text: 'Timing. Two transits give a period; the period gives the orbit and an equilibrium temperature.',
-      },
-      {
-        steps: '20–22',
-        text: 'Transmission spectroscopy: the planet changes size with color.',
-      },
-      {
-        steps: '23–28',
-        text: 'False positives and dilution. A hidden companion is found, imaged, and corrected for, recovering the true planet radius.',
-      },
-      {
-        steps: '29',
-        text: 'A closing summary rather than a question: one depth turned into a radius, then made more accurate three times over — limb darkening divided out, the impact parameter understood, and a star nobody could see corrected for.',
-      },
-    ],
     features: [
       {
         name: 'Light curve panel',
@@ -1544,7 +2446,7 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'This is the longest investigation in the library. Splitting at step 15 gives two clean sessions of roughly equal length.',
       'Step 8 needs a complete transit in the recording before the copy button has anything to offer. If a student presses it too early, tell them to let the simulation run one more dip.',
-      'Step 10 is where students see that their first answer was wrong and why. Do not let them skip past it: "my first measurement was biased and here is the correction" is the most transferable thing in the lesson.',
+      'Step 10 is where students see that their first answer was wrong and why. Do not let them skip past it: "my first measurement was biased and here is the correction" is the most transferable thing in the investigation.',
       'Step 15 is a written answer and the best assessment item in the investigation. Two distinct biases are wanted, geometric and detection.',
       'Step 17 depends on the transit counter. Students who lose count should use the transit number the panel reports rather than counting dips by eye.',
       'Steps 24–26 change scenario to the blended binary. If a student’s numbers suddenly stop matching, check they have not stepped backward into the unblended system.',
@@ -1560,20 +2462,13 @@ export const INSTRUCTOR_CONTENT = {
       'Have students estimate how many stars a survey must watch to find one Earth analogue, using their transit-probability answer from step 14.',
       'Ask advanced students to derive the transit duration for a central transit and compare it with the durations the panel reports.',
     ],
-    modelNotes: `Orbits are Newtonian and two-dimensional, which for a transit lesson is a feature
+    modelNotes: `Orbits are Newtonian and two-dimensional, which for a transit investigation is a feature
       rather than a limitation: every orbit is edge-on and every planet transits, so the light curve
       is always available. Inclination is therefore handled in a dedicated geometry panel rather than
       by the simulation. The light curve itself is an analytic model, not a radiative-transfer
       calculation: it uses a quadratic limb-darkening law with fixed coefficients, and treats the
       planet as an opaque disk. The transmission spectrum is illustrative. See ${MODEL_PAGE} for the
       full description.`,
-    expectations: {
-      8: 'Baseline near 1.000; depth about 1.8%. The naive radius ratio is then about 0.135, which is roughly ten percent larger than the true value, and the lesson goes on to explain why.',
-      10: 'With the limb-darkening correction and a stellar radius of 1.155 solar radii, the recovered planet radius lands near 1.38 Jupiter radii, the published value for HD 209458 b.',
-      17: 'Two successive transits are about 3.52 days apart. Students who miss a transit will get a multiple of that; the validator catches the doubled value and says so.',
-      18: 'A 3.52-day period around a 1.148 solar mass star gives a semi-major axis near 0.047 AU and an equilibrium temperature of order 1400 K.',
-      27: 'The blended depth is shallower than the clean one. Correcting for a companion half a magnitude fainter recovers a planet radius consistent with the unblended measurement.',
-    },
   },
 
   'orbital-energy': {
@@ -1582,7 +2477,7 @@ export const INSTRUCTOR_CONTENT = {
     placement:
       'After gravity has been introduced and before or alongside the discussion of escape velocity. Pairs naturally with a lecture on energy conservation.',
     overview: `Students fire a projectile from a tower at increasing speeds and find, by experiment,
-      the line between coming back and leaving forever. The lesson then reframes what they found:
+      the line between coming back and leaving forever. The investigation then reframes what they found:
       it was never really about speed, it was about the sign of the total energy. The last third
       applies this to a real object, the interstellar visitor 1I/'Oumuamua, and asks students to
       decide from its measured energy whether it will return. The design deliberately delays the
@@ -1620,28 +2515,6 @@ export const INSTRUCTOR_CONTENT = {
           step 19 are the same physics as the sign of the number, drawn.`,
       },
     ],
-    flow: [
-      {
-        steps: '1–8',
-        text: 'The cannonball experiment. Students predict, fire at low and high speed, hunt for the dividing line, and identify what happens at it.',
-      },
-      {
-        steps: '9–13',
-        text: 'The reframing. Energy bars are introduced, the sign of the total is read, and students confirm it stays constant around a real orbit.',
-      },
-      {
-        steps: '14–15',
-        text: 'Escape speed, and the misconception that gravity stops.',
-      },
-      {
-        steps: '16–20',
-        text: 'What changes escape speed: mass, then starting distance. Ends with the three orbit shapes.',
-      },
-      {
-        steps: '21–24',
-        text: 'ʻOumuamua. Students check its energy themselves and decide in writing whether it will return.',
-      },
-    ],
     features: [
       {
         name: 'Launch panel (steps 3–9)',
@@ -1649,7 +2522,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Energy bars',
-        text: 'Kinetic, potential and total, with the zero line marked. On the launch panel the numbers are deliberately not shown: the sign is the lesson, and simulation-unit energies labeled in joules would be worse than no number.',
+        text: 'Kinetic, potential and total, with the zero line marked. On the launch panel the numbers are deliberately not shown: the sign is the investigation, and simulation-unit energies labeled in joules would be worse than no number.',
       },
       {
         name: 'Escape comparison (steps 16–17)',
@@ -1674,13 +2547,13 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'You need to keep pushing to keep escaping.',
         response:
-          'No thrust is involved anywhere in this lesson. A single impulse either was or was not enough, and nothing afterwards changes the answer.',
+          'No thrust is involved anywhere in this investigation. A single impulse either was or was not enough, and nothing afterwards changes the answer.',
       },
       {
         claim:
           'Something in orbit is weightless because there is no gravity there.',
         response:
-          'Gravity is what holds the orbit. This one does not appear in the lesson but reliably comes up in discussion; it is worth having the answer ready.',
+          'Gravity is what holds the orbit. This one does not appear in the investigation but reliably comes up in discussion; it is worth having the answer ready.',
       },
       {
         claim:
@@ -1690,10 +2563,10 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Insist on the predictions at steps 2 and 4 before anything is fired. Students who watch first remember having known the answer all along, and the lesson loses its point.',
+      'Insist on the predictions at steps 2 and 4 before anything is fired. Students who watch first remember having known the answer all along, and the investigation loses its point.',
       'Step 6 is the discovery moment. Give it time; students should be allowed to bracket the dividing line themselves rather than being told the number.',
       'Step 12 asks what stays put as the object moves. If a class struggles, pause the simulation at two very different points and compare the three bars.',
-      'Step 14 is worth doing aloud as a class. It is the misconception most likely to survive the lesson if it is only read silently.',
+      'Step 14 is worth doing aloud as a class. It is the misconception most likely to survive the investigation if it is only read silently.',
       'Steps 20–22 change scenario to ʻOumuamua. The measured total energy is positive and that is the whole answer; students should quote the sign, not a speed.',
     ],
     discussion: [
@@ -1712,14 +2585,6 @@ export const INSTRUCTOR_CONTENT = {
       it reports is conserved to a few thousandths of a percent of the well depth. The ʻOumuamua
       scenario uses the object’s measured orbit; the simulation reproduces its hyperbolic path but
       does not model the non-gravitational acceleration seen in the real object.`,
-    expectations: {
-      3: 'A low launch speed gives a suborbital arc that returns to the surface. Total energy is clearly negative.',
-      5: 'A high launch speed gives a path that leaves and does not return. Total energy is at or above zero.',
-      7: 'Two numbers with a gap between them, bracketing 10.9 km/s. A student who moved the slider in whole units will report a gap of 1 km/s; one who worked through the last stretch in hundredths will report 0.02. Both are correct measurements and the difference is the point - the gap is the uncertainty, and the field check says so rather than marking the coarse one wrong. Anything centered outside 10.3 to 11.5 is a misread of which shot came back.',
-      6: 'The dividing line is where the total energy bar reaches zero. Students should be able to bracket it within a small range of the slider.',
-      10: 'The kinetic and potential bars change continuously; the total does not. This is the observation the next question depends on.',
-      22: 'ʻOumuamua’s total energy is positive. The eccentricity is above 1 and the path is hyperbolic.',
-    },
   },
 
   'weighing-stars': {
@@ -1731,13 +2596,13 @@ export const INSTRUCTOR_CONTENT = {
       stars move, find the balance point, learn that the heavier star sits closer to it, and then
       combine an orbit size with a period to weigh a pair whose masses are hidden from them. They
       finish by splitting that total between the two stars and checking the method against Sirius,
-      using the real observations. The lesson is written for students who are uncomfortable with
+      using the real observations. The investigation is written for students who are uncomfortable with
       algebra: every number is chosen so the arithmetic lands on whole numbers, and every symbol
       arrives only after the thing it stands for has been seen.`,
     priorKnowledge: [
       'That stars orbit each other in pairs',
       'Multiplying and dividing on a calculator',
-      'Kepler’s third law is helpful but is re-taught in the lesson',
+      'Kepler’s third law is helpful but is re-taught in the investigation',
       'No algebra beyond substituting numbers into a stated relation',
     ],
     keyConcepts: [
@@ -1758,39 +2623,13 @@ export const INSTRUCTOR_CONTENT = {
         body: `In AU, years and solar masses, a³ = P²(M_A + M_B) with no constants to carry. The a in
           that relation is the semi-major axis of the *relative* orbit, the star-to-star separation,
           not one star’s distance from the barycenter. This is the single most common error in
-          the topic and the lesson flags it explicitly.`,
+          the topic and the investigation flags it explicitly.`,
       },
       {
         heading: 'Ratio plus total gives both masses',
         body: `The total comes from the orbit; the ratio comes from the balance point; together they
           determine each mass separately. This is how essentially every stellar mass in the
           literature was originally measured.`,
-      },
-    ],
-    flow: [
-      {
-        steps: '1–7',
-        text: 'Both stars move, and there is a fixed point between them. Ends with the barycenter of an equal-mass pair.',
-      },
-      {
-        steps: '8–14',
-        text: 'Unequal masses. The balance point shifts toward the heavier star; the see-saw makes the mass ratio visible and then quantitative.',
-      },
-      {
-        steps: '15–19',
-        text: 'Kepler’s third law and Newton’s correction, then a side-by-side comparison showing that the heavier pair orbits faster at the same separation.',
-      },
-      {
-        steps: '20–26',
-        text: 'The central measurement. Students practice on a known pair, then measure a mystery binary’s separation and period with a stopwatch and weigh it.',
-      },
-      {
-        steps: '27–30',
-        text: 'Splitting the total between the two stars using the balance point, and the reveal.',
-      },
-      {
-        steps: '31–36',
-        text: 'Sirius, measured from real observations, then a star with a planet, then one worked independently.',
       },
     ],
     features: [
@@ -1843,8 +2682,8 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'The lesson is deliberately gentle. A class comfortable with algebra can move through steps 1–14 quickly, but do not skip step 8: the prediction is what makes the balance-point rule stick.',
-      'Steps 23–25 are the heart of the lesson. Budget time for them. The stopwatch needs one full lap and students often stop it early.',
+      'The investigation is deliberately gentle. A class comfortable with algebra can move through steps 1–14 quickly, but do not skip step 8: the prediction is what makes the balance-point rule stick.',
+      'Steps 23–25 are the heart of the investigation. Budget time for them. The stopwatch needs one full lap and students often stop it early.',
       'At step 25 the intended answer is a = 4 AU, P = 4 years, giving 4 solar masses. A student who uses one star’s ring distance instead of the separation gets 0.5 and the validator says specifically what went wrong.',
       'Step 29 splits 4 into 3 and 1. Students who get the ratio right but the sum wrong, or vice versa, get different feedback; both are worth a moment at the board.',
       'Step 31 is real data. Point out that the residual difference from the accepted value is measurement error in a century-old observation, not a flaw in the method.',
@@ -1860,14 +2699,14 @@ export const INSTRUCTOR_CONTENT = {
       'Ask why the mass–luminosity relation is useful and what it had to be calibrated against.',
       'For students ready for it: why does the relative orbit have a semi-major axis equal to the sum of the two individual orbits?',
     ],
-    modelNotes: `Two different things are on screen at once and the lesson depends on students
+    modelNotes: `Two different things are on screen at once and the investigation depends on students
       not confusing them.
 
       The pair on the main canvas is integrated. They are ordinary bodies moved by the same
       Newtonian N-body engine that runs the rest of the sandbox, nothing prescribes their positions,
-      and that is what lets the lesson call its result a measurement: a student times an orbit the
+      and that is what lets the investigation call its result a measurement: a student times an orbit the
       engine produced and puts it into Newton’s form of Kepler’s third law, which tests the law
-      rather than restating a number the lesson wrote down for itself. They are set up on circular
+      rather than restating a number the investigation wrote down for itself. They are set up on circular
       orbits carrying zero net momentum, so the balance point stays where it is drawn instead of
       sliding off the view, and they are drawn at a fixed size rather than scaled by mass - discs
       that grew with mass would answer "which is heavier" from the picture and skip the reasoning
@@ -1883,17 +2722,6 @@ export const INSTRUCTOR_CONTENT = {
       separation you happen to catch; and a real orbit is tilted, so a measured separation is a
       projection of the true one. Both travel with the notebook entry as limitations, and screen 32
       is the natural place to raise them if nobody has.`,
-    expectations: {
-      4: 'Two stars of 2 M☉ each, 4.00 AU apart, read off their cards on the canvas. The point of asking is that they are equal: everything the next few screens conclude about the balance point follows from that, and a student who has not checked will not notice when it stops being true on screen 9.',
-      6: 'Both arms read 2.00 AU. Worth saying out loud that the cross is drawn by the renderer from where the two stars are at that instant rather than placed there by the lesson - it is a measurement of the pair, which is why it stays still while they swing round it.',
-      9: 'At 4 M☉ and 1 M☉ the arms are 0.80 and 3.20 AU, a ratio of 4.00 against a mass ratio of 4.00. Expect somebody to ask why the pair restarts when they move a slider: because a star whose mass changed mid-orbit would be on a path that no longer closes, so the pair is restood rather than edited. That is worth two minutes.',
-      20: 'Practice pair: a = 2 AU, P = 2 years, giving a total of 2 solar masses.',
-      23: 'The mystery pair is 4 AU apart: Star A about 1 AU from the balance point, Star B about 3 AU. Both are read off the canvas, and the inspector is deliberately closed on this screen so the masses cannot simply be looked up.',
-      24: 'One lap takes about 4 years. Capture this orbit records the separation, both arm lengths and the timing into the notebook, and marks the period as student-timed - a period taken from the model instead is recorded as a prediction, which is the distinction that entry exists to keep.',
-      25: 'a³ = 64, P² = 16, so the total is 4 solar masses. A student who uses one star’s barycenter distance instead of the separation gets 0.5 and is told so.',
-      29: 'The 3:1 distance ratio splits 4 solar masses into 3 and 1. Star A, on the smaller circle, is the heavier one.',
-      33: 'The independent pair is a = 3 AU, P = 3 years, giving 3 solar masses.',
-    },
   },
 
   'black-holes': {
@@ -1903,14 +2731,14 @@ export const INSTRUCTOR_CONTENT = {
       'In the stellar-remnants or galaxies unit. Needs no earlier investigation, though the escape-speed section lands better after Bound, Unbound and Escape.',
     overview: `Students change one property of a black hole, its mass, and discover how four unrelated
       properties respond: horizon size, average density, Hawking temperature and evaporation lifetime.
-      Two of the four go the opposite way to almost everyone’s expectation, and the lesson is built
+      Two of the four go the opposite way to almost everyone’s expectation, and the investigation is built
       so that students commit to a prediction before each one. The escape-speed section is handled
       carefully on purpose: the Newtonian argument gives the right radius for the wrong reason, and
-      saying so is part of the lesson rather than a footnote.`,
+      saying so is part of the investigation rather than a footnote.`,
     priorKnowledge: [
       'That stars can collapse at the end of their lives',
       'Reading a straight-line graph',
-      'Nothing else. Powers of ten are taught in the lesson as "counting zeros"',
+      'Nothing else. Powers of ten are taught in the investigation as "counting zeros"',
     ],
     keyConcepts: [
       {
@@ -1943,36 +2771,6 @@ export const INSTRUCTOR_CONTENT = {
         heading: 'Mass classes',
         body: `Stellar-mass, a few to tens of solar masses; intermediate, hundreds to hundreds of
           thousands; supermassive, millions to billions. The boundaries are conventions, not physics.`,
-      },
-    ],
-    flow: [
-      {
-        steps: '1–4',
-        text: 'What a black hole is not, what "size" could mean, and the event horizon at a fixed scale against familiar lengths.',
-      },
-      {
-        steps: '5–9',
-        text: 'The mass experiment. Students record three trials, watch the points land on a straight line through the origin, and only then meet R_s ∝ M.',
-      },
-      {
-        steps: '10–13',
-        text: 'Squeezing the Sun until the escape speed reaches c, followed by the careful statement that this is the right answer for the wrong reason.',
-      },
-      {
-        steps: '14–17',
-        text: 'The density surprise: prediction, ladder, then the zero-counting explanation.',
-      },
-      {
-        steps: '18–21',
-        text: 'Hawking temperature, introduced cautiously, with a logarithmic thermometer.',
-      },
-      {
-        steps: '22–24',
-        text: 'Evaporation lifetime on a bar chart that counts zeros rather than years.',
-      },
-      {
-        steps: '25–30',
-        text: 'Mass classes, a four-object lineup at clearly labeled separate scales, and the reveal that the mystery object is Sagittarius A*.',
       },
     ],
     features: [
@@ -2030,12 +2828,12 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Steps 5, 10, 14, 18 and 22 are predictions. The lesson is built on them; a class that clicks through them without committing loses most of the value.',
+      'Steps 5, 10, 14, 18 and 22 are predictions. The investigation is built on them; a class that clicks through them without committing loses most of the value.',
       'Step 6 asks for three trials at 5, 10 and 20 solar masses. Students who record only one cannot answer step 8, and the panel says so if the graph is empty.',
       'Step 13 is the most important screen scientifically. The Newtonian escape-speed argument gives the correct radius by coincidence; the real reason is the geometry of spacetime. Do not let a class leave believing light is a ball thrown too slowly.',
-      'Step 17 is the only numeric answer in the lesson. The panel shows the arithmetic 3 + 3 + 3 = 9 directly; students who type 3 are reading the mass row rather than the volume row.',
+      'Step 17 is the only numeric answer in the investigation. The panel shows the arithmetic 3 + 3 + 3 = 9 directly; students who type 3 are reading the mass row rather than the volume row.',
       'The lineup at steps 25–29 changes scale between panels. Point at the scale bar explicitly; it is the one place students could be misled about size.',
-      'The object inspector is left unlocked in this lesson. Clicking the black hole shows the same numbers the lesson quotes, computed by the simulation, which is worth demonstrating once.',
+      'The object inspector is left unlocked in this investigation. Clicking the black hole shows the same numbers the investigation quotes, computed by the simulation, which is worth demonstrating once.',
     ],
     discussion: [
       'If the Sun were replaced by a black hole of the same mass, what would change for the Earth?',
@@ -2045,21 +2843,21 @@ export const INSTRUCTOR_CONTENT = {
     ],
     extensions: [
       'Work out the mass a black hole would need for its average density to equal that of air, and compare with the largest known black holes.',
-      'Look up the Event Horizon Telescope images of M87* and Sagittarius A* and compare the apparent sizes with the horizon radii from the lesson.',
-      'Ask why a Kerr black hole differs from the Schwarzschild case used here, and which of the lesson’s trends survive.',
+      'Look up the Event Horizon Telescope images of M87* and Sagittarius A* and compare the apparent sizes with the horizon radii from the investigation.',
+      'Ask why a Kerr black hole differs from the Schwarzschild case used here, and which of the investigation’s trends survive.',
     ],
     modelNotes: `Nothing in this investigation is dynamically simulated relativity. The black hole in
       the scenario participates in the ordinary Newtonian N-body simulation like any other mass; the
       horizon radius, average density, Hawking temperature and evaporation lifetime are analytic
       Schwarzschild expressions evaluated for display. Every result assumes a non-rotating, uncharged
-      black hole, which the lesson states. Real astrophysical black holes rotate, which changes the
+      black hole, which the investigation states. Real astrophysical black holes rotate, which changes the
       horizon geometry but none of the trends taught here. See ${MODEL_PAGE} for the full statement.
 
-      What is on the canvas, and what is not. The lesson stands up its own black hole with four
+      What is on the canvas, and what is not. The investigation stands up its own black hole with four
       bodies in orbit, and those orbits are integrated with the same Newtonian force law as
       everything else on the canvas, so the engine is entitled to move them and a student is
       entitled to measure what it does. What they demonstrate is the Newtonian statement the
-      lesson makes: outside a spherical body the field depends on the mass and nothing else.
+      investigation makes: outside a spherical body the field depends on the mass and nothing else.
       Orbit radii are set in multiples of the hole's drawn radius, and never inside three of
       them, which is a bound on the picture rather than on the physics - it keeps the
       innermost orbiter reading as an orbit instead of as a rim on the dark disc. The drawn
@@ -2075,35 +2873,25 @@ export const INSTRUCTOR_CONTENT = {
       temperature or evaporation; nothing on the canvas is evaporating and nothing there could
       tell you if it were. The same goes for the interior: the dark disc is a boundary drawn
       at a display scale, and the physical size is only ever quoted in kilometers beside it.`,
-    expectations: {
-      3: "The card gives 10 M☉ and a Schwarzschild radius of 29.5 km, so 59.1 km right across. The labels on the canvas are the renderer's own: they name the dark region, the disk and the jets, which are what such a system looks like from outside. None of them is the black hole, and it is worth saying that out loud.",
-      4: 'The readout puts the two scales side by side on purpose: about 16 world units drawn, 59.1 km real. The drawn size is whatever lets four orbits fit in a window and carries no information. Students who try to measure the horizon off the screen are doing the thing this screen exists to stop.',
-      6: 'Three trials at 5, 10 and 20 solar masses give 14.8, 29.5 and 59.1 km. The points fall on a straight line through the origin. 5, 10 and 20 M☉ give 14.8, 29.5 and 59.1 km. The hole on the canvas changes with the slider and its orbiters change with it, which is the consequence the graph is about.',
-      11: 'Squeezing one solar mass: the Sun today gives 0.2% of light speed, Earth-sized 2.2%, 30 km gives 31%, 6 km gives 70%, and 2.95 km gives exactly 100%.',
-      13: "Both orbiters have the same period, to as many figures as the readout gives. That is the whole demonstration: eight solar masses is eight solar masses, and at the same distance the orbit is the same orbit whether the center is a star or a hole. Expect at least one student to predict the black hole's orbiter will be faster or will spiral in; neither happens, and the reason is that a black hole is not a stronger kind of gravity.",
-      15: 'The density marker moves down the ladder as mass rises. At 10 solar masses it sits near nuclear density; at a million it is ten powers of ten lower.',
-      20: 'The thermometer level falls with mass. Sagittarius A* comes out at 1.4×10⁻¹⁴ K, far below the coldest temperature ever produced in a laboratory.',
-      23: 'The lifetime bar for a 10 solar mass hole reaches 70 zeros against the universe’s 10.',
-    },
   },
 
   'radial-velocity': {
     topic: 'Exoplanet detection and characterization',
     difficulty: 'Introductory, written for non-science majors',
     placement:
-      'The third of the three exoplanet lessons, after Finding Planets by Their Shadows and before or after The Goldilocks Question. It closes the inference chain: Shadows measures a radius, this one measures a mass and combines the two into a density, and Goldilocks asks what that buys. It works standalone, but the payoff at steps 30-33 lands hardest for students who have done the transit lesson.',
+      'The third of the three exoplanet investigations, after Finding Planets by Their Shadows and before or after The Goldilocks Question. It closes the inference chain: Shadows measures a radius, this one measures a mass and combines the two into a density, and Goldilocks asks what that buys. It works standalone, but the payoff at steps 30-33 lands hardest for students who have done the transit investigation.',
     overview: `Students discover that a star and its planet both orbit their common center of
       mass, that the star's share of that motion is measurable through the Doppler shift of
       its spectral lines, and that the size of the wobble gives the planet's mass. They then
       meet the central limitation of the method, the M sin i degeneracy, and see why a
       transiting planet escapes it. Astrometry is introduced as the complementary method
-      that works precisely where radial velocity fails. The lesson closes by combining the
+      that works precisely where radial velocity fails. The investigation closes by combining the
       transit radius with the radial-velocity mass into a bulk density, placing the planet
       against the modeled habitable zone, and asking students to judge three candidate
       planets on evidence no single column can supply.`,
     priorKnowledge: [
       'That planets orbit stars, and that gravity acts between any two masses',
-      'That light can be spread into a spectrum (the lesson explains absorption lines from scratch)',
+      'That light can be spread into a spectrum (the investigation explains absorption lines from scratch)',
       'Helpful but not required: Finding Planets by Their Shadows, for the transit radius reused at step 30',
       'Helpful but not required: Weighing the Stars, for the center-of-mass rule reused at step 4',
     ],
@@ -2133,40 +2921,6 @@ export const INSTRUCTOR_CONTENT = {
         body: 'Mass and radius together give a mean density, the first real constraint on composition. It constrains rather than determines: rock under a hydrogen envelope and a water-rich world can produce similar densities.',
       },
     ],
-    flow: [
-      {
-        steps: '1-6',
-        text: 'The planet from the transit lesson returns, with the history that it was found by its star’s wobble first. Students predict which body moves, then use the reflex-motion instrument to see both orbiting the barycenter and to discover that more planet mass means a bigger stellar orbit.',
-      },
-      {
-        steps: '7-9',
-        text: 'Absorption lines and the Doppler shift are introduced from scratch, with the restriction that only line-of-sight motion produces a shift. The rv-observer instrument connects the star’s position on its orbit to the curve that motion produces.',
-      },
-      {
-        steps: '10-14',
-        text: 'Students open the live Radial Velocity panel on the Exoplanet Characterization Lab scenario, watch a real curve build over two orbits, measure the period, and learn the definition of K before reading it off the panel.',
-      },
-      {
-        steps: '15-17',
-        text: 'A controlled experiment: hold everything fixed and change only planet mass. Students discover the linear relationship, then use it in reverse to weigh HD 209458 b from the K they measured.',
-      },
-      {
-        steps: '18-21',
-        text: 'The inclination problem. The same planet is tilted and the reported mass falls away as sin i. M sin i is named, and students reason out why a transiting planet escapes the ambiguity.',
-      },
-      {
-        steps: '22-29',
-        text: 'Astrometry as the complementary method. Students tilt a system from edge-on to face-on and watch the sky path open from a line into a circle while the radial-velocity signal dies, then explore how distance and orbit size govern detectability.',
-      },
-      {
-        steps: '30-33',
-        text: 'The payoff. Transit radius and radial-velocity mass are combined into a bulk density, and the characterization panel adds stellar flux and habitable-zone context from the same habitability module The Goldilocks Question uses.',
-      },
-      {
-        steps: '34-38',
-        text: 'Three candidate planets, designed so that no single measurement identifies the best one. A short-answer step asks what is still unknown, and the lesson closes on the idea that combination, not any one technique, is what characterization consists of. The last screen is a closing summary: the chain from reflex motion to a density and a place on a diagram, and what a habitable-zone placement does not say.',
-      },
-    ],
     features: [
       {
         name: 'Exoplanet Characterization Lab scenario (steps 1, 3, 10, 14)',
@@ -2178,7 +2932,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Astrometry panel (available from Tools)',
-        text: 'Plots the star’s path on the sky about the barycenter, with the physical reflex orbit in AU and the angle it subtends shown separately. Not used by a lesson step, but worth demonstrating alongside step 24.',
+        text: 'Plots the star’s path on the sky about the barycenter, with the physical reflex orbit in AU and the angle it subtends shown separately. Not used by an investigation step, but worth demonstrating alongside step 24.',
       },
       {
         name: 'Shared observer control',
@@ -2217,7 +2971,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'The star does not really move; only the planet orbits.',
         response:
-          'Collect this at step 3 before anyone runs anything. It is the single most common starting belief and the whole lesson depends on dislodging it. The reflex-motion instrument at step 4 shows both bodies on opposite sides of a fixed point; the magnification label is what stops the fix becoming a new misconception.',
+          'Collect this at step 3 before anyone runs anything. It is the single most common starting belief and the whole investigation depends on dislodging it. The reflex-motion instrument at step 4 shows both bodies on opposite sides of a fixed point; the magnification label is what stops the fix becoming a new misconception.',
       },
       {
         claim: 'Radial velocity measures the planet’s speed.',
@@ -2252,7 +3006,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Density tells you exactly what a planet is made of.',
         response:
-          'It constrains composition, it does not determine it. Rock under a hydrogen envelope and a water-rich world can share a density. The lesson’s language is "consistent with" throughout and student answers should be held to the same standard.',
+          'It constrains composition, it does not determine it. Rock under a hydrogen envelope and a water-rich world can share a density. The investigation’s language is "consistent with" throughout and student answers should be held to the same standard.',
       },
       {
         claim: 'A planet in the habitable zone is habitable, or inhabited.',
@@ -2261,7 +3015,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Collect the step 3 prediction out loud before anyone runs the simulation. "Only the planet moves" is the majority answer in most classes and the rest of the lesson is built on overturning it.',
+      'Collect the step 3 prediction out loud before anyone runs the simulation. "Only the planet moves" is the majority answer in most classes and the rest of the investigation is built on overturning it.',
       'At step 10 the live panel takes about thirteen seconds per orbit. Tell students to let it run for two full cycles before moving on; a partial curve gives a K that is too small, and the panel says "so far" while that is true.',
       'Step 14 asks students to read K off the panel rather than compute it. The panel reports the semi-amplitude, not the full range, which is the definition step 13 just gave them. If a student writes 168 rather than 84 they have taken the peak-to-peak value.',
       'Step 17 is the quantitative centerpiece. Students match a mass to their measured K rather than rearranging a formula with G in SI units; the arithmetic is the software’s job and the inference is theirs.',
@@ -2274,15 +3028,15 @@ export const INSTRUCTOR_CONTENT = {
       'The first exoplanet surveys found mostly hot Jupiters. What does that tell us about planetary systems, and what does it tell us only about the surveys?',
       'Radial velocity gives a minimum mass. Is a minimum mass a useful scientific result, or is it a failure? What can you do with a lower limit?',
       'If a planet transits, we know the orbit is nearly edge-on. What fraction of planetary systems would you expect to be oriented that way, and what does that imply about how many planets transit surveys miss?',
-      'Astrometry favours wide orbits and nearby stars; transits favour close-in planets. If each method is biased, how does the field arrive at a picture of what planetary systems are actually like?',
+      'Astrometry favours wide orbits and nearby stars; transits favor close-in planets. If each method is biased, how does the field arrive at a picture of what planetary systems are actually like?',
       'A planet with Earth’s density in the habitable zone of its star: what would you want to measure next, and with what instrument?',
       'HD 209458 b is a hot Jupiter. Nothing about it resembles Earth. Why has so much effort gone into characterizing it?',
     ],
     extensions: [
-      'Have students look up a planet from the NASA Exoplanet Archive with both a measured mass and radius, compute its bulk density, and compare it with the values in this lesson.',
+      'Have students look up a planet from the NASA Exoplanet Archive with both a measured mass and radius, compute its bulk density, and compare it with the values in this investigation.',
       'Ask students to estimate the radial-velocity semi-amplitude Earth induces on the Sun (about 0.09 m/s) and discuss what that implies about detecting Earth analogues.',
       'Open the Astrometry panel alongside the Radial Velocity panel on the characterization scenario and demonstrate the inclination sweep live, rather than through the analytical widget.',
-      'For a mathematically prepared class, derive the semi-amplitude relation from the center-of-mass condition and a circular orbit. The lesson deliberately does not, but the derivation is short.',
+      'For a mathematically prepared class, derive the semi-amplitude relation from the center-of-mass condition and a circular orbit. The investigation deliberately does not, but the derivation is short.',
     ],
     modelNotes: `The simulation integrates gravity in a plane. The observer geometry is a genuine
       three-dimensional projection over that planar model: a line-of-sight direction is built
@@ -2304,42 +3058,33 @@ export const INSTRUCTOR_CONTENT = {
       effective temperatures between 2600 and 7200 K.
       \n\nSystem parameters for HD 209458 are stored in js/data/exoplanetSystems.js and shared
       by the scenario, the widgets and the tests, so a change in one place cannot leave the
-      lesson disagreeing with the instrument.
+      investigation disagreeing with the instrument.
 
       The star on the canvas is in genuine barycentric motion - the transit scenarios pin theirs,
       and a radial-velocity panel pointed at a pinned star would teach that planets do not move
-      their stars. Every live reading in this lesson comes from js/radialVelocity.js measuring
+      their stars. Every live reading in this investigation comes from js/radialVelocity.js measuring
       that motion, and the readout refuses to report a velocity for a pinned star rather than
       returning an artifact that looks like a measurement.
 
-      The catalog steps later in the lesson are observations of real systems and are labeled
+      The catalog steps later in the investigation are observations of real systems and are labeled
       as such. The inclination and mass panels are analytic aids: they compute from published
       formulae and are not readings taken from the scene.`,
-    expectations: {
-      9: "The live readout pairs the star's place in its orbit with what a spectrograph would read there. The sign is the thing to draw out: negative means approaching, which is the opposite of what most students guess, and it is a convention about wavelength rather than a fact about the star.",
-      10: 'The instrument measures whichever star is selected, so this is the screen to make sure they have selected one. The readout underneath gives the phase and the reading together, which is the pairing the rest of the lesson relies on.',
-      12: 'The curve repeats every 3.52 days. Students reading between successive peaks typically land between 3.3 and 3.8; anything in that range is a good measurement off a live plot. The published period is 3.5247 days. The event watch stops the run at the most positive radial velocity. Two stops bracket one period: about 3.5 days. While it is stopped, ask which way the star is actually moving on the canvas and whether the sign agrees - that is the point of stopping rather than reading it off a graph.',
-      14: 'The panel reports K near 84 m/s once a full cycle is recorded, which matches the published semi-amplitude for HD 209458 b. A student answer near 168 has taken the full peak-to-peak range rather than the semi-amplitude and should be sent back to step 13.',
-      16: 'The rv-mass instrument holds star, period and viewing angle fixed, so K is strictly proportional to planet mass: an Earth gives 0.38 m/s, a Neptune 6.6, HD 209458 b 84, and a five-Jupiter planet 609. At step 17 students match this instrument to their measured K and should land near 0.69 Jupiter masses, the published value; the accepted range is 0.61 to 0.77, wide enough to absorb a slightly misread K.',
-      19: "The observer has been swung to 90 degrees on the live system: one controlled change, nothing about the star or planet touched. The panel's inclination presets are the analytic version of the same idea, and the two should be read together rather than confused - the panel tilts a model, the observer angle moves where we are standing.",
-      31: 'The characterization panel reports HD 209458 b at 1.38 Jupiter radii, 0.69 Jupiter masses and a bulk density of 0.33 g/cm³: about a third the density of water and a sixteenth of Earth’s. It receives roughly 785 times Earth’s starlight and sits far inside the inner edge of the modeled zone. At step 32 the accepted density range is 0.25 to 0.41; a student answering near 5.5 has read Earth’s density from the comparison text rather than the planet’s.',
-    },
   },
   'retrograde-motion': {
     topic: 'Reference frames, apparent motion, and the Copernican argument',
     difficulty: 'Introductory, written for non-science majors',
     placement:
-      'Any time after circular orbits have been introduced; it pairs naturally with Kepler’s Laws and works well immediately after it, since students arrive already able to read a period off the inspector. It also stands alone as a single-session lesson, and it is the one lesson in the set that is as much history and philosophy of science as it is physics. If you teach a unit on the Copernican revolution, this is the lesson that lets students perform the observation the revolution was about rather than being told it.',
+      'Any time after circular orbits have been introduced; it pairs naturally with Kepler’s Laws and works well immediately after it, since students arrive already able to read a period off the inspector. It also stands alone as a single-session investigation, and it is the one investigation in the set that is as much history and philosophy of science as it is physics. If you teach a unit on the Copernican revolution, this is the investigation that lets students perform the observation the revolution was about rather than being told it.',
     overview: `Students meet retrograde motion as an observation first, stated in terms of the one
       quantity a pre-telescopic astronomer could actually measure: the direction to a planet against
       the fixed stars. They measure the orbital periods of Earth and Mars, convert them to angular
       speeds, and compute the 780-day synodic period twice by two different routes. They then predict
       what Mars's path will look like from Earth, switch the reference frame, and watch the loop draw
-      itself out of positions that never reversed. The rest of the lesson is about what that does and
+      itself out of positions that never reversed. The rest of the investigation is about what that does and
       does not establish: they locate the reversal at opposition, find that Mars is brightest exactly
       when it is moving backwards, discover that every outer planet's Ptolemaic epicycle has a period
       of one year, and are then asked directly whether the loop proves heliocentrism. It does not, and
-      the lesson closes on what did: the fictitious forces a geocentric frame requires, and the
+      the investigation closes on what did: the fictitious forces a geocentric frame requires, and the
       stellar parallax Tycho looked for with an instrument eighty times too coarse to find it.`,
     priorKnowledge: [
       'That planets orbit the Sun, and that an orbit has a period',
@@ -2350,11 +3095,11 @@ export const INSTRUCTOR_CONTENT = {
     keyConcepts: [
       {
         heading: 'Retrograde motion as an observation',
-        body: 'Over a few weeks an outer planet stops its steady eastward drift against the stars, reverses, and then resumes. It is a statement about a direction changing the wrong way, not about a path anyone watched being traced. Naked-eye astronomers had no distances at all, so direction against the fixed stars was the entire dataset, and stating the phenomenon that way keeps the lesson honest about what was being explained.',
+        body: 'Over a few weeks an outer planet stops its steady eastward drift against the stars, reverses, and then resumes. It is a statement about a direction changing the wrong way, not about a path anyone watched being traced. Naked-eye astronomers had no distances at all, so direction against the fixed stars was the entire dataset, and stating the phenomenon that way keeps the investigation honest about what was being explained.',
       },
       {
         heading: 'The synodic period',
-        body: 'The interval between successive alignments of Sun, Earth and planet, given by 1/S = 1/P1 - 1/P2 with P1 the shorter period. It counts laps gained rather than laps run, which is why it is longer than either planet’s year. For Earth and Mars it is 780 days. The lesson has students reach the same number twice, once from reciprocals and once from a rate of degrees gained per day, because the formula is easy to apply and hard to feel.',
+        body: 'The interval between successive alignments of Sun, Earth and planet, given by 1/S = 1/P1 - 1/P2 with P1 the shorter period. It counts laps gained rather than laps run, which is why it is longer than either planet’s year. For Earth and Mars it is 780 days. The investigation has students reach the same number twice, once from reciprocals and once from a rate of degrees gained per day, because the formula is easy to apply and hard to feel.',
       },
       {
         heading: 'Reference frames',
@@ -2371,48 +3116,6 @@ export const INSTRUCTOR_CONTENT = {
       {
         heading: 'What the loop does not establish',
         body: 'Both the geocentric and the heliocentric descriptions reproduce the observation, which is exactly why the argument lasted fourteen centuries. The loop establishes that the observer is moving relative to Mars; it does not by itself say what is at the center. What settles it is that only in the Sun’s frame can every force be traced to a mass, and that the heliocentric picture predicted stellar parallax, measured in 1838.',
-      },
-    ],
-    flow: [
-      {
-        steps: '1-4',
-        text: 'The phenomenon is stated as history and then as a measurement: five wandering stars, and the fact that the only measurable quantity was a direction. Students then watch the system from outside and confirm for themselves that neither planet ever reverses. Everything that follows is about reconciling those two screens.',
-      },
-      {
-        steps: '5-7',
-        text: 'The two orbits are measured off the inspector and converted to angular speeds. The multiple-choice step in the middle is there to make students say out loud that the inner planet is the faster one, which is the entire mechanism and is easy to skate past.',
-      },
-      {
-        steps: '8-10',
-        text: 'The synodic period, computed twice. Step 9 uses the reciprocal formula, step 10 the rate of degrees gained. Students who get two different answers have usually put the longer period first in the subtraction.',
-      },
-      {
-        steps: '11-13',
-        text: 'A prediction is committed to before anything changes, then reference frames are introduced, then a screen explaining what the trails are actually doing. The last of these matters more than it looks: students who think the picture is being redrawn artistically will not accept the loop as evidence.',
-      },
-      {
-        steps: '14-17',
-        text: 'The frame is switched and the loop appears. Students then put numbers on it: the direction from Earth running backwards, and the distance to Mars reaching a clear minimum and maximum. The direction readout is the observable the whole lesson rests on.',
-      },
-      {
-        steps: '18-21',
-        text: 'The geometry is pinned down. Brightness and reversal are shown to be the same event, the reversal is located at opposition, the overtaking analogy is given, and students write the explanation in their own words. This short-answer step is the assessment center of the lesson.',
-      },
-      {
-        steps: '22-24',
-        text: 'Ptolemy. The epicycle is presented as a device that worked rather than as a mistake, and students find the one-year period that a geocentric model has to accept as a coincidence, then count the twenty separate devices the five planets needed.',
-      },
-      {
-        steps: '25-27',
-        text: 'The Sun is examined in Earth’s frame, where it traces a clean annual circle with no loop, and students are then asked directly whether the loop proves heliocentrism. The intended answer is that it does not, and this is the step most likely to generate discussion.',
-      },
-      {
-        steps: '28-30',
-        text: 'What actually settles the question: the fictitious forces a geocentric frame requires, and stellar parallax. Tycho’s null result is treated as sound reasoning with an inadequate instrument, which gives a transferable lesson about what a non-detection constrains.',
-      },
-      {
-        steps: '31-33',
-        text: 'A final measurement of the length of the retrograde episode, a prediction about Jupiter that students can check against the formula, and a closing screen that names the transferable question: measured against what?',
       },
     ],
     features: [
@@ -2437,7 +3140,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Mars actually slows down and reverses in its orbit.',
         response:
-          'It does not, and the lesson is built so students see this before they see the loop: step 4 has them watch from outside and confirm that neither planet ever turns back. If a student still writes this at step 21, send them back to step 4 rather than re-explaining. The whole point is that the reversal is a fact about the observer.',
+          'It does not, and the investigation is built so students see this before they see the loop: step 4 has them watch from outside and confirm that neither planet ever turns back. If a student still writes this at step 21, send them back to step 4 rather than re-explaining. The whole point is that the reversal is a fact about the observer.',
       },
       {
         claim:
@@ -2471,8 +3174,8 @@ export const INSTRUCTOR_CONTENT = {
       'Steps 3 and 4 are the setup for everything else and are worth not rushing. A class that has personally confirmed at step 4 that neither planet reverses will accept the loop at step 14 as a puzzle to solve rather than as an animation to watch.',
       'At step 14 the loop does not appear instantly. The trail has to grow, and Earth has to reach opposition, which can take half a minute of running. Tell students this in advance or several will conclude the control is broken and switch it off again.',
       'Step 21 is the assessment center. The discriminating feature of a good answer is that it explains the reversal without attributing anything unusual to Mars. Answers that invoke gravity pulling Mars back, or Mars slowing at the far point of its orbit, are the common failure and are worth collecting and discussing as a group.',
-      'Step 27 is where the room usually divides, and it is the most valuable minute in the lesson. Some students will insist the loop settles it. Ask them to state what a geocentric astronomer would say when shown the same screen, and the argument becomes about criteria for choosing between models rather than about which is true.',
-      'If you are short on time, steps 22 to 24 can be assigned as reading rather than done in class; the physics survives without them. Steps 28 to 30 are harder to cut, because without them the lesson has raised the question of what settles the matter and left it unanswered.',
+      'Step 27 is where the room usually divides, and it is the most valuable minute in the investigation. Some students will insist the loop settles it. Ask them to state what a geocentric astronomer would say when shown the same screen, and the argument becomes about criteria for choosing between models rather than about which is true.',
+      'If you are short on time, steps 22 to 24 can be assigned as reading rather than done in class; the physics survives without them. Steps 28 to 30 are harder to cut, because without them the investigation has raised the question of what settles the matter and left it unanswered.',
       'Students who have done Kepler’s Laws will notice at step 6 that the inner planet being faster is the third law again. Naming that connection out loud costs nothing and does a lot for the coherence of the unit.',
     ],
     discussion: [
@@ -2488,34 +3191,25 @@ export const INSTRUCTOR_CONTENT = {
       'For a mathematically stronger group: derive the direction from Earth to Mars as a function of time for two circular orbits, and find the condition for the derivative to change sign. The result is a clean statement of when a retrograde episode begins and ends.',
     ],
     modelNotes: `The orbits here are circles at the true semi-major axes, 1.00 and 1.523 AU, with the true masses and therefore the true periods. Real eccentricities are 0.017 for Earth and 0.093 for Mars, and both are left out because neither changes the phenomenon: what draws the loop is the difference in angular speed, not the shape of either orbit. Real Mars retrograde episodes vary in length and in the shape of the loop from one opposition to the next, and that variation does come from the eccentricities and from the 1.85 degree inclination of Mars's orbit, which this planar model also omits. Students comparing a screenshot with a photograph of a real Mars loop will find the real one is a flattened S or an open zigzag as often as a closed loop, because Mars is usually a little above or below the ecliptic when it happens. The synodic period, the location of the reversal at opposition, and the coincidence of reversal with closest approach are all reproduced exactly.`,
-    expectations: {
-      4: 'Both planets circle counterclockwise and neither ever reverses. Earth’s speed reads about 29.8 km/s and Mars’s about 24.1 km/s; students should notice both that Earth is faster and that it has less far to go. If a student reports a reversal here, they have already switched the frame.',
-      5: 'Earth: 1.00 AU and about 365 days. Mars: 1.52 AU and about 687 days. The inspector computes these from live position and velocity, so readings drift by a per cent or two depending on when they are taken; anything within 5 per cent is a good measurement.',
-      7: 'Earth 0.99 degrees per day, Mars 0.52, and a gain of about 0.46 degrees per day. A student getting a negative gain has subtracted the wrong way round.',
-      14: 'Earth sits still at the center, the Sun circles it once a year, and Mars’s trail carries a loop or a cusp. The loop needs roughly half a minute of running to appear: the trail has to fill and Earth has to reach opposition. Students who switch the frame and immediately switch back will see nothing.',
-      16: 'The direction from Earth climbs at roughly half a degree a day for most of the cycle, then falls for about ten weeks around opposition. Any pair of readings that brackets a fall is a correct answer; the day numbers themselves depend on when the student started.',
-      17: 'Closest about 0.5 AU, furthest about 2.5 AU, a ratio near 5. Readings of 0.53 and 1.98 are typical if the student has not watched a full synodic period, and that is fine: the point is that the ratio is large, not its exact value. The real range is 0.38 to 2.68 AU because of the eccentricities this model leaves out.',
-      26: 'The Sun traces a closed circle of radius 1 AU around Earth, once a year, with no loop and no cusp anywhere on it. Switching to the world frame stops the Sun dead; switching to the Sun’s own frame puts Earth back on the circle. Students often find this screen more unsettling than the Mars loop, which is a good sign.',
-      31: 'About 70 to 80 days between the direction starting to fall and starting to rise again. The real figure for Mars is about 72 days, and it varies from one opposition to the next by a couple of weeks for reasons this planar circular model does not include.',
-    },
   },
   'missing-mass': {
     topic: 'Dark matter',
     difficulty: 'Introductory, with one genuinely open-ended fitting exercise',
     placement:
-      'Anywhere after orbital motion has been covered, and it needs nothing else. It pairs naturally with a unit on galaxies or on cosmology, and it also works as a single-session standalone: thirty-three screens, one argument, and a result students derive rather than receive. If you teach Kepler earlier in the term, this is the lesson that shows what happens when Kepler stops working. The rotation-curve fitting sequence at steps 13-19 is the longest single activity in Gravitas and the closest any of these lessons comes to what research actually feels like; if you are short of time it is the part to protect, and steps 2-3 and 6-8 are the scaffolding that makes it work.',
+      'Anywhere after orbital motion has been covered, and it needs nothing else. It pairs naturally with a unit on galaxies or on cosmology, and it also works as a single-session standalone: thirty-three screens, one argument, and a result students derive rather than receive. If you teach Kepler earlier in the term, this is the investigation that shows what happens when Kepler stops working. The rotation-curve fitting sequence at steps 13-19 is the longest single activity in Gravitas and the closest any of these investigations comes to what research actually feels like; if you are short of time it is the part to protect, and steps 2-3 and 6-8 are the scaffolding that makes it work.',
     overview: `Students weigh systems twice over, once by adding up the mass that is visible and once
       by watching how things move, and discover that the two answers agree for the Solar System and
-      disagree badly for anything larger. The lesson opens by making a rotation curve into a tool
+      disagree badly for anything larger. The investigation opens by making a rotation curve into a tool
       rather than a result: students rearrange a fixed amount of mass four ways and watch the curve
       change shape, then work the relation backwards on a second instrument that shows a curve and its
       enclosed mass side by side, and record four points that fall on a straight line through the
       origin. They read the Solar System's Keplerian exponent of -0.5, predict the same shape for a
       galaxy, and meet the flat curve telescopes actually find.
-      \n\nThe center of the lesson is a fitting exercise. Students are handed a measured rotation
-      curve and a model with a stellar disc and a dark halo, and asked to reproduce the data. They try
-      the disc alone first, with both of its parameters free, and cannot do it: the best possible
-      stars-only fit misses by about 15 km/s against measurement errors of 5, and it misses worst at
+      \n\nThe center of the investigation is a fitting exercise. Students are handed a rotation curve built
+      from NGC 3198's published parameters, labeled as synthetic on the panel, and a model with a
+      stellar disc and a dark halo, and asked to reproduce the points. They try the disc alone first,
+      with both of its parameters free, and cannot do it: the best possible stars-only fit misses by
+      about 15 km/s against error bars of about 5, and it misses worst at
       the outer edge. A choice step draws out why - the shortfall is the wrong shape, not merely the
       wrong size - and then the halo goes in and the fit closes. Students read off how much dark mass
       per unit of visible mass their own fit implies.
@@ -2523,7 +3217,7 @@ export const INSTRUCTOR_CONTENT = {
       halo is removed underneath it; then the same experiment is run on ninety stars in the live
       simulation and the disc comes apart. Zwicky's 1933 cluster measurement follows, first on the real
       Coma Cluster in an instrument where the two classic arithmetic mistakes are selectable, then on
-      the simulated cluster by hand. The lesson closes on the mass budget of the universe and on a
+      the simulated cluster by hand. The investigation closes on the mass budget of the universe and on a
       short-answer step asking what the measurements establish and, more importantly, what they do
       not.`,
     priorKnowledge: [
@@ -2531,7 +3225,7 @@ export const INSTRUCTOR_CONTENT = {
       'Reading a point off a graph, and the idea that a straight line on a log plot is a power law',
       'Squaring a number and dividing on a calculator; the arithmetic at steps 25 and 26 is two multiplications',
       'Comfort with the idea of fitting a model to data with error bars, and that a fit is judged against those errors rather than against zero. Steps 13-19 introduce this from scratch, but a class that has met it before will move faster',
-      'Helpful but not required: Kepler’s Laws, for the circular-orbit speed relation the whole lesson leans on',
+      'Helpful but not required: Kepler’s Laws, for the circular-orbit speed relation the whole investigation leans on',
     ],
     keyConcepts: [
       {
@@ -2540,7 +3234,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'The other reading: MOND',
-        body: 'Milgrom (1983) observed that rotation curves stop falling at a characteristic acceleration a\u2080 \u2248 1.2 \u00d7 10\u207b\u00b9\u2070 m/s\u00b2 rather than at a characteristic size or brightness, and proposed that below it gravity departs from Newton\u2019s law. Far from a galaxy this gives v\u2074 = G M a\u2080 - a flat curve and a fixed relation between baryonic mass and asymptotic speed, with no parameter fitted per galaxy. That relation is observed independently: it is the baryonic Tully-Fisher relation, and its scatter is small. \n\nMOND is very good at galaxy rotation curves and this is not in dispute. It is much less good elsewhere, and a lesson that presents it as an equal contender across the board would be misleading. In clusters it reduces the missing mass but leaves a residual factor of about two, so clusters still need unseen matter. The Bullet Cluster shows lensing mass displaced from the visible gas after a collision, which is what a collisionless dark component looks like. The relative heights of the acoustic peaks in the cosmic microwave background are fitted by cold dark matter and are not reproduced by MOND without adding a dark component anyway. And MOND has no settled relativistic form: TeVeS and its successors exist, are more complicated than general relativity, and several were ruled out by the measured speed of gravitational waves. \n\nThe symmetric point, which students should also hear: dark matter owes an explanation of why halo properties track the visible mass as tightly as the Tully-Fisher relation says they do, and that is a live problem. Neither picture is finished.',
+        body: 'Milgrom (1983) observed that rotation curves stop falling at a characteristic acceleration a\u2080 \u2248 1.2 \u00d7 10\u207b\u00b9\u2070 m/s\u00b2 rather than at a characteristic size or brightness, and proposed that below it gravity departs from Newton\u2019s law. Far from a galaxy this gives v\u2074 = G M a\u2080 - a flat curve and a fixed relation between baryonic mass and asymptotic speed, with no parameter fitted per galaxy. That relation is observed independently: it is the baryonic Tully-Fisher relation, and its scatter is small. \n\nMOND is very good at galaxy rotation curves and this is not in dispute. It is much less good elsewhere, and an investigation that presents it as an equal contender across the board would be misleading. In clusters it reduces the missing mass but leaves a residual factor of about two, so clusters still need unseen matter. The Bullet Cluster shows lensing mass displaced from the visible gas after a collision, which is what a collisionless dark component looks like. The relative heights of the acoustic peaks in the cosmic microwave background are fitted by cold dark matter and are not reproduced by MOND without adding a dark component anyway. And MOND has no settled relativistic form: TeVeS and its successors exist, are more complicated than general relativity, and several were ruled out by the measured speed of gravitational waves. \n\nThe symmetric point, which students should also hear: dark matter owes an explanation of why halo properties track the visible mass as tightly as the Tully-Fisher relation says they do, and that is a live problem. Neither picture is finished.',
       },
       {
         heading: 'Why the Keplerian exponent is -0.5',
@@ -2560,7 +3254,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Dynamical mass against visible mass',
-        body: 'These are two independent estimates of the same quantity, from two unrelated kinds of measurement. Their ratio is the entire result of this lesson. Because it is a ratio it is unaffected by the scale of the model, which is what lets a scaled-down cluster carry a conclusion about a real one.',
+        body: 'These are two independent estimates of the same quantity, from two unrelated kinds of measurement. Their ratio is the entire result of this investigation. Because it is a ratio it is unaffected by the scale of the model, which is what lets a scaled-down cluster carry a conclusion about a real one.',
       },
       {
         heading: 'Decomposing a rotation curve',
@@ -2569,52 +3263,6 @@ export const INSTRUCTOR_CONTENT = {
       {
         heading: 'Why the shape of the residual matters more than its size',
         body: 'The instinctive response to a model that falls below the data is to add mass. Students discover at steps 14-16 that this cannot work, because adding mass to a disc raises the inner curve faster than the outer one: the best stars-only fit leaves about 15 km/s of average error against measurement errors of 5, and the miss is concentrated at the outer edge. What the data requires is mass that is negligible where the light is and dominant where it is not, which is the opposite of how starlight is distributed. This is the argument that actually closed the question in the literature, and it is an argument about shape.',
-      },
-    ],
-    flow: [
-      {
-        steps: '1-3',
-        text: 'A rotation curve is established as a tool before it is used as a result. Students rearrange a fixed amount of mass four ways in the "Where the mass is" instrument and watch the curve change shape, then commit in a choice step to which arrangement produces a flat curve. Nothing about dark matter has been mentioned yet.',
-      },
-      {
-        steps: '4-5',
-        text: 'The Solar System, plotted live from the simulation. Students read the fitted exponent off the Rotation Curve panel and then reason out, in a multiple-choice step, why it comes to -0.5. This is the case where light and motion agree, and it is the reference the rest of the lesson is measured against.',
-      },
-      {
-        steps: '6-8',
-        text: 'The relation is worked backwards. The "What the speed tells you about the mass" instrument shows a curve and its enclosed mass together with a draggable radius marker, a choice step draws out what a flat curve requires, and then students record the enclosed mass at four radii and plot it. The four points fall on a straight line through the origin, which is what "proportional to radius" looks like.',
-      },
-      {
-        steps: '9-12',
-        text: 'The prediction and the observation. Students predict the curve of a galaxy built on the assumption that light traces mass, measure it, then meet Rubin and Ford’s result in the same disc with the speeds telescopes actually find, and measure that too. The visible mass is identical in both; only the motion differs.',
-      },
-      {
-        steps: '13-16',
-        text: 'The fitting exercise begins, and this is the heart of the lesson. Students are handed a measured curve with error bars and a stellar disc with two free parameters, and asked to reproduce the data. They cannot. Step 15 has them record their own best attempt, and step 16 asks why a heavier disc does not rescue it: the shortfall is the wrong shape, not the wrong size.',
-      },
-      {
-        steps: '17-19',
-        text: 'The halo goes in. Two more sliders, a fit that closes to within the measurement errors, and a numeric step in which students divide their own fitted halo mass by their own visible mass. The answer, about 3.4, is a number they produced rather than received.',
-      },
-      {
-        steps: '20-21',
-        text: 'What the halo is holding. A single star is launched on a circular orbit at the speed a real galaxy gives it and the halo is switched off underneath it; then the same experiment runs on ninety stars in the live simulation and the disc unwinds from the outside in.',
-      },
-      {
-        steps: '22-24',
-        text: 'Zwicky and the Coma Cluster. The history is introduced, then students work the virial theorem on the real Coma Cluster in an instrument where both classic arithmetic mistakes are selectable, and only then switch to simulation units and record the member count, speed spread and radius of the simulated cluster by hand.',
-      },
-      {
-        steps: '25-26',
-        text: 'The cluster calculation. Two numeric steps take students from the virial theorem to a dynamical mass and then to its ratio against the visible mass.',
-      },
-      {
-        steps: '27-30',
-        text: 'The other explanation, in four screens. MOND is introduced as what it is - an empirical observation that rotation curves stop falling at a particular acceleration, turned into a law - and then put on the same twelve measurements the halo was fitted to. Students discover that both reproduce the curve inside its error bars, that the halo spent three fitted numbers doing it and MOND spent one, and that the two disagree about how heavy the stellar disc is. A numeric step has them apply v⁴ = G M a₀ by hand, and a short-answer step asks what the curve can and cannot settle. Expect the question "so which one is right?" here; the honest answer is that this measurement does not say, and the step exists to make that a finding rather than a dodge. Nothing in the lesson asserts that either explanation is correct, and the answer key credits students who reach for evidence outside rotation curves.',
-      },
-      {
-        steps: '31-33',
-        text: 'What it all establishes. A short-answer step asks what has and has not been shown, the mass-budget instrument puts the result in cosmological context, and the lesson closes on where the evidence stands and what remains unknown.',
       },
     ],
     features: [
@@ -2628,7 +3276,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Where the mass is (steps 2-3)',
-        text: 'A lesson instrument, not the live panel. It holds a total mass fixed and lets a student arrange it four ways — all in the middle, a uniform ball, an exponential disc, and a halo whose mass keeps growing — showing the mass distribution beside the curve it produces. Every arrangement contains the same mass inside 30 kpc, so the comparison is about shape alone. It reports the outer slope, and names the shape in words using bands that are deliberately comparative: a pseudo-isothermal halo still climbs slightly over any finite range, so "flat" means near zero rather than exactly zero.',
+        text: 'An investigation instrument, not the live panel. It holds a total mass fixed and lets a student arrange it four ways — all in the middle, a uniform ball, an exponential disc, and a halo whose mass keeps growing — showing the mass distribution beside the curve it produces. Every arrangement contains the same mass inside 30 kpc, so the comparison is about shape alone. It reports the outer slope, and names the shape in words using bands that are deliberately comparative: a pseudo-isothermal halo still climbs slightly over any finite range, so "flat" means near zero rather than exactly zero.',
       },
       {
         name: 'What the speed tells you about the mass (steps 6-8)',
@@ -2636,7 +3284,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Fit a real galaxy (steps 13-19)',
-        text: 'The centerpiece. A measured rotation curve with error bars, and a four-slider model: disc mass, disc scale length, halo strength and halo core radius. It scores the fit as an RMS residual in km/s and states the mean measurement error alongside it, so a student can tell a good fit from a lucky one, and it names the radius of the worst single miss and whether the model is too fast or too slow there. The plot marks FITTED when the residual drops below the errors. Steps 14-16 hide the two halo sliders so the disc has to be tried on its own first.',
+        text: 'The centerpiece. A synthetic rotation curve with error bars, built from NGC 3198’s published parameters and labeled as synthetic on the canvas, and a four-slider model: disc mass, disc scale length, halo strength and halo core radius. It scores the fit as an RMS residual in km/s and states the mean error bar alongside it, so a student can tell a good fit from a lucky one, and it names the radius of the worst single miss and whether the model is too fast or too slow there. The plot marks FITTED when the residual drops below the errors. Steps 14-16 hide the two halo sliders so the disc has to be tried on its own first.',
       },
       {
         name: 'What the halo is holding (step 20)',
@@ -2675,7 +3323,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Dark matter is a theory somebody invented to patch up gravity.',
         response:
-          'The discrepancy is a measurement, made independently in galaxies and in clusters decades apart, and this lesson has students reproduce both. What dark matter names is the explanation, and step 27 exists specifically to separate the two. A student who leaves able to make that distinction has the most valuable thing in the lesson.',
+          'The discrepancy is a measurement, made independently in galaxies and in clusters decades apart, and this investigation has students reproduce both. What dark matter names is the explanation, and step 27 exists specifically to separate the two. A student who leaves able to make that distinction has the most valuable thing in the investigation.',
       },
       {
         claim:
@@ -2718,17 +3366,17 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Have the class open the Rotation Curve panel at step 4 and leave it open for the rest of the lesson. The live measurements at steps 4-5, 9-12 and 21-24 all come from that one instrument, and the argument is much clearer when students watch the same plot change under three different systems than when they open and close it. Steps 2-3, 6-8, 13-20, 23 and 28 use their own docked instruments instead and need nothing from the rail.',
+      'Have the class open the Rotation Curve panel at step 4 and leave it open for the rest of the investigation. The live measurements at steps 4-5, 9-12 and 21-24 all come from that one instrument, and the argument is much clearer when students watch the same plot change under three different systems than when they open and close it. Steps 2-3, 6-8, 13-20, 23 and 28 use their own docked instruments instead and need nothing from the rail.',
       'Steps 2 and 3 look like warm-up and are not. Everything after them depends on a student being able to look at a curve and say where the mass is, and this is the only place they get to build that by moving mass around rather than by being told. Ten minutes here saves twenty at step 16.',
       'Collect the step 9 prediction before anyone looks at the panel. Most classes correctly predict a falling curve, which is exactly what you want: the surprise at step 12 only lands for students who had committed to the other answer first.',
-      'Steps 13 to 19 are the lesson. Budget half the session for them and resist the urge to shorten. The intended experience at step 14 is sustained, honest failure: students should push the disc mass to the top of its range, watch the inner curve overshoot, bring it back, try the scale length, and arrive at about 15 km/s of residual convinced there is nothing left to try. Do not rescue them, and do not let a fast student tell the room the answer.',
+      'Steps 13 to 19 are the investigation. Budget half the session for them and resist the urge to shorten. The intended experience at step 14 is sustained, honest failure: students should push the disc mass to the top of its range, watch the inner curve overshoot, bring it back, try the scale length, and arrive at about 15 km/s of residual convinced there is nothing left to try. Do not rescue them, and do not let a fast student tell the room the answer.',
       'Ask for step 15 in writing before anyone touches the halo sliders. The number a student produced themselves, and the fact that their worst miss was at the outer edge, is what makes step 16 an inference rather than a claim.',
-      'Step 16 is the pivot of the whole lesson and the one place to run a discussion rather than a click. The distractor about a disc not holding enough mass is the intuitive answer and it is wrong: mass is not the problem, distribution is. If the class can articulate "we need mass where the light is not", they have the argument that settled the question in the literature.',
+      'Step 16 is the pivot of the whole investigation and the one place to run a discussion rather than a click. The distractor about a disc not holding enough mass is the intuitive answer and it is wrong: mass is not the problem, distribution is. If the class can articulate "we need mass where the light is not", they have the argument that settled the question in the literature.',
       'At step 17, expect a spread of halo parameters that all fit. That is a genuine degeneracy between halo strength and core radius, not a mistake, and it is worth naming out loud: published rotation-curve papers quote these two together with a covariance for exactly this reason. The halo mass, and therefore the ratio at step 19, is far better constrained than either slider on its own.',
-      'Step 20 is the best demonstration in the lesson and takes about thirty seconds. Run it on one screen with the class watching: launch the star, let it complete an orbit, then drag the halo slider to OFF and say nothing. Then ask why the star left, and insist on the answer that nothing was added to the star.',
+      'Step 20 is the best demonstration in the investigation and takes about thirty seconds. Run it on one screen with the class watching: launch the star, let it complete an orbit, then drag the halo slider to OFF and say nothing. Then ask why the star left, and insist on the answer that nothing was added to the star.',
       'Step 21 repeats step 20 on ninety stars in the live simulation. It is worth doing both: the single star makes the mechanism clear and the disc makes the consequence visible.',
       'Let students find both wrong settings at step 23 rather than warning them first. The "forget to square it" case is the valuable one, because the discrepancy vanishes: an answer that shows no missing mass is a signal that the arithmetic went wrong, and recognizing that is a transferable skill.',
-      'At step 24, make sure students actually switch to simulation units before recording anything. In physical units the panel reports a cluster radius in AU, which is a nonsense number for a cluster of galaxies and will produce a mass wrong by many orders of magnitude. The scenario is a scale model and the lesson says so, but the unit switch is the step students skip.',
+      'At step 24, make sure students actually switch to simulation units before recording anything. In physical units the panel reports a cluster radius in AU, which is a nonsense number for a cluster of galaxies and will produce a mass wrong by many orders of magnitude. The scenario is a scale model and the investigation says so, but the unit switch is the step students skip.',
       'The commonest arithmetic error at step 25 is using sigma rather than sigma squared, which gives about 86,000 instead of 1.76 million in simulation units. The second commonest is forgetting to divide by 1000 to reach solar masses. Both are worth naming in advance, and both were reachable deliberately at step 23 so that a student may already have met them.',
       'Steps 25 and 26 can be done on paper in under two minutes, and doing them on paper rather than in the answer box is worth the time: the point is that this calculation is genuinely small, and that Zwicky needed nothing more than this.',
       'Step 27 is a good exit ticket. Any answer that separates the measured discrepancy from its interpretation earns full credit; naming faint ordinary matter or modified gravity as alternatives earns more, and so does noticing that the rotation-curve result constrains the shape of the missing mass and not only its amount. Students who write only "dark matter exists" have missed the step.',
@@ -2762,7 +3410,7 @@ export const INSTRUCTOR_CONTENT = {
       \n\nThe three scenarios are scale models and their cards say so. A real galactic bulge is around
       ten billion solar masses and a real cluster is megaparsecs across, while Gravitas's units are
       calibrated so that G = 1 works for planetary systems. Rebuilding the unit system around galactic
-      scales would change nothing a student measures here, because every quantity this lesson turns on
+      scales would change nothing a student measures here, because every quantity this investigation turns on
       is dimensionless: the exponent of a power law, and the ratio of two masses.
       \n\nGalaxies are a genuine object type, deliberately the simplest in the codebase: a mass, a
       position and a drawing. They do not merge, accrete or evolve, because none of those are what a
@@ -2773,22 +3421,6 @@ export const INSTRUCTOR_CONTENT = {
       bulge also discarded Mercury, which is a tracer and belongs on the plot. Everything else shown
       is a live measurement: nothing is fitted or smoothed except the power law, whose fitting window
       is drawn on the plot.`,
-    expectations: {
-      2: 'All four presets should be pressed. The falling presets return an outer slope near -0.50 and the shape reads "falling, Keplerian"; the disc reads about -0.28 and "falling"; "What galaxies do" reads about +0.10 and "FLAT". The +0.10 is worth a word if a student queries it: a pseudo-isothermal halo approaches its asymptote from below, so over a finite range it is still climbing slightly. The claim the lesson makes is comparative — flat rather than -0.5 — and the panel’s bands are set for that.',
-      4: 'The Solar System returns an exponent of -0.500 and the panel names the shape Keplerian. Mercury sits at the left of the plot at 48.5 km/s and 0.389 AU, and Neptune at the right at 5.43 km/s and 30.1 AU, both within a per cent of the real values, and every point lies on the dashed prediction. This is the agreement the rest of the lesson is measured against.',
-      6: 'On the falling curve, dragging the marker from 2 kpc to 30 leaves the lower plot almost level and the readout says the enclosed mass "barely changes (x 1.00)". On the flat curve the lower plot is a straight line through the origin and the readout says it "roughly doubles (x 2.00)". On the real galaxy the visible dashed line accounts for about a quarter of the enclosed mass at 30 kpc, which is the number step 19 will reproduce independently.',
-      8: 'The flat curve gives 2.62, 5.23, 10.46 and 15.69 in units of 10^10 solar masses at 5, 10, 20 and 30 kpc: exactly proportional to radius, and the plot is a straight line through the origin. The falling curve gives 5.23 at 30 kpc, the same as it gives at 10, which is the contrast the step is for. Students who read 5.2 rather than 5.23 are fine; the point is the proportionality, not the third digit.',
-      10: 'The Spiral Galaxy scenario gives an exponent near -0.45 and the shape reads Keplerian. It is not exactly -0.5 because the disc carries about a fifth of the visible mass, so the enclosed total does keep growing a little; students who notice that discrepancy and can explain it are ahead of the lesson. The visible mass reads 14.7 solar masses in the model’s own units.',
-      12: 'The Milky Way Rotation scenario gives an exponent near +0.02 and the shape reads Flat. The visible mass is unchanged at 14.7, which is the point worth drawing out: nothing about the bookkeeping changed, only the motion. At the outer edge the stars are moving roughly 2.7 times faster than the dashed prediction, so answers between 2 and 3 are good readings off the plot.',
-      14: 'Expect frustration, and protect it. A heavier disc lifts the whole curve and overshoots the inner points long before it reaches the outer ones; a wider disc flattens its peak a little and moves it outward but still comes back down. The best achievable stars-only fit is an average miss of about 15 km/s at a disc mass near 8.5 and a scale length near 4.5, and it is worst at 30 kpc where the model runs about 27 km/s too slow. Students who get anywhere near 15 have found the real answer and should be told so.',
-      15: 'Around 15 km/s for the average miss, a disc mass between 6 and 10, and the worst miss at 30 kpc with the model too slow. A student reporting an average miss under 10 has almost certainly left the halo on or misread the row; a student reporting 40 or more has not swept the range. The sign of the worst miss is the field that matters most: too slow, at the outer edge, every time.',
-      17: 'Raising the halo strength from zero lifts the outer curve while the inner points barely move, which is the observation the whole exercise exists to produce. FITTED appears once the average miss drops below about 4.7 km/s. There is a real degeneracy between halo strength and core radius, so a range of settings will fit: anything from roughly 140 to 160 km/s with a matching core between 4 and 9 kpc gets there. That degeneracy is a feature of the real problem and worth naming.',
-      18: 'A halo flat speed near 150 km/s and a core radius near 6 kpc, with an average miss around 2 km/s. The visible mass reads 3.35 and the halo mass inside 30 kpc reads about 11.4, both in units of 10^10 solar masses. Because of the degeneracy the individual halo numbers will vary between students while the halo mass, and therefore the ratio at step 19, will not vary much.',
-      20: 'With the halo on the star holds 20 kpc indefinitely. The readout shows a launch speed near 146 km/s against about 77 km/s for what the visible disc alone could hold — a factor of nearly two in speed, which is a factor of nearly four in the mass required. Switching the halo off sends the star out past three times its launch radius within a few seconds and the verdict line appears. Relaunching at 8 kpc with the halo off keeps the star, because the disc still dominates there; that contrast is worth asking for explicitly.',
-      21: 'With the halo switched off the outermost stars begin drifting outward within a few seconds and the disc visibly unwinds from the outside in. The fitted slope climbs as the outer stars carry their speed to larger radii. Reloading the scenario restores it; the toggle alone does not, because the stars have already moved.',
-      23: 'Done correctly, Coma comes out near 1.6 x 10^15 solar masses, about 11 times the galaxies and hot gas combined and about 54 times the galaxies alone. Selecting "forget the factor of 3" divides the mass by exactly three. Selecting "forget to square it" collapses it by a factor of a thousand and the discrepancy disappears entirely, which is the most useful thing on the panel: an answer that shows no discrepancy is the signal that the arithmetic went wrong, not that the problem went away.',
-      24: 'Twenty-four members, a speed spread of 20.5 simulation units per time, and a cluster radius of about 2516 simulation units. The visible mass reads 96 solar masses. Because the scenario is paused and seeded these are the same for every student, so a different answer is a reading error rather than a different moment.',
-    },
   },
 
   'goldilocks-question': {
@@ -2800,7 +3432,7 @@ export const INSTRUCTOR_CONTENT = {
       dim star’s habitable zone is tucked in close, meet the two published definitions of that zone and
       what separates them, watch an eccentric planet swing in and out of it, and read the real
       TRAPPIST-1 system against the model. The last five screens are the reason the investigation
-      exists: having spent forty minutes making the habitable zone feel powerful, the lesson turns
+      exists: having spent forty minutes making the habitable zone feel powerful, the investigation turns
       round and asks what being inside it actually establishes. The answer is "very little about the
       planet", and a student who leaves with that is better equipped to read an exoplanet headline than
       one who leaves able to recite the definition.`,
@@ -2815,7 +3447,7 @@ export const INSTRUCTOR_CONTENT = {
         heading: 'Insolation and the inverse-square law',
         body: `The energy arriving per square meter goes as L/d². The reason is geometric: a star’s
           output crosses an imaginary sphere whose area grows as the square of the radius, so the same
-          energy is spread thinner. Earth receives about 1,361 W/m², which the lesson calls one Earth
+          energy is spread thinner. Earth receives about 1,361 W/m², which the investigation calls one Earth
           and uses as its unit throughout. Watts appear only as a secondary readout.`,
       },
       {
@@ -2847,40 +3479,6 @@ export const INSTRUCTOR_CONTENT = {
           whether a planet has an atmosphere, has any water, or is rocky. Venus and Earth are nearly the
           same size, receive starlight within a factor of two of each other, and have surfaces four
           hundred degrees apart. That comparison is the whole argument in one line.`,
-      },
-    ],
-    flow: [
-      {
-        steps: '1–6',
-        text: 'Insolation is introduced with Earth as the unit. Students predict what doubling the distance does, measure three distances with the instrument and the graph on the same screen, and read the curve their own points make.',
-      },
-      {
-        steps: '7–8',
-        text: 'Only now the explanation. Students step a shell outward one astronomical unit at a time and read off the areas 1, 4, 9, 16 before the inverse-square relation is written down, then apply it at an unfamiliar distance.',
-      },
-      {
-        steps: '9–13',
-        text: 'The star changes instead of the planet. Students find that insolation tracks luminosity, then meet the habitable zone as a band and watch it move by a factor of fifty as the star changes.',
-      },
-      {
-        steps: '14–17',
-        text: 'The careful definition, then the live Solar System with the zone drawn on it. Students classify four real worlds and then write a short answer about the one that makes the definition mean something: Mars is inside the zone and bone dry.',
-      },
-      {
-        steps: '18–23',
-        text: 'What sets each edge, the conservative and optimistic prescriptions side by side, and the same comparison run on the live Solar System. Ends with an inverse-square calculation for Venus.',
-      },
-      {
-        steps: '24–28',
-        text: 'Orbits. A circular year gives a flat starlight curve; an eccentric one does not. Students watch the planet cross a zone boundary and interpret the fraction of the year spent inside.',
-      },
-      {
-        steps: '29–32',
-        text: 'TRAPPIST-1, with the real measured luminosity: a prediction, the diagram, the live seven-planet simulation, and a measurement screen where students take the readings themselves instead of being told the answer.',
-      },
-      {
-        steps: '33–37',
-        text: 'The turn. Does being inside the zone establish anything about the planet? Three candidates with similar insolation and different everything else, a follow-up-target choice, an unfamiliar case, and the synthesis.',
       },
     ],
     features: [
@@ -2945,7 +3543,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'The habitable zone is a physical region of space.',
         response:
-          'It is a calculated range of orbital distances, drawn as an overlay. Nothing is there. The lesson says so at step 12 and again at step 15, where the ring is visibly sitting in empty space, and the wording is worth repeating aloud.',
+          'It is a calculated range of orbital distances, drawn as an overlay. Nothing is there. The investigation says so at step 12 and again at step 15, where the ring is visibly sitting in empty space, and the wording is worth repeating aloud.',
       },
       {
         claim: 'A planet that leaves the zone freezes immediately.',
@@ -2962,17 +3560,17 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'Collect the prediction at step 3 before anyone touches the slider. "Half" is the answer most students give, and the value of step 4 depends on them having committed to it.',
       'Step 5 puts the instrument and the plot on one screen. Students who typed a distance into a starlight field get a specific warning from the validator; point them at it rather than at the answer.',
-      'At step 7, have students say the area out loud at each distance before reading the third line of the readout. The sequence 1, 4, 9, 16 is the whole lesson, and it lands better spoken than read.',
+      'At step 7, have students say the area out loud at each distance before reading the third line of the readout. The sequence 1, 4, 9, 16 is the whole investigation, and it lands better spoken than read.',
       'Step 8 asks for 1/9. A student who types 0.33 has divided by three instead of nine.',
       'At step 12 the distance axis rescales when the star changes. Say this out loud: a class that reads the pixels instead of the axis will conclude that all four zones are the same size.',
-      'Step 15 is the first time the lesson leaves the panels and uses the simulation itself. Give it a minute of quiet looking before asking anything. Most students will find Mars inside the ring on their own, and the surprise is worth having.',
-      'Step 17 is the only written answer in the lesson. The model answer unlocks once a student has written about forty characters, so let them commit before pointing at the button. Collect a few answers aloud before anyone reveals it.',
+      'Step 15 is the first time the investigation leaves the panels and uses the simulation itself. Give it a minute of quiet looking before asking anything. Most students will find Mars inside the ring on their own, and the surprise is worth having.',
+      'Step 17 is the only written answer in the investigation. The model answer unlocks once a student has written about forty characters, so let them commit before pointing at the button. Collect a few answers aloud before anyone reveals it.',
       'Step 19 is worth doing as a class. The conservative-versus-optimistic distinction is the one place where students see that a published number depends on stated assumptions, and it transfers well beyond this topic.',
       'Steps 26 and 27 need a full lap before the fraction means anything. Students often pause too early.',
       'Step 31 unlocks the object inspector. Expect a minute of clicking; that is the point. TRAPPIST-1b should read about 1.5 days and h about 19 days, and those come out of the integrator rather than a table.',
       'Step 32 replaces what used to be a multiple choice. Students who write 4.18 for planet e have read the wrong row; the validator names the fields that are off rather than giving the values.',
       'Step 33 is the hinge of the whole investigation. If time is short, cut something from the first half rather than rushing steps 33 to 37.',
-      'Step 35 has a defensible answer, but a student arguing for A or C with a good reason has understood the lesson. Reward the reasoning.',
+      'Step 35 has a defensible answer, but a student arguing for A or C with a good reason has understood the investigation. Reward the reasoning.',
     ],
     discussion: [
       'Mars is inside the conservative habitable zone and has no liquid water. What would have to be different about Mars for the zone’s promise to hold?',
@@ -2985,13 +3583,13 @@ export const INSTRUCTOR_CONTENT = {
     ],
     extensions: [
       'Have students look up a real planet from the NASA Exoplanet Archive, find its host star’s luminosity and its semi-major axis, and place it against the zone themselves.',
-      'Open the Habitable Zone Lab scenario outside the lesson, change the Sun’s mass, and watch the zone move. Ask what would happen to Earth if the Sun were ten percent more luminous, which it will be in about a billion years.',
+      'Open the Habitable Zone Lab scenario outside the investigation, change the Sun’s mass, and watch the zone move. Ask what would happen to Earth if the Sun were ten percent more luminous, which it will be in about a billion years.',
       'Ask why a tidally locked planet is not automatically uninhabitable, and what an atmosphere would have to do for it to work.',
       'For students ready for it: the zone edges scale as the square root of luminosity, but luminosity itself scales steeply with stellar mass. Work out how the zone distance depends on mass, and why that makes low-mass stars such awkward hosts.',
     ],
     modelNotes: `The habitable-zone boundaries come from the Kopparapu et al. (2013) prescription with
       the 2014 erratum coefficients, evaluated from each star’s luminosity and effective temperature.
-      The same module draws the ring in the live simulation and the bands in the lesson panels, so a
+      The same module draws the ring in the live simulation and the bands in the investigation panels, so a
       student who reads 0.98 AU off a panel and then looks at the ring on screen is looking at one
       calculation drawn twice. Measured stellar luminosities are used wherever a scenario carries one,
       which matters most for TRAPPIST-1: a mass-luminosity relation would put its zone out by more than
@@ -2999,7 +3597,7 @@ export const INSTRUCTOR_CONTENT = {
       extrapolated, and the ring says so on screen. The orbital instruments solve Kepler’s equation
       analytically rather than integrating, so the timing of an eccentric year and the fraction spent
       inside the zone are exact. Nothing in this investigation models a climate: the zone is a
-      statement about incident starlight against limits from a published model, and the lesson is
+      statement about incident starlight against limits from a published model, and the investigation is
       careful to say so.
 
       Both habitable-zone scenarios put their planets on circles, deliberately: circles keep the
@@ -3012,34 +3610,17 @@ export const INSTRUCTOR_CONTENT = {
 
       Where a planet sits relative to the zone is computed by habitableZoneBounds() and
       habitableZoneStatus(), the same two functions the ring on the canvas is drawn with, so the
-      lesson and the picture cannot disagree about where the edges are. Being in the zone is a
+      investigation and the picture cannot disagree about where the edges are. Being in the zone is a
       statement about incoming starlight and nothing else: it is not evidence of water, of an
-      atmosphere, or of anything living, and the lesson is careful never to say otherwise.`,
-    expectations: {
-      21: "The inner edge visibly jumps inward from 0.98 to 0.75 AU while the outer barely moves, 1.69 to 1.77. Venus at 0.72 AU is still outside it, by about 0.03 AU. The census of the Solar System does not change: Earth and Mars, on either definition. Venus is now inside the optimistic zone at 0.72 AU against an inner edge of 0.75. Nothing about Venus changed - the definition did. That is the screen's whole point, and the readout says which definition is in force so the change is attributable.",
-      4: 'At 0.5, 1 and 2 AU the panel reads 4.00, 1.00 and 0.25 Earths. These are exact by construction, not rounded.',
-      5: 'The three pairs should be (0.5, 4), (1, 1) and (2, 0.25). The validator confirms starlight × distance² is constant and says the relationship has appeared in the student’s own numbers; it warns if the rows do not sit on one curve, which almost always means a value was read at the wrong distance.',
-      7: 'The shell areas read 1×, 4×, 9× and 16× at 1, 2, 3 and 4 AU, and the third line of the readout gives 1, 0.25, 0.111 and 0.063 Earths. The last line never changes: the total energy crossing the shell is the same at every distance.',
-      10: 'At a fixed 1 AU: the red dwarf gives 0.0015 Earths, the orange dwarf 0.34, the Sun 1.00, the brighter star 5.1. The starlight equals the luminosity exactly, because the distance is 1 AU.',
-      12: 'Conservative zones: red dwarf 0.042 to 0.080 AU, Sun 0.98 to 1.69 AU, brighter star 2.11 to 3.58 AU. A factor of about fifty between the extremes.',
-      15: 'The ring runs from 0.98 to 1.69 AU. Venus at 0.72 AU sits inside the inner edge and Ceres at 2.77 AU well beyond the outer one, so Earth and Mars are the two worlds inside. Mars being inside is the point of the screen and is worth waiting for a student to notice. Venus at 0.72 AU is inside the inner edge, Earth at 1.00 is comfortably in, Mars at 1.52 is just inside the outer edge on the conservative definition, and Ceres at 2.77 is far outside. Have them click each and read the distance and insolation rather than being told: the numbers come from the same functions that draw the ring.',
-      19: 'Around the Sun the conservative zone is 0.98 to 1.69 AU and the optimistic zone is 0.75 to 1.77 AU. The inner edge moves much further than the outer one, which surprises most students.',
-      24: 'On a circular orbit the starlight graph is a flat line. That is the observation the next prediction depends on.',
-      26: 'At a = 1.2 AU and e = 0.45 the planet swings between 0.66 and 1.74 AU, receiving 2.30 and 0.33 Earths. The starlight peak is narrow and the trough is wide, because the planet moves fastest at periapsis.',
-      27: 'At e = 0.45 the planet spends about 56% of its year inside the conservative zone; at e = 0.3 about 78%; on a circular orbit at the same semi-major axis, 100%. Wanderer swings between 0.66 AU at closest approach and 1.74 AU at furthest, so its starlight varies by a factor of about seven over one year. Arm the watch at periapsis, read the insolation, then let it run to apoapsis and read it again. Being inside the zone for part of a year is not the same as being habitable, and the next screen is where to say so.',
-      30: 'Insolations: b 4.18, c 2.22, d 1.11, e 0.65, f 0.37, g 0.25, h 0.14 Earths. The conservative zone runs 0.0254 to 0.0499 AU, putting e, f and g inside. Switching to optimistic brings d in as well.',
-      31: 'The whole system fits inside the ring plus a little either side. Orbital periods from the inspector: b about 1.5 days, c 2.4, d 4.0, e 6.1, f 9.2, g 12.4, h 18.8. TRAPPIST-1b completes about twelve laps for each one of h. Seven planets on their real orbits, with the zone drawn at the same scale. The caution printed on the ring matters: TRAPPIST-1 at 2,566 K is below the temperature range the published fit covers, so the model is evaluated at its own lower limit rather than extrapolated.',
-      32: 'e 0.65, f 0.37, g 0.25 Earths, with the zone running 0.0254 to 0.0499 AU. The validator accepts anything within five percent and names the specific fields that are off, so a student who has read the wrong row is told which one rather than being given the value. TRAPPIST-1e receives about 0.65 Earths, f about 0.38, g about 0.26. Selecting each planet gives the same numbers from the same code that draws the ring, so a student can check the instrument against the world it describes.',
-      34: 'All three candidates receive close to one Earth of starlight and all three are inside the zone. The differences are atmosphere, size and stellar activity.',
-    },
+      atmosphere, or of anything living, and the investigation is careful never to say otherwise.`,
   },
   'butterfly-effect': {
     topic: 'Deterministic chaos and the limits of prediction',
     difficulty: 'Introductory',
     placement:
-      'After Newtonian gravity and orbits, and after students have run at least one two-body scenario. It needs no calculus and no differential equations, only logarithms. It works particularly well immediately after a unit on the two-body problem, because the whole lesson is built on the contrast: the one problem that is solved exactly, against the one next door that is not.',
+      'After Newtonian gravity and orbits, and after students have run at least one two-body scenario. It needs no calculus and no differential equations, only logarithms. It works particularly well immediately after a unit on the two-body problem, because the whole investigation is built on the contrast: the one problem that is solved exactly, against the one next door that is not.',
     overview:
-      'The lesson is four measurements in a fixed order, and the order is the argument. First, two identical runs, which come out identical to the last decimal and establish that the engine is deterministic - so nothing later can be blamed on randomness. Second, a two-body system given a tiny nudge, which comes apart steadily in proportion to time; the instrument refuses to call this chaos and says why, which is the single most transferable idea in the lesson. Third, the same nudge in a three-body system, which comes apart exponentially, and the students measure the e-folding time. Fourth, the same comparison repeated with a smaller timestep and a different integrator, which is what turns the result from a property of the software into a property of the physics. It closes on the claim that "three bodies means chaos", which is false, and on the difference between a classroom estimate and a Lyapunov exponent.',
+      'The investigation is four measurements in a fixed order, and the order is the argument. First, two identical runs, which come out identical to the last decimal and establish that the engine is deterministic - so nothing later can be blamed on randomness. Second, a two-body system given a tiny nudge, which comes apart steadily in proportion to time; the instrument refuses to call this chaos and says why, which is the single most transferable idea in the investigation. Third, the same nudge in a three-body system, which comes apart exponentially, and the students measure the e-folding time. Fourth, the same comparison repeated with a smaller timestep and a different integrator, which is what turns the result from a property of the software into a property of the physics. It closes on the claim that "three bodies means chaos", which is false, and on the difference between a classroom estimate and a Lyapunov exponent.',
     priorKnowledge: [
       'Newtonian gravity and orbital motion at a qualitative level',
       'What a logarithm is, and that a straight line on a log axis means exponential growth',
@@ -3053,7 +3634,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Exponential growth, not merely growth',
-        body: 'Two nearly identical two-body orbits also separate, because a small change alters the period slightly and the two runs drift out of phase. That separation grows in proportion to time. Chaos means the separation grows by a fixed factor per unit time, which is a different function and looks different on a log axis. The lesson measures both cases with the same instrument so the comparison is direct.',
+        body: 'Two nearly identical two-body orbits also separate, because a small change alters the period slightly and the two runs drift out of phase. That separation grows in proportion to time. Chaos means the separation grows by a fixed factor per unit time, which is a different function and looks different on a log axis. The investigation measures both cases with the same instrument so the comparison is direct.',
       },
       {
         heading: 'An e-folding time, and what it buys',
@@ -3061,29 +3642,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Numerical refinement as evidence',
-        body: 'A computed divergence is only physical if it survives being computed better. The lesson requires the comparison to be repeated at a smaller timestep and with a different integrator, and the widget reports the spread. If the answers disagree, the correct report is "numerically unresolved" and no number at all - not the average, and not the value from the fanciest integrator.',
-      },
-    ],
-    flow: [
-      {
-        steps: '1–5',
-        text: 'The three-star lab, introduced, then the reproducibility control: two runs changing nothing, which come out identical. Establishes determinism before anything diverges. Ends by asking what exactly zero proves, and the answer is narrower than most students expect.',
-      },
-      {
-        steps: '6–10',
-        text: 'The two-body control. The Binary Pair scenario given a 1,500 km nudge separates steadily and linearly; the instrument declines to report an e-folding time and says the growth is proportional to time. This is the section to protect if time is short.',
-      },
-      {
-        steps: '11–17',
-        text: 'The three-body case. Lagrange\u2019s equilateral solution, Gascheau\u2019s stability criterion, and why three equal masses make it unstable. Students measure the e-folding time from the shaded log-linear interval and work out the predictability horizon and what improving the measurement buys.',
-      },
-      {
-        steps: '18–21',
-        text: 'The numerical control. Repeat at half the simulation speed and with a different integrator, record each, and read the refinement verdict. Includes the hypothetical of an unresolved result and what to report about it.',
-      },
-      {
-        steps: '22–28',
-        text: 'What chaos is not: the Trojan asteroids and the figure-eight orbit as stable three-body configurations, a sorting question, a short-answer synthesis, a free exploration of perturbation size, then the real-world reach of the result, the sources, and the summary.',
+        body: 'A computed divergence is only physical if it survives being computed better. The investigation requires the comparison to be repeated at a smaller timestep and with a different integrator, and the widget reports the spread. If the answers disagree, the correct report is "numerically unresolved" and no number at all - not the average, and not the value from the fanciest integrator.',
       },
     ],
     features: [
@@ -3133,28 +3692,20 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Steps 4 and 8 are the lesson. If the room is short of time, cut from steps 22 to 25, never from the reproducibility control or the two-body case: without them the three-body result is a light show rather than an argument.',
+      'Steps 4 and 8 are the investigation. If the room is short of time, cut from steps 22 to 25, never from the reproducibility control or the two-body case: without them the three-body result is a light show rather than an argument.',
       'Budget generously for step 3. Most students meet the A/B Bench here for the first time, and the capture-record-restore cycle takes a couple of attempts to become automatic. Demonstrating it once on the projector saves fifteen minutes across a class.',
       'Runs of about forty seconds are enough. Longer runs do not improve the measurement - the separation saturates once the stars have rearranged - and the instrument will simply exclude the flat tail from the fit.',
       'A common failure at step 13 is recording two runs of very different lengths, which shrinks the overlap the instrument can compare. The widget reports the overlap it used; point students at that line rather than at their result.',
       'At step 20, insist that only one thing changes at a time. A student who halves the speed and switches integrator together has run a valid experiment about neither.',
       'The theoretical e-folding time for this configuration is sqrt(2)/n = 6.0 simulated seconds. Measured values come out around 6.9. That 15% gap is honest and worth discussing: the fit covers a finite window, the perturbation is finite rather than infinitesimal, and the unstable eigenvalue has an oscillatory part the fit averages over.',
-      'If a class is comfortable with logarithms, step 17 is the place to slow down. The result that error reduction buys time only logarithmically is the single most useful thing in the lesson for anyone who will later meet weather models, ephemerides or orbit determination.',
+      'If a class is comfortable with logarithms, step 17 is the place to slow down. The result that error reduction buys time only logarithmically is the single most useful thing in the investigation for anyone who will later meet weather models, ephemerides or orbit determination.',
     ],
-    expectations: {
-      4: 'About a minute of running from one button. The separation should read exactly zero for the whole run and the instrument should report "the two runs are identical". The section reports both intervals - 40.0 simulated seconds each, against 40 asked for - and says in as many words that nothing was changed between the runs. Any nonzero value means something was; the parameter-difference line will name it. This is also the moment to point out that the runs are compared on simulated time, not wall-clock time.',
-      8: 'A growth factor of order 100 over four or five orbits, a straight-line fit around r-squared 0.99, and no e-folding time. The instrument should say the separation is growing in proportion to time. Students often read the refusal as an error; it is the result. The section names the nudge - 1500 km along x - as the only difference between the runs, which is worth reading aloud before the result.',
-      13: 'The guided pair runs a defined forty seconds at a defined step, so this is now the same for everyone: an e-folding time of 8.33 simulated seconds, r-squared 0.991, growth about 220, fitted between t = 5.3 and t = 29.3. The shaded band on the log plot marks that interval. Reproducibility is the change worth noticing here - two students who disagree have loaded different scenarios, not made different measurements.',
-      14: 'Expect tau 8.3 s, r-squared 0.99 and growth about 220. Values of tau outside 7 to 9 mean the wrong run or the wrong scenario rather than a physics error. The field validation warns rather than blocks, so a student can record an unexpected number and discuss it.',
-      20: 'Two controls, about a minute each, and the three e-folding times should agree far better than the twenty per cent the verdict allows. Measured: 8.333 s at the shipped step with symplectic Euler, 8.322 s at half that step, 8.314 s with velocity Verlet - a spread of 0.1 per cent, reported as resolved. Two things to check if it does not read that way. Wild disagreement means something else changed as well, and the parameter diff will name it. A verdict that says the repeats did not change the arithmetic means the same control was run twice: the section refuses to count agreement between two identical calculations, which is a point worth making out loud. Note also that the step control halves the MEASURED step rather than the setting - this lab ships with no cap at all, so halving the setting would have halved nothing.',
-      25: 'The e-folding time should be essentially unchanged by a smaller or larger perturbation; what moves is the time at which the two runs become visibly different, and it moves by ln(factor) times tau. A perturbation ten times smaller buys about sixteen extra seconds and no more.',
-    },
     discussion: [
       'The simulation is exactly reproducible and its long-term behavior cannot be predicted. Where exactly does the unpredictability live, if not in the equations?',
       'Weather forecasts are useful for about a week. What would have to be true for them to be useful for a month, and is it achievable in principle?',
       'If improving your measurement by a factor of a thousand buys seven e-folding times, what does that say about the value of ever more precise initial data for a chaotic system?',
       'The two-body problem is exactly solvable and the three-body problem is not. Is that a fact about the universe or a fact about mathematics?',
-      'Jupiter\u2019s Trojan asteroids sit in a three-body configuration that has been stable for billions of years. What distinguishes their situation from the one measured in this lesson?',
+      'Jupiter\u2019s Trojan asteroids sit in a three-body configuration that has been stable for billions of years. What distinguishes their situation from the one measured in this investigation?',
     ],
     extensions: [
       'Have students estimate the Lyapunov time of the inner Solar System from published values (a few million years) and work out the corresponding predictability horizon for planetary positions. Compare with the age of the Solar System.',
@@ -3220,31 +3771,9 @@ export const INSTRUCTOR_CONTENT = {
         body: `A deformable body stretches as it approaches, which lengthens the lever the tide acts on,
           so it disrupts further out than a body that holds its shape. The fluid coefficient is about
           2.44 against the rigid 1.26, so the two limits differ by nearly a factor of two. The gap is
-          physics, not error bars, and the lesson draws both arcs rather than one line. Below the scale
+          physics, not error bars, and the investigation draws both arcs rather than one line. Below the scale
           where self-gravity dominates, material strength takes over entirely and the argument does not
           apply at all: a boulder is safe at any distance.`,
-      },
-    ],
-    flow: [
-      {
-        steps: '1–8',
-        text: 'The Earth-Moon system live, then the three-arrow panel. Students see that the pulls differ by seven percent, predict why there are two bulges, and are shown the subtraction that produces them. Ends with the definition of a tide as a difference.',
-      },
-      {
-        steps: '9–15',
-        text: 'The two scaling relationships, each predicted and then measured. Four distances give the inverse cube (with a straighten-the-curve transform on the plot); three masses give simple proportionality. The expression 2GMR/d³ appears at step 12, after the distance measurement and before the mass one.',
-      },
-      {
-        steps: '16–19',
-        text: 'Applying both relationships. Students predict the Sun-versus-Moon contest, read seven real tides off a logarithmic comparison chart, meet tidal locking and heating conceptually, and write the far-side bulge in their own words.',
-      },
-      {
-        steps: '20–26',
-        text: 'Disruption. Stretch is set against a body’s own surface gravity as two bars, the crossing point is measured and named as the Roche limit, the material is varied to show the limit moving, and a full screen is given to what a Roche limit does not predict.',
-      },
-      {
-        steps: '27–30',
-        text: 'The extreme case: the live tidal disruption scenario with its modeling honestly described, the tidal-radius-against-horizon panel and the hundred-million-solar-mass crossover, then the written synthesis and the summary.',
       },
     ],
     features: [
@@ -3273,7 +3802,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Tides are caused by the Moon’s gravity being strong.',
         response:
-          'They are caused by it being unequal. The single best counterexample is in the lesson at step 16: the Sun pulls the Earth about 180 times harder than the Moon does and raises less than half the tide. If a class takes away only one correction, this is the one.',
+          'They are caused by it being unequal. The single best counterexample is in the investigation at step 16: the Sun pulls the Earth about 180 times harder than the Moon does and raises less than half the tide. If a class takes away only one correction, this is the one.',
       },
       {
         claim:
@@ -3306,12 +3835,12 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Steps 3 and 6 are the lesson. If the room is short of time, cut from the middle third, never from here. Consider projecting step 6 and doing the subtraction out loud with the class before letting them work on.',
+      'Steps 3 and 6 are the investigation. If the room is short of time, cut from the middle third, never from here. Consider projecting step 6 and doing the subtraction out loud with the class before letting them work on.',
       'Step 5 collects the wrong prediction deliberately. Do not correct it in the room before step 6; the commitment is what makes the reveal land, and predictions are never graded on correctness.',
       'Step 10 is the longest screen. Four rows is the target but two are enough for the transform to work, so a student who is behind should be told to fill two and press the transform button rather than to hurry through four.',
       'Step 12 introduces 2GMR/d³ after both the prediction and the distance measurement. Students who have seen the expression before will want to skip ahead to it; the measurement is worth more than the formula and is where the retention is.',
       'Step 19 is the first written answer and the one worth grading by hand. The discriminator is whether the student compares the far side with the center. "It is pulled less" alone is only half the answer.',
-      'Step 27 runs the live disruption scenario. Expect students to over-read it. The screen says explicitly that Gravitas sheds debris by a rule rather than computing fluid flow, and it is worth repeating that out loud, because this is the one place in the lesson where the picture is more dramatic than the physics behind it.',
+      'Step 27 runs the live disruption scenario. Expect students to over-read it. The screen says explicitly that Gravitas sheds debris by a rule rather than computing fluid flow, and it is worth repeating that out loud, because this is the one place in the investigation where the picture is more dramatic than the physics behind it.',
       'Step 29 is the summative written answer and maps directly onto the three learning objectives about cause, scaling and disruption. It grades quickly against the rubric.',
     ],
     discussion: [
@@ -3327,7 +3856,7 @@ export const INSTRUCTOR_CONTENT = {
       'For students with calculus: differentiate GM/r² with respect to r and show that the leading term of the difference across a small offset R is 2GMR/d³, which is where the factor of two and the extra power of distance come from.',
       'Look up the light curve of a real tidal disruption event and ask what part of it the Newtonian estimate in step 28 does and does not predict. The timing of the peak is roughly accessible; the luminosity is not.',
     ],
-    modelNotes: `The tidal and Roche calculations in this lesson are computed in js/tidalPhysics.js from the
+    modelNotes: `The tidal and Roche calculations in this investigation are computed in js/tidalPhysics.js from the
       masses and separations shown, using the standard Newtonian expressions, and they are unit-tested
       against published values: the lunar tide at 1.10 × 10⁻⁶ m/s², the Earth-Moon rigid and fluid Roche
       limits at about 9,500 and 18,400 km, and the swallow-whole black hole mass at 1.6 × 10⁸ solar masses.
@@ -3341,26 +3870,138 @@ export const INSTRUCTOR_CONTENT = {
       outcome rather than a calculation of it. Step 28 states the same caveat for the compact-object case,
       where general relativity would also matter near the horizon and is not used. Every one of these
       limitations is named on the screen where it applies rather than only here.`,
-    expectations: {
-      3: 'At a distance of 1.00 the three arrows are visually indistinguishable, which is the intended reaction. The readout gives 3.43 × 10⁻⁵, 3.32 × 10⁻⁵ and 3.21 × 10⁻⁵ m/s², and the last row reports the near side as 6.9% larger than the far side. Students who slide the distance down to 0.2 will see the arrows separate visibly, which is worth encouraging.',
-      6: 'The residual row shows about 1.1 × 10⁻⁶ m/s² outward on each side, roughly a thirtieth of the pull itself, and the panel reports the magnification between the two rows. The center shows a dot rather than an arrow, and students regularly ask whether that is a drawing error; it is the answer.',
-      10: 'At mass 1, the readings should be 0.13, 1.00, 8.00 and 64.00 times the lunar tide at distances of 2, 1, 0.5 and 0.25. The validator checks that stretch × distance³ is the same for every row and warns at a spread above 35%, which almost always means a strength read at a different slider position from the distance beside it. The transformed plot straightens to a line through the origin.',
-      14: 'At distance 1, the readings should be 1.00, 2.00 and 4.00 at masses of 1, 2 and 4. The validator checks that stretch ÷ mass is constant and warns if the distance slider was moved during the run, which is the only common failure here.',
-      17: 'The seven bars run from 5.05 × 10⁻⁷ m/s² for the Sun on the Earth to 68 m/s² for a stellar-mass black hole on the Sun at three million km. The two comparisons worth drawing out are the Moon beating the Sun by 2.2, and the last two rows differing by 1.2 × 10⁵ for a fifty-fold change in distance alone.',
-      21: 'At 5 Earth radii and lunar density the green bar dwarfs the red one and the verdict reads HOLDS TOGETHER. The bars become equal near 1.50 Earth radii. Comet ice moves the crossing out to about 2.64 Earth radii and iron brings it in to about 1.22, which is the observation step 25 depends on.',
-      23: 'With porous ice at 600 kg/m³ the no-strength limit is 2.47 Saturn radii, or about 149,000 km, and the keeps-its-shape limit is 1.27 Saturn radii. The A ring’s outer edge is at 2.27 Saturn radii and Mimas at 3.08, so the rings sit inside the outer limit and the innermost round moon sits outside it. That is the payoff of the screen.',
-      24: 'Both arcs move inward as density rises: the no-strength limit runs from 2.47 Saturn radii at 600 kg/m³ to 1.14 at 6,000. Above roughly 2,500 kg/m³ the keeps-its-shape limit drops below one Saturn radius and the panel reports it as being inside Saturn itself rather than drawing it.',
-      27: 'Bodies on close passages shed debris that spreads along the orbit; bodies passing further out are untouched. Students will ask whether the streams are real. The answer to give is that the geometry is plausible and the mechanism is a threshold rule, not a fluid calculation, which the screen also says.',
-      28: 'At ten solar masses the tidal radius is about 1.9 million km against a 29.5 km horizon, a ratio of 6.4 × 10⁴. At Sagittarius A* the ratio is about 11. The two meet near 1.6 × 10⁸ solar masses, and the billion-solar-mass preset reads SWALLOWED WHOLE.',
-    },
+  },
+  'power-law-gravity': {
+    topic:
+      'What depends on the inverse-square form of gravity, and what does not',
+    difficulty: 'Introductory',
+    placement:
+      'After Kepler’s laws, and ideally after any investigation in which conservation of momentum or angular momentum has been stated. It is the natural follow-up to a treatment that presents Kepler’s laws as facts about the Solar System, because it asks what those facts were consequences of. No calculus is required: the exponent is moved with a slider and every result is read off an instrument. The one piece of mathematics students do themselves is recognizing a linear pattern in four numbers and extrapolating it.',
+    overview:
+      'One exponent is moved and everything else is held fixed. Students measure three things and sort them into two piles. The closed elliptical orbit and the 3/2 slope of period against radius both move the instant the exponent does, and are therefore properties of the inverse square rather than of gravity in general. Conservation of momentum, angular momentum and energy do not move at all, because they follow from the force being pairwise and central - neither of which was changed. The investigation also rehearses one general method: a simulated result is not believed until the timestep has been refined and it has stayed put.',
+    priorKnowledge: [
+      'Newton’s law of gravitation as an inverse-square law, at the level of "the force falls off as one over distance squared"',
+      'Kepler’s first and third laws as statements about orbits, without derivation',
+      'That momentum and angular momentum are conserved quantities',
+      'Comfort reading numbers in scientific notation, since the conservation readouts are around 1e-15',
+      'Helpful but not required: having seen a log-log plot',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Why the law needs a reference radius',
+        body: 'This is the concept most likely to be skipped and it is load-bearing. Written as a = GM/r^n, the exponent is not a physical parameter: the departure from Newton is r^(2-n), which depends on the unit distance is measured in, and most of its effect is that gravity got globally stronger or weaker. That is a change students could produce by altering G instead, so an experiment built on it would not be about the exponent at all. Anchoring the law at r0 = 1 AU, where it is Newtonian for every n, makes the exponent a statement about the shape of the field. Students who understand only this have got the most transferable idea in the investigation.',
+      },
+      {
+        heading: 'Bertrand’s theorem, informally',
+        body: 'Only two central force laws give closed orbits for every bound orbit: the inverse square and the linear spring. Everything else precesses. The investigation does not prove this - it measures it at four exponents and names the theorem - but it is worth stating in class, because it converts "the ellipse turned" from a curiosity into a general result with a date on it (Bertrand, 1873).',
+      },
+      {
+        heading: 'The period-radius slope as a discriminator',
+        body: 'For a central acceleration going as r^-n, circular orbits satisfy P proportional to r^((n+1)/2), so the slope of log P against log r reads the exponent directly. What makes this the investigation’s quantitative centrepiece is that changing G shifts the line without tilting it. Almost everything else measurable about an orbit responds to gravity simply being stronger or weaker; the slope responds only to the exponent, which is exactly the property that makes a measurement evidence about the form of a law.',
+      },
+      {
+        heading: 'Refinement as the test of a simulated result',
+        body: 'Integration error depends on the timestep; physics does not. The investigation has students change the timestep by a factor of eight and find the precession unchanged to five decimal places, with an n = 2 control that reads zero throughout. This is the single most transferable habit in the investigation and it generalises far beyond gravity.',
+      },
+      {
+        heading: 'Why the conservation laws survive',
+        body: 'Momentum is conserved because each pair of bodies receives one force magnitude applied in opposite directions - Newton’s third law, which says nothing about distance. Angular momentum is conserved because the force lies along the line joining the bodies, so it exerts no torque about the center, which is also true for any radial dependence. Energy is conserved because the force depends only on position. None of the three mentions the exponent. Students frequently expect all of mechanics to fail together, and separating what did from what did not is the point of the investigation.',
+      },
+      {
+        heading: 'The potential belongs to the force',
+        body: 'A genuine trap, and worth the two minutes. The familiar -GMm/r is the potential of the inverse-square law specifically. Used with any other exponent it reports an energy violation that is not there. The instrument computes the potential matching whichever law is active; a student who later writes their own simulation and finds energy drifting should check this before concluding anything.',
+      },
+    ],
+    features: [
+      {
+        name: 'Apsidal precession, measured (steps 4–5)',
+        text: 'Integrates a two-body orbit with a fourth-order scheme and locates each periapsis by fitting a parabola through the three samples around it, so the answer is not quantized by the timestep. Reports degrees per radial period, with the near-circular analytic estimate beside it and labeled as an approximation.',
+      },
+      {
+        name: 'Timestep refinement (step 8)',
+        text: 'Runs the same orbit at four timesteps spanning a factor of eight and reports the spread. At n = 2.2 all four agree to about five decimal places; at n = 2 all four read zero.',
+      },
+      {
+        name: 'Period against radius (steps 11–12)',
+        text: 'Six circular orbits spanning a factor of 7.5 in radius, each launched at the correct circular speed for the active law rather than the Newtonian one, with periods timed from the integration and a least-squares fit through the logarithms.',
+      },
+      {
+        name: 'Conservation bench (step 15)',
+        text: 'Three unequal masses, all free to move, with pair forces applied equally and oppositely by construction. Reports momentum, angular-momentum and energy drift, the last computed from the potential belonging to the active law.',
+      },
+      {
+        name: 'Accessible readouts throughout',
+        text: 'Every instrument reports as a list of labels and values. There is no number in this investigation that exists only as a drawing, and the plot in step 11 carries its own data table.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim:
+          'A small change in the exponent must produce a small change in the orbit.',
+        response:
+          'Step 4. Two and a half percent in n gives nine degrees of precession per orbit, and twenty percent gives forty-three. The response of the orbit is not proportional to the change in the law, and the anchoring at r0 means this cannot be dismissed as gravity simply having got stronger.',
+      },
+      {
+        claim: 'Orbits are ellipses because that is what gravity does.',
+        response:
+          'Steps 4 and 6. Orbits are ellipses because gravity is inverse-square. Under any other exponent the orbit is still bound and still periodic in radius, but the ellipse turns. Bertrand’s theorem says only two laws in the whole family give closed orbits.',
+      },
+      {
+        claim: 'Precession in a simulation means the simulation is inaccurate.',
+        response:
+          'Steps 7–9. This is a reasonable suspicion and the investigation takes it seriously rather than dismissing it. Refinement settles it: the precession is unchanged across a factor of eight in timestep, and the Newtonian control reads zero throughout.',
+      },
+      {
+        claim: 'If you break one law of physics the rest go with it.',
+        response:
+          'Steps 14–16. Kepler’s first and third laws break immediately; momentum and angular momentum do not move at fifteen decimal places. Which laws survive, and why, is the substance of the investigation.',
+      },
+      {
+        claim: 'Energy is not conserved when the force law is changed.',
+        response:
+          'Step 17. Energy is conserved. What fails is the formula -GMm/r, which is the potential of the inverse-square law and of nothing else. This misconception is worth surfacing deliberately because it is a mistake students will make later in their own code.',
+      },
+      {
+        claim:
+          'This is how modified-gravity theories work, or this explains Mercury.',
+        response:
+          'Step 21 addresses both explicitly. The power law with a reference radius is a teaching instrument, not a proposal about the universe; Mercury’s anomalous precession is general relativity, which is not a change to the exponent. The resemblance is a good discussion opening and a bad conclusion.',
+      },
+    ],
+    teachingNotes: [
+      'Step 2 is the one to protect if time is short. A student who leaves without understanding why the reference radius is necessary has done a different and much weaker experiment.',
+      'The n = 1.8 preset, which precesses backwards, is worth dwelling on. Students expect "wrong gravity" to mean "stronger gravity" and a retrograde result breaks that.',
+      'The conservation readouts are around 1e-15. Some students read this as "small but not zero, so it nearly failed". It is the precision of double-precision arithmetic itself, and saying so once prevents the misreading.',
+      'Step 12 asks for a prediction at n = 2.9 and the instrument goes to 2.9, so students can check themselves. Let them.',
+      'The investigation never drives the bodies on the canvas. The instruments are a separate contained model, and the Solar System on screen stays Newtonian throughout. Say so if asked, because a student who thinks the visible planets are precessing has been misled.',
+      'Good pairing: run this immediately after an investigation in which Kepler’s third law was presented as a law, and open by asking what it was a consequence of.',
+      'The n = 3 boundary in step 19 is a genuine stability result and a good extension for a stronger group, but it is not needed for the main argument and can be cut.',
+    ],
+    discussion: [
+      'The exponent in Newton’s law is measured to be 2 to about one part in a billion. What would it take to convince you it was 2.000000001 rather than exactly 2, and would the difference matter?',
+      'The slope of log P against log r changes when the exponent changes but not when G changes. What other measurements can you think of that are sensitive to the form of a law but not to its strength?',
+      'Momentum and angular momentum survived a change that broke both of Kepler’s laws. What does that suggest about which of these statements is the more fundamental?',
+      'A student reports that their own orbital simulation loses energy steadily over time. What are the three things you would ask them to check, and in what order?',
+      'Mercury’s orbit precesses by more than Newtonian gravity predicts, and that turned out to be evidence for general relativity rather than for a different exponent. What would have distinguished the two hypotheses observationally?',
+      'The instrument refuses to go to n = 3. Is stopping a student short of a regime where the physics becomes pathological good teaching or an evasion?',
+    ],
+    extensions: [
+      'Have students derive slope = (n+1)/2 from v^2/r = a(r) and P = 2*pi*r/v. It is three lines of algebra and turns a measured pattern into a prediction.',
+      'Ask what the potential energy function is for a general exponent, and have them check by differentiating that it gives back the force. The investigation asserts the result; deriving it is a good exercise for a class with calculus.',
+      'Set the exponent to 2.9 and ask students to estimate how many orbits it takes for the ellipse to turn all the way round. Then check.',
+      'Investigate the other closed-orbit case in Bertrand’s theorem by asking what a force proportional to r rather than to 1/r^2 would do - the answer, an ellipse centered on the star rather than focused on it, is a good surprise.',
+      'For a class that has met Noether’s theorem: which symmetry does each surviving conservation law correspond to, and is anything in this investigation evidence for that correspondence or merely consistent with it?',
+    ],
+    modelNotes:
+      'The instruments run a contained model in js/powerLawGravity.js. It integrates its own two-body and three-body problems and never touches the main engine, so every ordinary Gravitas scenario remains Newtonian and the Solar System visible during this investigation is not affected by the exponent. The law is a(r) = GM * r0^(n-2) / r^n with r0 = 1 AU, which is exactly Newtonian at n = 2 and exactly Newtonian at r = r0 for every n. The potential used for the energy readout is the one belonging to that force, verified by differentiation in tests/powerLawGravity.test.js rather than transcribed. The near-circular precession relation shown beside the measurement is an approximation valid for small eccentricity; at the eccentricity the investigation runs it agrees with the integrated orbit to about one percent, and it is labeled as an estimate everywhere it appears. This is a controlled experiment, not a theory of gravity, and the investigation says so in its closing step.',
   },
   'when-orbits-lock': {
     topic: 'Mean-motion resonance, and what counts as evidence for it',
     difficulty: 'Introductory',
     placement:
-      'After Kepler’s laws and after students are comfortable with the idea that an orbit has a period and a shape. It sits naturally beside a unit on the Solar System’s architecture, and it is the obvious companion to any treatment of planetary migration or the asteroid belt. No calculus, no differential equations; the only new mathematical object is an angle built as an integer combination of other angles, and the lesson derives it rather than asserting it.',
+      'After Kepler’s laws and after students are comfortable with the idea that an orbit has a period and a shape. It sits naturally beside a unit on the Solar System’s architecture, and it is the obvious companion to any treatment of planetary migration or the asteroid belt. No calculus, no differential equations; the only new mathematical object is an angle built as an integer combination of other angles, and the investigation derives it rather than asserting it.',
     overview:
-      'The lesson takes away the definition students will already have met - "the periods are in a small whole-number ratio" - and makes them find a replacement. It does this with a counter-example from the same system: Callisto’s period ratio with Ganymede is 0.03% from 7:3, ten times closer to a small ratio than Pluto’s is to 3:2, and Callisto is in no resonance at all. From there it builds the resonant angle, shows what libration and circulation look like, and applies the test to three real systems: the Galilean Laplace resonance, Pluto’s 3:2 with Neptune, and Jupiter’s Trojans as a 1:1 co-orbital. Each has a control alongside it that fails the test, so every positive result is paired with a negative one measured by the same instrument in the same run.',
+      'The investigation takes away the definition students will already have met - "the periods are in a small whole-number ratio" - and makes them find a replacement. It does this with a counter-example from the same system: Callisto’s period ratio with Ganymede is 0.03% from 7:3, ten times closer to a small ratio than Pluto’s is to 3:2, and Callisto is in no resonance at all. From there it builds the resonant angle, shows what libration and circulation look like, and applies the test to three real systems: the Galilean Laplace resonance, Pluto’s 3:2 with Neptune, and Jupiter’s Trojans as a 1:1 co-orbital. Each has a control alongside it that fails the test, so every positive result is paired with a negative one measured by the same instrument in the same run.',
     priorKnowledge: [
       'That an orbit has a period, and that the period depends on the size of the orbit',
       'That the planets and moons all go round in more or less the same plane and the same direction',
@@ -3370,7 +4011,7 @@ export const INSTRUCTOR_CONTENT = {
     keyConcepts: [
       {
         heading: 'Small-integer ratios are cheap',
-        body: 'There are about thirty fractions with denominator ten or less in any unit interval, so an arbitrary period ratio lands within a percent or two of one by accident. The lesson makes this quantitative rather than rhetorical: the instrument reports how much closer than chance each measured ratio is, and the largest figure in the whole investigation - twenty-five times closer than chance - belongs to Callisto, which is not resonant. Students should leave unable to accept a near-rational ratio as evidence on its own.',
+        body: 'There are about thirty fractions with denominator ten or less in any unit interval, so an arbitrary period ratio lands within a percent or two of one by accident. The investigation makes this quantitative rather than rhetorical: the instrument reports how much closer than chance each measured ratio is, and the largest figure in the whole investigation - twenty-five times closer than chance - belongs to Callisto, which is not resonant. Students should leave unable to accept a near-rational ratio as evidence on its own.',
       },
       {
         heading: 'A resonant angle, and why it is built the way it is',
@@ -3382,47 +4023,17 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'The third answer, and why an instrument needs one',
-        body: 'A short record of a slowly circulating angle and a short record of a slowly librating one are indistinguishable. The instrument therefore reports libration, circulation or inconclusive, and it is willing to stay inconclusive for the whole of a lesson-length run. When it does, it reports the bound it has established - "any circulation would take more than a thousand conjunction cycles" - which is a real result. Students often read the refusal as a malfunction; it is the most transferable idea in the lesson.',
+        body: 'A short record of a slowly circulating angle and a short record of a slowly librating one are indistinguishable. The instrument therefore reports libration, circulation or inconclusive, and it is willing to stay inconclusive for the whole of a class-length run. When it does, it reports the bound it has established - "any circulation would take more than a thousand conjunction cycles" - which is a real result. Students often read the refusal as a malfunction; it is the most transferable idea in the investigation.',
       },
       {
         heading: 'The rotating frame',
         body: 'Nothing about the Trojans is visible from outside. In the inertial frame a Trojan traces the same orbit Jupiter does, and the fact that it stays 60 degrees ahead is invisible. Rotate with Jupiter and the tadpole draws itself. This is worth naming as a general move rather than a trick for this one case: choosing the frame in which the interesting quantity stands still is most of what makes a dynamical problem tractable.',
       },
     ],
-    flow: [
-      {
-        steps: '1–7',
-        text: 'The four Galilean moons. Students predict the Io–Europa ratio, measure all four periods, and meet the counter-example: the tidiest ratio in the system belongs to the moon that is not resonant. Ends on why small-integer ratios are dense enough to be worthless as evidence.',
-      },
-      {
-        steps: '8–10',
-        text: 'Conjunctions. A prediction most students get wrong - that line-ups cluster in a fixed direction in the sky - followed by the measurement showing they drift, and the explanation: the orbits themselves precess, so a direction in the sky is the wrong thing to measure.',
-      },
-      {
-        steps: '11–16',
-        text: 'The resonant angle, built from mean longitudes and longitudes of periapsis, then applied to the Laplace argument. The instrument moves through three verdicts as the run lengthens; students are told to start it and read on. Closes with the algebra showing that 180 degrees means the three moons are never all in conjunction.',
-      },
-      {
-        steps: '17–21',
-        text: 'The paired control and the awkward case. Europa moved one percent out and the argument circulates in forty-seven Io orbits. Then Callisto’s 7:3, which stays inconclusive for the whole run, and the question of what that establishes.',
-      },
-      {
-        steps: '22–26',
-        text: 'Pluto and Neptune. The crossing orbits, the 3:2, the libration measured in ninety seconds, the conjunctions clustered at Pluto’s aphelion, and the one line of algebra that connects the two. A third body on nearly the same orbit but outside the resonance circulates and is scattered.',
-      },
-      {
-        steps: '27–31',
-        text: 'The Trojans in the rotating frame: an exact equilibrium, a real tadpole libration, an unstable equilibrium that departs, and a non-co-orbital body whose ratio is closer to 7:5 than Pluto’s is to 3:2. The distinction between an equilibrium and a stable equilibrium is the target here.',
-      },
-      {
-        steps: '32–34',
-        text: 'The four cases sorted two ways - by how good the ratio is, and by whether they are resonant - which give different orders. Then a referee-style question about a paper that overclaims, and the closing survey: Kirkwood gaps, plutinos, Io’s volcanism, and resonant chains as evidence for migration.',
-      },
-    ],
     features: [
       {
         name: 'Measured periods and the ratios between them (steps 3, 4)',
-        text: 'Measures each body’s period from its own orbit and averages over the whole record, so the numbers settle within a few orbits and are quoted to five figures. For each adjacent pair it reports the ratio, the nearest ratio of small whole numbers found by continued fractions, the percentage offset, and - the figure that matters - how much closer than chance that offset is. The continued-fraction search will find a ratio for any number at all, which is the trap the lesson springs.',
+        text: 'Measures each body’s period from its own orbit and averages over the whole record, so the numbers settle within a few orbits and are quoted to five figures. For each adjacent pair it reports the ratio, the nearest ratio of small whole numbers found by continued fractions, the percentage offset, and - the figure that matters - how much closer than chance that offset is. The continued-fraction search will find a ratio for any number at all, which is the trap the investigation springs.',
       },
       {
         name: 'The resonant angle (steps 14, 18, 20, 23, 31)',
@@ -3457,7 +4068,7 @@ export const INSTRUCTOR_CONTENT = {
         claim:
           'A resonance means the bodies keep meeting, so they are in danger.',
         response:
-          'Exactly backwards for Pluto, and this is the lesson’s best surprise. The resonance is what stops Pluto and Neptune meeting: it fixes where the conjunctions happen, and 180 degrees puts them at Pluto’s aphelion. Worth pairing with the Kirkwood gaps at step 33, where the same mechanism removes asteroids instead of protecting them - the difference is the geometry the libration holds.',
+          'Exactly backwards for Pluto, and this is the investigation’s best surprise. The resonance is what stops Pluto and Neptune meeting: it fixes where the conjunctions happen, and 180 degrees puts them at Pluto’s aphelion. Worth pairing with the Kirkwood gaps at step 33, where the same mechanism removes asteroids instead of protecting them - the difference is the geometry the libration holds.',
       },
       {
         claim:
@@ -3477,29 +4088,14 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Steps 5 and 21 are the lesson. If time is short, cut the Trojans before cutting Callisto: the Trojan section is the most enjoyable and the Callisto section is the argument.',
-      'The Laplace argument takes about three and a half minutes of running before the instrument will call it a libration, and the lesson deliberately tells students to start it and read on. Start it on the projector at the beginning of the Galilean section and leave it running; by the time the class reaches step 16 it will have got there.',
+      'Steps 5 and 21 are the investigation. If time is short, cut the Trojans before cutting Callisto: the Trojan section is the most enjoyable and the Callisto section is the argument.',
+      'The Laplace argument takes about three and a half minutes of running before the instrument will call it a libration, and the investigation deliberately tells students to start it and read on. Start it on the projector at the beginning of the Galilean section and leave it running; by the time the class reaches step 16 it will have got there.',
       'Pluto and the Trojans both reach a verdict in about ninety seconds, so they are the better choices for a short demonstration. If you only have time to show one resonance being established, show Pluto.',
       'The scenarios run at speeds between 150 and 7,500 times the usual. That is deliberate - a single Pluto libration is twenty thousand years - but a student who drags the speed slider will not get it back to the right value by eye. Reloading the step restores it.',
-      'The Galilean scenario is a scale model and the app’s own distance and time readouts are wrong for it by factors of 100 and 1,000. The resonance instrument converts correctly and the lesson never asks for a reading from anywhere else, but a student exploring with the object inspector will notice, and it is worth pre-empting.',
+      'The Galilean scenario is a scale model and the app’s own distance and time readouts are wrong for it by factors of 100 and 1,000. The resonance instrument converts correctly and the investigation never asks for a reading from anywhere else, but a student exploring with the object inspector will notice, and it is worth pre-empting.',
       'The libration amplitude of the model Laplace argument is 26 degrees where the real one is 0.064. The libration period, which is the physically meaningful quantity, comes out at about 2,100 days against a measured 2,071. Say this if a student looks it up; the amplitude is a property of where the model was started, and the period is a property of the resonance.',
       'Step 30 rewards a demonstration. Ask the class to predict what the L3 probe will do before running it, and again after the L4 probe has been sitting motionless for a minute. Most will expect symmetry.',
     ],
-    expectations: {
-      3: 'Periods of about 1.769, 3.552, 7.155 and 16.69 days and ratios of 2.007, 2.014 and 2.333, settling within about thirty Io orbits. The figures to draw attention to are the "closer than chance" numbers, which come out around 2, 1 and 25 depending on how long the run has been going.',
-      4: 'The field validation warns rather than blocks. A student who enters exactly 2 gets a note that the instrument does not report exactly 2, which is the point of the step. Expect about 2.008, 2.014 and 2.333; the last figure of each moves a little with the length of the run.',
-      8: 'The sky dial should be a broad arc rather than a tight clump, and the arrow short. Most students predicted clustering at step 7, so this is the moment the lesson turns; do not rescue it too quickly.',
-      12: 'Three verdicts in order over about three and a half minutes: confined, then one reversal, then libration. If a class has less time, the first two are enough to make the argument as long as the paired control at step 17 is also run.',
-      14: 'A center within a degree or two of 180, an amplitude near 26 degrees and a libration period near 2,100 days. A much shorter period usually means the instrument is still quoting a provisional value from a single swing; leave it running.',
-      17: 'CIRCULATION within about ten seconds, with a period near 47 Io orbits. Worth remarking on how much faster this verdict arrives than the libration one, and why: one completed circuit proves circulation, while ruling out a slow circulation takes as long as it takes.',
-      19: 'Never LIBRATION. The verdict passes through confined, then either "the center is moving" or "it has turned back once", and the reported amplitude grows through the run. The growing amplitude is the specific evidence and is what step 20 asks about.',
-      22: 'LIBRATION about 180 degrees with an amplitude near 80 and a period near 19,600 years, against published values of 180, 82 and 19,670. This is the closest agreement with a published measurement anywhere in the investigation, and it takes about ninety seconds.',
-      23: 'The same three numbers, recorded. The validation accepts a center within 15 degrees of 180 and a period between 12,000 and 30,000 years; a value near zero for the center means the sign of the argument was read backwards, and the note says so.',
-      24: 'The sky dial is a broad smear; the orbit dial clusters near 180 degrees with a spread of about 38. The instrument’s own summary line reads that every line-up happens near the outer body’s aphelion.',
-      27: 'Four different behaviors: the L4 probe reported as an equilibrium with an amplitude of 0, Patroclus librating about 296 degrees with an amplitude near 24 and a period near 13 Jupiter years, the L3 probe more than 150 degrees from where it started, and the wide probe circulating. The instrument needs about twenty Jupiter years - roughly forty-five seconds - before it will commit to any of them.',
-      28: 'A center near 296 degrees, an amplitude near 24 and a period near 13 Jupiter years against a linearized prediction of 12.47. The validation catches a student who has read L4 instead of L5, which is the common slip, and one who has recorded Jupiter’s own period instead of the libration period.',
-      30: 'A nearest ratio of 7:5, an offset near 0.25%, about 4.6 times closer than chance, and circulation. Ask the class to compare that offset with Pluto’s 0.30% before revealing the verdict.',
-    },
     discussion: [
       'Callisto’s period ratio with Ganymede is closer to a small whole-number ratio than Pluto’s is to 3:2. What would you need to see before you believed either of them was resonant?',
       'The resonance protects Pluto from Neptune, and the same mechanism clears the Kirkwood gaps in the asteroid belt. What is different about the two situations?',
@@ -3509,14 +4105,14 @@ export const INSTRUCTOR_CONTENT = {
       'Io is the most volcanically active body known and the energy comes from the resonance holding its orbit eccentric. Would Io be geologically dead without Europa and Ganymede?',
     ],
     extensions: [
-      'Load the TRAPPIST-1 System scenario and have students measure the seven periods and look for the resonant chain. The ratios are close to 8:5, 5:3, 3:2, 3:2, 4:3 and 3:2; ask what further measurement would be needed to establish that the chain is real, and note that the answer is the same one this lesson gives.',
+      'Load the TRAPPIST-1 System scenario and have students measure the seven periods and look for the resonant chain. The ratios are close to 8:5, 5:3, 3:2, 3:2, 4:3 and 3:2; ask what further measurement would be needed to establish that the chain is real, and note that the answer is the same one this investigation gives.',
       'Have students compute the location of the 3:1 and 2:1 Kirkwood gaps from Jupiter’s period and Kepler’s third law, then compare with a published plot of asteroid semi-major axes.',
       'Set the Trojan libration period against the linearized prediction P / sqrt(27μ/4) for a range of secondary masses, by editing the scenario, and check whether the square-root dependence holds.',
       'For a class that has met migration: ask why a resonant chain is hard to build in place and easy to build by moving planets slowly inward, and connect it to the plutinos as a fossil of Neptune’s outward migration.',
       'Ask students to work out, from the libration amplitude of 80 degrees and Pluto’s orbital elements, the range of true anomalies at which Pluto–Neptune conjunctions can occur, and check it against what the conjunction instrument reports.',
     ],
     modelNotes:
-      'Three of the four scenarios are built from published elements in js/resonance/systems.js, which is also what the validation suite reads, so a scenario and its check cannot quote different numbers. Pluto and Neptune and Jupiter Trojans are at true scale: 1 length unit is 0.01 AU and 1000 mass units is a solar mass, as everywhere else in Gravitas. The Galilean scenario is a scale model with distances multiplied by 100 and, by Newtonian scale invariance with masses unchanged, durations multiplied by 1000; the instruments convert back and the scenario summary says so. Two documented departures from reality: Gravitas is two-dimensional, so Pluto’s 17-degree inclination is projected away, which brings the modeled minimum Pluto–Neptune separation down from the observed 17.2 AU to 16.6; and Jupiter’s orbit is circularized in the Trojan scenario, because the triangular points are exact equilibria only for a circular secondary. The Galilean moons are placed from their published periods rather than their published distances, because the resonance is a statement about mean motions and the two published quantities disagree at the 0.1% level in a point-mass model - the difference is Jupiter’s oblateness, which Gravitas does not model. Pluto is placed at the exact 3:2 rather than its observed semi-major axis for the same kind of reason: the 0.2% difference is taken up in reality by the precession of Pluto’s perihelion. All four scenarios use Velocity Verlet with a capped substep, because a resonant angle is a secular quantity accumulated over hundreds of orbits and symplectic Euler at the same step reports a Laplace libration amplitude a third of the converged value. Thirty-two checks in the "Orbital resonance" group of tools/physics-checks.mjs hold every number quoted above to a published value or to a refinement test.',
+      'Three of the four scenarios are built from published elements in js/resonance/systems.js, which is also what the validation suite reads, so a scenario and its check cannot quote different numbers. Pluto and Neptune and Jupiter Trojans are at true scale: 1 length unit is 0.01 AU and 1000 mass units is a solar mass, as everywhere else in Gravitas. The Galilean scenario is a scale model with distances multiplied by 100 and, by Newtonian scale invariance with masses unchanged, durations multiplied by 1000; the instruments convert back and the scenario summary says so. Two documented departures from reality: Gravitas is two-dimensional, so Pluto’s 17-degree inclination is projected away, which brings the modeled minimum Pluto–Neptune separation down from the observed 17.2 AU to 16.6; and Jupiter’s orbit is circularized in the Trojan scenario, because the triangular points are exact equilibria only for a circular secondary. The Galilean moons are placed from their published periods rather than their published distances, because the resonance is a statement about mean motions and the two published quantities disagree at the 0.1% level in a point-mass model - the difference is Jupiter’s oblateness, which Gravitas does not model. Pluto is placed at the exact 3:2 rather than its observed semi-major axis for the same kind of reason: the 0.2% difference is taken up in reality by the precession of Pluto’s perihelion. All four scenarios use Velocity Verlet with a capped substep, because a resonant angle is a secular quantity accumulated over hundreds of orbits and symplectic Euler at the same step reports a Laplace libration amplitude a third of the converged value. Thirty-two checks in the "Orbital resonance" group of js/validation/physicsChecks.js hold every number quoted above to a published value or to a refinement test.',
   },
   'lives-of-stars': {
     topic:
@@ -3548,12 +4144,12 @@ export const INSTRUCTOR_CONTENT = {
       'That stars differ in mass, size, temperature and brightness, and that these are four different things',
       'Reading a point off a graph with logarithmic axes, or willingness to be shown',
       'That gravity pulls everything towards everything else',
-      'Helpful but not required: "A Universe of Stars", which teaches the diagram this lesson moves across. Steps 1 to 7 recap what is needed.',
+      'Helpful but not required: "A Universe of Stars", which teaches the diagram this investigation moves across. Steps 1 to 7 recap what is needed.',
     ],
     keyConcepts: [
       {
         heading: 'Mass sets everything',
-        body: 'The initial mass fixes the luminosity, steeply; the luminosity fixes how fast the fuel goes; and that fixes the lifetime. Twenty solar masses gives forty thousand times the Sun’s light for a thousandth of the time. Everything else in the lesson - which phases a star has, how big it gets, what it leaves - follows from where a star sits in that range, which is why the lesson follows four masses rather than one.',
+        body: 'The initial mass fixes the luminosity, steeply; the luminosity fixes how fast the fuel goes; and that fixes the lifetime. Twenty solar masses gives forty thousand times the Sun’s light for a thousandth of the time. Everything else in the investigation - which phases a star has, how big it gets, what it leaves - follows from where a star sits in that range, which is why the investigation follows four masses rather than one.',
       },
       {
         heading: 'Leaving the main sequence is a core event',
@@ -3565,7 +4161,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Surface and core are different temperatures',
-        body: 'Everything plotted in this lesson is a photospheric temperature. The Sun’s surface is 5,772 K and its core is about 15 million K, and nothing in the lab ever plots the second. This matters most at the giant branch, where a student can otherwise conclude that a cooler surface means a cooler star throughout - and the core is contracting and heating at precisely that moment.',
+        body: 'Everything plotted in this investigation is a photospheric temperature. The Sun’s surface is 5,772 K and its core is about 15 million K, and nothing in the lab ever plots the second. This matters most at the giant branch, where a student can otherwise conclude that a cooler surface means a cooler star throughout - and the core is contracting and heating at precisely that moment.',
       },
       {
         heading: 'What a model output is, and what a quoted result is',
@@ -3574,32 +4170,6 @@ export const INSTRUCTOR_CONTENT = {
       {
         heading: 'Duration on screen means nothing',
         body: 'Paced by phase the playhead makes every stage reachable and stops being a clock: on a solar-mass star the thermally-pulsing AGB is a hundredth of a per cent of the life and takes a third of the playhead. The readout prints both numbers for whichever phase is showing, and screen 21 asks students to compare them deliberately. An animation that gave every phase equal time without saying so would teach that every phase takes equal time.',
-      },
-    ],
-    flow: [
-      {
-        steps: '1-6',
-        text: 'Before there is a star — The opening prediction is worth protecting: do not resolve it, and note that the two wrong answers about the small and the Sun-like star are corrected at screens 22 and 18 respectively. Screen 2 is the cloud, which carries no numbers at all, and the readout says why - that refusal is the lesson, not a gap. All three stars now stand on the main canvas rather than only on the comparison card, and they are half way through their own main sequences - the same FRACTION of a life, not the same age. That is the deliberate contrast with screen 23, which lines two stars up at the same number of years and gets a completely different picture. Name the difference here; a class that misses it reads screen 23 as contradicting this one.',
-      },
-      {
-        steps: '7-12',
-        text: 'The long part, and what ends it — Screen 8 is where a student sees that the Sun has already brightened by a third since it arrived, which kills the picture of a star sitting at one point for ten billion years. Screen 10 is the core-hydrogen prediction and the most important single screen in the lesson; give it time before revealing.',
-      },
-      {
-        steps: '13-21',
-        text: 'Giant, ejection, cinder — Screen 16 exists to stop the tidy story: after helium ignites the star does not carry on getting bigger and redder, it drops and loops back. Screen 18 is the "the Sun will explode" correction. Screen 21 is the duration comparison and is the one to keep if you are short of time.',
-      },
-      {
-        steps: '22-25',
-        text: 'The two ends of the mass range — Screen 22 is the red dwarf, and the point is that almost nothing happens to it. Screen 23 is explicitly a same-age comparison and says so - the distinction between comparing at the same age and at the same fraction of a life is set up here and used again at screen 33.',
-      },
-      {
-        steps: '26-31',
-        text: 'What the heavy ones do — Screen 27 is a written answer about iron and is the hardest question in the lesson. Screens 29 and 31 are the two endpoint cases, and the contrast between them is deliberate: one is confident, one is a range spanning a factor of three with no bright supernova expected.',
-      },
-      {
-        steps: '32-35',
-        text: 'Reading it back — Screen 32 has "not enough information" as its correct answer, which students find harder than any of the physics. Screen 33 is the open challenge and screen 34 the summative piece, which requires naming a limitation of the models. The last screen is a closing summary: mass to luminosity to lifetime, what is left behind, and what these models do not model.',
       },
     ],
     features: [
@@ -3617,7 +4187,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'The canvas shows the stage, not a stand-in for it',
-        text: 'The main scene carries the same model time the panel does. Before the track begins there is no star on the canvas at all - a contracting cloud with a brightening center stands where it will be, because MIST’s tracks start at a body that already has a photosphere and drawing one earlier would be the falsest thing in the lesson. On the AGB, dashed shells stand for the mass the track records being shed. At a core-collapse endpoint, expanding rings stand for an explosion the endpoint model expects and the remnant is a mark rather than a disc. All of it is bounded and seeded: fourteen blobs, three shells, three rings, the same every run, and none of it is a body the engine integrates. The readout names which of the four kinds of thing is on screen - a stored model row, an interpolation between two, a schematic, or a published prescription - on every screen.',
+        text: 'The main scene carries the same model time the panel does. Before the track begins there is no star on the canvas at all - a contracting cloud with a brightening center stands where it will be, because MIST’s tracks start at a body that already has a photosphere and drawing one earlier would be the falsest thing in the investigation. On the AGB, dashed shells stand for the mass the track records being shed. At a core-collapse endpoint, expanding rings stand for an explosion the endpoint model expects and the remnant is a mark rather than a disc. All of it is bounded and seeded: fourteen blobs, three shells, three rings, the same every run, and none of it is a body the engine integrates. The readout names which of the four kinds of thing is on screen - a stored model row, an interpolation between two, a schematic, or a published prescription - on every screen.',
       },
       {
         name: 'Freezing a moment, on screen 15',
@@ -3632,26 +4202,6 @@ export const INSTRUCTOR_CONTENT = {
         text: 'The path on the diagram is recomputed between the start and the playhead rather than appended to, and the shells of lost material are seeded on the track. Seeking backwards shortens the path and removes them; replaying draws the same picture. There are no leftover remnants or duplicated events after a scrub.',
       },
     ],
-    expectations: {
-      4: 'The radius falls from about 14.9 to about 0.88 solar radii across the pre-main-sequence stage, over 42 million years. Students sometimes read the two boxes in the wrong order; the validator catches it and says so.',
-      6: 'About 5,740 K and 0.80 solar luminosities at 457 million years - the zero-age main sequence.',
-      7: 'About 5,850 K, 1.11 solar luminosities, 1.03 solar radii at 4.6 Gyr. Worth pointing out that the real Sun is 5,772 K and 1.00 by definition, so the model is within a couple of per cent without having been fitted.',
-      8: 'From 0.80 to 2.28 solar luminosities over 9.9 billion years - nearly three times - with the surface temperature almost unchanged.',
-      9: 'Radii of about 0.90 and 1.56 solar - a factor of 1.7 across ten billion years, and the smallest change in the lesson. Both versions are on the canvas at once, so a student can click either. Hold on to these: three screens later the same star is 173.',
-      11: 'On the main sequence a filled core; on the red-giant branch a ring outside a core that is no longer the energy source. Expect at least one student to ask how big the shell really is, which is the question the "The interior" row answers: the model does not say.',
-      12: 'From about 1.65 to about 173 solar radii, with the surface cooling from 5,590 K to about 3,070 K.',
-      14: 'About 3,070 K, 2,390 solar luminosities, 173 solar radii, and 0.95 solar masses. The mass is the number to stop on: a giant is a stage, not a heavyweight.',
-      15: 'Two comparisons on one screen. On the canvas: freeze the star on the main sequence, run to the tip of the giant branch, and the frozen copy is about 0.9 solar radii beside a live star near 170 - a factor of two hundred, side by side, on one scale. Expect the class to freeze at different moments, which makes the discussion better; ask what the label says, because the age is on it and a copy without one is indistinguishable from a second star. In the panel: true-size mode makes the main-sequence star a mark and the giant fill the box, fitted mode fills it with both and the caption says the size means nothing.',
-      17: 'From 1.00 to about 0.54 solar masses - nearly half the star leaves. Most of the loss is late on the asymptotic giant branch, so students who stop early will see too little.',
-      20: 'About 47,600 K, 1.6 solar luminosities, 0.018 solar radii, 0.54 solar masses. Roughly twice the radius of the Earth.',
-      21: 'About 9.88 Gyr, 1.42 Gyr and 1.35 Myr. The last is a ten-thousandth of the first and gets a third of the playhead.',
-      23: 'About 1.11 and 0.0048 solar luminosities, a ratio near 230. Both stars are on the canvas and both are 4.6 billion years old - the same AGE, not the same fraction of a life: the Sun-like star is half way through its main sequence and the red dwarf has done four thousandths of its. Contrast with screen 1, where all three are half way through their own, explicitly; a class that misses the difference reads this screen as contradicting that one.',
-      25: 'About 1.11 against 43,000 solar luminosities, and 9.88 Gyr against 8.65 Myr.',
-      26: 'The radius climbs past 1,000 solar radii while the mass falls from 20 towards 14. Six solar masses lost to a wind is more than most stars weigh in total.',
-      29: 'A remnant of about 1.4 solar masses, from a track that stopped with 9.4. The wording of the "How this is known" row is the point of the screen, not the number.',
-      31: 'The track stopped during helium ignition with 35.1 of the original 40 solar masses, and the remnant range is 10 to 35 solar masses - a factor of three.',
-      33: 'Any two models. The validator recognizes both outcomes: heavier-and-brighter, which is the main-sequence case, and lighter-and-brighter, which means one of them is off it.',
-    },
     misconceptions: [
       {
         claim: 'The Sun will explode as a supernova.',
@@ -3686,7 +4236,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Every massive star explodes and leaves a neutron star.',
         response:
-          'Explodability is not a monotonic function of mass. The lesson gives ten solar masses as a confident neutron star, forty as a black hole probably without a bright supernova, and twenty as explicitly uncertain because the published engines disagree. Screen 31 is where a student meets a remnant mass given as a range spanning a factor of three, and that range is the honest answer rather than a missing one.',
+          'Explodability is not a monotonic function of mass. The investigation gives ten solar masses as a confident neutron star, forty as a black hole probably without a bright supernova, and twenty as explicitly uncertain because the published engines disagree. Screen 31 is where a student meets a remnant mass given as a range spanning a factor of three, and that range is the honest answer rather than a missing one.',
       },
       {
         claim: 'Small stars burn out quickly, or have already died.',
@@ -3702,20 +4252,20 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'Screen 1 depends on students committing before anything is revealed. If asked which star is which, the honest answer is "that is what the next thirty-three screens are for".',
       'Screen 2 shows a cloud with no numbers at all, and some students read the empty readout as a bug. It is not: a cloud has no photosphere, so it has no surface temperature or luminosity, and the readout says exactly that. It is worth reading aloud.',
-      'Screens 10 to 12 are the core of the lesson. If time is short, cut screens 15 and 26 rather than any of these three.',
+      'Screens 10 to 12 are the core of the investigation. If time is short, cut screens 15 and 26 rather than any of these three.',
       'Screen 21 needs the phase pacing to have been noticed. Ask the class to switch the playhead to time pacing and watch everything after the main sequence collapse into a sliver - the contrast makes the point faster than the numbers do.',
       'Screen 27 asks why iron ends the star and is the hardest written answer here. The rubric rejects "it runs out of fuel", which is the answer students reach for and which is wrong: an iron core is surrounded by plenty of unburnt material.',
       'Screens 29 and 31 are a matched pair. The value in running both is the contrast in confidence, so if you demonstrate rather than assign, demonstrate both.',
       'Screen 32 has "not enough information" as the right answer and students resist it. The lab will list all five models that pass near point A if they use the free cursor, which settles the argument better than assertion.',
-      'Every phase is reachable with one button and the age is a typed number as well as a slider, so nothing in this lesson requires waiting for an animation. Under reduced motion nothing autoplays at all and the whole lesson still completes.',
+      'Every phase is reachable with one button and the age is a typed number as well as a slider, so nothing in this investigation requires waiting for an animation. Under reduced motion nothing autoplays at all and the whole investigation still completes.',
       'The 40 solar-mass track was added to this project specifically so that the black-hole case would have a track behind it rather than an assertion. If a student asks why the bundle jumps from 20 to 40, that is the answer, and the reason is in the model documentation at /model/#stars.',
     ],
     discussion: [
       'The 0.2 solar-mass model is predicted to live for 1.1 trillion years. What would it take to check that? Is there any observation that could show the prediction is wrong?',
       'Screen 31 gives a remnant mass as "somewhere between 10 and 35 solar masses". Is that a useful statement? What would make it more useful, and what would it cost to get there?',
-      'Every track in this lesson is a single star with no companion. Roughly half of stars have one. Which parts of what you have seen would change, and which would not?',
-      'The lesson says the H-R diagram is a graph and not a map. What would a genuine map of these stars look like, and what would it tell you that the graph does not?',
-      'A supernova enriches the interstellar medium with elements the star made. Every atom heavier than helium in your body came from one. Does anything in this lesson let you check that claim, or is it being asserted?',
+      'Every track in this investigation is a single star with no companion. Roughly half of stars have one. Which parts of what you have seen would change, and which would not?',
+      'The investigation says the H-R diagram is a graph and not a map. What would a genuine map of these stars look like, and what would it tell you that the graph does not?',
+      'A supernova enriches the interstellar medium with elements the star made. Every atom heavier than helium in your body came from one. Does anything in this investigation let you check that claim, or is it being asserted?',
     ],
     extensions: [
       'Have students find the age at which the Sun-like model reaches twice its present luminosity, and discuss what that would mean for the Earth. The answer is around 9 billion years, well before the star becomes a giant.',
@@ -3731,7 +4281,7 @@ export const INSTRUCTOR_CONTENT = {
       both far beyond the age of the Universe, so neither is checkable in principle. 1, 2 and 5
       run through to a cooling white dwarf, and those remnant masses are the tracks' own last
       samples. 10 and 20 stop at carbon ignition and 40 stops during helium ignition, so every
-      statement in this lesson about neutron stars and black holes is a published result quoted
+      statement in this investigation about neutron stars and black holes is a published result quoted
       for the nearest modeled progenitor: Sukhbold, Ertl, Woosley, Brown & Lattimer (2016),
       ApJ 821, 38, with Ertl et al. (2016) for the explodability criterion. The readout names
       the source on every quoted endpoint and flags it as not from the track.
@@ -3747,11 +4297,18 @@ export const INSTRUCTOR_CONTENT = {
     difficulty:
       'Introductory, conceptual. The only arithmetic is a ratio and a square root',
     placement:
-      'Seventy to ninety minutes, and it can be the first lesson of a stars unit: nothing before it is required beyond the idea that a hotter thing glows differently from a cooler one. It pairs naturally before any lesson on stellar death and after any lesson that has used the word "star" loosely. No calculus. Nothing in it needs sound.',
+      'Seventy to ninety minutes, and it can be the first investigation of a stars unit: nothing before it is required beyond the idea that a hotter thing glows differently from a cooler one. It pairs naturally before any investigation on stellar death and after any investigation that has used the word "star" loosely. No calculus. Nothing in it needs sound.',
     overview: `Students meet three unlabeled stars, guess what the picture can tell them, and then
       spend twenty-seven screens taking the guess apart. The instrument is the Stellar Lab and the
       stars are eight published MIST evolutionary tracks, so every number a student reads is a
-      model output rather than a textbook value the lesson made up.
+      model output rather than a textbook value the investigation made up.
+      \n\nSix screens near the end are different in kind and it is worth saying so to the class.
+      Screens 29 to 34 are four real stellar spectra from SDSS - measurements of four particular
+      stars, made on four nights in 2008 - and they are the only numbers in the investigation that are
+      not model output. They exist to make one point the model half cannot: a color is a good
+      thermometer, and a spectrum still carries something a temperature does not determine. Four
+      spectra are four spectra, and the closing screen of that block says so at length; nothing
+      there is a claim about A stars in general.
       \n\nThe stars are on the main canvas, not only in the panel. Every screen stands the
       objects it is about in the sandbox itself, where they can be clicked, inspected and
       compared, and the instrument beside the text is a second view of the same objects rather
@@ -3760,7 +4317,7 @@ export const INSTRUCTOR_CONTENT = {
       model owns them, so the N-body integrator is not also evolving them. And the sizes on
       screen are compressed by default: the ordering by size is right, the ratios are not, and
       the True scale button shows the honest picture, in which a red dwarf beside a supergiant is
-      too small to see. That is the moment the lesson's whole point about size lands, and the
+      too small to see. That is the moment the investigation's whole point about size lands, and the
       object list under the readout is how a student selects what they can no longer see.
       \n\nThe spine is that mass, radius, temperature and luminosity are four things. Students
       arrive believing they are roughly one thing called "bigness", and the opening screen is
@@ -3790,7 +4347,7 @@ export const INSTRUCTOR_CONTENT = {
     keyConcepts: [
       {
         heading: 'Four quantities, not one',
-        body: 'Mass is how much material; radius is how big; temperature is how hot the surface is; luminosity is how much light leaves per second. Students reliably collapse these into a single axis of "big and bright and heavy". The lesson separates them by counterexample rather than by definition: a red giant that is four hundred times the radius of a red dwarf at the same temperature, and a white dwarf hotter than any main-sequence star in the set while putting out one and a half solar luminosities.',
+        body: 'Mass is how much material; radius is how big; temperature is how hot the surface is; luminosity is how much light leaves per second. Students reliably collapse these into a single axis of "big and bright and heavy". The investigation separates them by counterexample rather than by definition: a red giant that is four hundred times the radius of a red dwarf at the same temperature, and a white dwarf hotter than any main-sequence star in the set while putting out one and a half solar luminosities.',
       },
       {
         heading: 'Apparent brightness is not luminosity',
@@ -3798,7 +4355,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'The Stefan-Boltzmann relation, used both ways',
-        body: 'L over L-sun equals R over R-sun squared times T over 5772 K to the fourth. This is not a fitted law; it is what an effective temperature means, and it is exact. The lesson uses it forwards on screen 6 (same temperature, so the luminosity ratio is the radius ratio squared) and backwards on screens 9, 10 and 21 (a temperature and a luminosity determine a radius, whether or not any star is there).',
+        body: 'L over L-sun equals R over R-sun squared times T over 5772 K to the fourth. This is not a fitted law; it is what an effective temperature means, and it is exact. The investigation uses it forwards on screen 6 (same temperature, so the luminosity ratio is the radius ratio squared) and backwards on screens 9, 10 and 21 (a temperature and a luminosity determine a radius, whether or not any star is there).',
       },
       {
         heading: 'The main sequence is a stage, not a class',
@@ -3810,37 +4367,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Selection effects',
-        body: 'A sample chosen by brightness is a sample chosen by luminosity, and luminosity varies over a vastly wider range than the numbers of stars do. The synthetic population is two thirds M dwarfs and its bright subset contains none at all. This is the same mechanism behind survivorship bias in any field, and it is worth naming as such - the lesson deliberately places every star at the same distance so that distance cannot be blamed.',
-      },
-    ],
-    flow: [
-      {
-        steps: '1-6',
-        text: 'Four words that are not synonyms — The opening prediction is designed so that every "they go together" answer is wrong about these particular stars. Do not resolve it early; screen 2 reveals the numbers and screens 4 to 6 build the relation that explains them. Screen 3 is free exploration of color and is deliberately ungraded.',
-      },
-      {
-        steps: '7-11',
-        text: 'The diagram, and what a point on it means — All five screens are in free-cursor mode. Expect the reversed temperature axis to catch most of the room on screen 7; the validation catches a student who moved the wrong way and says why. Screen 11 turns on the constant-radius guides, which are straight lines on these axes - worth showing on the board as log L = 2 log R + 4 log T.',
-      },
-      {
-        steps: '12-16',
-        text: 'The main sequence, and its limits — Screens 13 and 15 are the quantitative core. Screen 16 is a short written answer and the first place the lesson checks whether "main sequence" has landed as a stage rather than a category. If time is short, screen 15 can be demonstrated from the front rather than done individually.',
-      },
-      {
-        steps: '17-22',
-        text: 'Everything that is not on the main sequence — The strongest fifteen minutes in the lesson. Screen 17 has two stars of identical color differing by a factor of 426 in radius. Screen 20 is a prediction and the one to hold the room on: a hot star that is faint has to be tiny, and the fourth option - "you cannot tell without the mass" - is the habit the whole lesson is trying to break. Take a show of hands before revealing it. Screen 21 needs the age slider paced by phase, which the step sets automatically; the tip invites students to switch it back and watch the whole post-main-sequence collapse into a sliver.',
-      },
-      {
-        steps: '23-24',
-        text: "Why the big ones go first — Screen 22 is a prediction most students get wrong for a good reason, and the discussion is better if they commit first. Screen 23 carries the lesson's one genuinely unverifiable number and says so: no 0.2 solar-mass star has ever finished its main sequence anywhere.",
-      },
-      {
-        steps: '25-28',
-        text: 'A population, counted twice — One population, one histogram and one canvas across all three screens; only the cut changes, and it now moves the canvas as well as the plot. Screen 26 is the prediction and it is worth a show of hands - "almost none" is the answer nearly nobody offers before seeing it. The written answer on screen 28 is the one worth collecting; see the rubric, and in particular the wrong answer it rejects.',
-      },
-      {
-        steps: '29-31',
-        text: 'The challenge and the argument — Screen 29 is open and accepts either counterexample; the validation recognizes both and nudges a student whose two stars break neither rule. Screen 30 puts the step 1 prediction back on screen and is the summative piece. The last screen is a closing summary: the five quantities, what the main sequence fixes, and what a position on the diagram does not.',
+        body: 'A sample chosen by brightness is a sample chosen by luminosity, and luminosity varies over a vastly wider range than the numbers of stars do. The synthetic population is two thirds M dwarfs and its bright subset contains none at all. This is the same mechanism behind survivorship bias in any field, and it is worth naming as such - the investigation deliberately places every star at the same distance so that distance cannot be blamed.',
       },
     ],
     features: [
@@ -3850,11 +4377,11 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'One star, in four places at once',
-        text: 'A star this lesson stands on the canvas is the same object on the H-R diagram, in the accessible object list, on the comparison card and in a capture - one model state with one name, not four pictures that have to be kept in step. Clicking a star selects it everywhere; so does the "Which star" control, which is there so that a student working from the keyboard can say which star they mean without a pointer. Re-ordering the comparison changes the order and nothing else: the columns are labeled with the stars\' names rather than by position, so "the second one" and "the red giant" stop being the same phrase. Worth demonstrating once on the board, because students who have met a comparison that renumbers itself do not trust one that does not.',
+        text: 'A star this investigation stands on the canvas is the same object on the H-R diagram, in the accessible object list, on the comparison card and in a capture - one model state with one name, not four pictures that have to be kept in step. Clicking a star selects it everywhere; so does the "Which star" control, which is there so that a student working from the keyboard can say which star they mean without a pointer. Re-ordering the comparison changes the order and nothing else: the columns are labeled with the stars\' names rather than by position, so "the second one" and "the red giant" stop being the same phrase. Worth demonstrating once on the board, because students who have met a comparison that renumbers itself do not trust one that does not.',
       },
       {
         name: 'Everything on the canvas is also in the list',
-        text: 'Every measurement the lesson asks for can be read from the rows beneath the canvas, which is what makes the whole lesson completable without interpreting a picture. Color is never graded, and the one screen about color asks what changed rather than what shade it is.',
+        text: 'Every measurement the investigation asks for can be read from the rows beneath the canvas, which is what makes the whole investigation completable without interpreting a picture. Color is never graded, and the one screen about color asks what changed rather than what shade it is.',
       },
       {
         name: 'The population screens show four numbers, not one',
@@ -3877,25 +4404,6 @@ export const INSTRUCTOR_CONTENT = {
         text: 'Four hundred stars from a Kroupa (2001) mass function and a constant star-formation rate over ten billion years, reproducible from a seed. Stars that had already left the main sequence are dropped rather than guessed at, and the count of dropped stars is reported. It is not a survey and the readout says what it omits: dust, binaries, and any composition but solar.',
       },
     ],
-    expectations: {
-      2: 'Near 3,373 K, 4,298 K and 16,596 K. The order on the stage is by radius, so the temperatures are deliberately not in stage order - students who read them off in the order shown will get them out of sequence, which is the intended stumble.',
-      3: 'Deep red at the cool end through white to blue-white at the hot end. Do not grade the color words; the observation that matters is that only one control moved.',
-      4: 'Both stars near 4,300 K; luminosities of about 0.18 and 62 solar, a ratio near 345.',
-      6: 'Radii 0.78 and 14.3 solar, a ratio of about 18.4. The square root of 345 is 18.6; the small discrepancy is the 26 K difference in temperature and is worth mentioning if a student notices it.',
-      7: 'Anywhere within about 15 per cent of 10,000 K and 100 solar luminosities. The common failure is moving right to get hotter.',
-      8: 'A radius of 1.00 solar, give or take the precision of the placement.',
-      9: 'About 100 solar radii. Four decades of luminosity at fixed temperature is two decades of radius, every time.',
-      11: 'Any two points on the 1 R-sun guide. A good pair might be 3,000 K at 0.073 L-sun and 12,000 K at 18.7 L-sun: the temperature ratio is 4 and the luminosity ratio is 256, which is 4 to the fourth.',
-      13: 'Luminosities of about 0.0066 and 58,550 solar, a ratio near nine million, for a mass ratio of 100.',
-      15: 'About 1.2, 726 and 58,550 solar luminosities, giving a slope near 3.6 between the ends.',
-      18: 'Radii 0.24 and 101.6 solar, a ratio of 426; luminosities 0.0066 and 1,146 solar, a ratio of about 173,000. The square of 426 is 181,000 and the gap is the 40 K difference in temperature.',
-      19: 'About 1,070 solar radii and a current mass near 14, from an initial 20. The mass loss is the number students skip past; it is worth stopping on.',
-      21: 'About 47,600 K, 1.6 solar luminosities and 0.018 solar radii - roughly twice the radius of the Earth, holding 0.54 solar masses.',
-      24: 'About 1,140,000, 9,880 and 8.7 million years for 0.2, 1 and 20 solar masses. Students often mis-key the trillion; the validation accepts billions and says so.',
-      25: '227 M, 93 K, 21 G out of 351 placed. Not one O and not one B: the sample drew a few and they had already left the main sequence.',
-      27: 'Sixteen stars kept, of which 8 F, 6 G, 2 A, and no K or M at all.',
-      29: 'Any pair where the hotter star is the fainter, or where the cooler star exceeds ten solar radii. The end of the 1 solar-mass track and the end of the 20 solar-mass track each supply one in a single click.',
-    },
     misconceptions: [
       {
         claim:
@@ -3906,7 +4414,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'A giant is a very massive star.',
         response:
-          'The red giant on screen 18 has 0.97 solar masses - less than the Sun, because it has already blown some away - and it is 426 times the radius of the 0.2 solar-mass dwarf beside it. "Giant" is a luminosity classification attached to a stage of a life. The lesson never uses it as a synonym for heavy, and it is worth saying explicitly that the same star was an ordinary main-sequence star for ten billion years.',
+          'The red giant on screen 18 has 0.97 solar masses - less than the Sun, because it has already blown some away - and it is 426 times the radius of the 0.2 solar-mass dwarf beside it. "Giant" is a luminosity classification attached to a stage of a life. The investigation never uses it as a synonym for heavy, and it is worth saying explicitly that the same star was an ordinary main-sequence star for ten billion years.',
       },
       {
         claim: 'Red stars are small and cool; blue stars are big and hot.',
@@ -3931,23 +4439,23 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'A point on the H-R diagram tells you what kind of star it is.',
         response:
-          'It tells you the radius, exactly, and it constrains the kind loosely. It does not give a mass or an age: at 4,500 K and 100 solar luminosities six of the seven bundled tracks pass close, at ages spanning five orders of magnitude. Screens 7 to 11 are all in the mode that makes this explicit, and no screen in the lesson grades a cursor position as an identified star.',
+          'It tells you the radius, exactly, and it constrains the kind loosely. It does not give a mass or an age: at 4,500 K and 100 solar luminosities six of the seven bundled tracks pass close, at ages spanning five orders of magnitude. Screens 7 to 11 are all in the mode that makes this explicit, and no screen in the investigation grades a cursor position as an identified star.',
       },
     ],
     teachingNotes: [
       'Screen 1 is worth protecting. Its value depends on students committing before any number is on screen, and the stage deliberately hides the numbers. If a student asks which is which, the honest answer is "that is screen 2".',
       'The reversed temperature axis needs saying out loud once, at screen 7, and then leaving alone. The validation on that screen catches a student who moved the wrong way and tells them why, which is more effective than a warning in advance.',
-      'Screens 7 to 11 never ask for a mass or an age, and that absence is deliberate. If a student asks what star is at their cursor, the lab has a "find nearby models" answer that lists all of them without choosing - use it, because the list is the lesson.',
+      'Screens 7 to 11 never ask for a mass or an age, and that absence is deliberate. If a student asks what star is at their cursor, the lab has a "find nearby models" answer that lists all of them without choosing - use it, because the list is the investigation.',
       'Screen 15 is where the A/B experiment bench would normally go. It does not apply here: that bench varies initial conditions of an N-body simulation and measures orbital outcomes, and there is no sense in which a stellar evolutionary track is one of its runs. The comparison is run on the models directly instead, and it is still a controlled comparison - one variable, six held fixed by construction.',
       'Screen 20 switches the age slider to phase pacing on its own. Some students will notice the handle stops meaning time; that is the right thing to notice, the readout says it in as many words, and the tip invites them to switch back and see the difference.',
-      'Screen 23 contains the one number in the lesson that cannot be checked against anything: a 1.1 trillion year main-sequence lifetime, eighty times the current age of the Universe. Say plainly that it is a model integrated forward and that no such star has finished, anywhere. It is a good place to talk about what a prediction is.',
+      'Screen 23 contains the one number in the investigation that cannot be checked against anything: a 1.1 trillion year main-sequence lifetime, eighty times the current age of the Universe. Say plainly that it is a model integrated forward and that no such star has finished, anywhere. It is a good place to talk about what a prediction is.',
       'Screens 24 and 25 look at one population twice. If students think the second view is a new sample, the point is lost - the readout says "351 placed from 400 drawn" in both, and pointing at that number is the quickest fix.',
       'Screen 27 accepts either counterexample and recognizes both automatically. Students who use the free cursor should be reminded what it establishes: that a temperature and a luminosity could coexist, not that any star has them.',
       'If ninety minutes is not available, screens 3, 9 and 19 can be demonstrated from the front, and screen 11 can be dropped entirely without breaking anything later.',
     ],
     discussion: [
       'The three stars on screen 1 were chosen so that no single word describes which is "biggest". If you had to rank them, what would you rank them by, and would anyone else have picked the same quantity?',
-      'The lesson keeps saying the main-sequence relations only apply to main-sequence stars. How would you know, looking at a real star through a real telescope, whether it was on the main sequence?',
+      'The investigation keeps saying the main-sequence relations only apply to main-sequence stars. How would you know, looking at a real star through a real telescope, whether it was on the main sequence?',
       'Every star in the population on screen 24 was placed at the same distance. Real ones are not. Does that make the selection effect weaker or stronger, and why?',
       'A 0.2 solar-mass star is predicted to live for 1.1 trillion years. What would it take to check that? Is there any observation that could show the prediction is wrong?',
       'The Sun is used as the unit for mass, radius and luminosity throughout. After screen 24, is the Sun a typical star? What is it typical of?',
@@ -3963,7 +4471,7 @@ export const INSTRUCTOR_CONTENT = {
       did not compute them and could not. What Gravitas did was reduce them from about 7,700 rows of
       77 columns to about 2,300 rows of four, keeping the ten primary equivalent evolutionary points
       exactly and bounding the thinning at 0.004 dex in luminosity.
-      \n\nWhere the tracks stop matters for this lesson. 0.2 and 0.5 solar masses stop at the end of
+      \n\nWhere the tracks stop matters for this investigation. 0.2 and 0.5 solar masses stop at the end of
       core hydrogen burning because MESA stopped them there; 1, 2 and 5 run to a cooling white dwarf;
       10 and 20 stop at carbon ignition, before core collapse, as red supergiants of 609 and 1,070
       solar radii. The supergiant on screen 19 is therefore the last state the model has, not a final
@@ -3983,7 +4491,7 @@ export const INSTRUCTOR_CONTENT = {
     difficulty:
       'Beginner. No prior physics, and the only arithmetic is a ratio',
     placement:
-      'Thirty to forty minutes, and it can be the first thing a class ever does on this subject: it assumes only that things orbit. It is the first of a pair - Listening to Spacetime follows it and goes considerably further - but neither requires the other to have been completed, and this one is self-contained. It works as a single lesson, as the opening of a two-lesson unit, or as a remedial half-hour for students who found the advanced lesson too fast. Nothing in it needs sound.',
+      'Thirty to forty minutes, and it can be the first thing a class ever does on this subject: it assumes only that things orbit. It is the first of a pair - Listening to Spacetime follows it and goes considerably further - but neither requires the other to have been completed, and this one is self-contained. It works as a single investigation, as the opening of a two-class unit, or as a remedial half-hour for students who found the advanced investigation too fast. Nothing in it needs sound.',
     overview: `Twenty-four short screens, built around two objects standing on the main canvas rather
       than a curve in a panel. The binary is a pair of selectable bodies driven by the same model
       the waveform is drawn from, so a student can click each object, read its mass, and watch the
@@ -3993,7 +4501,7 @@ export const INSTRUCTOR_CONTENT = {
       - screens 8 to 13, the stretch and squeeze at right angles, and the size of it. And how an
       instrument could possibly notice - screen 22, where the L-shape stops being arbitrary.
       \n\nRunning underneath is the distinction the whole subject needs and that the sequel
-      assumes: an illustration, a model and an observation are three different things. This lesson
+      assumes: an illustration, a model and an observation are three different things. This investigation
       names all three on the screens where they first appear, and the last screen asks a student to
       say which is which.`,
     priorKnowledge: [
@@ -4005,7 +4513,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         heading:
           'A field is already there; a wave is a change in it that travels',
-        body: 'Screen 3 draws the line the whole lesson depends on. Every mass curves the space around it and that curvature sits there whether or not anything is watching; a gravitational wave is a change in that curvature moving outwards at the speed of light. Students who arrive thinking "gravitational wave" is a fancier name for gravity will read every later screen wrongly, so it is worth hearing the distinction back from them in their own words before going on.',
+        body: 'Screen 3 draws the line the whole investigation depends on. Every mass curves the space around it and that curvature sits there whether or not anything is watching; a gravitational wave is a change in that curvature moving outwards at the speed of light. Students who arrive thinking "gravitational wave" is a fancier name for gravity will read every later screen wrongly, so it is worth hearing the distinction back from them in their own words before going on.',
       },
       {
         heading: 'A source must be non-spherical and changing',
@@ -4017,7 +4525,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Strain is a fraction, and the fraction is about 10⁻²¹',
-        body: 'Screen 13 gives the only vocabulary the lesson needs: how much a length changed, divided by how long it was. Screen 12 supplies the scale, and the scale is the reason the subject took a century - the Earth-Sun distance changing by about the width of an atom. Students who leave with strain as a fraction rather than a distance can read a published figure; students who leave thinking it is a number of meters cannot.',
+        body: 'Screen 13 gives the only vocabulary the investigation needs: how much a length changed, divided by how long it was. Screen 12 supplies the scale, and the scale is the reason the subject took a century - the Earth-Sun distance changing by about the width of an atom. Students who leave with strain as a fraction rather than a distance can read a published figure; students who leave thinking it is a number of meters cannot.',
       },
       {
         heading: 'The wave frequency is twice the orbital frequency',
@@ -4026,32 +4534,6 @@ export const INSTRUCTOR_CONTENT = {
       {
         heading: 'An interferometer measures a difference, not a length',
         body: 'Screen 22 pays off screen 9. Because a passing wave stretches one direction while squeezing the perpendicular one, an L-shaped instrument has one arm growing while the other shrinks, in the same moment - so what has to be measured is the difference between two arms rather than the absolute length of either. That is a far easier measurement to make well, and the shape of the instrument follows directly from the shape of the effect.',
-      },
-    ],
-    flow: [
-      {
-        steps: '1-6',
-        text: 'What has to be happening — Screen 1 is a prediction and is designed to be got wrong; do not resolve it early, and make sure it is written down, because screen 27 comes back to it. Screen 4 is the conceptual core of this quarter: the pulsating sphere emits nothing, and students who answer "B, because it is moving" have exposed the misconception the screen exists for. Spend a minute there. Screens 3 to 5 are the argument, and screen 4 is where it lands: an enormous amount of motion — a sphere swelling and shrinking — and nothing leaves it. Take a show of hands before revealing that one; "it is moving, so it radiates" is the answer most of a room gives, and it is the misconception the lesson exists to remove. The canvas shows each source in turn because the control puts it there.',
-      },
-      {
-        steps: '7-9',
-        text: 'The source and its rhythm — Screen 6 is the one to slow down on. Students reliably answer "a full orbit"; the half-orbit answer, and the reason for it - two identical objects swapped over look the same - is what makes the factor of two on screen 16 land rather than being a fact to memorize. Screen 7 introduces the ring overlay and says plainly that the speed is slowed and the rings are not matter.',
-      },
-      {
-        steps: '10-16',
-        text: 'What arrives — The physical heart of the lesson. Screen 11 is the one students most often need help with: the markers are not carried along, and the water-cork analogy is the one place a water analogy helps. Screen 12 is where the exaggeration is admitted, and it is worth pausing on the atom-across-an-astronomical-unit comparison. Screen 14 heads off "we heard the black holes" before anybody says it.',
-      },
-      {
-        steps: '17-21',
-        text: 'Shrinking orbits and the chirp — Screen 16 is the only counting exercise and it is worth the time: students count orbits on the canvas and peaks on the plot themselves and get two. Screen 17 draws the line between the energy argument and the sandbox’s own illustrative damping, which matters because the rest of Gravitas uses the latter. Screen 19 establishes that the plot ends because the model was switched off, not because anything happened.',
-      },
-      {
-        steps: '22-25',
-        text: 'Other pairs, distance, and a measurement — Screen 21 is a clean controlled comparison - only the distance moves, and the frequency does not - and its validator checks the factor of two. Screen 22 is the payoff: the L-shape follows from the transverse stretch and squeeze the students have already watched, and the published trace is the first and only observation in the lesson.',
-      },
-      {
-        steps: '26-28',
-        text: 'Their own experiment, and the story — Screen 26 is deliberately open and deliberately small: one variable, two readings, and a statement of what was held fixed. Screen 27 is the assessment. Read the revisit of screen 1 as carefully as the explanation - a student who can say why their first answer was wrong has done the lesson. The last screen is a closing summary of the five things the lesson established.',
       },
     ],
     features: [
@@ -4065,7 +4547,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Polarization, and the circle that is not always there',
-        text: 'The stretch-and-squeeze screens select an EDGE-ON view, and that is a deliberate physical choice rather than a camera angle. Seen edge-on only one polarization reaches the observer, so the ring stretches, passes exactly through a circle, and squeezes — the picture an introduction usually draws. Seen face-on the same binary is circularly polarized: the ellipse keeps its shape and rotates, and never becomes a circle at all. The readout names which case is on screen. If a student turns the inclination and asks why the circle has gone, that is the best question in the lesson.',
+        text: 'The stretch-and-squeeze screens select an EDGE-ON view, and that is a deliberate physical choice rather than a camera angle. Seen edge-on only one polarization reaches the observer, so the ring stretches, passes exactly through a circle, and squeezes — the picture an introduction usually draws. Seen face-on the same binary is circularly polarized: the ellipse keeps its shape and rotates, and never becomes a circle at all. The readout names which case is on screen. If a student turns the inclination and asks why the circle has gone, that is the best question in the investigation.',
       },
       {
         name: 'The amplification factor is on screen',
@@ -4108,30 +4590,13 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'The plot stops because the black holes merged there.',
         response:
-          'Screen 19. The plot stops because the calculation stops being reliable - there is no merger in it and no ringing afterwards. This is the same point Listening to Spacetime makes at greater length, and it is the most transferable habit in either lesson: a model that says where it stops is more useful than one that does not.',
+          'Screen 19. The plot stops because the calculation stops being reliable - there is no merger in it and no ringing afterwards. This is the same point Listening to Spacetime makes at greater length, and it is the most transferable habit in either investigation: a model that says where it stops is more useful than one that does not.',
       },
     ],
-    expectations: {
-      5: 'Switching to the binary is the moment the rings start. Same total mass, same place, and the only difference is that the mass is now in two lumps whose arrangement changes as they turn. Encourage switching back and forth: the old rings keep traveling outward after the source stops emitting, which is worth noticing on its own.',
-      24: 'The two arms are drawn over the marker ring and the readout gives both as numbers with opposite signs, plus their difference and what that difference is in meters on four-kilometer arms. This screen is edge-on deliberately — see the note on polarization below.',
-      2: 'Two cards, giving 36 and 29 solar masses. Students often expect a photograph and are surprised there is none; that surprise is the screen working. Worth saying out loud that the separation on the canvas is to scale in Schwarzschild radii while the two discs are fixed-size markers - the picture is honest about the geometry and silent about the sizes.',
-      7: 'The arrangement changing rather than either object moving. Ask what is the same about the two paused moments - the same two objects, the same separation - and what differs, which is only the orientation of the pair.',
-      9: 'Rings more widely spaced further out, because they left when the orbit was slower. A student who says the wave is speeding up has it backwards and is worth catching here.',
-      10: 'The ring becoming an oval and turning over. Expect at least one student to think the ring is the orbit seen from above; the body text says it is not, and it is worth repeating.',
-      12: 'Two different numbers - whichever direction they recorded first, the other one half a cycle later. The value that matters is not which is which but that they differ; a pair of identical answers means the scrubber was moved a whole cycle rather than half, and the validator says so. Worth adding out loud: between the two stops there is an instant when the ring is a perfect circle and nothing is happening to it, which is not a gap in the wave but the moment it passes through zero.',
-      13: 'A marker that returns to where it started. If it does not, the student is watching the whole ring rather than one dot.',
-      14: 'Nothing measurable - this screen is a statement, not a task. The number to leave them with is one part in 10²¹, and the atom-across-an-astronomical-unit comparison is the one most students remember.',
-      15: 'A practice answer of 0.0001 and a real one around 10⁻²¹. The common error is reading "Strain now", which passes through zero twice a cycle; the validator rejects anything above 10⁻¹⁵ and says why.',
-      18: 'About two peaks per orbit, and the validator accepts 1.6 to 2.4 because it is a hand count. Students who get four have counted zero crossings rather than peaks.',
-      22: 'Two neutron stars of 1.4 solar masses each, and a signal that stays in band far longer than the black-hole pair. The limit to state: the model treats both objects as points and says nothing about composition or about what happens when neutron stars touch.',
-      23: 'Amplitude halving each time the distance doubles, and the frequency identical at all three. Only the distance moved, which is what makes it an experiment.',
-      25: 'A trace that is unmistakably noisier than anything else in the lesson, with a recognizable rise in it. Ask which of the three kinds of picture it is, and then ask the same about the ring overlay on the previous screen.',
-      26: 'One variable, two readings, and a ratio. The half students forget is saying what they held fixed; the validator prompts for it and it is worth insisting on.',
-    },
     discussion: [
       'Screen 4, out loud and before the reveal: why does a pulsating sphere emit nothing when every part of it is accelerating? Push until somebody says "because it looks the same from out here".',
       'After screen 12: given the effect is one part in 10²¹, why did anybody bother trying? What would you need to believe about your instrument before you believed the result?',
-      'After screen 14: what is the honest way to describe playing a gravitational wave as a sound, in one sentence, to somebody who has not done this lesson?',
+      'After screen 14: what is the honest way to describe playing a gravitational wave as a sound, in one sentence, to somebody who has not done this investigation?',
       'After screen 22: three pictures - the ring overlay, the model plot, and the published trace. Which is which, and how would a reader who arrived at that screen cold be able to tell?',
     ],
     extensions: [
@@ -4141,7 +4606,7 @@ export const INSTRUCTOR_CONTENT = {
       'Listening to Spacetime is the direct continuation and starts where screen 22 finishes.',
     ],
     modelNotes: `Everything quantitative here comes from the same leading-order inspiral model the
-      advanced lesson uses: two point masses on a slowly shrinking circular orbit, radiating at the
+      advanced investigation uses: two point masses on a slowly shrinking circular orbit, radiating at the
       quadrupole order. It is real arithmetic in real units, it is valid over a stated range, and it
       is terminated at the innermost stable circular orbit rather than extrapolated - which screen
       19 makes a teaching point of rather than hiding.
@@ -4152,7 +4617,7 @@ export const INSTRUCTOR_CONTENT = {
       crests and travel far slower than light so that there is something to see. The marker ring's
       deformation is exaggerated by an enormous factor, which screen 12 both admits and quantifies.
       \n\nWhat is measurement: the GW150914 strain on screen 22, published by the collaboration,
-      band-passed and whitened before display. Nothing else in the lesson is data.
+      band-passed and whitened before display. Nothing else in the investigation is data.
       \n\nThe model says nothing about composition and nothing about mergers. Screen 20 says so
       where a student is most likely to over-read the neutron-star comparison, and the distance
       treatment on screen 21 is a simple inverse scaling with no cosmological redshift in it.`,
@@ -4169,9 +4634,9 @@ export const INSTRUCTOR_CONTENT = {
     difficulty:
       'Introductory, conceptual, with arithmetic no harder than a ratio',
     placement:
-      'Sixty to seventy-five minutes, after students have met orbits and ideally after Black Holes by the Numbers. It is the only lesson in the catalog that puts a measurement, a model and an illustration on the same screen and asks students to tell them apart, so it works well late in a course as a lesson about evidence as much as about gravity. No calculus. Audio is offered four times and required never. It is the second half of a pair, and the first half now exists: \u201cWhat Is a Gravitational Wave?\u201d is the beginner lesson and the intended prerequisite. That lesson establishes what a wave is and is not, why a source has to be changing and lopsided, that the effect is transverse, that a shrinking orbit makes a rising signal, and why an L-shaped instrument measures a difference; this lesson assumes all five and starts from a signal instead. Run them in that order where the timetable allows \u2014 the beginner lesson closes by asking students to tell the whole story in their own words, which makes a good opener for this session. Where a class arrives without it, spend five minutes on screen 2 - the three things on screen that all answer to the phrase - and treat that as the missing prerequisite.',
+      'Sixty to seventy-five minutes, after students have met orbits and ideally after Black Holes by the Numbers. It is the only investigation in the catalog that puts a measurement, a model and an illustration on the same screen and asks students to tell them apart, so it works well late in a course as an investigation about evidence as much as about gravity. No calculus. Audio is offered four times and required never. It is the second half of a pair, and the first half now exists: \u201cWhat Is a Gravitational Wave?\u201d is the beginner investigation and the intended prerequisite. That investigation establishes what a wave is and is not, why a source has to be changing and lopsided, that the effect is transverse, that a shrinking orbit makes a rising signal, and why an L-shaped instrument measures a difference; this investigation assumes all five and starts from a signal instead. Run them in that order where the timetable allows \u2014 the beginner investigation closes by asking students to tell the whole story in their own words, which makes a good opener for this session. Where a class arrives without it, spend five minutes on screen 2 - the three things on screen that all answer to the phrase - and treat that as the missing prerequisite.',
     overview: `Students are shown a signal with no label on it and asked what could have made it,
-      and then spend the rest of the lesson finding out whether they were right. The instrument
+      and then spend the rest of the investigation finding out whether they were right. The instrument
       computes a real waveform in real units; screens 21 and 22 compare it against the data
       LIGO published for GW150914.
       \n\nThe spine is a distinction that the subject makes very easy to lose. Three things on
@@ -4192,12 +4657,12 @@ export const INSTRUCTOR_CONTENT = {
       'That gravity holds things in orbit, and that a closer orbit is a faster one',
       'Reading a graph with a logarithmic axis, or willingness to be shown',
       'Helpful but not required: having met the idea of a wave having a frequency and an amplitude',
-      'No calculus, no vectors, no complex numbers. Every relationship in the lesson is measured rather than derived',
+      'No calculus, no vectors, no complex numbers. Every relationship in the investigation is measured rather than derived',
     ],
     keyConcepts: [
       {
         heading: 'A binary that loses energy speeds up',
-        body: 'The single most counter-intuitive fact in the lesson, and screen 4 asks students to commit to an answer before they see it. Radiating energy away means falling closer together, and closer together means going round faster. Students who reason "losing energy means slowing down" are reasoning correctly about a car and incorrectly about an orbit, and the difference is worth drawing out rather than correcting.',
+        body: 'The single most counter-intuitive fact in the investigation, and screen 4 asks students to commit to an answer before they see it. Radiating energy away means falling closer together, and closer together means going round faster. Students who reason "losing energy means slowing down" are reasoning correctly about a car and incorrectly about an orbit, and the difference is worth drawing out rather than correcting.',
       },
       {
         heading: 'The wave frequency is twice the orbital frequency',
@@ -4205,7 +4670,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'The chirp mass, not the masses',
-        body: 'Screen 13 sets up two binaries with very different component masses and nearly the same signal. To leading order the inspiral depends on one combination of the two masses and not on either separately, which is why a real detection reports a chirp mass to three figures and the individual masses to one. This is a fact about what an observation can constrain, and it is the lesson’s best example of that idea.',
+        body: 'Screen 13 sets up two binaries with very different component masses and nearly the same signal. To leading order the inspiral depends on one combination of the two masses and not on either separately, which is why a real detection reports a chirp mass to three figures and the individual masses to one. This is a fact about what an observation can constrain, and it is the investigation’s best example of that idea.',
       },
       {
         heading: 'Amplitude does not determine distance',
@@ -4220,40 +4685,6 @@ export const INSTRUCTOR_CONTENT = {
         body: 'The lab terminates at the Schwarzschild innermost stable circular orbit and reports the orbital velocity parameter throughout, which is already 0.27 when a heavy binary enters the band. The dropped post-Newtonian terms grow as the square of that. Screens 18 and 22 make the boundary the subject rather than an apology for it.',
       },
     ],
-    flow: [
-      {
-        steps: '1-3',
-        text: 'An unlabeled signal, a prediction about what made it, then the reveal and the three-kinds-of-picture screen. Screen 2 is the one to slow down on: if a class leaves without the distinction between the animation, the schematic and the plots, the rest lands differently. Screen 3 is controls practice and can be brisk.',
-      },
-      {
-        steps: '4-9',
-        text: 'The chirp, measured. A prediction, the wave overlay, the two-per-orbit count, two frequency readings, a saved evidence capture at 50 Hz, and a written explanation. The counting exercise at screen 6 takes longer than it looks and is worth the time.',
-      },
-      {
-        steps: '10-13',
-        text: 'Mass. A prediction about time in band, the first controlled comparison, a three-way table, and the chirp-mass surprise. Screen 13 lands best if students have not been told the answer at screen 11.',
-      },
-      {
-        steps: '14-16',
-        text: 'Distance and geometry. The vertical scale is pinned across screens 15 and 16 so the comparison is honest; screen 16 is where the degeneracy appears and it is the hardest idea in the lesson.',
-      },
-      {
-        steps: '17-18',
-        text: 'The three presets side by side, then the limits screen. Screen 18 is a multiple-choice question but it is really the conceptual close of the model half.',
-      },
-      {
-        steps: '19-20',
-        text: 'Noise, and what a similarity number is and is not. Expect this pair to generate the most discussion in the room.',
-      },
-      {
-        steps: '21-22',
-        text: 'The real data. Students find the seven-millisecond shift and the sign flip themselves before the readout confirms them, then see the residual. Do not shortcut the finding.',
-      },
-      {
-        steps: '23-25',
-        text: 'The open challenge and the written conclusion. Budget fifteen minutes: the challenge is the only screen with no right answer and it is where the experimental-control habit either shows up or does not. The last screen is a closing summary: what the chirp fixes, what it leaves open, and why a chirp is not a detection.',
-      },
-    ],
     features: [
       {
         name: 'The canvas follows the preset, components and all',
@@ -4261,7 +4692,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Inclination is geometry, and the picture shows it',
-        text: 'Turning the inclination from face-on to edge-on squashes the orbit on the canvas into a line, weakens the strain, and changes the polarization from circular to linear. Those are one fact with three consequences, and the panel now shows all three at once. Worth pausing on: it is the clearest place in either lesson where a single parameter visibly reaches the picture, the plot and the ring together.',
+        text: 'Turning the inclination from face-on to edge-on squashes the orbit on the canvas into a line, weakens the strain, and changes the polarization from circular to linear. Those are one fact with three consequences, and the panel now shows all three at once. Worth pausing on: it is the clearest place in either investigation where a single parameter visibly reaches the picture, the plot and the ring together.',
       },
       {
         name: 'Pause means pause',
@@ -4292,17 +4723,17 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'The signal on the first screen is a recording of a real event.',
         response:
-          'It is computed on the student\u2019s own machine, from the masses shown, in the second or so before the screen appears. Screen 1 now says so in as many words, before the prediction, because a lesson that lets a student believe for twenty screens that they are examining data and then corrects it at the end has taught them the wrong lesson about where evidence comes from. Nothing in screens 1 to 20 is evidence that any event occurred anywhere. The only measured data in the lesson is the GW150914 strain that arrives on screen 21, and it is labeled as such.',
+          'It is computed on the student\u2019s own machine, from the masses shown, in the second or so before the screen appears. Screen 1 now says so in as many words, before the prediction, because an investigation that lets a student believe for twenty screens that they are examining data and then corrects it at the end has taught them the wrong investigation about where evidence comes from. Nothing in screens 1 to 20 is evidence that any event occurred anywhere. The only measured data in the investigation is the GW150914 strain that arrives on screen 21, and it is labeled as such.',
       },
       {
         claim: 'The sandbox behind the panel is not a calculation of anything.',
         response:
-          'Too broad, and the lesson used to say it. The black holes\u2019 <em>motion</em> is a genuine Newtonian N-body calculation, the same integrator every other body gets. What is not calculated is the <em>inspiral</em>: Newtonian gravity radiates nothing and would leave that pair circling for ever, so the simulation shrinks the orbit by a small factor each step, at a rate chosen to look right rather than derived from how fast a binary actually radiates. Three separate statements, and students need all three: the orbit is calculated, the decay is an illustration, and the waveform in the panel comes from neither of them - it is computed independently from the masses.',
+          'Too broad, and the investigation used to say it. The black holes\u2019 <em>motion</em> is a genuine Newtonian N-body calculation, the same integrator every other body gets. What is not calculated is the <em>inspiral</em>: Newtonian gravity radiates nothing and would leave that pair circling for ever, so the simulation shrinks the orbit by a small factor each step, at a rate chosen to look right rather than derived from how fast a binary actually radiates. Three separate statements, and students need all three: the orbit is calculated, the decay is an illustration, and the waveform in the panel comes from neither of them - it is computed independently from the masses.',
       },
       {
         claim: 'A chirp means a black-hole merger was detected.',
         response:
-          'Three claims stacked, and only the middle one survives. A rising chirp is good evidence that <em>two compact objects were spiralling together</em>, and it fixes their chirp mass. It does not say what they are made of - two black holes, two neutron stars and a mixed pair all chirp, and what separates them here is the chirp mass and the frequency where the model stops. It does not establish a detection either: screen 20 has students score a wrong-mass template highly against buried noise, and the tip there names the three things a real search adds that this lab does not have. Ask a student who writes "we detected a merger" which of the three - composition, detection, or the merger itself - the lesson actually showed them.',
+          'Three claims stacked, and only the middle one survives. A rising chirp is good evidence that <em>two compact objects were spiralling together</em>, and it fixes their chirp mass. It does not say what they are made of - two black holes, two neutron stars and a mixed pair all chirp, and what separates them here is the chirp mass and the frequency where the model stops. It does not establish a detection either: screen 20 has students score a wrong-mass template highly against buried noise, and the tip there names the three things a real search adds that this lab does not have. Ask a student who writes "we detected a merger" which of the three - composition, detection, or the merger itself - the investigation actually showed them.',
       },
       {
         claim: 'The plot ends because that is where the black holes merged.',
@@ -4312,7 +4743,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Gravitational waves are a kind of sound.',
         response:
-          'They are not, and there is nothing between here and the source for sound to travel through. Everything audible in this lesson is data converted into sound, and the panel prints exactly what was done to make it audible - the speed factor, any frequency shift, and by how much the shift flattened the chirp. Students who reach for "we heard the black holes" should be asked what the microphone was.',
+          'They are not, and there is nothing between here and the source for sound to travel through. Everything audible in this investigation is data converted into sound, and the panel prints exactly what was done to make it audible - the speed factor, any frequency shift, and by how much the shift flattened the chirp. Students who reach for "we heard the black holes" should be asked what the microphone was.',
       },
       {
         claim:
@@ -4323,12 +4754,12 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'A louder signal means a closer source.',
         response:
-          'Only at fixed inclination, which is exactly what nobody knows in advance. Screen 16 shows a face-on binary at 800 Mpc and an edge-on one at 400 producing identical strain. This is the misconception most likely to survive the lesson if screen 16 is rushed.',
+          'Only at fixed inclination, which is exactly what nobody knows in advance. Screen 16 shows a face-on binary at 800 Mpc and an edge-on one at 400 producing identical strain. This is the misconception most likely to survive the investigation if screen 16 is rushed.',
       },
       {
         claim: 'The three presets show what a neutron star sounds like.',
         response:
-          'They show what three different pairs of masses sound like. This model has no tides, no disruption and no post-merger behavior, so a neutron-star preset is a mass choice and nothing more - and the lesson says so on the screen where the choice is made. Nothing in a gravitational wave says what the objects were made of.',
+          'They show what three different pairs of masses sound like. This model has no tides, no disruption and no post-merger behavior, so a neutron-star preset is a mass choice and nothing more - and the investigation says so on the screen where the choice is made. Nothing in a gravitational wave says what the objects were made of.',
       },
       {
         claim: 'The model shows the merger.',
@@ -4338,15 +4769,21 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'A template that matches means the signal has been detected.',
         response:
-          'Screen 20 is built to break this. A wrong-mass template still scores well, and a correct template scores well against a signal buried in noise. The number is a similarity and the lesson never calls it anything else; a detection claim needs a background estimate the lab does not have.',
+          'Screen 20 is built to break this. A wrong-mass template still scores well, and a correct template scores well against a signal buried in noise. The number is a similarity and the investigation never calls it anything else; a detection claim needs a background estimate the lab does not have.',
+      },
+      {
+        claim:
+          'Gravitas found nothing in the GW170817 recording, so the detectors did not really see it.',
+        response:
+          'Two different questions. The map asks whether one pixel - one frequency, one instant - is louder than the noise could make it, and for a light pair spread over nearly a minute of cycles no single pixel is. The catalog signal-to-noise ratio of 33 comes from a matched filter that adds every cycle together against a template before asking the same question of the total. Screen 27 is built around this contrast; the readout says Gravitas does not run that search. A student who concludes that the instrument on this screen is weaker than the search, rather than that the event is doubtful, has it right.',
       },
     ],
     teachingNotes: [
-      'The whole lesson can be completed with the sound off, and this is tested rather than asserted. Say so at the start: students on a shared machine or with hearing loss should not be wondering whether they are missing the point of the exercise. The frequency plot carries the same information as the pitch.',
+      'The whole investigation can be completed with the sound off, and this is tested rather than asserted. Say so at the start: students on a shared machine or with hearing loss should not be wondering whether they are missing the point of the exercise. The frequency plot carries the same information as the pitch.',
       'Screen 6 - counting orbits against wave peaks - reliably takes twice as long as it looks. The reliable method is to note where the small body starts, step the playhead until it returns, and count peaks over that same interval. Students who count peaks over a longer interval than orbits get three or four per orbit and conclude the relationship is not two.',
       'On screen 11 the panel will say that two things changed when a student moves both masses, and it is right. That is a good moment to discuss what "holding the mass ratio fixed" actually controls, rather than a message to work around.',
       'Screen 21 works best if nobody says the answer. Let a class hunt for the alignment; the shift comes out near seven milliseconds and the sign must be flipped, and both are physical. The readout has the measured values but they are phrased as a check, not as an instruction.',
-      'The lab reports the orbital velocity parameter with a verdict attached, and for a heavy black-hole binary it never reaches the reliable band inside LIGO’s frequency range. This is a real property of the approximation and not a defect of the software. A class that asks about it has found the most sophisticated point in the lesson.',
+      'The lab reports the orbital velocity parameter with a verdict attached, and for a heavy black-hole binary it never reaches the reliable band inside LIGO’s frequency range. This is a real property of the approximation and not a defect of the software. A class that asks about it has found the most sophisticated point in the investigation.',
       'The GW150914 comparison is the only real data in the catalog. If a class has time for one digression, the acknowledgment line in the readout - the Gravitational Wave Open Science Center - is worth a minute: this data is public because a collaboration decided it should be.',
     ],
     discussion: [
@@ -4360,27 +4797,8 @@ export const INSTRUCTOR_CONTENT = {
       'Have students work out how long a 1.4 + 1.4 solar-mass binary spends between 20 Hz and 40 Hz, then between 200 Hz and 400 Hz, using the lab’s own readout. The same octave takes very different times, which is the chirp in one comparison.',
       'Set two binaries with the same chirp mass and different total masses and find the frequency at which their signals visibly part company. That frequency is a rough measure of how much information the merger carries that the inspiral does not.',
       'Use the similarity control to find the largest chirp-mass error a template can have and still score above 0.9. That number is roughly how finely a real template bank has to be spaced.',
-      'Read the model page section on gravitational waves alongside the lesson and identify each of its stated limitations in the interface.',
+      'Read the model page section on gravitational waves alongside the investigation and identify each of its stated limitations in the interface.',
     ],
-    expectations: {
-      2: 'That there are three different objects on screen and only one of them is a calculation of a gravitational wave. Worth spending a minute on the sandbox specifically, because the honest description has two halves: the black holes\u2019 <em>motion</em> is a genuine Newtonian N-body calculation, and their <em>spiralling in</em> is not — Newtonian gravity radiates nothing, so the inspiral is a damping constant chosen so a merger happens while somebody is watching. Students who hear only "it is not real" draw the wrong conclusion, that the sandbox is a cartoon throughout. Students who hear only "it is a simulation" draw the other wrong one, that the merger rate on screen means something. Neither the orbit nor the damping produces the waveform in the panel, which is computed separately from the masses.',
-      3: 'Everything moving together: the playhead, the two bodies in the schematic, both plots and the readout. A student who reports one of them lagging has found a bug worth hearing about.',
-      5: 'Rings that are further apart at the edge of the picture than near the center, and a masked region in the middle. The test-mass ring stretches across the page and squeezes at right angles to that, alternately.',
-      6: 'Two wave peaks per orbit, within counting error. Anything between about 1.7 and 2.3 is a successful count; the validator says so and asks for a recount outside that.',
-      7: 'Roughly 20 Hz near the start and 60-67 Hz near the end for the default black-hole preset, a factor of about three. The time before merger falls from about 0.85 s to under 0.05 s.',
-      8: 'At 50 Hz the readout gives about 0.14 s before merger, a separation near 3.9 Schwarzschild radii and an orbital velocity parameter around 0.36. The saved notebook entry should carry the model’s limitations alongside those numbers.',
-      11: 'Halving both masses roughly triples the time in band and roughly doubles the frequency at which the model stops. The panel will report two changes rather than one, which is correct and worth discussing.',
-      12: 'The lighter pair stays in band longest and reaches the highest frequency; the heavier pair does neither. For 18 + 14.4, 36 + 29 and 60 + 48 solar masses the model stops at about 135, 68 and 41 Hz respectively, and the whole inspiral from 20 Hz lasts roughly 2.7 s, 0.85 s and 0.39 s.',
-      13: 'Chirp masses within about a solar mass of each other - near 28 for both pairs - despite total masses of 65 and 69.4 and mass ratios of 1.24 and 2.6. The two traces should be hard to tell apart over most of the window.',
-      15: 'Strain amplitude halving each time the distance doubles, so a ratio near 2.0, and the frequency at which the model stops identical at all three distances. Two things to watch for. Students reach for the "Strain now" row, which is the instantaneous signed value and passes through zero twice a cycle: the step says to use "Strain amplitude" and the validator rejects a zero or negative entry with that explanation. And if they are listening, the loudness is scaled against one fixed reference pinned by the step, so the three distances really do differ by ear - the amplitude ratio is 1 : 0.5 : 0.25, which is NOT a ratio of perceived loudness and should not be described as one.',
-      16: 'Edge-on about half the amplitude of face-on, and an effective distance of about 800 Mpc for a source at 400. The number to draw out is that the effective distance is what a single detector measures.',
-      17: 'Three very different windows from the same equations: the black-hole pair stops at 68 Hz after 0.8 s, the neutron-star pair at 1.57 kHz after 158 s of which the lab models the last eight, and the mixed pair at 386 Hz after 35 s. Chirp masses of about 28, 1.2 and 3.0 solar masses.',
-      19: 'At 410 Mpc the signal is clearly visible above the simulated noise; by 2000 Mpc it is not findable by eye in the time series. Pressing New noise changes the gray trace and leaves the blue one exactly where it was.',
-      20: 'The correct template near 0.9 or above, the wrong-mass template somewhere around 0.3 to 0.6, and the distant case still scoring high because the overlap is blind to amplitude. That last one is the finding: similarity does not fall with distance, which is precisely why it cannot be a detection statistic.',
-      21: 'A shift near 7 ms with the sign flipped, at which the two traces visibly line up. The readout reports -7.3 ms and a correlation of -0.76 as measured from the published files.',
-      22: 'The measurement and the reconstruction agreeing closely through the last cycles, and a residual that is as loud before the signal arrives as after it. The rapid die-away at the end is the ringdown and this lesson’s own model does not produce it.',
-      23: 'Any controlled comparison with one variable and a saved capture. Distance and viewing angle change amplitude alone; mass changes the shape as well, so a mass change is two effects and a good answer says so.',
-    },
     modelNotes: `The lab computes a leading-order quadrupole inspiral of two point masses on
       circular orbits - Peters (1964) for the radiation reaction, Maggiore chapter 4 for the
       closed forms - with no spin, no eccentricity, no tides and no higher post-Newtonian terms.
@@ -4400,9 +4818,1896 @@ export const INSTRUCTOR_CONTENT = {
       Open Science Center under CC BY 4.0. They were decimated from 16384 Hz and quantized to
       16 bits; nothing was shifted, inverted, filtered or aligned. The Hanford-Livingston lag and
       sign are measured by the build and recorded, not applied.
+      \n\nScreens 23-29 use a second instrument over a second dataset: thirty-two seconds of
+      4096 Hz strain for each of five events, retrieved from the GWOSC event API at build time with
+      pinned checksums and committed as one detector per event. Gravitas whitens each by a median
+      Welch estimate of that detector's own noise in the same thirty-two seconds - not the design
+      curve the lab's synthetic noise uses - and computes a constant-Q map from it. What it
+      measures is stated on screen: the last instant anything clears a noise threshold derived
+      from the number of pixels searched, and the loudest frequency at fixed times before it.
+      It does not measure a chirp mass; one was built, was unstable across the five events, and
+      was left out. The masses, distances, redshifts and signal-to-noise ratios are copied from
+      GWTC-1 and GWTC-2.1, shown under a heading that says so, and held until the student
+      turns them on. The model track on screen 28 is the lab's leading-order chirp for the
+      catalog chirp mass times one plus the catalog redshift, which is the one place this investigation
+      uses a cosmological quantity, and it is a catalog value rather than an assumption.
       \n\nNone of this is the ordinary sandbox. Its inspirals run on a damping constant and its
-      sounds are quantized onto a musical scale, and the lesson says so on screen 2. The full
+      sounds are quantized onto a musical scale, and the investigation says so on screen 2. The full
       specification, including what is deliberately absent, is at ${MODEL_PAGE}#gravitational-waves.`,
+  },
+
+  'the-suns-motion': {
+    topic:
+      'The Sun’s motion from Gaia: a velocity from parallax, proper motion and radial velocity, the solar apex, the stars’ lag behind the Galaxy’s rotation, and an assumption that cannot be measured away',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'After Lines and Motion, once students can turn a Doppler shift into a radial velocity, and before The Rotating Disk. It supports OpenStax Astronomy 2e section 25.1 (the architecture of the Galaxy), and works in an upper-level course as an introduction to what a reference frame assumes.',
+    overview:
+      'Students turn 1,570 real Gaia DR3 stars into velocities (U toward the Galactic center, V along the rotation, W toward the north Galactic pole) and measure the Sun’s velocity relative to the nearer ones as minus their mean, with uncertainties. They find the Sun moving about 10, 22 and 9 km/s in U, V and W relative to the stars within 100 pc, and learn why V is so large: the stars lag the Galaxy’s rotation (asymmetric drift). Taking out the lag gives the Sun’s V against the local standard of rest, and two published ways of doing so disagree by about 8 km/s. The investigation states both, lets the student record each, and makes the choice an assumption to state.',
+    priorKnowledge: [
+      'A Doppler shift gives a radial velocity (Lines and Motion)',
+      'That a star’s proper motion is its angular drift across the sky and parallax its distance',
+      'Components of a vector, and the square root of a sum of squares',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Three measurements make a velocity',
+        body: 'Parallax gives distance, proper motion times distance gives the speed across the sky, and the radial velocity gives the speed along the line of sight. The galactic kernel resolves them into U, V and W.',
+      },
+      {
+        heading: 'The Sun’s motion is minus the crowd’s mean',
+        body: 'Relative to a sample of stars the Sun’s velocity is the negative of their mean velocity, with an error of the mean (the scatter over the square root of the count). It is relative to those stars, not to the Galaxy.',
+      },
+      {
+        heading: 'Asymmetric drift',
+        body: 'Stars with more stirred-up orbits lag a circular orbit by about sigma_U squared over 80 km/s (Strömberg). That is why V is the largest component relative to the stars, and why the stars’ mean is not the local standard of rest.',
+      },
+      {
+        heading: 'A choice the sample cannot make',
+        body: 'Taking out the Strömberg lag gives the Sun’s V against the LSR as about 3.8 km/s; Schönrich, Binney and Dehnen (2010) found 12.24 km/s by arguing that the lag also depends on metallicity. The drift fit across color bins in this sample is too noisy to choose. The instrument offers both, labeled, and the investigation asks the student to state which they use.',
+      },
+    ],
+    features: [
+      {
+        name: 'Solar-motion instrument (galactic family)',
+        text: 'Stars within a chosen distance as a U-V velocity plot or a Hammer-Aitoff sky map with the apex marked; three frames for the Sun’s V (the mean of the stars, the Strömberg LSR, the Schönrich LSR adopted); every number in a list with its uncertainty.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the speed from the components, the Strömberg lag by hand and the error of a mean. Advanced: what the frame choice does to the Sun’s speed (about 4 km/s of 14 to 19), and what sample could settle it.',
+      },
+      {
+        name: 'The Observatory',
+        text: 'The same Gaia table opens in the Observatory (gaia-solar-neighborhood), whose sky panel draws it on a Galactic map and as proper-motion vectors.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The Sun is at rest, or the stars’ average motion is zero.',
+        response:
+          'Predict step. Seen from a moving Sun a still crowd streams the other way; the Sun’s motion is minus the mean.',
+      },
+      {
+        claim: 'V is large because Gaia measures it badly.',
+        response:
+          'Why is V the biggest. The error of V is about the same as the others; the 22 km/s is the stars’ lag.',
+      },
+      {
+        claim: 'The apex is the Galactic center.',
+        response:
+          'Where is the Sun heading. The apex is tens of degrees from the center because V dominates.',
+      },
+      {
+        claim: 'One of the two published values is simply correct.',
+        response:
+          'Record both and Your assumption. Both are published; this sample cannot choose; the investigation is built so that a student must say which one they assumed.',
+      },
+    ],
+    teachingNotes: [
+      'OPEN SCIENCE ITEM (Carl): the Sun’s V against the LSR is not chosen by Gravitas. Strömberg’s correction from this sample gives 3.77 km/s at 100 pc (the old Dehnen and Binney 1998 value was 5.2); Schönrich et al. 2010 give 12.24. The third frame in the instrument adopts 12.24 and says so on screen. The core measurement accepts 3.77 within 0.5 and 12.24 within 0.3.',
+      'The core measurement accepts U = 10.5 within 1.5, V = 21.9 within 2 and W = 9.1 within 1.5 (Schönrich et al. U = 11.1 and W = 7.25 are inside the sample’s own uncertainty plus the package check’s 3 km/s).',
+      'The solar sample is not volume-complete (Gaia radial velocities exist for bright stars) and its near stratum is over-sampled on purpose; the investigation never uses its star counts, only the means and scatter. GALACTIC_DYNAMICS.md lists the limits.',
+      'The advanced step about color-bin fits quotes GALACTIC_DYNAMICS.md (12.3 ± 6.7 km/s for one choice of bins, an error about as large as the 8 km/s between the two values); it is a recorded result and is not shown in the instrument, and the drift fit has not been shown to be stable against the choice of bins.',
+      'The Gaia data are CC BY-NC 3.0 IGO: not for commercial use (D-GAIA-01, ratified by Carl).',
+    ],
+    discussion: [
+      'Why can a measurement relative to nearby stars not be quoted as the Sun’s speed in the Galaxy?',
+      'What sample would let you choose between the two LSR values, and what else would you need to know about its stars?',
+      'If the apex were at l = 0, what would that say about the Sun’s orbit?',
+    ],
+    extensions: [
+      'The Rotating Disk uses the same stars’ proper motions to measure how the Galaxy rotates.',
+      'Compare the Sun’s U, V and W within 50 pc and within 1,000 pc, and say which is the cleaner reference and why.',
+    ],
+    modelNotes:
+      'Velocities by the galactic kernel (js/kernels/galactic/coords.js, motion.js): ICRS to Galactic with the Hipparcos/Gaia matrix, proper motions rotated to l and b, space velocity from the standard formulae. The Sun’s motion is minus the sample mean with the error of the mean; the Strömberg lag is sigma_U squared over 80 km/s. See GALACTIC_DYNAMICS.md.',
+  },
+
+  'the-rotating-disk': {
+    topic:
+      'The Galaxy’s rotation from data: the Oort constants from Gaia proper motions, the published rotation curve, and a bulge-disk-halo mass model',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'After The Sun’s Motion and before or alongside The Missing Mass at the advanced depth, which uses the same curve. It supports OpenStax Astronomy 2e section 25.3 (the mass of the Galaxy).',
+    overview:
+      'Students see that differential rotation puts a double wave in the proper motions of nearby stars along the Galactic plane, measure the Oort constants A and B from 1,570 Gaia stars, and turn A − B into the Sun’s circular speed (about 226 km/s, with an uncertainty of about 24). They then set the Milky Way’s published rotation curve (Bhattacharjee et al. 2014, 2 to 25 kpc) against a bulge, a disk and a halo: stars and gas alone, with the disk bounded in mass, fit it with a reduced chi-square of 50; adding a halo gives 4.8. They are asked what the comparison assumes.',
+    priorKnowledge: [
+      'The Sun’s Motion, or at least U, V and W and proper motions',
+      'A rotation curve and what a flat one implies (The Missing Mass)',
+      'Reading a fit’s chi-square qualitatively',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The double wave',
+        body: 'Seen from the Sun, differential rotation makes the proper motion in longitude go as A cos 2l plus B, so longitudes 180 degrees apart match.',
+      },
+      {
+        heading: 'Weighting is physics',
+        body: 'The quantity is a speed over a distance, so a fixed speed scatter is largest for the nearest stars. An unweighted fit lets them dominate and fails (A about −2 ± 11); weighting by 1 over parallax squared gives A = 13.5 ± 2.4 and B = −13.7 ± 1.7 km/s/kpc, within three sigma of Bovy 2017.',
+      },
+      {
+        heading: 'A comparison of models, not a measurement of a halo',
+        body: 'The reduced chi-square falls from 50 to 4.8 with a halo, and is still not 1. The result is that a halo is enough within a simple model; the disk’s bound, the Sun’s distance and speed and the model’s shapes are assumptions.',
+      },
+      {
+        heading: 'Why the disk is bounded',
+        body: 'Without a bound on the disk’s mass (here 8 times 10 to the 10 solar masses) a disk alone fits as well as a halo and the fit says nothing; the bound is a stated assumption from independent estimates of the Galaxy’s stellar mass.',
+      },
+    ],
+    features: [
+      {
+        name: 'Rotating-disk instrument (galactic family)',
+        text: 'The Oort fit with its binned data, with a switch between the weighted and the unweighted fit; the rotation curve with sliders for the disk’s mass and scale, the halo’s speed and core, or best fits with and without a halo; chi-square and reduced chi-square listed.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the circular speed from A − B, and the mass inside 8.3 kpc by M = v² r / G (about 1.15 times 10 to the 11, as an estimate). Advanced: the halo’s share of the force at the Sun (43.5 percent) and why the disk is bounded.',
+      },
+      {
+        name: 'Data behind the curve',
+        text: 'The rotation curve is the milky-way-rotation-curve data package, three sets of the Sun’s distance and speed with citations by region; the Observatory opens it as a table.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Without weighting, the nearest stars are the best ones.',
+        response: 'Why weight the stars. They are the noisiest in these units.',
+      },
+      {
+        claim: 'The better fit proves dark matter exists in that form.',
+        response:
+          'What the fit assumes. It shows a halo is enough in a simple model; the disk bound, R0 and V0 are assumptions.',
+      },
+      {
+        claim: 'The halo dominates the force everywhere.',
+        response:
+          'Where the halo matters. At the Sun the stars and gas are the larger share in this fit (203 against 178 km/s); the halo takes over far out.',
+      },
+      {
+        claim: 'A flat rotation curve is just what a disk of stars does.',
+        response:
+          'Stars only fit. The best stars-only curve falls away past about 10 kpc and misses the measured points (reduced chi-square of 50).',
+      },
+    ],
+    teachingNotes: [
+      'The rotation curve is the R0 = 8.3 kpc, V0 = 244 km/s set of Bhattacharjee et al. 2014 Table 2, disk-region points from 2 to 25 kpc, with errors floored at 3 km/s. The data package carries two other sets; the instrument uses one and says so (D-GAIA-02: cited by region, not by point).',
+      'The Sun’s distance 8.3 kpc is an assumption in the circular speed from the Oort constants, stated on screen.',
+      'The unweighted Oort fit is shown on purpose: A about −2.4 ± 11.5, B about −4.3 ± 8.0. It is a investigation in why a fit needs the right weights, not a second result.',
+      'The model fit is Nelder-Mead with several starts in the galactic kernel; the best-fit values the investigation quotes are deterministic.',
+    ],
+    discussion: [
+      'Why do proper motions along the plane make a double wave and not a single one?',
+      'If the disk could have any mass, what would the fit say about a halo?',
+      'What would change if the Sun were at 8.0 kpc with V0 = 200 km/s?',
+    ],
+    extensions: [
+      'The Missing Mass, advanced depth, fits the same measured curve.',
+      'Compare the circular speed from A − B with the curve’s value at the Sun, and say whether they agree within their uncertainties.',
+    ],
+    modelNotes:
+      'Oort constants: linear least squares of 4.74 times the proper motion in longitude on A cos 2l, B, and the Sun’s reflex, weighted by 1 over parallax squared (js/kernels/galactic/motion.js). Mass model: bulge as a point mass, an exponential disk and a pseudo-isothermal halo (js/darkMatter.js galaxyCurveAt), fitted by chi-square (js/kernels/galactic/rotation.js).',
+  },
+
+  'cluster-membership': {
+    topic:
+      'Cluster membership from motion: a mixture fit over Gaia proper motions and parallaxes, membership as a probability, and a check against a color-magnitude diagram',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'After Lives of Stars (or any use of a color-magnitude diagram), and independent of the other two galactic investigations. It supports OpenStax Astronomy 2e on star clusters (chapter 22) and is a first investigation in separating a population from a background.',
+    overview:
+      'Students see that a cluster is a tight clump in proper motion among the broad cloud of field stars, measure NGC 2420’s proper motion and member count from a two-component mixture fit (about 506 of 993 stars, moving at −1.23, −2.04 mas/yr), and meet the central idea: each star has a membership probability, and a count of members is a count above a threshold someone chooses. The count hardly changes between 0.1 and 0.99 here because the cluster is well separated. A color-magnitude diagram that the fit never used confirms the members as one population, and a mean parallax gives about 2.6 kpc with the zero-point not corrected.',
+    priorKnowledge: [
+      'A color-magnitude diagram and what a main sequence is',
+      'Proper motion and parallax',
+      'Probability as a number between 0 and 1',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A cluster moves together',
+        body: 'Stars born together share a motion to within about 0.08 mas/yr (about 1 km/s), while the field’s spread is several mas/yr.',
+      },
+      {
+        heading: 'A probability, not a label',
+        body: 'The fit gives the chance a star belongs to the cluster given its measurements and their errors. A member list needs a threshold, which is a stated choice.',
+      },
+      {
+        heading: 'An independent check',
+        body: 'The fit uses only proper motion and parallax. A narrow main sequence among the members in the color-magnitude diagram is a result it did not put in.',
+      },
+      {
+        heading: 'What a parallax distance leaves out',
+        body: '1 over the mean parallax is 2.6 kpc; the zero-point offset of about 0.02 mas (about 5 percent) is not corrected and nothing else was used to check it. The investigation states the value and nothing more.',
+      },
+    ],
+    features: [
+      {
+        name: 'Cluster-members instrument (galactic family)',
+        text: 'Proper-motion plane or color-magnitude diagram with stars above a threshold highlighted; the fit over proper motion alone or with parallax; the threshold; listed counts, expected members, uncertain stars, cluster motion, spread, mean parallax and distance.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the distance by hand and the members’ internal speed spread (about 1 km/s). Advanced: the expected number of field stars (487) and what parallax adds to a proper-motion-only fit (the borderline stars go from 8 to 4).',
+      },
+      {
+        name: 'The Observatory',
+        text: 'The same table opens in the Observatory (gaia-ngc2420), whose sky panel draws the field on a Galactic map and each star’s proper motion as an arrow.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A star is either a member or it is not.',
+        response:
+          'A star at 0.5 and Why a probability. The data give a probability and the list is a choice of threshold.',
+      },
+      {
+        claim:
+          'A membership found from motion and then plotted in color-magnitude is circular.',
+        response:
+          'A check the fit did not use. The fit never saw color or brightness.',
+      },
+      {
+        claim: 'A distance from a parallax is exact.',
+        response:
+          'What the distance leaves out. The zero-point alone is about 5 percent here.',
+      },
+      {
+        claim: 'A smaller list of members is a cleaner one.',
+        response:
+          'Move the threshold. The count barely changes from 0.1 to 0.99 here, so a strict threshold mostly throws away stars that are almost surely members.',
+      },
+    ],
+    teachingNotes: [
+      'OPEN ITEM (Carl): the members’ mean parallax of 0.385 mas (2.6 kpc) has not been compared with a literature distance for NGC 2420, and the package applies no zero-point correction. The investigation claims only what the instrument shows.',
+      'The core measurement accepts the proper motion within 0.05 mas/yr of (−1.227, −2.041), the member count 506 within 8, 497 and 509 at the two thresholds within 6, and the mean parallax within 0.02.',
+      'The fit starts from fixed values (cluster at (−1, −2) mas/yr and 0.3 mas, field broad) so a result is reproducible; the number of uncertain stars is 4 with parallax and 8 without.',
+      'Gaia data are CC BY-NC 3.0 IGO: not for commercial use (D-GAIA-01).',
+    ],
+    discussion: [
+      'What would a less well separated cluster do to the count between 0.1 and 0.99?',
+      'Why is a color-magnitude diagram a fair check, and when would it not be?',
+      'Who is harmed if a catalog publishes only a member / non-member column?',
+    ],
+    extensions: [
+      'Stellar populations investigations use cluster color-magnitude diagrams; compare NGC 2420’s turnoff with an isochrone.',
+      'Open the Observatory’s Gaia NGC 2420 table and make the same plot.',
+    ],
+    modelNotes:
+      'Two-component Gaussian mixture over proper motion and parallax by expectation-maximization (js/kernels/galactic/membership.js), each star’s own errors widening both components; the cluster’s intrinsic width uses the standard approximate update. See GALACTIC_DYNAMICS.md.',
+  },
+  'bending-light': {
+    topic:
+      'How a mass bends a ray of light: the weak-field formula, the Sun’s 1.75 arcseconds and where the formula stops being true',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After What Is a Gravitational Wave (or any first work on general relativity). The first of three lensing investigations; it needs only proportional reasoning. It supports OpenStax Astronomy 2e chapter 24.',
+    overview:
+      'Students use a point-mass lens and a ray of light. A ray that grazes the Sun is turned by 1.75 arcseconds (4GM/(c²R), 1.7517 with the app’s constants), a ray 100 solar radii out by 0.0175, and the same ray past ten solar masses by 17.5. They compare the Newtonian half (0.88) with the 1.98 ± 0.12 and 1.61 ± 0.30 arcseconds Eddington’s 1919 expeditions measured, and find a black hole case (10^8 solar masses, ray at 2.4 Schwarzschild radii) where the formula gives 49 degrees and the model says it cannot be trusted.',
+    priorKnowledge: [
+      'Proportional and inverse reasoning',
+      'Angles in arcseconds',
+      'The idea that mass curves space (a sentence is enough)',
+    ],
+    keyConcepts: [
+      {
+        heading:
+          'The bending is in proportion to the mass and inverse to the distance',
+        body: 'Doubling the closest approach halves the angle; ten times the mass gives ten times the angle.',
+      },
+      {
+        heading: 'Twice the Newtonian value',
+        body: 'General relativity turns light by 4GM/(c²b), twice what Newton’s gravity gives a particle at the speed of light; the 1919 plates favored the larger.',
+      },
+      {
+        heading: 'A weak-field formula has a boundary',
+        body: 'The formula needs the ray to pass at many Schwarzschild radii; closer, it returns an angle that is not small and the model says so.',
+      },
+    ],
+    features: [
+      {
+        name: 'Light-bending instrument (lensing family)',
+        text: 'Bending against closest approach on logarithmic axes, with the Sun as a gray reference and the weak-field limit shaded; mass and closest approach controls; listed mass, closest approach, Schwarzschild radius, the ratio, the bending, the Newtonian half and whether the weak field holds.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the Sun’s bending by hand. Advanced: the distance at which rays from the limb cross, 548 au.',
+      },
+      {
+        name: 'Presets',
+        text: 'The Sun’s limb, a ray 100 solar radii out, a ten-solar-mass star and a black hole of 100 million Suns load in one click, each with its readout.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Light has no mass, so gravity cannot bend it.',
+        response:
+          'Mass curves space, and light follows the curve; the bending is real and measured.',
+      },
+      {
+        claim: 'The bending is the same at any distance.',
+        response:
+          'It falls as one over the closest approach: a hundred times farther, a hundredth the angle.',
+      },
+      {
+        claim: 'The formula works for a black hole’s edge.',
+        response:
+          'It is a weak-field result; at 2.4 Schwarzschild radii the instrument says it cannot be trusted.',
+      },
+      {
+        claim: 'Only a black hole can bend light.',
+        response:
+          'Any mass does: the Sun’s limb turns a ray by 1.75 arcseconds.',
+      },
+    ],
+    teachingNotes: [
+      'The model is a thin point lens in the weak field (GRAVITATIONAL_LENSING.md). Say so if a student asks about a ray that dips close to a black hole.',
+      'The 1919 values are from Dyson, Eddington and Davidson (1920): 1.98 ± 0.12 at Sobral and 1.61 ± 0.30 at Principe. Later reductions of the plates are debated; the investigation states only the published numbers.',
+      'The Sun’s bending uses the app’s constants, 1.7517 arcseconds; the rounded 1.75 is the textbook value.',
+      'The instrument’s closest approach is a log slider in solar radii, so the Sun’s limb is the left-hand preset; remind students the Newtonian row is half of the other.',
+    ],
+    discussion: [
+      'Why is a measurement that could have gone either way worth more than one that could not?',
+      'What would you need to measure to test the formula nearer a black hole?',
+      'A ray passes the Sun at twice the radius: what does the bending do, and where does it cross the axis?',
+    ],
+    extensions: [
+      'Continue with Einstein Rings and Arcs.',
+      'Compare with the black-hole lab’s photon ring.',
+    ],
+    modelNotes:
+      'js/kernels/lensing/lens.js: deflectionAngle = 4GM/(c²b), valid for b much greater than 2GM/c²; the instrument shades b below ten Schwarzschild radii. See GRAVITATIONAL_LENSING.md.',
+  },
+  'einstein-rings-and-arcs': {
+    topic:
+      'Strong lensing geometry: the Einstein radius of a star and of a galaxy, the mass inside a ring, and the images of an off-axis source',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Bending Light. It supports OpenStax Astronomy 2e chapter 24 and is a first look at how astronomers weigh galaxies and clusters without knowing what they are made of.',
+    overview:
+      'Students read the Einstein radius with the source straight behind the lens: 1.01 milliarcseconds for one solar mass at 4 kpc, 0.638 arcseconds (3.09 kpc at the lens) for 10^11 solar masses at 1 Gpc. They change the mass until the ring is 1.0 arcsecond (2.46 × 10^11), find the two images of a source half an Einstein radius off-axis for a point mass (1.28 and −0.78, total 2.18) and an isothermal galaxy (1.5 and −0.5, total 4), and explain why most lensed galaxies are arcs.',
+    priorKnowledge: [
+      'Bending Light (the deflection angle)',
+      'Angular size and the arcsecond',
+      'Square roots',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The ring is a mass scale',
+        body: 'The Einstein radius grows as the square root of the mass inside it, so a measured ring gives that mass whatever the lens is made of.',
+      },
+      {
+        heading: 'A star’s ring is too small to see',
+        body: 'About a milliarcsecond: stars lens by changing brightness; galaxies make arcsecond rings Hubble resolves.',
+      },
+      {
+        heading: 'The images depend on the lens',
+        body: 'The same ring and source position give 2.18 times the light for a point mass and 4 for an isothermal galaxy.',
+      },
+    ],
+    features: [
+      {
+        name: 'Lens-plane instrument (lensing family)',
+        text: 'The sky around a lens in units of the Einstein radius with the ring, the source disk and the lensed images; a point mass or a singular isothermal sphere; mass inside the ring, lens distance (source at twice the distance), source offset and radius; listed Einstein radius in mas and arcseconds, its size at the lens, the equivalent galaxy speed spread, the images and magnifications and the point-mass time delay.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the mass inside a 1-arcsecond ring by hand (2.46 × 10^11). Advanced: the speed spread of the galaxy that makes it, 263 km/s.',
+      },
+      {
+        name: 'Presets',
+        text: 'A Sun at 4 kpc, a galaxy at 1 Gpc with the source straight behind or off to one side, and an isothermal galaxy load in one click.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A ring needs a very special lens.',
+        response:
+          'It needs an alignment, not a special lens: any lens makes one when the source is exactly behind it.',
+      },
+      {
+        claim: 'The ring’s mass is the mass of the galaxy’s stars.',
+        response: 'It is all the mass inside the ring, dark matter included.',
+      },
+      {
+        claim: 'Lensed galaxies should be rings.',
+        response: 'Alignment is rarely exact; off-axis the images are arcs.',
+      },
+      {
+        claim: 'A bigger lens always makes a bigger ring on the sky.',
+        response:
+          'The ring grows as the square root of the mass and falls with distance; a star’s ring is a thousand times smaller than a galaxy’s.',
+      },
+    ],
+    teachingNotes: [
+      'Distances are Euclidean with the source at twice the lens distance: no cosmology, no ellipticity or external shear (GRAVITATIONAL_LENSING.md). Say so for a student who compares with a real lens such as the Einstein Cross.',
+      'The mass slider is the mass inside the Einstein radius; for the isothermal sphere the instrument gives the equivalent speed spread, 4π(σ/c)²Dls/Ds = θE.',
+      'The inner image’s magnification is negative because it is flipped; the totals use absolute values.',
+      'The source offset is a slider, not a draggable point (the widget framework has no pointer hook); it works from the keyboard.',
+    ],
+    discussion: [
+      'Why does a galaxy at a billion parsecs make a ring a thousand times larger than a star at four thousand?',
+      'What would a ring of 1 arcsecond around a galaxy with only 10^10 solar masses of stars tell you?',
+      'How would the picture change if the lens were not circular?',
+    ],
+    extensions: [
+      'Continue with A Lens Passing By.',
+      'Open the model page for the thin-lens assumptions.',
+    ],
+    modelNotes:
+      'js/kernels/lensing/lens.js: einsteinAngle, sisEinsteinAngle, pointImages (lens equation y = x − 1/x), sisImages (y = x − sign x) and pointTimeDelay. The mass is the mass inside the Einstein radius for either lens. See GRAVITATIONAL_LENSING.md.',
+  },
+  'a-lens-passing-by': {
+    topic:
+      'Microlensing light curves: the peak, the crossing time, the mass–distance–speed degeneracy, blended light, a finite source and a fit of a synthetic event',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Einstein Rings and Arcs. It connects lensing to time-domain astronomy and supports OpenStax Astronomy 2e chapter 24; the advanced depth uses the inference core’s fitter.',
+    overview:
+      'Students watch a star brighten as a 0.3 solar-mass lens 6 kpc away crosses in front of it at 200 km/s: a pass at 0.1 Einstein radii peaks at 10.04, the crossing time is 16.6 days and the star stays above 1.34 times its baseline for 33 days; at 400 km/s the time halves. A brown dwarf of 0.075 solar masses at 2 kpc and 100 km/s makes the same curve, as does 0.68 at 6 kpc and 300 km/s, so one curve cannot weigh the lens. Half the light blended lowers the peak to 5.5; a star of radius 0.1 Einstein radii at u0 = 0.01 peaks at 20, not 100. The advanced depth fits a synthetic event with the blend free (tE 25.2 ± 0.7 days) and held at none (chi-square 2.13, tE 17.4 ± 0.06).',
+    priorKnowledge: [
+      'Einstein Rings and Arcs (the Einstein radius)',
+      'Reading a light curve',
+      'Speed, distance and time',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The curve fixes one number for three unknowns',
+        body: 'The crossing time is the Einstein radius over the speed; mass, distance and speed are degenerate.',
+      },
+      {
+        heading: 'Blending and finite size change the peak',
+        body: 'Blended light dilutes the rise; a star with a size caps it near 2 over its radius in Einstein radii.',
+      },
+      {
+        heading: 'An error bar is conditional on the model',
+        body: 'The fit that assumes no blend has a small error bar and a wrong answer; the free fit’s larger bar is the honest one.',
+      },
+    ],
+    features: [
+      {
+        name: 'Lens-passing instrument (lensing family)',
+        text: 'The light curve of a point lens crossing a star: mass, lens distance (source at 8 kpc), speed, closest approach, source share of the light and source radius; listed Einstein angle and radius, crossing time, peak, time above 1.34 and the masses that make the same curve at other distances and speeds; a synthetic event with noise, with its fits.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the crossing time (16.6 days) and the magnification at u = 0.5 (2.18) by hand. Advanced: fit the synthetic event with the blend free and held.',
+      },
+      {
+        name: 'The synthetic event and the forward model',
+        text: 'The microlensing forward model (js/forward/models/microlensing.js) returns a gravitas.observation time series labeled synthetic with a truth manifest, for the inference core and the Observatory. No authentic event ships: its terms of use could not be confirmed (D-LENS-01).',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The light curve tells you the lens’s mass.',
+        response:
+          'It tells you the crossing time, one combination of mass, distance and speed.',
+      },
+      {
+        claim: 'A closer pass can brighten the star without limit.',
+        response:
+          'A real star has a size; at u0 = 0.01 and radius 0.1 the peak is 20, not 100.',
+      },
+      {
+        claim: 'A fit with a small error bar must be right.',
+        response:
+          'The no-blend fit’s bar is 0.06 days and its answer is 8 days short, with chi-square 2.1.',
+      },
+      {
+        claim: 'The star really brightens, so something is heating it.',
+        response:
+          'Its output is unchanged; the lens focuses more of the same light toward us, and the curve is symmetric.',
+      },
+    ],
+    teachingNotes: [
+      'The model is one point lens, a uniform source disk and straight constant-speed motion; no parallax, limb darkening, binary lens or second source (GRAVITATIONAL_LENSING.md).',
+      'The synthetic event has a fixed seed, so every student sees the same points, and the answer key is exact; the truth (t0 = 0, u0 = 0.15, tE = 25 days, source share 0.6) is in the investigation’s source file, not on screen.',
+      'The tolerance on the free fit is two standard errors; the held fit’s chi-square is read, not its tE, so a student cannot be marked wrong for a narrower reading.',
+      'Presets “A very close pass, finite source” and “Fit the synthetic event” are the two to rehearse; the fit rows appear only with the synthetic event switched on.',
+    ],
+    discussion: [
+      'Which of mass, distance and speed would you most like to measure independently, and how?',
+      'Why is a fit with an unstated assumption more dangerous than one with a big error bar?',
+      'What would a second observer in space change?',
+    ],
+    extensions: [
+      'Open the microlensing forward model in the Observatory’s synthetic observations.',
+      'Read the model page for the thin-lens and point-mass assumptions.',
+    ],
+    modelNotes:
+      'js/kernels/lensing/microlensing.js (Paczynski, uniform finite source by ring integration, blending) and fit.js (the inference core’s createProblem and refine, multi-start, source and blend fluxes solved exactly). Validated against closed forms and over 30 seeds in tests/lensingKernel.test.js. See GRAVITATIONAL_LENSING.md.',
+  },
+  'who-gets-counted': {
+    topic:
+      'Selection by a magnitude limit: what a survey counts, what it misses and why a catalog is not a census',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Lives of Stars (or any work with luminosity and absolute magnitude). The first of three selection-effects investigations; it needs only the magnitude scale and the idea of distance. It supports OpenStax Astronomy 2e chapter 19 on stellar populations and surveys.',
+    overview:
+      'Students count a synthetic population of stars at three magnitude limits. A limit of 14 counts 167 of 2,645 stars (6.3 percent) and a limit of 18 counts 1,289 (48.7 percent); every star a limit of 18 misses is faint (absolute magnitude above 8). A Sun-like star can be counted to 711 pc at limit 14 but a red dwarf only to 63 pc, and the counted stars average 3.8 in absolute magnitude against 8.3 for every star. The point: a survey counts what it can see, and that is not a census.',
+    priorKnowledge: [
+      'The magnitude scale and what absolute magnitude means',
+      'Distance and the inverse-square law',
+      'A luminosity function in words: more faint stars than bright',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A limit selects on apparent brightness',
+        body: 'Stars are counted when they look brighter than the limit, which mixes how bright they are with how far away.',
+      },
+      {
+        heading: 'The missing stars are the faint ones',
+        body: 'Red dwarfs are the commonest stars and the faintest, so a shallow survey loses most of the population.',
+      },
+      {
+        heading: 'A truth that real surveys lack',
+        body: 'The stars are synthetic, so every missed star is known. A real survey cannot see its own misses.',
+      },
+    ],
+    features: [
+      {
+        name: 'Who-gets-counted instrument (survey family)',
+        text: 'Absolute magnitude against distance with the limit drawn, or the cumulative counts; the magnitude limit; listed counts, share, the faint share of the missed stars, the distance to which a Sun-like star and a red dwarf are counted, and the mean magnitudes of all and of counted stars.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the distance by hand and the volume gained per magnitude (3.98). Advanced: the same drift of brightness with distance in the real Gaia solar-neighborhood table (8.80 to 4.23, 4.56 mag).',
+      },
+      {
+        name: 'The synthetic survey',
+        text: 'The same universe can be surveyed outside the investigation: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labeled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Most stars are like the bright ones we see.',
+        response:
+          'The counted stars average four and a half magnitudes brighter than every star in the model.',
+      },
+      {
+        claim: 'A deeper survey counts everything.',
+        response: 'At limit 18 half the stars are still missed.',
+      },
+      {
+        claim: 'The missed stars are a random sample.',
+        response: 'All of them are faint: the survey selected on brightness.',
+      },
+      {
+        claim: 'A bigger telescope would fix it.',
+        response:
+          'A deeper limit helps but never reaches the faint end of a population that rises toward faint stars; the model still misses half the stars at limit 18.',
+      },
+    ],
+    teachingNotes: [
+      'The model is bolometric: no bolometric correction, no dust, no binaries, stars uniform in space (SELECTION_EFFECTS.md). Say so if a student asks whether the numbers are real.',
+      'The core values come from a fixed seed (survey-lab-1), so every student sees the same 2,645 stars.',
+      'The real-sample comparison uses the Gaia table, a stratified and radial-velocity-selected subset (CC BY-NC 3.0 IGO, D-GAIA-01); its shell means are stated in the advanced step and recomputed by a test.',
+      'All three selection-effects investigations use the same fixed synthetic universe, so every student sees the same stars and the answer key is exact.',
+    ],
+    discussion: [
+      'What would a survey of only the nearest 100 parsecs miss, and what would it get right?',
+      'Who would be misled by a catalog of the brightest stars, and how?',
+      'How would you know how many stars a real survey missed?',
+    ],
+    extensions: [
+      'Continue with Why the Bright Ones Win, which measures the bias.',
+      'Open the Gaia solar-neighborhood table in the Observatory and plot absolute magnitude against distance.',
+    ],
+    modelNotes:
+      'js/survey/model.js: a cone of stars uniform in space drawn from the stellar-population synthesis, observed with a limit on the measured magnitude; every draw keyed by seed and star index. See SELECTION_EFFECTS.md.',
+  },
+  'why-the-bright-ones-win': {
+    topic:
+      'Malmquist bias and a second bias from selecting on a well-measured parallax, each measured against a known truth',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Who Gets Counted. It supports OpenStax Astronomy 2e chapter 19 and is a first look at a bias that every distance-limited statistic in astronomy has to address.',
+    overview:
+      "Students group the survey by distance and compare the counted stars with all stars in each shell: at limit 16 the counted stars are brighter by 0.50 mag in the nearest shell and 3.56 mag in the farthest. For standard candles with a scatter of 0.7 mag the measured bias at the limit (-0.645) agrees with Malmquist's closed form (-1.382 sigma squared = -0.677). A parallax cut of 3 sigma makes measured parallaxes 18 percent too large and absolute magnitudes 0.25 mag too faint; a cut of 10 removes the bias but leaves 82 of 471 stars.",
+    priorKnowledge: [
+      'Who Gets Counted (or the magnitude limit idea)',
+      'Parallax and distance',
+      'Squaring a number',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The bias grows with distance',
+        body: 'A fixed apparent limit needs a brighter star at every larger distance, so far shells keep only the brightest of their stars.',
+      },
+      {
+        heading: 'A closed form for a simple case',
+        body: 'For equal-density stars with a Gaussian luminosity function the shift is -1.3816 sigma squared, and it quadruples when the scatter doubles.',
+      },
+      {
+        heading: 'Cuts make new selections',
+        body: 'Selecting on a well-measured parallax removes one bias and adds another; a stricter cut costs most of the sample.',
+      },
+    ],
+    features: [
+      {
+        name: 'Malmquist instrument (survey family)',
+        text: 'Bars of bias by shell of distance; the magnitude limit; two kinds of star (a population, or standard candles); a parallax cut; listed means, bias, shells, the bias at the limit with its closed form, and the parallax selection bias. The astrometer is deliberately weaker than Gaia so that the second bias is visible.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the closed form by hand for sigma 0.7 (0.677) and 1.4 (2.708). Advanced: the luminosity error from the parallax bias (20.6 percent) and the real Gaia table drifting the same way (8.80, 6.68, 5.35, 4.23 mag).',
+      },
+      {
+        name: 'The synthetic survey',
+        text: 'The same universe can be surveyed outside the investigation: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labeled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Far stars are intrinsically brighter.',
+        response:
+          'The model has the same stars everywhere; the selection makes the drift. The real Gaia sample drifts the same way.',
+      },
+      {
+        claim: 'Using more stars removes the bias.',
+        response:
+          'The bias is a property of the selection, not the sample size.',
+      },
+      {
+        claim: 'A strict parallax cut is free.',
+        response: 'It leaves 82 stars of 471 and they are the nearest.',
+      },
+      {
+        claim: 'The bias is an error in the measurements.',
+        response:
+          'Every measured value is right; the bias is in which stars were selected to be measured.',
+      },
+    ],
+    teachingNotes: [
+      'The standard-candle comparison measures stars in the last half magnitude before the limit with their true apparent magnitudes; with 30,000 candles about 750 stars fall in it, so the agreement is within about 0.05 mag.',
+      'The closed form is the textbook case (uniform density, no distance boundary); the cone has a boundary, so only the candle universe (500 pc, M = 10) is used for it.',
+      'Spanish text is unreviewed by a native reader.',
+      'The first two measure steps use the population; the standard-candle step uses a separate universe of 30,000 candles so that the closed form can be checked.',
+    ],
+    discussion: [
+      'Why does a standard candle with no scatter have no Malmquist bias?',
+      'Which is worse for a distance scale, Malmquist bias or the parallax selection bias?',
+      'How could a survey design avoid both?',
+    ],
+    extensions: [
+      'Continue with The Completeness Curve.',
+      'Compare the shell means of the Gaia solar-neighborhood table with the synthetic ones.',
+    ],
+    modelNotes:
+      'js/survey/model.js: malmquistShells, malmquistAtMagnitude, malmquistFormula, parallaxSelectionBias. See SELECTION_EFFECTS.md.',
+  },
+  'the-completeness-curve': {
+    topic:
+      'Correcting a luminosity function for a completeness curve with the effective-volume method, and stating the residual bias',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Why the Bright Ones Win. It supports OpenStax Astronomy 2e chapter 19 and is the introduction to correcting a survey; the advanced steps serve an upper-level statistics-of-surveys module.',
+    overview:
+      "Students see that a raw count of faint stars is too low (96 and 57 percent of the truth in the two faintest bins even for a sharp edge at 20), that weighting each counted star by 1 over the volume it could be seen in recovers the truth (0.97 +/- 0.06 for a survey 50 percent complete at 17, where the raw count gets 13 percent), that three stars cannot carry a bin (0.78 +/- 0.46), and that working the absolute magnitudes out from the catalog's own parallaxes leaves a 60 percent bias (1.60 against 1.00) in the faintest bin.",
+    priorKnowledge: [
+      'Who Gets Counted and Why the Bright Ones Win',
+      'Poisson counting (the error of N is the square root of N)',
+      'Cube laws for volumes',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The effective-volume method',
+        body: 'Each counted star stands for 1 over the volume in which it could have been counted (Schmidt 1968).',
+      },
+      {
+        heading: 'An error bar is part of the answer',
+        body: '0.97 +/- 0.06 is consistent with 1; three stars give an error too large to say anything.',
+      },
+      {
+        heading: 'Residual bias',
+        body: 'A correction made from measured magnitudes inherits the measurement errors; the bias must be stated.',
+      },
+    ],
+    features: [
+      {
+        name: 'Completeness instrument (survey family)',
+        text: 'The luminosity function (truth, raw, corrected) or the completeness curve; the magnitude limit, the 50 percent point and the width of the fade; listed counts and shares for the two faintest bins, with the corrected value from true and from catalog magnitudes.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the weight of one star (3.98) and the Poisson error (4.5 percent). Advanced: the Euclidean count slope 0.6, a real catalog (SDSS NGC 2420) running out beyond r = 21, and what a bootstrap can and cannot say.',
+      },
+      {
+        name: 'The synthetic survey',
+        text: 'The same universe can be surveyed outside the investigation: the survey forward model (js/forward/models/survey.js) returns a gravitas.observation table labeled synthetic, with a truth manifest listing every star, its true absolute magnitude and the ids of the stars that were missed (SELECTION_EFFECTS.md).',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A correction recovers everything.',
+        response:
+          'Only where some stars were counted; three stars give 0.78 +/- 0.46.',
+      },
+      {
+        claim: 'A bootstrap interval is the whole error.',
+        response:
+          'It is only the sampling spread; selection and magnitude bias are invisible to it.',
+      },
+      {
+        claim: 'Corrected values should equal the truth exactly.',
+        response:
+          'They agree to within the Poisson error, which is the most a finite count can promise.',
+      },
+      {
+        claim: 'A correction needs the true magnitudes.',
+        response:
+          "Only this synthetic survey has them; the measure step on the catalog's own magnitudes shows what an analyst gets instead, 1.60 against 1.00.",
+      },
+    ],
+    teachingNotes: [
+      "The catalog-magnitude value of 1.604 in the faintest bin depends on the instrument's astrometry (Gaia-like: 0.02 mas to magnitude 13); with worse parallaxes it is larger.",
+      'The SDSS counts in the advanced step are from the NGC 2420 photometry table (a cluster field, not a uniform one) and are recomputed by a test.',
+      "The statistics-of-surveys module is the advanced depth plus the pure functions in js/survey/model.js (sweepLimit, bootstrapLuminosityFunction) that use the analysis lab's bootstrap and quantiles.",
+      'The predict step before the first measure is held until the measure step is answered, as in the other investigations.',
+    ],
+    discussion: [
+      'How would you test a completeness curve you did not trust?',
+      'What would you report from a survey with a bin that holds three stars?',
+      'Why does a correction made from measured magnitudes differ from one made from true ones?',
+    ],
+    extensions: [
+      'Sweep the limit over seeds in a notebook using js/survey/model.js sweepLimit and report the spread.',
+      "Compare the model's luminosity function with the stellar-populations investigations.",
+    ],
+    modelNotes:
+      'js/survey/model.js: effectiveVolume, recoveredLuminosityFunction (truth and catalog modes), completenessCurve, bootstrapLuminosityFunction. See SELECTION_EFFECTS.md.',
+  },
+  'inside-a-star': {
+    topic:
+      'Hydrostatic equilibrium and the polytrope: the central density and temperature of a star from its weight, how concentrated it is, and why the center is hot',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Lives of Stars (or any first work on stellar structure). The first of three stellar-interior investigations; it needs proportional reasoning and one power law. It supports OpenStax Astronomy 2e chapter 16.',
+    overview:
+      'Students use a polytrope scaled to a star. With n = 3, one solar mass and one solar radius (Eddington’s standard model) the center is 76.4 g/cm³ (54.2 times the mean of 1.41) and 11.8 million kelvin, half the mass lies inside 0.283 of the radius, and doubling the mass at the same radius doubles both the central density (153) and temperature (23.5 million kelvin). A red dwarf as n = 3/2 (0.2 solar masses, 0.22 solar radii) is only 5.99 times denser at the center and 6.74 million kelvin; a uniform ball (n = 0) has ratio 1 and half its mass inside 0.794. The depths estimate the temperature by hand (13.8 million kelvin) and the central pressure in units of GM²/R⁴ (11.05).',
+    priorKnowledge: [
+      'Lives of Stars (what a star is made of and why it shines)',
+      'Density, pressure and the ideal gas law in words',
+      'Powers and ratios',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Weight sets pressure sets temperature',
+        body: 'Hydrostatic equilibrium fixes the pressure at the center; for a gas of that density the pressure demands a temperature, with no fusion in the model.',
+      },
+      {
+        heading: 'The temperature scales as M over R',
+        body: 'Doubling the mass at the same size doubles the central temperature; a compact star is hotter than a diffuse one of the same mass.',
+      },
+      {
+        heading: 'The index n is a concentration',
+        body: 'A uniform ball has a central density equal to the mean; n = 3 puts fifty times more at the center; a red dwarf (n = 3/2) is in between.',
+      },
+    ],
+    features: [
+      {
+        name: 'Polytrope instrument (interiors family)',
+        text: 'Density, pressure, temperature and enclosed mass from the center to the surface for an index n from 0 to 4.5, a mass and a radius; listed ξ₁, the dimensionless mass, the central-to-mean density ratio, mean and central density, central pressure and temperature, the radius that holds half the mass and what the index approximates.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the temperature scale GMμm/(kR) by hand, 13.8 million kelvin. Advanced: the central pressure in units of GM²/R⁴, 11.05.',
+      },
+      {
+        name: 'Presets and the Stellar Lab',
+        text: 'The Sun as n = 3, a red dwarf as n = 3/2, a uniform ball and a centrally condensed n = 4.5 load in one click. The Stellar Lab’s star card has an interior row that names the polytrope and its central values, stated as a model.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The center of a star is hot because fusion is happening there.',
+        response:
+          'The model has no fusion and the temperature is the same; fusion is possible because the weight already made the center hot.',
+      },
+      {
+        claim: 'A star is the same density throughout.',
+        response:
+          'The Sun’s center is some fifty times denser than its average; half its mass is inside a quarter of its radius.',
+      },
+      {
+        claim: 'A bigger star is hotter inside.',
+        response:
+          'The central temperature scales as M over R: for a given mass the larger star is cooler.',
+      },
+      {
+        claim: 'The polytrope is the Sun.',
+        response:
+          'It is a shape with the right order of magnitude: the real center is denser (150 g/cm³) and hotter (15.7 million kelvin) than n = 3 gives.',
+      },
+    ],
+    teachingNotes: [
+      'The model is the Lane-Emden polytrope with an ideal-gas temperature at μ = 0.6 (STELLAR_STRUCTURE.md). Radiation pressure matters above about ten solar masses, where the temperature row is not to be trusted.',
+      'The instrument gives the temperature in kelvin and the step asks for millions of kelvin: the conversion is part of the step.',
+      'The real Sun is better described by n near 3.3 (central concentration 106). The investigation says that the model underestimates, and the instrument does not hide it.',
+      'The Stellar Lab’s interior row uses n = 3/2 below 0.35 solar masses and n = 3 above, for main-sequence stars only; giants have a dense core in a tenuous envelope and white dwarfs have their own model.',
+    ],
+    discussion: [
+      'Why would a more compact star of the same mass be hotter inside?',
+      'What would have to be added to the model to say how fast the star radiates?',
+      'The Sun’s real center is hotter than the model’s. Which way does that push the star’s structure?',
+    ],
+    extensions: [
+      'Continue with Scaling the Main Sequence.',
+      'Open the Stellar Lab and read the interior row for a 5-solar-mass star.',
+    ],
+    modelNotes:
+      'js/kernels/stellar/polytrope.js (RK4 from a series start at small ξ, surface by bisection; closed forms for n = 0, 1, 5) and star.js. Checked against Chandrasekhar’s table to 2 × 10⁻⁵ in tests/stellarKernel.test.js. See STELLAR_STRUCTURE.md.',
+  },
+  'scaling-the-main-sequence': {
+    topic:
+      'Homology: what a scaling argument predicts for luminosity, radius and lifetime against mass, and how far the MIST zero-age models follow it',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Inside a Star. It uses log-log fits and exponents and supports OpenStax Astronomy 2e chapter 18; the advanced depth shows an exponent falling toward the Eddington limit.',
+    overview:
+      'Students set the exponents a homology argument predicts against the zero-age models of the MIST grid (eight masses, 0.2 to 40 solar masses). With electron scattering and the CNO cycle the predicted luminosity exponent is 3.00 and the fit over 2 to 40 solar masses is 3.16 with 0.143 dex of scatter; with Kramers opacity and the proton-proton chain it is 5.46 against 4.43 fitted over 0.5 to 2 solar masses; Kramers on massive stars scatters 0.92 dex. The radius exponent is predicted 0.789 and fitted 0.546; the lifetime exponent −2 against −1.82. The Sun’s MIST life is 9.88 Gyr against a nuclear timescale of 13.9. The depths find the 40 to 20 solar-mass luminosity ratio (5.29, against 8) and the effective exponent between them, 2.40.',
+    priorKnowledge: [
+      'Inside a Star (central temperature from weight)',
+      'Reading log-log plots and exponents',
+      'Main-sequence mass–luminosity relation as a fact',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A scaling argument predicts exponents, not constants',
+        body: 'The lines are slid to fit the height; what is tested is the slope, and the scatter that is left about it.',
+      },
+      {
+        heading: 'Different physics dominates in different mass ranges',
+        body: 'Low-mass stars are Kramers and proton-proton, massive stars electron scattering and CNO; one exponent cannot hold across both.',
+      },
+      {
+        heading: 'The residual is the result',
+        body: 'A wrong law gives 0.92 dex of scatter, the right one 0.14: the size of what is left is how a model is judged.',
+      },
+    ],
+    features: [
+      {
+        name: 'Scaling instrument (interiors family)',
+        text: 'Luminosity, radius or lifetime against mass on log-log axes for the eight MIST zero-age models, with the predicted exponent as lines over 0.5 to 2 and 2 to 40 solar masses (dashed and solid); choices of opacity law (Kramers or electron scattering) and energy source (proton-proton or CNO); listed predicted exponent, fitted exponents, scatter and the selected model’s luminosity, radius, MIST life and nuclear timescale.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the luminosity ratio of the 40 and 20 solar-mass models, 5.29 against 8. Advanced: the effective exponent between them, 2.40.',
+      },
+      {
+        name: 'The data',
+        text: 'The MIST v1.2 tracks data set (mist-v12-tracks, no license stated, attributed) read through the existing track module; nothing new is bundled.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Stars of different masses are made of different materials.',
+        response:
+          'All the models start with the same composition; what changes is the central temperature, which decides the opacity and the reactions.',
+      },
+      {
+        claim:
+          'A scaling law that is off by 10 percent in its exponent is wrong.',
+        response:
+          'It is a scaling argument; 3.16 against 3 over a factor of 20 in mass is a good prediction, and the scatter is the part it does not capture.',
+      },
+      {
+        claim: 'The mass–luminosity relation is one power law.',
+        response:
+          'The fitted exponent is 4.4 at low mass and 3.2 above 2 solar masses, and keeps falling toward 1.',
+      },
+      {
+        claim: 'The nuclear timescale is the lifetime.',
+        response:
+          'It is an estimate with a fixed burned fraction (0.1) and the zero-age luminosity; it is within about 40 percent for the Sun and further off for massive stars.',
+      },
+    ],
+    teachingNotes: [
+      'The MIST stars are models, not measurements; the page says so. A comparison against observed stars (the HR diagram of a cluster) belongs to Stellar Populations.',
+      'Each fitted range has only three or five models: 0.5, 1 and 2 solar masses at low mass, and 2, 5, 10, 20 and 40 above. The scatter is a description of those points, not a statistical estimate.',
+      'The nuclear timescale uses 0.7 percent efficiency, 10 percent of the mass burned and the zero-age luminosity, so for massive stars it is a factor of up to 2.6 below MIST (the luminosity rises during the main sequence).',
+      'The scatter rows give residuals about the predicted exponent with the best-fitting intercept: the scaling does not fix the height.',
+    ],
+    discussion: [
+      'Why does a steeper energy source (CNO against proton-proton) change the radius so much more than the luminosity?',
+      'At what mass would you expect the exponent to leave 3? Why?',
+      'What observations would you use to test the prediction for lifetimes?',
+    ],
+    extensions: [
+      'Continue with The Limit.',
+      'Read STELLAR_STRUCTURE.md for the homology derivation and its limits.',
+    ],
+    modelNotes:
+      'js/kernels/stellar/homology.js: L ∝ μ^(4+b) M^(3+b−a) R^(3a−b) for κ ∝ ρ^a T^−b and the radius from equating with ε ∝ ρ^λ T^ν; the zero-age models are js/stellar/tracks.js mainSequenceAt(mass, 0) at the eight grid masses. See STELLAR_STRUCTURE.md.',
+  },
+  'the-limit': {
+    topic:
+      'White dwarfs from a cold degenerate electron gas: mass and radius, why heavier is smaller, and the limiting mass 5.8/μₑ² solar masses',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After Inside a Star (or the stellar-evolution unit). It supports OpenStax Astronomy 2e chapter 23 and is a first look at why a limiting mass exists at all.',
+    overview:
+      'Students integrate a white dwarf from a central density. At 3.2 million g/cm³ (carbon and oxygen) it has 0.597 solar masses and 8,864 km; at 10⁹ it has 1.367 and 2,470 km; at 10¹¹ it has 1.450, against a limit of 1.456 that the integration approaches and never passes. A hydrogen star (μₑ = 1) would have 5.82 and an iron composition (μₑ = 2.15) 1.26. The depths find the typical dwarf’s mean density (4.07 × 10⁵ g/cm³) and the six percent of mass a hundredfold density adds near the limit.',
+    priorKnowledge: [
+      'Inside a Star (hydrostatic equilibrium)',
+      'The idea that particles cannot all be in the same state',
+      'Orders of magnitude in size and density',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Degenerate electrons hold the star up, at any temperature',
+        body: 'The pressure comes from the exclusion principle; the star can be cold and still not collapse.',
+      },
+      {
+        heading: 'Heavier is smaller',
+        body: 'More mass presses the electrons closer, so the radius falls as the mass rises, from planet-sized to a few thousand kilometers.',
+      },
+      {
+        heading: 'The limit emerges',
+        body: 'When the electrons are relativistic the pressure rises as ρ^(4/3), the rate gravity strengthens, and the mass saturates at 5.8/μₑ² solar masses.',
+      },
+    ],
+    features: [
+      {
+        name: 'White-dwarf instrument (interiors family)',
+        text: 'The mass-radius relation (every central density from 10⁴ to 10¹¹ g/cm³) with your dwarf, the limiting mass as a dashed line, and the nucleons-per-electron slider; listed mass, radius (solar radii and kilometers), mean density, central Fermi momentum, regime and fraction of the limit.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the mean density by hand, 4.07 × 10⁵ g/cm³. Advanced: the 6 percent a hundredfold density adds near the limit.',
+      },
+      {
+        name: 'No observed white dwarfs',
+        text: 'The instrument draws no observed dwarfs: a public compilation’s terms could not be confirmed in this session (D-INTERIOR-01). The model’s radius is a few percent larger than the best published relations.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A white dwarf over the limit runs out of fuel and collapses.',
+        response:
+          'A white dwarf has no fuel at any mass; the limit is where the electron pressure cannot keep up.',
+      },
+      {
+        claim: 'At 1.4 solar masses a white dwarf becomes a black hole.',
+        response: 'It collapses until neutrons hold it up, or it explodes.',
+      },
+      {
+        claim: 'A more massive white dwarf is larger.',
+        response:
+          'It is smaller: 0.6 solar masses is planet-sized and 1.4 is under 3,000 km.',
+      },
+      {
+        claim: 'The limit is a fixed 1.4 for every star.',
+        response:
+          'It is 5.8/μₑ²: 1.46 for carbon and oxygen, 1.26 for iron and 5.8 for pure hydrogen; real stars add other effects.',
+      },
+    ],
+    teachingNotes: [
+      'The equation of state is Chandrasekhar’s cold, ideal, degenerate electron gas with ions supplying mass only; Coulomb corrections, layers, temperature and the instabilities that end a real dwarf below the limit are left out (STELLAR_STRUCTURE.md).',
+      'The limit is checked three ways in tests/stellarKernel.test.js: the integration at central x = 10⁴ against the closed form from the n = 3 polytrope (within 2 × 10⁻⁴), Chandrasekhar’s 5.836/μₑ², and the n = 3/2 scaling at low density.',
+      'The instrument’s radius is about 3 percent above the Eggleton fit at 0.6 solar masses; say so if students compare it with observed radii.',
+      'The iron case (μₑ = 2.15, limit 1.26) is the cold bound for a star’s core, not the collapse mass of a real supernova core.',
+    ],
+    discussion: [
+      'Why does the exclusion principle give a pressure that does not depend on temperature?',
+      'What changes about the pressure when the electrons become relativistic?',
+      'What would a measured white dwarf at 1.5 solar masses tell you about the composition?',
+    ],
+    extensions: [
+      'Return to Lives of Stars and find where the model dwarfs sit on the cooling track.',
+      'Compare with the neutron-star case in the gravitational-wave investigations.',
+    ],
+    modelNotes:
+      'js/kernels/stellar/whiteDwarf.js: P(x) and ρ(x) of the degenerate gas, integrated in q = x² (regular at the surface) by RK4; the limit is also the closed form from the n = 3 polytrope. See STELLAR_STRUCTURE.md.',
+  },
+  'the-beat-of-a-star': {
+    topic:
+      'Finding a pulsating star’s period from a light curve: period search, folding, a bootstrap error, and the aliases of once-a-night sampling',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'After Lives of Stars, in the variable-star or distance-ladder unit. It supports OpenStax Astronomy 2e chapter 19 and leads into Leavitt’s Law.',
+    overview:
+      'Students search two authentic TESS light curves for their periods: SU Draconis, 0.66041 ± 0.00015 days over 39 cycles, and Eta Aquilae, 7.226 ± 0.030 days over 3.7. They fold on twice the period and on one 2 percent off, then keep SU Draconis once a night: the highest peak moves to 1.97 days, three times the true period, with equal peaks at 0.66 and 0.40 days. The depths find the peak width from the run length, the phase drift of a 2 percent error (0.77 cycles), the longer alias (1.945 days), and the bootstrap error against the catalog period (1.7 sigma).',
+    priorKnowledge: [
+      'Lives of Stars (pulsation and the instability strip)',
+      'Magnitudes as a brightness scale',
+      'The idea of a frequency and a period',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A period search scores every trial period',
+        body: 'The peak of the power is the period; its width is about the period squared over the length of the run.',
+      },
+      {
+        heading: 'Cycles in the run set the error',
+        body: 'Forty cycles fix a period to 0.02 percent; fewer than four fix it to 0.4 percent.',
+      },
+      {
+        heading: 'Sampling makes aliases',
+        body: 'Observing once a day cannot tell a frequency from that frequency plus or minus one per day.',
+      },
+    ],
+    features: [
+      {
+        name: 'The error and the aliases',
+        text: 'The bootstrap error is a floor because it treats the points as independent; the aliases listed are the periods one cycle per day away in frequency, where a once-a-night search puts its false peaks.',
+      },
+      {
+        name: 'Fold instrument (variables family)',
+        text: 'Three series (SU Draconis, Eta Aquilae, SU Draconis kept once a night), three pictures (time, period search, fold), a fold on half, once or twice the period and an offset of up to 5 percent; the readout lists the peak, its width, the refined period, the bootstrap error, cycles, both aliases, amplitude and R21.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the peak width P²/T, the 0.77-cycle drift, the alias by hand. Advanced: the shift of the refined period as a share of the peak width, and the sigma count against the catalog.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A period search finds the period by counting cycles.',
+        response:
+          'It scores every trial period against the whole run; counting is what the width of the peak limits.',
+      },
+      {
+        claim: 'The highest peak is always the true period.',
+        response:
+          'Once a night the highest peak is an alias, three times the true period.',
+      },
+      {
+        claim: 'A period that is a few percent off still folds well.',
+        response:
+          'Over 39 cycles a 2 percent error drifts 0.77 of a cycle and the fold is a band.',
+      },
+      {
+        claim: 'More points mean a better period.',
+        response:
+          'Length of the run, not the number of points, sets the width: Eta Aquilae has 541 points and 3.7 cycles.',
+      },
+    ],
+    teachingNotes: [
+      'A period search on an eclipsing binary lands on half its orbit; the Which Kind of Variable investigation meets the consequence.',
+      'The data are PDCSAP flux from TESS in the TESS band, binned; the bootstrap treats points as independent so its error is a floor (TIME_DOMAIN_LADDER.md).',
+      'Eta Aquilae is saturated and half the cadences of sector 54 are flagged, hence sector 81; the run recovers 7.226 days against the catalog 7.1766.',
+      'The nightly series keeps one bin from 0.3 to 0.4 day after each integer BTJD, a stand-in for a ground site.',
+      'Pulsar timing is out of scope here and is listed as not modeled on the model page.',
+    ],
+    discussion: [
+      'Why does a longer run narrow the peak?',
+      'How would a second observatory at another longitude change the aliases?',
+      'What would a period of exactly one day do to a once-a-night search?',
+    ],
+    extensions: [
+      'Thin the whole run of SU Draconis by hand to one point in four and watch the width of the peak grow only a little: the run, not the number of points, sets the width.',
+      'Fit the Cepheid relation in Leavitt’s Law.',
+      'Search the nightly series after thinning it further.',
+    ],
+    modelNotes:
+      'js/kernels/variables/period.js (Lomb-Scargle, width at half power, harmonic refinement, bootstrap, aliases) and fit.js. See TIME_DOMAIN_LADDER.md. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
+  },
+  'leavitts-law': {
+    topic:
+      'The Cepheid period-luminosity relation fitted on the Large Magellanic Cloud: slope, zero point, scatter and the Wesenheit magnitude',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'After The Beat of a Star. It supports OpenStax Astronomy 2e chapter 19 and precedes The First Rung.',
+    overview:
+      'Students read the least-squares fit to 339 authentic Hubble Cepheids of the Large Magellanic Cloud: slope −3.29 ± 0.02 mag per dex, 12.60 at 10 days, scatter 0.089 mag, and 0.040 mag of dust left per magnitude of A_V (0.207 for the infrared band alone). A tenfold step in period is 3.3 magnitudes, a factor of 21. The depths read a 30-day Cepheid off the line (11.03), turn one scatter into 4.1 percent in distance, compute the factor 20.7 and the zero point’s error 0.0049.',
+    priorKnowledge: [
+      'The Beat of a Star',
+      'Magnitudes and the distance modulus',
+      'Logarithms',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Longer period, brighter star',
+        body: 'The line rises to the right because magnitudes run backward: a brighter star has a smaller magnitude, so the fitted slope is negative.',
+      },
+      {
+        heading: 'One galaxy, one distance',
+        body: 'Fitting within the Cloud makes differences in apparent magnitude into differences in luminosity, because every star is at nearly one distance.',
+      },
+      {
+        heading: 'Wesenheit cancels dust',
+        body: 'A combination of one infrared and two visible bands leaves only 0.04 magnitudes per magnitude of A_V, where the infrared band alone leaves 0.21.',
+      },
+    ],
+    features: [
+      {
+        name: 'What is authentic',
+        text: 'The 339 Cepheids are Hubble measurements (Riess et al. 2022, CC BY 4.0); the relation, the fit and the dust residual are computed in the browser by the variables kernel.',
+      },
+      {
+        name: 'Leavitt-law instrument (variables family)',
+        text: 'The calibration galaxy with its fit; readout lists the stars kept, slope, zero point, scatter and the Wesenheit dust residual.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: 11.03 at 30 days, 4.1 percent per scatter. Advanced: the factor 20.7 and the 0.0049 zero-point error.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The Large Magellanic Cloud is special for Cepheids.',
+        response:
+          'It is only a galaxy whose distance is independently known, so it can calibrate.',
+      },
+      {
+        claim: 'A brighter star has a larger magnitude.',
+        response:
+          'Magnitudes run backward: brighter is smaller, so the slope is negative.',
+      },
+      {
+        claim: 'The relation can be fitted on a mixture of galaxies.',
+        response:
+          'Different distances would scatter the magnitudes; one galaxy is one distance.',
+      },
+      {
+        claim: 'A Wesenheit magnitude is brighter.',
+        response: 'It is built so dust leaves it almost unchanged.',
+      },
+    ],
+    teachingNotes: [
+      'The relation is fitted against log10 P minus 1, so the zero point is the magnitude at 10 days and is nearly independent of the slope.',
+      'Data: Riess et al. 2022 Cepheid table (CC BY 4.0), 5 to 120 days, one 3.3 sigma clip; metallicity and crowding are not corrected and the table’s errors carry no covariance (D-LADDER-01).',
+      'Wesenheit residual 0.040 uses the radiation kernel’s extinction law at R_V 3.3.',
+      'The Cloud’s distance modulus 18.477 ± 0.026 is Pietrzynski et al. 2019 and enters in the next investigation.',
+    ],
+    discussion: [
+      'Why must the stars be at one distance to fit the relation?',
+      'What would change the dust residual?',
+      'Why does the sign of the slope surprise students?',
+    ],
+    extensions: [
+      'Compare the relation’s slope with the scatter and ask how many Cepheids a galaxy needs for a distance good to five percent.',
+      'Continue with The First Rung.',
+    ],
+    modelNotes:
+      'js/kernels/variables/ladder.js: fitLine, fitLeavitt, wesenheitResidual. See TIME_DOMAIN_LADDER.md. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
+  },
+  'the-first-rung': {
+    topic:
+      'The distance to NGC 4258 and M101 from Cepheids, an independent maser check, and a four-term error budget',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'After Leavitt’s Law. It supports OpenStax Astronomy 2e chapter 19. The link to the Hubble constant is made in Standard Candles and in this investigation’s last advanced step.',
+    overview:
+      'The Cloud’s relation is slid onto Cepheids of NGC 4258 (μ 29.40 ± 0.05, 7.59 ± 0.18 Mpc, 111 stars) and M101 (29.21 ± 0.05, 6.95 ± 0.17 Mpc, 65 stars). Water masers give 29.397 ± 0.032 for NGC 4258, agreeing to 0.1 of the combined error. The budget: host scatter 0.043, Cloud distance 0.026, calibration scatter 0.0048, slope 0.00015. The depths compute the distance from the modulus, add the budget in quadrature (0.0505), find 2.35 percent, and show ten galaxies reach only 0.030 because the anchor is shared.',
+    priorKnowledge: [
+      'Leavitt’s Law',
+      'The distance modulus',
+      'Combining independent errors',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The slide is the distance',
+        body: 'The shift in magnitudes between the relation and the host’s Cepheids is the distance modulus.',
+      },
+      {
+        heading: 'Agreement with an independent method',
+        body: 'Masers give a geometric distance with no Cepheid in it, so agreement within the errors is a real check on the Cepheid distance of NGC 4258.',
+      },
+      {
+        heading: 'Shared errors do not average away',
+        body: 'The anchor’s distance is shared by every galaxy calibrated on it, so averaging many galaxies cannot shrink it, and it limits the whole ladder.',
+      },
+    ],
+    features: [
+      {
+        name: 'The budget rows',
+        text: 'Four rows, host scatter, calibration scatter, slope and the Cloud’s distance, added in quadrature to the total; the maser modulus is listed for NGC 4258 only.',
+      },
+      {
+        name: 'Leavitt-law instrument on the host galaxies',
+        text: 'The slid relation, modulus, distance in megaparsecs, four budget rows and the maser modulus for NGC 4258.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the distance by hand and the quadrature sum. Advanced: the percentage error and the ten-galaxy mean.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim:
+          'The Cepheid distance is a measurement of the galaxy’s light only.',
+        response:
+          'It uses the period, the relation and the Cloud’s distance; each carries an error.',
+      },
+      {
+        claim: 'More Cepheids shrink every error.',
+        response:
+          'Only the scatter terms fall as 1/√N; the anchor’s distance does not.',
+      },
+      {
+        claim: 'Errors add plainly.',
+        response:
+          'Independent errors add in quadrature; the plain sum is 0.074 against 0.051.',
+      },
+      {
+        claim: 'Agreement with masers proves the ladder.',
+        response:
+          'It checks one galaxy within its errors; it does not test crowding or metallicity.',
+      },
+    ],
+    teachingNotes: [
+      'The maser check is not a proof: the two distances agree to 0.1 of their combined error, which one galaxy cannot make a test of the whole ladder.',
+      'Hosts are thinned to every fourth star in the shipped table; the host scatter stands in for the unpublished covariance.',
+      'The Hubble constant is not derived here; the last advanced step only passes the rung’s 2.35 percent to H0 = 70, and Standard Candles shows the supernova side (COSMOLOGY.md).',
+      'Error-budget coverage over simulated hosts holds one sigma for 60 to 78 percent of the truths, so the budget is slightly optimistic.',
+    ],
+    discussion: [
+      'Which budget term would you attack first?',
+      'Why is the anchor’s distance so closely studied?',
+      'What would a metallicity correction do?',
+    ],
+    extensions: [
+      'Ask which single new measurement, a better Cloud distance or more host Cepheids, would improve the distance more.',
+      'Which Kind of Variable.',
+    ],
+    modelNotes:
+      'js/kernels/variables/ladder.js: ladderDistance with the budget of host, anchor, slope and anchor distance. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
+  },
+  'which-kind-of-variable': {
+    topic:
+      'Classifying five kinds of variable star by period, amplitude and light-curve shape, with a confusion table',
+    difficulty: 'Introductory (model-driven)',
+    placement:
+      'After The Beat of a Star. It supports OpenStax Astronomy 2e chapter 19.',
+    overview:
+      'A synthetic labeled sample of 120 stars (24 each of RRab, RRc, Cepheid, delta Scuti, eclipsing binary) is classified by five nearest neighbors, leave one out. Period alone: 83.3 percent, eclipsing binaries 29.2 (6 called RRab, 7 right). With amplitude 90.8 and 54.2; with the shape 99.2 and 100. The depths compute the accuracy from the table (100/120), the pulsator-only accuracy (96.9) and the accuracy under a skewed mix (48.5).',
+    priorKnowledge: [
+      'Magnitudes and what a light curve is',
+      'The Beat of a Star (period, amplitude, R21)',
+      'Percentages and weighted averages',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A confusion table shows who is mistaken for whom',
+        body: 'Accuracy averages over the kinds and hides the weakest: 83 percent overall with the period alone, yet eclipsing binaries are found only 29 percent of the time.',
+      },
+      {
+        heading: 'Each measurement buys something',
+        body: 'Each added measurement buys something: the amplitude lifts the eclipsing binaries from 29 to 54 percent found, and the shape of the curve lifts them to 100.',
+      },
+      {
+        heading: 'Accuracy depends on the mix',
+        body: 'Accuracy depends on the mix of kinds: the same classifier scores 48.5 percent when binaries are ten times as common as each pulsator kind.',
+      },
+    ],
+    features: [
+      {
+        name: 'The confusion rows',
+        text: 'One row per true kind, counting what it was called, and the share found of each kind; the picture can show amplitude or R21 against period.',
+      },
+      {
+        name: 'Variable-class instrument',
+        text: 'Amplitude or shape against period with five marks, three feature sets, the confusion rows and per-kind shares found.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: accuracy by hand, the four easy kinds. Advanced: the reweighted accuracy.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The classifier learns the physics of each kind.',
+        response:
+          'It votes among the five nearest stars in a few measured numbers and knows nothing else.',
+      },
+      {
+        claim: '99 percent accuracy means the classifier is finished.',
+        response:
+          'It is the average over a balanced synthetic sample and says nothing of a real mix.',
+      },
+      {
+        claim: 'Eclipsing binaries do not vary.',
+        response:
+          'They dim at each eclipse; their period overlaps the pulsators’.',
+      },
+      {
+        claim: 'The sample is survey data.',
+        response:
+          'It is synthetic, from stylised templates through the periodic forward model.',
+      },
+    ],
+    teachingNotes: [
+      'Leave-one-out means each star is classified by the other 119, so no star is its own neighbor.',
+      'The sample is variables/class-sample.json, held to the kernel by a test; five classes only, no blends, outbursts or second periods.',
+      'An eclipsing binary’s period search lands on half its orbit; its R21 is about 0.9, pulsators at most 0.56.',
+      'Leave-one-out accuracy 0.82, 0.88, 0.99 for the three feature sets in the kernel tests (seed variables-sample).',
+    ],
+    discussion: [
+      'Which measurement would you add next for the delta Scuti error?',
+      'Why does a balanced sample flatter a classifier?',
+      'What would blends do to the table?',
+    ],
+    extensions: [
+      'Switch the picture between amplitude and shape for each feature set and describe where the clusters of each kind overlap.',
+      'Return to The Beat of a Star and measure R21 for the two real stars.',
+    ],
+    modelNotes:
+      'js/kernels/variables/classify.js: five classes through the periodic forward model, measured by the same pipeline, kNN leave one out. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/variableInvestigations.test.js.',
+  },
+  'the-expanding-universe': {
+    topic:
+      'Hubble’s law as a straight line through the origin, fitted to Hubble’s own 24 nebulae and to Dark Energy Survey supernovae, and why the slope depends on the sample',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'In the galaxies or cosmology unit, after the distance ladder if you have one. It supports OpenStax Astronomy 2e chapter 26 and leads into Standard Candles and Where Galaxies Live.',
+    overview:
+      'Students fit a line through the origin to Hubble’s 24 nebulae of 1929 (424 ± 42 km/s/Mpc, six times today’s value; with a free intercept 454 ± 75) and to the DES supernovae: 66.33 ± 0.24 out to z = 0.1 (197 objects), 59.35 ± 0.20 out to z = 0.5 (955). They see that the slope falls by 22 combined errors as the sample reaches farther, because a straight line is the wrong shape beyond small redshift. The depths compute the Hubble time (2.31 Gyr for 424), a velocity from a distance, the slope’s 0.37 percent error and the 22.3-sigma gap.',
+    priorKnowledge: [
+      'Redshift and the Doppler shift',
+      'Slope of a line',
+      'Megaparsecs and kilometers per second',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A slope is a speed over a distance',
+        body: 'Distances that are too small make a slope that is too large: Hubble’s was six times today’s value.',
+      },
+      {
+        heading: 'The line is only the nearby limit',
+        body: 'Beyond a redshift of a few hundredths, velocity against distance bends, so the slope depends on how far the sample reaches.',
+      },
+      {
+        heading: 'The supernova scale is not measured here',
+        body: 'The distances come on the survey’s own scale (H0 = 70), so the modern slope shows the effect of the sample, not the scale.',
+      },
+    ],
+    features: [
+      {
+        name: 'The slope and its error',
+        text: 'The slope through the origin, its error from the scatter of the points, and the slope with a free intercept for Hubble’s table; the number of objects and the ratio to 70 are listed.',
+      },
+      {
+        name: 'Hubble-law instrument (cosmology family)',
+        text: 'Two samples (the 24 nebulae, the DES supernovae out to a redshift you set), a scatter plot with the fitted line, a data-source label and the readout rows.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the Hubble time 977.8 ÷ H0 and v = H0 d. Advanced: the relative error (0.37 percent) and the 22.3 standard deviations between the two slopes.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Hubble discovered the expansion at about 70 km/s/Mpc.',
+        response:
+          'His line was good and his scale was not: his slope is about 424.',
+      },
+      {
+        claim: 'A slope that changes with the sample means bad data.',
+        response:
+          'The change is 22 times the error and systematic: the relation is not a line at large redshift.',
+      },
+      {
+        claim: 'Recession velocities are the speeds of galaxies through space.',
+        response:
+          'They are the stretching of space; the line is the linear limit of that.',
+      },
+      {
+        claim: 'The Hubble constant is measured by these supernovae.',
+        response:
+          'Their distances come on the release’s scale; the scale comes from the distance ladder.',
+      },
+    ],
+    teachingNotes: [
+      'The supernova distances come from the DES-SN5YR Hubble diagram’s distance moduli, on the release scale H0 = 70; the supernova fit therefore cannot measure the scale (COSMOLOGY.md).',
+      'The instrument converts cz to a velocity without relativistic corrections, which is a stated simplification; the bend of the relation is the point of the last steps.',
+      'Hubble printed no errors; the instrument gives each nebula the same error (100 km/s, the scatter of the points) and the slope’s error comes from the scatter about the line.',
+      'Peculiar velocities are not removed; DES has few supernovae below z of 0.03, where they matter most.',
+    ],
+    discussion: [
+      'Why would distances that are too small make the universe look too young?',
+      'What would you need to measure to know the true scale of the supernova distances?',
+      'Where would you expect the line to bend, and which way?',
+    ],
+    extensions: [
+      'Continue with Standard Candles, which shows how a calibration error becomes an error in the Hubble constant.',
+      'Set the supernova range to a few values between 0.05 and 0.5 and plot the slope against the range.',
+    ],
+    modelNotes:
+      'js/kernels/cosmology/fit.js: fitHubbleLaw (weighted least squares through the origin, or with an intercept). Datasets hubble-1929-table1 and des-sn5yr-hd (COSMOLOGY.md). The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
+  },
+  'standard-candles': {
+    topic:
+      'Type Ia supernovae as standard candles, the degeneracy of the Hubble constant with their absolute magnitude, and how a calibration error is passed up the distance ladder',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'After The Expanding Universe, and after The First Rung if you teach the variable-star investigations. It supports OpenStax Astronomy 2e chapter 26.',
+    overview:
+      'Students read the 1,829 DES supernovae against redshift (chi-square 1688 for 1827 degrees of freedom at the best fit), then set a 0.1 mag error in the absolute magnitude: the implied H0 falls from 70 to 66.85, 4.5 percent, and the chi-square does not move. The supernovae fix the shape of the curve and not the scale. A 0.051 mag Cepheid distance error passes on 2.4 percent. The depths compute the 4.71 percent distance factor and the 4.5 percent fall, the 0.0216 mag a 1 percent H0 needs, and the 0.106 mag of a 5 percent gap.',
+    priorKnowledge: [
+      'The Expanding Universe',
+      'The distance modulus',
+      'Logarithms',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A candle gives distance only through its calibration',
+        body: 'Brightness and true luminosity give a distance; an error in the luminosity is the same fractional error in every distance.',
+      },
+      {
+        heading: 'The scale is degenerate with the calibration',
+        body: 'A change of H0 and a change of the absolute magnitude shift every modulus alike, and a fit with a free offset cannot tell them apart.',
+      },
+      {
+        heading: 'Errors are passed up the ladder',
+        body: 'Each rung of the distance ladder inherits the error of the rung below it and adds its own, so the top rung carries them all.',
+      },
+    ],
+    features: [
+      {
+        name: 'The calibration control',
+        text: 'The error in the absolute magnitude moves the implied Hubble constant (70 × 10^(−error/5)) and the percent change per 0.1 mag, and leaves the chi-square where it was.',
+      },
+      {
+        name: 'Hubble-diagram instrument (cosmology family)',
+        text: 'Moduli against redshift for 1,829 supernovae with a flat Lambda-CDM curve and its offset, the best fit, chi-square, the profile interval and the degeneracy range.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the distance factor and the Hubble-constant fall of 0.1 mag. Advanced: the calibration a 1 percent constant needs and a 5 percent gap in magnitudes.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A good chi-square means a good Hubble constant.',
+        response:
+          'The chi-square is the same for any H0: the fit is blind to the scale.',
+      },
+      {
+        claim: 'A fainter candle makes H0 larger.',
+        response:
+          'A fainter candle is farther, so every distance is larger and H0 is smaller.',
+      },
+      {
+        claim: '0.05 mag is negligible.',
+        response: 'It is 2.4 percent in distance, and every rung adds its own.',
+      },
+      {
+        claim: 'Supernovae measure H0 by themselves.',
+        response:
+          'They need the rungs below them, such as Cepheids, to fix the scale.',
+      },
+    ],
+    teachingNotes: [
+      'The “error in the absolute magnitude” stands for whatever the calibration of the lower rungs would change; the instrument does not recompute the ladder.',
+      'The First Rung’s 0.051 mag is quoted, not computed here, so this investigation does not need that one to be taken first.',
+      'The DES moduli carry the statistical errors only; the covariance of a real analysis (calibration, selection, host mass) is not in the table (COSMOLOGY.md).',
+      'The chi-square range over H0 50 to 90 is 2.5e-12 in the validation: the degeneracy is exact, not approximate.',
+    ],
+    discussion: [
+      'Where would you look for a calibration error that affects every supernova?',
+      'Why might a 5 percent disagreement between two methods be a calibration, not a physics, difference?',
+      'How would you check a calibration with a method that does not use supernovae?',
+    ],
+    extensions: [
+      'Continue with The Shape of Expansion.',
+      'If you teach the variable-star investigations, take The First Rung first and compare its 2.4 percent with the 4.5 percent a tenth of a magnitude gives.',
+    ],
+    modelNotes:
+      'js/kernels/cosmology/fit.js: the flat Lambda-CDM supernova model, the free offset and h0Degeneracy; js/kernels/cosmology/flrw.js for the moduli. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
+  },
+  'the-shape-of-expansion': {
+    topic:
+      'The matter density of a flat universe from 1,829 supernovae: the fit, its statistical interval, what the interval leaves out, and what the supernovae cannot determine',
+    difficulty: 'Advanced (data-driven)',
+    placement:
+      'After Standard Candles, near the end of a cosmology unit. It supports OpenStax Astronomy 2e chapter 29 and is the most demanding of the four.',
+    overview:
+      'Students see that a matter-only universe (Ωm = 1) fits 1,615 in chi-square worse than the best fit (3303 against 1688), fit Ωm = 0.361 (0.349 to 0.372) with the rest a cosmological constant, find that 0.30 is 30.9 above (5.6 sigma) and learn why the interval is too narrow (the published 0.352 ± 0.017 carries systematic errors), and see that moving the absolute magnitude by 0.15 mag changes H0 implied to 65.33 and leaves chi-square at 1687.9. The depths compute q0 = −0.459, the 63.9 percent dark-energy share, 5.56 sigma and the 1.48 ratio of intervals.',
+    priorKnowledge: [
+      'Standard Candles',
+      'Chi-square as a measure of fit',
+      'The idea of a model with a free parameter',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The curve is the history of the expansion',
+        body: 'Supernovae fainter than a decelerating universe predicts mean the expansion has sped up.',
+      },
+      {
+        heading: 'A statistical interval is a floor',
+        body: 'It shrinks as more supernovae are added; errors that every supernova shares do not shrink with the sample.',
+      },
+      {
+        heading: 'Shape, not scale',
+        body: 'The supernovae fix Ωm for a flat universe; H0 is degenerate with the calibration.',
+      },
+    ],
+    features: [
+      {
+        name: 'The two pictures',
+        text: 'Moduli against redshift, or the residual from an empty universe, with the curve for the Ωm you set and the offset that fits best.',
+      },
+      {
+        name: 'Hubble-diagram instrument (cosmology family)',
+        text: 'The best-fit Ωm and 68 percent interval from the profile, chi-square at the curve you chose and above the best fit, the H0 range, and the implied H0.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: q0 and the dark-energy share. Advanced: the sigma count of 0.30 and the published interval against this one.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: '0.30 is ruled out at 5.6 sigma.',
+        response:
+          'Only by statistical errors alone; the published analysis, with its systematics, is 0.352 ± 0.017.',
+      },
+      {
+        claim: 'The fit measures H0.',
+        response: 'The chi-square is flat in H0 once the offset is free.',
+      },
+      {
+        claim: 'A matter-only universe is the default.',
+        response:
+          'It is 1,615 worse in chi-square; the data prefer acceleration.',
+      },
+      {
+        claim: 'The supernovae prove dark energy is a cosmological constant.',
+        response: 'They fit one with w = −1; other forms are not tested here.',
+      },
+    ],
+    teachingNotes: [
+      'The fit assumes a flat universe, w = −1 and no radiation (COSMOLOGY.md); the best Ωm 0.3607 sits 0.009 from the published 0.352, inside the published error.',
+      'The residual picture subtracts an empty universe (Ωm = ΩΛ = 0), not the best fit, so the curve for the best fit bows rather than lying flat.',
+      'The validation covers 200 seeded synthetic diagrams, with coverage 67.5 percent for the 68 percent interval (cosmology:validate).',
+      'The 1,827 degrees of freedom follow from 1,829 supernovae less two fitted parameters; the offset is solved, not fitted by hand.',
+    ],
+    discussion: [
+      'What would a curved universe do to the fit?',
+      'Which errors would you add to make the interval honest?',
+      'Why can a fit be excellent and the constant still be unknown?',
+    ],
+    extensions: [
+      'Fit a different range of redshift in the Analysis Lab and compare the intervals.',
+      'Compare the published 0.352 ± 0.017 with the instrument’s 0.361 and say why the two intervals differ in width.',
+    ],
+    modelNotes:
+      'js/kernels/cosmology/fit.js: fitSupernovae (flat Lambda-CDM, profile interval) and h0Degeneracy; js/kernels/cosmology/flrw.js (Mattig for the open comparison). The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
+  },
+  'where-galaxies-live': {
+    topic:
+      'A redshift survey as a map: 2,911 SDSS galaxies in a wedge, the clustering of counts in cells, and the thinning of a flux-limited sample with distance',
+    difficulty: 'Introductory (data-driven)',
+    placement:
+      'After The Expanding Universe, in the large-scale structure part of a galaxies unit. It supports OpenStax Astronomy 2e chapter 28 and previews the selection-effects investigations.',
+    overview:
+      'Students place 2,911 galaxies of an SDSS strip (120° by 0.5°, r < 17.77) in a wedge: 363 out to z = 0.04 (170 Mpc), all out to z = 0.12 (500 Mpc). The variance over the mean of counts in 5° cells is 9.79 against 1 for a random scatter. The density falls from 15,800 to 4,860 galaxies per million cubic Mpc between 100 and 300 Mpc, and they decide that is the survey’s flux limit, not a void. The depths compute the density ratio 3.26, a shell volume 5,807 Mpc³, the luminosity factor 9 and 2.39 mag.',
+    priorKnowledge: [
+      'The Expanding Universe',
+      'Magnitudes and the inverse-square law',
+      'Right ascension',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A redshift and a direction make a position',
+        body: 'The distance comes from the redshift through the expansion; the direction from right ascension.',
+      },
+      {
+        heading: 'Galaxies are clustered',
+        body: 'Counts in cells vary far more than chance, which would give a variance over mean of 1.',
+      },
+      {
+        heading: 'A flux limit thins a sample with distance',
+        body: 'Far away only the brightest galaxies make the cut, so a falling density is selection, not a void.',
+      },
+    ],
+    features: [
+      {
+        name: 'The wedge and the density picture',
+        text: 'The wedge from above with the observer at the bottom, or the density in shells of 25 Mpc against distance; the distances use the Ωm you set.',
+      },
+      {
+        name: 'Redshift-wedge instrument (cosmology family)',
+        text: 'Galaxies shown, the farthest distance, the variance over mean averaged over shells, and the near and far shell densities.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the density ratio and a shell volume. Advanced: the luminosity factor of a flux cut from 100 to 300 Mpc, and the same in magnitudes.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The galaxies are scattered evenly.',
+        response:
+          'They gather in clusters and walls with voids between; the variance over mean is about 10.',
+      },
+      {
+        claim: 'The thinning shows we live in a void.',
+        response:
+          'The flux limit of the survey explains it, with no new physics needed.',
+      },
+      {
+        claim: 'A redshift is a pure distance.',
+        response:
+          'Peculiar motions distort it along the line of sight, which stretches clusters in the wedge.',
+      },
+      {
+        claim: 'The wedge is a picture of the whole sky.',
+        response:
+          'It is a strip half a degree thick, so it is a slice and not a map of the whole sky.',
+      },
+    ],
+    teachingNotes: [
+      'The strip is the SDSS Legacy main sample at declination 0 to 0.5 degrees (dataset sdss-dr18-redshift-slice); it is flux limited at r < 17.77, so its density falls with distance by selection (COSMOLOGY.md).',
+      'The distances are comoving distances in a flat universe with H0 = 70 and the Ωm set by the control; changing Ωm from 0.1 to 0.5 moves the farthest galaxy by under 4 percent.',
+      'The variance over mean is averaged over shells of 25 Mpc from 100 Mpc, with 24 cells of 5° in right ascension; a shell with no galaxies does not count.',
+      'The correction for the flux limit is the subject of the selection-effects investigations; this investigation only shows the need.',
+    ],
+    discussion: [
+      'What would a map of a volume-limited sample look like?',
+      'Why does the wedge show walls and voids rather than a smooth fog?',
+      'How would a galaxy’s own motion change its place in the wedge?',
+    ],
+    extensions: [
+      'Continue with the selection-effects investigations, which correct a sample for its limit.',
+      'Change the matter density and watch the farthest galaxy and the shell densities move.',
+    ],
+    modelNotes:
+      'js/kernels/cosmology/flrw.js: comovingDistance and wedgePoint; the strip is dataset sdss-dr18-redshift-slice. The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/cosmologyInvestigations.test.js.',
+  },
+  'what-a-ccd-records': {
+    topic:
+      'What a CCD adds to a star’s light: bias, dark and flat frames, cosmic rays and saturation, on synthetic frames with a known truth',
+    difficulty: 'Introductory (calculation and synthetic data)',
+    placement:
+      'The first of the three observing investigations on detectors, before Signal, Noise and Exposure and A Variable Star From Frames, and a good lead-in to Transit Photometry. It supports OpenStax Astronomy 2e chapter 6.',
+    overview:
+      'Students read a calibration set from a synthetic CCD: a master bias of 500.4 counts and a read noise of 8.05 electrons, a dark current of 0.100 electron a second (12 electrons in 120 s), a flat whose corner is 76.2 percent of the center and a gain of 1.52 electrons per count. They predict, then see, that dividing by the flat raises star B from 47,296 to 54,083 electrons (truth 53,988), find the bias and dark are subtracted and the flat divided, read 4 cosmic-ray pixels flagged and 13 saturated pixels, and find star D’s light 39 percent low with an error bar that cannot see it. The depths convert counts to electrons, find where the dark current’s noise matches the read noise (648 s), and count the 663 error bars star D is short.',
+    priorKnowledge: [
+      'What a pixel is and what a count is',
+      'Averages and scatter',
+      'Percent as a share of a whole',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Each calibration frame measures one thing the camera adds',
+        body: 'A bias is a zero-second exposure (the offset and read noise), a dark is a closed shutter over time (dark current), a flat is an even light (sensitivity of every pixel and the optics).',
+      },
+      {
+        heading: 'Subtract what adds, divide what multiplies',
+        body: 'The bias and dark add counts and are subtracted first; the flat is a sensitivity that multiplies the light and is divided last.',
+      },
+      {
+        heading: 'Some losses leave no trace in the error bar',
+        body: 'A saturated pixel stops counting; the error bar holds photon and read noise and cannot know about light that was never recorded.',
+      },
+    ],
+    features: [
+      {
+        name: 'CCD frames instrument (detector family)',
+        text: 'A bias, a dark, a flat and a raw picture of four stars, then the picture after each calibration step, with the master levels, the pair-method read noise and gain, and each star’s net light against the truth.',
+      },
+      {
+        name: 'Synthetic, with a truth manifest',
+        text: 'Every frame is made by a stated forward model of a CCD from a seed, so every number has a known truth and the table shows it. No authentic frames ship (D-CALIB-01).',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the bias in electrons, the exposure at which the dark’s noise equals the read noise, the size of the flat’s correction. Advanced: the share of star D’s light lost and the shortfall in error bars.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The bias is a light leak or the dark current.',
+        response:
+          'It is the same for zero seconds as for ten minutes and with the shutter closed: an offset the electronics add so noise never pushes a pixel below zero.',
+      },
+      {
+        claim: 'A flat can be subtracted like a bias.',
+        response:
+          'A flat is a sensitivity: a pixel at 76 percent turns every star’s light into 76 percent as many counts, which only division undoes.',
+      },
+      {
+        claim: 'A small error bar means a good measurement.',
+        response:
+          'The error bar counts noise only. Star D’s is the smallest relative to its light and it is 39 percent short.',
+      },
+      {
+        claim: 'The cosmic-ray mask can fix a saturated star.',
+        response:
+          'It replaces isolated sharp pixels; a star’s core is smooth over several pixels and its full pixels hold no information beyond the full well.',
+      },
+    ],
+    teachingNotes: [
+      'Every frame is synthetic, generated from a seed; the investigation says so in the first step and the instrument’s first row. Do not describe the numbers as measurements of a real camera.',
+      'The gain, read noise and dark current are those of the model (1.5, 8, 0.1); the instrument recovers them from the frames, which is what the numbers in the table show.',
+      'Left out, and stated in the instrument: blooming, nonlinearity, one flat for every color and a round Gaussian star. A saturated star in a real camera also bleeds along its column.',
+      'The error is shown only once the frame is calibrated, because before that the bias is in the sky level and the CCD equation does not apply.',
+    ],
+    discussion: [
+      'Why does a bias frame have to be taken with the same read-out settings as the science frames?',
+      'What would go wrong if the flat were taken at a different color from the stars?',
+      'How would you know that a star in your own data is saturated?',
+    ],
+    extensions: [
+      'Continue with Signal, Noise and Exposure, or with A Variable Star From Frames.',
+      'In the Observatory, compare a curated image with these synthetic ones and ask which calibration frames it came with.',
+    ],
+    modelNotes:
+      'js/kernels/detector/frame.js (the forward model) and reduce.js (master frames, calibration, cosmic-ray mask, aperture photometry); js/detectorWidgets.js (ccd-frames). The numbers an investigation asks for are rows of the instrument’s readout, recomputed in tests/calibrationLessons.test.js.',
+  },
+  'signal-noise-and-exposure': {
+    topic:
+      'The CCD equation: the noise of a measurement from the star, the sky, the dark current and the read noise, and the exposure that reaches a target',
+    difficulty: 'Introductory (calculation)',
+    placement:
+      'After What a CCD Records. It can precede or follow A Variable Star From Frames. It supports OpenStax Astronomy 2e chapter 6.',
+    overview:
+      'Students use a stated 0.4 m telescope with a small CCD. A V = 15 star in 60 s at a dark site has 33,631 electrons in a 5-pixel aperture, a noise of 220.6 and a signal-to-noise of 152.5, limited by its own photons. They predict four times the exposure gives twice the quality; it gives 320.7, a ratio of 2.10. A V = 19 star in a 3-pixel aperture goes from 2.64 at 10 s to 8.11 at 40 s because the read noise (77 percent of the noise squared) is paid once per frame. A signal-to-noise of 100 takes 40.4 s in a suburb and 89.4 s under a bright moon (29.3 s at a dark site), and the faintest star at 5 is V = 19.33 in a minute and 0.96 magnitude fainter in four. The depths compute the photon-limited 183, the read noise shares, the 3.05 moon factor and the 0.75 magnitude of a pure square-root law.',
+    priorKnowledge: [
+      'What a Calibration Frame Is (What a CCD Records)',
+      'Squares and square roots',
+      'Magnitudes',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Noise adds as squares',
+        body: 'The star’s photon noise, the sky’s, the dark current’s and the read noise of every pixel add as variances, and the signal-to-noise is the star’s electrons over the square root of the sum.',
+      },
+      {
+        heading: 'Which term limits depends on the star and the exposure',
+        body: 'A bright star is limited by its own photons, a faint one in a short exposure by the read noise, and a faint one under a bright sky by the sky.',
+      },
+      {
+        heading: 'Time is how the lost quality is bought back',
+        body: 'The signal-to-noise grows as the square root of the exposure when the signal, sky and dark dominate, and faster while the read noise does.',
+      },
+    ],
+    features: [
+      {
+        name: 'Signal-to-noise instrument (detector family)',
+        text: 'The CCD equation for one star in a round aperture: the noise terms, the dominant term, the exposure that reaches a target, and the faintest star at a signal-to-noise of 5, with the curve against exposure.',
+      },
+      {
+        name: 'A calculation, not data',
+        text: 'The instrument says it is calculated for a stated 0.4 m telescope with 0.55 of the light reaching the detector. The star’s photon rate comes from the radiation kernel’s V band.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the photon-limited signal-to-noise and the read noise’s share for a bright and a faint star. Advanced: the cost of a moon in time and what a pure square-root law would promise in magnitudes.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Four times the exposure always gives four times the quality.',
+        response:
+          'It gives twice when the photons dominate, about three times while the read noise does, never four.',
+      },
+      {
+        claim: 'The read noise is the main limit of every measurement.',
+        response:
+          'It is 13 percent of the noise squared for the bright star and 77 percent for the faint one in a short exposure.',
+      },
+      {
+        claim: 'A bright moon changes the star.',
+        response:
+          'The signal is the same; the sky adds noise, and the only remedy is time.',
+      },
+      {
+        claim: 'The calculator is a prediction of a real exposure.',
+        response:
+          'It leaves out flat-field error, seeing and sky gradients; a real calculator adds a margin.',
+      },
+    ],
+    teachingNotes: [
+      'The sky in the instrument is a rate per pixel from a stated surface brightness; “a dark site” is V 21.5 per square arcsecond, a suburb V 20, a bright moon V 18.5.',
+      'The CCD equation carries the small factor for measuring the sky from a finite ring, so the sky’s term is slightly above n times the sky per pixel.',
+      'The photon rate is the radiation kernel’s V band for a star of V = 0 (1017 photons per second per square centimeter per angstrom, against a published 1005); see CALIBRATION_LAB.md.',
+      'No published exposure-time table for a named instrument was available offline to compare against; the validation is the closed forms and the many-seed photometry.',
+    ],
+    discussion: [
+      'When would you take many short frames instead of one long one?',
+      'What does a suburb cost a survey of a hundred stars?',
+      'Which term would you reduce first for a faint star, and how?',
+    ],
+    extensions: [
+      'Continue with A Variable Star From Frames.',
+      'Work out the exposure for your own telescope’s aperture by scaling the photon rate by the collecting area.',
+    ],
+    modelNotes:
+      'js/kernels/detector/snr.js (noise terms, signal-to-noise, the exact inverse for the exposure) and bands.js and lab.js (the V-band photon rate and the stated telescope); js/detectorWidgets.js (ccd-snr). The numbers an investigation asks for are recomputed in tests/calibrationLessons.test.js.',
+  },
+  'a-variable-star-from-frames': {
+    topic:
+      'Differential photometry of forty calibrated synthetic frames: removing the cloud with a comparison star, a check star as the precision, and a sine fit with an error',
+    difficulty: 'Introductory (synthetic data)',
+    placement:
+      'After What a CCD Records, in a unit on observing or variable stars. It supports OpenStax Astronomy 2e chapter 6.',
+    overview:
+      'Students see a variable star measured alone wander by 0.070 mag over forty frames because thin cloud dims every star at once (the comparison star alone wanders in step). Against the comparison, the check star scatters by 0.0088 mag, 8.0 times less. The variable against the comparison shows a smooth variation: period 0.1223 d, amplitude 0.0417 ± 0.0018 mag, more than twenty errors and four to five times the check star’s scatter. The depths turn 0.0088 mag into 0.81 percent, the period into 2.93 hours, count 23 errors, and compare the uncalibrated night with the truth manifest (mean 0.313 against 0.346 mag).',
+    priorKnowledge: [
+      'What a CCD Records',
+      'Magnitudes',
+      'The idea of a period',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A common factor cancels in a ratio',
+        body: 'Cloud multiplies every star in a frame by the same factor; a comparison star divides it out, which a star measured alone cannot do.',
+      },
+      {
+        heading: 'A check star measures the precision',
+        body: 'A star that does not vary, measured exactly like the target, shows how much scatter noise alone gives.',
+      },
+      {
+        heading: 'A detection is an amplitude against its noise',
+        body: 'The fitted amplitude is many errors from zero and several times the check star’s scatter, and it repeats with a period.',
+      },
+    ],
+    features: [
+      {
+        name: 'Differential photometry instrument (detector family)',
+        text: 'Forty synthetic frames reduced with the same camera’s calibration set: the variable alone, the comparison alone, the variable against the comparison with the sine fit, and the check star, with the truth manifest on request.',
+      },
+      {
+        name: 'Truth manifest',
+        text: 'The series’ true period (0.12 d), amplitude (0.04 mag) and mean difference are shown when asked, to compare each calibration level with the truth.',
+      },
+      {
+        name: 'Depth',
+        text: 'Quantitative: the scatter as a percent of the light and the period in hours. Advanced: the amplitude in errors and the uncalibrated night against the truth.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The comparison star cancels the variable star too.',
+        response:
+          'The cloud multiplies both stars; the variable’s own change belongs to it alone and stays in the ratio.',
+      },
+      {
+        claim: 'A fit always finds a real signal.',
+        response:
+          'A sine fit to noise returns a small amplitude; compare it with the check star’s scatter and its own error.',
+      },
+      {
+        claim: 'Calibration does not matter for differential photometry.',
+        response:
+          'The scatter hardly changes, but the mean is off by 0.03 mag without it, as the truth manifest shows.',
+      },
+      {
+        claim: 'The period is known exactly.',
+        response:
+          'The run holds two and a half cycles, so it is good to about two percent.',
+      },
+    ],
+    teachingNotes: [
+      'The frames are synthetic: the variable is a perfect sine, the comparison and check stars are perfectly steady, there are no color terms and no pointing drift, and the cloud has no color.',
+      'The comparison and check stars are not guaranteed steady in a real night; checking that is part of the method.',
+      'The cosmic-ray step changes nothing in this series, which has none; the instrument still offers the level.',
+      'The fit scans trial periods between 0.05 and 0.3 day for the smallest chi-square; with only two and a half cycles in the run, the period error is about two percent.',
+    ],
+    discussion: [
+      'What if the comparison star turned out to vary?',
+      'Why is the check star a different star from the comparison?',
+      'How many more frames would halve the error of the period?',
+    ],
+    extensions: [
+      'Continue with Transit Photometry, the same method for a dip.',
+      'Fold the light curve on the fitted period and ask what shape the variable has.',
+    ],
+    modelNotes:
+      'js/kernels/detector/pipeline.js (reduceSeries) and lightcurve.js (the sine fit); js/detectorWidgets.js (diff-photometry). The numbers an investigation asks for are recomputed in tests/calibrationLessons.test.js.',
   },
 };
 

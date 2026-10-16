@@ -17,7 +17,7 @@
 // That is not a special case bolted on for the lesson: it falls out of adding
 // the light up correctly.
 
-import { chartColors } from './observationChart.js';
+import { chartColor, mountChart } from './observationChart.js';
 import { mountObserverControls } from './observerControls.js';
 import {
   layoutObservationPanels,
@@ -28,7 +28,6 @@ import {
   getPositionAngle,
   setPositionAngle,
 } from './observerGeometry.js';
-import { ensureChartJs } from './chartjs.js';
 import {
   stars,
   planets,
@@ -55,7 +54,12 @@ let enabled = false;
 // recorded photometry stops describing the geometry it was taken from.
 let prevAngleSnapshot = 0;
 let chart = null;
-let chartCanvas = null;
+let chartHost = null;
+// The mount in flight, so reopening the panel at once does not make two charts.
+let building = false;
+// The y range the redraw rule last chose; until there is one the chart pads
+// its own.
+let yRange;
 let simTime = 0;
 let lastBrightness = 1;
 let isDraggingHandle = false;
@@ -92,7 +96,6 @@ let transitsSeen = 0;
 let countedThrough = -Infinity;
 const TRANSIT_LOG_LIMIT = 400;
 
-const timeLabels = [];
 const timeDays = [];
 const brightnessValues = [];
 
@@ -106,24 +109,39 @@ const LD_U1 = 0.4;
 const LD_U2 = 0.26;
 const LD_I_AVG = 1 - LD_U1 / 3 - LD_U2 / 6;
 
-// ── Theming ─────────────────────────────────────────────────────────
-// Chart.js takes literal colors, so the palette has to be read out of the
-// design tokens and pushed back in whenever the theme changes. Left hardcoded,
-// the grid lines were white at 4% opacity, which is invisible on the two light
-// themes: exactly the panel a student is asked to read numbers off.
+// ── The chart ───────────────────────────────────────────────────────
+// A series chart (js/plot/chart.js, D-PLOT-02 stage 3b; it was Chart.js). Its
+// colors are functions of the design tokens, which the component reads again
+// on the page's theme change: left hardcoded, the grid lines were white at 4%
+// opacity, invisible on the two light themes, which is exactly the panel a
+// student is asked to read numbers off.
 
-function repaintChart() {
+/** The tooltip's words for one brightness: six decimals, as ever. */
+export const brightnessReadout = y => `Brightness: ${y.toFixed(6)}`;
+
+/** The chart as data (its axes, legend and series as drawn), for the tests. */
+export const lightCurveChartParts = () => chart?.parts() ?? null;
+
+/** What the chart is drawing: the recording itself, not a copy of it. */
+function drawChart() {
   if (!chart) return;
-  const t = chartColors();
-  const set = chart.data.datasets[0];
-  set.borderColor = t.accent;
-  set.backgroundColor = t.accentSoft;
-  for (const axis of [chart.options.scales.x, chart.options.scales.y]) {
-    axis.title.color = t.label;
-    axis.ticks.color = t.tick;
-    axis.grid.color = t.grid;
-  }
-  chart.update('none');
+  chart.draw({
+    label: translate('lightCurve.chartLabel'),
+    xTitle: 'Time (days)',
+    yTitle: 'Brightness',
+    yRange,
+    series: [
+      {
+        id: 'flux',
+        label: translate('lightCurve.relativeBrightness'),
+        x: timeDays,
+        y: brightnessValues,
+        color: () => chartColor('accent'),
+        fill: () => chartColor('accentSoft'),
+        width: 1.5,
+      },
+    ],
+  });
 }
 
 // ── Initialization ──────────────────────────────────────────────────
@@ -146,91 +164,49 @@ export function initLightCurve() {
   // The chart itself waits until the panel is opened. Nothing else in this
   // module needs it: every path that touches `chart` already returns early when
   // it is null, because that was already the state before initialization.
-  chartCanvas = document.getElementById('lightCurveCanvas');
+  chartHost = document.getElementById('lightCurveChart');
 }
 
 /**
- * Create the chart once Chart.js has arrived.
+ * Create the chart once the component has arrived.
  *
- * Split out of initLightCurve() so start-up does not wait on a 70KB CDN script
+ * Split out of initLightCurve() so start-up does not wait on the chart code
  * for a panel that is closed. Everything else in the module already tolerates a
- * missing chart: repaintChart() and the update path both return early on null.
+ * missing chart: drawChart() and the update path both return early on null.
  *
- * @param {HTMLCanvasElement} chartCanvas - The light-curve canvas
+ * @param {HTMLElement} host - The light-curve chart's host
  */
-async function buildChart(chartCanvas) {
-  const Chart = await ensureChartJs();
-  if (!Chart || chart) return;
-
-  const ctx2 = chartCanvas.getContext('2d');
-  const t = chartColors();
-  chart = new Chart(ctx2, {
-    type: 'line',
-    data: {
-      labels: timeLabels,
-      datasets: [
-        {
-          label: translate('lightCurve.relativeBrightness'),
-          data: brightnessValues,
-          borderColor: t.accent,
-          backgroundColor: t.accentSoft,
-          fill: true,
-          tension: 0.25,
-          pointRadius: 0,
-          borderWidth: 1.5,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: false,
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Time (days)',
-            color: t.label,
-            font: { size: 10 },
-          },
-          ticks: { color: t.tick, maxTicksLimit: 6, font: { size: 9 } },
-          grid: { color: t.grid },
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Brightness',
-            color: t.label,
-            font: { size: 10 },
-          },
-          ticks: { color: t.tick, font: { size: 9 } },
-          grid: { color: t.grid },
-        },
+async function buildChart(host) {
+  if (chart || building) return;
+  building = true;
+  try {
+    const made = await mountChart(host, {
+      height: 'fill',
+      maxPoints: MAX_DATA_POINTS,
+      maxTicks: 6,
+      tooltip: {
+        mode: 'nearest',
+        title: x => x.toFixed(2),
+        format: ({ y }) => brightnessReadout(y),
       },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          enabled: true,
-          mode: 'nearest',
-          intersect: false,
-          callbacks: {
-            label: item => `Brightness: ${Number(item.raw).toFixed(6)}`,
-          },
-        },
-      },
-    },
-  });
-
-  // The chart is created after the panel's colors are known, so it starts in
-  // the active theme rather than repainting on the first frame.
-  repaintChart();
+    });
+    chart = made;
+    // The chart starts in the active theme: its colors are read as it draws.
+    drawChart();
+  } catch (error) {
+    // A panel without its chart is a worse panel, not a broken application;
+    // the next open tries again.
+    console.error('The light curve chart could not be built.', error);
+  } finally {
+    building = false;
+  }
 }
 
 /** Wire the panel's controls. Independent of whether the chart exists. */
 function wireLightCurveControls() {
   if (angleSlider) {
     angleSlider.addEventListener('input', e => {
-      setPositionAngle(parseFloat(e.target.value));
+      setPositionAngle(e.target.valueAsNumber);
       const observerAngleDeg = getPositionAngle();
       if (angleDisplay)
         angleDisplay.textContent = `${Math.round(observerAngleDeg)}°`;
@@ -264,7 +240,6 @@ function wireLightCurveControls() {
   // A rebuild restarts the simulation clock, so samples taken before it belong
   // to a different world and would plot on top of the new ones.
   window.addEventListener('gravitasSimulationReset', clearData);
-  window.addEventListener('gravitasThemeChanged', repaintChart);
 
   setupCanvasInteraction();
 }
@@ -289,9 +264,9 @@ function setEnabled(next) {
   // the observing stack can be re-laid out without being bypassed.
   layoutObservationPanels();
 
-  // First time the panel is opened: fetch Chart.js and build the chart. Until
-  // then the 70KB library has not been downloaded at all.
-  if (enabled && chartCanvas && !chart) buildChart(chartCanvas);
+  // First time the panel is opened: fetch the chart component and build the
+  // chart. Until then it has not been downloaded at all.
+  if (enabled && chartHost && !chart) buildChart(chartHost);
 
   const toggleBtn = document.getElementById('toggleLightCurve');
   if (toggleBtn) {
@@ -314,7 +289,6 @@ function setEnabled(next) {
 }
 
 function clearData() {
-  timeLabels.length = 0;
   timeDays.length = 0;
   brightnessValues.length = 0;
   transitLog.length = 0;
@@ -322,7 +296,7 @@ function clearData() {
   transitsSeen = 0;
   countedThrough = -Infinity;
   simTime = 0;
-  if (chart) chart.update('none');
+  drawChart();
 }
 
 export function isLightCurveEnabled() {
@@ -610,11 +584,9 @@ export function updateLightCurve() {
   lastBrightness = calculateBrightness();
 
   timeDays.push(simTimeToDays(simTime));
-  timeLabels.push(timeDays[timeDays.length - 1].toFixed(2));
   brightnessValues.push(lastBrightness);
 
-  while (timeLabels.length > MAX_DATA_POINTS) {
-    timeLabels.shift();
+  while (timeDays.length > MAX_DATA_POINTS) {
     timeDays.shift();
     brightnessValues.shift();
   }
@@ -634,9 +606,8 @@ export function updateLightCurve() {
     }
     const range = maxB - minB;
     const margin = Math.max(range * 0.3, 0.0001);
-    chart.options.scales.y.min = Math.max(0, minB - margin);
-    chart.options.scales.y.max = maxB + margin;
-    chart.update('none');
+    yRange = [Math.max(0, minB - margin), maxB + margin];
+    drawChart();
   }
 }
 

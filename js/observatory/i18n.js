@@ -1,0 +1,124 @@
+// =============================================================================
+// The observatory's translator
+// -----------------------------------------------------------------------------
+// The same shape as js/figure/i18n.js, for the same reason: /observatory/ is a
+// small document page, and js/i18n/index.js would bring the application's
+// whole catalog with it. It shares the `gravitas_locale` storage key, so a
+// language chosen in the simulation is already chosen here, and reads only its
+// own catalog pair. The function is `t`, so `npm run i18n:check` audits its
+// ids. Static text carries `data-i18n`, `data-i18n-placeholder` and
+// `data-i18n-aria-label` and `data-i18n-aria-roledescription`; translatePage()
+// fills them.
+//
+// English is the page's own; another language's catalog loads when a reader
+// arrives with it or chooses it (loadLanguage), so an English reader never
+// downloads Spanish. Until it has loaded, t() falls back to English.
+// =============================================================================
+
+import { EN_OBSERVATORY } from '../i18n/en.observatory.js';
+
+const STORAGE_KEY = 'gravitas_locale';
+
+const CATALOGS = { en: { ...EN_OBSERVATORY }, es: {} };
+const LOADERS = {
+  es: () => import('../i18n/es.observatory.js').then(m => m.ES_OBSERVATORY),
+};
+const loaded = new Set(['en']);
+
+/**
+ * Load a language's catalog, if it is not loaded yet. The strings panels
+ * registered for it meanwhile are kept.
+ * @param {string} id - A language id
+ */
+export async function loadLanguage(id) {
+  if (loaded.has(id) || !LOADERS[id]) return;
+  const table = await LOADERS[id]();
+  CATALOGS[id] = { ...table, ...CATALOGS[id] };
+  loaded.add(id);
+}
+
+/**
+ * Add a lazily loaded part of the catalog: a panel's strings, registered by
+ * the panel when it loads, so the page does not carry them at start-up.
+ * @param {Record<string, Record<string, string>>} parts - By language id
+ */
+export function registerMessages(parts) {
+  for (const [id, table] of Object.entries(parts)) {
+    if (Object.hasOwn(CATALOGS, id)) Object.assign(CATALOGS[id], table);
+  }
+}
+const DEFAULT = 'en';
+let current = DEFAULT;
+
+/** @returns {string} The language the page is rendering in */
+export const language = () => current;
+
+/**
+ * The language to open in: a stored choice, then the browser's, then English.
+ * @returns {string} A language id
+ */
+export function preferred() {
+  try {
+    const saved = window.localStorage?.getItem(STORAGE_KEY);
+    if (saved && Object.hasOwn(CATALOGS, saved)) return saved;
+  } catch {
+    /* storage unavailable; the default is correct */
+  }
+  const nav = (typeof navigator !== 'undefined' && navigator.language) || '';
+  const base = String(nav).toLowerCase().split('-')[0];
+  return Object.hasOwn(CATALOGS, base) ? base : DEFAULT;
+}
+
+/**
+ * Change the language, and remember it for the application too.
+ * @param {string} id - A language id
+ * @returns {string} The language actually in force
+ */
+export function setLanguage(id) {
+  current = Object.hasOwn(CATALOGS, id) ? id : DEFAULT;
+  try {
+    window.localStorage?.setItem(STORAGE_KEY, current);
+  } catch {
+    /* the page still works; the choice just will not survive a reload */
+  }
+  document.documentElement.setAttribute('lang', current);
+  return current;
+}
+
+/**
+ * Translate. A missing string falls back to English, then to its own id.
+ * @param {string} id - An `obs.` message id
+ * @param {Object} [vars] - Placeholder values
+ * @returns {string} The message
+ */
+export function t(id, vars) {
+  const entry = CATALOGS[current]?.[id] ?? CATALOGS[DEFAULT][id];
+  if (entry === undefined) {
+    console.warn(`[observatory] no message for "${id}"`);
+    return id;
+  }
+  if (!vars) return entry;
+  return entry.replace(/\{(\w+)\}/g, (whole, name) =>
+    Object.hasOwn(vars, name) ? String(vars[name]) : whole
+  );
+}
+
+/** Fill every element that names a message, in the current language. */
+export function translatePage(root = document) {
+  for (const el of root.querySelectorAll('[data-i18n]')) {
+    el.textContent = t(el.dataset.i18n);
+  }
+  for (const el of root.querySelectorAll('[data-i18n-placeholder]')) {
+    el.setAttribute('placeholder', t(el.dataset.i18nPlaceholder));
+  }
+  for (const el of root.querySelectorAll('[data-i18n-aria-label]')) {
+    el.setAttribute('aria-label', t(el.dataset.i18nAriaLabel));
+  }
+  for (const el of root.querySelectorAll('[data-i18n-aria-roledescription]')) {
+    el.setAttribute(
+      'aria-roledescription',
+      t(el.dataset.i18nAriaRoledescription)
+    );
+  }
+  document.title = t('obs.doc.title');
+}

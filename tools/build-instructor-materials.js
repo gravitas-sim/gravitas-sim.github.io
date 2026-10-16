@@ -36,17 +36,18 @@
 
 import { webcrypto as crypto, createHash } from 'node:crypto';
 import { TextEncoder } from 'node:util';
-import {
-  readFileSync,
-  writeFileSync,
-  mkdirSync,
-  existsSync,
-  readdirSync,
-} from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+import {
+  checkFreshnessAt,
+  sourceDigestFor,
+  sourcePathsFor,
+} from './instructor-freshness.mjs';
 
 import { INVESTIGATIONS } from '../js/data/investigations.js';
+import { withAllDepths } from '../js/investigations/depthAll.js';
 import { verifyKey } from '../js/answerKey.js';
 import {
   instructorGuide,
@@ -61,6 +62,32 @@ import { plainText as plainTextOf } from '../js/answerKey.js';
 import { INSTRUCTOR_CONTENT } from '../js/data/instructorContent.js';
 import { checkInstructorCatalog } from '../js/authoring/instructorSchema.js';
 import { createDocument } from '../js/pdf.js';
+import { guideSource } from '../js/instructorSource.js';
+import { checkFlow } from '../js/instructorFlow.js';
+import { rubricProblems } from '../js/rubric.js';
+import { lessonFacts, lessonVersion } from '../js/instructorFacts.js';
+import { labelsFor } from '../js/data/instructorLabels.js';
+import { spanishLesson, lessonCoverage } from '../js/instructorLocale.js';
+import { depthsOf } from '../js/investigations/depthPure.js';
+import { ES_TEACHING } from '../js/i18n/es.teaching.js';
+import { gzipSync } from 'node:zlib';
+import {
+  exoplanetAnswerKey,
+  exoplanetInstructorGuide,
+} from '../js/exoplanetGuideDocs.js';
+import { EXOPLANET_KEY } from '../js/data/exoplanetAnswerKey.js';
+import {
+  populationsAnswerKey,
+  populationsInstructorGuide,
+} from '../js/populationsGuideDocs.js';
+import { POPULATIONS_KEY } from '../js/data/populationsAnswerKey.js';
+import { lab3dAnswerKey, lab3dInstructorGuide } from '../js/lab3dGuideDocs.js';
+import { LAB3D_KEY } from '../js/data/lab3dAnswerKey.js';
+import {
+  missionLabAnswerKey,
+  missionLabInstructorGuide,
+} from '../js/missionLabDocs.js';
+import { MISSION_LAB_KEY } from '../js/data/missionLabKey.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** A path as the repository sees it, for a message. */
@@ -92,50 +119,34 @@ const MANIFEST_FILE = join(OUT_DIR, 'materials.manifest.json');
 // every footer, so their bytes change on the first of each month with no change
 // to anything anybody wrote. A content digest would call the bundle stale
 // twelve times a year and be ignored by the second time.
-const SOURCE_FILES = [
-  'tools/build-instructor-materials.js',
-  'js/pdf.js',
-  'js/instructorDocs.js',
-  'js/activityDocs.js',
-  'js/answerKey.js',
-  'js/data/activities.js',
-  'js/data/investigations.js',
-  'js/i18n/en.teaching.js',
-];
-/** Every lesson module, which is where the answers themselves live. */
-const SOURCE_DIRS = ['js/data/investigations'];
+//
+// Which inputs, and why nobody lists them by hand any more
+// -----------------------------------------------------------------------------
+// This was a list of eight files and one directory - thirty-nine paths - and it
+// was wrong by fifteen. The build evaluates forty-odd modules, and among the
+// ones the list did not name were `js/data/instructorContent.js`, which holds
+// the prose of every instructor guide, `js/data/activityTeaching.js`, which
+// holds the teaching notes on every activity, and `js/authoring/
+// instructorSchema.js`, which decides what a guide is allowed to contain.
+// Rewriting any of them changed every document in the bundle and left the
+// recorded digest byte-identical, so `instructors:check` reported a stale
+// bundle as current - which is the one thing it exists not to do.
+//
+// A hand-written list beside a machine-maintained import graph drifts, and the
+// drift is silent by construction: nothing fails when a new import is added,
+// and it only surfaces as a release that shipped last month's answer keys. So
+// the list is derived from the graph instead, in tools/instructor-freshness.mjs
+// - which is also where the deploy gate reads it, so the question "is this
+// bundle current?" has one answer rather than two.
 
-const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
-
-/** Every input, as repository-relative paths, sorted. @returns {string[]} */
-function sourcePaths() {
-  const fromDirs = SOURCE_DIRS.flatMap(dir =>
-    readdirSync(join(ROOT, dir))
-      .filter(name => name.endsWith('.js'))
-      .map(name => `${dir}/${name}`)
-  );
-  return [...SOURCE_FILES, ...fromDirs].sort();
+/** @returns {string[]} Every input, as repository-relative paths, sorted */
+export function sourcePaths() {
+  return sourcePathsFor(ROOT);
 }
 
-/**
- * One digest over every input that decides what the materials say.
- *
- * The path is hashed with the bytes, so moving a lesson to a new file is a
- * change even when its text is identical.
- *
- * @returns {{digest: string, files: number}} The digest and how many files it covers
- */
-function sourceDigest() {
-  const paths = sourcePaths();
-  const lines = paths.map(rel => {
-    const full = join(ROOT, rel);
-    if (!existsSync(full)) {
-      console.error(`Instructor source is missing: ${rel}`);
-      process.exit(1);
-    }
-    return `${rel}:${sha256(readFileSync(full))}`;
-  });
-  return { digest: sha256(lines.join('\n')), files: paths.length };
+/** @returns {{digest: string, files: number, sources: object}} The record */
+export function sourceDigest() {
+  return sourceDigestFor(ROOT);
 }
 
 /**
@@ -143,37 +154,27 @@ function sourceDigest() {
  *
  * Needs no passphrase and renders nothing, so the release gate can afford it.
  *
+ * This is the RELEASE question. It compares the working tree against the
+ * production ciphertext that only Carl's passphrase can produce, so a branch
+ * that edits a lesson fails it until the bundle is rebuilt - which is correct
+ * for a release and wrong for a pull request. `--validate` is the question a
+ * pull request should be asked; see main().
+ *
  * @returns {void} Exits non-zero when the bundle is stale
  */
 function checkFreshness() {
-  const { digest, files } = sourceDigest();
-  if (!existsSync(MANIFEST_FILE)) {
-    console.error(
-      'No instructors/materials.manifest.json. Run `npm run build:instructors` ' +
-        'to build the bundle and write the record of what it was built from.'
-    );
-    process.exit(1);
-  }
-  const recorded = JSON.parse(readFileSync(MANIFEST_FILE, 'utf8'));
-  if (recorded.sourceDigest !== digest) {
-    console.error(
-      [
-        'The instructor bundle is stale.',
-        `  recorded: ${recorded.sourceDigest}`,
-        `  on disk:  ${digest}  (${files} source files)`,
-        '',
-        'Instructional content changed after the bundle was built. Rebuild it',
-        'with `npm run build:instructors` - which needs the real passphrase -',
-        'and commit the bundle and the manifest together.',
-      ].join('\n')
-    );
+  const verdict = checkFreshnessAt(ROOT);
+  if (!verdict.ok) {
+    for (const problem of verdict.problems) console.error(problem);
     process.exit(1);
   }
   console.log(
-    `Instructor bundle is current: ${files} source files, digest ${digest.slice(0, 12)}, ` +
-      `bundle built ${recorded.generated}.`
+    `Instructor bundle is current: ${verdict.files} source files, digest ` +
+      `${verdict.digest.slice(0, 12)}, bundle built ${verdict.recorded.generated}.`
   );
 }
+
+const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 
 /** PBKDF2 work factor. OWASP's floor for SHA-256; about a second on a phone. */
 const ITERATIONS = 600000;
@@ -226,7 +227,7 @@ function passphrase(unpublishable) {
   process.exit(1);
 }
 
-async function encrypt(plaintext, secret) {
+async function encrypt(plaintext, secret, { compressed = false } = {}) {
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const base = await crypto.subtle.importKey(
@@ -249,7 +250,11 @@ async function encrypt(plaintext, secret) {
     plaintext
   );
   return {
-    v: 1,
+    // v2 is v1 whose plaintext is gzipped before it is encrypted (Prompt 79:
+    // the inventory passed 150 documents and ciphertext does not compress, so
+    // the file would have been 11 MB). The portal reads both.
+    v: compressed ? 2 : 1,
+    ...(compressed ? { compress: 'gzip' } : {}),
     cipher: 'AES-GCM',
     kdf: { name: 'PBKDF2', hash: 'SHA-256', iterations: ITERATIONS },
     salt: b64(salt),
@@ -269,6 +274,8 @@ function hasRealSecret() {
 
 const slug = title =>
   title
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/[’']/g, '')
     .replace(/[^A-Za-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
@@ -289,7 +296,37 @@ function requireCanonicalContent() {
   const steps = Object.fromEntries(
     INVESTIGATIONS.map(inv => [inv.id, inv.steps.length])
   );
-  const problems = checkInstructorCatalog(INSTRUCTOR_CONTENT, steps);
+  const sources = Object.fromEntries(
+    INVESTIGATIONS.map(inv => [inv.id, guideSource(inv)])
+  );
+  const problems = [
+    ...checkInstructorCatalog(
+      Object.fromEntries(
+        Object.entries(INSTRUCTOR_CONTENT).map(([id, guide]) => {
+          const src = sources[id];
+          return src
+            ? [
+                id,
+                {
+                  ...guide,
+                  flow: src.flow.map(f => ({ steps: f.steps, text: f.text })),
+                  expectations: src.expectations,
+                },
+              ]
+            : [id, guide];
+        })
+      ),
+      steps
+    ),
+    // The flow is keyed by step id now; a block naming a step the lesson lacks,
+    // two blocks on one step or a step in none is a guide with a hole in it.
+    ...INVESTIGATIONS.flatMap(inv => checkFlow(inv)),
+    ...INVESTIGATIONS.flatMap(inv =>
+      withAllDepths(inv).steps.flatMap(s =>
+        rubricProblems(s).map(p => `${inv.id} ${s.sid}: ${p}`)
+      )
+    ),
+  ];
   if (!problems.length) return;
   console.error(
     [
@@ -344,15 +381,492 @@ function stubPdf(label) {
   return doc.build();
 }
 
-async function main() {
+/**
+ * Every document the bundle contains, rendered.
+ *
+ * Pulled out of main() because three callers want it: the build, the fixture,
+ * and `--restamp`, which re-renders in order to prove the plaintext has not
+ * moved. Rendering needs no passphrase - only encrypting does - which is what
+ * makes that proof available without the secret.
+ *
+ * @param {string} version - The stamp printed in every footer
+ * @param {object} [options] - `stub` to substitute placeholder pages
+ * @returns {Array<object>} One entry per document, with base64 bytes
+ */
+export function renderDocuments(version, { stub = false } = {}) {
+  const files = [];
+  /**
+   * One document. `bytes` is a thunk, so a fixture's placeholder never pays for
+   * the real render. `meta` is what the portal lists it by: its locale, the
+   * depth or activity it is cut to, the investigation's version and how much of
+   * it is in the language.
+   */
+  const add = (id, name, kind, investigation, bytes, meta = {}) => {
+    const made = stub ? stubPdf(name.replace(/\.pdf$/, '')) : bytes();
+    files.push({
+      id,
+      name,
+      kind,
+      investigation,
+      locale: 'en',
+      ...meta,
+      size: made.length,
+      bytes: b64(made),
+    });
+  };
+
+  add(
+    'adopters-guide',
+    'Teaching with Gravitas - Adopters Guide.pdf',
+    'general',
+    null,
+    () => adoptersGuide(INVESTIGATIONS, { version })
+  );
+  add(
+    'curriculum-map',
+    'Gravitas Investigation Curriculum Map.pdf',
+    'general',
+    null,
+    () => curriculumMap(INVESTIGATIONS, { version })
+  );
+
+  add(
+    'exoplanet-observatory-guide',
+    'The Exoplanet Observatory - Instructor Guide.pdf',
+    'guide',
+    null,
+    () => exoplanetInstructorGuide({ version })
+  );
+  add(
+    'exoplanet-observatory-key',
+    'The Exoplanet Observatory - Answer Key.pdf',
+    'key',
+    null,
+    () => exoplanetAnswerKey(EXOPLANET_KEY, { version })
+  );
+  add(
+    'populations-observatory-guide',
+    'Stars and Their Populations - Instructor Guide.pdf',
+    'guide',
+    null,
+    () => populationsInstructorGuide({ version })
+  );
+  add(
+    'populations-observatory-key',
+    'Stars and Their Populations - Answer Key.pdf',
+    'key',
+    null,
+    () => populationsAnswerKey(POPULATIONS_KEY, { version })
+  );
+  add(
+    'lab3d-curriculum-guide',
+    'Orbits in Three Dimensions - Instructor Guide.pdf',
+    'guide',
+    null,
+    () => lab3dInstructorGuide({ version })
+  );
+  add(
+    'lab3d-curriculum-key',
+    'Orbits in Three Dimensions - Answer Key.pdf',
+    'key',
+    null,
+    () => lab3dAnswerKey(LAB3D_KEY, { version })
+  );
+  add(
+    'mission-lab-guide',
+    'A Mission to Mars - Instructor Guide.pdf',
+    'guide',
+    null,
+    () => missionLabInstructorGuide({ version })
+  );
+  add(
+    'mission-lab-key',
+    'A Mission to Mars - Answer Key.pdf',
+    'key',
+    null,
+    () => missionLabAnswerKey(MISSION_LAB_KEY, { version })
+  );
+
+  // The classroom activities: the guide and a worksheet per format as before,
+  // and now a key per format cut to that format's steps, in both languages.
+  // The guide and the worksheets stay English (their teaching text has a
+  // Spanish catalog, their layout does not yet; PROMPT 79 staged).
+  for (const activity of ACTIVITIES) {
+    const lesson = INVESTIGATIONS.find(l => l.id === activity.lesson);
+    if (!lesson) continue;
+    const name = slug(
+      plainTextOf(EN_TEACHING[activity.titleId] || activity.id)
+    );
+    add(
+      `activity-${activity.id}-guide`,
+      `${name} - Classroom Activity Guide.pdf`,
+      'guide',
+      activity.lesson,
+      () => activityGuide(activity, lesson, EN_TEACHING, { version }),
+      { activity: activity.id }
+    );
+    for (const format of activity.formats) {
+      if (format.context !== 'projection')
+        add(
+          `activity-${activity.id}-${format.id}-worksheet`,
+          `${name} - ${plainTextOf(EN_TEACHING[format.nameId])} Worksheet.pdf`,
+          'worksheet',
+          activity.lesson,
+          () =>
+            activityWorksheet(activity, format, lesson, EN_TEACHING, {
+              version,
+            }),
+          { activity: activity.id, format: format.id }
+        );
+      for (const locale of ['en', 'es']) {
+        const teaching = locale === 'es' ? ES_TEACHING : EN_TEACHING;
+        const title = plainTextOf(
+          teaching[format.nameId] || EN_TEACHING[format.nameId]
+        );
+        const activityTitle = plainTextOf(
+          teaching[activity.titleId] || EN_TEACHING[activity.titleId]
+        );
+        const L = labelsFor(locale);
+        const inv =
+          locale === 'es' ? spanishLesson(lesson) : withAllDepths(lesson);
+        const source = guideSource(lesson, locale);
+        add(
+          `activity-${activity.id}-${format.id}-key${locale === 'es' ? '-es' : ''}`,
+          `${name} - ${slug(title)} - ${locale === 'es' ? 'Clave de respuestas' : 'Answer Key'}.pdf`,
+          'key',
+          activity.lesson,
+          () =>
+            answerKeyDocument(inv, {
+              version,
+              locale,
+              activity: {
+                title: `${activityTitle}: ${title}`,
+                steps: format.steps,
+              },
+              source,
+              status: statusOf(lesson, 'key', source, locale),
+            }),
+          {
+            locale,
+            variant: 'activity',
+            activity: activity.id,
+            format: format.id,
+            lessonVersion: lessonVersion(lesson),
+            ...(locale === 'es'
+              ? { status: statusOf(lesson, 'key', source, locale) }
+              : {}),
+            title: `${activityTitle}: ${title}`,
+            label: L('doc.keyActivity', {
+              title: plainTextOf(lesson.title),
+              activity: title,
+            }),
+          }
+        );
+      }
+    }
+  }
+
+  // Every investigation: a guide and a key in each language, and for a lesson
+  // with deeper steps a key for each depth, so a class reading at core is not
+  // handed a key with the advanced steps in it.
+  for (const base of INVESTIGATIONS) {
+    const full = withAllDepths(base);
+    const depths = depthsOf(full);
+    const version_ = lessonVersion(base);
+    for (const locale of ['en', 'es']) {
+      const inv = locale === 'es' ? spanishLesson(base) : full;
+      // The guide counts and numbers the steps every student has; the key the
+      // steps of every depth.
+      const core = locale === 'es' ? spanishLesson(base, false) : base;
+      const L = labelsFor(locale);
+      const title = plainTextOf(inv.title);
+      const s = slug(title);
+      const source = guideSource(base, locale);
+      const words =
+        locale === 'es' ? ' - Clave de respuestas' : ' - Answer Key';
+      const suffix = locale === 'es' ? '-es' : '';
+      const facts = lessonFacts(base, id =>
+        plainTextOf(
+          locale === 'es'
+            ? spanishLesson(INVESTIGATIONS.find(i => i.id === id)).title
+            : INVESTIGATIONS.find(i => i.id === id).title
+        )
+      );
+      const common = {
+        locale,
+        lessonVersion: version_,
+        title,
+      };
+      add(
+        `${base.id}-guide${suffix}`,
+        `${s} - ${locale === 'es' ? 'Guia para docentes' : 'Instructor Guide'}.pdf`,
+        'guide',
+        base.id,
+        () =>
+          instructorGuide(core, {
+            version,
+            locale,
+            source,
+            facts,
+            status: statusOf(base, 'guide', source, locale),
+          }),
+        {
+          ...common,
+          variant: 'full',
+          label: L('doc.guide', { title }),
+          ...(locale === 'es'
+            ? { status: statusOf(base, 'guide', source, locale) }
+            : {}),
+        }
+      );
+      add(
+        `${base.id}-key${suffix}`,
+        `${s}${words}.pdf`,
+        'key',
+        base.id,
+        () =>
+          answerKeyDocument(inv, {
+            version,
+            locale,
+            source,
+            status: statusOf(base, 'key', source, locale),
+          }),
+        {
+          ...common,
+          variant: 'full',
+          label: L('doc.key', { title }),
+          ...(locale === 'es'
+            ? { status: statusOf(base, 'key', source, locale) }
+            : {}),
+        }
+      );
+      if (depths.length > 1)
+        for (const depth of depths)
+          add(
+            `${base.id}-key-${depth}${suffix}`,
+            `${s}${words} - ${depth}.pdf`,
+            'key',
+            base.id,
+            () =>
+              answerKeyDocument(inv, {
+                version,
+                locale,
+                depth,
+                source,
+                status: statusOf(base, 'key', source, locale),
+              }),
+            {
+              ...common,
+              variant: 'depth',
+              depth,
+              label: L('doc.keyDepth', {
+                title,
+                depth: L(`key.depth.${depth}`),
+              }),
+              ...(locale === 'es'
+                ? { status: statusOf(base, 'key', source, locale) }
+                : {}),
+            }
+          );
+    }
+  }
+
+  return files;
+}
+
+/**
+ * How much of a Spanish document is in Spanish: the lesson's own words, plus
+ * the instructor prose a guide prints or the expectations a key prints.
+ * English documents have no status.
+ */
+function statusOf(base, kind, source, locale) {
+  if (locale !== 'es') return null;
+  const lesson = lessonCoverage(base);
+  const own =
+    kind === 'guide' ? source.status.guide : source.status.expectations;
+  return {
+    lesson,
+    guide: source.status.guide,
+    expectations: source.status.expectations,
+    done: lesson.translated + own.translated,
+    total: lesson.total + own.total,
+  };
+}
+
+/**
+ * What the bundle holds, counted, for the public record beside it and for the
+ * PR that changes it: by language, by kind and by how the document is cut.
+ * Names no document and carries nothing from inside the ciphertext.
+ *
+ * @param {Array<object>} files - From renderDocuments()
+ * @returns {{documents: number, byLocale: object, byKind: object,
+ *   byVariant: object}} The counts
+ */
+export function inventoryOf(files) {
+  const count = pick =>
+    Object.fromEntries(
+      Object.entries(
+        files.reduce((m, f) => {
+          const k = pick(f);
+          m[k] = (m[k] ?? 0) + 1;
+          return m;
+        }, {})
+      ).sort(([a], [b]) => a.localeCompare(b))
+    );
+  return {
+    documents: files.length,
+    byLocale: count(f => f.locale ?? 'en'),
+    byKind: count(f => f.kind),
+    byVariant: count(f => f.variant ?? 'general'),
+  };
+}
+
+/**
+ * A hash of the rendered set, independent of how it was encrypted.
+ *
+ * Not a freshness signal - it moves with the month, because `versionStamp()`
+ * prints the month into every footer and js/pdf.js stamps it into every
+ * document's creation date. It is an identity: two renders with the same
+ * version stamp agree here if and only if they produced the same documents.
+ *
+ * @param {Array<object>} files - From renderDocuments()
+ * @returns {string} The digest recorded in the manifest
+ */
+function contentDigestOf(files) {
+  return sha256(
+    files
+      .map(f => `${f.id}|${f.kind}|${f.investigation}:${sha256(f.bytes)}`)
+      .sort()
+      .join('|')
+  );
+}
+
+/**
+ * Build, check or render a fixture, according to the flags.
+ *
+ * Takes its arguments rather than reading `process.argv` directly so that
+ * tools/instructor-digest-audit.mjs can drive a real build in-process and watch
+ * which modules Node loads to do it. Nothing else passes them.
+ *
+ * @param {string[]} [args] - Flags, defaulting to this process's own
+ * @returns {Promise<void>} Resolves when the run is finished
+ */
+export async function main(args) {
+  const argv = args ?? process.argv.slice(2);
   // Asking whether the bundle is current needs neither the passphrase nor a
   // single rendered page, so it happens before anything else and costs
   // milliseconds. This is the mode the release gate runs.
-  if (process.argv.includes('--check')) {
+  if (argv.includes('--check')) {
     requireCanonicalContent();
     checkFreshness();
     return;
   }
+
+  // Re-state the freshness record without re-encrypting anything.
+  //
+  // The digest's covered set can change without a single document changing -
+  // it did when the set stopped being a hand-written list - and so can the
+  // builder's own bytes, which are an input because this file decides which
+  // documents exist. Either marks the bundle stale, and the only remedy used
+  // to be a rebuild with the real passphrase: a secret one person holds, a
+  // fresh salt and IV, four megabytes of new ciphertext, and a merge conflict
+  // with every other branch that did the same.
+  //
+  // None of that is necessary when the plaintext has not moved, and whether it
+  // has moved is a question anybody can answer. Rendering needs no passphrase;
+  // only encrypting does. So this re-renders every document at the version the
+  // manifest records and compares the result against the contentDigest the
+  // manifest already carries. Equal means the committed ciphertext holds
+  // exactly these documents, and the record may be re-stated for the inputs
+  // that actually produced it.
+  //
+  // It refuses otherwise, and the refusal is the safety property: nothing here
+  // can make a stale bundle look current, because a stale bundle is precisely
+  // one whose documents differ, which is what is being compared.
+  //
+  // The one thing it cannot see through: js/pdf.js stamps a month-granular
+  // creation date, so re-rendering in a later month produces different bytes
+  // for identical content and the comparison fails honestly rather than
+  // silently. Outside the month of the build, a rebuild is the only route.
+  if (argv.includes('--restamp')) {
+    requireCanonicalContent();
+    if (!existsSync(MANIFEST_FILE)) {
+      console.error(
+        `No ${rel(MANIFEST_FILE)} to re-state. Run \`npm run build:instructors\`.`
+      );
+      process.exit(1);
+    }
+    const recorded = JSON.parse(readFileSync(MANIFEST_FILE, 'utf8'));
+    const rendered = renderDocuments(recorded.version);
+    const contentDigest = contentDigestOf(rendered);
+    if (contentDigest !== recorded.contentDigest) {
+      console.error(
+        [
+          'The documents have changed, so the record cannot be re-stated.',
+          `  recorded content digest: ${recorded.contentDigest}`,
+          `  rendered now:            ${contentDigest}`,
+          '',
+          'Either instructional content really did move since the bundle was',
+          `built, or this is a different month from ${recorded.version} and the`,
+          'month-granular creation date in js/pdf.js has shifted every file.',
+          'Both need `npm run build:instructors` and the real passphrase.',
+        ].join('\n')
+      );
+      process.exit(1);
+    }
+    const { digest, files: sourceCount, sources } = sourceDigest();
+    if (digest === recorded.sourceDigest) {
+      console.log('The record already matches these inputs. Nothing to do.');
+      return;
+    }
+    writeFileSync(
+      MANIFEST_FILE,
+      JSON.stringify(
+        {
+          ...recorded,
+          sourceFiles: sourceCount,
+          sourceDigest: digest,
+          sources,
+        },
+        null,
+        2
+      ) + '\n'
+    );
+    console.log(
+      [
+        `Re-stated ${rel(MANIFEST_FILE)} for ${sourceCount} inputs.`,
+        `  content digest unchanged: ${contentDigest.slice(0, 12)}`,
+        `  source digest  ${recorded.sourceDigest.slice(0, 12)} -> ${digest.slice(0, 12)}`,
+        '',
+        `${rel(OUT_FILE)} was not touched: the ${rendered.length} documents it`,
+        'holds are the documents these sources render, which is what the',
+        'content digest above establishes.',
+      ].join('\n')
+    );
+    return;
+  }
+
+  // The other question, and the one a pull request should be asked.
+  //
+  // `--check` compares the tree against the production ciphertext, which only
+  // the real passphrase can produce. On a long-lived integration branch with a
+  // dozen parallel lesson branches that is the wrong question: every one of
+  // them edits instructional content, every one of them therefore goes red,
+  // and the only way to green is for one person to rebuild an encrypted file
+  // that then conflicts with every other branch doing the same. Three of the
+  // open v1.1 pull requests were red on exactly this and on nothing else.
+  //
+  // What a pull request needs established is that the pipeline still works:
+  // that the content matches its schema, that every derived answer still agrees
+  // with the site's own grading function, and that all fifty-four documents
+  // render. That is this mode. It builds everything, with a throwaway key, and
+  // writes nothing at all - so it can run on any branch, in any fork, with no
+  // secret and no encrypted file to conflict over.
+  //
+  // It is not a substitute for `--check`, and nothing here lets it become one:
+  // the release path runs both, and tests/releaseGate.test.js fails if the two
+  // ever collapse into one.
+  const validate = argv.includes('--validate');
 
   requireCanonicalContent();
 
@@ -363,13 +877,11 @@ async function main() {
   // can be driven end to end without the production secret, and it is built by
   // this tool rather than by a second one so its ids and names cannot drift
   // from the ones the portal looks up.
-  const fixtureAt = process.argv.indexOf('--fixture');
+  const fixtureAt = argv.indexOf('--fixture');
   const isFixture = fixtureAt >= 0;
   const fixtureOut =
-    isFixture &&
-    process.argv[fixtureAt + 1] &&
-    !process.argv[fixtureAt + 1].startsWith('--')
-      ? resolve(process.argv[fixtureAt + 1])
+    isFixture && argv[fixtureAt + 1] && !argv[fixtureAt + 1].startsWith('--')
+      ? resolve(argv[fixtureAt + 1])
       : FIXTURE_DEFAULT;
   if (isFixture && resolve(fixtureOut) === resolve(OUT_FILE)) {
     console.error(
@@ -380,13 +892,25 @@ async function main() {
     process.exit(1);
   }
 
-  const unpublishable = process.argv.includes('--unpublishable');
+  const unpublishable = validate || argv.includes('--unpublishable');
   const secret = isFixture ? FIXTURE_PASSPHRASE : passphrase(unpublishable);
   const usedThrowaway = unpublishable && !hasRealSecret();
   const version = versionStamp();
-  const keepPlain = process.argv.includes('--keep-plaintext');
+  const keepPlain = argv.includes('--keep-plaintext');
 
-  if (usedThrowaway) {
+  if (validate) {
+    console.log(
+      [
+        '',
+        '  VALIDATION BUILD',
+        '  Every document is rendered and every answer key re-checked against',
+        '  the grading function, with a throwaway key and no file written.',
+        '  Nothing here says whether the committed bundle is current; that is',
+        '  `--check`, and it is a release question.',
+        '',
+      ].join('\n')
+    );
+  } else if (usedThrowaway) {
     console.log(
       [
         '',
@@ -403,91 +927,14 @@ async function main() {
   // A key that disagrees with the site is worse than no key, so nothing is
   // built until every derived answer has been re-checked against the site's
   // own grading function.
-  const problems = INVESTIGATIONS.flatMap(verifyKey);
+  const problems = INVESTIGATIONS.map(withAllDepths).flatMap(verifyKey);
   if (problems.length) {
     console.error('Answer keys do not agree with the lessons:');
     for (const p of problems) console.error('  ' + p);
     process.exit(1);
   }
 
-  const files = [];
-  const add = (id, name, kind, investigation, bytes) => {
-    if (isFixture) bytes = stubPdf(name.replace(/\.pdf$/, ''));
-    files.push({
-      id,
-      name,
-      kind,
-      investigation,
-      size: bytes.length,
-      bytes: b64(bytes),
-    });
-  };
-
-  add(
-    'adopters-guide',
-    'Teaching with Gravitas - Adopters Guide.pdf',
-    'general',
-    null,
-    adoptersGuide(INVESTIGATIONS, { version })
-  );
-  add(
-    'curriculum-map',
-    'Gravitas Investigation Curriculum Map.pdf',
-    'general',
-    null,
-    curriculumMap(INVESTIGATIONS, { version })
-  );
-
-  // Classroom activities. One guide per activity covering all three formats,
-  // and a worksheet for each format that has students writing something down -
-  // generated from the resolved steps, so paper and screen agree on the order
-  // and the wording. No separate answer key: the investigation's own covers
-  // every question these formats contain, and a second copy would be a second
-  // thing to keep correct.
-  for (const activity of ACTIVITIES) {
-    const lesson = INVESTIGATIONS.find(l => l.id === activity.lesson);
-    if (!lesson) continue;
-    const name = slug(
-      plainTextOf(EN_TEACHING[activity.titleId] || activity.id)
-    );
-    add(
-      `activity-${activity.id}-guide`,
-      `${name} - Classroom Activity Guide.pdf`,
-      'guide',
-      activity.lesson,
-      activityGuide(activity, lesson, EN_TEACHING, { version })
-    );
-    for (const format of activity.formats) {
-      // A demonstration is projected and answered aloud; a worksheet for it
-      // would be a page of blank boxes nobody fills in.
-      if (format.context === 'projection') continue;
-      add(
-        `activity-${activity.id}-${format.id}-worksheet`,
-        `${name} - ${plainTextOf(EN_TEACHING[format.nameId])} Worksheet.pdf`,
-        'worksheet',
-        activity.lesson,
-        activityWorksheet(activity, format, lesson, EN_TEACHING, { version })
-      );
-    }
-  }
-
-  for (const inv of INVESTIGATIONS) {
-    const s = slug(inv.title);
-    add(
-      `${inv.id}-guide`,
-      `${s} - Instructor Guide.pdf`,
-      'guide',
-      inv.id,
-      instructorGuide(inv, { version })
-    );
-    add(
-      `${inv.id}-key`,
-      `${s} - Answer Key.pdf`,
-      'key',
-      inv.id,
-      answerKeyDocument(inv, { version })
-    );
-  }
+  const files = renderDocuments(version, { stub: isFixture });
 
   const manifest = {
     version,
@@ -496,8 +943,9 @@ async function main() {
   };
 
   const payload = await encrypt(
-    new TextEncoder().encode(JSON.stringify(manifest)),
-    secret
+    gzipSync(new TextEncoder().encode(JSON.stringify(manifest))),
+    secret,
+    { compressed: true }
   );
   if (isFixture) {
     mkdirSync(dirname(fixtureOut), { recursive: true });
@@ -506,6 +954,15 @@ async function main() {
       `\nTest fixture: ${files.length} placeholder documents -> ${rel(fixtureOut)}\n` +
         '  Encrypted with the published fixture passphrase. Not publishable,\n' +
         '  not tracked, and never a replacement for the real bundle.'
+    );
+    return;
+  }
+
+  if (validate) {
+    const total = files.reduce((t, f) => t + f.size, 0);
+    console.log(
+      `Rendered ${files.length} documents (${Math.round(total / 1024)} KB of ` +
+        'PDF) and encrypted them. Nothing was written.'
     );
     return;
   }
@@ -533,7 +990,7 @@ async function main() {
   // ciphertext is undecryptable, so letting it stamp a manifest would file a
   // freshness record for an artifact nobody can open.
   if (!usedThrowaway) {
-    const { digest, files: sourceCount } = sourceDigest();
+    const { digest, files: sourceCount, sources } = sourceDigest();
     writeFileSync(
       MANIFEST_FILE,
       JSON.stringify(
@@ -541,20 +998,19 @@ async function main() {
           version,
           generated: manifest.generated,
           documents: files.length,
+          inventory: inventoryOf(files),
           sourceFiles: sourceCount,
           sourceDigest: digest,
+          // Every input by name, with its own hash. The digest above is what
+          // the check compares; this is what lets it say which file moved, and
+          // what makes the covered set reviewable in a diff rather than only by
+          // reading tools/source-closure.mjs.
+          sources,
           // A hash of the rendered set, for anyone holding the passphrase who
           // wants to confirm the ciphertext matches this record. Not a
           // freshness signal: it moves with the month, which is why the check
           // above reads sourceDigest instead.
-          contentDigest: sha256(
-            files
-              .map(
-                f => `${f.id}|${f.kind}|${f.investigation}:${sha256(f.bytes)}`
-              )
-              .sort()
-              .join('|')
-          ),
+          contentDigest: contentDigestOf(files),
         },
         null,
         2
@@ -586,7 +1042,12 @@ async function main() {
   }
 }
 
-main().catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+// Run only when this file is the program, so a test or the digest audit can
+// import it without setting a build going. The same guard tools/docs-facts.mjs
+// uses.
+if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
+  main().catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
+}

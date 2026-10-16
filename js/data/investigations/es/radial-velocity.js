@@ -17,8 +17,6 @@ export default {
     'Observa el bamboleo de una estrella, pesa su planeta y combina las pistas',
   duration: '45-55 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Un planeta que no puedes ver sigue tirando de su estrella, y la estrella se mueve. Mide ese movimiento de dos maneras distintas, conviértelo en una masa y combínalo con el radio que te dio un tránsito para deducir qué clase de mundo es.',
   objectives: [
     'Explicar por qué una estrella y su planeta orbitan ambos su centro de masas común',
     'Leer una curva de velocidad radial e identificar su periodo y su semiamplitud K',
@@ -31,7 +29,7 @@ export default {
   steps: [
     {
       title: 'El planeta que ya mediste',
-      body: 'En <em>Encontrar planetas por sus sombras</em> observaste cómo HD 209458 b cruzaba su estrella y usaste la profundidad de la caída para deducir el tamaño del planeta. Aquí tienes el mismo sistema otra vez.\n\nHay algo que aquella lección no mencionó. Cuando se vio el tránsito por primera vez en 1999, los astrónomos ya sabían que el planeta estaba ahí. Llevaban meses observando la estrella, y la estrella se lo había estado diciendo.',
+      body: 'En <em>Encontrar planetas por sus sombras</em> observaste cómo HD 209458 b cruzaba su estrella y usaste la profundidad de la caída para deducir el tamaño del planeta. Aquí tienes el mismo sistema otra vez.\n\nHay algo que aquella investigación no mencionó. Cuando se vio el tránsito por primera vez en 1999, los astrónomos ya sabían que el planeta estaba ahí. Llevaban meses observando la estrella, y la estrella se lo había estado diciendo.',
       tip: 'La estrella es el disco brillante del centro. El planeta es el punto pequeño que traza el anillo a su alrededor.',
     },
     {
@@ -80,7 +78,7 @@ export default {
     },
     {
       title: 'Míralo crecer',
-      body: 'Arrastra el deslizador de masa planetaria desde una Tierra hasta un Júpiter pesado y observa cómo se abre el círculo de la estrella. Lee el número etiquetado <strong>Órbita propia de la estrella</strong> mientras lo haces.\n\nDespués prueba el ajuste de la Tierra. El bamboleo físico se vuelve diminuto, y el aumento tiene que subir en un factor de miles antes de que puedas verlo siquiera. Sigue estando ahí.\n\nEsa es toda la idea de esta lección. Un planeta no tiene que ser brillante para ser encontrado, ni visible en absoluto. Solo tiene que ser lo bastante pesado como para mover su estrella en una cantidad que podamos medir.',
+      body: 'Arrastra el deslizador de masa planetaria desde una Tierra hasta un Júpiter pesado y observa cómo se abre el círculo de la estrella. Lee el número etiquetado <strong>Órbita propia de la estrella</strong> mientras lo haces.\n\nDespués prueba el ajuste de la Tierra. El bamboleo físico se vuelve diminuto, y el aumento tiene que subir en un factor de miles antes de que puedas verlo siquiera. Sigue estando ahí.\n\nEsa es toda la idea de esta investigación. Un planeta no tiene que ser brillante para ser encontrado, ni visible en absoluto. Solo tiene que ser lo bastante pesado como para mover su estrella en una cantidad que podamos medir.',
       tool: {
         title: 'Más masa, mayor bamboleo',
       },
@@ -188,6 +186,13 @@ export default {
       },
       worked:
         'A 90 grados y con un periodo de 3,52 días, K es proporcional a la masa del planeta: una Tierra da 0,38 m/s y un planeta de cinco Júpiter da 609. Por tanto 84 m/s corresponde a unas 0,69 masas de Júpiter, que es el valor publicado.',
+      feedback: {
+        close:
+          'Cerca. Mueve el deslizador de masa hasta que la K de la lectura coincida con la que mediste.',
+        'wrong-order-of-magnitude':
+          'Te alejas por un factor grande. Para un planeta tan ligero, K crece en proporción a su masa, así que una masa diez veces mayor da unas diez veces la K.',
+        off: 'Haz coincidir una cosa: la K de la lectura con la K que mediste, dejando la inclinación en 90 grados.',
+      },
     },
     {
       title: 'Ahora inclina todo el sistema',
@@ -337,6 +342,13 @@ export default {
       },
       worked:
         '0,69 masas de Júpiter dentro de una esfera de 1,38 radios de Júpiter dan unos 0,33 g/cm³: un tercio de la densidad del agua y una decimosexta parte de la de la Tierra. Nada rocoso es tan ligero, así que el planeta tiene que ser sobre todo gas.',
+      feedback: {
+        close:
+          'Cerca. Lee la fila del propio planeta y comprueba la unidad que muestra.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez. Kilogramos por metro cúbico y gramos por centímetro cúbico difieren en mil; comprueba la unidad de la fila que leíste.',
+        off: 'Lee la fila del propio planeta, no la que lo compara con la Tierra.',
+      },
     },
     {
       title: '¿Dónde se sitúa HD 209458 b?',
@@ -386,7 +398,7 @@ export default {
     },
     {
       title: 'El sentido de todo esto',
-      body: 'Empezaste esta lección sin poder ver un planeta en absoluto.',
+      body: 'Empezaste esta investigación sin poder ver un planeta en absoluto.',
       prompt: 'La idea más importante de todas aquí es que…',
       options: [
         'la velocidad radial es la mejor manera de encontrar planetas',
@@ -399,7 +411,7 @@ export default {
     },
     {
       title: 'Lo que ya puedes decir de una estrella que no puedes resolver',
-      body: 'Empezaste con un punto de luz y ningún planeta. Terminas con un mundo que tiene periodo, masa, radio, densidad y un lugar en un diagrama, y nada de eso vino de verlo.\n\n<strong>La estrella se mueve porque el planeta se mueve.</strong> Ninguno orbita al otro: los dos giran alrededor del punto que hay entre ambos, y la parte del movimiento de la estrella a lo largo de tu línea de visión es un desplazamiento en su espectro. El periodo de ese vaivén es el periodo orbital, y su semiamplitud K lleva dentro la masa del planeta.\n\n<strong>K sola da un límite inferior.</strong> Una órbita inclinada respecto al canto produce el mismo vaivén que produciría de canto un planeta más ligero, así que lo que mide una velocidad radial es M sin i. Desde la curva no se distinguen.\n\n<strong>Un tránsito deshace el empate.</strong> Un planeta que cruza el disco está casi de canto por construcción, así que sin i vale casi 1 y el límite inferior se convierte en una masa. El tránsito da además un radio, que la velocidad radial nunca puede dar, y una masa con un radio son una densidad: el primer número de la lección que dice algo sobre de qué está hecho el planeta.\n\n<strong>La astrometría mira ese mismo movimiento de retroceso de lado</strong>, y prefiere los sistemas contrarios: planetas pesados y lejanos alrededor de estrellas cercanas, mientras que la velocidad radial prefiere planetas pesados y próximos.\n\n<strong>Y el último paso es el que hay que dar con más cuidado.</strong> Poner un planeta dentro de una zona habitable modelada dice que un cálculo climático sitúa el agua líquida al alcance a esa distancia, con supuestos que no has comprobado. No dice nada sobre la atmósfera de ese planeta, ni sobre su superficie, ni sobre si vive algo en él.',
+      body: 'Empezaste con un punto de luz y ningún planeta. Terminas con un mundo que tiene periodo, masa, radio, densidad y un lugar en un diagrama, y nada de eso vino de verlo.\n\n<strong>La estrella se mueve porque el planeta se mueve.</strong> Ninguno orbita al otro: los dos giran alrededor del punto que hay entre ambos, y la parte del movimiento de la estrella a lo largo de tu línea de visión es un desplazamiento en su espectro. El periodo de ese vaivén es el periodo orbital, y su semiamplitud K lleva dentro la masa del planeta.\n\n<strong>K sola da un límite inferior.</strong> Una órbita inclinada respecto al canto produce el mismo vaivén que produciría de canto un planeta más ligero, así que lo que mide una velocidad radial es M sin i. Desde la curva no se distinguen.\n\n<strong>Un tránsito deshace el empate.</strong> Un planeta que cruza el disco está casi de canto por construcción, así que sin i vale casi 1 y el límite inferior se convierte en una masa. El tránsito da además un radio, que la velocidad radial nunca puede dar, y una masa con un radio son una densidad: el primer número de la investigación que dice algo sobre de qué está hecho el planeta.\n\n<strong>La astrometría mira ese mismo movimiento de retroceso de lado</strong>, y prefiere los sistemas contrarios: planetas pesados y lejanos alrededor de estrellas cercanas, mientras que la velocidad radial prefiere planetas pesados y próximos.\n\n<strong>Y el último paso es el que hay que dar con más cuidado.</strong> Poner un planeta dentro de una zona habitable modelada dice que un cálculo climático sitúa el agua líquida al alcance a esa distancia, con supuestos que no has comprobado. No dice nada sobre la atmósfera de ese planeta, ni sobre su superficie, ni sobre si vive algo en él.',
       tip: 'Todos los métodos de aquí tienen un punto ciego y los puntos ciegos no coinciden, que es la razón de que los sondeos se hagan combinados y no en competencia.',
     },
   ],

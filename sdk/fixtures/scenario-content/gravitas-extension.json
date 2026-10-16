@@ -1,0 +1,18 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "fixture.scenario-content",
+  "version": "1.0.0",
+  "kind": "declarative",
+  "gravitas": "^1.0.0",
+  "title": { "en": "A scenario with problems", "es": "Un escenario con problemas" },
+  "provides": {
+    "scenarios": [{ "id": "scenario-content", "file": "scenario.json" }]
+  },
+  "assets": [{ "path": "scenario.json", "role": "data", "offline": "optional" }],
+  "citations": [],
+  "licenses": [{ "scope": "scenario.json", "license": "CC-BY-4.0" }],
+  "offline": { "policy": "precache" },
+  "validation": [{ "check": "registry:sdk-extensions" }],
+  "migrations": []
+}

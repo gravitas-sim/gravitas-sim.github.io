@@ -136,6 +136,12 @@ describe('it catches a broken identity', () => {
     );
   });
 
+  test('a step id that would end an attribute', () => {
+    expect(
+      rulesAfter('tides', l => (l.steps[1].sid = 'x" autofocus onfocus="y'))
+    ).toContain('id/step');
+  });
+
   test('two response fields sharing an id', () => {
     const rules = rulesAfter('tides', l => {
       const s = l.steps.find(s => s.fields?.length > 1);
@@ -461,7 +467,10 @@ describe('it catches missing instructor material', () => {
     const copy = { ...inputs, instructor: { ...inputs.instructor } };
     copy.instructor.tides = {
       ...copy.instructor.tides,
-      expectations: { ...copy.instructor.tides.expectations, 999: 'stale' },
+      expectations: {
+        ...copy.instructor.tides.expectations,
+        'no-such-step': 'stale',
+      },
     };
     expect(rulesFired(checkCatalog(copy))).toContain('instructor/expectations');
   });

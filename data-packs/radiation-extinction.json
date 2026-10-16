@@ -1,0 +1,149 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "radiation-extinction",
+  "version": "1.0.0",
+  "title": "The Cardelli, Clayton & Mathis (1989) interstellar extinction law: coefficients",
+  "object": {
+    "name": "interstellar extinction",
+    "identifiers": [
+      "CCM89"
+    ]
+  },
+  "facility": {
+    "observatory": "compiled from the literature",
+    "pipeline": "tools/data-packs/radiation.mjs 1.0.0"
+  },
+  "dataType": "model-grid",
+  "origin": "compilation",
+  "credit": "Cardelli, Clayton & Mathis 1989, ApJ 345, 245",
+  "license": {
+    "status": "attribution-requested",
+    "statement": "The coefficients of a published analytic law (eqs. 2 to 4 of the paper), cited to it.",
+    "basis": "Thirty-odd numbers that define a mathematical relation; no table, text or figure of the paper is reproduced beyond the eight published values the validation compares against. The paper is in the NASA ADS scanned archive."
+  },
+  "retrieved": "2026-10-09",
+  "columns": [
+    {
+      "name": "law",
+      "unit": "",
+      "description": "the coefficients of A(lambda)/A(V) = a(x) + b(x)/R_V, x = 1/lambda in 1/um"
+    }
+  ],
+  "source": {
+    "archive": "NASA ADS scanned article",
+    "urls": [
+      "https://articles.adsabs.harvard.edu/pdf/1989ApJ...345..245C"
+    ],
+    "citations": [
+      {
+        "text": "Cardelli, Clayton & Mathis 1989, ApJ 345, 245",
+        "doi": "10.1086/167900"
+      },
+      {
+        "text": "O'Donnell 1994, ApJ 422, 158 (a later revision of the optical coefficients, not used)",
+        "doi": "10.1086/173713"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "ccm89-apj-345-245.pdf",
+      "url": "https://articles.adsabs.harvard.edu/pdf/1989ApJ...345..245C",
+      "bytes": 1292222,
+      "sha256": "e3db684021b80d7c161499f8e6257df9881251b0fb0382a3d9d30b2ae0e6fd73"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/radiation.mjs",
+    "version": "1.0.0",
+    "options": {},
+    "steps": [
+      "Type the coefficients of eqs. 2a, 2b, 3a, 3b, 4a, 4b and the far-UV terms F_a, F_b from the pinned paper (pages 247-250).",
+      "Hold them to the paper's own Table 3: A/A_V at R_V = 3.1 for eight standard filters inside the law's range (validate())."
+    ],
+    "record": {}
+  },
+  "assumptions": [
+    "The law is the mean Milky Way law for 0.3 <= 1/lambda <= 8 um^-1 (3.3 um to 125 nm); it is not extrapolated. Individual lines of sight depart from it (CCM89, section on deviations).",
+    "The optical and near-infrared coefficients are CCM89's, not O'Donnell 1994's revision, which changes A_B/A_V by about 0.02.",
+    "The law describes extinction by dust between source and observer, with a single R_V; it says nothing about circumstellar dust or the extinction in another galaxy."
+  ],
+  "masks": [],
+  "reductions": [],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/radiation/extinction.js",
+    "bytes": 3012,
+    "sha256": "bdefe28b7589ae5b9a2798e1a571e7a027dd474c0de25eb5ec7bfd36d0e510de"
+  },
+  "validation": {
+    "check": "A(lambda)/A(V) at R_V = 3.1 reproduces the eight published values of CCM89 Table 3 inside the law's range within 0.015, the residual of the paper's own fit to that table",
+    "against": [
+      {
+        "quantity": "A(U)/A(V) at R_V = 3.1",
+        "value": 1.569,
+        "unit": "",
+        "ref": "Cardelli, Clayton & Mathis 1989, Table 3"
+      },
+      {
+        "quantity": "A(B)/A(V) at R_V = 3.1",
+        "value": 1.337,
+        "unit": "",
+        "ref": "Cardelli, Clayton & Mathis 1989, Table 3"
+      },
+      {
+        "quantity": "A(V)/A(V) at R_V = 3.1",
+        "value": 1,
+        "unit": "",
+        "ref": "Cardelli, Clayton & Mathis 1989, Table 3"
+      },
+      {
+        "quantity": "A(R)/A(V) at R_V = 3.1",
+        "value": 0.751,
+        "unit": "",
+        "ref": "Cardelli, Clayton & Mathis 1989, Table 3"
+      },
+      {
+        "quantity": "A(I)/A(V) at R_V = 3.1",
+        "value": 0.479,
+        "unit": "",
+        "ref": "Cardelli, Clayton & Mathis 1989, Table 3"
+      },
+      {
+        "quantity": "A(J)/A(V) at R_V = 3.1",
+        "value": 0.282,
+        "unit": "",
+        "ref": "Cardelli, Clayton & Mathis 1989, Table 3"
+      },
+      {
+        "quantity": "A(H)/A(V) at R_V = 3.1",
+        "value": 0.19,
+        "unit": "",
+        "ref": "Cardelli, Clayton & Mathis 1989, Table 3"
+      },
+      {
+        "quantity": "A(K)/A(V) at R_V = 3.1",
+        "value": 0.114,
+        "unit": "",
+        "ref": "Cardelli, Clayton & Mathis 1989, Table 3"
+      }
+    ],
+    "result": {
+      "calculatedMinusPublished": {
+        "U": 0,
+        "B": -0.014,
+        "V": 0,
+        "R": 0,
+        "I": -0.001,
+        "J": 0,
+        "H": 0.002,
+        "K": 0.002
+      }
+    }
+  }
+}

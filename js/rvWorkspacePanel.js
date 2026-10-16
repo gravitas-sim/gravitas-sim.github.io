@@ -35,7 +35,8 @@ import {
 } from './observationLayout.js';
 import { formatNumber } from './format.js';
 import { surface, palette, responsiveHeight, MONO } from './widgetCanvas.js';
-import { MC_LIMITS, runMonteCarlo } from './rvUncertainty.js';
+import { MC_LIMITS } from './inference/rvCircular.js';
+import { runMonteCarlo } from './inference/rvClient.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { captureToNotebook, snapshot } from './notebookBridge.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
@@ -230,6 +231,31 @@ function render() {
 }
 
 /**
+ * Run one of the workspace's Worker tasks for a button: a second press while
+ * it is out is ignored, and a failed realm is logged, not thrown into the
+ * click. Resolves undefined when the task did not answer.
+ */
+const busy = new Set();
+async function work(button, task) {
+  if (busy.has(button)) return undefined;
+  busy.add(button);
+  button.setAttribute('aria-busy', 'true');
+  try {
+    return await task();
+  } catch (err) {
+    console.warn('[rv] the inference Worker did not answer:', err);
+    if (els?.status)
+      els.status.textContent = t('failure.error', {
+        message: err?.message ?? '',
+      });
+    return undefined;
+  } finally {
+    busy.delete(button);
+    button.removeAttribute('aria-busy');
+  }
+}
+
+/**
  * Open or close the panel.
  * @param {boolean} on - Whether to show it
  * @returns {void}
@@ -245,14 +271,19 @@ export function setRvWorkspaceEnabled(on) {
   layoutObservationPanels();
 }
 
-/** @returns {boolean} Whether the panel is open */
-export const isRvWorkspaceEnabled = () => enabled;
+/** Undoes the locale subscription init made; null while not wired. */
+let unsubscribeLocale = null;
 
-/** @returns {?object} The exportable report, for the export dialog */
-export const currentReport = () => exportReport();
-
-/** Wire the panel up. Called once, when the chunk loads. */
-export function initRvWorkspacePanel() {
+/**
+ * Wire the panel up. Called by js/rvWorkspaceBridge.js once it has put the
+ * panel's markup in the page, which is what made a call at the bottom of this
+ * module - wiring whatever was there when the chunk loaded - wrong.
+ *
+ * @param {{signal?: AbortSignal}} [options] - Aborted when the markup is
+ *   unmounted; removes the one listener this adds outside it
+ */
+export function initRvWorkspacePanel({ signal } = {}) {
+  if (unsubscribeLocale) return;
   // This panel's strings are not in the start-up catalog, so it registers
   // them itself rather than trusting whoever opened it to have done so. The
   // bridge does register them first in the normal path; a lesson, a share link
@@ -264,8 +295,11 @@ export function initRvWorkspacePanel() {
 
   // The catalog can arrive after this panel does; see the note on the same
   // subscription in js/binaryRunPanel.js.
-  onLocaleChange(() => render());
+  unsubscribeLocale = onLocaleChange(() => render());
 
+  // Anything that asked for the elements before the markup was mounted
+  // cached nothing; ask again now that it is there.
+  els = null;
   const e = cacheElements();
   if (!e.container) return;
 
@@ -276,24 +310,27 @@ export function initRvWorkspacePanel() {
     input.max = String(s.max);
     input.step = String(s.step);
     input.addEventListener('input', () => {
-      setTrial(s.key, Number(input.value));
+      setTrial(s.key, input.valueAsNumber);
       render();
     });
   }
 
-  e.snap?.addEventListener('click', () => {
-    snapToBestAtPeriod();
+  e.snap?.addEventListener('click', async () => {
+    await work(e.snap, snapToBestAtPeriod);
     render();
   });
 
-  e.search?.addEventListener('click', () => {
+  e.search?.addEventListener('click', async () => {
     // Bounded, always, and by the reader. An unbounded search is not a
     // meaningful request and choosing the bounds for somebody would hide the
     // most consequential decision in the analysis.
-    const minPeriod = Number(e.minP?.value);
-    const maxPeriod = Number(e.maxP?.value);
-    const result = runSearch({ minPeriod, maxPeriod });
-    if (!result && e.status) e.status.textContent = t('rvfit.badBounds');
+    const minPeriod = Number(e.minP?.valueAsNumber);
+    const maxPeriod = Number(e.maxP?.valueAsNumber);
+    const result = await work(e.search, () =>
+      runSearch({ minPeriod, maxPeriod })
+    );
+    if (result === null && e.status)
+      e.status.textContent = t('rvfit.badBounds');
     render();
   });
 
@@ -348,22 +385,32 @@ export function initRvWorkspacePanel() {
 
   e.close?.addEventListener('click', () => setRvWorkspaceEnabled(false));
 
-  window.addEventListener('resize', () => {
-    if (enabled) render();
-  });
+  window.addEventListener(
+    'resize',
+    () => {
+      if (enabled) render();
+    },
+    signal ? { signal } : undefined
+  );
 
   e.container.style.display = 'none';
 }
 
-// The panel is only ever constructed inside the lazy chunk, so wiring it here
-// is safe: by the time this module has been imported, its DOM is present.
-initRvWorkspacePanel();
-
-/** @returns {?object} The recording under analysis, for the export dialog */
-export const analyzedRecording = () => currentRecording();
+/**
+ * Undo initRvWorkspacePanel(), for when the panel's markup leaves the page:
+ * close it, stop listening for the language, forget the elements.
+ */
+export function teardownRvWorkspacePanel() {
+  if (!unsubscribeLocale) return;
+  setRvWorkspaceEnabled(false);
+  clearUncertainty();
+  unsubscribeLocale();
+  unsubscribeLocale = null;
+  els = null;
+}
 
 // --- The optional uncertainty analysis ----------------------------------------
-// The interface over js/rvUncertainty.js. Everything it prints comes from the
+// The interface over js/inference/rvMonteCarlo.js. Everything it prints comes from the
 // report that module returns, including which numbers it is allowed to print:
 // the report's `period` field is null whenever the refits split into families,
 // so the single-interval line below simply has nothing to render and the family
@@ -517,12 +564,6 @@ export function clearUncertainty() {
   }
   renderUncertainty();
 }
-
-/** For tests: which generation the panel is on. @returns {number} */
-export const uncertaintyGeneration = () => mcGeneration;
-
-/** For tests: whether the held report is stale. @returns {boolean} */
-export const isUncertaintyStale = () => mcStale();
 
 /** A number for reading, at a sensible number of figures. */
 const fig = (v, sig = 5) =>
@@ -833,6 +874,7 @@ export async function runUncertainty() {
   const mayPublish = () => owns() && generation === mcGeneration;
 
   let outcome = null;
+  let failure = null;
   try {
     outcome = await runMonteCarlo(
       {
@@ -845,7 +887,7 @@ export async function runUncertainty() {
         // decision in the analysis.
         minPeriod: bounds?.minPeriod ?? Math.max(0.05, a.trial.period / 4),
         maxPeriod: bounds?.maxPeriod ?? a.trial.period * 4,
-        trials: Number(e.mcTrials?.value) || MC_LIMITS.defaultTrials,
+        trials: Number(e.mcTrials?.valueAsNumber) || MC_LIMITS.defaultTrials,
         seed: e.mcSeed?.value || 'mc-1',
         inputsKey,
       },
@@ -862,6 +904,7 @@ export async function runUncertainty() {
   } catch (err) {
     console.warn('[rv] the uncertainty analysis did not finish:', err);
     outcome = null;
+    failure = err;
   } finally {
     // Two separate decisions, and running them together is what broke this.
     //
@@ -876,7 +919,10 @@ export async function runUncertainty() {
     if (held) {
       mcRun = null;
       if (publish) mcReport = outcome;
-      if (e.mcStatus) e.mcStatus.textContent = '';
+      if (e.mcStatus)
+        e.mcStatus.textContent = failure
+          ? t('failure.error', { message: failure.message ?? '' })
+          : '';
       renderUncertainty();
     }
   }

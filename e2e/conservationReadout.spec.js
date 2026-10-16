@@ -9,7 +9,7 @@
 // still have it.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 const block = page => page.locator('.readout-conservation');
 
@@ -30,14 +30,23 @@ const help = page => page.locator('.readout-conservation-help');
  * by the time the world exists - which is exactly how a scenario that wants
  * the readout gets it back, and exactly why a test asking for it has to ask
  * afterwards.
+ *
+ * And they are pushed into the engine as well. The renderer reads ui.SETTINGS,
+ * but physics.js reads its own copy, which the build synced before these were
+ * written: without the second step a physics setting reaches the settings
+ * dialog and never the force law or conservationCaveats(). It is the order a
+ * share link uses for the settings its author changed after the build.
  */
 async function scenario(page, name, settings = {}) {
+  await requireScenarioKey(page, name);
   await page.evaluate(
     async ({ name: key, settings: s }) => {
       const ui = await import('/js/ui.js');
+      const physics = await import('/js/physics.js');
       ui.SETTINGS.preset_scenario = key;
       ui.initialize_simulation({ seed: 'conservation' });
       Object.assign(ui.SETTINGS, s);
+      physics.updatePhysicsSettings(ui.SETTINGS);
     },
     { name, settings }
   );
@@ -60,7 +69,7 @@ test.describe('an ordinary launch', () => {
   test('keeps the clock, the counts and the scale', async ({ page, app }) => {
     // What was removed is the diagnostic, not the instrumentation.
     await app.boot();
-    await scenario(page, 'Solar System');
+    await scenario(page, 'solar-system');
     const text = await page.locator('#overlayStats').innerText();
     expect(text).toMatch(/Elapsed/i);
     expect(text).toMatch(/Zoom/i);
@@ -71,7 +80,7 @@ test.describe('an ordinary launch', () => {
     // Presentation only. Everything the reliability check, the investigations
     // and the exports read is unchanged.
     await app.boot();
-    await scenario(page, 'Solar System');
+    await scenario(page, 'solar-system');
     const drift = await page.evaluate(async () => {
       const physics = await import('/js/physics.js');
       const d = physics.conservationDrift(true);
@@ -95,7 +104,7 @@ test.describe('when it is asked for', () => {
     app,
   }) => {
     await app.boot();
-    await scenario(page, 'Solar System', {
+    await scenario(page, 'solar-system', {
       show_conservation_diagnostics: true,
     });
     await expect(block(page)).toHaveCount(1);
@@ -114,7 +123,7 @@ test.describe('when it is asked for', () => {
     app,
   }) => {
     await app.boot();
-    await scenario(page, 'Solar System', {
+    await scenario(page, 'solar-system', {
       show_conservation_diagnostics: true,
     });
     const summary = help(page).locator('summary');
@@ -144,7 +153,7 @@ test.describe('when it is asked for', () => {
 
   test('a touch tap opens it too', async ({ page, app }) => {
     await app.boot();
-    await scenario(page, 'Solar System', {
+    await scenario(page, 'solar-system', {
       show_conservation_diagnostics: true,
     });
     const details = help(page);
@@ -156,17 +165,31 @@ test.describe('when it is asked for', () => {
 test.describe('what the scene does to its own conservation', () => {
   test('a closed system says so', async ({ page, app }) => {
     await app.boot();
-    await scenario(page, 'Kepler’s 2nd Law', {
+    // Two bodies under mutual gravity and nothing else, closed as built. This
+    // used to load Kepler's 2nd Law, which is star-only gravity on purpose, so
+    // it passed on the list of reasons and never once saw the closed line.
+    await scenario(page, 'earth-moon-system', {
       show_conservation_diagnostics: true,
-      mutual_gravity: true,
-      enable_star_merging: false,
     });
-    // Either the closed-system line or a list of reasons, never neither: a
-    // drift figure with nothing said about the scene is the thing this whole
-    // change exists to stop.
-    const caveats = await block(page).locator('.readout-caveats li').count();
-    const closed = await block(page).locator('.readout-caveat').count();
-    expect(caveats + closed).toBeGreaterThan(0);
+    // The premise, from the engine, so that a scenario which gains a reason
+    // fails here as a changed scene rather than as a broken readout.
+    const reasons = await page.evaluate(async () => {
+      const physics = await import('/js/physics.js');
+      return physics.conservationCaveats();
+    });
+    expect(reasons, 'Earth-Moon System is no longer closed').toEqual([]);
+
+    // The closed line itself, found by its words: the ill-conditioned note is
+    // a .readout-caveat too, so counting the class would pass on either. And
+    // no list of reasons beside it.
+    const closedLine = await page.evaluate(async () => {
+      const i18n = await import('/js/i18n/index.js');
+      return i18n.t('readout.conservation.closed');
+    });
+    await expect(block(page).locator('.readout-caveats')).toHaveCount(0);
+    await expect(
+      block(page).locator('.readout-caveat').filter({ hasText: closedLine })
+    ).toHaveCount(1);
   });
 
   test('a scene with a static hole names it rather than blaming the method', async ({
@@ -174,7 +197,7 @@ test.describe('what the scene does to its own conservation', () => {
     app,
   }) => {
     await app.boot();
-    await scenario(page, 'Black Hole Lab', {
+    await scenario(page, 'black-hole-lab', {
       show_conservation_diagnostics: true,
     });
     const caveats = block(page).locator('.readout-caveats li');
@@ -194,22 +217,10 @@ test.describe('a baseline a percentage cannot be taken against', () => {
     app,
   }) => {
     await app.boot();
-    await scenario(page, 'Empty', { show_conservation_diagnostics: true });
-    // The scenario may not exist under that name; fall back to clearing it.
+    // Built empty, so the baseline is taken over the empty world itself.
+    await app.emptyWorld('conservation');
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
-      const physics = await import('/js/physics.js');
-      for (const list of [
-        physics.planets,
-        physics.stars,
-        physics.bh_list,
-        physics.asteroids,
-        physics.comets,
-        physics.gas_giants,
-      ]) {
-        list.length = 0;
-      }
-      physics.resetConservationBaseline();
       ui.SETTINGS.show_conservation_diagnostics = true;
     });
     await page.waitForTimeout(900);
@@ -230,9 +241,9 @@ test.describe('deliberate choices are respected', () => {
   }) => {
     await app.boot();
     for (const name of [
-      'Three-Body Sensitivity Lab',
-      'Lagrange Point Lab',
-      'Orbital Transfer Lab',
+      'three-body-sensitivity-lab',
+      'lagrange-point-lab',
+      'orbital-transfer-lab',
     ]) {
       // Start from the new default, explicitly off, and let the scenario have
       // its say: applyPreset re-stamps its own settings during the rebuild.
@@ -256,7 +267,7 @@ test.describe('deliberate choices are respected', () => {
       const ui = await import('/js/ui.js');
       // A configuration where somebody turned it on deliberately.
       const payload = share.buildPayload({
-        scenario: 'Solar System',
+        scenario: 'solar-system',
         seed: 1234,
         settings: { ...DEFAULT_SETTINGS, show_conservation_diagnostics: true },
         DEFAULT_SETTINGS,
@@ -283,7 +294,7 @@ test.describe('deliberate choices are respected', () => {
       const share = await import('/js/shareState.js');
       const { DEFAULT_SETTINGS } = await import('/js/appState.js');
       const payload = share.buildPayload({
-        scenario: 'Solar System',
+        scenario: 'solar-system',
         seed: 1234,
         settings: { ...DEFAULT_SETTINGS, show_conservation_diagnostics: false },
         DEFAULT_SETTINGS,
@@ -307,7 +318,7 @@ test.describe('in Spanish', () => {
       const i18n = await import('/js/i18n/index.js');
       await i18n.setLocale('es');
     });
-    await scenario(page, 'Solar System', {
+    await scenario(page, 'solar-system', {
       show_conservation_diagnostics: true,
     });
     const text = await block(page).innerText();

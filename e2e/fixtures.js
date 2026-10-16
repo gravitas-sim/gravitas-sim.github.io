@@ -25,6 +25,7 @@
 // =============================================================================
 
 import { test as base, expect } from '@playwright/test';
+import { buildEmptyWorld } from '../tools/empty-world.mjs';
 
 /** localStorage keys that decide what a "clean browser" sees. */
 export const STORAGE_KEYS = {
@@ -53,6 +54,86 @@ const IGNORED_CONSOLE = [
 ];
 
 const isIgnorable = text => IGNORED_CONSOLE.some(re => re.test(text));
+
+/** How long the app-state waits give a condition before they throw. */
+const WAIT_TIMEOUT = 20_000;
+
+/**
+ * How long waitForFrames gives `count` steps before it throws.
+ *
+ * The counter is physics steps, not wall time: the largest scenarios step
+ * about eleven times a second on an idle laptop and a CI runner is slower, so a
+ * fixed 20 seconds fails a healthy 240-step wait that way. A quarter second a
+ * step (four steps a second) with a 30 second floor, and 80 seconds at most so
+ * the wait still fails inside the suite's 90-second test timeout.
+ *
+ * @param {number} count - Steps to wait for
+ * @returns {number} Milliseconds
+ */
+const frameWaitTimeout = count =>
+  Math.min(80_000, Math.max(30_000, count * 250));
+
+/**
+ * Refuse a name that is not a scenario key, before it reaches the application.
+ *
+ * `SETTINGS.preset_scenario` takes any string. For one it does not know,
+ * applyPreset resets every setting to DEFAULT_SETTINGS, finds no block, and the
+ * builder makes the default population - a black hole, fifteen planets, two gas
+ * giants and ten asteroids - with the previous scenario's card still on screen.
+ * Bodies exist, frames advance and the readout fills in, so a spec that asked
+ * for the wrong name runs on the wrong world and usually passes. "a closed
+ * system says so" asked for 'Kepler’s 2nd Law', with a curly apostrophe, and
+ * ran that way from the day it was written.
+ *
+ * Checked in the page against the catalog the gallery is built from, so the
+ * list cannot drift from the application's. Every helper that hands a caller's
+ * name to `preset_scenario` goes through here; a helper that iterates the
+ * catalog itself does not need to.
+ *
+ * @param {import('@playwright/test').Page} page - The page under test
+ * @param {string} key - A scenario key from js/data/scenarioInfo.js
+ * @returns {Promise<void>}
+ */
+export async function requireScenarioKey(page, key) {
+  const { known, near } = await page.evaluate(async k => {
+    const { SCENARIO_INFO, scenarioId } =
+      await import('/js/data/scenarioInfo.js');
+    const keys = Object.keys(SCENARIO_INFO);
+    // Typographic quotes and case, the two ways a correct-looking name misses.
+    const fold = s =>
+      String(s)
+        .normalize('NFKC')
+        .replace(/[‘’]/g, "'")
+        .replace(/[“”]/g, '"')
+        .toLowerCase();
+    return {
+      known: keys.includes(k),
+      // And the English name a scenario was keyed by before ids, which the
+      // application still reads but a spec names by id.
+      near: keys.find(x => fold(x) === fold(k)) ?? scenarioId(fold(k)) ?? null,
+    };
+  }, key);
+  if (known) return;
+  throw new Error(
+    `${JSON.stringify(key)} is not a scenario key in js/data/scenarioInfo.js` +
+      (near ? ` - did you mean ${JSON.stringify(near)}?` : '.') +
+      ' The application would build its default population for it without' +
+      ' complaint, and the test would run on that world instead.'
+  );
+}
+
+/** The body lists in physics.js, in the order the snapshots read them. */
+const BODY_LISTS = [
+  'bh_list',
+  'stars',
+  'planets',
+  'gas_giants',
+  'asteroids',
+  'comets',
+  'neutron_stars',
+  'white_dwarfs',
+  'galaxies',
+];
 
 /**
  * Everything a spec needs to drive the application.
@@ -97,6 +178,27 @@ function makeApp(page) {
           timeout: 30_000,
         }
       );
+
+      // And the interface itself, which comes after the signal. revealApp()
+      // sets the flag and then reveals the control rail on a 200 ms timer
+      // (js/main.js), and until then the rail is visibility: hidden
+      // (css/styles.css). A click waits for its control to become visible;
+      // focus() does not, and on a hidden control it leaves focus on <body>.
+      // So a keyboard test that focused a rail control inside that gap pressed
+      // its keys on the page: uiCoherence's picker test failed on v2 that way,
+      // attempt and retry, after passing on the same tree in the pull request.
+      // A first visit holds the interface back behind the front door on
+      // purpose, so it is the one boot that does not wait for it.
+      if (!firstVisit) {
+        await page.waitForFunction(
+          () =>
+            document
+              .querySelector('.ui-container')
+              ?.classList.contains('showUI') === true,
+          null,
+          { timeout: 30_000 }
+        );
+      }
 
       // Pin the quality tier, because on 'auto' it is a measurement of the
       // machine running the test rather than a property of the application.
@@ -204,10 +306,12 @@ function makeApp(page) {
      * going through the module keeps those specs from breaking when a button
      * moves.
      *
-     * @param {string} key - A scenario key from js/data/scenarioInfo.js
+     * @param {string} key - A scenario key from js/data/scenarioInfo.js; any
+     *   other name throws rather than building the default population
      * @param {string} [seed] - A fixed seed, so a run is reproducible
      */
     async loadScenario(key, seed = 'e2e', { run = true } = {}) {
+      await requireScenarioKey(page, key);
       const ok = await page.evaluate(
         async ({ key, seed, run }) => {
           const ui = await import('/js/ui.js');
@@ -226,38 +330,296 @@ function makeApp(page) {
       await this.waitForBodies();
     },
 
-    /** Wait until the world actually contains something. */
-    async waitForBodies(min = 1) {
-      await page.waitForFunction(
-        async least => {
+    /**
+     * Build a world with nothing in it, at a fixed seed.
+     *
+     * Not a scenario: the catalog has no empty one, and the application
+     * builds its default population for 'Empty', which is why loadScenario
+     * refuses it. See tools/empty-world.mjs.
+     *
+     * @param {string} [seed] - A fixed seed, which also fixes the sky
+     * @param {object} [options]
+     * @param {boolean} [options.run] - Leave the simulation running
+     */
+    async emptyWorld(seed = 'e2e', { run = true } = {}) {
+      const left = await page.evaluate(buildEmptyWorld, { seed, run });
+      expect(left, 'bodies left in the empty world').toEqual({});
+    },
+
+    /**
+     * Wait until the world actually contains at least `min` bodies.
+     *
+     * A real wait: the predicate is synchronous, reading the physics module
+     * through a handle taken first, so Playwright polls it on every animation
+     * frame until it holds. It must not be written as an async function that
+     * imports the module itself - a promise is truthy, so waitForFunction takes
+     * that for success on its first poll whatever the lists hold. On timeout
+     * it throws, naming the count it saw.
+     *
+     * @param {number} [min] - Bodies to wait for, across the nine lists
+     * @param {object} [options]
+     * @param {number} [options.timeout] - Milliseconds before giving up
+     */
+    async waitForBodies(min = 1, { timeout = WAIT_TIMEOUT } = {}) {
+      const physics = await page.evaluateHandle(() => import('/js/physics.js'));
+      try {
+        await page.waitForFunction(
+          ([p, least, lists]) =>
+            lists.reduce((n, k) => n + (p[k]?.length ?? 0), 0) >= least,
+          [physics, min, BODY_LISTS],
+          { timeout }
+        );
+      } catch (err) {
+        if (err?.name !== 'TimeoutError') throw err;
+        const seen = await page
+          .evaluate(
+            ([p, lists]) => lists.reduce((n, k) => n + (p[k]?.length ?? 0), 0),
+            [physics, BODY_LISTS]
+          )
+          .catch(() => 'unreadable');
+        throw new Error(
+          `waitForBodies(${min}): the body count was ${seen} after ` +
+            `${timeout} ms (wanted ${min})`
+        );
+      } finally {
+        await physics.dispose().catch(() => {});
+      }
+    },
+
+    /**
+     * Wait for the simulation to advance by `count` of the counter's own
+     * steps, proving the loop is alive. The unit is the counter's: one
+     * physics step, of which a rendered frame takes several on a heavy
+     * scenario.
+     *
+     * A real wait, built like waitForBodies: a synchronous predicate over a
+     * module handle, so the counter has to get there. (This used to hand
+     * waitForFunction an async predicate, which passed on its first poll:
+     * waitForFrames(200) returned after 5 steps in 41 ms.) It fails, naming
+     * the counter and whether the loop is paused, when the steps do not come.
+     * A paused simulation never advances, so a caller that waits on a paused
+     * world has to resume it first.
+     *
+     * @param {number} [count] - Steps to wait for
+     * @param {object} [options]
+     * @param {number} [options.timeout] - Milliseconds before giving up;
+     *   by default long enough for a quarter of a heavy scenario's step rate
+     *   (see frameWaitTimeout)
+     */
+    async waitForFrames(
+      count = 10,
+      { timeout = frameWaitTimeout(count) } = {}
+    ) {
+      const ui = await page.evaluateHandle(() => import('/js/ui.js'));
+      try {
+        const start = await page.evaluate(m => m.state?.frame_count ?? 0, ui);
+        try {
+          await page.waitForFunction(
+            ([m, from, n]) => (m.state?.frame_count ?? 0) >= from + n,
+            [ui, start, count],
+            { timeout }
+          );
+        } catch (err) {
+          if (err?.name !== 'TimeoutError') throw err;
+          const now = await page
+            .evaluate(
+              m => ({
+                frames: m.state?.frame_count ?? 0,
+                paused: m.state?.paused,
+              }),
+              ui
+            )
+            .catch(() => ({ frames: 'unreadable', paused: 'unreadable' }));
+          throw new Error(
+            `waitForFrames(${count}): the frame counter went from ${start} ` +
+              `to ${now.frames} in ${timeout} ms (paused: ${now.paused})`
+          );
+        }
+      } finally {
+        await ui.dispose().catch(() => {});
+      }
+    },
+
+    /**
+     * Wait for the page to paint `count` frames, whatever the simulation is
+     * doing. waitForFrames counts physics steps, and a paused world takes
+     * none, so a test that pauses and then changes how the world is drawn
+     * waits on this instead: it resolves after `count` animation frames, and
+     * the application's draw loop runs on every one of them, paused or not.
+     * Throws if they do not come, naming how many did.
+     *
+     * @param {number} [count] - Animation frames to wait for
+     * @param {object} [options]
+     * @param {number} [options.timeout] - Milliseconds before giving up
+     */
+    async waitForPaintedFrames(count = 3, { timeout = WAIT_TIMEOUT } = {}) {
+      const seen = await page.evaluate(
+        ([n, limit]) =>
+          new Promise(resolve => {
+            let frames = 0;
+            const deadline = window.setTimeout(() => resolve(frames), limit);
+            const tick = () => {
+              frames += 1;
+              if (frames >= n) {
+                window.clearTimeout(deadline);
+                resolve(frames);
+              } else {
+                window.requestAnimationFrame(tick);
+              }
+            };
+            window.requestAnimationFrame(tick);
+          }),
+        [count, timeout]
+      );
+      if (seen < count) {
+        throw new Error(
+          `waitForPaintedFrames(${count}): the page painted ${seen} frames ` +
+            `in ${timeout} ms`
+        );
+      }
+    },
+
+    /**
+     * Let the simulation run, and be sure it did. The same wait as
+     * waitForFrames, which is now a real one; kept under its name for the
+     * specs that adopted it while that was not.
+     *
+     * @param {number} [count] - Steps to wait for
+     */
+    async advanceFrames(count = 10) {
+      await this.waitForFrames(count);
+    },
+
+    /**
+     * Encode the world on screen as a share link, and arm the wait for the
+     * world that link will build.
+     *
+     * Call it on the page that is about to open the link: the tab, not a new
+     * one. What is armed is a world generation (the counter bumped whenever the
+     * lists are repopulated) and an observer that notices the first one past
+     * it. Opening a link in a tab that already has a world is a hashchange, so
+     * the old world is still there, running and identical in count, until the
+     * link's own is built after an asynchronous decode; a body count or a
+     * frame counter cannot tell the two apart. See bootLink().
+     *
+     * The body count and mass are read in the same task as the capture, so
+     * they describe exactly the bodies the link carries: a running world loses
+     * a body to a merge or a hole a few steps later, and a count read after
+     * another round trip is not the count that was encoded.
+     *
+     * @param {object} [options]
+     * @param {string} [options.kind] - 'full' (default) or 'seeded'
+     * @returns {Promise<{fragment: string, count: number, totalMass: number}>}
+     */
+    async captureLink({ kind = 'full' } = {}) {
+      return page.evaluate(
+        async ({ kind, lists }) => {
+          const ui = await import('/js/ui.js');
           const p = await import('/js/physics.js');
-          const n =
-            p.bh_list.length +
-            p.stars.length +
-            p.planets.length +
-            p.gas_giants.length +
-            p.asteroids.length +
-            p.comets.length +
-            p.neutron_stars.length +
-            p.white_dwarfs.length +
-            p.galaxies.length;
-          return n >= least;
+          const share = await import('/js/shareState.js');
+          const summarize = () => {
+            const bodies = lists
+              .flatMap(k => p[k] || [])
+              .filter(b => b && b.alive !== false);
+            return {
+              count: bodies.length,
+              totalMass: bodies.reduce((s, b) => s + (b.mass || 0), 0),
+              nonFinite: bodies.filter(
+                b =>
+                  !Number.isFinite(b.pos?.x) ||
+                  !Number.isFinite(b.pos?.y) ||
+                  !Number.isFinite(b.vel?.x) ||
+                  !Number.isFinite(b.vel?.y) ||
+                  !Number.isFinite(b.mass)
+              ).length,
+            };
+          };
+
+          const world = { generation: p.getWorldGeneration(), record: null };
+          window.__linkWorld = world;
+          // The link is applied inside one task: decode, rebuild, scenario
+          // card, announcement. A MutationObserver callback is a microtask, so
+          // the first one after the generation moves runs when that task's
+          // script ends and before any frame can step the new world. The
+          // announcement writes the DOM on every link, so one always comes.
+          const watcher = new window.MutationObserver(() => {
+            if (world.record || p.getWorldGeneration() === world.generation) {
+              return;
+            }
+            world.record = {
+              generation: p.getWorldGeneration(),
+              scenario: ui.current_scenario_name,
+              frame: ui.state.frame_count,
+              ...summarize(),
+            };
+            watcher.disconnect();
+          });
+          watcher.observe(document, {
+            subtree: true,
+            childList: true,
+            attributes: true,
+            characterData: true,
+          });
+
+          const sent = summarize();
+          const fragment = await share.encodePayload(
+            ui.captureShareState({ kind })
+          );
+          return {
+            fragment,
+            count: sent.count,
+            totalMass: sent.totalMass,
+          };
         },
-        min,
-        { timeout: 20_000 }
+        { kind, lists: BODY_LISTS }
       );
     },
 
-    /** Wait for the simulation to advance, proving the loop is alive. */
-    async waitForFrames(count = 10) {
-      const start = await this.frameCount();
-      await page.waitForFunction(
-        async ([from, n]) => {
-          const ui = await import('/js/ui.js');
-          return (ui.state?.frame_count ?? 0) >= from + n;
-        },
-        [start, count],
-        { timeout: 20_000 }
+    /**
+     * Open a link in this tab and wait for the world it builds.
+     *
+     * The wait is on the world generation armed by captureLink(), not on a
+     * minimum body count: the world that was on screen already satisfies a
+     * count, which is how a test of a link passed with the link never applied
+     * (the hashchange handler held back for ten minutes, 15 of 15 green).
+     *
+     * @param {string} fragment - From captureLink()
+     * @param {object} [options]
+     * @param {number} [options.timeout] - Milliseconds to wait for the world
+     * @returns {Promise<{generation: number, scenario: string, frame: number,
+     *   count: number, totalMass: number, nonFinite: number}>} The link's
+     *   world, read in the task that built it
+     */
+    async bootLink(fragment, { timeout = 20_000 } = {}) {
+      await this.boot({ url: `/#${fragment.replace(/^#/, '')}` });
+      return page.evaluate(
+        ms =>
+          new Promise((resolve, reject) => {
+            const world = window.__linkWorld;
+            if (!world) {
+              reject(
+                new Error(
+                  'No wait is armed: captureLink() has to run on this page ' +
+                    'first, and a reload in between loses it.'
+                )
+              );
+              return;
+            }
+            const started = performance.now();
+            const poll = () => {
+              if (world.record) resolve(world.record);
+              else if (performance.now() - started > ms) {
+                reject(
+                  new Error(
+                    `The link built no world within ${ms} ms ` +
+                      `(world generation stayed at ${world.generation}).`
+                  )
+                );
+              } else setTimeout(poll, 20);
+            };
+            poll();
+          }),
+        timeout
       );
     },
 
@@ -326,6 +688,25 @@ function makeApp(page) {
       }, paused);
     },
 
+    /**
+     * Pause a running simulation with the transport bar's own button.
+     *
+     * setPaused() writes ui.state, so it needs /js/ui.js and works against the
+     * sources only. This goes the way a reader does, through #timelinePlay,
+     * and takes its answer from the readout's status rather than from the
+     * module, so it works against dist/ too.
+     *
+     * The button toggles. Pressed on a world that was already paused it would
+     * start it, so the premise is asserted before the press rather than
+     * assumed.
+     */
+    async pressPause() {
+      const status = page.locator('#overlayStatus');
+      await expect(status).toHaveAttribute('data-state', 'running');
+      await this.press(page.locator('#timelinePlay'));
+      await expect(status).toHaveAttribute('data-state', 'paused');
+    },
+
     /** Whether the simulation is paused. */
     isPaused() {
       return page.evaluate(async () => {
@@ -336,19 +717,8 @@ function makeApp(page) {
 
     /** A snapshot of every body's state, for NaN hunting and drift checks. */
     bodySnapshot() {
-      return page.evaluate(async () => {
+      return page.evaluate(async lists => {
         const p = await import('/js/physics.js');
-        const lists = [
-          'bh_list',
-          'stars',
-          'planets',
-          'gas_giants',
-          'asteroids',
-          'comets',
-          'neutron_stars',
-          'white_dwarfs',
-          'galaxies',
-        ];
         const bodies = lists
           .flatMap(k => p[k] || [])
           .filter(b => b && b.alive !== false);
@@ -364,7 +734,7 @@ function makeApp(page) {
           ).length,
           totalMass: bodies.reduce((s, b) => s + (b.mass || 0), 0),
         };
-      });
+      }, BODY_LISTS);
     },
 
     /**
@@ -393,25 +763,24 @@ function makeApp(page) {
         const all = lists
           .flatMap(k => p[k] || [])
           .filter(b => b && b.alive !== false);
-        const pick =
-          (wanted && all.find(b => b.constructor?.name === wanted)) || all[0];
+        const pick = (wanted && all.find(b => b.kind === wanted)) || all[0];
         if (!pick) return null;
 
-        // The type string the inspector dispatches on is not the constructor
-        // name - a StarObject is a 'Star' there - and the mapping lives in
+        // The type string the inspector dispatches on is not the kind
+        // string - a StarObject is a 'Star' there - and the mapping lives in
         // findObjectAtPosition, which is what the canvas click handler calls.
         // Asking it about the body's own position gets the exact {object, type}
         // pair a click would produce, so this test uses the application's
         // vocabulary rather than inventing a parallel one that would drift.
         const hit = p.findObjectAtPosition(pick.pos);
         const target = hit?.object === pick ? hit : null;
-        if (!target) return { missed: pick.constructor?.name ?? 'unknown' };
+        if (!target) return { missed: pick.kind ?? 'unknown' };
 
         ui.showObjectInspector(target.object, target.type);
         return {
           id: target.object.id,
           type: target.type,
-          constructor: target.object.constructor?.name,
+          kind: target.object.kind,
           name: target.object.name ?? null,
           mass: target.object.mass,
         };
@@ -559,5 +928,17 @@ export const test = base.extend({
     { auto: true },
   ],
 });
+
+/**
+ * Opens the lesson's objects list if it is folded. On a phone it starts
+ * folded until the reader opens it (the step comes first on a sheet that
+ * small), so a test that wants a chip opens it as a reader would.
+ */
+export async function openObjectsList(page) {
+  const disclosure = page.locator('#investigationObjectsDisclosure');
+  if ((await disclosure.count()) === 0) return;
+  if (await disclosure.evaluate(el => el.open)) return;
+  await disclosure.locator('summary').click();
+}
 
 export { expect };

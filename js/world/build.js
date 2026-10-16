@@ -28,7 +28,7 @@
 //   pins this for all 53 scenarios.
 // =============================================================================
 
-import { CIRCUMBINARY, CIRCUMSTELLAR, systemLayout } from '../binaryOrbits.js';
+import { systemLayout } from '../binaryOrbits.js';
 import { encounterState } from '../gravityAssist.js';
 import {
   EARTH_MASSES_PER_JUPITER_MASS,
@@ -80,9 +80,895 @@ import {
   plutoBodies,
   trojanBodies,
 } from '../resonance/systems.js';
-import { applyPresetLayout } from '../scenarios.js';
+import {
+  SCENARIO_GEOMETRY,
+  applyPresetLayout,
+  expandGeometry,
+  scenarioId,
+} from '../scenarios.js';
 import { populationCaps } from '../quality.js';
 import { SIM_UNITS_PER_AU } from '../units.js';
+
+// Every type, for a declaration that replaces none of the generated population.
+// prettier-ignore
+const KEEP_ALL = ['Star', 'Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'];
+
+/**
+ * Scenarios whose bodies are declared as data but are the engine's alone to
+ * build (SCENARIO_GEOMETRY.md, slice 2): they take the bodies the generator
+ * drew, read the drawn radius, draw a phase or set the engine's own
+ * properties, none of which a scenario pack may do. They live here, with the
+ * builder that reads them, and not in js/scenarios.js, which every route loads:
+ * the start-up download pays for what only the builder uses. tests/
+ * scenarioGeometry.test.js holds each to the world the code made.
+ */
+export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
+  // The bodies the seeded generator drew for the scenario's own counts are
+  // reused (`from`), so every id, every generated field and the generator's
+  // place in its sequence are what the hand-built blocks left; a type in
+  // `keep` leaves any further generated bodies of it in the world, as the
+  // blocks did when a pack asked for more stars than the scenario places.
+  // Nothing below is a pack's to carry: SCENARIO_GEOMETRY.md says why.
+  //
+  // Earth and the Moon, about their barycenter, at a phase the seeded
+  // generator draws when the Moon is placed. G here carries the schematic's
+  // exaggerated distance (js/scenarios.js, the scenario's settings).
+  // prettier-ignore
+  'earth-moon-system': { steps: [
+    { body: { type: 'Planet', name: 'Earth', mass: { earths: 1 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { diameter: 12742, orbital_period: 365, baseColor: '#4B7BE5', radius: 12, density: 'rocky', isEarth: true, temperature: 288, gravity: 9.81, rotation_period: 1, atmosphere: 'N2/O2', density_kg_m3: 5514, escape_velocity: 11.19, surface_pressure: 101325, magnetic_field: 25, albedo: 0.306 } } },
+    { body: { type: 'Planet', name: 'Luna', mass: { earths: 0.0123 }, orbit: { around: 'Earth', distance: { units: 35 }, barycentric: true, angle: { random: true } }, set: { diameter: 3474, orbital_period: 27.3, baseColor: '#8B8B8B', radius: 3, density: 'rocky', isMoon: true, temperature: 250, gravity: 1.62, rotation_period: 27.3, atmosphere: 'none', density_kg_m3: 3344, escape_velocity: 2.38, surface_pressure: 0, magnetic_field: 0, albedo: 0.136 } } },
+  ] },
+  // 1I/'Oumuamua on its measured hyperbolic orbit, with Earth for scale. The
+  // visitor's state is that orbit evaluated at four AU on the way in; its mass
+  // is a billionth of a simulation unit, 3.329460487e-7 Earth masses.
+  // prettier-ignore
+  'interstellar-visitor': { steps: [
+    { body: { type: 'Star', name: 'Sun', mass: { suns: 1 }, from: { generated: 0, ifMissing: 'make' }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { radiusInSuns: 1, luminosityInSuns: 1, radius: 9, temperature: 5772, spectralType: 'G2V', baseColor: '#ffd34d', persistent: true } } },
+    { body: { type: 'Planet', name: 'Earth', mass: { earths: 1 }, orbit: { around: 'Sun', distance: { au: 1 }, angle: { pi: 0.5 } }, set: { radiusInEarths: 1, radius: 3, baseColor: '#4b90e2', persistent: true } } },
+    { body: { type: 'Planet', name: "1I/'Oumuamua", mass: { earths: 3.329460487e-7 }, at: { x: -286.14, y: -279.48 }, velocity: { x: 2.9436, y: 2.0454 }, set: { radius: 2.2, baseColor: '#d96a4a', persistent: true } } },
+  ] },
+  // Two equal A stars about their common center, barycentric so the pair
+  // circles a fixed point.
+  // prettier-ignore
+  'binary-pair': { keep: ['Star'], steps: [
+    { body: { type: 'Star', name: 'Star A', mass: { suns: 2 }, from: { generated: 0 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { radiusInSuns: 1.6, luminosityInSuns: 10, radius: 9, temperature: 8000, spectralType: 'A5V', baseColor: '#ffd97d', persistent: true } } },
+    { body: { type: 'Star', name: 'Star B', mass: { suns: 2 }, from: { generated: 1 }, orbit: { around: 'Star A', distance: { au: 4 }, barycentric: true }, set: { radiusInSuns: 1.6, luminosityInSuns: 10, radius: 9, temperature: 8000, spectralType: 'A5V', baseColor: '#8fd4ff', persistent: true } } },
+  ] },
+  // One black hole and four planets on circular orbits at multiples of its
+  // drawn radius, so the orbits stay outside it at any mass a step asks for.
+  // Phases are i*pi/2 + 0.3 radians. Planet masses are explicit: the generator
+  // makes them a sizeable fraction of a solar mass.
+  // prettier-ignore
+  'black-hole-lab': { keep: ['BlackHole'], steps: [
+    { body: { type: 'BlackHole', name: 'Black Hole', from: { generated: 0 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Inner Orbiter', mass: { earths: 1 }, from: { generated: 0 }, orbit: { around: 'Black Hole', distance: { radii: 4.2 }, angle: { rad: 0.3 } }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Second Orbiter', mass: { earths: 3 }, from: { generated: 1 }, orbit: { around: 'Black Hole', distance: { radii: 6.4 }, angle: { rad: 1.8707963267948966 } }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Third Orbiter', mass: { earths: 0.5 }, from: { generated: 2 }, orbit: { around: 'Black Hole', distance: { radii: 9.2 }, angle: { rad: 3.441592653589793 } }, set: { persistent: true } } },
+    { body: { type: 'Planet', name: 'Outer Orbiter', mass: { earths: 8 }, from: { generated: 3 }, orbit: { around: 'Black Hole', distance: { radii: 12.6 }, angle: { rad: 5.0123889803846895 } }, set: { persistent: true } } },
+  ] },
+  // The inner Solar System with the habitable zone drawn: real semi-major
+  // axes (Mercury left out), phases i/4 * 2 pi + 0.4 radians, each world one
+  // Earth mass (too small to perturb anything) and drawn large enough to click.
+  // prettier-ignore
+  'habitable-zone-lab': { keep: ['Star'], steps: [
+    { body: { type: 'Star', name: 'Sun', mass: { suns: 1 }, from: { generated: 0 }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { luminosityInSuns: 1, radiusInSuns: 1, temperature: 5772, spectralType: 'G2V', radius: 6, baseColor: '#ffd27f', showHabitableZone: true, persistent: true } } },
+    { body: { type: 'Planet', name: 'Venus', mass: { earths: 1 }, from: { generated: 0 }, orbit: { around: 'Sun', distance: { au: 0.723 }, angle: { rad: 0.4 } }, set: { radius: 4.6, baseColor: '#e8c39e', persistent: true } } },
+    { body: { type: 'Planet', name: 'Earth', mass: { earths: 1 }, from: { generated: 1 }, orbit: { around: 'Sun', distance: { au: 1 }, angle: { rad: 1.9707963267948965 } }, set: { radius: 4.8, baseColor: '#6ec6ff', persistent: true } } },
+    { body: { type: 'Planet', name: 'Mars', mass: { earths: 1 }, from: { generated: 2 }, orbit: { around: 'Sun', distance: { au: 1.524 }, angle: { rad: 3.541592653589793 } }, set: { radius: 3.6, baseColor: '#d9744a', persistent: true } } },
+    { body: { type: 'Planet', name: 'Ceres', mass: { earths: 1 }, from: { generated: 3 }, orbit: { around: 'Sun', distance: { au: 2.77 }, angle: { rad: 5.11238898038469 } }, set: { radius: 2.4, baseColor: '#9aa3b5', persistent: true } } },
+  ] },
+  // TRAPPIST-1 from js/data/trappist1.js, which the habitable zone
+  // instruments read too, so the scenario and the investigation cannot
+  // describe two different systems.
+  // prettier-ignore
+  'trappist-1-system': { keep: ['Star', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [{ rule: { name: 'published-system', params: { system: 'trappist-1' } } }] },
+  //
+  // The laboratory scenarios (slice 3). Their bodies are placed from settings a
+  // student changes, which a table row cannot hold as a number: a named rule
+  // reads the settings SCENARIO_GEOMETRY.md lists for it and builds the system
+  // from a published formula (js/cr3bp.js's convention, js/binaryOrbits.js,
+  // js/gravityAssist.js, the two-body circular speed), and the table keeps
+  // everything the scenario says about itself: the names, the colors, the drawn
+  // sizes and which formula. Every one replaces the generated population whole.
+  //
+  // The circular restricted three-body problem: two bodies on a circular orbit
+  // about the barycenter and a tracer of negligible mass, in the rotating frame.
+  // A drawn radius is `drawnSolarRadii` solar radii times the cube root of the
+  // star's true radius, which keeps both visible where the L4/L5 triangle fits.
+  // prettier-ignore
+  'lagrange-point-lab': { steps: [{ rule: { name: 'restricted-three-body', params: { primaryName: 'Primary', primaryColor: '#ffd27f', primaryRadiusInSuns: 1, secondaryName: 'Secondary', secondaryColor: '#9fd0ff', secondaryRadiusInSuns: 0.35, drawnSolarRadii: 30, tracerName: 'Tracer', tracerColor: '#f07f7f', tracerRadius: 0.8 } } }] },
+  // One star, a spacecraft and a target station on circular coplanar orbits.
+  // prettier-ignore
+  'orbital-transfer-lab': { steps: [{ rule: { name: 'circular-transfer', params: { starName: 'Sol', starDrawnSolarRadii: 10, probeName: 'Spacecraft', probeColor: '#e8f4ff', probeRadius: 0.5, targetName: 'Target Station', targetColor: '#f4c86a', targetRadius: 0.9, targetMassRatio: 1e-8 } } }] },
+  // Two stars and a planet from closed-form elements, round one star or round
+  // both; the stars are drawn ten times life size.
+  // prettier-ignore
+  'binary-planet-lab': { recenter: true, steps: [{ rule: { name: 'binary-lab', params: { mode: 'circumstellar', drawExaggeration: 10, starAName: 'Star A', starAColor: '#fff0d0', starBName: 'Star B', starBColor: '#ffc898', planetName: 'Planet', planetColor: '#7ec8ff', planetRadius: 1.5 } } }] },
+  // prettier-ignore
+  'circumbinary-planet-lab': { recenter: true, steps: [{ rule: { name: 'binary-lab', params: { mode: 'circumbinary', drawExaggeration: 10, starAName: 'Star A', starAColor: '#fff0d0', starBName: 'Star B', starBColor: '#ffc898', planetName: 'Planet', planetColor: '#7ec8ff', planetRadius: 1.5 } } }] },
+  // HD 209458 and its planet about their barycenter, from js/data/
+  // exoplanetSystems.js, which the exoplanet instruments read too.
+  // prettier-ignore
+  'exoplanet-characterization-lab': { recenter: true, steps: [{ rule: { name: 'published-system', params: { system: 'hd209458' } } }] },
+  // HD 209458 at true relative scale (the radii are the published ones, so the
+  // silhouette, the dip and the arithmetic in the investigation are one set of
+  // numbers). The star is the generator's first star, made if it drew none, kept
+  // with its id; the planet starts a quarter of an orbit before the first
+  // transit. Worked in the primary's rest frame: the companion (Blended Binary
+  // only: 300 AU out, half a magnitude fainter, 1.0 solar mass) circles it
+  // retrograde at the two-body speed for the pair. The planet's Earth-mass
+  // figure is 0.69 x 317.828 to the last digit (219.30131999999998, as the
+  // hand-built block computed it; 219.30132 is an ulp away). The gravitating
+  // mass is 0.02% less (physics.js's own constant). Kept (D-GEOM-06).
+  // prettier-ignore
+  'transit-lab': { steps: [
+    { body: { type: 'Star', name: 'HD 209458', mass: { suns: 1.148 }, born: { suns: 1 }, from: { generated: 0, ifMissing: 'make' }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { radiusInSuns: 1.155, luminosityInSuns: 1.77, radius: 0.537129285, temperature: 6065, spectralType: 'G0V', baseColor: '#fff3df', persistent: true } } },
+    { body: { type: 'Planet', name: 'HD 209458 b', mass: { jupiters: 0.69 }, born: { earths: 1 }, orbit: { around: 'HD 209458', distance: { au: 0.04747 }, angle: { rad: -1.5707963267948966 } }, set: { massInEarths: 219.30131999999998, radiusInJupiters: 1.38, radius: 0.06594968230817999, baseColor: '#b8875a', persistent: true } } },
+  ] },
+  // prettier-ignore
+  'blended-binary': { steps: [
+    { body: { type: 'Star', name: 'HD 209458', mass: { suns: 1.148 }, born: { suns: 1 }, from: { generated: 0, ifMissing: 'make' }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 }, set: { radiusInSuns: 1.155, luminosityInSuns: 1.77, radius: 0.537129285, temperature: 6065, spectralType: 'G0V', baseColor: '#fff3df', persistent: true } } },
+    { body: { type: 'Star', name: 'HD 209458 B (companion)', mass: { suns: 1 }, from: { generated: 1, ifMissing: 'make' }, orbit: { around: 'HD 209458', distance: { au: 300 }, angle: { rad: 0 }, mutual: true, retrograde: true }, set: { radiusInSuns: 0.95, luminosityInSuns: 1.1167944997299422, radius: 0.44179465, temperature: 5700, spectralType: 'G5V', baseColor: '#ffe9c4', persistent: true } } },
+    { body: { type: 'Planet', name: 'HD 209458 b', mass: { jupiters: 0.69 }, born: { earths: 1 }, orbit: { around: 'HD 209458', distance: { au: 0.04747 }, angle: { rad: -1.5707963267948966 } }, set: { massInEarths: 219.30131999999998, radiusInJupiters: 1.38, radius: 0.06594968230817999, baseColor: '#b8875a', persistent: true } } },
+  ] },
+  // Lagrange's equilateral solution: three equal stars rigidly rotating about
+  // their center, linearly unstable (Gascheau), which is what the investigation
+  // needs. 50 units circumradius, 6 solar masses each, named so the answer key
+  // can say which one is perturbed.
+  // prettier-ignore
+  'three-body-sensitivity-lab': { steps: [{ rule: { name: 'equilateral-stars', params: { circumradius: 50, massSuns: 6, starRadius: 8, names: ['Alpha', 'Beta', 'Gamma'], colors: ['#FFD86B', '#7FB2F0', '#F08A6B'] } } }] },
+  // A planet and a spacecraft on an exact encounter hyperbola, alone in space
+  // or about a star the planet circles. No net-momentum balance: the planet's
+  // recoil is the measurement.
+  // prettier-ignore
+  'gravity-assist-lab': { steps: [{ rule: { name: 'gravity-assist', params: { starName: 'Star', starColor: '#ffd34d', starRadius: 8, planetName: 'Planet', planetColor: '#c9a882', planetRadius: 2, planetRadiusInSuns: 0.102763, probeName: 'Spacecraft', probeColor: '#e8f4ff', probeRadius: 0.4 } } }] },
+  // prettier-ignore
+  'gravity-assist-heliocentric': { steps: [{ rule: { name: 'gravity-assist', params: { starName: 'Star', starColor: '#ffd34d', starRadius: 8, planetName: 'Planet', planetColor: '#c9a882', planetRadius: 2, planetRadiusInSuns: 0.102763, probeName: 'Spacecraft', probeColor: '#e8f4ff', probeRadius: 0.4 } } }] },
+  //
+  // Slice 4: the two galaxy discs, a cluster, systems of generated bodies on
+  // circular orbits, the Kuiper belt, a tidal disruption and an inspiral. A
+  // type in `keep` stays as the generator drew it, as the hand-built blocks
+  // left it; a type not named is emptied, as they emptied it.
+  //
+  // Spiral Galaxy is the prediction: a bulge, and 90 tracers evenly spaced in
+  // log radius from 150 to 900, each at the circular speed the visible mass
+  // inside it implies, so the curve falls as r^-1/2. Milky Way Rotation is the
+  // observation: the same disc, every tracer at one speed (11), which the
+  // visible mass cannot hold, so its halo is on. Both replace the population.
+  // prettier-ignore
+  'spiral-galaxy': { steps: [{ rule: { name: 'tracer-disc', params: { curve: 'keplerian', bulgeName: 'Galactic bulge', bulgeColor: '#ffe9b8', bulgeMassSuns: 12, count: 90, innerRadius: 150, outerRadius: 900, starMassSuns: 0.03, flatSpeed: 11, namePrefix: 'Disc star', starColor: '#cfe0ff' } } }] },
+  // prettier-ignore
+  'milky-way-rotation': { steps: [{ rule: { name: 'tracer-disc', params: { curve: 'flat', bulgeName: 'Galactic bulge', bulgeColor: '#ffe9b8', bulgeMassSuns: 12, count: 90, innerRadius: 150, outerRadius: 900, starMassSuns: 0.03, flatSpeed: 11, namePrefix: 'Disc star', starColor: '#cfe0ff' } } }] },
+  // Zwicky's cluster: 24 members of 4 solar masses within 2600 units, six of
+  // them elliptical, on random orbits at 0.55 to 1.05 of the speed the members
+  // and the halo together set.
+  // prettier-ignore
+  'coma-cluster': { steps: [{ rule: { name: 'bound-cluster', params: { members: 24, radius: 2600, memberMassSuns: 4, ellipticals: 6, concentration: 0.55, speedFloor: 0.55, speedSpread: 0.5 } } }] },
+  // Two stars (1.2 and 0.8 solar masses, 120 units apart) about a stationary
+  // center, and the generated planets, gas giants and asteroids circling both;
+  // the whole system is recentered. The generated stars are replaced.
+  // prettier-ignore
+  'binary-star-system': { keep: ['Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], recenter: true, steps: [
+    { rule: { name: 'circular-binary-stars', params: { massesSuns: [1.2, 0.8], separation: 120 } } },
+    { rule: { name: 'orbital-population', params: { centralStars: 2, planetInner: 150, planetStep: 30, giantInner: 300, giantStep: 50, asteroidInner: 400, asteroidSpan: 100 } } },
+  ] },
+  // The generated star's planets, gas giants and asteroids on circular orbits,
+  // and a black hole that keeps the name it was drawn with, far off and
+  // approaching. Nothing is recentered: the visitor is meant to be moving.
+  // prettier-ignore
+  'rogue-encounter': { keep: ['Star', 'Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [
+    { rule: { name: 'orbital-population', params: { centralStars: 1, planetInner: 50, planetStep: 25, giantInner: 200, giantStep: 50, asteroidInner: 350, asteroidSpan: 100 } } },
+    { body: { type: 'BlackHole', name: 'Rogue', from: { generated: 0, keepName: true }, at: { x: -800, y: 200 }, velocity: { x: 20, y: -5 } } },
+  ] },
+  // The generated star is named Sol, the eight named objects (a published
+  // table in this module) replace the generated planets, and the twelve small
+  // bodies are the generator's first twelve asteroids, placed in the band the
+  // named objects occupy (190 to 310 units); the rest stay where the layout put
+  // them.
+  // prettier-ignore
+  'kuiper-belt': { keep: ['Star', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [
+    { body: { type: 'Star', name: 'Sol', from: { generated: 0 } } },
+    { rule: { name: 'published-system', params: { system: 'kuiper-belt' } } },
+    { rule: { name: 'orbital-population', params: { centralStars: 1, asteroidInner: 190, asteroidSpan: 120, asteroidNames: ['Ixion', 'Huya', '2002 AW197', '2002 UX25', '2002 TX300', '2003 AZ84', '2003 VS2', '2004 GV9', '2005 RN43', '2005 UQ513', '2006 QH181', '2007 OR10'] } } },
+  ] },
+  // The hole at rest at the origin, and one star on a plunging ellipse (1.5
+  // drawn radii at periapsis). Everything else the generator drew but the
+  // compact objects is replaced.
+  // prettier-ignore
+  'tidal-disruption-event': { keep: ['BlackHole', 'NeutronStar', 'WhiteDwarf'], place: [{ rule: { name: 'hole-and-planet', params: { planetX: 150, planetSpeed: 80 } } }], steps: [
+    { body: { type: 'BlackHole', name: 'Hole', from: { generated: 0, keepName: true }, at: { x: 0, y: 0 }, velocity: { x: 0, y: 0 } } },
+    { rule: { name: 'tidal-infall', params: { starName: 'Doomed star', starMassSuns: 1, periapsisRadii: 1.5, apoapsisRadii: 11, apoapsisFloor: 900, startFraction: 0.45, startPeriapsisFactor: 2.5 } } },
+  ] },
+  // Three light holes on circular orbits about the heavy one at 3.2, 5.1 and
+  // 7 of its drawn radii, evenly spaced in phase.
+  // prettier-ignore
+  'black-hole-billiards': { keep: ['Star', 'Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [{ rule: { name: 'staggered-orbits', params: { innerRadii: 3.2, stepRadii: 1.9 } } }] },
+  // Two black holes 90 units apart at 0.92 of the circular speed, so they
+  // spiral in.
+  // prettier-ignore
+  'gw150914': { keep: ['Star', 'Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [{ rule: { name: 'inspiral-pair', params: { separation: 90, perturbation: 0.92 } } }] },
+  // The Sun and its published tables (js/world/build.js: solarSystemData,
+  // realAsteroids, famousComets). Only the compact objects the generator drew
+  // stay; the stars, planets, giants, asteroids and comets are replaced.
+  // prettier-ignore
+  'solar-system': { keep: ['BlackHole', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [{ rule: { name: 'published-system', params: { system: 'solar-system' } } }] },
+  //
+  // Slice 5: five scenarios that placed bodies inside applyPlacement. `place`
+  // steps run there, between the layout and the momentum balance; `steps` run
+  // at the end of the build, as the other declarations do, and with every type
+  // kept (nothing here replaces the generated population). Binary Black Hole
+  // is placed twice, as the code placed it: its pair again after everything
+  // else, then the planets and the asteroids on circular orbits about the pair.
+  // prettier-ignore
+  'binary-bh': { keep: KEEP_ALL, place: [{ rule: { name: 'inspiral-pair', params: { separation: 120, perturbation: 0.95 } } }], steps: [
+    { rule: { name: 'inspiral-pair', params: { separation: 120, perturbation: 0.95 } } },
+    { rule: { name: 'orbital-population', params: { centralHoles: 2, planetInner: 180, planetStep: 30, giantInner: 350, giantStep: 50, asteroidInner: 500, asteroidSpan: 100 } } },
+  ] },
+  // prettier-ignore
+  'slingshot': { place: [{ rule: { name: 'inspiral-pair', params: { separation: 100, perturbation: 0.9 } } }] },
+  // prettier-ignore
+  'triple-bh-system': { place: [{ rule: { name: 'triangle-holes', params: { radius: 150, speed: 15 } } }] },
+  // The two stars are placed in the layout and named at the end, whatever the layout.
+  // prettier-ignore
+  'neutron-star-collision': { keep: KEEP_ALL, place: [{ rule: { name: 'pin-pair', params: { type: 'NeutronStar', x: 50, speed: 15 } } }], steps: [{ rule: { name: 'name-pair', params: { type: 'NeutronStar', names: ['GW170817-A', 'GW170817-B'] } } }] },
+  // prettier-ignore
+  'white-dwarf-binary': { place: [{ rule: { name: 'pin-pair', params: { type: 'WhiteDwarf', x: 80, speed: 20 } } }] },
+});
+
+/**
+ * The named rules of the laboratory scenarios (ENGINE_GEOMETRY above;
+ * SCENARIO_GEOMETRY.md lists the settings each reads). A rule is handed the
+ * parameters its declaration carries and `env` ({G, units, settings}), and
+ * returns the records expandGeometry makes bodies from, in the order the
+ * hand-built blocks made them: each constructor draws from the seeded generator,
+ * and a world is the same only if the draws keep their order. The formulas are
+ * the blocks' own, written the same way.
+ */
+const laboratoryRules = {
+  // The circular restricted three-body problem. The barycenter is the origin,
+  // the heavier body sits at -mu and the lighter at 1-mu, in units of the
+  // separation. That is the convention js/cr3bp.js states and works in, and
+  // building the world any other way would mean the overlay and the simulation
+  // disagreed about where the origin is.
+  'restricted-three-body': (p, { G, units, settings: S }) => {
+    const AU = units.AU;
+    const m1 = S.lagrange_primary_mass * SOLAR_MASS_UNIT;
+    const m2 = S.lagrange_secondary_mass * SOLAR_MASS_UNIT;
+    const separation = S.lagrange_separation * AU;
+    const total = m1 + m2;
+    const mu = m2 / total;
+    const n = Math.sqrt((G * total) / (separation * separation * separation));
+    // Drawn well above life size so both are visible at a zoom that holds the
+    // whole L4/L5 triangle. Nothing here comes within twenty times the drawn
+    // radius, and js/physics.js collides on the drawn radius.
+    const place = (fraction, mass, name, baseColor, radiusInSuns) => {
+      const x = fraction * separation;
+      return {
+        type: 'Star',
+        ctor: 0,
+        pos: { x, y: 0 },
+        vel: { x: 0, y: n * x },
+        assign: {
+          mass,
+          massInSuns: mass / SOLAR_MASS_UNIT,
+          name,
+          radiusInSuns,
+          radius: p.drawnSolarRadii * 0.00465047 * AU * Math.cbrt(radiusInSuns),
+          baseColor,
+          persistent: true,
+        },
+      };
+    };
+    // The tracer, placed and launched in the ROTATING frame. At t = 0 the
+    // rotating and inertial frames coincide in orientation, so the position
+    // carries over unchanged and the velocity picks up the frame's own motion:
+    // v_inertial = v_rotating + omega x r, with omega along +z.
+    const rx = S.lagrange_tracer_x * separation;
+    const ry = S.lagrange_tracer_y * separation;
+    const tracerMass = total * S.lagrange_tracer_fraction;
+    return [
+      place(-mu, m1, p.primaryName, p.primaryColor, p.primaryRadiusInSuns),
+      place(
+        1 - mu,
+        m2,
+        p.secondaryName,
+        p.secondaryColor,
+        p.secondaryRadiusInSuns
+      ),
+      {
+        type: 'Planet',
+        ctor: 1,
+        pos: { x: rx, y: ry },
+        vel: {
+          x: S.lagrange_tracer_vx * separation * n - n * ry,
+          y: S.lagrange_tracer_vy * separation * n + n * rx,
+        },
+        assign: {
+          name: p.tracerName,
+          mass: tracerMass,
+          massInEarths: tracerMass / EARTH_MASS_UNIT,
+          radius: p.tracerRadius,
+          baseColor: p.tracerColor,
+          persistent: true,
+        },
+      },
+    ];
+  },
+
+  // A Hohmann transfer has an exact answer only between circular coplanar
+  // orbits about a single dominant mass. Circular, exactly: the speed is
+  // sqrt(GM/r) with the spacecraft's own mass included in mu, because
+  // orbitalElements() includes it and a scenario that set up its orbit with a
+  // different mu than the readout uses would open with a small eccentricity
+  // nobody asked for. The star is drawn `starDrawnSolarRadii` solar radii
+  // across so it is visible at a zoom that also holds a 2.5 AU orbit; the
+  // spacecraft never comes within twenty times that, and js/physics.js collides
+  // on the drawn radius. The target is given a real mass so it shows up in the
+  // inspector as a body, and kept light enough not to perturb the transfer.
+  'circular-transfer': (p, { G, units, settings: S }) => {
+    const AU = units.AU;
+    const starMass = S.transfer_star_mass * SOLAR_MASS_UNIT;
+    const r1 = S.transfer_inner_au * AU;
+    const r2 = S.transfer_outer_au * AU;
+    const circular = (radius, mass, phaseDeg) => {
+      const phase = (phaseDeg * Math.PI) / 180;
+      const mu = G * (starMass + mass);
+      const v = Math.sqrt(mu / radius);
+      return {
+        pos: { x: radius * Math.cos(phase), y: radius * Math.sin(phase) },
+        vel: { x: -v * Math.sin(phase), y: v * Math.cos(phase) },
+      };
+    };
+    const probeMass = starMass * S.transfer_probe_mass_ratio;
+    const targetMass = starMass * p.targetMassRatio;
+    const inner = circular(r1, probeMass, 0);
+    const outer = circular(r2, targetMass, S.transfer_target_phase_deg);
+    return [
+      {
+        type: 'Star',
+        ctor: 0,
+        pos: { x: 0, y: 0 },
+        vel: { x: 0, y: 0 },
+        assign: {
+          mass: starMass,
+          massInSuns: S.transfer_star_mass,
+          name: p.starName,
+          radiusInSuns: 1,
+          radius: p.starDrawnSolarRadii * 0.00465047 * AU,
+          persistent: true,
+        },
+      },
+      {
+        type: 'Planet',
+        ctor: 1,
+        ...inner,
+        // The reported mass and the gravitating mass, kept in step: the
+        // constructor was handed one Earth mass and the mass it moves with is
+        // replaced here.
+        assign: {
+          name: p.probeName,
+          mass: probeMass,
+          massInEarths: probeMass / EARTH_MASS_UNIT,
+          radius: p.probeRadius,
+          baseColor: p.probeColor,
+          persistent: true,
+        },
+      },
+      {
+        type: 'Planet',
+        ctor: 1,
+        ...outer,
+        assign: {
+          name: p.targetName,
+          mass: targetMass,
+          massInEarths: targetMass / EARTH_MASS_UNIT,
+          radius: p.targetRadius,
+          baseColor: p.targetColor,
+          persistent: true,
+        },
+      },
+    ];
+  },
+
+  // Two stars and a planet from closed-form elements (js/binaryOrbits.js), the
+  // planet round one star or round both. Nothing is randomized, so the same
+  // settings give the same world to the bit. The planet is one Earth mass: not
+  // zero, because a body with no mass drops out of the barycenter and out of
+  // the energy bookkeeping the diagnostics depend on, and small enough that the
+  // test-particle assumption behind the published stability boundary is not
+  // being quietly violated by the thing being measured.
+  //
+  // Radii, and the one honest compromise in this scenario. js/physics.js
+  // absorbs a planet when it comes within star.radius + planet.radius, so the
+  // size these bodies are DRAWN at is the distance at which a collision is
+  // recorded. At a 10 AU separation a true solar radius is a third of a pixel
+  // and a star nobody can see is not usable, so the stars are drawn
+  // `drawExaggeration` times their size from the main-sequence relation
+  // R ~ M^0.8. A "collision" here is the planet passing within about thirteen
+  // solar radii of a star's center, which destroys a planet in reality too, but
+  // the split between "collided" and "ejected" does depend on this factor. The
+  // split between disrupted and survived does not.
+  'binary-lab': (p, { G, units, settings: S }) => {
+    const AU = units.AU;
+    const R_SUN = 0.00465047 * AU;
+    const m1Solar = S.binary_lab_m1;
+    const m2Solar = S.binary_lab_m2;
+    const separation = S.binary_lab_separation * AU;
+    const planetMass = EARTH_MASS_UNIT;
+    const layout = systemLayout({
+      mode: p.mode,
+      m1: m1Solar * SOLAR_MASS_UNIT,
+      m2: m2Solar * SOLAR_MASS_UNIT,
+      separation,
+      eccentricity: S.binary_lab_eccentricity,
+      phaseDeg: S.binary_lab_binary_phase,
+      planetMass,
+      semiMajor: S.binary_lab_planet_a * separation,
+      planetPhaseDeg: S.binary_lab_planet_phase,
+      G,
+    });
+    const star = (at, solar, name, baseColor) => {
+      const radiusInSuns = solar ** 0.8;
+      return {
+        type: 'Star',
+        ctor: solar,
+        pos: { ...at.pos },
+        vel: { ...at.vel },
+        assign: {
+          name,
+          radiusInSuns,
+          radius: radiusInSuns * R_SUN * p.drawExaggeration,
+          baseColor,
+          persistent: true,
+        },
+      };
+    };
+    return [
+      star(layout.star1, m1Solar, p.starAName, p.starAColor),
+      star(layout.star2, m2Solar, p.starBName, p.starBColor),
+      {
+        type: 'Planet',
+        ctor: 1,
+        pos: { ...layout.planet.pos },
+        vel: { ...layout.planet.vel },
+        // An Earth radius at this scale is 4e-5 units, which cannot be drawn at
+        // any zoom. 1.5 units is a third of the drawn star and a ten-thousandth
+        // of the binary separation, so it adds almost nothing to the collision
+        // threshold the star already sets. What makes the planet findable on
+        // screen is its trail.
+        assign: {
+          name: p.planetName,
+          mass: planetMass,
+          radius: p.planetRadius,
+          baseColor: p.planetColor,
+          persistent: true,
+        },
+      },
+    ];
+  },
+
+  // Lagrange's equilateral solution (1772): equal masses at the corners of an
+  // equilateral triangle, rotating rigidly about their common center. Gascheau
+  // (1843) proved it stable only when 27(m1m2 + m2m3 + m3m1) < (m1+m2+m3)^2; for
+  // three equal masses that reads 81m^2 < 9m^2, false by a factor of nine, so
+  // the configuration is linearly unstable, which is exactly what the
+  // investigation needs. It starts perfectly regular, stays clear of every
+  // collision radius and departs exponentially (the Pythagorean problem merges
+  // in Gravitas and the figure eight is not chaotic). Measured over nine
+  // combinations of integrator and timestep the e-folding time is 6.8 to 7.6
+  // simulated seconds; theory gives sqrt(2)/omega = 6.0 s for the unstable
+  // eigenvalue. Everything is derived: omega = sqrt(G * 3m / L^3), L the side.
+  // Named rather than numbered, because the investigation asks the student to
+  // perturb one by name; never culled and never randomly re-typed.
+  'equilateral-stars': (p, { G }) => {
+    const R = p.circumradius;
+    const MASS = p.massSuns * SOLAR_MASS_UNIT;
+    const side = R * Math.sqrt(3);
+    const omega = Math.sqrt((G * 3 * MASS) / (side * side * side));
+    return p.names.map((name, i) => {
+      const theta = (i * 2 * Math.PI) / 3;
+      const x = R * Math.cos(theta);
+      const y = R * Math.sin(theta);
+      return {
+        type: 'Star',
+        ctor: 1,
+        pos: { x, y },
+        // Rigid rotation: v = omega x r.
+        vel: { x: -omega * y, y: omega * x },
+        assign: {
+          mass: MASS,
+          massInSuns: p.massSuns,
+          name,
+          radius: p.starRadius,
+          baseColor: p.colors[i],
+          persistent: true,
+        },
+      };
+    });
+  },
+
+  // A planet and a spacecraft on an exact encounter hyperbola. With a star the
+  // planet is on a circular orbit and its speed is not ours to choose; without
+  // one it drifts, and the speed is a stated parameter of the experiment. The
+  // spacecraft is placed from the encounter's elements so the impact parameter
+  // and the speed at infinity are exact inputs: pointing a probe at a planet
+  // from a finite distance gives a different b and a different vInf, and the
+  // comparison against theory would be measuring the setup. When no such
+  // approach exists (the gate is closer than periapsis) no spacecraft is made.
+  //
+  // Deliberately NOT balanced to zero net momentum: the planet's velocity
+  // change is its recoil from the encounter, and re-centering would mean it
+  // does not start at the speed the settings say it does. The star and the
+  // planet are drawn far larger than life (a true solar radius is under a
+  // pixel here); the exaggeration cannot reach the physics, because no
+  // configuration the investigation uses gets within twenty times the drawn
+  // radius of either.
+  'gravity-assist': (p, { G, settings: S }) => {
+    const planetMass =
+      S.assist_planet_mass *
+      (1 / JUPITER_MASSES_PER_SOLAR_MASS) *
+      SOLAR_MASS_UNIT;
+    const mu = G * planetMass;
+    const orbitRadius = S.assist_orbit_radius;
+    const out = [];
+    let planetPos = { x: 0, y: 0 };
+    let planetVel = { x: S.assist_planet_speed, y: 0 };
+    if (orbitRadius > 0) {
+      out.push({
+        type: 'Star',
+        ctor: 1,
+        pos: { x: 0, y: 0 },
+        vel: { x: 0, y: 0 },
+        assign: {
+          name: p.starName,
+          mass: SOLAR_MASS_UNIT,
+          massInSuns: 1,
+          radiusInSuns: 1,
+          luminosityInSuns: 1,
+          radius: p.starRadius,
+          temperature: 5772,
+          spectralType: 'G2V',
+          baseColor: p.starColor,
+          persistent: true,
+        },
+      });
+      planetPos = { x: orbitRadius, y: 0 };
+      // The pair's mass, not just the star's: the planet is a thousandth of a
+      // solar mass and ignoring it would start the orbit slightly eccentric.
+      planetVel = {
+        x: 0,
+        y: Math.sqrt((G * (SOLAR_MASS_UNIT + planetMass)) / orbitRadius),
+      };
+    }
+    out.push({
+      type: 'GasGiant',
+      pos: { ...planetPos },
+      vel: { ...planetVel },
+      assign: {
+        name: p.planetName,
+        mass: planetMass,
+        massInJupiters: S.assist_planet_mass,
+        radiusInSuns: p.planetRadiusInSuns,
+        radius: p.planetRadius,
+        baseColor: p.planetColor,
+        persistent: true,
+      },
+    });
+    const state = encounterState({
+      mu,
+      b: S.assist_impact_parameter,
+      vInf: S.assist_v_infinity,
+      distance: S.assist_gate,
+      approachDeg: S.assist_approach_deg,
+    });
+    if (state) {
+      const probeMass = planetMass * S.assist_probe_mass_ratio;
+      out.push({
+        type: 'Planet',
+        ctor: 1,
+        pos: { x: planetPos.x + state.pos.x, y: planetPos.y + state.pos.y },
+        vel: { x: planetVel.x + state.vel.x, y: planetVel.y + state.vel.y },
+        // The gravitating mass and the reported one, kept in step.
+        assign: {
+          name: p.probeName,
+          mass: probeMass,
+          massInEarths: probeMass / EARTH_MASS_UNIT,
+          radius: p.probeRadius,
+          baseColor: p.probeColor,
+          persistent: true,
+        },
+      });
+    }
+    return out;
+  },
+};
+
+/**
+ * The named rules of slice 4 (SCENARIO_GEOMETRY.md): systems of generated
+ * bodies placed on circular orbits, two galaxy discs, a cluster, a tidal
+ * disruption and a black hole inspiral. Same contract as laboratoryRules, with
+ * `env.generated` (the bodies the seeded generator drew, by type) for the
+ * rules that place them, as a record with `from`. A rule that makes bodies is
+ * a generator, so that each is made before the next one's draws from the seeded
+ * generator, as the hand-built loops drew them.
+ */
+const populationRules = {
+  // The spiral galaxy is the prediction (every star at the circular speed the
+  // visible mass inside it implies, so the curve falls as r^-1/2) and the
+  // Milky Way is the observation (every star at one speed). Radii are even in
+  // log so the tracers spread evenly across the plot's log axis.
+  'tracer-disc': function* (p, { G }) {
+    const BULGE = p.bulgeMassSuns * SOLAR_MASS_UNIT;
+    yield {
+      type: 'Star',
+      ctor: p.bulgeMassSuns,
+      pos: { x: 0, y: 0 },
+      vel: { x: 0, y: 0 },
+      assign: {
+        name: p.bulgeName,
+        isCentralBody: true,
+        persistent: true,
+        baseColor: p.bulgeColor,
+      },
+    };
+    const N = p.count;
+    for (let i = 0; i < N; i++) {
+      // One tracer sits at the inner radius (the hand-built disc always had 90,
+      // so i / (N - 1) was never 0 / 0).
+      const t = N > 1 ? i / (N - 1) : 0;
+      const r = p.innerRadius * Math.pow(p.outerRadius / p.innerRadius, t);
+      const theta = Math.random() * 2 * Math.PI;
+      // The bulge plus the share of the disc inside this radius.
+      const inner = BULGE + N * t * p.starMassSuns * SOLAR_MASS_UNIT;
+      const vKepler = Math.sqrt((G * inner) / r);
+      const v = p.curve === 'flat' ? p.flatSpeed : vKepler;
+      yield {
+        type: 'Star',
+        ctor: p.starMassSuns,
+        pos: { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+        vel: { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
+        assign: {
+          name: `${p.namePrefix} ${i + 1}`,
+          persistent: true,
+          baseColor: p.starColor,
+        },
+      };
+    }
+  },
+
+  // Zwicky's cluster. The speed scale comes from the total mass the cluster
+  // has, members plus halo, so it is bound; members are drawn from a centrally
+  // concentrated distribution on randomly oriented orbits, so their speeds are
+  // a dispersion and not a rotation.
+  'bound-cluster': function* (p, { G, settings: S }) {
+    const MEMBER = p.memberMassSuns * SOLAR_MASS_UNIT;
+    const haloMass = haloEnclosedMass(
+      p.radius,
+      { vFlat: S.halo_v_flat, coreRadius: S.halo_core_radius },
+      G
+    );
+    const totalMass = p.members * MEMBER + haloMass;
+    const vScale = Math.sqrt((G * totalMass) / p.radius);
+    for (let i = 0; i < p.members; i++) {
+      const r = p.radius * Math.pow(Math.random(), p.concentration);
+      const theta = Math.random() * 2 * Math.PI;
+      const speed = vScale * (p.speedFloor + Math.random() * p.speedSpread);
+      const phi = Math.random() * 2 * Math.PI;
+      yield {
+        type: 'Galaxy',
+        ctor: MEMBER,
+        args: [i < p.ellipticals ? 'elliptical' : 'spiral'],
+        pos: { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+        vel: { x: speed * Math.cos(phi), y: speed * Math.sin(phi) },
+        assign: {},
+      };
+    }
+  },
+
+  // The generated planets, gas giants and asteroids, each placed at a radius
+  // and a random phase on the circular orbit about the origin. Each is the
+  // generator's own body (`from`): placed, and given a name if the rule has one.
+  'orbital-population': (p, { G, generated }) => {
+    let centralMass = 0;
+    // The first `centralHoles` black holes set the speed instead of stars; with
+    // fewer than that there is nothing to circle and nothing is placed.
+    const center = p.centralHoles
+      ? generated.BlackHole.slice(0, p.centralHoles)
+      : stars.slice(0, p.centralStars);
+    if (center.length < (p.centralHoles ?? 0)) return [];
+    for (const body of center) centralMass += body.mass;
+    const out = [];
+    const place = (type, i, r, name) => {
+      const theta = Math.random() * 2 * Math.PI;
+      const v = Math.sqrt((G * centralMass) / r);
+      out.push({
+        type,
+        from: { generated: i },
+        pos: { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+        vel: { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
+        assign: name === undefined ? {} : { name },
+      });
+    };
+    if (p.planetInner !== undefined)
+      for (let i = 0; i < generated.Planet.length; i++)
+        place('Planet', i, p.planetInner + i * p.planetStep);
+    if (p.giantInner !== undefined)
+      for (let i = 0; i < generated.GasGiant.length; i++)
+        place('GasGiant', i, p.giantInner + i * p.giantStep);
+    if (p.asteroidInner !== undefined) {
+      const count = p.asteroidNames
+        ? Math.min(generated.Asteroid.length, p.asteroidNames.length)
+        : generated.Asteroid.length;
+      for (let i = 0; i < count; i++) {
+        // The radius is drawn before the phase, as the loops drew them.
+        const r = p.asteroidInner + Math.random() * p.asteroidSpan;
+        place('Asteroid', i, r, p.asteroidNames?.[i]);
+      }
+    }
+    return out;
+  },
+
+  // Two black holes about their center of mass at the circular speed for the
+  // pair, slowed so they spiral in.
+  'inspiral-pair': (p, { G, generated }) => {
+    const [b1, b2] = generated.BlackHole;
+    if (!b2) return [];
+    const m1 = b1.mass;
+    const m2 = b2.mass;
+    const totalMass = m1 + m2;
+    const r1 = p.separation * (m2 / totalMass);
+    const r2 = p.separation * (m1 / totalMass);
+    const orbitalSpeed = Math.sqrt((G * totalMass) / p.separation);
+    let v1 = orbitalSpeed * (m2 / totalMass);
+    let v2 = -orbitalSpeed * (m1 / totalMass);
+    v1 *= p.perturbation;
+    v2 *= p.perturbation;
+    const place = (i, x, vy) => ({
+      type: 'BlackHole',
+      from: { generated: i },
+      pos: { x, y: 0 },
+      vel: { x: 0, y: vy },
+      assign: {},
+    });
+    return [place(0, -r1, v1), place(1, r2, v2)];
+  },
+
+  // The first two bodies of a type at (-x, 0) and (x, 0), moving at `speed` in
+  // opposite directions along y, when there are two.
+  'pin-pair': (p, { generated }) => {
+    if (generated[p.type].length < 2) return [];
+    const at = (i, x, vy) => ({
+      type: p.type,
+      from: { generated: i },
+      pos: { x, y: 0 },
+      vel: { x: 0, y: vy },
+      assign: {},
+    });
+    return [at(0, -p.x, p.speed), at(1, p.x, -p.speed)];
+  },
+
+  // Three black holes on a circle of `radius`, a third of a turn apart, each
+  // at `speed` along the circle, when there are three.
+  'triangle-holes': (p, { generated }) => {
+    if (generated.BlackHole.length < 3) return [];
+    return [0, 1, 2].map(i => {
+      const angle = (i / 3) * 2 * Math.PI;
+      return {
+        type: 'BlackHole',
+        from: { generated: i },
+        pos: { x: Math.cos(angle) * p.radius, y: Math.sin(angle) * p.radius },
+        vel: { x: -Math.sin(angle) * p.speed, y: Math.cos(angle) * p.speed },
+        assign: {},
+      };
+    });
+  },
+
+  // The first black hole at rest at the origin and the first planet at
+  // (planetX, 0) moving at planetSpeed along y, when there is one of each.
+  // prettier-ignore
+  'hole-and-planet': (p, { generated: g }) => g.BlackHole.length < 1 || g.Planet.length < 1 ? [] : [
+    { type: 'BlackHole', from: { generated: 0 }, pos: { x: 0, y: 0 }, vel: { x: 0, y: 0 }, assign: {} },
+    { type: 'Planet', from: { generated: 0 }, pos: { x: p.planetX, y: 0 }, vel: { x: 0, y: p.planetSpeed }, assign: {} },
+  ],
+
+  // Names for the first two bodies of a type, when there are two.
+  'name-pair': (p, { generated }) =>
+    generated[p.type].length < 2
+      ? []
+      : p.names.map((name, i) => ({
+          type: p.type,
+          from: { generated: i },
+          assign: { name },
+        })),
+
+  // The heavy hole at rest at the origin, the light ones on staggered circular
+  // orbits about it, so the scene opens as something in motion.
+  'staggered-orbits': (p, { G, generated }) => {
+    const holes = generated.BlackHole;
+    const heavy = holes[0];
+    if (!heavy || holes.length < 2) return [];
+    const out = [
+      {
+        type: 'BlackHole',
+        from: { generated: 0 },
+        pos: { x: 0, y: 0 },
+        vel: { x: 0, y: 0 },
+        assign: {},
+      },
+    ];
+    for (let i = 1; i < holes.length; i++) {
+      const r = heavy.radius * (p.innerRadii + (i - 1) * p.stepRadii);
+      const angle = ((i - 1) / (holes.length - 1)) * 2 * Math.PI;
+      const v = Math.sqrt((G * heavy.mass) / r);
+      out.push({
+        type: 'BlackHole',
+        from: { generated: i },
+        pos: { x: Math.cos(angle) * r, y: Math.sin(angle) * r },
+        vel: { x: -Math.sin(angle) * v, y: Math.cos(angle) * v },
+        assign: {},
+      });
+    }
+    return out;
+  },
+
+  // One star falling in on a long ellipse whose closest approach is inside the
+  // hole's tidal radius and outside the one at which it is simply absorbed,
+  // begun part way down the infall so the first passage comes within seconds.
+  'tidal-infall': (p, { G, generated }) => {
+    const hole = generated.BlackHole[0];
+    if (!hole) return [];
+    const GM = G * hole.mass;
+    const apo = Math.max(p.apoapsisFloor, hole.radius * p.apoapsisRadii);
+    const peri = hole.radius * p.periapsisRadii;
+    const a = (apo + peri) / 2;
+    const r0 = Math.min(
+      apo,
+      Math.max(peri * p.startPeriapsisFactor, apo * p.startFraction)
+    );
+    const vPeri = Math.sqrt(GM * (2 / peri - 1 / a));
+    const angularMomentum = peri * vPeri;
+    const speed = Math.sqrt(GM * (2 / r0 - 1 / a));
+    const vTangential = angularMomentum / r0;
+    // Inbound: the radial component points back towards the hole.
+    const vRadial = -Math.sqrt(
+      Math.max(0, speed * speed - vTangential * vTangential)
+    );
+    return [
+      {
+        type: 'Star',
+        ctor: p.starMassSuns,
+        pos: { x: r0, y: 0 },
+        vel: { x: vRadial, y: vTangential },
+        assign: { name: p.starName },
+      },
+    ];
+  },
+
+  // Two stars of unequal mass. Equal and opposite speeds are not equal and
+  // opposite momentum, so the circular relative speed is split by the mass
+  // ratio and the barycenter is stationary.
+  'circular-binary-stars': (p, { G }) => {
+    const [M1, M2] = p.massesSuns.map(m => m * SOLAR_MASS_UNIT);
+    const MTOT = M1 + M2;
+    const vRel = Math.sqrt((G * MTOT) / p.separation);
+    return [
+      {
+        type: 'Star',
+        ctor: p.massesSuns[0],
+        pos: { x: (-p.separation * M2) / MTOT, y: 0 },
+        vel: { x: 0, y: (vRel * M2) / MTOT },
+        assign: {},
+      },
+      {
+        type: 'Star',
+        ctor: p.massesSuns[1],
+        pos: { x: (p.separation * M1) / MTOT, y: 0 },
+        vel: { x: 0, y: (-vRel * M1) / MTOT },
+        assign: {},
+      },
+    ];
+  },
+};
 
 /**
  * What world construction needs from the UI module.
@@ -97,7 +983,8 @@ import { SIM_UNITS_PER_AU } from '../units.js';
  * @property {object} state - The shared UI state object
  * @property {() => void} applyPreset - Reset settings to the scenario's own
  * @property {() => (object|null)} takePendingSettings - Share-link settings, once
- * @property {(name: string) => void} setScenarioName - Record what was built
+ * @property {(name: string) => void} setScenarioName - Record what was built:
+ *   a scenario id, or 'None'
  * @property {() => void} hideObjectInspector - Close the inspector before rebuild
  * @property {(key: string) => void} showScenarioInfo - Repaint the scenario card
  * @property {() => void} updateObjectTypeButton - Sync the insertion-type button
@@ -106,10 +993,305 @@ import { SIM_UNITS_PER_AU } from '../units.js';
  */
 
 // The Kuiper Belt scenario's schematic radial ladder: eight named objects,
-// evenly spaced, ordered by real semi-major axis. See the scenario block below
-// for why the spacing is not linear in AU.
+// evenly spaced, ordered by real semi-major axis. See the table below for why
+// the spacing is not linear in AU.
 const KUIPER_LADDER_INNER = 200;
 const KUIPER_LADDER_STEP = 20;
+
+// The named trans-Neptunian objects.
+//
+// These used to be written onto the first entry of `planets` (or of
+// `gas_giants`) and then spliced straight back out of it, so all eight were
+// configured and then deleted before the first frame: the scenario named
+// after them ran without any of them in it. They are built here instead,
+// the same way the Solar System scenario builds its planets - constructed
+// with their own mass and pushed - so nothing downstream has to keep a
+// pool index in step with them.
+//
+// Classification: every one of these is an icy solid body, so every one of
+// them is a Planet. Quaoar, Sedna, Orcus and Varuna were previously built
+// as GasGiants purely because that array had spare entries, which put four
+// gas giants in a Kuiper Belt and made the inspector say so.
+//
+// Masses are published values in Earth masses (M_E = 5.972e24 kg). Sedna's
+// is an estimate; it has no satellite and therefore no measured mass.
+//
+// Radial scale is SCHEMATIC, not linear in AU. The real belt runs from
+// 39 AU to Sedna's 507 AU, a factor of thirteen that cannot be drawn on
+// one screen and still show the classical objects apart from each other.
+// The eight are laid out on an evenly spaced ladder instead, ordered by
+// real semi-major axis, so the ordering a student reads off the screen is
+// the true one even though the spacing is not. `semi_major_axis_au` on
+// each body carries the real value for anything that wants it.
+const kuiperBeltObjects = [
+  { name: 'Orcus', mass: 0.000106, semiMajorAxisAu: 39.17 },
+  { name: 'Pluto', mass: 0.00218, semiMajorAxisAu: 39.48 },
+  { name: 'Varuna', mass: 0.0000619, semiMajorAxisAu: 42.92 },
+  { name: 'Haumea', mass: 0.000671, semiMajorAxisAu: 43.13 },
+  { name: 'Quaoar', mass: 0.000201, semiMajorAxisAu: 43.69 },
+  { name: 'Makemake', mass: 0.000519, semiMajorAxisAu: 45.43 },
+  { name: 'Eris', mass: 0.00276, semiMajorAxisAu: 67.78 },
+  { name: 'Sedna', mass: 0.00017, semiMajorAxisAu: 506.8 },
+];
+
+// The Solar System's published tables: eight planets and giants (mass in Earth
+// masses, distance in simulation units at 100 per AU, phase in degrees), sixteen
+// named asteroids and twelve named comets. The model page lists each row with
+// its sources, so the names stay as they are. `published-system` (solar-system)
+// builds them.
+const solarSystemData = [
+  {
+    name: 'Mercury',
+    mass: 0.055, // 0.055 Earth masses
+    distance: 38.7, // 0.387 AU at 100 units per AU
+    phase_deg: 0,
+    diameter: 4879, // km
+    orbital_period: 88, // days
+    type: 'terrestrial',
+    color: '#9E9E9E', // Mercury gray/rocky
+    density: 'rocky',
+    temperature: 440, // Kelvin (daytime surface temperature)
+    gravity: 3.7, // m/s²
+    rotation_period: 58.6, // days (slow rotation)
+    atmosphere: 'none',
+    density_kg_m3: 5427, // kg/m³
+    escape_velocity: 4.25, // km/s
+    surface_pressure: 0, // Pa (no atmosphere)
+  },
+  {
+    name: 'Venus',
+    mass: 0.815, // 0.815 Earth masses
+    distance: 72.3, // 0.723 AU at 100 units per AU
+    phase_deg: 45,
+    diameter: 12104, // km
+    orbital_period: 225, // days
+    type: 'terrestrial',
+    color: '#E6BE8A', // Venus's actual color (creamy yellow-brown)
+    density: 'rocky',
+    temperature: 737, // Kelvin (surface temperature)
+    gravity: 8.87, // m/s²
+    rotation_period: -243, // days (retrograde rotation)
+    atmosphere: 'CO2',
+    density_kg_m3: 5243, // kg/m³
+    escape_velocity: 10.36, // km/s
+    surface_pressure: 9200000, // Pa (92 bar)
+  },
+  {
+    name: 'Earth',
+    mass: 1.0, // 1 Earth mass
+    distance: 100.0, // 1.000 AU at 100 units per AU
+    phase_deg: 90,
+    diameter: 12742, // km
+    orbital_period: 365, // days
+    type: 'terrestrial',
+    color: '#3FA7D6', // Earth blue-greenish
+    density: 'rocky',
+    temperature: 288, // Kelvin (average surface temperature)
+    gravity: 9.81, // m/s²
+    rotation_period: 1.0, // days
+    atmosphere: 'N2/O2',
+    density_kg_m3: 5514, // kg/m³
+    escape_velocity: 11.19, // km/s
+    surface_pressure: 101325, // Pa (1 bar)
+  },
+  {
+    name: 'Mars',
+    mass: 0.107, // 0.107 Earth masses
+    distance: 152.4, // 1.524 AU at 100 units per AU
+    phase_deg: 135,
+    diameter: 6779, // km
+    orbital_period: 687, // days
+    type: 'terrestrial',
+    color: '#C1440E', // Mars's actual color (reddish-orange)
+    density: 'rocky',
+    temperature: 210, // Kelvin (average surface temperature)
+    gravity: 3.71, // m/s²
+    rotation_period: 1.03, // days
+    atmosphere: 'CO2',
+    density_kg_m3: 3933, // kg/m³
+    escape_velocity: 5.03, // km/s
+    surface_pressure: 636, // Pa (0.006 bar)
+  },
+  {
+    name: 'Jupiter',
+    mass: 317.8, // 317.8 Earth masses
+    distance: 520.4, // 5.204 AU at 100 units per AU
+    phase_deg: 210,
+    diameter: 139822, // km
+    orbital_period: 4333, // days
+    type: 'gas_giant',
+    color: '#D2B48C', // Jupiter tan/beige with bands
+    giantType: 'jupiter_like',
+    temperature: 165, // Kelvin (cloud top temperature)
+    gravity: 24.79, // m/s²
+    rotation_period: 0.41, // days (fast rotation)
+    atmosphere: 'H2/He',
+    density_kg_m3: 1326, // kg/m³
+    escape_velocity: 59.5, // km/s
+    surface_pressure: 100000, // Pa (1 bar at cloud tops)
+  },
+  {
+    name: 'Saturn',
+    mass: 95.2, // 95.2 Earth masses
+    distance: 958.3, // 9.583 AU at 100 units per AU
+    phase_deg: 260,
+    diameter: 116464, // km
+    orbital_period: 10759, // days
+    type: 'gas_giant',
+    color: '#F5DE8A', // Saturn pale yellow
+    giantType: 'jupiter_like',
+    temperature: 134, // Kelvin (cloud top temperature)
+    gravity: 10.44, // m/s²
+    rotation_period: 0.45, // days (fast rotation)
+    atmosphere: 'H2/He',
+    density_kg_m3: 687, // kg/m³
+    escape_velocity: 35.5, // km/s
+    surface_pressure: 100000, // Pa (1 bar at cloud tops)
+  },
+  {
+    name: 'Uranus',
+    mass: 14.5, // 14.5 Earth masses
+    distance: 1919.1, // 19.191 AU at 100 units per AU
+    phase_deg: 310,
+    diameter: 50724, // km
+    orbital_period: 30687, // days
+    type: 'ice_giant',
+    color: '#A7E3F1', // Uranus cyan
+    giantType: 'neptune_like',
+    temperature: 76, // Kelvin (cloud top temperature)
+    gravity: 8.69, // m/s²
+    rotation_period: -0.72, // days (retrograde rotation)
+    atmosphere: 'H2/He/CH4',
+    density_kg_m3: 1271, // kg/m³
+    escape_velocity: 21.3, // km/s
+    surface_pressure: 100000, // Pa (1 bar at cloud tops)
+  },
+  {
+    name: 'Neptune',
+    mass: 17.1, // 17.1 Earth masses
+    distance: 3007.0, // 30.070 AU at 100 units per AU
+    phase_deg: 350,
+    diameter: 49244, // km
+    orbital_period: 60190, // days
+    type: 'ice_giant',
+    color: '#4B70DD', // Neptune deep blue
+    giantType: 'neptune_like',
+    temperature: 72, // Kelvin (cloud top temperature)
+    gravity: 11.15, // m/s²
+    rotation_period: 0.67, // days
+    atmosphere: 'H2/He/CH4',
+    density_kg_m3: 1638, // kg/m³
+    escape_velocity: 23.5, // km/s
+    surface_pressure: 100000, // Pa (1 bar at cloud tops)
+  },
+  // Dwarf planet beyond Neptune
+];
+
+const realAsteroids = [
+  { name: 'Ceres', diameter: 939, distance: 277, mass: 0.00016 }, // Dwarf planet - between Mars and Jupiter
+  { name: 'Vesta', diameter: 525, distance: 236, mass: 0.00004 },
+  { name: 'Pallas', diameter: 512, distance: 277, mass: 0.00003 },
+  { name: 'Hygiea', diameter: 434, distance: 314, mass: 0.00002 },
+  { name: 'Interamnia', diameter: 350, distance: 306, mass: 0.00001 },
+  { name: 'Europa', diameter: 315, distance: 310, mass: 0.000008 },
+  { name: 'Davida', diameter: 289, distance: 316, mass: 0.000006 },
+  { name: 'Sylvia', diameter: 286, distance: 321, mass: 0.000006 },
+  { name: 'Hektor', diameter: 225, distance: 524, mass: 0.000003 },
+  { name: 'Juno', diameter: 257, distance: 267, mass: 0.000004 },
+  { name: 'Iris', diameter: 200, distance: 239, mass: 0.000002 },
+  { name: 'Eunomia', diameter: 255, distance: 335, mass: 0.000004 },
+  { name: 'Psyche', diameter: 226, distance: 340, mass: 0.000003 },
+  { name: 'Themis', diameter: 198, distance: 345, mass: 0.000002 },
+  { name: 'Bamberga', diameter: 229, distance: 350, mass: 0.000003 },
+  { name: 'Patientia', diameter: 225, distance: 355, mass: 0.000003 },
+];
+
+const famousComets = [
+  {
+    name: 'Halley',
+    period: 76,
+    perihelion: 0.586,
+    aphelion: 35.1,
+    diameter: 11,
+  },
+  {
+    name: 'Hale-Bopp',
+    period: 2533,
+    perihelion: 0.914,
+    aphelion: 370.8,
+    diameter: 60,
+  },
+  {
+    name: 'Hyakutake',
+    period: 113783,
+    perihelion: 0.23,
+    aphelion: 4698.77,
+    diameter: 4.2,
+  },
+  {
+    name: 'Shoemaker-Levy 9',
+    period: 11.3,
+    perihelion: 5.4,
+    aphelion: 7.8,
+    diameter: 1.8,
+  },
+  {
+    name: 'Comet ISON',
+    period: 400000,
+    perihelion: 0.012,
+    aphelion: 73000,
+    diameter: 2,
+  },
+  {
+    name: 'Lovejoy',
+    period: 314,
+    perihelion: 0.005,
+    aphelion: 157,
+    diameter: 0.5,
+  },
+  {
+    name: 'McNaught',
+    period: 92,
+    perihelion: 0.17,
+    aphelion: 67,
+    diameter: 19,
+  },
+  {
+    name: 'Pan-STARRS',
+    period: 110000,
+    perihelion: 0.3,
+    aphelion: 16000,
+    diameter: 1,
+  },
+  {
+    name: 'Swift-Tuttle',
+    period: 133,
+    perihelion: 0.96,
+    aphelion: 51.2,
+    diameter: 26,
+  },
+  {
+    name: 'Tempel-Tuttle',
+    period: 33,
+    perihelion: 0.98,
+    aphelion: 19.7,
+    diameter: 3.6,
+  },
+  {
+    name: 'Wild 2',
+    period: 6.4,
+    perihelion: 1.59,
+    aphelion: 5.3,
+    diameter: 5.5,
+  },
+  {
+    name: 'Hartley 2',
+    period: 6.46,
+    perihelion: 1.05,
+    aphelion: 5.87,
+    diameter: 1.2,
+  },
+];
 
 /**
  * Move the whole system into its own center-of-mass frame.
@@ -157,6 +1339,32 @@ export const zeroNetMomentum = () => {
     b.vel.x -= vx;
     b.vel.y -= vy;
   }
+};
+
+/** The bodies the seeded generator drew, by type: what a rule reuses (`from`). */
+const generatedBodies = () => ({
+  Star: [...stars],
+  Planet: [...planets],
+  GasGiant: [...gas_giants],
+  BlackHole: [...bh_list],
+  Asteroid: [...asteroids],
+  NeutronStar: [...neutron_stars],
+  WhiteDwarf: [...white_dwarfs],
+});
+
+/**
+ * A declaration's `place` steps: rules that give generated bodies a place and
+ * a velocity, run inside applyPlacement (see there). Applied in place, as the
+ * code they replace did, and drawing nothing from the seeded generator.
+ */
+const placeDeclared = (steps, G) => {
+  const generated = generatedBodies();
+  for (const { rule } of steps)
+    for (const r of populationRules[rule.name](rule.params, { G, generated })) {
+      const body = generated[r.type][r.from.generated];
+      Object.assign(body.pos, r.pos);
+      Object.assign(body.vel, r.vel);
+    }
 };
 
 /**
@@ -402,147 +1610,11 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
     }
   }
 
-  // Special positioning for various scenarios
-  if (
-    current_scenario_name === 'Neutron Star Collision' &&
-    neutron_stars.length >= 2
-  ) {
-    neutron_stars[0].pos.x = -50;
-    neutron_stars[0].pos.y = 0;
-    neutron_stars[0].vel.x = 0;
-    neutron_stars[0].vel.y = 15;
-
-    neutron_stars[1].pos.x = 50;
-    neutron_stars[1].pos.y = 0;
-    neutron_stars[1].vel.x = 0;
-    neutron_stars[1].vel.y = -15;
-  }
-
-  if (
-    current_scenario_name === 'White Dwarf Binary' &&
-    white_dwarfs.length >= 2
-  ) {
-    white_dwarfs[0].pos.x = -80;
-    white_dwarfs[0].pos.y = 0;
-    white_dwarfs[0].vel.x = 0;
-    white_dwarfs[0].vel.y = 20;
-
-    white_dwarfs[1].pos.x = 80;
-    white_dwarfs[1].pos.y = 0;
-    white_dwarfs[1].vel.x = 0;
-    white_dwarfs[1].vel.y = -20;
-  }
-
-  if (
-    current_scenario_name === 'Tidal Disruption Event' &&
-    bh_list.length >= 1 &&
-    planets.length >= 1
-  ) {
-    bh_list[0].pos.x = 0;
-    bh_list[0].pos.y = 0;
-    bh_list[0].vel.x = 0;
-    bh_list[0].vel.y = 0;
-
-    planets[0].pos.x = 150;
-    planets[0].pos.y = 0;
-    planets[0].vel.x = 0;
-    planets[0].vel.y = 80;
-  }
-
-  // Special positioning for black holes in specific scenarios
-  if (bh_list.length > 1) {
-    switch (current_scenario_name) {
-      case 'Slingshot':
-        if (bh_list.length >= 2) {
-          // Create a binary black hole system with proper orbital parameters
-          const separation = 100; // Initial separation distance
-          const m1 = bh_list[0].mass; // Mass of first black hole (60 M☉)
-          const m2 = bh_list[1].mass; // Mass of second black hole (3 M☉)
-          const totalMass = m1 + m2;
-
-          // Calculate center of mass positions
-          const r1 = separation * (m2 / totalMass); // Distance from BH1 to center of mass
-          const r2 = separation * (m1 / totalMass); // Distance from BH2 to center of mass
-
-          // Position black holes around center of mass
-          bh_list[0].pos.x = -r1;
-          bh_list[0].pos.y = 0;
-          bh_list[1].pos.x = r2;
-          bh_list[1].pos.y = 0;
-
-          // Calculate orbital velocity for circular orbit
-          const G = SETTINGS.gravitational_constant;
-          const orbitalSpeed = Math.sqrt((G * totalMass) / separation);
-
-          // Apply velocities for circular orbit (perpendicular to separation)
-          bh_list[0].vel.x = 0;
-          bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass); // Reduced velocity based on mass ratio
-          bh_list[1].vel.x = 0;
-          bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass); // Opposite direction
-
-          // Add slight perturbation to make it more interesting
-          const perturbation = 0.9; // Reduce velocity slightly to create more dynamic orbits
-          bh_list[0].vel.y *= perturbation;
-          bh_list[1].vel.y *= perturbation;
-        }
-        break;
-
-      case 'Binary BH':
-        if (bh_list.length >= 2) {
-          // Calculate proper orbital parameters for binary black holes
-          const separation = 120; // Initial separation distance
-          const m1 = bh_list[0].mass; // Mass of first black hole
-          const m2 = bh_list[1].mass; // Mass of second black hole
-          const totalMass = m1 + m2;
-
-          // Calculate center of mass positions
-          const r1 = separation * (m2 / totalMass); // Distance from BH1 to center of mass
-          const r2 = separation * (m1 / totalMass); // Distance from BH2 to center of mass
-
-          // Position black holes around center of mass
-          bh_list[0].pos.x = -r1;
-          bh_list[0].pos.y = 0;
-          bh_list[1].pos.x = r2;
-          bh_list[1].pos.y = 0;
-
-          // Calculate orbital velocity for circular orbit
-          // v = sqrt(G * M_total / separation) for reduced mass system
-          const G = SETTINGS.gravitational_constant;
-          const orbitalSpeed = Math.sqrt((G * totalMass) / separation);
-
-          // Apply velocities for circular orbit (perpendicular to separation)
-          bh_list[0].vel.x = 0;
-          bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass); // Reduced velocity based on mass ratio
-          bh_list[1].vel.x = 0;
-          bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass); // Opposite direction
-
-          // Add slight perturbation to start gravitational wave inspiral
-          const perturbation = 0.95; // Slightly reduce velocity to start inspiral
-          bh_list[0].vel.y *= perturbation;
-          bh_list[1].vel.y *= perturbation;
-        }
-        break;
-
-      case 'Triple BH System':
-        if (bh_list.length >= 3) {
-          // Triangle formation
-          const radius = 150;
-          for (let i = 0; i < 3; i++) {
-            const angle = (i / 3) * 2 * Math.PI;
-            bh_list[i].pos.x = Math.cos(angle) * radius;
-            bh_list[i].pos.y = Math.sin(angle) * radius;
-
-            // Orbital velocity
-            const vel_mag = 15;
-            bh_list[i].vel.x = -Math.sin(angle) * vel_mag;
-            bh_list[i].vel.y = Math.cos(angle) * vel_mag;
-          }
-        }
-        break;
-
-      // Duplicate 'Slingshot' case removed (handled earlier)
-    }
-  }
+  // The pairs and triangle a scenario places by hand are its declaration's
+  // `place` steps (SCENARIO_GEOMETRY.md, slice 5), run here: after the layout
+  // and before the balance below, as the code they replace ran.
+  const place = ENGINE_GEOMETRY[current_scenario_name]?.place;
+  if (place) placeDeclared(place, SETTINGS.gravitational_constant);
 
   zeroNetMomentum();
 };
@@ -569,7 +1641,11 @@ export const buildWorld = ctx => {
   // Set the state reference in physics.js to ensure single source of truth
   setStateReference(state);
 
-  const starting_preset = SETTINGS.preset_scenario;
+  // By id: preset_scenario may hold a key the scenario was known by before it
+  // had one (a share link, a saved setting, an older lesson). 'None' and a key
+  // that names nothing stay as they are, which is what they always built.
+  const starting_preset =
+    scenarioId(SETTINGS.preset_scenario) ?? SETTINGS.preset_scenario;
   apply_preset();
 
   // Settings carried in a shared link land here rather than before the call,
@@ -657,11 +1733,24 @@ export const buildWorld = ctx => {
   clearAllEnergyHistory();
 
   // Recorded history and the undo stack belong to the old simulation.
-  window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+  //
+  // Guarded the way js/physics.js guards its own dispatches, and for a reason
+  // that is no longer hypothetical: this is the only line in the builder that
+  // touches the DOM, and without the guard it is the only thing stopping
+  // buildWorld() from running in a Worker - which spike/lyapunov/ shows is
+  // otherwise possible today. There is nothing listening in a Worker, so
+  // announcing to nobody is the correct no-op rather than a lost event.
+  if (
+    typeof window !== 'undefined' &&
+    typeof window.dispatchEvent === 'function' &&
+    typeof CustomEvent === 'function'
+  ) {
+    window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+  }
 
   // Add central stars for specific presets
   if (
-    ['Kuiper Belt', 'Rogue Encounter', 'Solar System'].includes(starting_preset)
+    ['kuiper-belt', 'rogue-encounter', 'solar-system'].includes(starting_preset)
   ) {
     const central = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
     // Named as the anchor rather than inferred from mass: num_stars can add a
@@ -885,759 +1974,11 @@ export const buildWorld = ctx => {
     }
   }
 
-  // --- Fix for GW150914 scenario: two black holes in close inspiral ---
-  if (starting_preset === 'GW150914' && bh_list.length >= 2) {
-    const separation = 90; // Slightly closer for faster merger
-    const m1 = bh_list[0].mass;
-    const m2 = bh_list[1].mass;
-    const totalMass = m1 + m2;
-    // Center of mass positions
-    const r1 = separation * (m2 / totalMass);
-    const r2 = separation * (m1 / totalMass);
-    bh_list[0].pos.x = -r1;
-    bh_list[0].pos.y = 0;
-    bh_list[1].pos.x = r2;
-    bh_list[1].pos.y = 0;
-    // Orbital velocities
-    const G = SETTINGS.gravitational_constant;
-    const orbitalSpeed = Math.sqrt((G * totalMass) / separation);
-    bh_list[0].vel.x = 0;
-    bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass);
-    bh_list[1].vel.x = 0;
-    bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass);
-    // Add stronger perturbation to ensure inspiral
-    const perturbation = 0.92;
-    bh_list[0].vel.y *= perturbation;
-    bh_list[1].vel.y *= perturbation;
-  }
-
   // Show enhanced scenario info box
   show_enhanced_scenario_info(starting_preset);
 
   // Special scenario setups
-  if (starting_preset === 'Binary Star System') {
-    // Clear any existing stars and create binary system
-    stars.length = 0;
-
-    // Two stars of unequal mass were given equal and opposite speeds, which
-    // is not the same as equal and opposite momentum: 1.2 x 12 against
-    // 0.8 x 12 left the pair coasting at 2.4 units per time unit and the whole
-    // system walked out of frame within twenty seconds. Splitting a circular
-    // relative velocity by the mass ratio makes the barycenter stationary.
-    const SEP = 120;
-    const M1 = 1.2 * SOLAR_MASS_UNIT;
-    const M2 = 0.8 * SOLAR_MASS_UNIT;
-    const MTOT = M1 + M2;
-    const vRel = Math.sqrt((SETTINGS.gravitational_constant * MTOT) / SEP);
-    const star1 = new StarObject(
-      { x: (-SEP * M2) / MTOT, y: 0 },
-      { x: 0, y: (vRel * M2) / MTOT },
-      1.2
-    );
-    const star2 = new StarObject(
-      { x: (SEP * M1) / MTOT, y: 0 },
-      { x: 0, y: (-vRel * M1) / MTOT },
-      0.8
-    );
-    stars.push(star1, star2);
-
-    // Add planets orbiting the binary system
-    const centralMass = star1.mass + star2.mass;
-    for (let i = 0; i < pop('num_planets'); i++) {
-      const r = 150 + i * 30; // Orbital radius around binary center
-      const theta = Math.random() * 2 * Math.PI;
-      const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
-      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-      planets[i].pos = pos;
-      planets[i].vel = vel;
-    }
-
-    // Add gas giants
-    for (let i = 0; i < pop('num_gas_giants'); i++) {
-      const r = 300 + i * 50;
-      const theta = Math.random() * 2 * Math.PI;
-      const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
-      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-      gas_giants[i].pos = pos;
-      gas_giants[i].vel = vel;
-    }
-
-    // Add asteroids
-    if (SETTINGS.enable_asteroids) {
-      for (let i = 0; i < pop('num_asteroids'); i++) {
-        const r = 400 + Math.random() * 100;
-        const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt(
-          (SETTINGS.gravitational_constant * centralMass) / r
-        );
-        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-        asteroids[i].pos = pos;
-        asteroids[i].vel = vel;
-      }
-    }
-
-    // The stars are balanced against each other by construction, but the
-    // planets, giants and asteroids all circulate the same way and their
-    // momentum does not cancel on its own.
-    zeroNetMomentum();
-  } else if (starting_preset === 'Tidal Disruption Event') {
-    // One star, falling in on a long ellipse whose closest approach is inside
-    // the hole's tidal radius but outside the radius at which it would simply
-    // be absorbed. StarObject.tidal_mass_loss strips it there and sheds the
-    // debris that gives the scenario its name.
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    debris.length = 0;
-
-    const hole = bh_list[0];
-    if (hole) {
-      hole.pos.x = 0;
-      hole.pos.y = 0;
-      hole.vel.x = 0;
-      hole.vel.y = 0;
-
-      const G = SETTINGS.gravitational_constant;
-      const GM = G * hole.mass;
-      // Tidal disruption begins at three times the drawn radius, and the hole
-      // swallows anything within its radius plus six. Periapsis at 1.5 radii
-      // sits well inside the first and comfortably outside the second, so the
-      // star is stripped over repeated passes instead of being eaten on the
-      // first one.
-      const apo = Math.max(900, hole.radius * 11);
-      const peri = hole.radius * 1.5;
-      const a = (apo + peri) / 2;
-
-      // Started partway down the infall rather than at apoapsis, so the first
-      // passage happens within a few seconds of opening the scenario instead
-      // of after most of a period spent as a dot at the edge of the frame.
-      const r0 = Math.min(apo, Math.max(peri * 2.5, apo * 0.45));
-      const vPeri = Math.sqrt(GM * (2 / peri - 1 / a));
-      const angularMomentum = peri * vPeri;
-      const speed = Math.sqrt(GM * (2 / r0 - 1 / a));
-      const vTangential = angularMomentum / r0;
-      // Inbound: the radial component points back towards the hole.
-      const vRadial = -Math.sqrt(
-        Math.max(0, speed * speed - vTangential * vTangential)
-      );
-
-      const star = new StarObject(
-        { x: r0, y: 0 },
-        { x: vRadial, y: vTangential },
-        1.0
-      );
-      star.name = 'Doomed star';
-      stars.push(star);
-    }
-  } else if (starting_preset === 'Black Hole Billiards') {
-    // Three light holes on staggered circular orbits around the heavy one, so
-    // the scene opens as something recognizably in motion rather than four
-    // holes scattered at random that have merged by the time anyone looks.
-    const heavy = bh_list[0];
-    if (heavy && bh_list.length >= 2) {
-      heavy.pos.x = 0;
-      heavy.pos.y = 0;
-      heavy.vel.x = 0;
-      heavy.vel.y = 0;
-      const G = SETTINGS.gravitational_constant;
-      for (let i = 1; i < bh_list.length; i++) {
-        const r = heavy.radius * (3.2 + (i - 1) * 1.9);
-        const angle = ((i - 1) / (bh_list.length - 1)) * 2 * Math.PI;
-        const v = Math.sqrt((G * heavy.mass) / r);
-        bh_list[i].pos.x = Math.cos(angle) * r;
-        bh_list[i].pos.y = Math.sin(angle) * r;
-        bh_list[i].vel.x = -Math.sin(angle) * v;
-        bh_list[i].vel.y = Math.cos(angle) * v;
-      }
-    }
-  } else if (starting_preset === 'Solar System') {
-    // Clear any existing objects
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-
-    // Create the Sun as a proper G-type main sequence star with accurate properties
-    const sun = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
-    sun.name = 'Sol'; // Real name of our sun
-    sun.mass = SOLAR_MASS_UNIT; // 1 solar mass = 1000 units
-    sun.massInSuns = 1.0; // Exactly 1 solar mass
-    sun.baseColor = '#FFFF00'; // G-type star color (yellow, like our Sun)
-    sun.radius = 15; // Make sun larger for visibility
-    sun.temperature = 5778; // Kelvin (real solar effective temperature)
-    sun.spectralType = 'G2V'; // Real spectral classification
-    sun.age = 4.6; // Billion years (middle-aged G-type star)
-    sun.luminosity = 1.0; // Solar luminosity (3.828×10²⁶ W)
-    sun.solarRadius = 1.0; // 1.0 solar radii (696,340 km)
-    sun.metallicity = 0.02; // Solar metallicity (Z = 0.02)
-    sun.rotationPeriod = 25.4; // Days (solar rotation period at equator)
-    sun.surfaceGravity = 274; // m/s² (solar surface gravity)
-    sun.density = 1408; // kg/m³ (solar density)
-    sun.isSolarSystemSun = true; // Flag for Solar System sun
-    // Measured, so the habitable-zone model uses it rather than a fallback.
-    sun.massInSuns = 1.0;
-    sun.luminosityInSuns = 1.0;
-    sun.radiusInSuns = 1.0;
-    sun.temperature = 5772; // K, effective temperature
-    stars.push(sun);
-
-    // Real Solar System data with accurate properties
-    // Distances in AU (scaled down for simulation), masses in Earth masses, diameters in km
-    const solarSystemData = [
-      {
-        name: 'Mercury',
-        mass: 0.055, // 0.055 Earth masses
-        distance: 38.7, // 0.387 AU at 100 units per AU
-        phase_deg: 0,
-        diameter: 4879, // km
-        orbital_period: 88, // days
-        type: 'terrestrial',
-        color: '#9E9E9E', // Mercury gray/rocky
-        density: 'rocky',
-        temperature: 440, // Kelvin (daytime surface temperature)
-        gravity: 3.7, // m/s²
-        rotation_period: 58.6, // days (slow rotation)
-        atmosphere: 'none',
-        density_kg_m3: 5427, // kg/m³
-        escape_velocity: 4.25, // km/s
-        surface_pressure: 0, // Pa (no atmosphere)
-      },
-      {
-        name: 'Venus',
-        mass: 0.815, // 0.815 Earth masses
-        distance: 72.3, // 0.723 AU at 100 units per AU
-        phase_deg: 45,
-        diameter: 12104, // km
-        orbital_period: 225, // days
-        type: 'terrestrial',
-        color: '#E6BE8A', // Venus's actual color (creamy yellow-brown)
-        density: 'rocky',
-        temperature: 737, // Kelvin (surface temperature)
-        gravity: 8.87, // m/s²
-        rotation_period: -243, // days (retrograde rotation)
-        atmosphere: 'CO2',
-        density_kg_m3: 5243, // kg/m³
-        escape_velocity: 10.36, // km/s
-        surface_pressure: 9200000, // Pa (92 bar)
-      },
-      {
-        name: 'Earth',
-        mass: 1.0, // 1 Earth mass
-        distance: 100.0, // 1.000 AU at 100 units per AU
-        phase_deg: 90,
-        diameter: 12742, // km
-        orbital_period: 365, // days
-        type: 'terrestrial',
-        color: '#3FA7D6', // Earth blue-greenish
-        density: 'rocky',
-        temperature: 288, // Kelvin (average surface temperature)
-        gravity: 9.81, // m/s²
-        rotation_period: 1.0, // days
-        atmosphere: 'N2/O2',
-        density_kg_m3: 5514, // kg/m³
-        escape_velocity: 11.19, // km/s
-        surface_pressure: 101325, // Pa (1 bar)
-      },
-      {
-        name: 'Mars',
-        mass: 0.107, // 0.107 Earth masses
-        distance: 152.4, // 1.524 AU at 100 units per AU
-        phase_deg: 135,
-        diameter: 6779, // km
-        orbital_period: 687, // days
-        type: 'terrestrial',
-        color: '#C1440E', // Mars's actual color (reddish-orange)
-        density: 'rocky',
-        temperature: 210, // Kelvin (average surface temperature)
-        gravity: 3.71, // m/s²
-        rotation_period: 1.03, // days
-        atmosphere: 'CO2',
-        density_kg_m3: 3933, // kg/m³
-        escape_velocity: 5.03, // km/s
-        surface_pressure: 636, // Pa (0.006 bar)
-      },
-      {
-        name: 'Jupiter',
-        mass: 317.8, // 317.8 Earth masses
-        distance: 520.4, // 5.204 AU at 100 units per AU
-        phase_deg: 210,
-        diameter: 139822, // km
-        orbital_period: 4333, // days
-        type: 'gas_giant',
-        color: '#D2B48C', // Jupiter tan/beige with bands
-        giantType: 'jupiter_like',
-        temperature: 165, // Kelvin (cloud top temperature)
-        gravity: 24.79, // m/s²
-        rotation_period: 0.41, // days (fast rotation)
-        atmosphere: 'H2/He',
-        density_kg_m3: 1326, // kg/m³
-        escape_velocity: 59.5, // km/s
-        surface_pressure: 100000, // Pa (1 bar at cloud tops)
-      },
-      {
-        name: 'Saturn',
-        mass: 95.2, // 95.2 Earth masses
-        distance: 958.3, // 9.583 AU at 100 units per AU
-        phase_deg: 260,
-        diameter: 116464, // km
-        orbital_period: 10759, // days
-        type: 'gas_giant',
-        color: '#F5DE8A', // Saturn pale yellow
-        giantType: 'jupiter_like',
-        temperature: 134, // Kelvin (cloud top temperature)
-        gravity: 10.44, // m/s²
-        rotation_period: 0.45, // days (fast rotation)
-        atmosphere: 'H2/He',
-        density_kg_m3: 687, // kg/m³
-        escape_velocity: 35.5, // km/s
-        surface_pressure: 100000, // Pa (1 bar at cloud tops)
-      },
-      {
-        name: 'Uranus',
-        mass: 14.5, // 14.5 Earth masses
-        distance: 1919.1, // 19.191 AU at 100 units per AU
-        phase_deg: 310,
-        diameter: 50724, // km
-        orbital_period: 30687, // days
-        type: 'ice_giant',
-        color: '#A7E3F1', // Uranus cyan
-        giantType: 'neptune_like',
-        temperature: 76, // Kelvin (cloud top temperature)
-        gravity: 8.69, // m/s²
-        rotation_period: -0.72, // days (retrograde rotation)
-        atmosphere: 'H2/He/CH4',
-        density_kg_m3: 1271, // kg/m³
-        escape_velocity: 21.3, // km/s
-        surface_pressure: 100000, // Pa (1 bar at cloud tops)
-      },
-      {
-        name: 'Neptune',
-        mass: 17.1, // 17.1 Earth masses
-        distance: 3007.0, // 30.070 AU at 100 units per AU
-        phase_deg: 350,
-        diameter: 49244, // km
-        orbital_period: 60190, // days
-        type: 'ice_giant',
-        color: '#4B70DD', // Neptune deep blue
-        giantType: 'neptune_like',
-        temperature: 72, // Kelvin (cloud top temperature)
-        gravity: 11.15, // m/s²
-        rotation_period: 0.67, // days
-        atmosphere: 'H2/He/CH4',
-        density_kg_m3: 1638, // kg/m³
-        escape_velocity: 23.5, // km/s
-        surface_pressure: 100000, // Pa (1 bar at cloud tops)
-      },
-      // Dwarf planet beyond Neptune
-    ];
-
-    // Create planets with realistic properties
-    const DEG2RAD = Math.PI / 180;
-
-    for (let i = 0; i < solarSystemData.length; i++) {
-      const planetData = solarSystemData[i];
-      const r = planetData.distance;
-      const theta =
-        typeof planetData.phase_deg === 'number'
-          ? planetData.phase_deg * DEG2RAD
-          : (i * 45 * DEG2RAD) % (2 * Math.PI);
-      // Calculate orbital velocity based on real orbital periods
-      const orbitalVelocity = Math.sqrt(
-        (SETTINGS.gravitational_constant * sun.mass) / r
-      );
-      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      const vel = {
-        x: -orbitalVelocity * Math.sin(theta),
-        y: orbitalVelocity * Math.cos(theta),
-      };
-
-      if (planetData.type === 'gas_giant' || planetData.type === 'ice_giant') {
-        // Create new gas giant objects
-        // planetData.mass is in Earth masses, so the conversion to the
-        // constructor's Jupiter masses goes through the Earth/Jupiter ratio.
-        // Dividing by 50 here made Jupiter report 6.4 M_J in the inspector.
-        const gasGiant = new GasGiant(
-          pos,
-          vel,
-          planetData.mass / EARTH_MASSES_PER_JUPITER_MASS
-        );
-        gasGiant.name = planetData.name;
-        gasGiant.diameter = planetData.diameter;
-        gasGiant.orbital_period = planetData.orbital_period;
-        gasGiant.baseColor = planetData.color;
-        gasGiant.giantType = planetData.giantType;
-        // Add accurate physical properties
-        gasGiant.temperature = planetData.temperature;
-        gasGiant.gravity = planetData.gravity;
-        gasGiant.rotation_period = planetData.rotation_period;
-        gasGiant.atmosphere = planetData.atmosphere;
-        gasGiant.density_kg_m3 = planetData.density_kg_m3;
-        gasGiant.escape_velocity = planetData.escape_velocity;
-        gasGiant.surface_pressure = planetData.surface_pressure;
-        gasGiant.isSolarSystemPlanet = true; // Flag for Solar System planets
-        // Jupiter lands at 0.955 units against a 1000-unit Sun, which is the
-        // real ratio. The floor is here only for the smallest bodies.
-        gasGiant.mass = Math.max(planetData.mass * EARTH_MASS_UNIT, 1e-7);
-        // Ensure Saturn has visible rings; other giants do not
-        if (gasGiant.name === 'Saturn') {
-          gasGiant.hasRings = true;
-          // Set consistent, prominent ring parameters
-          gasGiant.ringInnerRadius = gasGiant.radius * 1.3;
-          gasGiant.ringOuterRadius = gasGiant.radius * 2.2;
-          gasGiant.ringAngle = 0.25; // slight tilt
-          gasGiant.ringOpacity = 0.65;
-        } else {
-          gasGiant.hasRings = false;
-        }
-        gas_giants.push(gasGiant);
-      } else {
-        // Create new terrestrial planet objects
-        const planet = new Planet(pos, vel, planetData.mass);
-        planet.name = planetData.name;
-        planet.massInEarths = planetData.mass;
-        planet.diameter = planetData.diameter;
-        planet.orbital_period = planetData.orbital_period;
-        planet.baseColor = planetData.color;
-        planet.density = planetData.density;
-        // Add accurate physical properties
-        planet.temperature = planetData.temperature;
-        planet.gravity = planetData.gravity;
-        planet.rotation_period = planetData.rotation_period;
-        planet.atmosphere = planetData.atmosphere;
-        planet.density_kg_m3 = planetData.density_kg_m3;
-        planet.escape_velocity = planetData.escape_velocity;
-        planet.surface_pressure = planetData.surface_pressure;
-        planet.isSolarSystemPlanet = true; // Flag for Solar System planets
-        planet.mass = Math.max(planetData.mass * EARTH_MASS_UNIT, 1e-7);
-        planets.push(planet);
-      }
-    }
-
-    // Add asteroid belt between Mars and Jupiter with real asteroids
-    if (SETTINGS.enable_asteroids) {
-      const realAsteroids = [
-        { name: 'Ceres', diameter: 939, distance: 277, mass: 0.00016 }, // Dwarf planet - between Mars and Jupiter
-        { name: 'Vesta', diameter: 525, distance: 236, mass: 0.00004 },
-        { name: 'Pallas', diameter: 512, distance: 277, mass: 0.00003 },
-        { name: 'Hygiea', diameter: 434, distance: 314, mass: 0.00002 },
-        { name: 'Interamnia', diameter: 350, distance: 306, mass: 0.00001 },
-        { name: 'Europa', diameter: 315, distance: 310, mass: 0.000008 },
-        { name: 'Davida', diameter: 289, distance: 316, mass: 0.000006 },
-        { name: 'Sylvia', diameter: 286, distance: 321, mass: 0.000006 },
-        { name: 'Hektor', diameter: 225, distance: 524, mass: 0.000003 },
-        { name: 'Juno', diameter: 257, distance: 267, mass: 0.000004 },
-        { name: 'Iris', diameter: 200, distance: 239, mass: 0.000002 },
-        { name: 'Eunomia', diameter: 255, distance: 335, mass: 0.000004 },
-        { name: 'Psyche', diameter: 226, distance: 340, mass: 0.000003 },
-        { name: 'Themis', diameter: 198, distance: 345, mass: 0.000002 },
-        { name: 'Bamberga', diameter: 229, distance: 350, mass: 0.000003 },
-        { name: 'Patientia', diameter: 225, distance: 355, mass: 0.000003 },
-      ];
-
-      for (
-        let i = 0;
-        i < Math.min(pop('num_asteroids'), realAsteroids.length);
-        i++
-      ) {
-        const asteroidData = realAsteroids[i];
-        const r = asteroidData.distance + (Math.random() - 0.5) * 20; // Add some variation for wider spacing
-        const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r);
-        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-
-        // Create new asteroid object
-        const asteroid = new Asteroid(pos, vel);
-        asteroid.name = asteroidData.name;
-        asteroid.diameter = asteroidData.diameter;
-        // Same unit the planets use, so relative masses stay true to life
-        asteroid.mass = Math.max(asteroidData.mass * EARTH_MASS_UNIT, 1e-12);
-        // These are real asteroids with real, individual masses, so the Ceres
-        // count the class carries has to follow the mass rather than keep the
-        // constructor's default of one. Vesta is a quarter of a Ceres and the
-        // inspector has to say so.
-        syncReportedMass(asteroid);
-        asteroids.push(asteroid);
-      }
-    }
-
-    // Add famous comets in distant orbits with real properties
-    if (pop('num_comets')) {
-      const famousComets = [
-        {
-          name: 'Halley',
-          period: 76,
-          perihelion: 0.586,
-          aphelion: 35.1,
-          diameter: 11,
-        },
-        {
-          name: 'Hale-Bopp',
-          period: 2533,
-          perihelion: 0.914,
-          aphelion: 370.8,
-          diameter: 60,
-        },
-        {
-          name: 'Hyakutake',
-          period: 113783,
-          perihelion: 0.23,
-          aphelion: 4698.77,
-          diameter: 4.2,
-        },
-        {
-          name: 'Shoemaker-Levy 9',
-          period: 11.3,
-          perihelion: 5.4,
-          aphelion: 7.8,
-          diameter: 1.8,
-        },
-        {
-          name: 'Comet ISON',
-          period: 400000,
-          perihelion: 0.012,
-          aphelion: 73000,
-          diameter: 2,
-        },
-        {
-          name: 'Lovejoy',
-          period: 314,
-          perihelion: 0.005,
-          aphelion: 157,
-          diameter: 0.5,
-        },
-        {
-          name: 'McNaught',
-          period: 92,
-          perihelion: 0.17,
-          aphelion: 67,
-          diameter: 19,
-        },
-        {
-          name: 'Pan-STARRS',
-          period: 110000,
-          perihelion: 0.3,
-          aphelion: 16000,
-          diameter: 1,
-        },
-        {
-          name: 'Swift-Tuttle',
-          period: 133,
-          perihelion: 0.96,
-          aphelion: 51.2,
-          diameter: 26,
-        },
-        {
-          name: 'Tempel-Tuttle',
-          period: 33,
-          perihelion: 0.98,
-          aphelion: 19.7,
-          diameter: 3.6,
-        },
-        {
-          name: 'Wild 2',
-          period: 6.4,
-          perihelion: 1.59,
-          aphelion: 5.3,
-          diameter: 5.5,
-        },
-        {
-          name: 'Hartley 2',
-          period: 6.46,
-          perihelion: 1.05,
-          aphelion: 5.87,
-          diameter: 1.2,
-        },
-      ];
-
-      for (
-        let i = 0;
-        i < Math.min(pop('num_comets'), famousComets.length);
-        i++
-      ) {
-        const cometData = famousComets[i];
-        // Use semi-major axis for distance (average of perihelion and aphelion)
-        const semiMajorAxis = (cometData.perihelion + cometData.aphelion) / 2;
-        const r = semiMajorAxis * 100; // 100 units per AU, as everywhere else
-        const theta = Math.random() * 2 * Math.PI;
-        const v =
-          Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r) * 0.7; // Comets are slower
-        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-
-        // Create new comet object with real properties
-        const comet = new Comet(pos, vel);
-        comet.name = cometData.name;
-        comet.period = cometData.period;
-        comet.perihelion = cometData.perihelion;
-        comet.aphelion = cometData.aphelion;
-        comet.diameter = cometData.diameter;
-        comets.push(comet);
-      }
-    }
-  } else if (starting_preset === 'Rogue Encounter') {
-    // Set up central star system first
-    const centralStar = stars[0];
-    const centralMass = centralStar.mass;
-
-    // Position planets around the central star
-    for (let i = 0; i < pop('num_planets'); i++) {
-      const r = 50 + i * 25;
-      const theta = Math.random() * 2 * Math.PI;
-      const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
-      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-      planets[i].pos = pos;
-      planets[i].vel = vel;
-    }
-
-    // Position gas giants
-    for (let i = 0; i < pop('num_gas_giants'); i++) {
-      const r = 200 + i * 50;
-      const theta = Math.random() * 2 * Math.PI;
-      const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
-      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-      gas_giants[i].pos = pos;
-      gas_giants[i].vel = vel;
-    }
-
-    // Position asteroids
-    if (SETTINGS.enable_asteroids) {
-      for (let i = 0; i < pop('num_asteroids'); i++) {
-        const r = 350 + Math.random() * 100;
-        const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt(
-          (SETTINGS.gravitational_constant * centralMass) / r
-        );
-        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-        asteroids[i].pos = pos;
-        asteroids[i].vel = vel;
-      }
-    }
-
-    // Position rogue black hole to approach the system
-    if (bh_list.length > 0) {
-      bh_list[0].pos = { x: -800, y: 200 }; // Start far away
-      bh_list[0].vel = { x: 20, y: -5 }; // Approach velocity
-    }
-  } else if (starting_preset === 'Kuiper Belt') {
-    // Set up central star system (our Sun)
-    const centralStar = stars[0];
-    centralStar.name = 'Sol';
-    const centralMass = centralStar.mass;
-
-    // The named trans-Neptunian objects.
-    //
-    // These used to be written onto the first entry of `planets` (or of
-    // `gas_giants`) and then spliced straight back out of it, so all eight were
-    // configured and then deleted before the first frame: the scenario named
-    // after them ran without any of them in it. They are built here instead,
-    // the same way the Solar System scenario builds its planets - constructed
-    // with their own mass and pushed - so nothing downstream has to keep a
-    // pool index in step with them.
-    //
-    // Classification: every one of these is an icy solid body, so every one of
-    // them is a Planet. Quaoar, Sedna, Orcus and Varuna were previously built
-    // as GasGiants purely because that array had spare entries, which put four
-    // gas giants in a Kuiper Belt and made the inspector say so.
-    //
-    // Masses are published values in Earth masses (M_E = 5.972e24 kg). Sedna's
-    // is an estimate; it has no satellite and therefore no measured mass.
-    //
-    // Radial scale is SCHEMATIC, not linear in AU. The real belt runs from
-    // 39 AU to Sedna's 507 AU, a factor of thirteen that cannot be drawn on
-    // one screen and still show the classical objects apart from each other.
-    // The eight are laid out on an evenly spaced ladder instead, ordered by
-    // real semi-major axis, so the ordering a student reads off the screen is
-    // the true one even though the spacing is not. `semi_major_axis_au` on
-    // each body carries the real value for anything that wants it.
-    const kuiperBeltObjects = [
-      { name: 'Orcus', mass: 0.000106, semiMajorAxisAu: 39.17 },
-      { name: 'Pluto', mass: 0.00218, semiMajorAxisAu: 39.48 },
-      { name: 'Varuna', mass: 0.0000619, semiMajorAxisAu: 42.92 },
-      { name: 'Haumea', mass: 0.000671, semiMajorAxisAu: 43.13 },
-      { name: 'Quaoar', mass: 0.000201, semiMajorAxisAu: 43.69 },
-      { name: 'Makemake', mass: 0.000519, semiMajorAxisAu: 45.43 },
-      { name: 'Eris', mass: 0.00276, semiMajorAxisAu: 67.78 },
-      { name: 'Sedna', mass: 0.00017, semiMajorAxisAu: 506.8 },
-    ];
-
-    // The pool `apply_placement` just laid out is replaced wholesale: these
-    // eight are the scenario's planets, and a random ninth would be a body
-    // with no name in a scenario whose whole subject is named ones.
-    planets.length = 0;
-    gas_giants.length = 0;
-
-    kuiperBeltObjects.forEach((kboData, i) => {
-      const r = KUIPER_LADDER_INNER + i * KUIPER_LADDER_STEP;
-      const theta = Math.random() * 2 * Math.PI;
-      const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
-      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-
-      const kbo = new Planet(pos, vel, kboData.mass);
-      kbo.name = kboData.name;
-      // The constructor already derived these from the same mass; setting them
-      // again is cheap insurance against the two drifting apart if it changes.
-      kbo.mass = kboData.mass * EARTH_MASS_UNIT;
-      kbo.massInEarths = kboData.mass;
-      kbo.semi_major_axis_au = kboData.semiMajorAxisAu;
-      kbo.density = 'icy';
-      kbo.baseColor = '#CFE6F5';
-      kbo.isKuiperBeltObject = true;
-      planets.push(kbo);
-    });
-
-    // Add smaller Kuiper Belt objects as asteroids
-    if (SETTINGS.enable_asteroids) {
-      const smallKBOs = [
-        'Ixion',
-        'Huya',
-        '2002 AW197',
-        '2002 UX25',
-        '2002 TX300',
-        '2003 AZ84',
-        '2003 VS2',
-        '2004 GV9',
-        '2005 RN43',
-        '2005 UQ513',
-        '2006 QH181',
-        '2007 OR10',
-      ];
-
-      // Inside the same band as the named objects, not beyond it. These are all
-      // classical-belt bodies at 39-48 AU, so the previous 500-700 placed every
-      // one of them outside Sedna, which is the single most distant object in
-      // the scenario by an order of magnitude.
-      for (
-        let i = 0;
-        i < Math.min(pop('num_asteroids'), smallKBOs.length);
-        i++
-      ) {
-        const r =
-          KUIPER_LADDER_INNER -
-          10 +
-          Math.random() * (KUIPER_LADDER_STEP * 5 + 20);
-        const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt(
-          (SETTINGS.gravitational_constant * centralMass) / r
-        );
-        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-        asteroids[i].pos = pos;
-        asteroids[i].vel = vel;
-        asteroids[i].name = smallKBOs[i];
-      }
-    }
-  } else if (starting_preset === 'Sagittarius A*') {
+  if (starting_preset === 'sagittarius-a') {
     // Set up Sagittarius A* with correct name
     if (bh_list.length > 0) {
       bh_list[0].name = 'Sagittarius A*';
@@ -1691,7 +2032,7 @@ export const buildWorld = ctx => {
     ) {
       neutron_stars[i].name = galacticNeutronStars[i];
     }
-  } else if (starting_preset === 'Galactic Center') {
+  } else if (starting_preset === 'galactic-center') {
     // Name some neutron stars with real binary star names for Galactic Center scenario
     const realBinaryStars = [
       'Alpha Centauri A',
@@ -1738,7 +2079,7 @@ export const buildWorld = ctx => {
     ) {
       planets[i].name = binaryExoplanets[i];
     }
-  } else if (starting_preset === 'Pulsar System') {
+  } else if (starting_preset === 'pulsar-system') {
     // Set up pulsar system with real pulsar and planet names
     if (neutron_stars.length > 0) {
       neutron_stars[0].name = 'PSR B1257+12'; // The real pulsar with the first confirmed exoplanets
@@ -1754,1468 +2095,466 @@ export const buildWorld = ctx => {
     for (let i = 0; i < Math.min(planets.length, pulsarPlanets.length); i++) {
       planets[i].name = pulsarPlanets[i];
     }
-  } else if (starting_preset === 'Neutron Star Collision') {
-    // Set up neutron star collision based on GW170817
-    if (neutron_stars.length >= 2) {
-      neutron_stars[0].name = 'GW170817-A';
-      neutron_stars[1].name = 'GW170817-B';
-    }
-  } else if (starting_preset === 'Earth-Moon System') {
-    // Clear any existing objects and create Earth-Moon system
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0; // Clear any black holes
-    neutron_stars.length = 0; // Clear any neutron stars
-    white_dwarfs.length = 0; // Clear any white dwarfs
-    debris.length = 0; // Clear any debris
-
-    // Create Earth at the center (we'll treat it as the primary body)
-    const earth = new Planet({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
-    earth.name = 'Earth';
-    earth.mass = 1.0 * EARTH_MASS_UNIT; // 1 Earth mass
-    earth.diameter = 12742; // km
-    earth.orbital_period = 365; // days (Earth's orbital period around Sun)
-    earth.baseColor = '#4B7BE5'; // More accurate Earth blue color
-    earth.radius = 12; // Make Earth larger for visibility
-    earth.density = 'rocky';
-    earth.isEarth = true; // Flag for custom Earth rendering
-    // Accurate Earth properties
-    earth.temperature = 288; // Kelvin (average surface temperature)
-    earth.gravity = 9.81; // m/s²
-    earth.rotation_period = 1.0; // days
-    earth.atmosphere = 'N2/O2';
-    earth.density_kg_m3 = 5514; // kg/m³
-    earth.escape_velocity = 11.19; // km/s
-    earth.surface_pressure = 101325; // Pa (1 bar)
-    earth.magnetic_field = 25; // μT (microtesla)
-    earth.albedo = 0.306; // Bond albedo
-    planets.push(earth);
-
-    // Create Moon orbiting Earth
-    const moonDistance = 35; // Distance from Earth (scaled for better visibility)
-    const moonMass = 0.0123 * EARTH_MASS_UNIT;
-    // The relative circular speed uses both masses. Using the Earth's alone
-    // understates it by the Moon's 1.2% share, which starts the orbit at an
-    // eccentricity of 0.012 rather than zero.
-    const relativeSpeed = Math.sqrt(
-      (SETTINGS.gravitational_constant * (earth.mass + moonMass)) / moonDistance
-    );
-    const moonTheta = Math.random() * 2 * Math.PI;
-    const totalMass = earth.mass + moonMass;
-    // Barycentric, and this matters more here than anywhere else in the app:
-    // the Earth-Moon barycenter is the standard example of a barycenter inside
-    // the larger body, and the reference-frame panel exists to show it. Given
-    // the Moon all of the momentum, the pair would circle its barycenter and
-    // drift off the screen at the same time. Split between them, the barycenter
-    // stays put and the Earth visibly wobbles about it.
-    const moonPos = {
-      x: ((moonDistance * earth.mass) / totalMass) * Math.cos(moonTheta),
-      y: ((moonDistance * earth.mass) / totalMass) * Math.sin(moonTheta),
-    };
-    const moonSpeed = (relativeSpeed * earth.mass) / totalMass;
-    const moonVel = {
-      x: -moonSpeed * Math.sin(moonTheta),
-      y: moonSpeed * Math.cos(moonTheta),
-    };
-    // Earth takes the balancing share, so the total momentum is zero.
-    earth.pos.x =
-      ((-moonDistance * moonMass) / totalMass) * Math.cos(moonTheta);
-    earth.pos.y =
-      ((-moonDistance * moonMass) / totalMass) * Math.sin(moonTheta);
-    const earthSpeed = (relativeSpeed * moonMass) / totalMass;
-    earth.vel.x = earthSpeed * Math.sin(moonTheta);
-    earth.vel.y = -earthSpeed * Math.cos(moonTheta);
-
-    const moon = new Planet(moonPos, moonVel, 0.0123); // Moon is 0.0123 Earth masses
-    moon.name = 'Luna';
-    moon.mass = 0.0123 * EARTH_MASS_UNIT; // Moon mass
-    moon.diameter = 3474; // km
-    moon.orbital_period = 27.3; // days (Moon's orbital period around Earth)
-    moon.baseColor = '#8B8B8B'; // More accurate Moon gray color
-    moon.radius = 3; // Moon is smaller than Earth but visible
-    moon.density = 'rocky';
-    moon.isMoon = true; // Flag for custom Moon rendering
-    // Accurate Moon properties
-    moon.temperature = 250; // Kelvin (average surface temperature)
-    moon.gravity = 1.62; // m/s²
-    moon.rotation_period = 27.3; // days (tidally locked)
-    moon.atmosphere = 'none';
-    moon.density_kg_m3 = 3344; // kg/m³
-    moon.escape_velocity = 2.38; // km/s
-    moon.surface_pressure = 0; // Pa (no atmosphere)
-    moon.magnetic_field = 0; // μT (no significant magnetic field)
-    moon.albedo = 0.136; // Bond albedo
-    planets.push(moon);
-
-    // Set up zoom and pan to focus on the Earth-Moon system
-    // This will be handled by the camera system to show both objects clearly
-    SETTINGS.sim_size = 'Small'; // Use small simulation size for better zoom
-  }
-  // --- Fix for Binary BH scenario: two black holes in mutual orbit, planets orbiting center of mass ---
-  else if (starting_preset === 'Binary BH') {
-    if (bh_list.length >= 2) {
-      const separation = 120;
-      const m1 = bh_list[0].mass;
-      const m2 = bh_list[1].mass;
-      const totalMass = m1 + m2;
-      // Center of mass positions
-      const r1 = separation * (m2 / totalMass);
-      const r2 = separation * (m1 / totalMass);
-      bh_list[0].pos.x = -r1;
-      bh_list[0].pos.y = 0;
-      bh_list[1].pos.x = r2;
-      bh_list[1].pos.y = 0;
-      // Orbital velocities
-      const G = SETTINGS.gravitational_constant;
-      const orbitalSpeed = Math.sqrt((G * totalMass) / separation);
-      bh_list[0].vel.x = 0;
-      bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass);
-      bh_list[1].vel.x = 0;
-      bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass);
-      // Add slight perturbation to start inspiral
-      const perturbation = 0.95;
-      bh_list[0].vel.y *= perturbation;
-      bh_list[1].vel.y *= perturbation;
-      // Place planets in orbits around the binary's center of mass
-      for (let i = 0; i < planets.length; i++) {
-        const r = 180 + i * 30;
-        const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((G * totalMass) / r);
-        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-        planets[i].pos = pos;
-        planets[i].vel = vel;
-      }
-      // Place gas giants
-      for (let i = 0; i < gas_giants.length; i++) {
-        const r = 350 + i * 50;
-        const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((G * totalMass) / r);
-        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-        gas_giants[i].pos = pos;
-        gas_giants[i].vel = vel;
-      }
-      // Place asteroids
-      if (SETTINGS.enable_asteroids) {
-        for (let i = 0; i < asteroids.length; i++) {
-          const r = 500 + Math.random() * 100;
-          const theta = Math.random() * 2 * Math.PI;
-          const v = Math.sqrt((G * totalMass) / r);
-          const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-          const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-          asteroids[i].pos = pos;
-          asteroids[i].vel = vel;
-        }
-      }
-    }
-  } else if (starting_preset === 'TRAPPIST-1 System') {
-    // Clear planets array
-    planets.length = 0;
-    // Every number here comes from js/data/trappist1.js, which the habitable
-    // zone instruments read too, so the scenario and the lesson cannot end up
-    // describing two different systems.
-    if (stars.length > 0) {
-      const star = stars[0];
-      star.name = TRAPPIST1_STAR.name;
-      star.mass = TRAPPIST1_STAR.massInSuns * SOLAR_MASS_UNIT;
-      star.baseColor = TRAPPIST1_STAR.baseColor;
-      // TRAPPIST-1 is barely larger than Jupiter. At 100 units per AU its true
-      // radius is 0.054 units; 0.4 keeps it comfortably inside the innermost
-      // orbit at 1.15 units, where the old value of 7 swallowed three planets.
-      star.radius = 0.4;
-      // The true radius and luminosity, so the light curve reports the real
-      // transit depths even though the star is drawn seven times oversized to
-      // keep the planets clickable.
-      star.radiusInSuns = TRAPPIST1_STAR.radiusInSuns;
-      star.luminosityInSuns = TRAPPIST1_STAR.luminosityInSuns;
-      star.massInSuns = TRAPPIST1_STAR.massInSuns;
-      star.temperature = TRAPPIST1_STAR.temperatureK;
-      star.spectralType = TRAPPIST1_STAR.spectralType;
-      // The one scenario in the app where the habitable zone lands in the
-      // middle of the planets rather than off past the edge of the view, so
-      // the ring is on by default here.
-      star.showHabitableZone = true;
-    }
-
-    // 100 units per AU, the scale units.js fixes and every other scenario now
-    // uses. The old 400 put the displayed semi-major axes at four times the
-    // real values, so the periods came out eight times too long.
-    const AU = SIM_UNITS_PER_AU;
-    const starMass = TRAPPIST1_STAR.massInSuns * SOLAR_MASS_UNIT;
-    if (stars.length > 0) stars[0].mass = starMass;
-
-    // Adjacent orbits here are as little as 0.0043 AU apart, which is 0.43
-    // units. Bodies have to be small enough that neighbors cannot touch: the
-    // largest sum of radii below is 0.26, leaving a clear margin on the
-    // tightest pair. The screen-space draw floor keeps them visible anyway.
-    const RADIUS_UNITS_PER_EARTH = 0.115;
-
-    for (let i = 0; i < TRAPPIST1_PLANETS.length; i++) {
-      const p = TRAPPIST1_PLANETS[i];
-      const r = p.a * AU;
-      // Evenly spaced in phase so no two start near each other.
-      const theta = (i / TRAPPIST1_PLANETS.length) * 2 * Math.PI;
-      const v = Math.sqrt((SETTINGS.gravitational_constant * starMass) / r);
-      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-      const planet = new Planet(pos, vel, p.mass);
-      planet.name = `TRAPPIST-1${p.name}`;
-      // Gravitationally negligible against an 0.0898 solar-mass star, so the
-      // two-body period of each planet is set by the star alone and every
-      // planet returns the same a^3/P^2.
-      planet.mass = Math.max(p.mass * EARTH_MASS_UNIT, 1e-7);
-      planet.massInEarths = p.mass;
-      planet.baseColor = '#6ec6ff';
-      planet.radius = p.radius * RADIUS_UNITS_PER_EARTH;
-      // Drawn oversized, measured true: the transit depth comes from this.
-      planet.radiusInEarths = p.radius;
-      planet.isTrappist = true;
-      planets.push(planet);
-    }
   }
 
-  // --- Binary Pair: two equal stars round their common center ---
-  if (starting_preset === 'Binary Pair') {
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
+  // --- Scenarios whose bodies are declared as data ------------------------------
+  // SCENARIO_GEOMETRY (js/scenarios.js) says what they are and expandGeometry
+  // builds them through what only this module can supply: a live engine object
+  // and the named rules. The generated population has already been drawn (the
+  // seeded generator keeps its sequence); a geometry replaces it, emptying every
+  // list but the galaxies as the hand-built blocks did. Bodies are made in the
+  // declaration's order because each constructor draws from the generator, and
+  // a body the declaration takes from the generated population (`from`) keeps
+  // its id and everything else the generator gave it.
+  const declared =
+    SCENARIO_GEOMETRY[starting_preset] ?? ENGINE_GEOMETRY[starting_preset];
+  // A declaration with only `place` steps has nothing to build here.
+  if (declared?.steps) {
+    const generated = generatedBodies();
+    // The generated bodies of a type the declaration keeps stay where they
+    // are; the rest are emptied, as the hand-built blocks emptied them.
+    const keep = new Set(declared.keep);
+    if (!keep.has('Star')) stars.length = 0;
+    if (!keep.has('Planet')) planets.length = 0;
+    if (!keep.has('GasGiant')) gas_giants.length = 0;
+    if (!keep.has('BlackHole')) bh_list.length = 0;
+    if (!keep.has('Asteroid')) asteroids.length = 0;
+    if (!keep.has('Comet')) comets.length = 0;
+    if (!keep.has('NeutronStar')) neutron_stars.length = 0;
+    if (!keep.has('WhiteDwarf')) white_dwarfs.length = 0;
+    if (!keep.has('Debris')) debris.length = 0;
 
-    const G = SETTINGS.gravitational_constant;
-    const AU = 100;
-    const SEP = 4 * AU;
-    const M = 2 * SOLAR_MASS_UNIT;
-    const total = 2 * M;
-    // Barycentric, so the pair genuinely circles a fixed point rather than
-    // drifting across the view: the fixed point is the thing being taught.
-    const vRel = Math.sqrt((G * total) / SEP);
-    const v1 = vRel * (M / total);
-
-    for (const [i, star] of [stars[0], stars[1]].entries()) {
-      if (!star) continue;
-      const side = i === 0 ? -1 : 1;
-      star.name = i === 0 ? 'Star A' : 'Star B';
-      star.pos = { x: (side * SEP) / 2, y: 0 };
-      star.vel = { x: 0, y: side * v1 };
-      star.mass = M;
-      star.massInSuns = 2;
-      star.radiusInSuns = 1.6;
-      star.luminosityInSuns = 10;
-      star.radius = 9;
-      star.temperature = 8000;
-      star.spectralType = 'A5V';
-      star.baseColor = i === 0 ? '#ffd97d' : '#8fd4ff';
-      star.persistent = true;
-    }
-  }
-
-  // --- Black Hole Lab: one hole, four things happily orbiting it ---
-  if (starting_preset === 'Black Hole Lab') {
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    stars.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const bh = bh_list[0];
-    if (bh) {
-      bh.pos = { x: 0, y: 0 };
-      bh.vel = { x: 0, y: 0 };
-      bh.name = 'Black Hole';
-      bh.persistent = true;
-      // Radii are set from the hole's own drawn size, so the four orbits stay
-      // outside it and stay on screen whatever mass a lesson step asks for.
-      const spacing = [4.2, 6.4, 9.2, 12.6];
-      const orbiters = [
-        { name: 'Inner Orbiter', earths: 1 },
-        { name: 'Second Orbiter', earths: 3 },
-        { name: 'Third Orbiter', earths: 0.5 },
-        { name: 'Outer Orbiter', earths: 8 },
-      ];
-      for (const [i, planet] of planets.entries()) {
-        if (i >= spacing.length) {
-          planet.alive = false;
-          continue;
-        }
-        const r = bh.radius * spacing[i];
-        const theta = (i * Math.PI) / 2 + 0.3;
-        const v = Math.sqrt((G * bh.mass) / r);
-        planet.name = orbiters[i].name;
-        // Explicit planet-sized masses. The default generator makes these a
-        // sizeable fraction of a solar mass, and a label reading "0.3 M☉"
-        // beside a planet is a distraction in a lesson about what masses mean.
-        planet.mass = orbiters[i].earths * EARTH_MASS_UNIT;
-        planet.massInEarths = orbiters[i].earths;
-        planet.pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-        planet.vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-        planet.persistent = true;
-      }
-      planets.length = Math.min(planets.length, spacing.length);
-    }
-  }
-
-  // --- Habitable Zone Lab: the inner Solar System, with the zone drawn ---
-  if (starting_preset === 'Habitable Zone Lab') {
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    bh_list.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const AU = SIM_UNITS_PER_AU;
-    const sun = stars[0];
-    if (sun) {
-      sun.name = 'Sun';
-      sun.pos = { x: 0, y: 0 };
-      sun.vel = { x: 0, y: 0 };
-      sun.mass = SOLAR_MASS_UNIT;
-      sun.massInSuns = 1;
-      sun.luminosityInSuns = 1;
-      sun.radiusInSuns = 1;
-      sun.temperature = 5772;
-      sun.spectralType = 'G2V';
-      sun.radius = 6;
-      sun.baseColor = '#ffd27f';
-      // On by default: the ring is the instrument this scenario exists for.
-      sun.showHabitableZone = true;
-      sun.persistent = true;
-    }
-
-    // Real semi-major axes. Mercury is left out: it is so far inside the zone
-    // that including it compresses everything else against the star.
-    const worlds = [
-      { name: 'Venus', a: 0.723, color: '#e8c39e', radius: 4.6 },
-      { name: 'Earth', a: 1.0, color: '#6ec6ff', radius: 4.8 },
-      { name: 'Mars', a: 1.524, color: '#d9744a', radius: 3.6 },
-      { name: 'Ceres', a: 2.77, color: '#9aa3b5', radius: 2.4 },
-    ];
-    for (const [i, planet] of planets.entries()) {
-      if (i >= worlds.length) {
-        planet.alive = false;
-        continue;
-      }
-      const w = worlds[i];
-      const r = w.a * AU;
-      // Spread in phase so no two start on top of each other.
-      const theta = (i / worlds.length) * 2 * Math.PI + 0.4;
-      const v = Math.sqrt((G * SOLAR_MASS_UNIT) / r);
-      planet.name = w.name;
-      planet.pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      planet.vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-      // Small enough not to perturb anything, drawn large enough to click.
-      planet.mass = EARTH_MASS_UNIT;
-      planet.massInEarths = 1;
-      planet.radius = w.radius;
-      planet.baseColor = w.color;
-      planet.persistent = true;
-    }
-    planets.length = Math.min(planets.length, worlds.length);
-  }
-
-  // --- Interstellar Visitor: 1I/'Oumuamua on its measured hyperbolic orbit ---
-  if (starting_preset === 'Interstellar Visitor') {
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const AU = 100;
-    const sun = stars[0] || new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1);
-    if (!stars.length) stars.push(sun);
-    stars.length = 1;
-    sun.name = 'Sun';
-    sun.pos = { x: 0, y: 0 };
-    sun.vel = { x: 0, y: 0 };
-    sun.mass = SOLAR_MASS_UNIT;
-    sun.massInSuns = 1;
-    sun.radiusInSuns = 1;
-    sun.luminosityInSuns = 1;
-    // Drawn far larger than life: at this zoom the true radius is a third of a
-    // pixel, and the scenario is about the shape of a path, not about the Sun.
-    sun.radius = 9;
-    sun.temperature = 5772;
-    sun.spectralType = 'G2V';
-    sun.baseColor = '#ffd34d';
-    sun.persistent = true;
-
-    // Earth, for scale: one AU, one year.
-    const earth = new Planet(
-      { x: 0, y: AU },
-      { x: -Math.sqrt((G * sun.mass) / AU), y: 0 },
-      1.0
-    );
-    earth.name = 'Earth';
-    earth.mass = EARTH_MASS_UNIT;
-    earth.massInEarths = 1;
-    earth.radiusInEarths = 1;
-    earth.radius = 3;
-    earth.baseColor = '#4b90e2';
-    earth.persistent = true;
-    planets.push(earth);
-
-    // 1I/'Oumuamua. Perihelion 0.2559 AU, eccentricity 1.2011: the first
-    // object ever seen on an orbit that is not merely eccentric but open. The
-    // state below is that orbit evaluated at four AU on the way in, so the
-    // simulation reproduces the real 87.7 km/s perihelion speed.
-    const visitor = new Planet(
-      { x: -286.14, y: -279.48 },
-      { x: 2.9436, y: 2.0454 },
-      1.0
-    );
-    visitor.name = "1I/'Oumuamua";
-    // Small enough to leave the Sun and Earth entirely undisturbed, which is
-    // true of the real thing as well.
-    visitor.mass = 1e-9;
-    visitor.massInEarths = visitor.mass / EARTH_MASS_UNIT;
-    visitor.radius = 2.2;
-    visitor.baseColor = '#d96a4a';
-    visitor.persistent = true;
-    planets.push(visitor);
-  }
-
-  // --- Exoplanet Characterization Lab: the same star, now allowed to move ---
-  // --- The dark-matter scenarios ------------------------------------------
-  //
-  // Two discs and a cluster, built by hand because every body's speed has to be
-  // exactly right for the point being made.
-  //
-  // Spiral Galaxy is the prediction: each star is launched at the circular
-  // speed the visible mass alone implies, sqrt(G M(<r) / r), so the rotation
-  // curve falls as r^-1/2 the way the Solar System's does.
-  //
-  // Milky Way Rotation is the observation: each star is launched at the same
-  // speed regardless of radius, which is what telescopes actually see. Those
-  // speeds are far too high for the visible mass to hold, so this scenario
-  // starts with the halo switched on. Switch it off and the disc flies apart,
-  // which is the whole argument in one gesture.
-  if (
-    starting_preset === 'Spiral Galaxy' ||
-    starting_preset === 'Milky Way Rotation'
-  ) {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    galaxies.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const flat = starting_preset === 'Milky Way Rotation';
-
-    // A compact central bulge carrying most of the visible mass. This is what
-    // makes the Keplerian prediction a prediction: outside it, the enclosed
-    // visible mass barely grows, so the expected speed has to fall.
-    const BULGE = 12 * SOLAR_MASS_UNIT;
-    const bulge = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 12);
-    bulge.name = 'Galactic bulge';
-    bulge.isCentralBody = true;
-    bulge.persistent = true;
-    bulge.baseColor = '#ffe9b8';
-    stars.push(bulge);
-
-    // The disc. Radii are spaced evenly in log so the tracers are spread
-    // evenly across the plot's log axis rather than bunched at the outside.
-    const N = 90;
-    const R_IN = 150;
-    const R_OUT = 900;
-    const STAR_MASS = 0.03; // solar masses each; 2.7 M_sun of disc in total
-    const V_FLAT = 11.0;
-
-    for (let i = 0; i < N; i++) {
-      const t = i / (N - 1);
-      const r = R_IN * Math.pow(R_OUT / R_IN, t);
-      const theta = Math.random() * 2 * Math.PI;
-
-      // Enclosed visible mass at this radius: the bulge plus whatever share of
-      // the disc lies inside. Computed rather than assumed, so the launch speed
-      // is the honest circular speed for the mass actually present.
-      const inner = BULGE + N * t * STAR_MASS * SOLAR_MASS_UNIT;
-      const vKepler = Math.sqrt((G * inner) / r);
-      const v = flat ? V_FLAT : vKepler;
-
-      const star = new StarObject(
-        { x: r * Math.cos(theta), y: r * Math.sin(theta) },
-        { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
-        STAR_MASS
-      );
-      star.name = `Disc star ${i + 1}`;
-      star.persistent = true;
-      // Uniform color: these are tracers, and a disc that shaded from red to
-      // blue with radius would suggest the color meant something.
-      star.baseColor = '#cfe0ff';
-      stars.push(star);
-    }
-  }
-
-  // --- Coma Cluster: Zwicky's measurement ---------------------------------
-  //
-  // A cluster of galaxies in virial equilibrium, built so that the member
-  // speeds are what a bound cluster of this total mass would produce. The
-  // lesson measures the dispersion, applies the virial theorem, and compares
-  // the answer with the mass of the galaxies themselves.
-  //
-  // The excess is put in by hand, as a halo, because that is what the
-  // measurement finds: the members move as though there were far more mass
-  // than the members account for.
-  if (starting_preset === 'Coma Cluster') {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    galaxies.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const N = 24;
-    const R = 2600;
-    const MEMBER = 4 * SOLAR_MASS_UNIT;
-
-    // The speed scale is set from the total mass the cluster actually has,
-    // members plus halo, so the cluster is bound and stays a cluster for as
-    // long as anyone watches it. A cluster that dispersed while being measured
-    // would not be in equilibrium, and the virial theorem would not apply.
-    const haloMass = haloEnclosedMass(
-      R,
-      { vFlat: SETTINGS.halo_v_flat, coreRadius: SETTINGS.halo_core_radius },
-      G
-    );
-    const totalMass = N * MEMBER + haloMass;
-    const vScale = Math.sqrt((G * totalMass) / R);
-
-    for (let i = 0; i < N; i++) {
-      // Positions drawn from a centrally concentrated distribution rather than
-      // uniformly in the disc: real clusters are densest in the middle, and a
-      // uniform ring would put every member at the same radius and give the
-      // virial radius nothing to be measured from.
-      const r = R * Math.pow(Math.random(), 0.55);
-      const theta = Math.random() * 2 * Math.PI;
-
-      // Random directions, not circular orbits. A cluster is a swarm on
-      // randomly oriented orbits, and its members' speeds are a dispersion
-      // rather than a rotation. Drawing them isotropically is what makes the
-      // dispersion the thing the virial theorem wants.
-      const speed = vScale * (0.55 + Math.random() * 0.5);
-      const phi = Math.random() * 2 * Math.PI;
-
-      const g = new Galaxy(
-        { x: r * Math.cos(theta), y: r * Math.sin(theta) },
-        { x: speed * Math.cos(phi), y: speed * Math.sin(phi) },
-        MEMBER,
-        i < 6 ? 'elliptical' : 'spiral'
-      );
-      galaxies.push(g);
-    }
-
-    // The cluster as a whole should not be sailing off the screen: any net
-    // drift would add itself to every member's speed and inflate the
-    // dispersion, which is the one number the lesson turns on.
-    zeroNetMomentum();
-  }
-
-  // --- Gravity Assist Lab / Gravity Assist: Heliocentric -----------------------
-  if (
-    starting_preset === 'Gravity Assist Lab' ||
-    starting_preset === 'Gravity Assist: Heliocentric'
-  ) {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const JUP_IN_SUNS = 1 / JUPITER_MASSES_PER_SOLAR_MASS;
-
-    const planetMass =
-      SETTINGS.assist_planet_mass * JUP_IN_SUNS * SOLAR_MASS_UNIT;
-    const mu = G * planetMass;
-    const orbitRadius = SETTINGS.assist_orbit_radius;
-    const hasStar = orbitRadius > 0;
-
-    // Where the planet is and how fast it is going. With a star it is on a
-    // circular orbit and its speed is not ours to choose; without one it
-    // drifts, and the speed is a stated parameter of the experiment.
-    let planetPos = { x: 0, y: 0 };
-    let planetVel = { x: SETTINGS.assist_planet_speed, y: 0 };
-    if (hasStar) {
-      const star = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1);
-      star.name = 'Star';
-      star.mass = SOLAR_MASS_UNIT;
-      star.massInSuns = 1;
-      star.radiusInSuns = 1;
-      star.luminosityInSuns = 1;
-      // Drawn far larger than life. At this zoom a true solar radius is under
-      // a pixel, and this scenario is about the shape of a path.
-      star.radius = 8;
-      star.temperature = 5772;
-      star.spectralType = 'G2V';
-      star.baseColor = '#ffd34d';
-      star.persistent = true;
-      stars.push(star);
-
-      planetPos = { x: orbitRadius, y: 0 };
-      // The pair's mass, not just the star's: the planet is a thousandth of a
-      // solar mass and ignoring it would start the orbit slightly eccentric.
-      const vCirc = Math.sqrt(
-        (G * (SOLAR_MASS_UNIT + planetMass)) / orbitRadius
-      );
-      planetVel = { x: 0, y: vCirc };
-    }
-
-    const planet = new GasGiant({ ...planetPos }, { ...planetVel });
-    planet.name = 'Planet';
-    planet.mass = planetMass;
-    planet.massInJupiters = SETTINGS.assist_planet_mass;
-    // A five-Jupiter planet is about one Jupiter radius across; drawn at 2
-    // units so it is visible, which is 40 times smaller than the closest the
-    // spacecraft comes on the default pass. The exaggeration therefore cannot
-    // reach the physics here the way it can in a tight binary: js/physics.js
-    // collides on the drawn radius, and no configuration this lesson uses gets
-    // within twenty times it.
-    planet.radiusInSuns = 0.102763;
-    planet.radius = 2;
-    planet.baseColor = '#c9a882';
-    planet.persistent = true;
-    gas_giants.push(planet);
-
-    // The spacecraft, placed on the encounter hyperbola from its elements so
-    // that the impact parameter and the speed at infinity are exact inputs.
-    // Pointing a probe at a planet from a finite distance and hoping gives a
-    // different b and a noticeably different vInf, and the comparison against
-    // theory would then be measuring the setup.
-    const state = encounterState({
-      mu,
-      b: SETTINGS.assist_impact_parameter,
-      vInf: SETTINGS.assist_v_infinity,
-      distance: SETTINGS.assist_gate,
-      approachDeg: SETTINGS.assist_approach_deg,
-    });
-
-    if (state) {
-      const probe = new Planet(
-        { x: planetPos.x + state.pos.x, y: planetPos.y + state.pos.y },
-        { x: planetVel.x + state.vel.x, y: planetVel.y + state.vel.y },
-        1
-      );
-      probe.name = 'Spacecraft';
-      probe.mass = planetMass * SETTINGS.assist_probe_mass_ratio;
-      // The gravitating mass and the reported one, kept in step. The Planet
-      // constructor was handed one Earth mass and the line above then replaced
-      // the mass it moves with, so the inspector claimed an Earth while the
-      // force law used sixteen ten-thousandths of one.
-      probe.massInEarths = probe.mass / EARTH_MASS_UNIT;
-      // Drawn at 0.4 units: visible as a dot, and small enough that the sum of
-      // the two radii is set by the planet rather than by it.
-      probe.radius = 0.4;
-      probe.baseColor = '#e8f4ff';
-      probe.persistent = true;
-      planets.push(probe);
-    }
-
-    // Deliberately NOT zeroing the net momentum here, unlike every other hand
-    // built scenario in this file.
-    //
-    // The whole point of the isolated case is that the planet's velocity change
-    // is its recoil from the encounter. Re-centering the system on its
-    // barycenter would subtract a constant from both bodies, which changes
-    // nothing physical - but it would also mean the planet does not start at
-    // the speed the scenario says it does, and a student reading "the planet
-    // was moving at 2.8 km/s" off the settings and 2.7 off the inspector has
-    // been given a puzzle that is not the lesson's.
-  }
-
-  // --- Lagrange Point Lab ------------------------------------------------------
-  if (starting_preset === 'Lagrange Point Lab') {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const AU = SIM_UNITS_PER_AU;
-    const G = SETTINGS.gravitational_constant;
-    const m1 = SETTINGS.lagrange_primary_mass * SOLAR_MASS_UNIT;
-    const m2 = SETTINGS.lagrange_secondary_mass * SOLAR_MASS_UNIT;
-    const separation = SETTINGS.lagrange_separation * AU;
-    const total = m1 + m2;
-    const mu = m2 / total;
-
-    // The barycenter is the origin, the heavier body sits at -mu and the
-    // lighter at 1-mu, in units of the separation. That is the convention
-    // js/cr3bp.js states and works in, and building the world any other way
-    // would mean the overlay and the simulation disagreed about where the
-    // origin is.
-    const n = Math.sqrt((G * total) / (separation * separation * separation));
-    const place = (fraction, mass, name, color, radiusSuns) => {
-      const x = fraction * separation;
-      const star = new StarObject({ x, y: 0 }, { x: 0, y: n * x }, 0);
-      star.mass = mass;
-      star.massInSuns = mass / SOLAR_MASS_UNIT;
-      star.name = name;
-      star.radiusInSuns = radiusSuns;
-      // Drawn well above life size so both are visible at a zoom that holds
-      // the whole L4/L5 triangle. Nothing here comes within twenty times the
-      // drawn radius, and js/physics.js collides on the drawn radius.
-      star.radius = 30 * 0.00465047 * AU * Math.cbrt(radiusSuns);
-      star.baseColor = color;
-      star.persistent = true;
-      stars.push(star);
-    };
-    place(-mu, m1, 'Primary', '#ffd27f', 1);
-    place(1 - mu, m2, 'Secondary', '#9fd0ff', 0.35);
-
-    // The tracer, placed and launched in the ROTATING frame. At t = 0 the
-    // rotating and inertial frames coincide in orientation, so the position
-    // carries over unchanged and the velocity picks up the frame's own motion:
-    // v_inertial = v_rotating + omega x r, with omega along +z.
-    const rx = SETTINGS.lagrange_tracer_x * separation;
-    const ry = SETTINGS.lagrange_tracer_y * separation;
-    const tracer = new Planet(
-      { x: rx, y: ry },
-      {
-        x: SETTINGS.lagrange_tracer_vx * separation * n - n * ry,
-        y: SETTINGS.lagrange_tracer_vy * separation * n + n * rx,
+    // One body of a published system, whose masses are in simulation units. A
+    // constructor derives the display masses from the mass it is handed, so all
+    // four are set; each body is persistent because investigations match bodies
+    // between samples by identity.
+    const published = d => ({
+      type:
+        d.kind === 'star'
+          ? 'Star'
+          : d.kind === 'gasGiant'
+            ? 'GasGiant'
+            : 'Planet',
+      ctor: d.kind === 'star' ? d.mass / SOLAR_MASS_UNIT : 1,
+      pos: d.pos,
+      vel: d.vel,
+      assign: {
+        mass: d.mass,
+        massInSuns: d.mass / SOLAR_MASS_UNIT,
+        massInEarths: d.mass / EARTH_MASS_UNIT,
+        massInJupiters: d.mass / JUPITER_MASS_UNIT,
+        name: d.name,
+        radius: d.radius,
+        baseColor: d.color,
+        persistent: true,
       },
-      1
-    );
-    tracer.name = 'Tracer';
-    tracer.mass = total * SETTINGS.lagrange_tracer_fraction;
-    tracer.massInEarths = tracer.mass / EARTH_MASS_UNIT;
-    tracer.radius = 0.8;
-    tracer.baseColor = '#f07f7f';
-    tracer.persistent = true;
-    planets.push(tracer);
-  }
-
-  // --- Orbital Transfer Lab ----------------------------------------------------
-  if (starting_preset === 'Orbital Transfer Lab') {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const AU = SIM_UNITS_PER_AU;
-    const G = SETTINGS.gravitational_constant;
-    const starMass = SETTINGS.transfer_star_mass * SOLAR_MASS_UNIT;
-    const r1 = SETTINGS.transfer_inner_au * AU;
-    const r2 = SETTINGS.transfer_outer_au * AU;
-
-    const star = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 0);
-    star.mass = starMass;
-    star.massInSuns = SETTINGS.transfer_star_mass;
-    star.name = 'Sol';
-    // Drawn ten times life size so it is visible at a zoom that also holds a
-    // 2.5 AU orbit. The exaggeration cannot reach the physics here: the
-    // spacecraft never comes within twenty times the drawn radius, and
-    // js/physics.js collides on the drawn radius.
-    star.radiusInSuns = 1;
-    star.radius = 10 * 0.00465047 * AU;
-    star.persistent = true;
-    stars.push(star);
-
-    // Circular, exactly. The speed is sqrt(GM/r) with the spacecraft's own
-    // mass included in mu, because orbitalElements() includes it and a
-    // scenario that set up its orbit with a different mu than the readout uses
-    // would open with a small eccentricity nobody asked for.
-    const probeMass = starMass * SETTINGS.transfer_probe_mass_ratio;
-    const circular = (radius, mass, phaseDeg) => {
-      const phase = (phaseDeg * Math.PI) / 180;
-      const mu = G * (starMass + mass);
-      const v = Math.sqrt(mu / radius);
-      return {
-        pos: { x: radius * Math.cos(phase), y: radius * Math.sin(phase) },
-        vel: { x: -v * Math.sin(phase), y: v * Math.cos(phase) },
-      };
-    };
-
-    const inner = circular(r1, probeMass, 0);
-    const probe = new Planet(inner.pos, inner.vel, 1);
-    probe.name = 'Spacecraft';
-    probe.mass = probeMass;
-    // The reported mass and the gravitating mass, kept in step. The Planet
-    // constructor was handed one Earth mass and the line above replaced what
-    // it moves with.
-    probe.massInEarths = probe.mass / EARTH_MASS_UNIT;
-    probe.radius = 0.5;
-    probe.baseColor = '#e8f4ff';
-    probe.persistent = true;
-    planets.push(probe);
-
-    // The destination. Given a real mass so it shows up in the inspector as a
-    // body rather than a marker, and kept light enough that it does not
-    // perturb the transfer the lesson asks students to check against the
-    // two-body answer.
-    const targetMass = starMass * 1e-8;
-    const outer = circular(r2, targetMass, SETTINGS.transfer_target_phase_deg);
-    const target = new Planet(outer.pos, outer.vel, 1);
-    target.name = 'Target Station';
-    target.mass = targetMass;
-    target.massInEarths = target.mass / EARTH_MASS_UNIT;
-    target.radius = 0.9;
-    target.baseColor = '#f4c86a';
-    target.persistent = true;
-    planets.push(target);
-  }
-
-  // --- Binary Planet Lab / Circumbinary Planet Lab -----------------------------
-  if (
-    starting_preset === 'Binary Planet Lab' ||
-    starting_preset === 'Circumbinary Planet Lab'
-  ) {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const AU = SIM_UNITS_PER_AU;
-    const R_SUN = 0.00465047 * AU;
-    const G = SETTINGS.gravitational_constant;
-    const mode =
-      starting_preset === 'Circumbinary Planet Lab'
-        ? CIRCUMBINARY
-        : CIRCUMSTELLAR;
-    /** How much larger than life the stars are drawn. See the note below. */
-    const STAR_DRAW_EXAGGERATION = 10;
-
-    const m1Solar = SETTINGS.binary_lab_m1;
-    const m2Solar = SETTINGS.binary_lab_m2;
-    const separation = SETTINGS.binary_lab_separation * AU;
-    // One Earth mass. Not zero, because a body with no mass drops out of the
-    // barycenter and out of the energy bookkeeping the diagnostics depend on;
-    // and small enough - three parts in a million of the lighter star - that
-    // the test-particle assumption behind the published stability boundary is
-    // not being quietly violated by the thing being measured.
-    const planetMass = EARTH_MASS_UNIT;
-
-    const layout = systemLayout({
-      mode,
-      m1: m1Solar * SOLAR_MASS_UNIT,
-      m2: m2Solar * SOLAR_MASS_UNIT,
-      separation,
-      eccentricity: SETTINGS.binary_lab_eccentricity,
-      phaseDeg: SETTINGS.binary_lab_binary_phase,
-      planetMass,
-      semiMajor: SETTINGS.binary_lab_planet_a * separation,
-      planetPhaseDeg: SETTINGS.binary_lab_planet_phase,
-      G,
     });
-
-    // Radii, and the one honest compromise in this scenario.
-    //
-    // js/physics.js absorbs a planet when it comes within star.radius +
-    // planet.radius, so the size these bodies are DRAWN at is the distance at
-    // which a collision gets recorded. At a 10 AU separation a true solar
-    // radius is 0.46 simulation units - about a third of a pixel at this zoom -
-    // and a star nobody can see is not usable. So the stars are drawn ten times
-    // their real size, from the main-sequence relation R ~ M^0.8.
-    //
-    // What that means for the results, stated here and repeated in the panel
-    // and the instructor notes: a "collision" in this scenario is the planet
-    // passing within about 0.06 AU of a star's center - roughly thirteen solar
-    // radii - not a measured impact. A pass that close destroys a planet in
-    // reality too, so the outcome is not fiction; but the split between
-    // "collided" and "ejected" among the disrupted configurations does depend
-    // on this factor, and a student comparing those two counts is comparing
-    // something partly set by a drawing decision. The split between disrupted
-    // and survived does not: every surviving configuration here keeps the
-    // planet at least 400 units from the far star, seventy times the threshold.
-    const star1 = new StarObject(
-      { ...layout.star1.pos },
-      { ...layout.star1.vel },
-      m1Solar
-    );
-    star1.name = 'Star A';
-    star1.radiusInSuns = m1Solar ** 0.8;
-    star1.radius = star1.radiusInSuns * R_SUN * STAR_DRAW_EXAGGERATION;
-    star1.baseColor = '#fff0d0';
-    star1.persistent = true;
-    stars.push(star1);
-
-    const star2 = new StarObject(
-      { ...layout.star2.pos },
-      { ...layout.star2.vel },
-      m2Solar
-    );
-    star2.name = 'Star B';
-    star2.radiusInSuns = m2Solar ** 0.8;
-    star2.radius = star2.radiusInSuns * R_SUN * STAR_DRAW_EXAGGERATION;
-    star2.baseColor = '#ffc898';
-    star2.persistent = true;
-    stars.push(star2);
-
-    const planet = new Planet(
-      { ...layout.planet.pos },
-      { ...layout.planet.vel },
-      1
-    );
-    planet.name = 'Planet';
-    planet.mass = planetMass;
-    // An Earth radius at this scale is 4e-5 units, which is not a thing that
-    // can be drawn at any zoom. 1.5 units is a third of the drawn star and a
-    // ten-thousandth of the binary separation, so it adds almost nothing to the
-    // collision threshold the star already sets. What actually makes the planet
-    // findable on screen is its trail, which is why the scenario asks for a
-    // long one.
-    planet.radius = 1.5;
-    planet.baseColor = '#7ec8ff';
-    planet.persistent = true;
-    planets.push(planet);
-
-    // Built barycentric, so this removes nothing but the planet's own small
-    // contribution. Worth doing anyway: without it the system creeps, and over
-    // forty binary periods a creeping barycenter turns "distance from the
-    // system" - the quantity an ejection is judged on - into a growing number
-    // that has nothing to do with the planet.
-    zeroNetMomentum();
-  }
-
-  if (starting_preset === 'Exoplanet Characterization Lab') {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const sys = HD209458;
-    const AU = SIM_UNITS_PER_AU;
-    const R_SUN = 0.00465047 * AU;
-    const R_JUP_IN_SUNS = 0.102763;
-    const G = SETTINGS.gravitational_constant;
-
-    const starMass = sys.star.massSolar * SOLAR_MASS_UNIT;
-    // Jupiter masses into the simulation's units, through the solar mass so
-    // there is no second conversion constant to keep in step.
-    const JUP_IN_SUNS = 1 / JUPITER_MASSES_PER_SOLAR_MASS;
-    const planetMass = sys.planet.massJupiter * JUP_IN_SUNS * SOLAR_MASS_UNIT;
-    const total = starMass + planetMass;
-    const a = sys.planet.semiMajorAU * AU;
-
-    // Barycentric split. Each body sits on the far side of the center of mass
+    const geometryRules = {
+      ...laboratoryRules,
+      ...populationRules,
+      // The Trojans are built balanced already; the other two are balanced here.
+      'published-system': ({ system, detuned }, env) => {
+        const G = env.G;
+        let spec;
+        if (system === 'trappist-1') return trappist(G);
+        if (system === 'hd209458') return hd209458(G);
+        if (system === 'kuiper-belt') return kuiperBelt(G);
+        if (system === 'solar-system') return solarSystem(G);
+        if (system === 'galilean') {
+          spec = galileanBodies(G, detuned ? { detune: GALILEAN.detune } : {});
+        } else if (system === 'pluto-neptune') spec = plutoBodies(G);
+        else spec = trojanBodies(G);
+        if (system !== 'jupiter-trojans')
+          balance([spec.primary, ...spec.bodies]);
+        return [spec.primary, ...spec.bodies].map(published);
+      },
+    };
+    // The eight named trans-Neptunian objects, built with their own masses on
+    // the schematic ladder (kuiperBeltObjects above). Each is a Planet on a
+    // circular orbit about the central star, at a random phase drawn before the
+    // body is made, as the hand-built loop drew it. The small bodies that fill
+    // the belt are the generator's asteroids, placed by `orbital-population`.
+    const kuiperBelt = function* (G) {
+      const centralMass = stars[0].mass;
+      for (let i = 0; i < kuiperBeltObjects.length; i++) {
+        const kboData = kuiperBeltObjects[i];
+        const r = KUIPER_LADDER_INNER + i * KUIPER_LADDER_STEP;
+        const theta = Math.random() * 2 * Math.PI;
+        const v = Math.sqrt((G * centralMass) / r);
+        yield {
+          type: 'Planet',
+          ctor: kboData.mass,
+          pos: { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+          vel: { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
+          assign: {
+            name: kboData.name,
+            // The constructor already derived these from the same mass;
+            // setting them again is cheap insurance against the two drifting.
+            mass: kboData.mass * EARTH_MASS_UNIT,
+            massInEarths: kboData.mass,
+            semi_major_axis_au: kboData.semiMajorAxisAu,
+            density: 'icy',
+            baseColor: '#CFE6F5',
+            isKuiperBeltObject: true,
+          },
+        };
+      }
+    };
+    // The Sun, the eight planets and giants of solarSystemData, and as many of
+    // the named asteroids and comets as the counts ask for. A planet's phase is
+    // the table's; an asteroid's distance and phase and a comet's phase are
+    // drawn from the seeded generator before the body is made, as the
+    // hand-built loops drew them (Math.random, which a seeded build replaces).
+    // Two things a row cannot hold are `finish` steps run once the body exists:
+    // Saturn's rings are sized from the radius its constructor derived, and an
+    // asteroid's reported Ceres count follows the mass it was given.
+    const solarSystem = function* (G) {
+      yield {
+        type: 'Star',
+        ctor: 1.0,
+        pos: { x: 0, y: 0 },
+        vel: { x: 0, y: 0 },
+        assign: {
+          name: 'Sol',
+          mass: SOLAR_MASS_UNIT,
+          massInSuns: 1.0,
+          baseColor: '#FFFF00',
+          radius: 15, // larger than life, for visibility
+          temperature: 5772, // K, effective; the habitable-zone model reads it
+          spectralType: 'G2V',
+          age: 4.6, // billion years
+          luminosity: 1.0,
+          solarRadius: 1.0,
+          metallicity: 0.02,
+          rotationPeriod: 25.4, // days, at the equator
+          surfaceGravity: 274, // m/s^2
+          density: 1408, // kg/m^3
+          isSolarSystemSun: true,
+          luminosityInSuns: 1.0,
+          radiusInSuns: 1.0,
+        },
+      };
+      const DEG2RAD = Math.PI / 180;
+      for (let i = 0; i < solarSystemData.length; i++) {
+        const d = solarSystemData[i];
+        const r = d.distance;
+        const theta =
+          typeof d.phase_deg === 'number'
+            ? d.phase_deg * DEG2RAD
+            : (i * 45 * DEG2RAD) % (2 * Math.PI);
+        const orbitalVelocity = Math.sqrt((G * stars[0].mass) / r);
+        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+        const vel = {
+          x: -orbitalVelocity * Math.sin(theta),
+          y: orbitalVelocity * Math.cos(theta),
+        };
+        const common = {
+          name: d.name,
+          diameter: d.diameter,
+          orbital_period: d.orbital_period,
+          baseColor: d.color,
+        };
+        const physical = {
+          temperature: d.temperature,
+          gravity: d.gravity,
+          rotation_period: d.rotation_period,
+          atmosphere: d.atmosphere,
+          density_kg_m3: d.density_kg_m3,
+          escape_velocity: d.escape_velocity,
+          surface_pressure: d.surface_pressure,
+          isSolarSystemPlanet: true,
+        };
+        if (d.type === 'gas_giant' || d.type === 'ice_giant') {
+          // d.mass is in Earth masses and the constructor takes Jupiter masses;
+          // dividing by 50 once made Jupiter report 6.4 M_J in the inspector.
+          // Jupiter lands at 0.955 units against a 1000-unit Sun, the real
+          // ratio; the floor is only for the smallest bodies.
+          yield {
+            type: 'GasGiant',
+            ctor: d.mass / EARTH_MASSES_PER_JUPITER_MASS,
+            pos,
+            vel,
+            assign: {
+              ...common,
+              giantType: d.giantType,
+              ...physical,
+              mass: Math.max(d.mass * EARTH_MASS_UNIT, 1e-7),
+              hasRings: d.name === 'Saturn',
+            },
+            finish: g => {
+              if (!g.hasRings) return;
+              g.ringInnerRadius = g.radius * 1.3;
+              g.ringOuterRadius = g.radius * 2.2;
+              g.ringAngle = 0.25; // slight tilt
+              g.ringOpacity = 0.65;
+            },
+          };
+        } else {
+          yield {
+            type: 'Planet',
+            ctor: d.mass,
+            pos,
+            vel,
+            assign: {
+              ...common,
+              massInEarths: d.mass,
+              density: d.density,
+              ...physical,
+              mass: Math.max(d.mass * EARTH_MASS_UNIT, 1e-7),
+            },
+          };
+        }
+      }
+      if (SETTINGS.enable_asteroids) {
+        for (
+          let i = 0;
+          i < Math.min(pop('num_asteroids'), realAsteroids.length);
+          i++
+        ) {
+          const a = realAsteroids[i];
+          const r = a.distance + (Math.random() - 0.5) * 20; // wider spacing
+          const theta = Math.random() * 2 * Math.PI;
+          const v = Math.sqrt((G * stars[0].mass) / r);
+          yield {
+            type: 'Asteroid',
+            pos: { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+            vel: { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
+            assign: {
+              name: a.name,
+              diameter: a.diameter,
+              // The planets' unit, so relative masses stay true to life.
+              mass: Math.max(a.mass * EARTH_MASS_UNIT, 1e-12),
+            },
+            // Real asteroids have individual masses, so the Ceres count the
+            // class carries has to follow the mass rather than keep the
+            // constructor's default of one.
+            finish: syncReportedMass,
+          };
+        }
+      }
+      if (pop('num_comets')) {
+        for (
+          let i = 0;
+          i < Math.min(pop('num_comets'), famousComets.length);
+          i++
+        ) {
+          const c = famousComets[i];
+          // The semi-major axis, 100 units per AU as everywhere else.
+          const r = ((c.perihelion + c.aphelion) / 2) * 100;
+          const theta = Math.random() * 2 * Math.PI;
+          const v = Math.sqrt((G * stars[0].mass) / r) * 0.7; // slower
+          yield {
+            type: 'Comet',
+            pos: { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+            vel: { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
+            assign: {
+              name: c.name,
+              period: c.period,
+              perihelion: c.perihelion,
+              aphelion: c.aphelion,
+              diameter: c.diameter,
+            },
+          };
+        }
+      }
+    };
+    // HD 209458 and its planet about their common center, from js/data/
+    // exoplanetSystems.js. Each body sits on the far side of the center of mass
     // from the other, at a distance set by the other's share of the mass, and
     // moves at the speed that keeps the pair circling that fixed point. The
     // star's share is 1/1700 of the planet's, which is exactly why the wobble
-    // is invisible at true scale and has to be magnified to be taught.
-    const vRel = Math.sqrt((G * total) / a);
-    const rStar = (a * planetMass) / total;
-    const rPlanet = (a * starMass) / total;
-    const vStar = (vRel * planetMass) / total;
-    const vPlanet = (vRel * starMass) / total;
-
-    const star = new StarObject(
-      { x: -rStar, y: 0 },
-      { x: 0, y: -vStar },
-      sys.star.massSolar
-    );
-    star.name = sys.name;
-    star.radiusInSuns = sys.star.radiusSolar;
-    star.radius = sys.star.radiusSolar * R_SUN;
-    star.luminosityInSuns = sys.star.luminositySolar;
-    star.temperature = sys.star.temperatureK;
-    star.spectralType = sys.star.spectralType;
-    star.baseColor = '#fff3df';
-    star.persistent = true;
-    star.distancePc = sys.star.distancePc;
-    stars.push(star);
-
-    const planet = new GasGiant({ x: rPlanet, y: 0 }, { x: 0, y: vPlanet });
-    planet.name = sys.planetName;
-    planet.mass = planetMass;
-    planet.massInJupiters = sys.planet.massJupiter;
-    planet.radiusInSuns = sys.planet.radiusJupiter * R_JUP_IN_SUNS;
-    planet.radius = planet.radiusInSuns * R_SUN;
-    planet.baseColor = '#c9a882';
-    planet.persistent = true;
-    gas_giants.push(planet);
-
-    // The pair was built in the center-of-mass frame, so this should be a
-    // no-op; running it anyway means the scenario cannot start drifting if a
-    // parameter above is ever edited by hand.
-    zeroNetMomentum();
-  }
-
-  // --- Transit Lab / Blended Binary: HD 209458 at true relative scale ---
-  if (
-    starting_preset === 'Transit Lab' ||
-    starting_preset === 'Blended Binary'
-  ) {
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const AU = 100; // units per AU, the scale units.js fixes
-    const R_SUN = 0.00465047 * AU; // one solar radius, in simulation units
-    const R_JUP_IN_SUNS = 0.102763; // 71,492 km / 695,700 km
-
-    // HD 209458 (Peter Sallis / "Osiris"), from the transit and radial-velocity
-    // literature. The radii are set explicitly rather than inferred from mass,
-    // so the light curve, the drawn silhouette and the arithmetic in the lesson
-    // all use the same numbers.
-    const M_STAR_SUNS = 1.148;
-    const R_STAR_SUNS = 1.155;
-    const L_STAR_SUNS = 1.77;
-    // The published mass and semi-major axis together return the published
-    // 3.5247-day period to within a minute, so nothing here has to be quietly
-    // adjusted to make Kepler's third law come out.
-    const A_PLANET_AU = 0.04747;
-    const R_PLANET_JUP = 1.38;
-    const M_PLANET_JUP = 0.69;
-
-    const starMass = M_STAR_SUNS * SOLAR_MASS_UNIT;
-    const aPlanet = A_PLANET_AU * AU;
-
-    // Companion, only for the blended case. Half a magnitude fainter: a
-    // contrast Robo-AO and SOAR both detect routinely, and one that changes the
-    // measured planet radius by a quarter.
-    const blended = starting_preset === 'Blended Binary';
-    const DELTA_MAG = 0.5;
-    const COMPANION_SEP_AU = 300;
-    const M_COMP_SUNS = 1.0;
-    const R_COMP_SUNS = 0.95;
-
-    const compMass = M_COMP_SUNS * SOLAR_MASS_UNIT;
-    const sep = COMPANION_SEP_AU * AU;
-    const totalMass = starMass + (blended ? compMass : 0);
-    // Worked in the primary's rest frame rather than the barycenter's. The
-    // relative orbit is the same either way, which is the part that is physics;
-    // what changes is that the primary stays where the camera is pointed
-    // instead of tracing out its own 300 AU circle and leaving the view. The
-    // pull the primary does feel from 300 AU moves it 0.015 units in an hour.
-    const vRel = blended ? Math.sqrt((G * totalMass) / sep) : 0;
-
-    const primary =
-      stars[0] || new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1);
-    if (!stars.length) stars.push(primary);
-    stars.length = blended ? Math.min(stars.length, 2) : 1;
-    primary.name = 'HD 209458';
-    primary.pos = { x: 0, y: 0 };
-    primary.vel = { x: 0, y: 0 };
-    primary.mass = starMass;
-    primary.massInSuns = M_STAR_SUNS;
-    primary.radiusInSuns = R_STAR_SUNS;
-    primary.luminosityInSuns = L_STAR_SUNS;
-    primary.radius = R_STAR_SUNS * R_SUN;
-    primary.persistent = true;
-    primary.temperature = 6065;
-    primary.spectralType = 'G0V';
-    primary.baseColor = '#fff3df';
-
-    if (blended) {
-      const companion =
-        stars[1] || new StarObject({ x: sep, y: 0 }, { x: 0, y: 0 }, 1);
-      if (stars.length < 2) stars.push(companion);
-      companion.name = 'HD 209458 B (companion)';
-      companion.pos = { x: sep, y: 0 };
-      companion.vel = { x: 0, y: -vRel };
-      companion.mass = compMass;
-      companion.massInSuns = M_COMP_SUNS;
-      companion.radiusInSuns = R_COMP_SUNS;
-      // Fixed rather than derived, so the contrast is exactly half a magnitude
-      // and the dilution a student measures is exactly the textbook factor.
-      companion.luminosityInSuns = L_STAR_SUNS * Math.pow(10, -0.4 * DELTA_MAG);
-      companion.radius = R_COMP_SUNS * R_SUN;
-      // Three hundred AU is far outside the cull box at the zoom this scenario
-      // needs, and being invisible is the entire point of it.
-      companion.persistent = true;
-      companion.temperature = 5700;
-      companion.spectralType = 'G5V';
-      companion.baseColor = '#ffe9c4';
-    }
-
-    // Start a quarter of an orbit before the first transit, so the light curve
-    // has a flat baseline to establish before anything happens to it.
-    const theta = -Math.PI / 2;
-    const vOrbit = Math.sqrt((G * starMass) / aPlanet);
-    const planet = new Planet(
-      {
-        x: aPlanet * Math.cos(theta),
-        y: aPlanet * Math.sin(theta),
+    // is invisible at true scale and has to be magnified to be taught. The
+    // planet is made without a mass (the constructor draws one) and given its
+    // own after, as the hand-built block did, so the generator is drawn the same.
+    const hd209458 = G => {
+      const sys = HD209458;
+      const R_SUN = 0.00465047 * SIM_UNITS_PER_AU;
+      const R_JUP_IN_SUNS = 0.102763;
+      const starMass = sys.star.massSolar * SOLAR_MASS_UNIT;
+      const planetMass =
+        sys.planet.massJupiter *
+        (1 / JUPITER_MASSES_PER_SOLAR_MASS) *
+        SOLAR_MASS_UNIT;
+      const total = starMass + planetMass;
+      const a = sys.planet.semiMajorAU * SIM_UNITS_PER_AU;
+      const vRel = Math.sqrt((G * total) / a);
+      const rStar = (a * planetMass) / total;
+      const rPlanet = (a * starMass) / total;
+      const vStar = (vRel * planetMass) / total;
+      const vPlanet = (vRel * starMass) / total;
+      return [
+        {
+          type: 'Star',
+          ctor: sys.star.massSolar,
+          pos: { x: -rStar, y: 0 },
+          vel: { x: 0, y: -vStar },
+          assign: {
+            name: sys.name,
+            radiusInSuns: sys.star.radiusSolar,
+            radius: sys.star.radiusSolar * R_SUN,
+            luminosityInSuns: sys.star.luminositySolar,
+            temperature: sys.star.temperatureK,
+            spectralType: sys.star.spectralType,
+            baseColor: '#fff3df',
+            persistent: true,
+            distancePc: sys.star.distancePc,
+          },
+        },
+        {
+          type: 'GasGiant',
+          pos: { x: rPlanet, y: 0 },
+          vel: { x: 0, y: vPlanet },
+          assign: {
+            name: sys.planetName,
+            mass: planetMass,
+            massInJupiters: sys.planet.massJupiter,
+            radiusInSuns: sys.planet.radiusJupiter * R_JUP_IN_SUNS,
+            radius: sys.planet.radiusJupiter * R_JUP_IN_SUNS * R_SUN,
+            baseColor: '#c9a882',
+            persistent: true,
+          },
+        },
+      ];
+    };
+    // TRAPPIST-1: the star the generator drew (kept, with its id, and skipped if
+    // there is none) and seven planets, every number from js/data/trappist1.js,
+    // which the habitable zone instruments read too.
+    const trappist = G => {
+      const starMass = TRAPPIST1_STAR.massInSuns * SOLAR_MASS_UNIT;
+      const records = [
+        {
+          type: 'Star',
+          from: { generated: 0 },
+          assign: {
+            name: TRAPPIST1_STAR.name,
+            mass: starMass,
+            baseColor: TRAPPIST1_STAR.baseColor,
+            // TRAPPIST-1 is barely larger than Jupiter. At 100 units per AU its
+            // true radius is 0.054 units; 0.4 keeps it comfortably inside the
+            // innermost orbit at 1.15 units, where the old value of 7 swallowed
+            // three planets.
+            radius: 0.4,
+            // The true radius and luminosity, so the light curve reports the
+            // real transit depths even though the star is drawn oversized to
+            // keep the planets clickable.
+            radiusInSuns: TRAPPIST1_STAR.radiusInSuns,
+            luminosityInSuns: TRAPPIST1_STAR.luminosityInSuns,
+            massInSuns: TRAPPIST1_STAR.massInSuns,
+            temperature: TRAPPIST1_STAR.temperatureK,
+            spectralType: TRAPPIST1_STAR.spectralType,
+            // The one scenario where the habitable zone lands in the middle of
+            // the planets, so the ring is on by default here.
+            showHabitableZone: true,
+          },
+        },
+      ];
+      // Adjacent orbits are as little as 0.43 units apart, so the bodies have
+      // to be small enough that neighbors cannot touch; the screen-space draw
+      // floor keeps them visible anyway.
+      const RADIUS_UNITS_PER_EARTH = 0.115;
+      TRAPPIST1_PLANETS.forEach((p, i) => {
+        const r = p.a * SIM_UNITS_PER_AU;
+        // Evenly spaced in phase so no two start near each other.
+        const theta = (i / TRAPPIST1_PLANETS.length) * 2 * Math.PI;
+        const v = Math.sqrt((G * starMass) / r);
+        records.push({
+          type: 'Planet',
+          ctor: p.mass,
+          pos: { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+          vel: { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
+          assign: {
+            name: `TRAPPIST-1${p.name}`,
+            // Gravitationally negligible against a 0.0898 solar-mass star, so
+            // each planet's two-body period is the star's alone.
+            mass: Math.max(p.mass * EARTH_MASS_UNIT, 1e-7),
+            massInEarths: p.mass,
+            baseColor: '#6ec6ff',
+            radius: p.radius * RADIUS_UNITS_PER_EARTH,
+            // Drawn oversized, measured true: the transit depth comes from this.
+            radiusInEarths: p.radius,
+            isTrappist: true,
+          },
+        });
+      });
+      return records;
+    };
+    expandGeometry(declared, {
+      G: SETTINGS.gravitational_constant,
+      units: { AU: SIM_UNITS_PER_AU },
+      settings: SETTINGS,
+      rules: geometryRules,
+      generated,
+      // A mass in `unit`, or in the type's own unit.
+      simMass: (type, ctor, unit) =>
+        ctor *
+        {
+          suns: SOLAR_MASS_UNIT,
+          earths: EARTH_MASS_UNIT,
+          jupiters: JUPITER_MASS_UNIT,
+        }[
+          unit ??
+            (type === 'Star'
+              ? 'suns'
+              : type === 'GasGiant'
+                ? 'jupiters'
+                : 'earths')
+        ],
+      create: ({ type, ctor, pos, vel, assign, from, args, finish }) => {
+        const [Body, list] = {
+          Star: [StarObject, stars],
+          GasGiant: [GasGiant, gas_giants],
+          BlackHole: [null, bh_list],
+          Asteroid: [Asteroid, asteroids],
+          Comet: [Comet, comets],
+          Galaxy: [Galaxy, galaxies],
+          Planet: [Planet, planets],
+          NeutronStar: [NeutronStar, neutron_stars],
+          WhiteDwarf: [WhiteDwarf, white_dwarfs],
+        }[type];
+        let body = from ? generated[type][from.generated] : undefined;
+        if (body) {
+          // Placed only if the step places it; everything else is the
+          // generator's, as the hand-built blocks left it. A kept type's body
+          // is still in its list. `keepName`: the body keeps the name it was
+          // drawn with, and the step's name is only what a step refers to it by.
+          if (pos) body.pos = { ...pos };
+          if (vel) body.vel = { ...vel };
+          Object.assign(
+            body,
+            from.keepName
+              ? Object.fromEntries(
+                  Object.entries(assign).filter(([k]) => k !== 'name')
+                )
+              : assign
+          );
+          if (!keep.has(type)) list.push(body);
+          return body;
+        }
+        if (from && from.ifMissing !== 'make') return null;
+        body = new Body({ ...pos }, { ...vel }, ctor, ...(args ?? []));
+        Object.assign(body, assign);
+        finish?.(body);
+        list.push(body);
+        return body;
       },
-      {
-        x: -vOrbit * Math.sin(theta),
-        y: vOrbit * Math.cos(theta),
-      },
-      1.0
-    );
-    planet.name = 'HD 209458 b';
-    planet.mass =
-      (M_PLANET_JUP / JUPITER_MASSES_PER_SOLAR_MASS) * SOLAR_MASS_UNIT;
-    planet.massInJupiters = M_PLANET_JUP;
-    // It is a Planet object carrying a gas giant's mass, so the Earth-mass
-    // field it inherited from the constructor is about a different body.
-    planet.massInEarths = M_PLANET_JUP * EARTH_MASSES_PER_JUPITER_MASS;
-    planet.radiusInJupiters = R_PLANET_JUP;
-    planet.radius = R_PLANET_JUP * R_JUP_IN_SUNS * R_SUN;
-    planet.persistent = true;
-    planet.baseColor = '#b8875a';
-    planets.push(planet);
-  }
-
-  // --- Three-Body Sensitivity Lab: Lagrange's equilateral solution ----------
-  //
-  // Three equal stars at the corners of an equilateral triangle, rotating
-  // rigidly about their common center. This is an exact solution of the
-  // three-body problem, found by Lagrange in 1772, and it is here because of
-  // what Gascheau proved about it in 1843: the equilateral solution is stable
-  // only when 27(m1m2 + m2m3 + m3m1) < (m1 + m2 + m3)^2. For three equal
-  // masses that reads 81m^2 < 9m^2, which is false by a factor of nine, so this
-  // configuration is linearly unstable.
-  //
-  // That is exactly what the lesson needs, and it is why this configuration was
-  // chosen over the two more famous candidates:
-  //
-  //   The Pythagorean (Burrau) problem is the classic chaotic three-body
-  //   system, and in Gravitas it merges. Its close approaches pass inside the
-  //   collision radius, the engine removes a body, and an experiment whose
-  //   divergence measure matches bodies by identity has nothing left to
-  //   measure. Measured: a merger every time, under all three integrators.
-  //
-  //   The Chenciner-Montgomery figure eight is a three-body system that is not
-  //   chaotic - which makes it a fine counterexample and a poor subject. Its
-  //   separation grows by a factor of 230 over thirteen orbits and no more,
-  //   the same under every integrator.
-  //
-  // The equilateral solution starts perfectly regular, stays clear of every
-  // collision radius, and departs exponentially. Measured over nine
-  // combinations of integrator and timestep, the e-folding time comes out at
-  // 6.8 to 7.6 simulated seconds with r^2 >= 0.98, which is the numerical
-  // resolution the lesson's conclusion rests on.
-  //
-  // The geometry, all of it derived rather than tuned:
-  //
-  //   circumradius  50 units = 0.5 AU
-  //   side          50*sqrt(3) = 86.6 units = 0.866 AU
-  //   mass          6000 units = 6 solar masses each
-  //   omega         sqrt(G * 3m / L^3) = 0.2354 rad per simulated second
-  //   period        2*pi/omega = 26.7 simulated seconds
-  //
-  // Theory predicts an e-folding time of sqrt(2)/omega = 6.0 s for the unstable
-  // eigenvalue; the measured 6.9 s is 15% longer, which is what a finite
-  // perturbation measured over a finite window gives and is worth a question in
-  // the lesson rather than a fudge here.
-  if (starting_preset === 'Three-Body Sensitivity Lab') {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const R = 50;
-    const MASS = 6 * SOLAR_MASS_UNIT;
-    const side = R * Math.sqrt(3);
-    const omega = Math.sqrt((G * 3 * MASS) / (side * side * side));
-
-    // Named rather than numbered, because the lesson asks the student to
-    // perturb one of them by name and the answer key has to be able to say
-    // which. Fixed names, not generated ones: a randomly named star would
-    // change what the lesson text has to say from one load to the next.
-    const names = ['Alpha', 'Beta', 'Gamma'];
-    const colors = ['#FFD86B', '#7FB2F0', '#F08A6B'];
-    for (let i = 0; i < 3; i++) {
-      const theta = (i * 2 * Math.PI) / 3;
-      const x = R * Math.cos(theta);
-      const y = R * Math.sin(theta);
-      const star = new StarObject(
-        { x, y },
-        // Rigid rotation: v = omega x r.
-        { x: -omega * y, y: omega * x },
-        1
-      );
-      star.mass = MASS;
-      star.massInSuns = 6;
-      star.name = names[i];
-      star.radius = 8;
-      star.baseColor = colors[i];
-      // Never culled and never randomly re-typed: the experiment depends on
-      // these three objects keeping their identities for the whole run.
-      star.persistent = true;
-      stars.push(star);
-    }
-  }
-
-  // --- The three resonance scenarios ----------------------------------------
-  //
-  // All three are built from js/resonance/systems.js, which holds the published
-  // elements and the paper each came from. Nothing numeric is written here: the
-  // scenario, the validation suite in tools/physics-checks.mjs and the unit
-  // tests all read the same table, so they cannot quote different values for
-  // the same moon.
-  //
-  // What this function contributes is the part only it can: turning a plain
-  // {name, mass, radius, pos, vel} into a live engine object with a stable
-  // identity, a fixed name and the persistence flag that keeps it out of the
-  // cull. The lesson perturbs bodies by name and matches them across runs by
-  // id, so a randomly generated or recycled body would break it.
-  const installResonanceSystem = spec => {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    for (const d of [spec.primary, ...spec.bodies]) {
-      let body;
-      if (d.kind === 'star') {
-        body = new StarObject(
-          { ...d.pos },
-          { ...d.vel },
-          d.mass / SOLAR_MASS_UNIT
-        );
-        body.massInSuns = d.mass / SOLAR_MASS_UNIT;
-        body.intact = true;
-        stars.push(body);
-      } else if (d.kind === 'gasGiant') {
-        body = new GasGiant({ ...d.pos }, { ...d.vel }, 1);
-        gas_giants.push(body);
-      } else {
-        body = new Planet({ ...d.pos }, { ...d.vel }, 1);
-        planets.push(body);
-      }
-      body.mass = d.mass;
-      // The constructors derive their display masses from the mass they were
-      // handed, and every one of these bodies has its mass overwritten
-      // afterwards. Without this the inspector reports Ganymede as one Earth
-      // mass, which it inherited from the Planet constructor's default rather
-      // than from anything true.
-      body.mass = d.mass;
-      body.massInSuns = d.mass / SOLAR_MASS_UNIT;
-      body.massInEarths = d.mass / EARTH_MASS_UNIT;
-      body.massInJupiters = d.mass / JUPITER_MASS_UNIT;
-      body.name = d.name;
-      body.radius = d.radius;
-      body.baseColor = d.color;
-      // Never culled, never re-typed, never merged: every measurement in the
-      // lesson matches bodies between samples by identity.
-      body.persistent = true;
-    }
-  };
-
-  // Io, Europa, Ganymede and Callisto. The only scale model of the three, and
-  // the reason is arithmetic rather than taste: Io orbits 0.28 length units
-  // from Jupiter at true scale, which is smaller than the softening floor and a
-  // twentieth of the radius Jupiter would be drawn at. Distances are multiplied
-  // by GALILEAN.scale, which under Newtonian gravity is exactly equivalent to
-  // dividing every duration by scale^1.5, and leaves every ratio alone.
-  if (starting_preset === 'Galilean Resonance') {
-    const spec = galileanBodies(SETTINGS.gravitational_constant);
-    balance([spec.primary, ...spec.bodies]);
-    installResonanceSystem(spec);
-  }
-
-  // The same four moons with Europa moved out by one percent. Everything else
-  // is identical, which is the point: one number changes and the Laplace
-  // argument stops librating and starts going round, once every forty-six Io
-  // orbits. The resonance's half-width in Europa's semi-major axis is between
-  // one and two parts in a thousand, so a percent is well outside it.
-  if (starting_preset === 'Broken Laplace Resonance') {
-    const spec = galileanBodies(SETTINGS.gravitational_constant, {
-      detune: GALILEAN.detune,
     });
-    balance([spec.primary, ...spec.bodies]);
-    installResonanceSystem(spec);
+    // The pair was built in the center-of-mass frame, so this should be a
+    // no-op; running it anyway means a laboratory cannot start drifting if a
+    // parameter is ever edited by hand.
+    if (declared.recenter) zeroNetMomentum();
   }
 
-  // Pluto, Neptune and a body on a Pluto-like orbit that is not in the 3:2.
-  // True scale, so every distance and period the interface reports is the real
-  // one.
-  if (starting_preset === 'Pluto and Neptune') {
-    const spec = plutoBodies(SETTINGS.gravitational_constant);
-    balance([spec.primary, ...spec.bodies]);
-    installResonanceSystem(spec);
+  // Earth and the Moon are declared; the size of the simulated space is a
+  // setting the scenario sets once the world exists, not geometry, and stays
+  // here.
+  if (starting_preset === 'earth-moon-system') {
+    SETTINGS.sim_size = 'Small';
   }
 
-  // The Sun, Jupiter and four test bodies on Jupiter's orbit. Built in the
-  // circular restricted frame - both massive bodies turning about a barycenter
-  // at the origin - because the triangular points are only exact in that frame.
-  // Already balanced by construction, so no balance() call.
-  if (starting_preset === 'Jupiter Trojans') {
-    installResonanceSystem(trojanBodies(SETTINGS.gravitational_constant));
-  }
-
-  // --- Retrograde Mars: the Sun, Earth and Mars, and nothing else -----------
-  if (starting_preset === 'Retrograde Mars') {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-    const AU = SIM_UNITS_PER_AU;
-
-    const sun = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
-    sun.name = 'Sun';
-    sun.mass = SOLAR_MASS_UNIT;
-    sun.massInSuns = 1.0;
-    sun.baseColor = '#FFD86B';
-    sun.radius = 10;
-    stars.push(sun);
-
-    // Circular orbits at the true semi-major axes. Earth's real eccentricity is
-    // 0.017 and Mars's 0.093, and neither changes the shape of the loop: what
-    // draws it is the difference in angular speed, not the shape of either
-    // orbit. Circles keep the measurement clean.
-    const worlds = [
-      { name: 'Earth', aAU: 1.0, earths: 1.0, r: 4, color: '#5B8FF0' },
-      { name: 'Mars', aAU: 1.523, earths: 0.107, r: 3, color: '#D06B4A' },
-    ];
-
-    // Mars starts 95 degrees ahead of Earth. Earth gains on it at 0.46 degrees
-    // a day, so opposition arrives after about 205 days, and that number is
-    // chosen against how long the trail takes to fill rather than against
-    // anything astronomical: 300 samples cover roughly 150 days here, so an
-    // earlier opposition would happen while the trail was still growing and the
-    // loop would be half drawn when it passed. Any later and a student waits.
-    // The next opposition is a synodic period after this one.
-    const startAngle = { Earth: 103, Mars: 198 };
-
-    for (const w of worlds) {
-      const r = w.aAU * AU;
-      const theta = (startAngle[w.name] * Math.PI) / 180;
-      const v = Math.sqrt((G * sun.mass) / r);
-      const planet = new Planet(
-        { x: r * Math.cos(theta), y: r * Math.sin(theta) },
-        { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
-        w.earths
-      );
-      planet.name = w.name;
-      planet.radius = w.r;
-      planet.baseColor = w.color;
-      planet.persistent = true;
-      planets.push(planet);
-    }
-  }
-
-  // --- Kepler's 2nd Law scenario: star + nearly-circular planet + eccentric planet ---
-  if (starting_preset === "Kepler's 2nd Law") {
-    stars.length = 0;
-    planets.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    bh_list.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-
-    const G = SETTINGS.gravitational_constant;
-
-    // Central star - Sun-like, pinned at origin
-    const kStar = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
-    kStar.name = 'Kepler Star';
-    kStar.mass = SOLAR_MASS_UNIT;
-    kStar.massInSuns = 1.0;
-    kStar.baseColor = '#FFFF00';
-    kStar.radius = 14;
-    stars.push(kStar);
-
-    // Planet - nearly circular orbit (e ≈ 0.02)
-    // Well outside the eccentric body's apoapsis of about 236. These two orbits
-    // used to cross: the eccentric orbiter swept from 50 out to 236 while this
-    // one sat at 180, so once an orbit they collided. Merging is off for this
-    // scenario, so instead of combining they bounced, and each bounce kicked
-    // both orbits by several percent in energy and angular momentum. That is
-    // what made a scenario built to show a fixed ellipse visibly drift.
-    const planetDist = 320;
-    const eP = 0.02;
-    const aP = planetDist / (1 - eP);
-    const vPlanet = Math.sqrt((((G * kStar.mass) / aP) * (1 + eP)) / (1 - eP));
-    const kPlanet = new Planet(
-      { x: planetDist, y: 0 },
-      { x: 0, y: vPlanet },
-      1.0
-    );
-    kPlanet.name = 'Circular Orbiter';
-    kPlanet.mass = 1.0 * EARTH_MASS_UNIT;
-    kPlanet.baseColor = '#4B90E2';
-    kPlanet.radius = 7;
-    planets.push(kPlanet);
-
-    // Eccentric body - a Planet (not Comet) for visibility, bright orange,
-    // on a tighter eccentric orbit (e ≈ 0.65) that fits within the view
-    const eccPeri = 50;
-    const eC = 0.65;
-    const aC = eccPeri / (1 - eC);
-    const vEcc = Math.sqrt((((G * kStar.mass) / aC) * (1 + eC)) / (1 - eC));
-    const eccAngle = Math.PI * 0.6;
-    const eccPlanet = new Planet(
-      { x: eccPeri * Math.cos(eccAngle), y: eccPeri * Math.sin(eccAngle) },
-      { x: -vEcc * Math.sin(eccAngle), y: vEcc * Math.cos(eccAngle) },
-      0.3
-    );
-    eccPlanet.name = 'Eccentric Orbiter';
-    eccPlanet.mass = 0.3 * EARTH_MASS_UNIT;
-    eccPlanet.baseColor = '#FF6B35';
-    eccPlanet.radius = 6;
-    planets.push(eccPlanet);
-
+  // Kepler's 2nd Law: the bodies are declared; the overlay is behavior, not
+  // geometry, and stays here.
+  if (starting_preset === 'keplers-2nd-law') {
+    const eccPlanet = planets.find(p => p.name === 'Eccentric Orbiter');
     // Auto-enable area sweep for the eccentric orbiter on startup
     setTimeout(() => {
       try {

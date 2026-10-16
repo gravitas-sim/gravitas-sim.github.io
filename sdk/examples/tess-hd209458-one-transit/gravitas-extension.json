@@ -1,0 +1,43 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "example.tess-hd209458-one-transit",
+  "version": "1.0.0",
+  "kind": "declarative",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "One transit of HD 209458, observed by TESS",
+    "es": "Un tránsito de HD 209458, observado por TESS"
+  },
+  "uses": {
+    "dataPacks": ["tess-hd209458-s56-lc"]
+  },
+  "provides": {
+    "dataPacks": [
+      {
+        "id": "tess-hd209458-one-transit",
+        "provenance": "pack.json",
+        "file": "series.json"
+      }
+    ]
+  },
+  "assets": [
+    { "path": "series.json", "role": "data", "offline": "optional" },
+    { "path": "pack.json", "role": "provenance", "offline": "none" }
+  ],
+  "citations": [
+    {
+      "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+      "url": "https://doi.org/10.17909/t9-nmc8-f686"
+    }
+  ],
+  "licenses": [
+    {
+      "scope": "*.json",
+      "license": "public domain (NASA mission data); acknowledge TESS and MAST"
+    }
+  ],
+  "offline": { "policy": "precache" },
+  "validation": [{ "check": "registry:sdk-extensions" }],
+  "migrations": []
+}

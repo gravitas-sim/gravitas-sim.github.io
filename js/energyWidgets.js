@@ -393,6 +393,7 @@ const LAUNCH = {
   actions: [
     {
       id: 'run',
+      icon: 'play',
       get label() {
         return t('energyW.run');
       },

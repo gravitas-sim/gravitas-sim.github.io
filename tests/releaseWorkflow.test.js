@@ -50,6 +50,14 @@ describe('the deploy job only runs behind the gate', () => {
     expect(deploy.if).toContain("github.ref == 'refs/heads/main'");
   });
 
+  test('pushes run CI on main alone, and only main can deploy', () => {
+    // v2, the integration branch, left the push list when it was released
+    // (BRANCHING.md, "Rolling out", step 3): a branch of that name would
+    // otherwise run CI silently. The deploy condition names main alone.
+    expect(workflow.on.push.branches).toEqual(['main']);
+    expect(String(deploy.if)).not.toContain('v2');
+  });
+
   test('the gate it depends on treats anything but success as failure', () => {
     // `needs` alone is not enough: the ci job runs with always() so that it can
     // report, so it must fail the run itself when a dependency did not pass.
@@ -67,9 +75,24 @@ describe('the deploy job only runs behind the gate', () => {
     // fail, so requiring it would mean a failed suite could not produce its
     // own diagnostics, and it decides nothing.
     const REPORTING_ONLY = new Set(['e2e-report']);
+    // And the scheduled jobs, which run on the schedule or a dispatch and
+    // never on a push or a pull request, so they cannot be required: a
+    // required job that does not run would block every merge.
+    const SCHEDULED = new Set([
+      'provenance',
+      'e2e-timings',
+      'observatory-report',
+      'tablet-walk',
+      'nav-matrix',
+    ]);
     const aggregated = new Set(gate.needs);
     for (const name of Object.keys(workflow.jobs)) {
       if (name === 'ci' || name === 'deploy') continue;
+      if (SCHEDULED.has(name)) {
+        expect(aggregated.has(name)).toBe(false);
+        expect(String(workflow.jobs[name].if)).toMatch(/schedule/);
+        continue;
+      }
       if (REPORTING_ONLY.has(name)) {
         expect(aggregated.has(name)).toBe(false);
         continue;
@@ -80,20 +103,45 @@ describe('the deploy job only runs behind the gate', () => {
 
   test('the source suite is sharded and every shard has to pass', () => {
     const e2e = workflow.jobs.e2e;
-    // Six shards, so the suite fits inside the job limit it kept exceeding
-    // with room to spare rather than by twelve seconds.
-    expect(e2e.strategy.matrix.shard).toEqual([1, 2, 3, 4, 5, 6]);
+    // Numbered from one with no gaps: tools/e2e-shards.mjs plans `--of` the
+    // matrix's size, so a hole in the list would be a shard nobody runs.
+    const shards = e2e.strategy.matrix.shard;
+    expect(shards.length).toBeGreaterThan(1);
+    expect(shards).toEqual(shards.map((_, i) => i + 1));
     // One failing shard must not cancel the others: a canceled shard says
     // nothing about the tests it never reached.
     expect(e2e.strategy['fail-fast']).toBe(false);
-    // Two workers per runner, as before. The parallelism belongs across
-    // runners; more workers on one make every test in this suite slower.
+    // Each shard plans the whole split from the listing and the timings and
+    // runs its own part of it; the count comes from the matrix, not a copy.
     const run = e2e.steps.map(st => st.run || '').join('\n');
-    expect(run).toMatch(/--shard=\$\{\{ matrix\.shard \}\}\/6/);
+    expect(run).toMatch(
+      /e2e-shards\.mjs plan --of \$\{\{ strategy\.job-total \}\} --shard \$\{\{ matrix\.shard \}\} --out shard-tests\.txt/
+    );
+    expect(run).toMatch(/playwright test --test-list shard-tests\.txt/);
+    // Two workers per runner, as before: the config's, never overridden here.
     expect(run).not.toMatch(/--workers/);
     // And the gate requires the matrix as a whole, which GitHub rolls up to
     // success only when every shard succeeded.
     expect(gate.needs).toContain('e2e');
+  });
+
+  test('the shards have to add up to the suite, and the gate asks', () => {
+    // Green shards say each ran what it was given. That what they were given
+    // covers the suite is a separate fact, and this job is where it is
+    // checked: every listed test in the merged results, exactly once.
+    const coverage = workflow.jobs['e2e-coverage'];
+    expect(coverage.needs).toContain('e2e');
+    expect(String(coverage.if)).toContain('!cancelled()');
+    const run = coverage.steps.map(st => st.run || '').join('\n');
+    expect(run).toMatch(/merge-reports --reporter json/);
+    expect(run).toMatch(/e2e-shards\.mjs verify --report/);
+    const download = coverage.steps.find(st =>
+      (st.uses || '').includes('download-artifact')
+    );
+    expect(download.with.pattern).toBe('blob-report-sources-*');
+    expect(gate.needs).toContain('e2e-coverage');
+    const script = gate.steps.map(st => st.run || '').join('\n');
+    expect(script).toMatch(/require e2e-coverage/);
   });
 
   test('a shard that produces no report is not a shard that passed', () => {
@@ -107,7 +155,9 @@ describe('the deploy job only runs behind the gate', () => {
     expect(String(upload.if)).toContain('!cancelled()');
     // The step running the tests is capped below the job, so an overrunning
     // shard is killed with time left to upload what it has.
-    const runStep = e2e.steps.find(st => (st.run || '').includes('--shard='));
+    const runStep = e2e.steps.find(st =>
+      (st.run || '').includes('--test-list')
+    );
     expect(runStep['timeout-minutes']).toBeLessThan(e2e['timeout-minutes']);
   });
 
@@ -126,8 +176,8 @@ describe('the deploy job only runs behind the gate', () => {
   });
 
   test('each shard uploads under its own name', () => {
-    // Four artifacts with one name is one artifact, and three quarters of the
-    // run is then missing from the merge.
+    // Twelve artifacts with one name is one artifact, and most of the run is
+    // then missing from the merge.
     const names = workflow.jobs.e2e.steps
       .filter(st => (st.uses || '').includes('upload-artifact'))
       .map(st => st.with.name);
@@ -135,6 +185,14 @@ describe('the deploy job only runs behind the gate', () => {
     for (const name of names) {
       expect(name).toContain('${{ matrix.shard }}');
     }
+    // And so is the blob inside each one: the merge downloads them all into
+    // one directory, where two files with one name are one file.
+    const runStep = workflow.jobs.e2e.steps.find(st =>
+      (st.run || '').includes('--test-list')
+    );
+    expect(runStep.env.PLAYWRIGHT_BLOB_OUTPUT_NAME).toContain(
+      '${{ matrix.shard }}'
+    );
   });
 });
 

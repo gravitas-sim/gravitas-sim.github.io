@@ -149,6 +149,11 @@ const ANSWERS = {
   s_right: 0.95,
   s_wrong: 0.42,
   s_far: 0.94,
+  // Read off the committed GWOSC strain, 0.05 s before each chirp's end.
+  f_150914: 58,
+  f_190412: 69,
+  f_190521: 55,
+  f_190814: 104,
 };
 
 test.describe('the lesson is reachable and complete', () => {

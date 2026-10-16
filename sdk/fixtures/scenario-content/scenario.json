@@ -1,0 +1,24 @@
+{
+  "format": "gravitas.scenario-pack",
+  "formatVersion": 1,
+  "id": "another-scenario",
+  "version": "1.0.0",
+  "locales": ["en", "es"],
+  "title": {
+    "en": "Two stars <b>and</b> a planet",
+    "es": "Dos estrellas y un planeta"
+  },
+  "summary": {
+    "en": "A star pair with a planet round the heavier one."
+  },
+  "seed": 3,
+  "settings": {
+    "binary_lab_planet_a": 3,
+    "num_planets": 5,
+    "placement": "Empty"
+  },
+  "bodies": [
+    { "type": "Star", "mass": 1, "x": 0, "y": 0, "vx": 0, "vy": 0 },
+    { "type": "Comet", "mass": 1, "x": 50, "y": 0, "vx": 0, "vy": 2 }
+  ]
+}

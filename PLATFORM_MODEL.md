@@ -1,0 +1,338 @@
+# The platform model
+
+Roadmap II, Prompt 49: the design gate for one shell, one taxonomy and one
+set of surfaces. The acceptance criteria were committed before any
+prototype existed (`spike/platform-shell/CRITERIA.md`, commit 8761b90 on the
+`spike/platform-shell` branch). The prototype and its measurements stay on
+that branch (d450026); this document and a register row are what land.
+
+**Verdict: B.** The taxonomy, the surface map, the shell specification, the
+templates, the responsive specification and the dialog and first-run
+policies are ready for Prompt 50. The shell met C1, C3, C4 and C5, and C2's
+size limits. It failed C2's last clause: on both prototyped pages it put the
+route over its ceiling. So Prompt 50 may put the shell on a page only where
+that page's route pays for it. See "What B authorizes" below.
+
+## The criteria, as measured
+
+Measured on the `spike/platform-shell` branch at d450026, from its own tree,
+by `spike/platform-shell/measure.mjs` (Chromium, headless, service worker
+blocked). Results are in `spike/platform-shell/results/measure.json`.
+
+| | Criterion | Measured | Met |
+|---|---|---|---|
+| C1 | Every capability within two activations from Home, by mouse, keyboard and touch | All 19 entry pages reached in two activations (open a group, follow a link) from both prototyped pages, by mouse, keyboard (Tab moves, Enter activates) and touch | yes |
+| C2 | One header, navigation, footer, locale and theme switch from one module; ≤ 6 KB JS and ≤ 4 KB CSS as served; precached; no route budget exceeded | `js/shell.js` **2.9 KB** gzipped (8.3 KB raw, 5.6 KB minified); `css/shell.css` **0.9 KB** gzipped. Precached by the default `js/*.js` rule. **Route budgets: teaching 254.2 KB of 246.4, Observatory 182.9 KB of 175.3.** Both over | size yes; routes **no** |
+| C3 | Axe clean on every page, all four themes, both languages | 0 violations (WCAG 2.2 AA rule tags) on the shell and on the whole page: 2 pages × 4 themes × 2 languages, with a navigation group open | yes |
+| C4 | Layouts at 375, 768, 1024 and 1440 px | Specified below. On the prototype, no horizontal overflow on either page at any of the four widths; the Observatory had an observation open (`?open=tess-light-curve`) | yes |
+| C5 | At most eight nouns, with a mapping from every current name | Eight nouns; the mapping is below | yes |
+
+Why the routes fail. Route budgets count the raw bytes of every script a page
+fetches, because the site is served unbundled. The shell adds 8.3 KB raw to
+each page, or 5.6 KB minified, and neither route has that room. The page's own
+chrome code that the shell replaces is far smaller. The Observatory's and the
+teaching page's language-switch functions are under 1 KB each.
+
+## What is there today
+
+Nineteen entry pages (`history/original/` excluded: it is kept as it was).
+The inventory script is `spike/platform-shell/inventory.py`. It reads each
+page's links, and every route named in its static import closure.
+
+| Page | Shell today | Linked from | Links out |
+|---|---|---|---|
+| `/` (the application) | menu, locale, footer | 16 pages | figure, instructors, model, teaching, validation |
+| `/model/`, `/validation/`, `/teaching/`, `/instructors/` | `doc-nav` bar, footer; the bar differs on every page | 3–5 document pages and `/` | each other, `/` |
+| `/evaluation/` | none | instructors, teaching | three document pages |
+| `/observatory/`, `/catalog/` | "Back to Gravitas", locale buttons | each other | `/`, each other |
+| `/studio/`, `/studio/lesson/`, `/studio/course/`, `/course/` | "Back to Gravitas", locale buttons | each other | `/`, each other |
+| `/figure/` | "Back to Gravitas", locale | `/` | `/` |
+| `/lab3d/`, `/mission/` | "Back to Gravitas", locale | `/3d/`; `/mission/lab/` | `/` |
+| `/3d/`, `/experiments/`, `/mission/lab/` | "Back to Gravitas", locale | **nothing** | `/` |
+| `/instructors/submissions/` | locale | **nothing** on `v2` (Prompt 47 Part C links it) | **nothing**: a dead end |
+
+Deep links that reach a capability, and the only way to reach several of
+them today: `#investigation=`, `#investigations`, `#activity=`, `#a1…`
+(assignment), `#1z…` (a world), `?author=&step=`, `?assign=`, `?roster=`,
+`?embed=` and `?ev=` (figures), `?guide=`, `?open=`, `?installed=`,
+`?course=`, `?system=`, `?view=`, `?activity=`, `?format=`, `?path=`,
+`?parent=`.
+
+## The nouns
+
+Eight, as the roadmap's section 8.1 proposed. Every current name maps to
+one.
+
+| Noun | What it is | Today's names |
+|---|---|---|
+| **Scenario** | A reproducible starting world: bodies, settings, seed | scenario, preset, world, system (Orbital System Builder), scenario pack, share-link world |
+| **Investigation** | A guided sequence of steps with predictions, measurements and questions | investigation, lesson, guided investigation, guide (Observatory, 3-D lab, mission lab), suite, investigation pack |
+| **Activity** | A classroom format cut from an Investigation, or a selection of its steps | classroom activity, teaching route, demonstration, assignment |
+| **Dataset** | A pinned, cited observation or model table, with its provenance | data pack, observation, fixture, table pack, ephemeris pack, archive import |
+| **Experiment** | A declared run of the model over parameters and seeds | experiment, A/B bench run, sweep, trial, inference run, fit |
+| **Course** | An ordered set of the above, with objectives, prerequisites and time | course, course pack, sequence ("ways through") |
+| **Evidence** | Anything a student produces | measurement, capture, notebook entry, figure, lab report, submission token, progress backup, results export |
+| **Package** | The unit of distribution for authored or curated content | capability package, extension, catalog entry |
+
+A name that is not a noun is either a surface (Observatory, Studio, Catalog)
+or a verb (assign, install, embed).
+
+## The surfaces
+
+| Surface | Today | After Prompts 50–57 |
+|---|---|---|
+| **Home** | `/` opens straight into the simulation, with a welcome dialog on first visit | A hub at `/`: three ways in (explore, learn, teach), the Library, My work and Courses. The simulation stays at `/` behind "Explore"; the welcome's tour becomes onboarding (Prompt 73) |
+| **Sandbox** | `/` | Unchanged; reached from Home and from every page's Labs group |
+| **Library** | the lesson browser, a dialog in `/` | One Library of Investigations, Activities, Scenarios, Datasets, Courses and Experiments (Prompt 54). The teaching page's activity list and the scenario gallery become filters of it |
+| **Observatory** | `/observatory/` | Stays; its guides become Investigations (section 8.3 of the roadmap) |
+| **Experiments** | `/experiments/`, linked from nowhere | Stays; in the Learn group and the Library |
+| **Labs** | `/3d/`, `/mission/lab/` and their diagnostic pages | Stay as peers of the Sandbox. The diagnostic pages (`/lab3d/`, `/mission/`) move to About, beside validation |
+| **Courses** | `/course/` | Stays; in Learn and on Home |
+| **My work** | none | New (Prompt 69): Evidence in one place |
+| **Teach** | `/teaching/`, `/instructors/`, `/instructors/submissions/`, `/evaluation/` | One Teach group, and a hub at `/teaching/` that links the portal, submission review and the evidence kit (Prompt 76) |
+| **Studio** | `/studio/`, `/studio/lesson/`, `/studio/course/`, `/figure/`, `/catalog/` | One Make group. The four builders stay pages; the catalog stays a page |
+
+Nothing merges into a single-page application. Pages stay pages; what they
+share is the shell.
+
+## The shell
+
+- **Header:** the product name, linking Home; the primary navigation; the
+  locale switch; the theme switch.
+- **Primary navigation:** five groups, each a disclosure button that shows
+  its links: **Learn** (Investigations, Courses, Observatory, Experiments),
+  **Labs** (Sandbox, 3-D lab, Mission lab), **Make** (Scenario Studio,
+  Investigation Composer, Course builder, Figure builder, Catalog), **Teach**
+  (Teaching, Instructor resources, Submission review, Classroom evidence
+  kit), **About** (the model, physics validation, the two diagnostic pages).
+  - One group opens at a time. Escape closes it and returns focus to its
+    button, and a click elsewhere closes it.
+  - The current page is marked `aria-current="page"`.
+  - It is the WAI-ARIA disclosure navigation pattern, not a menu: links stay
+    links, and Tab moves through them.
+- **"Back to":** none. Every page has the whole navigation, so no page is a
+  dead end, and no link needs to be named after where it goes back to.
+- **Footer:** physics validation, the source code, the citation.
+- **Locale:** one select, which writes `gravitas_locale`. Every page already
+  reads that key when it loads. A page that can re-translate in place passes
+  `onLanguage` and does; the Observatory and the teaching page both can. Any
+  other page reloads.
+- **Theme:** one select over the four themes, which writes `gravitas_theme`.
+  The shell uses only the design tokens in `css/tokens.css`, so all four
+  themes apply to it.
+
+### Page templates
+
+- **Application:** `/` and the labs. The canvas is full-bleed, and the shell
+  header is the only chrome above it.
+- **Document:** model, validation, teaching, instructors, evaluation. The
+  shell, then `doc-main`.
+- **Tool:** Observatory, Experiments, Studio pages, catalog, figure builder,
+  course home, submission review. The shell, then the tool's own `main`.
+- **Hub:** Home and Teach. The shell, then cards.
+
+### Dialogs
+
+- **Modal:** only flows that must finish or be cancelled before anything
+  else can happen: finishing a lesson, sharing, precise placement, a
+  destructive confirmation, the export dialog.
+- **Inline:** everything that is browsing or reading: the Library, the
+  object inspector, settings and panels.
+- The lesson browser, a modal today, becomes the Library page or panel.
+
+### Commands
+
+- One keyboard-shortcut catalogue, one "?" affordance in the shell header
+  that opens it on every page, and the application's existing Shortcuts
+  dialog as its content.
+- A page adds its own shortcuts to the catalogue; it never defines a second
+  help surface.
+
+### First run
+
+- One overlay at a time, in a fixed order:
+  1. the storage or update notice, if any;
+  2. the welcome (Home) or the page's own introduction;
+  3. the guided tour, only when asked for.
+- Nothing opens a second overlay while one is open. The application has 13
+  dialogs today, and their order is decided by timing.
+
+## Responsive layouts
+
+Specified for Prompt 57. On the prototype, the shell itself holds at every
+width.
+
+| Width | Application with a lesson open | Observatory with an observation open |
+|---|---|---|
+| **1440** | Shell header; canvas; the lesson panel docked right at its current width; instruments docked beside it | Shell header; the linked views (plot, table, image) side by side; the provenance card beside them |
+| **1024** | As 1440, the lesson panel narrower; one docked instrument at a time, as tabs | Plot above table and image, side by side below |
+| **768** | Canvas above; the lesson panel as a bottom sheet at 50% height, draggable to full; instruments as tabs inside it | The views stacked: plot, table, image; the provenance card collapsed into a disclosure |
+| **375** | The shell collapses to one Menu button, with the groups stacked beneath it (measured on the prototype). The lesson is a full-screen step with Next and Back fixed at the foot; the canvas is reached through a "Look" button and returns with one tap; instruments are a tab row under the step | The views stacked, one at a time, by tab; the table scrolls horizontally inside its own box and never the page |
+
+Two rules hold at every width. The page itself never scrolls horizontally.
+Controls are at least 24 by 24 CSS pixels (WCAG 2.2, 2.5.8).
+
+The Studio pages are read-only under 768 px, with a note saying so. An
+editor of this density is not usable on a phone, and a half-usable one loses
+work.
+
+## What B authorizes, and what it does not
+
+For Prompt 50, under the "no ceiling increase" rule:
+
+1. **The shell lands on a page only when that page's route pays for it.**
+   It pays by removing the page's own header, navigation, locale and theme
+   code, and by a smaller shell:
+   - labels read from the page's existing catalog, not a second table
+     (-2.2 KB raw);
+   - comments stripped from the served module, if Prompt 109's pipeline
+     allows.
+
+   A page whose route still cannot pay keeps its current chrome, and 50
+   lists it.
+2. **Or Carl decides the route ceilings.** A per-route allowance of up to
+   8 KB raw for the shell is the decision that would make C2 pass as
+   written. Nothing in this PR raises a ceiling.
+3. **The taxonomy, the surface map, the templates, the dialog, command and
+   first-run policies and the responsive specification** are ratified as
+   design for Prompts 50–57, within their own budgets.
+
+Not authorized: the Library merge (Prompt 54) or any page restructuring
+beyond the shell. The Home hub is part of Prompt 50, under the same rule: it
+lands only if the front door's route pays for it.
+
+### What the budgets allow today
+
+Measured on `v2` c4d0984 (`node tools/route-budget.mjs --report`). The shell
+needs about 5.6 KB of raw JavaScript and one request on each page it serves.
+
+| Room for the shell | Routes (sources) |
+|---|---|
+| Kilobytes, and a request | experiments (7.6 KB), figure (5.2), course builder (4.9), studio (4.4), 3-D guides (4.1), 3-D lab (3.4) |
+| Kilobytes, but no request | the four lesson routes (11 KB each, at their request ceilings) |
+| Neither | front door and sandbox (0), teaching (0.3), evaluation (0.2), instructors (1.3), observatory (0.5), catalog (0.4), composer (0.1), course home (1.1), 3-D kernel page (0.4), mission (0.1), mission lab (1.7) |
+
+A shell on only the first row's six pages would add a fifth shell to the
+four there are now. So Prompt 50 is only useful once one of two things has
+happened: Carl allows the shell its bytes on each route, or Prompt 109's
+deploy pipeline serves minified sources and so gives the routes room.
+
+## As built (Prompt 50)
+
+The shell was built lighter than the prototype, and that changes the
+arithmetic above.
+
+- **The markup is static HTML**, stamped into each page by
+  `tools/shell.mjs` (`--write`, `--check`; tests/shell.test.js), because
+  route budgets count only the JavaScript a page fetches.
+- **Each label is written in both languages;** css/shell.css shows the one
+  the page's `<html lang>` names. The shell needs no catalog.
+- **The groups are `<details>` elements,** the native disclosure: they open
+  and close with no script, by mouse and keyboard.
+- **`js/shell.js` is 3.2 KB raw** (1.3 KB gzipped): one group open at a
+  time, Escape, a click elsewhere, the two switches, the phone Menu. The
+  prototype was 8.3 KB. css/shell.css is 1.4 KB gzipped.
+- **A page whose route cannot pay for the module carries the markup
+  without it.** Its navigation works and its stored theme applies (a head
+  script, which no route counts); only the two switches wait. Part 1 does
+  this on /evaluation/ and /instructors/.
+
+Part 1 put the shell on the five document pages.
+Part 2 put it on the thirteen tool pages. Five mount the module: the
+Observatory, the experiment runner, the figure builder, the course builder
+and submission review. Eight cannot pay for it yet and keep their own
+language switch, under rule 1 above: the catalog, the Studio, the
+Composer, the course home, /lab3d/, /3d/, /mission/ and /mission/lab/.
+Most of those lack 2 to 3 KB of room; the Composer lacks a request. The
+observatory's build dropped keepNames, as the teaching page's did: nothing
+in it reads a function's name, and its helper was a request of its own.
+Part 3 put it on the application, as the application template: the bar
+is fixed over the full-bleed canvas, and everything the application
+anchors to the top adds `--shell-height`, which is 0 in an embed and in a
+lecture. It keeps its own skip link (to the controls) and its own footer.
+The footer's theme and language menus gave way to the shell's switches,
+which call the application's own setters.
+
+Home followed: the front door opens below the bar rather than over it,
+the bar stays live (outside the inert set, inside the Tab loop, so the
+layer is a non-modal dialog), and `/#home` opens it by name from every
+page's GRAVITAS link. Its content is unchanged until Prompt 73.
+
+## As built (Prompt 52)
+
+**Settings.**
+- The panel is `js/settingsSchema.js`: nine sections (one Visuals), with Numerical accuracy and Performance inside a closed Advanced disclosure that a search opens.
+- Each section has a Reset, every row has help in both languages, and `tests/settingsInventory.test.js` holds each row to a section, words, a reader and a stable id.
+- Four controls that did nothing left the panel; their keys still open. The course level (introductory, majors, advanced) sits at the top: a bundle of defaults, never a lock.
+
+**Menus.**
+- The rail is simulation controls only: Scenario, State, Tools and Add object. Its Learn section went to the shell (Home and the user manual).
+- It is one accordion with stable ids, and on a phone a section heading no longer closes the menu.
+
+**Dialogs.** Sixteen in the application: fourteen in its markup (`index.html` and, since Prompt 53, the fragments its families mount), and the shortcut list and the assignment builder, which modules build.
+- Every modal opens through `js/dialog.js`: Settings, precise placement, the system builder, the scenario browser, the lesson browser, export, the lesson finish, share, the black-hole masses, the lecture sequence and the shortcut list. Tab stays inside, Escape and the backdrop close, focus goes back to what opened it, and the page behind is inert (`isolate`) for all but the three that were on the module already: Settings, precise placement (no scrim on purpose) and the system builder.
+- `js/focusTrap.js`, the second trap three of them used, is gone. The modules on the start-up path fetch `js/dialog.js` on the first open, so no route carries it.
+- Not modal, by this model: the welcome (Home, a page of the shell since Prompt 50), the object inspector (inline), the sound panel (an inline popover on its button) and the guided tour (its scrim lets presses through to the control each step names). The assignment builder, a full-screen tool reached by URL, was on this list until the P81 checkpoint (K-1): a keyboard reader was never moved into it and Escape did nothing, so it now opens through `js/dialog.js` like the modals. `tests/dialogInventory.test.js` keeps that list and fails on any other dialog that does not open through `js/dialog.js`.
+- The lesson browser is still a modal, on `js/dialog.js`. Prompt 54 made it the Library's view of its lessons and left it a modal (see "As built (Prompt 54)").
+- The two conversions this model names as inline are done. The lesson panel's backup buttons are a Progress disclosure, and its objects list folds and remembers.
+
+**First run.** One overlay at a time, in order:
+1. Home (marked pending from the moment it is decided, so nothing rises under it).
+2. The scenario card, once Home closes. On a phone it sits above the transport bar, not over the readout.
+3. The touch tips, at the first touch on a clear screen.
+
+Escape closes each one. A card closed for a scenario does not return when that scenario is rebuilt. The footer's year is generated from `tools/project-metadata.mjs`.
+
+## As built (Prompt 53)
+
+`index.html` is the shell, the canvas and its scene description, the live regions, the readout, the rail and the transport bar, plus the four observation panels and the Share and Settings dialogs that start-up binds. Every other panel's markup ships with its family and is mounted at an empty `<template data-host>` where it used to stand. For the on-demand families that is a `js/fragments/` file; for the panels start-up binds it is a template in their module. The binary-run panel and the lesson browser stay as well, because the suite reads them before their code loads. The file went from 165.9 KB to 102.1 KB, and no route moved past its ceiling. The 40 KB and accessibility-tree thresholds are recorded as not met (D-INDEX-01). [INDEX_DECOMPOSITION.md](INDEX_DECOMPOSITION.md) has the mechanism and the measurements.
+
+## As built (Prompt 54)
+
+The Library is a tool page, `/library/`, over one generated index of everything there is to open (`library/library.json`, [LIBRARY.md](LIBRARY.md)): 125 entries of the six nouns it holds, each with the same fields, each linking to the surface that runs it. The Observatory's, the 3-D lab's and the mission lab's guides are Investigations in it, with the lessons' fields. Home leads into it by kind and continues a lesson left part-way, and every page's Learn group links it.
+
+The lesson browser inside the application is the Library's view of its lessons by data and by filter: the same tables, the same order, the same filtering functions, held together by `tests/library.test.js`. It keeps its own card and stays a modal: rendering the Library's card and kinds inside the application needs about 9.7 KB of deferred JavaScript, and the deferred total had 2.8 KB of room after Home's sections moved to a fragment (D-LIB-01). The teaching page's activity list and the scenario gallery are still their own lists.
+
+## As built (Prompt 55)
+
+**One breakpoint scale.** Four tiers, one per layout width, each width inside its tier: phone to 767 px (laid out at 375), tablet 768 to 900 (at 768), laptop 901 to 1200 (at 1024), desktop from 1201 (at 1440). They replaced twenty media-query widths; the computed styles at the four widths did not change in the move. `tests/breakpoints.test.js` refuses a width off the scale, and DESIGN_SYSTEM.md has the table (D-RESP-01).
+
+**The application with a lesson open,** by tier:
+
+| Tier | The lesson | What the step docks |
+|---|---|---|
+| desktop | docked left at its width | instrument and graph side by side in the column beside it |
+| laptop | docked left, narrower (340 px) | one at a time: two radio buttons over the column choose the instrument or the graph |
+| tablet | canvas above; a sheet across the bottom, the step on its left half | on the sheet's right half, beside the step, with the same tabs |
+| phone | canvas above; a sheet on the transport bar, with the close button, title and progress on one row, the objects list folded and Next and Back at its foot | a second sheet stacked on the first, with the same tabs |
+
+An observing panel a step opens (the pause-at-event form, the light curve, the radial-velocity curve) takes the instrument's place: beside the step on a tablet, the second sheet on a phone. `js/observationLayout.js` stacks them from the foot of the room the stylesheet gives it rather than from a fixed 120 px, where on a phone they used to lie over the sheet's Next button.
+
+In every arrangement the lesson's panels, the shell bar and the transport bar leave at least a third of the window to the canvas, no panel lies over the transport bar, and Next and Back can be pressed without scrolling. The footer keeps the bottom edge on a tablet and a laptop, with the transport bar standing on it, so its links no longer run under the elapsed time at 1024 px; on a phone it steps out for the lesson.
+
+**Touch.** On a touch screen every control the application, the shell and the page components draw is at least 44 by 44 px (sliders by padding round a thin track). Two fingers on the canvas zoom the simulation and the browser starts no gesture of its own there; a pinch anywhere else zooms the page. Precise placement is in the rail at every width, reached through Menu below the desktop.
+
+**The other surfaces.** The Observatory's plot, image and table stack inside the window below the laptop, its selection linkage holds at every width and its transform controls stay behind a closed disclosure. The Library and Teach hold at every width. The Studio pages are read-only on a phone: the editor and the toolbars that change or save the document step out, what reads it stays, and a note in both languages says so.
+
+**Measured** by `e2e/responsiveLayout.spec.js` at 375 (the phone project), 768 (the tablet project), 1024 and 1440 (the desktop project), and the investigation walker runs every step of every lesson in the phone and desktop projects on every pull request, and in the tablet project weekly (CI's `tablet-walk` job) and in the release gate.
+
+**Frame times by width** (`npm run perf -- --tier auto --viewport WxH`, six scenarios, 2026-10-06, an idle Mac, uncapped by vsync): the mean frame is 3.1 ms at 375x812, 4.4 ms at 768x1024, 4.4 ms at 1024x768 and 4.5 ms at 1440x900; the heaviest scene, star-cluster, is 12.8, 17.6, 17.9 and 19.1 ms. A narrower window draws fewer pixels, so no width is slower than the desktop one and the documented tiers hold at all four.
+
+**Not built,** and why (D-RESP-02):
+- The phone's lesson is a bottom sheet, not a full-screen step with a "Look" button: Prompt 55 allows either, and only the sheet keeps a third of the window for the canvas in every arrangement.
+- The tablet's sheet is not draggable to full height. Dragging needs script on the lesson's path, which has about 2.7 KB of deferred room, and a full-height sheet would cover the canvas.
+- The Observatory keeps its stacked views at 1440 (the table below the plot and image, not beside them), keeps its "What you are seeing" card open on a tablet, and shows its views together on a phone rather than one at a time by tab. The prompt's own requirement is the stack, and the linkage holds in it.
+
+## Rejected alternatives
+
+- **A framework** (React, Vue, Lit). It would cost far more than the whole
+  shell, give no capability the pages lack, and add a dependency the
+  offline, unbundled deploy would carry everywhere.
+- **A router, or a single-page application.** The site is 19 static pages
+  served from the committed tree. Deep links, the service worker's precache
+  and every page's route budget assume pages. A router would move every page
+  into one start-up path.
+- **An iframe or `<template>` include for the header.** An iframe breaks
+  focus order, `aria-current` and the theme cascade. An HTML include needs a
+  server the site does not have.
+- **One header per template.** That is the four shells there are today.

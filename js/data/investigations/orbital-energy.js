@@ -122,6 +122,11 @@ const ENERGY = {
   subtitle: 'Find out what decides whether something comes back',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 3, section: '3.5' },
+  courseLevel: 'survey',
+  mathematics: 'arithmetic',
+  prerequisites: ['keplers-laws'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
@@ -129,8 +134,6 @@ const ENERGY = {
   // The equal-area wedges belong to the lesson this scenario was built for,
   // not to this one.
   lock: { placement: true, inspector: true, areaSweep: false },
-  summary:
-    'Fire something off a planet and find out what decides whether it falls back, circles forever, or leaves and never returns. Work up from the experiment to the idea behind it: every object near a star carries an amount of energy, and the sign of that one number settles the question. Finish on a real interstellar visitor and decide for yourself whether it will be back.',
   objectives: [
     'Describe what happens to a launched object as its speed is raised past the escape point',
     'Explain in your own words why total energy below zero means an object is trapped',
@@ -159,7 +162,7 @@ const ENERGY = {
              \n\nAnd if you load even more gunpowder? At some speed it leaves and
              does not come back. Somewhere between those two outcomes there is a
              dividing line. Finding that line, and understanding what decides
-             which side of it something falls on, is the whole of this lesson.
+             which side of it something falls on, is the whole of this investigation.
              \n\nOver the next few steps you will fire Newton's cannon yourself.`,
       tip: 'Nothing needs measuring yet. The panel on the right will appear in a moment with a cannon on it.',
       setup: ENERGY_LAB,
@@ -331,6 +334,10 @@ const ENERGY = {
       answer: 1,
       because:
         'From the cannon it is 10.9 km/s, so 12 is much the closest. From the ground itself it is 11.2 km/s, and that is the number worth carrying around: roughly 25,000 miles per hour, or about forty times the speed of sound. Every spacecraft that has ever left for another planet had to be given at least this much. Notice that the two differ, and that the cannon on its tower needs slightly less. That is a clue you will come back to.',
+      hints: [
+        'Escape speed depends on how strong gravity is where you start and how far you must go.',
+        'It is fast by everyday standards: compare it with a jet airliner and with a rifle bullet.',
+      ],
     },
     {
       sid: 'what-is-actually-deciding-this',
@@ -398,6 +405,10 @@ const ENERGY = {
       answer: 0,
       because:
         'Below zero means bound. To get infinitely far away, an object would need a total of at least zero, because that is what the energy of position becomes out there and the energy of motion cannot be negative to make up the difference. Below zero it simply cannot reach, so gravity always wins in the end and turns it round.',
+      hints: [
+        'Think about what the energy of position becomes infinitely far away.',
+        'If the total is less than that, can the object ever get there?',
+      ],
     },
     {
       sid: 'around-a-real-orbit',
@@ -451,6 +462,10 @@ const ENERGY = {
       answer: 2,
       because:
         'The total. The other two traded back and forth by large amounts and their sum did not move, which is what allowed you to read off a single number and know the orbit was closed. An orbit cannot decide to become unbound on its own: something would have to come along and add energy to it.',
+      hints: [
+        'Watch the energy readout through one whole orbit.',
+        'Two of the three trade energy back and forth. What would a trade leave unchanged?',
+      ],
     },
     {
       sid: 'escape-speed',
@@ -496,6 +511,22 @@ const ENERGY = {
       answer: 1,
       because:
         'Still pulling, and still slowing it. Escaping does not switch gravity off, and there is no distance at which gravity stops. What escaping means is that the spacecraft has enough energy that the slowing never quite brings it to a halt: it keeps losing speed forever and never runs out. Below escape speed, the same slowing does bring it to a halt, and then everything happens in reverse.',
+      hints: [
+        'Does gravity have a distance beyond which it is zero?',
+        'Escape is about whether the slowing ever brings the craft to rest.',
+      ],
+      misconceptions: [
+        {
+          id: 'gravityStopsAtEscape',
+          option: 0,
+          say: 'Gravity has no range limit: it weakens with distance but never reaches zero.',
+        },
+        {
+          id: 'gravityPushesAway',
+          option: 2,
+          say: 'Gravity only ever pulls toward the mass. Escaping means the pull never wins, not that it reverses.',
+        },
+      ],
     },
     {
       sid: 'somewhere-else-entirely',
@@ -569,6 +600,17 @@ const ENERGY = {
       answer: 1,
       because:
         'Less. Escape speed is not a property of a planet on its own, it is a property of a planet and a place. The higher you start, the less of the climb is left, so the less speed you need to finish it. This is one reason interplanetary missions are often assembled in orbit rather than launched in one go.',
+      hints: [
+        'Escape speed depends on where you start, not only on which planet.',
+        'Starting higher, how much of the climb out of gravity is left?',
+      ],
+      misconceptions: [
+        {
+          id: 'zeroGravityUp',
+          option: 3,
+          say: 'Gravity is weaker up there, not zero: the space station is still held by Earth’s pull.',
+        },
+      ],
     },
     {
       sid: 'three-shapes-one-law',
@@ -653,6 +695,38 @@ const ENERGY = {
         'Will ʻOumuamua eventually slow to a stop, turn round, and come back into orbit around the Sun? Say why or why not, using what you have measured.',
       rubric:
         'No. Its total energy is above zero, so it is unbound: the Sun’s pull keeps slowing it but can never bring it to a halt, and it will still be moving away when it is arbitrarily far off. Credit for noting that its path is open rather than a closed loop, or that its eccentricity is greater than 1. A common wrong answer is that gravity stops acting on it once it is far enough away, which is worth correcting: gravity keeps pulling forever, and the object escapes anyway.',
+      rubricCriteria: [
+        {
+          name: 'Reaches the right answer',
+          levels: [
+            {
+              label: 'Full',
+              points: 2,
+              text: 'No: the total energy is above zero, so the visitor is unbound.',
+            },
+            {
+              label: 'Not yet',
+              points: 0,
+              text: 'Says it will come back, or gives no answer.',
+            },
+          ],
+        },
+        {
+          name: 'Uses what was measured',
+          levels: [
+            {
+              label: 'Full',
+              points: 1,
+              text: 'Cites the measured energy or speed, or that the path is open.',
+            },
+            {
+              label: 'Not yet',
+              points: 0,
+              text: 'Argues from the Sun’s pull alone.',
+            },
+          ],
+        },
+      ],
     },
     {
       sid: 'what-you-worked-out',

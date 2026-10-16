@@ -1,0 +1,93 @@
+{
+  "solar-system@1": {
+    "rows": {
+      "stars": "1:5cc4c51a",
+      "planets": "4:c7665980",
+      "gas_giants": "4:c9d6f2ae",
+      "asteroids": "16:fd1f8c26",
+      "comets": "10:9e844e6f"
+    },
+    "settings": "718f0614",
+    "zoom": 0.25,
+    "pan": [0, 0],
+    "tail": 0.7777841831557453
+  },
+  "solar-system@42": {
+    "rows": {
+      "stars": "1:5cc4c51a",
+      "planets": "4:c7665980",
+      "gas_giants": "4:c9d6f2ae",
+      "asteroids": "16:1e1cc3e3",
+      "comets": "10:6f0249f5"
+    },
+    "settings": "718f0614",
+    "zoom": 0.25,
+    "pan": [0, 0],
+    "tail": 0.06934030912816525
+  },
+  "solar-system@1554098974": {
+    "rows": {
+      "stars": "1:5cc4c51a",
+      "planets": "4:c7665980",
+      "gas_giants": "4:c9d6f2ae",
+      "asteroids": "16:77c26bef",
+      "comets": "10:9abdbaf0"
+    },
+    "settings": "718f0614",
+    "zoom": 0.25,
+    "pan": [0, 0],
+    "tail": 0.7564300249796361
+  },
+  "solar-system@123456789": {
+    "rows": {
+      "stars": "1:5cc4c51a",
+      "planets": "4:c7665980",
+      "gas_giants": "4:c9d6f2ae",
+      "asteroids": "16:ff796a27",
+      "comets": "10:ec6cf0b8"
+    },
+    "settings": "718f0614",
+    "zoom": 0.25,
+    "pan": [0, 0],
+    "tail": 0.7675654764752835
+  },
+  "solar-system@4000000000": {
+    "rows": {
+      "stars": "1:5cc4c51a",
+      "planets": "4:c7665980",
+      "gas_giants": "4:c9d6f2ae",
+      "asteroids": "16:1670eece",
+      "comets": "10:90f422f5"
+    },
+    "settings": "718f0614",
+    "zoom": 0.25,
+    "pan": [0, 0],
+    "tail": 0.204519166611135
+  },
+  "solar-system@7": {
+    "rows": {
+      "stars": "1:5cc4c51a",
+      "planets": "4:c7665980",
+      "gas_giants": "4:c9d6f2ae",
+      "asteroids": "16:3695ec40",
+      "comets": "10:13277e58"
+    },
+    "settings": "718f0614",
+    "zoom": 0.25,
+    "pan": [0, 0],
+    "tail": 0.3838182254694402
+  },
+  "solar-system@99991": {
+    "rows": {
+      "stars": "1:5cc4c51a",
+      "planets": "4:c7665980",
+      "gas_giants": "4:c9d6f2ae",
+      "asteroids": "16:168fc764",
+      "comets": "10:c95409b9"
+    },
+    "settings": "718f0614",
+    "zoom": 0.25,
+    "pan": [0, 0],
+    "tail": 0.3278903439640999
+  }
+}

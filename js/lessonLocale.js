@@ -69,7 +69,7 @@ export function setRequestedLessonLocale(locale) {
     try {
       registrySetter(wanted);
     } catch (err) {
-      console.warn('Could not set the lesson locale:', err);
+      console.warn('Could not set the investigation locale:', err);
     }
   }
 }

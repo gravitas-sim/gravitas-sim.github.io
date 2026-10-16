@@ -242,7 +242,8 @@ test.describe('advancing through representative step types', () => {
     // And it reveals the explanation, which is the part a student reads.
     await expect(page.locator('#investigationBody .inv-because')).toBeVisible();
 
-    // The options lock once answered, so a student cannot try again for credit.
+    // The options lock once answered: trying again takes Change answer, which
+    // keeps the first answer and counts the try.
     await expect(options.first()).toBeDisabled();
   });
 
@@ -272,6 +273,47 @@ test.describe('advancing through representative step types', () => {
     await expect(
       page.locator('#investigationBody .inv-option.is-correct')
     ).toHaveCount(1);
+  });
+
+  test('a graded choice can be changed, keeping the first answer and the count', async ({
+    page,
+    app,
+  }) => {
+    await openLesson(page, app);
+    await answerAndAdvance(page);
+    await answerAndAdvance(page);
+    const correct = await page.evaluate(
+      async ([id, n]) => {
+        const data = await import('/js/data/investigations.js');
+        return data.getInvestigation(id).steps[n - 1].answer;
+      },
+      [LESSON, 3]
+    );
+    const options = page.locator('#investigationBody .inv-option');
+    const wrong = (correct + 1) % (await options.count());
+    await options.nth(wrong).click();
+    await expect(options.nth(wrong)).toHaveClass(/is-wrong/);
+
+    const change = page.locator('#investigationBody [data-change]');
+    await change.click();
+    await expect(options.first()).toBeFocused();
+    await expect(
+      page.locator('#investigationBody .inv-option.is-chosen')
+    ).toHaveCount(0);
+    await options.nth(correct).click();
+    await expect(options.nth(correct)).toHaveClass(/is-correct/);
+
+    // What was stored: the answer now, the first one, and both tries.
+    const stored = await page.evaluate(() => {
+      const key = Object.keys(localStorage).find(k => /invest/i.test(k));
+      return JSON.parse(localStorage.getItem(key));
+    });
+    const entries = Object.entries(stored.responses);
+    const first = entries.find(([k]) => k.endsWith(':first'));
+    expect(first?.[1]).toBe(wrong);
+    const own = first[0].replace(/:first$/, '');
+    expect(stored.responses[own]).toBe(correct);
+    expect(stored.attempts[own]).toBe(2);
   });
 
   test('a measure step accepts numbers and plots them back @covers:ce.keplers-laws', async ({
@@ -463,6 +505,69 @@ test.describe('the student report', () => {
     const bytes = Buffer.concat(chunks);
     expect(bytes.length).toBeGreaterThan(2000);
     expect(bytes.subarray(0, 5).toString('latin1')).toBe('%PDF-');
+
+    // And beside the report, the progress file.
+    const [backup] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#investigationFinishProgress').click(),
+    ]);
+    expect(backup.suggestedFilename()).toMatch(/\.json$/);
+  });
+
+  test('in Spanish, with the token to paste', async ({ page, app }) => {
+    // The dialog was English whatever the lesson was in, and the token existed
+    // only inside the PDF, where a learning management system's text box
+    // cannot reach it. Opened on the last step through the authoring preview,
+    // because what is checked is the dialog, not the walk to it.
+    await app.boot({ url: '/?author=keplers-laws&step=1' });
+    const total = await page.evaluate(async () => {
+      const data = await import('/js/data/investigations.js');
+      const i18n = await import('/js/i18n/index.js');
+      await i18n.setLocale('es');
+      return data.getInvestigation('keplers-laws').steps.length;
+    });
+    const url = `/?author=keplers-laws&step=${total}`;
+    await app.boot({ url });
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await page.locator('#investigationNext').click();
+
+    const dialog = page.locator('#investigationFinishContent');
+    await expect(dialog).toBeVisible();
+    await expect(page.locator('#investigationFinishTitle')).toHaveText(
+      'Terminado'
+    );
+    await expect(page.locator('#investigationFinishSummary')).toContainText(
+      /Has abierto\s+\d+\s+de\s+\d+\s+pasos/
+    );
+    for (const english of ['Keep working', 'Finished', 'Your name']) {
+      await expect(dialog).not.toContainText(english);
+    }
+
+    // The token needs a name, as the report does.
+    const show = page.locator('#investigationTokenShow');
+    await show.click();
+    await expect(page.locator('#investigationNameError')).toBeVisible();
+    await page.locator('#investigationName').fill('Ada');
+    await show.click();
+    const token = page.locator('#investigationToken');
+    await expect(token).toHaveValue(/^s\d+[zr]/);
+    await expect(token).toHaveAttribute('readonly', '');
+    await expect(token).toBeFocused();
+    await expect(page.getByLabel(/Código de entrega/)).toHaveCount(1);
+
+    const [txt] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#investigationTokenSave').click(),
+    ]);
+    expect(txt.suggestedFilename()).toMatch(/-token\.txt$/);
+    const chunks = [];
+    for await (const chunk of await txt.createReadStream()) chunks.push(chunk);
+    expect(Buffer.concat(chunks).toString('utf8').trim()).toBe(
+      await token.inputValue()
+    );
+
+    // A preview has no progress to keep, so it offers no file of it.
+    await expect(page.locator('#investigationFinishProgress')).toBeHidden();
   });
 });
 
@@ -521,7 +626,7 @@ test.describe('lesson loading', () => {
     // Every card carries a step count and a duration, and all of it came out of
     // the manifest: the cards are drawn, and no lesson has been fetched.
     await expect(page.locator('#investigationBrowserCount')).toContainText(
-      /\d+ lessons · \d+ steps/
+      /\d+ investigations · \d+ steps/
     );
     expect(await lessonsFetched(page)).toEqual([]);
   });
@@ -720,5 +825,188 @@ test.describe('a lesson that locks placement says so', () => {
     await page.locator('#objectTypeBtn').click({ force: true });
     await page.waitForTimeout(300);
     await expect(page.locator('#objectTypePicker')).toBeHidden();
+  });
+});
+
+test.describe('lesson prose reads as characters, not entity names', () => {
+  // prose() escaped the & of every entity before letting its four tags back
+  // in, so these lessons showed "HD&nbsp;209458" and "The star&rsquo;s
+  // gravity" as written, on the public site. tests/lessonMarkup.test.js
+  // renders prose() in jsdom; this reads what Chromium actually shows.
+  const ENTITY = /&(?:[a-z][a-z\d]{1,31}|#\d{1,7}|#x[\da-f]{1,6});/i;
+
+  test('Twelve Nights opens on HD 209458 at La Silla', async ({
+    page,
+    app,
+  }) => {
+    await app.boot({ url: '/#investigation=twelve-nights' });
+    const body = page.locator('#investigationBody .inv-step-body').first();
+    await expect(body).toContainText('209458');
+    // textContent for the exact characters: a no-break space, not a space.
+    expect(await body.evaluate(el => el.textContent)).toContain(
+      'one star: HD\u00a0209458, from La\u00a0Silla'
+    );
+    expect(await body.innerText()).not.toMatch(ENTITY);
+  });
+
+  test('a held prediction: its options, its name, what is announced and its verdict', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await app.boot({ url: '/#investigation=lives-of-stars' });
+    await expect(page.locator('.inv-step-title')).not.toBeEmpty();
+    const wanted = 'What exactly runs out?';
+    for (let guard = 0; guard < 12; guard++) {
+      if ((await page.locator('.inv-step-title').innerText()) === wanted) break;
+      await answerAndAdvance(page);
+    }
+    await expect(page.locator('.inv-step-title')).toHaveText(wanted);
+
+    // The option written "The star&rsquo;s gravity", after its letter.
+    const options = page.locator('#investigationBody .inv-option');
+    await expect(options.nth(2)).toContainText('The star\u2019s gravity');
+    expect(await options.nth(2).innerText()).not.toMatch(ENTITY);
+    // The group is named by the prompt on screen, not by a copy of it in an
+    // attribute, where an entity would be read out as its letters.
+    await expect(
+      page.locator('#investigationBody [role="radiogroup"]')
+    ).toHaveAccessibleName(
+      'When a star leaves the main sequence, what has run out?'
+    );
+
+    await options.nth(2).click();
+    const status = page.locator('#srStatus');
+    await expect.poll(() => status.textContent()).not.toBe('');
+    expect(await status.textContent()).not.toMatch(ENTITY);
+
+    // Held, so it can still be changed: nothing has told the reader yet.
+    const change = page.locator('#investigationBody [data-change]');
+    await change.click();
+    await expect(options.nth(2)).toBeEnabled();
+    await expect(options.nth(2)).not.toHaveClass(/is-chosen/);
+    await options.nth(2).click();
+    await expect(change).toBeVisible();
+
+    // The reveal is the next step, and it carries the verdict.
+    await page.locator('#investigationNext').click();
+    const verdict = page.locator('#investigationBody .inv-verdict');
+    await expect(verdict.locator('.inv-verdict-head')).toHaveText(
+      'You predicted: The star\u2019s gravity'
+    );
+    await expect(verdict.locator('.inv-because')).toContainText(
+      'Only the core\u2019s hydrogen'
+    );
+    expect(await verdict.innerText()).not.toMatch(ENTITY);
+
+    // Once the verdict has been shown, the prediction stands.
+    await page.locator('#investigationPrev').click();
+    await expect(page.locator('.inv-step-title')).toHaveText(wanted);
+    await expect(options.nth(2)).toHaveClass(/is-chosen/);
+    await expect(change).toHaveCount(0);
+  });
+});
+
+test.describe('a screen reader hears every answer, not only the first', () => {
+  // announce() in js/notify.js returned early when a message was the one it
+  // had last written, and nothing reset it between steps. Two right answers in
+  // a row both announce "Correct.", so the second was never written to
+  // #srStatus: a student using a screen reader was told the first was right
+  // and heard nothing about the next. These two black-holes steps are adjacent
+  // ordinary graded choices on the same stage, so nothing else is announced
+  // between them.
+  const ID = 'black-holes';
+  const FIRST = 'what-did-doubling-do';
+  const SECOND = 'read-the-graph';
+
+  test('two right answers in a row are each announced', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    // Resumed at the first of the two, the way a returning student is, rather
+    // than walked to: the panel's own progress record, naming the step.
+    const facts = await page.evaluate(
+      async ([id, first]) => {
+        const reg = await import('/js/data/investigations/registry.js');
+        const { writeProgress } =
+          await import('/js/investigations/progressSchema.js');
+        const lesson = await reg.loadInvestigation(id);
+        const at = lesson.steps.findIndex(s => s.sid === first);
+        localStorage.setItem(
+          `gravitas_investigation_${id}`,
+          JSON.stringify(
+            writeProgress({
+              lesson,
+              responses: {},
+              attempts: {},
+              visited: [],
+              stepSid: first,
+              startedAt: null,
+            })
+          )
+        );
+        return {
+          steps: lesson.steps.slice(at, at + 2).map(s => ({
+            sid: s.sid,
+            title: s.title,
+            kind: s.kind,
+            answer: s.answer,
+            reveal: s.reveal ?? null,
+          })),
+        };
+      },
+      [ID, FIRST]
+    );
+    // If either gains a `reveal`, or they stop being neighbors, this is no
+    // longer the case being tested.
+    expect(facts.steps.map(s => s.sid)).toEqual([FIRST, SECOND]);
+    for (const step of facts.steps) {
+      expect(step.kind).toBe('choice');
+      expect(step.reveal).toBeNull();
+      expect(Number.isInteger(step.answer)).toBe(true);
+    }
+
+    await page.locator('#investigationsBtn').click();
+    await page.locator(`[data-investigation="${ID}"]`).click();
+    const title = page.locator('.inv-step-title');
+    await expect(title).toHaveText(facts.steps[0].title);
+    // Read now: the panel's strings arrive with the panel.
+    const correct = await page.evaluate(async () =>
+      (await import('/js/i18n/index.js')).t('inv.answer.correct')
+    );
+    expect(correct).not.toBe('inv.answer.correct');
+
+    // Every state the live region is left in from here on, starting with the
+    // one it is in now. A write that leaves it as it was is not heard.
+    await page.evaluate(() => {
+      const el = document.getElementById('srStatus');
+      window.__srStates = [el.textContent];
+      new window.MutationObserver(() =>
+        window.__srStates.push(el.textContent)
+      ).observe(el, { childList: true, characterData: true, subtree: true });
+    });
+    const heard = () =>
+      page.evaluate(() => {
+        const states = window.__srStates;
+        return states.filter((s, i) => i > 0 && s !== states[i - 1]);
+      });
+    const saidCorrect = async () =>
+      (await heard()).filter(s => s.trim() === correct).length;
+
+    const options = page.locator('#investigationBody .inv-option');
+    await options.nth(facts.steps[0].answer).click();
+    await expect(options.nth(facts.steps[0].answer)).toHaveClass(/is-correct/);
+    await expect.poll(saidCorrect).toBe(1);
+
+    await page.locator('#investigationNext').click();
+    await expect(title).toHaveText(facts.steps[1].title);
+    await options.nth(facts.steps[1].answer).click();
+    await expect(options.nth(facts.steps[1].answer)).toHaveClass(/is-correct/);
+    await expect
+      .poll(saidCorrect, {
+        message: 'the second "Correct." changed the live region',
+      })
+      .toBe(2);
   });
 });

@@ -14,11 +14,25 @@
 
 import { test, expect } from './fixtures.js';
 
-/** Run a scenario hard and report what came out. */
-async function stress(app, key, { frames = 300, seed = 'stress' } = {}) {
+/**
+ * Run a scenario hard and report what came out.
+ *
+ * The wait is for real physics steps, so its length is the scenario's: the
+ * largest one steps about eleven times a second on an idle laptop, and a CI
+ * runner is slower. The allowance is 400 ms a step (2.5 steps a second, a
+ * quarter of that rate) and the test's own timeout grows with it.
+ */
+async function stress(
+  app,
+  testInfo,
+  key,
+  { frames = 300, seed = 'stress' } = {}
+) {
+  const timeout = Math.max(20_000, frames * 400);
+  testInfo.setTimeout(timeout + 60_000);
   await app.loadScenario(key, seed);
   const before = await app.bodySnapshot();
-  await app.waitForFrames(frames);
+  await app.waitForFrames(frames, { timeout });
   const after = await app.bodySnapshot();
   return { before, after };
 }
@@ -26,13 +40,18 @@ async function stress(app, key, { frames = 300, seed = 'stress' } = {}) {
 test.describe('heavy scenarios stay finite', () => {
   test('the largest scenario in the catalog runs without producing a NaN', async ({
     app,
-  }) => {
+  }, testInfo) => {
     // Galactic Collision is the biggest thing here: two galaxies, hundreds of
     // bodies, mutual gravity and mergers all at once.
     await app.boot();
-    const { before, after } = await stress(app, 'Galactic Collision', {
-      frames: 240,
-    });
+    const { before, after } = await stress(
+      app,
+      testInfo,
+      'galactic-collision',
+      {
+        frames: 240,
+      }
+    );
 
     expect(before.count).toBeGreaterThan(100);
     expect(before.nonFinite).toBe(0);
@@ -42,12 +61,14 @@ test.describe('heavy scenarios stay finite', () => {
     expect(after.count).toBeGreaterThan(10);
   });
 
-  test('a tightly packed system holds its orbits', async ({ app }) => {
+  test('a tightly packed system holds its orbits', async ({
+    app,
+  }, testInfo) => {
     // TRAPPIST-1's seven planets orbit between 1.15 and 6.19 simulation units,
     // which is the regime where a softening floor set for a scenario a hundred
     // times larger used to starve them of gravity and throw them out.
     await app.boot();
-    const { before, after } = await stress(app, 'TRAPPIST-1 System', {
+    const { before, after } = await stress(app, testInfo, 'trappist-1-system', {
       frames: 400,
     });
 
@@ -59,9 +80,11 @@ test.describe('heavy scenarios stay finite', () => {
 
   test('a merger removes bodies without corrupting the survivors', async ({
     app,
-  }) => {
+  }, testInfo) => {
     await app.boot();
-    const { before, after } = await stress(app, 'GW150914', { frames: 300 });
+    const { before, after } = await stress(app, testInfo, 'gw150914', {
+      frames: 300,
+    });
 
     expect(before.nonFinite).toBe(0);
     expect(after.nonFinite).toBe(0);
@@ -171,8 +194,8 @@ test.describe('heavy scenarios stay finite', () => {
         };
       };
       return {
-        kessler: read('Kessler Cascade'),
-        slingshot: read('Slingshot Gauntlet'),
+        kessler: read('kessler-cascade'),
+        slingshot: read('slingshot-gauntlet'),
       };
     });
 
@@ -272,11 +295,11 @@ test.describe('the application recovers from rough handling', () => {
     // world each rebuild produces.
     const counts = [];
     for (const key of [
-      'Binary Pair',
-      'Solar System',
-      'Binary Pair',
-      'Solar System',
-      'Binary Pair',
+      'binary-pair',
+      'solar-system',
+      'binary-pair',
+      'solar-system',
+      'binary-pair',
     ]) {
       // run: false builds the world with the clock already stopped, so no body
       // is absorbed or culled between the build and the count.
@@ -305,7 +328,7 @@ test.describe('the application recovers from rough handling', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.waitForFrames(20);
 
     for (let i = 0; i < 8; i++) {
@@ -314,5 +337,112 @@ test.describe('the application recovers from rough handling', () => {
       await app.waitForFrames(5);
     }
     expect((await app.bodySnapshot()).nonFinite).toBe(0);
+  });
+});
+
+test.describe('a worker that fails, and an error nobody caught', () => {
+  test('a physics Worker ended mid-run hands gravity back to the main thread', async ({
+    page,
+    app,
+    errors,
+  }) => {
+    // Its busy flag stayed set when it died, so no job was ever scheduled
+    // again and every body kept the last pull it had been given.
+    await page.addInitScript(() => {
+      const Native = window.Worker;
+      window.__workers = [];
+      window.Worker = class extends Native {
+        constructor(url, opts) {
+          super(url, opts);
+          window.__workers.push({ url: String(url), worker: this });
+        }
+      };
+    });
+    await app.boot();
+    await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      const physics = await import('/js/physics.js');
+      ui.SETTINGS.mutual_gravity = true;
+      ui.SETTINGS.use_barnes_hut = true;
+      physics.updatePhysicsSettings(ui.SETTINGS);
+    });
+    // Running, and answering: some body holds a pull the worker computed.
+    await expect
+      .poll(() =>
+        page.evaluate(async () => {
+          const physics = await import('/js/physics.js');
+          return physics.planets.some(p => p.cached_accel);
+        })
+      )
+      .toBe(true);
+
+    // Ended without a word, which fires no error event - so it is the
+    // watchdog that has to notice. Its clock is moved on rather than waited
+    // for.
+    await page.evaluate(() => {
+      const w = window.__workers.find(x => /physicsWorker/.test(x.url));
+      w.worker.terminate();
+      const now = performance.now.bind(performance);
+      performance.now = () => now() + 11_000;
+    });
+    // Said once the deferred catalog it is written in has arrived.
+    await expect(page.locator('#srStatus')).toContainText(
+      /gravity is now worked out on the main thread/i,
+      { timeout: 20_000 }
+    );
+
+    // And the world goes on, on the main thread: no body keeps a stale pull.
+    const where = () =>
+      page.evaluate(async () => {
+        const physics = await import('/js/physics.js');
+        const p = physics.planets[0];
+        return [p.pos.x, p.pos.y];
+      });
+    const before = await where();
+    await app.waitForFrames(30);
+    expect(await where()).not.toEqual(before);
+    expect((await app.bodySnapshot()).nonFinite).toBe(0);
+    const stale = await page.evaluate(async () => {
+      const physics = await import('/js/physics.js');
+      return physics.planets.filter(p => p.cached_accel).length;
+    });
+    expect(stale).toBe(0);
+    // The one console error this test causes, said on purpose; any other
+    // still fails it.
+    const said = errors.consoleErrors.filter(e =>
+      /Physics Worker stopped answering/.test(e)
+    );
+    expect(said).toHaveLength(1);
+    errors.consoleErrors.splice(
+      0,
+      errors.consoleErrors.length,
+      ...errors.consoleErrors.filter(e => !said.includes(e))
+    );
+  });
+
+  test('an uncaught error is said in the status region, and still reported', async ({
+    page,
+    app,
+    errors,
+  }) => {
+    const seen = [];
+    page.on('pageerror', e => seen.push(e.message));
+    await app.boot();
+    await page.evaluate(() =>
+      setTimeout(() => {
+        throw new Error('a deliberate failure');
+      })
+    );
+    await expect(page.locator('#srStatus')).toContainText(
+      'Something went wrong: a deliberate failure'
+    );
+    // Not swallowed: the browser still saw it. It is this test's own, so
+    // it is taken off the list every test is failed by.
+    expect(seen).toContain('a deliberate failure');
+    errors.pageErrors.splice(
+      0,
+      errors.pageErrors.length,
+      ...errors.pageErrors.filter(e => e !== 'a deliberate failure')
+    );
   });
 });

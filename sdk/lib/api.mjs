@@ -1,0 +1,212 @@
+// =============================================================================
+// The Gravitas Extension SDK's public API
+// -----------------------------------------------------------------------------
+// The one module an extension author, an example or the SDK's contract suite
+// imports. Everything else under sdk/lib/ and the whole of js/ and tools/ is
+// private: it may change in any release, and the contract suite
+// (tests/sdkContract.test.js) fails if an example or the suite itself reaches
+// past this file.
+//
+// It is an adapter. What it exposes is stable and versioned (SDK_VERSION,
+// COMPATIBILITY in sdk/README.md); how it finds the answers - reading the
+// lesson manifest, the instrument registry, the scenario catalog, the
+// capability packages - is its own business and is allowed to change with the
+// application underneath it.
+// =============================================================================
+
+import { readdirSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+import { PLATFORM_API } from '../../js/platform/manifest.js';
+import { parseRange, satisfies } from '../../js/platform/semver.js';
+
+export { PLATFORM_API };
+export { observationOf, checkObservation } from '../../js/observation.js';
+// gravitas.artifact/1, the envelope a scientific result is written in.
+export {
+  artifact,
+  validateArtifact,
+  ORIGINS,
+  BASES,
+  UNCERTAINTY_KINDS,
+  SOURCE_KINDS,
+} from '../../js/platform/artifact.js';
+
+/**
+ * A FITS file's header-data units, as the data-pack pipeline reads them: each
+ * with its header `cards` and, for a binary table, its `columns`. Added in
+ * 1.2.0, because the first extension commissioned from outside the core, a
+ * TESS light curve of SU Draconis, had no public way to read its source.
+ */
+export { readFits } from '../../tools/data-packs/fits.mjs';
+
+/**
+ * A TESS SPOC light curve, masked, normalized, binned and encoded exactly as
+ * the built-in packs are (DATA_PACKS.md). With `fluxStepPpm` it writes
+ * `binned-relative-flux/2`, for a star that varies by more than the 3.3% that
+ * /1 holds. Added in 1.2.0, for the same extension.
+ *
+ * Since 1.3.0, `flux: 'SAP'` bins SAP_FLUX (the aperture's light before
+ * SPOC's corrections) instead of PDCSAP_FLUX, and `crowding: true` records
+ * the header's CROWDSAP and FLFRCSAP. Kepler-13, whose companion dilutes its
+ * transit, needed both; without them the output is what 1.2.0 wrote.
+ */
+export {
+  binLightCurve as binTessLightCurve,
+  foldedDepth,
+} from '../../tools/data-packs/tess-light-curve.mjs';
+// foldedDepth(observation, periodDays): the depth of the deepest phase slot,
+// the check a transit pack states (added in 1.3.0; `sdk test` runs the same).
+
+/** This SDK. A major version changes only with a breaking change to this file. */
+export const SDK_VERSION = '1.10.0';
+
+/**
+ * The modules an extension instrument (or a vendored panel) may import, by the
+ * specifier it writes. A maintainer rewrites each to its path when vendoring;
+ * `sdk test` rewrites them to the same files to run the instrument. Added in
+ * 1.9.0, to close what sdk/README.md listed as private (translation, plotting,
+ * colour tokens). Nothing else in js/ is promised.
+ */
+export const INSTRUMENT_API = Object.freeze({
+  'gravitas:instrument/strings': {
+    module: 'js/platform/instrument/strings.js',
+    exports: ['translator', 'checkCatalogs'],
+  },
+  'gravitas:instrument/tokens': {
+    module: 'js/platform/instrument/tokens.js',
+    exports: ['COLOR_TOKENS', 'colorToken'],
+  },
+  'gravitas:instrument/plot': {
+    module: 'js/platform/instrument/plot.js',
+    exports: ['createPlot', 'ticks'],
+  },
+});
+export {
+  translator,
+  checkCatalogs,
+} from '../../js/platform/instrument/strings.js';
+export { COLOR_TOKENS } from '../../js/platform/instrument/tokens.js';
+
+/** The formats this SDK reads and writes, and the version of each. */
+export const FORMATS = Object.freeze({
+  'gravitas.capability-package': 1,
+  'gravitas.observation-data-pack': 1,
+  // Reads /1 (units of lessons) and /2 (what the course-pack builder writes).
+  'gravitas.course-pack': 2,
+  'gravitas.investigation-pack': 1,
+  'gravitas.scenario-pack': 1,
+  'gravitas.extension-archive': 1,
+  'gravitas.artifact': 1,
+});
+
+/** The five kinds of extension, and whether each may carry code. */
+export const EXTENSION_TYPES = Object.freeze({
+  'data-pack': { kind: 'declarative', code: false },
+  'course-pack': { kind: 'declarative', code: false },
+  'scenario-pack': { kind: 'declarative', code: false },
+  'investigation-pack': { kind: 'declarative', code: false },
+  capability: { kind: 'built-in', code: true },
+});
+
+/** The interface languages Gravitas ships. */
+export const LOCALES = Object.freeze(['en', 'es']);
+
+const REPO = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '..'
+);
+let ids = null;
+
+/**
+ * Every public identifier an extension may name, or must not reuse.
+ * @returns {Promise<{lessons: Set<string>, widgets: Set<string>,
+ *   scenarios: Set<string>, dataPacks: Set<string>, courses: Set<string>,
+ *   packages: Map<string, string>, lessonTitles: Map<string, object>}>}
+ */
+export async function publicIds() {
+  if (ids) return ids;
+  const { loadAuthoringInputs } =
+    await import('../../tools/authoring/inputs.mjs');
+  const inputs = await loadAuthoringInputs();
+  const packages = new Map();
+  const dataPacks = new Set();
+  const courses = new Set();
+  const dir = path.join(REPO, 'capabilities');
+  for (const f of readdirSync(dir)
+    .filter(n => n.endsWith('.json'))
+    .sort()) {
+    const m = JSON.parse(readFileSync(path.join(dir, f), 'utf8'));
+    packages.set(m.id, m.version);
+    for (const d of m.provides?.dataPacks || []) dataPacks.add(d.id);
+    for (const c of m.provides?.courses || []) courses.add(c.id);
+  }
+  const lessonTitles = new Map();
+  for (const locale of LOCALES) {
+    for (const card of inputs.manifests[locale] || []) {
+      const t = lessonTitles.get(card.id) || {};
+      t[locale] = card.title;
+      lessonTitles.set(card.id, t);
+    }
+  }
+  ids = {
+    lessons: new Set(inputs.investigations.map(i => i.id)),
+    widgets: new Set(inputs.widgets.map(w => w.id)),
+    scenarios: new Set(Object.keys(inputs.scenarios)),
+    dataPacks,
+    courses,
+    packages,
+    lessonTitles,
+  };
+  return ids;
+}
+
+/** Whether a package's `gravitas` range accepts this platform. */
+export function acceptsPlatform(range) {
+  return Boolean(parseRange(range)) && satisfies(PLATFORM_API, range);
+}
+
+/**
+ * A data pack Gravitas has installed: its record (the pack manifest), the
+ * runtime module and the decoded observation. An extension derived from an
+ * installed pack reads its source through this, and pins what it read by the
+ * record's `derived` checksum.
+ *
+ * A pack whose module is in the shared encoding (PACK and SERIES) comes with
+ * its observation decoded. The four datasets that came before that encoding -
+ * the SDSS spectra, the GWOSC events, GW150914 and the MIST tracks - keep the
+ * module shape their instruments read, with PACK beside it, and come with
+ * `observation: null` and the module to read: their manifests are packs like
+ * any other, which is what the SDK checks (DATA_PACKS.md).
+ * @param {string} id - A public data-pack id, as publicIds().dataPacks lists
+ * @returns {Promise<{record: object, file: string, module: object, observation: object|null}>}
+ */
+export async function installedDataPack(id) {
+  const dir = path.join(REPO, 'capabilities');
+  for (const f of readdirSync(dir).filter(n => n.endsWith('.json'))) {
+    const m = JSON.parse(readFileSync(path.join(dir, f), 'utf8'));
+    const entry = (m.provides?.dataPacks || []).find(d => d.id === id);
+    if (!entry) continue;
+    if (!String(entry.provenance).endsWith('.json')) {
+      throw new Error(
+        `${id} predates gravitas.observation-data-pack/1 (its record is ${entry.provenance}); see DATA_PACKS.md, "Migrating"`
+      );
+    }
+    const record = JSON.parse(
+      readFileSync(path.join(REPO, entry.provenance), 'utf8')
+    );
+    const { observationOf } = await import('../../js/observation.js');
+    const module = await import(
+      pathToFileURL(path.join(REPO, record.derived.file)).href
+    );
+    return {
+      record,
+      file: record.derived.file,
+      module,
+      observation: module.SERIES ? observationOf(module) : null,
+    };
+  }
+  throw new Error(`Gravitas has no data pack "${id}"`);
+}

@@ -26,10 +26,10 @@ const LESSON = 'detect-this-planet';
 /** Open the RV panel on a scenario whose star is free to move. */
 async function openRv(page, app) {
   await app.boot();
-  await app.loadScenario('Exoplanet Characterization Lab');
+  await app.loadScenario('exoplanet-characterization-lab');
   await app.waitForFrames(10);
   await app.openPanel('toggleRadialVelocity', 'rvContainer');
-  await expect(page.locator('#rvCanvas')).toBeVisible();
+  await expect(page.locator('#rvChart')).toBeVisible();
 }
 
 /** Switch the synthetic run on, with a schedule. */
@@ -134,17 +134,21 @@ test.describe('the synthetic observing run', () => {
       seed: 'e2e',
     });
 
+    // The chart's legend is the component's own description of its series: a
+    // button a series, its name as text, its line style in the swatch, and
+    // aria-pressed false while it is hidden.
     const labels = () =>
-      page.evaluate(async () => {
-        const rv = await import('/js/radialVelocity.js');
-        void rv;
-        const canvas = document.getElementById('rvCanvas');
-        const chart = window.Chart?.getChart?.(canvas);
-        return chart
-          ? chart.data.datasets.map(d => ({
-              label: d.label,
-              hidden: Boolean(d.hidden),
-              dashed: (d.borderDash || []).length > 0,
+      page.evaluate(() => {
+        const buttons = [
+          ...document.querySelectorAll('#rvChart button[data-series]'),
+        ];
+        return buttons.length
+          ? buttons.map(b => ({
+              label: b.textContent,
+              hidden: b.getAttribute('aria-pressed') === 'false',
+              dashed:
+                (b.querySelector('line')?.getAttribute('stroke-dasharray') ??
+                  'none') !== 'none',
             }))
           : null;
       });
@@ -156,6 +160,18 @@ test.describe('the synthetic observing run', () => {
     expect(ideal.dashed).toBe(true);
     expect(ideal.hidden).toBe(false);
     expect(before.some(d => /measurements/i.test(d.label || ''))).toBe(true);
+
+    // Drawn behind the data: its path comes first in the chart, so the
+    // measurements and their error bars are painted over it, and only it is
+    // dashed.
+    const drawn = await page.evaluate(() =>
+      [...document.querySelectorAll('#rvChart svg > g > g[clip-path]')].map(
+        g => ({
+          dashed: g.querySelector('path[stroke-dasharray]') !== null,
+        })
+      )
+    );
+    expect(drawn.map(d => d.dashed)).toEqual([true, false]);
 
     // And it can be taken away, which is what a real observer has.
     await page.locator('#rvSurveyIdeal').uncheck();
@@ -348,7 +364,7 @@ test.describe('the export', () => {
     await expect(row).toContainText(/4 measurements/);
 
     const download = page.waitForEvent('download');
-    await row.locator('button').click();
+    await row.locator('[data-action="download"]').click();
     const file = await download;
     const path = join(OUT, 'rv.csv');
     await file.saveAs(path);
@@ -399,7 +415,7 @@ test.describe('the export', () => {
     await page.locator('#exportDataBtn').click();
     const row = page.locator('#dataExport [data-export="radialvelocity"]');
     await expect(row).toContainText(/No observing run/i);
-    await expect(row.locator('button')).toBeDisabled();
+    await expect(row.locator('[data-action="download"]')).toBeDisabled();
   });
 });
 
@@ -416,7 +432,7 @@ test.describe('a recording belongs to what it recorded', () => {
     // and the panel then fell through and appended - so this produced a
     // one-sample recording of an instant nobody observed.
     await app.boot();
-    await app.loadScenario('Binary Star System');
+    await app.loadScenario('binary-star-system');
     await app.waitForFrames(20);
     await app.openPanel('toggleRadialVelocity', 'rvContainer');
 
@@ -510,7 +526,7 @@ test.describe('a recording belongs to what it recorded', () => {
     await expect(row).toContainText(/4 measurements/);
 
     const download = page.waitForEvent('download');
-    await row.locator('button').click();
+    await row.locator('[data-action="download"]').click();
     const path = join(OUT, 'closed-panel.csv');
     await (await download).saveAs(path);
 

@@ -402,9 +402,6 @@ export function setCr3bpEnabled(on) {
   render();
 }
 
-/** @returns {boolean} Whether the teaching mode is on */
-export const isCr3bpEnabled = () => enabled;
-
 /** Build the panel once. */
 function mount() {
   if (root) return;
@@ -615,9 +612,6 @@ export function neckPairReport() {
       : null,
   };
 }
-
-/** For the lesson and the tests: run the pair as the button does. */
-export const startNeckPair = () => runNeckPair();
 
 /** Ask the run in progress to stop after the arm it is on. */
 export function cancelNeckPair() {
@@ -1253,7 +1247,7 @@ export function initCr3bp() {
  * @returns {void}
  */
 export function notifyScenarioReady() {
-  if (current_scenario_name === 'Lagrange Point Lab') setCr3bpEnabled(true);
+  if (current_scenario_name === 'lagrange-point-lab') setCr3bpEnabled(true);
 }
 
 /** Redraw the readout, for callers driving the panel. @returns {void} */

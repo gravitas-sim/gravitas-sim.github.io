@@ -179,7 +179,7 @@ test.describe('a lesson gives the sandbox back', () => {
 
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
-      ui.SETTINGS.preset_scenario = 'Solar System';
+      ui.SETTINGS.preset_scenario = 'solar-system';
       ui.initialize_simulation();
     });
     const chosen = await census(page);

@@ -17,7 +17,22 @@
 // =============================================================================
 
 import { createDocument } from './pdf.js';
+import { registerMessages } from './i18n/index.js';
+// Depths, shallowest first (as in investigations/progressSchema.js).
+const LEVELS = ['core', 'quantitative', 'advanced'];
+const rank = d => Math.max(0, LEVELS.indexOf(d));
+const inDepth = (s, d) => rank(s?.depth) <= rank(d);
 
+/** The report's strings, both languages, fetched the first time one is built. */
+let text = null;
+export const reportMessages = () =>
+  (text ??= Promise.all([
+    import('./i18n/en.report.js'),
+    import('./i18n/es.report.js'),
+  ]).then(([en, es]) => {
+    registerMessages('en', en.EN_REPORT);
+    registerMessages('es', es.ES_REPORT);
+  }));
 /**
  * Short, stable checksum over the report's contents.
  *
@@ -35,10 +50,29 @@ function completionCode(text) {
   return `${base.slice(0, 4)}-${base.slice(4)}`;
 }
 
-const dateText = iso => {
+/**
+ * Break a token into lines a person can copy without losing their place.
+ *
+ * Grouped in fours inside a line so the eye can track position, and the groups
+ * are separated by spaces because whitespace is the only thing the reader is
+ * allowed to strip.
+ *
+ * @param {string} token - The encoded submission
+ * @returns {string[]} Lines, each short enough for the page
+ */
+function tokenLines(token) {
+  const groups = String(token).match(/.{1,8}/g) || [];
+  const lines = [];
+  for (let i = 0; i < groups.length; i += 8) {
+    lines.push(groups.slice(i, i + 8).join(' '));
+  }
+  return lines;
+}
+
+const dateText = (iso, locale) => {
   const d = iso ? new Date(iso) : new Date();
   if (Number.isNaN(d.getTime())) return '-';
-  return d.toLocaleDateString(undefined, {
+  return d.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -68,7 +102,9 @@ const plain = text =>
  * @param {string} opts.name - Student's name
  * @param {Object} opts.responses - Answers, keyed by step id
  * @param {Object} opts.attempts - Attempt counts, keyed by step id
- * @param {Set} opts.visited - Indices of steps reached
+ * @param {Set<string>} opts.visited - Sids of the steps reached, as the engine
+ *   keeps them. It held indices before steps had sids, and a Set of sids never
+ *   contains a number, so a check by index was silently false for every step.
  * @param {string} opts.startedAt - ISO timestamp
  * @param {Array} opts.links - [{step, title, url}] states used by the lesson
  * @param {Object} [opts.plot] - {points, xLabel, yLabel, slope} to draw
@@ -78,6 +114,19 @@ const plain = text =>
  * @param {Function} opts.checkAnswer - (step, value, key) -> boolean|null.
  *   The key is passed so the caller can grade under the locale the answer was
  *   written in rather than under whatever is current.
+ * @param {Function} opts.decodeEntities - decodeEntities() from
+ *   js/lessonMarkup.js. Passed in, like checkAnswer, so this file does not pull
+ *   it into the notebook's chunk and cost every lesson a request.
+ * @param {Function} opts.t - The translator, passed in like checkAnswer: the
+ *   report is written in the language the student worked in
+ * @param {string} [opts.locale] - That language, for the dates
+ * @param {Array<[string, string]>} [opts.meta] - More rows for the title block:
+ *   the application and format versions, the engine fingerprint, the depth
+ * @param {(id: string) => ?{hints: number, revealed: boolean, stages: string[]}} [opts.helpFor] -
+ *   How much help a step was given (helpTaken() of js/answerFeedback.js),
+ *   passed in so this file does not pull the grader into the report's chunk
+ * @param {(doc: object) => void} [opts.evidence] - Prints the evidence ledger's
+ *   sections (js/notebook/report.js evidenceSections()) after the summary
  * @returns {Uint8Array} PDF bytes
  */
 export function buildLabReport({
@@ -93,27 +142,57 @@ export function buildLabReport({
   checkAnswer,
   assignment = null,
   binding = null,
+  submissionToken = '',
+  depth = null,
+  decodeEntities,
+  t,
+  locale = 'en',
+  meta = [],
+  evidence = null,
+  helpFor = () => null,
 }) {
-  const inv = investigation;
+  // At a depth, the steps are those a student reads there, numbered as they
+  // see them (DEPTH.md); `stepIdFor` still takes the index in the whole lesson.
+  const home = new Map(investigation.steps.map((s, i) => [s, i]));
+  const inv = depth
+    ? {
+        ...investigation,
+        steps: investigation.steps.filter(s => inDepth(s, depth)),
+      }
+    : investigation;
+  const stepsDone = t('rp.nOf', {
+    n: inv.steps.filter(s => visited.has(s.sid)).length,
+    total: inv.steps.length,
+  });
+  // For what the lesson says. What a student wrote goes through plain() as
+  // typed: the completion code is computed over it.
+  const lessonPlain = text => plain(decodeEntities(text));
   const doc = createDocument({
-    title: `${inv.title}: ${name}`,
-    footer: `Gravitas - ${plain(inv.title)}`,
+    title: `${lessonPlain(inv.title)}: ${name}`,
+    footer: `Gravitas - ${lessonPlain(inv.title)}`,
+    // The machine-readable copy. See the note beside /Keywords in js/pdf.js
+    // for why the instructor page prefers this to the printed block.
+    keywords: submissionToken || '',
+    tagged: true,
+    lang: locale === 'es' ? 'es-ES' : 'en-US',
   });
 
   // --- Header ----------------------------------------------------------------
   doc
-    .heading(inv.title, { size: 19, spaceBefore: 0 })
-    .paragraph(plain(inv.subtitle), {
+    .heading(lessonPlain(inv.title), { size: 19, spaceBefore: 0 })
+    .paragraph(lessonPlain(inv.subtitle), {
       size: 11,
       color: '0.35 0.35 0.42',
       gap: 4,
     })
     .rule({ gap: 8 })
-    .row('Submitted by', name)
-    .row('Investigation', inv.id)
-    .row('Started', dateText(startedAt))
-    .row('Report generated', dateText(new Date().toISOString()))
-    .row('Steps completed', `${visited.size} of ${inv.steps.length}`);
+    .row(t('rp.by'), name)
+    .row(t('rp.inv'), inv.id)
+    .row(t('rp.start'), dateText(startedAt, locale))
+    .row(t('rp.made'), dateText(new Date().toISOString(), locale))
+    .row(t('rp.steps'), stepsDone);
+  if (depth) doc.row(t('rp.depth'), t(`inv.depth.${depth}`));
+  for (const [label, value] of meta) doc.row(label, value);
 
   // --- Which activity this is ------------------------------------------------
   // An assignment is a subset of a lesson, so "12 of 12 steps" on its own is
@@ -125,15 +204,21 @@ export function buildLabReport({
   if (assignment) {
     doc
       .row(
-        'Assignment',
+        t('rp.asg'),
         `${plain(assignment.t || assignment.i)} (${assignment.i})`
       )
-      .row('Assignment version', `v${assignment.v}, issued ${assignment.c}`)
-      .row('Steps in this assignment', assignment.s.join(', '));
+      .row(
+        t('rp.asgV'),
+        t('rp.asgIssued', { v: assignment.v, date: assignment.c })
+      )
+      .row(t('rp.asgSteps'), assignment.s.join(', '));
     if (binding && (binding.changed || binding.missing)) {
       doc.row(
-        'Since this was set',
-        `${binding.changed} step(s) rewritten, ${binding.missing} no longer in the lesson`
+        t('rp.since'),
+        t('rp.sinceV', {
+          changed: binding.changed,
+          missing: binding.missing,
+        })
       );
     }
   }
@@ -141,22 +226,33 @@ export function buildLabReport({
 
   // --- Objectives ------------------------------------------------------------
   if (inv.objectives?.length) {
-    doc.heading('Learning objectives', { size: 12, spaceBefore: 8 });
+    doc.heading(t('rp.obj'), { size: 12, spaceBefore: 8 });
     for (const o of inv.objectives) {
-      doc.paragraph(`- ${plain(o)}`, { size: 10, indent: 8, gap: 3 });
+      doc.paragraph(`- ${lessonPlain(o)}`, { size: 10, indent: 8, gap: 3 });
     }
   }
 
   // --- Responses -------------------------------------------------------------
-  doc.heading('Responses', { size: 14 });
+  doc.heading(t('rp.resp'), { size: 14 });
+
+  // How much help a step was given: a fact beside the answer, never a mark.
+  const helpRow = id => {
+    const taken = helpFor(id);
+    if (taken?.stages.length)
+      doc.row(
+        t('rp.help'),
+        t('rp.helpV', { n: taken.hints }) +
+          (taken.revealed ? `; ${t('rp.helpWorked')}` : '')
+      );
+  };
 
   let autoTotal = 0;
   let autoRight = 0;
   const canonical = [`${inv.id}|${name}`];
 
   inv.steps.forEach((step, index) => {
-    const id = stepIdFor(index);
-    const reached = visited.has(index);
+    const id = stepIdFor(home.get(step));
+    const reached = visited.has(step.sid);
 
     // Reading steps ask for nothing, so listing them here leaves a heading with
     // no content under it. That they were worked through is already carried by
@@ -168,13 +264,16 @@ export function buildLabReport({
         String(responses[`${id}:${f.id}`] ?? '').trim()
       );
       if (!any && !reached) return;
-      doc.heading(`${index + 1}. ${plain(step.title)}`, {
+      doc.heading(`${index + 1}. ${lessonPlain(step.title)}`, {
         size: 11,
         spaceBefore: 12,
       });
       for (const f of step.fields) {
         const v = String(responses[`${id}:${f.id}`] ?? '').trim();
-        doc.row(plain(f.label) + (f.unit ? ` (${f.unit})` : ''), v || '-');
+        doc.row(
+          lessonPlain(f.label) + (f.unit ? ` (${f.unit})` : ''),
+          v || '-'
+        );
         canonical.push(`${id}:${f.id}=${v}`);
       }
       return;
@@ -185,15 +284,25 @@ export function buildLabReport({
         (_, i) => responses[`${id}:check:${i}`]
       ).length;
       if (!reached) return;
-      doc.heading(`${index + 1}. ${plain(step.title)}`, {
+      doc.heading(`${index + 1}. ${lessonPlain(step.title)}`, {
         size: 11,
         spaceBefore: 12,
       });
       doc.row(
-        'Exploration checklist',
-        `${done} of ${step.checklist.length} completed`
+        t('rp.check'),
+        t('rp.checkV', { done, total: step.checklist.length })
       );
       canonical.push(`${id}:explore=${done}`);
+      return;
+    }
+
+    // The same goes for every other step that asks for nothing - an explore
+    // step without a checklist, the ellipse, the wedges. What they keep is
+    // where a slider was left, which is not an answer.
+    if (
+      step.type !== 'predict' &&
+      !/^(choice|numeric|short)$/.test(step.kind)
+    ) {
       return;
     }
 
@@ -201,38 +310,57 @@ export function buildLabReport({
     const answered = value !== undefined && String(value).trim() !== '';
     if (!answered && !reached) return;
 
-    doc.heading(`${index + 1}. ${plain(step.title)}`, {
+    doc.heading(`${index + 1}. ${lessonPlain(step.title)}`, {
       size: 11,
       spaceBefore: 12,
     });
 
     if (step.type === 'predict') {
       const chosen =
-        typeof value === 'number' ? step.options[value] : '(no prediction)';
+        typeof value === 'number' ? step.options[value] : t('rp.noPred');
       // Predictions are reported, never marked. Their value is that the student
       // committed before seeing the answer.
-      doc.field(`Prediction: ${plain(step.prompt)}`, plain(chosen));
+      doc.field(
+        t('rp.pred', { prompt: lessonPlain(step.prompt) }),
+        lessonPlain(chosen)
+      );
+      // The outcome it was held against, where the lesson names one.
+      const out = step.reveal && inv.steps.find(x => x.sid === step.reveal);
+      if (out)
+        doc.row(
+          t('rp.outcome'),
+          `${t('rp.link', {
+            n: inv.steps.indexOf(out) + 1,
+            title: lessonPlain(out.title),
+          })} (${t(visited.has(out.sid) ? 'rp.reached' : 'rp.notReached')})`
+        );
       canonical.push(`${id}=${value}`);
       return;
     }
 
     if (step.kind === 'choice') {
       const chosen =
-        typeof value === 'number' ? step.options[value] : '(not answered)';
+        typeof value === 'number' ? step.options[value] : t('rp.noAns');
       const right = checkAnswer(step, value, id);
       if (right !== null && answered) {
         autoTotal++;
         if (right) autoRight++;
       }
-      doc.field(plain(step.prompt), plain(chosen));
+      doc.field(lessonPlain(step.prompt), lessonPlain(chosen));
+      // The verdict class, and how many tries it took. Never the key: a report
+      // is handed round, and the answer is the instructor's.
+      const tries = attempts[id] || 0;
       doc.row(
-        'Result',
-        !answered
-          ? 'not answered'
-          : right
-            ? 'correct'
-            : `incorrect (answer: ${plain(step.options[step.answer])})`
+        t('rp.result'),
+        (!answered
+          ? t('rp.none')
+          : right === null
+            ? '-'
+            : right
+              ? t('rp.right')
+              : t('rp.wrong')) + (tries > 1 ? t('rp.tries', { n: tries }) : '')
       );
+      helpRow(id);
       canonical.push(`${id}=${value}`);
       return;
     }
@@ -244,26 +372,30 @@ export function buildLabReport({
         if (right) autoRight++;
       }
       doc.field(
-        plain(step.prompt),
+        lessonPlain(step.prompt),
         answered ? `${value}${step.unit ? ` ${step.unit}` : ''}` : ''
       );
       const tries = attempts[id] || 0;
       doc.row(
-        'Result',
-        !answered
-          ? 'not answered'
-          : `${right ? 'correct' : 'incorrect'} - expected ${step.answer}${
-              step.tolerance ? ` +/- ${step.tolerance}` : ''
-            }${tries > 1 ? `, ${tries} attempts` : ''}`
+        t('rp.result'),
+        (!answered ? t('rp.none') : right ? t('rp.right') : t('rp.wrong')) +
+          (tries > 1 ? t('rp.tries', { n: tries }) : '')
       );
+      helpRow(id);
       canonical.push(`${id}=${value}`);
       return;
     }
 
     if (step.kind === 'short') {
-      doc.field(plain(step.prompt), plain(value));
-      if (step.rubric) {
-        doc.paragraph(`Marking note: ${plain(step.rubric)}`, {
+      // A reflection is printed as written and marked by no one.
+      doc.field(
+        step.reflect
+          ? `${t('rp.reflect')} ${lessonPlain(step.prompt)}`
+          : lessonPlain(step.prompt),
+        plain(value)
+      );
+      if (step.rubric && !step.reflect) {
+        doc.paragraph(t('rp.rubric', { note: lessonPlain(step.rubric) }), {
           size: 8.5,
           indent: 10,
           color: '0.45 0.45 0.52',
@@ -276,13 +408,8 @@ export function buildLabReport({
 
   // --- The student's own plot ------------------------------------------------
   if (plot?.points?.length) {
-    doc.heading('Your measurements, plotted', { size: 12 });
-    doc.paragraph(
-      'Each point is a value you measured. The dashed line is a least-squares ' +
-        'fit through the origin; a straight line through the origin is what a ' +
-        'power law looks like once the axes are chosen correctly.',
-      { size: 9, color: '0.35 0.35 0.42' }
-    );
+    doc.heading(t('rp.plot'), { size: 12 });
+    doc.paragraph(t('rp.plotNote'), { size: 9, color: '0.35 0.35 0.42' });
     doc.chart({
       points: plot.points,
       xLabel: plot.xLabel,
@@ -292,36 +419,63 @@ export function buildLabReport({
   }
 
   // --- Summary ---------------------------------------------------------------
-  doc.heading('Summary', { size: 14 });
-  doc.row('Steps completed', `${visited.size} of ${inv.steps.length}`);
+  doc.heading(t('rp.sum'), { size: 14 });
+  doc.row(t('rp.steps'), stepsDone);
   if (autoTotal) {
     doc.row(
-      'Automatically checked answers',
-      `${autoRight} of ${autoTotal} correct`
+      t('rp.auto'),
+      t('rp.autoV', { right: autoRight, total: autoTotal })
     );
   }
-  doc.row('Written answers', 'to be marked by the instructor');
+  doc.row(t('rp.written'), t('rp.writtenV'));
 
   const code = completionCode(canonical.join('\n'));
-  doc.row('Completion code', code);
+  doc.row(t('rp.code'), code);
   doc.space(4);
-  doc.paragraph(
-    'The completion code is a checksum of the answers above. It changes if the ' +
-      'report is edited, so it can be used to spot alterations, but it is ' +
-      'generated in the browser and is not proof of authorship.',
-    { size: 8.5, color: '0.45 0.45 0.52' }
-  );
+  doc.paragraph(t('rp.codeNote'), { size: 8.5, color: '0.45 0.45 0.52' });
+
+  if (evidence) evidence(doc);
+
+  // --- Submission token ------------------------------------------------------
+  //
+  // Last, and on its own page, because it is the one part of this document not
+  // written for a human. The completion code above says whether the answers
+  // were altered; this says what they were, so an instructor holding thirty
+  // reports can find the question the class got wrong instead of reading
+  // thirty PDFs.
+  //
+  // Printed as well as embedded in /Keywords because the two fail differently.
+  // The embedded copy needs the file; the printed copy survives a student who
+  // photographs the page or pastes it into a text box, which is what actually
+  // happens. Broken into short groups so a reader can see where they are, and
+  // the reader on the other end strips whitespace and nothing else - '-' and
+  // '_' are base64url alphabet, not punctuation.
+  if (submissionToken) {
+    doc.pageBreak();
+    doc.heading(t('rp.token'), { size: 14, spaceBefore: 0 });
+    doc.paragraph(t('rp.tokenNote'), {
+      size: 9.5,
+      color: '0.35 0.35 0.42',
+    });
+    doc.space(4);
+    for (const line of tokenLines(submissionToken)) {
+      // gap 1 so the lines stack as a block rather than as paragraphs, and a
+      // size chosen in tokenLines() so none of them re-wraps - a wrapped line
+      // would put a break where there is no space, and the reader strips only
+      // whitespace.
+      doc.paragraph(line, { size: 8.5, gap: 1 });
+    }
+  }
 
   // --- Links -----------------------------------------------------------------
   if (links.length) {
-    doc.heading('Reproduce this investigation', { size: 12 });
-    doc.paragraph(
-      'Each link below reopens the exact simulation used in that step, so the ' +
-        'measurements in this report can be checked independently.',
-      { size: 9.5, color: '0.35 0.35 0.42' }
-    );
+    doc.heading(t('rp.links'), { size: 12 });
+    doc.paragraph(t('rp.linksNote'), {
+      size: 9.5,
+      color: '0.35 0.35 0.42',
+    });
     for (const l of links) {
-      doc.link(`Step ${l.step}: ${plain(l.title)}`, l.url);
+      doc.link(t('rp.link', { n: l.step, title: lessonPlain(l.title) }), l.url);
     }
   }
 

@@ -1,0 +1,831 @@
+{
+  "format": "gravitas.catalog",
+  "formatVersion": 1,
+  "catalogVersion": "1.1.0",
+  "platform": "1.0.0",
+  "locales": [
+    "en",
+    "es"
+  ],
+  "lessons": {
+    "a-lens-passing-by": {
+      "en": "A Lens Passing By",
+      "es": "Una lente que pasa"
+    },
+    "a-universe-of-stars": {
+      "en": "A Universe of Stars",
+      "es": "Un universo de estrellas"
+    },
+    "a-variable-star-from-frames": {
+      "en": "A Variable Star From Frames",
+      "es": "Una estrella variable a partir de imágenes"
+    },
+    "bending-light": {
+      "en": "Bending Light",
+      "es": "La luz que se curva"
+    },
+    "binary-star-planets": {
+      "en": "Planets in Binary Stars",
+      "es": "Planetas en estrellas binarias"
+    },
+    "black-holes": {
+      "en": "Black Holes by the Numbers",
+      "es": "Agujeros negros en números"
+    },
+    "butterfly-effect": {
+      "en": "The Butterfly Effect in Space",
+      "es": "El efecto mariposa en el espacio"
+    },
+    "cluster-membership": {
+      "en": "Cluster Membership by Motion",
+      "es": "Pertenencia a un cúmulo por movimiento"
+    },
+    "color-and-temperature": {
+      "en": "Color and Temperature",
+      "es": "Color y temperatura"
+    },
+    "design-the-schedule": {
+      "en": "Design the Schedule",
+      "es": "Diseña el calendario"
+    },
+    "detect-this-planet": {
+      "en": "Can You Detect This Planet?",
+      "es": "¿Puedes detectar este planeta?"
+    },
+    "einstein-rings-and-arcs": {
+      "en": "Einstein Rings and Arcs",
+      "es": "Anillos y arcos de Einstein"
+    },
+    "extending-an-experiment": {
+      "en": "Extending an Experiment",
+      "es": "Ampliar un experimento"
+    },
+    "goldilocks-question": {
+      "en": "The Goldilocks Question",
+      "es": "La cuestión de Ricitos de Oro"
+    },
+    "gravity-assist": {
+      "en": "Where Does a Gravity Assist Get Its Speed?",
+      "es": "¿De dónde saca su velocidad una asistencia gravitatoria?"
+    },
+    "hohmann-transfer": {
+      "en": "Getting There From Here",
+      "es": "Llegar hasta allí desde aquí"
+    },
+    "inside-a-star": {
+      "en": "Inside a Star",
+      "es": "Dentro de una estrella"
+    },
+    "integrators-in-practice": {
+      "en": "Integrators in Practice",
+      "es": "Integradores en la práctica"
+    },
+    "keplers-laws": {
+      "en": "Kepler's Laws",
+      "es": "Las leyes de Kepler"
+    },
+    "lagrange-points": {
+      "en": "Where Can It Get To?",
+      "es": "¿Hasta dónde puede llegar?"
+    },
+    "leavitts-law": {
+      "en": "Leavitt’s Law",
+      "es": "La ley de Leavitt"
+    },
+    "lines-and-motion": {
+      "en": "Lines and Motion",
+      "es": "Líneas y movimiento"
+    },
+    "listening-to-spacetime": {
+      "en": "Listening to Spacetime",
+      "es": "Escuchar el espacio-tiempo"
+    },
+    "lives-of-stars": {
+      "en": "Lives of Stars",
+      "es": "Vidas de las estrellas"
+    },
+    "missing-mass": {
+      "en": "The Missing Mass",
+      "es": "La masa que falta"
+    },
+    "orbital-energy": {
+      "en": "Bound, Unbound and Escape",
+      "es": "Ligado, no ligado y escape"
+    },
+    "phases-and-eclipses": {
+      "en": "Phases and Eclipses",
+      "es": "Fases y eclipses"
+    },
+    "plan-a-night": {
+      "en": "Plan a Night at the Telescope",
+      "es": "Planifica una noche en el telescopio"
+    },
+    "power-law-gravity": {
+      "en": "What If Gravity Were Not Inverse Square?",
+      "es": "¿Y si la gravedad no fuera inversa al cuadrado?"
+    },
+    "radial-velocity": {
+      "en": "Finding Planets by Their Tug",
+      "es": "Encontrar planetas por su tirón"
+    },
+    "refitting-a-transit": {
+      "en": "Refitting a Transit",
+      "es": "Reajustar un tránsito"
+    },
+    "retrograde-motion": {
+      "en": "Why Mars Goes Backwards",
+      "es": "Por qué Marte va hacia atrás"
+    },
+    "sampling-a-posterior": {
+      "en": "Sampling a Posterior",
+      "es": "Muestrear una posterior"
+    },
+    "scaling-the-main-sequence": {
+      "en": "Scaling the Main Sequence",
+      "es": "Escalar la secuencia principal"
+    },
+    "signal-noise-and-exposure": {
+      "en": "Signal, Noise and Exposure",
+      "es": "Señal, ruido y exposición"
+    },
+    "standard-candles": {
+      "en": "Standard Candles",
+      "es": "Candelas estándar"
+    },
+    "the-beat-of-a-star": {
+      "en": "The Beat of a Star",
+      "es": "El latido de una estrella"
+    },
+    "the-completeness-curve": {
+      "en": "The Completeness Curve",
+      "es": "La curva de completitud"
+    },
+    "the-expanding-universe": {
+      "en": "The Expanding Universe",
+      "es": "El universo en expansión"
+    },
+    "the-first-rung": {
+      "en": "The First Rung",
+      "es": "El primer peldaño"
+    },
+    "the-limit": {
+      "en": "The Limit",
+      "es": "El límite"
+    },
+    "the-rotating-disk": {
+      "en": "The Rotating Disk",
+      "es": "El disco que gira"
+    },
+    "the-shape-of-expansion": {
+      "en": "The Shape of Expansion",
+      "es": "La forma de la expansión"
+    },
+    "the-sun-through-the-year": {
+      "en": "The Sun Through the Year",
+      "es": "El Sol a lo largo del año"
+    },
+    "the-suns-motion": {
+      "en": "The Sun’s Motion",
+      "es": "El movimiento del Sol"
+    },
+    "the-turning-sky": {
+      "en": "The Turning Sky",
+      "es": "El cielo que gira"
+    },
+    "tides": {
+      "en": "Tides",
+      "es": "Mareas"
+    },
+    "transit-photometry": {
+      "en": "Finding Planets by Their Shadows",
+      "es": "Encontrar planetas por sus sombras"
+    },
+    "twelve-nights": {
+      "en": "Twelve Nights",
+      "es": "Doce noches"
+    },
+    "two-periodograms": {
+      "en": "Two Periodograms",
+      "es": "Dos periodogramas"
+    },
+    "wanderers-on-the-sky": {
+      "en": "Wanderers on the Sky",
+      "es": "Errantes en el cielo"
+    },
+    "weighing-stars": {
+      "en": "Weighing the Stars",
+      "es": "Pesar las estrellas"
+    },
+    "what-a-ccd-records": {
+      "en": "What a CCD Records",
+      "es": "Qué registra un CCD"
+    },
+    "what-a-spectrum-is-made-of": {
+      "en": "What a Spectrum Is Made Of",
+      "es": "De qué está hecho un espectro"
+    },
+    "what-is-a-gravitational-wave": {
+      "en": "What Is a Gravitational Wave?",
+      "es": "¿Qué es una onda gravitacional?"
+    },
+    "when-orbits-lock": {
+      "en": "When Orbits Lock",
+      "es": "Cuando las órbitas se enganchan"
+    },
+    "where-galaxies-live": {
+      "en": "Where Galaxies Live",
+      "es": "Dónde viven las galaxias"
+    },
+    "which-kind-of-variable": {
+      "en": "Which Kind of Variable",
+      "es": "Qué tipo de variable"
+    },
+    "who-gets-counted": {
+      "en": "Who Gets Counted",
+      "es": "Quién entra en la cuenta"
+    },
+    "why-the-bright-ones-win": {
+      "en": "Why the Bright Ones Win",
+      "es": "Por qué ganan las brillantes"
+    }
+  },
+  "entries": [
+    {
+      "id": "community.kepler-13-tess-s14-pdcsap",
+      "version": "1.0.0",
+      "kind": "declarative",
+      "type": "data-pack",
+      "delivery": "archive",
+      "title": {
+        "en": "Kepler-13A and its hot Jupiter, observed by TESS: the light as corrected (PDCSAP)",
+        "es": "Kepler-13A y su júpiter caliente, observados por TESS: la luz tal como se corrigió (PDCSAP)"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "dataPacks": [
+          {
+            "id": "kepler-13-tess-s14-pdcsap",
+            "provenance": "pack.json",
+            "file": "series.json"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "*.json",
+          "license": "public domain (NASA mission data); acknowledge TESS and MAST"
+        }
+      ],
+      "citations": [
+        {
+          "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+          "url": "https://doi.org/10.17909/t9-nmc8-f686"
+        },
+        {
+          "text": "Esteves et al. 2015, ApJ 804, 150 (the period and radius ratio the packs are checked against)",
+          "url": "https://ui.adsabs.harvard.edu/abs/2015ApJ...804..150E"
+        },
+        {
+          "text": "Shporer et al. 2014, ApJ 788, 92 (the planet orbits Kepler-13A)",
+          "url": "https://ui.adsabs.harvard.edu/abs/2014ApJ...788...92S"
+        }
+      ],
+      "object": "Kepler-13",
+      "facility": "TESS",
+      "offline": "precache",
+      "archiveFile": "packages/community.kepler-13-tess-s14-pdcsap-1.0.0.gxp",
+      "bytes": 8690,
+      "sha256": "2f534b5f7dbf316647989fe325319aa83ac80ed1f0ef0170b521d23deeab2de7",
+      "files": [
+        {
+          "path": "gravitas-extension.json",
+          "bytes": 1582,
+          "sha256": "5936d3a1127db91532606090d648a1ce697761e7470a918bf9202d303f7d1be0"
+        },
+        {
+          "path": "README.md",
+          "bytes": 1853,
+          "sha256": "deb243e9a62871e5e8ccc7c4aa5e29b43655f402834c3489e4ea720e732a8902"
+        },
+        {
+          "path": "pack.json",
+          "bytes": 5780,
+          "sha256": "156b8613ab31b42815c5fa463705f41b7e6484ff8afd38c83567c77b9807b27c"
+        },
+        {
+          "path": "series.json",
+          "bytes": 10058,
+          "sha256": "7c04cc49d813ef7ac9dfa2cad6fe3da1de48e14e756d2c9a11c6404dd9a8b258"
+        }
+      ],
+      "unpackedBytes": 19273,
+      "review": {
+        "date": "2026-09-26",
+        "checks": [
+          "sdk validate",
+          "sdk test",
+          "catalog check",
+          "rebuilt from the pinned MAST file"
+        ],
+        "notes": "PDCSAP depth 0.00812 folded on Esteves et al. 2015's period, against their (Rp/R*)^2 0.00763 within 0.0015; CROWDSAP 0.549 and FLFRCSAP 0.921 recorded; the pack says the correction assumes the planet orbits A.",
+        "mechanical": [
+          "validate",
+          "tests",
+          "licenses",
+          "provenance",
+          "locales",
+          "content"
+        ]
+      },
+      "source": "extensions/kepler-13-tess-s14-pdcsap",
+      "history": []
+    },
+    {
+      "id": "community.kepler-13-tess-s14-sap",
+      "version": "1.0.0",
+      "kind": "declarative",
+      "type": "data-pack",
+      "delivery": "archive",
+      "title": {
+        "en": "Kepler-13A and its hot Jupiter, observed by TESS: the light as collected (SAP)",
+        "es": "Kepler-13A y su júpiter caliente, observados por TESS: la luz tal como se recogió (SAP)"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "dataPacks": [
+          {
+            "id": "kepler-13-tess-s14-sap",
+            "provenance": "pack.json",
+            "file": "series.json"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "*.json",
+          "license": "public domain (NASA mission data); acknowledge TESS and MAST"
+        }
+      ],
+      "citations": [
+        {
+          "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+          "url": "https://doi.org/10.17909/t9-nmc8-f686"
+        },
+        {
+          "text": "Esteves et al. 2015, ApJ 804, 150 (the period and radius ratio the packs are checked against)",
+          "url": "https://ui.adsabs.harvard.edu/abs/2015ApJ...804..150E"
+        },
+        {
+          "text": "Shporer et al. 2014, ApJ 788, 92 (the planet orbits Kepler-13A)",
+          "url": "https://ui.adsabs.harvard.edu/abs/2014ApJ...788...92S"
+        }
+      ],
+      "object": "Kepler-13",
+      "facility": "TESS",
+      "offline": "precache",
+      "archiveFile": "packages/community.kepler-13-tess-s14-sap-1.0.0.gxp",
+      "bytes": 8531,
+      "sha256": "ee16c3f2c08e154a9826f7f46177c6ea20f04cca61bace758ea9af72e62e6a94",
+      "files": [
+        {
+          "path": "gravitas-extension.json",
+          "bytes": 1569,
+          "sha256": "f1ff27f433fe1d48a5805c563b4d84af707f9e567db7895db05237fece374c5c"
+        },
+        {
+          "path": "README.md",
+          "bytes": 1841,
+          "sha256": "0d8f45ecc3dbbc37ed1869a78228ed79d94a3a8d520db44cc9c34982ca84810e"
+        },
+        {
+          "path": "pack.json",
+          "bytes": 5744,
+          "sha256": "526679f55a72071680bacfb12f19a93bfcad26f76366a7fabab2483e7023135e"
+        },
+        {
+          "path": "series.json",
+          "bytes": 10075,
+          "sha256": "56bf5f7880d66b6b2c4403a9e3bbd1da8dcc0a0ad465bbfacb44193cec9e785d"
+        }
+      ],
+      "unpackedBytes": 19229,
+      "review": {
+        "date": "2026-09-26",
+        "checks": [
+          "sdk validate",
+          "sdk test",
+          "catalog check",
+          "rebuilt from the pinned MAST file"
+        ],
+        "notes": "SAP depth 0.00475, the corrected depth times CROWDSAP (0.00446) within 0.001; the same pinned MAST file as the corrected pack; the pack says which star is the host is not in these data.",
+        "mechanical": [
+          "validate",
+          "tests",
+          "licenses",
+          "provenance",
+          "locales",
+          "content"
+        ]
+      },
+      "source": "extensions/kepler-13-tess-s14-sap",
+      "history": []
+    },
+    {
+      "id": "community.pulsating-stars",
+      "version": "1.0.0",
+      "kind": "declarative",
+      "type": "course-pack",
+      "delivery": "archive",
+      "title": {
+        "en": "Pulsating stars: a course",
+        "es": "Estrellas pulsantes: un curso"
+      },
+      "summary": {
+        "en": "Three lessons on reading a star's light, and a real light curve to finish: SU Draconis, an RR Lyrae star that nearly doubles in brightness and fades again every sixteen hours.",
+        "es": "Tres lecciones sobre cómo leer la luz de una estrella y, para terminar, una curva de luz real: SU Draconis, una estrella RR Lyrae que casi duplica su brillo y vuelve a apagarse cada dieciséis horas."
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "courses": [
+          {
+            "id": "pulsating-stars",
+            "file": "course.json"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "course.json",
+          "license": "CC-BY-4.0"
+        }
+      ],
+      "citations": [],
+      "offline": "precache",
+      "archiveFile": "packages/community.pulsating-stars-1.0.0.gxp",
+      "bytes": 2193,
+      "sha256": "1cc0aa2a15343014cf15132ccb2630f6e6979a545204ad340de13c4acf241b71",
+      "files": [
+        {
+          "path": "gravitas-extension.json",
+          "bytes": 760,
+          "sha256": "abd188a4cad93ed6f42d2d1feede681eac72065798dd11f573ce3eca7b3196f4"
+        },
+        {
+          "path": "README.md",
+          "bytes": 594,
+          "sha256": "35b140e48428eaf09fc6d4677ee46354876c27d0e1c11d48ed118ecaa7341fae"
+        },
+        {
+          "path": "course.json",
+          "bytes": 3306,
+          "sha256": "d4a0d15b292258eb389aa97439b86149d77f24a49e3dcd71d09228ec100a0a69"
+        }
+      ],
+      "unpackedBytes": 4660,
+      "review": {
+        "date": "2026-09-25",
+        "checks": [
+          "sdk validate",
+          "sdk test",
+          "catalog check"
+        ],
+        "notes": "Three existing lessons in both languages; every lesson id resolves and every note is translated.",
+        "mechanical": [
+          "validate",
+          "tests",
+          "licenses",
+          "provenance",
+          "locales",
+          "content"
+        ]
+      },
+      "source": "extensions/pulsating-stars",
+      "history": []
+    },
+    {
+      "id": "community.su-dra-tess-s15",
+      "version": "1.0.0",
+      "kind": "declarative",
+      "type": "data-pack",
+      "delivery": "archive",
+      "title": {
+        "en": "SU Draconis, an RR Lyrae star, observed by TESS",
+        "es": "SU Draconis, una estrella RR Lyrae, observada por TESS"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "dataPacks": [
+          {
+            "id": "su-dra-tess-s15",
+            "provenance": "pack.json",
+            "file": "series.json"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "*.json",
+          "license": "public domain (NASA mission data); acknowledge TESS and MAST"
+        }
+      ],
+      "citations": [
+        {
+          "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+          "url": "https://doi.org/10.17909/t9-nmc8-f686"
+        },
+        {
+          "text": "Monson et al. 2017, AJ 153, 96 (the period the pack is checked against)",
+          "url": "https://arxiv.org/abs/1703.01520"
+        }
+      ],
+      "object": "SU Dra",
+      "facility": "TESS",
+      "offline": "precache",
+      "archiveFile": "packages/community.su-dra-tess-s15-1.0.0.gxp",
+      "bytes": 12738,
+      "sha256": "17902100ca862811778233cd4c27212590b1ed8a6e2e8acef269563109b38988",
+      "files": [
+        {
+          "path": "gravitas-extension.json",
+          "bytes": 1283,
+          "sha256": "d9c9e43d43b006179b68e77b3806b85e51eaff84fb39709b8a925694d292e1fb"
+        },
+        {
+          "path": "README.md",
+          "bytes": 969,
+          "sha256": "e8480e2f1a03e9070e27293ba714036114f83191deeb11b33fd60f5c26b2d20b"
+        },
+        {
+          "path": "pack.json",
+          "bytes": 4915,
+          "sha256": "61124a808c342b40c1f8ae540c28605fdba55508626a3a256f7c2dca0bfadff4"
+        },
+        {
+          "path": "series.json",
+          "bytes": 17367,
+          "sha256": "50c85b136cb0cccc9b559707227f51b76f70dc6465c4012a29858332ad580302"
+        }
+      ],
+      "unpackedBytes": 24534,
+      "review": {
+        "date": "2026-09-25",
+        "checks": [
+          "sdk validate",
+          "sdk test",
+          "catalog check",
+          "rebuilt from the pinned MAST file"
+        ],
+        "notes": "Period within 1.2e-5 d of Monson et al. 2017; CROWDSAP 0.985; the pack records why RR Lyrae itself was not used.",
+        "mechanical": [
+          "validate",
+          "tests",
+          "licenses",
+          "provenance",
+          "locales",
+          "content"
+        ]
+      },
+      "source": "extensions/su-dra-tess-s15",
+      "history": []
+    },
+    {
+      "id": "gravitas.lab3d",
+      "version": "1.3.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "The 3-D small-N dynamics kernel",
+        "es": "El núcleo de dinámica de pocos cuerpos en 3-D"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "routes": [
+          {
+            "path": "/lab3d/"
+          },
+          {
+            "path": "/3d/"
+          }
+        ],
+        "models": [
+          {
+            "id": "lab3d-small-n"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/lab3d/**",
+          "license": "MIT"
+        }
+      ],
+      "citations": [],
+      "offline": "on-demand",
+      "bytes": 874973
+    },
+    {
+      "id": "gravitas.lesson.power-law-gravity",
+      "version": "1.0.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "What If Gravity Were Not Inverse Square?",
+        "es": "¿Y si la gravedad no fuera inversa del cuadrado?"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "routes": [
+          {
+            "path": "#investigation=power-law-gravity"
+          }
+        ],
+        "investigations": [
+          {
+            "id": "power-law-gravity",
+            "entry": "builtin:investigation/power-law-gravity"
+          }
+        ],
+        "translations": [
+          {
+            "locale": "es",
+            "investigation": "power-law-gravity",
+            "entry": "builtin:investigation/es/power-law-gravity"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/data/investigations/**",
+          "license": "CC-BY-4.0"
+        }
+      ],
+      "citations": [],
+      "offline": "precache",
+      "bytes": 62975
+    },
+    {
+      "id": "gravitas.mission",
+      "version": "1.2.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "The mission-design core and the mission lab",
+        "es": "El núcleo de diseño de misiones y el laboratorio de misiones"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "routes": [
+          {
+            "path": "/mission/"
+          },
+          {
+            "path": "/mission/lab/"
+          }
+        ],
+        "models": [
+          {
+            "id": "mission-two-body"
+          },
+          {
+            "id": "mission-lab-ephemeris"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/mission/**",
+          "license": "MIT"
+        },
+        {
+          "scope": "js/data/ephemeris/**",
+          "license": "no license stated; credit JPL and cite DE441, see NOTICE"
+        }
+      ],
+      "citations": [
+        {
+          "text": "JPL Horizons, ephemeris DE441 (Park et al. 2021, AJ 161, 105)",
+          "url": "https://doi.org/10.3847/1538-3881/abd414"
+        }
+      ],
+      "offline": "on-demand",
+      "bytes": 505516
+    },
+    {
+      "id": "gravitas.power-law-instruments",
+      "version": "1.0.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "Power-law gravity instruments",
+        "es": "Instrumentos de gravedad en ley de potencias"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "models": [
+          {
+            "id": "power-law-gravity-model"
+          }
+        ],
+        "widgetFamilies": [
+          {
+            "id": "power-law",
+            "entry": "builtin:widgets/power-law",
+            "pick": "POWER_LAW_WIDGETS",
+            "widgets": [
+              "power-law-precession",
+              "power-law-refinement",
+              "power-law-kepler",
+              "power-law-conservation"
+            ]
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/powerLaw*.js",
+          "license": "MIT"
+        }
+      ],
+      "citations": [],
+      "offline": "precache",
+      "bytes": 54509
+    },
+    {
+      "id": "gravitas.sdss-dr18-spectra",
+      "version": "1.1.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "Four observed stellar spectra (SDSS DR18)",
+        "es": "Cuatro espectros estelares observados (SDSS DR18)"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "dataPacks": [
+          {
+            "id": "sdss-dr18-stellar-spectra",
+            "entry": "builtin:data/sdss-spectra",
+            "provenance": "data-packs/sdss-dr18-stellar-spectra.json"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/data/spectra/**",
+          "license": "public domain; acknowledge SDSS, see NOTICE"
+        }
+      ],
+      "citations": [
+        {
+          "text": "SDSS DR18 (Almeida et al. 2023, ApJS 267, 44)",
+          "url": "https://doi.org/10.3847/1538-4365/acda98"
+        }
+      ],
+      "offline": "precache",
+      "bytes": 21730
+    },
+    {
+      "id": "gravitas.tess-hd209458-s56",
+      "version": "1.1.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "HD 209458 observed by TESS (sector 56 light curve and aperture mask)",
+        "es": "HD 209458 observada por TESS (curva de luz y máscara de apertura del sector 56)"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "dataPacks": [
+          {
+            "id": "tess-hd209458-s56-lc",
+            "entry": "builtin:data/tess-hd209458-s56",
+            "provenance": "data-packs/tess-hd209458-s56-lc.json"
+          },
+          {
+            "id": "tess-hd209458-s56-aperture",
+            "entry": "builtin:data/tess-hd209458-s56-aperture",
+            "provenance": "data-packs/tess-hd209458-s56-aperture.json"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/data/observations/**",
+          "license": "public domain (NASA mission data); acknowledge TESS and MAST, see NOTICE"
+        }
+      ],
+      "citations": [
+        {
+          "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+          "url": "https://doi.org/10.17909/t9-nmc8-f686"
+        },
+        {
+          "text": "TESS Science Data Products Description Document, NASA/TM-2018-220036 (aperture mask bits)",
+          "url": "https://ntrs.nasa.gov/citations/20180007935"
+        }
+      ],
+      "offline": "precache",
+      "bytes": 15782
+    }
+  ]
+}

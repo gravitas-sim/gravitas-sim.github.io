@@ -25,9 +25,6 @@ export { TEFF_SUN_K };
 /** One solar radius, in meters. IAU 2015 nominal. */
 export const R_SUN_M = 6.957e8;
 
-/** One solar luminosity, in watts. IAU 2015 nominal. */
-export const L_SUN_W = 3.828e26;
-
 /**
  * Photospheric radius from luminosity and effective temperature.
  *

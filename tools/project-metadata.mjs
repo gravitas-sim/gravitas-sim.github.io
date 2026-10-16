@@ -60,6 +60,15 @@ export const PAPER = {
 };
 
 /**
+ * The copyright notice: the year the work was first published and its holder,
+ * as LICENSE, LICENSE-CC-BY-4.0.md and LICENSES.md state it. The
+ * application's footer is generated from this (tools/docs-facts.mjs,
+ * copyrightYear) rather than typed, and tests/copyrightNotice.test.js holds the
+ * licence files to it.
+ */
+export const COPYRIGHT = { year: 2025, holder: 'Carl Ziegler' };
+
+/**
  * Release identity.
  *
  * Every field is null until there is something real to point at. The generators
@@ -68,21 +77,23 @@ export const PAPER = {
  */
 export const RELEASE = {
   // Set by RELEASING.md when a tag is cut. `null` means unreleased.
-  version: '1.0.0',
+  version: '2.0.0',
   // ISO date of the GitHub release, not the day the file was edited. If the
   // tag slips past this date, change this and regenerate before tagging: a
   // citation that names the wrong day is a citation nobody can check against
   // the archive.
-  dateReleased: '2026-09-16',
+  dateReleased: '2026-10-16',
   // Minted by Zenodo when the release is archived, and copied from the record
-  // rather than composed by hand. It could not be inside the v1.0.0 tag: with
-  // the GitHub-Zenodo workflow the identifier does not exist until the release
-  // is published, so this was recorded afterwards and the archived v1.0.0 does
-  // not contain it. That is expected - see RELEASING.md.
+  // rather than composed by hand. It cannot be inside the tag: with the
+  // GitHub-Zenodo workflow the identifier does not exist until the release is
+  // published, so it is recorded afterwards and the archive does not contain
+  // it. That is expected - see RELEASING.md.
   //
-  // This one names the 1.0.0 release specifically. Cite it when the exact
-  // version matters, which for a reproducible result it always does.
-  doi: '10.5281/zenodo.22800610',
+  // `null` until Zenodo has minted the 2.0.0 version DOI. The 1.0.0 version DOI
+  // (10.5281/zenodo.22800610) is not this release's and stays out of every file
+  // generated from this constant; RELEASING.md and OWNER_ACTIONS.md record it
+  // as what 1.0.0 produced.
+  doi: null,
   // The concept DOI, which is stable across versions: it resolves to whichever
   // release is newest. Right for a badge or a "cite the software" link, wrong
   // for citing the version somebody actually ran.
@@ -165,9 +176,10 @@ export const LICENSE_NOTE =
   'their own licenses and attribution: three.js and Chart.js (MIT), the Inter, ' +
   'Poppins and Roboto Mono families (SIL OFL 1.1), the Transit of Venus ' +
   'photograph (CC BY 2.5, Brocken Inaglory), gravitational-wave strain from ' +
-  'the Gravitational Wave Open Science Center (CC BY 4.0), and derived MIST ' +
-  'stellar tracks (cited, not relicensed). LICENSES.md in the repository says ' +
-  'which files each one covers.';
+  'the Gravitational Wave Open Science Center (CC BY 4.0), derived MIST ' +
+  'stellar tracks (cited, not relicensed), and four observed stellar spectra ' +
+  'from the Sloan Digital Sky Survey (public domain, acknowledged as SDSS ' +
+  'requests). LICENSES.md in the repository says which files each one covers.';
 
 export const KEYWORDS = [
   'astronomy education',
@@ -183,8 +195,10 @@ export const KEYWORDS = [
 /**
  * The abstract, as paragraphs, with the counts left as placeholders.
  *
- * `{scenarios}` and `{investigations}` are filled from the live catalog by
- * the generator. Written as digits in the output so that a reader - and the
+ * `{scenarios}`, `{libraryInvestigations}` (every guided investigation the
+ * Library lists), `{investigations}` (the ones that run in the simulation) and
+ * `{guidedInvestigations}` (the rest, in the Observatory and the labs) are
+ * filled from the live catalog by the generator. Written as digits in the output so that a reader - and the
  * checker - can see the number.
  *
  * @param {object} facts - From tools/docs-facts.mjs
@@ -206,7 +220,10 @@ export function abstractParagraphs(facts) {
     'Gravitas is a browser-based N-body gravity sandbox and astronomy ' +
       `teaching tool. It ships ${facts.scenarios} configurable scenarios ` +
       'drawn from real and idealized systems, ' +
-      `${facts.investigations} guided investigations in which undergraduate ` +
+      `${facts.libraryInvestigations} guided investigations ` +
+      `(${facts.investigations} that run in the simulation and ` +
+      `${facts.guidedInvestigations} in the Observatory, the 3-D lab and the ` +
+      'mission lab) in which undergraduate ' +
       'students predict, measure and plot their own data, instructor ' +
       'materials with answer keys, and a public account of what the ' +
       'underlying model does and does not represent.',
@@ -214,7 +231,8 @@ export function abstractParagraphs(facts) {
       'activities — shorter formats built from the same lesson steps, from a ' +
       'five-minute demonstration to a full lab — and ' +
       `${facts.instructorDocuments} generated instructor documents: a guide ` +
-      'and an answer key for every investigation, activity guides and student ' +
+      'and an answer key for every investigation that runs in the simulation, ' +
+      'activity guides and student ' +
       'worksheets, an adopter\u2019s guide and a curriculum map. Answer keys ' +
       'are derived from the lesson definitions and verified against the same ' +
       'function that marks student work, so they cannot disagree with what a ' +
@@ -223,7 +241,7 @@ export function abstractParagraphs(facts) {
       'installation, and encodes any simulation state into a shareable URL. ' +
       'It works offline after a first visit, targets WCAG 2.2 Level AA with ' +
       `axe-core run over ${facts.axeSurfaces} surfaces in ` +
-      `${facts.locales} languages and ${facts.axeThemes} themes on every ` +
+      `${facts.locales} languages and up to ${facts.axeAllThemes} themes on every ` +
       'build, and is published in English and Spanish.',
     `The physics is checked in public: ${facts.physicsChecks} ` +
       'checks of the engine against analytic results, published values and ' +

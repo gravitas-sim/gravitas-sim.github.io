@@ -25,7 +25,16 @@ import {
   fileProblemsWith,
 } from '../tools/build-teaching-demos.mjs';
 import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  mkdtempSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -227,27 +236,67 @@ describe('the file is still checked as a file', () => {
     expect(typeof formatChecked).toBe('boolean');
   });
 
+  /**
+   * A throwaway tree the command can run in: real copies of it and of js/.
+   *
+   * The command finds its inputs and its output from its own location, so it
+   * is copied along with them. node_modules is linked rather than copied, for
+   * Prettier; the Prettier settings are copied so the verdict is this
+   * repository's.
+   */
+  function copyOfCommand() {
+    // realpath because macOS hands out /var/..., a symlink to /private/var/...,
+    // and the command's run-directly guard compares its argv with its
+    // import.meta.url - a mismatch exits 0 having checked nothing.
+    const dir = realpathSync(
+      mkdtempSync(path.join(tmpdir(), 'gravitas-teaching-check-'))
+    );
+    for (const rel of [
+      'package.json',
+      '.prettierrc.json',
+      'js',
+      'tools/build-teaching-demos.mjs',
+    ]) {
+      cpSync(path.join(REPO, rel), path.join(dir, rel), { recursive: true });
+    }
+    symlinkSync(
+      path.join(REPO, 'node_modules'),
+      path.join(dir, 'node_modules')
+    );
+    return dir;
+  }
+
   test('the real command does check formatting, and rejects a mangled file', () => {
-    const original = readFileSync(GENERATED, 'utf8');
+    // Mangled in a copy. It used to be the real teachingGenerated.js, restored
+    // afterwards, and Jest runs suites in parallel: while the command ran,
+    // every other worker reading js/ saw the mangled file, and
+    // buildIntegrity's two service-worker manifests could hash two different
+    // trees.
+    const dir = copyOfCommand();
     try {
+      const file = path.join(dir, 'js/data/teachingGenerated.js');
+      const original = readFileSync(file, 'utf8');
       // Valid JavaScript, identical meaning, formatting Prettier would redo.
-      writeFileSync(GENERATED, original.replace(/\n\n/, '\n\n\n\n'));
+      writeFileSync(file, original.replace(/\n\n/, '\n\n\n\n'));
       let failed = false;
       let output = '';
       try {
         execFileSync(
           process.execPath,
           ['tools/build-teaching-demos.mjs', '--check'],
-          { cwd: REPO, encoding: 'utf8', stdio: 'pipe' }
+          { cwd: dir, encoding: 'utf8', stdio: 'pipe' }
         );
       } catch (err) {
         failed = true;
         output = `${err.stdout || ''}${err.stderr || ''}`;
       }
       expect(failed).toBe(true);
-      expect(output).toMatch(/Prettier/);
+      // The formatting finding by name. A copy the command cannot run in also
+      // fails, and "Cannot find package 'prettier'" is one letter's case away
+      // from matching a bare /Prettier/.
+      expect(output).toMatch(/not formatted the way Prettier would write it/);
     } finally {
-      writeFileSync(GENERATED, original);
+      rmSync(dir, { recursive: true, force: true });
     }
   });
 });

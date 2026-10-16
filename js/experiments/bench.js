@@ -38,6 +38,13 @@
 // the application is for, and on a scenario that already runs at 22ms a frame
 // that is a worse experiment, not a better one.
 //
+// That question has since been asked properly and answered: see
+// MULTI_WORLD_DECISION.md. The short version is that the refactor described
+// above was rejected and this reasoning stands. A Worker realm gets its own
+// module instance for free, which is the isolation the refactor was for, so
+// the only thing two main-thread engines would still add is the simultaneity
+// the paragraph above argues against.
+//
 // Sequential paired runs cost the student the wall-clock time of two runs and
 // nothing else. Because the restore is exact and the comparison is on
 // simulated time, the result is identical to what two engines would have
@@ -79,7 +86,6 @@ import {
 } from './canonicalState.js';
 import {
   METRICS,
-  METRIC_ARITY,
   METRIC_UNITS,
   SCALAR_METRICS,
   sampleFrame,
@@ -223,6 +229,41 @@ export function selectableBodies() {
 /** @param {number} id - Object id @returns {Object|null} The body, if it exists */
 function bodyById(id) {
   return selectableBodies().find(b => b.id === id) || null;
+}
+
+/**
+ * The conserved totals and their drift for one sample, measured once, now.
+ *
+ * conservationDrift() on its own reads the totals from a cache the engine
+ * refreshes at most every 100 ms, which suits a readout repainted sixty times
+ * a second and does not suit a recorded series. At 60 fps the drift column
+ * was a staircase, one value for about six samples and then a jump, beside a
+ * total_energy measured every sample: most rows carried an energy and a drift
+ * of two different instants, and a run's final drift could be several frames
+ * older than the sample it was read from.
+ *
+ * Asked for fresh, the drift measures the totals itself and returns them as
+ * its `energy` and `angular`, so they are handed on as the sample's totals
+ * too. That is one O(N^2) sum per sample, which the bench was already paying
+ * for the totals, rather than a second one for the drift - and none at all
+ * when no conserved metric was asked for.
+ *
+ * @param {Array<string>} metrics - The metric ids being sampled
+ * @returns {{conserved: ?Object, drift: ?Object}} For sampleFrame
+ */
+function conservedSample(metrics) {
+  const wantsDrift =
+    metrics.includes(METRICS.ENERGY_DRIFT) ||
+    metrics.includes(METRICS.ANGULAR_DRIFT);
+  const wantsTotals =
+    metrics.includes(METRICS.TOTAL_ENERGY) ||
+    metrics.includes(METRICS.ANGULAR_MOMENTUM);
+  if (wantsDrift) {
+    // Null only before a baseline exists, when the totals can still be read.
+    const drift = conservationDrift(true);
+    if (drift) return { conserved: drift, drift };
+  }
+  return { conserved: wantsTotals ? conservedQuantities() : null, drift: null };
 }
 
 /**
@@ -403,11 +444,6 @@ export const currentScenarioName = () => host.getScenario?.() || '';
 /** @returns {Object|null} The experiment being worked on */
 export const activeExperiment = () => current;
 
-/** @param {Object|null} exp - Replace the working experiment */
-export function setActiveExperiment(exp) {
-  current = exp;
-}
-
 // =============================================================================
 // The numerical reliability check
 // -----------------------------------------------------------------------------
@@ -514,8 +550,7 @@ async function runReliabilityPhase(cfg) {
         t: getSimulationTime(),
         bodies,
         primary,
-        conserved: conservedQuantities(),
-        drift: conservationDrift(),
+        ...conservedSample(current.metrics),
         secondsPerUnit: timeUnitSeconds(),
         metrics: current.metrics,
       })
@@ -551,7 +586,10 @@ async function runReliabilityPhase(cfg) {
   host.setFixedStep?.(0);
   if (state) state.paused = true;
 
-  const drift = conservationDrift();
+  // Fresh, like the samples: conservationTrend() compares this drift across
+  // the two phases, and from the cache each phase's could be up to 100 ms of
+  // frames older than the instant the phase ended.
+  const drift = conservationDrift(true);
   const secondsPerDay = 86400 / timeUnitSeconds();
   return {
     step: cfg.step,
@@ -711,6 +749,15 @@ export function buildReliabilityReport(input) {
   const tolerance = input.tolerance ?? DEFAULT_TOLERANCE;
   const ids = current?.metrics || [];
 
+  // The two drifts are reported here and judged nowhere. Halving the step is
+  // meant to move a drift - a second-order scheme quarters it - so "moved" is
+  // the check working rather than a conclusion failing, and
+  // conservationTrend() already says whether it fell. They were once judged,
+  // as conclusions and as the path below, and always agreed, because until
+  // sampleFrame read the right fields both runs recorded their totals.
+  const isDrift = id =>
+    id === METRICS.ENERGY_DRIFT || id === METRICS.ANGULAR_DRIFT;
+
   // Every tracked quantity, judged separately. A single verdict for a run is
   // not what a reader needs: some conclusions survive refinement and others do
   // not, and which is which is the useful output.
@@ -724,7 +771,7 @@ export function buildReliabilityReport(input) {
       coarse: a,
       fine: b,
       change,
-      agrees: change === null ? null : change <= tolerance,
+      agrees: change === null || isDrift(id) ? null : change <= tolerance,
       kind: coarse.results?.[id]?.kind ?? null,
     };
   });
@@ -732,7 +779,7 @@ export function buildReliabilityReport(input) {
   // A path to compare early against late, which is what separates a chaotic
   // pair from a badly resolved one. The first tracked quantity that varies
   // sample by sample; the reductions above cannot show when two runs parted.
-  const pathId = ids.find(id => !SCALAR_METRICS.has(id));
+  const pathId = ids.find(id => !SCALAR_METRICS.has(id) && !isDrift(id));
   let aligned = null;
   if (pathId) {
     const sa = series(coarse.samples, pathId);
@@ -940,8 +987,7 @@ async function runSweepTrial(cfg) {
         t: getSimulationTime(),
         bodies: found.bodies,
         primary: found.primary,
-        conserved: conservedQuantities(),
-        drift: conservationDrift(),
+        ...conservedSample(spec.metrics),
         secondsPerUnit: timeUnitSeconds(),
         metrics: spec.metrics,
       })
@@ -1119,7 +1165,7 @@ export async function runSweep(spec, opts = {}) {
     return { ok: false, reason: check.reason, detail: check.detail };
   }
 
-  const entry = SWEEP.SWEEPABLE[spec.scenario];
+  const entry = SWEEP.sweepLab(spec.scenario);
   const values = SWEEP.planValues(spec);
   const seed = spec.seed || 'sweep';
   const abort = { canceled: false };
@@ -1310,20 +1356,12 @@ function takeSample() {
 
   const bodies = (current.objects || []).map(bodyById).filter(Boolean);
   const primary = current.primary !== null ? bodyById(current.primary) : null;
-  const needsConserved = current.metrics.some(
-    m =>
-      m === METRICS.TOTAL_ENERGY ||
-      m === METRICS.ANGULAR_MOMENTUM ||
-      m === METRICS.ENERGY_DRIFT ||
-      m === METRICS.ANGULAR_DRIFT
-  );
 
   const sample = sampleFrame({
     t: clock,
     bodies,
     primary,
-    conserved: needsConserved ? conservedQuantities() : null,
-    drift: needsConserved ? conservationDrift() : null,
+    ...conservedSample(current.metrics),
     secondsPerUnit: timeUnitSeconds(),
     metrics: current.metrics,
   });
@@ -1572,15 +1610,6 @@ export function metricLabel(id) {
 /** @param {string} id - Metric id @returns {string} Unit string */
 export const metricUnit = id => METRIC_UNITS[id] || '';
 
-/**
- * Whether the current selection can answer every chosen metric.
- * @returns {Array<string>} Metric ids that need more bodies selected
- */
-export function unsatisfiedMetrics() {
-  const n = (current?.objects || []).length;
-  return (current?.metrics || []).filter(m => (METRIC_ARITY[m] || 0) > n);
-}
-
 // --- Persistence and export --------------------------------------------------------
 
 /**
@@ -1624,7 +1653,12 @@ export function open(id) {
   const { ok, record, reason } = loadExperiment(id);
   if (!ok) return { ok: false, message: t('bench.error.open', { reason }) };
   current = record;
-  return { ok: true, message: '' };
+  // Said on every open until the runs are recorded again, which is the only
+  // thing that puts real drift figures back. See store.js:migrate().
+  const withdrawn = Object.values(record.runs || {}).some(
+    run => run?.driftWithdrawn
+  );
+  return { ok: true, message: withdrawn ? t('bench.driftWithdrawn') : '' };
 }
 
 /**

@@ -9,7 +9,7 @@
 //
 //   node tools/small-body-sweep.mjs --baseline out.json      # record
 //   node tools/small-body-sweep.mjs --compare out.json       # record and diff
-//   node tools/small-body-sweep.mjs "Kuiper Belt" --seconds 40
+//   node tools/small-body-sweep.mjs 'kuiper-belt' --seconds 40
 //
 // Per scenario, over a seeded run at the scenario's own sim_speed:
 //
@@ -36,37 +36,37 @@ const PORT = 8131;
 
 /** Every shipped scenario that builds asteroids or comets. */
 const SMALL_BODY_SCENARIOS = [
-  'Solar System',
-  'Binary BH',
-  'Triple BH System',
-  'Supermassive BH',
-  'Star Cluster',
-  'Kuiper Belt',
-  'Sagittarius A*',
-  'Binary Star System',
-  'Slingshot',
-  'Rogue Encounter',
-  'Neutron Star Collision',
-  'Pulsar System',
-  'White Dwarf Binary',
-  'Stellar Graveyard',
-  'Galactic Center',
-  'Supernova Remnant',
-  'Compact Object Zoo',
-  'Millisecond Pulsar',
-  'Intermediate Mass BH',
-  'Galactic Collision',
-  'Micro BH Swarm',
-  'Exoplanet Lab',
-  'Quasar Cannon',
-  'The Pinwheel Galaxy Core',
-  'Star Frisbee',
-  'Alien Dyson Swarm Collapse',
-  'Tidal Arm Tango',
-  'Hungry Hungry Holes',
-  'Slingshot Gauntlet',
-  'Black Hole Billiards',
-  'Stellar Nursery',
+  'solar-system',
+  'binary-bh',
+  'triple-bh-system',
+  'supermassive-bh',
+  'star-cluster',
+  'kuiper-belt',
+  'sagittarius-a',
+  'binary-star-system',
+  'slingshot',
+  'rogue-encounter',
+  'neutron-star-collision',
+  'pulsar-system',
+  'white-dwarf-binary',
+  'stellar-graveyard',
+  'galactic-center',
+  'supernova-remnant',
+  'compact-object-zoo',
+  'millisecond-pulsar',
+  'intermediate-mass-bh',
+  'galactic-collision',
+  'micro-bh-swarm',
+  'exoplanet-lab',
+  'quasar-cannon',
+  'the-pinwheel-galaxy-core',
+  'star-frisbee',
+  'alien-dyson-swarm-collapse',
+  'tidal-arm-tango',
+  'hungry-hungry-holes',
+  'slingshot-gauntlet',
+  'black-hole-billiards',
+  'stellar-nursery',
 ];
 
 const pad = (s, n) => String(s).padEnd(n);

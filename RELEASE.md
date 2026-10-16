@@ -171,10 +171,30 @@ only CI passes, substitutes a throwaway key and marks the bundle
 
 > Whether the committed bundle is current is not a thing to write down here,
 > because a sentence in a document cannot know. `npm run instructors:check`
-> answers it: the bundle carries a manifest recording a digest of the 39 source
-> files it was built from, and the check recomputes that digest and compares.
-> It needs no passphrase, so it runs in CI and in the release gate, and a stale
-> bundle now fails the gate rather than waiting for somebody to notice.
+> answers it: the bundle carries a manifest recording a digest of every file the
+> build reads, and the check recomputes that digest and compares. No count is
+> written here on purpose - this paragraph said "39 source files" while the
+> build was reading forty-six, which is the same mistake one level up.
+>
+> It needs no passphrase, so it runs in the release gate, in
+> `tools/verify-release.mjs` on the tree that is about to be published, and in
+> CI on a release ref. Not on a pull request into `v2`: that question compares
+> against a ciphertext only you can produce, so asking it of every parallel
+> lesson branch makes each of them red until you rebuild an encrypted file that
+> then conflicts with every other branch doing the same. What CI asks of those
+> branches instead is `npm run instructors:validate`, which renders every
+> document and re-checks every answer key with a throwaway key and writes
+> nothing. See `tools/checks.mjs`.
+>
+> **If the check says stale and you have changed nothing instructional**, try
+> `npm run instructors:restamp` before reaching for the passphrase. It re-renders
+> the documents, compares them against the `contentDigest` the manifest already
+> carries, and - only if they are identical - rewrites the record for the inputs
+> that actually produced them, leaving the ciphertext untouched. That is the
+> case when the covered set changes rather than the content: no rebuild, no new
+> salt, no four-megabyte diff for every branch to conflict over. It refuses when
+> the documents really have moved, and it cannot see through a month boundary,
+> because `js/pdf.js` stamps a month-granular creation date.
 
 ---
 

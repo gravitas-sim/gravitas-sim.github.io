@@ -1,6 +1,11 @@
 import { describe, test, expect } from '@jest/globals';
 import {
+  FEEDBACK_CLASSES,
   HINT_STAGES,
+  answerClass,
+  feedbackFor,
+  helpStages,
+  hintLadder,
   STANDARD_MISCONCEPTIONS,
   helpTaken,
   hintsFor,
@@ -150,5 +155,96 @@ describe('help taken is recorded, not charged for', () => {
       revealed: false,
     });
     expect(helpTaken(null).hints).toBe(0);
+  });
+});
+
+describe('a ladder of up to three hints, one at a time', () => {
+  const ladder = step({ hints: ['one', 'two', 'three', 'four'], worked: 'w' });
+
+  test('the array form is a ladder of at most three, in order', () => {
+    expect(hintLadder(ladder).map(h => h.id)).toEqual(['h1', 'h2', 'h3']);
+    expect(nextHintStage(ladder, [])).toBe('h1');
+    expect(nextHintStage(ladder, ['h1'])).toBe('h2');
+    expect(nextHintStage(ladder, ['h1', 'h2'])).toBe('h3');
+    expect(nextHintStage(ladder, ['h1', 'h2', 'h3'])).toBe('reveal');
+    expect(nextHintStage(ladder, ['h1', 'h2', 'h3', 'reveal'])).toBeNull();
+  });
+
+  test('the object form reads as a ladder of two and keeps its stage names', () => {
+    const s = step({ hints: { concept: 'c', method: 'm' } });
+    expect(hintLadder(s).map(h => h.id)).toEqual(['concept', 'method']);
+  });
+
+  test('hints taken are a count of facts, not a penalty', () => {
+    expect(helpTaken(helpStages('h1,h2,reveal'))).toMatchObject({
+      hints: 2,
+      revealed: true,
+    });
+    expect(helpTaken(helpStages('h1,h1')).hints).toBe(1);
+    expect(helpStages(undefined)).toEqual([]);
+  });
+});
+
+describe('feedback by outcome class', () => {
+  const s = step({ answer: 8, tolerance: 0.4 });
+  const cls = value => answerClass(s, { status: 'incorrect', value }, 0.4);
+
+  test('the classes are the six the prompt names', () => {
+    expect(FEEDBACK_CLASSES).toEqual([
+      'correct',
+      'close',
+      'wrong-sign',
+      'wrong-unit',
+      'wrong-order-of-magnitude',
+      'off',
+    ]);
+  });
+
+  test('each class is a relationship between the two numbers', () => {
+    expect(answerClass(s, { status: 'correct', value: 8 }, 0.4)).toBe(
+      'correct'
+    );
+    expect(cls(-8)).toBe('wrong-sign');
+    expect(cls(8 * 365.25)).toBe('wrong-unit');
+    expect(cls(8 / 365.25)).toBe('wrong-unit');
+    expect(cls(8.9)).toBe('close');
+    expect(cls(80)).toBe('wrong-order-of-magnitude');
+    expect(cls(0.8)).toBe('wrong-order-of-magnitude');
+    expect(cls(13)).toBe('off');
+  });
+
+  test('a unit the parser refuses is a wrong unit; other refusals are not classed', () => {
+    expect(
+      answerClass(s, { status: 'unreadable', reason: 'incompatibleUnit' }, 0.4)
+    ).toBe('wrong-unit');
+    expect(
+      answerClass(s, { status: 'unreadable', reason: 'blank' }, 0.4)
+    ).toBeNull();
+    expect(answerClass(s, { status: 'ungraded' }, 0.4)).toBeNull();
+  });
+
+  test('only authored text is returned, never one made up', () => {
+    const f = step({ feedback: { 'wrong-sign': 'Check the direction.' } });
+    expect(feedbackFor(f, 'wrong-sign')).toBe('Check the direction.');
+    expect(feedbackFor(f, 'close')).toBeNull();
+    expect(feedbackFor(step(), 'off')).toBeNull();
+  });
+});
+
+describe('a wrong option can name its misconception', () => {
+  const c = {
+    kind: 'choice',
+    options: ['a', 'b', 'c'],
+    answer: 1,
+    misconceptions: [
+      { id: 'centre', option: 0, say: 'The star is not central.' },
+    ],
+  };
+  test('the bound option names it, the right one and others do not', () => {
+    expect(matchMisconception(c, 0, 0)?.message).toBe(
+      'The star is not central.'
+    );
+    expect(matchMisconception(c, 1, 0)).toBeNull();
+    expect(matchMisconception(c, 2, 0)).toBeNull();
   });
 });

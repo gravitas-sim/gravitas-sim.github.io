@@ -10,6 +10,7 @@ import {
   tagCounts,
   resultSummary,
 } from '../js/scenarioBrowser.js';
+import { assembledIndexHtml } from '../tools/index-fragments.mjs';
 
 const KEYS = Object.keys(SCENARIO_INFO);
 const repoFile = rel => fileURLToPath(new URL(`../${rel}`, import.meta.url));
@@ -95,33 +96,33 @@ describe('search', () => {
 
   test('matches a title', () => {
     expect(keysOf(filterScenarios({ search: 'trappist' }))).toContain(
-      'TRAPPIST-1 System'
+      'trappist-1-system'
     );
   });
 
   test('matches a summary', () => {
     // "kilonova"-adjacent wording lives only in the summary.
     const hits = keysOf(filterScenarios({ search: 'gamma-ray' }));
-    expect(hits).toContain('Neutron Star Collision');
+    expect(hits).toContain('neutron-star-collision');
   });
 
   test('matches the scenario key even when the title differs', () => {
     // 'Binary Star System' is titled "Binary Stars": searching the key works.
     const hits = keysOf(filterScenarios({ search: 'Binary Star System' }));
-    expect(hits).toContain('Binary Star System');
+    expect(hits).toContain('binary-star-system');
   });
 
   test('matches a concept nobody wrote in the prose', () => {
     // The whole point of indexing the tags. "kepler" is a curriculum word, not
     // necessarily a word in a given scenario's description.
     const hits = keysOf(filterScenarios({ search: 'kepler' }));
-    expect(hits).toContain('Solar System');
-    expect(hits).toContain('Binary Pair');
+    expect(hits).toContain('solar-system');
+    expect(hits).toContain('binary-pair');
     expect(hits.length).toBe(tagCounts()['orbits-kepler']);
 
     const tidal = keysOf(filterScenarios({ search: 'tides' }));
-    expect(tidal).toContain('Earth-Moon System');
-    expect(tidal).toContain('Tidal Disruption Event');
+    expect(tidal).toContain('earth-moon-system');
+    expect(tidal).toContain('tidal-disruption-event');
   });
 
   test('is case-insensitive and ignores surrounding space', () => {
@@ -149,10 +150,10 @@ describe('concept filtering', () => {
     const res = filterScenarios({ tag: 'exoplanets' });
     expect(res.length).toBeGreaterThan(0);
     for (const r of res) expect(r.tags).toContain('exoplanets');
-    expect(keysOf(res)).toContain('TRAPPIST-1 System');
-    expect(keysOf(res)).toContain('Transit Lab');
+    expect(keysOf(res)).toContain('trappist-1-system');
+    expect(keysOf(res)).toContain('transit-lab');
     // A scenario with planets in it is not automatically an exoplanet lesson.
-    expect(keysOf(res)).not.toContain('Solar System');
+    expect(keysOf(res)).not.toContain('solar-system');
   });
 
   test('All restores the full catalog', () => {
@@ -232,21 +233,25 @@ describe('the result line', () => {
 });
 
 describe('the catalog is the only source of truth', () => {
-  test('the settings panel derives its preset list rather than listing it', async () => {
-    const src = await import('node:fs').then(fs =>
-      fs.readFileSync(repoFile('js/ui.js'), 'utf8')
-    );
-    // The hand-written copy of all forty-three names is gone. Spot-check a few
-    // that only ever appeared in that list.
-    expect(src).toContain("options: ['None', ...Object.keys(SCENARIO_INFO)]");
-    expect(src).not.toContain("'Stellar Graveyard',");
-    expect(src).not.toContain("'Micro BH Swarm',");
+  test('the settings panel lists no scenarios of its own', async () => {
+    const fs = await import('node:fs');
+    // The hand-written copy of all forty-three names went first, for a list
+    // derived from the catalog; then the picker itself, which the panel never
+    // drew (js/settingsSchema.js). Scenarios are chosen from Load Scenario.
+    // Spot-check a few names that only ever appeared in that list.
+    for (const file of ['js/ui.js', 'js/settingsSchema.js']) {
+      const src = fs.readFileSync(repoFile(file), 'utf8');
+      expect(src).not.toContain("'Stellar Graveyard',");
+      expect(src).not.toContain("'Micro BH Swarm',");
+    }
+    expect(
+      fs.readFileSync(repoFile('js/settingsSchema.js'), 'utf8')
+    ).not.toContain("key: 'preset_scenario'");
   });
 
   test('no scenario count is hardcoded in the markup', async () => {
-    const html = await import('node:fs').then(fs =>
-      fs.readFileSync(repoFile('index.html'), 'utf8')
-    );
+    // With the gallery's own markup, which ships with js/scenarioBrowser.js.
+    const html = assembledIndexHtml();
     // The gallery writes its own subtitle from Object.keys(SCENARIO_INFO). A
     // number typed into the page is the bug this replaced: it said 37 while the
     // catalog held 43.

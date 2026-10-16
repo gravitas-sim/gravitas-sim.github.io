@@ -230,12 +230,7 @@ test('two unrelated touches do not reset the view', async ({ page, app }) => {
   // On a saturated runner that was enough to lose the gesture, which made this
   // a report on the machine rather than on the wiring. The thresholds
   // themselves are covered against an injected clock in tests/doubleTap.test.js.
-  await page.evaluate(async () => {
-    const ui = await import('/js/ui.js');
-    ui.SETTINGS.preset_scenario = 'Empty';
-    ui.initialize_simulation({ seed: 'tap' });
-    ui.state.paused = true;
-  });
+  await app.emptyWorld('tap', { run: false });
   const { box } = await canvasPoints(page);
 
   await page.evaluate(async () => {
@@ -285,12 +280,7 @@ test('two real taps in the same place still reset the view', async ({
   // On a saturated runner that was enough to lose the gesture, which made this
   // a report on the machine rather than on the wiring. The thresholds
   // themselves are covered against an injected clock in tests/doubleTap.test.js.
-  await page.evaluate(async () => {
-    const ui = await import('/js/ui.js');
-    ui.SETTINGS.preset_scenario = 'Empty';
-    ui.initialize_simulation({ seed: 'tap' });
-    ui.state.paused = true;
-  });
+  await app.emptyWorld('tap', { run: false });
   const { cx, cy } = await canvasPoints(page);
 
   await page.evaluate(async () => {
@@ -380,7 +370,7 @@ async function firstMerge(page) {
 
 test('Binary BH does not move the camera on its own', async ({ page, app }) => {
   await app.boot();
-  await app.loadScenario('Binary BH', 'camera-drift');
+  await app.loadScenario('binary-bh', 'camera-drift');
   await app.waitForFrames(5);
 
   const before = await camera(page);
@@ -416,7 +406,7 @@ test('a drag while Follow mode is on is kept, and following continues', async ({
   // exercises exactly the code under test, and a small step over a short span
   // cannot merge anything.
   await app.boot();
-  await app.loadScenario('Solar System', 'follow-offset');
+  await app.loadScenario('solar-system', 'follow-offset');
   await app.setPaused(true);
 
   const step = (n, dt = 0.01) =>
@@ -498,7 +488,7 @@ test('a merger carries the reference frame onto the black hole it made', async (
 }, testInfo) => {
   testInfo.setTimeout(90_000);
   await app.boot();
-  await app.loadScenario('Binary BH', 'merge-frame');
+  await app.loadScenario('binary-bh', 'merge-frame');
 
   // The recorder goes in first. The merge fires on the very next physics step
   // once the two overlap, which is sooner than a second round trip into the
@@ -546,7 +536,7 @@ test('a merger leaves a world-frame reader alone', async ({
 }, testInfo) => {
   testInfo.setTimeout(90_000);
   await app.boot();
-  await app.loadScenario('Binary BH', 'merge-world');
+  await app.loadScenario('binary-bh', 'merge-world');
 
   await recordMerges(page);
 
@@ -601,6 +591,14 @@ const collideStars = (page, at, arm = 'none') =>
     async ({ where, arm: how }) => {
       const p = await import('/js/physics.js');
       const ui = await import('/js/ui.js');
+      // Every module this needs, before the stars exist. An import() is not
+      // synchronous even for a module already loaded - Chromium settles it in
+      // a later task - so one between the push and the arming below is a gap
+      // a frame can run in, and measured, one in a few thousand does. If the
+      // pair merges in it, the frame is then pointed at a star already gone
+      // and the renderer sends it to the world origin - this test's failure,
+      // seen on a loaded machine with the engine's own race already fixed.
+      const rf = await import('/js/referenceFrame.js');
       ui.SETTINGS.max_timestep = 0.002;
       ui.SETTINGS.sim_speed = 0.2;
       ui.SETTINGS.enable_star_merging = true;
@@ -620,7 +618,6 @@ const collideStars = (page, at, arm = 'none') =>
           out.armed = ui.state.selectedObject?.object?.id ?? null;
         }
       } else if (how === 'frame') {
-        const rf = await import('/js/referenceFrame.js');
         rf.setFrame(rf.OBJECT, a.id);
         out.armed = rf.frameState().objectId ?? null;
       }
@@ -640,7 +637,7 @@ test('a star merger carries the reference frame onto the star it made', async ({
 }, testInfo) => {
   testInfo.setTimeout(90_000);
   await app.boot();
-  await app.loadScenario('Solar System', 'merge-star-frame');
+  await app.loadScenario('solar-system', 'merge-star-frame');
 
   await recordMerges(page);
 
@@ -707,7 +704,7 @@ test('a merger moves the inspector onto the body it produced', async ({
 }, testInfo) => {
   testInfo.setTimeout(90_000);
   await app.boot();
-  await app.loadScenario('Solar System', 'merge-inspector');
+  await app.loadScenario('solar-system', 'merge-inspector');
 
   await recordMerges(page);
 

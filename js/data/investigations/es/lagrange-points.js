@@ -16,8 +16,6 @@ export default {
     'Regiones prohibidas, cinco puntos de equilibrio y un número conservado',
   duration: '25-30 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Dos estrellas en órbita circular y una mota de polvo que siente a las dos. Hay un número que puedes calcular sobre la mota y que te dice dónde tiene prohibido estar, y a medida que la aceleras se abren muros de uno en uno, en un orden fijo. Encuentra los cinco lugares donde la mota podría quedarse quieta, averigua a cuáles puede llegar y descubre después por qué «puede llegar» son tres preguntas distintas con el mismo abrigo.',
   objectives: [
     'Enunciar la normalización y el convenio de signo de la constante de Jacobi',
     'Predecir cómo cambia la región prohibida cuando el trazador acelera',
@@ -39,7 +37,7 @@ export default {
              círculo. Es el sistema más simple en el que dejan de valer las
              respuestas de dos cuerpos, y casi todo lo interesante que tiene lo
              resolvieron Euler, Lagrange y Jacobi antes de 1840.`,
-      tip: 'El panel de tres cuerpos restringido se abrió con el escenario. Todo lo que esta lección te pide leer está ahí.',
+      tip: 'El panel de tres cuerpos restringido se abrió con el escenario. Todo lo que esta investigación te pide leer está ahí.',
     },
     {
       title: 'Viaja con ellas',
@@ -135,10 +133,18 @@ export default {
         'La distancia de L4 a cualquiera de las estrellas, en unidades de la separación',
       hints: [
         'Equilátero significa que los tres lados miden lo mismo.',
-        'El lado que une las dos estrellas mide 1.',
+        'El lado que une las dos estrellas es uno de los tres lados. Compáralo con la distancia que buscas.',
       ],
       worked:
         'Los tres lados de un triángulo equilátero son iguales, y el lado entre las estrellas mide 1 por definición de las unidades, así que L4 está a 1 de cada una. No está en la recta que las une, y no está en el punto medio.',
+      feedback: {
+        close:
+          'Cerca. En un triángulo equilátero, ¿cómo se compara cada lado con el lado entre las estrellas?',
+        'wrong-sign': 'Una distancia no puede ser negativa: da su tamaño.',
+        'wrong-order-of-magnitude':
+          'Te alejas por un factor grande. La respuesta es una razón entre dos longitudes del mismo triángulo, así que debe ser de tamaño moderado.',
+        off: 'Dibuja el triángulo de las dos estrellas y L4. ¿Qué lados son iguales y cuánto mide el lado que te dieron?',
+      },
     },
     {
       title: 'Los muros se abren en un orden fijo',

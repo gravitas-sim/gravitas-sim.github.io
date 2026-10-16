@@ -60,7 +60,7 @@ const both = page =>
       m2: lab?.params.m2,
       distanceMpc: lab?.params.distanceMpc,
       inclinationDeg: lab?.params.inclinationDeg,
-      classes: bodies.map(b => b.constructor.name).sort(),
+      classes: bodies.map(b => b.kind).sort(),
       massesSun: bodies.map(b => b.massInSuns).sort((a, b) => b - a),
       separation:
         bodies.length === 2

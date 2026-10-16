@@ -1,71 +1,129 @@
 // =============================================================================
 // A curated subset of the MIST stellar evolution tracks
 // -----------------------------------------------------------------------------
-// GENERATED FILE. Do not edit. Written by tools/build-stellar-tracks.mjs; run
+// GENERATED FILE. Do not edit. Written by tools/data-packs/mist-tracks.mjs; run
 // `npm run stellar:data` to regenerate and `npm run stellar:check` to verify.
 //
-// Seven tracks at solar metallicity with no rotation, reduced from about 7,700
+// Eight tracks at solar metallicity with no rotation, reduced from about 7,700
 // rows of 77 columns to a few hundred rows of four. MIST computed these; this
-// project reduced them and recorded how. PROVENANCE carries the version, the
-// composition, the source URL and checksum, the citation the modelers ask for,
-// and the error the reduction introduced.
+// project reduced them and recorded how, in the data pack's manifest,
+// data-packs/mist-v12-tracks.json: the version, the composition, the source
+// URL and checksum, the citations the modelers ask for, and the error the
+// reduction introduced. PACK is that manifest's runtime fields.
 //
 // These are model examples. None of them is a reconstruction of a named star.
 // =============================================================================
 
 /* eslint-disable */
 
-/** Where every number here came from, and what was done to it. */
-export const PROVENANCE = {
-  grid: 'MIST v1.2',
-  mesaRevision: 7503,
-  source:
-    'https://mist.science/data/tarballs_v1.2/MIST_v1.2_feh_p0.00_afe_p0.0_vvcrit0.0_EEPS.txz',
-  sourceSha256:
-    'a445d926c1765e951eb1bf6811dbfb14635725efcf63aaaa883d02f36cc58741',
-  sourceBytes: 100050704,
-  homepage: 'https://mist.science/',
-  composition: {
-    yInit: 0.2703,
-    zInit: 0.0142857,
-    feH: 0,
-    alphaFe: 0,
-    vDivVcrit: 0,
-    note: 'Solar-scaled abundances from Asplund et al. (2009). [Fe/H] = 0, [a/Fe] = 0.',
+/** What the data is and who to credit, as an interface shows it. */
+export const PACK = {
+  id: 'mist-v12-tracks',
+  version: '1.0.0',
+  title:
+    'MIST v1.2 evolutionary tracks: eight model stars at solar metallicity',
+  object: {
+    name: 'Eight model stars of 0.2 to 40 solar masses',
+    identifiers: [
+      '0.2 Msun',
+      '0.5 Msun',
+      '1 Msun',
+      '2 Msun',
+      '5 Msun',
+      '10 Msun',
+      '20 Msun',
+      '40 Msun',
+    ],
   },
-  rotation: 'none: v/vcrit = 0',
-  cite: [
-    'Dotter (2016), ApJS 222, 8',
-    'Choi et al. (2016), ApJ 823, 102',
-    'Paxton et al. (2011, 2013, 2015), the MESA instrument papers',
+  facility: {
+    observatory: 'MIST (MESA Isochrones and Stellar Tracks)',
+    instrument: 'MESA r7503',
+    pipeline: 'MIST v1.2 EEP tracks, [Fe/H] = 0, [a/Fe] = 0, v/vcrit = 0',
+  },
+  dataType: 'model-grid',
+  origin: 'model',
+  credit: 'MIST v1.2 (Dotter 2016; Choi et al. 2016)',
+  license: {
+    status: 'no-license-stated',
+    statement:
+      'MIST asks that Dotter 2016 and Choi et al. 2016 be cited by any publication using the models, and states no separate redistribution license.',
+    basis:
+      'What is bundled here is a heavily reduced derived subset for teaching, attributed in full, with the exact source and checksum recorded so the originals can be recovered. If MIST would prefer this not be redistributed, the build script reproduces it from their download in one command.',
+  },
+  retrieved: '2026-10-01',
+  columns: [
+    {
+      name: 'log age',
+      unit: 'dex',
+      description:
+        'log10 of years since the start of the MIST track (EEP 1, an early pre-main-sequence model)',
+    },
+    {
+      name: 'mass',
+      unit: 'Msun',
+      description: 'current, not initial',
+    },
+    {
+      name: 'log L',
+      unit: 'dex',
+      description: 'log10 of bolometric luminosity in solar units',
+    },
+    {
+      name: 'log Teff',
+      unit: 'dex',
+      description: 'log10 of effective temperature in kelvin',
+    },
+    {
+      name: 'phase',
+      unit: '',
+      description: 'MIST’s own phase flag',
+    },
   ],
-  terms:
-    'MIST asks that the papers above be cited by any publication using the models and states no separate redistribution license. What is bundled here is a heavily reduced derived subset for teaching, attributed in full, with the exact source and checksum recorded so the originals can be recovered. If MIST would prefer this not be redistributed, the build script reproduces it from their download in one command.',
-  whyV12:
-    'v1.2 rather than the newer v2.5 because its two describing papers are published and citable; the v2.5 references are listed as forthcoming.',
-  units: {
-    age: 'years since the start of the MIST track (EEP 1, an early pre-main-sequence model), stored as log10',
-    mass: 'solar masses, current rather than initial',
-    luminosity: 'log10 of bolometric luminosity in solar units',
-    temperature: 'log10 of effective temperature in kelvin',
-    radius: 'not stored; derived from L and Teff',
+  masks: [],
+  reductions: [
+    'Thinned from about 7,700 rows of 77 columns to a few hundred rows of four, within 0.004 dex of the curve, with the primary evolutionary points kept; the worst error is recorded on each track.',
+    'The radius is not stored: it follows from L and Teff, which MIST’s own radii satisfy to machine precision.',
+  ],
+  model: {
+    name: 'MIST v1.2',
+    mesaRevision: 7503,
+    composition: {
+      yInit: 0.2703,
+      zInit: 0.0142857,
+      feH: 0,
+      alphaFe: 0,
+      vDivVcrit: 0,
+      note: 'Solar-scaled abundances from Asplund et al. (2009). [Fe/H] = 0, [a/Fe] = 0.',
+    },
+    rotation: 'none: v/vcrit = 0',
+    ageZeroPoint:
+      'years since the start of the MIST track (EEP 1, an early pre-main-sequence model), stored as log10',
   },
-  teffSunK: 5772.16,
-  stefanBoltzmannCheck: {
-    rows: 8285,
-    impliedTeffSunSpreadK: 3.55e-11,
-    note: "MIST's own log_R column is reproduced by L = 4 pi R^2 sigma Teff^4 to machine precision across every row of every track, which is why the radius is derived here rather than stored.",
-  },
-  reduction: {
-    algorithm:
-      'Ramer-Douglas-Peucker on the H-R curve, on luminosity against age, and on mass against age, unioned, within each primary-EEP segment. The primary EEPs are pinned.',
-    toleranceDex: 0.004,
-    note: 'The worst error the thinning introduced is recorded per track.',
-  },
-  notModeled: [
-    'Rotation, binarity, magnetic fields, and any metallicity but solar.',
-    'Core collapse and everything after it: the 10 and 20 solar-mass tracks stop while the star is still a red supergiant.',
-    'White-dwarf cooling beyond the first few million years, which is where MIST stops following it.',
+  citations: [
+    {
+      text: 'Dotter 2016, ApJS 222, 8 (MIST 0)',
+      doi: '10.3847/0067-0049/222/1/8',
+    },
+    {
+      text: 'Choi et al. 2016, ApJ 823, 102 (MIST I)',
+      doi: '10.3847/0004-637X/823/2/102',
+    },
+    {
+      text: 'Paxton et al. 2011, ApJS 192, 3 (MESA)',
+      doi: '10.1088/0067-0049/192/1/3',
+    },
+    {
+      text: 'Paxton et al. 2013, ApJS 208, 4 (MESA)',
+      doi: '10.1088/0067-0049/208/1/4',
+    },
+    {
+      text: 'Paxton et al. 2015, ApJS 220, 15 (MESA)',
+      doi: '10.1088/0067-0049/220/1/15',
+    },
+    {
+      text: 'Asplund et al. 2009, ARA&A 47, 481 (the solar abundances MIST scales)',
+      doi: '10.1146/annurev.astro.46.060407.145222',
+    },
   ],
 };
 
@@ -81,25 +139,25 @@ export const TRACKS = {
       {
         name: 'pms',
         at: 0,
-        ageYr: 19699.409130104887,
+        ageYr: 19699.4091301,
         publishedAgeYr: 19699.408,
       },
       {
         name: 'zams',
         at: 21,
-        ageYr: 772525101.9129584,
+        ageYr: 772525101.913,
         publishedAgeYr: 772525130,
       },
       {
         name: 'iams',
         at: 34,
-        ageYr: 1021034225344.8016,
+        ageYr: 1021034225340,
         publishedAgeYr: 1021034200000,
       },
       {
         name: 'tams',
         at: 49,
-        ageYr: 1140714074378.0945,
+        ageYr: 1140714074380,
         publishedAgeYr: 1140714100000,
       },
     ],
@@ -149,25 +207,25 @@ export const TRACKS = {
       {
         name: 'pms',
         at: 0,
-        ageYr: 4174.029364278679,
+        ageYr: 4174.02936428,
         publishedAgeYr: 4174.0294,
       },
       {
         name: 'zams',
         at: 31,
-        ageYr: 157391110.63582915,
+        ageYr: 157391110.636,
         publishedAgeYr: 157391130,
       },
       {
         name: 'iams',
         at: 97,
-        ageYr: 36847370397.99745,
+        ageYr: 36847370398,
         publishedAgeYr: 36847370000,
       },
       {
         name: 'tams',
         at: 109,
-        ageYr: 95797174517.10846,
+        ageYr: 95797174517.1,
         publishedAgeYr: 95797164000,
       },
     ],
@@ -217,61 +275,61 @@ export const TRACKS = {
       {
         name: 'pms',
         at: 0,
-        ageYr: 1766.3680474880366,
+        ageYr: 1766.36804749,
         publishedAgeYr: 1766.3679,
       },
       {
         name: 'zams',
         at: 40,
-        ageYr: 41873474.64717559,
+        ageYr: 41873474.6472,
         publishedAgeYr: 41873472,
       },
       {
         name: 'iams',
         at: 47,
-        ageYr: 4501356399.397281,
+        ageYr: 4501356399.4,
         publishedAgeYr: 4501356400,
       },
       {
         name: 'tams',
         at: 54,
-        ageYr: 9919425043.275148,
+        ageYr: 9919425043.28,
         publishedAgeYr: 9919423900,
       },
       {
         name: 'rgb-tip',
         at: 110,
-        ageYr: 11336176523.658941,
+        ageYr: 11336176523.7,
         publishedAgeYr: 11336176000,
       },
       {
         name: 'zacheb',
         at: 135,
-        ageYr: 11337912473.548035,
+        ageYr: 11337912473.5,
         publishedAgeYr: 11337912000,
       },
       {
         name: 'tacheb',
         at: 157,
-        ageYr: 11447580336.77013,
+        ageYr: 11447580336.8,
         publishedAgeYr: 11447581000,
       },
       {
         name: 'tpagb',
         at: 180,
-        ageYr: 11461572345.065142,
+        ageYr: 11461572345.1,
         publishedAgeYr: 11461573000,
       },
       {
         name: 'post-agb',
         at: 411,
-        ageYr: 11462926295.930164,
+        ageYr: 11462926295.9,
         publishedAgeYr: 11462926000,
       },
       {
         name: 'wd-cooling',
         at: 512,
-        ageYr: 11465470994.955683,
+        ageYr: 11465470995,
         publishedAgeYr: 11465471000,
       },
     ],
@@ -321,61 +379,61 @@ export const TRACKS = {
       {
         name: 'pms',
         at: 0,
-        ageYr: 850.8272678543883,
+        ageYr: 850.827267854,
         publishedAgeYr: 850.82732,
       },
       {
         name: 'zams',
         at: 51,
-        ageYr: 9037139.78648492,
+        ageYr: 9037139.78648,
         publishedAgeYr: 9037140.7,
       },
       {
         name: 'iams',
         at: 66,
-        ageYr: 718642835.0987893,
+        ageYr: 718642835.099,
         publishedAgeYr: 718642760,
       },
       {
         name: 'tams',
         at: 87,
-        ageYr: 1062776884.7594239,
+        ageYr: 1062776884.76,
         publishedAgeYr: 1062776900,
       },
       {
         name: 'rgb-tip',
         at: 121,
-        ageYr: 1122657029.4165182,
+        ageYr: 1122657029.42,
         publishedAgeYr: 1122657100,
       },
       {
         name: 'zacheb',
         at: 141,
-        ageYr: 1123272431.2009315,
+        ageYr: 1123272431.2,
         publishedAgeYr: 1123272400,
       },
       {
         name: 'tacheb',
         at: 162,
-        ageYr: 1320521571.3241878,
+        ageYr: 1320521571.32,
         publishedAgeYr: 1320521600,
       },
       {
         name: 'tpagb',
         at: 188,
-        ageYr: 1338990513.1088307,
+        ageYr: 1338990513.11,
         publishedAgeYr: 1338990400,
       },
       {
         name: 'post-agb',
         at: 660,
-        ageYr: 1341867393.65857,
+        ageYr: 1341867393.66,
         publishedAgeYr: 1341867400,
       },
       {
         name: 'wd-cooling',
         at: 781,
-        ageYr: 1342747028.6402268,
+        ageYr: 1342747028.64,
         publishedAgeYr: 1342747100,
       },
     ],
@@ -425,61 +483,61 @@ export const TRACKS = {
       {
         name: 'pms',
         at: 0,
-        ageYr: 392.72151999983447,
+        ageYr: 392.72152,
         publishedAgeYr: 392.72155,
       },
       {
         name: 'zams',
         at: 47,
-        ageYr: 1002935.0290949306,
+        ageYr: 1002935.02909,
         publishedAgeYr: 1002934.9,
       },
       {
         name: 'iams',
         at: 58,
-        ageYr: 71766984.7542641,
+        ageYr: 71766984.7543,
         publishedAgeYr: 71766977,
       },
       {
         name: 'tams',
         at: 79,
-        ageYr: 99997582.3148788,
+        ageYr: 99997582.3149,
         publishedAgeYr: 99997578,
       },
       {
         name: 'rgb-tip',
         at: 117,
-        ageYr: 100831656.03583525,
+        ageYr: 100831656.036,
         publishedAgeYr: 100831650,
       },
       {
         name: 'zacheb',
         at: 118,
-        ageYr: 101475453.29386246,
+        ageYr: 101475453.294,
         publishedAgeYr: 101475450,
       },
       {
         name: 'tacheb',
         at: 157,
-        ageYr: 114681878.99714497,
+        ageYr: 114681878.997,
         publishedAgeYr: 114681890,
       },
       {
         name: 'tpagb',
         at: 185,
-        ageYr: 115541765.67085236,
+        ageYr: 115541765.671,
         publishedAgeYr: 115541760,
       },
       {
         name: 'post-agb',
         at: 470,
-        ageYr: 115640031.15407166,
+        ageYr: 115640031.154,
         publishedAgeYr: 115640030,
       },
       {
         name: 'wd-cooling',
         at: 532,
-        ageYr: 115673373.09049667,
+        ageYr: 115673373.09,
         publishedAgeYr: 115673380,
       },
     ],
@@ -529,49 +587,49 @@ export const TRACKS = {
       {
         name: 'pms',
         at: 0,
-        ageYr: 245.3530719798384,
+        ageYr: 245.35307198,
         publishedAgeYr: 245.35308,
       },
       {
         name: 'zams',
         at: 49,
-        ageYr: 187342.9695947927,
+        ageYr: 187342.969595,
         publishedAgeYr: 187342.95,
       },
       {
         name: 'iams',
         at: 61,
-        ageYr: 16658339.16092942,
+        ageYr: 16658339.1609,
         publishedAgeYr: 16658338,
       },
       {
         name: 'tams',
         at: 76,
-        ageYr: 23637693.661318477,
+        ageYr: 23637693.6613,
         publishedAgeYr: 23637692,
       },
       {
         name: 'rgb-tip',
         at: 120,
-        ageYr: 23732063.406509366,
+        ageYr: 23732063.4065,
         publishedAgeYr: 23732062,
       },
       {
         name: 'zacheb',
         at: 121,
-        ageYr: 23834722.503201116,
+        ageYr: 23834722.5032,
         publishedAgeYr: 23834720,
       },
       {
         name: 'tacheb',
         at: 168,
-        ageYr: 26223243.036071904,
+        ageYr: 26223243.0361,
         publishedAgeYr: 26223245,
       },
       {
         name: 'carbon-burning',
         at: 183,
-        ageYr: 26307555.78560487,
+        ageYr: 26307555.7856,
         publishedAgeYr: 26307556,
       },
     ],
@@ -621,49 +679,49 @@ export const TRACKS = {
       {
         name: 'pms',
         at: 0,
-        ageYr: 168.21088664330009,
+        ageYr: 168.210886643,
         publishedAgeYr: 168.21088,
       },
       {
         name: 'zams',
         at: 49,
-        ageYr: 54977.007917683244,
+        ageYr: 54977.0079177,
         publishedAgeYr: 54977.003,
       },
       {
         name: 'iams',
         at: 62,
-        ageYr: 5954142.165902935,
+        ageYr: 5954142.1659,
         publishedAgeYr: 5954142.4,
       },
       {
         name: 'tams',
         at: 80,
-        ageYr: 8707201.6019275,
+        ageYr: 8707201.60193,
         publishedAgeYr: 8707201.3,
       },
       {
         name: 'rgb-tip',
         at: 95,
-        ageYr: 8731788.344135731,
+        ageYr: 8731788.34414,
         publishedAgeYr: 8731789.3,
       },
       {
         name: 'zacheb',
         at: 98,
-        ageYr: 8757974.976881558,
+        ageYr: 8757974.97688,
         publishedAgeYr: 8757975.5,
       },
       {
         name: 'tacheb',
         at: 127,
-        ageYr: 9606843.148329955,
+        ageYr: 9606843.14833,
         publishedAgeYr: 9606843.3,
       },
       {
         name: 'carbon-burning',
         at: 143,
-        ageYr: 9621232.286599541,
+        ageYr: 9621232.2866,
         publishedAgeYr: 9621233.1,
       },
     ],
@@ -713,37 +771,37 @@ export const TRACKS = {
       {
         name: 'pms',
         at: 0,
-        ageYr: 216.57045053312717,
+        ageYr: 216.570450533,
         publishedAgeYr: 216.57046,
       },
       {
         name: 'zams',
         at: 49,
-        ageYr: 23923.091425839077,
+        ageYr: 23923.0914258,
         publishedAgeYr: 23923.092,
       },
       {
         name: 'iams',
         at: 65,
-        ageYr: 3114281.744542869,
+        ageYr: 3114281.74454,
         publishedAgeYr: 3114281.6,
       },
       {
         name: 'tams',
         at: 93,
-        ageYr: 4744082.141266995,
+        ageYr: 4744082.14127,
         publishedAgeYr: 4744082.6,
       },
       {
         name: 'rgb-tip',
         at: 113,
-        ageYr: 4753130.081160177,
+        ageYr: 4753130.08116,
         publishedAgeYr: 4753129.8,
       },
       {
         name: 'zacheb',
         at: 118,
-        ageYr: 4764609.364715765,
+        ageYr: 4764609.36472,
         publishedAgeYr: 4764609.7,
       },
     ],
@@ -802,7 +860,7 @@ function scaleColumn(column, of) {
  * Decode one column of one track.
  *
  * @param {object} column - One of the encoded column objects on a track
- * @returns {Float64Array} The values, in the units PROVENANCE records
+ * @returns {Float64Array} The values, in the units PACK.columns gives
  */
 function decodeColumn(column) {
   const binary =
@@ -812,7 +870,7 @@ function decodeColumn(column) {
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
   // The age column is 32-bit and everything else is 16. See the note on the
-  // encoder in tools/build-stellar-tracks.mjs: a logarithmic age axis at 16
+  // encoder in tools/data-packs/mist-tracks.mjs: a logarithmic age axis at 16
   // bits cannot resolve a helium flash inside an eleven-billion-year life.
   const width = column.bits === 32 ? 4 : 2;
   const Ints = column.bits === 32 ? Int32Array : Int16Array;

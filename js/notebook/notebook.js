@@ -11,6 +11,7 @@
 // =============================================================================
 
 import { SCHEMA_VERSION, reviveEntry, validateEntry } from './entry.js';
+import { readVersioned } from '../platform/common.js';
 
 /** What a downloaded notebook file says it is. */
 export const BACKUP_KIND = 'gravitas.evidence.notebook';
@@ -161,10 +162,13 @@ export function validateBackup(data) {
     return { ok: false, reason: 'notAnObject' };
   }
   if (data.kind !== BACKUP_KIND) return { ok: false, reason: 'notANotebook' };
-  if (!Number.isInteger(data.version) || data.version < 1) {
-    return { ok: false, reason: 'noVersion' };
-  }
-  if (data.version > BACKUP_VERSION) return { ok: false, reason: 'tooNew' };
+  const r = readVersioned(data, {
+    current: BACKUP_VERSION,
+    min: 1,
+    versionField: 'version',
+  });
+  if (!r.ok)
+    return { ok: false, reason: r.reason === 'newer' ? 'tooNew' : 'noVersion' };
   if (!Array.isArray(data.entries)) return { ok: false, reason: 'noEntries' };
   if (data.entries.length > MAX_ENTRIES) {
     return { ok: false, reason: 'tooManyEntries' };

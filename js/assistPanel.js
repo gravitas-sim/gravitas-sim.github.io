@@ -18,11 +18,7 @@
 
 import { onPhysicsStep, planets, gas_giants, state } from './physics.js';
 import { SETTINGS, current_scenario_name } from './appState.js';
-import {
-  deflectionAngle,
-  maximumDeltaV,
-  periapsisDistance,
-} from './gravityAssist.js';
+import { deflectionAngle, maximumDeltaV } from './gravityAssist.js';
 import {
   currentAssist,
   startAssistWatch,
@@ -50,8 +46,8 @@ let dismissed = false;
 
 /** The scenarios this panel has anything to say about. */
 const SCENARIOS = {
-  'Gravity Assist Lab': 'isolated',
-  'Gravity Assist: Heliocentric': 'heliocentric',
+  'gravity-assist-lab': 'isolated',
+  'gravity-assist-heliocentric': 'heliocentric',
 };
 
 /** @returns {?string} 'isolated', 'heliocentric', or null */
@@ -124,7 +120,7 @@ const kms = v => formatNumber(v * (velocityUnitToMs() / 1000), { sig: 4 });
 function beginRun() {
   if (!activeMode()) return;
   const e = cacheElements();
-  const b = Number(e.impact?.value);
+  const b = Number(e.impact?.valueAsNumber);
   if (Number.isFinite(b) && b !== 0) SETTINGS.assist_impact_parameter = b;
   window.dispatchEvent(new CustomEvent('gravitasRequestRebuild'));
 }
@@ -132,7 +128,7 @@ function beginRun() {
 /** Send the spacecraft past the other side of the planet. */
 function flipSide() {
   const e = cacheElements();
-  const b = Number(e.impact?.value) || SETTINGS.assist_impact_parameter;
+  const b = Number(e.impact?.valueAsNumber) || SETTINGS.assist_impact_parameter;
   if (e.impact) e.impact.value = String(-b);
   beginRun();
 }
@@ -435,20 +431,6 @@ export function setAssistEnabled(on) {
   layoutObservationPanels();
 }
 
-/** @returns {boolean} Whether the panel is open */
-export const isAssistEnabled = () => enabled;
-
-/** The predicted closest approach, for the lesson and for tests. */
-export const predictedPeriapsis = () => {
-  const parts = bodies();
-  if (!parts) return null;
-  return periapsisDistance(
-    SETTINGS.gravitational_constant * parts.planet.mass,
-    SETTINGS.assist_impact_parameter,
-    SETTINGS.assist_v_infinity
-  );
-};
-
 /** The scenario the panel last matched itself to. */
 let lastScenario = null;
 
@@ -505,6 +487,8 @@ function showForCurrentScenario() {
 
 /** True while either experiment is running; both share the one bench. */
 let experimentRunning = false;
+/** Why the last run left nothing to report, or null if it did not. */
+let experimentRefusal = null;
 /** The two passes, as the lesson reports them. */
 let comparison = null;
 /** The five, likewise. */
@@ -546,41 +530,54 @@ async function runAssistExperiment(which) {
   const e = cacheElements();
   if (activeMode() !== 'isolated' || experimentRunning) return;
 
-  // The bench has to be wired to the application before it can run anything,
-  // and its bridge is what does that. Same call the experiment panel makes, so
-  // a student who reaches this from the lesson without ever having opened the
-  // bench gets a working one.
-  const [{ bench }, assist, frameRate] = await Promise.all([
-    import('./experimentsBridge.js').then(m => m.ensureBench()),
-    import('./experiments/assistSweep.js'),
-    import('./experiments/frameRate.js'),
-  ]);
-
-  const savedVInf = SETTINGS.assist_v_infinity;
-  SETTINGS.assist_v_infinity = assist.BASELINE.vInfinity;
-
-  const over = {
-    gate: SETTINGS.assist_gate,
-    vInf: assist.BASELINE.vInfinity,
-    frameRatio: await frameRate.measureFrameRatio({
-      settings: SETTINGS,
-      state,
-    }),
-  };
-  const spec =
-    which === 'comparison'
-      ? assist.comparisonSpec(over)
-      : assist.sweepSpec(over);
-
+  // Claimed before anything is awaited. Between the click and the runner
+  // starting there are modules to load and ten frames to measure, and while
+  // the panel only said it was running once all of that was done, it spent
+  // that stretch neither running nor finished: a second click could start a
+  // second run over the first, and anything waiting on the result could not
+  // tell a run that had not started yet from one that had been refused and
+  // never would - so it waited out its whole timeout to find out.
   experimentRunning = true;
+  experimentRefusal = null;
   const buttons = [e.compareRun, e.sweepRun, e.compareKeep, e.sweepKeep];
   for (const b of buttons) if (b) b.disabled = true;
   const cancel = which === 'comparison' ? e.compareCancel : e.sweepCancel;
-  if (cancel) cancel.hidden = false;
   const status = which === 'comparison' ? e.compareStatus : e.sweepStatus;
 
+  const savedVInf = SETTINGS.assist_v_infinity;
+  let assist = null;
+  let spec = null;
   let result = null;
   try {
+    // The bench has to be wired to the application before it can run
+    // anything, and its bridge is what does that. Same call the experiment
+    // panel makes, so a student who reaches this from the lesson without ever
+    // having opened the bench gets a working one.
+    const [{ bench }, assistModule, frameRate] = await Promise.all([
+      import('./experimentsBridge.js').then(m => m.ensureBench()),
+      import('./experiments/assistSweep.js'),
+      import('./experiments/frameRate.js'),
+    ]);
+    assist = assistModule;
+
+    SETTINGS.assist_v_infinity = assist.BASELINE.vInfinity;
+
+    const over = {
+      gate: SETTINGS.assist_gate,
+      vInf: assist.BASELINE.vInfinity,
+      frameRatio: await frameRate.measureFrameRatio({
+        settings: SETTINGS,
+        state,
+      }),
+    };
+    spec =
+      which === 'comparison'
+        ? assist.comparisonSpec(over)
+        : assist.sweepSpec(over);
+
+    // Offered only now. Until the runner has started there is nothing for it
+    // to stop, and a cancel that was pressed early would be silently ignored.
+    if (cancel) cancel.hidden = false;
     result = await bench.runSweep(spec, {
       observer: assist.assistObserver({ armRun: armAssistRun }),
       onProgress: ({ trial, total }) => {
@@ -607,9 +604,17 @@ async function runAssistExperiment(which) {
   }
 
   if (!result?.ok) {
+    // Kept as well as shown, with what the run was sized at: 'duration' on
+    // its own does not say whether the limit or the measurement was wrong.
+    experimentRefusal = {
+      which,
+      reason: result?.reason ?? 'unknown',
+      detail: result?.detail ?? null,
+      duration: spec?.duration ?? null,
+    };
     if (status) {
       status.textContent = t('assist.exp.refused', {
-        reason: result?.reason ?? 'unknown',
+        reason: experimentRefusal.reason,
       });
     }
     return;
@@ -1074,9 +1079,21 @@ export function assistSweepReport() {
 /** @returns {boolean} Whether either experiment is running */
 export const isAssistExperimentRunning = () => experimentRunning;
 
+/**
+ * Why the last run left nothing to report, or null if it did not.
+ *
+ * The status line says so to the reader. This is the same fact for a lesson
+ * or a test waiting on a report, so that a refused run is known to be over,
+ * and why, rather than waited out as one that has not finished yet.
+ *
+ * @returns {?{which: string, reason: string, detail: ?object,
+ *   duration: ?number}} The refusal
+ */
+export const assistExperimentRefusal = () =>
+  experimentRefusal ? { ...experimentRefusal } : null;
+
 /** For the lesson and the tests: run either experiment as the button does. */
 export const startAssistComparison = () => runAssistExperiment('comparison');
-export const startAssistSweep = () => runAssistExperiment('sweep');
 
 /**
  * Show the experiments only where they mean something.
@@ -1102,7 +1119,16 @@ function syncExperimentSections() {
 }
 
 /** Wire the panel up. Called once at boot. */
-export function initAssist() {
+/** Undoes the locale subscription init made; null while not wired. */
+let unsubscribeLocale = null;
+
+/**
+ * @param {{signal?: AbortSignal}} [options] - Aborted when the panel's markup
+ *   is unmounted (js/placement.js); removes the one listener this
+ *   adds outside it
+ */
+export function initAssist({ signal } = {}) {
+  if (unsubscribeLocale) return;
   // This panel's strings are not in the start-up catalog, so it registers
   // them itself rather than trusting whoever opened it to have done so. The
   // bridge does register them first in the normal path; a lesson, a share link
@@ -1121,7 +1147,7 @@ export function initAssist() {
   // share link, a test - can render before that await resolves and paint
   // message ids. Redrawing when the catalog changes removes the race rather
   // than narrowing it, and is the same subscription a language switch needs.
-  onLocaleChange(() => {
+  unsubscribeLocale = onLocaleChange(() => {
     render();
     // The retained tables are built from strings too, and a reader who
     // switches language with two passes on screen should not be left holding
@@ -1129,6 +1155,9 @@ export function initAssist() {
     renderExperiments();
   });
 
+  // Anything that asked for the elements before the markup was mounted
+  // cached nothing; ask again now that it is there.
+  els = null;
   const e = cacheElements();
   if (!e.container) return;
 
@@ -1181,21 +1210,39 @@ export function initAssist() {
   // chip grid is full. So it shows itself when one of its scenarios loads and
   // stays out of the way everywhere else. Without this the panel is not
   // reachable at all, which is how the e2e suite found it missing.
-  window.addEventListener('gravitasSimulationReset', () => {
-    stopAssistWatch();
-    // A rebuilt world is a new encounter, and the frame pointed at the old
-    // planet is pointing at an id that now means something else.
-    setFrame(WORLD);
-    showForCurrentScenario();
-  });
+  window.addEventListener(
+    'gravitasSimulationReset',
+    () => {
+      stopAssistWatch();
+      // A rebuilt world is a new encounter, and the frame pointed at the old
+      // planet is pointing at an id that now means something else.
+      setFrame(WORLD);
+      showForCurrentScenario();
+    },
+    signal ? { signal } : undefined
+  );
 
   e.container.style.display = 'none';
 }
 
 /**
+ * Undo initAssist(), for when the panel's markup leaves the page: stop the
+ * watch, close the panel, stop listening for the language, forget the
+ * elements.
+ */
+export function teardownAssist() {
+  if (!unsubscribeLocale) return;
+  stopAssistWatch();
+  setAssistEnabled(false);
+  unsubscribeLocale();
+  unsubscribeLocale = null;
+  els = null;
+}
+
+/**
  * Show the panel for a scenario that has already finished loading.
  *
- * The chunk is fetched by js/scenarioPanelBridge.js in response to the reset
+ * The chunk is fetched by js/placement.js in response to the reset
  * event, so by the time init() subscribes to that event it has been and gone.
  * This is the one-off catch-up for the load that caused the import; every
  * later rebuild is handled by the subscription. It shows the panel directly

@@ -17,73 +17,26 @@
 // mixed into the derivation.
 // =============================================================================
 
+// Depths, shallowest first (as in investigations/progressSchema.js).
+const LEVELS = ['core', 'quantitative', 'advanced'];
+const rank = d => Math.max(0, LEVELS.indexOf(d));
+const inDepth = (s, d) => rank(s?.depth) <= rank(d);
 import { checkAnswer, toleranceFor } from './answerCheck.js';
+import { FEEDBACK_CLASSES, hintLadder } from './answerFeedback.js';
+import { decodeEntities } from './lessonMarkup.js';
 
-/** Strip the small set of inline tags a lesson uses, for plain-text output. */
-/**
- * The named HTML entities this content actually uses.
- *
- * Deliberately a short list rather than a full table: an entity that is not
- * here survives into the output and the test in tests/instructorMaterials.js
- * fails naming it, which is a better outcome than a 2,000-entry table that
- * silently decodes something the browser would not.
- */
-const ENTITIES = Object.freeze({
-  rsquo: '\u2019',
-  lsquo: '\u2018',
-  ldquo: '\u201c',
-  rdquo: '\u201d',
-  ndash: '\u2013',
-  mdash: '\u2014',
-  hellip: '\u2026',
-  nbsp: ' ',
-  thinsp: ' ',
-  ensp: ' ',
-  emsp: ' ',
-  times: '\u00d7',
-  minus: '\u2212',
-  plusmn: '\u00b1',
-  deg: '\u00b0',
-  sup2: '\u00b2',
-  sup3: '\u00b3',
-  frac12: '\u00bd',
-  lt: '<',
-  gt: '>',
-  quot: '"',
-  apos: "'",
-});
+// A number as a student gives it: with an uncertainty if the step asks for one.
+export const asGiven = (step, n, u = toleranceFor(step) / 2) =>
+  step.uncertainty ? `${n} ± ${u}` : n;
 
 /**
- * Decode HTML entities, for output that is not HTML.
+ * Lesson prose as plain text, for the PDFs: the inline tags stripped, and the
+ * entities resolved through the same table the lesson panel uses, in
+ * js/lessonMarkup.js.
  *
- * A PDF has no markup, so `&rsquo;` in a source string is not a curly quote
- * there - it is six literal characters, and nineteen of them went out in three
- * answer keys reading "Kepler&rsquo;s". The browser was always right; only the
- * PDF path was wrong, which is why this lives behind plainText() and not in
- * the content.
- *
- * `&amp;` is decoded last and separately. Doing it first would turn the source
- * text `&amp;lt;` - which should read as the literal "&lt;" - into a "<".
- *
- * @param {string} text - Text that may carry entities
- * @returns {string} The same text with entities resolved
+ * @param {string} html - Lesson prose
+ * @returns {string} Plain text
  */
-function decodeEntities(text) {
-  return text
-    .replace(/&([a-zA-Z][a-zA-Z0-9]{1,31});/g, (whole, name) =>
-      Object.hasOwn(ENTITIES, name) ? ENTITIES[name] : whole
-    )
-    .replace(/&#(\d{1,7});/g, (whole, n) => {
-      const code = Number(n);
-      return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : whole;
-    })
-    .replace(/&#[xX]([0-9a-fA-F]{1,6});/g, (whole, hex) => {
-      const code = parseInt(hex, 16);
-      return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : whole;
-    })
-    .replace(/&amp;/g, '&');
-}
-
 export function plainText(html) {
   return decodeEntities(
     String(html ?? '')
@@ -118,7 +71,9 @@ export function entryFor(step, index) {
     step: index + 1,
     type: step.type,
     kind: step.kind ?? null,
-    title: step.title,
+    sid: step.sid,
+    ...(step.depth ? { depth: step.depth } : {}),
+    title: plainText(step.title),
     category: categoryOf(step),
     prompt: step.prompt ? plainText(step.prompt) : null,
     explanation: step.because ? plainText(step.because) : null,
@@ -131,7 +86,13 @@ export function entryFor(step, index) {
     entry.answerText = plainText(step.options[step.answer]);
   }
 
-  if (step.kind === 'numeric') {
+  if (step.kind === 'numeric' && step.formula) {
+    // Different for every student: the key gives the rule, not a number.
+    entry.answerFormula = step.formula.expr;
+    entry.formulaOf = { ...step.formula.of };
+    entry.tolerancePct = step.formula.tolerancePct ?? 5;
+    entry.unit = step.unit ?? null;
+  } else if (step.kind === 'numeric') {
     const tol = toleranceFor(step);
     entry.answerValue = step.answer;
     entry.tolerance = tol;
@@ -144,18 +105,45 @@ export function entryFor(step, index) {
     entry.acceptedUnits = step.expect?.accept ? [...step.expect.accept] : null;
   }
 
-  // Whether help was on offer. Not a mark against anyone - it is context for
-  // reading a class's answers, and the report records what each student took.
-  if (step.hints || step.worked) {
+  // The help on offer, in words: the ladder in the order students are shown
+  // it, and the worked answer behind it. Context for reading a class's
+  // answers, and not a mark against anyone - the report records what each
+  // student took.
+  const ladder = hintLadder(step);
+  if (ladder.length || step.worked) {
     entry.help = {
-      concept: Boolean(step.hints?.concept),
-      method: Boolean(step.hints?.method),
-      worked: Boolean(step.worked),
+      hints: ladder.map(h => plainText(h.text)),
+      worked: step.worked ? plainText(step.worked) : null,
     };
   }
 
-  if (step.kind === 'short')
+  // What a wrong number is told, by class: the check each one teaches.
+  if (step.feedback) {
+    entry.feedback = FEEDBACK_CLASSES.filter(k => step.feedback[k]).map(k => ({
+      class: k,
+      text: plainText(step.feedback[k]),
+    }));
+  }
+
+  // A wrong option or number that names a mistake, with what it says.
+  const named = (step.misconceptions || []).filter(m => m?.say);
+  if (named.length) {
+    entry.mistakes = named.map(m => ({
+      id: m.id,
+      option: Number.isInteger(m.option)
+        ? String.fromCharCode(65 + m.option)
+        : null,
+      text: plainText(m.say),
+    }));
+  }
+
+  if (step.reflect) entry.reflect = true;
+
+  if (step.kind === 'short') {
     entry.rubric = step.rubric ? plainText(step.rubric) : null;
+    // Criteria and levels (Prompt 79, js/rubric.js), raw: the documents plain them.
+    if (step.rubricCriteria) entry.criteria = step.rubricCriteria;
+  }
 
   if (step.type === 'measure') {
     entry.fields = (step.fields || []).map(f => ({
@@ -163,7 +151,7 @@ export function entryFor(step, index) {
       label: plainText(f.label),
       unit: f.unit ?? null,
       derived: Boolean(f.compute),
-      hint: f.hint ?? null,
+      hint: plainText(f.hint) || null,
     }));
     entry.hasValidator = typeof step.validate === 'function';
     entry.importable = Boolean(step.importFromSelection);
@@ -181,18 +169,22 @@ export function entryFor(step, index) {
 /**
  * The answer key for one investigation.
  * @param {Object} inv - Investigation definition
+ * @param {string} [depth] - Only the steps a student reads at this depth,
+ *   numbered as they see them (DEPTH.md); every step when omitted
  * @returns {Object} Metadata plus one entry per step
  */
-export function answerKeyFor(inv) {
+export function answerKeyFor(inv, depth) {
+  const steps = depth ? inv.steps.filter(s => inDepth(s, depth)) : inv.steps;
   return {
+    depth: depth ?? null,
     id: inv.id,
-    title: inv.title,
-    subtitle: inv.subtitle,
-    duration: inv.duration,
-    level: inv.level,
-    stepCount: inv.steps.length,
+    title: plainText(inv.title),
+    subtitle: plainText(inv.subtitle),
+    duration: plainText(inv.duration),
+    level: plainText(inv.level),
+    stepCount: steps.length,
     objectives: (inv.objectives || []).map(plainText),
-    entries: inv.steps.map(entryFor),
+    entries: steps.map(entryFor),
   };
 }
 
@@ -234,11 +226,11 @@ export function verifyKey(inv) {
     }
 
     if (e.answerValue !== undefined) {
-      if (!checkAnswer(step, e.answerValue)) {
+      if (!checkAnswer(step, asGiven(step, e.answerValue))) {
         problems.push(`${where}: the derived value is not accepted`);
       }
       const outside = e.answerValue + e.tolerance * 1.001 + 1e-12;
-      if (checkAnswer(step, outside)) {
+      if (checkAnswer(step, asGiven(step, outside, e.tolerance / 1e4))) {
         problems.push(
           `${where}: the quoted tolerance is narrower than the site's`
         );
@@ -248,7 +240,7 @@ export function verifyKey(inv) {
       }
     }
 
-    if (e.category === 'written' && !e.rubric) {
+    if (e.category === 'written' && !e.rubric && !e.reflect) {
       problems.push(`${where}: short answer with no rubric for the instructor`);
     }
     if (

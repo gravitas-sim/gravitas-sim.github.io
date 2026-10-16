@@ -129,7 +129,7 @@ test.describe('the measurement tools', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario("Kepler's 2nd Law");
+    await app.loadScenario('keplers-2nd-law');
     await freeze(page);
 
     // The middle of the view, where a newly shown tool is laid out.
@@ -184,7 +184,7 @@ test.describe('the measurement tools', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario("Kepler's 2nd Law");
+    await app.loadScenario('keplers-2nd-law');
     await app.railControl('toggleStopwatch');
     await page.locator('#toggleStopwatch').click();
     await expect(page.locator('#stopwatchControls')).toBeVisible();
@@ -219,7 +219,7 @@ test.describe('the measurement tools', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario("Kepler's 2nd Law");
+    await app.loadScenario('keplers-2nd-law');
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
       ui.state.selectedObject = null;
@@ -238,7 +238,7 @@ test.describe('what a screenshot carries with it', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario("Kepler's 2nd Law");
+    await app.loadScenario('keplers-2nd-law');
     await freeze(page);
 
     // The bottom-left corner, where the instrumentation is drawn.
@@ -261,7 +261,7 @@ test.describe('what a screenshot carries with it', () => {
 
   test('the ruler is in the export too', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario("Kepler's 2nd Law");
+    await app.loadScenario('keplers-2nd-law');
     await freeze(page);
     const box = { x: 0.15, y: 0.55, w: 0.55, h: 0.3 };
     const before = await exportPixels(page, box);
@@ -289,7 +289,7 @@ test.describe('the vector overlay', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario("Kepler's 2nd Law");
+    await app.loadScenario('keplers-2nd-law');
     await app.setPaused(true);
 
     // Put the eccentric orbiter somewhere general on its orbit and select it.
@@ -330,7 +330,7 @@ test.describe('the vector overlay', () => {
   }) => {
     // The lesson the overlay exists to teach, measured rather than looked at.
     await app.boot();
-    await app.loadScenario("Kepler's 2nd Law");
+    await app.loadScenario('keplers-2nd-law');
     const angles = await page.evaluate(async () => {
       const P = await import('/js/physics.js');
       const ecc = P.planets.find(p => p.name === 'Eccentric Orbiter');
@@ -358,7 +358,7 @@ test.describe('the vector overlay', () => {
 
   test('the potential well draws under the scene', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Binary Star System');
+    await app.loadScenario('binary-star-system');
     await freeze(page);
     const box = { x: 0.1, y: 0.1, w: 0.8, h: 0.8 };
     const off = await exportPixels(page, box);
@@ -408,23 +408,23 @@ test.describe('the integrator setting', () => {
   // a part in a million, so the drift readout means what the lesson says it
   // means and rises only when something real is unresolved.
   const NON_DEFAULT_INTEGRATOR = {
-    'Galilean Resonance': 'Velocity Verlet',
-    'Broken Laplace Resonance': 'Velocity Verlet',
-    'Pluto and Neptune': 'Velocity Verlet',
-    'Jupiter Trojans': 'Velocity Verlet',
-    'Binary Planet Lab': 'Velocity Verlet',
-    'Circumbinary Planet Lab': 'Velocity Verlet',
+    'galilean-resonance': 'Velocity Verlet',
+    'broken-laplace-resonance': 'Velocity Verlet',
+    'pluto-and-neptune': 'Velocity Verlet',
+    'jupiter-trojans': 'Velocity Verlet',
+    'binary-planet-lab': 'Velocity Verlet',
+    'circumbinary-planet-lab': 'Velocity Verlet',
     // Both assist scenarios are a scattering measurement checked against a
     // closed-form deflection, and symplectic Euler does not hold an angle to
     // the precision the lesson asks students to read off.
-    'Gravity Assist Lab': 'Velocity Verlet',
-    'Gravity Assist: Heliocentric': 'Velocity Verlet',
+    'gravity-assist-lab': 'Velocity Verlet',
+    'gravity-assist-heliocentric': 'Velocity Verlet',
     // The transfer time is checked against the closed form to a per cent,
     // which symplectic Euler's first-order period error cannot support.
-    'Orbital Transfer Lab': 'Velocity Verlet',
+    'orbital-transfer-lab': 'Velocity Verlet',
     // The lesson watches the Jacobi constant hold; first-order drift would
     // make that a claim about the integrator.
-    'Lagrange Point Lab': 'Velocity Verlet',
+    'lagrange-point-lab': 'Velocity Verlet',
   };
 
   test('every shipped scenario loads under the scheme it declares', async ({
@@ -464,7 +464,7 @@ test.describe('the integrator setting', () => {
       for (const key of keys) {
         ui.SETTINGS.preset_scenario = key;
         ui.initialize_simulation({ seed: 'integrator-default' });
-        ui.SETTINGS.preset_scenario = 'Solar System';
+        ui.SETTINGS.preset_scenario = 'solar-system';
         ui.initialize_simulation({ seed: 'integrator-default' });
         if (P.activeIntegrator() !== 'Symplectic Euler') {
           out.push(`${key} left ${P.activeIntegrator()} in force`);
@@ -480,7 +480,7 @@ test.describe('the integrator setting', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Star System');
+    await app.loadScenario('binary-star-system');
     await app.waitForFrames(10);
 
     for (const scheme of ['Velocity Verlet', 'RK4', 'Symplectic Euler']) {
@@ -518,7 +518,7 @@ test.describe('the integrator setting', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Star System');
+    await app.loadScenario('binary-star-system');
     for (const scheme of ['RK4', 'Symplectic Euler']) {
       await setSettings(page, { integrator: scheme });
       await app.waitForFrames(5);

@@ -1,0 +1,197 @@
+{
+  "assets": {
+    "type": "course-pack",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "assets[0].offline",
+        "line": 24,
+        "column": 18,
+        "message": "a declarative extension is never core: a failed fetch would break the install for everybody; use optional"
+      },
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "assets[1].path",
+        "line": 27,
+        "column": 15,
+        "message": "no entry in licenses covers notes.json"
+      }
+    ]
+  },
+  "course-content": {
+    "type": "course-pack",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "course.json",
+        "path": "units[0].title.es",
+        "line": 21,
+        "column": 16,
+        "message": "is missing: every string needs every declared locale"
+      },
+      {
+        "severity": "error",
+        "file": "course.json",
+        "path": "units[0].lessons[2].lesson",
+        "line": 40,
+        "column": 21,
+        "message": "Gravitas has no investigation \"no-such-lesson\""
+      }
+    ]
+  },
+  "declarative-names-code": {
+    "type": "course-pack",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "provides.courses[0].entry",
+        "line": 17,
+        "column": 18,
+        "message": "a declarative package names no code"
+      },
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "assets[1].path",
+        "line": 28,
+        "column": 15,
+        "message": "a declarative package names no script"
+      },
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "assets",
+        "line": 21,
+        "column": 13,
+        "message": "a declarative package ships no code"
+      }
+    ]
+  },
+  "id-taken": {
+    "type": "capability",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "provides.widgetFamilies[0].widgets[0]",
+        "line": 17,
+        "column": 11,
+        "message": "\"launch\" is an instrument Gravitas already has"
+      },
+      {
+        "severity": "warning",
+        "file": "gravitas-extension.json",
+        "path": "provides.widgetFamilies[0].entry",
+        "line": 19,
+        "column": 18,
+        "message": "builtin:widgets/kepler-third-law is not in js/platform/builtins.js yet: that line is added when a maintainer vendors the family (sdk/README.md, \"Vendoring\")"
+      }
+    ]
+  },
+  "not-json": {
+    "type": null,
+    "findings": [
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "",
+        "line": 6,
+        "column": 25,
+        "message": "is not valid JSON here"
+      }
+    ]
+  },
+  "scenario-content": {
+    "type": "scenario-pack",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "title.en",
+        "line": 8,
+        "column": 11,
+        "message": "contains markup or a URL; a pack is plain text"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "summary.es",
+        "line": 11,
+        "column": 14,
+        "message": "is missing: every declared locale needs it"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "settings.binary_lab_planet_a",
+        "line": 16,
+        "column": 28,
+        "message": "\"binary_lab_planet_a\" is not a setting a scenario pack can set"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "bodies[1].type",
+        "line": 22,
+        "column": 15,
+        "message": "a body: Choose a type."
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "settings.num_black_holes",
+        "line": 15,
+        "column": 15,
+        "message": "num_black_holes is 1 by default; a scenario with its own bodies sets it to 0"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "settings.num_planets",
+        "line": 17,
+        "column": 20,
+        "message": "must be 0: a scenario with its own bodies does not also generate them"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "settings.num_gas_giants",
+        "line": 15,
+        "column": 15,
+        "message": "num_gas_giants is 2 by default; a scenario with its own bodies sets it to 0"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "settings.num_asteroids",
+        "line": 15,
+        "column": 15,
+        "message": "num_asteroids is 10 by default; a scenario with its own bodies sets it to 0"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "id",
+        "line": 4,
+        "column": 9,
+        "message": "is \"another-scenario\"; the extension provides \"scenario-content\""
+      }
+    ]
+  },
+  "wrong-platform": {
+    "type": "course-pack",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "gravitas",
+        "line": 7,
+        "column": 15,
+        "message": "accepts ^2.0.0; this Gravitas implements platform 1.0.0"
+      }
+    ]
+  }
+}

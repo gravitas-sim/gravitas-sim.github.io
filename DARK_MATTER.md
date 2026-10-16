@@ -156,7 +156,7 @@ true ratio a member is thirteen pixels across at the zoom the whole cluster fits
 in, and an object nobody can see the shape of might as well not have one.
 
 Adding the type turned up a duplicate worth removing. `js/physics.js` carried its
-own copy of the 355 object-name strings in `js/data/objectNames.js`, byte for
+own copy of the 355 object-name strings in `js/names.js`, byte for
 byte identical. Adding a ninth pool would have meant adding it twice, so the copy
 is gone and physics.js imports the shared table.
 

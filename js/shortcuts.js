@@ -10,6 +10,13 @@ let overlayEl = null;
 let enabled = true;
 
 /**
+ * js/dialog.js, fetched the first time the list is shown: this module is on
+ * the start-up path, and the dialog machinery is not.
+ */
+let dialogs = null;
+const loadDialogs = async () => (dialogs ??= await import('./dialog.js'));
+
+/**
  * Register a shortcut.
  * @param {Object} spec
  * @param {string} spec.keys - Display form, e.g. 'Shift + ←'
@@ -24,14 +31,6 @@ export function registerShortcut(spec) {
   registry.push(spec);
 }
 
-/** @returns {Array} All registered shortcuts */
-export const getShortcuts = () => registry.slice();
-
-/** Enable or disable global shortcut handling. */
-export const setShortcutsEnabled = v => {
-  enabled = !!v;
-};
-
 /**
  * True when the event came from somewhere that owns the keyboard: * a text field, a select, or anything contenteditable.
  */
@@ -45,6 +44,14 @@ function isTypingTarget(target) {
     target.isContentEditable === true
   );
 }
+
+/** Space presses a focused button; the pause shortcut used to take it. */
+const ownsSpace = target =>
+  Boolean(
+    target?.closest?.(
+      'button, summary, [role="button"], [role="switch"], [role="checkbox"], [role="tab"], [role="menuitem"]'
+    )
+  );
 
 function handleKey(e) {
   if (!enabled) return;
@@ -63,6 +70,7 @@ function handleKey(e) {
   // text before the panel closes. That is the right way round: the field
   // decides, and silence means the dialog gets it.
   if (e.key !== 'Escape' && isTypingTarget(e.target)) return;
+  if (e.key === ' ' && ownsSpace(e.target)) return;
 
   const key = e.key.toLowerCase();
   for (const s of registry) {
@@ -92,6 +100,7 @@ function buildOverlay() {
   el.setAttribute('aria-modal', 'true');
   el.setAttribute('aria-label', 'Keyboard shortcuts');
   el.hidden = true;
+  el.inert = true;
 
   const groups = new Map();
   for (const s of registry) {
@@ -139,20 +148,30 @@ function buildOverlay() {
   return el;
 }
 
-/** Show the shortcut cheatsheet. */
-export function showShortcutHelp() {
+/**
+ * Show the shortcut cheatsheet: a modal, through js/dialog.js, so Tab stays in
+ * it, the page behind it is inert, and Escape puts focus back where it was.
+ */
+export async function showShortcutHelp() {
   if (!overlayEl) overlayEl = buildOverlay();
-  overlayEl.hidden = false;
-  overlayEl.querySelector('[data-close]')?.focus();
+  if (isShortcutHelpOpen()) return;
+  const trigger = document.activeElement;
+  const { openDialog } = await loadDialogs();
+  openDialog(overlayEl, {
+    isolate: true,
+    trigger,
+    initialFocus: '[data-close]',
+  });
 }
 
 /** Hide the shortcut cheatsheet. */
 export function hideShortcutHelp() {
-  if (overlayEl) overlayEl.hidden = true;
+  if (overlayEl) dialogs?.closeDialog(overlayEl);
 }
 
-/** @returns {boolean} True while the cheatsheet is open */
-export const isShortcutHelpOpen = () => !!overlayEl && !overlayEl.hidden;
+/** @returns {boolean} True while the cheatsheet is open, and not closing */
+export const isShortcutHelpOpen = () =>
+  !!overlayEl && !overlayEl.hidden && !overlayEl.inert;
 
 /** Toggle the cheatsheet. */
 export function toggleShortcutHelp() {

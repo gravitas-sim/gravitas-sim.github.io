@@ -7,8 +7,12 @@ import {
   gradedSteps,
   seriesPosition,
 } from '../js/data/investigations.js';
-import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
-import { getWidget } from '../js/widgets.js';
+import { SCENARIO_INFO, scenarioId } from '../js/data/scenarioInfo.js';
+import { getWidget, whenWidgetsReady } from '../js/widgets.js';
+
+// Some instrument families are fetched on demand (js/widgets.js,
+// LAZY_FAMILIES), so the whole catalog is awaited before any lookup.
+await whenWidgetsReady();
 
 const repoFile = rel => fileURLToPath(new URL(`../${rel}`, import.meta.url));
 
@@ -502,7 +506,7 @@ describe('every lesson carries what its card needs', () => {
         inv.steps.map(s => s.setup?.scenario).filter(Boolean)
       );
       const owners = [...used]
-        .map(key => SCENARIO_INFO[key]?.thumbnail)
+        .map(key => SCENARIO_INFO[scenarioId(key)]?.thumbnail)
         .filter(Boolean);
       // A card is a picture of the first screen, so what decides is what the
       // lesson *opens* in. A lesson that stands up its own scene on screen one

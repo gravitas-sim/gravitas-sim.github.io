@@ -20,6 +20,7 @@
 // neighbor, not sorting a table.
 // =============================================================================
 
+import { parseDocument } from './platform/common.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { formatNumber } from './format.js';
 import {
@@ -27,6 +28,7 @@ import {
   requestObservationLayout,
 } from './observationLayout.js';
 import { KIND, annotate } from './notebook/entry.js';
+import { citationRows } from './notebook/artifactEntry.js';
 import {
   addEntry,
   backupFilename,
@@ -39,8 +41,9 @@ import {
   MAX_BACKUP_BYTES,
 } from './notebook/notebook.js';
 import * as store from './notebook/store.js';
-import { buildEvidenceReport, reportFilename } from './notebook/report.js';
-import { downloadPdf } from './labReport.js';
+import { buildLedgerReport, reportFilename } from './notebook/report.js';
+import { observedRows, ARTIFACT_SOURCES } from './notebook/ledger.js';
+import { downloadPdf, reportMessages } from './labReport.js';
 
 const PANEL_ID = 'evidenceNotebook';
 
@@ -77,9 +80,6 @@ export function setRevisionSource(fn) {
 /** The entries, for tests and for the report. @returns {Array<object>} */
 export const notebookEntries = () => entries;
 
-/** The last write's outcome. @returns {object} */
-export const lastSaveResult = () => lastSave;
-
 // --- Persistence ---------------------------------------------------------------
 
 /**
@@ -91,13 +91,32 @@ export const lastSaveResult = () => lastSave;
  * evidence is safe.
  */
 function persist() {
+  if (held) return lastSave;
   lastSave = store.save(entries);
   return lastSave;
 }
 
+// An unreadable stored notebook is left exactly as it is until the reader has
+// chosen: nothing is written over it.
+let held = false;
+
 /** Read the stored notebook into memory. Called once, when the panel loads. */
 export function loadNotebook() {
   const result = store.load();
+  held = result.reason === 'unreadable';
+  if (held)
+    import('./corruptState.js').then(m =>
+      m.recoverCorrupt({
+        raw: result.raw,
+        filename: 'gravitas-notebook-unreadable.txt',
+        discard: () => {
+          store.clear();
+          held = false;
+          lastSave = { ok: true };
+          render();
+        },
+      })
+    );
   entries = result.ok ? result.entries : [];
   if (!result.ok) lastSave = { ok: false, reason: result.reason };
   return entries;
@@ -226,7 +245,15 @@ function provenanceHtml(p) {
         .join('; '),
     ]);
   }
-  return `<dl class="nb-prov">${rows
+  return rowsHtml(rows);
+}
+
+/**
+ * Label/value rows as the conditions list: a simulation's conditions, or a
+ * measurement on real data's own rows (js/notebook/observed.js).
+ */
+function rowsHtml(rows) {
+  return `<dl class="nb-prov">${(rows || [])
     .map(
       ([label, value]) => `<dt>${esc(label)}</dt><dd>${esc(String(value))}</dd>`
     )
@@ -253,6 +280,7 @@ function proseHtml(entry) {
 /** One entry. */
 function entryHtml(entry, index, total) {
   const snap = entry.snapshot;
+  const cited = snap.artifact && ARTIFACT_SOURCES.includes(entry.source);
   const source = t(`nb.source.${entry.source}`);
   return `<li class="nb-entry" data-entry="${esc(entry.id)}">
       <div class="nb-entry-head">
@@ -319,8 +347,8 @@ function entryHtml(entry, index, total) {
       }
       ${proseHtml(entry)}
       <details class="nb-details">
-        <summary>${esc(t('nb.entry.conditions'))}</summary>
-        ${provenanceHtml(snap.provenance)}
+        <summary>${esc(t(snap.observed ? 'nb.entry.data' : cited ? 'nb.entry.cite' : 'nb.entry.conditions'))}</summary>
+        ${snap.observed ? rowsHtml(observedRows(snap.observed, t)) : cited ? rowsHtml(citationRows(snap.artifact, t)) : provenanceHtml(snap.provenance)}
       </details>
     </li>`;
 }
@@ -406,6 +434,10 @@ export function ensurePanel() {
       </div>
     </div>
     <p class="nb-intro">${esc(t('nb.intro'))}</p>
+    <details id="nbDerive" class="nb-derive">
+      <summary>${esc(t('nb.formula.summary'))}</summary>
+      <div id="nbDeriveHost"></div>
+    </details>
     <div id="nbBody" class="nb-body"></div>
     <input id="nbRestoreFile" type="file" accept="application/json,.json" hidden />
   `;
@@ -453,6 +485,18 @@ function subscribeToLocaleOnce() {
 /** Wire the panel's controls. Once, when it is built. */
 function wire() {
   $('nbClose')?.addEventListener('click', () => setNotebookEnabled(false));
+  // The formula form is a lazy module: nothing of it loads until it is opened.
+  let derive = null;
+  $('nbDerive')?.addEventListener('toggle', () => {
+    if (!$('nbDerive').open) return;
+    derive ??= import('./notebook/derivedPanel.js').then(m =>
+      m.mountDerivedPanel($('nbDeriveHost'), {
+        entries: () => entries,
+        offer: offerDraft,
+      })
+    );
+    derive.then(p => p.update());
+  });
 
   // Prose edits: on change rather than on every keystroke, so a save failure
   // is reported once per edit and not once per character.
@@ -589,9 +633,13 @@ export function downloadNotebook() {
   saveText(JSON.stringify(payload, null, 2), backupFilename());
 }
 
+/** Fetch the strings the ledger's rows and the report are said in. */
+export const loadWords = reportMessages;
+
 /** Download the report. */
-export function downloadReport() {
-  const bytes = buildEvidenceReport({ entries, revision: revisionOf() });
+export async function downloadReport() {
+  await reportMessages();
+  const bytes = await buildLedgerReport({ entries, revision: revisionOf() });
   downloadPdf(bytes, reportFilename());
 }
 
@@ -615,7 +663,7 @@ export async function restoreFrom(file) {
   }
   let data;
   try {
-    data = JSON.parse(await file.text());
+    data = parseDocument(await file.text());
   } catch {
     lastSave = { ok: false, reason: 'notJson' };
     render();
@@ -666,13 +714,3 @@ export function setNotebookEnabled(on) {
 
 /** @returns {boolean} Whether the panel is open */
 export const isNotebookEnabled = () => enabled;
-
-/** Forget everything, for tests. */
-export function resetPanel() {
-  root?.remove();
-  root = null;
-  entries = [];
-  draft = null;
-  enabled = false;
-  lastSave = { ok: true, reason: store.FAILURE.OK };
-}

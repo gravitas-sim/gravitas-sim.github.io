@@ -120,7 +120,7 @@ export function activityGuide(
       'The full investigation assumes a little more, and its guide lists it:',
       { size: 9.5, gap: 4 }
     );
-    doc.bullets(shared.priorKnowledge, { size: 9.5, gap: 1 });
+    doc.bullets(shared.priorKnowledge.map(plainText), { size: 9.5, gap: 1 });
   }
 
   let n = 3;
@@ -139,7 +139,7 @@ export function activityGuide(
         ['For', say(messages, format.forId)],
         [
           'Steps',
-          `${resolved.sids.length} of the lesson's ${lesson.steps.length}`,
+          `${resolved.sids.length} of the investigation's ${lesson.steps.length}`,
         ],
         ['Open with', activityLaunchUrl(activity.id, format.id)],
       ],

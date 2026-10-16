@@ -23,8 +23,19 @@ import {
   curriculumMap,
 } from '../js/instructorDocs.js';
 import { checkInstructorCatalog } from '../js/authoring/instructorSchema.js';
-import { toWinAnsi } from '../js/pdf.js';
+import { textWidth, toWinAnsi } from '../js/pdf.js';
 import { plural } from '../js/format.js';
+import { expectationsFor } from '../js/instructorExpectations.js';
+import { guideSource } from '../js/instructorSource.js';
+import { checkFlow } from '../js/instructorFlow.js';
+
+/** A lesson's instructor content with its flow, which lives in its own file. */
+const contentFor = id => ({
+  ...instructorContentFor(id),
+  flow: guideSource(INVESTIGATIONS.find(i => i.id === id)).flow.map(
+    ({ steps, text }) => ({ steps, text })
+  ),
+});
 import { ACTIVITIES } from '../js/data/activities.js';
 import { activityWorksheet } from '../js/activityDocs.js';
 import { activityLaunchUrl } from '../js/activities/activityBridge.js';
@@ -111,7 +122,7 @@ describe('answer keys are derived, not written', () => {
 describe('instructor content lines up with the lessons', () => {
   test('every implemented investigation has instructor content', () => {
     for (const inv of INVESTIGATIONS) {
-      expect(instructorContentFor(inv.id)).toBeTruthy();
+      expect(contentFor(inv.id)).toBeTruthy();
     }
   });
 
@@ -124,7 +135,7 @@ describe('instructor content lines up with the lessons', () => {
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
     '%s: every section a guide needs is present and specific',
     (id, inv) => {
-      const c = instructorContentFor(id);
+      const c = contentFor(id);
       expect(c.topic).toBeTruthy();
       expect(c.placement.length).toBeGreaterThan(40);
       expect(c.overview.length).toBeGreaterThan(200);
@@ -178,27 +189,16 @@ describe('instructor content lines up with the lessons', () => {
     (id, inv) => {
       // A guide whose roadmap skips steps sends an instructor looking for a
       // section of the lesson that is not where the guide says it is.
-      const seen = new Set();
-      for (const block of instructorContentFor(id).flow) {
-        const [a, b] = block.steps.split(/[–-]/).map(s => Number(s.trim()));
-        const end = Number.isFinite(b) ? b : a;
-        expect(a).toBeGreaterThanOrEqual(1);
-        expect(end).toBeLessThanOrEqual(inv.steps.length);
-        for (let n = a; n <= end; n++) {
-          expect(seen.has(n)).toBe(false);
-          seen.add(n);
-        }
-      }
-      expect(seen.size).toBe(inv.steps.length);
+      expect(checkFlow(inv)).toEqual([]);
     }
   );
 
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
     '%s: every step an expectation names really is one that needs one',
     (id, inv) => {
-      const c = instructorContentFor(id);
-      for (const [num, text] of Object.entries(c.expectations || {})) {
-        const step = inv.steps[Number(num) - 1];
+      const c = contentFor(id);
+      for (const [sid, text] of Object.entries(expectationsFor(inv))) {
+        const step = inv.steps.find(s => s.sid === sid);
         expect(step).toBeTruthy();
         // Expectations exist for screens where a student observes something:
         // measurements, activities, and reading screens that put something in
@@ -236,10 +236,10 @@ describe('instructor content lines up with the lessons', () => {
     (id, inv) => {
       // A measure step with no stated expectation is the one place an
       // instructor is left without an answer to give.
-      const c = instructorContentFor(id);
+      const c = contentFor(id);
       for (const [i, step] of inv.steps.entries()) {
         if (step.type !== 'measure') continue;
-        expect(c.expectations?.[i + 1]).toBeTruthy();
+        expect(expectationsFor(inv)[step.sid]).toBeTruthy();
       }
     }
   );
@@ -247,7 +247,7 @@ describe('instructor content lines up with the lessons', () => {
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
     '%s: teaching notes that cite a step cite one that exists',
     (id, inv) => {
-      const c = instructorContentFor(id);
+      const c = contentFor(id);
       const prose = [...c.teachingNotes, ...c.features.map(f => f.name)].join(
         ' '
       );
@@ -296,7 +296,8 @@ describe('grading at the edge of a tolerance', () => {
 describe('plain text for a medium with no markup', () => {
   // A PDF has no markup, so an entity in a source string is not a character
   // there - it is the six letters "&rsquo;", and nineteen of those went out in
-  // three answer keys. The browser was always right; only this path was wrong.
+  // three answer keys. The lesson panel had the same bug for longer; both now
+  // read one table, in js/lessonMarkup.js.
   test.each([
     ['Kepler&rsquo;s law', 'Kepler\u2019s law'],
     ['a&nbsp;b', 'a b'],
@@ -305,8 +306,8 @@ describe('plain text for a medium with no markup', () => {
     ['A &amp; B', 'A & B'],
     ['&#8217;s', '\u2019s'],
     ['&#x2014;', '\u2014'],
-    // &amp; is decoded last, so text that should read as a literal "&lt;"
-    // stays one rather than becoming a "<".
+    // Each reference is decoded once, so text that should read as a literal
+    // "&lt;" stays one rather than becoming a "<".
     ['&amp;lt; stays literal', '&lt; stays literal'],
     // An entity nobody listed survives, visibly, rather than being guessed at.
     ['&unknownthing; survives', '&unknownthing; survives'],
@@ -476,7 +477,15 @@ describe('instructor content matches the one schema', () => {
   );
 
   test('the whole catalog is canonical', () => {
-    expect(checkInstructorCatalog(INSTRUCTOR_CONTENT, steps)).toEqual([]);
+    // expectations live in their own module now; the schema judges the
+    // guide with them attached, as the author check does
+    const guides = Object.fromEntries(
+      INVESTIGATIONS.map(inv => [
+        inv.id,
+        { ...contentFor(inv.id), expectations: expectationsFor(inv) },
+      ])
+    );
+    expect(checkInstructorCatalog(guides, steps)).toEqual([]);
   });
 
   // The checker has to fail on the shapes that actually shipped, or it is a
@@ -518,7 +527,7 @@ describe('instructor content matches the one schema', () => {
         ...c,
         flow: [...c.flow, { steps: '900-901', text: 'C'.repeat(40) }],
       }),
-      /flow names screen 900, and the lesson has \d+/,
+      /flow names screen 900, and the investigation has \d+/,
     ],
     [
       'a blank cell',
@@ -531,7 +540,7 @@ describe('instructor content matches the one schema', () => {
   ])('it catches %s', (_label, breakIt, expected) => {
     const broken = {
       ...INSTRUCTOR_CONTENT,
-      'keplers-laws': breakIt(INSTRUCTOR_CONTENT['keplers-laws']),
+      'keplers-laws': breakIt(contentFor('keplers-laws')),
     };
     const problems = checkInstructorCatalog(broken, steps);
     expect(problems.join('\n')).toMatch(expected);
@@ -556,6 +565,14 @@ describe('the generated documents', () => {
     [...decode(pdf).matchAll(/\(((?:\\.|[^()\\])*)\)\s*Tj/g)].map(m =>
       m[1].replace(/\\([()\\])/g, '$1')
     );
+  /** The properties a reader shows in its title bar and file list. */
+  const properties = pdf =>
+    [...decode(pdf).matchAll(/\/(?:Title|Subject) \(((?:\\.|[^()\\])*)\)/g)]
+      .map(m => m[1])
+      .join(' ');
+  /** An entity or an inline tag: lesson markup, in a medium that has none. */
+  const MARKUP =
+    /&(?:[a-zA-Z][a-zA-Z0-9]{1,31}|#[0-9]{1,7}|#[xX][0-9a-fA-F]{1,6});|<\/?(?:em|strong|sub|sup)>/g;
 
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
     '%s: the instructor guide builds a valid PDF',
@@ -573,10 +590,12 @@ describe('the generated documents', () => {
         '5. Investigation flow',
         '6. Interactive features',
         '7. Common misconceptions',
-        '8. Teaching notes',
-        '9. Discussion questions',
-        '10. Optional extensions',
-        '11. Model notes',
+        '8. What is scored automatically',
+        '9. Accessibility',
+        '10. Teaching notes',
+        '11. Discussion questions',
+        '12. Optional extensions',
+        '13. Model notes',
       ]) {
         expect(text).toContain(heading);
       }
@@ -614,7 +633,7 @@ describe('the generated documents', () => {
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
     '%s: the guide prints something under every heading',
     (id, inv) => {
-      const c = instructorContentFor(id);
+      const c = contentFor(id);
       const text = flat(instructorGuide(inv, { version: 'Test 2026' }));
       for (const [i, f] of c.flow.entries()) {
         expect({
@@ -649,6 +668,36 @@ describe('the generated documents', () => {
     }
   );
 
+  // The key skipped every reading step, and fifteen expectations went with
+  // them: the authoring rule accepted them, the guide prints none, so they
+  // reached no document at all. Looked for under the step's own heading,
+  // because an expectation printed against the wrong step is the other way
+  // this goes wrong.
+  test.each(INVESTIGATIONS.map(i => [i.id, i]))(
+    '%s: the answer key prints every expectation under its step',
+    (id, inv) => {
+      const text = flat(answerKeyDocument(inv, { version: 'Test 2026' }));
+      // Whole headings, not "Step n:": a measurement's own fields can be
+      // labeled "Step 1: a^3", and that is not where step 1 starts.
+      const headings = answerKeyFor(inv)
+        .entries.map(e => ({
+          n: String(e.step),
+          at: text.indexOf(ascii(`Step ${e.step}: ${e.title}`)),
+        }))
+        .filter(h => h.at >= 0);
+      for (const [sid, expectation] of Object.entries(expectationsFor(inv))) {
+        const n = String(inv.steps.findIndex(s => s.sid === sid) + 1);
+        const i = headings.findIndex(h => h.n === n);
+        const under =
+          i < 0 ? '' : text.slice(headings[i].at, headings[i + 1]?.at);
+        expect({
+          step: n,
+          printed: under.includes(opening(expectation)),
+        }).toEqual({ step: n, printed: true });
+      }
+    }
+  );
+
   // `bullets()` iterates its argument, so a string reaches it as a sequence of
   // characters: one guide went out at 27 pages with 590 bullets reading "T",
   // "w", "o". A run of one-character draws is the signature.
@@ -679,22 +728,56 @@ describe('the generated documents', () => {
 
   // An entity is markup that reached a medium with no markup in it. The PDF
   // says "don&rsquo;t" where the browser says "don’t".
+  // A tag is the same mistake: Listening to Spacetime's guide printed "the
+  // black holes' <em>motion</em>", because instructor prose went to the page
+  // as written.
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
-    '%s: no HTML entity survives into the PDF',
+    '%s: no HTML entity or inline tag survives into the PDF',
     (id, inv) => {
       for (const [what, pdf] of [
         ['guide', instructorGuide(inv, { version: 'Test 2026' })],
         ['key', answerKeyDocument(inv, { version: 'Test 2026' })],
       ]) {
         const found = [
-          ...new Set(
-            flat(pdf).match(
-              /&(?:[a-zA-Z][a-zA-Z0-9]{1,31}|#[0-9]{1,7}|#[xX][0-9a-fA-F]{1,6});/g
-            ) || []
-          ),
+          ...new Set(`${flat(pdf)} ${properties(pdf)}`.match(MARKUP) || []),
         ];
         expect({ id, what, found }).toEqual({ id, what, found: [] });
       }
+    }
+  );
+
+  // Instructor prose is written in template literals: a newline is where the
+  // source line wrapped, and a blank line is a paragraph break. Printed as
+  // written, a line broke wherever the source line had. Flattened whole, the
+  // way lesson prose is, an overview would run its paragraphs together.
+  test.each(INVESTIGATIONS.map(i => [i.id, i]))(
+    '%s: the overview prints its paragraphs, wrapped to the page',
+    (id, inv) => {
+      const lines = drawn(instructorGuide(inv, { version: 'Test 2026' }));
+      const body = lines
+        .slice(
+          lines.indexOf('1. Overview') + 1,
+          lines.indexOf('2. Learning objectives')
+        )
+        .filter(l => !/^Gravitas Instructor Guide|^Page \d+ of \d+$/.test(l));
+      const paragraphs = text =>
+        text
+          .split(/\n\s*\n/)
+          .map(p => ascii(plainText(p)).trim())
+          .filter(Boolean);
+      expect({ id, printed: paragraphs(body.join('\n')) }).toEqual({
+        id,
+        printed: paragraphs(contentFor(id).overview),
+      });
+
+      // Overviews print at 10 pt. A line with room for the next word, measured
+      // against the widest line the page holds, was broken by the source.
+      const widest = Math.max(...body.map(l => textWidth(l, 10)));
+      const early = body.filter((l, i) => {
+        const next = body[i + 1]?.split(' ')[0];
+        return l && next && textWidth(`${l} ${next}`, 10) <= widest;
+      });
+      expect({ id, early }).toEqual({ id, early: [] });
     }
   );
 
@@ -799,20 +882,32 @@ describe('the generated documents', () => {
     }
   );
 
-  test('reading-only steps are left out of the key', () => {
+  // A reading step asks for nothing, so the key leaves it out - unless there
+  // is an observation to expect on it, and then it is printed for the sake of
+  // that. Black Holes by the Numbers has both kinds.
+  test('reading-only steps are left out of the key, unless they carry an expectation', () => {
     const inv = getInvestigation('black-holes');
-    const text = [
-      ...new TextDecoder('latin1')
-        .decode(answerKeyDocument(inv))
-        .matchAll(/\(((?:\\.|[^()\\])*)\)\s*Tj/g),
-    ]
-      .map(m => m[1])
-      .join(' ');
+    const text = flat(answerKeyDocument(inv));
+    const bySid = expectationsFor(inv);
+    const expectations = Object.fromEntries(
+      inv.steps.map((s, i) => [i + 1, bySid[s.sid]])
+    );
     const reading = answerKeyFor(inv).entries.filter(
       e => e.category === 'reading'
     );
-    expect(reading.length).toBeGreaterThan(0);
-    for (const e of reading) expect(text).not.toContain(`Step ${e.step}:`);
+    const bare = reading.filter(e => !expectations[e.step]);
+    const noted = reading.filter(e => expectations[e.step]);
+    expect(bare.length).toBeGreaterThan(0);
+    expect(noted.length).toBeGreaterThan(0);
+    for (const e of bare) expect(text).not.toContain(`Step ${e.step}:`);
+    for (const e of noted) {
+      expect(text).toContain(
+        ascii(
+          `Step ${e.step}: ${e.title} Reading Expected observation: ` +
+            opening(expectations[e.step])
+        )
+      );
+    }
   });
 
   test('the adopter guide and curriculum map build and name every lesson', () => {
@@ -828,6 +923,7 @@ describe('the generated documents', () => {
       for (const inv of INVESTIGATIONS) {
         expect(text).toContain(letters(plainText(inv.title)));
       }
+      expect(`${flat(pdf)} ${properties(pdf)}`.match(MARKUP)).toBeNull();
     }
   });
 

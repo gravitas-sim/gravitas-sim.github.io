@@ -189,7 +189,7 @@ export function checkInstructorContent(id, content, { steps = 0 } = {}) {
     for (const block of content.flow) {
       for (const n of String(block?.steps ?? '').match(/\d+/g) || []) {
         if (Number(n) < 1 || Number(n) > steps) {
-          say(`flow names screen ${n}, and the lesson has ${steps}`);
+          say(`flow names screen ${n}, and the investigation has ${steps}`);
         }
       }
     }

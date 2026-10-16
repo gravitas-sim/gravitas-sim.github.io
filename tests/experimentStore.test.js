@@ -252,6 +252,141 @@ describe('schema migration', () => {
   });
 });
 
+describe('the drifts version 2 recorded wrongly', () => {
+  // Every version 2 drift is a total times a hundred: sampleFrame read the
+  // engine's `energy` and `angular` fields, which are the current totals. The
+  // numbers below are what the default experiment on Binary Planet Lab saved.
+  const sample = (t, energy) => ({
+    t,
+    separation: 0.2,
+    total_energy: energy,
+    energy_drift: energy * 100,
+    angular_drift: 37416573.9,
+  });
+  const run = () => ({
+    samples: [sample(0, -250.0149), sample(1, -250.0144)],
+    recordedAt: 5,
+    results: {
+      separation: { value: 0.2, kind: 'mean' },
+      total_energy: { value: -250.0144, kind: 'final' },
+      energy_drift: { value: -25001.44, kind: 'final' },
+      angular_drift: { value: 37416573.9, kind: 'final' },
+    },
+  });
+  const v2 = (extra = {}) => ({
+    v: 2,
+    id: 'saved',
+    metrics: ['separation', 'total_energy', 'energy_drift', 'angular_drift'],
+    runs: { A: run(), B: run() },
+    comparison: {
+      rows: [
+        { metric: 'separation', a: 0.2, b: 0.2 },
+        { metric: 'energy_drift', a: -25001.44, b: -25001.44 },
+      ],
+    },
+    ...extra,
+  });
+
+  test('are withdrawn from every sample and every result', () => {
+    const { ok, record: out } = migrate(v2());
+    expect(ok).toBe(true);
+    expect(out.v).toBe(SCHEMA_VERSION);
+    for (const label of ['A', 'B']) {
+      for (const s of out.runs[label].samples) {
+        expect(s).not.toHaveProperty('energy_drift');
+        expect(s).not.toHaveProperty('angular_drift');
+      }
+      expect(Object.keys(out.runs[label].results)).toEqual([
+        'separation',
+        'total_energy',
+      ]);
+    }
+    expect(out.comparison.rows.map(r => r.metric)).toEqual(['separation']);
+  });
+
+  test('and nothing that was measured correctly goes with them', () => {
+    const { record: out } = migrate(v2());
+    expect(out.runs.A.samples[1]).toEqual({
+      t: 1,
+      separation: 0.2,
+      total_energy: -250.0144,
+    });
+    expect(out.runs.A.recordedAt).toBe(5);
+    // Still asked for, so recording the runs again measures them.
+    expect(out.metrics).toContain('energy_drift');
+    expect(out.metrics).toContain('angular_drift');
+  });
+
+  test('each run that lost them says so', () => {
+    const { record: out } = migrate(v2());
+    expect(out.runs.A.driftWithdrawn).toBe(true);
+    expect(out.runs.B.driftWithdrawn).toBe(true);
+
+    const clean = v2({
+      runs: { A: { samples: [{ t: 0, separation: 1 }], recordedAt: 1 } },
+    });
+    expect(migrate(clean).record.runs.A.driftWithdrawn).toBeUndefined();
+  });
+
+  test('a saved reliability check keeps its verdict but loses its drift rows', () => {
+    const reliability = {
+      ok: true,
+      verdict: 'converging',
+      pathMetric: 'separation',
+      metrics: [
+        { metric: 'separation', agrees: true },
+        { metric: 'energy_drift', agrees: true },
+      ],
+    };
+    const { record: out } = migrate(v2({ reliability }));
+    expect(out.reliability.verdict).toBe('converging');
+    expect(out.reliability.metrics.map(m => m.metric)).toEqual(['separation']);
+  });
+
+  test('a reliability check that followed a drift is dropped', () => {
+    // Its path was two runs' total energy, which always agree.
+    const reliability = {
+      ok: true,
+      verdict: 'converging',
+      pathMetric: 'energy_drift',
+      metrics: [{ metric: 'energy_drift', agrees: true }],
+    };
+    expect(migrate(v2({ reliability })).record.reliability).toBeNull();
+  });
+
+  test('a version 1 record is brought through both steps', () => {
+    const { record: out } = migrate({
+      v: 1,
+      id: 'old',
+      runA: [{ t: 0, separation: 1, energy_drift: -1250 }],
+    });
+    expect(out.runs.A.samples).toEqual([{ t: 0, separation: 1 }]);
+    expect(out.runs.A.driftWithdrawn).toBe(true);
+  });
+
+  test('a drift recorded under version 3 is kept', () => {
+    const now = {
+      v: SCHEMA_VERSION,
+      id: 'x',
+      runs: { A: { samples: [{ t: 0, energy_drift: 0.00017 }] } },
+    };
+    const { record: out } = migrate(now);
+    expect(out.runs.A.samples[0].energy_drift).toBe(0.00017);
+    expect(out.runs.A.driftWithdrawn).toBeUndefined();
+  });
+
+  test('the stored copy is not touched until the experiment is saved again', () => {
+    const backend = fakeStorage();
+    const raw = JSON.stringify(v2());
+    backend.map.set('gravitas_experiment_saved', raw);
+    setBackend(backend);
+    const { ok, record: out } = loadExperiment('saved');
+    expect(ok).toBe(true);
+    expect(out.runs.A.samples[0]).not.toHaveProperty('energy_drift');
+    expect(backend.map.get('gravitas_experiment_saved')).toBe(raw);
+  });
+});
+
 describe('duplicating', () => {
   test('a copy is a deep copy with a new id and name', () => {
     const original = record({ runs: { A: { samples: [{ t: 1 }] } } });

@@ -1,6 +1,14 @@
-import { readFileSync, readdirSync } from 'node:fs';
-import path from 'node:path';
+import {
+  readFileSync,
+  readdirSync,
+  mkdtempSync,
+  realpathSync,
+  rmSync,
+} from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 import { MANIFEST } from '../js/data/investigations/manifest.js';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -51,32 +59,177 @@ describe('the published surface carries nothing it did not mean to', () => {
 });
 
 describe('the production build preserves what the physics reads', () => {
+  // esbuild's minifier renames classes, after which constructor.name is a
+  // couple of letters. Star merging, stellar collapse, tidal disruption and
+  // rocky collisions were all dead in a minified build because physics.js
+  // compared those names; build.js kept every name to prevent it, at 63 KB of
+  // deferred JavaScript. Every body class now carries a `kind` string the
+  // source writes (the class's own name, which the merger events and the
+  // saved states have always carried), nothing reads a name from the
+  // constructor, and no bundle needs keepNames. These hold that.
+  const code = f => read(f).replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
   const physics = read('js/physics.js');
-  const build = read('build.js');
+  const BODY_CLASSES = [
+    'Planet',
+    'GasGiant',
+    'Asteroid',
+    'Comet',
+    'Debris',
+    'BlackHole',
+    'StarObject',
+    'NeutronStar',
+    'WhiteDwarf',
+    'Galaxy',
+    'AccretionDiskParticle',
+  ];
 
-  test('physics.js still branches on class names', () => {
-    // If this ever reaches zero the keepNames requirement below is obsolete and
-    // both this test and the build flag can go.
-    const uses = physics.match(/\.constructor\.name/g) || [];
-    expect(uses.length).toBeGreaterThan(0);
+  test('nothing in js/ reads a constructor by its name', () => {
+    const readers = [];
+    const walk = dir => {
+      for (const e of readdirSync(path.join(ROOT, dir), {
+        withFileTypes: true,
+      })) {
+        const rel = `${dir}/${e.name}`;
+        if (e.isDirectory()) walk(rel);
+        else if (
+          /\.m?js$/.test(e.name) &&
+          // With or without the optional chain.
+          /\bconstructor\??\.name\b/.test(code(rel))
+        )
+          readers.push(rel);
+      }
+    };
+    walk('js');
+    expect(readers).toEqual([]);
   });
 
-  test('every esbuild call keeps class names', () => {
-    // esbuild's minifier renames classes, after which constructor.name is a
-    // single letter and all fifteen comparisons in physics.js are false. Star
-    // merging, stellar collapse, tidal disruption and rocky collisions were all
-    // dead on the deployed site because of this, and passed locally.
-    const minify = (build.match(/minify:\s*true/g) || []).length;
-    const keep = (build.match(/keepNames:\s*true/g) || []).length;
-    expect(minify).toBeGreaterThan(0);
-    expect(keep).toBe(minify);
+  test('no object stands in for a class by carrying its constructor', () => {
+    // asPhysicsObject() wrapped each black hole for the merge loop with
+    // constructor: { name: 'BlackHole' }, which a name comparison accepted and
+    // an identity one does not; the loop then merged two holes forever. A
+    // wrapper carries the kind the class carries.
+    expect(code('js/physics.js')).not.toMatch(/\bconstructor:/);
+    expect(code('js/physics.js')).toMatch(/kind: 'BlackHole',/);
   });
 
-  test('obj_type is not substituted for the class name', () => {
-    // Tempting, because every class sets obj_type to its own class name. They
-    // are not interchangeable: a transformed body carries the obj_type of what
-    // it became and the class of what it was.
-    expect(physics).toContain('.constructor.name');
+  test('every body class has a kind equal to its own name', () => {
+    const bodies = [
+      ...physics.matchAll(/^class (\w+) extends PhysicsObject\b/gm),
+    ].map(m => m[1]);
+    // The black hole stands alone and carries its own accessor.
+    expect(physics).toMatch(
+      /class BlackHole \{\s+get kind\(\) \{\s+return 'BlackHole';/
+    );
+    bodies.push('BlackHole');
+    // Every other class has a static `kind` equal to its name, and the base
+    // class's accessor reads it (a static field is dropped with an unused
+    // class, which a top-level registration loop would have kept).
+    for (const cls of bodies.filter(b => b !== 'BlackHole'))
+      expect(physics).toMatch(
+        new RegExp(
+          `class ${cls} extends PhysicsObject \\{\\s+static kind = '${cls}';`
+        )
+      );
+    expect(physics).toMatch(
+      /get kind\(\) \{\s+return this\.constructor\.kind;/
+    );
+    expect(bodies.sort()).toEqual([...BODY_CLASSES].sort());
+    expect(physics).toMatch(
+      /export const className = o =>\s+\(typeof o\?\.kind === 'string' && o\.kind\) \|\| \(o \? 'Object' : ''\)/
+    );
+  });
+
+  test('a kind is not state: not enumerated, not replaced by a saved state', async () => {
+    const { Planet, StarObject } = await import('../js/physics.js');
+    const star = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 });
+    expect(star.kind).toBe('StarObject');
+    expect(Object.keys(star)).not.toContain('kind');
+    expect(star.get_state()).not.toHaveProperty('kind');
+    expect(JSON.stringify(star)).not.toContain('"kind"');
+    const planet = new Planet({ x: 0, y: 0 }, { x: 0, y: 0 });
+    planet.set_state({ ...planet.get_state(), kind: 'StarObject' });
+    expect(planet.kind).toBe('Planet');
+  });
+
+  test('the kinds survive the production minifier, which renames the classes', () => {
+    // The published build minifies without keepNames. Bundle the engine the
+    // same way, run the bundle in a plain Node process (it needs no DOM) and
+    // ask each class for its kind. The class names must have been renamed,
+    // or this proves nothing about the minifier.
+    // esbuild refuses to load inside Jest's realm, so a Node process does it.
+    const dir = realpathSync(
+      mkdtempSync(path.join(tmpdir(), 'gravitas-kind-'))
+    );
+    const script = `
+import { buildSync } from 'esbuild';
+const outfile = ${JSON.stringify(path.join(dir, 'physics.min.mjs'))};
+buildSync({
+  entryPoints: ['js/physics.js'],
+  bundle: true,
+  minify: true,
+  keepNames: false,
+  format: 'esm',
+  target: ['es2022'],
+  outfile,
+  logLevel: 'silent',
+});
+const m = await import(${JSON.stringify('file://')} + outfile);
+const p = { x: 0, y: 0 }, v = { x: 0, y: 0 };
+const make = {
+  Planet: () => new m.Planet(p, v),
+  GasGiant: () => new m.GasGiant(p, v),
+  Asteroid: () => new m.Asteroid(p, v),
+  Comet: () => new m.Comet(p, v),
+  Debris: () => new m.Debris(p, v),
+  BlackHole: () => new m.BlackHole(p, 10, v),
+  StarObject: () => new m.StarObject(p, v),
+  NeutronStar: () => new m.NeutronStar(p, v),
+  WhiteDwarf: () => new m.WhiteDwarf(p, v),
+  Galaxy: () => new m.Galaxy(p, v, 1, 'spiral'),
+  AccretionDiskParticle: () =>
+    new m.AccretionDiskParticle(p, v, new m.BlackHole(p, 10, v)),
+};
+const res = {};
+for (const [k, f] of Object.entries(make)) {
+  const o = f();
+  res[k] = { kind: o.kind, name: o.constructor.name };
+}
+console.log(JSON.stringify(res));
+`;
+    try {
+      const res = JSON.parse(
+        execFileSync(process.execPath, ['--input-type=module', '-e', script], {
+          cwd: ROOT,
+          encoding: 'utf8',
+        })
+      );
+      for (const k of BODY_CLASSES) {
+        expect(res[k].kind).toBe(k);
+      }
+      // The minifier did rename them (it would otherwise be a vacuous test).
+      expect(
+        BODY_CLASSES.filter(k => res[k].name !== k).length
+      ).toBeGreaterThan(5);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  test('no JavaScript bundle asks the minifier to keep names', () => {
+    // Class names were the only reader; a bundle that keeps names pays for the
+    // helper in every function. A new reader of function names must say so here.
+    const build = code('build.js');
+    expect(build).not.toMatch(/keepNames:\s*true/);
+  });
+
+  test('the chunk mirror builds the application as build.js does', () => {
+    const app = read('build.js').match(
+      /entryPoints: \[\{ in: 'js\/main\.js', out: 'app' \}\][\s\S]*?keepNames: (\w+)/
+    );
+    const mirror = read('tools/instrument-families.mjs').match(
+      /keepNames: (\w+)/
+    );
+    expect(app?.[1]).toBe(mirror?.[1]);
   });
 });
 
@@ -138,10 +291,11 @@ describe('the service worker manifest is current', () => {
       /^js\/data\/investigations\/[a-z0-9-]+\.js$/.test(p)
     );
     // provenance.js is generated infrastructure, not a lesson body - it is in
-    // this directory because the lesson engine imports it.
+    // this directory because the lesson engine imports it. So is discovery.js,
+    // the course-planning metadata generated with the manifest.
     const bodies = lessons.filter(
       p =>
-        !/\/(manifest|manifest\.es|registry|i18n|catalog|browse|browseData|sequences|provenance)\.js$/.test(
+        !/\/(manifest|manifest\.es|summaries|summaries\.es|registry|i18n|catalog|browse|browseData|discovery|sequences|provenance)\.js$/.test(
           p
         )
     );

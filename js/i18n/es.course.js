@@ -1,0 +1,339 @@
+// =============================================================================
+// The words for the course-pack builder (/studio/course/), in Spanish
+// -----------------------------------------------------------------------------
+// Imported by js/coursePage.js alone. The page also reads the Scenario
+// Studio's fragment (./es.studio.js) for what the Studio's pages share - drafts,
+// the raw view, the import conflict, the differences - and the application's
+// catalog for scenario and lesson names.
+// =============================================================================
+
+export const ES_COURSE = {
+  'course.title': 'Creador de paquetes de curso',
+  'course.intro':
+    'Arma un curso con lo que tiene Gravitas: investigaciones, actividades recortadas de ellas, simulaciones, datos y lecturas, en unidades, con objetivos, tiempos, caminos opcionales introductorios y avanzados, y notas para estudiantes y docentes en inglés y español. Comprueba de qué depende el curso y fija cada investigación, para que un curso archivado pueda decir con qué se hizo. No hace falta ninguna cuenta: el curso es un archivo y un enlace.',
+  'course.toolbar.label': 'Archivo del curso',
+  'course.action.new': 'Curso nuevo',
+  'course.action.example': 'Abrir el curso de ejemplo',
+  'course.action.manifest': 'Guardar el manifiesto',
+  'course.action.syllabus': 'Abrir el programa para imprimirlo',
+  'course.action.upgrade': 'Actualizar lo revisado',
+  'course.action.addObjective': 'Añadir un objetivo',
+  'course.action.addPrereqText': 'Añadir un requisito en palabras',
+  'course.action.addPrereqLesson': 'Añadir una investigación como requisito',
+  'course.action.addUnit': 'Añadir una unidad',
+  'course.action.addItem': 'Añadirlo',
+  'course.action.remove': 'Quitar',
+  'course.action.removeUnit': 'Quitar la unidad',
+  'course.action.up': 'Subir',
+  'course.action.down': 'Bajar',
+  'course.raw.label': 'El archivo del curso, en JSON',
+  'course.section.about': 'Sobre el curso',
+  'course.section.objectives': 'Objetivos de aprendizaje',
+  'course.section.prerequisites': 'Requisitos previos',
+  'course.section.units': 'Unidades',
+  'course.hint.id':
+    'Palabras en minúscula unidas por guiones. Da nombre al archivo y a los borradores.',
+  'course.hint.pinning':
+    'Exacto: un archivo histórico; cualquier cambio en una investigación que nombra espera tu revisión. Compatible: se aceptan los cambios dentro de la misma versión principal, y lo mayor espera.',
+  'course.hint.teacherGuide':
+    'Cómo impartir el curso, para otro docente. La página del curso lo muestra solo si se marca «Notas para docentes».',
+  'course.hint.objectives':
+    'Lo que un estudiante podrá hacer. Marca en cada elemento los objetivos a los que sirve; las comprobaciones nombran cualquier objetivo al que no sirva ningún elemento principal.',
+  'course.hint.units':
+    'Las unidades van en orden, y los elementos en orden dentro de ellas. No hay fechas: esas las pone el docente. Un elemento del camino introductorio o avanzado es opcional, y lo principal no puede depender de él.',
+  'course.hint.minutesDerived':
+    'Déjalo en blanco para usar su propio tiempo (en una actividad, su parte de los pasos).',
+  'course.hint.packItem':
+    'Pega el elemento hecho en la comprobación de investigaciones (contiene la investigación como enlace, y su ficha). Esa página abre el enlace y lo juzga; esta no puede.',
+  'course.status.packNotItem':
+    'Eso no es un elemento de curso para una investigación.',
+  'course.status.packRead': 'Se leyó «{id}» y se fijó su ficha.',
+  'course.pack.corrupt': 'está incompleto o dañado.',
+  'course.pack.wrongKind': 'no es un enlace de investigación.',
+  'course.pack.newerVersion': 'lo hizo una versión más nueva de Gravitas.',
+  'course.pack.tooLarge': 'contiene más de lo que un enlace puede llevar.',
+  'course.pack.notPack': 'no contiene ninguna investigación.',
+  'course.pack.installed':
+    'nombra un paquete instalado en un solo navegador; publica la investigación como enlace.',
+  'course.pack.noOriginal':
+    'se hizo a partir de «{what}», que esta versión de Gravitas no tiene.',
+  'course.pack.delta': 'sus cambios no se aplican al original: {what}',
+  'course.pack.invalid': 'no es una investigación válida: {what}',
+  'course.pack.identity':
+    'contiene «{what}», no la investigación que nombra este elemento.',
+  'course.hint.seed':
+    'Una palabra como orbit-1: la misma palabra construye siempre el mismo mundo.',
+  'course.hint.dataset':
+    'Un conjunto de datos del catálogo tiene que instalarse desde el catálogo antes de abrirse; la página del curso lo dice.',
+  'course.hint.url': 'Una dirección https.',
+  'course.hint.license':
+    'Por ejemplo CC BY 4.0, o «todos los derechos reservados».',
+  'course.hint.steps':
+    'Marca los pasos que se asignan, de {n}. Con un paso elegido vienen el paso que construye el mundo del que trata y un resultado que use.',
+  'course.field.id': 'Identificador',
+  'course.field.version': 'Versión',
+  'course.field.pinning': 'Fijación',
+  'course.field.spanish': 'En español además de en inglés',
+  'course.field.title': 'Título',
+  'course.field.summary': 'Resumen',
+  'course.field.audience': 'Para quién es',
+  'course.field.teacherGuide': 'Orientación para docentes',
+  'course.field.objective': 'Objetivo',
+  'course.field.objectives': 'Objetivos a los que sirve',
+  'course.field.prerequisite': 'Requisito',
+  'course.field.lesson': 'Investigación',
+  'course.field.unitTitle': 'Título de la unidad',
+  'course.field.addKind': 'Elemento nuevo',
+  'course.field.packItem': 'Elemento de investigación',
+  'course.field.packOpen': 'Hacer o comprobar uno',
+  'course.action.packOpen': 'Abrir la comprobación de investigaciones',
+  'course.field.path': 'Camino',
+  'course.field.minutes': 'Minutos',
+  'course.field.needs': 'Va después de',
+  'course.field.studentNote': 'Nota para estudiantes',
+  'course.field.teacherNote': 'Nota para docentes',
+  'course.field.assignmentTitle': 'Título de la actividad',
+  'course.field.assignmentIntro': 'Introducción de la actividad',
+  'course.field.steps': 'Pasos',
+  'course.field.scenario': 'Escenario',
+  'course.field.seed': 'Palabra semilla',
+  'course.field.paused': 'Se abre en pausa',
+  'course.field.dataset': 'Conjunto de datos',
+  'course.field.guide': 'Investigación de un laboratorio',
+  'course.field.depth': 'Profundidad',
+  'course.depth.core': 'Básica',
+  'course.depth.advanced': 'Avanzada',
+  'course.field.readingTitle': 'Qué leer',
+  'course.field.authors': 'Autores',
+  'course.field.year': 'Año',
+  'course.field.source': 'Publicado por, o en',
+  'course.field.doi': 'DOI',
+  'course.field.url': 'Dirección',
+  'course.field.license': 'Licencia',
+  'course.field.access': 'Cómo llegan los estudiantes',
+  'course.objective.n': 'Objetivo {n}',
+  'course.prerequisite.n': 'Requisito {n}',
+  'course.unit.n': 'Unidad {n}',
+  'course.unit.items': '{count} elementos',
+  'course.unit.itemsHeading': 'Elementos',
+  'course.dataset.builtin': 'En Gravitas',
+  'course.dataset.catalog': 'Del catálogo',
+  'course.pair.en': 'Inglés',
+  'course.pair.es': 'Español',
+  'course.state.done': 'Traducido',
+  'course.state.missing': 'Aún sin español',
+  'course.state.stale': 'Español desactualizado',
+  'course.kind.lesson': 'Investigación',
+  'course.kind.assignment': 'Actividad',
+  'course.kind.scenario': 'Simulación',
+  'course.kind.dataset': 'Datos',
+  'course.kind.reading': 'Lectura',
+  'course.kind.pack': 'Investigación del instructor',
+  'course.kind.guide': 'Investigación de un laboratorio',
+  'course.path.core': 'Principal',
+  'course.path.intro': 'Introductorio',
+  'course.path.advanced': 'Avanzado',
+  'course.pinning.exact': 'Exacta',
+  'course.pinning.compatible': 'Compatible',
+  'course.access.open': 'Libre en línea',
+  'course.access.library': 'A través de una biblioteca',
+  'course.access.print': 'Impreso',
+  'course.pin.line': 'Fijada en {fp} ({n} pasos).',
+  'course.pin.none': 'Sin fijar.',
+  'course.standing.same': 'como se fijó.',
+  'course.standing.changed': 'ha cambiado desde que se fijó.',
+  'course.standing.compatible':
+    'una versión más nueva de su paquete, con los mismos pasos.',
+  'course.standing.major': 'una nueva versión principal de su paquete.',
+  'course.standing.moved': 'ahora viene de otro paquete.',
+  'course.standing.unpinned': 'aún sin fijar.',
+  'course.standing.missing': 'ya no está en Gravitas.',
+  'course.standing.unchecked':
+    'no se comprueba aquí: ábrelo en la comprobación de investigaciones.',
+  'course.steps.loading': 'Cargando los pasos.',
+  'course.steps.needed': '(lo necesita un paso elegido)',
+  'course.checks.running': 'Comprobando.',
+  'course.checks.valid': 'Nada que corregir.',
+  'course.checks.errors':
+    '{count} por corregir antes de poder guardar o enlazar el curso.',
+  'course.checks.warnings': 'Nada que corregir; {count} por revisar.',
+  'course.review.heading': 'Fijaciones y actualizaciones',
+  'course.review.hint':
+    'Cómo está cada investigación frente a esta versión de Gravitas. Marca lo que hayas revisado y actualiza: las fijaciones pasan a ellas tal como son y la versión del curso sube.',
+  'course.review.summary': '{count} por revisar (fijación {pinning}).',
+  'course.review.clear': 'Las {count} investigaciones están como se fijaron.',
+  'course.review.steps': 'Pasos: {then} entonces, {now} ahora.',
+  'course.review.missingSteps': 'Pasos asignados que ya no están: {list}.',
+  'course.review.changedSteps': 'Pasos asignados que se reescribieron: {list}.',
+  'course.review.package': 'Paquete: {then} entonces, {now} ahora.',
+  'course.review.mark': 'Revisado',
+  'course.review.remove': 'Quítalo o reemplázalo.',
+  'course.bump.major':
+    'una versión principal, porque cambiaron sus enlaces o sus pasos',
+  'course.bump.minor': 'una versión menor',
+  'course.estimate.heading': 'Tiempo',
+  'course.time.path': '{path}: {minutes} ({lo}–{hi} h)',
+  'course.time.minutes': '{n} min',
+  'course.time.range': '{lo}–{hi} min',
+  'course.time.unknown': 'desconocido',
+  'course.time.items': 'Elementos: {list}',
+  'course.translation.heading': 'Traducción',
+  'course.translation.off': 'El curso está solo en inglés.',
+  'course.translation.complete': 'Cada texto tiene su español.',
+  'course.translation.summary':
+    '{missing} de {total} textos no tienen español; {stale} están desactualizados.',
+  'course.translation.item': '{where}: {state}',
+  'course.graph.heading': 'De qué depende',
+  'course.graph.summary':
+    '{nodes} partes, {edges} dependencias: lo que cada elemento necesita y abre, y lo que usa cada una.',
+  'course.edge.needs': 'va después de',
+  'course.edge.opens': 'abre',
+  'course.edge.uses': 'usa',
+  'course.edge.assumes': 'supone',
+  'course.links.heading': 'Enlaces',
+  'course.links.hint':
+    'Hechos solo con el archivo del curso, así que el mismo archivo hace siempre los mismos enlaces.',
+  'course.links.fixFirst': 'Corrige primero lo que nombran las comprobaciones.',
+  'course.links.home': 'La página del curso',
+  'course.links.length': '{n} caracteres.',
+  'course.links.tooLong':
+    '{n} caracteres, más de los {limit} que conservan algunas plataformas de correo y de aprendizaje. Da a los estudiantes el archivo del curso: la página del curso lo abre.',
+  'course.links.copy': 'Copiar el enlace',
+  'course.links.open': 'Abrir la página del curso',
+  'course.links.homeEmbed': 'La página del curso, para insertar',
+  'course.links.copyEmbed': 'Copiar el código',
+  'course.links.embedTitle': 'Curso de Gravitas: {title}',
+  'course.links.item': 'Elemento',
+  'course.links.openShort': 'Abrir',
+  'course.links.copyShort': 'Copiar',
+  'course.links.figure': 'Código de la figura: {title}',
+  'course.links.figureTitle': 'Simulación de Gravitas: {title}',
+  'course.links.figureFallback': 'Abrir esta simulación en Gravitas',
+  'course.preview.hint':
+    'La página del curso tal como la ve un estudiante, a partir del borrador de este navegador.',
+  'course.preview.go': 'Previsualizar la página del curso',
+  'course.preview.frame': 'La página del curso, tal como la ve un estudiante',
+  'course.status.new': 'Un curso nuevo.',
+  'course.status.example': 'El curso de ejemplo: astronomía introductoria.',
+  'course.status.saved': 'Guardado como {file}.',
+  'course.status.manifest': 'El manifiesto se guardó como {file}.',
+  'course.status.previewed':
+    'La vista previa muestra el curso tal como está ahora.',
+  'course.status.copied': 'Copiado.',
+  'course.status.copyFailed':
+    'Este navegador no quiso copiarlo; selecciona el texto y cópialo tú.',
+  'course.status.upgraded':
+    '{count} actualizados; el curso es ahora la versión {version}, {bump}.',
+  'course.status.nothingUpgraded': 'No se actualizó nada.',
+  'course.file.notPack': 'Esto no es un archivo de curso de Gravitas.',
+  'course.file.refused': 'Este archivo no se puede abrir: {why}',
+  'course.file.tooLarge':
+    'El archivo es más grande de lo que necesita cualquier curso.',
+  'course.file.migrated':
+    'Se abrió {id}, un curso de investigaciones del catálogo. Ahora es un paquete de curso de esta versión: añade objetivos y tiempos, y fija sus investigaciones actualizándolas.',
+  'course.audit.missing': 'Gravitas ya no tiene lo que abre este elemento.',
+  'course.audit.review': '{title}: {status} Espera revisión.',
+  'course.audit.assumes':
+    '{lessonTitle} supone que antes va {needsTitle}, según la propia secuencia de Gravitas, y el curso no la da antes.',
+  'course.audit.prerequisiteIncluded':
+    '{lessonTitle} es a la vez requisito y parte del curso.',
+  'course.audit.assignmentNeeds':
+    'La actividad necesita también estos pasos: {sids}.',
+  'course.audit.datasetIncompatible':
+    'Esta versión de Gravitas no puede abrir este conjunto de datos (necesita {range}).',
+  'course.audit.install':
+    'Los estudiantes instalan primero este conjunto de datos desde el catálogo.',
+  'course.audit.noLicense':
+    'Este conjunto de datos no declara ninguna licencia, así que el curso no puede decir cómo puede usarse.',
+  'course.audit.licenseNotStated':
+    'Los autores de este conjunto de datos no declaran licencia; cítalo como piden.',
+  'course.audit.readingLicense': 'No se indica la licencia de esta lectura.',
+  'course.audit.readingAddress':
+    'Esta lectura es libre en línea pero no tiene dirección ni DOI.',
+  'course.audit.untranslated': '{n} textos no tienen español.',
+  'course.audit.stale': '{n} textos en español están desactualizados.',
+  'course.audit.lessonUntranslated':
+    '{lessonTitle} no tiene español; quien lee en español la ve en inglés.',
+  'course.audit.localeNotDeclared':
+    'El curso no está en español; la página del curso lo muestra en inglés.',
+  'course.audit.noObjectives': 'El curso no tiene objetivos.',
+  'course.audit.objectiveUnserved':
+    'Ningún elemento principal sirve al objetivo «{id}».',
+  'course.audit.noTime': 'Este elemento no tiene tiempo.',
+  'course.audit.packUnchecked':
+    'Esta investigación no se ha abierto ni comprobado. Compruébala en la página de comprobación de investigaciones antes de enviar el curso.',
+  'course.audit.needs':
+    'Este elemento va después de «{id}», que el curso no tiene.',
+  'course.audit.noGuide': '{lessonTitle} aún no tiene guía para docentes.',
+  'course.error.format': 'Esto no es un archivo de curso de Gravitas.',
+  'course.error.formatVersion':
+    'Este archivo de curso es de otra versión del formato.',
+  'course.error.id': 'Palabras en minúscula unidas por guiones.',
+  'course.error.seed': 'Una palabra como orbit-1.',
+  'course.error.tooMany': 'Como mucho {max} elementos.',
+  'course.error.access':
+    'Libre en línea, a través de una biblioteca o impreso.',
+  'course.error.assignmentId':
+    'El identificador de la actividad y la fecha en que se hizo.',
+  'course.error.boolean': 'Sí o no.',
+  'course.error.cite': 'Quién lo escribió, cuándo y dónde.',
+  'course.error.count': 'Como mucho {max}.',
+  'course.error.dataset': 'Elige un conjunto de datos que tenga Gravitas.',
+  'course.error.guide':
+    'Elige una investigación que tenga el laboratorio 3D o el de misiones.',
+  'course.error.date': 'Una fecha como 2026-09-28.',
+  'course.error.doi': 'Un DOI como 10.1119/1.1234.',
+  'course.error.duplicate': '«{id}» ya se usa más arriba.',
+  'course.error.entity': 'Solo texto sin formato.',
+  'course.error.esOf':
+    'El registro de qué inglés traduce el español está dañado.',
+  'course.error.field': '«{field}» no es un campo aquí.',
+  'course.error.gravitas':
+    'La versión de la plataforma de Gravitas con la que se hizo, como 1.0.0.',
+  'course.error.hash': 'Ocho dígitos hexadecimales.',
+  'course.error.items': 'De 1 a {max} elementos.',
+  'course.error.kind': 'Uno de: {kinds}.',
+  'course.error.lesson': 'Elige una investigación que tenga Gravitas.',
+  'course.error.packId': 'El identificador público de la investigación.',
+  'course.error.packLink':
+    'El enlace de la investigación: lo que sigue a #, como lo hace Publicar en el Compositor, hasta {max} caracteres.',
+  'course.error.lessonTwice': 'Esta investigación ya está en el curso.',
+  'course.error.license': 'La licencia o las condiciones, en palabras.',
+  'course.error.locales': 'Los idiomas deben incluir el inglés.',
+  'course.error.minutes': 'Un número entero de minutos de 1 a 600.',
+  'course.error.needsEarlier':
+    '«{id}» no va antes: un elemento solo puede ir después de lo que tiene delante.',
+  'course.error.needsPath':
+    '«{id}» es opcional ({path}), y quien sigue el camino de este elemento puede no hacerlo.',
+  'course.error.notData': 'Esto no son datos sin más.',
+  'course.error.object': 'Un conjunto de campos.',
+  'course.error.objective': 'El curso no tiene el objetivo «{id}».',
+  'course.error.package': 'El paquete y su versión.',
+  'course.error.path': 'Principal, introductorio o avanzado.',
+  'course.error.pinRequired':
+    'Un curso exacto fija cada investigación que nombra: actualízala para fijarla.',
+  'course.error.pinning': 'Exacta o compatible.',
+  'course.error.courseLevel': 'General, especialistas o superior.',
+  'course.error.plain': 'Solo texto sin formato: sin marcas ni entidades.',
+  'course.error.prerequisite': 'Una investigación o un texto.',
+  'course.error.scenario': 'Elige un escenario que tenga Gravitas.',
+  'course.error.sid': 'Un identificador de paso.',
+  'course.error.stepCount': 'El número de pasos de la investigación.',
+  'course.error.stepHashes': 'Un hash por cada paso asignado.',
+  'course.error.steps': 'De 1 a {max} pasos.',
+  'course.error.stepsTwice': 'Un paso aparece dos veces.',
+  'course.error.depth': 'Una profundidad es core, quantitative o advanced.',
+  'course.error.tooDeep':
+    'El archivo está anidado más hondo que cualquier curso.',
+  'course.error.tooLarge':
+    'El archivo es más grande de lo que necesita cualquier curso.',
+  'course.error.units': 'De 1 a {max} unidades.',
+  'course.error.unsafeKey': '«{key}» no puede ser una clave.',
+  'course.error.url': 'Una dirección https.',
+  'course.error.words': 'Un texto de hasta {max} caracteres.',
+  'course.error.year': 'Un año.',
+  'course.add.failed':
+    'No se pudo añadir al curso: no es una investigación ni una actividad que esta versión conozca.',
+  'course.add.done':
+    'Añadido al curso. Se registró su versión fijada; revise el curso y guárdelo.',
+};

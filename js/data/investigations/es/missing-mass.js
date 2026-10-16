@@ -16,13 +16,11 @@ export default {
     'Pesa un sistema dos veces y descubre que las dos respuestas no coinciden',
   duration: '45-60 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Hay dos maneras de pesar un sistema en el espacio: sumar la luz, u observar cómo se mueven las cosas. Para el Sistema Solar coinciden. Para una galaxia no, y para un cúmulo de galaxias difieren en más de un factor diez. Los estudiantes reparten masa y observan la curva de rotación que produce, convierten una velocidad medida en una masa encerrada, y después toman la curva de una galaxia real e intentan ajustarla solo con estrellas —y fracasan, exactamente como fracasó el campo durante una década— antes de añadir un halo y acertar. Cierra con el cúmulo de Zwicky y el presupuesto de masa del universo. Así se encontró la materia oscura, y es una medida, no una teoría.',
   objectives: [
     'Explicar por qué la velocidad orbital cae como la inversa de la raíz del radio cuando la masa está concentrada en el centro',
     'Leer una curva de rotación y describir qué dice su pendiente sobre dónde está la masa',
     'Convertir una velocidad orbital medida en una masa encerrada, e indicar qué implica una curva plana sobre cómo crece esa masa con el radio',
-    'Descomponer una curva de rotación medida en un disco estelar y un halo oscuro, y juzgar un ajuste frente a los errores de medida',
+    'Descomponer una curva de rotación construida con los parámetros publicados de NGC 3198 en un disco estelar y un halo oscuro, y juzgar un ajuste frente a sus barras de error',
     'Argumentar, a partir de la forma del residuo y no solo de su tamaño, que ninguna disposición de materia visible reproduce una curva plana',
     'Aplicar el teorema del virial a un cúmulo de galaxias para estimar su masa a partir del movimiento de sus miembros, incluida la conversión desde una dispersión en la línea de visión',
     'Comparar una masa dinámica con una masa visible y cuantificar la discrepancia',
@@ -31,8 +29,8 @@ export default {
   steps: [
     {
       title: 'Dos maneras de pesar algo que no puedes tocar',
-      body: 'No puedes poner una galaxia en una balanza. Hay dos maneras de averiguar cuánto pesa un sistema en el espacio, y son completamente independientes entre sí.\n\nLa primera es <strong>sumar lo que puedes ver</strong>. Cuenta las estrellas, deduce la masa de cada una a partir de su brillo y su color, y suma. Esto es lo que los astrónomos llaman masa visible, o masa luminosa.\n\nLa segunda es <strong>observar cómo se mueven las cosas</strong>. La gravedad fija la velocidad de una órbita, así que una velocidad orbital y un radio orbital juntos te dan la masa que tiene que haber dentro. Esta es la masa dinámica.\n\nLas dos maneras miden lo mismo, así que más vale que coincidan. Esta lección trata de tres sistemas. En el primero, coinciden.',
-      tip: 'Abre el panel Curva de rotación en la sección Herramientas del panel derecho. Déjalo abierto: lo usarás durante toda la lección.',
+      body: 'No puedes poner una galaxia en una balanza. Hay dos maneras de averiguar cuánto pesa un sistema en el espacio, y son completamente independientes entre sí.\n\nLa primera es <strong>sumar lo que puedes ver</strong>. Cuenta las estrellas, deduce la masa de cada una a partir de su brillo y su color, y suma. Esto es lo que los astrónomos llaman masa visible, o masa luminosa.\n\nLa segunda es <strong>observar cómo se mueven las cosas</strong>. La gravedad fija la velocidad de una órbita, así que una velocidad orbital y un radio orbital juntos te dan la masa que tiene que haber dentro. Esta es la masa dinámica.\n\nLas dos maneras miden lo mismo, así que más vale que coincidan. Esta investigación trata de tres sistemas. En el primero, coinciden.',
+      tip: 'Abre el panel Curva de rotación en la sección Herramientas del panel derecho. Déjalo abierto: lo usarás durante toda la investigación.',
     },
     {
       title: 'Pon la masa en algún sitio',
@@ -44,7 +42,7 @@ export default {
         'En «Disco espiral», fíjate en que la curva sube, alcanza un máximo y luego cae: sigue sin ser plana',
         'En «Lo que hacen las galaxias», lee la pendiente exterior y compárala con el primer ajuste',
       ],
-      tip: 'El número de «pendiente exterior» es el exponente de v ∝ rⁿ. Kepleriano es −0,5. Plano es 0. Es el único número sobre el que gira toda esta lección.',
+      tip: 'El número de «pendiente exterior» es el exponente de v ∝ rⁿ. Kepleriano es −0,5. Plano es 0. Es el único número sobre el que gira toda esta investigación.',
     },
     {
       title: '¿Qué disposición da una curva plana?',
@@ -143,7 +141,7 @@ export default {
     },
     {
       title: 'Mide la curva esperada',
-      body: 'Lee el panel. La franja sombreada de la izquierda de la gráfica es la región interior, excluida del ajuste: dentro del bulbo la curva sube con el radio por razones que no tienen nada que ver con esta lección, e incluirla arrastraría la pendiente hacia cero.\n\nAnota la pendiente y la forma que informa el panel.',
+      body: 'Lee el panel. La franja sombreada de la izquierda de la gráfica es la región interior, excluida del ajuste: dentro del bulbo la curva sube con el radio por razones que no tienen nada que ver con esta investigación, e incluirla arrastraría la pendiente hacia cero.\n\nAnota la pendiente y la forma que informa el panel.',
       fields: [
         { label: 'Pendiente exterior (el exponente)', unit: '' },
         { label: 'Forma que informa el panel', unit: '' },
@@ -171,7 +169,7 @@ export default {
     },
     {
       title: 'Ahora haz lo que hicieron los astrónomos',
-      body: 'Medir una curva plana es la mitad fácil. La mitad difícil, y la que costó los años setenta y ochenta zanjar, es averiguar qué distribución de masa podría producirla —y demostrar que ninguna disposición de la materia visible sirve.\n\nEso es un problema de ajuste, y es lo que es este instrumento. Los puntos rosas con barras de error son una curva de rotación medida. Los deslizadores son un modelo de la galaxia: un disco de estrellas y un halo de algo distinto. Tu tarea es reproducir los puntos.\n\nLas reglas son las de un astrónomo real. Puedes elegir cuánta masa tiene el disco y lo extendido que está, porque ninguna de las dos cosas se conoce con precisión solo por la luz. No puedes mover los datos.',
+      body: 'Medir una curva plana es la mitad fácil. La mitad difícil, y la que costó los años setenta y ochenta zanjar, es averiguar qué distribución de masa podría producirla —y demostrar que ninguna disposición de la materia visible sirve.\n\nEso es un problema de ajuste, y es lo que es este instrumento. Los puntos rosas con barras de error son una curva de rotación construida con los parámetros publicados de NGC 3198, con una dispersión fija añadida. No son una medida, y eso es lo que da al ajuste una respuesta correcta. Los deslizadores son un modelo de la galaxia: un disco de estrellas y un halo de algo distinto. Tu trabajo es reproducir los puntos.\n\nLas reglas son las de un astrónomo real. Puedes elegir cuánta masa tiene el disco y lo extendido que está, porque ninguna de las dos cosas se conoce con precisión solo por la luz. No puedes mover los datos.',
       tip: 'El panel te puntúa: «error medio» es lo lejos que queda tu curva de los puntos, en km/s, y los propios datos solo son buenos hasta unos ±5. Baja de eso y la gráfica dirá AJUSTADA.',
     },
     {
@@ -199,7 +197,7 @@ export default {
           unit: '',
         },
       ],
-      tip: 'El mejor ajuste posible solo con estrellas deja un error medio de unos 15 km/s, tres veces el error de medida, y es peor en el borde exterior. Si te acercaste a eso, encontraste la respuesta real.',
+      tip: 'El mejor ajuste posible solo con estrellas deja un error medio de unos 15 km/s, tres veces el tamaño de las barras de error, y es peor en el borde exterior. Si te acercaste a eso, encontraste la respuesta real.',
     },
     {
       title: 'Por qué un disco más pesado no puede salvarlo',
@@ -212,7 +210,7 @@ export default {
         'los discos son bidimensionales y las galaxias tridimensionales',
       ],
       because:
-        'El problema es la forma del déficit, no su tamaño. La contribución de un disco alcanza su máximo un par de longitudes de escala afuera y después decae, porque ahí es donde está su masa. Los datos no decaen. Para arreglar la curva exterior sin destrozar la interior hace falta masa que sea <em>despreciable en el centro y dominante en el borde</em>, que es lo contrario de cómo se distribuye la luz en todas las espirales jamás fotografiadas. Un disco puede hacerse más pesado; no puede hacerse con esa forma. Los puntos exteriores están medidos, si acaso, con más fiabilidad que los interiores, porque proceden de hidrógeno frío que se extiende bastante más allá de las estrellas.',
+        'El problema es la forma del déficit, no su tamaño. La contribución de un disco alcanza su máximo un par de longitudes de escala afuera y después decae, porque ahí es donde está su masa. Los datos no decaen. Para arreglar la curva exterior sin destrozar la interior hace falta masa que sea <em>despreciable en el centro y dominante en el borde</em>, que es lo contrario de cómo se distribuye la luz en todas las espirales jamás fotografiadas. Un disco puede hacerse más pesado; no puede hacerse con esa forma. En una galaxia real, los puntos exteriores están medidos, si acaso, con más fiabilidad que los interiores, porque proceden de hidrógeno frío que se extiende bastante más allá de las estrellas.',
     },
     {
       title: 'Ahora añade el halo',
@@ -239,6 +237,15 @@ export default {
       tip: 'Un buen ajuste cae cerca de 150 km/s y un núcleo de unos 6 kpc, con un error medio en torno a 2 km/s. Hay una degeneración real entre los dos deslizadores del halo, y por eso los artículos reales los citan juntos con una covarianza.',
     },
     {
+      hints: [
+        'El número principal es un cociente de dos masas, ambas dadas por el panel del ajuste.',
+        'Divide la masa del halo entre la masa visible: la respuesta es cuántas veces más pesado es el halo.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Divide la masa del halo entre la masa visible, ambas en las mismas unidades.',
+        off: 'El cociente compara el halo con lo que se ve: el halo arriba y lo visible abajo.',
+      },
       title: '¿Qué parte es oscura?',
       body: 'Ajustaste una galaxia. Divide la masa del halo dentro de 30 kpc entre la masa visible y tendrás la cifra estrella de cuarenta años de dinámica galáctica.',
       prompt: 'Masa del halo dentro de 30 kpc, dividida entre la masa visible',
@@ -301,6 +308,17 @@ export default {
       tip: 'Mil unidades de masa de simulación son una masa solar, que es la conversión que necesitarás al final.',
     },
     {
+      hints: [
+        'Usa 2K + U = 0, con la energía cinética escrita a partir de la dispersión de las velocidades.',
+        'Despeja M: sale como una constante por la dispersión de velocidades al cuadrado por el tamaño, dividido entre G.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Revisa el factor de delante: sale de 2K + U = 0 con la dispersión de las velocidades.',
+        off: 'Reordena la relación del virial para M; la dispersión de velocidades entra al cuadrado y el tamaño una vez.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez; revisa las unidades del tamaño y de la velocidad.',
+      },
       title: 'Pesa el cúmulo por su movimiento',
       body: 'Para cualquier sistema mantenido por su propia gravedad y ya asentado, las energías cinética y potencial están encadenadas en una proporción fija: 2K + U = 0. Este es el teorema del virial, y es lo que convierte una dispersión de velocidades en una masa.\n\nEscribe la energía cinética como K = ½·M·⟨v²⟩, y toma la energía potencial de una esfera uniforme, U = −(3/5)·G·M²/R. Sustituye, cancela un factor de M y despeja:\n\n<strong>M = (5/3)·R·⟨v²⟩ / G</strong>\n\nLa simulación es plana, así que sus velocidades se reparten en dos dimensiones y no en tres, y la dispersión que informa el panel ya es la bidimensional completa y no una proyección sobre la línea de visión. Así que ⟨v²⟩ es simplemente σ², y en unidades de simulación G vale 1 y desaparece. Queda M = (5/3)·R·σ², que da una masa en unidades de simulación. Divide entre 1000 para convertirla en masas solares.',
       tip: 'El supuesto de esfera uniforme es una aproximación y el estimador solo es bueno hasta un factor de orden uno. Con eso basta: la discrepancia que estás a punto de encontrar es muchísimo mayor que el error del método, que es exactamente por lo que el resultado sobrevivió.',
@@ -311,6 +329,14 @@ export default {
         'σ = 20,46 y R = 2516, así que ⟨v²⟩ = 418,7 y M = (5/3) × 2516 × 418,7 = 1,76 × 10⁶ unidades de masa de simulación, que son 1756 masas solares en este modelo. Si obtuviste algo mil veces mayor, olvidaste convertir; si obtuviste algo cercano a 84 000, usaste σ en lugar de σ².',
     },
     {
+      hints: [
+        'Ambas masas ya están calculadas en este paso y en el anterior.',
+        'Divide la masa dinámica entre la masa visible.',
+      ],
+      feedback: {
+        close: 'Cerca. La masa dinámica arriba y la visible abajo.',
+        off: 'El cociente compara la masa que dan los movimientos con la masa que se puede sumar.',
+      },
       title: 'Ahora compara',
       body: 'Has pesado el mismo cúmulo dos veces. Una sumando sus galaxias, que es la masa visible que informa el panel, y otra observando cómo se mueven esas galaxias.',
       prompt: 'Masa dinámica dividida entre masa visible',
@@ -321,11 +347,11 @@ export default {
     {
       title: 'Otra manera de leer la misma curva',
       body: 'Todo lo anterior ha supuesto que la ley de la gravedad de Newton es correcta y ha preguntado qué masa tendría que haber. Hay otra manera de leer una curva de rotación plana, y está sobre la mesa desde 1983.\n\nMordehai Milgrom se dio cuenta de que las curvas dejan de caer a una <em>aceleración</em> determinada, y no a un radio o a un brillo determinados. Por debajo de unos a₀ = 1,2 × 10⁻¹⁰ m/s² —más o menos una cienmilmillonésima de la gravedad en la superficie de la Tierra— las galaxias se comportan como si la gravedad fuera más intensa de lo que dice Newton. Por encima no cambia nada, y por eso ningún laboratorio ni ninguna órbita planetaria ha visto jamás esto.\n\nSi eso es lo que ocurre, entonces lejos de una galaxia la atracción gravitatoria cae como 1/r en lugar de 1/r², y una órbita circular allí cumple\n\n<strong>v⁴ = G M a₀</strong>\n\ncon M la masa que puedes ver. No ajustada. Predicha, a partir de una constante que debe ser la misma para todas las galaxias.',
-      tip: 'El instrumento muestra el ajuste con halo que acabas de construir. El selector de arriba pone MOND sobre las mismas medidas.',
+      tip: 'El instrumento muestra el ajuste con halo que acabas de construir. El selector de arriba pone MOND sobre los mismos puntos.',
     },
     {
       title: 'Ajústala de las dos maneras',
-      body: 'Las dos explicaciones, las mismas doce medidas, evaluadas de la misma forma. Prueba cada una, y usa los dos preajustes cuando quieras ver dónde acaba cada cual.\n\nFíjate en lo que hubo que decirle a cada explicación. El halo necesita tres números elegidos para encajar con esta galaxia: cuánto pesa el disco, a qué velocidad se aplana la curva del halo y cómo de grande es su núcleo. MOND necesita uno —el disco— porque a₀ no es ajustable y es el mismo número para todas las galaxias del universo.',
+      body: 'Las dos explicaciones, los mismos doce puntos, evaluadas de la misma forma. Prueba cada una, y usa los dos preajustes cuando quieras ver dónde acaba cada cual.\n\nFíjate en lo que hubo que decirle a cada explicación. El halo necesita tres números elegidos para encajar con esta galaxia: cuánto pesa el disco, a qué velocidad se aplana la curva del halo y cómo de grande es su núcleo. MOND necesita uno —el disco— porque a₀ no es ajustable y es el mismo número para todas las galaxias del universo.',
       checklist: [
         'Carga el mejor ajuste con halo y lee su residuo',
         'Cambia a MOND, dejando el disco donde está',
@@ -335,6 +361,15 @@ export default {
       tip: 'MOND quiere un disco más ligero que el ajuste con halo, unas dos terceras partes. Una curva de rotación no puede medir directamente la masa de las estrellas, así que cuánto pesa el disco nunca quedó fijado por los datos en ninguna de las dos imágenes.',
     },
     {
+      hints: [
+        'MOND da v⁴ = G M a₀: la velocidad plana es la raíz cuarta de G M a₀.',
+        'Suma primero el disco y el bulbo, y usa las unidades del instrumento, antes de tomar la raíz cuarta.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Toma la raíz cuarta, no la cuadrada, e incluye el bulbo.',
+        off: 'Primero la masa visible total (disco más bulbo) y luego v = (G M a₀)^(1/4).',
+      },
       title: 'La predicción que hace MOND',
       body: 'La relación v⁴ = G M a₀ convierte una masa visible directamente en una velocidad plana, sin ajustar nada. Usa el disco que muestra el instrumento —2,1 × 10¹⁰ masas solares, más el pequeño bulbo de 0,05 × 10¹⁰— y el valor de a₀ de antes.\n\nEn las unidades en las que trabaja el instrumento, G a₀ = 0,0159 (km/s)⁴ por masa solar.',
       prompt: 'La velocidad plana que MOND predice para esta galaxia',
@@ -364,7 +399,7 @@ export default {
     {
       title: 'Dónde estamos',
       body: 'Las pruebas han crecido mucho desde 1933 y desde 1970, y ya no descansan en absoluto en las curvas de rotación. El patrón de puntos calientes y fríos del fondo cósmico de microondas, cómo se distribuyen las galaxias por el cielo, cómo la lente gravitatoria curva la luz alrededor de los cúmulos, y las abundancias de hidrógeno y helio sobrantes de los primeros minutos apuntan todos en el mismo sentido, y son sensibles a cosas distintas. La materia ordinaria que resulte ser oscura no puede dar cuenta de lo que muestran; tiene que haber algo que tenga masa y no interactúe con la luz.\n\nQué es ese algo, nadie lo sabe. Nunca se ha detectado en un laboratorio, no se ha encontrado ninguna partícula candidata, y las búsquedas llevan cuarenta años en marcha. El Cúmulo Bala, donde dos cúmulos se atravesaron y la masa se separó visiblemente del gas, es la observación más difícil de acomodar para las alternativas de gravedad modificada.\n\nEse es un lugar honesto donde dejarlo. La medida es sólida y se ha repetido de una docena de maneras independientes. La explicación es un nombre para algo que no hemos identificado. Son dos clases distintas de afirmación y merece la pena mantenerlas separadas.',
-      tip: 'Ajustaste una galaxia real y pesaste un cúmulo real. Esa parte no está en duda, y no has tenido que fiarte de la palabra de nadie.',
+      tip: 'Ajustaste una curva construida con los parámetros publicados de una galaxia real y pesaste un cúmulo real. Los números venían de la literatura; la conclusión la sacaste tú, sin fiarte de la palabra de nadie.',
     },
   ],
 };

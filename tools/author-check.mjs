@@ -23,6 +23,25 @@
 
 import { loadAuthoringInputs } from './authoring/inputs.mjs';
 import { checkCatalog, RULE_INDEX } from '../js/authoring/rules.js';
+import { checkDepth, DEPTH_RULES } from '../js/authoring/depthRules.js';
+import {
+  DEPTH_LESSONS,
+  depthSources,
+  layDepth,
+} from '../js/investigations/depth.js';
+import { realSystemFindings } from './authoring/realSystems.mjs';
+import {
+  MODELS,
+  SOURCED,
+  UNCHECKED,
+  RULE_ID as MODEL_RULE,
+  RULE_DESCRIPTION as MODEL_RULE_DESCRIPTION,
+  modelCheckFindings,
+} from './authoring/modelChecked.mjs';
+import {
+  RULE_ID as FORWARD_RULE,
+  forwardFindings,
+} from './authoring/forwardSources.mjs';
 
 const argv = process.argv.slice(2);
 const has = flag => argv.includes(flag);
@@ -47,7 +66,12 @@ if (has('--rules')) {
       'argue with its rule in js/authoring/rules.js.\n'
   );
   const groups = new Map();
-  for (const [id, description] of Object.entries(RULE_INDEX)) {
+  for (const [id, description] of Object.entries({
+    ...RULE_INDEX,
+    ...DEPTH_RULES,
+    // Node-only rule: kept out of js/authoring/rules.js, which ships on the Composer route
+    [MODEL_RULE]: MODEL_RULE_DESCRIPTION,
+  })) {
     const family = id.split('/')[0];
     if (!groups.has(family)) groups.set(family, []);
     groups.get(family).push([id, description]);
@@ -64,6 +88,67 @@ if (has('--rules')) {
 
 const inputs = await loadAuthoringInputs();
 let findings = checkCatalog(inputs);
+// Deeper steps (Prompt 72): each is judged by every per-step rule the core
+// ones pass, laid into its lesson, and by the rules of DEPTH.md.
+for (const core of inputs.investigations) {
+  if (!core.depths && !DEPTH_LESSONS.includes(core.id)) continue;
+  const { steps, words } = await depthSources(core.id).catch(() => ({
+    steps: [],
+    words: null,
+  }));
+  const laid = layDepth(core, steps);
+  const added = new Set(
+    laid.steps.map((s, i) => (steps.includes(s) ? i : -1)).filter(i => i >= 0)
+  );
+  findings.push(
+    ...checkCatalog(
+      { ...inputs, investigations: [laid] },
+      { skip: ['agree/', 'i18n/', 'instructor/', 'id/file', 'id/lesson'] }
+    ).filter(f => added.has(f.step)),
+    ...checkDepth(core, laid, steps, words)
+  );
+}
+// The attribution rule reaches the data a lesson stands on: every real-system
+// parameter object names where each value comes from, or says it is
+// approximate and unsourced (tools/authoring/realSystems.mjs). Node-only, so
+// it runs here rather than in the browser's copy of the rules.
+for (const f of await realSystemFindings()) {
+  findings.push({
+    level: 'error',
+    rule: 'instructor/attribution',
+    lesson: f.where,
+    step: null,
+    message: f.message,
+  });
+}
+
+// Lesson-declared forward-model sources (Prompt 84): each declared setup is
+// valid and its measurement reproduces the truth manifest.
+for (const f of forwardFindings()) {
+  findings.push({
+    level: 'error',
+    rule: FORWARD_RULE,
+    lesson: f.where,
+    step: null,
+    message: f.message,
+  });
+}
+
+// The model-checked rule (Prompt 66): a literal numeric answer is recomputed
+// from the lesson's own model, sourced, or on the shrinking allowlist.
+for (const f of modelCheckFindings(inputs.investigations, {
+  models: MODELS,
+  sourced: SOURCED,
+  unchecked: UNCHECKED,
+})) {
+  findings.push({
+    level: 'error',
+    rule: MODEL_RULE,
+    lesson: f.where,
+    step: f.step,
+    message: f.message,
+  });
+}
 
 const only = value('lesson');
 if (only) {

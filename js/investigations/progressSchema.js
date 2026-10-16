@@ -64,15 +64,23 @@ export const stepKey = (lessonId, sid) => `${lessonId}:${sid}`;
  * confused for one another, and anything containing a colon so the sub-key
  * scheme above stays unambiguous.
  *
+ * And anything but lowercase letters, digits and single hyphens: the key is
+ * written into the lesson panel's attributes, and a pack's sid is imported.
+ *
  * @param {*} sid - Candidate
  * @returns {boolean} Whether it is well formed
  */
 export const isValidSid = sid =>
   typeof sid === 'string' &&
-  sid.length > 0 &&
   sid.length <= 80 &&
-  !sid.includes(':') &&
+  /^[a-z0-9]+(-[a-z0-9]+)*$/.test(sid) &&
   !/^\d+$/.test(sid);
+
+export const DEPTHS = Object.freeze(['core', 'quantitative', 'advanced']);
+
+export const inDepth = (step, depth = 'core') =>
+  Math.max(0, DEPTHS.indexOf(step?.depth)) <=
+  Math.max(0, DEPTHS.indexOf(depth));
 
 /** @param {object} lesson - A merged lesson @returns {Array<string>} Its sids, in order */
 export const sidsOf = lesson =>
@@ -94,6 +102,9 @@ const EMPTY = () => ({
   visited: new Set(),
   stepSid: null,
   startedAt: null,
+  depth: null,
+  deepest: null,
+  spent: 0,
   schema: PROGRESS_SCHEMA,
   migrated: false,
   notes: [],
@@ -250,6 +261,9 @@ export function readProgress(data, lesson) {
     ? data.stepSid
     : (sidsOf(lesson)[0] ?? null);
   out.startedAt = typeof data.startedAt === 'string' ? data.startedAt : null;
+  if (DEPTHS.includes(data.depth)) out.depth = data.depth;
+  if (DEPTHS.includes(data.deepest)) out.deepest = data.deepest;
+  if (data.spent > 0) out.spent = Math.floor(data.spent);
 
   // A step that has been removed from the lesson since the save. The answer is
   // gone from the working set and the reader is told how much.
@@ -272,6 +286,9 @@ export function writeProgress({
   visited,
   stepSid,
   startedAt,
+  depth,
+  deepest,
+  spent,
 }) {
   return {
     schema: PROGRESS_SCHEMA,
@@ -281,5 +298,8 @@ export function writeProgress({
     attempts: { ...attempts },
     visited: [...(visited || [])],
     startedAt: startedAt ?? null,
+    ...(DEPTHS.includes(depth) ? { depth } : {}),
+    ...(deepest && deepest !== 'core' ? { deepest } : {}),
+    ...(spent > 0 ? { spent: Math.floor(spent) } : {}),
   };
 }

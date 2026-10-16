@@ -64,7 +64,7 @@ export const WINDOW_MARGIN = 1.1;
  */
 export const CONFIGURATIONS = Object.freeze({
   circumstellar: {
-    scenario: 'Binary Planet Lab',
+    scenario: 'binary-planet-lab',
     // Spanning the two the student ran by hand - 0.15 survived, 0.30 did not -
     // with the published critical radius for this system, 0.177, inside it.
     values: [0.12, 0.15, 0.18, 0.22, 0.3],
@@ -72,7 +72,7 @@ export const CONFIGURATIONS = Object.freeze({
     seed: 'binary',
   },
   circumbinary: {
-    scenario: 'Circumbinary Planet Lab',
+    scenario: 'circumbinary-planet-lab',
     // The optional extension. 4.0 and 2.0 are the two the lesson runs by hand,
     // and the published boundary for this pair is 3.61, so the range brackets
     // it from both sides. Forty periods because a circumbinary planet is slow.

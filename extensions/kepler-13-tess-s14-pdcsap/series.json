@@ -1,0 +1,99 @@
+{
+  "PACK": {
+    "id": "kepler-13-tess-s14-pdcsap",
+    "version": "1.0.0",
+    "title": "Kepler-13A: TESS sector 14 light curve, corrected (PDCSAP)",
+    "object": {
+      "name": "Kepler-13",
+      "identifiers": [
+        "TIC 158324245",
+        "KOI-13",
+        "Kepler-13 A"
+      ],
+      "ra": 286.971415279733,
+      "dec": 46.8683142230847,
+      "frame": "ICRS, epoch J2000",
+      "tessMagnitude": 10.23060036
+    },
+    "facility": {
+      "observatory": "TESS",
+      "instrument": "camera 2, CCD 3, 2-minute cadence",
+      "pipeline": "SPOC spoc-5.0.96-20230729"
+    },
+    "dataType": "light-curve",
+    "origin": "observed",
+    "credit": "TESS, sector 14 (NASA; SPOC light curve from MAST)",
+    "license": {
+      "status": "public-domain",
+      "statement": "NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive."
+    },
+    "retrieved": "2026-09-26",
+    "time": {
+      "scale": "TDB",
+      "reference": "BTJD = BJD - 2457000",
+      "unit": "d"
+    },
+    "columns": [
+      {
+        "name": "time",
+        "unit": "d",
+        "description": "bin centre: t0 + (index + 0.5) x binDays, in BTJD"
+      },
+      {
+        "name": "flux",
+        "unit": "",
+        "description": "PDCSAP flux over its median"
+      },
+      {
+        "name": "flux error",
+        "unit": "",
+        "uncertaintyOf": "flux",
+        "description": "propagated PDCSAP error over the median, one sigma, per bin"
+      }
+    ],
+    "masks": [
+      {
+        "column": "QUALITY",
+        "rule": "any nonzero flag drops the cadence",
+        "dropped": 917
+      },
+      {
+        "column": "TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR",
+        "rule": "a cadence without a finite value in all three is dropped",
+        "dropped": 0
+      },
+      {
+        "column": "bin",
+        "rule": "a bin with fewer than 3 kept cadences is dropped",
+        "dropped": 2
+      }
+    ],
+    "crowding": {
+      "crowdsap": 0.5492385,
+      "flfrcsap": 0.92097801
+    },
+    "reductions": [
+      "20-minute bins average up to 10 two-minute cadences each; the transit, about 3.2 hours long, spans nine or ten bins.",
+      "Flux is kept to 1 ppm and its error to 5 ppm (binned-relative-flux/1)."
+    ]
+  },
+  "SERIES": {
+    "encoding": "binned-relative-flux/1",
+    "t0": 1683.3472222222222,
+    "binDays": 0.013888888888888888,
+    "n": 1865,
+    "runs": [
+      [
+        0,
+        939
+      ],
+      [
+        1008,
+        926
+      ]
+    ],
+    "flux": "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",
+    "errStepPpm": 5,
+    "err": "klxcXFxcXFxcXFxcXFxhZ2dhbmdhZ2FcXFxcXGFcXFxcXFxcXFxcglxhXFxcXFxcXFxnXFxcYWFcXFxcXFxcXFxcXGdhXFxcXF1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dYl1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl9fX19fX19fX19fX19fX19fX19feoZ6al9kX19fX19kX19kX19fX19qX2RfX19fX3GGXmReXl5eXmNeXmNeXl5fX2RfZF9fX19fcl9kX19fX19fX19fZF9fX19fZF9fX19fX19qZF9fX19fZGRkX19fX19qZF9fX19fZGRkX19fX19fcV9fX19fX2RfX19gYGBgYGVgYGBgYGBgYGBgYGBlYGBgYGBgYGtgZWBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgX19fX19fX19fX19fX19gYGBgYGBgYGBgYGBhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFgYGBgYGBgYGBgYGBgYGBhYWFhYWFhYWFhYWJiYmJiYmJtYm5iYmduYmdiYmJoYmJoYmdiYmJiZ2JnZ2JiYm1iYmJiYmJiYmJiYWFhYWFhbIlhYWFmYWFnYWJiZ2dnYmJiaG5iY2NjY2NoY2NjY2lpY2RkZGlpZGRkZGRpaWRjY2Npb2NjY2NjY2NjY2NjY2NjY2NjY2hjY2JiYmJiYmJjY2NoY2NjY2NkZGRkZGRkZGRkZGRkZWVlZWVlZWVlZWVlZWVlZWVlZGRqZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGNjY2NpY2NjY2NjZGRkZGRkZGRqZGRkZGRkZGRkZGRkcGRkZGRqZGRkZGRkZGRkZGRjY2NjY2NjY2NjY2NjYmJiYmJiYmJiYmJiYWFhYWFhYWFhYWFhYWFhYWFhYWdhYWFhYWFhYGBgYGBfX19fX2ReXl5eXV1dXVxcYVxcXFxcXFxcXFxcYVxcXFxcXFxcXFxcXFxcXGFcZ2FcYVxcXFxcYVxcXFxcXFxcXFxnYVxcYVxuXFxhYVxcXFxcXFxhXFxcXGdcXFxcXFxhXFxcXFxcXFxcXFxcXFxhXFxcXFxcXFxcXV1dXV1dXV1dXWJdXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dYl1dXV1dXV1dXV1dXV1dXV1dYl1dXV1dXWJdXV1dXV1dXV1dXV1dXV1dXV1dXV1dXWhdXV1dXV1dXWJdXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXV1eXl1dXV1dXV1dXV5eXl5eXl5eXl5eXl5eXl6sXl5ecWNeXl5eXmNeXl5eaV5eXl5eaV5eXl5eXl5eXl5eY15eXl5eXl5eXl5eXmNeXl5eXmNeXl5eXl5eXl5eXl5eX19fZF9kX19fX19fX19fX19fX19fX19fX19famRfX19fX19fX19fX19fX19fX19fX19fX2RkX19eXl5eXl5eX19fX19fX19fX19fX19lX2BfX19fX19fX2BgYGBgYGBgYGBgYGBgYGBfX19fX19fX19fYGBgYGBgYGBfX19fX19fX19fX19fX19fX2BgYGBgYGBgYGVgYGBgYGBgYGBgYGBgYWFhYWFhYWFhYWBgYGBgYGBgYGBgYGBgYGBgYGBgZmBgYGBgYGBgYGBgYGBgYGBgYGBgYWZhYWFhYWFhYWFhYWFhYWFiYmJiYmJiYmKzYmJiZ2diYWFnZ2FhYWFhfmFhYWFnYWdhYWFhbWFhYWFmZmFhYWFhYWFhYWFhZ2JiYmJoYmNjY2NjY2NjY2NjY2NjY2NjY2NjZGNjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjZGRkZGRkZGRkZWVlZWVlZWVlZWtrZWVlZWVlZWVlZWVlZWVlZWRkZGRkZGVlZGRlZWVlZWVlZWVkZGRkZGRkZGRkZGRkZGRkZWVlZWVlZWVmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWRkZGRkZGNjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NiYmJiYmJhYWFhYWBgYF9fX19eXl1dXV1cXGE="
+  }
+}

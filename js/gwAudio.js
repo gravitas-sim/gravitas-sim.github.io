@@ -64,16 +64,6 @@ const notify = () => {
 };
 
 /**
- * Watch for a change in what is playing.
- * @param {Function} fn - Called with the state
- * @returns {Function} Unsubscribe
- */
-export function watchSignalAudio(fn) {
-  watchers.add(fn);
-  return () => watchers.delete(fn);
-}
-
-/**
  * What is playing, and what was done to it to make it audible.
  * @returns {{playing: boolean, nowPlaying: ?object, mapping: ?object}} The state
  */

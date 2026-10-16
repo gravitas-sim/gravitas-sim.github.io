@@ -97,13 +97,16 @@ const DETECT_THIS_PLANET = {
     'Two methods, the same problem: the answer was decided before the data arrived',
   duration: '30-35 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 21, section: '21.4' },
+  courseLevel: 'majors',
+  mathematics: 'algebra',
+  prerequisites: ['transit-photometry', 'radial-velocity'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
-  summary:
-    'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two radial-velocity runs of the same star with the same instrument and the same number of nights, and find that one detects a Jupiter and the other cannot tell you anything. Then do it again with transits, where the same planet is a 587-sigma certainty from space and a 4-sigma maybe from three nights on the ground — and work out how many more nights would fix that, and where the answer stops improving.',
   objectives: [
     'Predict whether an observing schedule can detect a given planet, and say which of cadence, baseline and precision decides it',
     'Explain why more measurements over a longer baseline can be worse than fewer over a shorter one',
@@ -136,7 +139,7 @@ const DETECT_THIS_PLANET = {
              knows which star you mean. Somewhere around it, too faint
              to see, there may or may not be a planet. Your twelve measurements
              of the star's velocity are all the evidence you are going to get.
-             \n\nThe usual question is <em>is there a planet</em>. This lesson
+             \n\nThe usual question is <em>is there a planet</em>. This investigation
              asks a different one, and it is the question an observer actually
              has to answer first: <strong>would this schedule find it if there
              were?</strong>`,
@@ -261,7 +264,7 @@ const DETECT_THIS_PLANET = {
              A χ²/dof near 49 says that if the star's velocity had really been
              constant, a scatter this large would essentially never happen by
              chance.
-             \n\nBe careful with the next step. It is the one this whole lesson
+             \n\nBe careful with the next step. It is the one this whole investigation
              is built around.`,
       prompt:
         'The most that these twelve measurements establish on their own is:',
@@ -272,6 +275,15 @@ const DETECT_THIS_PLANET = {
         'Nothing, because twelve measurements are too few',
       ],
       answer: 2,
+      misconceptions: [
+        {
+          id: 'planetOverreach',
+          option: 1,
+          say: `The scatter shows the velocity is not constant; it does not say
+                why. A planet is the likeliest cause, but a companion star,
+                spots or the instrument can do the same.`,
+        },
+      ],
       because: `The velocity is not constant. That is all the scatter can carry
                 by itself. A planet is the most likely explanation and it is not
                 the only one: a faint companion star, pulsations, spots rotating
@@ -388,6 +400,15 @@ const DETECT_THIS_PLANET = {
       },
     },
     {
+      hints: [
+        'Divide the time between measurements by the orbital period.',
+        'Both are in days. Count the whole orbits that fit; what is left over is a fraction of an orbit.',
+      ],
+      feedback: {
+        close:
+          'Close. The two times are nearly the same: what does their ratio round to, as a whole number of orbits?',
+        off: 'Divide the interval between measurements by the period, in the same unit.',
+      },
       sid: 'why-it-failed',
       bind: TARGET,
       type: 'question',
@@ -459,7 +480,7 @@ const DETECT_THIS_PLANET = {
                 second is wrong in the other direction: there <em>is</em> a
                 planet, and one this survey happened to be blind to, so
                 "no evidence" understates what the data cannot say. The fourth is
-                the specific error this lesson exists to prevent - an
+                the specific error this investigation exists to prevent - an
                 amplitude-to-noise ratio is not a significance, because it does
                 not account for how many points there are, how they are
                 distributed, or how many other periods you implicitly searched.`,
@@ -658,7 +679,7 @@ const DETECT_THIS_PLANET = {
                 night-to-night wander of the atmosphere is now the largest term
                 in the budget. Three nights is not many, though — the next
                 screen asks what happens with three hundred, and the answer is
-                not the one this lesson used to give.`,
+                not the one this investigation used to give.`,
     },
     {
       sid: 'the-floor',
@@ -881,7 +902,7 @@ const DETECT_THIS_PLANET = {
                 measured shallower transits than that. It is below what
                 <em>this</em> instrument can reach around <em>this</em> star, and
                 the difference between those two statements is the whole subject
-                of this lesson.`,
+                of this investigation.`,
     },
 
     {
@@ -889,7 +910,7 @@ const DETECT_THIS_PLANET = {
       bind: TARGET,
       type: 'read',
       title: 'What you decided before you looked',
-      body: `Two methods, and the same lesson twice.
+      body: `Two methods, and the same investigation twice.
              \n\nTwelve measurements. One instrument. One planet, which was there
              the whole time.
              \n\nSchedule A established beyond reasonable argument that this

@@ -4,9 +4,15 @@
 
 A static site. There is no server, no database, no account system and no
 session: GitHub Pages serves files, and everything else happens in the reader's
-browser. Nothing a reader does is sent anywhere, because there is nowhere to
-send it. Progress, settings and saved worlds live in that browser's own storage
-and are never transmitted.
+browser. Progress, settings and saved worlds live in that browser's own storage
+and are never transmitted, because there is nowhere to send them.
+
+The one exception is a reader's own choice. The Observatory's archive import,
+an opt-in panel ("Or find a star's Gaia epochs at CDS (live, opt-in)"), sends
+the name the reader types, and then the position CDS answers with, to CDS's
+Sesame and VizieR services when the reader presses Find, and to nothing else
+([`ARCHIVE_IMPORT.md`](ARCHIVE_IMPORT.md)). No lesson uses it, and nothing is
+sent until it is asked for.
 
 That removes most of the categories a security policy usually covers, and it is
 worth saying plainly rather than leaving a reader to infer it.

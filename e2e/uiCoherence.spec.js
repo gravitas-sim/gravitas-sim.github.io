@@ -408,6 +408,46 @@ test.describe('placing something says so, without a dialog', () => {
 });
 
 test.describe('from the keyboard alone', () => {
+  // The test below this one failed on v2 CI, attempt and retry, because
+  // app.boot() returned while the rail was still hidden: focus() on a
+  // visibility: hidden control does nothing, and Enter went to <body>. It is a
+  // race against the 200 ms reveal timer in js/main.js, so this stretches that
+  // one timer to a second and a half, which no boot can outrun by accident.
+  test('the rail takes focus as soon as boot returns, however late it is revealed', async ({
+    page,
+    app,
+  }) => {
+    await page.addInitScript(() => {
+      // Only the timer revealApp() schedules straight after it raises the
+      // signal: the reveal, and nothing else that happens to last 200 ms.
+      let ended = false;
+      let slowNext = false;
+      const real = window.setTimeout;
+      window.setTimeout = (fn, ms, ...rest) => {
+        if (slowNext && ms === 200) {
+          slowNext = false;
+          return real(fn, 1500, ...rest);
+        }
+        return real(fn, ms, ...rest);
+      };
+      Object.defineProperty(window, 'splashScreenEnded', {
+        configurable: true,
+        get: () => ended,
+        set: v => {
+          ended = v;
+          if (v) slowNext = true;
+        },
+      });
+    });
+    await app.boot();
+    await page.locator('#objectTypeBtn').focus();
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe(
+      'objectTypeBtn'
+    );
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#objectTypePicker')).toBeVisible();
+  });
+
   test('the picker opens, arrows move, Enter arms and Escape cancels', async ({
     page,
     app,
@@ -597,13 +637,11 @@ test.describe('the front door is fetched only when it is needed', () => {
     await expect(page.locator('#welcomeScreen')).toBeVisible();
   });
 
-  test('the reopen button opens it on a later visit', async ({ page, app }) => {
+  test('the GRAVITAS link opens it on a later visit', async ({ page, app }) => {
     await app.boot();
-    // Activated directly rather than through the rail's accordion: whether the
-    // Learn section happens to be expanded is a different question, and it has
-    // its own tests.
-    const press = () =>
-      page.locator('#aboutGravitasBtn').evaluate(el => el.click());
+    // The rail's "About Gravitas" reopened it until the shell's own name
+    // linked Home on every page; the rail's Learn section went with it.
+    const press = () => page.locator('.gs-app .gs-brand').click();
 
     await press();
     await expect(page.locator('#welcomeScreen')).toBeVisible();

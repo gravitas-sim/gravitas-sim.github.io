@@ -167,42 +167,41 @@ export function scheduleFault(ctx) {
  * Build the comparison of two finished arms.
  *
  * The arithmetic and the held-constant bookkeeping, kept out of the start-up
- * download with the rest of this module. The caller owns the generation guard:
- * it decides whether the answer is still wanted by the time it arrives.
+ * download with the rest of this module. The period searches run in the
+ * inference Worker (js/rvCompareSearch.js) and, if a realm fails, on the page.
+ * The caller owns the generation guard: it decides whether the answer is still
+ * wanted by the time it arrives.
  *
  * @param {object} ctx - {lib, armA, armB, bounds, target}
- * @returns {?object} The comparison, or null without usable bounds
+ * @returns {Promise<?object>} The comparison, or null without usable bounds
  */
-export function buildComparison(ctx) {
+export async function buildComparison(ctx) {
   const { lib, armA, armB, bounds } = ctx;
   if (!bounds) return null;
   const a = armA.config;
   const b = armB.config;
-  return lib.compareSchedules(
-    {
-      label: 'A',
-      kind: a.kind ?? 'regular',
-      plan: a.plan,
-      measurements: armA.measurements(),
+  const arm = (label, survey, c) => ({
+    label,
+    kind: c.kind ?? 'regular',
+    plan: c.plan,
+    measurements: survey.measurements(),
+  });
+  const arms = [arm('A', armA, a), arm('B', armB, b)];
+  const searches = await import('./rvCompareSearch.js')
+    .then(m => m.searchArms(arms, bounds))
+    .catch(() => undefined);
+  return lib.compareSchedules(arms[0], arms[1], {
+    ...bounds,
+    searches,
+    held: {
+      sigmaMs: { a: a.sigmaMs, b: b.sigmaMs },
+      seed: { a: a.seed, b: b.seed },
+      // Both arms observed the same frames of the same world, so the system
+      // is the same by construction; it is stated rather than assumed so the
+      // check is a check.
+      system: { a: ctx.target ?? null, b: ctx.target ?? null },
     },
-    {
-      label: 'B',
-      kind: b.kind ?? 'regular',
-      plan: b.plan,
-      measurements: armB.measurements(),
-    },
-    {
-      ...bounds,
-      held: {
-        sigmaMs: { a: a.sigmaMs, b: b.sigmaMs },
-        seed: { a: a.seed, b: b.seed },
-        // Both arms observed the same frames of the same world, so the system
-        // is the same by construction; it is stated rather than assumed so the
-        // check is a check.
-        system: { a: ctx.target ?? null, b: ctx.target ?? null },
-      },
-    }
-  );
+  });
 }
 
 /**

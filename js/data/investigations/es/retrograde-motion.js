@@ -15,8 +15,6 @@ export default {
   subtitle: 'Cambia el marco y catorce siglos de epiciclos se vienen abajo',
   duration: '35-45 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Dos veces cada tres años Marte se detiene en el cielo, invierte su marcha y traza un bucle sobre sí mismo. Visto desde fuera no ocurre nada de eso: la Tierra y Marte giran alrededor del Sol en el mismo sentido y no retroceden jamás. Medirás ambas órbitas, predecirás qué hace Marte visto desde la Tierra, y después cambiarás el sistema de referencia y verás cómo el bucle se dibuja solo. Nada de la física cambia al hacerlo. Ese es todo el asunto, y es lo que llevó a la astronomía de Ptolomeo a Copérnico.',
   objectives: [
     'Describir el movimiento retrógrado como una observación, aparte de cualquier explicación de él',
     'Calcular un periodo sinódico a partir de dos periodos orbitales y decir qué cuenta',
@@ -33,7 +31,7 @@ export default {
         text: 'Los planetas parecen a veces avanzar, a veces retroceder y a veces quedarse quietos.',
         by: 'Claudio Ptolomeo, Almagesto, h. 150 d. C.',
       },
-      tip: 'Esta lección deja el inspector activado: lo necesitarás para leer números de la Tierra y de Marte. La colocación de objetos nuevos está desactivada, así que un clic accidental no puede alterar el sistema que estás midiendo.',
+      tip: 'Esta investigación deja el inspector activado: lo necesitarás para leer números de la Tierra y de Marte. La colocación de objetos nuevos está desactivada, así que un clic accidental no puede alterar el sistema que estás midiendo.',
     },
     {
       title: 'Lo que estás mirando',
@@ -94,6 +92,14 @@ export default {
       body: 'Dos corredores en una pista circular, uno más rápido que el otro, vuelven a encontrarse a intervalos. No una vez por vuelta: el corredor más rápido tiene que sacarle una vuelta entera al más lento.\n\nPara los planetas este intervalo se llama <em>periodo sinódico</em>, y es el tiempo entre una alineación de Sol, Tierra y Marte y la siguiente. Como cuenta vueltas ganadas y no vueltas dadas, es más largo que el año propio de cualquiera de los dos planetas.\n\nSi el planeta más rápido gira en <em>P</em>₁ y el más lento en <em>P</em>₂, entonces en un periodo sinódico <em>S</em> el rápido completa exactamente una vuelta más que el lento:\n\n<strong>1/S = 1/P₁ − 1/P₂</strong>\n\nLa alineación que importa aquí es la <em>oposición</em>: la Tierra directamente entre el Sol y Marte, con Marte en el lado opuesto de nuestro cielo respecto al Sol. Es también cuando Marte está más cerca de nosotros y más brillante.',
     },
     {
+      hints: [
+        'Usa 1/S = 1/P₁ − 1/P₂ con el período más corto primero.',
+        'Resta los dos recíprocos y toma uno entre el resultado.',
+      ],
+      feedback: {
+        close: 'Cerca. Resta primero los recíprocos y solo después invierte.',
+        off: 'El período sinódico es uno entre la diferencia de las dos tasas, no la diferencia de los dos períodos.',
+      },
       title: '¿Cada cuánto alcanza la Tierra a Marte?',
       body: 'Usa tus dos periodos medidos en 1/S = 1/P₁ − 1/P₂, con P₁ el más corto. Trabaja en días.\n\nCon 365 y 687 la resta da 1/S = 0,00274 − 0,00146 = 0,00128 por día.',
       prompt:
@@ -103,6 +109,15 @@ export default {
         'S = 780 días, unos dos años y siete semanas. Por eso Marte está bien situado para observarlo aproximadamente cada dos años y no cada año: la Tierra necesita 780 días para sacarle una vuelta entera. Venus, que es mucho más rápido, vuelve a la misma alineación cada 584 días; Júpiter, que es mucho más lento, cada 399, apenas más que un año terrestre, porque Júpiter apenas se ha movido mientras la Tierra da la vuelta.',
     },
     {
+      hints: [
+        'Una vuelta completa son 360 grados y la tasa está en grados por día.',
+        'El tiempo es el ángulo a ganar dividido entre la tasa.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Divide 360 entre la tasa de ganancia, en grados por día.',
+        off: 'El tiempo es el ángulo que hay que ganar dividido entre la rapidez con que se gana.',
+      },
       title: 'Una vuelta ganada',
       body: 'Tienes el ritmo al que la Tierra le gana terreno a Marte, en grados por día. Una vuelta completa ganada son 360°.\n\nDivide uno entre el otro y tendrás otra vez el periodo sinódico, por un camino distinto. Debería coincidir con lo que obtuviste de los inversos.',
       prompt:
@@ -204,7 +219,7 @@ export default {
       prompt:
         'En dos o tres frases, explica por qué Marte parece invertir su marcha, sin decir nada sobre lo que Marte hace de distinto durante esas semanas.',
       rubric:
-        'Una buena respuesta dice que Marte se mueve de manera constante todo el tiempo, y que la inversión la produce el propio movimiento del observador: la Tierra está en una órbita más pequeña y más rápida, y cerca de la oposición adelanta a Marte, de modo que la dirección de la Tierra a Marte gira hacia atrás contra las estrellas lejanas. Se valora nombrar la oposición, conectarla con el paso de la Tierra entre el Sol y Marte, y señalar que eso hace además que Marte esté más cerca y más brillante en ese momento. Una respuesta en la que Marte frena, se detiene o es arrastrado hacia atrás ha perdido el sentido de la lección.',
+        'Una buena respuesta dice que Marte se mueve de manera constante todo el tiempo, y que la inversión la produce el propio movimiento del observador: la Tierra está en una órbita más pequeña y más rápida, y cerca de la oposición adelanta a Marte, de modo que la dirección de la Tierra a Marte gira hacia atrás contra las estrellas lejanas. Se valora nombrar la oposición, conectarla con el paso de la Tierra entre el Sol y Marte, y señalar que eso hace además que Marte esté más cerca y más brillante en ese momento. Una respuesta en la que Marte frena, se detiene o es arrastrado hacia atrás ha perdido el sentido de la investigación.',
     },
     {
       title: 'Lo que costó explicar esto',
@@ -229,6 +244,15 @@ export default {
         'El epiciclo de todo planeta exterior tarda exactamente un año. Ptolomeo lo sabía y lo dejó registrado; el modelo no da ninguna razón para ello. En la imagen heliocéntrica la razón es inmediata: el epiciclo no es el movimiento del planeta en absoluto, es el de la Tierra, reflejado sobre la trayectoria aparente del planeta. Tres planetas sin relación compartiendo un periodo es la clase de coincidencia que debería hacerte sospechar de un modelo, y es el hecho concreto que señaló Copérnico.',
     },
     {
+      hints: [
+        'Cada planeta necesita los mismos cuatro dispositivos.',
+        'Multiplica los dispositivos de un planeta por el número de planetas.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Cuenta los dispositivos de un planeta y toma esa cantidad por cada planeta.',
+        off: 'Multiplica los dispositivos de un planeta por el número de planetas.',
+      },
       title: 'Contando la maquinaria',
       body: 'El modelo de Ptolomeo necesitaba, para cada uno de los cinco planetas visibles, un círculo deferente, un epiciclo montado sobre él, un desplazamiento excéntrico para el centro del deferente y un punto ecuante para los tiempos. Cuatro artificios por planeta.\n\nCuenta los artificios necesarios solo para los cinco planetas errantes, dejando fuera el Sol y la Luna.',
       prompt:
@@ -293,7 +317,7 @@ export default {
         'el paralaje no existe',
       ],
       because:
-        'Un resultado nulo obtenido con un instrumento ochenta veces demasiado tosco no te dice nada sobre el efecto. El razonamiento de Tycho era sólido y sus datos excelentes; lo que le faltaba era alguna manera de saber a qué distancia estaban las estrellas, así que no podía distinguir un efecto pequeño de uno ausente. Este es un peligro general que merece la pena llevarse de la lección: una medida que no encuentra nada restringe una teoría solo cuando sabes qué habría podido detectar esa medida.',
+        'Un resultado nulo obtenido con un instrumento ochenta veces demasiado tosco no te dice nada sobre el efecto. El razonamiento de Tycho era sólido y sus datos excelentes; lo que le faltaba era alguna manera de saber a qué distancia estaban las estrellas, así que no podía distinguir un efecto pequeño de uno ausente. Este es un peligro general que merece la pena llevarse de la investigación: una medida que no encuentra nada restringe una teoría solo cuando sabes qué habría podido detectar esa medida.',
     },
     {
       title: '¿Cuánto dura un bucle?',
@@ -320,7 +344,7 @@ export default {
     },
     {
       title: 'Lo que has hecho',
-      body: 'Has medido dos periodos orbitales y has calculado un periodo sinódico a partir de ellos. Has predicho qué aspecto tendría un planeta visto desde un observador en movimiento, después has cambiado el marco y has visto cumplirse la predicción. Has situado la inversión en la oposición, la has ligado a la geometría del adelantamiento, y has encontrado el epiciclo de un año que un modelo geocéntrico tiene que aceptar como una coincidencia.\n\nLa simulación estuvo haciendo exactamente una cosa todo el tiempo: dos planetas en órbitas circulares, bajo una fuerza del inverso del cuadrado ejercida por una estrella. Todos los bucles, picos e inversiones salieron de restar la posición de un cuerpo a la de otro.\n\nEso merece la pena conservarlo más allá de esta lección. Muchísimas cosas que parecen anomalías en el cielo resultan ser afirmaciones sobre dónde está situado el observador, y la primera pregunta que hay que hacerle a un movimiento extraño es siempre: ¿medido contra qué?',
+      body: 'Has medido dos periodos orbitales y has calculado un periodo sinódico a partir de ellos. Has predicho qué aspecto tendría un planeta visto desde un observador en movimiento, después has cambiado el marco y has visto cumplirse la predicción. Has situado la inversión en la oposición, la has ligado a la geometría del adelantamiento, y has encontrado el epiciclo de un año que un modelo geocéntrico tiene que aceptar como una coincidencia.\n\nLa simulación estuvo haciendo exactamente una cosa todo el tiempo: dos planetas en órbitas circulares, bajo una fuerza del inverso del cuadrado ejercida por una estrella. Todos los bucles, picos e inversiones salieron de restar la posición de un cuerpo a la de otro.\n\nEso merece la pena conservarlo más allá de esta investigación. Muchísimas cosas que parecen anomalías en el cielo resultan ser afirmaciones sobre dónde está situado el observador, y la primera pregunta que hay que hacerle a un movimiento extraño es siempre: ¿medido contra qué?',
     },
   ],
 };

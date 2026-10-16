@@ -33,7 +33,7 @@ test.describe('on a phone', () => {
 
   test('nothing overflows sideways', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(20);
 
     const overflow = await page.evaluate(() => ({
@@ -57,6 +57,66 @@ test.describe('on a phone', () => {
     // the one control a phone visitor needs.
     const load = page.locator('#loadScenarioBtn');
     await expect(load).toBeVisible();
+  });
+
+  test('first run: Home, then the card, then the touch tips, one at a time', async ({
+    page,
+    app,
+  }) => {
+    await page.addInitScript(() => {
+      try {
+        window.localStorage.removeItem('mobile_instructions_shown');
+      } catch {
+        /* the app copes */
+      }
+    });
+    await app.boot({ firstVisit: true });
+    const card = page.locator('#scenarioInfoBox');
+    const tips = page.locator('#mobileInstructions');
+    const box = locator => locator.evaluate(el => el.getBoundingClientRect());
+
+    await expect(page.locator('#welcomeScreen')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#welcomeScreen')).toBeHidden();
+
+    // The card, alone: over neither the readout nor the transport bar.
+    await expect(card).toHaveClass(/showUI/);
+    await expect(tips).toBeHidden();
+    const c = await box(card);
+    expect(c.top).toBeGreaterThanOrEqual(
+      (await box(page.locator('#overlay'))).bottom
+    );
+    expect(c.bottom).toBeLessThanOrEqual(
+      (await box(page.locator('#timelineBar'))).top
+    );
+
+    // A touch while the card is up does not bring the tips over it.
+    await page.touchscreen.tap(200, 300);
+    await expect(tips).toBeHidden();
+
+    await page.locator('#closeScenarioInfo').tap();
+    await expect(card).not.toHaveClass(/showUI/);
+    await page.touchscreen.tap(200, 300);
+    await expect(tips).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(tips).toBeHidden();
+  });
+
+  test('a section heading opens its section and leaves the menu open', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await page.locator('#mobileMenuToggle').click();
+    const rail = page.locator('.ui-container');
+    await expect(rail).toHaveClass(/is-open/);
+    // Any button in the rail closes the menu once it has run; a heading used
+    // to as well, so a phone reader could open no section but the first.
+    const tools = page.locator('#railTools');
+    await tools.click();
+    await expect(tools).toHaveAttribute('aria-expanded', 'true');
+    await expect(rail).toHaveClass(/is-open/);
+    await expect(page.locator('#railToolsBody')).toBeVisible();
   });
 
   test('a scenario loads from the gallery and fits the screen', async ({
@@ -89,7 +149,7 @@ test.describe('on a phone', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.waitForFrames(10);
     await app.selectFirstObject('StarObject');
 
@@ -129,7 +189,7 @@ test.describe('on a phone', () => {
     // js/ui.js.
 
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.selectFirstObject('StarObject');
     await expect(page.locator('#objectInspector')).toBeVisible();
 
@@ -161,7 +221,7 @@ test.describe('on a phone', () => {
     // cancels the click the browser would otherwise synthesise. Every control in
     // the inspector header was dead on a phone as a result.
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.selectFirstObject('StarObject');
     await expect(page.locator('#objectInspector')).toBeVisible();
 

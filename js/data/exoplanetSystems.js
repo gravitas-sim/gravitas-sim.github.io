@@ -21,7 +21,7 @@
 // the arithmetic cannot disagree with the inputs.
 //
 // A note on precision: the parameters below carry the digits the measurements
-// justify. Do not add more.
+// justify. Do not add more. The source of each is in realSystemSources.js.
 // =============================================================================
 
 /**

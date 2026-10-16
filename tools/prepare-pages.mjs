@@ -65,6 +65,28 @@ export const ALLOWED_CHANGES = Object.freeze([
   'deployed-revision.json',
 ]);
 
+/**
+ * Directories the repository keeps and the site does not serve.
+ *
+ * `spike/` is evidence for MULTI_WORLD_DECISION.md, and tests/, e2e/ and
+ * tools/ are the suites and the build: about 7 MB nobody loads. They stay in
+ * the commit, and so in the Zenodo archive of a release, which is why they are
+ * dropped here, in staging, and not with `.gitattributes export-ignore` (that
+ * would drop them from `git archive`, which is what Zenodo archives).
+ *
+ * Nothing the site loads lives in them: no page links into them, nothing
+ * under js/ imports from them (the validation suite, the one module that
+ * did, moved to js/validation/), and the service worker precaches none of it.
+ * tests/spikeNotShipped.test.js holds all of that against the staged tree.
+ */
+export const NOT_PUBLISHED = Object.freeze(['spike', 'tests', 'e2e', 'tools']);
+
+/** Remove the unpublished directories from a staged tree. */
+export function dropUnpublished(into) {
+  for (const dir of NOT_PUBLISHED)
+    rmSync(path.join(into, dir), { recursive: true, force: true });
+}
+
 /** Run a command, returning its stdout, and throw with its output on failure. */
 function run(cmd, args, opts = {}) {
   return execFileSync(cmd, args, {
@@ -215,8 +237,19 @@ export function preparePages(opts = {}) {
       )}\n`
     );
 
+    // Verified with the whole tree still there: the instructor bundle's
+    // freshness is judged against tools/build-instructor-materials.js and
+    // its inputs, and a tree without them reports "not a source tree".
     const release = verifyRelease(out);
     problems.push(...release.problems);
+
+    // Then what the site does not serve goes, from both copies alike, so the
+    // comparison below is still between the same trees.
+    dropUnpublished(out);
+    dropUnpublished(pristine);
+    for (const dir of NOT_PUBLISHED)
+      if (existsSync(path.join(out, dir)))
+        problems.push(`${dir}/ is still in the staged tree`);
 
     // Only the changes this job is supposed to make.
     const diff = treeDifference(out, pristine);

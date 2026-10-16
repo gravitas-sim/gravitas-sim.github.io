@@ -17,8 +17,6 @@ export default {
     'Mide un tránsito, calibra lo que te dice y descubre lo que se esconde',
   duration: '50-70 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Recorre el método del tránsito desde los primeros principios con HD 209458 b, el primer planeta al que se pilló cruzando su estrella: mide una profundidad y conviértela en un radio, corrígela por el oscurecimiento del limbo, cronometra dos tránsitos para obtener un periodo, lee una atmósfera en el color de la caída, y termina encontrando la estrella compañera oculta que hace que el planeta parezca más pequeño de lo que es.',
   objectives: [
     'Explicar por qué casi todos los exoplanetas conocidos se encontraron de forma indirecta, y qué mide realmente cada método',
     'Deducir la relación entre profundidad del tránsito y cociente de radios, y usarla en una curva de luz medida',
@@ -31,7 +29,7 @@ export default {
     {
       title: 'Una luciérnaga junto a un faro',
       body: 'Hay más de seis mil planetas confirmados alrededor de otras estrellas. Menos de cien se han fotografiado alguna vez.\n\nEl problema no es que estén lejos, es que están junto a algo abrumadoramente más brillante. Visto desde treinta años luz, Júpiter es unas mil millones de veces más tenue que el Sol y está a medio segundo de arco de él: el ángulo que subtiende una moneda a cuatro kilómetros. Todo telescopio extiende un punto de luz en una pequeña mancha, y la mancha de la estrella es mil millones de veces más alta que el planeta. La imagen directa solo funciona en el raro rincón del espacio de parámetros donde el planeta es lo bastante joven para brillar aún con su propio calor, lo bastante masivo para brillar con fuerza, y lo bastante lejano para librarse del resplandor: un mundo joven y enorme en una órbita ancha. Eso no es lo que son la mayoría de los planetas.\n\nAsí que miramos la estrella. Un planeta no puede ocultar lo que le hace a su anfitriona: tira de ella, curva la luz de las estrellas de detrás y, si la geometría acompaña, pasa por delante y bloquea parte de la luz. Las tres cosas son medidas de la <em>estrella</em>, y las estrellas son brillantes y fáciles.\n\nEn pantalla está <strong>HD 209458</strong>, una parienta del Sol algo más caliente y masiva situada a unos 160 años luz en Pegaso, con un planeta en una órbita de tres días y medio. La estrella y el planeta están dibujados a sus tamaños relativos reales, y por eso la vista está tan ampliada.',
-      tip: 'Todo en esta lección es medible a partir de lo que hay en pantalla. Pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos está desactivada para que un clic accidental no altere el sistema que estás midiendo.',
+      tip: 'Todo en esta investigación es medible a partir de lo que hay en pantalla. Pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos está desactivada para que un clic accidental no altere el sistema que estás midiendo.',
     },
     {
       title: 'Cinco maneras de encontrar un planeta que no puedes ver',
@@ -49,7 +47,7 @@ export default {
         'se mantendrá plano: el planeta es demasiado pequeño para importar',
       ],
       because:
-        'Baja una pequeña cantidad y se recupera. El planeta bloquea una fracción del disco de la estrella igual al cociente de sus áreas, e incluso un Júpiter delante de una estrella parecida al Sol solo cubre alrededor del 1 % de ella. Todo lo de esta lección se sigue de que ese único número sea pequeño pero perfectamente medible.',
+        'Baja una pequeña cantidad y se recupera. El planeta bloquea una fracción del disco de la estrella igual al cociente de sus áreas, e incluso un Júpiter delante de una estrella parecida al Sol solo cubre alrededor del 1 % de ella. Todo lo de esta investigación se sigue de que ese único número sea pequeño pero perfectamente medible.',
     },
     {
       title: 'Tu primer tránsito',
@@ -70,7 +68,7 @@ export default {
     },
     {
       title: 'Pruébalo con planetas reales',
-      body: 'El instrumento de la derecha dibuja la silueta a escala a la izquierda y el tránsito que produce a la derecha, en una escala vertical fija para que los cambios se lean como cambios.\n\nRecorre los ajustes predefinidos. La lección está en los dos extremos: una Tierra delante del Sol son 84 partes por millón, una profundidad que exigió un telescopio espacial dedicado para alcanzarla, mientras que la misma Tierra delante de TRAPPIST-1 es casi el 1 %, cómodamente al alcance de un telescopio terrestre pequeño. Nada del planeta cambió. Cambió la estrella.',
+      body: 'El instrumento de la derecha dibuja la silueta a escala a la izquierda y el tránsito que produce a la derecha, en una escala vertical fija para que los cambios se lean como cambios.\n\nRecorre los ajustes predefinidos. La investigación está en los dos extremos: una Tierra delante del Sol son 84 partes por millón, una profundidad que exigió un telescopio espacial dedicado para alcanzarla, mientras que la misma Tierra delante de TRAPPIST-1 es casi el 1 %, cómodamente al alcance de un telescopio terrestre pequeño. Nada del planeta cambió. Cambió la estrella.',
       checklist: [
         'Halla la profundidad de una Tierra delante del Sol',
         'Halla la profundidad de un Júpiter delante del Sol',
@@ -88,6 +86,20 @@ export default {
       unit: '',
       because:
         'La raíz cuadrada de 0,01 es 0,1: el planeta es una décima parte del radio de la estrella. Alrededor de una estrella parecida al Sol eso es aproximadamente del tamaño de Júpiter, y es exactamente por lo que todos los planetas en tránsito encontrados antes de 2005 aproximadamente eran júpiteres calientes. Eran los únicos que alguien podía ver.',
+      hints: [
+        'La profundidad es la fracción de luz estelar que se bloquea. ¿Qué parte del disco de la estrella cubre el planeta?',
+        'La luz bloqueada va con el área, y el área va con el cuadrado de un radio.',
+        'Así que la profundidad es la razón de radios al cuadrado. Deshaz eso para obtener la razón.',
+      ],
+      feedback: {
+        close:
+          'Cerca, pero fuera de la tolerancia. Eleva tu respuesta al cuadrado y compárala con la profundidad dada.',
+        'wrong-order-of-magnitude':
+          'Te pasas o te quedas en una potencia de diez. Comprueba si usaste la profundidad como razón de radios, o si elevaste al cuadrado donde hacía falta una raíz.',
+        off: 'Compruébalo: eleva tu razón de radios al cuadrado. Si no devuelve la profundidad, parte de la profundidad con la operación contraria.',
+        correct:
+          'Para comprobar un resultado así, elévalo al cuadrado y verifica que recuperas la profundidad.',
+      },
     },
     {
       title: 'Mide la caída',
@@ -176,6 +188,18 @@ export default {
       unit: 'a una',
       because:
         'R★/a = 0,00465, o alrededor de 1 entre 215. Ese es el hecho más duro del método del tránsito: incluso un sondeo con fotometría perfecta observando todas las estrellas del cielo para siempre encontraría menos de uno entre doscientos de los planetas tipo Tierra que hay. Todo lo que el método informa sobre lo comunes que son los planetas tiene que dividirse por este factor geométrico antes de significar algo.',
+      hints: [
+        'La probabilidad es una razón entre dos longitudes que da el paso.',
+        'Divide el radio de la estrella entre el tamaño de la órbita, en la misma unidad.',
+        'Eso da una fracción. La pregunta pide una oportunidad entre cuántas, así que piensa qué hacer con una fracción para obtenerlo.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Revisa la división y que ambas longitudes estén en la misma unidad.',
+        'wrong-order-of-magnitude':
+          'Te alejas por un factor grande. Si tienes 0,00465, esa es la probabilidad como fracción; la pregunta pide una oportunidad entre cuántas, así que dale la vuelta. Si no, comprueba que ambas longitudes estén en UA.',
+        off: 'Escribe primero la probabilidad como fracción y pregúntate cuántas de ellas hacen una.',
+      },
     },
     {
       title: 'Lo que el método se pierde',
@@ -234,7 +258,7 @@ export default {
     },
     {
       title: 'Lo que un tránsito no puede decirte',
-      body: 'Tienes un radio, un periodo y una órbita. No tienes una masa, y ninguna fotometría mejor te la dará. Un planeta gaseoso esponjoso y uno rocoso denso del mismo tamaño producen caídas idénticas.\n\nLa masa tiene que venir de otro sitio, y casi siempre viene de las velocidades radiales: las líneas espectrales de la estrella se desplazan a medida que el planeta tira de ella, y el tamaño de ese desplazamiento da la masa del planeta. Para HD 209458 b son 0,69 masas de Júpiter. Junta las dos medidas y obtienes una densidad: 0,69 masas de Júpiter dentro de 1,38 radios de Júpiter son unos 0,34 gramos por centímetro cúbico, un tercio de la densidad del agua. El planeta flotaría, si tuvieras un océano lo bastante grande.\n\nPor eso la gráfica estándar del campo es el <strong>diagrama masa-radio</strong>, y por eso un planeta con solo una de las dos cosas es un candidato y no un resultado. Es también de donde salió el resultado reciente más interesante: representa el radio frente al periodo para los planetas pequeños de Kepler y hay un hueco visible cerca de 1,8 R<sub>⊕</sub>, el <em>valle de radios</em>, que separa las supertierras rocosas de los mundos pequeños que retienen una envoltura fina de hidrógeno. Se cree que el hueco lo esculpe el escape atmosférico, y es un rasgo que nadie predijo antes de que los datos lo mostraran. Encontrarlo exigió que miles de radios planetarios fueran exactos, que es a donde va la última sección de esta lección.',
+      body: 'Tienes un radio, un periodo y una órbita. No tienes una masa, y ninguna fotometría mejor te la dará. Un planeta gaseoso esponjoso y uno rocoso denso del mismo tamaño producen caídas idénticas.\n\nLa masa tiene que venir de otro sitio, y casi siempre viene de las velocidades radiales: las líneas espectrales de la estrella se desplazan a medida que el planeta tira de ella, y el tamaño de ese desplazamiento da la masa del planeta. Para HD 209458 b son 0,69 masas de Júpiter. Junta las dos medidas y obtienes una densidad: 0,69 masas de Júpiter dentro de 1,38 radios de Júpiter son unos 0,34 gramos por centímetro cúbico, un tercio de la densidad del agua. El planeta flotaría, si tuvieras un océano lo bastante grande.\n\nPor eso la gráfica estándar del campo es el <strong>diagrama masa-radio</strong>, y por eso un planeta con solo una de las dos cosas es un candidato y no un resultado. Es también de donde salió el resultado reciente más interesante: representa el radio frente al periodo para los planetas pequeños de Kepler y hay un hueco visible cerca de 1,8 R<sub>⊕</sub>, el <em>valle de radios</em>, que separa las supertierras rocosas de los mundos pequeños que retienen una envoltura fina de hidrógeno. Se cree que el hueco lo esculpe el escape atmosférico, y es un rasgo que nadie predijo antes de que los datos lo mostraran. Encontrarlo exigió que miles de radios planetarios fueran exactos, que es a donde va la última sección de esta investigación.',
       tip: 'Los planetas de TRAPPIST-1 obtuvieron sus masas por una tercera vía: se perturban unos a otros lo suficiente para desplazar sus tránsitos en minutos, y esas variaciones en el instante del tránsito son una medida de masa.',
     },
     {

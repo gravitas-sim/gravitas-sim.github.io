@@ -1,0 +1,287 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/orbital-system-1.schema.json",
+  "title": "gravitas.orbital-system/1",
+  "description": "A system as the Orbital System Builder saves one (ORBITAL_SYSTEM_BUILDER.md, \"The file\"): from two to twelve bodies, the first the root and each other going round an earlier one on a bound orbit given by its elements, and beside them the initial state the build computed. js/systemSpec.js systemFromFile() and validateSystem() are the authority. They also hold each companion's primary to an earlier body, which a schema cannot say. Being shared with the form, they read a number typed as text and a version of \"1\", and ignore a field they do not know; this schema states numbers, as the builder writes them. The 3-D lab (js/lab3d/state.js migrateSystem) opens such a file from its `initial` numbers alone, which this schema leaves optional because the builder does not need them. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "version",
+    "bodies"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.orbital-system"
+    },
+    "version": {
+      "const": 1
+    },
+    "bodies": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 12,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/root"
+        }
+      ],
+      "items": {
+        "$ref": "#/$defs/companion"
+      },
+      "anyOf": [
+        {
+          "description": "Black holes feel only other black holes, so a system with one is all black holes.",
+          "items": {
+            "properties": {
+              "type": {
+                "const": "BlackHole"
+              }
+            }
+          }
+        },
+        {
+          "items": {
+            "properties": {
+              "type": {
+                "not": {
+                  "const": "BlackHole"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "initial": {
+      "description": "The state the build computed from the elements, in simulation units at the world's G: what the builder compares a rebuild with, and all the 3-D lab reads.",
+      "type": "object",
+      "required": [
+        "G",
+        "bodies"
+      ],
+      "properties": {
+        "G": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "bodies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "x",
+              "y",
+              "vx",
+              "vy",
+              "mass"
+            ],
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              },
+              "vx": {
+                "type": "number"
+              },
+              "vy": {
+                "type": "number"
+              },
+              "mass": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "type": {
+      "enum": [
+        "Star",
+        "WhiteDwarf",
+        "NeutronStar",
+        "BlackHole",
+        "GasGiant",
+        "Planet"
+      ]
+    },
+    "radius": {
+      "description": "The contact radius, in simulation units. Left out (or null), the class gives one from the mass.",
+      "anyOf": [
+        {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10000
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "mass": {
+      "description": "The mass in the unit each type is entered in (suns, jupiters or earths), within the builder's range for that type. A black hole's radius follows its mass, so it has none of its own.",
+      "anyOf": [
+        {
+          "properties": {
+            "type": {
+              "const": "Star"
+            },
+            "mass": {
+              "minimum": 0.02,
+              "maximum": 20
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "WhiteDwarf"
+            },
+            "mass": {
+              "minimum": 0.1,
+              "maximum": 1.44
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "NeutronStar"
+            },
+            "mass": {
+              "minimum": 1.1,
+              "maximum": 2.9
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "BlackHole"
+            },
+            "mass": {
+              "minimum": 1,
+              "maximum": 1000000000
+            },
+            "radius": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "GasGiant"
+            },
+            "mass": {
+              "minimum": 0.01,
+              "maximum": 79
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "Planet"
+            },
+            "mass": {
+              "minimum": 0.001,
+              "maximum": 4000
+            }
+          }
+        }
+      ]
+    },
+    "root": {
+      "description": "The first body, which goes round nothing: anything given for its orbit is ignored, and it has no primary.",
+      "type": "object",
+      "required": [
+        "type",
+        "mass"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/type"
+        },
+        "mass": {
+          "type": "number"
+        },
+        "radius": {
+          "$ref": "#/$defs/radius"
+        },
+        "primary": {
+          "enum": [
+            null,
+            -1,
+            ""
+          ]
+        }
+      },
+      "$ref": "#/$defs/mass"
+    },
+    "companion": {
+      "description": "Every later body: its primary, an earlier body by its place in the list, and the bound orbit about it. The semi-major axis is in AU; omega and phase are in degrees.",
+      "type": "object",
+      "required": [
+        "type",
+        "mass",
+        "primary",
+        "a"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/type"
+        },
+        "mass": {
+          "type": "number"
+        },
+        "radius": {
+          "$ref": "#/$defs/radius"
+        },
+        "primary": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "a": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10000
+        },
+        "e": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 0.99
+        },
+        "omega": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "phase": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "retrograde": {
+          "type": "boolean"
+        }
+      },
+      "$ref": "#/$defs/mass"
+    }
+  }
+}

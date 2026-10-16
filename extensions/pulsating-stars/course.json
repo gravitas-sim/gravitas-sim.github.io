@@ -1,0 +1,72 @@
+{
+  "format": "gravitas.course-pack",
+  "formatVersion": 1,
+  "id": "pulsating-stars",
+  "version": "1.0.0",
+  "locales": [
+    "en",
+    "es"
+  ],
+  "title": {
+    "en": "Pulsating stars",
+    "es": "Estrellas pulsantes"
+  },
+  "summary": {
+    "en": "Three lessons on reading a star's light, and a real light curve to finish: SU Draconis, an RR Lyrae star that nearly doubles in brightness and fades again every sixteen hours.",
+    "es": "Tres lecciones sobre cómo leer la luz de una estrella y, para terminar, una curva de luz real: SU Draconis, una estrella RR Lyrae que casi duplica su brillo y vuelve a apagarse cada dieciséis horas."
+  },
+  "units": [
+    {
+      "id": "recorded-light",
+      "title": {
+        "en": "The light a telescope records",
+        "es": "La luz que registra un telescopio"
+      },
+      "lessons": [
+        {
+          "lesson": "transit-photometry",
+          "teacherNote": {
+            "en": "Start with a light curve students can explain: TESS sees a planet's shadow. The later units turn to light that changes because the star itself does.",
+            "es": "Empiecen con una curva de luz que los estudiantes puedan explicar: TESS ve la sombra de un planeta. Las unidades siguientes pasan a una luz que cambia porque cambia la propia estrella."
+          }
+        }
+      ]
+    },
+    {
+      "id": "bright-and-far",
+      "title": {
+        "en": "How bright, and how far",
+        "es": "Qué tan brillante y qué tan lejos"
+      },
+      "lessons": [
+        {
+          "lesson": "a-universe-of-stars",
+          "teacherNote": {
+            "en": "Brightness is luminosity spread over distance. RR Lyrae stars all shine with nearly the same luminosity, about fifty times the Sun's in visible light, which is why astronomers use them to measure distances.",
+            "es": "El brillo es la luminosidad repartida en la distancia. Todas las estrellas RR Lyrae tienen casi la misma luminosidad, unas cincuenta veces la del Sol en luz visible; por eso los astrónomos las usan para medir distancias."
+          }
+        }
+      ]
+    },
+    {
+      "id": "changing-stars",
+      "title": {
+        "en": "Stars that change",
+        "es": "Estrellas que cambian"
+      },
+      "lessons": [
+        {
+          "lesson": "lives-of-stars",
+          "teacherNote": {
+            "en": "RR Lyrae stars are old, low-mass stars that have passed helium ignition and now burn helium in their cores, the stage astronomers call the horizontal branch. Ask students to find that stage in the lesson.",
+            "es": "Las estrellas RR Lyrae son estrellas viejas y de poca masa que ya pasaron la ignición del helio y ahora queman helio en su núcleo, la etapa que los astrónomos llaman rama horizontal. Pidan a los estudiantes que encuentren esa etapa en la lección."
+          },
+          "studentNote": {
+            "en": "Afterwards, open SU Draconis in the observatory, once your class has installed it from the catalog. Fold it on its period, 0.66 days, and every cycle lies on the same curve.",
+            "es": "Después, abre SU Draconis en el observatorio, una vez que tu clase la haya instalado desde el catálogo. Pliégala con su período, 0,66 días, y todos los ciclos caen sobre la misma curva."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -11,7 +11,7 @@
 // changed.
 //
 // So this is the list, and both sides read it. release-check.mjs runs it.
-// tests/checkRegistry.test.js reads .github/workflows/ci.yml and fails when a
+// tests/releaseGate.test.js reads .github/workflows/ci.yml and fails when a
 // step there is missing here, or an entry here claims a CI job it is not in.
 // The workflow is still hand-written YAML - GitHub needs it that way - but it
 // can no longer quietly disagree with the gate.
@@ -38,7 +38,20 @@ const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CACHES = {
   gw: path.join(REPO, '.gw-cache'),
   stellar: path.join(REPO, '.mist-cache'),
+  spectra: path.join(REPO, '.sdss-cache'),
+  gwosc: path.join(REPO, '.gwosc-cache'),
+  packs: path.join(REPO, '.packs-cache'),
+  ephemeris: path.join(REPO, '.ephemeris-cache'),
 };
+
+/**
+ * The datasets that have a pinned source on disk.
+ *
+ * Exported so that tests/releaseGate.test.js can ask the registry which
+ * datasets exist rather than carry its own list of them. It carried one, and a
+ * third dataset failed two assertions that were not about the third dataset.
+ */
+export const SOURCE_KEYS = Object.freeze(Object.keys(CACHES));
 
 /**
  * Whether a pinned scientific source is on this machine.
@@ -49,7 +62,7 @@ const CACHES = {
  * run was able to establish, and a release summary that calls it a pass is
  * lying about which.
  *
- * @param {'gw'|'stellar'} which - The dataset
+ * @param {'gw'|'stellar'|'spectra'|'gwosc'|'packs'|'ephemeris'} which - The dataset
  * @returns {boolean} True when the cache has something in it
  */
 export function sourcesCached(which) {
@@ -173,6 +186,32 @@ export function summarize(results) {
  * @property {string} [why] - Why it is gate-only, when ci is null
  */
 
+/**
+ * The `if:` a CI step carries when it may only run on a release ref.
+ *
+ * One string, in one place, because it encodes a policy rather than a
+ * convenience: some checks compare the tree against artifacts that only the
+ * owner's passphrase can produce, and asking a pull request into the
+ * integration branch for those makes every parallel content branch red for a
+ * reason that has nothing to do with the branch.
+ *
+ * A push to main and a pull request into main are release paths and are asked.
+ * A push to v2 and a pull request into v2 are integration paths and are not.
+ * tests/releaseGate.test.js evaluates this expression against all four contexts
+ * rather than matching it as a string, so the policy is checked and not merely
+ * spelled consistently.
+ */
+export const RELEASE_REF_ONLY =
+  "github.ref == 'refs/heads/main' || github.base_ref == 'main'";
+
+/**
+ * The provenance job's checks run even after one of them failed, so each
+ * source is reported for itself: a failed pack does not hide the ephemeris.
+ * Written as the workflow spells it, because `!` cannot start a bare YAML
+ * value.
+ */
+export const EVEN_AFTER_A_FAILURE = '${{ !cancelled() }}';
+
 /** The heading each group prints under. */
 export const GROUPS = {
   correctness: 'Correctness',
@@ -227,6 +266,25 @@ export const CHECKS = [
     group: 'correctness',
   },
   {
+    // The message catalogs, cross-referenced against the source that asks for
+    // them. This existed as tools/i18n-audit.mjs for a long time with no npm
+    // script and no entry here, which is the one hole in a registry whose
+    // whole purpose is that a guard nobody runs is not a guard. It could not
+    // be registered before now because it could not pass: its extractor read
+    // a comment quoting `t('exoW....')` as a real reference, so it reported a
+    // phantom id missing from English on every run. It fails on an id that is
+    // asked for and does not exist, and on an id a translation has that
+    // English does not - a typo, which is silent at runtime because the
+    // message simply never appears. An untranslated id is honest work in
+    // progress and is reported without failing.
+    id: 'i18n',
+    label: 'message catalogs match the source that asks for them',
+    command: ['npm', 'run', 'i18n:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
+  {
     id: 'links',
     label: 'internal links and anchors (sources)',
     command: ['npm', 'run', 'validate:links'],
@@ -239,8 +297,7 @@ export const CHECKS = [
     label: 'browser-suite skip policy',
     command: ['npm', 'run', 'test:policy'],
     tier: 'quick',
-    ci: null,
-    why: 'added with the policy itself; runs in a fraction of a second',
+    ci: 'checks',
     group: 'correctness',
   },
   {
@@ -264,6 +321,31 @@ export const CHECKS = [
     label: 'physics validation',
     command: ['npm', 'run', 'validate:physics'],
     tier: 'slow',
+    ci: null,
+    why: 'CI runs the same suite inside npm test (tests/physicsValidation.test.js), which also writes the report the documentation step reads (D-CI-02)',
+    group: 'correctness',
+  },
+  {
+    id: 'lab3d',
+    label: '3-D kernel validation',
+    command: ['npm', 'run', 'validate:lab3d'],
+    tier: 'slow',
+    ci: 'checks',
+    group: 'correctness',
+  },
+  {
+    id: 'ephemeris',
+    label: 'the ephemeris pack decodes and holds its stated accuracy',
+    command: ['npm', 'run', 'ephemeris:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'science',
+  },
+  {
+    id: 'mission',
+    label: 'mission core validation',
+    command: ['npm', 'run', 'validate:mission'],
+    tier: 'quick',
     ci: 'checks',
     group: 'correctness',
   },
@@ -307,6 +389,64 @@ export const CHECKS = [
     ci: 'checks',
     group: 'correctness',
   },
+  // Every capability package valid, and true of the repository: its builtin
+  // references, assets and offline classes, validation checks, licenses and
+  // citations, the runtime catalog and the generated listing.
+  {
+    id: 'capabilities',
+    label: 'capability packages',
+    command: ['npm', 'run', 'capabilities:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
+  // The lazy registries (LAZY_FAMILIES, BUILTINS, the lesson loaders) are
+  // regions written by tools/capability-registries.mjs, so this is the check
+  // of their text, Prettier's formatting included.
+  {
+    id: 'registries',
+    label: 'the lazy registries are what the manifests and modules say',
+    command: ['npm', 'run', 'registries:check'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same facts as code, not text, in ' +
+      'tests/capabilityRegistries.test.js (Prettier does not load under ' +
+      "Jest); the formatting check is the merge queue's and the gate's, " +
+      'through `generate --check`',
+    group: 'correctness',
+  },
+  // The curated catalog (CATALOG.md): its archives, the extensions they come
+  // from, their licenses and catalog.json itself, against the repository.
+  {
+    id: 'catalog',
+    label: 'the curated catalog is true of the repository',
+    command: ['npm', 'run', 'catalog:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
+  // `sdk review` on every archive in catalog/packages; CI also passes the pull
+  // request's base, so the log and summary name what the branch adds.
+  {
+    id: 'catalog-review',
+    label: 'the catalog archives pass the mechanical review',
+    command: ['npm', 'run', 'catalog:review'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
+  // The Extension SDK's own examples, validated and tested as an author's
+  // would be (sdk/README.md). The contract suite in jest covers the SDK
+  // itself; this is the command an extension's `validation` names.
+  {
+    id: 'sdk-extensions',
+    label: 'the SDK example extensions validate and pass their tests',
+    command: ['npm', 'run', 'sdk:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
   {
     id: 'build',
     label: 'production build',
@@ -328,8 +468,15 @@ export const CHECKS = [
     label: 'start-up bundle composition',
     command: ['npm', 'run', 'budget:composition', '--', '--check'],
     tier: 'slow',
-    ci: null,
-    why: 'needs an esbuild pass; the gate has one already',
+    ci: 'build',
+    group: 'correctness',
+  },
+  {
+    id: 'routes',
+    label: 'what a fresh visitor downloads, route by route',
+    command: ['npm', 'run', 'budget:routes'],
+    tier: 'slow',
+    ci: 'e2e-build',
     group: 'correctness',
   },
   {
@@ -360,7 +507,10 @@ export const CHECKS = [
   {
     id: 'e2e-dist',
     label: 'browser suite (production build)',
-    command: ['npm', 'run', 'e2e:dist', '--', '--retries=0'],
+    // Two workers like e2e-sources and CI: the gate must judge the build the
+    // way CI does, not by the machine's core count (six workers on a 12-core
+    // laptop fail the wall-clock 3-D guide test).
+    command: ['npm', 'run', 'e2e:dist', '--', '--retries=0', '--workers=2'],
     tier: 'slow',
     ci: 'e2e-build',
     group: 'correctness',
@@ -372,7 +522,11 @@ export const CHECKS = [
     label: 'documentation facts, CITATION.cff, .zenodo.json',
     command: ['npm', 'run', 'docs:check'],
     tier: 'quick',
-    ci: 'checks',
+    ci: null,
+    why:
+      'the cheap subset. CI runs the wider `docs:check:tests` in the same job ' +
+      'and `docs:check:build` in the one that has a dist/; the gate runs ' +
+      '--full. Kept because it fails in two seconds when a cheap fact moved',
     group: 'generated',
   },
   {
@@ -397,12 +551,55 @@ export const CHECKS = [
       'check already pays for a run in CI and this is where a release is judged',
     group: 'generated',
   },
+  // Three questions about the instructor materials, and conflating them is
+  // what made every instructional pull request red.
+  //
+  //   validate   Does the pipeline still work? Renders all fifty-four
+  //              documents with a throwaway key, re-checks every derived
+  //              answer against the site's own grading function, writes
+  //              nothing. Needs no secret, so it runs on every branch and in
+  //              every fork - which is the question a pull request should be
+  //              asked.
+  //   digest     Does the freshness digest cover everything the build reads?
+  //              Runs the build under a module-load hook and compares. This is
+  //              what makes the third question mean anything.
+  //   check      Was the committed production ciphertext built from these
+  //              sources? A release question. It compares against a file only
+  //              the real passphrase can produce, so on a long-lived
+  //              integration branch it is red on every branch that edits a
+  //              lesson and green only after one person rebuilds an encrypted
+  //              file that then conflicts with every other branch doing the
+  //              same. Three open v1.1 pull requests were red on this and on
+  //              nothing else.
+  //
+  // So `check` runs in CI only on a release ref, and unconditionally in the
+  // gate and in tools/verify-release.mjs, which is the last thing between a
+  // commit and the live site. Nothing about release safety moves: a stale
+  // bundle still cannot deploy, and it is now refused in the job that
+  // publishes rather than only in a job that runs earlier.
+  {
+    id: 'instructors-validate',
+    label: 'every instructor document renders and every answer key agrees',
+    command: ['npm', 'run', 'instructors:validate'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'generated',
+  },
+  {
+    id: 'instructors-digest',
+    label: 'the freshness digest covers every input the build reads',
+    command: ['npm', 'run', 'instructors:audit'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'generated',
+  },
   {
     id: 'instructors',
     label: 'instructor bundle is built from these sources',
     command: ['npm', 'run', 'instructors:check'],
     tier: 'quick',
     ci: 'checks',
+    ciCondition: RELEASE_REF_ONLY,
     why: 'hashes the inputs; needs no passphrase and renders nothing',
     group: 'generated',
   },
@@ -438,13 +635,55 @@ export const CHECKS = [
     ci: 'checks',
     group: 'generated',
   },
+  // The Library's index (LIBRARY.md), against the sources it is read from.
+  {
+    id: 'library',
+    label: 'the Library index and its coverage table',
+    command: ['node', 'tools/generate.mjs', '--check', '--only', 'library'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same check inside the unit tests (tests/library.test.js ' +
+      'runs `build-library.mjs --check`); a step of its own is a workflow change',
+    group: 'generated',
+  },
+  // The adoption pages (ADOPTION.md), against the Library and the sources.
+  {
+    id: 'adoption',
+    label: 'the adoption pages and their index',
+    command: ['node', 'tools/generate.mjs', '--check', '--only', 'adoption'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same check inside the unit tests (tests/adoptionPages.test.js ' +
+      'runs `build-adoption-pages.mjs --check`); a step of its own is a workflow change',
+    group: 'generated',
+  },
   {
     id: 'activities',
     label: 'activity formats and their step lists',
     command: ['npm', 'run', 'activities:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
+    group: 'generated',
+  },
+  // A merge must not drop what one side wrote into a file with generated
+  // regions (tools/generated-tripwire.mjs). On anything but a merge commit it
+  // says so and passes; CI checks out a pull request as its merge.
+  {
+    id: 'tripwire',
+    label: 'no merge dropped hand-written lines around generated regions',
+    command: ['node', 'tools/generated-tripwire.mjs'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'generated',
+  },
+  {
+    id: 'tools-index',
+    label: 'tools/README.md describes every tool',
+    command: ['npm', 'run', 'tools:index:check'],
+    tier: 'quick',
+    ci: 'checks',
     group: 'generated',
   },
   {
@@ -452,8 +691,7 @@ export const CHECKS = [
     label: 'lesson cards',
     command: ['npm', 'run', 'cards:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'accessibility',
     group: 'generated',
   },
   // The scene catalog and the record beside it are generated from the lesson
@@ -465,22 +703,43 @@ export const CHECKS = [
     label: 'the lesson scene catalog and acceptance map',
     command: ['npm', 'run', 'audit:scene:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
+    group: 'generated',
+  },
+  // The list of engine operations that destroy information is scanned out of
+  // js/physics.js, not remembered. This is the check that makes that worth
+  // anything: add a cull or a new merge path and the committed list is stale
+  // here, rather than on the model page in front of a class.
+  {
+    id: 'irreversible',
+    label: 'the audit of operations that destroy information',
+    command: ['npm', 'run', 'audit:irreversible:check'],
+    tier: 'quick',
+    ci: 'checks',
     group: 'generated',
   },
   // The counts that cost a test run to measure: how many jest tests there are,
-  // how many browser tests, what a visitor downloads. The comment in
-  // docs-facts.mjs said CI paid for these in the job where the commands had
-  // already run. CI never did, and by the time anyone looked README.md was
-  // claiming 3608 jest tests against 4844 and 579 browser tests against 1061.
+  // how many browser tests, what a visitor downloads.
+  //
+  // The comment in docs-facts.mjs used to say CI paid for these in the job
+  // where the commands had already run. CI never did - its documentation step
+  // ran the cheap check, which reports these as not measured and then prints
+  // "Documentation matches the source" - and by the time anyone looked README.md
+  // was claiming 3608 jest tests against 4844 and 579 browser tests against
+  // 1061.
+  //
+  // It does now, and without running anything twice. The `checks` job writes
+  // the jest and physics reports it produces anyway into .facts/ and
+  // `docs:check:tests` reads them back; the `build` job checks the bundle sizes
+  // against the dist/ it just made. The two groups partition this check's
+  // facts, and tests/releaseGate.test.js fails if they ever stop covering all
+  // of them. This entry stays as the whole thing, which is what the gate runs.
   {
     id: 'docs-full',
     label: 'documentation counts that cost a test run',
     command: ['npm', 'run', 'docs:check:full'],
     tier: 'slow',
-    ci: null,
-    why: 'needs a jest run and a build; the gate has both already',
+    ci: 'checks',
     group: 'generated',
   },
 
@@ -497,8 +756,7 @@ export const CHECKS = [
     label: 'GW150914 data is complete and self-consistent',
     command: ['npm', 'run', 'gw:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
     group: 'science',
   },
   {
@@ -506,8 +764,31 @@ export const CHECKS = [
     label: 'MIST tracks are complete and self-consistent',
     command: ['npm', 'run', 'stellar:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
+    group: 'science',
+  },
+  {
+    id: 'spectra-structure',
+    label: 'the four SDSS spectra are complete and self-consistent',
+    command: ['npm', 'run', 'spectra:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'science',
+  },
+  {
+    id: 'gwosc-structure',
+    label: 'the five GWOSC events are complete and self-consistent',
+    command: ['npm', 'run', 'gwosc:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'science',
+  },
+  {
+    id: 'packs-structure',
+    label: 'the observation data packs are valid, decode and pass their checks',
+    command: ['npm', 'run', 'packs:check'],
+    tier: 'quick',
+    ci: 'checks',
     group: 'science',
   },
   {
@@ -516,7 +797,8 @@ export const CHECKS = [
     label: 'GW150914 regenerates from the published traces',
     command: ['npm', 'run', 'gw:provenance'],
     tier: 'provenance',
-    ci: null,
+    ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
     why: 'needs the GWOSC sources cached; see --provenance',
     group: 'science',
   },
@@ -526,8 +808,54 @@ export const CHECKS = [
     label: 'MIST tracks regenerate from the published grid',
     command: ['npm', 'run', 'stellar:provenance'],
     tier: 'provenance',
-    ci: null,
+    ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
     why: 'needs the 100 MB MIST grid cached; see --provenance',
+    group: 'science',
+  },
+
+  {
+    id: 'gwosc-provenance',
+    sources: 'gwosc',
+    label: 'the five GWOSC events regenerate from the cached strain',
+    command: ['npm', 'run', 'gwosc:provenance'],
+    tier: 'provenance',
+    ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
+    why: 'needs the GWOSC strain cached; see --provenance',
+    group: 'science',
+  },
+  {
+    id: 'spectra-provenance',
+    sources: 'spectra',
+    label: 'the four SDSS spectra regenerate from the archive CSVs',
+    command: ['npm', 'run', 'spectra:provenance'],
+    tier: 'provenance',
+    ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
+    why: 'needs the SDSS CSVs cached; see --provenance',
+    group: 'science',
+  },
+  {
+    id: 'ephemeris-provenance',
+    sources: 'ephemeris',
+    label: 'the ephemeris pack rebuilds from its pinned Horizons answers',
+    command: ['npm', 'run', 'ephemeris:provenance'],
+    tier: 'provenance',
+    ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
+    why: 'needs the Horizons answers cached; see --provenance',
+    group: 'science',
+  },
+  {
+    id: 'packs-provenance',
+    sources: 'packs',
+    label: 'the observation data packs rebuild from their pinned raw products',
+    command: ['npm', 'run', 'packs:provenance'],
+    tier: 'provenance',
+    ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
+    why: 'needs the raw products cached; see --provenance',
     group: 'science',
   },
 
@@ -576,11 +904,32 @@ export const CI_SETUP_STEPS = [
   'Deploy',
   'Say what went live',
   'Say why nothing went live',
+  // The scheduled jobs' plumbing: fetching the pinned sources into their
+  // caches, proving the fetch rewrote nothing committed, and recording and
+  // offering the e2e timings. The checks they serve are the provenance
+  // entries above and tools/e2e-shards.mjs's own tests.
+  'Fetch any source not cached (GW)',
+  'Fetch any source not cached (stellar tracks)',
+  'Fetch any source not cached (SDSS)',
+  'Fetch any source not cached (GWOSC)',
+  'Fetch any source not cached (packs)',
+  'Fetch any source not cached (ephemeris)',
+  'Put back what the fetch rewrote',
+  'Nothing committed was rewritten by the fetch',
+  'Record the timings',
+  'Offer them if they changed',
+  // tools/observatory-budgets.json: "a manual instrument, not a registry
+  // check". CI runs it on the schedule, report-only.
+  'Measure, and compare with the budgets',
 ];
 
 /** And the commands that are setup wherever they appear. */
 export const CI_SETUP_COMMANDS = [
   'npm ci',
+  // Creating the directory the reports are written into. The reports
+  // themselves are produced by checks that are in the registry; this is the
+  // mkdir in front of them.
+  'mkdir -p .facts',
   'npx playwright install',
   'npx playwright install-deps',
   'npx playwright merge-reports',
@@ -593,12 +942,13 @@ export const CI_EQUIVALENTS = {
   // repository secret; the gate has the passphrase and builds the real thing.
   'npm run build:ci': 'build',
   'npm run budget': 'budget',
+  // The two halves of the full documentation check, split by what each CI job
+  // has already paid for rather than by how important the facts are. Between
+  // them they cover every deferred fact; the gate runs the undivided form.
+  'npm run docs:check:tests': 'docs-full',
+  'npm run docs:check:build': 'docs-full',
   'node tools/check-links.mjs --root dist': 'links-dist',
   'node tools/validate-citation.mjs': 'citation',
-  // One npm script in the gate, two lines of a shell block in CI. Same two
-  // commands, same thresholds.
-  'npm audit --audit-level=moderate': 'deps',
-  'npm audit --omit=dev': 'deps',
   // The accessibility job runs two specs that are already inside the full
   // browser suite the gate runs, so `e2e-sources` covers them. Kept as its own
   // CI job because it uploads its own report and can fail independently;
@@ -609,8 +959,19 @@ export const CI_EQUIVALENTS = {
   'npm run author:check': 'author',
   'npm run a11y:axe': 'e2e-sources',
   'npm run a11y:manual': 'e2e-sources',
-  // Sharded in CI, whole in the gate.
-  'npx playwright test --shard=${{ matrix.shard }}/6': 'e2e-sources',
+  // Sharded in CI, whole in the gate. Each shard plans its part of the suite
+  // and runs it (tools/e2e-shards.mjs), and the coverage job checks the parts
+  // add up to the whole - which the gate has by running the whole.
+  'node tools/e2e-shards.mjs plan --of ${{ strategy.job-total }} --shard ${{ matrix.shard }} --out shard-tests.txt':
+    'e2e-sources',
+  'npx playwright test --test-list shard-tests.txt': 'e2e-sources',
+  'node tools/e2e-shards.mjs verify --report e2e-results.json': 'e2e-sources',
+  // The tablet's lesson walk: weekly in CI as its own job, and inside the
+  // gate's whole browser suite, which sets GRAVITAS_E2E_TABLET_WALK.
+  'npm run e2e:tablet-walk': 'e2e-sources',
+  // The navigation matrix: weekly in CI as its own job, and inside the gate's
+  // whole browser suite, which sets GRAVITAS_E2E_NAV_FULL.
+  'npm run e2e:nav-full': 'e2e-sources',
   'npm run e2e:dist': 'e2e-dist',
   // One matrix job per engine in CI; one registry entry per engine here, and
   // the engine comes from GRAVITAS_E2E_BROWSERS in both.

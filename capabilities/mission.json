@@ -1,0 +1,279 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "gravitas.mission",
+  "version": "1.2.0",
+  "kind": "built-in",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "The mission-design core and the mission lab",
+    "es": "El núcleo de diseño de misiones y el laboratorio de misiones"
+  },
+  "requires": {
+    "gravitas.lab3d": "^1.2.0"
+  },
+  "provides": {
+    "routes": [
+      {
+        "path": "/mission/"
+      },
+      {
+        "path": "/mission/lab/"
+      }
+    ],
+    "models": [
+      {
+        "id": "mission-two-body"
+      },
+      {
+        "id": "mission-lab-ephemeris"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "js/mission/bodies.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/twobody.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/lambert.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/transfers.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/patched.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/window.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/plan.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/verify.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/references.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/workerCore.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/worker.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/api.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/i18n.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/missionPage.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.mission.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.mission.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/ephemeris.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/solar.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/labReferences.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/labCore.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/labWorker.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/lab/defaults.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/lab/curriculum.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/lab/guidePanel.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/lab/i18n.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/missionLabPage.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.missionLab.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.missionLab.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.missionLabGuides.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.missionLabGuides.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/data/ephemeris/solarSystem2025.js",
+      "role": "data",
+      "offline": "optional"
+    },
+    {
+      "path": "js/data/ephemeris/solarSystem2025Check.js",
+      "role": "data",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/evidence.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/link.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/lab/address.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/lab/evidencePanel.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.missionEvidence.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.missionEvidence.js",
+      "role": "code",
+      "offline": "optional"
+    }
+  ],
+  "citations": [
+    {
+      "text": "JPL Horizons, ephemeris DE441 (Park et al. 2021, AJ 161, 105)",
+      "url": "https://doi.org/10.3847/1538-3881/abd414"
+    }
+  ],
+  "licenses": [
+    {
+      "scope": "js/mission/**",
+      "license": "MIT"
+    },
+    {
+      "scope": "js/data/ephemeris/**",
+      "license": "no license stated; credit JPL and cite DE441, see NOTICE"
+    }
+  ],
+  "offline": {
+    "policy": "on-demand"
+  },
+  "validation": [
+    {
+      "check": "registry:mission"
+    },
+    {
+      "check": "jest:tests/mission.test.js"
+    },
+    {
+      "check": "e2e:e2e/mission.spec.js"
+    },
+    {
+      "check": "registry:ephemeris"
+    },
+    {
+      "check": "jest:tests/missionLab.test.js"
+    },
+    {
+      "check": "e2e:e2e/missionLab.spec.js"
+    },
+    {
+      "check": "jest:tests/missionEvidence.test.js"
+    },
+    {
+      "check": "jest:tests/courseMission.test.js"
+    },
+    {
+      "check": "jest:tests/skyEphemeris.test.js"
+    },
+    {
+      "check": "e2e:e2e/missionEvidence.spec.js"
+    },
+    {
+      "check": "e2e:e2e/missionEmbed.spec.js"
+    }
+  ]
+}

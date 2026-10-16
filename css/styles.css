@@ -7,26 +7,7 @@
 @layer legacy {
   /* Floating close chip for small screens */
   .floating-close-chip {
-    position: fixed;
-    right: 10px;
-    top: 10px;
-    width: 32px;
-    height: 32px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
     background: rgba(0, 0, 0, 0.55);
-    color: #fff;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 2005;
-    backdrop-filter: blur(6px);
-  }
-
-  @media (max-width: 480px) {
-    .floating-close-chip {
-      display: flex;
-    }
   }
 
   /* ===== Splash screen ===== */
@@ -192,7 +173,6 @@
   body {
     margin: 0;
     padding: 0;
-    background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'Poppins', sans-serif;
     overflow: hidden;
@@ -229,6 +209,15 @@
     }
   }
 
+  /* No object-fit. A canvas whose intrinsic size differs from its CSS box is
+     stretched to fill it by default, which is exactly what is wanted when the
+     backing store is deliberately a different size - at the low tier, or at any
+     device-pixel ratio above 1. `cover` would instead preserve the aspect ratio
+     and CROP, and it would do it silently: the moment the two boxes diverged
+     the edges of the simulation would stop being drawn, with nothing on screen
+     to say so and every coordinate still internally consistent. It never fired
+     only because the backing store was always exactly innerWidth by
+     innerHeight, which is the assumption this change removes. */
   #simulationCanvas {
     display: block;
     position: absolute;
@@ -236,7 +225,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
   }
 
   #starfieldCanvas {
@@ -246,33 +234,21 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
   }
 
   #overlay {
-    position: fixed;
-    top: 10px;
-    left: 10px;
     font-family: 'Inter', sans-serif;
     font-size: 14px;
-    color: #e0e0e0;
+    color: var(--c13);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
     pointer-events: none;
     line-height: 1.6;
-    z-index: 10;
     max-width: 384px; /* ~1.2x wider than previous 320px */
     word-wrap: break-word;
     overflow-wrap: anywhere;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
+    background: var(--c1);
     padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
-  }
-
-  /* Enable pointer events for the minimize button */
-  #overlay .overlay-minimize-btn {
-    pointer-events: auto !important;
   }
 
   /* When minimized, enable pointer events for the entire overlay */
@@ -282,53 +258,28 @@
 
   /* Overlay minimize button */
   .overlay-minimize-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    color: #ffffff;
-    font-size: 18px;
-    font-weight: bold;
+    background: var(--c9);
     cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 4px;
     transition: all 0.2s ease;
-    z-index: 11;
-    pointer-events: auto !important;
-    width: 28px;
-    height: 28px;
+    /* The button's own declaration beats the overlay's inherited
+       pointer-events: none, and no other rule sets pointer-events, opacity or
+       visibility on it, so none of the three needs !important. */
+    pointer-events: auto;
     display: flex !important;
-    align-items: center;
-    justify-content: center;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     /* Ensure button is always visible when overlay is visible */
-    opacity: 1 !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 1;
     /* Force visibility */
-    visibility: visible !important;
+    visibility: visible;
   }
 
   .overlay-minimize-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-    transform: scale(1.1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: var(--c9);
+    box-shadow: 0 2px 8px var(--c1);
   }
 
   .overlay-minimize-btn:active {
     transform: scale(0.95);
-  }
-
-  /* Minimized overlay state.
-     
-     Sized and colored in css/chrome.css now, along with the rest of the
-     readout. The `!important` that used to be on every declaration here could
-     not be overridden from a later layer at all - an important declaration in
-     an earlier layer wins - so a 200px box with 8px of padding was still being
-     forced onto a panel that had been rebuilt around a header row. */
-  #overlay.minimized {
-    pointer-events: auto;
   }
 
   @keyframes fadeInOverlay {
@@ -349,7 +300,7 @@
 
   #scenarioInfoDisplay {
     position: fixed;
-    top: 15px;
+    top: calc(15px + var(--shell-height, 0px));
     left: 50%;
     transform: translateX(-50%);
     width: min(90%, 640px);
@@ -382,140 +333,35 @@
     }
   }
 
-  @media (max-width: 1024px) {
-    #scenarioInfoDisplay {
-      top: 10px;
-      width: 95%;
-      max-width: none;
-      padding: 8px 16px;
-    }
-
-    #scenarioInfoDisplay h4 {
-      font-size: 16px;
-    }
-
-    #scenarioInfoDisplay p {
-      font-size: 13px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    /* General UI scaling for small screens */
-    .ui-button {
-      padding: 6px 10px;
-      font-size: 12px;
-      border-radius: 8px;
-    }
-    .speed-controls {
-      gap: 6px;
-      padding: 6px 8px;
-    }
-    .measure-tools {
-      gap: 4px;
-    }
-    .measure-btn {
-      padding: 5px 8px;
-      font-size: 11px;
-    }
-    .speed-btn {
-      padding: 5px 10px;
-      font-size: 11px;
-      min-width: 50px;
-    }
-    .speed-display {
-      font-size: 12px;
-      min-width: 42px;
-    }
-    #scenarioInfoDisplay {
-      top: 5px;
-      width: 98%;
-      padding: 6px 12px;
-    }
-
-    #scenarioInfoDisplay h4 {
-      font-size: 15px;
-    }
-
-    #scenarioInfoDisplay p {
-      font-size: 12px;
-    }
-  }
-
-  @media (max-width: 360px) {
-    #scenarioInfoDisplay {
-      top: 5px;
-      width: 98%;
-      padding: 6px 12px;
-    }
-
-    #scenarioInfoDisplay h4 {
-      font-size: 15px;
-    }
-
-    #scenarioInfoDisplay p {
-      font-size: 12px;
-    }
-  }
-
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     #overlay {
-      top: 10px;
-      left: 10px;
       font-size: 12px;
       max-width: calc(100vw - 20px);
       padding: 8px;
     }
 
     #scenarioInfoDisplay {
-      top: 10px;
+      top: calc(10px + var(--shell-height, 0px));
       width: 95%;
       max-width: none;
       padding: 8px 16px;
     }
-
-    #scenarioInfoDisplay h4 {
-      font-size: 16px;
-    }
-
-    #scenarioInfoDisplay p {
-      font-size: 13px;
-    }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     #overlay {
-      top: 10px;
-      left: 10px;
       font-size: 11px;
       max-width: calc(100vw - 20px);
       padding: 6px;
     }
 
     #scenarioInfoDisplay {
-      top: 5px;
+      top: calc(5px + var(--shell-height, 0px));
       width: 98%;
       padding: 6px 12px;
     }
-
-    #scenarioInfoDisplay h4 {
-      font-size: 15px;
-    }
-
-    #scenarioInfoDisplay p {
-      font-size: 12px;
-    }
   }
 
-  @media (max-width: 360px) {
-    #overlay {
-      top: 10px;
-      left: 10px;
-      font-size: 10px;
-      max-width: calc(100vw - 20px);
-      padding: 5px;
-      line-height: 1.4;
-    }
-  }
   #scenarioInfoDisplay.visible {
     opacity: 1;
   }
@@ -546,14 +392,7 @@
   /* Responsive UI Container */
   .ui-container {
     position: fixed;
-    top: 15px;
-    right: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 10;
     max-width: calc(100vw - 30px);
-    flex-wrap: wrap;
     /* Opacity is owned by the .showUI / .is-open classes, not by an entrance
        animation. A CSS animation outranks every cascade layer, so while
        fadeInUI held opacity here the narrow-screen menu could open to a fully
@@ -578,33 +417,17 @@
 
   /* Mobile menu styles */
   .mobile-menu-toggle {
-    display: none;
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    width: 50px;
-    height: 50px;
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    border: none;
-    border-radius: 12px;
     cursor: pointer;
-    z-index: 1001;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
   }
 
   .mobile-menu-toggle:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px var(--c1);
   }
 
   .mobile-menu-toggle .hamburger {
-    width: 24px;
-    height: 2px;
-    background: white;
-    margin: 0 auto;
-    transition: all 0.3s ease;
-    display: block;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -622,99 +445,33 @@
     top: 30px;
   }
 
-  .mobile-menu-toggle.active .hamburger:nth-child(1) {
-    transform: translateX(-50%) rotate(45deg) translate(0, 8px);
-  }
-
-  .mobile-menu-toggle.active .hamburger:nth-child(2) {
-    opacity: 0;
-  }
-
-  .mobile-menu-toggle.active .hamburger:nth-child(3) {
-    transform: translateX(-50%) rotate(-45deg) translate(0, -8px);
-  }
-
-  @keyframes mobileMenuSlideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
   /* Responsive breakpoints */
   @media (max-width: 1200px) {
-    .ui-container {
-      gap: 8px;
-    }
-
     .ui-button {
       padding: 8px 12px !important;
       font-size: 13px !important;
-      min-height: 36px;
-    }
-
-    .speed-controls {
-      padding: 8px 10px;
     }
 
     .speed-btn {
       padding: 6px 10px !important;
       font-size: 12px !important;
-      min-width: 55px;
       min-height: 32px;
     }
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     /* Hide desktop UI container on mobile and tablet */
     /* The rail is no longer hidden on narrow screens - it *is* the menu the
        hamburger opens. See the narrow-screen block in components.css. */
-
-    /* Show mobile menu toggle */
-    .mobile-menu-toggle {
-      display: block;
-    }
-
-    /* Mobile menu positioning */
-    .mobile-menu-toggle {
-      top: 10px;
-      right: 10px;
-      width: 45px;
-      height: 45px;
-    }
-
-    #settingsPanel {
-      width: 95%;
-      max-width: none;
-      height: 95vh;
-      max-height: none;
-      top: 2.5%;
-      left: 2.5%;
-      transform: none;
-    }
-
-    .settings-grid {
-      grid-template-columns: 1fr;
-      gap: 15px 20px;
-    }
-
-    .setting-label {
-      justify-self: start;
-      text-align: left;
-    }
 
     #mobileInstructions {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(13, 13, 26, 0.95);
+      background: var(--surface-1);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(0, 170, 255, 0.3);
+      border: 1px solid var(--c10);
       border-radius: 15px;
       padding: 20px;
       z-index: 2000;
@@ -735,71 +492,8 @@
     }
   }
 
-  @media (max-width: 480px) {
-    .mobile-menu-toggle {
-      top: 5px;
-      right: 5px;
-      width: 40px;
-      height: 40px;
-    }
-
-    #settingsPanel {
-      width: 98%;
-      height: 98vh;
-      top: 1%;
-      left: 1%;
-    }
-  }
-
-  /* Extra small screens */
-  @media (max-width: 360px) {
-    .mobile-menu-toggle {
-      top: 3px;
-      right: 3px;
-      width: 38px;
-      height: 38px;
-    }
-
-    .settings-header {
-      padding: 20px 25px;
-      font-size: 24px;
-    }
-
-    .settings-content {
-      padding: 20px 25px;
-    }
-  }
-
   .ui-button {
-    padding: 8px 16px;
-    background-color: var(--button-bg);
-    color: var(--text-color);
-    border: 1px solid #666;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    transition:
-      background-color 0.2s ease,
-      transform 0.1s ease;
     text-align: center;
-  }
-
-  .ui-button:hover {
-    background-color: var(--button-hover-bg);
-  }
-  .ui-button:active {
-    transform: scale(0.98);
-  }
-
-  .speed-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(20, 20, 40, 0.8);
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid rgba(0, 170, 255, 0.3);
   }
 
   /* The measurement tools. A wrapping row rather than one button per line:
@@ -826,12 +520,6 @@
     flex: 1 1 calc(50% - 3px);
   }
 
-  .measure-btn[aria-pressed='true'] {
-    background: rgba(0, 170, 255, 0.28);
-    border-color: rgba(0, 170, 255, 0.75);
-    color: #eaf6ff;
-  }
-
   .speed-btn {
     padding: 6px 12px;
     font-size: 12px;
@@ -839,12 +527,6 @@
   }
 
   .speed-display {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 14px;
-    color: var(--primary-color);
-
-    min-width: 50px;
-    text-align: center;
     font-weight: bold;
   }
 
@@ -862,15 +544,15 @@
     max-width: 1040px;
     height: 90vh;
     max-height: 850px;
-    background: rgba(13, 13, 26, 0.85);
+    /* The theme's own panel surface. It was a fixed dark navy, so in Daylight
+       the panel stayed dark while everything the theme coloured inside it -
+       the course level, the section headings' text - turned dark too. */
+    background: color-mix(in srgb, var(--surface-1) 92%, transparent);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(0, 170, 255, 0.2);
+    border: 1px solid var(--accent-line);
     border-radius: 20px;
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-lg);
     display: flex;
     flex-direction: column;
     z-index: 1000;
@@ -885,7 +567,7 @@
     }
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     #settingsPanel {
       width: 95%;
       max-width: none;
@@ -898,7 +580,7 @@
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     #settingsPanel {
       width: 98%;
       height: 98vh;
@@ -911,11 +593,6 @@
       position: sticky;
       top: 0;
       z-index: 3;
-      background: linear-gradient(
-        135deg,
-        rgba(0, 170, 255, 0.12),
-        rgba(0, 170, 255, 0.06)
-      );
     }
   }
 
@@ -952,14 +629,13 @@
     color: var(--text-primary);
     background: var(--surface-2);
     border-bottom: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
   }
 
   .settings-content {
     flex-grow: 1;
     overflow-y: auto;
     padding: 25px 35px;
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--surface-inset);
   }
 
   .settings-grid {
@@ -975,18 +651,13 @@
     }
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     .settings-grid {
       gap: 15px 20px;
     }
-
-    .setting-label {
-      justify-self: start;
-      text-align: left;
-    }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     .settings-grid {
       gap: 12px 15px;
     }
@@ -996,8 +667,7 @@
     justify-self: end;
     text-align: right;
     font-size: 15px;
-    color: rgba(224, 224, 224, 0.9);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    color: var(--text-primary);
   }
 
   .setting-control {
@@ -1013,85 +683,49 @@
     height: 6px;
     background: linear-gradient(
       90deg,
-      rgba(0, 170, 255, 0.3),
-      rgba(0, 170, 255, 0.1)
+      var(--c10),
+      var(--accent-soft)
     );
     border-radius: 10px;
     outline: none;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 2px 4px var(--c1);
   }
   .setting-control input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 20px;
     height: 20px;
-    background: linear-gradient(135deg, var(--primary-color), #0088cc);
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-strong));
     border-radius: 50%;
     cursor: pointer;
     box-shadow:
-      0 2px 8px rgba(0, 170, 255, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      0 2px 8px var(--accent-line),
+      inset 0 1px 0 var(--c9);
     transition: all 0.2s ease;
   }
   .setting-control input[type='range']::-webkit-slider-thumb:hover {
     transform: scale(1.1);
     box-shadow:
-      0 4px 12px rgba(0, 170, 255, 0.6),
+      0 4px 12px var(--accent-line),
       inset 0 1px 0 rgba(255, 255, 255, 0.4);
   }
   .setting-control .value-display {
     min-width: 60px;
     text-align: left;
     font-family: 'Roboto Mono', monospace;
-    color: rgba(224, 224, 224, 0.9);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    color: var(--text-primary);
   }
 
   .setting-control select {
     width: 100%;
-    padding: 10px 14px;
-    background: rgba(34, 34, 34, 0.92);
-    border: 1.5px solid rgba(0, 170, 255, 0.25);
-    color: var(--text-color);
-    border-radius: 10px;
-    font-size: 15px;
-    font-family: 'Inter', sans-serif;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition:
-      border-color 0.2s,
-      box-shadow 0.2s,
-      background 0.2s;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-  }
-
-  .setting-control select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 170, 255, 0.18);
-    background: rgba(44, 44, 64, 0.98);
-  }
-
-  .setting-control select:hover {
-    background: rgba(44, 44, 64, 0.98);
-    border-color: rgba(0, 170, 255, 0.45);
-  }
-
-  /* Custom arrow for select (optional, for modern look) */
-  .setting-control select {
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%2300aaff" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 18px 18px;
   }
 
   /* Style dropdown options (limited support, but improves look on some browsers) */
   .setting-control select option {
     border-radius: 8px;
     padding: 8px 14px;
-    background: #23233a;
-    color: #fff;
+    background: var(--surface-2);
+    color: var(--c3);
     font-size: 15px;
     transition: background 0.18s;
   }
@@ -1099,14 +733,8 @@
   .setting-control select option:checked,
   .setting-control select option:focus,
   .setting-control select option:active {
-    background: #00aaff;
-    color: #fff;
-  }
-
-  /* For browsers that support option:hover */
-  .setting-control select option:hover {
-    background: #2e2e4d;
-    color: #fff;
+    background: var(--c14);
+    color: var(--c3);
   }
 
   .setting-control input[type='color'] {
@@ -1116,16 +744,16 @@
     width: 50px;
     height: 30px;
     background-color: transparent;
-    border: 2px solid rgba(0, 170, 255, 0.3);
+    border: 2px solid var(--c10);
     cursor: pointer;
     border-radius: 8px;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px var(--c4);
   }
   .setting-control input[type='color']:hover {
-    border-color: rgba(0, 170, 255, 0.5);
+    border-color: var(--border-strong);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px var(--c1);
   }
   .setting-control input[type='color']::-webkit-color-swatch {
     border-radius: 6px;
@@ -1137,33 +765,25 @@
     display: flex;
     justify-content: center;
     gap: 15px;
-    background: linear-gradient(
-      135deg,
-      rgba(0, 170, 255, 0.05),
-      rgba(0, 170, 255, 0.1)
-    );
-    border-top: 1px solid rgba(0, 170, 255, 0.2);
-    border-radius: 0 0 20px 20px;
+    background: var(--accent-soft);
+    border-top: 1px solid var(--accent-line);
   }
 
   .footer-button {
     padding: 12px 28px;
     font-size: 16px;
-    background: rgba(40, 40, 40, 0.8);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 170, 255, 0.3);
+    border: 1px solid var(--c10);
     border-radius: 10px;
     transition: all 0.3s ease;
     box-shadow:
-      0 2px 8px rgba(0, 0, 0, 0.2),
+      0 2px 8px var(--c4),
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
   .footer-button:hover {
-    background: rgba(50, 50, 50, 0.9);
-    border-color: rgba(0, 170, 255, 0.5);
     transform: translateY(-2px);
     box-shadow:
-      0 6px 16px rgba(0, 0, 0, 0.3),
+      0 6px 16px var(--c1),
       inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
   #settingsApply {
@@ -1265,7 +885,7 @@
     position: sticky;
     top: 0;
     z-index: 3;
-    background: rgba(13, 13, 26, 0.95);
+    background: var(--surface-1);
   }
   .bh-mass-item {
     display: grid;
@@ -1287,7 +907,6 @@
     -webkit-appearance: none;
     appearance: none;
     height: 5px;
-    background: #444;
     border-radius: 5px;
     outline: none;
   }
@@ -1314,9 +933,8 @@
   .preset-info {
     margin: 18px 0 10px;
     padding: 12px 16px;
-    background: rgba(0, 0, 0, 0.25);
+    background: var(--surface-inset);
     border: 1px solid var(--separator-color);
-    border-radius: 6px;
     font-size: 14px;
     line-height: 1.4;
   }
@@ -1332,9 +950,9 @@
   .setting-control select {
     padding: 10px 16px;
     border-radius: 8px;
-    border: 1.5px solid rgba(0, 170, 255, 0.25);
-    background: rgba(34, 34, 44, 0.95);
-    color: #e0e0e0;
+    border: 1.5px solid var(--accent-line);
+    background: var(--surface-2);
+    color: var(--c13);
     font-size: 15px;
     font-family: 'Inter', sans-serif;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -1352,32 +970,32 @@
   #settingsGrid select:focus,
   .settings-grid select:focus,
   .setting-control select:focus {
-    border-color: #00aaff;
-    box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.18);
-    background: rgba(34, 34, 64, 1);
+    border-color: var(--c14);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+    background: var(--surface-2);
   }
 
   #settingsGrid select:hover,
   .settings-grid select:hover,
   .setting-control select:hover {
-    background: rgba(44, 44, 64, 1);
-    border-color: #00aaff;
+    background: var(--surface-3);
+    border-color: var(--c14);
   }
 
   /* Option hover/focus workaround for modern browsers */
   #settingsGrid select option:checked,
   .settings-grid select option:checked,
   .setting-control select option:checked {
-    background: #1e293b;
-    color: #fff;
+    background: var(--surface-3);
+    color: var(--c3);
   }
 
   /* For browsers that support it, highlight hovered option */
   #settingsGrid select option:hover,
   .settings-grid select option:hover,
   .setting-control select option:hover {
-    background: #2563eb !important;
-    color: #fff !important;
+    background: var(--accent-deep) !important;
+    color: var(--c3) !important;
   }
 
   /* Add a dropdown arrow (optional, for style) */
@@ -1420,24 +1038,11 @@
     animation: scenarioMenuFadeIn 0.5s ease-out;
   }
   #scenarioListContent {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    border-radius: 20px;
-    box-shadow:
-      0 20px 60px rgba(0, 0, 0, 0.4),
-      0 8px 32px rgba(79, 172, 254, 0.15);
-    border: 1px solid rgba(79, 172, 254, 0.2);
-    padding: 40px 32px;
-    min-width: 320px;
-    max-width: 90vw;
-    max-height: 85vh;
-    overflow-y: auto;
-    color: #fff;
     position: relative;
     scrollbar-width: thin;
-    scrollbar-color: #555 transparent;
+    scrollbar-color: var(--range-track) transparent;
   }
   #scenarioListContent::before {
-    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -1453,12 +1058,6 @@
   }
 
   #closeScenarioList {
-    font-size: 1.4em;
-    padding: 8px 12px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
     backdrop-filter: blur(10px);
     position: fixed;
     top: 40px;
@@ -1468,9 +1067,7 @@
   }
 
   #closeScenarioList:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px var(--c1);
   }
   #scenarioListItems {
     margin-top: 8px;
@@ -1480,7 +1077,7 @@
     max-height: 70vh;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: #555 transparent;
+    scrollbar-color: var(--range-track) transparent;
   }
 
   /* Custom scrollbar styling for WebKit browsers */
@@ -1494,7 +1091,7 @@
   }
 
   #scenarioListItems::-webkit-scrollbar-thumb {
-    background: #555;
+    background: var(--range-track);
     border-radius: 3px;
     transition: background 0.2s ease;
   }
@@ -1514,7 +1111,7 @@
   }
 
   #scenarioListContent::-webkit-scrollbar-thumb {
-    background: #555;
+    background: var(--range-track);
     border-radius: 3px;
     transition: background 0.2s ease;
   }
@@ -1526,28 +1123,9 @@
   /* Responsive typography */
 
   #closeScenarioList {
-    background: #23233a;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     transition:
       background 0.2s,
       transform 0.18s;
-  }
-  #closeScenarioList:hover {
-    background: #2e2e4d;
-    transform: scale(1.08);
-  }
-  @keyframes modalFadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9) translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
   }
 
   @keyframes scenarioMenuFadeIn {
@@ -1561,26 +1139,7 @@
     }
   }
 
-  @keyframes scenarioCardFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (max-width: 1024px) {
-    #scenarioListContent {
-      min-width: 0;
-      width: 95vw;
-      padding: 1.5rem 1.25rem;
-      max-height: 90vh;
-      border-radius: 16px;
-    }
-
+  @media (max-width: 1200px) {
     #closeScenarioList {
       top: 24px;
       right: calc(50% - 47.5vw + 20px);
@@ -1591,32 +1150,8 @@
     }
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 767px) {
     #scenarioListContent {
-      width: 100vw;
-      padding: 1rem 0.75rem;
-      border-radius: 12px;
-      max-height: 95vh;
-      margin: 0;
-    }
-
-    #closeScenarioList {
-      top: 16px;
-      right: 12px;
-    }
-
-    #scenarioListItems {
-      gap: 8px;
-      width: 100%;
-    }
-  }
-
-  @media (max-width: 480px) {
-    #scenarioListContent {
-      width: 100vw;
-      padding: 0.75rem 0.5rem;
-      border-radius: 10px;
-      max-height: 98vh;
       margin: 0;
     }
 
@@ -1631,65 +1166,19 @@
     }
   }
 
-  @media (max-width: 360px) {
-    #scenarioListContent {
-      width: 100vw;
-      padding: 0.5rem 0.25rem;
-      border-radius: 8px;
-      max-height: 100vh;
-      margin: 0;
-    }
-
-    #closeScenarioList {
-      top: 8px;
-      right: 4px;
-    }
-
-    #scenarioListItems {
-      gap: 4px;
-      width: 100%;
-    }
-  }
-
   /* Enhanced Scenario Info Box Styles */
   .scenario-info-box {
     position: fixed;
-    top: 20px;
+    top: calc(20px + var(--shell-height, 0px));
     left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
     opacity: 0;
     visibility: hidden;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
   }
 
-  /* Ensure close button is always clickable when parent is visible */
-  .scenario-info-box.show .scenario-info-close {
-    pointer-events: auto !important;
-    cursor: pointer !important;
-  }
-
-  .scenario-info-box.show {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    animation: scenarioInfoSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .scenario-info-box.show .scenario-info-close {
-    pointer-events: auto !important;
-    cursor: pointer !important;
-  }
-
   .scenario-info-content {
     background: var(--panel-bg);
-    border: 1px solid var(--separator-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    padding: 10px 20px;
-    width: 95%;
-    max-width: 900px;
     position: relative;
     text-align: left;
   }
@@ -1724,9 +1213,6 @@
   }
 
   .sonification-toggle {
-    background: rgba(79, 172, 254, 0.12);
-    border: 1px solid rgba(79, 172, 254, 0.45);
-    color: #e8f6ff;
     font-size: 12px;
     line-height: 1;
     padding: 6px 12px;
@@ -1740,15 +1226,11 @@
   }
 
   .sonification-toggle:hover {
-    border-color: rgba(79, 172, 254, 0.8);
-    background: rgba(79, 172, 254, 0.25);
     box-shadow: 0 0 0 1px var(--accent-line);
   }
 
   .sonification-toggle[data-state='active'] {
-    background: rgba(79, 172, 254, 0.25);
-    border-color: rgba(79, 172, 254, 0.9);
-    color: #fff;
+    color: var(--c3);
     box-shadow: 0 0 0 1px var(--accent);
   }
 
@@ -1773,9 +1255,9 @@
     transition: all 0.2s ease !important;
     box-shadow: none !important;
     transform: none !important;
-    text-shadow: none !important;
+    text-shadow: none;
     font-weight: normal !important;
-    min-width: auto !important;
+    min-width: auto;
     width: auto !important;
     height: auto !important;
     line-height: 1 !important;
@@ -1785,19 +1267,19 @@
     right: auto !important;
     z-index: 1001 !important;
     pointer-events: auto !important;
-    flex-shrink: 0 !important;
+    flex-shrink: 0;
   }
 
   .scenario-info-close:hover {
-    background: rgba(255, 255, 255, 0.2) !important;
+    background: var(--c15) !important;
     color: var(--primary-color) !important;
-    box-shadow: 0 0 8px rgba(79, 172, 254, 0.3) !important;
+    box-shadow: 0 0 8px var(--accent-line) !important;
     transform: scale(1.1) !important;
     text-shadow: none !important;
   }
 
   .scenario-info-close:active {
-    background: rgba(255, 255, 255, 0.2) !important;
+    background: var(--c15) !important;
     box-shadow: none !important;
     transform: none !important;
     text-shadow: none !important;
@@ -1817,9 +1299,7 @@
   }
 
   .scenario-info-body p {
-    margin: 0 0 8px 0;
     font-size: 14px;
-    color: var(--text-color);
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
@@ -1861,12 +1341,12 @@
   }
 
   .scenario-info-details li.merging-disabled-notice {
-    color: #f5a623;
+    color: var(--warning);
   }
 
   .scenario-info-details li.merging-disabled-notice::before {
     content: '⚠';
-    color: #f5a623;
+    color: var(--warning);
   }
 
   @keyframes scenarioInfoSlideIn {
@@ -1880,18 +1360,11 @@
     }
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     .scenario-info-box {
-      top: 15px;
+      top: calc(15px + var(--shell-height, 0px));
       left: 10px;
       right: 10px;
-      transform: none;
-    }
-
-    .scenario-info-content {
-      width: 95%;
-      max-width: none;
-      padding: 8px 16px;
     }
 
     .scenario-info-header h2 {
@@ -1917,16 +1390,11 @@
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     .scenario-info-box {
-      top: 10px;
+      top: calc(10px + var(--shell-height, 0px));
       left: 8px;
       right: 8px;
-    }
-
-    .scenario-info-content {
-      width: 98%;
-      padding: 8px 14px;
     }
 
     .scenario-info-header h2 {
@@ -1945,7 +1413,7 @@
       height: 36px !important;
       display: flex !important;
       align-items: center !important;
-      justify-content: center !important;
+      justify-content: center;
     }
 
     .scenario-info-body p {
@@ -1969,33 +1437,6 @@
     }
   }
 
-  @media (max-width: 360px) {
-    .scenario-info-box {
-      top: 8px;
-      left: 6px;
-      right: 6px;
-    }
-
-    .scenario-info-content {
-      width: 99%;
-      padding: 6px 12px;
-    }
-
-    .scenario-info-header h2 {
-      font-size: 14px;
-      max-width: calc(100% - 50px);
-    }
-
-    .scenario-info-close {
-      font-size: 20px !important;
-      padding: 6px 10px !important;
-      top: auto !important;
-      right: auto !important;
-      width: 32px !important;
-      height: 32px !important;
-    }
-  }
-
   /* ===== Settings Info Icons ===== */
   .setting-info-icon {
     display: inline-flex;
@@ -2012,7 +1453,7 @@
     margin-left: 8px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px var(--c4);
     position: relative;
     z-index: 10;
   }
@@ -2021,13 +1462,13 @@
     background: linear-gradient(135deg, #3a8be8 0%, #00d0e0 100%);
     transform: scale(1.1);
     box-shadow:
-      0 4px 8px rgba(0, 0, 0, 0.3),
+      0 4px 8px var(--c1),
       0 0 10px rgba(0, 255, 255, 0.3);
   }
 
   .setting-info-icon:active {
     transform: scale(0.95);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 2px var(--c4);
   }
 
   .setting-info-icon:focus-visible {
@@ -2046,7 +1487,7 @@
   }
 
   /* Responsive adjustments for info icons */
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     .setting-info-icon {
       width: 16px;
       height: 16px;
@@ -2055,7 +1496,7 @@
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     .setting-info-icon {
       width: 15px;
       height: 15px;
@@ -2077,7 +1518,7 @@
       rgba(0, 170, 255, 0.95),
       rgba(0, 255, 170, 0.95)
     );
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid var(--c9);
     border-radius: 12px;
     padding: 15px 20px;
     color: white;
@@ -2085,7 +1526,7 @@
     font-weight: 600;
     font-size: 16px;
     z-index: 10000;
-    box-shadow: 0 8px 32px rgba(0, 170, 255, 0.4);
+    box-shadow: 0 8px 32px var(--accent-line);
     transform: translateX(400px);
     opacity: 0;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -2109,7 +1550,7 @@
   }
 
   .transformation-text {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 4px var(--c1);
   }
 
   @keyframes sparkle {
@@ -2123,7 +1564,7 @@
   }
 
   /* Responsive design for transformation notification */
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     .transformation-notification {
       top: 10px;
       right: 10px;
@@ -2133,7 +1574,7 @@
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     .transformation-notification {
       font-size: 13px;
       padding: 10px 14px;
@@ -2146,7 +1587,7 @@
 
   .energy-chart-header h3 {
     margin: 0;
-    color: #fff;
+    color: var(--c3);
     font-size: 16px;
     font-weight: 600;
   }
@@ -2154,7 +1595,7 @@
   /* Refresh button specific styling */
   #refreshEnergyChart {
     background: rgba(0, 255, 136, 0.2);
-    border-color: rgba(0, 255, 136, 0.4);
+    border-color: var(--c11);
   }
 
   #refreshEnergyChart:hover {
@@ -2163,20 +1604,20 @@
   }
 
   #refreshEnergyChart:active {
-    background: rgba(0, 255, 136, 0.4);
+    background: var(--c11);
   }
 
   #refreshEnergyChart.auto-refresh-active {
     background: rgba(0, 255, 136, 0.3);
     border-color: rgba(0, 255, 136, 0.8);
-    box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+    box-shadow: 0 0 8px var(--c11);
     animation: pulse 2s infinite;
   }
 
   @keyframes pulse {
     0%,
     100% {
-      box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+      box-shadow: 0 0 8px var(--c11);
     }
     50% {
       box-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
@@ -2191,8 +1632,8 @@
     display: none;
     text-align: center;
     padding: 40px 20px;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--c4);
+    border: 1px solid var(--border-subtle);
     border-radius: 8px;
     margin: 15px 0;
   }
@@ -2207,14 +1648,14 @@
   .collecting-spinner {
     width: 30px;
     height: 30px;
-    border: 3px solid rgba(255, 255, 255, 0.2);
-    border-top: 3px solid #00ff88;
+    border: 3px solid var(--c15);
+    border-top: 3px solid var(--accent);
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
 
   .collecting-text {
-    color: #e0e0e0;
+    color: var(--c13);
     font-size: 14px;
     font-weight: 500;
   }
@@ -2228,7 +1669,7 @@
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     .collecting-message {
       padding: 30px 15px;
     }
@@ -2305,13 +1746,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 12px;
-    background: linear-gradient(
-      135deg,
-      rgba(0, 122, 255, 0.18),
-      rgba(0, 0, 0, 0)
-    );
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     cursor: grab; /* Indicates draggable */
     flex-shrink: 0;
   }
@@ -2328,16 +1762,7 @@
   }
 
   .three-view-title {
-    font-size: 13px;
-    letter-spacing: 0.04em;
     text-transform: uppercase;
-    font-weight: 600;
-    color: #c9e8ff;
-  }
-
-  .three-view-status {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.7);
   }
 
   .three-toolbar-actions {
@@ -2346,12 +1771,8 @@
   }
 
   .three-toolbar-btn {
-    background: rgba(9, 15, 32, 0.75);
     border-radius: 6px;
-    border: 1px solid rgba(0, 180, 255, 0.4);
-    color: #dff5ff;
-    font-size: 11px;
-    padding: 4px 8px;
+    border: 1px solid var(--border-strong);
     cursor: pointer;
     transition:
       background 0.2s ease,
@@ -2359,8 +1780,7 @@
   }
 
   .three-toolbar-btn:hover {
-    background: rgba(14, 24, 55, 0.85);
-    border-color: rgba(0, 227, 255, 0.6);
+    border-color: var(--accent);
   }
 
   .three-view-stage {
@@ -2368,7 +1788,7 @@
     width: 100%;
     flex: 1; /* Take remaining height */
     min-height: 0;
-    background: #000;
+    background: var(--space-far);
   }
 
   .three-view-stage canvas {
@@ -2378,12 +1798,8 @@
   }
 
   .three-view-hint {
-    font-size: 11px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.5);
-    padding: 6px 10px;
-    background: rgba(0, 0, 0, 0.2);
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    background: var(--c4);
     flex-shrink: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -2404,7 +1820,7 @@
     background: linear-gradient(
       45deg,
       transparent 50%,
-      rgba(0, 180, 255, 0.4) 50%
+      var(--accent-line) 50%
     );
     border-top-right-radius: 12px;
   }
@@ -2413,11 +1829,11 @@
     background: linear-gradient(
       45deg,
       transparent 50%,
-      rgba(0, 180, 255, 0.8) 50%
+      var(--accent) 50%
     );
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .three-view-container {
       right: 10px;
       left: 10px;
@@ -2441,14 +1857,7 @@
     bottom: 120px;
     width: 420px;
     height: 320px;
-    background: rgba(5, 9, 22, 0.95);
-    border: 1px solid rgba(0, 180, 255, 0.3);
-    border-radius: 12px;
-    box-shadow:
-      0 12px 48px rgba(0, 0, 0, 0.5),
-      0 4px 16px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(6px);
-    overflow: hidden;
     z-index: 160;
     display: flex;
     flex-direction: column;
@@ -2460,13 +1869,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 12px;
-    background: linear-gradient(
-      135deg,
-      rgba(0, 122, 255, 0.15),
-      rgba(0, 0, 0, 0)
-    );
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     flex-shrink: 0;
   }
 
@@ -2477,16 +1879,7 @@
   }
 
   .light-curve-title {
-    font-size: 13px;
-    letter-spacing: 0.04em;
     text-transform: uppercase;
-    font-weight: 600;
-    color: #c9e8ff;
-  }
-
-  .light-curve-status {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.55);
   }
 
   .light-curve-actions {
@@ -2495,19 +1888,19 @@
   }
 
   .light-curve-btn {
-    background: rgba(9, 15, 32, 0.75) !important;
+    background: var(--surface-2) !important;
     border-radius: 6px !important;
-    border: 1px solid rgba(0, 180, 255, 0.35) !important;
-    color: #dff5ff !important;
+    border: 1px solid var(--c16) !important;
+    color: var(--text-primary) !important;
     font-size: 11px !important;
     padding: 4px 10px !important;
     cursor: pointer !important;
-    min-width: auto !important;
+    min-width: auto;
     box-shadow: none !important;
   }
 
   .light-curve-btn:hover {
-    background: rgba(0, 120, 255, 0.3) !important;
+    background: var(--accent-line) !important;
     transform: none !important;
   }
 
@@ -2524,13 +1917,15 @@
     display: block;
   }
 
+  /* The series chart fills the stage's padded box and takes its size from it. */
+  .light-curve-stage > .plot-host {
+    position: absolute;
+    inset: 6px 8px;
+  }
+
   .light-curve-hint {
-    font-size: 10px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.4);
-    padding: 4px 10px;
-    background: rgba(0, 0, 0, 0.15);
-    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    background: var(--surface-inset);
     flex-shrink: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -2539,13 +1934,13 @@
 
   .light-curve-info-btn {
     background: transparent !important;
-    border: 1px solid rgba(0, 180, 255, 0.35) !important;
+    border: 1px solid var(--c16) !important;
     border-radius: 50% !important;
-    color: #9cd4ff !important;
+    color: var(--accent) !important;
     font-size: 13px !important;
     width: 24px !important;
     height: 24px !important;
-    min-width: 0 !important;
+    min-width: 0;
     padding: 0 !important;
     display: flex !important;
     align-items: center;
@@ -2556,8 +1951,8 @@
   }
 
   .light-curve-info-btn:hover {
-    background: rgba(0, 120, 255, 0.2) !important;
-    border-color: rgba(0, 180, 255, 0.6) !important;
+    background: var(--accent-soft) !important;
+    border-color: var(--accent) !important;
     transform: none !important;
   }
 
@@ -2565,7 +1960,7 @@
     position: absolute;
     inset: 0;
     z-index: 5;
-    background: rgba(5, 9, 22, 0.97);
+    background: var(--surface-1);
     padding: 16px 18px;
     overflow-y: auto;
     display: flex;
@@ -2577,7 +1972,7 @@
     margin: 0;
     font-size: 14px;
     font-weight: 600;
-    color: #c9e8ff;
+    color: var(--text-primary);
     letter-spacing: 0.03em;
   }
 
@@ -2585,29 +1980,29 @@
     margin: 0;
     font-size: 11.5px;
     line-height: 1.55;
-    color: rgba(255, 255, 255, 0.72);
+    color: var(--text-secondary);
   }
 
   .light-curve-info-overlay .lc-info-close {
     align-self: flex-end;
-    background: rgba(9, 15, 32, 0.75) !important;
-    border: 1px solid rgba(0, 180, 255, 0.35) !important;
+    background: var(--surface-2) !important;
+    border: 1px solid var(--c16) !important;
     border-radius: 6px !important;
-    color: #dff5ff !important;
+    color: var(--text-primary) !important;
     font-size: 11px !important;
     padding: 4px 14px !important;
     cursor: pointer !important;
-    min-width: auto !important;
+    min-width: auto;
     box-shadow: none !important;
     margin-top: auto;
   }
 
   .light-curve-info-overlay .lc-info-close:hover {
-    background: rgba(0, 120, 255, 0.3) !important;
+    background: var(--accent-line) !important;
     transform: none !important;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .light-curve-container {
       left: 10px;
       right: 10px;

@@ -1,0 +1,815 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/scenario-pack-1.schema.json",
+  "title": "gravitas.scenario-pack/1",
+  "description": "A scenario as data: settings Gravitas understands, a seed, the instruments it opens with, bodies as an orbital system, typed states or declarative geometry, optionally a 3-D system for the 3-D lab, with text in every declared locale. Content only, never code. js/platform/scenario.js validateScenarioPack() is the authority: it also checks that every string is in every locale and free of markup, and that a pack with its own bodies generates no population. sdk/README.md, \"Scenario packs\".",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "version",
+    "locales",
+    "title",
+    "summary",
+    "seed"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.scenario-pack"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "locales": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "en",
+          "es"
+        ]
+      }
+    },
+    "title": {
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": {
+        "type": "string"
+      },
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": {
+        "type": "string"
+      },
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "enum": [
+          "orbits-kepler",
+          "solar-system",
+          "exoplanets",
+          "detection",
+          "habitability",
+          "binary-systems",
+          "tides",
+          "chaos",
+          "stellar-evolution",
+          "compact-objects",
+          "relativity",
+          "galaxies-clusters",
+          "dark-matter",
+          "resonance"
+        ]
+      }
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "scenario": {
+      "description": "A built-in scenario to start from, by its id: its world, hand-built geometry included, under this pack's seed and with its settings over the scenario's own. A pack that names one brings no bodies.",
+      "enum": [
+        "binary-bh",
+        "neutron-star-collision",
+        "pulsar-system",
+        "white-dwarf-binary",
+        "stellar-graveyard",
+        "galactic-center",
+        "supernova-remnant",
+        "compact-object-zoo",
+        "millisecond-pulsar",
+        "tidal-disruption-event",
+        "intermediate-mass-bh",
+        "galactic-collision",
+        "micro-bh-swarm",
+        "exoplanet-lab",
+        "triple-bh-system",
+        "supermassive-bh",
+        "star-cluster",
+        "kuiper-belt",
+        "sagittarius-a",
+        "binary-star-system",
+        "solar-system",
+        "earth-moon-system",
+        "slingshot",
+        "rogue-encounter",
+        "quasar-cannon",
+        "the-pinwheel-galaxy-core",
+        "star-frisbee",
+        "kessler-cascade",
+        "alien-dyson-swarm-collapse",
+        "tidal-arm-tango",
+        "hungry-hungry-holes",
+        "slingshot-gauntlet",
+        "black-hole-billiards",
+        "stellar-nursery",
+        "keplers-2nd-law",
+        "retrograde-mars",
+        "three-body-sensitivity-lab",
+        "galilean-resonance",
+        "broken-laplace-resonance",
+        "pluto-and-neptune",
+        "jupiter-trojans",
+        "binary-pair",
+        "black-hole-lab",
+        "habitable-zone-lab",
+        "interstellar-visitor",
+        "spiral-galaxy",
+        "milky-way-rotation",
+        "coma-cluster",
+        "exoplanet-characterization-lab",
+        "binary-planet-lab",
+        "circumbinary-planet-lab",
+        "gravity-assist-lab",
+        "gravity-assist-heliocentric",
+        "lagrange-point-lab",
+        "orbital-transfer-lab",
+        "transit-lab",
+        "blended-binary",
+        "trappist-1-system",
+        "gw150914"
+      ]
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "gravitational_constant": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 10000
+        },
+        "mutual_gravity": {
+          "type": "boolean"
+        },
+        "star_only_gravity": {
+          "type": "boolean"
+        },
+        "integrator": {
+          "enum": [
+            "Symplectic Euler",
+            "Velocity Verlet",
+            "RK4"
+          ]
+        },
+        "max_timestep": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "min_interaction_distance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "enable_star_merging": {
+          "type": "boolean"
+        },
+        "bh_behavior": {
+          "enum": [
+            "Static",
+            "Orbiting"
+          ]
+        },
+        "orbit_decay_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.1
+        },
+        "placement": {
+          "enum": [
+            "Circular",
+            "Multi-Ring",
+            "Random",
+            "Grid",
+            "Empty"
+          ]
+        },
+        "sim_size": {
+          "enum": [
+            "Small",
+            "Medium",
+            "Large",
+            "Huge"
+          ]
+        },
+        "num_black_holes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "bh_mass": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 1000000000
+        },
+        "num_stars": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 300
+        },
+        "num_neutron_stars": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50
+        },
+        "num_white_dwarfs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50
+        },
+        "num_planets": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 500
+        },
+        "num_gas_giants": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "enable_asteroids": {
+          "type": "boolean"
+        },
+        "num_asteroids": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "num_comets": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 200
+        },
+        "use_individual_bh_masses": {
+          "type": "boolean"
+        },
+        "bh_masses": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "number",
+            "minimum": 0.1,
+            "maximum": 1000000000
+          }
+        },
+        "num_micro_stars": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "micro_star_high_velocity": {
+          "type": "boolean"
+        },
+        "test_star_slingshot": {
+          "type": "boolean"
+        },
+        "bh_layout": {
+          "enum": [
+            null,
+            "parabolic-flyby"
+          ]
+        },
+        "init_velocity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 500
+        },
+        "velocity_stddev": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "sim_speed": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "show_trails": {
+          "type": "boolean"
+        },
+        "trail_style": {
+          "enum": [
+            "Cloud",
+            "Simple",
+            "Glow"
+          ]
+        },
+        "trail_length": {
+          "type": "integer",
+          "minimum": 5,
+          "maximum": 3000
+        },
+        "show_velocity_vectors": {
+          "type": "boolean"
+        },
+        "show_acceleration_vectors": {
+          "type": "boolean"
+        },
+        "show_potential_well": {
+          "type": "boolean"
+        },
+        "show_scale_bar": {
+          "type": "boolean"
+        },
+        "show_elapsed_time": {
+          "type": "boolean"
+        },
+        "show_conservation_diagnostics": {
+          "type": "boolean"
+        },
+        "star_density": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 30000
+        },
+        "preset_zoom": {
+          "type": "number",
+          "minimum": 0.001,
+          "maximum": 1000
+        },
+        "bh_environment": {
+          "enum": [
+            "quiescent",
+            "accreting",
+            "jet"
+          ]
+        },
+        "bh_disk_inclination": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90
+        },
+        "show_bh_glow": {
+          "type": "boolean"
+        },
+        "show_accretion_disk": {
+          "type": "boolean"
+        },
+        "show_bh_jets": {
+          "type": "boolean"
+        },
+        "dynamic_object_properties": {
+          "type": "boolean"
+        }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "zoom"
+      ],
+      "properties": {
+        "zoom": {
+          "type": "number"
+        },
+        "pan": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "x",
+            "y"
+          ],
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "paused": {
+      "type": "boolean"
+    },
+    "observer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inclination": {
+          "type": "number"
+        },
+        "positionAngle": {
+          "type": "number"
+        }
+      }
+    },
+    "open": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "lightCurve",
+          "radialVelocity",
+          "rotationCurve",
+          "astrometry",
+          "pauseAtEvent",
+          "view3d"
+        ]
+      }
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "ruler",
+          "protractor",
+          "stopwatch"
+        ]
+      }
+    },
+    "system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bodies"
+      ],
+      "properties": {
+        "bodies": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "mass"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "Star",
+                  "WhiteDwarf",
+                  "NeutronStar",
+                  "BlackHole",
+                  "GasGiant",
+                  "Planet"
+                ]
+              },
+              "mass": {
+                "type": "number"
+              },
+              "radius": {
+                "type": "number"
+              },
+              "primary": {
+                "type": "integer"
+              },
+              "a": {
+                "type": "number"
+              },
+              "e": {
+                "type": "number"
+              },
+              "omega": {
+                "type": "number"
+              },
+              "phase": {
+                "type": "number"
+              },
+              "retrograde": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "bodies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "mass",
+          "x",
+          "y",
+          "vx",
+          "vy"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "Star",
+              "WhiteDwarf",
+              "NeutronStar",
+              "BlackHole",
+              "GasGiant",
+              "Planet"
+            ]
+          },
+          "mass": {
+            "type": "number"
+          },
+          "radius": {
+            "type": "number"
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "vx": {
+            "type": "number"
+          },
+          "vy": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "system3d": {
+      "type": "object",
+      "description": "A gravitas.system3d/1 for the 3-D lab (/3d/), beside the pack's Sandbox world: units, an integrator, a start time and 2 to 50 bodies as numbers (mass, size, position, velocity). The shape only; js/lab3d/state.js validateSystem() is the authority and also refuses overlapping bodies, a duplicate id and an integrator step of zero. LAB3D.md.",
+      "required": [
+        "format",
+        "formatVersion",
+        "units",
+        "integrator",
+        "bodies"
+      ],
+      "properties": {
+        "format": {
+          "const": "gravitas.system3d"
+        },
+        "formatVersion": {
+          "const": 1
+        },
+        "units": {
+          "enum": [
+            "code",
+            "solar"
+          ]
+        },
+        "integrator": {
+          "type": "object"
+        },
+        "t": {
+          "type": "number"
+        },
+        "provenance": {
+          "type": "object"
+        },
+        "bodies": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 50,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "m",
+              "radius",
+              "x",
+              "v"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "m": {
+                "type": "number",
+                "minimum": 0
+              },
+              "radius": {
+                "type": "number",
+                "minimum": 0
+              },
+              "x": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": {
+                  "type": "number"
+                }
+              },
+              "v": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "description": "Declarative geometry (Roadmap II Prompt 108): the pack's bodies as steps, each a body made from a mass and a place or an orbit round an earlier body, in order. It replaces the generated population, so the pack's population counts are 0 and it has no system, no bodies and no built-in to start from. A built-in scenario's declaration may also use constructs a pack may not (a named rule, a body reused from the generator, an engine property); js/scenarioPack.js validateGeometry() refuses each for a pack. js/scenarioPack.js validateGeometry() is the authority; SCENARIO_GEOMETRY.md says what each construct means.",
+      "additionalProperties": false,
+      "required": [
+        "steps"
+      ],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 40,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "body"
+            ],
+            "properties": {
+              "body": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "type",
+                  "name",
+                  "mass"
+                ],
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "Star",
+                      "Planet",
+                      "GasGiant"
+                    ]
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 40
+                  },
+                  "mass": {
+                    "type": "object",
+                    "description": "One of suns (a Star), earths (a Planet) or jupiters (a GasGiant): the type's own unit, greater than 0.",
+                    "additionalProperties": false,
+                    "minProperties": 1,
+                    "maxProperties": 1,
+                    "properties": {
+                      "suns": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "earths": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "jupiters": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      }
+                    }
+                  },
+                  "at": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "x",
+                      "y"
+                    ],
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "velocity": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "x",
+                      "y"
+                    ],
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "orbit": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "around",
+                      "distance"
+                    ],
+                    "properties": {
+                      "around": {
+                        "type": "string",
+                        "description": "The name of a body made earlier in the geometry."
+                      },
+                      "distance": {
+                        "type": "object",
+                        "description": "The distance at the start, which is periapsis for an eccentric orbit: au, or units (simulation length units, 100 to the AU).",
+                        "additionalProperties": false,
+                        "minProperties": 1,
+                        "maxProperties": 1,
+                        "properties": {
+                          "au": {
+                            "type": "number",
+                            "exclusiveMinimum": 0
+                          },
+                          "units": {
+                            "type": "number",
+                            "exclusiveMinimum": 0
+                          }
+                        }
+                      },
+                      "eccentricity": {
+                        "type": "number",
+                        "minimum": 0,
+                        "exclusiveMaximum": 1
+                      },
+                      "angle": {
+                        "type": "object",
+                        "description": "Where on the circle the body starts: deg, rad, or pi (a multiple of pi).",
+                        "additionalProperties": false,
+                        "minProperties": 1,
+                        "maxProperties": 1,
+                        "properties": {
+                          "deg": {
+                            "type": "number"
+                          },
+                          "rad": {
+                            "type": "number"
+                          },
+                          "pi": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "set": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "radius": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "baseColor": {
+                        "type": "string",
+                        "pattern": "^#[0-9a-fA-F]{6}$"
+                      },
+                      "persistent": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

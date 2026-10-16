@@ -1,0 +1,781 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "gwosc-five-events",
+  "version": "1.0.0",
+  "title": "Five gravitational-wave events: whitened GWOSC strain",
+  "object": {
+    "name": "Five compact-binary mergers",
+    "identifiers": [
+      "GW150914",
+      "GW170817",
+      "GW190412",
+      "GW190521",
+      "GW190814"
+    ]
+  },
+  "facility": {
+    "observatory": "LIGO Hanford and LIGO Livingston, through GWOSC",
+    "instrument": "one detector per event, 32 s at 4096 Hz",
+    "pipeline": "GWOSC 4 kHz strain releases (GWTC-1 v3, GWTC-2.1 v4)"
+  },
+  "dataType": "strain",
+  "origin": "observed",
+  "credit": "GWOSC, LIGO/Virgo/KAGRA open data (CC BY 4.0); catalog values from GWTC-1 and GWTC-2.1",
+  "license": {
+    "status": "cc-by-4.0",
+    "statement": "GWOSC data are released under CC BY 4.0. GWOSC asks that work using them cite the open-data papers and carry its acknowledgement (NOTICE)."
+  },
+  "retrieved": "2026-09-23",
+  "time": {
+    "scale": "GPS",
+    "reference": "seconds from each event’s t0, a GPS time EVENTS gives",
+    "unit": "s"
+  },
+  "columns": [
+    {
+      "name": "time",
+      "unit": "s",
+      "description": "t0 + i / sampleRate"
+    },
+    {
+      "name": "whitened strain",
+      "unit": "",
+      "description": "whitened by the detector’s own noise, band-limited to 20-400 Hz, in units of its standard deviation"
+    }
+  ],
+  "masks": [
+    {
+      "column": "detector",
+      "rule": "a detector with a transient GWOSC documents inside the window is not used",
+      "dropped": 1
+    }
+  ],
+  "reductions": [
+    "Whitened by the noise spectrum the detector had at the time and band-limited to 20-400 Hz, in units of that noise.",
+    "A window around each merger, decimated from 4096 to 1024 samples a second.",
+    "Quantised to 16-bit integers, one scale per event.",
+    "The masses, distances and signal-to-noise ratios are GWOSC’s catalog values, copied: Gravitas measured none of them."
+  ],
+  "source": {
+    "archive": "Gravitational Wave Open Science Center",
+    "urls": [
+      "https://gwosc.org",
+      "https://gwosc.org/eventapi/json/GWTC-1-confident/GW150914/v3/H-H1_GWOSC_4KHZ_R1-1126259447-32.txt.gz",
+      "https://gwosc.org/eventapi/json/GWTC-1-confident/GW150914/v3/L-L1_GWOSC_4KHZ_R1-1126259447-32.txt.gz",
+      "https://gwosc.org/eventapi/json/GWTC-1-confident/GW170817/v3/H-H1_GWOSC_4KHZ_R1-1187008867-32.txt.gz",
+      "https://gwosc.org/eventapi/json/GWTC-1-confident/GW170817/v3/L-L1_GWOSC_4KHZ_R1-1187008867-32.txt.gz",
+      "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190412/v4/H-H1_GWOSC_4KHZ_R1-1239082247-32.txt.gz",
+      "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190412/v4/L-L1_GWOSC_4KHZ_R1-1239082247-32.txt.gz",
+      "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190521/v4/H-H1_GWOSC_4KHZ_R1-1242442952-32.txt.gz",
+      "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190521/v4/L-L1_GWOSC_4KHZ_R1-1242442952-32.txt.gz",
+      "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190814/v3/H-H1_GWOSC_4KHZ_R1-1249852241-32.txt.gz",
+      "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190814/v3/L-L1_GWOSC_4KHZ_R1-1249852241-32.txt.gz",
+      "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW150914/v4/",
+      "https://gwosc.org/eventapi/json/GWTC-1-confident/GW170817/v3/",
+      "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190412/v4/",
+      "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190521/v4/",
+      "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190814/v3/"
+    ],
+    "citations": [
+      {
+        "text": "LIGO Scientific and Virgo Collaborations (Abbott et al.) 2019, Phys. Rev. X 9, 031040 (GWTC-1)",
+        "doi": "10.1103/PhysRevX.9.031040"
+      },
+      {
+        "text": "GWOSC strain data release for GWTC-1",
+        "doi": "10.7935/82H3-HH23"
+      },
+      {
+        "text": "LIGO Scientific and Virgo Collaborations (Abbott et al.) 2024, Phys. Rev. D 109, 022001 (GWTC-2.1)",
+        "doi": "10.1103/PhysRevD.109.022001"
+      },
+      {
+        "text": "GWOSC strain data release for GWTC-2.1",
+        "doi": "10.7935/qf3a-3z67"
+      },
+      {
+        "text": "Abbott et al. 2021, SoftwareX 13, 100658 (O1 and O2 open data)",
+        "doi": "10.1016/j.softx.2021.100658"
+      },
+      {
+        "text": "Abbott et al. 2023, ApJS 267, 29 (O3 open data)",
+        "doi": "10.3847/1538-4365/acdc9f"
+      }
+    ],
+    "acknowledgement": "This research has made use of data or software obtained from the Gravitational Wave Open Science Center (gwosc.org), a service of the LIGO Scientific Collaboration, the Virgo Collaboration, and KAGRA.",
+    "terms": [
+      "https://gwosc.org/data/",
+      "https://gwosc.org/acknowledgement/"
+    ]
+  },
+  "raw": [
+    {
+      "file": "H-H1_GWOSC_4KHZ_R1-1126259447-32.txt.gz",
+      "url": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW150914/v3/H-H1_GWOSC_4KHZ_R1-1126259447-32.txt.gz",
+      "bytes": 1286320,
+      "sha256": "fefe8717306109460b6c9cff74da6beb9e80ee624824b4b09bdd2c54ce9b4dfc"
+    },
+    {
+      "file": "L-L1_GWOSC_4KHZ_R1-1126259447-32.txt.gz",
+      "url": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW150914/v3/L-L1_GWOSC_4KHZ_R1-1126259447-32.txt.gz",
+      "bytes": 1219514,
+      "sha256": "43d30a710d6ed4a8f27d13f45182f3825cbe99f87287b518618c8ff0e25e0d7c"
+    },
+    {
+      "file": "H-H1_GWOSC_4KHZ_R1-1187008867-32.txt.gz",
+      "url": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW170817/v3/H-H1_GWOSC_4KHZ_R1-1187008867-32.txt.gz",
+      "bytes": 1282112,
+      "sha256": "3fa9b80df10c94922fea1d130ccb18c632176bb3b8e0ccb91ac16c19f1f822f1"
+    },
+    {
+      "file": "L-L1_GWOSC_4KHZ_R1-1187008867-32.txt.gz",
+      "url": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW170817/v3/L-L1_GWOSC_4KHZ_R1-1187008867-32.txt.gz",
+      "bytes": 1287611,
+      "sha256": "b2811cb625ddc624297a0c6bae8fe7d35c501f3415442525bc64bf8fc2dabbed"
+    },
+    {
+      "file": "H-H1_GWOSC_4KHZ_R1-1239082247-32.txt.gz",
+      "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190412/v4/H-H1_GWOSC_4KHZ_R1-1239082247-32.txt.gz",
+      "bytes": 1334687,
+      "sha256": "b9713b0ec82b6a1549560f5376f81ae16c4f462f9299736cd6dbfe9f89e7829d"
+    },
+    {
+      "file": "L-L1_GWOSC_4KHZ_R1-1239082247-32.txt.gz",
+      "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190412/v4/L-L1_GWOSC_4KHZ_R1-1239082247-32.txt.gz",
+      "bytes": 1337725,
+      "sha256": "f9f03a53deb7c2991faadb0d0f478326cf86933db6fb0e48fb8b8b803c63f1e7"
+    },
+    {
+      "file": "H-H1_GWOSC_4KHZ_R1-1242442952-32.txt.gz",
+      "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190521/v4/H-H1_GWOSC_4KHZ_R1-1242442952-32.txt.gz",
+      "bytes": 1359493,
+      "sha256": "cbd3588e77ad0f785a29b59438677da6875731ea871a3d46a28cd5c63d2f4ffa"
+    },
+    {
+      "file": "L-L1_GWOSC_4KHZ_R1-1242442952-32.txt.gz",
+      "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190521/v4/L-L1_GWOSC_4KHZ_R1-1242442952-32.txt.gz",
+      "bytes": 1337447,
+      "sha256": "2b75e9e8d938d7a0e0c710658964407fb8b976ca570ffe1cc0f39b14935a46ae"
+    },
+    {
+      "file": "H-H1_GWOSC_4KHZ_R1-1249852241-32.txt.gz",
+      "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190814/v3/H-H1_GWOSC_4KHZ_R1-1249852241-32.txt.gz",
+      "bytes": 1363019,
+      "sha256": "6887e6376f0e7cd4cfacccb1ec874657aa46fcf2e6f73a87b6e04f68ca0fc9f2"
+    },
+    {
+      "file": "L-L1_GWOSC_4KHZ_R1-1249852241-32.txt.gz",
+      "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190814/v3/L-L1_GWOSC_4KHZ_R1-1249852241-32.txt.gz",
+      "bytes": 1341387,
+      "sha256": "1c5a36fdb1b49439edca2b730e226550fc82e30ed903ab8960f23f0f8c2e3d1c"
+    },
+    {
+      "file": "GW150914-GWTC-2.1-confident-v4.json",
+      "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW150914/v4/",
+      "bytes": 6934,
+      "sha256": "6fefd9719c8350eadae48c02e5e6a2a5151bd1d96c71bb00017a6b64f9614733",
+      "retrieved": "2026-10-01"
+    },
+    {
+      "file": "GW170817-GWTC-1-confident-v3.json",
+      "url": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW170817/v3/",
+      "bytes": 20094,
+      "sha256": "2cd7e903b895f5d3a406383362172a411b127efdcf9be65590a8234b9352ddcb",
+      "retrieved": "2026-10-01"
+    },
+    {
+      "file": "GW190412-GWTC-2.1-confident-v4.json",
+      "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190412/v4/",
+      "bytes": 18417,
+      "sha256": "54f05bdd9939ee55573bbfd0859aec49ef415d1994b00b88ebac358cba01b948",
+      "retrieved": "2026-10-01"
+    },
+    {
+      "file": "GW190521-GWTC-2.1-confident-v4.json",
+      "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190521/v4/",
+      "bytes": 18463,
+      "sha256": "23f6bb1e62531a16d367e9ddd85b2515e0da2afd4bd9dfabb84ec7ad49be2e81",
+      "retrieved": "2026-10-01"
+    },
+    {
+      "file": "GW190814-GWTC-2.1-confident-v3.json",
+      "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190814/v3/",
+      "bytes": 17616,
+      "sha256": "ba7d52087aa1e14500cad3501d9ca470bfd20d5ea59b0e205a0ab3cb1bb99344",
+      "retrieved": "2026-10-01"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/gwosc-events.mjs",
+    "version": "1.0.0",
+    "options": {
+      "band": [
+        20,
+        400
+      ],
+      "sourceRate": 4096,
+      "rate": 1024,
+      "scan": {
+        "fMin": 30,
+        "fMax": 400,
+        "rows": 48
+      },
+      "slices": [
+        1,
+        0.5,
+        0.3,
+        0.2,
+        0.1,
+        0.05
+      ]
+    },
+    "steps": [
+      "Parse the 32-second, 4096 Hz text strain file as published, refusing anything else.",
+      "Estimate the noise PSD by a median Welch estimate over 4-second Hann segments of the same file, leaving out the seconds around the merger for the four black-hole events.",
+      "Whiten by that PSD with js/gw/match.js whiten() and band-limit to 20-400 Hz.",
+      "Scale to unit standard deviation over the file, so the numbers are in units of the detector’s own noise.",
+      "Cut a window around the merger and keep every 4th sample, 4096 Hz to 1024 Hz; the power the window leaks above the new Nyquist frequency is measured and must be under 0.1%.",
+      "Quantise to 16-bit integers, one scale per event, refusing any quantisation that moves a reading of the slice table by more than 1 per cent.",
+      "Hold every catalog value copied beside the strain to the GWOSC event-API answer it was copied from, pinned with the strain."
+    ],
+    "record": {
+      "detectorRule": "Of the two LIGO detectors, the one with the larger Q-scan energy within 0.1 s of the catalog GPS time, excluding any detector with a transient GWOSC documents inside the window.",
+      "size": {
+        "sourceBytes": 13149315,
+        "sourceFiles": 10,
+        "payloadBase64Bytes": 50520
+      }
+    }
+  },
+  "records": {
+    "GW150914": {
+      "values": {
+        "catalog": "GWTC-2.1-confident",
+        "version": 4,
+        "json": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW150914/v4/",
+        "pinned": "GW150914-GWTC-2.1-confident-v4.json",
+        "paperDoi": "10.1103/PhysRevD.109.022001"
+      },
+      "strainRelease": {
+        "catalog": "GWTC-1-confident",
+        "version": 3,
+        "json": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW150914/v3/",
+        "dataDoi": "10.7935/82H3-HH23"
+      },
+      "detectors": {
+        "H1": {
+          "url": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW150914/v3/H-H1_GWOSC_4KHZ_R1-1126259447-32.txt.gz",
+          "gpsStart": 1126259447,
+          "sha256": "fefe8717306109460b6c9cff74da6beb9e80ee624824b4b09bdd2c54ce9b4dfc",
+          "bytes": 1286320,
+          "samples": 131072,
+          "sampleRate": 4096,
+          "seconds": 32,
+          "energyNearMerger": 80.1,
+          "excluded": null
+        },
+        "L1": {
+          "url": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW150914/v3/L-L1_GWOSC_4KHZ_R1-1126259447-32.txt.gz",
+          "gpsStart": 1126259447,
+          "sha256": "43d30a710d6ed4a8f27d13f45182f3825cbe99f87287b518618c8ff0e25e0d7c",
+          "bytes": 1219514,
+          "samples": 131072,
+          "sampleRate": 4096,
+          "seconds": 32,
+          "energyNearMerger": 45.4,
+          "excluded": null
+        }
+      },
+      "chosen": "H1",
+      "rule": "Of the two LIGO detectors, the one with the larger Q-scan energy within 0.1 s of the catalog GPS time, excluding any detector with a transient GWOSC documents inside the window.",
+      "psd": {
+        "method": "Welch",
+        "segmentSeconds": 4,
+        "overlap": 0.5,
+        "window": "Hann",
+        "average": "median, bias-corrected",
+        "segments": 11,
+        "excludedGps": [
+          [
+            1126259460.4,
+            1126259463.4
+          ]
+        ],
+        "why": "the 3 s around the merger were left out, so the signal is not estimated as noise"
+      },
+      "whitening": {
+        "function": "js/gw/match.js whiten()",
+        "band": [
+          20,
+          400
+        ],
+        "noiseUnits": "divided by 4.4421e-1, the standard deviation of the whitened file away from its tapered ends"
+      },
+      "window": {
+        "gpsStart": 1126259459.900391,
+        "before": 2.5,
+        "after": 0.5
+      },
+      "decimation": {
+        "from": 4096,
+        "to": 1024,
+        "method": "every fourth sample; no further filter, because whitening zeroed everything above 400 Hz",
+        "powerAboveNewNyquist": 0.00005204
+      },
+      "quantisation": {
+        "bits": 16,
+        "scale": 4746.53756,
+        "stepInNoiseSigma": 0.0002107,
+        "maxErrorInNoiseSigma": 0.0001053,
+        "sliceTableAgreesWithin": "1 per cent at every slice"
+      },
+      "sourceSamples": 131072,
+      "keptSamples": 3072,
+      "payloadSha256": "16e575fa985c74e4541a3441b78017836045d8342012df333281cbca0cd4dbcf"
+    },
+    "GW170817": {
+      "values": {
+        "catalog": "GWTC-1-confident",
+        "version": 3,
+        "json": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW170817/v3/",
+        "pinned": "GW170817-GWTC-1-confident-v3.json",
+        "paperDoi": "10.1103/PhysRevX.9.031040"
+      },
+      "strainRelease": {
+        "catalog": "GWTC-1-confident",
+        "version": 3,
+        "json": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW170817/v3/",
+        "dataDoi": "10.7935/82H3-HH23"
+      },
+      "detectors": {
+        "H1": {
+          "url": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW170817/v3/H-H1_GWOSC_4KHZ_R1-1187008867-32.txt.gz",
+          "gpsStart": 1187008867,
+          "sha256": "3fa9b80df10c94922fea1d130ccb18c632176bb3b8e0ccb91ac16c19f1f822f1",
+          "bytes": 1282112,
+          "samples": 131072,
+          "sampleRate": 4096,
+          "seconds": 32,
+          "energyNearMerger": 9.6,
+          "excluded": null
+        },
+        "L1": {
+          "url": "https://gwosc.org/eventapi/json/GWTC-1-confident/GW170817/v3/L-L1_GWOSC_4KHZ_R1-1187008867-32.txt.gz",
+          "gpsStart": 1187008867,
+          "sha256": "b2811cb625ddc624297a0c6bae8fe7d35c501f3415442525bc64bf8fc2dabbed",
+          "bytes": 1287611,
+          "samples": 131072,
+          "sampleRate": 4096,
+          "seconds": 32,
+          "energyNearMerger": 17.6,
+          "excluded": {
+            "reason": "documented transient at GPS 1187008881.389: a sub-5 ms saturation in a digital-to-analog converter, about 1.1 s before merger",
+            "source": "https://gwosc.org/events/GW170817/"
+          }
+        }
+      },
+      "chosen": "H1",
+      "rule": "Of the two LIGO detectors, the one with the larger Q-scan energy within 0.1 s of the catalog GPS time, excluding any detector with a transient GWOSC documents inside the window.",
+      "psd": {
+        "method": "Welch",
+        "segmentSeconds": 4,
+        "overlap": 0.5,
+        "window": "Hann",
+        "average": "median, bias-corrected",
+        "segments": 15,
+        "excludedGps": null,
+        "why": "nothing left out: the signal is in band for the whole 32-second file, and too weak per 4-second segment to move a median appreciably"
+      },
+      "whitening": {
+        "function": "js/gw/match.js whiten()",
+        "band": [
+          20,
+          400
+        ],
+        "noiseUnits": "divided by 4.3812e-1, the standard deviation of the whitened file away from its tapered ends"
+      },
+      "window": {
+        "gpsStart": 1187008876.400391,
+        "before": 6,
+        "after": 0.5
+      },
+      "decimation": {
+        "from": 4096,
+        "to": 1024,
+        "method": "every fourth sample; no further filter, because whitening zeroed everything above 400 Hz",
+        "powerAboveNewNyquist": 0.00001201
+      },
+      "quantisation": {
+        "bits": 16,
+        "scale": 7502.502535,
+        "stepInNoiseSigma": 0.0001333,
+        "maxErrorInNoiseSigma": 0.00006663,
+        "sliceTableAgreesWithin": "1 per cent at every slice"
+      },
+      "sourceSamples": 131072,
+      "keptSamples": 6656,
+      "payloadSha256": "44a9bdac4f49af49c6defef72bfea014d7a73ed1794e3a6a894a481fd03e9bb9"
+    },
+    "GW190412": {
+      "values": {
+        "catalog": "GWTC-2.1-confident",
+        "version": 4,
+        "json": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190412/v4/",
+        "pinned": "GW190412-GWTC-2.1-confident-v4.json",
+        "paperDoi": "10.1103/PhysRevD.109.022001"
+      },
+      "strainRelease": {
+        "catalog": "GWTC-2.1-confident",
+        "version": 4,
+        "json": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190412/v4/",
+        "dataDoi": "10.7935/qf3a-3z67"
+      },
+      "detectors": {
+        "H1": {
+          "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190412/v4/H-H1_GWOSC_4KHZ_R1-1239082247-32.txt.gz",
+          "gpsStart": 1239082247,
+          "sha256": "b9713b0ec82b6a1549560f5376f81ae16c4f462f9299736cd6dbfe9f89e7829d",
+          "bytes": 1334687,
+          "samples": 131072,
+          "sampleRate": 4096,
+          "seconds": 32,
+          "energyNearMerger": 23.3,
+          "excluded": null
+        },
+        "L1": {
+          "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190412/v4/L-L1_GWOSC_4KHZ_R1-1239082247-32.txt.gz",
+          "gpsStart": 1239082247,
+          "sha256": "f9f03a53deb7c2991faadb0d0f478326cf86933db6fb0e48fb8b8b803c63f1e7",
+          "bytes": 1337725,
+          "samples": 131072,
+          "sampleRate": 4096,
+          "seconds": 32,
+          "energyNearMerger": 41.3,
+          "excluded": null
+        }
+      },
+      "chosen": "L1",
+      "rule": "Of the two LIGO detectors, the one with the larger Q-scan energy within 0.1 s of the catalog GPS time, excluding any detector with a transient GWOSC documents inside the window.",
+      "psd": {
+        "method": "Welch",
+        "segmentSeconds": 4,
+        "overlap": 0.5,
+        "window": "Hann",
+        "average": "median, bias-corrected",
+        "segments": 11,
+        "excludedGps": [
+          [
+            1239082260.1,
+            1239082263.1
+          ]
+        ],
+        "why": "the 3 s around the merger were left out, so the signal is not estimated as noise"
+      },
+      "whitening": {
+        "function": "js/gw/match.js whiten()",
+        "band": [
+          20,
+          400
+        ],
+        "noiseUnits": "divided by 4.4826e-1, the standard deviation of the whitened file away from its tapered ends"
+      },
+      "window": {
+        "gpsStart": 1239082259.599609,
+        "before": 2.5,
+        "after": 0.5
+      },
+      "decimation": {
+        "from": 4096,
+        "to": 1024,
+        "method": "every fourth sample; no further filter, because whitening zeroed everything above 400 Hz",
+        "powerAboveNewNyquist": 0.00003622
+      },
+      "quantisation": {
+        "bits": 16,
+        "scale": 6542.221115,
+        "stepInNoiseSigma": 0.0001529,
+        "maxErrorInNoiseSigma": 0.00007641,
+        "sliceTableAgreesWithin": "1 per cent at every slice"
+      },
+      "sourceSamples": 131072,
+      "keptSamples": 3072,
+      "payloadSha256": "ee1adc9df6b2bec7783ac5c8dfbf0c7698eca39833894b409333e0bc7e956420"
+    },
+    "GW190521": {
+      "values": {
+        "catalog": "GWTC-2.1-confident",
+        "version": 4,
+        "json": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190521/v4/",
+        "pinned": "GW190521-GWTC-2.1-confident-v4.json",
+        "paperDoi": "10.1103/PhysRevD.109.022001"
+      },
+      "strainRelease": {
+        "catalog": "GWTC-2.1-confident",
+        "version": 4,
+        "json": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190521/v4/",
+        "dataDoi": "10.7935/qf3a-3z67"
+      },
+      "detectors": {
+        "H1": {
+          "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190521/v4/H-H1_GWOSC_4KHZ_R1-1242442952-32.txt.gz",
+          "gpsStart": 1242442952,
+          "sha256": "cbd3588e77ad0f785a29b59438677da6875731ea871a3d46a28cd5c63d2f4ffa",
+          "bytes": 1359493,
+          "samples": 131072,
+          "sampleRate": 4096,
+          "seconds": 32,
+          "energyNearMerger": 45.5,
+          "excluded": null
+        },
+        "L1": {
+          "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190521/v4/L-L1_GWOSC_4KHZ_R1-1242442952-32.txt.gz",
+          "gpsStart": 1242442952,
+          "sha256": "2b75e9e8d938d7a0e0c710658964407fb8b976ca570ffe1cc0f39b14935a46ae",
+          "bytes": 1337447,
+          "samples": 131072,
+          "sampleRate": 4096,
+          "seconds": 32,
+          "energyNearMerger": 94.8,
+          "excluded": null
+        }
+      },
+      "chosen": "L1",
+      "rule": "Of the two LIGO detectors, the one with the larger Q-scan energy within 0.1 s of the catalog GPS time, excluding any detector with a transient GWOSC documents inside the window.",
+      "psd": {
+        "method": "Welch",
+        "segmentSeconds": 4,
+        "overlap": 0.5,
+        "window": "Hann",
+        "average": "median, bias-corrected",
+        "segments": 11,
+        "excludedGps": [
+          [
+            1242442965.4,
+            1242442968.4
+          ]
+        ],
+        "why": "the 3 s around the merger were left out, so the signal is not estimated as noise"
+      },
+      "whitening": {
+        "function": "js/gw/match.js whiten()",
+        "band": [
+          20,
+          400
+        ],
+        "noiseUnits": "divided by 4.4764e-1, the standard deviation of the whitened file away from its tapered ends"
+      },
+      "window": {
+        "gpsStart": 1242442964.900391,
+        "before": 2.5,
+        "after": 0.5
+      },
+      "decimation": {
+        "from": 4096,
+        "to": 1024,
+        "method": "every fourth sample; no further filter, because whitening zeroed everything above 400 Hz",
+        "powerAboveNewNyquist": 0.00008217
+      },
+      "quantisation": {
+        "bits": 16,
+        "scale": 7068.014283,
+        "stepInNoiseSigma": 0.0001415,
+        "maxErrorInNoiseSigma": 0.00007074,
+        "sliceTableAgreesWithin": "1 per cent at every slice"
+      },
+      "sourceSamples": 131072,
+      "keptSamples": 3072,
+      "payloadSha256": "78ee138aea2df74af8c41425ab25ab9d92c690d5374331b9a67d84517795f0c9"
+    },
+    "GW190814": {
+      "values": {
+        "catalog": "GWTC-2.1-confident",
+        "version": 3,
+        "json": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190814/v3/",
+        "pinned": "GW190814-GWTC-2.1-confident-v3.json",
+        "paperDoi": "10.1103/PhysRevD.109.022001"
+      },
+      "strainRelease": {
+        "catalog": "GWTC-2.1-confident",
+        "version": 3,
+        "json": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190814/v3/",
+        "dataDoi": "10.7935/qf3a-3z67"
+      },
+      "detectors": {
+        "H1": {
+          "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190814/v3/H-H1_GWOSC_4KHZ_R1-1249852241-32.txt.gz",
+          "gpsStart": 1249852241,
+          "sha256": "6887e6376f0e7cd4cfacccb1ec874657aa46fcf2e6f73a87b6e04f68ca0fc9f2",
+          "bytes": 1363019,
+          "samples": 131072,
+          "sampleRate": 4096,
+          "seconds": 32,
+          "energyNearMerger": 16.6,
+          "excluded": null
+        },
+        "L1": {
+          "url": "https://gwosc.org/eventapi/json/GWTC-2.1-confident/GW190814/v3/L-L1_GWOSC_4KHZ_R1-1249852241-32.txt.gz",
+          "gpsStart": 1249852241,
+          "sha256": "1c5a36fdb1b49439edca2b730e226550fc82e30ed903ab8960f23f0f8c2e3d1c",
+          "bytes": 1341387,
+          "samples": 131072,
+          "sampleRate": 4096,
+          "seconds": 32,
+          "energyNearMerger": 26.3,
+          "excluded": null
+        }
+      },
+      "chosen": "L1",
+      "rule": "Of the two LIGO detectors, the one with the larger Q-scan energy within 0.1 s of the catalog GPS time, excluding any detector with a transient GWOSC documents inside the window.",
+      "psd": {
+        "method": "Welch",
+        "segmentSeconds": 4,
+        "overlap": 0.5,
+        "window": "Hann",
+        "average": "median, bias-corrected",
+        "segments": 12,
+        "excludedGps": [
+          [
+            1249852255,
+            1249852258
+          ]
+        ],
+        "why": "the 3 s around the merger were left out, so the signal is not estimated as noise"
+      },
+      "whitening": {
+        "function": "js/gw/match.js whiten()",
+        "band": [
+          20,
+          400
+        ],
+        "noiseUnits": "divided by 4.4430e-1, the standard deviation of the whitened file away from its tapered ends"
+      },
+      "window": {
+        "gpsStart": 1249852254.5,
+        "before": 2.5,
+        "after": 0.5
+      },
+      "decimation": {
+        "from": 4096,
+        "to": 1024,
+        "method": "every fourth sample; no further filter, because whitening zeroed everything above 400 Hz",
+        "powerAboveNewNyquist": 0.00007114
+      },
+      "quantisation": {
+        "bits": 16,
+        "scale": 6252.28683,
+        "stepInNoiseSigma": 0.0001599,
+        "maxErrorInNoiseSigma": 0.00007996,
+        "sliceTableAgreesWithin": "1 per cent at every slice"
+      },
+      "sourceSamples": 131072,
+      "keptSamples": 3072,
+      "payloadSha256": "c7a270ba9e50c900587f1728a6caca259759f5b3ad784fb79f5e2816d0bfa772"
+    }
+  },
+  "evidence": {
+    "observedStrain": "The strain in the data module. Measured by the LIGO detectors; published by GWOSC. Whitened, windowed, decimated and quantised by this project as recorded per event - never altered in any other way.",
+    "measuredFromStrain": "The noise spectrum, the time-frequency map, the end of the chirp - the last instant anything in it clears the noise, which is not the merger time the catalog publishes - and the loudest frequency at each time before that end. Computed by this project from the committed strain, in the browser, with js/gw/psd.js and js/gw/qscan.js.",
+    "catalogValue": "Masses, chirp mass, distance, redshift, final mass and network signal-to-noise ratio. Copied from the GWOSC event version named beside them. Gravitas did not measure any of them.",
+    "model": "Any curve computed from a formula - the leading-order chirp track, from the catalog chirp mass. Labelled as a model wherever it is drawn.",
+    "illustration": "None in this bundle."
+  },
+  "selection": {
+    "rule": "Included only if the chirp is visible in the processed data and the event adds a contrast the others do not. Nine candidates tested on 2026-09-23 UTC.",
+    "rejected": [
+      {
+        "id": "GW151226",
+        "why": "Low-mass binary black hole, network SNR 13. Its track is at or below the noise pixel by pixel in both detectors: largest normalised Q-scan energy 17 (H1) and 23 (L1) against a noise maximum near 13, spread along a track a student could not follow."
+      },
+      {
+        "id": "GW170608",
+        "why": "Low-mass binary black hole, network SNR 15. A faint track in each detector, energy 30 (H1) and 20 (L1), too weak along most of its length to measure."
+      },
+      {
+        "id": "GW170814",
+        "why": "Clearly visible, but a near twin of GW150914 (source-frame chirp mass 24.1 against 28.6, both from GWTC-1): it would repeat a contrast rather than add one."
+      },
+      {
+        "id": "GW200115",
+        "why": "A neutron star and a black hole, network SNR 11. Its largest energy within 0.1 s of the catalog time is 9.4 (H1) and 12.9 (L1), below what noise alone reaches in that many pixels. The catalog classification is honest; the data show nothing a student could see."
+      }
+    ]
+  },
+  "documentedGlitches": [
+    {
+      "event": "GW170817",
+      "detector": "L1",
+      "gps": 1187008881.389,
+      "what": "a sub-5 ms saturation in a digital-to-analog converter, about 1.1 s before merger",
+      "source": "https://gwosc.org/events/GW170817/"
+    }
+  ],
+  "notDone": [
+    "No gating and no glitch subtraction. A detector with a documented transient in the window is not used instead.",
+    "No time shift or sign change between detectors.",
+    "No template, matched filter, fit or parameter estimate. Nothing here is a detection statistic.",
+    "No chirp-mass estimate. One was tried - the 0PN relation inverted from pairs of points on the time-frequency track - and rejected: it failed outright on two of the five events, ran 16 per cent high on the one where it was stable, and depended on tuning a student could not see."
+  ],
+  "assumptions": [
+    "The strain is as GWOSC publishes it; nothing is gated, subtracted, shifted or inverted.",
+    "The catalog values are the GWOSC event versions named beside them, copied; Gravitas did not measure any of them."
+  ],
+  "compatible": {
+    "widgets": [
+      "gw-events"
+    ],
+    "investigations": [
+      "listening-to-spacetime"
+    ]
+  },
+  "offline": "core",
+  "derived": {
+    "file": "js/data/gw/gwoscEvents.js",
+    "bytes": 63222,
+    "sha256": "4b5afc5752e2ff42f2905a4ea36671cdfa13bc6718c3b49524102d7f9bd0e41b"
+  },
+  "validation": {
+    "check": "for each of the four binary black holes, the end of the chirp measured on the committed strain (js/gw/qscan.js signalEnd) is within 100 ms of the GWOSC catalog time. GW170817, a neutron-star pair whose track ends below the noise ceiling, is held to its discovery paper by tests/gwoscEvents.test.js instead.",
+    "against": [
+      {
+        "quantity": "GW150914 merger time (GPS)",
+        "value": 1126259462.4,
+        "unit": "s",
+        "ref": "GWOSC GWTC-2.1-confident v4"
+      },
+      {
+        "quantity": "GW170817 merger time (GPS)",
+        "value": 1187008882.4,
+        "unit": "s",
+        "ref": "GWOSC GWTC-1-confident v3"
+      },
+      {
+        "quantity": "GW190412 merger time (GPS)",
+        "value": 1239082262.1,
+        "unit": "s",
+        "ref": "GWOSC GWTC-2.1-confident v4"
+      },
+      {
+        "quantity": "GW190521 merger time (GPS)",
+        "value": 1242442967.4,
+        "unit": "s",
+        "ref": "GWOSC GWTC-2.1-confident v4"
+      },
+      {
+        "quantity": "GW190814 merger time (GPS)",
+        "value": 1249852257,
+        "unit": "s",
+        "ref": "GWOSC GWTC-2.1-confident v3"
+      }
+    ],
+    "result": {
+      "endMinusCatalogMs": {
+        "GW150914": 32.6,
+        "GW170817": null,
+        "GW190412": 54.3,
+        "GW190521": 77.5,
+        "GW190814": -6.8
+      }
+    }
+  }
+}

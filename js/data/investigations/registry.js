@@ -59,19 +59,45 @@ export { gradedSteps };
  */
 export let MANIFEST = MANIFEST_EN;
 
+/**
+ * The cards of a language with their summaries.
+ *
+ * The manifest carries no summary: the paragraph is written once, in
+ * summaries.js, and fetched here only when the lesson browser asks for the
+ * catalog, so opening a lesson never pays for twenty-four of them.
+ */
+const withSummaries = (cards, summaries, fallback = {}) =>
+  cards.map(card => ({
+    ...card,
+    summary: summaries[card.id] || fallback[card.id],
+  }));
+// A summaries file that fails to load leaves the cards (and their titles)
+// whole, only without the paragraph.
+const noSummaries = () => ({});
+
 const MANIFESTS = {
-  en: () => Promise.resolve({ MANIFEST: MANIFEST_EN }),
-  es: () => import('./manifest.es.js'),
+  en: () =>
+    import('./summaries.js')
+      .then(s => s.SUMMARIES)
+      .catch(noSummaries)
+      .then(s => ({ MANIFEST: withSummaries(MANIFEST_EN, s) })),
+  es: () =>
+    Promise.all([
+      import('./manifest.es.js'),
+      import('./summaries.es.js').then(s => s.SUMMARIES_ES, noSummaries),
+      import('./summaries.js').then(s => s.SUMMARIES, noSummaries),
+    ]).then(([m, es, en]) => ({
+      MANIFEST: withSummaries(m.MANIFEST, es, en),
+    })),
 };
 
 /**
- * The lesson loaders, by id.
- *
- * Written out rather than built from a template string because a bundler has to
- * see a static specifier to split a chunk for it: `import('./' + id + '.js')`
- * either bundles all ten into one chunk or fails outright, which is the exact
- * thing this module exists to avoid.
+ * The lesson loaders, by id. Literal specifiers, because a bundler has to see
+ * one to split a chunk for it: `import('./' + id + '.js')` bundles every lesson
+ * into one chunk, the thing this module exists to avoid. Generated
+ * (tools/capability-registries.mjs).
  */
+// <generated:loaders>
 const LOADERS = {
   'keplers-laws': () => import('./keplers-laws.js'),
   'retrograde-motion': () => import('./retrograde-motion.js'),
@@ -96,18 +122,54 @@ const LOADERS = {
   'listening-to-spacetime': () => import('./listening-to-spacetime.js'),
   'a-universe-of-stars': () => import('./a-universe-of-stars.js'),
   'lives-of-stars': () => import('./lives-of-stars.js'),
+  'twelve-nights': () => import('./twelve-nights.js'),
+  'power-law-gravity': () => import('./power-law-gravity.js'),
+  'color-and-temperature': () => import('./color-and-temperature.js'),
+  'the-turning-sky': () => import('./the-turning-sky.js'),
+  'the-sun-through-the-year': () => import('./the-sun-through-the-year.js'),
+  'phases-and-eclipses': () => import('./phases-and-eclipses.js'),
+  'wanderers-on-the-sky': () => import('./wanderers-on-the-sky.js'),
+  'plan-a-night': () => import('./plan-a-night.js'),
+  'lines-and-motion': () => import('./lines-and-motion.js'),
+  'what-a-spectrum-is-made-of': () => import('./what-a-spectrum-is-made-of.js'),
+  'the-suns-motion': () => import('./the-suns-motion.js'),
+  'the-rotating-disk': () => import('./the-rotating-disk.js'),
+  'cluster-membership': () => import('./cluster-membership.js'),
+  'inside-a-star': () => import('./inside-a-star.js'),
+  'scaling-the-main-sequence': () => import('./scaling-the-main-sequence.js'),
+  'the-limit': () => import('./the-limit.js'),
+  'the-expanding-universe': () => import('./the-expanding-universe.js'),
+  'standard-candles': () => import('./standard-candles.js'),
+  'the-shape-of-expansion': () => import('./the-shape-of-expansion.js'),
+  'where-galaxies-live': () => import('./where-galaxies-live.js'),
+  'what-a-ccd-records': () => import('./what-a-ccd-records.js'),
+  'signal-noise-and-exposure': () => import('./signal-noise-and-exposure.js'),
+  'a-variable-star-from-frames': () =>
+    import('./a-variable-star-from-frames.js'),
+  'the-beat-of-a-star': () => import('./the-beat-of-a-star.js'),
+  'leavitts-law': () => import('./leavitts-law.js'),
+  'the-first-rung': () => import('./the-first-rung.js'),
+  'which-kind-of-variable': () => import('./which-kind-of-variable.js'),
+  'bending-light': () => import('./bending-light.js'),
+  'einstein-rings-and-arcs': () => import('./einstein-rings-and-arcs.js'),
+  'a-lens-passing-by': () => import('./a-lens-passing-by.js'),
+  'who-gets-counted': () => import('./who-gets-counted.js'),
+  'why-the-bright-ones-win': () => import('./why-the-bright-ones-win.js'),
+  'the-completeness-curve': () => import('./the-completeness-curve.js'),
+  'integrators-in-practice': () => import('./integrators-in-practice.js'),
+  'extending-an-experiment': () => import('./extending-an-experiment.js'),
+  'refitting-a-transit': () => import('./refitting-a-transit.js'),
+  'two-periodograms': () => import('./two-periodograms.js'),
+  'sampling-a-posterior': () => import('./sampling-a-posterior.js'),
 };
+// </generated:loaders>
 
 /**
- * The translations, by locale and then by lesson.
- *
- * A translation is a shadow of a lesson carrying only its words - see ./i18n.js
- * - so it is a fraction of the size of the lesson and is fetched alongside it
- * only when the interface is in that language. English needs none: it is what
- * the lessons are written in.
- *
- * Static specifiers again, for the same reason as above.
+ * The translations, by locale and then by lesson: a shadow of a lesson carrying
+ * only its words (./i18n.js), fetched alongside it when the interface is in that
+ * language. English needs none. Static specifiers again, and generated too.
  */
+// <generated:translations>
 const TRANSLATIONS = {
   es: {
     'keplers-laws': () => import('./es/keplers-laws.js'),
@@ -133,12 +195,52 @@ const TRANSLATIONS = {
     'listening-to-spacetime': () => import('./es/listening-to-spacetime.js'),
     'a-universe-of-stars': () => import('./es/a-universe-of-stars.js'),
     'lives-of-stars': () => import('./es/lives-of-stars.js'),
+    'twelve-nights': () => import('./es/twelve-nights.js'),
+    'power-law-gravity': () => import('./es/power-law-gravity.js'),
+    'color-and-temperature': () => import('./es/color-and-temperature.js'),
+    'the-turning-sky': () => import('./es/the-turning-sky.js'),
+    'the-sun-through-the-year': () =>
+      import('./es/the-sun-through-the-year.js'),
+    'phases-and-eclipses': () => import('./es/phases-and-eclipses.js'),
+    'wanderers-on-the-sky': () => import('./es/wanderers-on-the-sky.js'),
+    'plan-a-night': () => import('./es/plan-a-night.js'),
+    'lines-and-motion': () => import('./es/lines-and-motion.js'),
+    'what-a-spectrum-is-made-of': () =>
+      import('./es/what-a-spectrum-is-made-of.js'),
+    'the-suns-motion': () => import('./es/the-suns-motion.js'),
+    'the-rotating-disk': () => import('./es/the-rotating-disk.js'),
+    'cluster-membership': () => import('./es/cluster-membership.js'),
+    'inside-a-star': () => import('./es/inside-a-star.js'),
+    'scaling-the-main-sequence': () =>
+      import('./es/scaling-the-main-sequence.js'),
+    'the-limit': () => import('./es/the-limit.js'),
+    'the-expanding-universe': () => import('./es/the-expanding-universe.js'),
+    'standard-candles': () => import('./es/standard-candles.js'),
+    'the-shape-of-expansion': () => import('./es/the-shape-of-expansion.js'),
+    'where-galaxies-live': () => import('./es/where-galaxies-live.js'),
+    'what-a-ccd-records': () => import('./es/what-a-ccd-records.js'),
+    'signal-noise-and-exposure': () =>
+      import('./es/signal-noise-and-exposure.js'),
+    'a-variable-star-from-frames': () =>
+      import('./es/a-variable-star-from-frames.js'),
+    'the-beat-of-a-star': () => import('./es/the-beat-of-a-star.js'),
+    'leavitts-law': () => import('./es/leavitts-law.js'),
+    'the-first-rung': () => import('./es/the-first-rung.js'),
+    'which-kind-of-variable': () => import('./es/which-kind-of-variable.js'),
+    'bending-light': () => import('./es/bending-light.js'),
+    'einstein-rings-and-arcs': () => import('./es/einstein-rings-and-arcs.js'),
+    'a-lens-passing-by': () => import('./es/a-lens-passing-by.js'),
+    'who-gets-counted': () => import('./es/who-gets-counted.js'),
+    'why-the-bright-ones-win': () => import('./es/why-the-bright-ones-win.js'),
+    'the-completeness-curve': () => import('./es/the-completeness-curve.js'),
+    'integrators-in-practice': () => import('./es/integrators-in-practice.js'),
+    'extending-an-experiment': () => import('./es/extending-an-experiment.js'),
+    'refitting-a-transit': () => import('./es/refitting-a-transit.js'),
+    'two-periodograms': () => import('./es/two-periodograms.js'),
+    'sampling-a-posterior': () => import('./es/sampling-a-posterior.js'),
   },
 };
-
-/** @returns {boolean} True if this locale has lesson translations at all */
-export const hasLessonTranslations = locale =>
-  Object.hasOwn(TRANSLATIONS, locale);
+// </generated:translations>
 
 // Keyed by `${locale}:${id}`, so switching language and switching back does not
 // re-merge, and so a lesson open in Spanish and the same lesson opened again in
@@ -161,6 +263,8 @@ let lessonLocale = requestedLessonLocale() || 'en';
 
 /** The in-flight catalog fetch, if there is one. See lessonCatalogReady. */
 let manifestLoad = null;
+/** Whether the browser has asked for the cards with their summaries. */
+let summariesWanted = false;
 
 /**
  * Choose the language lessons are loaded in.
@@ -174,6 +278,12 @@ let manifestLoad = null;
  */
 export function setLessonLocale(locale) {
   lessonLocale = locale || 'en';
+  // English cards need no fetch until the browser asks for them with their
+  // summaries; a lesson opened by link never does.
+  if (lessonLocale === 'en' && !summariesWanted) {
+    MANIFEST = MANIFEST_EN;
+    return (manifestLoad = Promise.resolve(MANIFEST));
+  }
   // The catalog follows the lessons. Fetched rather than bundled, so a
   // reader who never switches language never pays for the other one.
   const load = MANIFESTS[lessonLocale] || MANIFESTS.en;
@@ -211,7 +321,11 @@ export const getLessonLocale = () => lessonLocale;
  * @returns {Promise<Array>} The manifest for the current language
  */
 export function lessonCatalogReady() {
-  return manifestLoad || Promise.resolve(MANIFEST);
+  if (!summariesWanted) {
+    summariesWanted = true;
+    return setLessonLocale(lessonLocale);
+  }
+  return manifestLoad || setLessonLocale(lessonLocale);
 }
 
 // And fetch the card-level catalog for that language, now, without waiting to
@@ -238,6 +352,25 @@ export const investigationMeta = id => MANIFEST.find(m => m.id === id);
 
 /** @param {string} id - Investigation id @returns {boolean} True if it exists */
 export const hasInvestigation = id => Object.hasOwn(LOADERS, id);
+
+/**
+ * Loaders a capability package supplies for a lesson.
+ *
+ * Installed by the platform (js/platform/lessons.js) rather than imported here:
+ * a content registry does not depend on the layer that loads packages, so the
+ * package route arrives through this door and everything below - memoizing,
+ * the translation merge, the retry after a failed fetch - is unchanged.
+ *
+ * @param {string} id - Investigation id
+ * @param {{lesson: Function, translations?: Record<string, Function>}} loaders
+ */
+export function provideLessonLoaders(id, { lesson, translations = {} }) {
+  LOADERS[id] = lesson;
+  for (const [locale, load] of Object.entries(translations)) {
+    TRANSLATIONS[locale] = TRANSLATIONS[locale] || {};
+    TRANSLATIONS[locale][id] = load;
+  }
+}
 
 /**
  * A lesson already in memory, or undefined.

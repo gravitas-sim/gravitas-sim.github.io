@@ -1,0 +1,359 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "gaia-dr3-solar-neighbourhood",
+  "version": "1.0.0",
+  "title": "The solar neighbourhood: 1,570 Gaia DR3 stars with radial velocities",
+  "object": {
+    "name": "the solar neighbourhood (stars within 1 kpc of the Sun)",
+    "identifiers": [
+      "Gaia DR3 (source ids are left out)"
+    ],
+    "frame": "ICRS, epoch J2016.0"
+  },
+  "facility": {
+    "observatory": "ESA Gaia",
+    "instrument": "Gaia astrometric, photometric and radial-velocity spectrometer instruments",
+    "pipeline": "Gaia DR3 (gaiadr3.gaia_source), via the ESA Gaia archive TAP service"
+  },
+  "dataType": "catalog",
+  "origin": "observed",
+  "credit": "ESA/Gaia/DPAC; Gaia Collaboration (Vallenari et al. 2023, A&A 674, A1). This work has made use of data from the European Space Agency (ESA) mission Gaia (https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and Analysis Consortium (DPAC). NON-COMMERCIAL: CC BY-NC 3.0 IGO.",
+  "license": {
+    "status": "cc-by-nc-3.0-igo",
+    "statement": "ESA's Gaia data licence page (https://www.cosmos.esa.int/web/gaia-users/license, read 2026-10-10) says: \"Gaia data are distributed under the CC BY-NC 3.0 IGO license.\" and refers to ESA's Terms and Conditions for the use of data in the ESA space science archives for commercial use. This pack is a compact subset of Gaia DR3, offered under CC BY-NC 3.0 IGO: attribute ESA/Gaia/DPAC and the Gaia DR3 papers, do not use it commercially, and say that it is a selected and rounded subset of the archive (the selection is the query in the manifest and each column's rounding is stated).",
+    "basis": "CC BY-NC 3.0 IGO permits copying, redistribution and adaptation, which includes a derived subset of the catalogue, with attribution and for non-commercial purposes; Gravitas is a free educational tool. It is the same licence, and so the same mechanism, as radiation-gaia-bandpasses (D-RAD-01), which the project owner shipped by explicit instruction; extending it to these Gaia samples is a delegated decision awaiting his review (DECISION_REGISTER.md D-GAIA-01), not a standing licence. Each sample is a pack of its own so that no other data is covered by the NC terms, and none may be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md); removing the pack is removing its module, manifest and service-worker entry.",
+    "nonCommercial": true
+  },
+  "retrieved": "2026-10-10",
+  "columns": [
+    {
+      "id": "ra",
+      "name": "ra",
+      "unit": "deg",
+      "description": "right ascension, ICRS, epoch J2016.0"
+    },
+    {
+      "id": "dec",
+      "name": "dec",
+      "unit": "deg",
+      "description": "declination, ICRS, epoch J2016.0"
+    },
+    {
+      "id": "parallax",
+      "name": "parallax",
+      "unit": "mas",
+      "description": "parallax (parallax), not corrected for the zero point"
+    },
+    {
+      "id": "parallax_err",
+      "name": "parallax error",
+      "unit": "mas",
+      "uncertaintyOf": "parallax",
+      "description": "its one-sigma error (parallax_error)"
+    },
+    {
+      "id": "pmra",
+      "name": "pm ra",
+      "unit": "mas/yr",
+      "description": "proper motion in right ascension times cos(dec), mu_alpha* (pmra)"
+    },
+    {
+      "id": "pmra_err",
+      "name": "pm ra error",
+      "unit": "mas/yr",
+      "uncertaintyOf": "pm ra",
+      "description": "its one-sigma error (pmra_error)"
+    },
+    {
+      "id": "pmdec",
+      "name": "pm dec",
+      "unit": "mas/yr",
+      "description": "proper motion in declination (pmdec)"
+    },
+    {
+      "id": "pmdec_err",
+      "name": "pm dec error",
+      "unit": "mas/yr",
+      "uncertaintyOf": "pm dec",
+      "description": "its one-sigma error (pmdec_error)"
+    },
+    {
+      "id": "rv",
+      "name": "radial velocity",
+      "unit": "km/s",
+      "description": "heliocentric radial velocity from the Gaia spectrometer (radial_velocity)"
+    },
+    {
+      "id": "rv_err",
+      "name": "radial velocity error",
+      "unit": "km/s",
+      "uncertaintyOf": "radial velocity",
+      "description": "its one-sigma error (radial_velocity_error)"
+    },
+    {
+      "id": "g",
+      "name": "G",
+      "unit": "mag",
+      "description": "Gaia G magnitude (phot_g_mean_mag)"
+    },
+    {
+      "id": "bp_rp",
+      "name": "BP-RP",
+      "unit": "mag",
+      "description": "Gaia BP minus RP colour (bp_rp), not corrected for extinction"
+    }
+  ],
+  "masks": [],
+  "reductions": [
+    "The cuts: RUWE below 1.4 (Gaia's flag for a poor astrometric solution), a parallax measured to more than 10 times its error (so that 1/parallax is a distance to 10 percent or better), and a Gaia radial velocity.",
+    "Two strata of the stars that pass those cuts, each a random subset chosen by Gaia's own random_index: the nearer 489 stars (parallax above 10 mas, closer than 100 pc) are about 1 in 273 of the 133,468 that pass; the remaining 1081 (parallax 1 to 10 mas, 100 pc to 1 kpc) are about 1 in 9,065 of the 9,798,805. The proportions are not the sky's: the near stratum is over-sampled so that the Sun's motion has stars near enough to be measured without the Galaxy's rotation in them.",
+    "Gaia measures radial velocities only for stars brighter than about G_RVS = 14, which favours bright stars; the sample is not volume-complete and its colours are not those of the stellar population.",
+    "No parallax zero-point correction is applied (Lindegren et al. 2021 give about -0.017 mas on average: 1.7 percent at 100 pc, 1.7 percent at 1 kpc to the distance).",
+    "Positions are rounded to 0.006 degree in right ascension and 0.004 degree in declination (22 and 14 arcsec), parallaxes to 0.02 mas, proper motions to 0.01 mas/yr, radial velocities to 0.02 km/s: good for Galactic coordinates to 0.01 degree and for velocities to under 0.1 km/s, not for a cross-match.",
+    "Galactic longitude and latitude are not stored: the galactic kernel computes them from the position, and its transformation is tested against the values Gaia's archive gives.",
+    "The Gaia source ids are left out; the query in the pack's manifest returns them."
+  ],
+  "source": {
+    "archive": "ESA Gaia archive, Gaia DR3",
+    "urls": [
+      "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+radial_velocity%2C+radial_velocity_error%2C+phot_g_mean_mag%2C+bp_rp+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+%28%28parallax%3E10+AND+random_index%3C7000000%29+OR+%28parallax%3E1+AND+parallax%3C%3D10+AND+random_index%3C200000%29%29+ORDER+BY+source_id",
+      "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+parallax%3E10",
+      "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+parallax%3E1+AND+parallax%3C%3D10"
+    ],
+    "queries": [
+      "SELECT ra, dec, parallax, parallax_error, pmra, pmra_error, pmdec, pmdec_error, radial_velocity, radial_velocity_error, phot_g_mean_mag, bp_rp FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND radial_velocity IS NOT NULL AND parallax_over_error>10 AND ((parallax>10 AND random_index<7000000) OR (parallax>1 AND parallax<=10 AND random_index<200000)) ORDER BY source_id",
+      "SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND radial_velocity IS NOT NULL AND parallax_over_error>10 AND parallax>10",
+      "SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND radial_velocity IS NOT NULL AND parallax_over_error>10 AND parallax>1 AND parallax<=10"
+    ],
+    "citations": [
+      {
+        "text": "Gaia Collaboration, Vallenari et al. 2023, A&A 674, A1 (Gaia Data Release 3: summary of the content and survey properties)",
+        "doi": "10.1051/0004-6361/202243940"
+      },
+      {
+        "text": "Gaia Collaboration, Prusti et al. 2016, A&A 595, A1 (The Gaia mission)",
+        "doi": "10.1051/0004-6361/201629272"
+      },
+      {
+        "text": "Katz et al. 2023, A&A 674, A5 (Gaia DR3: properties and validation of the radial velocities)",
+        "doi": "10.1051/0004-6361/202244220"
+      },
+      {
+        "text": "Lindegren et al. 2021, A&A 649, A2 (Gaia EDR3: astrometric solution; the RUWE statistic and the parallax zero-point)",
+        "doi": "10.1051/0004-6361/202039709"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "gaia-dr3-solar-neighbourhood.csv",
+      "url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+radial_velocity%2C+radial_velocity_error%2C+phot_g_mean_mag%2C+bp_rp+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+%28%28parallax%3E10+AND+random_index%3C7000000%29+OR+%28parallax%3E1+AND+parallax%3C%3D10+AND+random_index%3C200000%29%29+ORDER+BY+source_id",
+      "sha256": "7b324e0a01f7928537a9d71be5b0bbc6eaaa44dc4b32ee1e3b7dd3a3e2127a35",
+      "bytes": 266354
+    },
+    {
+      "file": "gaia-dr3-solar-near-pool.csv",
+      "url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+parallax%3E10",
+      "sha256": "56830b003675e9a7b84c45faaeb1469d94bf0a6c9174cad0d394ac03b0b46c70",
+      "bytes": 9
+    },
+    {
+      "file": "gaia-dr3-solar-far-pool.csv",
+      "url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+parallax%3E1+AND+parallax%3C%3D10",
+      "sha256": "8a7d02161d531f2fdbef9fdb9cafdf8b6dc7846e2d7dea900926d02536a93ce6",
+      "bytes": 10
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/gaia-dynamics.mjs",
+    "version": "1.0.0",
+    "options": {
+      "columns": [
+        {
+          "id": "ra",
+          "step": 0.006
+        },
+        {
+          "id": "dec",
+          "step": 0.004
+        },
+        {
+          "id": "parallax",
+          "step": 0.02
+        },
+        {
+          "id": "parallax_err",
+          "step": 0.001
+        },
+        {
+          "id": "pmra",
+          "step": 0.01
+        },
+        {
+          "id": "pmra_err",
+          "step": 0.001
+        },
+        {
+          "id": "pmdec",
+          "step": 0.01
+        },
+        {
+          "id": "pmdec_err",
+          "step": 0.001
+        },
+        {
+          "id": "rv",
+          "step": 0.02
+        },
+        {
+          "id": "rv_err",
+          "step": 0.01
+        },
+        {
+          "id": "g",
+          "step": 0.001
+        },
+        {
+          "id": "bp_rp",
+          "step": 0.001
+        }
+      ]
+    },
+    "steps": [
+      "Query Gaia DR3 for stars with RUWE below 1.4, a radial velocity and a parallax measured to better than 10 sigma, taking the random subset random_index < 7,000,000 of those with parallax above 10 mas and random_index < 200,000 of those with parallax 1 to 10 mas, ordered by source id.",
+      "Count, in two further queries, every star passing the cuts in each stratum, for the sampling fractions.",
+      "Encode as table-columns/1: each column a whole number of its step from an offset, int16 where the range fits."
+    ],
+    "record": {
+      "rows": 1570,
+      "columns": [
+        {
+          "id": "ra",
+          "type": "int16",
+          "step": 0.006,
+          "missing": 0,
+          "maxRounding": 0.003
+        },
+        {
+          "id": "dec",
+          "type": "int16",
+          "step": 0.004,
+          "missing": 0,
+          "maxRounding": 0.002
+        },
+        {
+          "id": "parallax",
+          "type": "int16",
+          "step": 0.02,
+          "missing": 0,
+          "maxRounding": 0.00999
+        },
+        {
+          "id": "parallax_err",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "pmra",
+          "type": "int32",
+          "step": 0.01,
+          "missing": 0,
+          "maxRounding": 0.005
+        },
+        {
+          "id": "pmra_err",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "pmdec",
+          "type": "int32",
+          "step": 0.01,
+          "missing": 0,
+          "maxRounding": 0.005
+        },
+        {
+          "id": "pmdec_err",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.000499
+        },
+        {
+          "id": "rv",
+          "type": "int16",
+          "step": 0.02,
+          "missing": 0,
+          "maxRounding": 0.01
+        },
+        {
+          "id": "rv_err",
+          "type": "int16",
+          "step": 0.01,
+          "missing": 0,
+          "maxRounding": 0.00499
+        },
+        {
+          "id": "g",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "bp_rp",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 5,
+          "maxRounding": 0.0005
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    "Distance is 1/parallax with no zero-point correction and no prior; at parallax over error above 10 that is accurate to 10 percent or better, and the bias from the omitted correction is stated above.",
+    "The Sun is at the origin; velocities are heliocentric until a student subtracts the Sun's motion."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/observations/gaiaSolarNeighbourhood.js",
+    "bytes": 7982,
+    "sha256": "f0effd8e7fa979ecdb71c8a79f7e62f01642d5fb880123dba0a28f5b62bf7e87",
+    "sidecar": {
+      "file": "gaia/solar-neighbourhood.json",
+      "bytes": 59345,
+      "sha256": "8e0a738c697822aa7204c6dcc1118bc1755380a6a7c635c6da4c5f5e6f8d3c23"
+    }
+  },
+  "validation": {
+    "check": "the kernel's solar motion from the stars within 100 pc has U and W within 3 km/s of Schonrich, Binney and Dehnen 2010",
+    "against": [
+      {
+        "quantity": "U",
+        "value": 11.1,
+        "unit": "km/s",
+        "ref": "Schonrich, Binney & Dehnen 2010, MNRAS 403, 1829"
+      },
+      {
+        "quantity": "W",
+        "value": 7.25,
+        "unit": "km/s",
+        "ref": "Schonrich, Binney & Dehnen 2010, MNRAS 403, 1829"
+      }
+    ],
+    "result": {
+      "U": 10.48,
+      "W": 9.1,
+      "stars": 489
+    }
+  }
+}

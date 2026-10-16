@@ -14,6 +14,8 @@
 // is to call the same function.
 // =============================================================================
 
+// Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
+import './instrumentStartup.js';
 import {
   radialVelocitySemiAmplitude,
   stellarReflexSemimajorAxis,

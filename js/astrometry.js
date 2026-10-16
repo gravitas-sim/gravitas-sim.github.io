@@ -176,9 +176,6 @@ export function maxObservedOffset() {
   return au === null ? null : { au, arcsec: au / distancePc };
 }
 
-/** @returns {Array<{x: number, y: number}>} The recorded sky path, in AU */
-export const astrometryTrail = () => trail.map(p => ({ ...p }));
-
 /** @returns {number} The distance being assumed, in parsecs */
 export const getAssumedDistance = () => distancePc;
 
@@ -215,9 +212,6 @@ export function clearAstrometry() {
   });
   render();
 }
-
-/** @returns {boolean} Whether the panel is open */
-export const isAstrometryEnabled = () => enabled;
 
 function cacheElements() {
   if (els) return els;
@@ -622,7 +616,7 @@ export function initAstrometry() {
   e.close?.addEventListener('click', () => setAstrometryEnabled(false));
   e.clear?.addEventListener('click', () => clearAstrometry());
   e.distance?.addEventListener('input', ev => {
-    setAssumedDistance(parseFloat(ev.target.value));
+    setAssumedDistance(ev.target.valueAsNumber);
     distanceIsMeasured = false;
     render();
   });

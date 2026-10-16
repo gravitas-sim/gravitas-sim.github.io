@@ -1,5 +1,5 @@
 {
-  "Solar System": {
+  "solar-system": {
     "error": null,
     "count": 35,
     "byType": {
@@ -11,7 +11,7 @@
     },
     "totalMass": 1001.3412903,
     "momentumResidual": "about 1e0 of the momentum summed",
-    "scenarioName": "Solar System",
+    "scenarioName": "solar-system",
     "presetSentinel": "None",
     "zoom": 0.25,
     "pan": {
@@ -26,7 +26,7 @@
       "planets|1|Planet|71|Venus|0.00244784403714|4.70237529379|51.1238202798|51.1238202798|-2.62975841519|2.62975841519||"
     ]
   },
-  "Retrograde Mars": {
+  "retrograde-mars": {
     "error": null,
     "count": 3,
     "byType": {
@@ -35,7 +35,7 @@
     },
     "totalMass": 1000.00332486,
     "momentumResidual": "about 1e0 of the momentum summed",
-    "scenarioName": "Retrograde Mars",
+    "scenarioName": "retrograde-mars",
     "presetSentinel": "None",
     "zoom": 1.6,
     "pan": {
@@ -50,7 +50,7 @@
       "planets|1|Planet|5|Mars|0.000321373388925|3|-144.845907432|-47.0632882433|0.79183083981|-2.43700473991|P|"
     ]
   },
-  "Earth-Moon System": {
+  "earth-moon-system": {
     "error": null,
     "count": 2,
     "byType": {
@@ -58,7 +58,7 @@
     },
     "totalMass": 0.0030404325384,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Earth-Moon System",
+    "scenarioName": "earth-moon-system",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -72,7 +72,7 @@
       "planets|1|Planet|2|Luna|0.0000369429222783|3|32.9622398121|-10.4356483854|0.263636970083|0.832728807092||"
     ]
   },
-  "TRAPPIST-1 System": {
+  "trappist-1-system": {
     "error": null,
     "count": 8,
     "byType": {
@@ -81,7 +81,7 @@
     },
     "totalMass": 89.819366501,
     "momentumResidual": "about 1e-1 of the momentum summed",
-    "scenarioName": "TRAPPIST-1 System",
+    "scenarioName": "trappist-1-system",
     "presetSentinel": "None",
     "zoom": 55,
     "pan": {
@@ -96,7 +96,7 @@
       "planets|1|Planet|9|TRAPPIST-1c|0.00392856441789|0.126155|0.985113886937|1.2352937423|-5.89417165107|4.70044504124||"
     ]
   },
-  "Three-Body Sensitivity Lab": {
+  "three-body-sensitivity-lab": {
     "error": null,
     "count": 3,
     "byType": {
@@ -104,7 +104,7 @@
     },
     "totalMass": 18000,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Three-Body Sensitivity Lab",
+    "scenarioName": "three-body-sensitivity-lab",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -119,7 +119,7 @@
       "stars|2|StarObject|5|Gamma|6000|8|-25|-43.3012701892|10.1942654691|-5.88566191277|P|"
     ]
   },
-  "Galilean Resonance": {
+  "galilean-resonance": {
     "error": null,
     "count": 5,
     "byType": {
@@ -128,7 +128,7 @@
     },
     "totalMass": 0.954989618547,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Galilean Resonance",
+    "scenarioName": "galilean-resonance",
     "presetSentinel": "None",
     "zoom": 2.8,
     "pan": {
@@ -143,7 +143,7 @@
       "planets|1|Planet|7|Europa|0.0000241371402034|2.08666071609|-44.4500754592|-0.00713183857476|0.00000697795748909|-0.208275945711|P|"
     ]
   },
-  "Broken Laplace Resonance": {
+  "broken-laplace-resonance": {
     "error": null,
     "count": 5,
     "byType": {
@@ -152,7 +152,7 @@
     },
     "totalMass": 0.954989618547,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Broken Laplace Resonance",
+    "scenarioName": "broken-laplace-resonance",
     "presetSentinel": "None",
     "zoom": 2.8,
     "pan": {
@@ -167,7 +167,7 @@
       "planets|1|Planet|7|Europa|0.0000241371402034|2.08666071609|-44.8945082868|-0.00713183857476|0.00000697795748909|-0.207242435887|P|"
     ]
   },
-  "Pluto and Neptune": {
+  "pluto-and-neptune": {
     "error": null,
     "count": 4,
     "byType": {
@@ -176,7 +176,7 @@
     },
     "totalMass": 1000.05152763,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Pluto and Neptune",
+    "scenarioName": "pluto-and-neptune",
     "presetSentinel": "None",
     "zoom": 0.085,
     "pan": {
@@ -191,7 +191,7 @@
       "planets|1|Planet|6|Pluto|0.0000065512|5|1898.06401593|2606.0513933|-0.594571338112|0.616047849904|P|"
     ]
   },
-  "Jupiter Trojans": {
+  "jupiter-trojans": {
     "error": null,
     "count": 6,
     "byType": {
@@ -201,7 +201,7 @@
     },
     "totalMass": 1000.95479194,
     "momentumResidual": "about 1e-9 of the momentum summed",
-    "scenarioName": "Jupiter Trojans",
+    "scenarioName": "jupiter-trojans",
     "presetSentinel": "None",
     "zoom": 0.6,
     "pan": {
@@ -216,7 +216,7 @@
       "planets|1|Planet|9|Patroclus|1e-9|4|17.6666561423|-520.122962014|1.9600730355|0.0665764422282|P|"
     ]
   },
-  "Binary Pair": {
+  "binary-pair": {
     "error": null,
     "count": 2,
     "byType": {
@@ -224,7 +224,7 @@
     },
     "totalMass": 4000,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Binary Pair",
+    "scenarioName": "binary-pair",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -238,7 +238,7 @@
       "stars|1|StarObject|1|Star B|2000|9|200|0|0|1.58113883008|P|"
     ]
   },
-  "Interstellar Visitor": {
+  "interstellar-visitor": {
     "error": null,
     "count": 3,
     "byType": {
@@ -247,7 +247,7 @@
     },
     "totalMass": 1000.00300349,
     "momentumResidual": "about 1e0 of the momentum summed",
-    "scenarioName": "Interstellar Visitor",
+    "scenarioName": "interstellar-visitor",
     "presetSentinel": "None",
     "zoom": 1.1,
     "pan": {
@@ -262,7 +262,7 @@
       "planets|1|Planet|4|1I/'Oumuamua|1e-9|2.2|-286.14|-279.48|2.9436|2.0454|P|"
     ]
   },
-  "Transit Lab": {
+  "transit-lab": {
     "error": null,
     "count": 2,
     "byType": {
@@ -271,7 +271,7 @@
     },
     "totalMass": 1148.65880641,
     "momentumResidual": "about 1e0 of the momentum summed",
-    "scenarioName": "Transit Lab",
+    "scenarioName": "transit-lab",
     "presetSentinel": "None",
     "zoom": 60,
     "pan": {
@@ -285,7 +285,7 @@
       "planets|0|Planet|2|HD 209458 b|0.658806409836|0.0659496823082|2.90669917778e-16|-4.747|15.5511076664|9.52230711344e-16|P|"
     ]
   },
-  "Spiral Galaxy": {
+  "spiral-galaxy": {
     "error": null,
     "count": 91,
     "byType": {
@@ -293,7 +293,7 @@
     },
     "totalMass": 14700,
     "momentumResidual": "about 1e-1 of the momentum summed",
-    "scenarioName": "Spiral Galaxy",
+    "scenarioName": "spiral-galaxy",
     "presetSentinel": "None",
     "zoom": 0.5,
     "pan": {
@@ -308,7 +308,7 @@
       "stars|2|StarObject|2|Disc star 2|30|0.507636763456|145.91247991|-46.1950202433|2.67597629832|8.45239023194|P|"
     ]
   },
-  "Milky Way Rotation": {
+  "milky-way-rotation": {
     "error": null,
     "count": 91,
     "byType": {
@@ -316,7 +316,7 @@
     },
     "totalMass": 14700,
     "momentumResidual": "about 1e-1 of the momentum summed",
-    "scenarioName": "Milky Way Rotation",
+    "scenarioName": "milky-way-rotation",
     "presetSentinel": "None",
     "zoom": 0.5,
     "pan": {
@@ -331,7 +331,7 @@
       "stars|2|StarObject|2|Disc star 2|30|0.507636763456|145.91247991|-46.1950202433|3.32011644188|10.4869836851|P|"
     ]
   },
-  "Coma Cluster": {
+  "coma-cluster": {
     "error": null,
     "count": 24,
     "byType": {
@@ -339,7 +339,7 @@
     },
     "totalMass": 96000,
     "momentumResidual": "about 1e-1 of the momentum summed",
-    "scenarioName": "Coma Cluster",
+    "scenarioName": "coma-cluster",
     "presetSentinel": "None",
     "zoom": 0.16,
     "pan": {
@@ -354,7 +354,7 @@
       "galaxies|2|Galaxy|2|NGC 4860|4000|150|2371.9033327|-840.058982144|2.68676858242|-21.5483235343|P|"
     ]
   },
-  "Exoplanet Characterization Lab": {
+  "exoplanet-characterization-lab": {
     "error": null,
     "count": 2,
     "byType": {
@@ -363,7 +363,7 @@
     },
     "totalMass": 1148.65880641,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Exoplanet Characterization Lab",
+    "scenarioName": "exoplanet-characterization-lab",
     "presetSentinel": "None",
     "zoom": 55,
     "pan": {
@@ -377,7 +377,7 @@
       "gas_giants|0|GasGiant|3|HD 209458 b|0.658806409836|0.0659496823082|4.74427738645|0|0|15.5466474042|P|"
     ]
   },
-  "Blended Binary": {
+  "blended-binary": {
     "error": null,
     "count": 3,
     "byType": {
@@ -386,7 +386,7 @@
     },
     "totalMass": 2148.65880641,
     "momentumResidual": "about 1e0 of the momentum summed",
-    "scenarioName": "Blended Binary",
+    "scenarioName": "blended-binary",
     "presetSentinel": "None",
     "zoom": 60,
     "pan": {
@@ -401,7 +401,7 @@
       "planets|0|Planet|3|HD 209458 b|0.658806409836|0.0659496823082|2.90669917778e-16|-4.747|15.5511076664|9.52230711344e-16|P|"
     ]
   },
-  "Gravity Assist Lab": {
+  "gravity-assist-lab": {
     "error": null,
     "count": 2,
     "byType": {
@@ -410,7 +410,7 @@
     },
     "totalMass": 4.77396426552,
     "momentumResidual": "about 1e0 of the momentum summed",
-    "scenarioName": "Gravity Assist Lab",
+    "scenarioName": "gravity-assist-lab",
     "presetSentinel": "None",
     "zoom": 0.14,
     "pan": {
@@ -424,7 +424,7 @@
       "gas_giants|0|GasGiant|2|Planet|4.77395949156|2|0|0|0.3|0|P|"
     ]
   },
-  "Gravity Assist: Heliocentric": {
+  "gravity-assist-heliocentric": {
     "error": null,
     "count": 3,
     "byType": {
@@ -434,7 +434,7 @@
     },
     "totalMass": 1004.77396427,
     "momentumResidual": "about 1e0 of the momentum summed",
-    "scenarioName": "Gravity Assist: Heliocentric",
+    "scenarioName": "gravity-assist-heliocentric",
     "presetSentinel": "None",
     "zoom": 0.9,
     "pan": {
@@ -449,7 +449,7 @@
       "gas_giants|0|GasGiant|4|Planet|4.77395949156|2|500|0|0|1.41758524223|P|"
     ]
   },
-  "Lagrange Point Lab": {
+  "lagrange-point-lab": {
     "error": null,
     "count": 3,
     "byType": {
@@ -458,7 +458,7 @@
     },
     "totalMass": 1030.00000103,
     "momentumResidual": "about 1e-8 of the momentum summed",
-    "scenarioName": "Lagrange Point Lab",
+    "scenarioName": "lagrange-point-lab",
     "presetSentinel": "None",
     "zoom": 0.42,
     "pan": {
@@ -473,7 +473,7 @@
       "planets|0|Planet|4|Tracer|0.00000103|0.8|480|0|0|0.962808392153|P|"
     ]
   },
-  "Orbital Transfer Lab": {
+  "orbital-transfer-lab": {
     "error": null,
     "count": 3,
     "byType": {
@@ -482,7 +482,7 @@
     },
     "totalMass": 1000.000011,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Orbital Transfer Lab",
+    "scenarioName": "orbital-transfer-lab",
     "presetSentinel": "None",
     "zoom": 0.55,
     "pan": {
@@ -497,7 +497,7 @@
       "planets|1|Planet|3|Target Station|0.00001|0.9|250|0|0|2.82842710613|P|"
     ]
   },
-  "Binary Planet Lab": {
+  "binary-planet-lab": {
     "error": null,
     "count": 3,
     "byType": {
@@ -506,7 +506,7 @@
     },
     "totalMass": 1500.00300349,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Binary Planet Lab",
+    "scenarioName": "binary-planet-lab",
     "presetSentinel": "None",
     "zoom": 0.6,
     "pan": {
@@ -521,7 +521,7 @@
       "planets|0|Planet|5|Planet|0.00300348961612|1.5|-50|0|0|1.95837928918|P|"
     ]
   },
-  "Circumbinary Planet Lab": {
+  "circumbinary-planet-lab": {
     "error": null,
     "count": 3,
     "byType": {
@@ -530,7 +530,7 @@
     },
     "totalMass": 1500.00300349,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Circumbinary Planet Lab",
+    "scenarioName": "circumbinary-planet-lab",
     "presetSentinel": "None",
     "zoom": 0.11,
     "pan": {
@@ -545,7 +545,7 @@
       "planets|0|Planet|5|Planet|0.00300348961612|1.5|4000|0|0|0.612371822612|P|"
     ]
   },
-  "Black Hole Lab": {
+  "black-hole-lab": {
     "error": null,
     "count": 5,
     "byType": {
@@ -554,7 +554,7 @@
     },
     "totalMass": 10000.0375436,
     "momentumResidual": "about 1e-1 of the momentum summed",
-    "scenarioName": "Black Hole Lab",
+    "scenarioName": "black-hole-lab",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -569,7 +569,7 @@
       "planets|1|Planet|2|Second Orbiter|0.00901046884837|5.51318451971|-30.1895849812|97.5947210172|-9.45194934465|-2.92383056177|P|"
     ]
   },
-  "Habitable Zone Lab": {
+  "habitable-zone-lab": {
     "error": null,
     "count": 5,
     "byType": {
@@ -578,7 +578,7 @@
     },
     "totalMass": 1000.01201396,
     "momentumResidual": "about 1e-1 of the momentum summed",
-    "scenarioName": "Habitable Zone Lab",
+    "scenarioName": "habitable-zone-lab",
     "presetSentinel": "None",
     "zoom": 1.9,
     "pan": {
@@ -593,7 +593,7 @@
       "planets|1|Planet|2|Earth|0.00300348961612|4.8|-38.9418342309|92.1060994003|-2.91265060499|-1.23144892434|P|"
     ]
   },
-  "Kepler's 2nd Law": {
+  "keplers-2nd-law": {
     "error": null,
     "count": 3,
     "byType": {
@@ -602,7 +602,7 @@
     },
     "totalMass": 1000.00390454,
     "momentumResidual": "about 1e0 of the momentum summed",
-    "scenarioName": "Kepler's 2nd Law",
+    "scenarioName": "keplers-2nd-law",
     "presetSentinel": "None",
     "zoom": 0.9,
     "pan": {
@@ -617,7 +617,7 @@
       "planets|1|Planet|5|Eccentric Orbiter|0.000901046884837|6|-15.4508497187|47.5528258148|-5.46340373826|-1.77516748303||"
     ]
   },
-  "GW150914": {
+  "gw150914": {
     "error": null,
     "count": 2,
     "byType": {
@@ -625,7 +625,7 @@
     },
     "totalMass": 65000,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "GW150914",
+    "scenarioName": "gw150914",
     "presetSentinel": "None",
     "zoom": 1.7,
     "pan": {
@@ -639,7 +639,7 @@
       "bh_list|1|BlackHole|1|Stellar Grave|29000|21.9689543469|49.8461538462|0|0|-19.3654410663||"
     ]
   },
-  "Binary BH": {
+  "binary-bh": {
     "error": null,
     "count": 44,
     "byType": {
@@ -650,7 +650,7 @@
     },
     "totalMass": 25002.5943274,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Binary BH",
+    "scenarioName": "binary-bh",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -665,7 +665,7 @@
       "planets|0|Planet|2|Eden Glorious|0.004035964989|5.46344255337|19.7163674548|-178.916921655|16.5671939666|1.82543194301||"
     ]
   },
-  "Triple BH System": {
+  "triple-bh-system": {
     "error": null,
     "count": 65,
     "byType": {
@@ -676,7 +676,7 @@
     },
     "totalMass": 45003.6037239,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Triple BH System",
+    "scenarioName": "triple-bh-system",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -691,7 +691,7 @@
       "bh_list|2|BlackHole|2|Quantum Abyss|10000|15.9620985198|-75|-129.903810568|14.4339805129|-9.99915391463||"
     ]
   },
-  "Supermassive BH": {
+  "supermassive-bh": {
     "error": null,
     "count": 156,
     "byType": {
@@ -702,7 +702,7 @@
     },
     "totalMass": 80014.6471344,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Supermassive BH",
+    "scenarioName": "supermassive-bh",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -717,7 +717,7 @@
       "planets|1|Planet|2|New Earth|0.0041597562266|5.51318451971|270.552486428|14.8832461308|0.204231627047|22.7260555187||"
     ]
   },
-  "Star Cluster": {
+  "star-cluster": {
     "error": null,
     "count": 255,
     "byType": {
@@ -729,7 +729,7 @@
     },
     "totalMass": 9157.1022161,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Star Cluster",
+    "scenarioName": "star-cluster",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -744,7 +744,7 @@
       "planets|2|Planet|12|Cosmic Haven|0.0036774776197|5.31309003419|29.5034169278|-176.970974459|0.289870079109|2.09056313544||"
     ]
   },
-  "Kuiper Belt": {
+  "kuiper-belt": {
     "error": null,
     "count": 309,
     "byType": {
@@ -754,7 +754,7 @@
     },
     "totalMass": 1000.00016156,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Kuiper Belt",
+    "scenarioName": "kuiper-belt",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -769,7 +769,7 @@
       "planets|1|Planet|310|Pluto|0.00000654760736315|0.795255996313|218.066615805|-29.1024238025|0.295744824814|2.21643079687||"
     ]
   },
-  "Sagittarius A*": {
+  "sagittarius-a": {
     "error": null,
     "count": 336,
     "byType": {
@@ -782,7 +782,7 @@
     },
     "totalMass": 4033766.56823,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Sagittarius A*",
+    "scenarioName": "sagittarius-a",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -797,7 +797,7 @@
       "planets|1|Planet|32|Cosmic Splendor|0.00293354581555|4.96478020291|229.009932428|74.4098376789|-56.2804132626|173.550152419||"
     ]
   },
-  "Binary Star System": {
+  "binary-star-system": {
     "error": null,
     "count": 29,
     "byType": {
@@ -808,7 +808,7 @@
     },
     "totalMass": 2010.58688799,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Binary Star System",
+    "scenarioName": "binary-star-system",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -823,7 +823,7 @@
       "planets|0|Planet|2|Eden Alpha|0.00044874658439|2.826718171|-147.076285327|-29.4714488013|0.78277900559|-3.93474788666||"
     ]
   },
-  "Slingshot": {
+  "slingshot": {
     "error": null,
     "count": 72,
     "byType": {
@@ -834,7 +834,7 @@
     },
     "totalMass": 63024.6326601,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Slingshot",
+    "scenarioName": "slingshot",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -849,7 +849,7 @@
       "planets|0|Planet|2|Eden Glorious|0.004035964989|5.46344255337|-294.673445534|93.1029501958|-7.37308103358|-16.5454283085||"
     ]
   },
-  "Rogue Encounter": {
+  "rogue-encounter": {
     "error": null,
     "count": 98,
     "byType": {
@@ -861,7 +861,7 @@
     },
     "totalMass": 31026.9415694,
     "momentumResidual": "about 1e0 of the momentum summed",
-    "scenarioName": "Rogue Encounter",
+    "scenarioName": "rogue-encounter",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -876,7 +876,7 @@
       "planets|0|Planet|2|Eden Glorious|0.004035964989|5.46344255337|5.33327726008|49.7147478488|-5.44597776749|0.584231252155||"
     ]
   },
-  "Neutron Star Collision": {
+  "neutron-star-collision": {
     "error": null,
     "count": 28,
     "byType": {
@@ -887,7 +887,7 @@
     },
     "totalMass": 2800000.68144,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Neutron Star Collision",
+    "scenarioName": "neutron-star-collision",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -902,7 +902,7 @@
       "planets|2|Planet|4|Eden Glorious|0.000721529364605|3.25955540211|14.3672472614|-163.707372231|112.609841187|9.88281783718||"
     ]
   },
-  "Pulsar System": {
+  "pulsar-system": {
     "error": null,
     "count": 19,
     "byType": {
@@ -912,7 +912,7 @@
     },
     "totalMass": 1540.78139326,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Pulsar System",
+    "scenarioName": "pulsar-system",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -927,7 +927,7 @@
       "planets|2|Planet|3|PSR B1257+12 d|0.00405781532398|5.47229935983|160.869333055|134.985398034|-1.98516701547|2.36582398668||"
     ]
   },
-  "White Dwarf Binary": {
+  "white-dwarf-binary": {
     "error": null,
     "count": 82,
     "byType": {
@@ -936,7 +936,7 @@
     },
     "totalMass": 1227.96006466,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "White Dwarf Binary",
+    "scenarioName": "white-dwarf-binary",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -951,7 +951,7 @@
       "asteroids|2|Asteroid|4|Cosmic Shower|4.71769733534e-7|2|12.1747322707|-138.724794763|2.52836505407|-0.650854576958||"
     ]
   },
-  "Stellar Graveyard": {
+  "stellar-graveyard": {
     "error": null,
     "count": 229,
     "byType": {
@@ -964,7 +964,7 @@
     },
     "totalMass": 45062.8095306,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Stellar Graveyard",
+    "scenarioName": "stellar-graveyard",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -979,7 +979,7 @@
       "bh_list|2|BlackHole|2|Quantum Abyss|10000|15.9620985198|-247.700692543|-45.3859491507|5.89066281403|2.28577690546||"
     ]
   },
-  "Galactic Center": {
+  "galactic-center": {
     "error": null,
     "count": 162,
     "byType": {
@@ -992,7 +992,7 @@
     },
     "totalMass": 4026820.76991,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Galactic Center",
+    "scenarioName": "galactic-center",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1007,7 +1007,7 @@
       "planets|1|Planet|25|Kepler-34b|0.000503572498062|2.92617816292|229.009932428|74.4098376789|-53.3970994234|164.279251394||"
     ]
   },
-  "Supernova Remnant": {
+  "supernova-remnant": {
     "error": null,
     "count": 208,
     "byType": {
@@ -1018,7 +1018,7 @@
     },
     "totalMass": 1550.62869824,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Supernova Remnant",
+    "scenarioName": "supernova-remnant",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1033,7 +1033,7 @@
       "planets|2|Planet|3|Eden Glorious|0.00405781532398|5.47229935983|222.895223465|-97.6830785417|3.14813304871|-1.25991461685||"
     ]
   },
-  "Compact Object Zoo": {
+  "compact-object-zoo": {
     "error": null,
     "count": 66,
     "byType": {
@@ -1046,7 +1046,7 @@
     },
     "totalMass": 41170.9010346,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Compact Object Zoo",
+    "scenarioName": "compact-object-zoo",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1061,7 +1061,7 @@
       "bh_list|2|BlackHole|2|Quantum Abyss|10000|15.9620985198|41.0239394062|107.007255249|3.27489621648|0.775844211175||"
     ]
   },
-  "Millisecond Pulsar": {
+  "millisecond-pulsar": {
     "error": null,
     "count": 29,
     "byType": {
@@ -1072,7 +1072,7 @@
     },
     "totalMass": 2268.82515251,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Millisecond Pulsar",
+    "scenarioName": "millisecond-pulsar",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1087,7 +1087,7 @@
       "asteroids|0|Asteroid|4|Orbit Voyager|4.71769733534e-7|2|14.2737703047|-162.642250523|4.41698532177|0.650935084909||"
     ]
   },
-  "Tidal Disruption Event": {
+  "tidal-disruption-event": {
     "error": null,
     "count": 2,
     "byType": {
@@ -1096,7 +1096,7 @@
     },
     "totalMass": 2001000,
     "momentumResidual": "about 1e0 of the momentum summed",
-    "scenarioName": "Tidal Disruption Event",
+    "scenarioName": "tidal-disruption-event",
     "presetSentinel": "None",
     "zoom": 0.7,
     "pan": {
@@ -1110,7 +1110,7 @@
       "stars|0|StarObject|2|Doomed star|1000|10|405|0|-82.6204760784|71.1575096299||"
     ]
   },
-  "Intermediate Mass BH": {
+  "intermediate-mass-bh": {
     "error": null,
     "count": 106,
     "byType": {
@@ -1123,7 +1123,7 @@
     },
     "totalMass": 409816.04787,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Intermediate Mass BH",
+    "scenarioName": "intermediate-mass-bh",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1138,7 +1138,7 @@
       "planets|1|Planet|12|Terra Wonderland|0.00107998857822|3.6788146953|114.776854507|37.293260701|-23.478296625|70.8498146817||"
     ]
   },
-  "Galactic Collision": {
+  "galactic-collision": {
     "error": null,
     "count": 972,
     "byType": {
@@ -1151,7 +1151,7 @@
     },
     "totalMass": 2246656.64036,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Galactic Collision",
+    "scenarioName": "galactic-collision",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1166,7 +1166,7 @@
       "planets|0|Planet|42|Gaia Supreme|0.000507658508102|2.93328096948|159.584495509|51.8521458044|-36.0415653515|58.9336639572||"
     ]
   },
-  "Micro BH Swarm": {
+  "micro-bh-swarm": {
     "error": null,
     "count": 220,
     "byType": {
@@ -1177,7 +1177,7 @@
     },
     "totalMass": 13911.7155864,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Micro BH Swarm",
+    "scenarioName": "micro-bh-swarm",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1192,7 +1192,7 @@
       "bh_list|2|BlackHole|2|Quantum Abyss|900|7.75108928958|92.0590001437|-167.028777705|0.931541725589|-8.45405765568||"
     ]
   },
-  "Exoplanet Lab": {
+  "exoplanet-lab": {
     "error": null,
     "count": 448,
     "byType": {
@@ -1204,7 +1204,7 @@
     },
     "totalMass": 3445.32248032,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Exoplanet Lab",
+    "scenarioName": "exoplanet-lab",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1219,7 +1219,7 @@
       "planets|2|Planet|5|World Theta|0.000358147797557|2.64180555672|72.8115294937|52.9006727063|-2.17341266185|3.91346231469||"
     ]
   },
-  "Quasar Cannon": {
+  "quasar-cannon": {
     "error": null,
     "count": 78,
     "byType": {
@@ -1231,7 +1231,7 @@
     },
     "totalMass": 1000000112220,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Quasar Cannon",
+    "scenarioName": "quasar-cannon",
     "presetSentinel": "None",
     "zoom": 0.05,
     "pan": {
@@ -1246,7 +1246,7 @@
       "stars|1|StarObject|1|Plasma Overlord|5133.35819187|40.164404646|-9.32244331562|25229.1238358|-8906.50794934|8.92093839252||"
     ]
   },
-  "The Pinwheel Galaxy Core": {
+  "the-pinwheel-galaxy-core": {
     "error": null,
     "count": 229,
     "byType": {
@@ -1258,7 +1258,7 @@
     },
     "totalMass": 200355196.269,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "The Pinwheel Galaxy Core",
+    "scenarioName": "the-pinwheel-galaxy-core",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1273,7 +1273,7 @@
       "stars|0|StarObject|0|Plasma Heart|448.674400106|5.05989607756|-214.056016483|-595.130256169|529.166162029|-471.017760706||"
     ]
   },
-  "Star Frisbee": {
+  "star-frisbee": {
     "error": null,
     "count": 58,
     "byType": {
@@ -1285,7 +1285,7 @@
     },
     "totalMass": 75012.5072509,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Star Frisbee",
+    "scenarioName": "star-frisbee",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1300,7 +1300,7 @@
       "stars|1|StarObject|1|Plasma Overlord|5133.35819187|40.164404646|-82.2052602202|-228.551565039|8.15475027199|-2.73249075749||"
     ]
   },
-  "Kessler Cascade": {
+  "kessler-cascade": {
     "error": null,
     "count": 301,
     "byType": {
@@ -1309,7 +1309,7 @@
     },
     "totalMass": 530000,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Kessler Cascade",
+    "scenarioName": "kessler-cascade",
     "presetSentinel": "None",
     "zoom": 0.5,
     "pan": {
@@ -1324,7 +1324,7 @@
       "stars|1|StarObject|2|Plasma Overlord|100|1.2|251.833835679|-219.456795913|33.4706389552|62.044792776||"
     ]
   },
-  "Alien Dyson Swarm Collapse": {
+  "alien-dyson-swarm-collapse": {
     "error": null,
     "count": 128,
     "byType": {
@@ -1336,7 +1336,7 @@
     },
     "totalMass": 193954.802726,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Alien Dyson Swarm Collapse",
+    "scenarioName": "alien-dyson-swarm-collapse",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1351,7 +1351,7 @@
       "stars|1|StarObject|1|Plasma Overlord|5133.35819187|40.164404646|117.424391758|61.7149693548|-4.0105174771|7.85311396985||"
     ]
   },
-  "Tidal Arm Tango": {
+  "tidal-arm-tango": {
     "error": null,
     "count": 329,
     "byType": {
@@ -1363,7 +1363,7 @@
     },
     "totalMass": 2000527357.33,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Tidal Arm Tango",
+    "scenarioName": "tidal-arm-tango",
     "presetSentinel": "None",
     "zoom": 0.3,
     "pan": {
@@ -1378,7 +1378,7 @@
       "stars|0|StarObject|0|Plasma Heart|448.674400106|5.05989607756|-1347.60176604|979.089993845|-644.073768606|-1515.59997731||"
     ]
   },
-  "Hungry Hungry Holes": {
+  "hungry-hungry-holes": {
     "error": null,
     "count": 81,
     "byType": {
@@ -1390,7 +1390,7 @@
     },
     "totalMass": 312223.164313,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Hungry Hungry Holes",
+    "scenarioName": "hungry-hungry-holes",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1405,7 +1405,7 @@
       "bh_list|2|BlackHole|52|Warp Core|50000|25.8690802631|63.0578325431|-22.0294090539|-9.02145567718|-1.98438223779||"
     ]
   },
-  "Slingshot Gauntlet": {
+  "slingshot-gauntlet": {
     "error": null,
     "count": 33,
     "byType": {
@@ -1417,7 +1417,7 @@
     },
     "totalMass": 150459.489102,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Slingshot Gauntlet",
+    "scenarioName": "slingshot-gauntlet",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {
@@ -1432,7 +1432,7 @@
       "bh_list|2|BlackHole|3|Event Horizon|30000|22.1935289174|-175|-275|-0.128405909765|0.00301561643833||"
     ]
   },
-  "Black Hole Billiards": {
+  "black-hole-billiards": {
     "error": null,
     "count": 45,
     "byType": {
@@ -1444,7 +1444,7 @@
     },
     "totalMass": 2101477.75109,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Black Hole Billiards",
+    "scenarioName": "black-hole-billiards",
     "presetSentinel": "None",
     "zoom": 0.85,
     "pan": {
@@ -1459,7 +1459,7 @@
       "bh_list|2|BlackHole|16|Quantum Abyss|25000|21.0122224352|-199.498284783|345.541165267|-86.5338556776|-50.6939004717||"
     ]
   },
-  "Stellar Nursery": {
+  "stellar-nursery": {
     "error": null,
     "count": 128,
     "byType": {
@@ -1471,7 +1471,7 @@
     },
     "totalMass": 193954.802726,
     "momentumResidual": "cancels into rounding error",
-    "scenarioName": "Stellar Nursery",
+    "scenarioName": "stellar-nursery",
     "presetSentinel": "None",
     "zoom": 1.5,
     "pan": {

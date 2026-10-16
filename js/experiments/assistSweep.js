@@ -48,13 +48,13 @@ export const PARAMETER = 'assist_impact_parameter';
  * comparison would otherwise get two passes that agree with each other and
  * disagree with everything the lesson says about them.
  *
- * These are the values in js/scenarios.js for 'Gravity Assist Lab'. The
+ * These are the values in js/scenarios.js for 'gravity-assist-lab'. The
  * scenario re-stamps most of them on every rebuild; the two that survive a
  * rebuild - the impact parameter and the approach speed, both LAB_VARIABLES -
  * are the two that have to be set deliberately here.
  */
 export const BASELINE = Object.freeze({
-  scenario: 'Gravity Assist Lab',
+  scenario: 'gravity-assist-lab',
   seed: 'assist',
   /** Speed relative to the planet, far away. Held across every trial. */
   vInfinity: 0.461,

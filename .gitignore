@@ -61,3 +61,22 @@ manual/gravitas-user-manual.pdf
 # Cached MIST downloads for tools/build-stellar-tracks.mjs. The reduced result
 # is committed; the 100 MB source grid is not.
 .mist-cache/
+
+# Cached SDSS spectrum CSVs. `npm run spectra:data` refills this; the
+# committed js/data/spectra/sdssSpectra.js is what ships.
+.sdss-cache/
+
+# Cached GWOSC 32-second strain files. `npm run gwosc:data` refills this; the
+# committed js/data/gw/gwoscEvents.js is what ships.
+.gwosc-cache/
+# Cached raw products for tools/build-data-packs.mjs (a 2 MB TESS light curve
+# today). `npm run packs:data` refills it; the packs are committed, these are not.
+.packs-cache/
+
+# Cached JPL Horizons answers for tools/build-ephemeris.mjs. `npm run
+# ephemeris:data` refills it; the pack is committed, these 11 MB are not.
+.ephemeris-cache/
+
+# Reports an earlier CI step left for tools/docs-facts.mjs to read back.
+.facts/
+.generate-state.json

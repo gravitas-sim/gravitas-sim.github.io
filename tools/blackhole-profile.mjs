@@ -26,10 +26,10 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = Number(process.argv[2] || 8137);
 const TAG = process.argv[3] || '';
 const SCENES = [
-  'Quasar Cannon',
-  'Black Hole Lab',
-  'GW150914',
-  'Triple BH System',
+  'quasar-cannon',
+  'black-hole-lab',
+  'gw150914',
+  'triple-bh-system',
 ];
 
 const server = await serveStatic({ root: ROOT, port: PORT });

@@ -21,6 +21,8 @@
 //   learned once.
 // =============================================================================
 
+// Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
+import './instrumentStartup.js';
 import { withUnit } from './format.js';
 import { surface, responsiveHeight, MONO } from './widgetCanvas.js';
 import { scaleBar as drawScaleBar } from './instruments.js';

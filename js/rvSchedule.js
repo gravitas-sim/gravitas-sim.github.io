@@ -643,9 +643,6 @@ export function planSchedule(cfg = {}) {
     spacings,
     minSpacing: spacings.length ? Math.min(...spacings) : 0,
     maxSpacing: spacings.length ? Math.max(...spacings) : 0,
-    medianSpacing: spacings.length
-      ? [...spacings].sort((a, b) => a - b)[Math.floor(spacings.length / 2)]
-      : 0,
   };
 }
 

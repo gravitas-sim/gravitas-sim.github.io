@@ -9,7 +9,7 @@ export default [
     // thumbnail generator's page.evaluate() callbacks are serialized and run
     // inside headless Chromium, so this file legitimately contains both halves
     // and needs both sets of globals.
-    files: ['build.js', 'tools/*.js', 'tools/*.mjs'],
+    files: ['build.js', 'tools/*.js', 'tools/*.mjs', 'extensions/**/*.mjs'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
@@ -21,12 +21,42 @@ export default [
         // Node's own since 18. tools/build-gw-data.mjs downloads the published
         // GWOSC figure data with it rather than shelling out to curl.
         fetch: 'readonly',
+        // Also Node's own. A fetch against an archive needs a deadline: SDSS's
+        // spectrum service once held a connection for 122 s before a 502, and
+        // without one tools/build-sdss-spectra.mjs waited it out per spectrum.
+        AbortSignal: 'readonly',
         window: 'readonly',
         document: 'readonly',
         localStorage: 'readonly',
         getComputedStyle: 'readonly',
         performance: 'readonly',
         requestAnimationFrame: 'readonly',
+      },
+    },
+    plugins: { prettier },
+    rules: {
+      ...prettierConfig.rules,
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'prettier/prettier': 'error',
+    },
+  },
+  {
+    // The Extension SDK (sdk/README.md): a Node command line and its library.
+    // Its examples are an extension author's files: a transformation script,
+    // run under Node, and an instrument module that uses only the canvas it
+    // is handed, so no browser global either.
+    files: ['sdk/**/*.mjs', 'sdk/**/*.js'],
+    languageOptions: {
+      // 2025 for import attributes: an instrument imports its declared
+      // catalogs as JSON (sdk/examples/kepler-third-law).
+      ecmaVersion: 2025,
+      sourceType: 'module',
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        URL: 'readonly',
+        TextDecoder: 'readonly',
+        document: 'readonly',
       },
     },
     plugins: { prettier },
@@ -62,6 +92,11 @@ export default [
         CanvasRenderingContext2D: 'readonly',
         EventTarget: 'readonly',
         WeakRef: 'readonly',
+        // Used inside page.evaluate() by e2e/workerRealm.spec.js, which builds
+        // a module Worker from a Blob to prove the engine runs in its own realm.
+        Blob: 'readonly',
+        Worker: 'readonly',
+        location: 'readonly',
       },
     },
     plugins: { prettier },
@@ -105,6 +140,12 @@ export default [
       'js/physicsWorker.js',
       'js/chartWorker.js',
       'js/validationWorker.js',
+      'js/experiments/experimentWorker.js',
+      'js/inference/inferenceWorker.js',
+      'js/lab3d/worker.js',
+      'js/mission/worker.js',
+      'js/mission/labWorker.js',
+      'js/kernels/stellar/worker.js',
     ],
     languageOptions: {
       ecmaVersion: 2021,
@@ -135,7 +176,7 @@ export default [
       'js/validationWorker.js',
     ],
     languageOptions: {
-      ecmaVersion: 2021,
+      ecmaVersion: 2022,
       sourceType: 'module',
       globals: {
         window: 'readonly',
@@ -222,6 +263,11 @@ export default [
         Int8Array: 'readonly',
         Float64Array: 'readonly',
         PointerEvent: 'readonly',
+        // The Observatory's archive import (js/archive/): a bounded,
+        // cancellable request, a VOTable parsed as XML, and a cache.
+        AbortController: 'readonly',
+        DOMParser: 'readonly',
+        indexedDB: 'readonly',
       },
     },
     plugins: {

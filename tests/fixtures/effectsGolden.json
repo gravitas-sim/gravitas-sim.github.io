@@ -1,0 +1,724 @@
+{
+ "ns-ns heavy (kilonova)": {
+  "rows": [
+   {
+    "draws": 3681,
+    "particles": 450,
+    "hash": "c6b1d8e73f027d59:117993",
+    "ripples": "8a387a77bf56467d:115"
+   },
+   {
+    "draws": 3681,
+    "particles": 450,
+    "hash": "2057b34e6377b4c4:117918",
+    "ripples": "8a387a77bf56467d:115"
+   },
+   {
+    "draws": 3681,
+    "particles": 450,
+    "hash": "97356c74b32e9eaa:117943",
+    "ripples": "8a387a77bf56467d:115"
+   },
+   {
+    "draws": 3681,
+    "particles": 450,
+    "hash": "5190f110ff141628:117912",
+    "ripples": "8a387a77bf56467d:115"
+   }
+  ],
+  "kinds": {
+   "bh": 1,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 1
+  },
+  "next": 0.28018612787127495
+ },
+ "ns-ns light (small kilonova)": {
+  "rows": [
+   {
+    "draws": 1650,
+    "particles": 210,
+    "hash": "77f17be84894c678:54682",
+    "ripples": "fd5bac09cc5875fb:115"
+   },
+   {
+    "draws": 1650,
+    "particles": 210,
+    "hash": "d770118826b736e6:54641",
+    "ripples": "fd5bac09cc5875fb:115"
+   },
+   {
+    "draws": 1650,
+    "particles": 210,
+    "hash": "485b08853d78831f:54647",
+    "ripples": "fd5bac09cc5875fb:115"
+   },
+   {
+    "draws": 1650,
+    "particles": 210,
+    "hash": "6dda0fa25ce8e2c4:54616",
+    "ripples": "fd5bac09cc5875fb:115"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 1,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 1
+  },
+  "next": 0.8981501627713442
+ },
+ "ns-wd (neutron star and white dwarf)": {
+  "rows": [
+   {
+    "draws": 1506,
+    "particles": 194,
+    "hash": "ae471c04b770f8a0:50508",
+    "ripples": "83b1f2628b766f10:132"
+   },
+   {
+    "draws": 1506,
+    "particles": 194,
+    "hash": "89d965bf103a8967:50479",
+    "ripples": "83b1f2628b766f10:132"
+   },
+   {
+    "draws": 1506,
+    "particles": 194,
+    "hash": "91de2dddbf3774cf:50465",
+    "ripples": "83b1f2628b766f10:132"
+   },
+   {
+    "draws": 1506,
+    "particles": 194,
+    "hash": "8e2fc92e096c652:50455",
+    "ripples": "83b1f2628b766f10:132"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 1,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 1
+  },
+  "next": 0.2845926533918828
+ },
+ "wd-wd over the Chandrasekhar limit": {
+  "rows": [
+   {
+    "draws": 791,
+    "particles": 109,
+    "hash": "24b334dcf0c9110:27933",
+    "ripples": "538a71af353a06e3:133"
+   },
+   {
+    "draws": 791,
+    "particles": 109,
+    "hash": "a64a09c9bacd46e:27893",
+    "ripples": "538a71af353a06e3:133"
+   },
+   {
+    "draws": 791,
+    "particles": 109,
+    "hash": "5c58157b86228a83:27886",
+    "ripples": "538a71af353a06e3:133"
+   },
+   {
+    "draws": 791,
+    "particles": 109,
+    "hash": "9de6208866a2c352:27886",
+    "ripples": "538a71af353a06e3:133"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 1,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 1
+  },
+  "next": 0.9633033198770136
+ },
+ "wd-wd under the limit": {
+  "rows": [
+   {
+    "draws": 63,
+    "particles": 20,
+    "hash": "e550d311d85be0f7:4426",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 63,
+    "particles": 20,
+    "hash": "282c773bf32d33b3:4417",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 63,
+    "particles": 20,
+    "hash": "e49501001d72697e:4413",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 63,
+    "particles": 20,
+    "hash": "52135749f37a72c1:4408",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 0,
+   "wd": 1,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.9655216329265386
+ },
+ "star-star merger": {
+  "rows": [
+   {
+    "draws": 61,
+    "particles": 20,
+    "hash": "51cb844d60f65607:4427",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 61,
+    "particles": 20,
+    "hash": "1c8468c3f268d945:4415",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 61,
+    "particles": 20,
+    "hash": "a4ebf4a3ed2b176f:4411",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 61,
+    "particles": 20,
+    "hash": "c6fd581e6d95326c:4403",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 0,
+   "wd": 0,
+   "stars": 1,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.8936977803241462
+ },
+ "collapse: massive star": {
+  "rows": [
+   {
+    "draws": 91,
+    "particles": 30,
+    "hash": "a23168a87121e80c:6653",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 91,
+    "particles": 30,
+    "hash": "cda9246d9fc81b8b:6635",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 91,
+    "particles": 30,
+    "hash": "1c3a500ac15e9876:6632",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 91,
+    "particles": 30,
+    "hash": "810b047091710512:6620",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 1,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.42373026441782713
+ },
+ "collapse: neutron star over TOV": {
+  "rows": [
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "c325b0abf58c16e5:5536",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "4a91a48458fcfc3a:5523",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "bfdcc31c77bc3a1c:5519",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "71475754e03544d4:5507",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 1,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.259162305155769
+ },
+ "collapse: white dwarf over Chandrasekhar (type Ia style)": {
+  "rows": [
+   {
+    "draws": 65,
+    "particles": 20,
+    "hash": "f81126d91196f68f:4423",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 65,
+    "particles": 20,
+    "hash": "bbe42bab109d8909:4411",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 65,
+    "particles": 20,
+    "hash": "5efb3fcf2df54bc5:4399",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 65,
+    "particles": 20,
+    "hash": "1fe7b1b26944f7f6:4400",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 1,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.7582097565755248
+ },
+ "black hole absorbs a planet": {
+  "rows": [
+   {
+    "draws": 45,
+    "particles": 15,
+    "hash": "6cc7e6356f762c59:3298",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 45,
+    "particles": 15,
+    "hash": "950a1e2637c91282:3285",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 45,
+    "particles": 15,
+    "hash": "3f6679ce293d3266:3286",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 45,
+    "particles": 15,
+    "hash": "c80558c6d13a6c0c:3278",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 1,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.7992532015778124
+ },
+ "black hole absorbs a star, a comet and an asteroid": {
+  "rows": [
+   {
+    "draws": 1085,
+    "particles": 335,
+    "hash": "29c0b0af8c00343:73316",
+    "ripples": "5ef0236d2fb334a5:112"
+   },
+   {
+    "draws": 1085,
+    "particles": 335,
+    "hash": "8efa8200512a7fae:73295",
+    "ripples": "5ef0236d2fb334a5:112"
+   },
+   {
+    "draws": 1085,
+    "particles": 335,
+    "hash": "a9d4b015f4430d73:73246",
+    "ripples": "5ef0236d2fb334a5:112"
+   },
+   {
+    "draws": 1085,
+    "particles": 335,
+    "hash": "765fc07e7f660a18:73208",
+    "ripples": "5ef0236d2fb334a5:112"
+   }
+  ],
+  "kinds": {
+   "bh": 1,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 1
+  },
+  "next": 0.007093208376318216
+ },
+ "star swallows a planet, a gas giant and an asteroid": {
+  "rows": [
+   {
+    "draws": 48,
+    "particles": 16,
+    "hash": "d0145545c882477:3542",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 48,
+    "particles": 16,
+    "hash": "7e42965930efe8e7:3536",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 48,
+    "particles": 16,
+    "hash": "5a5aa16f7f2a3ed3:3524",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 48,
+    "particles": 16,
+    "hash": "d3b4a4165ed62f2c:3525",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 0,
+   "wd": 0,
+   "stars": 1,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.34559899382293224
+ },
+ "two planets collide": {
+  "rows": [
+   {
+    "draws": 78,
+    "particles": 10,
+    "hash": "2ea94b95f447c6eb:2210",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 78,
+    "particles": 10,
+    "hash": "f90a81334a704c5d:2211",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 78,
+    "particles": 10,
+    "hash": "befd21bc4118057e:2205",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 78,
+    "particles": 10,
+    "hash": "4a7ecb959426dd2b:2206",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 2,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.2465683885384351
+ },
+ "two gas giants merge": {
+  "rows": [
+   {
+    "draws": 46,
+    "particles": 15,
+    "hash": "132d778beefff56d:3318",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 46,
+    "particles": 15,
+    "hash": "794cb59451aec5aa:3313",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 46,
+    "particles": 15,
+    "hash": "1376b47358dedc11:3313",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 46,
+    "particles": 15,
+    "hash": "621e0bd0248fcfb6:3313",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 1,
+   "ripples": 0
+  },
+  "next": 0.4022570517845452
+ },
+ "two black holes merge": {
+  "rows": [
+   {
+    "draws": 1,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "d6ae84f4b5292858:96"
+   },
+   {
+    "draws": 2,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "d6ae84f4b5292858:96"
+   },
+   {
+    "draws": 3,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "d6ae84f4b5292858:96"
+   },
+   {
+    "draws": 4,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "d6ae84f4b5292858:96"
+   }
+  ],
+  "kinds": {
+   "bh": 1,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 1
+  },
+  "next": 0.7443064509425312
+ },
+ "black hole absorbs a planet with no usable color": {
+  "rows": [
+   {
+    "draws": 30,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 30,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 30,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 30,
+    "particles": 0,
+    "hash": "741638a55975e3:2",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 1,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.7595051995012909
+ },
+ "gas giant sweeps up a planet (plume)": {
+  "rows": [
+   {
+    "draws": 24,
+    "particles": 8,
+    "hash": "a5d0058ea6c2348e:1747",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 24,
+    "particles": 8,
+    "hash": "8bfd4d835932b66b:1749",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 24,
+    "particles": 8,
+    "hash": "d321043796222d23:1751",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 24,
+    "particles": 8,
+    "hash": "6f6605e498629a40:1745",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 1,
+   "ripples": 0
+  },
+  "next": 0.2858405006118119
+ },
+ "two gas giants merge into a star": {
+  "rows": [
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "424d09564e375784:5538",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "b14bbe399863656d:5527",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "82893674799835f0:5518",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 76,
+    "particles": 25,
+    "hash": "ab0c08c0395202b2:5511",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 0,
+   "ns": 0,
+   "wd": 0,
+   "stars": 1,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.4525250690057874
+ },
+ "disk tracer falls into a black hole": {
+  "rows": [
+   {
+    "draws": 18,
+    "particles": 6,
+    "hash": "a4da645bbef25057:1170",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 18,
+    "particles": 6,
+    "hash": "440b492c659f5fc:1293",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 18,
+    "particles": 6,
+    "hash": "466303f5131a52f9:1293",
+    "ripples": "741638a55975e3:2"
+   },
+   {
+    "draws": 18,
+    "particles": 6,
+    "hash": "a5ad76aa8623d816:1293",
+    "ripples": "741638a55975e3:2"
+   }
+  ],
+  "kinds": {
+   "bh": 1,
+   "ns": 0,
+   "wd": 0,
+   "stars": 0,
+   "planets": 0,
+   "gas": 0,
+   "ripples": 0
+  },
+  "next": 0.8810090185143054
+ }
+}

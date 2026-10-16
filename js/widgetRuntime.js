@@ -58,9 +58,6 @@ export function setCaptureSink(fn) {
   sink = typeof fn === 'function' ? fn : null;
 }
 
-/** @returns {boolean} Whether a capture would reach anything */
-export const captureAvailable = () => sink !== null;
-
 /**
  * Send a reading to the notebook.
  *
@@ -87,6 +84,22 @@ export function captureToNotebook(make) {
   }
   return sink(make);
 }
+
+// --- Where a capture is made --------------------------------------------------
+
+/** What the lesson engine says of where the student is. @type {?Function} */
+let contextSource = null;
+
+/**
+ * Install the lesson engine's answer to "where is the student?".
+ * @param {?Function} fn - Returns {lesson, step, assignment} or null
+ */
+export function setEvidenceContext(fn) {
+  contextSource = typeof fn === 'function' ? fn : null;
+}
+
+/** @returns {?object} The lesson and step a capture is made in, or null */
+export const evidenceContext = () => contextSource?.() ?? null;
 
 // --- Signal audio -----------------------------------------------------------
 
@@ -204,17 +217,6 @@ export const stopSignalIfOwner = owner =>
     ? audio.stopIfOwner(owner)
     : false;
 
-/**
- * Stop anything whose owner begins with this prefix.
- *
- * @param {string} prefix - An owner prefix
- * @returns {boolean} Whether anything stopped
- */
-export const stopSignalScope = prefix =>
-  audio && typeof audio.stopIfOwnerStartsWith === 'function'
-    ? audio.stopIfOwnerStartsWith(prefix)
-    : false;
-
 // -----------------------------------------------------------------------------
 // Selecting a body
 // -----------------------------------------------------------------------------
@@ -243,9 +245,6 @@ let selectBodyImpl = null;
 export function setBodySelector(fn) {
   selectBodyImpl = typeof fn === 'function' ? fn : null;
 }
-
-/** Whether anything can select a body yet. @returns {boolean} */
-export const bodySelectorReady = () => selectBodyImpl !== null;
 
 /**
  * Select a body the way a click on the canvas would.

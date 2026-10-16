@@ -119,24 +119,6 @@ export const typeAt = (size = TYPE.TICK, weight = '') =>
   `${weight}${Math.max(TYPE.TICK, size)}px ${MONO}`;
 
 /**
- * How many labeled ticks fit along an axis at TYPE.TICK.
- *
- * Raising the type without thinning the ticks is how an axis turns into a gray
- * smear. Given the room and the longest label, this says how many to draw; the
- * caller picks a round step from it.
- *
- * @param {number} span - Pixels available along the axis
- * @param {number} [chars] - Characters in the longest label
- * @returns {number} At least two, and at most as many as fit with a gap
- */
-export function tickBudget(span, chars = 5) {
-  // 0.62 em per character is close enough for the monospaced faces above, and
-  // the extra character is the gap that stops two labels touching.
-  const each = (chars + 1.6) * TYPE.TICK * 0.62;
-  return Math.max(2, Math.floor(span / each));
-}
-
-/**
  * The theme colors a widget normally needs.
  * @returns {Object} ink, muted, grid, accent, warn, good
  */

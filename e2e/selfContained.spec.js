@@ -127,7 +127,7 @@ test.describe('with every non-local request blocked', () => {
     expect(blocked).toEqual([]);
   });
 
-  test('the light curve draws, so Chart.js came from the bundle', async ({
+  test('the light curve draws, so the chart component came from the bundle', async ({
     page,
     app,
   }) => {
@@ -136,35 +136,25 @@ test.describe('with every non-local request blocked', () => {
 
     // No scenario is loaded first, and no module is imported to do it. Against
     // dist/ there is no /js/ui.js to reach for, and the assertion does not need
-    // one: Chart.js draws the axes, the grid and the labels of an empty chart,
-    // so a canvas with more than one color on it is the library having loaded
+    // one: the chart draws the axes, the grid and the labels of an empty chart,
+    // so a chart with its axis title and ticks on it is its code having loaded
     // and run either way.
     await app.openPanel('toggleLightCurve', 'lightCurveContainer');
-    await expect(page.locator('#lightCurveCanvas')).toBeVisible({
+    await expect(page.locator('#lightCurveChart')).toBeVisible({
       timeout: 30_000,
     });
 
-    // Chart.js is what puts pixels on that canvas. Asserting the canvas has
-    // drawn is asserting the library arrived and ran.
+    // The component is a lazy chunk of the bundle. Asserting the axis is
+    // drawn is asserting the chunk arrived and ran.
+    await expect(
+      page.locator('#lightCurveChart svg[role="group"]'),
+      'the light curve never drew'
+    ).toContainText('Time (days)', { timeout: 30_000 });
     await expect
-      .poll(
-        () =>
-          page.evaluate(() => {
-            const c = document.getElementById('lightCurveCanvas');
-            if (!c || !c.width) return 0;
-            const d = c
-              .getContext('2d')
-              .getImageData(0, 0, c.width, c.height).data;
-            const seen = new Set();
-            for (let i = 0; i < d.length; i += 4 * 29) {
-              seen.add(`${d[i]},${d[i + 1]},${d[i + 2]},${d[i + 3]}`);
-              if (seen.size > 3) return seen.size;
-            }
-            return seen.size;
-          }),
-        { timeout: 30_000, message: 'the light curve never drew' }
+      .poll(() =>
+        page.locator('#lightCurveChart svg[role="group"] text').count()
       )
-      .toBeGreaterThan(1);
+      .toBeGreaterThan(3);
 
     expect(blocked, `blocked: ${blocked.join(', ')}`).toEqual([]);
   });

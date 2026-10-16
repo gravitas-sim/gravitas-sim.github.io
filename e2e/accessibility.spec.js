@@ -95,7 +95,7 @@ const SURFACES = [
     name: 'object inspector',
     open: async ({ app }) => {
       await app.boot();
-      await app.loadScenario('Solar System');
+      await app.loadScenario('solar-system');
       await app.selectFirstObject();
     },
     expect: '#objectInspector',
@@ -219,12 +219,210 @@ const SURFACES = [
     expect: '#teachDemos article',
     standalone: true,
   },
+  {
+    name: 'figure builder',
+    open: async ({ page }) => {
+      await page.goto('/figure/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#figureForm',
+    // The preview is the application itself, in a frame, and axe caught its
+    // splash mid-fade (a wordmark at 1.15:1 on its way in). The application
+    // has its own surfaces above; this one is the builder around it.
+    exclude: ['#fbPreview'],
+    standalone: true,
+  },
+  {
+    name: 'glossary',
+    open: async ({ page }) => {
+      await page.goto('/glossary/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#nouns',
+    standalone: true,
+  },
+  {
+    name: 'evaluation kit',
+    open: async ({ page }) => {
+      await page.goto('/evaluation/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#ekTools',
+    standalone: true,
+  },
+  {
+    // Painted by js/validationPage.js from validation/data.json: a check row,
+    // not the empty shell.
+    name: 'validation report',
+    open: async ({ page }) => {
+      await page.goto('/validation/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '.val-row',
+    standalone: true,
+  },
+  // The tool pages, which carry the shared shell since Prompt 50 Part 2 and
+  // with it the stored theme: checked in all four, as the document pages are.
+  // Each waits for the page's own content, not the shell.
+  {
+    name: 'observatory',
+    open: async ({ page }) => {
+      await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '.gs-controls',
+    standalone: true,
+  },
+  {
+    name: 'catalog',
+    open: async ({ page }) => {
+      await page.goto('/catalog/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'article[data-entry]',
+    standalone: true,
+  },
+  {
+    // Its cards, grouped by sequence too, so the headings are checked.
+    name: 'library',
+    open: async ({ page }) => {
+      await page.goto('/library/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'html[data-ready="true"] .lib-card',
+    standalone: true,
+  },
+  {
+    name: 'my work',
+    open: async ({ page }) => {
+      await page.goto('/my-work/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'html[data-ready="true"] .mw-card',
+    standalone: true,
+  },
+  {
+    name: 'library by sequence',
+    open: async ({ page }) => {
+      await page.goto('/library/?group=sequence', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: 'html[data-ready="true"] .lib-group',
+    standalone: true,
+  },
+  {
+    name: 'experiment runner',
+    open: async ({ page }) => {
+      await page.goto('/experiments/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '.gs-controls',
+    standalone: true,
+  },
+  {
+    name: 'scenario studio',
+    open: async ({ page }) => {
+      await page.goto('/studio/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'body[data-ready="true"]',
+    standalone: true,
+  },
+  {
+    name: 'investigation composer',
+    open: async ({ page }) => {
+      await page.goto('/studio/lesson/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'body[data-ready="true"]',
+    standalone: true,
+  },
+  {
+    name: 'course builder',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'body[data-ready="true"]',
+    standalone: true,
+  },
+  {
+    name: 'investigations in a course',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/packs/', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: 'body[data-ready="true"]',
+    standalone: true,
+  },
+  {
+    name: 'course home',
+    open: async ({ page }) => {
+      await page.goto('/course/?course=intro-astronomy', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: 'html[data-ready="true"]',
+    standalone: true,
+  },
+  {
+    name: '3-D kernel diagnostics',
+    open: async ({ page }) => {
+      await page.goto('/lab3d/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#lb-problem',
+    standalone: true,
+  },
+  {
+    name: '3-D lab',
+    open: async ({ page }) => {
+      await page.goto('/3d/?system=R3', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#l3-canvas',
+    standalone: true,
+  },
+  {
+    name: '3-D lab guide',
+    open: async ({ page }) => {
+      await page.goto('/3d/?guide=l3-planes', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: '#l3-guide h2',
+    standalone: true,
+  },
+  {
+    name: 'mission diagnostics',
+    open: async ({ page }) => {
+      await page.goto('/mission/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#mn-transfer-go',
+    standalone: true,
+  },
+  {
+    name: 'mission lab',
+    open: async ({ page }) => {
+      await page.goto('/mission/lab/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#ml-go',
+    standalone: true,
+  },
+  {
+    name: 'submission review',
+    open: async ({ page }) => {
+      await page.goto('/instructors/submissions/', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: '#drop',
+    standalone: true,
+  },
 ];
 
 /** The two extremes of the palette. Midnight is the default. */
 const THEMES = [
   { id: 'midnight', label: 'dark' },
   { id: 'daylight', label: 'light' },
+];
+
+/**
+ * All four, for the pages that carry the shared shell (Prompt 50): its theme
+ * switch offers every one, so every one is checked where it is offered.
+ */
+const ALL_THEMES = [
+  ...THEMES,
+  { id: 'deep', label: 'deep space' },
+  { id: 'observatory', label: 'observatory red' },
 ];
 
 const LOCALES = [
@@ -273,9 +471,10 @@ async function waitForStableStyles(page) {
     .catch(() => {});
 }
 
-async function analyze(page, context) {
+async function analyze(page, context, exclude = []) {
   await waitForStableStyles(page);
   let builder = new AxeBuilder({ page }).withTags(TAGS);
+  for (const selector of exclude) builder = builder.exclude(selector);
   for (const [rule, on] of Object.entries(OFF)) {
     if (!on) builder = builder.disableRules(rule);
   }
@@ -343,7 +542,7 @@ async function assertConfigured(page, locale, theme) {
 for (const surface of SURFACES) {
   test.describe(`axe: ${surface.name}`, () => {
     for (const locale of LOCALES) {
-      for (const theme of THEMES) {
+      for (const theme of surface.standalone ? ALL_THEMES : THEMES) {
         test(`${locale.label}, ${theme.label} theme`, async ({
           page,
           app,
@@ -369,9 +568,14 @@ for (const surface of SURFACES) {
             });
           }
 
+          // With a navigation group open, so its links are checked too.
+          const group = page.locator('.gs-group').first();
+          if (await group.count()) await group.evaluate(d => (d.open = true));
+
           const violations = await analyze(
             page,
-            `${surface.name} / ${locale.label} / ${theme.label}`
+            `${surface.name} / ${locale.label} / ${theme.label}`,
+            surface.exclude
           );
 
           expect(

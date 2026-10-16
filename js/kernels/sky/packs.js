@@ -1,0 +1,53 @@
+// =============================================================================
+// Sky kernel: loading the data
+// -----------------------------------------------------------------------------
+// The only module that names the star file and the constellation figures, so
+// that a page which uses the kernel's arithmetic does not download a catalogue
+// it never asks for, and so that tests/dataPacks.test.js can hold the rule
+// "nothing names a lazy pack but its loader".
+//
+// The stars are a sidecar of the data pack sky-bright-stars (DATA_PACKS.md): a
+// JSON file fetched at run time, not a JavaScript module, so a route budget
+// that counts JavaScript does not count a star table, as for library.json. The
+// mission lab's ephemeris pack is a sidecar the same way (Roadmap II Prompt
+// 106), for the planets' positions.
+// =============================================================================
+
+/** Where the star rows are, from the site root (tools/build-data-packs.mjs). */
+export const STARS_URL = '/sky/bright-stars.json';
+
+/**
+ * The star file's text, parsed. A caller passes its own fetch so a test or a
+ * Worker can supply the file; the default is the page's.
+ * @param {typeof fetch} [fetchImpl]
+ * @returns {Promise<object>} The sidecar: {pack, columns, stars, ...}
+ */
+export async function loadStarFile(fetchImpl = globalThis.fetch) {
+  const res = await fetchImpl(STARS_URL);
+  if (!res.ok) throw new Error(`${STARS_URL}: HTTP ${res.status}`);
+  return res.json();
+}
+
+/** Where the ephemeris pack's coefficients are (tools/build-ephemeris.mjs). */
+export const EPHEMERIS_URL = '/sky/ephemeris.json';
+
+/**
+ * The ephemeris pack's sidecar: the mission lab's pack (MISSION_LAB.md) as a
+ * JSON file, so the Sky Lab reads it as it reads the stars and a route budget
+ * that counts JavaScript does not count a coefficient table. It is the pack
+ * module's own runtime part and data, byte for byte (`ephemeris:check`).
+ * @param {typeof fetch} [fetchImpl]
+ * @returns {Promise<{pack: object, data: object}>}
+ */
+export async function loadEphemerisFile(fetchImpl = globalThis.fetch) {
+  const res = await fetchImpl(EPHEMERIS_URL);
+  if (!res.ok) throw new Error(`${EPHEMERIS_URL}: HTTP ${res.status}`);
+  return res.json();
+}
+
+/** The pack's record: credit, licence and columns, for a page to show. A lazy module. */
+export const loadStarPack = () => import('../../data/sky/brightStars.js');
+
+/** The constellation figures (a lazy module of its own). */
+export const loadConstellations = () =>
+  import('../../data/sky/constellations.js');

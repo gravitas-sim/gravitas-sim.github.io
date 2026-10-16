@@ -50,7 +50,6 @@ import {
 import {
   scaleBar,
   angleAtVertex,
-  bearingDegrees,
   LatchStopwatch,
   INSTRUMENT_MONO,
 } from './instruments.js';
@@ -218,9 +217,6 @@ export function toolsPointerUp() {
   tools.drag = null;
   return held;
 }
-
-/** @returns {boolean} True while a handle is held */
-export const toolsDragging = () => !!tools.drag;
 
 // --- The stopwatch ------------------------------------------------------------
 
@@ -521,6 +517,33 @@ let captureCaption = '';
 let captureNote = '';
 
 /**
+ * Where a scenario built on a real system takes its numbers from, as the
+ * provenance line says it: short, because it is one line on a canvas. `cites`
+ * names the sources (names and years read the same in every language);
+ * `approximate` is 'some' or 'all' when values are unsourced. The full record,
+ * object by object and field by field, is js/data/realSystemSources.js, and
+ * tests/realSystemSources.test.js holds this summary to it.
+ */
+export const SCENARIO_SOURCES = {
+  'solar-system': { cites: 'NASA fact sheets, JPL', approximate: 'some' },
+  'kuiper-belt': { cites: '', approximate: 'all' },
+  'habitable-zone-lab': { cites: 'JPL', approximate: '' },
+  'retrograde-mars': { cites: 'JPL, NASA fact sheets', approximate: 'some' },
+  'trappist-1-system': {
+    cites: 'Agol et al. 2021, Gillon et al. 2017',
+    approximate: 'some',
+  },
+  'transit-lab': {
+    cites: 'Torres et al. 2008, Southworth 2010',
+    approximate: '',
+  },
+  'exoplanet-characterization-lab': {
+    cites: 'Torres et al. 2008, Southworth 2010',
+    approximate: '',
+  },
+};
+
+/**
  * Draw the provenance line on the next frame, for a screenshot.
  * @param {boolean} on - True while a capture is in flight
  * @param {object} [meta] - {caption, note} - the scenario title, and a
@@ -622,16 +645,29 @@ export function drawInstrumentation(
   // composited into the export. Larger than the bottom line and set slightly
   // brighter: on a slide it is read from the back of a room, and in a lab
   // report it is the caption the figure would otherwise need underneath it.
-  if (capturing && captureCaption) {
+  // A second line, when there is one, says where a real system's numbers come
+  // from (js/data/realSystemSources.js): smaller, under the title.
+  const [captionTitle, captionSources = ''] = captureCaption.split('\n');
+  let underTitle = pad + 24;
+  if (capturing && captionTitle) {
     ctx.save();
     ctx.font = `${narrow ? 13 : 15}px ${INSTRUMENT_MONO}`;
     // A dark backing, because a title in pale ink over a white star or the
     // bright side of an accretion disk is a title nobody can read.
-    const tw = ctx.measureText(captureCaption).width;
+    const tw = ctx.measureText(captionTitle).width;
     ctx.fillStyle = 'rgba(6, 10, 20, 0.55)';
     ctx.fillRect(pad - 4, pad - 2, Math.min(tw + 16, W - 2 * pad + 8), 24);
     ctx.fillStyle = 'rgba(232, 240, 252, 0.98)';
-    ctx.fillText(captureCaption, pad + 4, pad + 10);
+    ctx.fillText(captionTitle, pad + 4, pad + 10);
+    if (captionSources) {
+      ctx.font = `${narrow ? 10 : 11}px ${INSTRUMENT_MONO}`;
+      const sw = ctx.measureText(captionSources).width;
+      ctx.fillStyle = 'rgba(6, 10, 20, 0.55)';
+      ctx.fillRect(pad - 4, pad + 22, Math.min(sw + 16, W - 2 * pad + 8), 16);
+      ctx.fillStyle = 'rgba(210, 224, 245, 0.95)';
+      ctx.fillText(captionSources, pad + 4, pad + 30);
+      underTitle += 16;
+    }
     ctx.restore();
   }
 
@@ -656,7 +692,7 @@ export function drawInstrumentation(
     if (line && lines.length < 3) lines.push(line);
 
     const lineHeight = narrow ? 14 : 16;
-    const top = pad + 24;
+    const top = underTitle;
     ctx.fillStyle = 'rgba(6, 10, 20, 0.55)';
     ctx.fillRect(
       pad - 4,
@@ -802,12 +838,6 @@ export const protractorReading = () =>
     tools.protractor.arm1,
     tools.protractor.arm2
   );
-
-/** Exposed for the same reason: the bearing of each arm, in degrees. */
-export const protractorArms = () => ({
-  arm1: bearingDegrees(tools.protractor.vertex, tools.protractor.arm1),
-  arm2: bearingDegrees(tools.protractor.vertex, tools.protractor.arm2),
-});
 
 /** Exposed so a test can read the ruler's length without a canvas. */
 export const rulerLengthUnits = () =>

@@ -21,8 +21,6 @@ export default {
   subtitle: 'Una razón es una pista. Descubre qué cuenta como prueba',
   duration: '55-70 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Tres de las lunas de Júpiter se marcan el compás unas a otras, Plutón cruza la órbita de Neptuno y jamás se le ha acercado, y miles de asteroides se mantienen sesenta grados por delante de Júpiter sin moverse de ahí. Los tres casos son el mismo fenómeno, y ninguno queda explicado por lo que todo el mundo cita: la razón entre los periodos. Medirás esas razones, descubrirás que la más limpia de todo el sistema pertenece a una luna que no está en ninguna resonancia, y luego medirás la magnitud que sí resuelve la cuestión: un ángulo que o bien oscila o bien da la vuelta.',
   objectives: [
     'Medir periodos orbitales y razones de periodos a partir de las propias órbitas, y hallar la razón de enteros pequeños más cercana a cada una',
     'Explicar por qué una razón casi racional es una prueba débil, usando un caso en el que la razón más limpia del sistema pertenece a un cuerpo sin resonancia alguna',
@@ -93,7 +91,7 @@ export default {
              \n\nFíjate en la última cifra de cada fila. Dice cuánto más cerca
              está la razón medida de una razón de enteros pequeños de lo que
              habría estado un número cualquiera. Esa cifra es de lo que trata
-             esta lección.`,
+             esta investigación.`,
       checklist: [
         'Deja correr la simulación unas 150 órbitas de Ío',
         'Lee los cuatro periodos',
@@ -367,7 +365,7 @@ export default {
              y no lo mismo que una resonancia.
 
              \n\nRetén esto. Dentro de unos pasos vas a conocer un cuerpo cuyo
-             ángulo se queda en no concluyente durante toda la lección, y la
+             ángulo se queda en no concluyente durante toda la investigación, y la
              tentación de llamarlo resonante será considerable.`,
     },
     {
@@ -408,6 +406,20 @@ export default {
                 dirección cada vez que ocurriera, y la configuración no
                 sobreviviría. La resonancia es la disposición que hace imposible
                 el encuentro.`,
+      hints: [
+        'Tras la sustitución solo quedan dos longitudes. ¿Qué combinación de ellas permanece?',
+        'La expresión es el doble del ángulo entre Ganimedes y Europa.',
+        'Debe igualar el ángulo que φ mantiene. Divide entre lo que multiplica al ángulo que buscas.',
+      ],
+      feedback: {
+        close:
+          'Cerca, pero este es exacto. Sustituye tu ángulo: ¿da el ángulo que φ debe mantener?',
+        'wrong-sign': 'Da el tamaño del ángulo, no su sentido.',
+        'wrong-unit': 'Eso parece radianes. La pregunta pide grados.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez. Un ángulo entre dos cuerpos en órbita es como mucho de unos cientos de grados.',
+        off: 'Mira la expresión simplificada: es un múltiplo de un ángulo. Iguálala al valor que mantiene φ y despeja el ángulo.',
+      },
     },
     {
       title: 'Un uno por ciento',

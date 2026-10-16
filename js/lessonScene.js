@@ -63,7 +63,6 @@ import {
   noteProblem,
   resolveMatcher,
   roleOfBody,
-  savedValue,
   staleRoles,
 } from './lesson/binding.js';
 import {
@@ -337,9 +336,6 @@ export function selectableBodies() {
  */
 export const enterLessonScope = values => enterScope(scope, values);
 
-/** What was saved under a key on entry. @returns {*} */
-export const savedOnEntry = (key, fallback) => savedValue(scope, key, fallback);
-
 /**
  * Leave the lesson's scope.
  *
@@ -355,9 +351,6 @@ export function leaveLessonScope() {
   clearRoster(roster);
   return leaveScope(scope);
 }
-
-/** Whether a lesson scope is open. @returns {boolean} */
-export const inLessonScope = () => scope.entered;
 
 // -----------------------------------------------------------------------------
 // Evidence

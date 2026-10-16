@@ -20,6 +20,7 @@
 //   interaction  choices are answered, response fields filled, boxes ticked
 //   grading      the answer the lesson itself declares is submitted, and the
 //                site marks it correct - the same rule the answer key uses
+//   text         no entity reaches the screen as its name ("&rsquo;")
 //   advance      Next actually moved, within a bounded wait
 //
 // and at the end of each lesson, that the report opens.
@@ -126,8 +127,9 @@ for (const inv of lessons) {
 
         // --- Its setup was applied ---------------------------------------
         if (step.setup?.scenario) {
-          const world = await page.evaluate(async () => {
+          const world = await page.evaluate(async asked => {
             const ui = await import('/js/ui.js');
+            const { scenarioId } = await import('/js/data/scenarioInfo.js');
             const p = await import('/js/physics.js');
             const lists = [
               'bh_list',
@@ -141,11 +143,14 @@ for (const inv of lessons) {
               'galaxies',
             ];
             return {
+              // The world is named by id; a built-in lesson keeps the English
+              // key its fingerprint was made from (D-SCN-01), so compare ids.
               scenario: ui.current_scenario_name,
+              asked: scenarioId(asked) ?? asked,
               bodies: lists.reduce((n, l) => n + (p[l] || []).length, 0),
             };
-          });
-          if (world.scenario !== step.setup.scenario) {
+          }, step.setup.scenario);
+          if (world.scenario !== world.asked) {
             note(
               i,
               `asked for "${step.setup.scenario}", the world is "${world.scenario}"`
@@ -354,6 +359,22 @@ for (const inv of lessons) {
         for (let b = 0; b < boxCount; b++) {
           const box = boxes.nth(b);
           if (!(await box.isChecked())) await box.check().catch(() => {});
+        }
+
+        // --- Its words are characters -------------------------------------
+        // prose() once escaped the & of every entity, so lessons showed
+        // "HD&nbsp;209458" and "Sun&rsquo;s". Read once the step is answered,
+        // so its explanation, feedback and any verdict are on screen too.
+        const entities = await page.evaluate(
+          () =>
+            document
+              .getElementById('investigationBody')
+              ?.innerText.match(
+                /&(?:[a-z][a-z\d]{1,31}|#\d{1,7}|#x[\da-f]{1,6});/gi
+              ) || []
+        );
+        if (entities.length) {
+          note(i, `shows ${[...new Set(entities)].join(' ')} as text`);
         }
 
         // --- Advance -------------------------------------------------------

@@ -32,6 +32,8 @@
 // capture.js turn instrument output into these; store.js persists them.
 // =============================================================================
 
+import { deriveEnvelope } from './ledger.js';
+
 /** Bumped when the entry shape changes. See migrateEntry(). */
 export const SCHEMA_VERSION = 1;
 
@@ -63,6 +65,28 @@ export const SOURCE = Object.freeze({
   STELLAR_LAB: 'stellar-lab',
   BINARY_ORBIT: 'binary-orbit',
   HORIZON_TRIALS: 'horizon-trials',
+  // A measurement on real data in the Observatory (js/measure/). Its snapshot
+  // carries an `observed` group instead of a simulation's conditions: see
+  // js/notebook/observed.js.
+  OBSERVATORY: 'observatory',
+  // A fit, a sweep analysis and an experiment result, each kept as the
+  // gravitas.artifact/1 envelope it was made as (js/notebook/artifactEntry.js).
+  INFERENCE_FIT: 'inference-fit',
+  COMPARISON: 'comparison',
+  SWEEP_ANALYSIS: 'sweep-analysis',
+  EXPERIMENT_RESULT: 'experiment-result',
+  // A run of a reviewed notebook on the compute page, kept as its envelope
+  // (js/compute/keep.js).
+  COMPUTE_CAPSULE: 'compute-capsule',
+  // A formula over numbers the notebook holds (js/notebook/derivedEntry.js).
+  DERIVED_QUANTITY: 'derived-quantity',
+  // A reading, an event or a forward-model observation from the 3-D lab,
+  // kept as its envelope (js/lab3d/evidence.js).
+  LAB3D: 'lab3d',
+  // A result of the mission lab (a timeline, the maneuvers, the delta-v
+  // budget, the patched conic against the propagated flight), kept as its
+  // envelope (js/mission/evidence.js).
+  MISSION_LAB: 'mission-lab',
 });
 
 /** The sources this build can capture from. */
@@ -75,6 +99,15 @@ export const SOURCES = [
   SOURCE.STELLAR_LAB,
   SOURCE.BINARY_ORBIT,
   SOURCE.HORIZON_TRIALS,
+  SOURCE.OBSERVATORY,
+  SOURCE.INFERENCE_FIT,
+  SOURCE.COMPARISON,
+  SOURCE.SWEEP_ANALYSIS,
+  SOURCE.EXPERIMENT_RESULT,
+  SOURCE.COMPUTE_CAPSULE,
+  SOURCE.DERIVED_QUANTITY,
+  SOURCE.LAB3D,
+  SOURCE.MISSION_LAB,
 ];
 
 /** How long a student's prose may be, per field. */
@@ -126,6 +159,57 @@ const prose = (v, max) =>
     .slice(0, max);
 
 /**
+ * The message ids behind the words a capture wrote, so a report can say them
+ * again in the reader's language. A capture's translator calls say() with the
+ * text it made; quantity() and the figure helpers look the text up. Text from
+ * no message is not here, and is kept as it was written.
+ */
+const said = new Map();
+
+/**
+ * Remember which message made a piece of text.
+ * @param {string} text - What the translator returned
+ * @param {string} id - The message id
+ * @param {object} [vars] - Its variables
+ * @returns {string} The same text
+ */
+export function say(text, id, vars) {
+  if (typeof text === 'string' && text !== id) {
+    if (said.size > 400) said.clear();
+    said.set(text, vars ? { id, vars: { ...vars } } : { id });
+  }
+  return text;
+}
+
+/** `lid`/`nid` and their variables, for a label or a note that a message made. */
+const named = (text, key) => {
+  const m = text ? said.get(text) : undefined;
+  return m
+    ? { [`${key}id`]: m.id, ...(m.vars ? { [`${key}v`]: m.vars } : {}) }
+    : {};
+};
+
+/** Where in the student's work a capture happens: set around a capture. */
+let contextNow = null;
+
+/**
+ * Run a capture with the context it is made in: the lesson and step, the page.
+ * @template T
+ * @param {?object} context - Plain strings, or null
+ * @param {() => T} fn - The capture
+ * @returns {T}
+ */
+export function withContext(context, fn) {
+  const before = contextNow;
+  contextNow = context;
+  try {
+    return fn();
+  } finally {
+    contextNow = before;
+  }
+}
+
+/**
  * One recorded number.
  *
  * `unit` is required in the sense that omitting it stores the empty string and
@@ -139,6 +223,10 @@ const prose = (v, max) =>
  * @param {string} [spec.kind] - One of KIND; measured by default
  * @param {?number} [spec.uncertainty] - Plus or minus, same unit
  * @param {string} [spec.note] - A qualification that travels with it
+ * @param {string} [spec.qid] - The producer's own id for it (a pipeline's)
+ * @param {string} [spec.og] - Its origin in the envelope's words, where the
+ *   three kinds above are too few (a derived value)
+ * @param {string} [spec.ub] - The basis of its uncertainty (js/platform/artifact.js)
  * @returns {object} A quantity
  */
 export function quantity({
@@ -148,6 +236,9 @@ export function quantity({
   kind = KIND.MEASURED,
   uncertainty = null,
   note = '',
+  qid = '',
+  og = '',
+  ub = '',
 }) {
   return {
     label: text(label, 80),
@@ -156,6 +247,12 @@ export function quantity({
     kind: KINDS.includes(kind) ? kind : KIND.MEASURED,
     uncertainty: num(uncertainty),
     note: text(note, 160),
+    // Only when there is one, so an entry without them is what it was.
+    ...named(label, 'l'),
+    ...named(note, 'n'),
+    ...(qid ? { qid: String(qid) } : {}),
+    ...(og ? { og: String(og) } : {}),
+    ...(ub ? { ub: String(ub) } : {}),
   };
 }
 
@@ -190,6 +287,7 @@ export function figureSeries({
   }
   return {
     label: text(label, 60),
+    ...named(label, 'l'),
     kind: KINDS.includes(kind) ? kind : KIND.MEASURED,
     style: style === 'points' ? 'points' : 'line',
     points: clean,
@@ -217,6 +315,9 @@ export function figure({ title, xLabel, yLabel, series = [], logX = false }) {
     title: text(title, 90),
     xLabel: text(xLabel, 60),
     yLabel: text(yLabel, 60),
+    ...named(title, 't'),
+    ...named(xLabel, 'x'),
+    ...named(yLabel, 'y'),
     logX: Boolean(logX),
     series: kept,
   };
@@ -445,10 +546,19 @@ export function snapshotFingerprint(snapshot) {
  * @param {Array<object>} [spec.quantities] - From quantity()
  * @param {?object} [spec.figure] - From figure()
  * @param {object} [spec.provenance] - From provenanceOf()
+ * @param {?object} [spec.observed] - For a measurement on real data, what
+ *   the data were and what was done to them (js/notebook/observed.js); a
+ *   simulation's entry has none
+ * @param {?object} [spec.artifact] - For a fit, an analysis or an experiment
+ *   result, the gravitas.artifact/1 envelope it was made as, with the digest of
+ *   what it read (js/notebook/artifactEntry.js); a simulation's entry has none
  * @param {object} [spec.prose] - claim, evidence, limitations
  * @param {number} [spec.capturedAt] - Epoch ms; defaults to now
  * @param {string} [spec.id] - Reuse an id, for restore
- * @returns {object} A frozen-snapshot entry
+ * @param {?object} [spec.context] - Where in the student's work it was kept
+ *   (a lesson and step, a page); the context a capture runs in by default
+ * @returns {object} A frozen-snapshot entry. Every one holds its result as a
+ *   gravitas.artifact/1 envelope (./ledger.js), written once with the numbers
  */
 export function buildEntry({
   source,
@@ -456,22 +566,48 @@ export function buildEntry({
   quantities = [],
   figure: fig = null,
   provenance = null,
+  observed = null,
+  artifact = null,
   prose: written = null,
   capturedAt = Date.now(),
   id = null,
+  context = contextNow,
 }) {
+  const entryId = id || newEntryId();
+  const when = Number(capturedAt) || Date.now();
+  const kept = quantities
+    .filter(Boolean)
+    .slice(0, LIMITS.quantities)
+    .map(q => ({ ...q }));
+  const here = provenance || provenanceOf();
+  const made = artifact
+    ? JSON.parse(JSON.stringify(artifact))
+    : deriveEnvelope({
+        id: entryId,
+        source,
+        quantities: kept,
+        provenance: here,
+        observed,
+        capturedAt: when,
+        context,
+      });
+  // The producer's own envelope keeps what it said; where it was kept is added.
+  if (artifact && context)
+    made.provenance = { ...made.provenance, context: { ...context } };
   const snapshot = deepFreeze({
     v: SCHEMA_VERSION,
-    capturedAt: Number(capturedAt) || Date.now(),
-    quantities: quantities
-      .filter(Boolean)
-      .slice(0, LIMITS.quantities)
-      .map(q => ({ ...q })),
+    capturedAt: when,
+    quantities: kept,
     figure: fig ? { ...fig } : null,
-    provenance: provenance || provenanceOf(),
+    provenance: here,
+    // Only present when there is one, so an entry kept before these existed
+    // is exactly what it was.
+    ...(observed ? { observed: JSON.parse(JSON.stringify(observed)) } : {}),
+    artifact: made,
+    ...(context ? { context: { ...context } } : {}),
   });
   return {
-    id: id || newEntryId(),
+    id: entryId,
     source: SOURCES.includes(source) ? source : String(source || ''),
     title: text(title, LIMITS.title),
     prose: {

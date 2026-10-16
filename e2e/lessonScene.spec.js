@@ -13,7 +13,7 @@
 // and testing the test.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, openObjectsList } from './fixtures.js';
 
 /**
  * A step whose instrument and whose star are the same object.
@@ -282,6 +282,7 @@ test.describe('the layout holds where a reader has to use it', () => {
           document.documentElement.clientWidth
       );
       expect(overflow).toBeLessThanOrEqual(1);
+      await openObjectsList(page);
       await expect(page.locator('.inv-object')).toBeVisible();
       const box = await page.locator('.inv-object').boundingBox();
       // A 32-pixel target is the smallest this interface uses anywhere.
@@ -298,6 +299,7 @@ test.describe('the layout holds where a reader has to use it', () => {
         document.documentElement.clientWidth
     );
     expect(overflow).toBeLessThanOrEqual(1);
+    await openObjectsList(page);
     await expect(page.locator('.inv-object')).toBeVisible();
   });
 });

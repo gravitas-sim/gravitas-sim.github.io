@@ -1,0 +1,3 @@
+schema,submission,fingerprint,roster_id,assignment_id,name_as_typed,lesson_id,step_id,step_title,auto_verdict,entered_by,mark,points_possible,comment,response_status,response
+gravitas.instructor-marks/1,1,10df065b333557,S-1,wk3,Ada Lovelace,keplers-laws,why-the-speed-changes,Why the speed changes,unmarked,instructor,1,1,Names the speed-up.,withheld,
+gravitas.instructor-marks/1,4,16de52563031f5,S-3,wk3,Cleo,keplers-laws,why-the-speed-changes,Why the speed changes,unmarked,instructor,0.5,1,"'=Needs the second law",withheld,

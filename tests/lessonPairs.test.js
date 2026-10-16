@@ -269,7 +269,7 @@ describe('what a path did, and what that licenses', () => {
 
 describe('the chaos pair measures rather than assumes', () => {
   test('the configurations keep the two-body counterexample', () => {
-    expect(CONFIGURATIONS.binary.scenario).toBe('Binary Pair');
+    expect(CONFIGURATIONS.binary.scenario).toBe('binary-pair');
     expect(CONFIGURATIONS.binary.expect).toBe('linear');
     expect(CONFIGURATIONS.triple.expect).toBe('exponential');
     // The same nudge in both, which is what makes them comparable.

@@ -32,6 +32,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { scrollLikeAReader } from './reach.js';
 
 /** The sizes, named for what they are rather than for their numbers. */
 const VIEWPORTS = [
@@ -85,13 +86,21 @@ async function fillFields(page) {
  */
 async function reachable(page, selector, { minHeight = 0 } = {}) {
   const el = page.locator(selector).first();
+  // Scrolled only where a reader can scroll, which `scrollIntoView` is not: it
+  // scrolls an `overflow: hidden` box as readily as any other, and that is how
+  // a Next button clipped off the lesson sheet at 390px passed here. See
+  // e2e/reach.js.
+  //
   // Centered rather than minimally scrolled. `scrollIntoViewIfNeeded` stops the
   // moment an element is technically inside its scroll container, which leaves
   // it flush against the edge - and a point sampled at the very edge of a
   // scrolling panel hits the panel, not the control. That is a property of
   // this test, not of the layout, and it failed six of fourteen sizes before
   // it was pinned down.
-  await el.evaluate(node => node.scrollIntoView({ block: 'center' }));
+  expect(
+    await page.evaluate(scrollLikeAReader, selector),
+    `${selector} can be scrolled to`
+  ).toBe('ok');
   await page.waitForTimeout(120);
   await expect(el, `${selector} is visible`).toBeVisible();
   const box = await el.boundingBox();
@@ -153,7 +162,22 @@ for (const lang of ['en', 'es']) {
 
         // 3. Everything the step needs can be got to.
         await reachable(page, '#investigationToolReadout .inv-tool-row');
+        // Below a desktop the instrument and the graph share one place and
+        // a tab chooses between them (css/chrome.css), so the table is
+        // reached through its own tab, and the instrument comes back after.
+        const tabs = page.locator('#investigationDockTabs');
+        const tabbed = await tabs.isVisible();
+        if (tabbed) {
+          await tabs
+            .locator('label', { has: page.locator('#investigationDockPlot') })
+            .click();
+        }
         await reachable(page, '#investigationPlotTable');
+        if (tabbed) {
+          await tabs
+            .locator('label', { has: page.locator('#investigationDockTool') })
+            .click();
+        }
         await reachable(page, '#investigationBody input[data-field]', {
           minHeight: 32,
         });

@@ -1,0 +1,43 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "community.pulsating-stars",
+  "version": "1.0.0",
+  "kind": "declarative",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "Pulsating stars: a course",
+    "es": "Estrellas pulsantes: un curso"
+  },
+  "provides": {
+    "courses": [
+      {
+        "id": "pulsating-stars",
+        "file": "course.json"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "course.json",
+      "role": "data",
+      "offline": "optional"
+    }
+  ],
+  "citations": [],
+  "licenses": [
+    {
+      "scope": "course.json",
+      "license": "CC-BY-4.0"
+    }
+  ],
+  "offline": {
+    "policy": "precache"
+  },
+  "validation": [
+    {
+      "check": "registry:sdk-extensions"
+    }
+  ],
+  "migrations": []
+}

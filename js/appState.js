@@ -1,35 +1,18 @@
 // =============================================================================
-// Application state
-// -----------------------------------------------------------------------------
-// The three objects the whole application shares: the view state, the live
-// settings, and the name of the scenario currently loaded.
-//
-// They used to live in js/ui.js, and that single fact was the shape of the
-// dependency graph. Eleven modules imported js/ui.js, and four of them -
-// controls, lightCurve, timeline, exportDialog - wanted nothing from it except
-// these objects. Because js/ui.js also imports those modules back, every one
-// of those imports closed a cycle, and the import graph said the renderer
-// depended on the settings panel when what it actually depended on was a
-// settings object.
-//
-// So the state moved down here, below everything, and js/ui.js re-exports it
-// unchanged. Nothing about the objects themselves is different: `state` is the
-// same mutable object it always was and `SETTINGS` is still reassigned
-// wholesale when a save is loaded. What changed is who has to be imported to
-// reach them.
-//
-// Why setters for two of the three
-// -----------------------------------------------------------------------------
-// `state` is a const object that is mutated in place, so an importer's binding
-// is always current. `SETTINGS` and `current_scenario_name` are reassigned -
-// loading a save replaces the settings object outright - and an ES module
-// cannot assign to a binding it imported. The reassignments therefore go
-// through setSettings() and setScenarioName(). Importers still read the plain
-// bindings, which are live and follow the reassignment.
+// Application state, and the command bus
+// The view state, the live settings and the scenario name live below js/ui.js,
+// so a module wanting only them need not import the coordinator and close a
+// cycle; ui.js re-exports them unchanged. The command bus (end of file) is the
+// other half: what a module below ui.js needs the interface to DO, it asks for
+// by name through command().
+// Why setters for two of the three: `state` is mutated in place, so an
+// importer's binding is always current. `SETTINGS` and `current_scenario_name`
+// are reassigned, and an ES module cannot assign to an imported binding, so
+// that goes through setSettings() and setScenarioName(); importers read them.
 // =============================================================================
 
 export const DEFAULT_SETTINGS = {
-  preset_scenario: 'Binary BH',
+  preset_scenario: 'binary-bh',
   gravitational_constant: 2.0,
   follow_mode: 'None',
   num_planets: 15,
@@ -303,22 +286,14 @@ export const DEFAULT_SETTINGS = {
 /**
  * Setting names that have changed, and what they used to be called.
  *
- * A key in DEFAULT_SETTINGS is not prose. It is the name a saved world and a
- * share link store the value under, and both of those outlive the rename.
- * `trail_colour_mode` became `trail_color_mode` when the source was made
- * consistently American; a link or a save written before that carries the old
- * spelling, and assigning it into SETTINGS sets a property nothing reads - so
- * the trails quietly come back the default color rather than the one the
- * sender was demonstrating, with nothing to say a setting was dropped.
- *
- * The other two entries are not renames anybody intended. That same pass ran
- * `realis -> realiz` and `optimis -> optimiz` as substring rules, which is
- * fine on a suffix and wrong in the middle of a word: `realistic_disk_physics`
- * and `habitable_zone_optimism` came out as `realiztic_disk_physics` and
- * `habitable_zone_optimizm`, and were deployed under those names. The spelling
- * is repaired here, so the keys are back to what they always were - but a link
- * shared from the site during that window is still out there carrying the
- * misspelling, and it costs two lines to keep it working.
+ * A key in DEFAULT_SETTINGS is the name a saved world and a share link store
+ * the value under, and both outlive a rename. `trail_colour_mode` became
+ * `trail_color_mode` in the American-spelling pass; a link or a save written
+ * before it assigns a property nothing reads, so the trails quietly come back
+ * the default color. The other two are not renames anybody intended: the same
+ * pass ran `realis -> realiz` and `optimis -> optimiz` inside words, and the
+ * wrong names were deployed. The keys are back to what they were, and a link
+ * shared in that window still carries the misspelling, so it is mapped here.
  */
 export const RENAMED_SETTINGS = Object.freeze({
   trail_colour_mode: 'trail_color_mode',
@@ -498,4 +473,29 @@ export let current_scenario_name = null;
  */
 export function setScenarioName(name) {
   current_scenario_name = name;
+}
+
+// The command bus (Prompt 107, step 2d): the engine, share dialog, welcome
+// screen and bridges used to import js/ui.js for these.
+const handlers = new Map();
+
+/** Register handlers by name; js/ui.js does this once, after they exist. */
+export function registerCommands(table) {
+  for (const [name, fn] of Object.entries(table)) handlers.set(name, fn);
+}
+
+/**
+ * A function that runs the named command: same arguments and return value,
+ * synchronous, no queue or event between. The handler is looked up per call,
+ * so one may be made before ui.js registers; an unregistered name throws.
+ *
+ * @param {string} name - Command name
+ * @returns {Function} The command
+ */
+export function command(name) {
+  return (...args) => {
+    const fn = handlers.get(name);
+    if (!fn) throw new Error(`No handler for command "${name}"`);
+    return fn(...args);
+  };
 }

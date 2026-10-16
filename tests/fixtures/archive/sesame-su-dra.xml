@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Sesame xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="https://vizier.cds.unistra.fr/xml/sesame_4x.xsd">
+<Target option="SNV">
+  <name>SU Dra</name>
+  <!-- Q8255176 #1 -->
+  <Resolver name="Sc=Simbad (CDS, via client/server)"><!--delay: 89ms [6] -->
+    <oid>462617</oid>
+    <otype>RR*</otype>
+    <jpos>11:37:56.60 +67:19:47.0</jpos>
+    <jradeg>174.48586303</jradeg>
+    <jdedeg>67.32973892</jdedeg>
+    <refPos>2020yCat.1350....0G</refPos>
+    <errRAmas>0.0115</errRAmas><errDEmas>0.0117</errDEmas>
+    <pm>
+      <v>90.589</v><e>0.022</e><q>A</q><r>2020yCat.1350....0G</r>
+      <pa>210.71</pa>
+      <pmRA>-46.259</pmRA><epmRA>0.015</epmRA>
+      <pmDE>-77.887</pmDE><epmDE>0.016</epmDE>
+    </pm>
+    <Vel><v>-152.11</v><e>7.38</e><q>D</q><r>2022yCat.1355....0G</r></Vel>
+    <plx><v>1.3321</v><e>0.0144</e><q>A</q><r>2020yCat.1350....0G</r></plx>
+    <spType>kA2.5hA9.5</spType><spNum>0.0004ED00.0000.0000000000000000</spNum>
+    <oname>V* SU Dra</oname>
+    <nrefs>264</nrefs>
+  </Resolver>
+</Target>
+</Sesame>
+<!--- ****Total of 1 crashes -->
+<!-- Configuration tested: /run/sesame.conf -->

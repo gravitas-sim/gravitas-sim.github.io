@@ -17,8 +17,6 @@ export default {
     'Ejecuta el mismo sistema dos veces y descubre cuánto dura la respuesta',
   duration: '55-70 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Dos ejecuciones de las mismas tres estrellas, partiendo de posiciones que difieren en mil quinientos kilómetros dentro de un sistema de ciento treinta millones de kilómetros, acaban en sitios completamente distintos. Entremedias no ocurre nada aleatorio: la simulación es determinista, y ejecutarla dos veces con exactamente los mismos números da exactamente el mismo resultado. Por el camino medirás un caso que parece caos y no lo es, pondrás un número a la rapidez con la que falla la predicción, y comprobarás que ese número es una propiedad de la física y no del ordenador.',
   objectives: [
     'Mostrar que un sistema determinista puede ser impredecible, y explicar por qué no es lo mismo',
     'Distinguir la divergencia exponencial de la deriva lineal que muestran de todos modos dos órbitas casi idénticas',
@@ -48,7 +46,7 @@ export default {
              futuros completamente distintos, y la diferencia crece de forma
              <em>exponencial</em>.
 
-             \n\nTodo en esta lección apunta a distinguir eso de tres cosas con
+             \n\nTodo en esta investigación apunta a distinguir eso de tres cosas con
              las que se confunde habitualmente.`,
       tip: 'La simulación está en pausa. No se moverá nada hasta que la dejes correr.',
     },
@@ -74,7 +72,7 @@ export default {
                 en el mismo navegador. No hay ninguna tirada de dados en el
                 motor. Lo que estás a punto de ver no es aleatoriedad, y
                 demostrarlo <em>primero</em> es lo que hace que el resto de la
-                lección signifique algo.`,
+                investigación signifique algo.`,
     },
     {
       title: 'Cómo ejecutar lo mismo dos veces',
@@ -94,7 +92,7 @@ export default {
              experimento un nombre que reconozcas y pulsa
              <strong>Capturar inicio</strong>. Después marca
              <strong>Posición</strong> y <strong>Energía total</strong> para que
-             las ejecuciones lleven lo que esta lección necesita.`,
+             las ejecuciones lleven lo que esta investigación necesita.`,
       tip: 'El banco mantiene las dos ejecuciones sobre el mismo eje de tiempo simulado, que es lo que las hace comparables.',
     },
     {
@@ -103,7 +101,7 @@ export default {
              <em>nada</em> entre una y otra.
 
              \n\nAbre el <strong>Banco A/B</strong> y busca <em>El par
-             controlado de la lección</em>. Pulsa <strong>Ejecutarlo dos veces,
+             controlado de la investigación</em>. Pulsa <strong>Ejecutarlo dos veces,
              sin cambios</strong>. Captura el inicio, graba la ejecución A
              durante cuarenta segundos simulados, vuelve a ese mismo inicio y
              graba la ejecución B durante los mismos cuarenta: el experimento
@@ -171,7 +169,7 @@ export default {
              el empujón es de una parte en cuatrocientas mil del sistema.
 
              \n\nUna nota práctica: este par tarda cuatro años en dar una vuelta,
-             así que la lección ha subido la velocidad de simulación para esta
+             así que la investigación ha subido la velocidad de simulación para esta
              sección. Eso cambia la rapidez con la que lo miras y nada de la
              física: ambas ejecuciones usan el mismo paso, así que la comparación
              entre ellas no se ve afectada.`,
@@ -245,6 +243,15 @@ export default {
                 que siempre da una respuesta no está midiendo nada.`,
     },
     {
+      hints: [
+        'El crecimiento proporcional significa que la separación escala con el tiempo, así que una carrera más larga da el mismo múltiplo de lo que tenías al empezar.',
+        'Compara el tiempo nuevo con el del ejemplo: ¿cuántas veces más largo es? Escala la separación por ese mismo factor.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Escala la separación del ejemplo por las veces que cuarenta órbitas son más que cuatro.',
+        off: 'Proporcional significa que al duplicar el tiempo se duplica la separación. Halla el factor entre los dos tiempos y aplícalo.',
+      },
       title: 'Lineal, en números',
       body: `Supón que la separación en tu binario creció de 1500 km a unos
              100 000 km a lo largo de cuatro órbitas, en proporción al tiempo.`,
@@ -370,6 +377,17 @@ export default {
              planos sería citar un ritmo más lento que el real.`,
     },
     {
+      hints: [
+        'Crecer por un factor fijo cada τ significa que la separación se multiplica por e una vez por τ. Necesitas el número de τ que alcanza el factor de crecimiento.',
+        'Ese número de τ es el logaritmo natural del factor de crecimiento. Multiplícalo por el τ que mediste.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Toma el logaritmo natural del factor de crecimiento y multiplícalo por tu τ medido.',
+        off: 'El crecimiento exponencial es separación ∝ e^(t/τ). Despeja t con un logaritmo, no dividiendo.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez; comprueba que usaste el logaritmo natural y tu τ en segundos simulados.',
+      },
       title: '¿Cuánto dura una predicción?',
       body: `Toma tu τ. Empiezas conociendo las posiciones de las estrellas con
              una precisión de 1500 km, y quieres saber cuándo las dos ejecuciones
@@ -450,7 +468,7 @@ export default {
 
              \n\n<strong>La mitad del paso maximo.</strong> No la mitad de la
              velocidad de reproducción: esa era la instrucción que daba antes
-             esta lección y no era fiable. El motor divide el avance de cada
+             esta investigación y no era fiable. El motor divide el avance de cada
              fotograma en un numero maximo de trozos, ninguno mayor que un tope,
              y cual de esos dos límites manda depende del escenario: donde el
              tope no es el que manda, reducir la velocidad a la mitad reduce el

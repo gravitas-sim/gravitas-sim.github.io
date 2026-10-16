@@ -17,7 +17,7 @@ const deg = r => (r * 180) / Math.PI;
 // The lab's own configuration: a five-Jupiter planet (mu = 5 in simulation
 // units, G = 1) crossed by a probe at 0.461 units with an impact parameter of
 // 40. Every number below that is not obviously arithmetic came out of running
-// this through the integrator; see tools/physics-checks.mjs.
+// this through the integrator; see js/validation/physicsChecks.js.
 const MU = 5;
 const V_INF = 0.461;
 const B = 40;

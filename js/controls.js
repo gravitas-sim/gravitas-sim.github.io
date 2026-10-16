@@ -16,10 +16,10 @@ import {
   white_dwarfs,
   clearObjectEnergyHistory,
 } from './physics.js';
-import { state, SETTINGS } from './appState.js';
+import { state, SETTINGS, current_scenario_name } from './appState.js';
 import { resetFollowCamera } from './followCamera.js';
-import { renderEventMarker } from './pauseAtEventPanel.js';
-import { toast, announce } from './notify.js';
+import { ensurePauseAtEvent, renderEventMarker } from './pauseAtEventBridge.js';
+import { toast, announce, loadFailed } from './notify.js';
 export { toast, announce };
 import {
   tickTimeline,
@@ -39,16 +39,9 @@ import {
   unitModeLabel,
   formatTime,
 } from './units.js';
-import {
-  initTheme,
-  cycleTheme,
-  getTheme,
-  setTheme,
-  THEMES,
-  themeLabel,
-  themeHint,
-} from './theme.js';
+import { initTheme, cycleTheme, themeLabel } from './theme.js';
 import { t } from './i18n/index.js';
+import { scenarioTitle } from './i18n/scenario.js';
 import { setSonificationMuted, getSonificationState } from './audio.js';
 import {
   initShortcuts,
@@ -152,19 +145,14 @@ function setupTransport() {
     const frames = getFrameCount();
     if (frames < 2) return;
     // Slider runs oldest (0) → newest (max); the timeline counts backwards.
-    const offset = Number(scrubberEl.max) - Number(scrubberEl.value);
+    const offset = Number(scrubberEl.max) - scrubberEl.valueAsNumber;
     scrubTo(offset);
   });
 
-  playBtn?.addEventListener('click', () => {
-    if (isScrubbing()) {
-      resumeLive();
-      state.paused = false;
-    } else {
-      state.paused = !state.paused;
-    }
-    refreshTransport();
-  });
+  // Scrubbing through history always resumes, as it always has.
+  playBtn?.addEventListener('click', () =>
+    setPlaying(isScrubbing() || state.paused)
+  );
 
   liveBtn?.addEventListener('click', () => {
     resumeLive();
@@ -205,95 +193,26 @@ function refreshTransport() {
   const scrubbingNow = isScrubbing();
   const paused = state.paused;
   const showPlayIcon = scrubbingNow || paused;
-  playBtn.textContent = showPlayIcon ? '▶' : '❚❚';
+  // The picture is an icon (css/icons.css) and the name is the aria-label
+  // below, so swapping the class is all the glyph needs.
+  playBtn
+    .querySelector('.icon')
+    ?.setAttribute('class', `icon icon-${showPlayIcon ? 'play' : 'pause'}`);
+  // In the reader's language: these were English literals, so a paused figure
+  // told a Spanish screen reader "Play simulation" over a Spanish interface.
   playBtn.setAttribute(
     'aria-label',
-    showPlayIcon ? 'Play simulation' : 'Pause simulation'
+    t(
+      showPlayIcon
+        ? 'transport.timelinePlay.playLabel'
+        : 'transport.timelinePlay.label'
+    )
   );
-  playBtn.title = showPlayIcon ? 'Play (Space)' : 'Pause (Space)';
-}
-
-// --- Theme dock ---------------------------------------------------------------
-//
-// The picker sits beside the copyright rather than in the control rail: it is a
-// preference for the page, not a control for the simulation, and the rail had
-// grown past the height of a laptop screen. Closed it is a swatch and a word;
-// open it lists every theme with its one-line hint, so choosing Daylight is one
-// click rather than three presses of the cycle shortcut.
-
-/** Repaint the dock's swatch and label from the active theme. */
-function syncThemeDock() {
-  const name = document.getElementById('themeButtonName');
-  if (name) name.textContent = themeLabel(getTheme());
-  for (const item of document.querySelectorAll('[data-theme-option]')) {
-    const on = item.dataset.themeOption === getTheme();
-    item.setAttribute('aria-checked', String(on));
-    item.classList.toggle('is-active', on);
-  }
-}
-
-function setupThemeDock() {
-  const btn = document.getElementById('themeButton');
-  const menu = document.getElementById('themeMenu');
-  if (!btn || !menu) return;
-
-  // Rebuilt on a language change as well as at start-up: the menu holds
-  // rendered text, so it goes stale the moment the reader switches language.
-  const renderMenu = () => {
-    menu.innerHTML = THEMES.map(
-      theme => `<button type="button" role="menuitemradio" aria-checked="false"
-             class="theme-menu-item" data-theme-option="${theme.id}">
-             <span class="theme-menu-swatch" data-swatch="${theme.id}"></span>
-             <span class="theme-menu-text">
-               <span class="theme-menu-label">${themeLabel(theme.id)}</span>
-               <span class="theme-menu-hint">${themeHint(theme.id)}</span>
-             </span>
-           </button>`
-    ).join('');
-    syncThemeDock();
-  };
-  renderMenu();
-  window.addEventListener('gravitasLocaleChanged', renderMenu);
-
-  const close = ({ refocus = false } = {}) => {
-    if (menu.hidden) return;
-    menu.hidden = true;
-    btn.setAttribute('aria-expanded', 'false');
-    if (refocus) btn.focus();
-  };
-
-  const open = () => {
-    menu.hidden = false;
-    btn.setAttribute('aria-expanded', 'true');
-    menu.querySelector('.is-active, .theme-menu-item')?.focus();
-  };
-
-  btn.addEventListener('click', () => (menu.hidden ? open() : close()));
-
-  menu.addEventListener('click', e => {
-    const item = e.target.closest('[data-theme-option]');
-    if (!item) return;
-    setTheme(item.dataset.themeOption);
-    close({ refocus: true });
-  });
-
-  // A menu that cannot be dismissed by Escape or by clicking away is a trap,
-  // and this one floats over the simulation.
-  menu.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      e.stopPropagation();
-      close({ refocus: true });
-    }
-  });
-  document.addEventListener('click', e => {
-    if (!menu.hidden && !e.target.closest('.theme-dock')) close();
-  });
-  window.addEventListener('gravitasEscape', () => close({ refocus: true }));
-
-  // The T shortcut and any other caller change the theme without going through
-  // this menu, so the dock follows the theme rather than its own clicks.
-  window.addEventListener('gravitasThemeChanged', syncThemeDock);
-  syncThemeDock();
+  playBtn.title = t(
+    showPlayIcon
+      ? 'transport.timelinePlay.playHint'
+      : 'transport.timelinePlay.hint'
+  );
 }
 
 // --- Rail sections ------------------------------------------------------------
@@ -317,7 +236,7 @@ const RAIL_SECTIONS_KEY = 'gravitas_rail_sections';
 // section, which fits any screen the application runs on, and every group is
 // one click away with its name permanently in view. The choice persists, so a
 // user who lives in Tools opens Tools once.
-const RAIL_SECTIONS = ['railScenario', 'railState', 'railTools', 'railLearn'];
+const RAIL_SECTIONS = ['railScenario', 'railState', 'railTools'];
 
 /** The one open on a first visit: loading something is where everyone starts. */
 const DEFAULT_OPEN = 'railScenario';
@@ -395,7 +314,6 @@ function setupRailSections() {
 
 // --- View menu ----------------------------------------------------------------
 function setupViewMenu() {
-  setupThemeDock();
   setupRailSections();
 
   const unitBtn = document.getElementById('unitToggle');
@@ -538,10 +456,13 @@ function setupShortcuts() {
     group: 'State',
     label: t('shortcut.export'),
     run: () => {
-      // Lazily imported for the same reason as the two above: exportDialog.js
-      // imports this module for its toast, so a static import here would close
-      // a cycle for one keystroke.
-      import('./exportDialog.js').then(m => m.openExportDialog());
+      // Through the bridge, which initialises the dialog first; lazily, for the
+      // same reason as the two above (exportDialog.js imports this module).
+      const open = () =>
+        import('./exportBridge.js')
+          .then(m => m.openExport())
+          .catch(() => loadFailed(open));
+      open();
     },
   });
   registerShortcut({
@@ -622,7 +543,8 @@ function setupShortcuts() {
     group: 'View',
     label: t('shortcut.lecture'),
     run: async () => {
-      const { toggleLecture } = await import('./lecture.js');
+      const { toggleLecture, lectureReady } = await import('./lecture.js');
+      await lectureReady;
       toggleLecture();
     },
   });
@@ -631,9 +553,13 @@ function setupShortcuts() {
     match: 'n',
     group: 'Tools',
     label: t('shortcut.pauseAtEvent'),
-    run: () => {
+    run: async () => {
       const toggle = document.getElementById('togglePauseAtEvent');
       toggle?.click();
+      // The first press fetches the tool (js/pauseAtEventBridge.js). The
+      // button's handler awaits the same load and was first to, so the panel
+      // is open by the time this resumes.
+      await ensurePauseAtEvent().catch(() => {});
       // Focus the panel's first control, so the whole tool is reachable without
       // a mouse: choose an event, tab to Arm, press it.
       if (toggle?.getAttribute('aria-pressed') === 'true') {
@@ -654,7 +580,10 @@ function setupShortcuts() {
     match: 'escape',
     group: 'Help',
     label: t('shortcut.closePanel'),
-    run: () => {
+    run: event => {
+      // An Escape inside the list has already closed it (js/dialog.js), and
+      // closes nothing else.
+      if (event?.target?.closest?.('#shortcutOverlay')) return;
       if (isShortcutHelpOpen()) {
         hideShortcutHelp();
         return;
@@ -727,7 +656,7 @@ function setupPlacementHint() {
  * covers most of a 375px screen, and the simulation is the point.
  */
 export function collapseReadoutOnSmallScreens() {
-  if (window.innerWidth > 720) return;
+  if (window.innerWidth > 767) return;
   const overlay = document.getElementById('overlay');
   const btn = document.getElementById('overlayMinimize');
   if (!overlay || !btn || overlay.classList.contains('minimized')) return;
@@ -749,7 +678,7 @@ function paintRangeFill(el) {
   const min = Number(el.min || 0);
   const max = Number(el.max || 100);
   const span = max - min;
-  const pct = span > 0 ? ((Number(el.value) - min) / span) * 100 : 0;
+  const pct = span > 0 ? ((el.valueAsNumber - min) / span) * 100 : 0;
   el.style.setProperty('--range-fill', `${Math.max(0, Math.min(100, pct))}%`);
 }
 
@@ -781,6 +710,20 @@ function setupRangeFills() {
 }
 
 /** Initialize every control surface this module owns. */
+/**
+ * Run or pause the simulation, as the transport's play button does.
+ *
+ * Also what an embedding page's play and pause messages reach
+ * (js/embedBridge.js), so that the figure and its page cannot disagree about
+ * what pressing play means - scrubbing back through history included.
+ * @param {boolean} playing - True to run
+ */
+export function setPlaying(playing) {
+  if (playing && isScrubbing()) resumeLive();
+  state.paused = !playing;
+  refreshTransport();
+}
+
 export function initControls() {
   setupRangeFills();
   initTheme();
@@ -791,7 +734,16 @@ export function initControls() {
   window.addEventListener('gravitasSimulationReset', () => {
     clearPlacementHistory();
     resetTimeline();
-    announce(`Scenario loaded: ${SETTINGS.preset_scenario}`);
+    // Once: every build fires this, each sweep trial too.
+    // By the scenario on screen and in the reader's language. It named
+    // SETTINGS.preset_scenario, which a load leaves as the 'None' sentinel, so
+    // a screen reader heard "Scenario loaded: None", in English.
+    const name = current_scenario_name;
+    if (name && name !== 'None')
+      announce(
+        t('summary.announce.scenario', { name: scenarioTitle(name) || name }),
+        false
+      );
   });
   setupTransport();
   setupViewMenu();

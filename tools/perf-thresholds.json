@@ -1,0 +1,151 @@
+{
+  "_note": "Prompt 112. Advisory frame-time and heap thresholds per profile, recorded so a change can be compared with them by hand. NOT enforced by CI or by any test: a shared runner measures its own load (the documented rule). frameMs is the mean time between animation frames with the frame-rate cap lifted, so it is a throughput figure for light scenes (compositor and GPU bound, see OFFLINE_AND_LOW_END.md) and a script figure for heavy ones. A frame threshold is the measured value times 1.5, rounded up to 0.5 ms; a heap threshold is the measured used heap after a forced collection times 1.5, rounded up to 1 MB (a scenario's first visit loads its code, so compare the used heap, not the growth). Real-device profiles are empty until someone fills them from real hardware.",
+  "measured": {
+    "date": "2026-10-13",
+    "machine": "Intel Core i5-10500 (UHD 630), 24 GB, macOS, headless Chromium (Playwright 1.62) with GPU rasterisation through ANGLE, one other heavy job running",
+    "seconds": 5
+  },
+  "profiles": {
+    "desktop-full": {
+      "command": "npm run perf -- --tier full --seconds 5 --trace",
+      "description": "Headless Chromium 1440x900, device pixel ratio 1, no throttle, full tier.",
+      "enforced": false,
+      "scenarios": {
+        "binary-pair": {
+          "measuredFrameMs": 2.09,
+          "frameMsThreshold": 3.5,
+          "measuredHeapAfterMB": 5.0,
+          "heapAfterMBThreshold": 8
+        },
+        "solar-system": {
+          "measuredFrameMs": 1.58,
+          "frameMsThreshold": 2.5,
+          "measuredHeapAfterMB": 9.3,
+          "heapAfterMBThreshold": 14
+        },
+        "trappist-1-system": {
+          "measuredFrameMs": 1.76,
+          "frameMsThreshold": 3.0,
+          "measuredHeapAfterMB": 6.0,
+          "heapAfterMBThreshold": 9
+        },
+        "star-cluster": {
+          "measuredFrameMs": 19.55,
+          "frameMsThreshold": 29.5,
+          "measuredHeapAfterMB": 6.3,
+          "heapAfterMBThreshold": 10
+        },
+        "gw150914": {
+          "measuredFrameMs": 0.64,
+          "frameMsThreshold": 1.0,
+          "measuredHeapAfterMB": 5.8,
+          "heapAfterMBThreshold": 9
+        },
+        "tidal-disruption-event": {
+          "measuredFrameMs": 2.67,
+          "frameMsThreshold": 4.5,
+          "measuredHeapAfterMB": 5.7,
+          "heapAfterMBThreshold": 9
+        }
+      }
+    },
+    "chromebook-proxy": {
+      "command": "npm run perf -- --tier low --cpu 4 --seconds 5 --trace",
+      "description": "Headless Chromium 1440x900, CPU throttled 4x (main thread only), low tier. A proxy, not a Chromebook.",
+      "enforced": false,
+      "scenarios": {
+        "binary-pair": {
+          "measuredFrameMs": 5.01,
+          "frameMsThreshold": 8.0,
+          "measuredHeapAfterMB": 4.4,
+          "heapAfterMBThreshold": 7
+        },
+        "solar-system": {
+          "measuredFrameMs": 7.56,
+          "frameMsThreshold": 11.5,
+          "measuredHeapAfterMB": 4.7,
+          "heapAfterMBThreshold": 8
+        },
+        "trappist-1-system": {
+          "measuredFrameMs": 8.43,
+          "frameMsThreshold": 13.0,
+          "measuredHeapAfterMB": 4.5,
+          "heapAfterMBThreshold": 7
+        },
+        "star-cluster": {
+          "measuredFrameMs": 15.25,
+          "frameMsThreshold": 23.0,
+          "measuredHeapAfterMB": 4.8,
+          "heapAfterMBThreshold": 8
+        },
+        "gw150914": {
+          "measuredFrameMs": 4.68,
+          "frameMsThreshold": 7.5,
+          "measuredHeapAfterMB": 4.7,
+          "heapAfterMBThreshold": 8
+        },
+        "tidal-disruption-event": {
+          "measuredFrameMs": 5.57,
+          "frameMsThreshold": 8.5,
+          "measuredHeapAfterMB": 4.8,
+          "heapAfterMBThreshold": 8
+        }
+      }
+    },
+    "phone-proxy": {
+      "command": "npm run perf -- --tier low --cpu 4 --viewport 375x812 --dpr 2 --seconds 5 --trace",
+      "description": "Headless Chromium 375x812 at device pixel ratio 2, CPU throttled 4x, low tier. A proxy, not a phone.",
+      "enforced": false,
+      "scenarios": {
+        "binary-pair": {
+          "measuredFrameMs": 3.18,
+          "frameMsThreshold": 5.0,
+          "measuredHeapAfterMB": 4.5,
+          "heapAfterMBThreshold": 7
+        },
+        "solar-system": {
+          "measuredFrameMs": 5.29,
+          "frameMsThreshold": 8.0,
+          "measuredHeapAfterMB": 4.9,
+          "heapAfterMBThreshold": 8
+        },
+        "trappist-1-system": {
+          "measuredFrameMs": 5.69,
+          "frameMsThreshold": 9.0,
+          "measuredHeapAfterMB": 4.6,
+          "heapAfterMBThreshold": 7
+        },
+        "star-cluster": {
+          "measuredFrameMs": 10.41,
+          "frameMsThreshold": 16.0,
+          "measuredHeapAfterMB": 4.9,
+          "heapAfterMBThreshold": 8
+        },
+        "gw150914": {
+          "measuredFrameMs": 2.73,
+          "frameMsThreshold": 4.5,
+          "measuredHeapAfterMB": 4.8,
+          "heapAfterMBThreshold": 8
+        },
+        "tidal-disruption-event": {
+          "measuredFrameMs": 4.32,
+          "frameMsThreshold": 6.5,
+          "measuredHeapAfterMB": 5.0,
+          "heapAfterMBThreshold": 8
+        }
+      }
+    },
+    "real-chromebook": {
+      "command": "npm run perf on the device, then the protocol in OFFLINE_AND_LOW_END.md",
+      "description": "To be filled from real hardware (Prompt 112 part 1, skipped under D-PLAN-02).",
+      "enforced": false,
+      "scenarios": {}
+    },
+    "real-phone": {
+      "command": "the same, over remote debugging",
+      "description": "To be filled from real hardware (Prompt 112 part 1, skipped under D-PLAN-02).",
+      "enforced": false,
+      "scenarios": {}
+    }
+  }
+}

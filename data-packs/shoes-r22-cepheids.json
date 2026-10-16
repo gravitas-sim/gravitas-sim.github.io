@@ -1,0 +1,187 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "shoes-r22-cepheids",
+  "version": "1.0.0",
+  "title": "Cepheids in the LMC, NGC 4258 and M101: periods and Wesenheit magnitudes (Riess et al. 2022)",
+  "object": {
+    "name": "Cepheids of three galaxies",
+    "identifiers": [
+      "LMC",
+      "NGC 4258",
+      "M101"
+    ],
+    "frame": "HST WFC3 F160W, F555W, F814W"
+  },
+  "facility": {
+    "observatory": "HST WFC3 (SH0ES program)",
+    "pipeline": "Riess et al. 2022, ApJ 934, L7, Table 2 (as held by the SH0ES data release)"
+  },
+  "dataType": "catalog",
+  "origin": "compilation",
+  "credit": "Riess et al. 2022, ApJ 934, L7 (CC BY 4.0); the table as the SH0ES data release holds it",
+  "license": {
+    "status": "cc-by-4.0",
+    "statement": "The paper's publisher page and Crossref record say original content may be used under CC BY 4.0 (read 2026-10-10); the repository copy of the table has no licence of its own, so the pack relies on the paper's. Attribute Riess et al. 2022, ApJ 934, L7.",
+    "basis": "A published table from a CC BY 4.0 article, reduced to periods and Wesenheit magnitudes with the paper cited and credited; the same finding as the cosmology gate (COSMOLOGY_GATE.md, D-COSMO-07), made again here because the pack does not depend on that delegated verdict (D-LADDER-01)."
+  },
+  "retrieved": "2026-10-10",
+  "columns": [
+    {
+      "id": "host",
+      "name": "host",
+      "unit": "",
+      "description": "which galaxy: 1 the LMC, 2 NGC 4258, 3 M101"
+    },
+    {
+      "id": "period",
+      "name": "period",
+      "unit": "d",
+      "description": "pulsation period"
+    },
+    {
+      "id": "mw",
+      "name": "Wesenheit magnitude",
+      "unit": "mag",
+      "description": "m_W = F160W - 0.386 (F555W - F814W), the reddening-free magnitude of R22 eq. 7"
+    }
+  ],
+  "masks": [],
+  "reductions": [
+    "All 339 LMC rows, every fourth NGC 4258 row (111) and every fourth M101 row (65), in the table's order.",
+    "The Wesenheit magnitude is F160W - 0.386 (F555W - F814W) to 0.001 mag; coordinates, identifiers, the colour, the individual errors and the metallicity are not kept. The table's errors do not carry the covariance (the paper's own note), so the lessons fit the scatter about the relation instead.",
+    "Periods are the table's digits (to 0.001 d); the LMC and the two hosts are HST-only measurements, so the LMC slope is not the paper's, which leans on ground data."
+  ],
+  "source": {
+    "archive": "SH0ES data release (PantheonPlusSH0ES/DataRelease on GitHub)",
+    "urls": [
+      "https://raw.githubusercontent.com/PantheonPlusSH0ES/DataRelease/c447f0fea703fcd0fff57de5000947b5ca81286b/SH0ES_Data/table2.tex"
+    ],
+    "citations": [
+      {
+        "text": "Riess et al. 2022, ApJ 934, L7 (A comprehensive measurement of the local value of the Hubble constant)",
+        "doi": "10.3847/2041-8213/ac5c5b"
+      },
+      {
+        "text": "Pietrzynski et al. 2019, Nature 567, 200 (the LMC distance from eclipsing binaries)",
+        "doi": "10.1038/s41586-019-0999-4"
+      },
+      {
+        "text": "Reid, Pesce & Riess 2019, ApJ 886, L27 (the NGC 4258 maser distance)",
+        "doi": "10.3847/2041-8213/ab552d"
+      },
+      {
+        "text": "Leavitt & Pickering 1912, Harvard College Observatory Circular 173"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "shoes-r22-table2.tex",
+      "url": "https://raw.githubusercontent.com/PantheonPlusSH0ES/DataRelease/c447f0fea703fcd0fff57de5000947b5ca81286b/SH0ES_Data/table2.tex",
+      "bytes": 329678,
+      "sha256": "d4b9af2b5d65118f7ac44a41b7e8cd662dfd42a63b5c359ca402d8be3b4dbba4"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/variables.mjs",
+    "version": "1.0.0",
+    "options": {
+      "hosts": {
+        "LMC": [
+          1,
+          1
+        ],
+        "N4258": [
+          2,
+          4
+        ],
+        "M101": [
+          3,
+          4
+        ]
+      },
+      "columns": [
+        {
+          "id": "host",
+          "step": 1
+        },
+        {
+          "id": "period",
+          "step": 0.001
+        },
+        {
+          "id": "mw",
+          "step": 0.001
+        }
+      ]
+    },
+    "steps": [
+      "Read the rows of Table 2 (host, period, F555W-F814W, F160W).",
+      "Keep every LMC row and every fourth NGC 4258 and M101 row.",
+      "Compute m_W = F160W - 0.386 (F555W - F814W), to 0.001 mag.",
+      "Store host code, period and m_W as table-columns/1."
+    ],
+    "record": {
+      "rows": 515,
+      "columns": [
+        {
+          "id": "host",
+          "type": "int16",
+          "step": 1,
+          "missing": 0,
+          "maxRounding": 0
+        },
+        {
+          "id": "period",
+          "type": "int32",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 7.11e-15
+        },
+        {
+          "id": "mw",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 3.55e-15
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    "The Wesenheit coefficient 0.386 is the paper's (R_V = 3.3); the lessons check it against the radiation kernel's extinction law.",
+    "Anchor distance moduli are published values, not in this table: the LMC 18.477 +- 0.026 (Pietrzynski et al. 2019) and NGC 4258 29.397 +- 0.032 (Reid et al. 2019)."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/observations/shoesR22Cepheids.js",
+    "bytes": 4159,
+    "sha256": "148dbcc332dd332d598419b57d58133b687ffa8de24c41d175691647649bcec3",
+    "sidecar": {
+      "file": "variables/shoes-r22-cepheids.json",
+      "bytes": 5710,
+      "sha256": "4a03f5ced66e43374da1f26462d89abc789bc84e256387b8e5fbc4e02673f642"
+    }
+  },
+  "validation": {
+    "check": "the LMC Cepheids' Wesenheit slope is within 0.1 mag/dex of the paper's -3.284",
+    "against": [
+      {
+        "quantity": "LMC Wesenheit slope",
+        "value": -3.284,
+        "unit": "mag/dex",
+        "ref": "Riess et al. 2022, ApJL 934, L7"
+      }
+    ],
+    "result": {
+      "slope": -3.29,
+      "error": 0.019,
+      "stars": 339
+    }
+  }
+}

@@ -26,6 +26,13 @@ import { evidenceFrom } from './data/investigations/provenance.js';
 import { isWrittenAnswer } from './investigations/writtenAnswer.js';
 import { getLocale, t, onLocaleChange } from './i18n/index.js';
 import { lessonText } from './i18n/lesson.js';
+import {
+  ENTITIES,
+  decodeEntities,
+  escapeHtml as escape,
+  prose,
+} from './lessonMarkup.js';
+import { SCENARIO_IDS, scenarioId } from './scenarios.js';
 // The registry, not the barrel. ../data/investigations.js pulls all ten lessons
 // in statically, which is right for a build script and wrong here: the browser
 // draws ten cards from the manifest, and opening one lesson fetches that one.
@@ -34,44 +41,14 @@ import {
   investigationMeta,
   hasInvestigation,
   loadInvestigation,
+  provideLessonLoaders,
   gradedSteps,
-  seriesPosition,
-  lessonCatalogReady,
 } from './data/investigations/registry.js';
-// Search, filters and the curated orders. Both read the same generated
-// manifest the cards do, so there is one list of lessons and not three.
-import {
-  NO_FILTERS,
-  PROGRESSES,
-  filterCatalog,
-  isFiltered,
-  loosening,
-  subjectsOf,
-} from './data/investigations/browse.js';
-import {
-  LENGTH,
-  LENGTHS,
-  CALCULATIONS,
-  SEQUENCES,
-  resolveSequence,
-} from './data/investigations/sequences.js';
-// The thumbnail block and its fallback wiring are shared with the scenario
-// gallery and the front door's featured cards, so a borrowed capture lazy-loads
-// and degrades identically wherever it appears.
-import { scenarioShotHtml, wireThumbnailFallbacks } from './scenarioBrowser.js';
-import {
-  applyShareState,
-  captureShareState,
-  state,
-  SETTINGS,
-  setInspectorSuppressed,
-  hideObjectInspector,
-  setAreaSweepWedges,
-  getAreaSweepWedges,
-  showAreaSweepFor,
-  setAreaSweepSuppressed,
-  syncPlacementAvailability,
-} from './ui.js';
+// Lessons provided by capability packages load through the platform resolver,
+// which installs their loaders in the registry when it is imported.
+import { migrateSavedProgress } from './platform/resolver.js';
+import { state, SETTINGS, command } from './appState.js';
+
 import {
   bh_list,
   stars,
@@ -103,9 +80,17 @@ import {
   timeUnitSeconds,
   SIM_UNITS_PER_AU,
 } from './units.js';
-import { getWidget, widgetDefaults } from './widgets.js';
 import {
+  ensureWidget,
+  getWidget,
+  needsLoading,
+  whenWidgetsReady,
+  widgetDefaults,
+} from './widgets.js';
+import {
+  inDepth,
   indexOfSid,
+  isValidSid,
   readProgress,
   stepKey,
   writeProgress,
@@ -126,32 +111,51 @@ import {
   transitAnalysis,
   transitGeometry,
 } from './lightCurve.js';
-import { encodePayload, shareUrl } from './shareState.js';
+import { encodePayload, parseDocument, shareUrl } from './shareState.js';
 import { normalizeSeed, formatSeed } from './rng.js';
 // From js/notify.js rather than through js/controls.js, which only re-exports
 // them. Going through controls put this module in a cycle - controls
 // dynamic-imports the loader, the loader dynamic-imports this - and although
 // every edge in it was lazy, a cycle that exists only because of a convenience
 // re-export is not one worth keeping.
-import { toast, announce } from './notify.js';
-import { buildLabReport, downloadPdf } from './labReport.js';
+import { toast, announce, loadFailed } from './notify.js';
+import { setEvidenceContext } from './widgetRuntime.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
 import { checkAnswer, gradeAnswer, toleranceFor } from './answerCheck.js';
-import { localeOfAnswer, recordAnswer } from './answerParse.js';
+import {
+  UNITS,
+  decimalSeparatorFor,
+  localeOfAnswer,
+  parseNumber,
+  recordAnswer,
+} from './answerParse.js';
 import {
   assignmentStorageKey,
   filterResponses,
+  shortHash,
   stepBindings,
 } from './assignments/assignment.js';
 import { stepFingerprint } from './investigations/progressBackup.js';
 import {
+  bindChooser,
+  closeBrowser,
+  isBrowserOpen,
+  openBrowser,
+  renderBrowser,
+  setChooserElements,
+  wireBrowserFilters,
+} from './investigations/browser.js';
+import { drop, get, put } from './storage/local.js';
+import {
+  answerClass,
+  feedbackFor,
+  helpStages,
   helpTaken,
   hintsFor,
   matchMisconception,
   nextHintStage,
 } from './answerFeedback.js';
-import { trapFocus } from './focusTrap.js';
 import { frameState } from './referenceFrame.js';
 import {
   SCALE,
@@ -199,6 +203,22 @@ import {
 } from './lessonScene.js';
 
 export { checkAnswer };
+export {
+  browserSummary,
+  closeBrowser,
+  openBrowser,
+  resetBrowserFilters,
+} from './investigations/browser.js';
+
+const applyShareState = command('applyShareState');
+const captureShareState = command('captureShareState');
+const setInspectorSuppressed = command('setInspectorSuppressed');
+const hideObjectInspector = command('hideObjectInspector');
+const setAreaSweepWedges = command('setAreaSweepWedges');
+const getAreaSweepWedges = command('getAreaSweepWedges');
+const showAreaSweepFor = command('showAreaSweepFor');
+const setAreaSweepSuppressed = command('setAreaSweepSuppressed');
+const syncPlacementAvailability = command('syncPlacementAvailability');
 
 const STORAGE_PREFIX = 'gravitas_investigation_';
 const NAME_KEY = 'gravitas_student_name';
@@ -218,6 +238,14 @@ let visited = new Set();
  */
 let progressNotes = [];
 let startedAt = null;
+// Seconds this reader has had the lesson open and in view (the where line).
+let spent = 0;
+let lastTick = 0;
+// Depth (DEPTH.md).
+let depth = 'core';
+let depthChoice = null;
+let deepest = 'core';
+let depthName = '';
 let probeTimer = null;
 let els = {};
 let plotCanvas = null;
@@ -247,9 +275,6 @@ let lockedSettings = null;
 // nothing is written back to it.
 let authoring = null;
 
-/** @returns {boolean} True while the panel is an authoring preview */
-export const isAuthoringPreview = () => authoring !== null;
-
 // --- Persistence --------------------------------------------------------------
 
 const storageKey = id => `${STORAGE_PREFIX}${id}`;
@@ -272,6 +297,9 @@ let assignmentBinding = null;
 /** @returns {?object} The assignment in force */
 export const activeAssignment = () => assignment;
 
+/** @returns {?string} Where the open assignment's progress is stored */
+export const activeAssignmentKey = () => (assignment ? assignmentKey : null);
+
 /** @returns {?object} How its steps bound to the current lesson */
 export const activeAssignmentBinding = () => assignmentBinding;
 
@@ -281,8 +309,45 @@ export const activeAssignmentBinding = () => assignmentBinding;
  * @param {string} id - Lesson id
  * @returns {string} Storage key
  */
-const progressKey = id =>
-  assignment ? assignmentStorageKey(assignment) : storageKey(id);
+const progressKey = id => (assignment ? assignmentKey : storageKey(id));
+const progressArea = () => (assignment ? 'assignments' : 'progress');
+
+/** The open assignment's progress key; set with `assignment`. */
+let assignmentKey = null;
+
+/**
+ * An assignment's progress key: its lesson, steps and title, never its date,
+ * so a link re-issued on another day keeps the work. A new title is a new
+ * activity and re-keys on purpose. Work under the old dated key, from this
+ * link or an earlier issue of it, moves across the first time it is read.
+ *
+ * @param {object} a - A validated assignment payload
+ * @returns {string} The storage key
+ */
+function keyForAssignment(a) {
+  const hash = shortHash(`${a.l}|${a.s.join(',')}|${a.t}`);
+  const key = `gravitas_assignment_${hash}`;
+  if (authoring) return key;
+  try {
+    if (get(key) === null) {
+      const old = Object.keys(localStorage)
+        .filter(
+          k =>
+            k === assignmentStorageKey(a) ||
+            new RegExp(`^gravitas_assignment_\\d{6}${hash}$`).test(k)
+        )
+        .sort()
+        .pop();
+      if (old) {
+        put(key, get(old), 'assignments');
+        drop(old);
+      }
+    }
+  } catch {
+    /* storage refused: there is nothing to move */
+  }
+  return key;
+}
 
 /**
  * Whether the last write reached the disk, and what went wrong if not.
@@ -295,9 +360,6 @@ const progressKey = id =>
  * was told nothing at all and found out when they closed the tab.
  */
 let saveState = { status: 'idle', at: null };
-
-/** @returns {{status: string, at: ?number}} The last write's outcome */
-export const progressSaveState = () => ({ ...saveState });
 
 function setSaveState(status) {
   if (saveState.status === status) {
@@ -338,6 +400,7 @@ function classifyStorageError(err) {
 
 function save() {
   if (!active) return;
+  clock();
   // A payload from a newer build was left unread; overwriting it would destroy
   // progress this version does not understand. The reader is told, and their
   // answers stay usable in memory for the rest of the session.
@@ -358,6 +421,9 @@ function save() {
     visited,
     stepSid: active.steps[stepIndex]?.sid ?? null,
     startedAt,
+    depth: depthChoice,
+    deepest,
+    spent,
   });
 
   // This tab's copy, always, and before the disk is asked. It is what makes
@@ -365,7 +431,7 @@ function save() {
   sessionProgress.set(progressKey(active.id), payload);
 
   try {
-    localStorage.setItem(progressKey(active.id), JSON.stringify(payload));
+    put(progressKey(active.id), JSON.stringify(payload), progressArea());
     setSaveState('saved');
   } catch (err) {
     // The answers stay in memory and the lesson keeps working; what changes is
@@ -426,6 +492,13 @@ function renderSaveStatus() {
   }[status];
 
   el.textContent = text || '';
+  // The block is a status and a way to everything saved on this device (My work).
+  if (text && ['saved', 'full', 'unavailable'].includes(status)) {
+    const link = document.createElement('a');
+    link.href = '/my-work/';
+    link.textContent = t('inv.save.link');
+    el.append(' ', link);
+  }
   el.hidden = !text;
   el.dataset.state = status;
   // Only a problem interrupts. aria-live is set rather than removed so the
@@ -461,14 +534,7 @@ async function downloadProgressBackup() {
   const blob = new Blob([JSON.stringify(payload, null, 2)], {
     type: 'application/json',
   });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = backup.backupFilename(active);
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+  saveFile(blob, backup.backupFilename(active));
   announce(t('inv.backup.downloaded'));
 }
 
@@ -491,7 +557,7 @@ async function restoreProgressBackup(file) {
 
   let data;
   try {
-    data = JSON.parse(await file.text());
+    data = parseDocument(await file.text());
   } catch {
     toast(t('inv.backup.notJson'));
     return;
@@ -559,22 +625,10 @@ async function restoreProgressBackup(file) {
 
 /**
  * This tab's copy of every lesson's progress, whether or not the disk took it.
- *
- * When localStorage refuses a write the answers stay in the working variables,
- * which is enough while the panel is open and useless the moment it closes:
- * reopening the lesson read storage, found nothing or something stale, and the
- * reader was back at step one with their work gone. Reproduced before the fix -
- * answer to step 3 with writes failing, close, reopen, and the panel says step
- * 1. Closing a panel is not a decision to discard.
- *
- * So every save lands here first. It is authoritative for this tab: it is
- * written on every save and storage is not, so it can never be the older of the
- * two. It dies with the tab, which is exactly what the unsaved warning already
- * promises.
- *
- * Authoring previews never reach it, for the same reason they never reach
- * storage: an author looking at step 30 must not become the progress a student
- * finds when they open the lesson.
+ * Written on every save, so never the older of the two: when localStorage
+ * refuses a write, closing and reopening the lesson still finds the work. It
+ * dies with the tab, as the unsaved warning promises. Authoring previews never
+ * reach it, as they never reach storage.
  *
  * @type {Map<string, object>}
  */
@@ -586,12 +640,6 @@ const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
 /**
  * Read a lesson's saved progress, migrating an older save if that is what is
  * there.
- *
- * Needs the lesson, because a stable id is only meaningful against the step
- * list that defines it, and a v1 payload can only be re-keyed against the
- * current order. Callers that have no lesson in hand - the browser cards - get
- * the counts they need from `progressFor` instead.
- *
  * @param {string} id - Lesson id
  * @param {?object} lesson - The merged lesson, when the caller has it
  * @returns {?object} The progress, or null when there is none
@@ -604,7 +652,7 @@ function load(id, lesson = null) {
 
   if (!data) {
     try {
-      const raw = localStorage.getItem(progressKey(id));
+      const raw = get(progressKey(id));
       if (!raw) return null;
       data = JSON.parse(raw);
     } catch {
@@ -622,6 +670,9 @@ function load(id, lesson = null) {
 
   const isLegacy = !Number.isFinite(Number(data?.schema));
   const progress = readProgress(data, lesson);
+  // A lesson from a capability package may have renamed a control since the
+  // answers were saved; its manifest says how, and this applies it.
+  progress.responses = migrateSavedProgress(id, progress.responses);
 
   // Keep the original. A positional migration is right whenever the lesson has
   // not been reordered since the save and there is no way to tell from the
@@ -629,7 +680,7 @@ function load(id, lesson = null) {
   // looked at their answers.
   if (isLegacy && progress.migrated) {
     try {
-      localStorage.setItem(legacyKey(id), JSON.stringify(data));
+      put(legacyKey(id), JSON.stringify(data), progressArea());
     } catch {
       /* the migration still stands; only the safety copy is lost */
     }
@@ -640,7 +691,7 @@ function load(id, lesson = null) {
 /** @returns {string} The student's saved name, if they have given one */
 export function getStudentName() {
   try {
-    return localStorage.getItem(NAME_KEY) || '';
+    return get(NAME_KEY) || '';
   } catch {
     return '';
   }
@@ -648,7 +699,7 @@ export function getStudentName() {
 
 function setStudentName(name) {
   try {
-    localStorage.setItem(NAME_KEY, name);
+    put(NAME_KEY, name, 'settings');
   } catch {
     /* ignore */
   }
@@ -811,16 +862,6 @@ function probeContext() {
     mode: modeDescription,
     /**
      * The stars this step stood on the canvas, as values.
-     *
-     * The authoritative sample, and the reason there is only one: the H-R
-     * diagram, the comparison card and the object list all read this rather
-     * than resolving the step's declaration for themselves. A star is here
-     * once, with the model state the canvas is drawn from and the id of the
-     * body it is drawn as, so "the same star" is a fact rather than an
-     * agreement between two pieces of arithmetic.
-     *
-     * Values only. No PhysicsObject leaves through this: an instrument that
-     * could reach a body could move one.
      */
     stagedSample: () =>
       stagedStars().map(entry => ({
@@ -834,16 +875,6 @@ function probeContext() {
     stageKey: () => stageKey(),
     /**
      * Draw the stage of a star's life around a staged body.
-     *
-     * The main scene's half of the evolution playback. What is handed over is
-     * the model moment - which stage, how far through, and the endpoint
-     * prescription where there is one - and js/render.js turns that into a
-     * bounded, seeded illustration around that body. Nothing is integrated and
-     * nothing here has mass.
-     *
-     * Called every tick while the step is up, and cleared when the step
-     * changes or the lesson closes, so no illustration can outlive the screen
-     * that asked for it.
      */
     showEvolutionScene: (role, frame, opts = {}) => {
       const body = roleBody(role);
@@ -967,17 +998,6 @@ function probeContext() {
     /**
      * Where the observed star is in its orbit, and what the spectrograph is
      * reading at that instant.
-     *
-     * The two halves of the same fact, which the lesson previously showed in
-     * two places that could not be compared: `phaseDeg` is where the star
-     * actually is around the barycenter, measured off the scene, and `velocity`
-     * is the line-of-sight component the instrument reports. `towards` is the
-     * sign, spelled out, because the whole difficulty of reading these curves
-     * is that a negative number means approaching.
-     *
-     * Null when the scenario pins its star: a pinned star has no reflex motion,
-     * and js/radialVelocity.js refuses to report a velocity for one rather than
-     * returning an artifact that looks like a measurement.
      */
     rvNow: () => {
       const star = observedStar();
@@ -1004,17 +1024,6 @@ function probeContext() {
     },
     /**
      * Where a planet sits against its own star's habitable zone, right now.
-     *
-     * Computed with habitableZoneBounds() and habitableZoneStatus() - the same
-     * two functions js/render.js draws the ring with and the hz-* instruments
-     * quote - and with the zone definition read from the same setting. The
-     * lesson and the picture cannot disagree about where the edges are,
-     * because there is one place that decides.
-     *
-     * `insolation` is in Earths, which is the unit the whole lesson works in.
-     * The status word is deliberately not a boolean: a planet just past an edge
-     * is a different kind of object from one ten times too close, and neither
-     * is a statement about whether anything lives there.
      */
     habitability: body => {
       const planet = body || selected;
@@ -1041,16 +1050,6 @@ function probeContext() {
     },
     /**
      * How far the whole world's conserved quantities have moved.
-     *
-     * The distinction "Orbital Energy" is built on and could not previously
-     * make: a total energy that changes because a burn added some is physics,
-     * and a total energy that changes because the integrator is approximating
-     * is not. The engine keeps a baseline from the moment the world was built
-     * and reports both, so a step can show the drift beside the change and let
-     * a reader see which one they are looking at.
-     *
-     * Null before a baseline exists, which is the honest answer during the
-     * frame a world is being rebuilt.
      */
     conservation: () => conservationDrift(),
     /**
@@ -1090,15 +1089,6 @@ function probeContext() {
     },
     /**
      * Whether a recorded run still describes the scene on the canvas.
-     *
-     * A sweep result stays on screen after the reader changes something, and
-     * nothing used to say that the two no longer match. The engine bumps its
-     * world generation on every rebuild, so comparing the run's stamp with the
-     * current one answers it exactly: `false` means the numbers are about an
-     * arrangement that is gone.
-     *
-     * `null` when there is nothing to judge - no run, or a run recorded before
-     * this stamp existed - because "we cannot tell" is not the same as "stale".
      */
     runMatchesScene: run => {
       const stamped = run?.worldGeneration;
@@ -1164,17 +1154,6 @@ function applySetup(setup) {
  */
 /**
  * Resolve this step's `bind` against the world that is on screen.
- *
- * Run on every step change rather than once per lesson, for two reasons. A
- * step that carries a `setup` has just rebuilt the world, so every id from the
- * previous step is meaningless - that is what the world generation in a
- * binding records. And a step's roles are the step's: the one before it may
- * have bound something else, or nothing.
- *
- * A role that cannot be resolved is a warning in the console and nothing else.
- * It has to be visible to whoever is writing the lesson, and it must not stop
- * the lesson running for whoever is taking it.
- *
  * @returns {void}
  */
 function bindStepRoles() {
@@ -1201,7 +1180,7 @@ function bindStepRoles() {
 
     for (const [role, reason] of Object.entries(problems)) {
       console.warn(
-        `Lesson "${active?.id}" step "${step.sid}": staged star "${role}" - ${reason}`
+        `Investigation "${active?.id}" step "${step.sid}": staged star "${role}" - ${reason}`
       );
     }
     return;
@@ -1216,7 +1195,7 @@ function bindStepRoles() {
   });
   for (const [role, reason] of Object.entries(problems)) {
     console.warn(
-      `Lesson "${active?.id}" step "${step.sid}": role "${role}" is unbound - ${reason}`
+      `Investigation "${active?.id}" step "${step.sid}": role "${role}" is unbound - ${reason}`
     );
   }
 }
@@ -1351,6 +1330,8 @@ function unreadableMessage(step, graded) {
           });
     case 'trailingText':
       return t('inv.answer.trailingText', { text: d.text || '' });
+    case 'needsUncertainty':
+      return t('inv.answer.needsUncertainty');
     default:
       return t('inv.answer.notANumber');
   }
@@ -1376,20 +1357,22 @@ function hintBlock(step, id) {
   const hints = hintsFor(step);
   if (!hints) return '';
 
-  const used = String(responses[`${id}:help`] || '')
-    .split(',')
-    .filter(Boolean);
+  const used = helpStages(responses[`${id}:help`]);
+  const total = hints.ladder.length;
   const shown = [];
-  for (const stage of ['concept', 'method']) {
-    if (used.includes(stage) && hints[stage]) {
-      shown.push(
-        `<p class="inv-hint" data-stage="${stage}"><strong>${escape(t(`inv.hint.${stage}`))}</strong> ${prose(hints[stage])}</p>`
-      );
-    }
-  }
+  hints.ladder.forEach((h, i) => {
+    if (!used.includes(h.id)) return;
+    const label =
+      h.id === 'concept' || h.id === 'method'
+        ? t(`inv.hint.${h.id}`)
+        : t('inv.hint.n', { n: i + 1, total });
+    shown.push(
+      `<p class="inv-hint" data-stage="${h.id}" tabindex="-1"><strong>${escape(label)}</strong> ${prose(h.text)}</p>`
+    );
+  });
   if (used.includes('reveal') && hints.worked) {
     shown.push(
-      `<div class="inv-hint is-worked"><strong>${escape(t('inv.hint.worked'))}</strong> ${prose(hints.worked)}</div>`
+      `<div class="inv-hint is-worked" data-stage="reveal" tabindex="-1"><strong>${escape(t('inv.hint.worked'))}</strong> ${prose(hints.worked)}</div>`
     );
   }
 
@@ -1414,6 +1397,10 @@ function hintBlock(step, id) {
   return `<div class="inv-hints">${shown.join('')}<div class="inv-hint-row">${button}${tally}</div></div>`;
 }
 
+/** Text as it is read aloud: the markup lesson prose carries taken out. */
+const spoken = text =>
+  decodeEntities(String(text ?? '').replace(/<\/?(strong|em|sub|sup)>/g, ''));
+
 // --- Step helpers -------------------------------------------------------------
 
 // How much a student has to write on a short-answer step before the model
@@ -1430,17 +1417,11 @@ const SHORT_ANSWER_MIN = 40;
  * fingerprint was enough.
  */
 const stepId = index => stepKey(active.id, active.steps[index]?.sid);
+const shown = () => active.steps.filter(s => inDepth(s, depth));
 const currentStep = () => active?.steps[stepIndex] ?? null;
 
 /**
  * The prediction, if any, that this step is where the answer arrives.
- *
- * A predict step names `reveal: '<sid>'` when its answer should wait for the
- * experiment; this is the other end of that, and it is what makes the wait
- * worth anything. Returns null when no earlier step points here, when the
- * reader never committed to an answer, or when the prediction carries no
- * answer key to mark against.
- *
  * @param {Object} step - The step being rendered
  * @returns {?{chose: string, answer: string, right: boolean, because: string}}
  */
@@ -1463,6 +1444,23 @@ function predictionAnsweredHere(step) {
 
 // --- Measured values ----------------------------------------------------------
 
+/** A field as a number: its own convention, trailing text NaN, ".5" kept. */
+function parseFieldNumber(raw, locale) {
+  const p = parseNumber(
+    String(raw ?? '')
+      .trim()
+      .replace(/^([+-]?)([.,])(?=\d)/, '$10$2'),
+    locale
+  );
+  return p.ok && !p.rest ? p.value : NaN;
+}
+
+/** A computed field's text, in the reader's convention. */
+const formatFieldNumber = (value, decimals, locale) =>
+  Number.isFinite(value)
+    ? value.toFixed(decimals).replace('.', decimalSeparatorFor(locale))
+    : '';
+
 /**
  * The numbers a student has typed into the current step, keyed by field id.
  * @param {Object} step - Step definition
@@ -1472,8 +1470,13 @@ function predictionAnsweredHere(step) {
 function fieldValues(step, id) {
   const out = {};
   for (const f of step.fields || []) {
-    const raw = responses[`${id}:${f.id}`];
-    out[f.id] = raw === undefined || raw === '' ? NaN : Number(raw);
+    const key = `${id}:${f.id}`;
+    const raw = responses[key];
+    // In the convention it was typed in: Number() made "0,91" NaN.
+    out[f.id] = parseFieldNumber(
+      raw,
+      localeOfAnswer(responses, key, getLocale())
+    );
     out[`${f.id}_text`] = raw ?? '';
   }
   return out;
@@ -1498,13 +1501,26 @@ function recomputeFields(step, id) {
     if (!f.compute) continue;
     let next;
     try {
-      next = f.compute(vals);
+      // The second argument reads an earlier step's field.
+      next = f.compute(vals, (sid, field) => {
+        const key = `${stepKey(active.id, sid)}:${field}`;
+        return parseFieldNumber(
+          responses[key],
+          localeOfAnswer(responses, key, getLocale())
+        );
+      });
     } catch {
       next = NaN;
     }
-    const text = Number.isFinite(next) ? next.toFixed(f.decimals ?? 2) : '';
-    if (responses[`${id}:${f.id}`] !== text) {
-      responses[`${id}:${f.id}`] = text;
+    // Recorded with its convention: "0.910" read as Spanish is 910.
+    const locale = getLocale();
+    const text = formatFieldNumber(next, f.decimals ?? 2, locale);
+    const key = `${id}:${f.id}`;
+    if (
+      responses[key] !== text ||
+      localeOfAnswer(responses, key, '') !== locale
+    ) {
+      recordAnswer(responses, key, text, locale);
       changed = true;
     }
   }
@@ -1738,12 +1754,6 @@ function logSlope(pts) {
  */
 /**
  * The plot's points, as a table.
- *
- * The accessible equivalent of the scatter beside it, and the thing that makes
- * "read your fourth point off the graph" answerable without the graph. Hidden
- * when there is nothing plotted, because an empty table is worse than no
- * table: it announces a structure with nothing in it.
- *
  * @param {Object} spec - The step's plot specification
  * @param {Array<{x:number,y:number,label?:string}>} points - What is drawn
  * @param {Object} opts - {transform, useLog} - which labels apply
@@ -1965,29 +1975,8 @@ function drawPlot(step, id) {
 
 // --- Panel rendering ----------------------------------------------------------
 
-const escape = text =>
-  String(text ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-
 /** Escape for use inside a double-quoted attribute. */
 const attr = text => escape(text).replace(/"/g, '&quot;');
-
-/** Lesson prose carries a little inline markup, but never arbitrary HTML. */
-const prose = text =>
-  escape(text)
-    // [\s\S] rather than . : lesson prose is written in template literals that
-    // wrap across lines, and a tag spanning a newline was left as raw markup on
-    // screen.
-    .replace(/&lt;strong&gt;([\s\S]*?)&lt;\/strong&gt;/g, '<strong>$1</strong>')
-    .replace(/&lt;em&gt;([\s\S]*?)&lt;\/em&gt;/g, '<em>$1</em>')
-    // Real subscripts and superscripts: R<sub>p</sub> rather than R_p, which a
-    // student then has to translate back into the algebra they were taught.
-    .replace(/&lt;sub&gt;([\s\S]*?)&lt;\/sub&gt;/g, '<sub>$1</sub>')
-    .replace(/&lt;sup&gt;([\s\S]*?)&lt;\/sup&gt;/g, '<sup>$1</sup>')
-    .replace(/\n\s*\n/g, '</p><p>')
-    .replace(/\s+/g, ' ');
 
 function renderStep() {
   const step = currentStep();
@@ -1997,7 +1986,10 @@ function renderStep() {
 
   const parts = [
     `<p class="inv-step-count">${escape(
-      t('inv.step.counter', { n: stepIndex + 1, total: active.steps.length })
+      t('inv.step.counter', {
+        n: shown().indexOf(step) + 1,
+        total: shown().length,
+      })
     )}
        <span class="inv-step-kind">${escape(t(`inv.step.kind.${step.type}`))}</span></p>`,
     `<h3 class="inv-step-title">${escape(step.title)}</h3>`,
@@ -2066,7 +2058,7 @@ function renderStep() {
         .map((c, i) => {
           const key = `${id}:check:${i}`;
           const on = responses[key] ? 'checked' : '';
-          return `<li><label><input type="checkbox" data-check="${key}" ${on} /> <span>${prose(c)}</span></label></li>`;
+          return `<li><label><input type="checkbox" data-check="${attr(key)}" ${on} /> <span>${prose(c)}</span></label></li>`;
         })
         .join('')}</ul>`
     );
@@ -2081,9 +2073,13 @@ function renderStep() {
     // arrives, and that step shows them how it turned out.
     const held = locked && Boolean(step.reveal) && !visited.has(step.reveal);
     const marked = locked && !held;
-    parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
+    // Named by the prompt on screen rather than a copy of it in an attribute,
+    // where its entities and markup would be read out as written.
     parts.push(
-      `<div class="inv-options" role="radiogroup" aria-label="${escape(step.prompt)}">${step.options
+      `<p class="inv-prompt" id="invChoicePrompt">${prose(step.prompt)}</p>`
+    );
+    parts.push(
+      `<div class="inv-options" role="radiogroup" aria-labelledby="invChoicePrompt">${step.options
         .map((opt, i) => {
           const chosen = Number(saved) === i;
           const correct = marked && i === step.answer;
@@ -2112,8 +2108,22 @@ function renderStep() {
         )}</p>`
       );
     }
+    // A wrong option the author bound to a named mistake says which one.
+    const missed = marked ? matchMisconception(step, Number(saved), 0) : null;
+    if (missed) {
+      parts.push(
+        `<p class="inv-feedback is-wrong"><em class="inv-misconception">${prose(misconceptionText(missed))}</em></p>`
+      );
+    }
     if (marked && step.because) {
       parts.push(`<p class="inv-because">${prose(step.because)}</p>`);
+    }
+    // A graded choice can be revised, as a number can; a prediction only
+    // until its verdict is shown. The first answer and the count are kept.
+    if (locked && (step.kind === 'choice' || held)) {
+      parts.push(
+        `<button type="button" class="ui-button subtle" data-change>${escape(t('inv.answer.change'))}</button>`
+      );
     }
   }
 
@@ -2124,10 +2134,10 @@ function renderStep() {
   if (predicted) {
     parts.push(
       `<div class="inv-verdict ${predicted.right ? 'is-right' : 'is-wrong'}">
-         <p class="inv-verdict-head">${escape(
+         <p class="inv-verdict-head">${prose(
            t('inv.predict.youSaid', { choice: predicted.chose })
          )}</p>
-         <p class="inv-verdict-mark">${escape(
+         <p class="inv-verdict-mark">${prose(
            predicted.right
              ? t('inv.predict.right')
              : t('inv.predict.wrong', { answer: predicted.answer })
@@ -2139,6 +2149,13 @@ function renderStep() {
 
   if (step.kind === 'short') {
     parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
+    // A reflection is kept with the student's work and read by a person; it
+    // has no model answer and nothing marks it, and it says so.
+    if (step.reflect) {
+      parts.push(
+        `<p class="inv-reflect-note">${escape(t('inv.reflect.note'))}</p>`
+      );
+    }
     // Where the number this step asks about came from. Four sources, and the
     // difference is the thing this application is most often misread about: a
     // Schwarzschild radius is a closed-form panel and a period is the
@@ -2153,7 +2170,7 @@ function renderStep() {
       );
     }
     parts.push(
-      `<textarea class="inv-answer" data-answer="${id}" rows="4"
+      `<textarea class="inv-answer" data-answer="${attr(id)}" rows="4"
          aria-describedby="invAnswerNote"
          placeholder="${escape(t('inv.answer.placeholder'))}">${escape(saved || '')}</textarea>`
     );
@@ -2174,12 +2191,12 @@ function renderStep() {
       const ready = String(saved || '').trim().length >= SHORT_ANSWER_MIN;
       parts.push(
         `<div class="inv-short-reveal">
-           <button type="button" class="ui-button" data-reveal="${id}"
+           <button type="button" class="ui-button" data-reveal="${attr(id)}"
                    ${shown ? 'hidden' : ''} ${ready ? '' : 'disabled'}>
-             Compare with a model answer
+             ${escape(t('inv.model.compare'))}
            </button>
            <span class="inv-short-hint" data-reveal-hint ${shown || ready ? 'hidden' : ''}>
-             Write your own answer first.
+             ${escape(t('inv.model.writeFirst'))}
            </span>
            <div class="inv-because is-model" data-reveal-body ${shown ? '' : 'hidden'}>
              <strong>${escape(t('inv.answer.oneGood'))}</strong> ${prose(step.because)}
@@ -2197,40 +2214,54 @@ function renderStep() {
         })
       : null;
     parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
+    if (step.formula && !Number.isFinite(step.answer))
+      parts.push(`<p class="inv-hint">${escape(t('inv.formula.needs'))}</p>`);
     parts.push(
       `<div class="inv-numeric">
-         <input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${id}"
-                value="${escape(saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />
+         <input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${attr(id)}"
+                value="${attr(saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />
          ${step.unit ? `<span class="inv-unit">${escape(step.unit)}</span>` : ''}
-         <button type="button" class="ui-button" data-check-numeric="${id}">${escape(t('inv.answer.check'))}</button>
+         <button type="button" class="ui-button" data-check-numeric="${attr(id)}">${escape(t('inv.answer.check'))}</button>
        </div>`
     );
 
     if (graded?.status === 'unreadable') {
       // Not "wrong". The student answered something the step cannot read, and
       // which of the several reasons that is decides what is worth saying.
+      const unit = feedbackFor(step, answerClass(step, graded));
       parts.push(
-        `<p class="inv-feedback is-unreadable">${escape(unreadableMessage(step, graded))}</p>`
+        `<p class="inv-feedback is-unreadable">${escape(unreadableMessage(step, graded))}${unit ? ` ${prose(unit)}` : ''}</p>`
       );
     } else if (graded?.correct === true) {
       const note = graded.converted
         ? ` ${escape(t('inv.answer.converted', { unit: graded.unit, value: formatNumber(graded.value, { sig: 4 }), target: step.unit ?? '' }))}`
         : '';
       parts.push(
-        `<p class="inv-feedback is-right">${escape(t('inv.answer.matches'))}${note} ${prose(step.because || '')}</p>`
+        `<p class="inv-feedback is-right">${escape(t('inv.answer.matches'))}${note} ${prose(step.because || '')} ${prose(feedbackFor(step, 'correct') || '')}</p>`
       );
     } else if (graded?.correct === false) {
-      // A named misconception, and only a named one. Everything else is simply
-      // not the right number, which is what it says.
-      const missed = matchMisconception(step, graded.value, toleranceFor(step));
-      const named = missed
-        ? `<br /><em class="inv-misconception">${prose(misconceptionText(missed))}</em>`
+      // A named misconception, and only a named one; failing that, what the
+      // author wrote for this kind of miss. Everything else is simply not the
+      // right number, which is what it says.
+      const tol = toleranceFor(step);
+      const missed = matchMisconception(step, graded.value, tol);
+      const said = missed
+        ? misconceptionText(missed)
+        : feedbackFor(step, answerClass(step, graded, tol));
+      // A named mistake and the author's words for a kind of miss are different
+      // claims, and are told apart: only the first says what the student did.
+      const named = said
+        ? `<br /><em class="${missed ? 'inv-misconception' : 'inv-class'}">${prose(said)}</em>`
         : '';
       parts.push(
         `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}${named}</p>`
       );
     }
 
+    parts.push(hintBlock(step, id));
+  } else if (step.kind !== 'short' || !step.reflect) {
+    // A choice, a prediction or a measurement can carry a ladder too; a
+    // reflection has no right answer to be helped towards.
     parts.push(hintBlock(step, id));
   }
 
@@ -2252,9 +2283,9 @@ function renderStep() {
           const key = `${id}:${f.id}`;
           const derived = Boolean(f.compute);
           return `<label class="inv-field${derived ? ' is-derived' : ''}">
-              <span class="inv-field-label">${prose(f.label)}${f.unit ? ` <span class="inv-field-unit">(${escape(f.unit)})</span>` : ''}${derived ? ' <span class="inv-field-auto">worked out for you</span>' : ''}</span>
+              <span class="inv-field-label">${prose(f.label)}${f.unit ? ` <span class="inv-field-unit">(${escape(f.unit)})</span>` : ''}${derived ? ` <span class="inv-field-auto">${escape(t('inv.field.auto'))}</span>` : ''}</span>
               <input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
-                     data-field="${key}" value="${escape(responses[key] ?? '')}"
+                     data-field="${attr(key)}" value="${attr(responses[key] ?? '')}"
                      ${derived ? 'readonly tabindex="-1"' : ''}
                      placeholder="${escape(f.hint || '')}" />
             </label>`;
@@ -2299,20 +2330,12 @@ function renderStep() {
 }
 
 /**
- * Open the pause-at-event tool for a step that asks a student to catch a moment.
- *
- * A step declares `pauseAt: {kind, body, primary, label, note}`. This opens the
- * tool with those bodies and that event already chosen and arms NOTHING: the
- * reader presses Arm in the tool, or the step's own button, and that press is
- * the interaction the lesson is asking for.
- *
- * Everything heavier than this is behind a dynamic import, so a lesson that
- * never reaches one of these steps never fetches the tool or its prose.
- *
- * The release on the way out is the important half. A watch armed on one step
- * must not fire into the next one, and a step that has finished with the tool
- * has to drop its listener - see js/investigations/eventWatch.js, which holds
- * the generation and the world check that make that true.
+ * Open the pause-at-event tool for a step that asks a student to catch a
+ * moment. A step declares `pauseAt: {kind, body, primary, label, note}`; the
+ * tool opens with those chosen and arms NOTHING, so the reader's press of Arm
+ * is the interaction asked for. All of it is behind a dynamic import. The
+ * release on the way out matters: a watch armed on one step must not fire into
+ * the next (js/investigations/eventWatch.js).
  *
  * @param {Object} step - Step definition
  */
@@ -2371,6 +2394,7 @@ function syncPlotPanel(step) {
     if (els.plotTableWrap) els.plotTableWrap.hidden = true;
     return;
   }
+  resetExplainer(els.plotExplain);
   els.plotTitle.textContent = spec.title || t('inv.plot.title');
   els.plotNote.innerHTML = spec.note ? prose(spec.note) : '';
   els.plotNote.hidden = !spec.note;
@@ -2385,6 +2409,44 @@ function syncPlotPanel(step) {
 }
 
 /**
+ * The "What am I looking at?" button of a docked panel.
+ *
+ * Its label and its closed state are set each time the panel is drawn for a
+ * step, so a region opened on one step is not left under the next. The words
+ * are a lazy module fetched on the first press (js/explainers.js).
+ *
+ * @param {?HTMLElement} button - The panel header's button
+ * @returns {void}
+ */
+function resetExplainer(button) {
+  if (!button) return;
+  const host = button.closest('header');
+  if (host?.nextElementSibling?.classList.contains('explainer'))
+    host.nextElementSibling.remove();
+  button.setAttribute('aria-expanded', 'false');
+  button.removeAttribute('aria-controls');
+  button.textContent = t('inv.explain.open');
+}
+
+/**
+ * Wire a panel's explainer button once.
+ * @param {?HTMLElement} button - The button
+ * @param {(m: object) => ?string} keyOf - The explainer for what is showing now
+ * @param {object} [opts] - Listener options (the unmount signal)
+ */
+function wireExplainer(button, keyOf, opts) {
+  button?.addEventListener(
+    'click',
+    async () => {
+      const m = await import('./explainers.js');
+      const key = keyOf(m);
+      if (key) m.toggleExplainer(button, key, button.closest('header'));
+    },
+    opts
+  );
+}
+
+/**
  * Show or hide the ellipse explorer panel for the current step.
  * @param {Object} step - Step definition
  */
@@ -2393,6 +2455,7 @@ function syncEllipsePanel(step) {
   const on = step?.type === 'ellipse';
   els.ellipsePanel.hidden = !on;
   if (!on) return;
+  resetExplainer(els.ellipseExplain);
   const id = stepId(stepIndex);
   const e = Number(responses[`${id}:e`] ?? step.start ?? 0.5);
   els.ecc.value = String(e);
@@ -2430,6 +2493,48 @@ function syncToolPanel(step) {
   const spec = step?.tool;
   const widget = spec ? getWidget(spec.id) : null;
   stopToolLoop();
+  // An instrument whose family is fetched on demand. The panel says it is
+  // loading, in the note - made a status region for as long as it is saying
+  // so, because it is not one otherwise - fetches the family, and redraws only
+  // if the reader is still on this step. A failed fetch says so in the same
+  // region. If asking again can help, it offers a retry, which takes focus; if
+  // it cannot (see WidgetLoadError), it offers a reload, which keeps the
+  // reader's answers because they are already saved.
+  els.toolNote.removeAttribute('role');
+  if (spec && !widget && needsLoading(spec.id)) {
+    els.toolNote.setAttribute('role', 'status');
+    els.toolPanel.hidden = false;
+    els.toolTitle.textContent = spec.title || '';
+    els.toolNote.textContent = t('inv.tool.loading');
+    els.toolNote.hidden = false;
+    els.toolControls.innerHTML = '';
+    els.toolControls.hidden = true;
+    clearToolInstrument();
+    ensureWidget(spec.id)
+      .then(() => {
+        if (currentStep() === step) syncToolPanel(step);
+      })
+      .catch(err => {
+        if (currentStep() !== step) return;
+        const retryable = err?.retryable !== false;
+        els.toolNote.textContent = t(
+          retryable ? 'inv.tool.failed' : 'inv.tool.reloadNeeded'
+        );
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ui-button';
+        button.textContent = t(
+          retryable ? 'inv.tool.retry' : 'inv.tool.reload'
+        );
+        button.addEventListener('click', () =>
+          retryable ? syncToolPanel(step) : window.location.reload()
+        );
+        els.toolControls.replaceChildren(button);
+        els.toolControls.hidden = false;
+        button.focus();
+      });
+    return;
+  }
   els.toolPanel.hidden = !widget;
   if (!widget) return;
 
@@ -2444,6 +2549,7 @@ function syncToolPanel(step) {
     }
   }
 
+  resetExplainer(els.toolExplain);
   els.toolTitle.textContent = spec.title || widget.title;
   els.toolNote.innerHTML = prose(spec.note ?? widget.note ?? '');
   els.toolNote.hidden = !els.toolNote.innerHTML;
@@ -2473,7 +2579,9 @@ function syncToolPanel(step) {
   els.toolActions.innerHTML = actions
     .map(
       a =>
-        `<button type="button" class="inv-tool-action" data-tool-action="${escape(a.id)}">${escape(a.label)}</button>`
+        // An action may name an icon from css/icons.css; the words stay, in a
+        // span of their own so a relabel below does not erase the picture.
+        `<button type="button" class="inv-tool-action" data-tool-action="${escape(a.id)}">${a.icon ? `<span class="icon icon-${escape(a.icon)}" aria-hidden="true"></span>` : ''}<span>${escape(a.label)}</span></button>`
     )
     .join('');
   els.toolActions.hidden = !actions.length;
@@ -2520,7 +2628,7 @@ function syncToolPanel(step) {
 
   els.toolControls.querySelectorAll('[data-tool]').forEach(input => {
     input.addEventListener('input', () => {
-      toolValues[input.dataset.tool] = Number(input.value);
+      toolValues[input.dataset.tool] = input.valueAsNumber;
       els.toolPresetNote.textContent = '';
       applied();
     });
@@ -2609,20 +2717,35 @@ function stopToolLoop() {
 }
 
 /**
- * Let a widget be driven by pointing at its canvas, if it asks to be.
- *
- * Opt-in, and gated on the widget declaring `pick`: every other instrument in
- * the catalog is a canvas with sliders under it and stays exactly that. The
- * hook is handed a position in CSS pixels and the size it was measured
- * against, writes whatever it likes into the values, and then goes through
- * paintTool like a slider does - so the sliders move to match, the setting is
- * remembered with the step, and the redraw is the same one.
- *
- * The keyboard half is not a courtesy. A diagram you can only drive by
- * dragging is a diagram some students cannot drive, so a widget that declares
- * `pick` also names which two controls the arrow keys should step, and the
- * canvas becomes focusable. The sliders remain, and are the numeric entry.
- *
+ * Take the last step's instrument off the panel while this step's is fetched.
+ */
+function clearToolInstrument() {
+  els.toolReadout.innerHTML = '';
+  els.toolReadout.hidden = true;
+  lastToolHtml = '';
+  els.toolActions.innerHTML = '';
+  els.toolActions.hidden = true;
+  toolActionsShown = [];
+  els.toolPresets.innerHTML = '';
+  els.toolPresets.hidden = true;
+  els.toolPresetNote.textContent = '';
+  const canvas = els.toolCanvas;
+  if (!canvas) return;
+  canvas.removeAttribute('aria-label');
+  canvas.removeAttribute('role');
+  canvas.removeAttribute('tabindex');
+  const g = canvas.getContext('2d');
+  g?.setTransform(1, 0, 0, 1, 0, 0);
+  g?.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+/**
+ * Let a widget be driven by pointing at its canvas, if it declares `pick`.
+ * The hook gets a position in CSS pixels, writes into the values, and goes
+ * through paintTool like a slider, so the sliders move to match. A widget that
+ * declares `pick` also names the two controls the arrow keys step, and its
+ * canvas becomes focusable: a diagram only a drag can drive is closed to some
+ * students.
  * @param {Object} widget - The widget being shown
  * @param {Object} spec - The step's tool spec
  * @param {Function} applied - The runner's own "a control moved" path
@@ -2763,8 +2886,9 @@ function paintTool({ quiet = false } = {}) {
       `[data-tool-action="${CSS.escape(action.id)}"]`
     );
     const label = action.label;
-    if (btn && typeof label === 'string' && btn.textContent !== label) {
-      btn.textContent = label;
+    const text = btn?.querySelector('span:not(.icon)');
+    if (text && typeof label === 'string' && text.textContent !== label) {
+      text.textContent = label;
     }
   }
 
@@ -2868,7 +2992,9 @@ function refreshMeasurements() {
   if (recomputeFields(step, id)) {
     for (const f of step.fields || []) {
       if (!f.compute) continue;
-      const input = els.body.querySelector(`[data-field="${id}:${f.id}"]`);
+      const input = els.body.querySelector(
+        `[data-field="${CSS.escape(`${id}:${f.id}`)}"]`
+      );
       if (input) input.value = responses[`${id}:${f.id}`] ?? '';
     }
     save();
@@ -2885,6 +3011,51 @@ function refreshMeasurements() {
   drawPlot(step, id);
 }
 
+/** Count the time since the last tick, unless the page was hidden or idle. */
+function clock() {
+  const now = Date.now();
+  if (lastTick && !document.hidden)
+    spent += Math.min(now - lastTick, 6e4) / 1e3;
+  lastTick = now;
+}
+
+/** The steps the lesson's declared time is for: the whole lesson at core depth. */
+let fullSteps = 0;
+
+/**
+ * The lesson's declared time ("35-45 min") scaled to what is on offer: an
+ * assignment is part of the lesson, and a deeper level is more of it. Whole
+ * minutes, and the declared text untouched when nothing is scaled.
+ *
+ * @param {string} duration - The lesson's range, e.g. '35-45 min'
+ * @param {number} count - Steps on offer now
+ * @returns {string} The range to show
+ */
+function plannedTime(duration, count) {
+  const base =
+    fullSteps || active.steps.filter(s => inDepth(s, 'core')).length || 0;
+  const m = /^(\d+)\s*-\s*(\d+)(.*)$/.exec(duration || '');
+  const f = base ? count / base : 1;
+  if (!m || !(f > 0) || Math.abs(f - 1) < 0.03) return duration || '';
+  const lo = Math.max(1, Math.round(m[1] * f));
+  const hi = Math.max(lo, Math.round(m[2] * f));
+  return `${lo === hi ? lo : `${lo}-${hi}`}${m[3]}`;
+}
+
+/** The where line: step, depth and time against what the lesson declares. */
+function renderWhere(seen) {
+  const w = els.where;
+  if (!w) return;
+  clock();
+  const tpl = w.dataset[getLocale() === 'es' ? 'es' : 'en'];
+  w.textContent = tpl
+    .replace('{n}', seen.indexOf(currentStep()) + 1)
+    .replace('{total}', seen.length)
+    .replace('{depth}', depthName ? ` · ${depthName}` : '')
+    .replace('{m}', Math.floor(spent / 60))
+    .replace('{planned}', plannedTime(active.duration, seen.length));
+}
+
 function renderFooter() {
   const step = currentStep();
   if (authoring?.render) authoring.render(active, stepIndex);
@@ -2894,55 +3065,42 @@ function renderFooter() {
   // the controls that do both are not offered. The status line still shows,
   // saying why nothing is being saved.
   const safety = els.backupDownload?.closest('.inv-progress-safety');
-  const actions = safety?.querySelector('.inv-backup-actions');
-  if (actions) actions.hidden = Boolean(authoring);
+  const backup = safety?.querySelector('.inv-backup');
+  if (backup) backup.hidden = Boolean(authoring);
   els.prev.disabled = stepIndex === 0;
   els.next.textContent =
     stepIndex === active.steps.length - 1
       ? t('inv.action.finish')
       : t('inv.action.next');
-  const pct = Math.round((visited.size / active.steps.length) * 100);
-  els.progressBar.style.width = `${pct}%`;
+  const seen = shown();
+  const done = seen.filter(s => visited.has(s.sid)).length;
+  els.progressBar.style.width = `${Math.round((done / seen.length) * 100)}%`;
   els.progressText.textContent = t('inv.progress.steps', {
-    done: visited.size,
-    total: active.steps.length,
+    done,
+    total: seen.length,
   });
+  renderDepth();
+  renderWhere(seen);
   els.probeWrap.hidden = !step?.probe;
 }
 
 let lastProbeHtml = '';
 let lastSweepId = null;
 let lastObjectsKey = '';
+/** Whether the lesson's objects list was left open. */
+const OBJECTS_OPEN_KEY = 'gravitas_lesson_objects_open';
 
 /** Past this many, the object list is a count rather than a row of chips. */
 const OBJECT_LIST_MAX = 12;
 
 /**
  * The keyboard's way to select the objects a step is about.
- *
- * Only for steps that bind roles, and deliberately so. A list of every body in
- * a five-hundred-star cluster is not an accessibility feature, it is a wall;
- * what a reader needs is the two or three objects this activity names, which
- * is exactly what the bindings are. Selecting from here goes through the same
- * call a click on the canvas goes through, so the canvas, this list, the
- * inspector and any instrument reading ctx.selected all move together.
- *
  * @returns {void}
  */
 /**
- * A reader-facing name for a lesson's role key.
- *
- * Roles are the lesson author's handles for the objects a step talks about,
- * and they were being shown to the reader raw. In English that mostly reads as
- * a terse label and gets away with it; in Spanish it is an untranslated
- * English word sitting beside a translated body name, which is the one place
- * in the interface where the two languages are visibly mixed.
- *
- * A translation wins where there is one. Where there is not, the key is
- * derived rather than tabulated: `starA` becomes "star A" and `m2000` becomes
- * "20 M☉", which is right in both languages and means a lesson that invents a
- * role gets a sensible label for free instead of a bare identifier. Only the
- * roles derivation would get wrong carry an English entry.
+ * A reader-facing name for a lesson's role key. A translation wins; otherwise
+ * the key is derived (`starA` becomes "star A", `m2000` "20 M☉"), right in both
+ * languages, so a role a lesson invents still gets a sensible label.
  *
  * @param {string} key - The role as the lesson wrote it
  * @returns {string} What to show in the object list
@@ -3175,19 +3333,43 @@ function renderProbe() {
 function bindStepInputs() {
   const id = stepId(stepIndex);
 
+  els.body.querySelector('[data-change]')?.addEventListener('click', () => {
+    delete responses[id];
+    save();
+    renderStep();
+    els.body.querySelector('[data-option]')?.focus();
+    announce(t('inv.answer.changed'));
+  });
+
   els.body.querySelectorAll('[data-option]').forEach(btn => {
     btn.addEventListener('click', () => {
       const choice = Number(btn.dataset.option);
+      responses[`${id}:first`] ??= choice;
       responses[id] = choice;
       attempts[id] = (attempts[id] || 0) + 1;
       save();
       renderStep();
       const step = currentStep();
-      const right = checkAnswer(step, choice);
+      // A held prediction has no verdict yet, on screen or off it. This used to
+      // be graded here regardless, so a screen reader heard "Correct.", or the
+      // whole explanation, before the experiment meant to settle it, while the
+      // screen said only that the answer was recorded. The note renderStep()
+      // has just drawn under the options is what it hears now: the same words,
+      // by construction, and nothing the screen is keeping back.
       announce(
-        right
-          ? t('inv.answer.correct')
-          : `${t('inv.answer.recorded')} ${step.because ? step.because : ''}`
+        els.body.querySelector('.inv-held')?.textContent ||
+          (checkAnswer(step, choice)
+            ? t('inv.answer.correct')
+            : [
+                t('inv.answer.recorded'),
+                spoken(
+                  matchMisconception(step, choice, 0) &&
+                    misconceptionText(matchMisconception(step, choice, 0))
+                ),
+                spoken(step.because),
+              ]
+                .filter(Boolean)
+                .join(' '))
       );
     });
   });
@@ -3221,15 +3403,20 @@ function bindStepInputs() {
   els.body.querySelectorAll('[data-hint]').forEach(btn => {
     btn.addEventListener('click', () => {
       const key = `${stepId(stepIndex)}:help`;
-      const used = String(responses[key] || '')
-        .split(',')
-        .filter(Boolean);
+      const used = helpStages(responses[key]);
       const stage = btn.dataset.hint;
       if (!used.includes(stage)) used.push(stage);
       responses[key] = used.join(',');
       save();
       renderStep();
-      announce(t(stage === 'reveal' ? 'inv.hint.revealed' : 'inv.hint.given'));
+      // Said aloud in full, and the reader's place kept: the step is drawn
+      // again, so focus is put on the hint just shown (the next press is one
+      // Tab away) rather than left on a button that no longer exists.
+      const shown = els.body.querySelector(`[data-stage="${stage}"]`);
+      shown?.focus();
+      announce(
+        `${t(stage === 'reveal' ? 'inv.hint.revealed' : 'inv.hint.given')} ${shown?.textContent ?? ''}`
+      );
     });
   });
 
@@ -3251,7 +3438,7 @@ function bindStepInputs() {
   els.body.querySelectorAll('[data-field]').forEach(input => {
     if (input.hasAttribute('readonly')) return;
     input.addEventListener('input', () => {
-      responses[input.dataset.field] = input.value;
+      recordAnswer(responses, input.dataset.field, input.value, getLocale());
       save();
       refreshMeasurements();
     });
@@ -3262,15 +3449,15 @@ function bindStepInputs() {
     const out = els.body.querySelector('[data-wedges-out]');
     const readout = els.body.querySelector('[data-wedges-readout]');
     const apply = () => {
-      const n = Number(wedgeSlider.value);
+      const n = wedgeSlider.valueAsNumber;
       out.textContent = String(n);
       setAreaSweepWedges(n);
       const ov = state.areaSweepOverlay;
       if (readout && ov?.wedgeTime) {
-        readout.innerHTML =
-          `Each slice is <strong>${(100 / n).toFixed(1)}%</strong> of the orbit's area, ` +
-          `and the planet spends <strong>${formatTime(ov.wedgeTime)}</strong> ` +
-          `traversing every one of them.`;
+        readout.innerHTML = t('inv.wedge.readout', {
+          share: formatFieldNumber(100 / n, 1, getLocale()),
+          time: escape(formatTime(ov.wedgeTime)),
+        });
       }
       responses[`${stepId(stepIndex)}:wedges`] = String(n);
       save();
@@ -3301,6 +3488,9 @@ function bindStepInputs() {
       attempts[id] = (attempts[id] || 0) + 1;
       save();
       renderStep();
+      // What the panel now says under the box, read out: a result that only
+      // appears is one a screen reader never hears.
+      announce(els.body.querySelector('.inv-feedback')?.textContent ?? '');
     };
     checkBtn.addEventListener('click', submit);
     numeric.addEventListener('keydown', e => {
@@ -3364,13 +3554,15 @@ function importSelection() {
     return;
   }
 
+  // The lesson writes these the JavaScript way, so they are English.
   target.forEach((fid, i) => {
-    if (values[i] !== undefined) responses[`${id}:${fid}`] = String(values[i]);
+    if (values[i] !== undefined)
+      recordAnswer(responses, `${id}:${fid}`, String(values[i]), 'en');
   });
   save();
   renderStep();
   const h = els.body.querySelector('[data-import-hint]');
-  if (h) h.textContent = `Added ${values[0]}.`;
+  if (h) h.textContent = t('inv.import.added', { value: values[0] });
 }
 
 // --- Navigation ---------------------------------------------------------------
@@ -3401,21 +3593,11 @@ function setupInForceAt(index) {
  * @param {boolean} [opts.rebuild] - Reload the scenario in force at that step
  */
 /**
- * Release any sound a lesson started.
- *
- * A waveform the lab is playing belongs to the step that started it. Move on,
- * go back, close the lesson or rebuild the world underneath it and what is
- * still coming out of the speakers is a measurement of something that is no
- * longer on screen - which is worse than silence, because it sounds like an
- * answer.
- *
- * Sent as an event rather than a call: js/gwAudio.js pulls in the whole
- * waveform model, and importing it here would put that on every page load for
- * the sake of a stop. The scope is the prefix js/gwWidgets.js owns, so this
- * cannot silence something a reader started outside a lesson, and the single
- * listener on the other side means no amount of stepping accumulates handlers.
- * Stopping also un-ducks the ordinary sonification bus, because js/audio.js
- * un-ducks when the signal ends however it ends.
+ * Release any sound a lesson started: a waveform belongs to the step that
+ * started it, and one still playing after the step is gone sounds like an
+ * answer. Sent as an event, because js/gwAudio.js pulls in the whole waveform
+ * model; the scope is the prefix js/gwWidgets.js owns, so it cannot silence
+ * sound started outside a lesson.
  *
  * @returns {void}
  */
@@ -3467,6 +3649,66 @@ function goToStep(index, { rebuild = false } = {}) {
   save();
   renderStep();
   els.body.scrollTop = 0;
+  // On a narrow screen it is the whole sheet that scrolls, not the body, and
+  // Next sits at the bottom of it: without this the next step would open
+  // scrolled to wherever the reader had to go to press it.
+  els.panel.scrollTop = 0;
+}
+
+function renderDepth() {
+  const o = active.depths;
+  if (!els.depth) return;
+  els.depth.hidden = !o;
+  const i = o ? o.indexOf(depth) : 0;
+  els.depthState.textContent = depthName;
+  els.deeper.hidden = !o || Boolean(assignment) || i >= o.length - 1;
+  els.shallower.hidden = !o || Boolean(assignment) || i < 1;
+}
+
+async function changeDepth(by) {
+  if (!active || assignment) return;
+  const r = await (
+    await import('./investigations/depth.js')
+  ).change({ active, depth, deepest, stepIndex, by, locale: getLocale() });
+  if (!r || r.lesson.id !== active?.id) return;
+  ({ depth, deepest, depthName } = r);
+  depthChoice = depth;
+  active = r.lesson;
+  announce(r.said);
+  goToStep(r.at);
+}
+
+/**
+ * Whether a step is for this student. A remediation step (`when`, from an
+ * investigation pack: js/platform/investigation.js) is shown only when the
+ * graded step it names has an answer that is wrong - or right - now. One not
+ * yet answered, or answered the other way, is passed over by Next and
+ * Previous; every other step always applies. A held prediction counts as not
+ * yet answered until its reveal step is reached, as renderStep() holds its
+ * verdict: the compiler refuses remediation before the reveal, and a lesson
+ * compiled before it did must not give the answer away by skipping one.
+ */
+function stepApplies(index) {
+  if (!inDepth(active.steps[index], depth)) return false;
+  const w = active.steps[index]?.when;
+  if (!w) return true;
+  const target = active.steps.find(x => x.sid === w.sid);
+  const key = stepKey(active.id, w.sid);
+  const value = responses[key];
+  if (!target || value === undefined || value === '') return false;
+  if (target.reveal && !visited.has(target.reveal)) return false;
+  const right = checkAnswer(target, value, {
+    locale: localeOfAnswer(responses, key, getLocale()),
+  });
+  if (right === null) return false;
+  return w.is === 'correct' ? right : !right;
+}
+
+/** The nearest step that applies, one way from `from`; the ends always do. */
+function applyingFrom(from, dir) {
+  let i = from + dir;
+  while (i > 0 && i < active.steps.length - 1 && !stepApplies(i)) i += dir;
+  return i;
 }
 
 function next() {
@@ -3474,7 +3716,7 @@ function next() {
     openFinish();
     return;
   }
-  goToStep(stepIndex + 1);
+  goToStep(applyingFrom(stepIndex, 1));
 }
 
 // --- Opening and closing ------------------------------------------------------
@@ -3484,6 +3726,16 @@ function next() {
 // browser, or picks a different card - must not have the abandoned one open on
 // top of them when it lands.
 let openGeneration = 0;
+
+function peekDepth(id) {
+  try {
+    const p =
+      sessionProgress.get(storageKey(id)) ?? JSON.parse(get(storageKey(id)));
+    return { ...p, level: get('gravitas_course_level') };
+  } catch {
+    return {};
+  }
+}
 
 /**
  * Start or resume an investigation.
@@ -3495,8 +3747,54 @@ export async function openInvestigation(id, opts = {}) {
   // The one await in the panel's life. Everything below it runs against a
   // lesson that is fully in hand, so no other code path had to learn that a
   // lesson might not be there yet.
-  const inv = await loadInvestigation(id);
+  let inv = await loadInvestigation(id);
   if (!inv || generation !== openGeneration) return;
+  // A question whose expected value is a formula over the student's own
+  // measurements (js/formula/grade.js) is bound to read them, so every grader
+  // below sees the number that student is owed; the module loads only for a
+  // lesson that has one.
+  if (inv.steps.some(s => s.formula)) {
+    const { bindFormulas, useNumberReader } =
+      await import('./formula/grade.js');
+    useNumberReader(parseNumber);
+    if (generation !== openGeneration) return;
+    inv = bindFormulas(inv, (sid, field) => {
+      const key = `${stepKey(inv.id, sid)}:${field}`;
+      return parseFieldNumber(
+        responses[key],
+        localeOfAnswer(responses, key, getLocale())
+      );
+    });
+  }
+  depth = 'core';
+  depthChoice = null;
+  deepest = 'core';
+  depthName = '';
+  const mem = inv.depths && !authoring && peekDepth(id);
+  if (mem && opts.depth) mem.depth = opts.depth;
+  if (
+    opts.assignment?.d ||
+    mem?.depth ||
+    mem?.deepest ||
+    /^[ma]/.test(mem?.level)
+  ) {
+    const m = await (
+      await import('./investigations/depth.js')
+    ).openDepth(inv, mem, opts.assignment, getLocale());
+    if (generation !== openGeneration) return;
+    ({ inv, depth, depthChoice, deepest, depthName } = m);
+  }
+  // Every step key is written into the panel's attributes and selectors. The
+  // pack validator and the lesson checker refuse a sid that could end an
+  // attribute; this refuses a lesson that reached the panel without passing
+  // either - a Composer preview staged before they did, for one - rather than
+  // rendering it.
+  const unsafe = inv.steps.find(s => !isValidSid(s.sid));
+  if (unsafe) {
+    throw new Error(
+      `Investigation "${id}" has a step id that is not a safe key: ${JSON.stringify(unsafe.sid)}`
+    );
+  }
 
   // An assignment is the same lesson with most of its steps taken out. It is
   // built here rather than being a second kind of thing the panel has to know
@@ -3513,7 +3811,10 @@ export async function openInvestigation(id, opts = {}) {
       return { ok: false, reason: 'noStepsLeft' };
     }
     active = { ...inv, steps: assignmentBinding.steps };
+    assignmentKey = keyForAssignment(assignment);
+    fullSteps = inv.steps.filter(s => inDepth(s, 'core')).length;
   } else {
+    fullSteps = 0;
     active = inv;
   }
   // In an authoring preview the saved progress is not read at all: an author is
@@ -3536,21 +3837,16 @@ export async function openInvestigation(id, opts = {}) {
   attempts = saved?.attempts || {};
   visited = saved?.visited || new Set();
   startedAt = saved?.startedAt || new Date().toISOString();
-  // Resolved against `active`, which for an assignment is the SUBSET, not
-  // against the whole investigation.
-  //
-  // This read indexOfSid(inv, ...), so a student resuming an eight-step
-  // assignment cut from a thirty-step lesson was sent to the position that sid
-  // holds in the LESSON - past the end of their assignment, and clamped to
-  // whatever step happened to be there. Their saved answers were intact and
-  // they were dropped in the wrong place to find them.
-  //
-  // A sid that is not in the subset at all means the assignment was recut
-  // since they last worked on it; starting at the beginning of what they
-  // actually have is the honest fallback, and their responses are unaffected.
+  spent = saved?.spent || 0;
+  lastTick = Date.now();
+  // Resolved against `active`, which for an assignment is the SUBSET: against
+  // the whole lesson, a student resuming an eight-step assignment was sent to
+  // the position that sid holds in the lesson, past its end. A sid not in the
+  // subset means the assignment was recut: start at the beginning.
   stepIndex = saved?.stepSid
     ? Math.max(0, indexOfSid(active, saved.stepSid))
     : 0;
+  while (stepIndex > 0 && !inDepth(active.steps[stepIndex], depth)) stepIndex--;
   progressNotes = saved?.notes || [];
   if (authoring?.step) {
     stepIndex = Math.min(Math.max(authoring.step - 1, 0), inv.steps.length - 1);
@@ -3610,7 +3906,10 @@ export async function openInvestigation(id, opts = {}) {
           forExperiment: true,
         });
       } catch (err) {
-        console.warn('Could not save the sandbox before the lesson:', err);
+        console.warn(
+          'Could not save the sandbox before the investigation:',
+          err
+        );
         return null;
       }
     })(),
@@ -3626,17 +3925,10 @@ export async function openInvestigation(id, opts = {}) {
 }
 
 /**
- * Put the reader's own world back, if it is still theirs to put back.
- *
- * The guard is the point. Closing a lesson is not the only thing that happens
- * at that moment: a reader can load a scenario from the rail, follow a share
- * link, or start another lesson, and a restore that fired regardless would
- * replace the thing they had just chosen with a world from ten minutes ago.
- *
- * So it only restores when the world on screen is still the one the lesson
- * built - which it can tell because a stage was up, or because the world
- * generation has not moved past the lesson's own rebuilds. Anything else and
- * the reader has taken the scene somewhere deliberate and it is left alone.
+ * Put the reader's own world back, if it is still theirs to put back: only
+ * when the world on screen is still the one the lesson built (a stage was up,
+ * or the world generation has not moved past the lesson's rebuilds). A reader
+ * who loaded a scenario or followed a link has taken it somewhere deliberate.
  *
  * @param {object} saved - The pairs handed back by leaveLessonScope()
  * @returns {boolean} Whether the sandbox was put back
@@ -3653,23 +3945,16 @@ function restoreSandbox(saved) {
     applyShareState(JSON.parse(JSON.stringify(payload)));
     return true;
   } catch (err) {
-    console.warn('Could not restore the sandbox after the lesson:', err);
+    console.warn('Could not restore the sandbox after the investigation:', err);
     return false;
   }
 }
 
 /**
- * Put the reader's selection back on the body it was on.
- *
- * Only after a successful restore, and only by id: the payload rebuilds the
- * world from packed states that carry the ids they were saved with, so the
- * body that comes back is the same body as far as anything that records a
- * measurement is concerned. A selection restored into a world that was not
- * restored would point at whatever happened to share the number.
- *
- * Silent when the body is not there. A reader who had a lesson-staged object
- * selected when they opened the panel has nothing to come back to, and
- * selecting something arbitrary instead would be worse than selecting nothing.
+ * Put the reader's selection back on the body it was on, by id, only after a
+ * successful restore (the restored world carries the ids it was saved with).
+ * Silent when the body is not there: selecting something arbitrary instead
+ * would be worse than nothing.
  *
  * @param {?object} selection - {id} as saved on entry
  * @returns {boolean} Whether a body was reselected
@@ -3759,9 +4044,6 @@ export function closeInvestigation() {
   active = null;
 }
 
-/** @returns {boolean} True while a lesson panel is open */
-export const isInvestigationOpen = () => Boolean(active);
-
 function startProbeLoop() {
   stopProbeLoop();
   // Four times a second: fast enough that a changing speed reads as live, slow
@@ -3774,619 +4056,28 @@ function stopProbeLoop() {
   probeTimer = null;
 }
 
-// --- The lesson browser -------------------------------------------------------
-//
-// Visually a sibling of the scenario gallery: the same surface tokens, the same
-// borrowed thumbnails, the same monospaced count line above the grid. It is not
-// the same card, though, and the differences are the point. A scenario is a
-// portrait tile you click on a whim; a lesson is an hour of work with a report
-// at the end, so it gets a wide landscape card with room to say how long it
-// takes, how many steps it is, what you will be able to do afterwards, and how
-// far through it you already are. Eight of those read as a syllabus. Forty-odd
-// small tiles read as a catalog. Each list looks like the thing it is.
-//
-// There is deliberately no search box and no filter chips here. Eight lessons
-// fit on two scrolls, and a filter over eight items is furniture.
-
-/** Minutes named in a `duration` string, as a [low, high] pair. */
-function durationRange(text) {
-  const nums = String(text || '').match(/\d+/g);
-  if (!nums?.length) return [0, 0];
-  const low = Number(nums[0]);
-  return [low, nums.length > 1 ? Number(nums[1]) : low];
-}
-
 /**
- * The line above the grid: how much work the whole set is, and where the
- * student has got to in it.
- *
- * Nothing here is written down anywhere. Adding a lesson changes the sentence.
- *
- * @param {Array<Object>} list - The catalog
- * @returns {string} A sentence
+ * js/dialog.js, fetched the first time the browser or the finish dialog opens.
+ * Dynamic rather than static because this module is on every lesson's route
+ * and a lesson that is only being worked through opens neither.
  */
-export function browserSummary(list = MANIFEST) {
-  const steps = list.reduce((n, inv) => n + inv.stepCount, 0);
-  const [low, high] = list.reduce(
-    ([a, b], inv) => {
-      const [l, h] = durationRange(inv.duration);
-      return [a + l, b + h];
-    },
-    [0, 0]
-  );
-  const hours = (lo, hi) => {
-    const l = Math.round(lo / 60);
-    const h = Math.round(hi / 60);
-    return l === h
-      ? t('inv.summary.about', { h })
-      : t('inv.summary.range', { l, h });
-  };
+let dialogs = null;
+const loadDialogs = async () => (dialogs ??= await import('./dialog.js'));
 
-  const parts = [
-    t('inv.summary.lessons', { n: list.length }),
-    t('inv.summary.steps', { n: steps }),
-    t('inv.summary.work', { hours: hours(low, high) }),
-  ];
-
-  // Progress, only once there is some: eight "not started" markers say nothing.
-  const progress = list.map(inv => progressFor(inv.id));
-  const done = progress.filter(p => p.started && p.done >= p.total).length;
-  const going = progress.filter(p => p.started && p.done < p.total).length;
-  if (done) parts.push(t('inv.summary.complete', { n: done }));
-  if (going) parts.push(t('inv.summary.going', { n: going }));
-
-  return parts.join(' · ');
-}
-
-/**
- * The level to show on a card, if any.
- *
- * Every lesson currently reads "Introductory astronomy", and eight identical
- * pills are noise. So the shared level is stated once in the header and a card
- * carries one only when it is the odd one out.
- *
- * @param {Object} inv - Investigation
- * @param {string|null} shared - The level the whole catalog shares, or null
- * @returns {string} A level, or the empty string
- */
-const cardLevel = (inv, shared) =>
-  inv.level === shared ? '' : inv.level || '';
-
-/** The one level the whole catalog shares, or null if they differ. */
-function sharedLevel(list = MANIFEST) {
-  const levels = new Set(list.map(inv => inv.level).filter(Boolean));
-  return levels.size === 1 ? [...levels][0] : null;
-}
-
-function browserCardHtml(inv, index, shared) {
-  const p = progressFor(inv.id);
-  const complete = p.started && p.done >= p.total;
-  const pct = p.total ? Math.round((p.done / p.total) * 100) : 0;
-  const series = seriesPosition(inv);
-  const level = cardLevel(inv, shared);
-
-  // What the card's one control promises. A student who left off at step 12 of
-  // 35 wants to be told that, not "Start".
-  const cta = complete
-    ? t('inv.card.review')
-    : p.started
-      ? t('inv.card.resume', { n: p.at })
-      : t('inv.card.start');
-
-  const status = complete
-    ? t('inv.card.complete')
-    : p.started
-      ? t('inv.card.seen', { done: p.done, total: p.total })
-      : '';
-
-  // The whole card is the control, so its accessible name has to carry
-  // everything scanning it gives a sighted reader.
-  const label = [
-    inv.title,
-    inv.subtitle,
-    series
-      ? t('inv.card.series', {
-          label: series.label,
-          index: series.index,
-          of: series.of,
-        })
-      : '',
-    t('inv.summary.steps', { n: inv.stepCount }),
-    inv.duration,
-    status,
-    cta,
-  ]
-    .filter(Boolean)
-    .join('. ');
-
-  return `<button type="button" class="inv-card${complete ? ' is-complete' : ''}"
-            data-investigation="${escape(inv.id)}"
-            aria-label="${attr(label)}" title="${attr(inv.summary || inv.title)}">
-      <span class="inv-card-shot">
-        ${scenarioShotHtml(inv, inv.title)}
-        <span class="inv-card-index" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>
-        <span class="inv-card-clock" aria-hidden="true">${escape(inv.duration)}</span>
-      </span>
-      <span class="inv-card-body">
-        <span class="inv-card-flags${series || level ? '' : ' is-empty'}">
-          ${
-            series
-              ? `<span class="inv-flag is-series">${escape(series.label)}
-                   <b>${series.index}/${series.of}</b></span>`
-              : ''
-          }
-          ${level ? `<span class="inv-flag">${escape(level)}</span>` : ''}
-        </span>
-        <span class="inv-card-title">${escape(inv.title)}</span>
-        <span class="inv-card-sub">${escape(inv.subtitle)}</span>
-        <span class="inv-card-summary">${escape(inv.summary)}</span>
-        <span class="inv-card-meta">
-          <span>${escape(t('inv.summary.steps', { n: inv.stepCount }))}</span>
-          <span>${escape(t('inv.card.objectives', { n: inv.objectiveCount }))}</span>
-          <span>${escape(t('inv.card.report'))}</span>
-        </span>
-        <span class="inv-card-foot">
-          ${
-            p.started
-              ? `<span class="inv-card-progress">
-                   <span class="inv-card-bar"><span style="width:${pct}%"></span></span>
-                   <span class="inv-card-status${complete ? ' is-done' : ''}">${escape(status)}</span>
-                 </span>`
-              : ''
-          }
-          <span class="inv-card-cta">${escape(cta)}<span aria-hidden="true"> →</span></span>
-        </span>
-      </span>
-    </button>`;
-}
-
-// --- Search, filters and the curated orders -----------------------------------
-
-/**
- * What the reader has narrowed the list to.
- *
- * Module state, deliberately: a student who filters to "in progress", opens a
- * lesson and comes back should find the list as they left it, and that has to
- * survive the panel being closed and reopened. It is not written to storage -
- * a filter is about the next five minutes, and finding the catalog silently
- * cut down a week later would be a bug, not a convenience.
- */
-let browserFilters = { ...NO_FILTERS };
-
-/** For tests and for the assignment flow: start from the whole catalog. */
-export function resetBrowserFilters() {
-  browserFilters = { ...NO_FILTERS };
-}
-
-/** The current filter set, for tests. */
-export const browserFilterState = () => ({ ...browserFilters });
-
-/** Options for one select: an "any" row, then the values. */
-function fillSelect(select, values, labelOf, anyLabel, current) {
-  if (!select) return;
-  select.innerHTML = [
-    `<option value="">${escape(anyLabel)}</option>`,
-    ...values.map(
-      value =>
-        `<option value="${attr(value)}">${escape(labelOf(value))}</option>`
-    ),
-  ].join('');
-  select.value = current || '';
-}
-
-/**
- * Build the filter menus from the catalog.
- *
- * Called on every render rather than once, because the labels are translated
- * and the subject counts move as lessons are added.
- */
-function fillFilterMenus() {
-  const subjects = subjectsOf(MANIFEST);
-  fillSelect(
-    els.filterSubject,
-    subjects.map(s => s.tag),
-    tag => {
-      const found = subjects.find(s => s.tag === tag);
-      return t('inv.filter.subject.option', {
-        subject: t(`inv.tag.${tag}`),
-        n: found ? found.count : 0,
-      });
-    },
-    t('inv.filter.subject.any'),
-    browserFilters.subject
-  );
-  fillSelect(
-    els.filterLength,
-    LENGTHS,
-    value => t(`inv.filter.length.${value}`),
-    t('inv.filter.length.any'),
-    browserFilters.length
-  );
-  fillSelect(
-    els.filterCalculation,
-    CALCULATIONS,
-    value => t(`inv.filter.calculation.${value}`),
-    t('inv.filter.calculation.any'),
-    browserFilters.calculation
-  );
-  fillSelect(
-    els.filterProgress,
-    PROGRESSES,
-    value => t(`inv.filter.progress.${value}`),
-    t('inv.filter.progress.any'),
-    browserFilters.progress
-  );
-}
-
-/**
- * One lesson inside a curated sequence.
- *
- * The title, duration and length label all come from the manifest entry. The
- * sequence contributes the position, the reason and the prerequisites.
- */
-function sequenceStepHtml(step, index) {
-  const inv = step.entry;
-  const p = progressFor(inv.id);
-  const complete = p.started && p.done >= p.total;
-  const needs = step.needs
-    .map(id => investigationMeta(id)?.title)
-    .filter(Boolean);
-
-  // Only a lesson that really is short gets called short. Anything longer says
-  // how long it is and offers the builder, which is the honest way to get a
-  // fifteen-minute activity out of a seventy-minute lesson.
-  const fit =
-    step.fit === LENGTH.DEMO
-      ? t('inv.seq.fit.demo')
-      : step.fit === LENGTH.PERIOD
-        ? t('inv.seq.fit.period')
-        : t('inv.seq.fit.long');
-
-  return `<li class="inv-seq-step${complete ? ' is-complete' : ''}">
-      <span class="inv-seq-num" aria-hidden="true">${index + 1}</span>
-      <span class="inv-seq-body">
-        <button type="button" class="inv-seq-open" data-sequence-lesson="${escape(inv.id)}">
-          ${escape(inv.title)}
-        </button>
-        <span class="inv-seq-tags">
-          <span class="inv-seq-time">${escape(inv.duration)}</span>
-          <span class="inv-seq-fit is-${escape(step.fit)}">${escape(fit)}</span>
-          ${complete ? `<span class="inv-seq-done">${escape(t('inv.card.complete'))}</span>` : ''}
-        </span>
-        <span class="inv-seq-why">${escape(t(step.whyId))}</span>
-        ${
-          needs.length
-            ? `<span class="inv-seq-needs">${escape(
-                t('inv.seq.needs', { lessons: needs.join(', ') })
-              )}</span>`
-            : `<span class="inv-seq-needs is-none">${escape(t('inv.seq.needs.none'))}</span>`
-        }
-        ${
-          step.fit === LENGTH.LONG
-            ? `<a class="inv-seq-assign" href="?assign=${encodeURIComponent(inv.id)}">${escape(
-                t('inv.seq.assign')
-              )}</a>`
-            : ''
-        }
-      </span>
-    </li>`;
-}
-
-/** All the curated sequences, resolved against the catalog. */
-function renderSequences() {
-  if (!els.sequenceList) return;
-  els.sequenceList.innerHTML = SEQUENCES.map(sequence => {
-    const steps = resolveSequence(sequence, MANIFEST);
-    if (!steps.length) return '';
-    return `<section class="inv-seq">
-        <h5 class="inv-seq-title">${escape(t(sequence.titleId))}</h5>
-        <p class="inv-seq-blurb">${escape(t(sequence.blurbId))}</p>
-        <ol class="inv-seq-steps">${steps
-          .map((step, i) => sequenceStepHtml(step, i))
-          .join('')}</ol>
-      </section>`;
-  }).join('');
-
-  // A distinct attribute from the cards' `data-investigation`, on purpose: that
-  // one has meant "a lesson card" everywhere for long enough that half a dozen
-  // tests select on it bare, and a second element answering to it made those
-  // selectors ambiguous rather than wrong. The sequence rows say what they are.
-  els.sequenceList.querySelectorAll('[data-sequence-lesson]').forEach(btn => {
-    btn.addEventListener('click', () =>
-      openCardLesson(btn, btn.dataset.sequenceLesson)
-    );
-  });
-}
-
-/**
- * Open a lesson from a card or a sequence row.
- *
- * Shared so a sequence entry behaves exactly like a card: the same busy state,
- * the same failure message, the same lazy fetch.
- */
-function openCardLesson(btn, id = btn.dataset.investigation) {
-  // Opening is a fetch now, so the control says so. On a warm cache this class
-  // is added and removed within a frame and nobody sees it; on a phone on
-  // campus wifi it is the difference between a considered wait and a card
-  // that looks broken.
-  btn.setAttribute('aria-busy', 'true');
-  const cta = btn.querySelector('.inv-card-cta');
-  const wasCta = cta?.textContent;
-  if (cta) cta.textContent = t('inv.card.loading');
-  return openInvestigation(id)
-    .catch(() => toast(t('inv.load.failed')))
-    .finally(() => {
-      btn.removeAttribute('aria-busy');
-      if (cta && wasCta) cta.textContent = wasCta;
-    });
-}
-
-/** Nothing matched: say what would help rather than leaving a blank panel. */
-function renderEmpty(filtered) {
-  if (!els.empty) return;
-  els.empty.hidden = Boolean(filtered.length);
-  if (filtered.length) return;
-
-  const relax = loosening(MANIFEST, browserFilters, progressFor);
-  if (els.emptyText)
-    els.emptyText.textContent = browserFilters.query
-      ? t('inv.empty.search', { query: browserFilters.query })
-      : t('inv.empty.filters');
-  if (els.emptyAction) {
-    els.emptyAction.hidden = false;
-    els.emptyAction.textContent = relax
-      ? t('inv.empty.relax', {
-          filter: t(`inv.filter.${relax.key}`).toLowerCase(),
-          n: relax.count,
-        })
-      : t('inv.filter.clear');
-    els.emptyAction.dataset.relax = relax ? relax.key : '';
-  }
-}
-
-function renderBrowser() {
-  if (!els.list) return;
-  const shared = sharedLevel();
-  const narrowed = isFiltered(browserFilters);
-  const rows = filterCatalog(MANIFEST, browserFilters, progressFor);
-
-  fillFilterMenus();
-
-  if (els.count) {
-    // While filtering, the count is the answer to what was just typed, and the
-    // element is a live region so it is also the announcement. The standing
-    // summary of the whole catalog would bury that.
-    els.count.textContent = narrowed
-      ? t('inv.filter.count', { n: rows.length, total: MANIFEST.length })
-      : browserSummary();
-  }
-  // The level, said once, where it is a fact about the set rather than a pill
-  // repeated eight times.
-  if (els.level) {
-    els.level.hidden = !shared || narrowed;
-    if (shared)
-      els.level.textContent = t('inv.summary.level', {
-        level: shared.toLowerCase(),
-      });
-  }
-  if (els.filterClear) els.filterClear.hidden = !narrowed;
-
-  // The curated orders are an answer to "where do I start", which is not the
-  // question somebody typing in the search box is asking.
-  if (els.sequences) {
-    els.sequences.hidden = narrowed;
-    if (!narrowed) renderSequences();
-    else els.sequenceList.innerHTML = '';
-  }
-  if (els.allHeading) els.allHeading.hidden = narrowed;
-
-  els.list.innerHTML = rows
-    .map((row, i) => browserCardHtml(row.entry, i, shared))
-    .join('');
-
-  wireThumbnailFallbacks(els.list);
-
-  els.list.querySelectorAll('[data-investigation]').forEach(btn => {
-    btn.addEventListener('click', () => openCardLesson(btn));
-  });
-
-  renderEmpty(rows);
-}
-
-/**
- * A keystroke waiting out the debounce.
- *
- * Held here rather than inside the listener because any other filter change
- * has to settle it first. Without that, choosing a subject a tenth of a second
- * after typing renders with the old empty query and the typed text is lost -
- * which is exactly what happened, and is why the timer is module state.
- */
-let pendingQuery = null;
-
-/** Apply a keystroke that has not waited out its debounce yet. */
-function flushQuery() {
-  if (pendingQuery === null) return;
-  clearTimeout(pendingQuery);
-  pendingQuery = null;
-  browserFilters = {
-    ...browserFilters,
-    query: (els.search?.value || '').trim(),
-  };
-}
-
-/** Take a filter change and redraw. */
-function setBrowserFilter(key, value) {
-  flushQuery();
-  browserFilters = { ...browserFilters, [key]: value };
-  renderBrowser();
-}
-
-/** Empty every filter, including the box the reader typed in. */
-function clearBrowserFilters() {
-  if (pendingQuery !== null) clearTimeout(pendingQuery);
-  pendingQuery = null;
-  resetBrowserFilters();
-  if (els.search) els.search.value = '';
-  renderBrowser();
-}
-
-/** Wire the search box and the four menus. Once, at start-up. */
-function wireBrowserFilters() {
-  // Debounced, because a keystroke rebuilds seventeen cards and their
-  // thumbnails; 150ms is below the point a reader notices and above the rate
-  // anybody types.
-  els.search?.addEventListener('input', () => {
-    if (pendingQuery !== null) clearTimeout(pendingQuery);
-    pendingQuery = setTimeout(() => {
-      pendingQuery = null;
-      setBrowserFilter('query', els.search.value.trim());
-    }, 150);
-  });
-  // Escape empties the box rather than closing the panel out from under
-  // somebody who was only trying to undo a search.
-  els.search?.addEventListener('keydown', event => {
-    if (event.key !== 'Escape' || !els.search.value) return;
-    event.stopPropagation();
-    event.preventDefault();
-    if (pendingQuery !== null) clearTimeout(pendingQuery);
-    pendingQuery = null;
-    els.search.value = '';
-    setBrowserFilter('query', '');
-  });
-
-  const menus = [
-    [els.filterSubject, 'subject'],
-    [els.filterLength, 'length'],
-    [els.filterCalculation, 'calculation'],
-    [els.filterProgress, 'progress'],
-  ];
-  menus.forEach(([select, key]) => {
-    select?.addEventListener('change', () =>
-      setBrowserFilter(key, select.value)
-    );
-  });
-
-  els.filterClear?.addEventListener('click', () => {
-    clearBrowserFilters();
-    els.search?.focus();
-  });
-
-  els.emptyAction?.addEventListener('click', () => {
-    const key = els.emptyAction.dataset.relax;
-    if (key) setBrowserFilter(key, '');
-    else clearBrowserFilters();
-    els.search?.focus();
-  });
-}
-
-// Where focus was when the browser opened. The panel is an aria-modal dialog,
-// so leaving focus behind it would let a keyboard user tab through the rail
-// underneath, and closing it would drop them at the top of the document.
-/** Releases the browser's focus trap while it is open. */
-let releaseBrowserFocus = null;
-
-let browserLastFocus = null;
-
-/** Show the list of available investigations. */
-export function openBrowser() {
-  if (!els.browser) return;
-  browserLastFocus = document.activeElement;
-  renderBrowser();
-  // And again once the catalog for this language has arrived, if it had not.
-  //
-  // The panel opens immediately - waiting on a fetch before showing anything
-  // would be a worse trade than a grid that fills in - but a reader who chose
-  // Spanish before the lesson system was ever loaded would otherwise be left
-  // looking at English titles until they touched a filter. Resolved already in
-  // the common cases: English, or any second open.
-  lessonCatalogReady()
-    .then(() => {
-      if (els.browser && !els.browser.classList.contains('hidden')) {
-        renderBrowser();
-      }
-    })
-    .catch(() => {
-      /* the English catalog is already on screen; that is the fallback */
-    });
-  els.browser.classList.remove('hidden');
-  // Both of them. #investigationBrowserScroll is the list, but the element that
-  // actually scrolls is #investigationBrowserContent, and resetting only the
-  // former left the panel wherever it had been.
-  if (els.browserScroll) els.browserScroll.scrollTop = 0;
-  if (els.browserContent) els.browserContent.scrollTop = 0;
-  // The browser declares aria-modal="true"; without a trap, Tab left it for
-  // the rail behind and a screen reader could browse the whole page under it.
-  // The trap also marks the background inert and restores focus on release.
-  releaseBrowserFocus = trapFocus(els.browserContent, {
-    returnFocusTo: browserLastFocus,
-    // Focus is placed on the first card below, after the panel has laid out.
-    initialFocus: null,
-  });
-  // The first lesson, not the close button: the point of arriving here is to
-  // choose one, and it puts the keyboard user at the top of the same list a
-  // sighted user is reading. Deferred because a display change has to land
-  // before the element can take focus.
-  //
-  // preventScroll, because the first card sits below the panel's heading and
-  // its intro paragraph. Without it the browser scrolls the newly focused card
-  // into view and drags the heading off the top: at 320x568 the panel opened
-  // 137px down, so the first thing a reader saw was the second half of a
-  // sentence and no title at all.
-  //
-  // With a filter still applied from earlier there may be no first card at
-  // all, and the trap places focus nowhere: a keyboard user would arrive
-  // inside a modal with focus on the document and nothing to tab from. The
-  // search box is the right fallback - it is both focusable and the thing they
-  // need in order to see any lessons again.
-  setTimeout(() => {
-    const first = els.list?.querySelector('.inv-card');
-    if (first) first.focus({ preventScroll: true });
-    else els.search?.focus({ preventScroll: true });
-    if (els.browserContent) els.browserContent.scrollTop = 0;
-  }, 60);
-}
-
-/**
- * Hide the list of investigations.
- * @param {Object} [opts]
- * @param {boolean} [opts.restoreFocus] - Send focus back where it came from.
- *   False when a lesson is opening: the panel takes focus instead, and putting
- *   it back on the rail button first would be a visible detour.
- */
-export function closeBrowser({ restoreFocus = true } = {}) {
-  els.browser?.classList.add('hidden');
-  if (releaseBrowserFocus) {
-    const release = releaseBrowserFocus;
-    releaseBrowserFocus = null;
-    // The trap restores focus itself, so it is only released that way when the
-    // caller wants focus back; otherwise the background is un-inerted without
-    // moving focus, which is what opening a lesson from a card needs.
-    if (restoreFocus) {
-      release();
-      browserLastFocus = null;
-      return;
-    }
-    release();
-  }
-  if (
-    restoreFocus &&
-    browserLastFocus &&
-    document.contains(browserLastFocus) &&
-    browserLastFocus !== document.body
-  ) {
-    browserLastFocus.focus();
-  }
-  browserLastFocus = null;
-}
-
-const isBrowserOpen = () =>
-  Boolean(els.browser) && !els.browser.classList.contains('hidden');
+// The chooser lives in js/investigations/browser.js and takes these four
+// instead of importing this module back.
+bindChooser({
+  progressFor,
+  openInvestigation,
+  loadDialogs,
+  dialogs: () => dialogs,
+});
 
 // --- Finishing and the report -------------------------------------------------
 
 function openFinish() {
   if (!els.finish) return;
-  const graded = gradedSteps(active);
+  const graded = gradedSteps({ steps: shown() });
   const answered = graded.filter(s => {
     const i = active.steps.indexOf(s);
     const id = stepId(i);
@@ -4398,95 +4089,137 @@ function openFinish() {
     return String(responses[id] ?? '').trim() !== '';
   }).length;
 
+  showToken('');
+  // Not in an authoring preview, as the panel's backup controls are not.
+  els.finishProgress.hidden = Boolean(authoring);
   els.finishSummary.innerHTML = `
-    <p>You have worked through <strong>${visited.size} of ${active.steps.length}</strong>
-       steps and answered <strong>${answered} of ${graded.length}</strong> questions.</p>
-    <p class="inv-finish-note">A report is only needed if you are submitting this for
-       credit. If you are here for your own interest, you can simply close the panel: your progress is saved either way.</p>`;
+    <p>${t('inv.finish.summary', {
+      visited: shown().filter(s => visited.has(s.sid)).length,
+      steps: shown().length,
+      answered,
+      graded: graded.length,
+    })}</p>
+    <p class="inv-finish-note">${escape(t('inv.finish.note'))}</p>`;
   els.nameInput.value = getStudentName();
-  els.finish.classList.remove('hidden');
-  els.nameInput.focus();
+  import('./investigations/next.js').then(m =>
+    m.whatNext(document.getElementById('investigationNextList'), {
+      id: active.id,
+      deeper: active.depths && !els.deeper.hidden && els.deeper.textContent,
+      onDeeper: () => {
+        closeFinish();
+        changeDepth(1);
+      },
+    })
+  );
+  // Modal: the lesson behind it inert, Escape and the backdrop closing it,
+  // and focus back on Next, where the reader asked to finish.
+  const trigger = document.activeElement;
+  loadDialogs()
+    .then(({ openDialog }) =>
+      openDialog(els.finishContent, {
+        backdrop: els.finish,
+        isolate: true,
+        trigger,
+        initialFocus: els.nameInput,
+      })
+    )
+    .catch(() => {
+      /* offline and never fetched: Next on the last step asks again */
+    });
 }
 
 function closeFinish() {
-  els.finish?.classList.add('hidden');
+  dialogs?.closeDialog(els.finishContent);
 }
 
-async function generateReport() {
-  const name = els.nameInput.value.trim();
-  if (!name) {
-    els.nameInput.focus();
-    els.nameError.hidden = false;
-    return;
+/** A file the browser saves. */
+function saveFile(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = name;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+/** Put a token in the finish dialog's field, or clear it. */
+function showToken(token) {
+  els.token.value = token || '';
+  els.tokenBody.hidden = !token;
+}
+
+/**
+ * What the finish flow's module needs of this one. Built on each call, so the
+ * variables this module reassigns are read when the module needs them.
+ * @returns {import('./investigations/finish.js').FinishHost} The host
+ */
+const finishHost = () => ({
+  state: () => ({
+    active,
+    stepIndex,
+    responses,
+    attempts,
+    visited,
+    startedAt,
+    assignment,
+    assignmentBinding,
+    depth,
+  }),
+  elements: () => els,
+  payloadFromSetup,
+  plotData: plotAnywhere,
+  stepId,
+  reportSlug,
+  setStudentName,
+  showToken,
+  lib: {
+    t,
+    getLocale,
+    toast,
+    announce,
+    decodeEntities,
+    checkAnswer,
+    localeOfAnswer,
+    helpStages,
+    helpTaken,
+    encodePayload,
+    shareUrl,
+  },
+});
+
+/**
+ * The finish flow runs from a module fetched on first use. If it cannot be
+ * fetched, say what the button was for rather than doing nothing.
+ */
+const finishAction = (name, failedKey) => () =>
+  import('./investigations/finish.js')
+    .then(m => m[name](finishHost()))
+    .catch(() => toast(t(failedKey)));
+
+/** The file name a student's report and token are saved under. */
+const reportSlug = name =>
+  `${name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')}-${active.id}`;
+
+/**
+ * The plot lives on whichever step owns it, so find it rather than relying on
+ * the student being parked there when they press Download.
+ */
+function plotAnywhere() {
+  let plot = null;
+  const here = stepIndex;
+  for (let i = 0; i < active.steps.length; i++) {
+    if (!active.steps[i].plot) continue;
+    stepIndex = i;
+    plot = currentPlotData();
+    if (plot) break;
   }
-  els.nameError.hidden = true;
-  setStudentName(name);
-
-  els.downloadBtn.disabled = true;
-  els.downloadBtn.textContent = t('inv.report.building');
-  try {
-    // The setup states are turned into real links here rather than at authoring
-    // time, so a report always points at the encoding this build produces.
-    const links = [];
-    for (let i = 0; i < active.steps.length; i++) {
-      const setup = active.steps[i].setup;
-      if (!setup) continue;
-      const fragment = await encodePayload(payloadFromSetup(setup));
-      links.push({
-        step: i + 1,
-        title: active.steps[i].title,
-        url: shareUrl(fragment),
-      });
-    }
-
-    // The plot lives on whichever step owns it, so find it rather than relying
-    // on the student being parked there when they press Download.
-    let plot = null;
-    const here = stepIndex;
-    for (let i = 0; i < active.steps.length; i++) {
-      if (!active.steps[i].plot) continue;
-      stepIndex = i;
-      plot = currentPlotData();
-      if (plot) break;
-    }
-    stepIndex = here;
-
-    const bytes = buildLabReport({
-      investigation: active,
-      plot,
-      name,
-      responses,
-      attempts,
-      visited,
-      startedAt,
-      links,
-      stepIdFor: stepId,
-      assignment,
-      binding: assignmentBinding,
-      // Per answer, not per report. This used to be `checkAnswer` bare, which
-      // defaults to English, so every Spanish numeric answer was re-read under
-      // English rules on its way into the PDF and a student could be marked
-      // correct on screen and incorrect on the document they hand in.
-      checkAnswer: (step, value, key) =>
-        checkAnswer(step, value, {
-          locale: localeOfAnswer(responses, key, getLocale()),
-        }),
-    });
-
-    const slug = `${name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '')}-${active.id}`;
-    downloadPdf(bytes, `${slug}.pdf`);
-    toast(t('inv.report.done'));
-    announce(t('inv.report.done'));
-  } catch (err) {
-    console.error('Report generation failed:', err);
-    toast(t('inv.report.failed'));
-  } finally {
-    els.downloadBtn.disabled = false;
-    els.downloadBtn.textContent = t('inv.report.download');
-  }
+  stepIndex = here;
+  return plot;
 }
 
 function resetProgress() {
@@ -4496,7 +4229,7 @@ function resetProgress() {
   visited = new Set();
   startedAt = new Date().toISOString();
   try {
-    if (!authoring) localStorage.removeItem(storageKey(active.id));
+    if (!authoring) drop(storageKey(active.id));
   } catch {
     /* ignore */
   }
@@ -4537,8 +4270,8 @@ export function currentPlotData() {
 /** Wire up the investigations panel. Safe to call once, from init. */
 /** Lesson id named in the address bar, if there is one. */
 function investigationFromHash() {
-  const m = /^#investigation=([\w-]+)$/.exec(window.location.hash || '');
-  return m ? decodeURIComponent(m[1]) : null;
+  const m = /^#investigation=([\w-]+)(?:\/(\w+))?$/.exec(location.hash);
+  return m ? [decodeURIComponent(m[1]), m[2]] : [];
 }
 
 /**
@@ -4548,14 +4281,16 @@ function investigationFromHash() {
  * assignment lands the student on the right lesson rather than on the browser.
  */
 function openInvestigationFromHash() {
-  const id = investigationFromHash();
+  const [id, depth] = investigationFromHash();
   if (!id) return;
   if (!hasInvestigation(id)) {
     toast(t('inv.link.unknown'));
     return;
   }
   if (active?.id === id) return;
-  openInvestigation(id).catch(() => toast(t('inv.load.failed')));
+  openInvestigation(id, { depth }).catch(err =>
+    loadFailed(() => openInvestigation(id, { depth }).catch(() => {}), err)
+  );
 }
 
 // A language change swaps the manifest the cards are drawn from, and rewrites
@@ -4571,7 +4306,25 @@ onLocaleChange(() => {
   }
 });
 
-export function initInvestigations() {
+/**
+ * Wire the lesson engine to its markup, once the loader has mounted it.
+ *
+ * @param {{signal?: AbortSignal}} [options] - Aborted when the markup is
+ *   unmounted (js/investigationsLoader.js); removes every listener this adds
+ *   outside it - the rail's Lessons button and the window's
+ */
+export function initInvestigations({ signal } = {}) {
+  const opts = signal ? { signal } : undefined;
+  // Where a notebook capture is made: the lesson and step the student is on.
+  setEvidenceContext(() =>
+    active
+      ? {
+          lesson: active.id,
+          step: active.steps[stepIndex]?.sid ?? null,
+          ...(assignment ? { assignment: assignment.i } : {}),
+        }
+      : null
+  );
   els = {
     browser: document.getElementById('investigationBrowser'),
     list: document.getElementById('investigationList'),
@@ -4607,21 +4360,32 @@ export function initInvestigations() {
     fitBtn: document.getElementById('investigationFit'),
     followBtn: document.getElementById('investigationFollow'),
     scaleBtn: document.getElementById('investigationScale'),
+    depth: document.getElementById('investigationDepth'),
+    depthState: document.getElementById('investigationDepthState'),
+    deeper: document.getElementById('investigationDeeper'),
+    shallower: document.getElementById('investigationShallower'),
     prev: document.getElementById('investigationPrev'),
     next: document.getElementById('investigationNext'),
     close: document.getElementById('investigationClose'),
     progressBar: document.getElementById('investigationProgressBar'),
     progressText: document.getElementById('investigationProgressText'),
+    where: document.getElementById('investigationWhere'),
+    help: document.getElementById('investigationHelp'),
+    helpPanel: document.getElementById('investigationHelpPanel'),
     saveStatus: document.getElementById('investigationSaveStatus'),
     progressNotice: document.getElementById('investigationProgressNotice'),
     backupDownload: document.getElementById('investigationBackupDownload'),
     backupRestore: document.getElementById('investigationBackupRestore'),
     backupFile: document.getElementById('investigationBackupFile'),
     finish: document.getElementById('investigationFinish'),
+    finishContent: document.getElementById('investigationFinishContent'),
     finishSummary: document.getElementById('investigationFinishSummary'),
     nameInput: document.getElementById('investigationName'),
     nameError: document.getElementById('investigationNameError'),
     downloadBtn: document.getElementById('investigationDownload'),
+    finishProgress: document.getElementById('investigationFinishProgress'),
+    token: document.getElementById('investigationToken'),
+    tokenBody: document.getElementById('investigationTokenBody'),
     finishClose: document.getElementById('investigationFinishClose'),
     finishBack: document.getElementById('investigationFinishBack'),
     resetBtn: document.getElementById('investigationReset'),
@@ -4636,6 +4400,9 @@ export function initInvestigations() {
     plotLog: document.getElementById('investigationPlotLog'),
     toolPanel: document.getElementById('investigationTool'),
     toolTitle: document.getElementById('investigationToolTitle'),
+    toolExplain: document.getElementById('investigationToolExplain'),
+    plotExplain: document.getElementById('investigationPlotExplain'),
+    ellipseExplain: document.getElementById('investigationEllipseExplain'),
     toolCanvas: document.getElementById('investigationToolCanvas'),
     toolNote: document.getElementById('investigationToolNote'),
     toolReadout: document.getElementById('investigationToolReadout'),
@@ -4650,23 +4417,86 @@ export function initInvestigations() {
     presets: document.getElementById('investigationPresets'),
     presetNote: document.getElementById('investigationPresetNote'),
   };
+  setChooserElements(els);
   if (!els.panel || !els.browser) return;
 
-  document
-    .getElementById('investigationsBtn')
-    ?.addEventListener('click', () => {
-      isBrowserOpen() ? closeBrowser() : openBrowser();
+  // The objects list folds away, and stays folded: on the next step, and on
+  // the next visit.
+  const objectsDisclosure = document.getElementById(
+    'investigationObjectsDisclosure'
+  );
+  if (objectsDisclosure) {
+    // On a phone it starts folded until the reader says otherwise: the step
+    // comes first on a sheet that small. Not remembered, being no choice.
+    let quiet = false;
+    try {
+      const kept = get(OBJECTS_OPEN_KEY);
+      quiet = kept == null && window.innerWidth <= 767;
+      if (kept === '0' || quiet) objectsDisclosure.open = false;
+    } catch {
+      /* storage unavailable: it opens, as it always did */
+    }
+    objectsDisclosure.addEventListener('toggle', () => {
+      if (quiet) return void (quiet = false);
+      try {
+        put(
+          OBJECTS_OPEN_KEY,
+          objectsDisclosure.open ? '1' : '0',
+          'preferences'
+        );
+      } catch {
+        /* the list still folds; the choice just will not outlive the page */
+      }
     });
-  wireBrowserFilters();
-  els.browserClose?.addEventListener('click', closeBrowser);
-  els.browserChip?.addEventListener('click', closeBrowser);
-  els.browser.addEventListener('click', e => {
-    if (e.target === els.browser) closeBrowser();
-  });
+  }
 
-  els.prev?.addEventListener('click', () => goToStep(stepIndex - 1));
+  document.getElementById('investigationsBtn')?.addEventListener(
+    'click',
+    () => {
+      isBrowserOpen() ? closeBrowser() : openBrowser();
+    },
+    opts
+  );
+  wireBrowserFilters(opts);
+  els.browserClose?.addEventListener('click', closeBrowser, opts);
+  els.browserChip?.addEventListener('click', closeBrowser, opts);
+
+  els.prev?.addEventListener('click', () =>
+    goToStep(applyingFrom(stepIndex, -1))
+  );
   els.next?.addEventListener('click', next);
+  setInterval(() => active && renderWhere(shown()), 3e4);
+  els.help?.addEventListener(
+    'click',
+    async () => {
+      const on = els.help.getAttribute('aria-expanded') !== 'true';
+      els.help.setAttribute('aria-expanded', on);
+      els.helpPanel.hidden = !on;
+      if (on)
+        (await import('./investigations/guidance.js')).help(() => ({
+          lesson: active,
+          n: stepIndex,
+          total: shown().length,
+          depth,
+          spent,
+          link: async () => {
+            const s = currentStep()?.setup;
+            return s ? shareUrl(await encodePayload(payloadFromSetup(s))) : '';
+          },
+        }));
+    },
+    opts
+  );
+  els.deeper?.addEventListener('click', () => changeDepth(1), opts);
+  els.shallower?.addEventListener('click', () => changeDepth(-1), opts);
   els.close?.addEventListener('click', closeInvestigation);
+  wireExplainer(
+    els.toolExplain,
+    m => m.explainerKeyFor(currentStep()?.tool?.id),
+    opts
+  );
+  wireExplainer(els.plotExplain, () => 'plot-measure', opts);
+  wireExplainer(els.ellipseExplain, () => 'plot-ellipse', opts);
   // The stage's camera and scale. Both cameras act once, on the press: a view
   // that re-framed itself would take the scene back every time a reader looked
   // somewhere else, and the whole point of standing objects on the canvas is
@@ -4718,31 +4548,54 @@ export function initInvestigations() {
 
   els.finishClose?.addEventListener('click', closeFinish);
   els.finishBack?.addEventListener('click', closeFinish);
-  els.downloadBtn?.addEventListener('click', generateReport);
-  els.finish?.addEventListener('click', e => {
-    if (e.target === els.finish) closeFinish();
-  });
+  els.downloadBtn?.addEventListener(
+    'click',
+    finishAction('generateReport', 'inv.report.failed')
+  );
+  const on = (id, fn) =>
+    document.getElementById(id)?.addEventListener('click', fn);
+  els.finishProgress?.addEventListener('click', downloadProgressBackup);
+  on('investigationTokenShow', finishAction('revealToken', 'inv.token.failed'));
+  on('investigationTokenCopy', finishAction('copyToken', 'inv.token.failed'));
+  on('investigationTokenSave', () =>
+    saveFile(
+      new Blob([`${els.token.value}\n`], { type: 'text/plain' }),
+      `${reportSlug(els.nameInput.value.trim() || 'token')}-token.txt`
+    )
+  );
 
   // The widget and plot canvases are sized from their panel's width, which is a
   // percentage of the viewport, so a resized window leaves them stretched.
   let resizeTimer = null;
-  window.addEventListener('resize', () => {
-    if (!active) return;
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      const step = currentStep();
-      if (step?.tool) paintTool();
-      if (step?.plot) drawPlot(step, stepId(stepIndex));
-      if (step?.type === 'ellipse') {
-        paintEllipse(responses[`${stepId(stepIndex)}:e`] ?? step.start ?? 0.5);
-      }
-    }, 150);
-  });
+  window.addEventListener(
+    'resize',
+    () => {
+      if (!active) return;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const step = currentStep();
+        if (step?.tool) paintTool();
+        if (step?.plot) drawPlot(step, stepId(stepIndex));
+        if (step?.type === 'ellipse') {
+          paintEllipse(
+            responses[`${stepId(stepIndex)}:e`] ?? step.start ?? 0.5
+          );
+        }
+      }, 150);
+    },
+    opts
+  );
 
-  window.addEventListener('gravitasEscape', () => {
-    if (els.finish && !els.finish.classList.contains('hidden')) closeFinish();
-    else if (isBrowserOpen()) closeBrowser();
-  });
+  // js/dialog.js takes an Escape pressed inside either dialog; this is one
+  // pressed with focus on <body>.
+  window.addEventListener(
+    'gravitasEscape',
+    () => {
+      if (els.finish && !els.finish.classList.contains('hidden')) closeFinish();
+      else if (isBrowserOpen()) closeBrowser();
+    },
+    opts
+  );
 
   // A lesson can be opened by URL: gravitas-sim.online/#investigation=<id>.
   // That is what makes an investigation assignable, and what the instructor
@@ -4765,7 +4618,7 @@ export function initInvestigations() {
   });
 
   openInvestigationFromHash();
-  window.addEventListener('hashchange', openInvestigationFromHash);
+  window.addEventListener('hashchange', openInvestigationFromHash, opts);
 
   // The authoring preview: ?author=<lesson>&step=<n>.
   //
@@ -4793,26 +4646,31 @@ export function initInvestigations() {
         .then(([loaded, builder]) => {
           if (loaded) builder.openBuilder(loaded);
         })
-        .catch(() => toast(t('inv.load.failed')));
+        .catch(() => loadFailed(() => location.reload()));
     }
   }
 
   if (/[?&#]author=/.test(window.location.href)) {
-    import('./authoring/preview.js')
-      .then(preview => {
+    // The preview's findings read the whole widget catalog, lazy families too.
+    Promise.all([import('./authoring/preview.js'), whenWidgetsReady()])
+      .then(([preview]) => {
         const request = preview.authoringRequest();
         if (!request) return;
+        preview.installDraft(request);
         if (!hasInvestigation(request.lesson)) {
           toast(t('inv.link.unknown'));
           return;
         }
+        const student = request.view === 'student';
         authoring = {
           step: request.step,
-          render: (inv, index) => preview.renderAuthorBar(inv, index),
+          render: student
+            ? null
+            : (inv, index) => preview.renderAuthorBar(inv, index),
         };
-        preview.mountAuthorBar(index => goToStep(index));
-        openInvestigation(request.lesson).catch(() =>
-          toast(t('inv.load.failed'))
+        if (!student) preview.mountAuthorBar(index => goToStep(index));
+        openInvestigation(request.lesson).catch(err =>
+          loadFailed(() => location.reload(), err)
         );
       })
       .catch(() => {
@@ -4822,30 +4680,75 @@ export function initInvestigations() {
 
   // The plot reads its colors from the theme tokens, so it has to be redrawn
   // when the theme changes rather than keeping the old palette.
-  window.addEventListener('gravitasLightCurveToggled', () => {
-    if (active) reflowForLightCurve();
-  });
+  window.addEventListener(
+    'gravitasLightCurveToggled',
+    () => {
+      if (active) reflowForLightCurve();
+    },
+    opts
+  );
 
-  window.addEventListener('gravitasThemeChanged', () => {
-    if (!active) return;
-    drawPlot(currentStep(), stepId(stepIndex));
-    if (currentStep()?.tool) paintTool();
-  });
+  window.addEventListener(
+    'gravitasThemeChanged',
+    () => {
+      if (!active) return;
+      drawPlot(currentStep(), stepId(stepIndex));
+      if (currentStep()?.tool) paintTool();
+    },
+    opts
+  );
 
   // Arrow keys move through a lesson, but only when the student is not typing
   // into one of its own answer fields.
-  window.addEventListener('keydown', e => {
-    if (!active) return;
-    const tag = e.target?.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target?.isContentEditable) {
-      return;
-    }
-    if (e.key === 'ArrowRight' && e.shiftKey) {
-      e.preventDefault();
-      next();
-    } else if (e.key === 'ArrowLeft' && e.shiftKey) {
-      e.preventDefault();
-      goToStep(stepIndex - 1);
-    }
-  });
+  window.addEventListener(
+    'keydown',
+    e => {
+      if (!active) return;
+      const tag = e.target?.tagName;
+      if (
+        tag === 'INPUT' ||
+        tag === 'TEXTAREA' ||
+        e.target?.isContentEditable
+      ) {
+        return;
+      }
+      if (e.key === 'ArrowRight' && e.shiftKey) {
+        e.preventDefault();
+        next();
+      } else if (e.key === 'ArrowLeft' && e.shiftKey) {
+        e.preventDefault();
+        goToStep(applyingFrom(stepIndex, -1));
+      }
+    },
+    opts
+  );
 }
+
+/**
+ * Undo initInvestigations(), for when the engine's markup leaves the page:
+ * close the lesson and its dialogs, and forget every element. The listeners
+ * outside the markup go with the mount's signal.
+ */
+export function teardownInvestigations() {
+  if (active) closeInvestigation();
+  if (els.finish && !els.finish.classList.contains('hidden')) closeFinish();
+  if (isBrowserOpen()) closeBrowser();
+  // Opened through js/dialog.js, which keeps two document listeners per
+  // dialog; a mounted copy is a new element, so these are let go.
+  dialogs?.releaseDialog(els.browserContent);
+  dialogs?.releaseDialog(els.finishContent);
+  els = {};
+  setChooserElements(els);
+}
+
+/** What js/remix/open.js needs of the engine. */
+export const packFacts = () => ({
+  provideLessonLoaders,
+  loadInvestigation,
+  openInvestigation,
+  ENTITIES,
+  UNITS,
+  scenarios: SCENARIO_IDS,
+  scenarioId,
+  lessons: MANIFEST.map(m => m.id),
+});

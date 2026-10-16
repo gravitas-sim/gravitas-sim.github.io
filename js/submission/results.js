@@ -1,0 +1,828 @@
+// =============================================================================
+// Submission results: one model, two exports
+// -----------------------------------------------------------------------------
+// The review page grades a pile of lab reports into one table on screen. An
+// instructor also needs the pile as data - to put next to a gradebook, to hand
+// to a teaching assistant, to keep - and that is this module: the graded record
+// of every accepted submission, and the CSV and JSON written from it.
+//
+// It is one model on purpose. A CSV built by walking the screen table and a
+// JSON built by walking the submissions would be two derivations that agree
+// until the day they do not; here the summary rows, the question rows and the
+// JSON document are all projections of the same records. An adapter for a
+// particular gradebook, when one is written, reads that model or the JSON and
+// never the screen.
+//
+// No DOM, no storage, no network. Everything here is a function of what was
+// handed in, so the page, the tests and any future tool compute the same thing.
+//
+// What a record can and cannot say
+// -----------------------------------------------------------------------------
+// A token proves that a browser running Gravitas produced these answers to this
+// lesson. It does not prove who. `name_as_typed` is what the student typed into
+// the report and is exported as exactly that; `roster_id` is what the
+// instructor's link or assignment put there. Neither is identity, and nothing
+// here infers identity from anything else.
+//
+// So repeated attempts are grouped only where there is something to group by:
+// the same roster id, assignment and lesson. Without a roster id there is no
+// group, only a warning - two reports with the same typed name are two reports,
+// and deciding otherwise would be guessing. And a group is never collapsed:
+// every attempt keeps its row, numbered by when it was saved, and nothing here
+// chooses a winner or combines a grade across attempts. That is a policy, and
+// it belongs to the instructor.
+//
+// An exact duplicate - the same report dropped twice, or a PDF and the token
+// pasted out of it - is recognised by comparing the submissions themselves,
+// not a hash of them, and is kept and marked rather than dropped.
+//
+// Written answers
+// -----------------------------------------------------------------------------
+// A written answer is the one thing in a report that is the student's own
+// prose, and it is excluded from both exports unless the instructor asks for
+// it. Machine-checked answers - a number, a chosen option - are exported by
+// default: they are what the verdict was reached from. Every question row says
+// which it did, so a blank response is never ambiguous.
+// =============================================================================
+
+import { checkAnswer } from '../answerCheck.js';
+import { toCsv } from '../csv.js';
+import { gradedSteps } from '../data/investigations/catalog.js';
+import { stepFingerprint } from '../investigations/progressBackup.js';
+const DEPTHS = ['core', 'quantitative', 'advanced'];
+const rank = d => Math.max(0, DEPTHS.indexOf(d));
+const inDepth = (s, d) => rank(s?.depth) <= rank(d);
+import { answersOf, attemptsOf, helpOf } from './submissionToken.js';
+import { plainDataProblem } from '../platform/common.js';
+import { symbolOf } from '../units/registry.js';
+
+/** What the JSON export says it is. */
+export const RESULTS_KIND = 'gravitas.submission-results';
+
+/**
+ * The export schema. Bump it when a column or field changes meaning or goes
+ * away; adding a column at the end is not a change a reader must handle.
+ *
+ * 2 added points: what each question is worth and what it earned, and the
+ * totals. readResults() still reads a version 1 file.
+ */
+export const RESULTS_VERSION = 2;
+
+/** Written into the `schema` column of every CSV row. */
+export const RESULTS_SCHEMA_ID = `${RESULTS_KIND}/${RESULTS_VERSION}`;
+
+/** Verdicts a question row can carry. */
+export const VERDICTS = Object.freeze([
+  'correct',
+  'incorrect',
+  'unmarked',
+  'incomplete',
+  'stale',
+]);
+
+/** Warnings a summary row can carry, in the order they are listed. */
+export const WARNINGS = Object.freeze([
+  'noRosterId',
+  'exactDuplicate',
+  'repeatedAttempt',
+  'changedSteps',
+  'staleAnswers',
+  'evidenceMismatch',
+]);
+
+/** One row per accepted submission. */
+export const SUMMARY_COLUMNS = Object.freeze([
+  'schema',
+  'submission',
+  'fingerprint',
+  'source_kind',
+  'source_label',
+  'roster_id',
+  'assignment_id',
+  'name_as_typed',
+  'lesson_id',
+  'lesson_title',
+  'lesson_version',
+  'lesson_steps',
+  'recorded_steps',
+  'changed_steps',
+  'submission_schema',
+  'backup_version',
+  'saved_at',
+  'fallback_locale',
+  'answer_locales',
+  'visited_steps',
+  'completion',
+  'scorable',
+  'correct',
+  'incorrect',
+  'unmarked',
+  'incomplete',
+  'stale',
+  'duplicate_of',
+  'attempt_group',
+  'attempt_number',
+  'attempts_in_group',
+  'warnings',
+  'points',
+  'points_possible',
+  'points_unmarked',
+  'evidence_state',
+  'evidence_rows',
+  'evidence_digest',
+  'hints_taken',
+  'worked_shown',
+]);
+
+/** One row per evidence-table row of every submission that carried a ledger. */
+export const EVIDENCE_COLUMNS = Object.freeze([
+  'schema',
+  'submission',
+  'roster_id',
+  'assignment_id',
+  'lesson_id',
+  'evidence_state',
+  'envelope',
+  'quantity',
+  'value',
+  'unit',
+  'unit_id',
+  'uncertainty',
+  'origin',
+  'source_kind',
+  'source_id',
+  'source_digest',
+]);
+
+/**
+ * A row of a token's evidence table as an object, with its unit written as the
+ * registry writes it. The row is numbers and short codes (js/notebook/ledger.js
+ * ledgerRecord()); nothing in it is a sentence, so it reads the same in
+ * either language.
+ * @param {Array<*>} row - [envelope, quantity, value, unit id, half-width,
+ *   origin, source kind, source id, source digest prefix]
+ * @returns {object} The row by name
+ */
+export function evidenceRowOf(row) {
+  const [envelope, quantity, value, unitId, half, origin, kind, id, digest] =
+    row;
+  return {
+    envelope: String(envelope ?? ''),
+    quantity: String(quantity ?? ''),
+    value: Number.isFinite(value) ? value : null,
+    unitId: typeof unitId === 'string' ? unitId : null,
+    unit: typeof unitId === 'string' && unitId ? symbolOf(unitId, 'en') : '',
+    half: Number.isFinite(half) ? half : null,
+    origin: String(origin ?? ''),
+    sourceKind: String(kind ?? ''),
+    sourceId: String(id ?? ''),
+    sourceDigest: digest ? String(digest) : null,
+  };
+}
+
+/**
+ * What a record says of its evidence: the check's verdict, the digest the
+ * token stated and the table, by name. A report with no ledger says `none`.
+ * @param {?object} check - checkEvidence() from ./ledgerDigest.js
+ * @returns {object} The evidence block of a graded record
+ */
+function evidenceBlock(check) {
+  return {
+    state: check?.state ?? 'none',
+    digest: check?.digest ?? null,
+    total: check?.total ?? 0,
+    envelopes: check?.ids?.length ?? 0,
+    rows: (check?.rows ?? []).map(evidenceRowOf),
+  };
+}
+
+/** One row per graded step of every accepted submission. */
+export const QUESTION_COLUMNS = Object.freeze([
+  'schema',
+  'submission',
+  'roster_id',
+  'assignment_id',
+  'lesson_id',
+  'step_number',
+  'step_id',
+  'step_type',
+  'step_title',
+  'verdict',
+  'attempts',
+  'answer_locale',
+  'step_changed',
+  'response_status',
+  'response',
+  'points',
+  'points_possible',
+  'unit',
+  'hints_taken',
+  'worked_shown',
+]);
+
+/**
+ * A string that is the same for the same data, whatever order its keys were
+ * written in.
+ *
+ * @param {*} value - JSON-compatible value
+ * @returns {string} Canonical JSON
+ */
+export function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value)
+      .sort()
+      .map(k => `${JSON.stringify(k)}:${canonicalJson(value[k])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value ?? null);
+}
+
+/**
+ * A short label for a submission, for a person to match rows by.
+ *
+ * Not a security property and not what duplicates are decided by - that is an
+ * exact comparison of the submissions. This is a 53-bit string hash (cyrb53),
+ * which is plenty to tell thirty reports apart at a glance and says nothing
+ * about who made them.
+ *
+ * @param {string} text - Canonical JSON of a submission
+ * @returns {string} 14 hex digits
+ */
+export function fingerprintOf(text) {
+  let h1 = 0xdeadbeef;
+  let h2 = 0x41c6ce57;
+  for (let i = 0; i < text.length; i++) {
+    const c = text.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 2654435761);
+    h2 = Math.imul(h2 ^ c, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+  h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+  h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  const n = 4294967296 * (2097151 & h2) + (h1 >>> 0);
+  return n.toString(16).padStart(14, '0');
+}
+
+/**
+ * Which version of a lesson a set of steps is.
+ *
+ * The same fingerprints the progress backup keeps per step, reduced to one
+ * label. Two exports that show the same lesson_version graded against the same
+ * questions; a different one means the lesson changed between them.
+ *
+ * @param {Array<object>} steps - Lesson steps
+ * @returns {string} A 14-digit label
+ */
+export function lessonVersionOf(steps) {
+  return fingerprintOf((steps || []).map(stepFingerprint).join('\n'));
+}
+
+/**
+ * Grade one submission against the lesson it names.
+ *
+ * Every graded step of the lesson gets a row, answered or not, so "did not
+ * answer" is a verdict (`incomplete`) rather than an absence. An answer to a
+ * step the lesson no longer has is `stale`: the report is older than this
+ * build, and that is not the student's fault. Each answer is checked under the
+ * locale it was typed in, because a Spanish decimal comma is not an error.
+ *
+ * @param {object} submission - A validated submission payload
+ * @param {object} lesson - The lesson it names
+ * @param {object} source - Where it came from
+ * @param {'token'|'pdf'|'backup'} source.kind - What was handed in
+ * @param {string} source.label - The file name, or "pasted token"
+ * @param {?object} [source.evidence] - checkEvidence() of the token's ledger,
+ *   which is asynchronous and so is done by the caller
+ * @returns {object} The graded record
+ */
+export function gradeSubmission(
+  submission,
+  lesson,
+  { kind, label, evidence = null }
+) {
+  const backup = submission.b;
+  // At the depth it was read at: the steps a student there sees, and no more.
+  const depth = DEPTHS.includes(submission.dp) ? submission.dp : null;
+  const steps = (lesson.steps || []).filter(s => !depth || inDepth(s, depth));
+  const graded = gradedSteps({ steps });
+  const gradedIds = new Set(graded.map(s => s.sid));
+  // By sid. The engine stores both under `<lesson>:<sid>`, with sub-keys
+  // beside them that are not answers; answersOf() and attemptsOf() are where
+  // that is undone, so nothing here reads a stored key directly.
+  const answers = new Map(answersOf(submission, lesson).map(a => [a.sid, a]));
+  const attempts = attemptsOf(submission);
+  const help = helpOf(submission);
+
+  // Which steps have been rewritten under their own id since the report was
+  // saved. The backup keeps each step's fingerprint for exactly this.
+  const recorded = new Map(
+    (Array.isArray(backup.steps) ? backup.steps : [])
+      .filter(s => s && s.sid)
+      .map(s => [s.sid, s.fingerprint])
+  );
+  const changed = new Set(
+    steps
+      .filter(
+        s => recorded.has(s.sid) && recorded.get(s.sid) !== stepFingerprint(s)
+      )
+      .map(s => s.sid)
+  );
+
+  const questions = [];
+  for (const step of graded) {
+    const answer = answers.get(step.sid);
+    const has =
+      answer &&
+      answer.value !== undefined &&
+      answer.value !== null &&
+      String(answer.value).trim() !== '';
+    let verdict = 'incomplete';
+    if (has) {
+      let ok = null;
+      try {
+        ok = checkAnswer(step, answer.value, { locale: answer.locale });
+      } catch {
+        ok = null;
+      }
+      // checkAnswer returns null for anything it cannot judge, which is most
+      // written answers. Those are the instructor's to read.
+      verdict =
+        ok === true ? 'correct' : ok === false ? 'incorrect' : 'unmarked';
+    }
+    // What it is worth: the step's own points where a composed lesson declared
+    // them, one otherwise, as the Composer counts. A written answer earns
+    // nothing yet - it is the instructor's to mark - rather than zero.
+    const worth =
+      Number.isInteger(step.points) && step.points > 0 ? step.points : 1;
+    questions.push({
+      stepNumber: steps.indexOf(step) + 1,
+      sid: step.sid,
+      type: step.type,
+      kind: step.kind ?? null,
+      title: step.title || step.sid,
+      verdict,
+      pointsPossible: worth,
+      unit: typeof step.unit === 'string' ? step.unit : null,
+      points: verdict === 'correct' ? worth : verdict === 'unmarked' ? null : 0,
+      attempts: attempts.get(step.sid) ?? null,
+      hints: help.get(step.sid)?.hints ?? 0,
+      workedShown: help.get(step.sid)?.revealed ?? false,
+      locale: has ? answer.locale : null,
+      changed: changed.has(step.sid),
+      response: has ? String(answer.value) : null,
+    });
+  }
+  // Answers the lesson has no step for, after every step it does. Only a value
+  // under a removed step's own key is recognizable as one: which of its
+  // sub-keys were measure fields, nothing in the lesson now says.
+  for (const [sid, answer] of answers) {
+    if (gradedIds.has(sid) || steps.some(s => s.sid === sid)) continue;
+    questions.push({
+      stepNumber: null,
+      sid,
+      type: null,
+      kind: null,
+      title: sid,
+      verdict: 'stale',
+      pointsPossible: null,
+      unit: null,
+      points: null,
+      attempts: attempts.get(sid) ?? null,
+      hints: help.get(sid)?.hints ?? 0,
+      workedShown: help.get(sid)?.revealed ?? false,
+      locale: answer.locale,
+      changed: false,
+      response: String(answer.value ?? ''),
+    });
+  }
+
+  const count = v => questions.filter(q => q.verdict === v).length;
+  const sum = f => questions.reduce((a, q) => a + (f(q) ?? 0), 0);
+  const visited = Array.isArray(backup.progress?.visited)
+    ? new Set(backup.progress.visited).size
+    : 0;
+  const canonical = canonicalJson(submission);
+  const locales = [
+    ...new Set(questions.map(q => q.locale).filter(Boolean)),
+  ].sort();
+
+  return {
+    canonical,
+    fingerprint: fingerprintOf(canonical),
+    source: { kind, label: String(label || '') },
+    rosterId: submission.r || null,
+    assignmentId: submission.a || null,
+    nameAsTyped: backup.student || null,
+    depth,
+    lessonId: lesson.id,
+    lessonTitle: lesson.title || lesson.id,
+    lessonVersion: lessonVersionOf(steps),
+    lessonSteps: steps.length,
+    recordedSteps: Number.isInteger(backup.lesson?.stepCount)
+      ? backup.lesson.stepCount
+      : null,
+    changedSteps: changed.size,
+    submissionSchema: kind === 'backup' ? null : submission.v,
+    backupVersion: backup.version ?? null,
+    savedAt: backup.savedAt || null,
+    fallbackLocale: submission.fl || 'en',
+    answerLocales: locales,
+    visitedSteps: Math.min(visited, steps.length),
+    completion: steps.length
+      ? Math.min(visited, steps.length) / steps.length
+      : 0,
+    scorable: graded.length,
+    correct: count('correct'),
+    incorrect: count('incorrect'),
+    unmarked: count('unmarked'),
+    incomplete: count('incomplete'),
+    stale: count('stale'),
+    points: sum(q => q.points),
+    pointsPossible: sum(q => q.pointsPossible),
+    pointsUnmarked: sum(q => (q.points === null ? q.pointsPossible : 0)),
+    hintsTaken: [...help.values()].reduce((a, h) => a + h.hints, 0),
+    workedShown: [...help.values()].filter(h => h.revealed).length,
+    evidence: evidenceBlock(evidence),
+    // What the student attached to the evidence (js/myWork/made.js): as handed in.
+    systems: Array.isArray(submission.sy) ? submission.sy : [],
+    questions,
+  };
+}
+
+/**
+ * Number the records and relate them to one another.
+ *
+ * Adds `submission` (1-based, in the order accepted), `duplicateOf`, the
+ * attempt group and its numbering, and `warnings`. Returns new objects; the
+ * inputs are not touched, so re-annotating after another file arrives is safe.
+ *
+ * @param {Array<object>} records - From gradeSubmission(), in accepted order
+ * @returns {Array<object>} Annotated records, same order
+ */
+export function annotate(records) {
+  const out = records.map((r, i) => ({ ...r, submission: i + 1 }));
+
+  const firstSeen = new Map();
+  for (const r of out) {
+    if (firstSeen.has(r.canonical)) r.duplicateOf = firstSeen.get(r.canonical);
+    else {
+      firstSeen.set(r.canonical, r.submission);
+      r.duplicateOf = null;
+    }
+  }
+
+  // Repeated attempts: same roster id, assignment and lesson, different
+  // submissions. Exact duplicates are not attempts, so they take the number of
+  // the submission they repeat rather than one of their own.
+  const groups = new Map();
+  for (const r of out) {
+    if (!r.rosterId) continue;
+    const key = JSON.stringify([r.rosterId, r.assignmentId, r.lessonId]);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(r);
+  }
+  let groupNumber = 0;
+  for (const members of groups.values()) {
+    const distinct = members.filter(r => r.duplicateOf === null);
+    for (const r of members) {
+      r.attemptGroup = null;
+      r.attemptNumber = null;
+      r.attemptsInGroup = null;
+    }
+    if (distinct.length < 2) continue;
+    groupNumber++;
+    // By when it was saved, then by when it was handed in. A report with no
+    // saved time sorts last rather than being guessed into place.
+    const ordered = [...distinct].sort(
+      (a, b) =>
+        (a.savedAt ? Date.parse(a.savedAt) : Infinity) -
+          (b.savedAt ? Date.parse(b.savedAt) : Infinity) ||
+        a.submission - b.submission
+    );
+    ordered.forEach((r, i) => {
+      r.attemptNumber = i + 1;
+    });
+    for (const r of members) {
+      r.attemptGroup = groupNumber;
+      r.attemptsInGroup = distinct.length;
+      if (r.duplicateOf !== null) {
+        r.attemptNumber = out[r.duplicateOf - 1].attemptNumber;
+      }
+    }
+  }
+
+  for (const r of out) {
+    r.attemptGroup ??= null;
+    r.attemptNumber ??= null;
+    r.attemptsInGroup ??= null;
+    const w = [];
+    if (!r.rosterId) w.push('noRosterId');
+    if (r.duplicateOf !== null) w.push('exactDuplicate');
+    if (r.attemptGroup !== null) w.push('repeatedAttempt');
+    if (r.changedSteps > 0) w.push('changedSteps');
+    if (r.stale > 0) w.push('staleAnswers');
+    if (r.evidence?.state === 'mismatch') w.push('evidenceMismatch');
+    r.warnings = w;
+  }
+  return out;
+}
+
+/** A proportion as a plain decimal, the way a spreadsheet wants it. */
+const ratio = v =>
+  Number.isFinite(v) ? String(Math.round(v * 10000) / 10000) : '';
+
+/**
+ * The summary CSV.
+ *
+ * @param {Array<object>} records - From annotate()
+ * @returns {string} CSV with CRLF line endings, header first
+ */
+export function summaryCsv(records) {
+  const rows = [SUMMARY_COLUMNS];
+  for (const r of records) {
+    const cells = {
+      schema: RESULTS_SCHEMA_ID,
+      submission: r.submission,
+      fingerprint: r.fingerprint,
+      source_kind: r.source.kind,
+      source_label: r.source.label,
+      roster_id: r.rosterId,
+      assignment_id: r.assignmentId,
+      name_as_typed: r.nameAsTyped,
+      lesson_id: r.lessonId,
+      lesson_title: r.lessonTitle,
+      lesson_version: r.lessonVersion,
+      lesson_steps: r.lessonSteps,
+      recorded_steps: r.recordedSteps,
+      changed_steps: r.changedSteps,
+      submission_schema: r.submissionSchema,
+      backup_version: r.backupVersion,
+      saved_at: r.savedAt,
+      fallback_locale: r.fallbackLocale,
+      answer_locales: r.answerLocales.join(' '),
+      visited_steps: r.visitedSteps,
+      completion: ratio(r.completion),
+      scorable: r.scorable,
+      correct: r.correct,
+      incorrect: r.incorrect,
+      unmarked: r.unmarked,
+      incomplete: r.incomplete,
+      stale: r.stale,
+      duplicate_of: r.duplicateOf,
+      attempt_group: r.attemptGroup,
+      attempt_number: r.attemptNumber,
+      attempts_in_group: r.attemptsInGroup,
+      warnings: r.warnings.join(' '),
+      points: r.points,
+      points_possible: r.pointsPossible,
+      points_unmarked: r.pointsUnmarked,
+      hints_taken: r.hintsTaken,
+      worked_shown: r.workedShown,
+      evidence_state: r.evidence.state,
+      evidence_rows: r.evidence.rows.length,
+      evidence_digest: r.evidence.digest,
+    };
+    rows.push(SUMMARY_COLUMNS.map(c => cells[c]));
+  }
+  return toCsv(rows);
+}
+
+/**
+ * The evidence CSV: one row per quantity in each report's evidence table, with
+ * its unit and the half-width of its uncertainty, and the verdict of the check
+ * of that table against its digest on every row, so a filtered sheet cannot
+ * lose it.
+ *
+ * @param {Array<object>} records - From annotate()
+ * @returns {string} CSV with CRLF line endings, header first
+ */
+export function evidenceCsv(records) {
+  const rows = [EVIDENCE_COLUMNS];
+  for (const r of records) {
+    for (const e of r.evidence.rows) {
+      const cells = {
+        schema: RESULTS_SCHEMA_ID,
+        submission: r.submission,
+        roster_id: r.rosterId,
+        assignment_id: r.assignmentId,
+        lesson_id: r.lessonId,
+        evidence_state: r.evidence.state,
+        envelope: e.envelope,
+        quantity: e.quantity,
+        value: e.value,
+        unit: e.unit,
+        unit_id: e.unitId,
+        uncertainty: e.half,
+        origin: e.origin,
+        source_kind: e.sourceKind,
+        source_id: e.sourceId,
+        source_digest: e.sourceDigest,
+      };
+      rows.push(EVIDENCE_COLUMNS.map(c => cells[c]));
+    }
+  }
+  return toCsv(rows);
+}
+
+/**
+ * What a question row may say about the response, and the response itself.
+ *
+ * @param {object} q - A question from gradeSubmission()
+ * @param {boolean} includeWritten - Whether written answers were asked for
+ * @returns {{status: string, text: ?string}} What to write
+ */
+function responseFor(q, includeWritten) {
+  if (q.response === null) return { status: 'none', text: null };
+  const machineChecked = q.verdict === 'correct' || q.verdict === 'incorrect';
+  if (machineChecked || includeWritten) {
+    return { status: machineChecked ? 'checked' : 'written', text: q.response };
+  }
+  return { status: 'withheld', text: null };
+}
+
+/**
+ * The question-level CSV: one row per graded step of every submission.
+ *
+ * @param {Array<object>} records - From annotate()
+ * @param {object} [options] - What to include
+ * @param {boolean} [options.includeWritten] - Export written answers too
+ * @returns {string} CSV with CRLF line endings, header first
+ */
+export function questionCsv(records, { includeWritten = false } = {}) {
+  const rows = [QUESTION_COLUMNS];
+  for (const r of records) {
+    for (const q of r.questions) {
+      const response = responseFor(q, includeWritten);
+      const cells = {
+        schema: RESULTS_SCHEMA_ID,
+        submission: r.submission,
+        roster_id: r.rosterId,
+        assignment_id: r.assignmentId,
+        lesson_id: r.lessonId,
+        step_number: q.stepNumber,
+        step_id: q.sid,
+        step_type: q.type,
+        step_title: q.title,
+        verdict: q.verdict,
+        attempts: q.attempts,
+        answer_locale: q.locale,
+        step_changed: q.changed ? 'yes' : 'no',
+        response_status: response.status,
+        response: response.text,
+        points: q.points,
+        points_possible: q.pointsPossible,
+        unit: q.unit,
+        hints_taken: q.hints,
+        worked_shown: q.workedShown ? 'yes' : 'no',
+      };
+      rows.push(QUESTION_COLUMNS.map(c => cells[c]));
+    }
+  }
+  return toCsv(rows);
+}
+
+/**
+ * The JSON export: every record with its questions, and everything refused.
+ *
+ * @param {Array<object>} records - From annotate()
+ * @param {object} [options] - What to include
+ * @param {boolean} [options.includeWritten] - Export written answers too
+ * @param {Array<{label: string, reason: string}>} [options.refused] - Not read
+ * @param {Date} [options.now] - For the timestamp; injectable for tests
+ * @returns {string} Pretty-printed JSON with a trailing newline
+ */
+export function resultsJson(
+  records,
+  { includeWritten = false, refused = [], now = new Date() } = {}
+) {
+  const doc = {
+    kind: RESULTS_KIND,
+    version: RESULTS_VERSION,
+    generatedAt: now.toISOString(),
+    notice:
+      'A submission token verifies answers and structure, not identity or ' +
+      'authorship. name_as_typed is what the student typed; roster_id is ' +
+      'what the assignment supplied.',
+    options: { includeWritten },
+    submissions: records.map(r => ({
+      submission: r.submission,
+      fingerprint: r.fingerprint,
+      source: r.source,
+      rosterId: r.rosterId,
+      assignmentId: r.assignmentId,
+      nameAsTyped: r.nameAsTyped,
+      lesson: {
+        id: r.lessonId,
+        title: r.lessonTitle,
+        version: r.lessonVersion,
+        steps: r.lessonSteps,
+        recordedSteps: r.recordedSteps,
+        changedSteps: r.changedSteps,
+      },
+      submissionSchema: r.submissionSchema,
+      backupVersion: r.backupVersion,
+      savedAt: r.savedAt,
+      fallbackLocale: r.fallbackLocale,
+      answerLocales: r.answerLocales,
+      visitedSteps: r.visitedSteps,
+      completion: r.completion,
+      counts: {
+        scorable: r.scorable,
+        correct: r.correct,
+        incorrect: r.incorrect,
+        unmarked: r.unmarked,
+        incomplete: r.incomplete,
+        stale: r.stale,
+        points: r.points,
+        pointsPossible: r.pointsPossible,
+        pointsUnmarked: r.pointsUnmarked,
+        hintsTaken: r.hintsTaken,
+        workedShown: r.workedShown,
+      },
+      duplicateOf: r.duplicateOf,
+      attempt:
+        r.attemptGroup === null
+          ? null
+          : {
+              group: r.attemptGroup,
+              number: r.attemptNumber,
+              of: r.attemptsInGroup,
+            },
+      warnings: r.warnings,
+      evidence: r.evidence,
+      systems: r.systems,
+      questions: r.questions.map(q => {
+        const response = responseFor(q, includeWritten);
+        return {
+          stepNumber: q.stepNumber,
+          stepId: q.sid,
+          stepType: q.type,
+          stepTitle: q.title,
+          verdict: q.verdict,
+          attempts: q.attempts,
+          answerLocale: q.locale,
+          stepChanged: q.changed,
+          responseStatus: response.status,
+          response: response.text,
+          points: q.points,
+          pointsPossible: q.pointsPossible,
+          unit: q.unit,
+          hintsTaken: q.hints,
+          workedShown: q.workedShown,
+        };
+      }),
+    })),
+    refused: refused.map(r => ({ label: r.label, reason: r.reason })),
+  };
+  return `${JSON.stringify(doc, null, 2)}\n`;
+}
+
+/**
+ * Read a results file this build or an earlier one wrote.
+ *
+ * Version 1 had no points; it is read with them as null, which is what they
+ * are - the file does not say - rather than as zero.
+ *
+ * @param {string|object} input - The JSON text, or the parsed document
+ * @returns {{ok: true, doc: object}|{ok: false, reason: string}} The document,
+ *   in this version's shape
+ */
+export function readResults(input) {
+  let doc = input;
+  if (typeof input === 'string') {
+    try {
+      doc = JSON.parse(input);
+    } catch {
+      return { ok: false, reason: 'notJson' };
+    }
+  }
+  if (plainDataProblem(doc, { depth: 8, items: 100_000, text: 100_000 }))
+    return { ok: false, reason: 'notPlainData' };
+  if (!doc || doc.kind !== RESULTS_KIND)
+    return { ok: false, reason: 'wrongKind' };
+  if (doc.version === RESULTS_VERSION) return { ok: true, doc };
+  if (doc.version !== 1) return { ok: false, reason: 'unknownVersion' };
+  return {
+    ok: true,
+    doc: {
+      ...doc,
+      version: RESULTS_VERSION,
+      submissions: (doc.submissions || []).map(sub => ({
+        ...sub,
+        counts: {
+          ...sub.counts,
+          points: null,
+          pointsPossible: null,
+          pointsUnmarked: null,
+        },
+        questions: (sub.questions || []).map(q => ({
+          ...q,
+          points: null,
+          pointsPossible: null,
+        })),
+      })),
+    },
+  };
+}

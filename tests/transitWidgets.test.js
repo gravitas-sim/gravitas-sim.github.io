@@ -4,7 +4,11 @@ import {
   separationAt,
   halfDuration,
 } from '../js/transitWidgets.js';
-import { getWidget, widgetDefaults } from '../js/widgets.js';
+import { getWidget, whenWidgetsReady, widgetDefaults } from '../js/widgets.js';
+
+// The transit family is fetched on demand (js/widgets.js, LAZY_FAMILIES), so
+// the whole catalog is awaited before any lookup.
+await whenWidgetsReady();
 
 const WIDGET_IDS = [
   'depth-size',

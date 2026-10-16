@@ -14,8 +14,12 @@
 
 import * as esbuild from 'esbuild';
 import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { gzipSync } from 'node:zlib';
 import path from 'node:path';
+import { keyGroupsPlugin } from './tools/key-groups.mjs';
+import { proseWhitespacePlugin } from './tools/prose-whitespace.mjs';
+import { threeShadersPlugin } from './tools/three-shaders.mjs';
 
 const OUT = 'dist';
 const watch = process.argv.includes('--watch');
@@ -30,6 +34,36 @@ const STATIC_FILES = [
   'robots.txt',
   'sitemap.xml',
   'social-card.png',
+  // The curated catalog's index; its archives are in catalog/packages below.
+  'catalog/catalog.json',
+  // The Library's index (LIBRARY.md), which /library/ and Home read.
+  'library/library.json',
+  // The Sky Lab's star table (data-packs/sky-bright-stars.json): fetched by
+  // /sky/ at run time, so no bundle holds it.
+  'sky/bright-stars.json',
+  // The Sky Lab's planet positions (ephemeris-packs/solar-system-2025-2045.json,
+  // Prompt 106): the mission lab's pack as a JSON copy, fetched by /sky/.
+  'sky/ephemeris.json',
+  // The galactic tables' rows (data-packs/gaia-dr3-*.json and
+  // milky-way-rotation-curve.json), fetched by the galactic instruments and
+  // the Observatory.
+  'gaia/solar-neighbourhood.json',
+  'gaia/ngc2420.json',
+  'gaia/milky-way-rotation-curve.json',
+  // The variable-star tables' rows (data-packs/tess-su-dra-s15.json and two
+  // more, Roadmap II Prompt 96), fetched by the variable-star instruments.
+  'variables/tess-su-dra-s15.json',
+  'variables/tess-eta-aql-s81.json',
+  'variables/shoes-r22-cepheids.json',
+  // The synthetic labelled sample of the classification instrument.
+  'variables/class-sample.json',
+  // The cosmology tables' rows (data-packs/hubble-1929-table1.json and three
+  // more, Roadmap II Prompt 91), fetched by the cosmology instruments.
+  'cosmology/hubble-1929-table1.json',
+  'cosmology/des-sn5yr-hd.json',
+  'cosmology/pantheon-plus-hd.json',
+  'cosmology/sdss-dr18-redshift-slice.json',
+  'cosmology/coma-cluster-quoted.json',
 ];
 
 // Directories copied whole. Lesson figures are photographs used under licenses
@@ -38,10 +72,93 @@ const STATIC_FILES = [
 // copied rather than processed: css/app.css refers to the fonts by a relative
 // ../vendor/fonts/ path, which resolves the same in dist/ as it does in the
 // repository, and the library bundles are already built.
-const STATIC_DIRS = ['images', 'notebooks', 'vendor'];
+// catalog/packages: the curated archives the catalog page installs from
+// (CATALOG.md). The page itself is a document page, built below.
+// js/fragments: the panels' markup, fetched by each family as it mounts
+// (INDEX_DECOMPOSITION.md). HTML the bundler never sees, so it is copied, to
+// the path the page asks for.
+const STATIC_DIRS = [
+  'images',
+  'notebooks',
+  'vendor',
+  'catalog/packages',
+  'js/fragments',
+  // The compute page's reviewed notebooks and their example inputs, fetched
+  // by /compute/ when a run is asked for (COMPUTE.md).
+  'compute/notebooks',
+  'compute/inputs',
+];
 
 // Static document pages outside the single-page app.
-const DOC_PAGES = ['model', 'instructors', 'validation', 'teaching'];
+//
+// A page missing from this list is built in development and absent in
+// production: its bundle is emitted by the entries below, its stylesheet is
+// built, and only the HTML that loads them never arrives. /evaluation/ shipped
+// that way - linked from the instructor dashboard and the teaching page,
+// 404 on the deployed site - and /instructors/submissions/ shipped that way
+// too, unnoticed because nothing links to it by href; it is reached by pasting
+// a submission token URL, which is precisely the case a link checker cannot
+// see. So the list is held to the tree by tests/docPages.test.js: every
+// tracked `*/index.html` outside the app's own must appear here.
+const DOC_PAGES = [
+  'model',
+  'instructors',
+  'instructors/submissions',
+  'validation',
+  'glossary',
+  'teaching',
+  'teaching/find',
+  'teaching/alignment',
+  'teaching/adopt',
+  'teaching/kit',
+  'evaluation',
+  'figure',
+  'experiments',
+  'observatory',
+  'catalog',
+  'library',
+  'my-work',
+  'studio',
+  'studio/lesson',
+  'studio/course',
+  'course',
+  'studio/course/packs',
+  'lab3d',
+  'mission',
+  'mission/lab',
+  '3d',
+  'sky',
+  'compute',
+];
+
+/**
+ * The adoption pages (ADOPTION.md): one directory per investigation and per
+ * activity, written by tools/build-adoption-pages.mjs, so they are read from
+ * the tree rather than listed here by hand. tests/docPages.test.js holds this
+ * to the tree like the list above.
+ */
+const adoptionDirs = () =>
+  ['investigation', 'activity'].flatMap(kind =>
+    existsSync(`teaching/${kind}`)
+      ? readdirSync(`teaching/${kind}`).map(d => `teaching/${kind}/${d}`)
+      : []
+  );
+
+// Archival pages: copied byte for byte, and never processed.
+//
+// history/original/ is the first Gravitas, the single index.html that commit
+// a5d08fc put online in July 2025, and one unexplained word at the end of
+// /model/'s footer is the only way in. It is kept as it was, quirks included,
+// except that Save State and Load State are unwired. So it gets none of what
+// DOC_PAGES get - no stylesheet collapse, no revision stamp, no formatter -
+// and tests/historyOriginal.test.js holds it to that commit's blob, less the
+// two lines that wired those buttons. A page listed here satisfies
+// tests/docPages.test.js in place of DOC_PAGES.
+//
+// Nothing else fetches it. tools/build-service-worker.mjs precaches only the
+// directories it names, so the page is downloaded when somebody follows the
+// link and at no other time.
+const ARCHIVAL_PAGES = ['history/original'];
 
 /**
  * Stylesheets that belong to one document page and to nothing else.
@@ -62,7 +179,7 @@ const DOC_PAGES = ['model', 'instructors', 'validation', 'teaching'];
  * budget asks for; raising the limit for a stylesheet the sandbox never reads
  * would have been the wrong half of the trade.
  */
-const PAGE_STYLESHEETS = ['css/teaching.css', 'css/page.css'];
+const PAGE_STYLESHEETS = ['css/teaching.css', 'css/page.css', 'css/shell.css'];
 
 async function buildCss() {
   // tokens → styles → components → page, matching the cascade-layer order.
@@ -82,6 +199,12 @@ async function buildCss() {
     // component-layer files so it can restate what the older sheets set for
     // the same elements without reaching for !important.
     'css/chrome.css',
+    // The icon set: one class per picture, drawn as a mask in the text color.
+    'css/icons.css',
+    // The shared shell's header, which the application carries too; folded in
+    // here so the initial download counts it (index.html links it by the
+    // absolute path every other page uses, collapsed below).
+    'css/shell.css',
   ]) {
     parts.push(`/* ${f} */`, await readFile(f, 'utf8'));
   }
@@ -89,10 +212,6 @@ async function buildCss() {
   const result = await esbuild.transform(combined, {
     loader: 'css',
     minify: true,
-    // physics.js branches on constructor.name in fifteen places. Without
-    // this, minification renames the classes and every one of those branches
-    // is false in production and true in development.
-    keepNames: true,
     legalComments: 'none',
   });
   await writeFile(path.join(OUT, 'css', 'app.css'), result.code);
@@ -107,7 +226,6 @@ async function buildCss() {
     const one = await esbuild.transform(await readFile(file, 'utf8'), {
       loader: 'css',
       minify: true,
-      keepNames: true,
       legalComments: 'none',
     });
     await writeFile(path.join(OUT, file), one.code);
@@ -121,10 +239,11 @@ async function buildJs() {
     entryPoints: [{ in: 'js/main.js', out: 'app' }],
     bundle: true,
     minify: true,
-    // physics.js branches on constructor.name in fifteen places. Without
-    // this, minification renames the classes and every one of those branches
-    // is false in production and true in development.
-    keepNames: true,
+    // Names may be minified here. physics.js tells its body classes apart by
+    // the `kind` string each carries, and nothing the application bundles
+    // reads a function's name; tests/buildIntegrity.test.js holds both.
+    // Keeping them cost the deferred budget 63 KB.
+    keepNames: false,
     format: 'esm',
     target: ['es2022'],
     // Split, so the dynamic imports in the source become their own chunks
@@ -135,8 +254,19 @@ async function buildJs() {
     outdir: path.join(OUT, 'js'),
     splitting: true,
     chunkNames: 'chunk-[hash]',
-    sourcemap: true,
+    // External: the maps are written but the chunks do not end in a
+    // sourceMappingURL comment, an incompressible hash on every one of them
+    // (D-BUDGET-27).
+    sourcemap: 'external',
     metafile: true,
+    // Emit non-ASCII characters as themselves. esbuild's default writes each
+    // as an escape (\xE9 for e-acute, \u2014 for an em dash), four to six
+    // bytes where UTF-8 takes two or three, and the Spanish catalogs and
+    // lesson shadows are full of them. Module scripts are always decoded as
+    // UTF-8, so the program is the same one; only the bytes are fewer.
+    charset: 'utf8',
+    // Message catalogs write a shared key prefix once (tools/key-groups.mjs).
+    plugins: [keyGroupsPlugin(), proseWhitespacePlugin(), threeShadersPlugin()],
     // NOTE: three and chart.js are no longer external. They are imported by
     // relative path from vendor/, so esbuild follows them into the deferred
     // chunks for the 3-D view and the charts. See tools/vendor-deps.mjs.
@@ -146,13 +276,27 @@ async function buildJs() {
   // The physics worker is instantiated with `new Worker(new URL(...))`, so it
   // needs its own bundle rather than being inlined into the main graph.
   await esbuild.build({
-    entryPoints: ['js/physicsWorker.js', 'js/chartWorker.js'],
+    // The experiment runner's realm (js/experiments/experimentWorker.js) is
+    // the same kind of thing: started with `new Worker(new URL(...))` from its
+    // page, and carrying its own copy of the engine. So is the inference
+    // core's (js/inference/inferenceWorker.js), which carries no engine at
+    // all, only the models it fits. The 3-D kernel's realm
+    // (js/lab3d/worker.js, LAB3D.md) is the only place that kernel runs, and
+    // the mission core's (js/mission/worker.js, MISSION.md) the only place a
+    // transfer is solved.
+    entryPoints: [
+      'js/physicsWorker.js',
+      'js/chartWorker.js',
+      'js/experiments/experimentWorker.js',
+      'js/inference/inferenceWorker.js',
+      'js/lab3d/worker.js',
+      'js/mission/worker.js',
+      'js/mission/labWorker.js',
+    ],
     bundle: true,
     minify: true,
-    // physics.js branches on constructor.name in fifteen places. Without
-    // this, minification renames the classes and every one of those branches
-    // is false in production and true in development.
-    keepNames: true,
+    // As for the application: nothing a worker bundles reads a function's name.
+    keepNames: false,
     format: 'esm',
     target: ['es2022'],
     outdir: path.join(OUT, 'js'),
@@ -220,10 +364,19 @@ function summarizeBundle(metafile) {
   }
 
   const deferred = Object.keys(outputs).filter(f => !eager.has(f));
+  // What a reader's browser actually transfers for the deferred chunks: each
+  // file gzipped on its own, as a static host serves it, at zlib's default
+  // level. The bundle budget judges this rather than the raw bytes (Carl,
+  // 2026-10-09), because shortening identifiers and key prefixes saves far
+  // more raw bytes than it saves on the wire. Node 20 and Node 24 ship
+  // different zlib builds and land a few hundred bytes apart on this total,
+  // which is why no documentation fact quotes it.
+  const gzipped = f => gzipSync(readFileSync(f)).length;
   return {
     initial: [...eager].reduce((a, f) => a + size(f), 0),
     initialFiles: eager.size,
     deferred: deferred.reduce((a, f) => a + size(f), 0),
+    deferredGzip: deferred.reduce((a, f) => a + gzipped(f), 0),
     deferredFiles: deferred.length,
     total: Object.keys(outputs).reduce((a, f) => a + size(f), 0),
   };
@@ -245,6 +398,7 @@ async function buildHtml() {
     'components.css',
     'presentation.css',
     'chrome.css',
+    'icons.css',
   ];
   let replacedFirst = false;
   for (const name of DEV_STYLESHEETS) {
@@ -258,6 +412,12 @@ async function buildHtml() {
     );
     replacedFirst = true;
   }
+
+  // The shell's stylesheet is inside app.css in the build.
+  html = html.replace(
+    /\s*<link rel="stylesheet" href="\/css\/shell\.css" \/>/,
+    ''
+  );
 
   // Only main.js is needed once bundled; the other module tags were loading
   // the same graph a second time.
@@ -279,7 +439,7 @@ async function buildHtml() {
  * shares the lesson data with the app but none of the simulation.
  */
 async function buildDocPages() {
-  for (const dir of DOC_PAGES) {
+  for (const dir of [...DOC_PAGES, ...adoptionDirs()]) {
     if (!existsSync(dir)) continue;
     await mkdir(path.join(OUT, dir), { recursive: true });
     let html = await readFile(path.join(dir, 'index.html'), 'utf8');
@@ -303,10 +463,10 @@ async function buildDocPages() {
       entryPoints: ['js/instructorPortal.js'],
       bundle: true,
       minify: true,
-      // physics.js branches on constructor.name in fifteen places. Without
-      // this, minification renames the classes and every one of those branches
-      // is false in production and true in development.
-      keepNames: true,
+      // No keepNames: nothing this bundle includes reads a function's name.
+      // physics.js tells its body classes apart by their `kind` strings, which
+      // minification cannot rename (tests/buildIntegrity.test.js).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'instructorPortal.js'),
@@ -335,10 +495,10 @@ async function buildDocPages() {
       entryPoints: ['js/validationWorker.js'],
       bundle: true,
       minify: true,
-      // physics.js branches on constructor.name in fifteen places. Without
-      // this, minification renames the classes and every one of those branches
-      // is false in production and true in development.
-      keepNames: true,
+      // No keepNames: nothing this bundle includes reads a function's name.
+      // physics.js tells its body classes apart by their `kind` strings, which
+      // minification cannot rename (tests/buildIntegrity.test.js).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'validationWorker.js'),
@@ -354,14 +514,507 @@ async function buildDocPages() {
       entryPoints: ['js/teachingPage.js'],
       bundle: true,
       minify: true,
-      // physics.js branches on constructor.name in fifteen places. Without
-      // this, minification renames the classes and every one of those branches
-      // is false in production and true in development.
-      keepNames: true,
+      // No keepNames: nothing on this page reads a function's name (physics.js,
+      // which did, is not in it), and its helper would be one more request.
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
-      outfile: path.join(OUT, 'js', 'teachingPage.js'),
+      // Split, so the Spanish strings and lesson catalog stay chunks of their
+      // own that only a Spanish reader fetches (js/teaching/i18n.js).
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'teaching-[hash]',
       legalComments: 'none',
+    });
+  }
+
+  // The shared shell's module, for the pages that load it by URL rather
+  // than through a bundle of their own (/model/, /validation/).
+  if (existsSync('js/shell.js')) {
+    await esbuild.build({
+      entryPoints: ['js/shell.js'],
+      bundle: true,
+      minify: true,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js', 'shell.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The filters on /teaching/find/ (ADOPTION.md): a module of its own that the
+  // generated page loads by URL, and nothing else imports.
+  if (existsSync('js/teach/find.js')) {
+    await esbuild.build({
+      entryPoints: ['js/teach/find.js'],
+      bundle: true,
+      minify: true,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js', 'teach', 'find.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The distribution kit (/teaching/kit/, INSTRUCTOR_FLOW.md): an entry of its
+  // own, split so the registry it loads to read an activity's step titles, and
+  // the QR encoder, arrive only when a link is given, and nothing else imports it.
+  if (existsSync('js/teach/kit.js')) {
+    await esbuild.build({
+      entryPoints: ['js/teach/kit.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      outbase: 'js',
+      splitting: true,
+      chunkNames: 'kit-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // Investigations in a course (/studio/course/packs/, REMIX.md): an entry of
+  // its own. It opens an instructor's investigation as the application does
+  // and judges it, which needs the lesson checker the course builder's route
+  // has no room for; nothing else imports it.
+  if (existsSync('js/course/packsPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/course/packsPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      outbase: 'js',
+      splitting: true,
+      chunkNames: 'course-packs-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The instructor submission review page. Its own entry for the same reason
+  // the teaching and validation pages have theirs: it imports the answer
+  // checker and the lesson data, which is most of the application, and none of
+  // that may reach the start-up download for a page almost nobody opens.
+  // The classroom evidence kit. Its own entry for the same reason every other
+  // document page has one: it imports the instrument definitions and nothing
+  // from the simulation, and a page most visitors never open may not grow the
+  // start-up download.
+  if (existsSync('js/evaluationKit.js')) {
+    await esbuild.build({
+      entryPoints: ['js/evaluationKit.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing here reads a function's name, and each wrapper
+      // is bytes on a page the budget holds to 11.7 KB.
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js', 'evaluationKit.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The Scenario Studio. Its own entry for the same reason as the figure
+  // builder below: it reads the engine, the scenario catalog and both base
+  // catalogs of strings, and a page only an author opens may not grow
+  // anybody's start-up download or the application's deferred bundle.
+  if (existsSync('js/studioPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/studioPage.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing this page bundles reads a function's name (the
+      // engine compares classes by identity, tests/buildIntegrity.test.js), and
+      // the helper would be a chunk of its own beside the lazy chunks: one more
+      // request on the route (tools/route-budgets.json).
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'studio-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The Investigation Composer (/studio/lesson/), the Studio's second page:
+  // its own entry, for the same reason. It reads the lesson checker, the
+  // answer parser and, on request, the lab report; none of that may reach
+  // anybody's start-up download.
+  if (existsSync('js/composerPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/composerPage.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing this page bundles reads a function's name (the
+      // engine compares classes by identity, tests/buildIntegrity.test.js), and
+      // the helper would be a chunk of its own beside the lazy chunks: one more
+      // request on the route (tools/route-budgets.json).
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'composer-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The course-pack builder (/studio/course/), the Studio's third page, and
+  // the course home (/course/) a student opens: an entry each, for the same
+  // reason. The builder loads the lessons a course names to pin them; the
+  // course home reads only the pack, the lesson cards and the link encoder.
+  for (const [entry, chunks] of [
+    ['js/coursePage.js', 'course-builder-[hash]'],
+    ['js/courseHome.js', 'course-home-[hash]'],
+  ]) {
+    if (!existsSync(entry)) continue;
+    await esbuild.build({
+      entryPoints: [entry],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing this page bundles reads a function's name (the
+      // engine compares classes by identity, tests/buildIntegrity.test.js), and
+      // the helper would be a chunk of its own beside the lazy chunks: one more
+      // request on the route (tools/route-budgets.json).
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: chunks,
+      legalComments: 'none',
+    });
+  }
+
+  // The mission-design diagnostics page (/mission/): its own entry. It reads
+  // the bodies' constants and the plan file's format, never a solver, which
+  // run in the mission Worker (built with the others above).
+  if (existsSync('js/missionPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/missionPage.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing in this page reads a function's name, and the
+      // helper would be a chunk of its own once Spanish is lazy (one request).
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'mission-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The mission lab (/mission/lab/, MISSION_LAB.md): its own entry. The
+  // ephemeris pack and the solvers are the lab Worker's (built above).
+  if (existsSync('js/missionLabPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/missionLabPage.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing in this page reads a function's name, and the
+      // helper would be a chunk of its own once Spanish is lazy (one request).
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'mission-lab-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The mission lab's evidence panel and its address reader
+  // (js/mission/lab/evidencePanel.js and address.js, Prompt 106): a bundle of
+  // its own each, at the same path, which the lab loads by URL (the evidence
+  // panel when a reader presses its button, the address reader only when the
+  // address asks for a figure, a saved mission or a plan in the link). Built
+  // apart, each carries its own copy of what it needs and costs only the
+  // readers who use it. The panel carries the notebook writer and the My work
+  // writer, which a reader of the lab never downloads.
+  for (const file of [
+    'js/mission/lab/evidencePanel.js',
+    'js/mission/lab/address.js',
+  ]) {
+    if (!existsSync(file)) continue;
+    await esbuild.build({
+      entryPoints: [file],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, file),
+      legalComments: 'none',
+    });
+  }
+
+  // The Sky Lab (/sky/, SKY_LAB.md): its own entry. The instruments, the
+  // evidence writer and the constellation figures are lazy chunks; the star
+  // table is a JSON file the page fetches (STATIC_FILES), so no bundle holds it.
+  if (existsSync('js/skyPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/skyPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'sky-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The compute page (/compute/, COMPUTE.md): its own entry, opt-in, online
+  // only, and kept out of the precache (tools/build-service-worker.mjs). It
+  // runs no Python itself; the frame and the runtime are another origin's.
+  if (existsSync('js/computePage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/computePage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'compute-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The 3-D dynamics diagnostics page (/lab3d/): its own entry. It reads the
+  // 3-D kernel's state checks and reference problems, never the kernel,
+  // which runs in its Worker (built with the others above).
+  if (existsSync('js/lab3dPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/lab3dPage.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing in this page reads a function's name, and the
+      // helper would be a chunk of its own once Spanish is lazy (one request).
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'lab3d-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The 3-D lab (/3d/): its own entry, with three.js from the lab's own
+  // vendored build (vendor/three/lab3d.module.js), so the application's 3-D
+  // view and every other page are untouched. Like the diagnostics page it
+  // never integrates: its live runs are the same Worker's.
+  if (existsSync('js/lab3dLab.js')) {
+    await esbuild.build({
+      entryPoints: ['js/lab3dLab.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing in it reads a function's name, and the helper
+      // is a chunk of its own beside the lazy Spanish catalog (one request).
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'lab3d-lab-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The lab's guide panel (js/lab3d/view/guidePanel.js, Prompt 37): a bundle
+  // of its own at the same path, which the lab loads by URL when a guide
+  // opens. Were it a lazy chunk of the lab's bundle, esbuild would split out
+  // what the two share, and every reader of the lab would download those
+  // chunks; built apart, it carries its own copy and costs only a guide.
+  if (existsSync('js/lab3d/view/guidePanel.js')) {
+    await esbuild.build({
+      entryPoints: ['js/lab3d/view/guidePanel.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing in it reads a function's name, and the helper
+      // is a chunk of its own beside the lazy Spanish catalog (one request).
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js/lab3d/view/guidePanel.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The lab's evidence and observing panel (js/lab3d/view/evidencePanel.js,
+  // Prompt 105): a bundle of its own at the same path, for the reason the
+  // guide panel is. It carries the forward models, the notebook writer and the
+  // observation exporter, which a reader of the lab never downloads.
+  if (existsSync('js/lab3d/view/evidencePanel.js')) {
+    await esbuild.build({
+      entryPoints: ['js/lab3d/view/evidencePanel.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js/lab3d/view/evidencePanel.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The 3-D lab's embed (js/lab3d/embed.js, Prompt 105): by URL, only when
+  // `embed=1` is asked for.
+  if (existsSync('js/lab3d/embed.js')) {
+    await esbuild.build({
+      entryPoints: ['js/lab3d/embed.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js/lab3d/embed.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The figure builder. Its own entry for the reason the other document pages
+  // have theirs: it reads the scenario catalog and the share encoder, and a
+  // page only an author opens may not grow anybody's start-up download.
+  if (existsSync('js/figureBuilder.js')) {
+    await esbuild.build({
+      entryPoints: ['js/figureBuilder.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'figure-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The experiment runner. Its own entry, as the figure builder is: nothing
+  // in the simulation imports it, and it never loads the engine itself - its
+  // Workers do, from their own bundle above.
+  if (existsSync('js/experimentsPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/experimentsPage.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing this page bundles reads a function's name (the
+      // engine compares classes by identity, tests/buildIntegrity.test.js), and
+      // the helper would be a chunk of its own beside the lazy chunks: one more
+      // request on the route (tools/route-budgets.json).
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'experiments-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The observatory. Its own entry, as the experiment runner is: nothing in
+  // the simulation imports it, and each observation it opens is a chunk of
+  // its own, fetched when opened.
+  if (existsSync('js/observatoryPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/observatoryPage.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing the observatory bundles reads a function's name
+      // (physics.js, which does, is not in it), and the helper that keeps them
+      // was a request of its own and the room the shared shell needed.
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'observatory-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The catalog: its own entry, like the observatory. Nothing in the
+  // simulation imports it.
+  if (existsSync('js/catalogPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/catalogPage.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing in this page reads a function's name, and the
+      // helper would be a chunk of its own once Spanish is lazy (one request).
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'catalog-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The Library: its own entry, like the catalog. Nothing in the simulation
+  // imports it, and its index is a JSON file it fetches (LIBRARY.md).
+  if (existsSync('js/libraryPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/libraryPage.js'],
+      bundle: true,
+      minify: true,
+      // Split, so Spanish is a chunk of its own that only a Spanish reader
+      // fetches (js/library/i18n.js). No keepNames: nothing here reads a
+      // function's name, and the helper would be one more request.
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'library-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // My work: its own entry, like the Library. It is the only page that reads
+  // the storage module, so that module is this bundle's and nothing else's.
+  if (existsSync('js/myWorkPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/myWorkPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'my-work-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  if (existsSync('js/submissionReview.js')) {
+    await esbuild.build({
+      entryPoints: ['js/submissionReview.js'],
+      bundle: true,
+      minify: true,
+      // No keepNames: nothing this bundle includes reads a function's name.
+      // physics.js tells its body classes apart by their `kind` strings, which
+      // minification cannot rename (tests/buildIntegrity.test.js).
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js', 'submissionReview.js'),
+      legalComments: 'none',
+      splitting: false,
     });
   }
 
@@ -370,10 +1023,10 @@ async function buildDocPages() {
       entryPoints: ['js/validationPage.js'],
       bundle: true,
       minify: true,
-      // physics.js branches on constructor.name in fifteen places. Without
-      // this, minification renames the classes and every one of those branches
-      // is false in production and true in development.
-      keepNames: true,
+      // No keepNames: nothing this bundle includes reads a function's name.
+      // physics.js tells its body classes apart by their `kind` strings, which
+      // minification cannot rename (tests/buildIntegrity.test.js).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'validationPage.js'),
@@ -401,6 +1054,12 @@ async function copyStatic() {
   for (const d of STATIC_DIRS) {
     if (existsSync(d)) await cp(d, path.join(OUT, d), { recursive: true });
   }
+  for (const dir of ARCHIVAL_PAGES) {
+    const page = path.join(dir, 'index.html');
+    if (!existsSync(page)) continue;
+    await mkdir(path.join(OUT, dir), { recursive: true });
+    await cp(page, path.join(OUT, page));
+  }
   // GitHub Pages otherwise runs the output through Jekyll
   await writeFile(path.join(OUT, '.nojekyll'), '');
 }
@@ -421,7 +1080,7 @@ async function run() {
     `JS at start-up     ${kb(js.initial).padStart(9)}   ${js.initialFiles} file(s)`
   );
   console.log(
-    `JS on demand       ${kb(js.deferred).padStart(9)}   ${js.deferredFiles} chunk(s)`
+    `JS on demand       ${kb(js.deferred).padStart(9)}   ${js.deferredFiles} chunk(s), ${kb(js.deferredGzip)} gzipped`
   );
   console.log(`\nInitial download   ${kb(css + js.initial).padStart(9)}`);
 
@@ -441,6 +1100,7 @@ async function run() {
         initialJsBytes: js.initial,
         initialFiles: js.initialFiles,
         deferredJsBytes: js.deferred,
+        deferredJsGzipBytes: js.deferredGzip,
         deferredChunks: js.deferredFiles,
         initialDownloadBytes: css + js.initial,
       },

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Course | Gravitas</title>
+    <meta
+      name="description"
+      content="A Gravitas course: its units, investigations, activities, simulations, data and readings in order, with objectives, time and a printable syllabus."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: a course, read top to bottom, and its syllabus
+         when printed. Cards, badges and notes are css/page.css's. */
+      .ch-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-4);
+        align-items: center;
+        margin: var(--space-3) 0 var(--space-6);
+      }
+      .ch-wrap h1 {
+        margin: 0 0 var(--space-2);
+      }
+      .ch-wrap h2 {
+        margin: var(--space-6) 0 var(--space-2);
+      }
+      .ch-time {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-1) var(--space-6);
+        padding: 0;
+        list-style: none;
+      }
+      .ch-items {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .ch-item[data-path='intro'],
+      .ch-item[data-path='advanced'] {
+        border-style: dashed;
+      }
+      .ch-item-head {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-1) var(--space-3);
+        align-items: baseline;
+      }
+      .ch-item-head h3 {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+      .ch-kind {
+        font-size: var(--text-xs);
+        font-weight: var(--weight-semibold);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--text-secondary);
+      }
+      .ch-item p {
+        margin: var(--space-2) 0 0;
+        overflow-wrap: anywhere;
+      }
+      .ch-teacher {
+        padding-left: var(--space-2);
+        border-left: 3px solid var(--accent);
+      }
+      .ch-print-only {
+        display: none;
+      }
+      @media print {
+        html,
+        body.doc-page {
+          background: var(--c3);
+          color: #000;
+        }
+        .ch-wrap {
+          max-width: none;
+          padding: 0;
+        }
+        .ch-wrap a {
+          color: #000;
+        }
+        .ch-bar,
+        #langSwitch,
+        .ch-actions a:not([data-print]) {
+          display: none !important;
+        }
+        .ch-actions a[data-print] {
+          background: none !important;
+          border: 0 !important;
+          box-shadow: none !important;
+          padding: 0 !important;
+          color: #000 !important;
+          transition: none !important;
+        }
+        .ch-actions a[data-print]::after {
+          content: ' ' attr(data-print);
+          font-size: var(--text-sm);
+        }
+        .ch-print-only {
+          display: block;
+        }
+        .ui-note {
+          color: #333;
+        }
+        .ch-item {
+          border-color: #999;
+          break-inside: avoid;
+        }
+      }
+    </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
+  </head>
+  <body class="doc-page">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group" data-here><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/" aria-current="page"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<div class="gs-offline" role="status"><template><div class="gs-offline-box">
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
+</div></template></div>
+<!-- /shell:header -->
+    <main
+      id="main"
+      class="ui-page is-narrow ch-wrap"
+      aria-label="Course home"
+      data-i18n-aria-label="courseHome.label"
+    >
+      <div
+        id="langSwitch"
+        class="ch-bar"
+        role="group"
+        aria-label="Language"
+        data-i18n-aria-label="courseHome.lang"
+      ></div>
+
+      <div
+        class="ch-bar"
+        role="group"
+        aria-label="What to show"
+        data-i18n-aria-label="courseHome.controls"
+      >
+        <label for="ch-path" data-i18n="courseHome.show">Show</label>
+        <select class="ui-select is-inline" id="ch-path">
+          <option value="all" data-i18n="courseHome.show.all">Every item</option>
+          <option value="core" data-i18n="courseHome.show.core">The core only</option>
+          <option value="intro" data-i18n="courseHome.show.intro">The core and the introductions</option>
+          <option value="advanced" data-i18n="courseHome.show.advanced">The core and the advanced items</option>
+        </select>
+        <label>
+          <input id="ch-teacher" type="checkbox" />
+          <span data-i18n="courseHome.teacherToggle">Notes for instructors</span>
+        </label>
+        <button id="ch-print" type="button" class="ui-button" data-i18n="courseHome.print">Print the syllabus</button>
+        <button id="ch-open" type="button" class="ui-button" data-i18n="courseHome.openFile">Open a course file</button>
+        <input class="ui-file" id="ch-file" type="file" accept="application/json,.json" hidden />
+      </div>
+
+      <p class="ch-print-only ui-note" data-i18n="courseHome.printNote"></p>
+
+      <article id="ch-course" aria-labelledby="ch-title" hidden></article>
+
+      <section id="ch-empty" aria-labelledby="ch-empty-h" hidden>
+        <h1 id="ch-empty-h" data-i18n="courseHome.empty.heading">No course is open</h1>
+        <p data-i18n="courseHome.empty.text"></p>
+        <p><a href="?course=intro-astronomy" data-i18n="courseHome.empty.example"></a></p>
+        <p>
+          <button id="ch-open-empty" type="button" class="ui-button" data-i18n="courseHome.openFile">Open a course file</button>
+        </p>
+        <p><a href="/studio/course/" data-i18n="courseHome.empty.builder"></a></p>
+      </section>
+
+      <section id="ch-refused" aria-labelledby="ch-refused-h" role="alert" hidden>
+        <h1 id="ch-refused-h" data-i18n="courseHome.refused.heading">This course cannot be opened</h1>
+        <p data-i18n="courseHome.refused.text"></p>
+        <p id="ch-refused-why" class="ui-note"></p>
+      </section>
+    </main>
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
+    <script type="module" src="/js/courseHome.js"></script>
+  </body>
+</html>

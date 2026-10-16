@@ -20,11 +20,22 @@
 // =============================================================================
 
 import { createDocument } from './pdf.js';
+import { answerKeyDocument as renderKey } from './answerKeyDocument.js';
+import {
+  plainProse,
+  plainContent,
+  statusBlock,
+  depthLabel,
+} from './answerKeyDocument.js';
 import { answerKeyFor, questionCounts, plainText } from './answerKey.js';
 import { plural } from './format.js';
 import { instructorContentFor } from './data/instructorContent.js';
+import { labelsFor } from './data/instructorLabels.js';
+import { guideSource } from './instructorSource.js';
 
 const SITE = 'https://gravitas-sim.online';
+const ACCESSIBILITY_URL =
+  'https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/ACCESSIBILITY.md';
 
 /** Numbered section heading, so a guide's sections can be referred to aloud. */
 const section = (doc, n, title) =>
@@ -32,75 +43,112 @@ const section = (doc, n, title) =>
 
 /**
  * The instructor guide for one investigation.
- * @param {Object} inv - Investigation definition
- * @param {Object} [opts] - {version}
+ * @param {Object} inv - Investigation definition, in the document's language
+ * @param {Object} [opts]
+ * @param {string} [opts.version] - The stamp printed in the footer
+ * @param {string} [opts.locale] - 'en' or 'es'
+ * @param {Object} [opts.source] - guideSource(inv, locale), by default
+ * @param {Object} [opts.facts] - lessonFacts(): textbook, level, mathematics,
+ *   prerequisite titles and the investigation's version
+ * @param {Object} [opts.status] - How much of the document is in the language
  * @returns {Uint8Array} PDF bytes
  */
-export function instructorGuide(inv, { version = '' } = {}) {
-  const c = instructorContentFor(inv.id);
+export function instructorGuide(
+  inv,
+  { version = '', locale = 'en', source, facts = {}, status } = {}
+) {
+  const L = labelsFor(locale);
+  const src = source ?? guideSource(inv, locale);
+  const c = plainContent(src.content);
   if (!c) throw new Error(`No instructor content for ${inv.id}`);
   const key = answerKeyFor(inv);
   const counts = questionCounts(inv);
+  const title = plainText(inv.title);
 
   const doc = createDocument({
-    title: `${inv.title}: Instructor Guide`,
-    subject: `Instructor guide for the Gravitas investigation "${plainText(inv.title)}": objectives, flow, misconceptions, discussion prompts and model notes.`,
-    footer: `Gravitas Instructor Guide  |  ${plainText(inv.title)}${version ? `  |  ${version}` : ''}`,
+    title: L('guide.docTitle', { title }),
+    subject: L('guide.subject', { title }),
+    footer: `${L('guide.footer', { title })}${version ? `  |  ${version}` : ''}`,
+    lang: locale === 'es' ? 'es' : 'en-US',
   });
 
   doc.titleBlock({
-    kicker: 'Gravitas Investigation | Instructor Guide',
-    title: plainText(inv.title),
+    kicker: L('guide.kicker'),
+    title,
     subtitle: plainText(inv.subtitle),
   });
 
-  doc.table({
-    columns: ['', ''],
-    widths: [1, 2],
-    rows: [
-      ['Estimated time', inv.duration],
-      ['Student level', inv.level],
-      ['Primary topic', c.topic],
-      ['Difficulty', c.difficulty],
-      ['Length', plural(inv.steps.length, 'step')],
-      [
-        'Student input',
-        `${plural(counts.graded, 'graded question')}, ` +
-          `${plural(counts.predictions, 'prediction')}, ` +
-          `${plural(counts.measurements, 'measurement screen')}, ` +
-          `${plural(counts.written, 'written answer')}`,
-      ],
-      ['Recommended placement', c.placement],
+  const rows = [
+    [L('guide.row.time'), plainText(inv.duration)],
+    [L('guide.row.level'), plainText(inv.level)],
+    [L('guide.row.topic'), c.topic],
+    [L('guide.row.difficulty'), c.difficulty],
+    [L('guide.row.length'), L.count(inv.steps.length, 'step')],
+    [
+      L('guide.row.input'),
+      `${L.count(counts.graded, 'graded')}, ` +
+        `${L.count(counts.predictions, 'prediction')}, ` +
+        `${L.count(counts.measurements, 'measurement')}, ` +
+        `${L.count(counts.written, 'written')}`,
     ],
-    size: 9,
-  });
+    [L('guide.row.placement'), c.placement],
+  ];
+  if (facts.courseLevel)
+    rows.push([
+      L('guide.row.courseLevel'),
+      L(`fact.courseLevel.${facts.courseLevel}`),
+    ]);
+  if (facts.textbook)
+    rows.push([
+      L('guide.row.textbook'),
+      facts.textbook.section
+        ? L('guide.textbook', facts.textbook)
+        : L('guide.textbookChapter', facts.textbook),
+    ]);
+  if (facts.mathematics)
+    rows.push([
+      L('guide.row.mathematics'),
+      L(`fact.math.${facts.mathematics}`),
+    ]);
+  if (facts.prerequisites)
+    rows.push([
+      L('guide.row.prerequisites'),
+      facts.prerequisites.length
+        ? facts.prerequisites.join('; ')
+        : L('guide.none'),
+    ]);
+  if (facts.depths?.length > 1)
+    rows.push([
+      L('guide.row.depths'),
+      L('guide.depthsValue', {
+        depths: facts.depths.map(d => depthLabel(L, d)).join(', '),
+      }),
+    ]);
+  if (facts.version) rows.push([L('guide.row.version'), facts.version]);
+  doc.table({ columns: ['', ''], widths: [1, 2], rows, size: 9 });
 
-  section(doc, 1, 'Overview');
+  section(doc, 1, L('guide.s.overview'));
   doc.paragraph(c.overview);
 
-  section(doc, 2, 'Learning objectives');
-  doc.paragraph(
-    'After completing this investigation, students should be able to:',
-    {
-      gap: 6,
-    }
-  );
+  section(doc, 2, L('guide.s.objectives'));
+  doc.paragraph(L('guide.objectivesIntro'), { gap: 6 });
   doc.bullets(key.objectives);
 
-  section(doc, 3, 'Prior knowledge');
+  section(doc, 3, L('guide.s.prior'));
   doc.bullets(c.priorKnowledge);
 
-  section(doc, 4, 'Key concepts');
+  section(doc, 4, L('guide.s.concepts'));
   for (const k of c.keyConcepts) {
     doc.heading(k.heading, { size: 10.5, spaceBefore: 8, keepWith: 34 });
     doc.paragraph(k.body, { size: 9.5 });
   }
 
-  section(doc, 5, 'Investigation flow');
+  section(doc, 5, L('guide.s.flow'));
   doc.table({
-    columns: ['Steps', 'What students do'],
+    columns: [L('guide.flow.steps'), L('guide.flow.what')],
     widths: [1, 5.4],
-    rows: c.flow.map(f => [f.steps, f.text]),
+    // Printed from the sids the block names, so the numbers follow the lesson.
+    rows: src.flow.map(f => [f.steps, plainProse(f.text)]),
   });
 
   // Generated from the lesson rather than written per lesson, because it is a
@@ -111,225 +159,139 @@ export function instructorGuide(inv, { version = '' } = {}) {
     .map((s, i) => ({ s, n: i + 1 }))
     .filter(({ s }) => s.reveal);
   if (held.length) {
-    doc.paragraph(
-      'Predictions in this investigation are recorded when they are made and ' +
-        'marked later, at the step where the result arrives. Until then the ' +
-        'panel says only that the answer is recorded and where it will be ' +
-        'settled. This is deliberate: a prediction marked on commit is settled ' +
-        'by the answer key rather than by the experiment.',
-      { size: 9.5, gap: 6, color: '0.35 0.35 0.42' }
-    );
+    doc.paragraph(L('guide.held.note'), {
+      size: 9.5,
+      gap: 6,
+      color: '0.35 0.35 0.42',
+    });
     doc.table({
-      columns: ['Prediction', 'Marked at'],
+      columns: [L('guide.held.prediction'), L('guide.held.markedAt')],
       widths: [1, 1],
       rows: held.map(({ s, n }) => {
         const at = inv.steps.findIndex(x => x.sid === s.reveal);
         return [
-          `Step ${n}: ${plainText(s.title)}`,
-          at < 0 ? '—' : `Step ${at + 1}: ${plainText(inv.steps[at].title)}`,
+          L('guide.held.step', { n, title: plainText(s.title) }),
+          at < 0
+            ? '—'
+            : L('guide.held.step', {
+                n: at + 1,
+                title: plainText(inv.steps[at].title),
+              }),
         ];
       }),
       size: 9,
     });
   }
 
-  section(doc, 6, 'Interactive features');
+  section(doc, 6, L('guide.s.features'));
   doc.table({
-    columns: ['Feature', 'Notes'],
+    columns: [L('guide.features.feature'), L('guide.features.notes')],
     widths: [1.5, 4.2],
     rows: c.features.map(f => [f.name, f.text]),
   });
 
-  section(doc, 7, 'Common misconceptions');
+  section(doc, 7, L('guide.s.misconceptions'));
   doc.table({
-    columns: ['Students often think', 'How to address it'],
+    columns: [L('guide.misc.think'), L('guide.misc.address')],
     widths: [1.8, 3.4],
     rows: c.misconceptions.map(m => [m.claim, m.response]),
   });
 
-  section(doc, 8, 'Teaching notes');
+  section(doc, 8, L('guide.s.scoring'));
+  doc.paragraph(L('guide.scoring.intro'), {
+    size: 9.5,
+    gap: 6,
+    color: '0.35 0.35 0.42',
+  });
+  doc.table({
+    columns: [
+      L('guide.scoring.kind'),
+      L('guide.scoring.count'),
+      L('guide.scoring.who'),
+    ],
+    widths: [1.3, 0.7, 3.6],
+    rows: scoringRows(key, L),
+    size: 9,
+  });
+
+  section(doc, 9, L('guide.s.accessibility'));
+  const tools = inv.steps.filter(s => s.tool).length;
+  doc.bullets(
+    [
+      tools
+        ? L('guide.access.instruments', { n: tools })
+        : L('guide.access.noInstruments'),
+      L('guide.access.simulation'),
+      L('guide.access.report'),
+    ],
+    { size: 9.5 }
+  );
+  doc.paragraph(L('guide.access.statement'), { size: 9.5, gap: 3 });
+  doc.link(L('guide.access.link'), ACCESSIBILITY_URL);
+
+  section(doc, 10, L('guide.s.notes'));
   doc.bullets(c.teachingNotes);
 
-  section(doc, 9, 'Discussion questions');
-  doc.paragraph(
-    'Optional. Suitable before the investigation, during class, or as a wrap-up.',
-    { size: 9.5, gap: 6, color: '0.35 0.35 0.42' }
-  );
+  section(doc, 11, L('guide.s.discussion'));
+  doc.paragraph(L('guide.discussion.hint'), {
+    size: 9.5,
+    gap: 6,
+    color: '0.35 0.35 0.42',
+  });
   doc.bullets(c.discussion);
 
-  section(doc, 10, 'Optional extensions');
-  doc.paragraph(
-    'For interested or advanced students. None of these is a prerequisite for the investigation itself.',
-    { size: 9.5, gap: 6, color: '0.35 0.35 0.42' }
-  );
+  section(doc, 12, L('guide.s.extensions'));
+  doc.paragraph(L('guide.extensions.hint'), {
+    size: 9.5,
+    gap: 6,
+    color: '0.35 0.35 0.42',
+  });
   doc.bullets(c.extensions);
 
-  section(doc, 11, 'Model notes');
+  section(doc, 13, L('guide.s.model'));
   doc.paragraph(c.modelNotes);
-  doc.link('How Gravitas Models the Universe', `${SITE}/model/`);
+  doc.link(L('guide.modelLink'), `${SITE}/model/`);
 
   doc.space(14);
   doc.rule({ gap: 6, shade: 0.85 });
-  doc.paragraph(
-    `The answer key for this investigation is a separate document. ` +
-      `Every answer in it is generated from the lesson itself and checked against ` +
-      `the same grading rule the website applies.`,
-    { size: 8.5, color: '0.4 0.4 0.46' }
-  );
+  doc.paragraph(L('guide.closing'), { size: 8.5, color: '0.4 0.4 0.46' });
+  statusBlock(doc, L, 'guide', status);
 
   return doc.build();
 }
 
-/** How an entry is introduced in the key. */
-const CATEGORY_LABEL = {
-  graded: 'Question',
-  prediction: 'Prediction',
-  measurement: 'Measurement',
-  activity: 'Activity',
-  written: 'Written answer',
-};
-
-/**
- * The answer key for one investigation.
- * @param {Object} inv - Investigation definition
- * @param {Object} [opts] - {version}
- * @returns {Uint8Array} PDF bytes
- */
-export function answerKeyDocument(inv, { version = '' } = {}) {
-  const c = instructorContentFor(inv.id);
-  const key = answerKeyFor(inv);
-  const counts = questionCounts(inv);
-
-  const doc = createDocument({
-    title: `${inv.title}: Answer Key`,
-    subject: `Answer key for the Gravitas investigation "${plainText(inv.title)}", derived from the lesson definitions and verified against the site's own grader.`,
-    footer: `Gravitas Answer Key  |  ${plainText(inv.title)}  |  Instructor copy${version ? `  |  ${version}` : ''}`,
-  });
-
-  doc.titleBlock({
-    kicker: 'Gravitas Investigation | Answer Key',
-    title: plainText(inv.title),
-    subtitle: `${plural(inv.steps.length, 'step')}  |  ${inv.duration}  |  ${plural(counts.graded, 'graded question')}, ${plural(counts.predictions, 'prediction')}`,
-  });
-
-  doc.paragraph(
-    'Instructor copy. Every answer below is generated from the live lesson definition and ' +
-      'verified against the same rule the website uses to mark it, so this key and the site ' +
-      'cannot disagree. Steps that only ask students to read or watch are omitted.',
-    { size: 9, color: '0.35 0.35 0.42' }
+/** The rows of "what is scored automatically", counted from the key. */
+function scoringRows(key, L) {
+  const n = pick => key.entries.filter(pick).length;
+  const choice = n(e => e.category === 'graded' && e.options);
+  const numeric = n(
+    e => e.category === 'graded' && e.answerValue !== undefined
   );
-  doc.paragraph(
-    'Predictions are recorded but never marked wrong: their purpose is to make students ' +
-      'commit before they experiment. The answer given is the conclusion they should reach ' +
-      'afterwards.',
-    { size: 9, color: '0.35 0.35 0.42' }
-  );
-  doc.rule({ gap: 8, shade: 0.85 });
-
-  for (const e of key.entries) {
-    if (e.category === 'reading') continue;
-
-    doc.heading(`Step ${e.step}: ${e.title}`, {
-      size: 11,
-      spaceBefore: 16,
-      keepWith: 60,
-    });
-    doc.paragraph(CATEGORY_LABEL[e.category] ?? e.category, {
-      size: 8,
-      gap: 5,
-      color: '0.13 0.55 0.75',
-    });
-
-    if (e.prompt) doc.paragraph(e.prompt, { size: 10 });
-
-    if (e.options) {
-      doc.bullets(
-        e.options.map(
-          (opt, i) =>
-            `${String.fromCharCode(65 + i)}. ${opt}${i === e.answerIndex ? '     (correct answer)' : ''}`
-        ),
-        { size: 9.5, gap: 1 }
-      );
-      doc.row(
-        e.category === 'prediction'
-          ? 'Conclusion after experimenting'
-          : 'Correct answer',
-        `${e.answerLabel}. ${e.answerText}`
-      );
-    }
-
-    if (e.answerValue !== undefined) {
-      doc.row(
-        'Expected value',
-        `${e.answerValue}${e.unit ? ` ${e.unit}` : ''}`
-      );
-      doc.row(
-        'Accepted range',
-        `${round(e.acceptedLow)} to ${round(e.acceptedHigh)}${e.unit ? ` ${e.unit}` : ''}`
-      );
-    }
-
-    if (e.rubric) {
-      doc.paragraph('What to look for:', {
-        size: 9,
-        gap: 3,
-        color: '0.35 0.35 0.42',
-      });
-      doc.paragraph(e.rubric, { size: 9.5 });
-    }
-
-    if (e.fields?.length) {
-      doc.paragraph('Fields on this screen:', {
-        size: 9,
-        gap: 4,
-        color: '0.35 0.35 0.42',
-      });
-      doc.bullets(
-        e.fields.map(
-          f =>
-            `${f.label}${f.unit ? ` (${f.unit})` : ''}${f.derived ? ' (worked out for the student)' : ''}`
-        ),
-        { size: 9, gap: 1 }
-      );
-      if (e.hasValidator) {
-        doc.paragraph(
-          'This screen checks the entered values as they are typed and explains what is wrong ' +
-            'when they do not hang together.',
-          { size: 8.5, color: '0.4 0.4 0.46' }
-        );
-      }
-    }
-
-    if (e.checklist?.length) {
-      doc.paragraph('Students are asked to:', {
-        size: 9,
-        gap: 4,
-        color: '0.35 0.35 0.42',
-      });
-      doc.bullets(e.checklist, { size: 9, gap: 1 });
-    }
-
-    const expected = c?.expectations?.[e.step];
-    if (expected) {
-      doc.paragraph('Expected observation:', {
-        size: 9,
-        gap: 3,
-        color: '0.35 0.35 0.42',
-      });
-      doc.paragraph(expected, { size: 9.5 });
-    }
-
-    if (e.explanation) {
-      doc.paragraph('Why:', { size: 9, gap: 3, color: '0.35 0.35 0.42' });
-      doc.paragraph(e.explanation, { size: 9.5 });
-    }
-  }
-
-  return doc.build();
+  const prediction = n(e => e.category === 'prediction');
+  const measurement = n(e => e.category === 'measurement');
+  const written = n(e => e.category === 'written' && !e.reflect);
+  const reflect = n(e => e.reflect);
+  return [
+    [L('guide.scoring.choice'), String(choice), L('guide.scoring.site')],
+    [L('guide.scoring.numeric'), String(numeric), L('guide.scoring.site')],
+    [
+      L('guide.scoring.prediction'),
+      String(prediction),
+      L('guide.scoring.recorded'),
+    ],
+    [
+      L('guide.scoring.measurement'),
+      String(measurement),
+      L('guide.scoring.checked'),
+    ],
+    [L('guide.scoring.written'), String(written), L('guide.scoring.person')],
+    [
+      L('guide.scoring.reflect'),
+      String(reflect),
+      L('guide.scoring.reflection'),
+    ],
+  ].filter(r => r[1] !== '0');
 }
-
-const round = v =>
-  Number.isInteger(v) ? String(v) : String(Number(v.toPrecision(4)));
 
 /**
  * The adopter's guide: one document covering the whole library.
@@ -360,7 +322,7 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
       'account to create.'
   );
   doc.paragraph(
-    'An investigation is a guided lesson that runs in a panel beside the live simulation. Students ' +
+    'An investigation is a guided investigation that runs in a panel beside the live simulation. Students ' +
       'read a short screen, commit to a prediction, run an experiment, measure something, and answer ' +
       'a question that is checked immediately. At the end they can download a lab report containing ' +
       'their own answers, which is what an instructor collects.'
@@ -381,8 +343,8 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
     widths: [2.6, 1.9, 1.1, 0.7],
     rows: investigations.map(inv => [
       plainText(inv.title),
-      instructorContentFor(inv.id)?.topic ?? '',
-      inv.duration,
+      plainProse(instructorContentFor(inv.id)?.topic),
+      plainText(inv.duration),
       String(inv.steps.length),
     ]),
   });
@@ -428,11 +390,20 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
     'Progress is saved in the student’s own browser, so an investigation can be started, left, and ' +
       'resumed. When a student finishes, they enter their name and download a PDF lab report listing ' +
       'every question, their answer, and whether the automatically checked ones matched. The report ' +
-      'also carries links that reopen the exact simulation state each step used.'
+      'also carries links that reopen the exact simulation state each step used, and a submission ' +
+      'token, which the finish dialog also offers to copy or save for a learning management system ' +
+      'that takes text rather than a file.'
   );
+  doc.paragraph(
+    'To read the class’s work back, drop the reports, progress files or pasted tokens on the ' +
+      'submission review page. It needs no passphrase and returns one table of how often each question ' +
+      'was answered wrongly, hardest first, which can be downloaded as a spreadsheet. It keeps nothing ' +
+      'and sends nothing: close the tab and it is gone.'
+  );
+  doc.link('Submission review', `${SITE}/instructors/submissions/`);
   doc.bullets([
-    'Because progress lives in the browser, a student who switches machines starts again. Say so when assigning.',
-    'The report is the deliverable. There is no instructor-side gradebook and no account system.',
+    'Progress lives in the browser. A student who switches machines can download a progress file on one and restore it on the other; without one they start again. Say so when assigning.',
+    'The report is the deliverable. The review page reads it but is not a gradebook: there is no roster and no account system, and it checks answers, not identity.',
     'Multiple-choice and numeric answers are checked automatically. Written answers, predictions and measurements are not, and are where an instructor’s attention is best spent.',
     'A useful assignment pattern: "complete the investigation and submit the report, then answer these two discussion questions in a paragraph each."',
   ]);
@@ -445,12 +416,12 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
       [
         'Multiple choice',
         'Yes',
-        'Marked immediately, with an explanation shown once answered.',
+        'Marked immediately, with an explanation shown once answered. A student can change the answer, and the report says how many tries it took.',
       ],
       [
         'Numeric',
         'Yes',
-        'Marked against a stated tolerance. Units in the typed answer are ignored.',
+        'Marked against a stated tolerance. A unit typed with the answer is read: an equivalent one is converted, and one of the wrong kind is reported rather than marked wrong.',
       ],
       [
         'Prediction',
@@ -475,8 +446,8 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
   doc.bullets([
     'A current version of Chrome, Firefox, Safari or Edge. No plugins, no installation, no account.',
     'An internet connection to load the site. Once loaded, an investigation runs locally.',
-    'A laptop or desktop is strongly recommended. The lessons work on a tablet and are usable on a phone, but the instrument panels share the screen with the lesson text on small displays.',
-    'A screen of at least 1000 pixels wide gives the intended side-by-side layout of lesson and instrument.',
+    'A laptop or desktop is strongly recommended. The investigations work on a tablet and are usable on a phone, but the instrument panels share the screen with the investigation text on small displays.',
+    'A screen of at least 1000 pixels wide gives the intended side-by-side layout of investigation and instrument.',
     'Sound is optional and off by default.',
     'Downloading the lab report requires the browser to be allowed to save files.',
   ]);
@@ -499,7 +470,7 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
     'Gravitas simulates Newtonian gravity between point masses in two dimensions, integrated ' +
       'numerically. Collisions merge objects. A number of features are analytic models evaluated for ' +
       'display rather than dynamical simulations, and a few are illustrative visuals. All of this is ' +
-      'documented publicly and in detail, with a per-investigation note about which parts each lesson ' +
+      'documented publicly and in detail, with a per-investigation note about which parts each investigation ' +
       'relies on.'
   );
   doc.link('How Gravitas Models the Universe', `${SITE}/model/`);
@@ -540,11 +511,11 @@ export function curriculumMap(investigations, { version = '' } = {}) {
     columns: ['Investigation', 'Topic', 'Time', 'Steps', 'Difficulty'],
     widths: [2.4, 1.7, 0.95, 0.6, 1.5],
     rows: investigations.map(inv => {
-      const c = instructorContentFor(inv.id);
+      const c = plainContent(instructorContentFor(inv.id));
       return [
         plainText(inv.title),
         c.topic,
-        inv.duration,
+        plainText(inv.duration),
         String(inv.steps.length),
         c.difficulty,
       ];
@@ -553,7 +524,7 @@ export function curriculumMap(investigations, { version = '' } = {}) {
   });
 
   for (const inv of investigations) {
-    const c = instructorContentFor(inv.id);
+    const c = plainContent(instructorContentFor(inv.id));
     const key = answerKeyFor(inv);
     doc.heading(plainText(inv.title), {
       size: 12,
@@ -566,7 +537,7 @@ export function curriculumMap(investigations, { version = '' } = {}) {
       color: '0.35 0.35 0.42',
     });
     doc.row('Topic', c.topic);
-    doc.row('Time', inv.duration);
+    doc.row('Time', plainText(inv.duration));
     doc.row('Length', plural(inv.steps.length, 'step'));
     doc.row('Difficulty', c.difficulty);
     doc.space(6);
@@ -592,3 +563,17 @@ export function curriculumMap(investigations, { version = '' } = {}) {
 
   return doc.build();
 }
+
+/**
+ * The answer key for one investigation, or for one cut of it
+ * (js/answerKeyDocument.js), with the shipped instructor prose by default.
+ *
+ * @param {Object} inv - Investigation definition, every depth laid in
+ * @param {Object} [opts] - As js/answerKeyDocument.js takes them
+ * @returns {Uint8Array} PDF bytes
+ */
+export const answerKeyDocument = (inv, opts = {}) =>
+  renderKey(inv, {
+    ...opts,
+    source: opts.source ?? guideSource(inv, opts.locale ?? 'en'),
+  });

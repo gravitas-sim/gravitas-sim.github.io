@@ -25,7 +25,7 @@
 import { writeFile, readFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { runChecks } from './physics-checks.mjs';
+import { runChecks } from '../js/validation/physicsChecks.js';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const OUT = path.join(ROOT, 'validation', 'data.json');

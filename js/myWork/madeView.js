@@ -1,0 +1,255 @@
+// =============================================================================
+// My work's list of what was made
+// -----------------------------------------------------------------------------
+// Roadmap II Prompt 74 (MY_WORK.md). The page (js/myWorkPage.js) loads this
+// after it has drawn, and only when something was made, so its own route stays
+// small: it draws the section of
+// scenarios and experiments (js/myWork/made.js), each with its facts, a link
+// that opens it, the evidence entries it can be attached to, a copy of its
+// link and its file. Export and delete are the page's own buttons, which act
+// on the record's key like any other item.
+//
+// `page` is what the page hands over: its drawing of one item, its state (the
+// store and the records) and its refresh. Strings are English and Spanish pairs.
+// =============================================================================
+
+import { MADE_PREFIX, fileOf, hrefOf, readMade } from './made.js';
+
+const es = () => document.documentElement.lang.startsWith('es');
+const L = (en, sp) => (es() ? sp : en);
+const esc = s =>
+  String(s ?? '').replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
+const day = iso => {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime())
+    ? ''
+    : d.toLocaleDateString(es() ? 'es' : 'en', { dateStyle: 'medium' });
+};
+const say = text => {
+  document.getElementById('mwSummary').textContent = text;
+};
+function download(json, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(
+    new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' })
+  );
+  a.download = name;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+const NOTEBOOK = 'gravitas_evidence_notebook';
+
+/** The records the snapshot holds, readable, newest first. */
+export const madeIn = records =>
+  records
+    .filter(r => r.id.startsWith(MADE_PREFIX))
+    .map(r => readMade(r.value))
+    .filter(r => r.ok)
+    .map(r => r.record)
+    .sort((a, b) => String(b.savedAt).localeCompare(String(a.savedAt)));
+
+/** The things made, drawn into their section. */
+export const show = page => made(page);
+
+function facts(r) {
+  const when = r.savedAt
+    ? L(`saved ${day(r.savedAt)}`, `guardado el ${day(r.savedAt)}`)
+    : '';
+  if (r.kind === 'experiment') {
+    const e = r.experiment;
+    const res = e.result;
+    const n = res.summary?.trials ?? res.trials?.length ?? 0;
+    return [
+      L('Experiment', 'Experimento'),
+      L(`${n} trials`, `${n} ensayos`),
+      e.engine?.fingerprint
+        ? L(`engine ${e.engine.fingerprint}`, `motor ${e.engine.fingerprint}`)
+        : L('engine not recorded', 'motor sin registrar'),
+      res.trialsKept === false
+        ? L('trials not kept here', 'ensayos no guardados aquí')
+        : '',
+      when,
+    ];
+  }
+  if (r.kind === 'system3d') {
+    const s = r.system3d;
+    return [
+      L('3-D system', 'Sistema 3-D'),
+      L(`${s.bodies} bodies`, `${s.bodies} cuerpos`),
+      s.from === 'now'
+        ? L(
+            'saved as it was at the time',
+            'guardado como estaba en ese momento'
+          )
+        : L('saved from its start', 'guardado desde su inicio'),
+      r.app ? L(`build ${r.app}`, `versión ${r.app}`) : '',
+      when,
+    ];
+  }
+  if (r.kind === 'mission') {
+    const p = r.mission.file.inputs;
+    return [
+      L('Mission', 'Misión'),
+      p?.depart?.date
+        ? L(
+            `departs ${p.depart.date}, ${p.depart.tofDays} days`,
+            `sale el ${p.depart.date}, ${p.depart.tofDays} días`
+          )
+        : '',
+      r.app ? L(`build ${r.app}`, `versión ${r.app}`) : '',
+      when,
+    ];
+  }
+  const s = r.scenario;
+  const from = {
+    builder: L(
+      'Built in the system builder',
+      'Construido en el constructor de sistemas'
+    ),
+    sandbox: L('Saved from the Sandbox', 'Guardado desde la simulación libre'),
+  }[r.from];
+  return [
+    from || L('Scenario', 'Escenario'),
+    L(`seed ${s.seed || 'none'}`, `semilla ${s.seed || 'ninguna'}`),
+    s.bodies === null ? '' : L(`${s.bodies} objects`, `${s.bodies} objetos`),
+    s.derivedFrom
+      ? L(
+          `made from scenario ${s.derivedFrom.id} version ${s.derivedFrom.version}`,
+          `hecho a partir del escenario ${s.derivedFrom.id} versión ${s.derivedFrom.version}`
+        )
+      : '',
+    r.app ? L(`build ${r.app}`, `versión ${r.app}`) : '',
+    when,
+  ];
+}
+
+/** The evidence entries, as the notebook holds them, in order. */
+const entriesOf = records => {
+  const v = records.find(r => r.id === NOTEBOOK)?.value;
+  return Array.isArray(v?.entries) ? v.entries : [];
+};
+
+function attachControl(r, entries) {
+  if (!entries.length)
+    return `<p class="ui-hint">${esc(
+      L(
+        'Add something to your evidence notebook to attach this to it.',
+        'Añade algo a tu cuaderno de evidencia para adjuntarlo.'
+      )
+    )}</p>`;
+  return `<details class="ui-disclosure"><summary>${esc(
+    L(
+      `Attach to evidence (${r.attachedTo.length} attached)`,
+      `Adjuntar a la evidencia (${r.attachedTo.length} adjuntas)`
+    )
+  )}</summary><ul class="mw-units">${entries
+    .map(
+      (e, i) =>
+        `<li><label class="ui-choice"><input type="checkbox" data-made="attach" data-key="${esc(`${MADE_PREFIX}${r.id}`)}" data-entry="${esc(e.id)}"${r.attachedTo.includes(e.id) ? ' checked' : ''} /><span>${esc(`${i + 1}. ${e.title || e.source || e.id}`)}</span></label></li>`
+    )
+    .join('')}</ul><p class="ui-hint">${esc(
+    L(
+      'An attached item is listed in the report you download and its link goes with your submission.',
+      'Lo adjunto aparece en el informe que descargas y su enlace va con tu entrega.'
+    )
+  )}</p></details>`;
+}
+
+let wired = false;
+
+async function made(page) {
+  const { item, state } = page;
+  const box = document.getElementById('mwMade');
+  const list = madeIn(state.records);
+  const entries = entriesOf(state.records);
+  box.querySelector('.mw-none').hidden = list.length > 0;
+  // What the student has open and where the focus is survive the redraw: a
+  // refresh closed the group they had just opened and dropped the tick from
+  // sight (and from a keyboard user's place).
+  const same = (a, b) =>
+    a.dataset.made === b.dataset.made &&
+    a.dataset.key === b.dataset.key &&
+    a.dataset.entry === b.dataset.entry;
+  const controls = () => [...box.querySelectorAll('[data-made]')];
+  const was = controls();
+  const opened = was.filter(c => c.closest('details[open]'));
+  const focused = was.find(c => c === document.activeElement);
+  box.querySelector('.mw-body').innerHTML = list.length
+    ? `<ul class="mw-list">${list
+        .map(r =>
+          item({
+            title: r.name,
+            facts: facts(r),
+            href: hrefOf(r),
+            open:
+              r.kind === 'scenario'
+                ? L('Open in the Sandbox', 'Abrir en la simulación libre')
+                : r.kind === 'system3d'
+                  ? L('Open in the 3-D lab', 'Abrir en el laboratorio 3-D')
+                  : r.kind === 'mission'
+                    ? L(
+                        'Open in the mission lab',
+                        'Abrir en el laboratorio de misiones'
+                      )
+                    : L('Open the runner', 'Abrir el ejecutor'),
+            ids: [`${MADE_PREFIX}${r.id}`],
+            extra: `<div class="mw-actions">${
+              r.kind === 'scenario'
+                ? `<button type="button" class="ui-button is-small" data-made="copy" data-key="${esc(`${MADE_PREFIX}${r.id}`)}" aria-label="${esc(`${L('Copy link', 'Copiar enlace')}: ${r.name}`)}">${esc(L('Copy link', 'Copiar enlace'))}</button>`
+                : ''
+            }${
+              fileOf(r)
+                ? `<button type="button" class="ui-button is-small" data-made="file" data-key="${esc(`${MADE_PREFIX}${r.id}`)}" aria-label="${esc(`${L('Download file', 'Descargar archivo')}: ${r.name}`)}">${esc(L('Download file', 'Descargar archivo'))}</button>`
+                : ''
+            }</div>${r.kind === 'system3d' || r.kind === 'mission' ? '' : attachControl(r, entries)}`,
+          })
+        )
+        .join('')}</ul>`
+    : '';
+  for (const c of controls()) {
+    if (opened.some(o => same(o, c))) c.closest('details').open = true;
+    if (focused && same(focused, c)) c.focus({ preventScroll: true });
+  }
+  if (wired) return;
+  wired = true;
+  box.addEventListener('change', async e => {
+    const c = e.target.closest('[data-made="attach"]');
+    if (!c) return;
+    const rec = madeIn(state.records).find(
+      r => `${MADE_PREFIX}${r.id}` === c.dataset.key
+    );
+    if (!rec) return;
+    const next = {
+      ...rec,
+      attachedTo: c.checked
+        ? [...new Set([...rec.attachedTo, c.dataset.entry])]
+        : rec.attachedTo.filter(x => x !== c.dataset.entry),
+    };
+    const kept = await state.store.collection('made').put(c.dataset.key, next);
+    if (!kept?.ok) c.checked = !c.checked;
+    await page.refresh();
+  });
+  box.addEventListener('click', async e => {
+    const b = e.target.closest('[data-made]');
+    if (!b || b.dataset.made === 'attach') return;
+    const rec = madeIn(state.records).find(
+      r => `${MADE_PREFIX}${r.id}` === b.dataset.key
+    );
+    if (!rec) return;
+    if (b.dataset.made === 'copy') {
+      const url = new URL(hrefOf(rec), location.origin).href;
+      try {
+        await navigator.clipboard.writeText(url);
+        say(L('Link copied.', 'Enlace copiado.'));
+      } catch {
+        say(url);
+      }
+    } else {
+      const f = fileOf(rec);
+      download(f.json, f.name);
+    }
+  });
+}

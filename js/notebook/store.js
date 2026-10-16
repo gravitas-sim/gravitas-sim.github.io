@@ -22,6 +22,9 @@
 // notebook means reading all of it anyway.
 // =============================================================================
 
+import { parseDocument } from '../platform/common.js';
+import { drop, put } from '../storage/local.js';
+
 /** Bumped when the stored envelope changes. */
 export const SCHEMA_VERSION = 1;
 
@@ -118,14 +121,14 @@ export function load() {
   }
   if (!raw) return { ok: true, entries: [], reason: FAILURE.OK };
   try {
-    const parsed = JSON.parse(raw);
+    const parsed = parseDocument(raw);
     if (Number(parsed?.v) > SCHEMA_VERSION) {
       return { ok: false, entries: [], reason: 'from-a-newer-version' };
     }
     const entries = Array.isArray(parsed?.entries) ? parsed.entries : [];
     return { ok: true, entries, reason: FAILURE.OK };
   } catch {
-    return { ok: false, entries: [], reason: 'unreadable' };
+    return { ok: false, entries: [], reason: 'unreadable', raw };
   }
 }
 
@@ -176,7 +179,7 @@ export function save(entries) {
     };
   }
   try {
-    s.setItem(KEY, text);
+    put(KEY, text, 'evidence', s);
   } catch (err) {
     // QuotaExceededError, or a private-mode refusal. Either way the student
     // needs to hear "your browser will not keep this", not a stack trace.
@@ -196,7 +199,7 @@ export function clear() {
   const s = storage();
   if (!s) return false;
   try {
-    s.removeItem(KEY);
+    drop(KEY, s);
     return true;
   } catch {
     return false;

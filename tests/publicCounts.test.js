@@ -17,6 +17,9 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
+import { completeCatalogs } from '../tools/i18n-catalog.mjs';
+import { assembledIndexHtml } from '../tools/index-fragments.mjs';
+
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const WORDS = {
@@ -72,7 +75,7 @@ const WORDS = {
 const NUMBER = `\\d+|${Object.keys(WORDS).join('|')}`;
 // A number, then at most two adjectives, then the noun.
 const CLAIM = new RegExp(
-  `\\b(${NUMBER})\\b((?:\\s+[a-záéíóúñ]+){0,2}?)\\s+(investigations|investigaciones)\\b`,
+  `\\b(${NUMBER})\\b((?:\\s+[a-záéíóúñ]+){0,2}?)\\s+(investigations|investigaciones|lessons)\\b`,
   'gi'
 );
 
@@ -91,12 +94,30 @@ function claims(where, text) {
 
 /** An HTML page's visible text. */
 function visibleText(rel) {
-  return readFileSync(path.join(REPO, rel), 'utf8')
+  // index.html as a reader has it: the panels that ship with their family
+  // (INDEX_DECOMPOSITION.md) are still this page's text.
+  const html =
+    rel === 'index.html'
+      ? assembledIndexHtml()
+      : readFileSync(path.join(REPO, rel), 'utf8');
+  return html
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
     .replace(/<!--[\s\S]*?-->/g, ' ')
     .replace(/<[^>]+>/g, ' ');
 }
+
+/** Every investigation the Library lists, lessons and labs alike. */
+function libraryInvestigationCount() {
+  return JSON.parse(
+    readFileSync(path.join(REPO, 'library/library.json'), 'utf8')
+  ).entries.filter(e => e.kind === 'investigation').length;
+}
+
+/** The manifest's number with any noun, or the Library's beside its own. */
+const holds = (c, manifest, library) =>
+  c.said === manifest ||
+  (c.said === library && /\bguided investigations\b/i.test(c.text));
 
 describe('the public investigation count', () => {
   test('the sweep can see a claim, right or wrong', () => {
@@ -109,21 +130,13 @@ describe('the public investigation count', () => {
 
   test('every claim in the message catalogs equals the manifest', async () => {
     const { MANIFEST } = await import('../js/data/investigations/manifest.js');
-    const mods = await Promise.all([
-      import('../js/i18n/en.js'),
-      import('../js/i18n/en.deferred.js'),
-      import('../js/i18n/en.teaching.js'),
-      import('../js/i18n/en.activities.js'),
-      import('../js/i18n/es.js'),
-      import('../js/i18n/es.deferred.js'),
-      import('../js/i18n/es.teaching.js'),
-      import('../js/i18n/es.activities.js'),
-    ]);
+    // Every fragment of every locale, from the directory rather than a list
+    // of eight files that had already missed both placement catalogs.
+    const { catalogs } = await completeCatalogs();
     const found = [];
-    for (const mod of mods)
-      for (const [name, table] of Object.entries(mod))
-        for (const [key, value] of Object.entries(table))
-          found.push(...claims(`${name}.${key}`, value));
+    for (const { merged, homeOf } of catalogs.values())
+      for (const [key, value] of Object.entries(merged))
+        found.push(...claims(`${homeOf.get(key)} ${key}`, value));
     // At least one, or this test would pass over a catalog that never
     // mentions the number and prove nothing.
     expect(found.length).toBeGreaterThan(0);
@@ -150,5 +163,132 @@ describe('the public investigation count', () => {
         .filter(c => c.said !== MANIFEST.length)
         .map(c => `${c.where}: "${c.text}"`)
     ).toEqual([]);
+  });
+
+  test('every claim in the documents that describe the current software equals the manifest', async () => {
+    // README.md and LICENSES.md both said "the 22 investigations" two lessons
+    // after it stopped being true, and the paper's Summary said 22 while the
+    // app had 24. Those are now a generated fact or no count at all; this is
+    // what notices the next one typed by hand. A fact marker is expanded to
+    // its value, so a generated count is held to the manifest too.
+    //
+    // Only documents that describe the software as it is. The changelog's
+    // released sections and the "Historical record" reports are right to
+    // quote the counts of their day, and are deliberately not swept.
+    const { MANIFEST } = await import('../js/data/investigations/manifest.js');
+    // Two counts are true of two different things: the lessons that run in the
+    // simulation (the manifest) and every guided investigation the Library
+    // lists, which adds the Observatory and the labs. The Library's number is
+    // right only beside the Library's noun, "guided investigations", the
+    // phrase the generated sentence uses; any other noun must carry the
+    // manifest's number.
+    const library = libraryInvestigationCount();
+    expect(library).toBeGreaterThan(MANIFEST.length);
+    const found = [];
+    for (const doc of [
+      'README.md',
+      'LICENSES.md',
+      'CONTRIBUTING.md',
+      'paper.md',
+    ]) {
+      const text = readFileSync(path.join(REPO, doc), 'utf8').replace(
+        /<!--fact:[^>]*-->([\s\S]*?)<!--\/fact-->/g,
+        '$1'
+      );
+      found.push(...claims(doc, text));
+    }
+    expect(found.length).toBeGreaterThan(0);
+    expect(
+      found
+        .filter(c => !holds(c, MANIFEST.length, library))
+        .map(c => `${c.where}: "${c.text}"`)
+    ).toEqual([]);
+  });
+
+  test('the Library count holds only beside its own noun', async () => {
+    const { MANIFEST } = await import('../js/data/investigations/manifest.js');
+    const library = libraryInvestigationCount();
+    const said = text =>
+      claims('probe', text).every(c => holds(c, MANIFEST.length, library));
+    expect(
+      said(`${library} guided investigations (${MANIFEST.length} that run`)
+    ).toBe(true);
+    expect(
+      said(`${MANIFEST.length} investigations that run in the simulation`)
+    ).toBe(true);
+    // The right number, the wrong noun: lessons, or the simulation's own
+    // investigations, are the manifest's.
+    expect(said(`${library} investigations that run in the simulation`)).toBe(
+      false
+    );
+    expect(said(`${library} lessons`)).toBe(false);
+    expect(said(`${library} investigations`)).toBe(false);
+    expect(said(`${library} real investigations`)).toBe(false);
+  });
+});
+
+describe('the public scenario count', () => {
+  // The Library lists the sandbox's scenarios and the 3-D lab's reference
+  // systems under one kind, so its number is larger than the sandbox's. Each
+  // number is right beside its own noun: "ready-made scenarios" for the
+  // Library's, anything else for the sandbox's.
+  const SCENARIO_CLAIM = /\b(\d+)\b((?:\s+[a-z-]+){0,2}?)\s+scenarios\b/gi;
+  const scenarioClaims = (where, text) =>
+    [...text.matchAll(SCENARIO_CLAIM)].map(m => ({
+      where,
+      said: Number(m[1]),
+      text: m[0].replace(/\s+/g, ' '),
+    }));
+  const holdsScenarios = (c, sandbox, library) =>
+    c.said !== library || /\bready-made scenarios\b/i.test(c.text);
+  const counts = () => {
+    const entries = JSON.parse(
+      readFileSync(path.join(REPO, 'library/library.json'), 'utf8')
+    ).entries.filter(e => e.kind === 'scenario');
+    const threeD = entries.filter(e => e.id.startsWith('scenario:3d-')).length;
+    return { library: entries.length, sandbox: entries.length - threeD };
+  };
+
+  test('the Library count is said only as ready-made scenarios, with its split', () => {
+    const { library, sandbox } = counts();
+    expect(library).toBeGreaterThan(sandbox);
+    const found = [];
+    for (const doc of [
+      'README.md',
+      'LICENSES.md',
+      'CONTRIBUTING.md',
+      'paper.md',
+      'teaching/adopt/index.html',
+    ]) {
+      const raw = readFileSync(path.join(REPO, doc), 'utf8')
+        .replace(/<!--fact:[^>]*-->([\s\S]*?)<!--\/fact-->/g, '$1')
+        .replace(/<[^>]+>/g, ' ');
+      found.push(...scenarioClaims(doc, raw));
+    }
+    expect(found.some(c => c.said === library)).toBe(true);
+    expect(
+      found
+        .filter(c => !holdsScenarios(c, sandbox, library))
+        .map(c => `${c.where}: "${c.text}"`)
+    ).toEqual([]);
+    const adopt = readFileSync(
+      path.join(REPO, 'teaching/adopt/index.html'),
+      'utf8'
+    );
+    expect(adopt).toContain(
+      `${library} ready-made scenarios (${sandbox} in the sandbox`
+    );
+  });
+
+  test('the Library count beside another noun fails', () => {
+    const { library, sandbox } = counts();
+    const said = text =>
+      scenarioClaims('probe', text).every(c =>
+        holdsScenarios(c, sandbox, library)
+      );
+    expect(said(`${library} ready-made scenarios`)).toBe(true);
+    expect(said(`${sandbox} configurable scenarios`)).toBe(true);
+    expect(said(`${library} configurable scenarios`)).toBe(false);
+    expect(said(`${library} scenarios`)).toBe(false);
   });
 });

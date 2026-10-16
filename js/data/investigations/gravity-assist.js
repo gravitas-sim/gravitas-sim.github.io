@@ -53,7 +53,7 @@
 // pass which would overshoot the optimum is a pass that hits the planet.
 //
 // Numbers in this file were measured through the engine, not derived and hoped
-// for. See tools/physics-checks.mjs, group "Gravity assist", and
+// for. See js/validation/physicsChecks.js, group "Gravity assist", and
 // e2e/assistExperiments.spec.js for the comparison and the sweep.
 // =============================================================================
 
@@ -141,13 +141,16 @@ const GRAVITY_ASSIST = {
   // minutes, three of which is the sweep running while nobody types.
   duration: '15-20 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 3, section: '3.5' },
+  courseLevel: 'majors',
+  mathematics: 'algebra',
+  prerequisites: ['orbital-energy'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['spaceflight', 'orbits'],
   lock: { placement: true },
-  summary:
-    'Voyager 2 arrived at Jupiter traveling ten kilometers a second and left traveling twenty-six. Jupiter did not burn any fuel for it. Fly the same maneuver yourself, measure it in the planet’s frame and in an inertial one, run it past both sides of the planet at once, and find out why the two measurements disagree — and who actually paid.',
   objectives: [
     'Predict whether a flyby gains or loses speed from which side of the planet it passes',
     'State what a gravity assist changes and what it cannot change, in the planet’s frame and in an inertial one',
@@ -236,7 +239,7 @@ const GRAVITY_ASSIST = {
              spacecraft behind the planet, and the encounter takes about nine
              seconds to watch.
              \n\nPress <strong>Fly it</strong>. Watch the path bend. Then read
-             the two columns — they are the whole lesson, and they disagree.`,
+             the two columns — they are the whole investigation, and they disagree.`,
       checklist: [
         'Watch the trail bend as the spacecraft rounds the planet',
         'Read the left column: the speed relative to the planet, before and after',
@@ -488,6 +491,11 @@ const GRAVITY_ASSIST = {
                 closely.`,
     },
     {
+      feedback: {
+        close:
+          'Close. A full reversal flips the direction of the relative velocity: how big is the change in a flip?',
+        off: 'The most any flyby can do is reverse the relative velocity. Work out the change that causes, in km/s.',
+      },
       sid: 'the-ceiling',
       bind: ASSIST,
       type: 'question',
@@ -607,7 +615,7 @@ const GRAVITY_ASSIST = {
       kind: 'choice',
       title: 'Whose frame, exactly?',
       body: `One loose end, and it is the interesting kind.
-             \n\nThe whole lesson rests on the left-hand column: the speed
+             \n\nThe whole investigation rests on the left-hand column: the speed
              relative to the planet does not change. But the planet you are
              measuring against is not the same planet before and after — it
              recoiled. The comparison's caveat says by how much: about four

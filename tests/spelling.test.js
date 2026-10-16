@@ -27,6 +27,9 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
+import { completeCatalogs } from '../tools/i18n-catalog.mjs';
+import { assembledIndexHtml } from '../tools/index-fragments.mjs';
+
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
@@ -123,6 +126,9 @@ const FORBIDDEN = {
   programme: 'program',
 };
 
+// Titles of published works, quoted as spelled in the citation.
+const PROPER_TITLES = /\bBright Star Catalogue\b/g;
+
 const PATTERN = new RegExp(`\\b(${Object.keys(FORBIDDEN).join('|')})\\b`, 'gi');
 
 /**
@@ -132,8 +138,10 @@ const PATTERN = new RegExp(`\\b(${Object.keys(FORBIDDEN).join('|')})\\b`, 'gi');
  * @param {string} text - The text to read
  * @returns {string[]} One line per hit
  */
-function offences(where, text) {
-  if (typeof text !== 'string') return [];
+function offences(where, rawText) {
+  if (typeof rawText !== 'string') return [];
+  // A published title is quoted as its authors spelled it.
+  const text = rawText.replace(PROPER_TITLES, m => '_'.repeat(m.length));
   const out = [];
   const say = (m, right) => {
     const from = Math.max(0, m.index - 30);
@@ -157,7 +165,13 @@ function strings(value, at, into) {
 
 /** An HTML page's visible text: no tags, no comments, no script or style. */
 function visibleText(rel) {
-  return readFileSync(path.join(REPO, rel), 'utf8')
+  // index.html as a reader has it: the panels that ship with their family
+  // (INDEX_DECOMPOSITION.md) are still this page's text.
+  const html =
+    rel === 'index.html'
+      ? assembledIndexHtml()
+      : readFileSync(path.join(REPO, rel), 'utf8');
+  return html
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
     .replace(/<!--[\s\S]*?-->/g, ' ')
@@ -185,20 +199,16 @@ describe('American spellings in English a reader sees', () => {
   });
 
   test('the English message catalogs', async () => {
-    const mods = await Promise.all([
-      import('../js/i18n/en.js'),
-      import('../js/i18n/en.deferred.js'),
-      import('../js/i18n/en.teaching.js'),
-      import('../js/i18n/en.activities.js'),
-    ]);
+    // Every fragment, from the directory. This listed four files and so never
+    // read en.placement.js; tools/i18n-catalog.mjs is the one reader that
+    // cannot miss a split.
+    const { catalogs } = await completeCatalogs();
+    const { merged, homeOf } = catalogs.get('en');
+    expect(Object.keys(merged).length).toBeGreaterThan(0);
     const found = [];
-    for (const mod of mods) {
-      for (const [name, table] of Object.entries(mod)) {
-        // The value is what renders. The key is an identifier nobody reads.
-        for (const [key, value] of Object.entries(table)) {
-          found.push(...offences(`${name}.${key}`, value));
-        }
-      }
+    // The value is what renders. The key is an identifier nobody reads.
+    for (const [key, value] of Object.entries(merged)) {
+      found.push(...offences(`${homeOf.get(key)} ${key}`, value));
     }
     expect(found).toEqual([]);
   });

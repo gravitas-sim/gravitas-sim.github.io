@@ -1,0 +1,1490 @@
+{
+  "neutron-star-collision:3": {
+    "counts": {
+      "gravitasSimulationReset": 1,
+      "gravitasMerge": 1,
+      "listener": 150
+    },
+    "order": [
+      "gravitasSimulationReset",
+      "gravitasMerge"
+    ],
+    "when": [
+      [
+        "0",
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          1,
+          0,
+          5,
+          1,
+          20,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    ],
+    "mergeLog": 1,
+    "listenerCalls": 1500,
+    "first": {
+      "gravitasSimulationReset": null,
+      "gravitasMerge": {
+        "engineOwned": true,
+        "masses": {
+          "primary": "1400000",
+          "result": "2800000",
+          "secondary": "1400000",
+          "units": "sim"
+        },
+        "mergedMass": "2800000",
+        "modelOwned": false,
+        "position": {
+          "x": "-5.25818722589e-7",
+          "y": "-8.48050844984e-7"
+        },
+        "primaryId": "28",
+        "resultId": "30",
+        "secondaryId": "29",
+        "simTime": "0.01",
+        "simTimeUnits": "sim",
+        "time": "5033",
+        "type": "merge",
+        "types": {
+          "primary": "BlackHole",
+          "result": "BlackHole",
+          "resultObjType": "BlackHole",
+          "secondary": "BlackHole"
+        },
+        "velocity": {
+          "x": "-0.0000525818729446",
+          "y": "-0.0000848050844989"
+        }
+      }
+    },
+    "sha256": "b113eda9e0006e0eb74a12e0a97ea5824a09671cac528f3f759d6d84a38235a1"
+  },
+  "white-dwarf-binary:3": {
+    "counts": {
+      "gravitasSimulationReset": 1,
+      "listener": 150,
+      "gravitasCollision": 3
+    },
+    "order": [
+      "gravitasSimulationReset",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision"
+    ],
+    "when": [
+      [
+        "0",
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "9.4",
+        [
+          0,
+          0,
+          0,
+          0,
+          80,
+          0,
+          0,
+          2,
+          0,
+          0
+        ]
+      ],
+      [
+        "11.11",
+        [
+          0,
+          0,
+          0,
+          0,
+          79,
+          0,
+          0,
+          2,
+          0,
+          0
+        ]
+      ],
+      [
+        "12.77",
+        [
+          0,
+          0,
+          0,
+          0,
+          78,
+          0,
+          0,
+          2,
+          0,
+          0
+        ]
+      ]
+    ],
+    "mergeLog": 0,
+    "listenerCalls": 1500,
+    "first": {
+      "gravitasSimulationReset": null,
+      "gravitasCollision": {
+        "impactType": "stellar-absorption",
+        "masses": [
+          "957.803234371",
+          "4.71769733534e-7"
+        ],
+        "position": {
+          "x": "74.7446759961",
+          "y": "-187.752869687"
+        },
+        "relativeSpeed": "26.1585062425",
+        "sourceType": "WhiteDwarf",
+        "targetType": "Asteroid"
+      }
+    },
+    "sha256": "c5a8c09d7c4b358ce890274cf74a61a80d23ead80fff6d4b02041292b15028f2"
+  },
+  "supernova-remnant:3": {
+    "counts": {
+      "gravitasSimulationReset": 1,
+      "gravitasCollision": 18,
+      "listener": 150,
+      "gravitasMerge": 1
+    },
+    "order": [
+      "gravitasSimulationReset",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasMerge",
+      "gravitasCollision",
+      "gravitasCollision"
+    ],
+    "when": [
+      [
+        "0",
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          0,
+          0,
+          5,
+          2,
+          200,
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "1.42",
+        [
+          0,
+          0,
+          5,
+          2,
+          199,
+          0,
+          1,
+          0,
+          0,
+          4
+        ]
+      ],
+      [
+        "1.68",
+        [
+          0,
+          0,
+          5,
+          2,
+          199,
+          0,
+          1,
+          0,
+          0,
+          4
+        ]
+      ],
+      [
+        "2.54",
+        [
+          0,
+          0,
+          5,
+          2,
+          198,
+          0,
+          1,
+          0,
+          0,
+          4
+        ]
+      ],
+      [
+        "2.68",
+        [
+          0,
+          0,
+          5,
+          2,
+          197,
+          0,
+          1,
+          0,
+          0,
+          8
+        ]
+      ],
+      [
+        "3.19",
+        [
+          0,
+          0,
+          5,
+          2,
+          197,
+          0,
+          1,
+          0,
+          0,
+          8
+        ]
+      ],
+      [
+        "5.3",
+        [
+          0,
+          0,
+          5,
+          2,
+          196,
+          0,
+          1,
+          0,
+          0,
+          12
+        ]
+      ],
+      [
+        "10.03",
+        [
+          0,
+          0,
+          5,
+          2,
+          196,
+          0,
+          1,
+          0,
+          0,
+          12
+        ]
+      ],
+      [
+        "10.68",
+        [
+          0,
+          0,
+          5,
+          2,
+          195,
+          0,
+          1,
+          0,
+          0,
+          15
+        ]
+      ],
+      [
+        "10.72",
+        [
+          0,
+          0,
+          5,
+          2,
+          195,
+          0,
+          1,
+          0,
+          0,
+          19
+        ]
+      ],
+      [
+        "10.82",
+        [
+          0,
+          0,
+          5,
+          2,
+          195,
+          0,
+          1,
+          0,
+          0,
+          23
+        ]
+      ],
+      [
+        "11.85",
+        [
+          0,
+          0,
+          5,
+          2,
+          195,
+          0,
+          1,
+          0,
+          0,
+          23
+        ]
+      ],
+      [
+        "11.98",
+        [
+          0,
+          0,
+          5,
+          2,
+          194,
+          0,
+          1,
+          0,
+          0,
+          23
+        ]
+      ],
+      [
+        "12.02",
+        [
+          0,
+          0,
+          5,
+          2,
+          193,
+          0,
+          1,
+          0,
+          0,
+          23
+        ]
+      ],
+      [
+        "12.93",
+        [
+          0,
+          0,
+          5,
+          2,
+          192,
+          0,
+          1,
+          0,
+          0,
+          27
+        ]
+      ],
+      [
+        "13.23",
+        [
+          0,
+          0,
+          5,
+          2,
+          192,
+          0,
+          1,
+          0,
+          0,
+          27
+        ]
+      ],
+      [
+        "13.85",
+        [
+          0,
+          0,
+          5,
+          3,
+          191,
+          0,
+          1,
+          0,
+          0,
+          27
+        ]
+      ],
+      [
+        "13.85",
+        [
+          0,
+          0,
+          5,
+          1,
+          191,
+          0,
+          1,
+          0,
+          0,
+          27
+        ]
+      ],
+      [
+        "14.44",
+        [
+          0,
+          0,
+          5,
+          1,
+          190,
+          0,
+          1,
+          0,
+          0,
+          27
+        ]
+      ]
+    ],
+    "mergeLog": 1,
+    "listenerCalls": 1500,
+    "first": {
+      "gravitasSimulationReset": null,
+      "gravitasCollision": {
+        "impactType": "gas-giant-accretion",
+        "masses": [
+          "0.990954368112",
+          "4.71769733534e-7"
+        ],
+        "position": {
+          "x": "209.658841008",
+          "y": "-163.584000278"
+        },
+        "relativeSpeed": "0.668886520197",
+        "sourceType": "GasGiant",
+        "targetType": "Asteroid"
+      },
+      "gravitasMerge": {
+        "engineOwned": true,
+        "masses": {
+          "primary": "1.15460033586",
+          "result": "2.14555470397",
+          "secondary": "0.990954368112",
+          "units": "sim"
+        },
+        "mergedMass": "2.14555470397",
+        "modelOwned": false,
+        "position": {
+          "x": "217.438087885",
+          "y": "-156.11089999"
+        },
+        "primaryId": "6",
+        "resultId": "235",
+        "secondaryId": "7",
+        "simTime": "13.85",
+        "simTimeUnits": "sim",
+        "time": "304049",
+        "type": "merge",
+        "types": {
+          "primary": "GasGiant",
+          "result": "GasGiant",
+          "resultObjType": "GasGiant",
+          "secondary": "GasGiant"
+        },
+        "velocity": {
+          "x": "3.40539532996",
+          "y": "2.30468266238"
+        }
+      }
+    },
+    "sha256": "a65ebfc6cc17d3d3f6860f731274432dcfff4ba592ad822f29e2eae556c94025"
+  },
+  "hungry-hungry-holes:3": {
+    "counts": {
+      "gravitasSimulationReset": 1,
+      "gravitasMerge": 45,
+      "gravitasCollision": 8,
+      "listener": 150
+    },
+    "order": [
+      "gravitasSimulationReset",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasCollision",
+      "gravitasMerge",
+      "gravitasCollision",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasCollision",
+      "gravitasCollision",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge",
+      "gravitasMerge"
+    ],
+    "when": [
+      [
+        "0",
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          51,
+          15,
+          2,
+          10,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          50,
+          15,
+          2,
+          10,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          49,
+          15,
+          2,
+          10,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          48,
+          15,
+          2,
+          10,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          45,
+          15,
+          2,
+          10,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          45,
+          15,
+          2,
+          10,
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          43,
+          15,
+          2,
+          10,
+          0,
+          2,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          42,
+          15,
+          2,
+          10,
+          0,
+          2,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          41,
+          15,
+          2,
+          10,
+          0,
+          2,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          40,
+          15,
+          2,
+          10,
+          0,
+          2,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          39,
+          15,
+          2,
+          10,
+          0,
+          2,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          36,
+          15,
+          2,
+          10,
+          0,
+          2,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          37,
+          15,
+          2,
+          10,
+          0,
+          2,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          36,
+          15,
+          2,
+          10,
+          0,
+          2,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          34,
+          15,
+          2,
+          10,
+          0,
+          3,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          32,
+          15,
+          2,
+          10,
+          0,
+          4,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          30,
+          15,
+          2,
+          10,
+          0,
+          4,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          30,
+          15,
+          2,
+          10,
+          0,
+          4,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          30,
+          15,
+          2,
+          10,
+          0,
+          4,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          4,
+          30,
+          15,
+          2,
+          10,
+          0,
+          4,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.01",
+        [
+          7,
+          30,
+          11,
+          1,
+          9,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.27",
+        [
+          6,
+          30,
+          11,
+          1,
+          9,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.42",
+        [
+          6,
+          30,
+          10,
+          1,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "0.98",
+        [
+          6,
+          27,
+          10,
+          1,
+          7,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "1.3",
+        [
+          6,
+          27,
+          10,
+          1,
+          6,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "1.8",
+        [
+          6,
+          25,
+          8,
+          1,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "1.84",
+        [
+          6,
+          26,
+          8,
+          1,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "1.84",
+        [
+          6,
+          25,
+          8,
+          1,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "2.18",
+        [
+          6,
+          22,
+          8,
+          1,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "2.36",
+        [
+          6,
+          21,
+          8,
+          1,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "2.55",
+        [
+          6,
+          20,
+          7,
+          1,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "2.65",
+        [
+          6,
+          20,
+          7,
+          1,
+          4,
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "2.7",
+        [
+          7,
+          17,
+          7,
+          1,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "2.91",
+        [
+          7,
+          18,
+          7,
+          1,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "2.91",
+        [
+          7,
+          17,
+          7,
+          1,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "2.91",
+        [
+          7,
+          16,
+          7,
+          1,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "3.08",
+        [
+          6,
+          14,
+          7,
+          1,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "3.23",
+        [
+          5,
+          14,
+          7,
+          1,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "3.24",
+        [
+          5,
+          14,
+          7,
+          1,
+          4,
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "3.31",
+        [
+          6,
+          11,
+          7,
+          1,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "5.79",
+        [
+          6,
+          9,
+          3,
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "6.19",
+        [
+          6,
+          8,
+          3,
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "6.27",
+        [
+          6,
+          7,
+          3,
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "6.53",
+        [
+          6,
+          5,
+          3,
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "7.09",
+        [
+          6,
+          6,
+          3,
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "7.82",
+        [
+          5,
+          4,
+          3,
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "7.99",
+        [
+          5,
+          3,
+          3,
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "8.21",
+        [
+          5,
+          3,
+          3,
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "8.27",
+        [
+          5,
+          3,
+          2,
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "8.52",
+        [
+          4,
+          3,
+          1,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "9.36",
+        [
+          4,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "10.75",
+        [
+          3,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        "14.28",
+        [
+          3,
+          3,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    ],
+    "mergeLog": 45,
+    "listenerCalls": 1500,
+    "first": {
+      "gravitasSimulationReset": null,
+      "gravitasMerge": {
+        "engineOwned": true,
+        "masses": {
+          "primary": "2400.71262109",
+          "result": "3902.26413215",
+          "secondary": "1501.55151106",
+          "units": "sim"
+        },
+        "mergedMass": "3902.26413215",
+        "modelOwned": false,
+        "position": {
+          "x": "-228.48358121",
+          "y": "155.725100053"
+        },
+        "primaryId": "0",
+        "resultId": "81",
+        "secondaryId": "20",
+        "simTime": "0.01",
+        "simTimeUnits": "sim",
+        "time": "5081",
+        "type": "merge",
+        "types": {
+          "primary": "StarObject",
+          "result": "StarObject",
+          "resultObjType": "StarObject",
+          "secondary": "StarObject"
+        },
+        "velocity": {
+          "x": "-8.14640749018",
+          "y": "1.51481052174"
+        }
+      },
+      "gravitasCollision": {
+        "impactType": "stellar-absorption",
+        "masses": [
+          "3094.55415365",
+          "4.71769733534e-7"
+        ],
+        "position": {
+          "x": "-228.246679461",
+          "y": "-61.9086752892"
+        },
+        "relativeSpeed": "2.5513617752",
+        "sourceType": "StarObject",
+        "targetType": "Asteroid"
+      }
+    },
+    "sha256": "2368f6f4cb3c4a3b2788ed65e7f0d2ccc533f9dff346873b73e87da1ec516c7b"
+  }
+}

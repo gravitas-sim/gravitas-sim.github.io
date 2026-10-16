@@ -1,0 +1,179 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "kepler-13-tess-s14-sap",
+  "version": "1.0.0",
+  "title": "Kepler-13A: TESS sector 14 light curve, as collected (SAP)",
+  "object": {
+    "name": "Kepler-13",
+    "identifiers": [
+      "TIC 158324245",
+      "KOI-13",
+      "Kepler-13 A"
+    ],
+    "ra": 286.971415279733,
+    "dec": 46.8683142230847,
+    "frame": "ICRS, epoch J2000",
+    "tessMagnitude": 10.23060036
+  },
+  "facility": {
+    "observatory": "TESS",
+    "instrument": "camera 2, CCD 3, 2-minute cadence",
+    "pipeline": "SPOC spoc-5.0.96-20230729"
+  },
+  "dataType": "light-curve",
+  "origin": "observed",
+  "credit": "TESS, sector 14 (NASA; SPOC light curve from MAST)",
+  "license": {
+    "status": "public-domain",
+    "statement": "NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive."
+  },
+  "retrieved": "2026-09-26",
+  "time": {
+    "scale": "TDB",
+    "reference": "BTJD = BJD - 2457000",
+    "unit": "d"
+  },
+  "columns": [
+    {
+      "name": "time",
+      "unit": "d",
+      "description": "bin centre: t0 + (index + 0.5) x binDays, in BTJD"
+    },
+    {
+      "name": "flux",
+      "unit": "",
+      "description": "SAP flux (all the light in the aperture) over its median"
+    },
+    {
+      "name": "flux error",
+      "unit": "",
+      "uncertaintyOf": "flux",
+      "description": "propagated SAP error over the median, one sigma, per bin"
+    }
+  ],
+  "masks": [
+    {
+      "column": "QUALITY",
+      "rule": "any nonzero flag drops the cadence",
+      "dropped": 917
+    },
+    {
+      "column": "TIME, SAP_FLUX, SAP_FLUX_ERR",
+      "rule": "a cadence without a finite value in all three is dropped",
+      "dropped": 0
+    },
+    {
+      "column": "bin",
+      "rule": "a bin with fewer than 3 kept cadences is dropped",
+      "dropped": 2
+    }
+  ],
+  "crowding": {
+    "crowdsap": 0.5492385,
+    "flfrcsap": 0.92097801
+  },
+  "reductions": [
+    "20-minute bins average up to 10 two-minute cadences each; the transit, about 3.2 hours long, spans nine or ten bins.",
+    "Flux is kept to 1 ppm and its error to 5 ppm (binned-relative-flux/1)."
+  ],
+  "source": {
+    "archive": "MAST (Barbara A. Mikulski Archive for Space Telescopes)",
+    "urls": [
+      "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2019198215352-s0014-0000000158324245-0150-s_lc.fits"
+    ],
+    "citations": [
+      {
+        "text": "TESS Light Curves - All Sectors, STScI/MAST",
+        "doi": "10.17909/t9-nmc8-f686"
+      },
+      {
+        "text": "Ricker et al. 2015, JATIS 1, 014003 (TESS)",
+        "doi": "10.1117/1.JATIS.1.1.014003"
+      },
+      {
+        "text": "Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC)",
+        "doi": "10.1117/12.2233418"
+      },
+      {
+        "text": "Esteves et al. 2015, ApJ 804, 150 (2015ApJ...804..150E): the period and radius ratio the pack is checked against"
+      },
+      {
+        "text": "Shporer et al. 2014, ApJ 788, 92 (2014ApJ...788...92S): the planet orbits Kepler-13A"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "tess2019198215352-s0014-0000000158324245-0150-s_lc.fits",
+      "url": "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2019198215352-s0014-0000000158324245-0150-s_lc.fits",
+      "bytes": 1964160,
+      "sha256": "06ce86a5dac99a7ee4152199330025dc7f6c6d25e426e571fda4e221e35ed342"
+    }
+  ],
+  "derived": {
+    "file": "series.json",
+    "bytes": 10075,
+    "sha256": "56bf5f7880d66b6b2c4403a9e3bbd1da8dcc0a0ad465bbfacb44193cec9e785d"
+  },
+  "transformation": {
+    "script": "build.mjs",
+    "version": "1.0.0",
+    "steps": [
+      "Read tess2019198215352-s0014-0000000158324245-0150-s_lc.fits with the SDK's readFits(), pinned by its checksum.",
+      "Mask, normalize and bin SAP_FLUX with the SDK's binTessLightCurve(), the pipeline every TESS pack uses: QUALITY 0 and finite values only, divided by the median, 20-minute bins of at least 3 cadences; the header's CROWDSAP and FLFRCSAP recorded.",
+      "Encode it as binned-relative-flux/1."
+    ],
+    "record": {
+      "cadences": 19337,
+      "flagged": 917,
+      "notFinite": 0,
+      "kept": 18420,
+      "binsDropped": 2,
+      "bins": 1865,
+      "medianFlux": 20991.2529296875,
+      "fluxUnit": "e-/s",
+      "fluxColumn": "SAP_FLUX",
+      "crowding": {
+        "crowdsap": 0.5492385,
+        "flfrcsap": 0.92097801
+      }
+    }
+  },
+  "assumptions": [
+    "SAP flux is the aperture's light as collected: it holds the companion's light as well as A's, so a transit on A is diluted by the fraction CROWDSAP. Systematics are not removed.",
+    "Times are barycentric dynamical time for the target, as SPOC corrects them.",
+    "Which star the planet orbits is not in these data: 21-arcsecond pixels cannot separate A and B, 1.2 arcseconds apart. That it orbits A comes from other observations (Shporer et al. 2014 and the work it cites)."
+  ],
+  "validation": {
+    "check": "folding on the published period finds the corrected depth times CROWDSAP, within 0.001",
+    "against": [
+      {
+        "quantity": "period",
+        "value": 1.763588,
+        "unit": "d",
+        "ref": "Esteves et al. 2015, ApJ 804, 150 (KOI-13 b)"
+      },
+      {
+        "quantity": "(Rp/R*)^2",
+        "value": 0.00763,
+        "unit": "",
+        "ref": "Esteves et al. 2015, ApJ 804, 150 (Rp/R* = 0.087373 +- 0.000023)"
+      }
+    ],
+    "rule": {
+      "kind": "folded-depth",
+      "periodDays": 1.763588,
+      "expected": 0.00446,
+      "tolerance": 0.001
+    },
+    "result": {
+      "foldedDepth": 0.00475
+    }
+  },
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional"
+}

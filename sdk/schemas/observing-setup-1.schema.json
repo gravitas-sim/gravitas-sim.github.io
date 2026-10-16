@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/observing-setup-1.schema.json",
+  "title": "gravitas.observing-setup/1",
+  "description": "How a quantity is observed: its epochs (regular, irregular, clustered or listed, with gaps), exposure, noise model (white with a stated sigma, optional red noise and outliers, each seeded), allowed systematics (an offset and a trend) and the instrument that records it. A forward model (js/forward/) reads a model state and one of these and returns a synthetic gravitas.observation. js/forward/setup.js validateSetup() is the authority; it also checks units and cross-field rules. The radial-velocity panel's survey configuration (no format) reads into this as version 0. FORMATS.md lists it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "formatVersion",
+    "seed",
+    "epochs",
+    "instrument"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.observing-setup"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "seed": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Every draw is keyed by this text and the epoch's index."
+    },
+    "observables": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "epochs": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "regular",
+            "irregular",
+            "clustered",
+            "listed"
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "description": "A unit of time, or sim; days by default."
+        },
+        "start": {
+          "type": "number"
+        },
+        "duration": {
+          "type": "number",
+          "minimum": 0
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "cadence": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "jitter": {
+          "type": "number"
+        },
+        "clusters": {
+          "type": "integer"
+        },
+        "tight": {
+          "type": "number"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0
+          },
+          "minItems": 2
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      }
+    },
+    "exposure": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "number",
+          "minimum": 0
+        },
+        "supersample": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        }
+      }
+    },
+    "noise": {
+      "type": "object",
+      "properties": {
+        "white": {
+          "type": "object",
+          "required": [
+            "sigma"
+          ],
+          "properties": {
+            "sigma": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "type": "string"
+            }
+          }
+        },
+        "red": {
+          "type": "object",
+          "required": [
+            "sigma",
+            "timescale"
+          ],
+          "properties": {
+            "sigma": {
+              "type": "number",
+              "minimum": 0
+            },
+            "timescale": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        },
+        "outliers": {
+          "type": "object",
+          "required": [
+            "fraction",
+            "amplitude"
+          ],
+          "properties": {
+            "fraction": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.5
+            },
+            "amplitude": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "systematics": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number"
+        },
+        "trend": {
+          "type": "number"
+        }
+      }
+    },
+    "instrument": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "photometer",
+            "spectrograph",
+            "astrometer",
+            "imager",
+            "catalogue",
+            "metrics"
+          ]
+        },
+        "bandpass": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "magSystem": {
+          "enum": [
+            "ab",
+            "vega"
+          ]
+        },
+        "limitingMagnitude": {
+          "type": "number"
+        },
+        "resolvingPower": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "dispersion": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "window": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "pixelScale": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "psfFwhm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

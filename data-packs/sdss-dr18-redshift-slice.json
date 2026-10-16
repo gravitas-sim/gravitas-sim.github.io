@@ -1,0 +1,171 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "sdss-dr18-redshift-slice",
+  "version": "1.0.0",
+  "title": "SDSS DR18 galaxy redshifts in a 120 to 240 degree strip at declination 0 to 0.5 degrees (a wedge)",
+  "object": {
+    "name": "The SDSS Legacy main galaxy sample in a thin equatorial strip",
+    "identifiers": [
+      "SDSS DR18 SpecPhoto"
+    ],
+    "frame": "ICRS, J2000: right ascension 120 to 240 degrees, declination 0 to 0.5 degrees"
+  },
+  "facility": {
+    "observatory": "Sloan Digital Sky Survey (Apache Point 2.5 m)",
+    "pipeline": "SDSS DR18 SkyServer, SpecPhoto"
+  },
+  "dataType": "catalog",
+  "origin": "observed",
+  "credit": "SDSS-I/II (the Legacy main sample), Data Release 18: Almeida et al. 2023, ApJS 267, 44; Strauss et al. 2002, AJ 124, 1810",
+  "license": {
+    "status": "public-domain",
+    "statement": "SDSS states that all data released in its public data releases are considered public domain (image-use policy, read 2026-10-09); it asks for the acknowledgement of the survey phase and the data release."
+  },
+  "retrieved": "2026-10-10",
+  "columns": [
+    {
+      "id": "ra",
+      "name": "right ascension",
+      "unit": "deg",
+      "description": "J2000, rounded to 1e-4 degree (0.36 arcsecond step, 0.18 arcsecond largest rounding)"
+    },
+    {
+      "id": "z",
+      "name": "redshift",
+      "unit": "",
+      "description": "the spectroscopic redshift, its eight digits kept"
+    }
+  ],
+  "masks": [
+    {
+      "column": "class, zWarning, sciencePrimary",
+      "rule": "class GALAXY, zWarning 0, the survey's primary spectrum",
+      "dropped": 0
+    },
+    {
+      "column": "petroMag_r",
+      "rule": "r < 17.77, the Legacy main sample limit",
+      "dropped": 0
+    },
+    {
+      "column": "z, dec",
+      "rule": "z up to 0.12, declination 0 to 0.5 degrees: the first cut of six declared before the run that fits the size ceilings",
+      "dropped": 13336
+    }
+  ],
+  "reductions": [
+    "The strip declination 0 to 0.5 degrees, right ascension 120 to 240 degrees and redshift up to 0.12: 2911 of the 16247 galaxies the query returned, sorted by right ascension.",
+    "Right ascension is rounded to 1e-4 degree (a stated step, largest rounding 0.18 arcsecond); the redshift keeps its eight digits. Declination, magnitudes, errors and identifiers are not kept: the strip is thin, and declination is its limits.",
+    "This is a flux-limited sample (r < 17.77, fiber-limited, with fiber collisions): it thins with distance because fainter galaxies fall below the limit. A page that draws it must say so."
+  ],
+  "source": {
+    "archive": "SDSS Data Release 18, SkyServer SQL search",
+    "urls": [
+      "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+specObjID%2C+ra%2C+dec%2C+z%2C+zErr%2C+petroMag_r%0AFROM+SpecPhoto%0AWHERE+class%3D%27GALAXY%27+AND+zWarning%3D0+AND+survey%3D%27sdss%27+AND+sciencePrimary%3D1%0A++AND+petroMag_r%3C17.77+AND+dec+BETWEEN+0+AND+2+AND+ra+BETWEEN+120+AND+240%0A++AND+z+BETWEEN+0.01+AND+0.2%0AORDER+BY+specObjID&format=csv"
+    ],
+    "citations": [
+      {
+        "text": "Almeida et al. 2023, ApJS 267, 44 (The Eighteenth Data Release of the Sloan Digital Sky Surveys)",
+        "doi": "10.3847/1538-4365/acda98"
+      },
+      {
+        "text": "Strauss et al. 2002, AJ 124, 1810 (Spectroscopic target selection in the SDSS: the main galaxy sample)",
+        "doi": "10.1086/342343"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "sdss-dr18-redshift-slice-query.csv",
+      "url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+specObjID%2C+ra%2C+dec%2C+z%2C+zErr%2C+petroMag_r%0AFROM+SpecPhoto%0AWHERE+class%3D%27GALAXY%27+AND+zWarning%3D0+AND+survey%3D%27sdss%27+AND+sciencePrimary%3D1%0A++AND+petroMag_r%3C17.77+AND+dec+BETWEEN+0+AND+2+AND+ra+BETWEEN+120+AND+240%0A++AND+z+BETWEEN+0.01+AND+0.2%0AORDER+BY+specObjID&format=csv",
+      "bytes": 1163562,
+      "sha256": "251920df19f3ed7c22c2f43b8776df08c4df80041e550eb1968f86bd5c558aad"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/cosmology.mjs",
+    "version": "1.0.0",
+    "options": {
+      "slice": {
+        "decMax": 0.5,
+        "zMax": 0.12,
+        "raRange": [
+          120,
+          240
+        ]
+      },
+      "query": "SELECT specObjID, ra, dec, z, zErr, petroMag_r\nFROM SpecPhoto\nWHERE class='GALAXY' AND zWarning=0 AND survey='sdss' AND sciencePrimary=1\n  AND petroMag_r<17.77 AND dec BETWEEN 0 AND 2 AND ra BETWEEN 120 AND 240\n  AND z BETWEEN 0.01 AND 0.2\nORDER BY specObjID",
+      "columns": [
+        {
+          "id": "ra",
+          "step": 0.0001
+        },
+        {
+          "id": "z",
+          "step": 1e-8
+        }
+      ]
+    },
+    "steps": [
+      "Read ra, dec and z from the SkyServer answer to the query in options.query.",
+      "Keep dec in [0, 0.5) and z <= 0.12.",
+      "Sort by right ascension, then redshift.",
+      "Store right ascension and redshift as table-columns/1."
+    ],
+    "record": {
+      "queryRows": 16247,
+      "rows": 2911,
+      "columns": [
+        {
+          "id": "ra",
+          "type": "int32",
+          "step": 0.0001,
+          "missing": 0,
+          "maxRounding": 0.00005
+        },
+        {
+          "id": "z",
+          "type": "int32",
+          "step": 1e-8,
+          "missing": 0,
+          "maxRounding": 1.39e-17
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    "The redshift is the survey pipeline's (zWarning 0), heliocentric: it includes the galaxy's peculiar velocity, which the \"fingers of God\" in a wedge diagram show.",
+    "A wedge needs a distance: the page converts redshift with a stated cosmology (flat, Omega_m 0.3, H0 70 in the lessons)."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/observations/sdssDr18RedshiftSlice.js",
+    "bytes": 4110,
+    "sha256": "f3f6ab8d83720dc06654123224c69e4f6b305d29450603cc1aef6970aa00d971",
+    "sidecar": {
+      "file": "cosmology/sdss-dr18-redshift-slice.json",
+      "bytes": 31226,
+      "sha256": "60b2c7f99007a79b47c5f912f6bc25d4080b3b6402cbf2bdf335d4841419ff40"
+    }
+  },
+  "validation": {
+    "check": "galaxies in the strip are clustered: counts in 5-degree sectors of 25 Mpc shells (100 to 400 Mpc) have a variance-to-mean ratio above 2 (Poisson would give 1)",
+    "against": [
+      {
+        "quantity": "variance-to-mean ratio of counts in cells",
+        "value": 1,
+        "unit": "",
+        "ref": "a Poisson (unclustered) sample"
+      }
+    ],
+    "result": {
+      "varianceToMean": 9.8,
+      "galaxies": 2911
+    }
+  }
+}

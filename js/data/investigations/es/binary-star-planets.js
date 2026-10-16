@@ -20,8 +20,6 @@ export default {
   subtitle: 'Qué sobrevive alrededor de dos estrellas, y cómo lo sabrías',
   duration: '40-50 min',
   level: 'Astronomía introductoria',
-  summary:
-    'La mayoría de las estrellas vienen de dos en dos, así que la mayoría de los planetas tienen que arreglárselas en un sistema con dos soles. Algunas órbitas funcionan y otras no, y la línea que las separa es más nítida de lo que imaginarías. Encuéntrala dos veces —una para un planeta alrededor de una estrella y otra para un planeta alrededor de las dos— y averigua después cuánto de lo que acabas de medir era la física y cuánto la aritmética.',
   objectives: [
     'Predecir qué órbitas planetarias en una binaria sobreviven a una integración, tanto para un planeta alrededor de una estrella como alrededor de las dos',
     'Distinguir un resultado físico —expulsión, colisión, supervivencia— de un fallo numérico de la integración que lo produjo',
@@ -70,7 +68,7 @@ export default {
              seis AU la una de la otra en su máximo acercamiento. Un planeta que
              gire alrededor de la Estrella A tiene que vivir dentro de eso.
              \n\nComprométete ahora con un número. Vas a medir contra él durante
-             el resto de la lección.`,
+             el resto de la investigación.`,
       prompt:
         '¿A qué distancia de la Estrella A crees que puede estar un planeta y sobrevivir, como fracción de la separación de 10 AU?',
       options: [
@@ -81,14 +79,14 @@ export default {
       ],
       because: `Alrededor de una quinta parte, y para este par resulta ser algo
                 menos. La zona estable es mucho más pequeña que el espacio que
-                parece disponible, que es la primera sorpresa de esta lección y
+                parece disponible, que es la primera sorpresa de esta investigación y
                 no la última.`,
     },
     {
       title: 'Lo que va a significar "sobrevivió"',
       body: `Una cuestión de vocabulario antes de medir nada, porque decide lo
              que te está permitido decir al final.
-             \n\nCada ejecución de esta lección tiene una duración declarada:
+             \n\nCada ejecución de esta investigación tiene una duración declarada:
              veinte periodos binarios, o cuarenta. Cuando el planeta sigue en
              órbita al terminar, el panel dirá que <strong>sobrevivió a esta
              integración</strong>. Nunca dirá que la órbita es estable, y tú
@@ -272,7 +270,7 @@ export default {
                pasó.`,
       because: `Unas 0,177 separaciones, o 1,77 AU para estas estrellas. Tus dos
                 ejecuciones caen a uno y otro lado, que es el ajuste y la
-                simulación de acuerdo: el único sitio de esta lección donde lo
+                simulación de acuerdo: el único sitio de esta investigación donde lo
                 están sin discusión.`,
       tip: 'Holman, M. J. y Wiegert, P. A. 1999, The Astronomical Journal, 117, 621: "Long-Term Stability of Planets in Binary Systems".',
     },
@@ -416,7 +414,7 @@ export default {
         'Reduce a 0,25: anota las mismas tres cosas',
         'Pregúntate cuál de las tres ejecuciones pondrías en un artículo',
       ],
-      tip: 'Cada reducción a la mitad duplica el tiempo real. La última tarda un par de minutos; es la ejecución más importante de la lección.',
+      tip: 'Cada reducción a la mitad duplica el tiempo real. La última tarda un par de minutos; es la ejecución más importante de la investigación.',
     },
     {
       title: 'Tres ejecuciones de la misma configuración',
@@ -454,6 +452,11 @@ export default {
         'Que el planeta es expulsado, ya que el paso más fino siempre es más preciso',
         'Que esta configuración no está resuelta con ninguno de los dos pasos, así que ninguna ejecución establece un resultado',
         'Que la simulación está rota y hay que descartar las ejecuciones',
+      ],
+      misconceptions: [
+        {
+          say: 'Un paso más fino es más exacto, pero una respuesta que cambia sigue moviéndose. Habría que saber que la ejecución convergió antes de fiarse de ella, y nada aquí lo dice.',
+        },
       ],
       because: `Ninguna de las dos ejecuciones establece nada por sí sola. El paso
                 más fino es más preciso y eso es una razón para preferirlo, no
@@ -573,7 +576,7 @@ export default {
         'A 2,0: lee el número de encuentros al terminar; puede sorprenderte',
         'A 2,0: lee cuándo se marchó',
       ],
-      tip: 'En la segunda ejecución nada se acercó a nada. Esta es una forma de perder un planeta distinta de la que viste en la primera mitad de la lección.',
+      tip: 'En la segunda ejecución nada se acercó a nada. Esta es una forma de perder un planeta distinta de la que viste en la primera mitad de la investigación.',
     },
     {
       title: 'Se marchó sin tocar nada',
@@ -643,7 +646,7 @@ export default {
                 de tres separaciones y media de las estrellas.`,
       misconceptions: [
         {
-          say: `Esa es la frontera circunestelar de antes en la lección. El caso
+          say: `Esa es la frontera circunestelar de antes en la investigación. El caso
                 circumbinario tiene su propia fórmula, con coeficientes bastante
                 distintos, y además es un suelo y no un techo.`,
         },

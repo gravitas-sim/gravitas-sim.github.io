@@ -18,17 +18,15 @@ import {
   COMFORTABLE_URL_LENGTH,
   decodeTagged,
   encodeTagged,
+  parseDocument,
   shareUrl,
 } from '../shareState.js';
 import {
   ASSIGNMENT_SCHEMA,
+  assignmentVersion,
   ASSIGNMENT_TAG,
   validateAssignment,
 } from './assignment.js';
-
-/** @param {string} hash - A location hash @returns {boolean} Whether it is one */
-export const isAssignmentFragment = hash =>
-  /^#?a\d+[zr]./.test(String(hash || ''));
 
 /**
  * Encode an assignment and say whether the link is a comfortable size.
@@ -41,7 +39,7 @@ export const isAssignmentFragment = hash =>
 export async function assignmentLink(assignment, base) {
   const fragment = await encodeTagged(
     ASSIGNMENT_TAG,
-    ASSIGNMENT_SCHEMA,
+    assignmentVersion(assignment),
     assignment
   );
   // A clean base, deliberately. shareUrl() defaults to the current address
@@ -109,7 +107,7 @@ export async function readAssignmentLink(fragment) {
 export function readAssignmentFile(text) {
   let data;
   try {
-    data = JSON.parse(String(text || ''));
+    data = parseDocument(String(text || ''));
   } catch {
     return { ok: false, assignment: null, reason: 'notJson', detail: null };
   }

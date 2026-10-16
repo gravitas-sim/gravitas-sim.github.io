@@ -4,7 +4,7 @@
 // Five kinds, and the names for them. Its own module because four things need
 // the vocabulary and only one of them wants the three thousand lines of checks
 // that go with it: the validator prints these names, the documentation
-// generator writes them into a table, physics-checks.mjs assigns them, and the
+// generator writes them into a table, js/validation/physicsChecks.js assigns them, and the
 // published validation page groups by them.
 //
 // In js/ rather than tools/ because the browser is one of those four. The page

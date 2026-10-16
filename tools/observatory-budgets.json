@@ -1,0 +1,30 @@
+{
+  "note": "Ceilings for tools/observatory-bench.mjs (npm run bench:observatory -- --check), per profile and applying to every built-in observation. Measured on 2026-09-25 on an Intel Core i5-10500 in Chromium 151 headless, the sources served as Pages serves them; desktop at the machine's speed, mobile at 375 x 812 with the CPU slowed four times. Times are the handlers' own work, measured before any frame, with twice the measured value as the ceiling; *PaintMs is input to the frame after the one it is painted in, whose floor is two display frames (about 33 ms at 60 Hz), held to 100 ms. Bytes and heap have about 10% of room. A manual instrument, not a registry check: timings on a shared machine are not evidence (OBSERVATORY_WORKSPACE_DESIGN.md).",
+  "measuredAt": "unreleased",
+  "profiles": {
+    "desktop": {
+      "pageKB": 670,
+      "openMs": 120,
+      "transferKB": 66,
+      "heapMB": 2.5,
+      "keyMs": 4,
+      "keyPaintMs": 100,
+      "dragMs": 8,
+      "dragPaintMs": 100,
+      "changeMs": 18,
+      "undoMs": 27
+    },
+    "mobile": {
+      "pageKB": 670,
+      "openMs": 500,
+      "transferKB": 66,
+      "heapMB": 2.5,
+      "keyMs": 15,
+      "keyPaintMs": 100,
+      "dragMs": 28,
+      "dragPaintMs": 100,
+      "changeMs": 90,
+      "undoMs": 104
+    }
+  }
+}

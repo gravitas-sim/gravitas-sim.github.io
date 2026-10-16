@@ -17,6 +17,7 @@ import {
   readProgress,
   writeProgress,
 } from '../js/investigations/progressSchema.js';
+import { isValidSid as isPackSid } from '../js/platform/investigation.js';
 
 // =============================================================================
 // A step's identity
@@ -106,6 +107,36 @@ describe('every lesson step has a usable stable id', () => {
         expect(/^\d+$/.test(step.sid)).toBe(false);
         expect(step.sid).not.toContain(':');
       }
+    }
+  });
+
+  test('a sid is only ever an id, because it is written into markup', () => {
+    // The step key lands in the lesson panel's attributes and selectors, and a
+    // Composer pack's sid is text from a file. The pack format keeps its own
+    // copy of this rule (js/platform/investigation.js), so the two are held to
+    // the same answers.
+    const cases = [
+      ['kepler-period', true],
+      ['step-12', true],
+      ['a', true],
+      ['x" autofocus onfocus="y', false],
+      ['a<b', false],
+      ['a&b', false],
+      ["it's", false],
+      ['two words', false],
+      ['Upper', false],
+      ['snake_case', false],
+      ['a--b', false],
+      ['-a', false],
+      ['a:b', false],
+      ['42', false],
+      ['', false],
+      ['a'.repeat(81), false],
+      [7, false],
+    ];
+    for (const [sid, ok] of cases) {
+      expect([sid, isValidSid(sid)]).toEqual([sid, ok]);
+      expect([sid, isPackSid(sid)]).toEqual([sid, ok]);
     }
   });
 

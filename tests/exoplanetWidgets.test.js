@@ -7,7 +7,12 @@ import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 // every label is the message id it was going to be translated from.
 registerMessages('en', EN_DEFERRED);
 
-import { allWidgets, widgetDefaults, getWidget } from '../js/widgets.js';
+import {
+  allWidgets,
+  widgetDefaults,
+  getWidget,
+  whenWidgetsReady,
+} from '../js/widgets.js';
 import {
   relativeInsolation,
   habitableZoneBounds,
@@ -19,6 +24,11 @@ import {
 } from '../js/exoplanetObservables.js';
 import { HD209458 } from '../js/data/exoplanetSystems.js';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
+
+// Every instrument family is fetched on demand (js/widgets.js), the way a
+// lesson fetches one when a step names it; this suite reads the catalog, so
+// it waits for it first, as every reader of the whole catalog does.
+await whenWidgetsReady();
 
 const IDS = [
   'reflex-motion',

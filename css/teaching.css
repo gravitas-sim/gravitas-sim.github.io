@@ -17,16 +17,6 @@
    ============================================================================ */
 
 @layer components {
-  /* --- The language switch, in the page header ---------------------------- */
-  .teach-lang {
-    display: flex;
-    gap: var(--space-2);
-  }
-  .teach-lang button[aria-pressed='true'] {
-    color: var(--text-primary);
-    border-color: var(--accent);
-  }
-
   /* --text-secondary rather than --text-muted. css/page.css already records
      that muted gray fails contrast at small sizes in every theme, and this is
      small type; there is no reason to relearn it here. */
@@ -190,9 +180,9 @@
     flex-wrap: wrap;
     gap: var(--space-2);
   }
-  /* The figure. 16:10, which is the ratio js/embed.js offers for the reason it
-     documents there: an orbit is as tall as it is wide, and 16:9 crops the top
-     and bottom of an eccentric one. */
+  /* The figure. 16:10, which is the ratio the embed shell in js/world.js offers
+     for the reason it documents there: an orbit is as tall as it is wide, and
+     16:9 crops the top and bottom of an eccentric one. */
   .teach-figure {
     margin-top: var(--space-4);
     aspect-ratio: 16 / 10;
@@ -333,12 +323,7 @@
   }
 
   /* --- Narrow screens ------------------------------------------------------- */
-  /* The page header already stacks at 720px (css/page.css). The language switch
-     is a third child of that flex column, so it needs to stop stretching. */
-  @media (max-width: 720px) {
-    .teach-lang {
-      margin-left: 0;
-    }
+  @media (max-width: 767px) {
     .teach-stage {
       grid-template-columns: 1fr;
       gap: var(--space-2);
@@ -366,7 +351,6 @@
      that carries an argument stays, and the grids collapse to one column so a
      three-column card grid does not straddle a page break. */
   @media print {
-    .teach-lang,
     .teach-figure,
     .teach-sequence,
     .teach-demo-actions {
@@ -492,7 +476,7 @@
     border-left: 3px solid var(--warning);
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 767px) {
     .teach-activity-formats {
       grid-template-columns: 1fr;
     }
@@ -572,5 +556,26 @@
     min-height: 1.2em;
     font-size: var(--text-xs);
     color: var(--text-secondary);
+  }
+}
+
+/* The instructor path (ADOPTION.md): the contents list is the eight steps,
+   each holding the sections that belong to it. */
+@layer components {
+  .teach-path {
+    padding-left: var(--space-5);
+  }
+  .teach-path > li {
+    margin-bottom: var(--space-2);
+  }
+  .teach-path ol {
+    margin: var(--space-1) 0 var(--space-2);
+    padding-left: var(--space-5);
+    font-size: var(--text-sm);
+  }
+  .teach-find-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
   }
 }

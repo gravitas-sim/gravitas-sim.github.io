@@ -23,7 +23,6 @@
 // are in hand does anything get fetched.
 // =============================================================================
 
-import { t } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 // Statically imported, and that is the point of this module's existence.
 //
@@ -43,7 +42,7 @@ import { SETTINGS } from './appState.js';
 import { timeUnitSeconds } from './units.js';
 import { SECONDS_PER_DAY } from './constants.js';
 
-import { setCaptureSink } from './widgetRuntime.js';
+import { evidenceContext, setCaptureSink } from './widgetRuntime.js';
 
 let loading = null;
 
@@ -60,16 +59,16 @@ export function ensureNotebook() {
         import('./notebookPanel.js'),
         import('./notebook/capture.js'),
       ]);
+      // The ledger's words (led.*), which the panel's rows and the report use.
+      await panel.loadWords().catch(() => {});
       panel.setRevisionSource(buildRevision);
       panel.ensurePanel();
       return { panel, capture };
     })();
+    loading.catch(() => (loading = null));
   }
   return loading;
 }
-
-/** @returns {boolean} Whether the notebook has already been loaded */
-export const notebookLoaded = () => loading !== null;
 
 /**
  * Where the build identifier comes from, and whether it is real.
@@ -293,8 +292,7 @@ export function watchForNotebook() {
       btn.dataset.state = open ? 'on' : 'off';
     } catch (err) {
       console.error('The evidence notebook could not be loaded:', err);
-      const { toast } = await import('./notify.js');
-      toast(t('nb.error.load'));
+      (await import('./notify.js')).loadFailed(() => btn.click());
     } finally {
       btn.disabled = false;
     }
@@ -321,9 +319,12 @@ export function captureToNotebook(make) {
   // `make` is called afterwards, and that is safe on one condition the callers
   // meet: what it closes over has already been copied. See snapshot().
   const provenance = liveProvenance();
+  // Where the student is, read in the same task as the click for the same
+  // reason: a step answered a moment later is another step.
+  const context = evidenceContext() ?? { page: 'sandbox' };
   return (async () => {
     const { panel, capture } = await ensureNotebook();
-    const entry = make(capture, provenance);
+    const entry = capture.withContext(context, () => make(capture, provenance));
     if (!entry) return false;
     panel.offerDraft(entry);
     return true;

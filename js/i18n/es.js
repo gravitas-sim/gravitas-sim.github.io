@@ -28,19 +28,22 @@
 
 export const ES = {
   // --- Locale and the language picker ---------------------------------------
-  'locale.picker.label': 'Idioma',
-  'locale.picker.hint': 'Cambiar el idioma de la interfaz',
   'locale.coverage.es': 'Interfaz e investigaciones en español.',
   'locale.coverage.complete': 'Traducción completa.',
 
   // --- Presentation: embed ---------------------------------------------------
   'embed.figure.title': 'Simulación de Gravitas: {scenario}',
   'embed.figure.titleGeneric': 'Simulación interactiva de Gravitas',
+  'embed.action.reset': 'Restablecer la figura',
+  'embed.action.reset.hint': 'Restablecer la figura',
   'embed.action.openFull': 'Abrir en Gravitas',
   'embed.action.openFull.hint':
     'Abrir esta simulación a tamaño completo en una pestaña nueva, con todos los controles',
 
   // --- Presentation: the share dialog's embed half ---------------------------
+  'share.action.buildFigure': 'Crear una figura',
+  'share.action.buildFigure.hint':
+    'Elige cómo se abre y cómo se ve la figura, y cópiala',
   'share.action.copyEmbed': 'Copiar código de inserción',
   'share.action.copyEmbed.hint':
     'Copiar un iframe que muestra exactamente esta simulación, listo para pegar en una página de Canvas, Blackboard o Moodle',
@@ -51,7 +54,7 @@ export const ES = {
 
   // --- Presentation: lecture -------------------------------------------------
   'lecture.lectureBar.label': 'Presentación',
-  'lecture.action.enter': '🎦 Modo presentación',
+  'lecture.action.enter': 'Modo presentación',
   'lecture.action.enter.hint':
     'Ocupar toda la pantalla para proyectar: texto y controles más grandes, tema Luz de día, puntero de foco y flechas para recorrer una secuencia de enlaces preparada. Escape sale.',
   'lecture.action.exit': 'Salir del modo presentación',
@@ -98,11 +101,9 @@ export const ES = {
   'chrome.text2': 'Gravitas: laboratorio interactivo de astrofísica',
 
   // --- Footer ----------------------------------------------------------------
-  'footer.theme.hint':
-    'Cambiar la combinación de colores de la interfaz. Observatorio usa tonos rojos para conservar la visión nocturna; Luz de día conviene a salas iluminadas y a proyectores (T alterna).',
   'footer.attribution.hint': 'Carl Ziegler: autor de Gravitas',
   'footer.attribution.hint.2':
-    'Contra qué se ha comprobado el motor físico: 243 verificaciones con error medido, tolerancia declarada y una razón para cada tolerancia. Se ejecuta en directo en el navegador.',
+    'Contra qué se ha comprobado el motor físico: 304 verificaciones con error medido, tolerancia declarada y una razón para cada tolerancia. Se ejecuta en directo en el navegador.',
   'footer.attribution.hint.3':
     'Consultar o contribuir al código fuente en GitHub',
   'footer.attribution': 'Validado',
@@ -112,7 +113,7 @@ export const ES = {
   'rail.loadScenario.hint':
     'Explorar los escenarios incluidos por imagen, concepto o palabra clave: desde el sistema solar hasta la fusión de agujeros negros GW150914.',
   'rail.investigations.hint':
-    'Lecciones guiadas que recorren un concepto paso a paso, con preguntas y un informe de laboratorio opcional que se puede entregar',
+    'Investigaciones guiadas que recorren un concepto paso a paso, con preguntas y un informe de laboratorio opcional que se puede entregar',
   'rail.settings.hint':
     'Abrir el panel completo de ajustes: número de objetos, gravedad, aspecto visual y rendimiento. Los cambios estructurales reinician la simulación; el resto se aplica en directo.',
   'rail.refreshScenario.hint':
@@ -130,7 +131,7 @@ export const ES = {
     'Restaurar la última simulación guardada en este navegador.',
   'rail.undo.hint': 'Quitar el último objeto colocado (Z)',
   'rail.share.hint':
-    'Crear un enlace que vuelva a abrir esta misma simulación: para repartirlo como tarea, o para devolver lo que se ha construido (K)',
+    'Crear un enlace que vuelva a abrir esta misma simulación: para repartirlo como actividad, o para devolver lo que se ha construido (K)',
   'rail.exportData.hint':
     'Descargar la simulación registrada en CSV: posiciones, velocidades y energías a lo largo del tiempo, y la curva de luz si está activa. Se abren en Excel o en el cuaderno de Python que acompaña al programa (E)',
 
@@ -172,14 +173,6 @@ export const ES = {
   'rail.shortcuts.hint': 'Atajos de teclado (?)',
 
   // --- Rail: learn -----------------------------------------------------------
-  'rail.railLearn.hint': 'Mostrar u ocultar la sección de aprendizaje',
-  'rail.aboutGravitas.hint':
-    'Qué es Gravitas, qué se puede hacer aquí y por dónde empezar',
-  'rail.railLearnBody.hint':
-    'Cómo modela Gravitas el universo: qué calcula la simulación, qué aproxima y qué solo dibuja',
-  'rail.railLearnBody.hint.2':
-    'Guías docentes, soluciones y un mapa curricular para el profesorado',
-  'rail.railLearnBody.hint.3': 'Abrir el manual de usuario de Gravitas (PDF)',
   'rail.objectType.hint':
     'Elige qué añadir y luego haz clic en el lienzo para colocarlo',
   'rail.mainControls.label': 'Controles de la simulación',
@@ -187,13 +180,25 @@ export const ES = {
   'rail.slowDown.label': 'Reducir la velocidad',
   'rail.speedUp.label': 'Aumentar la velocidad',
   'rail.objectType.label': 'Elegir un objeto para añadir',
+  'rail.precisePlace': 'Colocaci\u00f3n precisa',
+  'place.precise.title': 'Colocaci\u00f3n precisa',
+  'place.precise.intro':
+    'A\u00f1ade un cuerpo introduciendo su estado. Es la misma colocaci\u00f3n que realiza el lienzo; un cuerpo a\u00f1adido aqu\u00ed es id\u00e9ntico a uno colocado con un clic, y el bot\u00f3n de deshacer lo elimina igual.',
+  'place.precise.field.type': 'Tipo de objeto',
+  'place.precise.submit': 'A\u00f1adir cuerpo',
+  'place.precise.close': 'Listo',
+  'rail.precisePlace.hint':
+    'A\u00f1adir un cuerpo escribiendo su posici\u00f3n, velocidad y masa',
+  'rail.systemBuilder': 'Constructor de sistemas orbitales',
+  'rail.systemBuilder.hint':
+    'Construir un sistema completo a partir de elementos orbitales, con su centro de masas en reposo',
 
   // --- Rail: labels ----------------------------------------------------------
   // The emoji stay: they are part of the button's shape rather than of its
   // wording, and a reader scanning the rail finds them before the text.
   'rail.railScenario': 'Escenario',
   'rail.loadScenario': 'Cargar escenario',
-  'rail.investigations': '🎓 Investigaciones',
+  'rail.investigations': 'Investigaciones',
   'rail.settings': 'Ajustes',
   'rail.refreshScenario': 'Recargar escenario',
   'rail.resetAll': 'Restablecer valores',
@@ -202,24 +207,24 @@ export const ES = {
   'rail.save': 'Guardar estado',
   'rail.load': 'Cargar estado',
   'rail.undo': 'Deshacer colocación',
-  'rail.share': '🔗 Compartir enlace',
-  'rail.exportData': '📊 Exportar datos',
+  'rail.share': 'Compartir enlace',
+  'rail.exportData': 'Exportar datos',
   'rail.railTools': 'Herramientas',
   'rail.unitToggle': 'Unidades físicas',
   'rail.railToolsBody': 'Sistema',
   'rail.referenceFrameSelect': 'Mundo',
   'rail.referenceFrameSelect.2': 'Baricentro',
   'rail.referenceFrameSelect.3': 'Objeto seleccionado',
-  'rail.toggleRuler': '📏 Regla',
-  'rail.toggleProtractor': '📐 Transportador',
-  'rail.toggleStopwatch': '⏱ Cronómetro',
-  'rail.stopwatchMark': '⚑ Marcar',
+  'rail.toggleRuler': 'Regla',
+  'rail.toggleProtractor': 'Transportador',
+  'rail.toggleStopwatch': 'Cronómetro',
+  'rail.stopwatchMark': 'Marcar',
   'rail.stopwatchStop': '■ Parar',
   'rail.stopwatchLatch': '⌖ Periastro',
   'rail.stopwatchReset': '↺ Reiniciar',
-  'rail.screenshot': '📸 Captura',
-  'rail.record': '🎬 Grabar clip',
-  'rail.record.stop': '⏹ Parar grab.',
+  'rail.screenshot': 'Captura',
+  'rail.record': 'Grabar clip',
+  'rail.record.stop': 'Parar grab.',
   'capture.caption.sandbox': 'Zona de pruebas de Gravitas',
   'capture.record.saved': 'Clip guardado: {s}, {mb} MB',
   'capture.record.cappedSize':
@@ -239,22 +244,18 @@ export const ES = {
   'rail.toggleExperiments': 'Banco A/B',
   'rail.toggleExperiments.hint':
     'Abrir el banco de experimentos A/B: captura un estado inicial, graba una ejecución de referencia, vuelve exactamente a ese inicio, cambia una variable y graba una segunda ejecución, y compara ambas sobre el mismo eje de tiempo simulado.',
-  'bench.error.load': 'No se pudo cargar el banco de experimentos.',
+  'failure.load': 'No se pudo cargar. Comprueba tu conexión.',
+  'failure.retry': 'Reintentar',
+  'failure.reload':
+    'Sigue sin cargar. Recarga la página; tu trabajo se conserva.',
   'rail.toggleNotebook': 'Cuaderno de pruebas',
   'rail.toggleNotebook.hint':
     'Abrir el cuaderno de pruebas: las mediciones que has guardado desde los instrumentos, el espacio de análisis y el banco, cada una congelada con las condiciones en que se tomó y con espacio para tu afirmación, tus pruebas y las limitaciones que veas.',
-  'nb.error.load': 'No se pudo cargar el cuaderno de pruebas.',
   'rail.toggleAstrometry': 'Astrometría',
-  'rail.slowDown': '⏪ Lento',
-  'rail.speedUp': 'Rápido ⏩',
+  'rail.slowDown': 'Lento',
+  'rail.speedUp': 'Rápido',
   'rail.resetView': 'Restablecer vista',
   'rail.shortcuts': 'Atajos',
-  'rail.railLearn': 'Aprender',
-  'rail.aboutGravitas': 'Acerca de Gravitas',
-  'rail.railLearnBody': 'Cómo funciona el modelo',
-  'rail.railLearnBody.2': 'Recursos para el profesorado',
-  'rail.railLearnBody.3': 'Manual de usuario (PDF)',
-  'rail.objectType': 'Añadir objeto',
   'rail.objectType.choose': 'Añadir objeto',
   'rail.objectType.placing': 'Haz clic para colocar · Esc',
   'rail.objectType.stop': 'Dejar de añadir',
@@ -292,6 +293,8 @@ export const ES = {
     'Arrastrar para retroceder por el historial grabado. La simulación se detiene en el fotograma elegido hasta volver al directo.',
   'transport.timelineLive.hint': 'Volver al directo (L)',
   'transport.timelineBar.label': 'Reproducción y línea de tiempo',
+  'transport.timelinePlay.playLabel': 'Reanudar la simulación',
+  'transport.timelinePlay.playHint': 'Reanudar (espacio)',
   'transport.timelinePlay.label': 'Pausar la simulación',
   'transport.timelineStepBack.label': 'Retroceder un fotograma',
   'transport.timelineStepFwd.label': 'Avanzar un fotograma',
@@ -321,12 +324,13 @@ export const ES = {
   'settings.settingsApply': 'Aplicar y reiniciar',
   'settings.settingsReset': 'Valores por defecto',
   'settings.settingsCancel': 'Cancelar',
-  'settings.demoMode': '🎬 Modo demostración',
+  'settings.demoMode': 'Modo demostración',
+  'settings.demoMode.stop': 'Detener demostración',
   'settings.bhMassesDone': 'Hecho',
   'settings.toggle.on': 'Sí',
+  'settings.bhMass.item': 'Agujero negro n.º {n}:',
   'settings.toggle.off': 'No',
   'settings.info.about': 'Información sobre {label}',
-  'settings.option.presetScenario.none': 'Ninguno',
 
   // --- Settings: sections ----------------------------------------------------
   'settings.section.simulation': 'Simulación',
@@ -353,9 +357,19 @@ export const ES = {
   'settings.section.objects': 'Objetos',
   'settings.section.ui-control': 'Interfaz y control',
   'settings.section.educational': 'Didáctico',
+  'settings.level.label': 'Nivel del curso',
+  'settings.level.introductory': 'Introductorio',
+  'settings.level.majors': 'Especialidad',
+  'settings.level.advanced': 'Avanzado',
+  'settings.section.advanced': 'Avanzado',
+  'settings.section.reset': 'Restablecer',
+  'settings.section.resetNamed':
+    'Devolver los ajustes de {section} a su valor por defecto',
+  'settings.section.resetDone':
+    'Ajustes de {section} devueltos a su valor por defecto; se aplican al pulsar «Aplicar y reiniciar».',
+  'settings.button.indivBhMasses': 'Masas individuales de los agujeros negros',
 
   // --- Settings: labels ------------------------------------------------------
-  'settings.label.presetScenario': 'Escenario predefinido',
   'settings.label.gravitationalConstant': 'Constante gravitatoria',
   'settings.label.mutualGravity': 'Gravedad mutua (todos)',
   'settings.label.simSpeed': 'Velocidad de simulación',
@@ -380,7 +394,7 @@ export const ES = {
 
   'tutorial.welcome.title': 'Bienvenido a Gravitas',
   'tutorial.welcome.body':
-    'Un laboratorio de gravedad y un conjunto de instrumentos para medirla. Los cuerpos que colocas y los escenarios que cargas se integran en tiempo real a partir de la ley de gravitación de Newton: ahí nada va sobre raíles ni está animado de antemano, y si dos estrellas se fusionan es porque sus órbitas las juntaron de verdad. Unas pocas pantallas de las lecciones, en cambio, colocan un cuerpo donde dice un modelo publicado — por ejemplo una estrella recorriendo una traza evolutiva — y lo indican en la propia pantalla.',
+    'Un laboratorio de gravedad y un conjunto de instrumentos para medirla. Los cuerpos que colocas y los escenarios que cargas se integran en tiempo real a partir de la ley de gravitación de Newton: ahí nada va sobre raíles ni está animado de antemano, y si dos estrellas se fusionan es porque sus órbitas las juntaron de verdad. Unas pocas pantallas de las investigaciones, en cambio, colocan un cuerpo donde dice un modelo publicado — por ejemplo una estrella recorriendo una traza evolutiva — y lo indican en la propia pantalla.',
   'tutorial.welcome.tip':
     'Esta visita tiene dieciséis pasos y dura unos tres minutos. Usa ← y → para avanzar, o Escape para salir en cualquier momento.',
 
@@ -422,9 +436,9 @@ export const ES = {
 
   'tutorial.investigations.title': 'Investigaciones guiadas',
   'tutorial.investigations.body':
-    'Doce lecciones estructuradas que usan la simulación como evidencia y no como ilustración. Mides algo, predices qué se sigue y se te dice si la predicción se cumplió. Cubren las leyes de Kepler, las mareas, los agujeros negros, los tránsitos de exoplanetas, el caos, la resonancia orbital y el caso de la materia oscura.',
+    'Investigaciones estructuradas que usan la simulación como evidencia y no como ilustración. Mides algo, predices qué se sigue y se te dice si la predicción se cumplió. Cubren las leyes de Kepler, las mareas, los agujeros negros, los tránsitos de exoplanetas, el caos, la resonancia orbital y el caso de la materia oscura.',
   'tutorial.investigations.tip':
-    'Cada una termina con un informe que puedes exportar en PDF, con tus propias medidas y respuestas. El progreso se guarda si cierras la lección y vuelves.',
+    'Cada una termina con un informe que puedes exportar en PDF, con tus propias medidas y respuestas. El progreso se guarda si cierras la investigación y vuelves.',
 
   'tutorial.measure.title': 'Mídelo tú mismo',
   'tutorial.measure.body':
@@ -442,7 +456,7 @@ export const ES = {
   'tutorial.rotation.body':
     'El panel de curva de rotación representa en vivo la velocidad orbital frente al radio para cada cuerpo, frente a lo que predice la masa visible por sí sola. En los escenarios de galaxia puedes elegir qué ley gobierna las afueras: solo materia visible, materia visible más un halo de materia oscura, o MOND. Son mutuamente excluyentes, y el panel indica qué parámetros se ajustaron y cuáles son fijos.',
   'tutorial.rotation.tip':
-    'Tanto el halo como MOND pueden hacerse coincidir con la misma curva. Ese es el sentido de la comparación, y la lección dice con claridad que ajustar una curva de rotación no establece cuál explicación es correcta.',
+    'Tanto el halo como MOND pueden hacerse coincidir con la misma curva. Ese es el sentido de la comparación, y la investigación dice con claridad que ajustar una curva de rotación no establece cuál explicación es correcta.',
 
   'tutorial.bench.title': 'Compara dos ejecuciones como es debido',
   'tutorial.bench.body':
@@ -470,7 +484,7 @@ export const ES = {
 
   'tutorial.done.title': 'Ya está',
   'tutorial.done.body':
-    'Pulsa <kbd>?</kbd> en cualquier momento para ver la lista completa de atajos de teclado, o vuelve a abrir esta visita desde el botón <strong>?</strong> de la esquina. Nada de lo que hagas aquí puede romper nada: Reiniciar deja el escenario como venía.',
+    'Pulsa <kbd>?</kbd> en cualquier momento para ver la lista completa de atajos de teclado, o vuelve a abrir esta visita desde el botón <strong>?</strong> de la esquina. Nada de lo que hagas aquí puede romper nada: Reiniciar deja el escenario como venía. Si una palabra no te suena, el <a href="/glossary/">glosario</a> define cada término.',
   'tutorial.done.tip':
     'Un buen primer experimento: carga el Sistema Solar, abre la curva de rotación y comprueba que cae exactamente como dice Kepler. Después carga Rotación de la Vía Láctea y comprueba que no.',
   'rotation.mode.label': 'Gravedad en las afueras',
@@ -515,11 +529,9 @@ export const ES = {
   'mond.limitation.external':
     'El efecto de campo externo. En MOND un sistema se ve afectado por el campo gravitatorio en el que esta inmerso incluso cuando ese campo es uniforme, lo que rompe el principio de equivalencia fuerte y dificulta enunciar predicciones aisladas.',
   'settings.label.qualityTier': 'Calidad',
-  'settings.option.qualityTier.auto': 'Automatica',
+  'settings.option.qualityTier.auto': 'Automática',
   'settings.option.qualityTier.full': 'Completa',
   'settings.option.qualityTier.low': 'Baja',
-  'settings.tooltip.qualityTier':
-    'La opcion automatica mide los fotogramas por segundo que esta maquina consigue de verdad y baja al nivel bajo por debajo de unos 32: menos pixeles, menos cuerpos generados y los efectos a pantalla completa desactivados. Los sistemas construidos a mano conservan todos sus cuerpos, porque ahi el numero es la fisica.',
   'settings.filter.label': 'Buscar ajustes',
   'settings.filter.placeholder': 'Buscar ajustes',
   'settings.filter.hint':
@@ -538,8 +550,7 @@ export const ES = {
   'settings.label.numAsteroids': 'Número de asteroides',
   'settings.label.numComets': 'Número de cometas',
   'settings.label.initVelocity': 'Velocidad inicial',
-  'settings.label.velocityStddev': 'Desviación de la velocidad',
-  'settings.label.inputObjectType': 'Tipo de objeto que se inserta',
+  'settings.label.velocityStddev': 'Dispersión de la velocidad',
   'settings.label.showTrails': 'Mostrar trazas',
   'settings.label.trailStyle': 'Estilo de traza',
   'settings.label.trailLength': 'Longitud de la traza',
@@ -548,6 +559,8 @@ export const ES = {
   'settings.label.showPotentialWell': 'Mostrar el pozo de potencial',
   'settings.label.showScaleBar': 'Mostrar la barra de escala',
   'settings.label.showElapsedTime': 'Mostrar el tiempo transcurrido',
+  // No longer in the Settings panel (it drew no glow), but a scenario pack can
+  // still carry it, and the Studio names it by this label.
   'settings.label.showBhGlow': 'Mostrar el halo del agujero negro',
   'settings.label.showAccretionDisk': 'Mostrar el disco de acreción',
   'settings.label.realisticDiskPhysics': 'Física realista del disco',
@@ -555,12 +568,10 @@ export const ES = {
   'settings.label.starDensity': 'Densidad del campo de estrellas',
   'settings.label.showAmbientLighting': 'Iluminación ambiental',
   'settings.label.dynamicObjectProperties': 'Colores dinámicos de los objetos',
-  'settings.label.planetBaseColor': 'Color base de los planetas',
-  'settings.label.starBaseColor': 'Color base de las estrellas',
+  'settings.label.planetBaseColor': 'Color de las trazas de los planetas',
   'settings.label.interactiveAdd': 'Añadir objetos con el ratón',
   'settings.label.followMode': 'Modo de seguimiento',
   'settings.label.showDynamicOverlays': 'Mostrar las capas de datos',
-  'settings.label.recordSimulation': 'Grabar la simulación',
   'settings.label.showGravitationalWaves': 'Mostrar ondas gravitatorias',
   'settings.label.habitableZoneOptimism': 'Modelo de zona habitable',
 
@@ -797,6 +808,11 @@ export const ES = {
   'share.shareReroll': 'Nueva',
   'share.shareContent.4':
     'La semilla decide cada detalle aleatorio de este escenario. Repartiendo la misma semilla, todo el mundo obtiene el mismo sistema para medir.',
+  'share.mine.name': 'Nombre en Mi trabajo',
+  'share.mine.save': 'Guardar en Mi trabajo',
+  'share.mine.saved': 'Guardado en Mi trabajo',
+  'share.mine.failed':
+    'Este navegador no lo guardó. Libera espacio o descarga una copia desde Mi trabajo.',
   'share.link.copied': 'Enlace copiado',
   'share.link.copyFailed': 'Pulsar Ctrl/Cmd + C para copiar el enlace',
   'share.link.failed': 'No se pudo abrir ese enlace.',
@@ -886,204 +902,204 @@ export const ES = {
   // Proper names of missions, instruments and cataloged objects are left as
   // they are: TRAPPIST-1, HD 209458 b and GW150914 are the names a student will
   // meet in every paper and every press release in any language.
-  'scenario.Solar System.title': 'Sistema solar',
-  'scenario.Solar System.summary':
+  'scenario.solar-system.title': 'Sistema solar',
+  'scenario.solar-system.summary':
     'Una simulación de nuestro sistema solar con los planetas reales y sus masas, distancias orbitales, diámetros y colores correctos. Incluye Mercurio, Venus, la Tierra, Marte, Júpiter, Saturno, Urano y Neptuno con sus propiedades reales, además de asteroides auténticos (Ceres, Vesta, Palas) y cometas célebres (Halley, Hale-Bopp, Hyakutake) con sus períodos orbitales y características verdaderas.',
-  'scenario.Retrograde Mars.title':
+  'scenario.retrograde-mars.title':
     'Marte retrógrado: el bucle que exigió epiciclos',
-  'scenario.Retrograde Mars.summary':
+  'scenario.retrograde-mars.summary':
     'El Sol, la Tierra y Marte a sus distancias y períodos reales, y nada más. Vistos desde fuera, ambos planetas giran alrededor del Sol en el mismo sentido y nunca retroceden. Al cambiar el sistema de referencia a la Tierra, en Herramientas, Marte deja de describir un círculo y dibuja un bucle que se repliega sobre sí mismo. La física no cambia; solo el sistema de referencia. Ese bucle es la observación que Ptolomeo reprodujo con epiciclos, y aquí se enciende y se apaga con un control.',
-  'scenario.Earth-Moon System.title': 'Sistema Tierra-Luna',
-  'scenario.Earth-Moon System.summary':
+  'scenario.earth-moon-system.title': 'Sistema Tierra-Luna',
+  'scenario.earth-moon-system.summary':
     'Una simulación detallada del sistema Tierra-Luna con masas precisas, mecánica orbital y aspecto realista. Presenta la Tierra con sus océanos azules y sus continentes verdes, y la Luna con su característica superficie gris y sus cráteres. Ideal para estudiar la dinámica orbital y los efectos de marea.',
-  'scenario.TRAPPIST-1 System.title': 'Sistema TRAPPIST-1',
-  'scenario.TRAPPIST-1 System.summary':
+  'scenario.trappist-1-system.title': 'Sistema TRAPPIST-1',
+  'scenario.trappist-1-system.summary':
     'Un sistema planetario compacto con siete mundos del tamaño de la Tierra alrededor de una enana roja fría situada a solo 40 años luz. Todos los planetas se apiñan cerca de su diminuto sol, y varios caen en la zona habitable. ¿Se puede mantener estable un sistema tan delicado?',
-  'scenario.Three-Body Sensitivity Lab.title':
+  'scenario.three-body-sensitivity-lab.title':
     'Laboratorio de sensibilidad de tres cuerpos: el mismo inicio, dos veces',
-  'scenario.Three-Body Sensitivity Lab.summary':
+  'scenario.three-body-sensitivity-lab.summary':
     'Tres estrellas de seis masas solares en los vértices de un triángulo equilátero, girando rígidamente en torno a su centro común. Es una solución exacta del problema de los tres cuerpos, hallada por Lagrange en 1772, y con masas iguales es inestable: el triángulo aguanta unas vueltas y se deshace. Está hecho para un solo experimento: ejecútalo dos veces desde inicios que difieren en mil quinientos kilómetros, y observa cuánto duran juntas.',
-  'scenario.Galilean Resonance.title':
+  'scenario.galilean-resonance.title':
     'Resonancia galileana: el bloqueo de Laplace',
-  'scenario.Galilean Resonance.summary':
+  'scenario.galilean-resonance.summary':
     'Ío, Europa y Ganímedes en la cadena 4:2:1 que Laplace explicó en 1805, con Calisto fuera como contraste. Los periodos no son exactamente 4:2:1 — Europa tarda un 0,37 % más que dos años de Ío — y ese casi acierto es la cuestión: lo que los une es el argumento de Laplace, que se queda cerca de 180 grados en vez de recorrer todos los valores, así que las tres nunca coinciden en conjunción. Calisto queda a un 0,03 % de 7:3 con Ganímedes y no resuena con nada. Modelo a escala, 100 veces mayor.',
-  'scenario.Broken Laplace Resonance.title':
+  'scenario.broken-laplace-resonance.title':
     'Resonancia de Laplace rota: un uno por ciento fuera',
-  'scenario.Broken Laplace Resonance.summary':
+  'scenario.broken-laplace-resonance.summary':
     'Las mismas cuatro lunas con un solo número cambiado: Europa parte un uno por ciento más lejos de Júpiter. Eso es cien veces más de lo que la resonancia puede sostener, y el bloqueo falla: el argumento de Laplace deja de oscilar en torno a 180 grados y empieza a dar vueltas completas, una cada cuarenta y seis órbitas de Ío. Ejecútalo junto a Resonancia galileana y la diferencia entre un sistema bloqueado y otro que solo tiene periodos convenientes aparece en pantalla en menos de un minuto.',
-  'scenario.Pluto and Neptune.title':
+  'scenario.pluto-and-neptune.title':
     'Plutón y Neptuno: la resonancia 3:2 que protege',
-  'scenario.Pluto and Neptune.summary':
+  'scenario.pluto-and-neptune.summary':
     'La órbita de Plutón cruza la de Neptuno, y jamás se han acercado. La resonancia 3:2 es la razón: Plutón da dos vueltas por cada tres años neptunianos, y el argumento resonante libra en torno a 180 grados en vez de circular, así que toda conjunción ocurre cerca del afelio de Plutón, muy lejos del alcance de Neptuno. Un tercer cuerpo recorre casi la misma órbita desde fuera de la resonancia; observa qué le ocurre. Escala real; un segundo son unos 270 años.',
-  'scenario.Jupiter Trojans.title':
+  'scenario.jupiter-trojans.title':
     'Troyanos de Júpiter: la resonancia coorbital 1:1',
-  'scenario.Jupiter Trojans.summary':
+  'scenario.jupiter-trojans.summary':
     'Dos de los cinco puntos de Lagrange son lugares donde un cuerpo puede quedarse quieto respecto a Júpiter para siempre, y miles de asteroides lo hacen. Una sonda colocada exactamente en L4 no se mueve en el marco rotante de Júpiter; el troyano 617 Patroclo rodea L5 una vez cada doce años y medio jovianos. Una tercera parte a un grado de L3 —equilibrio también, e inestable— y se marcha. La cuarta recorre una órbita corriente más ancha y no resuena con nada.',
-  'scenario.Binary Pair.title':
+  'scenario.binary-pair.title':
     'Par binario: dos estrellas, un punto de equilibrio',
-  'scenario.Binary Pair.summary':
+  'scenario.binary-pair.summary':
     'Dos estrellas de dos masas solares cada una, separadas por cuatro AU, que dan una vuelta a su centro de masas común cada cuatro años. Ninguna está quieta y ninguna orbita a la otra: ambas giran alrededor del mismo punto situado entre ellas. Al observar las trazas, el punto de equilibrio se delata solo.',
-  'scenario.Interstellar Visitor.title': 'Visitante interestelar: 1I/‘Oumuamua',
-  'scenario.Interstellar Visitor.summary':
+  'scenario.interstellar-visitor.title': 'Visitante interestelar: 1I/‘Oumuamua',
+  'scenario.interstellar-visitor.summary':
     'El primer objeto que se vio atravesar el sistema solar procedente de otro lugar, en su órbita medida: perihelio dentro de la de Mercurio, excentricidad 1,20 y 87,7 km/s en la máxima aproximación. La Tierra aparece como referencia de escala. Al seleccionar al visitante, lo que importa es el signo de su energía total: es positiva, y ahí está toda la historia. No está ligado al Sol, nunca iba a quedarse y no volverá.',
-  'scenario.Transit Lab.title': 'Laboratorio de tránsitos: HD 209458 b',
-  'scenario.Transit Lab.summary':
+  'scenario.transit-lab.title': 'Laboratorio de tránsitos: HD 209458 b',
+  'scenario.transit-lab.summary':
     'El primer exoplaneta que se sorprendió cruzando por delante de su estrella, hallado en 1999 después de que las velocidades radiales indicaran dónde mirar. Un júpiter caliente en una órbita de 3,5 días, dibujado aquí a escala relativa real: la estrella mide 1,155 radios solares, el planeta 1,38 radios de Júpiter, y la silueta en pantalla mantiene la misma razón de radios del 12 % que indica la curva de luz. Al abrir el panel de curva de luz se ve repetirse la caída del 1,7 %.',
-  'scenario.Spiral Galaxy.title': 'Galaxia espiral: lo que esperábamos',
-  'scenario.Spiral Galaxy.summary':
+  'scenario.spiral-galaxy.title': 'Galaxia espiral: lo que esperábamos',
+  'scenario.spiral-galaxy.summary':
     'Un bulbo galáctico con noventa estrellas orbitándolo, cada una lanzada exactamente a la velocidad que le corresponde según la masa visible. Esto es la predicción, no la observación: con la masa concentrada en el centro, la velocidad orbital decae como la inversa de la raíz cuadrada del radio, igual que ocurre en el sistema solar. Al abrir el panel de curva de rotación se puede leer la pendiente. Después conviene cargar Rotación de la Vía Láctea y volver a leerla.',
-  'scenario.Milky Way Rotation.title':
+  'scenario.milky-way-rotation.title':
     'Rotación de la Vía Láctea: lo que de verdad vemos',
-  'scenario.Milky Way Rotation.summary':
+  'scenario.milky-way-rotation.summary':
     'El mismo disco, con todas las estrellas moviéndose a la misma velocidad por lejos que estén. Eso es lo que miden los telescopios en las galaxias espirales reales, y es demasiado rápido para que las estrellas visibles puedan retenerlas: este escenario arranca con un halo de materia oscura activado, porque sin él el disco no sobrevive. Al abrir el panel de curva de rotación y desactivar el halo se ve cómo se deshace.',
-  'scenario.Coma Cluster.title': 'Cúmulo de Coma: Zwicky, 1933',
-  'scenario.Coma Cluster.summary':
+  'scenario.coma-cluster.title': 'Cúmulo de Coma: Zwicky, 1933',
+  'scenario.coma-cluster.summary':
     'Veinticuatro galaxias enjambrando en un cúmulo ligado, en órbitas orientadas al azar, con los nombres de los miembros del cúmulo de Coma real que midió Fritz Zwicky. Sumó la luz, sumó los movimientos y encontró que la segunda respuesta era cientos de veces mayor que la primera. Llamó a esa diferencia dunkle Materie y se le ignoró durante cuarenta años. Al seleccionar una galaxia se lee su velocidad, y se puede rehacer el mismo cálculo que hizo él.',
-  'scenario.Exoplanet Characterization Lab.title':
+  'scenario.exoplanet-characterization-lab.title':
     'Laboratorio de caracterización de exoplanetas',
-  'scenario.Exoplanet Characterization Lab.summary':
+  'scenario.exoplanet-characterization-lab.summary':
     'HD 209458 otra vez, pero con la estrella libre de moverse. En el laboratorio de tránsitos está fijada para centrar la curva de luz; aquí ambos cuerpos orbitan su centro de masas común, que es lo que necesitan los instrumentos de velocidad radial y astrometría para medir algo. La estrella rodea un punto a 2,7 millonésimas de AU, a 84 metros por segundo: demasiado poco para verlo y de sobra para detectarlo. Abre Velocidad radial y observa el bamboleo que descubrió el planeta.',
-  'scenario.Blended Binary.title': 'Binaria mezclada: una compañera oculta',
-  'scenario.Blended Binary.summary':
+  'scenario.blended-binary.title': 'Binaria mezclada: una compañera oculta',
+  'scenario.blended-binary.summary':
     'La misma estrella y el mismo planeta que en el laboratorio de tránsitos, con una segunda estrella medio magnitud más débil situada a 300 AU: demasiado cerca en el cielo para que un telescopio de sondeo las separe, y muy dentro de una misma apertura fotométrica. Su luz rellena parte de la caída, así que el tránsito se mide menos profundo y el planeta parece más pequeño. Corregir este efecto es para lo que sirven los sondeos de imagen de alta resolución.',
-  'scenario.Lagrange Point Lab.title':
+  'scenario.lagrange-point-lab.title':
     'Laboratorio de puntos de Lagrange: dos estrellas, una orbita circular, una particula de prueba',
-  'scenario.Lagrange Point Lab.summary':
+  'scenario.lagrange-point-lab.summary':
     'Una estrella de tipo solar y una companera de una treintava parte de su masa, en una orbita exactamente circular de ocho unidades astronomicas, con un trazador tan ligero que ninguna de las dos lo nota. Este es el problema restringido circular de los tres cuerpos: el sistema mas simple con puntos de Lagrange, regiones prohibidas y una constante de Jacobi conservada, y la unica disposicion en la que todo eso es exactamente cierto.',
-  'scenario.Orbital Transfer Lab.title':
+  'scenario.orbital-transfer-lab.title':
     'Laboratorio de transferencia orbital: una estrella, una nave, un destino',
-  'scenario.Orbital Transfer Lab.summary':
+  'scenario.orbital-transfer-lab.summary':
     'Una nave en orbita circular a 1 UA y una estacion en orbita circular a 2,5 UA, alrededor de una unica estrella de tipo solar y sin nada mas en el sistema. Que sean circulares y coplanarias es lo que hace que la transferencia entre ellas tenga solucion exacta, asi que una maniobra calculada a mano se puede comprobar con la aritmetica y no solo mirar.',
-  'scenario.Gravity Assist Lab.title':
+  'scenario.gravity-assist-lab.title':
     'Laboratorio de asistencia gravitatoria: un planeta, una nave y nada más',
-  'scenario.Gravity Assist Lab.summary':
+  'scenario.gravity-assist-lab.summary':
     'Un planeta errante de cinco masas de Júpiter a la deriva por el espacio vacío, y una nave de una masa terrestre que cruza su camino. Sin estrella, y eso es lo importante: sin nada más el planeta se mueve en línea recta y su sistema de referencia es exactamente inercial, así que el hecho más raro de una asistencia gravitatoria puede enunciarse de forma exacta. La nave se marcha a la misma velocidad respecto del planeta con la que llegó, y a otra completamente distinta respecto de todo lo demás.',
-  'scenario.Gravity Assist: Heliocentric.title':
+  'scenario.gravity-assist-heliocentric.title':
     'Asistencia gravitatoria: el mismo sobrevuelo, con un Sol al que robarle',
-  'scenario.Gravity Assist: Heliocentric.summary':
+  'scenario.gravity-assist-heliocentric.summary':
     'El mismo planeta, ahora en órbita circular a cinco AU de una estrella, y una nave que se encuentra con él. De aquí sale la energía: la nave se marcha más rápido alrededor de la estrella de lo que llegó, y el planeta se frena exactamente en el momento lineal que ella ganó. Aquí todo es aproximado -el planeta acelera, así que su sistema no es inercial y el encuentro solo es localmente de dos cuerpos- y el panel informa de cuánto lo es en vez de ocultarlo.',
-  'scenario.Binary Planet Lab.title':
+  'scenario.binary-planet-lab.title':
     'Laboratorio de planeta en binaria: un planeta alrededor de una de las estrellas',
-  'scenario.Binary Planet Lab.summary':
+  'scenario.binary-planet-lab.summary':
     'Dos estrellas de una y media masa solar, separadas diez AU en una órbita de excentricidad 0,4, y un planeta de una masa terrestre girando alrededor de la más pesada a 1,5 AU. Nada aquí es aleatorio: cada masa, distancia y ángulo inicial está escrito, así que dos ejecuciones solo difieren donde tú las hagas diferir. Aleja el planeta y hay una distancia a partir de la cual deja de volver. Averiguar dónde, y cuánto de esa respuesta es física y no paso de integración, es el experimento.',
-  'scenario.Circumbinary Planet Lab.title':
+  'scenario.circumbinary-planet-lab.title':
     'Laboratorio circumbinario: un planeta alrededor de las dos estrellas',
-  'scenario.Circumbinary Planet Lab.summary':
+  'scenario.circumbinary-planet-lab.summary':
     'Las mismas dos estrellas, con el planeta fuera de ambas a 40 AU, orbitando al par como si fuera un solo objeto. Hay planetas reales que lo hacen -Kepler-16b es el famoso- pero solo lo bastante lejos como para que las dos estrellas empiecen a parecer una. Acércalo y la aproximación falla: el tirón cambiante de una binaria que aún distingue empuja su órbita hacia fuera durante decenas de periodos binarios hasta que se marcha. Aquí la frontera es un suelo, no un techo.',
-  'scenario.Black Hole Lab.title':
+  'scenario.black-hole-lab.title':
     'Laboratorio de agujeros negros: diez masas solares y cuatro cuerpos alrededor',
-  'scenario.Black Hole Lab.summary':
+  'scenario.black-hole-lab.summary':
     'Un único agujero negro de masa estelar con cuatro cuerpos en órbitas circulares estables a su alrededor. Nada está cayendo dentro. La gravedad lejos de un agujero negro es la de cualquier otro sitio, y un objeto con movimiento transversal lo rodea igual que rodearía a una estrella de la misma masa. Al seleccionar el agujero negro se leen su radio de Schwarzschild, su densidad media a esa escala, su temperatura de Hawking y cuánto le queda de vida.',
-  'scenario.Habitable Zone Lab.title':
+  'scenario.habitable-zone-lab.title':
     'Laboratorio de zona habitable: el sistema solar interior, con la zona dibujada',
-  'scenario.Habitable Zone Lab.summary':
+  'scenario.habitable-zone-lab.summary':
     'El Sol con Venus, la Tierra, Marte y Ceres en sus órbitas reales, y la zona habitable circunestelar dibujada alrededor de la estrella según una prescripción publicada. Venus queda dentro del borde interior y Marte fuera del exterior en la definición conservadora, y solo uno de los cuatro tiene hoy agua líquida en su superficie. Cambiando el ajuste Modelo de zona habitable se ve la franja optimista, que llega más allá de Marte.',
-  "scenario.Kepler's 2nd Law.title": 'Segunda ley de Kepler: áreas iguales',
-  "scenario.Kepler's 2nd Law.summary":
+  'scenario.keplers-2nd-law.title': 'Segunda ley de Kepler: áreas iguales',
+  'scenario.keplers-2nd-law.summary':
     'Un planeta en órbita casi circular y otro en órbita excéntrica alrededor de una estrella central. La visualización del barrido de áreas se activa automáticamente para el cuerpo excéntrico: conviene observar cómo las cuñas cambian de forma pero conservan la misma área, lo que explica por qué los objetos se mueven más deprisa en el periastro que en el apoastro.',
-  'scenario.GW150914.title':
+  'scenario.gw150914.title':
     'GW150914: la primera fusión detectada en ondas gravitatorias',
-  'scenario.GW150914.summary':
+  'scenario.gw150914.summary':
     'Simula la histórica fusión de dos agujeros negros masivos (36 y 29 M☉) detectada por LIGO en 2015. Se los ve caer en espiral el uno hacia el otro, emitir ondas gravitatorias y fundirse en un único agujero negro más masivo.',
 
-  'scenario.Binary BH.title': 'Agujeros negros binarios',
-  'scenario.Binary BH.summary':
+  'scenario.binary-bh.title': 'Agujeros negros binarios',
+  'scenario.binary-bh.summary':
     'Dos agujeros negros de masa estelar (15 y 10 M☉) trabados en órbita mutua, con espectaculares chorros relativistas. Se los ve caer en espiral, generar ondas gravitatorias y acabar fundiéndose en un único agujero negro más masivo. Los chorros apuntan en direcciones aleatorias para cada uno, lo que produce un espectáculo cósmico en constante cambio.',
-  'scenario.Triple BH System.title': 'Agujero negro triple',
-  'scenario.Triple BH System.summary':
+  'scenario.triple-bh-system.title': 'Agujero negro triple',
+  'scenario.triple-bh-system.summary':
     'Una danza caótica de tres cuerpos entre agujeros negros masivos (20, 15 y 10 M☉) en una disposición orbital compleja. Esta configuración inestable acabará expulsando a uno de ellos mientras los otros dos se fusionan. Ilustra la naturaleza caótica de los sistemas gravitatorios de muchos cuerpos.',
-  'scenario.Supermassive BH.title': 'Núcleo supermasivo',
-  'scenario.Supermassive BH.summary':
+  'scenario.supermassive-bh.title': 'Núcleo supermasivo',
+  'scenario.supermassive-bh.summary':
     'Un enorme agujero negro (80 M☉) domina un denso enjambre estelar con 50 planetas, 5 gigantes gaseosos y 100 asteroides. El intenso campo gravitatorio produce espectaculares discos de acreción y sucesos de disrupción por marea. Parecido al entorno que rodea a los agujeros negros supermasivos reales en los centros galácticos.',
-  'scenario.Star Cluster.title': 'Cúmulo estelar denso',
-  'scenario.Star Cluster.summary':
+  'scenario.star-cluster.title': 'Cúmulo estelar denso',
+  'scenario.star-cluster.summary':
     'Un conjunto ligado gravitatoriamente de estrellas de la secuencia principal, gigantes evolucionadas y remanentes estelares que interaccionan entre sí. Se pueden observar encuentros estelares, formación de binarias y la evolución dinámica de esta comunidad estelar con el tiempo.',
-  'scenario.Kuiper Belt.title': 'Cinturón de Kuiper',
-  'scenario.Kuiper Belt.summary':
+  'scenario.kuiper-belt.title': 'Cinturón de Kuiper',
+  'scenario.kuiper-belt.summary':
     'Una simulación fiel del cinturón de Kuiper de nuestro sistema solar, con planetas enanos reales (Plutón, Eris, Haumea, Makemake), grandes objetos transneptunianos (Quaoar, Sedna, Orcus, Varuna) y cuerpos menores (Ixión, Huya, 2002 AW197), todos con masas y propiedades orbitales realistas.',
-  'scenario.Sagittarius A*.title': 'Sagitario A*',
-  'scenario.Sagittarius A*.summary':
+  'scenario.sagittarius-a.title': 'Sagitario A*',
+  'scenario.sagittarius-a.summary':
     'El agujero negro supermasivo central de la Vía Láctea (4000 M☉, reducido para la simulación) con estrellas S de movimiento rápido, objetos compactos y restos en órbitas extremas. Permite presenciar las increíbles fuerzas gravitatorias y los efectos relativistas cerca del agujero negro supermasivo de nuestra galaxia.',
-  'scenario.Binary Star System.title': 'Estrellas binarias',
-  'scenario.Binary Star System.summary':
+  'scenario.binary-star-system.title': 'Estrellas binarias',
+  'scenario.binary-star-system.summary':
     'Un par de soles en órbita mutua con 5 planetas orbitando el sistema binario. El complejo entorno gravitatorio da lugar a una dinámica orbital interesante y a posibles zonas habitables. Parecido a sistemas binarios reales como Alfa Centauri.',
-  'scenario.Slingshot.title': 'Asistencia gravitatoria',
-  'scenario.Slingshot.summary':
+  'scenario.slingshot.title': 'Asistencia gravitatoria',
+  'scenario.slingshot.summary':
     'Un agujero negro masivo (60 M☉) acompañado de una compañera menor (3 M☉) produce espectaculares asistencias gravitatorias a los planetas y gigantes gaseosos cercanos. Los objetos ganan una velocidad enorme en los encuentros próximos, igual que las sondas espaciales en sus maniobras de asistencia.',
-  'scenario.Rogue Encounter.title': 'Encuentro con un intruso',
-  'scenario.Rogue Encounter.summary':
+  'scenario.rogue-encounter.title': 'Encuentro con un intruso',
+  'scenario.rogue-encounter.summary':
     'Un agujero negro errante (30 M☉) atraviesa un sistema planetario estable con 12 planetas, 4 gigantes gaseosos y asteroides. Se observa la drástica alteración de las órbitas, la expulsión de planetas y las capturas por marea mientras el intruso siembra el caos.',
-  'scenario.Neutron Star Collision.title': 'Fusión de estrellas de neutrones',
-  'scenario.Neutron Star Collision.summary':
+  'scenario.neutron-star-collision.title': 'Fusión de estrellas de neutrones',
+  'scenario.neutron-star-collision.summary':
     'Dos estrellas de neutrones (1,4 M☉ cada una) caen en espiral la una hacia la otra en una danza mortal. Este suceso poco frecuente produce ondas gravitatorias, estallidos de rayos gamma y elementos pesados mediante nucleosíntesis por proceso r. Inspirado en el suceso GW170817 detectado por LIGO.',
-  'scenario.Pulsar System.title': 'Púlsar con planetas',
-  'scenario.Pulsar System.summary':
+  'scenario.pulsar-system.title': 'Púlsar con planetas',
+  'scenario.pulsar-system.summary':
     'Una estrella de neutrones en rotación rápida con 3 planetas en órbitas cerradas. El intenso campo magnético y la radiación del púlsar crean un entorno hostil. Inspirado en los primeros exoplanetas confirmados, descubiertos alrededor de PSR B1257+12.',
-  'scenario.White Dwarf Binary.title': 'Binaria de enanas blancas',
-  'scenario.White Dwarf Binary.summary':
+  'scenario.white-dwarf-binary.title': 'Binaria de enanas blancas',
+  'scenario.white-dwarf-binary.summary':
     'Dos enanas blancas en un sistema binario cerrado con acreción entre ellas. Una va robando material a su compañera, lo que puede acabar en una supernova de tipo Ia. Incluye disco de restos y remanentes estelares.',
-  'scenario.Stellar Graveyard.title': 'Cementerio estelar',
-  'scenario.Stellar Graveyard.summary':
+  'scenario.stellar-graveyard.title': 'Cementerio estelar',
+  'scenario.stellar-graveyard.summary':
     'Un conjunto dinámico de remanentes estelares: 3 agujeros negros, 5 estrellas de neutrones y 8 enanas blancas con planetas supervivientes y extensos campos de restos. Estos cadáveres estelares interaccionan en su última danza gravitatoria.',
-  'scenario.Galactic Center.title': 'Centro galáctico',
-  'scenario.Galactic Center.summary':
+  'scenario.galactic-center.title': 'Centro galáctico',
+  'scenario.galactic-center.summary':
     'Un agujero negro supermasivo (4000 M☉) rodeado de estrellas de alta velocidad, remanentes estelares y densas poblaciones estelares. Permite experimentar un entorno gravitatorio extremo con acreción espectacular, chorros y efectos relativistas.',
-  'scenario.Supernova Remnant.title': 'Remanente de supernova',
-  'scenario.Supernova Remnant.summary':
+  'scenario.supernova-remnant.title': 'Remanente de supernova',
+  'scenario.supernova-remnant.summary':
     'Las consecuencias explosivas de la muerte de una estrella masiva: una estrella de neutrones rodeada de restos a gran velocidad, planetas golpeados por la onda de choque y gigantes gaseosos desbaratados. Permite experimentar el entorno violento y energético que deja tras de sí la muerte estelar.',
-  'scenario.Compact Object Zoo.title': 'Zoo de objetos compactos',
-  'scenario.Compact Object Zoo.summary':
+  'scenario.compact-object-zoo.title': 'Zoo de objetos compactos',
+  'scenario.compact-object-zoo.summary':
     'Una colección variada de objetos compactos: varios agujeros negros, estrellas de neutrones y enanas blancas de distintas masas interaccionando en un entorno denso. Ideal para estudiar los distintos finales estelares y sus interacciones.',
-  'scenario.Millisecond Pulsar.title': 'Púlsar de milisegundos',
-  'scenario.Millisecond Pulsar.summary':
+  'scenario.millisecond-pulsar.title': 'Púlsar de milisegundos',
+  'scenario.millisecond-pulsar.summary':
     'Una estrella de neutrones de rotación extremadamente rápida (púlsar reciclado) con una compañera enana blanca y restos planetarios. Estos púlsares «reciclados» son acelerados por la acreción y figuran entre los relojes más precisos del universo.',
-  'scenario.Tidal Disruption Event.title': 'Disrupción por marea',
-  'scenario.Tidal Disruption Event.summary':
+  'scenario.tidal-disruption-event.title': 'Disrupción por marea',
+  'scenario.tidal-disruption-event.summary':
     'Varios objetos se acercan a un agujero negro supermasivo (2000 M☉) y son desgarrados por fuerzas de marea extremas. Se ve cómo planetas y gigantes gaseosos son estirados, desbaratados y finalmente expulsados o acretados, formando espectaculares corrientes de restos.',
 
-  'scenario.Intermediate Mass BH.title': 'Agujero negro de masa intermedia',
-  'scenario.Intermediate Mass BH.summary':
+  'scenario.intermediate-mass-bh.title': 'Agujero negro de masa intermedia',
+  'scenario.intermediate-mass-bh.summary':
     'Un raro agujero negro de masa intermedia (400 M☉) en el entorno de un cúmulo globular con poblaciones estelares densas. Estos objetos esquivos cubren el hueco entre los agujeros negros de masa estelar y los supermasivos.',
-  'scenario.Galactic Collision.title': 'Colisión galáctica',
-  'scenario.Galactic Collision.summary':
+  'scenario.galactic-collision.title': 'Colisión galáctica',
+  'scenario.galactic-collision.summary':
     'Dos agujeros negros supermasivos (1,2 y 1,0 millones de M☉) con centenares de estrellas que representan núcleos galácticos en colisión. Permite presenciar la formación de corrientes de marea, la disrupción estelar y la fusión final de los dos agujeros negros supermasivos.',
-  'scenario.Micro BH Swarm.title': 'Enjambre de microagujeros negros',
-  'scenario.Micro BH Swarm.summary':
+  'scenario.micro-bh-swarm.title': 'Enjambre de microagujeros negros',
+  'scenario.micro-bh-swarm.summary':
     'Un enjambre dinámico de pequeños agujeros negros (0,6 a 1,8 M☉) con planetas y gigantes gaseosos en una danza orbital caótica. Estos agujeros negros de masa estelar interaccionan, se fusionan y generan resonancias gravitatorias complejas.',
-  'scenario.Exoplanet Lab.title': 'Laboratorio de exoplanetas',
-  'scenario.Exoplanet Lab.summary':
+  'scenario.exoplanet-lab.title': 'Laboratorio de exoplanetas',
+  'scenario.exoplanet-lab.summary':
     'Una colección variada de más de 120 exoplanetas, gigantes gaseosos e incluso planetas de púlsar alrededor de estrellas anfitrionas muy distintas. Permite explorar la increíble diversidad de los sistemas planetarios con mecánica orbital e interacciones planetarias interactivas.',
-  'scenario.Quasar Cannon.title': 'Cañón de cuásar',
-  'scenario.Quasar Cannon.summary':
+  'scenario.quasar-cannon.title': 'Cañón de cuásar',
+  'scenario.quasar-cannon.summary':
     'Un agujero negro supermasivo se alimenta activamente de un cúmulo estelar denso. Se ve formarse un haz de luz a medida que las estrellas caen en espiral hacia el interior.',
-  'scenario.The Pinwheel Galaxy Core.title':
+  'scenario.the-pinwheel-galaxy-core.title':
     'Núcleo de la galaxia del Molinete',
-  'scenario.The Pinwheel Galaxy Core.summary':
+  'scenario.the-pinwheel-galaxy-core.summary':
     'Dos agujeros negros intermedios en el centro de un disco estelar. El disco forma un molinete giratorio a medida que las estrellas son lanzadas a su alrededor.',
-  'scenario.Star Frisbee.title': 'Disco estelar volador',
-  'scenario.Star Frisbee.summary':
+  'scenario.star-frisbee.title': 'Disco estelar volador',
+  'scenario.star-frisbee.summary':
     'Un disco estelar denso lanzado junto a un agujero negro errante. ¿Quedará hecho jirones o sobrevivirá al paso?',
-  'scenario.Kessler Cascade.title': 'Cascada de Kessler',
-  'scenario.Kessler Cascade.summary':
+  'scenario.kessler-cascade.title': 'Cascada de Kessler',
+  'scenario.kessler-cascade.summary':
     'Centenares de microestrellas orbitando caóticamente, chocando y saliendo despedidas como una nube de restos.',
-  'scenario.Alien Dyson Swarm Collapse.title':
+  'scenario.alien-dyson-swarm-collapse.title':
     'Colapso de un enjambre de Dyson alienígena',
-  'scenario.Alien Dyson Swarm Collapse.summary':
+  'scenario.alien-dyson-swarm-collapse.summary':
     'Un hipotético enjambre de Dyson de satélites artificiales cae hacia un agujero negro tras un fallo orbital catastrófico.',
-  'scenario.Tidal Arm Tango.title': 'Tango de brazos de marea',
-  'scenario.Tidal Arm Tango.summary':
+  'scenario.tidal-arm-tango.title': 'Tango de brazos de marea',
+  'scenario.tidal-arm-tango.summary':
     'Dos agujeros negros bailan al pasar uno junto al otro y lanzan estrellas formando enormes brazos de marea, como galaxias en colisión.',
-  'scenario.Hungry Hungry Holes.title': 'Agujeros hambrientos',
-  'scenario.Hungry Hungry Holes.summary':
+  'scenario.hungry-hungry-holes.title': 'Agujeros hambrientos',
+  'scenario.hungry-hungry-holes.summary':
     'Cuatro agujeros negros en los vértices de un cuadrado, tirando de las estrellas de un cúmulo central compartido.',
-  'scenario.Slingshot Gauntlet.title': 'Circuito de asistencias gravitatorias',
-  'scenario.Slingshot Gauntlet.summary':
+  'scenario.slingshot-gauntlet.title': 'Circuito de asistencias gravitatorias',
+  'scenario.slingshot-gauntlet.summary':
     'Una estrella veloz disparada a través de una carrera de obstáculos de agujeros negros. Para observar asistencias gravitatorias.',
-  'scenario.Black Hole Billiards.title': 'Billar de agujeros negros',
-  'scenario.Black Hole Billiards.summary':
+  'scenario.black-hole-billiards.title': 'Billar de agujeros negros',
+  'scenario.black-hole-billiards.summary':
     'Unos cuantos agujeros negros pequeños orbitando uno supermasivo, perturbándose entre sí y generando un movimiento caótico.',
-  'scenario.Stellar Nursery.title': 'Guardería estelar',
-  'scenario.Stellar Nursery.summary':
+  'scenario.stellar-nursery.title': 'Guardería estelar',
+  'scenario.stellar-nursery.summary':
     'Un cúmulo denso de estrellas jóvenes alrededor de un protoagujero negro. Permite observar interacciones y expulsiones a medida que el cúmulo evoluciona.',
 
   // --- Readout header, rail sub-headings ------------------------------------
@@ -1321,8 +1337,6 @@ export const ES = {
   'summary.announce.scenario': '{name} cargado.',
   'summary.announce.selected': '{name} seleccionado.',
   'view3d.close.label': 'Cerrar la vista del espacio-tiempo',
-  'view3d.loadFailed':
-    'No se pudo cargar la vista del espacio-tiempo. Comprueba tu conexión.',
   'tutorial.welcome': 'Bienvenido a Gravitas',
   'tutorial.place': 'Coloca un objeto arrastrando',
   'tutorial.choose': 'Elige qué estás colocando',
@@ -1337,26 +1351,6 @@ export const ES = {
   // --- Lesson instruments ----------------------------------------------------
   // Los rótulos, títulos de ejes y nombres de ajustes de los instrumentos
   // incrustados en las lecciones.
-  'bhP.manhattanEndToEnd': 'Manhattan, de punta a punta',
-  'bhP.earthSRadius': 'el radio de la Tierra',
-  'bhP.theSunSRadius': 'el radio del Sol',
-  'bhP.mercurySOrbit': 'la órbita de Mercurio',
-  'bhP.airAtSeaLevel': 'Aire a nivel del mar',
-  'bhP.water': 'Agua',
-  'bhP.theSunOnAverage': 'El Sol, en promedio',
-  'bhP.rock': 'Roca',
-  'bhP.lead': 'Plomo',
-  'bhP.aWhiteDwarf': 'Una enana blanca',
-  'bhP.anAtomicNucleus': 'Un núcleo atómico',
-  'bhP.theSurfaceOfTheSun': 'La superficie del Sol',
-  'bhP.roomTemperature': 'Temperatura ambiente',
-  'bhP.liquidNitrogen': 'Nitrógeno líquido',
-  'bhP.theMicrowaveBackground': 'El fondo de microondas',
-  'bhP.theColdestLabExperiment': 'El experimento de laboratorio más frío',
-  'bhP.aHumanLifetime': 'Una vida humana',
-  'bhP.sinceTheDinosaurs': 'Desde los dinosaurios',
-  'bhP.ageOfTheUniverse': 'Edad del universo',
-  'bhP.theLastStarBurnsOut': 'Se apaga la última estrella',
   // --- ¿Puedes detectar este planeta? ----------------------------------------
   // --- El presupuesto de ruido de un tránsito ----------------------------------
   'energyChart.kineticEnergy': 'Energía cinética',
@@ -1368,10 +1362,11 @@ export const ES = {
   // --- Lesson panel chrome ---------------------------------------------------
   'inv.action.restart': 'Reiniciar',
   'inv.action.restart.hint':
-    'Borrar todas las respuestas y volver a empezar esta lección',
+    'Borrar todas las respuestas y volver a empezar esta investigación',
   'inv.action.back': 'Atrás',
   'inv.action.back.hint': 'Paso anterior (Mayús + flecha izquierda)',
-  'inv.body.label': 'Paso de la lección',
+  'inv.body.label': 'Paso de la investigación',
+  'inv.backup.summary': 'Copia del progreso',
   'inv.backup.download': 'Descargar copia del progreso',
   'inv.backup.download.hint':
     'Guarda una copia de tus respuestas en un archivo tuyo. El informe PDF sigue siendo lo que se entrega.',
@@ -1426,7 +1421,7 @@ export const ES = {
   'update.ready': 'Hay una versión nueva',
   'update.apply': 'Recargar',
   'update.apply.hint':
-    'Recarga para terminar de actualizar. Se conserva tu punto en la lección.',
+    'Recarga para terminar de actualizar. Se conserva tu punto en la investigación.',
   'update.dismiss.label': 'Ahora no',
   'update.dismiss.hint': 'Mantener la versión actual por ahora',
 };

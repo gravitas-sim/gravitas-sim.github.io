@@ -63,6 +63,11 @@ const BLACK_HOLES = {
   subtitle: 'Make a black hole bigger and discover some surprising rules',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 24, section: '24.5' },
+  courseLevel: 'survey',
+  mathematics: 'algebra',
+  prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
@@ -71,8 +76,6 @@ const BLACK_HOLES = {
   // the object card already computes, and letting a student check the lesson
   // against the simulation is the point rather than a distraction.
   lock: { placement: true, inspector: false, areaSweep: false },
-  summary:
-    'Change one thing about a black hole, its mass, and watch four completely different properties respond. Its event horizon grows in step with the mass. Its average density falls. It gets colder. It lives dramatically longer. Two of those four surprise almost everybody, and you will predict them before you measure them.',
   objectives: [
     'Say what the event horizon of a black hole is, and what it is not',
     'Describe how the Schwarzschild radius changes when the mass changes',
@@ -101,7 +104,7 @@ const BLACK_HOLES = {
              into a small enough space that gravity wins.
              \n\nThis investigation is about one question: what changes when you
              make that mass bigger?`,
-      tip: 'Click the black hole to open its information card. Everything this lesson calculates is on that card too, worked out by the simulation from the same formulas.',
+      tip: 'Click the black hole to open its information card. Everything this investigation calculates is on that card too, worked out by the simulation from the same formulas.',
     },
     {
       sid: 'what-could-size-even-mean',
@@ -181,7 +184,7 @@ const BLACK_HOLES = {
         title: 'A ten solar mass black hole',
         note: 'The blue line is the Schwarzschild radius: from the middle out to the event horizon.',
       }),
-      tip: 'Every black hole in this lesson is treated as a simple one: not spinning and not electrically charged. Real black holes generally do spin, which changes the shape of the horizon, but not the trends you are about to find.',
+      tip: 'Every black hole in this investigation is treated as a simple one: not spinning and not electrically charged. Real black holes generally do spin, which changes the shape of the horizon, but not the trends you are about to find.',
     },
     {
       sid: 'thirty-kilometers-is-not-very',
@@ -445,7 +448,7 @@ const BLACK_HOLES = {
       ],
       answer: 1,
       because:
-        'Exactly the speed of light. And look at the number: 2.95 kilometers is the Schwarzschild radius of one solar mass, the same number you have been using all lesson. Squeeze any mass down to its own Schwarzschild radius and this calculation says light needs the speed of light to get away, which means it cannot.',
+        'Exactly the speed of light. And look at the number: 2.95 kilometers is the Schwarzschild radius of one solar mass, the same number you have been using all investigation. Squeeze any mass down to its own Schwarzschild radius and this calculation says light needs the speed of light to get away, which means it cannot.',
       tool: {
         id: 'bh-escape',
         // The control's own minimum, and its "3 km" preset: log10 of the
@@ -479,7 +482,7 @@ const BLACK_HOLES = {
              far that every direction leading away from the hole has stopped
              existing. Light does not fail to escape. There is no longer
              anywhere for it to escape to.
-             \n\nThat is as far as this lesson goes into it, and it is enough.
+             \n\nThat is as far as this investigation goes into it, and it is enough.
              \n\nThe canvas has changed to make one part of that concrete.
              There are now two systems on it, side by side: a black hole of
              eight solar masses on the left, and an ordinary star of eight solar
@@ -609,6 +612,15 @@ const BLACK_HOLES = {
       },
     },
     {
+      hints: [
+        'Volume grows with the cube of the radius.',
+        'If the radius gains some zeros, the volume gains three times as many.',
+      ],
+      feedback: {
+        close:
+          'Close. Volume goes as the cube of the radius, so cubing multiplies the zeros.',
+        off: 'Think of the radius and the volume: how does one number of zeros turn into the other when you cube?',
+      },
       sid: 'where-the-room-comes-from',
       stage: HOLE,
       // "That is the rule you measured earlier" - the radius-mass rule from
@@ -675,7 +687,7 @@ const BLACK_HOLES = {
       body: `Keep this modest, because the honest version is quite technical.
              \n\nQuantum effects near a black hole cause it to behave as though
              it has a temperature and to emit a very faint radiation. That is
-             the claim, and it is enough for this lesson.
+             the claim, and it is enough for this investigation.
              \n\nYou may have heard a story about pairs of particles popping
              into existence at the horizon, one falling in and one escaping. It
              is a picture Hawking himself used, and it is a good deal less
@@ -994,7 +1006,7 @@ const BLACK_HOLES = {
         title: 'Sagittarius A*',
         note: 'The dashed circle is the orbit of Mercury, drawn at the same scale as the horizon.',
       },
-      tip: 'The simplest black hole of all, and the one this lesson has used throughout, is a Schwarzschild black hole: not spinning, not charged. Real ones spin, sometimes very fast, and a spinning black hole is described by the Kerr solution instead. The horizon changes shape and size; every trend you found here survives.',
+      tip: 'The simplest black hole of all, and the one this investigation has used throughout, is a Schwarzschild black hole: not spinning, not charged. Real ones spin, sometimes very fast, and a spinning black hole is described by the Kerr solution instead. The horizon changes shape and size; every trend you found here survives.',
     },
   ],
 };

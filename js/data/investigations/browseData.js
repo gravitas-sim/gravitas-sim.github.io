@@ -100,4 +100,156 @@ export const BROWSE_META = {
     tags: ['stars', 'stellar-evolution'],
     numericCount: 0,
   },
+  'twelve-nights': {
+    tags: ['exoplanets', 'observing'],
+    numericCount: 0,
+  },
+  'power-law-gravity': {
+    tags: ['gravity', 'orbits'],
+    numericCount: 1,
+  },
+  'color-and-temperature': {
+    tags: ['observing', 'stars'],
+    numericCount: 3,
+  },
+  'the-turning-sky': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 2,
+  },
+  'the-sun-through-the-year': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 2,
+  },
+  'phases-and-eclipses': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 2,
+  },
+  'wanderers-on-the-sky': {
+    tags: ['observing', 'solar-system'],
+    numericCount: 2,
+  },
+  'plan-a-night': {
+    tags: ['observing', 'stars'],
+    numericCount: 3,
+  },
+  'lines-and-motion': {
+    tags: ['observing', 'stars'],
+    numericCount: 1,
+  },
+  'what-a-spectrum-is-made-of': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  'the-suns-motion': {
+    tags: ['galaxies', 'observing', 'stars'],
+    numericCount: 0,
+  },
+  'the-rotating-disk': {
+    tags: ['galaxies', 'observing'],
+    numericCount: 0,
+  },
+  'cluster-membership': {
+    tags: ['galaxies', 'observing', 'stars'],
+    numericCount: 0,
+  },
+  'inside-a-star': {
+    tags: ['stars', 'stellar-evolution'],
+    numericCount: 0,
+  },
+  'scaling-the-main-sequence': {
+    tags: ['stars', 'stellar-evolution'],
+    numericCount: 0,
+  },
+  'the-limit': {
+    tags: ['compact-objects', 'stars'],
+    numericCount: 0,
+  },
+  'the-expanding-universe': {
+    tags: ['galaxies', 'observing'],
+    numericCount: 0,
+  },
+  'standard-candles': {
+    tags: ['galaxies', 'observing', 'stars'],
+    numericCount: 0,
+  },
+  'the-shape-of-expansion': {
+    tags: ['galaxies', 'observing'],
+    numericCount: 0,
+  },
+  'where-galaxies-live': {
+    tags: ['galaxies', 'observing'],
+    numericCount: 0,
+  },
+  'what-a-ccd-records': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'signal-noise-and-exposure': {
+    tags: ['observing'],
+    numericCount: 0,
+  },
+  'a-variable-star-from-frames': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  'the-beat-of-a-star': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  'leavitts-law': {
+    tags: ['galaxies', 'observing', 'stars'],
+    numericCount: 0,
+  },
+  'the-first-rung': {
+    tags: ['galaxies', 'observing', 'stars'],
+    numericCount: 0,
+  },
+  'which-kind-of-variable': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  'bending-light': {
+    tags: ['gravity', 'observing'],
+    numericCount: 0,
+  },
+  'einstein-rings-and-arcs': {
+    tags: ['galaxies', 'gravity'],
+    numericCount: 0,
+  },
+  'a-lens-passing-by': {
+    tags: ['gravity', 'observing', 'stars'],
+    numericCount: 0,
+  },
+  'who-gets-counted': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  'why-the-bright-ones-win': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  'the-completeness-curve': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
+  'integrators-in-practice': {
+    tags: ['orbits'],
+    numericCount: 0,
+  },
+  'extending-an-experiment': {
+    tags: ['exoplanets'],
+    numericCount: 0,
+  },
+  'refitting-a-transit': {
+    tags: ['exoplanets'],
+    numericCount: 0,
+  },
+  'two-periodograms': {
+    tags: ['exoplanets'],
+    numericCount: 0,
+  },
+  'sampling-a-posterior': {
+    tags: ['exoplanets'],
+    numericCount: 0,
+  },
 };

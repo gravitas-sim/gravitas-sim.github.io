@@ -31,11 +31,19 @@ import { checkAnswer, toleranceFor } from '../answerCheck.js';
 import { verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
 import { parseNumber } from '../answerParse.js';
-import { STANDARD_MISCONCEPTIONS } from '../answerFeedback.js';
+import {
+  FEEDBACK_CLASSES,
+  HINT_LIMIT,
+  STANDARD_MISCONCEPTIONS,
+} from '../answerFeedback.js';
 import {
   mergeTranslation,
   translationCoverage,
 } from '../data/investigations/i18n.js';
+
+// A number as a student gives it: with an uncertainty if the step asks for one.
+const asGiven = (step, n, u = toleranceFor(step) / 2) =>
+  step.uncertainty ? `${n} ± ${u}` : n;
 
 /**
  * Step types the engine knows how to render.
@@ -82,7 +90,6 @@ const MANIFEST_MIRRORED = [
   'subtitle',
   'duration',
   'level',
-  'summary',
   'thumbnail',
 ];
 
@@ -90,7 +97,8 @@ const MANIFEST_MIRRORED = [
 export const RULE_INDEX = {
   'id/lesson': 'Lesson ids exist, are kebab-case, and are unique',
   'id/file': 'A lesson lives in a file named after its id',
-  'id/step': 'Every step has a stable sid, unique within the lesson',
+  'id/step':
+    'Every step has a stable sid of lowercase letters, digits and hyphens, unique within the lesson',
   'id/field': 'Response field ids are unique within a step and usable as keys',
   'content/lesson': 'Title, subtitle, duration, level, summary and thumbnail',
   'content/objectives': 'Objectives exist and say something',
@@ -101,6 +109,11 @@ export const RULE_INDEX = {
   'content/placeholder': 'A placeholder does not give away the expected value',
   'content/hints':
     'Staged hints are ordered and the reveal has something to reveal',
+  'content/hint-leak':
+    'A hint, feedback text or named mistake does not contain the expected value',
+  'content/feedback':
+    'Feedback is by outcome class, on a numeric step, and says something',
+  'content/reflect': 'A reflection asks, and is never marked',
   'ref/scenario': 'setup.scenario names a scenario in the catalog',
   'ref/widget': 'tool.id names a registered widget',
   'ref/control': 'tool.values and tool.hide name controls the widget has',
@@ -121,14 +134,17 @@ export const RULE_INDEX = {
   'interaction/validate': "A validator accepts the author's own hint values",
   'interaction/compute': 'A computed field survives the hint values',
   'interaction/checklist': 'A checklist asks for things',
+  'interaction/when':
+    'A remediation step follows an earlier graded step every student reaches',
   'interaction/animated': 'An animated widget can be rewound',
   'i18n/shape': 'A translation matches the shape of its lesson',
   'i18n/machinery': 'A translation never replaces machinery',
   'i18n/coverage': 'A translation is complete enough to ship',
   'instructor/present': 'Every lesson has instructor guidance',
   'instructor/sections': 'Every required guide section carries something',
-  'instructor/expectations': 'Expectations point at steps that exist and grade',
-  'instructor/attribution': 'A lesson that cites a source attributes it',
+  'instructor/expectations': 'Expectations name real steps and say something',
+  'instructor/attribution':
+    'A lesson that cites a source attributes it, and every real-system parameter names its source',
   'agree/manifest': 'The manifest says what the lesson says',
   'agree/counts': 'The manifest counts what the lesson contains',
   'agree/answerKey': 'The generated answer key verifies',
@@ -344,6 +360,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
     manifests,
     instructor,
     scenarios,
+    scenarioId,
     settingKeys,
     widgets,
     translations,
@@ -462,7 +479,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           'id/step',
           step.sid === undefined
             ? 'step has no sid; run `node tools/add-step-ids.mjs` to mint one'
-            : `sid ${JSON.stringify(step.sid)} is not usable as a key: it must be a non-numeric string with no colon`
+            : `sid ${JSON.stringify(step.sid)} is not usable as a key: it must be lowercase letters, digits and single hyphens, and not only digits`
         );
       } else if (sidsSeen.has(step.sid)) {
         E('id/step', `sid "${step.sid}" is already used by another step`);
@@ -527,6 +544,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         const known = Object.hasOwn(STANDARD_MISCONCEPTIONS, rule?.id ?? '');
         if (
           !known &&
+          !Number.isInteger(rule?.option) &&
           !Number.isFinite(rule?.factor) &&
           !Number.isFinite(rule?.equals)
         ) {
@@ -536,6 +554,9 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           );
         }
       }
+
+      for (const f of scaffoldProblems(step))
+        (f.level === 'error' ? E : W)(f.rule, f.message);
 
       const asks = ['predict', 'question'].includes(step.type);
       if (asks && !isNonEmptyString(step.prompt)) {
@@ -548,7 +569,11 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         if (s.scenario !== undefined) {
           if (!isNonEmptyString(s.scenario)) {
             E('ref/scenario', 'setup.scenario is empty');
-          } else if (!scenarioNames.has(s.scenario)) {
+          } else if (
+            !scenarioNames.has(scenarioId?.(s.scenario) ?? s.scenario)
+          ) {
+            // By id, or by the English key a lesson written before ids keeps:
+            // its steps' fingerprints are made from that key.
             E('ref/scenario', `setup names no such scenario "${s.scenario}"`);
           }
         }
@@ -801,7 +826,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             typed.length > 0 && Object.keys(hints).length === typed.length;
           if (fullyHinted) {
             for (const f of step.fields) {
-              if (typeof f.compute !== 'function') continue;
+              if (typeof f.compute !== 'function' || f.compute.length > 1)
+                continue;
               try {
                 const v = f.compute(hints);
                 if (
@@ -900,6 +926,62 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
+      // A remediation step is shown only when an earlier graded step was
+      // answered wrongly (or rightly): js/investigations.js stepApplies(). One
+      // level deep, so every student still walks a straight line to the end:
+      // the step it names is graded and one every student reaches (and, if a
+      // held prediction, already marked), and it is neither the last step nor
+      // where a prediction is marked.
+      if (step.when !== undefined) {
+        const w = step.when;
+        const at = isPlainObject(w)
+          ? steps.findIndex(x => x.sid === w.sid)
+          : -1;
+        const named = steps[at];
+        const gradedKind =
+          named &&
+          (named.type === 'predict' ||
+            (named.type === 'question' &&
+              (named.kind === 'choice' || named.kind === 'numeric')));
+        if (!isPlainObject(w) || !['incorrect', 'correct'].includes(w.is)) {
+          E('interaction/when', 'when is {sid, is: "incorrect" | "correct"}');
+        } else if (at < 0 || at >= i) {
+          E(
+            'interaction/when',
+            `when names "${w.sid}", which is not an earlier step`
+          );
+        } else if (!gradedKind) {
+          E(
+            'interaction/when',
+            `when names "${w.sid}", which is not a graded step`
+          );
+        } else if (named.when !== undefined) {
+          E(
+            'interaction/when',
+            `when names "${w.sid}", which is itself remediation`
+          );
+        } else if (
+          named.reveal !== undefined &&
+          steps.findIndex(x => x.sid === named.reveal) > i
+        ) {
+          // Before its reveal a held prediction has no verdict, and a step
+          // shown or passed over by it would be one.
+          E(
+            'interaction/when',
+            `when names "${w.sid}", a held prediction not marked until "${named.reveal}"`
+          );
+        }
+        if (i === steps.length - 1) {
+          E('interaction/when', 'the last step is one every student reaches');
+        }
+        if (steps.some(x => x.reveal === step.sid)) {
+          E(
+            'interaction/when',
+            'a held prediction is marked here, but not every student reaches it'
+          );
+        }
+      }
+
       // --- Answers -----------------------------------------------------------
       const graded = step.type === 'predict' || step.type === 'question';
       if (!graded) return;
@@ -979,6 +1061,10 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       }
 
       if (kind === 'numeric') {
+        // Its expected value is a formula over the student's own numbers
+        // (js/formula/grade.js), computed at grading; the pack validator has
+        // already judged the formula against the units of its fields.
+        if (step.formula) return;
         if (!Number.isFinite(step.answer)) {
           E('answer/shape', 'a numeric question has no finite answer');
           return;
@@ -990,7 +1076,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             `tolerance resolves to ${tol}, which grades nothing`
           );
         } else {
-          if (checkAnswer(step, step.answer) !== true) {
+          if (checkAnswer(step, asGiven(step, step.answer)) !== true) {
             E(
               'answer/accepted',
               'the grader rejects the answer this step declares'
@@ -1021,7 +1107,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       }
 
       if (kind === 'short') {
-        if (!isNonEmptyString(step.rubric)) {
+        if (!step.reflect && !isNonEmptyString(step.rubric)) {
           E(
             'answer/rubric',
             'a short answer carries no rubric for the instructor'
@@ -1057,34 +1143,23 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           );
         }
       }
-      // Keyed by step index, which is exactly the kind of reference that goes
-      // stale the moment a step is inserted above it.
-      // Keyed by the 1-based step number - the same number js/answerKey.js
-      // puts in `entry.step` and js/instructorDocs.js looks up. Reading them
-      // 0-based shifts every expectation by one step, which is exactly the
-      // silent failure this rule exists to catch, so the convention is stated
-      // rather than inferred.
-      for (const key of Object.keys(guide.expectations || {})) {
-        const number = Number(key);
-        const idx = number - 1;
-        if (!Number.isInteger(number) || idx < 0 || idx >= steps.length) {
+      // Keyed by step sid (js/data/instructorExpectations.js): a number goes
+      // stale the moment a step is inserted above it. It must name a step
+      // and say something.
+      const sids = steps.map(s => s.sid);
+      for (const [key, text] of Object.entries(guide.expectations || {})) {
+        const idx = sids.indexOf(key);
+        if (idx < 0) {
           err(
             'instructor/expectations',
             null,
-            `expectations has an entry for step ${key}, which this lesson does not have`
+            `expectations has an entry for step "${key}", which this lesson does not have`
           );
-          continue;
-        }
-        // Any step type may carry an expected observation: js/instructorDocs.js
-        // renders one against every entry in the key, not only the graded ones,
-        // and "what to look for" is most of what an explore step is for. So the
-        // check is that the number lands on a step and says something - which
-        // is what goes stale when a step is inserted or removed.
-        if (!isNonEmptyString(guide.expectations[key])) {
+        } else if (!isNonEmptyString(text)) {
           err(
             'instructor/expectations',
             idx,
-            `expectations for step ${key} is empty`
+            `expectations for step "${key}" is empty`
           );
         }
       }
@@ -1210,6 +1285,13 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         add(level, 'i18n/machinery', id, step, message)
       );
 
+      // What a Spanish reader sees must not give the answer away either.
+      const merged = mergeTranslation(inv, data);
+      merged.steps?.forEach((st, si) => {
+        for (const f of scaffoldProblems(st, false))
+          add(f.level, f.rule, id, si, `${locale}: ${f.message}`);
+      });
+
       const cov = translationCoverage(inv, data);
       const done = cov.translated ?? cov.done ?? 0;
       const total = cov.total ?? 0;
@@ -1235,6 +1317,142 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
     : findings.filter(f => !skip.some(prefix => f.rule.startsWith(prefix)));
 }
 
+/** Numbers in a text, as a reader in either convention writes them. */
+const numbersIn = text =>
+  [...String(text ?? '').matchAll(/(\d+)(?:[.,](\d+))?/g)].map(
+    m => parseNumber(m[2] === undefined ? m[1] : `${m[1]}.${m[2]}`).value
+  );
+
+const plainWords = text =>
+  String(text ?? '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+
+/**
+ * The texts a student sees before answering correctly, each with where it is.
+ * Hints, feedback by class (not the one for a correct answer, which is only
+ * seen after) and the words of a named mistake.
+ */
+function scaffoldTexts(step) {
+  const out = [];
+  const h = step.hints;
+  if (Array.isArray(h)) h.forEach((x, i) => out.push([`hint ${i + 1}`, x]));
+  else if (h && typeof h === 'object')
+    for (const k of ['concept', 'method']) out.push([`${k} hint`, h[k]]);
+  for (const [k, v] of Object.entries(step.feedback || {}))
+    if (k !== 'correct') out.push([`"${k}" feedback`, v]);
+  for (const m of step.misconceptions || [])
+    out.push([`misconception "${m?.id}"`, m?.say]);
+  return out;
+}
+
+/**
+ * Whether a text gives the expected value away: for a number, any number in it
+ * the step would accept; for a choice, the right option's own words.
+ * @param {string} text - A hint or feedback text
+ * @param {object} step - The step it belongs to
+ * @returns {boolean} Whether it leaks
+ */
+export function leaksAnswer(text, step) {
+  if (typeof text !== 'string') return false;
+  if (step.kind === 'numeric' && Number.isFinite(step.answer)) {
+    const tol = Math.abs(toleranceFor(step) ?? 0);
+    return numbersIn(text).some(
+      n => Math.abs(n - Math.abs(step.answer)) <= tol * (1 + 1e-9) + 1e-12
+    );
+  }
+  if (Array.isArray(step.options) && Number.isInteger(step.answer)) {
+    const right = plainWords(step.options[step.answer]);
+    return right.length >= 8 && plainWords(text).includes(right);
+  }
+  return false;
+}
+
+/**
+ * Problems with a step's scaffolding in one language.
+ * @param {object} step - The step, as that language reads it
+ * @param {boolean} [english] - Whether this is the lesson as written (the
+ *   structure is judged once, there)
+ * @returns {Array<{rule: string, level: string, message: string}>} Findings
+ */
+export function scaffoldProblems(step, english = true) {
+  const out = [];
+  const add = (rule, level, message) => out.push({ rule, level, message });
+  for (const [where, text] of scaffoldTexts(step)) {
+    if (leaksAnswer(text, step))
+      add(
+        'content/hint-leak',
+        'error',
+        `the ${where} contains the expected value; teach the check to make, not the answer`
+      );
+  }
+  if (!english) return out;
+  if (Array.isArray(step.hints)) {
+    if (step.hints.length > HINT_LIMIT)
+      add('content/hints', 'error', `a ladder has at most ${HINT_LIMIT} hints`);
+    step.hints.forEach((x, i) => {
+      if (!isNonEmptyString(x))
+        add('content/hints', 'error', `hint ${i + 1} is empty`);
+    });
+  }
+  if (step.feedback !== undefined) {
+    if (!isPlainObject(step.feedback) || step.kind !== 'numeric') {
+      add(
+        'content/feedback',
+        'error',
+        'feedback by outcome class belongs on a numeric question'
+      );
+    } else {
+      for (const [k, v] of Object.entries(step.feedback)) {
+        if (!FEEDBACK_CLASSES.includes(k))
+          add('content/feedback', 'error', `"${k}" is not an outcome class`);
+        else if (!isNonEmptyString(v))
+          add('content/feedback', 'error', `the "${k}" feedback is empty`);
+      }
+    }
+  }
+  for (const m of step.misconceptions || []) {
+    if (Number.isInteger(m?.option)) {
+      if (!Array.isArray(step.options) || m.option >= step.options.length)
+        add(
+          'content/feedback',
+          'error',
+          `misconception "${m.id}" names no such option`
+        );
+      else if (m.option === step.answer)
+        add(
+          'content/feedback',
+          'error',
+          `misconception "${m.id}" is bound to the right option`
+        );
+      if (!isNonEmptyString(m.say))
+        add(
+          'content/feedback',
+          'error',
+          `misconception "${m.id}" is bound to an option and says nothing`
+        );
+    }
+  }
+  if (step.reflect !== undefined) {
+    if (step.kind !== 'short' || step.reflect !== true)
+      add(
+        'content/reflect',
+        'error',
+        'reflect: true belongs on a short written step'
+      );
+    for (const k of ['answer', 'because', 'rubric', 'hints', 'worked'])
+      if (step[k] !== undefined)
+        add(
+          'content/reflect',
+          'error',
+          `a reflection has no ${k}: nothing marks it`
+        );
+  }
+  return out;
+}
+
 /**
  * Check one lesson, for the authoring preview.
  *
@@ -1244,7 +1462,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
  * property of the lesson itself, which is what an author is editing.
  *
  * @param {object} inv - One investigation
- * @param {object} refs - {widgets, scenarios, settingKeys, gradedSteps}
+ * @param {object} refs - {widgets, scenarios, scenarioId, settingKeys,
+ *   gradedSteps}
  * @returns {Array<object>} Findings for this lesson only
  */
 export function checkLesson(inv, refs) {
@@ -1254,6 +1473,7 @@ export function checkLesson(inv, refs) {
       manifests: {},
       instructor: {},
       scenarios: refs.scenarios,
+      scenarioId: refs.scenarioId,
       settingKeys: refs.settingKeys,
       widgets: refs.widgets,
       translations: {},

@@ -5,10 +5,16 @@ serves, and every merge is live. A *release* is a different thing — a tagged,
 archived, citable point in that history — and this is the checklist for making
 one.
 
-**There has been no release yet.** No tag, no GitHub release, no DOI. Until
-there is, `CITATION.cff` and `.zenodo.json` deliberately carry no `version` and
-no `date-released`: a citation file that names a version nobody can check out
-is worse than one that names none.
+**There has been one release, `v1.0.0`** (2026-09-16): a tag, a GitHub
+release and a Zenodo archive with its version and concept DOIs. "What 1.0.0
+produced" below has every identifier. `CITATION.cff` and `.zenodo.json` name
+that version, because it is the one a reader can check out.
+
+**The next is the release of `v2`,** the integration branch of the next major
+version. It is one release at the end, decided by Carl after Roadmap II's
+Prompt 121 returns GO ([`INTEGRATION.md`](INTEGRATION.md)). Until then, `main`
+and the live site stay at what was last deployed, and nothing merged into
+`v2` is released.
 
 ## This document, and the other one
 
@@ -113,6 +119,31 @@ journal that requires it, for instance.
 Every step is manual and step 6 is the one to be careful with: the file uploaded
 has to be the archive of the tag, not of a working tree that has moved on.
 `npm run archive:check -- --commit v1.0.0` builds and checks exactly that.
+
+## Version policy
+
+**The version is chosen once, by Carl, at the final release** of the
+integration branch ([`INTEGRATION.md`](INTEGRATION.md)). No feature pull
+request picks or bumps it.
+
+What a change means for the number, following semantic versioning from the
+reader's side:
+
+- **Major:**
+  - a saved-state change that an older build cannot read (a stored record, a
+    file or a link whose new version the old code refuses);
+  - a public format whose previous version is no longer read;
+  - anything that removes a page or a route a reader could have bookmarked.
+- **Minor:**
+  - a new page, lesson, guide, instrument, format or format version that keeps
+    a reader for the previous one;
+  - a new capability package.
+- **Patch:** a fix that changes no stored state and no format.
+
+**The changelog.** `CHANGELOG.md`'s `[Unreleased]` section collects entries as
+pull requests land. It is cut into a dated, versioned section **by the release,
+not by feature pull requests**. A feature pull request adds its entry under
+`[Unreleased]` and nothing else.
 
 ## The checklist
 
@@ -230,7 +261,7 @@ The first release, as a worked example of the above.
 | Tag | `v1.0.0`, annotated, on commit `9148f9e4296f6010293056303e7c6b10d87add1f` |
 | GitHub release | <https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v1.0.0>, published 2026-09-16 |
 | Zenodo record | <https://zenodo.org/records/22800610> |
-| Version DOI | <!--fact:doi-->10.5281/zenodo.22800610<!--/fact--> |
+| Version DOI | 10.5281/zenodo.22800610 |
 | Concept DOI | <!--fact:conceptDoi-->10.5281/zenodo.22800609<!--/fact--> |
 | Archived file | `gravitas-sim/gravitas-sim.github.io-v1.0.0.zip`, byte-identical to GitHub's zipball for the tag |
 

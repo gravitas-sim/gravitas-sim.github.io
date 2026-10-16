@@ -98,7 +98,16 @@ async function decrypt(payload, key) {
     key,
     b64ToBytes(payload.data)
   );
-  return JSON.parse(new TextDecoder().decode(plain));
+  // v2 bundles are gzipped before they are encrypted (Prompt 79).
+  const bytes =
+    payload.compress === 'gzip'
+      ? await new Response(
+          new Blob([plain])
+            .stream()
+            .pipeThrough(new DecompressionStream('gzip'))
+        ).arrayBuffer()
+      : plain;
+  return JSON.parse(new TextDecoder().decode(bytes));
 }
 
 /**
@@ -327,6 +336,26 @@ const GENERAL = [
     name: 'Curriculum Map',
     text: 'Every investigation side by side: topic, timing, difficulty, where it fits in a course, prerequisites and objectives.',
   },
+  {
+    id: 'exoplanet-observatory-guide',
+    name: 'Exoplanet Observatory Guide',
+    text: 'The five guided investigations with real TESS light curves in /observatory/: curriculum map, data and licenses, teaching notes and assignment sheets.',
+  },
+  {
+    id: 'exoplanet-observatory-key',
+    name: 'Exoplanet Observatory Answer Key',
+    text: 'Every step of the five investigations, answered from a reference run on the same data.',
+  },
+  {
+    id: 'populations-observatory-guide',
+    name: 'Stellar Populations Guide',
+    text: 'The five guided investigations with real SDSS, SEGUE and TESS data and MIST models in /observatory/: curriculum map, data and licenses, teaching notes and assignment sheets.',
+  },
+  {
+    id: 'populations-observatory-key',
+    name: 'Stellar Populations Answer Key',
+    text: 'Every step of the five investigations, answered from a reference run on the same data.',
+  },
 ];
 
 /** Approximate minutes, for the duration filter. */
@@ -426,6 +455,20 @@ function renderActivities() {
         none.textContent =
           'No worksheet: this format is projected and answered aloud.';
         rowActions.append(none);
+      }
+      for (const f of manifest.files.filter(
+        f =>
+          f.kind === 'key' &&
+          f.activity === activity.id &&
+          f.format === format.id
+      )) {
+        const k = document.createElement('button');
+        k.type = 'button';
+        k.className = 'ui-button is-quiet';
+        k.textContent = `${name}: Answer Key${f.locale === 'es' ? ' (es)' : ''} (PDF)`;
+        k.addEventListener('click', () => download(f));
+        rowActions.append(k);
+        documents++;
       }
       const open = document.createElement('a');
       open.className = 'ui-button is-quiet';
@@ -571,12 +614,48 @@ function renderInvestigations() {
       btn.addEventListener('click', () => download(file));
       actions.append(btn);
     }
+    // Spanish and per-depth documents (Prompt 79), each labelled with what it is.
+    const extras = manifest.files.filter(
+      f =>
+        f.investigation === inv.id &&
+        f.kind !== 'worksheet' &&
+        !f.activity &&
+        !(f.locale === 'en' && f.variant === 'full')
+    );
+    const more = document.createElement('details');
+    more.className = 'res-more';
+    const summary = document.createElement('summary');
+    summary.textContent = `More documents: Spanish, and a key for each depth (${extras.length})`;
+    more.append(summary);
+    for (const f of extras) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ui-button is-quiet';
+      const st =
+        f.status && f.status.total
+          ? ` — ${Math.round((100 * f.status.done) / f.status.total)}% in Spanish`
+          : '';
+      btn.textContent = `${f.label || f.name}${f.locale === 'es' ? ' (es)' : ''}${st} (PDF)`;
+      btn.addEventListener('click', () => download(f));
+      more.append(btn);
+    }
+    const stamp = document.createElement('p');
+    stamp.className = 'res-meta';
+    const first = byId(`${inv.id}-guide`);
+    stamp.textContent = `Generated ${manifest.generated}${first?.lessonVersion ? `, investigation version ${first.lessonVersion}` : ''}`;
     const preview = document.createElement('a');
     preview.className = 'ui-button is-quiet';
     preview.href = `/#investigation=${encodeURIComponent(inv.id)}`;
     preview.textContent = 'Open the investigation';
     actions.append(preview);
+    const adoption = document.createElement('a');
+    adoption.className = 'ui-button is-quiet';
+    adoption.href = `/teaching/investigation/${encodeURIComponent(inv.id)}/`;
+    adoption.textContent = 'Adoption page';
+    actions.append(adoption);
     card.append(actions);
+    if (extras.length) card.append(more);
+    card.append(stamp);
     list.append(card);
   }
 
@@ -585,7 +664,7 @@ function renderInvestigations() {
   if (count) {
     count.textContent =
       shown === INVESTIGATIONS.length
-        ? `${INVESTIGATIONS.length} investigations, ${INVESTIGATIONS.length * 2} documents`
+        ? `${INVESTIGATIONS.length} investigations, ${manifest.files.filter(f => f.investigation && !f.activity).length} documents`
         : `${shown} of ${INVESTIGATIONS.length} shown`;
   }
 }
@@ -768,7 +847,8 @@ export async function initInstructorPortal() {
     const showing = input.type === 'text';
     input.type = showing ? 'password' : 'text';
     toggle.setAttribute('aria-pressed', String(!showing));
-    toggle.textContent = showing ? 'Show' : 'Hide';
+    for (const e of toggle.children)
+      e.hidden = (e.dataset.s === 'h') !== showing;
     input.focus();
   });
 

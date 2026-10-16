@@ -9,6 +9,7 @@ import {
   parseAnswer,
   parseNumber,
   recordAnswer,
+  typedNumber,
 } from '../js/answerParse.js';
 import {
   AU_METERS,
@@ -392,5 +393,42 @@ describe('the locale an answer was stored under', () => {
     for (const bad of ['', null, 7, {}]) {
       expect(localeOfAnswer({ 'k:s:locale': bad }, 'k:s', 'es')).toBe('es');
     }
+  });
+});
+
+describe('typedNumber, the reader of a text field that holds a number', () => {
+  test.each([
+    ['0,91', 'es', 0.91],
+    ['0.91', 'en', 0.91],
+    ['1.234,5', 'es', 1234.5],
+    [' 300,5 ', 'es', 300.5],
+    ['2', 'es', 2],
+  ])('%p in %p is %p', (raw, locale, value) => {
+    expect(typedNumber(raw, locale)).toBe(value);
+  });
+
+  test.each([
+    ['', 'es'],
+    ['about 3', 'en'],
+    ['1.2.3', 'en'],
+    ['3 d', 'en'],
+  ])(
+    '%p in %p is NaN: blank, text, ambiguous or with a unit left over',
+    (raw, locale) => {
+      expect(typedNumber(raw, locale)).toBeNaN();
+    }
+  );
+});
+
+describe('the sites moved onto typedNumber', () => {
+  test.each([
+    'js/coursePage.js',
+    'js/lab3dPage.js',
+    'js/observatory/guidePanel.js',
+  ])('%s reads typed numbers through typedNumber', async file => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync(new URL(`../${file}`, import.meta.url), 'utf8');
+    expect(src).toMatch(/typedNumber/);
+    expect(src).not.toMatch(/\.replace\(\s*','\s*,\s*'\.'\s*\)/);
   });
 });

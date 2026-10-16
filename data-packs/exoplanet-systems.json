@@ -1,0 +1,354 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "exoplanet-systems",
+  "version": "1.0.0",
+  "title": "HD 209458 and the Sun and Jupiter: parameters compiled from the literature",
+  "object": {
+    "name": "HD 209458 and its planet; the Sun and Jupiter",
+    "identifiers": [
+      "HD 209458",
+      "HD 209458 b"
+    ]
+  },
+  "facility": {
+    "observatory": "compiled from the literature",
+    "pipeline": "NASA Exoplanet Archive and SIMBAD tables, read 2026-10-01"
+  },
+  "dataType": "system-parameters",
+  "origin": "compilation",
+  "license": {
+    "status": "attribution-requested",
+    "statement": "Published values, each cited to its paper; the NASA Exoplanet Archive and SIMBAD ask that work using them acknowledge them (NOTICE).",
+    "basis": "A few dozen numbers, each a published measurement cited to the paper that published it, read from the archives’ public tables. No table or text of anyone’s is reproduced, and the archives ask for acknowledgement, not a licence."
+  },
+  "retrieved": "2026-10-01",
+  "masks": [],
+  "reductions": [
+    "Each value is kept to the digits the simulation and the lessons use: the published value rounded, never cut short."
+  ],
+  "credit": "Compiled from Southworth 2010; Torres; del Burgo & Allende Prieto 2016; Stassun et al. 2019; Sing et al. 2016; Knutson et al. 2007; Casasayas-Barris et al. 2020; Stassun et al. 2017; Bonomo et al. 2017; Prša et al. 2016; NASA Jupiter Fact Sheet (NSSDCA",
+  "columns": [
+    {
+      "name": "value",
+      "unit": "",
+      "description": "per parameter, in the unit its name gives (massSolar, periodDays, …)"
+    }
+  ],
+  "source": {
+    "archive": "NASA Exoplanet Archive; SIMBAD; NASA NSSDCA; JPL SSD",
+    "urls": [
+      "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name%2Cpl_refname%2Cpl_orbper%2Cpl_orbsmax%2Cpl_radj%2Cpl_bmassj%2Cpl_orbeccen%2Cpl_orbincl%2Cpl_trandep%2Cpl_rvamp%2Cst_spectype%2Cst_teff%2Cst_rad%2Cst_mass%2Cst_lum%2Csy_dist+from+ps+where+pl_name%3D%27HD+209458+b%27+order+by+pl_refname&format=csv",
+      "https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html",
+      "https://ssd.jpl.nasa.gov/planets/approx_pos.html"
+    ],
+    "citations": [
+      {
+        "text": "Southworth 2010, MNRAS 408, 1689",
+        "doi": "10.1111/j.1365-2966.2010.17231.x"
+      },
+      {
+        "text": "Torres, Winn & Holman 2008, ApJ 677, 1324",
+        "doi": "10.1086/529429"
+      },
+      {
+        "text": "del Burgo & Allende Prieto 2016, MNRAS 463, 1400",
+        "doi": "10.1093/mnras/stw2005"
+      },
+      {
+        "text": "Stassun et al. 2019, AJ 158, 138 (TESS Input Catalog v8)",
+        "doi": "10.3847/1538-3881/ab3467"
+      },
+      {
+        "text": "Sing et al. 2016, Nature 529, 59",
+        "doi": "10.1038/nature16068"
+      },
+      {
+        "text": "Knutson et al. 2007, ApJ 655, 564",
+        "doi": "10.1086/510111"
+      },
+      {
+        "text": "Casasayas-Barris et al. 2020, A&A 635, A206",
+        "doi": "10.1051/0004-6361/201937221"
+      },
+      {
+        "text": "Stassun et al. 2017, AJ 153, 136",
+        "doi": "10.3847/1538-3881/aa5df3"
+      },
+      {
+        "text": "Bonomo et al. 2017, A&A 602, A107",
+        "doi": "10.1051/0004-6361/201629882"
+      },
+      {
+        "text": "Prša et al. 2016, AJ 152, 41 (IAU 2015 Resolution B3, nominal solar values)",
+        "doi": "10.3847/0004-6256/152/2/41"
+      },
+      {
+        "text": "NASA Jupiter Fact Sheet (NSSDCA, updated 2 October 2024)",
+        "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html"
+      },
+      {
+        "text": "NASA Exoplanet Archive, Planetary Systems table (NASA Exoplanet Science Institute 2020)",
+        "doi": "10.26133/NEA12"
+      },
+      {
+        "text": "Christiansen et al. 2025, PSJ 6, 186 (the NASA Exoplanet Archive)",
+        "doi": "10.3847/psj/ade3c2"
+      }
+    ],
+    "acknowledgement": "This research has made use of the NASA Exoplanet Archive, which is operated by the California Institute of Technology, under contract with the National Aeronautics and Space Administration under the Exoplanet Exploration Program."
+  },
+  "raw": [
+    {
+      "file": "nea-ps-hd209458b.csv",
+      "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name%2Cpl_refname%2Cpl_orbper%2Cpl_orbsmax%2Cpl_radj%2Cpl_bmassj%2Cpl_orbeccen%2Cpl_orbincl%2Cpl_trandep%2Cpl_rvamp%2Cst_spectype%2Cst_teff%2Cst_rad%2Cst_mass%2Cst_lum%2Csy_dist+from+ps+where+pl_name%3D%27HD+209458+b%27+order+by+pl_refname&format=csv",
+      "bytes": 5459,
+      "sha256": "d0f4bd6dd970ff579e6166512f11eb12d91961346cc2eee7b480ae7ae75ad12d"
+    },
+    {
+      "file": "nssdc-jupiterfact.html",
+      "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html",
+      "bytes": 11195,
+      "sha256": "9ac7835ae5387261bc02019a641bbfc8450122ffebebffea5678c3de6c54d0cb"
+    },
+    {
+      "file": "jpl-approx-pos.html",
+      "url": "https://ssd.jpl.nasa.gov/planets/approx_pos.html",
+      "bytes": 29585,
+      "sha256": "9f7b30ca81cc548a879565bb3f70e6899a38ff5877cb1ff16bb04892f9c4d742"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/compilations.mjs",
+    "version": "1.0.0",
+    "options": {},
+    "steps": [
+      "Read each value from the hand-written module.",
+      "Find it in the pinned table its source names, at the row and column recorded beside it.",
+      "Refuse a value that is not the published one rounded to the places the module keeps, and a source list on the object that does not say which source each value has."
+    ]
+  },
+  "values": [
+    {
+      "object": "HD209458",
+      "field": "star.massSolar",
+      "value": 1.148,
+      "found": 1.148,
+      "where": "HD 209458 b, SOUTHWORTH_2010, st_mass",
+      "cite": "southworth2010"
+    },
+    {
+      "object": "HD209458",
+      "field": "star.radiusSolar",
+      "value": 1.155,
+      "found": 1.155,
+      "where": "HD 209458 b, TORRES_ET_AL__2008, st_rad",
+      "cite": "torres2008"
+    },
+    {
+      "object": "HD209458",
+      "field": "star.luminositySolar",
+      "value": 1.77,
+      "found": 1.769986688,
+      "where": "HD 209458 b, DEL_BURGO__AMP__ALLENDE_PRIETO_2016, st_lum",
+      "cite": "delBurgo2016"
+    },
+    {
+      "object": "HD209458",
+      "field": "star.temperatureK",
+      "value": 6065,
+      "found": 6065,
+      "where": "HD 209458 b, TORRES_ET_AL__2008, st_teff",
+      "cite": "torres2008"
+    },
+    {
+      "object": "HD209458",
+      "field": "star.spectralType",
+      "value": "G0V",
+      "found": "G0 V",
+      "where": "HD 209458 b, DEL_BURGO__AMP__ALLENDE_PRIETO_2016, st_spectype",
+      "cite": "delBurgo2016"
+    },
+    {
+      "object": "HD209458",
+      "field": "star.distancePc",
+      "value": 48.3,
+      "found": 48.3016,
+      "where": "HD 209458 b, TORRES_ET_AL__2008, sy_dist",
+      "cite": "tic8"
+    },
+    {
+      "object": "HD209458",
+      "field": "planet.massJupiter",
+      "value": 0.69,
+      "found": 0.69,
+      "where": "HD 209458 b, SING_ET_AL__2016, pl_bmassj",
+      "cite": "sing2016"
+    },
+    {
+      "object": "HD209458",
+      "field": "planet.radiusJupiter",
+      "value": 1.38,
+      "found": 1.38,
+      "where": "HD 209458 b, SOUTHWORTH_2010, pl_radj",
+      "cite": "southworth2010"
+    },
+    {
+      "object": "HD209458",
+      "field": "planet.periodDays",
+      "value": 3.5247,
+      "found": 3.52474859,
+      "where": "HD 209458 b, KNUTSON_ET_AL__2007, pl_orbper",
+      "cite": "knutson2007"
+    },
+    {
+      "object": "HD209458",
+      "field": "planet.semiMajorAU",
+      "value": 0.04747,
+      "found": 0.04747,
+      "where": "HD 209458 b, SOUTHWORTH_2010, pl_orbsmax",
+      "cite": "southworth2010"
+    },
+    {
+      "object": "HD209458",
+      "field": "planet.eccentricity",
+      "value": 0,
+      "found": 0,
+      "where": "HD 209458 b, CASASAYAS_BARRIS_ET_AL__2020, pl_orbeccen",
+      "cite": "casasayas2020"
+    },
+    {
+      "object": "HD209458",
+      "field": "planet.inclinationDeg",
+      "value": 86.71,
+      "found": 86.71,
+      "where": "HD 209458 b, TORRES_ET_AL__2008, pl_orbincl",
+      "cite": "torres2008"
+    },
+    {
+      "object": "HD209458",
+      "field": "measured.transitDepthPercent",
+      "value": 1.5,
+      "found": 1.5,
+      "where": "HD 209458 b, STASSUN_ET_AL__2017, pl_trandep",
+      "cite": "stassun2017"
+    },
+    {
+      "object": "HD209458",
+      "field": "measured.semiAmplitudeMs",
+      "value": 84,
+      "found": 84.27,
+      "where": "HD 209458 b, BONOMO_ET_AL__2017, pl_rvamp",
+      "cite": "bonomo2017"
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "star.massSolar",
+      "value": 1,
+      "is": "the unit: one solar mass",
+      "cite": "prsa2016"
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "star.radiusSolar",
+      "value": 1,
+      "is": "the unit: one nominal solar radius",
+      "cite": "prsa2016"
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "star.luminositySolar",
+      "value": 1,
+      "is": "the unit: one nominal solar luminosity",
+      "cite": "prsa2016"
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "star.temperatureK",
+      "value": 5772,
+      "is": "the nominal solar effective temperature, 5772 K",
+      "cite": "prsa2016"
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "star.spectralType",
+      "value": "G2V",
+      "unsourced": "the conventional classification of the Sun; no table this tool reads gives it"
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "star.distancePc",
+      "value": 10,
+      "is": "a choice: the Sun as an astronomer ten parsecs away would see it"
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "planet.massJupiter",
+      "value": 1,
+      "is": "the unit: one Jupiter mass"
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "planet.radiusJupiter",
+      "value": 1,
+      "is": "the unit: one Jupiter radius"
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "planet.periodDays",
+      "value": 4332.59,
+      "found": 4332.589,
+      "where": "Jupiter fact sheet, sidereal orbit period (days)",
+      "cite": "jupiterFacts"
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "planet.semiMajorAU",
+      "value": 5.2028,
+      "unsourced": "JPL’s mean elements give 5.20288700 AU and the fact sheet 5.204: the stored 5.2028 is the first cut short, not rounded",
+      "nearest": 5.202887
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "planet.eccentricity",
+      "value": 0.0489,
+      "unsourced": "the fact sheet gives 0.0487 and JPL’s mean elements 0.04838624; 0.0489 is neither",
+      "nearest": 0.0487
+    },
+    {
+      "object": "SUN_JUPITER",
+      "field": "planet.inclinationDeg",
+      "value": 90,
+      "is": "a choice: the orbit seen edge-on"
+    }
+  ],
+  "assumptions": [
+    "Each value is the published one, rounded; a value no cited table gives is marked approximate and unsourced in the module, on the object it belongs to.",
+    "A unit (one solar mass) or a choice the scenario makes (the Sun seen from ten parsecs) is said to be one, not cited as a measurement."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "core",
+  "derived": {
+    "file": "js/data/exoplanetSystems.js",
+    "bytes": 4941,
+    "sha256": "0f30cbe810bd2662196c787b5e13c593412d0e9581291d4af24bbfe45942f136"
+  },
+  "validation": {
+    "check": "Kepler’s third law closes on the stored values: a^3 / P^2, in AU and years, is the star’s mass in solar masses to within 2 per cent",
+    "against": [
+      {
+        "quantity": "a^3 / P^2 / M",
+        "value": 1,
+        "unit": "",
+        "ref": "Kepler’s third law, the planet’s mass neglected"
+      }
+    ],
+    "result": {
+      "HD209458": 1.0006,
+      "SUN_JUPITER": 1.0009
+    }
+  }
+}

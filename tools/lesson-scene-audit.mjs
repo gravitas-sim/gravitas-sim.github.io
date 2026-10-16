@@ -25,7 +25,7 @@
 // did an experiment". Those are opposite ends of an activity. Standing an
 // object there is the author's work; changing it is the student's.
 //
-// So a step now carries a set drawn from seven kinds, and any step may have
+// So a step now carries a set drawn from eight kinds, and any step may have
 // several:
 //
 //   scene-declared          the lesson staged objects, or bound names to
@@ -49,13 +49,17 @@
 //   panel-diagram           the instrument on this step is self-contained: it
 //                           does not read the scene and the scene does not
 //                           read it.
+//   external-computation    the step sends the reader to the compute page, to
+//                           run a reviewed Python notebook (`compute: <id>`),
+//                           and the numbers come back from its capsule. Nothing
+//                           on this screen computed them.
 //   captured-evidence       something a reader produced is kept: a notebook
 //                           field, a plot, a pinned snapshot, an import from
 //                           the selection. Ticking a checklist box is not on
 //                           this list, deliberately - a checkbox records that
 //                           somebody clicked, not that anything was measured.
 //
-// A step with none of the seven is prose, and the catalog says so rather
+// A step with none of the eight is prose, and the catalog says so rather
 // than reaching for the nearest category.
 //
 // The loop
@@ -90,7 +94,10 @@ import { resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { allWidgets, whenWidgetsReady } from '../js/widgets.js';
+import { BUILTIN_SOURCES } from '../js/platform/builtins.js';
+import { CATALOGUE_DATA } from '../js/compute/catalogueData.js';
 import { auditBindings, parseCollected } from './acceptance-bindings.mjs';
+import { inOwnTransformCache } from './playwright-cache.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const CATALOG = resolve(ROOT, 'docs/lesson-scene-catalog.json');
@@ -102,7 +109,7 @@ const args = process.argv.slice(2);
 const wantJson = args.includes('--json');
 const wantCheck = args.includes('--check');
 
-/** The seven kinds. A step's `kinds` is a subset; several is normal. */
+/** The eight kinds. A step's `kinds` is a subset; several is normal. */
 const KIND = {
   DECLARED: 'scene-declared',
   STUDENT: 'student-changes-scene',
@@ -111,6 +118,7 @@ const KIND = {
   DATA: 'imported-data',
   DIAGRAM: 'panel-diagram',
   EVIDENCE: 'captured-evidence',
+  COMPUTATION: 'external-computation',
 };
 
 /**
@@ -221,6 +229,14 @@ const DATASETS = {
     name: 'MIST v1.2 evolutionary tracks',
     origin: 'computed-grid',
   },
+  'js/data/spectra/sdssSpectra.js': {
+    name: 'Four observed stellar spectra, SDSS DR18',
+    origin: 'observation',
+  },
+  'js/data/gw/gwoscEvents.js': {
+    name: 'Five GWOSC events, whitened strain',
+    origin: 'observation',
+  },
 };
 
 /**
@@ -306,15 +322,15 @@ async function fileText(rel) {
 }
 
 /**
- * Every project file a module can reach.
+ * Every project file a module can reach, for finding the registry's cycle.
  *
  * Every relative `.js` string literal counts, which picks up dynamic imports
  * as well as static ones. Over-inclusive on purpose: a module that mentions a
- * path in a comment gets counted, and the cost of that is a dataset
- * attribution that names one module too many, which the `via` field makes
- * visible. The opposite mistake - missing the lazily imported track grid, as
- * an earlier `from`-anchored pattern did - is the one that produces a wrong
- * answer instead of a wordy one.
+ * path in a comment gets counted, and the cost of that is a cycle one module
+ * too large - a module whose data is then not followed, which loses a credit
+ * and cannot invent one. The opposite mistake, an edge missed, shrinks the
+ * cycle and lets the data walk through a hub again, which is how every widget
+ * that used a runtime helper came to be credited with every dataset.
  */
 async function importsOf(rel) {
   const text = await fileText(rel);
@@ -345,51 +361,365 @@ async function exportsOf(rel) {
 }
 
 /**
- * identifier -> {dataset, via} for every name that carries stored data.
+ * The registry's import cycle: every module js/widgets.js reaches that also
+ * reaches it back.
  *
- * Built by walking out from each widget family and asking which modules can
- * reach a dataset at all; every name those modules export is then a name that
- * may be carrying the data. Scanning a widget's own functions for those names
- * is what attributes a dataset to a widget rather than to a whole family -
- * the difference between "the habitability widgets can see TRAPPIST-1" and
- * "hz-trappist draws it".
+ * Most families are on it. A family imports js/widgetRuntime.js for
+ * `captureToNotebook`, the runtime reaches the audio module, the audio module
+ * the engine, the engine the interface and the lesson loader, and those the
+ * registry, which imports every family. From anywhere on that loop every
+ * dataset in the application is reachable, so "this module can reach
+ * TRAPPIST-1" is true of all of them and says nothing about any. Walking
+ * through it credited exoplanet, TRAPPIST-1 and MIST data to the
+ * gravitational-wave lab by way of the runtime's audio-ownership helpers, and
+ * GW150914 strain to the stellar widgets by way of `captureToNotebook`.
+ *
+ * Found rather than listed. A list of hubs - physics.js, ui.js,
+ * widgetRuntime.js, investigations.js - is right until somebody adds an
+ * import, and it goes wrong without a sound. The cycle is the registry's
+ * strongly connected component, which is two walks: out from the registry,
+ * then back along the same edges.
  */
-async function datasetNames(familyModules) {
-  const reach = new Map();
-  const reaches = async (rel, seen = new Set()) => {
-    if (reach.has(rel)) return reach.get(rel);
-    if (seen.has(rel)) return new Set();
-    seen.add(rel);
-    const out = new Set();
-    if (DATASETS[rel]) out.add(rel);
-    for (const dep of await importsOf(rel)) {
-      for (const d of await reaches(dep, seen)) out.add(d);
+async function registryCycle() {
+  const REGISTRY = 'js/widgets.js';
+  const forward = new Map();
+  const queue = [REGISTRY];
+  while (queue.length) {
+    const cur = queue.pop();
+    if (forward.has(cur)) continue;
+    forward.set(cur, await importsOf(cur));
+    queue.push(...forward.get(cur));
+  }
+  const back = new Map();
+  for (const [from, deps] of forward) {
+    for (const dep of deps) {
+      if (!back.has(dep)) back.set(dep, []);
+      back.get(dep).push(from);
     }
-    reach.set(rel, out);
-    return out;
-  };
-  const byFamily = new Map();
-  for (const fam of familyModules) {
-    const names = new Map();
-    byFamily.set(fam, names);
-    const graph = new Set();
-    const queue = [fam];
-    while (queue.length) {
-      const cur = queue.pop();
-      if (graph.has(cur)) continue;
-      graph.add(cur);
-      for (const dep of await importsOf(cur)) queue.push(dep);
+  }
+  const cycle = new Set();
+  const up = [REGISTRY];
+  while (up.length) {
+    const cur = up.pop();
+    if (cycle.has(cur)) continue;
+    cycle.add(cur);
+    up.push(...(back.get(cur) ?? []));
+  }
+  return cycle;
+}
+
+/**
+ * The names a module binds to other project modules, and the module each
+ * one is bound to.
+ *
+ * A static import gives a local name - `TRACES`, `trackSamples`, or a
+ * namespace - and a use of that name is a use of that export. A dynamic
+ * import gives a module object the family keeps under a name of its own
+ * choosing (`data = mod` in both lazily loaded families), so there the use is
+ * a property access of one of the module's exports, `data.decodeEvent`, and
+ * the binding is marked `members`.
+ */
+async function importBindings(rel) {
+  const text = await fileText(rel);
+  const target = spec =>
+    relative(ROOT, resolve(dirname(resolve(ROOT, rel)), spec));
+  const out = [];
+  const statics =
+    /\bimport(?=[\s{*])\s*([\w$\s,{}*]+?)\s*from\s*'(\.\.?\/[^']*\.js)'/g;
+  for (const m of text.matchAll(statics)) {
+    const module = target(m[2]);
+    let clause = m[1];
+    const named = clause.match(/\{([^}]*)\}/);
+    if (named) {
+      for (const part of named[1].split(',')) {
+        const [imported, local = imported] = part
+          .trim()
+          .split(/\s+as\s+/)
+          .map(s => s.trim());
+        if (imported) out.push({ imported, local, module });
+      }
+      clause = clause.replace(named[0], '');
     }
-    for (const mod of graph) {
-      if (mod === fam) continue;
-      const hits = await reaches(mod);
-      if (!hits.size) continue;
-      for (const name of await exportsOf(mod)) {
-        if (!names.has(name)) {
-          names.set(name, { datasets: [...hits], via: mod });
+    const namespace = clause.match(/\*\s*as\s+([\w$]+)/);
+    if (namespace) {
+      out.push({ imported: '*', local: namespace[1], module });
+      clause = clause.replace(namespace[0], '');
+    }
+    const fallback = clause.match(/[\w$]+/);
+    if (fallback) out.push({ imported: 'default', local: fallback[0], module });
+  }
+  for (const m of text.matchAll(/\bimport\(\s*'(\.\.?\/[^']*\.js)'\s*\)/g)) {
+    out.push({ imported: '*', module: target(m[1]), members: true });
+  }
+  // A packaged capability's module, asked for by its builtin id: the same
+  // dynamic import, written once in js/platform/builtins.js rather than here.
+  // An id the registry does not know stops the audit, because dropping it
+  // would lose the dataset without a sound - which is what happened to the
+  // SDSS spectra when their import first moved behind loadBuiltin().
+  for (const m of text.matchAll(/\bloadBuiltin\(\s*'builtin:([^']+)'\s*\)/g)) {
+    const source = BUILTIN_SOURCES[m[1]];
+    if (!source) {
+      throw new Error(`${rel} loads builtin:${m[1]}, which is not a builtin`);
+    }
+    out.push({ imported: '*', module: source, members: true });
+  }
+  return out;
+}
+
+/**
+ * Source without its comments or quoted strings, so a helper that names a
+ * binding in prose, or a label that spells one - `'TRAPPIST-1'` - is not
+ * taken to use it.
+ *
+ * Not a tokenizer. `//` counts only at a line's start or after whitespace,
+ * which leaves the `https://` in a citation string alone; a quote pairs only
+ * on its own line; and template literals are kept whole, because their
+ * `${...}` is code. Each shortcut can cost a mention - an apostrophe inside
+ * a template can blank the code between it and the next quote on that line -
+ * and none can invent one, because what is removed leaves its boundary.
+ */
+function codeOnly(text) {
+  return text
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/(^|\s)\/\/.*$/gm, '$1')
+    .replace(/'(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"/g, "''");
+}
+
+/**
+ * A module's top-level declarations, and what it exports under which name.
+ *
+ * Cut at column 0, which prettier guarantees is where every top-level
+ * statement starts and where nothing nested does, apart from the closing
+ * brackets of the statement above and the lines of a template literal. A
+ * template line that starts with a letter ends its declaration early, which
+ * can lose a use and cannot invent one.
+ *
+ * @returns {{decls: Map<string, string>, exported: Map<string, string>,
+ *   forwarded: object[]}} local name -> body; exported name -> local name;
+ *   and `export ... from` re-exports
+ */
+function topLevel(text, rel) {
+  const target = spec =>
+    relative(ROOT, resolve(dirname(resolve(ROOT, rel)), spec));
+  const head =
+    /^(?:export\s+)?(?:default\s+)?(?:async\s+)?(?:function\*?\s*|class\s+|const\s+|let\s+|var\s+)([\w$]+)/;
+  const decls = new Map();
+  let current = null;
+  for (const line of text.split('\n')) {
+    if (/^[\w$@/]/.test(line)) {
+      current = line.match(head)?.[1] ?? null;
+      if (current) decls.set(current, '');
+    }
+    if (current) decls.set(current, `${decls.get(current)}${line}\n`);
+  }
+  for (const [name, body] of decls) decls.set(name, codeOnly(body));
+
+  const exported = new Map();
+  const forwarded = [];
+  const declared =
+    /^export\s+(?:async\s+)?(?:function\*?\s*|class\s+|const\s+|let\s+|var\s+)([\w$]+)/gm;
+  for (const m of text.matchAll(declared)) exported.set(m[1], m[1]);
+  const byDefault = text.match(
+    /^export\s+default\s+(?:async\s+)?(?:function\*?\s*|class\s+)?([\w$]+)/m
+  );
+  if (byDefault) exported.set('default', byDefault[1]);
+  const lists = /^export\s*\{([^}]*)\}\s*(?:from\s*'(\.\.?\/[^']*\.js)')?/gm;
+  for (const m of text.matchAll(lists)) {
+    for (const part of m[1].split(',')) {
+      const [imported, as = imported] = part
+        .trim()
+        .split(/\s+as\s+/)
+        .map(s => s.trim());
+      if (!imported) continue;
+      if (m[2]) forwarded.push({ module: target(m[2]), imported, as });
+      else exported.set(as, imported);
+    }
+  }
+  for (const m of text.matchAll(
+    /^export\s*\*\s*from\s*'(\.\.?\/[^']*\.js)'/gm
+  )) {
+    forwarded.push({ module: target(m[1]), all: true });
+  }
+  return { decls, exported, forwarded };
+}
+
+const escapeName = name => name.replace(/\$/g, '\\$');
+/** A use of a local name, not a property of something else spelled the same. */
+const bareUse = name => new RegExp(`(?<![\\w$.])${escapeName(name)}(?![\\w$])`);
+
+/**
+ * The data-carrying names a module's imports give it.
+ *
+ * @param {object[]} bindings - From importBindings()
+ * @param {Map<string, Map<string, Set<string>>>} carry - module -> export ->
+ *   the datasets that export carries
+ */
+function tokensFor(bindings, carry) {
+  const out = [];
+  for (const b of bindings) {
+    const exports = carry.get(b.module);
+    if (!exports) continue;
+    if (b.imported !== '*') {
+      const sets = exports.get(b.imported);
+      if (sets?.size) {
+        out.push({
+          binding: b.local,
+          use: bareUse(b.local),
+          datasets: [...sets],
+          via: b.module,
+        });
+      }
+      continue;
+    }
+    for (const [name, sets] of exports) {
+      if (!sets.size) continue;
+      const property = `\\.\\s*${escapeName(name)}(?![\\w$])`;
+      out.push({
+        binding: b.members ? `.${name}` : `${b.local}.${name}`,
+        use: b.members
+          ? new RegExp(property)
+          : new RegExp(`(?<![\\w$.])${escapeName(b.local)}\\s*\\??${property}`),
+        datasets: [...sets],
+        via: b.module,
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * Which of a module's own declarations carry data: those that use a
+ * data-carrying import, and those that use one of those, to a fixed point.
+ */
+function carriedLocally(decls, tokens) {
+  const carried = new Map();
+  const uses = new Map([...decls.keys()].map(n => [n, bareUse(n)]));
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const [name, body] of decls) {
+      const set = carried.get(name) ?? new Set();
+      const before = set.size;
+      for (const t of tokens) {
+        if (t.use.test(body)) for (const d of t.datasets) set.add(d);
+      }
+      for (const [other, sets] of carried) {
+        if (other !== name && uses.get(other).test(body)) {
+          for (const d of sets) set.add(d);
         }
       }
+      if (set.size > before) {
+        carried.set(name, set);
+        changed = true;
+      }
     }
+  }
+  return carried;
+}
+
+/**
+ * Per family, every name in scope that carries stored data.
+ *
+ * Decided per export, not per module. js/stellar/hr.js imports the MIST
+ * track accessors, and its `regions()` really is drawn from them - the
+ * main-sequence band is the tracks' zero-age and terminal points - but its
+ * `AXES` and `xForTemperature` are plotting geometry. Crediting every name a
+ * module exports because the module reaches a dataset recorded the stellar
+ * screens' MIST tracks as arriving by way of an axis range. So an export
+ * carries a dataset when its own top-level declaration uses a name that does,
+ * followed through module-local helpers and across modules to a fixed point;
+ * every export of a dataset module carries that dataset.
+ *
+ * A name imported into a family is matched in a widget's source by the
+ * binding the family actually made, not by any identifier spelled the same.
+ * The earlier bare-name scan credited MIST tracks to the GW150914 screen
+ * because both data modules export `PROVENANCE`, the engine's star list to
+ * the balance widget because it has a local called `stars`, and the stellar
+ * lab to a black-hole widget for the word `comparison` - in families that
+ * import none of those modules. A family's own top-level declarations that
+ * carry data are names too, so a table built from a dataset once at load time
+ * counts wherever a widget reads it.
+ *
+ * Imports onto the registry's cycle are followed only out of a family module
+ * itself: what a family takes from js/widgetRuntime.js is looked at, and what
+ * the runtime imports from the rest of the cycle is not.
+ *
+ * @param {string[]} familyModules - The widget family modules
+ * @returns {Promise<Map<string, object[]>>} family -> data-carrying names
+ */
+async function datasetNames(familyModules) {
+  const cycle = await registryCycle();
+  const families = new Set(familyModules);
+  const parsed = new Map();
+  const queue = [...familyModules];
+  while (queue.length) {
+    const rel = queue.pop();
+    if (parsed.has(rel)) continue;
+    if (DATASETS[rel]) {
+      parsed.set(rel, null);
+      continue;
+    }
+    const allowed = dep => families.has(rel) || !cycle.has(dep);
+    const top = topLevel(await fileText(rel), rel);
+    const mod = {
+      ...top,
+      bindings: (await importBindings(rel)).filter(b => allowed(b.module)),
+      forwarded: top.forwarded.filter(f => allowed(f.module)),
+    };
+    parsed.set(rel, mod);
+    for (const b of mod.bindings) queue.push(b.module);
+    for (const f of mod.forwarded) queue.push(f.module);
+  }
+
+  const carry = new Map([...parsed.keys()].map(rel => [rel, new Map()]));
+  for (const rel of parsed.keys()) {
+    if (!DATASETS[rel]) continue;
+    for (const name of await exportsOf(rel)) {
+      carry.get(rel).set(name, new Set([rel]));
+    }
+  }
+  const local = new Map();
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const [rel, mod] of parsed) {
+      if (!mod) continue;
+      const carried = carriedLocally(mod.decls, tokensFor(mod.bindings, carry));
+      local.set(rel, carried);
+      const exports = carry.get(rel);
+      const add = (name, sets) => {
+        if (!sets?.size) return;
+        if (!exports.has(name)) exports.set(name, new Set());
+        for (const d of sets) {
+          if (exports.get(name).has(d)) continue;
+          exports.get(name).add(d);
+          changed = true;
+        }
+      };
+      for (const [name, localName] of mod.exported) {
+        add(name, carried.get(localName));
+      }
+      for (const f of mod.forwarded) {
+        const from = carry.get(f.module);
+        if (!from) continue;
+        if (f.all) for (const [name, sets] of from) add(name, sets);
+        else add(f.as, from.get(f.imported));
+      }
+    }
+  }
+
+  const byFamily = new Map();
+  for (const fam of familyModules) {
+    const names = tokensFor(parsed.get(fam).bindings, carry);
+    for (const [name, sets] of local.get(fam)) {
+      names.push({
+        binding: name,
+        use: bareUse(name),
+        datasets: [...sets],
+        via: fam,
+      });
+    }
+    byFamily.set(fam, names);
   }
   return byFamily;
 }
@@ -398,7 +728,11 @@ async function datasetNames(familyModules) {
 async function widgetFamilies() {
   const text = await fileText('js/widgets.js');
   const out = new Map();
-  for (const m of text.matchAll(/from\s*'\.\/(\w+Widgets\.js)'/g)) {
+  // A lazily loaded family is named as `import('./xWidgets.js')`, an eager one
+  // as `from './xWidgets.js'`; both are families.
+  for (const m of text.matchAll(
+    /(?:from\s*|import\(\s*)'\.\/(\w+Widgets\.js)'/g
+  )) {
     const rel = `js/${m[1]}`;
     const mod = await import(`../${rel}`);
     for (const value of Object.values(mod)) {
@@ -735,7 +1069,7 @@ function actionsFor(step, widget, ctxOf, running, affordances) {
 }
 
 /**
- * Which of the seven kinds apply.
+ * Which of the eight kinds apply.
  *
  * The one rule worth stating out loud, because it decides most of the table:
  * a live widget with no controls and no presets has nothing of its own to
@@ -783,6 +1117,12 @@ function kindsFor(step, widget, ctxOf, datasets) {
   }
   if (datasets.length) out.add(KIND.DATA);
 
+  // A step that sends the reader to the compute page (Roadmap II Prompt 102)
+  // names the reviewed notebook that makes its numbers. Declared, not inferred:
+  // nothing on this screen computes them, and the audit says so rather than
+  // reading a typed-in number as an engine measurement.
+  if (step.compute) out.add(KIND.COMPUTATION);
+
   if (
     step.fields?.length ||
     step.plot ||
@@ -815,12 +1155,18 @@ function evidenceFor(step, ctxOf) {
 /** Which datasets this step's instrument actually draws on. */
 function datasetsFor(widget, source, names) {
   if (!widget) return [];
+  const code = codeOnly(source);
   const out = new Map();
-  for (const [name, hit] of names) {
-    if (!new RegExp(`\\b${name}\\b`).test(source)) continue;
+  for (const hit of names) {
+    if (!hit.use.test(code)) continue;
     for (const key of hit.datasets) {
       if (!out.has(key)) {
-        out.set(key, { ...DATASETS[key], dataset: key, via: hit.via });
+        out.set(key, {
+          ...DATASETS[key],
+          dataset: key,
+          via: hit.via,
+          binding: hit.binding,
+        });
       }
     }
   }
@@ -1183,7 +1529,7 @@ async function audit() {
       const datasets = datasetsFor(
         widget,
         wSource,
-        names.get(families.get(widget?.id)) ?? new Map()
+        names.get(families.get(widget?.id)) ?? []
       );
       const running = runningAt(inv, index);
       const affordances = affordancesFor(step, inv);
@@ -1269,6 +1615,8 @@ async function audit() {
         instrument: step.tool
           ? { id: step.tool.id, capture: Boolean(step.tool.capture) }
           : null,
+        // Named only where a step sends the reader to the compute page.
+        ...(step.compute ? { compute: step.compute } : {}),
         evidence: evidenceFor(step, ctxOf),
         reset: resetFor(step, inv, index),
         recovery: recoveryFor(step, inv, index, ctxOf, source),
@@ -1315,11 +1663,7 @@ async function audit() {
       buttons: listOf(widget.actions).map(a => a.id),
       engineReads: roles.read,
       mutates: roles.mutate,
-      datasets: datasetsFor(
-        widget,
-        wSource,
-        names.get(families.get(id)) ?? new Map()
-      ),
+      datasets: datasetsFor(widget, wSource, names.get(families.get(id)) ?? []),
     };
   }
 
@@ -1366,6 +1710,7 @@ function totalsFor(steps) {
     data: has(KIND.DATA),
     diagram: has(KIND.DIAGRAM),
     evidence: has(KIND.EVIDENCE),
+    computation: has(KIND.COMPUTATION),
     // The number the previous version of this file could not tell apart from
     // "staged something": a scene stood up and nobody able to touch it.
     declaredButInert: count(
@@ -1413,7 +1758,7 @@ function report(data) {
       `${pad(t.diagram, 6)} ${pad(t.evidence, 5)} ` +
       `${pad(`${t.completeLoops}/${t.closedLoops}/${t.loops}`, 8)} ${t.mismatched}`
   );
-  lines.push(`\n${t.prose} step(s) carry none of the seven kinds: prose.`);
+  lines.push(`\n${t.prose} step(s) carry none of the eight kinds: prose.`);
 
   const mismatches = data.lessons.flatMap(l =>
     l.steps.filter(s => s.loop.mismatch).map(s => [l.id, s])
@@ -1593,17 +1938,29 @@ async function checkAcceptanceBindings(acceptance, lessons) {
     if (text !== null) sources.set(`e2e/${name}`, text);
   }
 
+  // The bindings are judged by line, so the listing gets a transform cache of
+  // its own: in the shared one, another listing of this checkout can leave it
+  // reporting compiled line numbers. See tools/playwright-cache.mjs.
   let listing = null;
   try {
-    listing = execFileSync(
-      'npx',
-      ['playwright', 'test', '--list', '--project=chromium', '--reporter=list'],
-      {
-        cwd: ROOT,
-        encoding: 'utf8',
-        maxBuffer: 128 * 1024 * 1024,
-        stdio: ['ignore', 'pipe', 'ignore'],
-      }
+    listing = inOwnTransformCache(cacheEnv =>
+      execFileSync(
+        'npx',
+        [
+          'playwright',
+          'test',
+          '--list',
+          '--project=chromium',
+          '--reporter=list',
+        ],
+        {
+          cwd: ROOT,
+          encoding: 'utf8',
+          maxBuffer: 128 * 1024 * 1024,
+          stdio: ['ignore', 'pipe', 'ignore'],
+          env: { ...process.env, ...cacheEnv },
+        }
+      )
     );
   } catch {
     listing = null;
@@ -1678,6 +2035,7 @@ async function checkAcceptance(data) {
       model: 'model-result',
       data: 'imported-data',
       illustration: 'panel-diagram',
+      computation: 'external-computation',
     };
     if (entry.evidenceFrom) {
       const wanted = NEEDS[entry.evidenceFrom];
@@ -1729,7 +2087,21 @@ async function checkAcceptance(data) {
     // as `panel:<widget-id>`, which is checked against the registry and
     // against the lesson's own use of that instrument.
     const panel = String(entry.object || '').match(/^panel:([\w-]+)$/);
-    if (panel) {
+    // A lesson whose experiment is run on the compute page names the
+    // reviewed notebook as its object, `compute:<notebook id>`, and some step
+    // of the lesson has to declare that same notebook.
+    const notebook = String(entry.object || '').match(/^compute:([\w-]+)$/);
+    if (notebook) {
+      if (!lesson.steps.some(s => s.compute === notebook[1])) {
+        problems.push(
+          `${lesson.id}: acceptance object names notebook "${notebook[1]}", which no step of this lesson declares (compute: "${notebook[1]}")`
+        );
+      } else if (!CATALOGUE_DATA.some(e => e.id === notebook[1])) {
+        problems.push(
+          `${lesson.id}: acceptance object names notebook "${notebook[1]}", which is not in the compute catalogue`
+        );
+      }
+    } else if (panel) {
       if (!widgets.has(panel[1])) {
         problems.push(
           `${lesson.id}: acceptance object names widget "${panel[1]}", which is not registered`
@@ -1818,7 +2190,7 @@ function provenanceModule(acceptance) {
   return `// Generated by tools/lesson-scene-audit.mjs --write. Do not edit.
 //
 // Where each investigation's central experiment gets its number from, for the
-// line the explanation step shows a learner. Four sources, and the difference
+// line the explanation step shows a learner. Five sources, and the difference
 // matters: a Schwarzschild radius comes from a closed-form panel and a period
 // comes from the integrator, and a reader who thinks the first was simulated
 // has learned something false about what this application does.

@@ -27,15 +27,22 @@
 // scenarios.js takes its settings object as a parameter.
 // =============================================================================
 
-import { applyPreset } from './scenarios.js';
+import { applyPreset, scenarioId } from './scenarios.js';
 import { formatSeed, parseSeed } from './rng.js';
 
-const VERSION = 1;
+/** 2 names a scenario by id, 1 by its English name; both are read. */
+const VERSION = 2;
+export { VERSION as LINK_VERSION };
 
 // Above this the link starts getting refused or line-wrapped by mail clients,
 // LMS text fields and chat apps. Browsers themselves handle far more, so this
 // is a warning threshold rather than a limit.
 export const COMFORTABLE_URL_LENGTH = 8000;
+
+/** The most a link may inflate to (Prompt 67): a course link is a sixth. */
+export const MAX_INFLATED_BYTES = 8 * COMFORTABLE_URL_LENGTH;
+const TOO_LARGE =
+  'That link holds more than a link can carry. Ask for it as a file.';
 
 // --- base64url ---------------------------------------------------------------
 
@@ -73,7 +80,7 @@ function base64UrlToBytes(text) {
  * the compression path silently fall back: including the one the tests run
  * in, where it would have hidden this code from them entirely.
  */
-async function drain(stream) {
+async function drain(stream, max = Infinity) {
   const reader = stream.getReader();
   const chunks = [];
   let total = 0;
@@ -82,6 +89,11 @@ async function drain(stream) {
     if (done) break;
     chunks.push(value);
     total += value.length;
+    // Stopped while reading: a bomb is never inflated in full.
+    if (total > max) {
+      reader.cancel().catch(() => {});
+      throw Object.assign(new Error(TOO_LARGE), { code: 'tooLarge' });
+    }
   }
   const out = new Uint8Array(total);
   let at = 0;
@@ -112,16 +124,13 @@ async function inflate(bytes) {
   try {
     const ds = new DecompressionStream('deflate-raw');
     const writer = ds.writable.getWriter();
-    // Errors surface on the read side, so a rejection here is the stream
-    // already having failed; the read below reports it properly.
-    writer.write(bytes);
+    // Errors surface on the read side, which reports them.
+    writer.write(bytes).catch(() => {});
     writer.close().catch(() => {});
-    return await drain(ds.readable);
-  } catch {
-    // A cut-short payload surfaces from the stream as an opaque low-level
-    // error, which tells a student handed a broken link nothing at all. Half a
-    // URL is by far the likeliest way this fails: mail clients and chat apps
-    // wrap long ones, so say that instead.
+    return await drain(ds.readable, MAX_INFLATED_BYTES);
+  } catch (err) {
+    if (err?.code === 'tooLarge') throw err;
+    // Most likely half a URL: mail and chat wrap long ones. Say so.
     throw new Error('That link is incomplete or was cut short in transit.');
   }
 }
@@ -129,18 +138,24 @@ async function inflate(bytes) {
 // --- Number hygiene ----------------------------------------------------------
 
 /**
- * Round to 7 significant figures, recursively.
- *
- * Float arithmetic leaves positions like 123.40000000000001. Those extra
- * digits are noise, but they cost bytes and: worse: they compress badly,
- * because deflate finds no repetition in random mantissa tails. Trimming them
- * roughly halves a full payload and changes no orbit anyone can see.
+ * Significant figures a written world keeps: here and in the pack compiler
+ * (js/scenarioPack.js), one policy. Why twelve: FORMATS.md.
+ */
+export const LINK_PRECISION = 12;
+
+/** One number as a link writes it. */
+export const linkNumber = v => Number(v.toPrecision(LINK_PRECISION));
+
+/**
+ * Round every number in a value to the link's precision, recursively. The
+ * noise digits float arithmetic leaves (123.40000000000001) cost bytes and
+ * compress badly; nobody sees them.
  */
 function trim(value) {
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) return 0;
     if (value === 0) return 0;
-    return Number(value.toPrecision(7));
+    return linkNumber(value);
   }
   if (Array.isArray(value)) return value.map(trim);
   if (value && typeof value === 'object') {
@@ -161,7 +176,7 @@ function trim(value) {
  * scenario would give. Anything the live settings hold beyond this is a
  * deliberate change by the author and is the only part worth transmitting.
  *
- * @param {string} scenario - Scenario name
+ * @param {string} scenario - Scenario id, or a key it was known by
  * @param {Object} DEFAULT_SETTINGS - The baseline settings object
  * @returns {Object} Settings as the scenario alone would leave them
  */
@@ -256,6 +271,14 @@ const BODY_FIELDS = [
   // the link had one, which is the documented path for older links.
   'appearance',
   'jet_orientation',
+  // Whether a galaxy is spiral or elliptical: what the inspector reports and
+  // how it is drawn. Only a galaxy has it. A link made before galaxies
+  // travelled at all has none of them to restore.
+  'galaxyType',
+  // GasGiant.set_state copies both, so without them a restored gas giant had
+  // no massInJupiters and no giant type. Additive, like the fields above.
+  'massInJupiters',
+  'giantType',
 ];
 
 /**
@@ -279,6 +302,8 @@ export function packBody(s, { withId = false } = {}) {
   for (const f of BODY_FIELDS) {
     if (s[f] !== undefined && s[f] !== null) out[f] = trim(s[f]);
   }
+  // Only when set: a body marked permanent survives the distance cull.
+  if (s.persistent === true) out.persistent = true;
   if (withId && Number.isFinite(s.id)) out.id = s.id;
   return out;
 }
@@ -319,7 +344,7 @@ export function diffSettings(from, to) {
  * and is applied once the bodies exist.
  *
  * @param {Object} opts
- * @param {string} opts.scenario - Scenario name
+ * @param {string} opts.scenario - Scenario id (or a key it was known by), or 'None'
  * @param {number} opts.seed - Seed that generated the world
  * @param {Object} opts.settings - Live settings
  * @param {Object} [opts.generationSettings] - Settings as of the last build
@@ -343,7 +368,9 @@ export function buildPayload({
   extras,
   experiment,
 }) {
-  const payload = { v: VERSION, s: scenario, seed: formatSeed(seed) };
+  // By id; 'None' stays 'None'.
+  const s = scenarioId(scenario) ?? scenario;
+  const payload = { v: VERSION, s, seed: formatSeed(seed) };
   const atBuild = generationSettings || settings;
   const delta = settingsDelta(atBuild, DEFAULT_SETTINGS, scenario);
   if (Object.keys(delta).length) payload.d = delta;
@@ -410,6 +437,39 @@ export async function encodeTagged(tag, version, payload) {
 }
 
 /**
+ * JSON.parse for a link's payload or a file the studios open, refusing a prototype key or nesting past
+ * 24 deep, as js/platform/common.js parseDocument does for a file. A copy
+ * because this module is on every page's start-up path and that one is not:
+ * a link's size is already capped by MAX_INFLATED_BYTES, so what is left to
+ * check is its shape. tests/hostileInput.test.js holds the two to the same
+ * fixtures.
+ * @param {string} text
+ * @param {boolean} [allowKeys] - A prototype key passes, for a reader whose
+ *   validator already refuses one and says which
+ * @returns {*} The parsed value; throws a SyntaxError with code 'notPlainData'
+ */
+export function parseDocument(text, allowKeys = false) {
+  const value = JSON.parse(text);
+  const plain = (v, depth) =>
+    typeof v !== 'object' || v === null
+      ? typeof v !== 'number' || Number.isFinite(v)
+      : depth > 0 &&
+        Object.keys(v).every(
+          k =>
+            (allowKeys ||
+              (k !== '__proto__' &&
+                k !== 'constructor' &&
+                k !== 'prototype')) &&
+            plain(v[k], depth - 1)
+        );
+  if (!plain(value, 24))
+    throw Object.assign(new SyntaxError('not plain data'), {
+      code: 'notPlainData',
+    });
+  return value;
+}
+
+/**
  * Decode a tagged fragment, refusing one of the wrong kind.
  *
  * @param {string} tag - The kind expected
@@ -426,11 +486,17 @@ export async function decodeTagged(tag, fragment, maxVersion) {
   if (!(version >= 1)) throw new Error('wrongKind');
   if (version > maxVersion) throw new Error('newerVersion');
   const bytes = base64UrlToBytes(match[3]);
-  const raw = match[2] === 'z' ? await inflate(bytes) : bytes;
+  let raw;
+  try {
+    raw = match[2] === 'z' ? await inflate(bytes) : bytes;
+  } catch (err) {
+    if (err?.code === 'tooLarge') throw new Error('tooLarge');
+    throw err;
+  }
   if (!raw) throw new Error('corrupt');
   let payload;
   try {
-    payload = JSON.parse(new TextDecoder().decode(raw));
+    payload = parseDocument(new TextDecoder().decode(raw));
   } catch {
     throw new Error('corrupt');
   }
@@ -472,12 +538,27 @@ export async function decodePayload(fragment) {
 
   let payload;
   try {
-    payload = JSON.parse(json);
-  } catch {
-    throw new Error('That link is incomplete or was cut short in transit.');
+    payload = parseDocument(json);
+  } catch (err) {
+    throw new Error(
+      err?.code === 'notPlainData'
+        ? 'That link holds data Gravitas will not read.'
+        : 'That link is incomplete or was cut short in transit.'
+    );
   }
   if (!payload || typeof payload !== 'object' || !payload.s) {
     throw new Error('That link does not contain a simulation.');
+  }
+  // Out by id, from either version; a scenario this build lacks is refused
+  // rather than built as the default world.
+  if (payload.s !== 'None') {
+    const id = scenarioId(payload.s);
+    if (!id) {
+      throw new Error(
+        'That link names a scenario this version of Gravitas does not have. Reload the page and try again.'
+      );
+    }
+    payload.s = id;
   }
   return payload;
 }

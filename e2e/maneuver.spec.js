@@ -13,11 +13,11 @@ import { test, expect } from './fixtures.js';
 /** Load the transfer lab and open the planner on the spacecraft. */
 async function openPlanner(page, app) {
   await app.boot();
-  await app.loadScenario('Orbital Transfer Lab');
+  await app.loadScenario('orbital-transfer-lab');
   await app.waitForFrames(5);
   await page.evaluate(async () => {
     const p = await import('/js/physics.js');
-    const bridge = await import('/js/maneuverBridge.js');
+    const bridge = await import('/js/inspectorWindow.js');
     const probe = p.planets.find(b => b.name === 'Spacecraft');
     await bridge.openManeuverFor(probe.id);
   });
@@ -49,7 +49,7 @@ test.describe('the planner is not in the start-up path', () => {
   test('nothing loads it until it is asked for', async ({ page, app }) => {
     await app.boot();
     const loaded = await page.evaluate(async () => {
-      const bridge = await import('/js/maneuverBridge.js');
+      const bridge = await import('/js/inspectorWindow.js');
       return bridge.maneuverPlannerLoaded();
     });
     expect(loaded).toBe(false);
@@ -559,7 +559,7 @@ test.describe('two burns, then undo twice', () => {
     await app.waitForFrames(10);
     expect((await worldState(page)).undoDepth).toBe(1);
 
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(20);
     const after = await page.evaluate(async () => {
       const planner = await import('/js/maneuverPlanner.js');

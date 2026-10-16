@@ -1,0 +1,77 @@
+# The Playwright browsers, cached and installed. Every browser job needs the
+# same four steps, and they were written out four times: the version the
+# browsers are keyed on, the cache, the install on a miss, and the system
+# libraries (the cache does not hold those; they normally take about a minute).
+#
+# The system libraries are the step that hangs. `playwright install-deps` is
+# apt-get as root, and on some runners it stalls with no output until the
+# job's timeout - 30 minutes of a shard spent on nothing, after which the
+# coverage job fails for the missing shard (2026-09-30, and three runs on
+# 2026-10-07). So each attempt gets five minutes, a hung apt or dpkg is
+# killed and its half-done state repaired, and it is tried three times before
+# the job gives up. Carl approved the change on 2026-10-07.
+name: Playwright browsers
+description: Restore or install one Playwright browser, keyed on the pinned version
+inputs:
+  browser:
+    description: chromium, firefox or webkit
+    default: chromium
+runs:
+  using: composite
+  steps:
+    - name: Resolve the Playwright version
+      id: pw
+      shell: bash
+      run: |
+        version=$(node -p "require('./package.json').devDependencies['@playwright/test']")
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+
+    - name: Cache browsers
+      uses: actions/cache@v6
+      id: browsers
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-${{ inputs.browser }}
+
+    - name: Install the browser
+      if: steps.browsers.outputs.cache-hit != 'true'
+      shell: bash
+      run: npx playwright install ${{ inputs.browser }}
+
+    # A mirror that answers nothing ("Ign" on every request from
+    # azure.archive.ubuntu.com, twice on 2026-10-09) holds apt for its default
+    # two-minute connect timeout per request, so a single attempt below spends
+    # its five minutes waiting. Thirty seconds and three retries per request
+    # let apt fail on its own inside an attempt, and the next attempt starts
+    # fresh. Carl approved the change on 2026-10-09.
+    - name: Bound apt's network waits
+      shell: bash
+      run: |
+        printf '%s\n' \
+          'Acquire::http::Timeout "30";' \
+          'Acquire::https::Timeout "30";' \
+          'Acquire::Retries "3";' \
+          | sudo tee /etc/apt/apt.conf.d/80-gravitas-network > /dev/null
+
+    - name: Install browser dependencies
+      shell: bash
+      env:
+        BROWSER: ${{ inputs.browser }}
+      run: |
+        for attempt in 1 2 3; do
+          if timeout --kill-after=30 300 npx playwright install-deps "$BROWSER"; then
+            exit 0
+          fi
+          echo "::warning::install-deps attempt $attempt failed or ran past five minutes"
+          # By exact process name, and by the locks themselves: a `pkill -f`
+          # pattern also matches the `sudo pkill` running it, which killed
+          # itself and left the hung apt-get holding the lock (2026-10-07).
+          sudo pkill -9 -x apt-get || true
+          sudo pkill -9 -x apt || true
+          sudo pkill -9 -x dpkg || true
+          sudo fuser -k -9 /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock \
+            /var/lib/apt/lists/lock /var/cache/apt/archives/lock || true
+          sudo dpkg --configure -a || true
+        done
+        echo "::error::install-deps failed three times"
+        exit 1

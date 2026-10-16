@@ -6,18 +6,18 @@
 // instructor-guide stub, and every registration a lesson needs to exist.
 //
 // It exists because a lesson is not one file. Adding one by hand means touching
-// six places, and forgetting any of them fails in a different way: leave it out
-// of registry.js and the card is there but nothing opens; leave it out of
-// investigations.js and the site is fine while the answer keys and the
-// instructor PDFs quietly omit it; leave out the instructor stub and the guide
-// builds with a hole in it. All six are mechanical, so they are done here.
+// several places, and forgetting any of them fails in a different way: leave it
+// out of investigations.js and the card has nothing behind it while the answer
+// keys and the instructor PDFs quietly omit it; leave out the instructor stub
+// and the guide builds with a hole in it. The mechanical ones are done here.
 //
 //   js/data/investigations/<id>.js         the lesson
 //   js/data/investigations/es/<id>.js      the Spanish shadow
-//   js/data/investigations/registry.js     the lazy loader, and the translation
-//   js/data/investigations.js              the synchronous barrel
+//   js/data/investigations.js              the synchronous barrel and catalog
 //   js/data/instructorContent.js           the guide stub
 //   then: npm run manifest                 manifests and filter metadata
+//   then: npm run registries               the lazy loader and the translation
+//                                          in registry.js, from the catalog
 //
 // Nothing is overwritten. Re-running after an edit reports what is already in
 // place and touches nothing else, so it is safe to run twice.
@@ -87,6 +87,21 @@ async function writeNew(file, contents) {
  *
  * Anchored on text rather than a line number so that it keeps working as the
  * files around it change, and a no-op when the line is already present.
+ *
+ * The insertion is line-oriented, and that is the whole of the care here. An
+ * anchor is often written with a leading newline to make it unambiguous -
+ * "\nimport { gradedSteps, ... }" matches that import and not a substring of
+ * some other one - but that newline is the END of the line before the one the
+ * anchor names. Splicing at the raw index therefore appended the new import to
+ * the previous line:
+ *
+ *   import LIVES_OF_STARS from './investigations/lives-of-stars.js';import SCRATCH from './investigations/scratch.js';
+ *
+ * which is valid JavaScript and fails `npm run format:check` and `npm run
+ * lint` immediately, in a file the author never opened. So the anchor's own
+ * leading newlines are stepped over before deciding which line is meant, the
+ * insertion point is snapped to a line boundary, and the text inserted is
+ * guaranteed to end in one.
  */
 async function insertOnce(file, anchor, line, { before = true } = {}) {
   const text = await readFile(file, 'utf8');
@@ -101,8 +116,26 @@ async function insertOnce(file, anchor, line, { before = true } = {}) {
     );
     return;
   }
-  const insertion = before ? at : at + anchor.length;
-  const next = text.slice(0, insertion) + line + text.slice(insertion);
+
+  // Where the anchor's own text starts, past any newlines it carries.
+  let content = at;
+  while (text[content] === '\n' || text[content] === '\r') content += 1;
+
+  let insertion;
+  if (before) {
+    // The first character of the line the anchor sits on.
+    insertion = text.lastIndexOf('\n', content) + 1;
+  } else {
+    // The first character of the line after the one the anchor ends on.
+    const end = text.indexOf('\n', at + anchor.length);
+    insertion = end < 0 ? text.length : end + 1;
+  }
+
+  const entry = line.endsWith('\n') ? line : `${line}\n`;
+  // Only reachable when appending after an anchor on an unterminated last
+  // line; without it the new line would be glued to that one instead.
+  const lead = insertion > 0 && text[insertion - 1] !== '\n' ? '\n' : '';
+  const next = text.slice(0, insertion) + lead + entry + text.slice(insertion);
   if (!dryRun) await writeFile(file, next);
   done.push(`${file} (registered)`);
 }
@@ -114,7 +147,8 @@ const lesson = `// =============================================================
 // -----------------------------------------------------------------------------
 // Content only, no imports: every step that needs a live number is handed a
 // \`ctx\` by the engine, so a lesson stays a description of what is being taught
-// rather than a piece of the simulation.
+// rather than a piece of the simulation. The card paragraph is not here; it is
+// written once in summaries.js (and summaries.es.js).
 //
 // Every step carries a \`sid\`: an opaque, stable id that student progress is
 // keyed by. Reword a step, move it, translate it - but never change its sid, or
@@ -141,8 +175,6 @@ const ${constName} = {
   // tests/investigationBrowse.test.js checks.
   tags: ['orbits'],
   lock: { placement: true, inspector: true },
-  summary:
-    'A paragraph for the lesson card: what the student measures, and what it lets them conclude.',
   objectives: [
     'State what the student will be able to do, in a verb they can be tested on',
     'One objective per thing the lesson actually asks for',
@@ -155,7 +187,7 @@ const ${constName} = {
       body: \`Set the scene. Two or three short paragraphs; separate them with a
              blank line.\`,
       setup: {
-        scenario: 'Solar System',
+        scenario: 'solar-system',
         seed: '${id}',
         camera: { zoom: 1, pan: { x: 0, y: 0 } },
         paused: false,
@@ -251,7 +283,6 @@ const shadow = `// =============================================================
 export default {
   title: '',
   subtitle: '',
-  summary: '',
   objectives: [],
   steps: [
     // { title: '', body: '' },
@@ -276,31 +307,28 @@ const guide = `
     extensions: ['Where a student who finishes early can go'],
     modelNotes:
       'What the simulation simplifies, and where that matters for this lesson.',
-    // Keyed by the 1-based step number - the number the panel shows and the
-    // answer key prints. What an instructor should expect to see at that step.
-    expectations: {},
   },
 `;
 
 await writeNew(`js/data/investigations/${id}.js`, lesson);
 await writeNew(`js/data/investigations/es/${id}.js`, shadow);
 
-// The two registry maps, each before its closing brace.
-{
-  const file = 'js/data/investigations/registry.js';
-  const text = await readFile(file, 'utf8');
-  if (text.includes(`'${id}': () => import('./${id}.js')`)) {
-    skipped.push(`${file} (already registered)`);
+// The card paragraph, in both languages, at the end of each summaries file.
+for (const [file, text] of [
+  [
+    'js/data/investigations/summaries.js',
+    'A paragraph for the lesson card: what the student measures, and what it lets them conclude.',
+  ],
+  ['js/data/investigations/summaries.es.js', ''],
+]) {
+  const source = await readFile(file, 'utf8');
+  if (source.includes(`'${id}':`)) {
+    skipped.push(`${file} (already has a summary)`);
   } else {
-    const loaderLine = `  '${id}': () => import('./${id}.js'),\n`;
-    const translationLine = `    '${id}': () => import('./es/${id}.js'),\n`;
-    const loadersEnd = text.indexOf('};', text.indexOf('const LOADERS = {'));
-    let next = text.slice(0, loadersEnd) + loaderLine + text.slice(loadersEnd);
-    const transStart = next.indexOf('const TRANSLATIONS = {');
-    const esEnd = next.indexOf('  },', transStart);
-    next = next.slice(0, esEnd) + translationLine + next.slice(esEnd);
+    const end = source.lastIndexOf('};');
+    const next = `${source.slice(0, end)}  '${id}': ${JSON.stringify(text)},\n${source.slice(end)}`;
     if (!dryRun) await writeFile(file, next);
-    done.push(`${file} (loader + translation)`);
+    done.push(`${file} (summary stub)`);
   }
 }
 
@@ -359,6 +387,7 @@ console.log(
   `
 Next:
   npm run manifest          regenerate the manifests and the filter metadata
+  npm run registries        add the lesson's lazy loaders (registry.js)
   npm run author:check      validate the new lesson, and every other one
   npm run format            the scaffold is written plainly, prettier owns it
 

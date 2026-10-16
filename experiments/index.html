@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Experiment runner | Gravitas</title>
+    <meta
+      name="description"
+      content="Vary a laboratory setting across a range, run every value with several seeds in background workers, and read what changed, with a record precise enough to run it again."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: its own plots' marks. The analysis laboratory's
+         plot and table are js/plot/'s, the Observatory's too
+         (PLOT_COMPONENT.md), drawn by css/page.css. */
+      .xp-bad {
+        color: var(--danger);
+      }
+      /* On the dark of the simulation's sky in every theme, as .ui-sky is:
+         js/experimentsPage.js and the laboratory's histogram both make one. */
+      .xp-plot {
+        display: block;
+        width: 100%;
+        max-width: 42rem;
+        height: auto;
+        color: var(--hud-text);
+        background: var(--space-far);
+        border-radius: var(--radius-sm);
+      }
+      .xp-axis {
+        stroke: color-mix(in srgb, var(--hud-text-strong) 45%, transparent);
+      }
+      .xp-tick,
+      .xp-label {
+        fill: currentColor;
+        font-size: var(--text-xs);
+        opacity: 0.8;
+      }
+      .xp-point,
+      .xp-bar {
+        fill: var(--hue-comet);
+      }
+      .xp-mean {
+        fill: none;
+        stroke: var(--hue-star);
+        stroke-width: 2;
+      }
+      .xp-fail {
+        fill: color-mix(in srgb, var(--hue-gasgiant) 60%, var(--hud-text-strong));
+        font-size: var(--text-base);
+      }
+      .xp-lab {
+        margin: var(--space-6) 0;
+      }
+      .xp-lab > summary {
+        font-size: var(--text-lg);
+      }
+      .xp-lab h3 {
+        margin: var(--space-6) 0 var(--space-1);
+      }
+    </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
+  </head>
+  <body class="doc-page">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group" data-here><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/" aria-current="page"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li><li><a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<div class="gs-offline" role="status"><template><div class="gs-offline-box">
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/sky/"><span class="gs-en">Sky Lab</span><span class="gs-es" lang="es">Laboratorio del cielo</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
+</div></template></div>
+<!-- /shell:header -->
+    <main id="main" class="ui-page is-wide">
+      <h1 data-i18n="exp.title">Run an experiment</h1>
+      <p class="ui-note"><span class="ui-badge is-accent"><span class="gs-en">New in 2.0</span><span class="gs-es" lang="es">Nuevo en 2.0</span></span> <span class="gs-en">Not yet used in a class.</span><span class="gs-es" lang="es">Aún no se ha usado en un grupo.</span></p>
+      <p data-i18n="exp.intro">
+        Vary one laboratory setting across a range, run every value with
+        several seeds, and read what changed.
+      </p>
+
+      <form id="xpForm" autocomplete="off" novalidate>
+        <fieldset class="ui-fieldset">
+          <legend data-i18n="exp.what.title">What to run</legend>
+          <div class="ui-grid">
+            <label class="ui-field">
+              <span data-i18n="exp.what.scenario">Scenario</span>
+              <select class="ui-select" id="xpScenario"></select>
+            </label>
+            <label class="ui-field">
+              <span data-i18n="exp.what.param">Setting to vary</span>
+              <select class="ui-select" id="xpParam"></select>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="ui-fieldset">
+          <legend data-i18n="exp.values.title">Values</legend>
+          <div class="ui-grid">
+            <label class="ui-field">
+              <span data-i18n="exp.values.from">From</span>
+              <input
+                class="ui-input"
+                id="xpFrom"
+                type="number"
+                step="any"
+                aria-describedby="xpRangeHint"
+              />
+            </label>
+            <label class="ui-field">
+              <span data-i18n="exp.values.to">To</span>
+              <input
+                class="ui-input"
+                id="xpTo"
+                type="number"
+                step="any"
+                aria-describedby="xpRangeHint"
+              />
+            </label>
+            <label class="ui-field">
+              <span data-i18n="exp.values.count">How many values</span>
+              <input class="ui-input" id="xpCount" type="number" min="3" max="20" value="8" />
+            </label>
+            <label class="ui-field">
+              <span data-i18n="exp.values.spacing">Spacing</span>
+              <select class="ui-select" id="xpSpacing">
+                <option value="even" data-i18n="exp.values.even">Evenly</option>
+                <option value="random" data-i18n="exp.values.random">At random</option>
+              </select>
+            </label>
+          </div>
+          <p id="xpRangeHint" class="ui-hint"></p>
+        </fieldset>
+        <fieldset id="xpSecond" class="ui-fieldset" hidden>
+          <legend data-i18n="exp.second.title">A second setting</legend>
+          <div class="ui-grid">
+            <label class="ui-field">
+              <span data-i18n="exp.second.param">Also vary</span>
+              <select class="ui-select" id="xpParam2"></select>
+            </label>
+          </div>
+          <div id="xpSecondRange" class="ui-grid" hidden>
+            <label class="ui-field">
+              <span data-i18n="exp.values.from">From</span>
+              <input class="ui-input" id="xpFrom2" type="number" step="any" />
+            </label>
+            <label class="ui-field">
+              <span data-i18n="exp.values.to">To</span>
+              <input class="ui-input" id="xpTo2" type="number" step="any" />
+            </label>
+            <label class="ui-field">
+              <span data-i18n="exp.values.count">How many values</span>
+              <input class="ui-input" id="xpCount2" type="number" min="3" max="20" value="3" />
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="ui-fieldset">
+          <legend data-i18n="exp.runs.title">Seeds and length</legend>
+          <div class="ui-grid">
+            <label class="ui-field">
+              <span data-i18n="exp.runs.seeds">Seeds per value</span>
+              <input
+                class="ui-input"
+                id="xpSeeds"
+                type="number"
+                min="1"
+                max="20"
+                value="2"
+                aria-describedby="xpSeedHint"
+              />
+            </label>
+            <label class="ui-field">
+              <span data-i18n="exp.runs.seedBase">Seed name</span>
+              <input
+                class="ui-input"
+                id="xpSeedBase"
+                type="text"
+                value="run"
+                maxlength="24"
+                spellcheck="false"
+              />
+            </label>
+            <label class="ui-field">
+              <span data-i18n="exp.runs.duration">Simulated time per trial</span>
+              <input
+                class="ui-input"
+                id="xpDuration"
+                type="number"
+                min="1"
+                max="200000"
+                step="any"
+                value="10000"
+              />
+            </label>
+            <label class="ui-field">
+              <span data-i18n="exp.runs.step">Integration step</span>
+              <select class="ui-select" id="xpStep">
+                <option value="120">1/120 s</option>
+                <option value="60" selected>1/60 s</option>
+                <option value="30">1/30 s</option>
+              </select>
+            </label>
+          </div>
+          <p id="xpSeedHint" class="ui-hint" data-i18n="exp.runs.seedHint">
+            Every value runs once per seed.
+          </p>
+        </fieldset>
+
+        <fieldset class="ui-fieldset">
+          <legend data-i18n="exp.measure.title">What to measure</legend>
+          <label class="ui-field">
+            <span data-i18n="exp.measure.metric">Measurement</span>
+            <select class="ui-select" id="xpMetric"></select>
+          </label>
+        </fieldset>
+
+        <p id="xpDevice" class="ui-hint"></p>
+        <p id="xpEstimate" class="ui-status" role="status" aria-live="polite"></p>
+        <ul id="xpRefusals" class="ui-alert is-error" hidden></ul>
+        <div class="ui-toolbar">
+          <button id="xpRun" class="ui-button" type="submit" disabled data-i18n="exp.run">
+            Run
+          </button>
+          <button id="xpCancel" class="ui-button" type="button" hidden data-i18n="exp.cancel">
+            Cancel
+          </button>
+          <button id="xpResume" class="ui-button" type="button" hidden></button>
+        </div>
+      </form>
+
+      <section id="xpProgressBox" hidden>
+        <label class="ui-field">
+          <span data-i18n="exp.progress.label">Progress</span>
+          <progress id="xpProgress" class="ui-progress is-block" max="1000" value="0"></progress>
+        </label>
+        <p id="xpStatus" class="ui-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <p id="xpResultsEmpty" class="ui-state is-empty" data-i18n="exp.results.empty">
+        No results yet. Choose a scenario and a parameter above, then press Run;
+        the plot, the table and the downloads appear here.
+      </p>
+
+      <section id="xpResults" hidden aria-labelledby="xpResultsTitle">
+        <h2 id="xpResultsTitle" data-i18n="exp.results.title">Results</h2>
+        <figure>
+          <svg id="xpPlot" class="xp-plot" role="img"></svg>
+          <figcaption class="ui-hint" data-i18n="exp.plot.caption">
+            Each dot is one trial; the line joins the mean at each value.
+          </figcaption>
+        </figure>
+        <div
+          class="ui-table-wrap is-numeric"
+          role="region"
+          tabindex="0"
+          aria-labelledby="xpSummaryCaption"
+        >
+          <table>
+            <caption id="xpSummaryCaption"></caption>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="exp.summary.value">Value</th>
+                <th scope="col" data-i18n="exp.summary.mean">Mean</th>
+                <th scope="col" data-i18n="exp.summary.min">Lowest</th>
+                <th scope="col" data-i18n="exp.summary.max">Highest</th>
+                <th scope="col" data-i18n="exp.summary.spread">Spread (s.d.)</th>
+                <th scope="col" data-i18n="exp.summary.n">Trials used</th>
+                <th scope="col" data-i18n="exp.summary.left">Left out</th>
+              </tr>
+            </thead>
+            <tbody id="xpSummaryBody"></tbody>
+          </table>
+        </div>
+        <div class="ui-toolbar">
+          <button id="xpDownloadJson" class="ui-button" type="button" data-i18n="exp.download.json">
+            Download the result (JSON)
+          </button>
+          <button id="xpDownloadCsv" class="ui-button" type="button" data-i18n="exp.download.csv">
+            Download the trials (CSV)
+          </button>
+          <button id="xpSaveMine" class="ui-button" type="button" data-i18n="exp.mine.save">
+            Save to My work
+          </button>
+        </div>
+        <div
+          class="ui-table-wrap is-numeric"
+          role="region"
+          tabindex="0"
+          aria-labelledby="xpTrialsCaption"
+        >
+          <table>
+            <caption id="xpTrialsCaption" data-i18n="exp.trials.caption">
+              Every trial, in the order it was planned
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="exp.trials.index">Trial</th>
+                <th scope="col" data-i18n="exp.trials.value">Value</th>
+                <th scope="col" data-i18n="exp.trials.seed">Seed</th>
+                <th scope="col" data-i18n="exp.trials.status">Outcome</th>
+                <th scope="col" data-i18n="exp.trials.result">Measurement</th>
+                <th scope="col" data-i18n="exp.trials.steps">Steps</th>
+                <th scope="col" data-i18n="exp.trials.wall">Time (ms)</th>
+              </tr>
+            </thead>
+            <tbody id="xpTrialsBody"></tbody>
+          </table>
+        </div>
+        <details class="ui-disclosure">
+          <summary data-i18n="exp.manifest.title">The experiment as a file</summary>
+          <pre id="xpManifest" class="ui-hint"></pre>
+        </details>
+      </section>
+
+      <details id="xpAnalysis" class="ui-card is-compact ui-disclosure xp-lab">
+        <summary data-i18n="exp.analysis.title">
+          Analyze: uncertainty, sensitivity, distribution
+        </summary>
+        <div id="xpAnalysisBody"></div>
+      </details>
+
+      <section aria-labelledby="xpCheckTitle">
+        <h2 id="xpCheckTitle" data-i18n="exp.check.title">Check a saved result</h2>
+        <p id="xpCheckHint" class="ui-hint" data-i18n="exp.check.hint">
+          Paste a result file this page saved, or an experiment file.
+        </p>
+        <label class="ui-field">
+          <span data-i18n="exp.check.input">Result or experiment (JSON)</span>
+          <textarea class="ui-textarea is-code" id="xpCheckInput" rows="5" spellcheck="false" aria-describedby="xpCheckHint"></textarea>
+        </label>
+        <div class="ui-toolbar">
+          <button id="xpCheckBtn" class="ui-button" type="button" data-i18n="exp.check.run">
+            Check
+          </button>
+        </div>
+        <p id="xpCheckOut" class="ui-status" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
+    <script type="module" src="/js/experimentsPage.js"></script>
+  </body>
+</html>

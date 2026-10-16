@@ -1,100 +1,122 @@
 // Import utility functions
 import {
-  SOLAR_MASS_KG,
-  AU_METERS,
-  G_SI,
   JUPITER_MASSES_PER_SOLAR_MASS,
-  EARTH_MASSES_PER_JUPITER_MASS,
   CERES_MASS_KG,
   HALLEY_MASS_KG,
   DEBRIS_FRAGMENT_MASS_KG,
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
 } from './constants.js';
-import { setSimGravitationalConstant, simToAu } from './units.js';
-import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
-import { formatNumber, withUnit } from './format.js';
-import { t } from './i18n/index.js';
-import { forEachCandidatePair } from './spatialHash.js';
+import { SPACE_OBJECT_NAMES } from './names.js';
 import {
-  drawSolarLabel,
-  EARTH_SYMBOL,
   debugLog,
   hexToRgb,
-  computeDynamicColor,
   worldToScreen,
   screenToWorld,
   isOffscreen,
 } from './utils.js';
-import { recordBarycenter, clearFrameHistory } from './referenceFrame.js';
+import { recordBarycenter } from './referenceFrame.js';
 import { haloAcceleration } from './darkMatter.js';
 import { a0InSimUnits, mondVector } from './mond.js';
-// The render tier, for the passes a body can skip on a slow machine. Services
-// sit below the engine, so this is a downward import like the two above it.
-import { currentTier } from './quality.js';
 import { ENVIRONMENT, createAppearance } from './blackHole/appearance.js';
-// Fetched the first time a black hole is drawn, not at start-up. A scenario
-// with no black holes in it never asks for the renderer at all, and the four
-// kilobytes it costs stay out of everyone else's initial download. Until it
-// arrives the object is drawn as the simple mark the far level of detail uses,
-// which is a frame or two on a cold load and nothing on a warm one.
-let blackHoleRenderer = null;
-let blackHoleRendererPending = false;
-const ensureBlackHoleRenderer = () => {
-  if (blackHoleRenderer || blackHoleRendererPending) return blackHoleRenderer;
-  blackHoleRendererPending = true;
-  import('./blackHole/render.js')
-    .then(m => {
-      blackHoleRenderer = m;
-    })
-    .catch(() => {
-      // Leave it null: the simple mark is a complete, honest drawing of a
-      // black hole and the sandbox keeps working without the rest.
-      blackHoleRendererPending = false;
-    });
-  return null;
-};
 import { followCamera, resetFollowCamera } from './followCamera.js';
-// The shared drawing policy: level of detail, deterministic per-object
-// variation, star color, light direction and comet-tail geometry. Pure
-// arithmetic, so all of it is tested without a canvas - see
-// tests/bodyVisuals.test.js.
+// The drawing policy, as far as the engine reads it (tests/bodyVisuals.test.js).
 import {
-  LOD,
-  lodFor,
-  lodAtLeast,
   visualSeed,
-  hash01,
-  silhouetteFor,
-  lightDirection,
-  dominantLight,
-  starColor,
-  scaleRgb,
-  paintStarDisc,
-  tailActivity,
-  ionTailDirection,
-  dustTailDirection,
-  spriteFor,
-  drawnRadius,
-  displayRadius,
-  markerFloorPx,
   hitRadius,
   DISPLAY_MIN_PX,
-  CROWD_SOFT_START,
   hasRingsForSeed,
   ringGeometryFor,
 } from './bodyVisuals.js';
-import { stellarPropertiesFor, relativeInsolation } from './habitability.js';
+// Re-exported for the drawers: the engine still reaching these keeps the build's
+// chunk groups, and every route's request count, as they were.
+export { currentTier } from './quality.js';
+export { stellarPropertiesFor } from './habitability.js';
+// The state the rest of the engine reads (D-DECOMP-18, slice S1). The names the
+// facade used to export are re-exported below, live, so no importer changes.
+import {
+  bh_list,
+  planets,
+  stars,
+  gas_giants,
+  asteroids,
+  comets,
+  debris,
+  particles,
+  gwaves,
+  gravity_ripples,
+  neutron_stars,
+  white_dwarfs,
+  galaxies,
+  accretion_disk_particles,
+  setBodyList,
+  PhysicsObject_id_counter,
+  nextPhysicsObjectId,
+  resetPhysicsObjectCounter,
+  setPhysicsObjectCounter,
+  state,
+  setStateReference,
+  registerBodyDrawers,
+  paintBody,
+  particlePool,
+  effectLooks,
+  tracerColor,
+  registerEffects,
+  physicsSettings,
+  updatePhysicsSettings,
+  getPhysicsSetting,
+  simulationTime,
+  getSimulationTime,
+  resetSimulationTime,
+  setSimulationTime,
+  advanceSimulationTime,
+  liveBodyCount,
+  setLiveBodyCount,
+  setDetailScale,
+  getDetailScale,
+  trailTick,
+  getTrailTick,
+  resetTrailTick,
+  advanceTrailTick,
+  trailBudget,
+  worldGeneration,
+  bumpWorldGeneration,
+  MIN_INTERACTION_DISTANCE,
+  minInteractionDistance,
+  MASS_UNIT_KG,
+  INTEGRATORS,
+  activeIntegrator,
+  setWorkerFailed,
+  isBarnesHutActive,
+} from './engine/state.js';
+// Conservation and energy (slice S3), re-exported live below.
+import {
+  ENERGY_SAMPLE_RATE,
+  bankAbsorbedSpin,
+  bankDiscardedMomentum,
+  clearObjectEnergyHistory,
+  clearEnergyHistory,
+  updateEnergyHistory,
+} from './engine/conservation.js';
+// The events and the step listeners (slice S2), re-exported live.
+import {
+  broadcastImpact,
+  announceWorkerFailed,
+  announceMerge,
+  runStepListeners,
+} from './engine/events.js';
+export { simulation, onPhysicsStep } from './engine/events.js';
+export {
+  getWorldGeneration,
+  getInterventionEpoch,
+  noteIntervention,
+} from './engine/state.js';
 
-// Import the getRandomName function from ui.js
-// import { getRandomName } from './ui.js';
-
-// Local getRandomName function since it's not exported from ui.js
 /**
  * Pick a random display name for a new object of the given type.
  *
  * The pools used to be written out again here, all 355 of them, byte for byte
- * identical to js/data/objectNames.js. Two copies of a table is one copy too
+ * identical to js/names.js. Two copies of a table is one copy too
  * many: adding a ninth pool meant adding it twice, and the moment one edit
  * missed the other the same object would be named from two different lists
  * depending on which module made it.
@@ -124,36 +146,6 @@ const DT = 0.1;
 // SOLAR_SYSTEM_MASS_SCALE of 0.001, which is exactly the error. Those patches
 // are gone; the constant is right instead.
 const ABSORB_BUFFER = 6;
-// Softening floor on the gravity calculation, to keep a near-miss from
-// producing a singular force. Five units is right for scenarios laid out at
-// hundreds of units, and completely wrong for a compact one: TRAPPIST-1's seven
-// planets orbit between 1.15 and 6.19 units of their star, so six of them sat
-// inside the floor, felt a fraction of the gravity they should, and left on
-// hyperbolic orbits within a few hundred circuits regardless of timestep. A
-// scenario can lower it to suit its own scale.
-const MIN_INTERACTION_DISTANCE = 5.0;
-
-/**
- * The softening floor currently in force.
- *
- * The one authority on the question, and exported because there was briefly a
- * second. `min_interaction_distance` is zero in DEFAULT_SETTINGS and zero here
- * means "no scenario has an opinion, use the default" - it does not mean "no
- * floor". js/cr3bpPanel.js read the raw setting and took the zero at face
- * value, so a compact system sitting well inside the five-unit default was
- * validated as Newtonian while the engine was clamping every force in it.
- *
- * Anything that needs to know what the force law is actually doing - the
- * integrator, the potential, or a teaching overlay deciding whether its
- * closed-form claims hold - asks this. Nothing re-reads the setting and
- * nothing else carries the fallback.
- *
- * @returns {number} The floor, in simulation length units
- */
-const minInteractionDistance = () => {
-  const v = physicsSettings.min_interaction_distance;
-  return Number.isFinite(v) && v > 0 ? v : MIN_INTERACTION_DISTANCE;
-};
 const BH_RADIUS_BASE = 8; // Reduced from 15 to make black holes smaller
 const PLANET_RADIUS = 5;
 const GAS_GIANT_RADIUS = 8; // Reduced from 15 to make gas giants smaller than stars
@@ -214,13 +206,6 @@ const GAS_GIANT_TO_STAR_THRESHOLD = 80.0; // Jupiter masses needed to become a s
 // given; the mass it was given was wrong about Jupiter.
 const JUPITER_MASS_UNIT = SOLAR_MASS_UNIT / JUPITER_MASSES_PER_SOLAR_MASS;
 
-// Kilograms in one simulation mass unit. The solar mass is the anchor, so this
-// is the one conversion the small-body units below are allowed to go through:
-// a second route from kilograms to simulation units would be a second chance
-// to disagree with the anchor, which is the failure JUPITER_MASS_UNIT and
-// EARTH_MASS_UNIT both had.
-const MASS_UNIT_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT;
-
 // Simulation mass units per Ceres mass, per Halley mass, and per kilometer-scale
 // rocky fragment.
 //
@@ -251,64 +236,10 @@ const DEBRIS_MASS_UNIT = DEBRIS_FRAGMENT_MASS_KG / MASS_UNIT_KG;
 // the same transform with its origin in the corner instead of the middle -
 // still exact, still invertible - and is_offscreen already guards for it
 // explicitly, so the rest of the module is expecting it.
-const canvas = document.getElementById('simulationCanvas') || {
+const canvas = (typeof document !== 'undefined' &&
+  document.getElementById('simulationCanvas')) || {
   width: 0,
   height: 0,
-};
-
-// Global state variables
-let bh_list = [],
-  planets = [],
-  stars = [],
-  gas_giants = [],
-  asteroids = [],
-  comets = [],
-  debris = [],
-  particles = [],
-  gwaves = [],
-  gravity_ripples = [],
-  neutron_stars = [],
-  white_dwarfs = [],
-  galaxies = [],
-  accretion_disk_particles = [];
-
-const dispatchSimulationEvent = (name, detail = {}) => {
-  if (
-    typeof window !== 'undefined' &&
-    typeof window.dispatchEvent === 'function' &&
-    typeof window.CustomEvent === 'function'
-  ) {
-    window.dispatchEvent(new window.CustomEvent(name, { detail }));
-  }
-};
-
-const emitCollisionEvent = detail => {
-  dispatchSimulationEvent('gravitasCollision', detail);
-};
-
-const buildImpactPayload = (source, target, impactType) => {
-  const sourcePos = source?.pos || target?.pos || { x: 0, y: 0 };
-  const targetPos = target?.pos || sourcePos;
-  const avgPos = {
-    x: (sourcePos.x + targetPos.x) / 2,
-    y: (sourcePos.y + targetPos.y) / 2,
-  };
-  const relativeSpeed = Math.hypot(
-    (source?.vel?.x || 0) - (target?.vel?.x || 0),
-    (source?.vel?.y || 0) - (target?.vel?.y || 0)
-  );
-  return {
-    impactType,
-    sourceType: source?.obj_type || source?.constructor?.name || 'Unknown',
-    targetType: target?.obj_type || target?.constructor?.name || impactType,
-    relativeSpeed,
-    masses: [source?.mass || 0, target?.mass || 0],
-    position: avgPos,
-  };
-};
-
-const broadcastImpact = (source, target, impactType) => {
-  emitCollisionEvent(buildImpactPayload(source, target, impactType));
 };
 
 // Worker state
@@ -324,151 +255,60 @@ let workerBuffers = {
 };
 let workerJobObjects = []; // Stores references to objects currently being processed by worker
 let cachedGravityDirty = false; // True while any object holds worker-cached gravity
+let workerSentAt = 0;
 
-let PhysicsObject_id_counter = 0;
-
-// Import state from ui.js to ensure single source of truth
-let state = null;
-
-// Function to set state reference from ui.js
-const setStateReference = stateRef => {
-  state = stateRef;
+// A dead or silent worker left workerBusy set, and every pull went stale.
+const failPhysicsWorker = why => {
+  console.error(`Physics Worker ${why}; summing gravity on the main thread`);
+  physicsWorker?.terminate();
+  physicsWorker = null;
+  setWorkerFailed(why);
+  workerBusy = false;
+  workerJobObjects = [];
+  announceWorkerFailed();
 };
 
-// Physics settings that can be updated from UI.
-//
-// Twenty-six of these twenty-seven keys also appear in DEFAULT_SETTINGS in
-// js/appState.js, and two of them disagree with it: gravitational_constant is
-// 2.0 there and 1.0 here, trail_length is 15 there and 100 here. That is not a
-// bug, but it is a trap, so it is written down.
-//
-// These are bootstrap values only. Every path that runs the simulation calls
-// updatePhysicsSettings(SETTINGS) first - js/world/build.js does it on every
-// world build - which merges the real settings over the top. Nothing integrates
-// an orbit at G = 1. The values here are what the module answers with in the
-// window before any world exists, and js/units.js is seeded from the same 1 so
-// that its conversions agree with whatever this object says at the time.
-//
-// They are deliberately not imported from js/appState.js: that would make the
-// engine depend on the interface's state module, which is the dependency this
-// file has spent this pass getting rid of.
-let physicsSettings = {
-  gravitational_constant: 1.0,
-  mutual_gravity: false,
-  enable_star_merging: true,
-  show_bh_glow: true,
-  show_accretion_disk: true,
-  realistic_disk_physics: true,
-  show_bh_jets: false,
-  trail_length: 100,
-  dynamic_object_properties: true,
-  star_base_color: '#ffff00',
-  planet_base_color: '#6495ed',
-  bh_behavior: 'Static',
-  orbit_decay_rate: 0.005,
-  max_timestep: 0,
-  min_interaction_distance: 0,
-  habitable_zone_optimism: 1.0,
-  star_only_gravity: false,
-  disk_doppler: true,
-  use_barnes_hut: false,
-  // Calibrated against the direct N^2 solver on a 78-body cluster:
-  //   theta 0.3 -> 0.20% mean / 2.6% worst error
-  //   theta 0.4 -> 0.46% mean / 3.4% worst   <- default
-  //   theta 0.7 -> 3.74% mean / 75.5% worst
-  // 0.7 is the textbook default but costs the same here as 0.4 while being an
-  // order of magnitude less accurate, so it is not worth the error budget.
-  barnes_hut_theta: 0.4,
-
-  // A dark-matter halo added to the force law as a smooth background field.
-  // Off by default: the halo is a claim about the universe, and a student
-  // should switch it on deliberately and watch what changes.
-  //
-  // The halo is a field, not a body. It has no position of its own to
-  // integrate, it never merges or is captured, and it does not appear in the
-  // object counts, because nothing about it is visible. That is the point.
-  // Which law governs a galaxy's outskirts. One setting with three values
-  // rather than two booleans, because the halo and MOND are competing
-  // explanations for the same observation and applying both at once would be
-  // physically meaningless. An enum cannot express that mistake.
-  //
-  //   'newtonian'  visible matter only, and the curve falls
-  //   'halo'       Newtonian gravity plus the pseudo-isothermal halo
-  //   'mond'       Milgrom's law applied to the visible matter's own field
-  //
-  // `dark_matter_halo` is kept alongside it as a mirror, not as a second source
-  // of truth: scenarios, saved games and shared links written before this
-  // existed all set the boolean, and normalizeGalaxyGravity() below keeps the
-  // two in step whichever one a caller writes.
-  galaxy_gravity: 'newtonian',
-  dark_matter_halo: false,
-  halo_v_flat: 6.0,
-  halo_core_radius: 300,
-  // What one simulation unit represents, for the scenarios that are scale
-  // models of a galaxy. Zero means "this is not a galaxy", and MOND refuses to
-  // run: there is no defensible acceleration scale for a planetary system or a
-  // black-hole encounter, and applying one silently would be worse than
-  // refusing. See js/mond.js.
-  galaxy_kpc_per_unit: 0,
-  galaxy_msun_per_unit: 0,
-
-  // The numerical scheme the bodies are advanced with. Symplectic Euler is the
-  // default, and has to stay the default: every shipped scenario was laid out,
-  // timed and tuned against its particular error, and quietly moving them to a
-  // more accurate scheme would change the dynamics of all of them at once.
-  // See INTEGRATORS below for what the other two are for.
-  integrator: 'Symplectic Euler',
+// The thirteen bursts: count, speed (range, floor) and lifetime (range, floor).
+// One draw for the direction, one for the speed, then one for the lifetime, in
+// that order, count times; a plume (`aim`) draws its direction within 0.6 of the
+// aim, and a null color (an absorbed body with no usable color) draws the first
+// two and spawns nothing, as the absorption burst always did.
+const BURSTS = {
+  absorb: { n: 15, v: [50, 30], t: [0.6, 0.4] },
+  tracer: { n: 6, v: [60, 40], t: [1.2, 0.8] },
+  starMerge: { n: 20, v: [40, 20], t: [0.8, 0.6] },
+  starPlanet: { n: 5, v: [20, 10], t: [0.5, 0.3] },
+  starGas: { n: 8, v: [30, 15], t: [0.6, 0.4] },
+  starAsteroid: { n: 3, v: [15, 8], t: [0.4, 0.2] },
+  rocky: { n: 10, v: [30, 20], t: [0.6, 0.4] },
+  collapseStar: { n: 30, v: [60, 40], t: [1.2, 0.8] },
+  collapseNS: { n: 25, v: [80, 60], t: [1.0, 0.6] },
+  collapseWD: { n: 20, v: [70, 50], t: [0.8, 0.5] },
+  gasAccretion: { n: 8, v: [25, 15], t: [0.5, 0.3] },
+  gasMerge: { n: 15, v: [35, 15], t: [0.7, 0.5] },
+  gasStar: { n: 10, v: [50, 25], t: [1.0, 0.8] },
 };
-
-// =============================================================================
-// Simulated time, and the accelerations the last step actually used
-// -----------------------------------------------------------------------------
-// Both exist so that something outside the physics can report on it without
-// recomputing it. A readout that recalculated the acceleration on a body would
-// be a second implementation of the force law, free to disagree with the one
-// the integrator used; the point of publishing it is that it cannot.
-// =============================================================================
-
-let simulationTime = 0;
-
-/** @returns {number} Simulated time since the world was built, in sim units */
-const getSimulationTime = () => simulationTime;
-
-/** Put the simulated clock back to zero. Called when a world is built. */
-const resetSimulationTime = () => {
-  simulationTime = 0;
+const NO_LOOK = {};
+const burst = (name, pos, color, aim) => {
+  const { n, v, t } = BURSTS[name];
+  const look = effectLooks[name] || NO_LOOK;
+  for (let k = 0; k < n; k++) {
+    const angle =
+      aim === undefined
+        ? Math.random() * 2 * Math.PI
+        : aim + (Math.random() - 0.5) * 1.2;
+    const speed = Math.random() * v[0] + v[1];
+    if (color === null) continue;
+    particlePool.getParticle(
+      pos,
+      { x: speed * Math.cos(angle), y: speed * Math.sin(angle) },
+      Math.random() * t[0] + t[1],
+      look.start,
+      look.end,
+      color === undefined ? look.color : color
+    );
+  }
 };
-
-/**
- * Set the simulated clock, for a state that is being restored rather than built.
- *
- * The A/B bench needs this: Run B has to resume from the same point on the
- * clock Run A started from, or the two runs cannot be put on one time axis
- * without a fudge factor. Nothing in the integrator reads the clock - it is a
- * readout, and the conservation baseline's own timestamp - so setting it moves
- * the reported time and nothing else.
- *
- * @param {number} t - Simulated seconds
- */
-const setSimulationTime = t => {
-  simulationTime = Number.isFinite(t) && t >= 0 ? t : 0;
-};
-
-/**
- * The clock the black-hole drawing animates against.
- *
- * The simulated clock, so a paused world draws the same frame for as long as
- * it stays paused and two runs of one scenario draw the same picture at the
- * same time. It used to be Date.now(), which meant the flow kept turning while
- * the simulation was frozen and no two screenshots ever matched.
- *
- * Under reduced motion it returns a constant: the picture is complete and
- * legible, it simply does not move.
- *
- * @returns {number} Seconds
- */
-const visualClockSeconds = () =>
-  prefersReducedMotion() ? 0 : getSimulationTime();
 
 /**
  * An appearance for a black hole that has not got one.
@@ -565,30 +405,6 @@ const defaultAppearance = id =>
 // too is quantified rather than silent.
 // =============================================================================
 
-let absorbedSpinAngularMomentum = 0;
-let discardedAbsorptionMomentum = { x: 0, y: 0 };
-
-/**
- * The angular momentum banked as black-hole spin by every absorption so far.
- * @returns {number} Sum of mu * (r_rel x v_rel), in simulation units
- */
-const getAbsorbedSpinAngularMomentum = () => absorbedSpinAngularMomentum;
-
-/**
- * The linear momentum absorption has thrown away in static and one-way-gravity
- * configurations, where the hole is not a dynamical participant.
- * @returns {{x: number, y: number}} Running total
- */
-const getDiscardedAbsorptionMomentum = () => ({
-  ...discardedAbsorptionMomentum,
-});
-
-/** Clear the absorption accounting. Called when a world is built. */
-const resetAbsorptionAccounting = () => {
-  absorbedSpinAngularMomentum = 0;
-  discardedAbsorptionMomentum = { x: 0, y: 0 };
-};
-
 /**
  * Whether an absorption by this hole should move the hole.
  *
@@ -635,8 +451,7 @@ const absorb_into_black_hole = (bh, body) => {
       Number.isFinite(body.vel.x) &&
       Number.isFinite(body.vel.y)
     ) {
-      discardedAbsorptionMomentum.x += m2 * body.vel.x;
-      discardedAbsorptionMomentum.y += m2 * body.vel.y;
+      bankDiscardedMomentum(m2 * body.vel.x, m2 * body.vel.y);
     }
     bh.mass = total;
     if (typeof bh.updateRadius === 'function') bh.updateRadius();
@@ -657,7 +472,7 @@ const absorb_into_black_hole = (bh, body) => {
   const vy = bvy - bh.vel.y;
   const spin = mu * (rx * vy - ry * vx);
   if (Number.isFinite(spin)) {
-    absorbedSpinAngularMomentum += spin;
+    bankAbsorbedSpin(spin);
     bh.spin_angular_momentum = (bh.spin_angular_momentum || 0) + spin;
   }
 
@@ -830,17 +645,17 @@ const completeMerger = (a, b, result, { remove } = {}) => {
     primaryId: a.id,
     secondaryId: b.id,
     resultId: result ? result.id : null,
-    // Class names, which is what the merger branches decide on. `keepNames` in
-    // build.js is what makes them survive minification.
+    // Body kinds (the class names, set below), which the merger branches
+    // decide on; the minifier cannot rename them.
     //
     // `resultObjType` is separate and is not a synonym: a transformed body
     // carries the obj_type of what it became and the class of what it was, and
     // js/ui.js renders the inspector by obj_type. Both are here so that no
     // consumer has to guess which one it wanted.
     types: {
-      primary: a.constructor?.name ?? null,
-      secondary: b.constructor?.name ?? null,
-      result: result ? (result.constructor?.name ?? null) : null,
+      primary: a.kind ?? null,
+      secondary: b.kind ?? null,
+      result: result ? (result.kind ?? null) : null,
       resultObjType: result ? (result.obj_type ?? null) : null,
     },
     masses: {
@@ -863,349 +678,9 @@ const completeMerger = (a, b, result, { remove } = {}) => {
     engineOwned: !result?.model_owned,
   };
 
-  if (!simulation.eventLog) simulation.eventLog = [];
-  simulation.eventLog.push(detail);
-  if (simulation.eventLog.length > 1000) simulation.eventLog.shift();
-
-  try {
-    if (
-      typeof window !== 'undefined' &&
-      window.dispatchEvent &&
-      typeof window.CustomEvent === 'function'
-    ) {
-      window.dispatchEvent(new window.CustomEvent('gravitasMerge', { detail }));
-    }
-  } catch {
-    // no-op: event dispatch not supported in this environment
-  }
+  announceMerge(detail);
 
   return detail;
-};
-
-// =============================================================================
-// Live conservation diagnostics
-// -----------------------------------------------------------------------------
-// Energy and angular momentum, against a baseline taken when the world was
-// built, so a student can watch the integrator setting change the answer. The
-// definitions are deliberately the same ones tools/scenario-stability.mjs uses
-// offline: a readout that measured something slightly different from the
-// validation harness would let one of them pass while the other failed and
-// leave nobody able to say which was right.
-//
-// Debris, particles and disk fragments are left out, on the same grounds the
-// barycenter leaves them out: they are culled aggressively once they leave the
-// visible world, and a body vanishing from the sum is a step change in the
-// total that has nothing to do with the integrator.
-// =============================================================================
-
-/**
- * The bodies the conserved quantities are summed over.
- * @returns {Array} Live list, rebuilt on each call
- */
-const conservedBodies = () =>
-  [
-    ...bh_list,
-    ...stars,
-    ...neutron_stars,
-    ...white_dwarfs,
-    ...planets,
-    ...gas_giants,
-    ...asteroids,
-    ...comets,
-    ...galaxies,
-  ].filter(b => b && b.alive !== false && Number.isFinite(b.mass));
-
-/**
- * Total energy and angular momentum of the current configuration.
- *
- * The potential is the full pairwise sum, which is O(N^2); the caller decides
- * how often to pay for it. Angular momentum is taken about the instantaneous
- * center of mass, so a system drifting across the screen does not report a
- * growing L.
- *
- * @returns {{energy: number, angular: number, count: number}} The totals
- */
-const conservedQuantities = () => {
-  const bodies = conservedBodies();
-  const n = bodies.length;
-  const G = physicsSettings.gravitational_constant;
-
-  // Flat arrays, and Math.sqrt rather than Math.hypot in the inner loop. This
-  // is the one O(N^2) sum in the application: a nine-hundred-body scene is
-  // four hundred thousand pairs, and hypot - which guards against intermediate
-  // overflow the simulation's coordinates cannot reach - costs several times
-  // what the square root does. Measured on Galactic Collision, the two changes
-  // together take this from 29ms to 2.8.
-  const px = new Float64Array(n);
-  const py = new Float64Array(n);
-  const mass = new Float64Array(n);
-  let m = 0;
-  let cx = 0;
-  let cy = 0;
-  for (let i = 0; i < n; i++) {
-    const b = bodies[i];
-    px[i] = b.pos.x;
-    py[i] = b.pos.y;
-    mass[i] = b.mass;
-    m += b.mass;
-    cx += b.mass * b.pos.x;
-    cy += b.mass * b.pos.y;
-  }
-  const ox = m > 0 ? cx / m : 0;
-  const oy = m > 0 ? cy / m : 0;
-
-  let energy = 0;
-  let angular = 0;
-  // The size of the terms the totals are made of, accumulated alongside them.
-  //
-  // A total can be small because nothing is happening or because two large
-  // numbers nearly canceled, and a percentage cannot tell those apart: a
-  // marginally bound system has kinetic and potential energies of the same
-  // magnitude and opposite sign, so its total is near zero and a relative
-  // drift figure divides by nearly nothing. These scales are what let the
-  // caller notice that before printing 40,000%.
-  //
-  // They cost two additions per body inside a loop that already does the
-  // multiplications, and they change no total.
-  let energyScale = 0;
-  let angularScale = 0;
-  for (let i = 0; i < n; i++) {
-    const b = bodies[i];
-    const kinetic = 0.5 * mass[i] * (b.vel.x * b.vel.x + b.vel.y * b.vel.y);
-    const spin = mass[i] * ((px[i] - ox) * b.vel.y - (py[i] - oy) * b.vel.x);
-    energy += kinetic;
-    angular += spin;
-    energyScale += kinetic;
-    angularScale += Math.abs(spin);
-    const gmi = G * mass[i];
-    let pot = 0;
-    for (let j = i + 1; j < n; j++) {
-      const dx = px[i] - px[j];
-      const dy = py[i] - py[j];
-      const r2 = dx * dx + dy * dy;
-      if (r2 > 0) pot -= mass[j] / Math.sqrt(r2);
-    }
-    energy += gmi * pot;
-    energyScale += Math.abs(gmi * pot);
-  }
-  return { energy, angular, energyScale, angularScale, count: n };
-};
-
-/**
- * Is a relative drift figure meaningful against this baseline?
- *
- * A percentage of a total that is itself the difference of two much larger
- * numbers is an amplified rounding error wearing a per-cent sign. The test is
- * conditioning, not size: a baseline is usable when it is not vanishingly
- * small compared with the terms that produced it.
- *
- * The threshold is one part in a thousand, and it is chosen rather than tuned.
- * Below it, a change of one part in a thousand of the *terms* - which is a
- * perfectly ordinary amount of integration error over a long run - moves the
- * reported percentage by 100% or more, so the figure says more about the
- * cancellation than about the integrator. Above it the amplification is at
- * most a thousandfold and the number still means something.
- *
- * This is deliberately not a list of scenarios. A marginally bound pair, a
- * system whose net angular momentum happens to cancel, and an empty sandbox
- * all fail it for the same reason, and a new scenario that does the same will
- * fail it without anybody adding a case.
- */
-const CONDITION_FLOOR = 1e-3;
-
-/**
- * @param {number} total - The baseline total
- * @param {number} scale - The sum of the magnitudes it was built from
- * @returns {boolean} True when a percentage of `total` is worth printing
- */
-const wellConditioned = (total, scale) =>
-  Number.isFinite(total) &&
-  Number.isFinite(scale) &&
-  scale > 0 &&
-  Math.abs(total) >= CONDITION_FLOOR * scale;
-
-let conservationBaseline = null;
-
-/**
- * Take the reference state the drift is measured against.
- *
- * Called when a world is built, and available to the user as a "rebaseline"
- * so a drift figure can be started from a configuration that has settled
- * rather than from the instant of construction.
- *
- * @returns {object} The new baseline
- */
-const resetConservationBaseline = () => {
-  invalidateConservationCache();
-  const now = conservedQuantities();
-  conservationBaseline = {
-    energy: now.energy,
-    angular: now.angular,
-    // Kept so the drift figure can tell a small total from a canceled one.
-    energyScale: now.energyScale,
-    angularScale: now.angularScale,
-    count: now.count,
-    atTime: simulationTime,
-  };
-  return conservationBaseline;
-};
-
-/**
- * Reasons the configuration is not expected to conserve anything, so a drift
- * figure can say whether it is measuring the scheme or the model.
- *
- * Each of these is a deliberate simplification that is documented elsewhere in
- * this file, and each of them breaks a conservation law by construction rather
- * than by numerical error. A diagnostic that reported 40% energy drift without
- * saying "there is a static black hole in this scene" would be blamed on the
- * integrator.
- *
- * @returns {Array<string>} Short reasons, empty when the system is closed
- */
-const conservationCaveats = () => {
-  // Message ids rather than sentences: physics.js is the wrong place to hold
-  // prose, and the readout that prints these is drawn on the canvas in the
-  // reader's language. js/sandboxTools.js translates them at the point of use.
-  const out = [];
-  if (bh_list.length > 0 && physicsSettings.bh_behavior !== 'Orbiting') {
-    out.push('caveat.staticBlackHole');
-  }
-  if (
-    physicsSettings.star_only_gravity === true ||
-    physicsSettings.mutual_gravity !== true
-  ) {
-    out.push('caveat.oneWayGravity');
-  }
-  if (physicsSettings.galaxy_gravity === 'halo') {
-    out.push('caveat.halo');
-  }
-  if (physicsSettings.galaxy_gravity === 'mond') {
-    out.push('caveat.mond');
-  }
-  if ((physicsSettings.orbit_decay_rate || 0) > 0 && bh_list.length > 1) {
-    out.push('caveat.orbitDecay');
-  }
-  if (physicsSettings.enable_star_merging === true) {
-    out.push('caveat.merging');
-  }
-  // Tidal stripping runs whenever there is a hole for a body to pass close to,
-  // and it is not gated by a setting the way merging is. It removes mass from
-  // the body and returns fixed-mass fragments that do not account for it, so it
-  // is a mass sink and therefore an energy and momentum sink too.
-  if (bh_list.length > 0) {
-    out.push('caveat.tidalDisruption');
-  }
-  return out;
-};
-
-// The drift readout is repainted every frame and the potential sum inside it is
-// O(N^2): a nine-hundred-body scene is four hundred thousand pairs, which is a
-// few milliseconds, and a few milliseconds sixty times a second is most of a
-// frame budget spent on a number that changes far too slowly to need it.
-//
-// So the expensive half - the two totals - is cached and recomputed a few times
-// a second. The interval scales with the size of the system, because the cost
-// is quadratic in it while the usefulness of a faster update is not: a two-body
-// scenario refreshes ten times a second and a thousand-body one twice.
-//
-// Only the totals are cached. The scheme in force and the reasons the system is
-// not closed are free to compute and can change between two frames, so they are
-// read fresh every time; a readout that named the previous integrator for half
-// a second after the setting changed would look like the setting had not taken.
-let totalsCache = null;
-let totalsCachedAt = -Infinity;
-let totalsCachedGeneration = -1;
-
-// How long to wait before measuring again, from how long the last measurement
-// took. The rule is a budget rather than a schedule: never spend more than one
-// frame in fifty on the readout, whatever the scene turns out to cost. A
-// three-body system refreshes at the floor of ten times a second; a
-// nine-hundred-body one, where the sum is a few milliseconds, backs off to
-// about three times a second on its own and needs no special case.
-const DRIFT_BUDGET = 50;
-const DRIFT_MIN_MS = 100;
-const DRIFT_MAX_MS = 2000;
-let lastDriftCostMs = 0;
-
-const driftIntervalMs = () =>
-  Math.min(
-    DRIFT_MAX_MS,
-    Math.max(DRIFT_MIN_MS, lastDriftCostMs * DRIFT_BUDGET)
-  );
-
-const monotonicMs = () =>
-  typeof performance !== 'undefined' && performance.now
-    ? performance.now()
-    : Date.now();
-
-/** Throw away the cached totals, so the next read measures the world again. */
-const invalidateConservationCache = () => {
-  totalsCache = null;
-  totalsCachedAt = -Infinity;
-};
-
-/**
- * The conserved totals, measured now or read from the cache.
- * @param {boolean} fresh - Skip the cache
- * @returns {{energy: number, angular: number, count: number}} The totals
- */
-const cachedConservedQuantities = fresh => {
-  const nowMs = monotonicMs();
-  if (
-    !fresh &&
-    totalsCache &&
-    totalsCachedGeneration === worldGeneration &&
-    nowMs - totalsCachedAt < driftIntervalMs()
-  ) {
-    return totalsCache;
-  }
-  totalsCache = conservedQuantities();
-  lastDriftCostMs = monotonicMs() - nowMs;
-  totalsCachedAt = nowMs;
-  totalsCachedGeneration = worldGeneration;
-  return totalsCache;
-};
-
-/**
- * Drift from the baseline, as percentages.
- *
- * @param {boolean} [fresh] - Skip the cache and measure the totals now
- * @returns {?object} energyDrift, angularDrift, the raw totals, the baseline,
- *   the caveats, and the body count; null before a baseline exists
- */
-const conservationDrift = (fresh = false) => {
-  if (!conservationBaseline) return null;
-  const now = cachedConservedQuantities(fresh);
-  const e0 = conservationBaseline.energy;
-  const l0 = conservationBaseline.angular;
-  // Conditioned against the baseline's own scale, not the current one: the
-  // question is whether the number being divided by was ever a usable
-  // denominator.
-  const energyOk = wellConditioned(e0, conservationBaseline.energyScale);
-  const angularOk = wellConditioned(l0, conservationBaseline.angularScale);
-  return {
-    energy: now.energy,
-    angular: now.angular,
-    baselineEnergy: e0,
-    baselineAngular: l0,
-    // NaN where a percentage would be an amplified cancellation rather than a
-    // measurement. The absolute changes below are always available, and are
-    // what a caller should show instead of an enormous figure.
-    energyDrift: energyOk ? (100 * (now.energy - e0)) / Math.abs(e0) : NaN,
-    angularDrift: angularOk ? (100 * (now.angular - l0)) / Math.abs(l0) : NaN,
-    energyChange: now.energy - e0,
-    angularChange: now.angular - l0,
-    energyConditioned: energyOk,
-    angularConditioned: angularOk,
-    energyScale: conservationBaseline.energyScale,
-    angularScale: conservationBaseline.angularScale,
-    count: now.count,
-    baselineCount: conservationBaseline.count,
-    baselineTime: conservationBaseline.atTime,
-    elapsed: simulationTime - conservationBaseline.atTime,
-    integrator: activeIntegrator(),
-    caveats: conservationCaveats(),
-  };
 };
 
 /**
@@ -1287,7 +762,7 @@ const accelerationBreakdown = body => {
     sources.push({
       id: s.id ?? -1,
       label: s.name || s.obj_type || 'source',
-      type: s.obj_type || s.constructor?.name || 'source',
+      type: s.obj_type || s.kind || 'source',
       mass: s.mass,
       ax,
       ay,
@@ -1398,14 +873,6 @@ const activeMondA0 = () => {
 };
 
 /**
- * Whether the Barnes-Hut worker path is currently driving gravity.
- * @returns {boolean} True when approximate tree gravity is active
- */
-const isBarnesHutActive = () =>
-  physicsSettings.mutual_gravity === true &&
-  physicsSettings.use_barnes_hut === true;
-
-/**
  * Drop accelerations and potentials cached from the Barnes-Hut worker.
  * Called whenever the worker path is not active so stale values from a
  * previous run cannot be mistaken for current ones.
@@ -1452,321 +919,10 @@ const clearCachedGravity = () => {
  */
 export { DISPLAY_MIN_PX as DRAW_MIN_RADIUS_PX };
 
-/** How many bodies are on screen, for the crowded-field marker floor. */
-let liveBodyCount = 0;
-
-/** Record how many bodies are on screen, for the crowding rule above. */
-const setLiveBodyCount = n => {
-  liveBodyCount = n;
-};
-
-/** The current marker floor in screen pixels. Exported for the tests. */
-export const currentMarkerFloorPx = () => markerFloorPx(liveBodyCount);
-
-/**
- * Radius to draw a body at, in world units.
- *
- * @param {Object} obj - Body with a model radius
- * @param {string} type - Which family, for the display policy
- * @returns {number} Radius to draw, never below a few screen pixels
- */
-const drawRadius = (obj, type) =>
-  // `stageRadius` is a presentation override: a lesson comparing stellar sizes
-  // sets it to say how big to draw this body and nothing else. It is used
-  // *instead of* the model radius rather than as well as it, so the family
-  // display factor cannot compress a size the lesson has already chosen -
-  // two scalings fighting each other is how a true-scale comparison stopped
-  // being to scale. The engine radius is untouched, so collisions, tides and
-  // every measured orbital property are the same whichever scale is showing.
-  Number.isFinite(obj.stageRadius) && obj.stageRadius > 0
-    ? Math.max(
-        obj.stageRadius,
-        markerFloorPx(liveBodyCount) / ((state && state.zoom) || 1)
-      )
-    : drawnRadius(obj.radius, type, (state && state.zoom) || 1, liveBodyCount);
-
-/**
- * How much detail this body is worth, at its current size on screen.
- *
- * One call, so every family draws at the same thresholds and a reader zooming
- * out watches the whole scene simplify together rather than one class at a
- * time.
- *
- * Measured on the *display* radius before the floor, which is the size the
- * body is about to be drawn at, and deliberately not on the model radius. When
- * the two were the same number this distinction did not exist; now that a
- * planet is drawn at three eighths of its model radius, asking the model would
- * put surface marks and cloud bands on a body occupying three pixels. Before
- * the floor, because a body held at the floor is a marker standing in for
- * something too small to see, and drawing weather on it would be a fiction.
- *
- * @param {Object} obj - Body with a radius
- * @param {string} type - Which family, for the display policy
- * @returns {string} One of LOD
- */
-const lodOf = (obj, type) => {
-  const z = (state && state.zoom) || 1;
-  return lodFor(displayRadius(obj.radius, type) * z, {
-    tier: currentTier(),
-    crowded: liveBodyCount > CROWD_SOFT_START,
-  });
-};
-
-/**
- * The luminous bodies in the scene, as light sources, recomputed once a frame.
- *
- * Positions are held by reference, so a moving star needs no refresh; what is
- * cached is the array and the luminosity, which is the part that would
- * otherwise be recomputed once per lit body per frame. A hundred planets in a
- * two-star system asked for this two hundred times a frame before it was
- * memoised.
- *
- * @returns {Array<{pos: Object, luminosity: number}>} Sources, possibly empty
- */
-let lightCacheFrame = -1;
-let lightCacheList = [];
-const luminousSources = () => {
-  const frame = (state && state.frame_count) || 0;
-  if (frame === lightCacheFrame && lightCacheList.length === stars.length) {
-    return lightCacheList;
-  }
-  lightCacheFrame = frame;
-  lightCacheList = [];
-  for (const star of stars) {
-    if (!star || star.alive === false) continue;
-    const props = stellarPropertiesFor(star, SOLAR_MASS_UNIT);
-    if (!(props.luminositySolar > 0)) continue;
-    lightCacheList.push({
-      pos: star.pos,
-      luminosity: props.luminositySolar,
-      teffK: props.teffK,
-      star,
-    });
-  }
-  return lightCacheList;
-};
-
-/**
- * The star that lights this body, or null in a scene with none.
- * @param {{x: number, y: number}} pos - Where the light is received
- * @returns {?Object} A light source
- */
-const dominantStarFor = pos => dominantLight(pos, luminousSources());
-
-/**
- * Does the reader want animation held still?
- *
- * Read through matchMedia rather than from a setting, because it is an
- * operating-system preference and the rest of the interface already honors it
- * that way (see the reduced-motion block in css/tokens.css). Cached: matchMedia
- * is not free and this is asked once per pulsar per frame.
- *
- * @returns {boolean} True when animation should be held
- */
-let reducedMotionQuery = null;
-const prefersReducedMotion = () => {
-  if (typeof window === 'undefined' || !window.matchMedia) return false;
-  if (!reducedMotionQuery) {
-    try {
-      reducedMotionQuery = window.matchMedia(
-        '(prefers-reduced-motion: reduce)'
-      );
-    } catch {
-      return false;
-    }
-  }
-  return Boolean(reducedMotionQuery.matches);
-};
-
-/**
- * How far a star's corona reaches, in stellar radii.
- *
- * Was three, at more than twice this alpha. A corona that wide is not a
- * corona; it is a glow that hides whatever is orbiting inside it, and on a
- * zoomed-in star it covered the inner planets entirely.
- */
-const CORONA_SCALE = 1.9;
-
-/** `rgba(...)` from a channel triple and an alpha. Avoids a template per call site. */
-const rgba = (c, a) => `rgba(${c.r},${c.g},${c.b},${a})`;
-
 // The click minimums moved to js/bodyVisuals.js, beside the display policy and
 // pointedly separate from it: hitRadius() takes the *model* radius, so a body
 // drawn at three eighths of it is exactly as easy to select as it was before.
 // They are the same numbers they have always been.
-
-// Function to update physics settings
-const updatePhysicsSettings = settings => {
-  physicsSettings = normalizeGalaxyGravity(
-    {
-      ...physicsSettings,
-      ...settings,
-    },
-    settings
-  );
-  // js/units.js derives the length of a time unit from G, and used to import
-  // getPhysicsSetting to read it - which made the foundation layer depend on
-  // the engine. It is pushed from here instead, which is the one place
-  // physicsSettings is ever written.
-  setSimGravitationalConstant(physicsSettings.gravitational_constant);
-};
-
-/**
- * Keep the galaxy-gravity mode and the legacy halo boolean in step.
- *
- * There is one rule and it is enforced here rather than at every call site:
- * the halo and MOND are alternatives, so at most one of them can be in the
- * force law. Expressing the mode as an enum makes "both at once" unsayable;
- * this function is what stops the old boolean from saying it anyway.
- *
- * Which one wins when a caller writes both is decided by what the caller
- * actually asked for in this patch, not by what was already there - so
- * `updatePhysicsSettings({ galaxy_gravity: 'mond' })` turns the halo off, and
- * a saved game that only knows about `dark_matter_halo` still works.
- *
- * @param {object} next - The merged settings
- * @param {object} patch - Only the keys this call supplied
- * @returns {object} The merged settings, made self-consistent
- */
-const normalizeGalaxyGravity = (next, patch = {}) => {
-  const wroteMode = Object.hasOwn(patch, 'galaxy_gravity');
-  const wroteHalo = Object.hasOwn(patch, 'dark_matter_halo');
-
-  let mode = next.galaxy_gravity;
-
-  // Both named in one patch, and disagreeing. This happens when a caller merges
-  // a baseline that says 'newtonian' with an override that says the halo is on
-  // - which is exactly what the validation harness does, and it silently
-  // switched the halo off until this branch existed.
-  //
-  // Resolved toward the positive assertion: `dark_matter_halo: true` is
-  // somebody asking for something, where 'newtonian' is usually a baseline with
-  // no opinion. The state that comes out is consistent either way; this only
-  // decides which of two contradictory requests is honored.
-  if (wroteHalo && wroteMode && patch.dark_matter_halo === true) {
-    mode = 'halo';
-  } else if (wroteHalo && !wroteMode) {
-    // A caller that only knows the boolean. Turning the halo on means the halo;
-    // turning it off means plain Newtonian - but not if MOND is what is
-    // running, because then the boolean was already false and saying so again
-    // should not silently switch the mode.
-    if (patch.dark_matter_halo === true) mode = 'halo';
-    else if (mode === 'halo') mode = 'newtonian';
-  }
-  if (mode !== 'halo' && mode !== 'mond') mode = 'newtonian';
-
-  // MOND needs a scale to convert a0 into. Without one it is not applied, and
-  // the mode falls back rather than pretending.
-  if (
-    mode === 'mond' &&
-    !(next.galaxy_kpc_per_unit > 0 && next.galaxy_msun_per_unit > 0)
-  ) {
-    mode = 'newtonian';
-  }
-
-  next.galaxy_gravity = mode;
-  next.dark_matter_halo = mode === 'halo';
-  return next;
-};
-
-/**
- * Read a single physics setting. Lets other modules observe the live physics
- * configuration without importing the mutable object itself.
- * @param {string} key - Setting name
- * @returns {any} Current value
- */
-const getPhysicsSetting = key => physicsSettings[key];
-
-// Adaptive level-of-detail multiplier owned by the renderer (see render.js).
-// Kept separate from physicsSettings so it can never be persisted to a save
-// file or written back over a user setting.
-let detailScale = 1;
-
-/**
- * Set the adaptive level-of-detail multiplier.
- * @param {number} scale - Multiplier applied to detail budgets (clamped 0.5-1.5)
- */
-const setDetailScale = scale => {
-  // Capped at 1: adaptive detail may only trim below what the user asked for,
-  // never inflate past it.
-  detailScale =
-    typeof scale === 'number' && isFinite(scale)
-      ? Math.max(0.5, Math.min(1, scale))
-      : 1;
-};
-
-/**
- * Get the current adaptive level-of-detail multiplier.
- * @returns {number} Current detail scale
- */
-/**
- * Sample counter for trails.
- *
- * Every live body appends one trail point per physics step, so a shared counter
- * is enough to say which samples were taken at the same moment. That is what
- * lets one body's trail be re-expressed in another body's frame: without a
- * common clock the two arrays are just two lists of coordinates, and lining them
- * up by array index breaks the moment one body is younger than the other.
- */
-let trailTick = 0;
-
-/** @returns {number} The tick of the most recent trail sample */
-const getTrailTick = () => trailTick;
-
-/** Restart the trail clock and drop frame history. Called when the world is rebuilt. */
-const resetTrailTick = () => {
-  trailTick = 0;
-  clearFrameHistory();
-};
-
-/**
- * How many trail samples a body keeps.
- *
- * Extracted from update_trail so the barycenter history can be kept to exactly
- * the same length. A barycenter history shorter than the trails would silently
- * truncate the re-expressed trails; one longer would just waste memory.
- *
- * @returns {number} Sample budget, at least 1
- */
-const trailBudget = () => {
-  // Zoom-based budget: fewer points when zoomed out, more when zoomed in
-  const zoom = state ? state.zoom : 1.0;
-  // detailScale is the renderer's adaptive-quality multiplier. It is applied
-  // here, at read time, so the user's configured trail_length is never
-  // overwritten.
-  const baseLen = Math.max(
-    1,
-    Math.round(physicsSettings.trail_length * detailScale)
-  );
-  if (baseLen < 10) {
-    // Preserve exact behavior for small budgets (tests rely on this)
-    return baseLen;
-  }
-  const minLen = Math.max(10, Math.floor(baseLen * 0.4));
-  const maxLen = Math.max(baseLen, 10);
-  return Math.max(
-    minLen,
-    Math.min(maxLen, Math.floor(baseLen * Math.min(1.5, Math.max(0.6, zoom))))
-  );
-};
-
-const getDetailScale = () => detailScale;
-
-// Utility functions
-/**
- * Reset the physics object ID counter to 0
- */
-const resetPhysicsObjectCounter = () => {
-  PhysicsObject_id_counter = 0;
-};
-
-/**
- * Set the physics object ID counter to a specific value
- * @param {number} value - The new counter value
- */
-const setPhysicsObjectCounter = value => {
-  PhysicsObject_id_counter = value;
-};
 
 // Coordinate transformation functions (using utils)
 /**
@@ -1807,20 +963,6 @@ const is_offscreen = (pos, buffer_factor = 10.0) => {
   return isOffscreen(pos, state, canvas, zoom_adjusted_buffer);
 };
 
-// Color utilities (using utils)
-/**
- * Compute dynamic color based on proximity to black holes
- * @param {string} base_color_hex - Base color in hex format
- * @param {Object} pos - Position object with x, y properties
- * @param {Array} bh_list - Array of black hole objects
- * @param {number} threshold - Distance threshold for color change
- * @param {Object} target_color - Target RGB color to blend towards
- * @param {Object} settings - Settings object (optional)
- * @returns {string} RGB color string
- */
-const compute_dynamic_color = computeDynamicColor;
-
-// Core physics function
 /**
  * Calculate gravitational acceleration at a target position from multiple sources
  * @param {Object} target_pos - Target position with x, y properties
@@ -1993,23 +1135,6 @@ let intKy = new Float64Array(256);
 //   quietly collapse to Euler while still calling itself RK4. The multi-stage
 //   schemes therefore evaluate the direct sum, and say so in the settings help.
 // =============================================================================
-
-/** The schemes, by the label the settings dropdown uses. */
-const INTEGRATORS = ['Symplectic Euler', 'Velocity Verlet', 'RK4'];
-
-/**
- * The scheme in force, always one of INTEGRATORS.
- *
- * Anything unrecognized resolves to symplectic Euler rather than throwing: a
- * saved link or an old scenario file naming a scheme that no longer exists
- * should load into the default, not into a broken simulation.
- *
- * @returns {string} The active scheme's label
- */
-const activeIntegrator = () => {
-  const want = physicsSettings.integrator;
-  return INTEGRATORS.includes(want) ? want : 'Symplectic Euler';
-};
 
 /** Grow the multi-stage scratch buffers to hold `n` bodies. */
 const growIntegratorScratch = n => {
@@ -2305,15 +1430,15 @@ let cachedAllPhysicsObjects = [];
 const cachedBarycenterBodies = [];
 
 /**
- * Every body a reference frame's barycenter is averaged over.
- *
- * Exposed so the renderer's current barycenter and the recorded history are
- * taken over exactly the same set. If they disagreed, the origin would jump by
- * the difference the moment a frame was selected.
+ * Every body a frame's barycenter is averaged over, as its history records.
+ * Refreshed first, or a merger's product is missing from it until next step.
  *
  * @returns {Array} The live list, not a copy
  */
-const barycenterBodies = () => cachedBarycenterBodies;
+const barycenterBodies = () => {
+  updateCachedArrays();
+  return cachedBarycenterBodies;
+};
 let lastMutualGravityState = null;
 let lastStarOnlyGravityState = null;
 let lastObjectCounts = {
@@ -2328,60 +1453,11 @@ let lastObjectCounts = {
 // Barnes–Hut tree gravity lives in physicsWorker.js; the main thread only
 // ships positions to it and reads accelerations back.
 
+let lastWorldGeneration = -1;
+
 /**
  * Update cached arrays only when object counts change
  */
-// Bumped whenever the object lists are repopulated. The cache below keyed only
-// off list *lengths*, so rebuilding a scenario into the same shape (Refresh
-// Scenario, or a lesson re-applying its setup) left cachedAllPhysicsObjects
-// holding the discarded objects: the integrator went on advancing bodies that
-// were no longer in the simulation while the renderer drew the new ones.
-let worldGeneration = 0;
-let lastWorldGeneration = -1;
-let interventionEpoch = 0;
-
-/** Invalidate the physics caches. Call after repopulating the object lists. */
-const bumpWorldGeneration = () => {
-  worldGeneration++;
-};
-
-/**
- * Which world this is.
- *
- * Bumped on every repopulation of the object lists, so it distinguishes two
- * worlds that a body id cannot: ids restart from a counter, and a rebuilt
- * scenario hands the same id to a different star. The observing panels put this
- * in a recording's identity for exactly that reason - without it, a recording
- * of one star could be continued against its replacement.
- *
- * @returns {number} A counter, meaningful only by comparison
- */
-export const getWorldGeneration = () => worldGeneration;
-
-/**
- * How many times a body's state has been changed by hand.
- *
- * Distinct from the world generation, which counts rebuilds. This counts
- * interventions: a maneuver burn, a bench perturbation - the same objects,
- * moving differently because somebody made them. An observing session cannot
- * see the difference from the target's identity, and it matters to one: a
- * radial-velocity curve recorded before a burn is a recording of an orbit the
- * planet is no longer on, and continuing it afterwards would splice two
- * different systems into one dataset.
- *
- * @returns {number} A counter, meaningful only by comparison
- */
-export const getInterventionEpoch = () => interventionEpoch;
-
-/**
- * Record that a body's state was changed by hand rather than by integration.
- *
- * @returns {number} The new epoch
- */
-export function noteIntervention() {
-  return ++interventionEpoch;
-}
-
 const updateCachedArrays = () => {
   const currentCounts = {
     bh: bh_list.length,
@@ -2399,11 +1475,6 @@ const updateCachedArrays = () => {
   const countsChanged = Object.keys(currentCounts).some(
     key => currentCounts[key] !== lastObjectCounts[key]
   );
-
-  // Debug logging for tests
-  // if (countsChanged) {
-  //   console.log('Array counts changed:', lastObjectCounts, '->', currentCounts);
-  // }
 
   if (
     countsChanged ||
@@ -2479,12 +1550,26 @@ const updateCachedArrays = () => {
  * @param {number} dt - Delta time for physics update
  */
 const updatePhysics = dt => {
-  if (dt <= 0) return;
+  // Zero and nonsense do nothing; a negative step integrates backwards.
+  //
+  // This read `dt <= 0`, which refused a negative advance and - because NaN
+  // compares false against everything - let NaN through to be added to every
+  // position in the scene. Both halves are fixed here.
+  //
+  // Nothing in the application can ask for a backward step. There is one
+  // caller, js/render.js, and it gets its advance from frameAdvance(), which
+  // multiplies a non-negative frame time by a sim_speed the settings control
+  // bounds at [0, 5]. The reverse direction exists for
+  // tools/reversibility-probe.mjs, which measures how well a forward run can
+  // be undone - and the answer to that question is what the irreversibility
+  // audit is built on. It is a measurement, not a feature: there is no control
+  // anywhere that runs the simulation backwards.
+  if (!Number.isFinite(dt) || dt === 0) return;
   // The clock the elapsed-time readout and the stopwatch both run on. Advanced
   // here rather than in the render loop so that it counts what was actually
   // integrated: a scenario that substeps takes several calls per frame, and a
   // paused or scrubbing frame takes none.
-  simulationTime += dt;
+  advanceSimulationTime(dt);
   // If simulation is effectively empty, clear particle pool and exported array
   try {
     const totalObjects =
@@ -2565,11 +1650,17 @@ const updatePhysics = dt => {
           workerBusy = false;
         }
       };
+      physicsWorker.onerror = e => failPhysicsWorker(e?.message || 'failed');
+      physicsWorker.onmessageerror = () =>
+        failPhysicsWorker('sent an unreadable answer');
     } catch (err) {
       console.error('Physics Worker init failed:', err);
       physicsWorker = null;
     }
   }
+
+  if (workerBusy && performance.now() - workerSentAt > 10_000)
+    failPhysicsWorker('stopped answering');
 
   // Schedule new worker job if free
   if (
@@ -2663,11 +1754,12 @@ const updatePhysics = dt => {
     workerBuffers.sx = null;
     workerBuffers.tself = null;
     workerBusy = true;
+    workerSentAt = performance.now();
   }
 
   // One tick per step, before anything appends: every point pushed below shares
   // this number, which is what makes cross-body frame changes possible.
-  trailTick++;
+  advanceTrailTick();
 
   // One place for the halo, applied before whichever gravity solver runs.
   //
@@ -2822,31 +1914,18 @@ const updatePhysics = dt => {
     return obj_list.filter(obj => {
       if (obj.alive && obj.check_absorption(bh_list)) {
         // Create absorption particles matching original
-        for (let i = 0; i < 15; i++) {
-          const angle = Math.random() * 2 * Math.PI;
-          const speed = Math.random() * 50 + 30;
-          const p_vel = {
-            x: speed * Math.cos(angle),
-            y: speed * Math.sin(angle),
-          };
-          const baseColor =
-            (obj && obj.baseColor) ||
-            (obj && obj.obj_type
-              ? physicsSettings[`${obj.obj_type.toLowerCase()}_base_color`]
-              : undefined) ||
-            '#c8c8c8';
-          const rgb = hexToRgb(baseColor);
-          if (rgb) {
-            particlePool.getParticle(
-              obj.pos,
-              p_vel,
-              Math.random() * 0.6 + 0.4,
-              5,
-              1,
-              `rgb(${rgb.r},${rgb.g},${rgb.b})`
-            );
-          }
-        }
+        const baseColor =
+          (obj && obj.baseColor) ||
+          (obj && obj.obj_type
+            ? physicsSettings[`${obj.obj_type.toLowerCase()}_base_color`]
+            : undefined) ||
+          '#c8c8c8';
+        const rgb = hexToRgb(baseColor);
+        burst(
+          'absorb',
+          obj.pos,
+          rgb ? `rgb(${rgb.r},${rgb.g},${rgb.b})` : null
+        );
         // (event system removed)
         return false;
       }
@@ -2862,14 +1941,14 @@ const updatePhysics = dt => {
   };
 
   // Apply absorption check to all object types
-  planets = check_and_absorb(planets);
-  stars = check_and_absorb(stars);
-  gas_giants = check_and_absorb(gas_giants);
-  asteroids = check_and_absorb(asteroids);
-  comets = check_and_absorb(comets);
-  debris = check_and_absorb(debris);
-  neutron_stars = check_and_absorb(neutron_stars);
-  white_dwarfs = check_and_absorb(white_dwarfs);
+  setBodyList('planets', check_and_absorb(planets));
+  setBodyList('stars', check_and_absorb(stars));
+  setBodyList('gas_giants', check_and_absorb(gas_giants));
+  setBodyList('asteroids', check_and_absorb(asteroids));
+  setBodyList('comets', check_and_absorb(comets));
+  setBodyList('debris', check_and_absorb(debris));
+  setBodyList('neutron_stars', check_and_absorb(neutron_stars));
+  setBodyList('white_dwarfs', check_and_absorb(white_dwarfs));
 
   // Update particles
   // Legacy test compatibility: if external tests pushed mock particles with is_alive/update,
@@ -2894,10 +1973,10 @@ const updatePhysics = dt => {
   } else {
     // Default: use the particle pool system
     particlePool.updateAndCleanup(dt);
-    particles = particlePool.getActiveParticles();
+    setBodyList('particles', particlePool.getActiveParticles());
   }
 
-  // Update accretion disk particles - this was missing!
+  // The one place an accretion-disk tracer moves (see updateDiskParticles).
   for (const particle of accretion_disk_particles) {
     if (particle.alive) {
       particle.update_physics(dt, []);
@@ -2905,7 +1984,10 @@ const updatePhysics = dt => {
   }
 
   // Clean up dead accretion disk particles
-  accretion_disk_particles = accretion_disk_particles.filter(p => p.alive);
+  setBodyList(
+    'accretion_disk_particles',
+    accretion_disk_particles.filter(p => p.alive)
+  );
 
   // Black hole merging logic - enhanced with accretion disk transfer
   let merged_this_step = true;
@@ -3069,51 +2151,75 @@ const updatePhysics = dt => {
   const kept = obj => obj.persistent === true;
 
   // More conservative filtering for important objects - only remove if truly far away
-  planets = filterAndClearEnergy(
-    planets,
-    p => p.alive && (kept(p) || !is_offscreen(p.pos, 20.0))
+  setBodyList(
+    'planets',
+    filterAndClearEnergy(
+      planets,
+      p => p.alive && (kept(p) || !is_offscreen(p.pos, 20.0))
+    )
   );
-  stars = filterAndClearEnergy(
-    stars,
-    s => s.alive && (kept(s) || !is_offscreen(s.pos, 20.0))
+  setBodyList(
+    'stars',
+    filterAndClearEnergy(
+      stars,
+      s => s.alive && (kept(s) || !is_offscreen(s.pos, 20.0))
+    )
   );
-  gas_giants = filterAndClearEnergy(
-    gas_giants,
-    g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
+  setBodyList(
+    'gas_giants',
+    filterAndClearEnergy(
+      gas_giants,
+      g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
+    )
   );
-  neutron_stars = filterAndClearEnergy(
-    neutron_stars,
-    ns => ns.alive && (kept(ns) || !is_offscreen(ns.pos, 20.0))
+  setBodyList(
+    'neutron_stars',
+    filterAndClearEnergy(
+      neutron_stars,
+      ns => ns.alive && (kept(ns) || !is_offscreen(ns.pos, 20.0))
+    )
   );
-  white_dwarfs = filterAndClearEnergy(
-    white_dwarfs,
-    wd => wd.alive && (kept(wd) || !is_offscreen(wd.pos, 20.0))
+  setBodyList(
+    'white_dwarfs',
+    filterAndClearEnergy(
+      white_dwarfs,
+      wd => wd.alive && (kept(wd) || !is_offscreen(wd.pos, 20.0))
+    )
   );
-  galaxies = filterAndClearEnergy(
-    galaxies,
-    g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
+  setBodyList(
+    'galaxies',
+    filterAndClearEnergy(
+      galaxies,
+      g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
+    )
   );
-  bh_list = filterAndClearEnergy(
-    bh_list,
-    bh => bh.alive !== false && !is_offscreen(bh.pos, 50.0)
+  setBodyList(
+    'bh_list',
+    filterAndClearEnergy(
+      bh_list,
+      bh => bh.alive !== false && !is_offscreen(bh.pos, 50.0)
+    )
   ); // Black holes should never be removed
 
   // More aggressive filtering for smaller/less important objects
-  asteroids = filterAndClearEnergy(
-    asteroids,
-    a => a.alive && !is_offscreen(a.pos, 5.0)
+  setBodyList(
+    'asteroids',
+    filterAndClearEnergy(asteroids, a => a.alive && !is_offscreen(a.pos, 5.0))
   );
-  comets = filterAndClearEnergy(
-    comets,
-    c => c.alive && !is_offscreen(c.pos, 20.0)
+  setBodyList(
+    'comets',
+    filterAndClearEnergy(comets, c => c.alive && !is_offscreen(c.pos, 20.0))
   );
-  debris = filterAndClearEnergy(
-    debris,
-    d => d.alive && !is_offscreen(d.pos, 3.0)
+  setBodyList(
+    'debris',
+    filterAndClearEnergy(debris, d => d.alive && !is_offscreen(d.pos, 3.0))
   );
-  accretion_disk_particles = filterAndClearEnergy(
-    accretion_disk_particles,
-    ap => ap.alive && !is_offscreen(ap.pos, 2.0)
+  setBodyList(
+    'accretion_disk_particles',
+    filterAndClearEnergy(
+      accretion_disk_particles,
+      ap => ap.alive && !is_offscreen(ap.pos, 2.0)
+    )
   );
 
   // Follow mode logic
@@ -3186,51 +2292,25 @@ const updatePhysics = dt => {
   // Anything watching the integration itself, after the step is complete. The
   // set is empty unless something armed a watch, so the ordinary cost is one
   // size check per step. See onPhysicsStep().
-  if (stepListeners.size) {
-    for (const listen of stepListeners) {
-      try {
-        listen(dt, simulationTime);
-      } catch (err) {
-        // A listener must never be able to stop the integrator.
-        console.warn('A physics-step listener threw:', err);
-      }
-    }
-  }
+  runStepListeners(dt, simulationTime);
 };
-
-/**
- * Things to run after every integration step.
- *
- * Not after every frame: a scenario that substeps takes several of these per
- * frame, and a paused or scrubbing frame takes none. Anything that has to see
- * the states the integrator actually produced - event detection, in particular,
- * which has to be able to say how finely it localised something - belongs here
- * and not in the render loop.
- *
- * Inverted deliberately. physics.js is the bottom of the module graph and must
- * not import the things that care about it, so they subscribe instead.
- *
- * @type {Set<Function>}
- */
-const stepListeners = new Set();
-
-/**
- * Subscribe to integration steps.
- *
- * @param {Function} fn - Called with (dt, simulationTime) after each step
- * @returns {Function} Unsubscribe
- */
-export function onPhysicsStep(fn) {
-  if (typeof fn !== 'function') return () => {};
-  stepListeners.add(fn);
-  return () => stepListeners.delete(fn);
-}
 
 // Base PhysicsObject class
 /**
  * Base class for all physics objects in the simulation
  */
 class PhysicsObject {
+  // A body's kind: its class's static `kind`, a string minifying cannot rename.
+  // An accessor, so it is not state: not enumerated, not saved, and a saved
+  // state that names a `kind` cannot replace it. Not obj_type (see below).
+  //
+  // The setter does nothing on purpose: set_state() and `assign` copy fields
+  // with Object.assign, a getter alone would throw there, and a saved `kind`
+  // must never change what a body is (CONTRIBUTING.md, Module boundaries).
+  get kind() {
+    return this.constructor.kind;
+  }
+  set kind(_) {}
   /**
    * Create a physics object
    * @param {Object} pos - Initial position with x, y properties
@@ -3240,7 +2320,7 @@ class PhysicsObject {
    * @param {string} obj_type - Type identifier for the object
    */
   constructor(pos, vel, mass, radius, obj_type = 'object') {
-    this.id = PhysicsObject_id_counter++;
+    this.id = nextPhysicsObjectId();
     /**
      * Whether a prescribed scientific model owns this body's state.
      *
@@ -3378,15 +2458,17 @@ class PhysicsObject {
     this.trail = [];
   }
 
-  draw(_ctx) {}
+  draw(ctx) {
+    paintBody(this, ctx, this.kind);
+  }
 }
 
-// Planet class
 /**
  * Planet physics object with Earth-like properties
  * @extends PhysicsObject
  */
 class Planet extends PhysicsObject {
+  static kind = 'Planet';
   /**
    * Create a planet object
    * @param {Object} pos - Initial position with x, y properties
@@ -3422,423 +2504,6 @@ class Planet extends PhysicsObject {
       return 'rocky';
     } else {
       return 'rocky';
-    }
-  }
-
-  draw(ctx) {
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-
-    // Custom rendering for Earth and Moon
-    if (this.isEarth) {
-      this.drawEarth(ctx, world_pos);
-      return;
-    }
-
-    if (this.isMoon) {
-      this.drawMoon(ctx, world_pos);
-      return;
-    }
-
-    // A scenario that names a color means it: the Solar System sets Mercury
-    // gray, Venus cream, Mars red, and the Kepler lesson distinguishes its two
-    // orbiters by color in the text. Falling straight through to the density
-    // switch ignored all of that and drew every planet the same sky blue,
-    // including two side by side that the lesson calls "blue" and "orange".
-    let baseColor = this.baseColor;
-    if (!baseColor) {
-      switch (this.density) {
-        case 'gaseous':
-          baseColor = '#87CEEB';
-          break;
-        case 'icy':
-          baseColor = '#E6E6FA';
-          break;
-        case 'rocky':
-        default:
-          baseColor = '#87CEEB';
-          break;
-      }
-    }
-
-    const r = drawRadius(this, 'Planet');
-    const z = (state && state.zoom) || 1;
-    const level = lodOf(this, 'Planet');
-    const litColor = compute_dynamic_color(baseColor, this.pos, bh_list);
-
-    ctx.fillStyle = litColor;
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
-    ctx.fill();
-
-    // Everything from here to the label is inside the limb.
-    //
-    // The bands and the polar caps below used to be drawn as full-width
-    // rectangles across the body: correct in the middle, and running past the
-    // circle at the top and bottom of each one, so a planet had two tabs
-    // sticking out of its side. Clipping to the disc is what makes them
-    // markings on a sphere rather than stripes behind one - and it is one
-    // clip for the whole group rather than one path per marking.
-    if (lodAtLeast(level, LOD.SHADED)) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
-      ctx.clip();
-      this.drawSurface(ctx, world_pos, r, z, level, baseColor);
-      ctx.restore();
-    }
-
-    // Soft bloom, into the offscreen layer js/render.js composites additively.
-    //
-    // One pass. There used to be two consecutive blocks here, identical in
-    // geometry and differing only in color: the first in the planet's own
-    // base color at 0.15/0.06, the second in a fixed pale blue at 0.35/0.15.
-    // Added together, the fixed blue was more than twice the weight of the
-    // planet's own color, so a red planet and a blue one wore the same halo -
-    // and every planet paid for two full-size radial gradients a frame to be
-    // told the wrong color. The alphas below are the two sets summed, so the
-    // brightness is what it always was; only the hue is now correct.
-    //
-    // Reading window.bloomCtx is what arms the composite (see the getter in
-    // js/render.js), so the tier check has to come first: at the low tier the
-    // layer must not be touched at all, which is what js/quality.js means when
-    // it lists the bloom canvas among the passes that tier exists to skip.
-    try {
-      if (currentTier() !== 'low' && typeof window !== 'undefined') {
-        // The halo follows the drawn body, not the model radius.
-        const screenR = r * state.zoom;
-        if (screenR > 1 && window.bloomCtx) {
-          const { x: screenX, y: screenY } = world_to_screen(world_pos);
-          const rgbPlanet = hexToRgb(baseColor) || { r: 200, g: 220, b: 255 };
-          const { r, g, b } = rgbPlanet;
-          const grad = window.bloomCtx.createRadialGradient(
-            screenX,
-            screenY,
-            0,
-            screenX,
-            screenY,
-            screenR * 2.5
-          );
-          grad.addColorStop(0, `rgba(${r},${g},${b},0.5)`);
-          grad.addColorStop(0.6, `rgba(${r},${g},${b},0.21)`);
-          grad.addColorStop(1, 'rgba(0,0,0,0)');
-          window.bloomCtx.fillStyle = grad;
-          window.bloomCtx.beginPath();
-          window.bloomCtx.arc(screenX, screenY, screenR * 2.5, 0, 2 * Math.PI);
-          window.bloomCtx.fill();
-        }
-      }
-    } catch {
-      // no-op
-    }
-
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = world_to_screen(world_pos);
-    // Two different sizes, on purpose.
-    //
-    // The offset follows the *drawn* body, so a label sits just off the disc
-    // the reader can see. Whether to label at all follows the *model* radius,
-    // which is the size this decision has always been made on: gating on the
-    // drawn size instead would have taken the names off every planet in the
-    // Solar System the moment the displayed-size policy shrank them, which is
-    // a labeling change nobody asked for.
-    const screen_radius = r * state.zoom;
-    const label_size = this.radius * state.zoom;
-
-    if (label_size > 4) {
-      const label_y_offset = screen_radius + 10;
-      ctx.font = '10px Roboto Mono';
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'black';
-      ctx.shadowBlur = 3;
-
-      // Show name for Solar System planets, mass for others
-      if (this.isSolarSystemPlanet) {
-        ctx.fillText(
-          this.name,
-          true_screen_pos.x,
-          true_screen_pos.y + label_y_offset
-        );
-      } else {
-        drawSolarLabel(
-          ctx,
-          formatNumber(this.massInEarths),
-          true_screen_pos.x,
-          true_screen_pos.y + label_y_offset,
-          { symbol: EARTH_SYMBOL }
-        );
-      }
-    }
-    ctx.restore();
-  }
-
-  /**
-   * What is drawn on the planet's face, inside the limb.
-   *
-   * The caller has already clipped to the disc, which is what lets everything
-   * here be simple shapes: a band is a rectangle and the clip makes it a band
-   * on a sphere. Ordered cheapest first, so the level of detail can stop
-   * partway rather than needing a separate code path per level.
-   *
-   * @param {CanvasRenderingContext2D} ctx - Clipped, world-transformed context
-   * @param {{x: number, y: number}} at - Center, world units
-   * @param {number} r - Drawn radius, world units
-   * @param {number} z - Zoom
-   * @param {string} level - From lodOf
-   * @param {string} baseColor - The planet's own color
-   */
-  drawSurface(ctx, at, r, z, level, baseColor) {
-    // --- one shading pass: which side the light is on ---------------------
-    //
-    // From the star that actually lights this planet, so the terminator turns
-    // as it orbits and two planets on opposite sides of a star are lit from
-    // opposite sides. A scene with no luminous body gets the fixed fallback
-    // from js/bodyVisuals.js rather than an invented sun.
-    const sun = dominantStarFor(at);
-    const light = lightDirection(at, sun ? sun.pos : null);
-    const shade = ctx.createRadialGradient(
-      at.x + light.x * r * 0.55,
-      at.y + light.y * r * 0.55,
-      r * 0.1,
-      at.x,
-      at.y,
-      r * 1.05
-    );
-    shade.addColorStop(0, 'rgba(255,255,255,0.22)');
-    shade.addColorStop(0.45, 'rgba(255,255,255,0)');
-    shade.addColorStop(1, 'rgba(0,0,0,0.42)');
-    ctx.fillStyle = shade;
-    ctx.beginPath();
-    ctx.arc(at.x, at.y, r, 0, 2 * Math.PI);
-    ctx.fill();
-
-    if (!lodAtLeast(level, LOD.DETAILED)) return;
-
-    // --- body-specific detail ---------------------------------------------
-    if (this.density === 'gaseous') {
-      ctx.fillStyle = 'rgba(135, 206, 235, 0.45)';
-      const band = Math.max(1 / z, r * 0.18);
-      ctx.fillRect(at.x - r, at.y - r * 0.5 - band / 2, r * 2, band);
-      ctx.fillRect(at.x - r, at.y + r * 0.5 - band / 2, r * 2, band);
-    } else if (this.density === 'icy') {
-      // Polar caps. Drawn as squat ellipses rather than rectangles so the clip
-      // has something cap-shaped to trim, which reads as a pole rather than as
-      // a flat lid.
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-      const cap = r * 0.42;
-      for (const sign of [-1, 1]) {
-        ctx.beginPath();
-        ctx.ellipse(
-          at.x,
-          at.y + sign * r * 0.92,
-          r * 0.95,
-          cap,
-          0,
-          0,
-          2 * Math.PI
-        );
-        ctx.fill();
-      }
-    } else {
-      // Rocky: a few maria, in fixed places on this planet forever. The
-      // positions come from the object's own id through js/bodyVisuals.js, so
-      // the same world rebuilt from the same seed - or reopened from a share
-      // link - has the same planet with the same markings, and no draw path
-      // has to call Math.random.
-      const seed = visualSeed(this);
-      const dark = hexToRgb(baseColor) || { r: 140, g: 140, b: 150 };
-      const spot = scaleRgb(dark, 0.72);
-      ctx.fillStyle = rgba(spot, 0.5);
-      const marks = 3;
-      for (let i = 0; i < marks; i++) {
-        const a = hash01(seed, 10 + i) * Math.PI * 2;
-        const d = (0.15 + hash01(seed, 20 + i) * 0.55) * r;
-        const rad = (0.16 + hash01(seed, 30 + i) * 0.2) * r;
-        ctx.beginPath();
-        ctx.ellipse(
-          at.x + Math.cos(a) * d,
-          at.y + Math.sin(a) * d,
-          rad,
-          rad * (0.6 + hash01(seed, 40 + i) * 0.5),
-          a,
-          0,
-          2 * Math.PI
-        );
-        ctx.fill();
-      }
-    }
-  }
-
-  drawEarth(ctx, world_pos) {
-    // Everything here is proportioned to the drawn disc rather than to the
-    // model radius: a continent sized to a radius the body is no longer drawn
-    // at is a continent that covers the planet.
-    const r = drawRadius(this, 'Planet');
-    // Draw Earth with realistic appearance - blue oceans with green continents
-    const gradient = ctx.createRadialGradient(
-      world_pos.x,
-      world_pos.y,
-      0,
-      world_pos.x,
-      world_pos.y,
-      r
-    );
-
-    // Base ocean color
-    gradient.addColorStop(0, '#4B7BE5'); // Deep blue center
-    gradient.addColorStop(0.7, '#5B8BF5'); // Lighter blue
-    gradient.addColorStop(1, '#6B9BF5'); // Light blue edge
-
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(
-      world_pos.x,
-      world_pos.y,
-      drawRadius(this, 'Planet'),
-      0,
-      2 * Math.PI
-    );
-    ctx.fill();
-
-    // Add continent-like features (simplified)
-    if (r * state.zoom > 8) {
-      // Draw some green "continents" as simple shapes
-      ctx.fillStyle = '#2D5A2D'; // Dark green for continents
-
-      // North America-like shape
-      ctx.beginPath();
-      ctx.arc(
-        world_pos.x - r * 0.3,
-        world_pos.y - r * 0.4,
-        r * 0.25,
-        0,
-        2 * Math.PI
-      );
-      ctx.fill();
-
-      // Europe/Asia-like shape
-      ctx.beginPath();
-      ctx.arc(
-        world_pos.x + r * 0.2,
-        world_pos.y - r * 0.3,
-        r * 0.3,
-        0,
-        2 * Math.PI
-      );
-      ctx.fill();
-
-      // Africa-like shape
-      ctx.beginPath();
-      ctx.arc(
-        world_pos.x + r * 0.1,
-        world_pos.y + r * 0.2,
-        r * 0.2,
-        0,
-        2 * Math.PI
-      );
-      ctx.fill();
-
-      // South America-like shape
-      ctx.beginPath();
-      ctx.arc(
-        world_pos.x - r * 0.4,
-        world_pos.y + r * 0.3,
-        r * 0.15,
-        0,
-        2 * Math.PI
-      );
-      ctx.fill();
-    }
-
-    // Add atmospheric glow
-    ctx.strokeStyle = 'rgba(135, 206, 235, 0.3)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(
-      world_pos.x,
-      world_pos.y,
-      drawRadius(this, 'Planet') + 1,
-      0,
-      2 * Math.PI
-    );
-    ctx.stroke();
-  }
-
-  drawMoon(ctx, world_pos) {
-    const r = drawRadius(this, 'Planet');
-    // Draw Moon with realistic gray appearance and mock craters
-    const gradient = ctx.createRadialGradient(
-      world_pos.x,
-      world_pos.y,
-      0,
-      world_pos.x,
-      world_pos.y,
-      r
-    );
-
-    // Moon surface gradient
-    gradient.addColorStop(0, '#6B6B6B'); // Dark gray center
-    gradient.addColorStop(0.5, '#8B8B8B'); // Medium gray
-    gradient.addColorStop(1, '#A0A0A0'); // Light gray edge
-
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(
-      world_pos.x,
-      world_pos.y,
-      drawRadius(this, 'Planet'),
-      0,
-      2 * Math.PI
-    );
-    ctx.fill();
-
-    // Add mock craters if zoomed in enough
-    if (r * state.zoom > 6) {
-      ctx.fillStyle = '#5A5A5A'; // Darker gray for craters
-
-      // Draw several craters of different sizes
-      const craters = [
-        { x: -0.3, y: -0.2, r: 0.15 },
-        { x: 0.2, y: 0.3, r: 0.12 },
-        { x: 0.4, y: -0.1, r: 0.08 },
-        { x: -0.1, y: 0.4, r: 0.1 },
-        { x: 0.1, y: -0.4, r: 0.06 },
-        { x: -0.4, y: 0.1, r: 0.09 },
-      ];
-
-      craters.forEach(crater => {
-        ctx.beginPath();
-        ctx.arc(
-          world_pos.x + crater.x * r,
-          world_pos.y + crater.y * r,
-          crater.r * r,
-          0,
-          2 * Math.PI
-        );
-        ctx.fill();
-      });
-    }
-
-    // Add subtle surface texture
-    if (r * state.zoom > 4) {
-      ctx.strokeStyle = 'rgba(100, 100, 100, 0.2)';
-      ctx.lineWidth = 0.5;
-
-      // Draw some subtle lines to simulate lunar surface features
-      for (let i = 0; i < 3; i++) {
-        const angle = (i * Math.PI) / 3;
-        const x1 = world_pos.x + Math.cos(angle) * r * 0.8;
-        const y1 = world_pos.y + Math.sin(angle) * r * 0.8;
-        const x2 = world_pos.x + Math.cos(angle) * r;
-        const y2 = world_pos.y + Math.sin(angle) * r;
-
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-      }
     }
   }
 
@@ -3903,8 +2568,8 @@ class Planet extends PhysicsObject {
   }
 }
 
-// GasGiant class
 class GasGiant extends PhysicsObject {
+  static kind = 'GasGiant';
   constructor(pos, vel, massInJupiters = null) {
     let finalMassInJupiters;
     if (massInJupiters !== null) {
@@ -3968,109 +2633,6 @@ class GasGiant extends PhysicsObject {
     return this._rings;
   }
 
-  /**
-   * One half of the ring system, as concentric projected ellipses.
-   *
-   * The disk is drawn in two passes with the planet between them, which is the
-   * whole of what makes it read as a disk rather than as a hoop painted on the
-   * sky: the far half goes down first, the opaque planet covers the part of it
-   * that crosses the disc, and the near half goes over the top. The planet
-   * fill is opaque, so the occlusion is exact rather than approximate.
-   *
-   * Bands, gaps and an optional Cassini-like division, all from the cached
-   * geometry: no gradients, no allocation beyond the paths themselves, and
-   * nothing random.
-   *
-   * @param {CanvasRenderingContext2D} ctx - Target
-   * @param {{x: number, y: number}} at - Planet center, world coordinates
-   * @param {number} pr - The planet's displayed radius, world units
-   * @param {boolean} near - The half in front of the planet
-   * @param {boolean} detailed - Bands and a division, rather than one annulus
-   */
-  drawRingHalf(ctx, at, pr, near, detailed) {
-    const g = this.ringGeometry();
-    // Which half of the parameterised ellipse faces the viewer depends on
-    // which side of the ring plane the viewer is on, which is what tiltSign
-    // records. Flipping it swaps front and back, and is the difference between
-    // a ring that passes in front of the planet and one that does not.
-    const front = g.tiltSign > 0;
-    const t0 = near === front ? 0 : Math.PI;
-
-    ctx.save();
-    ctx.translate(at.x, at.y);
-    ctx.rotate(g.angle);
-    ctx.globalAlpha = g.opacity;
-
-    const arcs = detailed
-      ? g.bands
-      : [{ r0: g.inner, r1: g.outer, alpha: 0.8 }];
-
-    for (const band of arcs) {
-      const r1 = band.r1 * pr;
-      const r0 = band.r0 * pr;
-      // A band narrower than a fraction of a pixel is not a band.
-      if (r1 - r0 <= 0) continue;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, r1, r1 * g.flatten, 0, t0, t0 + Math.PI, false);
-      ctx.ellipse(0, 0, r0, r0 * g.flatten, 0, t0 + Math.PI, t0, true);
-      ctx.closePath();
-      ctx.fillStyle = `rgba(${g.tint.r},${g.tint.g},${g.tint.b},${band.alpha.toFixed(3)})`;
-      ctx.fill('evenodd');
-    }
-
-    // The division, drawn as a hole rather than as a line: it is a gap in the
-    // rings, and a dark stroke over them would read as a wire.
-    if (detailed && g.cassini) {
-      const r1 = g.cassini.r1 * pr;
-      const r0 = g.cassini.r0 * pr;
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.beginPath();
-      ctx.ellipse(0, 0, r1, r1 * g.flatten, 0, t0, t0 + Math.PI, false);
-      ctx.ellipse(0, 0, r0, r0 * g.flatten, 0, t0 + Math.PI, t0, true);
-      ctx.closePath();
-      ctx.fill('evenodd');
-      ctx.globalCompositeOperation = 'source-over';
-    }
-
-    ctx.globalAlpha = 1;
-    ctx.restore();
-  }
-
-  /**
-   * The planet's shadow, falling across the rings away from the star.
-   *
-   * A wedge, not a radiative-transfer calculation, and it claims no more than
-   * that: the rings are darker on the side the planet is between them and the
-   * light. Drawn only when there is a light to be away from and only at the
-   * size where it is legible.
-   *
-   * @param {CanvasRenderingContext2D} ctx - Target
-   * @param {{x: number, y: number}} at - Planet center, world coordinates
-   * @param {number} pr - Displayed planetary radius
-   * @param {{x: number, y: number}} light - Unit vector toward the light
-   */
-  drawRingShadow(ctx, at, pr, light) {
-    const g = this.ringGeometry();
-    const away = Math.atan2(-light.y, -light.x) - g.angle;
-    const half = 0.42; // radians either side: a shadow, not a sector chart
-
-    ctx.save();
-    ctx.translate(at.x, at.y);
-    ctx.rotate(g.angle);
-    ctx.globalAlpha = 0.55 * g.opacity;
-    ctx.globalCompositeOperation = 'destination-out';
-    const r1 = g.outer * pr;
-    const r0 = g.inner * pr;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, r1, r1 * g.flatten, 0, away - half, away + half, false);
-    ctx.ellipse(0, 0, r0, r0 * g.flatten, 0, away + half, away - half, true);
-    ctx.closePath();
-    ctx.fill('evenodd');
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = 1;
-    ctx.restore();
-  }
-
   calculateGiantType() {
     if (this.massInJupiters > 13) {
       return 'brown_dwarf';
@@ -4082,256 +2644,6 @@ class GasGiant extends PhysicsObject {
       return 'neptune_like';
     } else {
       return 'mini_neptune';
-    }
-  }
-
-  draw(ctx) {
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-
-    // The drawn radius, and how much of the system is worth showing at it.
-    // Everything below is proportioned to this rather than to the model
-    // radius, rings included.
-    const gr = drawRadius(this, 'GasGiant');
-    const gz = (state && state.zoom) || 1;
-    const glevel = lodOf(this, 'GasGiant');
-    const grPx = gr * gz;
-
-    // Rings, when there is room for them to be rings.
-    //
-    // A ring system on a body a few pixels across is four gray pixels beside
-    // three colored ones, which is noise rather than information - so below
-    // the shaded threshold they are simply not drawn, and in a crowded field
-    // they are not drawn at all. Between the two, a single annulus each side;
-    // above it, the bands and the division.
-    const ringsVisible =
-      this.hasRings && lodAtLeast(glevel, LOD.SHADED) && grPx >= 5;
-    const ringsDetailed =
-      ringsVisible && lodAtLeast(glevel, LOD.DETAILED) && grPx >= 9;
-
-    // The far half first, so the planet can cover the part of it that crosses
-    // the disc.
-    if (ringsVisible)
-      this.drawRingHalf(ctx, world_pos, gr, false, ringsDetailed);
-
-    // Draw the gas giant sphere (this will occlude the back portion of the ring)
-    let baseColor;
-    switch (this.giantType) {
-      case 'brown_dwarf':
-        baseColor = '#8B4513';
-        break;
-      case 'super_jupiter':
-        baseColor = '#DAA520';
-        break;
-      case 'jupiter_like':
-        baseColor = '#D2B48C';
-        break;
-      case 'neptune_like':
-        baseColor = '#4169E1';
-        break;
-      case 'mini_neptune':
-      default:
-        baseColor = '#87CEEB';
-        break;
-    }
-
-    ctx.fillStyle = compute_dynamic_color(baseColor, this.pos, bh_list);
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
-    ctx.fill();
-
-    // Spherical shading, and the clip that makes the bands below belong to the
-    // sphere rather than lie across it. One clip for the whole face: the bands
-    // were ellipses wider than the body, so their ends were cut by nothing and
-    // a gas giant had two lozenges floating over its silhouette.
-    if (lodAtLeast(glevel, LOD.SHADED)) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
-      ctx.clip();
-
-      const gsun = dominantStarFor(world_pos);
-      const glight = lightDirection(world_pos, gsun ? gsun.pos : null);
-      const gshade = ctx.createRadialGradient(
-        world_pos.x + glight.x * gr * 0.5,
-        world_pos.y + glight.y * gr * 0.5,
-        gr * 0.08,
-        world_pos.x,
-        world_pos.y,
-        gr * 1.05
-      );
-      gshade.addColorStop(0, 'rgba(255,255,255,0.18)');
-      gshade.addColorStop(0.4, 'rgba(255,255,255,0)');
-      gshade.addColorStop(1, 'rgba(0,0,0,0.45)');
-      ctx.fillStyle = gshade;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.restore();
-    }
-
-    if (lodAtLeast(glevel, LOD.DETAILED) && gr * gz > 4) {
-      // Clipped to the disc, for the reason above: the band ellipses are wider
-      // and taller than the sphere at the latitudes they sit at, so without
-      // this the outer ones hang off the limb.
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
-      ctx.clip();
-
-      let bandColor, highlightColor;
-      switch (this.giantType) {
-        case 'brown_dwarf':
-          bandColor = 'rgba(139, 69, 19, 0.6)';
-          highlightColor = 'rgba(160, 82, 45, 0.4)';
-          break;
-        case 'super_jupiter':
-          bandColor = 'rgba(218, 165, 32, 0.5)';
-          highlightColor = 'rgba(255, 215, 0, 0.3)';
-          break;
-        case 'jupiter_like':
-          bandColor = 'rgba(160, 82, 45, 0.5)';
-          highlightColor = 'rgba(210, 180, 140, 0.3)';
-          break;
-        case 'neptune_like':
-          bandColor = 'rgba(65, 105, 225, 0.5)';
-          highlightColor = 'rgba(100, 149, 237, 0.3)';
-          break;
-        case 'mini_neptune':
-        default:
-          bandColor = 'rgba(135, 206, 235, 0.5)';
-          highlightColor = 'rgba(173, 216, 230, 0.3)';
-          break;
-      }
-
-      // A band has to reach the limb, or it is a lozenge floating on the face.
-      // These ellipses are wider than the disc on purpose and the clip above
-      // trims them to it, which is what makes each one span the full width of
-      // the sphere at its own latitude. They used to be sized from the model
-      // radius, which over-spanned by so much that every band ran together
-      // into a wash; sized from the drawn radius they have to be widened
-      // deliberately instead of by accident.
-      const numBands = this.massInJupiters > 3 ? 4 : 2;
-      const BAND_OVERSPAN = 1.15;
-      for (let i = 0; i < numBands; i++) {
-        const bandOffset = (i - (numBands - 1) / 2) * (gr * 0.4);
-        const bandWidth = gr * 0.15;
-
-        ctx.fillStyle = bandColor;
-        ctx.beginPath();
-        ctx.ellipse(
-          world_pos.x,
-          world_pos.y + bandOffset,
-          gr * BAND_OVERSPAN,
-          bandWidth,
-          0,
-          0,
-          2 * Math.PI
-        );
-        ctx.fill();
-
-        ctx.fillStyle = highlightColor;
-        ctx.beginPath();
-        ctx.ellipse(
-          world_pos.x,
-          world_pos.y + bandOffset - bandWidth * 0.3,
-          gr * BAND_OVERSPAN * 0.94,
-          bandWidth * 0.4,
-          0,
-          0,
-          2 * Math.PI
-        );
-        ctx.fill();
-      }
-
-      // Polar caps, likewise trimmed to the limb rather than sitting inside it.
-      if (this.massInJupiters > 2) {
-        ctx.fillStyle = bandColor;
-        ctx.beginPath();
-        ctx.ellipse(
-          world_pos.x,
-          world_pos.y - gr * 0.8,
-          gr * 0.7,
-          gr * 0.28,
-          0,
-          0,
-          2 * Math.PI
-        );
-        ctx.ellipse(
-          world_pos.x,
-          world_pos.y + gr * 0.8,
-          gr * 0.7,
-          gr * 0.28,
-          0,
-          0,
-          2 * Math.PI
-        );
-        ctx.fill();
-      }
-
-      ctx.restore();
-    }
-
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = world_to_screen(world_pos);
-    // Two different sizes, on purpose.
-    //
-    // The offset follows the *drawn* body, so a label sits just off the disc
-    // the reader can see. Whether to label at all follows the *model* radius,
-    // which is the size this decision has always been made on: gating on the
-    // drawn size instead would have taken the names off every planet in the
-    // Solar System the moment the displayed-size policy shrank them, which is
-    // a labeling change nobody asked for.
-    const screen_radius = gr * state.zoom;
-    const label_size = this.radius * state.zoom;
-
-    if (label_size > 6) {
-      const label_y_offset = screen_radius + 12;
-      ctx.font = '11px Roboto Mono';
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'black';
-      ctx.shadowBlur = 3;
-
-      // Show name for Solar System gas giants, mass for others
-      if (this.isSolarSystemPlanet) {
-        ctx.fillText(
-          this.name,
-          true_screen_pos.x,
-          true_screen_pos.y + label_y_offset
-        );
-      } else {
-        const massInEarths =
-          this.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS;
-        drawSolarLabel(
-          ctx,
-          String(Math.round(massInEarths)),
-          true_screen_pos.x,
-          true_screen_pos.y + label_y_offset,
-          { symbol: EARTH_SYMBOL }
-        );
-      }
-    }
-    ctx.restore();
-
-    // ...and the near half over the top, which is what makes the disk read as
-    // a disk passing behind and in front rather than as a hoop drawn on the
-    // sky. Then the planet's own shadow across it, where there is a star to
-    // cast one.
-    if (ringsVisible) {
-      this.drawRingHalf(ctx, world_pos, gr, true, ringsDetailed);
-      if (ringsDetailed) {
-        const rsun = dominantStarFor(world_pos);
-        if (rsun) {
-          this.drawRingShadow(
-            ctx,
-            world_pos,
-            gr,
-            lightDirection(world_pos, rsun.pos)
-          );
-        }
-      }
     }
   }
 
@@ -4396,7 +2708,6 @@ class GasGiant extends PhysicsObject {
   }
 }
 
-// Asteroid class
 /**
  * A minor planet, massed in Ceres masses.
  *
@@ -4408,6 +2719,7 @@ class GasGiant extends PhysicsObject {
  * @extends PhysicsObject
  */
 class Asteroid extends PhysicsObject {
+  static kind = 'Asteroid';
   /**
    * @param {Object} pos - Initial position
    * @param {Object} vel - Initial velocity
@@ -4426,79 +2738,8 @@ class Asteroid extends PhysicsObject {
     this.massInCeres = finalMassInCeres;
     this.name = getRandomName('asteroids');
   }
-
-  /**
-   * A rock.
-   *
-   * A circle until it is big enough on screen for a shape to read, then a
-   * deterministic irregular outline - because an asteroid is not round, and at
-   * twenty pixels a perfect disc is the one thing it certainly is not. The
-   * outline comes from this body's own visual seed, so the same rock has the
-   * same shape in every session and in every share link, and the vertices are
-   * cached rather than rebuilt per frame.
-   *
-   * In a crowded field it stays a dot however large it is: js/bodyVisuals.js
-   * caps the level of detail there, and a belt of two hundred rocks each
-   * stroking a nine-vertex path is two hundred paths a frame to draw something
-   * the reader sees as a haze.
-   *
-   * @param {CanvasRenderingContext2D} ctx - World-transformed context
-   */
-  draw(ctx) {
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    const r = drawRadius(this, 'Asteroid');
-    const level = lodOf(this, 'Asteroid');
-
-    ctx.fillStyle = '#8B4513';
-
-    if (!lodAtLeast(level, LOD.DETAILED)) {
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
-      ctx.fill();
-      return;
-    }
-
-    const shape = silhouetteFor(visualSeed(this));
-    ctx.beginPath();
-    for (let i = 0; i < shape.length; i++) {
-      const a = (i / shape.length) * Math.PI * 2;
-      const rr = r * shape[i];
-      const x = world_pos.x + Math.cos(a) * rr;
-      const y = world_pos.y + Math.sin(a) * rr;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.closePath();
-    ctx.fill();
-
-    // One shading pass, from the same light every other body uses.
-    const sun = dominantStarFor(world_pos);
-    const light = lightDirection(world_pos, sun ? sun.pos : null);
-    ctx.save();
-    ctx.clip();
-    const shade = ctx.createRadialGradient(
-      world_pos.x + light.x * r * 0.6,
-      world_pos.y + light.y * r * 0.6,
-      r * 0.1,
-      world_pos.x,
-      world_pos.y,
-      r * 1.2
-    );
-    shade.addColorStop(0, 'rgba(255,235,205,0.35)');
-    shade.addColorStop(0.5, 'rgba(255,255,255,0)');
-    shade.addColorStop(1, 'rgba(0,0,0,0.45)');
-    ctx.fillStyle = shade;
-    ctx.fillRect(
-      world_pos.x - r * 1.3,
-      world_pos.y - r * 1.3,
-      r * 2.6,
-      r * 2.6
-    );
-    ctx.restore();
-  }
 }
 
-// Debris class
 /**
  * Collision and tidal ejecta, massed in kilometer-scale rocky fragments.
  *
@@ -4507,6 +2748,7 @@ class Asteroid extends PhysicsObject {
  * @extends PhysicsObject
  */
 class Debris extends PhysicsObject {
+  static kind = 'Debris';
   /**
    * @param {Object} pos - Initial position
    * @param {Object} vel - Initial velocity
@@ -4520,31 +2762,13 @@ class Debris extends PhysicsObject {
     super(pos, vel, finalMass * DEBRIS_MASS_UNIT, DEBRIS_RADIUS, 'Debris');
     this.massInFragments = finalMass;
   }
-
-  draw(ctx) {
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    ctx.fillStyle = compute_dynamic_color('#c8c8c8', this.pos, bh_list, 200.0, {
-      r: 255,
-      g: 100,
-      b: 0,
-    });
-    ctx.beginPath();
-    ctx.arc(
-      world_pos.x,
-      world_pos.y,
-      drawRadius(this, 'Debris'),
-      0,
-      2 * Math.PI
-    );
-    ctx.fill();
-  }
 }
 
-// AccretionDiskParticle class
 /**
  * Represents individual particles in black hole accretion disks
  */
 class AccretionDiskParticle extends PhysicsObject {
+  static kind = 'AccretionDiskParticle';
   constructor(pos, vel, parentBlackHole) {
     const mass = 0.0005; // Even smaller mass for disk particles
     const radius = 0.4; // Much smaller visual radius for more numerous, smaller particles
@@ -4620,22 +2844,7 @@ class AccretionDiskParticle extends PhysicsObject {
       }
 
       // Create absorption effect with temperature-based colors
-      for (let i = 0; i < 6; i++) {
-        const angle = Math.random() * 2 * Math.PI;
-        const speed = Math.random() * 60 + 40;
-        const p_vel = {
-          x: speed * Math.cos(angle),
-          y: speed * Math.sin(angle),
-        };
-        particlePool.getParticle(
-          this.pos,
-          p_vel,
-          Math.random() * 1.2 + 0.8,
-          8,
-          2,
-          this.getTemperatureColor()
-        );
-      }
+      burst('tracer', this.pos, tracerColor(this));
       return;
     }
 
@@ -4683,7 +2892,6 @@ class AccretionDiskParticle extends PhysicsObject {
     this.pos.y += (Math.random() - 0.5) * random_motion * dt;
 
     // Enhanced temperature calculations - dramatic heating as particle spirals inward
-    // const initial_distance = this.disk_radius; // reserved for future use
 
     // Exponential heating as particle approaches black hole
     const proximity_factor = Math.max(
@@ -4703,38 +2911,6 @@ class AccretionDiskParticle extends PhysicsObject {
 
     // Add pulsing effect based on orbital motion and heating
     this.pulse_phase += dt * (1 + this.heating_intensity * 3); // Standard pulsing when hotter
-  }
-
-  getTemperatureColor() {
-    // Enhanced temperature-based color with dramatic effects
-    const temp = this.temperature;
-    const brightness = this.brightness_multiplier;
-
-    // Pulsing effect
-    const pulse_factor = 0.8 + 0.4 * Math.sin(this.pulse_phase);
-    const final_brightness = brightness * pulse_factor;
-
-    if (temp < 3000) {
-      // Deep red-orange
-      const intensity = Math.floor(final_brightness * 150);
-      return `rgb(${Math.min(255, intensity)}, ${Math.floor(intensity * 0.3)}, 0)`;
-    } else if (temp < 8000) {
-      // Orange to yellow
-      const intensity = Math.floor(final_brightness * 200);
-      return `rgb(${Math.min(255, intensity)}, ${Math.floor(intensity * 0.8)}, ${Math.floor(intensity * 0.2)})`;
-    } else if (temp < 15000) {
-      // Yellow-white
-      const intensity = Math.floor(final_brightness * 220);
-      return `rgb(${Math.min(255, intensity)}, ${Math.min(255, intensity)}, ${Math.floor(intensity * 0.6)})`;
-    } else if (temp < 30000) {
-      // White-hot
-      const intensity = Math.floor(final_brightness * 240);
-      return `rgb(${Math.min(255, intensity)}, ${Math.min(255, intensity)}, ${Math.min(255, intensity)})`;
-    } else {
-      // Blue-white plasma
-      const intensity = Math.floor(final_brightness * 250);
-      return `rgb(${Math.floor(intensity * 0.8)}, ${Math.floor(intensity * 0.9)}, ${Math.min(255, intensity)})`;
-    }
   }
 
   /**
@@ -4768,53 +2944,16 @@ class AccretionDiskParticle extends PhysicsObject {
     const doppler = 1 / (gamma * (1 - beta * losFraction));
     return Math.max(0.25, Math.min(3.2, doppler ** 3));
   }
-
-  draw(ctx) {
-    if (!this.alive || this.absorbed) return;
-
-    const world_pos = this.pos;
-    const color = this.getTemperatureColor();
-    const beam = this.getDopplerFactor();
-
-    // Enhanced drawing with glow effect for hot particles
-    const glow_radius =
-      this.radius * (1 + this.heating_intensity * 2) * (0.8 + beam * 0.25);
-    const core_radius = this.radius * 0.6;
-
-    // Draw glow effect for hot particles
-    if (this.heating_intensity > 0.1) {
-      const glow_alpha = Math.min(0.9, this.heating_intensity * 0.6 * beam);
-      ctx.globalAlpha = glow_alpha;
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, glow_radius, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-
-    // Draw core particle
-    ctx.fillStyle = color;
-    ctx.globalAlpha = Math.max(0.15, Math.min(1, 0.9 * beam));
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, core_radius, 0, 2 * Math.PI);
-    ctx.fill();
-
-    // Draw bright center for very hot particles
-    if (this.heating_intensity > 0.5) {
-      ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, 0.8 * beam)})`;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, core_radius * 0.4, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-
-    ctx.globalAlpha = 1.0;
-  }
 }
 
-// BlackHole class
 /**
  * Black hole physics object with gravitational effects
  */
 class BlackHole {
+  get kind() {
+    return 'BlackHole';
+  }
+  set kind(_) {}
   /**
    * Create a black hole object
    * @param {Object} pos - Initial position with x, y properties
@@ -4830,7 +2969,7 @@ class BlackHole {
     isNewlyCreated = false,
     jet_orientation = null
   ) {
-    this.id = PhysicsObject_id_counter++; // Add unique ID for energy tracking
+    this.id = nextPhysicsObjectId(); // Add unique ID for energy tracking
     // See PhysicsObject: a black hole is not one, and needs its own copy.
     this.model_owned = false;
     this.pos = { ...pos };
@@ -4843,8 +2982,9 @@ class BlackHole {
 
     // Track if this black hole is newly created (spawned by user or from merger)
     this.isNewlyCreated = isNewlyCreated;
-    this.creationTime = Date.now();
-    this.movementGracePeriod = 10.0; // 10 seconds of movement even in static mode
+    this.creationTime = Date.now(); // a stamp; the grace counts steps
+    Object.defineProperty(this, 'graceUsed', { value: 0, writable: true });
+    this.movementGracePeriod = 10.0; // seconds of play at 1x, in simulated time
 
     this.accretion_intensity = 0.0;
     this.jet_intensity = 0.0;
@@ -4870,9 +3010,8 @@ class BlackHole {
     // physics randomness and shift every body placed afterwards.
     //
     // `jet_orientation` is kept and honored where a scenario or an old save
-    // supplied one: it becomes the disk's position angle, which is the same
-    // quantity it always meant on screen, and the jets come out along that
-    // disk's normal instead of being an angle of their own.
+    // supplied one: it becomes the disk's position angle (what it always
+    // meant on screen), and the jets come out along the disk's normal.
     this.jet_orientation = jet_orientation;
     this.appearance = createAppearance({
       seed: `bh:${this.id}`,
@@ -4927,16 +3066,15 @@ class BlackHole {
    * Whether this hole is allowed to move this step.
    *
    * Static holes are a deliberate model: a fixed potential well a student can
-   * fly things past. A newly created hole gets a short grace period so a merger
-   * product does not freeze in place mid-flight.
+   * fly things past. A new hole's short grace period, in simulated time so no
+   * frame rate changes it, stops a merger product freezing mid-flight.
    *
    * @returns {boolean} True when the hole integrates its own motion
    */
   can_move() {
-    const timeSinceCreation = (Date.now() - this.creationTime) / 1000;
     return (
       physicsSettings.bh_behavior === 'Orbiting' ||
-      (this.isNewlyCreated && timeSinceCreation < this.movementGracePeriod)
+      (this.isNewlyCreated && this.graceUsed < this.movementGracePeriod)
     );
   }
 
@@ -5000,6 +3138,7 @@ class BlackHole {
   }
 
   update_dynamic_effects(dt) {
+    this.graceUsed += dt / (50 * DT); // seconds of play at 1x; backward steps give it back
     if (this.mass > this.last_mass) {
       const mass_gain = this.mass - this.last_mass;
       const mass_ratio = mass_gain / this.mass;
@@ -5093,13 +3232,13 @@ class BlackHole {
       }
     }
 
-    // Update existing particles
+    // Moved once per step, by simulate()'s pass over accretion_disk_particles.
+    // Every tracer is in that list as well as this one, and moving it here as
+    // well ran each one at twice its speed and aged it twice as fast. That
+    // pass also keeps moving the tracers of a hole that has been swallowed,
+    // so they fade out rather than freeze. This list only forgets the dead.
     for (let i = this.disk_particles.length - 1; i >= 0; i--) {
-      const particle = this.disk_particles[i];
-      particle.update_physics(dt, []);
-
-      // Remove dead particles
-      if (!particle.alive) {
+      if (!this.disk_particles[i].alive) {
         this.disk_particles.splice(i, 1);
       }
     }
@@ -5136,124 +3275,7 @@ class BlackHole {
   }
 
   draw(ctx) {
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    const world_radius = this.radius;
-
-    // Everything visual lives in js/blackHole/render.js, which is handed a
-    // position, a drawn radius, this object's appearance and a clock. It reads
-    // no settings and no state of its own, so what is drawn here is entirely
-    // determined by those four things - which is what makes the picture
-    // reproducible and what keeps a rendering choice from reaching the
-    // integrator.
-    //
-    // The three global toggles stay visibility controls and nothing more:
-    // `show_accretion_disk` and `show_bh_jets` can hide what the object's
-    // environment would otherwise show, and neither can conjure a disk onto a
-    // quiescent hole. Whether a black hole HAS a disk is a property of the
-    // scenario, not of the renderer.
-    const bhLevel = lodOf(this, 'BlackHole');
-    const wanted = this.appearance || defaultAppearance(this.id);
-    const shown = {
-      ...wanted,
-      environment: physicsSettings.show_accretion_disk
-        ? wanted.environment
-        : ENVIRONMENT.QUIESCENT,
-      jetStrength: physicsSettings.show_bh_jets ? wanted.jetStrength : 0,
-    };
-
-    const renderer = ensureBlackHoleRenderer();
-    if (renderer && lodAtLeast(bhLevel, LOD.SHADED)) {
-      renderer.drawBlackHole(ctx, {
-        at: world_pos,
-        unit: world_radius,
-        appearance: shown,
-        // The simulation's own clock, so pausing freezes the flow and two runs
-        // of the same scenario draw the same frame. Never Date.now().
-        time: visualClockSeconds(),
-        tier: lodAtLeast(bhLevel, LOD.DETAILED) ? 'full' : 'low',
-        alpha: 1,
-      });
-    } else {
-      // Far away or on the low tier: the silhouette and nothing else. It used
-      // to carry a pale ring here too, and it is gone for the same reason it
-      // is gone from the renderer - a horizon does not glow at its edge. What
-      // finds a dark object is the hover and selection ring, which is drawn in
-      // js/render.js as UI, and the mass label below.
-      ctx.save();
-      ctx.fillStyle = '#000000';
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, world_radius, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.restore();
-    }
-
-    // "Explain this view": labels on the parts of the picture. Off unless
-    // asked for, because a diagram covered in captions is not a sandbox.
-    if (
-      renderer &&
-      physicsSettings.bh_explain_view &&
-      lodAtLeast(bhLevel, LOD.SHADED)
-    ) {
-      ctx.save();
-      ctx.font = `${Math.max(9, world_radius * 0.22)}px ui-monospace, monospace`;
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      // The one boundary the picture is allowed to show, and only here: a
-      // dashed line on a labeled diagram, at the silhouette's edge. See
-      // drawHorizonBoundary in js/blackHole/render.js for why it is not drawn
-      // the rest of the time.
-      renderer.drawHorizonBoundary(
-        ctx,
-        world_pos,
-        world_radius,
-        1 / (state.zoom || 1)
-      );
-      for (const mark of renderer.annotations(shown, world_radius)) {
-        const x = world_pos.x + mark.x;
-        const y = world_pos.y + mark.y;
-        ctx.strokeStyle = 'rgba(160,200,255,0.75)';
-        ctx.lineWidth = Math.max(0.4, world_radius * 0.02);
-        ctx.beginPath();
-        ctx.arc(x, y, mark.r * 0.35, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(x + mark.r * 0.35, y);
-        ctx.lineTo(x + mark.r * 0.9, y);
-        ctx.stroke();
-        ctx.fillStyle = 'rgba(210,230,255,0.95)';
-        ctx.fillText(t(`inspector.bh.label.${mark.key}`), x + mark.r * 1.0, y);
-      }
-      ctx.restore();
-    }
-
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = world_to_screen(world_pos);
-    const screen_radius = world_radius * state.zoom;
-    let label_y_offset = screen_radius + 15;
-    if (physicsSettings.show_bh_jets) {
-      label_y_offset = screen_radius * 6 + screen_radius + 10;
-    } else if (physicsSettings.show_accretion_disk) {
-      label_y_offset = screen_radius * 2.5 + 10;
-    } else if (physicsSettings.show_bh_glow) {
-      label_y_offset = screen_radius * 1.8 + 10;
-    }
-    ctx.font = '14px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 4;
-    // Significant figures rather than one decimal place: a stellar-mass hole
-    // reads 9.80 and a supermassive one reads 1.00 x 10^6 instead of 1000000.0.
-    const massStr = formatNumber(this.mass / SOLAR_MASS_UNIT);
-    drawSolarLabel(
-      ctx,
-      massStr,
-      true_screen_pos.x,
-      true_screen_pos.y + label_y_offset
-    );
-    ctx.restore();
+    paintBody(this, ctx, 'BlackHole');
   }
 
   get_state() {
@@ -5283,7 +3305,7 @@ class BlackHole {
     // falsy check hands it a brand-new id on every restore. Nothing noticed
     // while ids were only used for energy bookkeeping; the A/B bench compares
     // "body 0" across a restore and would have measured a different object.
-    this.id = s.id ?? PhysicsObject_id_counter++;
+    this.id = s.id ?? nextPhysicsObjectId();
     this.pos = s.pos;
     this.vel = s.vel;
     this.mass = s.mass;
@@ -5321,8 +3343,8 @@ class BlackHole {
 
 // Star color function is now imported from utils.js
 
-// StarObject class
 class StarObject extends PhysicsObject {
+  static kind = 'StarObject';
   constructor(pos, vel, massInSuns = null) {
     let finalMassInSuns;
     if (massInSuns !== null) {
@@ -5367,171 +3389,6 @@ class StarObject extends PhysicsObject {
     this.initialMassInSuns = finalMassInSuns;
     // Per-star toggle for rendering habitable (Goldilocks) zone rings
     this.showHabitableZone = false;
-  }
-
-  draw(ctx) {
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    const r = drawRadius(this, 'Star');
-    const z = (state && state.zoom) || 1;
-    const screenR = r * z;
-    const level = lodOf(this, 'Star');
-
-    // Color from the temperature, not from the mass directly.
-    //
-    // The two agree for a main-sequence star, because the temperature is
-    // estimated from the mass when a star does not carry one - but a star that
-    // DOES carry one, which is every star a scenario builds from real data, was
-    // being colored from a mass-to-color table that knew nothing about it.
-    // stellarPropertiesFor is the same function the habitable-zone ring and the
-    // light curve read, so the color on screen and the physics in the panels
-    // now come from one number. An explicit baseColor still wins: a scenario
-    // that names a color means it.
-    // Memoised on the star, keyed on the mass it was computed from.
-    //
-    // The color only changes when the star does, which is on accretion or a
-    // merger - not sixty times a second. A cluster of five hundred stars was
-    // otherwise running stellarPropertiesFor, which allocates, once per star
-    // per frame to arrive at the same answer it gave on the previous one.
-    if (
-      !this._visual ||
-      this._visual.mass !== this.mass ||
-      this._visual.base !== this.baseColor ||
-      this._visual.teff !== this.temperature ||
-      this._visual.lum !== this.luminosityInSuns
-    ) {
-      const props = stellarPropertiesFor(this, SOLAR_MASS_UNIT);
-      this._visual = {
-        mass: this.mass,
-        base: this.baseColor,
-        // The temperature is part of the key, not just an input. Without it a
-        // star whose temperature changed while its mass did not kept the
-        // color it was memoised with - which is every star in an evolutionary
-        // track, where the mass barely moves and the temperature moves by a
-        // factor of ten.
-        teff: this.temperature,
-        lum: this.luminosityInSuns,
-        rgb: this.baseColor
-          ? hexToRgb(this.baseColor) || starColor(props.teffK)
-          : starColor(props.teffK),
-      };
-    }
-    const rgb = this._visual.rgb;
-
-    if (level === LOD.POINT) {
-      // A crisp, high-contrast dot and nothing else. No gradient, no bloom: at
-      // three pixels a corona is one lighter ring of pixels that reads as blur.
-      ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
-      ctx.fill();
-    } else {
-      // A limb-darkened disc from a cached sprite. The sprite is radially
-      // symmetric, so the render pass's flipped Y axis does not matter, and it
-      // is keyed on color and size buckets - a cluster of similar stars shares
-      // one rather than building a gradient each, every frame.
-      // The painter is in js/bodyVisuals.js so that the Stellar Lab's preview
-      // and this draw the same star.
-      const disc = spriteFor('star-disc', rgb, screenR, paintStarDisc);
-      if (disc) {
-        ctx.drawImage(disc, world_pos.x - r, world_pos.y - r, r * 2, r * 2);
-      } else {
-        ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
-        ctx.beginPath();
-        ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
-        ctx.fill();
-      }
-    }
-
-    // The corona, into the offscreen layer js/render.js composites additively.
-    //
-    // Tighter than what was here: the old bloom ran to three times the stellar
-    // radius at 0.35 alpha, which on a zoomed-in star swallowed everything
-    // near it and made a planet at half an astronomical unit look like it was
-    // inside the photosphere. Restrained, and cached as a sprite rather than
-    // built as a gradient per star per frame.
-    try {
-      if (
-        lodAtLeast(level, LOD.SHADED) &&
-        screenR > 2 &&
-        typeof window !== 'undefined' &&
-        window.bloomCtx
-      ) {
-        const coronaR = screenR * CORONA_SCALE;
-        const halo = spriteFor('star-corona', rgb, coronaR, (sctx, size, c) => {
-          const half = size / 2;
-          const g = sctx.createRadialGradient(half, half, 0, half, half, half);
-          g.addColorStop(0, `rgba(${c.r},${c.g},${c.b},0.34)`);
-          g.addColorStop(0.35, `rgba(${c.r},${c.g},${c.b},0.16)`);
-          g.addColorStop(1, 'rgba(0,0,0,0)');
-          sctx.fillStyle = g;
-          sctx.beginPath();
-          sctx.arc(half, half, half, 0, 2 * Math.PI);
-          sctx.fill();
-        });
-        const { x: screenX, y: screenY } = world_to_screen(world_pos);
-        if (halo) {
-          window.bloomCtx.drawImage(
-            halo,
-            screenX - coronaR,
-            screenY - coronaR,
-            coronaR * 2,
-            coronaR * 2
-          );
-        }
-      }
-    } catch {
-      // no-op
-    }
-
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = world_to_screen(world_pos);
-    // Two different sizes, on purpose.
-    //
-    // The offset follows the *drawn* body, so a label sits just off the disc
-    // the reader can see. Whether to label at all follows the *model* radius,
-    // which is the size this decision has always been made on: gating on the
-    // drawn size instead would have taken the names off every planet in the
-    // Solar System the moment the displayed-size policy shrank them, which is
-    // a labeling change nobody asked for.
-    const screen_radius = r * state.zoom;
-    const label_size = this.radius * state.zoom;
-
-    if (label_size > 5) {
-      const label_y_offset = screen_radius + 12;
-      ctx.font = '12px Roboto Mono';
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'black';
-      ctx.shadowBlur = 4;
-
-      // Show name for Solar System sun, mass for others - unless a lesson has
-      // asked for neither. A step that puts three unlabeled stars up and asks
-      // a reader to judge them by eye is undone by a mass printed under each
-      // one, and that is the first screen of A Universe of Stars. The flag is
-      // set by js/lessonStage.js from the step's own declaration and cleared
-      // with the stage, so nothing else can leave a star anonymous.
-      if (this.anonymous) {
-        // Nothing. The lesson's object list still names it, so it is still
-        // selectable and still reachable from the keyboard.
-      } else if (this.isSolarSystemSun) {
-        ctx.fillText(
-          this.name,
-          true_screen_pos.x,
-          true_screen_pos.y + label_y_offset
-        );
-      } else {
-        drawSolarLabel(
-          ctx,
-          formatNumber(this.massInSuns),
-          true_screen_pos.x,
-          true_screen_pos.y + label_y_offset
-        );
-        // Remove subscript 'sun' drawing
-      }
-    }
-    ctx.restore();
   }
 
   tidal_mass_loss(bh_list, dt) {
@@ -5616,8 +3473,8 @@ class StarObject extends PhysicsObject {
   }
 }
 
-// NeutronStar class
 class NeutronStar extends PhysicsObject {
+  static kind = 'NeutronStar';
   constructor(pos, vel, massInSuns = null, isPulsar = null) {
     let finalMassInSuns;
     if (massInSuns !== null) {
@@ -5638,116 +3495,6 @@ class NeutronStar extends PhysicsObject {
     // Randomly assign pulsar status if not specified
     this.isPulsar = isPulsar !== null ? isPulsar : Math.random() < 0.5;
     this.pulsar = this.isPulsar; // For inspector compatibility
-  }
-
-  draw(ctx) {
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    // The drawn radius, which everything below is proportioned to. A neutron
-    // star is twenty kilometers across, so this is the marker floor at any
-    // zoom a scenario is actually viewed at.
-    const nsR = drawRadius(this, 'NeutronStar');
-
-    // Pulsar effect
-    this.pulsar_phase += 0.1;
-    // The pulse, held still when the reader has asked for that.
-    //
-    // A pulsar beam sweeping at a few hertz is exactly the kind of repeating
-    // motion prefers-reduced-motion exists for, and it is the only animation
-    // in the body drawing that runs on its own whether or not the simulation
-    // is playing. Held at its mid-brightness rather than switched off: the
-    // beam is what says "this is a pulsar", and removing it would remove the
-    // information along with the movement.
-    const pulse_intensity = prefersReducedMotion()
-      ? 0.65
-      : 0.5 + 0.5 * Math.sin(this.pulsar_phase / this.pulsar_period);
-
-    // Core
-    ctx.fillStyle = compute_dynamic_color('#E6E6FA', this.pos, bh_list, 300.0, {
-      r: 255,
-      g: 255,
-      b: 255,
-    });
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, nsR, 0, 2 * Math.PI);
-    ctx.fill();
-
-    // The magnetosphere ring: the cue that says "neutron star" rather than
-    // "white dwarf". Both are small, bright and dense; this is a stated
-    // boundary at a distance rather than a glow, which is the visual
-    // difference between a magnetic field and an atmosphere.
-    //
-    // Gated on the level of detail like everything else, and its reach is
-    // capped: magnetic_field_strength is unbounded in the constructor, and a
-    // strongly magnetised star drew a ring several times its own size.
-    const nsLevel = lodOf(this, 'NeutronStar');
-    if (lodAtLeast(nsLevel, LOD.SHADED) && nsR * state.zoom > 2) {
-      const field_radius =
-        nsR * Math.min(3.0, 2 + (this.magnetic_field_strength || 0));
-      const field_intensity = pulse_intensity * 0.3;
-
-      ctx.strokeStyle = `rgba(0, 255, 255, ${field_intensity})`;
-      ctx.lineWidth = 1 / state.zoom;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, field_radius, 0, 2 * Math.PI);
-      ctx.stroke();
-    }
-
-    // Pulsar beams (only if isPulsar)
-    if (this.isPulsar && nsR * state.zoom > 1) {
-      const beam_length = nsR * 8;
-      const beam_width = Math.max(0.5 / state.zoom, nsR * 0.3);
-
-      ctx.strokeStyle = `rgba(255, 255, 255, ${pulse_intensity * 0.8})`;
-      ctx.lineWidth = beam_width;
-      ctx.lineCap = 'round';
-
-      // Two beams at opposing angles
-      for (let i = 0; i < 2; i++) {
-        const angle = this.pulsar_phase + i * Math.PI;
-        const beam_start_x = world_pos.x + Math.cos(angle) * nsR;
-        const beam_start_y = world_pos.y + Math.sin(angle) * nsR;
-        const beam_end_x = world_pos.x + Math.cos(angle) * beam_length;
-        const beam_end_y = world_pos.y + Math.sin(angle) * beam_length;
-
-        ctx.beginPath();
-        ctx.moveTo(beam_start_x, beam_start_y);
-        ctx.lineTo(beam_end_x, beam_end_y);
-        ctx.stroke();
-      }
-    }
-
-    // Label
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = world_to_screen(world_pos);
-    // Two different sizes, on purpose.
-    //
-    // The offset follows the *drawn* body, so a label sits just off the disc
-    // the reader can see. Whether to label at all follows the *model* radius,
-    // which is the size this decision has always been made on: gating on the
-    // drawn size instead would have taken the names off every planet in the
-    // Solar System the moment the displayed-size policy shrank them, which is
-    // a labeling change nobody asked for.
-    const screen_radius = nsR * state.zoom;
-    const label_size = this.radius * state.zoom;
-
-    if (label_size > 2) {
-      const label_y_offset = screen_radius * 8 + 12;
-      ctx.font = '12px Roboto Mono';
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'black';
-      ctx.shadowBlur = 4;
-      drawSolarLabel(
-        ctx,
-        formatNumber(this.massInSuns),
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset,
-        { suffix: ' NS' }
-      );
-    }
-    ctx.restore();
   }
 
   get_state() {
@@ -5774,8 +3521,8 @@ class NeutronStar extends PhysicsObject {
   }
 }
 
-// WhiteDwarf class
 class WhiteDwarf extends PhysicsObject {
+  static kind = 'WhiteDwarf';
   constructor(pos, vel, massInSuns = null) {
     let finalMassInSuns;
     if (massInSuns !== null) {
@@ -5792,112 +3539,6 @@ class WhiteDwarf extends PhysicsObject {
     this.cooling_age = Math.random() * 10; // Billion years
     this.intact = true;
     this.name = getRandomName('whiteDwarfs');
-  }
-
-  getTemperatureColor() {
-    // Color based on temperature
-    if (this.temperature > 15000)
-      return '#9BB0FF'; // Blue-white
-    else if (this.temperature > 10000)
-      return '#CAD7FF'; // White
-    else if (this.temperature > 7500)
-      return '#F8F7FF'; // Yellow-white
-    else return '#FFE4B5'; // Orange-white
-  }
-
-  draw(ctx) {
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-
-    // Core with temperature-based color
-    const temp_color = this.getTemperatureColor();
-    ctx.fillStyle = compute_dynamic_color(
-      temp_color,
-      this.pos,
-      bh_list,
-      200.0,
-      { r: 255, g: 255, b: 255 }
-    );
-    const wdR = drawRadius(this, 'WhiteDwarf');
-    const wdZ = (state && state.zoom) || 1;
-    const wdLevel = lodOf(this, 'WhiteDwarf');
-
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, wdR, 0, 2 * Math.PI);
-    ctx.fill();
-
-    // Glow, bounded and gated.
-    //
-    // The reach used to be 1.5 + T/20000 stellar radii, which for a hot young
-    // dwarf is two and a half times the body and reads as a small star rather
-    // than as the Earth-sized cinder it is. Capped, and skipped entirely at
-    // the point level where a halo is one lighter ring of pixels.
-    if (lodAtLeast(wdLevel, LOD.SHADED) && wdR * wdZ > 3) {
-      const glow_radius =
-        wdR * Math.min(2.0, 1.3 + (this.temperature || 0) / 40000);
-      const glow_intensity = Math.min(0.32, (this.temperature / 20000) * 0.3);
-
-      const grad = ctx.createRadialGradient(
-        world_pos.x,
-        world_pos.y,
-        wdR,
-        world_pos.x,
-        world_pos.y,
-        glow_radius
-      );
-      grad.addColorStop(0, `rgba(255, 255, 255, ${glow_intensity})`);
-      grad.addColorStop(1, `rgba(255, 255, 255, 0)`);
-
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, glow_radius, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-
-    // The cue that says "white dwarf" rather than "small hot star": a hard,
-    // bright edge. A degenerate body has no atmosphere to soften its limb, and
-    // this is the one place a picture can say that without making the object
-    // bigger than it is. One screen pixel wide at any zoom, so it does not
-    // grow into a second disc.
-    if (lodAtLeast(wdLevel, LOD.DETAILED)) {
-      ctx.strokeStyle = 'rgba(255,255,255,0.85)';
-      ctx.lineWidth = 1 / wdZ;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, wdR * 0.94, 0, 2 * Math.PI);
-      ctx.stroke();
-    }
-
-    // Label
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = world_to_screen(world_pos);
-    // Two different sizes, on purpose.
-    //
-    // The offset follows the *drawn* body, so a label sits just off the disc
-    // the reader can see. Whether to label at all follows the *model* radius,
-    // which is the size this decision has always been made on: gating on the
-    // drawn size instead would have taken the names off every planet in the
-    // Solar System the moment the displayed-size policy shrank them, which is
-    // a labeling change nobody asked for.
-    const screen_radius = wdR * state.zoom;
-    const label_size = this.radius * state.zoom;
-
-    if (label_size > 3) {
-      const label_y_offset = screen_radius * 2 + 12;
-      ctx.font = '12px Roboto Mono';
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'black';
-      ctx.shadowBlur = 4;
-      drawSolarLabel(
-        ctx,
-        formatNumber(this.massInSuns),
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset,
-        { suffix: ' WD' }
-      );
-    }
-    ctx.restore();
   }
 
   get_state() {
@@ -5918,7 +3559,6 @@ class WhiteDwarf extends PhysicsObject {
   }
 }
 
-// Particle object pool for memory optimization
 // Visual radius of a galaxy. Drawing size only: as far as the dynamics are
 // concerned a member of a cluster is a point mass, which is exactly how Zwicky
 // treated them.
@@ -5931,6 +3571,9 @@ class WhiteDwarf extends PhysicsObject {
 // the same reason drawRadius enforces a minimum pixel size on everything else:
 // an object nobody can see the shape of might as well not have one.
 const GALAXY_RADIUS = 150;
+
+/** How far a galaxy's drawing is turned: one of eight angles, by id. */
+const galaxyTilt = id => (id % 8) * (Math.PI / 8);
 
 /**
  * A galaxy, as a member of a cluster.
@@ -5950,6 +3593,7 @@ const GALAXY_RADIUS = 150;
  * not care what the units were.
  */
 class Galaxy extends PhysicsObject {
+  static kind = 'Galaxy';
   /**
    * @param {Object} pos - Initial position
    * @param {Object} vel - Initial velocity
@@ -5965,212 +3609,27 @@ class Galaxy extends PhysicsObject {
     // dispersion the lesson is measuring.
     this.persistent = true;
     // Fixed at construction so the drawing does not spin from frame to frame.
-    this.tilt = (this.id % 8) * (Math.PI / 8);
+    this.tilt = galaxyTilt(this.id);
   }
 
-  draw(ctx) {
-    const { x, y } = this.pos;
-    const r = drawRadius(this, 'Galaxy');
+  // The kind travels with the rest of the state: the inspector reports it and
+  // the drawing depends on it.
+  get_state() {
+    return { ...super.get_state(), galaxyType: this.galaxyType };
+  }
 
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(this.tilt);
-    // Spirals are seen at some angle; ellipticals are round enough that
-    // squashing them would just look like a spiral.
-    if (this.galaxyType === 'spiral') ctx.scale(1, 0.42);
-
-    const halo = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
-    halo.addColorStop(0, 'rgba(255, 246, 224, 0.95)');
-    halo.addColorStop(0.28, 'rgba(255, 220, 170, 0.55)');
-    halo.addColorStop(1, 'rgba(150, 170, 255, 0)');
-    ctx.fillStyle = halo;
-    ctx.beginPath();
-    ctx.arc(0, 0, r, 0, 2 * Math.PI);
-    ctx.fill();
-
-    if (this.galaxyType === 'spiral') {
-      ctx.strokeStyle = 'rgba(186, 210, 255, 0.45)';
-      ctx.lineWidth = Math.max(0.4, r * 0.05);
-      ctx.lineCap = 'round';
-      for (let arm = 0; arm < 2; arm++) {
-        ctx.beginPath();
-        for (let t = 0.3; t <= 1.02; t += 0.04) {
-          // A logarithmic spiral, which is what real arms approximate: the
-          // angle grows with the log of the radius rather than with the radius.
-          const a = arm * Math.PI + Math.log(t / 0.3) * 2.4;
-          const rr = r * t;
-          const px = rr * Math.cos(a);
-          const py = rr * Math.sin(a);
-          if (t === 0.3) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-        ctx.stroke();
-      }
-    }
-
-    // The bright core, drawn round: it is the one part of a tilted disc that
-    // is not foreshortened.
-    ctx.restore();
-    ctx.fillStyle = 'rgba(255, 252, 238, 0.9)';
-    ctx.beginPath();
-    ctx.arc(x, y, Math.max(0.6, r * 0.11), 0, 2 * Math.PI);
-    ctx.fill();
+  set_state(s) {
+    super.set_state(s);
+    // A link can be edited by hand. The drawing and the inspector test for
+    // different values, so anything else would be drawn as one kind and
+    // reported as the other.
+    if (this.galaxyType !== 'elliptical') this.galaxyType = 'spiral';
+    // set_state may have replaced the id the constructor minted with the saved
+    // one, and the tilt follows the id.
+    this.tilt = galaxyTilt(this.id);
   }
 }
 
-class ParticlePool {
-  constructor(initialSize = 100) {
-    this.pool = [];
-    this.activeParticles = [];
-    this.maxPoolSize = initialSize;
-
-    // Don't pre-allocate particles to avoid initialization issues
-    // They will be created as needed and pooled when they die
-  }
-
-  getParticle(
-    pos,
-    vel,
-    lifetime = 0.8,
-    start_size = 5,
-    end_size = 1,
-    color = 'rgb(255,255,100)'
-  ) {
-    let particle;
-    if (this.pool.length > 0) {
-      particle = this.pool.pop();
-      if (particle.reset) {
-        particle.reset(pos, vel, lifetime, start_size, end_size, color);
-      } else {
-        // Fallback for particles created before reset method was added
-        if (!particle.pos) particle.pos = { x: 0, y: 0 };
-        if (!particle.vel) particle.vel = { x: 0, y: 0 };
-        particle.pos.x = pos.x;
-        particle.pos.y = pos.y;
-        particle.vel.x = vel.x;
-        particle.vel.y = vel.y;
-        particle.lifetime = Math.max(0.1, lifetime);
-        particle.age = 0;
-        particle.start_size = start_size;
-        particle.end_size = end_size;
-        particle.color = color;
-      }
-    } else {
-      particle = new Particle(pos, vel, lifetime, start_size, end_size, color);
-    }
-    this.activeParticles.push(particle);
-    return particle;
-  }
-
-  updateAndCleanup(dt) {
-    for (let i = this.activeParticles.length - 1; i >= 0; i--) {
-      const particle = this.activeParticles[i];
-      particle.update(dt);
-
-      if (!particle.is_alive()) {
-        // Return to pool if not at max capacity
-        this.activeParticles.splice(i, 1);
-        if (this.pool.length < this.maxPoolSize) {
-          this.pool.push(particle);
-        }
-        // Otherwise let it be garbage collected
-      }
-    }
-  }
-
-  getActiveParticles() {
-    return this.activeParticles;
-  }
-
-  clear() {
-    this.pool.push(...this.activeParticles);
-    this.activeParticles.length = 0;
-  }
-}
-
-// Global particle pool - initialize after Particle class is defined
-let particlePool;
-
-// Particle class for visual effects - optimized with reset method
-class Particle {
-  constructor(
-    pos,
-    vel,
-    lifetime = 0.8,
-    start_size = 5,
-    end_size = 1,
-    color = 'rgb(255,255,100)'
-  ) {
-    this.pos = { x: 0, y: 0 };
-    this.vel = { x: 0, y: 0 };
-    this.reset(pos, vel, lifetime, start_size, end_size, color);
-  }
-
-  reset(pos, vel, lifetime, start_size, end_size, color) {
-    this.pos.x = pos.x;
-    this.pos.y = pos.y;
-    this.vel.x = vel.x;
-    this.vel.y = vel.y;
-    this.lifetime = Math.max(0.1, lifetime);
-    this.age = 0;
-    this.start_size = start_size;
-    this.end_size = end_size;
-    this.color = color;
-  }
-
-  update(dt) {
-    this.pos.x += this.vel.x * dt;
-    this.pos.y += this.vel.y * dt;
-    this.age += dt;
-  }
-
-  is_alive() {
-    return this.age < this.lifetime;
-  }
-
-  draw(ctx) {
-    const life_fraction = this.age / this.lifetime;
-    const current_size =
-      this.start_size * (1 - life_fraction) + this.end_size * life_fraction;
-    const alpha = 1 - life_fraction;
-
-    if (current_size < 1 || alpha < 0.05) return;
-
-    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-
-    // Special kilonova glow effect
-    if (this.kilonova_glow && this.glow_intensity) {
-      const glow_size = current_size * 3 * this.glow_intensity;
-      const glow_alpha = alpha * 0.3 * this.glow_intensity;
-
-      // Draw glow
-      ctx.fillStyle = this.color;
-      ctx.globalAlpha = glow_alpha;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, glow_size / state.zoom, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-
-    // Draw main particle
-    ctx.fillStyle = this.color;
-    ctx.globalAlpha = alpha;
-    ctx.beginPath();
-    ctx.arc(
-      world_pos.x,
-      world_pos.y,
-      current_size / state.zoom,
-      0,
-      2 * Math.PI
-    );
-    ctx.fill();
-    ctx.globalAlpha = 1; // Reset alpha
-  }
-}
-
-// Initialize particle pool after Particle class is defined
-particlePool = new ParticlePool(200);
-
-// Add missing utility functions from original
 const findObjectAtPosition = worldPos => {
   // Check black holes first (they're usually the most important)
   for (const bh of bh_list) {
@@ -6308,8 +3767,8 @@ const findObjectAtPosition = worldPos => {
   return null;
 };
 
-// Comet class from original
 class Comet extends PhysicsObject {
+  static kind = 'Comet';
   constructor(pos, vel, massInComets = null) {
     let finalMassInComets;
     if (massInComets !== null) {
@@ -6342,231 +3801,6 @@ class Comet extends PhysicsObject {
     } else {
       return 'short_period'; // Short-period comets
     }
-  }
-
-  /**
-   * Draw the nucleus, the coma and the tail.
-   *
-   * In world coordinates, like every other body: the render pass has already
-   * applied the pan, the zoom and the reference-frame offset to the context.
-   * This used to convert to screen coordinates first and then draw through that
-   * transform, which puts a comet at roughly (zoom * pos + pan + half a canvas)
-   * instead of at pos. Nothing caught it because js/render.js never called this
-   * at all - `comets` was not among the collections it drew - so the Solar
-   * System's ten comets and every hand-placed one were simply absent.
-   *
-   * The nucleus is held at the shared screen-space floor, the same way an
-   * asteroid's is. A comet's physical radius is a fraction of a world unit and
-   * covers well under a pixel at any zoom a scenario opens at, so without the
-   * floor a placed comet is invisible and unclickable. The floor is a drawing
-   * decision only: `this.radius` is what collisions, tidal disruption and the
-   * inspector read, and it is untouched.
-   *
-   * @param {CanvasRenderingContext2D} ctx - The world-transformed context
-   */
-  draw(ctx) {
-    const world_pos = this.pos;
-    const r = drawRadius(this, 'Comet');
-    const z = (state && state.zoom) || 1;
-    const level = lodOf(this, 'Comet');
-
-    // Where the light is, which is what a comet's appearance is entirely about.
-    // The tails are not exhaust: the ion tail is blown radially outward by the
-    // stellar wind and points away from the star whichever way the comet is
-    // traveling, and there is no coma at all until something warms the ice.
-    const sun = dominantStarFor(world_pos);
-    const activity = sun
-      ? tailActivity(
-          relativeInsolation(
-            sun.luminosity,
-            simToAu(
-              Math.hypot(world_pos.x - sun.pos.x, world_pos.y - sun.pos.y)
-            )
-          )
-        )
-      : 0;
-
-    ctx.save();
-
-    if (activity > 0 && lodAtLeast(level, LOD.SHADED)) {
-      this.drawTails(ctx, world_pos, r, z, sun, activity);
-      this.drawComa(ctx, world_pos, r, activity);
-    }
-
-    // The nucleus. Always drawn, at the shared screen-space floor, so a comet
-    // in the outer system is a visible speck rather than nothing - which is
-    // what it looks like through a telescope, and what makes it clickable.
-    ctx.fillStyle = activity > 0 ? '#f4f4ef' : '#cfd3d8';
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
-    ctx.fill();
-
-    ctx.restore();
-
-    // The label is text, and text has to be drawn in screen space or the
-    // render pass's flipped Y axis renders it upside down. Same shape as the
-    // planet's and the star's: reset the transform, draw, put it back.
-    if (r * z > 4) {
-      ctx.save();
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      const true_screen_pos = world_to_screen(world_pos);
-      ctx.font = '10px Roboto Mono';
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'black';
-      ctx.shadowBlur = 2;
-      ctx.fillText(
-        withUnit(formatNumber(this.massInComets), 'C'),
-        true_screen_pos.x,
-        true_screen_pos.y + r * z + 12
-      );
-      ctx.restore();
-    }
-  }
-
-  /**
-   * The coma: the halo of gas and dust boiled off the nucleus.
-   *
-   * Grows with activity, so the same comet swells as it comes in and shrinks
-   * as it leaves. Drawn as a single radial gradient rather than a sprite
-   * because its radius changes continuously with activity, which is exactly
-   * the case a size-bucketed sprite cache serves badly.
-   *
-   * @param {CanvasRenderingContext2D} ctx - World-transformed context
-   * @param {{x: number, y: number}} at - The nucleus
-   * @param {number} r - Drawn nucleus radius, world units
-   * @param {number} activity - 0 to 1
-   */
-  drawComa(ctx, at, r, activity) {
-    const coma = r * (1.6 + 4.5 * activity);
-    const grad = ctx.createRadialGradient(
-      at.x,
-      at.y,
-      r * 0.5,
-      at.x,
-      at.y,
-      coma
-    );
-    grad.addColorStop(0, `rgba(214,244,255,${0.5 * activity})`);
-    grad.addColorStop(0.45, `rgba(170,225,245,${0.22 * activity})`);
-    grad.addColorStop(1, 'rgba(150,200,255,0)');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(at.x, at.y, coma, 0, 2 * Math.PI);
-    ctx.fill();
-  }
-
-  /**
-   * The two tails.
-   *
-   * A comet has two, they point in different directions, and telling them
-   * apart is most of what there is to learn from the picture:
-   *
-   *   The ion tail is gas, ionized and swept straight out by the stellar wind.
-   *   It is narrow, blue, and points directly away from the star - which means
-   *   that on the way out of the system it leads rather than follows. This is
-   *   the part the old drawing had backwards: it pointed the tail opposite the
-   *   comet's velocity, which is the picture students already hold and which
-   *   the real geometry contradicts.
-   *
-   *   The dust tail is grains, heavy enough that the wind only nudges them.
-   *   They leave with the nucleus's own orbital motion and fall behind, so the
-   *   tail lies between anti-solar and the orbital trail and curves along the
-   *   orbit. Broader, yellower, and drawn as an arc so the curve reads.
-   *
-   * Geometry from js/bodyVisuals.js, which is where it is tested.
-   *
-   * @param {CanvasRenderingContext2D} ctx - World-transformed context
-   * @param {{x: number, y: number}} at - The nucleus
-   * @param {number} r - Drawn nucleus radius, world units
-   * @param {number} z - Current zoom
-   * @param {Object} sun - The dominant light source
-   * @param {number} activity - 0 to 1
-   */
-  drawTails(ctx, at, r, z, sun, activity) {
-    // `tailLength` was written as screen pixels at zoom 1, so it carries over
-    // to world units one for one. Capped so a zoomed-in comet does not streak
-    // across the whole canvas, floored so a zoomed-out one is not swallowed by
-    // its own nucleus.
-    const len = Math.max(
-      Math.min(this.tailLength, 140 / z) * activity,
-      r * 4 * activity
-    );
-    if (!(len > 0)) return;
-
-    const ion = ionTailDirection(at, sun.pos, this.vel);
-    if (!ion) return;
-
-    // --- the ion tail: straight, narrow, away from the star ---
-    const ionEnd = { x: at.x + ion.x * len, y: at.y + ion.y * len };
-    const ionGrad = ctx.createLinearGradient(at.x, at.y, ionEnd.x, ionEnd.y);
-    ionGrad.addColorStop(0, `rgba(190,235,255,${0.55 * activity})`);
-    ionGrad.addColorStop(0.4, `rgba(140,200,255,${0.28 * activity})`);
-    ionGrad.addColorStop(1, 'rgba(120,170,255,0)');
-    const halfWidth = r * 0.9;
-    ctx.fillStyle = ionGrad;
-    ctx.beginPath();
-    ctx.moveTo(at.x - ion.y * halfWidth, at.y + ion.x * halfWidth);
-    ctx.lineTo(ionEnd.x, ionEnd.y);
-    ctx.lineTo(at.x + ion.y * halfWidth, at.y - ion.x * halfWidth);
-    ctx.closePath();
-    ctx.fill();
-
-    // --- the dust tail: broader, yellower, curved along the orbit ---
-    // Sampled rather than drawn as one wedge, because the whole point is that
-    // it bends: each step asks bodyVisuals for the direction at that fraction
-    // of the way out and walks along it.
-    const dustLen = len * 0.8;
-    const steps = 6;
-    const spine = [];
-    let px = at.x;
-    let py = at.y;
-    for (let i = 1; i <= steps; i++) {
-      const f = i / steps;
-      const dir = dustTailDirection(at, sun.pos, this.vel, f);
-      if (!dir) break;
-      px += (dir.x * dustLen) / steps;
-      py += (dir.y * dustLen) / steps;
-      spine.push({ x: px, y: py, f });
-    }
-    if (spine.length < 2) return;
-
-    const dustGrad = ctx.createLinearGradient(
-      at.x,
-      at.y,
-      spine[spine.length - 1].x,
-      spine[spine.length - 1].y
-    );
-    dustGrad.addColorStop(0, `rgba(255,238,205,${0.4 * activity})`);
-    dustGrad.addColorStop(0.5, `rgba(240,215,170,${0.18 * activity})`);
-    dustGrad.addColorStop(1, 'rgba(220,200,160,0)');
-
-    // One closed path down one edge and back up the other, widening with
-    // distance the way a real dust fan does.
-    const widthAt = f => r * (1.1 + 2.6 * f);
-    ctx.fillStyle = dustGrad;
-    ctx.beginPath();
-    ctx.moveTo(at.x, at.y);
-    for (const pt of spine) {
-      const prev = spine[spine.indexOf(pt) - 1] || at;
-      const tx = pt.x - prev.x;
-      const ty = pt.y - prev.y;
-      const d = Math.hypot(tx, ty) || 1;
-      const w = widthAt(pt.f);
-      ctx.lineTo(pt.x - (ty / d) * w, pt.y + (tx / d) * w);
-    }
-    for (let i = spine.length - 1; i >= 0; i--) {
-      const pt = spine[i];
-      const prev = spine[i - 1] || at;
-      const tx = pt.x - prev.x;
-      const ty = pt.y - prev.y;
-      const d = Math.hypot(tx, ty) || 1;
-      const w = widthAt(pt.f);
-      ctx.lineTo(pt.x + (ty / d) * w, pt.y - (tx / d) * w);
-    }
-    ctx.closePath();
-    ctx.fill();
   }
 
   tidal_mass_loss(bh_list, dt) {
@@ -6628,6 +3862,148 @@ class Comet extends PhysicsObject {
   }
 }
 
+// =============================================================================
+// Uniform spatial hash for broad-phase collision detection
+// -----------------------------------------------------------------------------
+// The collision handlers each walked their own O(N²) double loop, so a frame
+// did five full pairwise sweeps. This narrows every one of them to the pairs
+// that actually share a neighborhood. A uniform grid suits this simulation:
+// bodies are small relative to their separations, the cell size tracks the
+// largest radius present, and one huge object touching every cell is bounded
+// by clamping the cell count. (Folded in from js/spatialHash.js, whose only
+// importer was this module, so the engine's decomposition costs no request.)
+// =============================================================================
+
+const GRID_MIN_CELL = 8;
+const GRID_MAX_CELLS = 200_000;
+
+// Reused across frames so the hot path allocates nothing.
+const gridBuckets = new Map();
+let gridCellSize = 64;
+
+/**
+ * Build the grid from a list of bodies.
+ * @param {Array} objects - Bodies with pos and radius
+ * @returns {number} The chosen cell size
+ */
+function buildGrid(objects) {
+  gridBuckets.clear();
+  if (objects.length === 0) return gridCellSize;
+
+  // Cell size tracks the largest interaction radius so that a pair can never
+  // be separated by more than one cell in each axis.
+  let maxRadius = 0;
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity;
+  let maxY = -Infinity;
+  for (const o of objects) {
+    if (!o.alive) continue;
+    if (o.radius > maxRadius) maxRadius = o.radius;
+    if (o.pos.x < minX) minX = o.pos.x;
+    if (o.pos.x > maxX) maxX = o.pos.x;
+    if (o.pos.y < minY) minY = o.pos.y;
+    if (o.pos.y > maxY) maxY = o.pos.y;
+  }
+  if (!isFinite(minX)) return gridCellSize;
+
+  gridCellSize = Math.max(GRID_MIN_CELL, maxRadius * 2);
+
+  // A very sparse, very wide field would otherwise allocate an enormous number
+  // of cells; grow the cells instead of the map.
+  const spanX = Math.max(1, maxX - minX);
+  const spanY = Math.max(1, maxY - minY);
+  const estimate = (spanX / gridCellSize) * (spanY / gridCellSize);
+  if (estimate > GRID_MAX_CELLS) {
+    gridCellSize *= Math.sqrt(estimate / GRID_MAX_CELLS);
+  }
+
+  for (const o of objects) {
+    if (!o.alive) continue;
+    const key = gridHash(o.pos.x, o.pos.y);
+    let cell = gridBuckets.get(key);
+    if (!cell) {
+      cell = [];
+      gridBuckets.set(key, cell);
+    }
+    cell.push(o);
+  }
+  return gridCellSize;
+}
+
+function gridHash(x, y) {
+  const cx = Math.floor(x / gridCellSize);
+  const cy = Math.floor(y / gridCellSize);
+  // A string key rather than a bit-mixed integer: an integer gridHash can alias two
+  // distinct cells into one bucket, and an aliased bucket would hand the same
+  // pair to visit() twice: applying a collision impulse or a merge twice.
+  return `${cx},${cy}`;
+}
+
+/**
+ * Visit every candidate pair exactly once.
+ *
+ * Correctness note: because gridCellSize >= 2 * maxRadius, two touching bodies
+ * always land in the same or adjacent cells, so scanning the 3x3 neighborhood
+ * cannot miss a contact. Each unordered pair is yielded once: for the same
+ * cell by index ordering, and for neighbors by only scanning forward.
+ *
+ * @param {Array} objects - Bodies with pos, radius and alive
+ * @param {Function} visit - Called as visit(a, b)
+ */
+function forEachCandidatePair(objects, visit) {
+  if (objects.length < 2) return;
+
+  // Below this, the grid's bookkeeping costs more than the pairs it saves.
+  if (objects.length < 24) {
+    for (let i = 0; i < objects.length; i++) {
+      const a = objects[i];
+      if (!a.alive) continue;
+      for (let j = i + 1; j < objects.length; j++) {
+        const b = objects[j];
+        if (!b.alive) continue;
+        visit(a, b);
+      }
+    }
+    return;
+  }
+
+  buildGrid(objects);
+
+  // Only half of the 3x3 neighborhood is scanned; the mirrored half is
+  // covered when the other cell takes its turn.
+  const FORWARD = [
+    [1, -1],
+    [1, 0],
+    [1, 1],
+    [0, 1],
+  ];
+
+  for (const cell of gridBuckets.values()) {
+    // Pairs inside this cell
+    for (let i = 0; i < cell.length; i++) {
+      const a = cell[i];
+      if (!a.alive) continue;
+      for (let j = i + 1; j < cell.length; j++) {
+        const b = cell[j];
+        if (!b.alive) continue;
+        visit(a, b);
+      }
+      // Pairs spanning into forward neighbors
+      for (const [dx, dy] of FORWARD) {
+        const other = gridBuckets.get(
+          gridHash(a.pos.x + dx * gridCellSize, a.pos.y + dy * gridCellSize)
+        );
+        if (!other) continue;
+        for (const b of other) {
+          if (!b.alive || b === a) continue;
+          visit(a, b);
+        }
+      }
+    }
+  }
+}
+
 // Handle collisions between objects
 /**
  * Handle collisions between objects in the simulation
@@ -6680,22 +4056,15 @@ const handle_collisions = objects_list => {
   });
 };
 
-// Create kilonova explosion effect
-/**
- * Create a spectacular kilonova explosion when neutron stars merge
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging neutron stars
- */
+/** Create a spectacular kilonova explosion when neutron stars merge (pos, mass). */
 const createKilonovaExplosion = (pos, mass) => {
   // Kilonova parameters based on mass
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(2.0, massInSuns / 2.0); // Scale with mass
 
-  // Create massive particle explosion
   const particleCount = Math.floor(200 + massInSuns * 50); // 200-400 particles based on mass
 
   for (let i = 0; i < particleCount; i++) {
-    // Random angle and speed for explosion
     const angle = Math.random() * 2 * Math.PI;
     const speed = (Math.random() * 300 + 200) * explosionIntensity; // 200-500 speed units
 
@@ -6725,7 +4094,6 @@ const createKilonovaExplosion = (pos, mass) => {
 
     const color = colors[Math.floor(Math.random() * colors.length)];
 
-    // Create particle with kilonova properties
     const particle = particlePool.getParticle(
       spawnPos,
       vel,
@@ -6735,14 +4103,12 @@ const createKilonovaExplosion = (pos, mass) => {
       color
     );
 
-    // Add special kilonova glow effect
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.5 + 0.5;
     }
   }
 
-  // Create gravitational wave ripple effect
   gravity_ripples.push({
     x: pos.x,
     y: pos.y,
@@ -6754,7 +4120,6 @@ const createKilonovaExplosion = (pos, mass) => {
     kilonova: true, // Special flag for kilonova GW
   });
 
-  // Create shockwave effect
   for (let i = 0; i < 50; i++) {
     const angle = (i / 50) * 2 * Math.PI;
     const speed = 150 + Math.random() * 100;
@@ -6774,22 +4139,15 @@ const createKilonovaExplosion = (pos, mass) => {
   }
 };
 
-// Create smaller kilonova explosion for neutron star mergers that don't form black holes
-/**
- * Create a smaller kilonova explosion when neutron stars merge but don't form a black hole
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging neutron stars
- */
+/** Create a smaller kilonova explosion when neutron stars merge but don't form a black hole (pos, mass). */
 const createSmallKilonovaExplosion = (pos, mass) => {
   // Kilonova parameters based on mass (reduced intensity)
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(1.0, massInSuns / 3.0); // Reduced intensity for smaller explosions
 
-  // Create smaller particle explosion
   const particleCount = Math.floor(100 + massInSuns * 25); // 100-200 particles (half of full kilonova)
 
   for (let i = 0; i < particleCount; i++) {
-    // Random angle and speed for explosion
     const angle = Math.random() * 2 * Math.PI;
     const speed = (Math.random() * 200 + 150) * explosionIntensity; // 150-350 speed units (reduced)
 
@@ -6819,7 +4177,6 @@ const createSmallKilonovaExplosion = (pos, mass) => {
 
     const color = colors[Math.floor(Math.random() * colors.length)];
 
-    // Create particle with kilonova properties (smaller sizes)
     const particle = particlePool.getParticle(
       spawnPos,
       vel,
@@ -6829,14 +4186,12 @@ const createSmallKilonovaExplosion = (pos, mass) => {
       color
     );
 
-    // Add special kilonova glow effect (reduced intensity)
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.3 + 0.3; // Reduced glow
     }
   }
 
-  // Create gravitational wave ripple effect (smaller)
   gravity_ripples.push({
     x: pos.x,
     y: pos.y,
@@ -6848,9 +4203,7 @@ const createSmallKilonovaExplosion = (pos, mass) => {
     kilonova: true, // Special flag for kilonova GW
   });
 
-  // Create smaller shockwave effect
   for (let i = 0; i < 25; i++) {
-    // Half the shockwave particles
     const angle = (i / 25) * 2 * Math.PI;
     const speed = 100 + Math.random() * 75; // Reduced speed
     const vel = {
@@ -6869,17 +4222,11 @@ const createSmallKilonovaExplosion = (pos, mass) => {
   }
 };
 
-// Create neutron star-white dwarf merger explosion
-/**
- * Create a moderate explosion when neutron star and white dwarf merge
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging objects
- */
+/** Create a moderate explosion when neutron star and white dwarf merge (pos, mass). */
 const createNSWDExplosion = (pos, mass) => {
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(1.5, massInSuns / 1.5); // Moderate intensity
 
-  // Create moderate particle explosion
   const particleCount = Math.floor(80 + massInSuns * 30); // 80-150 particles
 
   for (let i = 0; i < particleCount; i++) {
@@ -6919,14 +4266,12 @@ const createNSWDExplosion = (pos, mass) => {
       color
     );
 
-    // Add moderate glow effect
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.3 + 0.3; // Moderate glow
     }
   }
 
-  // Create gravitational wave ripple effect
   gravity_ripples.push({
     x: pos.x,
     y: pos.y,
@@ -6938,7 +4283,6 @@ const createNSWDExplosion = (pos, mass) => {
     nswd_merger: true, // Special flag for NS-WD merger
   });
 
-  // Create moderate shockwave effect
   for (let i = 0; i < 25; i++) {
     const angle = (i / 25) * 2 * Math.PI;
     const speed = 120 + Math.random() * 80;
@@ -6958,17 +4302,11 @@ const createNSWDExplosion = (pos, mass) => {
   }
 };
 
-// Create white dwarf-white dwarf merger explosion (Type Ia supernova precursor)
-/**
- * Create a smaller explosion when white dwarfs merge
- * @param {Object} pos - Position of the explosion
- * @param {number} mass - Combined mass of the merging white dwarfs
- */
+/** Create a smaller explosion when white dwarfs merge (pos, mass). */
 const createWDWDExplosion = (pos, mass) => {
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(1.0, massInSuns / 1.0); // Smaller intensity
 
-  // Create smaller particle explosion
   const particleCount = Math.floor(40 + massInSuns * 20); // 40-80 particles
 
   for (let i = 0; i < particleCount; i++) {
@@ -7008,14 +4346,12 @@ const createWDWDExplosion = (pos, mass) => {
       color
     );
 
-    // Add subtle glow effect
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.2 + 0.2; // Subtle glow
     }
   }
 
-  // Create gravitational wave ripple effect
   gravity_ripples.push({
     x: pos.x,
     y: pos.y,
@@ -7027,7 +4363,6 @@ const createWDWDExplosion = (pos, mass) => {
     wdwd_merger: true, // Special flag for WD-WD merger
   });
 
-  // Create small shockwave effect
   for (let i = 0; i < 15; i++) {
     const angle = (i / 15) * 2 * Math.PI;
     const speed = 80 + Math.random() * 60;
@@ -7061,6 +4396,9 @@ const purgeDead = list =>
     return false;
   });
 
+export const className = o =>
+  (typeof o?.kind === 'string' && o.kind) || (o ? 'Object' : '');
+
 // Handle star merging - stars combining into more massive objects
 /**
  * Handle merging between stars, neutron stars, and white dwarfs
@@ -7091,21 +4429,10 @@ const handle_star_merging = stars_list => {
         const min_dist = star1.radius + star2.radius;
 
         if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
-          // These comparisons are against class names, so the build must not
-          // rename the classes. esbuild would: minified, constructor.name comes
-          // back as "t" and every branch below is false, which left star
-          // merging, stellar collapse, tidal disruption and rocky collisions
-          // dead on the deployed site while working perfectly in development.
-          // build.js sets keepNames for exactly this, and the validation page's
-          // three Mergers checks are what catch it if anyone turns it off.
-          //
-          // Not obj_type, though every class sets that to its own class name
-          // too. The two are not interchangeable: a body that has been
-          // transformed carries the obj_type of what it became and the class of
-          // what it was, and swapping them here changed behavior enough to hang
-          // the physics test suite.
-          const star1_type = star1.constructor.name;
-          const star2_type = star2.constructor.name;
+          // By class, never obj_type: a transformed body carries the obj_type
+          // of what it became and the class of what it was.
+          const star1_type = star1.kind;
+          const star2_type = star2.kind;
 
           // Skip BH-BH pairs here; dedicated BH-BH merger runs separately
           if (star1_type === 'BlackHole' && star2_type === 'BlackHole') {
@@ -7128,22 +4455,7 @@ const handle_star_merging = stars_list => {
           };
 
           // Create merger particles
-          for (let k = 0; k < 20; k++) {
-            const angle = Math.random() * 2 * Math.PI;
-            const speed = Math.random() * 40 + 20;
-            const p_vel = {
-              x: speed * Math.cos(angle),
-              y: speed * Math.sin(angle),
-            };
-            particlePool.getParticle(
-              new_pos,
-              p_vel,
-              Math.random() * 0.8 + 0.6,
-              8,
-              2,
-              'rgb(255, 220, 100)'
-            );
-          }
+          burst('starMerge', new_pos);
 
           // Special handling for black hole merging with regular star or white dwarf
           if (
@@ -7183,14 +4495,22 @@ const handle_star_merging = stars_list => {
             // Mark only the non-BH as dead
             other.alive = false;
             // Remove the non-BH from its global list
-            if (other.constructor.name === 'StarObject')
-              stars = stars.filter(s => s !== other);
-            if (other.constructor.name === 'WhiteDwarf')
+            if (other.kind === 'StarObject')
+              setBodyList(
+                'stars',
+                stars.filter(s => s !== other)
+              );
+            if (other.kind === 'WhiteDwarf') clearObjectEnergyHistory(other.id);
+            setBodyList(
+              'white_dwarfs',
+              white_dwarfs.filter(wd => wd !== other)
+            );
+            if (other.kind === 'NeutronStar')
               clearObjectEnergyHistory(other.id);
-            white_dwarfs = white_dwarfs.filter(wd => wd !== other);
-            if (other.constructor.name === 'NeutronStar')
-              clearObjectEnergyHistory(other.id);
-            neutron_stars = neutron_stars.filter(ns => ns !== other);
+            setBodyList(
+              'neutron_stars',
+              neutron_stars.filter(ns => ns !== other)
+            );
             // No new black hole is created, and the existing one remains in
             // bh_list - so it is the result. completeMerger declines to retire
             // a progenitor that is also the result, and a reader following the
@@ -7225,16 +4545,23 @@ const handle_star_merging = stars_list => {
               bh_list.push(new_object);
               clearObjectEnergyHistory(star1.id);
               clearObjectEnergyHistory(star2.id);
-              neutron_stars = neutron_stars.filter(
-                ns => ns !== star1 && ns !== star2
+              setBodyList(
+                'neutron_stars',
+                neutron_stars.filter(ns => ns !== star1 && ns !== star2)
               );
               if (star1_type === 'BlackHole' && star1._bh_ref) {
                 star1._bh_ref.alive = false;
-                bh_list = bh_list.filter(bh => bh !== star1._bh_ref);
+                setBodyList(
+                  'bh_list',
+                  bh_list.filter(bh => bh !== star1._bh_ref)
+                );
               }
               if (star2_type === 'BlackHole' && star2._bh_ref) {
                 star2._bh_ref.alive = false;
-                bh_list = bh_list.filter(bh => bh !== star2._bh_ref);
+                setBodyList(
+                  'bh_list',
+                  bh_list.filter(bh => bh !== star2._bh_ref)
+                );
               }
               gravity_ripples.push({
                 x: new_pos.x,
@@ -7261,8 +4588,9 @@ const handle_star_merging = stars_list => {
               // Remove merged neutron star from global list
               clearObjectEnergyHistory(star1.id);
               clearObjectEnergyHistory(star2.id);
-              neutron_stars = neutron_stars.filter(
-                ns => ns !== star1 && ns !== star2
+              setBodyList(
+                'neutron_stars',
+                neutron_stars.filter(ns => ns !== star1 && ns !== star2)
               );
 
               // Only add regular GW ripple if not a kilonova (kilonova creates its own)
@@ -7421,9 +4749,9 @@ const handle_star_merging = stars_list => {
 
     // Purge dead objects from global arrays so subsequent iterations
     // and later collision handlers never see stale references.
-    stars = purgeDead(stars);
-    neutron_stars = purgeDead(neutron_stars);
-    white_dwarfs = purgeDead(white_dwarfs);
+    setBodyList('stars', purgeDead(stars));
+    setBodyList('neutron_stars', purgeDead(neutron_stars));
+    setBodyList('white_dwarfs', purgeDead(white_dwarfs));
 
     // Rebuild stars_list from global lists (wrap BHs for consistent _bh_ref access)
     stars_list = [
@@ -7464,33 +4792,18 @@ const handle_star_object_collisions = () => {
         star.mass += planet.mass;
 
         // Update star properties based on type
-        if (star.constructor.name === 'NeutronStar') {
+        if (star.kind === 'NeutronStar') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'WhiteDwarf') {
+        } else if (star.kind === 'WhiteDwarf') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'StarObject') {
+        } else if (star.kind === 'StarObject') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
         }
 
         // Create absorption particles
-        for (let k = 0; k < 5; k++) {
-          const angle = Math.random() * 2 * Math.PI;
-          const speed = Math.random() * 20 + 10;
-          const p_vel = {
-            x: speed * Math.cos(angle),
-            y: speed * Math.sin(angle),
-          };
-          particlePool.getParticle(
-            planet.pos,
-            p_vel,
-            Math.random() * 0.5 + 0.3,
-            4,
-            1,
-            'rgb(255, 200, 100)'
-          );
-        }
+        burst('starPlanet', planet.pos);
 
         planet.alive = false;
         broadcastImpact(star, planet, 'stellar-absorption');
@@ -7512,33 +4825,18 @@ const handle_star_object_collisions = () => {
         star.mass += gasGiant.mass;
 
         // Update star properties based on type
-        if (star.constructor.name === 'NeutronStar') {
+        if (star.kind === 'NeutronStar') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'WhiteDwarf') {
+        } else if (star.kind === 'WhiteDwarf') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'StarObject') {
+        } else if (star.kind === 'StarObject') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
         }
 
         // Create more dramatic absorption particles for gas giant
-        for (let k = 0; k < 8; k++) {
-          const angle = Math.random() * 2 * Math.PI;
-          const speed = Math.random() * 30 + 15;
-          const p_vel = {
-            x: speed * Math.cos(angle),
-            y: speed * Math.sin(angle),
-          };
-          particlePool.getParticle(
-            gasGiant.pos,
-            p_vel,
-            Math.random() * 0.6 + 0.4,
-            6,
-            2,
-            'rgb(135, 206, 235)'
-          );
-        }
+        burst('starGas', gasGiant.pos);
 
         gasGiant.alive = false;
         broadcastImpact(star, gasGiant, 'stellar-absorption');
@@ -7561,33 +4859,18 @@ const handle_star_object_collisions = () => {
         star.mass += asteroid.mass;
 
         // Update star properties based on type
-        if (star.constructor.name === 'NeutronStar') {
+        if (star.kind === 'NeutronStar') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'WhiteDwarf') {
+        } else if (star.kind === 'WhiteDwarf') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'StarObject') {
+        } else if (star.kind === 'StarObject') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
         }
 
         // Create small absorption particles
-        for (let k = 0; k < 3; k++) {
-          const angle = Math.random() * 2 * Math.PI;
-          const speed = Math.random() * 15 + 8;
-          const p_vel = {
-            x: speed * Math.cos(angle),
-            y: speed * Math.sin(angle),
-          };
-          particlePool.getParticle(
-            asteroid.pos,
-            p_vel,
-            Math.random() * 0.4 + 0.2,
-            3,
-            1,
-            'rgb(200, 150, 100)'
-          );
-        }
+        burst('starAsteroid', asteroid.pos);
 
         asteroid.alive = false;
         broadcastImpact(star, asteroid, 'stellar-absorption');
@@ -7606,9 +4889,7 @@ const ROCKY_TYPES = new Set(['Planet', 'Asteroid', 'Comet']);
 const handle_rocky_collisions = objects_list => {
   // Comets are included: they are solid bodies and were previously able to fly
   // straight through planets and asteroids because this filter excluded them.
-  const rocky_objects = objects_list.filter(obj =>
-    ROCKY_TYPES.has(obj.constructor.name)
-  );
+  const rocky_objects = objects_list.filter(obj => ROCKY_TYPES.has(obj.kind));
 
   // This is the densest pairwise pass in the frame - the Kuiper Belt scenario
   // alone puts 300+ rocky bodies through it - so it gets the broad phase.
@@ -7659,25 +4940,10 @@ const handle_rocky_collisions = objects_list => {
           }
 
           // Create collision particles
-          for (let k = 0; k < 10; k++) {
-            const angle = Math.random() * 2 * Math.PI;
-            const speed = Math.random() * 30 + 20;
-            const p_vel = {
-              x: speed * Math.cos(angle),
-              y: speed * Math.sin(angle),
-            };
-            particlePool.getParticle(
-              {
-                x: (obj1.pos.x + obj2.pos.x) * 0.5,
-                y: (obj1.pos.y + obj2.pos.y) * 0.5,
-              },
-              p_vel,
-              Math.random() * 0.6 + 0.4,
-              5,
-              1,
-              'rgb(255, 100, 50)'
-            );
-          }
+          burst('rocky', {
+            x: (obj1.pos.x + obj2.pos.x) * 0.5,
+            y: (obj1.pos.y + obj2.pos.y) * 0.5,
+          });
 
           broadcastImpact(obj1, obj2, 'rocky-collision');
         }
@@ -7733,22 +4999,7 @@ const check_stellar_collapse = () => {
       bh_list.push(new_bh);
 
       // Create collapse particles
-      for (let k = 0; k < 30; k++) {
-        const angle = Math.random() * 2 * Math.PI;
-        const speed = Math.random() * 60 + 40;
-        const p_vel = {
-          x: speed * Math.cos(angle),
-          y: speed * Math.sin(angle),
-        };
-        particlePool.getParticle(
-          star.pos,
-          p_vel,
-          Math.random() * 1.2 + 0.8,
-          12,
-          3,
-          'rgb(255, 255, 255)'
-        );
-      }
+      burst('collapseStar', star.pos);
 
       // Remove the star
       star.alive = false;
@@ -7770,22 +5021,7 @@ const check_stellar_collapse = () => {
       bh_list.push(new_bh);
 
       // Create collapse particles
-      for (let k = 0; k < 25; k++) {
-        const angle = Math.random() * 2 * Math.PI;
-        const speed = Math.random() * 80 + 60;
-        const p_vel = {
-          x: speed * Math.cos(angle),
-          y: speed * Math.sin(angle),
-        };
-        particlePool.getParticle(
-          ns.pos,
-          p_vel,
-          Math.random() * 1.0 + 0.6,
-          10,
-          2,
-          'rgb(200, 200, 255)'
-        );
-      }
+      burst('collapseNS', ns.pos);
 
       // Remove the neutron star
       ns.alive = false;
@@ -7807,22 +5043,7 @@ const check_stellar_collapse = () => {
       neutron_stars.push(new_ns);
 
       // Create collapse particles
-      for (let k = 0; k < 20; k++) {
-        const angle = Math.random() * 2 * Math.PI;
-        const speed = Math.random() * 70 + 50;
-        const p_vel = {
-          x: speed * Math.cos(angle),
-          y: speed * Math.sin(angle),
-        };
-        particlePool.getParticle(
-          wd.pos,
-          p_vel,
-          Math.random() * 0.8 + 0.5,
-          8,
-          2,
-          'rgb(255, 200, 200)'
-        );
-      }
+      burst('collapseWD', wd.pos);
 
       // Remove the white dwarf
       wd.alive = false;
@@ -7874,18 +5095,7 @@ const handle_gas_giant_accretion = () => {
 
         // Impact plume thrown back along the approach direction
         const approach = Math.atan2(dy, dx);
-        for (let k = 0; k < 8; k++) {
-          const angle = approach + (Math.random() - 0.5) * 1.2;
-          const speed = Math.random() * 25 + 15;
-          particlePool.getParticle(
-            body.pos,
-            { x: speed * Math.cos(angle), y: speed * Math.sin(angle) },
-            Math.random() * 0.5 + 0.3,
-            4,
-            1,
-            'rgb(255, 190, 120)'
-          );
-        }
+        burst('gasAccretion', body.pos, undefined, approach);
 
         body.alive = false;
         clearObjectEnergyHistory(body.id);
@@ -7931,22 +5141,7 @@ const handle_gas_giant_merging = () => {
           const new_mass_in_jupiters = new_mass / JUPITER_MASS_UNIT;
 
           // Create merger particles
-          for (let k = 0; k < 15; k++) {
-            const angle = Math.random() * 2 * Math.PI;
-            const speed = Math.random() * 35 + 15;
-            const p_vel = {
-              x: speed * Math.cos(angle),
-              y: speed * Math.sin(angle),
-            };
-            particlePool.getParticle(
-              new_pos,
-              p_vel,
-              Math.random() * 0.7 + 0.5,
-              6,
-              2,
-              'rgb(135, 206, 235)'
-            );
-          }
+          burst('gasMerge', new_pos);
 
           // Remove the two original gas giants
           gasGiant1.alive = false;
@@ -7964,22 +5159,7 @@ const handle_gas_giant_merging = () => {
             stars.push(new_object);
 
             // Create extra particles for star formation
-            for (let k = 0; k < 10; k++) {
-              const angle = Math.random() * 2 * Math.PI;
-              const speed = Math.random() * 50 + 25;
-              const p_vel = {
-                x: speed * Math.cos(angle),
-                y: speed * Math.sin(angle),
-              };
-              particlePool.getParticle(
-                new_pos,
-                p_vel,
-                Math.random() * 1.0 + 0.8,
-                10,
-                3,
-                'rgb(255, 255, 0)'
-              );
-            }
+            burst('gasStar', new_pos);
           } else {
             // Create a larger gas giant
             new_object = new GasGiant(new_pos, new_vel, new_mass_in_jupiters);
@@ -8000,19 +5180,31 @@ const handle_gas_giant_merging = () => {
     }
 
     // Filter out dead gas giants after processing all collisions
-    gas_giants = purgeDead(gas_giants);
+    setBodyList('gas_giants', purgeDead(gas_giants));
   }
 };
 
-// Public simulation object for lightweight event access
-const simulation = {
-  eventLog: [],
-  getLatestEvents(count = 20) {
-    return (this.eventLog || []).slice(-count);
-  },
-};
+export {
+  getAbsorbedSpinAngularMomentum,
+  getDiscardedAbsorptionMomentum,
+  resetAbsorptionAccounting,
+  conservedQuantities,
+  conservationDrift,
+  resetConservationBaseline,
+  conservationCaveats,
+  calculateKineticEnergy,
+  calculateGravitationalPotentialEnergy,
+  calculateTotalPotentialEnergy,
+  calculateObjectEnergy,
+  getAllPhysicsObjects,
+  getObjectEnergyHistory,
+  clearAllEnergyHistory,
+  getObjectEnergyStats,
+  getEnergySystemMemoryStats,
+  trimAllEnergyHistory,
+  updateEnergySystemConfig,
+} from './engine/conservation.js';
 
-// Export classes and functions for use in other modules
 export {
   PhysicsObject,
   Planet,
@@ -8025,15 +5217,12 @@ export {
   NeutronStar,
   WhiteDwarf,
   Galaxy,
-  Particle,
-  ParticlePool,
   AccretionDiskParticle,
   particlePool,
   gravitational_acceleration,
   world_to_screen,
   screen_to_world,
   is_offscreen,
-  compute_dynamic_color,
   updatePhysics,
   handle_collisions,
   handle_star_merging,
@@ -8052,13 +5241,6 @@ export {
   resetSimulationTime,
   setSimulationTime,
   absorb_into_black_hole,
-  getAbsorbedSpinAngularMomentum,
-  getDiscardedAbsorptionMomentum,
-  resetAbsorptionAccounting,
-  conservedQuantities,
-  conservationDrift,
-  resetConservationBaseline,
-  conservationCaveats,
   gravitySourcesFor,
   accelerationBreakdown,
   syncReportedMass,
@@ -8107,22 +5289,18 @@ export {
   setDetailScale,
   getDetailScale,
   setStateReference,
-  // Energy calculation functions
-  calculateKineticEnergy,
-  calculateGravitationalPotentialEnergy,
-  calculateTotalPotentialEnergy,
-  calculateObjectEnergy,
-  getAllPhysicsObjects,
+  registerBodyDrawers,
+  registerEffects,
+  // The live values the drawers read (js/bodyDraw.js, js/bodyDrawSky.js). The
+  // engine keeps them because it owns them: it reassigns the settings, sets
+  // the count of bodies on screen each step and builds the black hole's
+  // appearance from the same default.
+  physicsSettings,
+  liveBodyCount,
+  defaultAppearance,
   updateEnergyHistory,
-  getObjectEnergyHistory,
   clearObjectEnergyHistory,
   clearEnergyHistory,
-  clearAllEnergyHistory,
-  getObjectEnergyStats,
-  getEnergySystemMemoryStats,
-  trimAllEnergyHistory,
-  updateEnergySystemConfig,
-  simulation,
   // Orbit preview helpers
   getMostMassiveBody,
   sampleTwoBodyOrbit,
@@ -8136,469 +5314,7 @@ function asPhysicsObject(bh) {
     mass: bh.mass,
     radius: bh.radius,
     alive: true,
-    constructor: { name: 'BlackHole' },
+    kind: 'BlackHole',
     _bh_ref: bh, // Keep reference to real BlackHole
   };
 }
-
-// ===== ENERGY SYSTEM =====
-// Fresh energy calculation and tracking system
-
-// Energy system configuration
-const ENERGY_SAMPLE_RATE = 10; // Sample energy every 10 frames (100ms at 60fps)
-const MAX_ENERGY_HISTORY_POINTS = 5000; // Maximum data points per object to prevent memory issues
-// Memory management: Uses efficient slice() instead of shift() for O(1) trimming
-
-// ---------------------------------------------------------------------------
-// Unit system
-// ---------------------------------------------------------------------------
-// Energies are computed in SIMULATION units first, because those are the only
-// units the integrator is actually self-consistent in:
-//
-//   KE_sim = 1/2 * m * v^2          PE_sim = -G_sim * m1 * m2 / r
-//
-// Both then share a single conversion to joules, so kinetic and potential
-// energy are directly comparable and their sum is meaningful.
-//
-// The sim fixes two anchors: mass (SOLAR_MASS_UNIT units per solar mass) and
-// length (DISTANCE_UNIT_TO_M meters per unit). The time unit is not free once
-// those are chosen - it is pinned by requiring the sim's own G to be the real
-// G expressed in sim units:
-//
-//   G_sim = G_SI * M * T^2 / L^3   =>   T = sqrt(G_sim * L^3 / (G_SI * M))
-//
-// The energy unit follows as M * L^2 / T^2. Because T depends on G_sim, raising
-// the gravitational constant genuinely shortens the simulated timescale, and
-// the reported energies track that.
-
-// MASS_UNIT_KG, up with the mass anchors, is this same conversion; it is
-// declared there because the small-body mass units are derived from it.
-const DISTANCE_UNIT_TO_M = AU_METERS / 100; // 1 distance unit -> m (0.01 AU)
-
-/**
- * Seconds per simulation time unit, derived from the current gravitational
- * constant so that the mass, length and time anchors stay mutually consistent.
- * @returns {number} Seconds represented by one simulation time unit
- */
-const getTimeUnitSeconds = () => {
-  const G_sim = physicsSettings.gravitational_constant;
-  if (!(G_sim > 0)) return 1;
-  const L3 = DISTANCE_UNIT_TO_M ** 3;
-  return Math.sqrt((G_sim * L3) / (G_SI * MASS_UNIT_KG));
-};
-
-/**
- * Joules represented by one simulation energy unit (M * L^2 / T^2).
- * @returns {number} Conversion factor from simulation energy units to joules
- */
-const getSimEnergyToJoules = () => {
-  const T = getTimeUnitSeconds();
-  if (!isFinite(T) || T <= 0) return 1;
-  return (MASS_UNIT_KG * DISTANCE_UNIT_TO_M ** 2) / (T * T);
-};
-
-// Energy history storage - Map of object ID to energy history array
-const energyHistory = new Map();
-
-/**
- * Calculate kinetic energy for a physics object, in simulation units
- * @param {Object} object - Physics object with mass and velocity
- * @returns {number} Kinetic energy in simulation energy units
- */
-const calculateKineticEnergySim = object => {
-  if (!object || !object.vel || !object.mass) return 0;
-  const vSq = object.vel.x * object.vel.x + object.vel.y * object.vel.y;
-  return 0.5 * object.mass * vSq;
-};
-
-/**
- * Calculate kinetic energy for a physics object
- * @param {Object} object - Physics object with mass and velocity
- * @returns {number} Kinetic energy in joules
- */
-const calculateKineticEnergy = object =>
-  calculateKineticEnergySim(object) * getSimEnergyToJoules();
-
-/**
- * Calculate gravitational potential energy between two objects
- * @param {Object} obj1 - First physics object
- * @param {Object} obj2 - Second physics object
- * @param {number} distance - Distance between objects in simulation units
- * @returns {number} Gravitational potential energy in joules
- */
-const calculateGravitationalPotentialEnergy = (obj1, obj2, distance) => {
-  if (!obj1 || !obj2 || distance <= 0) return 0;
-  return (
-    calculateGravitationalPotentialEnergySim(obj1, obj2, distance) *
-    getSimEnergyToJoules()
-  );
-};
-
-/**
- * Gravitational potential energy of a pair, in simulation units
- * @param {Object} obj1 - First physics object
- * @param {Object} obj2 - Second physics object
- * @param {number} distance - Distance between objects in simulation units
- * @returns {number} Pair potential energy in simulation energy units
- */
-const calculateGravitationalPotentialEnergySim = (obj1, obj2, distance) => {
-  if (!obj1 || !obj2 || distance <= 0) return 0;
-  // Match the softening the integrator uses so the reported potential cannot
-  // diverge for objects that are effectively on top of each other.
-  const r = Math.max(distance, minInteractionDistance());
-  const G_sim = physicsSettings.gravitational_constant;
-  return (-G_sim * obj1.mass * obj2.mass) / r;
-};
-
-/**
- * Calculate total gravitational potential energy for an object relative to all other objects
- * @param {Object} object - Physics object to calculate potential energy for
- * @param {Array} allObjects - Array of all physics objects
- * @returns {number} Total gravitational potential energy in joules
- */
-const calculateTotalPotentialEnergy = (object, allObjects) =>
-  calculateTotalPotentialEnergySim(object, allObjects) * getSimEnergyToJoules();
-
-/**
- * Total gravitational potential energy of an object, in simulation units
- * @param {Object} object - Physics object to calculate potential energy for
- * @param {Array} allObjects - Array of all physics objects
- * @returns {number} Total potential energy in simulation energy units
- */
-const calculateTotalPotentialEnergySim = (object, allObjects) => {
-  if (!object) return 0;
-
-  // Optimization: reuse the potential the Barnes-Hut worker already computed.
-  // cached_phi is the potential per unit mass in simulation units, so the
-  // object's potential energy is simply phi * m. Only trusted while the worker
-  // path is actually running - see clearCachedGravity().
-  if (isBarnesHutActive() && typeof object.cached_phi === 'number') {
-    return object.cached_phi * object.mass;
-  }
-
-  if (!allObjects || allObjects.length === 0) return 0;
-
-  let totalPotentialEnergy = 0;
-
-  for (const otherObject of allObjects) {
-    if (!otherObject || otherObject.id === object.id) continue;
-
-    const dx = object.pos.x - otherObject.pos.x;
-    const dy = object.pos.y - otherObject.pos.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (distance > 0) {
-      totalPotentialEnergy += calculateGravitationalPotentialEnergySim(
-        object,
-        otherObject,
-        distance
-      );
-    }
-  }
-
-  return totalPotentialEnergy;
-};
-
-/**
- * Calculate total energy (kinetic + potential) for an object
- * @param {Object} object - Physics object
- * @param {number} timestamp - Current timestamp
- * @returns {Object} Energy data object with timestamp, ke, pe, total
- */
-const calculateObjectEnergy = (object, timestamp, allObjects) => {
-  if (!object) {
-    return {
-      timestamp: timestamp || performance.now(),
-      ke: 0,
-      pe: 0,
-      total: 0,
-    };
-  }
-
-  // Both terms are computed in simulation units and converted with the same
-  // factor, so ke + pe is a real total energy: it stays flat for a stable
-  // orbit, drifts when an orbit decays, and crosses zero on ejection.
-  const toJoules = getSimEnergyToJoules();
-  const ke = calculateKineticEnergySim(object) * toJoules;
-  const pe =
-    calculateTotalPotentialEnergySim(
-      object,
-      allObjects || getAllPhysicsObjects()
-    ) * toJoules;
-
-  return {
-    timestamp: timestamp || performance.now(),
-    ke,
-    pe,
-    total: ke + pe,
-  };
-};
-
-/**
- * Get all physics objects as a flat array, excluding debris and particles
- * @returns {Array} Array of all physics objects
- */
-const getAllPhysicsObjects = () => {
-  return [
-    ...bh_list,
-    ...planets,
-    ...stars,
-    ...gas_giants,
-    ...asteroids,
-    ...comets,
-    ...neutron_stars,
-    ...white_dwarfs,
-  ].filter(obj => obj && obj.alive !== false);
-};
-
-/**
- * Update energy history for all objects
- * Called during the physics update loop at specified intervals
- */
-const updateEnergyHistory = () => {
-  const allObjects = getAllPhysicsObjects();
-
-  if (allObjects.length === 0) return;
-
-  const timestamp = performance.now();
-
-  for (const object of allObjects) {
-    // NB: ids start at 0, so this must be a null check rather than a
-    // truthiness check - otherwise the first object ever created is skipped.
-    if (!object || object.id === undefined || object.id === null) continue;
-
-    // Initialize energy history for new objects
-    if (!energyHistory.has(object.id)) {
-      energyHistory.set(object.id, []);
-    }
-
-    const history = energyHistory.get(object.id);
-    // Pass the object list down: recomputing it per object turns this loop
-    // into O(N^2) allocations on top of the O(N^2) potential sum.
-    const energy = calculateObjectEnergy(object, timestamp, allObjects);
-
-    // Add new energy data point
-    history.push(energy);
-
-    // Maintain data size limit - keep only the most recent entries
-    if (history.length > MAX_ENERGY_HISTORY_POINTS) {
-      // Use slice to keep only the most recent MAX_ENERGY_HISTORY_POINTS entries
-      // This is more efficient than shift() for large arrays
-      const startIndex = history.length - MAX_ENERGY_HISTORY_POINTS;
-      const trimmedHistory = history.slice(startIndex);
-      energyHistory.set(object.id, trimmedHistory);
-    }
-  }
-
-  // Debug logging (only every 100 frames to avoid spam)
-  if (state && state.frame_count % 100 === 0 && allObjects.length > 0) {
-    const firstObject = allObjects[0];
-    const firstObjectHistory = energyHistory.get(firstObject.id);
-    if (firstObjectHistory && firstObjectHistory.length > 0) {
-      const latest = firstObjectHistory[firstObjectHistory.length - 1];
-      debugLog(`Energy data for object ${firstObject.id}:`, {
-        ke: latest.ke.toExponential(2),
-        pe: latest.pe.toExponential(2),
-        total: latest.total.toExponential(2),
-        dataPoints: firstObjectHistory.length,
-      });
-    }
-  }
-
-  // Periodic memory management (every 1000 frames)
-  if (state && state.frame_count % 1000 === 0) {
-    const memoryStats = getEnergySystemMemoryStats();
-
-    // Log memory usage every 1000 frames
-    debugLog('Energy system memory usage:', {
-      objects: memoryStats.totalObjects,
-      dataPoints: memoryStats.totalDataPoints,
-      memoryMB: memoryStats.totalMemoryEstimateMB,
-      avgPointsPerObject: memoryStats.averageDataPointsPerObject,
-    });
-
-    // If memory usage is high (>50MB), trim all histories
-    if (memoryStats.totalMemoryEstimateMB > 50) {
-      debugLog('High memory usage detected, trimming energy histories...');
-      const trimmedCount = trimAllEnergyHistory();
-      debugLog(
-        `Trimmed ${trimmedCount} energy histories to reduce memory usage`
-      );
-    }
-  }
-};
-
-/**
- * Get energy history for a specific object
- * @param {string|number} objectId - ID of the object
- * @returns {Array} Copy of the energy history array for the object
- */
-const getObjectEnergyHistory = objectId => {
-  // ids start at 0 - a truthiness check here hides the first object created
-  if (objectId === undefined || objectId === null) return [];
-  const history = energyHistory.get(objectId);
-  return history ? [...history] : [];
-};
-
-/**
- * Clear energy history for a specific object
- * This function should be called when:
- * - An object's mass changes (energy calculations depend on mass)
- * - An object is removed from the simulation
- * - The simulation is reset
- * - Object transformation occurs (e.g., star to black hole)
- *
- * @param {string|number} objectId - ID of the object
- */
-const clearObjectEnergyHistory = objectId => {
-  if (objectId !== undefined && objectId !== null) {
-    energyHistory.delete(objectId);
-  }
-};
-
-/**
- * Clear energy history for a specific object (alias for consistency)
- * @param {string|number} objectId - ID of the object
- */
-const clearEnergyHistory = objectId => {
-  clearObjectEnergyHistory(objectId);
-};
-
-/**
- * Clear all energy history
- */
-const clearAllEnergyHistory = () => {
-  energyHistory.clear();
-};
-
-/**
- * Get energy statistics for an object
- * @param {string|number} objectId - ID of the object
- * @returns {Object} Energy statistics object
- */
-const getObjectEnergyStats = objectId => {
-  const data = getObjectEnergyHistory(objectId);
-  if (data.length === 0) {
-    return {
-      latest: null,
-      average: { ke: 0, pe: 0, total: 0 },
-      min: { ke: 0, pe: 0, total: 0 },
-      max: { ke: 0, pe: 0, total: 0 },
-      dataPoints: 0,
-    };
-  }
-
-  const latest = data[data.length - 1];
-  const keValues = data.map(d => d.ke);
-  const peValues = data.map(d => d.pe);
-  const totalValues = data.map(d => d.total);
-
-  return {
-    latest,
-    average: {
-      ke: keValues.reduce((a, b) => a + b, 0) / data.length,
-      pe: peValues.reduce((a, b) => a + b, 0) / data.length,
-      total: totalValues.reduce((a, b) => a + b, 0) / data.length,
-    },
-    min: {
-      ke: Math.min(...keValues),
-      pe: Math.min(...peValues),
-      total: Math.min(...totalValues),
-    },
-    max: {
-      ke: Math.max(...keValues),
-      pe: Math.max(...peValues),
-      total: Math.max(...totalValues),
-    },
-    dataPoints: data.length,
-  };
-};
-
-/**
- * Get energy system memory usage statistics
- * @returns {Object} Memory usage statistics
- */
-const getEnergySystemMemoryStats = () => {
-  const totalObjects = energyHistory.size;
-  let totalDataPoints = 0;
-  let totalMemoryEstimate = 0;
-
-  // Estimate memory usage (rough calculation)
-  // Each energy data point contains: timestamp (8 bytes) + ke (8 bytes) + pe (8 bytes) + total (8 bytes) = ~32 bytes
-  const bytesPerDataPoint = 32;
-
-  for (const [, history] of energyHistory) {
-    totalDataPoints += history.length;
-  }
-
-  totalMemoryEstimate = totalDataPoints * bytesPerDataPoint;
-
-  return {
-    totalObjects,
-    totalDataPoints,
-    totalMemoryEstimateBytes: totalMemoryEstimate,
-    totalMemoryEstimateKB: Math.round((totalMemoryEstimate / 1024) * 100) / 100,
-    totalMemoryEstimateMB:
-      Math.round((totalMemoryEstimate / (1024 * 1024)) * 100) / 100,
-    averageDataPointsPerObject:
-      totalObjects > 0 ? Math.round(totalDataPoints / totalObjects) : 0,
-    maxDataPointsPerObject: MAX_ENERGY_HISTORY_POINTS,
-  };
-};
-
-/**
- * Update energy system configuration
- * @param {Object} config - Configuration object
- * @param {number} config.maxHistoryPoints - Maximum data points per object
- * @param {number} config.sampleRate - Energy sampling rate (frames)
- */
-const updateEnergySystemConfig = config => {
-  if (config.maxHistoryPoints !== undefined) {
-    const oldMax = MAX_ENERGY_HISTORY_POINTS;
-    // Note: We can't reassign const, so we'll use the new value in trimAllEnergyHistory
-    debugLog(
-      `Energy history limit changed from ${oldMax} to ${config.maxHistoryPoints} points per object`
-    );
-
-    // Trim existing histories to new limit
-    if (config.maxHistoryPoints < oldMax) {
-      trimAllEnergyHistory(config.maxHistoryPoints);
-    }
-  }
-
-  if (config.sampleRate !== undefined) {
-    debugLog(
-      `Energy sampling rate changed from ${ENERGY_SAMPLE_RATE} to ${config.sampleRate} frames`
-    );
-  }
-
-  return {
-    maxHistoryPoints: config.maxHistoryPoints || MAX_ENERGY_HISTORY_POINTS,
-    sampleRate: config.sampleRate || ENERGY_SAMPLE_RATE,
-  };
-};
-
-/**
- * Trim energy history for all objects to reduce memory usage
- * @param {number} maxPoints - Maximum data points to keep per object (defaults to MAX_ENERGY_HISTORY_POINTS)
- */
-const trimAllEnergyHistory = (maxPoints = MAX_ENERGY_HISTORY_POINTS) => {
-  let trimmedCount = 0;
-
-  for (const [objectId, history] of energyHistory) {
-    if (history.length > maxPoints) {
-      const startIndex = history.length - maxPoints;
-      const trimmedHistory = history.slice(startIndex);
-      energyHistory.set(objectId, trimmedHistory);
-      trimmedCount++;
-    }
-  }
-
-  if (trimmedCount > 0) {
-    debugLog(
-      `Trimmed energy history for ${trimmedCount} objects to ${maxPoints} data points each`
-    );
-  }
-
-  return trimmedCount;
-};

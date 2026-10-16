@@ -110,8 +110,9 @@ describe('the combined CSV', () => {
 describe('the JSON manifest', () => {
   test('carries the provenance a repeat needs', () => {
     const m = experimentManifest(experiment(), { appVersion: '2026.09.3' });
-    expect(m.format).toBe('gravitas-experiment');
-    expect(m.version).toBe(MANIFEST_VERSION);
+    expect(m.format).toBe('gravitas.experiment');
+    expect(m.formatVersion).toBe(MANIFEST_VERSION);
+    expect(m.kind).toBe('comparison');
     expect(m.app.version).toBe('2026.09.3');
     expect(m.provenance).toMatchObject({
       scenario: 'Binary BH',

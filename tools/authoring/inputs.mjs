@@ -20,9 +20,11 @@ import { INVESTIGATIONS } from '../../js/data/investigations.js';
 import { MANIFEST as MANIFEST_EN } from '../../js/data/investigations/manifest.js';
 import { MANIFEST as MANIFEST_ES } from '../../js/data/investigations/manifest.es.js';
 import { INSTRUCTOR_CONTENT } from '../../js/data/instructorContent.js';
-import { SCENARIO_INFO } from '../../js/data/scenarioInfo.js';
+import { SCENARIO_INFO, scenarioId } from '../../js/data/scenarioInfo.js';
 import { DEFAULT_SETTINGS } from '../../js/appState.js';
-import { allWidgets } from '../../js/widgets.js';
+import { allWidgets, whenWidgetsReady } from '../../js/widgets.js';
+import { expectationsFor } from '../../js/instructorExpectations.js';
+import { flowFor } from '../../js/instructorFlow.js';
 import { gradedSteps } from '../../js/data/investigations/catalog.js';
 
 export const LESSON_DIR = 'js/data/investigations';
@@ -62,15 +64,35 @@ export async function loadAuthoringInputs() {
     }
   }
 
+  // allWidgets() lists only the families fetched so far; the rules check
+  // every tool id against the whole catalog, lazily loaded families included.
+  await whenWidgetsReady();
   return {
     investigations: INVESTIGATIONS,
     manifests: { en: MANIFEST_EN, es: MANIFEST_ES },
-    instructor: INSTRUCTOR_CONTENT,
+    instructor: instructorWithExpectations(),
     scenarios: SCENARIO_INFO,
+    scenarioId,
     settingKeys: new Set(Object.keys(DEFAULT_SETTINGS)),
     widgets: allWidgets(),
     translations,
     sources,
     gradedSteps,
   };
+}
+
+/**
+ * The instructor guides with their flow and expectations attached, sid-keyed. The
+ * record is its own module (js/data/instructorExpectations.js) so that no
+ * route carries it; the rules read it as a guide section as before.
+ */
+export function instructorWithExpectations() {
+  const out = {};
+  for (const [id, guide] of Object.entries(INSTRUCTOR_CONTENT)) {
+    const inv = INVESTIGATIONS.find(i => i.id === id);
+    out[id] = inv
+      ? { ...guide, flow: flowFor(inv), expectations: expectationsFor(inv) }
+      : guide;
+  }
+  return out;
 }

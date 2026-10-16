@@ -78,6 +78,61 @@ async function makeLink(page, name = 'Week 3') {
 }
 
 test.describe('building one', () => {
+  for (const size of [
+    { width: 1024, height: 768 },
+    { width: 375, height: 800 },
+  ]) {
+    test(`the builder is a dialog a keyboard reader is moved into (${size.width} px)`, async ({
+      page,
+      app,
+    }) => {
+      // P81 K-1: focus stayed on the page behind, the fields were fourteen
+      // Tabs in, Escape did nothing and nothing said "dialog".
+      await page.setViewportSize(size);
+      await openBuilder(page, app);
+      const builder = page.locator('#assignmentBuilder');
+      await expect(builder).toHaveAttribute('role', 'dialog');
+      await expect(builder).toHaveAttribute('aria-modal', 'true');
+      await expect(page.locator('#assignName')).toBeFocused();
+      // Tab never leaves it, however many times it is pressed.
+      for (let i = 0; i < 30; i++) {
+        await page.keyboard.press('Tab');
+        const inside = await page.evaluate(
+          () =>
+            !!document.activeElement?.closest('#assignmentBuilder') &&
+            document.activeElement !== document.body
+        );
+        expect(inside).toBe(true);
+      }
+      await page.keyboard.press('Shift+Tab');
+      expect(
+        await page.evaluate(
+          () => !!document.activeElement?.closest('#assignmentBuilder')
+        )
+      ).toBe(true);
+      await page.keyboard.press('Escape');
+      await expect(builder).toHaveCount(0);
+    });
+  }
+
+  test('a class code rides on the link, where the submission token reads it', async ({
+    page,
+    app,
+  }) => {
+    // The token has read ?roster= since it existed; the builder had no field
+    // to put it there, so an instructor had to edit the address by hand.
+    await openBuilder(page, app);
+    await tick(page, await dependentIndices(page, 1));
+    await page.locator('#assignRoster').fill('PHYS 101-A');
+    const url = new URL(await makeLink(page));
+    expect(url.searchParams.get('roster')).toBe('PHYS 101-A');
+    expect(url.hash).toMatch(/^#a1[zr]/);
+    // And the field is optional: without it the link carries no query.
+    await page.locator('#assignRoster').fill('');
+    const bare = new URL(await makeLink(page, 'Week 4'));
+    expect(bare.search).toBe('');
+  });
+
   test('the world a step is about is added, and the reason is on screen', async ({
     page,
     app,
@@ -109,8 +164,10 @@ test.describe('building one', () => {
     // the payload is what a student can actually read.
     const payload = await page.evaluate(async link => {
       const { decodeTagged } = await import('/js/shareState.js');
+      const { ASSIGNMENT_SCHEMA } =
+        await import('/js/assignments/assignment.js');
       const hash = link.slice(link.indexOf('#') + 1);
-      const { payload } = await decodeTagged('a', hash, 1);
+      const { payload } = await decodeTagged('a', hash, ASSIGNMENT_SCHEMA);
       return payload;
     }, url);
 
@@ -178,10 +235,12 @@ test.describe('doing one', () => {
 
     const chosen = await page.evaluate(async link => {
       const { decodeTagged } = await import('/js/shareState.js');
+      const { ASSIGNMENT_SCHEMA } =
+        await import('/js/assignments/assignment.js');
       const { payload } = await decodeTagged(
         'a',
         link.slice(link.indexOf('#') + 1),
-        1
+        ASSIGNMENT_SCHEMA
       );
       return payload.s;
     }, url);
@@ -230,8 +289,7 @@ test.describe('doing one', () => {
 
     const stored = await page.evaluate(async () => {
       const inv = await import('/js/investigations.js');
-      const a = inv.activeAssignment();
-      const key = `gravitas_assignment_${a.i}`;
+      const key = inv.activeAssignmentKey();
       // Drive a response through the module's own save path.
       return {
         key,
@@ -320,9 +378,10 @@ test.describe('doing one', () => {
       // anything in it.
       const open = await page.evaluate(async () => {
         const inv = await import('/js/investigations.js');
-        return inv.activeAssignment()?.i;
+        return [inv.activeAssignment()?.i, inv.activeAssignmentKey()];
       });
-      expect(open).toBe(link.id);
+      expect(open[0]).toBe(link.id);
+      link.key = open[1];
 
       // Walk to the answerable step and answer it.
       for (let i = 0; i < 4; i++) {
@@ -347,16 +406,84 @@ test.describe('doing one', () => {
     );
     // Two pieces of work, two records, and the full lesson's own progress
     // untouched by either.
-    expect(keys).toEqual(
-      [
-        `gravitas_assignment_${links[0].id}`,
-        `gravitas_assignment_${links[1].id}`,
-      ].sort()
-    );
+    expect(links[0].key).not.toBe(links[1].key);
+    expect(keys).toEqual([links[0].key, links[1].key].sort());
     const lessonKey = await page.evaluate(() =>
       localStorage.getItem('gravitas_investigation_keplers-laws')
     );
     expect(lessonKey).toBeNull();
+  });
+
+  test('a link re-issued on another day keeps the work, and old keys move across', async ({
+    page,
+    app,
+  }) => {
+    // The key used to be the id, and the id starts with the day it was made:
+    // the same worksheet handed out again next week opened empty.
+    await openBuilder(page, app);
+    await tick(page, await dependentIndices(page, 3));
+    await page.goto(await makeLink(page));
+    await expect(page.locator('#investigationPanel')).toBeVisible({
+      timeout: 30_000,
+    });
+    const option = page
+      .locator('#investigationBody .inv-option:not([disabled])')
+      .first();
+    for (let i = 0; i < 4 && !(await option.count()); i++) {
+      await page.locator('#investigationNext').click();
+    }
+    await option.click();
+
+    const first = await page.evaluate(async () => {
+      const inv = await import('/js/investigations.js');
+      const L = await import('/js/assignments/assignmentLink.js');
+      const a = inv.activeAssignment();
+      const key = inv.activeAssignmentKey();
+      // The same activity, issued on another day.
+      const again = { ...a, i: `991231${a.i.slice(6)}`, c: '2099-12-31' };
+      return {
+        key,
+        saved: localStorage.getItem(key),
+        url: (await L.assignmentLink(again)).url,
+        legacy: `gravitas_assignment_${a.i}`,
+      };
+    });
+    // No date in it: the lesson, the steps and the title, hashed.
+    expect(first.key).toMatch(/^gravitas_assignment_[0-9a-f]{8}$/);
+    expect(first.saved).not.toBeNull();
+
+    await page.goto(first.url);
+    await expect(page.locator('#investigationPanel')).toBeVisible({
+      timeout: 30_000,
+    });
+    const again = await page.evaluate(async () => {
+      const inv = await import('/js/investigations.js');
+      return [inv.activeAssignment().c, inv.activeAssignmentKey()];
+    });
+    expect(again).toEqual(['2099-12-31', first.key]);
+
+    // Work a build before this one saved under the dated key moves across.
+    await page.evaluate(({ key, legacy }) => {
+      localStorage.setItem(legacy, localStorage.getItem(key));
+      localStorage.removeItem(key);
+    }, first);
+    // A reload, not a goto: the address is the same, and only a fresh page
+    // reads storage rather than this tab's copy.
+    await page.reload();
+    await expect(page.locator('#investigationPanel')).toBeVisible({
+      timeout: 30_000,
+    });
+    const moved = await page.evaluate(
+      ({ key, legacy }) => ({
+        now: localStorage.getItem(key),
+        old: localStorage.getItem(legacy),
+      }),
+      first
+    );
+    expect(moved.old).toBeNull();
+    expect(JSON.parse(moved.now).responses).toEqual(
+      JSON.parse(first.saved).responses
+    );
   });
 });
 
@@ -715,5 +842,54 @@ test.describe('a calculation brings the measurements it copies', () => {
     // must not be able to change which steps an assignment contains.
     const why = await page.locator('.assignment-why').first().innerText();
     expect(why).not.toMatch(/assign\.[a-z]/i);
+  });
+});
+
+test.describe('an assignment and the package its lesson comes from', () => {
+  test('a link that predates pinning, or names an older major version, opens with a message saying so', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    const links = await page.evaluate(async () => {
+      const A = await import('/js/assignments/assignment.js');
+      const L = await import('/js/assignments/assignmentLink.js');
+      const P = await import('/js/assignments/provider.js');
+      const reg = await import('/js/data/investigations/registry.js');
+      const { stepFingerprint } =
+        await import('/js/investigations/progressBackup.js');
+      const lesson = await reg.loadInvestigation('power-law-gravity');
+      const pinned = A.buildAssignment({
+        lesson,
+        chosen: [lesson.steps[1].sid],
+        title: 'pinned',
+        fingerprint: stepFingerprint,
+        provider: P.lessonProvider(lesson.id),
+      });
+      const old = { ...pinned, v: 1, t: 'old' };
+      delete old.p;
+      const major = { ...pinned, p: [pinned.p[0], '0.9.0'], t: 'major' };
+      const url = async a => (await L.assignmentLink(a)).url;
+      return {
+        p: pinned.p,
+        pinned: await url(pinned),
+        old: await url(old),
+        major: await url(major),
+      };
+    });
+    expect(links.p[0]).toBe('gravitas.lesson.power-law-gravity');
+    const toast = page.locator('#gravitasToast');
+    await page.goto(links.old);
+    await expect(page.locator('#investigationPanel')).toBeVisible({
+      timeout: 30_000,
+    });
+    await expect(toast).toContainText(
+      'made before investigations came in versioned packages'
+    );
+    await page.goto(links.major);
+    await expect(page.locator('#investigationPanel')).toBeVisible({
+      timeout: 30_000,
+    });
+    await expect(toast).toContainText('a new major version');
   });
 });

@@ -18,7 +18,7 @@
 // lesson is now teaching something false, and both are worth a failing test.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 /**
  * Load a lab, set the experiment, and integrate it to completion.
@@ -33,8 +33,9 @@ import { test, expect } from './fixtures.js';
  * @param {object} spec - scenario, planetA, timestep, periods
  * @returns {Promise<object>} The finished run and its verdict
  */
-const runToCompletion = (page, spec) =>
-  page.evaluate(async s => {
+const runToCompletion = async (page, spec) => {
+  await requireScenarioKey(page, spec.scenario);
+  return page.evaluate(async s => {
     const ui = await import('/js/ui.js');
     const physics = await import('/js/physics.js');
     const { SETTINGS } = await import('/js/appState.js');
@@ -70,6 +71,7 @@ const runToCompletion = (page, spec) =>
       appliedStep: SETTINGS.max_timestep,
     };
   }, spec);
+};
 
 test.describe('the controlled binary', () => {
   test('is built from the stated numbers, not from the world generator', async ({
@@ -79,7 +81,7 @@ test.describe('the controlled binary', () => {
     await app.boot();
     // Paused: the assertions below are about the state the builder
     // produced, and a running world has moved on by the time they read it.
-    await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
+    await app.loadScenario('binary-planet-lab', 'e2e', { run: false });
 
     const world = await page.evaluate(async () => {
       const p = await import('/js/physics.js');
@@ -147,7 +149,7 @@ test.describe('the controlled binary', () => {
 
   test('rebuilds to exactly the same world', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
+    await app.loadScenario('binary-planet-lab', 'e2e', { run: false });
     const snapshot = () =>
       page.evaluate(async () => {
         const p = await import('/js/physics.js');
@@ -182,8 +184,8 @@ test.describe('the controlled binary', () => {
         return p.stars.map(s => [s.mass, s.pos.x, s.pos.y].join(','));
       });
     };
-    expect(await stars('Circumbinary Planet Lab')).toEqual(
-      await stars('Binary Planet Lab')
+    expect(await stars('circumbinary-planet-lab')).toEqual(
+      await stars('binary-planet-lab')
     );
   });
 });
@@ -197,7 +199,7 @@ test.describe('representative configurations', () => {
   }) => {
     await app.boot();
     const { run, verdict, boundary } = await runToCompletion(page, {
-      scenario: 'Binary Planet Lab',
+      scenario: 'binary-planet-lab',
       planetA: 0.15,
       timestep: 1.0,
       periods: 20,
@@ -223,7 +225,7 @@ test.describe('representative configurations', () => {
   }) => {
     await app.boot();
     const { run, verdict, boundary } = await runToCompletion(page, {
-      scenario: 'Binary Planet Lab',
+      scenario: 'binary-planet-lab',
       planetA: 0.3,
       timestep: 1.0,
       periods: 20,
@@ -244,7 +246,7 @@ test.describe('representative configurations', () => {
   }) => {
     await app.boot();
     const { run, verdict, boundary } = await runToCompletion(page, {
-      scenario: 'Circumbinary Planet Lab',
+      scenario: 'circumbinary-planet-lab',
       planetA: 4.0,
       timestep: 2.0,
       periods: 40,
@@ -263,7 +265,7 @@ test.describe('representative configurations', () => {
   }) => {
     await app.boot();
     const { run, verdict, boundary } = await runToCompletion(page, {
-      scenario: 'Circumbinary Planet Lab',
+      scenario: 'circumbinary-planet-lab',
       planetA: 2.0,
       timestep: 2.0,
       periods: 40,
@@ -292,13 +294,13 @@ test.describe('telling a numerical result from a physical one', () => {
     // decided by grazing passes, and the run is not converged: energy drift
     // stays tiny at both steps and the answers still disagree.
     const coarse = await runToCompletion(page, {
-      scenario: 'Binary Planet Lab',
+      scenario: 'binary-planet-lab',
       planetA: 0.25,
       timestep: 1.0,
       periods: 20,
     });
     const fine = await runToCompletion(page, {
-      scenario: 'Binary Planet Lab',
+      scenario: 'binary-planet-lab',
       planetA: 0.25,
       timestep: 0.25,
       periods: 20,
@@ -331,7 +333,7 @@ test.describe('telling a numerical result from a physical one', () => {
   }) => {
     await app.boot();
     const { run, appliedStep } = await runToCompletion(page, {
-      scenario: 'Binary Planet Lab',
+      scenario: 'binary-planet-lab',
       planetA: 0.15,
       timestep: 0.5,
       periods: 2,
@@ -351,7 +353,7 @@ test.describe('telling a numerical result from a physical one', () => {
     // Without the carry in applyPreset this returns the scenario's 0.15 and
     // every experiment a student runs is the same experiment.
     const { appliedA, run } = await runToCompletion(page, {
-      scenario: 'Binary Planet Lab',
+      scenario: 'binary-planet-lab',
       planetA: 0.22,
       timestep: 1.0,
       periods: 2,
@@ -369,7 +371,7 @@ test.describe('the panel', () => {
     await app.boot();
     // No rail chip: the panel is an instrument for two scenarios rather than a
     // general tool, so it shows itself when one of them loads.
-    await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
+    await app.loadScenario('binary-planet-lab', 'e2e', { run: false });
     await expect(page.locator('#binaryRunContainer')).toBeVisible();
 
     await expect(page.locator('#binaryRunPlanetA')).toHaveValue('0.15');
@@ -388,13 +390,13 @@ test.describe('the panel', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
+    await app.loadScenario('binary-planet-lab', 'e2e', { run: false });
     await expect(page.locator('#binaryRunContainer')).toBeVisible();
     // Leaving the lab hides it again: a readout about a planet in a binary
     // would be describing bodies that no longer exist.
-    await app.loadScenario('Solar System', 'e2e', { run: false });
+    await app.loadScenario('solar-system', 'e2e', { run: false });
     await expect(page.locator('#binaryRunContainer')).toBeHidden();
-    await app.loadScenario('Circumbinary Planet Lab', 'e2e', { run: false });
+    await app.loadScenario('circumbinary-planet-lab', 'e2e', { run: false });
     await expect(page.locator('#binaryRunContainer')).toBeVisible();
   });
 
@@ -403,7 +405,7 @@ test.describe('the panel', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
+    await app.loadScenario('binary-planet-lab', 'e2e', { run: false });
     await page.locator('#binaryRunClose').click();
     await expect(page.locator('#binaryRunContainer')).toBeHidden();
     // A rebuild is not a reason to reappear after being dismissed.
@@ -413,8 +415,8 @@ test.describe('the panel', () => {
     });
     await expect(page.locator('#binaryRunContainer')).toBeHidden();
     // Choosing the scenario again is.
-    await app.loadScenario('Solar System', 'e2e', { run: false });
-    await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
+    await app.loadScenario('solar-system', 'e2e', { run: false });
+    await app.loadScenario('binary-planet-lab', 'e2e', { run: false });
     await expect(page.locator('#binaryRunContainer')).toBeVisible();
   });
 
@@ -423,7 +425,7 @@ test.describe('the panel', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
+    await app.loadScenario('binary-planet-lab', 'e2e', { run: false });
     await expect(page.locator('#binaryRunContainer')).toBeVisible();
 
     for (const [locale, forbidden] of [
@@ -462,7 +464,7 @@ test.describe('the panel', () => {
       const { ensureDeferredMessages } =
         await import('/js/i18n/deferredMessages.js');
       await ensureDeferredMessages();
-      SETTINGS.preset_scenario = 'Binary Planet Lab';
+      SETTINGS.preset_scenario = 'binary-planet-lab';
       SETTINGS.binary_lab_periods = 1;
       ui.initialize_simulation({ seed: 'e2e' });
       panel.setBinaryRunEnabled(true);
@@ -498,7 +500,7 @@ test.describe('the panel', () => {
       const physics = await import('/js/physics.js');
       const { SETTINGS } = await import('/js/appState.js');
       const watch = await import('/js/binaryWatch.js');
-      SETTINGS.preset_scenario = 'Binary Planet Lab';
+      SETTINGS.preset_scenario = 'binary-planet-lab';
       ui.initialize_simulation({ seed: 'e2e' });
       SETTINGS.binary_lab_periods = 1;
       ui.initialize_simulation({ seed: 'e2e' });

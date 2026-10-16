@@ -25,6 +25,7 @@ import { writeFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveStatic } from './static-server.mjs';
+import { buildEmptyWorld } from './empty-world.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = 8129;
@@ -33,16 +34,19 @@ const PORT = 8129;
  * The four cases the starfield behaves differently in.
  *
  * Empty is the floor: no lensing objects, no ripples, so the field repaints
- * only for twinkle. Binary BH has two lensing masses and is the scene the
- * improvement is required in. The merger case is the expensive one - an
- * expanding ripple tests every star every repaint. The crowded case is the
- * other axis: many compact objects, each tested against every star.
+ * only for twinkle. It is not a scenario - the catalog has none with nothing
+ * in it, and asking for 'Empty' by name, as this once did, builds the default
+ * world with a black hole in it - so it is built by tools/empty-world.mjs.
+ * Binary BH has two lensing masses and is the scene the improvement is
+ * required in. The merger case is the expensive one - an expanding ripple
+ * tests every star every repaint. The crowded case is the other axis: many
+ * compact objects, each tested against every star.
  */
 const SCENES = [
-  { id: 'empty', scenario: 'Empty' },
-  { id: 'binary-bh', scenario: 'Binary BH' },
-  { id: 'gw-merger', scenario: 'GW150914', forceMerge: true },
-  { id: 'crowded', scenario: 'Compact Object Zoo' },
+  { id: 'empty', scenario: null },
+  { id: 'binary-bh', scenario: 'binary-bh' },
+  { id: 'gw-merger', scenario: 'gw150914', forceMerge: true },
+  { id: 'crowded', scenario: 'compact-object-zoo' },
 ];
 
 const pct = (sorted, p) => {
@@ -102,16 +106,28 @@ async function main() {
   const rows = [];
   for (const scene of SCENES) {
     for (const tier of ['full', 'low']) {
+      if (!scene.scenario) {
+        const left = await page.evaluate(buildEmptyWorld, {
+          seed: 'starfield-probe',
+        });
+        if (Object.keys(left).length) {
+          throw new Error(
+            `the empty scene is not empty: ${JSON.stringify(left)}`
+          );
+        }
+      }
       const row = await page.evaluate(
         async ({ scene, tier, seconds }) => {
           const ui = await import('/js/ui.js');
           const render = await import('/js/render.js');
           const physics = await import('/js/physics.js');
           const quality = await import('/js/quality.js');
-          const starfield = await import('/js/starfield.js');
+          const starfield = await import('/js/bodyDrawSky.js');
 
-          ui.SETTINGS.preset_scenario = scene.scenario;
-          ui.initialize_simulation({ seed: 'starfield-probe' });
+          if (scene.scenario) {
+            ui.SETTINGS.preset_scenario = scene.scenario;
+            ui.initialize_simulation({ seed: 'starfield-probe' });
+          }
           ui.SETTINGS.quality_tier = tier;
           quality.setTier(tier);
           ui.state.paused = false;

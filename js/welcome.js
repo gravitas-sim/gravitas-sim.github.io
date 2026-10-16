@@ -27,6 +27,7 @@ import {
 } from './data/welcome.js';
 import { scenarioShotHtml, wireThumbnailFallbacks } from './scenarioBrowser.js';
 import { t } from './i18n/index.js';
+import { command } from './appState.js';
 
 // The four functions that decide whether this layer is needed live in
 // js/welcomeGate.js, so that deciding can happen without downloading this. They
@@ -41,13 +42,23 @@ export {
   shouldShowWelcome,
 } from './welcomeGate.js';
 
-import { markWelcomeSeen, resetWelcomePreference } from './welcomeGate.js';
+import {
+  isOrientationSeen,
+  markOrientationSeen,
+  markWelcomeSeen,
+  resetWelcomePreference,
+} from './welcomeGate.js';
+import { announce } from './notify.js';
 
 // This module's prose lives in the deferred half of the catalog - see the
 // note in js/i18n/en.deferred.js. Registered from here rather than left to the
 // caller, because nothing in the start-up path can reach this module and a
 // reader who does reach it must not see message ids.
-import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import {
+  ensureDeferredMessages,
+  loadFragment,
+  mountFragment,
+} from './i18n/deferredMessages.js';
 
 ensureDeferredMessages().catch(() => {});
 
@@ -186,8 +197,42 @@ function audiencesHtml() {
   ).join('');
 }
 
+/** How far a reader is through a lesson, from what the lesson saved. */
+function savedProgress(id) {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem(`gravitas_investigation_${id}`) || 'null'
+    );
+    return saved && { seen: saved.visited?.length || 0, at: saved.startedAt };
+  } catch {
+    return null;
+  }
+}
+
 /**
- * Fill in the lesson previews once the registry has loaded.
+ * The lessons a reader has started and not finished, most recently started
+ * first: Home's "continue where you left off".
+ *
+ * @param {Array<Object>} catalog - The manifest
+ * @param {(id: string) => ?{seen: number, at: ?string}} [read] - Saved progress
+ * @returns {Array<Object>} id, title, seen and total, at most three
+ */
+export function unfinishedLessons(catalog, read = savedProgress) {
+  return catalog
+    .map(inv => ({ inv, p: read(inv.id) }))
+    .filter(({ inv, p }) => p && p.seen < inv.stepCount)
+    .sort((x, y) => String(y.p.at || '').localeCompare(String(x.p.at || '')))
+    .slice(0, 3)
+    .map(({ inv, p }) => ({
+      id: inv.id,
+      title: inv.title,
+      seen: p.seen,
+      total: inv.stepCount,
+    }));
+}
+
+/**
+ * Fill in the lessons, and the ones to continue, once the registry has loaded.
  *
  * The section renders without them and they drop in a moment later, rather than
  * the panel waiting on a 225KB import before it can show anything. If the
@@ -195,7 +240,7 @@ function audiencesHtml() {
  * real browser either way, so nothing is lost but a flourish.
  */
 async function fillLessonPreviews() {
-  const list = els.body?.querySelector('.wel-lessons');
+  const list = els.body?.querySelector('[data-slot="lessons"]');
   if (!list) return;
   try {
     // Imported here rather than at the top of the module, and the manifest
@@ -218,19 +263,103 @@ async function fillLessonPreviews() {
         </li>`
       )
       .join('');
+
+    const going = unfinishedLessons(INVESTIGATIONS);
+    const strip = els.body.querySelector('#welContinue');
+    if (strip && going.length) {
+      strip.querySelector('ul').innerHTML = going
+        .map(
+          g => `<li class="wel-lesson"><button type="button" class="wel-quiet" data-lesson="${escape(g.id)}">${escape(g.title)}</button>
+          <span class="wel-lesson-meta"><span class="gs-en">${g.seen} of ${g.total} steps seen</span><span class="gs-es" lang="es">${g.seen} de ${g.total} pasos vistos</span></span></li>`
+        )
+        .join('');
+      strip.hidden = false;
+    }
   } catch {
     list.remove();
   }
 }
 
-/** Fill the shell in index.html. Runs once, lazily, on the first open. */
+// Home's sections, asked for as this module loads, so they arrive with it.
+const sections = loadFragment('home');
+sections.catch(() => {});
+
+// The first-run introduction: three screens inside Home, so Home's place in
+// the order (PLATFORM_MODEL.md, "First run") is the introduction's too.
+let orienting = false;
+const orientEl = () => els.body?.querySelector('#welOrient');
+
+function showOrient(i) {
+  const box = orientEl();
+  if (!box) return;
+  box.hidden = false;
+  box.querySelectorAll('[data-orient]').forEach(s => {
+    s.hidden = Number(s.dataset.orient) !== i;
+  });
+  box.querySelectorAll('[data-n]').forEach(n => (n.textContent = i + 1));
+  const h = box.querySelector(`[data-orient="${i}"] [data-orient-h]`);
+  h?.focus();
+  announce(`${box.querySelector('#welOrientCount').innerText}. ${h.innerText}`);
+}
+
+/** Skip, finish or leave Home: the introduction is over and is not shown again. */
+function endOrient(focus) {
+  if (!orienting) return;
+  orienting = false;
+  markOrientationSeen();
+  document.body.classList.remove('wel-orienting');
+  const box = orientEl();
+  if (box) box.hidden = true;
+  if (focus)
+    els.body?.querySelector('.wel-hero [data-action="enter"]')?.focus();
+}
+
+/** Put the sections in place and fill them. Runs once, after build(). */
+async function fillSections() {
+  mountFragment('home', await sections);
+  const node = document.getElementById('welcomeSections');
+  if (!node || !els.body) return;
+  els.body.append(node);
+  const total = String(Object.keys(SCENARIO_INFO).length);
+  for (const n of node.querySelectorAll('[data-slot="scenario-count"]'))
+    n.textContent = total;
+  const fill = (slot, markup) => {
+    const n = node.querySelector(`[data-slot="${slot}"]`);
+    if (n) n.innerHTML = markup;
+  };
+  fill('doors', entryCardsHtml());
+  fill('scenarios', scenarioCardsHtml());
+  fill('audiences', audiencesHtml());
+  fill(
+    'links',
+    ['teaching', 'instructors', 'model']
+      .map(
+        k => `<a class="wel-link" href="${RESOURCE_LINKS[k].href}">
+          <span class="wel-link-label">${escape(t(RESOURCE_LINKS[k].label))}</span>
+          <span class="wel-link-note">${escape(t(RESOURCE_LINKS[k].note))}</span>
+        </a>`
+      )
+      .join('')
+  );
+  syncReset();
+  if (orienting) showOrient(0);
+  // The same treatment the gallery gives a capture that fails to load.
+  wireThumbnailFallbacks(node);
+  // The lesson titles and the count come from the registry, fetched
+  // separately so the panel does not wait on it.
+  fillLessonPreviews();
+}
+
+/**
+ * Write Home's heading, then its sections when they arrive. Runs once,
+ * lazily, on the first open. The heading is here rather than in the
+ * fragment so the panel has its name the moment it opens.
+ */
 function build() {
   if (built || !els.body) return;
   built = true;
-  const total = Object.keys(SCENARIO_INFO).length;
-
   els.body.innerHTML = `
-    <header class="wel-hero">
+    <div class="wel-hero">
       <p class="wel-eyebrow">Interactive astrophysics in your browser</p>
       <h1 class="wel-wordmark" id="welcomeTitle">GRAVITAS</h1>
       <p class="wel-lede">
@@ -249,124 +378,9 @@ function build() {
           Take a quick tour
         </button>
       </div>
-    </header>
-
-    <section class="wel-section wel-what" aria-labelledby="welWhat">
-      <h2 id="welWhat" class="wel-h2">What Gravitas is</h2>
-      <p class="wel-say">
-        A gravity simulation you can steer, paired with guided astronomy lessons
-        that use it. Change a system, predict what will happen, run it, measure
-        the result, and connect that back to the physics. Nothing here is a
-        recorded animation: every orbit on screen is being integrated as you
-        watch.
-      </p>
-      <div class="wel-triad">
-        <div class="wel-point">
-          <h3>Build</h3>
-          <p>
-            Place stars, planets and black holes by dragging, and change any
-            object's mass, velocity or position while it moves.
-          </p>
-        </div>
-        <div class="wel-point">
-          <h3>Explore</h3>
-          <p>
-            Load ${total} scenarios, from the Solar System and TRAPPIST-1 to the
-            GW150914 black-hole merger and a star torn apart by tides.
-          </p>
-        </div>
-        <div class="wel-point">
-          <h3>Learn</h3>
-          <p>
-            Work through <span data-lesson-count>guided</span> investigations
-            with predictions, measurements, plots and a lab report you can hand
-            in.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="wel-section" aria-labelledby="welDoors">
-      <h2 id="welDoors" class="wel-h2">Three ways in</h2>
-      <div class="wel-doors">${entryCardsHtml()}</div>
-    </section>
-
-    <section class="wel-section" aria-labelledby="welScenarios">
-      <div class="wel-section-head">
-        <h2 id="welScenarios" class="wel-h2">Featured scenarios</h2>
-        <button type="button" class="wel-quiet" data-action="scenarios">
-          Browse all ${total} scenarios
-        </button>
-      </div>
-      <div class="wel-scenarios">${scenarioCardsHtml()}</div>
-    </section>
-
-    <section class="wel-section wel-lessons-block" aria-labelledby="welLessons">
-      <h2 id="welLessons" class="wel-h2">Guided investigations</h2>
-      <p class="wel-say">
-        Structured undergraduate astronomy activities built into the simulation
-        rather than bolted on beside it. Each one asks for a prediction before
-        it shows you anything, hands you an instrument to measure with, plots
-        your own readings back to you, saves your progress, and exports a lab
-        report as a PDF.
-      </p>
-      <ul class="wel-lessons"></ul>
-      <button type="button" class="ui-button wel-secondary" data-action="investigations">
-        Browse investigations
-      </button>
-    </section>
-
-    <section class="wel-section" aria-labelledby="welWho">
-      <h2 id="welWho" class="wel-h2">Who it is for</h2>
-      <div class="wel-audiences">${audiencesHtml()}</div>
-    </section>
-
-    <section class="wel-section wel-teaching" aria-labelledby="welTeaching">
-      <h2 id="welTeaching" class="wel-h2">Teaching with Gravitas</h2>
-      <p class="wel-say">
-        Written for introductory undergraduate astronomy, including
-        general-education and non-science-major courses. Every investigation
-        ships with an instructor guide, stated learning objectives, expected
-        measurements and a generated answer key. The simulation's assumptions
-        and approximations are documented in public.
-      </p>
-      <div class="wel-links">
-        <a class="wel-link" href="${RESOURCE_LINKS.teaching.href}">
-          <span class="wel-link-label">${escape(t(RESOURCE_LINKS.teaching.label))}</span>
-          <span class="wel-link-note">${escape(t(RESOURCE_LINKS.teaching.note))}</span>
-        </a>
-        <a class="wel-link" href="${RESOURCE_LINKS.instructors.href}">
-          <span class="wel-link-label">${escape(t(RESOURCE_LINKS.instructors.label))}</span>
-          <span class="wel-link-note">${escape(t(RESOURCE_LINKS.instructors.note))}</span>
-        </a>
-        <a class="wel-link" href="${RESOURCE_LINKS.model.href}">
-          <span class="wel-link-label">${escape(t(RESOURCE_LINKS.model.label))}</span>
-          <span class="wel-link-note">${escape(t(RESOURCE_LINKS.model.note))}</span>
-        </a>
-      </div>
-    </section>
-
-    <footer class="wel-foot">
-      <button type="button" class="ui-button wel-primary" data-action="enter">
-        Enter the sandbox
-      </button>
-      <p class="wel-foot-note">
-        This introduction appears once. You can reopen it any time from
-        <strong>About Gravitas</strong>, under <strong>Learn</strong> at the
-        bottom of the control panel.
-      </p>
-      <button type="button" class="wel-quiet wel-reset" data-action="reset" hidden>
-        Show this again on my next visit
-      </button>
-    </footer>`;
-
+    </div>`;
   wireBody();
-  // The same treatment the gallery gives a capture that fails to load.
-  wireThumbnailFallbacks(els.body);
-  // Everything above renders from data already in memory. The lesson titles and
-  // the count come from the registry, which is fetched separately so the panel
-  // does not wait on it.
-  fillLessonPreviews();
+  fillSections().catch(err => console.warn('Home sections unavailable:', err));
 }
 
 // --- Actions -----------------------------------------------------------------
@@ -379,8 +393,7 @@ async function runAction(action, key) {
 
     case 'scenario': {
       // One authoritative scenario loader, shared with the scenario browser.
-      const { loadScenarioByKey } = await import('./ui.js');
-      const loaded = loadScenarioByKey(key);
+      const loaded = command('loadScenarioByKey')(key);
       closeWelcome();
       if (!loaded) {
         const { toast } = await import('./controls.js');
@@ -402,6 +415,14 @@ async function runAction(action, key) {
       const { ensureInvestigations } =
         await import('./investigationsLoader.js');
       (await ensureInvestigations()).openBrowser();
+      break;
+    }
+
+    case 'lesson': {
+      closeWelcome();
+      const { ensureInvestigations } =
+        await import('./investigationsLoader.js');
+      (await ensureInvestigations()).openInvestigation(key);
       break;
     }
 
@@ -438,8 +459,32 @@ function wireBody() {
       runAction('scenario', scenario.dataset.scenario);
       return;
     }
+    const lesson = e.target.closest('[data-lesson]');
+    if (lesson) {
+      runAction('lesson', lesson.dataset.lesson);
+      return;
+    }
+    const o = e.target.closest('[data-orient-act]');
+    if (o) {
+      const i = Number(o.closest('[data-orient]').dataset.orient);
+      const a = o.dataset.orientAct;
+      if (a === 'next') showOrient(i + 1);
+      else if (a === 'back') showOrient(i - 1);
+      else endOrient(true);
+      return;
+    }
     const action = e.target.closest('[data-action]');
     if (action) runAction(action.dataset.action);
+  });
+  els.body.addEventListener('keydown', e => {
+    const s = e.target.closest?.('[data-orient]');
+    if (!s || e.altKey || e.ctrlKey || e.metaKey) return;
+    const i = Number(s.dataset.orient);
+    const to = { ArrowRight: i + 1, ArrowLeft: i - 1 }[e.key];
+    if (to >= 0 && to < 3) {
+      e.preventDefault();
+      showOrient(to);
+    }
   });
 }
 
@@ -459,9 +504,13 @@ const FOCUSABLE =
  */
 function trapFocus(e) {
   if (e.key !== 'Tab' || !open || !els.screen) return;
-  const items = [...els.screen.querySelectorAll(FOCUSABLE)].filter(
-    el => el.offsetParent !== null || el === document.activeElement
-  );
+  // Home is a page of the shell: the bar above it is part of it, and Tab
+  // moves through both.
+  const bar = document.querySelector('.gs-shell');
+  const items = [
+    ...(bar ? bar.querySelectorAll(FOCUSABLE) : []),
+    ...els.screen.querySelectorAll(FOCUSABLE),
+  ].filter(el => el.offsetParent !== null || el === document.activeElement);
   if (!items.length) return;
   const first = items[0];
   const last = items[items.length - 1];
@@ -482,21 +531,47 @@ function trapFocus(e) {
  *
  * @param {boolean} on - True to hide, false to restore
  */
+/** The elements setBackgroundInert(true) changed, to restore and no others. */
+let madeInert = [];
+
 function setBackgroundInert(on) {
   if (!els.screen) return;
-  for (const node of document.body.children) {
-    if (node === els.screen) continue;
-    if (on) {
-      node.setAttribute('inert', '');
-      node.setAttribute('aria-hidden', 'true');
-    } else {
+  if (!on) {
+    // Only what this layer changed. It used to clear inert from every child of
+    // <body>, which un-hid closed dialogs that were inert before Home opened.
+    for (const node of madeInert) {
       node.removeAttribute('inert');
       node.removeAttribute('aria-hidden');
     }
+    madeInert = [];
+    return;
+  }
+  for (const node of document.body.children) {
+    // The layer, and the shell's bar above it, which stays usable.
+    if (node === els.screen || node.classList.contains('gs-shell')) continue;
+    // A live region stays audible: what is announced over Home is still said.
+    if (node.matches('[aria-live], [role="status"], [role="alert"]')) continue;
+    if (node.hasAttribute('inert')) continue;
+    node.setAttribute('inert', '');
+    node.setAttribute('aria-hidden', 'true');
+    madeInert.push(node);
   }
 }
 
 // --- Open and close ----------------------------------------------------------
+
+/**
+ * Offer to show Home again on a manually reopened Home only: on a first
+ * visit the preference has not been set yet. Called on every open, and when
+ * the sections arrive.
+ */
+function syncReset() {
+  const reset = els.body?.querySelector('[data-action="reset"]');
+  if (!reset) return;
+  reset.hidden = auto;
+  reset.disabled = false;
+  reset.textContent = t('welcome.showAgain');
+}
 
 /**
  * Present the front door.
@@ -513,6 +588,10 @@ export function openWelcome(opts = {}) {
   if (opts.onEnter) onEnter = opts.onEnter;
   lastFocus = document.activeElement;
 
+  // Only a first, automatic Home carries it; the page then shows nothing else
+  // until it ends (css: .wel-orienting).
+  orienting = auto && !isOrientationSeen();
+  document.body.classList.toggle('wel-orienting', orienting);
   build();
   els.screen.hidden = false;
   // The class carries two jobs: it lets the scenario card in ui.js know not to
@@ -525,12 +604,7 @@ export function openWelcome(opts = {}) {
   // A manually reopened door can be dismissed and put back. Offering to reset
   // the preference makes sense there and nowhere else: on a first visit the
   // preference has not been set yet.
-  const reset = els.body?.querySelector('[data-action="reset"]');
-  if (reset) {
-    reset.hidden = auto;
-    reset.disabled = false;
-    reset.textContent = t('welcome.showAgain');
-  }
+  syncReset();
 
   els.screen.scrollTop = 0;
   // Reading a layout property forces the style change from `hidden` to flush
@@ -563,6 +637,11 @@ export function closeWelcome() {
   // Only an intentional pass through the front door records it. A door skipped
   // by a deep link never opens, so it can never mark itself seen here.
   markWelcomeSeen();
+  endOrient(false);
+  // Leaving Home by name leaves its name out of the address, so a reload
+  // lands in the sandbox the reader chose.
+  if (location.hash === '#home')
+    history.replaceState(null, '', location.pathname + location.search);
 
   els.screen.classList.remove('is-shown');
   setBackgroundInert(false);
@@ -580,6 +659,11 @@ export function closeWelcome() {
       const fn = onEnter;
       onEnter = null;
       fn();
+      // The layer held focus until a moment ago; leaving it on <body> would
+      // send a keyboard user back to the top of the page. The shell's brand
+      // link is the first stop of the interface that has just been revealed.
+      if (!document.activeElement || document.activeElement === document.body)
+        document.querySelector('.gs-brand')?.focus?.({ preventScroll: true });
     } else if (!auto) {
       // Reopened from the footer: hand focus back where it came from. A
       // programmatic open leaves lastFocus on <body>, which cannot take focus,
@@ -601,9 +685,6 @@ export function closeWelcome() {
   if (reduced) finish();
   else setTimeout(finish, 260);
 }
-
-/** @returns {boolean} True while the front door is showing */
-export const isWelcomeOpen = () => open;
 
 // --- Wiring ------------------------------------------------------------------
 

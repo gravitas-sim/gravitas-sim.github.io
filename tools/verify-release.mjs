@@ -14,6 +14,24 @@
 //                         undecryptable by anyone and must never reach the
 //                         site. It marks itself now, and this refuses it.
 //
+//   and that it is current  A bundle can be perfectly real, perfectly
+//                         decryptable, and six weeks out of date, and until now
+//                         nothing between a commit and the live site would have
+//                         said so. That is the failure that actually reaches a
+//                         classroom: an answer key for a question the lesson no
+//                         longer asks. The freshness digest is public and costs
+//                         milliseconds, so the deploy checks it here rather
+//                         than trusting that some earlier job did.
+//
+//                         It is checked HERE, in the job that publishes, and
+//                         not only in the `checks` job, because the two answer
+//                         to different things. The `checks` job asks it only on
+//                         a release ref - a pull request into the integration
+//                         branch must not need Carl's passphrase - and a
+//                         condition is a thing somebody can widen by accident.
+//                         This runs on the tree that is about to go live, with
+//                         no condition at all.
+//
 //   offline manifest      The site is served unbundled from the repository root
 //                         and its service worker precaches a list of files by
 //                         name. A name in that list with no file behind it is
@@ -34,6 +52,8 @@
 
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
+
+import { checkFreshnessAt } from './instructor-freshness.mjs';
 
 /** Where the encrypted instructor bundle lives, relative to the root. */
 export const MATERIALS = 'instructors/materials.enc.json';
@@ -96,7 +116,12 @@ export function checkMaterials(text) {
 export function verifyRelease(root, { requireRevision = true } = {}) {
   const problems = [];
   const at = rel => path.join(root, rel);
-  const checked = { precached: 0, missing: [], revision: null };
+  const checked = {
+    precached: 0,
+    missing: [],
+    revision: null,
+    freshness: null,
+  };
 
   if (!existsSync(at('index.html'))) {
     problems.push('index.html is missing: the site would be blank.');
@@ -118,6 +143,27 @@ export function verifyRelease(root, { requireRevision = true } = {}) {
               'passphrase via `npm run build`.'
           : `${MATERIALS} is not a usable encrypted bundle (${verdict.reason}).`
       );
+    }
+    // Real, and current. A tree without the sources to judge it by is not a
+    // repository checkout - the deploy publishes one, but `verifyRelease` is
+    // also pointed at assembled artifacts - so the absence of the builder is
+    // reported as "not checked here" rather than as a stale bundle.
+    if (verdict.ok) {
+      if (!existsSync(at('tools/build-instructor-materials.js'))) {
+        checked.freshness = 'not a source tree';
+      } else {
+        let fresh;
+        try {
+          fresh = checkFreshnessAt(root);
+        } catch (err) {
+          fresh = {
+            ok: false,
+            problems: [`Freshness could not be judged: ${err.message}`],
+          };
+        }
+        checked.freshness = fresh.ok ? 'current' : 'stale';
+        problems.push(...fresh.problems);
+      }
     }
   }
 

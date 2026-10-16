@@ -22,39 +22,28 @@
 import { createDocument } from '../pdf.js';
 import { t } from '../i18n/index.js';
 import { KIND } from './entry.js';
+import { citationRows } from './artifactEntry.js';
+import {
+  evidenceSections,
+  orRaw,
+  scenarioName,
+  valueText,
+} from './ledgerReport.js';
+import {
+  ARTIFACT_SOURCES,
+  ledgerDigest,
+  ledgerRecord,
+  observedRows,
+} from './ledger.js';
+import { getLocale } from '../i18n/index.js';
 
-/**
- * A translated string, or a fallback when the id is not in the catalog.
- *
- * t() returns the id and warns once when a message is missing, which is right
- * for a hard-coded id and wrong for a dynamic one: a notebook restored from a
- * file written by a newer build can carry a flag this build has no name for,
- * and printing `nb.flag.something-new` in a report a student hands in would be
- * worse than printing the raw flag. The generated ids are all covered by the
- * catalog and asserted by tests/notebook.test.js; this is for the ones that
- * arrive from a file.
- *
- * @param {string} id - Message id
- * @param {string} fallback - What to print when there is no message
- * @returns {string} Text
- */
-const orRaw = (id, fallback) => {
-  const text = t(id);
-  return text === id ? fallback : text;
-};
-
-/** A number for reading: significant figures, not fixed decimals. */
-function valueText(value, unit) {
-  if (value === null || value === undefined) return t('nb.report.noValue');
-  const abs = Math.abs(value);
-  const digits =
-    abs === 0
-      ? '0'
-      : abs < 1e-4 || abs >= 1e6
-        ? value.toExponential(3)
-        : String(Number(value.toPrecision(6)));
-  return unit ? `${digits} ${unit}` : String(digits);
-}
+// The lesson engine reaches the ledger's part of a report through here. The
+// bare import below is not for what it brings: labReport.js, pdf.js and the
+// storage module are one chunk because the same entry points reach all three
+// (the lesson engine and the notebook panel), and a new entry that reached
+// only some of them would split it and cost every lesson route a request.
+import '../labReport.js';
+export { ledgerForReport } from './ledgerReport.js';
 
 const dateText = ms => {
   const d = new Date(ms || Date.now());
@@ -87,7 +76,7 @@ export function provenanceRows(p) {
   const or = v =>
     v === null || v === undefined || v === '' ? missing : String(v);
   const rows = [
-    [t('nb.prov.scenario'), or(p.scenario)],
+    [t('nb.prov.scenario'), or(p.scenario && scenarioName(p.scenario))],
     [t('nb.prov.target'), or(p.target)],
     [
       t('nb.prov.simTime'),
@@ -167,16 +156,38 @@ export function provenanceRows(p) {
  * @param {string} [spec.revision] - The build writing the file
  * @returns {Uint8Array} PDF bytes
  */
-export function buildEvidenceReport({
-  entries,
-  student = null,
-  revision = 'dev',
-}) {
-  const doc = createDocument({
+export function buildEvidenceReport(spec) {
+  const doc = newDocument();
+  fillEvidenceReport(doc, spec);
+  return doc.build();
+}
+
+/**
+ * The same report with the ledger's sections after the entries: the evidence
+ * table, methods, figures with their data, limitations and sources.
+ * @param {object} spec - As buildEvidenceReport
+ * @returns {Promise<Uint8Array>} PDF bytes
+ */
+export async function buildLedgerReport(spec) {
+  const doc = newDocument();
+  fillEvidenceReport(doc, spec);
+  const record = ledgerRecord(spec.entries);
+  evidenceSections(doc, spec.entries, { digest: await ledgerDigest(record) });
+  return doc.build();
+}
+
+const newDocument = () =>
+  createDocument({
     title: t('nb.report.title'),
     footer: t('nb.report.footer'),
+    tagged: true,
+    lang: getLocale() === 'es' ? 'es-ES' : 'en-US',
   });
 
+function fillEvidenceReport(
+  doc,
+  { entries, student = null, revision = 'dev' }
+) {
   doc
     .heading(t('nb.report.title'), { size: 19, spaceBefore: 0 })
     .paragraph(t('nb.report.subtitle'), {
@@ -284,13 +295,28 @@ export function buildEvidenceReport({
       );
     }
 
-    doc.heading(t('nb.report.conditions'), { size: 10, spaceBefore: 8 });
-    for (const [label, value] of provenanceRows(snap.provenance)) {
-      doc.row(label, value);
+    // A measurement on real data says what the data were and what was done
+    // to them (js/notebook/observed.js); a simulation's conditions do not
+    // describe it.
+    if (snap.observed) {
+      doc.heading(t('nb.report.data'), { size: 10, spaceBefore: 8 });
+      for (const [label, value] of observedRows(snap.observed, t)) {
+        doc.row(String(label), String(value));
+      }
+    } else if (snap.artifact && ARTIFACT_SOURCES.includes(entry.source)) {
+      // A fit, an analysis or an experiment result: what made it, from what
+      // data (by digest), and a line to cite it by (./artifactEntry.js).
+      doc.heading(t('nb.entry.cite'), { size: 10, spaceBefore: 8 });
+      for (const [label, value] of citationRows(snap.artifact, t)) {
+        doc.row(label, value);
+      }
+    } else {
+      doc.heading(t('nb.report.conditions'), { size: 10, spaceBefore: 8 });
+      for (const [label, value] of provenanceRows(snap.provenance)) {
+        doc.row(label, value);
+      }
     }
   });
-
-  return doc.build();
 }
 
 /**

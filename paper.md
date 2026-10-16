@@ -23,15 +23,17 @@ bibliography: paper.bib
 
 Gravitas is a browser-based gravitational sandbox and a suite of guided
 investigations for introductory and general-education astronomy. It ships 59
-configurable scenarios drawn from real and idealized systems, and 22
-investigations totalling 636 steps in which a student predicts an outcome,
-changes one thing, measures the result, and revises the prediction against what
-they measured. It runs entirely client-side as a static site, requires no
-account and no installation, works offline after a first visit, and encodes any
-simulation state into a shareable URL.
+configurable scenarios drawn from real and idealized systems, and 77 guided
+investigations (60 that run in the simulation and 17 in the Observatory, the
+3-D lab and the mission lab). The 60 that run in the simulation have 1024 steps
+in which a student predicts an outcome, changes one thing, measures the result,
+and revises the prediction against what they measured. It runs entirely
+client-side as a static site, requires no account and no installation, works
+offline after a first visit, and encodes any simulation state into a shareable
+URL.
 
 The distinguishing commitment is that the software says what it is doing. A
-public validation page reports 243 checks of the physics engine against
+public validation page reports 304 checks of the physics engine against
 analytic results, published values and independent integrations, each with its
 measured error and each labelled by the kind of evidence it rests on; a public
 model page states what the simulation represents and, at equal length, what it
@@ -120,9 +122,14 @@ any of these.
 
 # Functionality and the instructor adoption path
 
-The sandbox integrates gravitational N-body motion with a velocity-Verlet
-integrator and an optional fourth-order Runge–Kutta scheme, and supports point
-masses, stars, planets, small bodies, black holes and compact-object binaries.
+The sandbox integrates gravitational N-body motion with a choice of three
+schemes — symplectic Euler by default, velocity Verlet, and fourth-order
+Runge–Kutta — and supports point masses, stars, planets, small bodies, black
+holes and compact-object binaries. The default is first-order and symplectic
+rather than higher-order and not: every scenario is tuned against it, and the
+validation suite measures each scheme's convergence order and shows that the
+two symplectic schemes hold their energy error bounded over sixty orbits while
+Runge–Kutta accumulates.
 Instruments include an object inspector, an energy and angular-momentum
 conservation readout, a reference-frame selector, a tidal-field visualizer, a
 rotation-curve fitter, a radial-velocity and transit workspace, a
@@ -169,7 +176,8 @@ reproducible pipeline.
 # Accessibility, offline use and low-end hardware
 
 The interface targets WCAG 2.2 Level AA. An automated axe-core sweep runs over
-15 surfaces in two languages and two themes — 60 runs — with no rule disabled,
+36 surfaces in two languages, the pages with the shared shell in all four
+themes and the rest in two — 240 runs — with no rule disabled,
 and a second suite covers focus order, focus traps, Escape handling, focus
 restoration, heading order, landmarks, reflow, reduced motion and the canvas
 description. Automated checks are a floor rather than a ceiling, and the
@@ -185,14 +193,14 @@ has never been raised.
 # Testing and validation
 
 Gravitas is tested at three levels. A unit suite covers the modules. A browser
-suite runs in Chromium, Firefox and WebKit, against both the sources and the
-production build. A physics validation suite runs 243 checks and publishes the
+suite runs in full in Chromium, against both the sources and the production
+build; a tagged cross-engine subset of it runs in Firefox and WebKit. A physics validation suite runs 304 checks and publishes the
 result: each check names what it compares, the kind of evidence it rests on —
 analytic, integrated, published, approximation or empirical — and its measured
 error. The public validation page is generated from the suite that ran, not
 transcribed from it.
 
-A release gate runs 35 checks covering formatting, linting, module architecture,
+A release gate runs 59 checks covering formatting, linting, module architecture,
 authoring rules including lesson-quality warnings, internal links, dependency
 audits, the unit and browser suites, the physics validation, bundle budget and
 composition, and the currency of every generated artifact. It additionally
@@ -230,9 +238,14 @@ Gravitas is developed at
 educational text and figures are CC BY 4.0. Third-party components retain their
 own licenses, recorded in `NOTICE`.
 
-Version 1.0.0 is archived at
-<!-- OWNER: insert the Zenodo *version* DOI once minted — not the concept DOI,
-     and not a placeholder. See RELEASING.md, "Two DOIs". This sentence must not
-     be published with a DOI-shaped string that does not resolve. -->
+Releases are archived on Zenodo: all versions share one DOI,
+<https://doi.org/10.5281/zenodo.22800609>, and each release has its own.
+Version 1.0.0 is archived at <https://doi.org/10.5281/zenodo.22800610>. The
+counts in this paper are those of the current development version, not of that
+archive.
+<!-- OWNER: before this paper is submitted, name here the *version* DOI of the
+     release it describes, once that release is archived (not the concept DOI,
+     and not a placeholder). See RELEASING.md, "Two DOIs". This sentence must
+     not be published with a DOI-shaped string that does not resolve. -->
 
 # References

@@ -148,18 +148,22 @@ const DARK_MATTER = {
   subtitle: 'Weigh a system twice, and find the two answers do not agree',
   duration: '45-60 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  textbook: { chapter: 28, section: '28.4' },
+  courseLevel: 'survey',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'algebra',
+  prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['galaxies', 'gravity'],
   lock: { placement: true, inspector: false, areaSweep: false },
-  summary:
-    'There are two ways to weigh a system in space: add up the light, or watch how things move. For the Solar System the two agree. For a galaxy they do not, and for a cluster of galaxies they are out by more than a factor of ten. Students arrange mass and watch the rotation curve it makes, turn a measured speed into an enclosed mass, then take a real galaxy’s curve and try to fit it with stars alone — and fail, in the specific way the field failed for a decade, before adding a halo and getting it right. It closes on Zwicky’s cluster and the mass budget of the universe. It is how dark matter was found, and it is a measurement rather than a theory.',
   objectives: [
     'Explain why orbital speed falls as the inverse square root of radius when the mass is concentrated in the middle',
     'Read a rotation curve and describe what its slope says about where the mass is',
     'Convert a measured orbital speed into an enclosed mass, and state what a flat curve implies about how that mass grows with radius',
-    'Decompose a measured rotation curve into a stellar disc and a dark halo, and judge a fit against the measurement errors',
+    'Decompose a rotation curve built from NGC 3198’s published parameters into a stellar disc and a dark halo, and judge a fit against its error bars',
     'Argue from the shape of the residual, not just its size, that no arrangement of visible matter reproduces a flat curve',
     'Apply the virial theorem to a cluster of galaxies to estimate its mass from the motion of its members, including the conversion from a line-of-sight dispersion',
     'Compare a dynamical mass with a visible mass and quantify the discrepancy',
@@ -185,8 +189,8 @@ const DARK_MATTER = {
              radius together give you the mass that must be inside. This is the
              dynamical mass.
              \n\nThe two ways are measuring the same thing, so they had better
-             agree. This lesson is about three systems. In the first, they do.`,
-      tip: 'Open the Rotation Curve panel from the Tools section of the right-hand rail. Leave it open: you will use it for the whole lesson.',
+             agree. This investigation is about three systems. In the first, they do.`,
+      tip: 'Open the Rotation Curve panel from the Tools section of the right-hand rail. Leave it open: you will use it for the whole investigation.',
     },
     {
       sid: 'put-the-mass-somewhere',
@@ -208,7 +212,7 @@ const DARK_MATTER = {
         'On "Spiral disc", notice the curve rises, peaks and then falls: still not flat',
         'On "What galaxies do", read the outer slope and compare it with the first preset',
       ],
-      tip: 'The "outer slope" number is the exponent in v ∝ rⁿ. Keplerian is −0.5. Flat is 0. It is the single number this whole lesson turns on.',
+      tip: 'The "outer slope" number is the exponent in v ∝ rⁿ. Keplerian is −0.5. Flat is 0. It is the single number this whole investigation turns on.',
     },
     {
       sid: 'which-arrangement-gives-a-flat',
@@ -467,7 +471,7 @@ const DARK_MATTER = {
       body: `Read the panel. The shaded strip on the left of the plot is the
              inner region, which is excluded from the fit: inside the bulge the
              curve rises with radius for reasons that have nothing to do with
-             this lesson, and including it would drag the slope towards zero.
+             this investigation, and including it would drag the slope towards zero.
              \n\nRecord the slope and the shape the panel reports.`,
       fields: [
         { id: 'exp_slope', label: 'Outer slope (the exponent)', unit: '' },
@@ -514,7 +518,7 @@ const DARK_MATTER = {
              outer disc star - from the canvas, or from the list below - and read
              the last two lines of the readout: how fast it is actually moving,
              and how fast the visible mass inside its orbit says it should be.
-             The ratio between those is the whole of this lesson, measured on one
+             The ratio between those is the whole of this investigation, measured on one
              object you chose rather than read off a curve somebody drew.`,
       probe: tracerRows,
       fields: [
@@ -546,9 +550,11 @@ const DARK_MATTER = {
              distribution could possibly produce it — and showing that no
              arrangement of the visible matter will do.
              \n\nThat is a fitting problem, and it is what this instrument is.
-             The pink points with error bars are a measured rotation curve. The
-             sliders are a model of the galaxy: a disc of stars, and a halo of
-             something else. Your job is to reproduce the points.
+             The pink points with error bars are a rotation curve built from
+             NGC 3198's published parameters, with a fixed scatter added. They
+             are not a measurement, and that is what gives the fit a right
+             answer. The sliders are a model of the galaxy: a disc of stars,
+             and a halo of something else. Your job is to reproduce the points.
              \n\nThe rules are the ones a real astronomer works under. You may
              choose how much mass the disc has and how spread out it is, because
              neither is known precisely from the light alone. You may not move the
@@ -609,7 +615,7 @@ const DARK_MATTER = {
           kind: 'text',
         },
       ],
-      tip: 'The best possible stars-only fit leaves an average miss of about 15 km/s, three times the measurement error, and it is worst at the outer edge. If you got close to that, you found the real answer.',
+      tip: 'The best possible stars-only fit leaves an average miss of about 15 km/s, three times the size of the error bars, and it is worst at the outer edge. If you got close to that, you found the real answer.',
     },
     {
       sid: 'why-a-heavier-disc-cannot',
@@ -640,9 +646,10 @@ const DARK_MATTER = {
                 that is <em>negligible in the middle and dominant at the edge</em>,
                 which is the opposite of how light is distributed in every spiral
                 ever photographed. A disc can be made heavier; it cannot be made
-                to have that shape. The outer points are, if anything, measured
-                more reliably than the inner ones, because they come from cold
-                hydrogen gas that extends well beyond the stars.`,
+                to have that shape. In a real galaxy the outer points are, if
+                anything, measured more reliably than the inner ones, because
+                they come from cold hydrogen gas that extends well beyond the
+                stars.`,
     },
     {
       sid: 'now-add-the-halo',
@@ -691,6 +698,15 @@ const DARK_MATTER = {
       tip: 'A good fit lands near 150 km/s and a core of about 6 kpc, with an average miss around 2 km/s. There is a genuine degeneracy between the two halo sliders, which is why real papers quote them together with a covariance.',
     },
     {
+      hints: [
+        'The headline number is a ratio of two masses, both given by the fit panel.',
+        'Divide the halo mass by the visible mass: the answer is how many times heavier the halo is.',
+      ],
+      feedback: {
+        close:
+          'Close. Divide the halo mass by the visible mass, both in the same units.',
+        off: 'The ratio compares the halo with what you can see: halo on top, visible below.',
+      },
       sid: 'how-much-of-it-is',
       bind: GALAXY_TRACERS,
       type: 'question',
@@ -845,6 +861,17 @@ const DARK_MATTER = {
       tip: 'One thousand simulation mass units is one solar mass, which is the conversion you will need at the end.',
     },
     {
+      hints: [
+        'Use 2K + U = 0, with the kinetic energy written from the spread of the speeds.',
+        'Solve for M: it comes out as a constant times the speed spread squared times the size, divided by G.',
+      ],
+      feedback: {
+        close:
+          'Close. Check the factor in front: it comes from 2K + U = 0 with the speeds’ spread.',
+        off: 'Rearrange the virial relation for M; the speed spread enters squared and the size enters once.',
+        'wrong-order-of-magnitude':
+          'A power of ten out; check the units of the size and of the speed.',
+      },
       sid: 'weigh-the-cluster-by-its',
       type: 'question',
       title: 'Weigh the cluster by its motion',
@@ -876,6 +903,14 @@ const DARK_MATTER = {
                 near 84,000 you used σ rather than σ².`,
     },
     {
+      hints: [
+        'Both masses are already worked out in this step and the one before.',
+        'Divide the dynamical mass by the visible mass.',
+      ],
+      feedback: {
+        close: 'Close. Dynamical mass on top, visible mass below.',
+        off: 'The ratio compares the mass from the motions with the mass you can add up.',
+      },
       sid: 'now-compare',
       type: 'question',
       title: 'Now compare',
@@ -928,15 +963,15 @@ const DARK_MATTER = {
              \n\n<strong>v⁴ = G M a₀</strong>
              \n\nwith M the mass you can see. Not fitted. Predicted, from one
              constant that is meant to be the same for every galaxy.`,
-      tip: 'The instrument is showing the halo fit you just built. The switch at the top puts MOND on the same measurements.',
+      tip: 'The instrument is showing the halo fit you just built. The switch at the top puts MOND on the same points.',
     },
     {
       sid: 'fit-it-both-ways',
       type: 'explore',
       title: 'Fit it both ways',
       tool: { id: 'dm-mond' },
-      body: `Both explanations, the same twelve measurements, scored the same
-             way. Try each of them, and use the two presets when you want to see
+      body: `Both explanations, the same twelve points, scored the same way.
+             Try each of them, and use the two presets when you want to see
              where each one ends up.
              \n\nPay attention to what each explanation had to be told. The halo
              needs three numbers chosen to match this galaxy: how heavy the disc
@@ -952,6 +987,15 @@ const DARK_MATTER = {
       tip: 'MOND wants a lighter disc than the halo fit does — about two thirds. A rotation curve cannot measure the mass of the stars directly, so how heavy the disc is was never pinned down by the data in either picture.',
     },
     {
+      hints: [
+        'MOND gives v⁴ = G M a₀: the flat speed is the fourth root of G M a₀.',
+        'Add the disc and the bulge first, and use the units the instrument uses, before taking the fourth root.',
+      ],
+      feedback: {
+        close:
+          'Close. Take the fourth root, not the square root, and include the bulge.',
+        off: 'Total visible mass first (disc plus bulge), then v = (G M a₀)^(1/4).',
+      },
       sid: 'the-prediction-mond-makes',
       type: 'question',
       title: 'The prediction MOND makes',
@@ -1076,7 +1120,7 @@ const DARK_MATTER = {
              has been repeated in a dozen independent ways. The explanation is a
              name for something we have not identified. Those are different kinds
              of statement and it is worth keeping them apart.`,
-      tip: 'You fitted a real galaxy and weighed a real cluster. That part is not in doubt, and you did not have to take anyone’s word for it.',
+      tip: 'You fitted a curve built from a real galaxy’s published parameters and weighed a real cluster. The numbers came from the literature; the conclusion you reached yourself, without taking anyone’s word for it.',
     },
   ],
 };

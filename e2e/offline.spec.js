@@ -16,7 +16,7 @@
 // only these tests want it.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 /* global fetch */
 
@@ -188,7 +188,7 @@ test.describe('the quality tier is chosen from the frame rate', () => {
     testInfo.setTimeout(180_000);
 
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(30);
 
     // Full tier to begin with, on an unthrottled machine.
@@ -265,7 +265,7 @@ test.describe('the quality tier is chosen from the frame rate', () => {
       ui.SETTINGS.quality_tier = 'low';
       q.setTier('low');
     });
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(20);
 
     // Polled rather than read once. js/render.js defers the resize to the next
@@ -327,8 +327,9 @@ test.describe('the quality tier is chosen from the frame rate', () => {
     // three moons removed is not a cheaper version of the lesson.
     await app.boot();
 
-    const count = async (scenario, tier) =>
-      page.evaluate(
+    const count = async (scenario, tier) => {
+      await requireScenarioKey(page, scenario);
+      return page.evaluate(
         async ([k, t]) => {
           const q = await import('/js/quality.js');
           const ui = await import('/js/ui.js');
@@ -352,12 +353,13 @@ test.describe('the quality tier is chosen from the frame rate', () => {
         },
         [scenario, tier]
       );
+    };
 
     for (const scenario of [
-      'Galilean Resonance',
-      'TRAPPIST-1 System',
-      'Solar System',
-      'Milky Way Rotation',
+      'galilean-resonance',
+      'trappist-1-system',
+      'solar-system',
+      'milky-way-rotation',
     ]) {
       const full = await count(scenario, 'full');
       const low = await count(scenario, 'low');
@@ -366,8 +368,8 @@ test.describe('the quality tier is chosen from the frame rate', () => {
 
     // And the generic populations do come down, or the tier would be doing
     // nothing where it matters most.
-    const galacticFull = await count('Galactic Collision', 'full');
-    const galacticLow = await count('Galactic Collision', 'low');
+    const galacticFull = await count('galactic-collision', 'full');
+    const galacticLow = await count('galactic-collision', 'low');
     expect(galacticLow).toBeLessThan(galacticFull / 2);
   });
 
@@ -413,7 +415,7 @@ test.describe('the quality tier is chosen from the frame rate', () => {
       // *previous* scenario in that run had already rewritten the shared
       // SETTINGS and the damage persisted into every build after it, which is
       // the leak in one sentence.
-      ui.SETTINGS.preset_scenario = 'Galactic Collision';
+      ui.SETTINGS.preset_scenario = 'galactic-collision';
 
       q.setTier('full');
       ui.initialize_simulation({ seed: 'no-edit' });

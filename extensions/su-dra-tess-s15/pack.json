@@ -1,0 +1,147 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "su-dra-tess-s15",
+  "version": "1.0.0",
+  "title": "SU Draconis: an RR Lyrae star, TESS sector 15",
+  "object": {
+    "name": "SU Dra",
+    "identifiers": [
+      "TIC 142848794"
+    ],
+    "ra": 174.485863152031,
+    "dec": 67.3297391178305,
+    "frame": "ICRS, epoch J2000",
+    "tessMagnitude": 9.45479965
+  },
+  "facility": {
+    "observatory": "TESS",
+    "instrument": "camera 4, CCD 3, 2-minute cadence",
+    "pipeline": "SPOC spoc-5.0.96-20230729"
+  },
+  "dataType": "light-curve",
+  "origin": "observed",
+  "credit": "TESS, sector 15 (NASA; SPOC light curve from MAST)",
+  "license": {
+    "status": "public-domain",
+    "statement": "NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive."
+  },
+  "retrieved": "2026-09-25",
+  "time": {
+    "scale": "TDB",
+    "reference": "BTJD = BJD - 2457000",
+    "unit": "d"
+  },
+  "columns": [
+    {
+      "name": "time",
+      "unit": "d",
+      "description": "bin centre: t0 + (index + 0.5) x binDays, in BTJD"
+    },
+    {
+      "name": "flux",
+      "unit": "",
+      "description": "PDCSAP flux over its median"
+    },
+    {
+      "name": "flux error",
+      "unit": "",
+      "uncertaintyOf": "flux",
+      "description": "propagated PDCSAP error over the median, one sigma, per bin"
+    }
+  ],
+  "masks": [
+    {
+      "column": "QUALITY",
+      "rule": "any nonzero flag drops the cadence",
+      "dropped": 1054
+    },
+    {
+      "column": "TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR",
+      "rule": "a cadence without a finite value in all three is dropped",
+      "dropped": 0
+    },
+    {
+      "column": "bin",
+      "rule": "a bin with fewer than 3 kept cadences is dropped",
+      "dropped": 5
+    }
+  ],
+  "reductions": [
+    "10-minute bins average up to 5 two-minute cadences each; the pulsation's rise from minimum to maximum, 0.155 of a cycle or about two and a half hours, spans fifteen bins.",
+    "Flux is kept in steps of 20 ppm and its error in steps of 5 ppm (binned-relative-flux/2): the star swings from about 0.77 to 1.46 of its median, far past the 3.3% that binned-relative-flux/1 holds."
+  ],
+  "source": {
+    "archive": "MAST (Barbara A. Mikulski Archive for Space Telescopes)",
+    "urls": [
+      "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2019226182529-s0015-0000000142848794-0151-s_lc.fits"
+    ],
+    "citations": [
+      {
+        "text": "TESS Light Curves - All Sectors, STScI/MAST",
+        "doi": "10.17909/t9-nmc8-f686"
+      },
+      {
+        "text": "Ricker et al. 2015, JATIS 1, 014003 (TESS)",
+        "doi": "10.1117/1.JATIS.1.1.014003"
+      },
+      {
+        "text": "Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC)",
+        "doi": "10.1117/12.2233418"
+      },
+      {
+        "text": "Monson et al. 2017, AJ 153, 96, Table 1 (period of SU Dra)"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "tess2019226182529-s0015-0000000142848794-0151-s_lc.fits",
+      "url": "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2019226182529-s0015-0000000142848794-0151-s_lc.fits",
+      "bytes": 1906560,
+      "sha256": "feea6b25dd3d2a9762365b4fd4588887640076381999a43f53f87bd892e6e4a0"
+    }
+  ],
+  "derived": {
+    "file": "series.json",
+    "bytes": 17367,
+    "sha256": "50c85b136cb0cccc9b559707227f51b76f70dc6465c4012a29858332ad580302"
+  },
+  "transformation": {
+    "script": "build.mjs",
+    "version": "1.0.0",
+    "steps": [
+      "Read tess2019226182529-s0015-0000000142848794-0151-s_lc.fits with the SDK's readFits(), pinned by its checksum.",
+      "Mask, normalize and bin it with the SDK's binTessLightCurve(), the pipeline every TESS pack uses: QUALITY 0 and finite values only, divided by the median, 10-minute bins of at least 3 cadences.",
+      "Encode it as binned-relative-flux/2, flux in steps of 20 ppm."
+    ]
+  },
+  "assumptions": [
+    "PDCSAP flux has had instrumental systematics and crowding removed by SPOC; that correction is used as published. Its crowding estimate is sound here: CROWDSAP is 0.985.",
+    "Times are barycentric dynamical time for the target, as SPOC corrects them.",
+    "The star's period does not change measurably across one sector. RR Lyrae periods drift by parts in a billion a day."
+  ],
+  "validation": {
+    "check": "a 20-harmonic Fourier series fits best at the published period, within 0.00005 d",
+    "against": [
+      {
+        "quantity": "period",
+        "value": 0.66042001,
+        "unit": "d",
+        "ref": "Monson et al. 2017, AJ 153, 96, Table 1"
+      }
+    ],
+    "rule": {
+      "kind": "harmonic-period",
+      "periodDays": 0.66042001,
+      "windowDays": 0.002,
+      "harmonics": 20,
+      "tolerance": 0.00005
+    }
+  },
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional"
+}

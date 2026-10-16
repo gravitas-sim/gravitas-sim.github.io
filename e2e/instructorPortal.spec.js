@@ -20,29 +20,76 @@
 // always does and Playwright answers.
 // =============================================================================
 
-import { readFileSync, existsSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import AxeBuilder from '@axe-core/playwright';
 
 import { test, expect } from './fixtures.js';
+import { MANIFEST } from '../js/data/investigations/manifest.js';
+import { ACTIVITIES } from '../js/data/activities.js';
+import { DEEPER } from '../js/investigations/depthAll.js';
+import { ensureFixture } from '../tools/instructor-fixture.mjs';
 
-const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const FIXTURE = path.join(REPO, '.instructor-fixture', 'materials.enc.json');
+/**
+ * How many lessons the portal should be showing.
+ *
+ * Derived rather than written down. These counts were three literal 22s and
+ * a "22 investigations, 44 documents", which is a number that is only right
+ * until somebody adds a lesson - and then fails here, in a file about the
+ * instructor portal, for a reason that has nothing to do with the portal.
+ */
+const LESSONS = MANIFEST.length;
+/** A guide and an answer key each. */
+const BASE_DOCUMENTS = LESSONS * 2;
+/**
+ * Everything the bundle holds, which is what the version line counts.
+ *
+ * The lesson half is derived because it is the half that moves: every new
+ * investigation adds two documents and used to leave a literal behind. The
+ * other two terms are the adopters guide and the curriculum map, and the eight
+ * activity documents the test below asserts separately - both stable, both
+ * checked in their own right, and neither of them a reason to hard-code the
+ * total.
+ */
+const GENERAL_DOCUMENTS = 2;
+const ACTIVITY_DOCUMENTS = 8;
+// Prompt 79: a key per Activity format in each language, a guide and a key in
+// Spanish for every lesson, and a key per depth in each language for the
+// lessons that have deeper steps.
+const ACTIVITY_KEYS = ACTIVITIES.reduce((n, a) => n + a.formats.length * 2, 0);
+const SPANISH_DOCUMENTS = LESSONS * 2;
+const DEPTH_KEYS = Object.keys(DEEPER).length * 3 * 2;
+/** What the investigation cards list: both languages and every depth. */
+const DOCUMENTS = BASE_DOCUMENTS + SPANISH_DOCUMENTS + DEPTH_KEYS;
+// The Observatory suites' guides and answer keys (EXOPLANET_OBSERVATORY.md,
+// STELLAR_POPULATIONS.md): their investigations live in /observatory/, not in
+// the lesson manifest.
+const OBSERVATORY_DOCUMENTS = 4;
+// The 3-D lab's curriculum (LAB3D_CURRICULUM.md): its guides live in /3d/.
+const LAB3D_DOCUMENTS = 2;
+// The mission lab's (MISSION_LAB.md): its guides live in /mission/lab/.
+const MISSION_LAB_DOCUMENTS = 2;
+const ALL_DOCUMENTS =
+  GENERAL_DOCUMENTS +
+  OBSERVATORY_DOCUMENTS +
+  LAB3D_DOCUMENTS +
+  MISSION_LAB_DOCUMENTS +
+  ACTIVITY_DOCUMENTS +
+  ACTIVITY_KEYS +
+  DOCUMENTS;
+
 const PASSPHRASE = 'gravitas-fixture-not-a-secret';
 
-/** The fixture bundle, built on demand the first time a worker needs it. */
-function fixtureBundle() {
-  if (!existsSync(FIXTURE)) {
-    execFileSync(
-      'node',
-      ['tools/build-instructor-materials.js', '--fixture', FIXTURE],
-      { cwd: REPO, stdio: 'ignore' }
-    );
-  }
-  return readFileSync(FIXTURE, 'utf8');
-}
+/**
+ * The fixture bundle, rebuilt first unless it is the one these sources build.
+ *
+ * This used to rebuild only when the file was missing, so a checkout kept the
+ * first fixture it ever built: one on the development machine was serving an
+ * inventory from before two of the current lessons existed. The fixture now
+ * carries a stamp of every input that decides what it says, and a missing,
+ * stale, unstamped or corrupt one is rebuilt before a page sees it - see
+ * tools/instructor-fixture.mjs. The bytes returned are the ones that were
+ * judged, not a second read of a file another worker may be replacing.
+ */
+const fixtureBundle = () => ensureFixture().bytes;
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
@@ -100,7 +147,7 @@ test.describe('the instructor portal, signed in', () => {
       page,
     }) => {
       const cards = page.locator('#investigationResources .res-card');
-      await expect(cards).toHaveCount(22);
+      await expect(cards).toHaveCount(LESSONS);
       // textContent, not innerText: `.res-count` is text-transform: uppercase,
       // so innerText reports what is painted and textContent what was written.
       // Asserting the painted form would make this test fail the day somebody
@@ -108,14 +155,24 @@ test.describe('the instructor portal, signed in', () => {
       const count = await page
         .locator('#investigationCount')
         .evaluate(el => el.textContent.trim());
-      expect(count).toBe('22 investigations, 44 documents');
-      // Two download buttons and one "open" link on each card.
+      expect(count).toBe(`${LESSONS} investigations, ${DOCUMENTS} documents`);
+      // Two download buttons and two links on each card: "open" the
+      // investigation, and its public adoption page (ADOPTION.md).
       const first = cards.first();
-      await expect(first.locator('button.ui-button')).toHaveCount(2);
-      await expect(first.locator('a.ui-button')).toHaveCount(1);
+      await expect(
+        first.locator('.res-actions > button.ui-button')
+      ).toHaveCount(2);
+      // Spanish and per-depth documents sit in a disclosure, not among the two.
+      await expect(first.locator('details.res-more button')).toHaveCount(
+        2 + 3 + 3
+      );
+      await expect(first.locator('a.ui-button')).toHaveCount(2);
+      await expect(
+        first.locator('a.ui-button[href^="/teaching/investigation/"]')
+      ).toHaveCount(1);
     });
 
-    test('all eight activity documents are individually reachable', async ({
+    test('every activity document is individually reachable', async ({
       page,
     }) => {
       const cards = page.locator('#activityResources .res-card');
@@ -123,11 +180,13 @@ test.describe('the instructor portal, signed in', () => {
       const activityCount = await page
         .locator('#activityCount')
         .evaluate(el => el.textContent.trim());
-      expect(activityCount).toBe('3 activities, 8 documents');
+      expect(activityCount).toBe(
+        `3 activities, ${ACTIVITY_DOCUMENTS + ACTIVITY_KEYS} documents`
+      );
       // Three guides, five worksheets: the demonstration is projected and
       // answered aloud, and says so rather than leaving a gap.
       const buttons = page.locator('#activityResources button.ui-button');
-      await expect(buttons).toHaveCount(8);
+      await expect(buttons).toHaveCount(ACTIVITY_DOCUMENTS + ACTIVITY_KEYS);
       await expect(page.locator('#activityResources .res-none')).toHaveCount(1);
       await expect(page.locator('#activityResources .res-format')).toHaveCount(
         6
@@ -178,12 +237,14 @@ test.describe('the instructor portal, signed in', () => {
       await page.locator('#resourceSearch').fill('kepler');
       await expect
         .poll(() => page.locator('#investigationResources .res-card').count())
-        .toBeLessThan(22);
-      await expect(page.locator('#investigationCount')).toContainText('of 22');
+        .toBeLessThan(LESSONS);
+      await expect(page.locator('#investigationCount')).toContainText(
+        `of ${LESSONS}`
+      );
       await page.locator('#resourceSearch').fill('');
       await expect(
         page.locator('#investigationResources .res-card')
-      ).toHaveCount(22);
+      ).toHaveCount(LESSONS);
     });
 
     test('search that matches nothing says so rather than showing nothing', async ({
@@ -237,14 +298,14 @@ test.describe('the instructor portal, signed in', () => {
         .locator('#investigationResources .res-card')
         .count();
       expect(shown).toBeGreaterThan(0);
-      expect(shown).toBeLessThan(22);
+      expect(shown).toBeLessThan(LESSONS);
     });
 
     test('the version line names the catalog it is describing', async ({
       page,
     }) => {
       await expect(page.locator('#materialsVersion')).toContainText(
-        '54 documents'
+        `${ALL_DOCUMENTS} documents`
       );
     });
   });
@@ -337,7 +398,9 @@ test.describe('the dashboard on a small screen and by keyboard', () => {
     }
     expect(seen.length).toBeGreaterThan(8);
     expect(
-      seen.every(s => ['BUTTON', 'A', 'INPUT', 'SELECT'].includes(s.tag))
+      seen.every(s =>
+        ['BUTTON', 'A', 'INPUT', 'SELECT', 'SUMMARY'].includes(s.tag)
+      )
     ).toBe(true);
     // Every stop draws a ring. A focus outline of `none` is the defect this
     // catches, and it is invisible in a screenshot taken without tabbing.
@@ -352,7 +415,7 @@ test.describe('the dashboard on a small screen and by keyboard', () => {
     // container is a clean run that proves nothing, and an empty container is
     // exactly what a broken render looks like from here.
     await expect(page.locator('#investigationResources .res-card')).toHaveCount(
-      22
+      LESSONS
     );
     await expect(page.locator('#activityResources .res-format')).toHaveCount(6);
     const results = await new AxeBuilder({ page }).withTags(TAGS).analyze();

@@ -33,6 +33,7 @@
 // the answer key.
 // =============================================================================
 
+import { readFile } from 'node:fs/promises';
 import { test, expect } from './fixtures.js';
 import {
   commitPredictionHeld,
@@ -109,6 +110,191 @@ test.describe('the central experiment of each investigation', () => {
       s2: at[1].toFixed(2),
       d3: 2,
       s3: at[2].toFixed(2),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('color-and-temperature: the peak wavelength is inversely proportional to the temperature @accepts:ce.color-and-temperature', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'color-and-temperature';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('blackbody');
+    const at = {};
+    for (const T of [3000, 6000, 12000]) {
+      const { before, after } = await setControl(page, control, T);
+      if (T !== 3000) expect(after).not.toEqual(before);
+      at[T] = reading(after, /peak wavelength/i);
+    }
+
+    // 3. Wien's law: peak times temperature is the same every time.
+    expect(at[3000] / at[6000]).toBeCloseTo(2, 2);
+    expect(at[6000] / at[12000]).toBeCloseTo(2, 2);
+    expect(at[6000] * 6000).toBeCloseTo(2897772, -3);
+
+    // 4. the evidence, written down and kept
+    const evidence = {
+      p3: at[3000].toFixed(1),
+      p6: at[6000].toFixed(1),
+      p12: at[12000].toFixed(1),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('lines-and-motion: a line moves to longer wavelengths for a receding star and shorter for an approaching one @accepts:ce.lines-and-motion', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'lines-and-motion';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen: two stars
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('spectrum-viewer');
+    const at = {};
+    for (const src of [4, 5]) {
+      const { before, after } = await setControl(page, control, src);
+      if (src !== 4) expect(after).not.toEqual(before);
+      at[src] = reading(after, /velocity/i);
+    }
+
+    // 3. one is receding and one approaching, at the speeds the model gave
+    expect(at[4]).toBeGreaterThan(0);
+    expect(at[5]).toBeLessThan(0);
+    expect(Math.abs(at[4] - 85)).toBeLessThan(12);
+    expect(Math.abs(at[5] + 142)).toBeLessThan(12);
+
+    // 4. the evidence, written down and kept
+    const evidence = { v1: at[4].toFixed(0), v2: at[5].toFixed(0) };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('what-a-spectrum-is-made-of: the same cloud makes a dark line when cooler than the source and a bright one when hotter @accepts:ce.what-a-spectrum-is-made-of', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'what-a-spectrum-is-made-of';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen: the cloud's temperature
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('kirchhoff');
+    const at = {};
+    for (const Tc of [4000, 8000]) {
+      const { before, after } = await setControl(page, control, Tc);
+      if (Tc !== 4000) expect(after).not.toEqual(before);
+      at[Tc] = reading(after, /h-alpha center/i);
+    }
+
+    // 3. cooler than the source is dark and hotter is bright, at the model's numbers
+    expect(at[4000]).toBeLessThan(100);
+    expect(at[8000]).toBeGreaterThan(100);
+    expect(Math.abs(at[4000] - 19.9)).toBeLessThan(1.5);
+    expect(Math.abs(at[8000] - 251.6)).toBeLessThan(8);
+
+    // 4. the evidence, written down and kept
+    const evidence = { cool: at[4000].toFixed(1), hot: at[8000].toFixed(0) };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('power-law-gravity: the ellipse stops closing when the exponent moves @accepts:ce.power-law-gravity', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'power-law-gravity';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, exploreSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, on the declared screens
+    await walkToSid(page, plan, exploreSid);
+    expect(step(plan, exploreSid).tool).toBe('power-law-precession');
+    await walkToSid(page, plan, measureSid);
+
+    // 3. the relationship the lesson is about. The exponent is anchored at the
+    //    reference radius, so moving it changes the shape of the field and not
+    //    its strength - and the ellipse stops closing. Newton is the control
+    //    and must read zero; a shallower law turns the other way.
+    const exponents = [1.8, 2, 2.05, 2.2];
+    const at = {};
+    for (const n of exponents) {
+      const { before, after } = await setControl(page, control, n);
+      if (n !== exponents[0]) expect(after).not.toEqual(before);
+      at[n] = reading(after, /measured precession/i);
+    }
+
+    expect(at[2], 'a Newtonian orbit closes').toBeCloseTo(0, 2);
+    expect(at[1.8], 'a shallower law precesses backwards').toBeLessThan(-5);
+    expect(
+      at[2.05],
+      'a slightly steeper law precesses forwards'
+    ).toBeGreaterThan(5);
+    expect(at[2.2], 'and a steeper one much further').toBeGreaterThan(at[2.05]);
+
+    // 4. the evidence, written down and kept
+    const evidence = {
+      p_18: at[1.8].toFixed(2),
+      p_20: at[2].toFixed(2),
+      p_205: at[2.05].toFixed(2),
+      p_22: at[2.2].toFixed(2),
     };
     await recordFields(page, id, measureSid, evidence);
     await expectEvidenceRetained(page, id, measureSid, evidence);
@@ -1755,6 +1941,1002 @@ test.describe('the central experiment of each investigation', () => {
     await recordFields(page, id, measureSid, evidence);
     await expectEvidenceRetained(page, id, measureSid, evidence);
 
+    await expectVerdictRevealed(page, plan, predict);
+  });
+  test('twelve-nights: using the whole window lowers the peak the sky put there @accepts:ce.twelve-nights', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'twelve-nights';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, exploreSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // The control is where inside each night's window the twelve epochs go.
+    // Everything else is held: the same twelve nights, the same airmass limit,
+    // the same target from the same site. Only the placement moves.
+    await walkToSid(page, plan, exploreSid);
+    const center = (await setControl(page, control, 0)).after;
+    const ends = (await setControl(page, control, 1)).after;
+
+    const powerCenter = reading(center, /window power at the sidereal day/i);
+    const powerEnds = reading(ends, /window power at the sidereal day/i);
+
+    // Observing at the best moment of each night puts every epoch at the same
+    // hour angle, so the schedule is a comb and the window peak is essentially
+    // one: the alias fits the data as well as the planet does. Spending the
+    // width of the window buys a real reduction, and does not buy a small one.
+    expect(powerCenter, 'best-moment plan aliases completely').toBeGreaterThan(
+      0.95
+    );
+    expect(powerEnds, 'using the window lowers the peak').toBeLessThan(0.85);
+    expect(powerCenter - powerEnds).toBeGreaterThan(0.1);
+
+    // And the comb is spaced by the SIDEREAL day, not the solar one. Read off
+    // the best-moment plan, where the comb is pure and the peak is therefore
+    // unambiguous - the both-ends plan breaks the comb into pairs, which is
+    // the point of it, and broadens the feature so its maximum wanders. Four
+    // decimals in both directions: the two days differ by 0.0027, and a test
+    // that could not separate them would pass on an implementation that had
+    // never heard of sidereal time.
+    const combPeriod = reading(center, /strongest alias/i, 1);
+    expect(combPeriod, 'the comb is spaced by the sidereal day').toBeCloseTo(
+      0.9973,
+      3
+    );
+    expect(combPeriod, 'and not by the solar day').not.toBeCloseTo(1, 3);
+
+    // Widening the airmass limit does help, and does not rescue: a longer
+    // window gives the placement more room, so the peak falls further - to
+    // about 0.5 at X < 3 - and it is still a peak of 0.5, bought by observing
+    // through three atmospheres. The comb is not something a limit can spend
+    // its way out of.
+    const loose = (await setControl(page, 'airmass', 3)).after;
+    expect(
+      reading(loose, /window power at the sidereal day/i),
+      'a looser airmass limit does not remove the comb'
+    ).toBeGreaterThan(0.4);
+    await setControl(page, 'airmass', 2);
+    await setControl(page, control, 1);
+
+    await walkToSid(page, plan, measureSid);
+    const evidence = {
+      wCenter: powerCenter.toFixed(3),
+      wEnds: powerEnds.toFixed(3),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('the-suns-motion: a nearby-star sample gives the Sun about 10, 22 and 9 km/s against the stars @accepts:ce.the-suns-motion', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'the-suns-motion';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('solar-motion');
+    const at = {};
+    for (const pc of [50, 100]) {
+      const { before, after } = await setControl(page, control, pc);
+      if (pc !== 50) expect(after).not.toEqual(before);
+      at[pc] = {
+        U: reading(after, /Sun.s U/i),
+        V: reading(after, /Sun.s V/i),
+        W: reading(after, /Sun.s W/i),
+      };
+    }
+
+    // 3. the model's numbers, within the validator's tolerances
+    expect(Math.abs(at[100].U - 10.5)).toBeLessThan(1.5);
+    expect(Math.abs(at[100].V - 21.9)).toBeLessThan(2);
+    expect(Math.abs(at[100].W - 9.1)).toBeLessThan(1.5);
+
+    // 4. the evidence, written down and kept
+    const evidence = {
+      U: at[100].U.toFixed(1),
+      V: at[100].V.toFixed(1),
+      W: at[100].W.toFixed(1),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('the-rotating-disk: weighting by distance gives the Oort constants, and weighting all alike does not @accepts:ce.the-rotating-disk', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'the-rotating-disk';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('rotating-disk');
+    const at = {};
+    for (const w of [1, 0]) {
+      const { before, after } = await setControl(page, control, w);
+      if (w === 0) expect(after).not.toEqual(before);
+      at[w] = { A: reading(after, /Oort A/i), B: reading(after, /Oort B/i) };
+    }
+
+    // 3. weighted by distance A is positive and B negative, near the model's values
+    expect(Math.abs(at[0].A - 13.5)).toBeLessThan(1);
+    expect(Math.abs(at[0].B + 13.7)).toBeLessThan(1);
+    expect(Math.abs(at[1].A - at[0].A)).toBeGreaterThan(5);
+
+    // 4. the evidence, written down and kept
+    const evidence = { A: at[0].A.toFixed(1), B: at[0].B.toFixed(1) };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('cluster-membership: almost every star is clearly in or clearly out of NGC 2420, so the count barely moves with the threshold @accepts:ce.cluster-membership', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'cluster-membership';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, moved, on the declared screen
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe('cluster-members');
+    const at = {};
+    for (const th of [0.99, 0.5]) {
+      const { before, after } = await setControl(page, control, th);
+      if (th === 0.5) expect(after).not.toEqual(before);
+      at[th] = {
+        members: reading(after, /Stars above the probability/i),
+        pmra: reading(after, /Cluster.s proper motion/i),
+      };
+    }
+
+    // 3. the model's numbers
+    expect(Math.abs(at[0.5].members - 506)).toBeLessThan(8);
+    expect(Math.abs(at[0.99].members - 497)).toBeLessThan(6);
+    expect(Math.abs(at[0.5].pmra + 1.227)).toBeLessThan(0.05);
+
+    // 4. the evidence, written down and kept
+    const evidence = {
+      pmra: at[0.5].pmra.toFixed(2),
+      pmdec: '-2.04',
+      members: String(at[0.5].members),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+  // ---- The lensing investigations (Roadmap II, Prompt 94) -----------------------
+  const LENSING = [
+    {
+      id: 'bending-light',
+      title:
+        'bending-light: a ray a hundred times farther out is bent a hundred times less @accepts:ce.bending-light',
+      row: /Bending of the ray/i,
+      values: [
+        [0, 1.75, 0.03],
+        [2, 0.0175, 0.002],
+      ],
+    },
+    {
+      id: 'einstein-rings-and-arcs',
+      title:
+        'einstein-rings-and-arcs: ten solar masses makes a ring three times larger @accepts:ce.einstein-rings-and-arcs',
+      row: /Einstein radius, in milliarcseconds/i,
+      values: [
+        [0, 1.009, 0.03],
+        [1, 3.19, 0.1],
+      ],
+    },
+    {
+      id: 'a-lens-passing-by',
+      title:
+        'a-lens-passing-by: a closer pass brightens the star more, as the point-lens formula says @accepts:ce.a-lens-passing-by',
+      row: /Peak flux over baseline/i,
+      values: [
+        [0.1, 10.04, 0.15],
+        [0.5, 2.18, 0.05],
+      ],
+    },
+  ];
+  for (const c of LENSING) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(async () => reading(await readout(page), c.row), {
+            timeout: 5000,
+          })
+          .not.toBeNaN();
+        const got = reading(await readout(page), c.row);
+        seen.push(got);
+        expect(Math.abs(got - want)).toBeLessThan(tol);
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
+
+  // ---- The stellar-interior investigations (Roadmap II, Prompt 95) --------------
+  const INTERIORS = [
+    {
+      id: 'inside-a-star',
+      title:
+        'inside-a-star: twice the mass in the same size doubles the mean density @accepts:ce.inside-a-star',
+      row: /Mean density/,
+      values: [
+        [0, 1.41, 0.03],
+        [0.3, 2.81, 0.05],
+      ],
+    },
+    {
+      id: 'scaling-the-main-sequence',
+      title:
+        'scaling-the-main-sequence: Kramers opacity predicts a steeper luminosity law than electron scattering @accepts:ce.scaling-the-main-sequence',
+      row: /Exponent the scaling predicts/,
+      values: [
+        [1, 3, 0.02],
+        [0, 5.16, 0.03],
+      ],
+    },
+    {
+      id: 'the-limit',
+      title:
+        'the-limit: a denser white dwarf is a smaller one @accepts:ce.the-limit',
+      row: /Radius, in kilometers/,
+      values: [
+        [6.5, 8864, 120],
+        [9, 2470, 50],
+      ],
+    },
+  ];
+  for (const c of INTERIORS) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(async () => reading(await readout(page), c.row), {
+            timeout: 5000,
+          })
+          .not.toBeNaN();
+        const got = reading(await readout(page), c.row);
+        seen.push(got);
+        expect(Math.abs(got - want)).toBeLessThan(tol);
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
+
+  // ---- The variable-star investigations (Roadmap II, Prompt 96) ------------------
+  const VARIABLES = [
+    {
+      id: 'the-beat-of-a-star',
+      title:
+        'the-beat-of-a-star: seen once a night, the highest peak is an alias @accepts:ce.the-beat-of-a-star',
+      row: /Highest peak of the period search/,
+      values: [
+        [0, 0.6604, 0.01],
+        [2, 1.972, 0.03],
+      ],
+    },
+    {
+      id: 'the-first-rung',
+      title:
+        'the-first-rung: another galaxy’s Cepheids slide the relation to its own distance modulus @accepts:ce.the-first-rung',
+      row: /Distance modulus/,
+      values: [
+        [1, 29.4, 0.03],
+        [2, 29.21, 0.03],
+      ],
+    },
+    {
+      id: 'which-kind-of-variable',
+      title:
+        'which-kind-of-variable: more measurements raise the share classified correctly @accepts:ce.which-kind-of-variable',
+      row: /Share classified correctly/,
+      values: [
+        [0, 83.3, 1],
+        [1, 90.8, 1],
+      ],
+    },
+  ];
+  for (const c of VARIABLES) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(async () => reading(await readout(page), c.row), {
+            timeout: 5000,
+          })
+          .not.toBeNaN();
+        const got = reading(await readout(page), c.row);
+        seen.push(got);
+        expect(Math.abs(got - want)).toBeLessThan(tol);
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
+
+  test('leavitts-law: the calibration slope is the same whichever galaxy is chosen @accepts:ce.leavitts-law', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const entry = declared('leavitts-law');
+    const [predictSid, measureSid] = entry.loop;
+    await openInvestigation(page, app, 'leavitts-law');
+    const plan = await lessonPlan(page, 'leavitts-law');
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+    await expect
+      .poll(async () => reading(await readout(page), /Slope/), {
+        timeout: 5000,
+      })
+      .not.toBeNaN();
+    const slope = reading(await readout(page), /Slope/);
+    expect(Math.abs(slope + 3.29)).toBeLessThan(0.03);
+    await setControl(page, 'host', 1);
+    expect(
+      Math.abs(reading(await readout(page), /Slope/) - slope)
+    ).toBeLessThan(1e-9);
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  // ---- The selection-effects sequence (Roadmap II, Prompt 93) -------------------
+  const SURVEY = [
+    {
+      id: 'who-gets-counted',
+      title:
+        'who-gets-counted: a deeper survey counts many more stars, and the model says how many @accepts:ce.who-gets-counted',
+      row: /Stars counted/i,
+      values: [
+        [14, 167, 8],
+        [18, 1289, 40],
+      ],
+    },
+    {
+      id: 'why-the-bright-ones-win',
+      title:
+        'why-the-bright-ones-win: the counted stars are brighter than the stars there are, by an amount that falls with the limit @accepts:ce.why-the-bright-ones-win',
+      row: /Malmquist bias/i,
+      values: [
+        [16, 2.94, 0.3],
+        [18, 1.33, 0.3],
+      ],
+      abs: true,
+      last: 16,
+    },
+    {
+      id: 'the-completeness-curve',
+      title:
+        'the-completeness-curve: a raw count loses the faint stars that a corrected one puts back @accepts:ce.the-completeness-curve',
+      row: /raw count, share of the truth/i,
+      values: [
+        [17, null, null],
+        [20, 56.7, 3],
+      ],
+    },
+  ];
+  for (const c of SURVEY) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      // 1. the prediction, committed and held
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      // 2. the declared control, moved, on the declared screen
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(async () => reading(await readout(page), c.row), {
+            timeout: 5000,
+          })
+          .not.toBeNaN();
+        let got = reading(await readout(page), c.row);
+        if (c.abs) got = Math.abs(got);
+        seen.push(got);
+        if (want !== null) expect(Math.abs(got - want)).toBeLessThan(tol);
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      // 3. and only now is the prediction settled
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
+  // ---- The sky sequence (Roadmap II, Prompt 89) ---------------------------------
+  const SKY = [
+    {
+      id: 'the-turning-sky',
+      title:
+        'the-turning-sky: a star rises about four minutes earlier each night @accepts:ce.the-turning-sky',
+      async run(page, measureSid, control) {
+        const out = {};
+        for (const n of [0, 30]) {
+          const { after } = await setControl(page, control, n);
+          out[n] = Number(
+            /([\d.]+) minutes after noon/.exec(row(after, /^rises/i).text)[1]
+          );
+        }
+        expect(out[0] - out[30]).toBeGreaterThan(30 * 3.8);
+        expect(out[0] - out[30]).toBeLessThan(30 * 4.1);
+        return { r0: out[0].toFixed(1), r30: out[30].toFixed(1) };
+      },
+    },
+    {
+      id: 'the-sun-through-the-year',
+      title:
+        'the-sun-through-the-year: the noon Sun swings through twice the tilt @accepts:ce.the-sun-through-the-year',
+      async run(page, measureSid, control) {
+        const alt = {};
+        for (const d of [78, 171, 354]) {
+          const { after } = await setControl(page, control, d);
+          alt[d] = reading(after, /altitude at noon/i);
+        }
+        expect(alt[171] - alt[354]).toBeCloseTo(46.9, 0);
+        return {
+          eq: alt[78].toFixed(1),
+          jun: alt[171].toFixed(1),
+          dec: alt[354].toFixed(1),
+        };
+      },
+    },
+    {
+      id: 'phases-and-eclipses',
+      title:
+        'phases-and-eclipses: the lit fraction rises with the elongation @accepts:ce.phases-and-eclipses',
+      async run(page, measureSid, control) {
+        const lit = [];
+        for (const d of [3.7, 7.4, 11.1, 14.8]) {
+          const { after } = await setControl(page, control, d);
+          lit.push(reading(after, /fraction of the disc lit/i));
+        }
+        expect(lit[0]).toBeCloseTo(0.17, 1);
+        expect(lit[3]).toBeGreaterThan(0.98);
+        return {
+          l1: lit[0].toFixed(2),
+          l2: lit[1].toFixed(2),
+          l3: lit[2].toFixed(2),
+          l4: lit[3].toFixed(2),
+        };
+      },
+    },
+    {
+      id: 'wanderers-on-the-sky',
+      title:
+        'wanderers-on-the-sky: Mars turns retrograde and direct again, months apart @accepts:ce.wanderers-on-the-sky',
+      async run(page, measureSid, control) {
+        const { after: a } = await setControl(page, control, 67);
+        expect(row(a, /^motion on the sky/i).text).toMatch(/direct|retrograde/);
+        const { after: b } = await setControl(page, control, 100);
+        expect(row(b, /^motion on the sky/i).text).toMatch(/retrograde/);
+        const { after: c } = await setControl(page, control, 160);
+        expect(row(c, /^motion on the sky/i).text).toMatch(/direct/);
+        return { start: '68', end: '147' };
+      },
+    },
+    {
+      id: 'plan-a-night',
+      title:
+        'plan-a-night: the winter night is hours darker than the summer one @accepts:ce.plan-a-night',
+      async run(page, measureSid, control) {
+        const hrs = {};
+        for (const [name, d] of [
+          ['jan', 28],
+          ['jun', 171],
+        ]) {
+          const { after } = await setControl(page, 'day', d);
+          hrs[name] = Number(
+            /([\d.]+) hours/.exec(row(after, /astronomical dark/i).text)[1]
+          );
+        }
+        expect(hrs.jan - hrs.jun).toBeGreaterThan(3);
+        const { before, after } = await setControl(page, control, 1.5);
+        expect(after).not.toEqual(before);
+        return { jan: hrs.jan.toFixed(1), jun: hrs.jun.toFixed(1) };
+      },
+    },
+  ];
+  for (const lesson of SKY) {
+    test(lesson.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(lesson.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+      await openInvestigation(page, app, lesson.id);
+      const plan = await lessonPlan(page, lesson.id);
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+      await walkToSid(page, plan, measureSid);
+      expect(step(plan, measureSid).tool).toMatch(/^sky-/);
+      const evidence = await lesson.run(page, measureSid, control);
+      await recordFields(page, lesson.id, measureSid, evidence);
+      await expectEvidenceRetained(page, lesson.id, measureSid, evidence);
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
+  // ---- The cosmology investigations (Roadmap II, Prompt 91) ------------------------
+  const COSMOLOGY = [
+    {
+      id: 'the-expanding-universe',
+      title:
+        'the-expanding-universe: the supernova slope falls as the sample reaches farther @accepts:ce.the-expanding-universe',
+      row: /Slope through the origin/,
+      values: [
+        [0.1, 66.33, 0.3],
+        [0.5, 59.35, 0.3],
+      ],
+    },
+    {
+      id: 'standard-candles',
+      title:
+        'standard-candles: an error in the absolute magnitude moves the Hubble constant @accepts:ce.standard-candles',
+      row: /Hubble constant implied/,
+      values: [
+        [0.1, 66.85, 0.2],
+        [0.2, 63.84, 0.2],
+      ],
+    },
+    {
+      id: 'the-shape-of-expansion',
+      title:
+        'the-shape-of-expansion: a matter-only universe fits far worse than the best fit @accepts:ce.the-shape-of-expansion',
+      row: /Chi-square above the best fit/,
+      values: [
+        [1, 1615.4, 6],
+        [0.5, 124.5, 3],
+      ],
+    },
+    {
+      id: 'where-galaxies-live',
+      title:
+        'where-galaxies-live: a deeper redshift limit shows many more galaxies @accepts:ce.where-galaxies-live',
+      row: /Galaxies shown/,
+      values: [
+        [0.04, 363, 1],
+        [0.12, 2911, 1],
+      ],
+    },
+  ];
+  for (const c of COSMOLOGY) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(
+            async () => {
+              const got = reading(await readout(page), c.row);
+              return Number.isNaN(got) ? NaN : Math.abs(got - want);
+            },
+            { timeout: 8000 }
+          )
+          .toBeLessThan(tol);
+        seen.push(reading(await readout(page), c.row));
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
+  // ---- The calibration investigations (Roadmap II, Prompt 86) ---------------------
+  const CALIBRATION = [
+    {
+      id: 'what-a-ccd-records',
+      title:
+        'what-a-ccd-records: dividing by the flat raises a corner star @accepts:ce.what-a-ccd-records',
+      row: /Star B: net light/,
+      values: [
+        [3, 47296, 30],
+        [6, 54083, 30],
+      ],
+    },
+    {
+      id: 'signal-noise-and-exposure',
+      title:
+        'signal-noise-and-exposure: four times the exposure gives twice the signal-to-noise @accepts:ce.signal-noise-and-exposure',
+      row: /^Signal-to-noise$/,
+      values: [
+        [60, 152.5, 0.6],
+        [240, 320.7, 0.8],
+      ],
+    },
+    {
+      id: 'a-variable-star-from-frames',
+      title:
+        'a-variable-star-from-frames: without calibration the mean is off the truth @accepts:ce.a-variable-star-from-frames',
+      row: /^Mean of the variable against the comparison$/,
+      values: [
+        [0, 0.313, 0.003],
+        [3, 0.345, 0.003],
+      ],
+    },
+  ];
+  for (const c of CALIBRATION) {
+    test(c.title, async ({ page, app }) => {
+      test.slow();
+      const entry = declared(c.id);
+      const { control } = controlOf(entry);
+      const [predictSid, measureSid] = entry.loop;
+
+      await openInvestigation(page, app, c.id);
+      const plan = await lessonPlan(page, c.id);
+
+      const predict = await walkToSid(page, plan, predictSid);
+      await commitPredictionHeld(page, predict);
+
+      await walkToSid(page, plan, measureSid);
+      const seen = [];
+      for (const [value, want, tol] of c.values) {
+        await setControl(page, control, value);
+        await expect
+          .poll(
+            async () => {
+              const got = reading(await readout(page), c.row);
+              return Number.isNaN(got) ? NaN : Math.abs(got - want);
+            },
+            { timeout: 8000 }
+          )
+          .toBeLessThan(tol);
+        seen.push(reading(await readout(page), c.row));
+      }
+      expect(seen[0]).not.toEqual(seen[1]);
+
+      await expectVerdictRevealed(page, plan, predict);
+    });
+  }
+
+  // The two investigations whose experiment runs on the compute page
+  // (Roadmap II Prompt 102). The reader takes the numbers off the page by
+  // hand, so the test does too: it types the numbers the vendored notebook
+  // returned (the fixtures tools/compute-answers.mjs writes from its cells)
+  // as four significant digits, and checks that each graded step accepts them.
+  // The notebook itself runs in e2e/computeOnline.spec.js (online only).
+  const quantities = async file => {
+    const answer = JSON.parse(
+      await readFile(`tests/fixtures/compute/${file}.answer.json`, 'utf8')
+    );
+    const all = JSON.parse(answer.envelope).quantities;
+    return Object.fromEntries(
+      all.flatMap(q => [
+        [q.id, q.value],
+        ...(q.uncertainty?.lo !== undefined
+          ? [
+              [`${q.id}.lo`, q.uncertainty.lo],
+              [`${q.id}.hi`, q.uncertainty.hi],
+            ]
+          : []),
+      ])
+    );
+  };
+  const runs = async () =>
+    JSON.parse(
+      await readFile('tests/fixtures/compute/investigation-runs.json', 'utf8')
+    );
+  const four = x => String(Number(x.toPrecision(4)));
+  const accepted = page =>
+    expect(page.locator('#investigationBody .inv-check.is-ok')).toBeVisible();
+
+  test('integrators-in-practice: four integrators lose energy at different rates on the same system @accepts:ce.integrators-in-practice', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'integrators-in-practice';
+    const entry = declared(id);
+    const [predictSid, measureSid, halveSid] = entry.loop;
+    const main = await quantities('integrators-compared');
+    const half = (await runs())['integrators-compared/steps1000'];
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the notebook's four drifts, typed in, and accepted
+    await walkToSid(page, plan, measureSid);
+    const drifts = {
+      euler: four(main['drift.euler']),
+      symplectic: four(main['drift.symplectic']),
+      verlet: four(main['drift.verlet']),
+      rk4: four(main['drift.rk4']),
+      steps: String(main.steps),
+    };
+    await recordFields(page, id, measureSid, drifts);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, measureSid, drifts);
+
+    // 3. the relationship the lesson is about: halving the step improves a
+    //    second-order method four times, and a fourth-order one far more.
+    await walkToSid(page, plan, halveSid);
+    const halved = {
+      verlet: four(half['drift.verlet'].value),
+      rk4: four(half['drift.rk4'].value),
+      ratioVerlet: four(main['drift.verlet'] / half['drift.verlet'].value),
+      ratioRk4: four(main['drift.rk4'] / half['drift.rk4'].value),
+    };
+    expect(Number(halved.ratioVerlet)).toBeGreaterThan(3.8);
+    expect(Number(halved.ratioVerlet)).toBeLessThan(4.2);
+    expect(Number(halved.ratioRk4)).toBeGreaterThan(Number(halved.ratioVerlet));
+    await recordFields(page, id, halveSid, halved);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, halveSid, halved);
+
+    // 4. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('extending-an-experiment: the edge of the bound region is placed no better than the trials allow @accepts:ce.extending-an-experiment', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'extending-an-experiment';
+    const entry = declared(id);
+    const [predictSid, measureSid, moveSid] = entry.loop;
+    const main = await quantities('population-at-scale');
+    const six = (await runs())['population-at-scale/cutoff6'];
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    await walkToSid(page, plan, measureSid);
+    const fit = {
+      edge: four(main['a.crit']),
+      edgeSigma: '0.0243',
+      sample: four(main['bound.sample']),
+      extended: four(main['bound.extended']),
+    };
+    await recordFields(page, id, measureSid, fit);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, measureSid, fit);
+
+    // The relationship: one reclassified planet moves the edge, because an
+    // outcome is a definition.
+    await walkToSid(page, plan, moveSid);
+    const moved = {
+      edge: four(six['a.crit'].value),
+      extended: four(six['bound.extended'].value),
+    };
+    expect(Number(moved.edge)).toBeGreaterThan(Number(fit.edge));
+    await recordFields(page, id, moveSid, moved);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, moveSid, moved);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('refitting-a-transit: a second optimizer finds the same minimum, and holding a parameter fixed narrows the sigma without making it known @accepts:ce.refitting-a-transit', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'refitting-a-transit';
+    const entry = declared(id);
+    const [predictSid, measureSid, relationSid] = entry.loop;
+    const main = await quantities('refit-transit');
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+    const fit = {
+      period: String(Number(main.P.toPrecision(6))),
+      k: four(main.k),
+      aRs: four(main.aRs),
+      b: four(main.b),
+      chi2: four(main['chi2.reduced']),
+    };
+    await recordFields(page, id, measureSid, fit);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, measureSid, fit);
+
+    // The relationship: holding the limb darkening fixed narrows the sigma and moves the value.
+    await walkToSid(page, plan, relationSid);
+    const held = (await runs())['refit-transit/limb0'].k;
+    const shift = Math.abs((held.value - main.k) / held.sigma);
+    expect(shift).toBeGreaterThan(3);
+    const moved = {
+      k: four(held.value),
+      kSigma: four(held.sigma),
+      shift: four(shift),
+    };
+    await recordFields(page, id, relationSid, moved);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, relationSid, moved);
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('two-periodograms: the tallest periodogram peak is a harmonic, and a periodogram period has no error bar of its own @accepts:ce.two-periodograms', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'two-periodograms';
+    const entry = declared(id);
+    const [predictSid, measureSid, relationSid] = entry.loop;
+    const main = await quantities('periodograms');
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+    const two = {
+      ls: four(main['ls.period']),
+      bls: four(main['bls.period']),
+      ratio: four(main['period.ratio']),
+    };
+    await recordFields(page, id, measureSid, two);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, measureSid, two);
+
+    // The relationship: the box period is many fit sigmas from the fitted one.
+    await walkToSid(page, plan, relationSid);
+    const gap = {
+      difference: four(main['bls.period'] - 3.52454),
+      sigmas: four((main['bls.period'] - 3.52454) / 0.00003),
+    };
+    expect(Math.abs(Number(gap.sigmas))).toBeGreaterThan(10);
+    await recordFields(page, id, relationSid, gap);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, relationSid, gap);
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('sampling-a-posterior: an interval from a sampler is conditional on what is held fixed and on its chain having converged @accepts:ce.sampling-a-posterior', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'sampling-a-posterior';
+    const entry = declared(id);
+    const [predictSid, measureSid, relationSid] = entry.loop;
+    const main = await quantities('posterior-sampling');
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+    const draws = {
+      k: four(main.k),
+      kWidth: four(main['k.hi'] - main['k.lo']),
+      b: four(main.b),
+      bWidth: four(main['b.hi'] - main['b.lo']),
+    };
+    await recordFields(page, id, measureSid, draws);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, measureSid, draws);
+
+    await walkToSid(page, plan, relationSid);
+    const diag = {
+      rhat: four(main['rhat.max']),
+      ess: four(main['ess.min']),
+      acceptance: four(main.acceptance),
+    };
+    await recordFields(page, id, relationSid, diag);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, relationSid, diag);
     await expectVerdictRevealed(page, plan, predict);
   });
 });

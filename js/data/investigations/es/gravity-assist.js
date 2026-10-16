@@ -20,8 +20,6 @@ export default {
     'El mismo sobrevuelo, medido en dos sistemas de referencia, con dos respuestas distintas',
   duration: '15-20 min',
   level: 'Astronomía introductoria',
-  summary:
-    'La Voyager 2 llegó a Júpiter a diez kilómetros por segundo y se marchó a veintiséis. Júpiter no quemó combustible por ella. Haz tú mismo la misma maniobra, mídela en el sistema del planeta y en uno inercial, lánzala por los dos lados del planeta a la vez, y averigua por qué las dos medidas no coinciden, y quién pagó en realidad.',
   objectives: [
     'Predecir si un sobrevuelo gana o pierde velocidad según por qué lado del planeta pase',
     'Decir qué cambia y qué no puede cambiar una asistencia gravitatoria, en el sistema del planeta y en uno inercial',
@@ -90,7 +88,7 @@ export default {
              <strong>+40</strong>, que hace pasar a la nave por detrás del
              planeta, y el encuentro dura unos nueve segundos.
              \n\nPulsa <strong>Lanzarla</strong>. Mira cómo se curva la
-             trayectoria. Después lee las dos columnas: son toda la lección, y
+             trayectoria. Después lee las dos columnas: son toda la investigación, y
              no coinciden.`,
       checklist: [
         'Observa cómo se curva la estela mientras la nave rodea el planeta',
@@ -231,6 +229,11 @@ export default {
                 tabla dice con qué precisión.`,
     },
     {
+      feedback: {
+        close:
+          'Cerca. Una inversión completa da la vuelta a la dirección de la velocidad relativa: ¿de qué tamaño es el cambio de un giro así?',
+        off: 'Lo máximo que puede hacer un sobrevuelo es invertir la velocidad relativa. Calcula el cambio que eso causa, en km/s.',
+      },
       title: '¿Cuánto hay que llevarse?',
       body: `Hay un límite duro a lo que puede hacer un solo sobrevuelo, y sale
              directamente de la imagen de la pantalla anterior. Lo máximo que
@@ -309,7 +312,7 @@ export default {
     {
       title: '¿El sistema de quién, exactamente?',
       body: `Un cabo suelto, y del tipo interesante.
-             \n\nToda la lección se apoya en la columna izquierda: la rapidez
+             \n\nToda la investigación se apoya en la columna izquierda: la rapidez
              relativa al planeta no cambia. Pero el planeta contra el que mides
              no es el mismo planeta antes y después: retrocedió. La advertencia
              de la comparación dice cuánto: unos cuatro milímetros por segundo,

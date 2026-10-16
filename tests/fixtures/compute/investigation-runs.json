@@ -1,0 +1,140 @@
+{
+  "integrators-compared/steps1000": {
+    "drift.euler": {
+      "value": 46.11633401702658,
+      "sigma": null
+    },
+    "drift.symplectic": {
+      "value": -0.0038641272531882596,
+      "sigma": null
+    },
+    "drift.verlet": {
+      "value": 0.0004418868512697645,
+      "sigma": null
+    },
+    "drift.rk4": {
+      "value": -2.4426812673112033e-9,
+      "sigma": null
+    },
+    "steps": {
+      "value": 21443,
+      "sigma": null
+    }
+  },
+  "integrators-compared/steps438": {
+    "drift.euler": {
+      "value": 52.497617935802104,
+      "sigma": null
+    },
+    "drift.symplectic": {
+      "value": -0.00016455667350627468,
+      "sigma": null
+    },
+    "drift.verlet": {
+      "value": 0.0023037435531338035,
+      "sigma": null
+    },
+    "drift.rk4": {
+      "value": -1.2224607279783269e-7,
+      "sigma": null
+    },
+    "steps": {
+      "value": 9392,
+      "sigma": null
+    }
+  },
+  "population-at-scale/slope0": {
+    "a.crit": {
+      "value": 0.255,
+      "sigma": 0.02433590628241461
+    },
+    "a.width": {
+      "value": 0.01664582845569108,
+      "sigma": 0.007753742305237476
+    },
+    "bound.sample": {
+      "value": 0.6,
+      "sigma": 0.10954451150103323
+    },
+    "bound.extended": {
+      "value": 0.4511047042748701,
+      "sigma": 0.0808441273807343
+    },
+    "bound.count": {
+      "value": 90220.94085497402,
+      "sigma": 16168.825476146862
+    },
+    "trials": {
+      "value": 20,
+      "sigma": null
+    }
+  },
+  "population-at-scale/cutoff6": {
+    "a.crit": {
+      "value": 0.28900000000000003,
+      "sigma": 0.009564186277351033
+    },
+    "a.width": {
+      "value": 0.002,
+      "sigma": 4.342239886422062e-19
+    },
+    "bound.sample": {
+      "value": 0.65,
+      "sigma": 0.1066536450385077
+    },
+    "bound.extended": {
+      "value": 0.7007371428851061,
+      "sigma": 0.028092987717722263
+    },
+    "bound.count": {
+      "value": 140147.42857702123,
+      "sigma": 5618.5975435444525
+    },
+    "trials": {
+      "value": 20,
+      "sigma": null
+    }
+  },
+  "refit-transit/limb0": {
+    "t0": {
+      "value": 2826.7816555681843,
+      "sigma": 0.00012535624842530314
+    },
+    "P": {
+      "value": 3.5245370410852357,
+      "sigma": 0.000030037716327922875
+    },
+    "k": {
+      "value": 0.11767078996560022,
+      "sigma": 0.0004962053629423123
+    },
+    "aRs": {
+      "value": 9.516404387029391,
+      "sigma": 0.1823076507071812
+    },
+    "b": {
+      "value": 0.34095232671837145,
+      "sigma": 0.050447275339163516
+    },
+    "k.profile": {
+      "value": 0.11767078996560022,
+      "sigma": null,
+      "lo": 0.11716442137435705,
+      "hi": 0.11813388599166857
+    },
+    "b.profile": {
+      "value": 0.34095232671837145,
+      "sigma": null,
+      "lo": 0.2830628265982686,
+      "hi": 0.3840027788564888
+    },
+    "chi2.reduced": {
+      "value": 8.00408366076979,
+      "sigma": null
+    },
+    "points": {
+      "value": 1882,
+      "sigma": null
+    }
+  }
+}

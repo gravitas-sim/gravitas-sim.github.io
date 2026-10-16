@@ -108,7 +108,10 @@ export function stepFingerprint(step) {
  */
 function answerSignature(step) {
   const bits = [];
-  if (step.answer !== undefined && step.answer !== null) {
+  // A formula's expected value is the student's own, so the signature is the
+  // formula, not the number it gives today.
+  if (step.formula) bits.push(`f=${JSON.stringify(step.formula)}`);
+  else if (step.answer !== undefined && step.answer !== null) {
     bits.push(`a=${JSON.stringify(step.answer)}`);
   }
   if (Number.isFinite(step.tolerance)) bits.push(`t=${step.tolerance}`);
@@ -155,6 +158,7 @@ export function buildBackup({
       id: lesson?.id ?? null,
       title: lesson?.title ?? null,
       stepCount: steps.length,
+      ...(lesson?.pack ? { pack: lesson.pack } : {}),
     },
     student: studentName || null,
     progress: {
