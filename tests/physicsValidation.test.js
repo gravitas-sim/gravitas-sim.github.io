@@ -61,7 +61,13 @@ const runner = path.join(here, '..', 'tools', 'validate-physics.mjs');
 function runSuite() {
   let stdout;
   try {
-    stdout = execFileSync(process.execPath, [runner, '--json'], {
+    // CI sets GRAVITAS_PHYSICS_REPORT so this run also leaves the report the
+    // documentation step reads, instead of the workflow running the suite twice.
+    const reportPath = process.env.GRAVITAS_PHYSICS_REPORT;
+    const args = reportPath
+      ? [runner, '--json', '--report', reportPath]
+      : [runner, '--json'];
+    stdout = execFileSync(process.execPath, args, {
       encoding: 'utf8',
       // The report is a few hundred kilobytes and grows with the suite.
       maxBuffer: 64 * 1024 * 1024,

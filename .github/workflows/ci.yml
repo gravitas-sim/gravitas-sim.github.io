@@ -187,16 +187,16 @@ jobs:
       # reporter alone, so the log is unchanged and "Documentation counts" a few
       # steps down can read the test count out of the run that just happened
       # instead of paying for a second one. See tools/docs-facts.mjs.
+      #
+      # The physics validation suite runs once, here: tests/physicsValidation.test.js
+      # runs tools/validate-physics.mjs and fails this step on any failed check,
+      # and GRAVITAS_PHYSICS_REPORT has it leave the report the documentation step
+      # reads. A separate `npm run validate:physics` step ran the same suite a
+      # second time, about two minutes of this job's fifteen (D-CI-02).
       - name: Unit and integration tests
+        env:
+          GRAVITAS_PHYSICS_REPORT: .facts/physics.json
         run: npm test -- --json --outputFile=.facts/jest.json
-
-      # Same arrangement, and it saves more: the physics suite takes about two
-      # minutes, and tools/docs-facts.mjs used to run it twice on its own - once
-      # for the total and once, with --json, for the coverage table. `--report`
-      # leaves the machine-readable form behind from the run that prints the
-      # table, so this job runs it once and the documentation step reads it.
-      - name: Physics validation
-        run: npm run validate:physics -- --report .facts/physics.json
 
       # The 3-D kernel's reference problems (LAB3D.md): about a minute, most
       # of it the Kozai-Lidov run.
@@ -382,7 +382,7 @@ jobs:
       # against 4844, 579 browser tests against 1061.
       #
       # It costs about four seconds more than the cheap form, not five minutes,
-      # because GRAVITAS_FACTS_CACHE points it at the reports the two steps
+      # because GRAVITAS_FACTS_CACHE points it at the reports the unit-test step
       # above already wrote. The bundle sizes are the other half and are checked
       # in the `build` job, which has a dist/ already.
       - name: Documentation counts and links
