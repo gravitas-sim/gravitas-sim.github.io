@@ -5825,6 +5825,12 @@
     opacity: 0.85;
   }
 
+  /* On the filled chip the dimming is against the accent, not the page, and the
+     light theme's accent leaves 4.2:1 at 0.85. */
+  .sc-chip.is-active .sc-chip-count {
+    opacity: 1;
+  }
+
   .sc-concept-note {
     max-width: 78ch;
     margin: var(--space-3) 0 0;
