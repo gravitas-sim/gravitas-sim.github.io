@@ -155,9 +155,15 @@ test.describe('every other load boots revealed (b, c, e) @cross-browser', () => 
   }) => {
     await seen(page);
     await page.goto('/library/', { waitUntil: 'domcontentloaded' });
+    // Navigate from a timer so the evaluate returns before the page goes away:
+    // Firefox sometimes reports a destroyed context for an evaluate that
+    // navigates, and the wait below must run in the new document.
     await page.evaluate(() => {
-      location.href = '/#investigation=keplers-laws';
+      setTimeout(() => {
+        location.href = '/#investigation=keplers-laws';
+      }, 0);
     });
+    await page.waitForURL(url => new URL(url).pathname === '/');
     await page.waitForFunction(() => window.splashScreenEnded === true, null, {
       timeout: 30_000,
     });
