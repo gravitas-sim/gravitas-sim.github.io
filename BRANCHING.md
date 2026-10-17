@@ -71,6 +71,7 @@ The table is written from `tools/generate-graph.mjs`, the list that
 | `js/data/irreversible.js` | `node tools/build-irreversibility-audit.mjs` |  |
 | `validation/data.json` | `node tools/build-validation-data.mjs` | The physics suite's own output; the `/validation/` page paints from it. |
 | `tools/README.md` | `node tools/build-tools-index.mjs` |  |
+| `DOCUMENTS.md` | `node tools/docs-map.mjs` | The table is hand-written (tools/docs-map.json); DOCUMENTS.md is written from it and from the tree. A new root document needs a row; `node tools/docs-map.mjs --seed` fills its student flag. |
 | `sw-manifest.js` | `node tools/build-service-worker.mjs` | Precache list and version hash. |
 | `manual/facts.tex`, `CITATION.cff`, `.zenodo.json` | `node tools/docs-facts.mjs --sync --full` |  |
 | `Gravitas_User_Manual.pdf`, `manual/scenarios.tex`, `manual/investigations.tex` | needs a LaTeX engine (npm run manual) |  |

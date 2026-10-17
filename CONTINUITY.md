@@ -62,6 +62,15 @@ Nothing below needs the maintainer, an account on any service, or a build.
 5. Read [`SUPPORT.md`](SUPPORT.md) for the browsers that are tested and the
    features that degrade.
 
+**What has been shown.** On 2026-10-17 the original agent rebuilt Gravitas from
+the 2.0.0 Zenodo archive (checksum checked, served, `npm ci`, `node build.js`, the
+budgets, `release:check --fast`, an instructor bundle under a throwaway
+passphrase opened in the portal) in about twelve minutes, alone, on one machine.
+The steps and the stumbles it found are in [`RELEASING.md`](RELEASING.md),
+"Rehearsing recovery from an archive". It is not independent evidence: nobody
+else has done it, and who besides the owner can administer the Zenodo record or
+holds the instructor passphrase is not known to the repository.
+
 ## Adding a co-maintainer
 
 The project would be better with a second person. The way it happens:
