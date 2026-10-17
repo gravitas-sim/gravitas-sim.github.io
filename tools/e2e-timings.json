@@ -1929,5 +1929,14 @@
   "[chromium] › worldLifecycle.spec.js › the world lifecycle › placing a body or changing galaxy gravity makes a link carry the bodies": 4.3,
   "[chromium] › htmlReport.spec.js › the PDF download is unchanged beside it": 12.6,
   "[chromium] › htmlReport.spec.js › the finish dialog hands over the report as a web page, in en": 13.6,
-  "[chromium] › htmlReport.spec.js › the finish dialog hands over the report as a web page, in es": 13.4
+  "[chromium] › htmlReport.spec.js › the finish dialog hands over the report as a web page, in es": 13.4,
+  "[chromium] › startupLifecycle.spec.js › a figure frame keeps its own start (embed) › ?embed=1 is a startup even after a visit, so a frame never depends on its host": 8.4,
+  "[chromium] › startupLifecycle.spec.js › a genuine startup (a, d) › a new tab opened from outside is a startup again; an external referrer too": 10.2,
+  "[chromium] › startupLifecycle.spec.js › a genuine startup (a, d) › the first load shows the splash, with the shell hidden in the first paint": 6.4,
+  "[chromium] › startupLifecycle.spec.js › every other load boots revealed (b, c, e) @cross-browser › Sandbox, Library, Sandbox, back and forward: the splash runs once": 11.2,
+  "[chromium] › startupLifecycle.spec.js › every other load boots revealed (b, c, e) @cross-browser › a deep link followed from inside the site shows none": 5.1,
+  "[chromium] › startupLifecycle.spec.js › every other load boots revealed (b, c, e) @cross-browser › a duplicated tab inherits the visit, so it shows none": 3.8,
+  "[chromium] › startupLifecycle.spec.js › every other load boots revealed (b, c, e) @cross-browser › a reload after the splash shows none": 8.8,
+  "[chromium] › startupLifecycle.spec.js › failure and reduced motion (f, and the policy) › a script that never loads leaves a usable shell within the bound": 6.3,
+  "[chromium] › startupLifecycle.spec.js › failure and reduced motion (f, and the policy) › reduced motion reveals at once, with nothing moving": 2.5
 }
