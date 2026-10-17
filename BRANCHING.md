@@ -1,30 +1,37 @@
-# Branching for v2
+# Branching
 
 `main` publishes. Every push to it goes live at
 [gravitas-sim.online](https://gravitas-sim.online) through the `deploy` job in
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml). That is the whole reason
-this document exists: work on the next major version needs somewhere to
-accumulate for months without any of it reaching a classroom until it is
-finished and decided.
-
-That place is **`v2`**.
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml). That is why work that a
+student would notice does not go straight to `main`: it accumulates on a
+**train**, and the train reaches `main` in one reviewed promotion.
+[`INTEGRATION.md`](INTEGRATION.md) holds the model (which branch takes which
+class of change, the active train, the windows); this file is the day-to-day
+protocol. (This file was titled "Branching for v2" until `v2` was released and
+deleted, 2026-10-16.)
 
 ## The protocol
 
-- **Feature branches come off `v2`**, named `feat/<thing>`, and merge back into
-  `v2` **by pull request**. Never into `main`.
-- **`main` merges into `v2`** whenever `main` moves. Do it often; a long-lived
-  branch that diverges quietly is the expensive kind.
-- **Never rebase `v2`.** It is shared and long-lived and it has its own history
-  worth keeping. Rebasing it rewrites commits other branches are cut from.
-- **`v2` gets the full suite on every push.** `v2` is listed in
-  `on.push.branches`, so all fifteen jobs run — not only when a pull request
-  happens to be open.
+- **Feature branches come off the base their class names** and merge back by
+  pull request, never by a direct push: an `invisible` change comes off a green
+  `main` tip and targets `main`; a `visible` or `instructional` change comes off
+  the active train's green tip and targets the train
+  (`train/<version>`, named in INTEGRATION.md). Name branches `feat/<thing>`,
+  `fix/<thing>`, `docs/<thing>`, `chore/<thing>` or `refactor/<thing>`.
+- **`main` merges into the train** whenever `main` moves, never the reverse
+  before promotion. A long-lived branch that diverges quietly is the expensive
+  kind.
+- **Never rebase a shared branch** and never force push, even before review: a
+  pushed branch only ever receives new commits.
+- **Every pull request carries a class label** (`invisible` or `visible`), the
+  `instructional` flag where it applies, and, for an urgent live-site defect,
+  `hotfix`. The `Pull-request class` job enforces them (INTEGRATION.md).
+- **A train runs the full suite.** The queue dispatches the engine jobs
+  (Firefox and WebKit) on its branch, because they run on `main` pushes.
 
-## Why `v2` cannot publish
+## Why only `main` can publish
 
-Worth stating precisely rather than trusting, because the whole arrangement
-rests on it. The deploy job is a conjunction:
+The deploy job is a conjunction:
 
 ```yaml
 deploy:
@@ -32,15 +39,12 @@ deploy:
   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 ```
 
-A push to `v2` satisfies the first term and fails the second. A pull request
-fails the first. A manual `workflow_dispatch` fails the first. There is no path
-through it for any ref but `main`.
-
-Two further facts make this stable rather than merely true today. GitHub
-resolves a `push` event against the workflow file **on the pushed ref**, so
-`main`'s copy of `ci.yml` governs `main` and nothing on `v2` can change that.
-And the `v1.0.0` tag, its GitHub release, and both DOIs are immutable: nothing
-on this branch can disturb what has already been archived.
+A push to any other branch satisfies the first term and fails the second. A pull
+request fails the first. A manual `workflow_dispatch` fails the first. There is
+no path through it for any ref but `main`, and `on.push.branches` lists `main`
+alone. GitHub resolves a `push` event against the workflow file on the pushed
+ref, so `main`'s copy of `ci.yml` governs `main`. The tags and both DOIs are
+immutable: nothing on a branch can disturb what has been archived.
 
 ## Generated artifacts: regenerate, never hand-merge
 
@@ -133,37 +137,14 @@ The world golden is the exception: if `e2e/golden/world-construction.json`
 conflicts, that is a signal, not a chore. Two branches changed physics. Resolve
 the physics first.
 
-## `v2` lives until the final release
+## After a train is promoted
 
-[`INTEGRATION.md`](INTEGRATION.md) makes `v2` the integration branch for all of
-Roadmap II, with one release at the end (Carl's decision of 2026-09-29).
-**`v2` is deleted only after that final release,** at step 7 below, never at a
-checkpoint. Checkpoints 48, 58, 81, 99 and 113 report readiness; none of them
-is a release, and none of them removes the branch.
-
-## Rolling out
-
-When `v2` is complete and you have decided it is a release:
-
-1. **Merge `main` into `v2` one last time** and regenerate. The merge into
-   `main` should be a fast-forward-shaped merge of a branch that already
-   contains everything on `main`.
-2. **Run the full gate on the merged tree** — `npm run release:check`, with
-   nothing else running on the machine. Port contention on 4173 makes a
-   concurrent run's failures fiction.
-3. **Remove `v2` from `on.push.branches`** in `ci.yml`. It has no meaning once
-   the branch is gone, and leaving it means a future branch of that name would
-   silently run CI.
-4. **Merge `v2` into `main`.** This is the moment it goes live; the deploy job
-   fires on that push.
-5. **Verify the deployment** — `deployed-revision.json` must name the merge
-   commit — and smoke the live site before going further.
-6. **Then tag**, following [`RELEASING.md`](RELEASING.md). Not before: the tag
-   should name a commit that has been published and checked.
-7. **Delete `v2`** and any merged `feat/*` branches.
+The merge into `main` is Carl's action (INTEGRATION.md, "Promotion of a
+train"). Afterwards the owner deletes the train branch and any merged `feat/*`
+branches; nobody else deletes a branch. `RELEASING.md` has the tag, the Zenodo
+record and the DOI steps.
 
 ## Working on a candidate
 
-The ranked v2 docket — twenty refereed proposals, each with the experiment that
-decides it — is a published artifact rather than a file in this repository.
-Each item names its own branch.
+The ranked docket of proposals is a published artifact rather than a file in
+this repository. Each item names its own branch.

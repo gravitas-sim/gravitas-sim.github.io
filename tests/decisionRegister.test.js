@@ -7,7 +7,7 @@
 //   - every *_GATE.md and *_RFC.md in the repository has a row naming it;
 //   - every row's source commit is in git history;
 //   - every id is unique, and every status one of the five;
-//   - every Roadmap II prompt a row names is a number in 44-121.
+//   - every prompt a row names is a number in 44-295.
 //
 // CI's checks job checks out the full history without file contents
 // (fetch-depth 0, filter blob:none), so a commit from any time resolves.
@@ -141,12 +141,12 @@ describe('the decision register', () => {
     );
   });
 
-  test('every Roadmap II prompt a row names is between 44 and 121', () => {
+  test('every Roadmap II prompt a row names is between 44 and 295 (Roadmaps II and III)', () => {
     for (const r of all) {
       if (r.prompts === '-') continue;
       const nums = r.prompts.split(/,\s*/).map(Number);
       for (const n of nums)
-        expect([r.id, Number.isInteger(n) && n >= 44 && n <= 121]).toEqual([
+        expect([r.id, Number.isInteger(n) && n >= 44 && n <= 295]).toEqual([
           r.id,
           true,
         ]);

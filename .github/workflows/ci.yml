@@ -1047,6 +1047,40 @@ jobs:
   # edited every time a job is added or a matrix entry changes. It fails if any
   # job it needs failed, and tolerates cross-browser being skipped on a pull
   # request.
+  # ---------------------------------------------------------------------------
+  # The pull-request class check (Prompt 122)
+  # ---------------------------------------------------------------------------
+  # `main` deploys on every merge, so what may merge into it depends on the
+  # class of change (INTEGRATION.md): a `visible` pull request belongs on the
+  # active train unless a window is open or it carries `hotfix`, and an
+  # `instructional` one needs the ciphertext current, which the checks job
+  # decides. The labels are read from the API when the job runs, not from the
+  # event payload, which a re-run would replay unchanged; the merge queue
+  # re-runs this job before it merges.
+  pr-class:
+    name: Pull-request class
+    if: ${{ always() && github.event_name == 'pull_request' }}
+    needs: [checks]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Class, target and window
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_BASE: ${{ github.base_ref }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_REPO: ${{ github.repository }}
+          CHECKS_RESULT: ${{ needs.checks.result }}
+        run: node tools/pr-class.mjs --fetch
+
   ci:
     name: CI
     if: ${{ always() }}
@@ -1060,6 +1094,7 @@ jobs:
         accessibility,
         e2e-build,
         cross-browser,
+        pr-class,
       ]
     steps:
       - name: Report
@@ -1077,6 +1112,7 @@ jobs:
           echo "accessibility: ${{ needs.accessibility.result }}"
           echo "e2e-build:     ${{ needs.e2e-build.result }}"
           echo "cross-browser: ${{ needs.cross-browser.result }}"
+          echo "pr-class:      ${{ needs.pr-class.result }}"
           # A skipped job is not a passing job.
           #
           # This accepted `success|skipped` for every job, so anything that did
@@ -1125,6 +1161,13 @@ jobs:
             optional cross-browser "${{ needs.cross-browser.result }}"
           else
             require  cross-browser "${{ needs.cross-browser.result }}"
+          fi
+
+          # The class check exists for pull requests only.
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            require pr-class "${{ needs.pr-class.result }}"
+          else
+            optional pr-class "${{ needs.pr-class.result }}"
           fi
 
           if [ "$failed" -ne 0 ]; then

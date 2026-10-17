@@ -926,6 +926,9 @@ export const CI_SETUP_STEPS = [
 /** And the commands that are setup wherever they appear. */
 export const CI_SETUP_COMMANDS = [
   'npm ci',
+  // The pull-request class check reads a pull request's labels and target, which
+  // a local gate run has none of. Its rules are tested in tests/prClass.test.js.
+  'node tools/pr-class.mjs --fetch',
   // Creating the directory the reports are written into. The reports
   // themselves are produced by checks that are in the registry; this is the
   // mkdir in front of them.

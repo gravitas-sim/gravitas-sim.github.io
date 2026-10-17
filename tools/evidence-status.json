@@ -1,0 +1,223 @@
+{
+  "schema": 1,
+  "note": "One record per public claim (Roadmap III rule 7.5.10). Classes: S software works, V-internal and V-external science valid, A adopted, L learning measured. status is established, partial, or UNKNOWN (not established); nothing upgrades UNKNOWN on the strength of a unit test. anchors are exact single-line texts a public page carries; the test fails when one is missing or when a claim-bearing line on a scanned page matches no record. Run: node tools/evidence-status.mjs --write",
+  "scan": {
+    "files": ["README.md", "ADOPTER_GUIDE.md", "CHANGELOG.md"],
+    "section": { "CHANGELOG.md": "## [2.0.0]" },
+    "patterns": [
+      "learning gain",
+      "no evaluation",
+      "has not been (measured|reviewed|read|through)",
+      "have not been measured",
+      "WCAG 2.2 AA",
+      "conformance",
+      "external (scientist|audit|review)",
+      "claims no review, adopter",
+      "has adopted",
+      "peer.review",
+      "unvalidated",
+      "no claim"
+    ]
+  },
+  "claims": [
+    {
+      "id": "software-automated-tests",
+      "claim": "The software has extensive automated validation: unit tests and browser tests in Chromium, Firefox and WebKit.",
+      "scope": "the application at each release",
+      "version": "2.0.0",
+      "class": "S",
+      "status": "established",
+      "method": "Jest suite and Playwright specs run in CI on every pull request and push; Firefox and WebKit run on main pushes and weekly",
+      "evaluator": "the project's own CI",
+      "artifact": ".github/workflows/ci.yml",
+      "limitations": "Passing tests show the software does what the tests ask, not that the science or the teaching is right.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "CHANGELOG.md", "text": "The software has extensive automated validation" }
+      ]
+    },
+    {
+      "id": "physics-suite",
+      "claim": "A public validation suite checks the physics against cited references with stated tolerances.",
+      "scope": "the engine and the scientific kernels the suite covers",
+      "version": "2.0.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "npm run validate:physics: measured error against a tolerance, each with a written reason",
+      "evaluator": "the project",
+      "artifact": "PHYSICS_VALIDATION.md",
+      "limitations": "Internal validation. Tolerances are the project's; no one outside it has reviewed them.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "README.md", "text": "**A validation suite.**" },
+        { "file": "CHANGELOG.md", "text": "The scientific kernels have internal validation against cited references" }
+      ]
+    },
+    {
+      "id": "external-science-review",
+      "claim": "An external scientist has reviewed the validation suites.",
+      "scope": "the physics suite and the kernels",
+      "version": "2.0.0",
+      "class": "V-external",
+      "status": "UNKNOWN",
+      "method": "none run; owner-led (Roadmap III Appendix A)",
+      "evaluator": "none",
+      "artifact": "",
+      "limitations": "No external scientist has reviewed them. Not a failure of any gate.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "CHANGELOG.md", "text": "No external scientist has reviewed those suites." }
+      ]
+    },
+    {
+      "id": "outside-adoption",
+      "claim": "An instructor outside the project has adopted Gravitas.",
+      "scope": "any course",
+      "version": "2.0.0",
+      "class": "A",
+      "status": "UNKNOWN",
+      "method": "none; the repository has no issue, discussion or external pull request from an adopter",
+      "evaluator": "none",
+      "artifact": "",
+      "limitations": "No named adopter. The adopter's guide makes no claim of adopters or endorsement.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "CHANGELOG.md", "text": "No instructor outside the project has adopted Gravitas." },
+        { "file": "ADOPTER_GUIDE.md", "text": "The page makes no claim of learning gain, adopters or endorsement" },
+        { "file": "ADOPTER_GUIDE.md", "text": "it claims no review, adopter or endorsement." }
+      ]
+    },
+    {
+      "id": "learning-gain",
+      "claim": "Students learn more with Gravitas than without it.",
+      "scope": "any course",
+      "version": "2.0.0",
+      "class": "L",
+      "status": "UNKNOWN",
+      "method": "none run; /evaluation/ supplies instruments, not a result",
+      "evaluator": "none",
+      "artifact": "",
+      "limitations": "No evaluation has been run and no learning gain measured.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "README.md", "text": "run and no learning gain has been measured.**" },
+        { "file": "README.md", "text": "No evaluation of Gravitas has been" },
+        { "file": "CHANGELOG.md", "text": "No learning gain has been measured." }
+      ]
+    },
+    {
+      "id": "evaluation-instrument",
+      "claim": "The pilot concept assessment measures what it intends to.",
+      "scope": "the twelve-item pre/post assessment on /evaluation/",
+      "version": "2.0.0",
+      "class": "L",
+      "status": "UNKNOWN",
+      "method": "none; no item analysis, reliability testing or comparison with a concept inventory",
+      "evaluator": "none",
+      "artifact": "",
+      "limitations": "Project-developed and unvalidated; a score is a score on those twelve questions.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "README.md", "text": "project-developed and has not been through item analysis, reliability testing or" },
+        { "file": "CHANGELOG.md", "text": "are unvalidated (the page says so)" },
+        { "file": "CHANGELOG.md", "text": "The assessment is project-developed and unvalidated" }
+      ]
+    },
+    {
+      "id": "spanish-review",
+      "claim": "The Spanish text has been read by a fluent reader.",
+      "scope": "student-facing Spanish",
+      "version": "2.0.0",
+      "class": "V-external",
+      "status": "UNKNOWN",
+      "method": "none run; owner-led",
+      "evaluator": "none",
+      "artifact": "",
+      "limitations": "Parity of keys is machine-checked; fluency is not reviewed. Several surfaces are English only and named.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "CHANGELOG.md", "text": "Spanish has not been read by a fluent reader." }
+      ]
+    },
+    {
+      "id": "device-performance",
+      "claim": "Gravitas performs acceptably on real phones and low-end devices.",
+      "scope": "phones and low-end hardware",
+      "version": "2.0.0",
+      "class": "S",
+      "status": "partial",
+      "method": "throttled desktop browser as a proxy",
+      "evaluator": "the project",
+      "artifact": "OFFLINE_AND_LOW_END.md",
+      "limitations": "Every figure is a proxy; no real device has been measured.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "CHANGELOG.md", "text": "Real phones and low-end devices have not been measured." }
+      ]
+    },
+    {
+      "id": "accessibility-automated",
+      "claim": "Accessibility targets WCAG 2.2 AA, with automated checks.",
+      "scope": "the shipped surfaces the axe and keyboard specs cover",
+      "version": "2.0.0",
+      "class": "S",
+      "status": "partial",
+      "method": "axe and keyboard specs in CI; keyboard and live-region paths",
+      "evaluator": "the project's own CI",
+      "artifact": "ACCESSIBILITY.md",
+      "limitations": "A target, not a claim of conformance. Automated checks are a floor.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "CHANGELOG.md", "text": "Accessibility targets WCAG 2.2 AA with automated checks; it is not a claim of" }
+      ]
+    },
+    {
+      "id": "accessibility-audit",
+      "claim": "An external audit has found the application conformant to WCAG 2.2 AA.",
+      "scope": "the application",
+      "version": "2.0.0",
+      "class": "V-external",
+      "status": "UNKNOWN",
+      "method": "none run; owner-led",
+      "evaluator": "none",
+      "artifact": "",
+      "limitations": "No external audit has been done.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "CHANGELOG.md", "text": "conformance, and no external audit has been done." }
+      ]
+    },
+    {
+      "id": "static-local-first",
+      "claim": "Gravitas runs entirely in the browser with no account, no server and no analytics.",
+      "scope": "the public site",
+      "version": "2.0.0",
+      "class": "S",
+      "status": "established",
+      "method": "static GitHub Pages hosting, a content-security policy and specs that check what leaves the page; opt-in features are labelled",
+      "evaluator": "the project's own CI",
+      "artifact": "STORAGE.md",
+      "limitations": "Opt-in features (the CDS archive import, the compute page's CDN) send data when a user chooses them and say so.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "README.md", "text": "No account, no install, no server. It is a static site." }
+      ]
+    },
+    {
+      "id": "timing-estimates",
+      "claim": "Activity and investigation times are accurate.",
+      "scope": "the adoption pages",
+      "version": "2.0.0",
+      "class": "L",
+      "status": "UNKNOWN",
+      "method": "estimates only; none timed with a class",
+      "evaluator": "none",
+      "artifact": "ADOPTER_GUIDE.md",
+      "limitations": "No classroom evaluation is published.",
+      "date": "2026-10-16",
+      "anchors": [
+        { "file": "ADOPTER_GUIDE.md", "text": "Times are estimates, none timed with a class; no classroom evaluation is published" }
+      ]
+    }
+  ]
+}
