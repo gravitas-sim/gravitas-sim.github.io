@@ -25,6 +25,29 @@
       splashFadeOut 1.2s ease-in 2.3s forwards;
   }
 
+  /* The startup lifecycle. An inline script in index.html's head sets
+     html[data-startup] before the first paint: "splash" for a genuine startup,
+     "skip" for every other load (an internal navigation, a reload, a back or
+     forward, a duplicated tab), "failsafe" if the sequence did not finish in
+     six seconds. The shell is in the markup and the splash is a fade-in from
+     transparent, so without this the navigation painted first. The skip case
+     runs the same splashFadeOut with no time, so main.js's one reveal path
+     still runs and sets the same flags. */
+  html[data-startup='splash']:has(#splash) .gs-shell {
+    visibility: hidden;
+  }
+  html[data-startup='skip'] #splash {
+    animation: splashFadeOut 0.01ms linear 0s forwards;
+  }
+  html[data-startup='failsafe'] #splash {
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #splash {
+      animation-delay: 0s !important;
+    }
+  }
+
   /* Hide UI elements during splash screen */
   .ui-container,
   #overlay,

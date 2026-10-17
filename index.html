@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-WXBMMZhrxPJfEsfwCOPs1mn6qczhx2qDyvvNp4bZTY0=' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta
       name="viewport"
@@ -85,6 +85,55 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!-- Startup lifecycle (ACCESSIBILITY.md, "Startup"): decided before the first
+         paint, so the shell is never seen ahead of the splash and an internal
+         navigation, a reload or a duplicated tab never replays it. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var mode = 'splash';
+        try {
+          var nav = performance.getEntriesByType('navigation')[0];
+          var own =
+            document.referrer &&
+            new URL(document.referrer).origin === location.origin;
+          var seen = false;
+          try {
+            seen = !!sessionStorage.getItem('gravitas_visit');
+            sessionStorage.setItem('gravitas_visit', '1');
+          } catch (e) {
+            /* storage blocked: the navigation type and referrer decide alone */
+          }
+          if ((nav && nav.type !== 'navigate') || own || seen) mode = 'skip';
+        } catch (e) {
+          /* nothing to read: treat the load as a startup */
+        }
+        root.dataset.startup = mode;
+        // A skipped or reduced-motion splash is over before main.js can listen
+        // for its animationend, so the same event is sent once the page has
+        // booted: main.js's one reveal path runs, with the same flags, at once.
+        if (
+          mode === 'skip' ||
+          (window.matchMedia &&
+            matchMedia('(prefers-reduced-motion: reduce)').matches)
+        )
+          addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+              var splash = document.getElementById('splash');
+              if (splash)
+                splash.dispatchEvent(
+                  new AnimationEvent('animationend', {
+                    animationName: 'splashFadeOut',
+                  })
+                );
+            }, 0);
+          });
+        if (mode === 'splash')
+          setTimeout(function () {
+            if (!window.splashScreenEnded) root.dataset.startup = 'failsafe';
+          }, 6000);
+      })();
+    </script>
     <!-- shell:head -->
 <link rel="stylesheet" href="/css/shell.css" />
 <script>
