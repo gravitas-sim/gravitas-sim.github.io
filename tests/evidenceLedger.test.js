@@ -101,7 +101,7 @@ const node = {
       error: 0.16,
       errorKind: 'assumed',
     },
-    { id: 'rest', value: 6564.61, unit: 'Angstrom', kind: 'assumed' },
+    { id: 'rest', value: 6564.6, unit: 'Angstrom', kind: 'assumed' },
     {
       id: 'velocity',
       value: -241,

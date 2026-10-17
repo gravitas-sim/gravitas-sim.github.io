@@ -413,14 +413,14 @@ describe("the line tool's presets", () => {
   test('H-alpha: its windows about the rest wavelength, moved to the redshift', () => {
     const ha = L.LINES.find(l => l.id === 'ha');
     expect(L.presetWindows(ha, 'vacuum', 0)).toEqual({
-      line: [6544.61, 6584.61],
-      blue: [6499.61, 6539.61],
-      red: [6589.61, 6629.61],
-      rest: 6564.61,
+      line: [6544.6, 6584.6],
+      blue: [6499.6, 6539.6],
+      red: [6589.6, 6629.6],
+      rest: 6564.6,
     });
     const moved = L.presetWindows(ha, 'air', 0.001);
-    expect(moved.rest).toBe(6562.8);
-    expect(moved.line[0]).toBeCloseTo(6562.8 * 1.001 - 20, 2);
+    expect(moved.rest).toBe(6562.79);
+    expect(moved.line[0]).toBeCloseTo(6562.79 * 1.001 - 20, 2);
   });
 });
 

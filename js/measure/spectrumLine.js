@@ -29,8 +29,8 @@ export const LINES = Object.freeze([
   {
     id: 'ha',
     name: 'H-alpha',
-    vacuum: 6564.61,
-    air: 6562.8,
+    vacuum: 6564.6,
+    air: 6562.79,
     half: 20,
     gap: 25,
     side: 40,
@@ -38,7 +38,7 @@ export const LINES = Object.freeze([
   {
     id: 'hb',
     name: 'H-beta',
-    vacuum: 4862.68,
+    vacuum: 4862.71,
     air: 4861.35,
     half: 15,
     gap: 20,

@@ -1,6 +1,6 @@
 {
   "version": "October 2026",
-  "generated": "2026-10-13",
+  "generated": "2026-10-17",
   "documents": 480,
   "inventory": {
     "documents": 480,
@@ -22,7 +22,7 @@
     }
   },
   "sourceFiles": 268,
-  "sourceDigest": "eb8d7b4e3e2a09298ab7dcc559a210bcece85e0aee54bc09c613fd56b05e5411",
+  "sourceDigest": "396d804a418148850c990d815de94383ffa37ee33137710293e6f220acdb760b",
   "sources": {
     "js/activities/activities.js": "831a7712f2372ff8b54693d6669abfe9a185e677cd43411cac355fef979b8937",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -244,7 +244,7 @@
     "js/data/investigations/why-the-bright-ones-win.js": "cfe106f9963ed8e7f41f6efe5f950d40ec886554aab6e63cc8f2bbf2bb12b0ba",
     "js/data/lab3dAnswerKey.js": "286f34cabc8910c8bf49474daf4ca6546a5e662bca4f9d12ca0d0aaafadee7d1",
     "js/data/missionLabKey.js": "c7da9b26f5c9b6810dcbbe54f7f8efde97923a71111b69f93709a40dbf2e0091",
-    "js/data/populationsAnswerKey.js": "cf796ddfbdd9a57f2c21660deb2fe4db04316f4bdf3e491a183e649c392373d0",
+    "js/data/populationsAnswerKey.js": "2aa60f6ca7567ad32cbe318853a8a7c7e1a1b7233946cf90f85b73a21ea93aa9",
     "js/exoplanetGuideDocs.js": "1962b6ca3c76c9b22c58890c4c56828ba35fe6bde92075232b07e1501cdbc173",
     "js/format.js": "3097674eb75de36c51d1031fa36b811e8aa0900918907b7822c0f05a52b10c5d",
     "js/guideDocs.js": "42e7d3a67604184660e98fd6f72072371a58d911abcff70c806f63a3ee7c7f5e",
@@ -254,7 +254,7 @@
     "js/i18n/en.js": "d9012b76cbe933130292951ba5026e0f493fff78be6b985d558e601656b4ca72",
     "js/i18n/en.lab3dGuides.js": "e2d4eaa678c6872969f358dffd125dad34953900f83a822de71391ba906e6bc7",
     "js/i18n/en.missionLabGuides.js": "6c859aefad385c14245218a4d53514fb35ce1443c1fcb3b055575137a6a6d086",
-    "js/i18n/en.populations.js": "92787374886a07f7394ef1a38cade1b208200ddb95c6b909b725e81555e91ec3",
+    "js/i18n/en.populations.js": "91250db8e3d6d843e32bb524f2e53762184ce773a10d376d03b6ddb80c0d0d87",
     "js/i18n/en.teaching.js": "7ff770aa281aed33e8f7bccb0c2a1f7e3826b203afa705c337225ba753a645ce",
     "js/i18n/es.activities.js": "252cf8e9b01b359777e925e89144e47e9fb0252f6fce08a8903e07348f220e93",
     "js/i18n/es.teaching.js": "b4965a7b2e5a6c5d4288cbaf3b4c121a02bf73fdeae110ab01b4b0a7741779d5",
@@ -276,12 +276,12 @@
     "js/lab3dGuideDocs.js": "c211ebe05009874616c7ec22c3ea3777c7b305e3a38e7b79bb41f7defb38d8d0",
     "js/lessonMarkup.js": "39164623fcd287b8ec035c3e647c7b336809515580bb330b83011c0564c76d25",
     "js/measure/describe.js": "5d0010da20cc8c4c58292833cf30a148c8ef7cbf949d7ccca7a488cc03453152",
-    "js/measure/spectrumLine.js": "c37d6cdf1e1b59c72b71f59b7dc1dfff514a83e39147a0924bae02101ed9b80d",
+    "js/measure/spectrumLine.js": "3c3524d7b0946c6766f65c7fa2c24f49c3c6938b63fcb665b1edbdade318e9a4",
     "js/measure/tableOps.js": "613e474e791d3e80f966fda0b3180f688513c89fd4c02a17c0933d559ea9ecb8",
     "js/missionLabDocs.js": "fa86c6144f16fa6c1835c40f8cc585dae5c8db54bbcb3ea29fb62324a2981b36",
     "js/observatory/guides/core.js": "5a390c316321c3ea70b30a715bdca20cdd75b3dc2ee67e972b877e2bbea9a04d",
     "js/observatory/guides/exoplanet.js": "bd3c105d323662218cf51300ffb2bece3f97681896791bc8b9946ef9ef788541",
-    "js/observatory/guides/populations.js": "85844bba9072353d66a87c864b20e76320435557e67b8c88ded8014e5ac648e3",
+    "js/observatory/guides/populations.js": "4d39e2e8e56bc118a1582a335e013ba65ba3aba588c4aca9e6d622d4325604bc",
     "js/observatory/guides/science.js": "da3f8cd1e9642225c1f5671aa0bfa40af731167bdd2c226c7e3ef16fac4094b0",
     "js/pdf.js": "1f2b05451303abf75503e025e2b70abd9ee0a1839958f3525fc5202a482fbb3e",
     "js/platform/checker.js": "e6c1141b4c3045f70e610c1c02d6f53fb61e44a34999fdcce8f938085ae377db",
@@ -293,5 +293,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "28c9acf7ee906785f0b528198fe11e93f40e6d1399c5fa1d6984a0f4ca33fe2c"
+  "contentDigest": "76faf939290d3f7d5576f148f0cabac2eeee2c9c4968a0ee71ba6e5bbf1c91db"
 }
