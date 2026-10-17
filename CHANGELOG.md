@@ -28,6 +28,8 @@ Governance only (Prompt 122): INTEGRATION.md and BRANCHING.md describe `main` pl
 
 Scientific-defect triage (Prompt 125, visible): the model page has a generated known-discrepancies table (a register plus the validation report's per-check status); the extinction ratio of the cluster-fit tool is kept at 3.245 and its difference from the kernel's CCM89 value is explained (RADIATION.md); the Sky Lab and validation pages state that refraction below 5 degrees is not validated, in place of "several arcminutes" (it is up to about 20). No number a student sees changes.
 
+Institution-facing documents and an accessible report (Prompt 127, invisible): ACCESSIBILITY_CONFORMANCE.md, a scoped conformance report in the ACR form generated from tools/conformance/*.json (the project's own evaluation, no conformance claimed); DATA_PROTECTION.md with a Spanish draft; "What your IT office will ask" in the adopter's guide and on the Teach page; and the lab report as an accessible web page beside the PDF in the finish dialog.
+
 ## [2.0.0] - 2026-10-16
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided

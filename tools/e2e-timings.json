@@ -1926,5 +1926,8 @@
   "[chromium] › worldLifecycle.spec.js › the world lifecycle › Reset all returns to the default settings and the Binary BH world, running": 5.1,
   "[chromium] › worldLifecycle.spec.js › the world lifecycle › Save keeps the world and Load puts back the same bodies and view": 5.9,
   "[chromium] › worldLifecycle.spec.js › the world lifecycle › a rebuild request from a panel rebuilds the scenario on a new seed and runs": 4.6,
-  "[chromium] › worldLifecycle.spec.js › the world lifecycle › placing a body or changing galaxy gravity makes a link carry the bodies": 4.3
+  "[chromium] › worldLifecycle.spec.js › the world lifecycle › placing a body or changing galaxy gravity makes a link carry the bodies": 4.3,
+  "[chromium] › htmlReport.spec.js › the PDF download is unchanged beside it": 12.6,
+  "[chromium] › htmlReport.spec.js › the finish dialog hands over the report as a web page, in en": 13.6,
+  "[chromium] › htmlReport.spec.js › the finish dialog hands over the report as a web page, in es": 13.4
 }

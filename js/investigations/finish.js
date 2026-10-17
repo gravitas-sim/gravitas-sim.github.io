@@ -157,7 +157,16 @@ export async function copyToken(host) {
  * Build the lab report and hand it to the browser as a PDF.
  * @param {FinishHost} host - The engine's side
  */
-export async function generateReport(host) {
+export const generateReport = host => report(host, 'pdf');
+
+/**
+ * Build the same report as an accessible HTML document and hand it over.
+ * @param {FinishHost} host - The engine's side
+ */
+export const generateHtmlReport = host => report(host, 'html');
+
+async function report(host, format) {
+  const html = format === 'html';
   const {
     t,
     getLocale,
@@ -175,8 +184,12 @@ export async function generateReport(host) {
   if (!name) return;
 
   const els = host.elements();
-  els.downloadBtn.disabled = true;
-  els.downloadBtn.textContent = t('inv.report.building');
+  const button = html
+    ? document.getElementById('investigationDownloadHtml')
+    : els.downloadBtn;
+  const label = button.textContent;
+  button.disabled = true;
+  button.textContent = t('inv.report.building');
   try {
     // The setup states are turned into real links here rather than at authoring
     // time, so a report always points at the encoding this build produces.
@@ -208,7 +221,12 @@ export async function generateReport(host) {
 
     const { active, responses, attempts, visited, startedAt } = host.state();
     const { assignment, assignmentBinding, depth } = host.state();
+    // The HTML builder is its own lazy file: nothing is fetched until it is asked for.
+    const createDoc = html
+      ? (await import('../htmlReport.js')).createHtmlDocument
+      : undefined;
     const bytes = buildLabReport({
+      createDoc,
       helpFor: id => helpTaken(helpStages(responses[`${id}:help`])),
       investigation: active,
       plot,
@@ -238,14 +256,19 @@ export async function generateReport(host) {
       evidence: ledger?.print,
     });
 
-    downloadPdf(bytes, `${host.reportSlug(name)}.pdf`);
+    if (html)
+      (await import('../htmlReport.js')).downloadHtml(
+        bytes,
+        `${host.reportSlug(name)}.html`
+      );
+    else downloadPdf(bytes, `${host.reportSlug(name)}.pdf`);
     toast(t('inv.report.done'));
     announce(t('inv.report.done'));
   } catch (err) {
     console.error('Report generation failed:', err);
     toast(t('inv.report.failed'));
   } finally {
-    els.downloadBtn.disabled = false;
-    els.downloadBtn.textContent = t('inv.report.download');
+    button.disabled = false;
+    button.textContent = label;
   }
 }

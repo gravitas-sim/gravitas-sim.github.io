@@ -125,9 +125,12 @@ const plain = text =>
  * @param {(id: string) => ?{hints: number, revealed: boolean, stages: string[]}} [opts.helpFor] -
  *   How much help a step was given (helpTaken() of js/answerFeedback.js),
  *   passed in so this file does not pull the grader into the report's chunk
+ * @param {Function} [opts.createDoc] - The document builder: js/pdf.js
+ *   createDocument (the default) or js/htmlReport.js createHtmlDocument, which
+ *   has the same interface and makes the accessible HTML report
  * @param {(doc: object) => void} [opts.evidence] - Prints the evidence ledger's
  *   sections (js/notebook/report.js evidenceSections()) after the summary
- * @returns {Uint8Array} PDF bytes
+ * @returns {Uint8Array|string} PDF bytes, or the HTML document as a string
  */
 export function buildLabReport({
   investigation,
@@ -150,6 +153,7 @@ export function buildLabReport({
   meta = [],
   evidence = null,
   helpFor = () => null,
+  createDoc = createDocument,
 }) {
   // At a depth, the steps are those a student reads there, numbered as they
   // see them (DEPTH.md); `stepIdFor` still takes the index in the whole lesson.
@@ -167,7 +171,7 @@ export function buildLabReport({
   // For what the lesson says. What a student wrote goes through plain() as
   // typed: the completion code is computed over it.
   const lessonPlain = text => plain(decodeEntities(text));
-  const doc = createDocument({
+  const doc = createDoc({
     title: `${lessonPlain(inv.title)}: ${name}`,
     footer: `Gravitas - ${lessonPlain(inv.title)}`,
     // The machine-readable copy. See the note beside /Keywords in js/pdf.js

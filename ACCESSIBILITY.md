@@ -4,6 +4,8 @@ Gravitas targets **WCAG 2.2 Level AA**. This is what has been done, what is
 checked automatically, and — the part worth reading — what the visual
 simulation cannot offer regardless of effort.
 
+The scoped conformance report, a status for each WCAG 2.1 and 2.2 A and AA criterion with the method behind it, is [ACCESSIBILITY_CONFORMANCE.md](ACCESSIBILITY_CONFORMANCE.md). It is generated from `tools/conformance/*.json`, is the project's own evaluation rather than an external audit, and `tests/conformance.test.js` fails when its list of limitations and the one below disagree.
+
 ## What is checked, on every run
 
 | Check | Covers |
@@ -354,6 +356,8 @@ adding a half-implemented structure tree would be worse than none: it would make
 the files *claim* a reading order they had not earned. `tests/instructorMaterials.test.js`
 holds this section to what the files actually contain, so the day tagging is
 added the test fails and this text has to be updated with it.
+
+**The student's own reports are different.** The lab report and the evidence report are written as tagged PDFs (headings, lists, tables and figures with alternative text), and the lab report is also offered as an accessible web page from the finish dialog (Prompt 127): one document with its headings in order, a table of the numbers behind every plot, a text alternative on every figure, no script, and a print stylesheet. `e2e/htmlReport.spec.js` downloads it and runs axe on the file itself. No PDF/UA validator has been run on the tagged PDFs, so their conformance is not claimed; the instructor documents stay untagged, as above.
 
 **If a tagged document is needed today**, the same content is on the web in HTML,
 which is tagged by construction: the investigations at

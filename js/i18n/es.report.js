@@ -8,6 +8,7 @@
 
 export const ES_REPORT = {
   'rp.by': 'Entregado por',
+  'inv.report.done': 'Informe de laboratorio descargado',
   'rp.inv': 'Investigación',
   'rp.start': 'Comenzado',
   'rp.made': 'Informe generado',
