@@ -21,9 +21,9 @@ export const HASHES = Object.freeze({
   },
   'line-centroid': {
     cellsSha256:
-      'c32fae8e1293b8bd7c51bada2c50129a61b7e0403c4c19bcccc1d2b93552b465',
+      '7481352467a561f23735db9c9977d965fd4a96696d1ad5c3262bcc24e1bd74ef',
     fileSha256:
-      '0f690613238b874d5813b60976a1445339851a6c71e09e3958262f3f9633ac47',
+      '1277da533f58058ed39c56b26e1d626358fc9739bb31de223eb47f74881216f5',
     cells: 4,
     example: {
       sha256:

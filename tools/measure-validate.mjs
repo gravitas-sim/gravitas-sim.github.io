@@ -108,7 +108,7 @@ const recovery = [];
     });
 }
 {
-  const lam0 = 6564.61;
+  const lam0 = 6564.6;
   const center = lam0 * (1 + 5e-4);
   const truthEw = 0.4 * 4 * Math.sqrt(2 * Math.PI);
   for (const withErrors of [true, false]) {
@@ -265,9 +265,9 @@ const residuals = [];
   });
 }
 for (const [id, rest, half, gap, side, name] of [
-  ['sdss-a', 6564.61, 20, 25, 40, 'A0 star, H-alpha'],
+  ['sdss-a', 6564.6, 20, 25, 40, 'A0 star, H-alpha'],
   ['sdss-a', 4862.68, 15, 20, 30, 'A0 star, H-beta'],
-  ['sdss-g', 6564.61, 20, 25, 40, 'G2 star, H-alpha'],
+  ['sdss-g', 6564.6, 20, 25, 40, 'G2 star, H-alpha'],
 ]) {
   const o = await openFixture(id);
   const z = o.spectral.redshift;

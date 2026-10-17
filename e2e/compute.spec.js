@@ -438,7 +438,7 @@ test.describe('a run', () => {
     expect(capsule).toMatchObject({
       format: 'gravitas.compute-capsule',
       formatVersion: 1,
-      params: { rest: 6564.61, halfwidth: 60 },
+      params: { rest: 6564.6, halfwidth: 60 },
     });
     expect(capsule.outputs.map(o => o.name)).toEqual(['envelope', 'table']);
     // The capsule is checkable by anyone: its outputs hash to what it says.

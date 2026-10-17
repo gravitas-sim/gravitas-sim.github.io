@@ -151,8 +151,8 @@ const prepared = {
     source: 'example',
     title: 'example',
   },
-  params: { rest: 6564.61, halfwidth: 60 },
-  paramsText: '{"rest":6564.61,"halfwidth":60}',
+  params: { rest: 6564.6, halfwidth: 60 },
+  paramsText: '{"rest":6564.6,"halfwidth":60}',
 };
 const fails = async (p, code) => {
   const err = await p.then(

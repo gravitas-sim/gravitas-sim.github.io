@@ -1951,7 +1951,7 @@ describe('a measurement on real data (js/notebook/observed.js)', () => {
     id: 'm1',
     tool: 'line',
     version: '1.0.0',
-    params: { line: [6540, 6580], rest: 6564.61 },
+    params: { line: [6540, 6580], rest: 6564.6 },
     at: 1,
     input: { observation: 'builtin:sdss-dr18-a', digest: 'd'.repeat(64) },
     quantities: [
@@ -1965,7 +1965,7 @@ describe('a measurement on real data (js/notebook/observed.js)', () => {
       },
       {
         id: 'rest',
-        value: 6564.61,
+        value: 6564.6,
         unit: 'Angstrom',
         kind: 'assumed',
         cite: 'NIST ASD',
@@ -2026,7 +2026,7 @@ describe('a measurement on real data (js/notebook/observed.js)', () => {
       // Only the changes the measurement saw.
       changes: ['crop'],
       assumptions: [
-        { id: 'rest', value: 6564.61, unit: 'Angstrom', cite: 'NIST ASD' },
+        { id: 'rest', value: 6564.6, unit: 'Angstrom', cite: 'NIST ASD' },
       ],
     });
     expect(Object.isFrozen(e.snapshot.observed)).toBe(true);

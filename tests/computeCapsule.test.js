@@ -49,7 +49,7 @@ async function made(id = 'transit-times', over = {}) {
       },
     ],
     params:
-      id === 'transit-times' ? { sigma: 5 } : { rest: 6564.61, halfwidth: 60 },
+      id === 'transit-times' ? { sigma: 5 } : { rest: 6564.6, halfwidth: 60 },
     checked,
     runtime,
     frame: {
@@ -213,7 +213,7 @@ describe('the run-it-yourself notebook', () => {
       capsule,
       cells,
       inputs: { observation: text },
-      params: '{"rest":6564.61,"halfwidth":60}',
+      params: '{"rest":6564.6,"halfwidth":60}',
     });
     expect(out.nbformat).toBe(4);
     expect(out.cells.map(c => c.cell_type)).toEqual([
