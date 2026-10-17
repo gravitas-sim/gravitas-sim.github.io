@@ -152,6 +152,18 @@ describe('the planned shards cover the suite exactly once', () => {
     }
   });
 
+  test('the longest shard is within 15% of the mean (Prompt 145)', () => {
+    // The twelve jobs run at once, so the slowest one is the wall time. The
+    // planner balances on predicted spans; a plan whose longest shard exceeds
+    // the mean by more than 15% is leaving minutes on the table, and
+    // `node tools/e2e-shards.mjs record` refreshes the timings it works from.
+    const spans = plan.shards.map(shard =>
+      shardSpan(withDurations(shard, timings), serial)
+    );
+    const mean = spans.reduce((a, b) => a + b, 0) / spans.length;
+    expect(Math.max(...spans)).toBeLessThanOrEqual(mean * 1.15);
+  });
+
   test('the timings still describe most of the suite', () => {
     // Not a correctness condition - an unknown test is planned at its file's
     // median - but a plan built mostly on guesses is not balanced any more,
