@@ -163,6 +163,8 @@ No one signal gets all six right, so the rule is their conjunction: a startup is
 
 **Reduced motion.** The splash's delays are cut to nothing and the sequence reveals the shell at once; nothing moves. The branding appears for a frame at most.
 
+A frame loaded with `?embed=` is always a startup: it is a document inside someone else's page, the Figure builder's preview among them, and its own start must not depend on the host's visit.
+
 `e2e/startupLifecycle.spec.js` asserts each outcome as the reader sees it, in Chromium, and the bfcache-sensitive ones in Firefox and WebKit. A duplicated tab cannot be made from a browser driver, so the inherited `sessionStorage` token is what is simulated.
 
 ## The canvas

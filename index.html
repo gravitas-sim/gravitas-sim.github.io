@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-166YwAkgcjG0MkH9lNzFEqudFuFuj9EdrzCaUn7AXfM=' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-awYtDweaaCcmXqy0FIz/SrY8GCiiaI1Gxuo160Iel58=' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta
       name="viewport"
@@ -88,7 +88,7 @@
     <!-- Startup lifecycle (ACCESSIBILITY.md, "Startup"): decided before first paint -->
     <script>
       (function(d,r,m){try{var n=performance.getEntriesByType('navigation')[0],s=sessionStorage;
-      if((n&&n.type!='navigate')||(d.referrer&&new URL(d.referrer).origin==location.origin)||s.getItem('gravitas_visit'))m='skip';
+      if(!/embed=/.test(location.search)&&((n&&n.type!='navigate')||(d.referrer&&new URL(d.referrer).origin==location.origin)||s.getItem('gravitas_visit')))m='skip';
       s.setItem('gravitas_visit',1)}catch(e){}
       r.dataset.startup=m;
       if(m=='skip'||matchMedia('(prefers-reduced-motion:reduce)').matches)

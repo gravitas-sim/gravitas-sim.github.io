@@ -91,6 +91,18 @@ test.describe('a genuine startup (a, d)', () => {
   });
 });
 
+test.describe('a figure frame keeps its own start (embed)', () => {
+  test('?embed=1 is a startup even after a visit, so a frame never depends on its host', async ({
+    page,
+  }) => {
+    await seen(page);
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => window.splashScreenEnded === true);
+    await page.goto('/?embed=1', { waitUntil: 'domcontentloaded' });
+    expect(await startup(page)).toBe('splash');
+  });
+});
+
 test.describe('every other load boots revealed (b, c, e) @cross-browser', () => {
   test('a reload after the splash shows none', async ({ page }) => {
     await seen(page);
