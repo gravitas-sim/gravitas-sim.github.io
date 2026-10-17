@@ -1,0 +1,4 @@
+{
+  "about": "Acceptance checks for features not built yet. A check listed here runs and is reported under 'pending acceptance'; it does not count as a failure until its prompt sets `activated` to true. See tools/pending-acceptance.mjs.",
+  "checks": []
+}
