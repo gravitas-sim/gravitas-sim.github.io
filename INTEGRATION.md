@@ -28,7 +28,7 @@ A train is `{"name", "base", "owner", "state"}`, state one of `open`, `frozen`, 
 
 Read live by Prompt 122; the tree wins over the roadmap's planning snapshot.
 
-- **`v3`:** created from `main` at 092a121d on 2026-10-17; `on.push` in `ci.yml` lists only `main`, so a push to `v3` runs no CI. Each pull request gets its pull-request CI, and the queue dispatches a full run on the head before every code merge. Adding `v3` to `on.push` is a workflow change and Carl's call.
+- **`v3`:** created from `main` at 092a121d on 2026-10-17; `on.push` in `ci.yml` lists `main` and `v3` (Carl, 2026-10-17, D-CI-03), so every merge into `v3` runs the full suite on the merged tip; the deploy job still runs only for `main`. Each pull request also gets its pull-request CI, and the queue dispatches a full run on the head before every code merge. When `v3` is released, it leaves `on.push` as `v2` did.
 - **`origin/main`:** `092a121dc6244eccc54e2548b88a41edd847762a`, CI green (run on 2026-10-16 20:52 UTC). `v2` does not exist on `origin`.
 - **Deployed revision:** `deployed-revision.json` on the live site names the same commit (deployed 2026-10-16 21:13 UTC, run 38965399427).
 - **Open pull requests:** #335 (records the v2 deletion and the Gaia fixture decision) and four dependency updates (#330 to #333), all into `main`.
