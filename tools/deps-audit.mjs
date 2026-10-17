@@ -5,7 +5,8 @@
 // Two halves, the same two CI has always run:
 //
 //   every dependency   no advisory at moderate or above, except the ones named
-//                      in IGNORED below.
+//                      in tools/deps-audit-exceptions.json, each with its
+//                      basis and an expiry date; an expired one fails loudly.
 //   production only    `npm audit --omit=dev`, with no exceptions at all.
 //
 // Why an exception list at all: `npm audit` has none, and an advisory with no
@@ -21,19 +22,25 @@
 // =============================================================================
 
 import { spawnSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
+const EXCEPTIONS = JSON.parse(
+  readFileSync(new URL('./deps-audit-exceptions.json', import.meta.url), 'utf8')
+).exceptions;
+
 /** Advisories the full-tree audit passes over, keyed by GHSA id, with why. */
-export const IGNORED = new Map([
-  [
-    'GHSA-hp3w-g68c-fv3c',
-    'sprintf-js <= 1.1.3 (every release), denial of service through unbounded ' +
-      'precision specifiers. No patched release exists. Locked only as 1.0.3 ' +
-      'under argparse 1 under @istanbuljs/load-nyc-config, a dev-only path ' +
-      'under jest, so it never reaches the site. Remove this entry once a ' +
-      'patched sprintf-js is published and the lockfile can take it.',
-  ],
-]);
+export const IGNORED = new Map(EXCEPTIONS.map(e => [e.id, e.reason]));
+
+/**
+ * Exceptions whose expiry date is today or earlier. An exception is a bounded
+ * decision: when its date comes it is renewed with a fresh basis or removed,
+ * and until then the audit fails loudly instead of passing it over quietly.
+ */
+export function expired(exceptions = EXCEPTIONS, now = new Date()) {
+  const today = now.toISOString().slice(0, 10);
+  return exceptions.filter(e => e.expires <= today);
+}
 
 const LEVELS = ['info', 'low', 'moderate', 'high', 'critical'];
 
@@ -91,6 +98,12 @@ function fullTree() {
     return false;
   }
   const { failing, ignored, unreported } = judge(report);
+  const lapsed = expired();
+  for (const e of lapsed) {
+    console.error(
+      `EXPIRED ${e.id} (expired ${e.expires}): renew it in tools/deps-audit-exceptions.json with a fresh basis and a new date, or remove it.`
+    );
+  }
   for (const a of ignored) {
     console.log(
       `ignored ${a.id} (${a.name}, ${a.severity}): ${IGNORED.get(a.id)}`
@@ -98,9 +111,10 @@ function fullTree() {
   }
   for (const id of unreported) {
     console.log(
-      `${id} is ignored but no longer reported; remove it from IGNORED.`
+      `${id} is ignored but no longer reported; remove it from tools/deps-audit-exceptions.json.`
     );
   }
+  if (lapsed.length) return false;
   if (failing.length) {
     for (const a of failing) {
       console.error(

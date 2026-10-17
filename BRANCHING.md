@@ -138,6 +138,18 @@ The world golden is the exception: if `e2e/golden/world-construction.json`
 conflicts, that is a signal, not a chore. Two branches changed physics. Resolve
 the physics first.
 
+## Branch hygiene
+
+`node tools/branch-inventory.mjs --prs <file>` (`npm run branches:inventory`) lists every
+remote branch with its state (protected, asset, open pull request, merged, closed pull
+request, stale, active) and, for a merged branch only, the one `gh` command that would
+retire it. The pull request list comes from
+`gh pr list --state all --limit 1000 --json number,state,headRefName,baseRefName`.
+A session never deletes a branch: the owner runs the commands. `pr-assets/*` branches
+hold pull request screenshots by SHA-pinned URL and are kept. "Merged" means the tip is
+an ancestor of `main` or `v3`; a squash-merged branch is not, so it shows as active or
+stale and is looked at, not assumed.
+
 ## After a train is promoted
 
 The merge into `main` is Carl's action (INTEGRATION.md, "Promotion of a
