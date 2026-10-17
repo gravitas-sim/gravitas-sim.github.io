@@ -100,6 +100,25 @@ export const WORDS = {
   dismiss: ['Dismiss', 'Cerrar'],
 };
 
+/**
+ * Page titles in Spanish, for pages whose own script does not set one. The
+ * stamped title script swaps document.title with the locale, so a Spanish
+ * reader's tab and history read in Spanish. A page that sets its title from
+ * its own catalog is not listed.
+ */
+export const TITLES_ES = {
+  'my-work/index.html': 'Mi trabajo | Gravitas',
+  'glossary/index.html': 'Glosario | Gravitas',
+  'sky/index.html': 'Laboratorio del cielo | Gravitas',
+  'studio/index.html': 'Estudio de escenarios | Gravitas',
+  'studio/lesson/index.html': 'Compositor de investigaciones | Gravitas',
+  'studio/course/index.html': 'Creador de paquetes de curso | Gravitas',
+  '3d/index.html': 'El laboratorio 3-D | Gravitas',
+  'teaching/adopt/index.html': 'Guía para adoptantes | Gravitas',
+  'teaching/alignment/index.html': 'Alineación con libros de texto | Gravitas',
+  'teaching/find/index.html': 'Encontrar contenido para enseñar | Gravitas',
+};
+
 /** The five groups and their links: every entry page, and nothing twice. */
 export const NAV = [
   [
@@ -192,6 +211,15 @@ export function precachedPages() {
   );
 }
 
+/**
+ * The page's title in the reader's language, as a small inline script rather
+ * than js/shell.js, so no route pays for it in JavaScript. The English title is
+ * the one the page carries; the script follows <html lang>, as the shell's own
+ * labels do. tools/csp.mjs hashes it.
+ */
+const titleScript = es =>
+  `<script>(function(){var r=document.documentElement,en=document.title,es=${JSON.stringify(es)};function s(){document.title=r.lang.indexOf('es')==0?es:en}s();new MutationObserver(s).observe(r,{attributeFilter:['lang']});})();</script>`;
+
 /** The offline note: inert until the head script shows it, once, when offline. */
 function offlineNote() {
   const saved = precachedPages();
@@ -245,6 +273,7 @@ export function shellFor(page, { main }) {
     `</div>`,
     `</header>`,
     ...(app ? [] : [offlineNote()]),
+    ...(TITLES_ES[page] ? [titleScript(TITLES_ES[page])] : []),
   ].join('\n');
   const footer = [
     `<footer class="gs-foot">`,

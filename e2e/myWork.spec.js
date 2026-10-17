@@ -262,3 +262,17 @@ test.describe('My work', () => {
     }
   }
 });
+
+test('the page title follows the language, on load and when it changes', async ({
+  page,
+}) => {
+  // The shell stamps a small script that swaps document.title with <html lang>
+  // (tools/shell.mjs), so a Spanish reader's tab does not read in English.
+  await page.addInitScript(() => localStorage.setItem('gravitas_locale', 'es'));
+  await page.goto('/my-work/', { waitUntil: 'domcontentloaded' });
+  await expect(page).toHaveTitle('Mi trabajo | Gravitas');
+  await page.locator('[data-gs-lang]').selectOption('en');
+  await expect(page).toHaveTitle('My work | Gravitas');
+  await page.locator('[data-gs-lang]').selectOption('es');
+  await expect(page).toHaveTitle('Mi trabajo | Gravitas');
+});

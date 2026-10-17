@@ -197,7 +197,7 @@ describe('what each page says', () => {
       expect(html).toContain(
         e.duration.min === e.duration.max
           ? `${e.duration.min} `
-          : `${e.duration.min} to ${e.duration.max}`
+          : `${e.duration.min}–${e.duration.max}`
       );
       expect(html).toContain(`${e.textbook.chapter}`);
       expect(html).toContain(
