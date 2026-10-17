@@ -8,7 +8,8 @@
 // built to fail: an ignored advisory beside one that is not.
 // =============================================================================
 
-import { advisories, judge, IGNORED } from '../tools/deps-audit.mjs';
+import { advisories, expired, judge, IGNORED } from '../tools/deps-audit.mjs';
+import { readFileSync } from 'node:fs';
 
 const advisory = (id, name, severity) => ({
   source: 1,
@@ -88,5 +89,23 @@ describe('the dependency audit', () => {
 
   test('an ignored advisory that is no longer reported is pointed out', () => {
     expect(judge(report()).unreported).toEqual([SPRINTF]);
+  });
+
+  test('every exception has a basis and an expiry date, and none has lapsed', () => {
+    const { exceptions } = JSON.parse(
+      readFileSync('tools/deps-audit-exceptions.json', 'utf8')
+    );
+    for (const e of exceptions) {
+      expect(e.basis.length).toBeGreaterThan(10);
+      expect(e.expires).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
+    expect(expired()).toEqual([]);
+  });
+
+  test('an exception expires on its date, and not before', () => {
+    const list = [{ id: 'GHSA-aaaa-bbbb-cccc', expires: '2027-01-15' }];
+    expect(expired(list, new Date('2027-01-14T23:59:59Z'))).toEqual([]);
+    expect(expired(list, new Date('2027-01-15T00:00:00Z'))).toEqual(list);
+    expect(expired(list, new Date('2027-02-01T00:00:00Z'))).toEqual(list);
   });
 });

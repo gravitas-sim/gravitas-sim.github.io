@@ -15,6 +15,7 @@ current, and the orchestrator checks it.
 | `blackhole-profile.mjs` | What a black hole costs to draw |  |
 | `blackhole-shots.mjs` | Captures of the black holes |  |
 | `body-shots.mjs` | Reference captures of the bodies, for a before-and-after on their drawing |  |
+| `branch-inventory.mjs` | Every remote branch, its state, and the commands the owner may run | `npm run branches:inventory` |
 | `browser-support.mjs` | The supported-browser statement, generated (Prompt 111) | `npm run support:sync`, `npm run support:check` |
 | `budget-environment.mjs` | The reference environment of the size budgets |  |
 | `build-adoption-pages.mjs` | The adoption pages: one for every investigation and activity |  |
