@@ -1,5 +1,7 @@
 # Implementation checklist
 
+> **Archived 2026-10-17** (Prompt 128). Superseded by the shipped investigations *Listening to Spacetime*, *A Universe of Stars* and *Lives of Stars*, which are in the manifest. Kept for the record, unchanged below; links into it from the repository root were checked and none remained.
+
 > **Historical record — superseded.** This was the live working file for two
 > work packages, and both of them shipped. Package A became the investigation
 > *Listening to Spacetime*; package B became *A Universe of Stars* and *Lives

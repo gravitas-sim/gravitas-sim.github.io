@@ -32,6 +32,8 @@ Scientific-defect triage (Prompt 125, visible): the model page has a generated k
 Institution-facing documents and an accessible report (Prompt 127, invisible): ACCESSIBILITY_CONFORMANCE.md, a scoped conformance report in the ACR form generated from tools/conformance/*.json (the project's own evaluation, no conformance claimed); DATA_PROTECTION.md with a Spanish draft; "What your IT office will ask" in the adopter's guide and on the Teach page; and the lab report as an accessible web page beside the PDF in the finish dialog.
 Balmer rest wavelengths (Prompt 125, part 2, visible and instructional): the line tool's H-alpha (air 6562.79, vacuum 6564.60 A) and H-beta vacuum (4862.71 A) follow NIST and Morton 2000, closing a discrepancy of up to 1.7 km/s; the populations guide's H-alpha velocity answer moves from -240.971 to -240.515 km/s.
 
+Documents (invisible): `DOCUMENTS.md`, a generated map of every root document and generated artifact (`tools/docs-map.mjs`, `npm run docs-map:check`), `MAINTAINER_ONBOARDING.md`, two superseded notes archived to `docs/archive/`, the recovery rehearsal's findings in `RELEASING.md`, and `CONTINUITY.md`'s ecosystem sentence dated.
+
 ## [2.0.0] - 2026-10-16
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided

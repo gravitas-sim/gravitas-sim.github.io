@@ -96,6 +96,7 @@
     "sw:manifest": "node tools/build-service-worker.mjs",
     "generate": "node tools/generate.mjs",
     "generate:check": "node tools/generate.mjs --check",
+    "docs-map:check": "node tools/generate.mjs --check --only docs-map",
     "tools:index:check": "node tools/generate.mjs --check --only tools-index",
     "sw:check": "node tools/generate.mjs --check --only sw",
     "registries": "node tools/capability-registries.mjs",
