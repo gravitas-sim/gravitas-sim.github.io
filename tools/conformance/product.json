@@ -1,0 +1,163 @@
+{
+  "product": "Gravitas",
+  "standard": "WCAG 2.1 and 2.2, Levels A and AA",
+  "evaluation": "The project's own evaluation. It is not an external audit, and no assistive-technology user has validated it (OWNER_ACTIONS.md lists the external work).",
+  "date": "2026-10-17",
+  "scope": {
+    "student": [
+      {
+        "id": "S1",
+        "name": "Start from the front door and open an investigation",
+        "specs": [
+          "onboarding.spec.js",
+          "firstRun.spec.js",
+          "investigations.spec.js"
+        ]
+      },
+      {
+        "id": "S2",
+        "name": "Run and change a sandbox scenario",
+        "specs": [
+          "sandbox.spec.js",
+          "bodyPlacement.spec.js",
+          "accessibilityParity.spec.js"
+        ]
+      },
+      {
+        "id": "S3",
+        "name": "Work through an investigation: read, predict, answer, get feedback",
+        "specs": [
+          "investigations.spec.js",
+          "answerEntry.spec.js",
+          "predictionLoops.spec.js"
+        ]
+      },
+      {
+        "id": "S4",
+        "name": "Measure in an investigation and read a plot",
+        "specs": ["measure.spec.js", "plotChart.spec.js", "chartParity.spec.js"]
+      },
+      {
+        "id": "S5",
+        "name": "Open an observation in the Observatory and measure it",
+        "specs": ["observatory.spec.js", "stellarSpectra.spec.js"]
+      },
+      {
+        "id": "S6",
+        "name": "Use the Sky Lab to plan an observation",
+        "specs": ["sky.spec.js", "observing.spec.js"]
+      },
+      {
+        "id": "S7",
+        "name": "Run an experiment and read its results",
+        "specs": ["experimentRunner.spec.js", "experiments.spec.js"]
+      },
+      {
+        "id": "S8",
+        "name": "Finish an investigation and download the report (PDF or web page)",
+        "specs": ["investigations.spec.js", "htmlReport.spec.js"]
+      },
+      {
+        "id": "S9",
+        "name": "Save, resume and export one's own work",
+        "specs": [
+          "myWork.spec.js",
+          "progressSafety.spec.js",
+          "presetRecovery.spec.js"
+        ]
+      },
+      {
+        "id": "S10",
+        "name": "Share a scenario by link and open a shared one",
+        "specs": ["sharing.spec.js", "shareObserving.spec.js"]
+      }
+    ],
+    "instructor": {
+      "id": "I1",
+      "name": "Find an investigation, assign it, collect submissions and review them",
+      "specs": [
+        "adoption.spec.js",
+        "instructorFlow.spec.js",
+        "assignment.spec.js",
+        "submissionReview.spec.js",
+        "instructorPortal.spec.js"
+      ]
+    },
+    "outside": "Authoring tools (Scenario Studio, Investigation Composer, course builder) are covered by axe only (e2e/accessibility.spec.js); their workflows were not walked for this report. The generated PDFs are evaluated as documents, not as workflows."
+  },
+  "methods": [
+    {
+      "id": "axe",
+      "name": "axe-core automated rules",
+      "detail": "e2e/accessibility.spec.js runs axe-core with the wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa and best-practice rule sets and no rules disabled, over every surface the spec lists, in both languages, and in all four themes on the pages that carry the shared shell. axe judges a subset of most criteria, reports some checks as incomplete (contrast over images, canvas and gradients), and cannot judge meaning, order or operation.",
+      "canJudgeWhole": false
+    },
+    {
+      "id": "manual",
+      "name": "Scripted manual checks",
+      "detail": "e2e/accessibilityManual.spec.js: focus order, focus traps, Escape and focus restoration, heading order, landmarks, reflow at 320 and 640 CSS pixels, reduced motion and the canvas description. A scripted check judges what its assertions state, on the surfaces it opens.",
+      "canJudgeWhole": false
+    },
+    {
+      "id": "parity",
+      "name": "Keyboard and pointer parity",
+      "detail": "e2e/accessibilityParity.spec.js and the dialog and body-placement specs: the keyboard and the typed form reach the same state as the pointer.",
+      "canJudgeWhole": false
+    },
+    {
+      "id": "layout",
+      "name": "Responsive layout and target size",
+      "detail": "e2e/responsiveLayout.spec.js measures controls on phone and tablet projects, including the 44 px minimum on coarse pointers.",
+      "canJudgeWhole": false
+    },
+    {
+      "id": "static",
+      "name": "Static inventories",
+      "detail": "tests/dialogInventory.test.js (every modal opens through js/dialog.js), tests/accessibilityDocs.test.js (every surface is named in the prose), tools/i18n-audit.mjs (both languages on every page) and the shell check (a language and a title on every stamped page).",
+      "canJudgeWhole": true
+    },
+    {
+      "id": "pdf",
+      "name": "Inspection of the generated documents",
+      "detail": "tests/instructorMaterials.test.js holds the instructor PDFs to their stated untagged state; tests/evidenceLedger.test.js and tests/htmlReport.test.js check the tagged student report and the web-page report. No PDF/UA validator has been run.",
+      "canJudgeWhole": false
+    }
+  ],
+  "gaps": [
+    {
+      "id": "sentence-not-simulation",
+      "heading": "A sentence is not a simulation.",
+      "criteria": ["1.1.1", "1.3.3"]
+    },
+    {
+      "id": "motion-is-content",
+      "heading": "The orbital motion itself does not stop for `prefers-reduced-motion`.",
+      "criteria": ["2.2.2"]
+    },
+    {
+      "id": "curve-narration",
+      "heading": "The shape of a curve is not narrated.",
+      "criteria": ["1.1.1", "1.3.1"]
+    },
+    {
+      "id": "drag-feel",
+      "heading": "Direct manipulation has a keyboard equivalent, but not a pointer's.",
+      "criteria": ["2.5.1", "2.5.7"]
+    },
+    {
+      "id": "footer-links",
+      "heading": "The attribution links in the footer are under 24×24.",
+      "criteria": ["2.5.8"]
+    },
+    {
+      "id": "automated-floor",
+      "heading": "Automated checks are a floor, not a ceiling.",
+      "criteria": ["1.3.1", "1.4.3", "4.1.2"]
+    }
+  ],
+  "documents": {
+    "instructorPdfs": "The instructor guides, answer keys, activity guides and worksheets are untagged PDFs (no /StructTreeRoot), so they are not PDF/UA conformant and give a screen reader no declared structure or reading order. The same content is on the web in HTML.",
+    "studentReports": "The student's lab report and evidence report are tagged PDFs (headings, lists, tables, figures with alternative text). No PDF/UA validator has been run on them, so their conformance is not claimed. The same report is offered as an accessible web page (Prompt 127).",
+    "criteria": ["1.1.1", "1.3.1", "1.3.2", "2.4.2", "3.1.1"]
+  }
+}

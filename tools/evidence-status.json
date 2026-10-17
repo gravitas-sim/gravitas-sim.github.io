@@ -265,6 +265,10 @@
         {
           "file": "CHANGELOG.md",
           "text": "conformance, and no external audit has been done."
+        },
+        {
+          "file": "ADOPTER_GUIDE.md",
+          "text": "It is our own evaluation, not an external audit; no assistive-technology user has validated it"
         }
       ]
     },

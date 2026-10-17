@@ -16,6 +16,13 @@
       "student": true
     },
     {
+      "file": "ACCESSIBILITY_CONFORMANCE.md",
+      "kind": "policy",
+      "purpose": "The accessibility conformance report against WCAG 2.2, written by tools/conformance.mjs from tools/conformance/*.json (not yet a node of the generation graph; Prompt 289 decides).",
+      "owner": 127,
+      "student": true
+    },
+    {
       "file": "ADOPTER_GUIDE.md",
       "kind": "guide",
       "purpose": "The instructor adopter's guide and the newcomer docs test.",
@@ -181,6 +188,20 @@
       "kind": "feature",
       "purpose": "Observation data packs.",
       "owner": null,
+      "student": true
+    },
+    {
+      "file": "DATA_PROTECTION.es.md",
+      "kind": "policy",
+      "purpose": "What data Gravitas keeps, shares and never collects (Spanish).",
+      "owner": 127,
+      "student": true
+    },
+    {
+      "file": "DATA_PROTECTION.md",
+      "kind": "policy",
+      "purpose": "What data Gravitas keeps, shares and never collects (English).",
+      "owner": 127,
       "student": true
     },
     {
