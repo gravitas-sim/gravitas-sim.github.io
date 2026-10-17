@@ -80,5 +80,7 @@ with its own row in the decision register, not an update.
 6. **Record it.** A line in `CHANGELOG.md` naming what moved and what was held,
    and why.
 
+**Next checkpoint: the first week of January 2027.** The October 2026 one fell in the 2.0.0 release window and was not run as a pull request; its input is the four open Dependabot pull requests (#330 to #333: lint-and-format, Playwright and axe patch-and-minor groups and acorn, all dev-only, none a security update). `npm run deps:audit` was clean on 2026-10-17 (the only advisory is the ignored sprintf-js one with no patched release; production dependencies have none).
+
 The monthly Dependabot pull requests are the input to step 3 and nothing more:
 they are read at the checkpoint, not merged as they arrive.
