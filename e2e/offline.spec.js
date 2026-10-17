@@ -160,6 +160,35 @@ test.describe('the application survives the network going away', () => {
     }
   });
 
+  test('the investigation cards and the authoring pages are there without a network', async ({
+    page,
+    context,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(180_000);
+    await app.boot();
+    await waitForPrecache(page);
+    await context.setOffline(true);
+
+    // D-PERF-02, change 1: a card image, and the three authoring pages, which
+    // used to need a visit made online first. The image is fetched; a page is
+    // navigated to, because the worker answers a directory URL with its
+    // precached index only for a navigation.
+    const image = await page.evaluate(async () => {
+      const r = await fetch('/images/investigations/a-lens-passing-by.webp');
+      return { ok: r.ok, bytes: (await r.blob()).size };
+    });
+    expect(image.ok, 'the card image was not cached').toBe(true);
+    expect(image.bytes).toBeGreaterThan(1000);
+
+    for (const url of ['/studio/', '/studio/lesson/', '/studio/course/']) {
+      const response = await page.goto(url, { waitUntil: 'domcontentloaded' });
+      expect(response?.ok(), `${url} was not cached`).toBe(true);
+      expect(await page.title(), url).not.toBe('');
+      expect(await page.locator('body').innerText()).not.toBe('');
+    }
+  });
+
   test('the cache is named for its contents, so a rebuild can invalidate it', async ({
     page,
     app,

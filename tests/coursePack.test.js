@@ -1034,7 +1034,9 @@ describe('what the builder and course home copy, and where they are registered',
       './js/data/courses/intro-astronomy.js',
     ])
       expect(sw).toContain(`'${f}'`);
-    expect(sw).not.toContain("'./studio/course/index.html'");
+    // The builder joined the optional tier in 2.0.1 (D-PERF-02, change 1): its
+    // modules were already core, and a first offline visit needed the page.
+    expect(sw).toContain("'./studio/course/index.html'");
     expect(readFileSync('sitemap.xml', 'utf8')).toContain(
       'https://gravitas-sim.online/course/'
     );

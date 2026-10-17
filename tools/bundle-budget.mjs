@@ -28,7 +28,19 @@
 
 import { readFile } from 'node:fs/promises';
 
+import { judge, readReference } from './budget-environment.mjs';
+
 const check = process.argv.includes('--check');
+
+if (process.argv.includes('--print-environment')) {
+  console.log(`node ${process.versions.node}, zlib ${process.versions.zlib}`);
+  process.exit(0);
+}
+const reference = readReference();
+const verdict = judge(reference, process.versions, {
+  strictFlag: process.argv.includes('--strict'),
+  ci: process.env.GITHUB_ACTIONS === 'true',
+});
 
 /**
  * The ceilings, in kilobytes.
@@ -722,6 +734,14 @@ for (const { budget, size, pct } of rows) {
       `    ${exact.toLocaleString('en-US')} bytes${budget.id === 'deferred' ? ' gzipped' : ''}`
   );
   if (!check) console.log(`    ${budget.reason}\n`);
+}
+
+if (over && !verdict.strict) {
+  // Not the figure the gate judges: say so, and say what would be.
+  console.warn(
+    `\n${over} budget(s) read over here, as ADVISORY only: this environment differs from the one the gate is measured in (${verdict.differences.join('; ')}${verdict.zlibRecorded ? '' : '; the reference zlib is not recorded yet'}). The gate is CI's figure, measured in Node ${reference.nodeMajor}; rerun there, or pass --strict to fail on this one.`
+  );
+  process.exit(0);
 }
 
 if (over) {

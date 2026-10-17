@@ -1,0 +1,4 @@
+{
+  "note": "The zlib CI's Node (the major in .nvmrc) reports in process.versions.zlib. Null until recorded: run `node tools/bundle-budget.mjs --print-environment` on the reference environment (a CI log line, or a Node of the .nvmrc major) and commit the value. While it is null the comparison uses the Node major alone.",
+  "zlib": null
+}

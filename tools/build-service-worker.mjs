@@ -109,6 +109,10 @@ const TREES = [
   // did - the precise failure the offline support exists to prevent.
   { dir: 'vendor', ext: ['.woff2', '.js'], core: true },
   { dir: 'images/scenarios', ext: ['.webp'], core: false },
+  // The investigation cards the Library, Home and the adoption pages show
+  // (D-PERF-02, change 1): optional pictures, so a first offline visit to a
+  // card list is not a grid of empty boxes.
+  { dir: 'images/investigations', ext: ['.webp'], core: false },
 ];
 
 /** Individually named files. */
@@ -132,6 +136,12 @@ const FILES = [
   { path: 'library/library.json', core: false },
   // My work: the page, to open offline what the student made on this device.
   { path: 'my-work/index.html', core: false },
+  // The authoring pages (D-PERF-02, change 1): Scenario Studio, the
+  // Investigation Composer and the course builder. Their modules are already
+  // core under js/, so these pages are all a first offline visit lacked.
+  { path: 'studio/index.html', core: false },
+  { path: 'studio/lesson/index.html', core: false },
+  { path: 'studio/course/index.html', core: false },
   // The course home: a course link opens offline once Gravitas has been
   // opened, since the pack is in the link and the page's modules are under
   // js/. Optional, as the catalog is. The builder (studio/course/) is not.
