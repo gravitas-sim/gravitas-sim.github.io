@@ -22,6 +22,7 @@ the release rather than in the tag.
 - The catalog says "platform API" for the number that is not the Gravitas release; a test pins that the two differ and that every community package's range is satisfied.
 - A test counts the "New in 2.0" badges against D-R8-01's nine, in both languages; the evidence record keeps novelty apart from field use.
 - `tools/bundle-budget.mjs` names its reference environment (Node from `.nvmrc`, zlib from a committed record) and prints a figure from another environment as advisory; CI and `--strict` fail.
+- The splash runs once per genuine startup (Prompt 124): not on an internal navigation, a reload, back or forward, or a duplicated tab; the navigation is never painted ahead of it; a failed script leaves a usable shell within six seconds. See ACCESSIBILITY.md, "Startup".
 - Not done, listed for Prompt 133 because each adds bytes to a route with no room: the Library's scoped scenario count, My work's "preferences" label, and "illustrative" on the Coma and NGC 2420 values.
 
 Governance only (Prompt 122): INTEGRATION.md and BRANCHING.md describe `main` plus trains; a `Pull-request class` CI job enforces labels, windows and the instructor ciphertext rule; `tools/evidence-status.json` records the evidence class of each public claim and generates `docs/evidence-status.md`. No student-facing behavior changes.
