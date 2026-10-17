@@ -46,6 +46,7 @@ current, and the orchestrator checks it.
 | `check-links.mjs` | Internal link and asset checker | `npm run validate:links`, `npm run validate:links:dist` |
 | `check-test-policy.mjs` | A skip has to be a capability, and it has to be on the record | `npm run test:policy` |
 | `checks.mjs` | One list of what has to pass |  |
+| `ci-cost.mjs` | What one CI run cost |  |
 | `compute-answers.mjs` | The answers the reviewed notebooks gave, as fixtures for the tests |  |
 | `compute-examples.mjs` | The compute page's two Gravitas-made example inputs |  |
 | `compute.mjs` | The compute page's generated files: the frame, its pin, the catalogue's hashes |  |
@@ -107,6 +108,7 @@ current, and the orchestrator checks it.
 | `number-ratchet.mjs` | Three migrations that may only go one way: numbers through the formatter, |  |
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
 | `output-excerpt.mjs` | The part of a failing command's output worth printing |  |
+| `pending-acceptance.mjs` | Acceptance checks for features that are not built yet |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |
 | `perf-trace.mjs` | Compositor measurement: what a Chromium trace says about where a frame went |  |
 | `playwright-cache.mjs` | A Playwright transform cache that no other process is writing |  |
