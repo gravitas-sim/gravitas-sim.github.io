@@ -691,7 +691,10 @@ export const CHECKS = [
     label: 'DOCUMENTS.md maps every root document',
     command: ['npm', 'run', 'docs-map:check'],
     tier: 'quick',
-    ci: 'checks',
+    ci: null,
+    why:
+      'CI runs the same facts in tests/docsMap.test.js (the table against the ' +
+      'root, and the committed map against what the table and the tree render).',
     group: 'generated',
   },
   {
