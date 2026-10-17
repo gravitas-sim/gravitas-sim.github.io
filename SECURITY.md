@@ -14,6 +14,8 @@ Sesame and VizieR services when the reader presses Find, and to nothing else
 ([`ARCHIVE_IMPORT.md`](ARCHIVE_IMPORT.md)). No lesson uses it, and nothing is
 sent until it is asked for.
 
+What is stored, what is never sent and what an instructor receives is in [`DATA_PROTECTION.md`](DATA_PROTECTION.md).
+
 That removes most of the categories a security policy usually covers, and it is
 worth saying plainly rather than leaving a reader to infer it.
 

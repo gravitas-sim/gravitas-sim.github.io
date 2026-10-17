@@ -88,7 +88,11 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    # `v3` is the Roadmap III integration and staging branch (INTEGRATION.md),
+    # here so every merge into it gets the full suite on the merged tip. It
+    # does NOT make the branch publishable: the deploy job is gated on
+    # `github.ref == 'refs/heads/main'`, so a run on v3 skips it (D-CI-03).
+    branches: [main, v3]
   pull_request:
   schedule:
     # Monday morning, UTC. Catches an engine or dependency change that landed

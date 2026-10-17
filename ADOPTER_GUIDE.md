@@ -116,6 +116,19 @@ person, which is what the test below is for.
    help, and what was changed. A task done without help by one person is one
    observation, not a measure of the guide.
 
+## What your IT office will ask
+
+The documents an institution asks for are in the repository, and each says what it is and is not.
+
+| They ask | The answer | Where |
+|---|---|---|
+| What does it store, and where does student data go? | It stores a student's work in their own browser and sends nothing anywhere. There are no accounts, no analytics and no server of ours. Two optional features, a live archive lookup and the compute page, contact other sites only when a reader presses the control that says so. | [DATA_PROTECTION.md](DATA_PROTECTION.md) (Spanish: [DATA_PROTECTION.es.md](DATA_PROTECTION.es.md)) |
+| Is it accessible? Do you have a VPAT or an ACR? | A scoped conformance report in the ACR form, with a status per WCAG 2.1 and 2.2 A and AA criterion. It is our own evaluation, not an external audit; no assistive-technology user has validated it; and it claims no conformance. | [ACCESSIBILITY_CONFORMANCE.md](ACCESSIBILITY_CONFORMANCE.md) |
+| How is it secured, and how do we report a problem? | A static site with no server to attack; the instructor materials are encrypted files. Reports go to the maintainer. | [SECURITY.md](SECURITY.md) |
+| Does it work offline or on a campus network that blocks things? | Pages work offline once opened, and the site needs only its own address, except the two optional features above. | [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md) |
+| Can a student hand work in without an account? | Yes: a report (PDF or an accessible web page), a submission token or a progress file, which the course's own system collects. | [INSTRUCTOR_FLOW.md](INSTRUCTOR_FLOW.md) |
+| Is there a contract, an SLA or a support line? | No. It is a one-maintainer academic project under an open license; support is described in SUPPORT.md. | [SUPPORT.md](SUPPORT.md) |
+
 ## The listing kit
 
 The kit for Carl is outside the repository, beside the roadmaps, because it
