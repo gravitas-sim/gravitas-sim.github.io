@@ -27,6 +27,8 @@ the release rather than in the tag.
 
 Governance only (Prompt 122): INTEGRATION.md and BRANCHING.md describe `main` plus trains; a `Pull-request class` CI job enforces labels, windows and the instructor ciphertext rule; `tools/evidence-status.json` records the evidence class of each public claim and generates `docs/evidence-status.md`. No student-facing behavior changes.
 
+Scientific-defect triage (Prompt 125, visible): the model page has a generated known-discrepancies table (a register plus the validation report's per-check status); the extinction ratio of the cluster-fit tool is kept at 3.245 and its difference from the kernel's CCM89 value is explained (RADIATION.md); the Sky Lab and validation pages state that refraction below 5 degrees is not validated, in place of "several arcminutes" (it is up to about 20). No number a student sees changes.
+
 ## [2.0.0] - 2026-10-16
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
