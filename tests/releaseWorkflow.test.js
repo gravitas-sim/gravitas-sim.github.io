@@ -50,12 +50,14 @@ describe('the deploy job only runs behind the gate', () => {
     expect(deploy.if).toContain("github.ref == 'refs/heads/main'");
   });
 
-  test('pushes run CI on main alone, and only main can deploy', () => {
-    // v2, the integration branch, left the push list when it was released
-    // (BRANCHING.md, "Rolling out", step 3): a branch of that name would
-    // otherwise run CI silently. The deploy condition names main alone.
-    expect(workflow.on.push.branches).toEqual(['main']);
+  test('pushes run CI on main and the v3 staging branch, and only main can deploy', () => {
+    // v2 left the push list when it was released (BRANCHING.md, "Rolling
+    // out", step 3). v3, the Roadmap III staging branch, is on it so each
+    // merge gets the full suite on the merged tip (D-CI-03); it leaves the
+    // list when it is released. The deploy condition names main alone.
+    expect(workflow.on.push.branches).toEqual(['main', 'v3']);
     expect(String(deploy.if)).not.toContain('v2');
+    expect(String(deploy.if)).not.toContain('v3');
   });
 
   test('the gate it depends on treats anything but success as failure', () => {
