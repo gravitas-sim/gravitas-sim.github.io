@@ -5819,7 +5819,10 @@
   .sc-chip-count {
     font-family: var(--font-mono);
     font-size: var(--text-2xs);
-    opacity: 0.65;
+    /* 0.85, not 0.65: axe 4.13 counts opacity in the contrast it measures, and
+       the dimmer count was 4.37:1 in the dark theme and 3.1:1 in the light
+       one, under the 4.5:1 the text size needs. */
+    opacity: 0.85;
   }
 
   .sc-concept-note {
