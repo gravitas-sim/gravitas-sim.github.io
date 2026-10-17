@@ -623,6 +623,10 @@ investigations, the scenario catalog and what the model does and does not claim.
 It is written in LaTeX in [`manual/`](manual/) and rebuilt with `npm run manual`;
 its counts come from the same source as this page's.
 
+[`DOCUMENTS.md`](DOCUMENTS.md) maps every document in the repository root and every
+generated artifact; a second maintainer starts at
+[`MAINTAINER_ONBOARDING.md`](MAINTAINER_ONBOARDING.md).
+
 Topic documents, each about one part of the application and written when that
 part was built:
 
