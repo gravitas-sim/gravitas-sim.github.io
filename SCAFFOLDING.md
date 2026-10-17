@@ -73,9 +73,9 @@ fetched on first press, Spanish only for a Spanish reader.
 | Ellipse panel | `#investigationEllipseExplain` | `plot-ellipse` |
 | `createPlot` (hook `explain`) | `.plot-help` | `plot-series`, `plot-table`, `plot-log` (Observatory), `observatory-fit`, `observatory-archive`, `observatory-measure`, `plot-experiment`, `analysis-sweep` |
 
-Declared but not yet reachable from a button, because their charts are still
-Chart.js panels rather than the plot component (Prompt 64's migration will
-give them the affordance): `plot-light-curve`, `plot-rv`, `plot-energy`,
+Declared but not yet reachable from a button, because their charts are not
+yet reachable from a control (the plot component draws every chart now, so the
+reason is the missing button, not the chart library): `plot-light-curve`, `plot-rv`, `plot-energy`,
 `plot-compare`, `plot-bars`, `analysis-models`, `observatory-image`.
 
 ## Authoring and the composer

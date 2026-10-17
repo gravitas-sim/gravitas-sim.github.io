@@ -2575,11 +2575,7 @@ try {
     <template data-host="tutorial"></template>
 
     <!-- JavaScript modules in dependency order -->
-    <!--
-      Chart.js is not loaded here any more. It is 70KB and only the bench's
-      two charts use it, which start closed; js/chartjs.js fetches it the
-      first time one is opened. The live charts are js/plot/chart.js.
-    -->
+    <!-- Every chart is js/plot/chart.js, fetched the first time one is drawn. -->
     <script type="module" src="js/utils.js"></script>
     <script type="module" src="js/physics.js"></script>
     <script type="module" src="js/render.js"></script>

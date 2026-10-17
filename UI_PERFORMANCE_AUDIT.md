@@ -65,7 +65,7 @@ at start-up; Chart.js 70 KB, fetched by a `<script>` tag in `index.html`. The
 
 **Change.** `js/view3dBridge.js` holds the toggle and the per-frame hook; three
 arrives on first activation, with a loading state on the button because 249 KB
-is not instant. `js/chartjs.js` fetches Chart.js when the light curve or the
+is not instant. js/chartjs.js (removed, Prompt 132) fetches Chart.js when the light curve or the
 energy chart is first opened. Both consumers already read the global `Chart`, so
 nothing about their use changed.
 

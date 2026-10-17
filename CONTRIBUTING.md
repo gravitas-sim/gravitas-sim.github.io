@@ -37,7 +37,7 @@ npm run lint              # eslint (prettier runs inside it)
 npm run format:check      # prettier, for the files it owns
 npm run docs:check:full   # every count in the docs matches the source, the test counts too
 npm run check:architecture  # no import cycles, no low-level module importing up
-npm run vendor:check      # vendor/ matches the pinned three.js, Chart.js and fonts
+npm run vendor:check      # vendor/ matches the pinned three.js and fonts
 npm run a11y              # axe over every surface, plus the keyboard checks
 npm run build:ci          # a production bundle must still build (no passphrase)
 ```
@@ -64,8 +64,8 @@ Two things worth knowing before you run the browser suite:
 
 ## The build is self-contained
 
-Nothing the application needs is fetched from another origin. three.js,
-Chart.js and the three font families used to come from jsdelivr and Google
+Nothing the application needs is fetched from another origin. three.js
+and the three font families used to come from jsdelivr and Google
 Fonts; they are now pinned in `package.json`, bundled into `vendor/` by
 `tools/vendor-deps.mjs`, and committed — because GitHub Pages serves the
 repository root, so a generated file that is not committed is a 404 on the live

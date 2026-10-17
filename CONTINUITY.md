@@ -26,7 +26,7 @@ usually".
 - **The site needs no service.** It is static files on GitHub Pages: no server
   to run, no database, no account, no tracking. The simulations, the lessons
   and the validation page run from the files alone, offline once loaded
-  ([`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)). three.js, Chart.js and
+  ([`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)). three.js and
   the fonts are vendored into the repository, not fetched from a CDN. The only
   network use beyond the site's own files is the optional lookup of public
   astronomical archives, and that happens only when the user asks for it.
@@ -99,7 +99,7 @@ The project would be better with a second person. The way it happens:
 - **The licenses.** MIT for the software and CC BY 4.0 for the teaching
   material, as [`LICENSES.md`](LICENSES.md) divides them: keep both license
   files, the copyright line, and [`NOTICE`](NOTICE) with every third-party
-  attribution (three.js, Chart.js, the fonts under the SIL Open Font License,
+  attribution (three.js, the fonts under the SIL Open Font License,
   the data packs under their own terms). A file under another license keeps that
   license when it is moved.
 - **Attribution.** CC BY 4.0 asks that the teaching material credit the

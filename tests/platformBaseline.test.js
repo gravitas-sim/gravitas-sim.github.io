@@ -151,7 +151,6 @@ describe('the toolchain policy', () => {
   const all = { ...pkg.dependencies, ...pkg.devDependencies };
   const EXACT = [
     'three',
-    'chart.js',
     '@fontsource/inter',
     '@fontsource/poppins',
     '@fontsource/roboto-mono',

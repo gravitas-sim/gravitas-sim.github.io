@@ -1,5 +1,5 @@
 import { describe, test, expect } from '@jest/globals';
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 
 // =============================================================================
 // The five Chart.js charts: what they are, as data (D-PLOT-02, stage 3a)
@@ -211,17 +211,23 @@ describe('the caps and rates in source', () => {
 describe('which charts still load Chart.js', () => {
   test('none: all five draw with js/plot/chart.js, fetched on first use', () => {
     // D-PLOT-02 stage 3b ported the energy chart, the light curve and the
-    // radial-velocity trace; stage 3c the bench's comparison and sweep. Each is
-    // built through the one mount, which fetches the component on first use, so
-    // no page loads the vendored library for a chart. (The wrapper and the
-    // vendor entry go in stage 4.)
+    // radial-velocity trace; stage 3c the bench's comparison and sweep; stage 4
+    // (Prompt 132) removed the library, its wrapper and its vendor entry. Each
+    // chart is built through the one mount, which fetches the component on
+    // first use, and nothing in the tree can name the library any more.
     const files = readdirSync('js', { recursive: true })
       .filter(f => f.endsWith('.js'))
       .map(f => `js/${f}`);
-    const loaders = files.filter(f =>
-      /from '(\.\.?\/)+chartjs\.js'/.test(read(f))
+    const reachers = files.filter(f =>
+      /chartjs\.js|vendor\/chartjs|ensureChartJs|window\.Chart\b/.test(read(f))
     );
-    expect(loaders).toEqual([]);
+    expect(reachers).toEqual([]);
+    expect(existsSync('js/chartjs.js')).toBe(false);
+    expect(existsSync('vendor/chartjs')).toBe(false);
+    const pkg = JSON.parse(read('package.json'));
+    expect({ ...pkg.dependencies, ...pkg.devDependencies }['chart.js']).toBe(
+      undefined
+    );
     for (const ported of [
       'js/inspectorPanel.js',
       'js/lightCurve.js',
