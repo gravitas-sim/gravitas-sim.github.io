@@ -57,8 +57,8 @@ async function openLesson(page, app, { locale, narrow = false } = {}) {
           new Promise(resolve => {
             const at = () => JSON.stringify(el.getBoundingClientRect());
             const first = at();
-            requestAnimationFrame(() =>
-              requestAnimationFrame(() => resolve(at() === first))
+            window.requestAnimationFrame(() =>
+              window.requestAnimationFrame(() => resolve(at() === first))
             );
           })
       )
