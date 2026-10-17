@@ -49,7 +49,8 @@ export const ES_CATALOG = {
   'cat.size.archive': '{download} de descarga, {unpacked} instalado',
   'cat.size.builtIn': '{bytes} cuando se usa',
   'cat.works': 'Funciona con',
-  'cat.works.value': 'Gravitas {range} (esta es la {platform})',
+  'cat.works.value':
+    'API de plataforma {range} (esta es la API de plataforma {platform}; no es el número de versión de Gravitas)',
   'cat.license': 'Licencia',
   'cat.cite': 'Citar',
   'cat.reviewed': 'Revisado',

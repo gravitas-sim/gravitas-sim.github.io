@@ -1,9 +1,35 @@
 {
   "schema": 1,
   "note": "One record per public claim (Roadmap III rule 7.5.10). Classes: S software works, V-internal and V-external science valid, A adopted, L learning measured. status is established, partial, or UNKNOWN (not established); nothing upgrades UNKNOWN on the strength of a unit test. anchors are exact single-line texts a public page carries; the test fails when one is missing or when a claim-bearing line on a scanned page matches no record. Run: node tools/evidence-status.mjs --write",
+  "novelty": {
+    "note": "Novelty is not field use. A badge says a surface is new in a version; it says nothing about whether a class has used it, which is recorded by the adoption (A) and learning (L) claims. Pages carry the badge when listed here, D-R8-01 fixed the nine of 2.0; tests/noveltyBadges.test.js holds the pages to the list in both languages.",
+    "badge": {
+      "en": "New in 2.0",
+      "es": "Nuevo en 2.0"
+    },
+    "version": "2.0.0",
+    "decision": "D-R8-01",
+    "pages": [
+      "3d/index.html",
+      "catalog/index.html",
+      "compute/index.html",
+      "evaluation/index.html",
+      "experiments/index.html",
+      "mission/lab/index.html",
+      "observatory/index.html",
+      "sky/index.html",
+      "studio/index.html"
+    ],
+    "fieldUse": {
+      "en": "Not yet used in a class.",
+      "es": "Aún no se ha usado en un grupo."
+    }
+  },
   "scan": {
     "files": ["README.md", "ADOPTER_GUIDE.md", "CHANGELOG.md"],
-    "section": { "CHANGELOG.md": "## [2.0.0]" },
+    "section": {
+      "CHANGELOG.md": "## [2.0.0]"
+    },
     "patterns": [
       "learning gain",
       "no evaluation",
@@ -33,7 +59,10 @@
       "limitations": "Passing tests show the software does what the tests ask, not that the science or the teaching is right.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "CHANGELOG.md", "text": "The software has extensive automated validation" }
+        {
+          "file": "CHANGELOG.md",
+          "text": "The software has extensive automated validation"
+        }
       ]
     },
     {
@@ -49,8 +78,14 @@
       "limitations": "Internal validation. Tolerances are the project's; no one outside it has reviewed them.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "README.md", "text": "**A validation suite.**" },
-        { "file": "CHANGELOG.md", "text": "The scientific kernels have internal validation against cited references" }
+        {
+          "file": "README.md",
+          "text": "**A validation suite.**"
+        },
+        {
+          "file": "CHANGELOG.md",
+          "text": "The scientific kernels have internal validation against cited references"
+        }
       ]
     },
     {
@@ -66,7 +101,10 @@
       "limitations": "No external scientist has reviewed them. Not a failure of any gate.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "CHANGELOG.md", "text": "No external scientist has reviewed those suites." }
+        {
+          "file": "CHANGELOG.md",
+          "text": "No external scientist has reviewed those suites."
+        }
       ]
     },
     {
@@ -82,9 +120,18 @@
       "limitations": "No named adopter. The adopter's guide makes no claim of adopters or endorsement.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "CHANGELOG.md", "text": "No instructor outside the project has adopted Gravitas." },
-        { "file": "ADOPTER_GUIDE.md", "text": "The page makes no claim of learning gain, adopters or endorsement" },
-        { "file": "ADOPTER_GUIDE.md", "text": "it claims no review, adopter or endorsement." }
+        {
+          "file": "CHANGELOG.md",
+          "text": "No instructor outside the project has adopted Gravitas."
+        },
+        {
+          "file": "ADOPTER_GUIDE.md",
+          "text": "The page makes no claim of learning gain, adopters or endorsement"
+        },
+        {
+          "file": "ADOPTER_GUIDE.md",
+          "text": "it claims no review, adopter or endorsement."
+        }
       ]
     },
     {
@@ -100,9 +147,18 @@
       "limitations": "No evaluation has been run and no learning gain measured.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "README.md", "text": "run and no learning gain has been measured.**" },
-        { "file": "README.md", "text": "No evaluation of Gravitas has been" },
-        { "file": "CHANGELOG.md", "text": "No learning gain has been measured." }
+        {
+          "file": "README.md",
+          "text": "run and no learning gain has been measured.**"
+        },
+        {
+          "file": "README.md",
+          "text": "No evaluation of Gravitas has been"
+        },
+        {
+          "file": "CHANGELOG.md",
+          "text": "No learning gain has been measured."
+        }
       ]
     },
     {
@@ -118,9 +174,18 @@
       "limitations": "Project-developed and unvalidated; a score is a score on those twelve questions.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "README.md", "text": "project-developed and has not been through item analysis, reliability testing or" },
-        { "file": "CHANGELOG.md", "text": "are unvalidated (the page says so)" },
-        { "file": "CHANGELOG.md", "text": "The assessment is project-developed and unvalidated" }
+        {
+          "file": "README.md",
+          "text": "project-developed and has not been through item analysis, reliability testing or"
+        },
+        {
+          "file": "CHANGELOG.md",
+          "text": "are unvalidated (the page says so)"
+        },
+        {
+          "file": "CHANGELOG.md",
+          "text": "The assessment is project-developed and unvalidated"
+        }
       ]
     },
     {
@@ -136,7 +201,10 @@
       "limitations": "Parity of keys is machine-checked; fluency is not reviewed. Several surfaces are English only and named.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "CHANGELOG.md", "text": "Spanish has not been read by a fluent reader." }
+        {
+          "file": "CHANGELOG.md",
+          "text": "Spanish has not been read by a fluent reader."
+        }
       ]
     },
     {
@@ -152,7 +220,10 @@
       "limitations": "Every figure is a proxy; no real device has been measured.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "CHANGELOG.md", "text": "Real phones and low-end devices have not been measured." }
+        {
+          "file": "CHANGELOG.md",
+          "text": "Real phones and low-end devices have not been measured."
+        }
       ]
     },
     {
@@ -168,7 +239,10 @@
       "limitations": "A target, not a claim of conformance. Automated checks are a floor.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "CHANGELOG.md", "text": "Accessibility targets WCAG 2.2 AA with automated checks; it is not a claim of" }
+        {
+          "file": "CHANGELOG.md",
+          "text": "Accessibility targets WCAG 2.2 AA with automated checks; it is not a claim of"
+        }
       ]
     },
     {
@@ -184,7 +258,10 @@
       "limitations": "No external audit has been done.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "CHANGELOG.md", "text": "conformance, and no external audit has been done." }
+        {
+          "file": "CHANGELOG.md",
+          "text": "conformance, and no external audit has been done."
+        }
       ]
     },
     {
@@ -200,7 +277,10 @@
       "limitations": "Opt-in features (the CDS archive import, the compute page's CDN) send data when a user chooses them and say so.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "README.md", "text": "No account, no install, no server. It is a static site." }
+        {
+          "file": "README.md",
+          "text": "No account, no install, no server. It is a static site."
+        }
       ]
     },
     {
@@ -216,7 +296,10 @@
       "limitations": "No classroom evaluation is published.",
       "date": "2026-10-16",
       "anchors": [
-        { "file": "ADOPTER_GUIDE.md", "text": "Times are estimates, none timed with a class; no classroom evaluation is published" }
+        {
+          "file": "ADOPTER_GUIDE.md",
+          "text": "Times are estimates, none timed with a class; no classroom evaluation is published"
+        }
       ]
     }
   ]

@@ -52,15 +52,15 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | | Files | Raw |
 | --- | ---: | ---: |
 | JavaScript | 896 | 14.7 MB |
-| Images | 62 | 680 KB |
+| Images | 99 | 860 KB |
 | Stylesheets | 10 | 490 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
-| Pages | 9 | 280 KB |
+| Pages | 12 | 340 KB |
 | Other | 16 | 640 KB |
-| **Total** | **1012** | **16.9 MB** |
+| **Total** | **1052** | **17.2 MB** |
 
-Of those, 834 are core (the install fails without them) and 178 optional (a missing one is reported and costs nothing).
+Of those, 834 are core (the install fails without them) and 218 optional (a missing one is reported and costs nothing).
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -70,6 +70,8 @@ Gzipped, as Pages serves it, the whole is about 6 MB.
 | 3 Mbps | ~17 s |
 | 1.5 Mbps | ~34 s |
 <!--/fact-block-->
+**Install cost, before and after the 2.0.1 tier change (D-PERF-02, change 1).** The investigation cards (37 images, about 180 KB) and the three authoring pages (Scenario Studio, the Investigation Composer and the course builder) joined the optional tier, so a first offline visit to a card list or to those pages works. Before: 1,012 files, 16.9 MB raw, 834 core and 178 optional. After: 1,052 files, 17.2 MB raw, 834 core and 218 optional. The core install did not change, so an install that cannot fetch the new files still succeeds; the gzipped total stays about 6 MB (WebP does not compress). `e2e/offline.spec.js` fetches a card image and opens the three pages with the network off.
+
 Pages serves gzip, so the real transfer is more than <!--fact:precacheGzipMB-->6<!--/fact--> MB. The images barely
 compress, being WebP already.
 

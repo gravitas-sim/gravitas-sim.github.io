@@ -13,6 +13,17 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+### 2.0.1 (planned; Prompt 123, byte-neutral)
+
+- The investigation cards and the Scenario Studio, Investigation Composer and course-builder pages are available offline after one visit (D-PERF-02, change 1).
+- Page titles follow the language on ten pages that kept an English title in Spanish.
+- Teach marks its links to English-only documents "(en inglés)" in Spanish.
+- A duration whose bounds are equal reads "5", never "5–5", on the generated pages.
+- The catalog says "platform API" for the number that is not the Gravitas release; a test pins that the two differ and that every community package's range is satisfied.
+- A test counts the "New in 2.0" badges against D-R8-01's nine, in both languages; the evidence record keeps novelty apart from field use.
+- `tools/bundle-budget.mjs` names its reference environment (Node from `.nvmrc`, zlib from a committed record) and prints a figure from another environment as advisory; CI and `--strict` fail.
+- Not done, listed for Prompt 133 because each adds bytes to a route with no room: the Library's scoped scenario count, My work's "preferences" label, and "illustrative" on the Coma and NGC 2420 values.
+
 Governance only (Prompt 122): INTEGRATION.md and BRANCHING.md describe `main` plus trains; a `Pull-request class` CI job enforces labels, windows and the instructor ciphertext rule; `tools/evidence-status.json` records the evidence class of each public claim and generates `docs/evidence-status.md`. No student-facing behavior changes.
 
 Scientific-defect triage (Prompt 125, visible): the model page has a generated known-discrepancies table (a register plus the validation report's per-check status); the extinction ratio of the cluster-fit tool is kept at 3.245 and its difference from the kernel's CCM89 value is explained (RADIATION.md); the Sky Lab and validation pages state that refraction below 5 degrees is not validated, in place of "several arcminutes" (it is up to about 20). No number a student sees changes.
