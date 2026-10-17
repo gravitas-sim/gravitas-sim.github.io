@@ -994,6 +994,8 @@ export function createChart(host, opts = {}) {
       series: (spec?.series ?? []).map((s, k) => ({
         id: idOf(s, k),
         label: String(s.label ?? idOf(s, k)),
+        x: s.x,
+        y: s.y,
         color: color(s.color) ?? 'currentColor',
         fill: s.fill ? (s.fill === true ? 'same' : color(s.fill)) : null,
         dash: s.dash ?? [],

@@ -366,7 +366,17 @@
     },
     "plugins": [],
     "metricChoices": true,
-    "xValuesAreTimes": true
+    "xValuesAreTimes": true,
+    "contract": {
+      "label": "Run A against Run B on a shared simulated-time axis",
+      "metricTitles": [
+        ["Separation", "Separation (AU)"],
+        ["Total energy", "Total energy (sim)"],
+        ["Energy drift", "Energy drift (%)"]
+      ],
+      "tableBeside": true,
+      "dataIsTheAlignedRows": true
+    }
   },
   "A5": {
     "type": "scatter",
@@ -426,6 +436,16 @@
     },
     "plugins": [],
     "pointsAreXY": true,
-    "xTitleNamesTheParameter": true
+    "xTitleNamesTheParameter": true,
+    "contract": {
+      "label": "Parameter sweep",
+      "metricTitles": [
+        ["Distance from primary", "Distance from primary"],
+        ["Speed", "Speed"]
+      ],
+      "tableBeside": true,
+      "dataIsTheTrialsThatMeasured": true,
+      "failedTrialLeftOut": true
+    }
   }
 }
