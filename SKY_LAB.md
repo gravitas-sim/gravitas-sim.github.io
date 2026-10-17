@@ -43,7 +43,9 @@ The page says which source each planet used, the pack's range and its stated bou
   validated against in this prompt, so the readings carry a weather spread
   (`refractionSpreadArcmin`, 5 arcminutes at the horizon) and an envelope warning;
   the criterion against published tables the gate asked for is **not built** and is
-  the open item for the horizon band. The horizon value used for rising and
+  the open item for the horizon band. The limit is stated, in the same words, on
+  the Sky Lab page, on the validation page and in the model page's known-discrepancies
+  table (Prompt 125). The horizon value used for rising and
   setting is the published convention, 34 arcminutes.
 - The drawing's matrix frame leaves out annual aberration (0.35 arcminute at
   most); the accurate chain includes it.

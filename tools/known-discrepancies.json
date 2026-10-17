@@ -1,0 +1,31 @@
+{
+  "note": "Known discrepancies between a number Gravitas shows and the source or reference it is compared with. Read by tools/generated-blocks.mjs, which prints the model page's table from this list and from validation/data.json (the report's per-check status), so a check that starts failing, or one that is renamed away from here, shows on the page. A discrepancy goes here when it is found, with its status; it leaves only by a commit that says why. Statuses: explained (the number differs and the reason is documented, nothing to fix), limit (a stated bound on what is claimed), decided (a register decision fixes the behavior).",
+  "entries": [
+    {
+      "id": "extinction-sdss-ratio",
+      "status": "explained",
+      "item": "Interstellar extinction ratio in the cluster-fit tool",
+      "summary": "The tool uses A_g / E(g - r) = 3.245 (Schlafly & Finkbeiner 2011, the recalibration for SDSS bands). The radiation kernel's Cardelli, Clayton & Mathis law gives 3.60 at the same pivot wavelengths, 11 percent higher, and the number depends on the source's temperature. The two are different laws; CCM89 is not the recommended law for SDSS bands, so the tool keeps its adopted number and says so.",
+      "where": "RADIATION.md, deviations",
+      "checks": [
+        "Cardelli, Clayton & Mathis extinction: A_I / A_V at R_V = 3.1"
+      ]
+    },
+    {
+      "id": "refraction-below-five-degrees",
+      "status": "limit",
+      "item": "Atmospheric refraction below 5 degrees of altitude",
+      "summary": "The sky kernel uses the Saemundsson and Bennett fits for a standard atmosphere. Above 5 degrees of apparent altitude they agree with the reference model within an arcminute. Below it the reference saturates near 11 arcminutes while the fits give 20 to 35, and no published table has been checked against, so no accuracy claim is made there.",
+      "where": "SKY_LAB.md and the Sky Lab and validation pages",
+      "checks": []
+    },
+    {
+      "id": "gls-tolerance",
+      "status": "decided",
+      "item": "Generalized Lomb-Scargle correctness tolerance",
+      "summary": "The production periodogram is the direct per-frequency evaluation. A faster rotated form would meet a tolerance stated against the formula's own conditioning, which has not been adopted, so the faster form is not used.",
+      "where": "DECISION_REGISTER.md, D-KERNEL-07",
+      "checks": []
+    }
+  ]
+}

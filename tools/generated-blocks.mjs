@@ -287,6 +287,51 @@ export function irreversibleRows(operations) {
     .join('\n');
 }
 
+/**
+ * The known-discrepancies table, from tools/known-discrepancies.json and the
+ * validation report's per-check status.
+ *
+ * Each row names the check or checks in validation/data.json that bear on it
+ * and shows their current status, so a check that fails, or one renamed away
+ * from its row, is on the page instead of in someone's memory. A check that
+ * fails in the report and has no row is listed under the table as well.
+ *
+ * @param {{entries: object[]}} registry - tools/known-discrepancies.json
+ * @param {{checks: object[]}} report - validation/data.json
+ * @returns {string} Table rows and a summary line, between newlines
+ */
+export function knownDiscrepancyRows(registry, report) {
+  const STATUS = {
+    explained: 'Explained',
+    limit: 'Limit stated',
+    decided: 'Decided',
+    closed: 'Closed',
+  };
+  const byName = new Map(report.checks.map(c => [c.name, c]));
+  const listed = new Set();
+  const rows = registry.entries.map(e => {
+    const checks = e.checks.map(name => {
+      listed.add(name);
+      const c = byName.get(name);
+      if (!c) return `<code>${escapeHtml(name)}</code>: not in the report`;
+      return `${escapeHtml(name)}: ${c.pass ? 'passes' : '<strong>fails</strong>'}`;
+    });
+    return [
+      '            <tr>',
+      `              <td>${escapeHtml(e.item)}</td>`,
+      `              <td>${escapeHtml(STATUS[e.status] || e.status)}</td>`,
+      `              <td>${escapeHtml(e.summary)} <small>(${escapeHtml(e.where)})</small></td>`,
+      `              <td>${checks.length ? checks.join('<br />') : 'no check in this report'}</td>`,
+      '            </tr>',
+    ].join('\n');
+  });
+  const failing = report.checks.filter(c => !c.pass && !listed.has(c.name));
+  const tail = failing.length
+    ? `            <tr><td colspan="4"><strong>Failing, with no row above:</strong> ${failing.map(c => escapeHtml(c.name)).join('; ')}</td></tr>`
+    : `            <tr><td colspan="4">Checks failing in the report with no row above: none (${report.checks.length} checks, ${report.checks.filter(c => c.pass).length} pass).</td></tr>`;
+  return [...rows, tail].join('\n');
+}
+
 /** Named here so the row builder does not have to import the data module. */
 const IRREVERSIBLE_SOURCE_NAME = 'js/physics.js';
 
@@ -599,6 +644,7 @@ export function generatedBlocks({
   dataPacks = null,
   realSystems = null,
   moduleSizes = null,
+  discrepancies = null,
 }) {
   return {
     ...(dataPacks
@@ -611,6 +657,11 @@ export function generatedBlocks({
     ...(realSystems
       ? {
           parameterSources: `\n${parameterSourceRows(realSystems)}\n          `,
+        }
+      : {}),
+    ...(discrepancies
+      ? {
+          knownDiscrepancies: `\n${knownDiscrepancyRows(discrepancies.registry, discrepancies.report)}\n          `,
         }
       : {}),
     ...(graph ? { generatedArtifacts: generatedArtifactsTable(graph) } : {}),

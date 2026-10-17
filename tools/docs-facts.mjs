@@ -876,6 +876,15 @@ export async function gatherBlocks({ physics = null } = {}) {
     moduleSizes,
     dataPacks,
     realSystems: await loadRealSystems(),
+    // The registry and the committed report: two JSON files, nothing run.
+    discrepancies: {
+      registry: JSON.parse(
+        readFileSync(join(REPO, 'tools/known-discrepancies.json'), 'utf8')
+      ),
+      report: JSON.parse(
+        readFileSync(join(REPO, 'validation/data.json'), 'utf8')
+      ),
+    },
     graph: GRAPH,
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,

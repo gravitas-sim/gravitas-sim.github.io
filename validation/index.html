@@ -240,6 +240,14 @@ try {
           hidden behind a verdict.</span><span class="gs-es" lang="es"><strong >Pasar una tolerancia no es lo mismo que ser exacto.</strong > Una comprobación integrada se mide con el error de discretización del integrador a un paso de tiempo indicado, que es un número real y a veces grande. El gráfico de arriba está para que ese tamaño se vea y no quede escondido tras un veredicto.</span>
         </li>
         <li>
+          <span class="gs-en"><strong>Refraction below 5 degrees is not validated.</strong> The sky
+          kernel is checked against a reference model above 5 degrees of
+          apparent altitude, where they agree within an arcminute. Below that
+          the reference saturates near 11 arcminutes while the standard-atmosphere
+          fits give 20 to 35, and no published table has been checked against, so
+          the kernel makes no claim there.</span><span class="gs-es" lang="es"><strong>La refracción por debajo de 5 grados no está validada.</strong> El núcleo del cielo se comprueba contra un modelo de referencia por encima de 5 grados de altura aparente, donde coinciden en un minuto de arco. Por debajo, la referencia se satura cerca de 11 minutos de arco mientras que los ajustes de atmósfera estándar dan de 20 a 35, y no se ha comprobado contra ninguna tabla publicada, así que el núcleo no declara nada ahí.</span>
+        </li>
+        <li>
           <span class="gs-en"><strong>Coverage is not completeness.</strong> These are the
           quantities that have been checked. Parts of the engine with no entry
           in the table below have not been checked by it, and the honest reading
