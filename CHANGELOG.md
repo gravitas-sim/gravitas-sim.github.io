@@ -30,6 +30,8 @@ Scientific-defect triage (Prompt 125, visible): the model page has a generated k
 
 Balmer rest wavelengths (Prompt 125, part 2, visible and instructional): the line tool's H-alpha (air 6562.79, vacuum 6564.60 A) and H-beta vacuum (4862.71 A) follow NIST and Morton 2000, closing a discrepancy of up to 1.7 km/s; the populations guide's H-alpha velocity answer moves from -240.971 to -240.515 km/s.
 
+Toolchain (carried from main into v3, invisible): `@playwright/test` and `playwright` 1.63.0 to 1.64.0 (the supported browser builds move with it, Chromium 153 to 156), `@axe-core/playwright` 4.11.2 to 4.13.0 with `axe-core` 4.14.0, `acorn` 8.19.0, `prettier` 3.9.10 and `eslint-plugin-prettier` 5.5.7; held: nothing. The decision to keep the CC BY-NC Gaia test fixture in the archive is recorded in OWNER_ACTIONS.md.
+
 ## [2.0.0] - 2026-10-16
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
