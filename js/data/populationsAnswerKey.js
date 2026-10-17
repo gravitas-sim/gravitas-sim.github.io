@@ -178,7 +178,7 @@ export const POPULATIONS_KEY = [
     path: 'advanced',
     step: 'velocity',
     kind: 'answer',
-    expected: -240.971,
+    expected: -240.515,
     tolerance: 5,
     passes: null,
   },

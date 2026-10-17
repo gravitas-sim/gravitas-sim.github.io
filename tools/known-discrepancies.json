@@ -12,6 +12,16 @@
       ]
     },
     {
+      "id": "balmer-rest-wavelengths",
+      "status": "closed",
+      "item": "Balmer rest wavelengths in the line-measuring tool",
+      "summary": "The table paired H-beta air 4861.35 with vacuum 4862.68 (Morton 2000 gives 4862.71 for that air value) and was 0.01 A off for H-alpha, up to 1.7 km/s in all. Prompt 125 carried the kernel's NIST and Morton 2000 values to the table's 0.01 A; what remains is rounding, at most 0.23 km/s. The H-alpha velocity answer in the stellar-populations investigation moved by 0.456 km/s.",
+      "where": "RADIATION.md, consumer table and deviation 4",
+      "checks": [
+        "Air to vacuum at the sodium D2 line, against NIST level energies"
+      ]
+    },
+    {
       "id": "refraction-below-five-degrees",
       "status": "limit",
       "item": "Atmospheric refraction below 5 degrees of altitude",

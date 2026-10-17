@@ -157,7 +157,7 @@ export const ES_POPULATIONS = {
     'Eso no es lo que dio tu medida: el índice es la primera cantidad de su resultado.',
   'gd.pop-spectra.velocity.title': '¿Cuán rápida?',
   'gd.pop-spectra.velocity.text':
-    'La herramienta de líneas comparó el centro medido de H-alfa con su longitud de onda en reposo, 6564,61 Å en el vacío. ¿Qué velocidad a lo largo de la línea de visión da eso a la estrella A, en km/s? Negativa es hacia nosotros.',
+    'La herramienta de líneas comparó el centro medido de H-alfa con su longitud de onda en reposo, 6564,60 Å en el vacío. ¿Qué velocidad a lo largo de la línea de visión da eso a la estrella A, en km/s? Negativa es hacia nosotros.',
   'gd.pop-spectra.velocity.ok':
     '{value} km/s. El Sol y las estrellas que lo rodean giran juntos alrededor de la Galaxia, y sus velocidades unas respecto de otras son casi siempre de unas decenas de km/s. La de esta estrella es varias veces mayor.',
   'gd.pop-spectra.velocity.no':
