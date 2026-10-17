@@ -138,6 +138,35 @@ only if opened before, and goes when the connection returns. Its Dismiss button
 and Escape close it. `e2e/offlineStates.spec.js` and `e2e/emptyStates.spec.js`
 induce each state; `e2e/accessibility.spec.js` covers the touched pages.
 
+## Startup: one splash per genuine startup (Prompt 124)
+
+The splash is a startup event, not a page event. Six outcomes, then the
+mechanism that produces them.
+
+**Semantics.**
+- (a) The first full load of the site in a browsing context that has not shown the splash in this visit: the splash.
+- (b) Any other full load reached from inside the site, including returning to the sandbox, back and forward with or without a bfcache restore, and a deep link followed from inside: no splash.
+- (c) A reload of a page that already showed it: no splash.
+- (d) A new tab the reader opens from outside (a typed address, a bookmark, an external link): a genuine startup.
+- (e) A tab duplicated, or opened by the site itself: not a genuine startup.
+- (f) A script that fails, or a splash that never finishes: a visible, usable shell within six seconds, no spinner, nothing hidden for ever.
+
+**What distinguishes them.** Four signals were weighed:
+- The navigation type (`performance.getEntriesByType('navigation')`) separates reloads and back or forward from a fresh navigation, and cannot tell a typed address from a link.
+- The referrer separates an internal link (the site's own origin) from a typed address (empty) or an external link, and is empty for a duplicated tab and absent when a browser trims it.
+- A per-tab token in `sessionStorage` survives a reload and is copied into a duplicated tab, which is exactly (c) and (e), and is absent in a new tab, which is (d); on its own it would also treat a tab that left for another site and came back by typing as the same visit, and it is unavailable when storage is blocked.
+- `pageshow.persisted` matters only for a bfcache restore, which runs no script at all: the page returns as it was left, so (b) holds without reading it.
+
+No one signal gets all six right, so the rule is their conjunction: a startup is a `navigate`-type load, with no own-origin referrer, and no token. Any other load skips. Storage blocked: the type and referrer decide alone.
+
+**Mechanism.** An inline script in `index.html`'s head decides before the first paint and writes `html[data-startup]`: `splash`, `skip`, or `failsafe`. While the attribute is `splash` and the splash is in the page, the shell is hidden (`css/styles.css`), so the navigation is never seen ahead of the splash. Every other load runs the same one reveal path with no time: the animation is cut to nothing and `animationend` is sent once the page has booted, so `window.splashScreenEnded`, the welcome gate and the orientation keep their flags and their order. A timer in the same inline script, independent of `main.js`, sets `failsafe` after six seconds if the sequence has not ended; the splash is then removed from view and the shell shown. The six seconds is a bound on failure, not a duration the sequence depends on.
+
+**Reduced motion.** The splash's delays are cut to nothing and the sequence reveals the shell at once; nothing moves. The branding appears for a frame at most.
+
+A frame loaded with `?embed=` is always a startup: it is a document inside someone else's page, the Figure builder's preview among them, and its own start must not depend on the host's visit.
+
+`e2e/startupLifecycle.spec.js` asserts each outcome as the reader sees it, in Chromium, and the bfcache-sensitive ones in Firefox and WebKit. A duplicated tab cannot be made from a browser driver, so the inherited `sessionStorage` token is what is simulated.
+
 ## The canvas
 
 The simulation canvas has an accessible name and points, through
