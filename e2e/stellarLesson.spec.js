@@ -50,20 +50,42 @@ async function openLesson(page, app, { locale, narrow = false } = {}) {
   // The click skips Playwright's stability wait, so the page itself must show
   // the card at rest: its box is the same over two animation frames. A card
   // that never settles (a looping transform) fails here instead of passing.
+  // On a failure the received value is what moved: the box over six frames,
+  // the card's transform and the animations running on it or above it.
   await expect
     .poll(() =>
       card.evaluate(
         el =>
           new Promise(resolve => {
-            const at = () => JSON.stringify(el.getBoundingClientRect());
-            const first = at();
-            window.requestAnimationFrame(() =>
-              window.requestAnimationFrame(() => resolve(at() === first))
-            );
+            const seen = [];
+            const at = () => {
+              const r = el.getBoundingClientRect();
+              return [r.x, r.y, r.width, r.height].map(n => +n.toFixed(2));
+            };
+            const step = () => {
+              seen.push(at());
+              if (seen.length < 6) return window.requestAnimationFrame(step);
+              const same = seen.every(b => b.join() === seen[0].join());
+              const running = document
+                .getAnimations()
+                .filter(a => a.effect?.target?.contains(el))
+                .map(a => a.animationName || a.transitionProperty || 'anim');
+              resolve(
+                same
+                  ? 'at rest'
+                  : JSON.stringify({
+                      boxes: seen,
+                      transform: getComputedStyle(el).transform,
+                      running,
+                      scrollY: window.scrollY,
+                    })
+              );
+            };
+            step();
           })
       )
     )
-    .toBe(true);
+    .toBe('at rest');
   const box = await card.boundingBox();
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
   await expect(page.locator('#investigationPanel')).toBeVisible();
