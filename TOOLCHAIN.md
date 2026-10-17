@@ -82,5 +82,7 @@ with its own row in the decision register, not an update.
 
 **Next checkpoint: the first week of January 2027.** The October 2026 one fell in the 2.0.0 release window and was not run as a pull request; its input is the four open Dependabot pull requests (#330 to #333: lint-and-format, Playwright and axe patch-and-minor groups and acorn, all dev-only, none a security update). `npm run deps:audit` was clean on 2026-10-17 (the only advisory is the ignored sprintf-js one with no patched release; production dependencies have none).
 
+**The Q4 2026 pass (Prompt 129, 2026-10-17).** The four open Dependabot pull requests were read together and carried into `v3` as one change (the lockfile and exact pins; the browser bump is judged by CI). `npm run vendor:check` matches the installed packages; the engines floor (`>=22`), `.nvmrc` (22) and CI's `NODE_VERSION` agree; `npm run deps:audit` is clean except one dev-only exception. The exception now lives in `tools/deps-audit-exceptions.json` with its basis and an expiry date (2027-01-15, the January checkpoint), and an expired exception fails the audit loudly. Security advisories are never held for the quarter: read one and it becomes a prompt the same day. The branch inventory is `npm run branches:inventory`; the owner, not a session, deletes branches.
+
 The monthly Dependabot pull requests are the input to step 3 and nothing more:
 they are read at the checkpoint, not merged as they arrive.

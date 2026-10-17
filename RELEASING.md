@@ -253,6 +253,24 @@ workflow" above for why, and say so rather than letting a reader discover it.
 Then put the *version* DOI into the papers, not the concept DOI. See the two
 DOIs section for the reason and for the form of the citation.
 
+## Traps that have caught a release
+
+- **`docs:sync` without `--full`** leaves the counts that cost a test run, the
+  manual's facts, `CITATION.cff` and `.zenodo.json` stale, and the gate fails
+  at the end. Always `npm run docs:sync -- --full`.
+- **Sizes differ by Node version.** The gzip budgets and the "initial download"
+  fact are measured on CI's Node 22; a Mac on a later Node writes a different
+  number (791 where CI says 792). After a local `docs:sync`, put the CI value
+  back before committing.
+- **`social-card.png` is rewritten by the build** on some Node versions: restore
+  it with `git checkout social-card.png`; never commit the changed bytes.
+- **Order matters for the service worker.** `sw-manifest.js` hashes every
+  precached file, so it is regenerated after everything else that writes one
+  (`node tools/build-service-worker.mjs`), and a file written after it makes the
+  manifest stale.
+- **The instructor ciphertext conflicts on every merge, by design.** A fresh salt
+  and IV each build; take either side and have the passphrase holder rebuild.
+
 ## What 2.0.0 produced
 
 | | |
