@@ -30,6 +30,23 @@ async function openLesson(page, app, id = LESSON) {
   // a student's click, without Playwright's stability wait. The panel that
   // opens is asserted below, so a missed click still fails.
   await card.evaluate(el => el.scrollIntoView({ block: 'center' }));
+  // The click skips Playwright's stability wait, so the page itself must show
+  // the card at rest: its box is the same over two animation frames. A card
+  // that never settles (a looping transform) fails here instead of passing.
+  await expect
+    .poll(() =>
+      card.evaluate(
+        el =>
+          new Promise(resolve => {
+            const at = () => JSON.stringify(el.getBoundingClientRect());
+            const first = at();
+            requestAnimationFrame(() =>
+              requestAnimationFrame(() => resolve(at() === first))
+            );
+          })
+      )
+    )
+    .toBe(true);
   const box = await card.boundingBox();
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
 
