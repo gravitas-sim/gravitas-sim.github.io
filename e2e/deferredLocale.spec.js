@@ -147,23 +147,27 @@ test.describe('when the chunk will not load', () => {
     });
     expect(failed).toBe('rejected');
 
-    // What in-page retry can and cannot do. A module whose fetch failed is
-    // recorded as failed in the browser's module map, and re-importing the same
-    // specifier is rejected from that record without another request - so the
-    // attempt is forgotten, but the chunk itself cannot come back until the
-    // page does. Asserted rather than assumed, because the code comments claim
-    // it and a claim in a comment is not a test.
+    // What in-page retry can and cannot do depends on the engine. Older
+    // browsers record a module whose fetch failed in the module map and reject
+    // every later import of the same specifier without a request; Chromium 156
+    // (Playwright 1.64) fetches again, so the same retry resolves once the
+    // route is gone. Either is correct for the application, whose answer is the
+    // same: the attempt is forgotten, strings fall back to their ids, and a
+    // reload recovers. So this asserts the two outcomes that are allowed, and
+    // that when the retry resolves the strings are really there.
     await page.unroute('**/i18n/en.deferred.js');
-    const stillFails = await page.evaluate(async () => {
+    const retry = await page.evaluate(async () => {
       const mod = await import('/js/i18n/deferredMessages.js');
+      const i18n = await import('/js/i18n/index.js');
       try {
         await mod.ensureDeferredMessages();
-        return 'resolved';
+        return { state: 'resolved', text: i18n.t('bench.action.capture') };
       } catch {
-        return 'rejected';
+        return { state: 'rejected', text: null };
       }
     });
-    expect(stillFails).toBe('rejected');
+    expect(['rejected', 'resolved']).toContain(retry.state);
+    if (retry.state === 'resolved') expect(retry.text).toBe(DEFERRED.en);
 
     // The recovery a reader actually has, and it works.
     await app.boot();
