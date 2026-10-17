@@ -75,7 +75,7 @@ test.describe('the catalog', () => {
     const su = entry(page, SU_DRA);
     await expect(su).toContainText('Dataset package');
     await expect(su).toContainText('to download');
-    await expect(su).toContainText('Gravitas ^1.0.0 (this is 1.0.0)');
+    await expect(su).toContainText('Platform API ^1.0.0 (this is platform API 1.0.0');
     await expect(su).toContainText('public domain (NASA mission data)');
     await expect(su).toContainText('Monson et al. 2017');
     await expect(su).toContainText('SU Dra');
