@@ -44,7 +44,7 @@ test.describe('a genuine startup (a, d)', () => {
     // Recorded in the page itself at the first paint: was the shell hidden?
     await page.addInitScript(() => {
       window.__firstPaint = null;
-      new PerformanceObserver(list => {
+      new window.PerformanceObserver(list => {
         if (window.__firstPaint) return;
         const el = document.querySelector('.gs-shell');
         window.__firstPaint = {
@@ -171,7 +171,7 @@ test.describe('every other load boots revealed (b, c, e) @cross-browser', () => 
     // A duplicated tab starts with its source's sessionStorage and no way to
     // tell the page it was duplicated; the inherited token is what it has.
     await page.addInitScript(() =>
-      sessionStorage.setItem('gravitas_visit', '1')
+      window.sessionStorage.setItem('gravitas_visit', '1')
     );
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     expect(await startup(page)).toBe('skip');
