@@ -91,11 +91,13 @@ describe('the vendored Chart.js', () => {
 describe('every chart the application makes', () => {
   const modules = chartModules();
 
-  test('is found, so that the checks below are about something', () => {
-    // The bench's two, the comparison and the sweep: the light curve, the RV
-    // curve and the energy chart were ported to js/plot/chart.js (D-PLOT-02,
-    // stage 3b) and tests/chartParity.test.js pins that they stay off Chart.js.
-    expect(modules.map(m => path.basename(m.at)).sort()).toEqual(['panel.js']);
+  test('is none: the bench charts were the last, ported in stage 3c', () => {
+    // Every chart (the energy chart, the light curve, the RV curve, and now the
+    // bench's comparison and sweep) draws with js/plot/chart.js (D-PLOT-02) and
+    // tests/chartParity.test.js pins that none loads Chart.js. The vendored
+    // build and these checks go in stage 4; until then a chart that is made
+    // with it again is found here.
+    expect(modules.map(m => path.basename(m.at)).sort()).toEqual([]);
   });
 
   test('names only chart and axis types the vendored build registers', () => {
@@ -109,7 +111,6 @@ describe('every chart the application makes', () => {
         }
       }
     }
-    expect(named.length).toBeGreaterThan(2); // the bench's: line, scatter and a scale
     expect(named.filter(n => !n.ok)).toEqual([]);
   });
 

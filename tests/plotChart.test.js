@@ -995,6 +995,9 @@ describe('the chart as data (parts), for the ports and their parity test', () =>
       expect(Number.isFinite(v)).toBe(true);
       expect(text).toBe(String(Math.round(v * 1000) / 1000));
     }
+    // The series' data, for a test that reads what the chart was given.
+    expect(p.series[0].x).toBe(spec.series[0].x);
+    expect(p.series[0].y).toBe(spec.series[0].y);
     expect(
       p.series.map(s => [s.id, s.fill, s.order, s.mode, s.radius])
     ).toEqual([
