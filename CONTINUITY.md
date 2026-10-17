@@ -1,8 +1,12 @@
 # Continuity
 
 How Gravitas survives its maintainer's absence. It has one maintainer, who also
-teaches, and the field it belongs to has lost tools that had one (NAAP stopped
-development in 2025, JS9 is unmaintained, Trinket shut down in 2026). A teaching
+teaches, and the field it belongs to has lost tools that had one (NAAP's home site
+says development stopped in April 2025, and its Flash simulations now run only
+under the Ruffle emulator; JS9's project site lists 3.8, of 21 June 2022, as its
+maintainer's last release, announcing the end of active development on 1 July
+2022; Trinket announced in March 2026 that it would close and had shut down by
+31 August 2026; all read on 2026-10-17, from the projects' own pages and, for Trinket, a news report). A teaching
 tool an instructor builds a course on has to be able to outlive its author, so
 this file says what keeps working without anyone, what a department can do for
 itself, and how a second maintainer is added.
@@ -57,6 +61,15 @@ Nothing below needs the maintainer, an account on any service, or a build.
    public, so its strength is the passphrase's.
 5. Read [`SUPPORT.md`](SUPPORT.md) for the browsers that are tested and the
    features that degrade.
+
+**What has been shown.** On 2026-10-17 the original agent rebuilt Gravitas from
+the 2.0.0 Zenodo archive (checksum checked, served, `npm ci`, `node build.js`, the
+budgets, `release:check --fast`, an instructor bundle under a throwaway
+passphrase opened in the portal) in about twelve minutes, alone, on one machine.
+The steps and the stumbles it found are in [`RELEASING.md`](RELEASING.md),
+"Rehearsing recovery from an archive". It is not independent evidence: nobody
+else has done it, and who besides the owner can administer the Zenodo record or
+holds the instructor passphrase is not known to the repository.
 
 ## Adding a co-maintainer
 

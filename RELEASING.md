@@ -212,9 +212,16 @@ Then, in order:
    `commit` must be the SHA you are about to tag. If it names an earlier one,
    the deploy has not finished or has not run — [`RELEASE.md`](RELEASE.md) has
    the failure modes.
-3. **The site works.** Open it: the sandbox loads, an investigation opens, the
-   service worker activates, the instructor portal asks for its passphrase and
-   accepts it.
+3. **The site works.** The smoke list, in order:
+   1. the sandbox loads and its canvas is drawn;
+   2. an investigation opens (`/#investigation=transit-photometry` shows step 1);
+   3. the service worker activates (a second load works offline);
+   4. the instructor portal (`/instructors/`) asks for its passphrase, refuses a
+      wrong one and accepts the right one.
+
+   Against an unpacked archive served locally, item 3 depends on the browser and
+   `deployed-revision.json` is absent (the deploy writes it); say so rather than
+   counting either as a failure.
 
 Only once all three hold does the commit deserve a tag.
 
@@ -253,6 +260,28 @@ workflow" above for why, and say so rather than letting a reader discover it.
 Then put the *version* DOI into the papers, not the concept DOI. See the two
 DOIs section for the reason and for the form of the citation.
 
+## Rehearsing recovery from an archive
+
+To prove a release can be rebuilt without the repository: read the file's size and
+md5 from the Zenodo API for the version's record, download it, check the md5,
+unpack it, serve it, walk the smoke list above, then `npm ci`, `node build.js`,
+`npm run budget:check`, `npm run budget:routes` and `npm run release:check -- --fast`.
+Three things differ from a checkout, and none is a defect in the archive:
+
+- An archive is not a git repository. The merge tripwire cannot run `git` and
+  fails; `git init`, `git add -A` and one commit make it say there is no merge to
+  check.
+- Only CI's Node version (22) is authoritative for the gzip budgets. On a later
+  Node the deferred-JavaScript check can report an overrun of a kilobyte or two
+  that is the gzip difference alone.
+- `npm run build:instructors` needs a passphrase; for a rehearsal, set
+  `GRAVITAS_INSTRUCTOR_PASSWORD` to a throwaway one for that command only. Never
+  use the real one.
+
+The first rehearsal (2026-10-17, the original agent alone, on one machine) is
+recorded outside the repository; it is not evidence that someone else could do
+this unaided.
+
 ## What 2.0.0 produced
 
 | | |
@@ -261,7 +290,7 @@ DOIs section for the reason and for the form of the citation.
 | GitHub release | <https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v2.0.0>, published 2026-10-16 |
 | Zenodo record | <https://zenodo.org/records/23425533> |
 | Version DOI | 10.5281/zenodo.23425533 |
-| Archived file | `gravitas-sim/gravitas-sim.github.io-v2.0.0.zip` |
+| Archived file | `gravitas-sim/gravitas-sim.github.io-v2.0.0.zip`, 18,752,641 bytes, md5 `efb6b47c0355afb2d30219e0ae5be842` (from the Zenodo API, 2026-10-17; the unpacked folder is named for the tag object, `940db1d`, not for the commit) |
 
 ## What 1.0.0 produced
 
