@@ -23,7 +23,32 @@ async function openLesson(page, app, id = LESSON) {
 
   const card = page.locator(`[data-investigation="${id}"]`);
   await expect(card).toBeVisible();
-  await card.click();
+  // The two cards that sit far down the list (missing-mass, a-universe-of-stars)
+  // never reached "stable" on Playwright 1.64's Linux WebKit when click() did its
+  // own scroll first, and scrollIntoViewIfNeeded() waits on the same check. So
+  // the page scrolls the card itself and a real mouse click lands on its centre:
+  // a student's click, without Playwright's stability wait. The panel that
+  // opens is asserted below, so a missed click still fails.
+  await card.evaluate(el => el.scrollIntoView({ block: 'center' }));
+  // The click skips Playwright's stability wait, so the page itself must show
+  // the card at rest: its box is the same over two animation frames. A card
+  // that never settles (a looping transform) fails here instead of passing.
+  await expect
+    .poll(() =>
+      card.evaluate(
+        el =>
+          new Promise(resolve => {
+            const at = () => JSON.stringify(el.getBoundingClientRect());
+            const first = at();
+            window.requestAnimationFrame(() =>
+              window.requestAnimationFrame(() => resolve(at() === first))
+            );
+          })
+      )
+    )
+    .toBe(true);
+  const box = await card.boundingBox();
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
 
   await expect(page.locator('#investigationPanel')).toBeVisible();
   await expect(page.locator('.inv-step-title')).not.toBeEmpty();
