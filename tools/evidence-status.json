@@ -26,7 +26,11 @@
     }
   },
   "scan": {
-    "files": ["README.md", "ADOPTER_GUIDE.md", "CHANGELOG.md"],
+    "files": [
+      "README.md",
+      "ADOPTER_GUIDE.md",
+      "CHANGELOG.md"
+    ],
     "section": {
       "CHANGELOG.md": "## [2.0.0]"
     },
@@ -303,6 +307,25 @@
         {
           "file": "ADOPTER_GUIDE.md",
           "text": "Times are estimates, none timed with a class; no classroom evaluation is published"
+        }
+      ]
+    },
+    {
+      "id": "data-rebuild-provenance",
+      "claim": "Every bundled dataset rebuilds byte for byte from its pinned raw source.",
+      "scope": "the six pinned sources: GW figure data, MIST stellar tracks, SDSS spectra, GWOSC events, observation packs and the ephemeris pack",
+      "version": "2.0.0",
+      "class": "S",
+      "status": "UNKNOWN",
+      "method": "the six provenance checks (gw, stellar, spectra, gwosc, packs, ephemeris) rebuild from a cache of the raw product and compare; none has run against 2.0.0 code",
+      "evaluator": "the project",
+      "artifact": "DATA_PACKS.md",
+      "limitations": "Unverified since the 2.0.0 release (2026-10-16): no raw cache exists on any machine the project uses except one partial observation-pack cache that lacks the Gaia product, and the monthly scheduled run first runs on 2.0.0 code on 2026-11-01. The committed data are checked for structure, schema and digests; whether each rebuilds from its source is not established. Owner action: dispatch the workflow's scheduled input with provenance, or wait for the monthly run.",
+      "date": "2026-10-17",
+      "anchors": [
+        {
+          "file": "DATA_PACKS.md",
+          "text": "Rebuilds every pack from the cached raw product and compares both files byte"
         }
       ]
     }
