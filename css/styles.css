@@ -44,7 +44,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     #splash {
-      animation-delay: 0s !important;
+      animation-delay: 0s;
     }
   }
 
