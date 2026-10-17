@@ -23,6 +23,10 @@ async function openLesson(page, app, id = LESSON) {
 
   const card = page.locator(`[data-investigation="${id}"]`);
   await expect(card).toBeVisible();
+  // The two cards that sit far down the list (missing-mass, a-universe-of-stars)
+  // never reached "stable" on Playwright 1.64's Linux WebKit when click() did its
+  // own scroll first, so the card is brought into view before it is clicked.
+  await card.scrollIntoViewIfNeeded();
   await card.click();
 
   await expect(page.locator('#investigationPanel')).toBeVisible();
