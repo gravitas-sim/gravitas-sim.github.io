@@ -1,8 +1,12 @@
 # Continuity
 
 How Gravitas survives its maintainer's absence. It has one maintainer, who also
-teaches, and the field it belongs to has lost tools that had one (NAAP stopped
-development in 2025, JS9 is unmaintained, Trinket shut down in 2026). A teaching
+teaches, and the field it belongs to has lost tools that had one (NAAP's home site
+says development stopped in April 2025, and its Flash simulations now run only
+under the Ruffle emulator; JS9's project site lists 3.8, of 21 June 2022, as its
+maintainer's last release, announcing the end of active development on 1 July
+2022; Trinket announced in March 2026 that it would close and had shut down by
+31 August 2026; all read on 2026-10-17, from the projects' own pages and, for Trinket, a news report). A teaching
 tool an instructor builds a course on has to be able to outlive its author, so
 this file says what keeps working without anyone, what a department can do for
 itself, and how a second maintainer is added.

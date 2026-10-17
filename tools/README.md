@@ -54,6 +54,7 @@ current, and the orchestrator checks it.
 | `deps-audit.mjs` | The dependency audit | `npm run deps:audit` |
 | `design-ratchet.mjs` | Four migrations to the design system that may only go one way |  |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
+| `docs-map.mjs` | DOCUMENTS.md, the map of every root document, from a committed table |  |
 | `draw-trace.mjs` | The canvas calls a body makes, recorded and hashed |  |
 | `e2e-shards.mjs` | Splitting the source browser suite into shards of equal duration |  |
 | `effects-trace.mjs` | The effects an engine event spawns, counted and hashed |  |
@@ -69,7 +70,7 @@ current, and the orchestrator checks it.
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
 | `generate-scenario-thumbnails.mjs` | Scenario thumbnail generator | `npm run thumbnails` |
-| `generate.mjs` | Regenerate what is stale, in the order it has to happen | `npm run instructors:check`, `npm run thumbnails:check`, `npm run teaching:check`, `npm run cards:check`, `npm run audit:scene:check`, `npm run audit:irreversible:check`, `npm run docs:check:full`, `npm run manual:check`, `npm run validation:check`, `npm run catalog:check`, `npm run generate`, `npm run generate:check`, `npm run tools:index:check`, `npm run sw:check`, `npm run registries:check`, `npm run capabilities:check` |
+| `generate.mjs` | Regenerate what is stale, in the order it has to happen | `npm run instructors:check`, `npm run thumbnails:check`, `npm run teaching:check`, `npm run cards:check`, `npm run audit:scene:check`, `npm run audit:irreversible:check`, `npm run docs:check:full`, `npm run manual:check`, `npm run validation:check`, `npm run catalog:check`, `npm run generate`, `npm run generate:check`, `npm run docs-map:check`, `npm run tools:index:check`, `npm run sw:check`, `npm run registries:check`, `npm run capabilities:check` |
 | `generated-blocks.mjs` | Generated files and generated regions |  |
 | `generated-tripwire.mjs` | A merge must not drop what one side wrote into a file with generated regions |  |
 | `geometry-fuzz.mjs` | Base-versus-head fuzz of every scenario's world (Roadmap II Prompt 108) |  |

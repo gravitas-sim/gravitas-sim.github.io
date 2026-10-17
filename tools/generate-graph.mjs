@@ -238,6 +238,20 @@ export const GRAPH = Object.freeze([
     after: [],
   },
   {
+    id: 'docs-map',
+    generate: 'node tools/docs-map.mjs',
+    check: 'node tools/docs-map.mjs --check',
+    inputs: [
+      'tools/docs-map.json',
+      'tools/docs-map.mjs',
+      'tools/generate-graph.mjs',
+    ],
+    outputs: ['DOCUMENTS.md'],
+    after: [],
+    notes:
+      'The table is hand-written (tools/docs-map.json); DOCUMENTS.md is written from it and from the tree. A new root document needs a row; `node tools/docs-map.mjs --seed` fills its student flag.',
+  },
+  {
     // After everything that rewrites a precached file: the manifest hashes
     // them, so one written after it is a manifest that is already stale.
     id: 'sw',

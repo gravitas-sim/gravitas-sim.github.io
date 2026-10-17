@@ -687,6 +687,14 @@ export const CHECKS = [
     group: 'generated',
   },
   {
+    id: 'docs-map',
+    label: 'DOCUMENTS.md maps every root document',
+    command: ['npm', 'run', 'docs-map:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'generated',
+  },
+  {
     id: 'cards',
     label: 'lesson cards',
     command: ['npm', 'run', 'cards:check'],

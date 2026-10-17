@@ -1,5 +1,7 @@
 # Energy Tab Feature
 
+> **Archived 2026-10-17** (Prompt 128). Superseded by the object inspector's own document, [`OBJECT_INSPECTOR.md`](../../OBJECT_INSPECTOR.md). Kept for the record, unchanged below; links into it from the repository root were checked and none remained.
+
 > **Historical record.** This is the note written when the energy tab was added
 > to the object inspector, describing it as it was then. It is not maintained
 > and nothing links to it. The inspector as it stands is documented in
