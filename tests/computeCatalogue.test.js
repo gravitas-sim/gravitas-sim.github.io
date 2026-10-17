@@ -285,8 +285,8 @@ describe('what the page refuses before it sends anything', () => {
     expect(checkParams(e, { sigma: 2 }).code).toBe('params-refused');
     expect(checkParams(e, defaultParams(e))).toBeNull();
     const l = entryOf('line-centroid');
-    expect(paramsText(l, { halfwidth: 60, rest: 6564.61 })).toBe(
-      '{"rest":6564.61,"halfwidth":60}'
+    expect(paramsText(l, { halfwidth: 60, rest: 6564.6 })).toBe(
+      '{"rest":6564.6,"halfwidth":60}'
     );
   });
 });

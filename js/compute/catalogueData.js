@@ -153,7 +153,7 @@ export const CATALOGUE_DATA = [
         min: 1000,
         max: 20000,
         step: 0.01,
-        default: 6564.61,
+        default: 6564.6,
       },
       {
         id: 'halfwidth',

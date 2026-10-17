@@ -408,7 +408,7 @@ export const GUIDES = [
           kind: 'measured',
           target: 'sdss-a',
           tool: 'line',
-          params: { rest: 6564.61 },
+          params: { rest: 6564.6 },
           quantity: 'ew',
           within: [4, 10],
         },

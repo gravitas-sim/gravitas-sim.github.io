@@ -276,8 +276,8 @@ describe('reference cases on the data the Observatory ships', () => {
 
   test("SDSS Balmer lines: the A star's velocity is SDSS's own redshift, and the lines weaken A > G > K", async () => {
     const c = 299792.458;
-    const H_ALPHA = 6564.61; // vacuum, Angstrom (NIST)
-    const H_BETA = 4862.68;
+    const H_ALPHA = 6564.6; // vacuum, Angstrom (NIST)
+    const H_BETA = 4862.71;
     const measure = async (id, rest, half, gap, side) => {
       const o = await openFixture(id);
       const z = o.spectral.redshift;
@@ -377,7 +377,7 @@ describe('reference cases on the data the Observatory ships', () => {
 // --- Line, aperture and tables, against synthetic truth --------------------------------
 
 describe('a spectral line, against synthetic truth', () => {
-  const lam0 = 6564.61;
+  const lam0 = 6564.6;
   const center = lam0 * (1 + 5e-4);
   const spectrum = (seed, withErrors) => {
     const g = normal(seed);
