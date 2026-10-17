@@ -135,6 +135,27 @@ are, and each is given here with its exact path.
       beside **About** → Description (the suggested text above) and Topics (the
       suggested list above) → Save changes.
 
+### Settings for Roadmap III (Prompt 122)
+
+Each is Carl's, by hand, and none is done by a session. `v2` no longer exists,
+so the plan above reads without its `v2` clauses.
+
+- [ ] **Create the four labels the class check reads.** Issues → Labels → New
+      label, for each of `invisible`, `visible`, `instructional` and `hotfix`.
+      Without them a pull request cannot be classified and the `Pull-request
+      class` job fails it (INTEGRATION.md, "Enforcement").
+- [ ] **Require the checks on `main`.** In the `main` ruleset above, Require
+      status checks → Add checks → `CI` (it now includes the `Pull-request
+      class` job). Branch protection is what turns the class check from advice
+      into a gate; the repository reports `Branch not protected` until it is set.
+- [ ] **Private vulnerability reporting.** Settings → Advanced Security (Code
+      security) → Private vulnerability reporting → Enable. Still off.
+- [ ] **Description and topics.** On the repository's main page, the gear beside
+      **About**. Both are still empty; the suggested text and list are above.
+- [ ] **When a train exists:** restrict nothing new, but keep the `github-pages`
+      environment's deployment branches to `main` only, so a train can never
+      publish before promotion.
+
 ### Settings status, read from the API (Prompt 111, 2026-10-06)
 
 Read-only `gh api` calls against the repository, restated here so the plan

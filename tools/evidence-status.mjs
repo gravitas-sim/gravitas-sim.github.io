@@ -65,7 +65,9 @@ export function render(record) {
   }
   out.push('## Records');
   out.push('');
-  out.push('| Id | Class | Status | Scope | Method | Evaluator | Artifact | Date |');
+  out.push(
+    '| Id | Class | Status | Scope | Method | Evaluator | Artifact | Date |'
+  );
   out.push('| --- | --- | --- | --- | --- | --- | --- | --- |');
   for (const c of record.claims)
     out.push(

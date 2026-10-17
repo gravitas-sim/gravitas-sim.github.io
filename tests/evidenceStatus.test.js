@@ -11,8 +11,20 @@ describe('the evidence-status record', () => {
     const ids = record.claims.map(c => c.id);
     expect(new Set(ids).size).toBe(ids.length);
     for (const c of record.claims) {
-      for (const k of ['claim', 'scope', 'version', 'method', 'evaluator', 'limitations', 'date'])
-        expect([c.id, k, typeof c[k] === 'string' && c[k].length > 0]).toEqual([c.id, k, true]);
+      for (const k of [
+        'claim',
+        'scope',
+        'version',
+        'method',
+        'evaluator',
+        'limitations',
+        'date',
+      ])
+        expect([c.id, k, typeof c[k] === 'string' && c[k].length > 0]).toEqual([
+          c.id,
+          k,
+          true,
+        ]);
       expect(CLASSES).toContain(c.class);
       expect(STATUSES).toContain(c.status);
       expect(c.anchors.length).toBeGreaterThan(0);
@@ -20,14 +32,21 @@ describe('the evidence-status record', () => {
   });
 
   test('a non-software claim is never marked established without an artifact', () => {
-    for (const c of record.claims.filter(x => x.class !== 'S' && x.class !== 'V-internal'))
-      if (c.status !== 'UNKNOWN') expect([c.id, c.artifact.length > 0]).toEqual([c.id, true]);
+    for (const c of record.claims.filter(
+      x => x.class !== 'S' && x.class !== 'V-internal'
+    ))
+      if (c.status !== 'UNKNOWN')
+        expect([c.id, c.artifact.length > 0]).toEqual([c.id, true]);
   });
 
   test('every anchor is a line a public page still carries', () => {
     for (const c of record.claims)
       for (const a of c.anchors)
-        expect([c.id, a.file, readFileSync(a.file, 'utf8').includes(a.text)]).toEqual([c.id, a.file, true]);
+        expect([
+          c.id,
+          a.file,
+          readFileSync(a.file, 'utf8').includes(a.text),
+        ]).toEqual([c.id, a.file, true]);
   });
 
   test('a claim-bearing line on a public page without a record fails', () => {
@@ -45,7 +64,9 @@ describe('the evidence-status record', () => {
       text.split('\n').forEach((line, n) => {
         if (!re.test(line)) return;
         const covered = anchors.some(
-          a => a.file === file && (line.includes(a.text) || a.text.includes(line.trim()))
+          a =>
+            a.file === file &&
+            (line.includes(a.text) || a.text.includes(line.trim()))
         );
         if (!covered) missing.push(`${file}: ${line.trim()}`);
       });
@@ -59,7 +80,12 @@ describe('the evidence-status record', () => {
 
   test('the four-column statement lists every class and every UNKNOWN', () => {
     const text = render(record);
-    for (const h of ['Software works', 'Science valid', 'Adopted', 'Learning measured'])
+    for (const h of [
+      'Software works',
+      'Science valid',
+      'Adopted',
+      'Learning measured',
+    ])
       expect(text).toContain(h);
     for (const c of record.claims) expect(text).toContain(c.claim);
   });

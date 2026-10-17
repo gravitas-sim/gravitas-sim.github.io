@@ -17,7 +17,9 @@
 // check. A pull request into any other branch is stacked work: it is judged
 // when its prerequisite reaches main or a train.
 //
-// Usage (CI):  node tools/pr-class.mjs      reads the event from the environment
+// Usage (CI):  node tools/pr-class.mjs --fetch   reads the pull request's labels
+//   live from the API (PR_REPO, PR_NUMBER, GH_TOKEN), because the event payload
+//   is replayed unchanged by a re-run; without --fetch it reads
 //   PR_LABELS     JSON array of label names
 //   PR_BASE       the target branch
 //   PR_AUTHOR     the author's login
@@ -25,6 +27,7 @@
 //   CHECKS_RESULT the result of the `checks` job (it runs instructors:check)
 // =============================================================================
 
+import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -35,15 +38,19 @@ const BOT_AUTHORS = new Set(['dependabot[bot]']);
 
 /** The model block in INTEGRATION.md: integration branch, trains, windows. */
 export function readModel(text) {
-  const m = /<!--integration-model-->\s*([\s\S]*?)\s*<!--\/integration-model-->/.exec(
-    text
-  );
+  const m =
+    /<!--integration-model-->\s*([\s\S]*?)\s*<!--\/integration-model-->/.exec(
+      text
+    );
   if (!m) throw new Error('INTEGRATION.md has no integration-model block.');
   const model = JSON.parse(m[1]);
   for (const k of ['integrationBranch', 'trains', 'windows'])
     if (!(k in model)) throw new Error(`integration-model lacks "${k}".`);
   return model;
 }
+
+/** A train's branch: `train/<name>` unless the entry names one. */
+export const trainBranch = t => t.branch || `train/${t.name}`;
 
 /**
  * @returns {{ok: boolean, class: string|null, notes: string[], errors: string[]}}
@@ -89,12 +96,16 @@ export function classify({
       errors.push(
         `An instructional pull request into ${base} needs instructors:check current (the checks job returned '${checksResult}').`
       );
-  } else if (base.startsWith('train/')) {
-    const train = model.trains.find(t => `train/${t.name}` === base);
-    if (!train)
-      errors.push(`${base} is not a train INTEGRATION.md lists.`);
+  } else if (
+    model.trains.some(t => trainBranch(t) === base) ||
+    base.startsWith('train/')
+  ) {
+    const train = model.trains.find(t => trainBranch(t) === base);
+    if (!train) errors.push(`${base} is not a train INTEGRATION.md lists.`);
     else if (train.state !== 'open')
-      errors.push(`${base} is ${train.state}; only an open train accepts work.`);
+      errors.push(
+        `${base} is ${train.state}; only an open train accepts work.`
+      );
     else
       notes.push(
         `${base} is open: window and ciphertext checks do not apply here.`
@@ -112,7 +123,20 @@ function main() {
     readFileSync(path.join(REPO, 'INTEGRATION.md'), 'utf8')
   );
   const result = classify({
-    labels: JSON.parse(process.env.PR_LABELS || '[]'),
+    labels: process.argv.includes('--fetch')
+      ? JSON.parse(
+          execFileSync(
+            'gh',
+            [
+              'api',
+              `repos/${process.env.PR_REPO}/pulls/${process.env.PR_NUMBER}`,
+              '--jq',
+              '[.labels[].name]',
+            ],
+            { encoding: 'utf8' }
+          )
+        )
+      : JSON.parse(process.env.PR_LABELS || '[]'),
     base: process.env.PR_BASE || '',
     author: process.env.PR_AUTHOR || '',
     now: process.env.PR_NOW ? new Date(process.env.PR_NOW) : new Date(),

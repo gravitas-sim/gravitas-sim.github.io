@@ -10,17 +10,30 @@ const window = { name: 'w', from: '2026-12-15', to: '2026-12-20' };
 const run = (args, m = withTrain) => classify({ model: m, ...args });
 
 describe('the pull-request class check', () => {
-  test('INTEGRATION.md names main and starts with no train and no window', () => {
+  test('INTEGRATION.md names main, the open v3 train and no window', () => {
     expect(model.integrationBranch).toBe('main');
-    expect(model.trains).toEqual([]);
+    expect(model.trains.map(t => [t.branch, t.state])).toEqual([
+      ['v3', 'open'],
+    ]);
     expect(model.windows).toEqual([]);
+  });
+
+  test('a pull request into the v3 train is allowed in any class', () => {
+    for (const labels of [
+      ['invisible'],
+      ['visible'],
+      ['visible', 'instructional'],
+    ])
+      expect(
+        classify({ labels, base: 'v3', checksResult: 'failure', model }).ok
+      ).toBe(true);
   });
 
   test('a pull request needs exactly one class label', () => {
     expect(run({ labels: [], base: 'main' }).ok).toBe(false);
-    expect(
-      run({ labels: ['invisible', 'visible'], base: 'main' }).ok
-    ).toBe(false);
+    expect(run({ labels: ['invisible', 'visible'], base: 'main' }).ok).toBe(
+      false
+    );
     expect(run({ labels: ['invisible'], base: 'main' }).ok).toBe(true);
   });
 
@@ -36,9 +49,9 @@ describe('the pull-request class check', () => {
     expect(run({ labels: ['visible'], base: 'main', now: inside }, m).ok).toBe(
       true
     );
-    expect(
-      run({ labels: ['visible'], base: 'main', now: outside }, m).ok
-    ).toBe(false);
+    expect(run({ labels: ['visible'], base: 'main', now: outside }, m).ok).toBe(
+      false
+    );
   });
 
   test('an instructional pull request into main needs instructors:check current', () => {
@@ -80,8 +93,7 @@ describe('the workflow wiring', () => {
   test('the job runs only for pull requests and reads the labels live', () => {
     expect(String(job.if)).toContain("github.event_name == 'pull_request'");
     const script = JSON.stringify(job.steps);
-    expect(script).toContain('node tools/pr-class.mjs');
-    expect(script).toContain('gh api');
+    expect(script).toContain('node tools/pr-class.mjs --fetch');
   });
 
   test('the aggregate CI job requires it', () => {

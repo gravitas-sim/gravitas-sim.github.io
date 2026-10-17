@@ -1076,11 +1076,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PR_BASE: ${{ github.base_ref }}
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_REPO: ${{ github.repository }}
           CHECKS_RESULT: ${{ needs.checks.result }}
-        run: |
-          PR_LABELS=$(gh api "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" --jq '[.labels[].name]')
-          export PR_LABELS
-          node tools/pr-class.mjs
+        run: node tools/pr-class.mjs --fetch
 
   ci:
     name: CI

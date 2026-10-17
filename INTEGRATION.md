@@ -7,17 +7,28 @@ The model is machine-readable, and `tools/pr-class.mjs` (the CI job `Pull-reques
 <!--integration-model-->
 {
   "integrationBranch": "main",
-  "trains": [],
+  "trains": [
+    {
+      "name": "v3",
+      "branch": "v3",
+      "base": "092a121dc6244eccc54e2548b88a41edd847762a",
+      "owner": "the merge-queue session",
+      "state": "open"
+    }
+  ],
   "windows": []
 }
 <!--/integration-model-->
 
-A train is `{"name", "base", "owner", "state"}`, state one of `open`, `frozen`, `promoted`, `deleted`; its branch is `train/<name>`. A window is `{"name", "from", "to"}` in ISO dates. **No train and no window exists today.** Creating one is a reviewed change to the block above, made when a tranche's checkpoint authorizes visible work (see "Roadmap III execution").
+A train is `{"name", "base", "owner", "state"}`, state one of `open`, `frozen`, `promoted`, `deleted`; its branch is `train/<name>` unless the entry names one. A window is `{"name", "from", "to"}` in ISO dates. **`v3` is the Roadmap III integration and staging branch** (the model block lists it as the one open train so the class check treats it as one). It was created by the merge-queue session from `main` at 092a121d; this change creates no branch. Every Roadmap III pull request, whatever its class, targets `v3`, and the queue never merges into `main`. `main` receives a release only on Carl's direction (see "Promotion of a train"). No window exists today.
+
+**Departure from the roadmap, recorded.** Prompt 122 as written makes `main` the integration branch for invisible work and a train the target for visible work. Carl decided otherwise on 2026-10-17, in his words as the queue relayed them: "No, do not merge into main. Use v3 as the staging ground for the major releases that will be pushed to main under my direction." He then told this session to target every Roadmap III pull request at `v3`. The class labels and the checks that read them are unchanged; only the target differs.
 
 ## Roadmap III baseline (measured 2026-10-16)
 
 Read live by Prompt 122; the tree wins over the roadmap's planning snapshot.
 
+- **`v3`:** created from `main` at 092a121d on 2026-10-17; `on.push` in `ci.yml` lists only `main`, so a push to `v3` runs no CI. Each pull request gets its pull-request CI, and the queue dispatches a full run on the head before every code merge. Adding `v3` to `on.push` is a workflow change and Carl's call.
 - **`origin/main`:** `092a121dc6244eccc54e2548b88a41edd847762a`, CI green (run on 2026-10-16 20:52 UTC). `v2` does not exist on `origin`.
 - **Deployed revision:** `deployed-revision.json` on the live site names the same commit (deployed 2026-10-16 21:13 UTC, run 38965399427).
 - **Open pull requests:** #335 (records the v2 deletion and the Gaia fixture decision) and four dependency updates (#330 to #333), all into `main`.
@@ -28,7 +39,7 @@ Read live by Prompt 122; the tree wins over the roadmap's planning snapshot.
 ## How a session finds its base
 
 1. **Read this file.** The model block names the integration branch and the trains.
-2. **Choose by class.** An `invisible` change branches from a green `main` tip and targets `main`. A `visible` or `instructional` change branches from the active train's green tip and targets the train. If no train is open, a visible or instructional change waits: it is a stop, not a guess, and not a reason to open it against `main`.
+2. **Choose the base.** While `v3` is the open train, every Roadmap III change, invisible or not, branches from `v3`'s green tip and targets `v3` (Carl, 2026-10-17). A change to `main` itself (a hotfix to the live site, a dependency update) branches from a green `main` tip and targets `main`. When no train is open, an `invisible` change targets `main`, and a `visible` or `instructional` change waits: it is a stop, not a guess.
 3. **Verify the base.** Fetch `origin`; check the branch exists, its tip SHA and that the tip's aggregate check (`CI`) is green before starting.
 4. **Never assume a name.** If this file names a branch that does not exist, stop and say so.
 
@@ -50,7 +61,7 @@ The CI job `Pull-request class` (part of the aggregate `CI`; `tools/pr-class.mjs
 | no class label, or both | fails |
 | `visible` into `main`, no open window, no `hotfix` | fails |
 | `instructional` into `main` | fails unless the `checks` job (which runs `instructors:check`) passed |
-| into an open `train/<name>` | exempt from the window and the ciphertext check |
+| into an open train (today `v3`) | exempt from the window and the ciphertext check |
 | into an unlisted or non-open train | fails |
 | into any other branch (stacked work) | passes; it is judged when its prerequisite lands |
 | Dependabot, unlabelled | treated as invisible |
