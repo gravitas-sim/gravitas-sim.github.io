@@ -2539,6 +2539,50 @@ try {
         >.</span><span class="gs-es" lang="es">El informe completo, con cada número, cada tolerancia y su razonamiento, cada fuente de la literatura y los dos errores de física que encontró y corrigió la validación, está en <code>PHYSICS_VALIDATION.md</code> en el repositorio: <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/PHYSICS_VALIDATION.md" rel="noopener" >PHYSICS_VALIDATION.md</a >.</span>
       </p>
 
+      <h3 id="known-discrepancies"><span class="gs-en">Known discrepancies</span><span class="gs-es" lang="es">Discrepancias conocidas</span></h3>
+      <p>
+        <span class="gs-en">Where a number Gravitas shows differs from the source it is compared
+        with, or a limit is stated rather than closed, it is listed here. The
+        table is generated from a register of discrepancies and the validation
+        report's per-check status (the rows are in English in both languages), so a check that starts failing appears
+        here instead of being remembered.</span><span class="gs-es" lang="es">Donde un número que muestra Gravitas difiere de la fuente con la que se compara, o se declara un límite en lugar de cerrarlo, se lista aquí. La tabla se genera a partir de un registro de discrepancias y del estado por comprobación del informe de validación (las filas están en inglés en ambos idiomas), de modo que una comprobación que empiece a fallar aparece aquí en vez de recordarse.</span>
+      </p>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th scope="col"><span class="gs-en">Item</span><span class="gs-es" lang="es">Elemento</span></th>
+              <th scope="col"><span class="gs-en">Status</span><span class="gs-es" lang="es">Estado</span></th>
+              <th scope="col"><span class="gs-en">What differs, and why</span><span class="gs-es" lang="es">Qué difiere y por qué</span></th>
+              <th scope="col"><span class="gs-en">Report status</span><span class="gs-es" lang="es">Estado en el informe</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <!--fact-block:knownDiscrepancies-->
+            <tr>
+              <td>Interstellar extinction ratio in the cluster-fit tool</td>
+              <td>Explained</td>
+              <td>The tool uses A_g / E(g - r) = 3.245 (Schlafly &amp; Finkbeiner 2011, the recalibration for SDSS bands). The radiation kernel's Cardelli, Clayton &amp; Mathis law gives 3.60 at the same pivot wavelengths, 11 percent higher, and the number depends on the source's temperature. The two are different laws; CCM89 is not the recommended law for SDSS bands, so the tool keeps its adopted number and says so. <small>(RADIATION.md, deviations)</small></td>
+              <td>Cardelli, Clayton &amp; Mathis extinction: A_I / A_V at R_V = 3.1: passes</td>
+            </tr>
+            <tr>
+              <td>Atmospheric refraction below 5 degrees of altitude</td>
+              <td>Limit stated</td>
+              <td>The sky kernel uses the Saemundsson and Bennett fits for a standard atmosphere. Above 5 degrees of apparent altitude they agree with the reference model within an arcminute. Below it the reference saturates near 11 arcminutes while the fits give 20 to 35, and no published table has been checked against, so no accuracy claim is made there. <small>(SKY_LAB.md and the Sky Lab and validation pages)</small></td>
+              <td>no check in this report</td>
+            </tr>
+            <tr>
+              <td>Generalized Lomb-Scargle correctness tolerance</td>
+              <td>Decided</td>
+              <td>The production periodogram is the direct per-frequency evaluation. A faster rotated form would meet a tolerance stated against the formula's own conditioning, which has not been adopted, so the faster form is not used. <small>(DECISION_REGISTER.md, D-KERNEL-07)</small></td>
+              <td>no check in this report</td>
+            </tr>
+            <tr><td colspan="4">Checks failing in the report with no row above: none (304 checks, 304 pass).</td></tr>
+          <!--/fact-block-->
+          </tbody>
+        </table>
+      </div>
+
       <h2 id="data"><span class="gs-en">Where the data comes from</span><span class="gs-es" lang="es">De dónde provienen los datos</span></h2>
       <p>
         <span class="gs-en">Everything Gravitas shows as coming from outside it is a dataset package: a
