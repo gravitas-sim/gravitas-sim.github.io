@@ -59,12 +59,11 @@ describe('the spectra screens', () => {
     }
   });
 
-  test('the Balmer lines of the line-measuring tool against NIST: the largest difference is 1.7 km/s (H-beta vacuum, 0.028 A)', () => {
-    // Recorded, not changed: a student velocity measured with these rest wavelengths
-    // moves by up to 1.7 km/s if the kernel's are used instead. The cause of the largest
-    // is an inconsistency in the old table itself: its H-beta pairs air 4861.35 with vacuum
-    // 4862.68, which Morton 2000 gives for 4861.33; the pair is 0.028 A (1.7 km/s) apart. RADIATION.md has the
-    // table; it is for Prompt 83 to decide whether a lesson tolerance can absorb it.
+  test("the Balmer lines of the line-measuring tool are the kernel's NIST and Morton 2000 values, to the table's 0.01 A (Prompt 125)", () => {
+    // Prompt 125 closed the old 1.7 km/s discrepancy: the table's H-beta paired air
+    // 4861.35 with vacuum 4862.68 (Morton 2000 gives 4862.71 for that air value), and
+    // H-alpha was 0.01 A off in both media. What remains is rounding to the table's
+    // stated 0.01 A, at most 0.005 A, 0.23 km/s.
     const map = { ha: 'h-alpha', hb: 'h-beta', hg: 'h-gamma' };
     let worst = 0;
     for (const o of OLD_LINES) {
@@ -72,11 +71,10 @@ describe('the spectra screens', () => {
       for (const m of ['air', 'vacuum']) {
         const dKms = ((o[m] - k[m] * 10) / o[m]) * C;
         worst = Math.max(worst, Math.abs(dKms));
-        expect(Math.abs(o[m] - k[m] * 10)).toBeLessThan(0.03);
+        expect(Math.abs(o[m] - k[m] * 10)).toBeLessThanOrEqual(0.005 + 1e-9);
       }
     }
-    expect(worst).toBeGreaterThan(1.6);
-    expect(worst).toBeLessThan(1.8);
+    expect(worst).toBeLessThan(0.25);
   });
 
   test("the feature labels point where the kernel's lines are, to 0.05 A (the windows are tens of Angstroms wide)", () => {

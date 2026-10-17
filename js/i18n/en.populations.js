@@ -152,7 +152,7 @@ export const EN_POPULATIONS = {
     'That is not what your measurement gave: the index is the first quantity in its result.',
   'gd.pop-spectra.velocity.title': 'How fast?',
   'gd.pop-spectra.velocity.text':
-    'The line tool compared H-alpha’s measured center with its rest wavelength, 6564.61 Å in vacuum. What velocity along the line of sight does that give the A star, in km/s? Negative is toward us.',
+    'The line tool compared H-alpha’s measured center with its rest wavelength, 6564.60 Å in vacuum. What velocity along the line of sight does that give the A star, in km/s? Negative is toward us.',
   'gd.pop-spectra.velocity.ok':
     '{value} km/s. The Sun and the stars around it circle the Galaxy together, and their velocities relative to one another are mostly a few tens of km/s. This star’s is several times that.',
   'gd.pop-spectra.velocity.no':
