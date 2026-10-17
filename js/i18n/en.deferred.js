@@ -875,9 +875,9 @@ export const EN_DEFERRED = {
   'inv.predict.wrong': 'What happened instead: {answer}',
   'inv.announce.started': 'Investigation started: {title}',
   'inv.report.building': 'Building…',
-  'inv.report.done': 'Lab report downloaded',
   'inv.report.failed': 'Could not build the report.',
   'inv.report.download': 'Download lab report (PDF)',
+  'inv.report.downloadHtml': 'Download lab report (web page)',
   'inv.finish.title': 'Finished',
   'inv.finish.close': 'Close without downloading',
   'inv.finish.summary':

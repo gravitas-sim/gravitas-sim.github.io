@@ -4193,10 +4193,12 @@ const finishHost = () => ({
  * The finish flow runs from a module fetched on first use. If it cannot be
  * fetched, say what the button was for rather than doing nothing.
  */
-const finishAction = (name, failedKey) => () =>
-  import('./investigations/finish.js')
-    .then(m => m[name](finishHost()))
-    .catch(() => toast(t(failedKey)));
+const finishAction =
+  (name, failedKey = 'inv.report.failed') =>
+  () =>
+    import('./investigations/finish.js')
+      .then(m => m[name](finishHost()))
+      .catch(() => toast(t(failedKey)));
 
 /** The file name a student's report and token are saved under. */
 const reportSlug = name =>
@@ -4548,12 +4550,10 @@ export function initInvestigations({ signal } = {}) {
 
   els.finishClose?.addEventListener('click', closeFinish);
   els.finishBack?.addEventListener('click', closeFinish);
-  els.downloadBtn?.addEventListener(
-    'click',
-    finishAction('generateReport', 'inv.report.failed')
-  );
   const on = (id, fn) =>
     document.getElementById(id)?.addEventListener('click', fn);
+  on('investigationDownload', finishAction('generateReport'));
+  on('investigationDownloadHtml', finishAction('generateHtmlReport'));
   els.finishProgress?.addEventListener('click', downloadProgressBackup);
   on('investigationTokenShow', finishAction('revealToken', 'inv.token.failed'));
   on('investigationTokenCopy', finishAction('copyToken', 'inv.token.failed'));

@@ -882,9 +882,9 @@ export const ES_DEFERRED = {
   'inv.predict.wrong': 'Lo que ocurrió en su lugar: {answer}',
   'inv.announce.started': 'Investigación iniciada: {title}',
   'inv.report.building': 'Generando…',
-  'inv.report.done': 'Informe de laboratorio descargado',
   'inv.report.failed': 'No se pudo generar el informe.',
   'inv.report.download': 'Descargar informe de laboratorio (PDF)',
+  'inv.report.downloadHtml': 'Descargar informe de laboratorio (página web)',
   'inv.finish.title': 'Terminado',
   'inv.finish.close': 'Cerrar sin descargar',
   'inv.finish.summary':
