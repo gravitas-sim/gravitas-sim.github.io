@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->12954<!--/fact--> tests across <!--fact:jestSuites-->379<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->12959<!--/fact--> tests across <!--fact:jestSuites-->380<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -622,6 +622,10 @@ using the simulation rather than building it: the interface, the instruments, th
 investigations, the scenario catalog and what the model does and does not claim.
 It is written in LaTeX in [`manual/`](manual/) and rebuilt with `npm run manual`;
 its counts come from the same source as this page's.
+
+[`DOCUMENTS.md`](DOCUMENTS.md) maps every document in the repository root and every
+generated artifact; a second maintainer starts at
+[`MAINTAINER_ONBOARDING.md`](MAINTAINER_ONBOARDING.md).
 
 Topic documents, each about one part of the application and written when that
 part was built:

@@ -33,6 +33,7 @@ Institution-facing documents and an accessible report (Prompt 127, invisible): A
 Balmer rest wavelengths (Prompt 125, part 2, visible and instructional): the line tool's H-alpha (air 6562.79, vacuum 6564.60 A) and H-beta vacuum (4862.71 A) follow NIST and Morton 2000, closing a discrepancy of up to 1.7 km/s; the populations guide's H-alpha velocity answer moves from -240.971 to -240.515 km/s.
 
 Maintenance (invisible): `tools/branch-inventory.mjs` lists every remote branch and the commands the owner may run (nothing is deleted by a session); the dependency audit's exceptions moved to `tools/deps-audit-exceptions.json` with a basis and an expiry date, and an expired one fails the audit; the Q4 2026 quarterly checkpoint is recorded in `TOOLCHAIN.md`; the release traps are collected in `RELEASING.md`.
+Documents (invisible): `DOCUMENTS.md`, a generated map of every root document and generated artifact (`tools/docs-map.mjs`, `npm run docs-map:check`), `MAINTAINER_ONBOARDING.md`, two superseded notes archived to `docs/archive/`, the recovery rehearsal's findings in `RELEASING.md`, and `CONTINUITY.md`'s ecosystem sentence dated.
 
 ## [2.0.0] - 2026-10-16
 
