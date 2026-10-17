@@ -209,21 +209,24 @@ describe('the caps and rates in source', () => {
 });
 
 describe('which charts still load Chart.js', () => {
-  test('only the bench comparison and sweep (A4, A5): the live charts are ported', () => {
-    // D-PLOT-02 stage 3b: the energy chart, the light curve and the radial-
-    // velocity trace draw with js/plot/chart.js, fetched on first use, so the
-    // pages that show them never load the vendored library.
+  test('none: all five draw with js/plot/chart.js, fetched on first use', () => {
+    // D-PLOT-02 stage 3b ported the energy chart, the light curve and the
+    // radial-velocity trace; stage 3c the bench's comparison and sweep. Each is
+    // built through the one mount, which fetches the component on first use, so
+    // no page loads the vendored library for a chart. (The wrapper and the
+    // vendor entry go in stage 4.)
     const files = readdirSync('js', { recursive: true })
       .filter(f => f.endsWith('.js'))
       .map(f => `js/${f}`);
     const loaders = files.filter(f =>
       /from '(\.\.?\/)+chartjs\.js'/.test(read(f))
     );
-    expect(loaders).toEqual(['js/experiments/panel.js']);
+    expect(loaders).toEqual([]);
     for (const ported of [
       'js/inspectorPanel.js',
       'js/lightCurve.js',
       'js/radialVelocity.js',
+      'js/experiments/panel.js',
     ]) {
       expect(read(ported)).not.toMatch(/window\.Chart|ensureChartJs/);
       // Through the one mount, which fetches the component on first use.
@@ -232,5 +235,38 @@ describe('which charts still load Chart.js', () => {
     expect(read('js/observationChart.js')).toContain(
       "import('./plot/mount.js')"
     );
+  });
+
+  test('the bench charts are div hosts, not canvases, and are torn down with the panel', () => {
+    const panel = read('js/experiments/panel.js');
+    expect(panel).toContain('<div id="benchChart" class="plot-host"></div>');
+    expect(panel).toContain(
+      '<div id="benchSweepChart" class="plot-host"></div>'
+    );
+    expect(panel).not.toContain('<canvas');
+    // A language change replaces the panel's markup and so both hosts: the
+    // charts are released first and rebuilt in the new ones.
+    expect(panel).toMatch(/releaseBenchCharts\(\);\s+root\.remove\(\)/);
+  });
+});
+
+describe("the bench charts' contract", () => {
+  test('each has a text alternative, a title for every metric, and the table beside it', () => {
+    expect(parity.A4.contract).toMatchObject({
+      label: 'Run A against Run B on a shared simulated-time axis',
+      tableBeside: true,
+      dataIsTheAlignedRows: true,
+    });
+    expect(parity.A4.contract.metricTitles.map(([, title]) => title)).toEqual([
+      'Separation (AU)',
+      'Total energy (sim)',
+      'Energy drift (%)',
+    ]);
+    expect(parity.A5.contract).toMatchObject({
+      label: 'Parameter sweep',
+      tableBeside: true,
+      dataIsTheTrialsThatMeasured: true,
+      failedTrialLeftOut: true,
+    });
   });
 });

@@ -1,20 +1,21 @@
 // =============================================================================
 // Loading Chart.js on demand
 // -----------------------------------------------------------------------------
-// Two panels use it - the experiment bench's comparison and its sweep - and
-// both start closed, so it is loaded the first time one opens. (The light
-// curve, the radial-velocity trace and the energy chart in the object
-// inspector were ported to js/plot/chart.js in D-PLOT-02 stage 3b.)
+// Nothing calls it now: the experiment bench's comparison and sweep were the
+// last two charts on it, and they draw with js/plot/chart.js since D-PLOT-02
+// stage 3c (as the energy chart, the light curve and the radial-velocity trace
+// did since stage 3b). It, the vendor entry and the package dependency go in
+// stage 4; until then tests/chartParity.test.js pins that no module imports it.
 //
-// It used to be a <script> tag injected at that moment, pointing at jsdelivr.
+// It was loaded when a chart first opened, and used to be a <script> tag
+// pointing at jsdelivr.
 // That made a third-party request during ordinary use, could not be pinned by
 // the lockfile, and could not be served offline. It is now a dynamic import of
 // vendor/chartjs/chart.js, bundled from the pinned package by
 // tools/vendor-deps.mjs - so esbuild puts it in its own deferred chunk and the
 // service worker can precache it.
 //
-// Both consumers read the global `Chart`, so it is still published there and
-// nothing about how they use it changes.
+// Its consumers read the global `Chart`, so it is still published there.
 // =============================================================================
 
 let loading = null;

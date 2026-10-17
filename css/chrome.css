@@ -924,6 +924,17 @@
   .experiment-chart {
     position: relative;
     min-height: 170px;
+    /* The panel's body is a flex column that may shrink its children down to
+       their minimum; a chart is taller than its minimum and was drawn over
+       the table below it. */
+    flex-shrink: 0;
+  }
+
+  /* The series chart fills this box and takes its size from it. */
+  .experiment-chart > .plot-host {
+    height: 180px;
+    /* The legend's own bottom margin sits below the box the chart is fitted to. */
+    margin-bottom: 4px;
   }
 
   .experiment-table {
@@ -992,6 +1003,10 @@
 
     .experiment-chart {
       min-height: 130px;
+    }
+
+    .experiment-chart > .plot-host {
+      height: 150px;
     }
 
     .experiment-metrics {
