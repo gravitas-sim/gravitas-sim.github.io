@@ -18,7 +18,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'merge:absorption',
     kind: 'merge',
-    line: 475,
+    line: 492,
     detail: Object.freeze({
       what: 'a body absorbed by a black hole is deleted and its mass, momentum and spin folded into one object; two histories become one state',
     }),
@@ -26,7 +26,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'collapse:star-to-hole',
     kind: 'collapse',
-    line: 2025,
+    line: 1416,
     detail: Object.freeze({
       what: 'a star past the collapse mass is replaced by a black hole; the star it was is gone, along with its type, temperature and radius',
     }),
@@ -34,7 +34,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'cull:planets',
     kind: 'cull',
-    line: 2154,
+    line: 1545,
     detail: Object.freeze({
       list: 'planets',
       buffer: 20,
@@ -44,7 +44,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'cull:stars',
     kind: 'cull',
-    line: 2161,
+    line: 1552,
     detail: Object.freeze({
       list: 'stars',
       buffer: 20,
@@ -54,7 +54,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'cull:gas_giants',
     kind: 'cull',
-    line: 2168,
+    line: 1559,
     detail: Object.freeze({
       list: 'gas_giants',
       buffer: 20,
@@ -64,7 +64,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'cull:neutron_stars',
     kind: 'cull',
-    line: 2175,
+    line: 1566,
     detail: Object.freeze({
       list: 'neutron_stars',
       buffer: 20,
@@ -74,7 +74,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'cull:white_dwarfs',
     kind: 'cull',
-    line: 2182,
+    line: 1573,
     detail: Object.freeze({
       list: 'white_dwarfs',
       buffer: 20,
@@ -84,7 +84,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'cull:galaxies',
     kind: 'cull',
-    line: 2189,
+    line: 1580,
     detail: Object.freeze({
       list: 'galaxies',
       buffer: 20,
@@ -94,7 +94,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'cull:bh_list',
     kind: 'cull',
-    line: 2196,
+    line: 1587,
     detail: Object.freeze({
       list: 'bh_list',
       buffer: 50,
@@ -104,7 +104,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'cull:asteroids',
     kind: 'cull',
-    line: 2205,
+    line: 1596,
     detail: Object.freeze({
       list: 'asteroids',
       buffer: 5,
@@ -114,7 +114,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'cull:comets',
     kind: 'cull',
-    line: 2209,
+    line: 1600,
     detail: Object.freeze({
       list: 'comets',
       buffer: 20,
@@ -124,7 +124,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'cull:debris',
     kind: 'cull',
-    line: 2213,
+    line: 1604,
     detail: Object.freeze({
       list: 'debris',
       buffer: 3,
@@ -134,7 +134,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'cull:accretion_disk_particles',
     kind: 'cull',
-    line: 2217,
+    line: 1608,
     detail: Object.freeze({
       list: 'accretion_disk_particles',
       buffer: 2,
@@ -144,7 +144,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'damping:orbit_decay',
     kind: 'damping',
-    line: 3128,
+    line: 2519,
     detail: Object.freeze({
       what: 'each velocity component is multiplied by (1 - orbit_decay_rate * dt), so energy leaves the orbit and nothing records how much',
     }),
@@ -152,7 +152,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'fragment:rocky-collision',
     kind: 'fragment',
-    line: 4889,
+    line: 4280,
     detail: Object.freeze({
       draws: 4,
       what: 'a rocky collision destroys both bodies and scatters debris whose directions, speeds and offsets come from 4 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed',

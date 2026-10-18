@@ -1,5 +1,5 @@
 {
- "total": 595135,
+ "total": 592370,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -7,7 +7,7 @@
   },
   {
    "module": "js/physics.js",
-   "bytes": 45849
+   "bytes": 41291
   },
   {
    "module": "js/world/build.js",
@@ -26,20 +26,20 @@
    "bytes": 19116
   },
   {
-   "module": "js/inspectorPanel.js",
-   "bytes": 15789
-  },
-  {
-   "module": "js/radialVelocity.js",
-   "bytes": 15788
-  },
-  {
    "module": "js/settingsPanel.js",
    "bytes": 15063
   },
   {
+   "module": "js/radialVelocity.js",
+   "bytes": 14943
+  },
+  {
    "module": "js/ui.js",
    "bytes": 14694
+  },
+  {
+   "module": "js/inspectorPanel.js",
+   "bytes": 14364
   },
   {
    "module": "js/placement.js",
@@ -71,7 +71,7 @@
   },
   {
    "module": "js/lightCurve.js",
-   "bytes": 9112
+   "bytes": 8453
   },
   {
    "module": "js/controls.js",
@@ -103,7 +103,7 @@
   },
   {
    "module": "js/names.js",
-   "bytes": 6276
+   "bytes": 6297
   },
   {
    "module": "js/astrometry.js",
@@ -111,7 +111,7 @@
   },
   {
    "module": "js/engine/conservation.js",
-   "bytes": 5703
+   "bytes": 5704
   },
   {
    "module": "js/main.js",
@@ -136,6 +136,10 @@
   {
    "module": "js/bodyVisuals.js",
    "bytes": 4991
+  },
+  {
+   "module": "js/engine/forces.js",
+   "bytes": 4573
   },
   {
    "module": "js/vectorOverlay.js",
@@ -179,7 +183,7 @@
   },
   {
    "module": "js/engine/state.js",
-   "bytes": 2672
+   "bytes": 2674
   },
   {
    "module": "js/exoplanetObservables.js",
@@ -238,16 +242,16 @@
    "bytes": 1722
   },
   {
+   "module": "js/experimentsBridge.js",
+   "bytes": 1722
+  },
+  {
    "module": "js/mond.js",
    "bytes": 1719
   },
   {
    "module": "js/observationLayout.js",
    "bytes": 1704
-  },
-  {
-   "module": "js/experimentsBridge.js",
-   "bytes": 1692
   },
   {
    "module": "js/quality.js",
@@ -306,6 +310,10 @@
    "bytes": 1001
   },
   {
+   "module": "js/observationChart.js",
+   "bytes": 995
+  },
+  {
    "module": "js/widgetCanvas.js",
    "bytes": 969
   },
@@ -328,10 +336,6 @@
   {
    "module": "js/lesson/barycenter.js",
    "bytes": 636
-  },
-  {
-   "module": "js/observationChart.js",
-   "bytes": 601
   },
   {
    "module": "js/data/trappist1.js",
@@ -360,10 +364,6 @@
   {
    "module": "js/followCamera.js",
    "bytes": 313
-  },
-  {
-   "module": "js/chartjs.js",
-   "bytes": 299
   },
   {
    "module": "js/sonify/law.js",
