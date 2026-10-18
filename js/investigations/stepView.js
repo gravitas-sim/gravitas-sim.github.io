@@ -26,8 +26,9 @@ import { announce } from '../notify.js';
 import { formatTime } from '../units.js';
 import { checkAnswer, gradeAnswer, toleranceFor } from '../answerCheck.js';
 import {
-  formatFieldNumber,
+  decimalSeparatorFor,
   localeOfAnswer,
+  parseNumber,
   recordAnswer,
 } from '../answerParse.js';
 import {
@@ -1161,3 +1162,24 @@ export function bindStepInputs(h) {
     });
   }
 }
+
+// --- Measured values ----------------------------------------------------------
+// Kept here and not in js/answerParse.js: that module is a source of the
+// instructor bundle, and changing it would need the bundle rebuilt.
+
+/** A field as a number: its own convention, trailing text NaN, ".5" kept. */
+export function parseFieldNumber(raw, locale) {
+  const p = parseNumber(
+    String(raw ?? '')
+      .trim()
+      .replace(/^([+-]?)([.,])(?=\d)/, '$10$2'),
+    locale
+  );
+  return p.ok && !p.rest ? p.value : NaN;
+}
+
+/** A computed field's text, in the reader's convention. */
+export const formatFieldNumber = (value, decimals, locale) =>
+  Number.isFinite(value)
+    ? value.toFixed(decimals).replace('.', decimalSeparatorFor(locale))
+    : '';

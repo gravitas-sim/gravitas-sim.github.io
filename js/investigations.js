@@ -26,6 +26,8 @@ import {
   drawPlot as drawPlotFigure,
   fitSlope,
   bindStepInputs,
+  formatFieldNumber,
+  parseFieldNumber,
   stepMarkup,
 } from './investigations/stepView.js';
 import { getLocale, t, onLocaleChange } from './i18n/index.js';
@@ -129,9 +131,7 @@ import { setEvidenceContext } from './widgetRuntime.js';
 import { checkAnswer } from './answerCheck.js';
 import {
   UNITS,
-  formatFieldNumber,
   localeOfAnswer,
-  parseFieldNumber,
   parseNumber,
   recordAnswer,
 } from './answerParse.js';
