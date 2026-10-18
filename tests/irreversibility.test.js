@@ -17,7 +17,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { substepPlan, MAX_SUBSTEPS } from '../js/timestep.js';
-import { IRREVERSIBLE, IRREVERSIBLE_SOURCE } from '../js/data/irreversible.js';
+import { IRREVERSIBLE } from '../js/data/irreversible.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(here, '..');
@@ -158,9 +158,9 @@ describe('the audit is generated, not remembered', () => {
   });
 
   test('every operation names a real line of the file it came from', () => {
-    const source = read(IRREVERSIBLE_SOURCE).split('\n');
     expect(IRREVERSIBLE.length).toBeGreaterThan(10);
     for (const op of IRREVERSIBLE) {
+      const source = read(op.file).split('\n');
       expect(op.line).toBeGreaterThan(0);
       expect(op.line).toBeLessThanOrEqual(source.length);
       expect(String(op.detail.what || '').length).toBeGreaterThan(20);
@@ -202,7 +202,7 @@ describe('the model page says it', () => {
 
   test('it has a row for every audited operation', () => {
     for (const op of IRREVERSIBLE) {
-      expect(html).toContain(`${IRREVERSIBLE_SOURCE}:${op.line}`);
+      expect(html).toContain(`${op.file}:${op.line}`);
     }
   });
 

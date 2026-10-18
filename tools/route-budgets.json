@@ -19,7 +19,7 @@
         "kb": 3354.9,
         "requests": 144,
         "toolKb": 3562.9,
-        "toolRequests": 146
+        "toolRequests": 148
       },
       "power-law": {
         "kb": 3320.2,
@@ -44,12 +44,12 @@
         "requests": 16
       },
       "figure": {
-        "kb": 2359,
-        "requests": 121
+        "kb": 2361.6,
+        "requests": 122
       },
       "experiments": {
         "kb": 1109,
-        "requests": 51
+        "requests": 52
       },
       "observatory": {
         "kb": 179.9,
@@ -69,7 +69,7 @@
       },
       "studio": {
         "kb": 975.6,
-        "requests": 44
+        "requests": 45
       },
       "composer": {
         "kb": 494.5,

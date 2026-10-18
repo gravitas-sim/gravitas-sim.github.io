@@ -1,13 +1,9 @@
 {
- "total": 592370,
+ "total": 592378,
  "modules": [
   {
    "module": "js/i18n/en.js",
    "bytes": 84084
-  },
-  {
-   "module": "js/physics.js",
-   "bytes": 41291
   },
   {
    "module": "js/world/build.js",
@@ -20,6 +16,10 @@
   {
    "module": "js/scenarios.js",
    "bytes": 25418
+  },
+  {
+   "module": "js/physics.js",
+   "bytes": 23035
   },
   {
    "module": "js/inspectorView.js",
@@ -44,6 +44,10 @@
   {
    "module": "js/placement.js",
    "bytes": 14190
+  },
+  {
+   "module": "js/engine/bodies.js",
+   "bytes": 13428
   },
   {
    "module": "js/inspectorWindow.js",
@@ -136,6 +140,10 @@
   {
    "module": "js/bodyVisuals.js",
    "bytes": 4991
+  },
+  {
+   "module": "js/engine/blackHole.js",
+   "bytes": 4836
   },
   {
    "module": "js/engine/forces.js",

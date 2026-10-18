@@ -275,7 +275,7 @@ export function irreversibleRows(operations) {
   return operations
     .map(op => {
       const what = escapeHtml(String(op.detail?.what || ''));
-      const where = `${escapeHtml(IRREVERSIBLE_SOURCE_NAME)}:${op.line}`;
+      const where = `${escapeHtml(op.file || IRREVERSIBLE_SOURCE_NAME)}:${op.line}`;
       return (
         `            <tr>\n` +
         `              <td>${escapeHtml(KIND_LABEL[op.kind] || op.kind)}</td>\n` +

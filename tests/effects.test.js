@@ -96,10 +96,10 @@ describe('effects after the move', () => {
   });
 
   test('every burst the engine throws has a look, and every look a burst', () => {
-    const source = readFileSync(
-      new URL('../js/physics.js', import.meta.url),
-      'utf8'
-    );
+    // The bursts are thrown from the facade and from the bodies module.
+    const source = ['../js/physics.js', '../js/engine/bodies.js']
+      .map(f => readFileSync(new URL(f, import.meta.url), 'utf8'))
+      .join('\n');
     const thrown = [...source.matchAll(/\bburst\(\s*'(\w+)'/g)].map(m => m[1]);
     const table = source.match(/const BURSTS = \{([\s\S]*?)\n\};/)[1];
     const rows = [...table.matchAll(/^\s+(\w+):/gm)].map(m => m[1]);
