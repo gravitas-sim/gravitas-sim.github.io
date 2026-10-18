@@ -174,10 +174,9 @@ export function idbStore(name = 'gravitas-archive', limits = LIMITS) {
           tx.onabort = () => reject(tx.error);
         })
     );
-  // Each row is { value, usedMs }: the answer and when it was last read or
-  // written, which is what eviction orders by. A row an older build wrote (the
-  // bare answer) has no usedMs and counts as the oldest.
-  const unwrap = r => (r && 'usedMs' in r && 'value' in r ? r.value : r);
+  // Each row is the answer with a usedMs beside it: when it was last read or
+  // written, which is what eviction orders by. A row an older build wrote has
+  // no usedMs and counts as the oldest.
   const listRows = () =>
     db().then(
       d =>
@@ -191,7 +190,7 @@ export function idbStore(name = 'gravitas-archive', limits = LIMITS) {
             out.push({
               key: c.key,
               usedMs: c.value?.usedMs ?? 0,
-              size: sizeOf(unwrap(c.value)),
+              size: sizeOf(c.value),
             });
             c.continue();
           };
@@ -209,14 +208,14 @@ export function idbStore(name = 'gravitas-archive', limits = LIMITS) {
     // and a skipped write, never a failed query.
     get: async key => {
       const row = await run('readonly', s => s.get(key)).catch(() => undefined);
-      if (row && 'usedMs' in row && 'value' in row)
+      if (row)
         run('readwrite', s => s.put({ ...row, usedMs: Date.now() }, key)).catch(
           () => {}
         );
-      return unwrap(row);
+      return row;
     },
     set: (key, value) =>
-      run('readwrite', s => s.put({ value, usedMs: Date.now() }, key))
+      run('readwrite', s => s.put({ ...value, usedMs: Date.now() }, key))
         .then(evict)
         .then(
           () => {},

@@ -163,7 +163,7 @@ export function promisesTable(root, inv) {
       return `| \`${m.id}\` | ${m.title.en} | ${n('core')} | ${n('optional')} | ${n('idle')} | ${when} |`;
     });
   const groups = Object.entries(inv.idleGroups).map(
-    ([g, v]) => `| ${g} | ${v.files} | ${Math.round(v.gzip / 1024)} KB |`
+    ([g, v]) => `| ${g} | ${v.files} | ~${Math.round(v.gzip / 10240) * 10} KB |`
   );
   return [
     '',
@@ -171,7 +171,7 @@ export function promisesTable(root, inv) {
     '| --- | --- | ---: | ---: | ---: | --- |',
     ...rows,
     '',
-    'The idle tier, by surface (gzip level 6):',
+    'The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions differ by a kilobyte):',
     '',
     '| Surface | Files | Gzip |',
     '| --- | ---: | ---: |',

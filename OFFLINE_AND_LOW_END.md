@@ -95,17 +95,17 @@ a reader asks for them, with a storage estimate first (`js/offlineParts.js`).
 | `gravitas.sdss-dr18-spectra` | Four observed stellar spectra (SDSS DR18) | 1 | 0 | 0 | from the first visit |
 | `gravitas.tess-hd209458-s56` | HD 209458 observed by TESS (sector 56 light curve and aperture mask) | 0 | 0 | 2 | after the first visit settles (2 idle files) |
 
-The idle tier, by surface (gzip level 6):
+The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions differ by a kilobyte):
 
 | Surface | Files | Gzip |
 | --- | ---: | ---: |
-| 3-D lab | 38 | 142 KB |
-| data tables | 33 | 234 KB |
-| instructor modules | 15 | 259 KB |
-| mission lab | 40 | 228 KB |
-| Sky Lab | 22 | 175 KB |
-| Library | 7 | 68 KB |
-| three.js | 2 | 241 KB |
+| 3-D lab | 38 | ~140 KB |
+| data tables | 33 | ~230 KB |
+| instructor modules | 15 | ~260 KB |
+| mission lab | 40 | ~230 KB |
+| Sky Lab | 22 | ~170 KB |
+| Library | 7 | ~70 KB |
+| three.js | 2 | ~240 KB |
 <!--/fact-block-->
 
 **The rule for a new pack.** It is core only when a shipped investigation needs
