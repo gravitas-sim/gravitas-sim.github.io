@@ -123,10 +123,20 @@ async function openLesson(page, app, { locale, narrow = false } = {}) {
         window.requestAnimationFrame(step);
       })
   );
-  if (rest !== 'at rest')
+  if (rest !== 'at rest') {
+    // Which cost starves the frames? Remove the blurred backdrops, then also
+    // the simulation canvas, and ask again each time (D-TOOL-03 diagnostic).
+    await page.addStyleTag({
+      content:
+        '*{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}',
+    });
+    const noBlur = await frameProbe();
+    await page.addStyleTag({ content: 'canvas{display:none!important}' });
+    const noCanvas = await frameProbe();
     throw new Error(
-      `The card never settled: ${rest}; frames before scroll ${JSON.stringify(before)}, after ${JSON.stringify(after)}`
+      `The card never settled: ${rest}; frames before scroll ${JSON.stringify(before)}, after ${JSON.stringify(after)}, without backdrop blur ${JSON.stringify(noBlur)}, also without canvases ${JSON.stringify(noCanvas)}`
     );
+  }
   const box = await card.boundingBox();
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
   await expect(page.locator('#investigationPanel')).toBeVisible();
