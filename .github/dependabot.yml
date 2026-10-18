@@ -16,8 +16,8 @@
 #   Majors are opened separately and never grouped. A major is a decision, not
 #   an update: it gets its own PR so that its own test run is unambiguous.
 #
-#   The two runtime libraries are not on this schedule at all. three.js and
-#   chart.js are pinned exactly, vendored into vendor/ by tools/vendor-deps.mjs
+#   The two runtime libraries are not on this schedule at all. three.js is
+#   pinned exactly, vendored into vendor/ by tools/vendor-deps.mjs
 #   and committed, so a version bump is not just a lockfile change - it needs
 #   `npm run vendor` and a review of the regenerated bundles. `npm run
 #   vendor:check` fails CI if the two ever drift, which is what makes ignoring
@@ -95,7 +95,6 @@ updates:
     ignore:
       # Vendored and committed; see the header. A bump needs `npm run vendor`.
       - dependency-name: three
-      - dependency-name: chart.js
       # Same: the faces in vendor/fonts/ are generated from these.
       - dependency-name: '@fontsource/*'
       # Majors are a decision. Dependabot still opens them one at a time,

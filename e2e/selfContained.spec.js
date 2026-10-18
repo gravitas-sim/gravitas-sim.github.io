@@ -15,7 +15,7 @@
 //
 // Runs against both targets. In source mode the browser loads the real modules
 // from the repository; in the production bundle it loads esbuild's chunks. The
-// two resolve three.js and Chart.js by the same relative path into vendor/, and
+// two resolve three.js by the same relative path into vendor/, and
 // this is what proves it.
 //
 // DOM only, no module imports: `/js/ui.js` does not exist in dist/, which is

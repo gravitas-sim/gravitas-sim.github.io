@@ -9,9 +9,9 @@
 //   light curve        1 series x 2000 points, filled, 10 Hz
 //   radial velocity    900 points and 60 measurements with error bars, 15 Hz
 //
-// This draws each one in headless Chromium with js/plot/chart.js and, for
-// comparison, with the vendored Chart.js the charts use today, on the same
-// data and the same update schedule, and reports what an update costs: the
+// This draws each one in headless Chromium with js/plot/chart.js on the
+// same data and the same update schedule (the Chart.js comparison ended with
+// its removal, Prompt 132; PLOT_COMPONENT.md keeps the numbers), and reports what an update costs: the
 // draw() (or update()) call, the call plus the style and layout the page owes
 // for it, and the main thread's whole busy time per update (script, style,
 // layout and the recording of paint; raster is on other threads and not here). The caps and rates are the ones tests/fixtures/chart-limits.json
@@ -117,52 +117,6 @@ async function bench({ kind, engine, hz, updates }) {
         ],
       });
     ready = Promise.resolve();
-  } else {
-    const { Chart } = await import('/vendor/chartjs/chart.js');
-    const canvas = document.createElement('canvas');
-    host.append(canvas);
-    const sets = () => [
-      ...lines.map((y, k) => ({
-        label: `Series ${k}`,
-        data: xs.map((x, i) => ({ x, y: y[i] })),
-        borderColor: colors[k],
-        borderWidth: 2,
-        pointRadius: 0,
-        fill: shape.fill,
-        tension: 0.1,
-      })),
-      ...(shape.points
-        ? [
-            {
-              label: 'Measurements',
-              data: meas.x.map((x, i) => ({
-                x,
-                y: meas.y[i],
-                sigma: meas.sigma[i],
-              })),
-              showLine: false,
-              pointRadius: 3,
-            },
-          ]
-        : []),
-    ];
-    const chart = new Chart(canvas.getContext('2d'), {
-      type: 'line',
-      data: { datasets: sets() },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        parsing: false,
-        animation: false,
-        scales: { x: { type: 'linear' } },
-      },
-    });
-    draw = () => {
-      // What the modules do: replace each dataset's data, then update.
-      sets().forEach((s, i) => (chart.data.datasets[i].data = s.data));
-      chart.update('none');
-    };
-    ready = Promise.resolve();
   }
   await ready;
 
@@ -221,7 +175,7 @@ try {
       ['light', 10],
       ['rv', 15],
     ]) {
-      for (const engine of ['component', 'chartjs']) {
+      for (const engine of ['component']) {
         const busy = async () =>
           (await cdp.send('Performance.getMetrics')).metrics.find(
             m => m.name === 'TaskDuration'

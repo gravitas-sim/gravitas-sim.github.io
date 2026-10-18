@@ -101,7 +101,7 @@ hold.
    - Three tests read Chart.js internals and need an equivalent written
      against the component's public series model: `e2e/inspector.spec.js:86`
      (`Chart.getChart(...).config.type`), `e2e/detectPlanet.spec.js:142`
-     (dataset label, hidden, dashed) and `tests/vendoredChart.test.js`.
+     (dataset label, hidden, dashed) and tests/vendoredChart.test.js (removed, Prompt 132).
 5. **A characterization test comes first where none exists.**
    - Where the "Tests" cell says the chart itself is not asserted, a test is
      written against today's chart before it migrates. The golden tick table
@@ -140,7 +140,7 @@ measured is under "How these numbers were measured".
 
 ### A. The application's Chart.js charts
 
-All five load `vendor/chartjs/chart.js` through `js/chartjs.js`
+All five load `vendor/chartjs/chart.js` through js/chartjs.js (removed, Prompt 132)
 `ensureChartJs()`, on first open. The vendored build registers only
 LineController, ScatterController, LineElement, PointElement, CategoryScale,
 LinearScale, Filler, Legend and Tooltip (`tools/vendor-deps.mjs`). It has no
@@ -149,7 +149,7 @@ colors and axis settings.
 
 | # | Chart | Kind | Type · series | Live | Sel | Err | Log | Ann. | Leg. | Son. | Exp. | Keys | Text | Tests | Parity means |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| A1 | Energy, object inspector: `js/inspectorPanel.js`, wired in `js/ui.js` through `setupEnergyTab`; `#energyChart` | CJS | line · 3: kinetic, potential, total | ≤ 8 Hz (`chart_update_hz` 8, in `chartWorker.js` and again in `updateChart`), 200 points per series. **Measured 3.7 Hz**, 143 points per series, at 30 frames/s | tooltip, index mode | none | none | none | top, toggles | none | PNG (`toBase64Image`) | refresh and export buttons | no role or label on the canvas; text readouts beside it | `e2e/inspector.spec.js:86` (Chart internals); `tests/objectInspector.test.js`; `tests/vendoredChart.test.js` | 3 toggling series; ≥ 8 Hz at 200 points; PNG export; a keyboard-reachable value readout in place of the hover tooltip. Today's colors are fixed dark-theme values: tokens are an improvement, not a parity cost |
+| A1 | Energy, object inspector: `js/inspectorPanel.js`, wired in `js/ui.js` through `setupEnergyTab`; `#energyChart` | CJS | line · 3: kinetic, potential, total | ≤ 8 Hz (`chart_update_hz` 8, in `chartWorker.js` and again in `updateChart`), 200 points per series. **Measured 3.7 Hz**, 143 points per series, at 30 frames/s | tooltip, index mode | none | none | none | top, toggles | none | PNG (`toBase64Image`) | refresh and export buttons | no role or label on the canvas; text readouts beside it | `e2e/inspector.spec.js:86` (Chart internals); `tests/objectInspector.test.js`; tests/vendoredChart.test.js (removed, Prompt 132) | 3 toggling series; ≥ 8 Hz at 200 points; PNG export; a keyboard-reachable value readout in place of the hover tooltip. Today's colors are fixed dark-theme values: tokens are an improvement, not a parity cost |
 | A2 | Light curve: `js/lightCurve.js` `buildChart`, `updateLightCurve`; `#lightCurveCanvas` | CJS | line with fill, category x of day strings · 1 | one sample per frame, a repaint every 6th (`CHART_REDRAW_EVERY`), cap 2000 (`MAX_DATA_POINTS`): 10 Hz at 60 fps. **Measured 3.8 Hz**, 215 points, at 23 frames/s | tooltip, nearest, 6 decimals | none | none | none on the chart (transits detected, not drawn); y auto-range with a 30% margin, at least 1e-4 | off | none | CSV of the light curve and of the transits, with a table, in the export dialog | none | container `role=region`; no label on the canvas; table through the export dialog | `e2e/observing.spec.js:35`, `production.spec.js:98`, `selfContained.spec.js:143-153`; `tests/dataExport.test.js`, `vendoredChart.test.js` | 10 Hz at 2000 points; the same y range rule; the theme repaint; the x axis becomes numeric days, an equivalent recorded here |
 | A3 | Radial velocity: `js/radialVelocity.js` `buildChart`, `updateRadialVelocity`; `#rvCanvas` | CJS | line plus points · 2: curve, or a dashed "ideal" overlay during a survey; measurements | ≤ every 60 ms (`SAMPLE_INTERVAL_MS`), cap 900 (`MAX_SAMPLES`), thinned 2:1 in a survey: 15 Hz at 60 fps. **Measured 12.5 Hz**, 114 points, at 25 frames/s | tooltip | **custom `rvErrorBars` plugin**, ±σ per point, 3 px caps | none | dashed `[4,4]` ideal overlay | survey only, toggles | none | RV measurements CSV; "Analyze" opens B1 | none | container `role=region`; `#rvNotice` `role=status`; no label on the canvas | `e2e/observing.spec.js:88`, `detectPlanet.spec.js:32,141` (Chart internals), `rvLaunchPath`, `rvSchedule`, `shareObserving`; `tests/dataExport.test.js`. **No test of the error bars** | σ bars with caps; the overlay dashed and hideable; 15 Hz at 900 points. An error-bar characterization test comes first |
 | A4 | Bench comparison: `js/experiments/panel.js` `renderChart`; `#benchChart` | CJS | line, category x of aligned times · 2: run A solid, run B dashed `[5,3]` | static (drawn once both runs exist) | tooltip | none | none | none | toggles | none | CSV and JSON; notebook `fromBenchComparison` | metric `<select>` | `aria-label`; results table; `#benchWarnings` `aria-live` | `e2e/centralExperiments.spec.js` (the panel); `vendoredChart.test.js`. **No test names the canvas** | A solid, B dashed; the metric switch. A characterization test comes first |
@@ -469,7 +469,7 @@ download, which is at 779.6 of 830 KB.
    and the dependency removed.**
    - Vendored chunk, `ensureChartJs`, the vendor entry and package
      dependency, NOTICE and LICENSES.md, regenerated by their generators.
-   - `tests/vendoredChart.test.js` is replaced by its documented equivalent:
+   - tests/vendoredChart.test.js (removed, Prompt 132) is replaced by its documented equivalent:
      no module imports a chart library, and every chart names only types the
      component draws. It is not simply deleted.
    - This is the step the deferred budget forces to be indivisible.
@@ -590,7 +590,7 @@ budget's.
 | 3a | the features the five Chart.js charts need (D-PLOT-02) | on `feat/plot-stage-3a` | none: no route imports the new modules | 0 (2034.2 of 2034.4 KB gzipped); no chart ported | none ported: see "Stage 3a" |
 | 3b | A1-A3, the live charts (D-PLOT-02) | on `feat/plot-stage-3b` | Routes that load the application 2.3 to 3.1 KB smaller; the lesson instrument route 137.5 KB sources / 156.5 KB build smaller (Chart.js is no longer fetched for the light curve); no route ceiling raised | +6.6 KB gzipped (2034.2 to 2040.96 under CI's Node 22, 2,089,945 bytes; 2042.2 on a Node 24 Mac; ceiling raised 2034.4 to 2041.0 under D-PLOT-04); initial download −2.5 KB (793.7 to 791.4) | A1, A2, A3 ported: see "Stage 3b" |
 | 3c | A4, A5, the bench charts (D-PLOT-02) | on `feat/plot-stage-3c` | +0.1 to +0.2 KB in the sources of the routes that load the application (front door 2090.9 to 2091.1, the figure builder 2356.2 to 2356.3 against a ceiling of 2356.4), +0.1 in one build route (the transit instrument, 1299.3 to 1299.4), no request moved, all from the bridge's one added import; the experiment runner is 1026.6 KB in 48 requests / 286.9 KB in 2, before and after; no route ceiling raised | Node 24 Mac, advisory: 2045.6 to 1987.1 KB gzipped, 58.5 KB less, because the Chart.js chunk is no longer reachable from any import (over its 2044.4 ceiling on this Mac before, which Node 24 compresses larger than CI's Node 22, and 57 KB under it after; no ceiling touched); initial download 791.7 to 791.8 KB (the panel's chart CSS, 13 lines) | A4, A5 ported: see "Stage 3c" |
-| 4 | A1-A5 judged by the parity harness; Chart.js removed | | | | |
+| 4 | A1-A5 judged by the parity harness; Chart.js removed (Prompt 132) | on `chore/remove-chartjs` | none in the build: nothing reached the library since 3c | 0 in the build (it was already out at 3c); see "Stage 4" | all five pass (A) |
 | 5 | B1-B8 | | | | |
 | 6 | C1-C56, by family | | | | |
 
@@ -1055,7 +1055,7 @@ axis marched on by index); the module does not drop samples on a rewind
 `renderSweepChart`) in `js/experiments/panel.js` draw with `js/plot/chart.js`,
 built through `mountChart()` like the three of stage 3b. No chart is drawn by
 Chart.js any more: `ensureChartJs` has no caller, and `tests/chartParity.test.js`
-pins that no module imports `js/chartjs.js`. The wrapper, the vendor entry and
+pins that no module imports js/chartjs.js (removed, Prompt 132). The wrapper, the vendor entry and
 the package dependency stay until stage 4 (Prompt 132).
 
 | Chart | Host | Series | Kept |
@@ -1139,7 +1139,7 @@ nearest to a ceiling) and one build route 0.1 KB, no request moved, nothing
 raised; the bench panel itself is a lazy module and not on any route's static
 graph (the experiment runner is unchanged at 1026.6 KB / 48 requests and
 286.9 KB / 2); the initial download is 791.7 to 791.8 KB (the CSS); the
-deferred total is 2045.6 to 1987.1 KB, because `js/chartjs.js`, the only
+deferred total is 2045.6 to 1987.1 KB, because js/chartjs.js (removed, Prompt 132), the only
 importer of the vendored Chart.js, is no longer reachable. No ceiling was
 raised or lowered (stage 4 removes the dead wrapper and the vendor entry and
 can lower the deferred ceiling). `js/experiments/panel.js` went from 2036 to
@@ -1148,3 +1148,45 @@ can lower the deferred ceiling). `js/experiments/panel.js` went from 2036 to
 **Open.** The comparison's hover is the nearest point, one run at a time, as
 it was; a hover that read both runs at the same time (`index`) would suit a
 comparison better, and is a change of behavior for stage 4 or later to decide.
+
+
+### Stage 4: Chart.js removed (Prompt 132, D-PLOT-02)
+
+**Verdict: A.** All five charts pass the parity harness
+(`e2e/chartParity.spec.js` against `tests/fixtures/chart-parity.json`, the
+record of what the Chart.js charts were: series, colors, widths, dashes, axis
+titles and formats, legend, tooltip, the error-bar caps, the text alternative,
+the keyboard behavior, the export and the theme repaint). The library was
+removed rather than rendered beside the component, because stage 3a recorded
+the fixture before any chart was ported and every later stage held the
+component to that same fixture, so the Chart.js side of each comparison already
+exists as data; the one thing a live Chart.js side would add (two sizes, two
+themes of the old charts) cannot be measured any more and is not claimed.
+
+**Removed.** js/chartjs.js, `vendor/chartjs/`, tests/vendoredChart.test.js,
+the `chart.js` dependency and its lockfile entries, the `vendor-deps` entry,
+the NOTICE and LICENSES.md lines, the CONTINUITY.md, CONTRIBUTING.md,
+dependabot and README mentions, and the Chart.js engine of
+`tools/plot-live-bench.mjs`. `tests/chartParity.test.js` now pins that no
+module, file or dependency names the library.
+
+**The account.** Measured with `node build.js` and `budget:check`.
+
+| | Deferred JS (gzipped) | Source |
+|---|---|---|
+| Before stage 3b (the R9 checkpoint, CI Node 22) | 2,093,460 B | R9_CHECKPOINT |
+| After 131 (#348 merged, CI Node 22) | 2,033,427 B | the queue's CI figure |
+| After 132 (this PR, Mac Node 24, advisory) | 2,034,738 B (1987.0 KB) | `budget:check` |
+
+- **Gross:** the vendored library was 60,022 B gzipped (172,191 B raw).
+- **The replacement charts' cost:** the component's chunks (the series chart,
+  its catalogs, the export) were already in the deferred total of the first
+  row, because stages 3a and 3b had merged by then. Dropping the library's chunk
+  therefore accounts for the whole difference: 60,033 B against a gross of
+  60,022 B, within 11 B, so nothing else in the build moved.
+- **This PR's own saving is nil in the build:** nothing imported the library
+  after stage 3c, so esbuild had already dropped it (the 2045.6 to 1987.1 KB of
+  3c). Stage 4 deletes dead files, a dependency and a license line.
+- **Initial download** 791.8 KB; every route is unchanged. No ceiling was
+  raised or lowered; the working deferred headroom is the ceiling's 2044.4 KB
+  less the current figure, about 58 KB on CI's number, until 133 lands.

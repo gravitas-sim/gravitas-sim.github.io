@@ -300,9 +300,12 @@ the content, not decoration; a planetarium that will not move is a picture.
 Every decorative animation stops, and the simulation can be paused from the
 transport bar or the space bar — a real control rather than a media query.
 
-**The shape of a curve is not narrated.** The light curve, the rotation curve
-and the radial-velocity trace are drawn to a canvas. Their numbers are no
-longer only available by reading it: the export dialog offers each series as a
+**The shape of a curve is not narrated.** The light curve, the radial-velocity
+trace, the energy chart and the bench's two charts are one component
+(`js/plot/chart.js`): a named, focusable group with the values by arrow keys,
+a legend of real buttons and a text alternative. The rotation curve is still
+drawn to a canvas. Their numbers are no longer only available by reading the
+picture: the export dialog offers each series as a
 table — proper column headings with units, the independent variable as a row
 header, reachable and scrollable from a keyboard — beside the CSV download that
 was already there. Every table is rendered from the bytes the exporter writes,

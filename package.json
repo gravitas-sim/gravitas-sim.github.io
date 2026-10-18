@@ -174,7 +174,6 @@
     "node": ">=22"
   },
   "dependencies": {
-    "chart.js": "4.5.1",
     "three": "0.160.0"
   }
 }
