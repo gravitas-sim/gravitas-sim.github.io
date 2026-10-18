@@ -24,6 +24,7 @@ import { MODELS } from './models.js';
 import {
   Canceled,
   covarianceAt,
+  rankAt,
   createProblem,
   crossing,
   profile,
@@ -496,6 +497,14 @@ export function fitOnce(request, data, hooks = {}) {
   const cov = theta.length
     ? covarianceAt(problem, theta)
     : { covariance: null, sigma: [], correlation: null };
+  const rankInfo = theta.length ? rankAt(problem, theta) : null;
+  const rank = rankInfo && {
+    free: rankInfo.free,
+    rank: rankInfo.rank,
+    status: rankInfo.status,
+    tolerance: rankInfo.tolerance,
+    notConstrained: rankInfo.notConstrained.map(i => problem.free[i].name),
+  };
   // Unweighted, the residual scatter is the error bar: chi-square is a sum of
   // squared residuals in the data's unit, and dividing by dof gives variance.
   const scale = !problem.weighted
@@ -522,6 +531,9 @@ export function fitOnce(request, data, hooks = {}) {
         i >= 0 && problem.weighted && scale > 1
           ? cov.sigma[i] * Math.sqrt(scale)
           : null,
+      ...(rank?.notConstrained.includes(p.name)
+        ? { notConstrained: true }
+        : {}),
       atBound:
         i >= 0 &&
         (Math.abs(theta[i] - p.lo) < 1e-9 * (Math.abs(p.hi - p.lo) + 1) ||
@@ -564,6 +576,7 @@ export function fitOnce(request, data, hooks = {}) {
     scaled: scale > 1 && problem.weighted,
     covariance: cov.covariance,
     correlation: cov.correlation,
+    rank,
     free: problem.free.map(p => p.name),
     residualRms: Math.sqrt(rss / n),
     residuals,
@@ -713,6 +726,11 @@ function warningsFor(out, model, data, values, request) {
       w.push({ code: 'atBound', parameter: p.name, value: p.value });
   }
   if (!out.covariance && out.free.length) w.push({ code: 'singular' });
+  if (out.rank?.status === 'deficient')
+    w.push({
+      code: 'notConstrained',
+      parameters: out.rank.notConstrained.join(', '),
+    });
   if (out.correlation) {
     out.free.forEach((a, i) => {
       out.free.forEach((b, j) => {

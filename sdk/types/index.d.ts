@@ -259,7 +259,29 @@ export type Origin = 'measured' | 'derived' | 'assumed' | 'fitted' | 'fixed' | '
 export type Uncertainty =
   | { kind: 'none' }
   | { kind: 'sigma'; sigma: number; basis: 'data' | 'model' | 'assumed' | 'scaled' | 'profile' }
-  | { kind: 'interval'; lo: number; hi: number; level?: number; basis: 'data' | 'model' | 'assumed' | 'scaled' | 'profile' };
+  | { kind: 'interval'; lo: number; hi: number; level?: number; basis: 'data' | 'model' | 'assumed' | 'scaled' | 'profile' | 'derived' }
+  // Prompt 150: a 2.0.0 reader refuses these four; legacyView() writes them as none.
+  | { kind: 'not-constrained'; reason?: string }
+  | { kind: 'failed'; reason: string }
+  | { kind: 'assumed' }
+  | { kind: 'model-limited'; floor: number; sigma?: number; basis: 'data' | 'model' | 'assumed' | 'scaled' | 'profile' | 'derived' }
+  | { kind: 'limit'; bound: 'upper' | 'lower'; level?: number; basis: 'data' | 'model' | 'assumed' | 'scaled' | 'profile' | 'derived' };
+
+/** Quantities correlated with this one, by id; the pair may be stated on either side. */
+export interface Correlation { id: string; rho: number; basis?: 'data' | 'calibration' | 'model' | 'fit' }
+
+/** A fit's result record carried by an envelope (Prompt 150). */
+export interface FitRecord {
+  model: { id: string; version: string };
+  parameters: string[];
+  covariance?: { order: string[]; values: number[][]; units: Array<string | null> } | null;
+  statistic?: { name: string; value: number; dof: number; reduced?: number | null; weighted?: boolean };
+  residuals?: { n: number; rms: number };
+  data?: { digest?: string; rows?: number; used?: number; observation?: string };
+  settings?: Record<string, unknown>;
+  convergence?: { converged: boolean; reason?: string; iterations?: number; evaluations?: number };
+  rank?: { free: number; rank: number; status: 'full' | 'deficient'; tolerance?: number; notConstrained: string[] };
+}
 
 /** gravitas.artifact/1: one scientific result (sdk/schemas/artifact-1.schema.json). */
 export interface Artifact {
@@ -281,7 +303,8 @@ export interface Artifact {
     reductions?: unknown[];
   };
   /** Each unit is an id of js/units/registry.js, exactly; null is not stated. */
-  quantities: Array<{ id: string; value: number; unit: string | null; uncertainty: Uncertainty; origin: Origin; label?: string }>;
+  quantities: Array<{ id: string; value: number | null; unit: string | null; uncertainty: Uncertainty; origin: Origin; label?: string; correlatedWith?: Correlation[] }>;
+  fit?: FitRecord;
   warnings?: string[];
 }
 
@@ -327,6 +350,10 @@ export function validateArtifact(doc: unknown): Array<{ path: string; code: stri
 export const ORIGINS: readonly Origin[];
 export const BASES: readonly string[];
 export const UNCERTAINTY_KINDS: readonly string[];
+export const LEGACY_UNCERTAINTY_KINDS: readonly string[];
+export const CORRELATION_BASES: readonly string[];
+/** The envelope as a 2.0.0 reader can open it (Prompt 150). */
+export function legacyView(doc: Artifact): Artifact;
 export const SOURCE_KINDS: readonly string[];
 export interface FitsUnit {
   cards: Record<string, string | number | boolean | null>;

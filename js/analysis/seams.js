@@ -556,13 +556,80 @@ export function analysisArtifact(a, o = {}) {
 // --- Fit -> envelope --------------------------------------------------------------
 
 /**
+ * A fit's result record for an envelope (Prompt 150; js/platform/artifact.js
+ * checks its shape): the model, the free parameters by quantity id, the
+ * covariance in the order of `free` with the registry unit of each
+ * parameter, the chi-square statistic and its degrees of freedom, the
+ * residual count and rms, the rows' digest, the fitter's settings and seed
+ * (null: the grid and the refinement are deterministic), whether it
+ * converged, and whether the data fix every parameter (infer.js rank).
+ * @param {object} doc - A gravitas.inference/1 with `results.fit`
+ * @param {Set<string>} ids - The quantity ids the envelope holds
+ * @param {Map<string, string|null>} units - Each quantity's registry unit
+ * @param {string} [digest] - The digest of the rows it read
+ * @returns {object}
+ */
+function fitRecord(doc, ids, units, digest) {
+  const fit = doc.results.fit;
+  const order = fit.free ?? [];
+  const usable = order.every(n => ids.has(n));
+  return {
+    model: { id: doc.model.id, version: doc.model.version },
+    parameters: order.filter(n => ids.has(n)),
+    covariance:
+      fit.covariance && usable
+        ? {
+            order: [...order],
+            values: fit.covariance.map(r => [...r]),
+            units: order.map(n => units.get(n) ?? null),
+          }
+        : null,
+    statistic: {
+      name: 'chi2',
+      value: fit.chi2,
+      dof: fit.dof,
+      reduced: Number.isFinite(fit.reducedChi2) ? fit.reducedChi2 : null,
+      weighted: Boolean(fit.weighted),
+    },
+    residuals: { n: fit.n, rms: fit.residualRms },
+    data: {
+      ...(digest ? { digest } : {}),
+      ...(Number.isInteger(doc.data?.rows) ? { rows: doc.data.rows } : {}),
+      ...(Number.isInteger(doc.data?.used) ? { used: doc.data.used } : {}),
+      ...(doc.data?.observation ? { observation: doc.data.observation } : {}),
+    },
+    settings: {
+      algorithm: doc.algorithm ?? null,
+      model: doc.settings ?? {},
+      seed: doc.algorithm?.seed ?? null,
+    },
+    convergence: {
+      converged: Boolean(fit.converged),
+      ...(fit.stoppedBecause ? { reason: String(fit.stoppedBecause) } : {}),
+      ...(Number.isInteger(fit.iterations)
+        ? { iterations: fit.iterations }
+        : {}),
+      ...(Number.isInteger(fit.evaluations)
+        ? { evaluations: fit.evaluations }
+        : {}),
+    },
+    ...(fit.rank ? { rank: { ...fit.rank } } : {}),
+  };
+}
+
+/**
  * A fit as an envelope: each fitted and fixed parameter and each derived
  * quantity, with its standard error (the one scaled by the reduced chi-square
  * when the fit says it is too small, and its basis says so).
+ *
+ * With `extended`, the envelope carries what a 2.0.0 reader would refuse or
+ * drop (FORMATS.md): a parameter the data leave open is `not-constrained`, a
+ * parameter held fixed is `assumed`, and the fit-result record rides in
+ * `fit`. Without it the envelope is the one 2.0.0 wrote, unchanged.
  * @param {object} doc - A gravitas.inference/1 with `results.fit`
- * @param {{digest: string, units?: {x?: string, y?: string}}} o - The digest
- *   of the rows it read (rowsDigest), and the data columns' units, which the
- *   model's `d` and `m/s` take
+ * @param {{digest: string, units?: {x?: string, y?: string},
+ *   extended?: boolean}} o - The digest of the rows it read (rowsDigest), and
+ *   the data columns' units, which the model's `d` and `m/s` take
  * @returns {object} The envelope
  */
 export function fitArtifact(doc, o = {}) {
@@ -582,9 +649,13 @@ export function fitArtifact(doc, o = {}) {
       value: p.value,
       unit: u,
       uncertainty:
-        p.mode !== 'fixed' && Number.isFinite(sigma) && sigma >= 0
-          ? { kind: 'sigma', sigma, basis: scaled ? 'scaled' : 'data' }
-          : { kind: 'none' },
+        o.extended && p.notConstrained
+          ? { kind: 'not-constrained', reason: 'degenerate' }
+          : o.extended && p.mode === 'fixed'
+            ? { kind: 'assumed' }
+            : p.mode !== 'fixed' && Number.isFinite(sigma) && sigma >= 0
+              ? { kind: 'sigma', sigma, basis: scaled ? 'scaled' : 'data' }
+              : { kind: 'none' },
       origin:
         p.mode === 'derived'
           ? 'derived'
@@ -626,6 +697,16 @@ export function fitArtifact(doc, o = {}) {
       digest: o.digest,
     },
     quantities,
+    ...(o.extended
+      ? {
+          fit: fitRecord(
+            doc,
+            new Set(quantities.map(q => q.id)),
+            new Map(quantities.map(q => [q.id, q.unit])),
+            o.digest
+          ),
+        }
+      : {}),
     warnings: [...warnings, ...(fit.warnings ?? []).map(w => w.code)],
   });
 }

@@ -210,8 +210,19 @@ holds 68% of the truth is measured below, not asserted.
 - **Derived quantities** carry uncertainties propagated through the
   covariance (linearized), on the same sigma / sigmaScaled convention. An
   external input's own uncertainty adds in quadrature.
+- **Rank** (`results.fit.rank`, Prompt 150): the information matrix at the
+  fit, scaled to unit diagonal so units do not decide, is diagonalized; a
+  direction whose eigenvalue is below 1e-8 of the largest is one the data
+  cannot fix, and a parameter with at least 1% of its weight in such a
+  direction, or that the model does not use, is `notConstrained` (the
+  parameter record says so and the extended envelope writes the kind
+  `not-constrained`). The fitted values and the sigmas are exactly what they
+  were; what changes is that nothing quotes an uncertainty the data cannot
+  support. A well-posed fit is `full`. The tolerance is stated, not tuned: a
+  near-collinear fit above it keeps its large sigma.
 - **Warnings** name what a reader must know before quoting a number:
   - `notConverged`, `atBound` and `singular`;
+  - `notConstrained`, naming the parameters the data leave open (below);
   - `degenerate`, for a correlation above 0.95, naming the pair;
   - `unweighted`, `scaled` and `correlatedNoise`;
   - `droppedNoUncertainty` and `notDetected` (depth under 5× the in-transit

@@ -33,6 +33,31 @@ Each mapping comes with the rule for reversing it, so no older document loses wh
 | `sigma` | One standard deviation, `sigma` |
 | `interval` | `lo` and `hi`, and `level`, the probability between them, where it is known |
 | `none` | Nothing: the number has no uncertainty, or none was given, and the envelope says so rather than printing a zero |
+| `not-constrained` | The data leave the value open: a direction in the parameters changes nothing the fit can see (Prompt 150) |
+| `failed` | There is no result; `reason` says why, and the quantity's `value` is `null` |
+| `assumed` | Taken as exact by the analysis: nothing was estimated, which is not the same as nothing being stated (`none`) |
+| `model-limited` | The model's own error, `floor`, bounds the precision; the statistical `sigma`, if given, is below it |
+| `limit` | A nondetection: the value is an `upper` or a `lower` `bound` (`level` where stated), not a measurement |
+
+The first three kinds are the 2.0.0 envelope's, and an interval has always been
+allowed to be asymmetric (the sides are `value - lo` and `hi - value`). A 2.0.0
+reader refuses the other five in its own words, so a writer that must reach one
+uses `legacyView()` (`js/platform/artifact.js`), which writes each as `none` and
+lists it in the warnings as `extended:<id>:<kind>`. The mapping from every
+2.0.0 uncertainty to the extended form is the identity and back is
+`legacyView`, which leaves a 2.0.0 envelope exactly as it was
+(`tests/uncertaintyContract.test.js`); the three 2.0.0 kinds are the only ones
+the way back is exact for.
+
+A quantity may carry `correlatedWith`, a list of `{id, rho, basis}` naming
+other quantities of the same envelope that share data, a calibration, a model
+or a fit with it. A fit carries its result as `fit`: the model and version, the
+parameters by quantity id, the covariance in a stated order with the registry
+unit of each parameter, the statistic (chi-square, degrees of freedom), the
+residual count and rms, the digest of the rows read, the fitter's settings and
+seed, convergence, and the rank (`full` or `deficient`, with the parameters
+the data leave open). Both fields are dropped without a word by a 2.0.0
+reader, which is acceptable because neither is one it needs (FORMATS.md).
 
 | `basis` | Where the uncertainty comes from |
 |---|---|

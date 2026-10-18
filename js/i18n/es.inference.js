@@ -101,6 +101,8 @@ export const ES_INFERENCE = {
     '{parameter} terminó en un límite: su intervalo es de un solo lado y su sigma no tiene sentido.',
   'obs.fit.warn.singular':
     'No se pudo calcular la covarianza: algún parámetro no está limitado por los datos.',
+  'obs.fit.warn.notConstrained':
+    'Los datos dejan sin determinar {parameters}: una dirección en los parámetros no cambia nada que el ajuste pueda ver, así que cada valor es uno entre muchos igual de buenos y ninguno tiene una incertidumbre.',
   'obs.fit.warn.degenerate':
     '{a} y {b} son casi degenerados (correlación {correlation}): los datos limitan mejor una combinación de ambos que cada uno.',
   'obs.fit.warn.unweighted':

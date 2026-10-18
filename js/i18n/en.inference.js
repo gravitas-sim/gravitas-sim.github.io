@@ -104,6 +104,8 @@ export const EN_INFERENCE = {
     '{parameter} ended at a bound: its interval is one-sided, and its sigma is not meaningful.',
   'obs.fit.warn.singular':
     'The covariance could not be computed: some parameter is not constrained by the data.',
+  'obs.fit.warn.notConstrained':
+    'The data leave {parameters} undetermined: a direction in the parameters changes nothing the fit can see, so each value is one of many equally good ones and none of them has an uncertainty.',
   'obs.fit.warn.degenerate':
     '{a} and {b} are nearly degenerate (correlation {correlation}): the data constrain a combination of them better than either.',
   'obs.fit.warn.unweighted':
