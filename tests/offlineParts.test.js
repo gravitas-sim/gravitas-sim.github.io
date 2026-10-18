@@ -61,6 +61,7 @@ function fakeCaches() {
   return {
     stores,
     open: async n => (stores.has(n) || stores.set(n, make()), stores.get(n)),
+    match: async (k, { cacheName } = {}) => stores.get(cacheName)?.match(k),
     keys: async () => [...stores.keys()],
     delete: async n => stores.delete(n),
   };

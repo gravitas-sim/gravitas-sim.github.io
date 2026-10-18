@@ -337,7 +337,8 @@ self.addEventListener('fetch', event => {
       }
 
       // A part the reader kept: exact match only, the URL is the identity.
-      const part = await (await caches.open(PARTS_CACHE)).match(request);
+      // match() with a cacheName never creates the cache.
+      const part = await caches.match(request, { cacheName: PARTS_CACHE });
       if (part) return part;
 
       try {

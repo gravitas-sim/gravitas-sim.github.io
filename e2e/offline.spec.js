@@ -189,6 +189,70 @@ test.describe('the application survives the network going away', () => {
     }
   });
 
+  test('the idle tier arrives after the install, and the labs then open with no network', async ({
+    page,
+    context,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(180_000);
+    await app.boot();
+    const status = await waitForPrecache(page);
+    // The install itself holds the first-visit tier; the idle files came in
+    // afterwards, on the page's request (Prompt 147).
+    expect(status.idleCount).toBeGreaterThan(100);
+    expect(status.idleCached).toBe(status.idleCount);
+    expect(status.coreComplete).toBe(true);
+    await context.setOffline(true);
+
+    for (const url of ['/3d/', '/mission/lab/', '/sky/', '/library/']) {
+      const response = await page.goto(url, { waitUntil: 'domcontentloaded' });
+      expect(response?.ok(), `${url} was not cached`).toBe(true);
+      expect(await page.locator('body').innerText()).not.toBe('');
+    }
+    const three = await page.evaluate(async () => {
+      const r = await fetch('/vendor/three/three.module.js');
+      return r.ok;
+    });
+    expect(three, 'three.js was not cached').toBe(true);
+  });
+
+  test('a device that asked for less data is not given the idle tier unasked', async ({
+    page,
+    app,
+  }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'connection', {
+        value: { saveData: true },
+        configurable: true,
+      });
+      window.__idleAsks = 0;
+      const post = ServiceWorker.prototype.postMessage;
+      ServiceWorker.prototype.postMessage = function (m, ...rest) {
+        if (m && m.type === 'install-idle') window.__idleAsks++;
+        return post.call(this, m, ...rest);
+      };
+    });
+    await app.boot();
+    // Core install done and the worker controlling: the same moment the idle
+    // request goes out when Save-Data is off.
+    await page.waitForFunction(
+      async () => {
+        const m = await import('/js/offline.js');
+        const s = await m.cacheStatus(2000);
+        return Boolean(s && s.coreComplete);
+      },
+      null,
+      { timeout: 60_000 }
+    );
+    await page.waitForTimeout(4000);
+    const { asks, status } = await page.evaluate(async () => {
+      const m = await import('/js/offline.js');
+      return { asks: window.__idleAsks, status: await m.cacheStatus(2000) };
+    });
+    expect(asks).toBe(0);
+    expect(status.idleCached).toBe(0);
+  });
+
   test('the cache is named for its contents, so a rebuild can invalidate it', async ({
     page,
     app,
