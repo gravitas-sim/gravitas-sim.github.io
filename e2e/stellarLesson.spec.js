@@ -87,7 +87,8 @@ async function openLesson(page, app, { locale, narrow = false } = {}) {
     );
   let rest = await sampleRest();
   for (let i = 0; i < 40 && rest !== 'at rest'; i++) {
-    await page.waitForTimeout(200);
+    // Poll the condition: the pause is between samples, not a wait for time.
+    await page.evaluate(() => new Promise(r => window.setTimeout(r, 200)));
     rest = await sampleRest();
   }
   if (rest !== 'at rest') throw new Error(`The card never settled: ${rest}`);
