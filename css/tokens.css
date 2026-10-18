@@ -421,3 +421,98 @@
     }
   }
 }
+
+/* =============================================================================
+   While the lesson browser or a lesson is open
+   -----------------------------------------------------------------------------
+   The same solid surfaces as above, for everyone, for as long as the lesson
+   browser or a lesson panel is up (the browser is where the stall begins). Linux software WebKit stops producing frames once the lesson
+   overlay opens over this many stacked backdrop-filter layers (measured in CI
+   with the layers removed one group at a time: only removing all of them
+   brought the frames back), and the lesson is where a student is looking at a
+   moving simulation and reading at once. Nothing moves or resizes; the panels
+   are the opaque token they were blended from.
+   ========================================================================== */
+@layer overrides {
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden))) * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .ui-container,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .timeline-bar,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .object-picker,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .placement-status,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .obs-panel,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .light-curve-container,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .sonification-panel,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .scenario-info-content,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .shortcut-overlay,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .transformation-notification,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .recording-badge,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .update-badge,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .mobile-menu-toggle,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .floating-close-chip,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .footer-button,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .insp-pin,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .inv-card-clock,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .attribution,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .gs-shell,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #overlay,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #overlay
+    .overlay-panel,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #overlayStats,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #objectInspector,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #settingsPanel,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #scenarioListModal,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #closeScenarioList,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #investigationBrowser,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #investigationFinish,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #shareModal,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #dataExport,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #mobileInstructions {
+    background: var(--surface-1);
+  }
+
+  /* The three that sit directly on the canvas rather than inside a panel
+       read better against the page ground than against a panel one. */
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #overlay,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    #overlayStats,
+  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+    .attribution {
+    background: var(--surface-0);
+  }
+}

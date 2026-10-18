@@ -15,117 +15,15 @@ import { test, expect } from './fixtures.js';
 
 const LESSON = 'missing-mass';
 
-// Diagnostic (D-TOOL-03): does this page get frames at all before and after
-// the scroll, is it visible and focused, and how late does a timer fire?
-/** Whether the page gets frames, and how late (D-TOOL-03 diagnostic). */
-const frameProbe = (page, wait = 1000) =>
-  page.evaluate(
-    wait =>
-      new Promise(resolve => {
-        const t0 = performance.now();
-        let frame = null;
-        let timer = null;
-        window.requestAnimationFrame(() => (frame = performance.now() - t0));
-        window.setTimeout(() => (timer = performance.now() - t0), 0);
-        window.setTimeout(
-          () =>
-            resolve({
-              frameAfterMs: frame,
-              timerAfterMs: timer,
-              visibility: document.visibilityState,
-              focused: document.hasFocus(),
-            }),
-          wait
-        );
-      }),
-    wait
-  );
-
 /** Open the lesson browser and start a lesson through the interface. */
 async function openLesson(page, app, id = LESSON) {
   await app.boot();
-  const atBoot = await frameProbe(page, 400);
   await page.locator('#investigationsBtn').click();
   await expect(page.locator('#investigationBrowser')).toBeVisible();
 
   const card = page.locator(`[data-investigation="${id}"]`);
   await expect(card).toBeVisible();
-  // The two cards that sit far down the list (missing-mass, a-universe-of-stars)
-  // never reached "stable" on Playwright 1.64's Linux WebKit when click() did its
-  // own scroll first, and scrollIntoViewIfNeeded() waits on the same check. So
-  // the page scrolls the card itself and a real mouse click lands on its centre:
-  // a student's click, without Playwright's stability wait. The panel that
-  // opens is asserted below, so a missed click still fails.
-  const before = await frameProbe(page);
-  await card.evaluate(el => el.scrollIntoView({ block: 'center' }));
-  const after = await frameProbe(page);
-  // The click skips Playwright's stability wait, so the page itself must show
-  // the card at rest: its box is the same over two animation frames. A card
-  // that never settles (a looping transform) fails here instead of passing.
-  // On a failure the received value is what moved: the box over six frames,
-  // the card's transform and the animations running on it or above it.
-  // One bounded sample, in the page: at most 120 frames and 4 s, whichever
-  // ends first, so it returns even if no frame ever fires. The card is at rest
-  // when its last six boxes are identical; otherwise the answer says what moved.
-  const rest = await card.evaluate(
-    el =>
-      new Promise(resolve => {
-        const seen = [];
-        let done = false;
-        const finish = reason => {
-          if (done) return;
-          done = true;
-          const last = seen.slice(-6);
-          const same =
-            last.length === 6 && last.every(b => b.join() === last[0].join());
-          resolve(
-            same
-              ? 'at rest'
-              : JSON.stringify({
-                  reason,
-                  frames: seen.length,
-                  last,
-                  transform: getComputedStyle(el).transform,
-                  running: document
-                    .getAnimations()
-                    .filter(a => a.effect?.target?.contains(el))
-                    .map(a => a.animationName || a.transitionProperty || 'anim')
-                    .slice(0, 10),
-                  scrollY: window.scrollY,
-                })
-          );
-        };
-        window.setTimeout(() => finish('deadline'), 4000);
-        const step = () => {
-          const r = el.getBoundingClientRect();
-          seen.push([r.x, r.y, r.width, r.height].map(n => +n.toFixed(2)));
-          if (
-            seen.length >= 6 &&
-            seen.slice(-6).every(b => b.join() === seen.at(-1).join())
-          )
-            return finish('settled');
-          if (seen.length >= 120) return finish('frames');
-          window.requestAnimationFrame(step);
-        };
-        window.requestAnimationFrame(step);
-      })
-  );
-  if (rest !== 'at rest') {
-    // Which cost starves the frames? Remove the blurred backdrops, then also
-    // the simulation canvas, and ask again each time (D-TOOL-03 diagnostic).
-    await page.addStyleTag({
-      content:
-        '*{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}',
-    });
-    const noBlur = await frameProbe(page);
-    await page.addStyleTag({ content: 'canvas{display:none!important}' });
-    const noCanvas = await frameProbe(page);
-    throw new Error(
-      `The card never settled: ${rest}; frames at boot ${JSON.stringify(atBoot)}, before scroll ${JSON.stringify(before)}, after ${JSON.stringify(after)}, without backdrop blur ${JSON.stringify(noBlur)}, also without canvases ${JSON.stringify(noCanvas)}`
-    );
-  }
-  const box = await card.boundingBox();
-  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await card.click();
 
   await expect(page.locator('#investigationPanel')).toBeVisible();
   await expect(page.locator('.inv-step-title')).not.toBeEmpty();

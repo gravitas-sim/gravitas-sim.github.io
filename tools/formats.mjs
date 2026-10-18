@@ -17,6 +17,8 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { BOUNDARY } from '../tests/compat/boundary.mjs';
+
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const DOC = path.join(ROOT, 'FORMATS.md');
 
@@ -556,7 +558,107 @@ export const FORMATS = Object.freeze([
   },
 ]);
 
+// --- Compatibility with the 2.0.0 readers (Prompt 134) ------------------------
+// fixture: the record kind in tests/compat/kinds that exercises this format's
+// 2.0.0 reader, or none. unknown: what the 2.0.0 reader does with a top-level
+// field it does not know (refused, ignored, or n/a for an encoded fragment).
+// tests/compat/inventory.test.js holds both to the corpus. A format with no
+// fixture has not been exercised against its old reader: that is a gap, stated.
+export const COMPAT = Object.freeze({
+  'gravitas.artifact': { fixture: 'artifact', unknown: 'ignored' },
+  'gravitas.ledger': { fixture: 'ledger-entry', unknown: 'ignored' },
+  'gravitas.observation': { fixture: 'observation', unknown: 'ignored' },
+  'gravitas.experiment': { fixture: 'experiment', unknown: 'ignored' },
+  'experiment store': { fixture: 'experiment-store', unknown: 'ignored' },
+  'gravitas.assignment': { fixture: 'assignment-link', unknown: 'n/a' },
+  'world share link': { fixture: 'share-link', unknown: 'n/a' },
+  'investigation progress': { fixture: 'progress-store', unknown: 'ignored' },
+  'gravitas.investigation.progress': {
+    fixture: 'progress-backup',
+    unknown: 'ignored',
+  },
+  'submission token': { fixture: 'submission-token', unknown: 'n/a' },
+  'gravitas.submission-results': {
+    fixture: 'submission-results',
+    unknown: 'ignored',
+  },
+  'gravitas.course-pack (extension form)': {
+    fixture: 'course-pack-extension',
+    unknown: 'refused',
+  },
+  'gravitas.course-pack (builder form)': {
+    fixture: 'course-pack',
+    unknown: 'refused',
+  },
+  'course home link': { fixture: 'course-home-link', unknown: 'n/a' },
+  'gravitas.investigation-pack': {
+    fixture: 'investigation-pack',
+    unknown: 'refused',
+  },
+  'gravitas.capability-package': {
+    fixture: 'capability-package',
+    unknown: 'refused',
+  },
+  'gravitas.lab3d-guide-report': {
+    fixture: 'report-files',
+    unknown: 'ignored',
+  },
+  'gravitas.mission-lab-report': {
+    fixture: 'report-files',
+    unknown: 'ignored',
+  },
+  'gravitas.course-manifest': { fixture: 'report-files', unknown: 'ignored' },
+});
+
+/** The support period every format is held to, until a format's row says more. */
+const SUPPORT_PERIOD_SHORT = 'policy (above)';
+export const SUPPORT_PERIOD =
+  "Within a major version a reader is never withdrawn. When a later major version supersedes a format version, the old version is deprecated for the major version's first twelve months (read and written), then read-only for twelve more (read, never written; a new write is refused with an export path), then retired (refused, in words, with an export path). A period is counted from the release date of the major version that supersedes it, and a retirement is announced in CHANGELOG.md one release before it takes effect.";
+
 const cell = s => String(s).replace(/\|/g, '\\|');
+
+/** The compatibility section of FORMATS.md (Prompt 134). */
+function compatibilitySection(formats) {
+  const compatRows = formats
+    .map(f => {
+      const c = COMPAT[f.name];
+      return `| ${cell(f.name)} | ${c ? `\`${c.fixture}\`` : 'none yet'} | ${c ? c.unknown : 'not yet exercised'} | ${SUPPORT_PERIOD_SHORT} |`;
+    })
+    .join('\n');
+  const consequence = {
+    refused: 'refused in its own words: safe as a capability-required refusal',
+    ignored:
+      'accepted and silently dropped: a boundary, or the field must not be one an old reader needs',
+  };
+  const boundaryRows = BOUNDARY.map(
+    b =>
+      `| ${cell(b.plans)} (${b.prompt}) | \`${b.kind}\` | ${b.expect === 'refused' ? 'refuses' : 'ignores the field'} | ${consequence[b.expect]} |`
+  ).join('\n');
+  return `## Compatibility with 2.0.0 (Prompt 134)
+
+An older build is a real reader: a browser still running 2.0.0's cached code, a tab opened before a deploy, a deploy rolled back. \`tests/compat/\` runs the 2.0.0 readers (archived from the \`v2.0.0\` commit) beside the current ones on a fixture set per record kind, and holds a matrix to each: the old reader reads what 2.0.0 wrote; the current reader reads it losslessly; what the 2.0.0 reader says of what the current writer makes (accepted, or refused with the message recorded); a round trip; the capabilities a record needs; and the 2.0.0 reader's answer to an unknown field. \`tests/compat/boundary.test.js\` runs the fields later prompts plan to write against it.
+
+**The policy.**
+- A writer may change only when its corpus row is green for the change.
+- Where a change makes an older build refuse or silently misread, it is a major-version boundary and lands on the 3.0 train (Prompt 176).
+- Where a payload does not need new fields, the writer writes the old version.
+- A record a new reader needs that an old reader would ignore is never carried as an unknown field, because silent misreading is unsafe: it is a capability-required refusal with a message.
+
+**The support period.** ${SUPPORT_PERIOD}
+
+**What 2.0.0 does with a field it does not know** is not uniform. The pack and manifest readers refuse it (the course packs, the investigation pack, the capability package). The envelope and record readers accept it and drop it without a word (the artifact, the observation, the experiment, the progress records, the results file, the ledger). That second group is where "additive fields" are not old-reader-safe.
+
+| Format | 2.0.0 reader's fixture | Unknown top-level field | Support period |
+|---|---|---|---|
+${compatRows}
+
+**The planned extensions against 2.0.0** (the list Prompt 176 starts from; \`tests/compat/boundary.mjs\`):
+
+| Planned (prompt) | Kind | What 2.0.0 does | Consequence |
+|---|---|---|---|
+${boundaryRows}
+`;
+}
 
 /** FORMATS.md, as this table writes it. */
 export function render(formats = FORMATS) {
@@ -611,6 +713,7 @@ ${rows.join('\n')}
 - **Written but never read:** ${neverRead}. A student's file in any of them cannot be opened again.
 - **Newer versions:** they are refused in words in some readers, by a bare reason code in others (spelled \`newer\`, \`newerVersion\`, \`tooNew\`, \`schemaTooNew\` and \`from-a-newer-version\`), and not at all in the link blocks, \`gravitas.observed\` and the catalog curation.
 
+${compatibilitySection(formats)}
 ## Fields added inside a version
 
 - **\`rubricCriteria\` (Prompt 79).** A written answer in an investigation pack or a question bank may carry one to six criteria beside its \`rubric\`, each a name and two to five levels (a label, what it looks like, optionally its points), best first, every text in the file's locales. It is optional, so \`investigation-pack/1\` and \`question-bank/1\` stay version 1: a reader that does not know the field refuses the file, in words, as an unknown field. The compile lays it on the lesson step and its Spanish shadow, a remix carries it (\`REMIX.md\`), the answer key prints it and the review page shows it.
