@@ -14,7 +14,7 @@ export interface Localized {
   [locale: string]: string;
 }
 
-export type Offline = 'core' | 'optional' | 'locale' | 'none';
+export type Offline = 'core' | 'optional' | 'idle' | 'locale' | 'none';
 export type AssetRole = 'code' | 'data' | 'provenance' | 'translation' | 'image';
 
 /** gravitas.capability-package/1: gravitas-extension.json. */

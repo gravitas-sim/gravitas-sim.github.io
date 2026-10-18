@@ -178,12 +178,8 @@ self.addEventListener('activate', event => {
         names
           // The parts cache is the reader's own downloads, under immutable
           // URLs: a new version replaces the pages and keeps them.
-          .filter(
-            name =>
-              name.startsWith('gravitas-') &&
-              name !== VERSION &&
-              name !== PARTS_CACHE
-          )
+          .filter(name => name !== PARTS_CACHE)
+          .filter(name => name.startsWith('gravitas-') && name !== VERSION)
           .map(name => caches.delete(name))
       );
       await clients.claim();

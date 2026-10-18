@@ -27,8 +27,9 @@
 // =============================================================================
 
 import { sha256Hex } from './archive/net.js';
+import { CACHE_PARTS } from './names.js';
 
-export const PARTS_CACHE = 'gravitas-parts';
+export const PARTS_CACHE = CACHE_PARTS;
 const WANTED = '/__wanted/';
 
 /** @param {object} part @returns {string[]} What is wrong with a declaration */
