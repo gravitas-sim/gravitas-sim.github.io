@@ -15,9 +15,36 @@ import { test, expect } from './fixtures.js';
 
 const LESSON = 'missing-mass';
 
+// Diagnostic (D-TOOL-03): does this page get frames at all before and after
+// the scroll, is it visible and focused, and how late does a timer fire?
+/** Whether the page gets frames, and how late (D-TOOL-03 diagnostic). */
+const frameProbe = (page, wait = 1000) =>
+  page.evaluate(
+    wait =>
+      new Promise(resolve => {
+        const t0 = performance.now();
+        let frame = null;
+        let timer = null;
+        window.requestAnimationFrame(() => (frame = performance.now() - t0));
+        window.setTimeout(() => (timer = performance.now() - t0), 0);
+        window.setTimeout(
+          () =>
+            resolve({
+              frameAfterMs: frame,
+              timerAfterMs: timer,
+              visibility: document.visibilityState,
+              focused: document.hasFocus(),
+            }),
+          wait
+        );
+      }),
+    wait
+  );
+
 /** Open the lesson browser and start a lesson through the interface. */
 async function openLesson(page, app, id = LESSON) {
   await app.boot();
+  const atBoot = await frameProbe(page, 400);
   await page.locator('#investigationsBtn').click();
   await expect(page.locator('#investigationBrowser')).toBeVisible();
 
@@ -29,32 +56,9 @@ async function openLesson(page, app, id = LESSON) {
   // the page scrolls the card itself and a real mouse click lands on its centre:
   // a student's click, without Playwright's stability wait. The panel that
   // opens is asserted below, so a missed click still fails.
-  // Diagnostic (D-TOOL-03): does this page get frames at all before and after
-  // the scroll, is it visible and focused, and how late does a timer fire?
-  const frameProbe = () =>
-    page.evaluate(
-      () =>
-        new Promise(resolve => {
-          const t0 = performance.now();
-          let frame = null;
-          let timer = null;
-          window.requestAnimationFrame(() => (frame = performance.now() - t0));
-          window.setTimeout(() => (timer = performance.now() - t0), 0);
-          window.setTimeout(
-            () =>
-              resolve({
-                frameAfterMs: frame,
-                timerAfterMs: timer,
-                visibility: document.visibilityState,
-                focused: document.hasFocus(),
-              }),
-            1000
-          );
-        })
-    );
-  const before = await frameProbe();
+  const before = await frameProbe(page);
   await card.evaluate(el => el.scrollIntoView({ block: 'center' }));
-  const after = await frameProbe();
+  const after = await frameProbe(page);
   // The click skips Playwright's stability wait, so the page itself must show
   // the card at rest: its box is the same over two animation frames. A card
   // that never settles (a looping transform) fails here instead of passing.
@@ -113,11 +117,11 @@ async function openLesson(page, app, id = LESSON) {
       content:
         '*{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}',
     });
-    const noBlur = await frameProbe();
+    const noBlur = await frameProbe(page);
     await page.addStyleTag({ content: 'canvas{display:none!important}' });
-    const noCanvas = await frameProbe();
+    const noCanvas = await frameProbe(page);
     throw new Error(
-      `The card never settled: ${rest}; frames before scroll ${JSON.stringify(before)}, after ${JSON.stringify(after)}, without backdrop blur ${JSON.stringify(noBlur)}, also without canvases ${JSON.stringify(noCanvas)}`
+      `The card never settled: ${rest}; frames at boot ${JSON.stringify(atBoot)}, before scroll ${JSON.stringify(before)}, after ${JSON.stringify(after)}, without backdrop blur ${JSON.stringify(noBlur)}, also without canvases ${JSON.stringify(noCanvas)}`
     );
   }
   const box = await card.boundingBox();
