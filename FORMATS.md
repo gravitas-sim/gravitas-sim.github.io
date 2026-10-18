@@ -85,6 +85,87 @@ The columns:
 - **Written but never read:** `gravitas.lab3d-guide-report`, `gravitas.mission-lab-report`, `gravitas.course-manifest`. A student's file in any of them cannot be opened again.
 - **Newer versions:** they are refused in words in some readers, by a bare reason code in others (spelled `newer`, `newerVersion`, `tooNew`, `schemaTooNew` and `from-a-newer-version`), and not at all in the link blocks, `gravitas.observed` and the catalog curation.
 
+## Compatibility with 2.0.0 (Prompt 134)
+
+An older build is a real reader: a browser still running 2.0.0's cached code, a tab opened before a deploy, a deploy rolled back. `tests/compat/` runs the 2.0.0 readers (archived from the `v2.0.0` commit) beside the current ones on a fixture set per record kind, and holds a matrix to each: the old reader reads what 2.0.0 wrote; the current reader reads it losslessly; what the 2.0.0 reader says of what the current writer makes (accepted, or refused with the message recorded); a round trip; the capabilities a record needs; and the 2.0.0 reader's answer to an unknown field. `tests/compat/boundary.test.js` runs the fields later prompts plan to write against it.
+
+**The policy.**
+- A writer may change only when its corpus row is green for the change.
+- Where a change makes an older build refuse or silently misread, it is a major-version boundary and lands on the 3.0 train (Prompt 176).
+- Where a payload does not need new fields, the writer writes the old version.
+- A record a new reader needs that an old reader would ignore is never carried as an unknown field, because silent misreading is unsafe: it is a capability-required refusal with a message.
+
+**The support period.** Within a major version a reader is never withdrawn. When a later major version supersedes a format version, the old version is deprecated for the major version's first twelve months (read and written), then read-only for twelve more (read, never written; a new write is refused with an export path), then retired (refused, in words, with an export path). A period is counted from the release date of the major version that supersedes it, and a retirement is announced in CHANGELOG.md one release before it takes effect.
+
+**What 2.0.0 does with a field it does not know** is not uniform. The pack and manifest readers refuse it (the course packs, the investigation pack, the capability package). The envelope and record readers accept it and drop it without a word (the artifact, the observation, the experiment, the progress records, the results file, the ledger). That second group is where "additive fields" are not old-reader-safe.
+
+| Format | 2.0.0 reader's fixture | Unknown top-level field | Support period |
+|---|---|---|---|
+| gravitas.observation | `observation` | ignored | policy (above) |
+| gravitas.observing-setup | none yet | not yet exercised | policy (above) |
+| gravitas.pipeline | none yet | not yet exercised | policy (above) |
+| gravitas.inference | none yet | not yet exercised | policy (above) |
+| gravitas.analysis | none yet | not yet exercised | policy (above) |
+| gravitas.artifact | `artifact` | ignored | policy (above) |
+| gravitas.observed | none yet | not yet exercised | policy (above) |
+| gravitas.observation-data-pack | none yet | not yet exercised | policy (above) |
+| world share link | `share-link` | n/a | policy (above) |
+| built-in scenario id | none yet | not yet exercised | policy (above) |
+| experiment link block (xp) | none yet | not yet exercised | policy (above) |
+| link extras (x) | none yet | not yet exercised | policy (above) |
+| gravitas.orbital-system | none yet | not yet exercised | policy (above) |
+| gravitas.system3d | none yet | not yet exercised | policy (above) |
+| gravitas.lab3d.snapshot | none yet | not yet exercised | policy (above) |
+| gravitas.experiment | `experiment` | ignored | policy (above) |
+| gravitas.experiment-result | none yet | not yet exercised | policy (above) |
+| experiment store | `experiment-store` | ignored | policy (above) |
+| gravitas.mission-plan | none yet | not yet exercised | policy (above) |
+| gravitas.ephemeris-pack | none yet | not yet exercised | policy (above) |
+| gravitas.investigation-pack | `investigation-pack` | refused | policy (above) |
+| gravitas.question-bank | none yet | not yet exercised | policy (above) |
+| gravitas.assignment | `assignment-link` | n/a | policy (above) |
+| investigation progress | `progress-store` | ignored | policy (above) |
+| gravitas.investigation.progress | `progress-backup` | ignored | policy (above) |
+| submission token | `submission-token` | n/a | policy (above) |
+| gravitas.submission-results | `submission-results` | ignored | policy (above) |
+| gravitas.lab3d-guide-report | `report-files` | ignored | policy (above) |
+| gravitas.mission-lab-report | `report-files` | ignored | policy (above) |
+| notebook store | none yet | not yet exercised | policy (above) |
+| notebook entry snapshot | none yet | not yet exercised | policy (above) |
+| gravitas.evidence.notebook | none yet | not yet exercised | policy (above) |
+| gravitas.ledger | `ledger-entry` | ignored | policy (above) |
+| gravitas.course-pack (extension form) | `course-pack-extension` | refused | policy (above) |
+| gravitas.course-pack (builder form) | `course-pack` | refused | policy (above) |
+| course home link | `course-home-link` | n/a | policy (above) |
+| investigation link | none yet | not yet exercised | policy (above) |
+| gravitas.course-manifest | `report-files` | ignored | policy (above) |
+| gravitas.capability-package | `capability-package` | refused | policy (above) |
+| gravitas.scenario-pack | none yet | not yet exercised | policy (above) |
+| gravitas.catalog | none yet | not yet exercised | policy (above) |
+| gravitas.library | none yet | not yet exercised | policy (above) |
+| gravitas.catalog-curation | none yet | not yet exercised | policy (above) |
+| gravitas.extension-archive | none yet | not yet exercised | policy (above) |
+| gravitas-embed messages | none yet | not yet exercised | policy (above) |
+| gravitas-compute messages | none yet | not yet exercised | policy (above) |
+| gravitas.compute-capsule | none yet | not yet exercised | policy (above) |
+| embed options | none yet | not yet exercised | policy (above) |
+| gravitas.student-data | none yet | not yet exercised | policy (above) |
+| gravitas.made | none yet | not yet exercised | policy (above) |
+| gravitas.evaluation | none yet | not yet exercised | policy (above) |
+
+**The planned extensions against 2.0.0** (the list Prompt 176 starts from; `tests/compat/boundary.mjs`):
+
+| Planned (prompt) | Kind | What 2.0.0 does | Consequence |
+|---|---|---|---|
+| an additive `profile: "collection"` on the course package (164) | `course-pack` | refuses | refused in its own words: safe as a capability-required refusal |
+| the one resume record carried as a field of the progress record (163) | `progress-store` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
+| a stated confidence level on the (already asymmetric) interval: `level` (150) | `artifact` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
+| the states "not constrained", "failed", "assumed", "model-limited" (150) | `artifact` | refuses | refused in its own words: safe as a capability-required refusal |
+| a fit-result record carried by the envelope (150) | `artifact` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
+| a correlation reference between quantities that share data (150) | `artifact` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
+| the mark set as part of the observation workspace record (179) | `observation` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
+| named streams, the stream fork per trial and the kernel versions on the experiment record (265) | `experiment` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
+
 ## Fields added inside a version
 
 - **`rubricCriteria` (Prompt 79).** A written answer in an investigation pack or a question bank may carry one to six criteria beside its `rubric`, each a name and two to five levels (a label, what it looks like, optionally its points), best first, every text in the file's locales. It is optional, so `investigation-pack/1` and `question-bank/1` stay version 1: a reader that does not know the field refuses the file, in words, as an unknown field. The compile lays it on the lesson step and its Spanish shadow, a remix carries it (`REMIX.md`), the answer key prints it and the review page shows it.
