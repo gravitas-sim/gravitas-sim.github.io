@@ -97,7 +97,12 @@ const PARSES = {
   ],
   'js/storage/local.js': [1, 'none', 'the storage layer'],
   'js/experiments/store.js': [2, 'none', OWN + '; migrate checks it'],
-  'js/investigations.js': [2, 'none', OWN + ' (progress, twice)'],
+  'js/investigations.js': [
+    1,
+    'none',
+    OWN + ' (the sandbox restore reads progress)',
+  ],
+  'js/investigations/stepView.js': [1, 'none', OWN + ' (load reads progress)'],
   'js/studio/model.js': [
     5,
     'none',
@@ -190,7 +195,7 @@ describe('a saved document is parsed as plain, bounded data', () => {
       'js/courseHome.js',
       'js/notebookPanel.js',
       'js/notebook/store.js',
-      'js/investigations.js',
+      'js/investigations/finish.js',
       'js/submissionReview.js',
     ])
       expect([file, uses(file, 'parseDocument(')]).toEqual([file, true]);

@@ -293,6 +293,28 @@ test.describe('a saved answer comes back exactly as it was written', () => {
     await expectIntact(page, answer(page));
   });
 
+  test("the backup button downloads the lesson's progress as a file the restore reads", async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await openAsStudent(page);
+    await page.locator('.inv-backup > summary').click();
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#investigationBackupDownload').click(),
+    ]);
+    expect(download.suggestedFilename()).toMatch(/\.json$/);
+    const file = JSON.parse(
+      await (
+        await import('node:fs/promises')
+      ).readFile(await download.path(), 'utf8')
+    );
+    expect(file.kind).toBe('gravitas.investigation.progress');
+    expect(file.lesson.id).toBe(LESSON);
+    expect(file.version).toBe(2);
+  });
+
   test('a restored backup cannot add attributes to a measure field', async ({
     page,
     app,

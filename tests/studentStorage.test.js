@@ -200,15 +200,12 @@ describe('which collection holds which key', () => {
   // The collection a writer names must be the one KEYS gives its keys. Source
   // text, because the pages cannot be imported here.
   test.each([
+    ['js/investigations.js', ['gravitas_lesson_objects_open']],
     [
-      'js/investigations.js',
-      [
-        'gravitas_investigation_',
-        'gravitas_assignment_',
-        'gravitas_student_name',
-        'gravitas_lesson_objects_open',
-      ],
+      'js/investigations/stepView.js',
+      ['gravitas_investigation_', 'gravitas_assignment_'],
     ],
+    ['js/investigations/progressSchema.js', ['gravitas_student_name']],
     ['js/notebook/store.js', ['gravitas_evidence_notebook']],
     ['js/observatory/guidePanel.js', ['gravitas_guides']],
     ['js/mission/lab/guidePanel.js', ['gravitas_missionlab_']],
