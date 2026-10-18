@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-word-that-has-been",
+  "position": [
+   1,
+   28
+  ],
+  "title": "The Butterfly Effect in Space",
+  "subtitle": "Run the same system twice and find out how long the answer lasts",
+  "body": "<p class=\"inv-step-count\">Step 1 of 28 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A word that has been worn smooth</h3><div class=\"inv-step-body\"><p>On screen are three stars of six solar masses each, sitting at the corners of an equilateral triangle and rotating about their common center like a rigid object. It is not an accident that they fit so neatly: this is an exact solution of the three-body problem, found by Lagrange in 1772, and if the numbers are set up precisely the triangle turns forever without changing shape.</p><p>It will not turn forever here. Watch it long enough and it comes apart. That is the subject of this investigation, and the word usually attached to it — <strong>chaos</strong> — has been worn so smooth by use that it is worth saying at the start what it does <em>not</em> mean.</p><p>Chaos does not mean random. It does not mean disordered. It does not mean the computer gave up. It means one specific thing, which you are going to measure: two starts that are almost the same lead to futures that are completely different, and the difference grows <em>exponentially</em>.</p><p>Everything in this investigation is aimed at telling that apart from three things it is regularly confused with.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> The simulation is paused. Nothing will move until you let it.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "the-same-numbers-twice",
+  "position": [
+   2,
+   28
+  ],
+  "title": "The Butterfly Effect in Space",
+  "subtitle": "Run the same system twice and find out how long the answer lasts",
+  "body": "<p class=\"inv-step-count\">Step 2 of 28 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">The same numbers, twice</h3><div class=\"inv-step-body\"><p>Before anything else, the most basic question there is about a simulation.</p><p>Suppose you record this system for forty seconds, then put every star back exactly where it started — the same positions, the same velocities, the same everything — and record it again for another forty seconds.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The two recordings will be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>identical, to every decimal place</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>almost identical, with tiny random differences</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>noticeably different, because the computer rounds differently each time</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>completely different, because the system is chaotic</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "the-same-numbers-twice",
+  "position": [
+   2,
+   28
+  ],
+  "title": "The Butterfly Effect in Space",
+  "subtitle": "Run the same system twice and find out how long the answer lasts",
+  "body": "<p class=\"inv-step-count\">Step 2 of 28 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">The same numbers, twice</h3><div class=\"inv-step-body\"><p>Before anything else, the most basic question there is about a simulation.</p><p>Suppose you record this system for forty seconds, then put every star back exactly where it started — the same positions, the same velocities, the same everything — and record it again for another forty seconds.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The two recordings will be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>identical, to every decimal place</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>almost identical, with tiny random differences</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>noticeably different, because the computer rounds differently each time</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>completely different, because the system is chaotic</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “The reproducibility control”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-established",
+  "position": [
+   28,
+   28
+  ],
+  "title": "The Butterfly Effect in Space",
+  "subtitle": "Run the same system twice and find out how long the answer lasts",
+  "body": "<p class=\"inv-step-count\">Step 28 of 28 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you established</h3><div class=\"inv-step-body\"><p>In order, and each one measured rather than asserted:</p><p><strong>The simulation is deterministic.</strong> Two runs from identical starts were identical to every decimal place.</p><p><strong>Not all divergence is chaos.</strong> A two-body system given the same 1,500 km nudge came apart steadily, in proportion to time. The instrument refused to give it an e-folding time, and was right to.</p><p><strong>The three-body system diverged exponentially.</strong> The same nudge grew by a factor of e every seven simulated seconds or so — a factor of ten million over the run.</p><p><strong>That is physics, not arithmetic.</strong> The rate survived halving the timestep and changing the integrator.</p><p><strong>And it is not about the number three.</strong> Stable three-body configurations exist, and one of them is why Jupiter's Trojan asteroids are still there.</p><p>Generate your report to keep the numbers, the perturbation you applied, and the divergence plot.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

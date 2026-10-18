@@ -1,0 +1,45 @@
+{
+ "cut": "star-sizes/route",
+ "lesson": "a-universe-of-stars",
+ "ok": true,
+ "reason": null,
+ "assignment": {
+  "k": "gravitas.assignment",
+  "v": 2,
+  "i": "act-star-sizes-route",
+  "l": "a-universe-of-stars",
+  "t": "star-sizes",
+  "n": "Golden intro",
+  "s": [
+   "predict-which-is-bigger",
+   "measure-the-radius-ratio",
+   "sideways-at-one-luminosity"
+  ],
+  "f": [
+   "c8129973",
+   "45ed7792",
+   "986cd21a"
+  ],
+  "c": "2026-01-02",
+  "p": [
+   "golden-pack",
+   "1.2.0"
+  ]
+ },
+ "sids": [
+  "predict-which-is-bigger",
+  "measure-the-radius-ratio",
+  "sideways-at-one-luminosity"
+ ],
+ "added": [],
+ "unknown": [],
+ "valid": false,
+ "pins": {
+  "none": "none",
+  "same": "same",
+  "compatible": "compatible",
+  "major": "major",
+  "moved": "moved",
+  "unpinned": "unpinned"
+ }
+}

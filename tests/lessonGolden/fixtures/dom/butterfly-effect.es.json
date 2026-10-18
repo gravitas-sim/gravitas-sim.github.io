@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-word-that-has-been",
+  "position": [
+   1,
+   28
+  ],
+  "title": "El efecto mariposa en el espacio",
+  "subtitle": "Ejecuta el mismo sistema dos veces y descubre cuánto dura la respuesta",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 28 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una palabra desgastada por el uso</h3><div class=\"inv-step-body\"><p>En pantalla hay tres estrellas de seis masas solares cada una, situadas en los vértices de un triángulo equilátero y girando alrededor de su centro común como si fueran un objeto rígido. No es casualidad que encajen tan bien: es una solución exacta del problema de los tres cuerpos, hallada por Lagrange en 1772, y si los números se ajustan con precisión el triángulo gira para siempre sin cambiar de forma.</p><p>Aquí no girará para siempre. Obsérvalo el tiempo suficiente y se deshace. De eso trata esta investigación, y la palabra que suele acompañarla —<strong>caos</strong>— está tan desgastada por el uso que conviene decir de entrada lo que <em>no</em> significa.</p><p>Caos no significa aleatorio. No significa desordenado. No significa que el ordenador se haya rendido. Significa una cosa muy concreta, que vas a medir: dos inicios casi iguales conducen a futuros completamente distintos, y la diferencia crece de forma <em>exponencial</em>.</p><p>Todo en esta investigación apunta a distinguir eso de tres cosas con las que se confunde habitualmente.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> La simulación está en pausa. No se moverá nada hasta que la dejes correr.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "the-same-numbers-twice",
+  "position": [
+   2,
+   28
+  ],
+  "title": "El efecto mariposa en el espacio",
+  "subtitle": "Ejecuta el mismo sistema dos veces y descubre cuánto dura la respuesta",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 28 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Los mismos números, dos veces</h3><div class=\"inv-step-body\"><p>Antes que nada, la pregunta más básica que existe sobre una simulación.</p><p>Supón que grabas este sistema durante cuarenta segundos, después devuelves cada estrella exactamente a donde empezó —las mismas posiciones, las mismas velocidades, todo igual— y lo grabas otros cuarenta segundos.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Las dos grabaciones serán…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>idénticas, hasta el último decimal</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>casi idénticas, con diferencias aleatorias diminutas</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>perceptiblemente distintas, porque el ordenador redondea de otra manera cada vez</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>completamente distintas, porque el sistema es caótico</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "the-same-numbers-twice",
+  "position": [
+   2,
+   28
+  ],
+  "title": "El efecto mariposa en el espacio",
+  "subtitle": "Ejecuta el mismo sistema dos veces y descubre cuánto dura la respuesta",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 28 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Los mismos números, dos veces</h3><div class=\"inv-step-body\"><p>Antes que nada, la pregunta más básica que existe sobre una simulación.</p><p>Supón que grabas este sistema durante cuarenta segundos, después devuelves cada estrella exactamente a donde empezó —las mismas posiciones, las mismas velocidades, todo igual— y lo grabas otros cuarenta segundos.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Las dos grabaciones serán…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>idénticas, hasta el último decimal</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>casi idénticas, con diferencias aleatorias diminutas</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>perceptiblemente distintas, porque el ordenador redondea de otra manera cada vez</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>completamente distintas, porque el sistema es caótico</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «El control de reproducibilidad», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-established",
+  "position": [
+   28,
+   28
+  ],
+  "title": "El efecto mariposa en el espacio",
+  "subtitle": "Ejecuta el mismo sistema dos veces y descubre cuánto dura la respuesta",
+  "body": "<p class=\"inv-step-count\">Paso 28 de 28 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Qué has establecido</h3><div class=\"inv-step-body\"><p>Por orden, y cada punto medido en lugar de afirmado:</p><p><strong>La simulación es determinista.</strong> Dos ejecuciones desde inicios idénticos fueron idénticas hasta el último decimal.</p><p><strong>No toda divergencia es caos.</strong> Un sistema de dos cuerpos con el mismo empujón de 1500 km se separó de forma sostenida, en proporción al tiempo. El instrumento se negó a darle un tiempo de crecimiento, y hizo bien.</p><p><strong>El sistema de tres cuerpos divergió exponencialmente.</strong> El mismo empujón creció un factor e cada siete segundos simulados aproximadamente: un factor de diez millones a lo largo de la ejecución.</p><p><strong>Y eso es física, no aritmética.</strong> El ritmo sobrevivió a reducir el paso temporal a la mitad y a cambiar de integrador.</p><p><strong>Y no va del número tres.</strong> Existen configuraciones estables de tres cuerpos, y una de ellas explica que los asteroides troyanos de Júpiter sigan ahí.</p><p>Genera tu informe para conservar los números, la perturbación que aplicaste y la gráfica de divergencia.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

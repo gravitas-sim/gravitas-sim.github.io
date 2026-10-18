@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "twelve-nights",
+  "position": [
+   1,
+   26
+  ],
+  "title": "¿Puedes detectar este planeta?",
+  "subtitle": "El mismo planeta, las mismas doce noches, dos respuestas distintas",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 26 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Doce noches</h3><div class=\"inv-step-body\"><p>Te han concedido doce noches en un espectrógrafo. No necesariamente doce noches seguidas: doce noches, para usarlas cuando quieras, repartidas por el tiempo que pidas.</p><p>El objetivo es la estrella en pantalla. En algún lugar a su alrededor, demasiado tenue para verse, puede haber o no un planeta. Tus doce medidas de la velocidad de la estrella son todas las pruebas que vas a tener.</p><p>La pregunta habitual es <em>¿hay un planeta?</em>. Esta investigación plantea otra distinta, y es la que un observador tiene que responder primero: <strong>¿lo encontraría este calendario si lo hubiera?</strong></p><p>El objetivo es la estrella de la pantalla: haz clic en ella, o usa <strong>Objetos de esta actividad</strong> más abajo, para que el instrumento sepa a qué estrella te refieres.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> El tiempo en un telescopio grande se asigna por noches, con meses de antelación. El calendario se decide antes de que nadie sepa qué mostrarán los datos.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "what-decides-whether-you-find",
+  "position": [
+   2,
+   26
+  ],
+  "title": "¿Puedes detectar este planeta?",
+  "subtitle": "El mismo planeta, las mismas doce noches, dos respuestas distintas",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 26 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué decide si lo encuentras?</h3><div class=\"inv-step-body\"><p>Cuatro cosas son evidentes en cualquier campaña de observación: cuántas medidas tomas, con qué precisión, qué intervalo de tiempo abarcan y cómo se reparten dentro de ese intervalo.</p><p>Supón que el número de medidas está fijado en doce y que el instrumento también está fijado. Comprométete con una respuesta antes de ver ningún dato.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Con doce medidas y un solo instrumento, ¿qué elección crees que importa más?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Repartirlas a lo largo del intervalo total más largo posible</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Cómo se espacian con respecto a la órbita del planeta</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Tomarlas todas en noches consecutivas</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>No puede importar mucho: doce medidas son doce medidas</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "what-decides-whether-you-find",
+  "position": [
+   2,
+   26
+  ],
+  "title": "¿Puedes detectar este planeta?",
+  "subtitle": "El mismo planeta, las mismas doce noches, dos respuestas distintas",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 26 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué decide si lo encuentras?</h3><div class=\"inv-step-body\"><p>Cuatro cosas son evidentes en cualquier campaña de observación: cuántas medidas tomas, con qué precisión, qué intervalo de tiempo abarcan y cómo se reparten dentro de ese intervalo.</p><p>Supón que el número de medidas está fijado en doce y que el instrumento también está fijado. Comprométete con una respuesta antes de ver ningún dato.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Con doce medidas y un solo instrumento, ¿qué elección crees que importa más?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Repartirlas a lo largo del intervalo total más largo posible</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Cómo se espacian con respecto a la órbita del planeta</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Tomarlas todas en noches consecutivas</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>No puede importar mucho: doce medidas son doce medidas</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Calendario A: doce noches, una órbita», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-decided-before-you",
+  "position": [
+   26,
+   26
+  ],
+  "title": "¿Puedes detectar este planeta?",
+  "subtitle": "El mismo planeta, las mismas doce noches, dos respuestas distintas",
+  "body": "<p class=\"inv-step-count\">Paso 26 de 26 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que decidiste antes de mirar</h3><div class=\"inv-step-body\"><p>Dos métodos, y la misma investigación dos veces.</p><p>Doce medidas. Un instrumento. Un planeta, que estuvo ahí todo el tiempo.</p><p>El calendario A estableció, más allá de toda duda razonable, que la velocidad de esta estrella no es constante, a lo largo de un ciclo que muestreó de principio a fin. Eso no es lo mismo que haber detectado un planeta: es la prueba sobre la que un planeta pasa a ser, con diferencia, la mejor explicación, una vez que se demuestra que la variación se repite con un periodo definido y se descartan las demás causas.</p><p>El calendario B, con once veces el intervalo total y ni una medida menos, no pudo establecer ni siquiera eso. No está vacío: acota cuán grande pudo ser la oscilación de velocidad de la estrella en las dos fases que llegó a visitar, y esa es una restricción real aunque estrecha. Lo que no puede es decir nada sobre las otras ocho décimas del ciclo, que es donde vive este planeta.</p><p>Ninguno de los dos resultados es un fallo de los datos. Ambos se decidieron meses antes, cuando alguien escribió una cadencia. El calendario de observación forma parte del experimento y, como el resto del experimento, puede diseñarse bien o mal antes de que llegue un solo fotón.</p><p>La mitad de los tránsitos hizo el mismo planteamiento con otro mando. Un planeta, una profundidad, y una detección a 355 sigmas o una discusión a 2,5 dependiendo por completo de lo que hubiera por debajo de la medida. Y mientras que el fallo de la velocidad radial podía repararse observando de otra manera, el fotométrico en general no: pasado el suelo de ruido correlacionado, más noches compran más datos con la misma precisión y nada más. Una gemela de la Tierra no es indetectable en principio: es indetectable con ese instrumento, alrededor de esa estrella, y mejorar cualquiera de las tres cosas es un proyecto distinto de tener paciencia.</p><p>Que es el resumen honesto de las dos mitades. La pregunta «¿puedes detectar este planeta?» nunca trata solo del planeta.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Los sondeos reales se protegen del fallo de la velocidad radial con espaciados deliberadamente irregulares, varias longitudes geográficas y comprobando cualquier periodo candidato frente a la cadencia que lo encontró. Del fotométrico se protegen yendo al espacio, eligiendo estrellas tranquilas y modelando el ruido correlacionado en vez de fingir que se promediará solo.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

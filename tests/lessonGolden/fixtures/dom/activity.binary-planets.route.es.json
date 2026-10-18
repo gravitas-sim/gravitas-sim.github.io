@@ -1,0 +1,58 @@
+[
+ {
+  "role": "first",
+  "sid": "run-the-default",
+  "position": [
+   1,
+   5
+  ],
+  "title": "Planetas alrededor de dos estrellas: ¿dónde sobrevive una órbita?",
+  "subtitle": "5 pasos de Planetas en estrellas binarias (37 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 5 <span class=\"inv-step-kind\">exploración</span></p><h3 class=\"inv-step-title\">Ejecútalo tal como está</h3><div class=\"inv-step-body\"><p>Abre <strong>Ejecución en binaria</strong> en la lista de Herramientas de la derecha. Viene con la configuración que hay en pantalla: el planeta empezando a 0,15 de la separación binaria —1,5 AU— y veinte periodos binarios que integrar, que son algo más de quinientos años y alrededor de medio minuto de observación.</p><p>Pulsa <strong>Ejecutar</strong> y mira. El planeta da unas seis vueltas por segundo, así que lo que puedes ver no es una órbita concreta sino la banda que ocupa. Fíjate en si esa banda mantiene su forma.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Baja la velocidad con los controles de reproducción si quieres ver una órbita concreta en lugar de la banda.</p><ul class=\"inv-checklist\"><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:0\"><span>Observa la banda de la estela: ¿sigue siendo un anillo, o empieza a respirar cuando las estrellas pasan cerca?</span></label></li><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:1\"><span>Lee \"Integrado\" mientras sube: cuenta periodos binarios, no años</span></label></li><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:2\"><span>Vigila la fila \"Órbita actual del planeta\": el semieje mayor apenas se mueve, y la excentricidad no se está quieta</span></label></li><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:3\"><span>Vigila \"Excentricidad máxima alcanzada\": no vuelve a bajar</span></label></li><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:4\"><span>Anota la deriva de energía mientras la ejecución está tranquila; querrás la comparación más adelante</span></label></li><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:5\"><span>Déjalo terminar y lee la frase del final del panel</span></label></li></ul>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "graded",
+  "sid": "move-it-out",
+  "position": [
+   2,
+   5
+  ],
+  "title": "Planetas alrededor de dos estrellas: ¿dónde sobrevive una órbita?",
+  "subtitle": "5 pasos de Planetas en estrellas binarias (37 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 5 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Aléjalo</h3><div class=\"inv-step-body\"><p>Ahora duplica el radio inicial del planeta, hasta 0,30 de la separación —3 AU—. Eso sigue siendo menos de la mitad de lo más cerca que llegan a estar las dos estrellas, así que el planeta no está en absoluto cerca de ninguna de ellas al empezar.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">A 0,30 separaciones, a lo largo de veinte periodos binarios, esperas:</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Más o menos lo de antes: un anillo algo más ancho y algo más tembloroso</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Un anillo que respira visiblemente pero se queda donde está</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Que el planeta se marche</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>Que el planeta caiga en una de las estrellas</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "marked",
+  "sid": "move-it-out",
+  "position": [
+   2,
+   5
+  ],
+  "title": "Planetas alrededor de dos estrellas: ¿dónde sobrevive una órbita?",
+  "subtitle": "5 pasos de Planetas en estrellas binarias (37 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 5 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Aléjalo</h3><div class=\"inv-step-body\"><p>Ahora duplica el radio inicial del planeta, hasta 0,30 de la separación —3 AU—. Eso sigue siendo menos de la mitad de lo más cerca que llegan a estar las dos estrellas, así que el planeta no está en absoluto cerca de ninguna de ellas al empezar.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">A 0,30 separaciones, a lo largo de veinte periodos binarios, esperas:</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Más o menos lo de antes: un anillo algo más ancho y algo más tembloroso</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Un anillo que respira visiblemente pero se queda donde está</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Que el planeta se marche</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>Que el planeta caiga en una de las estrellas</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Ejecútalo a 0,30», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "last",
+  "sid": "ejected-means-what",
+  "position": [
+   5,
+   5
+  ],
+  "title": "Planetas alrededor de dos estrellas: ¿dónde sobrevive una órbita?",
+  "subtitle": "5 pasos de Planetas en estrellas binarias (37 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 5 de 5 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Qué significa aquí \"expulsado\"?</h3><div class=\"inv-step-body\"><p>El panel ha llamado a eso una expulsión. Tiene dos condiciones para usar la palabra y necesita las dos: el planeta debe tener energía positiva respecto de <em>ambas</em> estrellas, y debe estar a más de diez separaciones binarias.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿Por qué no basta con la energía positiva?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Porque la energía no se conserva lo bastante bien como para fiarse</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Porque un planeta puede estar desligado un rato durante un encuentro y volver después</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Porque la masa del planeta es demasiado pequeña para que la energía signifique algo</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>Porque el baricentro se mueve, así que la energía se mide en el sistema de referencia equivocado</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

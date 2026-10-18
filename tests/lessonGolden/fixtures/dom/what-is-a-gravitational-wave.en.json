@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "travel-without-shining",
+  "position": [
+   1,
+   28
+  ],
+  "title": "What Is a Gravitational Wave?",
+  "subtitle": "A first look at what moves, what travels and what a detector feels",
+  "body": "<p class=\"inv-step-count\">Step 1 of 28 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Something can travel without shining</h3><div class=\"inv-step-body\"><p>Two objects are on the canvas, circling each other. They are paused, and they give off no light: no glow, no color, nothing a telescope could photograph.</p><p>Commit to an answer before going on. You are not expected to know this one.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> The two discs are a drawing of where the model says the objects are. They are not a photograph, and nothing in this investigation is.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">If these two objects emit no light at all, could we still find out that they are moving?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>No — with no light there is nothing to detect</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Yes — anything with mass bends space, and moving mass can send that bending outwards as a traveling disturbance</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Yes — we would hear them, because sound travels through space</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>Only if something else nearby lit them up</span></button></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "travel-without-shining",
+  "position": [
+   1,
+   28
+  ],
+  "title": "What Is a Gravitational Wave?",
+  "subtitle": "A first look at what moves, what travels and what a detector feels",
+  "body": "<p class=\"inv-step-count\">Step 1 of 28 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Something can travel without shining</h3><div class=\"inv-step-body\"><p>Two objects are on the canvas, circling each other. They are paused, and they give off no light: no glow, no color, nothing a telescope could photograph.</p><p>Commit to an answer before going on. You are not expected to know this one.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> The two discs are a drawing of where the model says the objects are. They are not a photograph, and nothing in this investigation is.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">If these two objects emit no light at all, could we still find out that they are moving?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>No — with no light there is nothing to detect</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Yes — anything with mass bends space, and moving mass can send that bending outwards as a traveling disturbance</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Yes — we would hear them, because sound travels through space</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>Only if something else nearby lit them up</span></button></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "travel-without-shining",
+  "position": [
+   1,
+   28
+  ],
+  "title": "What Is a Gravitational Wave?",
+  "subtitle": "A first look at what moves, what travels and what a detector feels",
+  "body": "<p class=\"inv-step-count\">Step 1 of 28 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Something can travel without shining</h3><div class=\"inv-step-body\"><p>Two objects are on the canvas, circling each other. They are paused, and they give off no light: no glow, no color, nothing a telescope could photograph.</p><p>Commit to an answer before going on. You are not expected to know this one.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> The two discs are a drawing of where the model says the objects are. They are not a photograph, and nothing in this investigation is.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">If these two objects emit no light at all, could we still find out that they are moving?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>No — with no light there is nothing to detect</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Yes — anything with mass bends space, and moving mass can send that bending outwards as a traveling disturbance</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Yes — we would hear them, because sound travels through space</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>Only if something else nearby lit them up</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Meet the two objects”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   28,
+   28
+  ],
+  "title": "What Is a Gravitational Wave?",
+  "subtitle": "A first look at what moves, what travels and what a detector feels",
+  "body": "<p class=\"inv-step-count\">Step 28 of 28 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p><strong>A gravitational wave is a change in distance, not something arriving.</strong> Nothing lands on you. The separation between things that are not touching gets briefly larger one way and smaller at right angles to it, and then it is over.</p><p><strong>A source has to be changing, and it has to be lopsided.</strong> A mass sitting still radiates nothing. A mass pulsing in and out radiates nothing either, however violently, because it looks the same from every direction. Two objects going round each other are neither still nor symmetric, which is why the binary was the one that worked and the other two did not.</p><p><strong>The stretch and the squeeze are transverse.</strong> Both are at right angles to the way the wave is going, which is why a ring of test masses becomes an oval rather than a bigger circle. Nothing grew.</p><p><strong>A shrinking orbit makes a rising signal</strong>, at twice the orbital frequency - closer and faster means higher and louder, and that is what makes the pattern on screen 1 a chirp rather than a hum.</p><p><strong>An L-shaped instrument measures a difference.</strong> Two arms at right angles respond oppositely to the same wave, so comparing one against the other turns a change in length far smaller than a proton into something that can be recorded.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Next: <strong>Listening to Spacetime</strong> takes the same instrument much further — what a signal reveals about the source that made it, how a model is compared against real data, and why a signal that looks right is not yet a detection.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "three-stars-no-labels",
+  "position": [
+   1,
+   37
+  ],
+  "title": "Un universo de estrellas",
+  "subtitle": "Tamaño, color y el diagrama H-R, a partir de ocho estrellas modeladas",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 37 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Tres estrellas, sin etiquetas</h3><div class=\"inv-step-body\"><p>En el escenario hay tres estrellas, dibujadas en una escala común, así que la que parece mayor <em>es</em> mayor. Sus números están apagados en este paso.</p><p>Antes de que se revele nada, decide qué puede decirte de verdad esta imagen. Compromete una respuesta; se te volverá a preguntar por ella justo al final.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> El tamaño en este escenario es real. El brillo en pantalla no lo es: está elegido para que toda estrella se vea, y el pie de la imagen lo dice.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Solo con esta imagen, ¿de qué puedes estar seguro?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>De cuál es la mayor: están dibujadas en una escala común, así que el tamaño se puede leer</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>De cuál es la más luminosa: será la que se vea más brillante en pantalla</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>De cuál tiene más masa: la estrella más grande es la más pesada</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>De las tres, porque tamaño, brillo y masa van juntos</span></button></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "three-stars-no-labels",
+  "position": [
+   1,
+   37
+  ],
+  "title": "Un universo de estrellas",
+  "subtitle": "Tamaño, color y el diagrama H-R, a partir de ocho estrellas modeladas",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 37 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Tres estrellas, sin etiquetas</h3><div class=\"inv-step-body\"><p>En el escenario hay tres estrellas, dibujadas en una escala común, así que la que parece mayor <em>es</em> mayor. Sus números están apagados en este paso.</p><p>Antes de que se revele nada, decide qué puede decirte de verdad esta imagen. Compromete una respuesta; se te volverá a preguntar por ella justo al final.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> El tamaño en este escenario es real. El brillo en pantalla no lo es: está elegido para que toda estrella se vea, y el pie de la imagen lo dice.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Solo con esta imagen, ¿de qué puedes estar seguro?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>De cuál es la mayor: están dibujadas en una escala común, así que el tamaño se puede leer</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>De cuál es la más luminosa: será la que se vea más brillante en pantalla</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>De cuál tiene más masa: la estrella más grande es la más pesada</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>De las tres, porque tamaño, brillo y masa van juntos</span></button></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "three-stars-no-labels",
+  "position": [
+   1,
+   37
+  ],
+  "title": "Un universo de estrellas",
+  "subtitle": "Tamaño, color y el diagrama H-R, a partir de ocho estrellas modeladas",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 37 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Tres estrellas, sin etiquetas</h3><div class=\"inv-step-body\"><p>En el escenario hay tres estrellas, dibujadas en una escala común, así que la que parece mayor <em>es</em> mayor. Sus números están apagados en este paso.</p><p>Antes de que se revele nada, decide qué puede decirte de verdad esta imagen. Compromete una respuesta; se te volverá a preguntar por ella justo al final.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> El tamaño en este escenario es real. El brillo en pantalla no lo es: está elegido para que toda estrella se vea, y el pie de la imagen lo dice.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Solo con esta imagen, ¿de qué puedes estar seguro?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>De cuál es la mayor: están dibujadas en una escala común, así que el tamaño se puede leer</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>De cuál es la más luminosa: será la que se vea más brillante en pantalla</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>De cuál tiene más masa: la estrella más grande es la más pesada</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>De las tres, porque tamaño, brillo y masa van juntos</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Ahora los números», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-the-diagram-is-for",
+  "position": [
+   37,
+   37
+  ],
+  "title": "Un universo de estrellas",
+  "subtitle": "Tamaño, color y el diagrama H-R, a partir de ocho estrellas modeladas",
+  "body": "<p class=\"inv-step-count\">Paso 37 de 37 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Para qué sirve el diagrama</h3><div class=\"inv-step-body\"><p><strong>Cinco magnitudes, y no son la misma.</strong> La masa es cuánta estrella hay. El radio es cómo de grande es. La temperatura es cómo de caliente está su superficie. La luminosidad es cuánta luz sale de ella. El brillo aparente es cuánta de esa luz te llega, y depende de dónde estés tú.</p><p><strong>La temperatura y la luminosidad juntas fijan el radio</strong>, y lo usaste en ambos sentidos: así fue como dos estrellas del mismo color resultaron diferir en tamaño en un factor de varios cientos.</p><p><strong>En la secuencia principal, la masa fija lo demás</strong>, y de forma muy pronunciada: un factor cien en masa son millones en luz. Esa pendiente es toda la respuesta a cómo una estrella con mucho más combustible se queda sin él mucho antes.</p><p><strong>Una posición en el diagrama no fija una masa ni una edad.</strong> La gigante y la enana blanca que mediste son contraejemplos de las dos cosas, y las dos fueron estrellas corrientes de secuencia principal en su momento. Las relaciones de arriba son afirmaciones sobre la secuencia principal, no sobre las estrellas.</p><p><strong>Y una muestra no es una población.</strong> Las estrellas más brillantes del cielo no son las más comunes de la galaxia. Son las que se ven desde más lejos, que es un hecho sobre el muestreo y no sobre las estrellas.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Si quieres ver cambiar a estas estrellas en vez de compararlas, «Vidas de las estrellas» sigue a cuatro de ellas desde una nube que se colapsa hasta lo que dejan atrás.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

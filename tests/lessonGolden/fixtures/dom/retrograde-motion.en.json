@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "the-wandering-stars",
+  "position": [
+   1,
+   33
+  ],
+  "title": "Why Mars Goes Backwards",
+  "subtitle": "Change the frame, and fourteen centuries of epicycles fall away",
+  "body": "<p class=\"inv-step-count\">Step 1 of 33 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">The wandering stars</h3><div class=\"inv-step-body\"><p>Almost everything in the night sky moves together. The stars turn overhead as one rigid pattern, night after night, and the patterns themselves do not change within a human lifetime.</p><p>Five points of light do not obey. They drift slowly through the fixed stars along their own paths, and the Greeks called them <em>planētai</em>, the wanderers. Most of the time each one creeps steadily eastward against the stars.</p><p>And then, at intervals, one of them stops. It hangs still for a few days, reverses, and travels westward for weeks or months. Then it stops again and resumes its eastward march, having traced a loop or a zigzag against the background. Mars does this once every 780 days, and the reversal lasts about ten weeks.</p><p>This is not a subtle effect visible only to specialists. Anyone who watches Mars for a few months with the naked eye can see it, and every civilization that kept sky records noticed it.</p></div><figure class=\"inv-quote\"><blockquote>The planets appear sometimes to move forward, sometimes backward, and sometimes to stand still.</blockquote><figcaption>Claudius Ptolemy, Almagest, c. 150 CE</figcaption></figure><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> This investigation leaves the inspector switched on: you will need it to read numbers off Earth and Mars. Placing new objects is off, so a stray click cannot alter the system you are measuring.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "which-one-is-faster",
+  "position": [
+   6,
+   33
+  ],
+  "title": "Why Mars Goes Backwards",
+  "subtitle": "Change the frame, and fourteen centuries of epicycles fall away",
+  "body": "<p class=\"inv-step-count\">Step 6 of 33 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">Which one is faster?</h3><div class=\"inv-step-body\"><p>You have two periods and two distances. Kepler's third law relates them, but you do not need it here: you can read the answer straight off the numbers you just wrote down.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Going round the Sun, Earth…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>completes an orbit in less time than Mars, so it is going round faster</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>completes an orbit in more time than Mars, because it has further to go</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>goes round in the same time as Mars, since both orbit the same Sun</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>goes round faster only when it is closer to Mars</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "which-one-is-faster",
+  "position": [
+   6,
+   33
+  ],
+  "title": "Why Mars Goes Backwards",
+  "subtitle": "Change the frame, and fourteen centuries of epicycles fall away",
+  "body": "<p class=\"inv-step-count\">Step 6 of 33 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">Which one is faster?</h3><div class=\"inv-step-body\"><p>You have two periods and two distances. Kepler's third law relates them, but you do not need it here: you can read the answer straight off the numbers you just wrote down.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Going round the Sun, Earth…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>completes an orbit in less time than Mars, so it is going round faster</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>completes an orbit in more time than Mars, because it has further to go</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>goes round in the same time as Mars, since both orbit the same Sun</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>goes round faster only when it is closer to Mars</span></button></div><p class=\"inv-because\">Earth takes 365 days and Mars 687, so Earth laps the Sun nearly twice for every one lap of Mars. That is the whole mechanism of retrograde motion, and you have already measured it. The inner planet is on a shorter track and it also moves faster along it: both effects run the same way, which is what Kepler’s third law says.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-did",
+  "position": [
+   33,
+   33
+  ],
+  "title": "Why Mars Goes Backwards",
+  "subtitle": "Change the frame, and fourteen centuries of epicycles fall away",
+  "body": "<p class=\"inv-step-count\">Step 33 of 33 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you did</h3><div class=\"inv-step-body\"><p>You measured two orbital periods and computed a synodic period from them. You predicted what a planet would look like from a moving observer, then changed the frame and watched the prediction come true. You located the reversal at opposition, tied it to the overtaking geometry, and found the one-year epicycle that a geocentric model has to accept as a coincidence.</p><p>The simulation was doing exactly one thing throughout: two planets on circular orbits, under an inverse-square force from a star. Every loop, cusp and reversal came out of subtracting one body's position from another's.</p><p>That is worth holding onto beyond this investigation. A great many things that look like anomalies in the sky turn out to be statements about where the observer is standing, and the first question to ask of a strange motion is always: measured against what?</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

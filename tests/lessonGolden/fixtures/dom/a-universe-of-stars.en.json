@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "three-stars-no-labels",
+  "position": [
+   1,
+   37
+  ],
+  "title": "A Universe of Stars",
+  "subtitle": "Size, color and the H-R diagram, from eight modeled stars",
+  "body": "<p class=\"inv-step-count\">Step 1 of 37 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Three stars, no labels</h3><div class=\"inv-step-body\"><p>Three stars are on the stage, drawn on one common scale, so one that looks bigger <em>is</em> bigger. Their numbers are switched off for this step.</p><p>Before anything is revealed, decide what this picture can actually tell you. Commit to an answer; you will be asked about it again at the very end.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Size on this stage is real. Brightness on screen is not — it is chosen so that every star is visible, and the caption says so.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">From this picture alone, which can you be confident about?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Which is largest — they are drawn on one scale, so size is readable</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Which is most luminous — it will be the brightest on screen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Which has the most mass — the biggest star is the heaviest</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>All three, because size, brightness and mass go together</span></button></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "three-stars-no-labels",
+  "position": [
+   1,
+   37
+  ],
+  "title": "A Universe of Stars",
+  "subtitle": "Size, color and the H-R diagram, from eight modeled stars",
+  "body": "<p class=\"inv-step-count\">Step 1 of 37 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Three stars, no labels</h3><div class=\"inv-step-body\"><p>Three stars are on the stage, drawn on one common scale, so one that looks bigger <em>is</em> bigger. Their numbers are switched off for this step.</p><p>Before anything is revealed, decide what this picture can actually tell you. Commit to an answer; you will be asked about it again at the very end.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Size on this stage is real. Brightness on screen is not — it is chosen so that every star is visible, and the caption says so.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">From this picture alone, which can you be confident about?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Which is largest — they are drawn on one scale, so size is readable</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Which is most luminous — it will be the brightest on screen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Which has the most mass — the biggest star is the heaviest</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>All three, because size, brightness and mass go together</span></button></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "three-stars-no-labels",
+  "position": [
+   1,
+   37
+  ],
+  "title": "A Universe of Stars",
+  "subtitle": "Size, color and the H-R diagram, from eight modeled stars",
+  "body": "<p class=\"inv-step-count\">Step 1 of 37 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Three stars, no labels</h3><div class=\"inv-step-body\"><p>Three stars are on the stage, drawn on one common scale, so one that looks bigger <em>is</em> bigger. Their numbers are switched off for this step.</p><p>Before anything is revealed, decide what this picture can actually tell you. Commit to an answer; you will be asked about it again at the very end.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Size on this stage is real. Brightness on screen is not — it is chosen so that every star is visible, and the caption says so.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">From this picture alone, which can you be confident about?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Which is largest — they are drawn on one scale, so size is readable</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Which is most luminous — it will be the brightest on screen</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Which has the most mass — the biggest star is the heaviest</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>All three, because size, brightness and mass go together</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Now the numbers”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-the-diagram-is-for",
+  "position": [
+   37,
+   37
+  ],
+  "title": "A Universe of Stars",
+  "subtitle": "Size, color and the H-R diagram, from eight modeled stars",
+  "body": "<p class=\"inv-step-count\">Step 37 of 37 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What the diagram is for</h3><div class=\"inv-step-body\"><p><strong>Five quantities, and they are not each other.</strong> Mass is how much star there is. Radius is how big it is. Temperature is how hot its surface is. Luminosity is how much light leaves it. Apparent brightness is how much of that reaches you, and it depends on where you happen to be standing.</p><p><strong>Temperature and luminosity together fix the radius</strong>, and you used that in both directions - which is how two stars of the same color turned out to differ in size by a factor of several hundred.</p><p><strong>On the main sequence, mass sets the rest</strong>, and steeply: a hundredfold in mass is a millionfold in light. That steepness is the whole answer to how a star with far more fuel runs out of it far sooner.</p><p><strong>A position on the diagram does not fix a mass or an age.</strong> The giant and the white dwarf you measured are both counterexamples, and both were ordinary main-sequence stars once. The relationships above are statements about the main sequence, not about stars.</p><p><strong>And a sample is not a population.</strong> The brightest stars in the sky are not the commonest stars in the galaxy. They are the ones that can be seen from furthest away, which is a fact about the sampling rather than about the stars.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> If you want to see these stars change rather than compare them, \"Lives of Stars\" follows four of them from a collapsing cloud to what they leave behind.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

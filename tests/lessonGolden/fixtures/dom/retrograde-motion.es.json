@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "the-wandering-stars",
+  "position": [
+   1,
+   33
+  ],
+  "title": "Por qué Marte va hacia atrás",
+  "subtitle": "Cambia el marco y catorce siglos de epiciclos se vienen abajo",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 33 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Las estrellas errantes</h3><div class=\"inv-step-body\"><p>Casi todo en el cielo nocturno se mueve al unísono. Las estrellas giran sobre nuestras cabezas como un patrón rígido, noche tras noche, y los patrones mismos no cambian a lo largo de una vida humana.</p><p>Cinco puntos de luz no obedecen. Van a la deriva lentamente entre las estrellas fijas por sus propios caminos, y los griegos los llamaron <em>planētai</em>, los errantes. La mayor parte del tiempo cada uno de ellos avanza despacio hacia el este contra las estrellas.</p><p>Y entonces, a intervalos, uno se detiene. Se queda quieto unos días, invierte la marcha y viaja hacia el oeste durante semanas o meses. Después se detiene otra vez y reanuda su marcha hacia el este, habiendo trazado un bucle o un zigzag contra el fondo. Marte hace esto una vez cada 780 días, y la inversión dura unas diez semanas.</p><p>No es un efecto sutil visible solo para especialistas. Cualquiera que observe Marte durante unos meses a simple vista puede verlo, y todas las civilizaciones que llevaron registros del cielo lo advirtieron.</p></div><figure class=\"inv-quote\"><blockquote>Los planetas parecen a veces avanzar, a veces retroceder y a veces quedarse quietos.</blockquote><figcaption>Claudio Ptolomeo, Almagesto, h. 150 d. C.</figcaption></figure><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Esta investigación deja el inspector activado: lo necesitarás para leer números de la Tierra y de Marte. La colocación de objetos nuevos está desactivada, así que un clic accidental no puede alterar el sistema que estás midiendo.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "which-one-is-faster",
+  "position": [
+   6,
+   33
+  ],
+  "title": "Por qué Marte va hacia atrás",
+  "subtitle": "Cambia el marco y catorce siglos de epiciclos se vienen abajo",
+  "body": "<p class=\"inv-step-count\">Paso 6 de 33 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Cuál es más rápido?</h3><div class=\"inv-step-body\"><p>Tienes dos periodos y dos distancias. La tercera ley de Kepler los relaciona, pero aquí no la necesitas: puedes leer la respuesta directamente de los números que acabas de anotar.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Al girar alrededor del Sol, la Tierra…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>completa una órbita en menos tiempo que Marte, así que gira más rápido</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>completa una órbita en más tiempo que Marte, porque tiene más recorrido</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>gira en el mismo tiempo que Marte, ya que ambos orbitan el mismo Sol</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>gira más rápido solo cuando está más cerca de Marte</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "which-one-is-faster",
+  "position": [
+   6,
+   33
+  ],
+  "title": "Por qué Marte va hacia atrás",
+  "subtitle": "Cambia el marco y catorce siglos de epiciclos se vienen abajo",
+  "body": "<p class=\"inv-step-count\">Paso 6 de 33 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Cuál es más rápido?</h3><div class=\"inv-step-body\"><p>Tienes dos periodos y dos distancias. La tercera ley de Kepler los relaciona, pero aquí no la necesitas: puedes leer la respuesta directamente de los números que acabas de anotar.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Al girar alrededor del Sol, la Tierra…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>completa una órbita en menos tiempo que Marte, así que gira más rápido</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>completa una órbita en más tiempo que Marte, porque tiene más recorrido</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>gira en el mismo tiempo que Marte, ya que ambos orbitan el mismo Sol</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>gira más rápido solo cuando está más cerca de Marte</span></button></div><p class=\"inv-because\">La Tierra tarda 365 días y Marte 687, así que la Tierra da casi dos vueltas al Sol por cada vuelta de Marte. Ese es todo el mecanismo del movimiento retrógrado, y ya lo has medido. El planeta interior está en una pista más corta y además se mueve más rápido por ella: ambos efectos van en el mismo sentido, que es lo que dice la tercera ley de Kepler.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-did",
+  "position": [
+   33,
+   33
+  ],
+  "title": "Por qué Marte va hacia atrás",
+  "subtitle": "Cambia el marco y catorce siglos de epiciclos se vienen abajo",
+  "body": "<p class=\"inv-step-count\">Paso 33 de 33 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que has hecho</h3><div class=\"inv-step-body\"><p>Has medido dos periodos orbitales y has calculado un periodo sinódico a partir de ellos. Has predicho qué aspecto tendría un planeta visto desde un observador en movimiento, después has cambiado el marco y has visto cumplirse la predicción. Has situado la inversión en la oposición, la has ligado a la geometría del adelantamiento, y has encontrado el epiciclo de un año que un modelo geocéntrico tiene que aceptar como una coincidencia.</p><p>La simulación estuvo haciendo exactamente una cosa todo el tiempo: dos planetas en órbitas circulares, bajo una fuerza del inverso del cuadrado ejercida por una estrella. Todos los bucles, picos e inversiones salieron de restar la posición de un cuerpo a la de otro.</p><p>Eso merece la pena conservarlo más allá de esta investigación. Muchísimas cosas que parecen anomalías en el cielo resultan ser afirmaciones sobre dónde está situado el observador, y la primera pregunta que hay que hacerle a un movimiento extraño es siempre: ¿medido contra qué?</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "two-suns",
+  "position": [
+   1,
+   37
+  ],
+  "title": "Planets in Binary Stars",
+  "subtitle": "What survives around two stars, and how you would know",
+  "body": "<p class=\"inv-step-count\">Step 1 of 37 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Two suns</h3><div class=\"inv-step-body\"><p>Rather more than half of the Sun-like stars in the galaxy have at least one companion. Planets in those systems are not a curiosity; they are the normal case, and the Sun's single-star arrangement is the one that needs explaining.</p><p>On screen are two stars — one solar mass and half a solar mass — ten AU apart on an orbit with eccentricity 0.4, so they swing between six and fourteen AU of each other every twenty-six years. The small blue trail is an Earth-mass planet going round the heavier star at 1.5 AU.</p><p>The question for the next forty minutes is the obvious one: <strong>where can a planet be here and stay?</strong></p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Alpha Centauri A and B are a real version of this: 1.13 and 0.97 solar masses, 23.5 AU apart, eccentricity 0.52.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "before-you-run-anything",
+  "position": [
+   3,
+   37
+  ],
+  "title": "Planets in Binary Stars",
+  "subtitle": "What survives around two stars, and how you would know",
+  "body": "<p class=\"inv-step-count\">Step 3 of 37 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Before you run anything</h3><div class=\"inv-step-body\"><p>The stars are 10 AU apart on average and come within 6 AU of each other at their closest. A planet going round Star A has to live somewhere inside that.</p><p>Commit to a number now. You will be measuring against it for the rest of the investigation.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">How far from Star A do you think a planet can be and still survive, as a fraction of the 10 AU separation?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Almost all of it — anywhere inside about 0.9 of the separation</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Roughly half of it</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Something like a fifth of it</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>Only very close in — a few per cent</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "before-you-run-anything",
+  "position": [
+   3,
+   37
+  ],
+  "title": "Planets in Binary Stars",
+  "subtitle": "What survives around two stars, and how you would know",
+  "body": "<p class=\"inv-step-count\">Step 3 of 37 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Before you run anything</h3><div class=\"inv-step-body\"><p>The stars are 10 AU apart on average and come within 6 AU of each other at their closest. A planet going round Star A has to live somewhere inside that.</p><p>Commit to a number now. You will be measuring against it for the rest of the investigation.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">How far from Star A do you think a planet can be and still survive, as a fraction of the 10 AU separation?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Almost all of it — anywhere inside about 0.9 of the separation</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Roughly half of it</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Something like a fifth of it</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>Only very close in — a few per cent</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Run it as it stands”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-can-say",
+  "position": [
+   37,
+   37
+  ],
+  "title": "Planets in Binary Stars",
+  "subtitle": "What survives around two stars, and how you would know",
+  "body": "<p class=\"inv-step-count\">Step 37 of 37 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you can say, and what the model leaves out</h3><div class=\"inv-step-body\"><p>You have measured a good deal:</p><p>· A planet at 0.15 separations around one star survived twenty binary periods untroubled, and the published fit agrees it should.</p><p>· A planet at 0.30 was ejected within three periods, at every timestep tried.</p><p>· A planet at 0.25 gave different answers at different timesteps, so its fate is not determined by these runs.</p><p>· A circumbinary planet at 4.0 held its orbit for forty periods; one at 2.0 was driven out in three, without ever coming near a star.</p><p>· Two configurations the fit calls unstable survived forty periods, while visibly being flung most of the way out of the system.</p><p>Every one of those is a statement about a finite integration of a specific configuration. None of them is a statement about stability, and the last two are a good demonstration of why the distinction is worth keeping.</p><p>Three limits of the model itself, before you take any of this to a real system.</p><p><strong>It is flat.</strong> Everything here — the simulation and the fit both — is two-dimensional. Real orbits are inclined, and an inclined orbit in a binary can trade its tilt for eccentricity, which destabilizes orbits that are perfectly safe in the plane.</p><p><strong>The planet is a test particle.</strong> An Earth mass against a solar mass. A Jupiter would perturb the stars back, and a system with several planets is a different problem again.</p><p><strong>The stars are points.</strong> No tides, no radiation, no mass loss. A \"collision\" here means the planet came within about 0.06 AU of a star's center, because the stars are drawn ten times life size and the simulation collides on what is drawn.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> The gap between \"my integration says X\" and \"nature does X\" is where most of the work in computational astrophysics actually lives.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

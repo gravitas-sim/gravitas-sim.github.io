@@ -699,6 +699,18 @@ export const CHECKS = [
     group: 'correctness',
   },
   {
+    id: 'lesson-golden',
+    label: 'the lesson-engine coverage table is current',
+    command: ['npm', 'run', 'lesson:coverage', '--', '--check'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same facts in tests/lessonGolden.test.js (the table ' +
+      'against the lessons and activities, the Node golden against the ' +
+      'engine) and e2e/lessonGolden.spec.js (the rendered screens).',
+    group: 'correctness',
+  },
+  {
     id: 'docs-map',
     label: 'DOCUMENTS.md maps every root document',
     command: ['npm', 'run', 'docs-map:check'],

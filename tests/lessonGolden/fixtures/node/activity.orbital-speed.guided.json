@@ -1,0 +1,59 @@
+{
+ "cut": "orbital-speed/guided",
+ "lesson": "keplers-laws",
+ "ok": true,
+ "reason": null,
+ "assignment": {
+  "k": "gravitas.assignment",
+  "v": 2,
+  "i": "act-orbital-speed-guided",
+  "l": "keplers-laws",
+  "t": "orbital-speed",
+  "n": "Golden intro",
+  "s": [
+   "eight-minutes-of-arc",
+   "change-the-shape",
+   "where-does-it-move-fastest",
+   "watch-it-happen",
+   "equal-areas-however-you-slice",
+   "fast-and-slow-in-numbers",
+   "why-the-speed-changes"
+  ],
+  "f": [
+   "ac4f2f95",
+   "589c83e1",
+   "0086f3c7",
+   "5fd14104",
+   "086efbfc",
+   "c4e6d0fa",
+   "36370368"
+  ],
+  "c": "2026-01-02",
+  "p": [
+   "golden-pack",
+   "1.2.0"
+  ]
+ },
+ "sids": [
+  "eight-minutes-of-arc",
+  "change-the-shape",
+  "where-does-it-move-fastest",
+  "watch-it-happen",
+  "equal-areas-however-you-slice",
+  "fast-and-slow-in-numbers",
+  "why-the-speed-changes"
+ ],
+ "added": [
+  "eight-minutes-of-arc"
+ ],
+ "unknown": [],
+ "valid": false,
+ "pins": {
+  "none": "none",
+  "same": "same",
+  "compatible": "compatible",
+  "major": "major",
+  "moved": "moved",
+  "unpinned": "unpinned"
+ }
+}
