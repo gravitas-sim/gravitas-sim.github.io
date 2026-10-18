@@ -9,6 +9,7 @@
 // each time the engine mounts or unmounts its markup.
 // =============================================================================
 
+import { put } from '../storage/local.js';
 import { t } from '../i18n/index.js';
 import { escapeHtml as escape, prose } from '../lessonMarkup.js';
 import {
@@ -398,12 +399,13 @@ function renderSequences() {
   els.sequenceList.querySelectorAll('[data-sequence-lesson]').forEach(btn => {
     btn.addEventListener('click', () => {
       try {
-        localStorage.setItem(
+        put(
           'gravitas_next_context',
           JSON.stringify({
             k: 'seq',
             id: btn.closest('[data-seq]').dataset.seq,
-          })
+          }),
+          'preferences'
         );
       } catch {
         /* no storage: no next offered */

@@ -10,6 +10,7 @@
 // Nothing here is sent anywhere; the Library index is a file of the site.
 // =============================================================================
 
+import { put } from '../storage/local.js';
 import { getLocale } from '../i18n/index.js';
 
 export const CONTEXT_KEY = 'gravitas_next_context';
@@ -83,7 +84,7 @@ export async function whatNext(list, { id, deeper, onDeeper }) {
         const name = ctx.t;
         const move = () => {
           ctx.i = at + 1;
-          localStorage.setItem(CONTEXT_KEY, JSON.stringify(ctx));
+          put(CONTEXT_KEY, JSON.stringify(ctx), 'preferences');
         };
         link(
           next[0]
