@@ -102,7 +102,6 @@ import {
   announceMerge,
   runStepListeners,
 } from './engine/events.js';
-// Bodies and the black hole (slice S5), re-exported below as before.
 import {
   DT,
   ABSORB_BUFFER,
