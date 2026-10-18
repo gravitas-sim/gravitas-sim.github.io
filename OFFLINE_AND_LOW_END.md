@@ -60,7 +60,7 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | Other | 16 | 640 KB |
 | **Total** | **1051** | **17.0 MB** |
 
-Of those, 833 are core (the install fails without them) and 218 optional (a missing one is reported and costs nothing).
+Of those, 787 are core (the install fails without them), 107 optional (installed with them; a missing one is reported and costs nothing) and 157 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 894 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -70,6 +70,50 @@ Gzipped, as Pages serves it, the whole is about 6 MB.
 | 3 Mbps | ~17 s |
 | 1.5 Mbps | ~34 s |
 <!--/fact-block-->
+### What each page promises offline, and the rule for a new pack
+
+Three tiers, and a page promises offline only what its tier delivers. The
+**first-visit install** (core and optional) is what a reader waits for and what
+decides whether a version activates; it has a committed ceiling in
+`tools/data-budget.json` that `tests/offlineTiers.test.js` enforces in every
+budget-policy mode. The **idle install** is fetched after activation, when the
+page has gone idle, by an `install-idle` message to the worker: the instructor
+modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the Library and
+the data tables. It fetches only what the cache lacks, so a run cut short is
+finished by the next open, and a device that asked for less data (Save-Data) is
+not given it unasked. Until it finishes, those surfaces need the network; that
+is the trade D-PERF-02 accepted for a smaller install. **Parts** are on-demand:
+a reader asks for them, with a storage estimate first (`js/offlineParts.js`).
+
+<!--fact-block:promises-->
+| Package | What it provides | Core | Optional | Idle | Works offline |
+| --- | --- | ---: | ---: | ---: | --- |
+| `gravitas.lab3d` | The 3-D small-N dynamics kernel | 0 | 0 | 32 | after the first visit settles (32 idle files) |
+| `gravitas.mission` | The mission-design core and the mission lab | 0 | 0 | 38 | after the first visit settles (38 idle files) |
+| `gravitas.lesson.power-law-gravity` | What If Gravity Were Not Inverse Square? | 1 | 0 | 0 | from the first visit |
+| `gravitas.power-law-instruments` | Power-law gravity instruments | 3 | 0 | 0 | from the first visit |
+| `gravitas.sdss-dr18-spectra` | Four observed stellar spectra (SDSS DR18) | 1 | 0 | 0 | from the first visit |
+| `gravitas.tess-hd209458-s56` | HD 209458 observed by TESS (sector 56 light curve and aperture mask) | 0 | 0 | 2 | after the first visit settles (2 idle files) |
+
+The idle tier, by surface (gzip level 6):
+
+| Surface | Files | Gzip |
+| --- | ---: | ---: |
+| 3-D lab | 38 | 142 KB |
+| data tables | 33 | 234 KB |
+| instructor modules | 15 | 259 KB |
+| mission lab | 40 | 228 KB |
+| Sky Lab | 22 | 175 KB |
+| Library | 7 | 68 KB |
+| three.js | 2 | 241 KB |
+<!--/fact-block-->
+
+**The rule for a new pack.** It is core only when a shipped investigation needs
+it at boot. Anything a reader reaches by choosing it (a lab, a data table, a
+survey) is an idle file if it is small and a part if it is not, never core. A
+page that needs a part says so and does not promise offline without it, and a
+capability package cannot declare an idle-tier path `core`; the build refuses.
+
 **Install cost, before and after the 2.0.1 tier change (D-PERF-02, change 1).** The investigation cards (37 images, about 180 KB) and the three authoring pages (Scenario Studio, the Investigation Composer and the course builder) joined the optional tier, so a first offline visit to a card list or to those pages works. Before: 1,012 files, 16.9 MB raw, 834 core and 178 optional. After: 1,052 files, 17.2 MB raw, 834 core and 218 optional. The core install did not change, so an install that cannot fetch the new files still succeeds; the gzipped total stays about 6 MB (WebP does not compress). `e2e/offline.spec.js` fetches a card image and opens the three pages with the network off.
 
 Pages serves gzip, so the real transfer is more than <!--fact:precacheGzipMB-->6<!--/fact--> MB. The images barely

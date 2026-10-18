@@ -84,6 +84,10 @@ const OPTIONAL = self.__GRAVITAS_PRECACHE_OPTIONAL || [];
 // idle ('install-idle'), so the install a reader waits for stays small.
 const IDLE = self.__GRAVITAS_PRECACHE_IDLE || [];
 
+// Parts a reader chose to keep offline (js/offlineParts.js). Their URLs carry
+// their digest, so a hit here is always the right bytes.
+const PARTS_CACHE = 'gravitas-parts';
+
 /** The one document every navigation is answered with. */
 const SHELL = './index.html';
 
@@ -172,7 +176,14 @@ self.addEventListener('activate', event => {
       const names = await caches.keys();
       await Promise.all(
         names
-          .filter(name => name.startsWith('gravitas-') && name !== VERSION)
+          // The parts cache is the reader's own downloads, under immutable
+          // URLs: a new version replaces the pages and keeps them.
+          .filter(
+            name =>
+              name.startsWith('gravitas-') &&
+              name !== VERSION &&
+              name !== PARTS_CACHE
+          )
           .map(name => caches.delete(name))
       );
       await clients.claim();
@@ -324,6 +335,10 @@ self.addEventListener('fetch', event => {
         }
         return hit;
       }
+
+      // A part the reader kept: exact match only, the URL is the identity.
+      const part = await (await caches.open(PARTS_CACHE)).match(request);
+      if (part) return part;
 
       try {
         return maybeCache(cache, request, await fetch(request));
