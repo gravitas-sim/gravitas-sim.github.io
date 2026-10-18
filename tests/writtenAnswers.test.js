@@ -19,7 +19,7 @@
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
-import { isWrittenAnswer } from '../js/investigations/writtenAnswer.js';
+import { isWrittenAnswer } from '../js/investigations/stepView.js';
 import {
   EVIDENCE_FROM,
   evidenceFrom,
