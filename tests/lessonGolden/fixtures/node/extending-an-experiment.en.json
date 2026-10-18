@@ -1,0 +1,437 @@
+{
+ "id": "extending-an-experiment",
+ "locale": "en",
+ "title": "Extending an Experiment",
+ "steps": 8,
+ "depths": [
+  [
+   "core",
+   8
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "how-well-can-twenty-place-an-edge",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-the-sample-differs",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-moved-it",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "extending-an-experiment",
+   "stepSid": "what-you-worked-out",
+   "responses": {
+    "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
+    "extending-an-experiment:why-the-sample-differs": 0,
+    "extending-an-experiment:what-moved-it": 0
+   },
+   "attempts": {
+    "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
+    "extending-an-experiment:why-the-sample-differs": 1,
+    "extending-an-experiment:what-moved-it": 1
+   },
+   "visited": [
+    "twenty-planets",
+    "how-well-can-twenty-place-an-edge",
+    "the-fit",
+    "a-uniform-population",
+    "why-the-sample-differs",
+    "move-the-definition",
+    "what-moved-it",
+    "what-you-worked-out"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
+    "extending-an-experiment:why-the-sample-differs": 0,
+    "extending-an-experiment:what-moved-it": 0
+   },
+   "attempts": {
+    "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
+    "extending-an-experiment:why-the-sample-differs": 1,
+    "extending-an-experiment:what-moved-it": 1
+   },
+   "visited": [
+    "a-uniform-population",
+    "how-well-can-twenty-place-an-edge",
+    "move-the-definition",
+    "the-fit",
+    "twenty-planets",
+    "what-moved-it",
+    "what-you-worked-out",
+    "why-the-sample-differs"
+   ],
+   "stepSid": "what-you-worked-out",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "extending-an-experiment",
+    "title": "Extending an Experiment",
+    "stepCount": 8
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-worked-out",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "twenty-planets",
+     "how-well-can-twenty-place-an-edge",
+     "the-fit",
+     "a-uniform-population",
+     "why-the-sample-differs",
+     "move-the-definition",
+     "what-moved-it",
+     "what-you-worked-out"
+    ],
+    "responses": {
+     "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
+     "extending-an-experiment:why-the-sample-differs": 0,
+     "extending-an-experiment:what-moved-it": 0
+    },
+    "attempts": {
+     "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
+     "extending-an-experiment:why-the-sample-differs": 1,
+     "extending-an-experiment:what-moved-it": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "twenty-planets",
+     "fingerprint": "read|-|-|Binary Planet Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "how-well-can-twenty-place-an-edge",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "the-fit",
+     "fingerprint": "measure|-|-|-|edge+edgeSigma+sample+extended|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "a-uniform-population",
+     "fingerprint": "measure|-|-|-|extended+gap|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "why-the-sample-differs",
+     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "move-the-definition",
+     "fingerprint": "measure|-|-|-|edge+extended|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "what-moved-it",
+     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 7,
+     "sid": "what-you-worked-out",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
+    "extending-an-experiment:why-the-sample-differs": 0,
+    "extending-an-experiment:what-moved-it": 0
+   },
+   "attempts": {
+    "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
+    "extending-an-experiment:why-the-sample-differs": 1,
+    "extending-an-experiment:what-moved-it": 1
+   },
+   "visited": [
+    "a-uniform-population",
+    "how-well-can-twenty-place-an-edge",
+    "move-the-definition",
+    "the-fit",
+    "twenty-planets",
+    "what-moved-it",
+    "what-you-worked-out",
+    "why-the-sample-differs"
+   ],
+   "stepIndex": 7,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-extending-an-experiment",
+  "record": {
+   "ids": [
+    "golden-extending-an-experiment"
+   ],
+   "rows": [
+    [
+     "golden-extending-an-experiment",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "6d47fd4bea41c972a97cdc61ffe5b564da167a134c0ce0f955fe4efc46795f04"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "how-well-can-twenty-place-an-edge",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-the-sample-differs",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-moved-it",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "how-well-can-twenty-place-an-edge",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-the-sample-differs",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-moved-it",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "6d47fd4bea41c972a97cdc61ffe5b564da167a134c0ce0f955fe4efc46795f04",
+     "i": [
+      "golden-extending-an-experiment"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-extending-an-experiment",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "how-well-can-twenty-place-an-edge",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-the-sample-differs",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-moved-it",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "how-well-can-twenty-place-an-edge",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-the-sample-differs",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-moved-it",
+     "value": 0,
+     "locale": "en"
+    }
+   ]
+  }
+ }
+}

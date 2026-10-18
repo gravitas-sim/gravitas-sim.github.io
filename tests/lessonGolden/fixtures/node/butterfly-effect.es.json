@@ -1,0 +1,1190 @@
+{
+ "id": "butterfly-effect",
+ "locale": "es",
+ "title": "El efecto mariposa en el espacio",
+ "steps": 28,
+ "depths": [
+  [
+   "core",
+   28
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "the-same-numbers-twice",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-zero-proves",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "nudge-one-star-in-a",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-instrument-refused",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "linear-in-numbers",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 150000,
+   "grades": [
+    [
+     "1000000",
+     true,
+     "correct",
+     1000000,
+     null,
+     false,
+     null
+    ],
+    [
+     "1075000",
+     true,
+     "correct",
+     1075000,
+     null,
+     false,
+     null
+    ],
+    [
+     "1450000",
+     false,
+     "incorrect",
+     1450000,
+     null,
+     false,
+     null
+    ],
+    [
+     "1000000 km",
+     true,
+     "correct",
+     1000000,
+     "km",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "the-same-nudge-three-bodies",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "how-long-does-a-prediction",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 12,
+   "grades": [
+    [
+     "95",
+     true,
+     "correct",
+     95,
+     null,
+     false,
+     null
+    ],
+    [
+     "101",
+     true,
+     "correct",
+     101,
+     null,
+     false,
+     null
+    ],
+    [
+     "131",
+     false,
+     "incorrect",
+     131,
+     null,
+     false,
+     null
+    ],
+    [
+     "95 simulated seconds",
+     true,
+     "correct",
+     95,
+     "simulated seconds",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "buying-more-time",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "before-you-refine",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "reading-the-verdict",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "which-of-these-is-chaos",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "deterministic-and-unpredictable",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "butterfly-effect",
+   "stepSid": "what-you-established",
+   "responses": {
+    "butterfly-effect:the-same-numbers-twice": 0,
+    "butterfly-effect:what-zero-proves": 1,
+    "butterfly-effect:nudge-one-star-in-a": 1,
+    "butterfly-effect:the-instrument-refused": 1,
+    "butterfly-effect:linear-in-numbers": "1000000",
+    "butterfly-effect:linear-in-numbers:locale": "es",
+    "butterfly-effect:the-same-nudge-three-bodies": 2,
+    "butterfly-effect:how-long-does-a-prediction": "95",
+    "butterfly-effect:how-long-does-a-prediction:locale": "es",
+    "butterfly-effect:buying-more-time": 1,
+    "butterfly-effect:before-you-refine": 1,
+    "butterfly-effect:reading-the-verdict": 2,
+    "butterfly-effect:which-of-these-is-chaos": 2,
+    "butterfly-effect:deterministic-and-unpredictable": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "butterfly-effect:the-same-numbers-twice": 1,
+    "butterfly-effect:what-zero-proves": 1,
+    "butterfly-effect:nudge-one-star-in-a": 1,
+    "butterfly-effect:the-instrument-refused": 1,
+    "butterfly-effect:linear-in-numbers": 1,
+    "butterfly-effect:the-same-nudge-three-bodies": 1,
+    "butterfly-effect:how-long-does-a-prediction": 1,
+    "butterfly-effect:buying-more-time": 1,
+    "butterfly-effect:before-you-refine": 1,
+    "butterfly-effect:reading-the-verdict": 1,
+    "butterfly-effect:which-of-these-is-chaos": 1
+   },
+   "visited": [
+    "a-word-that-has-been",
+    "the-same-numbers-twice",
+    "how-to-run-the-same",
+    "the-reproducibility-control",
+    "what-zero-proves",
+    "a-control-before-the-interesting",
+    "nudge-one-star-in-a",
+    "measure-the-binary",
+    "the-instrument-refused",
+    "linear-in-numbers",
+    "back-to-the-triangle",
+    "the-same-nudge-three-bodies",
+    "measure-the-triple",
+    "write-down-what-you-measured",
+    "what-an-e-folding-time",
+    "how-long-does-a-prediction",
+    "buying-more-time",
+    "the-objection-you-should-have",
+    "before-you-refine",
+    "the-numerical-control",
+    "reading-the-verdict",
+    "not-every-three-body-system",
+    "which-of-these-is-chaos",
+    "deterministic-and-unpredictable",
+    "move-the-horizon",
+    "what-this-is-a-model",
+    "where-these-results-come-from",
+    "what-you-established"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "butterfly-effect:the-same-numbers-twice": 0,
+    "butterfly-effect:what-zero-proves": 1,
+    "butterfly-effect:nudge-one-star-in-a": 1,
+    "butterfly-effect:the-instrument-refused": 1,
+    "butterfly-effect:linear-in-numbers": "1000000",
+    "butterfly-effect:linear-in-numbers:locale": "es",
+    "butterfly-effect:the-same-nudge-three-bodies": 2,
+    "butterfly-effect:how-long-does-a-prediction": "95",
+    "butterfly-effect:how-long-does-a-prediction:locale": "es",
+    "butterfly-effect:buying-more-time": 1,
+    "butterfly-effect:before-you-refine": 1,
+    "butterfly-effect:reading-the-verdict": 2,
+    "butterfly-effect:which-of-these-is-chaos": 2,
+    "butterfly-effect:deterministic-and-unpredictable": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "butterfly-effect:the-same-numbers-twice": 1,
+    "butterfly-effect:what-zero-proves": 1,
+    "butterfly-effect:nudge-one-star-in-a": 1,
+    "butterfly-effect:the-instrument-refused": 1,
+    "butterfly-effect:linear-in-numbers": 1,
+    "butterfly-effect:the-same-nudge-three-bodies": 1,
+    "butterfly-effect:how-long-does-a-prediction": 1,
+    "butterfly-effect:buying-more-time": 1,
+    "butterfly-effect:before-you-refine": 1,
+    "butterfly-effect:reading-the-verdict": 1,
+    "butterfly-effect:which-of-these-is-chaos": 1
+   },
+   "visited": [
+    "a-control-before-the-interesting",
+    "a-word-that-has-been",
+    "back-to-the-triangle",
+    "before-you-refine",
+    "buying-more-time",
+    "deterministic-and-unpredictable",
+    "how-long-does-a-prediction",
+    "how-to-run-the-same",
+    "linear-in-numbers",
+    "measure-the-binary",
+    "measure-the-triple",
+    "move-the-horizon",
+    "not-every-three-body-system",
+    "nudge-one-star-in-a",
+    "reading-the-verdict",
+    "the-instrument-refused",
+    "the-numerical-control",
+    "the-objection-you-should-have",
+    "the-reproducibility-control",
+    "the-same-nudge-three-bodies",
+    "the-same-numbers-twice",
+    "what-an-e-folding-time",
+    "what-this-is-a-model",
+    "what-you-established",
+    "what-zero-proves",
+    "where-these-results-come-from",
+    "which-of-these-is-chaos",
+    "write-down-what-you-measured"
+   ],
+   "stepSid": "what-you-established",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "butterfly-effect",
+    "title": "El efecto mariposa en el espacio",
+    "stepCount": 28
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-established",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "a-word-that-has-been",
+     "the-same-numbers-twice",
+     "how-to-run-the-same",
+     "the-reproducibility-control",
+     "what-zero-proves",
+     "a-control-before-the-interesting",
+     "nudge-one-star-in-a",
+     "measure-the-binary",
+     "the-instrument-refused",
+     "linear-in-numbers",
+     "back-to-the-triangle",
+     "the-same-nudge-three-bodies",
+     "measure-the-triple",
+     "write-down-what-you-measured",
+     "what-an-e-folding-time",
+     "how-long-does-a-prediction",
+     "buying-more-time",
+     "the-objection-you-should-have",
+     "before-you-refine",
+     "the-numerical-control",
+     "reading-the-verdict",
+     "not-every-three-body-system",
+     "which-of-these-is-chaos",
+     "deterministic-and-unpredictable",
+     "move-the-horizon",
+     "what-this-is-a-model",
+     "where-these-results-come-from",
+     "what-you-established"
+    ],
+    "responses": {
+     "butterfly-effect:the-same-numbers-twice": 0,
+     "butterfly-effect:what-zero-proves": 1,
+     "butterfly-effect:nudge-one-star-in-a": 1,
+     "butterfly-effect:the-instrument-refused": 1,
+     "butterfly-effect:linear-in-numbers": "1000000",
+     "butterfly-effect:linear-in-numbers:locale": "es",
+     "butterfly-effect:the-same-nudge-three-bodies": 2,
+     "butterfly-effect:how-long-does-a-prediction": "95",
+     "butterfly-effect:how-long-does-a-prediction:locale": "es",
+     "butterfly-effect:buying-more-time": 1,
+     "butterfly-effect:before-you-refine": 1,
+     "butterfly-effect:reading-the-verdict": 2,
+     "butterfly-effect:which-of-these-is-chaos": 2,
+     "butterfly-effect:deterministic-and-unpredictable": "A fixed sentence for the golden."
+    },
+    "attempts": {
+     "butterfly-effect:the-same-numbers-twice": 1,
+     "butterfly-effect:what-zero-proves": 1,
+     "butterfly-effect:nudge-one-star-in-a": 1,
+     "butterfly-effect:the-instrument-refused": 1,
+     "butterfly-effect:linear-in-numbers": 1,
+     "butterfly-effect:the-same-nudge-three-bodies": 1,
+     "butterfly-effect:how-long-does-a-prediction": 1,
+     "butterfly-effect:buying-more-time": 1,
+     "butterfly-effect:before-you-refine": 1,
+     "butterfly-effect:reading-the-verdict": 1,
+     "butterfly-effect:which-of-these-is-chaos": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "a-word-that-has-been",
+     "fingerprint": "read|-|-|Three-Body Sensitivity Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "the-same-numbers-twice",
+     "fingerprint": "predict|-|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "how-to-run-the-same",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "the-reproducibility-control",
+     "fingerprint": "explore|-|chaos-divergence|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "what-zero-proves",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "a-control-before-the-interesting",
+     "fingerprint": "read|-|-|Binary Pair|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "nudge-one-star-in-a",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 7,
+     "sid": "measure-the-binary",
+     "fingerprint": "explore|-|chaos-divergence|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "the-instrument-refused",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 9,
+     "sid": "linear-in-numbers",
+     "fingerprint": "question|numeric|-|-|-|-|a=1000000;t=150000;u=km",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "back-to-the-triangle",
+     "fingerprint": "read|-|-|Three-Body Sensitivity Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 11,
+     "sid": "the-same-nudge-three-bodies",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 12,
+     "sid": "measure-the-triple",
+     "fingerprint": "explore|-|chaos-divergence|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 13,
+     "sid": "write-down-what-you-measured",
+     "fingerprint": "measure|-|chaos-divergence|-|tau+r2+growth|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "what-an-e-folding-time",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "how-long-does-a-prediction",
+     "fingerprint": "question|numeric|-|-|-|-|a=95;t=12;u=simulated seconds",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "buying-more-time",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 17,
+     "sid": "the-objection-you-should-have",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 18,
+     "sid": "before-you-refine",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 19,
+     "sid": "the-numerical-control",
+     "fingerprint": "explore|-|chaos-divergence|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 20,
+     "sid": "reading-the-verdict",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 21,
+     "sid": "not-every-three-body-system",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 22,
+     "sid": "which-of-these-is-chaos",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 23,
+     "sid": "deterministic-and-unpredictable",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 24,
+     "sid": "move-the-horizon",
+     "fingerprint": "explore|-|chaos-divergence|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 25,
+     "sid": "what-this-is-a-model",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 26,
+     "sid": "where-these-results-come-from",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 27,
+     "sid": "what-you-established",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "butterfly-effect:the-same-numbers-twice": 0,
+    "butterfly-effect:what-zero-proves": 1,
+    "butterfly-effect:nudge-one-star-in-a": 1,
+    "butterfly-effect:the-instrument-refused": 1,
+    "butterfly-effect:linear-in-numbers": "1000000",
+    "butterfly-effect:linear-in-numbers:locale": "es",
+    "butterfly-effect:the-same-nudge-three-bodies": 2,
+    "butterfly-effect:how-long-does-a-prediction": "95",
+    "butterfly-effect:how-long-does-a-prediction:locale": "es",
+    "butterfly-effect:buying-more-time": 1,
+    "butterfly-effect:before-you-refine": 1,
+    "butterfly-effect:reading-the-verdict": 2,
+    "butterfly-effect:which-of-these-is-chaos": 2,
+    "butterfly-effect:deterministic-and-unpredictable": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "butterfly-effect:the-same-numbers-twice": 1,
+    "butterfly-effect:what-zero-proves": 1,
+    "butterfly-effect:nudge-one-star-in-a": 1,
+    "butterfly-effect:the-instrument-refused": 1,
+    "butterfly-effect:linear-in-numbers": 1,
+    "butterfly-effect:the-same-nudge-three-bodies": 1,
+    "butterfly-effect:how-long-does-a-prediction": 1,
+    "butterfly-effect:buying-more-time": 1,
+    "butterfly-effect:before-you-refine": 1,
+    "butterfly-effect:reading-the-verdict": 1,
+    "butterfly-effect:which-of-these-is-chaos": 1
+   },
+   "visited": [
+    "a-control-before-the-interesting",
+    "a-word-that-has-been",
+    "back-to-the-triangle",
+    "before-you-refine",
+    "buying-more-time",
+    "deterministic-and-unpredictable",
+    "how-long-does-a-prediction",
+    "how-to-run-the-same",
+    "linear-in-numbers",
+    "measure-the-binary",
+    "measure-the-triple",
+    "move-the-horizon",
+    "not-every-three-body-system",
+    "nudge-one-star-in-a",
+    "reading-the-verdict",
+    "the-instrument-refused",
+    "the-numerical-control",
+    "the-objection-you-should-have",
+    "the-reproducibility-control",
+    "the-same-nudge-three-bodies",
+    "the-same-numbers-twice",
+    "what-an-e-folding-time",
+    "what-this-is-a-model",
+    "what-you-established",
+    "what-zero-proves",
+    "where-these-results-come-from",
+    "which-of-these-is-chaos",
+    "write-down-what-you-measured"
+   ],
+   "stepIndex": 27,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-butterfly-effect",
+  "record": {
+   "ids": [
+    "golden-butterfly-effect"
+   ],
+   "rows": [
+    [
+     "golden-butterfly-effect",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "cf374d53ea66cd1d5b532c41bd4e6c40bd60ee140377203e69af5623608d77d5"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "the-same-numbers-twice",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-zero-proves",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "nudge-one-star-in-a",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-instrument-refused",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "linear-in-numbers",
+     "value": "1000000",
+     "locale": "es"
+    },
+    {
+     "sid": "the-same-nudge-three-bodies",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "how-long-does-a-prediction",
+     "value": "95",
+     "locale": "es"
+    },
+    {
+     "sid": "buying-more-time",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "before-you-refine",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-verdict",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-of-these-is-chaos",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "deterministic-and-unpredictable",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "the-same-numbers-twice",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-zero-proves",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "nudge-one-star-in-a",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-instrument-refused",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "linear-in-numbers",
+     "value": "1000000",
+     "locale": "es"
+    },
+    {
+     "sid": "the-same-nudge-three-bodies",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "how-long-does-a-prediction",
+     "value": "95",
+     "locale": "es"
+    },
+    {
+     "sid": "buying-more-time",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "before-you-refine",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-verdict",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-of-these-is-chaos",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "deterministic-and-unpredictable",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "cf374d53ea66cd1d5b532c41bd4e6c40bd60ee140377203e69af5623608d77d5",
+     "i": [
+      "golden-butterfly-effect"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-butterfly-effect",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "the-same-numbers-twice",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-zero-proves",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "nudge-one-star-in-a",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-instrument-refused",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "linear-in-numbers",
+     "value": "1000000",
+     "locale": "es"
+    },
+    {
+     "sid": "the-same-nudge-three-bodies",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "how-long-does-a-prediction",
+     "value": "95",
+     "locale": "es"
+    },
+    {
+     "sid": "buying-more-time",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "before-you-refine",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-verdict",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-of-these-is-chaos",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "deterministic-and-unpredictable",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "the-same-numbers-twice",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-zero-proves",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "nudge-one-star-in-a",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-instrument-refused",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "linear-in-numbers",
+     "value": "1000000",
+     "locale": "es"
+    },
+    {
+     "sid": "the-same-nudge-three-bodies",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "how-long-does-a-prediction",
+     "value": "95",
+     "locale": "es"
+    },
+    {
+     "sid": "buying-more-time",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "before-you-refine",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-verdict",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-of-these-is-chaos",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "deterministic-and-unpredictable",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

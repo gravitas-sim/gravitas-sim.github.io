@@ -1,0 +1,58 @@
+[
+ {
+  "role": "first",
+  "sid": "run-the-default",
+  "position": [
+   1,
+   5
+  ],
+  "title": "Planets around two stars: where can an orbit survive?",
+  "subtitle": "5 steps of Planets in Binary Stars (37 in the full investigation)",
+  "body": "<p class=\"inv-step-count\">Step 1 of 5 <span class=\"inv-step-kind\">explore</span></p><h3 class=\"inv-step-title\">Run it as it stands</h3><div class=\"inv-step-body\"><p>Open <strong>Binary Planet Run</strong> from the Tools list on the right. It is set to the configuration on screen: the planet starting at 0.15 of the binary separation — 1.5 AU — and twenty binary periods to integrate, which is a bit over five hundred years and about half a minute of watching.</p><p>Press <strong>Run</strong> and watch. The planet goes round about six times a second, so what you can see is not an individual orbit but the band it occupies. Watch whether that band holds its shape.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Turn the speed down with the transport controls if you want to see a single orbit rather than the band.</p><ul class=\"inv-checklist\"><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:0\"><span>Watch the trail band: does it stay a ring, or does it start to breathe in and out as the stars swing past?</span></label></li><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:1\"><span>Read \"Integrated\" as it climbs — it counts binary periods, not years</span></label></li><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:2\"><span>Watch the \"Planet’s orbit now\" row: the semi-major axis barely moves, and the eccentricity does not sit still</span></label></li><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:3\"><span>Watch \"Highest eccentricity reached\" — it does not come back down</span></label></li><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:4\"><span>Note the energy drift while the run is quiet; you will want the comparison later</span></label></li><li><label><input type=\"checkbox\" data-check=\"binary-star-planets:run-the-default:check:5\"><span>Let it finish, and read the sentence at the bottom of the panel</span></label></li></ul>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "graded",
+  "sid": "move-it-out",
+  "position": [
+   2,
+   5
+  ],
+  "title": "Planets around two stars: where can an orbit survive?",
+  "subtitle": "5 steps of Planets in Binary Stars (37 in the full investigation)",
+  "body": "<p class=\"inv-step-count\">Step 2 of 5 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Move it out</h3><div class=\"inv-step-body\"><p>Now double the planet's starting radius, to 0.30 of the separation — 3 AU. That is still less than half the closest the two stars ever come to each other, so the planet is nowhere near either of them at the start.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">At 0.30 separations, over twenty binary periods, you expect:</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Much the same as before — a slightly wider, slightly wobblier ring</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>A ring that visibly breathes but stays put</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>The planet to leave</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>The planet to fall into one of the stars</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "marked",
+  "sid": "move-it-out",
+  "position": [
+   2,
+   5
+  ],
+  "title": "Planets around two stars: where can an orbit survive?",
+  "subtitle": "5 steps of Planets in Binary Stars (37 in the full investigation)",
+  "body": "<p class=\"inv-step-count\">Step 2 of 5 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Move it out</h3><div class=\"inv-step-body\"><p>Now double the planet's starting radius, to 0.30 of the separation — 3 AU. That is still less than half the closest the two stars ever come to each other, so the planet is nowhere near either of them at the start.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">At 0.30 separations, over twenty binary periods, you expect:</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Much the same as before — a slightly wider, slightly wobblier ring</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>A ring that visibly breathes but stays put</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>The planet to leave</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>The planet to fall into one of the stars</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Run it at 0.30”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "last",
+  "sid": "ejected-means-what",
+  "position": [
+   5,
+   5
+  ],
+  "title": "Planets around two stars: where can an orbit survive?",
+  "subtitle": "5 steps of Planets in Binary Stars (37 in the full investigation)",
+  "body": "<p class=\"inv-step-count\">Step 5 of 5 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">What does \"ejected\" mean here?</h3><div class=\"inv-step-body\"><p>The panel called that an ejection. It has two conditions for the word and it needs both: the planet must have positive energy with respect to <em>both</em> stars, and it must be more than ten binary separations away.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Why is positive energy on its own not enough?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Because energy is not conserved well enough to trust</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Because a planet can be briefly unbound during an encounter and still come back</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Because the planet’s mass is too small for energy to mean anything</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>Because the barycenter moves, so energy is measured in the wrong frame</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

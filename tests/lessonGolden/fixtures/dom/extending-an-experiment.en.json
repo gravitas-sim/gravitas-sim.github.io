@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "twenty-planets",
+  "position": [
+   1,
+   8
+  ],
+  "title": "Extending an Experiment",
+  "subtitle": "From twenty planets that the engine ran to a population of two hundred thousand, with every uncertainty, in Python on the compute page",
+  "body": "<p class=\"inv-step-count\">Step 1 of 8 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Twenty planets that the engine ran</h3><div class=\"inv-step-body\"><p>The Binary Planet Lab puts a planet near one star of a pair that is ten astronomical units apart. An <strong>experiment</strong> on the experiment runner ran twenty trials of it: in each the planet started at a distance from its star drawn at random between 0.12 and 0.42 of the stars' separation, and the engine ran it for about twenty orbits of the binary. Some planets stayed in orbit and some were thrown out.</p><p>The experiment's result is a file, and the notebook reads it. It calls a planet <strong>bound</strong> if its mean distance from the star stayed within a cutoff (three, to start) times the distance it started at, fits the chance of being bound as a smooth curve of the starting distance, repeats the fit on 400 resamples of the twenty to get its uncertainty, and draws two hundred thousand synthetic planets to say how many would stay bound in a larger population.</p><p>Open the compute page at <strong>/compute/</strong> of this site. It is online only and downloads about 19 MB of Python the first time, when you press the button. Choose the notebook <strong>A population of planets, extended</strong>, keep its example input (the twenty planets), and its settings at slope 1, 200,000 planets and cutoff 3. Do not press Run yet.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "how-well-can-twenty-place-an-edge",
+  "position": [
+   2,
+   8
+  ],
+  "title": "Extending an Experiment",
+  "subtitle": "From twenty planets that the engine ran to a population of two hundred thousand, with every uncertainty, in Python on the compute page",
+  "body": "<p class=\"inv-step-count\">Step 2 of 8 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">How well can twenty place an edge</h3><div class=\"inv-step-body\"><p>Before you run it. Of the twenty planets, the ones that stayed bound started closer than about 0.25, and those that did not started beyond about 0.34, with nothing in between except a few close calls.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The notebook will report the starting distance where the chance of staying bound is one half, with an uncertainty. That uncertainty will be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>tiny, because two hundred thousand synthetic planets are used</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>a few hundredths, a fraction of the gap between the last planet that stayed and the first that left</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>zero, because the engine is exact</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>large, because twenty is too few to say anything</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "how-well-can-twenty-place-an-edge",
+  "position": [
+   2,
+   8
+  ],
+  "title": "Extending an Experiment",
+  "subtitle": "From twenty planets that the engine ran to a population of two hundred thousand, with every uncertainty, in Python on the compute page",
+  "body": "<p class=\"inv-step-count\">Step 2 of 8 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">How well can twenty place an edge</h3><div class=\"inv-step-body\"><p>Before you run it. Of the twenty planets, the ones that stayed bound started closer than about 0.25, and those that did not started beyond about 0.34, with nothing in between except a few close calls.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The notebook will report the starting distance where the chance of staying bound is one half, with an uncertainty. That uncertainty will be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>tiny, because two hundred thousand synthetic planets are used</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>a few hundredths, a fraction of the gap between the last planet that stayed and the first that left</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>zero, because the engine is exact</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>large, because twenty is too few to say anything</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Run it: the edge and the fractions”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   8,
+   8
+  ],
+  "title": "Extending an Experiment",
+  "subtitle": "From twenty planets that the engine ran to a population of two hundred thousand, with every uncertainty, in Python on the compute page",
+  "body": "<p class=\"inv-step-count\">Step 8 of 8 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>Twenty planets, run by the engine, fixed the edge of the bound region to about 0.255 ± 0.024 of the stars' separation. Extended to two hundred thousand synthetic planets, the bound fraction was 0.596 ± 0.076 for a population with equal numbers per factor of distance, and 0.451 ± 0.081 for a uniform one, which is where the sample's own 0.6 should have been.</p><p>What the numbers do not say: the interval counts the scatter of twenty trials and nothing else. It does not count the choice of a logistic curve, the definition of bound, or the draw's range, outside of which no synthetic planet is made. A larger synthetic population has a smaller sampling error and exactly the same assumptions. The run is yours to keep: its capsule records the notebook's hash and the result file's, so a report can cite it.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]
