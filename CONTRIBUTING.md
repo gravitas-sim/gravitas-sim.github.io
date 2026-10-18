@@ -244,20 +244,23 @@ builders stay whole. `tests/effectsMissing.test.js` runs nineteen engine events
 with no module and compares draws, the next draw and the ripples with the
 registered engine.
 
-**The engine split is planned, not begun** (D-DECOMP-18). Target: an engine
-folder inside `js` holding the state, events, conservation and energy, forces, integrator, bodies,
-collisions, mergers and the step, with `js/physics.js` kept as the one facade so
-no importer changes, and a Worker-safe rule (no `document`, `window` or
-`CustomEvent` in that folder except its host module). Order, risks and the
-test that proves each slice are in the register row; the first slice is the
-module that owns the engine's singletons (the 14 body lists, the settings, the
-clocks, the id counter), because nothing else can leave `physics.js` without a
-cycle until it exists. Two things must be decided before the second slice: how
-the sources routes count the new files (each is a request on every route that
-loads the engine, and the request ceilings may not rise), and what replaces two
-live dependencies the engine has today on the page (the canvas size that culls
-off-screen bodies, and the wall clock that a new black hole's grace period
-reads).
+**The engine split is under way** (D-DECOMP-18, Prompts 107 and 135). `js/physics.js`
+stays the one facade, re-exporting every name it ever exported (live, so no
+importer changes), and the engine folder is read downward only: a module in it
+never imports the facade. Where each piece lives so far:
+
+| File | What it owns | Slice |
+|---|---|---|
+| `js/engine/state.js` | the body lists, the settings, the clocks and counters, the registries | S1 |
+| `js/engine/events.js` | simulation events and the step listeners | S2 |
+| `js/engine/conservation.js` | the absorption ledgers, the conserved totals and the energy history | S3 |
+| `js/engine/forces.js` | the sources a body feels, the dark-matter and MOND terms, softening, direct-sum acceleration and the Velocity Verlet, RK4 and default step schemes | S4 |
+
+Still in `js/physics.js`: the body classes and the black hole, collisions,
+mergers and collapse, and the step itself (S5 to S7). Order, risks and the test
+that proves each slice are in the register row. Two decisions remain for the
+last slice: what replaces the canvas size that culls off-screen bodies, and the
+wall clock a new black hole's grace period reads.
 
 **A module carved out of `ui.js` is handed nothing it can ask for.** The slices
 of Prompt 107 follow one rule: an extracted module never imports `ui.js`, and
