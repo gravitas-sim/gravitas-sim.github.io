@@ -18,6 +18,7 @@ current, and the orchestrator checks it.
 | `branch-inventory.mjs` | Every remote branch, its state, and the commands the owner may run | `npm run branches:inventory` |
 | `browser-support.mjs` | The supported-browser statement, generated (Prompt 111) | `npm run support:sync`, `npm run support:check` |
 | `budget-environment.mjs` | The reference environment of the size budgets |  |
+| `budget-policy.mjs` | The budget policy: workflow ceilings, an optional-growth allowance, a ledger | `npm run budget:policy` |
 | `build-adoption-pages.mjs` | The adoption pages: one for every investigation and activity |  |
 | `build-data-packs.mjs` | Observation data packs: build, check, reproduce | `npm run packs:data`, `npm run packs:provenance`, `npm run packs:check` |
 | `build-ephemeris.mjs` | The educational ephemeris pack, from JPL Horizons | `npm run ephemeris:data`, `npm run ephemeris:check`, `npm run ephemeris:provenance` |
@@ -54,6 +55,7 @@ current, and the orchestrator checks it.
 | `conservation-trace.mjs` | The engine's conservation and energy numbers along a seeded run |  |
 | `cosmology-validate.mjs` | (no header) | `npm run cosmology:validate` |
 | `csp.mjs` | A Content-Security-Policy on every page |  |
+| `data-budget.mjs` | The data plane's budget: what Gravitas stores and keeps, not just what it ships | `npm run budget:data` |
 | `deps-audit.mjs` | The dependency audit | `npm run deps:audit` |
 | `design-ratchet.mjs` | Four migrations to the design system that may only go one way |  |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |

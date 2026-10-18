@@ -86,11 +86,24 @@ Two rules follow from this:
   request and then uses the application, the charts and the 3-D view anyway. It
   runs against the sources *and* the production bundle, because the two have to
   resolve the same files.
-- **Both libraries must stay lazy.** Neither may enter the initial chunk.
+- **Neither three.js nor the plot component may enter the initial chunk.**
   `npm run budget` enforces a ceiling on what a first-time visitor downloads;
   raising it means editing `tools/bundle-budget.mjs` in the same commit and
   saying in its `reason` what was added. Growth is allowed, unexplained growth
   is not.
+- **The budget policy (`tools/budget-policy.json`, `docs/BUDGET_POLICY.md`).**
+  It is switched off (`mode: "exact"`), and while it is, the rule above and the
+  standing size-budget approval apply as before. When the owner switches it to
+  `"declared"`: no slice raises any ceiling (it finds a saving or stops); the
+  workflow ceilings (front door, sandbox, each lesson route's first-usable
+  graph, the Observatory with one observation open, the initial download, the
+  deferred core) never move except by the owner's explicit decision; lazy
+  families and packs draw on a capped allowance recorded in
+  `tools/growth-ledger.json`; and a re-baseline (`node tools/budget-policy.mjs
+  rebaseline`) is a ceiling increase, made in a reviewed pull request labelled
+  "ceiling increase", never automatically. Module line ceilings are separate
+  and unchanged. `tools/data-budget.json` holds the data-plane ceilings (pack
+  bytes, precache tiers, worker caps; browser-probe ones are not measured yet).
 
 Dependabot is configured conservatively in `.github/dependabot.yml`: grouped by
 what breaks together, majors never grouped, and the vendored packages ignored

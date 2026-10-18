@@ -1,0 +1,62 @@
+{
+  "note": "Proposed ceilings for the data plane (Prompt 133). PROPOSALS: nothing reads them as a gate while tools/budget-policy.json says mode \"exact\", and the values are Carl's to adopt or change. A ceiling whose measuredBy is a browser probe is written down but has no measurement yet; that is reported as \"not measured\", never as a pass. Gzip figures are zlib's and differ by a few KB between Node versions; the gate is CI's (tools/budget-environment.mjs). Each tree-measurable ceiling is the measurement at 314ceb0b (Mac, Node 24, advisory) plus 10% rounded up to 1 KiB.",
+  "measuredAt": "314ceb0b",
+  "ceilings": [
+    {
+      "key": "packBytes",
+      "label": "Observation packs, raw (data-packs/*.json)",
+      "ceiling": 325632,
+      "unit": "bytes",
+      "measuredBy": "tools/data-budget.mjs"
+    },
+    {
+      "key": "packGzipBytes",
+      "label": "Observation packs, gzip level 6",
+      "ceiling": 101376,
+      "unit": "bytes",
+      "measuredBy": "tools/data-budget.mjs"
+    },
+    {
+      "key": "precacheFirstVisitGzipBytes",
+      "label": "First-visit precache tier (sw-manifest CORE), gzip level 6",
+      "ceiling": 5175296,
+      "unit": "bytes",
+      "measuredBy": "tools/data-budget.mjs"
+    },
+    {
+      "key": "precacheIdleGzipBytes",
+      "label": "Idle precache tier (sw-manifest OPTIONAL), gzip level 6",
+      "ceiling": 1972224,
+      "unit": "bytes",
+      "measuredBy": "tools/data-budget.mjs"
+    },
+    {
+      "key": "workerConcurrencyLowEnd",
+      "label": "Workers running at once, low-end profile (the pool's cap)",
+      "ceiling": 2,
+      "unit": "workers",
+      "measuredBy": "js/experiments/experimentManifest.js PROFILES"
+    },
+    {
+      "key": "workerMemoryBytesLowEnd",
+      "label": "Aggregate memory a low-end experiment run may use (the pool's cap)",
+      "ceiling": 256000000,
+      "unit": "bytes",
+      "measuredBy": "js/experiments/experimentManifest.js PROFILES"
+    },
+    {
+      "key": "decodedImageBytesPerPage",
+      "label": "Decoded image memory held by one page",
+      "ceiling": 67108864,
+      "unit": "bytes",
+      "measuredBy": "decoded-memory probe on the throttled profile (Prompt 157): not built yet"
+    },
+    {
+      "key": "indexedDbAndCacheBytes",
+      "label": "IndexedDB plus Cache Storage a user can accumulate before the application prunes",
+      "ceiling": 209715200,
+      "unit": "bytes",
+      "measuredBy": "a real profile through navigator.storage.estimate (Prompt 153): not built yet"
+    }
+  ]
+}
