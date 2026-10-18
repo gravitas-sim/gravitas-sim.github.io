@@ -35,45 +35,52 @@ async function openLesson(page, app, id = LESSON) {
   // that never settles (a looping transform) fails here instead of passing.
   // On a failure the received value is what moved: the box over six frames,
   // the card's transform and the animations running on it or above it.
-  // expect.poll leaves the received value out of its timeout message, so the
-  // loop is by hand: the last description is the failure.
-  const sampleRest = () =>
-    card.evaluate(
-      el =>
-        new Promise(resolve => {
-          const seen = [];
-          const at = () => {
-            const r = el.getBoundingClientRect();
-            return [r.x, r.y, r.width, r.height].map(n => +n.toFixed(2));
-          };
-          const step = () => {
-            seen.push(at());
-            if (seen.length < 6) return window.requestAnimationFrame(step);
-            const same = seen.every(b => b.join() === seen[0].join());
-            const running = document
-              .getAnimations()
-              .filter(a => a.effect?.target?.contains(el))
-              .map(a => a.animationName || a.transitionProperty || 'anim');
-            resolve(
-              same
-                ? 'at rest'
-                : JSON.stringify({
-                    boxes: seen,
-                    transform: getComputedStyle(el).transform,
-                    running,
-                    scrollY: window.scrollY,
-                  })
-            );
-          };
-          step();
-        })
-    );
-  let rest = await sampleRest();
-  for (let i = 0; i < 40 && rest !== 'at rest'; i++) {
-    // Poll the condition: the pause is between samples, not a wait for time.
-    await page.evaluate(() => new Promise(r => window.setTimeout(r, 200)));
-    rest = await sampleRest();
-  }
+  // One bounded sample, in the page: at most 120 frames and 4 s, whichever
+  // ends first, so it returns even if no frame ever fires. The card is at rest
+  // when its last six boxes are identical; otherwise the answer says what moved.
+  const rest = await card.evaluate(
+    el =>
+      new Promise(resolve => {
+        const seen = [];
+        let done = false;
+        const finish = reason => {
+          if (done) return;
+          done = true;
+          const last = seen.slice(-6);
+          const same =
+            last.length === 6 && last.every(b => b.join() === last[0].join());
+          resolve(
+            same
+              ? 'at rest'
+              : JSON.stringify({
+                  reason,
+                  frames: seen.length,
+                  last,
+                  transform: getComputedStyle(el).transform,
+                  running: document
+                    .getAnimations()
+                    .filter(a => a.effect?.target?.contains(el))
+                    .map(a => a.animationName || a.transitionProperty || 'anim')
+                    .slice(0, 10),
+                  scrollY: window.scrollY,
+                })
+          );
+        };
+        window.setTimeout(() => finish('deadline'), 4000);
+        const step = () => {
+          const r = el.getBoundingClientRect();
+          seen.push([r.x, r.y, r.width, r.height].map(n => +n.toFixed(2)));
+          if (
+            seen.length >= 6 &&
+            seen.slice(-6).every(b => b.join() === seen.at(-1).join())
+          )
+            return finish('settled');
+          if (seen.length >= 120) return finish('frames');
+          window.requestAnimationFrame(step);
+        };
+        window.requestAnimationFrame(step);
+      })
+  );
   if (rest !== 'at rest') throw new Error(`The card never settled: ${rest}`);
   const box = await card.boundingBox();
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
