@@ -40,6 +40,8 @@ Toolchain (carried from main into v3, invisible): `acorn` 8.19.0, `prettier` 3.9
 Maintenance (invisible): `tools/branch-inventory.mjs` lists every remote branch and the commands the owner may run (nothing is deleted by a session); the dependency audit's exceptions moved to `tools/deps-audit-exceptions.json` with a basis and an expiry date, and an expired one fails the audit; the Q4 2026 quarterly checkpoint is recorded in `TOOLCHAIN.md`; the release traps are collected in `RELEASING.md`.
 Documents (invisible): `DOCUMENTS.md`, a generated map of every root document and generated artifact (`tools/docs-map.mjs`, `npm run docs-map:check`), `MAINTAINER_ONBOARDING.md`, two superseded notes archived to `docs/archive/`, the recovery rehearsal's findings in `RELEASING.md`, and `CONTINUITY.md`'s ecosystem sentence dated.
 
+Toolchain (invisible): `@playwright/test` and `playwright` 1.64.0 (supported browser builds move with it, Chromium 153 to 156), `@axe-core/playwright` 4.13.0 and `axe-core` 4.14.0, taken together (D-TOOL-03); the gallery chip counts' contrast raised to what axe 4.14 measures, and one failed-import spec made engine-agnostic.
+
 ## [2.0.0] - 2026-10-16
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
