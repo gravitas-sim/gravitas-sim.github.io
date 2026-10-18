@@ -172,8 +172,8 @@ their ceilings:
 | --- | ---: | ---: |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/validation/physicsChecks.js` | 6,621 | 6,621 |
-| `js/investigations.js` | 4,754 | 4,754 |
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
+| `js/investigations.js` | 4,028 | 4,028 |
 | `js/i18n/en.deferred.js` | 3,845 | 3,845 |
 | `js/render.js` | 3,028 | 3,028 |
 | `js/physics.js` | 2,951 | 2,951 |
