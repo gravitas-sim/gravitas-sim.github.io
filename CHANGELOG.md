@@ -15,6 +15,8 @@ the release rather than in the tag.
 
 ### 2.0.1 (planned; Prompt 123, byte-neutral)
 
+- Chart.js is removed (Prompt 132, D-PLOT-02 stage 4): every chart is the plot component; the dependency, `vendor/chartjs/` and its license lines are gone. No bytes change in the build (the library was already unreachable); the parity record stays in `tests/fixtures/chart-parity.json`.
+
 - The investigation cards and the Scenario Studio, Investigation Composer and course-builder pages are available offline after one visit (D-PERF-02, change 1).
 - Page titles follow the language on ten pages that kept an English title in Spanish.
 - Teach marks its links to English-only documents "(en inglés)" in Spanish.

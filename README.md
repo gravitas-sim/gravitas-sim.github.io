@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->12971<!--/fact--> tests across <!--fact:jestSuites-->382<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->12965<!--/fact--> tests across <!--fact:jestSuites-->381<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -433,7 +433,7 @@ data-packs/         observation data-pack manifests (pinned sources)
 ephemeris-packs/    the ephemeris pack's manifest (pinned JPL Horizons answers)
 sdk/                the extension SDK: a command line, a library, four schemas
 extensions/         extensions built with the SDK outside the core
-vendor/             three.js, Chart.js and the fonts, vendored
+vendor/             three.js and the fonts, vendored
 history/            the first Gravitas, kept as it was
 docs/               generated inventories (capabilities, lesson scenes)
 manual/             LaTeX source for the user manual PDF
@@ -462,8 +462,8 @@ overrides`. Component rules win on layer order alone, which is why they need
   and not the other fails `npm test`.
 
 The guided-investigation system is roughly half the application by weight and loads only
-when someone asks for it; so do Three.js and Chart.js, which back the spacetime
-view and the chart panels.
+when someone asks for it; so does Three.js, which backs the spacetime
+view. The charts are one component, `js/plot/chart.js`, fetched on first use.
 
 ---
 
@@ -755,7 +755,7 @@ Two licenses, because this is two kinds of work.
 [`LICENSES.md`](LICENSES.md) says exactly which files each one covers.
 [`NOTICE`](NOTICE) carries the third-party attributions, each under its own
 license:
-- three.js, Chart.js and three font families;
+- three.js and three font families;
 - the Transit of Venus photograph;
 - the GWOSC strain data;
 - the MIST tracks and isochrones;

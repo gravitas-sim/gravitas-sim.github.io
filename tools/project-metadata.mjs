@@ -173,7 +173,7 @@ export const LICENSE_NOTE =
   'guided investigations, the instructor guides and answer keys, the user ' +
   'manual, the documentation and the original figures - is Creative Commons ' +
   'Attribution 4.0 International (CC BY 4.0). Third-party components keep ' +
-  'their own licenses and attribution: three.js and Chart.js (MIT), the Inter, ' +
+  'their own licenses and attribution: three.js (MIT), the Inter, ' +
   'Poppins and Roboto Mono families (SIL OFL 1.1), the Transit of Venus ' +
   'photograph (CC BY 2.5, Brocken Inaglory), gravitational-wave strain from ' +
   'the Gravitational Wave Open Science Center (CC BY 4.0), derived MIST ' +

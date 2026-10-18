@@ -27,7 +27,7 @@
 // is a 404 on the live site.
 //
 // --check rebuilds into memory and compares, so a lockfile bump that changes
-// three or chart.js fails CI until the vendored files are regenerated. That is
+// three fails CI until the vendored files are regenerated. That is
 // the only thing keeping "pinned in package.json" and "what the site loads"
 // from drifting apart.
 // =============================================================================
@@ -91,37 +91,6 @@ const TARGETS = [
       '  SphereGeometry, Vector3, WebGLRenderer,',
       "} from 'three';",
       "export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';",
-    ].join('\n'),
-  },
-  {
-    package: 'chart.js',
-    out: 'vendor/chartjs/chart.js',
-    license: 'vendor/chartjs/LICENSE.md',
-    // Only what Gravitas draws. chart.js/auto registers every controller,
-    // scale, element and plugin - bars, doughnuts, radar and polar charts,
-    // time and logarithmic axes, decimation, titles - and exported the rest
-    // of the library beside it, 200 KB that every reader who opened a chart
-    // downloaded to draw lines and points. The five charts (the light curve,
-    // the radial-velocity curve, the energy chart and the bench's sweep and
-    // comparison) are line and scatter charts on category and linear axes,
-    // one filled, with legends and tooltips; that is 170.
-    //
-    // A chart that needs something else adds it here. An unregistered chart
-    // or axis type throws when the chart is made, and
-    // tests/vendoredChart.test.js reads every chart the application makes for
-    // the types it names; an unregistered plugin is ignored without a word,
-    // which is why the plugins every chart relies on are listed there too.
-    entry: [
-      'import {',
-      '  Chart, LineController, ScatterController, LineElement, PointElement,',
-      '  CategoryScale, LinearScale, Filler, Legend, Tooltip,',
-      "} from 'chart.js';",
-      'Chart.register(',
-      '  LineController, ScatterController, LineElement, PointElement,',
-      '  CategoryScale, LinearScale, Filler, Legend, Tooltip,',
-      ');',
-      'export { Chart };',
-      'export default Chart;',
     ].join('\n'),
   },
 ];

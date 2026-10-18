@@ -66,7 +66,6 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | | | |
 | --- | --- | --- |
 | `vendor/three/**` | three.js | MIT — `vendor/three/LICENSE` |
-| `vendor/chartjs/**` | Chart.js | MIT — `vendor/chartjs/LICENSE.md` |
 | `vendor/fonts/inter-*` | Inter | SIL OFL 1.1 — `vendor/fonts/inter-LICENSE` |
 | `vendor/fonts/poppins-*` | Poppins | SIL OFL 1.1 — `vendor/fonts/poppins-LICENSE` |
 | `vendor/fonts/roboto-mono-*` | Roboto Mono | SIL OFL 1.1 — `vendor/fonts/roboto-mono-LICENSE` |
