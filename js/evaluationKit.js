@@ -15,6 +15,7 @@
 // transmitted is worth exactly as much as the check behind it.
 // =============================================================================
 
+import { put, drop } from './storage/local.js';
 import {
   AGREE_POINTS,
   CONCEPT_COLUMNS,
@@ -97,7 +98,7 @@ const readDraft = () => {
 };
 const writeDraft = draft => {
   try {
-    localStorage.setItem(STORE_KEY, JSON.stringify(draft));
+    put(STORE_KEY, JSON.stringify(draft), 'drafts');
   } catch {
     /* a browser with storage disabled still gets working forms and export */
   }
@@ -324,7 +325,7 @@ function wire(draft) {
 
   $('ekClear')?.addEventListener('click', () => {
     try {
-      localStorage.removeItem(STORE_KEY);
+      drop(STORE_KEY);
     } catch {
       /* nothing stored, nothing to remove */
     }
