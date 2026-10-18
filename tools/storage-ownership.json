@@ -268,10 +268,10 @@
       "where": "IndexedDB gravitas-archive",
       "name": "The archive import's cached answers",
       "owner": "js/archive/cache.js",
-      "migration": "none",
+      "migration": "rows are { value, usedMs }; a bare row from before 2.0.1 reads as the least recently used",
       "export": "evictable",
       "corpus": null,
-      "corpusWhy": "a cache of public answers, rebuilt on demand"
+      "corpusWhy": "a cache of public answers, rebuilt on demand; evicted least recently used past 400 answers or 64 MiB (Prompt 147)"
     },
     {
       "where": "IndexedDB gravitas-store",
