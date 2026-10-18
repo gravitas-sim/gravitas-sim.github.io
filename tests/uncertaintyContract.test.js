@@ -27,6 +27,7 @@ const S = await import('../js/analysis/seams.js');
 const E = await import('../js/formula/engine.js');
 const EV = await import('../js/formula/evidence.js');
 const FM = await import('../js/format.js');
+const U = await import('../js/platform/uncertain.js');
 const { parseNumber } = await import('../js/answerParse.js');
 const { fitDocument } = await import('./analysisSeamsFixtures.js');
 
@@ -428,12 +429,12 @@ describe('the formatter and the parser', () => {
 
   test('the precision comes from the sigma', () => {
     expect(
-      FM.formatUncertain(
+      U.formatUncertain(
         q(1.2341, { kind: 'sigma', sigma: 0.012, basis: 'data' })
       )
     ).toBe(`1.234${NB}±${NB}0.012`);
     expect(
-      FM.formatUncertain(
+      U.formatUncertain(
         q(1.2341, { kind: 'sigma', sigma: 0.012, basis: 'data' }),
         {
           method: true,
@@ -444,7 +445,7 @@ describe('the formatter and the parser', () => {
 
   test('a symmetric interval is written from its half-width', () => {
     const u = { kind: 'interval', lo: 1.222, hi: 1.246, basis: 'data' };
-    expect(FM.formatUncertain(q(1.234, u), { method: true })).toEqual({
+    expect(U.formatUncertain(q(1.234, u), { method: true })).toEqual({
       text: `1.234${NB}±${NB}0.012`,
       method: 'half-width',
     });
@@ -452,35 +453,35 @@ describe('the formatter and the parser', () => {
 
   test('an asymmetric interval is written at the smaller side', () => {
     const u = { kind: 'interval', lo: 1.2, hi: 1.55, basis: 'profile' };
-    const out = FM.formatUncertain(q(1.25, u), { method: true });
+    const out = U.formatUncertain(q(1.25, u), { method: true });
     expect(out.method).toBe('asymmetric');
     expect(out.text).toBe(`1.250${NB}+0.300${NB}−0.050`);
   });
 
   test('a limit, a floor and the states without a number', () => {
     expect(
-      FM.formatUncertain(
+      U.formatUncertain(
         q(3.2, { kind: 'limit', bound: 'upper', basis: 'data' })
       )
     ).toBe(`<${NB}3.2`);
     expect(
-      FM.formatUncertain(
+      U.formatUncertain(
         q(3.2, { kind: 'limit', bound: 'lower', basis: 'data' })
       )
     ).toBe(`>${NB}3.2`);
     expect(
-      FM.formatUncertain(
+      U.formatUncertain(
         q(10, { kind: 'model-limited', floor: 0.4, basis: 'model' }),
         {
           method: true,
         }
       )
     ).toEqual({ text: `10.00${NB}±${NB}0.40`, method: 'floor' });
-    expect(FM.formatUncertain(q(null, { kind: 'failed', reason: 'x' }))).toBe(
+    expect(U.formatUncertain(q(null, { kind: 'failed', reason: 'x' }))).toBe(
       '-'
     );
     expect(
-      FM.formatUncertain(q(7, { kind: 'assumed' }), { method: true })
+      U.formatUncertain(q(7, { kind: 'assumed' }), { method: true })
     ).toEqual({
       text: '7.00',
       method: 'assumed',
@@ -488,7 +489,7 @@ describe('the formatter and the parser', () => {
   });
 
   test('a typed uncertainty is read by the shared number reader, in the locale', () => {
-    const read = (t, locale) => FM.parseUncertain(t, parseNumber, locale);
+    const read = (t, locale) => U.parseUncertain(t, parseNumber, locale);
     expect(read('9.81 ± 0.02')).toEqual({
       value: 9.81,
       uncertainty: { kind: 'sigma', sigma: 0.02, basis: 'assumed' },
