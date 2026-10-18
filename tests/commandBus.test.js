@@ -45,6 +45,7 @@ describe('command()', () => {
     const asked = new Set();
     for (const file of [
       'js/investigations.js',
+      'js/investigations/stepView.js',
       'js/share.js',
       'js/welcome.js',
       'js/experimentsBridge.js',
