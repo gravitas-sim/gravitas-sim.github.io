@@ -30,6 +30,9 @@ export {
   ORIGINS,
   BASES,
   UNCERTAINTY_KINDS,
+  LEGACY_UNCERTAINTY_KINDS,
+  CORRELATION_BASES,
+  legacyView,
   SOURCE_KINDS,
 } from '../../js/platform/artifact.js';
 

@@ -124,7 +124,7 @@
         "requests": 13
       },
       "compute": {
-        "kb": 163.4,
+        "kb": 171.6,
         "requests": 20
       }
     },
@@ -250,7 +250,7 @@
         "requests": 4
       },
       "compute": {
-        "kb": 78.2,
+        "kb": 81.7,
         "requests": 3
       }
     }

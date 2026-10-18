@@ -33,6 +33,16 @@ export const EN_FORMULA = {
     '{name} has no unit stated, so a formula cannot check it. State its unit first.',
   'formula.err.interval':
     '{name} has an uncertainty given as an interval, which this rule cannot propagate. Use the bootstrap in the analysis lab instead.',
+  'formula.err.notConstrained':
+    '{name} is not constrained by the data, so it has no value to compute with. Fix the fit or state a value for it first.',
+  'formula.err.failed':
+    '{name} has no result: the analysis that was to produce it failed. A formula cannot use it.',
+  'formula.err.limit':
+    '{name} is an upper or lower limit, which this rule cannot carry through. A derivation passes one limit through a formula whose other inputs are exact.',
+  'formula.err.limitMixed':
+    '{name} is an upper or lower limit, and a limit only passes through a formula when it is the one limit in it and every other input is exact. Otherwise the result would be neither a limit nor a value.',
+  'formula.err.limitNonMonotone':
+    'The formula is not steadily rising or falling as {name} runs from zero to its limit, so a limit on it is not a limit on the result.',
   'formula.err.string':
     "A quoted unit belongs only in to(x, 'km/s'); there are no other strings.",
   'formula.err.dimension':
