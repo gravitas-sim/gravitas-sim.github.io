@@ -18,6 +18,11 @@
 
 import { closeDialog, openDialog, releaseDialog } from '../dialog.js';
 import { getLocale, t } from '../i18n/index.js';
+import {
+  hasInvestigation,
+  loadInvestigation,
+} from '../data/investigations/registry.js';
+import { loadFailed, toast } from '../notify.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import {
   MAX_INTRO,
@@ -60,6 +65,32 @@ const inDepth = (s, d = 'core') =>
 const shown = () => lesson.steps.filter(s => inDepth(s, depth ?? undefined));
 
 const $ = id => root?.querySelector(`#${id}`);
+
+/**
+ * Open the builder for the lesson `?assign=` names. The engine calls this only
+ * when the URL carries it.
+ *
+ * @param {string} lessonId - The lesson the instructor is setting work from
+ * @returns {Promise<void>} Settles when the builder is open, or the failure
+ *   has been shown
+ */
+export async function bootBuilder(lessonId) {
+  if (!hasInvestigation(lessonId)) {
+    toast(t('inv.link.unknown'));
+    return;
+  }
+  try {
+    const [loaded] = await Promise.all([
+      loadInvestigation(lessonId),
+      import('../i18n/deferredMessages.js').then(m =>
+        m.ensureDeferredMessages().catch(() => {})
+      ),
+    ]);
+    if (loaded) await openBuilder(loaded);
+  } catch {
+    loadFailed(() => location.reload());
+  }
+}
 
 /**
  * Open the builder over a lesson.

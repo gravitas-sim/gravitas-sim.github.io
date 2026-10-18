@@ -21,8 +21,13 @@
 // =============================================================================
 
 import { checkLesson } from './rules.js';
-import { provideLessonLoaders } from '../data/investigations/registry.js';
-import { allWidgets } from '../widgets.js';
+import {
+  hasInvestigation,
+  provideLessonLoaders,
+} from '../data/investigations/registry.js';
+import { allWidgets, whenWidgetsReady } from '../widgets.js';
+import { t } from '../i18n/index.js';
+import { loadFailed, toast } from '../notify.js';
 import { SCENARIO_INFO, scenarioId } from '../data/scenarioInfo.js';
 import { DEFAULT_SETTINGS } from '../appState.js';
 import { gradedSteps } from '../data/investigations/catalog.js';
@@ -262,4 +267,35 @@ export function renderAuthorBar(inv, index) {
     (problems
       ? `<div class="inv-author-findings">${problems}</div>`
       : `<div class="inv-author-findings is-clean">No findings for this step.</div>`);
+}
+
+/**
+ * Start the preview the address bar asks for. The engine calls this only when
+ * the URL carries `author=`.
+ *
+ * @param {{open: function(string): Promise<*>, jump: function(number): void,
+ *   setAuthoring: function(?object): void}} host - The lesson engine's three
+ *   hooks: open a lesson, go to a step, and put the preview in force
+ * @returns {Promise<void>} Settles when the preview is up, or when there was
+ *   nothing to preview
+ */
+export async function bootPreview(host) {
+  // The preview's findings read the whole widget catalog, lazy families too.
+  await whenWidgetsReady();
+  const request = authoringRequest();
+  if (!request) return;
+  installDraft(request);
+  if (!hasInvestigation(request.lesson)) {
+    toast(t('inv.link.unknown'));
+    return;
+  }
+  const student = request.view === 'student';
+  host.setAuthoring({
+    step: request.step,
+    render: student ? null : (inv, index) => renderAuthorBar(inv, index),
+  });
+  if (!student) mountAuthorBar(host.jump);
+  host
+    .open(request.lesson)
+    .catch(err => loadFailed(() => location.reload(), err));
 }
