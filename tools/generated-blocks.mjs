@@ -641,6 +641,7 @@ export function generatedBlocks({
   irreversible = null,
   graph = null,
   precache = null,
+  promises = null,
   dataPacks = null,
   realSystems = null,
   moduleSizes = null,
@@ -673,6 +674,7 @@ export function generatedBlocks({
     doiBadge: doiBadgeBlock(),
     // OFFLINE_AND_LOW_END.md's table, from the committed sw-manifest.js.
     ...(precache ? { precache } : {}),
+    ...(promises ? { promises } : {}),
     citation: citationBlock(),
     ...(irreversible
       ? {

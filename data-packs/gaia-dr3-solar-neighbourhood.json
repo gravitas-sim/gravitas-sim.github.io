@@ -323,7 +323,7 @@
     "widgets": [],
     "investigations": []
   },
-  "offline": "optional",
+  "offline": "idle",
   "derived": {
     "file": "js/data/observations/gaiaSolarNeighbourhood.js",
     "bytes": 7982,

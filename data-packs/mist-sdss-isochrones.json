@@ -318,7 +318,7 @@
     "widgets": [],
     "investigations": []
   },
-  "offline": "optional",
+  "offline": "idle",
   "derived": {
     "file": "js/data/observations/mistSdssIsochrones.js",
     "bytes": 35286,

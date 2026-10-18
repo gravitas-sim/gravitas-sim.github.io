@@ -71,7 +71,7 @@ export const USES = ['scenarios', 'widgets', 'dataPacks', 'models'];
 const CODE_FIELDS = new Set(['entry', 'pick', 'ready', 'services']);
 const ASSET_ROLES = ['code', 'data', 'provenance', 'translation', 'image'];
 /** A file's offline class: needed, worth having, warmed per locale, never. */
-const OFFLINE = ['core', 'optional', 'locale', 'none'];
+const OFFLINE = ['core', 'optional', 'idle', 'locale', 'none'];
 const POLICIES = ['precache', 'on-demand', 'online-only'];
 const CHECK_REF = /^(registry|jest|e2e):[\w./-]+$/;
 

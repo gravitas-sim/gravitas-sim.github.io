@@ -8,9 +8,11 @@
 // said 190 files long after the manifest listed 601.
 // =============================================================================
 
-import { readFileSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { gzipSync } from 'node:zlib';
+
+import { idleGroupOf } from './build-service-worker.mjs';
 
 /** The arrays sw-manifest.js assigns, by name. */
 function arrays(text) {
@@ -49,7 +51,8 @@ export function precacheInventory(root) {
   const a = arrays(text);
   const core = a.CORE || [];
   const optional = a.OPTIONAL || [];
-  const all = [...core, ...optional];
+  const idle = a.IDLE || [];
+  const all = [...core, ...optional, ...idle];
   const kinds = [
     ...KINDS.map(([kind]) => ({ kind, files: 0, bytes: 0, gzip: 0 })),
     { kind: 'Other', files: 0, bytes: 0, gzip: 0 },
@@ -68,10 +71,21 @@ export function precacheInventory(root) {
     bytes += size;
     gzip += z;
   }
+  const idleGroups = {};
+  for (const rel of idle) {
+    const g = (idleGroups[idleGroupOf(rel) ?? 'Other'] ??= {
+      files: 0,
+      gzip: 0,
+    });
+    g.files++;
+    g.gzip += gzipSync(readFileSync(path.join(root, rel)), { level: 6 }).length;
+  }
   return {
     files: all.length,
+    idleGroups,
     core: core.length,
     optional: optional.length,
+    idle: idle.length,
     bytes,
     gzip,
     kinds: kinds.filter(k => k.files > 0),
@@ -110,7 +124,7 @@ export function precacheTable(inv) {
     ...rows,
     `| **Total** | **${inv.files}** | **${mb(inv.bytes)}** |`,
     '',
-    `Of those, ${inv.core} are core (the install fails without them) and ${inv.optional} optional (a missing one is reported and costs nothing).`,
+    `Of those, ${inv.core} are core (the install fails without them), ${inv.optional} optional (installed with them; a missing one is reported and costs nothing) and ${inv.idle} idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: ${inv.core + inv.optional} files.`,
     '',
     `Gzipped, as Pages serves it, the whole is about ${gzipMB(inv)} MB.`,
     '',
@@ -119,6 +133,49 @@ export function precacheTable(inv) {
     `| 10 Mbps | ~${secs(10)} s |`,
     `| 3 Mbps | ~${secs(3)} s |`,
     `| 1.5 Mbps | ~${secs(1.5)} s |`,
+    '',
+  ].join('\n');
+}
+
+/**
+ * What each page promises offline, from the manifest's tiers and the
+ * capability packages' declarations (Prompt 147). A page that needs a file
+ * which is not in the first-visit install says when it is available.
+ * @param {string} root - The repository
+ * @param {ReturnType<typeof precacheInventory>} inv - The inventory
+ * @returns {string} Markdown, for a fact block
+ */
+export function promisesTable(root, inv) {
+  const dir = path.join(root, 'capabilities');
+  const rows = readdirSync(dir)
+    .filter(f => f.endsWith('.json'))
+    .sort()
+    .map(f => JSON.parse(readFileSync(path.join(dir, f), 'utf8')))
+    .map(m => {
+      const by = {};
+      for (const a of m.assets || []) by[a.offline] = (by[a.offline] || 0) + 1;
+      const n = k => by[k] || 0;
+      const when = n('idle')
+        ? `after the first visit settles (${n('idle')} idle files)`
+        : n('core') + n('optional')
+          ? 'from the first visit'
+          : 'in the application itself';
+      return `| \`${m.id}\` | ${m.title.en} | ${n('core')} | ${n('optional')} | ${n('idle')} | ${when} |`;
+    });
+  const groups = Object.entries(inv.idleGroups).map(
+    ([g, v]) => `| ${g} | ${v.files} | ~${Math.round(v.gzip / 10240) * 10} KB |`
+  );
+  return [
+    '',
+    '| Package | What it provides | Core | Optional | Idle | Works offline |',
+    '| --- | --- | ---: | ---: | ---: | --- |',
+    ...rows,
+    '',
+    'The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions differ by a kilobyte):',
+    '',
+    '| Surface | Files | Gzip |',
+    '| --- | ---: | ---: |',
+    ...groups,
     '',
   ].join('\n');
 }

@@ -536,7 +536,7 @@ describe('a pack changed after it was built is caught', () => {
     pkg.assets[0].offline = 'core';
     writeFileSync(file, JSON.stringify(pkg, null, 2));
     expect(runCheck(dir).out).toContain(
-      'offline is optional; gravitas.tess-hd209458-s56 says core'
+      'offline is idle; gravitas.tess-hd209458-s56 says core'
     );
   });
 });
@@ -768,18 +768,18 @@ describe('what a pack owes, and where it goes', () => {
   });
 
   test('the pack is precached as its manifest says, and its record is not precached at all', async () => {
-    const { core, optional } = await precacheLists();
+    const { core, optional, idle } = await precacheLists();
+    const tiers = { core, optional, idle };
     for (const pack of PACKS) {
       const offline = json(pack.manifest).offline;
       expect({ pack: pack.id, offline }).toEqual({
         pack: pack.id,
-        offline: expect.stringMatching(/^(core|optional)$/),
+        offline: expect.stringMatching(/^(core|optional|idle)$/),
       });
-      expect(offline === 'optional' ? optional : core).toContain(pack.module);
-      expect(offline === 'optional' ? core : optional).not.toContain(
-        pack.module
-      );
-      expect([...core, ...optional]).not.toContain(pack.manifest);
+      for (const [name, list] of Object.entries(tiers))
+        if (name === offline) expect(list).toContain(pack.module);
+        else expect(list).not.toContain(pack.module);
+      expect([...core, ...optional, ...idle]).not.toContain(pack.manifest);
     }
   });
 });

@@ -188,7 +188,7 @@ export const HUBBLE_1929 = {
         "The paper's solar-motion solution cannot be reproduced: the table carries no positions. A plain straight line is what the pack supports.",
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return asSidecar(this, { meta, manifestRest, series });
   },
@@ -382,7 +382,7 @@ export const DES_SN5YR = {
         'The raw file is committed beside this tool (tools/data-packs/cosmology/DES-SN5YR_HD.csv, 91,860 bytes, CC BY 4.0, from the zip member named in the record): the zip is too large to fetch for a 92 KB table.',
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return asSidecar(this, { meta, manifestRest, series });
   },
@@ -607,7 +607,7 @@ export const PANTHEON_PLUS = {
         'The raw file is committed beside this tool (tools/data-packs/cosmology/Pantheon+SH0ES.dat, 579,283 bytes) at the commit named in its URL, so the build does not depend on a repository that may change.',
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return asSidecar(this, { meta, manifestRest, series });
   },
@@ -780,7 +780,7 @@ export const SDSS_SLICE = {
         'A wedge needs a distance: the page converts redshift with a stated cosmology (flat, Omega_m 0.3, H0 70 in the lessons).',
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return asSidecar(this, { meta, manifestRest, series });
   },
@@ -933,7 +933,7 @@ export const COMA_QUOTED = {
         'The published dispersion is 1038 +- 60 km/s; the quoted 1000 sits inside it.',
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return asSidecar(this, { meta, manifestRest, series });
   },
