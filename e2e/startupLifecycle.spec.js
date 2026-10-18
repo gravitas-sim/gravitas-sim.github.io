@@ -108,6 +108,11 @@ test.describe('every other load boots revealed (b, c, e) @cross-browser', () => 
     await seen(page);
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.splashScreenEnded === true);
+    // A reload while the home fragment is still being fetched aborts that fetch,
+    // and WebKit logs the abort as a console error ("... due to access control
+    // checks"), which the error fixture counts. Let the page finish loading
+    // before it is reloaded, so the test is about the reload and not the race.
+    await page.waitForLoadState('networkidle');
     await page.reload({ waitUntil: 'domcontentloaded' });
     expect(await startup(page)).toBe('skip');
     const t0 = Date.now();

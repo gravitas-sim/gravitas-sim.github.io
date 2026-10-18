@@ -110,15 +110,15 @@ locked Playwright's browser builds (`npm run support:sync`), so it cannot drift
 from what CI runs:
 
 <!-- browser-support:begin -->
-Playwright 1.63.0 is locked, and these are the builds it drives:
+Playwright 1.64.0 is locked, and these are the builds it drives:
 
 | Project | Engine build | Profile | Runs | When |
 | --- | --- | --- | --- | --- |
-| `chromium` | Chromium 153 | Desktop Chrome, 1440×900 | The whole suite | Every change |
-| `firefox` | Firefox 155 | Desktop Firefox, 1440×900 | The `@cross-browser` profile | Every push, and weekly |
-| `webkit` | WebKit 26 | Desktop Safari, 1440×900 | The `@cross-browser` profile | Every push, and weekly |
-| `mobile-chrome` | Chromium 153 | Pixel 7 (Chrome on Android), 412×839, touch | The phone layout and every lesson walked | Every change |
-| `tablet` | Chromium 153 | iPad Mini geometry, 768×1024, touch | The tablet layout, and every lesson walked | Layout on every change, the walk weekly |
+| `chromium` | Chromium 156 | Desktop Chrome, 1440×900 | The whole suite | Every change |
+| `firefox` | Firefox 157 | Desktop Firefox, 1440×900 | The `@cross-browser` profile | Every push, and weekly |
+| `webkit` | WebKit 27 | Desktop Safari, 1440×900 | The `@cross-browser` profile | Every push, and weekly |
+| `mobile-chrome` | Chromium 156 | Pixel 7 (Chrome on Android), 412×839, touch | The phone layout and every lesson walked | Every change |
+| `tablet` | Chromium 156 | iPad Mini geometry, 768×1024, touch | The tablet layout, and every lesson walked | Layout on every change, the walk weekly |
 <!-- browser-support:end -->
 
 ### Feature detection
