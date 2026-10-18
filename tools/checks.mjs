@@ -687,6 +687,19 @@ export const CHECKS = [
     group: 'generated',
   },
   {
+    id: 'storage-matrix',
+    label: 'the storage ownership matrix is current',
+    command: ['npm', 'run', 'storage:matrix', '--', '--check'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same facts in tests/storageMatrix.test.js (the file ' +
+      'against KEYS, the writers and the corpus, and the generated tables ' +
+      'against STORAGE.md and My work) and tests/storageProfile.test.js (a ' +
+      '2.0.0 profile opened on the tip).',
+    group: 'correctness',
+  },
+  {
     id: 'budget-policy',
     label: 'the budget policy and the data-plane budget are consistent',
     command: ['npm', 'run', 'budget:policy'],

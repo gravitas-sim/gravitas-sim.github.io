@@ -50,6 +50,7 @@ import {
 import { RESUMABLE, createScheduler } from './experiments/scheduler.js';
 import { METRIC_UNITS } from './experiments/metrics.js';
 import { toCsv } from './csv.js';
+import { put, drop } from './storage/local.js';
 import { addMessages } from './experiments/i18n.js';
 
 const $ = id => document.getElementById(id);
@@ -352,7 +353,7 @@ function saveCheckpoint(manifest, trials) {
     // A checkpoint that would crowd out everything else the site keeps is not
     // one worth keeping; the run still finishes, it just cannot be resumed.
     if (text.length > CHECKPOINT_MAX_CHARS) return false;
-    window.localStorage?.setItem(CHECKPOINT + experimentHash(manifest), text);
+    put(CHECKPOINT + experimentHash(manifest), text, 'drafts');
     return true;
   } catch {
     return false;
@@ -361,7 +362,7 @@ function saveCheckpoint(manifest, trials) {
 
 function dropCheckpoint(manifest) {
   try {
-    window.localStorage?.removeItem(CHECKPOINT + experimentHash(manifest));
+    drop(CHECKPOINT + experimentHash(manifest));
   } catch {
     /* nothing to drop */
   }
