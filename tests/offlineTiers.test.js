@@ -11,6 +11,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
+import { URL } from 'node:url';
 import vm from 'node:vm';
 
 import { measure, readDataBudget } from '../tools/data-budget.mjs';

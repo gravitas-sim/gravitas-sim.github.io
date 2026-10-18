@@ -82,7 +82,7 @@ const NEEDS_BASIS = new Set([
  */
 export const NON_COMMERCIAL = new Set(['cc-by-nc-3.0-igo']);
 /** The capability package's offline classes, less `locale`, which is for text. */
-export const OFFLINE = ['core', 'optional', 'none'];
+export const OFFLINE = ['core', 'optional', 'idle', 'none'];
 /** How a raw product not stable byte for byte is pinned; see pinned.mjs. */
 export const CANONICAL_FORMS = ['data-lines'];
 

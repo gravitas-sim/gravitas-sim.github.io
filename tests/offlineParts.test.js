@@ -8,6 +8,8 @@
 import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { Buffer } from 'node:buffer';
+import { URL } from 'node:url';
 import vm from 'node:vm';
 import { createHash } from 'node:crypto';
 

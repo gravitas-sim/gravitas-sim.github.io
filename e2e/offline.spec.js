@@ -18,7 +18,7 @@
 
 import { test, expect, requireScenarioKey } from './fixtures.js';
 
-/* global fetch */
+/* global fetch, navigator, ServiceWorker, requestIdleCallback */
 
 test.use({ serviceWorkers: 'allow' });
 
@@ -233,18 +233,25 @@ test.describe('the application survives the network going away', () => {
       };
     });
     await app.boot();
-    // Core install done and the worker controlling: the same moment the idle
+    // The worker is controlling and has installed: the same moment the idle
     // request goes out when Save-Data is off.
-    await page.waitForFunction(
-      async () => {
-        const m = await import('/js/offline.js');
-        const s = await m.cacheStatus(2000);
-        return Boolean(s && s.coreComplete);
-      },
-      null,
-      { timeout: 60_000 }
+    await expect
+      .poll(
+        () =>
+          page.evaluate(async () => {
+            const m = await import('/js/offline.js');
+            const s = await m.cacheStatus(2000);
+            return Boolean(s && s.coreComplete);
+          }),
+        { timeout: 60_000 }
+      )
+      .toBe(true);
+    // The page's own idle request was queued before this one, so once the
+    // browser has run this callback it has run that one.
+    await page.evaluate(
+      () =>
+        new Promise(r => requestIdleCallback(() => r(), { timeout: 20_000 }))
     );
-    await page.waitForTimeout(4000);
     const { asks, status } = await page.evaluate(async () => {
       const m = await import('/js/offline.js');
       return { asks: window.__idleAsks, status: await m.cacheStatus(2000) };
