@@ -172,11 +172,11 @@ their ceilings:
 | --- | ---: | ---: |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
 | `js/validation/physicsChecks.js` | 6,621 | 6,621 |
-| `js/physics.js` | 4,711 | 4,711 |
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
 | `js/i18n/en.deferred.js` | 3,845 | 3,845 |
 | `js/investigations.js` | 3,717 | 3,717 |
 | `js/render.js` | 3,028 | 3,028 |
+| `js/physics.js` | 2,951 | 2,951 |
 | `js/world/build.js` | 2,599 | 2,599 |
 <!--/fact-block-->
 
@@ -255,9 +255,11 @@ never imports the facade. Where each piece lives so far:
 | `js/engine/events.js` | simulation events and the step listeners | S2 |
 | `js/engine/conservation.js` | the absorption ledgers, the conserved totals and the energy history | S3 |
 | `js/engine/forces.js` | the sources a body feels, the dark-matter and MOND terms, softening, direct-sum acceleration and the Velocity Verlet, RK4 and default step schemes | S4 |
+| `js/engine/bodies.js` | the size and mass constants, the bursts, the absorption rule, and every body class from `PhysicsObject` to `Comet` with the accretion-disk tracer and the galaxy helpers | S5 |
+| `js/engine/blackHole.js` | the black hole class and its default appearance | S5 |
 
-Still in `js/physics.js`: the body classes and the black hole, collisions,
-mergers and collapse, and the step itself (S5 to S7). Order, risks and the test
+Still in `js/physics.js`: collisions, mergers and collapse, and the step
+itself (S6 and S7). Order, risks and the test
 that proves each slice are in the register row. Two decisions remain for the
 last slice: what replaces the canvas size that culls off-screen bodies, and the
 wall clock a new black hole's grace period reads.

@@ -68,7 +68,13 @@ describe('the production build preserves what the physics reads', () => {
   // saved states have always carried), nothing reads a name from the
   // constructor, and no bundle needs keepNames. These hold that.
   const code = f => read(f).replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
-  const physics = read('js/physics.js');
+  // The engine's body classes are in three files since slice S5.
+  const ENGINE = [
+    'js/physics.js',
+    'js/engine/bodies.js',
+    'js/engine/blackHole.js',
+  ];
+  const physics = ENGINE.map(read).join('\n');
   const BODY_CLASSES = [
     'Planet',
     'GasGiant',
@@ -108,13 +114,13 @@ describe('the production build preserves what the physics reads', () => {
     // constructor: { name: 'BlackHole' }, which a name comparison accepted and
     // an identity one does not; the loop then merged two holes forever. A
     // wrapper carries the kind the class carries.
-    expect(code('js/physics.js')).not.toMatch(/\bconstructor:/);
+    for (const f of ENGINE) expect(code(f)).not.toMatch(/\bconstructor:/);
     expect(code('js/physics.js')).toMatch(/kind: 'BlackHole',/);
   });
 
   test('every body class has a kind equal to its own name', () => {
     const bodies = [
-      ...physics.matchAll(/^class (\w+) extends PhysicsObject\b/gm),
+      ...physics.matchAll(/^(?:export )?class (\w+) extends PhysicsObject\b/gm),
     ].map(m => m[1]);
     // The black hole stands alone and carries its own accessor.
     expect(physics).toMatch(
