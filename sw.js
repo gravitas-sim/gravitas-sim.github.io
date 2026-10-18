@@ -78,6 +78,11 @@ const CORE = self.__GRAVITAS_PRECACHE_CORE || PRECACHE;
 // Pictures. A missing one is reported and costs the reader a preview, not a
 // version.
 const OPTIONAL = self.__GRAVITAS_PRECACHE_OPTIONAL || [];
+// The surfaces a reader reaches after the first screen (the instructor
+// documents, the 3-D view and lab, the mission lab, the Sky Lab, the Library,
+// the data tables). Not fetched at install: the page asks for them once it is
+// idle ('install-idle'), so the install a reader waits for stays small.
+const IDLE = self.__GRAVITAS_PRECACHE_IDLE || [];
 
 /** The one document every navigation is answered with. */
 const SHELL = './index.html';
@@ -363,6 +368,33 @@ self.addEventListener('message', event => {
     return;
   }
 
+  // The idle tier. Fetches only what the cache lacks, so a cut-short run is
+  // finished by the next open and a finished one costs nothing. Failures are
+  // tolerated: a missing file costs its surface the offline copy, not the
+  // version.
+  if (data.type === 'install-idle') {
+    if (!IDLE.length) return;
+    event.waitUntil(
+      (async () => {
+        const cache = await caches.open(VERSION);
+        const have = new Set(
+          (await cache.keys()).map(r => new URL(r.url).pathname)
+        );
+        const need = IDLE.filter(
+          url => !have.has(new URL(url, self.location.href).pathname)
+        );
+        const { added, failed } = need.length
+          ? await addAllTolerant(cache, need)
+          : { added: 0, failed: [] };
+        console.info(
+          `[gravitas-sw] idle tier: ${added}/${need.length} fetched` +
+            (failed.length ? `, ${failed.length} failed` : '')
+        );
+      })()
+    );
+    return;
+  }
+
   // A status reply, for the diagnostics readout and for the tests, which need
   // to know what is actually cached rather than guess from timing.
   if (data.type === 'status' && event.ports && event.ports[0]) {
@@ -379,6 +411,10 @@ self.addEventListener('message', event => {
         precacheCount: PRECACHE.length,
         coreCount: CORE.length,
         optionalCount: OPTIONAL.length,
+        idleCount: IDLE.length,
+        idleCached: IDLE.filter(url =>
+          cached.has(new URL(url, self.location.href).pathname)
+        ).length,
         precacheBytes: self.__GRAVITAS_PRECACHE_BYTES || 0,
         cachedCount: keys.length,
         // Whether this worker is serving a whole version. It can only ever be

@@ -240,6 +240,55 @@ const ON_DEMAND_ONLY = new Set([
 ]);
 
 /**
+ * The idle tier (D-PERF-02, change 2; Prompt 147): what is installed after the
+ * worker has activated and the page has gone idle, not during the install.
+ *
+ * The first-visit install is what a reader waits for on a school connection and
+ * what decides whether the version activates at all, so it holds only what the
+ * shell, the Sandbox and an ordinary lesson need. These are the surfaces a
+ * reader reaches after that: the instructor documents, the 3-D view and lab,
+ * the mission lab, the Sky Lab, the Library and the data tables the guided
+ * investigations open. They are installed in the background, on the next open
+ * if this one is cut short, and a file that cannot be fetched costs that
+ * surface its offline copy and nothing else. The cost is stated on the page
+ * (OFFLINE_AND_LOW_END.md): until the idle tier finishes, those surfaces need
+ * the network, which is the trade D-PERF-02 accepted for a smaller install.
+ *
+ * Idle wins over a core walk or an `offline: core` default for the same file,
+ * because it is the later and more specific decision; a capability package
+ * that declares one of these `core` is refused, so a package cannot quietly
+ * pull its files back into the install.
+ */
+export const IDLE_TIER = [
+  [
+    'instructor modules',
+    /^(js\/authoring\/instructorSchema\.js|js\/instructor[A-Za-z]*\.js|js\/data\/instructor[A-Za-z.]*\.js)$/,
+  ],
+  ['three.js', /^vendor\/three\//],
+  [
+    '3-D lab',
+    /^(js\/lab3d\/|js\/lab3d[A-Za-z]*\.js$|js\/forward\/system3d\.js$|js\/i18n\/(en|es)\.lab3d[A-Za-z]*\.js$|3d\/index\.html$)/,
+  ],
+  [
+    'mission lab',
+    /^(js\/mission\/|js\/mission[A-Za-z]*\.js$|js\/i18n\/(en|es)\.mission[A-Za-z]*\.js$|mission\/lab\/index\.html$|js\/data\/ephemeris\/)/,
+  ],
+  [
+    'Sky Lab',
+    /^(js\/kernels\/sky\/|js\/sky\/|js\/sky[A-Za-z]*\.js$|js\/data\/sky\/|sky\/)/,
+  ],
+  ['Library', /^(js\/library\/|js\/libraryPage\.js$|library\/)/],
+  [
+    'data tables',
+    /^((cosmology|gaia|variables)\/.*\.json$|js\/data\/(observations|radiation)\/)/,
+  ],
+];
+
+/** @param {string} p - Repo-relative path @returns {?string} Its idle group, or null */
+export const idleGroupOf = p =>
+  IDLE_TIER.find(([, re]) => re.test(p))?.[0] ?? null;
+
+/**
  * Paths kept out of the precache. Matched against the repo-relative path.
  *
  * The translated lesson shadows are the deliberate exclusion; see the header.
@@ -328,6 +377,16 @@ function applyCapabilityOffline(entries) {
       );
       continue;
     }
+    if (offline === 'core' && idleGroupOf(p)) {
+      problems.push(
+        `${p} is declared core but belongs to the idle tier (${idleGroupOf(p)})`
+      );
+      continue;
+    }
+    if (offline === 'idle' && !idleGroupOf(p)) {
+      problems.push(`${p} is declared idle but matches no idle tier rule`);
+      continue;
+    }
     if (offline === 'none') {
       byPath.delete(p);
     } else if (byPath.has(p)) {
@@ -349,21 +408,21 @@ function applyCapabilityOffline(entries) {
 
 /**
  * The three lists a reader's browser caches, as the worker will receive them.
- * @returns {Promise<{core: string[], optional: string[], localeWarm: Map<string, string[]>}>}
+ * @returns {Promise<{core: string[], optional: string[], idle: string[], localeWarm: Map<string, string[]>}>}
  */
 export async function precacheLists() {
-  const { core, optional } = await buildManifest();
+  const { core, optional, idle } = await buildManifest();
   const onDisk = await shadowsOnDisk();
   const localeWarm = new Map(
     SHADOW_LOCALES.map(id => [id, onDisk.get(id) || []])
   );
-  return { core, optional, localeWarm };
+  return { core, optional, idle, localeWarm };
 }
 
 /**
  * The precache list and the version its contents imply.
  *
- * @returns {Promise<{paths: string[], version: string, bytes: number}>} Manifest
+ * @returns {Promise<{paths: string[], core: string[], optional: string[], idle: string[], version: string, bytes: number}>} Manifest
  */
 export async function buildManifest() {
   const collected = FILES.map(f => ({ path: f.path, core: f.core }));
@@ -384,8 +443,13 @@ export async function buildManifest() {
     )
   ).sort((a, b) => a.path.localeCompare(b.path));
   const paths = kept.map(f => f.path);
-  const core = kept.filter(f => f.core).map(f => f.path);
-  const optional = kept.filter(f => !f.core).map(f => f.path);
+  const idle = kept.filter(f => idleGroupOf(f.path)).map(f => f.path);
+  const core = kept
+    .filter(f => f.core && !idleGroupOf(f.path))
+    .map(f => f.path);
+  const optional = kept
+    .filter(f => !f.core && !idleGroupOf(f.path))
+    .map(f => f.path);
 
   // The version is a hash of what is in the files, not of their names or of
   // the clock. Two builds of an unchanged tree produce the same version, so a
@@ -401,7 +465,7 @@ export async function buildManifest() {
   }
   const version = digest.digest('hex').slice(0, 12);
 
-  return { paths, core, optional, version, bytes };
+  return { paths, core, optional, idle, version, bytes };
 }
 
 /**
@@ -412,7 +476,7 @@ export async function buildManifest() {
  * @returns {string} File contents
  */
 export function renderManifest(
-  { paths, core, optional, version, bytes },
+  { paths, core, optional, idle = [], version, bytes },
   localeWarm
 ) {
   // A Map keyed by locale id. Accepts the older array-of-Spanish-paths shape
@@ -435,13 +499,17 @@ export function renderManifest(
 // it changes when they do and only when they do - which is what makes the old
 // cache safe to delete on activate and safe to keep otherwise.
 //
-// Split two ways, and the split is what install enforces. The ${core.length} core
+// Split three ways, and the split is what install enforces. The ${core.length} core
 // entries are the shell, the modules, the stylesheets and the self-hosted
 // fonts and libraries: if any one of them cannot be fetched the install fails
 // and this version never activates, because a half-cached build is the mixed
 // revision the whole arrangement exists to prevent. The ${optional.length} optional
-// entries are pictures; a missing one is reported and does not cost the reader
-// the version.
+// entries are pictures and small pages; a missing one is reported and does not
+// cost the reader the version. The ${idle.length} idle entries are installed after
+// activation, on idle, by a message from the page (D-PERF-02, change 2): the
+// instructor modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the
+// Library and the data tables. A missing one costs that surface its offline
+// copy, and the next open fetches only what is missing.
 self.__GRAVITAS_CACHE_VERSION = 'gravitas-${version}';
 self.__GRAVITAS_PRECACHE_BYTES = ${bytes};
 self.__GRAVITAS_PRECACHE_CORE = [
@@ -449,6 +517,9 @@ ${core.map(p => `  './${p}',`).join('\n')}
 ];
 self.__GRAVITAS_PRECACHE_OPTIONAL = [
 ${optional.map(p => `  './${p}',`).join('\n')}
+];
+self.__GRAVITAS_PRECACHE_IDLE = [
+${idle.map(p => `  './${p}',`).join('\n')}
 ];
 // The union, in one sorted list, for the fetch handler's "is this precached?"
 // question and for the diagnostics readout.

@@ -122,9 +122,11 @@ export async function checkRepository(packages) {
       ? 'core'
       : lists.optional.includes(p)
         ? 'optional'
-        : warm.has(p)
-          ? 'locale'
-          : 'none';
+        : lists.idle.includes(p)
+          ? 'idle'
+          : warm.has(p)
+            ? 'locale'
+            : 'none';
   const { CHECKS } = await import('./checks.mjs');
   const registry = new Set(CHECKS.map(c => c.id));
   const licenses = readFileSync(path.join(REPO, 'LICENSES.md'), 'utf8');

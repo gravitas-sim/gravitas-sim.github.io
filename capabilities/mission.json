@@ -34,192 +34,192 @@
     {
       "path": "js/mission/bodies.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/twobody.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/lambert.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/transfers.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/patched.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/window.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/plan.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/verify.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/references.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/workerCore.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/worker.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/api.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/i18n.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/missionPage.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/en.mission.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/es.mission.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/ephemeris.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/solar.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/labReferences.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/labCore.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/labWorker.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/lab/defaults.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/lab/curriculum.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/lab/guidePanel.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/lab/i18n.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/missionLabPage.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/en.missionLab.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/es.missionLab.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/en.missionLabGuides.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/es.missionLabGuides.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/data/ephemeris/solarSystem2025.js",
       "role": "data",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/data/ephemeris/solarSystem2025Check.js",
       "role": "data",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/evidence.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/link.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/lab/address.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/mission/lab/evidencePanel.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/en.missionEvidence.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/es.missionEvidence.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     }
   ],
   "citations": [

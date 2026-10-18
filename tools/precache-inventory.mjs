@@ -49,7 +49,8 @@ export function precacheInventory(root) {
   const a = arrays(text);
   const core = a.CORE || [];
   const optional = a.OPTIONAL || [];
-  const all = [...core, ...optional];
+  const idle = a.IDLE || [];
+  const all = [...core, ...optional, ...idle];
   const kinds = [
     ...KINDS.map(([kind]) => ({ kind, files: 0, bytes: 0, gzip: 0 })),
     { kind: 'Other', files: 0, bytes: 0, gzip: 0 },
@@ -72,6 +73,7 @@ export function precacheInventory(root) {
     files: all.length,
     core: core.length,
     optional: optional.length,
+    idle: idle.length,
     bytes,
     gzip,
     kinds: kinds.filter(k => k.files > 0),
