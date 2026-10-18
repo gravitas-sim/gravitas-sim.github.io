@@ -1,0 +1,4 @@
+{
+  "note": "Every addition drawn against the optional-growth allowance in tools/budget-policy.json: its bytes, its tranche, the allocation it drew on and the running total. Empty while the policy is off. Written by `node tools/budget-policy.mjs rebaseline` in a reviewed pull request labelled \"ceiling increase\"; never edited by hand and never written by a session on its own.",
+  "entries": []
+}
