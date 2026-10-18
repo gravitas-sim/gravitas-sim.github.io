@@ -782,6 +782,9 @@ test.describe('while a lesson is open', () => {
     expect((await blur()).slice(0, 2)).not.toContain('none');
 
     await page.locator('#investigationsBtn').click();
+    // The stall begins when the lesson browser opens, before any card.
+    await expect(page.locator('#investigationBrowser')).toBeVisible();
+    expect((await blur()).slice(0, 2)).toEqual(['none', 'none']);
     await page.locator('[data-investigation]').first().click();
     await expect(page.locator('#investigationPanel')).toBeVisible();
     expect(await blur()).toEqual(['none', 'none', 'none']);
