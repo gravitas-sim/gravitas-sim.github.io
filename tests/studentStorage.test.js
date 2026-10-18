@@ -10,6 +10,7 @@
 // direct write unnoticed.
 // =============================================================================
 
+import { OWNERSHIP } from '../tools/storage-matrix.mjs';
 import { beforeEach, describe, expect, test } from '@jest/globals';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -402,37 +403,11 @@ describe('copying the legacy keys into collections (adoptLegacy)', () => {
 describe('no writer slips back to a direct write', () => {
   // Every direct write that remains, and why. A new one fails this list; a
   // moved one must leave it.
-  const DIRECT = {
-    'js/notebook/store.js': 'the availability probe, removed at once',
-    'js/studio/model.js':
-      'writes through the Storage a page hands it (Studio hands a guarded one)',
-    'js/platform/resolver.js': 'the platform stamps, not student work',
-    'js/instructorPortal.js':
-      'sessionStorage: the instructor key, for the session',
-    'js/shell.js': 'the shell’s own theme and language choice, every route',
-    'js/experiments/store.js': 'route at its request ceiling (STORAGE.md)',
-    'js/experimentsPage.js': 'route at its request ceiling (STORAGE.md)',
-    'js/myWork/made.js':
-      'reached from the Sandbox: a second importer would split storage/local.js into a chunk every lesson fetches (STORAGE.md)',
-    'js/composerPage.js': 'route at its request ceiling (STORAGE.md)',
-    'js/coursePage.js': 'route at its request ceiling (STORAGE.md)',
-    'js/evaluationKit.js': 'route has 0.7 KB of room (STORAGE.md)',
-    'js/world.js':
-      'a new shared chunk costs every lesson route a request (STORAGE.md)',
-    'js/controls.js': 'preference, same chunk cost',
-    'js/lecture.js': 'preference, same chunk cost',
-    'js/main.js': 'preference, same chunk cost',
-    'js/welcomeGate.js': 'preference, same chunk cost',
-    'js/settingsSchema.js': 'preference, same chunk cost',
-    'js/theme.js': 'preference, same chunk cost',
-    'js/units.js': 'preference, same chunk cost',
-    'js/i18n/index.js': 'the language, each page’s catalog loader',
-    'js/courseHome.js':
-      'gravitas_next_context: where a lesson was opened from, not student work (STORAGE.md)',
-    'js/libraryPage.js': 'gravitas_next_context, as above',
-    'js/investigations/browser.js': 'gravitas_next_context, as above',
-    'js/investigations/next.js': 'gravitas_next_context, as above',
-  };
+  // The list is tools/storage-ownership.json (writers), which also feeds
+  // STORAGE.md's table and My work's sentence (npm run storage:matrix).
+  const DIRECT = Object.fromEntries(
+    OWNERSHIP.writers.map(w => [w.file, w.reason])
+  );
   test('the files that call setItem or removeItem on a Storage are exactly the listed ones', () => {
     const lines = execFileSync(
       'git',

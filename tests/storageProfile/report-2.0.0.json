@@ -1,0 +1,339 @@
+{
+ "myWork": {
+  "assignments": [
+   {
+    "answered": 1,
+    "key": "gravitas_assignment_golden1",
+    "seen": 4,
+    "since": "2026-09-20T09:00:00.000Z",
+    "title": "keplers-laws"
+   }
+  ],
+  "courses": [],
+  "drafts": [
+   {
+    "href": "/studio/lesson/?open=golden-pack",
+    "key": "gravitas_composer_draft:golden-pack",
+    "kind": "composer",
+    "title": "Reading an orbit",
+    "when": null
+   },
+   {
+    "href": "/evaluation/",
+    "key": "gravitas_evaluation_draft_v1",
+    "kind": "evaluation",
+    "title": null,
+    "when": null
+   },
+   {
+    "href": "/experiments/",
+    "key": "gravitas_experiment_checkpoint_abc123",
+    "kind": "checkpoint",
+    "title": "abc123",
+    "when": null
+   },
+   {
+    "href": "/studio/?open=golden-scenario",
+    "key": "gravitas_studio_draft:golden-scenario",
+    "kind": "studio",
+    "title": "golden-scenario",
+    "when": null
+   },
+   {
+    "href": "/teaching/",
+    "key": "gravitas_teaching_notes_v1",
+    "kind": "notes",
+    "title": null,
+    "when": null
+   },
+   {
+    "href": "/studio/course/?open=golden-course",
+    "key": "gravitas_course_draft:golden-course",
+    "kind": "course",
+    "title": "Introductory astronomy: gravity, starlight and other worlds",
+    "when": null
+   }
+  ],
+  "evidence": {
+   "groups": {
+    "compute": [],
+    "experiments": [],
+    "lab3d": [],
+    "mission": [],
+    "observatory": [],
+    "sandbox": [
+     {
+      "id": "golden-entry-1",
+      "key": "gravitas_evidence_notebook",
+      "source": "rv-fit",
+      "title": "Measurement 1",
+      "when": "2026-09-21T14:13:21.000Z"
+     },
+     {
+      "id": "golden-entry-2",
+      "key": "gravitas_evidence_notebook",
+      "source": "rv-fit",
+      "title": "Measurement 2",
+      "when": "2026-09-21T14:13:22.000Z"
+     }
+    ]
+   },
+   "notebook": {
+    "count": 2,
+    "key": "gravitas_evidence_notebook"
+   }
+  },
+  "experiments": [
+   {
+    "key": "gravitas_experiment_golden-exp-1",
+    "title": "First comparison",
+    "when": "2026-10-18T05:23:41.840Z"
+   },
+   {
+    "key": "gravitas_experiment_golden-exp-2",
+    "title": "Second comparison",
+    "when": "2026-10-18T05:23:41.840Z"
+   }
+  ],
+  "lessons": [
+   {
+    "answered": 3,
+    "done": false,
+    "href": "/#investigation=keplers-laws",
+    "id": "keplers-laws",
+    "key": "gravitas_investigation_keplers-laws",
+    "kind": "lesson",
+    "seen": 9,
+    "since": "2026-09-14T15:00:00.000Z",
+    "title": "keplers-laws",
+    "total": null
+   },
+   {
+    "answered": 2,
+    "done": false,
+    "href": "/#investigation=orbital-energy",
+    "id": "orbital-energy",
+    "key": "gravitas_investigation_orbital-energy",
+    "kind": "lesson",
+    "seen": 5,
+    "since": "2026-09-14T15:00:00.000Z",
+    "title": "orbital-energy",
+    "total": null
+   },
+   {
+    "answered": 1,
+    "done": false,
+    "href": "/#investigation=detect-this-planet",
+    "id": "detect-this-planet",
+    "key": "gravitas_investigation_detect-this-planet",
+    "kind": "lesson",
+    "seen": 2,
+    "since": "2025-11-02T10:00:00.000Z",
+    "title": "detect-this-planet",
+    "total": null
+   },
+   {
+    "done": false,
+    "empty": true,
+    "href": "/observatory/?guide=version",
+    "id": "version",
+    "key": "gravitas_guides",
+    "kind": "observatory",
+    "seen": null,
+    "since": null,
+    "title": "version",
+    "total": null
+   },
+   {
+    "done": false,
+    "empty": false,
+    "href": "/observatory/?guide=suites",
+    "id": "suites",
+    "key": "gravitas_guides",
+    "kind": "observatory",
+    "seen": null,
+    "since": null,
+    "title": "suites",
+    "total": null
+   },
+   {
+    "done": false,
+    "empty": false,
+    "href": "/3d/?guide=basics",
+    "id": "basics",
+    "key": "gravitas_lab3d_guide_basics",
+    "kind": "lab3d",
+    "seen": null,
+    "since": null,
+    "title": "basics",
+    "total": null
+   },
+   {
+    "done": false,
+    "empty": false,
+    "href": "/mission/lab/?guide=transfer",
+    "id": "transfer",
+    "key": "gravitas_missionlab_transfer",
+    "kind": "mission",
+    "seen": null,
+    "since": null,
+    "title": "transfer",
+    "total": null
+   }
+  ],
+  "made": [
+   {
+    "key": "gravitas_made_mmvddr3bnm8p",
+    "title": "My Solar System"
+   }
+  ],
+  "name": "Ada Lovelace",
+  "saved": [
+   {
+    "bodies": 3,
+    "key": "gravitas_simulation_save",
+    "kind": "world",
+    "title": null
+   }
+  ]
+ },
+ "progress": [
+  {
+   "id": "detect-this-planet",
+   "responses": 1,
+   "attempts": 0,
+   "visited": 2,
+   "stepSid": "what-decides-whether-you-find",
+   "notes": [
+    {
+     "code": "migratedByPosition",
+     "carried": 1,
+     "certain": false
+    }
+   ],
+   "migrated": true
+  },
+  {
+   "id": "keplers-laws",
+   "responses": 3,
+   "attempts": 3,
+   "visited": 9,
+   "stepSid": "equal-areas-however-you-slice",
+   "notes": [],
+   "migrated": false
+  },
+  {
+   "id": "orbital-energy",
+   "responses": 2,
+   "attempts": 2,
+   "visited": 5,
+   "stepSid": "find-the-dividing-line",
+   "notes": [],
+   "migrated": false
+  }
+ ],
+ "experiments": [
+  {
+   "id": "golden-exp-1",
+   "name": "First comparison",
+   "updated": 1792301021840,
+   "bytes": 292,
+   "loads": true
+  },
+  {
+   "id": "golden-exp-2",
+   "name": "Second comparison",
+   "updated": 1792301021840,
+   "bytes": 293,
+   "loads": true
+  }
+ ],
+ "notebook": {
+  "ok": true,
+  "reason": "ok",
+  "ids": [
+   "golden-entry-1",
+   "golden-entry-2"
+  ]
+ },
+ "installed": [
+  {
+   "id": "example.tess-hd209458-one-transit",
+   "type": "data-pack",
+   "version": "1.0.0",
+   "files": [
+    "series.json"
+   ]
+  }
+ ],
+ "archive": [
+  {
+   "key": "https://example.test/query?q=1",
+   "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "bytes": 16
+  }
+ ],
+ "export": {
+  "ok": true,
+  "carried": 36,
+  "collections": {
+   "progress": [
+    "gravitas_guides",
+    "gravitas_investigation_detect-this-planet",
+    "gravitas_investigation_keplers-laws",
+    "gravitas_investigation_keplers-laws:v1",
+    "gravitas_investigation_orbital-energy",
+    "gravitas_investigation_orbital-energy:v1",
+    "gravitas_lab3d_guide_basics",
+    "gravitas_missionlab_transfer"
+   ],
+   "evidence": [
+    "gravitas_evidence_notebook"
+   ],
+   "experiments": [
+    "gravitas_experiment_golden-exp-1",
+    "gravitas_experiment_golden-exp-2",
+    "gravitas_experiments_index"
+   ],
+   "drafts": [
+    "gravitas_composer_draft:golden-pack",
+    "gravitas_composer_last",
+    "gravitas_evaluation_draft_v1",
+    "gravitas_experiment_checkpoint_abc123",
+    "gravitas_simulation_save",
+    "gravitas_studio_draft:golden-scenario",
+    "gravitas_studio_last",
+    "gravitas_teaching_notes_v1"
+   ],
+   "assignments": [
+    "gravitas_assignment_golden1"
+   ],
+   "courses": [
+    "gravitas_course_draft:golden-course",
+    "gravitas_course_last"
+   ],
+   "made": [
+    "gravitas_made_mmvddr3bnm8p"
+   ],
+   "settings": [
+    "gravitas_student_name"
+   ],
+   "preferences": [
+    "gravitas_course_level",
+    "gravitas_last_export",
+    "gravitas_lecture_sequence",
+    "gravitas_lesson_objects_open",
+    "gravitas_locale",
+    "gravitas_orientation_seen_v1",
+    "gravitas_rail_sections",
+    "gravitas_theme",
+    "gravitas_units",
+    "gravitas_welcome_seen_v1",
+    "mobile_instructions_shown"
+   ]
+  },
+  "missing": [],
+  "different": [],
+  "extra": []
+ }
+}

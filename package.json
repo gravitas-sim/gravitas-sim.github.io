@@ -111,6 +111,8 @@
     "budget:composition": "node tools/bundle-composition.mjs",
     "budget:routes": "node tools/route-budget.mjs",
     "budget:check": "node tools/bundle-budget.mjs --check",
+    "storage:matrix": "node tools/storage-matrix.mjs",
+    "storage:profile": "node tools/storage-profile.mjs",
     "budget:policy": "node tools/budget-policy.mjs check",
     "budget:data": "node tools/data-budget.mjs --check",
     "release:check": "node tools/release-check.mjs",
