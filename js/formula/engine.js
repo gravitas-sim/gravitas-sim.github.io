@@ -45,6 +45,14 @@ import {
 
 export const RULE = 'first-order-uncorrelated';
 
+/** The uncertainty states a formula refuses, and the words for each. */
+const REFUSED = {
+  interval: 'interval',
+  'not-constrained': 'notConstrained',
+  failed: 'failed',
+  limit: 'limit',
+};
+
 const MATH = {
   sqrt: [Math.sqrt, v => 0.5 / Math.sqrt(v)],
   log10: [Math.log10, v => 1 / (v * Math.LN10)],
@@ -93,9 +101,11 @@ const fold = n => ev(n, { cols: {}, aggs: new Map() }, 0)[0];
  *
  * @param {string} source - The formula
  * @param {{inputs: Record<string, {unit: string|null,
- *   uncertainty?: 'sigma'|'interval'|'none'}>}} scope - The names a formula may
+ *   uncertainty?: string}>}} scope - The names a formula may
  *   use: a unit as a registry id or spelling (`''` is dimensionless, null is
- *   not stated and refused) and the kind of uncertainty the input has
+ *   not stated and refused) and the kind of uncertainty the input has: sigma
+ *   propagates, assumed is exact, none leaves the result without one, and an
+ *   interval, a limit, not-constrained or failed is refused in words
  * @param {{locale?: string}} [opts] - 'en' or 'es': how numbers are written
  * @returns {{info: object, run: Function, ast: object}} `info` is the
  *   dimension, unit, inputs and uncertainty rule; `run(data, opts)` computes
@@ -141,8 +151,8 @@ export function compile(source, scope, { locale = 'en' } = {}) {
             ? { dim: ZERO, mult: 1, id: '', scale: 1, text: '', angle: false }
             : parseUnitText(spec.unit);
         if (!u) fail('unit', { unit: spec.unit, name: n.n }, n.s, n.e);
-        if (spec.uncertainty === 'interval')
-          fail('interval', { name: n.n }, n.s, n.e);
+        const refused = REFUSED[spec.uncertainty];
+        if (refused) fail(refused, { name: n.n }, n.s, n.e);
         Object.assign(n, { t: 'ref', d: u.dim, m: u.mult, ang: u.angle });
         Object.assign(n, { u, k: false, in: new Set([n.n]) });
         break;
@@ -277,7 +287,10 @@ export function compile(source, scope, { locale = 'en' } = {}) {
     [...outside].some(x => aggCount[x]) ||
     Object.values(aggCount).some(c => c > 1);
   const used = [...ast.in];
-  const lacking = used.filter(x => scope.inputs[x].uncertainty !== 'sigma');
+  // An input taken as exact adds no variance and leaves the others' theirs.
+  const lacking = used.filter(
+    x => !['sigma', 'assumed'].includes(scope.inputs[x].uncertainty)
+  );
   const rule = !used.length
     ? 'exact'
     : lacking.length
@@ -466,7 +479,7 @@ function execute({ ast, used, rule, aggs, mult }, data, rows, skip) {
  * notebook entry uses.
  * @param {string} source - The formula
  * @param {Record<string, {value: number, unit: string|null, sigma?: number,
- *   uncertainty?: 'sigma'|'interval'|'none'}>} inputs - By name
+ *   uncertainty?: 'sigma'|'assumed'|'none'}>} inputs - By name
  * @param {{locale?: string}} [opts]
  * @returns {{value: number, sigma: number|null, info: object}}
  * @throws {FormulaError}
@@ -477,7 +490,10 @@ export function evaluate(source, inputs, opts) {
   for (const [k, v] of Object.entries(inputs)) {
     const kind = v.uncertainty ?? (Number.isFinite(v.sigma) ? 'sigma' : 'none');
     scope.inputs[k] = { unit: v.unit, uncertainty: kind };
-    data[k] = { values: [v.value], sigma: kind === 'sigma' ? [v.sigma] : null };
+    data[k] = {
+      values: [v.value],
+      sigma: kind === 'sigma' ? [v.sigma] : kind === 'assumed' ? [0] : null,
+    };
   }
   const { info, run } = compile(source, scope, opts);
   const out = run(data, { rows: 1 });

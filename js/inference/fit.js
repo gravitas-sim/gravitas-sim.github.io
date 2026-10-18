@@ -263,23 +263,27 @@ export function refine(problem, start, opts = {}, hooks = {}) {
   return { theta, best, iterations: k, converged: false, why };
 }
 
-/**
- * The covariance of the free parameters at a point, from J^T W J.
- * @returns {{covariance: number[][]|null, sigma: number[], correlation:
- *   number[][]|null}}
- */
-export function covarianceAt(problem, theta) {
+/** J^T W J for the free parameters at a point (r is already weighted). */
+function fisherAt(problem, theta) {
   const base = problem.evaluate(theta);
   const J = jacobian(problem, theta, base);
   const n = theta.length;
-  const F = Array.from({ length: n }, (_, a) =>
+  return Array.from({ length: n }, (_, a) =>
     Array.from({ length: n }, (_, b) => {
       let s = 0;
       for (let i = 0; i < base.r.length; i++) s += J[a][i] * J[b][i];
       return s;
     })
   );
-  const C = invertSpd(F);
+}
+
+/**
+ * The covariance of the free parameters at a point, from J^T W J.
+ * @returns {{covariance: number[][]|null, sigma: number[], correlation:
+ *   number[][]|null}}
+ */
+export function covarianceAt(problem, theta) {
+  const C = invertSpd(fisherAt(problem, theta));
   if (!C)
     return { covariance: null, sigma: theta.map(() => NaN), correlation: null };
   const sigma = C.map((row, i) => Math.sqrt(Math.max(0, row[i])));
@@ -287,6 +291,101 @@ export function covarianceAt(problem, theta) {
     row.map((v, j) => v / (sigma[i] * sigma[j] || 1))
   );
   return { covariance: C, sigma, correlation };
+}
+
+/** Eigenvalues and vectors of a small symmetric matrix (cyclic Jacobi). */
+function eigenSymmetric(M) {
+  const n = M.length;
+  const A = M.map(r => r.slice());
+  const V = Array.from({ length: n }, (_, i) =>
+    Array.from({ length: n }, (_, j) => (i === j ? 1 : 0))
+  );
+  for (let sweep = 0; sweep < 60; sweep++) {
+    let off = 0;
+    for (let i = 0; i < n; i++)
+      for (let j = i + 1; j < n; j++) off += A[i][j] * A[i][j];
+    if (off < 1e-30) break;
+    for (let p = 0; p < n - 1; p++)
+      for (let q = p + 1; q < n; q++) {
+        if (Math.abs(A[p][q]) < 1e-300) continue;
+        const theta = (A[q][q] - A[p][p]) / (2 * A[p][q]);
+        const t =
+          Math.sign(theta || 1) / (Math.abs(theta) + Math.hypot(theta, 1));
+        const c = 1 / Math.hypot(t, 1);
+        const s = t * c;
+        for (let k = 0; k < n; k++) {
+          const akp = A[k][p];
+          const akq = A[k][q];
+          A[k][p] = c * akp - s * akq;
+          A[k][q] = s * akp + c * akq;
+        }
+        for (let k = 0; k < n; k++) {
+          const apk = A[p][k];
+          const aqk = A[q][k];
+          A[p][k] = c * apk - s * aqk;
+          A[q][k] = s * apk + c * aqk;
+        }
+        for (let k = 0; k < n; k++) {
+          const vkp = V[k][p];
+          const vkq = V[k][q];
+          V[k][p] = c * vkp - s * vkq;
+          V[k][q] = s * vkp + c * vkq;
+        }
+      }
+  }
+  // Columns of V are the vectors; largest eigenvalue first.
+  return A.map((r, i) => ({ value: r[i], vector: V.map(row => row[i]) })).sort(
+    (a, b) => b.value - a.value
+  );
+}
+
+/**
+ * Whether the data fix every free parameter, and if not which ones they leave
+ * open (Prompt 150). The information matrix is scaled to unit diagonal, so a
+ * parameter's units do not decide the answer, and its eigenvalues are read
+ * against the largest: a direction whose eigenvalue is below `tolerance` of
+ * it is one the data cannot fix, because moving along it leaves the fit
+ * unchanged to the tolerance. A parameter is not constrained when at least
+ * 1% of its own weight lies in such a direction, and a parameter the model
+ * does not depend on at all (a zero column) always is. The covariance of a
+ * fit with such a direction is not usable: `covarianceAt` either returns
+ * null or returns a variance that is the rounding noise of an inversion.
+ *
+ * @param {object} problem - From createProblem
+ * @param {number[]} theta - The free parameters at the fit
+ * @param {{tolerance?: number}} [opts] - Relative eigenvalue floor, 1e-8
+ * @returns {{free: number, rank: number, status: 'full'|'deficient',
+ *   tolerance: number, notConstrained: number[]}} The indices into theta
+ */
+export function rankAt(problem, theta, { tolerance = 1e-8 } = {}) {
+  const n = theta.length;
+  if (!n)
+    return { free: 0, rank: 0, status: 'full', tolerance, notConstrained: [] };
+  const F = fisherAt(problem, theta);
+  const dead = F.map((row, i) => !(row[i] > 0) || !Number.isFinite(row[i]));
+  const scale = F.map((row, i) => (dead[i] ? 1 : Math.sqrt(row[i])));
+  const R = F.map((row, i) =>
+    row.map((v, j) =>
+      i === j ? 1 : dead[i] || dead[j] ? 0 : v / (scale[i] * scale[j])
+    )
+  );
+  const modes = eigenSymmetric(R);
+  const top = modes[0].value;
+  const open = modes.filter(m => !(m.value > tolerance * top));
+  const notConstrained = [];
+  for (let i = 0; i < n; i++) {
+    let weight = dead[i] ? 1 : 0;
+    if (!dead[i]) for (const m of open) weight += m.vector[i] ** 2;
+    if (weight >= 0.01) notConstrained.push(i);
+  }
+  const rank = n - open.length - dead.filter(Boolean).length;
+  return {
+    free: n,
+    rank: Math.max(0, rank),
+    status: notConstrained.length ? 'deficient' : 'full',
+    tolerance,
+    notConstrained,
+  };
 }
 
 /**

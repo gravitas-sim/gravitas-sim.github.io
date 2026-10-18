@@ -12,6 +12,8 @@ beforeAll(() => {
 });
 afterAll(() => old?.cleanup());
 
+const clone = x => JSON.parse(JSON.stringify(x));
+
 /** What the 2.0.0 reader says of the fixture with the planned field added. */
 async function outcome(entry) {
   const made = run(old.tree, entry.kind, 'make');
@@ -33,6 +35,52 @@ describe.each(BOUNDARY)('$id (Prompt $prompt)', entry => {
       id: entry.id,
       outcome: entry.expect,
     });
+  });
+});
+
+describe('what a 2.0.0 artifact reader is given (Prompt 150)', () => {
+  test('legacyView turns every state it refuses into one it opens, and lists the loss', async () => {
+    const { legacyView } = await import('../../js/platform/artifact.js');
+    const made = run(old.tree, 'artifact', 'make');
+    const extended = clone(made.value);
+    extended.quantities = [
+      {
+        id: 'a',
+        value: 1,
+        unit: 'd',
+        origin: 'measured',
+        uncertainty: { kind: 'not-constrained' },
+      },
+      {
+        id: 'b',
+        value: 2,
+        unit: 'd',
+        origin: 'measured',
+        uncertainty: { kind: 'limit', bound: 'upper', basis: 'data' },
+      },
+      {
+        id: 'c',
+        value: 3,
+        unit: 'd',
+        origin: 'fitted',
+        uncertainty: { kind: 'sigma', sigma: 0.1, basis: 'data' },
+        correlatedWith: [{ id: 'a', rho: 0.3 }],
+      },
+    ];
+    extended.fit = {
+      model: { id: 'm', version: '1' },
+      parameters: ['a', 'b', 'c'],
+    };
+    const refused = run(old.tree, 'artifact', 'read', extended);
+    expect(refused.value.accepted).toBe(false);
+    const view = legacyView(extended);
+    const read = run(old.tree, 'artifact', 'read', view);
+    expect(read.value.accepted).toBe(true);
+    expect(view.warnings).toEqual([
+      'extended:a:not-constrained',
+      'extended:b:limit',
+    ]);
+    expect(view.fit).toBeUndefined();
   });
 });
 
