@@ -159,7 +159,7 @@
     "widgets": [],
     "investigations": []
   },
-  "offline": "optional",
+  "offline": "idle",
   "derived": {
     "file": "js/data/observations/desSn5yrHd.js",
     "bytes": 4844,

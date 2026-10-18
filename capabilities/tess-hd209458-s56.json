@@ -27,12 +27,12 @@
     {
       "path": "js/data/observations/tessHd209458S56.js",
       "role": "data",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/data/observations/tessHd209458S56Aperture.js",
       "role": "data",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "data-packs/tess-hd209458-s56-lc.json",

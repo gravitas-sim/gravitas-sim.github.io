@@ -178,7 +178,7 @@
     "widgets": [],
     "investigations": []
   },
-  "offline": "optional",
+  "offline": "idle",
   "derived": {
     "file": "js/data/observations/pantheonPlusHd.js",
     "bytes": 5834,

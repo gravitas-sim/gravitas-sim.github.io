@@ -402,7 +402,7 @@ const starsPack = {
       masks: [],
       reductions: [],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     const pack = runtimeMeta({
       format: 'gravitas.observation-data-pack',

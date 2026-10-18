@@ -77,15 +77,17 @@ export function measure(root = ROOT) {
     ).exec(manifest);
     return m ? [...m[1].matchAll(/'\.\/([^']+)'/g)].map(x => x[1]) : [];
   };
-  const core = tier(listed('CORE'));
-  const idle = tier(listed('OPTIONAL'));
+  // First visit is what the install fetches (core and optional); the idle tier
+  // is what the page asks for afterwards (Prompt 147).
+  const core = tier([...listed('CORE'), ...listed('OPTIONAL')]);
+  const idle = tier(listed('IDLE'));
   return {
     packFiles: packs.files,
     packBytes: packs.bytes,
     packGzipBytes: packs.gzip,
-    precacheFirstVisitFiles: inv.core,
+    precacheFirstVisitFiles: inv.core + inv.optional,
     precacheFirstVisitGzipBytes: core.gzip,
-    precacheIdleFiles: inv.optional,
+    precacheIdleFiles: inv.idle,
     precacheIdleGzipBytes: idle.gzip,
     // The pool's own caps, which are what the realms are held to.
     workerConcurrencyLowEnd: PROFILES['low-end'].maxConcurrency,

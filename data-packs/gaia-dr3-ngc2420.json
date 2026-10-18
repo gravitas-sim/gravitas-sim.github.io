@@ -293,7 +293,7 @@
     "widgets": [],
     "investigations": []
   },
-  "offline": "optional",
+  "offline": "idle",
   "derived": {
     "file": "js/data/observations/gaiaNgc2420.js",
     "bytes": 6532,
