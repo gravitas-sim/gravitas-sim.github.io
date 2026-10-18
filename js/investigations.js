@@ -25,11 +25,23 @@ import {
   drawEllipse,
   drawPlot as drawPlotFigure,
   fitSlope,
+  bindPersistence,
   bindStepInputs,
   formatFieldNumber,
+  keyForAssignment,
+  load,
   parseFieldNumber,
+  progressFor,
+  renderProgressNotice,
+  renderSaveStatus,
+  save,
+  sessionProgress,
   stepMarkup,
+  storageKey,
 } from './investigations/stepView.js';
+// The public readers of the saved record, as they were exported from here.
+export { getStudentName } from './investigations/progressSchema.js';
+export { progressFor } from './investigations/stepView.js';
 import { getLocale, t, onLocaleChange } from './i18n/index.js';
 import { lessonText } from './i18n/lesson.js';
 import {
@@ -44,7 +56,6 @@ import { SCENARIO_IDS, scenarioId } from './scenarios.js';
 // draws ten cards from the manifest, and opening one lesson fetches that one.
 import {
   MANIFEST,
-  investigationMeta,
   hasInvestigation,
   loadInvestigation,
   provideLessonLoaders,
@@ -52,7 +63,6 @@ import {
 } from './data/investigations/registry.js';
 // Lessons provided by capability packages load through the platform resolver,
 // which installs their loaders in the registry when it is imported.
-import { migrateSavedProgress } from './platform/resolver.js';
 import { state, SETTINGS, command } from './appState.js';
 
 import {
@@ -97,9 +107,9 @@ import {
   inDepth,
   indexOfSid,
   isValidSid,
-  readProgress,
+  getStudentName,
+  setStudentName,
   stepKey,
-  writeProgress,
 } from './investigations/progressSchema.js';
 import {
   rotationCurveState,
@@ -135,12 +145,7 @@ import {
   parseNumber,
   recordAnswer,
 } from './answerParse.js';
-import {
-  assignmentStorageKey,
-  filterResponses,
-  shortHash,
-  stepBindings,
-} from './assignments/assignment.js';
+import { filterResponses, stepBindings } from './assignments/assignment.js';
 import { stepFingerprint } from './investigations/progressBackup.js';
 import {
   bindChooser,
@@ -215,9 +220,6 @@ const showAreaSweepFor = command('showAreaSweepFor');
 const setAreaSweepSuppressed = command('setAreaSweepSuppressed');
 const syncPlacementAvailability = command('syncPlacementAvailability');
 
-const STORAGE_PREFIX = 'gravitas_investigation_';
-const NAME_KEY = 'gravitas_student_name';
-
 let active = null; // the investigation object
 let stepIndex = 0;
 let responses = {}; // stepId -> value
@@ -272,8 +274,6 @@ let authoring = null;
 
 // --- Persistence --------------------------------------------------------------
 
-const storageKey = id => `${STORAGE_PREFIX}${id}`;
-
 /**
  * The assignment being worked through, if this is one rather than a lesson.
  *
@@ -298,434 +298,29 @@ export const activeAssignmentKey = () => (assignment ? assignmentKey : null);
 /** @returns {?object} How its steps bound to the current lesson */
 export const activeAssignmentBinding = () => assignmentBinding;
 
-/**
- * Where this activity's progress lives.
- *
- * @param {string} id - Lesson id
- * @returns {string} Storage key
- */
-const progressKey = id => (assignment ? assignmentKey : storageKey(id));
-const progressArea = () => (assignment ? 'assignments' : 'progress');
-
 /** The open assignment's progress key; set with `assignment`. */
 let assignmentKey = null;
 
-/**
- * An assignment's progress key: its lesson, steps and title, never its date,
- * so a link re-issued on another day keeps the work. A new title is a new
- * activity and re-keys on purpose. Work under the old dated key, from this
- * link or an earlier issue of it, moves across the first time it is read.
- *
- * @param {object} a - A validated assignment payload
- * @returns {string} The storage key
- */
-function keyForAssignment(a) {
-  const hash = shortHash(`${a.l}|${a.s.join(',')}|${a.t}`);
-  const key = `gravitas_assignment_${hash}`;
-  if (authoring) return key;
-  try {
-    if (get(key) === null) {
-      const old = Object.keys(localStorage)
-        .filter(
-          k =>
-            k === assignmentStorageKey(a) ||
-            new RegExp(`^gravitas_assignment_\\d{6}${hash}$`).test(k)
-        )
-        .sort()
-        .pop();
-      if (old) {
-        put(key, get(old), 'assignments');
-        drop(old);
-      }
-    }
-  } catch {
-    /* storage refused: there is nothing to move */
-  }
-  return key;
-}
-
-/**
- * Whether the last write reached the disk, and what went wrong if not.
- *
- * 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'
- *
- * This used to be swallowed entirely - the comment said progress was "not worth
- * an alert", which is true of a toast and false of the reader's forty minutes
- * of work. A student in a private window, or on a machine whose disk is full,
- * was told nothing at all and found out when they closed the tab.
- */
-let saveState = { status: 'idle', at: null };
-
-function setSaveState(status) {
-  if (saveState.status === status) {
-    // Same outcome as last time: refresh the timestamp for a success so the
-    // reader sees it is still saving, but do not re-render a standing warning
-    // on every keystroke.
-    if (status === 'saved') saveState.at = Date.now();
-    else return;
-  } else {
-    saveState = { status, at: Date.now() };
-  }
-  renderSaveStatus();
-}
-
-/**
- * Tell a failed write apart from a refused one.
- *
- * A quota error is recoverable by the reader - they can free space, or take a
- * backup and clear old lessons. A SecurityError in a private window is not, and
- * saying "storage is full" there would send them looking for space they have
- * plenty of.
- *
- * @param {*} err - Whatever setItem threw
- * @returns {'full'|'unavailable'} Which kind
- */
-function classifyStorageError(err) {
-  const name = err?.name || '';
-  if (
-    name === 'QuotaExceededError' ||
-    name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
-    err?.code === 22 ||
-    err?.code === 1014
-  ) {
-    return 'full';
-  }
-  return 'unavailable';
-}
-
-function save() {
-  if (!active) return;
-  clock();
-  // A payload from a newer build was left unread; overwriting it would destroy
-  // progress this version does not understand. The reader is told, and their
-  // answers stay usable in memory for the rest of the session.
-  if (progressNotes.some(n => n.code === 'schemaTooNew')) {
-    setSaveState('foreign');
-    return;
-  }
-  // An author looking at step 30 of Tides must not overwrite the progress of
-  // whoever is working through Tides on this machine.
-  if (authoring) {
-    setSaveState('authoring');
-    return;
-  }
-  const payload = writeProgress({
-    lesson: active,
+// What persistence (./investigations/stepView.js) reads of this module, once.
+bindPersistence({
+  state: () => ({
+    active,
     responses,
     attempts,
     visited,
-    stepSid: active.steps[stepIndex]?.sid ?? null,
+    stepIndex,
     startedAt,
-    depth: depthChoice,
+    depthChoice,
     deepest,
     spent,
-  });
-
-  // This tab's copy, always, and before the disk is asked. It is what makes
-  // closing and reopening the lesson safe when the write below fails.
-  sessionProgress.set(progressKey(active.id), payload);
-
-  try {
-    put(progressKey(active.id), JSON.stringify(payload), progressArea());
-    setSaveState('saved');
-  } catch (err) {
-    // The answers stay in memory and the lesson keeps working; what changes is
-    // that the reader is told, once, and given a way to take the work with
-    // them.
-    setSaveState(classifyStorageError(err));
-  }
-}
-
-/**
- * Show whether the work is safe, without shouting about it.
- *
- * A polite live region, not a toast: a toast for a storage failure would fire
- * on every keystroke, and the one thing a reader needs here is a message that
- * *stays* until the situation changes. Successes announce nothing - the text is
- * there to be looked at, and a screen reader being told "saved" forty times
- * while typing an answer is worse than silence.
- */
-/**
- * Say what reading the saved progress turned up, once, when the lesson opens.
- *
- * Only three things reach here and all three mean the reader's answers may not
- * be where they left them, so none of them is a toast: a migration from the
- * pre-sid format, which was necessarily done by position; answers for steps the
- * lesson no longer has; and a payload from a newer build, which was not read.
- */
-function renderProgressNotice() {
-  const el = els?.progressNotice;
-  if (!el) return;
-
-  const lines = [];
-  for (const note of progressNotes || []) {
-    if (note.code === 'migratedByPosition') {
-      lines.push(t('inv.progress.migrated', { n: note.carried }));
-    } else if (note.code === 'removedSteps') {
-      lines.push(t('inv.progress.removedSteps', { n: note.dropped }));
-    } else if (note.code === 'schemaTooNew') {
-      lines.push(t('inv.progress.foreign'));
-    }
-  }
-
-  el.textContent = lines.join(' ');
-  el.hidden = lines.length === 0;
-}
-
-function renderSaveStatus() {
-  const el = els?.saveStatus;
-  if (!el) return;
-  const { status } = saveState;
-
-  const text = {
-    saved: t('inv.save.saved'),
-    full: t('inv.save.full'),
-    unavailable: t('inv.save.unavailable'),
-    authoring: t('inv.save.authoring'),
-    foreign: t('inv.save.foreign'),
-    idle: '',
-  }[status];
-
-  el.textContent = text || '';
-  // The block is a status and a way to everything saved on this device (My work).
-  if (text && ['saved', 'full', 'unavailable'].includes(status)) {
-    const link = document.createElement('a');
-    link.href = '/my-work/';
-    link.textContent = t('inv.save.link');
-    el.append(' ', link);
-  }
-  el.hidden = !text;
-  el.dataset.state = status;
-  // Only a problem interrupts. aria-live is set rather than removed so the
-  // element keeps its identity across renders.
-  el.setAttribute(
-    'aria-live',
-    status === 'full' || status === 'unavailable' || status === 'foreign'
-      ? 'polite'
-      : 'off'
-  );
-}
-
-/**
- * Write the active lesson's progress to a file the reader keeps.
- *
- * Lazily imported: the backup format, its validator and the remapping logic are
- * only needed by a reader who asks for them, and the lesson engine is already
- * the heaviest thing in the application.
- */
-async function downloadProgressBackup() {
-  if (!active) return;
-  const backup = await import('./investigations/progressBackup.js');
-  const payload = backup.buildBackup({
-    lesson: active,
-    responses,
-    attempts,
-    visited,
-    stepSid: active.steps[stepIndex]?.sid ?? null,
-    startedAt,
-    studentName: getStudentName(),
-  });
-
-  const blob = new Blob([JSON.stringify(payload, null, 2)], {
-    type: 'application/json',
-  });
-  saveFile(blob, backup.backupFilename(active));
-  announce(t('inv.backup.downloaded'));
-}
-
-/**
- * Read a backup file and, with the reader's agreement, become it.
- *
- * Everything about this is deliberately cautious: a restore replaces work, and
- * a reader who picked the wrong file should not discover that afterwards.
- *
- * @param {File} file - The chosen file
- */
-async function restoreProgressBackup(file) {
-  if (!active || !file) return;
-  const backup = await import('./investigations/progressBackup.js');
-
-  if (file.size > backup.MAX_BACKUP_BYTES) {
-    toast(t('inv.backup.tooLarge'));
-    return;
-  }
-
-  let data;
-  try {
-    data = parseDocument(await file.text());
-  } catch {
-    toast(t('inv.backup.notJson'));
-    return;
-  }
-
-  const verdict = backup.validateBackup(data);
-  if (!verdict.ok) {
-    toast(t(`inv.backup.invalid.${verdict.reason}`));
-    return;
-  }
-
-  if (data.lesson.id !== active.id) {
-    toast(
-      t('inv.backup.wrongLesson', {
-        backup: data.lesson.title || data.lesson.id,
-        open: active.title,
-      })
-    );
-    return;
-  }
-
-  // The explicit choice. Anything already answered is work, and replacing it
-  // is the reader's decision to make rather than a consequence of choosing a
-  // file.
-  const answered = Object.keys(responses).length;
-  if (answered > 0) {
-    const ok = window.confirm(t('inv.backup.confirmReplace', { n: answered }));
-    if (!ok) return;
-  }
-
-  progressNotes = [];
-  const restored = backup.restoreProgress(data, active);
-  responses = restored.responses;
-  attempts = restored.attempts;
-  visited = restored.visited;
-  startedAt = restored.startedAt || new Date().toISOString();
-  save();
-  goToStep(restored.stepIndex, { rebuild: true });
-
-  // What could not be carried across, said plainly. A lesson that has changed
-  // since the backup was taken is the ordinary case over a term, not an error.
-  if (restored.uncertain > 0) {
-    // Answers that were not applied because the step they belong to has
-    // changed under them. They are still in the file the reader restored from,
-    // which is why this says "set aside" rather than "lost".
-    toast(
-      t('inv.backup.restoredUncertain', {
-        n: restored.uncertain,
-        applied: Object.keys(restored.responses).length,
-      })
-    );
-  } else if (restored.dropped.length || restored.discardedKeys) {
-    toast(
-      t('inv.backup.restoredPartly', {
-        dropped: restored.dropped.length,
-        moved: restored.moved.length,
-      })
-    );
-  } else if (restored.moved.length) {
-    toast(t('inv.backup.restoredMoved', { moved: restored.moved.length }));
-  } else {
-    toast(t('inv.backup.restored'));
-  }
-}
-
-/**
- * This tab's copy of every lesson's progress, whether or not the disk took it.
- * Written on every save, so never the older of the two: when localStorage
- * refuses a write, closing and reopening the lesson still finds the work. It
- * dies with the tab, as the unsaved warning promises. Authoring previews never
- * reach it, as they never reach storage.
- *
- * @type {Map<string, object>}
- */
-const sessionProgress = new Map();
-
-/** Where a v1 payload is kept after it has been migrated, in case it was wrong. */
-const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
-
-/**
- * Read a lesson's saved progress, migrating an older save if that is what is
- * there.
- * @param {string} id - Lesson id
- * @param {?object} lesson - The merged lesson, when the caller has it
- * @returns {?object} The progress, or null when there is none
- */
-function load(id, lesson = null) {
-  // This tab first. It is written on every save and storage is not, so when the
-  // two differ the session copy is the newer one - and when storage refused
-  // every write, it is the only one there is.
-  let data = sessionProgress.get(progressKey(id)) ?? null;
-
-  if (!data) {
-    try {
-      const raw = get(progressKey(id));
-      if (!raw) return null;
-      data = JSON.parse(raw);
-    } catch {
-      return null;
-    }
-  }
-
-  // Without the lesson only the counts are readable, which is all the card
-  // wants. A v1 payload's `visited` is indices and a v2's is sids; either way
-  // the size is the number of steps seen.
-  if (!lesson) {
-    const visited = Array.isArray(data?.visited) ? data.visited : [];
-    return { countsOnly: true, visited: new Set(visited), data };
-  }
-
-  const isLegacy = !Number.isFinite(Number(data?.schema));
-  const progress = readProgress(data, lesson);
-  // A lesson from a capability package may have renamed a control since the
-  // answers were saved; its manifest says how, and this applies it.
-  progress.responses = migrateSavedProgress(id, progress.responses);
-
-  // Keep the original. A positional migration is right whenever the lesson has
-  // not been reordered since the save and there is no way to tell from the
-  // payload, so the thing it replaced is worth keeping until the reader has
-  // looked at their answers.
-  if (isLegacy && progress.migrated) {
-    try {
-      put(legacyKey(id), JSON.stringify(data), progressArea());
-    } catch {
-      /* the migration still stands; only the safety copy is lost */
-    }
-  }
-  return progress;
-}
-
-/** @returns {string} The student's saved name, if they have given one */
-export function getStudentName() {
-  try {
-    return get(NAME_KEY) || '';
-  } catch {
-    return '';
-  }
-}
-
-function setStudentName(name) {
-  try {
-    put(NAME_KEY, name, 'settings');
-  } catch {
-    /* ignore */
-  }
-}
-
-/**
- * How far through an investigation a student is.
- *
- * `done` counts steps seen, which is what the progress bar shows; `at` is the
- * step a resume would land on, which is not the same number once a student has
- * gone back to reread something.
- *
- * @param {string} id - Investigation id
- * @returns {{done:number, total:number, started:boolean, at:number}} Progress
- */
-export function progressFor(id) {
-  // From the manifest: the browser asks this for all ten lessons before any of
-  // them is loaded, and a step count is a number the manifest already carries.
-  const total = investigationMeta(id)?.stepCount || 0;
-  const saved = load(id);
-  // `at` is a 1-based screen number for the card. A v2 payload stores a sid
-  // rather than an index and the card has no lesson to resolve it against, so
-  // it reports how far the reader got rather than exactly where they stopped.
-  const done = saved ? saved.visited.size : 0;
-  return {
-    done,
-    total,
-    started: Boolean(saved),
-    at: done > 0 ? Math.min(done, total || done) : 1,
-  };
-}
+    progressNotes,
+  }),
+  authoring: () => authoring,
+  assigned: () => Boolean(assignment),
+  assignmentKey: () => assignmentKey,
+  els: () => els,
+  clock: () => clock(),
+});
 
 // --- Live simulation context --------------------------------------------------
 
@@ -3136,6 +2731,17 @@ const finishHost = () => ({
   stepId,
   reportSlug,
   setStudentName,
+  getStudentName,
+  saveFile,
+  restoreInto: restored => {
+    progressNotes = [];
+    responses = restored.responses;
+    attempts = restored.attempts;
+    visited = restored.visited;
+    startedAt = restored.startedAt || new Date().toISOString();
+    save();
+    goToStep(restored.stepIndex, { rebuild: true });
+  },
   showToken,
   lib: {
     t,
@@ -3149,6 +2755,7 @@ const finishHost = () => ({
     helpTaken,
     encodePayload,
     shareUrl,
+    parseDocument,
   },
 });
 
@@ -3517,7 +3124,10 @@ export function initInvestigations({ signal } = {}) {
     document.getElementById(id)?.addEventListener('click', fn);
   on('investigationDownload', finishAction('generateReport'));
   on('investigationDownloadHtml', finishAction('generateHtmlReport'));
-  els.finishProgress?.addEventListener('click', downloadProgressBackup);
+  els.finishProgress?.addEventListener(
+    'click',
+    finishAction('downloadBackup', 'inv.backup.failed')
+  );
   on('investigationTokenShow', finishAction('revealToken', 'inv.token.failed'));
   on('investigationTokenCopy', finishAction('copyToken', 'inv.token.failed'));
   on('investigationTokenSave', () =>
@@ -3565,7 +3175,7 @@ export function initInvestigations({ signal } = {}) {
   // resources link to. Shared simulation links use a different hash shape
   // (digits followed by z or r), so the two cannot be confused.
   els.backupDownload?.addEventListener('click', () => {
-    downloadProgressBackup().catch(() => toast(t('inv.backup.failed')));
+    finishAction('downloadBackup', 'inv.backup.failed')();
   });
   // The button opens the picker; the input does the work. A bare file input in
   // the footer would be a permanent piece of browser chrome in a teaching
@@ -3576,7 +3186,9 @@ export function initInvestigations({ signal } = {}) {
     // Reset first, so choosing the same file twice fires again.
     event.target.value = '';
     if (file) {
-      restoreProgressBackup(file).catch(() => toast(t('inv.backup.failed')));
+      import('./investigations/finish.js')
+        .then(m => m.restoreBackup(finishHost(), file))
+        .catch(() => toast(t('inv.backup.failed')));
     }
   });
 

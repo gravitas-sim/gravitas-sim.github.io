@@ -26,6 +26,8 @@
 // quietly attached to the wrong questions.
 // =============================================================================
 
+import { get, put } from '../storage/local.js';
+
 /**
  * The stored shape's version.
  *
@@ -302,4 +304,53 @@ export function writeProgress({
     ...(deepest && deepest !== 'core' ? { deepest } : {}),
     ...(spent > 0 ? { spent: Math.floor(spent) } : {}),
   };
+}
+
+// --- What persistence needs that is not the engine's -----------------------------
+// Moved from js/investigations.js with Prompt 139 part C: how a failed write is
+// told apart from a refused one, and the student's saved name. Both describe
+// the saved record and nothing the engine is doing, which is why they are here
+// and not with the code that saves it (./stepView.js).
+
+const NAME_KEY = 'gravitas_student_name';
+
+/**
+ * Tell a failed write apart from a refused one.
+ *
+ * A quota error is recoverable by the reader - they can free space, or take a
+ * backup and clear old lessons. A SecurityError in a private window is not, and
+ * saying "storage is full" there would send them looking for space they have
+ * plenty of.
+ *
+ * @param {*} err - Whatever setItem threw
+ * @returns {'full'|'unavailable'} Which kind
+ */
+export function classifyStorageError(err) {
+  const name = err?.name || '';
+  if (
+    name === 'QuotaExceededError' ||
+    name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+    err?.code === 22 ||
+    err?.code === 1014
+  ) {
+    return 'full';
+  }
+  return 'unavailable';
+}
+
+/** @returns {string} The student's saved name, if they have given one */
+export function getStudentName() {
+  try {
+    return get(NAME_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+export function setStudentName(name) {
+  try {
+    put(NAME_KEY, name, 'settings');
+  } catch {
+    /* ignore */
+  }
 }

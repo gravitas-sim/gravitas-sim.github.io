@@ -258,6 +258,7 @@
   "[chromium] › analysisLab.spec.js › the analysis laboratory › says the seeds changed nothing, and puts no interval on nothing": 4.1,
   "[chromium] › answerEntry.spec.js › a saved answer comes back exactly as it was written › a quote typed into the numeric box is kept, and adds nothing to it": 13,
   "[chromium] › answerEntry.spec.js › a saved answer comes back exactly as it was written › a restored backup cannot add attributes to a measure field": 13,
+  "[chromium] › answerEntry.spec.js › a saved answer comes back exactly as it was written › the backup button downloads the lesson's progress as a file the restore reads": 7,
   "[chromium] › answerEntry.spec.js › hints arrive one at a time, and only when asked › concept, then method, then the worked answer behind its own press": 4.8,
   "[chromium] › answerEntry.spec.js › hints arrive one at a time, and only when asked › nothing is shown before the first press": 4.2,
   "[chromium] › answerEntry.spec.js › hints arrive one at a time, and only when asked › taking help is recorded on screen, not charged for": 5.3,
