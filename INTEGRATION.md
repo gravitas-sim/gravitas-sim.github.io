@@ -123,6 +123,17 @@ Two orders matter:
 - Regenerate the catalog (`npm run catalog`) before the service-worker manifest
   (`npm run sw:manifest`), because the manifest hashes the catalog.
 
+## A writer changes only when its corpus row is green
+
+An older build is a real reader (a browser on 2.0.0's cached code, an open tab, a rolled-back deploy), and 2.0.0's readers are not uniform about what they do not know: the pack and manifest readers refuse an unknown field, and the envelope and record readers accept it and drop it. So:
+
+- A writer may change only when its row in `tests/compat/` is green for the change (`npm test` runs the corpus; it reads the `v2.0.0` commit's own readers).
+- Where a change makes an older build refuse or silently misread, it is a major-version boundary, and it lands on the 3.0 train (Prompt 176), not on this one.
+- Where a payload does not need new fields, the writer writes the old version.
+- A record a new reader needs that an old reader would ignore is never carried as an unknown field: it is a capability-required refusal, with a message.
+
+`FORMATS.md` ("Compatibility with 2.0.0") has the inventory, the support period and the list of planned extensions against 2.0.0.
+
 ## What the checkpoints may and may not do
 
 Checkpoints are read-only readiness reports (130, 160, 171, 177, 192, 207, 232, 254, 267, 288, 294, 295).
