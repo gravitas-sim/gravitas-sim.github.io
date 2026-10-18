@@ -431,7 +431,9 @@
    with the layers removed one group at a time: only removing all of them
    brought the frames back), and the lesson is where a student is looking at a
    moving simulation and reading at once. Nothing moves or resizes; the panels
-   are the opaque token they were blended from.
+   are the opaque token they were blended from. The readout and the attribution
+   chip sit directly on the canvas, carry light text in every theme and have no
+   panel behind them, so they lose the blur and keep their own background.
    ========================================================================== */
 @layer overrides {
   :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden))) * {
@@ -474,16 +476,7 @@
   :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
     .inv-card-clock,
   :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    .attribution,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
     .gs-shell,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    #overlay,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    #overlay
-    .overlay-panel,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    #overlayStats,
   :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
     #objectInspector,
   :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
@@ -503,16 +496,5 @@
   :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
     #mobileInstructions {
     background: var(--surface-1);
-  }
-
-  /* The three that sit directly on the canvas rather than inside a panel
-       read better against the page ground than against a panel one. */
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    #overlay,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    #overlayStats,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    .attribution {
-    background: var(--surface-0);
   }
 }
