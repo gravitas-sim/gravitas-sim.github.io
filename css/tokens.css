@@ -436,64 +436,52 @@
    panel behind them, so they lose the blur and keep their own background.
    ========================================================================== */
 @layer overrides {
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden))) * {
+  :is(body.investigation-open, body.investigation-browser-open) * {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
 
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    .ui-container,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    .timeline-bar,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    .object-picker,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open) .ui-container,
+  :is(body.investigation-open, body.investigation-browser-open) .timeline-bar,
+  :is(body.investigation-open, body.investigation-browser-open) .object-picker,
+  :is(body.investigation-open, body.investigation-browser-open)
     .placement-status,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    .obs-panel,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open) .obs-panel,
+  :is(body.investigation-open, body.investigation-browser-open)
     .light-curve-container,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open)
     .sonification-panel,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open)
     .scenario-info-content,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open)
     .shortcut-overlay,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open)
     .transformation-notification,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open)
     .recording-badge,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    .update-badge,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open) .update-badge,
+  :is(body.investigation-open, body.investigation-browser-open)
     .mobile-menu-toggle,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open)
     .floating-close-chip,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    .footer-button,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    .insp-pin,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    .inv-card-clock,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    .gs-shell,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open) .footer-button,
+  :is(body.investigation-open, body.investigation-browser-open) .insp-pin,
+  :is(body.investigation-open, body.investigation-browser-open) .inv-card-clock,
+  :is(body.investigation-open, body.investigation-browser-open) .gs-shell,
+  :is(body.investigation-open, body.investigation-browser-open)
     #objectInspector,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    #settingsPanel,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open) #settingsPanel,
+  :is(body.investigation-open, body.investigation-browser-open)
     #scenarioListModal,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open)
     #closeScenarioList,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open)
     #investigationBrowser,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open)
     #investigationFinish,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    #shareModal,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
-    #dataExport,
-  :is(body.investigation-open, body:has(#investigationBrowser:not(.hidden)))
+  :is(body.investigation-open, body.investigation-browser-open) #shareModal,
+  :is(body.investigation-open, body.investigation-browser-open) #dataExport,
+  :is(body.investigation-open, body.investigation-browser-open)
     #mobileInstructions {
     background: var(--surface-1);
   }
