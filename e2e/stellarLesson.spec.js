@@ -46,7 +46,32 @@ async function openLesson(page, app, { locale, narrow = false } = {}) {
   // the page scrolls the card itself and a real mouse click lands on its centre:
   // a student's click, without Playwright's stability wait. The panel that
   // opens is asserted below, so a missed click still fails.
+  // Diagnostic (D-TOOL-03): does this page get frames at all before and after
+  // the scroll, is it visible and focused, and how late does a timer fire?
+  const frameProbe = () =>
+    page.evaluate(
+      () =>
+        new Promise(resolve => {
+          const t0 = performance.now();
+          let frame = null;
+          let timer = null;
+          window.requestAnimationFrame(() => (frame = performance.now() - t0));
+          window.setTimeout(() => (timer = performance.now() - t0), 0);
+          window.setTimeout(
+            () =>
+              resolve({
+                frameAfterMs: frame,
+                timerAfterMs: timer,
+                visibility: document.visibilityState,
+                focused: document.hasFocus(),
+              }),
+            1000
+          );
+        })
+    );
+  const before = await frameProbe();
   await card.evaluate(el => el.scrollIntoView({ block: 'center' }));
+  const after = await frameProbe();
   // The click skips Playwright's stability wait, so the page itself must show
   // the card at rest: its box is the same over two animation frames. A card
   // that never settles (a looping transform) fails here instead of passing.
@@ -98,7 +123,10 @@ async function openLesson(page, app, { locale, narrow = false } = {}) {
         window.requestAnimationFrame(step);
       })
   );
-  if (rest !== 'at rest') throw new Error(`The card never settled: ${rest}`);
+  if (rest !== 'at rest')
+    throw new Error(
+      `The card never settled: ${rest}; frames before scroll ${JSON.stringify(before)}, after ${JSON.stringify(after)}`
+    );
   const box = await card.boundingBox();
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
   await expect(page.locator('#investigationPanel')).toBeVisible();
