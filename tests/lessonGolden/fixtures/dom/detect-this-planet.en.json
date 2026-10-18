@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "twelve-nights",
+  "position": [
+   1,
+   26
+  ],
+  "title": "Can You Detect This Planet?",
+  "subtitle": "Two methods, the same problem: the answer was decided before the data arrived",
+  "body": "<p class=\"inv-step-count\">Step 1 of 26 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Twelve nights</h3><div class=\"inv-step-body\"><p>You have been given twelve nights on a spectrograph. Not twelve consecutive nights necessarily - twelve nights, to use when you like, over as long a run as you care to ask for.</p><p>The target is the star on screen — click it, or use <strong>Objects in this activity</strong> below, so the instrument knows which star you mean. Somewhere around it, too faint to see, there may or may not be a planet. Your twelve measurements of the star's velocity are all the evidence you are going to get.</p><p>The usual question is <em>is there a planet</em>. This investigation asks a different one, and it is the question an observer actually has to answer first: <strong>would this schedule find it if there were?</strong></p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Time on a large telescope is allocated in nights, months in advance. The schedule is decided before anyone knows what the data will show.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "what-decides-whether-you-find",
+  "position": [
+   2,
+   26
+  ],
+  "title": "Can You Detect This Planet?",
+  "subtitle": "Two methods, the same problem: the answer was decided before the data arrived",
+  "body": "<p class=\"inv-step-count\">Step 2 of 26 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What decides whether you find it?</h3><div class=\"inv-step-body\"><p>Four things are obviously true of any observing run: how many measurements you take, how precise each one is, how long a stretch of time they span, and how they are spaced within that stretch.</p><p>Suppose the number of measurements is fixed at twelve and the instrument is fixed. Commit to an answer before you see any data.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">With twelve measurements and one instrument, which choice do you think matters most?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Spreading them over as long a total run as possible</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>How they are spaced relative to the planet’s orbit</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Taking them all on consecutive nights</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>It cannot matter much: twelve measurements are twelve measurements</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "what-decides-whether-you-find",
+  "position": [
+   2,
+   26
+  ],
+  "title": "Can You Detect This Planet?",
+  "subtitle": "Two methods, the same problem: the answer was decided before the data arrived",
+  "body": "<p class=\"inv-step-count\">Step 2 of 26 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What decides whether you find it?</h3><div class=\"inv-step-body\"><p>Four things are obviously true of any observing run: how many measurements you take, how precise each one is, how long a stretch of time they span, and how they are spaced within that stretch.</p><p>Suppose the number of measurements is fixed at twelve and the instrument is fixed. Commit to an answer before you see any data.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">With twelve measurements and one instrument, which choice do you think matters most?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Spreading them over as long a total run as possible</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>How they are spaced relative to the planet’s orbit</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Taking them all on consecutive nights</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>It cannot matter much: twelve measurements are twelve measurements</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Schedule A: twelve nights, one orbit”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-decided-before-you",
+  "position": [
+   26,
+   26
+  ],
+  "title": "Can You Detect This Planet?",
+  "subtitle": "Two methods, the same problem: the answer was decided before the data arrived",
+  "body": "<p class=\"inv-step-count\">Step 26 of 26 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you decided before you looked</h3><div class=\"inv-step-body\"><p>Two methods, and the same investigation twice.</p><p>Twelve measurements. One instrument. One planet, which was there the whole time.</p><p>Schedule A established beyond reasonable argument that this star's velocity is not constant, over a cycle it sampled from end to end. That is not the same as having detected a planet — it is the evidence on which a planet becomes much the best explanation, once the variation is shown to repeat on a definite period and the other causes are ruled out.</p><p>Schedule B, with eleven times the baseline and not one measurement fewer, could not establish even that. It is not empty: it bounds how large a velocity swing the star can have had at the two phases it happened to visit, and that is a real if narrow constraint. What it cannot do is say anything about the other eight tenths of the cycle, which is where this planet lives.</p><p>Neither outcome is a failure of the data. Both were decided months earlier, when someone wrote down a cadence. The observing schedule is part of the experiment, and like the rest of the experiment it can be designed well or badly before a single photon arrives.</p><p>The transit half made the same point with a different knob. One planet, one depth, and a detection at 587 sigma or an argument at 4 depending entirely on what was underneath the measurement. And where the radial-velocity failure could be repaired by observing differently, the photometric one mostly cannot: past the correlated noise floor, more nights buy more data at the same precision and nothing else. An Earth twin is not undetectable in principle — it is undetectable with that instrument, around that star, and improving any of the three is a different project from being patient.</p><p>Which is the honest summary of both halves. The question \"can you detect this planet?\" is never only about the planet.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Real surveys defend against the radial-velocity failure with deliberately irregular spacing, several longitudes, and checking any candidate period against the cadence that found it. Against the photometric one they defend by going to space, by choosing quiet stars, and by modeling the correlated noise instead of pretending it will average away.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

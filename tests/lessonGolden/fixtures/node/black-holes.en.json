@@ -1,0 +1,1501 @@
+{
+ "id": "black-holes",
+ "locale": "en",
+ "title": "Black Holes by the Numbers",
+ "steps": 30,
+ "depths": [
+  [
+   "core",
+   30
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "what-could-size-even-mean",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "now-make-it-heavier",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-did-doubling-do",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "read-the-graph",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "squeezing-and-getting-away",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-last-squeeze",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-right-answer-for-the",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "which-one-is-denser",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "which-way-did-it-go",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "where-the-room-comes-from",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.5,
+   "grades": [
+    [
+     "9",
+     true,
+     "correct",
+     9,
+     null,
+     false,
+     null
+    ],
+    [
+     "9.25",
+     true,
+     "correct",
+     9.25,
+     null,
+     false,
+     null
+    ],
+    [
+     "10.5",
+     false,
+     "incorrect",
+     10.5,
+     null,
+     false,
+     null
+    ],
+    [
+     "9 zeros",
+     true,
+     "correct",
+     9,
+     "zeros",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "which-one-is-hotter",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "colder-not-hotter",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "then-what-happens-to-it",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "longer-and-then-much-longer",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "sorting-them-out",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     true,
+     "correct"
+    ]
+   ]
+  },
+  {
+   "sid": "a-mystery-black-hole-size",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "a-mystery-black-hole-temperature",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     true,
+     "correct"
+    ]
+   ]
+  },
+  {
+   "sid": "say-what-scales-with-what",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "black-holes",
+   "stepSid": "it-has-a-name",
+   "responses": {
+    "black-holes:what-could-size-even-mean": 2,
+    "black-holes:now-make-it-heavier": 1,
+    "black-holes:what-did-doubling-do": 1,
+    "black-holes:read-the-graph": 1,
+    "black-holes:squeezing-and-getting-away": 2,
+    "black-holes:the-last-squeeze": 1,
+    "black-holes:the-right-answer-for-the": 2,
+    "black-holes:which-one-is-denser": 0,
+    "black-holes:which-way-did-it-go": 1,
+    "black-holes:where-the-room-comes-from": "9",
+    "black-holes:where-the-room-comes-from:locale": "en",
+    "black-holes:which-one-is-hotter": 0,
+    "black-holes:colder-not-hotter": 1,
+    "black-holes:then-what-happens-to-it": 0,
+    "black-holes:longer-and-then-much-longer": 2,
+    "black-holes:sorting-them-out": 3,
+    "black-holes:a-mystery-black-hole-size": 1,
+    "black-holes:a-mystery-black-hole-temperature": 3,
+    "black-holes:say-what-scales-with-what": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "black-holes:what-could-size-even-mean": 1,
+    "black-holes:now-make-it-heavier": 1,
+    "black-holes:what-did-doubling-do": 1,
+    "black-holes:read-the-graph": 1,
+    "black-holes:squeezing-and-getting-away": 1,
+    "black-holes:the-last-squeeze": 1,
+    "black-holes:the-right-answer-for-the": 1,
+    "black-holes:which-one-is-denser": 1,
+    "black-holes:which-way-did-it-go": 1,
+    "black-holes:where-the-room-comes-from": 1,
+    "black-holes:which-one-is-hotter": 1,
+    "black-holes:colder-not-hotter": 1,
+    "black-holes:then-what-happens-to-it": 1,
+    "black-holes:longer-and-then-much-longer": 1,
+    "black-holes:sorting-them-out": 1,
+    "black-holes:a-mystery-black-hole-size": 1,
+    "black-holes:a-mystery-black-hole-temperature": 1
+   },
+   "visited": [
+    "not-a-hole-and-not",
+    "what-could-size-even-mean",
+    "the-event-horizon",
+    "thirty-kilometers-is-not-very",
+    "now-make-it-heavier",
+    "three-measurements",
+    "what-did-doubling-do",
+    "read-the-graph",
+    "the-rule-you-just-found",
+    "squeezing-and-getting-away",
+    "squeeze-the-sun",
+    "the-last-squeeze",
+    "the-right-answer-for-the",
+    "which-one-is-denser",
+    "mass-divided-by-volume",
+    "which-way-did-it-go",
+    "where-the-room-comes-from",
+    "which-one-is-hotter",
+    "what-hawking-radiation-is-and",
+    "the-thermometer",
+    "colder-not-hotter",
+    "then-what-happens-to-it",
+    "a-timeline-that-will-not",
+    "longer-and-then-much-longer",
+    "from-city-sized-to-solar",
+    "sorting-them-out",
+    "a-mystery-black-hole-size",
+    "a-mystery-black-hole-temperature",
+    "say-what-scales-with-what",
+    "it-has-a-name"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "black-holes:what-could-size-even-mean": 2,
+    "black-holes:now-make-it-heavier": 1,
+    "black-holes:what-did-doubling-do": 1,
+    "black-holes:read-the-graph": 1,
+    "black-holes:squeezing-and-getting-away": 2,
+    "black-holes:the-last-squeeze": 1,
+    "black-holes:the-right-answer-for-the": 2,
+    "black-holes:which-one-is-denser": 0,
+    "black-holes:which-way-did-it-go": 1,
+    "black-holes:where-the-room-comes-from": "9",
+    "black-holes:where-the-room-comes-from:locale": "en",
+    "black-holes:which-one-is-hotter": 0,
+    "black-holes:colder-not-hotter": 1,
+    "black-holes:then-what-happens-to-it": 0,
+    "black-holes:longer-and-then-much-longer": 2,
+    "black-holes:sorting-them-out": 3,
+    "black-holes:a-mystery-black-hole-size": 1,
+    "black-holes:a-mystery-black-hole-temperature": 3,
+    "black-holes:say-what-scales-with-what": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "black-holes:what-could-size-even-mean": 1,
+    "black-holes:now-make-it-heavier": 1,
+    "black-holes:what-did-doubling-do": 1,
+    "black-holes:read-the-graph": 1,
+    "black-holes:squeezing-and-getting-away": 1,
+    "black-holes:the-last-squeeze": 1,
+    "black-holes:the-right-answer-for-the": 1,
+    "black-holes:which-one-is-denser": 1,
+    "black-holes:which-way-did-it-go": 1,
+    "black-holes:where-the-room-comes-from": 1,
+    "black-holes:which-one-is-hotter": 1,
+    "black-holes:colder-not-hotter": 1,
+    "black-holes:then-what-happens-to-it": 1,
+    "black-holes:longer-and-then-much-longer": 1,
+    "black-holes:sorting-them-out": 1,
+    "black-holes:a-mystery-black-hole-size": 1,
+    "black-holes:a-mystery-black-hole-temperature": 1
+   },
+   "visited": [
+    "a-mystery-black-hole-size",
+    "a-mystery-black-hole-temperature",
+    "a-timeline-that-will-not",
+    "colder-not-hotter",
+    "from-city-sized-to-solar",
+    "it-has-a-name",
+    "longer-and-then-much-longer",
+    "mass-divided-by-volume",
+    "not-a-hole-and-not",
+    "now-make-it-heavier",
+    "read-the-graph",
+    "say-what-scales-with-what",
+    "sorting-them-out",
+    "squeeze-the-sun",
+    "squeezing-and-getting-away",
+    "the-event-horizon",
+    "the-last-squeeze",
+    "the-right-answer-for-the",
+    "the-rule-you-just-found",
+    "the-thermometer",
+    "then-what-happens-to-it",
+    "thirty-kilometers-is-not-very",
+    "three-measurements",
+    "what-could-size-even-mean",
+    "what-did-doubling-do",
+    "what-hawking-radiation-is-and",
+    "where-the-room-comes-from",
+    "which-one-is-denser",
+    "which-one-is-hotter",
+    "which-way-did-it-go"
+   ],
+   "stepSid": "it-has-a-name",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "black-holes",
+    "title": "Black Holes by the Numbers",
+    "stepCount": 30
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "it-has-a-name",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "not-a-hole-and-not",
+     "what-could-size-even-mean",
+     "the-event-horizon",
+     "thirty-kilometers-is-not-very",
+     "now-make-it-heavier",
+     "three-measurements",
+     "what-did-doubling-do",
+     "read-the-graph",
+     "the-rule-you-just-found",
+     "squeezing-and-getting-away",
+     "squeeze-the-sun",
+     "the-last-squeeze",
+     "the-right-answer-for-the",
+     "which-one-is-denser",
+     "mass-divided-by-volume",
+     "which-way-did-it-go",
+     "where-the-room-comes-from",
+     "which-one-is-hotter",
+     "what-hawking-radiation-is-and",
+     "the-thermometer",
+     "colder-not-hotter",
+     "then-what-happens-to-it",
+     "a-timeline-that-will-not",
+     "longer-and-then-much-longer",
+     "from-city-sized-to-solar",
+     "sorting-them-out",
+     "a-mystery-black-hole-size",
+     "a-mystery-black-hole-temperature",
+     "say-what-scales-with-what",
+     "it-has-a-name"
+    ],
+    "responses": {
+     "black-holes:what-could-size-even-mean": 2,
+     "black-holes:now-make-it-heavier": 1,
+     "black-holes:what-did-doubling-do": 1,
+     "black-holes:read-the-graph": 1,
+     "black-holes:squeezing-and-getting-away": 2,
+     "black-holes:the-last-squeeze": 1,
+     "black-holes:the-right-answer-for-the": 2,
+     "black-holes:which-one-is-denser": 0,
+     "black-holes:which-way-did-it-go": 1,
+     "black-holes:where-the-room-comes-from": "9",
+     "black-holes:where-the-room-comes-from:locale": "en",
+     "black-holes:which-one-is-hotter": 0,
+     "black-holes:colder-not-hotter": 1,
+     "black-holes:then-what-happens-to-it": 0,
+     "black-holes:longer-and-then-much-longer": 2,
+     "black-holes:sorting-them-out": 3,
+     "black-holes:a-mystery-black-hole-size": 1,
+     "black-holes:a-mystery-black-hole-temperature": 3,
+     "black-holes:say-what-scales-with-what": "A fixed sentence for the golden."
+    },
+    "attempts": {
+     "black-holes:what-could-size-even-mean": 1,
+     "black-holes:now-make-it-heavier": 1,
+     "black-holes:what-did-doubling-do": 1,
+     "black-holes:read-the-graph": 1,
+     "black-holes:squeezing-and-getting-away": 1,
+     "black-holes:the-last-squeeze": 1,
+     "black-holes:the-right-answer-for-the": 1,
+     "black-holes:which-one-is-denser": 1,
+     "black-holes:which-way-did-it-go": 1,
+     "black-holes:where-the-room-comes-from": 1,
+     "black-holes:which-one-is-hotter": 1,
+     "black-holes:colder-not-hotter": 1,
+     "black-holes:then-what-happens-to-it": 1,
+     "black-holes:longer-and-then-much-longer": 1,
+     "black-holes:sorting-them-out": 1,
+     "black-holes:a-mystery-black-hole-size": 1,
+     "black-holes:a-mystery-black-hole-temperature": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "not-a-hole-and-not",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "what-could-size-even-mean",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "the-event-horizon",
+     "fingerprint": "read|-|bh-horizon|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "thirty-kilometers-is-not-very",
+     "fingerprint": "read|-|bh-horizon|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "now-make-it-heavier",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "three-measurements",
+     "fingerprint": "explore|-|bh-scaling|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "what-did-doubling-do",
+     "fingerprint": "question|choice|bh-scaling|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 7,
+     "sid": "read-the-graph",
+     "fingerprint": "question|choice|bh-scaling|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 8,
+     "sid": "the-rule-you-just-found",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "squeezing-and-getting-away",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 10,
+     "sid": "squeeze-the-sun",
+     "fingerprint": "explore|-|bh-escape|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 11,
+     "sid": "the-last-squeeze",
+     "fingerprint": "question|choice|bh-escape|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 12,
+     "sid": "the-right-answer-for-the",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 13,
+     "sid": "which-one-is-denser",
+     "fingerprint": "predict|-|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 14,
+     "sid": "mass-divided-by-volume",
+     "fingerprint": "explore|-|bh-density|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "which-way-did-it-go",
+     "fingerprint": "question|choice|bh-density|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 16,
+     "sid": "where-the-room-comes-from",
+     "fingerprint": "question|numeric|bh-blocks|-|-|-|a=9;t=0.5;u=zeros",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "which-one-is-hotter",
+     "fingerprint": "predict|-|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 18,
+     "sid": "what-hawking-radiation-is-and",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 19,
+     "sid": "the-thermometer",
+     "fingerprint": "explore|-|bh-thermo|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 20,
+     "sid": "colder-not-hotter",
+     "fingerprint": "question|choice|bh-thermo|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 21,
+     "sid": "then-what-happens-to-it",
+     "fingerprint": "predict|-|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 22,
+     "sid": "a-timeline-that-will-not",
+     "fingerprint": "explore|-|bh-lifetime|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 23,
+     "sid": "longer-and-then-much-longer",
+     "fingerprint": "question|choice|bh-lifetime|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 24,
+     "sid": "from-city-sized-to-solar",
+     "fingerprint": "read|-|bh-lineup|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 25,
+     "sid": "sorting-them-out",
+     "fingerprint": "question|choice|bh-lineup|-|-|4|a=3;c=3",
+     "optionCount": 4
+    },
+    {
+     "index": 26,
+     "sid": "a-mystery-black-hole-size",
+     "fingerprint": "question|choice|bh-lineup|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 27,
+     "sid": "a-mystery-black-hole-temperature",
+     "fingerprint": "question|choice|bh-lineup|-|-|4|a=3;c=3",
+     "optionCount": 4
+    },
+    {
+     "index": 28,
+     "sid": "say-what-scales-with-what",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 29,
+     "sid": "it-has-a-name",
+     "fingerprint": "read|-|bh-lineup|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "black-holes:what-could-size-even-mean": 2,
+    "black-holes:now-make-it-heavier": 1,
+    "black-holes:what-did-doubling-do": 1,
+    "black-holes:read-the-graph": 1,
+    "black-holes:squeezing-and-getting-away": 2,
+    "black-holes:the-last-squeeze": 1,
+    "black-holes:the-right-answer-for-the": 2,
+    "black-holes:which-one-is-denser": 0,
+    "black-holes:which-way-did-it-go": 1,
+    "black-holes:where-the-room-comes-from": "9",
+    "black-holes:where-the-room-comes-from:locale": "en",
+    "black-holes:which-one-is-hotter": 0,
+    "black-holes:colder-not-hotter": 1,
+    "black-holes:then-what-happens-to-it": 0,
+    "black-holes:longer-and-then-much-longer": 2,
+    "black-holes:sorting-them-out": 3,
+    "black-holes:a-mystery-black-hole-size": 1,
+    "black-holes:a-mystery-black-hole-temperature": 3,
+    "black-holes:say-what-scales-with-what": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "black-holes:what-could-size-even-mean": 1,
+    "black-holes:now-make-it-heavier": 1,
+    "black-holes:what-did-doubling-do": 1,
+    "black-holes:read-the-graph": 1,
+    "black-holes:squeezing-and-getting-away": 1,
+    "black-holes:the-last-squeeze": 1,
+    "black-holes:the-right-answer-for-the": 1,
+    "black-holes:which-one-is-denser": 1,
+    "black-holes:which-way-did-it-go": 1,
+    "black-holes:where-the-room-comes-from": 1,
+    "black-holes:which-one-is-hotter": 1,
+    "black-holes:colder-not-hotter": 1,
+    "black-holes:then-what-happens-to-it": 1,
+    "black-holes:longer-and-then-much-longer": 1,
+    "black-holes:sorting-them-out": 1,
+    "black-holes:a-mystery-black-hole-size": 1,
+    "black-holes:a-mystery-black-hole-temperature": 1
+   },
+   "visited": [
+    "a-mystery-black-hole-size",
+    "a-mystery-black-hole-temperature",
+    "a-timeline-that-will-not",
+    "colder-not-hotter",
+    "from-city-sized-to-solar",
+    "it-has-a-name",
+    "longer-and-then-much-longer",
+    "mass-divided-by-volume",
+    "not-a-hole-and-not",
+    "now-make-it-heavier",
+    "read-the-graph",
+    "say-what-scales-with-what",
+    "sorting-them-out",
+    "squeeze-the-sun",
+    "squeezing-and-getting-away",
+    "the-event-horizon",
+    "the-last-squeeze",
+    "the-right-answer-for-the",
+    "the-rule-you-just-found",
+    "the-thermometer",
+    "then-what-happens-to-it",
+    "thirty-kilometers-is-not-very",
+    "three-measurements",
+    "what-could-size-even-mean",
+    "what-did-doubling-do",
+    "what-hawking-radiation-is-and",
+    "where-the-room-comes-from",
+    "which-one-is-denser",
+    "which-one-is-hotter",
+    "which-way-did-it-go"
+   ],
+   "stepIndex": 29,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-black-holes",
+  "record": {
+   "ids": [
+    "golden-black-holes"
+   ],
+   "rows": [
+    [
+     "golden-black-holes",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "f16676145d7eba72465c528c2ea24be2883b220e5182415e51edba011733d69e"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "what-could-size-even-mean",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "now-make-it-heavier",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "what-did-doubling-do",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "read-the-graph",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "squeezing-and-getting-away",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "the-last-squeeze",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "the-right-answer-for-the",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-denser",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "which-way-did-it-go",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "where-the-room-comes-from",
+     "value": "9",
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-hotter",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "colder-not-hotter",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "then-what-happens-to-it",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "longer-and-then-much-longer",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "sorting-them-out",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "a-mystery-black-hole-size",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-mystery-black-hole-temperature",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "say-what-scales-with-what",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "what-could-size-even-mean",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "now-make-it-heavier",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "what-did-doubling-do",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "read-the-graph",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "squeezing-and-getting-away",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "the-last-squeeze",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "the-right-answer-for-the",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-denser",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "which-way-did-it-go",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "where-the-room-comes-from",
+     "value": "9",
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-hotter",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "colder-not-hotter",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "then-what-happens-to-it",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "longer-and-then-much-longer",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "sorting-them-out",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "a-mystery-black-hole-size",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-mystery-black-hole-temperature",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "say-what-scales-with-what",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "f16676145d7eba72465c528c2ea24be2883b220e5182415e51edba011733d69e",
+     "i": [
+      "golden-black-holes"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-black-holes",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "what-could-size-even-mean",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "now-make-it-heavier",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "what-did-doubling-do",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "read-the-graph",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "squeezing-and-getting-away",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "the-last-squeeze",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "the-right-answer-for-the",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-denser",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "which-way-did-it-go",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "where-the-room-comes-from",
+     "value": "9",
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-hotter",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "colder-not-hotter",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "then-what-happens-to-it",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "longer-and-then-much-longer",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "sorting-them-out",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "a-mystery-black-hole-size",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-mystery-black-hole-temperature",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "say-what-scales-with-what",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "what-could-size-even-mean",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "now-make-it-heavier",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "what-did-doubling-do",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "read-the-graph",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "squeezing-and-getting-away",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "the-last-squeeze",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "the-right-answer-for-the",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-denser",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "which-way-did-it-go",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "where-the-room-comes-from",
+     "value": "9",
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-hotter",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "colder-not-hotter",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "then-what-happens-to-it",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "longer-and-then-much-longer",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "sorting-them-out",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "a-mystery-black-hole-size",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-mystery-black-hole-temperature",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "say-what-scales-with-what",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  }
+ }
+}

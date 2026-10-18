@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-firefly-beside-a-lighthouse",
+  "position": [
+   1,
+   29
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 29 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una luciérnaga junto a un faro</h3><div class=\"inv-step-body\"><p>Hay más de seis mil planetas confirmados alrededor de otras estrellas. Menos de cien se han fotografiado alguna vez.</p><p>El problema no es que estén lejos, es que están junto a algo abrumadoramente más brillante. Visto desde treinta años luz, Júpiter es unas mil millones de veces más tenue que el Sol y está a medio segundo de arco de él: el ángulo que subtiende una moneda a cuatro kilómetros. Todo telescopio extiende un punto de luz en una pequeña mancha, y la mancha de la estrella es mil millones de veces más alta que el planeta. La imagen directa solo funciona en el raro rincón del espacio de parámetros donde el planeta es lo bastante joven para brillar aún con su propio calor, lo bastante masivo para brillar con fuerza, y lo bastante lejano para librarse del resplandor: un mundo joven y enorme en una órbita ancha. Eso no es lo que son la mayoría de los planetas.</p><p>Así que miramos la estrella. Un planeta no puede ocultar lo que le hace a su anfitriona: tira de ella, curva la luz de las estrellas de detrás y, si la geometría acompaña, pasa por delante y bloquea parte de la luz. Las tres cosas son medidas de la <em>estrella</em>, y las estrellas son brillantes y fáciles.</p><p>En pantalla está <strong>HD 209458</strong>, una parienta del Sol algo más caliente y masiva situada a unos 160 años luz en Pegaso, con un planeta en una órbita de tres días y medio. La estrella y el planeta están dibujados a sus tamaños relativos reales, y por eso la vista está tan ampliada.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Todo en esta investigación es medible a partir de lo que hay en pantalla. Pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos está desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   29
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 29 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué hará el brillo?</h3><div class=\"inv-step-body\"><p>El planeta está a punto de cruzar por delante de la estrella desde tu punto de vista. Dentro de un momento abrirás un fotómetro y lo observarás. Comprométete primero con una respuesta.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Mientras el planeta cruza la estrella, el brillo medido…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>subirá, porque el planeta refleja luz extra hacia nosotros</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>bajará una pequeña cantidad, y después se recuperará</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>bajará a cero hasta que el planeta haya pasado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>se mantendrá plano: el planeta es demasiado pequeño para importar</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   29
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 29 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué hará el brillo?</h3><div class=\"inv-step-body\"><p>El planeta está a punto de cruzar por delante de la estrella desde tu punto de vista. Dentro de un momento abrirás un fotómetro y lo observarás. Comprométete primero con una respuesta.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Mientras el planeta cruza la estrella, el brillo medido…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>subirá, porque el planeta refleja luz extra hacia nosotros</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>bajará una pequeña cantidad, y después se recuperará</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>bajará a cero hasta que el planeta haya pasado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>se mantendrá plano: el planeta es demasiado pequeño para importar</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Tu primer tránsito», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-did-and-where",
+  "position": [
+   29,
+   29
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 29 de 29 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que hiciste, y a dónde va después</h3><div class=\"inv-step-body\"><p>Mediste una profundidad de tránsito y la convertiste en un radio planetario, y después hiciste ese radio más exacto tres veces seguidas: una dividiendo por el oscurecimiento del limbo, una entendiendo la geometría que fija el parámetro de impacto, y una corrigiendo por una estrella que nadie podía ver. Esa secuencia —medida, luego corrección, luego corrección— es el aspecto real que tiene el campo desde dentro.</p><p>El método no se está frenando. TESS está sondeando esencialmente todo el cielo en busca de tránsitos alrededor de estrellas brillantes y cercanas, las que merece la pena seguir. El JWST está tomando espectros de transmisión de planetas pequeños alrededor de estrellas frías, que es la única ruta a una atmósfera en algo rocoso con la tecnología actual. PLATO, de la ESA, prevista para más adelante en esta década, está construida para encontrar planetas del tamaño de la Tierra en órbitas de un año alrededor de estrellas parecidas al Sol, el rincón del espacio de parámetros al que Kepler solo llegaba a duras penas. Ariel, después de ella, hará atmósferas a escala de sondeo.</p><p>Y detrás de todas ellas está el trabajo poco glamuroso que hiciste en los tres últimos pasos: alguien tiene que ir a mirar cada estrella anfitriona con un telescopio lo bastante grande para averiguar qué más hay en la apertura. Cada uno de esos miles de radios planetarios es solo tan bueno como la respuesta.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Una nota sobre los números: los resultados de sondeo citados aquí vienen del Robo-AO Kepler Survey y del SOAR TESS Survey, que se propusieron ambos fotografiar todas las anfitrionas de candidatos a planeta a su alcance. El censo de Robo-AO cubre 3857 anfitrionas de Kepler; el programa SOAR ha observado cerca de 3000 objetivos de TESS y encuentra una corrección mediana del radio de la anfitriona primaria de alrededor de 1,07, que sube a 1,33 para la décima parte peor.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "a-firefly-beside-a-lighthouse",
+  "position": [
+   1,
+   31
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 31 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una luciérnaga junto a un faro</h3><div class=\"inv-step-body\"><p>Hay más de seis mil planetas confirmados alrededor de otras estrellas. Menos de cien se han fotografiado alguna vez.</p><p>El problema no es que estén lejos, es que están junto a algo abrumadoramente más brillante. Visto desde treinta años luz, Júpiter es unas mil millones de veces más tenue que el Sol y está a medio segundo de arco de él: el ángulo que subtiende una moneda a cuatro kilómetros. Todo telescopio extiende un punto de luz en una pequeña mancha, y la mancha de la estrella es mil millones de veces más alta que el planeta. La imagen directa solo funciona en el raro rincón del espacio de parámetros donde el planeta es lo bastante joven para brillar aún con su propio calor, lo bastante masivo para brillar con fuerza, y lo bastante lejano para librarse del resplandor: un mundo joven y enorme en una órbita ancha. Eso no es lo que son la mayoría de los planetas.</p><p>Así que miramos la estrella. Un planeta no puede ocultar lo que le hace a su anfitriona: tira de ella, curva la luz de las estrellas de detrás y, si la geometría acompaña, pasa por delante y bloquea parte de la luz. Las tres cosas son medidas de la <em>estrella</em>, y las estrellas son brillantes y fáciles.</p><p>En pantalla está <strong>HD 209458</strong>, una parienta del Sol algo más caliente y masiva situada a unos 160 años luz en Pegaso, con un planeta en una órbita de tres días y medio. La estrella y el planeta están dibujados a sus tamaños relativos reales, y por eso la vista está tan ampliada.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Todo en esta investigación es medible a partir de lo que hay en pantalla. Pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos está desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   31
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 31 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué hará el brillo?</h3><div class=\"inv-step-body\"><p>El planeta está a punto de cruzar por delante de la estrella desde tu punto de vista. Dentro de un momento abrirás un fotómetro y lo observarás. Comprométete primero con una respuesta.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Mientras el planeta cruza la estrella, el brillo medido…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>subirá, porque el planeta refleja luz extra hacia nosotros</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>bajará una pequeña cantidad, y después se recuperará</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>bajará a cero hasta que el planeta haya pasado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>se mantendrá plano: el planeta es demasiado pequeño para importar</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   31
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 31 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué hará el brillo?</h3><div class=\"inv-step-body\"><p>El planeta está a punto de cruzar por delante de la estrella desde tu punto de vista. Dentro de un momento abrirás un fotómetro y lo observarás. Comprométete primero con una respuesta.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Mientras el planeta cruza la estrella, el brillo medido…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>subirá, porque el planeta refleja luz extra hacia nosotros</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>bajará una pequeña cantidad, y después se recuperará</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>bajará a cero hasta que el planeta haya pasado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>se mantendrá plano: el planeta es demasiado pequeño para importar</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Tu primer tránsito», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-you-did-and-where",
+  "position": [
+   31,
+   31
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 31 de 31 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que hiciste, y a dónde va después</h3><div class=\"inv-step-body\"><p>Mediste una profundidad de tránsito y la convertiste en un radio planetario, y después hiciste ese radio más exacto tres veces seguidas: una dividiendo por el oscurecimiento del limbo, una entendiendo la geometría que fija el parámetro de impacto, y una corrigiendo por una estrella que nadie podía ver. Esa secuencia —medida, luego corrección, luego corrección— es el aspecto real que tiene el campo desde dentro.</p><p>El método no se está frenando. TESS está sondeando esencialmente todo el cielo en busca de tránsitos alrededor de estrellas brillantes y cercanas, las que merece la pena seguir. El JWST está tomando espectros de transmisión de planetas pequeños alrededor de estrellas frías, que es la única ruta a una atmósfera en algo rocoso con la tecnología actual. PLATO, de la ESA, prevista para más adelante en esta década, está construida para encontrar planetas del tamaño de la Tierra en órbitas de un año alrededor de estrellas parecidas al Sol, el rincón del espacio de parámetros al que Kepler solo llegaba a duras penas. Ariel, después de ella, hará atmósferas a escala de sondeo.</p><p>Y detrás de todas ellas está el trabajo poco glamuroso que hiciste en los tres últimos pasos: alguien tiene que ir a mirar cada estrella anfitriona con un telescopio lo bastante grande para averiguar qué más hay en la apertura. Cada uno de esos miles de radios planetarios es solo tan bueno como la respuesta.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Una nota sobre los números: los resultados de sondeo citados aquí vienen del Robo-AO Kepler Survey y del SOAR TESS Survey, que se propusieron ambos fotografiar todas las anfitrionas de candidatos a planeta a su alcance. El censo de Robo-AO cubre 3857 anfitrionas de Kepler; el programa SOAR ha observado cerca de 3000 objetivos de TESS y encuentra una corrección mediana del radio de la anfitriona primaria de alrededor de 1,07, que sube a 1,33 para la décima parte peor.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "a-firefly-beside-a-lighthouse",
+  "position": [
+   1,
+   34
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 34 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Una luciérnaga junto a un faro</h3><div class=\"inv-step-body\"><p>Hay más de seis mil planetas confirmados alrededor de otras estrellas. Menos de cien se han fotografiado alguna vez.</p><p>El problema no es que estén lejos, es que están junto a algo abrumadoramente más brillante. Visto desde treinta años luz, Júpiter es unas mil millones de veces más tenue que el Sol y está a medio segundo de arco de él: el ángulo que subtiende una moneda a cuatro kilómetros. Todo telescopio extiende un punto de luz en una pequeña mancha, y la mancha de la estrella es mil millones de veces más alta que el planeta. La imagen directa solo funciona en el raro rincón del espacio de parámetros donde el planeta es lo bastante joven para brillar aún con su propio calor, lo bastante masivo para brillar con fuerza, y lo bastante lejano para librarse del resplandor: un mundo joven y enorme en una órbita ancha. Eso no es lo que son la mayoría de los planetas.</p><p>Así que miramos la estrella. Un planeta no puede ocultar lo que le hace a su anfitriona: tira de ella, curva la luz de las estrellas de detrás y, si la geometría acompaña, pasa por delante y bloquea parte de la luz. Las tres cosas son medidas de la <em>estrella</em>, y las estrellas son brillantes y fáciles.</p><p>En pantalla está <strong>HD 209458</strong>, una parienta del Sol algo más caliente y masiva situada a unos 160 años luz en Pegaso, con un planeta en una órbita de tres días y medio. La estrella y el planeta están dibujados a sus tamaños relativos reales, y por eso la vista está tan ampliada.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Todo en esta investigación es medible a partir de lo que hay en pantalla. Pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos está desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   34
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 34 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué hará el brillo?</h3><div class=\"inv-step-body\"><p>El planeta está a punto de cruzar por delante de la estrella desde tu punto de vista. Dentro de un momento abrirás un fotómetro y lo observarás. Comprométete primero con una respuesta.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Mientras el planeta cruza la estrella, el brillo medido…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>subirá, porque el planeta refleja luz extra hacia nosotros</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>bajará una pequeña cantidad, y después se recuperará</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>bajará a cero hasta que el planeta haya pasado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>se mantendrá plano: el planeta es demasiado pequeño para importar</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   34
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 34 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Qué hará el brillo?</h3><div class=\"inv-step-body\"><p>El planeta está a punto de cruzar por delante de la estrella desde tu punto de vista. Dentro de un momento abrirás un fotómetro y lo observarás. Comprométete primero con una respuesta.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Mientras el planeta cruza la estrella, el brillo medido…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>subirá, porque el planeta refleja luz extra hacia nosotros</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>bajará una pequeña cantidad, y después se recuperará</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>bajará a cero hasta que el planeta haya pasado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>se mantendrá plano: el planeta es demasiado pequeño para importar</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Tu primer tránsito», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-you-did-and-where",
+  "position": [
+   34,
+   34
+  ],
+  "title": "Encontrar planetas por sus sombras",
+  "subtitle": "Mide un tránsito, calibra lo que te dice y descubre lo que se esconde",
+  "body": "<p class=\"inv-step-count\">Paso 34 de 34 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que hiciste, y a dónde va después</h3><div class=\"inv-step-body\"><p>Mediste una profundidad de tránsito y la convertiste en un radio planetario, y después hiciste ese radio más exacto tres veces seguidas: una dividiendo por el oscurecimiento del limbo, una entendiendo la geometría que fija el parámetro de impacto, y una corrigiendo por una estrella que nadie podía ver. Esa secuencia —medida, luego corrección, luego corrección— es el aspecto real que tiene el campo desde dentro.</p><p>El método no se está frenando. TESS está sondeando esencialmente todo el cielo en busca de tránsitos alrededor de estrellas brillantes y cercanas, las que merece la pena seguir. El JWST está tomando espectros de transmisión de planetas pequeños alrededor de estrellas frías, que es la única ruta a una atmósfera en algo rocoso con la tecnología actual. PLATO, de la ESA, prevista para más adelante en esta década, está construida para encontrar planetas del tamaño de la Tierra en órbitas de un año alrededor de estrellas parecidas al Sol, el rincón del espacio de parámetros al que Kepler solo llegaba a duras penas. Ariel, después de ella, hará atmósferas a escala de sondeo.</p><p>Y detrás de todas ellas está el trabajo poco glamuroso que hiciste en los tres últimos pasos: alguien tiene que ir a mirar cada estrella anfitriona con un telescopio lo bastante grande para averiguar qué más hay en la apertura. Cada uno de esos miles de radios planetarios es solo tan bueno como la respuesta.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Una nota sobre los números: los resultados de sondeo citados aquí vienen del Robo-AO Kepler Survey y del SOAR TESS Survey, que se propusieron ambos fotografiar todas las anfitrionas de candidatos a planeta a su alcance. El censo de Robo-AO cubre 3857 anfitrionas de Kepler; el programa SOAR ha observado cerca de 3000 objetivos de TESS y encuentra una corrección mediana del radio de la anfitriona primaria de alrededor de 1,07, que sube a 1,33 para la décima parte peor.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ }
+]

@@ -1,0 +1,58 @@
+[
+ {
+  "role": "first",
+  "sid": "predict-which-is-bigger",
+  "position": [
+   1,
+   3
+  ],
+  "title": "Dos estrellas, una temperatura: ¿cuál es más grande?",
+  "subtitle": "3 pasos de Un universo de estrellas (37 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 3 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Cuál es mayor, y por cuánto?</h3><div class=\"inv-step-body\"><p>Las mismas dos estrellas. La misma temperatura superficial. Una unas trescientas veces más luminosa.</p><p>Compromete una respuesta antes de medir. El razonamiento importa más que el número: la superficie de una estrella crece con el <em>cuadrado</em> del radio.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Radio, no diámetro. Todos los tamaños de esta investigación son radios, en unidades del radio del Sol: 696.000 km.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Dos estrellas a la misma temperatura superficial, una 300 veces más luminosa. Su radio es unas…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>300 veces mayor</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>17 veces mayor</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>el mismo: luminosidad y tamaño son propiedades separadas</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>90.000 veces mayor</span></button></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "graded",
+  "sid": "predict-which-is-bigger",
+  "position": [
+   1,
+   3
+  ],
+  "title": "Dos estrellas, una temperatura: ¿cuál es más grande?",
+  "subtitle": "3 pasos de Un universo de estrellas (37 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 3 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Cuál es mayor, y por cuánto?</h3><div class=\"inv-step-body\"><p>Las mismas dos estrellas. La misma temperatura superficial. Una unas trescientas veces más luminosa.</p><p>Compromete una respuesta antes de medir. El razonamiento importa más que el número: la superficie de una estrella crece con el <em>cuadrado</em> del radio.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Radio, no diámetro. Todos los tamaños de esta investigación son radios, en unidades del radio del Sol: 696.000 km.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Dos estrellas a la misma temperatura superficial, una 300 veces más luminosa. Su radio es unas…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>300 veces mayor</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>17 veces mayor</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>el mismo: luminosidad y tamaño son propiedades separadas</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>90.000 veces mayor</span></button></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "marked",
+  "sid": "predict-which-is-bigger",
+  "position": [
+   1,
+   3
+  ],
+  "title": "Dos estrellas, una temperatura: ¿cuál es más grande?",
+  "subtitle": "3 pasos de Un universo de estrellas (37 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 3 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Cuál es mayor, y por cuánto?</h3><div class=\"inv-step-body\"><p>Las mismas dos estrellas. La misma temperatura superficial. Una unas trescientas veces más luminosa.</p><p>Compromete una respuesta antes de medir. El razonamiento importa más que el número: la superficie de una estrella crece con el <em>cuadrado</em> del radio.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Radio, no diámetro. Todos los tamaños de esta investigación son radios, en unidades del radio del Sol: 696.000 km.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Dos estrellas a la misma temperatura superficial, una 300 veces más luminosa. Su radio es unas…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>300 veces mayor</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>17 veces mayor</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>el mismo: luminosidad y tamaño son propiedades separadas</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>90.000 veces mayor</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Mídelo», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "last",
+  "sid": "sideways-at-one-luminosity",
+  "position": [
+   3,
+   3
+  ],
+  "title": "Dos estrellas, una temperatura: ¿cuál es más grande?",
+  "subtitle": "3 pasos de Un universo de estrellas (37 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 3 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">De lado, a una luminosidad</h3><div class=\"inv-step-body\"><p>Ahora en la otra dirección. Pon el cursor en 1 luminosidad solar y recorre esa línea, del lado frío de la derecha al lado caliente de la izquierda, mirando el radio.</p><p>A luminosidad fija, una superficie más caliente radia muchísimo más por metro cuadrado —con la cuarta potencia de la temperatura—, así que la estrella necesita menos metros cuadrados para emitir la misma luz.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Los dos movimientos —hacia arriba y a lo largo del diagrama— son la misma relación usada en direcciones distintas. No se está introduciendo nada nuevo.</p><p class=\"inv-prompt\" id=\"invChoicePrompt\">Moviéndose a la izquierda por una línea de luminosidad constante, de 3.000 K a 30.000 K, el radio…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>crece, porque las estrellas más calientes son mayores</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>no cambia, porque la luminosidad está fija</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>se reduce en un factor de unas 100 veces</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>se reduce en un factor de unas 10 veces</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

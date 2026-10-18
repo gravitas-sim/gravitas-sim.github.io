@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "two-ways-to-weigh-a",
+  "position": [
+   1,
+   33
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 33 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dos maneras de pesar algo que no puedes tocar</h3><div class=\"inv-step-body\"><p>No puedes poner una galaxia en una balanza. Hay dos maneras de averiguar cuánto pesa un sistema en el espacio, y son completamente independientes entre sí.</p><p>La primera es <strong>sumar lo que puedes ver</strong>. Cuenta las estrellas, deduce la masa de cada una a partir de su brillo y su color, y suma. Esto es lo que los astrónomos llaman masa visible, o masa luminosa.</p><p>La segunda es <strong>observar cómo se mueven las cosas</strong>. La gravedad fija la velocidad de una órbita, así que una velocidad orbital y un radio orbital juntos te dan la masa que tiene que haber dentro. Esta es la masa dinámica.</p><p>Las dos maneras miden lo mismo, así que más vale que coincidan. Esta investigación trata de tres sistemas. En el primero, coinciden.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Abre el panel Curva de rotación en la sección Herramientas del panel derecho. Déjalo abierto: lo usarás durante toda la investigación.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "which-arrangement-gives-a-flat",
+  "position": [
+   3,
+   33
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 33 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Qué disposición da una curva plana?</h3><div class=\"inv-step-body\"><p>Acabas de ver cuatro maneras de repartir la misma masa, y solo una de ellas produjo una curva que se mantiene nivelada al alejarse. Usa el instrumento para comprobar tu respuesta antes de comprometerte con ella.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Una curva de rotación se mantiene plana cuando…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>la masa está concentrada en el centro</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>la masa está en una bola con un borde definido</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>la masa está en un disco que se adelgaza con el radio</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>la masa sigue añadiéndose a medida que te alejas</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "which-arrangement-gives-a-flat",
+  "position": [
+   3,
+   33
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 33 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Qué disposición da una curva plana?</h3><div class=\"inv-step-body\"><p>Acabas de ver cuatro maneras de repartir la misma masa, y solo una de ellas produjo una curva que se mantiene nivelada al alejarse. Usa el instrumento para comprobar tu respuesta antes de comprometerte con ella.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Una curva de rotación se mantiene plana cuando…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>la masa está concentrada en el centro</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>la masa está en una bola con un borde definido</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>la masa está en un disco que se adelgaza con el radio</span></button><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"3\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>la masa sigue añadiéndose a medida que te alejas</span></button></div><p class=\"inv-because\">Solo la cuarta. Las tres primeras tienen algo en común: la masa se acaba en algún punto, y pasado ese punto alejarse no añade nada al total dentro de tu órbita. Una vez que la masa encerrada deja de crecer, la velocidad tiene que caer. Una curva plana es la firma de una distribución de masa que todavía no ha terminado, y eso es algo extraño en una galaxia, porque las galaxias visiblemente sí terminan.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "where-it-stands",
+  "position": [
+   33,
+   33
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 33 de 33 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dónde estamos</h3><div class=\"inv-step-body\"><p>Las pruebas han crecido mucho desde 1933 y desde 1970, y ya no descansan en absoluto en las curvas de rotación. El patrón de puntos calientes y fríos del fondo cósmico de microondas, cómo se distribuyen las galaxias por el cielo, cómo la lente gravitatoria curva la luz alrededor de los cúmulos, y las abundancias de hidrógeno y helio sobrantes de los primeros minutos apuntan todos en el mismo sentido, y son sensibles a cosas distintas. La materia ordinaria que resulte ser oscura no puede dar cuenta de lo que muestran; tiene que haber algo que tenga masa y no interactúe con la luz.</p><p>Qué es ese algo, nadie lo sabe. Nunca se ha detectado en un laboratorio, no se ha encontrado ninguna partícula candidata, y las búsquedas llevan cuarenta años en marcha. El Cúmulo Bala, donde dos cúmulos se atravesaron y la masa se separó visiblemente del gas, es la observación más difícil de acomodar para las alternativas de gravedad modificada.</p><p>Ese es un lugar honesto donde dejarlo. La medida es sólida y se ha repetido de una docena de maneras independientes. La explicación es un nombre para algo que no hemos identificado. Son dos clases distintas de afirmación y merece la pena mantenerlas separadas.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Ajustaste una curva construida con los parámetros publicados de una galaxia real y pesaste un cúmulo real. Los números venían de la literatura; la conclusión la sacaste tú, sin fiarte de la palabra de nadie.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "two-ways-to-weigh-a",
+  "position": [
+   1,
+   35
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 35 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dos maneras de pesar algo que no puedes tocar</h3><div class=\"inv-step-body\"><p>No puedes poner una galaxia en una balanza. Hay dos maneras de averiguar cuánto pesa un sistema en el espacio, y son completamente independientes entre sí.</p><p>La primera es <strong>sumar lo que puedes ver</strong>. Cuenta las estrellas, deduce la masa de cada una a partir de su brillo y su color, y suma. Esto es lo que los astrónomos llaman masa visible, o masa luminosa.</p><p>La segunda es <strong>observar cómo se mueven las cosas</strong>. La gravedad fija la velocidad de una órbita, así que una velocidad orbital y un radio orbital juntos te dan la masa que tiene que haber dentro. Esta es la masa dinámica.</p><p>Las dos maneras miden lo mismo, así que más vale que coincidan. Esta investigación trata de tres sistemas. En el primero, coinciden.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Abre el panel Curva de rotación en la sección Herramientas del panel derecho. Déjalo abierto: lo usarás durante toda la investigación.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "which-arrangement-gives-a-flat",
+  "position": [
+   3,
+   35
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 35 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Qué disposición da una curva plana?</h3><div class=\"inv-step-body\"><p>Acabas de ver cuatro maneras de repartir la misma masa, y solo una de ellas produjo una curva que se mantiene nivelada al alejarse. Usa el instrumento para comprobar tu respuesta antes de comprometerte con ella.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Una curva de rotación se mantiene plana cuando…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>la masa está concentrada en el centro</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>la masa está en una bola con un borde definido</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>la masa está en un disco que se adelgaza con el radio</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>la masa sigue añadiéndose a medida que te alejas</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "which-arrangement-gives-a-flat",
+  "position": [
+   3,
+   35
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 35 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Qué disposición da una curva plana?</h3><div class=\"inv-step-body\"><p>Acabas de ver cuatro maneras de repartir la misma masa, y solo una de ellas produjo una curva que se mantiene nivelada al alejarse. Usa el instrumento para comprobar tu respuesta antes de comprometerte con ella.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Una curva de rotación se mantiene plana cuando…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>la masa está concentrada en el centro</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>la masa está en una bola con un borde definido</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>la masa está en un disco que se adelgaza con el radio</span></button><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"3\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>la masa sigue añadiéndose a medida que te alejas</span></button></div><p class=\"inv-because\">Solo la cuarta. Las tres primeras tienen algo en común: la masa se acaba en algún punto, y pasado ese punto alejarse no añade nada al total dentro de tu órbita. Una vez que la masa encerrada deja de crecer, la velocidad tiene que caer. Una curva plana es la firma de una distribución de masa que todavía no ha terminado, y eso es algo extraño en una galaxia, porque las galaxias visiblemente sí terminan.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "where-it-stands",
+  "position": [
+   35,
+   35
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 35 de 35 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dónde estamos</h3><div class=\"inv-step-body\"><p>Las pruebas han crecido mucho desde 1933 y desde 1970, y ya no descansan en absoluto en las curvas de rotación. El patrón de puntos calientes y fríos del fondo cósmico de microondas, cómo se distribuyen las galaxias por el cielo, cómo la lente gravitatoria curva la luz alrededor de los cúmulos, y las abundancias de hidrógeno y helio sobrantes de los primeros minutos apuntan todos en el mismo sentido, y son sensibles a cosas distintas. La materia ordinaria que resulte ser oscura no puede dar cuenta de lo que muestran; tiene que haber algo que tenga masa y no interactúe con la luz.</p><p>Qué es ese algo, nadie lo sabe. Nunca se ha detectado en un laboratorio, no se ha encontrado ninguna partícula candidata, y las búsquedas llevan cuarenta años en marcha. El Cúmulo Bala, donde dos cúmulos se atravesaron y la masa se separó visiblemente del gas, es la observación más difícil de acomodar para las alternativas de gravedad modificada.</p><p>Ese es un lugar honesto donde dejarlo. La medida es sólida y se ha repetido de una docena de maneras independientes. La explicación es un nombre para algo que no hemos identificado. Son dos clases distintas de afirmación y merece la pena mantenerlas separadas.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Ajustaste una curva construida con los parámetros publicados de una galaxia real y pesaste un cúmulo real. Los números venían de la literatura; la conclusión la sacaste tú, sin fiarte de la palabra de nadie.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "two-ways-to-weigh-a",
+  "position": [
+   1,
+   39
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 39 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dos maneras de pesar algo que no puedes tocar</h3><div class=\"inv-step-body\"><p>No puedes poner una galaxia en una balanza. Hay dos maneras de averiguar cuánto pesa un sistema en el espacio, y son completamente independientes entre sí.</p><p>La primera es <strong>sumar lo que puedes ver</strong>. Cuenta las estrellas, deduce la masa de cada una a partir de su brillo y su color, y suma. Esto es lo que los astrónomos llaman masa visible, o masa luminosa.</p><p>La segunda es <strong>observar cómo se mueven las cosas</strong>. La gravedad fija la velocidad de una órbita, así que una velocidad orbital y un radio orbital juntos te dan la masa que tiene que haber dentro. Esta es la masa dinámica.</p><p>Las dos maneras miden lo mismo, así que más vale que coincidan. Esta investigación trata de tres sistemas. En el primero, coinciden.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Abre el panel Curva de rotación en la sección Herramientas del panel derecho. Déjalo abierto: lo usarás durante toda la investigación.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "which-arrangement-gives-a-flat",
+  "position": [
+   3,
+   39
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 39 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Qué disposición da una curva plana?</h3><div class=\"inv-step-body\"><p>Acabas de ver cuatro maneras de repartir la misma masa, y solo una de ellas produjo una curva que se mantiene nivelada al alejarse. Usa el instrumento para comprobar tu respuesta antes de comprometerte con ella.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Una curva de rotación se mantiene plana cuando…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>la masa está concentrada en el centro</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>la masa está en una bola con un borde definido</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>la masa está en un disco que se adelgaza con el radio</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>la masa sigue añadiéndose a medida que te alejas</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "which-arrangement-gives-a-flat",
+  "position": [
+   3,
+   39
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 39 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Qué disposición da una curva plana?</h3><div class=\"inv-step-body\"><p>Acabas de ver cuatro maneras de repartir la misma masa, y solo una de ellas produjo una curva que se mantiene nivelada al alejarse. Usa el instrumento para comprobar tu respuesta antes de comprometerte con ella.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Una curva de rotación se mantiene plana cuando…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>la masa está concentrada en el centro</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>la masa está en una bola con un borde definido</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>la masa está en un disco que se adelgaza con el radio</span></button><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"3\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>la masa sigue añadiéndose a medida que te alejas</span></button></div><p class=\"inv-because\">Solo la cuarta. Las tres primeras tienen algo en común: la masa se acaba en algún punto, y pasado ese punto alejarse no añade nada al total dentro de tu órbita. Una vez que la masa encerrada deja de crecer, la velocidad tiene que caer. Una curva plana es la firma de una distribución de masa que todavía no ha terminado, y eso es algo extraño en una galaxia, porque las galaxias visiblemente sí terminan.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "where-it-stands",
+  "position": [
+   39,
+   39
+  ],
+  "title": "La masa que falta",
+  "subtitle": "Pesa un sistema dos veces y descubre que las dos respuestas no coinciden",
+  "body": "<p class=\"inv-step-count\">Paso 39 de 39 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dónde estamos</h3><div class=\"inv-step-body\"><p>Las pruebas han crecido mucho desde 1933 y desde 1970, y ya no descansan en absoluto en las curvas de rotación. El patrón de puntos calientes y fríos del fondo cósmico de microondas, cómo se distribuyen las galaxias por el cielo, cómo la lente gravitatoria curva la luz alrededor de los cúmulos, y las abundancias de hidrógeno y helio sobrantes de los primeros minutos apuntan todos en el mismo sentido, y son sensibles a cosas distintas. La materia ordinaria que resulte ser oscura no puede dar cuenta de lo que muestran; tiene que haber algo que tenga masa y no interactúe con la luz.</p><p>Qué es ese algo, nadie lo sabe. Nunca se ha detectado en un laboratorio, no se ha encontrado ninguna partícula candidata, y las búsquedas llevan cuarenta años en marcha. El Cúmulo Bala, donde dos cúmulos se atravesaron y la masa se separó visiblemente del gas, es la observación más difícil de acomodar para las alternativas de gravedad modificada.</p><p>Ese es un lugar honesto donde dejarlo. La medida es sólida y se ha repetido de una docena de maneras independientes. La explicación es un nombre para algo que no hemos identificado. Son dos clases distintas de afirmación y merece la pena mantenerlas separadas.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Ajustaste una curva construida con los parámetros publicados de una galaxia real y pesaste un cúmulo real. Los números venían de la literatura; la conclusión la sacaste tú, sin fiarte de la palabra de nadie.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ }
+]

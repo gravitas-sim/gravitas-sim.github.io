@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-firefly-beside-a-lighthouse",
+  "position": [
+   1,
+   29
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 1 of 29 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A firefly beside a lighthouse</h3><div class=\"inv-step-body\"><p>There are more than six thousand confirmed planets around other stars. Fewer than a hundred have ever been photographed.</p><p>The problem is not that they are far away, it is that they sit next to something overwhelmingly brighter. Seen from thirty light years, Jupiter is about a billion times fainter than the Sun and sits half an arcsecond away from it: the angle a coin subtends from four kilometers. Every telescope spreads a point of light out into a small blur, and the star's blur is a billion times taller than the planet is. Direct imaging works only in the rare corner of parameter space where the planet is young enough to still glow with its own heat, massive enough to glow brightly, and far enough out to be clear of the glare: a young, enormous world on a wide orbit. That is not what most planets are.</p><p>So we look for the star instead. A planet cannot hide what it does to its host: it pulls the star around, it bends the light of stars behind it, and, if the geometry is right, it passes in front of it and blocks some light. All three are measurements of the <em>star</em>, and stars are bright and easy.</p><p>On screen is <strong>HD 209458</strong>, a slightly hotter and more massive relative of the Sun about 160 light years away in Pegasus, with a planet on a three and a half day orbit. The star and the planet are drawn at their true relative sizes, which is why the view is zoomed so far in.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Everything in this investigation is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   29
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 3 of 29 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What will the brightness do?</h3><div class=\"inv-step-body\"><p>The planet is about to cross in front of the star from your point of view. In a moment you will open a photometer and watch. Commit to an answer first.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">While the planet crosses the star, the measured brightness will…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>rise, because the planet reflects extra light towards us</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>drop by a small amount, then recover</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>drop to zero until the planet has passed</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>stay flat: the planet is far too small to matter</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   29
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 3 of 29 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What will the brightness do?</h3><div class=\"inv-step-body\"><p>The planet is about to cross in front of the star from your point of view. In a moment you will open a photometer and watch. Commit to an answer first.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">While the planet crosses the star, the measured brightness will…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>rise, because the planet reflects extra light towards us</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>drop by a small amount, then recover</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>drop to zero until the planet has passed</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>stay flat: the planet is far too small to matter</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Your first transit”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-did-and-where",
+  "position": [
+   29,
+   29
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 29 of 29 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you did, and where it goes next</h3><div class=\"inv-step-body\"><p>You measured a transit depth and turned it into a planet radius, and then made that radius more accurate three times over: once by dividing out limb darkening, once by understanding the geometry that sets the impact parameter, and once by correcting for a star nobody could see. That sequence, measurement then correction then correction, is what the field actually looks like from the inside.</p><p>The method is not slowing down. TESS is surveying essentially the whole sky for transits around bright, nearby stars, the ones worth following up. JWST is taking transmission spectra of small planets around cool stars, which is the only route to an atmosphere on anything rocky with current technology. ESA's PLATO, due later this decade, is built to find Earth-sized planets in year-long orbits around Sun-like stars, the corner of parameter space Kepler could only just reach. Ariel after it will do atmospheres at survey scale.</p><p>And behind all of them sits the unglamorous work you did in the last three steps: somebody has to go and look at every host star with a big enough telescope to find out what else is in the aperture. Every one of those thousands of planet radii is only as good as the answer.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> A note on numbers: the survey results quoted here come from the Robo-AO Kepler Survey and the SOAR TESS Survey, both of which set out to image every planet-candidate host they could reach. The Robo-AO census covers 3,857 Kepler hosts; the SOAR program has observed close to 3,000 TESS targets and finds a median primary-host radius correction of about 1.07, rising to 1.33 for the worst tenth.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "a-firefly-beside-a-lighthouse",
+  "position": [
+   1,
+   31
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 1 of 31 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A firefly beside a lighthouse</h3><div class=\"inv-step-body\"><p>There are more than six thousand confirmed planets around other stars. Fewer than a hundred have ever been photographed.</p><p>The problem is not that they are far away, it is that they sit next to something overwhelmingly brighter. Seen from thirty light years, Jupiter is about a billion times fainter than the Sun and sits half an arcsecond away from it: the angle a coin subtends from four kilometers. Every telescope spreads a point of light out into a small blur, and the star's blur is a billion times taller than the planet is. Direct imaging works only in the rare corner of parameter space where the planet is young enough to still glow with its own heat, massive enough to glow brightly, and far enough out to be clear of the glare: a young, enormous world on a wide orbit. That is not what most planets are.</p><p>So we look for the star instead. A planet cannot hide what it does to its host: it pulls the star around, it bends the light of stars behind it, and, if the geometry is right, it passes in front of it and blocks some light. All three are measurements of the <em>star</em>, and stars are bright and easy.</p><p>On screen is <strong>HD 209458</strong>, a slightly hotter and more massive relative of the Sun about 160 light years away in Pegasus, with a planet on a three and a half day orbit. The star and the planet are drawn at their true relative sizes, which is why the view is zoomed so far in.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Everything in this investigation is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   31
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 3 of 31 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What will the brightness do?</h3><div class=\"inv-step-body\"><p>The planet is about to cross in front of the star from your point of view. In a moment you will open a photometer and watch. Commit to an answer first.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">While the planet crosses the star, the measured brightness will…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>rise, because the planet reflects extra light towards us</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>drop by a small amount, then recover</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>drop to zero until the planet has passed</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>stay flat: the planet is far too small to matter</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   31
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 3 of 31 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What will the brightness do?</h3><div class=\"inv-step-body\"><p>The planet is about to cross in front of the star from your point of view. In a moment you will open a photometer and watch. Commit to an answer first.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">While the planet crosses the star, the measured brightness will…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>rise, because the planet reflects extra light towards us</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>drop by a small amount, then recover</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>drop to zero until the planet has passed</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>stay flat: the planet is far too small to matter</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Your first transit”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-you-did-and-where",
+  "position": [
+   31,
+   31
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 31 of 31 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you did, and where it goes next</h3><div class=\"inv-step-body\"><p>You measured a transit depth and turned it into a planet radius, and then made that radius more accurate three times over: once by dividing out limb darkening, once by understanding the geometry that sets the impact parameter, and once by correcting for a star nobody could see. That sequence, measurement then correction then correction, is what the field actually looks like from the inside.</p><p>The method is not slowing down. TESS is surveying essentially the whole sky for transits around bright, nearby stars, the ones worth following up. JWST is taking transmission spectra of small planets around cool stars, which is the only route to an atmosphere on anything rocky with current technology. ESA's PLATO, due later this decade, is built to find Earth-sized planets in year-long orbits around Sun-like stars, the corner of parameter space Kepler could only just reach. Ariel after it will do atmospheres at survey scale.</p><p>And behind all of them sits the unglamorous work you did in the last three steps: somebody has to go and look at every host star with a big enough telescope to find out what else is in the aperture. Every one of those thousands of planet radii is only as good as the answer.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> A note on numbers: the survey results quoted here come from the Robo-AO Kepler Survey and the SOAR TESS Survey, both of which set out to image every planet-candidate host they could reach. The Robo-AO census covers 3,857 Kepler hosts; the SOAR program has observed close to 3,000 TESS targets and finds a median primary-host radius correction of about 1.07, rising to 1.33 for the worst tenth.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "a-firefly-beside-a-lighthouse",
+  "position": [
+   1,
+   34
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 1 of 34 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A firefly beside a lighthouse</h3><div class=\"inv-step-body\"><p>There are more than six thousand confirmed planets around other stars. Fewer than a hundred have ever been photographed.</p><p>The problem is not that they are far away, it is that they sit next to something overwhelmingly brighter. Seen from thirty light years, Jupiter is about a billion times fainter than the Sun and sits half an arcsecond away from it: the angle a coin subtends from four kilometers. Every telescope spreads a point of light out into a small blur, and the star's blur is a billion times taller than the planet is. Direct imaging works only in the rare corner of parameter space where the planet is young enough to still glow with its own heat, massive enough to glow brightly, and far enough out to be clear of the glare: a young, enormous world on a wide orbit. That is not what most planets are.</p><p>So we look for the star instead. A planet cannot hide what it does to its host: it pulls the star around, it bends the light of stars behind it, and, if the geometry is right, it passes in front of it and blocks some light. All three are measurements of the <em>star</em>, and stars are bright and easy.</p><p>On screen is <strong>HD 209458</strong>, a slightly hotter and more massive relative of the Sun about 160 light years away in Pegasus, with a planet on a three and a half day orbit. The star and the planet are drawn at their true relative sizes, which is why the view is zoomed so far in.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Everything in this investigation is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   34
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 3 of 34 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What will the brightness do?</h3><div class=\"inv-step-body\"><p>The planet is about to cross in front of the star from your point of view. In a moment you will open a photometer and watch. Commit to an answer first.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">While the planet crosses the star, the measured brightness will…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>rise, because the planet reflects extra light towards us</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>drop by a small amount, then recover</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>drop to zero until the planet has passed</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>stay flat: the planet is far too small to matter</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "what-will-the-brightness-do",
+  "position": [
+   3,
+   34
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 3 of 34 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What will the brightness do?</h3><div class=\"inv-step-body\"><p>The planet is about to cross in front of the star from your point of view. In a moment you will open a photometer and watch. Commit to an answer first.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">While the planet crosses the star, the measured brightness will…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>rise, because the planet reflects extra light towards us</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>drop by a small amount, then recover</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>drop to zero until the planet has passed</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>stay flat: the planet is far too small to matter</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Your first transit”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-you-did-and-where",
+  "position": [
+   34,
+   34
+  ],
+  "title": "Finding Planets by Their Shadows",
+  "subtitle": "Measure a transit, weigh what it tells you, and find what is hiding",
+  "body": "<p class=\"inv-step-count\">Step 34 of 34 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you did, and where it goes next</h3><div class=\"inv-step-body\"><p>You measured a transit depth and turned it into a planet radius, and then made that radius more accurate three times over: once by dividing out limb darkening, once by understanding the geometry that sets the impact parameter, and once by correcting for a star nobody could see. That sequence, measurement then correction then correction, is what the field actually looks like from the inside.</p><p>The method is not slowing down. TESS is surveying essentially the whole sky for transits around bright, nearby stars, the ones worth following up. JWST is taking transmission spectra of small planets around cool stars, which is the only route to an atmosphere on anything rocky with current technology. ESA's PLATO, due later this decade, is built to find Earth-sized planets in year-long orbits around Sun-like stars, the corner of parameter space Kepler could only just reach. Ariel after it will do atmospheres at survey scale.</p><p>And behind all of them sits the unglamorous work you did in the last three steps: somebody has to go and look at every host star with a big enough telescope to find out what else is in the aperture. Every one of those thousands of planet radii is only as good as the answer.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> A note on numbers: the survey results quoted here come from the Robo-AO Kepler Survey and the SOAR TESS Survey, both of which set out to image every planet-candidate host they could reach. The Robo-AO census covers 3,857 Kepler hosts; the SOAR program has observed close to 3,000 TESS targets and finds a median primary-host radius correction of about 1.07, rising to 1.33 for the worst tenth.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ }
+]

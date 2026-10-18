@@ -1,0 +1,58 @@
+[
+ {
+  "role": "first",
+  "sid": "eight-minutes-of-arc",
+  "position": [
+   1,
+   7
+  ],
+  "title": "Movimiento orbital: ¿por qué cambian de velocidad los planetas?",
+  "subtitle": "7 pasos de Las leyes de Kepler (23 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 7 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Ocho minutos de arco</h3><div class=\"inv-step-body\"><p>Durante casi toda la historia registrada las órbitas fueron círculos. Cuando las observaciones no encajaban, los astrónomos añadían más círculos —epiciclos— hasta que el modelo cuadraba. Copérnico movió el Sol al centro pero mantuvo los círculos, y su modelo no fue más preciso que el que sustituía.</p><p>Lo que rompió el círculo fueron los datos. Tycho Brahe pasó dos décadas midiendo posiciones planetarias con una precisión de un minuto de arco, el límite de lo posible sin telescopio. Cuando Johannes Kepler intentó ajustar las observaciones de Marte de Tycho a una órbita circular, el mejor ajuste que consiguió fallaba por ocho minutos de arco. Podría haber llamado a eso error observacional y haber seguido adelante. En vez de eso confió en las medidas de Tycho por encima de dos mil años de suposiciones, y pasó años averiguando qué curva encajaría.</p><p>La respuesta fue una elipse, con el Sol fuera de su centro.</p></div><figure class=\"inv-quote\"><blockquote>Puesto que estos ocho minutos no podían ignorarse, ellos solos han abierto el camino a la reforma de toda la astronomía.</blockquote><figcaption>Johannes Kepler, Astronomia Nova, 1609</figcaption></figure><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "graded",
+  "sid": "where-does-it-move-fastest",
+  "position": [
+   3,
+   7
+  ],
+  "title": "Movimiento orbital: ¿por qué cambian de velocidad los planetas?",
+  "subtitle": "7 pasos de Las leyes de Kepler (23 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 7 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde se mueve más rápido?</h3><div class=\"inv-step-body\"><p>La segunda ley de Kepler dice que una línea trazada de la estrella al planeta barre áreas iguales en tiempos iguales. Piensa en lo que eso obliga a hacer a la velocidad en distintos puntos de la órbita.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">El planeta excéntrico se mueve más rápido…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>en su máximo acercamiento a la estrella</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>en su punto más lejano de la estrella</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>a la misma velocidad en todas partes</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>a mitad de camino entre los dos</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "marked",
+  "sid": "where-does-it-move-fastest",
+  "position": [
+   3,
+   7
+  ],
+  "title": "Movimiento orbital: ¿por qué cambian de velocidad los planetas?",
+  "subtitle": "7 pasos de Las leyes de Kepler (23 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 7 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde se mueve más rápido?</h3><div class=\"inv-step-body\"><p>La segunda ley de Kepler dice que una línea trazada de la estrella al planeta barre áreas iguales en tiempos iguales. Piensa en lo que eso obliga a hacer a la velocidad en distintos puntos de la órbita.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">El planeta excéntrico se mueve más rápido…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>en su máximo acercamiento a la estrella</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>en su punto más lejano de la estrella</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>a la misma velocidad en todas partes</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>a mitad de camino entre los dos</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Míralo suceder», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "last",
+  "sid": "why-the-speed-changes",
+  "position": [
+   7,
+   7
+  ],
+  "title": "Movimiento orbital: ¿por qué cambian de velocidad los planetas?",
+  "subtitle": "7 pasos de Las leyes de Kepler (23 en la investigación completa)",
+  "body": "<p class=\"inv-step-count\">Paso 7 de 7 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">Por qué cambia la velocidad</h3><div class=\"inv-step-body\"><p>Acabas de medir un planeta acelerando y frenando sobre una órbita fija, sin nada que lo empuje y sin quemar combustible. Algo se está intercambiando, y algo más se está conservando.</p></div><p class=\"inv-prompt\">En una o dos frases, explica por qué el planeta acelera al acercarse a la estrella. ¿Qué magnitud se mantiene constante, y por qué la gravedad no la cambia?</p><p class=\"inv-evidence-from\">Aquí tu evidencia viene del motor de simulación: los números se miden sobre cuerpos que integró.</p><textarea class=\"inv-answer\" data-answer=\"keplers-laws:why-the-speed-changes\" rows=\"4\" aria-describedby=\"invAnswerNote\" placeholder=\"Tu valor\"></textarea><p class=\"inv-answer-note\" id=\"invAnswerNote\" role=\"status\" hidden=\"\">Eso parece vacío. Escribe una o dos frases: qué mediste y cómo se compara con lo que predijiste.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

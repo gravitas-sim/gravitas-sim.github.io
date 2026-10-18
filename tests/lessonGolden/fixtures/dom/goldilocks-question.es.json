@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "what-does-earth-get-from",
+  "position": [
+   1,
+   37
+  ],
+  "title": "La cuestión de Ricitos de Oro",
+  "subtitle": "Mueve un planeta, cambia su estrella y decide qué significa de verdad «habitable»",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 37 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">¿Qué recibe la Tierra del Sol?</h3><div class=\"inv-step-body\"><p>La luz del Sol tarda ocho minutos y veinte segundos en llegarnos. Lo que llega es energía, y casi todo lo relativo a la superficie de la Tierra se sigue de cuánta de ella aterriza aquí: la temperatura, el tiempo atmosférico, si el agua está en océanos o en hielo o escapa al espacio por completo.</p><p>Esa magnitud tiene nombre. El <strong>flujo estelar</strong>, o insolación, es la energía que llega cada segundo a cada metro cuadrado de un planeta. Para la Tierra son unos 1361 vatios por metro cuadrado, que es aproximadamente la potencia de un pequeño calefactor eléctrico cayendo sobre cada metro cuadrado del lado iluminado.</p><p>Esta investigación trata de una sola pregunta: ¿qué decide cuánto de eso recibe un planeta, y qué te permite decir la respuesta sobre el planeta?</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Aquí no hace falta álgebra. Moverás un deslizador, leerás tres números en un panel y verás cómo una gráfica se dibuja sola.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "move-it-twice-as-far",
+  "position": [
+   3,
+   37
+  ],
+  "title": "La cuestión de Ricitos de Oro",
+  "subtitle": "Mueve un planeta, cambia su estrella y decide qué significa de verdad «habitable»",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 37 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Llévalo al doble de distancia</h3><div class=\"inv-step-body\"><p>Ahora imagina levantar la Tierra y dejarla a 2 UA, al doble de distancia del Sol de la que está ahora. El Sol no cambia. El planeta no cambia. Solo cambia la distancia.</p><p>Comprométete con una respuesta antes de tocar nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Al doble de distancia, cada metro cuadrado del planeta recibe…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>la misma cantidad de luz estelar</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>la mitad</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>la cuarta parte</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>la octava parte</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "move-it-twice-as-far",
+  "position": [
+   3,
+   37
+  ],
+  "title": "La cuestión de Ricitos de Oro",
+  "subtitle": "Mueve un planeta, cambia su estrella y decide qué significa de verdad «habitable»",
+  "body": "<p class=\"inv-step-count\">Paso 3 de 37 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Llévalo al doble de distancia</h3><div class=\"inv-step-body\"><p>Ahora imagina levantar la Tierra y dejarla a 2 UA, al doble de distancia del Sol de la que está ahora. El Sol no cambia. El planeta no cambia. Solo cambia la distancia.</p><p>Comprométete con una respuesta antes de tocar nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Al doble de distancia, cada metro cuadrado del planeta recibe…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>la misma cantidad de luz estelar</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>la mitad</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>la cuarta parte</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>la octava parte</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Tres distancias», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   37,
+   37
+  ],
+  "title": "La cuestión de Ricitos de Oro",
+  "subtitle": "Mueve un planeta, cambia su estrella y decide qué significa de verdad «habitable»",
+  "body": "<p class=\"inv-step-count\">Paso 37 de 37 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que has deducido</h3><div class=\"inv-step-body\"><p>Partiendo de un planeta y una estrella, encontraste tú mismo todo esto:</p><p><strong>Más lejos → menos luz estelar.</strong> Al doble de distancia, la cuarta parte, porque la luz se reparte sobre una esfera cuya área crece como el cuadrado de la distancia.</p><p><strong>Estrella más luminosa → zona habitable más lejos. Estrella menos luminosa → zona habitable más cerca.</strong> Una estrella cien veces más brillante tiene su zona diez veces más lejos.</p><p><strong>Órbita excéntrica → la luz estelar cambia a lo largo del año</strong>, y el planeta pasa la mayor parte de ese año en la fría parte exterior de su órbita y no en la caliente parte interior.</p><p><strong>Estar dentro de la zona habitable no es lo mismo que ser habitable</strong>, y no se parece ni de lejos a estar habitado. La zona se calcula solo a partir de la estrella.</p><p>Lo que deja a la zona habitable haciendo algo genuinamente valioso, solo que no lo que sugiere su nombre. Hay miles de millones de planetas en la galaxia y un puñado de telescopios capaces de tomar sus espectros. La zona habitable es cómo decides cuáles mirar primero.</p><p>Es un sitio excelente para empezar a buscar. No es la respuesta a si un mundo es habitable.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> La expresión «zona de Ricitos de Oro» es más antigua que la ciencia y ha hecho verdadero daño a cómo se entiende la idea. Todos los artículos profesionales usan «zona habitable circunestelar», y todos ellos se refieren a la definición cuidadosa que leíste antes.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]
