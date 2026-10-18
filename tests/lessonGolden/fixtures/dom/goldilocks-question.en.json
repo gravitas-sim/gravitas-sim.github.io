@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "what-does-earth-get-from",
+  "position": [
+   1,
+   37
+  ],
+  "title": "The Goldilocks Question",
+  "subtitle": "Move a planet, change its star, and decide what 'habitable' really means",
+  "body": "<p class=\"inv-step-count\">Step 1 of 37 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What does Earth get from the Sun?</h3><div class=\"inv-step-body\"><p>Sunlight takes eight minutes and twenty seconds to reach us. What arrives is energy, and almost everything about the Earth's surface follows from how much of it lands here: the temperature, the weather, whether water sits in oceans or in ice or escapes into space entirely.</p><p>That quantity has a name. The <strong>stellar flux</strong>, or insolation, is the energy arriving on each square meter of a planet every second. For Earth it is about 1,361 watts per square meter, which is roughly the output of a small electric heater falling on every square meter of the daylit side.</p><p>This investigation is about one question: what decides how much of that a planet gets, and what does the answer let you say about the planet?</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Nothing here needs algebra. You will move one slider, read three numbers off a panel, and watch a graph draw itself.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "move-it-twice-as-far",
+  "position": [
+   3,
+   37
+  ],
+  "title": "The Goldilocks Question",
+  "subtitle": "Move a planet, change its star, and decide what 'habitable' really means",
+  "body": "<p class=\"inv-step-count\">Step 3 of 37 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Move it twice as far out</h3><div class=\"inv-step-body\"><p>Now imagine picking the Earth up and putting it down at 2 AU, twice as far from the Sun as it is now. The Sun is unchanged. The planet is unchanged. Only the distance is different.</p><p>Commit to an answer before you touch anything.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">At twice the distance, each square meter of the planet receives…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>the same amount of starlight</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>half as much</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>one quarter as much</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>one eighth as much</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "move-it-twice-as-far",
+  "position": [
+   3,
+   37
+  ],
+  "title": "The Goldilocks Question",
+  "subtitle": "Move a planet, change its star, and decide what 'habitable' really means",
+  "body": "<p class=\"inv-step-count\">Step 3 of 37 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Move it twice as far out</h3><div class=\"inv-step-body\"><p>Now imagine picking the Earth up and putting it down at 2 AU, twice as far from the Sun as it is now. The Sun is unchanged. The planet is unchanged. Only the distance is different.</p><p>Commit to an answer before you touch anything.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">At twice the distance, each square meter of the planet receives…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>the same amount of starlight</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>half as much</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>one quarter as much</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>one eighth as much</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Three distances”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   37,
+   37
+  ],
+  "title": "The Goldilocks Question",
+  "subtitle": "Move a planet, change its star, and decide what 'habitable' really means",
+  "body": "<p class=\"inv-step-count\">Step 37 of 37 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>Starting from a planet and a star, you found all of this yourself:</p><p><strong>Further away → less starlight.</strong> Twice as far, one quarter as much, because the light spreads over a sphere whose area grows as the square of the distance.</p><p><strong>More luminous star → habitable zone further out. Less luminous star → habitable zone closer in.</strong> A star a hundred times brighter has its zone ten times further out.</p><p><strong>Eccentric orbit → the starlight changes through the year</strong>, and the planet spends most of that year in the cold outer part of its orbit rather than the hot inner part.</p><p><strong>Inside the habitable zone is not the same as habitable</strong>, and it is not remotely the same as inhabited. The zone is calculated from the star alone.</p><p>Which leaves the habitable zone doing something genuinely valuable, just not the thing its name suggests. There are billions of planets in the galaxy and a handful of telescopes able to take their spectra. The habitable zone is how you decide which ones to look at first.</p><p>It is an excellent place to start looking. It is not the answer to whether a world is habitable.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> The phrase \"Goldilocks zone\" is older than the science and has done real damage to how the idea is understood. Every professional paper uses \"circumstellar habitable zone\", and every one of them means the careful definition you read earlier.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "twenty-planets",
+  "position": [
+   1,
+   8
+  ],
+  "title": "Ampliar un experimento",
+  "subtitle": "De veinte planetas que ejecutó el motor a una población de doscientos mil, con todas las incertidumbres, en Python en la página de cálculo",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 8 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Veinte planetas que ejecutó el motor</h3><div class=\"inv-step-body\"><p>El Laboratorio de planeta en binaria pone un planeta cerca de una estrella de un par separado diez unidades astronómicas. Un <strong>experimento</strong> del ejecutor de experimentos corrió veinte ensayos: en cada uno el planeta empezó a una distancia de su estrella sacada al azar entre 0,12 y 0,42 de la separación de las estrellas, y el motor lo ejecutó unas veinte órbitas de la binaria. Algunos planetas siguieron en órbita y otros fueron expulsados.</p><p>El resultado del experimento es un archivo, y el cuaderno lo lee. Llama <strong>ligado</strong> a un planeta si su distancia media a la estrella se mantuvo dentro de un umbral (tres, al principio) veces la distancia de partida, ajusta la probabilidad de estar ligado como una curva suave de la distancia inicial, repite el ajuste en 400 remuestreos de los veinte para obtener su incertidumbre, y genera doscientos mil planetas sintéticos para decir cuántos seguirían ligados en una población mayor.</p><p>Abre la página de cálculo en <strong>/compute/</strong> de este sitio. Solo funciona con conexión y la primera vez descarga unos 19 MB de Python, cuando pulsas el botón. Elige el cuaderno <strong>Una población de planetas, ampliada</strong>, deja su entrada de ejemplo (los veinte planetas) y sus ajustes en pendiente 1, 200.000 planetas y umbral 3. Todavía no pulses Ejecutar.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "how-well-can-twenty-place-an-edge",
+  "position": [
+   2,
+   8
+  ],
+  "title": "Ampliar un experimento",
+  "subtitle": "De veinte planetas que ejecutó el motor a una población de doscientos mil, con todas las incertidumbres, en Python en la página de cálculo",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 8 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Qué tan bien sitúan veinte un borde</h3><div class=\"inv-step-body\"><p>Antes de ejecutarlo. De los veinte planetas, los que siguieron ligados partieron a menos de 0,25 aproximadamente, y los que no, a más de 0,34, sin nada en medio salvo unos pocos casos dudosos.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">El cuaderno dará la distancia inicial donde la probabilidad de seguir ligado es un medio, con una incertidumbre. Esa incertidumbre será…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>diminuta, porque se usan doscientos mil planetas sintéticos</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>unas centésimas, una fracción de la brecha entre el último planeta que se quedó y el primero que se fue</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>cero, porque el motor es exacto</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>grande, porque veinte son demasiado pocos para decir nada</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "how-well-can-twenty-place-an-edge",
+  "position": [
+   2,
+   8
+  ],
+  "title": "Ampliar un experimento",
+  "subtitle": "De veinte planetas que ejecutó el motor a una población de doscientos mil, con todas las incertidumbres, en Python en la página de cálculo",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 8 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">Qué tan bien sitúan veinte un borde</h3><div class=\"inv-step-body\"><p>Antes de ejecutarlo. De los veinte planetas, los que siguieron ligados partieron a menos de 0,25 aproximadamente, y los que no, a más de 0,34, sin nada en medio salvo unos pocos casos dudosos.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">El cuaderno dará la distancia inicial donde la probabilidad de seguir ligado es un medio, con una incertidumbre. Esa incertidumbre será…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>diminuta, porque se usan doscientos mil planetas sintéticos</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>unas centésimas, una fracción de la brecha entre el último planeta que se quedó y el primero que se fue</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>cero, porque el motor es exacto</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>grande, porque veinte son demasiado pocos para decir nada</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Ejecútalo: el borde y las fracciones», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   8,
+   8
+  ],
+  "title": "Ampliar un experimento",
+  "subtitle": "De veinte planetas que ejecutó el motor a una población de doscientos mil, con todas las incertidumbres, en Python en la página de cálculo",
+  "body": "<p class=\"inv-step-count\">Paso 8 de 8 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que calculaste</h3><div class=\"inv-step-body\"><p>Veinte planetas, ejecutados por el motor, fijaron el borde de la región ligada en unos 0,255 ± 0,024 de la separación de las estrellas. Ampliada a doscientos mil planetas sintéticos, la fracción ligada fue 0,596 ± 0,076 para una población con números iguales por factor de distancia, y 0,451 ± 0,081 para una uniforme, que es donde debió estar el 0,6 de la propia muestra.</p><p>Lo que los números no dicen: el intervalo cuenta la dispersión de veinte ensayos y nada más. No cuenta la elección de una curva logística, la definición de ligado ni el rango del sorteo, fuera del cual no se genera ningún planeta sintético. Una población sintética mayor tiene un error de muestreo menor y exactamente las mismas suposiciones. La ejecución es tuya: su cápsula registra el hash del cuaderno y el del archivo de resultados, así que un informe puede citarla.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

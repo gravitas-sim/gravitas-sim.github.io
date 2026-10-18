@@ -97,6 +97,9 @@ current, and the orchestrator checks it.
 | `key-registry-scan.mjs` | Which 'gravitas*' string literals are still loose in js/ (Prompt 107, step 2c) |  |
 | `lab3d-bench.mjs` | The 3-D kernel's throughput, desktop measured and low-end modelled |  |
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
+| `lesson-coverage.mjs` | npm run lesson:coverage | `npm run lesson:coverage` |
+| `lesson-golden-dom.mjs` | npm run lesson:golden:dom -- --regenerate-lesson-golden | `npm run lesson:golden:dom` |
+| `lesson-golden.mjs` | npm run lesson:golden -- --regenerate-lesson-golden | `npm run lesson:golden` |
 | `lesson-scene-audit.mjs` | What every lesson step does with the main scene | `npm run audit:scene` |
 | `library-routes.mjs` | Does a Library route open what it names? |  |
 | `longtask-census.mjs` | Main-thread work above a stated budget (Prompt 112, part 2) |  |

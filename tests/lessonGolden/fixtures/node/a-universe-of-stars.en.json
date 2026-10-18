@@ -1,0 +1,1307 @@
+{
+ "id": "a-universe-of-stars",
+ "locale": "en",
+ "title": "A Universe of Stars",
+ "steps": 37,
+ "depths": [
+  [
+   "core",
+   37
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "three-stars-no-labels",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-which-is-bigger",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "sideways-at-one-luminosity",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-mass-and-light",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-trend-covers",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "two-red-stars",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-hot-and-faint",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "classify-from-position",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-who-lives-longer",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-the-bright-subset",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-a-survey-misses",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "spectra-color-is-enough-here",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "spectra-name-the-star",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "spectra-what-color-cannot-give",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "the-argument",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "a-universe-of-stars",
+   "stepSid": "what-the-diagram-is-for",
+   "responses": {
+    "a-universe-of-stars:three-stars-no-labels": 0,
+    "a-universe-of-stars:predict-which-is-bigger": 1,
+    "a-universe-of-stars:sideways-at-one-luminosity": 2,
+    "a-universe-of-stars:predict-mass-and-light": 2,
+    "a-universe-of-stars:what-the-trend-covers": "A fixed sentence for the golden.",
+    "a-universe-of-stars:two-red-stars": 2,
+    "a-universe-of-stars:predict-hot-and-faint": 0,
+    "a-universe-of-stars:classify-from-position": 1,
+    "a-universe-of-stars:predict-who-lives-longer": 2,
+    "a-universe-of-stars:predict-the-bright-subset": 0,
+    "a-universe-of-stars:what-a-survey-misses": "A fixed sentence for the golden.",
+    "a-universe-of-stars:spectra-color-is-enough-here": 0,
+    "a-universe-of-stars:spectra-name-the-star": 1,
+    "a-universe-of-stars:spectra-what-color-cannot-give": "A fixed sentence for the golden.",
+    "a-universe-of-stars:the-argument": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "a-universe-of-stars:three-stars-no-labels": 1,
+    "a-universe-of-stars:predict-which-is-bigger": 1,
+    "a-universe-of-stars:sideways-at-one-luminosity": 1,
+    "a-universe-of-stars:predict-mass-and-light": 1,
+    "a-universe-of-stars:two-red-stars": 1,
+    "a-universe-of-stars:predict-hot-and-faint": 1,
+    "a-universe-of-stars:classify-from-position": 1,
+    "a-universe-of-stars:predict-who-lives-longer": 1,
+    "a-universe-of-stars:predict-the-bright-subset": 1,
+    "a-universe-of-stars:spectra-color-is-enough-here": 1,
+    "a-universe-of-stars:spectra-name-the-star": 1
+   },
+   "visited": [
+    "three-stars-no-labels",
+    "the-numbers-arrive",
+    "temperature-makes-color",
+    "same-temperature-different-light",
+    "predict-which-is-bigger",
+    "measure-the-radius-ratio",
+    "the-two-axes",
+    "where-the-sun-sits",
+    "straight-up-the-diagram",
+    "sideways-at-one-luminosity",
+    "lines-of-constant-radius",
+    "switch-to-modeled-stars",
+    "three-on-the-main-sequence",
+    "predict-mass-and-light",
+    "the-whole-sequence",
+    "what-the-trend-covers",
+    "two-red-stars",
+    "measure-the-two-reds",
+    "a-supergiant",
+    "predict-hot-and-faint",
+    "hot-and-faint",
+    "classify-from-position",
+    "predict-who-lives-longer",
+    "measure-the-lifetimes",
+    "a-population",
+    "predict-the-bright-subset",
+    "only-the-bright-ones",
+    "what-a-survey-misses",
+    "find-a-counterexample",
+    "spectra-the-light-itself",
+    "spectra-color-is-enough-here",
+    "spectra-two-features",
+    "spectra-name-the-star",
+    "spectra-what-color-cannot-give",
+    "spectra-four-is-four",
+    "the-argument",
+    "what-the-diagram-is-for"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "a-universe-of-stars:three-stars-no-labels": 0,
+    "a-universe-of-stars:predict-which-is-bigger": 1,
+    "a-universe-of-stars:sideways-at-one-luminosity": 2,
+    "a-universe-of-stars:predict-mass-and-light": 2,
+    "a-universe-of-stars:what-the-trend-covers": "A fixed sentence for the golden.",
+    "a-universe-of-stars:two-red-stars": 2,
+    "a-universe-of-stars:predict-hot-and-faint": 0,
+    "a-universe-of-stars:classify-from-position": 1,
+    "a-universe-of-stars:predict-who-lives-longer": 2,
+    "a-universe-of-stars:predict-the-bright-subset": 0,
+    "a-universe-of-stars:what-a-survey-misses": "A fixed sentence for the golden.",
+    "a-universe-of-stars:spectra-color-is-enough-here": 0,
+    "a-universe-of-stars:spectra-name-the-star": 1,
+    "a-universe-of-stars:spectra-what-color-cannot-give": "A fixed sentence for the golden.",
+    "a-universe-of-stars:the-argument": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "a-universe-of-stars:three-stars-no-labels": 1,
+    "a-universe-of-stars:predict-which-is-bigger": 1,
+    "a-universe-of-stars:sideways-at-one-luminosity": 1,
+    "a-universe-of-stars:predict-mass-and-light": 1,
+    "a-universe-of-stars:two-red-stars": 1,
+    "a-universe-of-stars:predict-hot-and-faint": 1,
+    "a-universe-of-stars:classify-from-position": 1,
+    "a-universe-of-stars:predict-who-lives-longer": 1,
+    "a-universe-of-stars:predict-the-bright-subset": 1,
+    "a-universe-of-stars:spectra-color-is-enough-here": 1,
+    "a-universe-of-stars:spectra-name-the-star": 1
+   },
+   "visited": [
+    "a-population",
+    "a-supergiant",
+    "classify-from-position",
+    "find-a-counterexample",
+    "hot-and-faint",
+    "lines-of-constant-radius",
+    "measure-the-lifetimes",
+    "measure-the-radius-ratio",
+    "measure-the-two-reds",
+    "only-the-bright-ones",
+    "predict-hot-and-faint",
+    "predict-mass-and-light",
+    "predict-the-bright-subset",
+    "predict-which-is-bigger",
+    "predict-who-lives-longer",
+    "same-temperature-different-light",
+    "sideways-at-one-luminosity",
+    "spectra-color-is-enough-here",
+    "spectra-four-is-four",
+    "spectra-name-the-star",
+    "spectra-the-light-itself",
+    "spectra-two-features",
+    "spectra-what-color-cannot-give",
+    "straight-up-the-diagram",
+    "switch-to-modeled-stars",
+    "temperature-makes-color",
+    "the-argument",
+    "the-numbers-arrive",
+    "the-two-axes",
+    "the-whole-sequence",
+    "three-on-the-main-sequence",
+    "three-stars-no-labels",
+    "two-red-stars",
+    "what-a-survey-misses",
+    "what-the-diagram-is-for",
+    "what-the-trend-covers",
+    "where-the-sun-sits"
+   ],
+   "stepSid": "what-the-diagram-is-for",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "a-universe-of-stars",
+    "title": "A Universe of Stars",
+    "stepCount": 37
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-the-diagram-is-for",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "three-stars-no-labels",
+     "the-numbers-arrive",
+     "temperature-makes-color",
+     "same-temperature-different-light",
+     "predict-which-is-bigger",
+     "measure-the-radius-ratio",
+     "the-two-axes",
+     "where-the-sun-sits",
+     "straight-up-the-diagram",
+     "sideways-at-one-luminosity",
+     "lines-of-constant-radius",
+     "switch-to-modeled-stars",
+     "three-on-the-main-sequence",
+     "predict-mass-and-light",
+     "the-whole-sequence",
+     "what-the-trend-covers",
+     "two-red-stars",
+     "measure-the-two-reds",
+     "a-supergiant",
+     "predict-hot-and-faint",
+     "hot-and-faint",
+     "classify-from-position",
+     "predict-who-lives-longer",
+     "measure-the-lifetimes",
+     "a-population",
+     "predict-the-bright-subset",
+     "only-the-bright-ones",
+     "what-a-survey-misses",
+     "find-a-counterexample",
+     "spectra-the-light-itself",
+     "spectra-color-is-enough-here",
+     "spectra-two-features",
+     "spectra-name-the-star",
+     "spectra-what-color-cannot-give",
+     "spectra-four-is-four",
+     "the-argument",
+     "what-the-diagram-is-for"
+    ],
+    "responses": {
+     "a-universe-of-stars:three-stars-no-labels": 0,
+     "a-universe-of-stars:predict-which-is-bigger": 1,
+     "a-universe-of-stars:sideways-at-one-luminosity": 2,
+     "a-universe-of-stars:predict-mass-and-light": 2,
+     "a-universe-of-stars:what-the-trend-covers": "A fixed sentence for the golden.",
+     "a-universe-of-stars:two-red-stars": 2,
+     "a-universe-of-stars:predict-hot-and-faint": 0,
+     "a-universe-of-stars:classify-from-position": 1,
+     "a-universe-of-stars:predict-who-lives-longer": 2,
+     "a-universe-of-stars:predict-the-bright-subset": 0,
+     "a-universe-of-stars:what-a-survey-misses": "A fixed sentence for the golden.",
+     "a-universe-of-stars:spectra-color-is-enough-here": 0,
+     "a-universe-of-stars:spectra-name-the-star": 1,
+     "a-universe-of-stars:spectra-what-color-cannot-give": "A fixed sentence for the golden.",
+     "a-universe-of-stars:the-argument": "A fixed sentence for the golden."
+    },
+    "attempts": {
+     "a-universe-of-stars:three-stars-no-labels": 1,
+     "a-universe-of-stars:predict-which-is-bigger": 1,
+     "a-universe-of-stars:sideways-at-one-luminosity": 1,
+     "a-universe-of-stars:predict-mass-and-light": 1,
+     "a-universe-of-stars:two-red-stars": 1,
+     "a-universe-of-stars:predict-hot-and-faint": 1,
+     "a-universe-of-stars:classify-from-position": 1,
+     "a-universe-of-stars:predict-who-lives-longer": 1,
+     "a-universe-of-stars:predict-the-bright-subset": 1,
+     "a-universe-of-stars:spectra-color-is-enough-here": 1,
+     "a-universe-of-stars:spectra-name-the-star": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "three-stars-no-labels",
+     "fingerprint": "predict|-|stellar-compare|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 1,
+     "sid": "the-numbers-arrive",
+     "fingerprint": "measure|-|stellar-compare|-|coolest+middle+hottest|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 2,
+     "sid": "temperature-makes-color",
+     "fingerprint": "explore|-|stellar-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "same-temperature-different-light",
+     "fingerprint": "read|-|stellar-compare|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "predict-which-is-bigger",
+     "fingerprint": "predict|-|stellar-compare|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "measure-the-radius-ratio",
+     "fingerprint": "measure|-|stellar-compare|-|small+large+ratio+why|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "the-two-axes",
+     "fingerprint": "measure|-|stellar-lab|-|teff+lum|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "where-the-sun-sits",
+     "fingerprint": "measure|-|stellar-lab|-|radius|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "straight-up-the-diagram",
+     "fingerprint": "measure|-|stellar-lab|-|radius|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "sideways-at-one-luminosity",
+     "fingerprint": "question|choice|stellar-lab|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 10,
+     "sid": "lines-of-constant-radius",
+     "fingerprint": "measure|-|stellar-lab|-|coolT+coolL+hotT+hotL|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 11,
+     "sid": "switch-to-modeled-stars",
+     "fingerprint": "explore|-|stellar-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "three-on-the-main-sequence",
+     "fingerprint": "measure|-|stellar-compare|-|smallL+bigL+ratio|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 13,
+     "sid": "predict-mass-and-light",
+     "fingerprint": "predict|-|stellar-compare|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 14,
+     "sid": "the-whole-sequence",
+     "fingerprint": "measure|-|stellar-lab|-|one+five+twenty|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "what-the-trend-covers",
+     "fingerprint": "question|short|stellar-lab|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "two-red-stars",
+     "fingerprint": "predict|-|stellar-compare|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 17,
+     "sid": "measure-the-two-reds",
+     "fingerprint": "measure|-|stellar-compare|-|rSmall+rBig+lSmall+lBig+rRatio+lRatio|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 18,
+     "sid": "a-supergiant",
+     "fingerprint": "measure|-|stellar-compare|-|radius+mass|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 19,
+     "sid": "predict-hot-and-faint",
+     "fingerprint": "predict|-|stellar-compare|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 20,
+     "sid": "hot-and-faint",
+     "fingerprint": "measure|-|stellar-lab|-|teff+lum+radius|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 21,
+     "sid": "classify-from-position",
+     "fingerprint": "question|choice|stellar-lab|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 22,
+     "sid": "predict-who-lives-longer",
+     "fingerprint": "predict|-|stellar-lab|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 23,
+     "sid": "measure-the-lifetimes",
+     "fingerprint": "measure|-|stellar-lab|-|small+sun+big|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 24,
+     "sid": "a-population",
+     "fingerprint": "measure|-|stellar-population|-|m+k+g|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 25,
+     "sid": "predict-the-bright-subset",
+     "fingerprint": "predict|-|stellar-population|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 26,
+     "sid": "only-the-bright-ones",
+     "fingerprint": "measure|-|stellar-population|-|kept+m+f|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 27,
+     "sid": "what-a-survey-misses",
+     "fingerprint": "question|short|stellar-population|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 28,
+     "sid": "find-a-counterexample",
+     "fingerprint": "measure|-|stellar-lab|-|aT+aL+bT+bL|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 29,
+     "sid": "spectra-the-light-itself",
+     "fingerprint": "read|-|spectra-compare|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 30,
+     "sid": "spectra-color-is-enough-here",
+     "fingerprint": "question|choice|spectra-compare|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 31,
+     "sid": "spectra-two-features",
+     "fingerprint": "measure|-|spectra-compare|-|hw+hx+hy+hz+cw+cx+cy+cz|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 32,
+     "sid": "spectra-name-the-star",
+     "fingerprint": "question|choice|spectra-identify|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 33,
+     "sid": "spectra-what-color-cannot-give",
+     "fingerprint": "question|short|spectra-compare|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 34,
+     "sid": "spectra-four-is-four",
+     "fingerprint": "read|-|spectra-compare|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 35,
+     "sid": "the-argument",
+     "fingerprint": "question|short|stellar-compare|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 36,
+     "sid": "what-the-diagram-is-for",
+     "fingerprint": "read|-|stellar-compare|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "a-universe-of-stars:three-stars-no-labels": 0,
+    "a-universe-of-stars:predict-which-is-bigger": 1,
+    "a-universe-of-stars:sideways-at-one-luminosity": 2,
+    "a-universe-of-stars:predict-mass-and-light": 2,
+    "a-universe-of-stars:what-the-trend-covers": "A fixed sentence for the golden.",
+    "a-universe-of-stars:two-red-stars": 2,
+    "a-universe-of-stars:predict-hot-and-faint": 0,
+    "a-universe-of-stars:classify-from-position": 1,
+    "a-universe-of-stars:predict-who-lives-longer": 2,
+    "a-universe-of-stars:predict-the-bright-subset": 0,
+    "a-universe-of-stars:what-a-survey-misses": "A fixed sentence for the golden.",
+    "a-universe-of-stars:spectra-color-is-enough-here": 0,
+    "a-universe-of-stars:spectra-name-the-star": 1,
+    "a-universe-of-stars:spectra-what-color-cannot-give": "A fixed sentence for the golden.",
+    "a-universe-of-stars:the-argument": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "a-universe-of-stars:three-stars-no-labels": 1,
+    "a-universe-of-stars:predict-which-is-bigger": 1,
+    "a-universe-of-stars:sideways-at-one-luminosity": 1,
+    "a-universe-of-stars:predict-mass-and-light": 1,
+    "a-universe-of-stars:two-red-stars": 1,
+    "a-universe-of-stars:predict-hot-and-faint": 1,
+    "a-universe-of-stars:classify-from-position": 1,
+    "a-universe-of-stars:predict-who-lives-longer": 1,
+    "a-universe-of-stars:predict-the-bright-subset": 1,
+    "a-universe-of-stars:spectra-color-is-enough-here": 1,
+    "a-universe-of-stars:spectra-name-the-star": 1
+   },
+   "visited": [
+    "a-population",
+    "a-supergiant",
+    "classify-from-position",
+    "find-a-counterexample",
+    "hot-and-faint",
+    "lines-of-constant-radius",
+    "measure-the-lifetimes",
+    "measure-the-radius-ratio",
+    "measure-the-two-reds",
+    "only-the-bright-ones",
+    "predict-hot-and-faint",
+    "predict-mass-and-light",
+    "predict-the-bright-subset",
+    "predict-which-is-bigger",
+    "predict-who-lives-longer",
+    "same-temperature-different-light",
+    "sideways-at-one-luminosity",
+    "spectra-color-is-enough-here",
+    "spectra-four-is-four",
+    "spectra-name-the-star",
+    "spectra-the-light-itself",
+    "spectra-two-features",
+    "spectra-what-color-cannot-give",
+    "straight-up-the-diagram",
+    "switch-to-modeled-stars",
+    "temperature-makes-color",
+    "the-argument",
+    "the-numbers-arrive",
+    "the-two-axes",
+    "the-whole-sequence",
+    "three-on-the-main-sequence",
+    "three-stars-no-labels",
+    "two-red-stars",
+    "what-a-survey-misses",
+    "what-the-diagram-is-for",
+    "what-the-trend-covers",
+    "where-the-sun-sits"
+   ],
+   "stepIndex": 36,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-a-universe-of-stars",
+  "record": {
+   "ids": [
+    "golden-a-universe-of-stars"
+   ],
+   "rows": [
+    [
+     "golden-a-universe-of-stars",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "f9af56e595c33837138f230207dcf8a6c33ed2ac8c3b3608db6860c402ec495f"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "three-stars-no-labels",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-which-is-bigger",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "sideways-at-one-luminosity",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-mass-and-light",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-trend-covers",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "two-red-stars",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-hot-and-faint",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "classify-from-position",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-who-lives-longer",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-bright-subset",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-a-survey-misses",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-color-is-enough-here",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-name-the-star",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-what-color-cannot-give",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "the-argument",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "three-stars-no-labels",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-which-is-bigger",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "sideways-at-one-luminosity",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-mass-and-light",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-trend-covers",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "two-red-stars",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-hot-and-faint",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "classify-from-position",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-who-lives-longer",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-bright-subset",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-a-survey-misses",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-color-is-enough-here",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-name-the-star",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-what-color-cannot-give",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "the-argument",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "f9af56e595c33837138f230207dcf8a6c33ed2ac8c3b3608db6860c402ec495f",
+     "i": [
+      "golden-a-universe-of-stars"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-a-universe-of-stars",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "three-stars-no-labels",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-which-is-bigger",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "sideways-at-one-luminosity",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-mass-and-light",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-trend-covers",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "two-red-stars",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-hot-and-faint",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "classify-from-position",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-who-lives-longer",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-bright-subset",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-a-survey-misses",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-color-is-enough-here",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-name-the-star",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-what-color-cannot-give",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "the-argument",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "three-stars-no-labels",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-which-is-bigger",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "sideways-at-one-luminosity",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-mass-and-light",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-trend-covers",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "two-red-stars",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-hot-and-faint",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "classify-from-position",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-who-lives-longer",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-bright-subset",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-a-survey-misses",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-color-is-enough-here",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-name-the-star",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "spectra-what-color-cannot-give",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "the-argument",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    }
+   ]
+  }
+ }
+}
