@@ -19,7 +19,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'collapse:star-to-hole',
     kind: 'collapse',
     file: 'js/physics.js',
-    line: 1087,
+    line: 1086,
     detail: Object.freeze({
       what: 'a star past the collapse mass is replaced by a black hole; the star it was is gone, along with its type, temperature and radius',
     }),
@@ -28,7 +28,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:planets',
     kind: 'cull',
     file: 'js/physics.js',
-    line: 1216,
+    line: 1215,
     detail: Object.freeze({
       list: 'planets',
       buffer: 20,
@@ -39,7 +39,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:stars',
     kind: 'cull',
     file: 'js/physics.js',
-    line: 1223,
+    line: 1222,
     detail: Object.freeze({
       list: 'stars',
       buffer: 20,
@@ -50,7 +50,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:gas_giants',
     kind: 'cull',
     file: 'js/physics.js',
-    line: 1230,
+    line: 1229,
     detail: Object.freeze({
       list: 'gas_giants',
       buffer: 20,
@@ -61,7 +61,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:neutron_stars',
     kind: 'cull',
     file: 'js/physics.js',
-    line: 1237,
+    line: 1236,
     detail: Object.freeze({
       list: 'neutron_stars',
       buffer: 20,
@@ -72,7 +72,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:white_dwarfs',
     kind: 'cull',
     file: 'js/physics.js',
-    line: 1244,
+    line: 1243,
     detail: Object.freeze({
       list: 'white_dwarfs',
       buffer: 20,
@@ -83,7 +83,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:galaxies',
     kind: 'cull',
     file: 'js/physics.js',
-    line: 1251,
+    line: 1250,
     detail: Object.freeze({
       list: 'galaxies',
       buffer: 20,
@@ -94,7 +94,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:bh_list',
     kind: 'cull',
     file: 'js/physics.js',
-    line: 1258,
+    line: 1257,
     detail: Object.freeze({
       list: 'bh_list',
       buffer: 50,
@@ -105,7 +105,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:asteroids',
     kind: 'cull',
     file: 'js/physics.js',
-    line: 1267,
+    line: 1266,
     detail: Object.freeze({
       list: 'asteroids',
       buffer: 5,
@@ -116,7 +116,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:comets',
     kind: 'cull',
     file: 'js/physics.js',
-    line: 1271,
+    line: 1270,
     detail: Object.freeze({
       list: 'comets',
       buffer: 20,
@@ -127,7 +127,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:debris',
     kind: 'cull',
     file: 'js/physics.js',
-    line: 1275,
+    line: 1274,
     detail: Object.freeze({
       list: 'debris',
       buffer: 3,
@@ -138,7 +138,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:accretion_disk_particles',
     kind: 'cull',
     file: 'js/physics.js',
-    line: 1279,
+    line: 1278,
     detail: Object.freeze({
       list: 'accretion_disk_particles',
       buffer: 2,
@@ -149,7 +149,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'fragment:rocky-collision',
     kind: 'fragment',
     file: 'js/physics.js',
-    line: 2521,
+    line: 2520,
     detail: Object.freeze({
       draws: 4,
       what: 'a rocky collision destroys both bodies and scatters debris whose directions, speeds and offsets come from 4 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed',

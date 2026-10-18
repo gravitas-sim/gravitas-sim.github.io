@@ -176,7 +176,7 @@ their ceilings:
 | `js/i18n/es.deferred.js` | 4,092 | 4,092 |
 | `js/i18n/en.deferred.js` | 3,845 | 3,845 |
 | `js/render.js` | 3,028 | 3,028 |
-| `js/physics.js` | 2,952 | 2,951 |
+| `js/physics.js` | 2,951 | 2,951 |
 | `js/world/build.js` | 2,599 | 2,599 |
 <!--/fact-block-->
 
