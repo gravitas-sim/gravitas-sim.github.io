@@ -1,0 +1,58 @@
+[
+ {
+  "role": "first",
+  "sid": "eight-minutes-of-arc",
+  "position": [
+   1,
+   4
+  ],
+  "title": "Orbital motion: why do planets change speed?",
+  "subtitle": "4 steps of Kepler's Laws (23 in the full investigation)",
+  "body": "<p class=\"inv-step-count\">Step 1 of 4 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Eight minutes of arc</h3><div class=\"inv-step-body\"><p>For most of recorded history orbits were circles. When observations disagreed, astronomers added more circles: epicycles: until the model fit. Copernicus moved the Sun to the center but kept the circles, and his model was no more accurate than the one it replaced.</p><p>What broke the circle was data. Tycho Brahe spent two decades measuring planetary positions to about one arcminute, the limit of what is possible without a telescope. When Johannes Kepler tried to fit Tycho's observations of Mars to a circular orbit, the best fit he could manage was off by eight arcminutes. He could have called that observational error and moved on. Instead he trusted Tycho's measurements over two thousand years of assumption, and spent years working out what curve would fit.</p><p>The answer was an ellipse, with the Sun not at its center.</p></div><figure class=\"inv-quote\"><blockquote>Because these eight minutes could not be ignored, they alone have led the way toward reforming the whole of astronomy.</blockquote><figcaption>Johannes Kepler, Astronomia Nova, 1609</figcaption></figure><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> While an investigation is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "graded",
+  "sid": "where-does-it-move-fastest",
+  "position": [
+   2,
+   4
+  ],
+  "title": "Orbital motion: why do planets change speed?",
+  "subtitle": "4 steps of Kepler's Laws (23 in the full investigation)",
+  "body": "<p class=\"inv-step-count\">Step 2 of 4 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Where does it move fastest?</h3><div class=\"inv-step-body\"><p>Kepler's second law says a line drawn from the star to the planet sweeps out equal areas in equal times. Think about what that forces the speed to do at different points on the orbit.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The eccentric planet moves fastest…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>at its closest approach to the star</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>at its furthest point from the star</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>at the same speed everywhere</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>halfway between the two</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "marked",
+  "sid": "where-does-it-move-fastest",
+  "position": [
+   2,
+   4
+  ],
+  "title": "Orbital motion: why do planets change speed?",
+  "subtitle": "4 steps of Kepler's Laws (23 in the full investigation)",
+  "body": "<p class=\"inv-step-count\">Step 2 of 4 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Where does it move fastest?</h3><div class=\"inv-step-body\"><p>Kepler's second law says a line drawn from the star to the planet sweeps out equal areas in equal times. Think about what that forces the speed to do at different points on the orbit.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The eccentric planet moves fastest…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>at its closest approach to the star</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>at its furthest point from the star</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>at the same speed everywhere</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>halfway between the two</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Watch it happen”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "role": "last",
+  "sid": "equal-areas-however-you-slice",
+  "position": [
+   4,
+   4
+  ],
+  "title": "Orbital motion: why do planets change speed?",
+  "subtitle": "4 steps of Kepler's Laws (23 in the full investigation)",
+  "body": "<p class=\"inv-step-count\">Step 4 of 4 <span class=\"inv-step-kind\">explore</span></p><h3 class=\"inv-step-title\">Equal areas, however you slice it</h3><div class=\"inv-step-body\"><p>The orbit on screen is cut into equal-time slices, and every slice is labeled with its share of the total area. Change how many slices there are and watch what happens to those numbers.</p><p>With 5 slices each is 20%. With 12 each is 8.3%. The count is arbitrary; what is not arbitrary is that they are always equal. The planet takes exactly the same time to travel along each slice's stretch of orbit, whether that stretch is a short fast dash past the star or a long slow crawl across the far side.</p></div><div class=\"inv-wedge-control\"><label class=\"inv-ecc-row\" for=\"invWedgeCount\"><span>Slices</span><input type=\"range\" id=\"invWedgeCount\" data-wedges=\"\" min=\"3\" max=\"16\" step=\"1\" value=\"8\" style=\"--range-fill: 38.46153846153847%;\"><output data-wedges-out=\"\">8</output></label><p class=\"inv-wedge-readout\" data-wedges-readout=\"\"></p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> The wedge time below is the real answer to \"equal areas in equal times\": it is the same number for every wedge because they all represent the same interval.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

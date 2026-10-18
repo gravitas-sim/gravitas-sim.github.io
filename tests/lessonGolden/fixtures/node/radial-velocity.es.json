@@ -1,0 +1,1620 @@
+{
+ "id": "radial-velocity",
+ "locale": "es",
+ "title": "Encontrar planetas por su tirón",
+ "steps": 38,
+ "depths": [
+  [
+   "core",
+   38
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "how-does-an-invisible-planet",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "which-one-moves",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "make-the-planet-heavier",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "which-way-is-it-going",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "reading-the-curve",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-would-make-k-bigger",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "weigh-hd-209458-b",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.08,
+   "grades": [
+    [
+     "0,69",
+     true,
+     "correct",
+     0.69,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,73",
+     true,
+     "correct",
+     0.73,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,93",
+     false,
+     "incorrect",
+     0.93,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,69 M_J",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "unknownUnit"
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "now-tilt-the-whole-system",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-a-transit-adds",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "a-face-on-system",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "two-methods-opposite-weaknesses",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "move-the-system-further-away",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "different-methods-different-planets",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "how-dense-is-it",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.08,
+   "grades": [
+    [
+     "0,33",
+     true,
+     "correct",
+     0.33,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,37",
+     true,
+     "correct",
+     0.37,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,57",
+     false,
+     "incorrect",
+     0.57,
+     null,
+     false,
+     null
+    ],
+    [
+     "0,33 g/cm³",
+     true,
+     "correct",
+     0.33,
+     "g/cm3",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "where-does-hd-209458-b",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "which-is-the-strongest-candidate",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-would-you-still-want",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "the-point-of-all-this",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "radial-velocity",
+   "stepSid": "what-you-can-now-say",
+   "responses": {
+    "radial-velocity:how-does-an-invisible-planet": 1,
+    "radial-velocity:which-one-moves": 1,
+    "radial-velocity:make-the-planet-heavier": 2,
+    "radial-velocity:which-way-is-it-going": 1,
+    "radial-velocity:reading-the-curve": 0,
+    "radial-velocity:what-would-make-k-bigger": 2,
+    "radial-velocity:weigh-hd-209458-b": "0,69",
+    "radial-velocity:weigh-hd-209458-b:locale": "es",
+    "radial-velocity:now-tilt-the-whole-system": 1,
+    "radial-velocity:what-a-transit-adds": 1,
+    "radial-velocity:a-face-on-system": 1,
+    "radial-velocity:two-methods-opposite-weaknesses": 1,
+    "radial-velocity:move-the-system-further-away": 2,
+    "radial-velocity:different-methods-different-planets": 0,
+    "radial-velocity:how-dense-is-it": "0,33",
+    "radial-velocity:how-dense-is-it:locale": "es",
+    "radial-velocity:where-does-hd-209458-b": 1,
+    "radial-velocity:which-is-the-strongest-candidate": 0,
+    "radial-velocity:what-would-you-still-want": "A fixed sentence for the golden.",
+    "radial-velocity:the-point-of-all-this": 1
+   },
+   "attempts": {
+    "radial-velocity:how-does-an-invisible-planet": 1,
+    "radial-velocity:which-one-moves": 1,
+    "radial-velocity:make-the-planet-heavier": 1,
+    "radial-velocity:which-way-is-it-going": 1,
+    "radial-velocity:reading-the-curve": 1,
+    "radial-velocity:what-would-make-k-bigger": 1,
+    "radial-velocity:weigh-hd-209458-b": 1,
+    "radial-velocity:now-tilt-the-whole-system": 1,
+    "radial-velocity:what-a-transit-adds": 1,
+    "radial-velocity:a-face-on-system": 1,
+    "radial-velocity:two-methods-opposite-weaknesses": 1,
+    "radial-velocity:move-the-system-further-away": 1,
+    "radial-velocity:different-methods-different-planets": 1,
+    "radial-velocity:how-dense-is-it": 1,
+    "radial-velocity:where-does-hd-209458-b": 1,
+    "radial-velocity:which-is-the-strongest-candidate": 1,
+    "radial-velocity:the-point-of-all-this": 1
+   },
+   "visited": [
+    "the-planet-you-already-measured",
+    "how-does-an-invisible-planet",
+    "which-one-moves",
+    "both-of-them-go-round",
+    "make-the-planet-heavier",
+    "watch-it-grow",
+    "light-carries-the-answer",
+    "which-way-is-it-going",
+    "toward-away-toward-again",
+    "open-the-real-instrument",
+    "reading-the-curve",
+    "measure-the-period",
+    "the-semi-amplitude-k",
+    "read-k-off-the-panel",
+    "what-would-make-k-bigger",
+    "one-thing-at-a-time",
+    "weigh-hd-209458-b",
+    "now-tilt-the-whole-system",
+    "the-same-planet-four-viewing",
+    "m-sin-i",
+    "what-a-transit-adds",
+    "a-face-on-system",
+    "astrometry",
+    "tilt-it-again-and-watch",
+    "two-methods-opposite-weaknesses",
+    "all-three-at-once",
+    "move-the-system-further-away",
+    "distance-and-orbit-size",
+    "different-methods-different-planets",
+    "bring-the-transit-back",
+    "characterize-the-planet",
+    "how-dense-is-it",
+    "where-does-hd-209458-b",
+    "three-candidates",
+    "which-is-the-strongest-candidate",
+    "what-would-you-still-want",
+    "the-point-of-all-this",
+    "what-you-can-now-say"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "radial-velocity:how-does-an-invisible-planet": 1,
+    "radial-velocity:which-one-moves": 1,
+    "radial-velocity:make-the-planet-heavier": 2,
+    "radial-velocity:which-way-is-it-going": 1,
+    "radial-velocity:reading-the-curve": 0,
+    "radial-velocity:what-would-make-k-bigger": 2,
+    "radial-velocity:weigh-hd-209458-b": "0,69",
+    "radial-velocity:weigh-hd-209458-b:locale": "es",
+    "radial-velocity:now-tilt-the-whole-system": 1,
+    "radial-velocity:what-a-transit-adds": 1,
+    "radial-velocity:a-face-on-system": 1,
+    "radial-velocity:two-methods-opposite-weaknesses": 1,
+    "radial-velocity:move-the-system-further-away": 2,
+    "radial-velocity:different-methods-different-planets": 0,
+    "radial-velocity:how-dense-is-it": "0,33",
+    "radial-velocity:how-dense-is-it:locale": "es",
+    "radial-velocity:where-does-hd-209458-b": 1,
+    "radial-velocity:which-is-the-strongest-candidate": 0,
+    "radial-velocity:what-would-you-still-want": "A fixed sentence for the golden.",
+    "radial-velocity:the-point-of-all-this": 1
+   },
+   "attempts": {
+    "radial-velocity:how-does-an-invisible-planet": 1,
+    "radial-velocity:which-one-moves": 1,
+    "radial-velocity:make-the-planet-heavier": 1,
+    "radial-velocity:which-way-is-it-going": 1,
+    "radial-velocity:reading-the-curve": 1,
+    "radial-velocity:what-would-make-k-bigger": 1,
+    "radial-velocity:weigh-hd-209458-b": 1,
+    "radial-velocity:now-tilt-the-whole-system": 1,
+    "radial-velocity:what-a-transit-adds": 1,
+    "radial-velocity:a-face-on-system": 1,
+    "radial-velocity:two-methods-opposite-weaknesses": 1,
+    "radial-velocity:move-the-system-further-away": 1,
+    "radial-velocity:different-methods-different-planets": 1,
+    "radial-velocity:how-dense-is-it": 1,
+    "radial-velocity:where-does-hd-209458-b": 1,
+    "radial-velocity:which-is-the-strongest-candidate": 1,
+    "radial-velocity:the-point-of-all-this": 1
+   },
+   "visited": [
+    "a-face-on-system",
+    "all-three-at-once",
+    "astrometry",
+    "both-of-them-go-round",
+    "bring-the-transit-back",
+    "characterize-the-planet",
+    "different-methods-different-planets",
+    "distance-and-orbit-size",
+    "how-dense-is-it",
+    "how-does-an-invisible-planet",
+    "light-carries-the-answer",
+    "m-sin-i",
+    "make-the-planet-heavier",
+    "measure-the-period",
+    "move-the-system-further-away",
+    "now-tilt-the-whole-system",
+    "one-thing-at-a-time",
+    "open-the-real-instrument",
+    "read-k-off-the-panel",
+    "reading-the-curve",
+    "the-planet-you-already-measured",
+    "the-point-of-all-this",
+    "the-same-planet-four-viewing",
+    "the-semi-amplitude-k",
+    "three-candidates",
+    "tilt-it-again-and-watch",
+    "toward-away-toward-again",
+    "two-methods-opposite-weaknesses",
+    "watch-it-grow",
+    "weigh-hd-209458-b",
+    "what-a-transit-adds",
+    "what-would-make-k-bigger",
+    "what-would-you-still-want",
+    "what-you-can-now-say",
+    "where-does-hd-209458-b",
+    "which-is-the-strongest-candidate",
+    "which-one-moves",
+    "which-way-is-it-going"
+   ],
+   "stepSid": "what-you-can-now-say",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "radial-velocity",
+    "title": "Encontrar planetas por su tirón",
+    "stepCount": 38
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-can-now-say",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "the-planet-you-already-measured",
+     "how-does-an-invisible-planet",
+     "which-one-moves",
+     "both-of-them-go-round",
+     "make-the-planet-heavier",
+     "watch-it-grow",
+     "light-carries-the-answer",
+     "which-way-is-it-going",
+     "toward-away-toward-again",
+     "open-the-real-instrument",
+     "reading-the-curve",
+     "measure-the-period",
+     "the-semi-amplitude-k",
+     "read-k-off-the-panel",
+     "what-would-make-k-bigger",
+     "one-thing-at-a-time",
+     "weigh-hd-209458-b",
+     "now-tilt-the-whole-system",
+     "the-same-planet-four-viewing",
+     "m-sin-i",
+     "what-a-transit-adds",
+     "a-face-on-system",
+     "astrometry",
+     "tilt-it-again-and-watch",
+     "two-methods-opposite-weaknesses",
+     "all-three-at-once",
+     "move-the-system-further-away",
+     "distance-and-orbit-size",
+     "different-methods-different-planets",
+     "bring-the-transit-back",
+     "characterize-the-planet",
+     "how-dense-is-it",
+     "where-does-hd-209458-b",
+     "three-candidates",
+     "which-is-the-strongest-candidate",
+     "what-would-you-still-want",
+     "the-point-of-all-this",
+     "what-you-can-now-say"
+    ],
+    "responses": {
+     "radial-velocity:how-does-an-invisible-planet": 1,
+     "radial-velocity:which-one-moves": 1,
+     "radial-velocity:make-the-planet-heavier": 2,
+     "radial-velocity:which-way-is-it-going": 1,
+     "radial-velocity:reading-the-curve": 0,
+     "radial-velocity:what-would-make-k-bigger": 2,
+     "radial-velocity:weigh-hd-209458-b": "0,69",
+     "radial-velocity:weigh-hd-209458-b:locale": "es",
+     "radial-velocity:now-tilt-the-whole-system": 1,
+     "radial-velocity:what-a-transit-adds": 1,
+     "radial-velocity:a-face-on-system": 1,
+     "radial-velocity:two-methods-opposite-weaknesses": 1,
+     "radial-velocity:move-the-system-further-away": 2,
+     "radial-velocity:different-methods-different-planets": 0,
+     "radial-velocity:how-dense-is-it": "0,33",
+     "radial-velocity:how-dense-is-it:locale": "es",
+     "radial-velocity:where-does-hd-209458-b": 1,
+     "radial-velocity:which-is-the-strongest-candidate": 0,
+     "radial-velocity:what-would-you-still-want": "A fixed sentence for the golden.",
+     "radial-velocity:the-point-of-all-this": 1
+    },
+    "attempts": {
+     "radial-velocity:how-does-an-invisible-planet": 1,
+     "radial-velocity:which-one-moves": 1,
+     "radial-velocity:make-the-planet-heavier": 1,
+     "radial-velocity:which-way-is-it-going": 1,
+     "radial-velocity:reading-the-curve": 1,
+     "radial-velocity:what-would-make-k-bigger": 1,
+     "radial-velocity:weigh-hd-209458-b": 1,
+     "radial-velocity:now-tilt-the-whole-system": 1,
+     "radial-velocity:what-a-transit-adds": 1,
+     "radial-velocity:a-face-on-system": 1,
+     "radial-velocity:two-methods-opposite-weaknesses": 1,
+     "radial-velocity:move-the-system-further-away": 1,
+     "radial-velocity:different-methods-different-planets": 1,
+     "radial-velocity:how-dense-is-it": 1,
+     "radial-velocity:where-does-hd-209458-b": 1,
+     "radial-velocity:which-is-the-strongest-candidate": 1,
+     "radial-velocity:the-point-of-all-this": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "the-planet-you-already-measured",
+     "fingerprint": "read|-|-|Exoplanet Characterization Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "how-does-an-invisible-planet",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "which-one-moves",
+     "fingerprint": "predict|-|-|Exoplanet Characterization Lab|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 3,
+     "sid": "both-of-them-go-round",
+     "fingerprint": "explore|-|reflex-motion|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "make-the-planet-heavier",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "watch-it-grow",
+     "fingerprint": "explore|-|reflex-motion|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "light-carries-the-answer",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "which-way-is-it-going",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 8,
+     "sid": "toward-away-toward-again",
+     "fingerprint": "explore|-|rv-observer|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "open-the-real-instrument",
+     "fingerprint": "explore|-|-|Exoplanet Characterization Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "reading-the-curve",
+     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "measure-the-period",
+     "fingerprint": "measure|-|-|-|period|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "the-semi-amplitude-k",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 13,
+     "sid": "read-k-off-the-panel",
+     "fingerprint": "measure|-|-|Exoplanet Characterization Lab|k|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "what-would-make-k-bigger",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 15,
+     "sid": "one-thing-at-a-time",
+     "fingerprint": "explore|-|rv-mass|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "weigh-hd-209458-b",
+     "fingerprint": "question|numeric|rv-inclination|-|-|-|a=0.69;t=0.08;u=M_J",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "now-tilt-the-whole-system",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 18,
+     "sid": "the-same-planet-four-viewing",
+     "fingerprint": "explore|-|rv-inclination|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 19,
+     "sid": "m-sin-i",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 20,
+     "sid": "what-a-transit-adds",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 21,
+     "sid": "a-face-on-system",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 22,
+     "sid": "astrometry",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 23,
+     "sid": "tilt-it-again-and-watch",
+     "fingerprint": "explore|-|astrometry-signature|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 24,
+     "sid": "two-methods-opposite-weaknesses",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 25,
+     "sid": "all-three-at-once",
+     "fingerprint": "explore|-|method-comparison|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 26,
+     "sid": "move-the-system-further-away",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 27,
+     "sid": "distance-and-orbit-size",
+     "fingerprint": "explore|-|astrometry-signature|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 28,
+     "sid": "different-methods-different-planets",
+     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 29,
+     "sid": "bring-the-transit-back",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 30,
+     "sid": "characterize-the-planet",
+     "fingerprint": "explore|-|planet-characterization|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 31,
+     "sid": "how-dense-is-it",
+     "fingerprint": "question|numeric|-|-|-|-|a=0.33;t=0.08;u=g/cm³",
+     "optionCount": null
+    },
+    {
+     "index": 32,
+     "sid": "where-does-hd-209458-b",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 33,
+     "sid": "three-candidates",
+     "fingerprint": "read|-|planet-characterization|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 34,
+     "sid": "which-is-the-strongest-candidate",
+     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 35,
+     "sid": "what-would-you-still-want",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 36,
+     "sid": "the-point-of-all-this",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 37,
+     "sid": "what-you-can-now-say",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "radial-velocity:how-does-an-invisible-planet": 1,
+    "radial-velocity:which-one-moves": 1,
+    "radial-velocity:make-the-planet-heavier": 2,
+    "radial-velocity:which-way-is-it-going": 1,
+    "radial-velocity:reading-the-curve": 0,
+    "radial-velocity:what-would-make-k-bigger": 2,
+    "radial-velocity:weigh-hd-209458-b": "0,69",
+    "radial-velocity:weigh-hd-209458-b:locale": "es",
+    "radial-velocity:now-tilt-the-whole-system": 1,
+    "radial-velocity:what-a-transit-adds": 1,
+    "radial-velocity:a-face-on-system": 1,
+    "radial-velocity:two-methods-opposite-weaknesses": 1,
+    "radial-velocity:move-the-system-further-away": 2,
+    "radial-velocity:different-methods-different-planets": 0,
+    "radial-velocity:how-dense-is-it": "0,33",
+    "radial-velocity:how-dense-is-it:locale": "es",
+    "radial-velocity:where-does-hd-209458-b": 1,
+    "radial-velocity:which-is-the-strongest-candidate": 0,
+    "radial-velocity:what-would-you-still-want": "A fixed sentence for the golden.",
+    "radial-velocity:the-point-of-all-this": 1
+   },
+   "attempts": {
+    "radial-velocity:how-does-an-invisible-planet": 1,
+    "radial-velocity:which-one-moves": 1,
+    "radial-velocity:make-the-planet-heavier": 1,
+    "radial-velocity:which-way-is-it-going": 1,
+    "radial-velocity:reading-the-curve": 1,
+    "radial-velocity:what-would-make-k-bigger": 1,
+    "radial-velocity:weigh-hd-209458-b": 1,
+    "radial-velocity:now-tilt-the-whole-system": 1,
+    "radial-velocity:what-a-transit-adds": 1,
+    "radial-velocity:a-face-on-system": 1,
+    "radial-velocity:two-methods-opposite-weaknesses": 1,
+    "radial-velocity:move-the-system-further-away": 1,
+    "radial-velocity:different-methods-different-planets": 1,
+    "radial-velocity:how-dense-is-it": 1,
+    "radial-velocity:where-does-hd-209458-b": 1,
+    "radial-velocity:which-is-the-strongest-candidate": 1,
+    "radial-velocity:the-point-of-all-this": 1
+   },
+   "visited": [
+    "a-face-on-system",
+    "all-three-at-once",
+    "astrometry",
+    "both-of-them-go-round",
+    "bring-the-transit-back",
+    "characterize-the-planet",
+    "different-methods-different-planets",
+    "distance-and-orbit-size",
+    "how-dense-is-it",
+    "how-does-an-invisible-planet",
+    "light-carries-the-answer",
+    "m-sin-i",
+    "make-the-planet-heavier",
+    "measure-the-period",
+    "move-the-system-further-away",
+    "now-tilt-the-whole-system",
+    "one-thing-at-a-time",
+    "open-the-real-instrument",
+    "read-k-off-the-panel",
+    "reading-the-curve",
+    "the-planet-you-already-measured",
+    "the-point-of-all-this",
+    "the-same-planet-four-viewing",
+    "the-semi-amplitude-k",
+    "three-candidates",
+    "tilt-it-again-and-watch",
+    "toward-away-toward-again",
+    "two-methods-opposite-weaknesses",
+    "watch-it-grow",
+    "weigh-hd-209458-b",
+    "what-a-transit-adds",
+    "what-would-make-k-bigger",
+    "what-would-you-still-want",
+    "what-you-can-now-say",
+    "where-does-hd-209458-b",
+    "which-is-the-strongest-candidate",
+    "which-one-moves",
+    "which-way-is-it-going"
+   ],
+   "stepIndex": 37,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-radial-velocity",
+  "record": {
+   "ids": [
+    "golden-radial-velocity"
+   ],
+   "rows": [
+    [
+     "golden-radial-velocity",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "ce37073136f33bb90572826c83b80f4e6925b75f4c0a9c2aed0d2e8a0d5d2927"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "how-does-an-invisible-planet",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-one-moves",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "make-the-planet-heavier",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-way-is-it-going",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-curve",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-make-k-bigger",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-hd-209458-b",
+     "value": "0,69",
+     "locale": "es"
+    },
+    {
+     "sid": "now-tilt-the-whole-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-a-transit-adds",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "a-face-on-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "two-methods-opposite-weaknesses",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "move-the-system-further-away",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "different-methods-different-planets",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "how-dense-is-it",
+     "value": "0,33",
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-hd-209458-b",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-is-the-strongest-candidate",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-you-still-want",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "the-point-of-all-this",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "how-does-an-invisible-planet",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-one-moves",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "make-the-planet-heavier",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-way-is-it-going",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-curve",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-make-k-bigger",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-hd-209458-b",
+     "value": "0,69",
+     "locale": "es"
+    },
+    {
+     "sid": "now-tilt-the-whole-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-a-transit-adds",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "a-face-on-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "two-methods-opposite-weaknesses",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "move-the-system-further-away",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "different-methods-different-planets",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "how-dense-is-it",
+     "value": "0,33",
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-hd-209458-b",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-is-the-strongest-candidate",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-you-still-want",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "the-point-of-all-this",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "ce37073136f33bb90572826c83b80f4e6925b75f4c0a9c2aed0d2e8a0d5d2927",
+     "i": [
+      "golden-radial-velocity"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-radial-velocity",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "how-does-an-invisible-planet",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-one-moves",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "make-the-planet-heavier",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-way-is-it-going",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-curve",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-make-k-bigger",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-hd-209458-b",
+     "value": "0,69",
+     "locale": "es"
+    },
+    {
+     "sid": "now-tilt-the-whole-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-a-transit-adds",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "a-face-on-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "two-methods-opposite-weaknesses",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "move-the-system-further-away",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "different-methods-different-planets",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "how-dense-is-it",
+     "value": "0,33",
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-hd-209458-b",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-is-the-strongest-candidate",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-you-still-want",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "the-point-of-all-this",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "how-does-an-invisible-planet",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-one-moves",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "make-the-planet-heavier",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-way-is-it-going",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "reading-the-curve",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-make-k-bigger",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "weigh-hd-209458-b",
+     "value": "0,69",
+     "locale": "es"
+    },
+    {
+     "sid": "now-tilt-the-whole-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-a-transit-adds",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "a-face-on-system",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "two-methods-opposite-weaknesses",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "move-the-system-further-away",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "different-methods-different-planets",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "how-dense-is-it",
+     "value": "0,33",
+     "locale": "es"
+    },
+    {
+     "sid": "where-does-hd-209458-b",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "which-is-the-strongest-candidate",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "what-would-you-still-want",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "the-point-of-all-this",
+     "value": 1,
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

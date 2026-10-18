@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "you-cannot-put-a-star",
+  "position": [
+   1,
+   36
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 36 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">No puedes poner una estrella en una balanza</h3><div class=\"inv-step-body\"><p>Una báscula de baño funciona empujando hacia arriba. Súbete a ella y mide con cuánta fuerza te está tirando la Tierra hacia abajo. No existe ninguna versión de eso para una estrella. Las estrellas son enormes, son inalcanzables, y la más cercana después del Sol está a cuarenta mil años a la velocidad de una nave espacial.</p><p>Y sin embargo, abre cualquier libro de texto de astronomía y te dirá la masa de decenas de estrellas, con dos decimales. Alguien las midió. ¿Cómo?</p><p>La respuesta es lo último que te mostró la investigación de Kepler. Kepler descubrió que el tamaño y la duración de una órbita van juntos. Newton descubrió que la <em>masa</em> de lo que tira también forma parte de esa relación, y una vez que sabes eso, una órbita se convierte en un instrumento de medida.</p><p>Esta investigación trata de apuntar ese instrumento a un par de estrellas.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Aquí no hace falta álgebra. Leerás dos números de una pantalla y harás una división.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "how-would-you-do-it",
+  "position": [
+   2,
+   36
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 36 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Cómo lo harías tú?</h3><div class=\"inv-step-body\"><p>Antes de seguir, piensa qué podría funcionar. Tienes un telescopio. No puedes viajar hasta allí, no puedes tocarla, y no puedes esperar mucho tiempo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿Cómo podría un astrónomo medir la masa de una estrella?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Medir cuánto brilla</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Medir cuán grande se ve</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Observar cómo su gravedad mueve otra cosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>No hay manera de medir la masa de una estrella</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "how-would-you-do-it",
+  "position": [
+   2,
+   36
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 36 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Cómo lo harías tú?</h3><div class=\"inv-step-body\"><p>Antes de seguir, piensa qué podría funcionar. Tienes un telescopio. No puedes viajar hasta allí, no puedes tocarla, y no puedes esperar mucho tiempo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿Cómo podría un astrónomo medir la masa de una estrella?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Medir cuánto brilla</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Medir cuán grande se ve</span></button><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Observar cómo su gravedad mueve otra cosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>No hay manera de medir la masa de una estrella</span></button></div><p class=\"inv-because\">La gravedad es la única de estas opciones que depende de la masa. El brillo y el tamaño están relacionados con la masa en las estrellas ordinarias, pero solo de manera aproximada, y solo porque alguien midió antes las masas de otra forma. Observar cómo una estrella tira de otra cosa es la medida directa, y todo lo demás se calibra contra ella.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-can-now-say",
+  "position": [
+   36,
+   36
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 36 de 36 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que ahora puedes decir</h3><div class=\"inv-step-body\"><p>En palabras corrientes, sin memorizar nada:</p><p><strong>Cuando dos estrellas se orbitan mutuamente, ambas se mueven alrededor de un punto de equilibrio compartido. Cómo de grande es su órbita y cuánto tarda nos dicen su masa combinada. Lo lejos que está cada estrella del punto de equilibrio nos dice cómo se reparte esa masa entre ellas.</strong></p><p>Por eso importan tanto las estrellas binarias. Son la única manera directa que tenemos de pesar una estrella, y casi todo lo demás que decimos saber sobre masas estelares descansa en ellas. Cuando un libro de texto dice que el Sol es una estrella corriente, o que una estrella diez veces la masa del Sol se consume en unas decenas de millones de años, los números que hay detrás de esas afirmaciones se calibraron con pares de estrellas medidos exactamente como acabas de hacerlo tú.</p><p>Alrededor de la mitad de las estrellas del cielo tienen compañera. Cada una de ellas anuncia calladamente su propia masa a quien observe el tiempo suficiente.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Bessel encontró Sirio B al advertir un bamboleo, décadas antes de que nadie la viera. Medir lo que no puedes ver observando lo que le hace a algo que sí puedes ver es uno de los trucos más antiguos de esta materia y sigue siendo de los mejores.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "you-cannot-put-a-star",
+  "position": [
+   1,
+   38
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 38 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">No puedes poner una estrella en una balanza</h3><div class=\"inv-step-body\"><p>Una báscula de baño funciona empujando hacia arriba. Súbete a ella y mide con cuánta fuerza te está tirando la Tierra hacia abajo. No existe ninguna versión de eso para una estrella. Las estrellas son enormes, son inalcanzables, y la más cercana después del Sol está a cuarenta mil años a la velocidad de una nave espacial.</p><p>Y sin embargo, abre cualquier libro de texto de astronomía y te dirá la masa de decenas de estrellas, con dos decimales. Alguien las midió. ¿Cómo?</p><p>La respuesta es lo último que te mostró la investigación de Kepler. Kepler descubrió que el tamaño y la duración de una órbita van juntos. Newton descubrió que la <em>masa</em> de lo que tira también forma parte de esa relación, y una vez que sabes eso, una órbita se convierte en un instrumento de medida.</p><p>Esta investigación trata de apuntar ese instrumento a un par de estrellas.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Aquí no hace falta álgebra. Leerás dos números de una pantalla y harás una división.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "how-would-you-do-it",
+  "position": [
+   2,
+   38
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 38 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Cómo lo harías tú?</h3><div class=\"inv-step-body\"><p>Antes de seguir, piensa qué podría funcionar. Tienes un telescopio. No puedes viajar hasta allí, no puedes tocarla, y no puedes esperar mucho tiempo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿Cómo podría un astrónomo medir la masa de una estrella?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Medir cuánto brilla</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Medir cuán grande se ve</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Observar cómo su gravedad mueve otra cosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>No hay manera de medir la masa de una estrella</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "how-would-you-do-it",
+  "position": [
+   2,
+   38
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 38 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Cómo lo harías tú?</h3><div class=\"inv-step-body\"><p>Antes de seguir, piensa qué podría funcionar. Tienes un telescopio. No puedes viajar hasta allí, no puedes tocarla, y no puedes esperar mucho tiempo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿Cómo podría un astrónomo medir la masa de una estrella?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Medir cuánto brilla</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Medir cuán grande se ve</span></button><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Observar cómo su gravedad mueve otra cosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>No hay manera de medir la masa de una estrella</span></button></div><p class=\"inv-because\">La gravedad es la única de estas opciones que depende de la masa. El brillo y el tamaño están relacionados con la masa en las estrellas ordinarias, pero solo de manera aproximada, y solo porque alguien midió antes las masas de otra forma. Observar cómo una estrella tira de otra cosa es la medida directa, y todo lo demás se calibra contra ella.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-you-can-now-say",
+  "position": [
+   38,
+   38
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 38 de 38 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que ahora puedes decir</h3><div class=\"inv-step-body\"><p>En palabras corrientes, sin memorizar nada:</p><p><strong>Cuando dos estrellas se orbitan mutuamente, ambas se mueven alrededor de un punto de equilibrio compartido. Cómo de grande es su órbita y cuánto tarda nos dicen su masa combinada. Lo lejos que está cada estrella del punto de equilibrio nos dice cómo se reparte esa masa entre ellas.</strong></p><p>Por eso importan tanto las estrellas binarias. Son la única manera directa que tenemos de pesar una estrella, y casi todo lo demás que decimos saber sobre masas estelares descansa en ellas. Cuando un libro de texto dice que el Sol es una estrella corriente, o que una estrella diez veces la masa del Sol se consume en unas decenas de millones de años, los números que hay detrás de esas afirmaciones se calibraron con pares de estrellas medidos exactamente como acabas de hacerlo tú.</p><p>Alrededor de la mitad de las estrellas del cielo tienen compañera. Cada una de ellas anuncia calladamente su propia masa a quien observe el tiempo suficiente.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Bessel encontró Sirio B al advertir un bamboleo, décadas antes de que nadie la viera. Medir lo que no puedes ver observando lo que le hace a algo que sí puedes ver es uno de los trucos más antiguos de esta materia y sigue siendo de los mejores.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Cuantitativo"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "you-cannot-put-a-star",
+  "position": [
+   1,
+   40
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 40 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">No puedes poner una estrella en una balanza</h3><div class=\"inv-step-body\"><p>Una báscula de baño funciona empujando hacia arriba. Súbete a ella y mide con cuánta fuerza te está tirando la Tierra hacia abajo. No existe ninguna versión de eso para una estrella. Las estrellas son enormes, son inalcanzables, y la más cercana después del Sol está a cuarenta mil años a la velocidad de una nave espacial.</p><p>Y sin embargo, abre cualquier libro de texto de astronomía y te dirá la masa de decenas de estrellas, con dos decimales. Alguien las midió. ¿Cómo?</p><p>La respuesta es lo último que te mostró la investigación de Kepler. Kepler descubrió que el tamaño y la duración de una órbita van juntos. Newton descubrió que la <em>masa</em> de lo que tira también forma parte de esa relación, y una vez que sabes eso, una órbita se convierte en un instrumento de medida.</p><p>Esta investigación trata de apuntar ese instrumento a un par de estrellas.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Aquí no hace falta álgebra. Leerás dos números de una pantalla y harás una división.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "how-would-you-do-it",
+  "position": [
+   2,
+   40
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 40 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Cómo lo harías tú?</h3><div class=\"inv-step-body\"><p>Antes de seguir, piensa qué podría funcionar. Tienes un telescopio. No puedes viajar hasta allí, no puedes tocarla, y no puedes esperar mucho tiempo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿Cómo podría un astrónomo medir la masa de una estrella?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Medir cuánto brilla</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Medir cuán grande se ve</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Observar cómo su gravedad mueve otra cosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>No hay manera de medir la masa de una estrella</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "how-would-you-do-it",
+  "position": [
+   2,
+   40
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 40 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">¿Cómo lo harías tú?</h3><div class=\"inv-step-body\"><p>Antes de seguir, piensa qué podría funcionar. Tienes un telescopio. No puedes viajar hasta allí, no puedes tocarla, y no puedes esperar mucho tiempo.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">¿Cómo podría un astrónomo medir la masa de una estrella?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Medir cuánto brilla</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Medir cuán grande se ve</span></button><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Observar cómo su gravedad mueve otra cosa</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>No hay manera de medir la masa de una estrella</span></button></div><p class=\"inv-because\">La gravedad es la única de estas opciones que depende de la masa. El brillo y el tamaño están relacionados con la masa en las estrellas ordinarias, pero solo de manera aproximada, y solo porque alguien midió antes las masas de otra forma. Observar cómo una estrella tira de otra cosa es la medida directa, y todo lo demás se calibra contra ella.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-you-can-now-say",
+  "position": [
+   40,
+   40
+  ],
+  "title": "Pesar las estrellas",
+  "subtitle": "Usa una órbita para medir algo que no puedes poner en una balanza",
+  "body": "<p class=\"inv-step-count\">Paso 40 de 40 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que ahora puedes decir</h3><div class=\"inv-step-body\"><p>En palabras corrientes, sin memorizar nada:</p><p><strong>Cuando dos estrellas se orbitan mutuamente, ambas se mueven alrededor de un punto de equilibrio compartido. Cómo de grande es su órbita y cuánto tarda nos dicen su masa combinada. Lo lejos que está cada estrella del punto de equilibrio nos dice cómo se reparte esa masa entre ellas.</strong></p><p>Por eso importan tanto las estrellas binarias. Son la única manera directa que tenemos de pesar una estrella, y casi todo lo demás que decimos saber sobre masas estelares descansa en ellas. Cuando un libro de texto dice que el Sol es una estrella corriente, o que una estrella diez veces la masa del Sol se consume en unas decenas de millones de años, los números que hay detrás de esas afirmaciones se calibraron con pares de estrellas medidos exactamente como acabas de hacerlo tú.</p><p>Alrededor de la mitad de las estrellas del cielo tienen compañera. Cada una de ellas anuncia calladamente su propia masa a quien observe el tiempo suficiente.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Bessel encontró Sirio B al advertir un bamboleo, décadas antes de que nadie la viera. Medir lo que no puedes ver observando lo que le hace a algo que sí puedes ver es uno de los trucos más antiguos de esta materia y sigue siendo de los mejores.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Profundidad: Avanzado"
+ }
+]

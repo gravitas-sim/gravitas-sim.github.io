@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "not-a-hole-and-not",
+  "position": [
+   1,
+   30
+  ],
+  "title": "Black Holes by the Numbers",
+  "subtitle": "Make a black hole bigger and discover some surprising rules",
+  "body": "<p class=\"inv-step-count\">Step 1 of 30 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Not a hole, and not a vacuum cleaner</h3><div class=\"inv-step-body\"><p>On screen is a black hole of ten solar masses, and four objects going round it. Watch them for a moment.</p><p>Nothing is falling in. That is worth sitting with, because the most common thing people believe about black holes is that they pull everything nearby into themselves. They do not. Gravity a long way from a black hole is exactly the same gravity as anywhere else: an object with sideways motion goes into orbit around a ten solar mass black hole in precisely the way it would orbit a ten solar mass star. If the Sun were swapped for a black hole of the same mass, the Earth's orbit would not change at all. It would just get very dark.</p><p>A black hole is not a hole in space either. It is mass, packed into a small enough space that gravity wins.</p><p>This investigation is about one question: what changes when you make that mass bigger?</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Click the black hole to open its information card. Everything this investigation calculates is on that card too, worked out by the simulation from the same formulas.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "what-could-size-even-mean",
+  "position": [
+   2,
+   30
+  ],
+  "title": "Black Holes by the Numbers",
+  "subtitle": "Make a black hole bigger and discover some surprising rules",
+  "body": "<p class=\"inv-step-count\">Step 2 of 30 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">What could \"size\" even mean?</h3><div class=\"inv-step-body\"><p>Here is the awkward part. A black hole does not have a surface. It is not a ball of rock with an edge you could land on, and there is nothing there to measure with a ruler.</p><p>So when an astronomer says a black hole is thirty kilometers across, what could they possibly be measuring? Have a guess. You are not expected to know this yet.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The \"size\" of a black hole most likely means…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>the width of the lump of matter that fell in</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>the distance out to which its gravity reaches</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>the boundary inside which nothing can get back out</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>nothing, because a black hole has no size</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "what-could-size-even-mean",
+  "position": [
+   2,
+   30
+  ],
+  "title": "Black Holes by the Numbers",
+  "subtitle": "Make a black hole bigger and discover some surprising rules",
+  "body": "<p class=\"inv-step-count\">Step 2 of 30 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">What could \"size\" even mean?</h3><div class=\"inv-step-body\"><p>Here is the awkward part. A black hole does not have a surface. It is not a ball of rock with an edge you could land on, and there is nothing there to measure with a ruler.</p><p>So when an astronomer says a black hole is thirty kilometers across, what could they possibly be measuring? Have a guess. You are not expected to know this yet.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The \"size\" of a black hole most likely means…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>the width of the lump of matter that fell in</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>the distance out to which its gravity reaches</span></button><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>the boundary inside which nothing can get back out</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>nothing, because a black hole has no size</span></button></div><p class=\"inv-because\">It is the boundary. Not a surface, not an object, not a wall you could touch: a place in space where the situation changes. Outside it, light can still get away. Inside it, nothing can. That boundary is called the event horizon, and how far out it sits is what astronomers mean by the size of a black hole. The second answer is a good guess and a common one, but gravity has no edge; it just gets weaker with distance, and it does that around a black hole exactly as it does around a star.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "it-has-a-name",
+  "position": [
+   30,
+   30
+  ],
+  "title": "Black Holes by the Numbers",
+  "subtitle": "Make a black hole bigger and discover some surprising rules",
+  "body": "<p class=\"inv-step-count\">Step 30 of 30 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">It has a name</h3><div class=\"inv-step-body\"><p>Black hole D is <strong>Sagittarius A*</strong>, and it is 26,000 light years away at the center of our own galaxy. Its mass, 4.3 million solar masses, was measured by watching stars orbit it for thirty years; the work won the Nobel Prize in Physics in 2020. In 2022 the Event Horizon Telescope published a picture of it.</p><p>Everything you predicted about it is right. Its horizon is about 12.7 million kilometers across the radius, a fifth of the way out to Mercury. Its average density on that scale is about a million kilograms per cubic meter, roughly two hundred billion times lower than a ten solar mass black hole works out at. Its temperature is 1.4 × 10⁻¹⁴ degrees above absolute zero. It will take about 10⁸⁷ years to evaporate.</p><p>So: making a black hole more massive does much more than make it bigger.</p><p><strong>More mass → a larger event horizon.</strong></p><p><strong>More mass → a lower average density on the horizon scale.</strong></p><p><strong>More mass → a lower Hawking temperature.</strong></p><p><strong>More mass → a very much longer lifetime.</strong></p><p>You changed one thing, and four completely different properties answered. That is what it means to say that black holes follow the same rules across their whole range, from the remnant of a single dead star to the giants at the centers of galaxies.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> The simplest black hole of all, and the one this investigation has used throughout, is a Schwarzschild black hole: not spinning, not charged. Real ones spin, sometimes very fast, and a spinning black hole is described by the Kerr solution instead. The horizon changes shape and size; every trend you found here survives.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

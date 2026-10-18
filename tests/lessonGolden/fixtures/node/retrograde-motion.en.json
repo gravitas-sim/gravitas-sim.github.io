@@ -1,0 +1,1334 @@
+{
+ "id": "retrograde-motion",
+ "locale": "en",
+ "title": "Why Mars Goes Backwards",
+ "steps": 33,
+ "depths": [
+  [
+   "core",
+   33
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "which-one-is-faster",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "how-often-does-earth-catch",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 60,
+   "grades": [
+    [
+     "780",
+     true,
+     "correct",
+     780,
+     null,
+     false,
+     null
+    ],
+    [
+     "810",
+     true,
+     "correct",
+     810,
+     null,
+     false,
+     null
+    ],
+    [
+     "960",
+     false,
+     "incorrect",
+     960,
+     null,
+     false,
+     null
+    ],
+    [
+     "780 days",
+     true,
+     "correct",
+     780,
+     "days",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "a-lap-gained",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 60,
+   "grades": [
+    [
+     "783",
+     true,
+     "correct",
+     783,
+     null,
+     false,
+     null
+    ],
+    [
+     "813",
+     true,
+     "correct",
+     813,
+     null,
+     false,
+     null
+    ],
+    [
+     "963",
+     false,
+     "incorrect",
+     963,
+     null,
+     false,
+     null
+    ],
+    [
+     "783 days",
+     true,
+     "correct",
+     783,
+     "days",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "before-you-look",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "bright-and-backwards-together",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "when-does-it-reverse",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "say-it-in-your-own",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-epicycle-was-really",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "counting-the-machinery",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 1,
+   "grades": [
+    [
+     "20",
+     true,
+     "correct",
+     20,
+     null,
+     false,
+     null
+    ],
+    [
+     "20.5",
+     true,
+     "correct",
+     20.5,
+     null,
+     false,
+     null
+    ],
+    [
+     "23",
+     false,
+     "incorrect",
+     23,
+     null,
+     false,
+     null
+    ],
+    [
+     "20 devices",
+     true,
+     "correct",
+     20,
+     "devices",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "and-what-about-the-sun",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "which-one-is-moving",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-tycho-found-nothing",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "mars-or-jupiter",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "retrograde-motion",
+   "stepSid": "what-you-did",
+   "responses": {
+    "retrograde-motion:which-one-is-faster": 0,
+    "retrograde-motion:how-often-does-earth-catch": "780",
+    "retrograde-motion:how-often-does-earth-catch:locale": "en",
+    "retrograde-motion:a-lap-gained": "783",
+    "retrograde-motion:a-lap-gained:locale": "en",
+    "retrograde-motion:before-you-look": 1,
+    "retrograde-motion:bright-and-backwards-together": 1,
+    "retrograde-motion:when-does-it-reverse": 1,
+    "retrograde-motion:say-it-in-your-own": "A fixed sentence for the golden.",
+    "retrograde-motion:what-the-epicycle-was-really": 1,
+    "retrograde-motion:counting-the-machinery": "20",
+    "retrograde-motion:counting-the-machinery:locale": "en",
+    "retrograde-motion:and-what-about-the-sun": 1,
+    "retrograde-motion:which-one-is-moving": 2,
+    "retrograde-motion:why-tycho-found-nothing": 2,
+    "retrograde-motion:mars-or-jupiter": 1
+   },
+   "attempts": {
+    "retrograde-motion:which-one-is-faster": 1,
+    "retrograde-motion:how-often-does-earth-catch": 1,
+    "retrograde-motion:a-lap-gained": 1,
+    "retrograde-motion:before-you-look": 1,
+    "retrograde-motion:bright-and-backwards-together": 1,
+    "retrograde-motion:when-does-it-reverse": 1,
+    "retrograde-motion:what-the-epicycle-was-really": 1,
+    "retrograde-motion:counting-the-machinery": 1,
+    "retrograde-motion:and-what-about-the-sun": 1,
+    "retrograde-motion:which-one-is-moving": 1,
+    "retrograde-motion:why-tycho-found-nothing": 1,
+    "retrograde-motion:mars-or-jupiter": 1
+   },
+   "visited": [
+    "the-wandering-stars",
+    "what-you-are-looking-at",
+    "against-the-fixed-stars",
+    "watch-from-outside-first",
+    "the-two-orbits",
+    "which-one-is-faster",
+    "how-fast-each-one-goes",
+    "the-synodic-period",
+    "how-often-does-earth-catch",
+    "a-lap-gained",
+    "before-you-look",
+    "reference-frames",
+    "what-the-trails-are-doing",
+    "put-yourself-on-earth",
+    "that-is-the-observation",
+    "catch-the-reversal",
+    "nearest-and-furthest",
+    "bright-and-backwards-together",
+    "when-does-it-reverse",
+    "overtaking-on-the-inside",
+    "say-it-in-your-own",
+    "what-it-cost-to-explain",
+    "what-the-epicycle-was-really",
+    "counting-the-machinery",
+    "and-what-about-the-sun",
+    "do-it-for-the-sun",
+    "which-one-is-moving",
+    "frames-are-not-all-equal",
+    "what-actually-settled-it",
+    "why-tycho-found-nothing",
+    "how-long-does-a-loop",
+    "mars-or-jupiter",
+    "what-you-did"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "retrograde-motion:which-one-is-faster": 0,
+    "retrograde-motion:how-often-does-earth-catch": "780",
+    "retrograde-motion:how-often-does-earth-catch:locale": "en",
+    "retrograde-motion:a-lap-gained": "783",
+    "retrograde-motion:a-lap-gained:locale": "en",
+    "retrograde-motion:before-you-look": 1,
+    "retrograde-motion:bright-and-backwards-together": 1,
+    "retrograde-motion:when-does-it-reverse": 1,
+    "retrograde-motion:say-it-in-your-own": "A fixed sentence for the golden.",
+    "retrograde-motion:what-the-epicycle-was-really": 1,
+    "retrograde-motion:counting-the-machinery": "20",
+    "retrograde-motion:counting-the-machinery:locale": "en",
+    "retrograde-motion:and-what-about-the-sun": 1,
+    "retrograde-motion:which-one-is-moving": 2,
+    "retrograde-motion:why-tycho-found-nothing": 2,
+    "retrograde-motion:mars-or-jupiter": 1
+   },
+   "attempts": {
+    "retrograde-motion:which-one-is-faster": 1,
+    "retrograde-motion:how-often-does-earth-catch": 1,
+    "retrograde-motion:a-lap-gained": 1,
+    "retrograde-motion:before-you-look": 1,
+    "retrograde-motion:bright-and-backwards-together": 1,
+    "retrograde-motion:when-does-it-reverse": 1,
+    "retrograde-motion:what-the-epicycle-was-really": 1,
+    "retrograde-motion:counting-the-machinery": 1,
+    "retrograde-motion:and-what-about-the-sun": 1,
+    "retrograde-motion:which-one-is-moving": 1,
+    "retrograde-motion:why-tycho-found-nothing": 1,
+    "retrograde-motion:mars-or-jupiter": 1
+   },
+   "visited": [
+    "a-lap-gained",
+    "against-the-fixed-stars",
+    "and-what-about-the-sun",
+    "before-you-look",
+    "bright-and-backwards-together",
+    "catch-the-reversal",
+    "counting-the-machinery",
+    "do-it-for-the-sun",
+    "frames-are-not-all-equal",
+    "how-fast-each-one-goes",
+    "how-long-does-a-loop",
+    "how-often-does-earth-catch",
+    "mars-or-jupiter",
+    "nearest-and-furthest",
+    "overtaking-on-the-inside",
+    "put-yourself-on-earth",
+    "reference-frames",
+    "say-it-in-your-own",
+    "that-is-the-observation",
+    "the-synodic-period",
+    "the-two-orbits",
+    "the-wandering-stars",
+    "watch-from-outside-first",
+    "what-actually-settled-it",
+    "what-it-cost-to-explain",
+    "what-the-epicycle-was-really",
+    "what-the-trails-are-doing",
+    "what-you-are-looking-at",
+    "what-you-did",
+    "when-does-it-reverse",
+    "which-one-is-faster",
+    "which-one-is-moving",
+    "why-tycho-found-nothing"
+   ],
+   "stepSid": "what-you-did",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "retrograde-motion",
+    "title": "Why Mars Goes Backwards",
+    "stepCount": 33
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-did",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "the-wandering-stars",
+     "what-you-are-looking-at",
+     "against-the-fixed-stars",
+     "watch-from-outside-first",
+     "the-two-orbits",
+     "which-one-is-faster",
+     "how-fast-each-one-goes",
+     "the-synodic-period",
+     "how-often-does-earth-catch",
+     "a-lap-gained",
+     "before-you-look",
+     "reference-frames",
+     "what-the-trails-are-doing",
+     "put-yourself-on-earth",
+     "that-is-the-observation",
+     "catch-the-reversal",
+     "nearest-and-furthest",
+     "bright-and-backwards-together",
+     "when-does-it-reverse",
+     "overtaking-on-the-inside",
+     "say-it-in-your-own",
+     "what-it-cost-to-explain",
+     "what-the-epicycle-was-really",
+     "counting-the-machinery",
+     "and-what-about-the-sun",
+     "do-it-for-the-sun",
+     "which-one-is-moving",
+     "frames-are-not-all-equal",
+     "what-actually-settled-it",
+     "why-tycho-found-nothing",
+     "how-long-does-a-loop",
+     "mars-or-jupiter",
+     "what-you-did"
+    ],
+    "responses": {
+     "retrograde-motion:which-one-is-faster": 0,
+     "retrograde-motion:how-often-does-earth-catch": "780",
+     "retrograde-motion:how-often-does-earth-catch:locale": "en",
+     "retrograde-motion:a-lap-gained": "783",
+     "retrograde-motion:a-lap-gained:locale": "en",
+     "retrograde-motion:before-you-look": 1,
+     "retrograde-motion:bright-and-backwards-together": 1,
+     "retrograde-motion:when-does-it-reverse": 1,
+     "retrograde-motion:say-it-in-your-own": "A fixed sentence for the golden.",
+     "retrograde-motion:what-the-epicycle-was-really": 1,
+     "retrograde-motion:counting-the-machinery": "20",
+     "retrograde-motion:counting-the-machinery:locale": "en",
+     "retrograde-motion:and-what-about-the-sun": 1,
+     "retrograde-motion:which-one-is-moving": 2,
+     "retrograde-motion:why-tycho-found-nothing": 2,
+     "retrograde-motion:mars-or-jupiter": 1
+    },
+    "attempts": {
+     "retrograde-motion:which-one-is-faster": 1,
+     "retrograde-motion:how-often-does-earth-catch": 1,
+     "retrograde-motion:a-lap-gained": 1,
+     "retrograde-motion:before-you-look": 1,
+     "retrograde-motion:bright-and-backwards-together": 1,
+     "retrograde-motion:when-does-it-reverse": 1,
+     "retrograde-motion:what-the-epicycle-was-really": 1,
+     "retrograde-motion:counting-the-machinery": 1,
+     "retrograde-motion:and-what-about-the-sun": 1,
+     "retrograde-motion:which-one-is-moving": 1,
+     "retrograde-motion:why-tycho-found-nothing": 1,
+     "retrograde-motion:mars-or-jupiter": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "the-wandering-stars",
+     "fingerprint": "read|-|-|Retrograde Mars|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "what-you-are-looking-at",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 2,
+     "sid": "against-the-fixed-stars",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "watch-from-outside-first",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "the-two-orbits",
+     "fingerprint": "measure|-|-|-|earth_a+mars_a+earth_P+mars_P|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 5,
+     "sid": "which-one-is-faster",
+     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 6,
+     "sid": "how-fast-each-one-goes",
+     "fingerprint": "measure|-|-|-|earth_P+mars_P+earth_w+mars_w+gain_w|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "the-synodic-period",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "how-often-does-earth-catch",
+     "fingerprint": "question|numeric|-|-|-|-|a=780;t=60;u=days",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "a-lap-gained",
+     "fingerprint": "question|numeric|-|-|-|-|a=783;t=60;u=days",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "before-you-look",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "reference-frames",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "what-the-trails-are-doing",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 13,
+     "sid": "put-yourself-on-earth",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "that-is-the-observation",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "catch-the-reversal",
+     "fingerprint": "measure|-|-|-|lon_a+day_a+lon_b+day_b|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "nearest-and-furthest",
+     "fingerprint": "measure|-|-|-|sep_min+sep_max+sep_ratio|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "bright-and-backwards-together",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 18,
+     "sid": "when-does-it-reverse",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 19,
+     "sid": "overtaking-on-the-inside",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 20,
+     "sid": "say-it-in-your-own",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 21,
+     "sid": "what-it-cost-to-explain",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 22,
+     "sid": "what-the-epicycle-was-really",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 23,
+     "sid": "counting-the-machinery",
+     "fingerprint": "question|numeric|-|-|-|-|a=20;t=1;u=devices",
+     "optionCount": null
+    },
+    {
+     "index": 24,
+     "sid": "and-what-about-the-sun",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 25,
+     "sid": "do-it-for-the-sun",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 26,
+     "sid": "which-one-is-moving",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 27,
+     "sid": "frames-are-not-all-equal",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 28,
+     "sid": "what-actually-settled-it",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 29,
+     "sid": "why-tycho-found-nothing",
+     "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 30,
+     "sid": "how-long-does-a-loop",
+     "fingerprint": "measure|-|-|-|retro_start+retro_end+retro_len|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 31,
+     "sid": "mars-or-jupiter",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 32,
+     "sid": "what-you-did",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "retrograde-motion:which-one-is-faster": 0,
+    "retrograde-motion:how-often-does-earth-catch": "780",
+    "retrograde-motion:how-often-does-earth-catch:locale": "en",
+    "retrograde-motion:a-lap-gained": "783",
+    "retrograde-motion:a-lap-gained:locale": "en",
+    "retrograde-motion:before-you-look": 1,
+    "retrograde-motion:bright-and-backwards-together": 1,
+    "retrograde-motion:when-does-it-reverse": 1,
+    "retrograde-motion:say-it-in-your-own": "A fixed sentence for the golden.",
+    "retrograde-motion:what-the-epicycle-was-really": 1,
+    "retrograde-motion:counting-the-machinery": "20",
+    "retrograde-motion:counting-the-machinery:locale": "en",
+    "retrograde-motion:and-what-about-the-sun": 1,
+    "retrograde-motion:which-one-is-moving": 2,
+    "retrograde-motion:why-tycho-found-nothing": 2,
+    "retrograde-motion:mars-or-jupiter": 1
+   },
+   "attempts": {
+    "retrograde-motion:which-one-is-faster": 1,
+    "retrograde-motion:how-often-does-earth-catch": 1,
+    "retrograde-motion:a-lap-gained": 1,
+    "retrograde-motion:before-you-look": 1,
+    "retrograde-motion:bright-and-backwards-together": 1,
+    "retrograde-motion:when-does-it-reverse": 1,
+    "retrograde-motion:what-the-epicycle-was-really": 1,
+    "retrograde-motion:counting-the-machinery": 1,
+    "retrograde-motion:and-what-about-the-sun": 1,
+    "retrograde-motion:which-one-is-moving": 1,
+    "retrograde-motion:why-tycho-found-nothing": 1,
+    "retrograde-motion:mars-or-jupiter": 1
+   },
+   "visited": [
+    "a-lap-gained",
+    "against-the-fixed-stars",
+    "and-what-about-the-sun",
+    "before-you-look",
+    "bright-and-backwards-together",
+    "catch-the-reversal",
+    "counting-the-machinery",
+    "do-it-for-the-sun",
+    "frames-are-not-all-equal",
+    "how-fast-each-one-goes",
+    "how-long-does-a-loop",
+    "how-often-does-earth-catch",
+    "mars-or-jupiter",
+    "nearest-and-furthest",
+    "overtaking-on-the-inside",
+    "put-yourself-on-earth",
+    "reference-frames",
+    "say-it-in-your-own",
+    "that-is-the-observation",
+    "the-synodic-period",
+    "the-two-orbits",
+    "the-wandering-stars",
+    "watch-from-outside-first",
+    "what-actually-settled-it",
+    "what-it-cost-to-explain",
+    "what-the-epicycle-was-really",
+    "what-the-trails-are-doing",
+    "what-you-are-looking-at",
+    "what-you-did",
+    "when-does-it-reverse",
+    "which-one-is-faster",
+    "which-one-is-moving",
+    "why-tycho-found-nothing"
+   ],
+   "stepIndex": 32,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-retrograde-motion",
+  "record": {
+   "ids": [
+    "golden-retrograde-motion"
+   ],
+   "rows": [
+    [
+     "golden-retrograde-motion",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "ddc20a4325827ef7820bc528431cea9888a0a04a0938a9c84066a8f745324eef"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "which-one-is-faster",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "how-often-does-earth-catch",
+     "value": "780",
+     "locale": "en"
+    },
+    {
+     "sid": "a-lap-gained",
+     "value": "783",
+     "locale": "en"
+    },
+    {
+     "sid": "before-you-look",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "bright-and-backwards-together",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "when-does-it-reverse",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "say-it-in-your-own",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-epicycle-was-really",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "counting-the-machinery",
+     "value": "20",
+     "locale": "en"
+    },
+    {
+     "sid": "and-what-about-the-sun",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-moving",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "why-tycho-found-nothing",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "mars-or-jupiter",
+     "value": 1,
+     "locale": "en"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "which-one-is-faster",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "how-often-does-earth-catch",
+     "value": "780",
+     "locale": "en"
+    },
+    {
+     "sid": "a-lap-gained",
+     "value": "783",
+     "locale": "en"
+    },
+    {
+     "sid": "before-you-look",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "bright-and-backwards-together",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "when-does-it-reverse",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "say-it-in-your-own",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-epicycle-was-really",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "counting-the-machinery",
+     "value": "20",
+     "locale": "en"
+    },
+    {
+     "sid": "and-what-about-the-sun",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-moving",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "why-tycho-found-nothing",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "mars-or-jupiter",
+     "value": 1,
+     "locale": "en"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "ddc20a4325827ef7820bc528431cea9888a0a04a0938a9c84066a8f745324eef",
+     "i": [
+      "golden-retrograde-motion"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-retrograde-motion",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "which-one-is-faster",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "how-often-does-earth-catch",
+     "value": "780",
+     "locale": "en"
+    },
+    {
+     "sid": "a-lap-gained",
+     "value": "783",
+     "locale": "en"
+    },
+    {
+     "sid": "before-you-look",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "bright-and-backwards-together",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "when-does-it-reverse",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "say-it-in-your-own",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-epicycle-was-really",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "counting-the-machinery",
+     "value": "20",
+     "locale": "en"
+    },
+    {
+     "sid": "and-what-about-the-sun",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-moving",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "why-tycho-found-nothing",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "mars-or-jupiter",
+     "value": 1,
+     "locale": "en"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "which-one-is-faster",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "how-often-does-earth-catch",
+     "value": "780",
+     "locale": "en"
+    },
+    {
+     "sid": "a-lap-gained",
+     "value": "783",
+     "locale": "en"
+    },
+    {
+     "sid": "before-you-look",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "bright-and-backwards-together",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "when-does-it-reverse",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "say-it-in-your-own",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-epicycle-was-really",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "counting-the-machinery",
+     "value": "20",
+     "locale": "en"
+    },
+    {
+     "sid": "and-what-about-the-sun",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "which-one-is-moving",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "why-tycho-found-nothing",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "mars-or-jupiter",
+     "value": 1,
+     "locale": "en"
+    }
+   ]
+  }
+ }
+}
