@@ -763,3 +763,31 @@ test.describe('with transparency turned down', () => {
     expect(uncovered).toEqual([]);
   });
 });
+
+test.describe('while a lesson is open', () => {
+  test('the frosted panels are solid, and frosted again when it closes', async ({
+    page,
+    app,
+  }) => {
+    // Linux software WebKit stops producing frames under the stack of blurs
+    // once the lesson panel is up, so none is drawn while it is.
+    await app.boot();
+    const blur = () =>
+      page.evaluate(() =>
+        ['.timeline-bar', '.ui-container', '#investigationPanel'].map(sel => {
+          const el = document.querySelector(sel);
+          return el ? getComputedStyle(el).backdropFilter : 'absent';
+        })
+      );
+    expect((await blur()).slice(0, 2)).not.toContain('none');
+
+    await page.locator('#investigationsBtn').click();
+    await page.locator('[data-investigation]').first().click();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    expect(await blur()).toEqual(['none', 'none', 'none']);
+
+    await page.locator('#investigationClose').click();
+    await expect(page.locator('#investigationPanel')).toBeHidden();
+    expect((await blur()).slice(0, 2)).not.toContain('none');
+  });
+});

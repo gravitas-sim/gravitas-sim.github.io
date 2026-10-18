@@ -421,3 +421,63 @@
     }
   }
 }
+
+/* =============================================================================
+   While a lesson is open
+   -----------------------------------------------------------------------------
+   The same solid surfaces as above, for everyone, for as long as the lesson
+   panel is up. Linux software WebKit stops producing frames once the lesson
+   overlay opens over this many stacked backdrop-filter layers (measured in CI
+   with the layers removed one group at a time: only removing all of them
+   brought the frames back), and the lesson is where a student is looking at a
+   moving simulation and reading at once. Nothing moves or resizes; the panels
+   are the opaque token they were blended from.
+   ========================================================================== */
+@layer overrides {
+  body.investigation-open * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  body.investigation-open .ui-container,
+  body.investigation-open .timeline-bar,
+  body.investigation-open .object-picker,
+  body.investigation-open .placement-status,
+  body.investigation-open .obs-panel,
+  body.investigation-open .light-curve-container,
+  body.investigation-open .sonification-panel,
+  body.investigation-open .scenario-info-content,
+  body.investigation-open .shortcut-overlay,
+  body.investigation-open .transformation-notification,
+  body.investigation-open .recording-badge,
+  body.investigation-open .update-badge,
+  body.investigation-open .mobile-menu-toggle,
+  body.investigation-open .floating-close-chip,
+  body.investigation-open .footer-button,
+  body.investigation-open .insp-pin,
+  body.investigation-open .inv-card-clock,
+  body.investigation-open .attribution,
+  body.investigation-open .gs-shell,
+  body.investigation-open #overlay,
+  body.investigation-open #overlay .overlay-panel,
+  body.investigation-open #overlayStats,
+  body.investigation-open #objectInspector,
+  body.investigation-open #settingsPanel,
+  body.investigation-open #scenarioListModal,
+  body.investigation-open #closeScenarioList,
+  body.investigation-open #investigationBrowser,
+  body.investigation-open #investigationFinish,
+  body.investigation-open #shareModal,
+  body.investigation-open #dataExport,
+  body.investigation-open #mobileInstructions {
+    background: var(--surface-1);
+  }
+
+  /* The three that sit directly on the canvas rather than inside a panel
+       read better against the page ground than against a panel one. */
+  body.investigation-open #overlay,
+  body.investigation-open #overlayStats,
+  body.investigation-open .attribution {
+    background: var(--surface-0);
+  }
+}
