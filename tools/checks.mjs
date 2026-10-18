@@ -687,6 +687,18 @@ export const CHECKS = [
     group: 'generated',
   },
   {
+    id: 'budget-policy',
+    label: 'the budget policy and the data-plane budget are consistent',
+    command: ['npm', 'run', 'budget:policy'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same facts in tests/budgetPolicy.test.js (the policy file ' +
+      'against the real ceilings, the ledger, the refusals, and the data ' +
+      'budget against what the tree measures).',
+    group: 'correctness',
+  },
+  {
     id: 'docs-map',
     label: 'DOCUMENTS.md maps every root document',
     command: ['npm', 'run', 'docs-map:check'],
