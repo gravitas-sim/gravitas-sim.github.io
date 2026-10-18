@@ -149,6 +149,18 @@ export function warmLocale(locale) {
 }
 
 /**
+ * Ask the worker for the idle tier: the instructor documents, the 3-D view and
+ * lab, the mission lab, the Sky Lab, the Library and the data tables. The
+ * worker fetches only what its cache lacks, so calling this on every open
+ * finishes an interrupted run and costs a finished one nothing. A device that
+ * asked for less data (Save-Data) is not given it unasked.
+ */
+export function installIdle() {
+  if (navigator.connection?.saveData) return;
+  navigator.serviceWorker?.controller?.postMessage({ type: 'install-idle' });
+}
+
+/**
  * Show the update badge, and wire its two buttons.
  *
  * Called once, when a version is actually waiting. Nothing is created up front:
@@ -278,6 +290,14 @@ export async function initOffline() {
       }
     };
     if (navigator.serviceWorker.controller) warmCurrent();
+    // The idle tier waits for the browser to have nothing else to do.
+    const whenIdle = cb =>
+      window.requestIdleCallback
+        ? window.requestIdleCallback(cb, { timeout: 15000 })
+        : setTimeout(cb, 5000);
+    const idleInstall = () => whenIdle(installIdle);
+    if (navigator.serviceWorker.controller) idleInstall();
+    navigator.serviceWorker.addEventListener('controllerchange', idleInstall);
     navigator.serviceWorker.addEventListener('controllerchange', warmCurrent);
     window.addEventListener('gravitasLocaleChanged', warmCurrent);
   } catch (err) {

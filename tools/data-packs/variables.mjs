@@ -259,7 +259,7 @@ function tessTable({
           type,
         ],
         compatible: { widgets: [], investigations: [] },
-        offline: 'optional',
+        offline: 'idle',
       };
       return asSidecar(this, { meta, manifestRest, series });
     },
@@ -471,7 +471,7 @@ export const SHOES_CEPHEIDS = {
         'Anchor distance moduli are published values, not in this table: the LMC 18.477 +- 0.026 (Pietrzynski et al. 2019) and NGC 4258 29.397 +- 0.032 (Reid et al. 2019).',
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return asSidecar(this, { meta, manifestRest, series });
   },

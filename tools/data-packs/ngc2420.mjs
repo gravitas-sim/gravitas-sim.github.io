@@ -266,7 +266,7 @@ export const NGC2420_PHOTOMETRY = {
         'PSF magnitudes, as the SDSS pipeline measures them; not corrected for extinction, which a reader applies with a reddening they choose.',
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return { meta, manifestRest, series };
   },
@@ -525,7 +525,7 @@ export const NGC2420_SEGUE = {
         "SSPP's adopted parameters, as published. Lee et al. 2008b found SSPP's [Fe/H] low by about 0.3 dex for stars of near-solar metallicity; that is not corrected here.",
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return { meta, manifestRest, series };
   },
@@ -821,7 +821,7 @@ export const MIST_ISOCHRONES = {
         'A model, not an observation: MIST at scaled-solar abundances, without rotation, binaries or extinction. A cluster compared with it is compared with these assumptions too.',
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return { meta, manifestRest, series };
   },

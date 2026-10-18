@@ -342,7 +342,7 @@
     "widgets": [],
     "investigations": []
   },
-  "offline": "optional",
+  "offline": "idle",
   "derived": {
     "file": "js/data/observations/sdssNgc2420Segue.js",
     "bytes": 24585,

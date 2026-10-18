@@ -86,7 +86,7 @@ this build doesn't know is refused, not guessed at.
 | Check | folding on 3.52474859 d (Knutson et al. 2007) gives a central depth of 0.01592, against (Rp/Rs)² = 0.0146 (Torres et al. 2008), within the 0.003 limb darkening allows |
 | Module | 11,063 bytes as committed (it carries its `reductions` since SDK 1.1.0, and its `citations` since 1.6.0); 9.1 KB minified before the citations |
 | Rights | public domain (NASA mission data); acknowledge TESS and MAST and cite doi:10.17909/t9-nmc8-f686. See NOTICE |
-| Offline | `optional`: precached at install, and a failed fetch does not fail the install |
+| Offline | `idle`: installed after activation, when the browser is idle, and a failed fetch costs the Observatory its offline copy, not the version (OFFLINE_AND_LOW_END.md) |
 | Used by | the observatory (`/observatory/`), as its time series |
 
 No lesson uses the pack yet; the observatory opens it (OBSERVATORY_WORKSPACE_DESIGN.md).
@@ -204,8 +204,8 @@ What they prove about the format:
   `no-license-stated` carries the basis for shipping a thinned subset.
 - **No capability package ships them** (`capability: null`). They are the
   Observatory's alone, opened by its fixtures, so main.js, which reaches the
-  builtin registry, never reaches them; the service worker precaches them as
-  optional, like the page that opens them (`tools/build-service-worker.mjs`).
+  builtin registry, never reaches them; the service worker installs them in the idle tier,
+  after the first visit (`tools/build-service-worker.mjs`).
 
 ## Packs from outside the core
 

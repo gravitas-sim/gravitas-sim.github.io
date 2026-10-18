@@ -229,7 +229,7 @@ const TESS_HD209458_S56 = {
         `Flux is kept to 1 ppm and its error to ${errStepPpm} ppm.`,
       ],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return { meta, manifestRest, series };
   },
@@ -372,7 +372,7 @@ const TESS_HD209458_S56_APERTURE = {
       ],
       reductions: [],
       compatible: { widgets: [], investigations: [] },
-      offline: 'optional',
+      offline: 'idle',
     };
     return { meta, manifestRest, series: encodeAperture(a) };
   },

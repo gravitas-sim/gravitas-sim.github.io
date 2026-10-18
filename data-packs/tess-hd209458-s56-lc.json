@@ -133,7 +133,7 @@
     "widgets": [],
     "investigations": []
   },
-  "offline": "optional",
+  "offline": "idle",
   "derived": {
     "file": "js/data/observations/tessHd209458S56.js",
     "bytes": 11063,

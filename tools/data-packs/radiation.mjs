@@ -70,7 +70,7 @@ const COMMON = {
   masks: [],
   reductions: [],
   compatible: { widgets: [], investigations: [] },
-  offline: 'optional',
+  offline: 'idle',
 };
 
 // --- Formatting ------------------------------------------------------------------

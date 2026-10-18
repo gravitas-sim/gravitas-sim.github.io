@@ -28,162 +28,162 @@
     {
       "path": "js/lab3d/kernel.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/elements.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/state.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/engine.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/worker.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/api.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/experiment.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/references.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/liveClient.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/live.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/snapshot.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/view/projection.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/view/instruments.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/view/frames.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/view/scene.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/view/i18n.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "vendor/three/lab3d.module.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3dLab.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/en.lab3dLab.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/es.lab3dLab.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/view/tick.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/view/guidePanel.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/guides/curriculum.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/en.lab3dGuides.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/es.lab3dGuides.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/evidence.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/link.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/embed.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/lab3d/view/evidencePanel.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/forward/system3d.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/en.lab3dEvidence.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     },
     {
       "path": "js/i18n/es.lab3dEvidence.js",
       "role": "code",
-      "offline": "optional"
+      "offline": "idle"
     }
   ],
   "citations": [],

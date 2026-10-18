@@ -77,6 +77,7 @@ import { COPYRIGHT, RELEASE } from './project-metadata.mjs';
 import {
   precacheInventory,
   precacheTable,
+  promisesTable,
   gzipMB,
 } from './precache-inventory.mjs';
 import { CHECKS } from './checks.mjs';
@@ -889,6 +890,7 @@ export async function gatherBlocks({ physics = null } = {}) {
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,
     precache: precacheTable(precacheInventory(REPO)),
+    promises: promisesTable(REPO, precacheInventory(REPO)),
     physics: physics ? physicsInventory(physics) : null,
     // Cheap: reading a generated data module, not running anything. The audit
     // it comes from is itself checked by `npm run audit:irreversible -- --check`.

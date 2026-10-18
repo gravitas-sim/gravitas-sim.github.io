@@ -75,7 +75,7 @@
     "widgets": [],
     "investigations": []
   },
-  "offline": "optional",
+  "offline": "idle",
   "derived": {
     "file": "js/data/radiation/extinction.js",
     "bytes": 3012,
