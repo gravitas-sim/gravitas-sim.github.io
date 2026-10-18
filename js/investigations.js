@@ -22,13 +22,11 @@
 // =============================================================================
 
 import {
-  SHORT_ANSWER_MIN,
   drawEllipse,
   drawPlot as drawPlotFigure,
   fitSlope,
-  misconceptionText,
+  bindStepInputs,
   stepMarkup,
-  isWrittenAnswer,
 } from './investigations/stepView.js';
 import { getLocale, t, onLocaleChange } from './i18n/index.js';
 import { lessonText } from './i18n/lesson.js';
@@ -131,8 +129,9 @@ import { setEvidenceContext } from './widgetRuntime.js';
 import { checkAnswer } from './answerCheck.js';
 import {
   UNITS,
-  decimalSeparatorFor,
+  formatFieldNumber,
   localeOfAnswer,
+  parseFieldNumber,
   parseNumber,
   recordAnswer,
 } from './answerParse.js';
@@ -153,13 +152,7 @@ import {
   wireBrowserFilters,
 } from './investigations/browser.js';
 import { drop, get, put } from './storage/local.js';
-import {
-  helpStages,
-  helpTaken,
-  hintsFor,
-  matchMisconception,
-  nextHintStage,
-} from './answerFeedback.js';
+import { helpStages, helpTaken } from './answerFeedback.js';
 import { frameState } from './referenceFrame.js';
 import {
   SCALE,
@@ -218,7 +211,6 @@ const applyShareState = command('applyShareState');
 const captureShareState = command('captureShareState');
 const setInspectorSuppressed = command('setInspectorSuppressed');
 const hideObjectInspector = command('hideObjectInspector');
-const setAreaSweepWedges = command('setAreaSweepWedges');
 const showAreaSweepFor = command('showAreaSweepFor');
 const setAreaSweepSuppressed = command('setAreaSweepSuppressed');
 const syncPlacementAvailability = command('syncPlacementAvailability');
@@ -1279,127 +1271,6 @@ function releaseLocks() {
 
 // --- Answer feedback ----------------------------------------------------------
 
-/**
- * The placeholder for a numeric box.
- *
- * Audited, because a placeholder is visible before the student has thought
- * about the question: one that shows the shape of the expected measurement -
- * "e.g. 3.52" - hands over the answer to the first digit. A step may set its
- * own only when it says something about *form* rather than value, and the
- * default says nothing at all beyond the unit.
- *
- * @param {Object} step - Step definition
- * @returns {string} The placeholder text
- */
-function numericPlaceholder(step) {
-  if (step.placeholder) return step.placeholder;
-  return step.unit
-    ? t('inv.answer.placeholderUnit', { unit: step.unit })
-    : t('inv.answer.placeholder');
-}
-
-/**
- * Why a typed answer could not be read, in words a student can act on.
- *
- * Each refusal names a different thing to do about it, which is the whole
- * reason the parser distinguishes them instead of returning NaN.
- *
- * @param {Object} step - Step definition
- * @param {Object} graded - From gradeAnswer()
- * @returns {string} The sentence
- */
-function unreadableMessage(step, graded) {
-  const d = graded.detail || {};
-  const allowed = (step.expect?.accept || []).join(', ');
-  switch (graded.reason) {
-    case 'blank':
-      return t('inv.answer.blank');
-    case 'ambiguousSeparator':
-      return t('inv.answer.ambiguous');
-    case 'incompatibleUnit':
-      return t('inv.answer.wrongDimension', {
-        unit: d.text || '',
-        got: t(`inv.dimension.${d.got}`),
-        want: t(`inv.dimension.${d.dimension}`),
-      });
-    case 'unknownUnit':
-      return t('inv.answer.unknownUnit', { unit: d.text || '' });
-    case 'unitNotAllowed':
-      return allowed
-        ? t('inv.answer.unitNotAllowed', { unit: d.text || '', allowed })
-        : t('inv.answer.unitExpected', {
-            unit: d.text || '',
-            expected: d.expected || step.unit || '',
-          });
-    case 'trailingText':
-      return t('inv.answer.trailingText', { text: d.text || '' });
-    case 'needsUncertainty':
-      return t('inv.answer.needsUncertainty');
-    default:
-      return t('inv.answer.notANumber');
-  }
-}
-
-/**
- * The hint controls, and whatever the student has already asked for.
- *
- * Nothing appears unbidden. A hint that shows itself has done the thinking
- * before the student has tried to, which is the opposite of what a hint is
- * for - so each stage is a button, and the worked explanation is behind one
- * more press than the hints are.
- *
- * @param {Object} step - Step definition
- * @param {string} id - Response-key prefix
- * @returns {string} Markup, or empty when the step offers no help
- */
-function hintBlock(step, id) {
-  const hints = hintsFor(step);
-  if (!hints) return '';
-
-  const used = helpStages(responses[`${id}:help`]);
-  const total = hints.ladder.length;
-  const shown = [];
-  hints.ladder.forEach((h, i) => {
-    if (!used.includes(h.id)) return;
-    const label =
-      h.id === 'concept' || h.id === 'method'
-        ? t(`inv.hint.${h.id}`)
-        : t('inv.hint.n', { n: i + 1, total });
-    shown.push(
-      `<p class="inv-hint" data-stage="${h.id}" tabindex="-1"><strong>${escape(label)}</strong> ${prose(h.text)}</p>`
-    );
-  });
-  if (used.includes('reveal') && hints.worked) {
-    shown.push(
-      `<div class="inv-hint is-worked" data-stage="reveal" tabindex="-1"><strong>${escape(t('inv.hint.worked'))}</strong> ${prose(hints.worked)}</div>`
-    );
-  }
-
-  const next = nextHintStage(step, used);
-  const button = next
-    ? `<button type="button" class="ui-button subtle inv-hint-btn" data-hint="${next}">
-         ${escape(t(next === 'reveal' ? 'inv.hint.reveal' : 'inv.hint.ask'))}
-       </button>`
-    : '';
-
-  const taken = helpTaken(used);
-  // Said plainly, because the report says it too and a student should not find
-  // out afterwards that it was recorded. It is a record, not a penalty.
-  const tally = taken.stages.length
-    ? `<span class="inv-hint-tally">${escape(
-        taken.revealed
-          ? t('inv.hint.takenRevealed', { n: taken.hints })
-          : t('inv.hint.taken', { n: taken.hints })
-      )}</span>`
-    : '';
-
-  return `<div class="inv-hints">${shown.join('')}<div class="inv-hint-row">${button}${tally}</div></div>`;
-}
-
-/** Text as it is read aloud: the markup lesson prose carries taken out. */
-const spoken = text =>
-  decodeEntities(String(text ?? '').replace(/<\/?(strong|em|sub|sup)>/g, ''));
-
 // --- Step helpers -------------------------------------------------------------
 
 /**
@@ -1437,23 +1308,6 @@ function predictionAnsweredHere(step) {
 }
 
 // --- Measured values ----------------------------------------------------------
-
-/** A field as a number: its own convention, trailing text NaN, ".5" kept. */
-function parseFieldNumber(raw, locale) {
-  const p = parseNumber(
-    String(raw ?? '')
-      .trim()
-      .replace(/^([+-]?)([.,])(?=\d)/, '$10$2'),
-    locale
-  );
-  return p.ok && !p.rest ? p.value : NaN;
-}
-
-/** A computed field's text, in the reader's convention. */
-const formatFieldNumber = (value, decimals, locale) =>
-  Number.isFinite(value)
-    ? value.toFixed(decimals).replace('.', decimalSeparatorFor(locale))
-    : '';
 
 /**
  * The numbers a student has typed into the current step, keyed by field id.
@@ -1563,9 +1417,6 @@ function renderStep() {
     visited,
     shown,
     predictionAnsweredHere,
-    unreadableMessage,
-    numericPlaceholder,
-    hintBlock,
     recomputeFields,
   });
 
@@ -1599,7 +1450,17 @@ function renderStep() {
   syncEventWatch(step);
   renderProbe();
   renderFooter();
-  bindStepInputs();
+  bindStepInputs({
+    els: () => els,
+    responses: () => responses,
+    attempts: () => attempts,
+    stepId: () => stepId(stepIndex),
+    currentStep,
+    save,
+    renderStep,
+    refreshMeasurements,
+    importSelection,
+  });
   refreshMeasurements();
 }
 
@@ -2601,178 +2462,6 @@ function renderProbe() {
   if (html !== lastProbeHtml) {
     els.probe.innerHTML = html;
     lastProbeHtml = html;
-  }
-}
-
-function bindStepInputs() {
-  const id = stepId(stepIndex);
-
-  els.body.querySelector('[data-change]')?.addEventListener('click', () => {
-    delete responses[id];
-    save();
-    renderStep();
-    els.body.querySelector('[data-option]')?.focus();
-    announce(t('inv.answer.changed'));
-  });
-
-  els.body.querySelectorAll('[data-option]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const choice = Number(btn.dataset.option);
-      responses[`${id}:first`] ??= choice;
-      responses[id] = choice;
-      attempts[id] = (attempts[id] || 0) + 1;
-      save();
-      renderStep();
-      const step = currentStep();
-      // A held prediction has no verdict yet, on screen or off it. This used to
-      // be graded here regardless, so a screen reader heard "Correct.", or the
-      // whole explanation, before the experiment meant to settle it, while the
-      // screen said only that the answer was recorded. The note renderStep()
-      // has just drawn under the options is what it hears now: the same words,
-      // by construction, and nothing the screen is keeping back.
-      announce(
-        els.body.querySelector('.inv-held')?.textContent ||
-          (checkAnswer(step, choice)
-            ? t('inv.answer.correct')
-            : [
-                t('inv.answer.recorded'),
-                spoken(
-                  matchMisconception(step, choice, 0) &&
-                    misconceptionText(matchMisconception(step, choice, 0))
-                ),
-                spoken(step.because),
-              ]
-                .filter(Boolean)
-                .join(' '))
-      );
-    });
-  });
-
-  els.body.querySelectorAll('[data-answer]').forEach(area => {
-    area.addEventListener('input', () => {
-      responses[id] = area.value;
-      save();
-      const btn = els.body.querySelector('[data-reveal]');
-      if (btn && !btn.hidden) {
-        const ready = area.value.trim().length >= SHORT_ANSWER_MIN;
-        btn.disabled = !ready;
-        const hint = els.body.querySelector('[data-reveal-hint]');
-        if (hint) hint.hidden = ready;
-      }
-      // A box holding only whitespace or punctuation is not an answer, and
-      // saying so beside it is kinder than letting it reach a report as one.
-      const note = els.body.querySelector('#invAnswerNote');
-      if (note) {
-        // Raw length, not trimmed: a box of spaces is something the reader
-        // typed and is not an answer, while a box they have not touched needs
-        // no telling.
-        note.hidden = area.value.length === 0 || isWrittenAnswer(area.value);
-      }
-    });
-  });
-
-  // Staged hints. Each press records the stage and re-renders; nothing is shown
-  // that was not asked for, and taking help is recorded rather than charged for
-  // - see helpTaken() in js/answerFeedback.js.
-  els.body.querySelectorAll('[data-hint]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = `${stepId(stepIndex)}:help`;
-      const used = helpStages(responses[key]);
-      const stage = btn.dataset.hint;
-      if (!used.includes(stage)) used.push(stage);
-      responses[key] = used.join(',');
-      save();
-      renderStep();
-      // Said aloud in full, and the reader's place kept: the step is drawn
-      // again, so focus is put on the hint just shown (the next press is one
-      // Tab away) rather than left on a button that no longer exists.
-      const shown = els.body.querySelector(`[data-stage="${stage}"]`);
-      shown?.focus();
-      announce(
-        `${t(stage === 'reveal' ? 'inv.hint.revealed' : 'inv.hint.given')} ${shown?.textContent ?? ''}`
-      );
-    });
-  });
-
-  els.body.querySelectorAll('[data-reveal]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      responses[`${btn.dataset.reveal}:shown`] = true;
-      save();
-      btn.hidden = true;
-      const hint = els.body.querySelector('[data-reveal-hint]');
-      if (hint) hint.hidden = true;
-      const body = els.body.querySelector('[data-reveal-body]');
-      if (body) {
-        body.hidden = false;
-        announce(t('inv.answer.model'));
-      }
-    });
-  });
-
-  els.body.querySelectorAll('[data-field]').forEach(input => {
-    if (input.hasAttribute('readonly')) return;
-    input.addEventListener('input', () => {
-      recordAnswer(responses, input.dataset.field, input.value, getLocale());
-      save();
-      refreshMeasurements();
-    });
-  });
-
-  const wedgeSlider = els.body.querySelector('[data-wedges]');
-  if (wedgeSlider) {
-    const out = els.body.querySelector('[data-wedges-out]');
-    const readout = els.body.querySelector('[data-wedges-readout]');
-    const apply = () => {
-      const n = wedgeSlider.valueAsNumber;
-      out.textContent = String(n);
-      setAreaSweepWedges(n);
-      const ov = state.areaSweepOverlay;
-      if (readout && ov?.wedgeTime) {
-        readout.innerHTML = t('inv.wedge.readout', {
-          share: formatFieldNumber(100 / n, 1, getLocale()),
-          time: escape(formatTime(ov.wedgeTime)),
-        });
-      }
-      responses[`${stepId(stepIndex)}:wedges`] = String(n);
-      save();
-    };
-    wedgeSlider.addEventListener('input', apply);
-    apply();
-  }
-
-  els.body.querySelector('[data-import]')?.addEventListener('click', () => {
-    importSelection();
-  });
-
-  const numeric = els.body.querySelector('[data-numeric]');
-  const checkBtn = els.body.querySelector('[data-check-numeric]');
-  if (numeric && checkBtn) {
-    const submit = () => {
-      // The first thing they committed to, kept. A student who tries a number,
-      // is told it is wrong, and revises has done something a report should be
-      // able to show; overwriting it leaves only the answer they arrived at
-      // with help, which is a different fact about a different moment.
-      if (responses[`${id}:first`] === undefined && numeric.value.trim()) {
-        responses[`${id}:first`] = numeric.value;
-      }
-      // The text and the convention it was typed under, together. Storing the
-      // text alone let a later reader - the PDF, or the same panel after a
-      // language switch - decide that "1,234" had meant something else.
-      recordAnswer(responses, id, numeric.value, getLocale());
-      attempts[id] = (attempts[id] || 0) + 1;
-      save();
-      renderStep();
-      // What the panel now says under the box, read out: a result that only
-      // appears is one a screen reader never hears.
-      announce(els.body.querySelector('.inv-feedback')?.textContent ?? '');
-    };
-    checkBtn.addEventListener('click', submit);
-    numeric.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        submit();
-      }
-    });
   }
 }
 

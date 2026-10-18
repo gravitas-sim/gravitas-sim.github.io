@@ -477,3 +477,20 @@ export function parseAnswer(raw, step = {}, locale = 'en') {
     converted: known.factor !== target.factor,
   };
 }
+
+/** A field as a number: its own convention, trailing text NaN, ".5" kept. */
+export function parseFieldNumber(raw, locale) {
+  const p = parseNumber(
+    String(raw ?? '')
+      .trim()
+      .replace(/^([+-]?)([.,])(?=\d)/, '$10$2'),
+    locale
+  );
+  return p.ok && !p.rest ? p.value : NaN;
+}
+
+/** A computed field's text, in the reader's convention. */
+export const formatFieldNumber = (value, decimals, locale) =>
+  Number.isFinite(value)
+    ? value.toFixed(decimals).replace('.', decimalSeparatorFor(locale))
+    : '';
