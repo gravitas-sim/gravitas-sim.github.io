@@ -15,6 +15,8 @@ the release rather than in the tag.
 
 ### 2.0.1 (planned; Prompt 123, byte-neutral)
 
+- While an investigation is open, the frosted panels are drawn solid (the same opaque surfaces `prefers-reduced-transparency` already gives), and frosted again when it closes. Linux software WebKit stopped producing frames once the lesson panel opened over the stack of blurs; removing all of them restored the frames, removing only the panel's own did not.
+
 - Chart.js is removed (Prompt 132, D-PLOT-02 stage 4): every chart is the plot component; the dependency, `vendor/chartjs/` and its license lines are gone. No bytes change in the build (the library was already unreachable); the parity record stays in `tests/fixtures/chart-parity.json`.
 
 - The investigation cards and the Scenario Studio, Investigation Composer and course-builder pages are available offline after one visit (D-PERF-02, change 1).
