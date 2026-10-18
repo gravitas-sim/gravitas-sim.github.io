@@ -41,6 +41,15 @@ import {
   nextHintStage,
 } from '../answerFeedback.js';
 import { command, state } from '../appState.js';
+import { drop, get, put } from '../storage/local.js';
+import { migrateSavedProgress } from '../platform/resolver.js';
+import { investigationMeta } from '../data/investigations/registry.js';
+import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
+import {
+  classifyStorageError,
+  readProgress,
+  writeProgress,
+} from './progressSchema.js';
 
 const getAreaSweepWedges = command('getAreaSweepWedges');
 
@@ -1183,3 +1192,306 @@ export const formatFieldNumber = (value, decimals, locale) =>
   Number.isFinite(value)
     ? value.toFixed(decimals).replace('.', decimalSeparatorFor(locale))
     : '';
+
+// --- Persistence: the saved record and the save status (Prompt 139 part C) ----
+// What the engine holds (the lesson open, its answers, the clock, the
+// assignment in force, the elements) is read through the host it binds once,
+// when it loads; this module owns the status of the last write and this tab's
+// copy of every lesson's progress. Keys, payloads, migration and notices are
+// exactly what they were.
+
+/**
+ * What persistence needs of the engine: state() is {active, responses,
+ * attempts, visited, stepIndex, startedAt, depthChoice, deepest, spent,
+ * progressNotes}; authoring() and assigned() are booleans; assignmentKey() is
+ * where an assignment's progress lives; els() the elements; clock() brings the
+ * time spent up to date.
+ * @typedef {Object} PersistenceHost
+ */
+/** @type {PersistenceHost} */
+let host = null;
+
+/** Hand this module the engine's side, once, when the engine loads. */
+export const bindPersistence = h => {
+  host = h;
+};
+
+const STORAGE_PREFIX = 'gravitas_investigation_';
+
+export const storageKey = id => `${STORAGE_PREFIX}${id}`;
+
+/**
+ * Where this activity's progress lives.
+ *
+ * @param {string} id - Lesson id
+ * @returns {string} Storage key
+ */
+const progressKey = id =>
+  host.assigned() ? host.assignmentKey() : storageKey(id);
+const progressArea = () => (host.assigned() ? 'assignments' : 'progress');
+
+/**
+ * An assignment's progress key: its lesson, steps and title, never its date,
+ * so a link re-issued on another day keeps the work. A new title is a new
+ * activity and re-keys on purpose. Work under the old dated key, from this
+ * link or an earlier issue of it, moves across the first time it is read.
+ *
+ * @param {object} a - A validated assignment payload
+ * @returns {string} The storage key
+ */
+export function keyForAssignment(a) {
+  const hash = shortHash(`${a.l}|${a.s.join(',')}|${a.t}`);
+  const key = `gravitas_assignment_${hash}`;
+  if (host.authoring()) return key;
+  try {
+    if (get(key) === null) {
+      const old = Object.keys(localStorage)
+        .filter(
+          k =>
+            k === assignmentStorageKey(a) ||
+            new RegExp(`^gravitas_assignment_\\d{6}${hash}$`).test(k)
+        )
+        .sort()
+        .pop();
+      if (old) {
+        put(key, get(old), 'assignments');
+        drop(old);
+      }
+    }
+  } catch {
+    /* storage refused: there is nothing to move */
+  }
+  return key;
+}
+
+/**
+ * Whether the last write reached the disk, and what went wrong if not.
+ *
+ * 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'
+ *
+ * This used to be swallowed entirely - the comment said progress was "not worth
+ * an alert", which is true of a toast and false of the reader's forty minutes
+ * of work. A student in a private window, or on a machine whose disk is full,
+ * was told nothing at all and found out when they closed the tab.
+ */
+let saveState = { status: 'idle', at: null };
+
+function setSaveState(status) {
+  if (saveState.status === status) {
+    // Same outcome as last time: refresh the timestamp for a success so the
+    // reader sees it is still saving, but do not re-render a standing warning
+    // on every keystroke.
+    if (status === 'saved') saveState.at = Date.now();
+    else return;
+  } else {
+    saveState = { status, at: Date.now() };
+  }
+  renderSaveStatus();
+}
+
+export function save() {
+  const s = host.state();
+  const { active } = s;
+  if (!active) return;
+  host.clock();
+  // A payload from a newer build was left unread; overwriting it would destroy
+  // progress this version does not understand. The reader is told, and their
+  // answers stay usable in memory for the rest of the session.
+  if (s.progressNotes.some(n => n.code === 'schemaTooNew')) {
+    setSaveState('foreign');
+    return;
+  }
+  // An author looking at step 30 of Tides must not overwrite the progress of
+  // whoever is working through Tides on this machine.
+  if (host.authoring()) {
+    setSaveState('authoring');
+    return;
+  }
+  const payload = writeProgress({
+    lesson: active,
+    responses: s.responses,
+    attempts: s.attempts,
+    visited: s.visited,
+    stepSid: active.steps[s.stepIndex]?.sid ?? null,
+    startedAt: s.startedAt,
+    depth: s.depthChoice,
+    deepest: s.deepest,
+    spent: s.spent,
+  });
+
+  // This tab's copy, always, and before the disk is asked. It is what makes
+  // closing and reopening the lesson safe when the write below fails.
+  sessionProgress.set(progressKey(active.id), payload);
+
+  try {
+    put(progressKey(active.id), JSON.stringify(payload), progressArea());
+    setSaveState('saved');
+  } catch (err) {
+    // The answers stay in memory and the lesson keeps working; what changes is
+    // that the reader is told, once, and given a way to take the work with
+    // them.
+    setSaveState(classifyStorageError(err));
+  }
+}
+
+/**
+ * Show whether the work is safe, without shouting about it.
+ *
+ * A polite live region, not a toast: a toast for a storage failure would fire
+ * on every keystroke, and the one thing a reader needs here is a message that
+ * *stays* until the situation changes. Successes announce nothing - the text is
+ * there to be looked at, and a screen reader being told "saved" forty times
+ * while typing an answer is worse than silence.
+ */
+/**
+ * Say what reading the saved progress turned up, once, when the lesson opens.
+ *
+ * Only three things reach here and all three mean the reader's answers may not
+ * be where they left them, so none of them is a toast: a migration from the
+ * pre-sid format, which was necessarily done by position; answers for steps the
+ * lesson no longer has; and a payload from a newer build, which was not read.
+ */
+export function renderProgressNotice() {
+  const el = host.els()?.progressNotice;
+  if (!el) return;
+
+  const lines = [];
+  for (const note of host.state().progressNotes || []) {
+    if (note.code === 'migratedByPosition') {
+      lines.push(t('inv.progress.migrated', { n: note.carried }));
+    } else if (note.code === 'removedSteps') {
+      lines.push(t('inv.progress.removedSteps', { n: note.dropped }));
+    } else if (note.code === 'schemaTooNew') {
+      lines.push(t('inv.progress.foreign'));
+    }
+  }
+
+  el.textContent = lines.join(' ');
+  el.hidden = lines.length === 0;
+}
+
+export function renderSaveStatus() {
+  const el = host.els()?.saveStatus;
+  if (!el) return;
+  const { status } = saveState;
+
+  const text = {
+    saved: t('inv.save.saved'),
+    full: t('inv.save.full'),
+    unavailable: t('inv.save.unavailable'),
+    authoring: t('inv.save.authoring'),
+    foreign: t('inv.save.foreign'),
+    idle: '',
+  }[status];
+
+  el.textContent = text || '';
+  // The block is a status and a way to everything saved on this device (My work).
+  if (text && ['saved', 'full', 'unavailable'].includes(status)) {
+    const link = document.createElement('a');
+    link.href = '/my-work/';
+    link.textContent = t('inv.save.link');
+    el.append(' ', link);
+  }
+  el.hidden = !text;
+  el.dataset.state = status;
+  // Only a problem interrupts. aria-live is set rather than removed so the
+  // element keeps its identity across renders.
+  el.setAttribute(
+    'aria-live',
+    status === 'full' || status === 'unavailable' || status === 'foreign'
+      ? 'polite'
+      : 'off'
+  );
+}
+
+/**
+ * This tab's copy of every lesson's progress, whether or not the disk took it.
+ * Written on every save, so never the older of the two: when localStorage
+ * refuses a write, closing and reopening the lesson still finds the work. It
+ * dies with the tab, as the unsaved warning promises. Authoring previews never
+ * reach it, as they never reach storage.
+ *
+ * @type {Map<string, object>}
+ */
+export const sessionProgress = new Map();
+
+/** Where a v1 payload is kept after it has been migrated, in case it was wrong. */
+const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
+
+/**
+ * Read a lesson's saved progress, migrating an older save if that is what is
+ * there.
+ * @param {string} id - Lesson id
+ * @param {?object} lesson - The merged lesson, when the caller has it
+ * @returns {?object} The progress, or null when there is none
+ */
+export function load(id, lesson = null) {
+  // This tab first. It is written on every save and storage is not, so when the
+  // two differ the session copy is the newer one - and when storage refused
+  // every write, it is the only one there is.
+  let data = sessionProgress.get(progressKey(id)) ?? null;
+
+  if (!data) {
+    try {
+      const raw = get(progressKey(id));
+      if (!raw) return null;
+      data = JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  // Without the lesson only the counts are readable, which is all the card
+  // wants. A v1 payload's `visited` is indices and a v2's is sids; either way
+  // the size is the number of steps seen.
+  if (!lesson) {
+    const visited = Array.isArray(data?.visited) ? data.visited : [];
+    return { countsOnly: true, visited: new Set(visited), data };
+  }
+
+  const isLegacy = !Number.isFinite(Number(data?.schema));
+  const progress = readProgress(data, lesson);
+  // A lesson from a capability package may have renamed a control since the
+  // answers were saved; its manifest says how, and this applies it.
+  progress.responses = migrateSavedProgress(id, progress.responses);
+
+  // Keep the original. A positional migration is right whenever the lesson has
+  // not been reordered since the save and there is no way to tell from the
+  // payload, so the thing it replaced is worth keeping until the reader has
+  // looked at their answers.
+  if (isLegacy && progress.migrated) {
+    try {
+      put(legacyKey(id), JSON.stringify(data), progressArea());
+    } catch {
+      /* the migration still stands; only the safety copy is lost */
+    }
+  }
+  return progress;
+}
+
+/**
+ * How far through an investigation a student is.
+ *
+ * `done` counts steps seen, which is what the progress bar shows; `at` is the
+ * step a resume would land on, which is not the same number once a student has
+ * gone back to reread something.
+ *
+ * @param {string} id - Investigation id
+ * @returns {{done:number, total:number, started:boolean, at:number}} Progress
+ */
+export function progressFor(id) {
+  // From the manifest: the browser asks this for all ten lessons before any of
+  // them is loaded, and a step count is a number the manifest already carries.
+  const total = investigationMeta(id)?.stepCount || 0;
+  const saved = load(id);
+  // `at` is a 1-based screen number for the card. A v2 payload stores a sid
+  // rather than an index and the card has no lesson to resolve it against, so
+  // it reports how far the reader got rather than exactly where they stopped.
+  const done = saved ? saved.visited.size : 0;
+  return {
+    done,
+    total,
+    started: Boolean(saved),
+    at: done > 0 ? Math.min(done, total || done) : 1,
+  };
+}
