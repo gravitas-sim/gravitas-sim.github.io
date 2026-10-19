@@ -10,7 +10,8 @@
 // =============================================================================
 
 import { t, getLocale } from '../i18n/index.js';
-import { formatNumber, roundSig, withUncertainty } from '../format.js';
+import { formatNumber, roundSig } from '../format.js';
+import { describeUncertain } from '../platform/uncertain.js';
 import { ensureDeferredMessages } from '../i18n/deferredMessages.js';
 import { load } from './store.js';
 import { canonicalJsonExact, sha256Hex } from '../hash.js';
@@ -65,11 +66,18 @@ export const scenarioName = key => {
   return title === id ? key : title;
 };
 
-/** A value with its uncertainty at the uncertainty's precision, no unit. */
-export function rowValue(r, locale = getLocale()) {
-  return r.half > 0
-    ? withUncertainty(r.value, r.half, { locale })
-    : formatNumber(r.value, { sig: 6, locale });
+/**
+ * A value with its uncertainty at the uncertainty's precision, no unit, in the
+ * one pattern a number is printed in (js/platform/uncertain.js): "X ± Y
+ * (method)", "< X (limit)", "not constrained". A value with nothing stated is
+ * printed as it always was.
+ */
+export function rowValue(r, locale = getLocale(), translate = t) {
+  const u = r.uncertainty;
+  if (!u || u.kind === 'none') return formatNumber(r.value, { sig: 6, locale });
+  return describeUncertain({ value: r.value, uncertainty: u }, translate, {
+    locale,
+  }).line;
 }
 
 /** The settings of every distinct way the entries were made, as sentences. */
@@ -144,7 +152,7 @@ export function evidenceSections(
     widths: [0.28, 0.2, 0.1, 0.12, 0.3],
     rows: rows.map(r => [
       `${r.n}. ${r.label}`,
-      rowValue(r, locale),
+      rowValue(r, locale, t),
       r.unit,
       r.kind,
       `${r.source.kind} ${r.source.id}${

@@ -6,8 +6,8 @@
 // uncertainty sets, and a value typed with one read back into the envelope's
 // own form. Beside the envelope, not in js/format.js: that module is a source
 // of the instructor bundle, which cannot change without its passphrase, and
-// nothing on a page imports this yet, so it costs no route a request until the
-// first adopter (Prompt 151) does.
+// it is on a page only through its adopters (Prompt 151): the notebook, the
+// report and the evidence ledger.
 // =============================================================================
 
 import {
@@ -76,6 +76,71 @@ export function formatUncertain(q, options = {}) {
     formatNumber(value, { locale }),
     u.kind === 'none' ? 'exact' : u.kind
   );
+}
+
+/**
+ * Where an uncertainty's figures come from, as an id for the reader's words
+ * (Prompt 151): the envelope's `basis` named for a reader, or what the kind
+ * itself says. Null when nothing is stated, which prints without a method.
+ * @param {?object} u - An envelope quantity's uncertainty
+ * @returns {?string} 'data', 'model', 'scaled', 'profile', 'propagated',
+ *   'stated', 'limit' or 'exact'
+ */
+export function uncertaintyMethod(u) {
+  if (!u || u.kind === 'none') return null;
+  if (u.kind === 'limit') return 'limit';
+  if (u.kind === 'assumed') return 'exact';
+  if (u.kind === 'model-limited') return 'model';
+  return (
+    {
+      data: 'data',
+      model: 'model',
+      assumed: 'stated',
+      scaled: 'scaled',
+      profile: 'profile',
+      derived: 'propagated',
+    }[u.basis] ?? null
+  );
+}
+
+/**
+ * One quantity as a reader sees it, in one pattern wherever a number is
+ * printed (Prompt 151): "X ± Y (method)", asymmetric as "X +U −L (method)", a
+ * limit as "< X (limit)", and a failed or unconstrained quantity as the
+ * words for what it is. `text` is the value and its uncertainty alone;
+ * `label` is the method's word and `tip` its one-sentence meaning, for a
+ * title attribute or a caption; `line` is the whole.
+ * @param {{value: ?number, uncertainty: object}} q - An envelope's quantity
+ * @param {(id: string) => string} t - The translator
+ * @param {{sig?: number, locale?: string}} [options] - As formatUncertain
+ * @returns {{text: string, state: string, method: ?string, label: string,
+ *   tip: string, line: string}}
+ */
+export function describeUncertain(q, t, options = {}) {
+  const u = q?.uncertainty ?? { kind: 'none' };
+  if (u.kind === 'failed' || u.kind === 'not-constrained') {
+    const text = t(u.kind === 'failed' ? 'unc.failed' : 'unc.notConstrained');
+    return {
+      text,
+      state: u.kind,
+      method: null,
+      label: '',
+      tip: '',
+      line: text,
+    };
+  }
+  const text = formatUncertain(q, options);
+  const method = uncertaintyMethod(u);
+  const label = method ? t(`unc.method.${method}`) : '';
+  const tip = method ? t(`unc.method.${method}.tip`) : '';
+  return {
+    text,
+    state: u.kind,
+    method,
+    label,
+    tip,
+    line: label ? `${text} (${label})` : text,
+  };
 }
 
 /**

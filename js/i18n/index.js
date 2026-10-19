@@ -90,6 +90,7 @@ export const DEFERRED_NAMESPACES = Object.freeze([
   'tideP',
   'tideW',
   'transitW',
+  'unc',
   'welcome',
   'welcomeAudience',
   'welcomeCard',
