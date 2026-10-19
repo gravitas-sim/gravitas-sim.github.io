@@ -21,6 +21,7 @@ import {
 } from './audio.js';
 import { periodToCents } from './sonify/law.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import { EV_SIGNAL_AUDIO, EV_STOP_SIGNAL_AUDIO } from './names.js';
 
 // -----------------------------------------------------------------------------
 // What the sound is carrying, as numbers (folded in from
@@ -432,7 +433,7 @@ async function playSoundExample() {
 let lastSignalAudio = { playing: false, nowPlaying: null, mapping: null };
 const signalAudioState = () => lastSignalAudio;
 export const stopSignalAudio = () => {
-  window.dispatchEvent(new CustomEvent('gravitasStopSignalAudio'));
+  window.dispatchEvent(new CustomEvent(EV_STOP_SIGNAL_AUDIO));
 };
 
 /**
@@ -526,7 +527,7 @@ export function initSoundPanel(deps) {
     console.warn('Sonification toggle button not found');
   }
 
-  window.addEventListener('gravitasSignalAudio', event => {
+  window.addEventListener(EV_SIGNAL_AUDIO, event => {
     lastSignalAudio = event.detail || lastSignalAudio;
     refreshSonificationToggle();
   });

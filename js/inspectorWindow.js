@@ -60,6 +60,7 @@ import {
   isObjectStillInSimulation,
 } from './inspectorView.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
+import { EV_MANEUVER_REQUESTED, EV_SIMULATION_RESET } from './names.js';
 
 /**
  * The type string the inspector dispatches on, for a body.
@@ -1131,7 +1132,7 @@ export function wireInspectorControls() {
       const target = state.selectedObject?.object;
       if (!target) return;
       window.dispatchEvent(
-        new CustomEvent('gravitasManeuverRequested', {
+        new CustomEvent(EV_MANEUVER_REQUESTED, {
           detail: { bodyId: target.id },
         })
       );
@@ -1180,7 +1181,7 @@ export function ensureManeuverPlanner() {
       });
       // A rebuilt world is a different set of bodies, so the burns recorded
       // against the old ones are not a log of anything that is on screen.
-      window.addEventListener('gravitasSimulationReset', () => {
+      window.addEventListener(EV_SIMULATION_RESET, () => {
         planner.resetManeuverPlanner();
       });
       return planner;
@@ -1210,7 +1211,7 @@ export async function openManeuverFor(bodyId = null) {
  * @returns {void}
  */
 export function watchForManeuver() {
-  window.addEventListener('gravitasManeuverRequested', event => {
+  window.addEventListener(EV_MANEUVER_REQUESTED, event => {
     openManeuverFor(event.detail?.bodyId ?? null).catch(err =>
       console.error('The maneuver planner could not be loaded:', err)
     );

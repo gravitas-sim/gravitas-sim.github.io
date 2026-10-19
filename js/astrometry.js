@@ -54,6 +54,7 @@ import {
   layoutObservationPanels,
   noteObservationPanelUsed,
 } from './observationLayout.js';
+import { EV_SIMULATION_RESET } from './names.js';
 
 const SAMPLE_INTERVAL_MS = 60;
 const MAX_SAMPLES = 1200;
@@ -621,7 +622,7 @@ export function initAstrometry() {
     render();
   });
 
-  window.addEventListener('gravitasSimulationReset', () => {
+  window.addEventListener(EV_SIMULATION_RESET, () => {
     clearAstrometry();
     // A new world, so the previous reader's assumed distance is an assumption
     // about a system that is no longer loaded. Forced past the explicit flag

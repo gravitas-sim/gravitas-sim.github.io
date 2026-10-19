@@ -25,6 +25,7 @@
 
 import { t } from './i18n/index.js';
 import { mountFragment } from './i18n/deferredMessages.js';
+import { EV_ESCAPE } from './names.js';
 
 /**
  * The guided tour's popup, inserted at its host in index.html by initTutorial() before
@@ -332,5 +333,5 @@ export function initTutorial() {
   });
 
   window.addEventListener('resize', reposition);
-  window.addEventListener('gravitasEscape', () => open && closeTutorial());
+  window.addEventListener(EV_ESCAPE, () => open && closeTutorial());
 }

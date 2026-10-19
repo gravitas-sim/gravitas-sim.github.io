@@ -71,6 +71,7 @@ import {
   potentialField,
   regimeFor,
 } from './cr3bp.js';
+import { EV_REQUEST_REBUILD, EV_SIMULATION_RESET } from './names.js';
 
 /** Grid resolution of the forbidden-region mask, in cells across. */
 const GRID = 220;
@@ -777,7 +778,7 @@ async function runNeckPair() {
   SETTINGS.lagrange_tracer_y = neck.BASELINE.position.y;
   SETTINGS.lagrange_tracer_vx = 0;
   SETTINGS.lagrange_tracer_vy = 0;
-  window.dispatchEvent(new CustomEvent('gravitasRequestRebuild'));
+  window.dispatchEvent(new CustomEvent(EV_REQUEST_REBUILD));
 
   const rebuilt = readSystem();
   const span = neck.windowFor(rebuilt, SETTINGS.gravitational_constant);
@@ -1227,7 +1228,7 @@ export function initCr3bp() {
     .catch(() => {});
 
   mount();
-  window.addEventListener('gravitasSimulationReset', () => {
+  window.addEventListener(EV_SIMULATION_RESET, () => {
     // A rebuilt world is a different mu and possibly a different problem. The
     // cached field is discarded and the validity re-tested, which is what
     // stops the overlay describing a system that is no longer on screen.

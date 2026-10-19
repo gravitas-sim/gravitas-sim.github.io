@@ -47,6 +47,7 @@ import { MONO } from './widgetCanvas.js';
 import { captureToNotebook, snapshot } from './notebookBridge.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import { EV_REQUEST_REBUILD, EV_SIMULATION_RESET } from './names.js';
 
 let enabled = false;
 let els = null;
@@ -143,7 +144,7 @@ function beginRun() {
 
   // Rebuilding fires gravitasSimulationReset, which clears the watch. Start
   // recording after it, not before.
-  window.dispatchEvent(new CustomEvent('gravitasRequestRebuild'));
+  window.dispatchEvent(new CustomEvent(EV_REQUEST_REBUILD));
 }
 
 /**
@@ -932,7 +933,7 @@ export function initBinaryRun() {
   // instrument for two scenarios rather than a general tool, and the rail's
   // chip grid is full. So it shows itself when one of its scenarios loads and
   // stays out of the way everywhere else.
-  window.addEventListener('gravitasSimulationReset', () => {
+  window.addEventListener(EV_SIMULATION_RESET, () => {
     stopBinaryWatch();
     showForCurrentScenario();
   });
