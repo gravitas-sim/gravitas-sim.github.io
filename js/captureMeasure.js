@@ -23,7 +23,7 @@ import {
 } from './physics.js';
 import { canRecordClips } from './utils.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
-import { keplerNewton } from './orbital.js';
+import { solveKepler } from './kepler.js';
 import { t, registerMessages, onLocaleChange } from './i18n/index.js';
 import { scenarioTitle } from './i18n/scenario.js';
 import {
@@ -190,7 +190,7 @@ export function computeAreaSweep(obj, wedgeCount = areaSweepWedges) {
   const sinW = Math.sin(omega);
 
   const at = M => {
-    const E = keplerNewton(M, e, e < 0.8 ? M : Math.PI, 1e-13, 40);
+    const E = solveKepler(M, e);
     // Perifocal coordinates, then rotated into the simulation frame.
     const xp = a * (Math.cos(E) - e);
     const yp = b * Math.sin(E) * dir;

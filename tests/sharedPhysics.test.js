@@ -3,20 +3,15 @@
 // -----------------------------------------------------------------------------
 // Kepler's equation, quadratic limb darkening and the radial-velocity
 // semi-amplitude each used to exist two to six times. They now live in
-// js/orbital.js and js/limbDarkening.js. This file is the cross-implementation
-// agreement test: the callers, which kept their own starting guess, tolerance
-// and cap (tabulated in js/orbital.js), are held against an independent
-// reference, with a stated tolerance and the reason for it.
+// js/kepler.js (Prompt 142; tests/keplerSolver.test.js holds the solver and
+// that nothing else defines one) and js/limbDarkening.js. This file is the
+// cross-implementation agreement test: what the callers build on the one
+// solver is held against an independent reference.
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
-import { keplerNewton, orbitalElements } from '../js/orbital.js';
-import { eccentricAnomaly } from '../js/habitability.js';
-import { solveKepler as solveKeplerRv } from '../js/inference/rv.js';
-import {
-  solveKepler as solveKeplerLab3d,
-  fromElements,
-} from '../js/lab3d/elements.js';
+import { orbitalElements } from '../js/orbital.js';
+import { fromElements } from '../js/lab3d/elements.js';
 import { keplerState } from '../js/systemSpec.js';
 import { stateFromElements } from '../js/resonance/systems.js';
 import {
@@ -49,55 +44,9 @@ const grid = (n, lo, hi) =>
   Array.from({ length: n + 1 }, (_, i) => lo + ((hi - lo) * i) / n);
 
 // -----------------------------------------------------------------------------
-describe('Kepler: every solver agrees with the bracketed reference', () => {
-  // Tolerance 1e-12 is the loosest stopping tolerance any caller uses
-  // (habitability.js and binaryWidgets.js stop at |step| < 1e-12). Newton's
-  // quadratic convergence means the last step bounds the remaining error, and
-  // the observed disagreement is 1e-14 at e = 0.95 and 1e-15 below e = 0.5,
-  // which is rounding in sin and cos: Node 20 (CI) and Node 24 (the Mac) round
-  // those differently in the last place, so nothing tighter can be promised.
-  const TOL = 1e-12;
-  const residual = (E, M, e) => Math.abs(E - e * Math.sin(E) - M);
-
-  test('the bracketed reference solves the equation to rounding, any turn', () => {
-    for (const e of [0, 0.3, 0.8, 0.95, 0.999]) {
-      for (const M of [...grid(60, -9, 9), 1e-9, -1e-9]) {
-        const E = solveKeplerLab3d(M, e);
-        expect(residual(E, M, e)).toBeLessThan(1e-14 * (1 + Math.abs(M)));
-      }
-    }
-  });
-
-  test('the Newton callers agree for M in [0, 2 pi], e up to 0.95', () => {
-    const profiles = {
-      'habitability (own copy)': (M, e) => eccentricAnomaly(M, e),
-      'ui.js (a copy of its parameters; the test does not call it)': (M, e) =>
-        keplerNewton(M, e, e < 0.8 ? M : Math.PI, 1e-13, 40),
-      'inference/rv.js (own copy)': (M, e) => solveKeplerRv(M, e),
-      'systemSpec.js': (M, e) =>
-        keplerNewton(
-          M,
-          e,
-          e > 0.8 ? Math.PI * Math.sign(M || 1) : M,
-          1e-15,
-          60
-        ),
-    };
-    for (const [name, solve] of Object.entries(profiles)) {
-      let worst = 0;
-      for (const e of [0, 0.01, 0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 0.95]) {
-        for (const M of grid(240, 0, TWO_PI)) {
-          const ref = solveKeplerLab3d(M, e);
-          worst = Math.max(worst, Math.abs(solve(M, e) - ref));
-        }
-      }
-      expect({ name, ok: worst < TOL }).toEqual({ name, ok: true });
-    }
-  });
-
-  test('resonance/systems.js (own copy): the domain it declares, e up to 0.6', () => {
-    // Its comment claims e <= 0.25 (Pluto); started at M it converges well
-    // beyond that, and is held here to 0.6 only.
+describe('Kepler: what the callers build on the one solver', () => {
+  test('resonance/systems.js: the domain it declares, e up to 0.6', () => {
+    // Its comment claims e <= 0.25 (Pluto); held here to 0.6.
     for (const e of [0, 0.05, 0.249, 0.4, 0.6]) {
       for (const lambdaDeg of grid(72, 0, 360)) {
         const M = (lambdaDeg * Math.PI) / 180;
@@ -125,8 +74,8 @@ describe('Kepler: every solver agrees with the bracketed reference', () => {
 
   test('systemSpec keplerState and the 3-D lab agree on the same orbit', () => {
     // Same a, e, omega = 0 and mean anomaly M; the lab uses radians and its
-    // own frame (z up, i = 0), so the in-plane position must match. The 3-D lab
-    // is bracketed (any e < 1); keplerState is Newton from pi above 0.8.
+    // own frame (z up, i = 0), so the in-plane position must match. Both use
+    // the one solver; this holds the surrounding geometry.
     for (const e of [0, 0.2, 0.6, 0.9, 0.95]) {
       for (const phaseDeg of grid(36, -180, 180)) {
         const M = (phaseDeg * Math.PI) / 180;
@@ -142,18 +91,6 @@ describe('Kepler: every solver agrees with the bracketed reference', () => {
         expect(Math.abs(ks.pos.y - lab.x[1])).toBeLessThan(1e-12);
         expect(Math.abs(ks.vel.x - lab.v[0])).toBeLessThan(1e-12);
         expect(Math.abs(ks.vel.y - lab.v[1])).toBeLessThan(1e-12);
-      }
-    }
-  });
-
-  test('the lab and the inference solver agree off the principal turn', () => {
-    // inference/rv.js starts from M + e sin M, which holds for any M; the lab
-    // wraps explicitly. Both must land on the root on M's own turn.
-    for (const e of [0.1, 0.5, 0.9]) {
-      for (const M of grid(80, -3 * TWO_PI, 3 * TWO_PI)) {
-        const a = solveKeplerRv(M, e);
-        const b = solveKeplerLab3d(M, e);
-        expect(Math.abs(a - b)).toBeLessThan(TOL);
       }
     }
   });

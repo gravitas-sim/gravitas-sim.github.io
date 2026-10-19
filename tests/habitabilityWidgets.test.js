@@ -10,11 +10,11 @@ import {
   stellarPropertiesFor,
   orbitalStateAt,
   orbitExtremes,
-  eccentricAnomaly,
   fractionOfYearInZone,
   EARTH_INSOLATION_WM2,
   HZ_TEFF_RANGE,
 } from '../js/habitability.js';
+import { solveKepler } from '../js/kepler.js';
 import {
   TRAPPIST1_STAR,
   TRAPPIST1_PLANETS,
@@ -341,7 +341,7 @@ describe('eccentric orbits', () => {
   test('Kepler’s equation is solved, not approximated away', () => {
     for (const e of [0, 0.2, 0.6, 0.9]) {
       for (const M of [0, 1, 3, 5.5]) {
-        const E = eccentricAnomaly(M, e);
+        const E = solveKepler(M, e);
         expect(E - e * Math.sin(E)).toBeCloseTo(M, 9);
       }
     }

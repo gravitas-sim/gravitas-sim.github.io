@@ -70,7 +70,8 @@ import {
   GAS_GIANT_TO_STAR_THRESHOLD,
   MIN_INTERACTION_DISTANCE,
 } from './physics.js';
-import { orbitalElements, keplerNewton } from './orbital.js';
+import { orbitalElements } from './orbital.js';
+import { solveKepler } from './kepler.js';
 import { hashState } from './experiments/canonicalState.js';
 import { MASS_FIELD, TYPE_NAME_KEY } from './place/preciseFields.js';
 import { ID_ORBITAL_SYSTEM } from './names.js';
@@ -245,8 +246,7 @@ export function secondsPerTimeUnit(G) {
 /**
  * Position and velocity on a Keplerian orbit, relative to the focus.
  *
- * Kepler's equation by Newton-Raphson from E = M (from pi above e = 0.8,
- * where M is a poor start), to the last bit. The perifocal state is then
+ * Kepler's equation by js/kepler.js, to the last bit. The perifocal state is then
  * mirrored across the periapsis line for a retrograde orbit and turned
  * through the argument of periapsis.
  *
@@ -260,18 +260,12 @@ export function secondsPerTimeUnit(G) {
  * @returns {{pos: {x: number, y: number}, vel: {x: number, y: number}}} State
  */
 export function keplerState({ a, e, omegaDeg, phaseDeg, mu, retrograde }) {
-  // Reduced to (-pi, pi], so Newton starts inside the branch it converges to.
+  // Reduced to (-pi, pi], the principal turn.
   let M = (phaseDeg * DEG) % (2 * Math.PI);
   if (M > Math.PI) M -= 2 * Math.PI;
   if (M <= -Math.PI) M += 2 * Math.PI;
 
-  const E = keplerNewton(
-    M,
-    e,
-    e > 0.8 ? Math.PI * Math.sign(M || 1) : M,
-    1e-15,
-    60
-  );
+  const E = solveKepler(M, e);
 
   const cosE = Math.cos(E);
   const sinE = Math.sin(E);

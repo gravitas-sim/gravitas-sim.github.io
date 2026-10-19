@@ -57,7 +57,7 @@ import {
 } from '../js/lab3d/engine.js';
 import { LAB3D_API, createLab3d } from '../js/lab3d/api.js';
 import { handle } from '../js/lab3d/workerCore.js';
-import { solveKepler } from '../js/lab3d/elements.js';
+import { solveKepler } from '../js/kepler.js';
 import {
   planLab3dTrials,
   scheduleLab3d,
