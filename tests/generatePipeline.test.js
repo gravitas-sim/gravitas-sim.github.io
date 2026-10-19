@@ -1,7 +1,15 @@
 // The generate graph (tools/generate-graph.mjs), its orchestrator
 // (tools/generate.mjs) and the merge tripwire (tools/generated-tripwire.mjs).
 import { describe, test, expect } from '@jest/globals';
-import { existsSync, readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import {
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { GRAPH, order } from '../tools/generate-graph.mjs';
@@ -150,5 +158,42 @@ describe('the merge tripwire', () => {
       'js/i18n/es.js',
     ])
       expect(WATCHED).toContain(f);
+  });
+});
+
+describe('the merge tripwire outside a git checkout', () => {
+  const script = path.join(ROOT, 'tools', 'generated-tripwire.mjs');
+  const run = (cwd, ...args) => {
+    try {
+      return {
+        code: 0,
+        out: execFileSync(process.execPath, [script, ...args], {
+          cwd,
+          encoding: 'utf8',
+          stdio: ['ignore', 'pipe', 'pipe'],
+          env: { ...process.env, GIT_CEILING_DIRECTORIES: path.dirname(cwd) },
+        }),
+      };
+    } catch (err) {
+      return { code: err.status, out: `${err.stdout}${err.stderr}` };
+    }
+  };
+
+  test('a restored release archive has no merge to check, and says so', () => {
+    const dir = realpathSync(
+      mkdtempSync(path.join(tmpdir(), 'gravitas-nogit-'))
+    );
+    try {
+      const { code, out } = run(dir);
+      expect(code).toBe(0);
+      expect(out).toMatch(/Not a git checkout/);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  test('inside a checkout a commit git cannot resolve still fails', () => {
+    const { code } = run(ROOT, 'not-a-revision-of-this-repository');
+    expect(code).not.toBe(0);
   });
 });

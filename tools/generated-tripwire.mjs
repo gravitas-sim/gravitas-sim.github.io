@@ -100,7 +100,24 @@ const show = (rev, file) => {
   return git('show', `${rev}:${file}`);
 };
 
+/**
+ * Whether the working directory is inside a git checkout. A release archive
+ * restored and built elsewhere has none, and there is no merge to judge in it;
+ * a checkout in which git itself fails still throws below.
+ */
+function inCheckout() {
+  try {
+    return git('rev-parse', '--is-inside-work-tree').trim() === 'true';
+  } catch {
+    return false;
+  }
+}
+
 function main(commit = 'HEAD') {
+  if (!inCheckout()) {
+    console.log('Not a git checkout; there is no merge to check.');
+    return 0;
+  }
   const parents = git('rev-list', '--parents', '-n', '1', commit)
     .trim()
     .split(' ')
