@@ -89,6 +89,7 @@ const GROUPS = [
   () => import('./groups/radiation-and-photometry.js'),
   () => import('./groups/barnes-hut-gravity.js'),
   () => import('./groups/collision-outcomes.js'),
+  () => import('./groups/long-term-regression.js'),
 ];
 
 /**
