@@ -1,6 +1,7 @@
-import { EV_THEME_CHANGED, KEY_LOCALE, KEY_THEME } from './names.js';
 // The shell's behaviour; its markup is in the page (tools/shell.mjs), and the
 // navigation works without this. Short on purpose: every route counts it.
+
+import { EV_THEME_CHANGED, KEY_LOCALE, KEY_THEME } from './names.js';
 
 const root = document.documentElement;
 const store = (k, v) => {
