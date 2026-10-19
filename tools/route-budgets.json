@@ -4,11 +4,11 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 2112,
+        "kb": 2111.7,
         "requests": 107
       },
       "sandbox": {
-        "kb": 2112,
+        "kb": 2111.7,
         "requests": 107
       },
       "kepler": {
@@ -40,11 +40,11 @@
         "requests": 5
       },
       "instructors": {
-        "kb": 852.2,
+        "kb": 852,
         "requests": 16
       },
       "figure": {
-        "kb": 2385.4,
+        "kb": 2384.9,
         "requests": 126
       },
       "experiments": {
@@ -52,19 +52,19 @@
         "requests": 56
       },
       "observatory": {
-        "kb": 186.8,
+        "kb": 186.6,
         "requests": 17
       },
       "catalog": {
-        "kb": 88.5,
+        "kb": 88.2,
         "requests": 13
       },
       "library": {
-        "kb": 59.4,
+        "kb": 59.2,
         "requests": 12
       },
       "my-work": {
-        "kb": 87.9,
+        "kb": 87.7,
         "requests": 10
       },
       "studio": {
@@ -72,19 +72,19 @@
         "requests": 48
       },
       "composer": {
-        "kb": 504.5,
+        "kb": 504.2,
         "requests": 31
       },
       "course-builder": {
-        "kb": 1052.9,
+        "kb": 1052.6,
         "requests": 46
       },
       "course-home": {
-        "kb": 263.2,
+        "kb": 262.9,
         "requests": 19
       },
       "lab3d": {
-        "kb": 87.1,
+        "kb": 86.8,
         "requests": 11
       },
       "lab3d-lab": {
@@ -104,27 +104,27 @@
         "requests": 36
       },
       "adoption": {
-        "kb": 10.2,
+        "kb": 9.9,
         "requests": 2
       },
       "teach-find": {
-        "kb": 12.9,
+        "kb": 12.6,
         "requests": 3
       },
       "teach-kit": {
-        "kb": 44.1,
+        "kb": 43.8,
         "requests": 6
       },
       "course-packs": {
-        "kb": 629.0,
+        "kb": 628.7,
         "requests": 44
       },
       "sky": {
-        "kb": 114.8,
+        "kb": 114.6,
         "requests": 14
       },
       "compute": {
-        "kb": 178.9,
+        "kb": 178.6,
         "requests": 20
       }
     },
