@@ -73,6 +73,7 @@ export const CODES = Object.freeze([
   'limit',
   'limitMixed',
   'limitNonMonotone',
+  'correlation',
   'string',
   'dimension',
   'angleMix',
