@@ -12,7 +12,7 @@ reason for every tolerance.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->304<!--/fact--> checks, about two minutes, and a
+That is <!--fact:physicsChecks-->332<!--/fact--> checks, about two minutes, and a
 PASS/FAIL table with measured error against stated tolerance. Add `--verbose` to print the rationale for each tolerance,
 `--json` for machine-readable output, or `--group "Conservation"` to run one
 section. Exit status is 0 only if everything passes, so it works in CI unchanged.
@@ -62,7 +62,10 @@ are two front ends onto it.
 | Sonification law | 5 | 5 analytic |
 | Observing windows | 38 | 17 analytic, 17 published, 4 approximation |
 | Radiation and photometry | 18 | 5 analytic, 1 integrated, 11 published, 1 approximation |
-| **Total** | **304** | 114 analytic, 111 integrated, 61 published, 17 approximation, 1 empirical |
+| Barnes-Hut gravity | 7 | 2 analytic, 2 integrated, 3 approximation |
+| Collision outcomes | 19 | 7 analytic, 8 integrated, 4 approximation |
+| Long-term regression | 2 | 2 integrated |
+| **Total** | **332** | 123 analytic, 123 integrated, 61 published, 24 approximation, 1 empirical |
 <!--/fact-block-->
 
 Nothing here reads a pixel. Every check is a deterministic number-in,
@@ -862,6 +865,13 @@ the suite's own inventory, so an entry cannot name a group the suite no longer
 has, and the model page's known-discrepancies table reads the same file.
 
 <!--fact-block:physicsGaps-->
+- **Rendering.** Nothing here reads a pixel. Trails, glows, accretion disks, jets, the spacetime view and the merger ripple are visual and are described on the model page as illustrative.
+- **The Barnes-Hut solver in the running application.** The suite runs the tree's arithmetic (js/engine/barnesHut.js, the code the Worker runs) against the direct sum on three seeded worlds at the application's opening angle of 0.4, and its energy drift against the direct sum's. It does not start the Worker, so the message handling, the choice of when the tree takes over from the direct sum, and any distribution unlike the three worlds (a cluster of masses 1 to 20, two clumps, a disc about a body 100 to 500 times heavier than the rest) are not checked. The mean force error is about half a percent and the worst single body sits just under its 10 percent bound; the measured values are in the validation report. Checked in part by: Barnes-Hut gravity (7 checks).
+- **Debris generation and particle effects.** The thirteen visual bursts are shown to alter no body, and every event that throws one is run with mass and momentum totalled either side (Collision outcomes). Two departures are characterized rather than conserved: a star that absorbs a planet, gas giant or asteroid keeps its own velocity and discards the body's momentum, and a rocky collision above a relative speed of 15 removes a tenth of each body's mass. The random momentum of the debris fragments themselves is not audited, and tidal-disruption debris is checked only for the star's own bookkeeping. Checked in part by: Collision outcomes (19 checks); Tidal disruption (5 checks).
+- **Collision outcome classification.** Which object type results from a merger is a modeling choice, not a conservation law. The product of twelve hand-chosen canonical pairs and six collapse cases is checked against the documented thresholds (3.0 and 1.4 solar masses, 8 and the application's most-massive-star setting); the other pairs the sandbox can make are not enumerated. Checked in part by: Collision outcomes (19 checks); Mergers (3 checks).
+- **Long-term N-body statistics.** Cluster relaxation, mass segregation and ejection rates are not compared against any reference; a dense cluster in Gravitas is a demonstration, not a simulation anyone should measure. The one long-run check is a regression bound on the energy drift of 50 seeded perturbed three-body systems, recorded when it was written: it says the integrator has not got worse, and it validates no physical statistic. Its heavy tail (the worst tenth of the seeds drift by tens of percent in 50 simulated seconds) is the fixed step through a close encounter. Checked in part by: Long-term regression (2 checks); Three-body sensitivity (10 checks).
+- **The gravitational-wave inspiral.** Left unvalidated against general relativity by decision (DECISION_REGISTER.md, D-R10-13): the model is a constant fractional velocity decay, not the power-law inspiral of the quadrupole formula. The suite checks that the code does what the model page says it does, and measures how far that is from the equation it does not use, so the departure is a number; it does not check the physics of an inspiral, which is not claimed. Checked in part by: Inspiral (approximation) (4 checks).
+- **Numerical relativity, post-Newtonian dynamics and gravitational waveforms.** Absent entirely; see the educational approximations section below.
 <!--/fact-block-->
 
 ---
