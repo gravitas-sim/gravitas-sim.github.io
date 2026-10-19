@@ -65,7 +65,6 @@ const texts = {
 };
 const lines = text.split('\n');
 const lineIn = (source, index) => source.slice(0, index).split('\n').length;
-const lineOf = index => lineIn(text, index);
 
 const found = [];
 const problems = [];
