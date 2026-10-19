@@ -41,7 +41,7 @@ export const FEATURES = [
       'Optional uses degrade: gravity is summed on the main thread, charts update directly, and the validation and experiment pages say they cannot run here. The Mission lab, the 3-D lab, the Observatory fitter and the RV workspace search, fit and Monte Carlo have no main-thread fallback and need module Workers.',
     uses: [
       {
-        file: 'js/physics.js',
+        file: 'js/engine/step.js',
         detect: /summing gravity on the main thread/,
         note: 'falls back to the main thread',
       },
