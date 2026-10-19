@@ -407,6 +407,12 @@ describe('the deploy sequence keeps its artifacts describing one candidate', () 
       new URL('../js/notebookBridge.js', import.meta.url),
       'utf8'
     );
-    expect(bridge).toContain("meta('gravitas-revision')");
+    // The name is spelled once, in the registry, and the bridge reads it there.
+    expect(bridge).toContain('meta(KEY_META_REVISION)');
+    const registry = readFileSync(
+      new URL('../js/names.js', import.meta.url),
+      'utf8'
+    );
+    expect(registry).toMatch(/KEY_META_REVISION =\s*'gravitas-revision'/);
   });
 });

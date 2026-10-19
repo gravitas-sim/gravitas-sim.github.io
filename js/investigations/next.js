@@ -12,8 +12,9 @@
 
 import { put } from '../storage/local.js';
 import { getLocale } from '../i18n/index.js';
+import { KEY_NEXT_CONTEXT } from '../names.js';
 
-export const CONTEXT_KEY = 'gravitas_next_context';
+export const CONTEXT_KEY = KEY_NEXT_CONTEXT;
 
 const read = () => {
   try {

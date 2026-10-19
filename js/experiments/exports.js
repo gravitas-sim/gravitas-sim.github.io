@@ -25,6 +25,7 @@ import { csvField, num, toCsv } from '../csv.js';
 import { METRIC_UNITS, SCALAR_METRICS } from './metrics.js';
 import { canonicalJson } from './canonicalState.js';
 import { plainDataProblem } from '../platform/common.js';
+import { KEY_FORMAT_EXPERIMENT } from '../names.js';
 
 /** gravitas.experiment/1, versioned separately from the storage schema. */
 export const MANIFEST_VERSION = 1;
@@ -402,7 +403,7 @@ export function importManifest(text) {
     return no('not-plain-data');
   // `gravitas-experiment` and its `version` are the retired id of
   // gravitas.experiment/1; the runner reads both (experimentManifest.js).
-  const old = parsed?.format === 'gravitas-experiment';
+  const old = parsed?.format === KEY_FORMAT_EXPERIMENT;
   if (
     !old &&
     !(parsed?.format === 'gravitas.experiment' && parsed.kind === 'comparison')

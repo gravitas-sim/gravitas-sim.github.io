@@ -56,19 +56,11 @@
       "gravitas.orbital-system": 1,
       "gravitas.experiment-result": 1
     },
-    "js/compute/frame/worker.js": {
-      "gravitas-compute": 1,
-      "gravitas_input": 1,
-      "gravitas_params": 1
-    },
     "js/compute/messages.js": {
       "gravitas-compute": 1
     },
     "js/computePage.js": {
       "gravitas_locale": 1
-    },
-    "js/controls.js": {
-      "gravitas_rail_sections": 1
     },
     "js/course/i18n.js": {
       "gravitas_locale": 1
@@ -117,9 +109,6 @@
     "js/data/instructorFlow.js": {
       "gravitas.instructor-flow": 1
     },
-    "js/embedMessages.js": {
-      "gravitas-embed": 1
-    },
     "js/evaluationKit.js": {
       "gravitas_evaluation_draft_v1": 1
     },
@@ -133,16 +122,13 @@
     },
     "js/experiments/exports.js": {
       "gravitas.experiment": 2,
-      "gravitas.experiment-result": 1,
-      "gravitas-experiment": 1
+      "gravitas.experiment-result": 1
     },
     "js/experiments/i18n.js": {
       "gravitas_locale": 1
     },
     "js/experiments/store.js": {
-      "gravitas.experiment-result": 1,
-      "gravitas_experiment_": 1,
-      "gravitas_experiments_index": 1
+      "gravitas.experiment-result": 1
     },
     "js/experimentsPage.js": {
       "gravitas_experiment_checkpoint_": 1
@@ -180,23 +166,11 @@
       "gravitasLightCurveToggled": 1,
       "gravitasThemeChanged": 1
     },
-    "js/investigations/browser.js": {
-      "gravitas_next_context": 1
-    },
-    "js/investigations/guidance.js": {
-      "gravitas-": 1
-    },
-    "js/investigations/next.js": {
-      "gravitas_next_context": 1
-    },
     "js/investigations/progressBackup.js": {
       "gravitas.investigation.progress": 1
     },
     "js/investigations/progressSchema.js": {
       "gravitas_student_name": 1
-    },
-    "js/investigations/stepView.js": {
-      "gravitas_investigation_": 1
     },
     "js/kernels/variables/classify.js": {
       "gravitas.observing-setup": 1
@@ -224,9 +198,6 @@
     "js/lab3d/view/i18n.js": {
       "gravitas_locale": 1
     },
-    "js/lecture.js": {
-      "gravitas_lecture_sequence": 1
-    },
     "js/library/format.js": {
       "gravitas.library": 1
     },
@@ -240,9 +211,6 @@
     },
     "js/libraryPage.js": {
       "gravitas_next_context": 1
-    },
-    "js/maneuverPlanner.js": {
-      "gravitas-maneuver-log": 1
     },
     "js/measure/pipeline.js": {
       "gravitas.pipeline": 1,
@@ -313,10 +281,6 @@
     "js/notebook/store.js": {
       "gravitas_evidence_notebook": 1
     },
-    "js/notebookBridge.js": {
-      "gravitas-revision": 1,
-      "gravitas-build": 1
-    },
     "js/notify.js": {
       "gravitasToast": 2
     },
@@ -373,9 +337,6 @@
     },
     "js/presentation.js": {
       "gravitasPresentationChanged": 1
-    },
-    "js/settingsSchema.js": {
-      "gravitas_course_level": 1
     },
     "js/shell.js": {
       "gravitas_locale": 2,
@@ -445,18 +406,8 @@
     "js/teachingPage.js": {
       "gravitas_teaching_notes_v1": 1
     },
-    "js/theme.js": {
-      "gravitas_theme": 1
-    },
     "js/utils.js": {
       "gravitasDebug": 1
-    },
-    "js/welcomeGate.js": {
-      "gravitas_welcome_seen_v1": 1,
-      "gravitas_orientation_seen_v1": 1
-    },
-    "js/world.js": {
-      "gravitas_simulation_save": 1
     },
     "js/world/build.js": {
       "gravitasSimulationReset": 1

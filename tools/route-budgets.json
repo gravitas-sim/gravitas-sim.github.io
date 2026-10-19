@@ -4,11 +4,11 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 2105.9,
+        "kb": 2107.2,
         "requests": 106
       },
       "sandbox": {
-        "kb": 2105.9,
+        "kb": 2107.2,
         "requests": 106
       },
       "kepler": {
@@ -44,7 +44,7 @@
         "requests": 16
       },
       "figure": {
-        "kb": 2372.1,
+        "kb": 2373.5,
         "requests": 124
       },
       "experiments": {
