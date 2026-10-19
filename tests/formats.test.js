@@ -13,6 +13,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { DOC, FORMATS, render } from '../tools/formats.mjs';
+import * as registry from '../js/names.js';
 
 const id = f => f.name.replace(/\s*\(.*\)$/, '');
 
@@ -43,7 +44,8 @@ test('every format constant in the sources has a row', () => {
     [
       'grep',
       '-hoE',
-      "const [A-Z_]*FORMAT\\s*=\\s*'gravitas[.-][a-z0-9.-]+'",
+      // A constant is the literal or a name from the registry (js/names.js).
+      "const [A-Z_]*FORMAT\\s*=\\s*('gravitas[.-][a-z0-9.-]+'|ID_[A-Z0-9_]+)",
       '--',
       'js',
       'tools',
@@ -52,7 +54,9 @@ test('every format constant in the sources has a row', () => {
     { encoding: 'utf8' }
   );
   const names = new Set(FORMATS.map(id));
-  const found = [...out.matchAll(/'(gravitas[.-][a-z0-9.-]+)'/g)];
+  const found = [
+    ...out.matchAll(/= ?('gravitas[.-][a-z0-9.-]+'|ID_[A-Z0-9_]+)/g),
+  ].map(m => [null, m[1].startsWith("'") ? m[1].slice(1, -1) : registry[m[1]]]);
   // A search that matched nothing would pass everything.
   expect(found.length).toBeGreaterThan(20);
   for (const m of found)
