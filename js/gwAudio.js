@@ -28,6 +28,7 @@ import {
 } from './audio.js';
 import { renderAudio } from './gw/audioRender.js';
 import { setSignalAudio } from './widgetRuntime.js';
+import { EV_SIGNAL_AUDIO, EV_STOP_SIGNAL_AUDIO } from './names.js';
 
 /** The one thing playing, if anything is. */
 let source = null;
@@ -58,7 +59,7 @@ const notify = () => {
     typeof window.CustomEvent === 'function'
   ) {
     window.dispatchEvent(
-      new window.CustomEvent('gravitasSignalAudio', { detail: current })
+      new window.CustomEvent(EV_SIGNAL_AUDIO, { detail: current })
     );
   }
 };
@@ -223,7 +224,7 @@ export function stopIfOwnerStartsWith(prefix) {
 // the lesson panel can release what a lesson started without silencing
 // something a reader started somewhere else. No scope means stop everything.
 if (typeof window !== 'undefined') {
-  window.addEventListener('gravitasStopSignalAudio', event => {
+  window.addEventListener(EV_STOP_SIGNAL_AUDIO, event => {
     const scope = event?.detail?.scope;
     if (scope) stopIfOwnerStartsWith(scope);
     else stop();

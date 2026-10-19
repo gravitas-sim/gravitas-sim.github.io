@@ -141,6 +141,12 @@ import {
 } from './presentation.js';
 import { fixTheme, forgetThemes } from './theme.js';
 import { reduceMotion } from './quality.js';
+import {
+  EV_GALAXY_GRAVITY_CHANGED,
+  EV_OBJECT_PLACED,
+  EV_REQUEST_REBUILD,
+  EV_SIMULATION_RESET,
+} from './names.js';
 
 // Where Save and Load keep the world, in localStorage.
 const SAVE_KEY = 'gravitas_simulation_save';
@@ -535,7 +541,7 @@ const load_simulation_state = () => {
     // A restored save is a hand-made world by definition: no seed regenerates
     // it, so sharing it has to carry the bodies themselves.
     markWorldTouched();
-    window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+    window.dispatchEvent(new CustomEvent(EV_SIMULATION_RESET));
     toast(t('state.loaded'));
     state.paused = false;
     updateSpeedDisplay();
@@ -948,7 +954,7 @@ const validateScenarioData = () => {
 export function initWorld() {
   // Placing anything by hand puts the world beyond what its seed rebuilds, so
   // from here on a link has to carry the bodies themselves.
-  window.addEventListener('gravitasObjectPlaced', markWorldTouched);
+  window.addEventListener(EV_OBJECT_PLACED, markWorldTouched);
 
   // What just happened, said once, without taking the canvas away.
   //
@@ -957,7 +963,7 @@ export function initWorld() {
   // purpose. This is a brief line plus a polite live-region announcement, which
   // is what makes the creation perceivable to somebody who cannot see the canvas
   // it happened on.
-  window.addEventListener('gravitasObjectPlaced', event => {
+  window.addEventListener(EV_OBJECT_PLACED, event => {
     const type = typeKeyOf(event.detail?.object);
     if (type) toast(t('placement.added', { type: typeName(type) }));
   });
@@ -972,7 +978,7 @@ export function initWorld() {
   // Done by event rather than by importing the panel, so the dependency runs one
   // way: the panel already announces the change for the listeners that predate
   // three modes.
-  window.addEventListener('gravitasGalaxyGravityChanged', event => {
+  window.addEventListener(EV_GALAXY_GRAVITY_CHANGED, event => {
     const mode = event?.detail?.mode;
     if (mode !== 'newtonian' && mode !== 'halo' && mode !== 'mond') return;
     SETTINGS.galaxy_gravity = mode;
@@ -985,7 +991,7 @@ export function initWorld() {
   // the binary planet lab does, because changing where a planet starts means
   // starting over rather than teleporting it mid-flight - has to be able to say
   // so without acquiring an edge back up to this module.
-  window.addEventListener('gravitasRequestRebuild', () => {
+  window.addEventListener(EV_REQUEST_REBUILD, () => {
     if (rebuildBuiltSystem()) return;
     SETTINGS.preset_scenario =
       current_scenario_name || SETTINGS.preset_scenario;

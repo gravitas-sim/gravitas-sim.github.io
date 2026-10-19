@@ -25,6 +25,7 @@ import {
 } from './investigationsLoader.js';
 import { t } from './i18n/index.js';
 import { scenarioTitle } from './i18n/scenario.js';
+import { EV_ESCAPE, EV_SIMULATION_RESET } from './names.js';
 
 const captureShareState = command('captureShareState');
 const applyShareState = command('applyShareState');
@@ -153,7 +154,7 @@ export function applySharePayload(payload) {
  * bar rather than the dialog, would silently get the wrong system.
  */
 function watchForDivergence() {
-  window.addEventListener('gravitasSimulationReset', () => {
+  window.addEventListener(EV_SIMULATION_RESET, () => {
     // The rebuild a link performs is the link arriving, not the world moving
     // away from it. Stripping the fragment here would leave a student who
     // opened an assignment unable to reload, bookmark or re-copy it.
@@ -362,7 +363,7 @@ async function copyEmbed() {
  */
 function rebuildWithSeed(seed) {
   initialize_simulation(seed === undefined ? {} : { seed });
-  window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+  window.dispatchEvent(new CustomEvent(EV_SIMULATION_RESET));
 }
 
 /** Rebuild from whatever seed is typed in the seed field. */
@@ -459,13 +460,13 @@ export function initShare() {
 
   // js/dialog.js takes an Escape pressed inside the dialog; this is one
   // pressed with focus on <body>.
-  window.addEventListener('gravitasEscape', () => {
+  window.addEventListener(EV_ESCAPE, () => {
     if (isShareDialogOpen()) closeShareDialog();
   });
 
   // A rebuild changes the seed and possibly the body count, so a dialog left
   // open would be showing a link to a simulation that no longer exists.
-  window.addEventListener('gravitasSimulationReset', () => {
+  window.addEventListener(EV_SIMULATION_RESET, () => {
     if (isShareDialogOpen()) refresh();
   });
 

@@ -5,7 +5,13 @@ import { screen_to_world, findObjectAtPosition } from './physics.js';
 import { worldToScreen } from './utils.js';
 import { transferFrame } from './referenceFrame.js';
 
-import { SPACE_OBJECT_NAMES } from './names.js';
+import {
+  EV_ESCAPE,
+  EV_MERGE,
+  EV_PLACEMENT_ARMED,
+  EV_SETTINGS_APPLIED,
+  SPACE_OBJECT_NAMES,
+} from './names.js';
 import {
   getBlackHoleInfo,
   getStarInfo,
@@ -458,7 +464,7 @@ if (typeof window !== 'undefined') {
  * frame see nothing change, which is checked in tests/mergeFrameTransfer.js.
  */
 if (typeof window !== 'undefined') {
-  window.addEventListener('gravitasMerge', event => {
+  window.addEventListener(EV_MERGE, event => {
     const { primaryId, secondaryId, resultId } = event.detail || {};
     if (resultId === null || resultId === undefined) return;
     const gone = [primaryId, secondaryId];
@@ -691,7 +697,7 @@ document.getElementById('settingsApply').onclick = () => {
     commitSettings('apply-panel');
     if (starfieldChanged) generateStarfield();
     window.dispatchEvent(
-      new CustomEvent('gravitasSettingsApplied', {
+      new CustomEvent(EV_SETTINGS_APPLIED, {
         detail: { rebuilt: false },
       })
     );
@@ -782,7 +788,7 @@ if (mobileMenuToggle && uiRail) {
     closeRail();
   });
 
-  window.addEventListener('gravitasEscape', closeRail);
+  window.addEventListener(EV_ESCAPE, closeRail);
 }
 
 // Scenario info box close button
@@ -811,7 +817,7 @@ if (closeScenarioInfoBtn) {
   }
 }
 // Escape closes it like any other overlay.
-window.addEventListener('gravitasEscape', dismissScenarioCard);
+window.addEventListener(EV_ESCAPE, dismissScenarioCard);
 
 // Run validation on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -899,7 +905,7 @@ canvas.addEventListener(
           state.dragStart = { ...worldPos };
           state.dragCurrent = { ...worldPos };
           if (navigator.vibrate) navigator.vibrate(12);
-          window.dispatchEvent(new CustomEvent('gravitasPlacementArmed'));
+          window.dispatchEvent(new CustomEvent(EV_PLACEMENT_ARMED));
         }, LONG_PRESS_MS);
       }
     }
