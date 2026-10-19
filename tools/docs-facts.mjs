@@ -1237,7 +1237,14 @@ async function checkModelNoteClaims() {
   const checksPath = join(REPO, 'js', 'validation', 'physicsChecks.js');
   if (!existsSync(checksPath)) return problems;
 
-  const source = readFileSync(checksPath, 'utf8');
+  // The checks live in the registry and in the group files beside it.
+  const groupsDir = join(REPO, 'js', 'validation', 'groups');
+  const source = [
+    readFileSync(checksPath, 'utf8'),
+    ...(existsSync(groupsDir) ? readdirSync(groupsDir).sort() : []).map(f =>
+      readFileSync(join(groupsDir, f), 'utf8')
+    ),
+  ].join('\n');
   const groups = new Map();
   for (const m of source.matchAll(/group:\s*'([^']+)'/g)) {
     groups.set(m[1], (groups.get(m[1]) || 0) + 1);

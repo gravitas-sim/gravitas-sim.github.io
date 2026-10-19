@@ -232,6 +232,9 @@ const NEVER_PRECACHED = [
   /^js\/computePage\.js$/,
   /^compute\//,
   /^compute-frame\//,
+  // The validation suite's groups and harness: fetched when the suite runs,
+  // like physicsChecks.js itself (ON_DEMAND_ONLY below).
+  /^js\/validation\/(groups\/|harness\.js$)/,
 ];
 
 const ON_DEMAND_ONLY = new Set([
