@@ -28,6 +28,7 @@ import { STATUS, pinFor, reviewCoursePack } from './review.js';
 import { PLATFORM_API, courseApi, courseFacts, lessonFacts } from './api.js';
 import { openedLink, openedPack } from './packItems.js';
 import { collectTexts } from '../composer/compile.js';
+import { KEY_LOCALE } from '../names.js';
 
 export const WORDS = {
   en: {
@@ -358,7 +359,7 @@ function init() {
   // P81 L-1: saved choice, else the browser's, as Teach does.
   try {
     document.documentElement.lang = /^es/i.test(
-      localStorage.getItem('gravitas_locale') || navigator.language
+      localStorage.getItem(KEY_LOCALE) || navigator.language
     )
       ? 'es'
       : 'en';

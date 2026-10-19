@@ -39,6 +39,7 @@ import { BUILTINS } from './builtins.js';
 import { satisfies } from './semver.js';
 import { migrateSaved } from './migrate.js';
 import { provideLessonLoaders } from '../data/investigations/registry.js';
+import { KEY_CAPABILITY_VERSIONS } from '../names.js';
 
 /** A capability that could not be resolved or loaded. */
 export class CapabilityError extends Error {
@@ -126,7 +127,7 @@ export function loadBuiltin(ref) {
 export const providerOf = (kind, id) => OWNERS[`${kind}:${id}`] || null;
 
 /** Where a packaged lesson's saved work was last read, by package. */
-const STAMPS = 'gravitas_capability_versions';
+const STAMPS = KEY_CAPABILITY_VERSIONS;
 
 /**
  * A packaged lesson's saved answers, carried across its package's renames.

@@ -9,8 +9,9 @@
 // =============================================================================
 
 import { EN_LIBRARY } from '../i18n/en.library.js';
+import { KEY_LOCALE } from '../names.js';
 
-const STORAGE_KEY = 'gravitas_locale';
+const STORAGE_KEY = KEY_LOCALE;
 // English is the page's own; Spanish loads when a reader arrives with it or
 // chooses it (loadLanguage), so an English reader never downloads it.
 const CATALOGS = { en: EN_LIBRARY, es: {} };

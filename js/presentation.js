@@ -1,3 +1,4 @@
+import { EV_PRESENTATION_CHANGED } from './names.js';
 // =============================================================================
 // Presentation mode: which shell the simulation is wearing
 // -----------------------------------------------------------------------------
@@ -75,7 +76,7 @@ export function setPresentationMode(next) {
     }
   });
   window.dispatchEvent(
-    new CustomEvent('gravitasPresentationChanged', {
+    new CustomEvent(EV_PRESENTATION_CHANGED, {
       detail: { mode, previous },
     })
   );

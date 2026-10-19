@@ -14,13 +14,14 @@
 // =============================================================================
 
 import { EN_EXPERIMENTS } from '../i18n/en.experiments.js';
+import { KEY_LOCALE } from '../names.js';
 
 const LOAD = {
   es: () => import('../i18n/es.experiments.js').then(m => m.ES_EXPERIMENTS),
 };
 const loaded = new Set(['en']);
 
-const STORAGE_KEY = 'gravitas_locale';
+const STORAGE_KEY = KEY_LOCALE;
 
 /** The languages this page is written in, in the order the switch offers them. */
 export const LANGUAGES = Object.freeze([

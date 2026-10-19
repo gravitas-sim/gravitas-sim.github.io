@@ -1,3 +1,4 @@
+import { KEY_PROTOCOL_COMPUTE } from '../names.js';
 // =============================================================================
 // The messages the compute page and its frame exchange: gravitas-compute/1
 // -----------------------------------------------------------------------------
@@ -23,7 +24,7 @@
 // strings, parses them itself, and returns text the page checks again.
 // =============================================================================
 
-export const PROTOCOL = 'gravitas-compute';
+export const PROTOCOL = KEY_PROTOCOL_COMPUTE;
 export const PROTOCOL_VERSION = 1;
 
 /** The bounds, in characters (every string here is JSON text or ASCII). */

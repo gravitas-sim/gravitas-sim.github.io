@@ -1,3 +1,8 @@
+import {
+  KEY_GUIDES,
+  KEY_LAB3D_GUIDE_PREFIX,
+  KEY_MISSIONLAB_PREFIX,
+} from '../names.js';
 // =============================================================================
 // How far a reader has got, read from this browser's storage
 // -----------------------------------------------------------------------------
@@ -41,12 +46,10 @@ export function progressOf(entry) {
     started = Boolean(saved);
     done = Array.isArray(saved?.visited) ? saved.visited.length : 0;
   } else if (entry?.format === 'observatory') {
-    started = opened(read('gravitas_guides')?.[id]);
+    started = opened(read(KEY_GUIDES)?.[id]);
   } else if (entry?.format === 'lab3d' || entry?.format === 'mission') {
     const prefix =
-      entry.format === 'lab3d'
-        ? 'gravitas_lab3d_guide_'
-        : 'gravitas_missionlab_';
+      entry.format === 'lab3d' ? KEY_LAB3D_GUIDE_PREFIX : KEY_MISSIONLAB_PREFIX;
     started = ['intro', 'advanced'].some(p =>
       opened(read(`${prefix}${id}_${p}`))
     );
