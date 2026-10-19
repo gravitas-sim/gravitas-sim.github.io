@@ -265,6 +265,19 @@ that proves each slice are in the register row. Two decisions remain for the
 last slice: what replaces the canvas size that culls off-screen bodies, and the
 wall clock a new black hole's grace period reads.
 
+**Settings reach the engine through one door.** The page writes
+`SETTINGS` (`js/appState.js`) and pushes it with `commitSettings(<writer>)`;
+the writers are the named table `SETTINGS_WRITERS`, and
+`tests/settingsWriters.test.js` holds that table equal to the call sites. The
+engine's copy (`physicsSettings`) is frozen, replaced on each push, and never
+written in place. A Worker, a tool or a test calls `updatePhysicsSettings(
+settings, { engineContext: 'headless' })`: G is 2 in the application's context
+and the engine's own 1 in the headless one, and neither falls back to the other
+(PHYSICS_VALIDATION.md, "Two input contexts"). Settings names that changed
+(`trail_colour_mode` and two misspellings) are rewritten by the share-link and
+saved-world readers (`migrateSettings` in `js/shareState.js`), not by the state
+module.
+
 **A module carved out of `ui.js` is handed nothing it can ask for.** The slices
 of Prompt 107 follow one rule: an extracted module never imports `ui.js`, and
 what it needs of the coordinator it either owns (state moves with the code) or

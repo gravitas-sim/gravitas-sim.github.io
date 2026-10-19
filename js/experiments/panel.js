@@ -27,8 +27,8 @@ import { SWEEPABLE, parameterFor, sweepableScenarios } from './sweep.js';
 import { describeDiff } from './canonicalState.js';
 import { describePerturbation, systemExtent } from './perturbation.js';
 import * as CHAOS from './chaosPair.js';
-import { SETTINGS } from '../appState.js';
-import { state, onPhysicsStep, updatePhysicsSettings } from '../physics.js';
+import { SETTINGS, commitSettings } from '../appState.js';
+import { state, onPhysicsStep } from '../physics.js';
 import { getSimClock } from '../timeline.js';
 import { captureToNotebook, snapshot } from '../notebookBridge.js';
 import { frameAdvance } from '../timestep.js';
@@ -862,7 +862,7 @@ async function runChaosPair(opts = {}) {
       console.warn('[bench] could not restore after the chaos pair:', err);
     }
     Object.assign(SETTINGS, savedSettings);
-    updatePhysicsSettings(SETTINGS);
+    commitSettings('bench-chaos');
     state.paused = savedPaused;
     chaosRunning = false;
     for (const id of ['benchChaosRun', 'benchChaosSame', 'benchChaosControl']) {
@@ -921,7 +921,7 @@ function pinStepAndHurry() {
   const before = { step: SETTINGS.max_timestep, simSpeed: SETTINGS.sim_speed };
   SETTINGS.max_timestep = cap;
   SETTINGS.sim_speed = SETTINGS.sim_speed * HURRY;
-  updatePhysicsSettings(SETTINGS);
+  commitSettings('bench-hurry');
   return { ...before, pinnedStep: cap, factor: HURRY };
 }
 
@@ -955,7 +955,7 @@ function applyChaosControl(control, baseline) {
     const next = CHAOS.alternateIntegrator(settings.integrator);
     if (next) settings.integrator = next;
   }
-  updatePhysicsSettings(settings);
+  commitSettings('bench-chaos');
 }
 
 /** Draw the chaos section: what ran, over what, and whether it is resolved. */

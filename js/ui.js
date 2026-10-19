@@ -1,10 +1,6 @@
 // UI and event handling functions
 
-import {
-  screen_to_world,
-  updatePhysicsSettings,
-  findObjectAtPosition,
-} from './physics.js';
+import { screen_to_world, findObjectAtPosition } from './physics.js';
 
 import { worldToScreen } from './utils.js';
 import { transferFrame } from './referenceFrame.js';
@@ -406,6 +402,7 @@ import {
   SETTINGS,
   DEFAULT_SETTINGS,
   setSettings,
+  commitSettings,
   current_scenario_name,
   setScenarioName as setCurrentScenarioName,
   registerCommands,
@@ -691,7 +688,7 @@ document.getElementById('settingsApply').onclick = () => {
   } else {
     // Live path: push the new values into the physics layer and repaint the
     // background if it depends on anything that changed.
-    updatePhysicsSettings(SETTINGS);
+    commitSettings('apply-panel');
     if (starfieldChanged) generateStarfield();
     window.dispatchEvent(
       new CustomEvent('gravitasSettingsApplied', {

@@ -566,7 +566,8 @@ describe('body ids travel when the restored context points at a body', () => {
 // different measurement.
 describe('settings that have been renamed', () => {
   test('an old name is read as the current one', async () => {
-    const { withCurrentSettingNames } = await import('../js/appState.js');
+    const { migrateSettings: withCurrentSettingNames } =
+      await import('../js/shareState.js');
     const fromAnOldLink = { trail_colour_mode: 'speed', sim_speed: 2 };
     expect(withCurrentSettingNames(fromAnOldLink)).toEqual({
       trail_color_mode: 'speed',
@@ -575,7 +576,8 @@ describe('settings that have been renamed', () => {
   });
 
   test('a current name is left alone, and wins over an old one', async () => {
-    const { withCurrentSettingNames } = await import('../js/appState.js');
+    const { migrateSettings: withCurrentSettingNames } =
+      await import('../js/shareState.js');
     expect(withCurrentSettingNames({ trail_color_mode: 'type' })).toEqual({
       trail_color_mode: 'type',
     });
@@ -594,7 +596,8 @@ describe('settings that have been renamed', () => {
   // links exist nowhere in the source any more, which is exactly the condition
   // under which a link goes quiet instead of failing.
   test('a link written while the names were misspelled still opens', async () => {
-    const { withCurrentSettingNames } = await import('../js/appState.js');
+    const { migrateSettings: withCurrentSettingNames } =
+      await import('../js/shareState.js');
     expect(
       withCurrentSettingNames({
         realiztic_disk_physics: false,
@@ -608,15 +611,27 @@ describe('settings that have been renamed', () => {
     });
   });
 
-  test('every rename points at a setting that exists', async () => {
-    const { RENAMED_SETTINGS, DEFAULT_SETTINGS } =
-      await import('../js/appState.js');
-    const renames = Object.entries(RENAMED_SETTINGS);
-    expect(renames.length).toBeGreaterThan(0);
-    for (const [was, now] of renames) {
-      expect(DEFAULT_SETTINGS).toHaveProperty(now);
-      expect(DEFAULT_SETTINGS).not.toHaveProperty(was);
-    }
+  test('a link and a saved world are read through the same rename', async () => {
+    // The names are retired from js/appState.js into the readers (Prompt 140):
+    // decodePayload migrates the link's delta and its overrides, and the saved
+    // world's loader calls the same function, so a version 1 and a version 2
+    // link open alike.
+    const { encodePayload, decodePayload } =
+      await import('../js/shareState.js');
+    const fragment = await encodePayload({
+      v: 2,
+      s: 'binary-pair',
+      seed: 'abc',
+      p: 0,
+      a: { trail_colour_mode: 'speed' },
+      d: { realiztic_disk_physics: false },
+    });
+    const payload = await decodePayload(fragment);
+    expect(payload.a).toEqual({ trail_color_mode: 'speed' });
+    expect(payload.d).toEqual({ realistic_disk_physics: false });
+    const appState = await import('../js/appState.js');
+    expect(appState.RENAMED_SETTINGS).toBeUndefined();
+    expect(appState.withCurrentSettingNames).toBeUndefined();
   });
 });
 

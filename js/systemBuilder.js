@@ -34,13 +34,10 @@ import {
   SETTINGS,
   DEFAULT_SETTINGS,
   setSettings,
+  commitSettings,
   setScenarioName,
 } from './appState.js';
-import {
-  bumpWorldGeneration,
-  updatePhysicsSettings,
-  resetConservationBaseline,
-} from './physics.js';
+import { bumpWorldGeneration, resetConservationBaseline } from './physics.js';
 import { withSeed } from './rng.js';
 import {
   BUILDER_TYPES,
@@ -976,7 +973,7 @@ export function installSystem(system, kit) {
     }
   });
   bumpWorldGeneration();
-  updatePhysicsSettings(SETTINGS);
+  commitSettings('system-builder');
   resetConservationBaseline();
 
   const canvas = $('simulationCanvas');

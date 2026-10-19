@@ -1703,8 +1703,8 @@ export const buildWorld = ctx => {
   // Ensure inspector is hidden during initialization
   hideObjectInspector();
 
-  // Update physics settings
-  updatePhysicsSettings(SETTINGS);
+  // Physics settings: the page's door (ctx.pushSettings), else headless.
+  (ctx.pushSettings || updatePhysicsSettings)(SETTINGS);
 
   state.zoom = SETTINGS.preset_zoom || 1.5; // Use preset zoom or default to 1.5
   state.pan = { x: 0.0, y: 0.0 };

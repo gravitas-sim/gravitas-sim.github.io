@@ -49,7 +49,6 @@ import {
   getPhysicsSetting,
   state,
   onPhysicsStep,
-  updatePhysicsSettings,
   minInteractionDistance,
 } from './physics.js';
 import { getSimClock } from './timeline.js';
@@ -57,7 +56,7 @@ import { captureToNotebook, snapshot } from './notebookBridge.js';
 import * as CHAOS_STEPS from './experiments/chaosPair.js';
 import { a0InSimUnits } from './mond.js';
 import { orbitalElements } from './orbital.js';
-import { SETTINGS, current_scenario_name } from './appState.js';
+import { SETTINGS, current_scenario_name, commitSettings } from './appState.js';
 import { registerOverlay } from './overlays.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
@@ -815,7 +814,7 @@ async function runNeckPair() {
   // than asserted - and well short of the substep ceiling, past which the
   // step WOULD grow.
   SETTINGS.sim_speed = Math.min(savedSpeed * 4, 120);
-  updatePhysicsSettings(SETTINGS);
+  commitSettings('cr3bp-pair');
   let arms = null;
   try {
     bench.captureExperiment(PAIR_EXPERIMENT);
@@ -858,7 +857,7 @@ async function runNeckPair() {
       console.warn('[cr3bp] could not restore after the pair:', err);
     }
     SETTINGS.sim_speed = savedSpeed;
-    updatePhysicsSettings(SETTINGS);
+    commitSettings('cr3bp-pair');
     state.paused = savedPaused;
     pairRunning = false;
     if (run) run.disabled = false;
