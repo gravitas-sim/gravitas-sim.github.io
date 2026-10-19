@@ -1723,6 +1723,32 @@ export const ES_DEFERRED = {
   'nb.report.figure': 'Figura',
   'nb.report.conditions': 'Condiciones en que se tomó',
   'nb.report.noValue': 'no registrado',
+  'nb.unc.failed': 'sin resultado',
+  'nb.unc.notConstrained': 'no acotado',
+  'nb.unc.method.data': 'datos',
+  'nb.unc.method.data.tip':
+    'La incertidumbre es la dispersión o las barras de error de las mediciones.',
+  'nb.unc.method.model': 'modelo',
+  'nb.unc.method.model.tip':
+    'La incertidumbre es el error propio del modelo, como el de un integrador, y más datos no lo reducirían.',
+  'nb.unc.method.scaled': 'reescalada',
+  'nb.unc.method.scaled.tip':
+    'La incertidumbre de los datos se reescaló para que el modelo ajuste tan bien como dice la dispersión que puede.',
+  'nb.unc.method.profile': 'perfil',
+  'nb.unc.method.profile.tip':
+    'La incertidumbre se lee de lo rápido que empeora el ajuste al mover el valor, y puede ser asimétrica.',
+  'nb.unc.method.propagated': 'propagada',
+  'nb.unc.method.propagated.tip':
+    'La incertidumbre se propagó desde las de las entradas a primer orden.',
+  'nb.unc.method.stated': 'dada',
+  'nb.unc.method.stated.tip':
+    'La incertidumbre se dio, no se estimó a partir de nada.',
+  'nb.unc.method.limit': 'límite',
+  'nb.unc.method.limit.tip':
+    'No se detectó nada, así que el valor es una cota, no una medición.',
+  'nb.unc.method.exact': 'exacto',
+  'nb.unc.method.exact.tip':
+    'El análisis tomó el valor como exacto: no se estimó nada.',
   'nb.report.notRecorded': 'no registrado',
 
   // --- Búsqueda y filtros del catálogo ----------------------------------------
