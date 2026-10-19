@@ -44,8 +44,6 @@ const PINNED = {
   EV_SIGNAL_AUDIO: 'gravitasSignalAudio',
   EV_MANEUVER_REQUESTED: 'gravitasManeuverRequested',
   EV_LIGHT_CURVE_TOGGLED: 'gravitasLightCurveToggled',
-  EV_BEFORE_UPDATE: 'gravitasBeforeUpdate',
-  EV_UPDATE_READY: 'gravitasUpdateReady',
   EV_GALAXY_GRAVITY_CHANGED: 'gravitasGalaxyGravityChanged',
   EV_SETTINGS_APPLIED: 'gravitasSettingsApplied',
 };

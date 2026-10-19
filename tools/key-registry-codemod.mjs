@@ -45,6 +45,8 @@ const KINDS = {
 const KEEP = {
   'js/shell.js': 'stamped on every page: the pools would ride on all of them',
   'js/presentation.js': 'on the shell routes (figure, the course builder)',
+  'js/offline.js':
+    'copied alone into e2e/serviceWorkerUpdate.spec.js: it can import nothing',
 };
 
 // camelCase gravitas* literals that are not event names: an element id and a

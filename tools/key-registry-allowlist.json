@@ -333,6 +333,11 @@
       "gravitas.observation": 1,
       "gravitas.observing-setup": 1
     },
+    "js/offline.js": {
+      "gravitasBeforeUpdate": 1,
+      "gravitasUpdateReady": 1,
+      "gravitasLocaleChanged": 1
+    },
     "js/platform/artifact.js": {
       "gravitas.artifact": 1,
       "gravitas": 1

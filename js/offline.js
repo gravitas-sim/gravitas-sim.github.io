@@ -1,8 +1,3 @@
-import {
-  EV_BEFORE_UPDATE,
-  EV_LOCALE_CHANGED,
-  EV_UPDATE_READY,
-} from './names.js';
 // =============================================================================
 // Registering the service worker
 // -----------------------------------------------------------------------------
@@ -86,7 +81,7 @@ export async function applyUpdate(timeout = 10_000) {
   // listeners are synchronous by contract: an update is a user action, not a
   // moment to start awaiting things.
   try {
-    window.dispatchEvent(new CustomEvent(EV_BEFORE_UPDATE));
+    window.dispatchEvent(new CustomEvent('gravitasBeforeUpdate'));
   } catch {
     /* a listener that throws must not strand the reader on the old build */
   }
@@ -254,7 +249,7 @@ export async function initOffline() {
     const announce = () => {
       status.waiting = true;
       showUpdateBadge();
-      window.dispatchEvent(new CustomEvent(EV_UPDATE_READY));
+      window.dispatchEvent(new CustomEvent('gravitasUpdateReady'));
     };
     if (registration.waiting && navigator.serviceWorker.controller) announce();
 
@@ -304,7 +299,7 @@ export async function initOffline() {
     if (navigator.serviceWorker.controller) idleInstall();
     navigator.serviceWorker.addEventListener('controllerchange', idleInstall);
     navigator.serviceWorker.addEventListener('controllerchange', warmCurrent);
-    window.addEventListener(EV_LOCALE_CHANGED, warmCurrent);
+    window.addEventListener('gravitasLocaleChanged', warmCurrent);
   } catch (err) {
     // A failed registration is not a failed application. The most common cause
     // is a browser configured to refuse workers, and the right response is to

@@ -21,8 +21,6 @@ export const EV_WORKER_FAILED = 'gravitasWorkerFailed';
 export const EV_SIGNAL_AUDIO = 'gravitasSignalAudio';
 export const EV_MANEUVER_REQUESTED = 'gravitasManeuverRequested';
 export const EV_LIGHT_CURVE_TOGGLED = 'gravitasLightCurveToggled';
-export const EV_BEFORE_UPDATE = 'gravitasBeforeUpdate';
-export const EV_UPDATE_READY = 'gravitasUpdateReady';
 export const EV_GALAXY_GRAVITY_CHANGED = 'gravitasGalaxyGravityChanged';
 export const EV_SETTINGS_APPLIED = 'gravitasSettingsApplied';
 
