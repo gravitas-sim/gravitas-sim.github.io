@@ -22,7 +22,8 @@ The same checks run as part of `npm test`
 physics regression fails a pull request rather than waiting for someone to
 remember to print the table.
 
-Everything lives in [`js/validation/physicsChecks.js`](js/validation/physicsChecks.js). There
+Everything lives under [`js/validation/`](js/validation/): the groups in `groups/`, listed in
+[`physicsChecks.js`](js/validation/physicsChecks.js). There
 is one copy of every expected value; the command-line table and the jest suite
 are two front ends onto it.
 
@@ -855,33 +856,26 @@ with itself while disagreeing with gravity.
 
 ## What is not validated
 
-Stated plainly, because a coverage claim is only useful with an edge.
+Stated plainly, because a coverage claim is only useful with an edge. The list
+is generated from [`tools/validation-gaps.json`](tools/validation-gaps.json) and
+the suite's own inventory, so an entry cannot name a group the suite no longer
+has, and the model page's known-discrepancies table reads the same file.
 
-- **Rendering.** Nothing here reads a pixel. Trails, glows, accretion disks,
-  jets, the spacetime view and the merger ripple are visual and are described on
-  the [model page](model/) as illustrative.
-- **The Barnes–Hut solver.** The suite runs the direct N² path. Tree gravity is
-  approximate by construction and lives in a Web Worker the deterministic suite
-  cannot start; its accuracy was calibrated separately against the direct solver
-  (0.46% mean, 3.4% worst error at `theta = 0.4`) and that calibration is
-  recorded in `js/physics.js` rather than re-measured here.
-- **Tidal disruption, debris generation and particle effects.** Momentum
-  bookkeeping across debris creation is not audited.
-- **Collision outcome classification.** Which object type results from a merger
-  is a modeling choice, not a conservation law; only momentum and mass are
-  checked.
-- **Long-term N-body statistics.** Cluster relaxation, mass segregation and
-  ejection rates are not compared against any reference. A dense cluster in
-  Gravitas is a demonstration, not a simulation anyone should measure.
-- **Numerical relativity, post-Newtonian dynamics, and gravitational
-  waveforms.** Absent entirely; see
-  [Educational approximations](#educational-approximations).
+<!--fact-block:physicsGaps-->
+<!--/fact-block-->
 
 ---
 
 ## Adding or changing a check
 
-Checks live in [`js/validation/physicsChecks.js`](js/validation/physicsChecks.js) as records:
+Checks live in one file per area under [`js/validation/groups/`](js/validation/groups/), each
+exporting `run({ add, lab, ... })` and registered in the `GROUPS` table of
+[`js/validation/physicsChecks.js`](js/validation/physicsChecks.js), so a new domain adds a
+file and a line, not lines to one module. The shared harness is
+[`js/validation/harness.js`](js/validation/harness.js), and the tolerances for the engine's
+own debt (the Barnes-Hut tree, collision outcomes, the long-run regression) are in
+[`js/validation/engineTolerances.js`](js/validation/engineTolerances.js), each with its
+literature, committed before the checks that use them. A check is a record:
 
 ```js
 add({

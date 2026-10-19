@@ -776,7 +776,7 @@ export const FACT_GROUPS = Object.freeze({
       'e2eFiles',
       'physicsChecks',
     ]),
-    blocks: Object.freeze(['physicsCoverage']),
+    blocks: Object.freeze(['physicsCoverage', 'physicsGaps']),
     // CITATION.cff and .zenodo.json quote physicsChecks in their abstract, so
     // they can be judged exactly when that group has been gathered and not
     // before. A cheap run that rewrote them replaced the check total with a
@@ -886,6 +886,9 @@ export async function gatherBlocks({ physics = null } = {}) {
         readFileSync(join(REPO, 'validation/data.json'), 'utf8')
       ),
     },
+    gaps: JSON.parse(
+      readFileSync(join(REPO, 'tools/validation-gaps.json'), 'utf8')
+    ),
     graph: GRAPH,
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,

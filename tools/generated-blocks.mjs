@@ -298,9 +298,12 @@ export function irreversibleRows(operations) {
  *
  * @param {{entries: object[]}} registry - tools/known-discrepancies.json
  * @param {{checks: object[]}} report - validation/data.json
+ * @param {?{entries: object[]}} [gaps] - tools/validation-gaps.json; an entry
+ *   with a `modelPage` field is a row here too, so what the suite leaves
+ *   unvalidated and what the model page admits to are one list
  * @returns {string} Table rows and a summary line, between newlines
  */
-export function knownDiscrepancyRows(registry, report) {
+export function knownDiscrepancyRows(registry, report, gaps = null) {
   const STATUS = {
     explained: 'Explained',
     limit: 'Limit stated',
@@ -309,7 +312,16 @@ export function knownDiscrepancyRows(registry, report) {
   };
   const byName = new Map(report.checks.map(c => [c.name, c]));
   const listed = new Set();
-  const rows = registry.entries.map(e => {
+  const fromGaps = (gaps?.entries || [])
+    .filter(g => g.modelPage)
+    .map(g => ({
+      item: g.title,
+      status: g.modelPage.status,
+      summary: g.text,
+      where: 'PHYSICS_VALIDATION.md, What is not validated',
+      checks: g.modelPage.checks,
+    }));
+  const rows = [...registry.entries, ...fromGaps].map(e => {
     const checks = e.checks.map(name => {
       listed.add(name);
       const c = byName.get(name);
@@ -369,6 +381,39 @@ function physicsCoverageTable(inventory) {
     total,
     '',
   ].join('\n');
+}
+
+/**
+ * The "What is not validated" list, from tools/validation-gaps.json and the
+ * suite's own inventory.
+ *
+ * The list was hand-written and said the Barnes-Hut solver was unvalidated
+ * after it had been calibrated, and that collision outcomes were unchecked
+ * after they were. Each entry now names the suite groups that touch it and the
+ * count printed is the suite's, so an entry that names a group the suite no
+ * longer has fails the build instead of going quietly stale.
+ *
+ * @param {{entries: object[]}} gaps - tools/validation-gaps.json
+ * @param {{groups: Array<{group: string, checks: number}>}} inventory - Counted
+ *   from a `validate-physics --json` run
+ * @returns {string} The markdown list, between its markers
+ */
+export function physicsGapsList(gaps, inventory) {
+  const counts = new Map(inventory.groups.map(g => [g.group, g.checks]));
+  const lines = gaps.entries.map(e => {
+    const covered = e.groups.map(name => {
+      if (!counts.has(name))
+        throw new Error(
+          `validation-gaps.json: "${e.id}" names a group the suite does not have: ${name}`
+        );
+      return `${name} (${counts.get(name)} checks)`;
+    });
+    const tail = covered.length
+      ? ` Checked in part by: ${covered.join('; ')}.`
+      : '';
+    return `- **${e.title}.** ${e.text}${tail}`;
+  });
+  return ['', ...lines, ''].join('\n');
 }
 
 /**
@@ -646,6 +691,7 @@ export function generatedBlocks({
   realSystems = null,
   moduleSizes = null,
   discrepancies = null,
+  gaps = null,
 }) {
   return {
     ...(dataPacks
@@ -662,7 +708,7 @@ export function generatedBlocks({
       : {}),
     ...(discrepancies
       ? {
-          knownDiscrepancies: `\n${knownDiscrepancyRows(discrepancies.registry, discrepancies.report)}\n          `,
+          knownDiscrepancies: `\n${knownDiscrepancyRows(discrepancies.registry, discrepancies.report, gaps)}\n          `,
         }
       : {}),
     ...(graph ? { generatedArtifacts: generatedArtifactsTable(graph) } : {}),
@@ -685,5 +731,6 @@ export function generatedBlocks({
     // Only a run of the suite can produce this, so a cheap docs check leaves
     // the block alone rather than claiming nobody generates it.
     ...(physics ? { physicsCoverage: physicsCoverageTable(physics) } : {}),
+    ...(physics && gaps ? { physicsGaps: physicsGapsList(gaps, physics) } : {}),
   };
 }
