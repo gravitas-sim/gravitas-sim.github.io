@@ -50,6 +50,7 @@ import {
   readProgress,
   writeProgress,
 } from './progressSchema.js';
+import { KEY_INVESTIGATION_PREFIX } from '../names.js';
 
 const getAreaSweepWedges = command('getAreaSweepWedges');
 
@@ -1216,7 +1217,7 @@ export const bindPersistence = h => {
   host = h;
 };
 
-const STORAGE_PREFIX = 'gravitas_investigation_';
+const STORAGE_PREFIX = KEY_INVESTIGATION_PREFIX;
 
 export const storageKey = id => `${STORAGE_PREFIX}${id}`;
 

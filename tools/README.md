@@ -95,6 +95,7 @@ current, and the orchestrator checks it.
 | `key-groups-check.mjs` | Key groups: does the rewritten catalog equal its source? |  |
 | `key-groups.mjs` | Key groups: write a shared key prefix once, in the bundle only |  |
 | `key-registry-codemod.mjs` | Move allowlisted 'gravitas*' literals into js/names.js (Prompt 141) |  |
+| `key-registry-free.mjs` | Which modules may import js/names.js without costing a route a request |  |
 | `key-registry-scan.mjs` | Which 'gravitas*' string literals are still loose in js/ (Prompt 107, step 2c) |  |
 | `lab3d-bench.mjs` | The 3-D kernel's throughput, desktop measured and low-end modelled |  |
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
