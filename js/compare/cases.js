@@ -13,9 +13,10 @@
 
 import { runForward } from '../forward/index.js';
 import { stateFromExoplanet, withElement } from './system.js';
+import { ID_OBSERVING_SETUP } from '../names.js';
 
 const setup = (kind, extra) => ({
-  format: 'gravitas.observing-setup',
+  format: ID_OBSERVING_SETUP,
   formatVersion: 1,
   epochs: { kind: 'regular', unit: 'd', start: 0, duration: 8, count: 320 },
   instrument: { kind },

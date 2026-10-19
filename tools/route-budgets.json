@@ -4,11 +4,11 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 2109.6,
+        "kb": 2111.7,
         "requests": 107
       },
       "sandbox": {
-        "kb": 2109.6,
+        "kb": 2111.7,
         "requests": 107
       },
       "kepler": {
@@ -40,11 +40,11 @@
         "requests": 5
       },
       "instructors": {
-        "kb": 849.9,
+        "kb": 852,
         "requests": 16
       },
       "figure": {
-        "kb": 2380.7,
+        "kb": 2384.9,
         "requests": 126
       },
       "experiments": {
@@ -52,19 +52,19 @@
         "requests": 56
       },
       "observatory": {
-        "kb": 184.4,
+        "kb": 186.6,
         "requests": 17
       },
       "catalog": {
-        "kb": 85.9,
+        "kb": 88.2,
         "requests": 13
       },
       "library": {
-        "kb": 57.0,
+        "kb": 59.2,
         "requests": 12
       },
       "my-work": {
-        "kb": 85.5,
+        "kb": 87.7,
         "requests": 10
       },
       "studio": {
@@ -72,19 +72,19 @@
         "requests": 48
       },
       "composer": {
-        "kb": 501.9,
+        "kb": 504.2,
         "requests": 31
       },
       "course-builder": {
-        "kb": 1050.4,
+        "kb": 1052.6,
         "requests": 46
       },
       "course-home": {
-        "kb": 260.7,
+        "kb": 262.9,
         "requests": 19
       },
       "lab3d": {
-        "kb": 85.1,
+        "kb": 86.8,
         "requests": 11
       },
       "lab3d-lab": {
@@ -104,27 +104,27 @@
         "requests": 36
       },
       "adoption": {
-        "kb": 7.8,
+        "kb": 9.9,
         "requests": 2
       },
       "teach-find": {
-        "kb": 10.5,
+        "kb": 12.6,
         "requests": 3
       },
       "teach-kit": {
-        "kb": 41.7,
+        "kb": 43.8,
         "requests": 6
       },
       "course-packs": {
-        "kb": 626.4,
+        "kb": 628.7,
         "requests": 44
       },
       "sky": {
-        "kb": 112.4,
+        "kb": 114.6,
         "requests": 14
       },
       "compute": {
-        "kb": 176.4,
+        "kb": 178.6,
         "requests": 20
       }
     },
@@ -178,7 +178,7 @@
         "requests": 4
       },
       "observatory": {
-        "kb": 87.7,
+        "kb": 88,
         "requests": 5
       },
       "catalog": {
@@ -186,11 +186,11 @@
         "requests": 2
       },
       "library": {
-        "kb": 22.9,
+        "kb": 23,
         "requests": 2
       },
       "my-work": {
-        "kb": 33.7,
+        "kb": 33.9,
         "requests": 3
       },
       "studio": {
@@ -198,15 +198,15 @@
         "requests": 4
       },
       "composer": {
-        "kb": 262.3,
+        "kb": 262.6,
         "requests": 15
       },
       "course-builder": {
-        "kb": 605.3,
+        "kb": 605.5,
         "requests": 13
       },
       "course-home": {
-        "kb": 66.6,
+        "kb": 66.7,
         "requests": 4
       },
       "lab3d": {
@@ -238,7 +238,7 @@
         "requests": 3
       },
       "teach-kit": {
-        "kb": 25.1,
+        "kb": 25.3,
         "requests": 2
       },
       "course-packs": {
@@ -246,7 +246,7 @@
         "requests": 13
       },
       "sky": {
-        "kb": 43.6,
+        "kb": 43.7,
         "requests": 4
       },
       "compute": {

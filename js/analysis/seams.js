@@ -49,10 +49,11 @@ import { LEVEL, describe, meanInterval } from './stats.js';
 import { artifact, validateArtifact } from '../platform/artifact.js';
 import { readVersioned } from '../platform/common.js';
 import { unitIdOf } from '../units/registry.js';
+import { ID_ANALYSIS, ID_EXPERIMENT_RESULT, ID_OBSERVATION } from '../names.js';
 
-export const RESULT_FORMAT = 'gravitas.experiment-result';
-export const ANALYSIS_FORMAT = 'gravitas.analysis';
-export const OBSERVATION_FORMAT = 'gravitas.observation';
+export const RESULT_FORMAT = ID_EXPERIMENT_RESULT;
+export const ANALYSIS_FORMAT = ID_ANALYSIS;
+export const OBSERVATION_FORMAT = ID_OBSERVATION;
 
 /** Statuses that finished with a number, in the result format's own word. */
 const OK = 'ok';

@@ -64,8 +64,9 @@
 // =============================================================================
 
 import { TIME_FORMATS, TIME_SCALES, dimensionOf, parseUnit } from './units.js';
+import { ID_OBSERVATION, ID_OBSERVING_SETUP } from '../names.js';
 
-export const FORMAT = 'gravitas.observation';
+export const FORMAT = ID_OBSERVATION;
 export const FORMAT_VERSION = 1;
 export const KINDS = Object.freeze([
   'time-series',
@@ -203,7 +204,7 @@ export function validateObservation(o) {
     need(
       sy &&
         typeof sy.forwardModel?.id === 'string' &&
-        sy.setup?.format === 'gravitas.observing-setup' &&
+        sy.setup?.format === ID_OBSERVING_SETUP &&
         Array.isArray(sy.truth?.parameters),
       'synthetic',
       'names its forward model, its setup and its truth parameters'

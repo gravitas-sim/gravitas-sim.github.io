@@ -1,3 +1,4 @@
+import { ID_EVALUATION } from '../names.js';
 // =============================================================================
 // The classroom evidence kit's shape
 // -----------------------------------------------------------------------------
@@ -14,7 +15,7 @@
 export const EVALUATION_SCHEMA = 1;
 
 /** The kind marker every export carries, so an importer can refuse a stranger. */
-export const EVALUATION_KIND = 'gravitas.evaluation';
+export const EVALUATION_KIND = ID_EVALUATION;
 
 /** The concept items' ids, each with four choices (a to d). */
 export const CONCEPT_IDS = Object.freeze([

@@ -1,3 +1,4 @@
+import { ID_EPHEMERIS_PACK } from '../names.js';
 // =============================================================================
 // Reading the educational ephemeris pack
 // -----------------------------------------------------------------------------
@@ -17,7 +18,7 @@
 
 const { floor, min, max } = Math;
 
-export const EPHEMERIS_FORMAT = 'gravitas.ephemeris-pack';
+export const EPHEMERIS_FORMAT = ID_EPHEMERIS_PACK;
 export const JD_J2000 = 2451545.0;
 
 /** Base64 to bytes, in a browser, a Worker or Node. */

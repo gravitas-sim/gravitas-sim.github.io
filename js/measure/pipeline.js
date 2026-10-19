@@ -55,8 +55,9 @@ import {
 import { sha256Hex } from '../hash.js';
 import { isUnit } from '../units/registry.js';
 import { contentPayload } from '../observatory/identity.js';
+import { ID_OBSERVATION, ID_PIPELINE } from '../names.js';
 
-export const FORMAT = 'gravitas.pipeline';
+export const FORMAT = ID_PIPELINE;
 export const FORMAT_VERSION = 1;
 export const KIND = Object.freeze({
   MEASURED: 'measured',
@@ -913,7 +914,7 @@ export function readPipeline(text) {
   } catch {
     return { ok: false, code: 'notJson' };
   }
-  if (doc?.format === 'gravitas.observation') {
+  if (doc?.format === ID_OBSERVATION) {
     return {
       ok: true,
       workspaceText: text,

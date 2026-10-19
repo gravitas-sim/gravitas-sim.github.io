@@ -29,9 +29,10 @@
 
 import { artifact } from '../platform/artifact.js';
 import { symbolOf, unitIdOf } from '../units/registry.js';
+import { ID_LEDGER } from '../names.js';
 
 /** What a ledger record says it is. */
-export const LEDGER_FORMAT = 'gravitas.ledger';
+export const LEDGER_FORMAT = ID_LEDGER;
 export const LEDGER_VERSION = 1;
 
 const HEX = /^[0-9a-f]{8,64}$/;

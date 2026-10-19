@@ -23,6 +23,7 @@ import { run as runPeriodic } from '../../forward/models/periodic.js';
 import { mulberry32, normalizeSeed } from '../../rng.js';
 import { harmonicFit, curveStats, magnitudesOf } from './fit.js';
 import { findPeriod, refinePeriod } from './period.js';
+import { ID_OBSERVING_SETUP } from '../../names.js';
 
 const { Math } = globalThis;
 
@@ -128,7 +129,7 @@ export function drawStar(cls, rand) {
 
 /** The observing setup of the sample: nightly visits, 1 percent white noise. */
 export const sampleSetup = (seed, nights = 60) => ({
-  format: 'gravitas.observing-setup',
+  format: ID_OBSERVING_SETUP,
   formatVersion: 1,
   seed,
   epochs: { kind: 'listed', list: nightlyEpochs(seed, nights), unit: 'd' },

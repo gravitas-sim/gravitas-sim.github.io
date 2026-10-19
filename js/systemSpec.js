@@ -73,6 +73,7 @@ import {
 import { orbitalElements, keplerNewton } from './orbital.js';
 import { hashState } from './experiments/canonicalState.js';
 import { MASS_FIELD, TYPE_NAME_KEY } from './place/preciseFields.js';
+import { ID_ORBITAL_SYSTEM } from './names.js';
 
 const DEG = Math.PI / 180;
 
@@ -114,7 +115,7 @@ export const holmanWiegert = {
 };
 
 /** The file format a saved system is written in. */
-export const SYSTEM_FORMAT = 'gravitas.orbital-system';
+export const SYSTEM_FORMAT = ID_ORBITAL_SYSTEM;
 /** Its schema version. A file with a larger one is refused, not guessed at. */
 export const SYSTEM_VERSION = 1;
 

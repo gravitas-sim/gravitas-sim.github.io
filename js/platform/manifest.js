@@ -23,8 +23,9 @@
 // =============================================================================
 
 import { parseRange, parseVersion, satisfies } from './semver.js';
+import { ID_CAPABILITY_PACKAGE } from '../names.js';
 
-export const FORMAT = 'gravitas.capability-package';
+export const FORMAT = ID_CAPABILITY_PACKAGE;
 export const FORMAT_VERSION = 1;
 /** The platform API this build of Gravitas implements. */
 export const PLATFORM_API = '1.0.0';
