@@ -31,6 +31,7 @@ import { loadFailed, toast } from '../notify.js';
 import { SCENARIO_INFO, scenarioId } from '../data/scenarioInfo.js';
 import { DEFAULT_SETTINGS } from '../appState.js';
 import { gradedSteps } from '../data/investigations/catalog.js';
+import { KEY_COMPOSER_PREVIEW } from '../names.js';
 
 /**
  * What the address bar is asking for.
@@ -71,7 +72,7 @@ export function authoringRequest() {
 }
 
 /** Where the Studio's composer (/studio/lesson/) leaves the lesson it previews. */
-export const DRAFT_KEY = 'gravitas_composer_preview';
+export const DRAFT_KEY = KEY_COMPOSER_PREVIEW;
 
 /**
  * Install the composer's draft, when that is what the address bar names.

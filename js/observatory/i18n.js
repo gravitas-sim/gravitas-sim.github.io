@@ -16,8 +16,9 @@
 // =============================================================================
 
 import { EN_OBSERVATORY } from '../i18n/en.observatory.js';
+import { KEY_LOCALE } from '../names.js';
 
-const STORAGE_KEY = 'gravitas_locale';
+const STORAGE_KEY = KEY_LOCALE;
 
 const CATALOGS = { en: { ...EN_OBSERVATORY }, es: {} };
 const LOADERS = {

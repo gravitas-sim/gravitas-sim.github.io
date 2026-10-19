@@ -20,6 +20,7 @@
 // =============================================================================
 
 import { sha256Hex } from './net.js';
+import { KEY_DB_ARCHIVE } from '../names.js';
 
 export const FRESH_MS = 7 * 86_400_000;
 
@@ -150,7 +151,7 @@ export function memoryStore(limits = LIMITS, now = Date.now) {
  * memory where IndexedDB is missing or refused (a private window, some
  * embedded browsers).
  */
-export function idbStore(name = 'gravitas-archive', limits = LIMITS) {
+export function idbStore(name = KEY_DB_ARCHIVE, limits = LIMITS) {
   if (typeof indexedDB === 'undefined') return memoryStore(limits);
   let opening = null;
   const db = () =>

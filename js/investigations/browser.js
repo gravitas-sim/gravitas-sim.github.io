@@ -39,6 +39,7 @@ import {
   wireThumbnailFallbacks,
 } from '../scenarioBrowser.js';
 import { loadFailed } from '../notify.js';
+import { KEY_NEXT_CONTEXT } from '../names.js';
 
 const attr = text => escape(text).replace(/"/g, '&quot;');
 
@@ -400,7 +401,7 @@ function renderSequences() {
     btn.addEventListener('click', () => {
       try {
         put(
-          'gravitas_next_context',
+          KEY_NEXT_CONTEXT,
           JSON.stringify({
             k: 'seq',
             id: btn.closest('[data-seq]').dataset.seq,

@@ -1,3 +1,4 @@
+import { KEY_PROTOCOL_COMPUTE } from '../../names.js';
 // =============================================================================
 // The compute frame's Worker: Pyodide lives here
 // -----------------------------------------------------------------------------
@@ -33,7 +34,7 @@ class Coded extends Error {
 
 const post = (type, fields) =>
   self.postMessage({
-    protocol: 'gravitas-compute',
+    protocol: KEY_PROTOCOL_COMPUTE,
     version: 1,
     type,
     ...fields,

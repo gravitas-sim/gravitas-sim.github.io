@@ -16,6 +16,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 
 import * as names from '../js/names.js';
+import * as objectNames from '../js/data/objectNames.js';
 import { setUnitMode } from '../js/units.js';
 import {
   looseLiterals,
@@ -46,6 +47,56 @@ const PINNED = {
   EV_LIGHT_CURVE_TOGGLED: 'gravitasLightCurveToggled',
   EV_GALAXY_GRAVITY_CHANGED: 'gravitasGalaxyGravityChanged',
   EV_SETTINGS_APPLIED: 'gravitasSettingsApplied',
+  EV_PRESENTATION_CHANGED: 'gravitasPresentationChanged',
+  KEY_DASHED_PREFIX: 'gravitas-',
+  KEY_ASSIGNMENT_PREFIX: 'gravitas_assignment_',
+  KEY_CAPABILITY_VERSIONS: 'gravitas_capability_versions',
+  KEY_COMPOSER_PREFIX: 'gravitas_composer_',
+  KEY_COMPOSER_PREVIEW: 'gravitas_composer_preview',
+  KEY_COURSE_PREFIX: 'gravitas_course_',
+  KEY_COURSE_LEVEL: 'gravitas_course_level',
+  KEY_COURSE_PREVIEW: 'gravitas_course_preview',
+  KEY_EVALUATION_DRAFT_PREFIX: 'gravitas_evaluation_draft_',
+  KEY_EVALUATION_DRAFT_V1: 'gravitas_evaluation_draft_v1',
+  KEY_EVIDENCE_NOTEBOOK: 'gravitas_evidence_notebook',
+  KEY_EXPERIMENT: 'gravitas_experiment',
+  KEY_EXPERIMENT_CHECKPOINT_PREFIX: 'gravitas_experiment_checkpoint_',
+  KEY_EXPERIMENT_PREFIX: 'gravitas_experiment_',
+  KEY_EXPERIMENTS_INDEX: 'gravitas_experiments_index',
+  KEY_GUIDES: 'gravitas_guides',
+  KEY_INSTRUCTOR_KEY: 'gravitas_instructor_key',
+  KEY_INVESTIGATION_PREFIX: 'gravitas_investigation_',
+  KEY_LAB3D_GUIDE_PREFIX: 'gravitas_lab3d_guide_',
+  KEY_LAST_EXPORT: 'gravitas_last_export',
+  KEY_LECTURE_SEQUENCE: 'gravitas_lecture_sequence',
+  KEY_LESSON_OBJECTS_OPEN: 'gravitas_lesson_objects_open',
+  KEY_LOCALE: 'gravitas_locale',
+  KEY_MADE_PREFIX: 'gravitas_made_',
+  KEY_MISSIONLAB_PREFIX: 'gravitas_missionlab_',
+  KEY_NEXT_CONTEXT: 'gravitas_next_context',
+  KEY_ORIENTATION_SEEN_PREFIX: 'gravitas_orientation_seen_',
+  KEY_ORIENTATION_SEEN_V1: 'gravitas_orientation_seen_v1',
+  KEY_RAIL_SECTIONS: 'gravitas_rail_sections',
+  KEY_SIMULATION_SAVE: 'gravitas_simulation_save',
+  KEY_STORE_PREFIX: 'gravitas_store:',
+  KEY_STUDENT_NAME: 'gravitas_student_name',
+  KEY_STUDIO_PREFIX: 'gravitas_studio_',
+  KEY_STUDIO_DRAFT_PREFIX: 'gravitas_studio_draft:',
+  KEY_STUDIO_LAST: 'gravitas_studio_last',
+  KEY_TEACHING_NOTES_PREFIX: 'gravitas_teaching_notes_',
+  KEY_TEACHING_NOTES_V1: 'gravitas_teaching_notes_v1',
+  KEY_THEME: 'gravitas_theme',
+  KEY_WELCOME_SEEN_PREFIX: 'gravitas_welcome_seen_',
+  KEY_WELCOME_SEEN_V1: 'gravitas_welcome_seen_v1',
+  KEY_DB_ARCHIVE: 'gravitas-archive',
+  KEY_DB_CATALOG: 'gravitas-catalog',
+  KEY_DB_STORE: 'gravitas-store',
+  KEY_PROTOCOL_COMPUTE: 'gravitas-compute',
+  KEY_PROTOCOL_EMBED: 'gravitas-embed',
+  KEY_FORMAT_EXPERIMENT: 'gravitas-experiment',
+  KEY_FORMAT_MANEUVER_LOG: 'gravitas-maneuver-log',
+  KEY_META_BUILD: 'gravitas-build',
+  KEY_META_REVISION: 'gravitas-revision',
 };
 
 const NAME_EXPORT = /^(KEY|EV|ID)_[A-Z0-9_]+$/;
@@ -74,7 +125,7 @@ describe('the registry', () => {
   test('the prefix of a name says what it is', () => {
     for (const k of exported()) {
       if (k.startsWith('EV_')) expect(names[k]).toMatch(/^gravitas[A-Z]/);
-      if (k.startsWith('KEY_')) expect(names[k]).toMatch(/^gravitas_/);
+      if (k.startsWith('KEY_')) expect(names[k]).toMatch(/^gravitas[_-]/);
       if (k.startsWith('ID_')) expect(names[k]).toMatch(/^gravitas[.-]/);
     }
   });
@@ -98,12 +149,16 @@ describe('the registry', () => {
   });
 
   test('the object name pools moved with their data intact', () => {
-    expect(Object.keys(names.SPACE_OBJECT_NAMES).length).toBeGreaterThan(5);
-    expect(names.default).toBe(names.SPACE_OBJECT_NAMES);
+    expect(Object.keys(objectNames.SPACE_OBJECT_NAMES).length).toBeGreaterThan(
+      5
+    );
+    expect(objectNames.default).toBe(objectNames.SPACE_OBJECT_NAMES);
+    // And names.js no longer carries them: any module may import the registry.
+    expect(names.SPACE_OBJECT_NAMES).toBeUndefined();
     // The pools as v2 had them in js/data/objectNames.js: a hash of the whole
     // table, so a name changed, dropped or reordered fails here.
     const digest = createHash('sha256')
-      .update(JSON.stringify(names.SPACE_OBJECT_NAMES))
+      .update(JSON.stringify(objectNames.SPACE_OBJECT_NAMES))
       .digest('hex')
       .slice(0, 16);
     expect(digest).toBe('61a542a615ec994a');

@@ -1,3 +1,4 @@
+import { KEY_MADE_PREFIX } from '../names.js';
 // =============================================================================
 // What a student built or ran: scenarios and experiments kept in My work
 // -----------------------------------------------------------------------------
@@ -31,7 +32,7 @@
 
 export const MADE_FORMAT = 'gravitas.made';
 export const MADE_VERSION = 1;
-export const MADE_PREFIX = 'gravitas_made_';
+export const MADE_PREFIX = KEY_MADE_PREFIX;
 export const MADE_COLLECTION = 'made';
 const ITEM_LIMIT = 512 * 1024;
 

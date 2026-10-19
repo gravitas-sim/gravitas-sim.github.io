@@ -38,13 +38,11 @@ const KINDS = {
   ids: { prefix: 'ID_', shape: /^gravitas\.[\w.:-]+$/ },
 };
 
-// Modules left as they are, and why. js/names.js also carries the object name
-// pools (about 10 KB), so a module that imports it puts them on every route that
-// loads the module: the stamped shell is on every page of the site, and
-// js/presentation.js is on the shell routes.
+// Modules left as they are, and why. js/names.js once carried the object name
+// pools (about 10 KB), which kept the stamped shell and js/presentation.js out;
+// the pools moved to js/data/objectNames.js in Part B, so only a module that
+// cannot import anything stays.
 const KEEP = {
-  'js/shell.js': 'stamped on every page: the pools would ride on all of them',
-  'js/presentation.js': 'on the shell routes (figure, the course builder)',
   'js/offline.js':
     'copied alone into e2e/serviceWorkerUpdate.spec.js: it can import nothing',
 };

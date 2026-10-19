@@ -1,3 +1,4 @@
+import { KEY_ORIENTATION_SEEN_V1, KEY_WELCOME_SEEN_V1 } from './names.js';
 // =============================================================================
 // Whether the front door opens, without opening it
 // -----------------------------------------------------------------------------
@@ -18,7 +19,7 @@
 // Versioned on purpose. Bumping it shows the front door once more to everyone
 // who has already dismissed it, which is right for a genuine redesign and wrong
 // for a copy edit. Do not bump it for wording.
-export const WELCOME_SEEN_KEY = 'gravitas_welcome_seen_v1';
+export const WELCOME_SEEN_KEY = KEY_WELCOME_SEEN_V1;
 
 // --- Storage -----------------------------------------------------------------
 //
@@ -57,7 +58,7 @@ export function resetWelcomePreference() {
 }
 
 /** The three-screen introduction on Home: once, whatever ends it (Prompt 73). */
-export const ORIENTATION_SEEN_KEY = 'gravitas_orientation_seen_v1';
+export const ORIENTATION_SEEN_KEY = KEY_ORIENTATION_SEEN_V1;
 export const isOrientationSeen = () => {
   try {
     return window.localStorage.getItem(ORIENTATION_SEEN_KEY) === '1';

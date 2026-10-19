@@ -19,6 +19,7 @@ import {
 } from './handout.js';
 import { tr } from './kitText.js';
 import { NOTES, PLATFORMS } from './lmsNotes.js';
+import { KEY_LOCALE } from '../names.js';
 
 /**
  * Everything that reads a link or a course, fetched when something is given to
@@ -370,7 +371,7 @@ async function init() {
   // P81 L-1: saved choice, else the browser's, as Teach does.
   try {
     document.documentElement.lang = /^es/i.test(
-      localStorage.getItem('gravitas_locale') || navigator.language
+      localStorage.getItem(KEY_LOCALE) || navigator.language
     )
       ? 'es'
       : 'en';
