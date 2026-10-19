@@ -8,9 +8,9 @@
 // adds the trend page): the queue time (run created to first job started), the
 // wall time (run created to last job completed), and runner-minutes - each
 // finished job's duration rounded UP to a whole minute, which is how GitHub
-// bills hosted runners, summed. Skipped jobs cost nothing. The workflow step
-// that would produce the artifact on every run is a ci.yml change and waits for
-// Carl (see DECISION_REGISTER, D-R10-01).
+// bills hosted runners, summed. Skipped jobs cost nothing. The ci-cost job in
+// .github/workflows/ci.yml writes this record as an artifact on every run (see
+// DECISION_REGISTER, D-R10-01).
 // =============================================================================
 
 import { readFileSync } from 'node:fs';
