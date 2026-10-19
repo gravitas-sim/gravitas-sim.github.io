@@ -13,6 +13,7 @@ import {
   readPackages,
   checkRepository,
   listing,
+  idsAsNames,
 } from '../tools/capabilities.mjs';
 
 // =============================================================================
@@ -324,5 +325,28 @@ describe('T10: public identifiers migrate, and old saved work still opens', () =
     const { default: inv } =
       await import('../js/data/investigations/power-law-gravity.js');
     expect(inv.id).toBe('power-law-gravity');
+  });
+});
+
+describe('the generated catalog spells a package id through the registry', () => {
+  test('a value becomes the registry name and an object key stays a string', () => {
+    const { text, used } = idsAsNames(
+      '{"gravitas.mission":["1",{"gravitas.lab3d":"^1"}],"owner":"gravitas.lab3d","other":"gravitas.not-in-the-registry"}'
+    );
+    expect(used).toEqual([]);
+    const known = idsAsNames('{"gravitas.lab3d":"x","o":"gravitas.library"}');
+    expect(known.used).toEqual(['ID_LIBRARY']);
+    expect(known.text).toBe('{"gravitas.lab3d":"x","o":ID_LIBRARY}');
+    expect(text).toContain('"gravitas.not-in-the-registry"');
+  });
+
+  test('the shipped catalog reads the same package ids as the manifests', async () => {
+    const shipped = await import('../js/platform/catalog.generated.js');
+    expect(Object.keys(shipped.PACKAGES).sort()).toEqual(
+      packages.map(p => p.manifest.id).sort()
+    );
+    expect(shipped.LESSONS['power-law-gravity'][2]).toBe(
+      'gravitas.lesson.power-law-gravity'
+    );
   });
 });

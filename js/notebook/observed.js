@@ -33,8 +33,9 @@
 // =============================================================================
 
 import { buildEntry, KIND, SOURCE, provenanceOf } from './entry.js';
+import { ID_OBSERVED } from '../names.js';
 
-export const OBSERVED_FORMAT = 'gravitas.observed';
+export const OBSERVED_FORMAT = ID_OBSERVED;
 export const OBSERVED_VERSION = 1;
 
 /**

@@ -20,8 +20,9 @@ import {
   offlineOf,
   reviewItem,
 } from './review.js';
+import { ID_COURSE_MANIFEST } from '../names.js';
 
-export const MANIFEST_FORMAT = 'gravitas.course-manifest';
+export const MANIFEST_FORMAT = ID_COURSE_MANIFEST;
 export const MANIFEST_FORMAT_VERSION = 1;
 
 const LICENSE_WORDS = {

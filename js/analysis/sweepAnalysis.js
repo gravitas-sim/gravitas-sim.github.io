@@ -50,8 +50,9 @@ import {
   stream,
   varianceShare,
 } from './stats.js';
+import { ID_ANALYSIS } from '../names.js';
 
-export const ANALYSIS_FORMAT = 'gravitas.analysis';
+export const ANALYSIS_FORMAT = ID_ANALYSIS;
 export const ANALYSIS_VERSION = 1;
 export const SWEEP_ANALYSIS = { id: 'sweep-analysis', version: '1.0.0' };
 

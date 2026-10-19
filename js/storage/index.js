@@ -28,6 +28,7 @@ import { canonicalJson } from '../hash.js';
 import { isObject, readVersioned } from '../platform/common.js';
 import { drop, put as putText } from './local.js';
 import {
+  ID_STUDENT_DATA,
   KEY_ASSIGNMENT_PREFIX,
   KEY_CAPABILITY_VERSIONS,
   KEY_COMPOSER_PREFIX,
@@ -63,7 +64,7 @@ import {
   KEY_WELCOME_SEEN_PREFIX,
 } from '../names.js';
 
-export const EXPORT_FORMAT = 'gravitas.student-data';
+export const EXPORT_FORMAT = ID_STUDENT_DATA;
 export const EXPORT_VERSION = 1;
 
 /**

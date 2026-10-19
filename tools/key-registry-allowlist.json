@@ -1,77 +1,23 @@
 {
   "_note": "The gravitas* string literals still written inline in js/, by module and value, with how many times. tests/keyRegistry.test.js requires this to equal what tools/key-registry-scan.mjs finds: a new loose literal fails (add a name to js/names.js instead), and so does an entry that no longer matches (run node tools/key-registry-scan.mjs --record, which can only lower a count). Reasons the rest are not moved yet are in DECISION_REGISTER.md (D-DECOMP-14).",
   "loose": {
-    "js/analysis/seams.js": {
-      "gravitas.experiment-result": 1,
-      "gravitas.analysis": 1,
-      "gravitas.observation": 1
-    },
-    "js/analysis/sweepAnalysis.js": {
-      "gravitas.analysis": 1
-    },
-    "js/archive/gaiaEpochs.js": {
-      "gravitas.observation": 1
-    },
     "js/assignments/assignment.js": {
       "gravitas.assignment": 1
-    },
-    "js/catalog/install.js": {
-      "gravitas.investigation-pack": 1
-    },
-    "js/catalogPage.js": {
-      "gravitas.catalog": 1
-    },
-    "js/compare/cases.js": {
-      "gravitas.observing-setup": 1
-    },
-    "js/compare/compare.js": {
-      "gravitas.observing-setup": 1
-    },
-    "js/composer/example.js": {
-      "gravitas.investigation-pack": 1
     },
     "js/composerPage.js": {
       "gravitas_composer_preview": 1,
       "gravitas_composer_draft:": 1,
       "gravitas_composer_last": 1
     },
-    "js/compute/capsule.js": {
-      "gravitas.compute-capsule": 1,
-      "gravitas": 2
-    },
-    "js/compute/catalogueData.js": {
-      "gravitas.observation": 5,
-      "gravitas.orbital-system": 1,
-      "gravitas.experiment-result": 1
-    },
-    "js/course/manifest.js": {
-      "gravitas.course-manifest": 1
-    },
     "js/course/pack.js": {
-      "gravitas.course-pack": 1,
-      "gravitas": 3
+      "gravitas.course-pack": 1
     },
     "js/coursePage.js": {
       "gravitas_course_draft:": 1,
       "gravitas_course_last": 1
     },
-    "js/data/courses/astronomy-semester.js": {
-      "gravitas.course-pack": 1
-    },
-    "js/data/courses/intro-astronomy.js": {
-      "gravitas.course-pack": 1
-    },
-    "js/data/courses/observing-lab.js": {
-      "gravitas.course-pack": 1
-    },
-    "js/data/courses/upper-level-modules.js": {
-      "gravitas.course-pack": 1
-    },
     "js/data/ephemeris/solarSystem2025.js": {
       "gravitas.ephemeris-pack": 1
-    },
-    "js/data/evaluationShape.js": {
-      "gravitas.evaluation": 1
     },
     "js/data/instructorExpectations.js": {
       "gravitas.instructor-expectations": 1
@@ -79,33 +25,9 @@
     "js/data/instructorFlow.js": {
       "gravitas.instructor-flow": 1
     },
-    "js/experiments/analysisPanel.js": {
-      "gravitas.experiment-result": 2
-    },
-    "js/experiments/experimentManifest.js": {
-      "gravitas.experiment": 2,
-      "gravitas.experiment-result": 2,
-      "gravitas.analysis": 1
-    },
-    "js/experiments/exports.js": {
-      "gravitas.experiment": 2,
-      "gravitas.experiment-result": 1
-    },
-    "js/experiments/store.js": {
-      "gravitas.experiment-result": 1
-    },
-    "js/figureBuilder.js": {
-      "gravitas.system3d": 1
-    },
-    "js/forward/setup.js": {
-      "gravitas.observing-setup": 1
-    },
     "js/i18n/index.js": {
       "gravitas_locale": 1,
       "gravitasLocaleChanged": 1
-    },
-    "js/inference/manifest.js": {
-      "gravitas.inference": 1
     },
     "js/instructorExpectations.js": {
       "gravitas.instructor-expectations": 1
@@ -124,14 +46,8 @@
     "js/investigations/progressBackup.js": {
       "gravitas.investigation.progress": 1
     },
-    "js/kernels/variables/classify.js": {
-      "gravitas.observing-setup": 1
-    },
     "js/lab3d/experiment.js": {
       "gravitas.experiment": 1
-    },
-    "js/lab3d/snapshot.js": {
-      "gravitas.lab3d.snapshot": 1
     },
     "js/lab3d/state.js": {
       "gravitas.system3d": 1,
@@ -143,95 +59,13 @@
     "js/lab3d/view/guidePanel.js": {
       "gravitas.lab3d-guide-report": 1
     },
-    "js/library/format.js": {
-      "gravitas.library": 1
-    },
-    "js/measure/pipeline.js": {
-      "gravitas.pipeline": 1,
-      "gravitas.observation": 1
-    },
-    "js/mission/ephemeris.js": {
-      "gravitas.ephemeris-pack": 1
-    },
-    "js/mission/lab/guidePanel.js": {
-      "gravitas.mission-lab-report": 1
-    },
-    "js/mission/plan.js": {
-      "gravitas.mission-plan": 1
-    },
-    "js/myWork/made.js": {
-      "gravitas.made": 1,
-      "gravitas.system3d": 1,
-      "gravitas.mission-plan": 1
-    },
-    "js/myWorkPage.js": {
-      "gravitas.investigation.progress": 1
-    },
-    "js/notebook/ledger.js": {
-      "gravitas.ledger": 1
-    },
-    "js/notebook/notebook.js": {
-      "gravitas.evidence.notebook": 1
-    },
-    "js/notebook/observed.js": {
-      "gravitas.observed": 1
-    },
     "js/notify.js": {
       "gravitasToast": 2
-    },
-    "js/observatory/fitPanel.js": {
-      "gravitas.analysis": 1
-    },
-    "js/observatory/schema.js": {
-      "gravitas.observation": 1,
-      "gravitas.observing-setup": 1
     },
     "js/offline.js": {
       "gravitasBeforeUpdate": 1,
       "gravitasUpdateReady": 1,
       "gravitasLocaleChanged": 1
-    },
-    "js/platform/artifact.js": {
-      "gravitas.artifact": 1,
-      "gravitas": 1
-    },
-    "js/platform/catalog.generated.js": {
-      "gravitas.lesson.power-law-gravity": 2,
-      "gravitas.power-law-instruments": 5,
-      "gravitas.sdss-dr18-spectra": 1,
-      "gravitas.tess-hd209458-s56": 2
-    },
-    "js/platform/course.js": {
-      "gravitas.course-pack": 1
-    },
-    "js/platform/investigation.js": {
-      "gravitas.investigation-pack": 1
-    },
-    "js/platform/manifest.js": {
-      "gravitas.capability-package": 1,
-      "gravitas": 4
-    },
-    "js/platform/questionBank.js": {
-      "gravitas.question-bank": 1
-    },
-    "js/platform/remix.js": {
-      "gravitas.investigation-pack": 1
-    },
-    "js/platform/scenario.js": {
-      "gravitas.scenario-pack": 1,
-      "gravitas.system3d": 1
-    },
-    "js/storage/index.js": {
-      "gravitas.student-data": 1
-    },
-    "js/studioPage.js": {
-      "gravitas.system3d": 1
-    },
-    "js/submission/results.js": {
-      "gravitas.submission-results": 1
-    },
-    "js/systemSpec.js": {
-      "gravitas.orbital-system": 1
     },
     "js/utils.js": {
       "gravitasDebug": 1

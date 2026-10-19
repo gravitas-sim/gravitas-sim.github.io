@@ -21,8 +21,9 @@ import {
 } from './curriculum.js';
 
 import { readJson, writeJson } from '../../storage/local.js';
+import { ID_MISSION_LAB_REPORT } from '../../names.js';
 
-export const REPORT_FORMAT = 'gravitas.mission-lab-report';
+export const REPORT_FORMAT = ID_MISSION_LAB_REPORT;
 const STORE = (guide, path) => `gravitas_missionlab_${guide}_${path}`;
 
 function el(tag, attrs = {}, ...children) {

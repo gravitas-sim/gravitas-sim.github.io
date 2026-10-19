@@ -35,10 +35,11 @@
 
 import { isObject, knownKeys, makeChecker } from './checker.js';
 import { checkItems, checkUnitName } from './questionBank.js';
+import { ID_INVESTIGATION_PACK } from '../names.js';
 
 export { makeChecker };
 
-export const FORMAT = 'gravitas.investigation-pack';
+export const FORMAT = ID_INVESTIGATION_PACK;
 export const FORMAT_VERSION = 1;
 
 export const STEP_TYPES = Object.freeze([

@@ -55,9 +55,10 @@ const inDepth = (s, d) => rank(s?.depth) <= rank(d);
 import { answersOf, attemptsOf, helpOf } from './submissionToken.js';
 import { plainDataProblem } from '../platform/common.js';
 import { symbolOf } from '../units/registry.js';
+import { ID_SUBMISSION_RESULTS } from '../names.js';
 
 /** What the JSON export says it is. */
-export const RESULTS_KIND = 'gravitas.submission-results';
+export const RESULTS_KIND = ID_SUBMISSION_RESULTS;
 
 /**
  * The export schema. Bump it when a column or field changes meaning or goes
