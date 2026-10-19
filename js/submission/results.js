@@ -154,25 +154,76 @@ export const EVIDENCE_COLUMNS = Object.freeze([
   'source_digest',
 ]);
 
+const KIND_OF_CODE = {
+  s: 'sigma',
+  i: 'interval',
+  l: 'limit',
+  m: 'model-limited',
+  a: 'assumed',
+  f: 'failed',
+  c: 'not-constrained',
+};
+const BASIS_OF_CODE = {
+  d: 'data',
+  m: 'model',
+  a: 'assumed',
+  s: 'scaled',
+  p: 'profile',
+  v: 'derived',
+};
+
+/**
+ * The uncertainty a row's tenth column codes (js/notebook/ledger.js
+ * uncertaintyCode), or null for a row of nine columns, which says no more than
+ * its half-width does. A code this build does not know reads as nothing.
+ * @param {*} code - The tenth column
+ * @param {?number} half - The fifth
+ * @returns {?{kind: string, basis: ?string, half: ?number, lo?: number,
+ *   hi?: number, level?: number, bound?: string, floor?: number,
+ *   sigma?: number}}
+ */
+function uncertaintyOf(code, half) {
+  const kind = Array.isArray(code) ? KIND_OF_CODE[code[0]] : undefined;
+  if (!kind) return null;
+  const [, b, x, y, z] = code;
+  const num = v => (Number.isFinite(v) ? v : undefined);
+  return {
+    kind,
+    basis: BASIS_OF_CODE[b] ?? null,
+    half,
+    ...(kind === 'interval'
+      ? { lo: num(x), hi: num(y), level: num(z) }
+      : kind === 'limit'
+        ? { bound: x === 'l' ? 'lower' : 'upper' }
+        : kind === 'model-limited'
+          ? { floor: num(x), sigma: num(y) }
+          : {}),
+  };
+}
+
 /**
  * A row of a token's evidence table as an object, with its unit written as the
  * registry writes it. The row is numbers and short codes (js/notebook/ledger.js
  * ledgerRecord()); nothing in it is a sentence, so it reads the same in
  * either language.
  * @param {Array<*>} row - [envelope, quantity, value, unit id, half-width,
- *   origin, source kind, source id, source digest prefix]
- * @returns {object} The row by name
+ *   origin, source kind, source id, source digest prefix, and, from Prompt 151,
+ *   the uncertainty's code]
+ * @returns {object} The row by name; `uncertainty` is null for a row with no
+ *   code
  */
 export function evidenceRowOf(row) {
-  const [envelope, quantity, value, unitId, half, origin, kind, id, digest] =
+  const [envelope, quantity, value, unitId, half, origin, kind, id, digest, c] =
     row;
+  const half_ = Number.isFinite(half) ? half : null;
   return {
     envelope: String(envelope ?? ''),
     quantity: String(quantity ?? ''),
     value: Number.isFinite(value) ? value : null,
     unitId: typeof unitId === 'string' ? unitId : null,
     unit: typeof unitId === 'string' && unitId ? symbolOf(unitId, 'en') : '',
-    half: Number.isFinite(half) ? half : null,
+    half: half_,
+    uncertainty: uncertaintyOf(c, half_),
     origin: String(origin ?? ''),
     sourceKind: String(kind ?? ''),
     sourceId: String(id ?? ''),

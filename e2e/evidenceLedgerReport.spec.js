@@ -29,6 +29,7 @@ import {
   readSubmissionToken,
 } from '../js/submission/submissionToken.js';
 import { buildBackup } from '../js/investigations/progressBackup.js';
+import { ledgerDigest } from '../js/submission/ledgerDigest.js';
 
 const LESSON = 'keplers-laws';
 const kepler = await import(`../js/data/investigations/${LESSON}.js`).then(
@@ -124,6 +125,67 @@ test.describe('the evidence ledger, end to end', () => {
     expect(text.split('\r\n')[0]).toContain('unit,unit_id,uncertainty');
     expect(text).toContain('verified');
     expect(text).toContain('3.5247');
+  });
+
+  test('the review page says what each uncertainty is, in either language, and reads a row of nine columns', async ({
+    page,
+    app,
+  }) => {
+    const token = await studentToken(page, app);
+    const { submission } = await readSubmissionToken(token);
+    const ids = submission.ev.i;
+    const base = [
+      'e1',
+      'q',
+      3.5,
+      'd',
+      0.01,
+      'fitted',
+      'inference',
+      'fit',
+      'ab',
+    ];
+    const rows = [
+      [...base.slice(0, 1), 'period', ...base.slice(2), ['s', 'd']],
+      [
+        ...base.slice(0, 1),
+        'flux',
+        1.5,
+        null,
+        null,
+        ...base.slice(5),
+        ['l', 'd', 'u'],
+      ],
+      [...base.slice(0, 1), 'depth', null, null, null, ...base.slice(5), ['f']],
+      [...base.slice(0, 1), 'old', ...base.slice(2)],
+    ];
+    submission.ev = {
+      d: await ledgerDigest({ ids, rows }),
+      i: ids,
+      n: rows.length,
+      r: rows,
+    };
+    const edited = (await encodeSubmission(submission)).token;
+
+    for (const [locale, words] of [
+      ['en', ['0.01', '(data)', 'upper limit', 'no result']],
+      ['es', ['0,01', '(datos)', 'límite superior', 'sin resultado']],
+    ]) {
+      await open(page, locale);
+      await page.locator('#paste').fill(edited);
+      await page.locator('#paste-go').click();
+      const section = page.locator('.sr-evidence');
+      await section.locator('summary').click();
+      const cells = section.locator('tbody tr');
+      await expect(cells).toHaveCount(4);
+      await expect(cells.nth(0)).toContainText(`± ${words[0]} ${words[1]}`);
+      await expect(cells.nth(1)).toContainText(words[2]);
+      await expect(cells.nth(2)).toContainText(words[3]);
+      // The row of nine columns, which a token from before this said.
+      await expect(cells.nth(3)).toContainText(words[0]);
+      await expect(cells.nth(3)).not.toContainText('(');
+      await expect(page.locator('#evidence p[role="alert"]')).toHaveCount(0);
+    }
   });
 
   test('a token whose table was edited afterwards is flagged, and a v1 token still reads', async ({

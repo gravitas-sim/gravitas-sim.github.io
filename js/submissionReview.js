@@ -426,6 +426,49 @@ const num = v =>
     : v.toLocaleString(language(), { maximumSignificantDigits: 6 });
 
 /**
+ * What a row's uncertainty says, in the page's words (Prompt 151): "± half
+ * (method)", an asymmetric interval as "+p -m", a limit as what kind it is, a
+ * failed or unconstrained quantity as such. A row with no more to say than its
+ * half-width is that number, as it always was.
+ * @param {object} r - An evidence row (js/submission/results.js)
+ * @returns {string}
+ */
+function uncertaintyText(r) {
+  const u = r.uncertainty;
+  if (!u) return num(r.half);
+  if (u.kind === 'failed') return t('sub.evidence.unc.failed');
+  if (u.kind === 'not-constrained') return t('sub.evidence.unc.notConstrained');
+  if (u.kind === 'limit') return t(`sub.evidence.unc.limit.${u.bound}`);
+  const method = {
+    data: 'data',
+    model: 'model',
+    assumed: 'stated',
+    scaled: 'scaled',
+    profile: 'profile',
+    derived: 'propagated',
+  }[u.basis];
+  const how =
+    u.kind === 'assumed'
+      ? 'exact'
+      : u.kind === 'model-limited'
+        ? 'model'
+        : method;
+  const asymmetric =
+    u.kind === 'interval' &&
+    Number.isFinite(u.lo) &&
+    Number.isFinite(u.hi) &&
+    Number.isFinite(r.value) &&
+    Math.abs(u.hi - r.value - (r.value - u.lo)) > 1e-9 * (u.hi - u.lo);
+  const size = asymmetric
+    ? `+${num(u.hi - r.value)} −${num(r.value - u.lo)}`
+    : u.kind === 'assumed'
+      ? ''
+      : `± ${num(u.kind === 'model-limited' ? (u.floor ?? r.half) : r.half)}`;
+  const word = how ? `(${t(`sub.evidence.method.${how}`)})` : '';
+  return [size, word].filter(Boolean).join(' ') || num(r.half);
+}
+
+/**
  * Each report's evidence table, with the verdict of its check against the
  * digest the token states. A table that does not match is open and says so in
  * words; a match says what it does not show.
@@ -468,7 +511,7 @@ function evidenceSections(records) {
             .map(
               r => `<tr><td>${esc(r.envelope)}</td><td>${esc(r.quantity)}</td>
                 <td>${esc(num(r.value))}</td><td>${esc(r.unit)}</td>
-                <td>${esc(num(r.half))}</td><td>${esc(word('origin', r.origin))}</td>
+                <td>${esc(uncertaintyText(r))}</td><td>${esc(word('origin', r.origin))}</td>
                 <td>${esc(`${r.sourceKind} ${r.sourceId}${r.sourceDigest ? ` ${r.sourceDigest}` : ''}`)}</td></tr>`
             )
             .join('')}</tbody></table></div>`
