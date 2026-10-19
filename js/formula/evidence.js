@@ -14,8 +14,57 @@
 
 import { artifact } from '../platform/artifact.js';
 import { sha256Hex } from '../hash.js';
-import { RULE, compile, evaluate } from './engine.js';
+import { RULE, RULE_CORRELATED, compile, evaluate } from './engine.js';
 import { fail } from './parse.js';
+
+/**
+ * That the coefficients given between the inputs a formula read are usable:
+ * each between -1 and 1 and between two different inputs, one value for a
+ * pair, and together a correlation matrix (positive semi-definite, or some
+ * direction would give the result a negative variance; Cholesky, with a small
+ * tolerance). Refused with `correlation` when not. The formula engine trusts
+ * what it is given; this is the check the callers that take coefficients from
+ * an envelope make first.
+ * @param {Array<{a: string, b: string, rho: number}>} correlations - By name
+ * @param {string[]} used - The inputs the formula read (info.inputs)
+ * @throws {FormulaError}
+ */
+export function checkCorrelations(correlations, used) {
+  const n = used.length;
+  const seen = new Map();
+  for (const { a, b, rho } of correlations) {
+    if (!used.includes(a) || !used.includes(b)) continue;
+    const key = [a, b].sort().join('\u0000');
+    if (
+      a === b ||
+      !(Math.abs(rho) <= 1) ||
+      (seen.has(key) && seen.get(key) !== rho)
+    )
+      fail('correlation', { name: `${a}, ${b}` });
+    seen.set(key, rho);
+  }
+  const R = used.map((a, i) =>
+    used.map((b, j) =>
+      i === j
+        ? 1
+        : (correlations.find(
+            c => (c.a === a && c.b === b) || (c.a === b && c.b === a)
+          )?.rho ?? 0)
+    )
+  );
+  const L = R.map(() => new Array(n).fill(0));
+  for (let i = 0; i < n; i++)
+    for (let j = 0; j <= i; j++) {
+      let s = R[i][j];
+      for (let k = 0; k < j; k++) s -= L[i][k] * L[j][k];
+      const bad = () => fail('correlation', { name: used.join(', ') });
+      if (i === j) {
+        if (s < -1e-9) bad();
+        L[i][i] = Math.sqrt(Math.max(s, 0));
+      } else if (L[j][j] > 1e-12) L[i][j] = s / L[j][j];
+      else if (Math.abs(s) > 1e-9) bad();
+    }
+}
 
 /**
  * One result from one number per input, where an input's uncertainty may be
@@ -94,6 +143,10 @@ export function evaluateStates(source, inputs, opts) {
  *   sigma?: number|null, digest?: string}>} a.inputs - What the formula read.
  *   A digest the caller has (an entry's, an observation's) is kept; without
  *   one, the digest is of the value, unit and sigma written here
+ * @param {Array<{a: string, b: string, rho: number}>} [a.correlations] - The
+ *   coefficients between inputs, by name, that the result was computed with
+ *   (engine.js evaluate); kept in the derivation, by input id, when the rule
+ *   used them, and part of the source digest then
  * @returns {Promise<object>} The envelope
  */
 export async function derivationEnvelope({
@@ -102,6 +155,7 @@ export async function derivationEnvelope({
   locale = 'en',
   result,
   inputs,
+  correlations = [],
 }) {
   const used = new Set(result.info.inputs);
   const read = [];
@@ -116,7 +170,18 @@ export async function derivationEnvelope({
         )),
     });
   }
-  const rule = result.info.rule === 'first-order' ? RULE : result.info.rule;
+  const correlated = result.info.rule === 'first-order-correlated';
+  const rule = correlated
+    ? RULE_CORRELATED
+    : result.info.rule === 'first-order'
+      ? RULE
+      : result.info.rule;
+  const idOf = new Map(read.map(r => [r.name, r.id]));
+  const used_ = correlated
+    ? correlations
+        .filter(c => idOf.has(c.a) && idOf.has(c.b) && c.rho !== 0)
+        .map(c => ({ a: idOf.get(c.a), b: idOf.get(c.b), rho: c.rho }))
+    : [];
   const { info } = result;
   const sigma = result.sigma;
   return artifact({
@@ -126,10 +191,22 @@ export async function derivationEnvelope({
       id: 'formula',
       version: '1',
       digest: await sha256Hex(
-        JSON.stringify([formula, locale, read.map(r => r.digest)])
+        JSON.stringify(
+          used_.length
+            ? [formula, locale, read.map(r => r.digest), used_]
+            : [formula, locale, read.map(r => r.digest)]
+        )
       ),
     },
-    provenance: { derivation: { formula, locale, rule, inputs: read } },
+    provenance: {
+      derivation: {
+        formula,
+        locale,
+        rule,
+        inputs: read,
+        ...(used_.length ? { correlations: used_ } : {}),
+      },
+    },
     quantities: [
       {
         id: 'result',

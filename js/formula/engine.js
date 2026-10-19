@@ -14,7 +14,11 @@
 //     dimensionless when it is a ratio, or has no registry unit at all (a time
 //     squared per length cubed), which the caller may refuse or write as text.
 //   - Uncertainty is first-order, for uncorrelated inputs with a standard
-//     deviation each: every number carries its partial derivative with respect
+//     deviation each, or for inputs whose correlation coefficients the caller
+//     gives (Prompt 151: `correlations`, from an envelope's `correlatedWith`),
+//     where the cross terms 2 rho gj gk sj sk are added and the rule says so;
+//     with none given the inputs are treated as independent, and the rule says
+//     that: every number carries its partial derivative with respect
 //     to each input, so a quantity used twice (x - x, x * x) is differentiated
 //     once, correctly, and not added in quadrature as two inputs. It is not
 //     propagated, and the result says why, when an input has none, when an
@@ -44,6 +48,8 @@ import {
 } from './units.js';
 
 export const RULE = 'first-order-uncorrelated';
+/** The rule when correlation coefficients between inputs were given and used. */
+export const RULE_CORRELATED = 'first-order-correlated';
 
 /** The uncertainty states a formula refuses, and the words for each. */
 const REFUSED = {
@@ -291,13 +297,16 @@ export function compile(source, scope, { locale = 'en' } = {}) {
   const lacking = used.filter(
     x => !['sigma', 'assumed'].includes(scope.inputs[x].uncertainty)
   );
-  const rule = !used.length
+  let rule = !used.length
     ? 'exact'
     : lacking.length
       ? 'none'
       : shared
         ? 'shared'
         : 'first-order';
+  const pairs =
+    rule === 'first-order' ? correlationPairs(scope.correlations, used) : [];
+  if (pairs.length) rule = 'first-order-correlated';
 
   const r = ast;
   let unit;
@@ -325,8 +334,29 @@ export function compile(source, scope, { locale = 'en' } = {}) {
   };
 
   const run = (data, { rows, skip } = {}) =>
-    execute({ ast, used, rule, aggs, mult, scope }, data, rows, skip);
+    execute({ ast, used, rule, aggs, mult, scope, pairs }, data, rows, skip);
   return { info, run, ast };
+}
+
+/**
+ * The coefficients between the inputs a formula reads, as pairs of their
+ * positions among them. Trusting: that each is between -1 and 1, that no pair
+ * is given twice, and that the set is a correlation matrix is checked by
+ * js/formula/evidence.js checkCorrelations, which every caller that takes
+ * coefficients from an envelope uses (the variance is floored at zero here
+ * either way).
+ * @param {?Array<{a: string, b: string, rho: number}>} given - By input name
+ * @param {string[]} used - The inputs the formula reads
+ * @returns {Array<[number, number, number]>} [j, k, rho] for the pairs with
+ *   both inputs read and a coefficient other than zero
+ */
+function correlationPairs(given, used) {
+  const out = [];
+  for (const { a, b, rho } of given ?? []) {
+    const [j, k] = [used.indexOf(a), used.indexOf(b)];
+    if (j >= 0 && k >= 0 && j !== k && rho) out.push([j, k, rho]);
+  }
+  return out;
 }
 
 /** The dual number of a node at a row: its value and its gradient (or null). */
@@ -431,16 +461,18 @@ function variance(g, c, i) {
   for (let j = 0; j < c.U; j++) s += (g[j] * c.sg[j][i]) ** 2;
   for (let a = 0; a < c.aggSigma.length; a++)
     s += (g[c.U + a] * c.aggSigma[a]) ** 2;
-  return s;
+  for (const [j, k, rho] of c.pairs)
+    s += 2 * rho * g[j] * g[k] * c.sg[j][i] * c.sg[k][i];
+  return Math.max(s, 0);
 }
 
-function execute({ ast, used, rule, aggs, mult }, data, rows, skip) {
+function execute({ ast, used, rule, aggs, mult, pairs }, data, rows, skip) {
   const first = used.length ? data?.[used[0]]?.values : null;
   const n = rows ?? first?.length ?? 1;
   if (n > LIMITS.rows) fail('rows', { max: LIMITS.rows, rows: n });
   const cols = {};
   const sg = [];
-  const prop = rule === 'first-order';
+  const prop = rule === 'first-order' || rule === 'first-order-correlated';
   used.forEach((name, j) => {
     const d = data?.[name];
     if (!d?.values || d.values.length !== n) fail('data', { name, rows: n });
@@ -453,6 +485,7 @@ function execute({ ast, used, rule, aggs, mult }, data, rows, skip) {
     cols,
     sg,
     prop,
+    pairs,
     rows: n,
     skip,
     U: used.length,
@@ -480,12 +513,14 @@ function execute({ ast, used, rule, aggs, mult }, data, rows, skip) {
  * @param {string} source - The formula
  * @param {Record<string, {value: number, unit: string|null, sigma?: number,
  *   uncertainty?: 'sigma'|'assumed'|'none'}>} inputs - By name
- * @param {{locale?: string}} [opts]
+ * @param {{locale?: string, correlations?: Array<{a: string, b: string,
+ *   rho: number}>}} [opts] - `correlations` are coefficients between inputs,
+ *   by name; absent, the inputs are treated as independent
  * @returns {{value: number, sigma: number|null, info: object}}
  * @throws {FormulaError}
  */
 export function evaluate(source, inputs, opts) {
-  const scope = { inputs: {} };
+  const scope = { inputs: {}, correlations: opts?.correlations };
   const data = {};
   for (const [k, v] of Object.entries(inputs)) {
     const kind = v.uncertainty ?? (Number.isFinite(v.sigma) ? 'sigma' : 'none');
