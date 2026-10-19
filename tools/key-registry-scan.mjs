@@ -36,7 +36,9 @@ export const EXEMPT = Object.freeze({
  * file name (gravitas-code.svg) and a host name are not keys.
  */
 const KEY_SHAPE = /^gravitas[\w.:-]*$/;
-const NOT_A_KEY = /\.(json|csv|svg|txt|online)$|\.\.\./;
+// The bare word is the product's name (the `app` a saved file records, the
+// manifest field that holds the platform range), never a key, event or id.
+const NOT_A_KEY = /^gravitas$|\.(json|csv|svg|txt|online)$|\.\.\./;
 
 /** Every .js file under a directory, as repo-relative posix paths. */
 function jsFiles(dir) {

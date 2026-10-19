@@ -49,6 +49,7 @@ import {
   load as loadNotebook,
   save as saveNotebook,
 } from '../notebook/store.js';
+import { ID_EXPERIMENT_RESULT } from '../names.js';
 
 // The page's own modules - its translator, the metrics' units, the CSV writer
 // - arrive in `ctx`, as the Observatory's fit panel has them: a module both
@@ -337,7 +338,7 @@ export function mountAnalysis(root, ctx) {
         openSaved(f.name, parsed);
         return;
       }
-      if (parsed?.format !== 'gravitas.experiment-result' || !designOf(parsed))
+      if (parsed?.format !== ID_EXPERIMENT_RESULT || !designOf(parsed))
         throw new Error(t('lab.refuse.notAResult'));
       opened = { name: f.name, result: parsed };
       seen.set(parsed.hash, parsed);
@@ -353,7 +354,7 @@ export function mountAnalysis(root, ctx) {
     if (!f) return;
     try {
       const parsed = JSON.parse(await f.text());
-      if (parsed?.format !== 'gravitas.experiment-result' || !designOf(parsed))
+      if (parsed?.format !== ID_EXPERIMENT_RESULT || !designOf(parsed))
         throw new Error(t('lab.refuse.notAResult'));
       seen.set(parsed.hash, parsed);
       status.textContent = '';

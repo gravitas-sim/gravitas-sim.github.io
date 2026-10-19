@@ -1,3 +1,4 @@
+import { ID_SCENARIO_PACK, ID_SYSTEM3D } from '../names.js';
 // =============================================================================
 // gravitas.scenario-pack/1: a scenario, as data
 // -----------------------------------------------------------------------------
@@ -22,7 +23,7 @@
 // how to judge an orbital system or a typed body - arrives as `api`.
 // =============================================================================
 
-export const FORMAT = 'gravitas.scenario-pack';
+export const FORMAT = ID_SCENARIO_PACK;
 export const FORMAT_VERSION = 1;
 
 const PUBLIC_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
@@ -206,7 +207,7 @@ const FIELDS = new Set([
 function system3dShape(sys) {
   const bad = (path, code) => [{ path, code }];
   if (!isObject(sys)) return bad('', 'notSystem');
-  if (sys.format !== 'gravitas.system3d') return bad('format', 'format');
+  if (sys.format !== ID_SYSTEM3D) return bad('format', 'format');
   if (sys.formatVersion !== 1) return bad('formatVersion', 'version');
   if (sys.units !== 'code' && sys.units !== 'solar')
     return bad('units', 'units');

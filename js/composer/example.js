@@ -1,3 +1,4 @@
+import { ID_INVESTIGATION_PACK } from '../names.js';
 // =============================================================================
 // The example investigation: "Reading an orbit"
 // -----------------------------------------------------------------------------
@@ -11,7 +12,7 @@
 // =============================================================================
 
 export const EXAMPLE_INVESTIGATION = {
-  format: 'gravitas.investigation-pack',
+  format: ID_INVESTIGATION_PACK,
   formatVersion: 1,
   id: 'reading-an-orbit',
   version: '1.0.0',

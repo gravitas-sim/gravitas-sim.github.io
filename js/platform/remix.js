@@ -28,6 +28,7 @@
 import { digest, compileInvestigation } from '../composer/compile.js';
 import { shortHash } from '../assignments/assignment.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
+import { ID_INVESTIGATION_PACK } from '../names.js';
 
 const isObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 
@@ -340,7 +341,7 @@ export function remixInvestigation(lesson, spanish, options) {
   );
   if (lessonKept.length) kept.unshift({ sid: null, fields: lessonKept });
   const pack = {
-    format: 'gravitas.investigation-pack',
+    format: ID_INVESTIGATION_PACK,
     formatVersion: 1,
     id: options.id,
     version: options.version || '1.0.0',

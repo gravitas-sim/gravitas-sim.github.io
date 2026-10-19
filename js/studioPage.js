@@ -71,6 +71,7 @@ import {
   serialize,
 } from './studio/model.js';
 import { drop, put } from './storage/local.js';
+import { ID_SYSTEM3D } from './names.js';
 
 const $ = id => document.getElementById(id);
 const LOCAL = { en: [EN_STUDIO, EN_BUILDER, EN_PLACEMENT] };
@@ -1239,7 +1240,7 @@ async function openFile(file) {
     return;
   }
   let pack;
-  if (data?.format === 'gravitas.system3d') {
+  if (data?.format === ID_SYSTEM3D) {
     // A 3-D lab file: the pack carries it (js/scenarioPack3d.js, lazy).
     const r = (await import('./scenarioPack3d.js')).packFromSystem3d(data);
     if (!r.ok) return setStatus(t('studio.file.system3d', { why: r.code }));

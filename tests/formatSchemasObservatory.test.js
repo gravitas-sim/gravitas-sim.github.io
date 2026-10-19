@@ -380,7 +380,7 @@ describe('the analysis schema', () => {
   test('the comparison’s fields are the ones the fit panel writes', () => {
     const panel = read('js/observatory/fitPanel.js');
     const literal = panel.match(
-      /const doc = \{\n {8}format: 'gravitas\.analysis',([\s\S]*?)\n {6}\};/
+      /const doc = \{\n {8}format: ID_ANALYSIS,([\s\S]*?)\n {6}\};/
     )[1];
     const keys = ['format', ...literals(literal, /^ {8}(\w+)\b/gm)];
     expect(keys.sort()).toEqual(

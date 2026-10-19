@@ -99,6 +99,41 @@ const PINNED = {
   KEY_TEACHING_NOTES_PREFIX: 'gravitas_teaching_notes_',
   KEY_TEACHING_NOTES_V1: 'gravitas_teaching_notes_v1',
   KEY_WELCOME_SEEN_PREFIX: 'gravitas_welcome_seen_',
+  ID_ANALYSIS: 'gravitas.analysis',
+  ID_ARTIFACT: 'gravitas.artifact',
+  ID_CAPABILITY_PACKAGE: 'gravitas.capability-package',
+  ID_CATALOG: 'gravitas.catalog',
+  ID_COMPUTE_CAPSULE: 'gravitas.compute-capsule',
+  ID_COURSE_MANIFEST: 'gravitas.course-manifest',
+  ID_COURSE_PACK: 'gravitas.course-pack',
+  ID_EPHEMERIS_PACK: 'gravitas.ephemeris-pack',
+  ID_EVALUATION: 'gravitas.evaluation',
+  ID_EVIDENCE_NOTEBOOK: 'gravitas.evidence.notebook',
+  ID_EXPERIMENT: 'gravitas.experiment',
+  ID_EXPERIMENT_RESULT: 'gravitas.experiment-result',
+  ID_INFERENCE: 'gravitas.inference',
+  ID_INVESTIGATION_PACK: 'gravitas.investigation-pack',
+  ID_INVESTIGATION_PROGRESS: 'gravitas.investigation.progress',
+  ID_LAB3D_SNAPSHOT: 'gravitas.lab3d.snapshot',
+  ID_LEDGER: 'gravitas.ledger',
+  ID_LESSON_POWER_LAW_GRAVITY: 'gravitas.lesson.power-law-gravity',
+  ID_LIBRARY: 'gravitas.library',
+  ID_MADE: 'gravitas.made',
+  ID_MISSION_LAB_REPORT: 'gravitas.mission-lab-report',
+  ID_MISSION_PLAN: 'gravitas.mission-plan',
+  ID_OBSERVATION: 'gravitas.observation',
+  ID_OBSERVED: 'gravitas.observed',
+  ID_OBSERVING_SETUP: 'gravitas.observing-setup',
+  ID_ORBITAL_SYSTEM: 'gravitas.orbital-system',
+  ID_PIPELINE: 'gravitas.pipeline',
+  ID_POWER_LAW_INSTRUMENTS: 'gravitas.power-law-instruments',
+  ID_QUESTION_BANK: 'gravitas.question-bank',
+  ID_SCENARIO_PACK: 'gravitas.scenario-pack',
+  ID_SDSS_DR18_SPECTRA: 'gravitas.sdss-dr18-spectra',
+  ID_STUDENT_DATA: 'gravitas.student-data',
+  ID_SUBMISSION_RESULTS: 'gravitas.submission-results',
+  ID_SYSTEM3D: 'gravitas.system3d',
+  ID_TESS_HD209458_S56: 'gravitas.tess-hd209458-s56',
 };
 
 const NAME_EXPORT = /^(KEY|EV|ID)_[A-Z0-9_]+$/;
@@ -219,6 +254,7 @@ describe('the loose-literal ratchet', () => {
       const c = \`gravitas\${a}\`;
       const d = 'gravitas: a sentence';
       const e = 'gravitas-report.csv';
+      const g = 'gravitas';
       f('gravitas_two', "gravitas.three");
     `;
     expect(

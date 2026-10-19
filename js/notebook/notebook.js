@@ -12,9 +12,10 @@
 
 import { SCHEMA_VERSION, reviveEntry, validateEntry } from './entry.js';
 import { readVersioned } from '../platform/common.js';
+import { ID_EVIDENCE_NOTEBOOK } from '../names.js';
 
 /** What a downloaded notebook file says it is. */
-export const BACKUP_KIND = 'gravitas.evidence.notebook';
+export const BACKUP_KIND = ID_EVIDENCE_NOTEBOOK;
 
 /** The file format's version, independent of an entry's schema version. */
 export const BACKUP_VERSION = 1;

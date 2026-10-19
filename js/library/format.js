@@ -1,3 +1,4 @@
+import { ID_LIBRARY } from '../names.js';
 // =============================================================================
 // gravitas.library/1: the Library's index (LIBRARY.md, FORMATS.md)
 // -----------------------------------------------------------------------------
@@ -6,7 +7,7 @@
 // before it reads anything else.
 // =============================================================================
 
-export const FORMAT = 'gravitas.library';
+export const FORMAT = ID_LIBRARY;
 export const FORMAT_VERSION = 1;
 
 /**

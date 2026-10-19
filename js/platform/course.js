@@ -1,3 +1,4 @@
+import { ID_COURSE_PACK } from '../names.js';
 // =============================================================================
 // gravitas.course-pack/1: a sequence of existing lessons, as data
 // -----------------------------------------------------------------------------
@@ -17,7 +18,7 @@
 // Pure, with no imports, so the page and the tools share it.
 // =============================================================================
 
-export const FORMAT = 'gravitas.course-pack';
+export const FORMAT = ID_COURSE_PACK;
 export const FORMAT_VERSION = 1;
 
 const PUBLIC_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
