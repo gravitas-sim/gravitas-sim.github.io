@@ -22,6 +22,7 @@
 
 import { INTEGRATORS } from './physics.js';
 import { setReadoutDigits, setUnitMode } from './units.js';
+import { KEY_COURSE_LEVEL } from './names.js';
 
 /**
  * The sections, in the panel's order. An `advanced` section sits inside the
@@ -496,7 +497,7 @@ export const COURSE_LEVELS = Object.freeze({
   }),
 });
 
-const LEVEL_KEY = 'gravitas_course_level';
+const LEVEL_KEY = KEY_COURSE_LEVEL;
 let courseLevel = 'introductory';
 
 /** @returns {string} The reader's course level */

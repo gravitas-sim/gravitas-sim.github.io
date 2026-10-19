@@ -1,3 +1,4 @@
+import { KEY_PROTOCOL_EMBED } from './names.js';
 // =============================================================================
 // The messages an embedded figure exchanges with its page: gravitas-embed/1
 // -----------------------------------------------------------------------------
@@ -20,7 +21,7 @@
 // new. EMBEDDING.md is the public description.
 // =============================================================================
 
-export const PROTOCOL = 'gravitas-embed';
+export const PROTOCOL = KEY_PROTOCOL_EMBED;
 export const PROTOCOL_VERSION = 1;
 
 /** What a page may ask for, in the order `ready` lists them. */

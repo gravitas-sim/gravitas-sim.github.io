@@ -21,7 +21,9 @@ import {
   looseLiterals,
   scanTree,
   REGISTRY,
+  EXEMPT,
 } from '../tools/key-registry-scan.mjs';
+import { costs, freeFiles } from '../tools/key-registry-free.mjs';
 import { rewriteSource } from '../tools/key-registry-codemod.mjs';
 
 /** Every name and the exact string it has always been. */
@@ -47,6 +49,23 @@ const PINNED = {
   EV_LIGHT_CURVE_TOGGLED: 'gravitasLightCurveToggled',
   EV_GALAXY_GRAVITY_CHANGED: 'gravitasGalaxyGravityChanged',
   EV_SETTINGS_APPLIED: 'gravitasSettingsApplied',
+  KEY_DASHED_PREFIX: 'gravitas-',
+  KEY_META_BUILD: 'gravitas-build',
+  KEY_PROTOCOL_EMBED: 'gravitas-embed',
+  KEY_FORMAT_EXPERIMENT: 'gravitas-experiment',
+  KEY_FORMAT_MANEUVER_LOG: 'gravitas-maneuver-log',
+  KEY_META_REVISION: 'gravitas-revision',
+  KEY_COURSE_LEVEL: 'gravitas_course_level',
+  KEY_EXPERIMENT_PREFIX: 'gravitas_experiment_',
+  KEY_EXPERIMENTS_INDEX: 'gravitas_experiments_index',
+  KEY_INVESTIGATION_PREFIX: 'gravitas_investigation_',
+  KEY_LECTURE_SEQUENCE: 'gravitas_lecture_sequence',
+  KEY_NEXT_CONTEXT: 'gravitas_next_context',
+  KEY_ORIENTATION_SEEN_V1: 'gravitas_orientation_seen_v1',
+  KEY_RAIL_SECTIONS: 'gravitas_rail_sections',
+  KEY_SIMULATION_SAVE: 'gravitas_simulation_save',
+  KEY_THEME: 'gravitas_theme',
+  KEY_WELCOME_SEEN_V1: 'gravitas_welcome_seen_v1',
 };
 
 const NAME_EXPORT = /^(KEY|EV|ID)_[A-Z0-9_]+$/;
@@ -75,7 +94,7 @@ describe('the registry', () => {
   test('the prefix of a name says what it is', () => {
     for (const k of exported()) {
       if (k.startsWith('EV_')) expect(names[k]).toMatch(/^gravitas[A-Z]/);
-      if (k.startsWith('KEY_')) expect(names[k]).toMatch(/^gravitas_/);
+      if (k.startsWith('KEY_')) expect(names[k]).toMatch(/^gravitas[_-]/);
       if (k.startsWith('ID_')) expect(names[k]).toMatch(/^gravitas[.-]/);
     }
   });
@@ -225,5 +244,30 @@ describe('the codemod (tools/key-registry-codemod.mjs)', () => {
     const r = run(`window.addEventListener('gravitasNotInTheRegistry', f);\n`);
     expect(r.moved).toBe(0);
     expect(r.unknown).toEqual(['gravitasNotInTheRegistry']);
+  });
+});
+
+describe('what a module costs a page by importing the registry', () => {
+  test('a page that does not start with the registry is charged for a module that would add it', () => {
+    // The instructors page loads the portal and has no other use of the
+    // registry at start-up: moving the portal's key would add a request there.
+    const charged = costs(['js/instructorPortal.js'])['js/instructorPortal.js'];
+    expect(charged.length).toBeGreaterThan(0);
+    expect(freeFiles(['js/instructorPortal.js'])).toEqual([]);
+  });
+
+  test('a module no page reaches is not called free', () => {
+    expect(freeFiles(['js/lab3d/view/guidePanel.js'])).toEqual([]);
+  });
+
+  test('a module that already imports the registry is free', () => {
+    expect(freeFiles(['js/world.js'])).toEqual(['js/world.js']);
+  });
+
+  test('every exemption names a real file and says why', () => {
+    for (const [file, why] of Object.entries(EXEMPT)) {
+      expect(() => readFileSync(file, 'utf8')).not.toThrow();
+      expect(why.length).toBeGreaterThan(40);
+    }
   });
 });

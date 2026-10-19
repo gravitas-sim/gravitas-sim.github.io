@@ -7,9 +7,9 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
-import { EV_THEME_CHANGED } from './names.js';
+import { EV_THEME_CHANGED, KEY_THEME } from './names.js';
 
-const STORAGE_KEY = 'gravitas_theme';
+const STORAGE_KEY = KEY_THEME;
 
 /**
  * The themes, in the order the picker lists them.

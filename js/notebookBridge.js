@@ -43,6 +43,7 @@ import { timeUnitSeconds } from './units.js';
 import { SECONDS_PER_DAY } from './constants.js';
 
 import { evidenceContext, setCaptureSink } from './widgetRuntime.js';
+import { KEY_META_BUILD, KEY_META_REVISION } from './names.js';
 
 let loading = null;
 
@@ -103,12 +104,12 @@ const REVISION_SOURCE = Object.freeze({
 export function buildRevision() {
   const meta = name =>
     document.querySelector(`meta[name="${name}"]`)?.content?.trim() || null;
-  const deployed = meta('gravitas-revision');
+  const deployed = meta(KEY_META_REVISION);
   if (deployed) {
     return { id: deployed, source: REVISION_SOURCE.DEPLOYED };
   }
   const stamped =
-    document.documentElement.dataset.build || meta('gravitas-build');
+    document.documentElement.dataset.build || meta(KEY_META_BUILD);
   return stamped
     ? { id: String(stamped), source: REVISION_SOURCE.STAMPED }
     : { id: null, source: REVISION_SOURCE.UNKNOWN };
