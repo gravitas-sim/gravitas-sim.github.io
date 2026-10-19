@@ -243,6 +243,9 @@ test.describe('embed mode', () => {
       ui.state.zoom = 1.75;
     });
     await app.waitForFrames(5);
+    // Paused, so what is compared is what the page did and not what a running
+    // world did in the meantime (a planet in a binary-hole scene can be eaten).
+    await app.setPaused(true);
     const before = await worldState(page);
 
     await app.railControl('shareBtn');
@@ -536,6 +539,8 @@ test.describe('lecture mode', () => {
     await app.boot();
     await app.loadScenario('binary-star-system', 'spotlight');
     await enterLecture(page);
+    // Paused: a running world can lose a body between the two readings.
+    await app.setPaused(true);
     const before = await worldState(page);
 
     await page.locator('#lectureSpotlightBtn').click();
@@ -582,6 +587,10 @@ test.describe('lecture mode', () => {
       (await import('/js/theme.js')).setTheme('deep')
     );
     await app.waitForFrames(3);
+    // Paused: the scene is a binary-hole world that keeps stepping, and a
+    // planet swallowed between the two readings (10 then 9, seen on CI) is the
+    // world, not lecture mode. The test is about what entering and leaving do.
+    await app.setPaused(true);
     const before = await worldState(page);
 
     await enterLecture(page);
