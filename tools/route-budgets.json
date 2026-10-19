@@ -4,32 +4,32 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 2103.3,
-        "requests": 105
+        "kb": 2104.0,
+        "requests": 106
       },
       "sandbox": {
-        "kb": 2103.3,
-        "requests": 105
+        "kb": 2104.0,
+        "requests": 106
       },
       "kepler": {
         "kb": 3342.9,
-        "requests": 144
+        "requests": 145
       },
       "transit": {
         "kb": 3354.9,
-        "requests": 144,
+        "requests": 145,
         "toolKb": 3562.9,
-        "toolRequests": 149
+        "toolRequests": 150
       },
       "power-law": {
         "kb": 3320.2,
-        "requests": 144,
+        "requests": 145,
         "toolKb": 3373.2,
-        "toolRequests": 147
+        "toolRequests": 148
       },
       "largest-lesson": {
         "kb": 3452.4,
-        "requests": 146
+        "requests": 147
       },
       "teaching": {
         "kb": 246.4,
@@ -44,12 +44,12 @@
         "requests": 16
       },
       "figure": {
-        "kb": 2367.9,
-        "requests": 123
+        "kb": 2370.3,
+        "requests": 124
       },
       "experiments": {
         "kb": 1109,
-        "requests": 53
+        "requests": 54
       },
       "observatory": {
         "kb": 179.9,
@@ -69,7 +69,7 @@
       },
       "studio": {
         "kb": 975.6,
-        "requests": 46
+        "requests": 47
       },
       "composer": {
         "kb": 497.3,
