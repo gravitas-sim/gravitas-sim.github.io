@@ -1127,12 +1127,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "133b6f316b8548d018ede574eccd10521a27b0f1f557acf3cbd1830a16379f6a"
+  "digest": "0208554b25e0b2137c7451d3c33b56a76b8f2ae6947cc1e61e9f123c7d5116b7"
  },
  "tokens": {
   "plain": {
@@ -1311,7 +1315,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "133b6f316b8548d018ede574eccd10521a27b0f1f557acf3cbd1830a16379f6a",
+     "d": "0208554b25e0b2137c7451d3c33b56a76b8f2ae6947cc1e61e9f123c7d5116b7",
      "i": [
       "golden-missing-mass"
      ],
@@ -1326,7 +1330,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },

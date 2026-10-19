@@ -288,12 +288,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "6d47fd4bea41c972a97cdc61ffe5b564da167a134c0ce0f955fe4efc46795f04"
+  "digest": "bec2545c05167e53841d23b8a08ec575bbf7718e34abf08c95e604ccc2cf0ef0"
  },
  "tokens": {
   "plain": {
@@ -362,7 +366,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "6d47fd4bea41c972a97cdc61ffe5b564da167a134c0ce0f955fe4efc46795f04",
+     "d": "bec2545c05167e53841d23b8a08ec575bbf7718e34abf08c95e604ccc2cf0ef0",
      "i": [
       "golden-extending-an-experiment"
      ],
@@ -377,7 +381,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },

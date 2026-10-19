@@ -1171,12 +1171,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "ce37073136f33bb90572826c83b80f4e6925b75f4c0a9c2aed0d2e8a0d5d2927"
+  "digest": "817641297a923b954f104814c4855f67c5e5c6b227dee764773f8ece5a51933a"
  },
  "tokens": {
   "plain": {
@@ -1395,7 +1399,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "ce37073136f33bb90572826c83b80f4e6925b75f4c0a9c2aed0d2e8a0d5d2927",
+     "d": "817641297a923b954f104814c4855f67c5e5c6b227dee764773f8ece5a51933a",
      "i": [
       "golden-radial-velocity"
      ],
@@ -1410,7 +1414,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },
