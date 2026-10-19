@@ -87,6 +87,7 @@ const GROUPS = [
   () => import('./groups/sonification-law.js'),
   () => import('./groups/observing-windows.js'),
   () => import('./groups/radiation-and-photometry.js'),
+  () => import('./groups/barnes-hut-gravity.js'),
 ];
 
 /**
