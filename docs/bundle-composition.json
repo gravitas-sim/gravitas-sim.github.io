@@ -1,5 +1,5 @@
 {
- "total": 592378,
+ "total": 592382,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -16,10 +16,6 @@
   {
    "module": "js/scenarios.js",
    "bytes": 25418
-  },
-  {
-   "module": "js/physics.js",
-   "bytes": 23035
   },
   {
    "module": "js/inspectorView.js",
@@ -47,7 +43,7 @@
   },
   {
    "module": "js/engine/bodies.js",
-   "bytes": 13428
+   "bytes": 13767
   },
   {
    "module": "js/inspectorWindow.js",
@@ -56,6 +52,10 @@
   {
    "module": "js/inspectorInfo.js",
    "bytes": 12931
+  },
+  {
+   "module": "js/engine/collisions.js",
+   "bytes": 12439
   },
   {
    "module": "js/bodyDraw.js",
@@ -68,6 +68,10 @@
   {
    "module": "js/world.js",
    "bytes": 9522
+  },
+  {
+   "module": "js/physics.js",
+   "bytes": 9228
   },
   {
    "module": "js/captureMeasure.js",
@@ -218,6 +222,10 @@
    "bytes": 2279
   },
   {
+   "module": "js/engine/events.js",
+   "bytes": 2244
+  },
+  {
    "module": "js/notebookBridge.js",
    "bytes": 2188
   },
@@ -280,10 +288,6 @@
   {
    "module": "js/orbital.js",
    "bytes": 1216
-  },
-  {
-   "module": "js/engine/events.js",
-   "bytes": 1211
   },
   {
    "module": "js/rng.js",
