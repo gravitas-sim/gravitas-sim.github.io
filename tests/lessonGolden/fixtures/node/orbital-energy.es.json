@@ -638,12 +638,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "98d80d19b6f5d080390bce9c1b7b32ed624b0b1a01e93bea101253a42868dd48"
+  "digest": "21df793a5cbfa3d0999337955aff8f814d67601580108adbb4055c4039d39a30"
  },
  "tokens": {
   "plain": {
@@ -772,7 +776,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "98d80d19b6f5d080390bce9c1b7b32ed624b0b1a01e93bea101253a42868dd48",
+     "d": "21df793a5cbfa3d0999337955aff8f814d67601580108adbb4055c4039d39a30",
      "i": [
       "golden-orbital-energy"
      ],
@@ -787,7 +791,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },

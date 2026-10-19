@@ -913,12 +913,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "d45b426e2dcc379e7c29dd8118b2eaceacb60d3ce6a022e5d49d5892e647960c"
+  "digest": "67772e920bdf0907382ca37ba8af27d3e6db70d675a29118dc04269783ebbc1f"
  },
  "tokens": {
   "plain": {
@@ -1067,7 +1071,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "d45b426e2dcc379e7c29dd8118b2eaceacb60d3ce6a022e5d49d5892e647960c",
+     "d": "67772e920bdf0907382ca37ba8af27d3e6db70d675a29118dc04269783ebbc1f",
      "i": [
       "golden-keplers-laws"
      ],
@@ -1082,7 +1086,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },

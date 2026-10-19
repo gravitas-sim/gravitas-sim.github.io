@@ -618,12 +618,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "7af71b1f33e4c75272f1461e16b58a70e8ded4af039eadcec19049d682c2422a"
+  "digest": "fba5d9e4fa2fe7893b1b1dd3ac3e895609badac9e55165bad5736819dd7aaade"
  },
  "tokens": {
   "plain": {
@@ -722,7 +726,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "7af71b1f33e4c75272f1461e16b58a70e8ded4af039eadcec19049d682c2422a",
+     "d": "fba5d9e4fa2fe7893b1b1dd3ac3e895609badac9e55165bad5736819dd7aaade",
      "i": [
       "golden-a-lens-passing-by"
      ],
@@ -737,7 +741,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },
