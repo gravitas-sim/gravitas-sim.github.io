@@ -66,6 +66,7 @@ import {
   layoutObservationPanels,
   noteObservationPanelUsed,
 } from './observationLayout.js';
+import { EV_GALAXY_GRAVITY_CHANGED, EV_SIMULATION_RESET } from './names.js';
 
 let enabled = false;
 let els = null;
@@ -766,7 +767,7 @@ export function setGalaxyGravity(mode) {
   const actual = galaxyGravityMode();
 
   window.dispatchEvent(
-    new CustomEvent('gravitasGalaxyGravityChanged', {
+    new CustomEvent(EV_GALAXY_GRAVITY_CHANGED, {
       detail: { mode: actual, requested: wanted },
     })
   );
@@ -804,7 +805,7 @@ export function initRotationCurve() {
   });
 
   // A new world is a new set of bodies, so nothing about the old fit applies.
-  window.addEventListener('gravitasSimulationReset', () => {
+  window.addEventListener(EV_SIMULATION_RESET, () => {
     lastFit = null;
     syncControls();
   });

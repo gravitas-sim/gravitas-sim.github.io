@@ -7,6 +7,24 @@ export const CACHE_PARTS = 'gravitas-parts';
 export const EV_SIMULATION_RESET = 'gravitasSimulationReset';
 export const EV_UNITS_CHANGED = 'gravitasUnitsChanged';
 export const EV_THEME_CHANGED = 'gravitasThemeChanged';
+export const EV_REQUEST_REBUILD = 'gravitasRequestRebuild';
+export const EV_MERGE = 'gravitasMerge';
+export const EV_COLLISION = 'gravitasCollision';
+export const EV_LOCALE_CHANGED = 'gravitasLocaleChanged';
+export const EV_SELECTION_CLEARED = 'gravitasSelectionCleared';
+export const EV_STOP_SIGNAL_AUDIO = 'gravitasStopSignalAudio';
+export const EV_ESCAPE = 'gravitasEscape';
+export const EV_SPEED_CHANGED = 'gravitasSpeedChanged';
+export const EV_PLACEMENT_ARMED = 'gravitasPlacementArmed';
+export const EV_OBJECT_PLACED = 'gravitasObjectPlaced';
+export const EV_WORKER_FAILED = 'gravitasWorkerFailed';
+export const EV_SIGNAL_AUDIO = 'gravitasSignalAudio';
+export const EV_MANEUVER_REQUESTED = 'gravitasManeuverRequested';
+export const EV_LIGHT_CURVE_TOGGLED = 'gravitasLightCurveToggled';
+export const EV_BEFORE_UPDATE = 'gravitasBeforeUpdate';
+export const EV_UPDATE_READY = 'gravitasUpdateReady';
+export const EV_GALAXY_GRAVITY_CHANGED = 'gravitasGalaxyGravityChanged';
+export const EV_SETTINGS_APPLIED = 'gravitasSettingsApplied';
 
 // Object name pools, formerly js/data/objectNames.js: pure data.
 

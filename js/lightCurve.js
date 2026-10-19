@@ -45,6 +45,7 @@ import { timeUnitSeconds } from './units.js';
 // called on a color object is a crash rather than a wrong word.
 import { t as translate } from './i18n/index.js';
 import { stellarStateFor } from './stellar/state.js';
+import { EV_LIGHT_CURVE_TOGGLED, EV_SIMULATION_RESET } from './names.js';
 
 let enabled = false;
 // The observer used to live here. It now lives in js/observerGeometry.js,
@@ -239,7 +240,7 @@ function wireLightCurveControls() {
 
   // A rebuild restarts the simulation clock, so samples taken before it belong
   // to a different world and would plot on top of the new ones.
-  window.addEventListener('gravitasSimulationReset', clearData);
+  window.addEventListener(EV_SIMULATION_RESET, clearData);
 
   setupCanvasInteraction();
 }
@@ -280,7 +281,7 @@ function setEnabled(next) {
   // The guided lessons lay themselves out around it, and it can be toggled from
   // the Tools menu at any moment, so the state has to be announced.
   window.dispatchEvent(
-    new CustomEvent('gravitasLightCurveToggled', { detail: { enabled } })
+    new CustomEvent(EV_LIGHT_CURVE_TOGGLED, { detail: { enabled } })
   );
 
   if (enabled && chart) {

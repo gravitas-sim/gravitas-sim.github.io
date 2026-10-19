@@ -59,6 +59,7 @@ import {
   loadFragment,
   mountFragment,
 } from './i18n/deferredMessages.js';
+import { EV_ESCAPE } from './names.js';
 
 ensureDeferredMessages().catch(() => {});
 
@@ -715,7 +716,7 @@ export function initWelcome() {
   // Escape closes a door the visitor opened themselves. On a first visit it
   // does too: the layer is a modal, and a modal that cannot be escaped is a
   // trap. Either way "enter the sandbox" is what closing means.
-  window.addEventListener('gravitasEscape', () => {
+  window.addEventListener(EV_ESCAPE, () => {
     if (open) closeWelcome();
   });
 
