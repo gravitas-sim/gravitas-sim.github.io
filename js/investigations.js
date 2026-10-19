@@ -100,7 +100,6 @@ import {
   ensureWidget,
   getWidget,
   needsLoading,
-  whenWidgetsReady,
   widgetDefaults,
 } from './widgets.js';
 import {
@@ -3195,59 +3194,27 @@ export function initInvestigations({ signal } = {}) {
   openInvestigationFromHash();
   window.addEventListener('hashchange', openInvestigationFromHash, opts);
 
-  // The authoring preview: ?author=<lesson>&step=<n>.
-  //
-  // Imported dynamically, and only when the URL asks for it, so that neither
-  // this module nor the rule engine it pulls in reaches a student's download.
-  // Everything in it - the bar, the diagnostics, the rules - is authoring
-  // machinery, and the lazy boundary the lessons already use is the right
-  // place for it.
-  // The assignment builder: ?assign=<lesson>. Lazy for the same reason as the
-  // authoring preview below - it is machinery for the person setting the work,
-  // not for the people doing it.
+  // The assignment builder (?assign=<lesson>) and the authoring preview
+  // (?author=<lesson>&step=<n>) are machinery for the person setting the work,
+  // not for the people doing it. Each is imported only when the URL asks, so
+  // neither it nor the rule engine behind the preview reaches a student's
+  // download; the boot logic lives in the lazy module.
   const assignMatch = /[?&]assign=([A-Za-z0-9_-]+)/.exec(window.location.href);
   if (assignMatch) {
-    const lessonId = assignMatch[1];
-    if (!hasInvestigation(lessonId)) {
-      toast(t('inv.link.unknown'));
-    } else {
-      Promise.all([
-        loadInvestigation(lessonId),
-        import('./assignments/assignmentBuilder.js'),
-        import('./i18n/deferredMessages.js').then(m =>
-          m.ensureDeferredMessages().catch(() => {})
-        ),
-      ])
-        .then(([loaded, builder]) => {
-          if (loaded) builder.openBuilder(loaded);
-        })
-        .catch(() => loadFailed(() => location.reload()));
-    }
+    import('./assignments/assignmentBuilder.js')
+      .then(m => m.bootBuilder(assignMatch[1]))
+      .catch(() => loadFailed(() => location.reload()));
   }
 
   if (/[?&#]author=/.test(window.location.href)) {
-    // The preview's findings read the whole widget catalog, lazy families too.
-    Promise.all([import('./authoring/preview.js'), whenWidgetsReady()])
-      .then(([preview]) => {
-        const request = preview.authoringRequest();
-        if (!request) return;
-        preview.installDraft(request);
-        if (!hasInvestigation(request.lesson)) {
-          toast(t('inv.link.unknown'));
-          return;
-        }
-        const student = request.view === 'student';
-        authoring = {
-          step: request.step,
-          render: student
-            ? null
-            : (inv, index) => preview.renderAuthorBar(inv, index),
-        };
-        if (!student) preview.mountAuthorBar(index => goToStep(index));
-        openInvestigation(request.lesson).catch(err =>
-          loadFailed(() => location.reload(), err)
-        );
-      })
+    import('./authoring/preview.js')
+      .then(m =>
+        m.bootPreview({
+          open: openInvestigation,
+          jump: goToStep,
+          setAuthoring: value => (authoring = value),
+        })
+      )
       .catch(() => {
         /* the preview is a development aid; its absence is not a student's problem */
       });
