@@ -432,3 +432,23 @@ export const SPACE_OBJECT_NAMES = {
 };
 
 export default SPACE_OBJECT_NAMES;
+
+// Storage keys, and the prefixes a key is built from (a name that ends in _PREFIX),
+// with the database, protocol, format and meta names that share the shape.
+export const KEY_DASHED_PREFIX = 'gravitas-';
+export const KEY_META_BUILD = 'gravitas-build';
+export const KEY_PROTOCOL_EMBED = 'gravitas-embed';
+export const KEY_FORMAT_EXPERIMENT = 'gravitas-experiment';
+export const KEY_FORMAT_MANEUVER_LOG = 'gravitas-maneuver-log';
+export const KEY_META_REVISION = 'gravitas-revision';
+export const KEY_COURSE_LEVEL = 'gravitas_course_level';
+export const KEY_EXPERIMENT_PREFIX = 'gravitas_experiment_';
+export const KEY_EXPERIMENTS_INDEX = 'gravitas_experiments_index';
+export const KEY_INVESTIGATION_PREFIX = 'gravitas_investigation_';
+export const KEY_LECTURE_SEQUENCE = 'gravitas_lecture_sequence';
+export const KEY_NEXT_CONTEXT = 'gravitas_next_context';
+export const KEY_ORIENTATION_SEEN_V1 = 'gravitas_orientation_seen_v1';
+export const KEY_RAIL_SECTIONS = 'gravitas_rail_sections';
+export const KEY_SIMULATION_SAVE = 'gravitas_simulation_save';
+export const KEY_THEME = 'gravitas_theme';
+export const KEY_WELCOME_SEEN_V1 = 'gravitas_welcome_seen_v1';

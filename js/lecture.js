@@ -39,6 +39,7 @@ import {
   mountFragment,
   unmountFragment,
 } from './i18n/deferredMessages.js';
+import { KEY_LECTURE_SEQUENCE } from './names.js';
 
 /**
  * Say something, through the application's toast and live region.
@@ -63,7 +64,7 @@ const notify = (kind, message) => {
     });
 };
 
-const STORAGE_KEY = 'gravitas_lecture_sequence';
+const STORAGE_KEY = KEY_LECTURE_SEQUENCE;
 
 /** The theme in force before Lecture Mode borrowed Daylight. */
 let themeBeforeLecture = null;

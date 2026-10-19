@@ -59,6 +59,7 @@ import {
   EV_SPEED_CHANGED,
   EV_STOP_SIGNAL_AUDIO,
   EV_UNITS_CHANGED,
+  KEY_RAIL_SECTIONS,
 } from './names.js';
 
 // --- Placement undo -----------------------------------------------------------
@@ -232,7 +233,7 @@ function refreshTransport() {
 // fits without scrolling. What is open is remembered, because a panel that
 // reopens everything on every visit is not a preference, it is a chore.
 
-const RAIL_SECTIONS_KEY = 'gravitas_rail_sections';
+const RAIL_SECTIONS_KEY = KEY_RAIL_SECTIONS;
 
 // The rail is an accordion: one section open at a time.
 //
