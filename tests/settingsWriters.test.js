@@ -79,7 +79,7 @@ describe('the table of writers', () => {
     }
     expect([...new Set(files)].sort()).toEqual([
       'js/scenarioPackWorld.js',
-      'js/validation/physicsChecks.js',
+      'js/validation/harness.js',
     ]);
     // The world build takes the page's door from its caller.
     expect(js['js/world/build.js']).toMatch(/ctx\.pushSettings/);

@@ -249,7 +249,7 @@ What is actually established, and the limit of each:
 
 | claim | evidence | what it does not show |
 | --- | --- | --- |
-| The period-to-pitch encoding preserves the quantity | 5 checks in `js/validation/physicsChecks.js`, "Sonification law" | Nothing about the audible sound, which is quantized and lossy |
+| The period-to-pitch encoding preserves the quantity | 5 checks in `js/validation/groups/sonification-law.js`, "Sonification law" | Nothing about the audible sound, which is quantized and lossy |
 | A non-audio path to the same facts exists | `e2e/sonifyTextEquivalent.spec.js` | Nothing about whether it is findable, readable or useful |
 | The panel has no machine-detectable violation | axe-core, no rules disabled | Nothing about whether a screen reader user can operate it |
 
