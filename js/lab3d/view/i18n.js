@@ -11,8 +11,9 @@
 // =============================================================================
 
 import { EN_LAB3DLAB } from '../../i18n/en.lab3dLab.js';
+import { KEY_LOCALE } from '../../names.js';
 
-const STORAGE_KEY = 'gravitas_locale';
+const STORAGE_KEY = KEY_LOCALE;
 
 export const LANGUAGES = Object.freeze([
   { id: 'en', endonym: 'English' },

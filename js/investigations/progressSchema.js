@@ -27,6 +27,7 @@
 // =============================================================================
 
 import { get, put } from '../storage/local.js';
+import { KEY_STUDENT_NAME } from '../names.js';
 
 /**
  * The stored shape's version.
@@ -312,7 +313,7 @@ export function writeProgress({
 // the saved record and nothing the engine is doing, which is why they are here
 // and not with the code that saves it (./stepView.js).
 
-const NAME_KEY = 'gravitas_student_name';
+const NAME_KEY = KEY_STUDENT_NAME;
 
 /**
  * Tell a failed write apart from a refused one.

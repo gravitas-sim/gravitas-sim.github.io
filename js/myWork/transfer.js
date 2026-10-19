@@ -1,3 +1,10 @@
+import {
+  KEY_EVIDENCE_NOTEBOOK,
+  KEY_EXPERIMENTS_INDEX,
+  KEY_EXPERIMENT_PREFIX,
+  KEY_GUIDES,
+  KEY_LAST_EXPORT,
+} from '../names.js';
 // =============================================================================
 // Moving work between devices: what goes in a file, and how a file comes back
 // -----------------------------------------------------------------------------
@@ -14,10 +21,10 @@
 // wins in "skip", as it does for every other key.
 // =============================================================================
 
-export const INDEX_KEY = 'gravitas_experiments_index';
-const NOTEBOOK_KEY = 'gravitas_evidence_notebook';
-const GUIDES_KEY = 'gravitas_guides';
-export const LAST_EXPORT_KEY = 'gravitas_last_export';
+export const INDEX_KEY = KEY_EXPERIMENTS_INDEX;
+const NOTEBOOK_KEY = KEY_EVIDENCE_NOTEBOOK;
+const GUIDES_KEY = KEY_GUIDES;
+export const LAST_EXPORT_KEY = KEY_LAST_EXPORT;
 /** The collection that holds the language, theme and the like; not "work". */
 export const PREFERENCES = 'preferences';
 
@@ -41,7 +48,7 @@ export function only(file, ids) {
   const all = records(file);
   if (
     [...want].some(
-      k => k.startsWith('gravitas_experiment_') && !k.includes('checkpoint')
+      k => k.startsWith(KEY_EXPERIMENT_PREFIX) && !k.includes('checkpoint')
     )
   ) {
     const index = all.find(r => r.id === INDEX_KEY);

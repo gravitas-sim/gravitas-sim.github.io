@@ -10,8 +10,9 @@
 
 import { EN_COURSEHOME } from '../i18n/en.courseHome.js';
 import { ES_COURSEHOME } from '../i18n/es.courseHome.js';
+import { KEY_LOCALE } from '../names.js';
 
-const STORAGE_KEY = 'gravitas_locale';
+const STORAGE_KEY = KEY_LOCALE;
 
 export const LANGUAGES = Object.freeze([
   { id: 'en', endonym: 'English' },

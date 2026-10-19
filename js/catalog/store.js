@@ -1,3 +1,4 @@
+import { KEY_DB_CATALOG } from '../names.js';
 // =============================================================================
 // Where installed catalog packs live: IndexedDB, one record a pack
 // -----------------------------------------------------------------------------
@@ -13,7 +14,7 @@
 // persistent, and the page tells the reader rather than pretending.
 // =============================================================================
 
-const DB = 'gravitas-catalog';
+const DB = KEY_DB_CATALOG;
 // Records are JSON through and through, so a copy is a JSON round trip.
 const copy = r => JSON.parse(JSON.stringify(r));
 const VERSION = 1;

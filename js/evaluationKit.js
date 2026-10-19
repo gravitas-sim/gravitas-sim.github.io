@@ -31,8 +31,9 @@ import {
   USABILITY_RATED,
 } from './data/evaluationShape.js';
 import { csvField } from './csv.js';
+import { KEY_EVALUATION_DRAFT_V1 } from './names.js';
 
-const STORE_KEY = 'gravitas_evaluation_draft_v1';
+const STORE_KEY = KEY_EVALUATION_DRAFT_V1;
 const $ = id => document.getElementById(id);
 
 /** Words a code is built from. Nothing here derives from a person. */

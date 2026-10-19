@@ -60,6 +60,7 @@ import {
   setLanguage,
   tr,
 } from './teaching/i18n.js';
+import { KEY_TEACHING_NOTES_V1 } from './names.js';
 
 const $ = id => document.getElementById(id);
 
@@ -893,7 +894,7 @@ function renderFeedbackRoutes() {
 }
 
 /** Where the local notes live. One key, and the reader can empty it. */
-const FEEDBACK_KEY = 'gravitas_teaching_notes_v1';
+const FEEDBACK_KEY = KEY_TEACHING_NOTES_V1;
 
 /** Read the notes, tolerating a browser that refuses storage. */
 const readNotes = () => readJson(FEEDBACK_KEY, {});

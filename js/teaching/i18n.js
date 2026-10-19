@@ -24,9 +24,10 @@
 // =============================================================================
 
 import { EN_TEACHING } from '../i18n/en.teaching.js';
+import { KEY_LOCALE } from '../names.js';
 
 /** The same key the application writes, so the two pages agree. */
-const STORAGE_KEY = 'gravitas_locale';
+const STORAGE_KEY = KEY_LOCALE;
 
 /** The languages this page is written in, in the order the switch offers them. */
 export const LANGUAGES = Object.freeze([

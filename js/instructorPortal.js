@@ -33,11 +33,12 @@ import { activityTeachingFor } from './data/activityTeaching.js';
 import { activityHash } from './activities/activityBridge.js';
 import { EN_TEACHING } from './i18n/en.teaching.js';
 import { INSTRUCTOR_CONTENT } from './data/instructorContent.js';
+import { KEY_INSTRUCTOR_KEY } from './names.js';
 
 /** Where the encrypted bundle lives. */
 const PAYLOAD_URL = '/instructors/materials.enc.json';
 /** Per-tab, cleared when the tab closes. Holds the derived key, not the phrase. */
-const SESSION_KEY = 'gravitas_instructor_key';
+const SESSION_KEY = KEY_INSTRUCTOR_KEY;
 
 let manifest = null;
 const objectUrls = [];

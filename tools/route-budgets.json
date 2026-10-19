@@ -4,32 +4,32 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 2107.2,
-        "requests": 106
+        "kb": 2109.6,
+        "requests": 107
       },
       "sandbox": {
-        "kb": 2107.2,
-        "requests": 106
+        "kb": 2109.6,
+        "requests": 107
       },
       "kepler": {
         "kb": 3342.9,
-        "requests": 145
+        "requests": 146
       },
       "transit": {
         "kb": 3354.9,
-        "requests": 145,
+        "requests": 146,
         "toolKb": 3562.9,
-        "toolRequests": 150
+        "toolRequests": 151
       },
       "power-law": {
         "kb": 3320.2,
-        "requests": 145,
+        "requests": 146,
         "toolKb": 3373.2,
-        "toolRequests": 148
+        "toolRequests": 149
       },
       "largest-lesson": {
         "kb": 3452.4,
-        "requests": 147
+        "requests": 148
       },
       "teaching": {
         "kb": 246.4,
@@ -37,51 +37,51 @@
       },
       "evaluation": {
         "kb": 30.7,
-        "requests": 4
+        "requests": 5
       },
       "instructors": {
-        "kb": 845.3,
+        "kb": 849.9,
         "requests": 16
       },
       "figure": {
-        "kb": 2373.5,
-        "requests": 124
+        "kb": 2380.7,
+        "requests": 126
       },
       "experiments": {
         "kb": 1109,
-        "requests": 54
+        "requests": 56
       },
       "observatory": {
-        "kb": 179.9,
+        "kb": 184.4,
         "requests": 17
       },
       "catalog": {
-        "kb": 81.6,
+        "kb": 85.9,
         "requests": 13
       },
       "library": {
-        "kb": 52.2,
+        "kb": 57.0,
         "requests": 12
       },
       "my-work": {
-        "kb": 79.8,
-        "requests": 9
+        "kb": 85.5,
+        "requests": 10
       },
       "studio": {
         "kb": 975.6,
-        "requests": 47
+        "requests": 48
       },
       "composer": {
-        "kb": 497.3,
-        "requests": 30
+        "kb": 501.9,
+        "requests": 31
       },
       "course-builder": {
-        "kb": 1045.6,
+        "kb": 1050.4,
         "requests": 46
       },
       "course-home": {
-        "kb": 256.0,
-        "requests": 18
+        "kb": 260.7,
+        "requests": 19
       },
       "lab3d": {
         "kb": 85.1,
@@ -104,27 +104,27 @@
         "requests": 36
       },
       "adoption": {
-        "kb": 3.3,
+        "kb": 7.8,
         "requests": 2
       },
       "teach-find": {
-        "kb": 6,
+        "kb": 10.5,
         "requests": 3
       },
       "teach-kit": {
-        "kb": 37.1,
+        "kb": 41.7,
         "requests": 6
       },
       "course-packs": {
-        "kb": 621.7,
+        "kb": 626.4,
         "requests": 44
       },
       "sky": {
-        "kb": 107.8,
-        "requests": 13
+        "kb": 112.4,
+        "requests": 14
       },
       "compute": {
-        "kb": 171.6,
+        "kb": 176.3,
         "requests": 20
       }
     },
@@ -175,11 +175,11 @@
       },
       "experiments": {
         "kb": 325.2,
-        "requests": 3
+        "requests": 4
       },
       "observatory": {
-        "kb": 87.5,
-        "requests": 4
+        "kb": 87.7,
+        "requests": 5
       },
       "catalog": {
         "kb": 36.4,
@@ -190,23 +190,23 @@
         "requests": 2
       },
       "my-work": {
-        "kb": 33.4,
-        "requests": 2
+        "kb": 33.7,
+        "requests": 3
       },
       "studio": {
         "kb": 226.2,
         "requests": 4
       },
       "composer": {
-        "kb": 262,
-        "requests": 14
+        "kb": 262.3,
+        "requests": 15
       },
       "course-builder": {
-        "kb": 605.2,
+        "kb": 605.3,
         "requests": 13
       },
       "course-home": {
-        "kb": 66.5,
+        "kb": 66.6,
         "requests": 4
       },
       "lab3d": {
@@ -238,19 +238,19 @@
         "requests": 3
       },
       "teach-kit": {
-        "kb": 25,
+        "kb": 25.1,
         "requests": 2
       },
       "course-packs": {
-        "kb": 237.7,
-        "requests": 12
+        "kb": 237.9,
+        "requests": 13
       },
       "sky": {
         "kb": 43.6,
         "requests": 4
       },
       "compute": {
-        "kb": 81.7,
+        "kb": 81.8,
         "requests": 3
       }
     }
