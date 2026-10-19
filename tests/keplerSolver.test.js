@@ -1,12 +1,25 @@
 // =============================================================================
 // Kepler's equation has one solver (Prompt 142)
 // -----------------------------------------------------------------------------
-// solveKepler in js/orbital.js is the bracketed Newton the 3-D lab used; eight modules had each
-// solved E - e sin E = M with their own start, tolerance and cap, and three of
-// them could miss the root. This holds the solver's contract on a fixture grid
-// against a reference that shares none of its code (bisection to adjacent
-// doubles), the two inputs the others failed on, and that no module outside it
-// defines a solver again.
+// solveKepler in js/orbital.js is the bracketed Newton the 3-D lab used. Nine
+// modules had each solved E - e sin E = M for themselves, with their own start,
+// tolerance and cap; outside the range their callers use, six could miss the
+// root: the three that start at pi wander for M below zero at e = 0.8 and up,
+// and the radial-velocity, resonance and sky solvers do not settle at e = 0.995.
+//
+// The contract this file holds, on a grid, against a reference that shares none
+// of the solver's code (bisection to adjacent doubles):
+//   input    M any finite real, radians; e in [0, 1). A hyperbola is the 3-D
+//            lab's own branch (js/lab3d/elements.js), and e = 1 has no a.
+//   output   the E on the same turn as M: E - e sin E = M to rounding.
+//   stop     the Newton step is below 1e-16 of |E|, or the bracket has closed.
+//            The bracket [M - e, M + e] always holds the root, and a step that
+//            would leave it is a bisection, so the 200-iteration cap is never
+//            reached.
+//   e = 0    returns M. e near 1 is limited by the equation, not the solver:
+//            one ulp in M is up to 1 / (1 - e) ulps in E.
+// and that no module defines a solver again (one listed exception, with its
+// reason).
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';

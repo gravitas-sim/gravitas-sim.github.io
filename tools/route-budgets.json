@@ -49,7 +49,7 @@
       },
       "experiments": {
         "kb": 1109,
-        "requests": 56
+        "requests": 57
       },
       "observatory": {
         "kb": 186.6,
@@ -84,7 +84,7 @@
         "requests": 19
       },
       "lab3d": {
-        "kb": 86.8,
+        "kb": 92.8,
         "requests": 11
       },
       "lab3d-lab": {
@@ -101,7 +101,7 @@
       },
       "mission-lab": {
         "kb": 431.6,
-        "requests": 36
+        "requests": 37
       },
       "adoption": {
         "kb": 9.9,
