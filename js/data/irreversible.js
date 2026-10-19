@@ -19,7 +19,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'collapse:star-to-hole',
     kind: 'collapse',
     file: 'js/engine/step.js',
-    line: 817,
+    line: 822,
     detail: Object.freeze({
       what: 'a star past the collapse mass is replaced by a black hole; the star it was is gone, along with its type, temperature and radius',
     }),
@@ -28,7 +28,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:planets',
     kind: 'cull',
     file: 'js/engine/step.js',
-    line: 946,
+    line: 951,
     detail: Object.freeze({
       list: 'planets',
       buffer: 20,
@@ -39,7 +39,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:stars',
     kind: 'cull',
     file: 'js/engine/step.js',
-    line: 953,
+    line: 958,
     detail: Object.freeze({
       list: 'stars',
       buffer: 20,
@@ -50,7 +50,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:gas_giants',
     kind: 'cull',
     file: 'js/engine/step.js',
-    line: 960,
+    line: 965,
     detail: Object.freeze({
       list: 'gas_giants',
       buffer: 20,
@@ -61,7 +61,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:neutron_stars',
     kind: 'cull',
     file: 'js/engine/step.js',
-    line: 967,
+    line: 972,
     detail: Object.freeze({
       list: 'neutron_stars',
       buffer: 20,
@@ -72,7 +72,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:white_dwarfs',
     kind: 'cull',
     file: 'js/engine/step.js',
-    line: 974,
+    line: 979,
     detail: Object.freeze({
       list: 'white_dwarfs',
       buffer: 20,
@@ -83,7 +83,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:galaxies',
     kind: 'cull',
     file: 'js/engine/step.js',
-    line: 981,
+    line: 986,
     detail: Object.freeze({
       list: 'galaxies',
       buffer: 20,
@@ -94,7 +94,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:bh_list',
     kind: 'cull',
     file: 'js/engine/step.js',
-    line: 988,
+    line: 993,
     detail: Object.freeze({
       list: 'bh_list',
       buffer: 50,
@@ -105,7 +105,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:asteroids',
     kind: 'cull',
     file: 'js/engine/step.js',
-    line: 997,
+    line: 1002,
     detail: Object.freeze({
       list: 'asteroids',
       buffer: 5,
@@ -116,7 +116,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:comets',
     kind: 'cull',
     file: 'js/engine/step.js',
-    line: 1001,
+    line: 1006,
     detail: Object.freeze({
       list: 'comets',
       buffer: 20,
@@ -127,7 +127,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:debris',
     kind: 'cull',
     file: 'js/engine/step.js',
-    line: 1005,
+    line: 1010,
     detail: Object.freeze({
       list: 'debris',
       buffer: 3,
@@ -138,7 +138,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'cull:accretion_disk_particles',
     kind: 'cull',
     file: 'js/engine/step.js',
-    line: 1009,
+    line: 1014,
     detail: Object.freeze({
       list: 'accretion_disk_particles',
       buffer: 2,
