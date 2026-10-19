@@ -48,8 +48,6 @@ import {
 } from './units.js';
 
 export const RULE = 'first-order-uncorrelated';
-/** The rule when correlation coefficients between inputs were given and used. */
-export const RULE_CORRELATED = 'first-order-correlated';
 
 /** The uncertainty states a formula refuses, and the words for each. */
 const REFUSED = {
@@ -297,16 +295,21 @@ export function compile(source, scope, { locale = 'en' } = {}) {
   const lacking = used.filter(
     x => !['sigma', 'assumed'].includes(scope.inputs[x].uncertainty)
   );
-  let rule = !used.length
+  const rule = !used.length
     ? 'exact'
     : lacking.length
       ? 'none'
       : shared
         ? 'shared'
         : 'first-order';
-  const pairs =
-    rule === 'first-order' ? correlationPairs(scope.correlations, used) : [];
-  if (pairs.length) rule = 'first-order-correlated';
+  // [j, k, rho] for each coefficient between two inputs the formula reads.
+  // Trusting: js/formula/evidence.js checkCorrelations is the check.
+  const pairs = [];
+  if (rule === 'first-order')
+    for (const { a, b, rho } of scope.correlations ?? []) {
+      const [j, k] = [used.indexOf(a), used.indexOf(b)];
+      if (j >= 0 && k >= 0 && rho) pairs.push([j, k, rho]);
+    }
 
   const r = ast;
   let unit;
@@ -329,6 +332,7 @@ export function compile(source, scope, { locale = 'en' } = {}) {
     angle: r.ang,
     inputs: used,
     rule,
+    correlated: pairs.length > 0,
     lacking: rule === 'none' ? lacking : [],
     aggregates: aggs.length,
   };
@@ -336,27 +340,6 @@ export function compile(source, scope, { locale = 'en' } = {}) {
   const run = (data, { rows, skip } = {}) =>
     execute({ ast, used, rule, aggs, mult, scope, pairs }, data, rows, skip);
   return { info, run, ast };
-}
-
-/**
- * The coefficients between the inputs a formula reads, as pairs of their
- * positions among them. Trusting: that each is between -1 and 1, that no pair
- * is given twice, and that the set is a correlation matrix is checked by
- * js/formula/evidence.js checkCorrelations, which every caller that takes
- * coefficients from an envelope uses (the variance is floored at zero here
- * either way).
- * @param {?Array<{a: string, b: string, rho: number}>} given - By input name
- * @param {string[]} used - The inputs the formula reads
- * @returns {Array<[number, number, number]>} [j, k, rho] for the pairs with
- *   both inputs read and a coefficient other than zero
- */
-function correlationPairs(given, used) {
-  const out = [];
-  for (const { a, b, rho } of given ?? []) {
-    const [j, k] = [used.indexOf(a), used.indexOf(b)];
-    if (j >= 0 && k >= 0 && j !== k && rho) out.push([j, k, rho]);
-  }
-  return out;
 }
 
 /** The dual number of a node at a row: its value and its gradient (or null). */
@@ -463,7 +446,7 @@ function variance(g, c, i) {
     s += (g[c.U + a] * c.aggSigma[a]) ** 2;
   for (const [j, k, rho] of c.pairs)
     s += 2 * rho * g[j] * g[k] * c.sg[j][i] * c.sg[k][i];
-  return Math.max(s, 0);
+  return s;
 }
 
 function execute({ ast, used, rule, aggs, mult, pairs }, data, rows, skip) {
@@ -472,7 +455,7 @@ function execute({ ast, used, rule, aggs, mult, pairs }, data, rows, skip) {
   if (n > LIMITS.rows) fail('rows', { max: LIMITS.rows, rows: n });
   const cols = {};
   const sg = [];
-  const prop = rule === 'first-order' || rule === 'first-order-correlated';
+  const prop = rule === 'first-order';
   used.forEach((name, j) => {
     const d = data?.[name];
     if (!d?.values || d.values.length !== n) fail('data', { name, rows: n });

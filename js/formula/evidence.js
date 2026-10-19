@@ -14,7 +14,10 @@
 
 import { artifact } from '../platform/artifact.js';
 import { sha256Hex } from '../hash.js';
-import { RULE, RULE_CORRELATED, compile, evaluate } from './engine.js';
+import { RULE, compile, evaluate } from './engine.js';
+
+/** The derivation's rule when coefficients between inputs were used. */
+export const RULE_CORRELATED = 'first-order-correlated';
 import { fail } from './parse.js';
 
 /**
@@ -170,7 +173,7 @@ export async function derivationEnvelope({
         )),
     });
   }
-  const correlated = result.info.rule === 'first-order-correlated';
+  const correlated = result.info.correlated;
   const rule = correlated
     ? RULE_CORRELATED
     : result.info.rule === 'first-order'

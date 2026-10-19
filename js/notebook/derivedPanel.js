@@ -124,9 +124,12 @@ export function mountDerivedPanel(host, ctx) {
       checkCorrelations(correlations, info.inputs);
       preview.textContent = t('nb.formula.preview', {
         unit: info.unit === '' ? t('obs.formula.plain') : info.unitText,
-        why: t(`obs.formula.why.${info.rule}`, {
-          lacking: info.lacking.join(', '),
-        }),
+        why: t(
+          `obs.formula.why.${info.correlated ? 'first-order-correlated' : info.rule}`,
+          {
+            lacking: info.lacking.join(', '),
+          }
+        ),
       });
     } catch (e) {
       preview.classList.add('is-error');

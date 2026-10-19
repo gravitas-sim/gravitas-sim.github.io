@@ -6,9 +6,10 @@ import { describe, test, expect } from '@jest/globals';
 import { webcrypto } from 'node:crypto';
 import { TextEncoder } from 'node:util';
 
-import { evaluate, RULE, RULE_CORRELATED } from '../js/formula/engine.js';
+import { evaluate, RULE } from '../js/formula/engine.js';
 import { FormulaError, useNumberReader } from '../js/formula/parse.js';
 import {
+  RULE_CORRELATED,
   checkCorrelations,
   derivationEnvelope,
 } from '../js/formula/evidence.js';
@@ -56,7 +57,7 @@ describe('the cross terms', () => {
   test('a sum of positively correlated inputs widens, a difference narrows', () => {
     const sum = evaluate('x + y', inputs, { correlations: [rho('x', 'y', 1)] });
     expect(sum.sigma).toBeCloseTo(0.3, 12);
-    expect(sum.info.rule).toBe('first-order-correlated');
+    expect(sum.info.correlated).toBe(true);
     expect(
       evaluate('x - y', inputs, { correlations: [rho('x', 'y', 1)] }).sigma
     ).toBeCloseTo(0.1, 12);
@@ -78,7 +79,7 @@ describe('the cross terms', () => {
 
   test('a coefficient for an input the formula does not read changes nothing', () => {
     const r = evaluate('x + y', inputs, { correlations: [rho('x', 'z', 0.9)] });
-    expect(r.info.rule).toBe('first-order');
+    expect(r.info.correlated).toBe(false);
     expect(r.sigma).toBeCloseTo(Math.hypot(0.1, 0.2), 12);
   });
 
