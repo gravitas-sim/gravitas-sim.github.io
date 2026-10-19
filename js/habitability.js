@@ -25,7 +25,7 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
-import { solveKepler } from './kepler.js';
+import { solveKepler } from './orbital.js';
 
 /** Earth's insolation is the unit everything is quoted in: 1 at 1 AU from the Sun. */
 export const EARTH_INSOLATION_WM2 = 1361;

@@ -1,7 +1,7 @@
 // =============================================================================
 // Kepler's equation has one solver (Prompt 142)
 // -----------------------------------------------------------------------------
-// js/kepler.js is the bracketed Newton the 3-D lab used; eight modules had each
+// solveKepler in js/orbital.js is the bracketed Newton the 3-D lab used; eight modules had each
 // solved E - e sin E = M with their own start, tolerance and cap, and three of
 // them could miss the root. This holds the solver's contract on a fixture grid
 // against a reference that shares none of its code (bisection to adjacent
@@ -13,7 +13,7 @@ import { describe, test, expect } from '@jest/globals';
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 
-import { solveKepler } from '../js/kepler.js';
+import { solveKepler } from '../js/orbital.js';
 
 const TWO_PI = 2 * Math.PI;
 
@@ -137,18 +137,29 @@ describe('nothing else solves it again', () => {
   };
   walk('js');
 
-  test('no module outside js/kepler.js steps Newton on Kepler’s equation', () => {
+  // A module that keeps its own step, and why. A new one is a decision.
+  const EXCEPTIONS = {
+    'js/kernels/sky/planets.js':
+      'the Sky Lab route is held to its weight gate (SKY_LAB_GATE.md): it would pay the 7 KB module and a request for a step that is exact to 1e-12 at its eccentricities, 0.21 and below',
+  };
+
+  test('no module outside js/orbital.js steps Newton on Kepler’s equation, but the listed one', () => {
     // The step: (E - e sin E - M) / (1 - e cos E), in any spelling of e and M.
     const step =
       /\(\s*\w+\s*-\s*[\w.]+\s*\*\s*Math\.sin\(\s*\w+\s*\)\s*-\s*\w+\s*\)\s*\/\s*\(\s*1\s*-\s*[\w.]+\s*\*\s*Math\.cos/;
-    const defines = files.filter(
-      f =>
-        f !== path.join('js', 'kepler.js') && step.test(readFileSync(f, 'utf8'))
-    );
-    expect(defines).toEqual([]);
+    const defines = files
+      .filter(
+        f =>
+          f !== path.join('js', 'orbital.js') &&
+          step.test(readFileSync(f, 'utf8'))
+      )
+      .sort();
+    expect(defines).toEqual(Object.keys(EXCEPTIONS));
+    for (const why of Object.values(EXCEPTIONS))
+      expect(why.length).toBeGreaterThan(40);
   });
 
-  test('the nine callers import it', () => {
+  test('the callers import it', () => {
     for (const f of [
       'js/lab3d/elements.js',
       'js/inference/rv.js',
@@ -158,11 +169,10 @@ describe('nothing else solves it again', () => {
       'js/systemSpec.js',
       'js/captureMeasure.js',
       'js/resonance/systems.js',
-      'js/kernels/sky/planets.js',
     ]) {
       expect({
         f,
-        imports: /from '(\.\.?\/)+kepler\.js'/.test(readFileSync(f, 'utf8')),
+        imports: /from '(\.\.?\/)+orbital\.js'/.test(readFileSync(f, 'utf8')),
       }).toEqual({
         f,
         imports: true,
@@ -171,6 +181,6 @@ describe('nothing else solves it again', () => {
   });
 
   test('the module imports nothing', () => {
-    expect(readFileSync('js/kepler.js', 'utf8')).not.toMatch(/^\s*import\s/m);
+    expect(readFileSync('js/orbital.js', 'utf8')).not.toMatch(/^\s*import\s/m);
   });
 });

@@ -22,7 +22,7 @@
 
 // Bound once, not read as globals: in Jest's vm context every free global read
 // goes through the context, which made these loops 8-25x slower than in Node.
-import { solveKepler } from '../kepler.js';
+import { solveKepler } from '../orbital.js';
 
 const { Math, Float64Array } = globalThis;
 

@@ -33,7 +33,7 @@
 // The masses are not scaled anywhere, and neither is G.
 // =============================================================================
 
-import { solveKepler } from '../kepler.js';
+import { solveKepler } from '../orbital.js';
 
 /** Length scale of the Jovian scenario: distances are this much larger. */
 export const SCALE_JOVIAN = 100;
@@ -575,7 +575,7 @@ export function trojanBodies(G) {
 /**
  * Position and velocity from classical elements, in the orbit plane.
  *
- * Kepler's equation by js/kepler.js, once per body at scenario load.
+ * Kepler's equation by js/orbital.js, once per body at scenario load.
  *
  * @param {{a:number, e:number, varpiDeg:number, lambdaDeg:number, mu:number}} el
  * @returns {{pos:{x:number,y:number}, vel:{x:number,y:number}}} State vector

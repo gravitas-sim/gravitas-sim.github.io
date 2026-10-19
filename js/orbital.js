@@ -1,10 +1,67 @@
 // =============================================================================
-// Two-body orbital elements
+// Two-body orbital elements, and Kepler's equation
 // -----------------------------------------------------------------------------
 // What an investigation asks a student to measure comes from here. The
 // inspector's "Orbital Period" assumes a central mass of 1000 whatever the
 // parent is; these solve the real two-body problem. Pure: no DOM, no imports.
+//
+// Kepler's equation has one solver, solveKepler below (Prompt 142). Nine modules
+// had each solved it for themselves, with their own start, tolerance and cap;
+// outside the range their callers use, six could miss the root: the three that
+// start at pi wander for M below zero at e = 0.8 and up, and the radial-velocity,
+// resonance and sky solvers do not settle at e = 0.995. The bracketed one the
+// 3-D lab used is the one that stays. Its contract, which
+// tests/keplerSolver.test.js holds on a grid against a reference that shares
+// none of its code:
+//   input    M any finite real, radians; e in [0, 1). A hyperbola is the 3-D
+//            lab's own branch (js/lab3d/elements.js), and e = 1 has no a.
+//   output   the E on the same turn as M: E - e sin E = M to rounding
+//            (periapsis and apoapsis come back as 0 and pi to rounding).
+//   stop     the Newton step is below 1e-16 of |E|, or the bracket has closed.
+//            The bracket [M - e, M + e] always holds the root, and a step that
+//            would leave it is a bisection, so 200 iterations is a ceiling
+//            nothing reaches.
+//   e = 0    returns M. e near 1 is limited by the equation, not the solver:
+//            the root's slope is 1 / (1 - e), so one ulp in M is up to
+//            1 / (1 - e) ulps in E.
+// js/kernels/sky/planets.js keeps its own step, for the Sky Lab's weight gate
+// (SKY_LAB_GATE.md): its eccentricities stop at 0.21, where it is exact to 1e-12.
 // =============================================================================
+
+// Bound once: in Jest's vm context every free global read goes through the
+// context, which made hot loops over this 8-25x slower than in Node (the
+// radial-velocity fits call the solver per observation).
+const { Math } = globalThis;
+
+/**
+ * Kepler's equation E - e sin E = M, for 0 <= e < 1. Newton's method from
+ * Danby's starting value, kept inside the bracket [M - e, M + e] that always
+ * holds the root, with a bisection whenever a step would leave it: started
+ * at pi, plain Newton wanders at high eccentricity (e = 0.95, M = -1.74
+ * never converged).
+ * @param {number} M - Mean anomaly, radians, any turn
+ * @param {number} e - Eccentricity, [0, 1)
+ * @returns {number} The eccentric anomaly on M's own turn, radians
+ */
+export function solveKepler(M, e) {
+  const wrapped = M - 2 * Math.PI * Math.round(M / (2 * Math.PI));
+  let lo = wrapped - e;
+  let hi = wrapped + e;
+  let E = wrapped + 0.85 * e * Math.sign(Math.sin(wrapped) || 1);
+  for (let k = 0; k < 200; k++) {
+    const f = E - e * Math.sin(E) - wrapped;
+    if (f > 0) hi = E;
+    else lo = E;
+    let next = E - f / (1 - e * Math.cos(E));
+    if (!(next > lo && next < hi)) next = (lo + hi) / 2;
+    if (Math.abs(next - E) <= 1e-16 * (1 + Math.abs(E))) {
+      E = next;
+      break;
+    }
+    E = next;
+  }
+  return E + (M - wrapped);
+}
 
 /**
  * Orbital elements of a body about a primary.

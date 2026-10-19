@@ -21,7 +21,7 @@
 // Angles are radians throughout; the forms convert degrees at their edge.
 // =============================================================================
 
-import { solveKepler } from '../kepler.js';
+import { solveKepler } from '../orbital.js';
 
 const cross = (a, b) => [
   a[1] * b[2] - a[2] * b[1],

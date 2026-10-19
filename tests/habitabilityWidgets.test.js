@@ -14,7 +14,7 @@ import {
   EARTH_INSOLATION_WM2,
   HZ_TEFF_RANGE,
 } from '../js/habitability.js';
-import { solveKepler } from '../js/kepler.js';
+import { solveKepler } from '../js/orbital.js';
 import {
   TRAPPIST1_STAR,
   TRAPPIST1_PLANETS,

@@ -14,8 +14,6 @@
 //   [a (au), da, e, de, I (deg), dI, L (deg), dL, long.peri (deg), d, long.node (deg), d]
 // =============================================================================
 
-import { solveKepler } from '../../kepler.js';
-
 const DEG = Math.PI / 180;
 const TABLE = {
   mercury: [
@@ -74,7 +72,12 @@ export function heliocentric(body, jdTt) {
   const w = (wbar - (k[10] + k[11] * t)) * DEG;
   let M = ((((L - wbar) % 360) + 540) % 360) - 180; // degrees, -180..180
   M *= DEG;
-  const E = solveKepler(M, e);
+  let E = M + e * Math.sin(M);
+  for (let i = 0; i < 12; i++) {
+    const d = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+    E -= d;
+    if (Math.abs(d) < 1e-12) break;
+  }
   const xp = a * (Math.cos(E) - e);
   const yp = a * Math.sqrt(1 - e * e) * Math.sin(E);
   const cw = Math.cos(w),

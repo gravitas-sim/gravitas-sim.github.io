@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // Kepler's equation, quadratic limb darkening and the radial-velocity
 // semi-amplitude each used to exist two to six times. They now live in
-// js/kepler.js (Prompt 142; tests/keplerSolver.test.js holds the solver and
+// js/orbital.js (Prompt 142; tests/keplerSolver.test.js holds the solver and
 // that nothing else defines one) and js/limbDarkening.js. This file is the
 // cross-implementation agreement test: what the callers build on the one
 // solver is held against an independent reference.

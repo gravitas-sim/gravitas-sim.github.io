@@ -71,7 +71,7 @@ import {
   MIN_INTERACTION_DISTANCE,
 } from './physics.js';
 import { orbitalElements } from './orbital.js';
-import { solveKepler } from './kepler.js';
+import { solveKepler } from './orbital.js';
 import { hashState } from './experiments/canonicalState.js';
 import { MASS_FIELD, TYPE_NAME_KEY } from './place/preciseFields.js';
 import { ID_ORBITAL_SYSTEM } from './names.js';
@@ -246,7 +246,7 @@ export function secondsPerTimeUnit(G) {
 /**
  * Position and velocity on a Keplerian orbit, relative to the focus.
  *
- * Kepler's equation by js/kepler.js, to the last bit. The perifocal state is then
+ * Kepler's equation by js/orbital.js, to the last bit. The perifocal state is then
  * mirrored across the periapsis line for a retrograde orbit and turned
  * through the argument of periapsis.
  *

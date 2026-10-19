@@ -25,7 +25,7 @@ import {
   uniformOccultation,
 } from '../js/inference/transit.js';
 import { eccentricity, rvCurve } from '../js/inference/rv.js';
-import { solveKepler } from '../js/kepler.js';
+import { solveKepler } from '../js/orbital.js';
 import {
   Canceled,
   crossing,

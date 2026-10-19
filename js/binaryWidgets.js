@@ -15,7 +15,7 @@
 // =============================================================================
 
 import { withUnit } from './format.js';
-import { solveKepler } from './kepler.js';
+import { solveKepler } from './orbital.js';
 import {
   surface,
   palette,

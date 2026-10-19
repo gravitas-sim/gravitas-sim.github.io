@@ -23,7 +23,7 @@ import {
 } from './physics.js';
 import { canRecordClips } from './utils.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
-import { solveKepler } from './kepler.js';
+import { solveKepler } from './orbital.js';
 import { t, registerMessages, onLocaleChange } from './i18n/index.js';
 import { scenarioTitle } from './i18n/scenario.js';
 import {
