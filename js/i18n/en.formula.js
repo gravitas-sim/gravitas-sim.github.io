@@ -43,6 +43,8 @@ export const EN_FORMULA = {
     '{name} is an upper or lower limit, and a limit only passes through a formula when it is the one limit in it and every other input is exact. Otherwise the result would be neither a limit nor a value.',
   'formula.err.limitNonMonotone':
     'The formula is not steadily rising or falling as {name} runs from zero to its limit, so a limit on it is not a limit on the result.',
+  'formula.err.correlation':
+    'The correlations given for {name} cannot all hold at once: a coefficient is outside -1 to 1, is given twice with different values, or the set is not a correlation matrix. Fix them, or remove them to treat the inputs as independent.',
   'formula.err.string':
     "A quoted unit belongs only in to(x, 'km/s'); there are no other strings.",
   'formula.err.dimension':
@@ -85,6 +87,8 @@ export const EN_FORMULA = {
     '{n} rows have no value: an input was missing there, or the formula has none at that value.',
   'obs.formula.why.first-order':
     'Its uncertainty is propagated to first order from the columns’ own, treated as independent.',
+  'obs.formula.why.first-order-correlated':
+    'Its uncertainty is propagated to first order from the inputs’ own, with the correlations given between them.',
   'obs.formula.why.none':
     '{lacking} has no uncertainty recorded, so the new column has none.',
   'obs.formula.why.shared':

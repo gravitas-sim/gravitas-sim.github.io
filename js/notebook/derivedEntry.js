@@ -16,7 +16,7 @@
 // =============================================================================
 
 import { evaluate } from '../formula/engine.js';
-import { derivationEnvelope } from '../formula/evidence.js';
+import { checkCorrelations, derivationEnvelope } from '../formula/evidence.js';
 import { artifactEntry } from './artifactEntry.js';
 import { SOURCE } from './entry.js';
 
@@ -44,9 +44,32 @@ export function namedQuantities(entries) {
         kind:
           env[i]?.uncertainty?.kind ??
           (Number.isFinite(q.uncertainty) ? 'sigma' : 'none'),
+        envId: env[i]?.id,
+        correlatedWith: env[i]?.correlatedWith ?? [],
       });
     });
   }
+  return out;
+}
+
+/**
+ * The coefficients between the named quantities that their envelopes state
+ * (`correlatedWith`, by quantity id within one envelope), by name, for the
+ * formula engine. Two quantities of different entries are never correlated by
+ * this: nothing says they share data.
+ * @param {Array<object>} quantities - From namedQuantities()
+ * @returns {Array<{a: string, b: string, rho: number}>}
+ */
+export function correlationsOf(quantities) {
+  const out = [];
+  for (const q of quantities)
+    for (const c of q.correlatedWith ?? []) {
+      const other = quantities.find(
+        x => x.entry === q.entry && x.envId === c.id
+      );
+      if (other && q.name < other.name)
+        out.push({ a: q.name, b: other.name, rho: c.rho });
+    }
   return out;
 }
 
@@ -80,12 +103,15 @@ export async function derivedEntry({
             ? 'none'
             : 'sigma',
     };
-  const result = evaluate(formula, inputs, { locale });
+  const correlations = correlationsOf(quantities);
+  const result = evaluate(formula, inputs, { locale, correlations });
+  checkCorrelations(correlations, result.info.inputs);
   const envelope = await derivationEnvelope({
     id: `derived:${title}`,
     formula,
     locale,
     result,
+    correlations,
     inputs: quantities.map(q => ({
       name: q.name,
       id: `${q.entry.id}#${q.index}`,

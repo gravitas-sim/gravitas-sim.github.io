@@ -38,6 +38,8 @@ export const ES_FORMULA = {
     '{name} es un límite superior o inferior, y un límite solo atraviesa una fórmula cuando es el único límite en ella y todas las demás entradas son exactas. De lo contrario el resultado no sería ni un límite ni un valor.',
   'formula.err.limitNonMonotone':
     'La fórmula no crece ni decrece de forma continua cuando {name} va de cero a su límite, así que un límite sobre ella no es un límite sobre el resultado.',
+  'formula.err.correlation':
+    'Las correlaciones dadas para {name} no pueden cumplirse a la vez: un coeficiente está fuera de -1 a 1, se da dos veces con valores distintos, o el conjunto no es una matriz de correlación. Corrígelas, o quítalas para tratar las entradas como independientes.',
   'formula.err.string':
     "Una unidad entre comillas solo va en to(x, 'km/s'); no hay otras cadenas de texto.",
   'formula.err.dimension':
@@ -80,6 +82,8 @@ export const ES_FORMULA = {
     '{n} filas no tienen valor: faltaba una entrada ahí, o la fórmula no tiene valor en ese punto.',
   'obs.formula.why.first-order':
     'Su incertidumbre se propaga a primer orden desde la de las columnas, tratadas como independientes.',
+  'obs.formula.why.first-order-correlated':
+    'Su incertidumbre se propaga a primer orden desde las de las entradas, con las correlaciones dadas entre ellas.',
   'obs.formula.why.none':
     '{lacking} no tiene incertidumbre registrada, así que la columna nueva no tiene.',
   'obs.formula.why.shared':
