@@ -46,6 +46,7 @@ import { DATASETS } from './course/datasets.js';
 import { progressOf } from './library/progress.js';
 import { BUILTIN_COURSES } from './data/courses/index.js';
 import { PLATFORM_API } from './platform/catalog.generated.js';
+import { KEY_NEXT_CONTEXT } from './names.js';
 
 const MAX_FILE = 512 * 1024;
 
@@ -83,7 +84,7 @@ function remember(item) {
   const items = itemsOf(pack).map(x => x.item);
   try {
     localStorage.setItem(
-      'gravitas_next_context',
+      KEY_NEXT_CONTEXT,
       JSON.stringify({
         k: 'course',
         home: location.href,

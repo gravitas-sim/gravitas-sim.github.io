@@ -40,6 +40,7 @@ import {
 } from '../../observatory/guides/core.js';
 import { EN_LAB3DGUIDES } from '../../i18n/en.lab3dGuides.js';
 import { put, readJson } from '../../storage/local.js';
+import { KEY_LAB3D_GUIDE_PREFIX } from '../../names.js';
 
 export const REPORT_FORMAT = 'gravitas.lab3d-guide-report';
 export const REPORT_VERSION = 1;
@@ -50,7 +51,7 @@ const loadSpanish = async () => {
   if (!Object.keys(CATALOGS.es).length)
     CATALOGS.es = (await import('../../i18n/es.lab3dGuides.js')).ES_LAB3DGUIDES;
 };
-const STORE = 'gravitas_lab3d_guide_';
+const STORE = KEY_LAB3D_GUIDE_PREFIX;
 
 /** The report a reader hands in: plain data, in a fixed order, no clock. */
 export function reportOf(

@@ -36,13 +36,22 @@ test('every IndexedDB database is in STORAGE.md', () => {
   const opened = new Set(
     execFileSync(
       'git',
-      ['grep', '-hoE', "(DB|NAME|name)\\s*=\\s*'gravitas-[a-z-]+'", '--', 'js'],
+      [
+        'grep',
+        '-hoE',
+        // A database name is a constant of its module or an entry of the
+        // registry (js/names.js KEY_DB_*).
+        "(DB|NAME|name|KEY_DB_[A-Z_]+)\\s*=\\s*'gravitas-[a-z-]+'",
+        '--',
+        'js',
+      ],
       { encoding: 'utf8' }
     )
       .split('\n')
       .filter(Boolean)
       .map(l => /'([^']+)'/.exec(l)[1])
   );
+  expect(opened.size).toBeGreaterThan(1);
   for (const db of opened)
     expect({ db, listed: doc.includes(db) }).toEqual({ db, listed: true });
 });

@@ -1,3 +1,4 @@
+import { KEY_STUDIO_DRAFT_PREFIX, KEY_STUDIO_LAST } from '../names.js';
 // =============================================================================
 // The Scenario Studio's state: history, drafts and differences
 // -----------------------------------------------------------------------------
@@ -71,8 +72,8 @@ export function createHistory(initial, limit = 200) {
   };
 }
 
-const DRAFT_PREFIX = 'gravitas_studio_draft:';
-const LAST_KEY = 'gravitas_studio_last';
+const DRAFT_PREFIX = KEY_STUDIO_DRAFT_PREFIX;
+const LAST_KEY = KEY_STUDIO_LAST;
 
 /**
  * Drafts kept in a Storage (localStorage in the page, a stand-in in tests).
