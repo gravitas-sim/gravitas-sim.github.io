@@ -1,5 +1,5 @@
 {
- "total": 592382,
+ "total": 592384,
  "modules": [
   {
    "module": "js/i18n/en.js",
@@ -55,7 +55,7 @@
   },
   {
    "module": "js/engine/collisions.js",
-   "bytes": 12439
+   "bytes": 12438
   },
   {
    "module": "js/bodyDraw.js",
@@ -70,8 +70,8 @@
    "bytes": 9522
   },
   {
-   "module": "js/physics.js",
-   "bytes": 9228
+   "module": "js/engine/step.js",
+   "bytes": 9223
   },
   {
    "module": "js/captureMeasure.js",
@@ -119,7 +119,7 @@
   },
   {
    "module": "js/engine/conservation.js",
-   "bytes": 5704
+   "bytes": 5716
   },
   {
    "module": "js/main.js",
@@ -195,7 +195,7 @@
   },
   {
    "module": "js/engine/state.js",
-   "bytes": 2674
+   "bytes": 2670
   },
   {
    "module": "js/exoplanetObservables.js",
@@ -408,6 +408,10 @@
   {
    "module": "js/i18n/scenario.js",
    "bytes": 122
+  },
+  {
+   "module": "js/physics.js",
+   "bytes": 0
   }
  ]
 }
