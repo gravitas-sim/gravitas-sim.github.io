@@ -37,8 +37,8 @@ import {
   white_dwarfs,
   galaxies,
   getPhysicsSetting,
-  updatePhysicsSettings,
 } from './physics.js';
+import { commitSettings } from './appState.js';
 import {
   massCenter,
   rotationCurvePoints,
@@ -762,7 +762,7 @@ export function setGalaxyGravity(mode) {
   const wanted = ['newtonian', 'halo', 'mond'].includes(mode)
     ? mode
     : 'newtonian';
-  updatePhysicsSettings({ galaxy_gravity: wanted });
+  commitSettings('rotation-curve', { galaxy_gravity: wanted });
   const actual = galaxyGravityMode();
 
   window.dispatchEvent(
@@ -793,11 +793,13 @@ export function initRotationCurve() {
   e.modeMond?.addEventListener('click', () => setGalaxyGravity('mond'));
 
   e.vFlat?.addEventListener('input', () => {
-    updatePhysicsSettings({ halo_v_flat: e.vFlat.valueAsNumber });
+    commitSettings('rotation-curve', { halo_v_flat: e.vFlat.valueAsNumber });
     updateRotationCurve();
   });
   e.core?.addEventListener('input', () => {
-    updatePhysicsSettings({ halo_core_radius: e.core.valueAsNumber });
+    commitSettings('rotation-curve', {
+      halo_core_radius: e.core.valueAsNumber,
+    });
     updateRotationCurve();
   });
 

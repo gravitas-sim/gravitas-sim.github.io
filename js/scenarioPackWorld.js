@@ -109,7 +109,7 @@ export function buildPackWorld(pack) {
     physics.resetPhysicsObjectCounter();
     for (const s of payload.b) restore(s);
   }
-  physics.updatePhysicsSettings(settings);
+  physics.updatePhysicsSettings(settings, { engineContext: 'headless' });
   physics.bumpWorldGeneration();
   physics.resetSimulationTime();
   physics.resetConservationBaseline();

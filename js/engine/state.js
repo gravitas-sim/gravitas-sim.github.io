@@ -243,20 +243,40 @@ export const setLiveBodyCount = n => {
   liveBodyCount = n;
 };
 
-// Function to update physics settings
-export const updatePhysicsSettings = settings => {
-  physicsSettings = normalizeGalaxyGravity(
-    {
-      ...physicsSettings,
-      ...settings,
-    },
-    settings
+// 'bootstrap' until the first push, then the context that last pushed:
+// 'application' (the page; every push is the whole of its SETTINGS, so G is
+// the application's) or 'headless' (a Worker, tool, test or the validation
+// suite, whose own fixtures, G = 1 included, are the input).
+let engineContext = 'bootstrap';
+
+/** @returns {string} 'bootstrap', 'application' or 'headless' */
+export const getEngineContext = () => engineContext;
+
+/**
+ * Take a settings object: the one door into `physicsSettings`. Merges over the
+ * copy and leaves it frozen, a projection of what was pushed. The page pushes
+ * through commitSettings() in js/appState.js; any other caller is headless.
+ *
+ * @param {object} settings - Keys to merge in
+ * @param {{engineContext?: 'application'|'headless'}} [options]
+ */
+export const updatePhysicsSettings = (settings, options = {}) => {
+  const context = options.engineContext ?? 'headless';
+  if (context !== 'application' && context !== 'headless')
+    throw new TypeError(`unknown engine context "${context}"`);
+  // An application push is its whole SETTINGS; less would leave the bootstrap G of 1.
+  if (
+    context === 'application' &&
+    !Number.isFinite(settings?.gravitational_constant)
+  )
+    throw new TypeError('an application push carries gravitational_constant');
+  engineContext = context;
+  physicsSettings = Object.freeze(
+    normalizeGalaxyGravity({ ...physicsSettings, ...settings }, settings)
   );
-  // js/units.js derives the length of a time unit from G, and used to import
-  // getPhysicsSetting to read it - which made the foundation layer depend on
-  // the engine. It is pushed from here instead, which is the one place
-  // physicsSettings is ever written.
+  // js/units.js takes G from here, the one place physicsSettings is written.
   setSimGravitationalConstant(physicsSettings.gravitational_constant);
+  return physicsSettings;
 };
 
 /**
