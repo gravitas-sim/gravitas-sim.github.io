@@ -1949,16 +1949,6 @@
     }
   }
 
-  /* The reader's override: the same stop (data-motion on the root). */
-  :root[data-motion] *,
-  :root[data-motion] *::before,
-  :root[data-motion] *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-
   /* Windows high-contrast / forced-colors: let the OS palette through rather
      than fighting it with backdrop filters and translucent surfaces. */
   @media (forced-colors: active) {
@@ -7802,4 +7792,16 @@
     color: var(--text-muted);
     white-space: nowrap;
   }
+}
+
+/* The reader's override of the system's reduced-motion setting (data-motion on
+   the root, js/quality.js). Outside every layer, so it outranks the layered
+   rules that set a duration without needing to be marked important. */
+:root[data-motion] *,
+:root[data-motion] *::before,
+:root[data-motion] *::after {
+  animation-duration: 0.01ms;
+  animation-iteration-count: 1;
+  transition-duration: 0.01ms;
+  scroll-behavior: auto;
 }

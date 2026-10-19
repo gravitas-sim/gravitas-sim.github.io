@@ -288,7 +288,15 @@ test.describe("reduced motion, with the reader's own override", () => {
         async () => (await import('/js/physics.js')).simulationTime
       );
     const t0 = await clock();
-    await page.waitForTimeout(1000);
+    await page.evaluate(
+      () =>
+        new Promise(resolve => {
+          let n = 0;
+          const next = () =>
+            ++n >= 30 ? resolve() : window.requestAnimationFrame(next);
+          next();
+        })
+    );
     expect(await clock()).toBe(t0);
     // Play is the reader's act, and it runs.
     await page.locator('#timelinePlay').click();

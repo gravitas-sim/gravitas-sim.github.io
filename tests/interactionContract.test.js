@@ -221,8 +221,8 @@ describe('the contract is one set of numbers', () => {
       );
   });
 
-  test('the override reaches every blanket reduced-motion rule', () => {
-    for (const f of ['css/tokens.css', 'css/styles.css', 'css/components.css'])
+  test('the override reaches the duration tokens and the blanket rule', () => {
+    for (const f of ['css/tokens.css', 'css/components.css'])
       expect(read(f)).toMatch(/:root\[data-motion\]/);
   });
 
