@@ -96,12 +96,13 @@ describe('effects after the move', () => {
   });
 
   test('every burst the engine throws has a look, and every look a burst', () => {
-    // The bursts are thrown from the facade, the bodies module and the
-    // collisions module.
+    // The bursts are thrown from the facade, the bodies module, the
+    // collisions module and the step.
     const source = [
       '../js/physics.js',
       '../js/engine/bodies.js',
       '../js/engine/collisions.js',
+      '../js/engine/step.js',
     ]
       .map(f => readFileSync(new URL(f, import.meta.url), 'utf8'))
       .join('\n');

@@ -46,11 +46,11 @@ async function prettierOptions() {
 }
 
 const check = process.argv.includes('--check');
-const SOURCE = 'js/physics.js';
+const SOURCE = 'js/engine/step.js';
 // Where an operation lives is the engine slice that holds it: the absorption
 // moved to the bodies module and the damping to the black hole module with
-// slice S5, and the rocky collision to the collisions module with slice S6
-// (D-DECOMP-18).
+// slice S5, and the rocky collision to the collisions module with slice S6, and the distance culls and the collapse site
+// to the step module with slice S7 (D-DECOMP-18).
 const BODIES = 'js/engine/bodies.js';
 const BLACK_HOLE = 'js/engine/blackHole.js';
 const COLLISIONS = 'js/engine/collisions.js';
