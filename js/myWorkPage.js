@@ -30,6 +30,7 @@ import {
 } from './myWork/transfer.js';
 import { mountShell } from './shell.js';
 import {
+  ID_INVESTIGATION_PROGRESS,
   KEY_EXPERIMENT_PREFIX,
   KEY_GUIDES,
   KEY_LOCALE,
@@ -525,7 +526,7 @@ async function readFile(file) {
       )
     );
   }
-  if (data?.kind === 'gravitas.investigation.progress')
+  if (data?.kind === ID_INVESTIGATION_PROGRESS)
     return bad(
       L(
         'That is a backup of one investigation. Restore it from inside that investigation.',

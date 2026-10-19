@@ -25,7 +25,11 @@
 // =============================================================================
 
 import { put, drop } from '../storage/local.js';
-import { KEY_EXPERIMENTS_INDEX, KEY_EXPERIMENT_PREFIX } from '../names.js';
+import {
+  ID_EXPERIMENT_RESULT,
+  KEY_EXPERIMENTS_INDEX,
+  KEY_EXPERIMENT_PREFIX,
+} from '../names.js';
 
 /**
  * A record is a gravitas.experiment-result/1 of kind `comparison`, with `v`
@@ -39,7 +43,7 @@ const refuse = reason => ({ ok: false, record: null, reason });
 const failed = (reason, bytes, limit) => ({ ok: false, reason, bytes, limit });
 
 const STAMP = {
-  format: 'gravitas.experiment-result',
+  format: ID_EXPERIMENT_RESULT,
   formatVersion: 1,
   kind: 'comparison',
 };

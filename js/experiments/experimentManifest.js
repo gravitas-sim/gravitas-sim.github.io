@@ -41,6 +41,7 @@ import {
   planValues,
 } from './sweep.js';
 import { STATUS } from './status.js';
+import { ID_ANALYSIS, ID_EXPERIMENT, ID_EXPERIMENT_RESULT } from '../names.js';
 
 // A trial's statuses and the check on a realm's answer live in ./status.js,
 // which imports nothing but ./sweep.js, so the scheduler can take them without
@@ -48,9 +49,9 @@ import { STATUS } from './status.js';
 // tasks through it.
 export { STATUS, isTrialResult } from './status.js';
 
-export const FORMAT = 'gravitas.experiment';
+export const FORMAT = ID_EXPERIMENT;
 export const FORMAT_VERSION = 1;
-export const RESULT_FORMAT = 'gravitas.experiment-result';
+export const RESULT_FORMAT = ID_EXPERIMENT_RESULT;
 export const RESULT_VERSION = 1;
 /** The platform API these manifests are written against (js/platform). */
 export const PLATFORM_RANGE = '^1.0.0';
@@ -689,8 +690,8 @@ export function fromSweepSpec(spec, { profile = 'desktop', nav = {} } = {}) {
 // --- Retired ids: version 0 of their replacements; TO_VERSION_1 migrates them.
 
 export const RETIRED_FORMATS = Object.freeze({
-  'gravitas-experiment': 'gravitas.experiment',
-  'gravitas-reliability-check': 'gravitas.experiment-result',
+  'gravitas-experiment': ID_EXPERIMENT,
+  'gravitas-reliability-check': ID_EXPERIMENT_RESULT,
 });
 
 export function underCurrentId(d) {
@@ -918,8 +919,7 @@ function analysisVerdict(doc, here) {
  */
 export function reproducibility(result, here) {
   const reasons = [];
-  if (result?.format === 'gravitas.analysis')
-    return analysisVerdict(result, here);
+  if (result?.format === ID_ANALYSIS) return analysisVerdict(result, here);
   if (['comparison', 'reliability-check'].includes(result?.kind))
     return { reproducible: false, reasons: ['not a sweep result'], notes: [] };
   if (

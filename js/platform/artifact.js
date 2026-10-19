@@ -20,8 +20,9 @@
 // =============================================================================
 
 import { UNITS } from '../units/registry.js';
+import { ID_ARTIFACT } from '../names.js';
 
-export const FORMAT = 'gravitas.artifact';
+export const FORMAT = ID_ARTIFACT;
 export const FORMAT_VERSION = 1;
 
 /**

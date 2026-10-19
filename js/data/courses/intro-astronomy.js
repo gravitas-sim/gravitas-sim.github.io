@@ -1,3 +1,4 @@
+import { ID_COURSE_PACK } from '../../names.js';
 // =============================================================================
 // Introductory astronomy: the course pack the builder was proved on
 // -----------------------------------------------------------------------------
@@ -13,7 +14,7 @@
 // =============================================================================
 
 export const INTRO_ASTRONOMY = {
-  format: 'gravitas.course-pack',
+  format: ID_COURSE_PACK,
   formatVersion: 2,
   id: 'intro-astronomy',
   version: '1.0.0',

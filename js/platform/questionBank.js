@@ -15,6 +15,7 @@
 
 import { RELATIONS, evaluateRelation } from './relations.js';
 import { knownKeys } from './checker.js';
+import { ID_QUESTION_BANK } from '../names.js';
 
 // The same lists as js/answerFeedback.js, written out here because this module
 // serves routes that do not otherwise load the lesson engine's grader, and a
@@ -30,7 +31,7 @@ export const FEEDBACK_CLASSES = Object.freeze([
 ]);
 export const HINT_LIMIT = 3;
 
-export const BANK_FORMAT = 'gravitas.question-bank';
+export const BANK_FORMAT = ID_QUESTION_BANK;
 export const BANK_FORMAT_VERSION = 1;
 
 export const ITEM_KINDS = Object.freeze(['choice', 'numeric', 'short']);
