@@ -1398,3 +1398,31 @@ export class Comet extends PhysicsObject {
     this.tailLength = s.tailLength;
   }
 }
+
+/**
+ * Bring a body's reported mass back into agreement with its actual one.
+ *
+ * Every class carries its mass twice: once as `mass`, in simulation units,
+ * which is what gravity uses, and once in the unit the class is built and
+ * displayed in - Earth masses, Jupiter masses, solar masses, Ceres masses,
+ * Halley masses, fragments. Any code that writes `mass` and leaves the other
+ * one behind produces a body that gravitates as one thing and is labeled as
+ * another, which is the single most repeated bug in this file's history.
+ *
+ * @param {object} obj - The body
+ * @returns {object} The same body
+ */
+export const syncReportedMass = obj => {
+  if (!obj || !Number.isFinite(obj.mass)) return obj;
+  if (obj.massInEarths != null) obj.massInEarths = obj.mass / EARTH_MASS_UNIT;
+  if (obj.massInJupiters != null) {
+    obj.massInJupiters = obj.mass / JUPITER_MASS_UNIT;
+  }
+  if (obj.massInSuns != null) obj.massInSuns = obj.mass / SOLAR_MASS_UNIT;
+  if (obj.massInCeres != null) obj.massInCeres = obj.mass / CERES_MASS_UNIT;
+  if (obj.massInComets != null) obj.massInComets = obj.mass / HALLEY_MASS_UNIT;
+  if (obj.massInFragments != null) {
+    obj.massInFragments = obj.mass / DEBRIS_MASS_UNIT;
+  }
+  return obj;
+};
