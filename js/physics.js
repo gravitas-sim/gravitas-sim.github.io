@@ -112,9 +112,14 @@ import {
   findObjectAtPosition,
   is_offscreen,
   screen_to_world,
+  setPhysicsWorkerUrl,
   updatePhysics,
   world_to_screen,
 } from './engine/step.js';
+
+// The Barnes-Hut Worker's file, resolved from here (its bundle sits beside this
+// one in the build, and beside this file in the sources).
+setPhysicsWorkerUrl(new URL('./physicsWorker.js', import.meta.url));
 export { simulation, onPhysicsStep } from './engine/events.js';
 export { NOMINAL_RADIUS } from './engine/bodies.js';
 export { className } from './engine/collisions.js';

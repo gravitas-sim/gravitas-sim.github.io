@@ -19,6 +19,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
+import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const PAGE = 'glossary/index.html';
@@ -138,6 +140,22 @@ export const NOUNS = [
 ];
 
 /**
+ * The method words printed after an uncertainty (Prompt 151): "9.81 ± 0.02
+ * (data)". The words and their sentences are the catalog's own, so the page and
+ * the report cannot disagree.
+ */
+export const METHODS = [
+  'data',
+  'model',
+  'scaled',
+  'profile',
+  'propagated',
+  'stated',
+  'limit',
+  'exact',
+];
+
+/**
  * The words that are retired. `en` and `es` are the patterns the terminology
  * test refuses outside this page; `use` is what to write instead.
  */
@@ -243,6 +261,24 @@ export function render() {
     }
     out.push('</dd>');
     out.push('</div>');
+  }
+  out.push('</dl>');
+  out.push('</section>');
+  out.push(`<section id="uncertainty" aria-labelledby="uncertainty-h">`);
+  out.push(
+    `<h2 id="uncertainty-h">${both('Uncertainty, and how it was found', 'La incertidumbre y cómo se obtuvo')}</h2>`
+  );
+  out.push(
+    `<p>${both(
+      'A number a student reads is printed as value ± uncertainty, with one word in brackets that says where the uncertainty comes from. A limit is printed as < or >, and a result the data leave open is printed as not constrained.',
+      'Un número que lee un estudiante se imprime como valor ± incertidumbre, con una palabra entre paréntesis que dice de dónde viene la incertidumbre. Un límite se imprime como < o >, y un resultado que los datos dejan abierto se imprime como no acotado.'
+    )}</p>`
+  );
+  out.push('<dl class="gl-terms">');
+  for (const m of METHODS) {
+    out.push(
+      `<div id="method-${m}"><dt>${both(EN_DEFERRED[`nb.unc.method.${m}`], ES_DEFERRED[`nb.unc.method.${m}`])}</dt><dd>${both(EN_DEFERRED[`nb.unc.method.${m}.tip`], ES_DEFERRED[`nb.unc.method.${m}.tip`])}</dd></div>`
+    );
   }
   out.push('</dl>');
   out.push('</section>');

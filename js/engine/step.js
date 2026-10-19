@@ -106,6 +106,12 @@ const canvas = (typeof document !== 'undefined' &&
 
 // Worker state
 let physicsWorker = null;
+// Where the Worker's file is, said by js/physics.js: a module URL resolves from
+// the file it is written in, and the build puts every chunk beside the Worker.
+let physicsWorkerUrl = null;
+export const setPhysicsWorkerUrl = url => {
+  physicsWorkerUrl = url;
+};
 let workerBusy = false;
 let workerBuffers = {
   sx: null,
@@ -415,8 +421,7 @@ export const updatePhysics = dt => {
   // Initialize worker if needed
   if (useBarnesHut && !physicsWorker) {
     try {
-      const url = new URL('./physicsWorker.js', import.meta.url);
-      physicsWorker = new Worker(url, { type: 'module' });
+      physicsWorker = new Worker(physicsWorkerUrl, { type: 'module' });
       physicsWorker.onmessage = e => {
         const { type, ax, ay, phi, sources, targets } = e.data;
         if (type === 'accel') {
