@@ -76,7 +76,7 @@ describe('the deploy job only runs behind the gate', () => {
     // than skipped quietly: it exists to publish a report when the shards
     // fail, so requiring it would mean a failed suite could not produce its
     // own diagnostics, and it decides nothing.
-    const REPORTING_ONLY = new Set(['e2e-report']);
+    const REPORTING_ONLY = new Set(['e2e-report', 'ci-cost']);
     // And the scheduled jobs, which run on the schedule or a dispatch and
     // never on a push or a pull request, so they cannot be required: a
     // required job that does not run would block every merge.
