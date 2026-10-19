@@ -37,7 +37,7 @@ import { watchForInvestigations } from './investigationsLoader.js';
 import { shouldShowWelcome } from './welcomeGate.js';
 
 // Failures go to #srStatus too, by js/failures.js, fetched only then.
-for (const type of ['error', 'unhandledrejection', 'gravitasWorkerFailed'])
+for (const type of ['error', 'unhandledrejection', EV_WORKER_FAILED])
   window.addEventListener(type, e =>
     import('./failures.js').then(
       m => m.record(e),
@@ -92,6 +92,12 @@ import {
   embedRequest,
   embedWorldBuilt,
 } from './world.js';
+import {
+  EV_ESCAPE,
+  EV_OBJECT_PLACED,
+  EV_PLACEMENT_ARMED,
+  EV_WORKER_FAILED,
+} from './names.js';
 
 // Add global flag to track splash screen status
 window.isSplashActive = true;
@@ -308,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     canvas.addEventListener('pointerdown', onTouch);
     // Escape dismisses them like any other overlay.
-    window.addEventListener('gravitasEscape', () => {
+    window.addEventListener(EV_ESCAPE, () => {
       const tips = document.getElementById('mobileInstructions');
       if (tips) tips.style.display = 'none';
     });
@@ -429,8 +435,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Placing a body is an interaction of its own. The long press that arms it is
   // already too long to be a tap, but the release that drops the object must
   // not pair with whatever comes next either.
-  window.addEventListener('gravitasPlacementArmed', () => doubleTap.cancel());
-  window.addEventListener('gravitasObjectPlaced', () => doubleTap.cancel());
+  window.addEventListener(EV_PLACEMENT_ARMED, () => doubleTap.cancel());
+  window.addEventListener(EV_OBJECT_PLACED, () => doubleTap.cancel());
 
   // Initialize with error handling
   try {

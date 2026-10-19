@@ -7,6 +7,7 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
+import { EV_THEME_CHANGED } from './names.js';
 
 const STORAGE_KEY = 'gravitas_theme';
 
@@ -83,7 +84,7 @@ export function setTheme(id) {
     }
   });
   window.dispatchEvent(
-    new CustomEvent('gravitasThemeChanged', { detail: { theme: current } })
+    new CustomEvent(EV_THEME_CHANGED, { detail: { theme: current } })
   );
 }
 

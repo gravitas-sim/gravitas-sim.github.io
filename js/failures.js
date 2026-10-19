@@ -11,6 +11,7 @@
 import { announce } from './notify.js';
 import { t } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import { EV_WORKER_FAILED } from './names.js';
 
 /**
  * Say what failed.
@@ -22,8 +23,7 @@ import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 export async function record(e) {
   let id = 'failure.error';
   let message = '';
-  if (e.type === 'gravitasWorkerFailed')
-    id = `failure.worker.${e.detail?.worker}`;
+  if (e.type === EV_WORKER_FAILED) id = `failure.worker.${e.detail?.worker}`;
   else if (e.type === 'unhandledrejection')
     message = String(e.reason?.message ?? e.reason ?? '');
   else message = String(e.error?.message ?? e.message ?? '');

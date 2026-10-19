@@ -39,6 +39,7 @@ import { lastEvent } from './pauseAtEventBridge.js';
 import { toast } from './notify.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { resetFollowCamera } from './followCamera.js';
+import { EV_LOCALE_CHANGED } from './names.js';
 
 /** The two canvases, handed in by initCaptureMeasure. */
 let canvas = null;
@@ -956,7 +957,7 @@ export function initBottomDock() {
   // the new text is already in the DOM, and deferring a frame left the bar sized
   // for English beside a Spanish footer (11px gap, not 16, on WebKit at 1700px).
   // The scheduled follow-up stays for a font that loads a frame or two later.
-  window.addEventListener('gravitasLocaleChanged', () => {
+  window.addEventListener(EV_LOCALE_CHANGED, () => {
     measure();
     schedule();
   });

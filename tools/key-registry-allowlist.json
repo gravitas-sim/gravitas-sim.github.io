@@ -18,26 +18,8 @@
     "js/assignments/assignment.js": {
       "gravitas.assignment": 1
     },
-    "js/assistPanel.js": {
-      "gravitasRequestRebuild": 1,
-      "gravitasSimulationReset": 1
-    },
-    "js/astrometry.js": {
-      "gravitasSimulationReset": 1
-    },
-    "js/audio.js": {
-      "gravitasMerge": 1,
-      "gravitasCollision": 1
-    },
     "js/authoring/preview.js": {
       "gravitas_composer_preview": 1
-    },
-    "js/binaryRunPanel.js": {
-      "gravitasRequestRebuild": 1,
-      "gravitasSimulationReset": 1
-    },
-    "js/captureMeasure.js": {
-      "gravitasLocaleChanged": 1
     },
     "js/catalog/i18n.js": {
       "gravitas_locale": 1
@@ -86,15 +68,7 @@
       "gravitas_locale": 1
     },
     "js/controls.js": {
-      "gravitasSelectionCleared": 1,
-      "gravitas_rail_sections": 1,
-      "gravitasUnitsChanged": 1,
-      "gravitasStopSignalAudio": 1,
-      "gravitasEscape": 1,
-      "gravitasSpeedChanged": 1,
-      "gravitasPlacementArmed": 1,
-      "gravitasObjectPlaced": 1,
-      "gravitasSimulationReset": 1
+      "gravitas_rail_sections": 1
     },
     "js/course/i18n.js": {
       "gravitas_locale": 1
@@ -118,10 +92,6 @@
     "js/coursePage.js": {
       "gravitas_course_draft:": 1,
       "gravitas_course_last": 1
-    },
-    "js/cr3bpPanel.js": {
-      "gravitasRequestRebuild": 1,
-      "gravitasSimulationReset": 1
     },
     "js/data/courses/astronomy-semester.js": {
       "gravitas.course-pack": 1
@@ -150,11 +120,6 @@
     "js/embedMessages.js": {
       "gravitas-embed": 1
     },
-    "js/engine/events.js": {
-      "gravitasCollision": 1,
-      "gravitasWorkerFailed": 1,
-      "gravitasMerge": 1
-    },
     "js/evaluationKit.js": {
       "gravitas_evaluation_draft_v1": 1
     },
@@ -182,13 +147,6 @@
     "js/experimentsPage.js": {
       "gravitas_experiment_checkpoint_": 1
     },
-    "js/exportDialog.js": {
-      "gravitasEscape": 1,
-      "gravitasSimulationReset": 1
-    },
-    "js/failures.js": {
-      "gravitasWorkerFailed": 1
-    },
     "js/figure/i18n.js": {
       "gravitas_locale": 1
     },
@@ -198,20 +156,12 @@
     "js/forward/setup.js": {
       "gravitas.observing-setup": 1
     },
-    "js/gwAudio.js": {
-      "gravitasSignalAudio": 1,
-      "gravitasStopSignalAudio": 1
-    },
     "js/i18n/index.js": {
       "gravitas_locale": 1,
       "gravitasLocaleChanged": 1
     },
     "js/inference/manifest.js": {
       "gravitas.inference": 1
-    },
-    "js/inspectorWindow.js": {
-      "gravitasManeuverRequested": 2,
-      "gravitasSimulationReset": 1
     },
     "js/instructorExpectations.js": {
       "gravitas.instructor-expectations": 1
@@ -290,16 +240,6 @@
     },
     "js/libraryPage.js": {
       "gravitas_next_context": 1
-    },
-    "js/lightCurve.js": {
-      "gravitasSimulationReset": 1,
-      "gravitasLightCurveToggled": 1
-    },
-    "js/main.js": {
-      "gravitasWorkerFailed": 1,
-      "gravitasEscape": 1,
-      "gravitasPlacementArmed": 1,
-      "gravitasObjectPlaced": 1
     },
     "js/maneuverPlanner.js": {
       "gravitas-maneuver-log": 1
@@ -398,13 +338,6 @@
       "gravitasUpdateReady": 1,
       "gravitasLocaleChanged": 1
     },
-    "js/pauseAtEventPanel.js": {
-      "gravitasSimulationReset": 1
-    },
-    "js/placement.js": {
-      "gravitasObjectPlaced": 1,
-      "gravitasSimulationReset": 1
-    },
     "js/platform/artifact.js": {
       "gravitas.artifact": 1,
       "gravitas": 1
@@ -441,19 +374,8 @@
     "js/presentation.js": {
       "gravitasPresentationChanged": 1
     },
-    "js/rotationCurve.js": {
-      "gravitasGalaxyGravityChanged": 1,
-      "gravitasSimulationReset": 1
-    },
-    "js/scenarioBrowser.js": {
-      "gravitasEscape": 1
-    },
     "js/settingsSchema.js": {
       "gravitas_course_level": 1
-    },
-    "js/share.js": {
-      "gravitasSimulationReset": 3,
-      "gravitasEscape": 1
     },
     "js/shell.js": {
       "gravitas_locale": 2,
@@ -462,10 +384,6 @@
     },
     "js/skyPage.js": {
       "gravitas_locale": 1
-    },
-    "js/soundPanel.js": {
-      "gravitasStopSignalAudio": 1,
-      "gravitasSignalAudio": 1
     },
     "js/storage/index.js": {
       "gravitas.student-data": 1,
@@ -515,9 +433,6 @@
     "js/submission/results.js": {
       "gravitas.submission-results": 1
     },
-    "js/systemBuilder.js": {
-      "gravitasSimulationReset": 1
-    },
     "js/systemSpec.js": {
       "gravitas.orbital-system": 1
     },
@@ -531,37 +446,17 @@
       "gravitas_teaching_notes_v1": 1
     },
     "js/theme.js": {
-      "gravitas_theme": 1,
-      "gravitasThemeChanged": 1
-    },
-    "js/tutorial.js": {
-      "gravitasEscape": 1
-    },
-    "js/ui.js": {
-      "gravitasMerge": 1,
-      "gravitasSettingsApplied": 1,
-      "gravitasEscape": 2,
-      "gravitasPlacementArmed": 1
+      "gravitas_theme": 1
     },
     "js/utils.js": {
       "gravitasDebug": 1
-    },
-    "js/view3d.js": {
-      "gravitasSimulationReset": 1
-    },
-    "js/welcome.js": {
-      "gravitasEscape": 1
     },
     "js/welcomeGate.js": {
       "gravitas_welcome_seen_v1": 1,
       "gravitas_orientation_seen_v1": 1
     },
     "js/world.js": {
-      "gravitas_simulation_save": 1,
-      "gravitasSimulationReset": 1,
-      "gravitasObjectPlaced": 2,
-      "gravitasGalaxyGravityChanged": 1,
-      "gravitasRequestRebuild": 1
+      "gravitas_simulation_save": 1
     },
     "js/world/build.js": {
       "gravitasSimulationReset": 1

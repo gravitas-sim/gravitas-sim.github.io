@@ -52,6 +52,7 @@ import {
   systemFromFile,
   initialStateMatches,
 } from './systemSpec.js';
+import { EV_SIMULATION_RESET } from './names.js';
 
 /**
  * Bring in this panel's strings, for the locale in use.
@@ -982,7 +983,7 @@ export function installSystem(system, kit) {
   state.pan = { x: 0, y: 0 };
   state.paused = false;
   kit.finish(system);
-  window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+  window.dispatchEvent(new CustomEvent(EV_SIMULATION_RESET));
   return count;
 }
 

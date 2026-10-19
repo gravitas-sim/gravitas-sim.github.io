@@ -22,6 +22,7 @@ import {
   scanTree,
   REGISTRY,
 } from '../tools/key-registry-scan.mjs';
+import { rewriteSource } from '../tools/key-registry-codemod.mjs';
 
 /** Every name and the exact string it has always been. */
 const PINNED = {
@@ -29,6 +30,22 @@ const PINNED = {
   EV_SIMULATION_RESET: 'gravitasSimulationReset',
   EV_UNITS_CHANGED: 'gravitasUnitsChanged',
   EV_THEME_CHANGED: 'gravitasThemeChanged',
+  EV_REQUEST_REBUILD: 'gravitasRequestRebuild',
+  EV_MERGE: 'gravitasMerge',
+  EV_COLLISION: 'gravitasCollision',
+  EV_LOCALE_CHANGED: 'gravitasLocaleChanged',
+  EV_SELECTION_CLEARED: 'gravitasSelectionCleared',
+  EV_STOP_SIGNAL_AUDIO: 'gravitasStopSignalAudio',
+  EV_ESCAPE: 'gravitasEscape',
+  EV_SPEED_CHANGED: 'gravitasSpeedChanged',
+  EV_PLACEMENT_ARMED: 'gravitasPlacementArmed',
+  EV_OBJECT_PLACED: 'gravitasObjectPlaced',
+  EV_WORKER_FAILED: 'gravitasWorkerFailed',
+  EV_SIGNAL_AUDIO: 'gravitasSignalAudio',
+  EV_MANEUVER_REQUESTED: 'gravitasManeuverRequested',
+  EV_LIGHT_CURVE_TOGGLED: 'gravitasLightCurveToggled',
+  EV_GALAXY_GRAVITY_CHANGED: 'gravitasGalaxyGravityChanged',
+  EV_SETTINGS_APPLIED: 'gravitasSettingsApplied',
 };
 
 const NAME_EXPORT = /^(KEY|EV|ID)_[A-Z0-9_]+$/;
@@ -160,5 +177,52 @@ describe('the loose-literal ratchet', () => {
         'gravitas.three',
       ].sort()
     );
+  });
+});
+
+describe('the registry stays a leaf', () => {
+  test('js/names.js imports nothing', () => {
+    const src = readFileSync('js/names.js', 'utf8');
+    expect(src).not.toMatch(/^\s*import\s/m);
+    expect(src).not.toMatch(/\bimport\(/);
+  });
+});
+
+describe('the codemod (tools/key-registry-codemod.mjs)', () => {
+  const run = (src, file = 'js/x/mod.js', kind = 'events') =>
+    rewriteSource(src, file, kind);
+
+  test('moves an event name used as one and adds the import', () => {
+    const r = run(
+      `import { a } from './a.js';\nwindow.addEventListener('gravitasMerge', f);\nwindow.dispatchEvent(new window.CustomEvent('gravitasMerge', {}));\nif (e.type === 'gravitasMerge') g();\n`
+    );
+    expect(r.moved).toBe(3);
+    expect(r.src).toContain("import { EV_MERGE } from '../names.js';");
+    expect(r.src).not.toMatch(/'gravitasMerge'/);
+    expect(r.src).toContain('addEventListener(EV_MERGE, f)');
+  });
+
+  test('extends an import that is already there, sorted', () => {
+    const r = run(
+      `import { KEY_UNITS } from '../names.js';\nwindow.addEventListener('gravitasMerge', f);\nf(KEY_UNITS);\n`
+    );
+    expect(r.src).toContain(
+      "import { EV_MERGE, KEY_UNITS } from '../names.js';"
+    );
+    expect(r.src.match(/from '..\/names.js'/g)).toHaveLength(1);
+  });
+
+  test('leaves an element id and a storage property alone', () => {
+    const r = run(
+      `document.getElementById('gravitasToast');\nconst d = localStorage.gravitasDebug ?? 'gravitasDebug';\n`
+    );
+    expect(r.moved).toBe(0);
+    expect(r.left.sort()).toEqual(['gravitasDebug', 'gravitasToast']);
+  });
+
+  test('refuses a literal the registry does not know', () => {
+    const r = run(`window.addEventListener('gravitasNotInTheRegistry', f);\n`);
+    expect(r.moved).toBe(0);
+    expect(r.unknown).toEqual(['gravitasNotInTheRegistry']);
   });
 });
