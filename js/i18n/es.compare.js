@@ -37,4 +37,28 @@ export const ES_COMPARE = {
   'compareW.loading': 'Generando los datos',
   'compareW.axis.residual': 'Residuo en sigmas',
   'compareW.axis.data': 'Datos y modelo',
+  'compareW.est.result':
+    'La diferencia es {diff}: {n} sigma. Una diferencia tan grande o mayor surgiría por azar con probabilidad {p}.',
+  'compareW.est.which.a': 'La primera estimación',
+  'compareW.est.which.b': 'La segunda estimación',
+  'compareW.est.assume.gaussian': 'Se supone que los errores son gaussianos.',
+  'compareW.est.assume.independent':
+    'Las dos estimaciones se tratan como independientes, porque no se dio ninguna covarianza.',
+  'compareW.est.assume.covariance': 'Se tiene en cuenta su covarianza.',
+  'compareW.est.assume.sharedUnknown':
+    'Comparten sus datos o su calibración, así que sus errores se mueven juntos: la incertidumbre de la diferencia es probablemente menor de lo que dice esto y la diferencia más significativa. Dé su correlación para corregirlo.',
+  'compareW.est.refused.value': 'Una de las dos no tiene valor que comparar.',
+  'compareW.est.refused.none':
+    '{which} no indica incertidumbre, así que no se pueden comparar.',
+  'compareW.est.refused.asymmetric':
+    '{which} tiene un intervalo asimétrico, que esta comparación no puede tratar como una desviación estándar.',
+  'compareW.est.refused.level':
+    '{which} es un intervalo sin nivel de confianza indicado, así que no se puede convertir en una desviación estándar.',
+  'compareW.est.refused.limit':
+    '{which} es un límite, no una medición, así que no hay diferencia que comparar.',
+  'compareW.est.refused.failed': '{which} no tiene resultado.',
+  'compareW.est.refused.not-constrained':
+    '{which} no está acotada por los datos.',
+  'compareW.est.refused.covariance':
+    'La covarianza dada es mayor de lo que permiten las dos incertidumbres.',
 };
