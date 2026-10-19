@@ -22,7 +22,7 @@
 import { createDocument } from '../pdf.js';
 import { t } from '../i18n/index.js';
 import { KIND } from './entry.js';
-import { citationRows } from './artifactEntry.js';
+import { citationRows, quantityText } from './artifactEntry.js';
 import {
   evidenceSections,
   orRaw,
@@ -256,11 +256,13 @@ function fillEvidenceReport(
           t('nb.report.colNote'),
         ],
         widths: [0.3, 0.2, 0.15, 0.35],
-        rows: snap.quantities.map(q => [
+        rows: snap.quantities.map((q, i) => [
           q.label,
-          q.uncertainty
-            ? `${valueText(q.value, '')} ± ${valueText(q.uncertainty, q.unit)}`
-            : valueText(q.value, q.unit),
+          quantityText(q, snap.artifact?.quantities?.[i], t, getLocale())
+            ?.line ??
+            (q.uncertainty
+              ? `${valueText(q.value, '')} ± ${valueText(q.uncertainty, q.unit)}`
+              : valueText(q.value, q.unit)),
           kindText(q.kind),
           q.note || '',
         ]),
