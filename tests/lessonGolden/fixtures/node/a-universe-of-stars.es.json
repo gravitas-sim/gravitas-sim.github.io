@@ -918,12 +918,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "f9af56e595c33837138f230207dcf8a6c33ed2ac8c3b3608db6860c402ec495f"
+  "digest": "b8b51eaef02fd5e3e9d70c328460e698a105d4456a8974a94f77367adfe4c875"
  },
  "tokens": {
   "plain": {
@@ -1112,7 +1116,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "f9af56e595c33837138f230207dcf8a6c33ed2ac8c3b3608db6860c402ec495f",
+     "d": "b8b51eaef02fd5e3e9d70c328460e698a105d4456a8974a94f77367adfe4c875",
      "i": [
       "golden-a-universe-of-stars"
      ],
@@ -1127,7 +1131,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },

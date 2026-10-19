@@ -1091,12 +1091,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "b3976900ba2665d8ad1fdf9e47e1cb5ddf9d736c84812eb66d535efe31315907"
+  "digest": "ea045d8e02eb71cb8f0499943c5f872d590e1bc8121f9e1276f04133de8157b2"
  },
  "tokens": {
   "plain": {
@@ -1295,7 +1299,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "b3976900ba2665d8ad1fdf9e47e1cb5ddf9d736c84812eb66d535efe31315907",
+     "d": "ea045d8e02eb71cb8f0499943c5f872d590e1bc8121f9e1276f04133de8157b2",
      "i": [
       "golden-binary-star-planets"
      ],
@@ -1310,7 +1314,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },

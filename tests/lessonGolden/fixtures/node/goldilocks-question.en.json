@@ -1126,12 +1126,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "a1b690d7ca0ced3f2d1a3f460cb169bbfb2f5788c6d50c948b7bbf70f0e00999"
+  "digest": "8e44abe159e9293abccdbcdab1dc911a9efe1d963263a9d9a8e319ccac839d1e"
  },
  "tokens": {
   "plain": {
@@ -1340,7 +1344,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "a1b690d7ca0ced3f2d1a3f460cb169bbfb2f5788c6d50c948b7bbf70f0e00999",
+     "d": "8e44abe159e9293abccdbcdab1dc911a9efe1d963263a9d9a8e319ccac839d1e",
      "i": [
       "golden-goldilocks-question"
      ],
@@ -1355,7 +1359,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },

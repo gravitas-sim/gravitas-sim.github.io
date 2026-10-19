@@ -1052,12 +1052,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "f16676145d7eba72465c528c2ea24be2883b220e5182415e51edba011733d69e"
+  "digest": "4bf2b8ce6f6a5c082b5a7ddab5b0ac5eec163f8922ba28337d1958304ddd2bd7"
  },
  "tokens": {
   "plain": {
@@ -1276,7 +1280,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "f16676145d7eba72465c528c2ea24be2883b220e5182415e51edba011733d69e",
+     "d": "4bf2b8ce6f6a5c082b5a7ddab5b0ac5eec163f8922ba28337d1958304ddd2bd7",
      "i": [
       "golden-black-holes"
      ],
@@ -1291,7 +1295,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },

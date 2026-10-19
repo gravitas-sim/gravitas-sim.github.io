@@ -9,12 +9,17 @@
 // =============================================================================
 
 import { compile } from '../formula/engine.js';
+import { checkCorrelations } from '../formula/evidence.js';
 import { FormulaError } from '../formula/parse.js';
 import { t, getLocale, registerMessages } from '../i18n/index.js';
 import { formatNumber } from '../format.js';
 import { EN_FORMULA } from '../i18n/en.formula.js';
 import { ES_FORMULA } from '../i18n/es.formula.js';
-import { derivedEntry, namedQuantities } from './derivedEntry.js';
+import {
+  correlationsOf,
+  derivedEntry,
+  namedQuantities,
+} from './derivedEntry.js';
 
 // No number reader is registered here: the shared one (js/answerParse.js) would
 // give this lazy module another entry set in a chunk every lesson route shares,
@@ -110,12 +115,21 @@ export function mountDerivedPanel(host, ctx) {
     if (!qs.length) preview.textContent = t('nb.formula.none');
     if (!text.value.trim() || !qs.length) return;
     try {
-      const { info } = compile(text.value, scope(qs), { locale: getLocale() });
+      const correlations = correlationsOf(qs);
+      const { info } = compile(
+        text.value,
+        { ...scope(qs), correlations },
+        { locale: getLocale() }
+      );
+      checkCorrelations(correlations, info.inputs);
       preview.textContent = t('nb.formula.preview', {
         unit: info.unit === '' ? t('obs.formula.plain') : info.unitText,
-        why: t(`obs.formula.why.${info.rule}`, {
-          lacking: info.lacking.join(', '),
-        }),
+        why: t(
+          `obs.formula.why.${info.correlated ? 'first-order-correlated' : info.rule}`,
+          {
+            lacking: info.lacking.join(', '),
+          }
+        ),
       });
     } catch (e) {
       preview.classList.add('is-error');

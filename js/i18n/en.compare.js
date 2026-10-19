@@ -34,4 +34,28 @@ export const EN_COMPARE = {
   'compareW.loading': 'Making the data',
   'compareW.axis.residual': 'Residual in sigmas',
   'compareW.axis.data': 'Data and model',
+  'compareW.est.result':
+    'The difference is {diff}: {n} sigma. A difference that large or larger would arise by chance with probability {p}.',
+  'compareW.est.which.a': 'The first estimate',
+  'compareW.est.which.b': 'The second estimate',
+  'compareW.est.assume.gaussian': 'This assumes the errors are Gaussian.',
+  'compareW.est.assume.independent':
+    'The two estimates are treated as independent, because no covariance was given.',
+  'compareW.est.assume.covariance': 'Their covariance is taken into account.',
+  'compareW.est.assume.sharedUnknown':
+    'They share their data or calibration, so their errors move together: the uncertainty of the difference is probably smaller than this says and the difference more significant. Give their correlation to correct it.',
+  'compareW.est.refused.value': 'One of the two has no value to compare.',
+  'compareW.est.refused.none':
+    '{which} states no uncertainty, so the two cannot be compared.',
+  'compareW.est.refused.asymmetric':
+    '{which} has an asymmetric interval, which this comparison cannot treat as one standard deviation.',
+  'compareW.est.refused.level':
+    '{which} is an interval with no stated confidence level, so it cannot be turned into a standard deviation.',
+  'compareW.est.refused.limit':
+    '{which} is a limit, not a measurement, so there is no difference to compare.',
+  'compareW.est.refused.failed': '{which} has no result.',
+  'compareW.est.refused.not-constrained':
+    '{which} is not constrained by the data.',
+  'compareW.est.refused.covariance':
+    'The covariance given is larger than the two uncertainties allow.',
 };

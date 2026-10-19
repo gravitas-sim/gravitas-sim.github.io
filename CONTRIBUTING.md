@@ -176,8 +176,8 @@ their ceilings:
 | `js/i18n/en.deferred.js` | 3,871 | 3,871 |
 | `js/investigations.js` | 3,296 | 3,296 |
 | `js/render.js` | 3,028 | 3,028 |
-| `js/physics.js` | 2,951 | 2,951 |
 | `js/world/build.js` | 2,599 | 2,599 |
+| `js/composerPage.js` | 2,532 | 2,532 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |
@@ -252,11 +252,12 @@ never imports the facade. Where each piece lives so far:
 | File | What it owns | Slice |
 |---|---|---|
 | `js/engine/state.js` | the body lists, the settings, the clocks and counters, the registries | S1 |
-| `js/engine/events.js` | simulation events and the step listeners | S2 |
+| `js/engine/events.js` | simulation events, the step listeners and the bookkeeping every merger ends in (`mergedState`, `mergeAllowed`, `completeMerger`) | S2, S6 |
 | `js/engine/conservation.js` | the absorption ledgers, the conserved totals and the energy history | S3 |
 | `js/engine/forces.js` | the sources a body feels, the dark-matter and MOND terms, softening, direct-sum acceleration and the Velocity Verlet, RK4 and default step schemes | S4 |
-| `js/engine/bodies.js` | the size and mass constants, the bursts, the absorption rule, and every body class from `PhysicsObject` to `Comet` with the accretion-disk tracer and the galaxy helpers | S5 |
+| `js/engine/bodies.js` | the size and mass constants, the bursts, the absorption rule, and every body class from `PhysicsObject` to `Comet` with the accretion-disk tracer and the galaxy helpers, and `syncReportedMass` | S5, S6 |
 | `js/engine/blackHole.js` | the black hole class and its default appearance | S5 |
+| `js/engine/collisions.js` | the broad-phase grid, the collision handlers for each kind of pair, stellar collapse, gas-giant accretion and merging, and the kilonova and white-dwarf explosion builders | S6 |
 
 Still in `js/physics.js`: collisions, mergers and collapse, and the step
 itself (S6 and S7). Order, risks and the test

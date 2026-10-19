@@ -14,7 +14,11 @@
 //     dimensionless when it is a ratio, or has no registry unit at all (a time
 //     squared per length cubed), which the caller may refuse or write as text.
 //   - Uncertainty is first-order, for uncorrelated inputs with a standard
-//     deviation each: every number carries its partial derivative with respect
+//     deviation each, or for inputs whose correlation coefficients the caller
+//     gives (Prompt 151: `correlations`, from an envelope's `correlatedWith`),
+//     where the cross terms 2 rho gj gk sj sk are added and the rule says so;
+//     with none given the inputs are treated as independent, and the rule says
+//     that: every number carries its partial derivative with respect
 //     to each input, so a quantity used twice (x - x, x * x) is differentiated
 //     once, correctly, and not added in quadrature as two inputs. It is not
 //     propagated, and the result says why, when an input has none, when an
@@ -298,6 +302,14 @@ export function compile(source, scope, { locale = 'en' } = {}) {
       : shared
         ? 'shared'
         : 'first-order';
+  // [j, k, rho] for each coefficient between two inputs the formula reads.
+  // Trusting: js/formula/evidence.js checkCorrelations is the check.
+  const pairs = [];
+  if (rule === 'first-order')
+    for (const { a, b, rho } of scope.correlations ?? []) {
+      const [j, k] = [used.indexOf(a), used.indexOf(b)];
+      if (j >= 0 && k >= 0 && rho) pairs.push([j, k, rho]);
+    }
 
   const r = ast;
   let unit;
@@ -320,12 +332,13 @@ export function compile(source, scope, { locale = 'en' } = {}) {
     angle: r.ang,
     inputs: used,
     rule,
+    correlated: pairs.length > 0,
     lacking: rule === 'none' ? lacking : [],
     aggregates: aggs.length,
   };
 
   const run = (data, { rows, skip } = {}) =>
-    execute({ ast, used, rule, aggs, mult, scope }, data, rows, skip);
+    execute({ ast, used, rule, aggs, mult, scope, pairs }, data, rows, skip);
   return { info, run, ast };
 }
 
@@ -431,10 +444,12 @@ function variance(g, c, i) {
   for (let j = 0; j < c.U; j++) s += (g[j] * c.sg[j][i]) ** 2;
   for (let a = 0; a < c.aggSigma.length; a++)
     s += (g[c.U + a] * c.aggSigma[a]) ** 2;
+  for (const [j, k, rho] of c.pairs)
+    s += 2 * rho * g[j] * g[k] * c.sg[j][i] * c.sg[k][i];
   return s;
 }
 
-function execute({ ast, used, rule, aggs, mult }, data, rows, skip) {
+function execute({ ast, used, rule, aggs, mult, pairs }, data, rows, skip) {
   const first = used.length ? data?.[used[0]]?.values : null;
   const n = rows ?? first?.length ?? 1;
   if (n > LIMITS.rows) fail('rows', { max: LIMITS.rows, rows: n });
@@ -453,6 +468,7 @@ function execute({ ast, used, rule, aggs, mult }, data, rows, skip) {
     cols,
     sg,
     prop,
+    pairs,
     rows: n,
     skip,
     U: used.length,
@@ -480,12 +496,14 @@ function execute({ ast, used, rule, aggs, mult }, data, rows, skip) {
  * @param {string} source - The formula
  * @param {Record<string, {value: number, unit: string|null, sigma?: number,
  *   uncertainty?: 'sigma'|'assumed'|'none'}>} inputs - By name
- * @param {{locale?: string}} [opts]
+ * @param {{locale?: string, correlations?: Array<{a: string, b: string,
+ *   rho: number}>}} [opts] - `correlations` are coefficients between inputs,
+ *   by name; absent, the inputs are treated as independent
  * @returns {{value: number, sigma: number|null, info: object}}
  * @throws {FormulaError}
  */
 export function evaluate(source, inputs, opts) {
-  const scope = { inputs: {} };
+  const scope = { inputs: {}, correlations: opts?.correlations };
   const data = {};
   for (const [k, v] of Object.entries(inputs)) {
     const kind = v.uncertainty ?? (Number.isFinite(v.sigma) ? 'sigma' : 'none');

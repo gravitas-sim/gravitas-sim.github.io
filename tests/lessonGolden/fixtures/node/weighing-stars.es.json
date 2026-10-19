@@ -1165,12 +1165,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "74ccbe62370e548dbf0089c67519caed8dec9b9470d4ca41c2021fca327a3d87"
+  "digest": "147522f438632d0bcaddd6c2d3fc0a40fc4a577d3b93fe25875df965d83387fd"
  },
  "tokens": {
   "plain": {
@@ -1379,7 +1383,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "74ccbe62370e548dbf0089c67519caed8dec9b9470d4ca41c2021fca327a3d87",
+     "d": "147522f438632d0bcaddd6c2d3fc0a40fc4a577d3b93fe25875df965d83387fd",
      "i": [
       "golden-weighing-stars"
      ],
@@ -1394,7 +1398,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },
