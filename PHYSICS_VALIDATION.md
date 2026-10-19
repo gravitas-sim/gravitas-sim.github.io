@@ -144,6 +144,26 @@ does not accumulate: ten times the run length must give the same worst error.
 
 ---
 
+## Two input contexts
+
+The engine answers to settings from one of two contexts, and says which
+(`getEngineContext()` in `js/engine/state.js`).
+
+- **Application.** The page. Every push is the whole of the page's settings,
+  through `commitSettings()` in `js/appState.js`, so the gravitational constant
+  is the application's `G = 2` and the engine never falls back to a default of
+  its own; a push without `G` is refused.
+- **Headless.** A Worker, a tool, a test and this validation suite name their
+  own settings. Their fixtures keep the engine's bootstrap `G = 1`, and every
+  number in this document was measured there. Nothing in the suite depends on
+  the application's value, and the application never reads a validation result
+  as a statement about its own `G`.
+
+The engine's copy of the settings is frozen: a projection of what was pushed,
+not a second place to write.
+
+---
+
 ## Results
 
 Representative numbers from a passing run. The full table, with every tolerance

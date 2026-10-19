@@ -69,9 +69,9 @@ import {
   NeutronStar,
   WhiteDwarf,
   Galaxy,
-  updatePhysicsSettings,
   particlePool,
   clearAllEnergyHistory,
+  updatePhysicsSettings,
 } from './physics.js';
 import { debugLog } from './utils.js';
 import { setFrame, resetFrame, frameState } from './referenceFrame.js';
@@ -108,6 +108,7 @@ import {
   packBody,
   payloadSeed,
   chooseKind,
+  migrateSettings,
 } from './shareState.js';
 import { generateStarfield } from './render.js';
 import { stopSignalAudio } from './soundPanel.js';
@@ -127,7 +128,8 @@ import {
   state,
   SETTINGS,
   DEFAULT_SETTINGS,
-  withCurrentSettingNames,
+  commitSettings,
+  registerSettingsReceiver,
   setSettings,
   current_scenario_name,
   setScenarioName as setCurrentScenarioName,
@@ -350,12 +352,17 @@ const markWorldTouched = () => {
 // Settings from a shared link, waiting for the next build to apply them.
 let pendingSettingsOverride = null;
 
+// The page's writers (SETTINGS_WRITERS) reach the engine through commitSettings();
+// this file holds both ends, so it says who takes them.
+registerSettingsReceiver(updatePhysicsSettings);
+
 // World construction lives in js/world/build.js. What stays here is the wiring:
 // the settings object, the mutable bindings it reads and writes, and the four
 // pieces of user interface it has to touch on the way through.
 const build_simulation = () =>
   buildWorld({
     settings: SETTINGS,
+    pushSettings: () => commitSettings('world-build'),
     state,
     applyPreset: apply_preset,
     takePendingSettings: () => {
@@ -516,12 +523,12 @@ const load_simulation_state = () => {
   try {
     const loadedState = JSON.parse(savedJSON);
     setSettings(
-      withCurrentSettingNames(loadedState.settings) || { ...DEFAULT_SETTINGS }
+      migrateSettings(loadedState.settings) || { ...DEFAULT_SETTINGS }
     );
     const view = loadedState.view || { zoom: 1.5, pan: { x: 0, y: 0 } };
     state.zoom = view.zoom;
     state.pan = view.pan;
-    updatePhysicsSettings(SETTINGS);
+    commitSettings('saved-world');
     rebuildWorldFromStates(loadedState.objects);
     builtSystem = null;
     resetConservationBaseline();
@@ -696,9 +703,7 @@ const applyShareState = payload => {
   // Held for build_simulation() to apply. Settings cannot simply be assigned
   // here: apply_preset() runs first inside the build and resets everything to
   // the scenario's own defaults, which would discard them.
-  pendingSettingsOverride = payload.d
-    ? withCurrentSettingNames(payload.d)
-    : null;
+  pendingSettingsOverride = payload.d ? payload.d : null;
 
   const seed = payloadSeed(payload);
 
@@ -708,7 +713,7 @@ const applyShareState = payload => {
     // the bodies with the ones the link actually carries.
     initialize_simulation({ seed });
     rebuildWorldFromStates(payload.b);
-    updatePhysicsSettings(SETTINGS);
+    commitSettings('share-link');
     // The baseline was taken over the world these bodies just replaced.
     resetConservationBaseline();
     markWorldTouched();
@@ -721,8 +726,8 @@ const applyShareState = payload => {
   // the same order they happened, so live-applied values like gravity land on
   // an already-generated system rather than shaping the generation itself.
   if (payload.a) {
-    Object.assign(SETTINGS, withCurrentSettingNames(payload.a));
-    updatePhysicsSettings(SETTINGS);
+    Object.assign(SETTINGS, payload.a);
+    commitSettings('share-link-delta');
   }
 
   if (Array.isArray(payload.c) && payload.c.length === 3) {
