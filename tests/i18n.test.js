@@ -384,7 +384,7 @@ describe('the catalog split', () => {
     // failure.* is read only by js/failures.js, which main.js fetches when
     // something has failed and which awaits this catalog before it speaks.
     const allowed =
-      /^(failure|lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|unc|gwW|gwE|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|obsW|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|specW|stellar\.phase|summary\.life)\./;
+      /^(failure|lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|gwE|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|obsW|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|specW|stellar\.phase|summary\.life)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
 
     // The sandbox sentences the summary reads on a first visit stayed eager.

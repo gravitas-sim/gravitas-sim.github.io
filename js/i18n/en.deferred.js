@@ -1699,31 +1699,31 @@ export const EN_DEFERRED = {
   'nb.report.figure': 'Figure',
   'nb.report.conditions': 'Conditions it was taken under',
   'nb.report.noValue': 'not recorded',
-  'unc.failed': 'no result',
-  'unc.notConstrained': 'not constrained',
-  'unc.method.data': 'data',
-  'unc.method.data.tip':
+  'nb.unc.failed': 'no result',
+  'nb.unc.notConstrained': 'not constrained',
+  'nb.unc.method.data': 'data',
+  'nb.unc.method.data.tip':
     'The uncertainty is the scatter or the error bars of the measurements.',
-  'unc.method.model': 'model',
-  'unc.method.model.tip':
+  'nb.unc.method.model': 'model',
+  'nb.unc.method.model.tip':
     'The uncertainty is the model’s own error, such as an integrator’s, and more data would not shrink it.',
-  'unc.method.scaled': 'rescaled',
-  'unc.method.scaled.tip':
+  'nb.unc.method.scaled': 'rescaled',
+  'nb.unc.method.scaled.tip':
     'The data uncertainty was rescaled so the model fits as well as the scatter says it can.',
-  'unc.method.profile': 'profile',
-  'unc.method.profile.tip':
+  'nb.unc.method.profile': 'profile',
+  'nb.unc.method.profile.tip':
     'The uncertainty is read from how fast the fit gets worse as the value moves, which can be asymmetric.',
-  'unc.method.propagated': 'propagated',
-  'unc.method.propagated.tip':
+  'nb.unc.method.propagated': 'propagated',
+  'nb.unc.method.propagated.tip':
     'The uncertainty was carried from the inputs’ own to first order.',
-  'unc.method.stated': 'stated',
-  'unc.method.stated.tip':
+  'nb.unc.method.stated': 'stated',
+  'nb.unc.method.stated.tip':
     'The uncertainty was given, not estimated from anything.',
-  'unc.method.limit': 'limit',
-  'unc.method.limit.tip':
+  'nb.unc.method.limit': 'limit',
+  'nb.unc.method.limit.tip':
     'Nothing was detected, so the value is a bound, not a measurement.',
-  'unc.method.exact': 'exact',
-  'unc.method.exact.tip':
+  'nb.unc.method.exact': 'exact',
+  'nb.unc.method.exact.tip':
     'The analysis took the value as exact: nothing was estimated.',
   'nb.report.notRecorded': 'not recorded',
 

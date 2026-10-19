@@ -119,7 +119,9 @@ export function uncertaintyMethod(u) {
 export function describeUncertain(q, t, options = {}) {
   const u = q?.uncertainty ?? { kind: 'none' };
   if (u.kind === 'failed' || u.kind === 'not-constrained') {
-    const text = t(u.kind === 'failed' ? 'unc.failed' : 'unc.notConstrained');
+    const text = t(
+      u.kind === 'failed' ? 'nb.unc.failed' : 'nb.unc.notConstrained'
+    );
     return {
       text,
       state: u.kind,
@@ -131,8 +133,8 @@ export function describeUncertain(q, t, options = {}) {
   }
   const text = formatUncertain(q, options);
   const method = uncertaintyMethod(u);
-  const label = method ? t(`unc.method.${method}`) : '';
-  const tip = method ? t(`unc.method.${method}.tip`) : '';
+  const label = method ? t(`nb.unc.method.${method}`) : '';
+  const tip = method ? t(`nb.unc.method.${method}.tip`) : '';
   return {
     text,
     state: u.kind,

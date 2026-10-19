@@ -70,11 +70,13 @@ describe('the pattern a number is printed in', () => {
     ];
     for (const id of ids)
       for (const t of [en, es]) {
-        expect(t(`unc.method.${id}`)).not.toBe(`unc.method.${id}`);
-        expect(t(`unc.method.${id}.tip`)).not.toBe(`unc.method.${id}.tip`);
+        expect(t(`nb.unc.method.${id}`)).not.toBe(`nb.unc.method.${id}`);
+        expect(t(`nb.unc.method.${id}.tip`)).not.toBe(
+          `nb.unc.method.${id}.tip`
+        );
       }
-    expect(es('unc.failed')).not.toBe('unc.failed');
-    expect(es('unc.notConstrained')).not.toBe('unc.notConstrained');
+    expect(es('nb.unc.failed')).not.toBe('nb.unc.failed');
+    expect(es('nb.unc.notConstrained')).not.toBe('nb.unc.notConstrained');
   });
 
   test('the basis names the method; the kind does where there is none', () => {

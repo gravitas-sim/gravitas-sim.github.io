@@ -277,7 +277,7 @@ export function render() {
   out.push('<dl class="gl-terms">');
   for (const m of METHODS) {
     out.push(
-      `<div id="method-${m}"><dt>${both(EN_DEFERRED[`unc.method.${m}`], ES_DEFERRED[`unc.method.${m}`])}</dt><dd>${both(EN_DEFERRED[`unc.method.${m}.tip`], ES_DEFERRED[`unc.method.${m}.tip`])}</dd></div>`
+      `<div id="method-${m}"><dt>${both(EN_DEFERRED[`nb.unc.method.${m}`], ES_DEFERRED[`nb.unc.method.${m}`])}</dt><dd>${both(EN_DEFERRED[`nb.unc.method.${m}.tip`], ES_DEFERRED[`nb.unc.method.${m}.tip`])}</dd></div>`
     );
   }
   out.push('</dl>');
