@@ -32,6 +32,7 @@ import {
   white_dwarfs,
   gravity_ripples,
 } from './physics.js';
+import { EV_COLLISION, EV_MERGE } from './names.js';
 
 const VOICE_CONFIGS = [
   {
@@ -686,12 +687,12 @@ const updateSonification = (timestamp = getNow()) => {
 };
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('gravitasMerge', e => {
+  window.addEventListener(EV_MERGE, e => {
     if (!muted) {
       triggerBassDrop(e.detail);
     }
   });
-  window.addEventListener('gravitasCollision', e => {
+  window.addEventListener(EV_COLLISION, e => {
     if (!muted) {
       triggerCollisionChime(e.detail);
     }

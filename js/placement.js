@@ -61,6 +61,7 @@ import {
   mountFragment,
   unmountFragment,
 } from './i18n/deferredMessages.js';
+import { EV_OBJECT_PLACED, EV_SIMULATION_RESET } from './names.js';
 
 let canvas = null; // set by initPlacement(ctx)
 
@@ -309,7 +310,7 @@ export function placeBody(
   // and a direct call back would close an import cycle. The undo stack and the
   // double-tap guard both listen.
   window.dispatchEvent(
-    new CustomEvent('gravitasObjectPlaced', { detail: { object: obj } })
+    new CustomEvent(EV_OBJECT_PLACED, { detail: { object: obj } })
   );
   return obj;
 }
@@ -1351,7 +1352,7 @@ export async function unmountScenarioPanel(host) {
 
 /** Start watching for scenarios that bring their own instrument. */
 export function initScenarioPanels() {
-  window.addEventListener('gravitasSimulationReset', () => {
+  window.addEventListener(EV_SIMULATION_RESET, () => {
     // Errors here must not stop the other reset listeners: a panel that fails
     // to load is a missing readout, not a broken simulation.
     loadForScenario().catch(err =>

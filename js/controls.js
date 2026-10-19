@@ -50,6 +50,16 @@ import {
   hideShortcutHelp,
   isShortcutHelpOpen,
 } from './shortcuts.js';
+import {
+  EV_ESCAPE,
+  EV_OBJECT_PLACED,
+  EV_PLACEMENT_ARMED,
+  EV_SELECTION_CLEARED,
+  EV_SIMULATION_RESET,
+  EV_SPEED_CHANGED,
+  EV_STOP_SIGNAL_AUDIO,
+  EV_UNITS_CHANGED,
+} from './names.js';
 
 // --- Placement undo -----------------------------------------------------------
 // Only user-placed objects are undoable. Simulation-created bodies (merger
@@ -95,7 +105,7 @@ export function undoPlacement() {
     obj.alive = false;
     clearObjectEnergyHistory(obj.id);
     if (state.selectedObject && state.selectedObject.object === obj) {
-      window.dispatchEvent(new CustomEvent('gravitasSelectionCleared'));
+      window.dispatchEvent(new CustomEvent(EV_SELECTION_CLEARED));
     }
     refreshUndoButton();
     toast(t('toast.undo.removed'));
@@ -332,7 +342,7 @@ function setupViewMenu() {
       sync();
       toast(t('toast.units.showing', { units: unitModeLabel().toLowerCase() }));
     });
-    window.addEventListener('gravitasUnitsChanged', sync);
+    window.addEventListener(EV_UNITS_CHANGED, sync);
   }
 
   document.getElementById('undoBtn')?.addEventListener('click', undoPlacement);
@@ -486,7 +496,7 @@ function setupShortcuts() {
     run: () => {
       const next = setSonificationMuted(!getSonificationState().muted);
       if (next.muted) {
-        window.dispatchEvent(new CustomEvent('gravitasStopSignalAudio'));
+        window.dispatchEvent(new CustomEvent(EV_STOP_SIGNAL_AUDIO));
       }
       toast(t(`sound.state.long.${next.muted ? 'muted' : 'ready'}`));
     },
@@ -588,7 +598,7 @@ function setupShortcuts() {
         hideShortcutHelp();
         return;
       }
-      window.dispatchEvent(new CustomEvent('gravitasEscape'));
+      window.dispatchEvent(new CustomEvent(EV_ESCAPE));
     },
   });
 
@@ -614,7 +624,7 @@ function adjustSpeed(direction) {
   }
   SETTINGS.sim_speed = next;
   window.dispatchEvent(
-    new CustomEvent('gravitasSpeedChanged', { detail: { speed: next } })
+    new CustomEvent(EV_SPEED_CHANGED, { detail: { speed: next } })
   );
   toast(t('toast.speed.changed', { speed: next }));
 }
@@ -629,7 +639,7 @@ function adjustSpeed(direction) {
 function setupPlacementHint() {
   let el = null;
   let timer = null;
-  window.addEventListener('gravitasPlacementArmed', () => {
+  window.addEventListener(EV_PLACEMENT_ARMED, () => {
     if (!el) {
       el = document.createElement('div');
       el.className = 'placement-armed-hint';
@@ -728,10 +738,10 @@ export function initControls() {
   setupRangeFills();
   initTheme();
   initUnits();
-  window.addEventListener('gravitasObjectPlaced', e => {
+  window.addEventListener(EV_OBJECT_PLACED, e => {
     if (e.detail?.object) recordPlacement(e.detail.object);
   });
-  window.addEventListener('gravitasSimulationReset', () => {
+  window.addEventListener(EV_SIMULATION_RESET, () => {
     clearPlacementHistory();
     resetTimeline();
     // Once: every build fires this, each sweep trial too.

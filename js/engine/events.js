@@ -4,6 +4,7 @@
 
 import { clearObjectEnergyHistory } from './conservation.js';
 import { getSimulationTime } from './state.js';
+import { EV_COLLISION, EV_MERGE, EV_WORKER_FAILED } from '../names.js';
 
 export const dispatchSimulationEvent = (name, detail = {}) => {
   if (
@@ -16,7 +17,7 @@ export const dispatchSimulationEvent = (name, detail = {}) => {
 };
 
 const emitCollisionEvent = detail => {
-  dispatchSimulationEvent('gravitasCollision', detail);
+  dispatchSimulationEvent(EV_COLLISION, detail);
 };
 
 const buildImpactPayload = (source, target, impactType) => {
@@ -46,7 +47,7 @@ export const broadcastImpact = (source, target, impactType) => {
 
 export const announceWorkerFailed = () => {
   globalThis.dispatchEvent?.(
-    new CustomEvent('gravitasWorkerFailed', { detail: { worker: 'physics' } })
+    new CustomEvent(EV_WORKER_FAILED, { detail: { worker: 'physics' } })
   );
 };
 
@@ -68,7 +69,7 @@ export const announceMerge = detail => {
       window.dispatchEvent &&
       typeof window.CustomEvent === 'function'
     ) {
-      window.dispatchEvent(new window.CustomEvent('gravitasMerge', { detail }));
+      window.dispatchEvent(new window.CustomEvent(EV_MERGE, { detail }));
     }
   } catch {
     // no-op: event dispatch not supported in this environment

@@ -41,6 +41,7 @@ import {
   layoutObservationPanels,
   noteObservationPanelUsed,
 } from './observationLayout.js';
+import { EV_SIMULATION_RESET } from './names.js';
 
 let containerEl = null;
 let canvasHost = null;
@@ -166,7 +167,7 @@ function init3DView({ signal } = {}) {
   // which looks exactly like a panel that has stopped working.
   if (hasWindow) {
     window.addEventListener(
-      'gravitasSimulationReset',
+      EV_SIMULATION_RESET,
       () => {
         needsFocusReset = true;
       },
