@@ -693,12 +693,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "31bc01afa8e6b3d0b3d87013652e12fdaf774c037b553c3b5a8e5af06cbb6431"
+  "digest": "958cedbaa8361f5ea9da6a4644650c7c268f4540c56d4aa03c8726990bde1f74"
  },
  "tokens": {
   "plain": {
@@ -837,7 +841,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "31bc01afa8e6b3d0b3d87013652e12fdaf774c037b553c3b5a8e5af06cbb6431",
+     "d": "958cedbaa8361f5ea9da6a4644650c7c268f4540c56d4aa03c8726990bde1f74",
      "i": [
       "golden-what-is-a-gravitational-wave"
      ],
@@ -852,7 +856,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },

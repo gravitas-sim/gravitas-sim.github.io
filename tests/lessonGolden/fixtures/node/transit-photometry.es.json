@@ -1008,12 +1008,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "4c0498239408d07172416f2bceb6edbe5b1dc73ac055f7c7ea4afc4d0662a84f"
+  "digest": "5e6eb89521e1d43d014764355b963c3b598c77f7267c785686d3d4adceae74a7"
  },
  "tokens": {
   "plain": {
@@ -1172,7 +1176,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "4c0498239408d07172416f2bceb6edbe5b1dc73ac055f7c7ea4afc4d0662a84f",
+     "d": "5e6eb89521e1d43d014764355b963c3b598c77f7267c785686d3d4adceae74a7",
      "i": [
       "golden-transit-photometry"
      ],
@@ -1187,7 +1191,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },

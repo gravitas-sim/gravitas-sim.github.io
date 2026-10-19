@@ -985,12 +985,16 @@
      "measured",
      "simulation",
      "rv-fit",
-     null
+     null,
+     [
+      "s",
+      "d"
+     ]
     ]
    ],
    "total": 1
   },
-  "digest": "ddc20a4325827ef7820bc528431cea9888a0a04a0938a9c84066a8f745324eef"
+  "digest": "8c5d10a5302b5af1df586b2d259f6492a8d0e75b7a01ec48ffb26e3a04d7dd55"
  },
  "tokens": {
   "plain": {
@@ -1159,7 +1163,7 @@
    "payload": {
     "v": 2,
     "ev": {
-     "d": "ddc20a4325827ef7820bc528431cea9888a0a04a0938a9c84066a8f745324eef",
+     "d": "8c5d10a5302b5af1df586b2d259f6492a8d0e75b7a01ec48ffb26e3a04d7dd55",
      "i": [
       "golden-retrograde-motion"
      ],
@@ -1174,7 +1178,11 @@
        "measured",
        "simulation",
        "rv-fit",
-       null
+       null,
+       [
+        "s",
+        "d"
+       ]
       ]
      ]
     },
