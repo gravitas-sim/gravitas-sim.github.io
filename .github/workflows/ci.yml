@@ -1180,6 +1180,51 @@ jobs:
           fi
           echo "Every job required for a ${{ github.event_name }} event succeeded."
 
+  # What this run cost (Prompt 145, D-R10-01). Runs after `ci` whatever its
+  # result, turns the run's own job list into queue seconds, wall seconds and
+  # runner-minutes with tools/ci-cost.mjs, and keeps the record for 30 days as
+  # the ci-cost artifact. It is not among `ci`'s needs and nothing needs it, so
+  # which jobs run and what makes CI pass or fail are unchanged; the job is
+  # continue-on-error, so a failure here shows as success and blocks nothing.
+  # Jobs still running when it reads the run (the deploy, on a push to main) are
+  # left out of the record, as tools/ci-cost.mjs leaves out any unfinished job.
+  ci-cost:
+    name: Record the CI cost
+    if: ${{ always() }}
+    needs: [ci]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    continue-on-error: true
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Write the record
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run view "${{ github.run_id }}" --repo "${{ github.repository }}" \
+            --json databaseId,createdAt,startedAt,updatedAt,jobs \
+            | node tools/ci-cost.mjs > ci-cost.json
+          {
+            echo "### CI cost"
+            echo '```json'
+            cat ci-cost.json
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ci-cost
+          path: ci-cost.json
+          retention-days: 30
+
   # ---------------------------------------------------------------------------
   # Publishing
   # ---------------------------------------------------------------------------
