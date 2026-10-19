@@ -17,36 +17,36 @@
 // 'step' also pauses the world, because that is what the mode promises.
 // =============================================================================
 
-/** Locales whose strings are already registered: a repeat would re-render. */
-const loaded = new Set();
-
 /**
- * Bring in the row's strings for the locale in use.
- * @param {object} services - See fillMotionRow
- * @returns {Promise<void>} Resolves once t() can answer
+ * The row's strings for the locale in use, read straight from its file.
+ *
+ * Not registered with the catalog: registering announces a catalog change to
+ * every listener, the panel rebuilds itself, and a rebuild that lands after the
+ * panel has opened takes focus out of it, so Escape no longer reaches it.
+ *
+ * @param {Function} getLocale - The current locale
+ * @returns {Promise<object>} Ids to strings
  */
-async function ensureMessages({ getLocale, registerMessages }) {
-  const locale = getLocale();
-  if (loaded.has(locale)) return;
-  loaded.add(locale);
+async function strings(getLocale) {
   const module =
-    locale === 'es'
+    getLocale() === 'es'
       ? await import('./i18n/es.interaction.js')
       : await import('./i18n/en.interaction.js');
-  registerMessages(locale, module.ES_INTERACTION || module.EN_INTERACTION);
+  return module.ES_INTERACTION || module.EN_INTERACTION;
 }
 
 /**
  * Fill an empty element with the Motion select and its hint.
  * @param {HTMLElement} host - The row, already in the panel
- * @param {object} services - What the panel already holds: t, getLocale,
- *   registerMessages, announce, modes, preference(), setPreference(mode) and
- *   pause()
+ * @param {object} services - What the panel already holds: getLocale,
+ *   announce, modes, preference(), setPreference(mode) and pause()
  * @returns {Promise<void>}
  */
 export async function fillMotionRow(host, services) {
-  const { t, announce, modes, preference, setPreference, pause } = services;
-  await ensureMessages(services);
+  const { getLocale, announce, modes, preference, setPreference, pause } =
+    services;
+  const words = await strings(getLocale);
+  const t = id => words[id];
   const label = document.createElement('label');
   label.htmlFor = 'settingsMotion';
   label.textContent = t('motion.label');

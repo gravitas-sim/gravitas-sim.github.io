@@ -530,9 +530,7 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
   settingsGrid.appendChild(motionRow);
   import('./motionControl.js').then(m =>
     m.fillMotionRow(motionRow, {
-      t,
       getLocale,
-      registerMessages,
       announce,
       modes: MOTION_MODES,
       preference: motionPreference,
