@@ -17,6 +17,12 @@ import { EN } from './i18n/en.js';
 import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
 import { announce } from './notify.js';
 import {
+  MOTION_MODES,
+  motionPreference,
+  setMotionPreference,
+} from './quality.js';
+import { setPlaying } from './controls.js';
+import {
   COURSE_LEVELS,
   SETTING_SECTIONS,
   courseLevelDefaults,
@@ -516,6 +522,24 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
   };
   levelRow.append(levelLabel, levelSelect, levelHint);
   settingsGrid.appendChild(levelRow);
+
+  // Motion: a preference of this device, applied at once and filled in by its
+  // own lazy module (js/motionControl.js).
+  const motionRow = document.createElement('div');
+  motionRow.className = 'settings-level';
+  settingsGrid.appendChild(motionRow);
+  import('./motionControl.js').then(m =>
+    m.fillMotionRow(motionRow, {
+      t,
+      getLocale,
+      registerMessages,
+      announce,
+      modes: MOTION_MODES,
+      preference: motionPreference,
+      setPreference: setMotionPreference,
+      pause: () => setPlaying(false),
+    })
+  );
 
   // The sections, in the schema's order. The advanced ones sit together in
   // one disclosure after the rest, closed until it is opened.

@@ -299,6 +299,10 @@ properties as text in the inspector, and work through an investigation.
 the content, not decoration; a planetarium that will not move is a picture.
 Every decorative animation stops, and the simulation can be paused from the
 transport bar or the space bar — a real control rather than a media query.
+Settings has a Motion choice for a reader who wants more: Reduced applies the
+same stop on a device that did not ask for it, and Step by step also starts the
+simulation paused, so nothing moves until the reader steps it or presses play
+(INTERACTION.md, "Reduced motion").
 
 **The shape of a curve is not narrated.** The light curve, the radial-velocity
 trace, the energy chart and the bench's two charts are one component
@@ -348,6 +352,12 @@ reads its labels in Spanish.
 What remains is the gesture itself. Dragging to *feel* how fast a throw is,
 and seeing the velocity arrow grow as you drag, has no keyboard equivalent and
 will not get one; the form gives you the number instead of the feel.
+
+[INTERACTION.md](INTERACTION.md) is the rule for every drag now: each needs a
+single-pointer alternative, and a test that a typed launch equals a recorded
+drag holds this one to it. The drags that still have none (panning the view,
+the 3-D camera's free orbit, the observer's handle, moving a pinned card) are
+listed there and run as pending acceptance checks.
 
 **The attribution links in the footer are under 24×24.** They are inline text
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would

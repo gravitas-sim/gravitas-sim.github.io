@@ -17,6 +17,23 @@ let dialogs = null;
 const loadDialogs = async () => (dialogs ??= await import('./dialog.js'));
 
 /**
+ * The three sizes of a nudge, as multipliers of a surface's own step: the same
+ * modifier keys on every surface that nudges a quantity (INTERACTION.md).
+ */
+export const NUDGE = Object.freeze({ fine: 0.25, normal: 1, coarse: 4 });
+
+/**
+ * Which size a key event asks for.
+ * @param {{altKey?: boolean, shiftKey?: boolean}} event - A keyboard event
+ * @returns {'fine'|'normal'|'coarse'} Alt is fine, Shift is coarse
+ */
+export const nudgeSize = event =>
+  event.altKey ? 'fine' : event.shiftKey ? 'coarse' : 'normal';
+
+/** @param {{altKey?: boolean, shiftKey?: boolean}} event @returns {number} 0.25, 1 or 4 */
+export const nudgeScale = event => NUDGE[nudgeSize(event)];
+
+/**
  * Register a shortcut.
  * @param {Object} spec
  * @param {string} spec.keys - Display form, e.g. 'Shift + ←'

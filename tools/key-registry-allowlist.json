@@ -386,6 +386,7 @@
       "gravitas_locale": 1
     },
     "js/storage/index.js": {
+      "gravitas_motion": 1,
       "gravitas.student-data": 1,
       "gravitas_store:": 1,
       "gravitas_experiment_checkpoint_": 1,

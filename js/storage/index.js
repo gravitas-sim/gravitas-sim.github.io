@@ -166,6 +166,7 @@ export const KEYS = [
   ['gravitas_locale', 'preferences'],
   ['gravitas_theme', 'preferences'],
   ['gravitas_units', 'preferences'],
+  ['gravitas_motion', 'preferences'],
   ['gravitas_lesson_objects_open', 'preferences'],
   ['gravitas_rail_sections', 'preferences'],
   ['gravitas_lecture_sequence', 'preferences'],

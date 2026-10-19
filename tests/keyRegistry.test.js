@@ -27,6 +27,7 @@ import { rewriteSource } from '../tools/key-registry-codemod.mjs';
 /** Every name and the exact string it has always been. */
 const PINNED = {
   KEY_UNITS: 'gravitas_units',
+  KEY_MOTION: 'gravitas_motion',
   EV_SIMULATION_RESET: 'gravitasSimulationReset',
   EV_UNITS_CHANGED: 'gravitasUnitsChanged',
   EV_THEME_CHANGED: 'gravitasThemeChanged',

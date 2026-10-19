@@ -2061,4 +2061,13 @@
       scroll-behavior: auto !important;
     }
   }
+
+  /* The same, for the override (data-motion on the root). */
+  :root[data-motion] *,
+  :root[data-motion] *::before,
+  :root[data-motion] *::after {
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
 }
