@@ -15,8 +15,8 @@
     "initialKb": 830.0,
     "deferredCoreKb": 1985.8,
     "routes": {
-      "front-door": { "kb": 2115.3, "requests": 107 },
-      "sandbox": { "kb": 2115.3, "requests": 107 },
+      "front-door": { "kb": 2115.5, "requests": 107 },
+      "sandbox": { "kb": 2115.5, "requests": 107 },
       "kepler": { "kb": 3342.9, "requests": 146 },
       "transit": { "kb": 3354.9, "requests": 146 },
       "power-law": { "kb": 3320.2, "requests": 146 },

@@ -15,6 +15,7 @@
 // =============================================================================
 
 import { withUnit } from './format.js';
+import { solveKepler } from './orbital.js';
 import {
   surface,
   palette,
@@ -1151,21 +1152,10 @@ const BALANCE = {
 // against a measured 3.06. Nothing here is adjusted to make that work.
 const SIRIUS = { period: 50.1, a: 19.8, e: 0.5923, firstEpoch: 1894.13 };
 
-/** Solve M = E - e sin E, so the marked epochs fall where they really would. */
-function eccentricAnomaly(M, e) {
-  let E = e < 0.8 ? M : Math.PI;
-  for (let i = 0; i < 40; i++) {
-    const d = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
-    E -= d;
-    if (Math.abs(d) < 1e-12) break;
-  }
-  return E;
-}
-
 /** Where the companion sits relative to the primary, in AU, at a given date. */
 function siriusAt(year) {
   const M = (2 * Math.PI * (year - SIRIUS.firstEpoch)) / SIRIUS.period;
-  const E = eccentricAnomaly(
+  const E = solveKepler(
     ((M % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI),
     SIRIUS.e
   );

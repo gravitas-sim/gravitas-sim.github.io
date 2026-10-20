@@ -1985,5 +1985,14 @@
   "[chromium] › startupLifecycle.spec.js › every other load boots revealed (b, c, e) @cross-browser › a duplicated tab inherits the visit, so it shows none": 3.8,
   "[chromium] › startupLifecycle.spec.js › every other load boots revealed (b, c, e) @cross-browser › a reload after the splash shows none": 8.8,
   "[chromium] › startupLifecycle.spec.js › failure and reduced motion (f, and the policy) › a script that never loads leaves a usable shell within the bound": 6.3,
-  "[chromium] › startupLifecycle.spec.js › failure and reduced motion (f, and the policy) › reduced motion reveals at once, with nothing moving": 2.5
+  "[chromium] › startupLifecycle.spec.js › failure and reduced motion (f, and the policy) › reduced motion reveals at once, with nothing moving": 2.5,
+  "[chromium] › announcements.spec.js › every status line says the same words in the same order › my work": 0.3,
+  "[chromium] › announcements.spec.js › every status line says the same words in the same order › the course builder": 1,
+  "[chromium] › announcements.spec.js › every status line says the same words in the same order › the figure builder": 0.9,
+  "[chromium] › announcements.spec.js › every status line says the same words in the same order › the investigation composer": 0.7,
+  "[chromium] › announcements.spec.js › every status line says the same words in the same order › the mission lab": 1,
+  "[chromium] › announcements.spec.js › every status line says the same words in the same order › the observatory": 0.5,
+  "[chromium] › announcements.spec.js › every status line says the same words in the same order › the orbital system builder": 5.2,
+  "[chromium] › announcements.spec.js › every status line says the same words in the same order › the scenario studio": 0.7,
+  "[chromium] › announcements.spec.js › every status line says the same words in the same order › the teaching page": 0.8
 }

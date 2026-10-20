@@ -776,7 +776,7 @@ export const FACT_GROUPS = Object.freeze({
       'e2eFiles',
       'physicsChecks',
     ]),
-    blocks: Object.freeze(['physicsCoverage']),
+    blocks: Object.freeze(['physicsCoverage', 'physicsGaps']),
     // CITATION.cff and .zenodo.json quote physicsChecks in their abstract, so
     // they can be judged exactly when that group has been gathered and not
     // before. A cheap run that rewrote them replaced the check total with a
@@ -886,6 +886,9 @@ export async function gatherBlocks({ physics = null } = {}) {
         readFileSync(join(REPO, 'validation/data.json'), 'utf8')
       ),
     },
+    gaps: JSON.parse(
+      readFileSync(join(REPO, 'tools/validation-gaps.json'), 'utf8')
+    ),
     graph: GRAPH,
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,
@@ -1237,7 +1240,14 @@ async function checkModelNoteClaims() {
   const checksPath = join(REPO, 'js', 'validation', 'physicsChecks.js');
   if (!existsSync(checksPath)) return problems;
 
-  const source = readFileSync(checksPath, 'utf8');
+  // The checks live in the registry and in the group files beside it.
+  const groupsDir = join(REPO, 'js', 'validation', 'groups');
+  const source = [
+    readFileSync(checksPath, 'utf8'),
+    ...(existsSync(groupsDir) ? readdirSync(groupsDir).sort() : []).map(f =>
+      readFileSync(join(groupsDir, f), 'utf8')
+    ),
+  ].join('\n');
   const groups = new Map();
   for (const m of source.matchAll(/group:\s*'([^']+)'/g)) {
     groups.set(m[1], (groups.get(m[1]) || 0) + 1);
