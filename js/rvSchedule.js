@@ -44,6 +44,7 @@
 // =============================================================================
 
 import { mulberry32, normalizeSeed } from './rng.js';
+import { fnvBase36 } from './hash.js';
 
 /** The shapes a schedule can take. */
 export const SCHEDULE = Object.freeze({
@@ -664,12 +665,7 @@ export function scheduleFingerprint(plan) {
   const text = (plan?.epochs || [])
     .map(e => `${e.index}:${e.offset.toPrecision(12)}`)
     .join('|');
-  let h = 0x811c9dc5;
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
-    h = Math.imul(h, 0x01000193);
-  }
-  return (h >>> 0).toString(36).toUpperCase().padStart(7, '0');
+  return fnvBase36(text);
 }
 
 /**

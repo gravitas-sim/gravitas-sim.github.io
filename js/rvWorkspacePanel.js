@@ -34,6 +34,7 @@ import {
   noteObservationPanelUsed,
 } from './observationLayout.js';
 import { formatNumber } from './format.js';
+import { fnv1a32 } from './hash.js';
 import { surface, palette, responsiveHeight, MONO } from './widgetCanvas.js';
 import { MC_LIMITS } from './inference/rvCircular.js';
 import { runMonteCarlo } from './inference/rvClient.js';
@@ -492,26 +493,14 @@ function mcInputsKey() {
   if (!a || a.tooFew || !a.atTrial) return null;
   const source = currentRecording();
   const points = source?.points || [];
-  let h = 0x811c9dc5;
-  const eat = text => {
-    const str = String(text);
-    for (let i = 0; i < str.length; i++) {
-      h ^= str.charCodeAt(i);
-      h = Math.imul(h, 0x01000193);
-    }
-  };
-  eat(source?.target ?? '');
-  eat(source?.worldGeneration ?? '');
-  eat(points.length);
+  // FNV-1a runs on across pieces, so the pieces run together as one text.
+  let eaten = `${source?.target ?? ''}${source?.worldGeneration ?? ''}${points.length}`;
   for (const p of points) {
-    eat(p.day?.toPrecision?.(12) ?? p.day);
-    eat(p.rv?.toPrecision?.(12) ?? p.rv);
-    eat(p.sigma ?? '');
-    eat(p.quality ?? '');
+    eaten += `${p.day?.toPrecision?.(12) ?? p.day}${p.rv?.toPrecision?.(12) ?? p.rv}${p.sigma ?? ''}${p.quality ?? ''}`;
   }
   const bounds = lastSearch()?.bounds;
   return [
-    (h >>> 0).toString(36),
+    fnv1a32(eaten).toString(36),
     // The model the synthetic runs are drawn around. A slider move changes the
     // interval, so it changes the key.
     a.trial.period.toPrecision(12),
