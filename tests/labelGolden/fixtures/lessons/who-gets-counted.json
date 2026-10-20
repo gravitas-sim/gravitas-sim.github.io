@@ -1,0 +1,75 @@
+{
+ "id": "who-gets-counted",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.count-a-shallow-survey.fields.0.unit",""],
+    ["steps.count-a-shallow-survey.fields.1.unit","%"],
+    ["steps.count-a-deep-survey.fields.0.unit",""],
+    ["steps.count-a-deep-survey.fields.1.unit","%"],
+    ["steps.how-far-can-it-see.fields.0.unit","pc"],
+    ["steps.how-far-can-it-see.fields.1.unit","pc"],
+    ["steps.limit-distance-by-hand.unit","pc"],
+    ["steps.volume-per-magnitude.unit",""],
+    ["steps.the-average-star.fields.0.unit","mag"],
+    ["steps.the-average-star.fields.1.unit","mag"],
+    ["steps.real-drift.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.count-a-shallow-survey.fields.0.hint","167"],
+    ["steps.count-a-shallow-survey.fields.1.hint","6.3"],
+    ["steps.count-a-deep-survey.fields.0.hint","1289"],
+    ["steps.count-a-deep-survey.fields.1.hint","49"],
+    ["steps.how-far-can-it-see.fields.0.hint","711"],
+    ["steps.how-far-can-it-see.fields.1.hint","63"],
+    ["steps.the-average-star.fields.0.hint","8.3"],
+    ["steps.the-average-star.fields.1.hint","3.8"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "limit-distance-by-hand",
+    "answer": "711",
+    "tolerance": "15",
+    "unit": "pc"
+   },
+   {
+    "sid": "volume-per-magnitude",
+    "answer": "3.98",
+    "tolerance": "0.1",
+    "unit": ""
+   },
+   {
+    "sid": "real-drift",
+    "answer": "4.56",
+    "tolerance": "0.1",
+    "unit": "mag"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "count-a-shallow-survey": {
+    "validate": {"calls":232,"distinct":2,"digest":"023efa0858c37fe4","samples":[null,{"level":"error","message":"Set “Magnitude limit” to 14, then read “Stars counted” and “Share of the stars counted”."}]}
+   },
+   "count-a-deep-survey": {
+    "validate": {"calls":232,"distinct":2,"digest":"6ea5c9cfc23e303b","samples":[null,{"level":"error","message":"Set “Magnitude limit” to 18 and read the two rows again."}]}
+   },
+   "how-far-can-it-see": {
+    "validate": {"calls":232,"distinct":2,"digest":"d61f603f0fbb4c1b","samples":[null,{"level":"error","message":"Use a limit of 14 and read the two rows “A star like the Sun is lost beyond” and “A red dwarf is lost beyond”."}]}
+   },
+   "the-average-star": {
+    "validate": {"calls":232,"distinct":2,"digest":"aca04c0804e309a7","samples":[null,{"level":"error","message":"Use a limit of 14 and read the two “Mean absolute magnitude” rows. The first is every star, the second only the counted ones."}]}
+   }
+  },
+  "es": "same"
+ }
+}

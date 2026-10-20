@@ -1,0 +1,73 @@
+{
+ "id": "the-expanding-universe",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.hubbles-slope.fields.0.unit","km/s/Mpc"],
+    ["steps.hubbles-slope.fields.1.unit","km/s/Mpc"],
+    ["steps.the-hubble-time.unit","Gyr"],
+    ["steps.a-modern-sample.fields.1.unit","km/s/Mpc"],
+    ["steps.a-velocity-from-a-distance.unit","km/s"],
+    ["steps.the-slopes-error.unit","%"],
+    ["steps.further-out.fields.1.unit","km/s/Mpc"],
+    ["steps.how-many-errors-apart.unit",""]
+   ],
+   "numbered": [
+    ["steps.hubbles-slope.fields.0.hint","424"],
+    ["steps.hubbles-slope.fields.1.hint","42"],
+    ["steps.a-modern-sample.fields.0.hint","197"],
+    ["steps.a-modern-sample.fields.1.hint","66.3"],
+    ["steps.further-out.fields.0.hint","955"],
+    ["steps.further-out.fields.1.hint","59.3"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-hubble-time",
+    "answer": "2.31",
+    "tolerance": "0.05",
+    "unit": "Gyr"
+   },
+   {
+    "sid": "a-velocity-from-a-distance",
+    "answer": "6633",
+    "tolerance": "70",
+    "unit": "km/s"
+   },
+   {
+    "sid": "the-slopes-error",
+    "answer": "0.37",
+    "tolerance": "0.03",
+    "unit": "%"
+   },
+   {
+    "sid": "how-many-errors-apart",
+    "answer": "22.3",
+    "tolerance": "0.8",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "hubbles-slope": {
+    "validate": {"calls":232,"distinct":2,"digest":"dc218a575ec755a3","samples":[null,{"level":"error","message":"With Hubble’s 24 nebulae chosen, read “Slope through the origin (Hubble constant)”: the number and the error after the ±."}]}
+   },
+   "a-modern-sample": {
+    "validate": {"calls":232,"distinct":2,"digest":"a22b9a19bda2bd4d","samples":[null,{"level":"error","message":"Choose “Dark Energy Survey supernovae”, set the range to z ≤ 0.10, and read “Objects in the fit” and the slope through the origin."}]}
+   },
+   "further-out": {
+    "validate": {"calls":232,"distinct":2,"digest":"f3a780a5a8960f88","samples":[null,{"level":"error","message":"Set the range to z ≤ 0.50 and read “Objects in the fit” and the slope through the origin."}]}
+   }
+  },
+  "es": "same"
+ }
+}

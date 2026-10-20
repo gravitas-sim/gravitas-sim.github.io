@@ -1,0 +1,73 @@
+{
+ "id": "what-a-spectrum-is-made-of",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.measure-two-clouds.fields.0.unit","%"],
+    ["steps.measure-two-clouds.fields.1.unit","%"],
+    ["steps.planck-floor.unit","%"],
+    ["steps.equivalent-width.unit","Å"],
+    ["steps.boltzmann-ratio.unit",""],
+    ["steps.same-patch.unit","Å"],
+    ["steps.real-balmer-ratio.unit",""]
+   ],
+   "numbered": [
+    ["steps.measure-two-clouds.fields.0.label","H-alpha center, cloud at 4,000 K"],
+    ["steps.measure-two-clouds.fields.0.hint","20"],
+    ["steps.measure-two-clouds.fields.1.label","H-alpha center, cloud at 8,000 K"],
+    ["steps.measure-two-clouds.fields.1.hint","250"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.measure-two-clouds.fields.0.label","Centro de H-alfa, nube a 4.000 K"],
+    ["steps.measure-two-clouds.fields.1.label","Centro de H-alfa, nube a 8.000 K"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "planck-floor",
+    "answer": "6.07",
+    "tolerance": "0.15",
+    "unit": "%"
+   },
+   {
+    "sid": "equivalent-width",
+    "answer": "14.2",
+    "tolerance": "0.5",
+    "unit": "Å"
+   },
+   {
+    "sid": "boltzmann-ratio",
+    "answer": "2673",
+    "tolerance": "120",
+    "unit": ""
+   },
+   {
+    "sid": "same-patch",
+    "answer": "16.8",
+    "tolerance": "0.4",
+    "unit": "Å"
+   },
+   {
+    "sid": "real-balmer-ratio",
+    "answer": "2.34",
+    "tolerance": "0.4",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "measure-two-clouds": {
+    "validate": {"calls":232,"distinct":2,"digest":"cc6a36c08d9c5bf5","samples":[null,{"level":"error","message":"Zoom on H-alpha with “the source, through the cloud” selected, then read the row “At the H-alpha center, brightness against the source’s” at each cloud temperature. The source stays at 6,000 K."}]}
+   }
+  },
+  "es": "same"
+ }
+}

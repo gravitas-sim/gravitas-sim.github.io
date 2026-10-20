@@ -1,0 +1,156 @@
+{
+ "id": "a-universe-of-stars",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-numbers-arrive.fields.0.unit","K"],
+    ["steps.the-numbers-arrive.fields.1.unit","K"],
+    ["steps.the-numbers-arrive.fields.2.unit","K"],
+    ["steps.measure-the-radius-ratio.fields.0.unit","R☉"],
+    ["steps.measure-the-radius-ratio.fields.1.unit","R☉"],
+    ["steps.measure-the-radius-ratio.fields.2.unit","×"],
+    ["steps.the-two-axes.fields.0.unit","K"],
+    ["steps.the-two-axes.fields.1.unit","L☉"],
+    ["steps.where-the-sun-sits.fields.0.unit","R☉"],
+    ["steps.straight-up-the-diagram.fields.0.unit","R☉"],
+    ["steps.lines-of-constant-radius.fields.0.unit","K"],
+    ["steps.lines-of-constant-radius.fields.1.unit","L☉"],
+    ["steps.lines-of-constant-radius.fields.2.unit","K"],
+    ["steps.lines-of-constant-radius.fields.3.unit","L☉"],
+    ["steps.three-on-the-main-sequence.fields.0.unit","L☉"],
+    ["steps.three-on-the-main-sequence.fields.1.unit","L☉"],
+    ["steps.three-on-the-main-sequence.fields.2.unit","×"],
+    ["steps.the-whole-sequence.fields.0.unit","L☉"],
+    ["steps.the-whole-sequence.fields.1.unit","L☉"],
+    ["steps.the-whole-sequence.fields.2.unit","L☉"],
+    ["steps.measure-the-two-reds.fields.0.unit","R☉"],
+    ["steps.measure-the-two-reds.fields.1.unit","R☉"],
+    ["steps.measure-the-two-reds.fields.2.unit","L☉"],
+    ["steps.measure-the-two-reds.fields.3.unit","L☉"],
+    ["steps.measure-the-two-reds.fields.4.unit","×"],
+    ["steps.measure-the-two-reds.fields.5.unit","×"],
+    ["steps.a-supergiant.fields.0.unit","R☉"],
+    ["steps.a-supergiant.fields.1.unit","M☉"],
+    ["steps.hot-and-faint.fields.0.unit","K"],
+    ["steps.hot-and-faint.fields.1.unit","L☉"],
+    ["steps.hot-and-faint.fields.2.unit","R☉"],
+    ["steps.measure-the-lifetimes.fields.0.unit","Gyr"],
+    ["steps.measure-the-lifetimes.fields.1.unit","Gyr"],
+    ["steps.measure-the-lifetimes.fields.2.unit","Gyr"],
+    ["steps.a-population.fields.0.unit",""],
+    ["steps.a-population.fields.1.unit",""],
+    ["steps.a-population.fields.2.unit",""],
+    ["steps.only-the-bright-ones.fields.0.unit",""],
+    ["steps.only-the-bright-ones.fields.1.unit",""],
+    ["steps.only-the-bright-ones.fields.2.unit",""],
+    ["steps.find-a-counterexample.fields.0.unit","K"],
+    ["steps.find-a-counterexample.fields.1.unit","L☉"],
+    ["steps.find-a-counterexample.fields.2.unit","K"],
+    ["steps.find-a-counterexample.fields.3.unit","L☉"],
+    ["steps.spectra-two-features.fields.0.unit","%"],
+    ["steps.spectra-two-features.fields.1.unit","%"],
+    ["steps.spectra-two-features.fields.2.unit","%"],
+    ["steps.spectra-two-features.fields.3.unit","%"],
+    ["steps.spectra-two-features.fields.4.unit","%"],
+    ["steps.spectra-two-features.fields.5.unit","%"],
+    ["steps.spectra-two-features.fields.6.unit","%"],
+    ["steps.spectra-two-features.fields.7.unit","%"]
+   ],
+   "numbered": [
+    ["steps.straight-up-the-diagram.fields.0.label","Radius at 5,772 K and 10,000 L☉"],
+    ["steps.three-on-the-main-sequence.fields.0.label","Luminosity of the 0.2 M☉ star"],
+    ["steps.three-on-the-main-sequence.fields.1.label","Luminosity of the 20 M☉ star"],
+    ["steps.the-whole-sequence.fields.0.label","1 M☉"],
+    ["steps.the-whole-sequence.fields.1.label","5 M☉"],
+    ["steps.the-whole-sequence.fields.2.label","20 M☉"],
+    ["steps.measure-the-lifetimes.fields.0.label","0.2 M☉ main-sequence lifetime"],
+    ["steps.measure-the-lifetimes.fields.1.label","1 M☉"],
+    ["steps.measure-the-lifetimes.fields.2.label","20 M☉"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.straight-up-the-diagram.fields.0.label","Radio a 5.772 K y 10.000 L☉"],
+    ["steps.three-on-the-main-sequence.fields.0.label","Luminosidad de la estrella de 0,2 M☉"],
+    ["steps.three-on-the-main-sequence.fields.1.label","Luminosidad de la estrella de 20 M☉"],
+    ["steps.measure-the-lifetimes.fields.0.label","Vida en la secuencia principal de 0,2 M☉"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "measure-the-radius-ratio.ratio",
+    1
+   ],
+   [
+    "three-on-the-main-sequence.ratio",
+    0
+   ],
+   [
+    "measure-the-two-reds.rRatio",
+    0
+   ],
+   [
+    "measure-the-two-reds.lRatio",
+    0
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-numbers-arrive": {
+    "validate": {"calls":242,"distinct":3,"digest":"c4eccbc27c8e6da0","samples":[{"level":"warn","message":"Three temperatures, from the list under the picture."},{"level":"error","message":"Coolest first, hottest last. Put them back in order."},{"level":"warn","message":"One of those has come from somewhere else. The three are near 3,400 K, 4,300 K and 16,600 K."}]}
+   },
+   "measure-the-radius-ratio": {
+    "validate": {"calls":242,"distinct":4,"digest":"59e64eafb82033e4","samples":[{"level":"warn","message":"Both radii, in solar radii."},{"level":"warn","message":"That is not the ratio the stage reports. Check that both radii came from these two stars."},{"level":"warn","message":"The numbers are right — about 18.4 times. Now say why in a sentence, in the last box: that is the part you will need again in four screens&rsquo; time."},{"level":"error","message":"The larger radius goes in the second box."}]}
+   },
+   "the-two-axes": {
+    "validate": {"calls":232,"distinct":2,"digest":"ccc0f0e08e12dff5","samples":[{"level":"warn","message":"Both numbers, off the readout."},{"level":"error","message":"That is cooler than 10,000 K, not hotter. The axis runs backwards: to raise the temperature, move left."}]}
+   },
+   "where-the-sun-sits": {
+    "validate": {"calls":97,"distinct":3,"digest":"44a4b4228a661a1f","samples":[{"level":"warn","message":"One number, off the readout."},{"level":"ok","message":"One solar radius, from a temperature and a luminosity alone. This is where the Sun is now. It has not always been here and will not stay."},{"level":"warn","message":"Not on the Sun yet. Set the temperature first — 5,772 K, and remember hotter is to the left — then bring the luminosity to 1."}]}
+   },
+   "straight-up-the-diagram": {
+    "validate": {"calls":97,"distinct":3,"digest":"cc0480d476d77cc9","samples":[{"level":"warn","message":"The radius from the readout."},{"level":"warn","message":"Check both numbers: the temperature should still read about 5,772 K, and the luminosity 10,000."},{"level":"ok","message":"A hundred solar radii, which is the square root of ten thousand. Four decades up the diagram at one temperature is two decades in radius, every time."}]}
+   },
+   "lines-of-constant-radius": {
+    "validate": {"calls":242,"distinct":3,"digest":"ed38c3796cc24465","samples":[{"level":"warn","message":"All four numbers, from the readout."},{"level":"error","message":"The hotter of the two goes in the second pair."},{"level":"warn","message":"At least one of those is not on the 1 R☉ line — the radius in the readout should stay near 1.0 at both."}]}
+   },
+   "three-on-the-main-sequence": {
+    "validate": {"calls":242,"distinct":3,"digest":"af96799d53632e87","samples":[{"level":"warn","message":"Both luminosities, off the list."},{"level":"warn","message":"That is smaller than the list gives. The faint one is a few thousandths of a solar luminosity and the bright one is tens of thousands."},{"level":"ok","message":"Around nine million. A hundredfold in mass has bought nine million in light — and the radius has only gone from 0.24 to 7.3 solar radii, a factor of 30. Almost all of that light comes from being hot, not from being big."}]}
+   },
+   "the-whole-sequence": {
+    "validate": {"calls":242,"distinct":4,"digest":"139ed20c7c4045d0","samples":[{"level":"warn","message":"Three luminosities, all positive."},{"level":"error","message":"They should rise with mass. Check which star each came from."},{"level":"ok","message":"A slope near 3.6 across that range. Notice you have not been asked to apply it to anything off the main sequence — the giant in step 4 was a solar-mass star putting out fifty times what this table says a solar mass should."},{"level":"warn","message":"Those do not give the slope the models do. The 1 M☉ star is near 1.2 L☉, the 5 M☉ near 730 and the 20 M☉ near 59,000."}]}
+   },
+   "measure-the-two-reds": {
+    "validate": {"calls":242,"distinct":3,"digest":"03af08d9aa327faa","samples":[{"level":"warn","message":"All four numbers, from the list."},{"level":"warn","message":"The radius ratio is not what the list gives — check both numbers came from these two stars."},{"level":"error","message":"The giant goes in the second box of each pair."}]}
+   },
+   "a-supergiant": {
+    "validate": {"calls":232,"distinct":2,"digest":"1c3d66eddc748957","samples":[{"level":"warn","message":"A radius and a mass, from the list."},{"level":"warn","message":"The list gives about 1,070 solar radii for this star."}]}
+   },
+   "hot-and-faint": {
+    "validate": {"calls":242,"distinct":2,"digest":"34ef176c84d5c02f","samples":[{"level":"warn","message":"All three, from the list."},{"level":"warn","message":"Not far enough along yet. Drag the age slider to the very end of the track."}]}
+   },
+   "measure-the-lifetimes": {
+    "validate": {"calls":242,"distinct":4,"digest":"0c9640187050e44c","samples":[{"level":"warn","message":"Three lifetimes, all in billions of years. The readout may give the largest in trillions — 1.1 trillion is 1,100 billion."},{"level":"error","message":"They should fall as the mass rises. Check which star each figure came from."},{"level":"warn","message":"The 20 M☉ figure is about 8.7 million years, which is 0.0087 billion."},{"level":"ok","message":"About 1,140,000 million years, 9,880 million and 8.7 million: a factor of 130,000 across the set. The heaviest star in this investigation finished its main sequence before the lightest had got started, and the lightest will still be on it when the Universe is a hundred times its present age."}]}
+   },
+   "a-population": {
+    "validate": {"calls":242,"distinct":3,"digest":"e535315fe7951ce3","samples":[{"level":"warn","message":"Three counts, off the histogram."},{"level":"error","message":"Those are not in the order the histogram shows. M is the tallest bar by a long way."},{"level":"warn","message":"The M bar is the tall one on the right — over two hundred."}]}
+   },
+   "only-the-bright-ones": {
+    "validate": {"calls":242,"distinct":4,"digest":"ca5f1d7f81016c48","samples":[{"level":"warn","message":"Three counts, off the histogram."},{"level":"error","message":"Look again at the M column in the bright subset. The number there is the point of this step."},{"level":"ok","message":"Sixteen stars left out of 351, and not one of them is an M dwarf — the type that was two thirds of the sample. Half of what is left is type F, which was two per cent of it."},{"level":"warn","message":"That looks like the whole sample. Switch the view to the bright subset — the readout says how many are kept."}]}
+   },
+   "find-a-counterexample": {
+    "validate": {"calls":242,"distinct":3,"digest":"ec76559ee0a63a5f","samples":[{"level":"warn","message":"Four numbers: a temperature and a luminosity for each star."},{"level":"ok","message":"That breaks the first one: your cooler star works out at more than ten solar radii, so it is red and large. A giant or a supergiant does it."},{"level":"ok","message":"That breaks the second one: the hotter of your two stars is the fainter. Anything hot and small does it — a white dwarf against almost anything."}]}
+   },
+   "spectra-two-features": {
+    "validate": {"calls":242,"distinct":5,"digest":"177bbefd8e7756f5","samples":[{"level":"warn","message":"Eight percentages: the hydrogen column and the calcium column, four stars each. With the focus control on \"all four\" the readout lists every one of them."},{"level":"error","message":"The hydrogen figures should fall from W to Z. Check which figure came from which star — the readout labels each row."},{"level":"warn","message":"The hydrogen order is right, but star W reads about 36.6%. Make sure you are reading the Hβ figure and not the calcium one."},{"level":"error","message":"Check the calcium column. The deepest calcium here is in neither the hottest star nor the coolest — that is the point of the column."},{"level":"ok","message":"Hydrogen: about 37%, 14%, 9% and 5%. Star W absorbs eight times as much of its own light at hydrogen β as star Z does, and you measured that in a window where the four are the same color. Calcium: about 3%, 56%, 53% and 22% — nearly absent in the hottest star, enormous in the next two, back down by the coolest. The hydrogen column falls all the way. The calcium column goes up and then comes down, and that is a different kind of fact: a quantity that rises and falls cannot be recovered from a temperature, because two different temperatures give the same answer."}]}
+   }
+  },
+  "es": "same"
+ }
+}

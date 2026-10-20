@@ -1,0 +1,142 @@
+{
+ "id": "missing-mass",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.measure-the-enclosed-mass-yourself.fields.0.unit","× 10¹⁰ M☉"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.1.unit","× 10¹⁰ M☉"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.2.unit","× 10¹⁰ M☉"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.3.unit","× 10¹⁰ M☉"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.4.unit","× 10¹⁰ M☉"],
+    ["steps.measure-the-expected-curve.fields.0.unit",""],
+    ["steps.measure-the-expected-curve.fields.1.unit",""],
+    ["steps.measure-the-expected-curve.fields.2.unit","M☉"],
+    ["steps.measure-the-real-curve.fields.0.unit",""],
+    ["steps.measure-the-real-curve.fields.1.unit",""],
+    ["steps.measure-the-real-curve.fields.2.unit","×"],
+    ["steps.record-your-best-stars-only.fields.0.unit","km/s"],
+    ["steps.record-your-best-stars-only.fields.1.unit","× 10¹⁰ M☉"],
+    ["steps.record-your-best-stars-only.fields.2.unit","kpc"],
+    ["steps.record-your-best-stars-only.fields.3.unit",""],
+    ["steps.record-the-fit-that-works.fields.0.unit","km/s"],
+    ["steps.record-the-fit-that-works.fields.1.unit","kpc"],
+    ["steps.record-the-fit-that-works.fields.2.unit","km/s"],
+    ["steps.record-the-fit-that-works.fields.3.unit","× 10¹⁰ M☉"],
+    ["steps.record-the-fit-that-works.fields.4.unit","× 10¹⁰ M☉"],
+    ["steps.how-much-of-it-is.unit","×"],
+    ["steps.how-sure-is-the-dark-fraction.fields.0.unit",""],
+    ["steps.how-sure-is-the-dark-fraction.fields.1.unit",""],
+    ["steps.how-sure-is-the-dark-fraction.fields.2.unit",""],
+    ["steps.how-sure-is-the-dark-fraction.fields.3.unit",""],
+    ["steps.dark-fraction-with-an-error-bar.unit","×"],
+    ["steps.the-real-halo-fit.fields.0.unit",""],
+    ["steps.the-real-halo-fit.fields.1.unit",""],
+    ["steps.measure-the-simulated-cluster.fields.0.unit",""],
+    ["steps.measure-the-simulated-cluster.fields.1.unit","simulation units per time"],
+    ["steps.measure-the-simulated-cluster.fields.2.unit","simulation units"],
+    ["steps.measure-the-simulated-cluster.fields.3.unit","M☉"],
+    ["steps.weigh-the-cluster-by-its.unit","M☉"],
+    ["steps.now-compare.unit","×"],
+    ["steps.the-prediction-mond-makes.unit","km/s"]
+   ],
+   "numbered": [
+    ["steps.measure-the-enclosed-mass-yourself.fields.0.label","Flat curve: mass inside 5 kpc"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.1.label","Flat curve: mass inside 10 kpc"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.2.label","Flat curve: mass inside 20 kpc"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.3.label","Flat curve: mass inside 30 kpc"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.4.label","Falling curve: mass inside 30 kpc"],
+    ["steps.measure-the-enclosed-mass-yourself.plot.yLabel","mass inside  (10¹⁰ M☉)"],
+    ["steps.record-the-fit-that-works.fields.4.label","Halo mass inside 30 kpc"],
+    ["steps.how-sure-is-the-dark-fraction.fields.0.hint","0.2"],
+    ["steps.dark-fraction-with-an-error-bar.placeholder","e.g. 3.4 ± 0.7"],
+    ["steps.the-real-halo-fit.fields.0.hint","50"],
+    ["steps.the-real-halo-fit.fields.1.hint","4.8"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.measure-the-enclosed-mass-yourself.fields.0.label","Curva plana: masa dentro de 5 kpc"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.1.label","Curva plana: masa dentro de 10 kpc"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.2.label","Curva plana: masa dentro de 20 kpc"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.3.label","Curva plana: masa dentro de 30 kpc"],
+    ["steps.measure-the-enclosed-mass-yourself.fields.4.label","Curva descendente: masa dentro de 30 kpc"],
+    ["steps.measure-the-enclosed-mass-yourself.plot.yLabel","masa interior  (10¹⁰ M☉)"],
+    ["steps.record-the-fit-that-works.fields.4.label","Masa del halo dentro de 30 kpc"],
+    ["steps.dark-fraction-with-an-error-bar.placeholder","p. ej. 3,4 ± 0,7"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "how-much-of-it-is",
+    "answer": "3.4",
+    "tolerance": "0.9",
+    "unit": "×"
+   },
+   {
+    "sid": "dark-fraction-with-an-error-bar",
+    "answer": "3.4",
+    "tolerance": "0.9",
+    "unit": "×"
+   },
+   {
+    "sid": "weigh-the-cluster-by-its",
+    "answer": "1756",
+    "tolerance": "180",
+    "unit": "M☉"
+   },
+   {
+    "sid": "now-compare",
+    "answer": "18.3",
+    "tolerance": "4",
+    "unit": "×"
+   },
+   {
+    "sid": "the-prediction-mond-makes",
+    "answer": "136",
+    "tolerance": "12",
+    "unit": "km/s"
+   }
+  ],
+  "decimals": [
+   [
+    "how-sure-is-the-dark-fraction.ratio",
+    2
+   ],
+   [
+    "how-sure-is-the-dark-fraction.halo_frac",
+    4
+   ],
+   [
+    "how-sure-is-the-dark-fraction.s_ratio",
+    2
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-solar-system-plotted": {
+    "probe": [[{"label":"Rotation curve","value":"open the panel"}],[{"label":"Bodies plotted","value":"3"},{"label":"Innermost","value":"0.400 AU at 40.0 km/s"},{"label":"Outermost","value":"2.00 AU at 20.6 km/s"},{"label":"Fitted slope","value":"-0.512"}],[{"label":"Bodies plotted","value":"3"},{"label":"Innermost","value":"0.400 AU at 40.0 km/s"},{"label":"Outermost","value":"2.00 AU at 20.6 km/s"},{"label":"Fitted slope","value":"-1.000"}]]
+   },
+   "measure-the-expected-curve": {
+    "probe": [[{"label":"Tracer","value":"select a disc star, on the canvas or below"}],[{"label":"Tracer","value":"Eccentric Orbiter"},{"label":"Its distance from the center","value":"1.00 AU"},{"label":"Its speed now","value":"35.7 km/s"},{"label":"Speed the visible mass alone would give","value":"29.8 km/s"},{"label":"Measured ÷ predicted","value":"1.20×","emphasis":true}],[{"label":"Tracer","value":"Circular Orbiter"},{"label":"Its distance from the center","value":"1.00 AU"},{"label":"Its speed now","value":"29.8 km/s"},{"label":"Speed the visible mass alone would give","value":"29.8 km/s"},{"label":"Measured ÷ predicted","value":"1.00×","emphasis":true}],[{"label":"Tracer","value":"Far Orbiter"}]]
+   },
+   "measure-the-real-curve": {
+    "probe": [[{"label":"Tracer","value":"select a disc star, on the canvas or below"}],[{"label":"Tracer","value":"Eccentric Orbiter"},{"label":"Its distance from the center","value":"1.00 AU"},{"label":"Its speed now","value":"35.7 km/s"},{"label":"Speed the visible mass alone would give","value":"29.8 km/s"},{"label":"Measured ÷ predicted","value":"1.20×","emphasis":true}],[{"label":"Tracer","value":"Circular Orbiter"},{"label":"Its distance from the center","value":"1.00 AU"},{"label":"Its speed now","value":"29.8 km/s"},{"label":"Speed the visible mass alone would give","value":"29.8 km/s"},{"label":"Measured ÷ predicted","value":"1.00×","emphasis":true}],[{"label":"Tracer","value":"Far Orbiter"}]]
+   },
+   "how-sure-is-the-dark-fraction": {
+    "validate": {"calls":242,"distinct":145,"digest":"3d15077aee275259","samples":[null,{"level":"ok","message":"The halo holds 1.00 ± 1.00 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."},{"level":"ok","message":"The halo holds 0.03 ± 0.21 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."},{"level":"ok","message":"The halo holds 0.24 ± 520.70 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."},{"level":"ok","message":"The halo holds 2.22 ± 4255.00 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."},{"level":"ok","message":"The halo holds 0.28 ± 4163.00 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."},{"level":"ok","message":"The halo holds 639.60 ± 4209.00 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."},{"level":"ok","message":"The halo holds 14.05 ± 1.77 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."},{"level":"ok","message":"The halo holds 35.75 ± 1.00 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."},{"level":"ok","message":"The halo holds 0.44 ± 35.75 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."},{"level":"ok","message":"The halo holds 1.00 ± 35.75 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."},{"level":"ok","message":"The halo holds 35.75 ± 14.05 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."},{"level":"ok","message":"The halo holds 35.75 ± 35.75 times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars."}]}
+   },
+   "the-real-halo-fit": {
+    "validate": {"calls":232,"distinct":2,"digest":"ed4b1ff59488bede","samples":[null,{"level":"error","message":"In the instrument choose “best fit, stars only (no halo)” and read the reduced χ², then “best fit, with a halo” and read it again."}]}
+   },
+   "take-the-halo-away-from": {
+    "probe": [[{"label":"Rotation curve","value":"open the panel"}],[{"label":"Halo","value":"On"},{"label":"Outermost star","value":"2.00 AU"},{"label":"Slope","value":"-0.512"}],[{"label":"Halo","value":"Off"},{"label":"Outermost star","value":"2.00 AU"},{"label":"Slope","value":"-1.000"}]]
+   }
+  },
+  "es": "same"
+ }
+}

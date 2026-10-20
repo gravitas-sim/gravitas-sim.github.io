@@ -1,0 +1,90 @@
+{
+ "id": "the-sun-through-the-year",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.three-noons.fields.0.unit","deg"],
+    ["steps.three-noons.fields.1.unit","deg"],
+    ["steps.three-noons.fields.2.unit","deg"],
+    ["steps.three-noons.fields.3.unit","deg"],
+    ["steps.what-if-the-tilt.unit","deg"],
+    ["steps.three-day-lengths.fields.0.unit","h"],
+    ["steps.three-day-lengths.fields.1.unit","h"],
+    ["steps.three-day-lengths.fields.2.unit","h"],
+    ["steps.daily-sunlight.fields.0.unit",""],
+    ["steps.daily-sunlight.fields.1.unit",""],
+    ["steps.daily-sunlight.fields.2.unit",""],
+    ["steps.distance-in-percent.unit","%"],
+    ["steps.equinox-longitude.unit","deg"]
+   ],
+   "numbered": [
+    ["steps.three-noons.fields.0.hint","50"],
+    ["steps.three-noons.fields.1.hint","73.4"],
+    ["steps.three-noons.fields.2.hint","26.6"],
+    ["steps.three-day-lengths.fields.0.label","Day length at latitude 0°"],
+    ["steps.three-day-lengths.fields.0.hint","12.1"],
+    ["steps.three-day-lengths.fields.1.label","Day length at latitude 40°"],
+    ["steps.three-day-lengths.fields.1.hint","15.0"],
+    ["steps.three-day-lengths.fields.2.label","Day length at latitude 65°"],
+    ["steps.three-day-lengths.fields.2.hint","22.0"],
+    ["steps.daily-sunlight.fields.0.hint","483"],
+    ["steps.daily-sunlight.fields.1.hint","156"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.three-day-lengths.fields.0.label","Duración del día a latitud 0°"],
+    ["steps.three-day-lengths.fields.1.label","Duración del día a latitud 40°"],
+    ["steps.three-day-lengths.fields.2.label","Duración del día a latitud 65°"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "what-if-the-tilt",
+    "answer": "60",
+    "tolerance": "0.5",
+    "unit": "deg"
+   },
+   {
+    "sid": "distance-in-percent",
+    "answer": "6.7",
+    "tolerance": "0.4",
+    "unit": "%"
+   },
+   {
+    "sid": "equinox-longitude",
+    "answer": "180",
+    "tolerance": "3",
+    "unit": "deg"
+   }
+  ],
+  "decimals": [
+   [
+    "three-noons.range",
+    1
+   ],
+   [
+    "daily-sunlight.ratio",
+    1
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "three-noons": {
+    "validate": {"calls":242,"distinct":2,"digest":"6b038ee243ab6bcd","samples":[null,{"level":"error","message":"Set the latitude to 40° and read the “Sun’s altitude at noon” row at each preset."}]}
+   },
+   "three-day-lengths": {
+    "validate": {"calls":242,"distinct":2,"digest":"9c3c584588db48eb","samples":[null,{"level":"error","message":"Use the June solstice preset, then read the “Length of the day” row at each latitude."}]}
+   },
+   "daily-sunlight": {
+    "validate": {"calls":242,"distinct":2,"digest":"80f15a8e9a4b3910","samples":[null,{"level":"error","message":"Set the latitude to 40° and read the daily mean sunlight row at each solstice."}]}
+   }
+  },
+  "es": "same"
+ }
+}

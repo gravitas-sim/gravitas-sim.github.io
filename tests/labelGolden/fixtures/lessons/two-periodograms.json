@@ -1,0 +1,50 @@
+{
+ "id": "two-periodograms",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-two-periods.fields.0.unit","d"],
+    ["steps.the-two-periods.fields.1.unit","d"],
+    ["steps.the-two-periods.fields.2.unit",""],
+    ["steps.the-box.fields.0.unit","h"],
+    ["steps.the-box.fields.1.unit","ppm"],
+    ["steps.the-box.fields.2.unit",""],
+    ["steps.against-the-fit.fields.0.unit","d"],
+    ["steps.against-the-fit.fields.1.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-two-periods.fields.0.hint","1.7689"],
+    ["steps.the-two-periods.fields.1.hint","3.524"],
+    ["steps.the-two-periods.fields.2.hint","0.502"],
+    ["steps.the-box.fields.0.hint","2.5"],
+    ["steps.the-box.fields.1.hint","14582"],
+    ["steps.the-box.fields.2.hint","191"],
+    ["steps.against-the-fit.fields.0.hint","-0.00058"],
+    ["steps.against-the-fit.fields.1.hint","-19"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-two-periods": {
+    "validate": {"calls":242,"distinct":2,"digest":"6f83cbddc2bec7d6","samples":[null,{"level":"error","message":"Run the notebook with its settings at 15 and 6, and read the two best periods and their ratio from the table of numbers it returns."}]}
+   },
+   "the-box": {
+    "validate": {"calls":242,"distinct":2,"digest":"849231fe72606924","samples":[null,{"level":"error","message":"Read the box duration, the box depth and its signal-to-noise ratio from the table of numbers. They are rows of the table, in hours and in parts per million."}]}
+   },
+   "against-the-fit": {
+    "validate": {"calls":232,"distinct":2,"digest":"342067efb1a70294","samples":[null,{"level":"error","message":"Subtract 3.52454 from the box least squares period, and divide by 0.00003."}]}
+   }
+  },
+  "es": "same"
+ }
+}

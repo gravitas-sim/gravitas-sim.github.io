@@ -118,6 +118,7 @@
     "lesson:coverage": "node tools/lesson-coverage.mjs",
     "lesson:golden": "node tools/lesson-golden.mjs",
     "lesson:golden:dom": "node tools/lesson-golden-dom.mjs",
+    "label:golden": "node tools/label-golden.mjs",
     "budget:data": "node tools/data-budget.mjs --check",
     "release:check": "node tools/release-check.mjs",
     "a11y": "playwright test e2e/accessibility.spec.js e2e/accessibilityManual.spec.js --project=chromium",

@@ -1,0 +1,80 @@
+{
+ "id": "the-suns-motion",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.measure-the-sun.fields.0.unit","km/s"],
+    ["steps.measure-the-sun.fields.1.unit","km/s"],
+    ["steps.measure-the-sun.fields.2.unit","km/s"],
+    ["steps.speed-from-components.unit","km/s"],
+    ["steps.measure-farther.fields.0.unit","km/s"],
+    ["steps.measure-farther.fields.1.unit","km/s"],
+    ["steps.error-of-the-mean.unit","km/s"],
+    ["steps.lag-arithmetic.unit","km/s"],
+    ["steps.record-both-frames.fields.0.unit","km/s"],
+    ["steps.record-both-frames.fields.1.unit","km/s"],
+    ["steps.speed-two-frames.unit","km/s"]
+   ],
+   "numbered": [
+    ["steps.measure-the-sun.fields.0.hint","10"],
+    ["steps.measure-the-sun.fields.1.hint","22"],
+    ["steps.measure-the-sun.fields.2.hint","9"],
+    ["steps.measure-farther.fields.0.label","Sun’s U within 1,000 pc"],
+    ["steps.measure-farther.fields.0.hint","9.7"],
+    ["steps.measure-farther.fields.1.hint","1.0"],
+    ["steps.record-both-frames.fields.0.hint","3.8"],
+    ["steps.record-both-frames.fields.1.hint","12.2"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.measure-farther.fields.0.label","U del Sol dentro de 1.000 pc"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "speed-from-components",
+    "answer": "25.95",
+    "tolerance": "0.8",
+    "unit": "km/s"
+   },
+   {
+    "sid": "error-of-the-mean",
+    "answer": "1.03",
+    "tolerance": "0.05",
+    "unit": "km/s"
+   },
+   {
+    "sid": "lag-arithmetic",
+    "answer": "18.15",
+    "tolerance": "0.3",
+    "unit": "km/s"
+   },
+   {
+    "sid": "speed-two-frames",
+    "answer": "4.12",
+    "tolerance": "0.3",
+    "unit": "km/s"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "measure-the-sun": {
+    "validate": {"calls":242,"distinct":2,"digest":"5f0a49e8044be958","samples":[null,{"level":"error","message":"Set “Use stars closer than” to 100 pc and “Measure the Sun’s V against” to the mean of these stars, then read the three rows for U, V and W."}]}
+   },
+   "measure-farther": {
+    "validate": {"calls":232,"distinct":2,"digest":"80726250914bcc38","samples":[null,{"level":"error","message":"Move “Use stars closer than” to 1,000 pc, leave the frame on the mean of these stars, and read the Sun’s U and the number after the ± sign."}]}
+   },
+   "record-both-frames": {
+    "validate": {"calls":232,"distinct":2,"digest":"afa6e517c958c6c0","samples":[null,{"level":"error","message":"Use 100 pc. Read V with the Strömberg frame, then with the Schönrich frame. If the second differs from 12.24, check the frame control; if the first differs from about 3.8, check the distance limit."}]}
+   }
+  },
+  "es": "same"
+ }
+}

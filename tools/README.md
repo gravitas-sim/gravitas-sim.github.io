@@ -100,6 +100,7 @@ current, and the orchestrator checks it.
 | `key-registry-scan.mjs` | Which 'gravitas*' string literals are still loose in js/ (Prompt 107, step 2c) |  |
 | `lab3d-bench.mjs` | The 3-D kernel's throughput, desktop measured and low-end modelled |  |
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
+| `label-golden.mjs` | npm run label:golden [-- --regenerate-label-golden] | `npm run label:golden` |
 | `lesson-coverage.mjs` | npm run lesson:coverage | `npm run lesson:coverage` |
 | `lesson-golden-dom.mjs` | npm run lesson:golden:dom -- --regenerate-lesson-golden | `npm run lesson:golden:dom` |
 | `lesson-golden.mjs` | npm run lesson:golden -- --regenerate-lesson-golden | `npm run lesson:golden` |

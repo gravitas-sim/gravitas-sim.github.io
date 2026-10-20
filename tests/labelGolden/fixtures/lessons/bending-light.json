@@ -1,0 +1,62 @@
+{
+ "id": "bending-light",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-suns-limb.fields.0.unit","arcsec"],
+    ["steps.the-bending-by-hand.unit","arcsec"],
+    ["steps.the-far-ray.fields.0.unit","arcsec"],
+    ["steps.ten-times-the-mass.fields.0.unit","arcsec"],
+    ["steps.ten-times-the-mass.fields.1.unit","km"],
+    ["steps.where-the-rays-cross.unit","au"],
+    ["steps.where-the-formula-fails.fields.0.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-suns-limb.fields.0.hint","1.75"],
+    ["steps.the-far-ray.fields.0.hint","0.0175"],
+    ["steps.ten-times-the-mass.fields.0.hint","17.5"],
+    ["steps.ten-times-the-mass.fields.1.hint","29.5"],
+    ["steps.where-the-formula-fails.fields.0.hint","2.4"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-bending-by-hand",
+    "answer": "1.75",
+    "tolerance": "0.02",
+    "unit": "arcsec"
+   },
+   {
+    "sid": "where-the-rays-cross",
+    "answer": "548",
+    "tolerance": "6",
+    "unit": "au"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-suns-limb": {
+    "validate": {"calls":97,"distinct":2,"digest":"492fce8e69642d00","samples":[null,{"level":"error","message":"Set “Mass of the lens” to 1 and “Closest approach of the ray” to 1, then read “Bending of the ray”."}]}
+   },
+   "the-far-ray": {
+    "validate": {"calls":97,"distinct":2,"digest":"1f76ae0b76af0f3c","samples":[null,{"level":"error","message":"Use a mass of 1 and a closest approach of 100, then read “Bending of the ray”."}]}
+   },
+   "ten-times-the-mass": {
+    "validate": {"calls":232,"distinct":2,"digest":"5021203fffcd1bb4","samples":[null,{"level":"error","message":"Set “Mass of the lens” to 10 and “Closest approach” to 1, then read the two rows."}]}
+   },
+   "where-the-formula-fails": {
+    "validate": {"calls":97,"distinct":3,"digest":"190a071e7b27fbe0","samples":[null,{"level":"error","message":"Use a mass of 100 million Suns (10^8) and a closest approach of about 1,000 solar radii, then read “Closest approach divided by the Schwarzschild radius”."},{"level":"ok","message":"The ray passes at 2.4 Schwarzschild radii, and the formula returns about 49 degrees, which is not a small angle: the weak-field formula has stopped being valid, and a real ray this close is turned by a different, larger amount, or captured. The model says so in its last row."}]}
+   }
+  },
+  "es": "same"
+ }
+}

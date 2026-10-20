@@ -1,0 +1,71 @@
+{
+ "id": "leavitts-law",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-calibration.fields.0.unit",""],
+    ["steps.the-calibration.fields.1.unit","mag"],
+    ["steps.a-cepheid-at-thirty-days.unit","mag"],
+    ["steps.how-tight.fields.0.unit","mag"],
+    ["steps.how-tight.fields.1.unit",""],
+    ["steps.one-star-in-distance.unit","%"],
+    ["steps.the-brightness-ratio.unit",""],
+    ["steps.many-stars.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.the-calibration.fields.0.hint","-3.29"],
+    ["steps.the-calibration.fields.1.label","Magnitude at 10 days"],
+    ["steps.the-calibration.fields.1.hint","12.60"],
+    ["steps.how-tight.fields.0.hint","0.089"],
+    ["steps.how-tight.fields.1.hint","0.040"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-calibration.fields.1.label","Magnitud a los 10 días"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "a-cepheid-at-thirty-days",
+    "answer": "11.03",
+    "tolerance": "0.03",
+    "unit": "mag"
+   },
+   {
+    "sid": "one-star-in-distance",
+    "answer": "4.1",
+    "tolerance": "0.2",
+    "unit": "%"
+   },
+   {
+    "sid": "the-brightness-ratio",
+    "answer": "20.7",
+    "tolerance": "0.7",
+    "unit": ""
+   },
+   {
+    "sid": "many-stars",
+    "answer": "0.0049",
+    "tolerance": "0.0004",
+    "unit": "mag"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-calibration": {
+    "validate": {"calls":232,"distinct":3,"digest":"6a8b31a3dcaa6fa3","samples":[null,{"level":"error","message":"The slope is negative: a longer period means a smaller magnitude, which is a brighter star. Enter it with its minus sign."},{"level":"error","message":"Pick “The Large Magellanic Cloud (the calibration)” and read “Slope” and “Magnitude at a period of 10 days”."}]}
+   },
+   "how-tight": {
+    "validate": {"calls":232,"distinct":2,"digest":"47f9619adcfb6488","samples":[null,{"level":"error","message":"Read “Scatter about the relation” and “Dust left in a Wesenheit magnitude, per magnitude of A_V” with the calibration selected."}]}
+   }
+  },
+  "es": "same"
+ }
+}

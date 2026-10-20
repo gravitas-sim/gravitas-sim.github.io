@@ -1,0 +1,73 @@
+{
+ "id": "lines-and-motion",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.measure-one-shift.fields.0.unit","km/s"],
+    ["steps.measure-one-shift.fields.1.unit","km/s"],
+    ["steps.doppler-arithmetic.unit","km/s"],
+    ["steps.fast-galaxy.unit","km/s"],
+    ["steps.two-lines-one-star.unit","km/s"],
+    ["steps.how-wide-is-wide.unit","Å"],
+    ["steps.a-real-star-two-lines.unit","km/s"]
+   ],
+   "numbered": [
+    ["steps.measure-one-shift.fields.0.label","Synthetic star 1, from H-alpha"],
+    ["steps.measure-one-shift.fields.0.hint","85"],
+    ["steps.measure-one-shift.fields.1.label","Synthetic star 2, from H-alpha"],
+    ["steps.measure-one-shift.fields.1.hint","-142"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.measure-one-shift.fields.0.label","Estrella sintética 1, con H-alfa"],
+    ["steps.measure-one-shift.fields.1.label","Estrella sintética 2, con H-alfa"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "doppler-arithmetic",
+    "answer": "141.8",
+    "tolerance": "3",
+    "unit": "km/s"
+   },
+   {
+    "sid": "fast-galaxy",
+    "answer": "28487",
+    "tolerance": "100",
+    "unit": "km/s"
+   },
+   {
+    "sid": "two-lines-one-star",
+    "answer": "82.2",
+    "tolerance": "1.5",
+    "unit": "km/s"
+   },
+   {
+    "sid": "how-wide-is-wide",
+    "answer": "8.7",
+    "tolerance": "0.3",
+    "unit": "Å"
+   },
+   {
+    "sid": "a-real-star-two-lines",
+    "answer": "-224.8",
+    "tolerance": "4",
+    "unit": "km/s"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "measure-one-shift": {
+    "validate": {"calls":232,"distinct":2,"digest":"3442eff4df992531","samples":[null,{"level":"error","message":"Zoom on H-alpha and read the “Velocity” row for each synthetic star. A line at a longer wavelength than rest is a positive speed."}]}
+   }
+  },
+  "es": "same"
+ }
+}

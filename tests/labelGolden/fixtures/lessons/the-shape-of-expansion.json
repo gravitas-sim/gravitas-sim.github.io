@@ -1,0 +1,75 @@
+{
+ "id": "the-shape-of-expansion",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.acceleration-today.unit",""],
+    ["steps.the-dark-energy-share.unit","%"],
+    ["steps.how-many-sigma-is-0-3.unit",""],
+    ["steps.the-published-interval.unit",""],
+    ["steps.the-degeneracy-check.fields.1.unit","km/s/Mpc"]
+   ],
+   "numbered": [
+    ["steps.a-matter-only-universe.fields.0.hint","3303"],
+    ["steps.a-matter-only-universe.fields.1.hint","1615"],
+    ["steps.the-best-fit.fields.0.hint","0.361"],
+    ["steps.the-best-fit.fields.1.hint","0.349"],
+    ["steps.the-best-fit.fields.2.hint","0.372"],
+    ["steps.the-usual-value.fields.0.hint","30.9"],
+    ["steps.the-degeneracy-check.fields.0.hint","1688"],
+    ["steps.the-degeneracy-check.fields.1.hint","65.3"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "acceleration-today",
+    "answer": "-0.459",
+    "tolerance": "0.01",
+    "unit": ""
+   },
+   {
+    "sid": "the-dark-energy-share",
+    "answer": "63.9",
+    "tolerance": "0.3",
+    "unit": "%"
+   },
+   {
+    "sid": "how-many-sigma-is-0-3",
+    "answer": "5.56",
+    "tolerance": "0.1",
+    "unit": ""
+   },
+   {
+    "sid": "the-published-interval",
+    "answer": "1.48",
+    "tolerance": "0.06",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "a-matter-only-universe": {
+    "validate": {"calls":232,"distinct":2,"digest":"e7eb2cd3244ebdbd","samples":[null,{"level":"error","message":"Set Ωm to 1 and read “Chi-square of the curve you chose” and “Chi-square above the best fit”."}]}
+   },
+   "the-best-fit": {
+    "validate": {"calls":242,"distinct":2,"digest":"d8f443b39166ea54","samples":[null,{"level":"error","message":"Read “Best-fit matter density”, and the lower and upper numbers of “68% interval for Ωm”."}]}
+   },
+   "the-usual-value": {
+    "validate": {"calls":97,"distinct":2,"digest":"510da8b9fd271f03","samples":[null,{"level":"error","message":"Set Ωm to 0.30 and read “Chi-square above the best fit”."}]}
+   },
+   "the-degeneracy-check": {
+    "validate": {"calls":232,"distinct":2,"digest":"e5e013d99ff3562b","samples":[null,{"level":"error","message":"Set Ωm to 0.36 and the error in the absolute magnitude to 0.15, and read “Chi-square of the curve you chose” and “Hubble constant implied by that magnitude error”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

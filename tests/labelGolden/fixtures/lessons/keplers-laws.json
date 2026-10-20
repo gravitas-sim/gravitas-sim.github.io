@@ -1,0 +1,297 @@
+{
+ "id": "keplers-laws",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.measure-the-two-orbits.fields.0.unit",""],
+    ["steps.measure-the-two-orbits.fields.1.unit",""],
+    ["steps.measure-the-two-orbits.fields.2.unit","AU"],
+    ["steps.measure-the-two-orbits.fields.3.unit","AU"],
+    ["steps.measure-the-two-orbits.fields.4.unit","AU"],
+    ["steps.fast-and-slow-in-numbers.fields.0.unit","km/s"],
+    ["steps.fast-and-slow-in-numbers.fields.1.unit","AU"],
+    ["steps.fast-and-slow-in-numbers.fields.2.unit","km/s"],
+    ["steps.fast-and-slow-in-numbers.fields.3.unit","AU"],
+    ["steps.fast-and-slow-in-numbers.fields.4.unit",""],
+    ["steps.measure-four-planets.fields.0.unit",""],
+    ["steps.measure-four-planets.fields.1.unit","AU"],
+    ["steps.measure-four-planets.fields.2.unit","yr"],
+    ["steps.measure-four-planets.fields.3.unit",""],
+    ["steps.measure-four-planets.fields.4.unit","AU"],
+    ["steps.measure-four-planets.fields.5.unit","yr"],
+    ["steps.measure-four-planets.fields.6.unit",""],
+    ["steps.measure-four-planets.fields.7.unit","AU"],
+    ["steps.measure-four-planets.fields.8.unit","yr"],
+    ["steps.measure-four-planets.fields.9.unit",""],
+    ["steps.measure-four-planets.fields.10.unit","AU"],
+    ["steps.measure-four-planets.fields.11.unit","yr"],
+    ["steps.measure-four-planets.fields.12.unit",""],
+    ["steps.measure-four-planets.fields.13.unit","AU"],
+    ["steps.measure-four-planets.fields.14.unit","yr"],
+    ["steps.measure-four-planets.fields.15.unit",""],
+    ["steps.measure-four-planets.fields.16.unit","AU"],
+    ["steps.measure-four-planets.fields.17.unit","yr"],
+    ["steps.measure-four-planets.fields.18.unit",""],
+    ["steps.measure-four-planets.fields.19.unit","AU"],
+    ["steps.measure-four-planets.fields.20.unit","yr"],
+    ["steps.measure-four-planets.fields.21.unit",""],
+    ["steps.measure-four-planets.fields.22.unit","AU"],
+    ["steps.measure-four-planets.fields.23.unit","yr"],
+    ["steps.work-the-law-out-step.fields.0.unit","AU"],
+    ["steps.work-the-law-out-step.fields.1.unit","yr"],
+    ["steps.work-the-law-out-step.fields.2.unit","AU³"],
+    ["steps.work-the-law-out-step.fields.3.unit","yr²"],
+    ["steps.work-the-law-out-step.fields.4.unit",""],
+    ["steps.use-the-law.unit","years"],
+    ["steps.use-the-law.expect.unit","yr"],
+    ["steps.repeat-the-timing.fields.0.unit","yr"],
+    ["steps.repeat-the-timing.fields.1.unit","yr"],
+    ["steps.repeat-the-timing.fields.2.unit","yr"],
+    ["steps.repeat-the-timing.fields.3.unit","yr"],
+    ["steps.repeat-the-timing.fields.4.unit","yr"],
+    ["steps.repeat-the-timing.fields.5.unit",""],
+    ["steps.weighted-fit.fields.0.unit",""],
+    ["steps.weighted-fit.fields.1.unit",""],
+    ["steps.weighted-fit.fields.2.unit",""],
+    ["steps.weighted-fit.fields.3.unit",""],
+    ["steps.weighted-fit.fields.4.unit","yr"],
+    ["steps.weighted-fit.fields.5.unit","yr"],
+    ["steps.predict-with-an-error-bar.unit","years"],
+    ["steps.predict-with-an-error-bar.expect.unit","yr"],
+    ["steps.weigh-the-host-star.unit","M☉"],
+    ["steps.weigh-trappist-1-yourself.fields.0.unit",""],
+    ["steps.weigh-trappist-1-yourself.fields.1.unit","AU"],
+    ["steps.weigh-trappist-1-yourself.fields.2.unit","days"],
+    ["steps.weigh-trappist-1-yourself.fields.3.unit","yr"],
+    ["steps.weigh-trappist-1-yourself.fields.4.unit","AU cubed"],
+    ["steps.weigh-trappist-1-yourself.fields.5.unit","yr squared"],
+    ["steps.weigh-trappist-1-yourself.fields.6.unit","M_sun"],
+    ["steps.weighing-another-star.unit","M_sun"],
+    ["steps.weighing-another-star.expect.unit","M_sun"]
+   ],
+   "numbered": [
+    ["steps.measure-four-planets.fields.0.label","Planet 1: name"],
+    ["steps.measure-four-planets.fields.1.label","Planet 1: a"],
+    ["steps.measure-four-planets.fields.2.label","Planet 1: P"],
+    ["steps.measure-four-planets.fields.3.label","Planet 2: name"],
+    ["steps.measure-four-planets.fields.4.label","Planet 2: a"],
+    ["steps.measure-four-planets.fields.5.label","Planet 2: P"],
+    ["steps.measure-four-planets.fields.6.label","Planet 3: name"],
+    ["steps.measure-four-planets.fields.7.label","Planet 3: a"],
+    ["steps.measure-four-planets.fields.8.label","Planet 3: P"],
+    ["steps.measure-four-planets.fields.9.label","Planet 4: name"],
+    ["steps.measure-four-planets.fields.10.label","Planet 4: a"],
+    ["steps.measure-four-planets.fields.11.label","Planet 4: P"],
+    ["steps.measure-four-planets.fields.12.label","Planet 5: name"],
+    ["steps.measure-four-planets.fields.13.label","Planet 5: a"],
+    ["steps.measure-four-planets.fields.14.label","Planet 5: P"],
+    ["steps.measure-four-planets.fields.15.label","Planet 6: name"],
+    ["steps.measure-four-planets.fields.16.label","Planet 6: a"],
+    ["steps.measure-four-planets.fields.17.label","Planet 6: P"],
+    ["steps.measure-four-planets.fields.18.label","Planet 7: name"],
+    ["steps.measure-four-planets.fields.19.label","Planet 7: a"],
+    ["steps.measure-four-planets.fields.20.label","Planet 7: P"],
+    ["steps.measure-four-planets.fields.21.label","Planet 8: name"],
+    ["steps.measure-four-planets.fields.22.label","Planet 8: a"],
+    ["steps.measure-four-planets.fields.23.label","Planet 8: P"],
+    ["steps.work-the-law-out-step.fields.2.label","Step 1: a³"],
+    ["steps.work-the-law-out-step.fields.3.label","Step 2: P²"],
+    ["steps.work-the-law-out-step.fields.4.label","Step 3: P² ÷ a³"],
+    ["steps.repeat-the-timing.fields.0.label","Reading 1: P"],
+    ["steps.repeat-the-timing.fields.1.label","Reading 2: P"],
+    ["steps.repeat-the-timing.fields.2.label","Reading 3: P"],
+    ["steps.weighted-fit.fields.4.label","Predicted period at 4 AU"],
+    ["steps.predict-with-an-error-bar.placeholder","e.g. 8.0 ± 0.1"],
+    ["steps.weigh-the-host-star.placeholder","e.g. 1.15 ± 0.04"],
+    ["steps.weigh-trappist-1-yourself.fields.3.label","Step 1: period in years (days / 365.25)"],
+    ["steps.weigh-trappist-1-yourself.fields.4.label","Step 2: a cubed"],
+    ["steps.weigh-trappist-1-yourself.fields.5.label","Step 3: P squared"],
+    ["steps.weigh-trappist-1-yourself.fields.6.label","Step 4: star mass = a cubed / P squared"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.measure-four-planets.fields.0.label","Planeta 1: nombre"],
+    ["steps.measure-four-planets.fields.1.label","Planeta 1: a"],
+    ["steps.measure-four-planets.fields.2.label","Planeta 1: P"],
+    ["steps.measure-four-planets.fields.3.label","Planeta 2: nombre"],
+    ["steps.measure-four-planets.fields.4.label","Planeta 2: a"],
+    ["steps.measure-four-planets.fields.5.label","Planeta 2: P"],
+    ["steps.measure-four-planets.fields.6.label","Planeta 3: nombre"],
+    ["steps.measure-four-planets.fields.7.label","Planeta 3: a"],
+    ["steps.measure-four-planets.fields.8.label","Planeta 3: P"],
+    ["steps.measure-four-planets.fields.9.label","Planeta 4: nombre"],
+    ["steps.measure-four-planets.fields.10.label","Planeta 4: a"],
+    ["steps.measure-four-planets.fields.11.label","Planeta 4: P"],
+    ["steps.measure-four-planets.fields.12.label","Planeta 5: nombre"],
+    ["steps.measure-four-planets.fields.13.label","Planeta 5: a"],
+    ["steps.measure-four-planets.fields.14.label","Planeta 5: P"],
+    ["steps.measure-four-planets.fields.15.label","Planeta 6: nombre"],
+    ["steps.measure-four-planets.fields.16.label","Planeta 6: a"],
+    ["steps.measure-four-planets.fields.17.label","Planeta 6: P"],
+    ["steps.measure-four-planets.fields.18.label","Planeta 7: nombre"],
+    ["steps.measure-four-planets.fields.19.label","Planeta 7: a"],
+    ["steps.measure-four-planets.fields.20.label","Planeta 7: P"],
+    ["steps.measure-four-planets.fields.21.label","Planeta 8: nombre"],
+    ["steps.measure-four-planets.fields.22.label","Planeta 8: a"],
+    ["steps.measure-four-planets.fields.23.label","Planeta 8: P"],
+    ["steps.work-the-law-out-step.fields.2.label","Paso 1: a³"],
+    ["steps.work-the-law-out-step.fields.3.label","Paso 2: P²"],
+    ["steps.work-the-law-out-step.fields.4.label","Paso 3: P² ÷ a³"],
+    ["steps.repeat-the-timing.fields.0.label","Lectura 1: P"],
+    ["steps.repeat-the-timing.fields.1.label","Lectura 2: P"],
+    ["steps.repeat-the-timing.fields.2.label","Lectura 3: P"],
+    ["steps.weighted-fit.fields.4.label","Periodo previsto a 4 UA"],
+    ["steps.predict-with-an-error-bar.placeholder","p. ej. 8,0 ± 0,1"],
+    ["steps.weigh-the-host-star.placeholder","p. ej. 1,15 ± 0,04"],
+    ["steps.weigh-trappist-1-yourself.fields.3.label","Paso 1: periodo en años (días / 365,25)"],
+    ["steps.weigh-trappist-1-yourself.fields.4.label","Paso 2: a al cubo"],
+    ["steps.weigh-trappist-1-yourself.fields.5.label","Paso 3: P al cuadrado"],
+    ["steps.weigh-trappist-1-yourself.fields.6.label","Paso 4: masa estelar = a al cubo / P al cuadrado"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "use-the-law",
+    "answer": "8",
+    "tolerance": "0.4",
+    "unit": "years"
+   },
+   {
+    "sid": "predict-with-an-error-bar",
+    "answer": "8",
+    "tolerance": "0.4",
+    "unit": "years"
+   },
+   {
+    "sid": "weigh-the-host-star",
+    "answer": "1.15",
+    "tolerance": "0.06",
+    "unit": "M☉"
+   },
+   {
+    "sid": "weighing-another-star",
+    "answer": "0.91",
+    "tolerance": "0.12",
+    "unit": "M_sun"
+   }
+  ],
+  "decimals": [
+   [
+    "measure-the-two-orbits.ecc_a",
+    2
+   ],
+   [
+    "fast-and-slow-in-numbers.v_ratio",
+    2
+   ],
+   [
+    "work-the-law-out-step.k_a3",
+    3
+   ],
+   [
+    "work-the-law-out-step.k_P2",
+    3
+   ],
+   [
+    "work-the-law-out-step.k_ratio",
+    3
+   ],
+   [
+    "repeat-the-timing.mean",
+    5
+   ],
+   [
+    "repeat-the-timing.sem",
+    5
+   ],
+   [
+    "repeat-the-timing.frac",
+    6
+   ],
+   [
+    "weighted-fit.n",
+    0
+   ],
+   [
+    "weighted-fit.k_ols",
+    4
+   ],
+   [
+    "weighted-fit.k_w",
+    4
+   ],
+   [
+    "weighted-fit.s_k",
+    4
+   ],
+   [
+    "weighted-fit.p4",
+    3
+   ],
+   [
+    "weighted-fit.s_p4",
+    3
+   ],
+   [
+    "weigh-trappist-1-yourself.w_Py",
+    5
+   ],
+   [
+    "weigh-trappist-1-yourself.w_a3",
+    8
+   ],
+   [
+    "weigh-trappist-1-yourself.w_P2",
+    8
+   ],
+   [
+    "weigh-trappist-1-yourself.w_M",
+    4
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "measure-the-two-orbits": {
+    "probe": [[{"label":"Click a planet to select it","value":"-"}],[{"label":"Selected","value":"Eccentric Orbiter","emphasis":true},{"label":"Eccentricity e","value":"0.436"},{"label":"Semi-major axis a","value":"1.77 AU"},{"label":"Closest (periapsis)","value":"1.00 AU"},{"label":"Furthest (apoapsis)","value":"2.54 AU"},{"label":"Current speed","value":"35.7 km/s"}],[{"label":"Selected","value":"Circular Orbiter","emphasis":true},{"label":"Eccentricity e","value":"0.000"},{"label":"Semi-major axis a","value":"1.00 AU"},{"label":"Closest (periapsis)","value":"1.00 AU"},{"label":"Furthest (apoapsis)","value":"1.00 AU"},{"label":"Current speed","value":"29.8 km/s"}],[{"label":"Selected","value":"Far Orbiter","emphasis":true},{"label":"Eccentricity e","value":"0.360"},{"label":"Semi-major axis a","value":"1.84 AU"},{"label":"Closest (periapsis)","value":"1.18 AU"},{"label":"Furthest (apoapsis)","value":"2.50 AU"},{"label":"Current speed","value":"15.1 km/s"}]],
+    "validate": {"calls":242,"distinct":83,"digest":"c4b0f95c4745e780","samples":[null,{"level":"error","message":"Distances have to be positive numbers."},{"level":"warn","message":"Closest approach is larger than furthest distance: these look swapped."},{"level":"warn","message":"Your two distances average to 1.00 AU, but this orbit's semi-major axis is about 1.77 AU. Check you read both values from the same body."},{"level":"warn","message":"Your two distances average to 1.05 AU, but this orbit's semi-major axis is about 1.77 AU. Check you read both values from the same body."},{"level":"warn","message":"Your two distances average to 292.25 AU, but this orbit's semi-major axis is about 1.77 AU. Check you read both values from the same body."},{"level":"warn","message":"Your two distances average to 292.25 AU, but this orbit's semi-major axis is about 4.87 AU. Check you read both values from the same body."},{"level":"warn","message":"Your two distances average to 12.72 AU, but this orbit's semi-major axis is about 1.77 AU. Check you read both values from the same body."},{"level":"warn","message":"Your two distances average to 81.52 AU, but this orbit's semi-major axis is about 1.77 AU. Check you read both values from the same body."},{"level":"ok","message":"That averages to 1.77 AU, which matches the semi-major axis the simulation reports. The mean of the two extremes <em>is</em> a: that is what \"semi-major axis\" means."},{"level":"ok","message":"That averages to 1.67 AU, which matches the semi-major axis the simulation reports. The mean of the two extremes <em>is</em> a: that is what \"semi-major axis\" means."}]}
+   },
+   "watch-it-happen": {
+    "probe": [[{"label":"Select the Eccentric Orbiter","value":"-"}],[{"label":"Selected","value":"Eccentric Orbiter"},{"label":"Distance from star","value":"1.00 AU"},{"label":"Speed now","value":"35.7 km/s","emphasis":true},{"label":"Eccentricity e","value":"0.436"}],[{"label":"Selected","value":"Circular Orbiter"},{"label":"Distance from star","value":"1.00 AU"},{"label":"Speed now","value":"29.8 km/s","emphasis":true},{"label":"Eccentricity e","value":"0.000"}],[{"label":"Selected","value":"Far Orbiter"},{"label":"Distance from star","value":"2.50 AU"},{"label":"Speed now","value":"15.1 km/s","emphasis":true},{"label":"Eccentricity e","value":"0.360"}]]
+   },
+   "fast-and-slow-in-numbers": {
+    "probe": [[{"label":"Select a planet","value":"-"}],[{"label":"Distance from star","value":"1.00 AU","emphasis":true},{"label":"Speed now","value":"35.7 km/s","emphasis":true},{"label":"At an extreme?","value":"closest: read now"},{"label":"Closest this orbit","value":"1.00 AU"},{"label":"Furthest this orbit","value":"2.54 AU"}],[{"label":"Distance from star","value":"1.00 AU","emphasis":true},{"label":"Speed now","value":"29.8 km/s","emphasis":true},{"label":"At an extreme?","value":"closest: read now"},{"label":"Closest this orbit","value":"1.00 AU"},{"label":"Furthest this orbit","value":"1.00 AU"}],[{"label":"Distance from star","value":"2.50 AU","emphasis":true},{"label":"Speed now","value":"15.1 km/s","emphasis":true},{"label":"At an extreme?","value":"furthest: read now"},{"label":"Closest this orbit","value":"1.18 AU"},{"label":"Furthest this orbit","value":"2.50 AU"}]],
+    "validate": {"calls":248,"distinct":24,"digest":"d4e2a7ceb6c5b93f","samples":[null,{"level":"error","message":"Speeds have to be positive. Read the \"Speed now\" value, which is a magnitude."},{"level":"warn","message":"Your \"closest\" speed is lower than your \"furthest\" speed. That is the wrong way round for any bound orbit. Check which reading you took where, using the distance to tell them apart."},{"level":"warn","message":"The distance you recorded at closest approach is not smaller than the one at the far point, so the two readings are swapped or both came from the same end. The tool stops at whichever event it was armed for - check that the second arm was apoapsis."},{"level":"ok","message":"Your ratio of 2.54 matches (1+e)/(1−e) = 2.54 for this orbit's eccentricity of 0.436. That relation falls straight out of angular momentum being conserved."},{"level":"warn","message":"Your two distances imply an eccentricity of 0.141, but this orbit's is 0.436. Both have to come from the paused state at each event, measured from the star."},{"level":"warn","message":"Your two distances imply an eccentricity of 0.946, but this orbit's is 0.436. Both have to come from the paused state at each event, measured from the star."},{"level":"warn","message":"A ratio of 1.10 is close to 1, which would mean the planet barely changes speed, but this orbit has e = 0.436, so the ratio should be near 2.54. You have probably caught it twice at similar distances. Pause when \"Distance from star\" is at its smallest, then again at its largest."},{"level":"warn","message":"Your ratio is 3.27, but for e = 0.690 it should be about (1+e)/(1−e) = 5.45. Double-check both readings: pausing a little before or after the true extreme is the usual cause."}]}
+   },
+   "measure-four-planets": {
+    "probe": [[{"label":"Click a planet to measure it","value":"-"}],[{"label":"Selected","value":"Eccentric Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.77 AU"},{"label":"Period P","value":"2.36 yr","emphasis":true},{"label":"Eccentricity e","value":"0.436"}],[{"label":"Selected","value":"Circular Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.00 AU"},{"label":"Period P","value":"365 d","emphasis":true},{"label":"Eccentricity e","value":"0.000"}],[{"label":"Selected","value":"Far Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.84 AU"},{"label":"Period P","value":"2.49 yr","emphasis":true},{"label":"Eccentricity e","value":"0.360"}]],
+    "importFromSelection": [null,["Eccentric Orbiter","1.772","2.355"],["Circular Orbiter","1.000","1.000"],["Far Orbiter","1.838","2.492"]],
+    "validate": {"calls":242,"distinct":58,"digest":"44b2482c20c27af8","samples":[null,{"level":"ok","message":"All 8 of your P²/a³ values agree to within 0%. That constancy across planets of wildly different sizes is Kepler's third law. Add more planets and watch the fitted line tighten."},{"level":"error","message":"Distances and periods must both be positive."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 110.88. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 197.41. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 360450754.65. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 5.15. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 4356.24. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 1905.48. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 25.45. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 23.52. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 47326909662.59. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 42256160898.03. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 37037037.04. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 33068783.07. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 15450.06. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 13794.71. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 7311620005.93. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 6528275292.40. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 32866314029999996928.00. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 32866201372399677440.00. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 37028963362325264.00. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 37036592593925920.00. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 4.74912963375e+21. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 6407785467129629696.00. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.01 to 6407785467129629696.00. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 1.0517046222685188e+21. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 4.2402952615062174e+21. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."},{"level":"warn","message":"Your P²/a³ values range from 0.00 to 939027324347397701632.00. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets."}]}
+   },
+   "work-the-law-out-step": {
+    "probe": [[{"label":"Click a planet to re-read it","value":"-"}],[{"label":"Selected","value":"Eccentric Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.77 AU"},{"label":"Period P","value":"2.36 yr"}],[{"label":"Selected","value":"Circular Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.00 AU"},{"label":"Period P","value":"365 d"}],[{"label":"Selected","value":"Far Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.84 AU"},{"label":"Period P","value":"2.49 yr"}]],
+    "validate": {"calls":242,"distinct":148,"digest":"efefa60e36d7a233","samples":[null,{"level":"ok","message":"P² ÷ a³ = 1.000, which is 1 within your reading error. The star here is exactly one solar mass, and in years and AU that makes the constant exactly 1, so this is the check working, not a coincidence."},{"level":"ok","message":"P² ÷ a³ = 0.997, which is 1 within your reading error. The star here is exactly one solar mass, and in years and AU that makes the constant exactly 1, so this is the check working, not a coincidence."},{"level":"error","message":"Both values must be positive."},{"level":"warn","message":"P² ÷ a³ comes out as 2.06e+6, which is far from 1. That size of error almost always means a unit slip: a period entered in days instead of years, or a distance in simulation units rather than AU. Check the readout labels."},{"level":"warn","message":"P² ÷ a³ comes out as 1.67e+3, which is far from 1. That size of error almost always means a unit slip: a period entered in days instead of years, or a distance in simulation units rather than AU. Check the readout labels."},{"level":"warn","message":"P² ÷ a³ comes out as 9.65e-4, which is far from 1. That size of error almost always means a unit slip: a period entered in days instead of years, or a distance in simulation units rather than AU. Check the readout labels."},{"level":"warn","message":"P² ÷ a³ comes out as 2.19e-5, which is far from 1. That size of error almost always means a unit slip: a period entered in days instead of years, or a distance in simulation units rather than AU. Check the readout labels."},{"level":"warn","message":"P² ÷ a³ = 5.716, where it should be close to 1 for a one-solar-mass star. Re-read a and P for the same planet and check you have not mixed rows."},{"level":"warn","message":"P² ÷ a³ = 0.191, where it should be close to 1 for a one-solar-mass star. Re-read a and P for the same planet and check you have not mixed rows."},{"level":"warn","message":"P² ÷ a³ = 67.068, where it should be close to 1 for a one-solar-mass star. Re-read a and P for the same planet and check you have not mixed rows."},{"level":"warn","message":"P² ÷ a³ = 97.810, where it should be close to 1 for a one-solar-mass star. Re-read a and P for the same planet and check you have not mixed rows."},{"level":"warn","message":"P² ÷ a³ comes out as 4.73e+10, which is far from 1. That size of error almost always means a unit slip: a period entered in days instead of years, or a distance in simulation units rather than AU. Check the readout labels."},{"level":"warn","message":"P² ÷ a³ comes out as 4.23e+10, which is far from 1. That size of error almost always means a unit slip: a period entered in days instead of years, or a distance in simulation units rather than AU. Check the readout labels."},{"level":"warn","message":"P² ÷ a³ comes out as 1.97e-10, which is far from 1. That size of error almost always means a unit slip: a period entered in days instead of years, or a distance in simulation units rather than AU. Check the readout labels."},{"level":"warn","message":"P² ÷ a³ comes out as 1.76e-10, which is far from 1. That size of error almost always means a unit slip: a period entered in days instead of years, or a distance in simulation units rather than AU. Check the readout labels."}]}
+   },
+   "repeat-the-timing": {
+    "importFromSelection": [null,["2.3552"],["0.9999"],["2.4920"]],
+    "validate": {"calls":242,"distinct":152,"digest":"e0da238429c0b20c","samples":[null,{"level":"ok","message":"The mean is 1.0000 yr, uncertain by 0.003% of itself. Quote it as 1.0000 ± 0.0000 yr."},{"level":"ok","message":"The mean is 1.0000 yr, uncertain by 0.004% of itself. Quote it as 1.0000 ± 0.0000 yr."},{"level":"error","message":"A period must be positive."},{"level":"ok","message":"The mean is 2.9127 yr, uncertain by 73.412% of itself. Quote it as 2.9127 ± 2.1383 yr."},{"level":"ok","message":"The mean is 1.3778 yr, uncertain by 48.188% of itself. Quote it as 1.3778 ± 0.6639 yr."},{"level":"ok","message":"The mean is 44.8410 yr, uncertain by 70.408% of itself. Quote it as 44.8410 ± 31.5718 yr."},{"level":"ok","message":"The mean is 37.4860 yr, uncertain by 99.122% of itself. Quote it as 37.4860 ± 37.1570 yr."},{"level":"ok","message":"The mean is 851.1167 yr, uncertain by 91.914% of itself. Quote it as 851.1167 ± 782.2968 yr."},{"level":"ok","message":"The mean is 17.1897 yr, uncertain by 57.781% of itself. Quote it as 17.1897 ± 9.9324 yr."},{"level":"ok","message":"The mean is 20.1927 yr, uncertain by 47.524% of itself. Quote it as 20.1927 ± 9.5963 yr."},{"level":"ok","message":"The mean is 9.9296 yr, uncertain by 100.000% of itself. Quote it as 9.9296 ± 9.9296 yr."},{"level":"ok","message":"The mean is 11.1212 yr, uncertain by 100.000% of itself. Quote it as 11.1212 ± 11.1212 yr."}]}
+   },
+   "weighted-fit": {
+    "validate": {"calls":242,"distinct":134,"digest":"03eaabe6c079d212","samples":[null,{"level":"ok","message":"The weighted constant, 1.000 ± 1.000, and the plain one, 1.000, differ by 0.0 of its uncertainties: the same law, found two ways."},{"level":"ok","message":"The weighted constant, 7.614 ± 8.460, and the plain one, 0.050, differ by 0.9 of its uncertainties: the same law, found two ways."},{"level":"ok","message":"The weighted constant, −1.500 ± −1.500, and the plain one, −1.500, differ by 0.0 of its uncertainties: the same law, found two ways."},{"level":"warn","message":"The two constants differ by  uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"warn","message":"The two constants differ by 5.0 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"warn","message":"The two constants differ by 5.1 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"ok","message":"The weighted constant, 7.708 ± 108.200, and the plain one, 6.016, differ by 0.0 of its uncertainties: the same law, found two ways."},{"level":"warn","message":"The two constants differ by 34.2 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"warn","message":"The two constants differ by 13.1 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"warn","message":"The two constants differ by 317.8 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"warn","message":"The two constants differ by 514.7 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"ok","message":"The weighted constant, 2.355 ± 35.747, and the plain one, 0.436, differ by 0.1 of its uncertainties: the same law, found two ways."},{"level":"ok","message":"The weighted constant, 0.003 ± 35.747, and the plain one, 1.000, differ by 0.0 of its uncertainties: the same law, found two ways."},{"level":"ok","message":"The weighted constant, 1.000 ± 35.747, and the plain one, 35.747, differ by 1.0 of its uncertainties: the same law, found two ways."},{"level":"ok","message":"The weighted constant, 1.120 ± 40.036, and the plain one, 40.036, differ by 1.0 of its uncertainties: the same law, found two ways."},{"level":"warn","message":"The two constants differ by 11324.9 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"ok","message":"The weighted constant, 29.789 ± 29.789, and the plain one, 1.000, differ by 1.0 of its uncertainties: the same law, found two ways."},{"level":"ok","message":"The weighted constant, 33.364 ± 33.364, and the plain one, 1.120, differ by 1.0 of its uncertainties: the same law, found two ways."},{"level":"ok","message":"The weighted constant, 29.789 ± 1.000, and the plain one, 29.789, differ by 0.0 of its uncertainties: the same law, found two ways."},{"level":"ok","message":"The weighted constant, 33.364 ± 1.120, and the plain one, 33.364, differ by 0.0 of its uncertainties: the same law, found two ways."},{"level":"warn","message":"The two constants differ by 9596301.0 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"warn","message":"The two constants differ by 9929665.4 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"warn","message":"The two constants differ by 611733.3 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"warn","message":"The two constants differ by 611726.2 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"warn","message":"The two constants differ by 22056450.0 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."},{"level":"warn","message":"The two constants differ by 22056517.9 uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet."}]}
+   },
+   "the-same-laws-forty-light": {
+    "probe": [[{"label":"Click a planet","value":"-"}],[{"label":"Selected","value":"Eccentric Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.77 AU","emphasis":true},{"label":"Period P","value":"2.36 yr","emphasis":true},{"label":"Eccentricity e","value":"0.4357"}],[{"label":"Selected","value":"Circular Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.00 AU","emphasis":true},{"label":"Period P","value":"365 d","emphasis":true},{"label":"Eccentricity e","value":"0.0000"}],[{"label":"Selected","value":"Far Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.84 AU","emphasis":true},{"label":"Period P","value":"2.49 yr","emphasis":true},{"label":"Eccentricity e","value":"0.3600"}]]
+   },
+   "weigh-trappist-1-yourself": {
+    "probe": [[{"label":"Click a planet to read it","value":"-"}],[{"label":"Selected","value":"Eccentric Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.77 AU"},{"label":"Period P","value":"2.36 yr"}],[{"label":"Selected","value":"Circular Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.00 AU"},{"label":"Period P","value":"365 d"}],[{"label":"Selected","value":"Far Orbiter","emphasis":true},{"label":"Semi-major axis a","value":"1.84 AU"},{"label":"Period P","value":"2.49 yr"}]],
+    "validate": {"calls":254,"distinct":151,"digest":"bfc8ffcdcdd2fe4c","samples":[null,{"level":"warn","message":"That works out to 1.33e+5 solar masses, which is <strong>too high</strong>. The semi-major axis looks too large. Every orbit here is under 0.07 AU, so the value should start 0.0 something."},{"level":"warn","message":"That works out to 6.17e+5 solar masses, which is <strong>too high</strong>. The semi-major axis looks too large. Every orbit here is under 0.07 AU, so the value should start 0.0 something."},{"level":"error","message":"Both values must be positive."},{"level":"warn","message":"That works out to 2.26e+4 solar masses, which is <strong>too high</strong>. The period looks too small for days. The readout gives days, and the shortest year in this system is about 1.5 of them."},{"level":"warn","message":"That works out to 0.0000912 solar masses, which is <strong>too low</strong>. The period looks too large for days. The longest year here is about 19 of them."},{"level":"warn","message":"That works out to 4.94 solar masses, which is <strong>too high</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 8.63 solar masses, which is <strong>too high</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 315 solar masses, which is <strong>too high</strong>. The period looks too small for days. The readout gives days, and the shortest year in this system is about 1.5 of them."},{"level":"warn","message":"That works out to 746 solar masses, which is <strong>too high</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"ok","message":"0.0897 solar masses. That is TRAPPIST-1: the published value is 0.0898, one of the smallest stars known and barely above the limit for hydrogen fusion. You have weighed a star forty light years away from two numbers read off its planets. Try a different planet and you should get the same answer, because they all orbit the same mass."},{"level":"warn","message":"That works out to 0.000897 solar masses, which is <strong>too low</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 676 solar masses, which is <strong>too high</strong>. The semi-major axis looks too large. Every orbit here is under 0.07 AU, so the value should start 0.0 something."},{"level":"warn","message":"That works out to 104 solar masses, which is <strong>too high</strong>. The semi-major axis looks too large. Every orbit here is under 0.07 AU, so the value should start 0.0 something."},{"level":"warn","message":"That works out to 1.99e+3 solar masses, which is <strong>too high</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 1.70e+3 solar masses, which is <strong>too high</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 1.48e+10 solar masses, which is <strong>too high</strong>. The semi-major axis looks too large. Every orbit here is under 0.07 AU, so the value should start 0.0 something."},{"level":"warn","message":"That works out to 2.44e+11 solar masses, which is <strong>too high</strong>. The semi-major axis looks too large. Every orbit here is under 0.07 AU, so the value should start 0.0 something."},{"level":"warn","message":"That works out to 0.00000282 solar masses, which is <strong>too low</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 0.00000316 solar masses, which is <strong>too low</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 0.00360 solar masses, which is <strong>too low</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 0.00403 solar masses, which is <strong>too low</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 0.0000182 solar masses, which is <strong>too low</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 0.0000204 solar masses, which is <strong>too low</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 3.60e-12 solar masses, which is <strong>too low</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 4.06e-15 solar masses, which is <strong>too low</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 27.4 solar masses, which is <strong>too high</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."},{"level":"warn","message":"That works out to 30.7 solar masses, which is <strong>too high</strong>. Out by more than a factor of three, which usually means a and P were read from different planets."}]}
+   }
+  },
+  "es": "same"
+ }
+}

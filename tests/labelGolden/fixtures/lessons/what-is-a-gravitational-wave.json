@@ -1,0 +1,80 @@
+{
+ "id": "what-is-a-gravitational-wave",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.now-swap.fields.0.unit",""],
+    ["steps.now-swap.fields.1.unit",""],
+    ["steps.measure-a-change-in-length.fields.0.unit",""],
+    ["steps.measure-a-change-in-length.fields.1.unit",""],
+    ["steps.count-the-rhythm.fields.0.unit",""],
+    ["steps.count-the-rhythm.fields.1.unit",""],
+    ["steps.count-the-rhythm.fields.2.unit",""],
+    ["steps.the-same-source-farther-away.fields.0.unit",""],
+    ["steps.the-same-source-farther-away.fields.1.unit",""],
+    ["steps.the-same-source-farther-away.fields.2.unit",""],
+    ["steps.design-one-small-experiment.fields.0.unit",""],
+    ["steps.design-one-small-experiment.fields.1.unit",""],
+    ["steps.design-one-small-experiment.fields.2.unit",""],
+    ["steps.design-one-small-experiment.fields.3.unit",""]
+   ],
+   "numbered": [
+    ["steps.now-swap.fields.0.label","At your first stop, which way was the ring widest? (1 = across, 2 = up and down)"],
+    ["steps.now-swap.fields.1.label","Half a cycle later, which way? (1 = across, 2 = up and down)"],
+    ["steps.measure-a-change-in-length.fields.0.label","Practice: a 10 m rod that stretches by 1 mm has a strain of…"],
+    ["steps.measure-a-change-in-length.fields.0.hint","0.0001"],
+    ["steps.the-same-source-farther-away.fields.0.label","Strain amplitude at 400 Mpc"],
+    ["steps.the-same-source-farther-away.fields.1.label","Strain amplitude at 800 Mpc"],
+    ["steps.the-same-source-farther-away.fields.2.label","Strain amplitude at 1600 Mpc"],
+    ["steps.design-one-small-experiment.fields.0.label","Which control you changed (1 = a mass, 2 = distance, 3 = viewing angle)"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.now-swap.fields.1.label","Medio ciclo después, ¿en cuál? (1 = a lo ancho, 2 = de arriba abajo)"],
+    ["steps.measure-a-change-in-length.fields.0.label","Práctica: una barra de 10 m que se estira 1 mm tiene una deformación de…"],
+    ["steps.measure-a-change-in-length.fields.0.hint","0,0001"],
+    ["steps.the-same-source-farther-away.fields.0.label","Amplitud de deformación a 400 Mpc"],
+    ["steps.the-same-source-farther-away.fields.1.label","Amplitud de deformación a 800 Mpc"],
+    ["steps.the-same-source-farther-away.fields.2.label","Amplitud de deformación a 1600 Mpc"],
+    ["steps.design-one-small-experiment.fields.0.label","Qué control cambiaste (1 = una masa, 2 = distancia, 3 = ángulo de visión)"],
+    ["steps.now-swap.fields.0.label",null]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "count-the-rhythm.ratio",
+    1
+   ],
+   [
+    "design-one-small-experiment.change",
+    2
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "now-swap": {
+    "validate": {"calls":232,"distinct":3,"digest":"ac4440f423657414","samples":[{"level":"warn","message":"Two answers, each a 1 or a 2."},{"level":"warn","message":"Those are the same. Half a wave cycle later the two directions have exchanged places — try moving a little further, or a little less far."},{"level":"ok","message":"They exchange. Stretch and squeeze swap over twice in every wave cycle, and in between there is a moment when the ring really is a circle again and nothing is happening to it at all.\n\nThat last part is true of this source because you are looking at it edge-on, which is a choice this screen has made for you: seen edge-on, only one of the two polarizations reaches you, and the ring stretches, passes through a circle, and squeezes. Turn the same binary face-on and it does something quite different — the oval keeps its shape and rotates instead, and never becomes a circle at all. The readout names which of the two you are looking at."}]}
+   },
+   "measure-a-change-in-length": {
+    "validate": {"calls":232,"distinct":2,"digest":"6a8147a823ca7d0f","samples":[{"level":"warn","message":"Read \"Strain amplitude\" from the list under the plot. It will be a very small number written with a power of ten."},{"level":"warn","message":"Not quite. One millimeter is 0.001 m, and 0.001 divided by 10 is 0.0001. The strain is a fraction, so it has no units."}]}
+   },
+   "count-the-rhythm": {
+    "validate": {"calls":242,"distinct":58,"digest":"ed5a5089b77c0865","samples":[{"level":"warn","message":"Two counts, both whole numbers."},{"level":"warn","message":"You have 1.0 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"warn","message":"You have 4.0 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"error","message":"Count at least one whole orbit."},{"level":"warn","message":"You have 14.1 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"warn","message":"You have 15.2 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"warn","message":"You have 11915.6 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"warn","message":"You have 333.3 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"ok","message":"About 1.8 peaks per orbit — two, within counting error. The pattern the source shows the outside world repeats twice per orbit, so the wave does too."},{"level":"ok","message":"About 2.1 peaks per orbit — two, within counting error. The pattern the source shows the outside world repeats twice per orbit, so the wave does too."},{"level":"warn","message":"You have 4683.5 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"warn","message":"You have 333296.4 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"warn","message":"You have 333331.3 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"warn","message":"You have 9929700.0 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"warn","message":"You have 9929666.4 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"warn","message":"You have 53380500.0 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."},{"level":"warn","message":"You have 25120166.7 per orbit, and the answer for this pair is 2. Count again over a stretch where the motion is slow, and be careful to count peaks rather than every crossing of the middle line."}]}
+   },
+   "the-same-source-farther-away": {
+    "validate": {"calls":242,"distinct":109,"digest":"602240af077afaa1","samples":[{"level":"warn","message":"Three readings, from \"Strain amplitude\". Set the distance, then read it off."},{"level":"warn","message":"Your readings fall by 1.00 and then 1.00 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 0.02 and then 0.01 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"error","message":"An amplitude cannot be zero or negative. Read \"Strain amplitude\", which is the size of the wobble, rather than \"Strain now\", which passes through zero twice a cycle."},{"level":"warn","message":"Your readings fall by 8.41 and then 27.33 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 0.07 and then 14.05 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 35.75 and then 0.07 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 14.05 and then 2.54 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 2.54 and then 333.33 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 0.93 and then 848.06 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 333.33 and then 0.00 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 848.06 and then 0.00 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 0.05 and then 11915.57 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 11915.57 and then 0.00 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 1.00 and then 333333.44 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 1.00 and then 333333.33 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 333333.44 and then 0.00 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 333333.33 and then 0.00 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 9929666.43 and then 0.00 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 9929633.33 and then 0.00 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 0.03 and then 9929633.33 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 0.00 and then 9929666.43 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 0.12 and then 25120166.67 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 0.12 and then 25120238.10 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 25120166.67 and then 0.00 for each doubling. The expected answer is 2 each time. Check that only the distance changed."},{"level":"warn","message":"Your readings fall by 25120238.10 and then 0.00 for each doubling. The expected answer is 2 each time. Check that only the distance changed."}]}
+   },
+   "design-one-small-experiment": {
+    "validate": {"calls":242,"distinct":3,"digest":"04b7f627ec63522e","samples":[{"level":"warn","message":"Say which control you changed: 1, 2 or 3."},{"level":"warn","message":"Your two readings are identical. Either the control you moved does not affect the number you read, which is itself a finding worth writing down, or the change was too small to show."},{"level":"ok","message":"Two settings, one variable, and a ratio. Say in the box below what you held fixed — that half of the description is what makes it an experiment rather than an observation."}]}
+   }
+  },
+  "es": "same"
+ }
+}

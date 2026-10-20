@@ -1,0 +1,164 @@
+{
+ "id": "listening-to-spacetime",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.two-crests-per-orbit.fields.0.unit",""],
+    ["steps.two-crests-per-orbit.fields.1.unit",""],
+    ["steps.two-crests-per-orbit.fields.2.unit",""],
+    ["steps.frequency-early-and-late.fields.0.unit","Hz"],
+    ["steps.frequency-early-and-late.fields.1.unit","s"],
+    ["steps.frequency-early-and-late.fields.2.unit","Hz"],
+    ["steps.frequency-early-and-late.fields.3.unit","s"],
+    ["steps.frequency-early-and-late.fields.4.unit","×"],
+    ["steps.stop-at-a-milestone.fields.0.unit","Hz"],
+    ["steps.stop-at-a-milestone.fields.1.unit","s"],
+    ["steps.stop-at-a-milestone.fields.2.unit","Rs"],
+    ["steps.stop-at-a-milestone.fields.3.unit","v/c"],
+    ["steps.measure-time-in-band.fields.0.unit","s"],
+    ["steps.measure-time-in-band.fields.1.unit","Hz"],
+    ["steps.measure-time-in-band.fields.2.unit","s"],
+    ["steps.measure-time-in-band.fields.3.unit","Hz"],
+    ["steps.measure-time-in-band.fields.4.unit","s"],
+    ["steps.measure-time-in-band.fields.5.unit","Hz"],
+    ["steps.the-one-mass-that-matters.fields.0.unit","M☉"],
+    ["steps.the-one-mass-that-matters.fields.1.unit","M☉"],
+    ["steps.the-one-mass-that-matters.fields.2.unit","M☉"],
+    ["steps.the-one-mass-that-matters.fields.3.unit","M☉"],
+    ["steps.test-distance.fields.0.unit",""],
+    ["steps.test-distance.fields.1.unit",""],
+    ["steps.test-distance.fields.2.unit",""],
+    ["steps.test-distance.fields.3.unit",""],
+    ["steps.test-distance.fields.4.unit","Hz"],
+    ["steps.test-distance.fields.5.unit","Hz"],
+    ["steps.edge-on.fields.0.unit",""],
+    ["steps.edge-on.fields.1.unit",""],
+    ["steps.edge-on.fields.2.unit","×"],
+    ["steps.edge-on.fields.3.unit","Mpc"],
+    ["steps.looks-like-is-not-enough.fields.0.unit",""],
+    ["steps.looks-like-is-not-enough.fields.1.unit",""],
+    ["steps.looks-like-is-not-enough.fields.2.unit",""],
+    ["steps.the-same-moment.fields.0.unit","Hz"],
+    ["steps.the-same-moment.fields.1.unit","Hz"],
+    ["steps.the-same-moment.fields.2.unit","Hz"],
+    ["steps.the-same-moment.fields.3.unit","Hz"]
+   ],
+   "numbered": [
+    ["steps.measure-time-in-band.fields.0.label","18 + 14.4 M☉: whole inspiral from 20 Hz"],
+    ["steps.measure-time-in-band.fields.1.label","18 + 14.4 M☉: where it stops"],
+    ["steps.measure-time-in-band.fields.2.label","36 + 29 M☉: whole inspiral from 20 Hz"],
+    ["steps.measure-time-in-band.fields.3.label","36 + 29 M☉: where it stops"],
+    ["steps.measure-time-in-band.fields.4.label","60 + 48 M☉: whole inspiral from 20 Hz"],
+    ["steps.measure-time-in-band.fields.5.label","60 + 48 M☉: where it stops"],
+    ["steps.the-one-mass-that-matters.fields.0.label","Chirp mass of 36 + 29"],
+    ["steps.the-one-mass-that-matters.fields.1.label","Chirp mass of 50 + 19.4"],
+    ["steps.the-one-mass-that-matters.fields.2.label","Total mass of 36 + 29"],
+    ["steps.the-one-mass-that-matters.fields.3.label","Total mass of 50 + 19.4"],
+    ["steps.test-distance.fields.0.label","Strain amplitude at 400 Mpc"],
+    ["steps.test-distance.fields.1.label","Strain amplitude at 800 Mpc"],
+    ["steps.test-distance.fields.2.label","Strain amplitude at 1600 Mpc"],
+    ["steps.test-distance.fields.3.label","400 Mpc amplitude ÷ 800 Mpc amplitude"],
+    ["steps.test-distance.fields.4.label","Where it stops, at 400 Mpc"],
+    ["steps.test-distance.fields.5.label","Where it stops, at 1600 Mpc"],
+    ["steps.edge-on.fields.0.label","Peak strain at 0° (face-on)"],
+    ["steps.edge-on.fields.1.label","Peak strain at 90° (edge-on)"],
+    ["steps.edge-on.fields.3.label","Effective distance at 90°, from the readout"],
+    ["steps.looks-like-is-not-enough.fields.1.label","Similarity with 20 + 16 M☉ instead"],
+    ["steps.looks-like-is-not-enough.fields.2.label","Similarity with the correct masses at 2000 Mpc"],
+    ["steps.the-same-moment.fields.0.label","GW150914, 0.05 s before the end"],
+    ["steps.the-same-moment.fields.1.label","GW190412"],
+    ["steps.the-same-moment.fields.2.label","GW190521"],
+    ["steps.the-same-moment.fields.3.label","GW190814"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.measure-time-in-band.fields.0.label","18 + 14,4 M☉: espiral completa desde 20 Hz"],
+    ["steps.measure-time-in-band.fields.1.label","18 + 14,4 M☉: dónde se detiene"],
+    ["steps.measure-time-in-band.fields.2.label","36 + 29 M☉: espiral completa desde 20 Hz"],
+    ["steps.measure-time-in-band.fields.3.label","36 + 29 M☉: dónde se detiene"],
+    ["steps.measure-time-in-band.fields.4.label","60 + 48 M☉: espiral completa desde 20 Hz"],
+    ["steps.measure-time-in-band.fields.5.label","60 + 48 M☉: dónde se detiene"],
+    ["steps.the-one-mass-that-matters.fields.0.label","Masa de chirrido de 36 + 29"],
+    ["steps.the-one-mass-that-matters.fields.1.label","Masa de chirrido de 50 + 19,4"],
+    ["steps.the-one-mass-that-matters.fields.2.label","Masa total de 36 + 29"],
+    ["steps.the-one-mass-that-matters.fields.3.label","Masa total de 50 + 19,4"],
+    ["steps.test-distance.fields.0.label","Amplitud de la deformación a 400 Mpc"],
+    ["steps.test-distance.fields.1.label","Amplitud de la deformación a 800 Mpc"],
+    ["steps.test-distance.fields.2.label","Amplitud de la deformación a 1600 Mpc"],
+    ["steps.test-distance.fields.3.label","Amplitud a 400 Mpc ÷ amplitud a 800 Mpc"],
+    ["steps.test-distance.fields.4.label","Dónde se detiene, a 400 Mpc"],
+    ["steps.test-distance.fields.5.label","Dónde se detiene, a 1600 Mpc"],
+    ["steps.edge-on.fields.0.label","Deformación máxima a 0° (de frente)"],
+    ["steps.edge-on.fields.1.label","Deformación máxima a 90° (de canto)"],
+    ["steps.edge-on.fields.3.label","Distancia efectiva a 90°, según la lectura"],
+    ["steps.looks-like-is-not-enough.fields.1.label","Similitud con 20 + 16 M☉ en su lugar"],
+    ["steps.looks-like-is-not-enough.fields.2.label","Similitud con las masas correctas a 2000 Mpc"],
+    ["steps.the-same-moment.fields.0.label","GW150914, 0,05 s antes del final"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": [
+   [
+    "two-crests-per-orbit.ratio",
+    2
+   ],
+   [
+    "frequency-early-and-late.factor",
+    2
+   ],
+   [
+    "the-one-mass-that-matters.total_a",
+    1
+   ],
+   [
+    "the-one-mass-that-matters.total_b",
+    1
+   ],
+   [
+    "test-distance.ratio_1",
+    2
+   ],
+   [
+    "edge-on.weaker",
+    2
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "two-crests-per-orbit": {
+    "validate": {"calls":242,"distinct":57,"digest":"1aa0a00e20fff27f","samples":[{"level":"warn","message":"Count at least one whole orbit."},{"level":"warn","message":"You have 1.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 0.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 592.4 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 174.8 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 52.5 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 14.1 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 11915.6 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},null,{"level":"warn","message":"You have 4683.5 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 333296.4 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 333331.3 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 9929700.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 9929666.4 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 53380500.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 25120166.7 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."}]}
+   },
+   "frequency-early-and-late": {
+    "validate": {"calls":242,"distinct":4,"digest":"c4a5353532c2d059","samples":[{"level":"warn","message":"Read the frequency at both ends."},{"level":"warn","message":"The later reading should be the higher one. Check which end of the plot each was taken at."},{"level":"warn","message":"The later reading should be closer to the merger, so its time before merger should be the smaller of the two."},null]}
+   },
+   "stop-at-a-milestone": {
+    "validate": {"calls":242,"distinct":30,"digest":"a7583a275c52d8da","samples":[{"level":"warn","message":"Read the frequency you stopped at."},{"level":"warn","message":"You are at 1.0 Hz. Nudge the playhead until it reads close to 50."},{"level":"warn","message":"You are at 0.0 Hz. Nudge the playhead until it reads close to 50."},{"level":"warn","message":"You are at -1.5 Hz. Nudge the playhead until it reads close to 50."},{"level":"warn","message":"You are at 21.3 Hz. Nudge the playhead until it reads close to 50."},{"level":"warn","message":"You are at 35.7 Hz. Nudge the playhead until it reads close to 50."}]}
+   },
+   "measure-time-in-band": {
+    "validate": {"calls":242,"distinct":3,"digest":"4010ded65e132f9a","samples":[{"level":"warn","message":"Fill in all six readings."},{"level":"warn","message":"The lighter pair should stay in band longest. Check that each time goes with its own pair of masses."},{"level":"warn","message":"The lighter pair should reach the highest frequency before the model stops. Check the pairing again."}]}
+   },
+   "the-one-mass-that-matters": {
+    "validate": {"calls":242,"distinct":104,"digest":"650b021620d92146","samples":[{"level":"warn","message":"Read the chirp mass for both pairs from the top line of the readout."},null,{"level":"warn","message":"You have 6.1 and 676.5. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 0.0 and 164.6. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 0.0 and 2.1. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 1.8 and 0.4. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 578.1 and 697.0. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 35.7 and 1.0. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 14.1 and 2.5. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 1.0 and 14.1. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 2.4 and 35.7. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 35.7 and 14.1. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 40.0 and 15.7. Those should come out close to each other — check the masses you entered."}]}
+   },
+   "test-distance": {
+    "validate": {"calls":242,"distinct":68,"digest":"3a85a4085186696c","samples":[{"level":"warn","message":"Read the amplitude at all three distances. The readout gives it on the line marked \"Strain amplitude\" - not \"Strain now\", which is the instantaneous signed value and passes through zero twice a cycle."},{"level":"warn","message":"Your ratio is 1.00. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 0.99. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"error","message":"An amplitude cannot be zero or negative. That is the signature of having read \"Strain now\", which is the signed value at one instant: use the \"Strain amplitude\" line instead."},{"level":"warn","message":"Your ratio is 79.65. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 23.09. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 333.33. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 848.06. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Those two should be the same number. The frequency at which the model stops depends on the masses, not on how far away you are."},{"level":"warn","message":"Your ratio is 11915.57. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 333333.44. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 333333.33. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 9929666.43. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 9929633.33. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 25120166.67. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 25120238.10. Doubling the distance should halve the strain, so this should come out near 2."}]}
+   },
+   "edge-on": {
+    "validate": {"calls":242,"distinct":72,"digest":"4897f598270002fd","samples":[{"level":"warn","message":"Read the peak strain at both angles."},{"level":"warn","message":"Your ratio is 1.00. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is 0.32. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is NaN. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is 1345.74. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is 35.75. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is 14.05. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is 333.33. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is 848.06. Edge-on should be about half as strong."},{"level":"warn","message":"The readout should give about 800 Mpc at 90° with the source at 400. You have 2."},{"level":"warn","message":"The readout should give about 800 Mpc at 90° with the source at 400. You have 3."},{"level":"warn","message":"Your ratio is 11915.57. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is 333333.44. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is 333333.33. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is 9929666.43. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is 9929633.33. Edge-on should be about half as strong."},{"level":"warn","message":"The readout should give about 800 Mpc at 90° with the source at 400. You have 32."},{"level":"warn","message":"The readout should give about 800 Mpc at 90° with the source at 400. You have 36."},{"level":"warn","message":"Your ratio is 25120166.67. Edge-on should be about half as strong."},{"level":"warn","message":"Your ratio is 25120238.10. Edge-on should be about half as strong."}]}
+   },
+   "looks-like-is-not-enough": {
+    "validate": {"calls":242,"distinct":4,"digest":"6dbacfc93ba37f1f","samples":[{"level":"warn","message":"Record all three similarities."},{"level":"warn","message":"The wrong-mass template should score lower than the right one. Check which is pinned."},{"level":"warn","message":"The matching template should score high. Check that you pinned A with the same masses you are now showing."},null]}
+   },
+   "the-same-moment": {
+    "validate": {"calls":242,"distinct":2,"digest":"d35709014def5db1","samples":[{"level":"warn","message":"Four frequencies, from the line marked \"All five, 0.05 s before the end\". GW170817 has a dash there, so it is not one of them."},{"level":"error","message":"Check GW150914: it reads about 58 Hz on the line marked \"All five, 0.05 s before the end\"."}]}
+   }
+  },
+  "es": "same"
+ }
+}
