@@ -27,7 +27,7 @@
 // scenarios.js takes its settings object as a parameter.
 // =============================================================================
 
-import { applyPreset, scenarioId } from './scenarios.js';
+import { applyPreset, resetPresetMemory, scenarioId } from './scenarios.js';
 import { formatSeed, parseSeed } from './rng.js';
 
 /** 2 names a scenario by id, 1 by its English name; both are read. */
@@ -185,11 +185,17 @@ export function pristineSettingsFor(scenario, DEFAULT_SETTINGS) {
   scratch.preset_scenario = scenario;
   // A scratch view object, so probing the preset cannot move the real camera.
   const scratchView = { zoom: 1, pan: { x: 0, y: 0 } };
+  // applyPreset remembers which scenario it set up last, so that a rebuild of
+  // the same one carries a laboratory's variables across. A probe is nobody's
+  // rebuild: left to remember, the diff a panel draws mid-sweep makes the next
+  // trial forget the value it was just given.
+  const remembered = resetPresetMemory();
   try {
     applyPreset(scratch, DEFAULT_SETTINGS, scratchView);
   } catch (err) {
     console.warn('Could not derive baseline settings for', scenario, err);
   }
+  resetPresetMemory(remembered);
   // applyPreset signs off by setting preset_scenario to 'None', a sentinel that
   // stops the preset re-applying on every later settings change. Left alone it
   // would make this baseline claim to be a different scenario than the one it

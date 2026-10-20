@@ -1801,9 +1801,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, _state) => {
   SETTINGS.preset_scenario = 'None';
 };
 
-/** Forget which scenario was last set up. For tests and for a full reset. */
-export function resetPresetMemory() {
-  lastPresetApplied = null;
+/** Set which scenario was last set up (none: forget); says which it was. */
+export function resetPresetMemory(to = null) {
+  return [lastPresetApplied, (lastPresetApplied = to)][0];
 }
 
 export { applyPreset };
