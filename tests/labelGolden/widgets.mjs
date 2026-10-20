@@ -330,23 +330,27 @@ function frame(widget, v, ctx, spec) {
     widget.draw(fakeCanvas(texts), v, ctx, spec);
     return 'drawn';
   });
+  const clean = x =>
+    noiseFloor && typeof x === 'string' ? maskNoise(x, noiseFloor) : x;
   const rows = outcome(() =>
     widget.readout(v, ctx, spec).map(r => ({
-      label: r.label,
-      value: r.value,
+      label: clean(r.label),
+      value: clean(r.value),
       ...(r.emphasis ? { emphasis: true } : {}),
     }))
   );
   const controls = (widget.controls || []).map(c =>
     outcome(() =>
-      c.format
-        ? c.format(Number(v[c.id]))
-        : `${toFixedOnce.call(Number(v[c.id]), c.decimals ?? 2)}${c.unit ? ` ${c.unit}` : ''}`
+      clean(
+        c.format
+          ? c.format(Number(v[c.id]))
+          : `${toFixedOnce.call(Number(v[c.id]), c.decimals ?? 2)}${c.unit ? ` ${c.unit}` : ''}`
+      )
     )
   );
   return {
     rows,
-    canvas: drawn === 'drawn' ? texts : { drew: drawn, texts },
+    canvas: drawn === 'drawn' ? texts.map(clean) : { drew: drawn, texts },
     controls,
   };
 }
@@ -387,6 +391,34 @@ function staticOf(widget, specs, defaults) {
 
 const normalizeDefaults = d =>
   Object.fromEntries(Object.entries(d).map(([k, x]) => [k, num(x)]));
+
+/**
+ * The families whose printed numbers include integration noise: the precession
+ * of a Newtonian ellipse is exactly zero, and what the power-law instrument
+ * prints for it is the rounding error of the run ("-0.00000 °", "3.79e-15 of
+ * total |p|"). That error has a different sign and different digits on Node 20
+ * and Node 24, whose Math.pow, log and atan2 differ in the last place, and CI
+ * failed on it. Whatever such a family prints with a magnitude below its floor
+ * is recorded as a zero of the same shape: the sign and the digits are dropped,
+ * the number of decimals and the exponent's presence are kept. Everything
+ * above the floor is recorded as printed.
+ */
+let noiseFloor = 0;
+const NOISE_FLOOR = new Map([['powerLaw', 1e-4]]);
+
+const NUMBER_TOKEN = /[-\u2212]?(?:\d+\.\d+(?:e[-+]?\d+)?|\d+e[-+]?\d+)/gi;
+
+/** A text with each number below `floor` in magnitude written as a zero. */
+export function maskNoise(text, floor) {
+  return text.replace(NUMBER_TOKEN, token => {
+    const value = Number(token.replace('\u2212', '-'));
+    if (!Number.isFinite(value) || Math.abs(value) >= floor) return token;
+    return token
+      .replace(/^[-\u2212]/, '')
+      .replace(/e[-+]?\d+/i, 'e-N')
+      .replace(/\d/g, '0');
+  });
+}
 
 const FRAMES = new Set([1, 2, 4, 8, 16, 24]);
 const FEW_FRAMES = new Set([4, 24]);
@@ -694,22 +726,36 @@ export async function recordWidgets({
               widgets.LAZY_FAMILIES
             )) {
               if (only && !only.includes(family)) continue;
-              for (const widget of entry.ids.map(id => widgets.getWidget(id))) {
-                const harvested = (specsBy[locale].get(widget.id) ?? []).map(
-                  s => s.spec
-                );
-                const keys = rowKeysOf(entry);
-                const specs = [
-                  { id: widget.id },
-                  ...(keys.length ? [{ id: widget.id, rows: keys }] : []),
-                  ...harvested,
-                ];
-                (perLocale[locale][family] ??= {})[widget.id] = recordWidget(
-                  widget,
-                  specs,
-                  contexts,
-                  widgets
-                );
+              const recordFamily = () => {
+                for (const widget of entry.ids.map(id =>
+                  widgets.getWidget(id)
+                )) {
+                  const harvested = (specsBy[locale].get(widget.id) ?? []).map(
+                    s => s.spec
+                  );
+                  const keys = rowKeysOf(entry);
+                  const specs = [
+                    { id: widget.id },
+                    ...(keys.length ? [{ id: widget.id, rows: keys }] : []),
+                    ...harvested,
+                  ];
+                  (perLocale[locale][family] ??= {})[widget.id] = recordWidget(
+                    widget,
+                    specs,
+                    contexts,
+                    widgets
+                  );
+                }
+              };
+              // No await in this loop, on purpose: gw-lab's Listen button
+              // starts a dynamic import whose answer lands at the next await,
+              // so a recording that yielded mid-run would read that lab before
+              // or after it by chance.
+              noiseFloor = NOISE_FLOOR.get(family) ?? 0;
+              try {
+                recordFamily();
+              } finally {
+                noiseFloor = 0;
               }
             }
           }
