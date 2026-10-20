@@ -5,6 +5,7 @@ import {
   onTierChange,
   setTier,
   currentTier,
+  prefersReducedMotion,
 } from './quality.js';
 
 /** The last value of SETTINGS.quality_tier pushed into js/quality.js. */
@@ -536,7 +537,7 @@ const starRgba = (index, alpha) => {
 function rebuildStarLayers() {
   if (!starField) return;
   const { width: W, height: H } = starField;
-  const animate = !prefersReducedMotionForStars();
+  const animate = !prefersReducedMotion();
   const key = `${starField.seed}:${W}x${H}:${starField.count}:${animate}`;
   if (!starLayersStale && starLayerKey === key) return;
 
@@ -564,20 +565,6 @@ function rebuildStarLayers() {
 
   starLayersStale = false;
   starLayerKey = key;
-}
-
-/** Has the reader asked for less movement? Cached; matchMedia is not free. */
-let starMotionQuery = null;
-function prefersReducedMotionForStars() {
-  if (typeof window === 'undefined' || !window.matchMedia) return false;
-  if (!starMotionQuery) {
-    try {
-      starMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    } catch {
-      return false;
-    }
-  }
-  return Boolean(starMotionQuery.matches);
 }
 
 /**
@@ -869,7 +856,7 @@ function drawStarfield() {
   }
 
   // --- the few that twinkle ---------------------------------------------------
-  if (!prefersReducedMotionForStars() && starField.twinklers.length) {
+  if (!prefersReducedMotion() && starField.twinklers.length) {
     const time = Date.now() * 0.001;
     for (const star of starField.twinklers) {
       const off = offsets[star.layer] || { x: 0, y: 0 };

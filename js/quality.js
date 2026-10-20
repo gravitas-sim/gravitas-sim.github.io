@@ -55,6 +55,8 @@
 // promote costs some fidelity, being quick to demote costs a stutter.
 // =============================================================================
 
+import { KEY_MOTION } from './names.js';
+
 /**
  * Time ignored at start-up, while the first world and starfield are built.
  *
@@ -384,11 +386,23 @@ export function renderOverrides() {
 // The other preference a drawing has to respect
 // -----------------------------------------------------------------------------
 
-/** The media query, made once. Null where matchMedia is not available. */
-let motionQuery;
-
 /** Set by an embed that asks for reduced motion (js/embedOptions.js). */
 let motionReduced = false;
+
+/**
+ * The reader's own override of the system setting, kept on this device.
+ *
+ * 'system' follows the operating system; 'reduce' behaves as if it asked for
+ * reduced motion; 'step' does that and also starts the world paused, so
+ * nothing moves until the reader steps it or presses play. An override only
+ * ever adds reduction, as an embed's does: a reader whose system asks for
+ * reduced motion keeps it whatever is chosen here. It is a preference of the
+ * person at the machine, so it is stored beside the theme and never travels in
+ * a share link (INTERACTION.md, "Reduced motion").
+ */
+export const MOTION_MODES = Object.freeze(['system', 'reduce', 'step']);
+const MOTION_KEY = KEY_MOTION;
+let motionMode = 'system';
 
 /**
  * Reduce motion on this page, whatever the reader's own setting.
@@ -401,6 +415,48 @@ export function reduceMotion() {
   motionReduced = true;
 }
 
+/** @returns {string} 'system', 'reduce' or 'step' */
+export const motionPreference = () => motionMode;
+
+/**
+ * Choose the override, apply it to the page and keep it.
+ *
+ * `data-motion` on the root is what css/tokens.css and the two blanket rules
+ * answer to, so every transition and animation follows the choice as it does
+ * the media query.
+ *
+ * @param {string} mode - One of MOTION_MODES; anything else is 'system'
+ * @param {{remember?: boolean}} [options] - Pass remember false to apply only
+ */
+export function setMotionPreference(mode, { remember = true } = {}) {
+  motionMode = MOTION_MODES.includes(mode) ? mode : 'system';
+  if (typeof document !== 'undefined') {
+    if (motionMode === 'system') delete document.documentElement.dataset.motion;
+    else document.documentElement.dataset.motion = motionMode;
+  }
+  if (!remember) return;
+  try {
+    if (motionMode === 'system') window.localStorage?.removeItem(MOTION_KEY);
+    else window.localStorage?.setItem(MOTION_KEY, motionMode);
+  } catch {
+    /* storage unavailable: the choice holds for this page */
+  }
+}
+
+/** Restore the stored override at start-up. */
+export function initMotionPreference() {
+  let saved = null;
+  try {
+    saved = window.localStorage?.getItem(MOTION_KEY);
+  } catch {
+    /* storage unavailable */
+  }
+  setMotionPreference(saved, { remember: false });
+}
+
+/** The media query, made once. Null where matchMedia is not available. */
+let motionQuery;
+
 /**
  * Whether the reader has asked for less motion.
  *
@@ -409,10 +465,11 @@ export function reduceMotion() {
  * unrelated things have to consult. Live rather than cached, because the
  * preference can be changed while the page is open.
  *
- * @returns {boolean} True when prefers-reduced-motion is set to reduce
+ * @returns {boolean} True when prefers-reduced-motion is set to reduce, or the
+ *   reader's override or an embed asks for it
  */
 export function prefersReducedMotion() {
-  if (motionReduced) return true;
+  if (motionReduced || motionMode !== 'system') return true;
   if (motionQuery === undefined) {
     motionQuery =
       typeof window !== 'undefined' && typeof window.matchMedia === 'function'
@@ -421,3 +478,6 @@ export function prefersReducedMotion() {
   }
   return Boolean(motionQuery?.matches);
 }
+
+/** @returns {boolean} Whether the world should start paused (the 'step' mode) */
+export const stepMotion = () => motionMode === 'step';

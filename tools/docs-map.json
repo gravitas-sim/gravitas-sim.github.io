@@ -345,6 +345,13 @@
       "student": false
     },
     {
+      "file": "INTERACTION.md",
+      "kind": "policy",
+      "purpose": "The interaction contract: keyboard model, single-pointer rule, focus, announcements and reduced motion.",
+      "owner": 155,
+      "student": false
+    },
+    {
       "file": "LAB3D.md",
       "kind": "feature",
       "purpose": "The 3-D small-N kernel.",

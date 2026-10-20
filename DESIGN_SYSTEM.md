@@ -535,6 +535,40 @@ follows it: grounds and edges go red, text goes warm. The plots keep the
 object hues, as the simulation's canvas does. A proposal to give the plots
 their own red set is in the token proposals below.
 
+## Touch measurement
+
+How any instrument that reads a value off a picture is operated by a finger,
+defined here once for Prompt 179 and every later instrument
+([INTERACTION.md](INTERACTION.md), the single-pointer rule). A mouse and a
+keyboard keep what they have; this is the pattern a touch reader gets.
+
+- **Place, then nudge.** A tap puts a marker where the finger landed; a drag is
+  never required to reach a value. Beside the marker, one pad of controls moves
+  it by the keyboard's three step sizes (fine a quarter step, one step, coarse
+  four) and a confirm and a cancel, so a touch reader has Enter and Escape.
+  The marker stays until it is confirmed or cancelled.
+- **The loupe.** While a finger is down on the picture, a 3x magnifier circle,
+  96 px across, is drawn 72 px above the contact point (below it near the top
+  edge), with the marker's crosshair at its centre, because the finger hides
+  what it points at. It is a picture of the same pixels, not a second
+  measurement. It is not shown for a mouse.
+- **Handle sizes.** A handle the reader grabs is at least 24 x 24 CSS px, the
+  floor of WCAG 2.5.8 (Target Size, Minimum) and the design system's size for
+  every control today, and 44 x 44 on a touch screen (`pointer: coarse`).
+  A handle for a precise task (a ruler's end, an aperture's edge) is a larger,
+  dedicated one, 56 x 56, with a visible dot of the true size at its centre.
+- **Spacing.** A target smaller than 24 px is allowed only if a 24 px circle
+  centred on it meets no other target's circle (2.5.8's spacing exception);
+  two adjacent 24 px handles need no gap. Handles that cannot meet this, such
+  as the ends of a short ruler, move apart or are reached by selecting one and
+  nudging.
+- **Inline exceptions.** A link inside a sentence is exempt (2.5.8's inline
+  exception) and is not enlarged; neither is a control the browser draws, or
+  one whose size is essential to what it measures. Each use of an exception is
+  named in the instrument's own documentation.
+- **No drag is required, and no second finger.** Pinch and rotate have buttons;
+  the nudge pad is the keyboard's arrow keys on a screen.
+
 ## Token proposals
 
 `css/tokens.css` is not edited by component work. What the components above

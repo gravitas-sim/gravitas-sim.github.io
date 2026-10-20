@@ -40,7 +40,7 @@ import {
 import { SETTINGS, state, current_scenario_name } from './appState.js';
 import { announce } from './notify.js';
 import { t, onLocaleChange } from './i18n/index.js';
-import { registerShortcut } from './shortcuts.js';
+import { registerShortcut, nudgeScale } from './shortcuts.js';
 import { glyphMarkup } from './inspectorView.js';
 import {
   toolsPointerDown,
@@ -168,11 +168,11 @@ export function updateOrbitHelper(shiftSnap) {
 // with the same velocity scale as the mouse.
 // =============================================================================
 
-/** How far one arrow press moves the aim, in canvas pixels. */
+/**
+ * How far one arrow press moves the aim, in canvas pixels. Shift for a bigger
+ * stride, Alt for a finer one: the three sizes are js/shortcuts.js's.
+ */
 const AIM_STEP = 24;
-/** Shift for a bigger stride, Alt for a finer one. */
-const AIM_COARSE = 4;
-const AIM_FINE = 0.25;
 
 /** Null when the keyboard is not placing anything. */
 let keyboardAim = null;
@@ -256,11 +256,11 @@ export function commitKeyboardPlacement() {
  *
  * @param {number} dx - Horizontal, in steps
  * @param {number} dy - Vertical, in steps
- * @param {object} [opts] - {coarse, fine}
+ * @param {number} [scale] - Multiplier of one step, from nudgeScale()
  */
-function moveKeyboardAim(dx, dy, { coarse = false, fine = false } = {}) {
+function moveKeyboardAim(dx, dy, scale = 1) {
   if (!keyboardAim) return;
-  const step = AIM_STEP * (coarse ? AIM_COARSE : fine ? AIM_FINE : 1);
+  const step = AIM_STEP * scale;
   // Canvas pixels, like state.mouse, not the CSS box.
   const { width, height } = canvas;
   state.mouse.x = Math.max(0, Math.min(width, state.mouse.x + dx * step));
@@ -838,7 +838,7 @@ export function initPlacement(ctx) {
       };
       if (arrows[e.key]) {
         const [dx, dy] = arrows[e.key];
-        moveKeyboardAim(dx, dy, { coarse: e.shiftKey, fine: e.altKey });
+        moveKeyboardAim(dx, dy, nudgeScale(e));
         e.preventDefault();
         e.stopPropagation();
         return;
