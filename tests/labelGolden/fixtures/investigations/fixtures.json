@@ -1,0 +1,35 @@
+{
+ "en": {
+  "tess-light-curve": [
+   "QUALITY: any nonzero flag drops the cadence (1288 dropped)",
+   "TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR: a cadence without a finite value in all three is dropped (0 dropped)",
+   "bin: a bin with fewer than 3 kept cadences is dropped (3 dropped)",
+   "20-minute bins average 10 two-minute cadences each, which rounds ingress and egress to a bin.",
+   "Flux is kept to 1 ppm and its error to 5 ppm."
+  ],
+  "crowded": {
+   "1/1": [
+    "crowding: the pipeline gives 100.0% of the aperture's light to this star (CROWDSAP 1), and the aperture holds 100.0% of the star's light (FLFRCSAP 1)"
+   ],
+   "0.9923/0.8641": [
+    "crowding: the pipeline gives 99.2% of the aperture's light to this star (CROWDSAP 0.9923), and the aperture holds 86.4% of the star's light (FLFRCSAP 0.8641)"
+   ],
+   "0.995/0.9949": [
+    "crowding: the pipeline gives 99.5% of the aperture's light to this star (CROWDSAP 0.995), and the aperture holds 99.5% of the star's light (FLFRCSAP 0.9949)"
+   ],
+   "0.8641/0.5": [
+    "crowding: the pipeline gives 86.4% of the aperture's light to this star (CROWDSAP 0.8641), and the aperture holds 50.0% of the star's light (FLFRCSAP 0.5)"
+   ],
+   "0.5/0.123": [
+    "crowding: the pipeline gives 50.0% of the aperture's light to this star (CROWDSAP 0.5), and the aperture holds 12.3% of the star's light (FLFRCSAP 0.123)"
+   ],
+   "0.1234/0.0456": [
+    "crowding: the pipeline gives 12.3% of the aperture's light to this star (CROWDSAP 0.1234), and the aperture holds 4.6% of the star's light (FLFRCSAP 0.0456)"
+   ],
+   "0.99999/0.00051": [
+    "crowding: the pipeline gives 100.0% of the aperture's light to this star (CROWDSAP 0.99999), and the aperture holds 0.1% of the star's light (FLFRCSAP 0.00051)"
+   ]
+  }
+ },
+ "es": "same"
+}

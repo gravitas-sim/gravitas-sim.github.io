@@ -1,0 +1,66 @@
+{
+ "en": [
+  {
+   "name": "SU Dra",
+   "position": "SU Dra: RA 174.48586°, Dec +67.32974° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=174.48586%20%2B67.32974&fov=0.2"
+  },
+  {
+   "name": "Nowhere A",
+   "position": "Nowhere A: RA 0.00000°, Dec +0.00000° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=0.00000%20%2B0.00000&fov=0.2"
+  },
+  {
+   "name": "Nowhere B",
+   "position": "Nowhere B: RA 0.00001°, Dec −0.00001° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=0.00001%20-0.00001&fov=0.2"
+  },
+  {
+   "name": "Nowhere C",
+   "position": "Nowhere C: RA 360.00000°, Dec −90.00000° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=360.00000%20-90.00000&fov=0.2"
+  },
+  {
+   "name": "Nowhere D",
+   "position": "Nowhere D: RA 83.82208°, Dec −5.39111° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=83.82208%20-5.39111&fov=0.2"
+  },
+  {
+   "name": "Nowhere E",
+   "position": "Nowhere E: RA 12.34568°, Dec +45.00000° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=12.34568%20%2B45.00000&fov=0.2"
+  }
+ ],
+ "es": [
+  {
+   "name": "SU Dra",
+   "position": "SU Dra: AR 174.48586°, Dec +67.32974° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=174.48586%20%2B67.32974&fov=0.2"
+  },
+  {
+   "name": "Nowhere A",
+   "position": "Nowhere A: AR 0.00000°, Dec +0.00000° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=0.00000%20%2B0.00000&fov=0.2"
+  },
+  {
+   "name": "Nowhere B",
+   "position": "Nowhere B: AR 0.00001°, Dec −0.00001° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=0.00001%20-0.00001&fov=0.2"
+  },
+  {
+   "name": "Nowhere C",
+   "position": "Nowhere C: AR 360.00000°, Dec −90.00000° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=360.00000%20-90.00000&fov=0.2"
+  },
+  {
+   "name": "Nowhere D",
+   "position": "Nowhere D: AR 83.82208°, Dec −5.39111° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=83.82208%20-5.39111&fov=0.2"
+  },
+  {
+   "name": "Nowhere E",
+   "position": "Nowhere E: AR 12.34568°, Dec +45.00000° (RR*)",
+   "aladin": "https://aladin.cds.unistra.fr/AladinLite/?target=12.34568%20%2B45.00000&fov=0.2"
+  }
+ ]
+}
