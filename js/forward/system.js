@@ -35,7 +35,7 @@ import {
   SOLAR_MASS_KG,
   SOLAR_RADIUS_M,
 } from '../constants.js';
-import { solveKepler } from '../inference/rv.js';
+import { solveKepler } from '../orbital.js';
 import { geometryFor } from '../observerGeometry.js';
 
 const DEG = Math.PI / 180;

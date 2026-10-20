@@ -131,6 +131,49 @@ describe('announce()', () => {
   });
 });
 
+describe("announce() into a region of the page's own", () => {
+  beforeEach(() => {
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      '<p id="pageStatus" role="status" aria-live="polite"></p>'
+    );
+  });
+  const page = () => document.getElementById('pageStatus');
+
+  test('writes there by id or by element, and leaves the shared region alone', () => {
+    announce('Saved.', true, 'pageStatus');
+    expect(page().textContent).toBe('Saved.');
+    announce('Copied.', true, page());
+    expect(page().textContent).toBe('Copied.');
+    expect(region.textContent).toBe('');
+  });
+
+  test('repeats and again false behave as they do in the shared region', () => {
+    announce('Saved.', true, 'pageStatus');
+    announce('Saved.', true, 'pageStatus');
+    expect(page().textContent).toBe(`Saved.${NBSP}`);
+    announce('Saved.', false, 'pageStatus');
+    expect(page().textContent).toBe(`Saved.${NBSP}`);
+    announce('Saved.', true, 'pageStatus');
+    expect(page().textContent).toBe('Saved.');
+  });
+
+  test('an empty message clears it, and clearing is not a repeat', () => {
+    announce('Saved.', true, 'pageStatus');
+    announce('', true, 'pageStatus');
+    expect(page().textContent).toBe('');
+    announce('Saved.', true, 'pageStatus');
+    expect(page().textContent).toBe('Saved.');
+  });
+
+  test('a region that was asked for and is absent says nothing, anywhere', () => {
+    announce('Lost.', true, 'nowhere');
+    announce('Lost.', true, null);
+    expect(region.textContent).toBe('');
+    expect(page().textContent).toBe('');
+  });
+});
+
 describe('toast()', () => {
   test('a toast repeated after a frame is announced again', async () => {
     toast('Link copied.');

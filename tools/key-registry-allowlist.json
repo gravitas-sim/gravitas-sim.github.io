@@ -59,9 +59,6 @@
     "js/lab3d/view/guidePanel.js": {
       "gravitas.lab3d-guide-report": 1
     },
-    "js/notify.js": {
-      "gravitasToast": 2
-    },
     "js/offline.js": {
       "gravitasBeforeUpdate": 1,
       "gravitasUpdateReady": 1,
