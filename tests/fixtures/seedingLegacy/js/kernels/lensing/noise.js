@@ -2,7 +2,7 @@
 // the same construction the inference core's synthetic signals use, kept here
 // so the lensing instruments do not import the inference core's transit and
 // radial-velocity code.
-import { mulberry32, normalizeSeed } from '../../rng.js';
+import { mulberry32, normalizeSeed } from '../../../../../../js/rng.js';
 
 export function gaussianNoise(seed) {
   const u = mulberry32(normalizeSeed(String(seed)));

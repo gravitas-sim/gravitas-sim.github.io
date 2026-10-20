@@ -37,7 +37,7 @@
 // Pure and Worker-safe: no DOM, no Math.random, imports only pure modules.
 // =============================================================================
 
-import { mulberry32, normalizeSeed } from '../rng.js';
+import { stream } from '../random/streams.js';
 import { gaussianAt } from '../rvSurvey.js';
 import { planSchedule } from '../rvSchedule.js';
 import { isObject, readVersioned } from '../platform/common.js';
@@ -353,8 +353,7 @@ export function planEpochs(setup) {
 }
 
 /** A uniform in [0, 1) for one epoch of one stream, keyed as the noise is. */
-export const uniformAt = (seed, index) =>
-  mulberry32(normalizeSeed(`${seed}:${index}`))();
+export const uniformAt = (seed, index) => stream('forward', seed, index)();
 
 /**
  * Add a setup's systematics and noise to model values.

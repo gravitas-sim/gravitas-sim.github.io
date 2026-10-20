@@ -20,6 +20,7 @@
 // =============================================================================
 
 import { einsteinAngle, massFromEinstein } from './lens.js';
+import { gaussian, stream } from '../../random/streams.js';
 
 const A = u => (u * u + 2) / (u * Math.sqrt(u * u + 4));
 
@@ -143,5 +144,5 @@ export function massForTimescale(tEDays, dl, ds, vMs) {
   return massFromEinstein((tEDays * SECONDS_PER_DAY * vMs) / dl, dl, ds);
 }
 
-/** A seeded standard normal source (Box-Muller over mulberry32), for synthetic events. */
-export { gaussianNoise } from './noise.js';
+/** A seeded standard normal source (the noise stream's), for synthetic events. */
+export const gaussianNoise = seed => gaussian(stream('noise', String(seed)));

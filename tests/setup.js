@@ -90,3 +90,10 @@ if (typeof global.DecompressionStream === 'undefined') {
 if (typeof global.Blob === 'undefined' || !global.Blob.prototype.stream) {
   global.Blob = Blob;
 }
+
+// The seeded streams are linked before a test starts. Under Jest's module
+// linker (the sources run through node:vm), several concurrent dynamic imports
+// of a module that nothing has linked yet lose it - "request for '../rng.js' is
+// not in cache" - when whenWidgetsReady() fetches every family at once and
+// many of them reach js/random/streams.js. A browser does not.
+await import('../js/random/streams.js');

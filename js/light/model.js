@@ -12,6 +12,7 @@ import { planckLambda } from '../kernels/radiation/planck.js';
 import { K_BOLTZMANN } from '../kernels/radiation/constants.js';
 import { zFromVelocity } from '../kernels/radiation/doppler.js';
 import { measureLine } from '../measure/spectrumLine.js';
+import { state } from '../random/streams.js';
 
 const { exp, pow } = Math;
 
@@ -119,18 +120,6 @@ export const SYNTH_STARS = Object.freeze([
   { id: 's3', vKmS: 12, snr: 15, seed: 3308 },
 ]);
 
-/** mulberry32: a small seeded generator (Tommy Ettinger), uniform on [0, 1). */
-function rng(seed) {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
 /**
  * One synthetic spectrum on the given wavelength grid, Angstroms.
  * @param {ArrayLike<number>} lambdaA - Observed wavelengths, vacuum Angstroms
@@ -139,7 +128,7 @@ function rng(seed) {
  */
 export function syntheticFlux(lambdaA, { vKmS, snr, seed }) {
   const z = zFromVelocity(vKmS);
-  const next = rng(seed);
+  const next = state('noise', seed);
   const T = 5800;
   const norm = planckLambda(550e-9, T);
   const out = new Float64Array(lambdaA.length);
