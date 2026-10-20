@@ -383,6 +383,7 @@ function copyForCheck() {
     'js/gw',
     'js/rng.js',
     'js/random',
+    'js/numeric',
     // The radiation packs' checks run the kernel they are measured with.
     'js/kernels/radiation',
     // The galactic packs' rows are sidecar files.
