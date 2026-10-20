@@ -92,6 +92,9 @@ const LAYERS = [
       // The named random streams (Prompt 149): js/rng.js's algorithm under
       // stream identities, with nothing else in it, beside js/rng.js.
       /^js\/random\//,
+      // The numerical routines (Prompt 152): arithmetic over values handed in,
+      // each module importing nothing, beside js/random and js/units.js.
+      /^js\/numeric\//,
       /^js\/theme\.js$/,
       /^js\/i18n\//,
       // Pure geometry over values handed in: the follow camera's arithmetic and

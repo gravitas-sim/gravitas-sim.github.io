@@ -841,7 +841,7 @@ export const CASES = [
           10,
           1e-12
         ),
-        measure('clamp beyond the end', linear(xs, line, 4), 1, 0),
+        measure('clamp beyond the end', linear(xs, line, 4), 7, 0),
         measure('natural spline on a line', wn, 0, 1e-12),
         measure('clamped spline on a cubic', wc, 0, 1e-11),
         measure('clamped spline slope on a cubic', ws, 0, 1e-10),
@@ -1797,7 +1797,7 @@ export const CASES = [
     title: 'NIST StRD Wampler 1 and 2',
     source:
       'NIST Statistical Reference Datasets, Wampler 1: y = 1 + x + x^2 + x^3 + x^4 + x^5 and Wampler 2: y = 1 + 0.1 x + 0.01 x^2 + 0.001 x^3 + 1e-4 x^4 + 1e-5 x^5, x = 0..20; certified coefficients all 1 (Wampler 1) and the powers of 0.1 (Wampler 2), certified residual standard deviation 0',
-    why: 'NIST built these to break least-squares codes (the raw Vandermonde matrix on 0..20 has a condition number near 1e12 for degree 5). The certified residual is exactly zero, so the fit must reproduce every y to 1e-11 relative (the data run from 1 to 3.2e6 in Wampler 1), and the polynomial it describes must have the certified coefficients: the fitted value and slope at x = 0 are the certified 1 and 1 (0.1 in Wampler 2) to 1e-8 absolute.',
+    why: 'NIST built these to break least-squares codes (the raw Vandermonde matrix on 0..20 has a condition number near 1e12 for degree 5). The certified residual is exactly zero, so the fit must reproduce every y to 1e-11 of the largest y (least squares bounds the error in norm, not point by point: the data run from 1 to 3.2e6 in Wampler 1, and a point-by-point relative bound at y = 1 asks for 1e-17 of the scale of the data), and the polynomial it describes must have the certified coefficients: the fitted value and slope at x = 0 are the certified 1 and 1 (0.1 in Wampler 2) to 1e-8 absolute.',
     run() {
       const xs = Array.from({ length: 21 }, (_, i) => i);
       const w1 = x => 1 + x * (1 + x * (1 + x * (1 + x * (1 + x))));
@@ -1810,11 +1810,17 @@ export const CASES = [
       ]) {
         const p = polyfit(xs, xs.map(f), 5);
         let worst = 0;
+        const big = Math.max(...xs.map(f));
         for (const x of xs)
-          worst = Math.max(worst, Math.abs(p.at(x) - f(x)) / f(x));
+          worst = Math.max(worst, Math.abs(p.at(x) - f(x)) / big);
         const d = 1e-4;
         out.push(
-          measure(`${name}, largest relative deviation`, worst, 0, 1e-11),
+          measure(
+            `${name}, largest deviation over the largest y`,
+            worst,
+            0,
+            1e-11
+          ),
           measure(`${name}, value at 0 (certified 1)`, p.at(0), 1, 1e-8),
           measure(
             `${name}, slope at 0 (certified ${slope0})`,

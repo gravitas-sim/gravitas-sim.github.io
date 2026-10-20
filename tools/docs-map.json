@@ -478,6 +478,13 @@
       "student": false
     },
     {
+      "file": "NUMERICS.md",
+      "kind": "feature",
+      "purpose": "Numerical routines: roots, quadrature, interpolation, small linear algebra and a polynomial fit, each with a contract and a consumer.",
+      "owner": 152,
+      "student": false
+    },
+    {
       "file": "OBJECT_INSPECTOR.md",
       "kind": "feature",
       "purpose": "The object inspector.",

@@ -227,11 +227,18 @@ const OBSERVATORY_ONLY = new Set([
  * modules, its notebooks and its example inputs are never precached, so no
  * install downloads them and no offline reader is promised them.
  */
-const NEVER_PRECACHED = [
+export const NEVER_PRECACHED = [
   /^js\/compute\//,
   /^js\/computePage\.js$/,
   /^compute\//,
   /^compute-frame\//,
+  // The numerical routines (Prompt 152, NUMERICS.md): no shipped module imports
+  // one yet, so no page can fetch one and an install has no use for them; the
+  // first-visit tier has 95 bytes of room and they weigh 8 KB. The first
+  // consumer deletes this line, and tests/numericRoutines.test.js fails until
+  // it does: a module a page imports is installed, and its bytes are that
+  // change's to find.
+  /^js\/numeric\//,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,
