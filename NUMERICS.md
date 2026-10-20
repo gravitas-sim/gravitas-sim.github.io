@@ -5,9 +5,10 @@ contract and a named consumer: root finding on a bracket, quadrature,
 interpolation on a table, small dense linear algebra and a polynomial
 least-squares fit. Prompt 152 extracts only what the first consumers of
 Roadmap III need, validates each routine against closed forms, independent
-methods and published test problems, and moves nobody onto them yet: no
-consumer fits the first-visit install without a decision that is not this
-prompt's (see "Costs and waits"). The decision is D-R10-28 in
+methods and published test problems, and moves the two consumers that are proved
+bit for bit onto them: `js/kernels/cosmology/flrw.js` onto `quadrature.js` and
+`js/inference/fit.js` onto `linalg.js`. The first-visit ceiling rose by 2,300
+bytes for it (see "Costs and waits"). The decision is D-R10-28 in
 `DECISION_REGISTER.md`.
 
 It is not a numerical library. The integrators of the Sandbox, the 3-D kernel
@@ -63,9 +64,9 @@ and nothing here claims otherwise.
 | Newton with a bracket | 200, 227 | `solveKepler` in `js/orbital.js` and `js/lab3d/elements.js` (a fixed tolerance; `elements.js` is a source of the instructor bundle) | no: different tolerance, and one is in the bundle's closure | extract; the Kepler solvers stay (D-R10-18, D-R10-25) |
 | Linear interpolation on a table | 219, 255 | value lerps only (`js/utils.js` clamps t, `js/bodyDrawSky.js`, `js/stellar/tracks.js`), `js/rvSurvey.js` `interpolate`, `js/lab3d/snapshot.js` `interpolate` (state Hermite) | no: they blend two values, they do not look a table up | extract the table form; the lerps stay |
 | Cubic spline | 219, 255 | none | n/a | extract |
-| Composite Gauss-Legendre | 255, 200 | `js/kernels/cosmology/flrw.js` `gl` (the tables and the panel arithmetic); `js/kernels/lensing/microlensing.js` `gauss` (one panel; the midpoint is (a + b)/2 where flrw's is a + 0.5(b - a), so one ulp of the node differs) | flrw.js: identical, proved; microlensing.js: one ulp, not proved | extract from flrw.js; flrw.js waits to adopt; microlensing.js waits for a bounded difference |
+| Composite Gauss-Legendre | 255, 200 | `js/kernels/cosmology/flrw.js` `gl` (the tables and the panel arithmetic); `js/kernels/lensing/microlensing.js` `gauss` (one panel; the midpoint is (a + b)/2 where flrw's is a + 0.5(b - a), so one ulp of the node differs) | flrw.js: identical, proved; microlensing.js: one ulp, not proved | extract from flrw.js; flrw.js adopted; microlensing.js waits for a bounded difference |
 | Adaptive quadrature | 200 | none (`js/kernels/radiation/photometry.js` `integrate` is a trapezoid over a tabulated band: data, not a function) | n/a | extract; the trapezoid stays |
-| Cholesky, SPD solve and inverse, Jacobi eigenvalues | 154, 256 | `js/inference/fit.js` `solveSpd`, `invertSpd`, `eigenSymmetric` (the authority) | identical, proved | extract; fit.js waits to adopt |
+| Cholesky, SPD solve and inverse, Jacobi eigenvalues | 154, 256 | `js/inference/fit.js` `solveSpd`, `invertSpd`, `eigenSymmetric` (the authority) | identical, proved | extract; fit.js adopted |
 | General solve and inverse | 154, 256 | `js/kernels/galactic/motion.js` `solve` and `invert` (elimination, the same operation order as `solve` here, no singularity test: unproved), `js/kernels/variables/fit.js` `invertAndSolve` (Gauss-Jordan), `js/kernels/detector/lightcurve.js` `invert3` (cofactors), `js/inference/rvCircular.js` and `js/inference/infer.js` `solve3` (an in-place elimination with a 1e-14 test; Cramer with a 1e-300 test) | no for four of the five: different algorithms and singularity contracts | extract the elimination; the five stay until a consumer shows a measured reason |
 | Polynomial least squares | 213 | none (`js/kernels/variables/fit.js` `harmonicFit` is a Fourier series; the Observatory's models are in `js/inference/`) | n/a | extract (QR, because the normal equations square the condition number) |
 | Fast Fourier transform | 221 | none | n/a | not extracted: 221 adds it with its own validation, if its gate passes |
@@ -76,8 +77,8 @@ and nothing here claims otherwise.
 
 | Area | Existing authority | Missing behavior | Adopter | Duplication removed |
 | --- | --- | --- | --- | --- |
-| Symmetric linear algebra | `js/inference/fit.js` | `cholesky` as an export, a general `solve`/`inverse`, an eigensolver that is not private | 154, 256 (statistics, combined contours); `fit.js` itself | none yet: `fit.js` still holds its copy until it adopts (waits) |
-| Quadrature | `js/kernels/cosmology/flrw.js` | an exported rule, adaptive refinement | 255, 200; `flrw.js` itself | none yet |
+| Symmetric linear algebra | `js/inference/fit.js` | `cholesky` as an export, a general `solve`/`inverse`, an eigensolver that is not private | 154, 256 (statistics, combined contours); `fit.js` itself | `fit.js`: its three routines (738 B gzipped) |
+| Quadrature | `js/kernels/cosmology/flrw.js` | an exported rule, adaptive refinement | 255, 200; `flrw.js` itself | `flrw.js`: its tables and rule (407 B gzipped) |
 | Root finding | none | a bracketed solver | 200, 227 | none |
 | Interpolation | none | table lookup and a spline | 219, 255 | none |
 | Polynomial fit | none | a stable polynomial least-squares fit | 213 | none |
@@ -327,18 +328,24 @@ differs by a few hundred bytes of gzip over an install this size).
 
 - **The routines in the install.** The five modules are about 8.2 KB gzipped
   (roots 1.6, quadrature 1.45, interpolation 1.5, linear algebra 1.9,
-  polynomial fit 1.7). The first-visit tier is 5,175,201 of 5,175,296 bytes: 95
-  bytes of room. A module no page imports is not needed offline, so the build
-  does not install `js/numeric/` (`NEVER_PRECACHED` in
-  `tools/build-service-worker.mjs`); the first consumer deletes that line, and
-  `tests/numericRoutines.test.js` fails until it does. The tier is untouched by
-  this change.
-- **An experiment, not committed.** `flrw.js` on `gaussLegendre` and `fit.js` on
-  `linalg.js`, with the modules installed: every one of the 30 routes of
-  `tools/route-budget.mjs` is identical to the base in requests and kilobytes in
-  both configurations (the sources, and the build), so no request ceiling is
-  approached; the first-visit tier was 5,182,146, over its ceiling by 6,850
-  bytes (the modules cost 8,209, the two adoptions saved 1,145).
+  polynomial fit 1.7). `quadrature.js` and `linalg.js` are imported by
+  `flrw.js` and `fit.js` and are installed. A module no page imports is not
+  needed offline, so the build does not install `roots.js`, `interp.js` and
+  `polyfit.js` (per-file `NEVER_PRECACHED` entries in
+  `tools/build-service-worker.mjs`, about 4.8 KB gzipped); the first adopter of
+  each deletes its entry, and `tests/numericRoutines.test.js` fails until it
+  does.
+- **The first-visit tier.** Before: 5,175,201 of 5,175,296 bytes (95 bytes of
+  room). After the two adoptions: 5,177,543 (the two modules add 3,377 and the
+  adoptions free 1,035, the 1,145 of the two removed bodies less their import
+  lines: +2,342 net), an overrun of 2,247 over the old ceiling. The ceiling in `tools/data-budget.json` is raised to 5,177,596, the overrun
+  rounded up to the next 100, with 53 bytes of room (Carl, in chat, 2026-10-20:
+  "Allow the raise"; the standing size approval does not cover this file). The
+  idle tier is untouched.
+- **Routes.** With both adopted and the modules installed, every one of the 30
+  routes of `tools/route-budget.mjs` is identical to the base in requests and
+  kilobytes in both configurations (the sources, and the build), so no request
+  ceiling is approached and none moved; the module line ceilings are unchanged.
 - **The static screen** (`tools/key-registry-free.mjs`, which counts every
   literal dynamic import as a load) puts `flrw.js`, `microlensing.js`, `fit.js`,
   `infer.js` and `photometry.js` on five pages (the front door, the instructor
@@ -346,18 +353,14 @@ differs by a few hundred bytes of gzip over an install this size).
   families), `rvCircular.js` on two and `cr3bp.js` on one; the measurement above
   is what a visitor actually pays.
 
-| Consumer | Moves to | Equivalence | Source saved (gzipped) | Module added | Net on the first-visit tier | Waits for |
-| --- | --- | --- | --- | --- | --- | --- |
-| `js/kernels/cosmology/flrw.js` (the integrals of 255) | `quadrature.js` | bit for bit, proved | 407 B | 1,450 B (844 B for the rule alone) | +1,043 B (+437) | 95 B of room, or savings elsewhere |
-| `js/inference/fit.js` (the SPD routines of 154, 256) | `linalg.js` | bit for bit, proved | 738 B | 1,927 B | +1,189 B | the same |
-| `js/kernels/lensing/microlensing.js` | `quadrature.js` | one ulp of the midpoint, not proved | 340 B | (shared) | -340 B with flrw.js | a committed tolerance, then the above |
-| `js/kernels/galactic/motion.js`, `variables/fit.js`, `detector/lightcurve.js`, `inference/rvCircular.js`, `inference/infer.js` | `linalg.js` | different algorithms | not computed | (shared) | not computed | a measured reason |
-| Consumers 154, 200, 213, 219, 227, 255, 256 | the module each needs | new code | 0 | 1.45 to 1.9 KB each | their own | their own prompts, which now know the figure |
+| Consumer | Moves to | Equivalence | Source saved (gzipped, before its import line) | Module added | State |
+| --- | --- | --- | --- | --- | --- |
+| `js/kernels/cosmology/flrw.js` (the integrals of 255) | `quadrature.js` | bit for bit, proved (Q3) | 407 B | 1,450 B | adopted |
+| `js/inference/fit.js` (the SPD routines of 154, 256) | `linalg.js` | bit for bit, proved (L3) | 738 B | 1,927 B | adopted |
+| `js/kernels/lensing/microlensing.js` | `quadrature.js` | one ulp of the midpoint, not proved | 340 B | (shared) | waits for a committed tolerance |
+| `js/kernels/galactic/motion.js`, `variables/fit.js`, `detector/lightcurve.js`, `inference/rvCircular.js`, `inference/infer.js` | `linalg.js` | different algorithms | not computed | (shared) | waits for a measured reason |
+| Consumers 154, 200, 213, 219, 227, 255, 256 | the module each needs | new code | 0 | 1.45 to 1.9 KB each | their own prompts; `roots`, `interp` and `polyfit` carry 1.6, 1.5 and 1.7 KB into the install when their first adopter lands |
 
-Adopting both proved consumers together would save 1,145 bytes against 3,377
-for the two modules: +2,232 B on a tier with 95 bytes of room. The cheapest way
-in is a decision about the tier (a raise, which the standing approval does not
-cover, or a saving found elsewhere), or an adopter that is itself a new module
-and carries the bytes. Nothing in this prompt is a closure file of the
-instructor bundle's sources, and none was edited; `js/lab3d/elements.js`
-(`solveKepler`) is one, and is not a candidate.
+Nothing in this prompt is a closure file of the instructor bundle's sources,
+and none was edited; `js/lab3d/elements.js` (`solveKepler`) is one, and is not a
+candidate.

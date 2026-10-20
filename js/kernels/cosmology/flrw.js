@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // The kernel of Roadmap II Prompt 91, as COSMOLOGY_GATE.md section 3 measured
 // it (flat and open Lambda-CDM; the open matter-only family is the same code at
-// Omega_L = 0). Pure and Worker-safe: no DOM, no clock, no imports.
+// Omega_L = 0). Pure and Worker-safe: no DOM, no clock; its one import is the quadrature rule.
 //
 //   E(z)^2 = Om (1+z)^3 + Ok (1+z)^2 + OL,   Ok = 1 - Om - OL >= 0
 //   D_C = (c/H0) Int_0^z dz'/E(z')
@@ -19,7 +19,8 @@
 // velocities, clustering or growth of structure. Closed universes (Ok < 0) are
 // refused. Units: distances in Mpc, times in Gyr, H0 in km/s/Mpc.
 //
-// The integrals are composite 16-point Gauss-Legendre in u = ln(1+z) with
+// The integrals are composite 16-point Gauss-Legendre (js/numeric/quadrature.js, the
+// rule this file held until Prompt 152, bit for bit) in u = ln(1+z) with
 // panels at most 0.25 wide. Against astropy the kernel is within 1.8e-12 and
 // against quadrature within 9e-16 on the 900-point grid of the validation
 // suite (tests/cosmologyKernel.test.js).
@@ -27,6 +28,8 @@
 
 // Bound once, not read as globals: in Jest's vm context every free global read
 // goes through the context, which made integration loops 10x slower than in Node.
+import { gaussLegendre as gl } from '../../numeric/quadrature.js';
+
 const { Math } = globalThis;
 
 export const C_KMS = 299792.458;
@@ -34,33 +37,6 @@ const MPC_KM = 3.085677581491367e19;
 const JULIAN_YEAR_S = 365.25 * 86400;
 /** (1/H0) in Gyr for H0 = 1 km/s/Mpc. */
 export const GYR_PER_INV_H0 = MPC_KM / JULIAN_YEAR_S / 1e9;
-
-// 16-point Gauss-Legendre on [-1, 1]: the eight positive nodes and weights.
-const GL_X = [
-  0.0950125098376374, 0.2816035507792589, 0.4580167776572274,
-  0.6178762444026438, 0.755404408355003, 0.8656312023878318, 0.9445750230732326,
-  0.9894009349916499,
-];
-const GL_W = [
-  0.1894506104550685, 0.1826034150449236, 0.1691565193950025,
-  0.1495959888165767, 0.1246289712555339, 0.0951585116824928,
-  0.0622535239386479, 0.0271524594117541,
-];
-
-/** Integral of f over [a, b]: n panels of 16 nodes. */
-function gl(f, a, b, n) {
-  const h = (b - a) / n;
-  const half = h / 2;
-  let sum = 0;
-  for (let k = 0; k < n; k++) {
-    const mid = a + (k + 0.5) * h;
-    let s = 0;
-    for (let i = 0; i < 8; i++)
-      s += GL_W[i] * (f(mid - half * GL_X[i]) + f(mid + half * GL_X[i]));
-    sum += s * half;
-  }
-  return sum;
-}
 
 /** Thrown for a universe with Omega_k < 0, which this kernel does not model. */
 export class ClosedModelError extends Error {

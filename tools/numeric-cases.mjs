@@ -574,8 +574,8 @@ export const CASES = [
     kind: 'oracle',
     title: "Bit for bit against the cosmology kernel's own rule",
     source:
-      "tests/fixtures/numericLegacy/flrwGl.js, flrw.js's tables and gl verbatim at 2a6ce1c5, on five integrands, four intervals and panel counts 1 to 9; and createCosmology's comovingDistance, lookbackTime and age against the same arithmetic through the new module",
-    why: "The rule the module extracts is flrw.js's, so adopting it must change no bit of any distance, time or age: the count of results that differ in any bit, in one process (so one engine), must be 0. This is the compatibility proof a consumer's move needs.",
+      "tests/fixtures/numericLegacy/flrwGl.js, flrw.js's tables and gl verbatim at 2a6ce1c5, on five integrands, four intervals and panel counts 1 to 9; and createCosmology's comovingDistance, lookbackTime and age (flrw.js now calls the module) against the same arithmetic through the verbatim copy",
+    why: "The rule the module extracts is flrw.js's, so adopting it changes no bit of any distance, time or age (flrw.js adopted it in this prompt, and the kernel is compared with the verbatim copy of what it held): the count of results that differ in any bit, in one process (so one engine), must be 0. This is the compatibility proof a consumer's move needs.",
     run() {
       const fs = [
         Math.sin,
@@ -605,7 +605,7 @@ export const CASES = [
       const panels = z => Math.max(1, Math.ceil(Math.log1p(z) / 0.25));
       const integ = (g, z) =>
         z > 0
-          ? gaussLegendre(
+          ? legacyGl(
               u => g(Math.expm1(u)) * Math.exp(u),
               0,
               Math.log1p(z),
@@ -625,7 +625,7 @@ export const CASES = [
       kernel.push(k.age());
       mine.push(
         (GYR_PER_INV_H0 / 70) *
-          gaussLegendre(
+          legacyGl(
             s => (2 * s * s) / Math.sqrt(0.3 + k.Ok * s * s + 0.7 * s ** 6),
             0,
             1,

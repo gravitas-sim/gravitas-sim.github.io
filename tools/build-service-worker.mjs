@@ -232,13 +232,14 @@ export const NEVER_PRECACHED = [
   /^js\/computePage\.js$/,
   /^compute\//,
   /^compute-frame\//,
-  // The numerical routines (Prompt 152, NUMERICS.md): no shipped module imports
-  // one yet, so no page can fetch one and an install has no use for them; the
-  // first-visit tier has 95 bytes of room and they weigh 8 KB. The first
-  // consumer deletes this line, and tests/numericRoutines.test.js fails until
-  // it does: a module a page imports is installed, and its bytes are that
+  // The numerical routines no shipped module imports yet (Prompt 152,
+  // NUMERICS.md): no page can fetch one, so an install has no use for it, and
+  // the first-visit tier has little room. quadrature.js (flrw.js) and linalg.js
+  // (fit.js) are imported and so installed. Each of these three is deleted from
+  // this list by its first adopter, and tests/numericRoutines.test.js fails
+  // until it is: a module a page imports is installed, and its bytes are that
   // change's to find.
-  /^js\/numeric\//,
+  /^js\/numeric\/(roots|interp|polyfit)\.js$/,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

@@ -123,29 +123,53 @@ describe('NUMERICS.md', () => {
 });
 
 describe('the install', () => {
-  const numeric = modules.map(f => `js/numeric/${f}`);
-
-  test('does not list the routines while no shipped module imports one', async () => {
-    for (const f of numeric)
-      expect(NEVER_PRECACHED.some(re => re.test(f))).toBe(true);
-    const { paths } = await buildManifest();
-    expect(paths.filter(p => p.startsWith('js/numeric/'))).toEqual([]);
-  });
-
-  test('no shipped module imports one: the first consumer deletes the NEVER_PRECACHED line for js/numeric and this test with it', () => {
-    // Modules a page can fetch. js/compute/ and js/validation/ are never
-    // installed either, so they may import a routine without making one needed.
-    const shipped = walk('js').filter(
-      f =>
-        !f.startsWith('js/numeric/') &&
-        !NEVER_PRECACHED.some(re => re.test(f)) &&
-        !f.startsWith('js/validation/')
-    );
-    const importing = shipped.filter(f =>
-      /from\s+['"][./]*\/numeric\/|import\(\s*['"][./]*\/numeric\//.test(
+  // quadrature.js (js/kernels/cosmology/flrw.js) and linalg.js
+  // (js/inference/fit.js) are imported by a shipped module, so they are
+  // installed; the other three are not, and each stays out of the install
+  // until its first adopter deletes its NEVER_PRECACHED entry (and its name
+  // here).
+  const adopted = ['quadrature', 'linalg'];
+  const waiting = ['roots', 'interp', 'polyfit'];
+  const file = n => `js/numeric/${n}.js`;
+  // Modules a page can fetch. js/compute/ and js/validation/ are never
+  // installed either, so they may import a routine without making one needed.
+  const shipped = walk('js').filter(
+    f =>
+      !f.startsWith('js/numeric/') &&
+      !NEVER_PRECACHED.some(re => re.test(f)) &&
+      !f.startsWith('js/validation/')
+  );
+  const importersOf = n =>
+    shipped.filter(f =>
+      new RegExp(`['"][./]*/numeric/${n}\\.js['"]`).test(
         readFileSync(f, 'utf8')
       )
     );
-    expect(importing).toEqual([]);
+
+  test('the five modules are the adopted and the waiting', () => {
+    expect([...adopted, ...waiting].map(n => `${n}.js`).sort()).toEqual(
+      modules.slice().sort()
+    );
+  });
+
+  for (const n of waiting)
+    test(`${n}.js is not installed while no shipped module imports it: its first adopter deletes its NEVER_PRECACHED entry and this name`, async () => {
+      expect(NEVER_PRECACHED.some(re => re.test(file(n)))).toBe(true);
+      expect(importersOf(n)).toEqual([]);
+      const { paths } = await buildManifest();
+      expect(paths).not.toContain(file(n));
+    });
+
+  for (const n of adopted)
+    test(`${n}.js is imported by a shipped module, so it is installed`, async () => {
+      expect(importersOf(n).length).toBeGreaterThan(0);
+      expect(NEVER_PRECACHED.some(re => re.test(file(n)))).toBe(false);
+      const { paths } = await buildManifest();
+      expect(paths).toContain(file(n));
+    });
+
+  test('the adopters are the two that were proved bit for bit', () => {
+    expect(importersOf('quadrature')).toEqual(['js/kernels/cosmology/flrw.js']);
+    expect(importersOf('linalg')).toEqual(['js/inference/fit.js']);
   });
 });
