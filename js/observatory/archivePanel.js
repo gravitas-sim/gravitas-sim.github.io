@@ -19,6 +19,7 @@
 
 import { resolveName, gaiaSourcesAt, gaiaEpochs } from '../archive/cds.js';
 import { idbStore } from '../archive/cache.js';
+import { fixed } from '../format.js';
 import { BANDS, toObservation } from '../archive/gaiaEpochs.js';
 import { EN_ARCHIVE } from '../i18n/en.archive.js';
 import { ES_ARCHIVE } from '../i18n/es.archive.js';
@@ -254,8 +255,8 @@ function build(root, ctx, initialName) {
       id: 'arcPosition',
       text: t('obs.arc.position', {
         name: pos.name,
-        ra: pos.ra.toFixed(5),
-        dec: `${pos.dec < 0 ? '−' : '+'}${Math.abs(pos.dec).toFixed(5)}`,
+        ra: fixed(pos.ra, 5),
+        dec: `${pos.dec < 0 ? '−' : '+'}${fixed(Math.abs(pos.dec), 5)}`,
         type: pos.otype ?? '?',
       }),
     });

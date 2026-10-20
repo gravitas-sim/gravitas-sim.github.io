@@ -14,7 +14,7 @@
 // in kept the lesson routes' request count where it was.
 // =============================================================================
 
-import { formatNumber, tickLabel } from '../format.js';
+import { fixed, formatNumber, tickLabel } from '../format.js';
 import { evidenceFrom } from '../data/investigations/provenance.js';
 import { getLocale, t } from '../i18n/index.js';
 import {
@@ -538,10 +538,10 @@ export function drawEllipse(canvas, e) {
   // Readout, top left, clear of the figure
   ctx.textAlign = 'left';
   ctx.fillStyle = ink;
-  ctx.fillText(`e = ${e.toFixed(3)}`, 6, 16);
+  ctx.fillText(`e = ${fixed(e, 3)}`, 6, 16);
   ctx.fillStyle = muted;
   ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, monospace';
-  ctx.fillText(`b/a = ${(b / a).toFixed(3)}`, 6, 33);
+  ctx.fillText(`b/a = ${fixed(b / a, 3)}`, 6, 33);
 }
 
 // --- Plotting -----------------------------------------------------------------

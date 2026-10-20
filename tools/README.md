@@ -101,6 +101,7 @@ current, and the orchestrator checks it.
 | `lab3d-bench.mjs` | The 3-D kernel's throughput, desktop measured and low-end modelled |  |
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
 | `label-golden.mjs` | npm run label:golden [-- --regenerate-label-golden] | `npm run label:golden` |
+| `label-golden-investigations.mjs` | npm run label:golden:investigations [-- --regenerate-label-golden] | `npm run label:golden:investigations` |
 | `lesson-coverage.mjs` | npm run lesson:coverage | `npm run lesson:coverage` |
 | `lesson-golden-dom.mjs` | npm run lesson:golden:dom -- --regenerate-lesson-golden | `npm run lesson:golden:dom` |
 | `lesson-golden.mjs` | npm run lesson:golden -- --regenerate-lesson-golden | `npm run lesson:golden` |
