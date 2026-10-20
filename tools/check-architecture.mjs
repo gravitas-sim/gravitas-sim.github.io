@@ -141,6 +141,9 @@ const LAYERS = [
       'and the unit tests import directly.',
     match: [
       /^js\/orbital\.js$/,
+      // The orbital layer (Prompt 148): elements and state vectors with their
+      // units, frame and clock named. Numbers in, numbers out, beside orbital.js.
+      /^js\/orbital\//,
       /^js\/darkMatter\.js$/,
       /^js\/mond\.js$/,
       /^js\/blackHolePhysics\.js$/,

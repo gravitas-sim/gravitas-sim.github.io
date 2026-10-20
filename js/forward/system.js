@@ -23,6 +23,9 @@
 // a two-body orbit with the star; several planets' reflex motions add, which is
 // the standard approximation when they are far from each other in period.
 //
+// Orbit conversions go through js/orbital/layer.js (ORBITAL_LAYER.md), to the
+// last bit of the earlier arithmetic; e outside [0, 1) is refused, not NaN.
+//
 // Pure: no DOM, no state of its own.
 // =============================================================================
 
@@ -35,7 +38,24 @@ import {
   SOLAR_MASS_KG,
   SOLAR_RADIUS_M,
 } from '../constants.js';
-import { solveKepler } from '../orbital.js';
+import {
+  OrbitalLayerError,
+  boundEccentricity,
+  PHYSICAL_UNITS,
+  angle,
+  convertAnomaly,
+  dimensionless,
+  elementsToState,
+  gm,
+  instant,
+  keplerElements,
+  length,
+  makeState,
+  simulationUnits,
+  stateToElements,
+  time as duration,
+  vector,
+} from '../orbital/layer.js';
 import { geometryFor } from '../observerGeometry.js';
 
 const DEG = Math.PI / 180;
@@ -81,26 +101,32 @@ export function orbitOf(star, planet) {
   };
 }
 
+const AU_DAY = PHYSICAL_UNITS['AU-day'];
+
 /**
  * The planet's position and velocity relative to the star, in the orbital
  * plane, in AU and AU per day, at time t (days).
+ *
+ * Through the orbital layer: the orbit as elements in AU and days, the clock
+ * named 'elapsed' (days from the zero its author chose), and the layer's planar
+ * branch, which is this function's earlier arithmetic to the last bit.
  */
 export function relativeState(o, t) {
-  const M = o.M0 + o.n * (t - o.epochDays);
-  const E = solveKepler(M, o.e);
-  const cE = Math.cos(E);
-  const sE = Math.sin(E);
-  const s1 = Math.sqrt(1 - o.e * o.e);
-  const px = o.aAU * (cE - o.e);
-  const py = o.aAU * s1 * sE;
-  const r = 1 - o.e * cE;
-  const vx = (-o.aAU * o.n * sE) / r;
-  const vy = (o.aAU * o.n * s1 * cE) / r;
-  const c = Math.cos(o.omega);
-  const s = Math.sin(o.omega);
+  const { r, v } = elementsToState(
+    keplerElements({
+      dimension: 2,
+      a: length(o.aAU, AU_DAY),
+      e: dimensionless(o.e),
+      omega: angle(o.omega),
+      anomaly: { type: 'mean', value: angle(o.M0) },
+      epoch: instant(o.epochDays, AU_DAY, 'elapsed'),
+      period: duration(o.periodDays, AU_DAY),
+    }),
+    instant(t, AU_DAY, 'elapsed')
+  );
   return {
-    pos: { x: c * px - s * py, y: s * px + c * py },
-    vel: { x: c * vx - s * vy, y: s * vx + c * vy },
+    pos: { x: r.value[0], y: r.value[1] },
+    vel: { x: v.value[0], y: v.value[1] },
   };
 }
 
@@ -111,14 +137,13 @@ export function relativeState(o, t) {
  * mid-transit; for radial velocity, inferior conjunction.
  */
 export function conjunctionTime(o, geometry) {
+  boundEccentricity(o.e);
   const nu = geometry.positionAngleDeg * DEG - o.omega;
-  const E =
-    2 *
-    Math.atan2(
-      Math.sqrt(1 - o.e) * Math.sin(nu / 2),
-      Math.sqrt(1 + o.e) * Math.cos(nu / 2)
-    );
-  const Mc = E - o.e * Math.sin(E);
+  const Mc = convertAnomaly(
+    { type: 'true', value: angle(nu) },
+    'mean',
+    dimensionless(o.e)
+  ).value.value;
   const frac = ((((Mc - o.M0) / (2 * Math.PI)) % 1) + 1) % 1;
   return o.epochDays + frac * o.periodDays;
 }
@@ -135,7 +160,7 @@ export function conjunctionTime(o, geometry) {
  *   timeUnitDays?: number}} s - mass is the total of the two bodies
  * @returns {{periodDays: number, e: number, omegaDeg: number,
  *   meanAnomalyDeg: number, epochDays: number}|null} null on an unbound or
- *   clockwise orbit
+ *   clockwise orbit, or one the layer does not describe
  */
 export function elementsFromBodies({
   G,
@@ -144,34 +169,37 @@ export function elementsFromBodies({
   time = 0,
   timeUnitDays = 1,
 }) {
-  const mu = G * mass;
-  const r = Math.hypot(rel.x, rel.y);
-  const v2 = rel.vx * rel.vx + rel.vy * rel.vy;
-  const energy = v2 / 2 - mu / r;
-  if (!(energy < 0)) return null;
-  const a = -mu / (2 * energy);
-  const h = rel.x * rel.vy - rel.y * rel.vx;
-  // Only counter-clockwise orbits are described: the elements assume them.
-  if (!(h > 0)) return null;
-  // The eccentricity vector points at periapsis.
-  const ex = (rel.vy * h) / mu - rel.x / r;
-  const ey = (-rel.vx * h) / mu - rel.y / r;
-  const e = Math.hypot(ex, ey);
-  const omega = e > 1e-12 ? Math.atan2(ey, ex) : 0;
-  // True anomaly from the angle of the position past periapsis.
-  const nu = Math.atan2(rel.y, rel.x) - omega;
-  const E =
-    2 *
-    Math.atan2(
-      Math.sqrt(1 - e) * Math.sin(nu / 2),
-      Math.sqrt(1 + e) * Math.cos(nu / 2)
+  const units = simulationUnits(G);
+  let el;
+  try {
+    el = stateToElements(
+      makeState({
+        frame: 'primary-reference',
+        epoch: instant(time, units, 'simulation'),
+        r: vector([rel.x, rel.y], 'length', units),
+        v: vector([rel.vx, rel.vy], 'speed', units),
+      }),
+      gm(G * mass, units)
     );
-  const M = E - e * Math.sin(E);
+  } catch (err) {
+    // Not an ellipse, no angular momentum, or an orbit the layer does not
+    // describe (e rounds to 1): nothing to say.
+    if (
+      err instanceof OrbitalLayerError &&
+      (err.code === 'unbound' ||
+        err.code === 'degenerate' ||
+        err.code === 'domain')
+    )
+      return null;
+    throw err;
+  }
+  // Only counter-clockwise orbits are described: the elements assume them.
+  if (el.sense !== 1) return null;
   return {
-    periodDays: 2 * Math.PI * Math.sqrt((a * a * a) / mu) * timeUnitDays,
-    e,
-    omegaDeg: (omega / DEG + 360) % 360,
-    meanAnomalyDeg: (((M / DEG) % 360) + 360) % 360,
+    periodDays: el.period.value * timeUnitDays,
+    e: el.e.value,
+    omegaDeg: (el.omega.value / DEG + 360) % 360,
+    meanAnomalyDeg: (((el.anomaly.value.value / DEG) % 360) + 360) % 360,
     epochDays: time * timeUnitDays,
   };
 }
