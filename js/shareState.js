@@ -185,10 +185,7 @@ export function pristineSettingsFor(scenario, DEFAULT_SETTINGS) {
   scratch.preset_scenario = scenario;
   // A scratch view object, so probing the preset cannot move the real camera.
   const scratchView = { zoom: 1, pan: { x: 0, y: 0 } };
-  // applyPreset remembers which scenario it set up last, so that a rebuild of
-  // the same one carries a laboratory's variables across. A probe is nobody's
-  // rebuild: left to remember, the diff a panel draws mid-sweep makes the next
-  // trial forget the value it was just given.
+  // A probe is nobody's rebuild: it must not change what applyPreset carries.
   const remembered = resetPresetMemory();
   try {
     applyPreset(scratch, DEFAULT_SETTINGS, scratchView);
