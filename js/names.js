@@ -1,5 +1,5 @@
 // Names (P107 2c, D-DECOMP-14): KEY_ storage keys, EV_ window events, ID_ format
-// ids, spelled once; values never change. tests/keyRegistry.test.js pins them,
+// ids, DOM_ element ids, spelled once; values never change. tests/keyRegistry.test.js pins them,
 // tools/key-registry-allowlist.json lists those not yet moved. A leaf module.
 
 export const KEY_UNITS = 'gravitas_units';
@@ -119,3 +119,5 @@ export const ID_STUDENT_DATA = 'gravitas.student-data';
 export const ID_SUBMISSION_RESULTS = 'gravitas.submission-results';
 export const ID_SYSTEM3D = 'gravitas.system3d';
 export const ID_TESS_HD209458_S56 = 'gravitas.tess-hd209458-s56';
+
+export const DOM_TOAST = 'gravitasToast';

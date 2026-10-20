@@ -11,6 +11,7 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
+import { DOM_TOAST } from './names.js';
 
 // --- Screen-reader announcements ---------------------------------------------
 // The canvas is opaque to assistive technology, so anything that only shows up
@@ -50,10 +51,10 @@ let toastTimer = null;
  * @param {{label: string, run: Function}} [action] - A button to offer
  */
 export function toast(message, action) {
-  let el = document.getElementById('gravitasToast');
+  let el = document.getElementById(DOM_TOAST);
   if (!el) {
     el = document.createElement('div');
-    el.id = 'gravitasToast';
+    el.id = DOM_TOAST;
     el.className = 'toast';
     el.setAttribute('role', 'status');
     el.setAttribute('aria-live', 'polite');

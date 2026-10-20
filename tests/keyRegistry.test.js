@@ -100,6 +100,7 @@ const PINNED = {
   KEY_TEACHING_NOTES_PREFIX: 'gravitas_teaching_notes_',
   KEY_TEACHING_NOTES_V1: 'gravitas_teaching_notes_v1',
   KEY_WELCOME_SEEN_PREFIX: 'gravitas_welcome_seen_',
+  DOM_TOAST: 'gravitasToast',
   ID_ANALYSIS: 'gravitas.analysis',
   ID_ARTIFACT: 'gravitas.artifact',
   ID_CAPABILITY_PACKAGE: 'gravitas.capability-package',
@@ -137,7 +138,7 @@ const PINNED = {
   ID_TESS_HD209458_S56: 'gravitas.tess-hd209458-s56',
 };
 
-const NAME_EXPORT = /^(KEY|EV|ID)_[A-Z0-9_]+$/;
+const NAME_EXPORT = /^(KEY|EV|ID|DOM)_[A-Z0-9_]+$/;
 const exported = () =>
   Object.keys(names)
     .filter(k => NAME_EXPORT.test(k))

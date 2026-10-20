@@ -81,7 +81,7 @@ function inEventApi(node, parent) {
 /** The registry's name for each value. */
 const byValue = new Map(
   Object.entries(names)
-    .filter(([k]) => /^(KEY|EV|ID)_[A-Z0-9_]+$/.test(k))
+    .filter(([k]) => /^(KEY|EV|ID|DOM)_[A-Z0-9_]+$/.test(k))
     .map(([k, v]) => [v, k])
 );
 
