@@ -14,8 +14,9 @@
 
 import { EN_FIGURE } from '../i18n/en.figure.js';
 import { ES_FIGURE } from '../i18n/es.figure.js';
+import { KEY_LOCALE } from '../names.js';
 
-const STORAGE_KEY = 'gravitas_locale';
+const STORAGE_KEY = KEY_LOCALE;
 
 /** The languages this page is written in, in the order the switch offers them. */
 export const LANGUAGES = Object.freeze([

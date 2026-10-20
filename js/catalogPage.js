@@ -37,6 +37,7 @@ import {
   statusOf,
 } from './catalog/install.js';
 import { PLATFORM_API } from './platform/manifest.js';
+import { ID_CATALOG } from './names.js';
 
 const $ = id => document.getElementById(id);
 const CATALOG_URL = new URL('catalog.json', document.baseURI);
@@ -112,7 +113,7 @@ async function load() {
     const res = await fetch(CATALOG_URL, { cache: 'no-cache' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const catalog = await res.json();
-    if (catalog.format !== 'gravitas.catalog' || catalog.formatVersion !== 1)
+    if (catalog.format !== ID_CATALOG || catalog.formatVersion !== 1)
       throw new Error('not a gravitas.catalog/1');
     state.catalog = catalog;
     box.replaceChildren();

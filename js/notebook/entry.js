@@ -33,6 +33,7 @@
 // =============================================================================
 
 import { deriveEnvelope } from './ledger.js';
+import { fnvBase36 } from '../hash.js';
 
 /** Bumped when the entry shape changes. See migrateEntry(). */
 export const SCHEMA_VERSION = 1;
@@ -523,13 +524,7 @@ function canonical(value) {
  * @returns {string} Checksum
  */
 export function snapshotFingerprint(snapshot) {
-  const text_ = canonical(snapshot);
-  let h = 0x811c9dc5;
-  for (let i = 0; i < text_.length; i++) {
-    h ^= text_.charCodeAt(i);
-    h = Math.imul(h, 0x01000193);
-  }
-  return (h >>> 0).toString(36).toUpperCase().padStart(7, '0');
+  return fnvBase36(canonical(snapshot));
 }
 
 /**

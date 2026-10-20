@@ -52,9 +52,10 @@ import { METRIC_UNITS } from './experiments/metrics.js';
 import { toCsv } from './csv.js';
 import { put, drop } from './storage/local.js';
 import { addMessages } from './experiments/i18n.js';
+import { KEY_EXPERIMENT_CHECKPOINT_PREFIX } from './names.js';
 
 const $ = id => document.getElementById(id);
-const CHECKPOINT = 'gravitas_experiment_checkpoint_';
+const CHECKPOINT = KEY_EXPERIMENT_CHECKPOINT_PREFIX;
 const CHECKPOINT_MAX_CHARS = 1_500_000;
 const nav = typeof navigator === 'undefined' ? {} : navigator;
 const profile = detectProfile(nav);

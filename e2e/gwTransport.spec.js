@@ -267,15 +267,28 @@ test.describe('Listen starts where the reader is looking', () => {
       .poll(async () => (await transport(page)).audioPlaying)
       .toBe(true);
 
-    await press(page, 'replay');
+    // Replay means start over *and run*, so the playhead moves on from the
+    // start at once, and how far it has moved by the time a test reads it is
+    // the machine's frame rate: a round trip that takes a second on a loaded
+    // runner lets the picture run past any fixed fraction of the span. So the
+    // playhead is read in the same turn as the click, before a frame can run.
+    const button = page.locator(
+      '#investigationToolActions [data-tool-action="replay"]'
+    );
+    await expect(button).toBeVisible();
+    const handle = await button.elementHandle();
+    const atClick = await page.evaluate(async el => {
+      const w = await import('/js/gwWidgets.js');
+      el.click();
+      const lab = w.activeLab();
+      return { cursorT: lab.cursorT, playing: Boolean(lab.playing) };
+    }, handle);
     const after = await transport(page);
-    // Replay means start over *and run*, so the playhead is already a frame or
-    // two past the start by the time this reads it. What matters is that it
-    // went back to the beginning rather than staying where it was: a strict
-    // equality here would be asserting that the transport had stopped.
+    // What matters is that it went back to the beginning rather than staying
+    // where it was.
     const span = after.tEnd - after.tStart;
-    expect(after.cursorT - after.tStart).toBeLessThan(span * 0.05);
-    expect(after.cursorT).toBeGreaterThanOrEqual(after.tStart);
+    expect(atClick.cursorT - after.tStart).toBeLessThan(span * 0.05);
+    expect(atClick.cursorT).toBeGreaterThanOrEqual(after.tStart);
     if (after.audioPlaying) {
       expect(after.audioT0 - after.tStart).toBeLessThan(span * 0.05);
     }

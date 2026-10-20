@@ -26,8 +26,9 @@
 import { canonicalJsonExact, sha256Hex } from '../hash.js';
 import { checkOutput } from './check.js';
 import { RUNTIME } from './runtime.js';
+import { ID_COMPUTE_CAPSULE } from '../names.js';
 
-export const FORMAT = 'gravitas.compute-capsule';
+export const FORMAT = ID_COMPUTE_CAPSULE;
 export const FORMAT_VERSION = 1;
 /** The largest capsule file read at all, in characters. */
 export const MAX_CAPSULE_CHARS = 12_000_000;

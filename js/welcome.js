@@ -680,9 +680,9 @@ export function closeWelcome() {
 
   // Match the CSS fade, and skip it entirely when the visitor has asked for
   // less motion or when the transition will not fire.
-  const reduced = window.matchMedia?.(
-    '(prefers-reduced-motion: reduce)'
-  )?.matches;
+  const reduced =
+    document.documentElement.dataset.motion ||
+    window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   if (reduced) finish();
   else setTimeout(finish, 260);
 }

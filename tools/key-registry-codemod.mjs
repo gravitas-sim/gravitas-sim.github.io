@@ -13,6 +13,7 @@
 //
 //   node tools/key-registry-codemod.mjs events            report what would move
 //   node tools/key-registry-codemod.mjs events --write    rewrite, then record
+//   node tools/key-registry-codemod.mjs storage --free    only modules that cost no page a request
 //
 // Kinds: events (gravitasCamelCase, used as an event name), storage (gravitas_x, gravitas-x), ids (gravitas.x).
 // =============================================================================
@@ -23,6 +24,7 @@ import { fileURLToPath } from 'node:url';
 import { parse } from 'acorn';
 import * as names from '../js/names.js';
 import { sourcePathsFor } from './instructor-freshness.mjs';
+import { freeFiles } from './key-registry-free.mjs';
 import {
   ALLOWLIST,
   REGISTRY,
@@ -38,13 +40,10 @@ const KINDS = {
   ids: { prefix: 'ID_', shape: /^gravitas\.[\w.:-]+$/ },
 };
 
-// Modules left as they are, and why. js/names.js also carries the object name
-// pools (about 10 KB), so a module that imports it puts them on every route that
-// loads the module: the stamped shell is on every page of the site, and
-// js/presentation.js is on the shell routes.
+// Modules left as they are, and why. Only one cannot import anything: the
+// pools that once made the shell and js/presentation.js unable to take the
+// registry moved to js/data/objectNames.js (Prompt 141).
 const KEEP = {
-  'js/shell.js': 'stamped on every page: the pools would ride on all of them',
-  'js/presentation.js': 'on the shell routes (figure, the course builder)',
   'js/offline.js':
     'copied alone into e2e/serviceWorkerUpdate.spec.js: it can import nothing',
 };
@@ -205,6 +204,12 @@ if (
   const write = process.argv.includes('--write');
   const closure = new Set(sourcePathsFor('.').map(p => relative('.', p)));
   const loose = JSON.parse(readFileSync(join(ROOT, ALLOWLIST), 'utf8')).loose;
+  // --free: only the modules whose pages already load the registry, so no
+  // route gains a request (tools/key-registry-free.mjs).
+  const free = process.argv.includes('--free')
+    ? new Set(freeFiles(Object.keys(loose)))
+    : null;
+  const costly = [];
   let moved = 0;
   const skipped = [];
   const over = [];
@@ -221,6 +226,10 @@ if (
     }
     if (closure.has(file)) {
       skipped.push(file);
+      continue;
+    }
+    if (free && !free.has(file)) {
+      costly.push(file);
       continue;
     }
     const r = rewrite(file, kind);
@@ -246,6 +255,10 @@ if (
   if (skipped.length)
     console.log(
       `in the instructor bundle's closure, untouched: ${skipped.length} file(s)`
+    );
+  if (costly.length)
+    console.log(
+      `would add a request on a page, untouched: ${costly.length} file(s) (tools/key-registry-free.mjs)`
     );
   if (kept.length) console.log(`kept by decision:\n  ${kept.join('\n  ')}`);
   if (over.length)

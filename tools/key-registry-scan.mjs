@@ -23,11 +23,22 @@ export const REGISTRY = 'js/names.js';
 export const ALLOWLIST = 'tools/key-registry-allowlist.json';
 
 /**
+ * Files the scan does not read, and why. Each is a place that cannot import
+ * the registry, so its literals are not loose keys but the thing itself.
+ */
+export const EXEMPT = Object.freeze({
+  'js/compute/frame/worker.js':
+    "a classic Worker built from a Blob (an opaque-origin frame may not start a module Worker), so it imports nothing; its two literals are the Python names 'gravitas_input' and 'gravitas_params' in the notebook's namespace, part of the notebook language and not storage",
+});
+
+/**
  * What a key looks like: "gravitas" and then name characters. A sentence, a
  * file name (gravitas-code.svg) and a host name are not keys.
  */
 const KEY_SHAPE = /^gravitas[\w.:-]*$/;
-const NOT_A_KEY = /\.(json|csv|svg|txt|online)$|\.\.\./;
+// The bare word is the product's name (the `app` a saved file records, the
+// manifest field that holds the platform range), never a key, event or id.
+const NOT_A_KEY = /^gravitas$|\.(json|csv|svg|txt|online)$|\.\.\./;
 
 /** Every .js file under a directory, as repo-relative posix paths. */
 function jsFiles(dir) {
@@ -97,7 +108,7 @@ export function looseLiterals(src) {
 export function scanTree() {
   const found = {};
   for (const file of jsFiles('js').sort()) {
-    if (file === REGISTRY) continue;
+    if (file === REGISTRY || EXEMPT[file]) continue;
     const counts = {};
     for (const s of looseLiterals(readFileSync(join(ROOT, file), 'utf8')))
       counts[s.value] = (counts[s.value] || 0) + 1;

@@ -1,3 +1,4 @@
+import { ID_COURSE_PACK } from '../../names.js';
 // =============================================================================
 // Observational astronomy lab: from a night plan to authentic data
 // -----------------------------------------------------------------------------
@@ -9,7 +10,7 @@
 // =============================================================================
 
 export const OBSERVING_LAB = {
-  format: 'gravitas.course-pack',
+  format: ID_COURSE_PACK,
   formatVersion: 2,
   id: 'observing-lab',
   version: '1.0.0',

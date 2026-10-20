@@ -349,6 +349,14 @@
       --duration-slow: 1ms;
     }
   }
+
+  /* The reader's own override (js/quality.js, INTERACTION.md): the same
+     collapse, asked for on this device rather than by the system. */
+  :root[data-motion] {
+    --duration-fast: 1ms;
+    --duration: 1ms;
+    --duration-slow: 1ms;
+  }
 }
 
 /* =============================================================================

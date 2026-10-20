@@ -13,7 +13,7 @@ import {
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
 } from '../constants.js';
-import { SPACE_OBJECT_NAMES } from '../names.js';
+import { SPACE_OBJECT_NAMES } from '../data/objectNames.js';
 import {
   visualSeed,
   hasRingsForSeed,

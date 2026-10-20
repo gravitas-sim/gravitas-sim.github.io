@@ -146,10 +146,11 @@ import {
   EV_OBJECT_PLACED,
   EV_REQUEST_REBUILD,
   EV_SIMULATION_RESET,
+  KEY_SIMULATION_SAVE,
 } from './names.js';
 
 // Where Save and Load keep the world, in localStorage.
-const SAVE_KEY = 'gravitas_simulation_save';
+const SAVE_KEY = KEY_SIMULATION_SAVE;
 
 /**
  * Apply the selected preset scenario to the live settings.

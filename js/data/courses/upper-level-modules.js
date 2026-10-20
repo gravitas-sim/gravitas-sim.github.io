@@ -1,3 +1,4 @@
+import { ID_COURSE_PACK } from '../../names.js';
 // =============================================================================
 // Upper-level astrophysics modules: eight short units
 // -----------------------------------------------------------------------------
@@ -9,7 +10,7 @@
 // =============================================================================
 
 export const UPPER_LEVEL_MODULES = {
-  format: 'gravitas.course-pack',
+  format: ID_COURSE_PACK,
   formatVersion: 2,
   id: 'upper-level-modules',
   version: '1.0.0',

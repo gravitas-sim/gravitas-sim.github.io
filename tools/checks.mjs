@@ -969,6 +969,10 @@ export const CI_SETUP_STEPS = [
   // tools/observatory-budgets.json: "a manual instrument, not a registry
   // check". CI runs it on the schedule, report-only.
   'Measure, and compare with the budgets',
+  // The ci-cost job: what the run cost, written as an artifact after `ci` has
+  // decided (D-R10-01). It checks nothing, and tools/ci-cost.mjs has its own
+  // tests.
+  'Write the record',
 ];
 
 /** And the commands that are setup wherever they appear. */

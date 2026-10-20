@@ -35,6 +35,7 @@ import { MODELS } from '../inference/models.js';
 import { runForward } from '../forward/index.js';
 import { conversionFactor, parseUnit } from '../observatory/units.js';
 import { ELEMENTS } from './system.js';
+import { ID_OBSERVING_SETUP } from '../names.js';
 
 export const COMPARISON_VERSION = '1.0.0';
 export const SOURCE_TYPES = Object.freeze(['system', 'inference', 'analytic']);
@@ -139,7 +140,7 @@ function evaluateSystem(source, data) {
   if (offsets.length < 2)
     throw new CompareError('size', 'the model needs at least two epochs');
   const setup = {
-    format: 'gravitas.observing-setup',
+    format: ID_OBSERVING_SETUP,
     formatVersion: 1,
     seed: 'compare',
     epochs: { kind: 'listed', unit: 'd', start, list: offsets },

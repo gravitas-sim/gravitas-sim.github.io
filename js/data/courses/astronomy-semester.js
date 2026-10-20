@@ -1,3 +1,4 @@
+import { ID_COURSE_PACK } from '../../names.js';
 // =============================================================================
 // Introductory astronomy, one semester, with OpenStax Astronomy 2e
 // -----------------------------------------------------------------------------
@@ -9,7 +10,7 @@
 // =============================================================================
 
 export const ASTRONOMY_SEMESTER = {
-  format: 'gravitas.course-pack',
+  format: ID_COURSE_PACK,
   formatVersion: 2,
   id: 'astronomy-semester',
   version: '1.0.0',

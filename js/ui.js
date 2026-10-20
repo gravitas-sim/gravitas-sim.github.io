@@ -10,8 +10,8 @@ import {
   EV_MERGE,
   EV_PLACEMENT_ARMED,
   EV_SETTINGS_APPLIED,
-  SPACE_OBJECT_NAMES,
 } from './names.js';
+import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import {
   getBlackHoleInfo,
   getStarInfo,

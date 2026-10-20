@@ -9,8 +9,9 @@
 
 import { EN_MISSIONLAB } from '../../i18n/en.missionLab.js';
 import { EN_MISSIONLABGUIDES } from '../../i18n/en.missionLabGuides.js';
+import { KEY_LOCALE } from '../../names.js';
 
-const STORAGE_KEY = 'gravitas_locale';
+const STORAGE_KEY = KEY_LOCALE;
 
 export const LANGUAGES = Object.freeze([
   { id: 'en', endonym: 'English' },

@@ -1,3 +1,4 @@
+import { ID_LAB3D_SNAPSHOT } from '../names.js';
 // =============================================================================
 // The boundary between the 3-D kernel's Worker and anything that draws it
 // -----------------------------------------------------------------------------
@@ -25,7 +26,7 @@
 // come from a snapshot itself, never from these.
 // =============================================================================
 
-export const SNAPSHOT_FORMAT = 'gravitas.lab3d.snapshot';
+export const SNAPSHOT_FORMAT = ID_LAB3D_SNAPSHOT;
 export const SNAPSHOT_VERSION = 1;
 
 const isArr = v => v instanceof Float64Array;

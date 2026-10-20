@@ -42,8 +42,9 @@ import { gaussianAt } from '../rvSurvey.js';
 import { planSchedule } from '../rvSchedule.js';
 import { isObject, readVersioned } from '../platform/common.js';
 import { parseUnit, dimensionOf } from '../observatory/units.js';
+import { ID_OBSERVING_SETUP } from '../names.js';
 
-export const FORMAT = 'gravitas.observing-setup';
+export const FORMAT = ID_OBSERVING_SETUP;
 export const FORMAT_VERSION = 1;
 export const EPOCH_KINDS = Object.freeze([
   'regular',

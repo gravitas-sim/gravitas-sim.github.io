@@ -25,6 +25,11 @@
 // =============================================================================
 
 import { put, drop } from '../storage/local.js';
+import {
+  ID_EXPERIMENT_RESULT,
+  KEY_EXPERIMENTS_INDEX,
+  KEY_EXPERIMENT_PREFIX,
+} from '../names.js';
 
 /**
  * A record is a gravitas.experiment-result/1 of kind `comparison`, with `v`
@@ -38,7 +43,7 @@ const refuse = reason => ({ ok: false, record: null, reason });
 const failed = (reason, bytes, limit) => ({ ok: false, reason, bytes, limit });
 
 const STAMP = {
-  format: 'gravitas.experiment-result',
+  format: ID_EXPERIMENT_RESULT,
   formatVersion: 1,
   kind: 'comparison',
 };
@@ -56,9 +61,9 @@ export const SCHEMA_VERSION = 3;
 const MISRECORDED = ['energy_drift', 'angular_drift'];
 
 /** One key per experiment, so a large one cannot slow down reading a small one. */
-export const KEY_PREFIX = 'gravitas_experiment_';
+export const KEY_PREFIX = KEY_EXPERIMENT_PREFIX;
 /** The index, so listing does not have to parse every experiment. */
-export const INDEX_KEY = 'gravitas_experiments_index';
+export const INDEX_KEY = KEY_EXPERIMENTS_INDEX;
 
 /**
  * Caps, in characters of serialized JSON.

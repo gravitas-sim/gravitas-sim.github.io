@@ -174,7 +174,7 @@ their ceilings:
 | `js/i18n/es.deferred.js` | 4,118 | 4,118 |
 | `js/i18n/en.deferred.js` | 3,871 | 3,871 |
 | `js/investigations.js` | 3,296 | 3,296 |
-| `js/render.js` | 3,028 | 3,028 |
+| `js/render.js` | 3,015 | 3,015 |
 | `js/world/build.js` | 2,599 | 2,599 |
 | `js/composerPage.js` | 2,532 | 2,532 |
 | `js/darkMatterWidgets.js` | 2,329 | 2,329 |

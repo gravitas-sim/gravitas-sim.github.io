@@ -25,6 +25,11 @@ import { csvField, num, toCsv } from '../csv.js';
 import { METRIC_UNITS, SCALAR_METRICS } from './metrics.js';
 import { canonicalJson } from './canonicalState.js';
 import { plainDataProblem } from '../platform/common.js';
+import {
+  ID_EXPERIMENT,
+  ID_EXPERIMENT_RESULT,
+  KEY_FORMAT_EXPERIMENT,
+} from '../names.js';
 
 /** gravitas.experiment/1, versioned separately from the storage schema. */
 export const MANIFEST_VERSION = 1;
@@ -124,7 +129,7 @@ export function experimentManifest(experiment, { appVersion = 'dev' } = {}) {
   const p = experiment?.provenance || {};
   const diff = experiment?.diff || { variables: [], incidental: [] };
   return {
-    format: 'gravitas.experiment',
+    format: ID_EXPERIMENT,
     formatVersion: MANIFEST_VERSION,
     kind: 'comparison',
     exported: new Date().toISOString(),
@@ -214,7 +219,7 @@ export function reliabilityJson(experiment, { appVersion = 'dev' } = {}) {
   if (!r?.ok) return null;
   return `${JSON.stringify(
     {
-      format: 'gravitas.experiment-result',
+      format: ID_EXPERIMENT_RESULT,
       formatVersion: 1,
       kind: 'reliability-check',
       appVersion,
@@ -402,10 +407,10 @@ export function importManifest(text) {
     return no('not-plain-data');
   // `gravitas-experiment` and its `version` are the retired id of
   // gravitas.experiment/1; the runner reads both (experimentManifest.js).
-  const old = parsed?.format === 'gravitas-experiment';
+  const old = parsed?.format === KEY_FORMAT_EXPERIMENT;
   if (
     !old &&
-    !(parsed?.format === 'gravitas.experiment' && parsed.kind === 'comparison')
+    !(parsed?.format === ID_EXPERIMENT && parsed.kind === 'comparison')
   ) {
     return no('not-an-experiment');
   }

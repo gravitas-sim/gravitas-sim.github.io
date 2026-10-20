@@ -48,6 +48,7 @@ import {
   timeUnitSeconds,
   velocityUnitToMs,
 } from './units.js';
+import { KEY_FORMAT_MANEUVER_LOG } from './names.js';
 
 let host = null;
 let root = null;
@@ -450,7 +451,7 @@ function renderLog() {
 function exportLog() {
   if (!log.length) return;
   const doc = {
-    kind: 'gravitas-maneuver-log',
+    kind: KEY_FORMAT_MANEUVER_LOG,
     scenario: host?.getScenario?.() ?? null,
     exportedAt: new Date().toISOString(),
     frame: log[0].frame,

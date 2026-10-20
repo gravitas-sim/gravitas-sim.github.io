@@ -14,6 +14,7 @@
 // =============================================================================
 
 import { MADE_PREFIX, fileOf, hrefOf, readMade } from './made.js';
+import { KEY_EVIDENCE_NOTEBOOK } from '../names.js';
 
 const es = () => document.documentElement.lang.startsWith('es');
 const L = (en, sp) => (es() ? sp : en);
@@ -40,7 +41,7 @@ function download(json, name) {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
-const NOTEBOOK = 'gravitas_evidence_notebook';
+const NOTEBOOK = KEY_EVIDENCE_NOTEBOOK;
 
 /** The records the snapshot holds, readable, newest first. */
 export const madeIn = records =>

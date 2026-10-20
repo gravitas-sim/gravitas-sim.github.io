@@ -19,8 +19,9 @@
 // =============================================================================
 
 import { BODIES } from './bodies.js';
+import { ID_MISSION_PLAN } from '../names.js';
 
-export const PLAN_FORMAT = 'gravitas.mission-plan';
+export const PLAN_FORMAT = ID_MISSION_PLAN;
 export const PLAN_VERSION = 1;
 export const NOT_FOR = 'operational mission design or navigation';
 

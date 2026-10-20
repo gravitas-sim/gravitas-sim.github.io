@@ -92,6 +92,7 @@ import {
   embedRequest,
   embedWorldBuilt,
 } from './world.js';
+import { initMotionPreference, stepMotion } from './quality.js';
 import {
   EV_ESCAPE,
   EV_OBJECT_PLACED,
@@ -107,6 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // anything reads them. initI18n only picks the locale; the markup sweep waits
   // for initI18nDom() below, once the rest of the document is known to exist.
   initI18n();
+  // The reader's own motion override, before anything animates.
+  initMotionPreference();
   // Embed mode has to be entered here rather than after the splash: a rail that
   // appears for one frame and then vanishes reads as a bug in the host page.
   const embedded = initEmbedMode();
@@ -597,6 +600,8 @@ document.addEventListener('DOMContentLoaded', () => {
       initialize_simulation();
       embedWorldBuilt();
     }
+    // 'Step by step' (js/quality.js): the world is built but does not start.
+    if (stepMotion()) setPlaying(false);
     requestAnimationFrame(gameLoop);
 
     // Offline support, after the first frame rather than during boot: the

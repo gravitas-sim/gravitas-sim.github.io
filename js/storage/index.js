@@ -27,8 +27,44 @@
 import { canonicalJson } from '../hash.js';
 import { isObject, readVersioned } from '../platform/common.js';
 import { drop, put as putText } from './local.js';
+import {
+  ID_STUDENT_DATA,
+  KEY_ASSIGNMENT_PREFIX,
+  KEY_CAPABILITY_VERSIONS,
+  KEY_COMPOSER_PREFIX,
+  KEY_COMPOSER_PREVIEW,
+  KEY_COURSE_LEVEL,
+  KEY_COURSE_PREFIX,
+  KEY_COURSE_PREVIEW,
+  KEY_DB_STORE,
+  KEY_EVALUATION_DRAFT_PREFIX,
+  KEY_EVIDENCE_NOTEBOOK,
+  KEY_EXPERIMENT,
+  KEY_EXPERIMENT_CHECKPOINT_PREFIX,
+  KEY_GUIDES,
+  KEY_INVESTIGATION_PREFIX,
+  KEY_LAB3D_GUIDE_PREFIX,
+  KEY_LAST_EXPORT,
+  KEY_LECTURE_SEQUENCE,
+  KEY_LESSON_OBJECTS_OPEN,
+  KEY_LOCALE,
+  KEY_MADE_PREFIX,
+  KEY_MISSIONLAB_PREFIX,
+  KEY_MOTION,
+  KEY_NEXT_CONTEXT,
+  KEY_ORIENTATION_SEEN_PREFIX,
+  KEY_RAIL_SECTIONS,
+  KEY_SIMULATION_SAVE,
+  KEY_STORE_PREFIX,
+  KEY_STUDENT_NAME,
+  KEY_STUDIO_PREFIX,
+  KEY_TEACHING_NOTES_PREFIX,
+  KEY_THEME,
+  KEY_UNITS,
+  KEY_WELCOME_SEEN_PREFIX,
+} from '../names.js';
 
-export const EXPORT_FORMAT = 'gravitas.student-data';
+export const EXPORT_FORMAT = ID_STUDENT_DATA;
 export const EXPORT_VERSION = 1;
 
 /**
@@ -100,7 +136,7 @@ export function memoryBackend() {
 }
 
 /** The prefix of every localStorage key the fallback writes (STORAGE.md). */
-export const LOCAL_PREFIX = 'gravitas_store:';
+export const LOCAL_PREFIX = KEY_STORE_PREFIX;
 
 /** Records in localStorage, one key each. */
 export function localBackend(storage = globalThis.localStorage) {
@@ -141,36 +177,37 @@ export function localBackend(storage = globalThis.localStorage) {
  * the platform's own stamps.
  */
 export const KEYS = [
-  ['gravitas_experiment_checkpoint_', 'drafts'],
-  ['gravitas_experiment', 'experiments'],
-  ['gravitas_investigation_', 'progress'],
-  ['gravitas_guides', 'progress'],
-  ['gravitas_lab3d_guide_', 'progress'],
-  ['gravitas_missionlab_', 'progress'],
-  ['gravitas_assignment_', 'assignments'],
-  ['gravitas_evidence_notebook', 'evidence'],
-  ['gravitas_made_', 'made'],
-  ['gravitas_course_level', 'preferences'],
-  ['gravitas_course_preview', null],
-  ['gravitas_next_context', null],
-  ['gravitas_course_', 'courses'],
-  ['gravitas_composer_preview', null],
-  ['gravitas_composer_', 'drafts'],
-  ['gravitas_studio_', 'drafts'],
-  ['gravitas_simulation_save', 'drafts'],
-  ['gravitas_evaluation_draft_', 'drafts'],
-  ['gravitas_teaching_notes_', 'drafts'],
-  ['gravitas_student_name', 'settings'],
-  ['gravitas_last_export', 'preferences'],
-  ['gravitas_capability_versions', null],
-  ['gravitas_locale', 'preferences'],
-  ['gravitas_theme', 'preferences'],
-  ['gravitas_units', 'preferences'],
-  ['gravitas_lesson_objects_open', 'preferences'],
-  ['gravitas_rail_sections', 'preferences'],
-  ['gravitas_lecture_sequence', 'preferences'],
-  ['gravitas_welcome_seen_', 'preferences'],
-  ['gravitas_orientation_seen_', 'preferences'],
+  [KEY_EXPERIMENT_CHECKPOINT_PREFIX, 'drafts'],
+  [KEY_EXPERIMENT, 'experiments'],
+  [KEY_INVESTIGATION_PREFIX, 'progress'],
+  [KEY_GUIDES, 'progress'],
+  [KEY_LAB3D_GUIDE_PREFIX, 'progress'],
+  [KEY_MISSIONLAB_PREFIX, 'progress'],
+  [KEY_ASSIGNMENT_PREFIX, 'assignments'],
+  [KEY_EVIDENCE_NOTEBOOK, 'evidence'],
+  [KEY_MADE_PREFIX, 'made'],
+  [KEY_COURSE_LEVEL, 'preferences'],
+  [KEY_COURSE_PREVIEW, null],
+  [KEY_NEXT_CONTEXT, null],
+  [KEY_COURSE_PREFIX, 'courses'],
+  [KEY_COMPOSER_PREVIEW, null],
+  [KEY_COMPOSER_PREFIX, 'drafts'],
+  [KEY_STUDIO_PREFIX, 'drafts'],
+  [KEY_SIMULATION_SAVE, 'drafts'],
+  [KEY_EVALUATION_DRAFT_PREFIX, 'drafts'],
+  [KEY_TEACHING_NOTES_PREFIX, 'drafts'],
+  [KEY_STUDENT_NAME, 'settings'],
+  [KEY_LAST_EXPORT, 'preferences'],
+  [KEY_CAPABILITY_VERSIONS, null],
+  [KEY_LOCALE, 'preferences'],
+  [KEY_THEME, 'preferences'],
+  [KEY_UNITS, 'preferences'],
+  [KEY_MOTION, 'preferences'],
+  [KEY_LESSON_OBJECTS_OPEN, 'preferences'],
+  [KEY_RAIL_SECTIONS, 'preferences'],
+  [KEY_LECTURE_SEQUENCE, 'preferences'],
+  [KEY_WELCOME_SEEN_PREFIX, 'preferences'],
+  [KEY_ORIENTATION_SEEN_PREFIX, 'preferences'],
   ['mobile_instructions_shown', 'preferences'],
 ];
 
@@ -228,7 +265,7 @@ export function legacyBackend(storage = globalThis.localStorage) {
 }
 
 /** The IndexedDB database the store uses (STORAGE.md). */
-export const DB_NAME = 'gravitas-store';
+export const DB_NAME = KEY_DB_STORE;
 const DB_VERSION = 1;
 const OBJECTS = 'records';
 
@@ -296,7 +333,7 @@ export async function idbBackend(idb = globalThis.indexedDB, name = DB_NAME) {
 export async function openStore({
   backend = 'auto',
   estimate = () => globalThis.navigator?.storage?.estimate?.() ?? null,
-  channel = 'gravitas-store',
+  channel = KEY_DB_STORE,
 } = {}) {
   let chosen = null;
   const tried = [];

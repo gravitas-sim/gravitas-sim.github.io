@@ -1,10 +1,10 @@
 {
   "note": "Written by tools/compute.mjs in the Gravitas application repository. Do not edit.",
   "origin": "https://gravitas-compute.github.io",
-  "build": "e880d4ee23205b2816b61e8a63a9d7991b0665a500e71ac823b9d65d9316543b",
-  "indexSha256": "99804535bc4019a60f2fc57fa4f4c501643ece1c6b7fdd281e407f80771b46f9",
-  "scriptSha256Base64": "pXl3EK7/ICwBPtEN9XbcX59BDt/fHntcL0Big70fUso=",
-  "csp": "default-src 'none'; script-src 'sha256-pXl3EK7/ICwBPtEN9XbcX59BDt/fHntcL0Big70fUso=' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; connect-src https://cdn.jsdelivr.net; worker-src blob:; base-uri 'none'; form-action 'none'",
+  "build": "649362134d99a42bdc81f643c87df78c726780f27bf607d8b3599c4b13b60c15",
+  "indexSha256": "338ec7e630881aa32dd83ad2fe3484600ed02962d0e6c1b9b58cc899a89adeb3",
+  "scriptSha256Base64": "MfbF4r76BcyiVBe85azVOkK/1B5A2SVd5FWq/kS9LS0=",
+  "csp": "default-src 'none'; script-src 'sha256-MfbF4r76BcyiVBe85azVOkK/1B5A2SVd5FWq/kS9LS0=' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; connect-src https://cdn.jsdelivr.net; worker-src blob:; base-uri 'none'; form-action 'none'",
   "answers": [
     "https://gravitas-sim.online"
   ],

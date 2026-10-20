@@ -34,6 +34,7 @@ import {
   translatePage,
 } from './library/i18n.js';
 import { mountShell } from './shell.js';
+import { KEY_NEXT_CONTEXT } from './names.js';
 
 const $ = id => document.getElementById(id);
 const LEVELS = ['beginner', 'intro'];
@@ -293,7 +294,7 @@ function wire() {
     try {
       if (seq)
         localStorage.setItem(
-          'gravitas_next_context',
+          KEY_NEXT_CONTEXT,
           JSON.stringify({ k: 'seq', id: seq.dataset.seq })
         );
     } catch {

@@ -29,8 +29,9 @@ import { MODELS } from './models.js';
 import { transitFlux } from './transit.js';
 import { rvCurve } from './rv.js';
 import { fnvHex8 } from '../hash.js';
+import { ID_INFERENCE } from '../names.js';
 
-export const FORMAT = 'gravitas.inference';
+export const FORMAT = ID_INFERENCE;
 export const FORMAT_VERSION = 1;
 export const ALGORITHM = Object.freeze({ id: 'grid-lm', version: '1.0.0' });
 

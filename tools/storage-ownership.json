@@ -191,6 +191,15 @@
       "export": "preference"
     },
     {
+      "prefix": "gravitas_motion",
+      "name": "The motion override",
+      "owner": "js/quality.js",
+      "migration": "none",
+      "corpus": null,
+      "corpusWhy": "a one-word preference",
+      "export": "preference"
+    },
+    {
       "prefix": "gravitas_units",
       "name": "Physical or simulation units",
       "owner": "js/units.js",
@@ -439,6 +448,16 @@
     {
       "file": "js/units.js",
       "reason": "as theme.js",
+      "lacks": {
+        "kb": 1.4,
+        "requests": 1,
+        "route": "as theme.js"
+      },
+      "student": null
+    },
+    {
+      "file": "js/quality.js",
+      "reason": "as theme.js: the motion override is a preference every route reads",
       "lacks": {
         "kb": 1.4,
         "requests": 1,
