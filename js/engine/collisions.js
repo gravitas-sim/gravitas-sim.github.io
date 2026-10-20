@@ -44,6 +44,7 @@ import {
   GAS_GIANT_TO_STAR_THRESHOLD,
   JUPITER_MASS_UNIT,
   burst,
+  absorb_into_star,
   GasGiant,
   Debris,
   StarObject,
@@ -953,6 +954,21 @@ export const handle_star_merging = stars_list => {
   }
 };
 
+/**
+ * A star takes in a smaller body: mass and momentum through absorb_into_star
+ * (D-R10-23), then what depends on the new mass, the burst and the event.
+ */
+const starAbsorbs = (star, body, burstKind) => {
+  absorb_into_star(star, body);
+  star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+  if (star.kind === 'StarObject') {
+    star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
+  }
+  burst(burstKind, body.pos);
+  body.alive = false;
+  broadcastImpact(star, body, 'stellar-absorption');
+};
+
 // Handle collisions between stars and smaller objects (planets, gas giants, asteroids)
 /**
  * Handle stars absorbing planets, gas giants, and asteroids
@@ -978,25 +994,7 @@ export const handle_star_object_collisions = () => {
       const min_dist = star.radius + planet.radius;
 
       if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
-        // Star absorbs the planet
-        star.mass += planet.mass;
-
-        // Update star properties based on type
-        if (star.kind === 'NeutronStar') {
-          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.kind === 'WhiteDwarf') {
-          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.kind === 'StarObject') {
-          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-          // Update radius for regular stars
-          star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
-        }
-
-        // Create absorption particles
-        burst('starPlanet', planet.pos);
-
-        planet.alive = false;
-        broadcastImpact(star, planet, 'stellar-absorption');
+        starAbsorbs(star, planet, 'starPlanet');
       }
     }
 
@@ -1011,25 +1009,7 @@ export const handle_star_object_collisions = () => {
       const min_dist = star.radius + gasGiant.radius;
 
       if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
-        // Star absorbs the gas giant
-        star.mass += gasGiant.mass;
-
-        // Update star properties based on type
-        if (star.kind === 'NeutronStar') {
-          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.kind === 'WhiteDwarf') {
-          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.kind === 'StarObject') {
-          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-          // Update radius for regular stars
-          star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
-        }
-
-        // Create more dramatic absorption particles for gas giant
-        burst('starGas', gasGiant.pos);
-
-        gasGiant.alive = false;
-        broadcastImpact(star, gasGiant, 'stellar-absorption');
+        starAbsorbs(star, gasGiant, 'starGas');
       }
     }
 
@@ -1045,25 +1025,7 @@ export const handle_star_object_collisions = () => {
       const min_dist = star.radius + asteroid.radius;
 
       if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
-        // Star absorbs the asteroid/comet
-        star.mass += asteroid.mass;
-
-        // Update star properties based on type
-        if (star.kind === 'NeutronStar') {
-          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.kind === 'WhiteDwarf') {
-          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.kind === 'StarObject') {
-          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-          // Update radius for regular stars
-          star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
-        }
-
-        // Create small absorption particles
-        burst('starAsteroid', asteroid.pos);
-
-        asteroid.alive = false;
-        broadcastImpact(star, asteroid, 'stellar-absorption');
+        starAbsorbs(star, asteroid, 'starAsteroid');
       }
     }
   }

@@ -195,9 +195,12 @@ export const burst = (name, pos, color, aim) => {
 };
 
 // =============================================================================
-// Absorption by a black hole
+// Absorption by a black hole (and by a star)
 // -----------------------------------------------------------------------------
-// What accretion does to the hole that did the accreting.
+// What accretion does to the hole that did the accreting. A star that swallows
+// a planet, a gas giant or an asteroid is the same event and goes through the
+// same function (absorb_into_star below), so it had the same flaw and has the
+// same repair (D-R10-23); everything said here about the hole holds for it.
 //
 // This used to be one line - `bh.mass += this.mass` - inside
 // PhysicsObject.check_absorption. The hole gained the mass and kept its own
@@ -291,24 +294,43 @@ const absorptionMovesHole = bh => {
 };
 
 /**
- * Merge a body into a black hole, conserving what the model can conserve.
+ * Whether an absorption by this star, neutron star or white dwarf should move
+ * it: the one-way-gravity rules above, and a star a prescribed model owns stays
+ * where the model put it (apply_step's own refusal), so its mass grows and its
+ * motion does not.
  *
- * @param {object} bh - The absorbing black hole
+ * @param {object} star - The absorbing star
+ * @returns {boolean} True when the star takes the recoil
+ */
+const absorptionMovesStar = star =>
+  Boolean(star && star.vel) &&
+  !star.model_owned &&
+  Number.isFinite(star.vel.x) &&
+  Number.isFinite(star.vel.y) &&
+  physicsSettings.mutual_gravity === true &&
+  physicsSettings.star_only_gravity !== true;
+
+/**
+ * Fold a body into its host as a perfectly inelastic collision, and say where
+ * what cannot be kept went. The shared body of both absorbers.
+ *
+ * @param {object} host - The absorbing hole or star
  * @param {object} body - The body being absorbed; already marked not alive
+ * @param {boolean} moves - Whether the host takes the recoil
+ * @param {boolean} ownsSpin - Whether the host has a spin field to bank into
  * @returns {void}
  */
-export const absorb_into_black_hole = (bh, body) => {
-  const m1 = Number.isFinite(bh.mass) ? bh.mass : 0;
+const absorbInto = (host, body, moves, ownsSpin) => {
+  const m1 = Number.isFinite(host.mass) ? host.mass : 0;
   const m2 = Number.isFinite(body.mass) ? body.mass : 0;
   const total = m1 + m2;
 
   if (!(total > 0) || m2 === 0) {
-    bh.mass = total;
-    if (typeof bh.updateRadius === 'function') bh.updateRadius();
+    host.mass = total;
     return;
   }
 
-  if (!absorptionMovesHole(bh)) {
+  if (!moves) {
     // The hole keeps its state. Record the momentum that consequently goes
     // nowhere, so the departure is measured rather than assumed small.
     if (
@@ -318,33 +340,34 @@ export const absorb_into_black_hole = (bh, body) => {
     ) {
       bankDiscardedMomentum(m2 * body.vel.x, m2 * body.vel.y);
     }
-    bh.mass = total;
-    if (typeof bh.updateRadius === 'function') bh.updateRadius();
+    host.mass = total;
     return;
   }
 
-  const bx = body.pos?.x ?? bh.pos.x;
-  const by = body.pos?.y ?? bh.pos.y;
-  const bvx = body.vel?.x ?? bh.vel.x;
-  const bvy = body.vel?.y ?? bh.vel.y;
+  const bx = body.pos?.x ?? host.pos.x;
+  const by = body.pos?.y ?? host.pos.y;
+  const bvx = body.vel?.x ?? host.vel.x;
+  const bvy = body.vel?.y ?? host.vel.y;
 
   // Banked before the state is overwritten: r_rel and v_rel are relative to the
   // hole as it is now, not as the merged object will be.
   const mu = (m1 * m2) / total;
-  const rx = bx - bh.pos.x;
-  const ry = by - bh.pos.y;
-  const vx = bvx - bh.vel.x;
-  const vy = bvy - bh.vel.y;
+  const rx = bx - host.pos.x;
+  const ry = by - host.pos.y;
+  const vx = bvx - host.vel.x;
+  const vy = bvy - host.vel.y;
   const spin = mu * (rx * vy - ry * vx);
   if (Number.isFinite(spin)) {
     bankAbsorbedSpin(spin);
-    bh.spin_angular_momentum = (bh.spin_angular_momentum || 0) + spin;
+    if (ownsSpin) {
+      host.spin_angular_momentum = (host.spin_angular_momentum || 0) + spin;
+    }
   }
 
-  const px = (bh.pos.x * m1 + bx * m2) / total;
-  const py = (bh.pos.y * m1 + by * m2) / total;
-  const pvx = (bh.vel.x * m1 + bvx * m2) / total;
-  const pvy = (bh.vel.y * m1 + bvy * m2) / total;
+  const px = (host.pos.x * m1 + bx * m2) / total;
+  const py = (host.pos.y * m1 + by * m2) / total;
+  const pvx = (host.vel.x * m1 + bvx * m2) / total;
+  const pvy = (host.vel.y * m1 + bvy * m2) / total;
 
   // The same refusal PhysicsObject.apply_step makes: a non-finite hole poisons
   // every body in the scene through the gravity sum and nothing recovers.
@@ -354,14 +377,40 @@ export const absorb_into_black_hole = (bh, body) => {
     Number.isFinite(pvx) &&
     Number.isFinite(pvy)
   ) {
-    bh.pos.x = px;
-    bh.pos.y = py;
-    bh.vel.x = pvx;
-    bh.vel.y = pvy;
+    host.pos.x = px;
+    host.pos.y = py;
+    host.vel.x = pvx;
+    host.vel.y = pvy;
   }
 
-  bh.mass = total;
+  host.mass = total;
+};
+
+/**
+ * Merge a body into a black hole, conserving what the model can conserve.
+ *
+ * @param {object} bh - The absorbing black hole
+ * @param {object} body - The body being absorbed; already marked not alive
+ * @returns {void}
+ */
+export const absorb_into_black_hole = (bh, body) => {
+  absorbInto(bh, body, absorptionMovesHole(bh), true);
   if (typeof bh.updateRadius === 'function') bh.updateRadius();
+};
+
+/**
+ * Merge a planet, gas giant or asteroid into a star, neutron star or white
+ * dwarf the same way. The caller updates what depends on the new mass (the
+ * solar-mass figure and a main-sequence star's radius). A star has no spin
+ * field: the spin term goes to the same ledger a hole's does, and the star
+ * keeps the point-mass model.
+ *
+ * @param {object} star - The absorbing star
+ * @param {object} body - The body being absorbed
+ * @returns {void}
+ */
+export const absorb_into_star = (star, body) => {
+  absorbInto(star, body, absorptionMovesStar(star), false);
 };
 
 // Base PhysicsObject class

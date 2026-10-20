@@ -23,19 +23,21 @@ import {
   MASS_UNIT_KG,
 } from './state.js';
 
-// Absorption accounting: what absorb_into_black_hole banks and discards.
+// Absorption accounting: what absorb_into_black_hole and absorb_into_star bank
+// and discard.
 let absorbedSpinAngularMomentum = 0;
 let discardedAbsorptionMomentum = { x: 0, y: 0 };
 
 /**
- * The angular momentum banked as black-hole spin by every absorption so far.
+ * The angular momentum banked as spin by every absorption so far, by a black
+ * hole or a star (D-R10-23).
  * @returns {number} Sum of mu * (r_rel x v_rel), in simulation units
  */
 export const getAbsorbedSpinAngularMomentum = () => absorbedSpinAngularMomentum;
 
 /**
- * The linear momentum absorption has thrown away in static and one-way-gravity
- * configurations, where the hole is not a dynamical participant.
+ * The linear momentum absorption has thrown away in static, model-owned and
+ * one-way-gravity configurations, where the host is not a dynamical participant.
  * @returns {{x: number, y: number}} Running total
  */
 export const getDiscardedAbsorptionMomentum = () => ({

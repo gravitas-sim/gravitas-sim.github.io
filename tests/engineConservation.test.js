@@ -54,7 +54,9 @@ describe('the numbers are the ones the engine gave before the move', () => {
     expect(graveyard[0].totals.energy).toBe('-6517309.37878');
     expect(graveyard[0].totals.angular).toBe('-6505987.4472');
     expect(graveyard[0].drift.energyDrift).toBe('0');
-    expect(graveyard[1].spin).toBe('-0.000393366119608');
+    // Re-recorded for D-R10-23: it was -0.000393366119608 when only a hole
+    // banked spin; a star that absorbs a small body now banks its share too.
+    expect(graveyard[1].spin).toBe('-0.000303633314114');
     expect(graveyard[1].discarded.x).toBe('9.59581497618');
     // A moving hole banks spin, a fixed one discards momentum: both occur.
     expect(Number(graveyard[4].spin)).not.toBe(0);
