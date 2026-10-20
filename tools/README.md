@@ -115,6 +115,8 @@ current, and the orchestrator checks it.
 | `module-load-hook.mjs` | Write down every module Node loads |  |
 | `new-investigation.mjs` | npm run author:new -- --id=<lesson-id> --title="..." | `npm run author:new` |
 | `number-ratchet.mjs` | Three migrations that may only go one way: numbers through the formatter, |  |
+| `numeric-cases.mjs` | The numerical routines' validation group (Prompt 152) |  |
+| `numeric-validate.mjs` | npm run validate:numeric - the numerical routines' validation group | `npm run validate:numeric` |
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
 | `orbital-cases.mjs` | The orbital layer's validation group (Prompt 148) |  |
 | `orbital-validate.mjs` | npm run validate:orbital - the orbital layer's validation group | `npm run validate:orbital` |
