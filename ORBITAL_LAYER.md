@@ -14,7 +14,7 @@ and the scenario geometry, each in its own units (simulation or physical), its
 own epoch convention and its own sign and frame conventions, and nothing said
 so. Prompt 148 builds the layer and moves the first consumers onto it where
 that costs no route a request. This document is its contract; the decision is
-D-R10-24 in `DECISION_REGISTER.md`.
+D-R10-25 in `DECISION_REGISTER.md`.
 
 ## What it converts, and what it does not
 
@@ -50,7 +50,6 @@ builds an angle from degrees: the edge of the layer is where degrees stop.
 | `simulationUnits(G, name)` | the engine's length, time and mass; **G is part of the identity** (the time unit is a second only through G) | the 2-D engine and builder (G = 2), the 3-D kernel (`'code'`, G = 1) |
 | `PHYSICAL_UNITS['AU-day']` | AU, day, solar mass | the forward models |
 | `PHYSICAL_UNITS['km-s']` | km, s | the mission core |
-| `PHYSICAL_UNITS['m-s']` | m, s | SI |
 
 A quantity made at G = 2 and one made at G = 9000 (the Earth-Moon scenario)
 are different unit systems and do not mix. A caller that does not know G passes
@@ -166,7 +165,7 @@ place, against the table before; the screen is `costs()` of
 
 | Consumer | State | Reason and cost |
 | --- | --- | --- |
-| `js/forward/system.js` (the forward models' system: `relativeState`, `conjunctionTime`, `elementsFromBodies`) | **adopted** | Identical to its earlier arithmetic on 20,000 seeded planets, epochs and states (O5). Cost: none. The screen says five pages load it; the forward models are lazy on all of them, and every source route measured the same requests as before (observatory 17, composer 31, course packs 44, instructors 15) and no build route moved. The layer is 30 KB of source and sits in the lazy forward-model chunk (deferred bundle 1998.2 KB of 2044.4 KB) |
+| `js/forward/system.js` (the forward models' system: `relativeState`, `conjunctionTime`, `elementsFromBodies`) | **adopted** | Identical to its earlier arithmetic on 20,000 seeded planets, epochs and states (O5). Cost in requests: none. The screen says five pages load it; the forward models are lazy on all of them, and every source route measured the same requests as before (observatory 17, composer 31, course packs 44, instructors 15) and no build route moved. The layer is 23 KB of source, 7.1 KB gzipped, and sits in the lazy forward-model chunk (deferred bundle 1998.2 KB of 2044.4 KB); it is also in the service worker's first-visit install like every module, which stands at 5,175,230 of its 5,175,296-byte ceiling (`tools/data-budget.json`) on a Mac, where Node 24 reads a few KB larger than CI's Node 22 |
 | `js/lab3d/elements.js` (the 3-D kernel's element readout) | waiting | An instructor-bundle source: editing it makes `instructors:check` stale, and a rebuild needs the passphrase a session does not have. The layer reproduces its outputs bit for bit on the kernel's reference corpus and on 20,000 seeded orbits (O1, O2, O3), so the adoption is a swap that waits for an instructor rebuild. Cost when adopted, by the screen: it has no imports today, so `/3d/`, `/lab3d/` and the observatory gain the layer and `js/orbital.js` (two requests), and `/studio/` the layer (one); they are at their request ceilings. The roadmap's prompts that own `js/lab3d/*` (271 to 273) should make the swap the other way round, `elements.js` re-exporting the layer, in the same rebuild |
 | `js/systemSpec.js` (the Orbital System Builder: `keplerState`) | waiting | The layer's planar branch is `keplerState` to the last bit (O4: 20,000 seeded orbits and every orbit of four builder systems, prograde and retrograde). Cost measured: `/studio/` 48 to 49 requests (ceiling 48) and 929.4 to 959.0 KB (ceiling 975.6); no other route loads it before first use. A request is not covered by the standing size approval, so it is not adopted until `/studio/` has a request to give or the layer is folded into a module the route already loads |
 | `js/binaryOrbits.js` (the binary laboratory's layout in the scenario geometry, `js/world/build.js`) | waiting | `js/world/build.js` has no element conversions of its own (the circular orbits are `sqrt(mu / r)`); the one eccentric orbit it builds is `js/binaryOrbits.js`'s `relativeState`, a true-anomaly form with a different arithmetic, whose bits the world golden (`tests/scenarioGeometry.test.js`) compares. Cost measured with the layer imported: +1 request on nine routes (front door and sandbox 107 to 108, the three lessons 146 to 147, largest lesson 148 to 149, figure 126 to 127, experiments 57 to 58) |
@@ -264,8 +263,11 @@ Measured with `node tools/route-budget.mjs`, both configurations, on the tree
 that adds this layer and moves `js/forward/system.js` onto it: **no route
 changed** in requests or kilobytes in the build, and none changed in the
 sources; the layer is reached only by the forward models, which are lazy
-everywhere they appear. The initial download and the deferred bundle stay
-inside their budgets (`npm run budget:check`).
+everywhere they appear. The initial download (798.1 of 830.0 KB) and the
+deferred bundle (1998.2 of 2044.4 KB) stay inside their budgets (`npm run
+budget:check`). The one margin it used up is the service worker's first-visit
+install (`tools/data-budget.json`, 66 bytes left on a Mac): a further module
+in the install's core needs room made elsewhere, or a ceiling decision.
 
 ## References
 

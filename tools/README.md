@@ -115,6 +115,8 @@ current, and the orchestrator checks it.
 | `new-investigation.mjs` | npm run author:new -- --id=<lesson-id> --title="..." | `npm run author:new` |
 | `number-ratchet.mjs` | Three migrations that may only go one way: numbers through the formatter, |  |
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
+| `orbital-cases.mjs` | The orbital layer's validation group (Prompt 148) |  |
+| `orbital-validate.mjs` | npm run validate:orbital - the orbital layer's validation group | `npm run validate:orbital` |
 | `output-excerpt.mjs` | The part of a failing command's output worth printing |  |
 | `pending-acceptance.mjs` | Acceptance checks for features that are not built yet |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |

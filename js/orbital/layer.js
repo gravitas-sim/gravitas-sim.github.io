@@ -1,45 +1,21 @@
 // =============================================================================
 // The orbital layer: elements and state vectors, with the units named
 // -----------------------------------------------------------------------------
-// Elements, state vectors and anomalies are converted in several places - the
-// 3-D kernel, the mission core, the forward models, the Orbital System Builder
-// - and they differ in what a number means: simulation units or physical ones,
-// radians or degrees, a clock that starts at the run or at a Julian date.
-// This module converts between elements and a state, in two dimensions and in
-// three, and refuses when two quantities do not mean the same thing. It does
-// not convert between meanings: simulation to physical units, one frame to
-// another beyond the one rotation an orbit needs, one time scale to another.
-// Those stay with their authorities (js/units.js, js/mission/*, js/kernels/sky/).
-// ORBITAL_LAYER.md has the table of what is adopted and what is not.
+// Elements to a state vector and back, in 2-D and 3-D, with every quantity
+// typed (dimension, unit system, frame, epoch on a named time scale) and a
+// mismatch refused. It converts nothing across meanings: simulation to
+// physical units, one time scale to another, one frame to another beyond the
+// rotation an orbit needs stay with their authorities (js/units.js,
+// js/mission/*, js/kernels/sky/). The arithmetic is its first consumers',
+// operation for operation: the planar branch is js/systemSpec.js keplerState
+// and the forward models' relativeState, the spatial branch js/lab3d/elements.js
+// (two roundings of one state, each pinned to the bit where something depends
+// on it). Newtonian two-body orbits: no perturbation, no relativistic term.
+// Contract, frames, time scales, consumers and validation: ORBITAL_LAYER.md.
 //
-// Every public function takes and returns typed quantities:
-//
-//   quantity    { value, dim, units }: dim is one of DIMENSIONS; units is a
-//               unit system (simulationUnits(G), PHYSICAL_UNITS) for a length,
-//               time, speed, gm (G times a mass) or rate, and null for an
-//               angle (always radians) or a dimensionless number
-//   instant     a time with a time scale named: { value, dim: 'time', units,
-//               scale }, scale one of TIME_SCALES. A duration has no scale
-//   vector      a quantity whose value is an array (2 or 3 components)
-//   elements    from keplerElements: a, e, omega (and i, Omega in 3-D), one
-//               anomaly with its kind named, the epoch it holds at, and mu or
-//               a period; always in the 'primary-reference' frame
-//   state       from elementsToState: r and v in one named frame, at an epoch
-//
-// A refusal is an OrbitalLayerError with a code: 'quantity' (not typed),
-// 'dimension', 'units', 'frame', 'timeScale', 'domain' (an orbit this layer
-// does not describe), 'elements' (the 3-D kernel's own problem list), 'unbound'
-// and 'degenerate'.
-//
-// The arithmetic is the arithmetic of its first consumers, operation for
-// operation, so that adopting the layer changes no orbit's numbers by a bit:
-// the planar branch is js/systemSpec.js's keplerState and the forward models'
-// relativeState, the spatial branch is js/lab3d/elements.js. Two ways of
-// writing the same perifocal state, then, and they agree to rounding; each is
-// pinned bit for bit where a golden or a saved file depends on its bits.
-//
-// Pure: no DOM, no state of its own. Newtonian two-body orbits only: no
-// perturbations, no relativistic terms, no third body.
+// A refusal is an OrbitalLayerError with a `code`: quantity, dimension, units,
+// frame, timeScale, domain, elements (the 3-D kernel's own words), unbound,
+// degenerate. Pure: no DOM, no state of its own.
 // =============================================================================
 
 import { solveKepler } from '../orbital.js';
@@ -49,10 +25,9 @@ const { Math } = globalThis;
 
 const TAU = 2 * Math.PI;
 const DEG = Math.PI / 180;
-/** Below this, e is circular (as the 3-D kernel's SINGULAR) */
+/** Below this, e is circular (the 3-D kernel's SINGULAR). */
 const SINGULAR = 1e-11;
 
-const DIMENSIONAL = new Set(['length', 'time', 'speed', 'gm', 'rate']);
 export const DIMENSIONS = Object.freeze([
   'length',
   'time',
@@ -62,14 +37,9 @@ export const DIMENSIONS = Object.freeze([
   'angle',
   'dimensionless',
 ]);
-/** The frames a state or an element set can be named in. */
+const DIMENSIONAL = new Set(DIMENSIONS.slice(0, 5));
 export const FRAMES = Object.freeze(['perifocal', 'primary-reference']);
-/**
- * The clocks. 'simulation' is the 2-D engine's, in its time unit, zero at the
- * start of a run; 'code' the 3-D kernel's; 'elapsed' a day count from a zero
- * the system's author chose (the forward models); TT, TDB and UTC the
- * astronomical scales, named so a later consumer cannot pass one for another.
- */
+/** The clocks: the 2-D engine's, the 3-D kernel's, day counts, and the astronomical scales. */
 export const TIME_SCALES = Object.freeze([
   'simulation',
   'code',
@@ -79,10 +49,9 @@ export const TIME_SCALES = Object.freeze([
   'UTC',
 ]);
 const SCALES = new Set(TIME_SCALES);
-/** The anomalies. On a hyperbola, 'eccentric' is the hyperbolic anomaly H. */
+/** On a hyperbola, 'eccentric' is the hyperbolic anomaly H. */
 export const ANOMALY_TYPES = Object.freeze(['mean', 'true', 'eccentric']);
 
-/** A refusal. `code` says which rule, `detail` (when set) the specific problem. */
 export class OrbitalLayerError extends Error {
   constructor(code, message, detail) {
     super(message);
@@ -97,60 +66,35 @@ const refuse = (code, message, detail) => {
 
 // --- Unit systems ------------------------------------------------------------
 
-const simulationSets = new Map();
+const sets = new Map();
 /**
- * The simulation's units: length, time and mass in the engine's own scale. The
- * time unit is a second only through G (js/systemSpec.js secondsPerTimeUnit),
- * so G is part of the identity: a quantity made at G = 2 is not one made at
- * G = 9000. G may be left unstated (null) where the caller does not know it;
- * that is its own unit system and mixes with no stated one.
- *
- * @param {number|null} [G] - Gravitational constant, simulation units
- * @param {string} [name] - 'simulation', or 'code' for the 3-D kernel's
- * @returns {object} The unit system (the same object for the same arguments)
+ * The engine's own length, time and mass. The time unit is a second only
+ * through G, so G is part of the identity (null: unstated, mixes with no
+ * stated one). The same arguments give the same object.
  */
 export function simulationUnits(G = null, name = 'simulation') {
   if (G !== null && !(Number.isFinite(G) && G > 0))
     refuse('units', `G must be a positive number or null, not ${G}`);
-  const key = `${name}(G=${G === null ? 'unstated' : G})`;
-  let u = simulationSets.get(key);
-  if (!u) {
-    u = Object.freeze({
-      kind: 'simulation',
-      id: key,
-      G,
-      length: `${name} length`,
-      time: `${name} time`,
-      mass: `${name} mass`,
-    });
-    simulationSets.set(key, u);
-  }
-  return u;
+  const id = `${name}(G=${G === null ? 'unstated' : G})`;
+  if (!sets.has(id))
+    sets.set(
+      id,
+      Object.freeze({
+        kind: 'simulation',
+        id,
+        G,
+        length: `${name} length`,
+        time: `${name} time`,
+        mass: `${name} mass`,
+      })
+    );
+  return sets.get(id);
 }
-
-/** Physical unit systems, by what a length and a time are in each. */
+const physical = (id, length, time, mass) =>
+  Object.freeze({ kind: 'physical', id, length, time, mass });
 export const PHYSICAL_UNITS = Object.freeze({
-  'AU-day': Object.freeze({
-    kind: 'physical',
-    id: 'AU-day',
-    length: 'AU',
-    time: 'day',
-    mass: 'solar mass',
-  }),
-  'km-s': Object.freeze({
-    kind: 'physical',
-    id: 'km-s',
-    length: 'km',
-    time: 's',
-    mass: 'kg',
-  }),
-  'm-s': Object.freeze({
-    kind: 'physical',
-    id: 'm-s',
-    length: 'm',
-    time: 's',
-    mass: 'kg',
-  }),
+  'AU-day': physical('AU-day', 'AU', 'day', 'solar mass'),
+  'km-s': physical('km-s', 'km', 's', 'kg'),
 });
 
 const isUnits = u =>
@@ -158,29 +102,20 @@ const isUnits = u =>
   (u.kind === 'simulation' || u.kind === 'physical') &&
   typeof u.id === 'string';
 const isNumber = x => typeof x === 'number';
+const UNITS_HINT = '(simulationUnits or PHYSICAL_UNITS)';
 
 // --- Quantities --------------------------------------------------------------
 
-/**
- * A typed quantity.
- * @param {number|number[]} value - A number, or an array for a vector
- * @param {string} dim - One of DIMENSIONS
- * @param {object|null} [units] - A unit system, for a dimensional quantity
- * @returns {{value, dim, units}} Frozen
- */
+/** A typed quantity, frozen: a number or an array of them, a dimension and units. */
 export function quantity(value, dim, units = null) {
   const bare = dim === 'angle' || dim === 'dimensionless';
   if (!bare && !DIMENSIONAL.has(dim))
     refuse('dimension', `unknown dimension "${dim}"`);
-  if (bare && units !== null)
-    refuse('units', `a ${dim} carries no unit system`);
+  if (bare && units !== null) refuse('units', `a ${dim} has no unit system`);
   if (!bare && !isUnits(units))
-    refuse(
-      'units',
-      `a ${dim} needs a unit system (simulationUnits or PHYSICAL_UNITS)`
-    );
-  const ok = Array.isArray(value) ? value.every(isNumber) : isNumber(value);
-  if (!ok) refuse('quantity', `a ${dim} must be a number or numbers`);
+    refuse('units', `a ${dim} needs a unit system ${UNITS_HINT}`);
+  if (!(Array.isArray(value) ? value.every(isNumber) : isNumber(value)))
+    refuse('quantity', `a ${dim} must be a number or numbers`);
   return Object.freeze({ value, dim, units });
 }
 export const length = (v, units) => quantity(v, 'length', units);
@@ -189,29 +124,21 @@ export const speed = (v, units) => quantity(v, 'speed', units);
 export const gm = (v, units) => quantity(v, 'gm', units);
 export const rate = (v, units) => quantity(v, 'rate', units);
 export const dimensionless = v => quantity(v, 'dimensionless');
-/** An angle, in radians. */
+/** An angle in radians; `degrees` takes degrees and holds radians. */
 export const angle = v => quantity(v, 'angle');
-/** An angle given in degrees, held in radians. */
 export const degrees = v => quantity(v * DEG, 'angle');
-/** A vector quantity, 2 or 3 components. */
+/** A vector quantity of two or three components. */
 export function vector(values, dim, units) {
   if (!Array.isArray(values) || (values.length !== 2 && values.length !== 3))
     refuse('quantity', 'a vector has two or three components');
   return quantity(Object.freeze(values.slice()), dim, units);
 }
-/** A time with its scale named. */
+/** A time with its scale named (a duration, `time`, has none). */
 export function instant(value, units, scale) {
-  if (!SCALES.has(scale))
-    refuse(
-      'timeScale',
-      `unknown time scale "${scale}"; one of ${TIME_SCALES.join(', ')}`
-    );
+  if (!SCALES.has(scale)) refuse('timeScale', `unknown time scale "${scale}"`);
   if (!isNumber(value)) refuse('quantity', 'an instant must be a number');
   if (!isUnits(units))
-    refuse(
-      'units',
-      'a time needs a unit system (simulationUnits or PHYSICAL_UNITS)'
-    );
+    refuse('units', `a time needs a unit system ${UNITS_HINT}`);
   return Object.freeze({ value, dim: 'time', units, scale });
 }
 
@@ -221,24 +148,16 @@ function need(x, dim, what, units) {
   if (x.dim !== dim)
     refuse('dimension', `${what} is a ${x.dim}; a ${dim} is needed`);
   if (units && x.units?.id !== units.id)
-    refuse(
-      'units',
-      `${what} is in ${x.units?.id ?? 'no units'}; ${units.id} is needed`
-    );
+    refuse('units', `${what} is in ${x.units?.id}; ${units.id} is needed`);
   return x;
 }
 function needInstant(x, what) {
   need(x, 'time', what);
-  if (!TIME_SCALES.includes(x.scale))
-    refuse('timeScale', `${what} is a duration; an instant names its scale`);
+  if (!SCALES.has(x.scale)) refuse('timeScale', `${what} is a duration`);
   return x;
 }
 
-/**
- * An angle reduced to the principal turn, (-pi, pi].
- * @param {{value: number}} a - An angle
- * @returns {object} The angle
- */
+/** An angle reduced to the principal turn, (-pi, pi]. */
 export function principalAngle(a) {
   need(a, 'angle', 'the angle');
   let M = a.value % TAU;
@@ -247,9 +166,7 @@ export function principalAngle(a) {
   return angle(M);
 }
 
-// --- Anomalies ---------------------------------------------------------------
-//
-// Plain radians, in the forms the consumers wrote them.
+// --- Anomalies (plain radians, in the consumers' own forms) ------------------
 
 const trueToEccentric = (nu, e) =>
   2 *
@@ -257,7 +174,7 @@ const trueToEccentric = (nu, e) =>
     Math.sqrt(1 - e) * Math.sin(nu / 2),
     Math.sqrt(1 + e) * Math.cos(nu / 2)
   );
-/** The true anomaly is always the principal one, (-pi, pi]. */
+/** A true anomaly is always the principal one, (-pi, pi]. */
 const eccentricToTrue = (E, e) => {
   const nu =
     2 *
@@ -273,7 +190,7 @@ const trueToHyperbolic = (nu, e) =>
 const hyperbolicToTrue = (H, e) =>
   2 * Math.atan(Math.sqrt((e + 1) / (e - 1)) * Math.tanh(H / 2));
 const hyperbolicToMean = (H, e) => e * Math.sinh(H) - H;
-/** Newton's method on the hyperbolic Kepler equation, from asinh(M / e). */
+/** Newton's method on e sinh H - H = M, from asinh(M / e). */
 function meanToHyperbolic(M, e) {
   let H = Math.asinh(M / e);
   for (let k = 0; k < 200; k++) {
@@ -284,7 +201,6 @@ function meanToHyperbolic(M, e) {
   return H;
 }
 
-/** One anomaly in the form asked for, plain radians; 'eccentric' is H when e > 1. */
 function convert(type, value, to, e) {
   if (type === to) return value;
   if (e < 1) {
@@ -298,7 +214,7 @@ function convert(type, value, to, e) {
     return to === 'mean' ? eccentricToMean(E, e) : eccentricToTrue(E, e);
   }
   if (type === 'true' && !(1 + e * Math.cos(value) > 0))
-    refuse('domain', "that true anomaly is past the hyperbola's asymptote");
+    refuse('domain', "a true anomaly past the hyperbola's asymptote");
   const H =
     type === 'mean'
       ? meanToHyperbolic(value, e)
@@ -309,26 +225,20 @@ function convert(type, value, to, e) {
   return to === 'mean' ? hyperbolicToMean(H, e) : hyperbolicToTrue(H, e);
 }
 
+const kind = (an, what = 'an anomaly') => {
+  if (!an || !ANOMALY_TYPES.includes(an.type))
+    refuse('quantity', `${what} names its kind: ${ANOMALY_TYPES.join(', ')}`);
+  need(an.value, 'angle', 'the anomaly');
+  return an;
+};
+
 /**
- * An anomaly in another kind, for an ellipse (e < 1) or a hyperbola (e > 1).
- * Mean to eccentric goes through js/orbital.js's solveKepler, on the mean
- * anomaly's own turn, and so does eccentric to mean; a true anomaly is always
- * the principal one, (-pi, pi], and the eccentric anomaly made from it too.
- *
- * @param {{type: string, value: object}} anomaly - { type, value: angle }
- * @param {string} to - One of ANOMALY_TYPES
- * @param {object} e - Eccentricity, dimensionless
- * @returns {{type: string, value: object}} The same position on the orbit
+ * An anomaly `{ type, value: angle }` in another kind, for an ellipse or a
+ * hyperbola. Mean to eccentric is solveKepler's, on the mean anomaly's own turn.
  */
 export function convertAnomaly(anomaly, to, e) {
-  if (!anomaly || !ANOMALY_TYPES.includes(anomaly.type))
-    refuse(
-      'quantity',
-      `an anomaly names its kind: ${ANOMALY_TYPES.join(', ')}`
-    );
-  if (!ANOMALY_TYPES.includes(to))
-    refuse('quantity', `no anomaly named "${to}"`);
-  need(anomaly.value, 'angle', 'the anomaly');
+  kind(anomaly);
+  if (!ANOMALY_TYPES.includes(to)) refuse('quantity', `no anomaly "${to}"`);
   need(e, 'dimensionless', 'e');
   if (!(e.value >= 0) || Math.abs(e.value - 1) < 1e-9)
     refuse('domain', `e = ${e.value}: an ellipse or a hyperbola is needed`);
@@ -344,8 +254,8 @@ const ZERO = angle(0);
 
 /** The 3-D kernel's list of why elements are unusable (js/lab3d/elements.js). */
 function spatialProblem({ a, e, i, Omega, omega, M }, mu) {
-  const finite = [a, e, i, Omega, omega, M, mu].every(Number.isFinite);
-  if (!finite) return 'notFinite';
+  if (![a, e, i, Omega, omega, M, mu].every(Number.isFinite))
+    return 'notFinite';
   if (!(mu > 0)) return 'mu';
   if (e < 0) return 'eccentricity';
   if (Math.abs(e - 1) < 1e-9) return 'parabolic';
@@ -356,25 +266,10 @@ function spatialProblem({ a, e, i, Omega, omega, M }, mu) {
 }
 
 /**
- * Elements of a two-body orbit, checked.
- *
- * @param {object} spec
- * @param {number} spec.dimension - 2 (planar: no i, no Omega, a sense) or 3
- * @param {object} spec.a - Semi-major axis, a length; negative on a hyperbola
- *   (3-D only)
- * @param {object} spec.e - Eccentricity, dimensionless; 3-D allows e > 1
- * @param {object} spec.omega - Argument of periapsis, an angle: from the
- *   reference axis in 2-D, from the ascending node in 3-D
- * @param {object} [spec.i] - Inclination, an angle (3-D)
- * @param {object} [spec.Omega] - Longitude of the ascending node (3-D)
- * @param {{type: string, value: object}} spec.anomaly - One anomaly, its kind
- *   named, at the epoch
- * @param {object} spec.epoch - An instant, in the unit system of `a`
- * @param {object} [spec.mu] - G times the mass(es), a gm (needed in 3-D)
- * @param {object} [spec.period] - The period, a time (2-D: either mu or this)
- * @param {number} [spec.sense] - 2-D only: 1 counter-clockwise, -1 clockwise
- * @param {string} [spec.frame] - Only 'primary-reference'
- * @returns {object} Frozen elements
+ * Checked elements. `dimension` 2: an ellipse, `omega` from the reference
+ * axis, `sense` 1 or -1, `mu` or `period`. `dimension` 3: i, Omega, omega as
+ * the kernel has them, a negative a on a hyperbola, `mu` required. `anomaly`
+ * is `{ type, value }` at `epoch` (an instant in a's unit system).
  */
 export function keplerElements(spec) {
   const planar = spec?.dimension === 2;
@@ -385,55 +280,38 @@ export function keplerElements(spec) {
   const omega = need(spec.omega, 'angle', 'omega');
   const i = planar ? ZERO : need(spec.i, 'angle', 'i');
   const Omega = planar ? ZERO : need(spec.Omega, 'angle', 'Omega');
-  const an = spec.anomaly;
-  if (!an || !ANOMALY_TYPES.includes(an.type))
-    refuse(
-      'quantity',
-      `an anomaly names its kind: ${ANOMALY_TYPES.join(', ')}`
-    );
-  need(an.value, 'angle', 'the anomaly');
+  const an = kind(spec.anomaly);
   const epoch = needInstant(spec.epoch, 'the epoch');
   if (epoch.units.id !== units.id)
     refuse('units', `the epoch is in ${epoch.units.id}; ${units.id} is needed`);
-  const mu = spec.mu === undefined ? null : need(spec.mu, 'gm', 'mu', units);
-  const period =
-    spec.period === undefined
-      ? null
-      : need(spec.period, 'time', 'the period', units);
+  const opt = (q, dim, what) =>
+    q === undefined ? null : need(q, dim, what, units);
+  const mu = opt(spec.mu, 'gm', 'mu');
+  const period = opt(spec.period, 'time', 'the period');
   const frame = spec.frame ?? 'primary-reference';
   if (!FRAMES.includes(frame)) refuse('frame', `unknown frame "${frame}"`);
   if (frame !== 'primary-reference')
-    refuse(
-      'frame',
-      "elements are angles from the reference axes: 'primary-reference'"
-    );
+    refuse('frame', 'elements are measured in the primary-reference frame');
   const sense = spec.sense ?? 1;
   if (sense !== 1 && sense !== -1) refuse('domain', 'sense is 1 or -1');
-  if (!planar && sense !== 1)
-    refuse('domain', 'a 3-D orbit has no sense; its inclination carries it');
+  if (!planar && sense !== 1) refuse('domain', 'a 3-D orbit has no sense');
 
   let shape = 'ellipse';
   if (planar) {
-    const ok = [
-      a.value,
-      e.value,
-      omega.value,
-      an.value.value,
-      epoch.value,
-    ].every(Number.isFinite);
-    if (!ok) refuse('domain', 'every element must be finite');
+    if (
+      ![a.value, e.value, omega.value, an.value.value, epoch.value].every(
+        Number.isFinite
+      )
+    )
+      refuse('domain', 'every element must be finite');
     if (!(e.value >= 0 && e.value < 1))
-      refuse(
-        'domain',
-        `e = ${e.value}: a planar orbit here is an ellipse, 0 <= e < 1`
-      );
+      refuse('domain', `e = ${e.value}: a planar orbit here is 0 <= e < 1`);
     if (!(a.value > 0)) refuse('domain', 'a must be positive');
-    if (mu === null && period === null) refuse('domain', 'give mu or a period');
-    if (mu !== null && !(mu.value > 0)) refuse('domain', 'mu must be positive');
-    if (period !== null && !(period.value > 0))
-      refuse('domain', 'the period must be positive');
+    if (!mu && !period) refuse('domain', 'give mu or a period');
+    if ((mu && !(mu.value > 0)) || (period && !(period.value > 0)))
+      refuse('domain', 'mu and the period must be positive');
   } else {
-    if (mu === null) refuse('domain', 'a 3-D orbit needs mu');
+    if (!mu) refuse('domain', 'a 3-D orbit needs mu');
     const problem = spatialProblem(
       {
         a: a.value,
@@ -467,10 +345,6 @@ export function keplerElements(spec) {
   });
 }
 
-/** The mean motion, a rate: sqrt(mu / a^3) or 2 pi / period. */
-export function meanMotion(el) {
-  return rate(meanMotionOf(checkElements(el)), el.units);
-}
 function checkElements(el) {
   if (!el || el.kind !== 'elements')
     refuse('quantity', 'these are not elements from keplerElements');
@@ -486,41 +360,34 @@ function meanMotionOf(el) {
     ? Math.sqrt(el.mu.value / (a * a * a))
     : TAU / el.period.value;
 }
+/** The mean motion, a rate: sqrt(mu / a^3), or 2 pi / period. */
+export const meanMotion = el => rate(meanMotionOf(checkElements(el)), el.units);
 
-/** The mean anomaly at the epoch, plain radians. */
-function meanAtEpoch(el) {
-  return convert(el.anomaly.type, el.anomaly.value.value, 'mean', el.e.value);
-}
-
-/**
- * The mean anomaly at an instant: M at the epoch plus the mean motion times
- * the time since. The instant must be on the epoch's time scale, in its units.
- *
- * @param {object} el - Elements
- * @param {object} [t] - An instant; the epoch if omitted
- * @returns {object} An angle, not reduced
- */
-export function meanAnomalyAt(el, t) {
-  checkElements(el);
-  if (t === undefined) return angle(meanAtEpoch(el));
-  return angle(meanAt(el, timeSince(el, t)));
-}
+const meanAtEpoch = el =>
+  convert(el.anomaly.type, el.anomaly.value.value, 'mean', el.e.value);
 function timeSince(el, t) {
   needInstant(t, 'the time');
   if (t.scale !== el.epoch.scale)
     refuse(
       'timeScale',
-      `the time is on ${t.scale} and the epoch on ${el.epoch.scale}; convert with the domain authority, not here`
+      `the time is on ${t.scale} and the epoch on ${el.epoch.scale}; convert with the domain authority`
     );
   if (t.units.id !== el.units.id)
     refuse('units', `the time is in ${t.units.id}; ${el.units.id} is needed`);
   return t.value - el.epoch.value;
 }
 const meanAt = (el, dt) => meanAtEpoch(el) + meanMotionOf(el) * dt;
+/** The mean anomaly at an instant on the epoch's scale (the epoch's if omitted), not reduced. */
+export function meanAnomalyAt(el, t) {
+  checkElements(el);
+  return angle(
+    t === undefined ? meanAtEpoch(el) : meanAt(el, timeSince(el, t))
+  );
+}
 
 // --- Elements to a state -----------------------------------------------------
 
-/** The planar perifocal state, js/systemSpec.js keplerState's arithmetic. */
+/** js/systemSpec.js keplerState's arithmetic. */
 function planarPerifocal(el, M) {
   const a = el.a.value;
   const e = el.e.value;
@@ -539,7 +406,7 @@ function planarPerifocal(el, M) {
   ];
 }
 
-/** The spatial perifocal state, js/lab3d/elements.js fromElements's arithmetic. */
+/** js/lab3d/elements.js fromElements's arithmetic. */
 function spatialPerifocal(el, M) {
   const a = el.a.value;
   const e = el.e.value;
@@ -565,39 +432,7 @@ function spatialPerifocal(el, M) {
   ];
 }
 
-/**
- * A state vector, checked: position and velocity in one named frame, at an
- * instant, in one unit system.
- *
- * @param {object} spec
- * @param {object} spec.r - Position, a length vector of 2 or 3 components
- * @param {object} spec.v - Velocity, a speed vector of the same size and units
- * @param {string} spec.frame - One of FRAMES
- * @param {object} spec.epoch - The instant the state holds at, in those units
- * @returns {object} Frozen state
- */
-export function makeState({ r, v, frame, epoch }) {
-  need(r, 'length', 'the position');
-  need(v, 'speed', 'the velocity', r.units);
-  if (!Array.isArray(r.value) || r.value.length !== v.value?.length)
-    refuse('dimension', 'position and velocity must have the same size');
-  if (!FRAMES.includes(frame)) refuse('frame', `unknown frame "${frame}"`);
-  needInstant(epoch, 'the epoch');
-  if (epoch.units.id !== r.units.id)
-    refuse(
-      'units',
-      `the epoch is in ${epoch.units.id}; ${r.units.id} is needed`
-    );
-  return Object.freeze({
-    kind: 'state',
-    dimension: r.value.length,
-    frame,
-    epoch,
-    r,
-    v,
-  });
-}
-/** A state built by this module from parts it has already checked. */
+/** A state built here from parts already checked. */
 const stateOf = (frame, dimension, epoch, r, v, units) =>
   Object.freeze({
     kind: 'state',
@@ -609,22 +444,28 @@ const stateOf = (frame, dimension, epoch, r, v, units) =>
   });
 
 /**
- * The orbit's own frame: x toward periapsis, y a quarter turn along the motion
- * (z, in 3-D, along the angular momentum). The position and velocity relative
- * to the primary at the epoch, or at `t`.
- *
- * @param {object} el - Elements
- * @param {object} [t] - An instant on the epoch's time scale
- * @returns {object} A state in the 'perifocal' frame
+ * A checked state vector: `r` (a length vector), `v` (a speed vector of the
+ * same size and units), a `frame` from FRAMES and the `epoch` it holds at.
  */
-export function perifocalState(el, t) {
-  checkElements(el);
-  const when = t === undefined ? el.epoch : needInstant(t, 'the time');
-  const { r, v } = perifocalOf(el, t);
-  return stateOf('perifocal', el.dimension, when, r, v, el.units);
+export function makeState({ r, v, frame, epoch }) {
+  need(r, 'length', 'the position');
+  need(v, 'speed', 'the velocity', r.units);
+  if (!Array.isArray(r.value) || r.value.length !== v.value?.length)
+    refuse('dimension', 'position and velocity must have the same size');
+  if (!FRAMES.includes(frame)) refuse('frame', `unknown frame "${frame}"`);
+  needInstant(epoch, 'the epoch');
+  if (epoch.units.id !== r.units.id)
+    refuse('units', `the epoch is in ${epoch.units.id}; ${r.units.id} needed`);
+  return Object.freeze({
+    kind: 'state',
+    dimension: r.value.length,
+    frame,
+    epoch,
+    r,
+    v,
+  });
 }
 
-/** The perifocal position and velocity as plain arrays. */
 function perifocalOf(el, t) {
   const M = t === undefined ? meanAtEpoch(el) : meanAt(el, timeSince(el, t));
   if (el.dimension === 2) {
@@ -635,54 +476,21 @@ function perifocalOf(el, t) {
   return { r, v };
 }
 
-/**
- * The one frame change the layer makes: a perifocal state into the frame its
- * elements are measured in, the primary-centred reference axes.
- *
- * @param {object} state - A state in the 'perifocal' frame
- * @param {object} el - The elements that state belongs to
- * @returns {object} A state in the 'primary-reference' frame
- */
-export function toReferenceFrame(state, el) {
+/** The state in the orbit's own frame: x toward periapsis, z along the angular momentum. */
+export function perifocalState(el, t) {
   checkElements(el);
-  if (!state || state.kind !== 'state')
-    refuse('quantity', 'this is not a state from the layer');
-  if (state.frame !== 'perifocal')
-    refuse(
-      'frame',
-      `a ${state.frame} state is not perifocal; nothing to rotate`
-    );
-  if (state.dimension !== el.dimension)
-    refuse(
-      'dimension',
-      `a ${state.dimension}-D state and ${el.dimension}-D elements`
-    );
-  if (state.r.units.id !== el.units.id)
-    refuse(
-      'units',
-      `the state is in ${state.r.units.id}; ${el.units.id} is needed`
-    );
-  const { r, v } = rotated(el, state.r.value, state.v.value);
-  return stateOf(
-    'primary-reference',
-    el.dimension,
-    state.epoch,
-    r,
-    v,
-    el.units
-  );
+  const when = t === undefined ? el.epoch : needInstant(t, 'the time');
+  const { r, v } = perifocalOf(el, t);
+  return stateOf('perifocal', el.dimension, when, r, v, el.units);
 }
 
-/** A perifocal position and velocity turned into the reference axes. */
 function rotated(el, pos, vel) {
   if (el.dimension === 2) {
-    const [px, py] = pos;
-    const [pvx, pvy] = vel;
     const c = Math.cos(el.omega.value);
     const s = Math.sin(el.omega.value);
     return {
-      r: [px * c - py * s, px * s + py * c],
-      v: [pvx * c - pvy * s, pvx * s + pvy * c],
+      r: [pos[0] * c - pos[1] * s, pos[0] * s + pos[1] * c],
+      v: [vel[0] * c - vel[1] * s, vel[0] * s + vel[1] * c],
     };
   }
   const cO = Math.cos(el.Omega.value);
@@ -700,14 +508,38 @@ function rotated(el, pos, vel) {
   return { r: rot(pos), v: rot(vel) };
 }
 
+/** The one frame change: a perifocal state into its elements' reference axes. */
+export function toReferenceFrame(state, el) {
+  checkElements(el);
+  if (!state || state.kind !== 'state')
+    refuse('quantity', 'this is not a state from the layer');
+  if (state.frame !== 'perifocal')
+    refuse('frame', `a ${state.frame} state is not perifocal`);
+  if (state.dimension !== el.dimension)
+    refuse(
+      'dimension',
+      `a ${state.dimension}-D state, ${el.dimension}-D elements`
+    );
+  if (state.r.units.id !== el.units.id)
+    refuse(
+      'units',
+      `the state is in ${state.r.units.id}; ${el.units.id} needed`
+    );
+  const { r, v } = rotated(el, state.r.value, state.v.value);
+  return stateOf(
+    'primary-reference',
+    el.dimension,
+    state.epoch,
+    r,
+    v,
+    el.units
+  );
+}
+
 /**
- * Elements to the state relative to the primary, in the primary-reference
- * frame: the perifocal state turned into the reference axes.
- *
- * @param {object} el - Elements (keplerElements)
- * @param {object} [t] - An instant on the epoch's time scale and in its units;
- *   the state at the epoch if omitted
- * @returns {object} The state, frame 'primary-reference'
+ * The state relative to the primary in the primary-reference frame, at the
+ * epoch or at an instant on its scale: the mean anomaly advanced by the mean
+ * motion, Kepler's equation by solveKepler, the perifocal state turned.
  */
 export function elementsToState(el, t) {
   checkElements(el);
@@ -728,66 +560,44 @@ const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const norm = a => Math.sqrt(dot(a, a));
 
 /**
- * The elements of a state relative to its primary.
- *
- * 2-D: an ellipse of either sense (the clockwise orbit has sense -1); the
- * periapsis direction of a circular orbit is undefined and is the reference
- * axis. 3-D: the conventions of js/lab3d/elements.js (a negative for a
- * hyperbola, Omega 0 with no node, omega 0 with no periapsis, i from +z).
- * The anomaly returned is the mean, and `trueAnomaly` is beside it.
- *
- * @param {object} state - A state in the 'primary-reference' frame
- * @param {object} mu - G times the mass(es), a gm in the state's units
- * @returns {object} Elements at the state's epoch, with `trueAnomaly` and,
- *   for an ellipse, `period`
- * @throws {OrbitalLayerError} 'unbound' (2-D, not an ellipse), 'degenerate'
- *   (no angular momentum), or a unit, frame or dimension refusal
+ * The elements of a primary-reference state, at its epoch, with the mean
+ * anomaly and `trueAnomaly` beside it. 2-D: an ellipse of either sense, with
+ * a `period` ('unbound' or 'degenerate' otherwise). 3-D: the kernel's
+ * conventions.
  */
 export function stateToElements(state, mu) {
   if (!state || state.kind !== 'state')
     refuse('quantity', 'this is not a state from the layer');
   if (state.frame !== 'primary-reference')
-    refuse(
-      'frame',
-      `a ${state.frame} state has no reference axes to measure from`
-    );
+    refuse('frame', `a ${state.frame} state has no reference axes`);
   const units = state.r.units;
   need(state.v, 'speed', 'the velocity', units);
   need(mu, 'gm', 'mu', units);
-  const m = mu.value;
-  if (!(m > 0)) refuse('domain', 'mu must be positive');
+  if (!(mu.value > 0)) refuse('domain', 'mu must be positive');
   if (![...state.r.value, ...state.v.value].every(Number.isFinite))
     refuse('domain', 'every component of the state must be finite');
   return state.dimension === 2
-    ? planarElementsOf(state, m, units)
-    : spatialElementsOf(state, m, units);
+    ? planarElementsOf(state, mu.value, units)
+    : spatialElementsOf(state, mu.value, units);
 }
 
 function planarElementsOf(state, mu, units) {
   const [x, y] = state.r.value;
   const [vx, vy] = state.v.value;
   const r = Math.hypot(x, y);
-  const v2 = vx * vx + vy * vy;
-  const energy = v2 / 2 - mu / r;
-  if (!(energy < 0))
-    refuse(
-      'unbound',
-      'the orbit is not bound; this layer describes ellipses in 2-D'
-    );
+  const energy = (vx * vx + vy * vy) / 2 - mu / r;
+  if (!(energy < 0)) refuse('unbound', 'the orbit is not an ellipse');
   const a = -mu / (2 * energy);
   const h = x * vy - y * vx;
-  if (h === 0)
-    refuse('degenerate', 'no angular momentum: a straight-line orbit');
+  if (h === 0) refuse('degenerate', 'no angular momentum');
   const sense = h > 0 ? 1 : -1;
   // The eccentricity vector points at periapsis.
   const ex = (vy * h) / mu - x / r;
   const ey = (-vx * h) / mu - y / r;
   const e = Math.hypot(ex, ey);
   const omega = e > 1e-12 ? Math.atan2(ey, ex) : 0;
-  // True anomaly from the angle of the position past periapsis.
   const nu = sense * (Math.atan2(y, x) - omega);
-  const E = trueToEccentric(nu, e);
-  const M = eccentricToMean(E, e);
+  const M = eccentricToMean(trueToEccentric(nu, e), e);
   const el = keplerElements({
     dimension: 2,
     a: length(a, units),
@@ -811,15 +621,14 @@ function spatialElementsOf(state, mu, units) {
   const h = cross(x, v);
   const hn = norm(h);
   const r = norm(x);
-  if (!(hn > 0))
-    refuse('degenerate', 'no angular momentum: a straight-line orbit');
+  if (!(hn > 0)) refuse('degenerate', 'no angular momentum');
   const ev = cross(v, h).map((c, k) => c / mu - x[k] / r);
   const e = norm(ev);
   const a = 1 / (2 / r - dot(v, v) / mu);
   const i = Math.acos(Math.max(-1, Math.min(1, h[2] / hn)));
-  const planar = i < SINGULAR || Math.PI - i < SINGULAR;
-  const node = planar ? [1, 0, 0] : [-h[1], h[0], 0];
-  const Omega = planar ? 0 : Math.atan2(node[1], node[0]);
+  const flat = i < SINGULAR || Math.PI - i < SINGULAR;
+  const node = flat ? [1, 0, 0] : [-h[1], h[0], 0];
+  const Omega = flat ? 0 : Math.atan2(node[1], node[0]);
   const nn = norm(node);
   // The in-plane direction the phase is measured from: periapsis, or the node
   // on a circular orbit.
