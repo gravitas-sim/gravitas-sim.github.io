@@ -21,7 +21,7 @@
 // one does not.
 // =============================================================================
 
-import { mulberry32, normalizeSeed } from '../rng.js';
+import { stream } from '../random/streams.js';
 import { gaussianAt } from '../rvSurvey.js';
 import { synthesisePopulation } from '../stellar/population.js';
 import { quantile, bootstrap, sortedFinite } from '../analysis/stats.js';
@@ -127,7 +127,7 @@ export function makeUniverse(spec = {}) {
     );
   } else throw new Error(`no universe of kind "${kind}"`);
   const n = M.length;
-  const place = mulberry32(normalizeSeed(`${seed}:place`));
+  const place = stream('injection', seed, 'place');
   const omega = (areaDeg2 / SKY_DEG2) * 4 * Math.PI;
   const d = new Float64Array(n);
   const m = new Float64Array(n);
@@ -194,7 +194,7 @@ export function observe(u, partialInstrument = {}) {
     pmDecObs[i] = u.pmDec[i] + sigPm[i] * gaussianAt(`${key}:pmdec`, i);
     if (mObs[i] <= inst.limit) {
       const c = completenessAt(inst.completeness, mObs[i]);
-      const draw = mulberry32(normalizeSeed(`${key}:detect:${i}`))();
+      const draw = stream('injection', key, 'detect', i)();
       if (draw < c) {
         detected[i] = 1;
         count++;

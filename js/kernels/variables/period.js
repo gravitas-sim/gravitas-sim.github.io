@@ -25,7 +25,7 @@
 // =============================================================================
 
 import { harmonicFit } from './fit.js';
-import { mulberry32, normalizeSeed } from '../../rng.js';
+import { stream } from '../../random/streams.js';
 
 const { Math, Float64Array } = globalThis;
 
@@ -184,7 +184,7 @@ export function bootstrapPeriod(
   { K = 3, resamples = 40, seed = 'bootstrap' } = {}
 ) {
   const n = t.length;
-  const rand = mulberry32(normalizeSeed(`${seed}:${n}:${P0}`));
+  const rand = stream('experiments', seed, n, P0);
   const T = span(t);
   const hw = (0.25 * P0 * P0) / T;
   const periods = [];

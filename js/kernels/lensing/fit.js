@@ -16,8 +16,11 @@
 // =============================================================================
 
 import { createProblem, refine, covarianceAt } from '../../inference/fit.js';
-import { microlensingFlux, separationAt } from './microlensing.js';
-import { gaussianNoise } from './noise.js';
+import {
+  gaussianNoise,
+  microlensingFlux,
+  separationAt,
+} from './microlensing.js';
 
 export const MICROLENSING_MODEL = {
   id: 'microlensing-point-lens',

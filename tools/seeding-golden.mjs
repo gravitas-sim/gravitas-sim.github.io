@@ -23,7 +23,7 @@ import { writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 import { gaussian } from '../js/inference/synthetic.js';
-import { gaussianNoise } from '../js/kernels/lensing/noise.js';
+import { gaussianNoise } from '../js/kernels/lensing/microlensing.js';
 import { syntheticHubbleDiagram } from '../js/kernels/cosmology/fit.js';
 import {
   detectorPattern,
