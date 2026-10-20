@@ -1,0 +1,45 @@
+{
+ "id": "sampling-a-posterior",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-draws.fields.0.unit",""],
+    ["steps.the-draws.fields.1.unit",""],
+    ["steps.the-draws.fields.2.unit",""],
+    ["steps.the-draws.fields.3.unit",""],
+    ["steps.did-it-converge.fields.0.unit",""],
+    ["steps.did-it-converge.fields.1.unit",""],
+    ["steps.did-it-converge.fields.2.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-draws.fields.0.hint","0.11926"],
+    ["steps.the-draws.fields.1.hint","0.00026"],
+    ["steps.the-draws.fields.2.hint","0.430"],
+    ["steps.the-draws.fields.3.hint","0.0051"],
+    ["steps.did-it-converge.fields.0.hint","1.01"],
+    ["steps.did-it-converge.fields.1.hint","2000"],
+    ["steps.did-it-converge.fields.2.hint","0.72"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-draws": {
+    "validate": {"calls":242,"distinct":2,"digest":"bed47c76ade3d9fb","samples":[null,{"level":"error","message":"Run the notebook with its settings as they are. Read each median from the Value column, and subtract the low end of its interval from the high end for its width."}]}
+   },
+   "did-it-converge": {
+    "validate": {"calls":242,"distinct":2,"digest":"de11f65f782229fc","samples":[null,{"level":"error","message":"Read the largest R-hat, the smallest effective sample size and the acceptance fraction from the table of numbers. R-hat is a little above 1, and the sample size is in the thousands."}]}
+   }
+  },
+  "es": "same"
+ }
+}

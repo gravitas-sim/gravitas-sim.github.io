@@ -1,0 +1,104 @@
+{
+ "id": "goldilocks-question",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.write-the-three-down.fields.0.unit","AU"],
+    ["steps.write-the-three-down.fields.1.unit","Earths"],
+    ["steps.write-the-three-down.fields.2.unit","AU"],
+    ["steps.write-the-three-down.fields.3.unit","Earths"],
+    ["steps.write-the-three-down.fields.4.unit","AU"],
+    ["steps.write-the-three-down.fields.5.unit","Earths"],
+    ["steps.writing-it-down-then-using.unit","Earths"],
+    ["steps.venus-by-the-rule-you.unit","Earths"],
+    ["steps.take-the-readings-yourself.fields.0.unit","Earths"],
+    ["steps.take-the-readings-yourself.fields.1.unit","Earths"],
+    ["steps.take-the-readings-yourself.fields.2.unit","Earths"],
+    ["steps.take-the-readings-yourself.fields.3.unit","AU"],
+    ["steps.take-the-readings-yourself.fields.4.unit","AU"]
+   ],
+   "numbered": [
+    ["steps.write-the-three-down.fields.0.label","Distance 1"],
+    ["steps.write-the-three-down.fields.0.hint","0.5"],
+    ["steps.write-the-three-down.fields.1.hint","4"],
+    ["steps.write-the-three-down.fields.2.label","Distance 2"],
+    ["steps.write-the-three-down.fields.2.hint","1"],
+    ["steps.write-the-three-down.fields.3.hint","1"],
+    ["steps.write-the-three-down.fields.4.label","Distance 3"],
+    ["steps.write-the-three-down.fields.4.hint","2"],
+    ["steps.write-the-three-down.fields.5.hint","0.25"],
+    ["steps.take-the-readings-yourself.fields.0.label","TRAPPIST-1e receives"],
+    ["steps.take-the-readings-yourself.fields.0.hint","0.65"],
+    ["steps.take-the-readings-yourself.fields.1.label","TRAPPIST-1f receives"],
+    ["steps.take-the-readings-yourself.fields.1.hint","0.37"],
+    ["steps.take-the-readings-yourself.fields.2.label","TRAPPIST-1g receives"],
+    ["steps.take-the-readings-yourself.fields.2.hint","0.25"],
+    ["steps.take-the-readings-yourself.fields.3.hint","0.0254"],
+    ["steps.take-the-readings-yourself.fields.4.hint","0.0499"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.write-the-three-down.fields.0.label","Distancia 1"],
+    ["steps.write-the-three-down.fields.0.hint","0,5"],
+    ["steps.write-the-three-down.fields.2.label","Distancia 2"],
+    ["steps.write-the-three-down.fields.4.label","Distancia 3"],
+    ["steps.write-the-three-down.fields.5.hint","0,25"],
+    ["steps.take-the-readings-yourself.fields.0.label","TRAPPIST-1e recibe"],
+    ["steps.take-the-readings-yourself.fields.0.hint","0,65"],
+    ["steps.take-the-readings-yourself.fields.1.label","TRAPPIST-1f recibe"],
+    ["steps.take-the-readings-yourself.fields.1.hint","0,37"],
+    ["steps.take-the-readings-yourself.fields.2.label","TRAPPIST-1g recibe"],
+    ["steps.take-the-readings-yourself.fields.2.hint","0,25"],
+    ["steps.take-the-readings-yourself.fields.3.hint","0,0254"],
+    ["steps.take-the-readings-yourself.fields.4.hint","0,0499"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "writing-it-down-then-using",
+    "answer": "0.111",
+    "tolerance": "0.02",
+    "unit": "Earths"
+   },
+   {
+    "sid": "venus-by-the-rule-you",
+    "answer": "1.92",
+    "tolerance": "0.12",
+    "unit": "Earths"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "write-the-three-down": {
+    "validate": {"calls":242,"distinct":4,"digest":"8eb981184f08066f","samples":[null,{"level":"ok","message":"Every one of your readings satisfies starlight x distance x distance = 1. That is the pattern, already in your own numbers."},{"level":"error","message":"Distances and starlight are both positive numbers."},{"level":"warn","message":"These do not all sit on the same relationship. Check that each starlight value was read at the distance beside it."}]}
+   },
+   "now-put-it-round-the": {
+    "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]
+   },
+   "the-wider-definition-on-the": {
+    "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]
+   },
+   "crossing-the-edges": {
+    "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]
+   },
+   "reading-the-fraction": {
+    "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]
+   },
+   "watch-it-run": {
+    "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]
+   },
+   "take-the-readings-yourself": {
+    "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]],
+    "validate": {"calls":242,"distinct":4,"digest":"70ddabe1c8de154e","samples":[null,{"level":"warn","message":"Check e, f, g, inner, outer against the list under the picture. Each planet's row gives its starlight in Earths, and the top row gives the two edges."},{"level":"warn","message":"Check e, f, g, inner against the list under the picture. Each planet's row gives its starlight in Earths, and the top row gives the two edges."},{"level":"warn","message":"Check e, g, inner, outer against the list under the picture. Each planet's row gives its starlight in Earths, and the top row gives the two edges."}]}
+   }
+  },
+  "es": "same"
+ }
+}

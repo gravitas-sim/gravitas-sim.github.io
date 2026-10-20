@@ -1,0 +1,75 @@
+{
+ "id": "inside-a-star",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-suns-center.fields.0.unit","g/cm³"],
+    ["steps.the-suns-center.fields.1.unit",""],
+    ["steps.the-estimate-by-hand.unit",""],
+    ["steps.half-the-mass.fields.0.unit",""],
+    ["steps.half-the-mass.fields.1.unit",""],
+    ["steps.twice-the-mass.fields.0.unit","g/cm³"],
+    ["steps.twice-the-mass.fields.1.unit",""],
+    ["steps.the-central-pressure.unit",""],
+    ["steps.a-red-dwarf.fields.0.unit",""],
+    ["steps.a-red-dwarf.fields.1.unit",""],
+    ["steps.no-concentration.fields.0.unit",""],
+    ["steps.no-concentration.fields.1.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-suns-center.fields.0.hint","76.4"],
+    ["steps.the-suns-center.fields.1.hint","11.8"],
+    ["steps.half-the-mass.fields.0.hint","0.28"],
+    ["steps.half-the-mass.fields.1.hint","54.2"],
+    ["steps.twice-the-mass.fields.0.hint","153"],
+    ["steps.twice-the-mass.fields.1.hint","23.5"],
+    ["steps.a-red-dwarf.fields.0.hint","6.74"],
+    ["steps.a-red-dwarf.fields.1.hint","5.99"],
+    ["steps.no-concentration.fields.0.hint","1"],
+    ["steps.no-concentration.fields.1.hint","0.79"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-estimate-by-hand",
+    "answer": "13.77",
+    "tolerance": "0.25",
+    "unit": ""
+   },
+   {
+    "sid": "the-central-pressure",
+    "answer": "11.05",
+    "tolerance": "0.15",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-suns-center": {
+    "validate": {"calls":232,"distinct":2,"digest":"8b0846f33f979fc2","samples":[null,{"level":"error","message":"Set “Polytropic index n” to 3, the mass to 1 and the radius to 1, then read “Central density” and “Central temperature” (kelvin; divide by a million)."}]}
+   },
+   "half-the-mass": {
+    "validate": {"calls":232,"distinct":2,"digest":"5e9390ad366e74b6","samples":[null,{"level":"error","message":"Keep n = 3, mass 1 and radius 1, and read “Radius holding half the mass” and “Central density divided by the mean density”."}]}
+   },
+   "twice-the-mass": {
+    "validate": {"calls":232,"distinct":2,"digest":"5b7d4498406ba8d0","samples":[null,{"level":"error","message":"Keep n = 3 and the radius at 1, set the mass to 2, then read the two rows (temperature in kelvin, divided by a million)."}]}
+   },
+   "a-red-dwarf": {
+    "validate": {"calls":232,"distinct":2,"digest":"8fd61cc8ed6af6fc","samples":[null,{"level":"error","message":"Use the preset “A red dwarf as n = 3/2”, then read “Central temperature” (divide kelvin by a million) and “Central density divided by the mean density”."}]}
+   },
+   "no-concentration": {
+    "validate": {"calls":232,"distinct":2,"digest":"7805cc621d659a47","samples":[null,{"level":"error","message":"Set “Polytropic index n” to 0, the mass to 1 and the radius to 1, then read the two rows."}]}
+   }
+  },
+  "es": "same"
+ }
+}

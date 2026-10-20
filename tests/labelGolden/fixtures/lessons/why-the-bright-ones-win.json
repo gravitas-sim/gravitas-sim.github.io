@@ -1,0 +1,73 @@
+{
+ "id": "why-the-bright-ones-win",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.measure-the-shells.fields.0.unit","mag"],
+    ["steps.measure-the-shells.fields.1.unit","mag"],
+    ["steps.standard-candles.fields.0.unit","mag"],
+    ["steps.standard-candles.fields.1.unit","mag"],
+    ["steps.formula-by-hand.unit","mag"],
+    ["steps.formula-doubled.unit","mag"],
+    ["steps.a-second-bias.fields.0.unit","%"],
+    ["steps.a-second-bias.fields.1.unit","mag"],
+    ["steps.luminosity-error.unit","%"]
+   ],
+   "numbered": [
+    ["steps.measure-the-shells.fields.0.label","Shell 0–250 pc"],
+    ["steps.measure-the-shells.fields.0.hint","0.5"],
+    ["steps.measure-the-shells.fields.1.label","Shell 750–1,000 pc"],
+    ["steps.measure-the-shells.fields.1.hint","3.6"],
+    ["steps.standard-candles.fields.0.hint","-0.65"],
+    ["steps.standard-candles.fields.1.hint","-0.68"],
+    ["steps.a-second-bias.fields.0.hint","18"],
+    ["steps.a-second-bias.fields.1.hint","0.25"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.measure-the-shells.fields.0.label","Capa 0–250 pc"],
+    ["steps.measure-the-shells.fields.1.label","Capa 750–1.000 pc"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "formula-by-hand",
+    "answer": "0.677",
+    "tolerance": "0.01",
+    "unit": "mag"
+   },
+   {
+    "sid": "formula-doubled",
+    "answer": "2.708",
+    "tolerance": "0.03",
+    "unit": "mag"
+   },
+   {
+    "sid": "luminosity-error",
+    "answer": "20.6",
+    "tolerance": "1",
+    "unit": "%"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "measure-the-shells": {
+    "validate": {"calls":232,"distinct":2,"digest":"e48f93c344a78f28","samples":[null,{"level":"error","message":"Set the limit to 16 and the stars to the stellar population, then read the number after “brighter by” in the first and the last shell rows."}]}
+   },
+   "standard-candles": {
+    "validate": {"calls":232,"distinct":2,"digest":"b17432e956c1dc1b","samples":[null,{"level":"error","message":"Set “Stars in the cone” to standard candles and the limit to 16, then read “At the limit” and the closed form."}]}
+   },
+   "a-second-bias": {
+    "validate": {"calls":232,"distinct":2,"digest":"88e15dedc63af691","samples":[null,{"level":"error","message":"Set the limit to 18, the stars to the population and the parallax cut to 3, then read the last two rows."}]}
+   }
+  },
+  "es": "same"
+ }
+}

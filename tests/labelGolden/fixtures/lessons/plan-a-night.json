@@ -1,0 +1,107 @@
+{
+ "id": "plan-a-night",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.dark-hours.fields.0.unit","h"],
+    ["steps.dark-hours.fields.1.unit","h"],
+    ["steps.dark-hours.fields.2.unit","h"],
+    ["steps.midnight-sun-altitude.unit","deg"],
+    ["steps.airmass-at-thirty.unit",""],
+    ["steps.secant-versus-fit.unit",""],
+    ["steps.what-the-moon-costs.fields.0.unit","h"],
+    ["steps.what-the-moon-costs.fields.1.unit","h"],
+    ["steps.what-the-moon-costs.fields.2.unit","h"],
+    ["steps.count-the-targets.unit",""],
+    ["steps.tighten-the-limit.unit",""]
+   ],
+   "numbered": [
+    ["steps.dark-hours.fields.0.label","Astronomical dark, 29 January"],
+    ["steps.dark-hours.fields.0.hint","10.5"],
+    ["steps.dark-hours.fields.1.label","Astronomical dark, 21 June"],
+    ["steps.dark-hours.fields.1.hint","6.7"],
+    ["steps.what-the-moon-costs.fields.0.hint","8.1"],
+    ["steps.what-the-moon-costs.fields.1.hint","0.0"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.dark-hours.fields.0.label","Oscuridad astronómica, 29 de enero"],
+    ["steps.dark-hours.fields.1.label","Oscuridad astronómica, 21 de junio"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "midnight-sun-altitude",
+    "answer": "-6.6",
+    "tolerance": "0.3",
+    "unit": "deg"
+   },
+   {
+    "sid": "airmass-at-thirty",
+    "answer": "2",
+    "tolerance": "0.05",
+    "unit": ""
+   },
+   {
+    "sid": "secant-versus-fit",
+    "answer": "0.17",
+    "tolerance": "0.03",
+    "unit": ""
+   },
+   {
+    "sid": "count-the-targets",
+    "answer": "5",
+    "tolerance": "0.4",
+    "unit": ""
+   },
+   {
+    "sid": "tighten-the-limit",
+    "answer": "4",
+    "tolerance": "0.4",
+    "unit": ""
+   }
+  ],
+  "decimals": [
+   [
+    "dark-hours.jan",
+    1
+   ],
+   [
+    "dark-hours.jun",
+    1
+   ],
+   [
+    "dark-hours.diff",
+    1
+   ],
+   [
+    "what-the-moon-costs.newm",
+    1
+   ],
+   [
+    "what-the-moon-costs.fullm",
+    1
+   ],
+   [
+    "what-the-moon-costs.lost",
+    1
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "dark-hours": {
+    "validate": {"calls":242,"distinct":2,"digest":"94f3411e27978b6e","samples":[null,{"level":"error","message":"Set the evening exactly and read the “Astronomical dark” row at each date."}]}
+   },
+   "what-the-moon-costs": {
+    "validate": {"calls":242,"distinct":2,"digest":"320aa22b3c310dfc","samples":[null,{"level":"error","message":"Set the evening to each date, with the limits as given, and read the Regulus row."}]}
+   }
+  },
+  "es": "same"
+ }
+}

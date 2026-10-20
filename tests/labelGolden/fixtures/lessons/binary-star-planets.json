@@ -1,0 +1,113 @@
+{
+ "id": "binary-star-planets",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.what-the-quiet-run-did.fields.0.unit",""],
+    ["steps.what-the-quiet-run-did.fields.1.unit","a"],
+    ["steps.what-the-quiet-run-did.fields.2.unit",""],
+    ["steps.what-the-quiet-run-did.fields.3.unit","%"],
+    ["steps.when-did-it-leave.fields.0.unit",""],
+    ["steps.when-did-it-leave.fields.1.unit",""],
+    ["steps.work-out-the-boundary.unit",""],
+    ["steps.read-the-sweep.fields.0.unit",""],
+    ["steps.read-the-sweep.fields.1.unit","separations"],
+    ["steps.read-the-sweep.fields.2.unit","separations"],
+    ["steps.the-drift-was-tiny.fields.0.unit","%"],
+    ["steps.the-drift-was-tiny.fields.1.unit","%"],
+    ["steps.the-drift-was-tiny.fields.2.unit",""],
+    ["steps.no-encounter-at-all.fields.0.unit",""],
+    ["steps.no-encounter-at-all.fields.1.unit",""],
+    ["steps.no-encounter-at-all.fields.2.unit","%"],
+    ["steps.circumbinary-boundary.unit",""]
+   ],
+   "numbered": [
+    ["steps.read-the-sweep.fields.0.hint","4"],
+    ["steps.read-the-sweep.fields.1.hint","0.22"],
+    ["steps.read-the-sweep.fields.2.hint","0.30"],
+    ["steps.the-drift-was-tiny.fields.0.label","Energy drift at step 1.0, in per cent"],
+    ["steps.the-drift-was-tiny.fields.1.label","Energy drift at step 0.25, in per cent"],
+    ["steps.the-drift-was-tiny.fields.2.hint","of 3"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-drift-was-tiny.fields.0.label","Deriva de energía con paso 1,0, en por ciento"],
+    ["steps.the-drift-was-tiny.fields.1.label","Deriva de energía con paso 0,25, en por ciento"],
+    ["steps.the-drift-was-tiny.fields.2.hint","de 3"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "work-out-the-boundary",
+    "answer": "0.177",
+    "tolerance": "0.012",
+    "unit": ""
+   },
+   {
+    "sid": "circumbinary-boundary",
+    "answer": "3.605",
+    "tolerance": "0.12",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [
+  {
+   "rule": "answer-beyond-tolerance",
+   "at": "circumbinary-boundary",
+   "text": "3.605 within 0.12"
+  }
+ ],
+ "steps": {
+  "en": {
+   "run-the-default": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "what-the-quiet-run-did": {
+    "validate": {"calls":242,"distinct":4,"digest":"27849d02bfca071b","samples":[null,{"level":"warn","message":"The run should reach a full twenty periods. If it stopped early, the planet left — check the starting radius is 0.15."},{"level":"ok","message":"A quiet run: never much more than half a separation out, never near the other star, and energy conserved to a couple of parts in a million."},{"level":"warn","message":"That is much further out than this configuration goes. Check you are reading the row in binary separations rather than AU."}]}
+   },
+   "run-it-at-030": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "when-did-it-leave": {
+    "validate": {"calls":232,"distinct":3,"digest":"6205e7fdb7d8d4ad","samples":[null,{"level":"ok","message":"A few binary periods, and one close pass with the companion was enough to do it."},{"level":"warn","message":"A full twenty periods means it did not leave. Check the starting radius really is 0.30 — the panel shows the value it used."}]}
+   },
+   "run-the-sweep": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "read-the-sweep": {
+    "validate": {"calls":242,"distinct":4,"digest":"5006431d6f286998","samples":[null,{"level":"error","message":"The survivor has to be inside the loss, or the two columns have been read the wrong way round."},{"level":"ok","message":"Your last survivor is outside the published boundary of 0.177 — which the paper allows for, and which is the next question."},{"level":"ok","message":"The change of outcome sits between your two figures. Where exactly, this sweep does not say."}]}
+   },
+   "resolve-the-edge": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "energy-drift-as-a-screen": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "the-case-that-matters": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "the-drift-was-tiny": {
+    "validate": {"calls":242,"distinct":3,"digest":"8dec91c3373fc99a","samples":[null,{"level":"warn","message":"That is above the screen, so the panel would have refused to report an outcome. Check you are reading the run at step 1.0 with the planet at 0.25."},{"level":"ok","message":"Both runs conserve energy to better than a part in a million — and that is exactly what makes this case worth the trouble."}]}
+   },
+   "run-the-circumbinary": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "no-encounter-at-all": {
+    "validate": {"calls":242,"distinct":3,"digest":"a75ba78efdc5bf0a","samples":[null,{"level":"warn","message":"This configuration should record no close encounters at all. Check the starting radius is 2.0 and not something smaller."},{"level":"ok","message":"Ejected in a few binary periods without ever coming near a star, and with the energy conserved to seven parts in a million. Nothing about this run is numerical."}]}
+   },
+   "sweep-the-circumbinary": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "where-the-fit-disagrees": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   }
+  },
+  "es": "same"
+ }
+}

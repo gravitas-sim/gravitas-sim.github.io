@@ -1,0 +1,100 @@
+{
+ "id": "hohmann-transfer",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.measure-the-orbits.fields.0.unit","km/s"],
+    ["steps.measure-the-orbits.fields.1.unit","km/s"],
+    ["steps.transfer-semi-major.unit","AU"],
+    ["steps.transfer-semi-major.expect.unit","AU"],
+    ["steps.vis-viva-departure.unit","km/s"],
+    ["steps.vis-viva-departure.expect.unit","km/s"],
+    ["steps.first-burn-size.unit","km/s"],
+    ["steps.first-burn-size.expect.unit","km/s"],
+    ["steps.transfer-time.unit","days"],
+    ["steps.transfer-time.expect.unit","days"],
+    ["steps.read-the-arc.fields.0.unit","AU"],
+    ["steps.read-the-arc.fields.1.unit","AU"],
+    ["steps.second-burn-size.unit","km/s"],
+    ["steps.second-burn-size.expect.unit","km/s"],
+    ["steps.total-cost.unit","km/s"],
+    ["steps.total-cost.expect.unit","km/s"]
+   ],
+   "numbered": []
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "transfer-semi-major",
+    "answer": "1.75",
+    "tolerance": "0.02",
+    "unit": "AU"
+   },
+   {
+    "sid": "vis-viva-departure",
+    "answer": "35.6",
+    "tolerance": "0.4",
+    "unit": "km/s"
+   },
+   {
+    "sid": "first-burn-size",
+    "answer": "5.815",
+    "tolerance": "0.15",
+    "unit": "km/s"
+   },
+   {
+    "sid": "transfer-time",
+    "answer": "422.7",
+    "tolerance": "12",
+    "unit": "days"
+   },
+   {
+    "sid": "second-burn-size",
+    "answer": "4.598",
+    "tolerance": "0.15",
+    "unit": "km/s"
+   },
+   {
+    "sid": "total-cost",
+    "answer": "10.41",
+    "tolerance": "0.3",
+    "unit": "km/s"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [
+  {
+   "rule": "answer-beyond-tolerance",
+   "at": "first-burn-size",
+   "text": "5.815 km/s within 0.15"
+  },
+  {
+   "rule": "answer-beyond-tolerance",
+   "at": "transfer-time",
+   "text": "422.7 days within 12"
+  },
+  {
+   "rule": "answer-beyond-tolerance",
+   "at": "second-burn-size",
+   "text": "4.598 km/s within 0.15"
+  }
+ ],
+ "steps": {
+  "en": {
+   "watch-the-coast": {
+    "probe": [[{"label":"Spacecraft","value":"not on the canvas"}],[{"label":"Spacecraft, distance from the star","value":"1.13 AU"},{"label":"Its speed now","value":"25.2 km/s"},{"label":"Top of its current arc","value":"1.13 AU"},{"label":"Bottom of it","value":"0.769 AU"},{"label":"The station orbits at","value":"1.87 AU","emphasis":true}]]
+   },
+   "read-the-arc": {
+    "probe": [[{"label":"Spacecraft","value":"not on the canvas"}],[{"label":"Spacecraft, distance from the star","value":"1.13 AU"},{"label":"Its speed now","value":"25.2 km/s"},{"label":"Top of its current arc","value":"1.13 AU"},{"label":"Bottom of it","value":"0.769 AU"},{"label":"The station orbits at","value":"1.87 AU","emphasis":true}]],
+    "validate": {"calls":232,"distinct":4,"digest":"c1967e17aec97950","samples":[{"level":"warn","message":"Both numbers, in AU. The readout gives them as “top of its current arc” and “bottom of it”."},{"level":"error","message":"The top of the arc should be the station’s orbit, 2.5 AU, to within about 0.15. If the run has not reached the top yet, let it finish and read it again."},{"level":"error","message":"The bottom should still be 1 AU, to within about 0.15. Nothing has changed it since the first burn — check you are reading the bottom row and not the current distance."},{"level":"ok","message":"The bottom is still 1 AU — where you started. The transfer ellipse is a closed orbit and the spacecraft is at the far end of it, not at rest."}]}
+   }
+  },
+  "es": "same"
+ }
+}

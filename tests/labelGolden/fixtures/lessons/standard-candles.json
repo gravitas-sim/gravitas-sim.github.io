@@ -1,0 +1,69 @@
+{
+ "id": "standard-candles",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.a-calibration-error.fields.0.unit","km/s/Mpc"],
+    ["steps.a-calibration-error.fields.1.unit","%"],
+    ["steps.the-distance-factor.unit","%"],
+    ["steps.and-the-hubble-constant.unit","%"],
+    ["steps.a-five-percent-gap.unit","mag"],
+    ["steps.the-calibration-for-one-percent.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.the-sample.fields.0.hint","1829"],
+    ["steps.the-sample.fields.1.hint","1688"],
+    ["steps.a-calibration-error.fields.0.hint","66.85"],
+    ["steps.a-calibration-error.fields.1.label","Change in H₀ for 0.1 mag"],
+    ["steps.a-calibration-error.fields.1.hint","4.5"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.a-calibration-error.fields.1.label","Cambio en H₀ por 0,1 mag"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-distance-factor",
+    "answer": "4.71",
+    "tolerance": "0.05",
+    "unit": "%"
+   },
+   {
+    "sid": "and-the-hubble-constant",
+    "answer": "4.5",
+    "tolerance": "0.05",
+    "unit": "%"
+   },
+   {
+    "sid": "a-five-percent-gap",
+    "answer": "0.106",
+    "tolerance": "0.004",
+    "unit": "mag"
+   },
+   {
+    "sid": "the-calibration-for-one-percent",
+    "answer": "0.0216",
+    "tolerance": "0.001",
+    "unit": "mag"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-sample": {
+    "validate": {"calls":232,"distinct":2,"digest":"cfb7ece2ac525ff9","samples":[null,{"level":"error","message":"Read “Supernovae” and the first number of “Chi-square of the best fit, with its degrees of freedom”."}]}
+   },
+   "a-calibration-error": {
+    "validate": {"calls":232,"distinct":2,"digest":"64b5299530dc1f74","samples":[null,{"level":"error","message":"Set the error in the absolute magnitude to 0.10 and read “Hubble constant implied by that magnitude error” and “Change in H0 for 0.1 mag”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

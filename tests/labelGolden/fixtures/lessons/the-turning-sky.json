@@ -1,0 +1,90 @@
+{
+ "id": "the-turning-sky",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.rise-shift.fields.0.unit","min"],
+    ["steps.rise-shift.fields.1.unit","min"],
+    ["steps.rise-shift.fields.2.unit","min"],
+    ["steps.a-month-on.unit","min"],
+    ["steps.sidereal-day.unit","min"],
+    ["steps.sidereal-clock.fields.0.unit","h"],
+    ["steps.sidereal-clock.fields.1.unit","h"],
+    ["steps.sidereal-clock.fields.2.unit","h"],
+    ["steps.height-at-the-meridian.unit","deg"],
+    ["steps.time-above-the-horizon.unit","h"]
+   ],
+   "numbered": [
+    ["steps.rise-shift.fields.0.label","Rises on night 0 (minutes after noon)"],
+    ["steps.rise-shift.fields.0.hint","738.5"],
+    ["steps.rise-shift.fields.1.label","Rises on night 30 (minutes after noon)"],
+    ["steps.rise-shift.fields.1.hint","620.6"],
+    ["steps.sidereal-clock.fields.0.label","Sidereal time at midnight, night 0"],
+    ["steps.sidereal-clock.fields.0.hint","6.79"],
+    ["steps.sidereal-clock.fields.1.label","Sidereal time at midnight, night 30"],
+    ["steps.sidereal-clock.fields.1.hint","8.76"],
+    ["steps.sidereal-clock.fields.2.label","Advance over 30 nights"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.rise-shift.fields.0.label","Sale la noche 0 (minutos después del mediodía)"],
+    ["steps.rise-shift.fields.1.label","Sale la noche 30 (minutos después del mediodía)"],
+    ["steps.sidereal-clock.fields.0.label","Tiempo sidéreo a medianoche, noche 0"],
+    ["steps.sidereal-clock.fields.1.label","Tiempo sidéreo a medianoche, noche 30"],
+    ["steps.sidereal-clock.fields.2.label","Avance en 30 noches"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "a-month-on",
+    "answer": "122",
+    "tolerance": "4",
+    "unit": "min"
+   },
+   {
+    "sid": "sidereal-day",
+    "answer": "3.93",
+    "tolerance": "0.05",
+    "unit": "min"
+   },
+   {
+    "sid": "height-at-the-meridian",
+    "answer": "69.1",
+    "tolerance": "0.5",
+    "unit": "deg"
+   },
+   {
+    "sid": "time-above-the-horizon",
+    "answer": "14.3",
+    "tolerance": "0.2",
+    "unit": "h"
+   }
+  ],
+  "decimals": [
+   [
+    "rise-shift.shift",
+    2
+   ],
+   [
+    "sidereal-clock.adv",
+    2
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "rise-shift": {
+    "validate": {"calls":242,"distinct":3,"digest":"24972f783c71307b","samples":[null,{"level":"error","message":"Read the “Rises” row, the minutes after noon, with Arcturus selected, at night 0 and again at night 30."},{"level":"error","message":"The star should rise earlier on night 30, so the second number is the smaller one."}]}
+   },
+   "sidereal-clock": {
+    "validate": {"calls":242,"distinct":2,"digest":"6497eba4acfcaeb5","samples":[null,{"level":"error","message":"Read the “Sidereal time at midnight” row, in hours, on night 0 and on night 30."}]}
+   }
+  },
+  "es": "same"
+ }
+}

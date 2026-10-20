@@ -1,0 +1,110 @@
+{
+ "id": "phases-and-eclipses",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.four-phases.fields.0.unit",""],
+    ["steps.four-phases.fields.1.unit",""],
+    ["steps.four-phases.fields.2.unit",""],
+    ["steps.four-phases.fields.3.unit",""],
+    ["steps.phase-from-elongation.unit",""],
+    ["steps.eclipse-table.fields.0.unit",""],
+    ["steps.eclipse-table.fields.1.unit",""],
+    ["steps.months-between.unit","d"],
+    ["steps.eclipse-year.unit","d"],
+    ["steps.saros.unit","d"]
+   ],
+   "numbered": [
+    ["steps.four-phases.fields.0.label","Lit at 3.7 days"],
+    ["steps.four-phases.fields.0.hint","0.17"],
+    ["steps.four-phases.fields.1.label","Lit at 7.4 days"],
+    ["steps.four-phases.fields.1.hint","0.57"],
+    ["steps.four-phases.fields.2.label","Lit at 11.1 days"],
+    ["steps.four-phases.fields.2.hint","0.91"],
+    ["steps.four-phases.fields.3.label","Lit at 14.8 days"],
+    ["steps.four-phases.fields.3.hint","0.99"],
+    ["steps.eclipse-table.fields.0.label","Possible eclipses, January to June 2025"],
+    ["steps.eclipse-table.fields.0.hint","2"],
+    ["steps.eclipse-table.fields.1.label","Possible eclipses, July to December 2025"],
+    ["steps.eclipse-table.fields.1.hint","2"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.four-phases.fields.0.label","Iluminada a 3,7 días"],
+    ["steps.four-phases.fields.1.label","Iluminada a 7,4 días"],
+    ["steps.four-phases.fields.2.label","Iluminada a 11,1 días"],
+    ["steps.four-phases.fields.3.label","Iluminada a 14,8 días"],
+    ["steps.eclipse-table.fields.0.label","Eclipses posibles, enero a junio de 2025"],
+    ["steps.eclipse-table.fields.1.label","Eclipses posibles, julio a diciembre de 2025"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "phase-from-elongation",
+    "answer": "0.25",
+    "tolerance": "0.02",
+    "unit": ""
+   },
+   {
+    "sid": "months-between",
+    "answer": "177",
+    "tolerance": "2",
+    "unit": "d"
+   },
+   {
+    "sid": "eclipse-year",
+    "answer": "173.3",
+    "tolerance": "0.3",
+    "unit": "d"
+   },
+   {
+    "sid": "saros",
+    "answer": "0.04",
+    "tolerance": "0.02",
+    "unit": "d"
+   }
+  ],
+  "decimals": [
+   [
+    "four-phases.l1",
+    2
+   ],
+   [
+    "four-phases.l2",
+    2
+   ],
+   [
+    "four-phases.l3",
+    2
+   ],
+   [
+    "four-phases.l4",
+    2
+   ],
+   [
+    "eclipse-table.n1",
+    0
+   ],
+   [
+    "eclipse-table.n2",
+    0
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "four-phases": {
+    "validate": {"calls":242,"distinct":2,"digest":"0d3e31be62ff0f59","samples":[null,{"level":"error","message":"Set the day slider exactly and read the “Fraction of the disc lit” row each time."}]}
+   },
+   "eclipse-table": {
+    "validate": {"calls":232,"distinct":2,"digest":"02bdbc8515629c4b","samples":[null,{"level":"error","message":"Count the rows that say “an eclipse is possible”, once for each half year."}]}
+   }
+  },
+  "es": "same"
+ }
+}

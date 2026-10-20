@@ -1,0 +1,49 @@
+{
+ "id": "twelve-nights",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.measure-the-window.fields.0.unit","h"],
+    ["steps.measure-the-window.fields.1.unit","min"],
+    ["steps.read-what-you-got.fields.0.unit","d"],
+    ["steps.read-what-you-got.fields.1.unit","d"]
+   ],
+   "numbered": [
+    ["steps.measure-the-window.fields.0.hint","4.96"],
+    ["steps.measure-the-window.fields.1.hint","3.9"],
+    ["steps.measure-the-window-power.fields.0.label","Spread out, best moment (window use 0)"],
+    ["steps.measure-the-window-power.fields.0.hint","0.998"],
+    ["steps.measure-the-window-power.fields.1.label","Spread out, both ends (window use 1)"],
+    ["steps.measure-the-window-power.fields.1.hint","0.701"],
+    ["steps.read-what-you-got.fields.0.hint","0.78"],
+    ["steps.read-what-you-got.fields.1.hint","3.52"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.measure-the-window-power.fields.0.label","Repartidas, el mejor momento (uso de ventana 0)"],
+    ["steps.measure-the-window-power.fields.1.label","Repartidas, ambos extremos (uso de ventana 1)"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "measure-the-window": {
+    "validate": {"calls":232,"distinct":2,"digest":"17e086e13195278e","samples":[null,{"level":"warn","message":"That is not the window at airmass 2. Check the airmass slider is at 2.0 and read the first row of the readout."}]}
+   },
+   "measure-the-window-power": {
+    "validate": {"calls":232,"distinct":4,"digest":"d416f52a8e4d2298","samples":[null,{"level":"warn","message":"The second number should be the smaller of the two. Set the window-use slider to 1 and read it again."},{"level":"warn","message":"The best-moment plan should be very close to 1. Check the window-use slider is at 0 and the span at 20."},{"level":"ok","message":"From essentially 1 down to about 0.7. Worth holding on to: 0.7 is a large improvement and it is still a very big peak."}]}
+   },
+   "read-what-you-got": {
+    "validate": {"calls":232,"distinct":2,"digest":"8dab4aaf254328db","samples":[null,{"level":"warn","message":"The both-ends plan misses about one time in five, so this is a real outcome rather than a mistake — but check the epoch list you pasted came from the window-use-1 preset before you accept it. Then try seed twelve-2."}]}
+   }
+  },
+  "es": "same"
+ }
+}
