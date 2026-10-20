@@ -382,6 +382,7 @@ function copyForCheck() {
     'js/stellar/spectrumIndex.js',
     'js/gw',
     'js/rng.js',
+    'js/random',
     // The radiation packs' checks run the kernel they are measured with.
     'js/kernels/radiation',
     // The galactic packs' rows are sidecar files.

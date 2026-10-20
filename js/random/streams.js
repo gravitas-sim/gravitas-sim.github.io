@@ -1,6 +1,4 @@
-// Named random streams (Prompt 149, docs/SEEDING.md): mulberry32 seeded by
-// js/rng.js's hash of the seed's text, so every sequence reproducible today is
-// the same one. js/rng.js is wrapped, never changed.
+// Named random streams (Prompt 149, SEEDING.md): js/rng.js's algorithm, wrapped.
 import { mulberry32, normalizeSeed, withSeed } from '../rng.js';
 
 export const ALGORITHM = 'mulberry32';

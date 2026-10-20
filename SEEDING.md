@@ -52,10 +52,16 @@ engine(seed, () => buildWorld())     // Math.random is the engine's stream insid
 | --- | --- | --- | --- | --- |
 | `engine` | mulberry32 v1 (`withSeed`) | `js/rng.js`, wrapped as `engine` | `tools/seeded-step.mjs` | `js/world/build.js`, `js/scenarios.js`, `js/placement.js` and `js/engine/*` (the thirteen bursts and the collisions) stay on the `Math.random` that `withSeed` installs, by design (lint-allowed). `js/world.js` is on the front door's start-up path (107 of 107 requests); `js/systemBuilder.js` and `js/scenarioPackWorld.js` would only rename `withSeed`; `js/experiments/trialRunner.js` receives `rng` as an argument |
 | `effects` | the engine's, and mulberry32 v1 for scenery | the engine; `js/bodyDrawSky.js` | the bursts (through `engine`, unchanged) | `js/bodyDrawSky.js` starfield and `js/lesson/evolutionScene.js` are static on the front door, sandbox and lessons (+1 request on 107 of 107); `js/stellarEvolutionWidgets.js` is the widgets family (another session's); `js/blackHole/geometry.js` +1 request on the front door by the screen |
-| `forward` | mulberry32 v1 | `js/forward/`, `js/kernels/variables/` | `forward/setup.js` `uniformAt`; `variables/classify.js` `nightlyEpochs` | `js/rvSchedule.js` (salted state): +19 B gzipped, the precache margin is 26 B |
-| `noise` | mulberry32 v1, Box-Muller | `js/inference/`, `js/kernels/`, `js/gw/` | `inference/synthetic.js`; `kernels/lensing/microlensing.js` (its own `noise.js` is gone); `kernels/cosmology/fit.js`; `kernels/detector/frame.js`; `gw/noise.js`; `light/model.js` (its own copy of the generator is gone) | `js/rvSurvey.js` `gaussianAt` (mixed state, +19 B); `js/inference/rvMonteCarlo.js` (its normal clamps instead of redrawing, a different variant, +15 B) |
+| `forward` | mulberry32 v1 | `js/forward/`, `js/kernels/variables/` | `forward/setup.js` `uniformAt`; `variables/classify.js` `nightlyEpochs` | `js/rvSchedule.js` (salted state): +19 B gzipped (see the note below) |
+| `noise` | mulberry32 v1, Box-Muller | `js/inference/`, `js/kernels/`, `js/gw/` | `inference/synthetic.js`; `kernels/lensing/microlensing.js` (its own `noise.js` is gone); `kernels/cosmology/fit.js`; `kernels/detector/frame.js`; `gw/noise.js`; `light/model.js` (its own copy of the generator is gone) | `js/rvSurvey.js` `gaussianAt` (mixed state, +19 B); `js/inference/rvMonteCarlo.js` (its normal clamps instead of redrawing, a different variant, +15 B; its uniform could move) |
 | `experiments` | mulberry32 v1 | `js/experiments/`, `js/kernels/variables/` | `variables/period.js` `bootstrapPeriod` | `experiments/experimentManifest.js` `valuesFor`: +1 request on `/experiments/` (57 to 58 of 57); `composer/compile.js` `variantStream`: +1 request and 1.8 KB on `/studio/lesson/` and on `/studio/course/packs/` (31 to 32 of 31; 44 to 45 of 44); `analysis/stats.js` `stream`: its header's rule (it imports nothing, so no lazy chunk gains a shared one) |
 | `injection` | mulberry32 v1 | `js/survey/`, `js/stellar/`, `js/kernels/` | `cosmology/fit.js` redshifts; `variables/classify.js` `makeSample`; `survey/model.js` placement and detection | `stellar/population.js`: +1 request on the four lesson routes (146 to 147, 148 to 149, the transit and power-law tool steps 151 to 152 and 149 to 150), through `js/lessonStage.js`; `js/lab3d/state.js`: a source of the instructor bundle |
+
+The three byte-only waits (`rvSchedule`, `rvSurvey`, `rvMonteCarlo`: +19, +19, +15 B
+gzipped, no request on any route) fit the 95 bytes together and would leave 42; they
+are held back so that the open widgets PR (#390), which wants that margin, and the
+queue keep it, and move with the same proof (their cases are already in the
+golden) when it is settled.
 
 Not on the API and not seeded, kept as `Math.random` with the file listed in
 `eslint.config.js` (`MATH_RANDOM_ALLOWED`): `main.js` (a colour), `audio.js` (a
@@ -109,6 +115,8 @@ is the value to write.
 A new algorithm is a new `ALGORITHM` value and a new row here, never a change to
 this one. Before a site moves: add its call to `tools/seeding-golden.mjs`, run it
 on the commit before, and keep the answer. After: `node tools/route-budget.mjs`
-(both configurations) and `node tools/data-budget.mjs`. The module costs 919 bytes
-gzipped in the first-visit precache; the sites it replaced gave back 831 (a copy of the generator in `light/model.js`, three copies of the normal generator, the module `kernels/lensing/noise.js`), which
-leaves 26 bytes of the ceiling on a Mac with Node 24 (see `D-R10-27`).
+(both configurations) and `node tools/data-budget.mjs`. The module costs 850 bytes
+gzipped in the first-visit precache; the sites it replaced gave
+back 831 (a copy of the generator in `light/model.js`, three copies of the normal
+generator, the module `kernels/lensing/noise.js`), which leaves 95 bytes of the
+ceiling on a Mac with Node 24 (see `D-R10-27`).
