@@ -956,17 +956,15 @@ export const handle_star_merging = stars_list => {
 
 /**
  * A star takes in a smaller body: mass and momentum through absorb_into_star
- * (D-R10-23), then what depends on the new mass, the burst and the event.
+ * (D-R10-23), then what depends on the new mass (the solar-mass figure and a
+ * main-sequence star's radius).
  */
-const starAbsorbs = (star, body, burstKind) => {
+const starAbsorbs = (star, body) => {
   absorb_into_star(star, body);
   star.massInSuns = star.mass / SOLAR_MASS_UNIT;
   if (star.kind === 'StarObject') {
     star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
   }
-  burst(burstKind, body.pos);
-  body.alive = false;
-  broadcastImpact(star, body, 'stellar-absorption');
 };
 
 // Handle collisions between stars and smaller objects (planets, gas giants, asteroids)
@@ -994,7 +992,13 @@ export const handle_star_object_collisions = () => {
       const min_dist = star.radius + planet.radius;
 
       if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
-        starAbsorbs(star, planet, 'starPlanet');
+        starAbsorbs(star, planet);
+
+        // Create absorption particles
+        burst('starPlanet', planet.pos);
+
+        planet.alive = false;
+        broadcastImpact(star, planet, 'stellar-absorption');
       }
     }
 
@@ -1009,7 +1013,13 @@ export const handle_star_object_collisions = () => {
       const min_dist = star.radius + gasGiant.radius;
 
       if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
-        starAbsorbs(star, gasGiant, 'starGas');
+        starAbsorbs(star, gasGiant);
+
+        // Create more dramatic absorption particles for gas giant
+        burst('starGas', gasGiant.pos);
+
+        gasGiant.alive = false;
+        broadcastImpact(star, gasGiant, 'stellar-absorption');
       }
     }
 
@@ -1025,7 +1035,13 @@ export const handle_star_object_collisions = () => {
       const min_dist = star.radius + asteroid.radius;
 
       if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
-        starAbsorbs(star, asteroid, 'starAsteroid');
+        starAbsorbs(star, asteroid);
+
+        // Create small absorption particles
+        burst('starAsteroid', asteroid.pos);
+
+        asteroid.alive = false;
+        broadcastImpact(star, asteroid, 'stellar-absorption');
       }
     }
   }
