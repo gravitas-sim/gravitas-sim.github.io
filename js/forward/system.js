@@ -23,12 +23,8 @@
 // a two-body orbit with the star; several planets' reflex motions add, which is
 // the standard approximation when they are far from each other in period.
 //
-// The conversions between elements, anomalies and a state go through the
-// orbital layer (js/orbital/layer.js, ORBITAL_LAYER.md), with this module's
-// units named there (AU and days, the clock 'elapsed'). Its outputs are the
-// earlier ones to the last bit (tests/orbitalLayerValidation.test.js); what
-// changed is that a planet with e outside [0, 1) or a period that is not
-// positive is refused with an OrbitalLayerError, where it used to return NaN.
+// Orbit conversions go through js/orbital/layer.js (ORBITAL_LAYER.md), to the
+// last bit of the earlier arithmetic; e outside [0, 1) is refused, not NaN.
 //
 // Pure: no DOM, no state of its own.
 // =============================================================================
@@ -44,6 +40,7 @@ import {
 } from '../constants.js';
 import {
   OrbitalLayerError,
+  boundEccentricity,
   PHYSICAL_UNITS,
   angle,
   convertAnomaly,
@@ -140,6 +137,7 @@ export function relativeState(o, t) {
  * mid-transit; for radial velocity, inferior conjunction.
  */
 export function conjunctionTime(o, geometry) {
+  boundEccentricity(o.e);
   const nu = geometry.positionAngleDeg * DEG - o.omega;
   const Mc = convertAnomaly(
     { type: 'true', value: angle(nu) },

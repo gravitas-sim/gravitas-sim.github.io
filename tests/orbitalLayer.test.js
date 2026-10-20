@@ -175,6 +175,65 @@ describe('elements and states', () => {
     ).toBeCloseTo(0.4 + Math.PI / 2, 12);
   });
 
+  test('mu and a period together must agree; either alone is enough', () => {
+    const spec = extra => ({
+      dimension: 2,
+      a: L.length(0.1, AUD),
+      e: L.dimensionless(0.3),
+      omega: L.angle(1),
+      anomaly: { type: 'mean', value: L.angle(0.4) },
+      epoch: L.instant(0, AUD, 'elapsed'),
+      ...extra,
+    });
+    const mu = (4 * Math.PI ** 2 * 0.1 ** 3) / 25 ** 2;
+    expect(() =>
+      L.keplerElements(spec({ mu: L.gm(mu, AUD), period: L.time(25, AUD) }))
+    ).not.toThrow();
+    for (const [m, P] of [
+      [mu, 26],
+      [mu * 2, 25],
+    ]) {
+      try {
+        L.keplerElements(spec({ mu: L.gm(m, AUD), period: L.time(P, AUD) }));
+        throw new Error('not refused');
+      } catch (err) {
+        expect(err).toBeInstanceOf(L.OrbitalLayerError);
+        expect(err.code).toBe('domain');
+        expect(err.message).toMatch(/disagree/);
+      }
+    }
+  });
+
+  test('e, the period, the axis and mu refuse NaN and out-of-range values with code domain', () => {
+    const code = over => {
+      try {
+        planar(over);
+      } catch (err) {
+        return err instanceof L.OrbitalLayerError ? err.code : 'other';
+      }
+      return 'not refused';
+    };
+    for (const e of [NaN, 1, 1.5, -0.1, Infinity])
+      expect(code({ e: L.dimensionless(e) })).toBe('domain');
+    expect(code({ a: L.length(NaN, SIM) })).toBe('domain');
+    expect(code({ a: L.length(-1, SIM) })).toBe('domain');
+    expect(code({ mu: L.gm(0, SIM) })).toBe('domain');
+    expect(code({ mu: L.gm(-1, SIM) })).toBe('domain');
+    expect(code({ mu: L.gm(NaN, SIM) })).toBe('domain');
+    expect(code({ mu: undefined, period: L.time(NaN, SIM) })).toBe('domain');
+    expect(code({ mu: undefined, period: L.time(-3, SIM) })).toBe('domain');
+    expect(code({ e: L.dimensionless(1 - 1e-12) })).toBe('not refused');
+  });
+
+  test('the unit-system cache is bounded, and a system rebuilt after it is still compatible', () => {
+    const first = L.simulationUnits(1.5);
+    for (let k = 0; k < 200; k++) L.simulationUnits(10 + k);
+    const again = L.simulationUnits(1.5);
+    expect(again.id).toBe(first.id);
+    expect(() => L.length(1, again)).not.toThrow();
+    expect(L.simulationUnits(1.5)).toBe(again);
+  });
+
   test('a state of an elements set is the state of its true anomaly', () => {
     const asTrue = L.convertAnomaly(
       { type: 'mean', value: L.degrees(70) },

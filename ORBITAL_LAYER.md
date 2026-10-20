@@ -47,8 +47,8 @@ builds an angle from degrees: the edge of the layer is where degrees stop.
 
 | System | Names | Where it is used |
 | --- | --- | --- |
-| `simulationUnits(G, name)` | the engine's length, time and mass; **G is part of the identity** (the time unit is a second only through G) | the 2-D engine and builder (G = 2), the 3-D kernel (`'code'`, G = 1) |
-| `PHYSICAL_UNITS['AU-day']` | AU, day, solar mass | the forward models |
+| `simulationUnits(G, name)` | the engine's length and time; **G is part of the identity** (the time unit is a second only through G) | the 2-D engine and builder (G = 2), the 3-D kernel (`'code'`, G = 1) |
+| `PHYSICAL_UNITS['AU-day']` | AU, day | the forward models |
 | `PHYSICAL_UNITS['km-s']` | km, s | the mission core |
 
 A quantity made at G = 2 and one made at G = 9000 (the Earth-Moon scenario)
@@ -87,7 +87,10 @@ period, [sense] })` checks and freezes a set of elements:
   `sense` 1 (counter-clockwise) or -1 (the mirror image across the periapsis
   line, the Orbital System Builder's retrograde). Either `mu` or a `period`
   gives the mean motion: sqrt(mu / a^3) or 2 pi / period (the forward models
-  state a period).
+  state a period). Given both, they must agree to 1e-9 (`domain`,
+  "mu and the period disagree"); the cache of simulation unit systems is
+  bounded at 64 entries (a rebuilt system has the same `id`, which is what
+  compatibility compares).
 - **3-D**: the conventions of the 3-D kernel (`js/lab3d/elements.js`): a
   negative for a hyperbola, e = 1 refused (a parabola has no a), Omega 0 and
   the node undefined for a flat orbit, omega 0 and the phase measured from the
@@ -102,6 +105,14 @@ equation by `solveKepler`, the perifocal state turned into the reference axes.
 `unbound` otherwise, with a `period`; 3-D: ellipses and hyperbolas, with the
 true anomaly beside the mean). `convertAnomaly(anomaly, to, e)` converts one
 anomaly. `meanMotion`, `meanAnomalyAt`, `makeState` complete the set.
+
+One bound check serves every 2-D bound orbit and the forward models: e must
+satisfy `!(e >= 0 && e < 1)` to be refused, so NaN, a negative e, a parabola and
+a hyperbola all raise the same `domain` error, and so does a period, an axis
+or a mu that fails `> 0`. Every bound orbit, up to e = 1 - 2^-53, converts with
+the earlier numbers; only `convertAnomaly` on a true anomaly refuses e = 1
+itself (and e < 0, NaN). A NaN time is not an orbit's fault and still returns
+NaN, as the forward models always did.
 
 `solveKepler`'s contract carries over, and so does its limit: M any real, e in
 [0, 1), E on M's own turn, accuracy limited by the equation's conditioning,
@@ -142,8 +153,11 @@ agree to rounding, which the validation group measures (E1, A4).
   no third body. An osculating element set is the orbit at one instant.
 - 2-D: ellipses only (the engine's orbits are planar and bound). A hyperbola
   is a 3-D object here, as in the kernel.
-- A parabola is refused in 3-D and has no a. A state within 1e-9 of e = 1 is
-  refused rather than described with an enormous a.
+- A parabola is refused in 3-D and has no a, and the 3-D kernel's own
+  `elements: parabolic` refusal (|e - 1| < 1e-9) is kept for 3-D element
+  sets. The planar, forward path has no such band: a bound orbit with e as
+  close to 1 as a double allows is described with the earlier numbers (O6),
+  because refusing it would turn a 3-D file the bridge reads into a throw.
 - The mean anomaly is advanced with a constant mean motion: no drag, no mass
   change, no J2.
 - The layer does no unit conversion between systems and no time-scale
@@ -165,11 +179,11 @@ place, against the table before; the screen is `costs()` of
 
 | Consumer | State | Reason and cost |
 | --- | --- | --- |
-| `js/forward/system.js` (the forward models' system: `relativeState`, `conjunctionTime`, `elementsFromBodies`) | **adopted** | Identical to its earlier arithmetic on 20,000 seeded planets, epochs and states (O5). Cost in requests: none. The screen says five pages load it; the forward models are lazy on all of them, and every source route measured the same requests as before (observatory 17, composer 31, course packs 44, instructors 15) and no build route moved. The layer is 23 KB of source, 7.1 KB gzipped, and sits in the lazy forward-model chunk (deferred bundle 1998.2 KB of 2044.4 KB); it is also in the service worker's first-visit install like every module, which stands at 5,175,230 of its 5,175,296-byte ceiling (`tools/data-budget.json`) on a Mac, where Node 24 reads a few KB larger than CI's Node 22 |
+| `js/forward/system.js` (the forward models' system: `relativeState`, `conjunctionTime`, `elementsFromBodies`) | **adopted** | Identical to its earlier arithmetic on 20,000 seeded planets, epochs and states (O5) and on every bound e up to 1 - 2^-53, inside 1e-9 of 1 included, and on states of almost no binding energy (O6). `relativeState` and `conjunctionTime` share one bound check and refuse e >= 1, e < 0 and NaN with the same `OrbitalLayerError` (N2); the transit model keeps its own "needs a circular orbit" words for e >= 1. The 3-D lab's evidence panel (`js/lab3d/view/evidencePanel.js`) shows its existing translated "could not be read" text for a layer error, not the error's English message. Cost in requests: none. The screen says five pages load it; the forward models are lazy on all of them, and every source route measured the same requests as before (observatory 17, composer 31, course packs 44, instructors 15) and no build route moved. The layer is 23 KB of source, 7.1 KB gzipped, and sits in the lazy forward-model chunk (deferred bundle 1998.2 KB of 2044.4 KB); it is also in the service worker's first-visit install like every module, which stands at 5,175,182 of its 5,175,296-byte ceiling (`tools/data-budget.json`) on a Mac, where Node 24 reads a few KB larger than CI's Node 22 |
 | `js/lab3d/elements.js` (the 3-D kernel's element readout) | waiting | An instructor-bundle source: editing it makes `instructors:check` stale, and a rebuild needs the passphrase a session does not have. The layer reproduces its outputs bit for bit on the kernel's reference corpus and on 20,000 seeded orbits (O1, O2, O3), so the adoption is a swap that waits for an instructor rebuild. Cost when adopted, by the screen: it has no imports today, so `/3d/`, `/lab3d/` and the observatory gain the layer and `js/orbital.js` (two requests), and `/studio/` the layer (one); they are at their request ceilings. The roadmap's prompts that own `js/lab3d/*` (271 to 273) should make the swap the other way round, `elements.js` re-exporting the layer, in the same rebuild |
 | `js/systemSpec.js` (the Orbital System Builder: `keplerState`) | waiting | The layer's planar branch is `keplerState` to the last bit (O4: 20,000 seeded orbits and every orbit of four builder systems, prograde and retrograde). Cost measured: `/studio/` 48 to 49 requests (ceiling 48) and 929.4 to 959.0 KB (ceiling 975.6); no other route loads it before first use. A request is not covered by the standing size approval, so it is not adopted until `/studio/` has a request to give or the layer is folded into a module the route already loads |
 | `js/binaryOrbits.js` (the binary laboratory's layout in the scenario geometry, `js/world/build.js`) | waiting | `js/world/build.js` has no element conversions of its own (the circular orbits are `sqrt(mu / r)`); the one eccentric orbit it builds is `js/binaryOrbits.js`'s `relativeState`, a true-anomaly form with a different arithmetic, whose bits the world golden (`tests/scenarioGeometry.test.js`) compares. Cost measured with the layer imported: +1 request on nine routes (front door and sandbox 107 to 108, the three lessons 146 to 147, largest lesson 148 to 149, figure 126 to 127, experiments 57 to 58) |
-| `js/forward/system3d.js` (a 3-D system read as a forward-model state) | available | Already loads the layer through the forward models, so the swap costs no request; not adopted because the contract does not name it and because the layer refuses a bound orbit within 1e-9 of e = 1 where `toElements` returned numbers |
+| `js/forward/system3d.js` (a 3-D system read as a forward-model state) | available | Already loads the layer through the forward models, so the swap costs no request; not adopted because the contract does not name it; the forward path it reaches no longer refuses a bound orbit within 1e-9 of e = 1, so a near-parabolic bound 3-D file is observed with the earlier numbers (`tests/forwardSystem3d.test.js`) |
 | `js/mission/references.js`, `js/mission/verify.js`, `js/mission/labReferences.js` | waiting | Import `fromElements` and `toElements` from `js/lab3d/elements.js`; they follow it. The mission core's own transforms (Lambert, universal variables, the ephemeris) stay the authority and import the element conversions only |
 | `js/lab3d/state.js`, `js/lab3d/references.js`, `js/lab3d/experiment.js`, `js/lab3d/workerCore.js`, `js/lab3d/guides/curriculum.js`, `js/lab3d/view/instruments.js` | waiting | Callers of the kernel's element functions; they follow `js/lab3d/elements.js` |
 | `js/inference/rv.js`, `js/habitability.js`, `js/binaryWidgets.js`, `js/captureMeasure.js` | waiting | Solve Kepler's equation through `solveKepler` (D-R10-18) and have no element conversion to move; `convertAnomaly` is the call when one of them needs a typed anomaly |
@@ -242,12 +256,21 @@ the rows.
 | **O5** The forward models on the layer, against their earlier arithmetic | oracle | relativeState, differing bits | 0 | = 0 | pass |
 |  |  | conjunctionTime, differing bits | 0 | = 0 | pass |
 |  |  | elementsFromBodies, differing bits (null included) | 0 | = 0 | pass |
+| **O6** The bound edge: e up to 1, a state of almost no binding energy | oracle | relativeState, differing bits | 0 | = 0 | pass |
+|  |  | conjunctionTime, differing bits | 0 | = 0 | pass |
+|  |  | elementsFromBodies, differing bits | 0 | = 0 | pass |
+|  |  | near-parabolic states read back finite, of 6 | 6 | = 6 | pass |
+|  |  | energy 0 and +1e-12 read back null, of 2 | 2 | = 2 | pass |
 | **E1** A state through elements and back, on seeded ensembles | ensemble | orbits outside the stated bound, of 4,000 | 0 | = 0 | pass |
 |  |  | planar: worst error x (1 - e) / a | 2e-15 | 0 ± 1e-11 | pass |
 |  |  | spatial: worst error x (1 - e) / a (hyperbolas: / a) | 7e-14 | 0 ± 1e-11 | pass |
 | **N1** What the layer must refuse | negative | refusals missed, of 32 | 0 | = 0 | pass |
 |  |  | refusals with the wrong code | 0 | = 0 | pass |
 |  |  | element sets refused in other words than the 3-D kernel's, of 7 | 0 | = 0 | pass |
+| **N2** The bound check is one check | negative | e outside [0, 1) or NaN, refused with code domain, missed of 6 | 0 | = 0 | pass |
+|  |  | the two functions answering differently, of 6 | 0 | = 0 | pass |
+|  |  | a NaN or negative period or semi-major axis, missed of 4 | 0 | = 0 | pass |
+|  |  | NaN time: bits differing from v3 | 0 | = 0 | pass |
 | **T1** A textbook state vector to its elements | authentic | e | 0.1712 | 0.1712 ± 5e-5 | pass |
 |  |  | i | 153.2 | 153.2 ± 0.05 deg | pass |
 |  |  | Omega | 255.3 | 255.3 ± 0.05 deg | pass |
@@ -266,7 +289,7 @@ sources; the layer is reached only by the forward models, which are lazy
 everywhere they appear. The initial download (798.1 of 830.0 KB) and the
 deferred bundle (1998.2 of 2044.4 KB) stay inside their budgets (`npm run
 budget:check`). The one margin it used up is the service worker's first-visit
-install (`tools/data-budget.json`, 66 bytes left on a Mac): a further module
+install (`tools/data-budget.json`, 114 bytes left on a Mac): a further module
 in the install's core needs room made elsewhere, or a ceiling decision.
 
 ## References

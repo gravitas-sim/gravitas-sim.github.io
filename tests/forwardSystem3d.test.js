@@ -398,6 +398,54 @@ describe('what the bridge refuses or warns of', () => {
     expect(supplied.ok).toBe(true);
   });
 
+  test('a nearly parabolic bound orbit is observed with the earlier numbers, never refused by the orbital layer', () => {
+    const setup = {
+      format: 'gravitas.observing-setup',
+      formatVersion: 1,
+      seed: 'p148',
+      epochs: { kind: 'regular', duration: 7, count: 20 },
+      noise: {},
+      instrument: { kind: 'spectrograph' },
+    };
+    // The kernel refuses elements within 1e-9 of e = 1, but a state vector of
+    // almost no binding energy is a file the bridge can be given: periapsis at
+    // 1 AU with the speed of a bound orbit of eccentricity e.
+    const near = e => {
+      const sys = pair(orbit({ e: 0.5, a: 1 }));
+      const mu = K2 * (sys.bodies[0].m + sys.bodies[1].m);
+      const [m1, m2] = sys.bodies.map(b => b.m);
+      const vp = Math.sqrt(mu * (1 + e));
+      const rel = { x: [1, 0, 0], v: [0, vp, 0] };
+      sys.bodies[0].x = rel.x.map(c => (-m2 / (m1 + m2)) * c);
+      sys.bodies[0].v = rel.v.map(c => (-m2 / (m1 + m2)) * c);
+      sys.bodies[1].x = rel.x.map(c => (m1 / (m1 + m2)) * c);
+      sys.bodies[1].v = rel.v.map(c => (m1 / (m1 + m2)) * c);
+      return sys;
+    };
+    for (const e of [
+      0.95,
+      1 - 1e-6,
+      1 - 2e-9,
+      1 - 1e-10,
+      1 - 1e-12,
+      1 - 1e-15,
+    ]) {
+      const sys = near(e);
+      let out;
+      expect(() => {
+        out = observeSystem3d(sys, 'radial-velocity', setup);
+      }).not.toThrow();
+      // A finite observation, or the bridge's own word for an orbit it cannot read.
+      if (out.ok)
+        expect(
+          out.observation.columns
+            .find(c => c.role === 'value')
+            .values.every(Number.isFinite)
+        ).toBe(true);
+      else expect(typeof out.code).toBe('string');
+    }
+  });
+
   test('every bridge says what it is not', () => {
     const b = stateFromSystem3d(good);
     expect(b.warnings).toEqual(

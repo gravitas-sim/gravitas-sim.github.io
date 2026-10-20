@@ -866,6 +866,80 @@ export const CASES = [
     },
   },
   {
+    id: 'O6',
+    kind: 'oracle',
+    title: 'The bound edge: e up to 1, a state of almost no binding energy',
+    source:
+      'js/forward/system.js relativeState and conjunctionTime for e from 0.95 to 1 - 1e-12 and inside 1e-9 of 1, and elementsFromBodies for a body of binding energy -1e-4 to -1e-16 and for energy 0 and +1e-12, against the v3 functions kept in this file',
+    why: 'The layer refuses a parabola and a hyperbola, never a bound orbit: for every e in [0, 1) the forward path must keep the earlier numbers, including the orbits whose e is within 1e-9 of 1 (the 3-D kernel refuses those, the forward models never did). A state read back must be finite where it was finite, and null where it was null.',
+    run() {
+      const star = { massSun: 0.9, radiusSun: 1, teffK: 5500, distancePc: 30 };
+      const grid = [0.95, 0.99, 1 - 1e-6, 1 - 1e-9, 1 - 5e-10, 1 - 1e-10];
+      for (const eps of [1e-11, 1e-12, 1e-13, 1e-14, 1e-15, 2 ** -53])
+        grid.push(1 - eps);
+      let rel = 0;
+      let conj = 0;
+      for (const e of grid)
+        for (const [P, t, pa] of [
+          [30, 57, 200],
+          [400, -20, 10],
+          [3.3, 1234.5, 350],
+        ]) {
+          const o = forward.orbitOf(star, {
+            id: 'b',
+            massEarth: 10,
+            radiusEarth: 1,
+            periodDays: P,
+            e,
+            omegaDeg: 40,
+            meanAnomalyDeg: 100,
+            epochDays: 1,
+          });
+          const a = baseline.relativeState(o, t);
+          const b = forward.relativeState(o, t);
+          rel += mismatches(
+            [a.pos.x, a.pos.y, a.vel.x, a.vel.y],
+            [b.pos.x, b.pos.y, b.vel.x, b.vel.y]
+          );
+          conj += Object.is(
+            baseline.conjunctionTime(o, { positionAngleDeg: pa }),
+            forward.conjunctionTime(o, { positionAngleDeg: pa })
+          )
+            ? 0
+            : 1;
+        }
+      let read = 0;
+      let nulls = 0;
+      let finite = 0;
+      const energies = [1e-4, 1e-8, 1e-10, 1e-12, 1e-14, 1e-16, 0, -1e-12];
+      for (const binding of energies) {
+        const input = {
+          G: 1,
+          mass: 1,
+          rel: { x: 1, y: 0, vx: 0, vy: Math.sqrt(2 * (1 - binding)) },
+        };
+        const a = baseline.elementsFromBodies(input);
+        const b = forward.elementsFromBodies(input);
+        if (a === null || b === null) read += a === b ? 0 : 1;
+        else
+          read += mismatches(
+            [a.periodDays, a.e, a.omegaDeg, a.meanAnomalyDeg, a.epochDays],
+            [b.periodDays, b.e, b.omegaDeg, b.meanAnomalyDeg, b.epochDays]
+          );
+        if (b === null) nulls++;
+        else if ([b.periodDays, b.e, b.meanAnomalyDeg].every(Number.isFinite))
+          finite++;
+      }
+      return [
+        measure('relativeState, differing bits', rel, 0, 0),
+        measure('conjunctionTime, differing bits', conj, 0, 0),
+        measure('elementsFromBodies, differing bits', read, 0, 0),
+        measure('near-parabolic states read back finite, of 6', finite, 6, 0),
+        measure('energy 0 and +1e-12 read back null, of 2', nulls, 2, 0),
+      ];
+    },
+  },
+  {
     id: 'E1',
     kind: 'ensemble',
     title: 'A state through elements and back, on seeded ensembles',
@@ -1255,6 +1329,87 @@ export const CASES = [
           0,
           0
         ),
+      ];
+    },
+  },
+  {
+    id: 'N2',
+    kind: 'negative',
+    title: 'The bound check is one check',
+    source:
+      'js/forward/system.js relativeState and conjunctionTime, js/forward/models/transit.js',
+    why: "Both forward functions must refuse e >= 1, e < 0 and NaN with the same OrbitalLayerError (code domain), NaN as a period or a mass, and nothing else: NaN as a time returns NaN, as v3's did. The transit model keeps its own words for e >= 1.",
+    run() {
+      const star = { massSun: 0.9, radiusSun: 1, teffK: 5500, distancePc: 30 };
+      const make = (o = {}) =>
+        forward.orbitOf(star, {
+          id: 'b',
+          massEarth: 10,
+          radiusEarth: 1,
+          periodDays: 30,
+          e: 0.2,
+          omegaDeg: 40,
+          meanAnomalyDeg: 100,
+          epochDays: 1,
+          ...o,
+        });
+      const code = fn => {
+        try {
+          fn();
+        } catch (err) {
+          return err instanceof L.OrbitalLayerError ? err.code : 'other';
+        }
+        return 'not refused';
+      };
+      let missed = 0;
+      let split = 0;
+      for (const e of [1, 1.2, 2, -0.1, NaN, Infinity]) {
+        const o = make({ e });
+        const a = code(() => forward.relativeState(o, 5));
+        const b = code(() =>
+          forward.conjunctionTime(o, { positionAngleDeg: 9 })
+        );
+        if (a !== 'domain' || b !== 'domain') missed++;
+        if (a !== b) split++;
+      }
+      let badInput = 0;
+      for (const o of [
+        { ...make(), periodDays: NaN, n: NaN },
+        { ...make(), periodDays: -5 },
+        { ...make(), aAU: NaN },
+        { ...make(), aAU: -1 },
+      ])
+        if (code(() => forward.relativeState(o, 5)) === 'not refused')
+          badInput++;
+      const o = make();
+      const timeNaN = [
+        forward.relativeState(o, NaN),
+        baseline.relativeState(o, NaN),
+      ];
+      const same = mismatches(
+        [
+          timeNaN[0].pos.x,
+          timeNaN[0].pos.y,
+          timeNaN[0].vel.x,
+          timeNaN[0].vel.y,
+        ],
+        [timeNaN[1].pos.x, timeNaN[1].pos.y, timeNaN[1].vel.x, timeNaN[1].vel.y]
+      );
+      return [
+        measure(
+          'e outside [0, 1) or NaN, refused with code domain, missed of 6',
+          missed,
+          0,
+          0
+        ),
+        measure('the two functions answering differently, of 6', split, 0, 0),
+        measure(
+          'a NaN or negative period or semi-major axis, missed of 4',
+          badInput,
+          0,
+          0
+        ),
+        measure('NaN time: bits differing from v3', same, 0, 0),
       ];
     },
   },

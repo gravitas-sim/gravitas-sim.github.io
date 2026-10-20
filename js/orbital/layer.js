@@ -25,7 +25,6 @@ const { Math } = globalThis;
 
 const TAU = 2 * Math.PI;
 const DEG = Math.PI / 180;
-/** Below this, e is circular (the 3-D kernel's SINGULAR). */
 const SINGULAR = 1e-11;
 
 export const DIMENSIONS = Object.freeze([
@@ -39,7 +38,6 @@ export const DIMENSIONS = Object.freeze([
 ]);
 const DIMENSIONAL = new Set(DIMENSIONS.slice(0, 5));
 export const FRAMES = Object.freeze(['perifocal', 'primary-reference']);
-/** The clocks: the 2-D engine's, the 3-D kernel's, day counts, and the astronomical scales. */
 export const TIME_SCALES = Object.freeze([
   'simulation',
   'code',
@@ -49,7 +47,6 @@ export const TIME_SCALES = Object.freeze([
   'UTC',
 ]);
 const SCALES = new Set(TIME_SCALES);
-/** On a hyperbola, 'eccentric' is the hyperbolic anomaly H. */
 export const ANOMALY_TYPES = Object.freeze(['mean', 'true', 'eccentric']);
 
 export class OrbitalLayerError extends Error {
@@ -63,6 +60,11 @@ export class OrbitalLayerError extends Error {
 const refuse = (code, message, detail) => {
   throw new OrbitalLayerError(code, message, detail);
 };
+/** The one bound-orbit check, NaN refused; the forward models share it. */
+export function boundEccentricity(e) {
+  if (!(e >= 0 && e < 1))
+    refuse('domain', `e = ${e}: a bound orbit is 0 <= e < 1`);
+}
 
 // --- Unit systems ------------------------------------------------------------
 
@@ -76,6 +78,7 @@ export function simulationUnits(G = null, name = 'simulation') {
   if (G !== null && !(Number.isFinite(G) && G > 0))
     refuse('units', `G must be a positive number or null, not ${G}`);
   const id = `${name}(G=${G === null ? 'unstated' : G})`;
+  if (sets.size >= 64) sets.clear();
   if (!sets.has(id))
     sets.set(
       id,
@@ -85,16 +88,15 @@ export function simulationUnits(G = null, name = 'simulation') {
         G,
         length: `${name} length`,
         time: `${name} time`,
-        mass: `${name} mass`,
       })
     );
   return sets.get(id);
 }
-const physical = (id, length, time, mass) =>
-  Object.freeze({ kind: 'physical', id, length, time, mass });
+const physical = (id, length, time) =>
+  Object.freeze({ kind: 'physical', id, length, time });
 export const PHYSICAL_UNITS = Object.freeze({
-  'AU-day': physical('AU-day', 'AU', 'day', 'solar mass'),
-  'km-s': physical('km-s', 'km', 's', 'kg'),
+  'AU-day': physical('AU-day', 'AU', 'day'),
+  'km-s': physical('km-s', 'km', 's'),
 });
 
 const isUnits = u =>
@@ -240,8 +242,8 @@ export function convertAnomaly(anomaly, to, e) {
   kind(anomaly);
   if (!ANOMALY_TYPES.includes(to)) refuse('quantity', `no anomaly "${to}"`);
   need(e, 'dimensionless', 'e');
-  if (!(e.value >= 0) || Math.abs(e.value - 1) < 1e-9)
-    refuse('domain', `e = ${e.value}: an ellipse or a hyperbola is needed`);
+  if (!(e.value >= 0) || e.value === 1)
+    refuse('domain', `e = ${e.value}: not a parabola, not below 0`);
   return Object.freeze({
     type: to,
     value: angle(convert(anomaly.type, anomaly.value.value, to, e.value)),
@@ -304,12 +306,21 @@ export function keplerElements(spec) {
       )
     )
       refuse('domain', 'every element must be finite');
-    if (!(e.value >= 0 && e.value < 1))
-      refuse('domain', `e = ${e.value}: a planar orbit here is 0 <= e < 1`);
+    boundEccentricity(e.value);
     if (!(a.value > 0)) refuse('domain', 'a must be positive');
     if (!mu && !period) refuse('domain', 'give mu or a period');
     if ((mu && !(mu.value > 0)) || (period && !(period.value > 0)))
       refuse('domain', 'mu and the period must be positive');
+    if (
+      mu &&
+      period &&
+      !(
+        Math.abs(
+          (Math.sqrt(mu.value / a.value ** 3) * period.value) / TAU - 1
+        ) < 1e-9
+      )
+    )
+      refuse('domain', 'mu and the period disagree');
   } else {
     if (!mu) refuse('domain', 'a 3-D orbit needs mu');
     const problem = spatialProblem(
@@ -432,7 +443,6 @@ function spatialPerifocal(el, M) {
   ];
 }
 
-/** A state built here from parts already checked. */
 const stateOf = (frame, dimension, epoch, r, v, units) =>
   Object.freeze({
     kind: 'state',
