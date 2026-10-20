@@ -165,15 +165,15 @@
           "4.71769733534e-7"
         ],
         "position": {
-          "x": "74.7446759941",
-          "y": "-187.752869689"
+          "x": "74.7446759961",
+          "y": "-187.752869687"
         },
-        "relativeSpeed": "26.1585062296",
+        "relativeSpeed": "26.1585062425",
         "sourceType": "WhiteDwarf",
         "targetType": "Asteroid"
       }
     },
-    "sha256": "786641a2386423686caf111e23b16f78b5414b6d740980fd6d1829a9157d3b58"
+    "sha256": "c044ce250cca0ede985b64be583ba1b339bc496c915411ec10de1d0612af4ad8"
   },
   "supernova-remnant:3": {
     "counts": {
@@ -557,7 +557,7 @@
         }
       }
     },
-    "sha256": "0fc0c7387cc1e53607c4762451b534c6a270bc59e5af07f7b5c9aae793c0c0e4"
+    "sha256": "cdf848e95c5c7a8e5d81c7115dbf465a040de8c6081cc98a79cfe74e0cff9f84"
   },
   "hungry-hungry-holes:3": {
     "counts": {

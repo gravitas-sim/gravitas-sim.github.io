@@ -3,7 +3,7 @@
  "version": "2.0.0",
  "passed": 332,
  "failed": 0,
- "elapsedMs": 108886,
+ "elapsedMs": 95611,
  "checks": [
   {
    "group": "Unit system",
@@ -4190,7 +4190,7 @@
    "unit": "relative",
    "tolerance": 1e-12,
    "toleranceKind": "absolute",
-   "why": "The star's mass grows by exactly the absorbed body's. Each of the three kinds was absorbed (a guard: one body left).",
+   "why": "The star's mass grows by exactly the absorbed body's. Each of the three kinds was absorbed in all of them (a guard: one body left).",
    "error": 0,
    "pass": true
   },
@@ -4198,12 +4198,12 @@
    "group": "Collision outcomes",
    "kind": "analytic",
    "name": "A star absorbs each kind of small body (one body left)",
-   "measured": 3,
-   "expected": 3,
+   "measured": 66,
+   "expected": 66,
    "unit": "dimensionless",
    "tolerance": 0,
    "toleranceKind": "absolute",
-   "why": "A guard on the checks around it: planet, gas giant and asteroid each end inside the star.",
+   "why": "A guard on the checks around it: planet, gas giant and asteroid each end inside the star, in both configurations and in the sixty-case sweep (66 cases).",
    "error": 0,
    "pass": true
   },
@@ -4211,13 +4211,13 @@
    "group": "Collision outcomes",
    "kind": "integration",
    "name": "A star absorbing a planet, gas giant or asteroid conserves linear momentum (before and after, and the hand-worked total)",
-   "measured": 0,
+   "measured": 1.7165129711492721e-16,
    "expected": 0,
    "unit": "relative",
    "tolerance": 1e-12,
    "toleranceKind": "absolute",
-   "why": "The star takes the mass-weighted mean velocity, the same perfectly inelastic merge the black-hole path makes (Absorption group). It used to add the mass and keep its own velocity, so the system lost m (v_body - v_star): 9.1e-5, 1.7e-3, 3.8e-10 of the sum of the magnitudes of m v for the planet, the gas giant and the asteroid (D-R10-23). Two errors are taken and the larger reported. One is the momentum after against the momentum before. The other is an absolute value, not a ratio: the total worked out here as M v_star + m v_body from the masses and velocities written into the check (a 4 solar-mass star at (1.5, -0.5), each body at (-3 + k, 4)), which a ratio of after to before would not see if it scaled both alike; that hand-worked total differs from the momentum before the event by 0.0e+0, 0.0e+0, 0.0e+0, which is round-off, so it is the total and not something absorption made. The tolerance is the one committed for this check before it ran (engineTolerances.js, OUTCOMES.momentumScale) and sits 384 times under the smallest of those losses, so a star that kept its velocity could not pass; as absolute momentum it is 6.33e-9 mass * units per time at the largest scale, against sums of 6.33e+3, 6.33e+3, 6.32e+3. The scale is the sum of magnitudes because the net momentum can be small.",
-   "error": 0,
+   "why": "The star takes the mass-weighted mean velocity, the same perfectly inelastic merge the black-hole path makes (Absorption group). It used to add the mass and keep its own velocity, so the system lost m (v_body - v_star): 9.1e-5, 1.7e-3, 3.8e-10 and, in the second configuration, 5.2e-5, 1.2e-3, 1.3e-9 of the sum of the magnitudes of m v for the planet, the gas giant and the asteroid (D-R10-23). Two errors are taken and the larger reported. One is the momentum after against the momentum before. The other is an absolute value, not a ratio: the total worked out here as M v_star + m v_body from the masses and velocities written into the check, which a ratio of after to before would not see if it scaled both alike; that hand-worked total differs from the momentum before the event by at most 0.0e+0 of the scale, which is round-off, so it is the total and not something absorption made. Round-off, measured: the round-number configuration gives 0.0e+0, the non-round one (a 3.7 solar-mass star and bodies of 17.3 Earth, 1.37 Jupiter and 3.3 Ceres masses) 0.0e+0, and the largest of the sixty-case sweep 1.7e-16 (a fraction of the scale), against a tolerance of 1e-12. The tolerance is the one committed for this check before it ran (engineTolerances.js, OUTCOMES.momentumScale) and sits 384 times under the smallest of the losses above, so a star that kept its velocity could not pass; as absolute momentum it is 3.68e-7 mass * units per time at the largest scale. The scale is the sum of magnitudes because the net momentum can be small.",
+   "error": 1.7165129711492721e-16,
    "pass": true
   },
   {

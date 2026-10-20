@@ -321,26 +321,57 @@ export default async function run({ physics, constants, add, lab }) {
   });
 
   // ---- 4. A star absorbing a small body ------------------------------------
-  // The star is 4 solar masses at the origin moving at (1.5, -0.5); each body
-  // is inside it and moving at (-3 + k, 4). What the expected total needs is
-  // written out below as numbers, so it is worked out by hand and not read back
-  // from the engine: a ratio against the engine's own result would divide a
-  // uniform error out. (The centre of mass, the banked spin and the one-way and
-  // model-owned cases are pinned in tests/engineConservation.test.js: the
-  // suite's check count is printed on pages that carry instructor materials, so
-  // this group replaces a check and adds none.)
-  const STAR_M = 4 * SUN;
-  const STAR_V = { x: 1.5, y: -0.5 };
-  const sink = (kindName, make, k) => {
+  // Two configurations. A: a 4 solar-mass star at the origin moving at
+  // (1.5, -0.5), each body inside it at (-3 + k, 4), round numbers so the
+  // arithmetic can be followed by hand. B: a 3.7 solar-mass star at
+  // (0.83171, -1.29413), bodies of 17.3 Earth masses, 1.37 Jupiter masses and
+  // 3.3 Ceres masses at (-2.71828 + 0.31 k, 3.14159 - 0.27 k) off the axis,
+  // which round-off cannot cancel: at A the error is exactly zero, and a margin
+  // that is never exercised says nothing about the tolerance. What the expected
+  // total needs is written out below as numbers, so it is worked out by hand and
+  // not read back from the engine: a ratio against the engine's own result
+  // would divide a uniform error out. (The centre of mass, the banked spin and
+  // the one-way and model-owned cases are pinned in
+  // tests/engineConservation.test.js: the suite's check count is printed on
+  // pages that carry instructor materials, so this group replaces a check and
+  // adds none.)
+  const CONFIGS = [
+    {
+      suns: 4,
+      v: { x: 1.5, y: -0.5 },
+      pos: { x: 0, y: 0 },
+      bv: k => ({ x: -3 + k, y: 4 }),
+      off: { x: 0.5, y: 0 },
+      sizes: [30, 2, 1],
+    },
+    {
+      suns: 3.7,
+      v: { x: 0.83171, y: -1.29413 },
+      pos: { x: 0, y: 0 },
+      bv: k => ({ x: -2.71828 + 0.31 * k, y: 3.14159 - 0.27 * k }),
+      off: { x: 0.31, y: 0.27 },
+      sizes: [17.3, 1.37, 3.3],
+    },
+  ];
+  const sink = (kindName, k, cfg) => {
     lab.reset();
-    const s = star(4, 0);
-    s.vel = { ...STAR_V };
-    s.pos = { x: 0, y: 0 };
+    const starM = cfg.suns * SUN;
+    const starV = cfg.v;
+    const s = star(cfg.suns, 0);
+    s.vel = { ...starV };
+    s.pos = { ...cfg.pos };
     s.model_owned = false;
     s.persistent = true;
-    const body = make();
-    body.vel = { x: -3 + k, y: 4 };
-    body.pos = { x: s.radius * 0.5, y: 0 };
+    const size = cfg.sizes[k];
+    const zero = { x: 0, y: 0 };
+    const body =
+      kindName === 'planet'
+        ? new physics.Planet({ ...zero }, { ...zero }, size)
+        : kindName === 'gas'
+          ? new physics.GasGiant({ ...zero }, { ...zero }, size)
+          : new physics.Asteroid({ ...zero }, { ...zero }, size);
+    body.vel = cfg.bv(k);
+    body.pos = { x: s.radius * cfg.off.x, y: s.radius * cfg.off.y };
     body.persistent = true;
     physics.stars.push(s);
     (kindName === 'planet'
@@ -355,11 +386,10 @@ export default async function run({ physics, constants, add, lab }) {
     const m = body.mass;
     const vb = { ...body.vel };
     const hand = {
-      px: STAR_M * STAR_V.x + m * vb.x,
-      py: STAR_M * STAR_V.y + m * vb.y,
+      px: starM * starV.x + m * vb.x,
+      py: starM * starV.y + m * vb.y,
       // The scale the tolerance is a fraction of: the sum of m v magnitudes.
-      scale:
-        STAR_M * Math.hypot(STAR_V.x, STAR_V.y) + m * Math.hypot(vb.x, vb.y),
+      scale: starM * Math.hypot(starV.x, starV.y) + m * Math.hypot(vb.x, vb.y),
     };
     physics.handle_star_object_collisions();
     const after = live();
@@ -376,27 +406,49 @@ export default async function run({ physics, constants, add, lab }) {
       // the hand-worked number is the total and not something absorption made.
       handBefore: Math.hypot(pb.x - hand.px, pb.y - hand.py),
       // What a star that kept its own velocity would have lost.
-      wouldLose: m * Math.hypot(vb.x - STAR_V.x, vb.y - STAR_V.y),
+      wouldLose: m * Math.hypot(vb.x - starV.x, vb.y - starV.y),
     };
   };
-  const sinks = [
-    sink(
-      'planet',
-      () => new physics.Planet({ x: 0, y: 0 }, { x: 0, y: 0 }, 30),
-      0
-    ),
-    sink(
-      'gas',
-      () => new physics.GasGiant({ x: 0, y: 0 }, { x: 0, y: 0 }, 2),
-      1
-    ),
-    sink(
-      'asteroid',
-      () => new physics.Asteroid({ x: 0, y: 0 }, { x: 0, y: 0 }),
-      2
-    ),
+  // A third set: 60 cases from a fixed linear congruential sequence (so the same
+  // every run), the star 0.5 to 10 solar masses, the speeds up to 40 and of
+  // either sign, each of the three kinds in turn. The round numbers above can
+  // land exactly on the answer; sixty unrelated ones cannot all do so, and the
+  // largest of them is the round-off the tolerance has to cover.
+  let lcg = 12345;
+  const rnd = () => {
+    lcg = (lcg * 1103515245 + 12345) % 2147483648;
+    return lcg / 2147483648;
+  };
+  const sweep = Array.from({ length: 60 }, (_, i) => {
+    const sizeRange = [
+      [1, 60],
+      [0.1, 20],
+      [0.5, 50],
+    ][i % 3];
+    const size = sizeRange[0] + rnd() * (sizeRange[1] - sizeRange[0]);
+    const cfg = {
+      suns: 0.5 + rnd() * 9.5,
+      v: { x: (rnd() - 0.5) * 80, y: (rnd() - 0.5) * 80 },
+      pos: { x: 0, y: 0 },
+      off: { x: 0.2 + rnd() * 0.4, y: rnd() * 0.3 },
+    };
+    const bv = { x: (rnd() - 0.5) * 80, y: (rnd() - 0.5) * 80 };
+    cfg.bv = () => bv;
+    cfg.sizes = [size, size, size];
+    return [i % 3, cfg];
+  });
+  const KINDS = ['planet', 'gas', 'asteroid'];
+  const sinksBy = [
+    ...CONFIGS.map(cfg => KINDS.map((kn, k) => sink(kn, k, cfg))),
+    sweep.map(([k, cfg]) => sink(KINDS[k], k, cfg)),
   ];
-  const smallestLoss = Math.min(...sinks.map(r => r.wouldLose / r.scale));
+  const sinks = sinksBy.flat();
+  const errOf = rs =>
+    Math.max(...rs.map(r => Math.max(r.dp, r.dHand) / r.scale));
+  const named = sinksBy.slice(0, 2);
+  const smallestLoss = Math.min(
+    ...named.flat().map(r => r.wouldLose / r.scale)
+  );
   add({
     group: GROUP,
     kind: 'integration',
@@ -406,18 +458,18 @@ export default async function run({ physics, constants, add, lab }) {
     unit: 'relative',
     tolerance: OUTCOMES.exact,
     toleranceKind: 'absolute',
-    why: "The star's mass grows by exactly the absorbed body's. Each of the three kinds was absorbed (a guard: one body left).",
+    why: "The star's mass grows by exactly the absorbed body's. Each of the three kinds was absorbed in all of them (a guard: one body left).",
   });
   add({
     group: GROUP,
     kind: 'analytic',
     name: 'A star absorbs each kind of small body (one body left)',
     measured: sinks.filter(r => r.absorbed).length,
-    expected: 3,
+    expected: sinks.length,
     unit: 'dimensionless',
     tolerance: 0,
     toleranceKind: 'absolute',
-    why: 'A guard on the checks around it: planet, gas giant and asteroid each end inside the star.',
+    why: 'A guard on the checks around it: planet, gas giant and asteroid each end inside the star, in both configurations and in the sixty-case sweep (66 cases).',
   });
   add({
     group: GROUP,
@@ -428,7 +480,7 @@ export default async function run({ physics, constants, add, lab }) {
     unit: 'relative',
     tolerance: OUTCOMES.momentumScale,
     toleranceKind: 'absolute',
-    why: `The star takes the mass-weighted mean velocity, the same perfectly inelastic merge the black-hole path makes (Absorption group). It used to add the mass and keep its own velocity, so the system lost m (v_body - v_star): ${sinks.map(r => (r.wouldLose / r.scale).toExponential(1)).join(', ')} of the sum of the magnitudes of m v for the planet, the gas giant and the asteroid (D-R10-23). Two errors are taken and the larger reported. One is the momentum after against the momentum before. The other is an absolute value, not a ratio: the total worked out here as M v_star + m v_body from the masses and velocities written into the check (a 4 solar-mass star at (1.5, -0.5), each body at (-3 + k, 4)), which a ratio of after to before would not see if it scaled both alike; that hand-worked total differs from the momentum before the event by ${sinks.map(r => r.handBefore.toExponential(1)).join(', ')}, which is round-off, so it is the total and not something absorption made. The tolerance is the one committed for this check before it ran (engineTolerances.js, OUTCOMES.momentumScale) and sits ${Math.round(smallestLoss / OUTCOMES.momentumScale)} times under the smallest of those losses, so a star that kept its velocity could not pass; as absolute momentum it is ${Math.max(...sinks.map(r => OUTCOMES.momentumScale * r.scale)).toExponential(2)} mass * units per time at the largest scale, against sums of ${sinks.map(r => r.scale.toExponential(2)).join(', ')}. The scale is the sum of magnitudes because the net momentum can be small.`,
+    why: `The star takes the mass-weighted mean velocity, the same perfectly inelastic merge the black-hole path makes (Absorption group). It used to add the mass and keep its own velocity, so the system lost m (v_body - v_star): ${named.map(rs => rs.map(r => (r.wouldLose / r.scale).toExponential(1)).join(', ')).join(' and, in the second configuration, ')} of the sum of the magnitudes of m v for the planet, the gas giant and the asteroid (D-R10-23). Two errors are taken and the larger reported. One is the momentum after against the momentum before. The other is an absolute value, not a ratio: the total worked out here as M v_star + m v_body from the masses and velocities written into the check, which a ratio of after to before would not see if it scaled both alike; that hand-worked total differs from the momentum before the event by at most ${Math.max(...sinks.map(r => r.handBefore / r.scale)).toExponential(1)} of the scale, which is round-off, so it is the total and not something absorption made. Round-off, measured: the round-number configuration gives ${errOf(sinksBy[0]).toExponential(1)}, the non-round one (a 3.7 solar-mass star and bodies of 17.3 Earth, 1.37 Jupiter and 3.3 Ceres masses) ${errOf(sinksBy[1]).toExponential(1)}, and the largest of the sixty-case sweep ${errOf(sinksBy[2]).toExponential(1)} (a fraction of the scale), against a tolerance of ${OUTCOMES.momentumScale.toExponential(0)}. The tolerance is the one committed for this check before it ran (engineTolerances.js, OUTCOMES.momentumScale) and sits ${Math.round(smallestLoss / OUTCOMES.momentumScale)} times under the smallest of the losses above, so a star that kept its velocity could not pass; as absolute momentum it is ${Math.max(...sinks.map(r => OUTCOMES.momentumScale * r.scale)).toExponential(2)} mass * units per time at the largest scale. The scale is the sum of magnitudes because the net momentum can be small.`,
   });
 
   // ---- 5. Rocky collisions -------------------------------------------------

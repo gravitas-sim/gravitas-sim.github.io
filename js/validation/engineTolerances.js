@@ -98,6 +98,13 @@ export const OUTCOMES = Object.freeze({
    * 7e-6 for a thirty-Earth-mass planet and 5e-4 for a two-Jupiter-mass giant.
    * The asteroid is the smallest of the three, and it still sits two orders
    * above this tolerance.
+   *
+   * Measured afterwards, with the number above unchanged (D-R10-23): over a
+   * 60-case sweep of unrelated masses and velocities the largest error is
+   * 1.7e-16 of the scale, about one and a half ulp, so the tolerance sits
+   * nearly four orders (5.8e3 times) above the round-off and about 1.4e3 times
+   * above the worst-case bound given here. The round-number cases measure
+   * exactly zero, which is why the check also runs the sweep.
    */
   momentumScale: 1e-12,
 });

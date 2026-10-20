@@ -403,6 +403,46 @@ describe('a star absorbing a small body (D-R10-23), worked by hand', () => {
   });
 });
 
+describe('the stellar-absorption event reports the impact, not the merged star', () => {
+  test('relativeSpeed, position and masses are what the event always said', () => {
+    for (const l of ['planets', 'stars']) physics[l].length = 0;
+    physics.updatePhysicsSettings({
+      mutual_gravity: true,
+      star_only_gravity: false,
+    });
+    const sun = new physics.StarObject({ x: 0, y: 0 }, { x: 1.5, y: -0.5 }, 4);
+    sun.model_owned = false;
+    sun.persistent = true;
+    const rock = new physics.Planet({ x: 0, y: 0 }, { x: -3, y: 4 }, 30);
+    rock.pos = { x: sun.radius * 0.5, y: 0 };
+    rock.persistent = true;
+    physics.stars.push(sun);
+    physics.planets.push(rock);
+    physics.bumpWorldGeneration();
+    const heard = [];
+    const fn = e => heard.push(e.detail);
+    window.addEventListener('gravitasCollision', fn);
+    const m = rock.mass;
+    const rx = rock.pos.x;
+    physics.handle_star_object_collisions();
+    window.removeEventListener('gravitasCollision', fn);
+    expect(heard).toHaveLength(1);
+    // Worked by hand: v_rel = (1.5 - -3, -0.5 - 4) = (4.5, -4.5), so the impact
+    // speed is 4.5 * sqrt(2). The merged star moved (its velocity is now the
+    // mass-weighted one), and the event must not say so.
+    expect(heard[0].relativeSpeed).toBeCloseTo(4.5 * Math.SQRT2, 12);
+    expect(sun.vel.x).not.toBe(1.5);
+    expect(heard[0].position.x).toBeCloseTo(rx / 2, 12);
+    expect(heard[0].position.y).toBe(0);
+    // The star's mass after the merge, as before this change.
+    expect(heard[0].masses[0]).toBeCloseTo(4000 + m, 9);
+    expect(heard[0].masses[1]).toBe(m);
+    expect(heard[0].impactType).toBe('stellar-absorption');
+    expect(heard[0].sourceType).toBe('StarObject');
+    for (const l of ['planets', 'stars']) physics[l].length = 0;
+  });
+});
+
 describe('energy, in joules and in history', () => {
   // The energy unit follows from the mass and length anchors and the sim's G:
   // T = sqrt(G L^3 / (G_SI M)), E = M L^2 / T^2.
