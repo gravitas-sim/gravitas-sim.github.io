@@ -1,0 +1,306 @@
+{
+ "binary": {
+  "en": {
+   "static": {
+    "title": "Two stars, orbiting",
+    "note": "Both stars are moving. Watch them for a few seconds before reading anything off.",
+    "controls": [{"id":"m1","label":"Mass of Star A","unit":"M☉","min":0.5,"max":5,"step":0.5,"value":2,"decimals":1},{"id":"m2","label":"Mass of Star B","unit":"M☉","min":0.5,"max":5,"step":0.5,"value":2,"decimals":1}],
+    "presets": [],
+    "actions": [{"id":"run","label":"Run / Pause"},{"id":"reset","label":"↺ Reset"},{"id":"mark","label":"Mark"},{"id":"stop","label":"■ Stop"},{"id":"capture","label":"Capture this orbit"}],
+    "defaults": {"m1":"2","m2":"2"}
+   },
+   "precision": [],
+   "specs": 5,
+   "frames": 292,
+   "readout": {
+    "calls": 292,
+    "distinct": 37,
+    "digest": "e126ee66a13a0fa8",
+    "samples": [[{"label":"Star A, distance from the barycenter","value":"2.00 AU","emphasis":true},{"label":"Star B, distance from the barycenter","value":"2.00 AU","emphasis":true}],[{"label":"Star A, distance from the barycenter","value":"3.20 AU","emphasis":true},{"label":"Star B, distance from the barycenter","value":"0.80 AU","emphasis":true}],[{"label":"Mass of Star A","value":"2.0 M☉"},{"label":"Mass of Star B","value":"2.0 M☉"},{"label":"Star A, distance from the barycenter","value":"2.00 AU","emphasis":true},{"label":"Star B, distance from the barycenter","value":"2.00 AU","emphasis":true},{"label":"Distance between the two stars","value":"4.0 AU"},{"label":"Which star is closer to the balance point","value":"neither: they are the same","emphasis":true},{"label":"Years since you started watching","value":"0.00 yr"},{"label":"Stopwatch","value":"press Mark when Star A crosses the line","emphasis":true},{"label":"Time for one full orbit","value":"4.00 years"},{"label":"Total mass of the pair","value":"4.0 M☉"},{"label":"How far the planet moves","value":"2.00 AU"},{"label":"How far the star moves","value":"2000.0 thousandths of an AU","emphasis":true},{"label":"The star’s wobble, compared with the planet’s orbit","value":"about 1 times smaller"}],[{"label":"Mass of Star A","value":"0.5 M☉"},{"label":"Mass of Star B","value":"0.5 M☉"},{"label":"Star A, distance from the barycenter","value":"2.00 AU","emphasis":true},{"label":"Star B, distance from the barycenter","value":"2.00 AU","emphasis":true},{"label":"Distance between the two stars","value":"4.0 AU"},{"label":"Which star is closer to the balance point","value":"neither: they are the same","emphasis":true},{"label":"Years since you started watching","value":"0.00 yr"},{"label":"Stopwatch","value":"press Mark when Star A crosses the line","emphasis":true},{"label":"Time for one full orbit","value":"8.00 years"},{"label":"Total mass of the pair","value":"1.0 M☉"},{"label":"How far the planet moves","value":"2.00 AU"},{"label":"How far the star moves","value":"2000.0 thousandths of an AU","emphasis":true},{"label":"The star’s wobble, compared with the planet’s orbit","value":"about 1 times smaller"}],[{"label":"Mass of Star A","value":"5.0 M☉"},{"label":"Mass of Star B","value":"5.0 M☉"},{"label":"Star A, distance from the barycenter","value":"2.00 AU","emphasis":true},{"label":"Star B, distance from the barycenter","value":"2.00 AU","emphasis":true},{"label":"Distance between the two stars","value":"4.0 AU"},{"label":"Which star is closer to the balance point","value":"neither: they are the same","emphasis":true},{"label":"Years since you started watching","value":"0.00 yr"},{"label":"Stopwatch","value":"press Mark when Star A crosses the line","emphasis":true},{"label":"Time for one full orbit","value":"2.53 years"},{"label":"Total mass of the pair","value":"10.0 M☉"},{"label":"How far the planet moves","value":"2.00 AU"},{"label":"How far the star moves","value":"2000.0 thousandths of an AU","emphasis":true},{"label":"The star’s wobble, compared with the planet’s orbit","value":"about 1 times smaller"}],[{"label":"Mass of Star A","value":"2.0 M☉"},{"label":"Mass of Star B","value":"2.0 M☉"},{"label":"Star A, distance from the barycenter","value":"2.00 AU","emphasis":true},{"label":"Star B, distance from the barycenter","value":"2.00 AU","emphasis":true},{"label":"Which star is closer to the balance point","value":"neither: they are the same","emphasis":true}],[{"label":"Mass of Star A","value":"0.5 M☉"},{"label":"Mass of Star B","value":"0.5 M☉"},{"label":"Star A, distance from the barycenter","value":"2.00 AU","emphasis":true},{"label":"Star B, distance from the barycenter","value":"2.00 AU","emphasis":true},{"label":"Which star is closer to the balance point","value":"neither: they are the same","emphasis":true}],[{"label":"Years since you started watching","value":"0.00 yr"},{"label":"Stopwatch","value":"press Mark when Star A crosses the line","emphasis":true}],[{"label":"Years since you started watching","value":"0.25 yr"},{"label":"Stopwatch","value":"press Mark when Star A crosses the line","emphasis":true}],[{"label":"Years since you started watching","value":"0.38 yr"},{"label":"Stopwatch","value":"0.00 years (running)","emphasis":true}],[{"label":"Years since you started watching","value":"0.75 yr"},{"label":"Stopwatch","value":"0.38 years (running)","emphasis":true}],[{"label":"How far the planet moves","value":"4.00 AU"},{"label":"How far the star moves","value":"3.8 thousandths of an AU","emphasis":true},{"label":"The star’s wobble, compared with the planet’s orbit","value":"about 1048 times smaller"}],[{"label":"How far the planet moves","value":"4.00 AU"},{"label":"How far the star moves","value":"0.8 thousandths of an AU","emphasis":true},{"label":"The star’s wobble, compared with the planet’s orbit","value":"about 5241 times smaller"}],[{"label":"How far the planet moves","value":"3.99 AU"},{"label":"How far the star moves","value":"7.6 thousandths of an AU","emphasis":true},{"label":"The star’s wobble, compared with the planet’s orbit","value":"about 524 times smaller"}]]
+   },
+   "canvas": {
+    "calls": 292,
+    "distinct": 48,
+    "digest": "7000d74437e02200",
+    "samples": [["Star A","Star A","Star B","Star B","2.0 + 2.0 M☉","2.0 + 2.0 M☉","0.00 years","0.00 years"],["Star A","Star A","Star B","Star B","0.5 + 0.5 M☉","0.5 + 0.5 M☉","0.00 years","0.00 years"],["Star A","Star A","Star B","Star B","2.0 + 2.0 M☉","2.0 + 2.0 M☉","0.38 years","0.38 years","paused","paused"],["Star A","Star A","Star B","Star B","2.0 + 2.0 M☉","2.0 + 2.0 M☉","0.00 years","0.00 years","barycenter","barycenter"],["Star A","Star A","Star B","Star B","0.5 + 0.5 M☉","0.5 + 0.5 M☉","0.00 years","0.00 years","barycenter","barycenter"],["Star A","Star A","Star B","Star B","masses hidden","masses hidden","0.00 years","0.00 years","barycenter","barycenter"],["Star A","Star A","Star B","Star B","masses hidden","masses hidden","0.25 years","0.25 years","barycenter","barycenter"],["Star A","Star A","Star B","Star B","masses hidden","masses hidden","0.38 years","0.38 years","barycenter","barycenter","paused","paused"],["star","star","planet","planet","star, magnified 311×","star, magnified 311×","0.00 years","0.00 years","barycenter","barycenter"],["star","star","planet","planet","star, magnified 156×","star, magnified 156×","0.00 years","0.00 years","barycenter","barycenter"],["star","star","planet","planet","star, magnified 1554×","star, magnified 1554×","0.00 years","0.00 years","barycenter","barycenter"]]
+   },
+   "controls": {
+    "calls": 292,
+    "distinct": 23,
+    "digest": "03ea9495726b424e",
+    "samples": [["2.0 M☉","2.0 M☉"],["0.5 M☉","0.5 M☉"]]
+   },
+   "phases": {
+    "calls": 140,
+    "distinct": 21,
+    "digest": "d3f32bb1e9ef45cc",
+    "samples": [{"run":1},{"run":2},{"run":16},{"run":24},{"action":"run","after":"press","button":"Run / Pause"},{"action":"run","after":"step","button":"Run / Pause"},{"action":"run","after":"press again","button":"Run / Pause"},{"action":"reset","after":"press","button":"↺ Reset"},{"action":"reset","after":"step","button":"↺ Reset"},{"action":"reset","after":"press again","button":"↺ Reset"},{"action":"mark","after":"press","button":"Mark"},{"action":"mark","after":"step","button":"Mark"},{"action":"mark","after":"press again","button":"Mark"},{"action":"stop","after":"press","button":"■ Stop"},{"action":"stop","after":"step","button":"■ Stop"},{"action":"stop","after":"press again","button":"■ Stop"},{"action":"capture","after":"press","button":"Capture this orbit"},{"action":"capture","after":"step","button":"Capture this orbit"},{"action":"capture","after":"press again","button":"Capture this orbit"}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Dos estrellas, orbitando",
+    "note": "Las dos estrellas se mueven. Obsérvalas unos segundos antes de leer nada.",
+    "controls": [{"id":"m1","label":"Masa de la Estrella A","unit":"M☉","min":0.5,"max":5,"step":0.5,"value":2,"decimals":1},{"id":"m2","label":"Masa de la Estrella B","unit":"M☉","min":0.5,"max":5,"step":0.5,"value":2,"decimals":1}],
+    "presets": [],
+    "actions": [{"id":"run","label":"Ejecutar / Pausar"},{"id":"reset","label":"↺ Reiniciar"},{"id":"mark","label":"Marcar"},{"id":"stop","label":"■ Parar"},{"id":"capture","label":"Capturar esta órbita"}],
+    "defaults": {"m1":"2","m2":"2"}
+   },
+   "precision": [],
+   "specs": 5,
+   "frames": 292,
+   "readout": {
+    "calls": 292,
+    "distinct": 37,
+    "digest": "b80afb1d05cde8b4",
+    "samples": [[{"label":"Estrella A, distancia al baricentro","value":"2.00 AU","emphasis":true},{"label":"Estrella B, distancia al baricentro","value":"2.00 AU","emphasis":true}],[{"label":"Estrella A, distancia al baricentro","value":"3.20 AU","emphasis":true},{"label":"Estrella B, distancia al baricentro","value":"0.80 AU","emphasis":true}],[{"label":"Masa de la Estrella A","value":"2.0 M☉"},{"label":"Masa de la Estrella B","value":"2.0 M☉"},{"label":"Estrella A, distancia al baricentro","value":"2.00 AU","emphasis":true},{"label":"Estrella B, distancia al baricentro","value":"2.00 AU","emphasis":true},{"label":"Distancia entre las dos estrellas","value":"4.0 AU"},{"label":"Qué estrella está más cerca del punto de equilibrio","value":"neither: they are the same","emphasis":true},{"label":"Años desde que empezaste a observar","value":"0.00 yr"},{"label":"Cronómetro","value":"press Mark when Star A crosses the line","emphasis":true},{"label":"Tiempo de una órbita completa","value":"4.00 years"},{"label":"Masa total del par","value":"4.0 M☉"},{"label":"Cuánto se mueve el planeta","value":"2.00 AU"},{"label":"Cuánto se mueve la estrella","value":"2000.0 thousandths of an AU","emphasis":true},{"label":"El bamboleo de la estrella, comparado con la órbita del planeta","value":"about 1 times smaller"}],[{"label":"Masa de la Estrella A","value":"0.5 M☉"},{"label":"Masa de la Estrella B","value":"0.5 M☉"},{"label":"Estrella A, distancia al baricentro","value":"2.00 AU","emphasis":true},{"label":"Estrella B, distancia al baricentro","value":"2.00 AU","emphasis":true},{"label":"Distancia entre las dos estrellas","value":"4.0 AU"},{"label":"Qué estrella está más cerca del punto de equilibrio","value":"neither: they are the same","emphasis":true},{"label":"Años desde que empezaste a observar","value":"0.00 yr"},{"label":"Cronómetro","value":"press Mark when Star A crosses the line","emphasis":true},{"label":"Tiempo de una órbita completa","value":"8.00 years"},{"label":"Masa total del par","value":"1.0 M☉"},{"label":"Cuánto se mueve el planeta","value":"2.00 AU"},{"label":"Cuánto se mueve la estrella","value":"2000.0 thousandths of an AU","emphasis":true},{"label":"El bamboleo de la estrella, comparado con la órbita del planeta","value":"about 1 times smaller"}],[{"label":"Masa de la Estrella A","value":"5.0 M☉"},{"label":"Masa de la Estrella B","value":"5.0 M☉"},{"label":"Estrella A, distancia al baricentro","value":"2.00 AU","emphasis":true},{"label":"Estrella B, distancia al baricentro","value":"2.00 AU","emphasis":true},{"label":"Distancia entre las dos estrellas","value":"4.0 AU"},{"label":"Qué estrella está más cerca del punto de equilibrio","value":"neither: they are the same","emphasis":true},{"label":"Años desde que empezaste a observar","value":"0.00 yr"},{"label":"Cronómetro","value":"press Mark when Star A crosses the line","emphasis":true},{"label":"Tiempo de una órbita completa","value":"2.53 years"},{"label":"Masa total del par","value":"10.0 M☉"},{"label":"Cuánto se mueve el planeta","value":"2.00 AU"},{"label":"Cuánto se mueve la estrella","value":"2000.0 thousandths of an AU","emphasis":true},{"label":"El bamboleo de la estrella, comparado con la órbita del planeta","value":"about 1 times smaller"}],[{"label":"Masa de la Estrella A","value":"2.0 M☉"},{"label":"Masa de la Estrella B","value":"2.0 M☉"},{"label":"Estrella A, distancia al baricentro","value":"2.00 AU","emphasis":true},{"label":"Estrella B, distancia al baricentro","value":"2.00 AU","emphasis":true},{"label":"Qué estrella está más cerca del punto de equilibrio","value":"neither: they are the same","emphasis":true}],[{"label":"Masa de la Estrella A","value":"0.5 M☉"},{"label":"Masa de la Estrella B","value":"0.5 M☉"},{"label":"Estrella A, distancia al baricentro","value":"2.00 AU","emphasis":true},{"label":"Estrella B, distancia al baricentro","value":"2.00 AU","emphasis":true},{"label":"Qué estrella está más cerca del punto de equilibrio","value":"neither: they are the same","emphasis":true}],[{"label":"Años desde que empezaste a observar","value":"0.00 yr"},{"label":"Cronómetro","value":"press Mark when Star A crosses the line","emphasis":true}],[{"label":"Años desde que empezaste a observar","value":"0.25 yr"},{"label":"Cronómetro","value":"press Mark when Star A crosses the line","emphasis":true}],[{"label":"Años desde que empezaste a observar","value":"0.38 yr"},{"label":"Cronómetro","value":"0.00 years (running)","emphasis":true}],[{"label":"Años desde que empezaste a observar","value":"0.75 yr"},{"label":"Cronómetro","value":"0.38 years (running)","emphasis":true}],[{"label":"Cuánto se mueve el planeta","value":"4.00 AU"},{"label":"Cuánto se mueve la estrella","value":"3.8 thousandths of an AU","emphasis":true},{"label":"El bamboleo de la estrella, comparado con la órbita del planeta","value":"about 1048 times smaller"}],[{"label":"Cuánto se mueve el planeta","value":"4.00 AU"},{"label":"Cuánto se mueve la estrella","value":"0.8 thousandths of an AU","emphasis":true},{"label":"El bamboleo de la estrella, comparado con la órbita del planeta","value":"about 5241 times smaller"}],[{"label":"Cuánto se mueve el planeta","value":"3.99 AU"},{"label":"Cuánto se mueve la estrella","value":"7.6 thousandths of an AU","emphasis":true},{"label":"El bamboleo de la estrella, comparado con la órbita del planeta","value":"about 524 times smaller"}]]
+   },
+   "canvas": {
+    "calls": 292,
+    "distinct": 48,
+    "digest": "7000d74437e02200",
+    "samples": [["Star A","Star A","Star B","Star B","2.0 + 2.0 M☉","2.0 + 2.0 M☉","0.00 years","0.00 years"],["Star A","Star A","Star B","Star B","0.5 + 0.5 M☉","0.5 + 0.5 M☉","0.00 years","0.00 years"],["Star A","Star A","Star B","Star B","2.0 + 2.0 M☉","2.0 + 2.0 M☉","0.38 years","0.38 years","paused","paused"],["Star A","Star A","Star B","Star B","2.0 + 2.0 M☉","2.0 + 2.0 M☉","0.00 years","0.00 years","barycenter","barycenter"],["Star A","Star A","Star B","Star B","0.5 + 0.5 M☉","0.5 + 0.5 M☉","0.00 years","0.00 years","barycenter","barycenter"],["Star A","Star A","Star B","Star B","masses hidden","masses hidden","0.00 years","0.00 years","barycenter","barycenter"],["Star A","Star A","Star B","Star B","masses hidden","masses hidden","0.25 years","0.25 years","barycenter","barycenter"],["Star A","Star A","Star B","Star B","masses hidden","masses hidden","0.38 years","0.38 years","barycenter","barycenter","paused","paused"],["star","star","planet","planet","star, magnified 311×","star, magnified 311×","0.00 years","0.00 years","barycenter","barycenter"],["star","star","planet","planet","star, magnified 156×","star, magnified 156×","0.00 years","0.00 years","barycenter","barycenter"],["star","star","planet","planet","star, magnified 1554×","star, magnified 1554×","0.00 years","0.00 years","barycenter","barycenter"]]
+   },
+   "controls": {
+    "calls": 292,
+    "distinct": 23,
+    "digest": "03ea9495726b424e",
+    "samples": [["2.0 M☉","2.0 M☉"],["0.5 M☉","0.5 M☉"]]
+   },
+   "phases": {
+    "calls": 140,
+    "distinct": 21,
+    "digest": "a4894736286149e7",
+    "samples": [{"run":1},{"run":2},{"run":16},{"run":24},{"action":"run","after":"press","button":"Ejecutar / Pausar"},{"action":"run","after":"step","button":"Ejecutar / Pausar"},{"action":"run","after":"press again","button":"Ejecutar / Pausar"},{"action":"reset","after":"press","button":"↺ Reiniciar"},{"action":"reset","after":"step","button":"↺ Reiniciar"},{"action":"reset","after":"press again","button":"↺ Reiniciar"},{"action":"mark","after":"press","button":"Marcar"},{"action":"mark","after":"step","button":"Marcar"},{"action":"mark","after":"press again","button":"Marcar"},{"action":"stop","after":"press","button":"■ Parar"},{"action":"stop","after":"step","button":"■ Parar"},{"action":"stop","after":"press again","button":"■ Parar"},{"action":"capture","after":"press","button":"Capturar esta órbita"},{"action":"capture","after":"step","button":"Capturar esta órbita"},{"action":"capture","after":"press again","button":"Capturar esta órbita"}]
+   }
+  }
+ },
+ "binary-compare": {
+  "en": {
+   "static": {
+    "title": "Same size orbit, different masses",
+    "note": "Both pairs are exactly the same distance apart. Only the masses differ. Watch which one gets round first.",
+    "controls": [],
+    "presets": [],
+    "actions": [{"id":"run","label":"Run / Pause"},{"id":"reset","label":"↺ Reset"}],
+    "defaults": {}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 19,
+   "readout": {
+    "calls": 19,
+    "distinct": 8,
+    "digest": "61ede42093e5da32",
+    "samples": [[{"label":"Years elapsed","value":"0.00 yr"},{"label":"lightweight pair: laps completed","value":"0.00","emphasis":true},{"label":"heavyweight pair: laps completed","value":"0.00","emphasis":true},{"label":"Separation of each pair","value":"4 AU, both the same"}],[{"label":"Years elapsed","value":"0.06 yr"},{"label":"lightweight pair: laps completed","value":"0.01","emphasis":true},{"label":"heavyweight pair: laps completed","value":"0.02","emphasis":true},{"label":"Separation of each pair","value":"4 AU, both the same"}]]
+   },
+   "canvas": {
+    "calls": 19,
+    "distinct": 8,
+    "digest": "3e43a330b6417302",
+    "samples": [["0.5 + 0.5 = 1 M☉","0.5 + 0.5 = 1 M☉","0.00 laps","0.00 laps","2 + 2 = 4 M☉","2 + 2 = 4 M☉","0.00 laps","0.00 laps"],["0.5 + 0.5 = 1 M☉","0.5 + 0.5 = 1 M☉","0.01 laps","0.01 laps","2 + 2 = 4 M☉","2 + 2 = 4 M☉","0.02 laps","0.02 laps"]]
+   },
+   "controls": {
+    "calls": 19,
+    "distinct": 1,
+    "digest": "cf1cbb66a638b486",
+    "samples": [[]]
+   },
+   "phases": {
+    "calls": 16,
+    "distinct": 12,
+    "digest": "0797b274d8258bbc",
+    "samples": [{"run":1},{"run":2},{"run":16},{"run":24},{"action":"run","after":"press","button":"Run / Pause"},{"action":"run","after":"step","button":"Run / Pause"},{"action":"run","after":"press again","button":"Run / Pause"},{"action":"reset","after":"press","button":"↺ Reset"},{"action":"reset","after":"step","button":"↺ Reset"},{"action":"reset","after":"press again","button":"↺ Reset"}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Órbita del mismo tamaño, masas distintas",
+    "note": "Ambos pares están exactamente a la misma distancia. Solo difieren las masas. Observa cuál da la vuelta primero.",
+    "controls": [],
+    "presets": [],
+    "actions": [{"id":"run","label":"Ejecutar / Pausar"},{"id":"reset","label":"↺ Reiniciar"}],
+    "defaults": {}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 19,
+   "readout": {
+    "calls": 19,
+    "distinct": 8,
+    "digest": "00ded526c07d1998",
+    "samples": [[{"label":"Años transcurridos","value":"0.00 yr"},{"label":"par ligero: laps completed","value":"0.00","emphasis":true},{"label":"par pesado: laps completed","value":"0.00","emphasis":true},{"label":"Separación de cada par","value":"4 AU, both the same"}],[{"label":"Años transcurridos","value":"0.06 yr"},{"label":"par ligero: laps completed","value":"0.01","emphasis":true},{"label":"par pesado: laps completed","value":"0.02","emphasis":true},{"label":"Separación de cada par","value":"4 AU, both the same"}]]
+   },
+   "canvas": {
+    "calls": 19,
+    "distinct": 8,
+    "digest": "3e43a330b6417302",
+    "samples": [["0.5 + 0.5 = 1 M☉","0.5 + 0.5 = 1 M☉","0.00 laps","0.00 laps","2 + 2 = 4 M☉","2 + 2 = 4 M☉","0.00 laps","0.00 laps"],["0.5 + 0.5 = 1 M☉","0.5 + 0.5 = 1 M☉","0.01 laps","0.01 laps","2 + 2 = 4 M☉","2 + 2 = 4 M☉","0.02 laps","0.02 laps"]]
+   },
+   "controls": {
+    "calls": 19,
+    "distinct": 1,
+    "digest": "cf1cbb66a638b486",
+    "samples": [[]]
+   },
+   "phases": {
+    "calls": 16,
+    "distinct": 12,
+    "digest": "2c77d19f688376f1",
+    "samples": [{"run":1},{"run":2},{"run":16},{"run":24},{"action":"run","after":"press","button":"Ejecutar / Pausar"},{"action":"run","after":"step","button":"Ejecutar / Pausar"},{"action":"run","after":"press again","button":"Ejecutar / Pausar"},{"action":"reset","after":"press","button":"↺ Reiniciar"},{"action":"reset","after":"step","button":"↺ Reiniciar"},{"action":"reset","after":"press again","button":"↺ Reiniciar"}]
+   }
+  }
+ },
+ "balance": {
+  "en": {
+   "static": {
+    "title": "The balance point",
+    "note": "A see-saw balances when the heavier child sits closer to the middle. Two stars do exactly the same thing.",
+    "controls": [{"id":"d1","label":"Star A, distance from the middle","unit":"AU","min":1,"max":4,"step":1,"value":1,"decimals":0},{"id":"d2","label":"Star B, distance from the middle","unit":"AU","min":1,"max":4,"step":1,"value":2,"decimals":0}],
+    "presets": [{"label":"1 AU and 2 AU","values":{"d1":"1","d2":"2"},"note":"Star B is twice as far out, so Star A must be twice as heavy to balance it."},{"label":"1 AU and 3 AU","values":{"d1":"1","d2":"3"},"note":"Star B is three times as far out, so Star A is three times as heavy."},{"label":"2 AU and 4 AU","values":{"d1":"2","d2":"4"},"note":"Twice as far again, so twice as heavy again. Only the ratio of the two distances matters, not the distances themselves."},{"label":"Equal, 2 AU each","values":{"d1":"2","d2":"2"},"note":"Equal distances mean equal masses. This is the case you started the investigation with."}],
+    "actions": [],
+    "defaults": {"d1":"1","d2":"2"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 26,
+   "readout": {
+    "calls": 26,
+    "distinct": 15,
+    "digest": "a20ac6dae4723c32",
+    "samples": [[{"label":"Star A is this far from the middle","value":"1 AU"},{"label":"Star B is this far from the middle","value":"2 AU"},{"label":"The heavier star, and by how much","value":"Star A, by 2 times","emphasis":true}],[{"label":"Star A is this far from the middle","value":"1 AU"},{"label":"Star B is this far from the middle","value":"3 AU"},{"label":"The heavier star, and by how much","value":"Star A, by 3 times","emphasis":true}],[{"label":"Star A is this far from the middle","value":"1 AU"},{"label":"Star B is this far from the middle","value":"1 AU"},{"label":"The heavier star, and by how much","value":"neither: they weigh the same","emphasis":true}],[{"label":"Star A is this far from the middle","value":"4 AU"},{"label":"Star B is this far from the middle","value":"4 AU"},{"label":"The heavier star, and by how much","value":"neither: they weigh the same","emphasis":true}],[{"label":"Star A is this far from the middle","value":"3 AU"},{"label":"Star B is this far from the middle","value":"2 AU"},{"label":"The heavier star, and by how much","value":"Star B, by 1.50 times","emphasis":true}],[{"label":"Star A is this far from the middle","value":"4 AU"},{"label":"Star B is this far from the middle","value":"2 AU"},{"label":"The heavier star, and by how much","value":"Star B, by 2 times","emphasis":true}],[{"label":"Star A is this far from the middle","value":"3 AU"},{"label":"Star B is this far from the middle","value":"1 AU"},{"label":"The heavier star, and by how much","value":"Star B, by 3 times","emphasis":true}],[{"label":"Star A is this far from the middle","value":"1 AU"},{"label":"Star B is this far from the middle","value":"3 AU"},{"label":"The heavier star, and by how much","value":"Star A, by 3 times","emphasis":true},{"label":"Splitting 4 M☉ between them","value":"3 M☉ and 1 M☉","emphasis":true}],[{"label":"Star A is this far from the middle","value":"1 AU"},{"label":"Star B is this far from the middle","value":"1 AU"},{"label":"The heavier star, and by how much","value":"neither: they weigh the same","emphasis":true},{"label":"Splitting 4 M☉ between them","value":"2 M☉ and 2 M☉","emphasis":true}],[{"label":"Star A is this far from the middle","value":"4 AU"},{"label":"Star B is this far from the middle","value":"4 AU"},{"label":"The heavier star, and by how much","value":"neither: they weigh the same","emphasis":true},{"label":"Splitting 4 M☉ between them","value":"2 M☉ and 2 M☉","emphasis":true}]]
+   },
+   "canvas": {
+    "calls": 26,
+    "distinct": 15,
+    "digest": "73a27233207721b1",
+    "samples": [["barycenter","Star A","Star B","1 AU","2 AU"],["barycenter","Star A","Star B","1 AU","1 AU"],["barycenter","Star A","Star B","1 AU","3 AU","4 solar masses to share out","Star A: 3 M☉","Star B: 1 M☉"],["barycenter","Star A","Star B","1 AU","1 AU","4 solar masses to share out","Star A: 2 M☉","Star B: 2 M☉"]]
+   },
+   "controls": {
+    "calls": 26,
+    "distinct": 11,
+    "digest": "efc19e6c474b9d7c",
+    "samples": [["1 AU","2 AU"],["1 AU","1 AU"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "897e9b2356216bd8",
+    "samples": [{"preset":"1 AU and 2 AU","note":"Star B is twice as far out, so Star A must be twice as heavy to balance it."},{"preset":"1 AU and 3 AU","note":"Star B is three times as far out, so Star A is three times as heavy."},{"preset":"2 AU and 4 AU","note":"Twice as far again, so twice as heavy again. Only the ratio of the two distances matters, not the distances themselves."},{"preset":"Equal, 2 AU each","note":"Equal distances mean equal masses. This is the case you started the investigation with."}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "El punto de equilibrio",
+    "note": "Un balancín se equilibra cuando el niño más pesado se sienta más cerca del centro. Dos estrellas hacen exactamente lo mismo.",
+    "controls": [{"id":"d1","label":"Estrella A, distancia al centro","unit":"AU","min":1,"max":4,"step":1,"value":1,"decimals":0},{"id":"d2","label":"Estrella B, distancia al centro","unit":"AU","min":1,"max":4,"step":1,"value":2,"decimals":0}],
+    "presets": [{"label":"1 UA y 2 UA","values":{"d1":"1","d2":"2"},"note":"La Estrella B está el doble de lejos, así que la Estrella A debe ser el doble de pesada para equilibrarla."},{"label":"1 UA y 3 UA","values":{"d1":"1","d2":"3"},"note":"La Estrella B está tres veces más lejos, así que la Estrella A es tres veces más pesada."},{"label":"2 UA y 4 UA","values":{"d1":"2","d2":"4"},"note":"Otra vez el doble de lejos, así que otra vez el doble de pesada. Solo importa el cociente de las dos distancias, no las distancias en sí."},{"label":"Iguales, 2 UA cada una","values":{"d1":"2","d2":"2"},"note":"Distancias iguales significan masas iguales. Este es el caso con el que empezaste la investigación."}],
+    "actions": [],
+    "defaults": {"d1":"1","d2":"2"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 26,
+   "readout": {
+    "calls": 26,
+    "distinct": 15,
+    "digest": "b8d34ef5212e2263",
+    "samples": [[{"label":"La Estrella A está a esta distancia del centro","value":"1 AU"},{"label":"La Estrella B está a esta distancia del centro","value":"2 AU"},{"label":"La estrella más pesada, y por cuánto","value":"Star A, by 2 times","emphasis":true}],[{"label":"La Estrella A está a esta distancia del centro","value":"1 AU"},{"label":"La Estrella B está a esta distancia del centro","value":"3 AU"},{"label":"La estrella más pesada, y por cuánto","value":"Star A, by 3 times","emphasis":true}],[{"label":"La Estrella A está a esta distancia del centro","value":"1 AU"},{"label":"La Estrella B está a esta distancia del centro","value":"1 AU"},{"label":"La estrella más pesada, y por cuánto","value":"neither: they weigh the same","emphasis":true}],[{"label":"La Estrella A está a esta distancia del centro","value":"4 AU"},{"label":"La Estrella B está a esta distancia del centro","value":"4 AU"},{"label":"La estrella más pesada, y por cuánto","value":"neither: they weigh the same","emphasis":true}],[{"label":"La Estrella A está a esta distancia del centro","value":"3 AU"},{"label":"La Estrella B está a esta distancia del centro","value":"2 AU"},{"label":"La estrella más pesada, y por cuánto","value":"Star B, by 1.50 times","emphasis":true}],[{"label":"La Estrella A está a esta distancia del centro","value":"4 AU"},{"label":"La Estrella B está a esta distancia del centro","value":"2 AU"},{"label":"La estrella más pesada, y por cuánto","value":"Star B, by 2 times","emphasis":true}],[{"label":"La Estrella A está a esta distancia del centro","value":"3 AU"},{"label":"La Estrella B está a esta distancia del centro","value":"1 AU"},{"label":"La estrella más pesada, y por cuánto","value":"Star B, by 3 times","emphasis":true}],[{"label":"La Estrella A está a esta distancia del centro","value":"1 AU"},{"label":"La Estrella B está a esta distancia del centro","value":"3 AU"},{"label":"La estrella más pesada, y por cuánto","value":"Star A, by 3 times","emphasis":true},{"label":"Splitting 4 M☉ between them","value":"3 M☉ and 1 M☉","emphasis":true}],[{"label":"La Estrella A está a esta distancia del centro","value":"1 AU"},{"label":"La Estrella B está a esta distancia del centro","value":"1 AU"},{"label":"La estrella más pesada, y por cuánto","value":"neither: they weigh the same","emphasis":true},{"label":"Splitting 4 M☉ between them","value":"2 M☉ and 2 M☉","emphasis":true}],[{"label":"La Estrella A está a esta distancia del centro","value":"4 AU"},{"label":"La Estrella B está a esta distancia del centro","value":"4 AU"},{"label":"La estrella más pesada, y por cuánto","value":"neither: they weigh the same","emphasis":true},{"label":"Splitting 4 M☉ between them","value":"2 M☉ and 2 M☉","emphasis":true}]]
+   },
+   "canvas": {
+    "calls": 26,
+    "distinct": 15,
+    "digest": "73a27233207721b1",
+    "samples": [["barycenter","Star A","Star B","1 AU","2 AU"],["barycenter","Star A","Star B","1 AU","1 AU"],["barycenter","Star A","Star B","1 AU","3 AU","4 solar masses to share out","Star A: 3 M☉","Star B: 1 M☉"],["barycenter","Star A","Star B","1 AU","1 AU","4 solar masses to share out","Star A: 2 M☉","Star B: 2 M☉"]]
+   },
+   "controls": {
+    "calls": 26,
+    "distinct": 11,
+    "digest": "efc19e6c474b9d7c",
+    "samples": [["1 AU","2 AU"],["1 AU","1 AU"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "a1405a391d74eb3d",
+    "samples": [{"preset":"1 UA y 2 UA","note":"La Estrella B está el doble de lejos, así que la Estrella A debe ser el doble de pesada para equilibrarla."},{"preset":"1 UA y 3 UA","note":"La Estrella B está tres veces más lejos, así que la Estrella A es tres veces más pesada."},{"preset":"2 UA y 4 UA","note":"Otra vez el doble de lejos, así que otra vez el doble de pesada. Solo importa el cociente de las dos distancias, no las distancias en sí."},{"preset":"Iguales, 2 UA cada una","note":"Distancias iguales significan masas iguales. Este es el caso con el que empezaste la investigación."}]
+   }
+  }
+ },
+ "visual-binary": {
+  "en": {
+   "static": {
+    "title": "Sirius, watched for a century",
+    "note": "Each dot is where the faint companion was seen, relative to the bright star. Slide forward through the years and the orbit draws itself.",
+    "controls": [{"id":"year","label":"Observations up to","unit":"","min":1900,"max":2000,"step":5,"value":1900,"decimals":0}],
+    "presets": [{"label":"One decade","values":{"year":"1910"},"note":"Three dots. They are moving, but nobody could tell you the shape of the orbit from this."},{"label":"Half an orbit","values":{"year":"1925"},"note":"A curve is appearing. Notice the dots are further apart when the companion is on the near side: it moves faster there, which is Kepler’s second law showing up in real data."},{"label":"One full orbit","values":{"year":"1945"},"note":"Fifty years of watching gives one complete orbit, and with it the period and the size. That is everything the mass formula needs."},{"label":"A century","values":{"year":"2000"},"note":"Two orbits. The companion returns to the same track, which is how astronomers know they are watching a bound pair rather than two stars passing."}],
+    "actions": [],
+    "defaults": {"year":"1900"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 18,
+   "readout": {
+    "calls": 18,
+    "distinct": 9,
+    "digest": "151c038fe325ea6d",
+    "samples": [[{"label":"Observations plotted","value":"1"},{"label":"Years of watching","value":"0"},{"label":"Orbits completed","value":"0.00","emphasis":true},{"label":"Period, once the orbit closes","value":"50.1 years"},{"label":"Orbit size, once the orbit closes","value":"19.8 AU"}],[{"label":"Observations plotted","value":"21"},{"label":"Years of watching","value":"100"},{"label":"Orbits completed","value":"2.00","emphasis":true},{"label":"Period, once the orbit closes","value":"50.1 years"},{"label":"Orbit size, once the orbit closes","value":"19.8 AU"}],[{"label":"Observations plotted","value":"11"},{"label":"Years of watching","value":"50"},{"label":"Orbits completed","value":"1.00","emphasis":true},{"label":"Period, once the orbit closes","value":"50.1 years"},{"label":"Orbit size, once the orbit closes","value":"19.8 AU"}],[{"label":"Observations plotted","value":"16"},{"label":"Years of watching","value":"75"},{"label":"Orbits completed","value":"1.50","emphasis":true},{"label":"Period, once the orbit closes","value":"50.1 years"},{"label":"Orbit size, once the orbit closes","value":"19.8 AU"}],[{"label":"Observations plotted","value":"6"},{"label":"Years of watching","value":"25"},{"label":"Orbits completed","value":"0.50","emphasis":true},{"label":"Period, once the orbit closes","value":"50.1 years"},{"label":"Orbit size, once the orbit closes","value":"19.8 AU"}],[{"label":"Observations plotted","value":"3"},{"label":"Years of watching","value":"10"},{"label":"Orbits completed","value":"0.20","emphasis":true},{"label":"Period, once the orbit closes","value":"50.1 years"},{"label":"Orbit size, once the orbit closes","value":"19.8 AU"}]]
+   },
+   "canvas": {
+    "calls": 18,
+    "distinct": 9,
+    "digest": "950a9996c37a5082",
+    "samples": [["Sirius A","Sirius A","positions seen from Earth, 1900 to 1900","positions seen from Earth, 1900 to 1900","19.8 AU across at its widest","19.8 AU across at its widest"],["Sirius A","Sirius A","positions seen from Earth, 1900 to 2000","positions seen from Earth, 1900 to 2000","19.8 AU across at its widest","19.8 AU across at its widest"]]
+   },
+   "controls": {
+    "calls": 18,
+    "distinct": 9,
+    "digest": "217aa25d66d43f76",
+    "samples": [["1900"],["2000"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "a91498fc60ab8e5b",
+    "samples": [{"preset":"One decade","note":"Three dots. They are moving, but nobody could tell you the shape of the orbit from this."},{"preset":"Half an orbit","note":"A curve is appearing. Notice the dots are further apart when the companion is on the near side: it moves faster there, which is Kepler’s second law showing up in real data."},{"preset":"One full orbit","note":"Fifty years of watching gives one complete orbit, and with it the period and the size. That is everything the mass formula needs."},{"preset":"A century","note":"Two orbits. The companion returns to the same track, which is how astronomers know they are watching a bound pair rather than two stars passing."}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Sirio, observada durante un siglo",
+    "note": "Each dot is where the faint companion was seen, relative to the bright star. Slide forward through the years and the orbit draws itself.",
+    "controls": [{"id":"year","label":"Observaciones hasta","unit":"","min":1900,"max":2000,"step":5,"value":1900,"decimals":0}],
+    "presets": [{"label":"Una década","values":{"year":"1910"},"note":"Tres puntos. Se mueven, pero nadie podría decirte la forma de la órbita a partir de esto."},{"label":"Media órbita","values":{"year":"1925"},"note":"A curve is appearing. Notice the dots are further apart when the companion is on the near side: it moves faster there, which is Kepler’s second law showing up in real data."},{"label":"Una órbita completa","values":{"year":"1945"},"note":"Fifty years of watching gives one complete orbit, and with it the period and the size. That is everything the mass formula needs."},{"label":"Un siglo","values":{"year":"2000"},"note":"Two orbits. The companion returns to the same track, which is how astronomers know they are watching a bound pair rather than two stars passing."}],
+    "actions": [],
+    "defaults": {"year":"1900"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 18,
+   "readout": {
+    "calls": 18,
+    "distinct": 9,
+    "digest": "01943bea5a392f91",
+    "samples": [[{"label":"Observaciones representadas","value":"1"},{"label":"Años de observación","value":"0"},{"label":"Órbitas completadas","value":"0.00","emphasis":true},{"label":"Periodo, una vez que la órbita se cierra","value":"50.1 years"},{"label":"Tamaño de la órbita, una vez que se cierra","value":"19.8 AU"}],[{"label":"Observaciones representadas","value":"21"},{"label":"Años de observación","value":"100"},{"label":"Órbitas completadas","value":"2.00","emphasis":true},{"label":"Periodo, una vez que la órbita se cierra","value":"50.1 years"},{"label":"Tamaño de la órbita, una vez que se cierra","value":"19.8 AU"}],[{"label":"Observaciones representadas","value":"11"},{"label":"Años de observación","value":"50"},{"label":"Órbitas completadas","value":"1.00","emphasis":true},{"label":"Periodo, una vez que la órbita se cierra","value":"50.1 years"},{"label":"Tamaño de la órbita, una vez que se cierra","value":"19.8 AU"}],[{"label":"Observaciones representadas","value":"16"},{"label":"Años de observación","value":"75"},{"label":"Órbitas completadas","value":"1.50","emphasis":true},{"label":"Periodo, una vez que la órbita se cierra","value":"50.1 years"},{"label":"Tamaño de la órbita, una vez que se cierra","value":"19.8 AU"}],[{"label":"Observaciones representadas","value":"6"},{"label":"Años de observación","value":"25"},{"label":"Órbitas completadas","value":"0.50","emphasis":true},{"label":"Periodo, una vez que la órbita se cierra","value":"50.1 years"},{"label":"Tamaño de la órbita, una vez que se cierra","value":"19.8 AU"}],[{"label":"Observaciones representadas","value":"3"},{"label":"Años de observación","value":"10"},{"label":"Órbitas completadas","value":"0.20","emphasis":true},{"label":"Periodo, una vez que la órbita se cierra","value":"50.1 years"},{"label":"Tamaño de la órbita, una vez que se cierra","value":"19.8 AU"}]]
+   },
+   "canvas": {
+    "calls": 18,
+    "distinct": 9,
+    "digest": "950a9996c37a5082",
+    "samples": [["Sirius A","Sirius A","positions seen from Earth, 1900 to 1900","positions seen from Earth, 1900 to 1900","19.8 AU across at its widest","19.8 AU across at its widest"],["Sirius A","Sirius A","positions seen from Earth, 1900 to 2000","positions seen from Earth, 1900 to 2000","19.8 AU across at its widest","19.8 AU across at its widest"]]
+   },
+   "controls": {
+    "calls": 18,
+    "distinct": 9,
+    "digest": "217aa25d66d43f76",
+    "samples": [["1900"],["2000"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "262700f77966c5dc",
+    "samples": [{"preset":"Una década","note":"Tres puntos. Se mueven, pero nadie podría decirte la forma de la órbita a partir de esto."},{"preset":"Media órbita","note":"A curve is appearing. Notice the dots are further apart when the companion is on the near side: it moves faster there, which is Kepler’s second law showing up in real data."},{"preset":"Una órbita completa","note":"Fifty years of watching gives one complete orbit, and with it the period and the size. That is everything the mass formula needs."},{"preset":"Un siglo","note":"Two orbits. The companion returns to the same track, which is how astronomers know they are watching a bound pair rather than two stars passing."}]
+   }
+  }
+ }
+}

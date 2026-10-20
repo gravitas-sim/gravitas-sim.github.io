@@ -1,0 +1,78 @@
+{
+ "chaos-divergence": {
+  "en": {
+   "static": {
+    "title": "How far apart the two runs are",
+    "note": "The distance between Run A and Run B, added up over every body and matched by identity, at each moment of simulated time. The same data on two axes: linear above, logarithmic below. A straight line on the lower plot is exponential growth.",
+    "controls": [],
+    "presets": [],
+    "actions": [],
+    "defaults": {}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 14,
+   "readout": {
+    "calls": 14,
+    "distinct": 7,
+    "digest": "9df751399e69a0de",
+    "samples": [[{"label":"Separation at the start","value":"—"},{"label":"Separation at the end","value":"0.00e+0 u  (0.0 km)"},{"label":"Grew by","value":"×1.00"},{"label":"Behavior","value":"the two runs are identical — the simulation is deterministic","emphasis":true},{"label":"A straight line fits","value":"r² = 0.000"}],[{"label":"Separation at the start","value":"1.00e-3 u  (1,496 km)"},{"label":"Separation at the end","value":"9.06e-4 u  (1,355 km)"},{"label":"Grew by","value":"×0.906"},{"label":"Behavior","value":"bounded: the two runs stay close","emphasis":true},{"label":"No e-folding time because","value":"the separation did not grow through enough e-folds. Under three, a straight line can imitate an exponential."},{"label":"A straight line fits","value":"r² = 0.006"}],[{"label":"Separation at the start","value":"1.00e-3 u  (1,496 km)"},{"label":"Separation at the end","value":"0.0305 u  (45,627 km)"},{"label":"Grew by","value":"×30.5"},{"label":"Behavior","value":"growing in proportion to time — that is drift, not chaos","emphasis":true},{"label":"No e-folding time because","value":"the separation did not grow through enough e-folds. Under three, a straight line can imitate an exponential."},{"label":"A straight line fits","value":"r² = 1.000"}],[{"label":"Separation at the start","value":"1.00e-9 u  (0.0015 km)"},{"label":"Separation at the end","value":"1.50 u  (2.24 million km)"},{"label":"Grew by","value":"×1.5e+9"},{"label":"Behavior","value":"exponential, e-folding time 1.1 s  (r² = 1.000)","emphasis":true},{"label":"Fitted over","value":"t = 1 to 22 s  (18.9 e-folds)"},{"label":"A straight line fits","value":"r² = 0.609"}],[{"label":"Separation at the start","value":"1.00e-9 u  (0.0015 km)"},{"label":"Separation at the end","value":"0.00255 u  (3,809 km)"},{"label":"Grew by","value":"×2.5e+6"},{"label":"Behavior","value":"exponential, e-folding time 2.0 s  (r² = 1.000)","emphasis":true},{"label":"Fitted over","value":"t = 1 to 26 s  (12.5 e-folds)"},{"label":"A straight line fits","value":"r² = 0.348"}],[{"label":"Perturbation","value":"Moon, x, 2 km"},{"label":"Separation at the start","value":"1.00e-9 u  (0.0015 km)"},{"label":"Separation at the end","value":"0.00255 u  (3,809 km)"},{"label":"Grew by","value":"×2.5e+6"},{"label":"Behavior","value":"exponential, e-folding time 2.0 s  (r² = 1.000)","emphasis":true},{"label":"Fitted over","value":"t = 1 to 26 s  (12.5 e-folds)"},{"label":"A straight line fits","value":"r² = 0.348"},{"label":"Under refinement","value":"resolved — the e-folding times agree to 5%","emphasis":true}],[{"label":"Status","value":"Record Run A and Run B in the A/B Bench, then come back."}]]
+   },
+   "canvas": {
+    "calls": 14,
+    "distinct": 3,
+    "digest": "afe98f6eb60df68e",
+    "samples": [["separation, linear scale","separation","simulated time →","separation, logarithmic scale","not enough overlapping samples"],["separation, linear scale","separation","simulated time →","separation, logarithmic scale","log₁₀ separation","simulated time →"],["Record Run A and Run B in the A/B Bench, then come back."]]
+   },
+   "controls": {
+    "calls": 14,
+    "distinct": 1,
+    "digest": "cf1cbb66a638b486",
+    "samples": [[]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Cuán separadas están las dos ejecuciones",
+    "note": "La distancia entre la ejecución A y la B, sumada sobre todos los cuerpos y emparejada por identidad, en cada instante de tiempo simulado. Los mismos datos en dos ejes: lineal arriba, logarítmico abajo. Una recta en la gráfica inferior es crecimiento exponencial.",
+    "controls": [],
+    "presets": [],
+    "actions": [],
+    "defaults": {}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 14,
+   "readout": {
+    "calls": 14,
+    "distinct": 7,
+    "digest": "d8ea75f9c29b1ec8",
+    "samples": [[{"label":"Separación al principio","value":"—"},{"label":"Separación al final","value":"0.00e+0 u  (0.0 km)"},{"label":"Creció","value":"×1.00"},{"label":"Comportamiento","value":"las dos ejecuciones son idénticas: la simulación es determinista","emphasis":true},{"label":"Una recta ajusta con","value":"r² = 0.000"}],[{"label":"Separación al principio","value":"1.00e-3 u  (1,496 km)"},{"label":"Separación al final","value":"9.06e-4 u  (1,355 km)"},{"label":"Creció","value":"×0.906"},{"label":"Comportamiento","value":"acotada: las dos ejecuciones se mantienen próximas","emphasis":true},{"label":"Sin tiempo de crecimiento porque","value":"la separación no creció los suficientes factores e. Por debajo de tres, una recta puede imitar una exponencial."},{"label":"Una recta ajusta con","value":"r² = 0.006"}],[{"label":"Separación al principio","value":"1.00e-3 u  (1,496 km)"},{"label":"Separación al final","value":"0.0305 u  (45,627 km)"},{"label":"Creció","value":"×30.5"},{"label":"Comportamiento","value":"crece en proporción al tiempo: eso es deriva, no caos","emphasis":true},{"label":"Sin tiempo de crecimiento porque","value":"la separación no creció los suficientes factores e. Por debajo de tres, una recta puede imitar una exponencial."},{"label":"Una recta ajusta con","value":"r² = 1.000"}],[{"label":"Separación al principio","value":"1.00e-9 u  (0.0015 km)"},{"label":"Separación al final","value":"1.50 u  (2.24 million km)"},{"label":"Creció","value":"×1.5e+9"},{"label":"Comportamiento","value":"exponencial, tiempo de crecimiento 1.1 s  (r² = 1.000)","emphasis":true},{"label":"Ajustado en","value":"t = 1 a 22 s  (18.9 factores e)"},{"label":"Una recta ajusta con","value":"r² = 0.609"}],[{"label":"Separación al principio","value":"1.00e-9 u  (0.0015 km)"},{"label":"Separación al final","value":"0.00255 u  (3,809 km)"},{"label":"Creció","value":"×2.5e+6"},{"label":"Comportamiento","value":"exponencial, tiempo de crecimiento 2.0 s  (r² = 1.000)","emphasis":true},{"label":"Ajustado en","value":"t = 1 a 26 s  (12.5 factores e)"},{"label":"Una recta ajusta con","value":"r² = 0.348"}],[{"label":"Perturbación","value":"Moon, x, 2 km"},{"label":"Separación al principio","value":"1.00e-9 u  (0.0015 km)"},{"label":"Separación al final","value":"0.00255 u  (3,809 km)"},{"label":"Creció","value":"×2.5e+6"},{"label":"Comportamiento","value":"exponencial, tiempo de crecimiento 2.0 s  (r² = 1.000)","emphasis":true},{"label":"Ajustado en","value":"t = 1 a 26 s  (12.5 factores e)"},{"label":"Una recta ajusta con","value":"r² = 0.348"},{"label":"Bajo refinamiento","value":"resuelto: los tiempos de crecimiento coinciden dentro del 5%","emphasis":true}],[{"label":"Estado","value":"Graba la ejecución A y la B en el Banco A/B y vuelve aquí."}]]
+   },
+   "canvas": {
+    "calls": 14,
+    "distinct": 3,
+    "digest": "a6c2212d00a0e136",
+    "samples": [["separación, escala lineal","separación","tiempo simulado →","separación, escala logarítmica","no hay suficientes muestras solapadas"],["separación, escala lineal","separación","tiempo simulado →","separación, escala logarítmica","log₁₀ separación","tiempo simulado →"],["Graba la ejecución A y la B en el Banco A/B y vuelve aquí."]]
+   },
+   "controls": {
+    "calls": 14,
+    "distinct": 1,
+    "digest": "cf1cbb66a638b486",
+    "samples": [[]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ }
+}

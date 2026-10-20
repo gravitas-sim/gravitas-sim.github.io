@@ -575,7 +575,7 @@ export async function syntheticContexts() {
 // --- Recording one step -------------------------------------------------------
 
 /** What a call printed: its result, or the error it threw. */
-function outcome(call) {
+export function outcome(call) {
   try {
     return normalize(call());
   } catch (e) {
@@ -584,7 +584,7 @@ function outcome(call) {
 }
 
 /** A result as plain JSON: numbers to twelve figures, functions dropped. */
-function normalize(x) {
+export function normalize(x) {
   if (typeof x === 'number') return num(x);
   if (x === undefined) return null;
   if (Array.isArray(x)) return x.map(normalize);
@@ -608,7 +608,7 @@ const LADDER = [0.03, 0.2, 1.3, 4.7, 15, 88, 410, 2300];
  * digit anywhere does. A message that prints a different number of decimals,
  * or a different minus sign, is a different shape and always shown.
  */
-function summarize(list) {
+export function summarize(list) {
   const all = distinct(list);
   const byShape = new Map();
   for (const item of all) {
@@ -632,7 +632,7 @@ function summarize(list) {
 }
 
 /** The distinct outputs, in the order they first appeared. */
-function distinct(list) {
+export function distinct(list) {
   const seen = new Map();
   for (const item of list) {
     const key = JSON.stringify(item);
