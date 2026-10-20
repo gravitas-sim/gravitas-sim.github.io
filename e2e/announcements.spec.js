@@ -155,4 +155,24 @@ test.describe('every status line says the same words in the same order', () => {
     await press(page, ['fbCopyMarkup', 'fbCopyLink']);
     expect(await announced(page)).toEqual(['fbCopyStatus: Copied.']);
   });
+
+  test('the orbital system builder', async ({ page, app }) => {
+    await app.boot();
+    if (await page.evaluate(() => window.innerWidth <= 1024)) {
+      await page.locator('#mobileMenuToggle').click();
+    }
+    await app.railControl('systemBuilderBtn');
+    await page.locator('#systemBuilderBtn').click();
+    await expect(page.locator('#systemBuilderDialog')).toBeVisible();
+    await page.locator('#systemBuilderTemplate').selectOption('kepler16');
+    await page.locator('#systemBuilderTemplateApply').click();
+    await expect(page.locator('#systemBuilderTableBody tr')).not.toHaveCount(0);
+    await page.waitForTimeout(400);
+    // The main app announces a good deal else, with timings of its own.
+    expect(
+      (await announced(page)).filter(m => m.startsWith('systemBuilderStatus:'))
+    ).toEqual([
+      'systemBuilderStatus: Started from A planet around a binary star (Kepler-16).',
+    ]);
+  });
 });
