@@ -768,8 +768,7 @@ const scheduleRefresh = () => {
 };
 
 function setStatus(message) {
-  const status = $('systemBuilderStatus');
-  if (status) status.textContent = message;
+  announce(message, true, 'systemBuilderStatus');
 }
 
 // --- Actions ------------------------------------------------------------------
