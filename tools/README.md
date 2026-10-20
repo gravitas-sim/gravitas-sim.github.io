@@ -136,6 +136,7 @@ current, and the orchestrator checks it.
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
 | `seeded-step.mjs` | A preset world stepped under a seed, every body kept at full precision |  |
+| `seeding-golden.mjs` | Every seeded sequence that moved onto js/random, recorded at full precision |  |
 | `shell.mjs` | The shared shell, stamped into every page |  |
 | `sky-horizons-astrometric.mjs` | Reference positions for the Sky Lab's ephemeris source (Prompt 106), from JPL Horizons |  |
 | `small-body-sweep.mjs` | Small-body scenario sweep |  |
