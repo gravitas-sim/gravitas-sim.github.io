@@ -26,7 +26,7 @@
 // =============================================================================
 
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -89,6 +89,11 @@ function lyingCache() {
     })
   );
   // One check, so physicsChecks is wrong too, and the coverage block with it.
+  // One stand-in per group the list of gaps names, since that list refuses a
+  // group the report does not have.
+  const named = JSON.parse(
+    readFileSync(path.join(REPO, 'tools/validation-gaps.json'), 'utf8')
+  ).entries.flatMap(e => e.groups);
   writeFileSync(
     path.join(dir, 'physics.json'),
     JSON.stringify({
@@ -102,6 +107,12 @@ function lyingCache() {
           name: 'a stand-in',
           pass: true,
         },
+        ...named.map(group => ({
+          group,
+          kind: 'analytic',
+          name: `a stand-in for ${group}`,
+          pass: true,
+        })),
       ],
     })
   );
