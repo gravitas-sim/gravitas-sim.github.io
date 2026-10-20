@@ -1,0 +1,306 @@
+{
+ "launch": {
+  "en": {
+   "static": {
+    "title": "Does it come back?",
+    "note": "Fired sideways off a tower 320 km high, the way Newton imagined firing a cannonball off a very tall mountain. Move the speed and it re-runs. The bars are energies, in megajoules per kilogram.",
+    "controls": [{"id":"v","label":"Launch speed","unit":"km/s","min":3,"max":16,"step":0.1,"value":6,"decimals":1}],
+    "presets": [{"label":"Slow: 6 km/s","values":{"v":"6"},"note":"Not fast enough. It arcs a long way over the horizon and falls back to the ground, which is what every cannonball in history has done."},{"label":"Orbit: 7.8 km/s","values":{"v":"7.8"},"note":"Now it falls all the way round. Nothing has changed except the speed: an orbit is what happens when you fall fast enough sideways that the ground curves away underneath you as fast as you drop."},{"label":"Boundary: 10.9 km/s","values":{"v":"10.9"},"note":"The dividing line from up here. It leaves and never comes back, but only just: it is still slowing down the whole way out, and only stops once it is infinitely far away."},{"label":"Fast: 14 km/s","values":{"v":"14"},"note":"Clearly gone. It leaves along an open path and still has speed to spare when it is far away."}],
+    "actions": [{"id":"run","label":"Run"},{"id":"reset","label":"↺ Reset"}],
+    "defaults": {"v":"6"}
+   },
+   "precision": [],
+   "specs": 5,
+   "frames": 54,
+   "readout": {
+    "calls": 54,
+    "distinct": 16,
+    "digest": "bf7c80e313fa854d",
+    "samples": [[{"label":"Does it come back?","value":"no: it falls back to the ground","emphasis":true},{"label":"Total energy","value":"−41.6 MJ per kg, below zero"},{"label":"Escape speed from here","value":"10.92 km/s"},{"label":"Furthest it gets","value":"it never leaves the ground"}],[{"label":"Does it come back?","value":"no: it falls back to the ground","emphasis":true},{"label":"Total energy","value":"−55.1 MJ per kg, below zero"},{"label":"Escape speed from here","value":"10.92 km/s"},{"label":"Furthest it gets","value":"it never leaves the ground"}],[{"label":"Does it come back?","value":"no: it leaves for good","emphasis":true},{"label":"Total energy","value":"+68.4 MJ per kg, above zero"},{"label":"Escape speed from here","value":"10.92 km/s"},{"label":"Furthest it gets","value":"no limit: it never turns round"}],[{"label":"Does it come back?","value":"no: it leaves for good","emphasis":true},{"label":"Total energy","value":"+22.3 MJ per kg, above zero"},{"label":"Escape speed from here","value":"10.92 km/s"},{"label":"Furthest it gets","value":"no limit: it never turns round"}],[{"label":"Does it come back?","value":"yes: it comes back round","emphasis":true},{"label":"Total energy","value":"−14.5 MJ per kg, below zero"},{"label":"Escape speed from here","value":"10.92 km/s"},{"label":"Furthest it gets","value":"3.3 Earth radii out, then back"}],[{"label":"Does it come back?","value":"yes: it comes back round","emphasis":true},{"label":"Total energy","value":"−11.6 MJ per kg, below zero"},{"label":"Escape speed from here","value":"10.92 km/s"},{"label":"Furthest it gets","value":"4.4 Earth radii out, then back"}],[{"label":"Does it come back?","value":"no: it leaves for good","emphasis":true},{"label":"Total energy","value":"+4.3 MJ per kg, above zero"},{"label":"Escape speed from here","value":"10.92 km/s"},{"label":"Furthest it gets","value":"no limit: it never turns round"}],[{"label":"Does it come back?","value":"yes: it comes back round","emphasis":true},{"label":"Total energy","value":"−4.5 MJ per kg, below zero"},{"label":"Escape speed from here","value":"10.92 km/s"},{"label":"Furthest it gets","value":"13.0 Earth radii out, then back"}],[{"label":"Does it come back?","value":"yes: it comes back round","emphasis":true},{"label":"Total energy","value":"−0.2 MJ per kg, below zero"},{"label":"Escape speed from here","value":"10.92 km/s"},{"label":"Furthest it gets","value":"354.0 Earth radii out, then back"}]]
+   },
+   "canvas": {
+    "calls": 54,
+    "distinct": 16,
+    "digest": "8454a1cc3a41563c",
+    "samples": [["sideways at 6.0 km/s, from 320 km up","sideways at 6.0 km/s, from 320 km up","falls back to the surface","falls back to the surface","view is 2 Earth radii across","view is 2 Earth radii across","+18.0","motion","-59.6","position","-41.6","TOTAL","zero"],["sideways at 6.3 km/s, from 320 km up","sideways at 6.3 km/s, from 320 km up","falls back to the surface","falls back to the surface","view is 2 Earth radii across","view is 2 Earth radii across","+19.8","motion","-59.6","position","-39.7","TOTAL","zero"],["sideways at 3.0 km/s, from 320 km up","sideways at 3.0 km/s, from 320 km up","falls back to the surface","falls back to the surface","view is 2 Earth radii across","view is 2 Earth radii across","+4.5","motion","-59.6","position","-55.1","TOTAL","zero"],["sideways at 16.0 km/s, from 320 km up","sideways at 16.0 km/s, from 320 km up","open path: it never returns","open path: it never returns","view is 27 Earth radii across","view is 27 Earth radii across","+128.0","motion","-59.6","position","+68.4","TOTAL","zero"],["sideways at 9.5 km/s, from 320 km up","sideways at 9.5 km/s, from 320 km up","closed path: it returns","closed path: it returns","view is 8 Earth radii across","view is 8 Earth radii across","+45.1","motion","-59.6","position","-14.5","TOTAL","zero"],["sideways at 7.8 km/s, from 320 km up","sideways at 7.8 km/s, from 320 km up","closed path: it returns","closed path: it returns","view is 3 Earth radii across","view is 3 Earth radii across","+30.4","motion","-59.6","position","-29.2","TOTAL","zero"],["sideways at 12.8 km/s, from 320 km up","sideways at 12.8 km/s, from 320 km up","open path: it never returns","open path: it never returns","view is 27 Earth radii across","view is 27 Earth radii across","+81.9","motion","-59.6","position","+22.3","TOTAL","zero"],["sideways at 12.9 km/s, from 320 km up","sideways at 12.9 km/s, from 320 km up","open path: it never returns","open path: it never returns","view is 27 Earth radii across","view is 27 Earth radii across","+83.2","motion","-59.6","position","+23.6","TOTAL","zero"],["sideways at 11.3 km/s, from 320 km up","sideways at 11.3 km/s, from 320 km up","open path: it never returns","open path: it never returns","view is 27 Earth radii across","view is 27 Earth radii across","+63.8","motion","-59.6","position","+4.3","TOTAL","zero"],["sideways at 10.5 km/s, from 320 km up","sideways at 10.5 km/s, from 320 km up","closed path: it returns","closed path: it returns","view is 27 Earth radii across","view is 27 Earth radii across","+55.1","motion","-59.6","position","-4.5","TOTAL","zero"],["sideways at 10.9 km/s, from 320 km up","sideways at 10.9 km/s, from 320 km up","closed path: it returns","closed path: it returns","view is 27 Earth radii across","view is 27 Earth radii across","+59.4","motion","-59.6","position","-0.2","TOTAL","zero"],["sideways at 9.8 km/s, from 320 km up","sideways at 9.8 km/s, from 320 km up","closed path: it returns","closed path: it returns","view is 10 Earth radii across","view is 10 Earth radii across","+48.0","motion","-59.6","position","-11.6","TOTAL","zero"]]
+   },
+   "controls": {
+    "calls": 54,
+    "distinct": 16,
+    "digest": "b01fb7c39b0c181d",
+    "samples": [["6.0 km/s"],["3.0 km/s"],["16.0 km/s"],["12.8 km/s"]]
+   },
+   "phases": {
+    "calls": 24,
+    "distinct": 16,
+    "digest": "bc84c574c623fce6",
+    "samples": [{"run":1},{"run":2},{"run":16},{"run":24},{"action":"run","after":"press","button":"Run"},{"action":"run","after":"step","button":"Run"},{"action":"run","after":"press again","button":"Run"},{"action":"reset","after":"press","button":"↺ Reset"},{"action":"reset","after":"step","button":"↺ Reset"},{"action":"reset","after":"press again","button":"↺ Reset"},{"preset":"Slow: 6 km/s","note":"Not fast enough. It arcs a long way over the horizon and falls back to the ground, which is what every cannonball in history has done."},{"preset":"Orbit: 7.8 km/s","note":"Now it falls all the way round. Nothing has changed except the speed: an orbit is what happens when you fall fast enough sideways that the ground curves away underneath you as fast as you drop."},{"preset":"Boundary: 10.9 km/s","note":"The dividing line from up here. It leaves and never comes back, but only just: it is still slowing down the whole way out, and only stops once it is infinitely far away."},{"preset":"Fast: 14 km/s","note":"Clearly gone. It leaves along an open path and still has speed to spare when it is far away."}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "¿Vuelve?",
+    "note": "Fired sideways off a tower 320 km high, the way Newton imagined firing a cannonball off a very tall mountain. Move the speed and it re-runs. The bars are energies, in megajoules per kilogram.",
+    "controls": [{"id":"v","label":"Velocidad de lanzamiento","unit":"km/s","min":3,"max":16,"step":0.1,"value":6,"decimals":1}],
+    "presets": [{"label":"Lento: 6 km/s","values":{"v":"6"},"note":"Not fast enough. It arcs a long way over the horizon and falls back to the ground, which is what every cannonball in history has done."},{"label":"Órbita: 7,8 km/s","values":{"v":"7.8"},"note":"Now it falls all the way round. Nothing has changed except the speed: an orbit is what happens when you fall fast enough sideways that the ground curves away underneath you as fast as you drop."},{"label":"Frontera: 10,9 km/s","values":{"v":"10.9"},"note":"The dividing line from up here. It leaves and never comes back, but only just: it is still slowing down the whole way out, and only stops once it is infinitely far away."},{"label":"Rápido: 14 km/s","values":{"v":"14"},"note":"Claramente se ha ido. Se marcha por una trayectoria abierta y todavía le sobra velocidad cuando está muy lejos."}],
+    "actions": [{"id":"run","label":"Ejecutar"},{"id":"reset","label":"↺ Reiniciar"}],
+    "defaults": {"v":"6"}
+   },
+   "precision": [],
+   "specs": 5,
+   "frames": 54,
+   "readout": {
+    "calls": 54,
+    "distinct": 16,
+    "digest": "7211c9762619eb69",
+    "samples": [[{"label":"¿Vuelve?","value":"no: it falls back to the ground","emphasis":true},{"label":"Energía total","value":"−41.6 MJ per kg, below zero"},{"label":"Velocidad de escape desde aquí","value":"10.92 km/s"},{"label":"Hasta dónde llega","value":"it never leaves the ground"}],[{"label":"¿Vuelve?","value":"no: it falls back to the ground","emphasis":true},{"label":"Energía total","value":"−55.1 MJ per kg, below zero"},{"label":"Velocidad de escape desde aquí","value":"10.92 km/s"},{"label":"Hasta dónde llega","value":"it never leaves the ground"}],[{"label":"¿Vuelve?","value":"no: it leaves for good","emphasis":true},{"label":"Energía total","value":"+68.4 MJ per kg, above zero"},{"label":"Velocidad de escape desde aquí","value":"10.92 km/s"},{"label":"Hasta dónde llega","value":"no limit: it never turns round"}],[{"label":"¿Vuelve?","value":"no: it leaves for good","emphasis":true},{"label":"Energía total","value":"+22.3 MJ per kg, above zero"},{"label":"Velocidad de escape desde aquí","value":"10.92 km/s"},{"label":"Hasta dónde llega","value":"no limit: it never turns round"}],[{"label":"¿Vuelve?","value":"yes: it comes back round","emphasis":true},{"label":"Energía total","value":"−14.5 MJ per kg, below zero"},{"label":"Velocidad de escape desde aquí","value":"10.92 km/s"},{"label":"Hasta dónde llega","value":"3.3 Earth radii out, then back"}],[{"label":"¿Vuelve?","value":"yes: it comes back round","emphasis":true},{"label":"Energía total","value":"−11.6 MJ per kg, below zero"},{"label":"Velocidad de escape desde aquí","value":"10.92 km/s"},{"label":"Hasta dónde llega","value":"4.4 Earth radii out, then back"}],[{"label":"¿Vuelve?","value":"no: it leaves for good","emphasis":true},{"label":"Energía total","value":"+4.3 MJ per kg, above zero"},{"label":"Velocidad de escape desde aquí","value":"10.92 km/s"},{"label":"Hasta dónde llega","value":"no limit: it never turns round"}],[{"label":"¿Vuelve?","value":"yes: it comes back round","emphasis":true},{"label":"Energía total","value":"−4.5 MJ per kg, below zero"},{"label":"Velocidad de escape desde aquí","value":"10.92 km/s"},{"label":"Hasta dónde llega","value":"13.0 Earth radii out, then back"}],[{"label":"¿Vuelve?","value":"yes: it comes back round","emphasis":true},{"label":"Energía total","value":"−0.2 MJ per kg, below zero"},{"label":"Velocidad de escape desde aquí","value":"10.92 km/s"},{"label":"Hasta dónde llega","value":"354.0 Earth radii out, then back"}]]
+   },
+   "canvas": {
+    "calls": 54,
+    "distinct": 16,
+    "digest": "8454a1cc3a41563c",
+    "samples": [["sideways at 6.0 km/s, from 320 km up","sideways at 6.0 km/s, from 320 km up","falls back to the surface","falls back to the surface","view is 2 Earth radii across","view is 2 Earth radii across","+18.0","motion","-59.6","position","-41.6","TOTAL","zero"],["sideways at 6.3 km/s, from 320 km up","sideways at 6.3 km/s, from 320 km up","falls back to the surface","falls back to the surface","view is 2 Earth radii across","view is 2 Earth radii across","+19.8","motion","-59.6","position","-39.7","TOTAL","zero"],["sideways at 3.0 km/s, from 320 km up","sideways at 3.0 km/s, from 320 km up","falls back to the surface","falls back to the surface","view is 2 Earth radii across","view is 2 Earth radii across","+4.5","motion","-59.6","position","-55.1","TOTAL","zero"],["sideways at 16.0 km/s, from 320 km up","sideways at 16.0 km/s, from 320 km up","open path: it never returns","open path: it never returns","view is 27 Earth radii across","view is 27 Earth radii across","+128.0","motion","-59.6","position","+68.4","TOTAL","zero"],["sideways at 9.5 km/s, from 320 km up","sideways at 9.5 km/s, from 320 km up","closed path: it returns","closed path: it returns","view is 8 Earth radii across","view is 8 Earth radii across","+45.1","motion","-59.6","position","-14.5","TOTAL","zero"],["sideways at 7.8 km/s, from 320 km up","sideways at 7.8 km/s, from 320 km up","closed path: it returns","closed path: it returns","view is 3 Earth radii across","view is 3 Earth radii across","+30.4","motion","-59.6","position","-29.2","TOTAL","zero"],["sideways at 12.8 km/s, from 320 km up","sideways at 12.8 km/s, from 320 km up","open path: it never returns","open path: it never returns","view is 27 Earth radii across","view is 27 Earth radii across","+81.9","motion","-59.6","position","+22.3","TOTAL","zero"],["sideways at 12.9 km/s, from 320 km up","sideways at 12.9 km/s, from 320 km up","open path: it never returns","open path: it never returns","view is 27 Earth radii across","view is 27 Earth radii across","+83.2","motion","-59.6","position","+23.6","TOTAL","zero"],["sideways at 11.3 km/s, from 320 km up","sideways at 11.3 km/s, from 320 km up","open path: it never returns","open path: it never returns","view is 27 Earth radii across","view is 27 Earth radii across","+63.8","motion","-59.6","position","+4.3","TOTAL","zero"],["sideways at 10.5 km/s, from 320 km up","sideways at 10.5 km/s, from 320 km up","closed path: it returns","closed path: it returns","view is 27 Earth radii across","view is 27 Earth radii across","+55.1","motion","-59.6","position","-4.5","TOTAL","zero"],["sideways at 10.9 km/s, from 320 km up","sideways at 10.9 km/s, from 320 km up","closed path: it returns","closed path: it returns","view is 27 Earth radii across","view is 27 Earth radii across","+59.4","motion","-59.6","position","-0.2","TOTAL","zero"],["sideways at 9.8 km/s, from 320 km up","sideways at 9.8 km/s, from 320 km up","closed path: it returns","closed path: it returns","view is 10 Earth radii across","view is 10 Earth radii across","+48.0","motion","-59.6","position","-11.6","TOTAL","zero"]]
+   },
+   "controls": {
+    "calls": 54,
+    "distinct": 16,
+    "digest": "b01fb7c39b0c181d",
+    "samples": [["6.0 km/s"],["3.0 km/s"],["16.0 km/s"],["12.8 km/s"]]
+   },
+   "phases": {
+    "calls": 24,
+    "distinct": 16,
+    "digest": "b5e08be45a5707d1",
+    "samples": [{"run":1},{"run":2},{"run":16},{"run":24},{"action":"run","after":"press","button":"Ejecutar"},{"action":"run","after":"step","button":"Ejecutar"},{"action":"run","after":"press again","button":"Ejecutar"},{"action":"reset","after":"press","button":"↺ Reiniciar"},{"action":"reset","after":"step","button":"↺ Reiniciar"},{"action":"reset","after":"press again","button":"↺ Reiniciar"},{"preset":"Lento: 6 km/s","note":"Not fast enough. It arcs a long way over the horizon and falls back to the ground, which is what every cannonball in history has done."},{"preset":"Órbita: 7,8 km/s","note":"Now it falls all the way round. Nothing has changed except the speed: an orbit is what happens when you fall fast enough sideways that the ground curves away underneath you as fast as you drop."},{"preset":"Frontera: 10,9 km/s","note":"The dividing line from up here. It leaves and never comes back, but only just: it is still slowing down the whole way out, and only stops once it is infinitely far away."},{"preset":"Rápido: 14 km/s","note":"Claramente se ha ido. Se marcha por una trayectoria abierta y todavía le sobra velocidad cuando está muy lejos."}]
+   }
+  }
+ },
+ "live-energy": {
+  "en": {
+   "static": {
+    "title": "Energy around one orbit",
+    "note": "The bars are right now. The plot underneath is the last minute or so: watch the two colored lines trade places while the white one stays where it is.",
+    "controls": [],
+    "presets": [],
+    "actions": [],
+    "defaults": {}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 8,
+   "readout": {
+    "calls": 8,
+    "distinct": 4,
+    "digest": "3aac92c171fdcc33",
+    "samples": [[{"label":"Click a planet in the simulation","value":"…"}],[{"label":"Watching","value":"Eccentric Orbiter"},{"label":"Energy of motion","value":"72% of the depth"},{"label":"Total energy","value":"below zero: bound","emphasis":true},{"label":"How much the total has moved","value":"0.00% of the depth"},{"label":"Where it is","value":"on the close, fast part"}],[{"label":"Watching","value":"Circular Orbiter"},{"label":"Energy of motion","value":"50% of the depth"},{"label":"Total energy","value":"below zero: bound","emphasis":true},{"label":"How much the total has moved","value":"0.00% of the depth"},{"label":"Where it is","value":"on the far, slow part"}],[{"label":"Watching","value":"Far Orbiter"},{"label":"Energy of motion","value":"32% of the depth"},{"label":"Total energy","value":"below zero: bound","emphasis":true},{"label":"How much the total has moved","value":"0.00% of the depth"},{"label":"Where it is","value":"on the far, slow part"}]]
+   },
+   "canvas": {
+    "calls": 8,
+    "distinct": 2,
+    "digest": "e815259b1f4afc9e",
+    "samples": [["Click a planet in the simulation"],["motion","position","TOTAL","zero","0","motion","position","total","time"]]
+   },
+   "controls": {
+    "calls": 8,
+    "distinct": 1,
+    "digest": "cf1cbb66a638b486",
+    "samples": [[]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Energía a lo largo de una órbita",
+    "note": "The bars are right now. The plot underneath is the last minute or so: watch the two colored lines trade places while the white one stays where it is.",
+    "controls": [],
+    "presets": [],
+    "actions": [],
+    "defaults": {}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 8,
+   "readout": {
+    "calls": 8,
+    "distinct": 4,
+    "digest": "9fdab72620e91fc2",
+    "samples": [[{"label":"Pulsa un planeta en la simulación","value":"…"}],[{"label":"Observando","value":"Eccentric Orbiter"},{"label":"Energía de movimiento","value":"72% of the depth"},{"label":"Energía total","value":"below zero: bound","emphasis":true},{"label":"Cuánto se ha movido el total","value":"0.00% of the depth"},{"label":"Dónde está","value":"on the close, fast part"}],[{"label":"Observando","value":"Circular Orbiter"},{"label":"Energía de movimiento","value":"50% of the depth"},{"label":"Energía total","value":"below zero: bound","emphasis":true},{"label":"Cuánto se ha movido el total","value":"0.00% of the depth"},{"label":"Dónde está","value":"on the far, slow part"}],[{"label":"Observando","value":"Far Orbiter"},{"label":"Energía de movimiento","value":"32% of the depth"},{"label":"Energía total","value":"below zero: bound","emphasis":true},{"label":"Cuánto se ha movido el total","value":"0.00% of the depth"},{"label":"Dónde está","value":"on the far, slow part"}]]
+   },
+   "canvas": {
+    "calls": 8,
+    "distinct": 2,
+    "digest": "e815259b1f4afc9e",
+    "samples": [["Click a planet in the simulation"],["motion","position","TOTAL","zero","0","motion","position","total","time"]]
+   },
+   "controls": {
+    "calls": 8,
+    "distinct": 1,
+    "digest": "cf1cbb66a638b486",
+    "samples": [[]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ },
+ "escape-compare": {
+  "en": {
+   "static": {
+    "title": "What makes escape hard?",
+    "note": "Escape speed from four real bodies. Move the slider to start further out and watch every bar fall.",
+    "controls": [{"id":"dist","label":"Start distance","unit":"× body radius","min":1,"max":20,"step":0.5,"value":1,"decimals":1}],
+    "presets": [{"label":"At the surface","values":{"dist":"1"},"note":"Standing on each one. This is the number quoted when people say \"escape velocity\": 11.2 km/s from Earth, and five times that from Jupiter."},{"label":"Twice as far out","values":{"dist":"2"},"note":"Doubling the distance does not halve the escape speed. It divides it by the square root of two, about 1.41: the pull weakens quickly, but the speed you need weakens more slowly."},{"label":"Ten radii out","values":{"dist":"10"},"note":"From here escaping Earth needs only 3.5 km/s. Nothing about Earth changed. You simply started most of the way out of its gravity already."}],
+    "actions": [],
+    "defaults": {"dist":"1"}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 17,
+   "readout": {
+    "calls": 17,
+    "distinct": 12,
+    "digest": "1f31d96b5c9a793b",
+    "samples": [[{"label":"Escape speed from the Moon","value":"2.38 km/s"},{"label":"Escape speed from Earth","value":"11.19 km/s","emphasis":true},{"label":"Escape speed from Jupiter","value":"59.53 km/s"},{"label":"Escape speed from the Sun","value":"617.75 km/s"},{"label":"Starting distance","value":"1.0 × the body's own radius"}],[{"label":"Escape speed from the Moon","value":"0.53 km/s"},{"label":"Escape speed from Earth","value":"2.50 km/s","emphasis":true},{"label":"Escape speed from Jupiter","value":"13.31 km/s"},{"label":"Escape speed from the Sun","value":"138.13 km/s"},{"label":"Starting distance","value":"20.0 × the body's own radius"}],[{"label":"Escape speed from the Moon","value":"0.73 km/s"},{"label":"Escape speed from Earth","value":"3.45 km/s","emphasis":true},{"label":"Escape speed from Jupiter","value":"18.37 km/s"},{"label":"Escape speed from the Sun","value":"190.64 km/s"},{"label":"Starting distance","value":"10.5 × the body's own radius"}],[{"label":"Escape speed from the Moon","value":"0.97 km/s"},{"label":"Escape speed from Earth","value":"4.57 km/s","emphasis":true},{"label":"Escape speed from Jupiter","value":"24.30 km/s"},{"label":"Escape speed from the Sun","value":"252.20 km/s"},{"label":"Starting distance","value":"6.0 × the body's own radius"}],[{"label":"Escape speed from the Moon","value":"1.12 km/s"},{"label":"Escape speed from Earth","value":"5.27 km/s","emphasis":true},{"label":"Escape speed from Jupiter","value":"28.06 km/s"},{"label":"Escape speed from the Sun","value":"291.21 km/s"},{"label":"Starting distance","value":"4.5 × the body's own radius"}]]
+   },
+   "canvas": {
+    "calls": 17,
+    "distinct": 12,
+    "digest": "2164e8f9add8fa70",
+    "samples": [["the Moon","2.38 km/s","Earth","11.19 km/s","Jupiter","59.53 km/s","the Sun","617.75 km/s - off the scale","escape speed","starting 1.0 radii out"],["the Moon","0.53 km/s","Earth","2.50 km/s","Jupiter","13.31 km/s","the Sun","138.13 km/s - off the scale","escape speed","starting 20.0 radii out"],["the Moon","0.73 km/s","Earth","3.45 km/s","Jupiter","18.37 km/s","the Sun","190.64 km/s - off the scale","escape speed","starting 10.5 radii out"],["the Moon","0.97 km/s","Earth","4.57 km/s","Jupiter","24.30 km/s","the Sun","252.20 km/s - off the scale","escape speed","starting 6.0 radii out"],["the Moon","1.12 km/s","Earth","5.27 km/s","Jupiter","28.06 km/s","the Sun","291.21 km/s - off the scale","escape speed","starting 4.5 radii out"]]
+   },
+   "controls": {
+    "calls": 17,
+    "distinct": 12,
+    "digest": "4c800c4027c98191",
+    "samples": [["1.0 × body radius"],["6.0 × body radius"],["20.0 × body radius"],["10.5 × body radius"]]
+   },
+   "phases": {
+    "calls": 3,
+    "distinct": 3,
+    "digest": "644c0f9ac580a869",
+    "samples": [{"preset":"At the surface","note":"Standing on each one. This is the number quoted when people say \"escape velocity\": 11.2 km/s from Earth, and five times that from Jupiter."},{"preset":"Twice as far out","note":"Doubling the distance does not halve the escape speed. It divides it by the square root of two, about 1.41: the pull weakens quickly, but the speed you need weakens more slowly."},{"preset":"Ten radii out","note":"From here escaping Earth needs only 3.5 km/s. Nothing about Earth changed. You simply started most of the way out of its gravity already."}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "¿Qué hace difícil escapar?",
+    "note": "Velocidad de escape desde cuatro cuerpos reales. Mueve el deslizador para empezar más lejos y observa cómo caen todas las barras.",
+    "controls": [{"id":"dist","label":"Distancia inicial","unit":"× radio del cuerpo","min":1,"max":20,"step":0.5,"value":1,"decimals":1}],
+    "presets": [{"label":"En la superficie","values":{"dist":"1"},"note":"Standing on each one. This is the number quoted when people say \"escape velocity\": 11.2 km/s from Earth, and five times that from Jupiter."},{"label":"Al doble de distancia","values":{"dist":"2"},"note":"Doubling the distance does not halve the escape speed. It divides it by the square root of two, about 1.41: the pull weakens quickly, but the speed you need weakens more slowly."},{"label":"A diez radios","values":{"dist":"10"},"note":"From here escaping Earth needs only 3.5 km/s. Nothing about Earth changed. You simply started most of the way out of its gravity already."}],
+    "actions": [],
+    "defaults": {"dist":"1"}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 17,
+   "readout": {
+    "calls": 17,
+    "distinct": 12,
+    "digest": "34aa44f0f62fab51",
+    "samples": [[{"label":"Escape speed from la Luna","value":"2.38 km/s"},{"label":"Escape speed from la Tierra","value":"11.19 km/s","emphasis":true},{"label":"Escape speed from Júpiter","value":"59.53 km/s"},{"label":"Escape speed from el Sol","value":"617.75 km/s"},{"label":"Distancia de partida","value":"1.0 × the body's own radius"}],[{"label":"Escape speed from la Luna","value":"0.53 km/s"},{"label":"Escape speed from la Tierra","value":"2.50 km/s","emphasis":true},{"label":"Escape speed from Júpiter","value":"13.31 km/s"},{"label":"Escape speed from el Sol","value":"138.13 km/s"},{"label":"Distancia de partida","value":"20.0 × the body's own radius"}],[{"label":"Escape speed from la Luna","value":"0.73 km/s"},{"label":"Escape speed from la Tierra","value":"3.45 km/s","emphasis":true},{"label":"Escape speed from Júpiter","value":"18.37 km/s"},{"label":"Escape speed from el Sol","value":"190.64 km/s"},{"label":"Distancia de partida","value":"10.5 × the body's own radius"}],[{"label":"Escape speed from la Luna","value":"0.97 km/s"},{"label":"Escape speed from la Tierra","value":"4.57 km/s","emphasis":true},{"label":"Escape speed from Júpiter","value":"24.30 km/s"},{"label":"Escape speed from el Sol","value":"252.20 km/s"},{"label":"Distancia de partida","value":"6.0 × the body's own radius"}],[{"label":"Escape speed from la Luna","value":"1.12 km/s"},{"label":"Escape speed from la Tierra","value":"5.27 km/s","emphasis":true},{"label":"Escape speed from Júpiter","value":"28.06 km/s"},{"label":"Escape speed from el Sol","value":"291.21 km/s"},{"label":"Distancia de partida","value":"4.5 × the body's own radius"}]]
+   },
+   "canvas": {
+    "calls": 17,
+    "distinct": 12,
+    "digest": "f6f40a0199049370",
+    "samples": [["la Luna","2.38 km/s","la Tierra","11.19 km/s","Júpiter","59.53 km/s","el Sol","617.75 km/s - off the scale","escape speed","starting 1.0 radii out"],["la Luna","0.53 km/s","la Tierra","2.50 km/s","Júpiter","13.31 km/s","el Sol","138.13 km/s - off the scale","escape speed","starting 20.0 radii out"],["la Luna","0.73 km/s","la Tierra","3.45 km/s","Júpiter","18.37 km/s","el Sol","190.64 km/s - off the scale","escape speed","starting 10.5 radii out"],["la Luna","0.97 km/s","la Tierra","4.57 km/s","Júpiter","24.30 km/s","el Sol","252.20 km/s - off the scale","escape speed","starting 6.0 radii out"],["la Luna","1.12 km/s","la Tierra","5.27 km/s","Júpiter","28.06 km/s","el Sol","291.21 km/s - off the scale","escape speed","starting 4.5 radii out"]]
+   },
+   "controls": {
+    "calls": 17,
+    "distinct": 12,
+    "digest": "e2eeed9afe02851d",
+    "samples": [["1.0 × radio del cuerpo"],["6.0 × radio del cuerpo"],["20.0 × radio del cuerpo"],["10.5 × radio del cuerpo"]]
+   },
+   "phases": {
+    "calls": 3,
+    "distinct": 3,
+    "digest": "0d9fbeaac125dc58",
+    "samples": [{"preset":"En la superficie","note":"Standing on each one. This is the number quoted when people say \"escape velocity\": 11.2 km/s from Earth, and five times that from Jupiter."},{"preset":"Al doble de distancia","note":"Doubling the distance does not halve the escape speed. It divides it by the square root of two, about 1.41: the pull weakens quickly, but the speed you need weakens more slowly."},{"preset":"A diez radios","note":"From here escaping Earth needs only 3.5 km/s. Nothing about Earth changed. You simply started most of the way out of its gravity already."}]
+   }
+  }
+ },
+ "shapes": {
+  "en": {
+   "static": {
+    "title": "One law, three shapes",
+    "note": "The same planet, the same launch point, the same law of gravity. Only the speed is different.",
+    "controls": [{"id":"k","label":"Speed, as a fraction of escape speed","unit":"×","min":0.7,"max":1.4,"step":0.01,"value":0.82,"decimals":2}],
+    "presets": [{"label":"Below escape","values":{"k":"0.82"},"note":"A closed loop, an ellipse. Total energy below zero: it can only ever reach a certain distance before gravity turns it round."},{"label":"Exactly escape","values":{"k":"1"},"note":"A parabola, the knife edge. Total energy exactly zero. It never turns round, but it also never gets anywhere with speed left over: it slows towards a dead stop that it only reaches infinitely far away."},{"label":"Above escape","values":{"k":"1.25"},"note":"A hyperbola, an open path. Total energy above zero: it leaves and is still moving when it is far away. This is the shape of an interstellar visitor."}],
+    "actions": [],
+    "defaults": {"k":"0.82"}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 21,
+   "readout": {
+    "calls": 21,
+    "distinct": 16,
+    "digest": "7a798f07b9eb2530",
+    "samples": [[{"label":"Shape of the path","value":"ellipse","emphasis":true},{"label":"Total energy","value":"below zero"},{"label":"Does it come back?","value":"yes"},{"label":"Launch speed","value":"7.25 km/s"},{"label":"Escape speed here","value":"8.84 km/s"}],[{"label":"Shape of the path","value":"ellipse","emphasis":true},{"label":"Total energy","value":"below zero"},{"label":"Does it come back?","value":"yes"},{"label":"Launch speed","value":"6.19 km/s"},{"label":"Escape speed here","value":"8.84 km/s"}],[{"label":"Shape of the path","value":"hyperbola","emphasis":true},{"label":"Total energy","value":"above zero"},{"label":"Does it come back?","value":"no"},{"label":"Launch speed","value":"12.38 km/s"},{"label":"Escape speed here","value":"8.84 km/s"}],[{"label":"Shape of the path","value":"hyperbola","emphasis":true},{"label":"Total energy","value":"above zero"},{"label":"Does it come back?","value":"no"},{"label":"Launch speed","value":"10.88 km/s"},{"label":"Escape speed here","value":"8.84 km/s"}],[{"label":"Shape of the path","value":"hyperbola","emphasis":true},{"label":"Total energy","value":"above zero"},{"label":"Does it come back?","value":"no"},{"label":"Launch speed","value":"9.29 km/s"},{"label":"Escape speed here","value":"8.84 km/s"}],[{"label":"Shape of the path","value":"hyperbola","emphasis":true},{"label":"Total energy","value":"above zero"},{"label":"Does it come back?","value":"no"},{"label":"Launch speed","value":"9.55 km/s"},{"label":"Escape speed here","value":"8.84 km/s"}],[{"label":"Shape of the path","value":"parabola","emphasis":true},{"label":"Total energy","value":"exactly zero"},{"label":"Does it come back?","value":"no"},{"label":"Launch speed","value":"8.84 km/s"},{"label":"Escape speed here","value":"8.84 km/s"}]]
+   },
+   "canvas": {
+    "calls": 21,
+    "distinct": 16,
+    "digest": "d33a2d1c0b5576fc",
+    "samples": [["below escape: ellipse","escape exactly: parabola","above escape: hyperbola","yours: 0.82 × escape speed","Earth, to scale","Earth, to scale"],["below escape: ellipse","escape exactly: parabola","above escape: hyperbola","yours: 0.70 × escape speed","Earth, to scale","Earth, to scale"]]
+   },
+   "controls": {
+    "calls": 21,
+    "distinct": 16,
+    "digest": "ef9eb8c119bb3fca",
+    "samples": [["0.82 ×"],["0.70 ×"]]
+   },
+   "phases": {
+    "calls": 3,
+    "distinct": 3,
+    "digest": "01ee5ce78406ea2a",
+    "samples": [{"preset":"Below escape","note":"A closed loop, an ellipse. Total energy below zero: it can only ever reach a certain distance before gravity turns it round."},{"preset":"Exactly escape","note":"A parabola, the knife edge. Total energy exactly zero. It never turns round, but it also never gets anywhere with speed left over: it slows towards a dead stop that it only reaches infinitely far away."},{"preset":"Above escape","note":"A hyperbola, an open path. Total energy above zero: it leaves and is still moving when it is far away. This is the shape of an interstellar visitor."}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Una ley, tres formas",
+    "note": "El mismo planeta, el mismo punto de lanzamiento, la misma ley de la gravedad. Solo cambia la velocidad.",
+    "controls": [{"id":"k","label":"Velocidad, como fracción de la velocidad de escape","unit":"×","min":0.7,"max":1.4,"step":0.01,"value":0.82,"decimals":2}],
+    "presets": [{"label":"Por debajo del escape","values":{"k":"0.82"},"note":"A closed loop, an ellipse. Total energy below zero: it can only ever reach a certain distance before gravity turns it round."},{"label":"Exactamente el escape","values":{"k":"1"},"note":"A parabola, the knife edge. Total energy exactly zero. It never turns round, but it also never gets anywhere with speed left over: it slows towards a dead stop that it only reaches infinitely far away."},{"label":"Por encima del escape","values":{"k":"1.25"},"note":"A hyperbola, an open path. Total energy above zero: it leaves and is still moving when it is far away. This is the shape of an interstellar visitor."}],
+    "actions": [],
+    "defaults": {"k":"0.82"}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 21,
+   "readout": {
+    "calls": 21,
+    "distinct": 16,
+    "digest": "187e1721c362e868",
+    "samples": [[{"label":"Forma de la trayectoria","value":"ellipse","emphasis":true},{"label":"Energía total","value":"below zero"},{"label":"¿Vuelve?","value":"yes"},{"label":"Velocidad de lanzamiento","value":"7.25 km/s"},{"label":"Velocidad de escape aquí","value":"8.84 km/s"}],[{"label":"Forma de la trayectoria","value":"ellipse","emphasis":true},{"label":"Energía total","value":"below zero"},{"label":"¿Vuelve?","value":"yes"},{"label":"Velocidad de lanzamiento","value":"6.19 km/s"},{"label":"Velocidad de escape aquí","value":"8.84 km/s"}],[{"label":"Forma de la trayectoria","value":"hyperbola","emphasis":true},{"label":"Energía total","value":"above zero"},{"label":"¿Vuelve?","value":"no"},{"label":"Velocidad de lanzamiento","value":"12.38 km/s"},{"label":"Velocidad de escape aquí","value":"8.84 km/s"}],[{"label":"Forma de la trayectoria","value":"hyperbola","emphasis":true},{"label":"Energía total","value":"above zero"},{"label":"¿Vuelve?","value":"no"},{"label":"Velocidad de lanzamiento","value":"10.88 km/s"},{"label":"Velocidad de escape aquí","value":"8.84 km/s"}],[{"label":"Forma de la trayectoria","value":"hyperbola","emphasis":true},{"label":"Energía total","value":"above zero"},{"label":"¿Vuelve?","value":"no"},{"label":"Velocidad de lanzamiento","value":"9.29 km/s"},{"label":"Velocidad de escape aquí","value":"8.84 km/s"}],[{"label":"Forma de la trayectoria","value":"hyperbola","emphasis":true},{"label":"Energía total","value":"above zero"},{"label":"¿Vuelve?","value":"no"},{"label":"Velocidad de lanzamiento","value":"9.55 km/s"},{"label":"Velocidad de escape aquí","value":"8.84 km/s"}],[{"label":"Forma de la trayectoria","value":"parabola","emphasis":true},{"label":"Energía total","value":"exactly zero"},{"label":"¿Vuelve?","value":"no"},{"label":"Velocidad de lanzamiento","value":"8.84 km/s"},{"label":"Velocidad de escape aquí","value":"8.84 km/s"}]]
+   },
+   "canvas": {
+    "calls": 21,
+    "distinct": 16,
+    "digest": "9336a8533b5b1bf2",
+    "samples": [["por debajo del escape: elipse","escape exacto: parábola","por encima del escape: hipérbola","yours: 0.82 × escape speed","Earth, to scale","Earth, to scale"],["por debajo del escape: elipse","escape exacto: parábola","por encima del escape: hipérbola","yours: 0.70 × escape speed","Earth, to scale","Earth, to scale"]]
+   },
+   "controls": {
+    "calls": 21,
+    "distinct": 16,
+    "digest": "ef9eb8c119bb3fca",
+    "samples": [["0.82 ×"],["0.70 ×"]]
+   },
+   "phases": {
+    "calls": 3,
+    "distinct": 3,
+    "digest": "06b86cedff730bba",
+    "samples": [{"preset":"Por debajo del escape","note":"A closed loop, an ellipse. Total energy below zero: it can only ever reach a certain distance before gravity turns it round."},{"preset":"Exactamente el escape","note":"A parabola, the knife edge. Total energy exactly zero. It never turns round, but it also never gets anywhere with speed left over: it slows towards a dead stop that it only reaches infinitely far away."},{"preset":"Por encima del escape","note":"A hyperbola, an open path. Total energy above zero: it leaves and is still moving when it is far away. This is the shape of an interstellar visitor."}]
+   }
+  }
+ }
+}

@@ -7,10 +7,11 @@ afterwards. This is what "the same" is measured against. It is a recording of
 every number and unit a family prints, made before any file of the family
 changes, so that a migration is judged by a diff and not by a reading.
 
-This is the harness and the first family's recording: the lesson data under
+This is the harness and two families' recordings: the lesson data under
 `js/data/investigations/`, every lesson with its depth laid in, in English and
-Spanish. The instrument readouts and the other families are recorded by their
-own PRs, with the same recorder.
+Spanish, and the instrument widgets (`js/*Widgets.js`), every readout in both
+locales. The other families are recorded by their own PRs, with the same
+recorder.
 
 ```
 npm run label:golden                                 does the recording agree with the lessons?
@@ -122,3 +123,47 @@ Nothing in the lesson-data family could be migrated by this PR; see D-R10-24.
   registry units (`× lunar tide`, `Earths`, `° per orbit`, `× 10¹⁰ M☉`, `AU³`,
   `yr²`), so naming one would change the label; 8 are `gw150914`'s tags and 6
   are the mission key's `km²/s²` and `million km`.
+
+# The second family: the instrument widgets
+
+`tests/labelGolden/widgets.mjs` records what an instrument prints, the way a
+student meets it (the engine reads `draw`, `readout` and the controls in
+`js/investigations.js` `paintTool`): 100 widgets in 27 families,
+`tests/labelGolden/fixtures/widgets/<family>.json` and
+`tests/labelGolden/coverage-widgets.json`. The test is
+`tests/labelGoldenWidgets.test.js`; `npm run label:golden` records both
+families and `-- --regenerate-label-golden` rewrites both.
+
+**What is recorded**, per widget and locale:
+
+- `readout`: the rows under the canvas (`label`, `value`, `emphasis`);
+- `canvas`: the text `draw()` paints (axis ticks, marker labels, captions),
+  caught from a stand-in 2-D context (`fillText`, `strokeText`);
+- `controls`: the number beside each slider, written the way `paintTool()`
+  writes it (`format(value)`, or `toFixed(decimals ?? 2)` and the unit);
+- `static`: title, note, each slider's label, unit and range, preset and
+  action labels, preset notes, and the precision findings.
+
+**How it is read.** A step's `tool` spec decides which rows show, so every
+spec any lesson (depth laid in, in each locale) gives a widget is read, and the
+bare spec, and one spec per family that asks for every row name its readouts
+choose among (`has('masses')`). The bare spec is read at the step's defaults,
+at both ends of every control, at the middle, at five places along each control
+with the rest at their defaults, and at eight seeded places; a step's own spec
+at the four corner sets. An animated widget is reset and stepped 24 frames
+(`run`), each button is pressed, the widget stepped and the button pressed
+again (`actions`), and each preset is pressed (`presets`). A widget that reads
+the live simulation is given the lesson recording's four synthetic worlds; the
+chaos divergence instrument is given seven synthetic experiments (every verdict
+it can write). The data packs behind the sky, Galactic and variable-star
+families are served from the repository by a stand-in `fetch`. Nothing is random
+and nothing reads a clock; the same module records under Jest's jsdom and, for
+`npm run label:golden`, under the same jsdom in Node.
+
+**What it can tell apart (held by the test)**, as for the lessons: a different
+number of decimals, a true minus where a hyphen was, a widget that throws; every
+`toFixed` and `toPrecision` call in `js/*Widgets.js` reports its line when it
+runs, and `coverage-widgets.json` lists the ones no case reached (those sites
+are not moved: the golden cannot vouch for them); a naive swap of every
+`toFixed` for `fixed()` is not identity (it writes a true minus and `''` for a
+number it cannot write), and a wrapper that calls the original is.
