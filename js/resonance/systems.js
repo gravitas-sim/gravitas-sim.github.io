@@ -33,8 +33,6 @@
 // The masses are not scaled anywhere, and neither is G.
 // =============================================================================
 
-import { solveKepler } from '../orbital.js';
-
 /** Length scale of the Jovian scenario: distances are this much larger. */
 export const SCALE_JOVIAN = 100;
 /** ...so its clock runs this much faster. Newtonian scale invariance. */
@@ -575,7 +573,10 @@ export function trojanBodies(G) {
 /**
  * Position and velocity from classical elements, in the orbit plane.
  *
- * Kepler's equation by js/orbital.js, once per body at scenario load.
+ * Kepler's equation by Newton-Raphson, which converges in a handful of
+ * iterations for every eccentricity used here - Pluto's 0.249 is the largest -
+ * and is given a generous cap rather than a clever starting guess because this
+ * runs once per body at scenario load.
  *
  * @param {{a:number, e:number, varpiDeg:number, lambdaDeg:number, mu:number}} el
  * @returns {{pos:{x:number,y:number}, vel:{x:number,y:number}}} State vector
@@ -584,7 +585,12 @@ export function stateFromElements({ a, e, varpiDeg, lambdaDeg, mu }) {
   const varpi = varpiDeg * DEG;
   const M = (lambdaDeg - varpiDeg) * DEG;
 
-  const E = solveKepler(M, e);
+  let E = M;
+  for (let i = 0; i < 100; i++) {
+    const step = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+    E -= step;
+    if (Math.abs(step) < 1e-14) break;
+  }
 
   const f =
     2 *

@@ -18,7 +18,7 @@
 //            reached.
 //   e = 0    returns M. e near 1 is limited by the equation, not the solver:
 //            one ulp in M is up to 1 / (1 - e) ulps in E.
-// and that no module defines a solver again (two listed exceptions, each with
+// and that no module defines a solver again (three listed exceptions, each with
 // its reason; the 3-D lab's copy is held bit-identical).
 // =============================================================================
 
@@ -165,6 +165,8 @@ describe('nothing else solves it again', () => {
   const EXCEPTIONS = {
     'js/lab3d/elements.js':
       'a source of the instructor bundle: a change to it makes the bundle stale and rebuilding needs the passphrase. Its solveKepler is the one the others now import, line for line, and a test below holds them bit-identical',
+    'js/resonance/systems.js':
+      'its scenarios are pinned bit for bit by the world golden (tests/scenarioGeometry.test.js): the shared solver moves each body by up to 1e-14, which is every row of the golden. A change of that golden is a decision of its own, and 148 revisits it',
     'js/kernels/sky/planets.js':
       'the Sky Lab route is held to its weight gate (SKY_LAB_GATE.md): it would pay the 7 KB module and a request for a step that is exact to 1e-12 at its eccentricities, 0.21 and below',
   };
@@ -195,7 +197,6 @@ describe('nothing else solves it again', () => {
       'js/binaryWidgets.js',
       'js/systemSpec.js',
       'js/captureMeasure.js',
-      'js/resonance/systems.js',
     ]) {
       expect({
         f,

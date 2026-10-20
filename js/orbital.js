@@ -7,9 +7,9 @@
 //
 // Kepler's equation has one solver, solveKepler below (Prompt 142): M any real,
 // e in [0, 1), E on M's own turn. Its contract and its fixture grid are in
-// tests/keplerSolver.test.js. Two modules keep their own: js/lab3d/elements.js (an
-// instructor-bundle source, held bit-identical) and js/kernels/sky/planets.js
-// (the Sky Lab's weight gate).
+// tests/keplerSolver.test.js. Three modules keep their own: js/lab3d/elements.js (an
+// instructor-bundle source, held bit-identical), js/kernels/sky/planets.js (the
+// Sky Lab's weight gate) and js/resonance/systems.js (a bit-for-bit world golden).
 // =============================================================================
 
 // Bound once: free globals are 8-25x slower in Jest's vm context.
