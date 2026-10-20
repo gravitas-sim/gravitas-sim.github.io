@@ -8,30 +8,12 @@
 // often its stated uncertainty holds the truth.
 // =============================================================================
 
-import { mulberry32, normalizeSeed } from '../rng.js';
+import { gaussian as normals, stream } from '../random/streams.js';
 import { limbDarkening, transitFlux } from './transit.js';
 import { rvCurve } from './rv.js';
 
 /** A seeded standard normal. */
-export function gaussian(seed) {
-  const u = mulberry32(normalizeSeed(String(seed)));
-  let spare = null;
-  return () => {
-    if (spare !== null) {
-      const s = spare;
-      spare = null;
-      return s;
-    }
-    let a;
-    let b;
-    do a = u();
-    while (a <= 1e-12);
-    b = u();
-    const r = Math.sqrt(-2 * Math.log(a));
-    spare = r * Math.sin(2 * Math.PI * b);
-    return r * Math.cos(2 * Math.PI * b);
-  };
-}
+export const gaussian = seed => normals(stream('noise', String(seed)));
 
 /**
  * A transit light curve at given times, with white noise.

@@ -15,8 +15,8 @@
 // instructor modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the
 // Library and the data tables. A missing one costs that surface its offline
 // copy, and the next open fetches only what is missing.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-314a56f56149';
-self.__GRAVITAS_PRECACHE_BYTES = 18005006;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-2897def89617';
+self.__GRAVITAS_PRECACHE_BYTES = 18004800;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',
@@ -555,7 +555,6 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/kernels/lensing/index.js',
   './js/kernels/lensing/lens.js',
   './js/kernels/lensing/microlensing.js',
-  './js/kernels/lensing/noise.js',
   './js/kernels/radiation/constants.js',
   './js/kernels/radiation/doppler.js',
   './js/kernels/radiation/extinction.js',
@@ -715,6 +714,7 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/preview.js',
   './js/quality.js',
   './js/radialVelocity.js',
+  './js/random/streams.js',
   './js/referenceFrame.js',
   './js/remix/grade.js',
   './js/remix/open.js',
@@ -1798,7 +1798,6 @@ self.__GRAVITAS_PRECACHE = [
   './js/kernels/lensing/index.js',
   './js/kernels/lensing/lens.js',
   './js/kernels/lensing/microlensing.js',
-  './js/kernels/lensing/noise.js',
   './js/kernels/radiation/constants.js',
   './js/kernels/radiation/doppler.js',
   './js/kernels/radiation/extinction.js',
@@ -2031,6 +2030,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/preview.js',
   './js/quality.js',
   './js/radialVelocity.js',
+  './js/random/streams.js',
   './js/referenceFrame.js',
   './js/remix/grade.js',
   './js/remix/open.js',
