@@ -13,7 +13,7 @@
 // time: that is what the geometry does, not an animation of what it looks like.
 // =============================================================================
 
-import { withUnit } from './format.js';
+import { fixed, withUnit } from './format.js';
 import { token, surface } from './widgetCanvas.js';
 import { t } from './i18n/index.js';
 
@@ -169,7 +169,7 @@ function drawCurve(ctx, o) {
   }
 }
 
-const pct = v => `${(v * 100).toFixed(3)}%`;
+const pct = v => `${fixed(v * 100, 3)}%`;
 const ppm = v => `${Math.round(v * 1e6).toLocaleString()} ppm`;
 
 // --- 1. Depth and size --------------------------------------------------------
@@ -256,7 +256,7 @@ const DEPTH_SIZE = {
         get label() {
           return t('transitW.radiusRatioRSubP');
         },
-        value: k.toFixed(4),
+        value: fixed(k, 4),
       },
       {
         get label() {
@@ -309,7 +309,7 @@ const DEPTH_SIZE = {
     ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.fillText(`k = ${k.toFixed(4)}`, cx, cy + R + 14);
+    ctx.fillText(`k = ${fixed(k, 4)}`, cx, cy + R + 14);
 
     // Right: the transit it makes, on a fixed 3% scale so changes are visible
     // as changes rather than being rescaled away.
@@ -463,7 +463,7 @@ const GEOMETRY = {
         get label() {
           return t('transitW.orbitalInclinationI');
         },
-        value: `${c.inclination.toFixed(2)}°`,
+        value: `${fixed(c.inclination, 2)}°`,
       },
       {
         get label() {
@@ -482,13 +482,13 @@ const GEOMETRY = {
         get label() {
           return t('transitW.durationAsAFractionOf');
         },
-        value: c.transits ? `${(c.durationFraction * 100).toFixed(2)}%` : '-',
+        value: c.transits ? `${fixed(c.durationFraction * 100, 2)}%` : '-',
       },
       {
         get label() {
           return t('transitW.chanceARandomObserverSees');
         },
-        value: `${(c.probability * 100).toFixed(2)}%  (about 1 in ${Math.round(1 / c.probability)})`,
+        value: `${fixed(c.probability * 100, 2)}%  (about 1 in ${Math.round(1 / c.probability)})`,
       },
     ];
   },
@@ -534,7 +534,7 @@ const GEOMETRY = {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     if (c.b > 0.04)
-      ctx.fillText(`b = ${c.b.toFixed(2)}`, cx + 32, (cy + yChord) / 2);
+      ctx.fillText(`b = ${fixed(c.b, 2)}`, cx + 32, (cy + yChord) / 2);
 
     // The curve it produces, always over the same window of orbital phase so
     // that a shorter transit reads as shorter.
@@ -731,7 +731,7 @@ const SPECTRUM = {
         get label() {
           return t('transitW.wavelength');
         },
-        value: `${v.lambda.toFixed(2)} μm`,
+        value: `${fixed(v.lambda, 2)} μm`,
       },
       {
         get label() {
@@ -750,7 +750,7 @@ const SPECTRUM = {
         get label() {
           return t('transitW.apparentPlanetRadius');
         },
-        value: withUnit((c.here.Rp / R_JUP_KM).toFixed(4), 'R_J'),
+        value: withUnit(fixed(c.here.Rp / R_JUP_KM, 4), 'R_J'),
       },
       {
         get label() {
@@ -872,7 +872,7 @@ const SPECTRUM = {
     ctx.textAlign = x > padL + pw * 0.7 ? 'right' : 'left';
     ctx.textBaseline = 'bottom';
     ctx.fillText(
-      `${v.lambda.toFixed(2)} μm`,
+      `${fixed(v.lambda, 2)} μm`,
       x + (x > padL + pw * 0.7 ? -6 : 6),
       Y(c.here.depth) - 8
     );
@@ -961,26 +961,26 @@ const DILUTION = {
         get label() {
           return t('transitW.fluxRatioFSub2');
         },
-        value: c.f.toFixed(4),
+        value: fixed(c.f, 4),
       },
       {
         get label() {
           return t('transitW.shareOfTheLightFrom');
         },
-        value: `${(c.companionLight * 100).toFixed(1)}%`,
+        value: `${fixed(c.companionLight * 100, 1)}%`,
       },
       {
         get label() {
           return t('transitW.radiusCorrection1FSub');
         },
-        value: `×${c.correction.toFixed(3)}`,
+        value: `×${fixed(c.correction, 3)}`,
         emphasis: true,
       },
       {
         get label() {
           return t('transitW.truePlanetRadius');
         },
-        value: withUnit(c.truePlanet.toFixed(2), 'R⊕'),
+        value: withUnit(fixed(c.truePlanet, 2), 'R⊕'),
       },
       {
         get label() {
@@ -1023,7 +1023,7 @@ const DILUTION = {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     ctx.fillText('one photometric aperture', cx + 4, cy + 66);
-    ctx.fillText(`Δm = ${v.dm.toFixed(1)}`, cx + 4, cy + 80);
+    ctx.fillText(`Δm = ${fixed(v.dm, 1)}`, cx + 4, cy + 80);
 
     // Right: the true curve and the blended one it turns into.
     const k = (v.rp * R_EARTH_IN_SUNS) / 1.0;
@@ -1081,7 +1081,7 @@ const DILUTION = {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     ctx.fillText(
-      `measured ${v.rp.toFixed(1)} R⊕  →  actually ${c.truePlanet.toFixed(2)} R⊕`,
+      `measured ${fixed(v.rp, 1)} R⊕  →  actually ${fixed(c.truePlanet, 2)} R⊕`,
       x0 + cw / 2,
       boxTop + boxH + 10
     );
@@ -1192,7 +1192,7 @@ const RESOLVE = {
         get label() {
           return t('transitW.separationInUnitsOfThe');
         },
-        value: `${c.ratio.toFixed(2)} × FWHM`,
+        value: `${fixed(c.ratio, 2)} × FWHM`,
       },
       {
         get label() {
@@ -1210,19 +1210,19 @@ const RESOLVE = {
         get label() {
           return t('transitW.lightFromTheCompanion');
         },
-        value: `${(c.companionLight * 100).toFixed(1)}%`,
+        value: `${fixed(c.companionLight * 100, 1)}%`,
       },
       {
         get label() {
           return t('transitW.radiusCorrectionItImplies');
         },
-        value: `×${c.correction.toFixed(3)}`,
+        value: `×${fixed(c.correction, 3)}`,
       },
       {
         get label() {
           return t('transitW.thisFrameAsAShare');
         },
-        value: `${(c.pixelFraction * 100).toFixed(1)}% of its area`,
+        value: `${fixed(c.pixelFraction * 100, 1)}% of its area`,
       },
     ];
   },
@@ -1344,9 +1344,9 @@ const RESOLVE = {
               'correction.',
             ];
     lines.forEach((line, i) => ctx.fillText(line, tx, y0 + 30 + i * 15));
-    ctx.fillText(`${v.fwhm.toFixed(2)}″ resolution`, tx, y0 + 108);
-    ctx.fillText(`${v.sep.toFixed(2)}″ apart`, tx, y0 + 123);
-    ctx.fillText(`Δm = ${v.dm.toFixed(1)}`, tx, y0 + 138);
+    ctx.fillText(`${fixed(v.fwhm, 2)}″ resolution`, tx, y0 + 108);
+    ctx.fillText(`${fixed(v.sep, 2)}″ apart`, tx, y0 + 123);
+    ctx.fillText(`Δm = ${fixed(v.dm, 1)}`, tx, y0 + 138);
   },
 };
 

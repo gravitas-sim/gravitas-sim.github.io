@@ -1,7 +1,7 @@
 {
  "family": "js/*Widgets.js",
- "calls": 245,
- "reached": 209,
+ "calls": 134,
+ "reached": 98,
  "unreached": [
   "js/binaryWidgets.js:1106:52",
   "js/binaryWidgets.js:1106:79",

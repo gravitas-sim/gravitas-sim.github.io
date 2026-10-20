@@ -43,6 +43,7 @@ import {
   analyzeDivergence,
   refinementVerdict,
 } from './chaos/divergence.js';
+import { fixed } from './format.js';
 
 /**
  * Pull the two recorded runs out of the bench, in the shape the analysis wants.
@@ -111,8 +112,8 @@ export function verdictText(v) {
       return t('chaosW.verdict.saturated');
     case BEHAVIOR.EXPONENTIAL:
       return t('chaosW.verdict.exponential', {
-        tau: v.tau.toFixed(1),
-        r2: v.r2.toFixed(3),
+        tau: fixed(v.tau, 1),
+        r2: fixed(v.r2, 3),
       });
     default:
       return t(`chaosW.reject.${v.reason || 'insufficient'}`);
@@ -324,9 +325,9 @@ const DIVERGENCE = {
       rows.push({
         label: t('chaosW.row.window'),
         value: t('chaosW.value.window', {
-          from: v.window.from.toFixed(0),
-          to: v.window.to.toFixed(0),
-          efolds: v.efolds.toFixed(1),
+          from: fixed(v.window.from, 0),
+          to: fixed(v.window.to, 0),
+          efolds: fixed(v.efolds, 1),
         }),
       });
     } else if (v.reason) {
@@ -341,7 +342,7 @@ const DIVERGENCE = {
     // the student with no way to see that the comparison was made.
     rows.push({
       label: t('chaosW.row.straightLine'),
-      value: `r² = ${v.linearR2.toFixed(3)}`,
+      value: `r² = ${fixed(v.linearR2, 3)}`,
     });
 
     if (m.controls.length) {
@@ -353,7 +354,7 @@ const DIVERGENCE = {
         label: t('chaosW.row.refinement'),
         value: verdictOf.resolved
           ? t('chaosW.value.resolved', {
-              spread: (verdictOf.spread * 100).toFixed(0),
+              spread: fixed(verdictOf.spread * 100, 0),
             })
           : t(`chaosW.unresolved.${verdictOf.reason}`),
         emphasis: true,

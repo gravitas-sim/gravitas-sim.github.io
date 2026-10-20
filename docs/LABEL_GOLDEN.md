@@ -167,3 +167,42 @@ runs, and `coverage-widgets.json` lists the ones no case reached (those sites
 are not moved: the golden cannot vouch for them); a naive swap of every
 `toFixed` for `fixed()` is not identity (it writes a true minus and `''` for a
 number it cannot write), and a wrapper that calls the original is.
+
+## What it found about the widgets, and what moved (D-R10-26)
+
+`fixed()` differs from `toFixed` in two ways: it writes U+2212 for a hyphen and
+`''` for a number it cannot write (`toFixed` writes `NaN`). While recording,
+each call site keeps whether it ever wrote a hyphen or saw a non-finite number
+(`withWidgetCoverage` in `tests/labelGolden/widgets.mjs`). A site moved to
+`fixed()` only when the recording reached it, it wrote no hyphen and saw no
+non-finite number, or its value goes straight into `withUnit`, which already
+writes the true minus. After the move the recording was regenerated and no
+fixture changed: that is the identity proof. The file
+`tests/labelGolden/coverage-widgets.json` now lists the 134 calls that are still
+`toFixed` or `toPrecision`; the 36 of them the recording cannot reach stay.
+
+- Moved, 111 calls in 7 files: `binaryWidgets` 21, `blackHoleWidgets` 9,
+  `chaosWidgets` 7, `darkMatterWidgets` 24, `observingWidgets` 10,
+  `tidalWidgets` 16, `transitWidgets` 24. The ratchet falls from 608 to 497.
+- Stayed, 23 `toPrecision`: `decimal()` groups the digits, drops the exponent
+  form and writes `-` for a non-finite number, so it is not the same text.
+- Stayed, 10 that write a hyphen where `fixed()` writes a true minus (a
+  typography change, Prompt 282's decision).
+- Stayed, 34 the recording cannot reach: 26 in `resonanceWidgets` (a live
+  Jovian system the recorder does not build), 5 in `gwWidgets`, 2 in
+  `binaryWidgets`, 1 in `stellarWidgets`.
+- Stayed, 67 eligible calls in `gwWidgets`, `powerLawWidgets`, `gwEventWidgets`,
+  `stellarWidgets`, `stellarSpectraWidgets`, `energyWidgets` and
+  `habitabilityWidgets`: moving them costs about 100 bytes of gzip in the
+  first-visit precache tier, whose margin is about 114 bytes
+  (`tools/data-budget.json`; not covered by the standing approval).
+- The 16 unit literals stay: no widget loads `js/units/registry.js`, which costs
+  one request and 11.7 KB on the lesson routes.
+- Requests: none on any of the 60 lessons or the measured routes; an import of
+  `js/format.js` in a widget family is already paid for wherever a lesson
+  runs.
+
+`precisionFindings` is applied to everything the widgets print: 45 readings write
+a value finer than the uncertainty beside it (`hubble-law`, `solar-motion`,
+`rotating-disk`, `lens-passing`, `spectrum-viewer`, `completeness-lf`, and one
+parsing artifact in `ccd-frames`). They are listed in the fixtures, not changed.

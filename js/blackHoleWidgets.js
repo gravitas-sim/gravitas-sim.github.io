@@ -23,7 +23,7 @@
 
 // Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
 import './instrumentStartup.js';
-import { withUnit } from './format.js';
+import { fixed, withUnit } from './format.js';
 import { surface, responsiveHeight, MONO } from './widgetCanvas.js';
 import { scaleBar as drawScaleBar } from './instruments.js';
 import { t } from './i18n/index.js';
@@ -229,7 +229,7 @@ const HORIZON = {
         get label() {
           return t('bhW.schwarzschildRadiusR');
         },
-        value: withUnit(f.rsKm.toFixed(1), 'km'),
+        value: withUnit(fixed(f.rsKm, 1), 'km'),
         emphasis: true,
       });
     }
@@ -238,7 +238,7 @@ const HORIZON = {
         get label() {
           return t('bhW.rightAcrossTheEventHorizon');
         },
-        value: withUnit((2 * f.rsKm).toFixed(1), 'km'),
+        value: withUnit(fixed(2 * f.rsKm, 1), 'km'),
       });
     }
     if (want.includes('compare')) {
@@ -246,7 +246,7 @@ const HORIZON = {
         get label() {
           return t('bhW.comparedWithTheLengthOf');
         },
-        value: withUnit((f.rsM / 21600).toFixed(1), 'times'),
+        value: withUnit(fixed(f.rsM / 21600, 1), 'times'),
       });
     }
     return rows;
@@ -295,7 +295,7 @@ const HORIZON = {
     halo(ctx, 'Rₛ', cx + r / 2, cy - 7);
     ctx.textBaseline = 'middle';
     ctx.font = `12px ${MONO}`;
-    halo(ctx, `Rₛ = ${f.rsKm.toFixed(1)} km`, cx, 12 + 2 * rMax + 15);
+    halo(ctx, `Rₛ = ${fixed(f.rsKm, 1)} km`, cx, 12 + 2 * rMax + 15);
 
     if (!showCompare) {
       scaleBar(ctx, 14, H - 16, Math.min(120, w / 3), kmPerPx * 1000);
@@ -418,13 +418,13 @@ const SCALING = {
     const f = blackHoleFacts(v.mass);
     const rows = trials.points.map((p, i) => ({
       label: `Trial ${i + 1}: ${massLabel(p.mass)}`,
-      value: withUnit(p.rsKm.toFixed(1), 'km'),
+      value: withUnit(fixed(p.rsKm, 1), 'km'),
     }));
     rows.push({
       get label() {
         return t('bhW.sliderIsAt');
       },
-      value: `${massLabel(f.massInSuns)} → ${f.rsKm.toFixed(1)} km`,
+      value: `${massLabel(f.massInSuns)} → ${fixed(f.rsKm, 1)} km`,
       emphasis: true,
     });
     return rows;
@@ -630,14 +630,14 @@ const ESCAPE = {
         get label() {
           return t('bhW.asAShareOfThe');
         },
-        value: `${(c.fraction * 100).toFixed(1)}%`,
+        value: `${fixed(c.fraction * 100, 1)}%`,
         emphasis: true,
       },
       {
         get label() {
           return t('bhW.radiusInSchwarzschildRadii');
         },
-        value: `${c.multiple < 10 ? c.multiple.toFixed(2) : commas(Math.round(c.multiple))} × Rₛ`,
+        value: `${c.multiple < 10 ? fixed(c.multiple, 2) : commas(Math.round(c.multiple))} × Rₛ`,
       },
     ];
   },
@@ -652,7 +652,7 @@ const ESCAPE = {
     ctx.font = `bold 15px ${MONO}`;
     ctx.fillStyle = c.fraction >= 0.999 ? HOT : COOL;
     ctx.fillText(
-      `${(c.fraction * 100).toFixed(1)}% of the speed of light`,
+      `${fixed(c.fraction * 100, 1)}% of the speed of light`,
       w / 2,
       17
     );
