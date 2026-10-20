@@ -13,7 +13,7 @@
 
 import { describe, test, expect } from '@jest/globals';
 import { Buffer } from 'node:buffer';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { webcrypto } from 'node:crypto';
 
 import {
@@ -121,18 +121,200 @@ describe('FNV-1a', () => {
     );
   });
 
-  test('the copies that are not exported run the same loop', () => {
-    // The lab report's completion code and the analysis stream's seed (the
-    // import's fingerprint and the engine's now use js/hash.js): the same basis, the same prime, over charCodeAt.
-    for (const file of ['js/labReport.js', 'js/analysis/stats.js']) {
-      const src = readFileSync(file, 'utf8');
-      expect({ file, basis: src.includes('0x811c9dc5') }).toEqual({
-        file,
-        basis: true,
-      });
-      expect(src).toMatch(/Math\.imul\(h, 0x01000193\)/);
-      expect(src).toMatch(/h \^= \w+\.charCodeAt\(i\)/);
-    }
+  test('the loop is spelled out only where a decision says so', () => {
+    // Prompt 143 Part A: a content hash (a link, a key, a fingerprint, a
+    // digest) is js/hash.js's wherever importing it costs no route a request.
+    // What still spells the basis is listed with its reason; a new one is a
+    // decision.
+    const KEPT = {
+      'js/hash.js': 'the one',
+      'js/rng.js': 'the world seed; an instructor-bundle source',
+      'js/assignments/assignment.js': 'an instructor-bundle source',
+      'js/analysis/stats.js':
+        'the seed of an analysis stream, spelled as js/rng.js seeds',
+      'js/bodyVisuals.js': 'a silhouette seed: the basis xor the body id',
+      'js/analysis/modelCompare.js':
+        'a fit data key over the bytes of floats: a bytes form of the loop in hash.js would add 0.3 KB to every route that has the module, for one caller',
+      'js/composer/compile.js':
+        'a request on the composer and the course-packs routes (D-R10-19)',
+      'js/experiments/canonicalState.js':
+        'a request on eleven sources routes, the front door among them (D-R10-19)',
+      'js/experiments/experimentManifest.js':
+        'a request on the experiments route (D-R10-19)',
+      'js/experiments/trialRunner.js':
+        'a request on the experiments route (D-R10-19)',
+    };
+    const spellsIt = [];
+    const walk = dir => {
+      for (const e of readdirSync(dir, { withFileTypes: true })) {
+        const p = `${dir}/${e.name}`;
+        if (e.isDirectory()) walk(p);
+        else if (
+          p.endsWith('.js') &&
+          readFileSync(p, 'utf8').includes('0x811c9dc5')
+        )
+          spellsIt.push(p);
+      }
+    };
+    walk('js');
+    expect(spellsIt.sort()).toEqual(Object.keys(KEPT).sort());
+  });
+
+  test('digests run on across pieces, so a stream of pieces is their concatenation', () => {
+    // The fit workspace's inputs key and the engine's fingerprint fed the loop
+    // piece by piece; each is now one text. Proved on the loop as it was.
+    const piecewise = pieces => {
+      let h = 0x811c9dc5;
+      for (const piece of pieces)
+        for (let i = 0; i < piece.length; i++) {
+          h ^= piece.charCodeAt(i);
+          h = Math.imul(h, 0x01000193);
+        }
+      return h >>> 0;
+    };
+    for (const pieces of [
+      [],
+      [''],
+      ['a', 'b', 'c'],
+      ['target', '3', '40', '1.23456789012', '-4.5', '', 'good'],
+      ['é', '😀', 'x'.repeat(300)],
+    ])
+      expect(fnv1a32(pieces.join(''))).toBe(piecewise(pieces));
+  });
+});
+
+describe('the digests v3 wrote, as recorded then', () => {
+  // Recorded by running v3 (c83e2040, before Prompt 143) over these
+  // inputs; the functions now build on js/hash.js and must return them.
+  const IN = [
+    '',
+    'a',
+    'abc',
+    ' spaced ',
+    'orbit1',
+    'orbit2',
+    'é',
+    'naïve café',
+    '日本語',
+    '😀 astral',
+    '\u0000',
+    'line\nbreak',
+    '{"a":1}',
+    'x'.repeat(5000),
+    '12345',
+    '-0',
+    'The Chirp: step 3/7',
+  ];
+  const OBJ = [
+    [],
+    [1, [2, [3]]],
+    {},
+    { b: 1, a: 2 },
+    { a: undefined, b: null, c: [undefined, 1] },
+    { nested: { z: 0.30000000000000004, y: -0, x: 'é' } },
+  ];
+  const WANT = {
+    shortHash: [
+      '811c9dc5',
+      'e40c292c',
+      '1a47e90b',
+      '595022e7',
+      'ce6f135a',
+      'cd6f11c7',
+      '6c0b6c44',
+      '76745c95',
+      '5406374e',
+      'e56e8f7f',
+      '050c5d1f',
+      '1f7562aa',
+      '8b9e4511',
+      '616035e5',
+      '43c2c0d8',
+      '13cd0898',
+      'aff4cc3f',
+    ],
+    digest: [
+      '811c9dc5',
+      'e40c292c',
+      '1a47e90b',
+      '595022e7',
+      'ce6f135a',
+      'cd6f11c7',
+      '6c0b6c44',
+      '76745c95',
+      '5406374e',
+      'e56e8f7f',
+      '050c5d1f',
+      '1f7562aa',
+      '8b9e4511',
+      '616035e5',
+      '43c2c0d8',
+      '13cd0898',
+      'aff4cc3f',
+    ],
+    hashState: [
+      '5465b825',
+      '070e19fa',
+      '5465b825',
+      'af62f0e3',
+      '307f4b12',
+      'e686cca5',
+    ],
+    experimentHash: [
+      '741638a5',
+      'd47b3d89',
+      '5465b825',
+      'af62f0e3',
+      '014941cb',
+      'e686cca5',
+    ],
+    snapshot: [
+      '0W7K42T',
+      '1MYF155',
+      '0NF0RVP',
+      '1CNVX7N',
+      '12K02Z3',
+      '15VP5SH',
+    ],
+    schedule: ['0ZTNTFP', '17A5E77', '0DH4X4Q', '0ZTNTFP'],
+    dataKey: [
+      '40:dc89e42f',
+      '40:7431c507',
+      '1:1f03da9d',
+      '0:cc55e280',
+      '3:3ed8aa8c',
+    ],
+  };
+
+  test('assignment links, translation digests', () => {
+    expect(IN.map(shortHash)).toEqual(WANT.shortHash);
+    expect(IN.map(digest)).toEqual(WANT.digest);
+  });
+
+  test('an initial state, an experiment and a notebook snapshot', () => {
+    expect(OBJ.map(v => state.hashState(v))).toEqual(WANT.hashState);
+    expect(OBJ.map(v => experimentHash(v))).toEqual(WANT.experimentHash);
+    expect(OBJ.map(v => snapshotFingerprint(v))).toEqual(WANT.snapshot);
+  });
+
+  test('a schedule', () => {
+    const plans = [
+      { epochs: [] },
+      {
+        epochs: [
+          { index: 0, offset: 0.1 + 0.2 },
+          { index: 3, offset: 12.5 },
+        ],
+      },
+      {
+        epochs: Array.from({ length: 400 }, (_, i) => ({
+          index: i,
+          offset: i * 0.3137 + 1 / 7,
+        })),
+      },
+      null,
+    ];
+    expect(plans.map(scheduleFingerprint)).toEqual(WANT.schedule);
   });
 });
 
