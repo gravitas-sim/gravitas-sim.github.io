@@ -94,7 +94,7 @@ never be resolved with a whole-file choice:
 | `PHYSICS_VALIDATION.md` | Hand-written methodology around a generated coverage table |
 | `model/index.html` | The public physics-model page, with generated blocks inside it |
 | `ACCESSIBILITY.md`, `paper.md`, `index.html`, `js/i18n/en.js`, `js/i18n/es.js` | Prose and code around generated facts and attributes |
-| `js/validation/physicsChecks.js` | Hand-written, and the file two branches will both append a validation group to |
+| `js/validation/physicsChecks.js` | Hand-written, and the `GROUPS` table two branches will both append a validation group to (each group is its own file under `js/validation/groups/`) |
 | `js/widgets.js`, `js/platform/builtins.js`, `js/data/investigations/registry.js` | Hand-written code around the lazy registries (`// <generated:NAME>` regions); a conflict inside a region is resolved by `npm run registries`, not by a side |
 
 **`git checkout --ours/--theirs <path>` does not mean "take my side of these
