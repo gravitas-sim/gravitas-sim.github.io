@@ -37,6 +37,7 @@
     "validate:physics": "node tools/validate-physics.mjs",
     "validate:lab3d": "node tools/validate-lab3d.mjs",
     "validate:mission": "node tools/validate-mission.mjs",
+    "validate:orbital": "node tools/orbital-validate.mjs",
     "validate:inference": "node tools/inference-validate.mjs",
     "manifest": "node tools/build-investigation-manifest.js",
     "teaching:data": "node tools/build-teaching-demos.mjs",
