@@ -1,0 +1,225 @@
+{
+ "id": "transit-photometry",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.from-a-depth-to-a.unit",""],
+    ["steps.measure-the-dip.fields.0.unit",""],
+    ["steps.measure-the-dip.fields.1.unit",""],
+    ["steps.measure-the-dip.fields.2.unit",""],
+    ["steps.measure-the-dip.fields.3.unit",""],
+    ["steps.correct-it-and-get-a.fields.0.unit",""],
+    ["steps.correct-it-and-get-a.fields.1.unit","R☉"],
+    ["steps.correct-it-and-get-a.fields.2.unit",""],
+    ["steps.correct-it-and-get-a.fields.3.unit","R_Jupiter"],
+    ["steps.correct-it-and-get-a.fields.4.unit","R⊕"],
+    ["steps.how-sure-is-the-depth.fields.0.unit",""],
+    ["steps.how-sure-is-the-depth.fields.1.unit",""],
+    ["steps.how-sure-is-the-depth.fields.2.unit",""],
+    ["steps.how-sure-is-the-depth.fields.3.unit",""],
+    ["steps.how-sure-is-the-depth.fields.4.unit",""],
+    ["steps.how-sure-is-the-depth.fields.5.unit",""],
+    ["steps.how-sure-is-the-depth.fields.6.unit",""],
+    ["steps.radius-with-an-error-bar.unit",""],
+    ["steps.forward-model-the-dip.unit",""],
+    ["steps.how-lucky-do-you-have.unit","to one"],
+    ["steps.time-two-transits.fields.0.unit","days"],
+    ["steps.time-two-transits.fields.1.unit",""],
+    ["steps.time-two-transits.fields.2.unit","days"],
+    ["steps.time-two-transits.fields.3.unit",""],
+    ["steps.time-two-transits.fields.4.unit",""],
+    ["steps.time-two-transits.fields.5.unit","days"],
+    ["steps.from-a-period-to-an.fields.0.unit","days"],
+    ["steps.from-a-period-to-an.fields.1.unit","M☉"],
+    ["steps.from-a-period-to-an.fields.2.unit","yr"],
+    ["steps.from-a-period-to-an.fields.3.unit","AU"],
+    ["steps.from-a-period-to-an.fields.4.unit",""],
+    ["steps.from-a-period-to-an.fields.5.unit","K"],
+    ["steps.recover-the-real-planet.fields.0.unit",""],
+    ["steps.recover-the-real-planet.fields.1.unit",""],
+    ["steps.recover-the-real-planet.fields.2.unit","R⊕"],
+    ["steps.recover-the-real-planet.fields.3.unit",""],
+    ["steps.recover-the-real-planet.fields.4.unit","mag"],
+    ["steps.recover-the-real-planet.fields.5.unit",""],
+    ["steps.recover-the-real-planet.fields.6.unit","R⊕"]
+   ],
+   "numbered": [
+    ["steps.measure-the-dip.fields.0.hint","e.g. 1.000065"],
+    ["steps.correct-it-and-get-a.fields.1.hint","1.155"],
+    ["steps.correct-it-and-get-a.fields.2.label","Corrected ratio √(δ / 1.215)"],
+    ["steps.how-sure-is-the-depth.fields.0.hint","0.0003"],
+    ["steps.how-sure-is-the-depth.fields.1.hint","90"],
+    ["steps.how-sure-is-the-depth.fields.2.hint","450"],
+    ["steps.radius-with-an-error-bar.placeholder","e.g. 1.37 ± 0.01"],
+    ["steps.forward-model-the-dip.placeholder","e.g. 0.0183 ± 0.0007"],
+    ["steps.time-two-transits.fields.1.hint","e.g. 2"],
+    ["steps.time-two-transits.fields.3.hint","e.g. 5"],
+    ["steps.from-a-period-to-an.fields.1.hint","1.148"],
+    ["steps.recover-the-real-planet.fields.1.hint","from step 8"],
+    ["steps.recover-the-real-planet.fields.3.label","Depth ratio = 1 + F₂/F₁"],
+    ["steps.recover-the-real-planet.fields.5.label","Radius correction √(1 + F₂/F₁)"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.measure-the-dip.fields.0.hint","p. ej. 1,000065"],
+    ["steps.correct-it-and-get-a.fields.1.hint","1,155"],
+    ["steps.correct-it-and-get-a.fields.2.label","Cociente corregido √(δ / 1,215)"],
+    ["steps.radius-with-an-error-bar.placeholder","p. ej. 1,37 ± 0,01"],
+    ["steps.forward-model-the-dip.placeholder","p. ej. 0,0183 ± 0,0007"],
+    ["steps.time-two-transits.fields.1.hint","p. ej. 2"],
+    ["steps.time-two-transits.fields.3.hint","p. ej. 5"],
+    ["steps.from-a-period-to-an.fields.1.hint","1,148"],
+    ["steps.recover-the-real-planet.fields.1.hint","del paso 8"],
+    ["steps.recover-the-real-planet.fields.3.label","Cociente de profundidades = 1 + F₂/F₁"],
+    ["steps.recover-the-real-planet.fields.5.label","Corrección del radio √(1 + F₂/F₁)"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "from-a-depth-to-a",
+    "answer": "0.1",
+    "tolerance": "0.015",
+    "unit": ""
+   },
+   {
+    "sid": "radius-with-an-error-bar",
+    "answer": "1.37",
+    "tolerance": "0.1",
+    "unit": ""
+   },
+   {
+    "sid": "forward-model-the-dip",
+    "answer": "0.0183",
+    "tolerance": "0.0008",
+    "unit": ""
+   },
+   {
+    "sid": "how-lucky-do-you-have",
+    "answer": "215",
+    "tolerance": "40",
+    "unit": "to one"
+   }
+  ],
+  "decimals": [
+   [
+    "measure-the-dip.depth",
+    5
+   ],
+   [
+    "measure-the-dip.k_naive",
+    4
+   ],
+   [
+    "correct-it-and-get-a.k_true",
+    4
+   ],
+   [
+    "correct-it-and-get-a.rp_rj",
+    3
+   ],
+   [
+    "correct-it-and-get-a.rp_re",
+    2
+   ],
+   [
+    "how-sure-is-the-depth.depth_in",
+    5
+   ],
+   [
+    "how-sure-is-the-depth.s_depth",
+    6
+   ],
+   [
+    "how-sure-is-the-depth.rp",
+    3
+   ],
+   [
+    "how-sure-is-the-depth.s_rp",
+    4
+   ],
+   [
+    "time-two-transits.P",
+    4
+   ],
+   [
+    "from-a-period-to-an.P_yr",
+    6
+   ],
+   [
+    "from-a-period-to-an.a_au",
+    5
+   ],
+   [
+    "from-a-period-to-an.a_over_r",
+    2
+   ],
+   [
+    "from-a-period-to-an.teq",
+    0
+   ],
+   [
+    "recover-the-real-planet.rp_blend",
+    2
+   ],
+   [
+    "recover-the-real-planet.ratio",
+    4
+   ],
+   [
+    "recover-the-real-planet.dm",
+    2
+   ],
+   [
+    "recover-the-real-planet.corr",
+    4
+   ],
+   [
+    "recover-the-real-planet.rp_true",
+    2
+   ]
+  ]
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "your-first-transit": {
+    "probe": [[{"label":"Brightness now","value":"1.000000"},{"label":"The planet","value":"select it, and let a frame go by"},{"label":"Baseline, out of transit","value":"1.000000"},{"label":"Complete transits recorded","value":"0"},{"label":"Waiting for a complete transit","value":"..."},{"label":"Clock","value":"0.0000 days"}],[{"label":"Brightness now","value":"0.984567"},{"label":"Planet","value":"HD 209458 b"},{"label":"Where it is","value":"in front of the star","emphasis":true},{"label":"Distance from disc center","value":"0.31 stellar radii"},{"label":"Baseline, out of transit","value":"1.000123"},{"label":"Complete transits recorded","value":"3"},{"label":"Transit 3: bottom","value":"0.984123","emphasis":true},{"label":"Transit 3: mid-time","value":"6.2832 days"},{"label":"Clock","value":"3.1416 days"}],[{"label":"Brightness now","value":"1.000000"},{"label":"Planet","value":"planet"},{"label":"Where it is","value":"not in transit","emphasis":true},{"label":"Distance from disc center","value":"1.80 stellar radii"},{"label":"Baseline, out of transit","value":"0.999877"},{"label":"Complete transits recorded","value":"1"},{"label":"Transit 1: bottom","value":"0.992100","emphasis":true},{"label":"Transit 1: mid-time","value":"1.5000 days"},{"label":"Clock","value":"12.5000 days"}],[{"label":"Brightness now","value":"0.500000"},{"label":"The planet","value":"select it, and let a frame go by"},{"label":"Baseline, out of transit","value":"1.000000"},{"label":"Complete transits recorded","value":"2"},{"label":"Transit 2: bottom","value":"0.970000","emphasis":true},{"label":"Transit 2: mid-time","value":"20.2500 days"},{"label":"Clock","value":"400.0000 days"}]]
+   },
+   "measure-the-dip": {
+    "probe": [[{"label":"Baseline, out of transit","value":"1.000000"},{"label":"Complete transits recorded","value":"0"},{"label":"Waiting for a complete transit","value":"..."},{"label":"Clock","value":"0.0000 days"}],[{"label":"Baseline, out of transit","value":"1.000123"},{"label":"Complete transits recorded","value":"3"},{"label":"Transit 3: bottom","value":"0.984123","emphasis":true},{"label":"Transit 3: mid-time","value":"6.2832 days"},{"label":"Clock","value":"3.1416 days"}],[{"label":"Baseline, out of transit","value":"0.999877"},{"label":"Complete transits recorded","value":"1"},{"label":"Transit 1: bottom","value":"0.992100","emphasis":true},{"label":"Transit 1: mid-time","value":"1.5000 days"},{"label":"Clock","value":"12.5000 days"}],[{"label":"Baseline, out of transit","value":"1.000000"},{"label":"Complete transits recorded","value":"2"},{"label":"Transit 2: bottom","value":"0.970000","emphasis":true},{"label":"Transit 2: mid-time","value":"20.2500 days"},{"label":"Clock","value":"400.0000 days"}]],
+    "importFromSelection": [null,["1.000123","0.984123"],["0.999877","0.992100"],["1.000000","0.970000"]],
+    "validate": {"calls":242,"distinct":5,"digest":"042ef91efc5e55a3","samples":[null,{"level":"error","message":"The bottom of a transit sits <em>below</em> the baseline, so the depth has to come out positive. Check that you have not swapped the two."},{"level":"error","message":"A 20% dip would be a stellar eclipse, not a planet. If you entered numbers like 98.2 and 100, enter the brightness itself rather than a percentage of it."},{"level":"warn","message":"Expected somewhere near 0.018 for this system. Read the baseline from a flat stretch well away from any dip, and the bottom from the lowest point of one."},{"level":"warn","message":"That is shallower than this system can produce. Make sure the bottom value really is from the lowest point of a dip and not from the shoulder on the way in."}]}
+   },
+   "correct-it-and-get-a": {
+    "validate": {"calls":242,"distinct":5,"digest":"3d0f48c4d9dc9230","samples":[null,{"level":"warn","message":"Too large. Check that you divided the depth by 1.215 before taking the square root rather than after, and that the depth is the one you measured rather than a percentage."},{"level":"warn","message":"Too small. The most common cause is reading the bottom of the dip from the ingress shoulder rather than the lowest point."},{"level":"error","message":"The depth is a fraction, not a percentage: 1.8% goes in as 0.018."},{"level":"error","message":"The star radius goes in solar radii, not in kilometers or in Jupiters. HD 209458 is 1.155 R☉."}]}
+   },
+   "how-sure-is-the-depth": {
+    "validate": {"calls":242,"distinct":156,"digest":"913d4ab7fa8cf357","samples":[null,{"level":"ok","message":"The radius is 1.000 ± 1.0000 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."},{"level":"ok","message":"The radius is 0.292 ± 0.3780 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."},{"level":"ok","message":"The radius is 701.100 ± 3496.0000 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."},{"level":"ok","message":"The radius is 3680.000 ± 1.8720 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."},{"level":"ok","message":"The radius is 586.300 ± 668.3000 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."},{"level":"ok","message":"The radius is 95.040 ± 23.1000 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."},{"level":"ok","message":"The radius is 35.747 ± 14.0504 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."},{"level":"ok","message":"The radius is 2300.000 ± 3197.0000 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."},{"level":"ok","message":"The radius is 5.405 ± 26.2500 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."},{"level":"ok","message":"The radius is 2.355 ± 35.7467 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."},{"level":"ok","message":"The radius is 35.747 ± 2.5442 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."},{"level":"ok","message":"The radius is 35.747 ± 1.0000 R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about."}]}
+   },
+   "the-shape-of-the-dip": {
+    "probe": [[{"label":"Brightness now","value":"1.000000"},{"label":"The planet","value":"select it, and let a frame go by"}],[{"label":"Brightness now","value":"0.984567"},{"label":"Planet","value":"HD 209458 b"},{"label":"Where it is","value":"in front of the star","emphasis":true},{"label":"Distance from disc center","value":"0.31 stellar radii"}],[{"label":"Brightness now","value":"1.000000"},{"label":"Planet","value":"planet"},{"label":"Where it is","value":"not in transit","emphasis":true},{"label":"Distance from disc center","value":"1.80 stellar radii"}],[{"label":"Brightness now","value":"0.500000"},{"label":"The planet","value":"select it, and let a frame go by"}]]
+   },
+   "time-two-transits": {
+    "probe": [[{"label":"Complete transits recorded","value":"0","emphasis":true},{"label":"Waiting for a complete transit","value":"..."},{"label":"Clock","value":"0.0000 days"}],[{"label":"Complete transits recorded","value":"3","emphasis":true},{"label":"Transit 1","value":"0.7854 days"},{"label":"Transit 2","value":"3.6126 days"},{"label":"Transit 3","value":"6.2832 days"},{"label":"Clock","value":"3.1416 days"}],[{"label":"Complete transits recorded","value":"1","emphasis":true},{"label":"Transit 1","value":"1.5000 days"},{"label":"Clock","value":"12.5000 days"}],[{"label":"Complete transits recorded","value":"2","emphasis":true},{"label":"Transit 1","value":"10.1000 days"},{"label":"Transit 2","value":"20.2500 days"},{"label":"Clock","value":"400.0000 days"}]],
+    "importFromSelection": [null,["6.2832","3"],["1.5000","1"],["20.2500","2"]],
+    "validate": {"calls":242,"distinct":44,"digest":"6551c17568c10b41","samples":[null,{"level":"warn","message":"Expected something near 3.5 days. Check that the orbit count matches the difference between the two transit numbers in the readout."},{"level":"error","message":"At least one orbit has to pass between two transits."},{"level":"warn","message":"You recorded transit 0.0549 and transit 4071, so the planet went round <strong>4070.9451</strong> times in between, not 4117. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 3174 and transit 4278, so the planet went round <strong>1104</strong> times in between, not 27.3. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 6.016 and transit 22.5, so the planet went round <strong>16.484</strong> times in between, not 520.7. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 23.4 and transit 27.3, so the planet went round <strong>3.900000000000002</strong> times in between, not 27.75. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.368 and transit 8.084, so the planet went round <strong>7.715999999999999</strong> times in between, not 709.3. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.268 and transit 627.3, so the planet went round <strong>627.0319999999999</strong> times in between, not 688.8. Count the gaps between the transits, not the transits themselves."},{"level":"error","message":"The second stamp has to come after the first. Swap them, or take a fresh pair."},{"level":"warn","message":"You recorded transit 0.435693 and transit 35.7467, so the planet went round <strong>35.311007</strong> times in between, not 2.54417. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 2.35521 and transit 2.54417, so the planet went round <strong>0.1889599999999998</strong> times in between, not 1. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.003 and transit 1, so the planet went round <strong>0.997</strong> times in between, not 14.0504. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.435693 and transit 1, so the planet went round <strong>0.564307</strong> times in between, not 35.7467. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 1 and transit 14.0504, so the planet went round <strong>13.0504</strong> times in between, not 1.77208. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 1 and transit 15.0721, so the planet went round <strong>14.0721</strong> times in between, not 1.83823. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.487976 and transit 40.0363, so the planet went round <strong>39.548323999999994</strong> times in between, not 2.84947. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 2.63783 and transit 2.84947, so the planet went round <strong>0.21164000000000005</strong> times in between, not 1.12. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.00336 and transit 1.12, so the planet went round <strong>1.11664</strong> times in between, not 15.7365. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.487976 and transit 1.12, so the planet went round <strong>0.6320240000000001</strong> times in between, not 40.0363. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 1.12 and transit 15.7365, so the planet went round <strong>14.616499999999998</strong> times in between, not 1.98473. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.999886 and transit 1.00001, so the planet went round <strong>0.000124000000000013</strong> times in between, not 1. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.000003 and transit 0.999994, so the planet went round <strong>0.9999910000000001</strong> times in between, not 29.7889. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.00000299999 and transit 1, so the planet went round <strong>0.99999700001</strong> times in between, not 29.7891. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 29.7889 and transit 29.7891, so the planet went round <strong>0.00019999999999953388</strong> times in between, not 29.7889. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 33.3636 and transit 33.3638, so the planet went round <strong>0.00019999999999953388</strong> times in between, not 33.3636. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 1.11987 and transit 1.12001, so the planet went round <strong>0.000140000000000029</strong> times in between, not 1.12. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.00000336 and transit 1.11999, so the planet went round <strong>1.11998664</strong> times in between, not 33.3636. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.00000335999 and transit 1.12, so the planet went round <strong>1.11999664001</strong> times in between, not 33.3638. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 1.12 and transit 33.3636, so the planet went round <strong>32.2436</strong> times in between, not 1.12. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 1.11987 and transit 1.11999, so the planet went round <strong>0.00012000000000012001</strong> times in between, not 1.12. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.36 and transit 15.0721, so the planet went round <strong>14.712100000000001</strong> times in between, not 2.125. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 6e-7 and transit 1.17647, so the planet went round <strong>1.1764694</strong> times in between, not 15.0721. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.36 and transit 1, so the planet went round <strong>0.64</strong> times in between, not 32.0283. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 15.0721 and transit 32.0283, so the planet went round <strong>16.956200000000003</strong> times in between, not 15.0721. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 16.8808 and transit 35.8717, so the planet went round <strong>18.990899999999996</strong> times in between, not 16.8808. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 2.125 and transit 2.5, so the planet went round <strong>0.375</strong> times in between, not 2.49204. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 6e-7 and transit 0.36, so the planet went round <strong>0.35999939999999997</strong> times in between, not 2.125. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.4032 and transit 16.8808, so the planet went round <strong>16.477600000000002</strong> times in between, not 2.38. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 6.72e-7 and transit 1.31765, so the planet went round <strong>1.317649328</strong> times in between, not 16.8808. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 0.4032 and transit 1.12, so the planet went round <strong>0.7168000000000001</strong> times in between, not 35.8717. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 1.12 and transit 16.8808, so the planet went round <strong>15.7608</strong> times in between, not 2.05882. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 2.38 and transit 2.8, so the planet went round <strong>0.41999999999999993</strong> times in between, not 2.79108. Count the gaps between the transits, not the transits themselves."},{"level":"warn","message":"You recorded transit 6.72e-7 and transit 0.4032, so the planet went round <strong>0.403199328</strong> times in between, not 2.38. Count the gaps between the transits, not the transits themselves."}]}
+   },
+   "from-a-period-to-an": {
+    "validate": {"calls":242,"distinct":5,"digest":"35fcf6fe8379f02c","samples":[null,{"level":"warn","message":"Expected roughly 0.047 AU. Check the period is in days and the mass in solar masses."},{"level":"error","message":"The period goes in days, not years. Three and a half days, not three and a half thousandths of a year."},{"level":"error","message":"The mass goes in solar masses. HD 209458 is 1.148 of them."},{"level":"ok","message":"About 0.047 AU: one eighth of Mercury’s distance from the Sun, and roughly nine stellar radii out. At 1,450 K the planet’s day side is hot enough to glow dull red on its own. Nothing in planet formation theory before 1995 put a gas giant there, and working out how it arrived is still an active argument between migration through the disk and scattering off other planets."}]}
+   },
+   "now-measure-it": {
+    "probe": [[{"label":"Baseline, out of transit","value":"1.000000"},{"label":"Complete transits recorded","value":"0"},{"label":"Waiting for a complete transit","value":"..."},{"label":"Clock","value":"0.0000 days"}],[{"label":"Baseline, out of transit","value":"1.000123"},{"label":"Complete transits recorded","value":"3"},{"label":"Transit 3: bottom","value":"0.984123","emphasis":true},{"label":"Transit 3: mid-time","value":"6.2832 days"},{"label":"Clock","value":"3.1416 days"}],[{"label":"Baseline, out of transit","value":"0.999877"},{"label":"Complete transits recorded","value":"1"},{"label":"Transit 1: bottom","value":"0.992100","emphasis":true},{"label":"Transit 1: mid-time","value":"1.5000 days"},{"label":"Clock","value":"12.5000 days"}],[{"label":"Baseline, out of transit","value":"1.000000"},{"label":"Complete transits recorded","value":"2"},{"label":"Transit 2: bottom","value":"0.970000","emphasis":true},{"label":"Transit 2: mid-time","value":"20.2500 days"},{"label":"Clock","value":"400.0000 days"}]]
+   },
+   "recover-the-real-planet": {
+    "probe": [[{"label":"Baseline, out of transit","value":"1.000000"},{"label":"Complete transits recorded","value":"0"},{"label":"Waiting for a complete transit","value":"..."},{"label":"Clock","value":"0.0000 days"}],[{"label":"Baseline, out of transit","value":"1.000123"},{"label":"Complete transits recorded","value":"3"},{"label":"Transit 3: bottom","value":"0.984123","emphasis":true},{"label":"Transit 3: mid-time","value":"6.2832 days"},{"label":"Clock","value":"3.1416 days"}],[{"label":"Baseline, out of transit","value":"0.999877"},{"label":"Complete transits recorded","value":"1"},{"label":"Transit 1: bottom","value":"0.992100","emphasis":true},{"label":"Transit 1: mid-time","value":"1.5000 days"},{"label":"Clock","value":"12.5000 days"}],[{"label":"Baseline, out of transit","value":"1.000000"},{"label":"Complete transits recorded","value":"2"},{"label":"Transit 2: bottom","value":"0.970000","emphasis":true},{"label":"Transit 2: mid-time","value":"20.2500 days"},{"label":"Clock","value":"400.0000 days"}]],
+    "importFromSelection": [null,["0.016000"],["0.007800"],["0.030000"]],
+    "validate": {"calls":242,"distinct":5,"digest":"81ed9e3bb5cd1379","samples":[null,{"level":"error","message":"The blended depth has to be the <em>shallower</em> of the two. Check you have not put them in the wrong boxes."},{"level":"warn","message":"Expected a ratio near 1.63 and a corrected radius near 15.5 R⊕. Check both depths came from the bottom of a dip rather than a shoulder."},{"level":"error","message":"Both depths are fractions, not percentages: 1.1% goes in as 0.011."},{"level":"warn","message":"The ratio is larger than this companion can produce. Re-read the blended depth: it should be near 0.011, not near half the clean value."}]}
+   }
+  },
+  "es": "same"
+ }
+}

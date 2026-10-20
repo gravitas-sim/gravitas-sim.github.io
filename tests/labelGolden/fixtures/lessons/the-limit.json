@@ -1,0 +1,71 @@
+{
+ "id": "the-limit",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.a-typical-dwarf.fields.0.unit","M☉"],
+    ["steps.a-typical-dwarf.fields.1.unit","km"],
+    ["steps.the-mean-density-by-hand.unit",""],
+    ["steps.a-dense-dwarf.fields.0.unit","M☉"],
+    ["steps.a-dense-dwarf.fields.1.unit","km"],
+    ["steps.the-ceiling.fields.0.unit","M☉"],
+    ["steps.the-ceiling.fields.1.unit","M☉"],
+    ["steps.the-diminishing-return.unit","%"],
+    ["steps.hydrogen-would-be-different.fields.0.unit","M☉"],
+    ["steps.an-iron-core.fields.0.unit","M☉"]
+   ],
+   "numbered": [
+    ["steps.a-typical-dwarf.fields.0.hint","0.60"],
+    ["steps.a-typical-dwarf.fields.1.hint","8860"],
+    ["steps.a-dense-dwarf.fields.0.hint","1.37"],
+    ["steps.a-dense-dwarf.fields.1.hint","2470"],
+    ["steps.the-ceiling.fields.0.hint","1.45"],
+    ["steps.the-ceiling.fields.1.hint","1.456"],
+    ["steps.hydrogen-would-be-different.fields.0.hint","5.82"],
+    ["steps.an-iron-core.fields.0.hint","1.26"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-mean-density-by-hand",
+    "answer": "4.07",
+    "tolerance": "0.06",
+    "unit": ""
+   },
+   {
+    "sid": "the-diminishing-return",
+    "answer": "6.1",
+    "tolerance": "0.3",
+    "unit": "%"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "a-typical-dwarf": {
+    "validate": {"calls":232,"distinct":2,"digest":"64321d5db7436a1f","samples":[null,{"level":"error","message":"Use the preset “A typical dwarf, 0.6 solar masses” (central density 3.2 million g/cm³, two nucleons per electron), then read “Mass” and “Radius, in kilometers”."}]}
+   },
+   "a-dense-dwarf": {
+    "validate": {"calls":232,"distinct":2,"digest":"38919c75090db950","samples":[null,{"level":"error","message":"Set “Central density” to 10⁹ g/cm³ (slider at 9) with two nucleons per electron, then read “Mass” and “Radius, in kilometers”."}]}
+   },
+   "the-ceiling": {
+    "validate": {"calls":232,"distinct":2,"digest":"b05a8bd7bbc06faa","samples":[null,{"level":"error","message":"Set “Central density” to 10¹¹ g/cm³ (the end of the slider) with two nucleons per electron, then read “Mass” and “Limiting mass for this μₑ”."}]}
+   },
+   "hydrogen-would-be-different": {
+    "validate": {"calls":97,"distinct":2,"digest":"88c28f87aaadf356","samples":[null,{"level":"error","message":"Use the preset “A hypothetical hydrogen star, μₑ = 1”, then read “Limiting mass for this μₑ”."}]}
+   },
+   "an-iron-core": {
+    "validate": {"calls":97,"distinct":2,"digest":"cb6aa5c2eede1706","samples":[null,{"level":"error","message":"Set “Nucleons per electron, μₑ” to 2.15 and read “Limiting mass for this μₑ”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

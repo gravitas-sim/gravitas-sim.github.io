@@ -1,0 +1,83 @@
+{
+ "id": "gravity-assist",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.write-down-both-columns.fields.0.unit","km/s"],
+    ["steps.write-down-both-columns.fields.1.unit","km/s"],
+    ["steps.write-down-both-columns.fields.2.unit","km/s"],
+    ["steps.write-down-both-columns.fields.3.unit","km/s"],
+    ["steps.read-the-comparison.fields.0.unit","km/s"],
+    ["steps.read-the-comparison.fields.1.unit","km/s"],
+    ["steps.read-the-comparison.fields.2.unit","km/s"],
+    ["steps.the-ceiling.unit","km/s"],
+    ["steps.the-ceiling.expect.unit","km/s"],
+    ["steps.who-paid.fields.0.unit","mm/s"],
+    ["steps.who-paid.fields.1.unit","%"],
+    ["steps.read-the-sweep.fields.0.unit","°"],
+    ["steps.read-the-sweep.fields.1.unit","km/s"],
+    ["steps.read-the-sweep.fields.2.unit","km/s"]
+   ],
+   "numbered": [
+    ["steps.read-the-sweep.fields.0.label","Turn at the closest pass, b = 20"],
+    ["steps.read-the-sweep.fields.1.label","Speed change at b = 20"],
+    ["steps.read-the-sweep.fields.2.label","Speed change at b = 30"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.read-the-sweep.fields.0.label","Giro en el paso más cercano, b = 20"],
+    ["steps.read-the-sweep.fields.1.label","Cambio de rapidez en b = 20"],
+    ["steps.read-the-sweep.fields.2.label","Cambio de rapidez en b = 30"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-ceiling",
+    "answer": "8.686",
+    "tolerance": "0.2",
+    "unit": "km/s"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [
+  {
+   "rule": "answer-beyond-tolerance",
+   "at": "the-ceiling",
+   "text": "8.686 km/s within 0.2"
+  }
+ ],
+ "steps": {
+  "en": {
+   "fly-the-gaining-pass": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "write-down-both-columns": {
+    "validate": {"calls":242,"distinct":4,"digest":"e48508181176e514","samples":[null,{"level":"warn","message":"The right-hand column should have grown. Check the impact parameter is +40 rather than −40."},{"level":"warn","message":"Those two should be the same number to four figures. Check you are reading the left-hand column, which is measured relative to the planet."},{"level":"ok","message":"Identical on the left, most of a factor of two larger on the right. Same encounter, same two moments."}]}
+   },
+   "the-other-side": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "read-the-comparison": {
+    "validate": {"calls":242,"distinct":5,"digest":"d668a765ce2fb4fb","samples":[null,{"level":"warn","message":"Those two came out the same size. Check you have read the \"change in speed\" row and not the \"change in velocity\" row: it is the velocity change that matches on both sides."},{"level":"warn","message":"Enter the loss as a positive number — how much speed it lost. The sign is in the question, not in the answer."},{"level":"ok","message":"A gain of about 2.6 and a loss of about 1.7 — not mirror images — and one velocity change of about 4.3 shared by both. The next screen is why."},{"level":"warn","message":"The change in velocity should be the largest of the three. It is the length of the arrow between the before and after velocities, and neither speed changed by that much."}]}
+   },
+   "who-paid": {
+    "validate": {"calls":232,"distinct":3,"digest":"88eed8acec8cade0","samples":[null,{"level":"ok","message":"A few millimeters per second, against its own 2.83 km/s — about one part in a million, and exactly the momentum the spacecraft gained."},{"level":"warn","message":"That looks like the planet’s speed rather than its change. The row you want says \"What it cost the planet\"."}]}
+   },
+   "sweep-the-impact-parameter": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   },
+   "read-the-sweep": {
+    "validate": {"calls":242,"distinct":3,"digest":"da58fd8ec54071d7","samples":[null,{"level":"warn","message":"The closer pass should have gained more, not less. Check which row is which: 20 is the top row and it is the closest pass, not the widest."},{"level":"warn","message":"That looks like the turn at a wider pass. At b = 20 the spacecraft is turned by about 97 degrees."}]}
+   },
+   "fly-it-heliocentric": {
+    "probe": [[{"label":"On the canvas","value":"nothing bound yet"},{"label":"Last run","value":"none yet"}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"Sweep of the planet’s starting distance"},{"label":"Does it still describe this scene?","value":"yes","emphasis":false}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"unnamed"},{"label":"Does it still describe this scene?","value":"NO — the scene has been rebuilt since, so re-run before comparing","emphasis":true}],[{"label":"On the canvas","value":"star, planet, hole, tracer"},{"label":"Last run","value":"none yet"}]]
+   }
+  },
+  "es": "same"
+ }
+}

@@ -1,0 +1,35 @@
+{
+ "id": "orbital-energy",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.write-down-the-dividing-speed.fields.0.unit","km/s"],
+    ["steps.write-down-the-dividing-speed.fields.1.unit","km/s"]
+   ],
+   "numbered": []
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "write-down-the-dividing-speed": {
+    "validate": {"calls":240,"distinct":5,"digest":"4c44e4cb7f605c9e","samples":[{"level":"warn","message":"Both speeds, in km/s: the fastest shot you saw come back, and the slowest one that did not."},{"level":"error","message":"The speed that left has to be the larger of the two. Check which number went in which box."},{"level":"error","message":"The dividing speed from this cannon is 10.9 km/s, and yours is more than 0.6 km/s away. Go back and step through the last stretch more slowly — just under the line the ball goes an absurd distance and still turns round."},{"level":"ok","message":"You have pinned it to 0.10 km/s. The accepted value from this height is 10.9 km/s."},{"level":"ok","message":"Your dividing speed is 10.90 km/s, give or take 0.40. The accepted value from this height is 10.9 km/s — inside your gap, which is what a measurement with an honest uncertainty looks like."}]}
+   },
+   "around-a-real-orbit": {
+    "probe": [[{"label":"Click a body in the simulation","value":"…"}],[{"label":"Selected","value":"Eccentric Orbiter"},{"label":"Distance from the star","value":"1.00 AU"},{"label":"Speed","value":"35.7 km/s"},{"label":"Total energy","value":"below zero","emphasis":true},{"label":"Bound or unbound","value":"bound: it comes back"},{"label":"Closest it gets","value":"1.00 AU"},{"label":"Furthest it gets","value":"2.54 AU"},{"label":"Whole-system energy, since this world was built","value":"+0.370% — numerical drift, not physics"}],[{"label":"Selected","value":"Circular Orbiter"},{"label":"Distance from the star","value":"1.00 AU"},{"label":"Speed","value":"29.8 km/s"},{"label":"Total energy","value":"below zero","emphasis":true},{"label":"Bound or unbound","value":"bound: it comes back"},{"label":"Closest it gets","value":"1.00 AU"},{"label":"Furthest it gets","value":"1.00 AU"},{"label":"Whole-system energy, since this world was built","value":"-0.420% — numerical drift, not physics"}],[{"label":"Selected","value":"Far Orbiter"},{"label":"Distance from the star","value":"2.50 AU"},{"label":"Speed","value":"15.1 km/s"},{"label":"Total energy","value":"below zero","emphasis":true},{"label":"Bound or unbound","value":"bound: it comes back"},{"label":"Closest it gets","value":"1.18 AU"},{"label":"Furthest it gets","value":"2.50 AU"},{"label":"Whole-system energy, since this world was built","value":"unchanged to the precision worth quoting"}]]
+   },
+   "check-it-yourself": {
+    "probe": [[{"label":"Click a body in the simulation","value":"…"}],[{"label":"Selected","value":"Eccentric Orbiter"},{"label":"Distance from the star","value":"1.00 AU"},{"label":"Speed","value":"35.7 km/s"},{"label":"Total energy","value":"below zero","emphasis":true},{"label":"Bound or unbound","value":"bound: it comes back"},{"label":"Closest it gets","value":"1.00 AU"},{"label":"Furthest it gets","value":"2.54 AU"},{"label":"Whole-system energy, since this world was built","value":"+0.370% — numerical drift, not physics"}],[{"label":"Selected","value":"Circular Orbiter"},{"label":"Distance from the star","value":"1.00 AU"},{"label":"Speed","value":"29.8 km/s"},{"label":"Total energy","value":"below zero","emphasis":true},{"label":"Bound or unbound","value":"bound: it comes back"},{"label":"Closest it gets","value":"1.00 AU"},{"label":"Furthest it gets","value":"1.00 AU"},{"label":"Whole-system energy, since this world was built","value":"-0.420% — numerical drift, not physics"}],[{"label":"Selected","value":"Far Orbiter"},{"label":"Distance from the star","value":"2.50 AU"},{"label":"Speed","value":"15.1 km/s"},{"label":"Total energy","value":"below zero","emphasis":true},{"label":"Bound or unbound","value":"bound: it comes back"},{"label":"Closest it gets","value":"1.18 AU"},{"label":"Furthest it gets","value":"2.50 AU"},{"label":"Whole-system energy, since this world was built","value":"unchanged to the precision worth quoting"}]]
+   }
+  },
+  "es": "same"
+ }
+}

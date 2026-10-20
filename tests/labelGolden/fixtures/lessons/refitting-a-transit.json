@@ -1,0 +1,60 @@
+{
+ "id": "refitting-a-transit",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-fit.fields.0.unit","d"],
+    ["steps.the-fit.fields.1.unit",""],
+    ["steps.the-fit.fields.2.unit",""],
+    ["steps.the-fit.fields.3.unit",""],
+    ["steps.the-fit.fields.4.unit",""],
+    ["steps.sigma-and-profile.fields.0.unit",""],
+    ["steps.sigma-and-profile.fields.1.unit",""],
+    ["steps.sigma-and-profile.fields.2.unit",""],
+    ["steps.sigma-and-profile.fields.3.unit",""],
+    ["steps.sigma-and-profile.fields.4.unit",""],
+    ["steps.hold-the-limb-darkening.fields.0.unit",""],
+    ["steps.hold-the-limb-darkening.fields.1.unit",""],
+    ["steps.hold-the-limb-darkening.fields.2.unit",""]
+   ],
+   "numbered": [
+    ["steps.the-fit.fields.0.hint","3.52454"],
+    ["steps.the-fit.fields.1.hint","0.11926"],
+    ["steps.the-fit.fields.2.hint","9.21"],
+    ["steps.the-fit.fields.3.hint","0.430"],
+    ["steps.the-fit.fields.4.hint","7.98"],
+    ["steps.sigma-and-profile.fields.0.hint","0.00164"],
+    ["steps.sigma-and-profile.fields.1.hint","0.11797"],
+    ["steps.sigma-and-profile.fields.2.hint","0.12043"],
+    ["steps.sigma-and-profile.fields.3.hint","0.368"],
+    ["steps.sigma-and-profile.fields.4.hint","0.476"],
+    ["steps.hold-the-limb-darkening.fields.0.hint","0.11767"],
+    ["steps.hold-the-limb-darkening.fields.1.hint","0.00050"],
+    ["steps.hold-the-limb-darkening.fields.2.hint","3.2"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-fit": {
+    "validate": {"calls":242,"distinct":2,"digest":"5684826a16cf9f4c","samples":[null,{"level":"error","message":"Run the notebook with its setting at 1, and read the period, Rp/R*, a/R*, the impact parameter and the reduced chi-square from the table of numbers it returns."}]}
+   },
+   "sigma-and-profile": {
+    "validate": {"calls":242,"distinct":2,"digest":"36e9cc06f448cf1f","samples":[null,{"level":"error","message":"Read Rp/R*’s sigma from the Uncertainty column, and the ends of the two profile intervals from the rows labeled with their profile interval."}]}
+   },
+   "hold-the-limb-darkening": {
+    "validate": {"calls":242,"distinct":2,"digest":"a19a9e7ba76c8ded","samples":[null,{"level":"error","message":"Set the setting to 0, run, read Rp/R* and its sigma, and divide the difference from 0.11926 by the new sigma."}]}
+   }
+  },
+  "es": "same"
+ }
+}

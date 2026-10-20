@@ -1,0 +1,73 @@
+{
+ "id": "a-variable-star-from-frames",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-star-alone.fields.0.unit","mag"],
+    ["steps.against-the-comparison.fields.0.unit","mag"],
+    ["steps.against-the-comparison.fields.1.unit",""],
+    ["steps.magnitudes-to-percent.unit","%"],
+    ["steps.the-sine.fields.0.unit","d"],
+    ["steps.the-sine.fields.1.unit","mag"],
+    ["steps.the-period-in-hours.unit","h"],
+    ["steps.how-many-errors.unit",""],
+    ["steps.the-uncalibrated-night.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.the-star-alone.fields.0.hint","0.070"],
+    ["steps.against-the-comparison.fields.0.hint","0.0088"],
+    ["steps.against-the-comparison.fields.1.hint","8.0"],
+    ["steps.the-sine.fields.0.hint","0.122"],
+    ["steps.the-sine.fields.1.hint","0.042"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "magnitudes-to-percent",
+    "answer": "0.81",
+    "tolerance": "0.03",
+    "unit": "%"
+   },
+   {
+    "sid": "the-period-in-hours",
+    "answer": "2.93",
+    "tolerance": "0.1",
+    "unit": "h"
+   },
+   {
+    "sid": "how-many-errors",
+    "answer": "23.5",
+    "tolerance": "1.3",
+    "unit": ""
+   },
+   {
+    "sid": "the-uncalibrated-night",
+    "answer": "0.032",
+    "tolerance": "0.004",
+    "unit": "mag"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-star-alone": {
+    "validate": {"calls":97,"distinct":2,"digest":"f25b42afd5af569e","samples":[null,{"level":"error","message":"Choose “The variable star alone” with “all, with cosmic rays masked”, and read “Scatter of the variable star alone”, in magnitudes."}]}
+   },
+   "against-the-comparison": {
+    "validate": {"calls":232,"distinct":2,"digest":"0a39e06be541431c","samples":[null,{"level":"error","message":"Choose “The check star against the comparison” and read “Scatter of the check star against the comparison”, in magnitudes; divide 0.070 by it."}]}
+   },
+   "the-sine": {
+    "validate": {"calls":232,"distinct":2,"digest":"5a43b8557841cc9e","samples":[null,{"level":"error","message":"Choose “The variable against the comparison” and read “Period of the best sine” in days and “Amplitude of the best sine” in magnitudes."}]}
+   }
+  },
+  "es": "same"
+ }
+}

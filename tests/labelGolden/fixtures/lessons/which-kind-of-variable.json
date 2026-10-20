@@ -1,0 +1,75 @@
+{
+ "id": "which-kind-of-variable",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.period-alone.fields.0.unit","%"],
+    ["steps.period-alone.fields.1.unit","%"],
+    ["steps.read-the-table.fields.0.unit",""],
+    ["steps.read-the-table.fields.1.unit",""],
+    ["steps.accuracy-from-the-table.unit","%"],
+    ["steps.the-four-easy-kinds.unit","%"],
+    ["steps.add-the-amplitude.fields.0.unit","%"],
+    ["steps.add-the-amplitude.fields.1.unit","%"],
+    ["steps.the-shape.fields.0.unit","%"],
+    ["steps.the-shape.fields.1.unit","%"],
+    ["steps.a-skewed-sky.unit","%"]
+   ],
+   "numbered": [
+    ["steps.period-alone.fields.0.hint","83.3"],
+    ["steps.period-alone.fields.1.hint","29.2"],
+    ["steps.read-the-table.fields.0.hint","6"],
+    ["steps.read-the-table.fields.1.hint","7"],
+    ["steps.add-the-amplitude.fields.0.hint","90.8"],
+    ["steps.add-the-amplitude.fields.1.hint","54.2"],
+    ["steps.the-shape.fields.0.hint","99.2"],
+    ["steps.the-shape.fields.1.hint","100"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "accuracy-from-the-table",
+    "answer": "83.3",
+    "tolerance": "0.3",
+    "unit": "%"
+   },
+   {
+    "sid": "the-four-easy-kinds",
+    "answer": "96.9",
+    "tolerance": "0.3",
+    "unit": "%"
+   },
+   {
+    "sid": "a-skewed-sky",
+    "answer": "48.5",
+    "tolerance": "1",
+    "unit": "%"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "period-alone": {
+    "validate": {"calls":232,"distinct":2,"digest":"375b2afee85f2d02","samples":[null,{"level":"error","message":"Choose “the period only” and read “Share classified correctly (leave one out)” and the eclipsing binary’s “share found”, both as percentages."}]}
+   },
+   "read-the-table": {
+    "validate": {"calls":232,"distinct":2,"digest":"629eb3d5177305e0","samples":[null,{"level":"error","message":"Find the row beginning “Truly an eclipsing binary, called” and read the counts after “RRab” and after “eclipsing”."}]}
+   },
+   "add-the-amplitude": {
+    "validate": {"calls":232,"distinct":2,"digest":"4ab6c812ac40eee3","samples":[null,{"level":"error","message":"Choose “the period and the amplitude” and read “Share classified correctly (leave one out)” and the eclipsing binary’s “share found”."}]}
+   },
+   "the-shape": {
+    "validate": {"calls":232,"distinct":2,"digest":"fedab2430a75f8f5","samples":[null,{"level":"error","message":"Choose “the period, the amplitude and the shape” and read “Share classified correctly (leave one out)” and the eclipsing binary’s “share found”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

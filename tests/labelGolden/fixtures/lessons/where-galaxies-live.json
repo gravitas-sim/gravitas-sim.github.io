@@ -1,0 +1,80 @@
+{
+ "id": "where-galaxies-live",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-near-sample.fields.1.unit","Mpc"],
+    ["steps.the-whole-strip.fields.1.unit","Mpc"],
+    ["steps.the-density-ratio.unit",""],
+    ["steps.the-volume-of-a-shell.unit",""],
+    ["steps.how-much-brighter.unit",""],
+    ["steps.that-in-magnitudes.unit","mag"]
+   ],
+   "numbered": [
+    ["steps.the-near-sample.fields.0.hint","363"],
+    ["steps.the-near-sample.fields.1.hint","170"],
+    ["steps.the-whole-strip.fields.0.hint","2911"],
+    ["steps.the-whole-strip.fields.1.hint","500"],
+    ["steps.the-clumping.fields.0.hint","9.8"],
+    ["steps.the-thinning.fields.0.label","At 100 to 125 Mpc"],
+    ["steps.the-thinning.fields.0.hint","15800"],
+    ["steps.the-thinning.fields.1.label","At 300 to 325 Mpc"],
+    ["steps.the-thinning.fields.1.hint","4860"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.the-thinning.fields.0.label","A 100 a 125 Mpc"],
+    ["steps.the-thinning.fields.1.label","A 300 a 325 Mpc"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "the-density-ratio",
+    "answer": "3.26",
+    "tolerance": "0.05",
+    "unit": ""
+   },
+   {
+    "sid": "the-volume-of-a-shell",
+    "answer": "5807",
+    "tolerance": "40",
+    "unit": ""
+   },
+   {
+    "sid": "how-much-brighter",
+    "answer": "9",
+    "tolerance": "0.2",
+    "unit": ""
+   },
+   {
+    "sid": "that-in-magnitudes",
+    "answer": "2.39",
+    "tolerance": "0.05",
+    "unit": "mag"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "the-near-sample": {
+    "validate": {"calls":232,"distinct":2,"digest":"8f51237df74822a1","samples":[null,{"level":"error","message":"Set the range to z ≤ 0.04 and read “Galaxies shown” and “Distance of the farthest, in the cosmology chosen”."}]}
+   },
+   "the-whole-strip": {
+    "validate": {"calls":232,"distinct":2,"digest":"d505f03421c2557e","samples":[null,{"level":"error","message":"Set the range to z ≤ 0.12 and read “Galaxies shown” and “Distance of the farthest”."}]}
+   },
+   "the-clumping": {
+    "validate": {"calls":97,"distinct":2,"digest":"ac4313c255a821cf","samples":[null,{"level":"error","message":"With z ≤ 0.12, read “Variance over mean of counts in cells (1 for no clustering)”."}]}
+   },
+   "the-thinning": {
+    "validate": {"calls":232,"distinct":2,"digest":"803417941fe36ab8","samples":[null,{"level":"error","message":"With the whole strip, read “Galaxies per 10^6 cubic Mpc, 100 to 125 Mpc” and “… 300 to 325 Mpc”."}]}
+   }
+  },
+  "es": "same"
+ }
+}

@@ -1,0 +1,89 @@
+{
+ "id": "retrograde-motion",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-two-orbits.fields.0.unit","AU"],
+    ["steps.the-two-orbits.fields.1.unit","AU"],
+    ["steps.the-two-orbits.fields.2.unit","days"],
+    ["steps.the-two-orbits.fields.3.unit","days"],
+    ["steps.how-fast-each-one-goes.fields.0.unit","days"],
+    ["steps.how-fast-each-one-goes.fields.1.unit","days"],
+    ["steps.how-fast-each-one-goes.fields.2.unit","°/day"],
+    ["steps.how-fast-each-one-goes.fields.3.unit","°/day"],
+    ["steps.how-fast-each-one-goes.fields.4.unit","°/day"],
+    ["steps.how-often-does-earth-catch.unit","days"],
+    ["steps.a-lap-gained.unit","days"],
+    ["steps.catch-the-reversal.fields.0.unit","°"],
+    ["steps.catch-the-reversal.fields.1.unit","days"],
+    ["steps.catch-the-reversal.fields.2.unit","°"],
+    ["steps.catch-the-reversal.fields.3.unit","days"],
+    ["steps.nearest-and-furthest.fields.0.unit","AU"],
+    ["steps.nearest-and-furthest.fields.1.unit","AU"],
+    ["steps.nearest-and-furthest.fields.2.unit",""],
+    ["steps.counting-the-machinery.unit","devices"],
+    ["steps.how-long-does-a-loop.fields.0.unit","days"],
+    ["steps.how-long-does-a-loop.fields.1.unit","days"],
+    ["steps.how-long-does-a-loop.fields.2.unit","days"]
+   ],
+   "numbered": []
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "how-often-does-earth-catch",
+    "answer": "780",
+    "tolerance": "60",
+    "unit": "days"
+   },
+   {
+    "sid": "a-lap-gained",
+    "answer": "783",
+    "tolerance": "60",
+    "unit": "days"
+   },
+   {
+    "sid": "counting-the-machinery",
+    "answer": "20",
+    "tolerance": "1",
+    "unit": "devices"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "watch-from-outside-first": {
+    "probe": [[{"label":"Earth: speed","value":"Earth is not on the canvas yet"},{"label":"Mars: speed","value":"Mars is not on the canvas yet"},{"label":"Day","value":"0"}],[{"label":"Earth: speed","value":"33.3 km/s"},{"label":"Mars: speed","value":"25.9 km/s"},{"label":"Day","value":"3"}],[{"label":"Earth: speed","value":"33.3 km/s"},{"label":"Mars: speed","value":"25.9 km/s"},{"label":"Day","value":"13"}],[{"label":"Earth: speed","value":"33.3 km/s"},{"label":"Mars: speed","value":"25.9 km/s"},{"label":"Day","value":"400"}]]
+   },
+   "the-two-orbits": {
+    "probe": [[{"label":"Earth","value":"not found"},{"label":"Mars","value":"not found"}],[{"label":"Earth: distance from the Sun","value":"- AU"},{"label":"Earth: period","value":"9.09 yr"},{"label":"Mars: distance from the Sun","value":"- AU"},{"label":"Mars: period","value":"1.51 yr"}]]
+   },
+   "how-fast-each-one-goes": {
+    "probe": [[{"label":"Earth: period","value":"Earth is not on the canvas yet"},{"label":"Mars: period","value":"Mars is not on the canvas yet"}],[{"label":"Earth: period","value":"9.09 yr"},{"label":"Mars: period","value":"1.51 yr"}]]
+   },
+   "put-yourself-on-earth": {
+    "probe": [[{"label":"Reference frame","value":"World, not switched yet"}],[{"label":"Reference frame","value":"Earth"},{"label":"Mars: distance from Earth","value":"0.781 AU"},{"label":"Mars: direction from Earth","value":"34.9°"}]]
+   },
+   "catch-the-reversal": {
+    "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Mars: distance from Earth","value":"0.781 AU"},{"label":"Day","value":"3"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Mars: distance from Earth","value":"0.781 AU"},{"label":"Day","value":"13"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Mars: distance from Earth","value":"0.781 AU"},{"label":"Day","value":"400"}]]
+   },
+   "nearest-and-furthest": {
+    "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: distance from Earth","value":"0.781 AU"}]]
+   },
+   "do-it-for-the-sun": {
+    "probe": [[{"label":"Reference frame","value":"World"},{"label":"Sun: as seen from Earth","value":"the Sun is not on the canvas yet"}],[{"label":"Reference frame","value":"A body"},{"label":"Sun: distance from Earth","value":"0.829 AU"},{"label":"Sun: direction from Earth","value":"221.5°"}],[{"label":"Reference frame","value":"World"},{"label":"Sun: distance from Earth","value":"0.829 AU"},{"label":"Sun: direction from Earth","value":"221.5°"}]]
+   },
+   "how-long-does-a-loop": {
+    "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Day","value":"3"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Day","value":"13"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Day","value":"400"}]]
+   }
+  },
+  "es": "same"
+ }
+}

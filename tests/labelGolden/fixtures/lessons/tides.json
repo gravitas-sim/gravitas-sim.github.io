@@ -1,0 +1,108 @@
+{
+ "id": "tides",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.four-distances.fields.0.unit","× Moon’s"],
+    ["steps.four-distances.fields.1.unit","× lunar tide"],
+    ["steps.four-distances.fields.2.unit","× Moon’s"],
+    ["steps.four-distances.fields.3.unit","× lunar tide"],
+    ["steps.four-distances.fields.4.unit","× Moon’s"],
+    ["steps.four-distances.fields.5.unit","× lunar tide"],
+    ["steps.four-distances.fields.6.unit","× Moon’s"],
+    ["steps.four-distances.fields.7.unit","× lunar tide"],
+    ["steps.how-steeply-does-it-fall.unit","×"],
+    ["steps.three-masses.fields.0.unit","× Moon’s"],
+    ["steps.three-masses.fields.1.unit","× lunar tide"],
+    ["steps.three-masses.fields.2.unit","× Moon’s"],
+    ["steps.three-masses.fields.3.unit","× lunar tide"],
+    ["steps.three-masses.fields.4.unit","× Moon’s"],
+    ["steps.three-masses.fields.5.unit","× lunar tide"],
+    ["steps.where-the-balance-tips.unit","Earth radii"]
+   ],
+   "numbered": [
+    ["steps.four-distances.fields.0.label","Distance 1"],
+    ["steps.four-distances.fields.0.hint","2"],
+    ["steps.four-distances.fields.1.hint","0.13"],
+    ["steps.four-distances.fields.2.label","Distance 2"],
+    ["steps.four-distances.fields.2.hint","1"],
+    ["steps.four-distances.fields.3.hint","1"],
+    ["steps.four-distances.fields.4.label","Distance 3"],
+    ["steps.four-distances.fields.4.hint","0.5"],
+    ["steps.four-distances.fields.5.hint","8"],
+    ["steps.four-distances.fields.6.label","Distance 4"],
+    ["steps.four-distances.fields.6.hint","0.25"],
+    ["steps.four-distances.fields.7.hint","64"],
+    ["steps.four-distances.plot.transform.label","Try 1 ÷ distance³"],
+    ["steps.four-distances.plot.transform.xLabel","1 ÷ distance³"],
+    ["steps.three-masses.fields.0.label","Mass 1"],
+    ["steps.three-masses.fields.0.hint","1"],
+    ["steps.three-masses.fields.1.hint","1"],
+    ["steps.three-masses.fields.2.label","Mass 2"],
+    ["steps.three-masses.fields.2.hint","2"],
+    ["steps.three-masses.fields.3.hint","2"],
+    ["steps.three-masses.fields.4.label","Mass 3"],
+    ["steps.three-masses.fields.4.hint","4"],
+    ["steps.three-masses.fields.5.hint","4"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.four-distances.fields.0.label","Distancia 1"],
+    ["steps.four-distances.fields.1.hint","0,13"],
+    ["steps.four-distances.fields.2.label","Distancia 2"],
+    ["steps.four-distances.fields.4.label","Distancia 3"],
+    ["steps.four-distances.fields.4.hint","0,5"],
+    ["steps.four-distances.fields.6.label","Distancia 4"],
+    ["steps.four-distances.fields.6.hint","0,25"],
+    ["steps.four-distances.plot.transform.label","Prueba 1 ÷ distancia³"],
+    ["steps.four-distances.plot.transform.xLabel","1 ÷ distancia³"],
+    ["steps.three-masses.fields.0.label","Masa 1"],
+    ["steps.three-masses.fields.2.label","Masa 2"],
+    ["steps.three-masses.fields.4.label","Masa 3"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "how-steeply-does-it-fall",
+    "answer": "8",
+    "tolerance": "0.6",
+    "unit": "×"
+   },
+   {
+    "sid": "where-the-balance-tips",
+    "answer": "1.5",
+    "tolerance": "0.2",
+    "unit": "Earth radii"
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "twice-a-day-everywhere": {
+    "probe": [[{"label":"Bodies on screen","value":"Earth, and the Moon"},{"label":"Moon’s distance now","value":"building the system…"},{"label":"Real separation","value":"384,400 km, on average"}],[{"label":"Bodies on screen","value":"Earth, and the Moon"},{"label":"Moon’s distance now","value":"2.39 AU"},{"label":"Real separation","value":"384,400 km, on average"}]]
+   },
+   "three-points-three-pulls": {
+    "probe": [[{"label":"The pair","value":"not both on the canvas"}],[{"label":"Pull on earth, at its center","value":"4.383e-8"},{"label":"Near side, compared with the center","value":"0.54%"},{"label":"Far side, compared with the center","value":"-0.54%"},{"label":"Measured across the body as drawn","value":"earth is drawn 0.3% of the way to moon"},{"label":"The same subtraction at true scale","value":"the real Earth is 1.66% of the way to the Moon, so the near side feels about 3.3% more pull than the center and the far side about 3.3% less","emphasis":true},{"label":"Which is why there are two bulges","value":"the near side is pulled towards it, the far side is left behind"}]]
+   },
+   "take-the-center-away": {
+    "probe": [[{"label":"The pair","value":"not both on the canvas"}],[{"label":"Pull on earth, at its center","value":"4.383e-8"},{"label":"Near side, compared with the center","value":"0.54%"},{"label":"Far side, compared with the center","value":"-0.54%"},{"label":"Measured across the body as drawn","value":"earth is drawn 0.3% of the way to moon"},{"label":"The same subtraction at true scale","value":"the real Earth is 1.66% of the way to the Moon, so the near side feels about 3.3% more pull than the center and the far side about 3.3% less","emphasis":true},{"label":"Which is why there are two bulges","value":"the near side is pulled towards it, the far side is left behind"}]]
+   },
+   "four-distances": {
+    "validate": {"calls":242,"distinct":4,"digest":"473be101e08cd9a9","samples":[null,{"level":"ok","message":"Every one of your readings satisfies stretch × distance × distance × distance = 1.00. Distance appears three times. Nobody told you that; it is in your own numbers."},{"level":"error","message":"Distances and tidal strengths are both positive numbers."},{"level":"warn","message":"These do not all sit on one relationship. The usual cause is a strength read at a different distance from the one beside it: check each row against the slider position that produced it."}]}
+   },
+   "three-masses": {
+    "validate": {"calls":242,"distinct":4,"digest":"7dcb89b478dc6fb8","samples":[null,{"level":"ok","message":"Stretch ÷ mass is 1.00 for every row you filled in. A constant ratio is what a straight line through the corner looks like in a table."},{"level":"error","message":"Masses and tidal strengths are both positive numbers."},{"level":"warn","message":"Stretch ÷ mass is not coming out the same for every row. Check that the distance slider stayed put while you changed the mass: moving both at once hides the relationship you are looking for."}]}
+   },
+   "the-extreme-case-running-live": {
+    "probe": [[{"label":"The pair","value":"not both on the canvas"},{"label":"Bodies being tracked","value":"1"},{"label":"What is simulated","value":"Newtonian gravity between point masses"},{"label":"What is not","value":"Fluid flow, pressure, radiation"}],[{"label":"Pull on star, at its center","value":"NaN"},{"label":"Near side, compared with the center","value":"NaN%"},{"label":"Far side, compared with the center","value":"NaN%"},{"label":"Measured across the body as drawn","value":"star is drawn 0.3% of the way to hole"},{"label":"Which is why there are two bulges","value":"the near side is pulled towards it, the far side is left behind"},{"label":"Bodies being tracked","value":"18"},{"label":"What is simulated","value":"Newtonian gravity between point masses"},{"label":"What is not","value":"Fluid flow, pressure, radiation"}],[{"label":"Pull on star, at its center","value":"NaN"},{"label":"Near side, compared with the center","value":"NaN%"},{"label":"Far side, compared with the center","value":"NaN%"},{"label":"Measured across the body as drawn","value":"star is drawn 0.3% of the way to hole"},{"label":"Which is why there are two bulges","value":"the near side is pulled towards it, the far side is left behind"},{"label":"Bodies being tracked","value":"19"},{"label":"What is simulated","value":"Newtonian gravity between point masses"},{"label":"What is not","value":"Fluid flow, pressure, radiation"}]]
+   }
+  },
+  "es": "same"
+ }
+}

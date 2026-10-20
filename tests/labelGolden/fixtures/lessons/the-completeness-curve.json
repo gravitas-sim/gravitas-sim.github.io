@@ -1,0 +1,86 @@
+{
+ "id": "the-completeness-curve",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.raw-against-truth.fields.0.unit","%"],
+    ["steps.raw-against-truth.fields.1.unit","%"],
+    ["steps.poisson-by-hand.unit","%"],
+    ["steps.weight-by-hand.unit",""],
+    ["steps.correct-the-fade.fields.0.unit","%"],
+    ["steps.correct-the-fade.fields.1.unit",""],
+    ["steps.when-it-cannot-help.fields.0.unit",""],
+    ["steps.when-it-cannot-help.fields.1.unit",""],
+    ["steps.the-catalog-own-magnitudes.fields.0.unit",""],
+    ["steps.the-catalog-own-magnitudes.fields.1.unit",""],
+    ["steps.euclidean-slope.unit",""]
+   ],
+   "numbered": [
+    ["steps.raw-against-truth.fields.0.label","Bin 8 to 10"],
+    ["steps.raw-against-truth.fields.0.hint","96"],
+    ["steps.raw-against-truth.fields.1.label","Bin 10 to 12"],
+    ["steps.raw-against-truth.fields.1.hint","57"],
+    ["steps.correct-the-fade.fields.0.label","Raw, bin 8 to 10"],
+    ["steps.correct-the-fade.fields.0.hint","13"],
+    ["steps.correct-the-fade.fields.1.label","Corrected, bin 8 to 10"],
+    ["steps.correct-the-fade.fields.1.hint","0.97"],
+    ["steps.when-it-cannot-help.fields.0.label","Stars counted, bin 10 to 12"],
+    ["steps.when-it-cannot-help.fields.0.hint","3"],
+    ["steps.when-it-cannot-help.fields.1.hint","0.46"],
+    ["steps.the-catalog-own-magnitudes.fields.0.hint","1.00"],
+    ["steps.the-catalog-own-magnitudes.fields.1.hint","1.6"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.raw-against-truth.fields.0.label","Intervalo 8 a 10"],
+    ["steps.raw-against-truth.fields.1.label","Intervalo 10 a 12"],
+    ["steps.correct-the-fade.fields.0.label","Bruta, intervalo 8 a 10"],
+    ["steps.correct-the-fade.fields.1.label","Corregido, intervalo 8 a 10"],
+    ["steps.when-it-cannot-help.fields.0.label","Estrellas contadas, intervalo 10 a 12"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [
+   {
+    "sid": "poisson-by-hand",
+    "answer": "4.5",
+    "tolerance": "0.3",
+    "unit": "%"
+   },
+   {
+    "sid": "weight-by-hand",
+    "answer": "3.98",
+    "tolerance": "0.05",
+    "unit": ""
+   },
+   {
+    "sid": "euclidean-slope",
+    "answer": "0.6",
+    "tolerance": "0.02",
+    "unit": ""
+   }
+  ],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "raw-against-truth": {
+    "validate": {"calls":232,"distinct":2,"digest":"d8a50dbfc152133e","samples":[null,{"level":"error","message":"Use the first preset (limit 20, 50 percent at 20) and read the two “raw count, share of the truth” rows."}]}
+   },
+   "correct-the-fade": {
+    "validate": {"calls":232,"distinct":3,"digest":"d528f48c2f996fa1","samples":[null,{"level":"error","message":"Use the second preset (limit 20, 50 percent at 17, width 0.5) and read the raw and corrected rows of the first bin."},{"level":"ok","message":"A raw count gets 13 percent of the truth; the weighted count gets 97 percent, with an error of about 6 percent. Knowing the completeness curve turns a hopeless count into a usable one, in a part of the luminosity function where the survey is far from complete."}]}
+   },
+   "when-it-cannot-help": {
+    "validate": {"calls":232,"distinct":3,"digest":"d24575f9046d3215","samples":[null,{"level":"error","message":"Use the third preset (limit 17, 50 percent at 16, width 1) and read the last bin’s “stars counted” and the number after ± in its corrected row."},{"level":"ok","message":"Three stars stand for the whole bin, and the corrected value, 0.78, comes with an error of 0.46: it says almost nothing. A correction can put a fraction back, but only if some stars of that kind were counted."}]}
+   },
+   "the-catalog-own-magnitudes": {
+    "validate": {"calls":232,"distinct":2,"digest":"8cc62e424e9b982f","samples":[null,{"level":"error","message":"Use the first preset and read the last two rows of the bin from 10 to 12: the corrected value, and the one “from the catalog’s own magnitudes”."}]}
+   }
+  },
+  "es": "same"
+ }
+}
