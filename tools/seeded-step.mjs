@@ -2,14 +2,16 @@
 // =============================================================================
 // A preset world stepped under a seed, every body kept at full precision
 // -----------------------------------------------------------------------------
-// Development and test (tests/effectsRealm.test.js). Builds a scenario under a
-// seed, then steps it with Math.random replaced by a stream seeded from the
-// same number, and prints every own data property of every body (numbers at
-// full precision), the debris count and the next draw. Run with and without
-// --effects (which imports js/bodyEffects.js first): the two must print the
-// same thing, because the collisions draw from the stream the explosions'
-// builders draw from. Also runs in a checkout from before the effects module
-// (the flag then does nothing), so a build of v2 can be compared.
+// Development and test (tests/effectsRealm.test.js and
+// tests/seedingEquivalence.test.js). Builds a scenario under a seed, then steps
+// it with Math.random replaced by a stream seeded from the same number (the
+// engine's stream, through js/random/streams.js), and prints every own data
+// property of every body (numbers at full precision), the debris count and the
+// next draw. Run with and without --effects (which imports js/bodyEffects.js
+// first): the two must print the same thing, because the collisions draw from
+// the stream the explosions' builders draw from. Also runs in a checkout from
+// before the effects module (the flag then does nothing), so a build of v2 can
+// be compared.
 //
 //   node tools/seeded-step.mjs stellar-graveyard 9 [300] [--effects]
 // =============================================================================
@@ -18,7 +20,7 @@ import * as physics from '../js/physics.js';
 import { applyPreset } from '../js/scenarios.js';
 import { buildWorld } from '../js/world/build.js';
 import { DEFAULT_SETTINGS, setScenarioName } from '../js/appState.js';
-import { withSeed } from '../js/rng.js';
+import { engine } from '../js/random/streams.js';
 
 const LISTS = [
   'bh_list',
@@ -71,7 +73,7 @@ export function run(key, seed, frames) {
   Date.now = () => 1.7e12 + tick++;
   performance.now = () => 5000 + tick++;
   let next;
-  withSeed(seed, () => {
+  engine(seed, () => {
     buildWorld({
       settings,
       state,
