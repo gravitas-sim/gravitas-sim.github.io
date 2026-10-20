@@ -53,7 +53,7 @@ Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
 gradebook file, <!--fact:instructorDocuments-->480<!--/fact--> generated
 instructor documents, a public validation suite
-of <!--fact:physicsChecks-->304<!--/fact--> checks, and authoring tools
+of <!--fact:physicsChecks-->332<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
 The Library lists <!--fact:libraryScenarios-->67<!--/fact--> ready-made
 scenarios: the 59 in the sandbox and <!--fact:systems3dScenarios-->8<!--/fact-->
@@ -1837,7 +1837,7 @@ listed here because this is the release that first carries it.
   the share dialog and the scenario gallery keyboard traps in practice.
 - Three modal dialogs declared `aria-modal="true"` without trapping focus.
 - Stale counts across the documentation: `/model/` claimed 135 physics checks
-  against a suite of <!--fact:physicsChecks-->304<!--/fact-->, and 48 scenarios
+  against a suite of <!--fact:physicsChecks-->332<!--/fact-->, and 48 scenarios
   against a catalog of <!--fact:scenarios-->59<!--/fact-->.
 
 ### Removed
