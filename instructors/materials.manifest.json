@@ -1,6 +1,6 @@
 {
   "version": "October 2026",
-  "generated": "2026-10-17",
+  "generated": "2026-10-20",
   "documents": 480,
   "inventory": {
     "documents": 480,
@@ -22,7 +22,7 @@
     }
   },
   "sourceFiles": 268,
-  "sourceDigest": "396d804a418148850c990d815de94383ffa37ee33137710293e6f220acdb760b",
+  "sourceDigest": "1bcb730363346444684c26920e617968a4ca1476514e28c9c93d68dd5a7f3569",
   "sources": {
     "js/activities/activities.js": "831a7712f2372ff8b54693d6669abfe9a185e677cd43411cac355fef979b8937",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -251,7 +251,7 @@
     "js/i18n/en.activities.js": "f20cf171d13a956aed5e7f15319f7ef93a918ccbc803fd441e5b08394488d5d5",
     "js/i18n/en.exoplanet.js": "f7d834d396e30716ea395efee77e99bfc90c6f159c094e5623272ce83ba8704c",
     "js/i18n/en.guides.js": "6462bfa9a931d5901393a19fdab9d5f3a27ba0969799f2dfbd7d61e501a43252",
-    "js/i18n/en.js": "d9012b76cbe933130292951ba5026e0f493fff78be6b985d558e601656b4ca72",
+    "js/i18n/en.js": "c4730d7da2ba3c563175e44b0d4850d41bddf3b0eb7d7513238baf8d3948f0b1",
     "js/i18n/en.lab3dGuides.js": "e2d4eaa678c6872969f358dffd125dad34953900f83a822de71391ba906e6bc7",
     "js/i18n/en.missionLabGuides.js": "6c859aefad385c14245218a4d53514fb35ce1443c1fcb3b055575137a6a6d086",
     "js/i18n/en.populations.js": "91250db8e3d6d843e32bb524f2e53762184ce773a10d376d03b6ddb80c0d0d87",
