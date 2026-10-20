@@ -60,8 +60,9 @@ engine(seed, () => buildWorld())     // Math.random is the engine's stream insid
 The three byte-only waits (`rvSchedule`, `rvSurvey`, `rvMonteCarlo`: +19, +19, +15 B
 gzipped, no request on any route) fit the 95 bytes together and would leave 42; they
 are held back so that the open widgets PR (#390), which wants that margin, and the
-queue keep it, and move with the same proof (their cases are already in the
-golden) when it is settled.
+queue keep it, and move with the same proof (v3's copy of the file in
+`tests/fixtures/seedingLegacy/` and a probe in `tools/seeding-probes.mjs`) when it
+is settled.
 
 Not on the API and not seeded, kept as `Math.random` with the file listed in
 `eslint.config.js` (`MATH_RANDOM_ALLOWED`): `main.js` (a colour), `audio.js` (a
@@ -73,27 +74,34 @@ algorithm, in the widgets family), `validation/groups/` (not published to a visi
 
 ## Equivalence
 
-`tests/seedingEquivalence.test.js` (20 tests):
+`tests/seedingEquivalence.test.js` (18 tests):
 
-1. **Every moved site, 214 cases** (`tools/seeding-golden.mjs`,
-   `tests/fixtures/seedingGolden.json`, recorded on v3 at 9847b6e5 before any site
-   moved and committed first). 22 public functions called with thirteen kinds of
+1. **Every moved site, 145 cases, against v3 in the same process**
+   (`tools/seeding-probes.mjs`, `tests/fixtures/seedingLegacy/`). The ten modules
+   as v3 had them at 9847b6e5 are kept verbatim (only their import specifiers are
+   rewritten to reach the modules that did not change), and 14 public functions
+   are called through them and through the current modules with thirteen kinds of
    seed (text, an accented word, the empty text, digits as text and as a number, a
-   number that is not an integer, a negative one, zero, NaN, null, undefined) and
-   the SHA-256 of every number returned, at full precision. It includes the sites
-   that wait, so the baseline is already there when one moves.
+   number that is not an integer, a negative one, zero, NaN, null, undefined). Each
+   number is compared with `Object.is`. Nothing is a stored hash, on purpose: nearly
+   every site passes through `Math.log`, `cos`, `exp` or `pow` after the draw, and
+   those are not bit-identical between Node versions (CI runs Node 20, a Mac Node
+   24), so a digest recorded on one machine fails on the other with nothing
+   changed. A deliberate change of one stream key makes the comparison fail.
+   What is stored is raw draws only (`tests/fixtures/seedingRawGolden.json`, 25
+   SHA-256 of 64 uniforms each): mulberry32 is `Math.imul` and a division by 2^32,
+   exact everywhere.
 2. **An independent reference** written in the test from the algorithm alone
    (FNV-1a, mulberry32, the documented rule for a seed) agrees with `stream`, a
    fork, `state` and `gaussian` bit for bit, including the keys `undefined:x` and
    `null:x` that a template literal writes.
-3. **The engine's stream**: `engine` is `withSeed` itself, Math.random is restored
-   after a return and a throw, and three worlds stepped through it by
-   `tools/seeded-step.mjs` (stellar-graveyard 9, galactic-collision 1,
-   compact-object-zoo 3: 63 to 965 bodies, the debris counts and the next draw)
-   equal what v3 printed at 9847b6e5. The effects trace
-   (`tests/effects.test.js`, nineteen events), the paired seeded steps
-   (`tests/effectsRealm.test.js`), the events and conservation goldens and the world
-   golden are unchanged and pass.
+3. **The engine's stream**: `engine` is `withSeed` itself (object identity),
+   `Math.random` inside it is the stream's and is restored after a return and a
+   throw. `tools/seeded-step.mjs` runs on `engine`, so the paired seeded steps of
+   `tests/effectsRealm.test.js` (three worlds, with and without the effects module),
+   the effects trace (`tests/effects.test.js`, nineteen events) and the events,
+   conservation and world goldens exercise it and pass unchanged. No hash of an
+   integrated world is stored by this prompt.
 4. **A Worker draws what the page draws**; jobs draw the same whatever order they
    run in; a fork is a sibling.
 5. **The lint rule**: `Math.random` is refused in any module of `js/` outside
@@ -113,8 +121,10 @@ is the value to write.
 ## Adding a stream or moving a site
 
 A new algorithm is a new `ALGORITHM` value and a new row here, never a change to
-this one. Before a site moves: add its call to `tools/seeding-golden.mjs`, run it
-on the commit before, and keep the answer. After: `node tools/route-budget.mjs`
+this one. Before a site moves: copy v3's version of its file into
+`tests/fixtures/seedingLegacy/` (import specifiers rewritten, nothing else) and add
+its call to `tools/seeding-probes.mjs`; compare in one process, never against a
+stored digest of anything that reaches `Math.log` or `cos`. After: `node tools/route-budget.mjs`
 (both configurations) and `node tools/data-budget.mjs`. The module costs 850 bytes
 gzipped in the first-visit precache; the sites it replaced gave
 back 831 (a copy of the generator in `light/model.js`, three copies of the normal

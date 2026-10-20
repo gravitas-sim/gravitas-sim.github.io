@@ -5,29 +5,34 @@
 // experiments, injection) and the call sites that moved onto it must draw
 // exactly what they drew before. The proofs, in this file:
 //
-//   1. tools/seeding-golden.mjs calls every moved site through its public
-//      function with thirteen kinds of seed; tests/fixtures/seedingGolden.json
-//      is its answer on v3 at 9847b6e5, before any site moved (214 cases,
-//      SHA-256 of every number at full precision).
-//   2. A reference written here from the algorithm alone (FNV-1a over the
-//      seed's text, mulberry32) agrees with the API bit for bit, so the API is
-//      not only agreeing with itself.
-//   3. The engine's stream is js/rng.js's own withSeed: three seeded worlds
-//      stepped through the adapter equal what v3 printed at 9847b6e5
-//      (tests/fixtures/seedingEngineGolden.json), bodies, debris and the next
-//      draw.
-//   4. A Worker draws the same numbers as the page, a job's draws come from
-//      its own fork whatever order jobs run in, and a fork is a sibling.
+//   1. tools/seeding-probes.mjs calls every moved site through its public
+//      function with thirteen kinds of seed, once through v3's own copy of the
+//      ten modules (tests/fixtures/seedingLegacy/, as they were at 9847b6e5) and
+//      once through the current ones, in this process, and compares every
+//      number with Object.is. No digest of anything that passes through
+//      Math.log, cos, exp or pow is stored: those differ in the last bit between
+//      Node 20 (CI) and Node 24, so a hash recorded on one would fail on the
+//      other with nothing changed.
+//   2. What is stored is only raw draws (tests/fixtures/seedingRawGolden.json):
+//      mulberry32 is Math.imul, integer arithmetic and a division by 2^32, exact
+//      on every Node, so a SHA-256 of the uniforms of a seed means the same
+//      thing everywhere.
+//   3. A reference written here from the algorithm alone (FNV-1a over the seed's
+//      text, mulberry32) agrees with the API bit for bit.
+//   4. The engine's stream is js/rng.js's own withSeed (object identity), its
+//      draws are the stream's, and tests/effectsRealm.test.js steps three seeded
+//      worlds through tools/seeded-step.mjs, which now runs on `engine`.
+//   5. A Worker draws the same numbers as the page, a job's draws come from its
+//      own fork whatever order jobs run in, and a fork is a sibling.
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
 import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { promisify } from 'node:util';
 import { Worker } from 'node:worker_threads';
 
-import { traceSeeding } from '../tools/seeding-golden.mjs';
+import { compareSites } from '../tools/seeding-probes.mjs';
 import { mulberry32, normalizeSeed, withSeed } from '../js/rng.js';
 import {
   ALGORITHM,
@@ -78,14 +83,55 @@ function reference(seed32) {
 }
 
 describe('every moved call site draws what it drew before', () => {
-  test('214 cases at full precision against v3 at 9847b6e5', async () => {
-    const golden = fixture('seedingGolden.json');
-    const now = await traceSeeding();
-    expect(Object.keys(now)).toEqual(Object.keys(golden));
-    for (const id of Object.keys(golden))
-      expect({ id, ...now[id] }).toEqual({ id, ...golden[id] });
-    expect(Object.keys(golden)).toHaveLength(214);
-  }, 60000);
+  test('145 cases, each number Object.is-equal to v3 run in this process', async () => {
+    const cases = await compareSites();
+    expect(cases).toHaveLength(145);
+    expect(cases.filter(c => c.mismatch)).toEqual([]);
+    // every case returned numbers, so equal does not mean both were empty
+    expect(Math.min(...cases.map(c => c.n))).toBeGreaterThanOrEqual(12);
+  }, 120000);
+
+  test('raw uniforms of a seed, a fork and a state match what js/rng.js gave on v3', () => {
+    const golden = fixture('seedingRawGolden.json');
+    const sha = next =>
+      createHash('sha256')
+        .update(draws(next).map(String).join('\n'))
+        .digest('hex');
+    const seeds = [
+      'a',
+      'kepler-3',
+      'été',
+      '',
+      '7',
+      7,
+      2024,
+      1.5,
+      -3,
+      0,
+      NaN,
+      null,
+      undefined,
+      2 ** 40,
+    ];
+    for (const s of seeds)
+      expect(sha(stream('noise', s))).toBe(
+        golden['raw:' + (typeof s === 'string' ? JSON.stringify(s) : String(s))]
+      );
+    for (const l of [
+      ['run-4', 'epoch', 3],
+      [17, 'z'],
+      ['k', 'nights'],
+      [undefined, 'x'],
+      [null, 'x'],
+      ['s', 'a', 'b', 'c'],
+    ])
+      expect(sha(stream('forward', ...l))).toBe(
+        golden['fork:' + l.map(String).join(':')]
+      );
+    for (const s of [0, 1, 2202, 0x5c4e21d3, 4294967295])
+      expect(sha(state('forward', s))).toBe(golden['state:' + s]);
+    expect(Object.keys(golden)).toHaveLength(25);
+  });
 });
 
 describe('the API against an independent reference', () => {
@@ -221,31 +267,6 @@ describe('the engine adapter is js/rng.js withSeed', () => {
     );
     same(seen, draws(reference(fnv1a('kepler-3')), 16));
   });
-
-  const execFileAsync = promisify(execFile);
-  const golden = fixture('seedingEngineGolden.json');
-  for (const [id, want] of Object.entries(golden)) {
-    const [key, seed, frames] = id.split(':');
-    test(`${key}, seed ${seed}: every body, the debris and the next draw (${frames} frames)`, async () => {
-      const { stdout } = await execFileAsync(
-        process.execPath,
-        [
-          new URL('../tools/seeded-step.mjs', import.meta.url).pathname,
-          key,
-          seed,
-          frames,
-        ],
-        { maxBuffer: 1 << 28, encoding: 'utf8' }
-      );
-      const got = JSON.parse(stdout);
-      expect(got.next).toBe(want.next);
-      expect(got.counts).toEqual(want.counts);
-      expect(got.rows).toHaveLength(want.bodies);
-      expect(
-        createHash('sha256').update(got.rows.join('\n')).digest('hex')
-      ).toBe(want.sha256);
-    }, 120000);
-  }
 });
 
 describe('a Worker and the page draw the same numbers', () => {
