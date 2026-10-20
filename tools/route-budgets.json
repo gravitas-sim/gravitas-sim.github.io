@@ -84,7 +84,7 @@
         "requests": 19
       },
       "lab3d": {
-        "kb": 92.8,
+        "kb": 86.8,
         "requests": 11
       },
       "lab3d-lab": {
@@ -101,7 +101,7 @@
       },
       "mission-lab": {
         "kb": 431.6,
-        "requests": 37
+        "requests": 36
       },
       "adoption": {
         "kb": 9.9,

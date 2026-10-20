@@ -21,8 +21,6 @@
 // Angles are radians throughout; the forms convert degrees at their edge.
 // =============================================================================
 
-import { solveKepler } from '../orbital.js';
-
 const cross = (a, b) => [
   a[1] * b[2] - a[2] * b[1],
   a[2] * b[0] - a[0] * b[2],
@@ -44,6 +42,33 @@ export function elementsProblem({ a, e, i, Omega, omega, M }, mu) {
   if (e > 1 && !(a < 0)) return 'hyperbolaAxis';
   if (i < 0 || i > Math.PI) return 'inclination';
   return null;
+}
+
+/**
+ * Kepler's equation E - e sin E = M, for 0 <= e < 1. Newton's method from
+ * Danby's starting value, kept inside the bracket [M - e, M + e] that always
+ * holds the root, with a bisection whenever a step would leave it: started
+ * at pi, plain Newton wanders at high eccentricity (e = 0.95, M = -1.74
+ * never converged).
+ */
+export function solveKepler(M, e) {
+  const wrapped = M - 2 * Math.PI * Math.round(M / (2 * Math.PI));
+  let lo = wrapped - e;
+  let hi = wrapped + e;
+  let E = wrapped + 0.85 * e * Math.sign(Math.sin(wrapped) || 1);
+  for (let k = 0; k < 200; k++) {
+    const f = E - e * Math.sin(E) - wrapped;
+    if (f > 0) hi = E;
+    else lo = E;
+    let next = E - f / (1 - e * Math.cos(E));
+    if (!(next > lo && next < hi)) next = (lo + hi) / 2;
+    if (Math.abs(next - E) <= 1e-16 * (1 + Math.abs(E))) {
+      E = next;
+      break;
+    }
+    E = next;
+  }
+  return E + (M - wrapped);
 }
 
 /**

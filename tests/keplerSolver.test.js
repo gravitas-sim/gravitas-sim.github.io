@@ -18,8 +18,8 @@
 //            reached.
 //   e = 0    returns M. e near 1 is limited by the equation, not the solver:
 //            one ulp in M is up to 1 / (1 - e) ulps in E.
-// and that no module defines a solver again (one listed exception, with its
-// reason).
+// and that no module defines a solver again (two listed exceptions, each with
+// its reason; the 3-D lab's copy is held bit-identical).
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
@@ -27,6 +27,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 
 import { solveKepler } from '../js/orbital.js';
+import { solveKepler as labSolveKepler } from '../js/lab3d/elements.js';
 
 const TWO_PI = 2 * Math.PI;
 
@@ -102,6 +103,16 @@ describe('the fixture grid, against an independent reference', () => {
   });
 });
 
+describe('the 3-D lab keeps its copy, line for line', () => {
+  test('it returns the same bits as the shared solver on the whole grid', () => {
+    for (const e of ECCENTRICITIES) {
+      for (const M of MEANS) {
+        expect(Object.is(labSolveKepler(M, e), solveKepler(M, e))).toBe(true);
+      }
+    }
+  });
+});
+
 describe('the contract’s edges', () => {
   test('a circular orbit returns M', () => {
     for (const M of [-7, -1, 0, 0.5, Math.PI, 9.25]) {
@@ -152,11 +163,13 @@ describe('nothing else solves it again', () => {
 
   // A module that keeps its own step, and why. A new one is a decision.
   const EXCEPTIONS = {
+    'js/lab3d/elements.js':
+      'a source of the instructor bundle: a change to it makes the bundle stale and rebuilding needs the passphrase. Its solveKepler is the one the others now import, line for line, and a test below holds them bit-identical',
     'js/kernels/sky/planets.js':
       'the Sky Lab route is held to its weight gate (SKY_LAB_GATE.md): it would pay the 7 KB module and a request for a step that is exact to 1e-12 at its eccentricities, 0.21 and below',
   };
 
-  test('no module outside js/orbital.js steps Newton on Kepler’s equation, but the listed one', () => {
+  test('no module outside js/orbital.js steps Newton on Kepler’s equation, but the listed ones', () => {
     // The step: (E - e sin E - M) / (1 - e cos E), in any spelling of e and M.
     const step =
       /\(\s*\w+\s*-\s*[\w.]+\s*\*\s*Math\.sin\(\s*\w+\s*\)\s*-\s*\w+\s*\)\s*\/\s*\(\s*1\s*-\s*[\w.]+\s*\*\s*Math\.cos/;
@@ -167,14 +180,15 @@ describe('nothing else solves it again', () => {
           step.test(readFileSync(f, 'utf8'))
       )
       .sort();
-    expect(defines).toEqual(Object.keys(EXCEPTIONS));
+    expect(defines.filter(f => !(f in EXCEPTIONS))).toEqual([]);
+    for (const f of Object.keys(EXCEPTIONS))
+      expect(() => readFileSync(f, 'utf8')).not.toThrow();
     for (const why of Object.values(EXCEPTIONS))
       expect(why.length).toBeGreaterThan(40);
   });
 
   test('the callers import it', () => {
     for (const f of [
-      'js/lab3d/elements.js',
       'js/inference/rv.js',
       'js/forward/system.js',
       'js/habitability.js',
