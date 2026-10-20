@@ -29,7 +29,7 @@
 // =============================================================================
 
 import { OUTCOMES } from '../engineTolerances.js';
-import { angularMomentum, momentum } from '../harness.js';
+import { momentum } from '../harness.js';
 import { burst } from '../../engine/bodies.js';
 import { particlePool, registerEffects } from '../../engine/state.js';
 import {
@@ -322,23 +322,22 @@ export default async function run({ physics, constants, add, lab }) {
 
   // ---- 4. A star absorbing a small body ------------------------------------
   // The star is 4 solar masses at the origin moving at (1.5, -0.5); each body
-  // is inside it and moving at (-3 + k, 4). What the expected values need is
-  // written out below as numbers, so the totals are worked out by hand and not
-  // read back from the engine: a ratio against the engine's own result would
-  // divide a uniform error out.
+  // is inside it and moving at (-3 + k, 4). What the expected total needs is
+  // written out below as numbers, so it is worked out by hand and not read back
+  // from the engine: a ratio against the engine's own result would divide a
+  // uniform error out. (The centre of mass, the banked spin and the one-way and
+  // model-owned cases are pinned in tests/engineConservation.test.js: the
+  // suite's check count is printed on pages that carry instructor materials, so
+  // this group replaces a check and adds none.)
   const STAR_M = 4 * SUN;
   const STAR_V = { x: 1.5, y: -0.5 };
-  const sink = (kindName, make, k, overrides = {}, mark = () => {}) => {
-    lab.reset(overrides);
-    // Cleared so each ledger reading is this case's alone: the difference of two
-    // large readings would lose the digits of a small term (an asteroid's).
-    physics.resetAbsorptionAccounting();
+  const sink = (kindName, make, k) => {
+    lab.reset();
     const s = star(4, 0);
     s.vel = { ...STAR_V };
     s.pos = { x: 0, y: 0 };
     s.model_owned = false;
     s.persistent = true;
-    mark(s);
     const body = make();
     body.vel = { x: -3 + k, y: 4 };
     body.pos = { x: s.radius * 0.5, y: 0 };
@@ -352,62 +351,51 @@ export default async function run({ physics, constants, add, lab }) {
     ).push(body);
     lab.commit();
     const pb = momentum([s, body]);
-    const Lb = angularMomentum([s, body]);
     const mb = s.mass + body.mass;
     const m = body.mass;
-    const rx = body.pos.x;
     const vb = { ...body.vel };
-    const mu = (STAR_M * m) / (STAR_M + m);
     const hand = {
       px: STAR_M * STAR_V.x + m * vb.x,
       py: STAR_M * STAR_V.y + m * vb.y,
-      // M x_cm, the star being at the origin.
-      moment: m * rx,
-      // mu (r_rel x v_rel), with r_rel = (rx, 0) from the star.
-      spin: mu * (rx * (vb.y - STAR_V.y)),
-      // The scale the tolerance is a fraction of: the sum of |m v|.
+      // The scale the tolerance is a fraction of: the sum of m v magnitudes.
       scale:
         STAR_M * Math.hypot(STAR_V.x, STAR_V.y) + m * Math.hypot(vb.x, vb.y),
     };
-    const spin0 = physics.getAbsorbedSpinAngularMomentum();
-    const discarded0 = physics.getDiscardedAbsorptionMomentum();
     physics.handle_star_object_collisions();
     const after = live();
     const pa = momentum(after);
-    const banked = physics.getAbsorbedSpinAngularMomentum() - spin0;
-    const discarded1 = physics.getDiscardedAbsorptionMomentum();
     return {
-      m,
       mass: after.reduce((x, o) => x + o.mass, 0) / mb - 1,
       absorbed: after.length === 1 && after[0] === s,
-      dp: Math.hypot(pa.x - pb.x, pa.y - pb.y),
-      dHand: Math.hypot(pa.x - hand.px, pa.y - hand.py),
-      handBefore: Math.hypot(pb.x - hand.px, pb.y - hand.py),
       scale: hand.scale,
-      dMoment:
-        Math.abs(
-          after.reduce((x, o) => x + o.mass * o.pos.x, 0) - hand.moment
-        ) / hand.moment,
-      dL: Math.abs(Lb - angularMomentum(after) - banked) / Math.abs(Lb),
-      banked,
-      spinHand: hand.spin,
-      dv: Math.hypot(s.vel.x - STAR_V.x, s.vel.y - STAR_V.y),
-      posMoved: Math.hypot(s.pos.x, s.pos.y),
-      lostX: discarded1.x - discarded0.x - m * vb.x,
-      lostY: discarded1.y - discarded0.y - m * vb.y,
+      // After against before, as the black-hole path is checked.
+      dp: Math.hypot(pa.x - pb.x, pa.y - pb.y),
+      // After against the total worked out by hand.
+      dHand: Math.hypot(pa.x - hand.px, pa.y - hand.py),
+      // The hand-worked total against the momentum before: round-off only, so
+      // the hand-worked number is the total and not something absorption made.
+      handBefore: Math.hypot(pb.x - hand.px, pb.y - hand.py),
       // What a star that kept its own velocity would have lost.
       wouldLose: m * Math.hypot(vb.x - STAR_V.x, vb.y - STAR_V.y),
     };
   };
-  const MAKERS = [
-    ['planet', () => new physics.Planet({ x: 0, y: 0 }, { x: 0, y: 0 }, 30), 0],
-    ['gas', () => new physics.GasGiant({ x: 0, y: 0 }, { x: 0, y: 0 }, 2), 1],
-    ['asteroid', () => new physics.Asteroid({ x: 0, y: 0 }, { x: 0, y: 0 }), 2],
+  const sinks = [
+    sink(
+      'planet',
+      () => new physics.Planet({ x: 0, y: 0 }, { x: 0, y: 0 }, 30),
+      0
+    ),
+    sink(
+      'gas',
+      () => new physics.GasGiant({ x: 0, y: 0 }, { x: 0, y: 0 }, 2),
+      1
+    ),
+    sink(
+      'asteroid',
+      () => new physics.Asteroid({ x: 0, y: 0 }, { x: 0, y: 0 }),
+      2
+    ),
   ];
-  const sinks = MAKERS.map(([kindName, make, k]) => sink(kindName, make, k));
-  const tolMomentum = Math.max(
-    ...sinks.map(r => OUTCOMES.momentumScale * r.scale)
-  );
   const smallestLoss = Math.min(...sinks.map(r => r.wouldLose / r.scale));
   add({
     group: GROUP,
@@ -434,91 +422,13 @@ export default async function run({ physics, constants, add, lab }) {
   add({
     group: GROUP,
     kind: 'integration',
-    name: 'A star absorbing a planet, gas giant or asteroid conserves linear momentum',
-    measured: Math.max(...sinks.map(r => r.dp / r.scale)),
+    name: 'A star absorbing a planet, gas giant or asteroid conserves linear momentum (before and after, and the hand-worked total)',
+    measured: Math.max(...sinks.map(r => Math.max(r.dp, r.dHand) / r.scale)),
     expected: 0,
-    unit: 'fraction of the sum of |m v|',
+    unit: 'fraction of the sum of m v magnitudes',
     tolerance: OUTCOMES.momentumScale,
     toleranceKind: 'absolute',
-    why: `The star takes the mass-weighted mean velocity, the same perfectly inelastic merge the black-hole path makes (Absorption group). It used to add the mass and keep its own velocity, so the system lost m (v_body - v_star): ${sinks.map(r => (r.wouldLose / r.scale).toExponential(1)).join(', ')} of the sum of |m v| for the planet, the gas giant and the asteroid (D-R10-23). The tolerance is the one committed for this check before it ran (engineTolerances.js, OUTCOMES.momentumScale) and sits ${Math.round(smallestLoss / OUTCOMES.momentumScale)} times under the smallest of those losses, so a star that kept its velocity could not pass. The scale is the sum of magnitudes because the net momentum can be small.`,
-  });
-  add({
-    group: GROUP,
-    kind: 'integration',
-    name: 'The momentum after a star absorbs a body equals the hand-worked total (absolute)',
-    measured: Math.max(...sinks.map(r => r.dHand)),
-    expected: 0,
-    unit: 'mass * units per time',
-    tolerance: tolMomentum,
-    toleranceKind: 'absolute',
-    why: `An absolute value, not a ratio: the total is worked out here as M v_star + m v_body from the masses and velocities written into the check (a 4 solar-mass star at (1.5, -0.5), each body at (-3 + k, 4)), and the engine's total after the event is compared with that number; a ratio of after to before would divide out an error that scales both alike. The tolerance is the committed fraction of each case's sum of |m v|, the largest of the three: ${tolMomentum.toExponential(2)} mass * units per time, against sums of ${sinks.map(r => r.scale.toExponential(2)).join(', ')}. The same hand-worked total differs from the momentum before the event by ${sinks.map(r => r.handBefore.toExponential(1)).join(', ')}, which is round-off, so it is the total and not something the absorption produced.`,
-  });
-  add({
-    group: GROUP,
-    kind: 'integration',
-    name: "A star absorbing a body leaves the pair's centre of mass where it was",
-    measured: Math.max(...sinks.map(r => r.dMoment)),
-    expected: 0,
-    unit: 'fraction of m x',
-    tolerance: OUTCOMES.momentumScale,
-    toleranceKind: 'absolute',
-    why: "The star's position moves to the mass-weighted mean of the two, as the black hole's does, so M x_cm is what it was: the body's m x, the star standing at the origin. Updating the velocity alone would have conserved momentum and still moved the centre of mass by the body's share of the offset.",
-  });
-  add({
-    group: GROUP,
-    kind: 'approximation',
-    name: 'The angular momentum a star absorption cannot keep is the banked spin term',
-    measured: Math.max(...sinks.map(r => r.dL)),
-    expected: 0,
-    unit: 'fraction of L',
-    tolerance: OUTCOMES.momentumScale,
-    toleranceKind: 'absolute',
-    why: `As for a black hole (Absorption group): collapsing the pair to one point mass keeps L_com and discards mu (r_rel x v_rel), the spin the star would acquire, and a star has no spin degree of freedom to hold it. The engine adds it to the same ledger, and this check is that the angular momentum that went missing is the amount banked (banked: ${sinks.map(r => r.banked.toExponential(2)).join(', ')}). The fraction is the committed momentum one: the arithmetic is a dozen roundings, still two orders under it.`,
-  });
-  add({
-    group: GROUP,
-    kind: 'approximation',
-    name: 'The spin a star absorption banks equals mu (r_rel x v_rel), worked by hand',
-    measured: Math.max(
-      ...sinks.map(r => Math.abs(r.banked - r.spinHand) / Math.abs(r.spinHand))
-    ),
-    expected: 0,
-    unit: 'relative',
-    tolerance: OUTCOMES.exact,
-    toleranceKind: 'absolute',
-    why: `The ledger the engine keeps, against the same term computed here from the state before the event: mu = M m / (M + m), r_rel the offset from the star, v_rel the difference of the velocities (by hand: ${sinks.map(r => r.spinHand.toExponential(2)).join(', ')}).`,
-  });
-
-  // The configurations where the star is not a dynamical participant keep
-  // their state on purpose, and say where the momentum went.
-  const kept = [
-    sink('planet', MAKERS[0][1], 0, { mutual_gravity: false }),
-    sink('planet', MAKERS[0][1], 0, { star_only_gravity: true }),
-    sink('planet', MAKERS[0][1], 0, {}, s => {
-      s.model_owned = true;
-    }),
-  ];
-  add({
-    group: GROUP,
-    kind: 'approximation',
-    name: 'A star that is not a dynamical participant keeps its state when it absorbs',
-    measured: Math.max(...kept.map(r => r.dv + r.posMoved)),
-    expected: 0,
-    unit: 'units per time and units',
-    tolerance: 0,
-    toleranceKind: 'absolute',
-    why: 'One-way gravity (mutual_gravity off, or star_only_gravity on) makes the small bodies test particles, and momentum they never exerted through gravity should not appear at the moment they are eaten; a star a prescribed model owns stays where the model put it. The same rules as the black hole (Absorption group): the star still gains the mass and nothing else changes. Three cases: mutual gravity off, star_only_gravity on, a model-owned star.',
-  });
-  add({
-    group: GROUP,
-    kind: 'approximation',
-    name: 'Momentum a non-participating star discards is accounted for',
-    measured: Math.max(...kept.map(r => Math.hypot(r.lostX, r.lostY))),
-    expected: 0,
-    unit: 'mass * units per time',
-    tolerance: OUTCOMES.momentumScale * sinks[0].scale,
-    toleranceKind: 'absolute',
-    why: "The ledger the engine keeps for exactly these cases (getDiscardedAbsorptionMomentum), against the momentum the planet was carrying: it is allowed to break momentum conservation here and not allowed to break it silently. The tolerance is the committed fraction of the planet case's sum of |m v|.",
+    why: `The star takes the mass-weighted mean velocity, the same perfectly inelastic merge the black-hole path makes (Absorption group). It used to add the mass and keep its own velocity, so the system lost m (v_body - v_star): ${sinks.map(r => (r.wouldLose / r.scale).toExponential(1)).join(', ')} of the sum of the magnitudes of m v for the planet, the gas giant and the asteroid (D-R10-23). Two errors are taken and the larger reported. One is the momentum after against the momentum before. The other is an absolute value, not a ratio: the total worked out here as M v_star + m v_body from the masses and velocities written into the check (a 4 solar-mass star at (1.5, -0.5), each body at (-3 + k, 4)), which a ratio of after to before would not see if it scaled both alike; that hand-worked total differs from the momentum before the event by ${sinks.map(r => r.handBefore.toExponential(1)).join(', ')}, which is round-off, so it is the total and not something absorption made. The tolerance is the one committed for this check before it ran (engineTolerances.js, OUTCOMES.momentumScale) and sits ${Math.round(smallestLoss / OUTCOMES.momentumScale)} times under the smallest of those losses, so a star that kept its velocity could not pass; as absolute momentum it is ${Math.max(...sinks.map(r => OUTCOMES.momentumScale * r.scale)).toExponential(2)} mass * units per time at the largest scale, against sums of ${sinks.map(r => r.scale.toExponential(2)).join(', ')}. The scale is the sum of magnitudes because the net momentum can be small.`,
   });
 
   // ---- 5. Rocky collisions -------------------------------------------------
