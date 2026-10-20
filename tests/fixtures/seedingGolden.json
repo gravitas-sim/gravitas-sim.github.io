@@ -1,0 +1,1286 @@
+{
+  "inference.gaussian(\"a\")": {
+    "n": 24,
+    "first": "-0.34878334911922365",
+    "last": "-1.264535701601406",
+    "sha256": "29a328859fa5ba7d8a908d111fbbd240d3bde8d70a686f0b3121c8b631f8b679"
+  },
+  "inference.gaussian(\"kepler-3\")": {
+    "n": 24,
+    "first": "-0.2663889531445146",
+    "last": "0.1463202242702024",
+    "sha256": "4b88ee91555ce33d5f5ef53a63b7676be2639618260e89533e1c18a596b45af7"
+  },
+  "inference.gaussian(\"été\")": {
+    "n": 24,
+    "first": "-1.793324892261252",
+    "last": "-0.7475535426893604",
+    "sha256": "fe653495044070bc58ac6a5faa0b0a884c85cb3ab0f34d02f714388eac4e8774"
+  },
+  "inference.gaussian(\"\")": {
+    "n": 24,
+    "first": "1.6264323081902676",
+    "last": "0.787616882606861",
+    "sha256": "c60b203f5df076d239487e8499324b6ef0eabe28984edc84ae79e7d1dc002f7c"
+  },
+  "inference.gaussian(\"7\")": {
+    "n": 24,
+    "first": "2.759372987028844",
+    "last": "1.4287817562825116",
+    "sha256": "afe96ca4979d63263fbc6c1c8b9f9f7edd148abe7111e95c8d9f61b59a108701"
+  },
+  "inference.gaussian(7)": {
+    "n": 24,
+    "first": "2.759372987028844",
+    "last": "1.4287817562825116",
+    "sha256": "afe96ca4979d63263fbc6c1c8b9f9f7edd148abe7111e95c8d9f61b59a108701"
+  },
+  "inference.gaussian(2024)": {
+    "n": 24,
+    "first": "-0.15738025902594666",
+    "last": "-0.9561558038725344",
+    "sha256": "6533cd92a70aee02d568d7ddbb1e004a663c2c2fb434f8f42c76264e4e3b7090"
+  },
+  "inference.gaussian(1.5)": {
+    "n": 24,
+    "first": "1.609776665603876",
+    "last": "0.46608340957833694",
+    "sha256": "d7ff0cdc845f2dd0e45789b1a958b18a9adead2ec30a9936008bcc4d58257d29"
+  },
+  "inference.gaussian(-3)": {
+    "n": 24,
+    "first": "0.3167619489389688",
+    "last": "1.317613593741435",
+    "sha256": "26a0e0575e58fa9f1c66fa305120a162317bc88fc28990218427778db48c8a50"
+  },
+  "inference.gaussian(0)": {
+    "n": 24,
+    "first": "1.6264323081902676",
+    "last": "0.787616882606861",
+    "sha256": "c60b203f5df076d239487e8499324b6ef0eabe28984edc84ae79e7d1dc002f7c"
+  },
+  "inference.gaussian(NaN)": {
+    "n": 24,
+    "first": "-1.7297250739814356",
+    "last": "0.4660457981713636",
+    "sha256": "db23bdab9b8ed799eb2f157dabd31b0164f2c89e3e3c1ababae9c1c8a767a640"
+  },
+  "inference.gaussian(null)": {
+    "n": 24,
+    "first": "-0.7783739997014771",
+    "last": "-1.195896437224505",
+    "sha256": "ec8b367a7c962425c3ca46403501b825afdaea318069f98949352c4fae61e77c"
+  },
+  "inference.gaussian(undefined)": {
+    "n": 24,
+    "first": "-0.05219452023960455",
+    "last": "1.7044073891888507",
+    "sha256": "8a87e7c324bb06c52f38e93274e3a1d249dc938ae707d68a8eb37f207ab5fb14"
+  },
+  "lensing.gaussianNoise(\"a\")": {
+    "n": 24,
+    "first": "-0.34878334911922365",
+    "last": "-1.264535701601406",
+    "sha256": "29a328859fa5ba7d8a908d111fbbd240d3bde8d70a686f0b3121c8b631f8b679"
+  },
+  "lensing.gaussianNoise(\"kepler-3\")": {
+    "n": 24,
+    "first": "-0.2663889531445146",
+    "last": "0.1463202242702024",
+    "sha256": "4b88ee91555ce33d5f5ef53a63b7676be2639618260e89533e1c18a596b45af7"
+  },
+  "lensing.gaussianNoise(\"été\")": {
+    "n": 24,
+    "first": "-1.793324892261252",
+    "last": "-0.7475535426893604",
+    "sha256": "fe653495044070bc58ac6a5faa0b0a884c85cb3ab0f34d02f714388eac4e8774"
+  },
+  "lensing.gaussianNoise(\"\")": {
+    "n": 24,
+    "first": "1.6264323081902676",
+    "last": "0.787616882606861",
+    "sha256": "c60b203f5df076d239487e8499324b6ef0eabe28984edc84ae79e7d1dc002f7c"
+  },
+  "lensing.gaussianNoise(\"7\")": {
+    "n": 24,
+    "first": "2.759372987028844",
+    "last": "1.4287817562825116",
+    "sha256": "afe96ca4979d63263fbc6c1c8b9f9f7edd148abe7111e95c8d9f61b59a108701"
+  },
+  "lensing.gaussianNoise(7)": {
+    "n": 24,
+    "first": "2.759372987028844",
+    "last": "1.4287817562825116",
+    "sha256": "afe96ca4979d63263fbc6c1c8b9f9f7edd148abe7111e95c8d9f61b59a108701"
+  },
+  "lensing.gaussianNoise(2024)": {
+    "n": 24,
+    "first": "-0.15738025902594666",
+    "last": "-0.9561558038725344",
+    "sha256": "6533cd92a70aee02d568d7ddbb1e004a663c2c2fb434f8f42c76264e4e3b7090"
+  },
+  "lensing.gaussianNoise(1.5)": {
+    "n": 24,
+    "first": "1.609776665603876",
+    "last": "0.46608340957833694",
+    "sha256": "d7ff0cdc845f2dd0e45789b1a958b18a9adead2ec30a9936008bcc4d58257d29"
+  },
+  "lensing.gaussianNoise(-3)": {
+    "n": 24,
+    "first": "0.3167619489389688",
+    "last": "1.317613593741435",
+    "sha256": "26a0e0575e58fa9f1c66fa305120a162317bc88fc28990218427778db48c8a50"
+  },
+  "lensing.gaussianNoise(0)": {
+    "n": 24,
+    "first": "1.6264323081902676",
+    "last": "0.787616882606861",
+    "sha256": "c60b203f5df076d239487e8499324b6ef0eabe28984edc84ae79e7d1dc002f7c"
+  },
+  "lensing.gaussianNoise(NaN)": {
+    "n": 24,
+    "first": "-1.7297250739814356",
+    "last": "0.4660457981713636",
+    "sha256": "db23bdab9b8ed799eb2f157dabd31b0164f2c89e3e3c1ababae9c1c8a767a640"
+  },
+  "lensing.gaussianNoise(null)": {
+    "n": 24,
+    "first": "-0.7783739997014771",
+    "last": "-1.195896437224505",
+    "sha256": "ec8b367a7c962425c3ca46403501b825afdaea318069f98949352c4fae61e77c"
+  },
+  "lensing.gaussianNoise(undefined)": {
+    "n": 24,
+    "first": "-0.05219452023960455",
+    "last": "1.7044073891888507",
+    "sha256": "8a87e7c324bb06c52f38e93274e3a1d249dc938ae707d68a8eb37f207ab5fb14"
+  },
+  "cosmology.syntheticHubbleDiagram(\"a\")": {
+    "n": 53,
+    "first": "33.33853188742937",
+    "last": "0.9611806304189149",
+    "sha256": "b3a3ffc7e90eedd1d9ddcfa1697b3e62cc35fa8de0192b471580953c92510077"
+  },
+  "cosmology.syntheticHubbleDiagram(\"kepler-3\")": {
+    "n": 53,
+    "first": "37.823707983760045",
+    "last": "0.9553140709475634",
+    "sha256": "e74b24d2cd6b67461961ab972cd61db0f8c60bc719d7b8f8e8b41cca51d665ca"
+  },
+  "cosmology.syntheticHubbleDiagram(\"été\")": {
+    "n": 53,
+    "first": "33.369484322000055",
+    "last": "0.9430861058435314",
+    "sha256": "38814dc920c20c114d49955d28e77204802346e32d1939fb22a38ee8849a5c98"
+  },
+  "cosmology.syntheticHubbleDiagram(\"\")": {
+    "n": 53,
+    "first": "35.040705362301665",
+    "last": "0.9442361575778325",
+    "sha256": "7663549ee06aa713a2bff79d84374a84975606ecc5bcbd3ef59cda2deed3ba35"
+  },
+  "cosmology.syntheticHubbleDiagram(\"7\")": {
+    "n": 53,
+    "first": "36.75146993523443",
+    "last": "0.9412131777115978",
+    "sha256": "aac1159e66cc1c15c024a53b080a8e76f3db25d29629899d19a53abf2e91ec49"
+  },
+  "cosmology.syntheticHubbleDiagram(7)": {
+    "n": 53,
+    "first": "36.75146993523443",
+    "last": "0.9412131777115978",
+    "sha256": "aac1159e66cc1c15c024a53b080a8e76f3db25d29629899d19a53abf2e91ec49"
+  },
+  "cosmology.syntheticHubbleDiagram(2024)": {
+    "n": 53,
+    "first": "33.42163509364249",
+    "last": "0.9896404388276611",
+    "sha256": "7f8d1665bdf070ee41e63159f4bb6c6b73436a8ca36ac99e0220377b87d2847a"
+  },
+  "cosmology.syntheticHubbleDiagram(1.5)": {
+    "n": 53,
+    "first": "33.82696108264178",
+    "last": "0.8110081487178986",
+    "sha256": "f39edfeaa7daf5288e48b68ed4d1afacf2f25dc9b74661ef207ed81fef0ff6cf"
+  },
+  "cosmology.syntheticHubbleDiagram(-3)": {
+    "n": 53,
+    "first": "33.33655359253768",
+    "last": "0.7672058932119266",
+    "sha256": "d245e719115b19efbd319ceaee3eee78e433097aa295c4a32cc26315416aadbd"
+  },
+  "cosmology.syntheticHubbleDiagram(0)": {
+    "n": 53,
+    "first": "33.78102071990993",
+    "last": "0.9426308162056771",
+    "sha256": "0546b2bf9e399e591f703383e1f54437a6eb5de1660006fd7598cf4468be18ca"
+  },
+  "cosmology.syntheticHubbleDiagram(NaN)": {
+    "n": 53,
+    "first": "33.28635081013047",
+    "last": "0.8646541792640834",
+    "sha256": "92d9acec0e7b97dc4ac4a7d75cca766a2927ba32e44eb334cdfb079cdeed4736"
+  },
+  "cosmology.syntheticHubbleDiagram(null)": {
+    "n": 53,
+    "first": "33.25764191660941",
+    "last": "0.9937190646296565",
+    "sha256": "29c4320ad80a8e41fa8f83065871fe347dca3793efe8ed36725fa60f7b17bc40"
+  },
+  "cosmology.syntheticHubbleDiagram(undefined)": {
+    "n": 53,
+    "first": "33.18261357725647",
+    "last": "0.976329161834778",
+    "sha256": "ad0a4f0fff6c5f4d7d93fbb06239da9321eb03a58f12710def632ef12af9f10c"
+  },
+  "detector.detectorPattern(\"a\")": {
+    "n": 136,
+    "first": "1.3561545690800585",
+    "last": "0.8116634421988105",
+    "sha256": "4d3e0e8ee4367dfc5f10ee7170a26c9cc4cc11cc370df3d99f1570eb9b8bb7e5"
+  },
+  "detector.detectorPattern(\"kepler-3\")": {
+    "n": 137,
+    "first": "2.126396931455483",
+    "last": "46",
+    "sha256": "f741028ad69db83c551da21ee3015a57b5846d94dbd4eb88d3ba1bd0ef985105"
+  },
+  "detector.detectorPattern(\"été\")": {
+    "n": 136,
+    "first": "1.1408765091600175",
+    "last": "0.7231553057326228",
+    "sha256": "eb3f267238f9408e690f56b573884c8077da9a99c77367313fef2156ee56f716"
+  },
+  "detector.detectorPattern(\"\")": {
+    "n": 137,
+    "first": "0.9881615025708893",
+    "last": "12",
+    "sha256": "f32065f91b01998b168feabc04e2cb61f0359c57d0f77545e80d082699e8bd73"
+  },
+  "detector.detectorPattern(\"7\")": {
+    "n": 136,
+    "first": "1.1197798779290584",
+    "last": "0.8942756810388073",
+    "sha256": "f8928b25fed9165892b690dc54b22ac9e4686d41ea7b99f53c26c201ec6b6177"
+  },
+  "detector.detectorPattern(7)": {
+    "n": 136,
+    "first": "1.1197798779290584",
+    "last": "0.8942756810388073",
+    "sha256": "f8928b25fed9165892b690dc54b22ac9e4686d41ea7b99f53c26c201ec6b6177"
+  },
+  "detector.detectorPattern(2024)": {
+    "n": 137,
+    "first": "-1.5029403405761137",
+    "last": "45",
+    "sha256": "8d9047bc95b65fb03d661f05436e3f476995215decf2a4687c6951b00c0bdf97"
+  },
+  "detector.detectorPattern(1.5)": {
+    "n": 137,
+    "first": "0.017892249392379912",
+    "last": "38",
+    "sha256": "7861403047c2f440f01fdc056d7512adb458311d8ecac0c7796ae41ef6ef7397"
+  },
+  "detector.detectorPattern(-3)": {
+    "n": 136,
+    "first": "0.5023742962672584",
+    "last": "0.7629808696323829",
+    "sha256": "27b1c36b6988bd78e4e631fb129a915fca06f824b52b691391c65f6476497403"
+  },
+  "detector.detectorPattern(0)": {
+    "n": 136,
+    "first": "-1.6862998150235433",
+    "last": "0.8635519346304046",
+    "sha256": "5144c077389995c240b9681b8aab254c7538ce7755b33c33e28e839436361857"
+  },
+  "detector.detectorPattern(NaN)": {
+    "n": 136,
+    "first": "-1.480185685749689",
+    "last": "0.8738240637158214",
+    "sha256": "375f98f1d3aba81946457edeb8a70e9d7cc4987f673b3d63f98cd667ad885805"
+  },
+  "detector.detectorPattern(null)": {
+    "n": 137,
+    "first": "1.88458914271012",
+    "last": "48",
+    "sha256": "cf90ebb1ea8a01f957990844fff84994ba6d914fb6e696dbdc37b360ea6f3d4a"
+  },
+  "detector.detectorPattern(undefined)": {
+    "n": 136,
+    "first": "-4.412499584607327",
+    "last": "0.8058063628148592",
+    "sha256": "d58ed43aa3e385633f30729424fb4d3486d96705fb58d9a9e7e8c4139aaea15c"
+  },
+  "detector.simulateFrame(\"a\")": {
+    "n": 2032,
+    "first": "30",
+    "last": "12",
+    "sha256": "05e895b98618b969d42eef0a6a79f6cba9ceed3b1f06c80388634a8b86bfd460"
+  },
+  "detector.simulateFrame(\"kepler-3\")": {
+    "n": 2039,
+    "first": "30",
+    "last": "12",
+    "sha256": "427023b378cad07406e32495fc7f7ccdfa6f53a713d1ce54b63ced488c4d15f7"
+  },
+  "detector.simulateFrame(\"été\")": {
+    "n": 2038,
+    "first": "30",
+    "last": "12",
+    "sha256": "7bf52639408374b5f69cb66e1c0e412175b327f022eeb6da26adda4b3724ff70"
+  },
+  "detector.simulateFrame(\"\")": {
+    "n": 2041,
+    "first": "30",
+    "last": "12",
+    "sha256": "d2f8507f69581c6c0517e0ae95354b30a0f8466c16f973009b4101ab649a6c0e"
+  },
+  "detector.simulateFrame(\"7\")": {
+    "n": 2049,
+    "first": "30",
+    "last": "12",
+    "sha256": "f6ada85c73353c17ee4884eca05cc70ce6cb96b2c7566a9250cf39b4c2f900b4"
+  },
+  "detector.simulateFrame(7)": {
+    "n": 2049,
+    "first": "30",
+    "last": "12",
+    "sha256": "f6ada85c73353c17ee4884eca05cc70ce6cb96b2c7566a9250cf39b4c2f900b4"
+  },
+  "detector.simulateFrame(2024)": {
+    "n": 2040,
+    "first": "30",
+    "last": "12",
+    "sha256": "bd9ce0b7d88e762c7fa7de74954129b055edc910fb976027c424e68c5f1529db"
+  },
+  "detector.simulateFrame(1.5)": {
+    "n": 2026,
+    "first": "30",
+    "last": "12",
+    "sha256": "b09ad5eeed170f680bcd605c1931b72cd2925f92f2d548ba850a89ac3be79aae"
+  },
+  "detector.simulateFrame(-3)": {
+    "n": 2026,
+    "first": "30",
+    "last": "12",
+    "sha256": "7d264a58fd2c942fa9baa152d0a25b18fdcdcbeabfc78a9a35060f07225196dc"
+  },
+  "detector.simulateFrame(0)": {
+    "n": 2043,
+    "first": "30",
+    "last": "12",
+    "sha256": "46b3b251fd43f764c4056735476168bfcb816a7347b7360d06ceb052ece8d343"
+  },
+  "detector.simulateFrame(NaN)": {
+    "n": 2029,
+    "first": "30",
+    "last": "12",
+    "sha256": "3f7ae671b8f5fdbd1d0b09a216aaf08239009047d148fa5aad2e0b00ebdf26fd"
+  },
+  "detector.simulateFrame(null)": {
+    "n": 2043,
+    "first": "30",
+    "last": "12",
+    "sha256": "32f9462aff3c4a05f7bf19e86bae0c89eec2545337b12953b916e873c8a84d60"
+  },
+  "detector.simulateFrame(undefined)": {
+    "n": 2043,
+    "first": "30",
+    "last": "12",
+    "sha256": "32f9462aff3c4a05f7bf19e86bae0c89eec2545337b12953b916e873c8a84d60"
+  },
+  "detector.simulateSeries(\"a\")": {
+    "n": 3754,
+    "first": "30",
+    "last": "0",
+    "sha256": "8ad6c6fc4e03e70e1ae11e5d3f7fd1973d9a9ff08b9bfb154f76512b5ef1d972"
+  },
+  "detector.simulateSeries(\"kepler-3\")": {
+    "n": 3739,
+    "first": "30",
+    "last": "0",
+    "sha256": "71e85278107d7ebafb32bb4e8ec12ab2f93d08e8c4efbf49d4d890511af2f19a"
+  },
+  "detector.simulateSeries(\"été\")": {
+    "n": 3757,
+    "first": "30",
+    "last": "0",
+    "sha256": "91896e5fe3deaca567b77ab11ecc6f8d9f71815c99cb1e7cb169557695f7671c"
+  },
+  "detector.simulateSeries(\"\")": {
+    "n": 3742,
+    "first": "30",
+    "last": "0",
+    "sha256": "9d6297f6bcba1f6d1494298152c69ad795e20da8c6f10338f185cb1405b61e29"
+  },
+  "detector.simulateSeries(\"7\")": {
+    "n": 3736,
+    "first": "30",
+    "last": "0",
+    "sha256": "698195beedaaffec151b197f0e72052655f694ed73c6c9f35b25156b9d4b15e3"
+  },
+  "detector.simulateSeries(7)": {
+    "n": 3736,
+    "first": "30",
+    "last": "0",
+    "sha256": "698195beedaaffec151b197f0e72052655f694ed73c6c9f35b25156b9d4b15e3"
+  },
+  "detector.simulateSeries(2024)": {
+    "n": 3742,
+    "first": "30",
+    "last": "0",
+    "sha256": "d41a2768a9e9dcb423d5af2787521977e284926b6d98e79089367b3957bc1f5a"
+  },
+  "detector.simulateSeries(1.5)": {
+    "n": 3739,
+    "first": "30",
+    "last": "0",
+    "sha256": "8a818be8c0cb9294005299890fa7b18045d43d3a1951b33600fe4db4862b51c9"
+  },
+  "detector.simulateSeries(-3)": {
+    "n": 3754,
+    "first": "30",
+    "last": "0",
+    "sha256": "819414b624793f7fd7e50b0e2ea6516aff54fb72758a1255d560e91163746eb3"
+  },
+  "detector.simulateSeries(0)": {
+    "n": 3751,
+    "first": "30",
+    "last": "0",
+    "sha256": "9034dd76c8720d2e7a4613e1460bbed952eb0ecc137495079d53ffc062bc3bd2"
+  },
+  "detector.simulateSeries(NaN)": {
+    "n": 3736,
+    "first": "30",
+    "last": "0",
+    "sha256": "5b80b1e377c2bdb7e69fa4a8900562567e4a700b4394710c30f5ac20dd13a305"
+  },
+  "detector.simulateSeries(null)": {
+    "n": 3754,
+    "first": "30",
+    "last": "0",
+    "sha256": "c648ad444214116f5282d1150609377b331c0f56d2c1294086feb8f8a4be9ba4"
+  },
+  "detector.simulateSeries(undefined)": {
+    "n": 3754,
+    "first": "30",
+    "last": "0",
+    "sha256": "26d54d61b961caa4af9003288c61dc7bb493fbbae69827953b1f709079d360c8"
+  },
+  "forward.uniformAt(\"a\")": {
+    "n": 12,
+    "first": "0.735530614387244",
+    "last": "0.08437687274999917",
+    "sha256": "a9245c9ee84dfb390da4b6b10d30bd553aa909bcf899dda8d93bc2e655e10082"
+  },
+  "forward.uniformAt(\"kepler-3\")": {
+    "n": 12,
+    "first": "0.940454535651952",
+    "last": "0.081776880659163",
+    "sha256": "05191b7687897b065305632a29712590ec40437aaa6dade9a33a1c6db4dc602b"
+  },
+  "forward.uniformAt(\"été\")": {
+    "n": 12,
+    "first": "0.07465669116936624",
+    "last": "0.4277048781514168",
+    "sha256": "748f7a678666767a296af10166189e47391a859f11d3b2567dbb36c0b0a651fa"
+  },
+  "forward.uniformAt(\"\")": {
+    "n": 12,
+    "first": "0.2391860643401742",
+    "last": "0.21186707355082035",
+    "sha256": "d975b1195b535d0769651dd33536d34a841b48306db6bf7c7d699b06c8399092"
+  },
+  "forward.uniformAt(\"7\")": {
+    "n": 12,
+    "first": "0.5115501785185188",
+    "last": "0.1772711812518537",
+    "sha256": "5d2bc2c6493e44bb29e7484470b0f027e097a0af8ec49fa8803456305d30f0c4"
+  },
+  "forward.uniformAt(7)": {
+    "n": 12,
+    "first": "0.5115501785185188",
+    "last": "0.1772711812518537",
+    "sha256": "5d2bc2c6493e44bb29e7484470b0f027e097a0af8ec49fa8803456305d30f0c4"
+  },
+  "forward.uniformAt(2024)": {
+    "n": 12,
+    "first": "0.8477737598586828",
+    "last": "0.5003328141756356",
+    "sha256": "fb15823f4af5f0025e099cfa53cdaf71d80b3781f5fb818697cd6b87cd512164"
+  },
+  "forward.uniformAt(1.5)": {
+    "n": 12,
+    "first": "0.6888641659170389",
+    "last": "0.5021811362821609",
+    "sha256": "c2625a39bf098ec660d847fe9c7dfd588bcf57e7855ebc23e1e6f0e56f497850"
+  },
+  "forward.uniformAt(-3)": {
+    "n": 12,
+    "first": "0.70267453789711",
+    "last": "0.8234551204368472",
+    "sha256": "8b4204d7745e0069a7a175c7c8d4516dbdf4b474a2128a4908bc61df3b62ad1e"
+  },
+  "forward.uniformAt(0)": {
+    "n": 12,
+    "first": "0.5390442491043359",
+    "last": "0.7017808461096138",
+    "sha256": "dc32ab9ee9a9ed82cc5e41d9bad6344e9d4ffeff8790573869d1a277adc7b638"
+  },
+  "forward.uniformAt(NaN)": {
+    "n": 12,
+    "first": "0.16982914018444717",
+    "last": "0.19271933822892606",
+    "sha256": "351f261de32e6b3bfb34400058f8970d96c7f81572b5979345f185e7c129acef"
+  },
+  "forward.uniformAt(null)": {
+    "n": 12,
+    "first": "0.8396389458794147",
+    "last": "0.03035205672495067",
+    "sha256": "3c10bfd9e650dacb562b172249dfb30926530e89c6d2d8210a164694058b6e10"
+  },
+  "forward.uniformAt(undefined)": {
+    "n": 12,
+    "first": "0.11399740562774241",
+    "last": "0.302488521207124",
+    "sha256": "053ac66e59373bc8f4bb161d53974aed18881050cfff5e49c45c0a0911a09d1a"
+  },
+  "variables.nightlyEpochs(\"a\")": {
+    "n": 25,
+    "first": "1.10933",
+    "last": "11.3871",
+    "sha256": "791eff9f33307e0ffbcf1af10267abedf66ca154c439fde21220d8e17d775635"
+  },
+  "variables.nightlyEpochs(\"kepler-3\")": {
+    "n": 21,
+    "first": "1.178893",
+    "last": "10.381565",
+    "sha256": "237e1342b029fa735fcf2470db615835a8719e52a03c0f783bc30f036cf6eb70"
+  },
+  "variables.nightlyEpochs(\"été\")": {
+    "n": 28,
+    "first": "0.234665",
+    "last": "11.33577",
+    "sha256": "e06299154fb9525b1d183984cb0a135159d4ba8864c6f5f76818ebc65e29028c"
+  },
+  "variables.nightlyEpochs(\"\")": {
+    "n": 25,
+    "first": "1.116518",
+    "last": "11.395025",
+    "sha256": "9e31c48fcb00b8d07465a9820749c87a0483d8d778243a69fde116cec21db0f8"
+  },
+  "variables.nightlyEpochs(\"7\")": {
+    "n": 27,
+    "first": "0.111778",
+    "last": "11.282493",
+    "sha256": "be826cdb1098aeed89cd070eab69e8b3c6c68f6c0cee95f66c1d019097643529"
+  },
+  "variables.nightlyEpochs(7)": {
+    "n": 27,
+    "first": "0.111778",
+    "last": "11.282493",
+    "sha256": "be826cdb1098aeed89cd070eab69e8b3c6c68f6c0cee95f66c1d019097643529"
+  },
+  "variables.nightlyEpochs(2024)": {
+    "n": 29,
+    "first": "0.153473",
+    "last": "10.383974",
+    "sha256": "648a4e1a47e698a387a2bd660bac210bdc01e71329c7c6ca7c8378cd49cbc9e5"
+  },
+  "variables.nightlyEpochs(1.5)": {
+    "n": 18,
+    "first": "1.107611",
+    "last": "11.224826",
+    "sha256": "c1d4503c30feca2198d45ae6d0851bfddfa5854e23dbcdddb806f25185a1a6a4"
+  },
+  "variables.nightlyEpochs(-3)": {
+    "n": 20,
+    "first": "0.387699",
+    "last": "10.306372",
+    "sha256": "a5b42cc1ec2689523a94b8b2067844c73ff8744ea5a2eb304e8ec128445ba151"
+  },
+  "variables.nightlyEpochs(0)": {
+    "n": 26,
+    "first": "0.252305",
+    "last": "11.277973",
+    "sha256": "a68f35eba484477561abbaac7a448e4e822c4bbce680ede0cf08bed6d6239805"
+  },
+  "variables.nightlyEpochs(NaN)": {
+    "n": 18,
+    "first": "0.256158",
+    "last": "11.363341",
+    "sha256": "e1da400fdb4d4227f16ca929978b3329b774b8bad850a5009224632a838a7bdb"
+  },
+  "variables.nightlyEpochs(null)": {
+    "n": 28,
+    "first": "0.259873",
+    "last": "11.321823",
+    "sha256": "27c26b0dce6b813bec12107b219f3613f96c4a5d9d3d16c1731ba6df642b8f17"
+  },
+  "variables.nightlyEpochs(undefined)": {
+    "n": 21,
+    "first": "2.24631",
+    "last": "11.314689",
+    "sha256": "193e17c725e4a04fd7db4568dd5c3a5910c915e88d20fc9e9b9faf2897495dfd"
+  },
+  "variables.makeSample(\"a\")": {
+    "n": 130,
+    "first": "1.1915208844502168",
+    "last": "0.6940011359817724",
+    "sha256": "c57b0413d17ff70e94d74f25a375f16e2a30e8f0d331abd52f15a12b92c4d465"
+  },
+  "variables.makeSample(\"variables-sample\")": {
+    "n": 130,
+    "first": "0.8930048312176107",
+    "last": "5.176405189192784",
+    "sha256": "0c8d4aa4b4b0e463d4f3c4eda221969424e456b7841557d3dc3f6ce505fe3264"
+  },
+  "variables.makeSample(7)": {
+    "n": 130,
+    "first": "0.916225850422298",
+    "last": "3.278567608864342",
+    "sha256": "66d50594ea3dac8f87551ce38dae8d6ef5265777ed689b4b0ce7ab0decb786c4"
+  },
+  "variables.bootstrapPeriod(\"a\")": {
+    "n": 9,
+    "first": "3.100000000012385",
+    "last": "0",
+    "sha256": "e0005ef5a43b6a76c4b177537a5a841b2832c746111de84006890445b1863ecb"
+  },
+  "variables.bootstrapPeriod(\"kepler-3\")": {
+    "n": 9,
+    "first": "3.100000000012385",
+    "last": "0",
+    "sha256": "e0005ef5a43b6a76c4b177537a5a841b2832c746111de84006890445b1863ecb"
+  },
+  "variables.bootstrapPeriod(\"été\")": {
+    "n": 9,
+    "first": "3.100000000012385",
+    "last": "0",
+    "sha256": "e0005ef5a43b6a76c4b177537a5a841b2832c746111de84006890445b1863ecb"
+  },
+  "variables.bootstrapPeriod(\"\")": {
+    "n": 9,
+    "first": "3.100000000012385",
+    "last": "0",
+    "sha256": "e0005ef5a43b6a76c4b177537a5a841b2832c746111de84006890445b1863ecb"
+  },
+  "variables.bootstrapPeriod(\"7\")": {
+    "n": 9,
+    "first": "3.1000000000082566",
+    "last": "1.0112114101140622e-11",
+    "sha256": "ad3d8691bc5470963828898903fa39a6e8c42fdde02ad3601d8d6fc646d715c2"
+  },
+  "variables.bootstrapPeriod(7)": {
+    "n": 9,
+    "first": "3.1000000000082566",
+    "last": "1.0112114101140622e-11",
+    "sha256": "ad3d8691bc5470963828898903fa39a6e8c42fdde02ad3601d8d6fc646d715c2"
+  },
+  "variables.bootstrapPeriod(2024)": {
+    "n": 9,
+    "first": "3.1000000000082566",
+    "last": "1.0112114101140622e-11",
+    "sha256": "99c9f7f1de60cb0aa1b77b6e5cba6ecf76110d456e19a21c5a63033e3fef81eb"
+  },
+  "variables.bootstrapPeriod(1.5)": {
+    "n": 9,
+    "first": "3.100000000012385",
+    "last": "0",
+    "sha256": "e0005ef5a43b6a76c4b177537a5a841b2832c746111de84006890445b1863ecb"
+  },
+  "variables.bootstrapPeriod(-3)": {
+    "n": 9,
+    "first": "3.1000000000041283",
+    "last": "1.2790925007644258e-11",
+    "sha256": "e23080389da1e2d784e79fce482f0c529a0ead55883136ec59c2983b9d1f2cdd"
+  },
+  "variables.bootstrapPeriod(0)": {
+    "n": 9,
+    "first": "3.100000000012385",
+    "last": "0",
+    "sha256": "e0005ef5a43b6a76c4b177537a5a841b2832c746111de84006890445b1863ecb"
+  },
+  "variables.bootstrapPeriod(NaN)": {
+    "n": 9,
+    "first": "3.100000000012385",
+    "last": "0",
+    "sha256": "e0005ef5a43b6a76c4b177537a5a841b2832c746111de84006890445b1863ecb"
+  },
+  "variables.bootstrapPeriod(null)": {
+    "n": 9,
+    "first": "3.100000000012385",
+    "last": "1.9860273225978183e-16",
+    "sha256": "031bf5a28ca2ebba1b303f9724ab714e0160d533f4a237c87ff5855c419ef6fa"
+  },
+  "variables.bootstrapPeriod(undefined)": {
+    "n": 9,
+    "first": "3.100000000008256",
+    "last": "1.0112476703662671e-11",
+    "sha256": "86893bff24d2505fd617e8166252bf8ec2eaa58760d53c9348772065282fa06a"
+  },
+  "survey.makeUniverse(\"a\")": {
+    "n": 1003,
+    "first": "10.093215458310777",
+    "last": "10153914.300419632",
+    "sha256": "a777e888373725ae4373ad97834adf9762256b1d92f6ed022a287a5ecb70ad60"
+  },
+  "survey.makeUniverse(\"survey-1\")": {
+    "n": 1003,
+    "first": "10.257970589456054",
+    "last": "10153914.300419632",
+    "sha256": "cc1189671f0ac053bf3e794f1e3229b90bea506fb52d9a87c3809c78850fe07c"
+  },
+  "survey.makeUniverse(7)": {
+    "n": 985,
+    "first": "10.482015119698023",
+    "last": "10153914.300419632",
+    "sha256": "0a462675a7d1d1f1e1d1c2b43bb582428eca565364c9f42ad33f043a219189bb"
+  },
+  "survey.observe(\"a\")": {
+    "n": 985,
+    "first": "60",
+    "last": "10153914.300419632",
+    "sha256": "b39ae86858bc85fe068b979c418be0f3f0c686ed9612673b91c8e6f057f2b16c"
+  },
+  "survey.observe(\"survey-1\")": {
+    "n": 985,
+    "first": "60",
+    "last": "10153914.300419632",
+    "sha256": "7b81b78ab6b99bd13b369c270108f33d68c652b482893654dfa97d4aea59d8b7"
+  },
+  "survey.observe(7)": {
+    "n": 985,
+    "first": "60",
+    "last": "10153914.300419632",
+    "sha256": "04e452a3aa91cce038064d05d56364048bec9974a2fb74d6fc23735953742605"
+  },
+  "stellar.synthesisePopulation(\"a\")": {
+    "n": 302,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "3554.961424197748",
+    "sha256": "27220e7a9991ec1770fea4657434d7577e59ae985ab3224804df82ae4a2db090"
+  },
+  "stellar.synthesisePopulation(\"kepler-3\")": {
+    "n": 280,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "5299.611445825625",
+    "sha256": "a0217dd4aad44516c0f983a45ade787f04a033438a773b23e390aea1747b9b4d"
+  },
+  "stellar.synthesisePopulation(\"été\")": {
+    "n": 324,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "3519.275804024823",
+    "sha256": "dd2d9a9c33109fe0d2820b081abba88ed5696852b08fd1d874d5deeece735b7c"
+  },
+  "stellar.synthesisePopulation(\"\")": {
+    "n": 324,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "3234.0893633149003",
+    "sha256": "dddb87c42bf2cfeb975e28cc2f5d4d2be1d5f7f08fd1955ff10b67b99a99391c"
+  },
+  "stellar.synthesisePopulation(\"7\")": {
+    "n": 324,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "3521.876959088434",
+    "sha256": "c9330a803ec9991586f66080f9c9e5a688140816ac67e9c5d895a1a5fd7bca0a"
+  },
+  "stellar.synthesisePopulation(7)": {
+    "n": 324,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "3521.876959088434",
+    "sha256": "c9330a803ec9991586f66080f9c9e5a688140816ac67e9c5d895a1a5fd7bca0a"
+  },
+  "stellar.synthesisePopulation(2024)": {
+    "n": 291,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "4252.298957884832",
+    "sha256": "5e921938d0f0e9964c550ba2d6e40a4af6cc2d44d25fef2f5167dbf878313430"
+  },
+  "stellar.synthesisePopulation(1.5)": {
+    "n": 324,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "4410.151877492421",
+    "sha256": "a62d57360d153482aa436aab6a05e8f639fed38c609169822453e626602496af"
+  },
+  "stellar.synthesisePopulation(-3)": {
+    "n": 313,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "3662.5084819698486",
+    "sha256": "7262c944a89b64695e47f27343d430713e7738e4709e9ba86353ee236cb49c3b"
+  },
+  "stellar.synthesisePopulation(0)": {
+    "n": 324,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "3234.0893633149003",
+    "sha256": "1bffcabad440e797f6309f49cdaa82d4bec47235c4ebcc2716706bd78172b3a8"
+  },
+  "stellar.synthesisePopulation(NaN)": {
+    "n": 335,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "7361.992053326011",
+    "sha256": "3f14fdcd68dbea4cab78d14941e36809101fb742a44c5138382111aae09bd934"
+  },
+  "stellar.synthesisePopulation(\"stellar-population-1\")": {
+    "n": 324,
+    "first": "\"solar, as the bundled tracks\"",
+    "last": "3302.0465465180187",
+    "sha256": "df302b8265ce39f33d8c878b6b4cd8158ce1ede08986682c49f8ac22b2b467a0"
+  },
+  "experiments.valuesFor(\"a\")": {
+    "n": 8,
+    "first": "1.616446948144585",
+    "last": "2.7819603593088686",
+    "sha256": "487114b286b4db027232626fa7132ace3fbfc9ba1349f67c6ebe844002cd3589"
+  },
+  "experiments.valuesFor(\"experiment-drift\")": {
+    "n": 8,
+    "first": "1.0431335605680943",
+    "last": "2.9631962655112147",
+    "sha256": "34494855b6c0f1e376ba307e3860ea45111b82338e77c37f4a6c1bf1e9e68a72"
+  },
+  "experiments.valuesFor(\"été\")": {
+    "n": 8,
+    "first": "1.310451665893197",
+    "last": "2.9356729639694095",
+    "sha256": "5eff1cf52e896aa8a831ce62c422d915ad6e9bbfe1ac075ceff5e201922fa6a2"
+  },
+  "experiments.valuesFor(\"7\")": {
+    "n": 8,
+    "first": "1.0234095063060522",
+    "last": "2.95381526555866",
+    "sha256": "2fac6a907b021a48e946aff3fa8b1e154a60685ccead9e2b5378f0df04181eed"
+  },
+  "gw.coloredNoise(\"a\")": {
+    "n": 128,
+    "first": "-9.410747723270269e-23",
+    "last": "-3.44804412131628e-23",
+    "sha256": "de8e64385cf718b3df0a4770647ff99467afde0460dcb9e89a13c4ef4e6c89a4"
+  },
+  "gw.coloredNoise(\"kepler-3\")": {
+    "n": 128,
+    "first": "-5.025368976950796e-23",
+    "last": "-3.632106827520964e-23",
+    "sha256": "22359a924af7c4d0ffe72ccebd4935af9adf9a942b943945a67edd2fb6018e72"
+  },
+  "gw.coloredNoise(\"été\")": {
+    "n": 128,
+    "first": "-1.897337325890093e-22",
+    "last": "-1.77433649271735e-22",
+    "sha256": "aed4df24853b45d0ff737275d2ed261434a7a7f441c93076201eccdf4e991bd7"
+  },
+  "gw.coloredNoise(\"\")": {
+    "n": 128,
+    "first": "5.901750528618096e-23",
+    "last": "1.6094683500585035e-22",
+    "sha256": "5a167b55213d24392ce33a134235d377d5ff0d6e4f18b72e594e3305b9a119ce"
+  },
+  "gw.coloredNoise(\"7\")": {
+    "n": 128,
+    "first": "2.3459501533502885e-22",
+    "last": "9.850497288252636e-23",
+    "sha256": "fce9b7bcbbbd893ab8647608f34547194feb214b2b11f6b79b85d149db746351"
+  },
+  "gw.coloredNoise(7)": {
+    "n": 128,
+    "first": "2.3459501533502885e-22",
+    "last": "9.850497288252636e-23",
+    "sha256": "fce9b7bcbbbd893ab8647608f34547194feb214b2b11f6b79b85d149db746351"
+  },
+  "gw.coloredNoise(2024)": {
+    "n": 128,
+    "first": "-1.6861105415129216e-22",
+    "last": "-1.1847292303806822e-22",
+    "sha256": "0f52e34838ed520ce79554109c97db417413d4d9b9aa3704b21f62729e27ad5f"
+  },
+  "gw.coloredNoise(1.5)": {
+    "n": 128,
+    "first": "2.1693215460986624e-22",
+    "last": "4.099704444635081e-23",
+    "sha256": "2fc6478b8e9768bc24d34e206dccbd8280190d91760485a4305d6e7f7a6df062"
+  },
+  "gw.coloredNoise(-3)": {
+    "n": 128,
+    "first": "-3.704521418720994e-23",
+    "last": "3.796318006817942e-23",
+    "sha256": "f8a2da26f172532c7397b6b9fd66d2a3a4fcfe8a4421261ef5dceb77180a315a"
+  },
+  "gw.coloredNoise(0)": {
+    "n": 128,
+    "first": "5.901750528618096e-23",
+    "last": "1.6094683500585035e-22",
+    "sha256": "5a167b55213d24392ce33a134235d377d5ff0d6e4f18b72e594e3305b9a119ce"
+  },
+  "gw.coloredNoise(NaN)": {
+    "n": 128,
+    "first": "-1.4581104285890894e-22",
+    "last": "-1.5160937246067511e-22",
+    "sha256": "13281af2644164a00e03740072852d592e9b6e13f58036d7e3a5d911e69a7b96"
+  },
+  "gw.coloredNoise(null)": {
+    "n": 128,
+    "first": "5.901750528618096e-23",
+    "last": "1.6094683500585035e-22",
+    "sha256": "5a167b55213d24392ce33a134235d377d5ff0d6e4f18b72e594e3305b9a119ce"
+  },
+  "gw.coloredNoise(undefined)": {
+    "n": 128,
+    "first": "-2.2827481006824828e-23",
+    "last": "-3.524197834320967e-24",
+    "sha256": "da3e60bd9a11ab887af30e416bb1e81e01af944e36b5ae5cfa685e176b307ce9"
+  },
+  "inference.gaussianStream(\"a\")": {
+    "n": 24,
+    "first": "-0.34878334911922365",
+    "last": "-1.264535701601406",
+    "sha256": "29a328859fa5ba7d8a908d111fbbd240d3bde8d70a686f0b3121c8b631f8b679"
+  },
+  "inference.gaussianStream(\"kepler-3\")": {
+    "n": 24,
+    "first": "-0.2663889531445146",
+    "last": "0.1463202242702024",
+    "sha256": "4b88ee91555ce33d5f5ef53a63b7676be2639618260e89533e1c18a596b45af7"
+  },
+  "inference.gaussianStream(\"été\")": {
+    "n": 24,
+    "first": "-1.793324892261252",
+    "last": "-0.7475535426893604",
+    "sha256": "fe653495044070bc58ac6a5faa0b0a884c85cb3ab0f34d02f714388eac4e8774"
+  },
+  "inference.gaussianStream(\"\")": {
+    "n": 24,
+    "first": "1.6264323081902676",
+    "last": "0.787616882606861",
+    "sha256": "c60b203f5df076d239487e8499324b6ef0eabe28984edc84ae79e7d1dc002f7c"
+  },
+  "inference.gaussianStream(\"7\")": {
+    "n": 24,
+    "first": "2.759372987028844",
+    "last": "1.4287817562825116",
+    "sha256": "afe96ca4979d63263fbc6c1c8b9f9f7edd148abe7111e95c8d9f61b59a108701"
+  },
+  "inference.gaussianStream(7)": {
+    "n": 24,
+    "first": "2.759372987028844",
+    "last": "1.4287817562825116",
+    "sha256": "afe96ca4979d63263fbc6c1c8b9f9f7edd148abe7111e95c8d9f61b59a108701"
+  },
+  "inference.gaussianStream(2024)": {
+    "n": 24,
+    "first": "-0.15738025902594666",
+    "last": "-0.9561558038725344",
+    "sha256": "6533cd92a70aee02d568d7ddbb1e004a663c2c2fb434f8f42c76264e4e3b7090"
+  },
+  "inference.gaussianStream(1.5)": {
+    "n": 24,
+    "first": "0.9659740590152261",
+    "last": "1.1064121268379254",
+    "sha256": "2740a920cb9e0f3c3c756d452cd17f9e298643b7eeeb1fdef60810b2134a4f71"
+  },
+  "inference.gaussianStream(-3)": {
+    "n": 24,
+    "first": "0.7863846115586807",
+    "last": "0.08088744153017163",
+    "sha256": "3458f6053414d1c8d72a1aef917fabe0e8bf87004249bbb64fe9bc739c1625dd"
+  },
+  "inference.gaussianStream(0)": {
+    "n": 24,
+    "first": "1.6264323081902676",
+    "last": "0.787616882606861",
+    "sha256": "c60b203f5df076d239487e8499324b6ef0eabe28984edc84ae79e7d1dc002f7c"
+  },
+  "inference.gaussianStream(NaN)": {
+    "n": 24,
+    "first": "-1.7297250739814356",
+    "last": "0.4660457981713636",
+    "sha256": "db23bdab9b8ed799eb2f157dabd31b0164f2c89e3e3c1ababae9c1c8a767a640"
+  },
+  "inference.gaussianStream(null)": {
+    "n": 24,
+    "first": "1.6264323081902676",
+    "last": "0.787616882606861",
+    "sha256": "c60b203f5df076d239487e8499324b6ef0eabe28984edc84ae79e7d1dc002f7c"
+  },
+  "inference.gaussianStream(undefined)": {
+    "n": 24,
+    "first": "1.6264323081902676",
+    "last": "0.787616882606861",
+    "sha256": "c60b203f5df076d239487e8499324b6ef0eabe28984edc84ae79e7d1dc002f7c"
+  },
+  "rvSurvey.gaussianAt(\"a\")": {
+    "n": 10,
+    "first": "0.3742277030519684",
+    "last": "1.037179094420562",
+    "sha256": "d1ccaddbd0fa575c88261d82b57c82c95568178bba4b23ecd65bd336f3aa3f1b"
+  },
+  "rvSurvey.gaussianAt(\"kepler-3\")": {
+    "n": 10,
+    "first": "-0.6095240929077151",
+    "last": "0.6190021833431892",
+    "sha256": "644a02e6554bf459b95568d94e932e4c767031b40207363581ba003d00321b52"
+  },
+  "rvSurvey.gaussianAt(\"été\")": {
+    "n": 10,
+    "first": "-0.4166049693600223",
+    "last": "0.49571244299926653",
+    "sha256": "93d4abd17810104651950a1a9b7637822f6301fbd26ac47f83a55fd73ed6c91d"
+  },
+  "rvSurvey.gaussianAt(\"\")": {
+    "n": 10,
+    "first": "0.6347231071655276",
+    "last": "0.9992006852202914",
+    "sha256": "76a9fe2a3f5b1477ab2be80c82e42ff7b1355327dc497e450d27c2921fa9dbaa"
+  },
+  "rvSurvey.gaussianAt(\"7\")": {
+    "n": 10,
+    "first": "-1.251930735820984",
+    "last": "0.76972336026607",
+    "sha256": "c99a9c45a8eac5c18d43664e2a220036949075fabc0cd237d647723dae1534d2"
+  },
+  "rvSurvey.gaussianAt(7)": {
+    "n": 10,
+    "first": "-1.251930735820984",
+    "last": "0.76972336026607",
+    "sha256": "c99a9c45a8eac5c18d43664e2a220036949075fabc0cd237d647723dae1534d2"
+  },
+  "rvSurvey.gaussianAt(2024)": {
+    "n": 10,
+    "first": "-0.8206328156494179",
+    "last": "-0.8535344096918404",
+    "sha256": "023ff9e577cf115e8b2029b1e787b28d7381f1cb50fc174970dec7f5413a9a13"
+  },
+  "rvSurvey.gaussianAt(1.5)": {
+    "n": 10,
+    "first": "1.5296936671168027",
+    "last": "0.08558398523692182",
+    "sha256": "a0e811400121b516c42f26660b8aa72e5ad0ff623858ec3d830e838ffd714547"
+  },
+  "rvSurvey.gaussianAt(-3)": {
+    "n": 10,
+    "first": "1.766316317754887",
+    "last": "0.025908977830750305",
+    "sha256": "07209380f1f29c649fa4a40ffb933081f30f86bb7c2976edad4cc4a1ac1b336f"
+  },
+  "rvSurvey.gaussianAt(0)": {
+    "n": 10,
+    "first": "0.6347231071655276",
+    "last": "0.9992006852202914",
+    "sha256": "76a9fe2a3f5b1477ab2be80c82e42ff7b1355327dc497e450d27c2921fa9dbaa"
+  },
+  "rvSurvey.gaussianAt(NaN)": {
+    "n": 10,
+    "first": "-0.7200846928059949",
+    "last": "0.9118373792248987",
+    "sha256": "5399c54333384ba82e44031c51325fc64f6ca8cc5d55c081413dba9a946fef86"
+  },
+  "rvSurvey.gaussianAt(null)": {
+    "n": 10,
+    "first": "0.6347231071655276",
+    "last": "0.9992006852202914",
+    "sha256": "76a9fe2a3f5b1477ab2be80c82e42ff7b1355327dc497e450d27c2921fa9dbaa"
+  },
+  "rvSurvey.gaussianAt(undefined)": {
+    "n": 10,
+    "first": "0.6347231071655276",
+    "last": "0.9992006852202914",
+    "sha256": "76a9fe2a3f5b1477ab2be80c82e42ff7b1355327dc497e450d27c2921fa9dbaa"
+  },
+  "rvSchedule.planSchedule(\"a\")": {
+    "n": 48,
+    "first": "120",
+    "last": "\"null\"",
+    "sha256": "daea0744ce4b22abea7456868a1d360829817ddf15067d05225caeccb4824ba7"
+  },
+  "rvSchedule.planSchedule(\"rv-run\")": {
+    "n": 48,
+    "first": "120",
+    "last": "\"null\"",
+    "sha256": "b840608561c9374873f0705f31d0e8e682c0dc4ab50802addfd64d9d2b7404b3"
+  },
+  "rvSchedule.planSchedule(7)": {
+    "n": 48,
+    "first": "120",
+    "last": "\"null\"",
+    "sha256": "778dbfba5d7accb824e34afebcda95825cbd0426572fcc62661d47af8f60b017"
+  },
+  "rvSchedule.planSchedule(\"7\")": {
+    "n": 48,
+    "first": "120",
+    "last": "\"null\"",
+    "sha256": "778dbfba5d7accb824e34afebcda95825cbd0426572fcc62661d47af8f60b017"
+  },
+  "rvSchedule.planSchedule(2024)": {
+    "n": 48,
+    "first": "120",
+    "last": "\"null\"",
+    "sha256": "99d9c973c59d56396f7dbbd1cfbb1b5ee4636963f6e75f537e9e7f6c75e46b4a"
+  },
+  "composer.variantStream(0)": {
+    "n": 24,
+    "first": "0.3812940570060164",
+    "last": "0.6146893182303756",
+    "sha256": "50668641622b624667067b15e4741c713723d1603156160661e1a7ef7f7cf569"
+  },
+  "composer.variantStream(1)": {
+    "n": 24,
+    "first": "0.4355752596165985",
+    "last": "0.43757190578617156",
+    "sha256": "d71b389d28e96971331afff8fc595c8e6e5007e0055da39cb88f4ba15e792848"
+  },
+  "composer.variantStream(7)": {
+    "n": 24,
+    "first": "0.5096900700591505",
+    "last": "0.6675116382539272",
+    "sha256": "9365cc422753e8bae6b080b1d9f8b6bc64ef2650ecd6f82e0c63d704ca34fc1f"
+  },
+  "composer.variantStream(2024)": {
+    "n": 24,
+    "first": "0.6982672216836363",
+    "last": "0.462112225824967",
+    "sha256": "32234ede67dab33693c0f40c6d38216e60f42e55f1299919fe2e382cc98ed940"
+  },
+  "composer.variantStream(4294967295)": {
+    "n": 24,
+    "first": "0.8743417817167938",
+    "last": "0.8302632411941886",
+    "sha256": "2b6a2191244b562ff940aa38691ce109ca9fcef98b0ea304811526a2d155ca3f"
+  },
+  "composer.variantStream(-5)": {
+    "n": 24,
+    "first": "0.6860886230133474",
+    "last": "0.04044181201606989",
+    "sha256": "1f36d264d28f32423191345b0b0a946ab404b4d69813f083d8f3218b5e0b0ae1"
+  },
+  "light.syntheticFlux(0)": {
+    "n": 40,
+    "first": "1.0337911764457968",
+    "last": "1.0032211500392758",
+    "sha256": "f4189ca76f8f4a8ec9a9c296152d820432b5070e6518bc4e4092b6da2e9a18f4"
+  },
+  "light.syntheticFlux(1)": {
+    "n": 40,
+    "first": "1.0545143601098785",
+    "last": "0.9767983959052802",
+    "sha256": "b60b35f419f32a3b7d5888e6ca08cbb76aa70b5b695ce1664f03782a72ea0fa4"
+  },
+  "light.syntheticFlux(2202)": {
+    "n": 40,
+    "first": "1.0734133911585333",
+    "last": "1.0139605046467344",
+    "sha256": "dc77e9c96fb8165a0c11e8cb51091d4563550c9416aa79790dbdaca1ba3a3211"
+  },
+  "light.syntheticFlux(3308)": {
+    "n": 40,
+    "first": "0.972095818341065",
+    "last": "1.0437257583405335",
+    "sha256": "c602efeb654b21793f1836069c8fe921b2869d0516667f50d88f4752ed0c096b"
+  },
+  "light.syntheticFlux(4294967295)": {
+    "n": 40,
+    "first": "1.0338997020029748",
+    "last": "1.0351417191592196",
+    "sha256": "aa20cbcf338ad225150707db105dd01766e2d1a45a922222b7139de41d750694"
+  },
+  "analysis.stream(\"a\")": {
+    "n": 24,
+    "first": "0.621685681398958",
+    "last": "0.6887228589039296",
+    "sha256": "b911425bb22288d5f340a1aa60a4b7b73a6d8735a2fd0d9bfe2c5e87482cf65e"
+  },
+  "analysis.stream(\"kepler-3\")": {
+    "n": 24,
+    "first": "0.2783434276934713",
+    "last": "0.03578051133081317",
+    "sha256": "7f6d28787f98cd3cdc44cc56fef4e2b36b0ddb067cdc8f8af85420403d84ad1a"
+  },
+  "analysis.stream(\"été\")": {
+    "n": 24,
+    "first": "0.15522583294659853",
+    "last": "0.7268907392863184",
+    "sha256": "220f9b2ab33057e4001cca0e3a0dda3f3f1b8d1a7600f6d69f9a778ac0a165db"
+  },
+  "analysis.stream(\"\")": {
+    "n": 24,
+    "first": "0.6112444521859288",
+    "last": "0.3087758240289986",
+    "sha256": "a3241b878d8af200bcb6695ce4d8470c6544072982ef9a0fb7a199bd1610a68d"
+  },
+  "analysis.stream(\"7\")": {
+    "n": 24,
+    "first": "0.5916928979568183",
+    "last": "0.5641750497743487",
+    "sha256": "f7e852412b38a149f3e4fcf1d0187880188df7b018c35ff4a7b9957e1f8a95f3"
+  },
+  "analysis.stream(7)": {
+    "n": 24,
+    "first": "0.5916928979568183",
+    "last": "0.5641750497743487",
+    "sha256": "f7e852412b38a149f3e4fcf1d0187880188df7b018c35ff4a7b9957e1f8a95f3"
+  },
+  "analysis.stream(2024)": {
+    "n": 24,
+    "first": "0.7691851996351033",
+    "last": "0.6464925413019955",
+    "sha256": "05a54875ba8c95bdc8accbeae9b7e4f7298cbd122c9a0e722ec59d9b4b746081"
+  },
+  "analysis.stream(1.5)": {
+    "n": 24,
+    "first": "0.23237958760000765",
+    "last": "0.09425614611245692",
+    "sha256": "8b5c27e2734a6da1898e1668276d80e382adea6a6838ec089dc14fee325e665b"
+  },
+  "analysis.stream(-3)": {
+    "n": 24,
+    "first": "0.9226509209256619",
+    "last": "0.1897488592658192",
+    "sha256": "2e2e00390f900fa78ec6db8c6516603e7dbd34b8de8bc3155ada1545f75a20f6"
+  },
+  "analysis.stream(0)": {
+    "n": 24,
+    "first": "0.49139764392748475",
+    "last": "0.3412834871560335",
+    "sha256": "6515ade3bdeaf6774b11b2eed613f4b04468630328b17d2a1abcce1dee2dc701"
+  },
+  "analysis.stream(NaN)": {
+    "n": 24,
+    "first": "0.22284048632718623",
+    "last": "0.43781785666942596",
+    "sha256": "0fe70b82963b83bba054e77f981af672a8db7a77f531096779038fa2b64498df"
+  },
+  "analysis.stream(null)": {
+    "n": 24,
+    "first": "0.5494516240432858",
+    "last": "0.6991243963129818",
+    "sha256": "da39bf124a65f34fdace0bf3148469991c72793b9b8caec9920155f9477bdccd"
+  },
+  "analysis.stream(undefined)": {
+    "n": 24,
+    "first": "0.9973941231146455",
+    "last": "0.2798204110004008",
+    "sha256": "84d8372b063bcb7fbb005b1ce8f59fe60dbfd9db467746a519edcfab1f4b3857"
+  },
+  "analysis.bootstrap(\"a\")": {
+    "n": 4,
+    "first": "0.0029011511295628733",
+    "last": "50",
+    "sha256": "7e12dd19bdb526fdfde9e7f2320bc37676b49f4b54faf49613ff47df1d931592"
+  },
+  "analysis.bootstrap(\"bootstrap\")": {
+    "n": 4,
+    "first": "0.0029011511295628733",
+    "last": "50",
+    "sha256": "cf9de09344cf24bcc3a30fc0c7d2dc9a030c3725b84f6592bbeab970a8951203"
+  },
+  "analysis.bootstrap(7)": {
+    "n": 4,
+    "first": "0.0029011511295628733",
+    "last": "50",
+    "sha256": "d78f1c89286e0933c856ff3c21a66b23e4fa0528de79341cd5308e47c970e42d"
+  },
+  "analysis.bootstrap(undefined)": {
+    "n": 4,
+    "first": "0.0029011511295628733",
+    "last": "50",
+    "sha256": "cf9de09344cf24bcc3a30fc0c7d2dc9a030c3725b84f6592bbeab970a8951203"
+  }
+}
