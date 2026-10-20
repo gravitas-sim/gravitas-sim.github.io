@@ -149,9 +149,9 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'merge:absorption',
     kind: 'merge',
     file: 'js/engine/bodies.js',
-    line: 340,
+    line: 361,
     detail: Object.freeze({
-      what: 'a body absorbed by a black hole is deleted and its mass, momentum and spin folded into one object; two histories become one state',
+      what: 'a body absorbed by a black hole or a star is deleted and its mass, momentum and spin folded into one object; two histories become one state',
     }),
   }),
   Object.freeze({
@@ -167,7 +167,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'fragment:rocky-collision',
     kind: 'fragment',
     file: 'js/engine/collisions.js',
-    line: 1079,
+    line: 1070,
     detail: Object.freeze({
       draws: 4,
       what: 'a rocky collision destroys both bodies and scatters debris whose directions, speeds and offsets come from 4 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed',

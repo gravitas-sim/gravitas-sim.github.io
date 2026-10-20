@@ -74,6 +74,39 @@ export const OUTCOMES = Object.freeze({
    * closed pair, and no more.
    */
   throughStep: 1e-9,
+  /**
+   * A star absorbing a planet, a gas giant or an asteroid (D-R10-23): the
+   * largest momentum error, and the largest centre-of-mass error, as a
+   * fraction of the scale S = sum of |m q| over the two bodies, where q is the
+   * velocity (for momentum) or the position (for the centre of mass).
+   *
+   * The scale is the sum of magnitudes, not the net, on purpose. The net can be
+   * near zero when the two velocities oppose, and the same round-off would then
+   * look like a large fraction of nothing.
+   *
+   * The merged state is q' = (m1 q1 + m2 q2) / (m1 + m2), and what the system
+   * holds afterwards is (m1 + m2) q'. That is two products, a sum, a quotient
+   * and a product, and the mass sum, so six roundings of at most 1.1e-16 each
+   * (half an ulp of a double): a worst case of 7e-16 S, and a few times that
+   * once the check adds the two sides up itself. A part in 1e12 of S is three
+   * orders of margin over that arithmetic and no more, the figure `exact`
+   * already uses for the same operations.
+   *
+   * It is also far finer than the effect it has to see. A star that keeps its
+   * own velocity drops m2 |v2 - v1|, which is m2 / (m1 + m2) of S at the
+   * largest: 1e-10 for a Ceres-mass asteroid (4.7e-7 units on a star of 4000),
+   * 7e-6 for a thirty-Earth-mass planet and 5e-4 for a two-Jupiter-mass giant.
+   * The asteroid is the smallest of the three, and it still sits two orders
+   * above this tolerance.
+   *
+   * Measured afterwards, with the number above unchanged (D-R10-23): over a
+   * 60-case sweep of unrelated masses and velocities the largest error is
+   * 1.7e-16 of the scale, about one and a half ulp, so the tolerance sits
+   * nearly four orders (5.8e3 times) above the round-off and about 1.4e3 times
+   * above the worst-case bound given here. The round-number cases measure
+   * exactly zero, which is why the check also runs the sweep.
+   */
+  momentumScale: 1e-12,
 });
 
 /**

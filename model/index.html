@@ -2398,8 +2398,8 @@ try {
             </tr>
             <tr>
               <td>Merged</td>
-              <td>a body absorbed by a black hole is deleted and its mass, momentum and spin folded into one object; two histories become one state</td>
-              <td><code>js/engine/bodies.js:340</code></td>
+              <td>a body absorbed by a black hole or a star is deleted and its mass, momentum and spin folded into one object; two histories become one state</td>
+              <td><code>js/engine/bodies.js:361</code></td>
             </tr>
             <tr>
               <td>Damped</td>
@@ -2409,7 +2409,7 @@ try {
             <tr>
               <td>Fragmented</td>
               <td>a rocky collision destroys both bodies and scatters debris whose directions, speeds and offsets come from 4 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed</td>
-              <td><code>js/engine/collisions.js:1079</code></td>
+              <td><code>js/engine/collisions.js:1070</code></td>
             </tr>
           <!--/fact-block-->
           </tbody>
@@ -2592,8 +2592,8 @@ try {
             <tr>
               <td>Debris generation and particle effects</td>
               <td>Limit stated</td>
-              <td>The thirteen visual bursts are shown to alter no body, and every event that throws one is run with mass and momentum totalled either side (Collision outcomes). Two departures are characterized rather than conserved: a star that absorbs a planet, gas giant or asteroid keeps its own velocity and discards the body's momentum, and a rocky collision above a relative speed of 15 removes a tenth of each body's mass. The random momentum of the debris fragments themselves is not audited, and tidal-disruption debris is checked only for the star's own bookkeeping. <small>(PHYSICS_VALIDATION.md, What is not validated)</small></td>
-              <td>A star absorbing a body keeps its own velocity, so the body's momentum is discarded: passes<br />A fast rocky collision (relative speed 40) removes exactly a tenth of each body's mass: passes</td>
+              <td>The thirteen visual bursts are shown to alter no body, and every event that throws one is run with mass and momentum totalled either side (Collision outcomes). One departure is characterized rather than conserved, and kept on purpose (DECISION_REGISTER.md, D-R10-23): a rocky collision above a relative speed of 15 multiplies each body's mass by 0.9 and throws floor(speed/8)+2 fragments of a tiny fixed mass, so a tenth of the pair's mass leaves the system and its momentum with it. A star that absorbs a planet, gas giant or asteroid used to keep its own velocity and discard the body's momentum; it now takes the mass-weighted velocity as a black hole does, and the check pins the total in absolute terms. The random momentum of the debris fragments themselves is not audited, and tidal-disruption debris is checked only for the star's own bookkeeping. <small>(PHYSICS_VALIDATION.md, What is not validated)</small></td>
+              <td>A fast rocky collision (relative speed 40) removes exactly a tenth of each body's mass: passes</td>
             </tr>
             <tr>
               <td>Long-term N-body statistics</td>

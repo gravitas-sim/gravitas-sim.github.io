@@ -174,7 +174,7 @@ scan({
   pattern: /bankAbsorbedSpin\(spin\)/g,
   id: 'merge:absorption',
   describe: () => ({
-    what: 'a body absorbed by a black hole is deleted and its mass, momentum and spin folded into one object; two histories become one state',
+    what: 'a body absorbed by a black hole or a star is deleted and its mass, momentum and spin folded into one object; two histories become one state',
   }),
 });
 
