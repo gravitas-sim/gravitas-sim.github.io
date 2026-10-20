@@ -205,6 +205,16 @@ describe('transit', () => {
     expect(() => runForward('transit', ecc, SETUP())).toThrow(/circular/);
   });
 
+  test("e at or past 1 keeps the transit model's own words, not the orbital layer's", () => {
+    for (const e of [1, 1.2, 3]) {
+      const s = STATE();
+      s.planets[0].e = e;
+      expect(() => runForward('transit', s, SETUP())).toThrow(
+        /the transit model needs a circular orbit; b has e = /
+      );
+    }
+  });
+
   test('two planets: the deficits add', () => {
     const one = STATE();
     const two = STATE();

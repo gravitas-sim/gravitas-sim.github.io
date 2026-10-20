@@ -192,7 +192,6 @@ describe('nothing else solves it again', () => {
   test('the callers import it', () => {
     for (const f of [
       'js/inference/rv.js',
-      'js/forward/system.js',
       'js/habitability.js',
       'js/binaryWidgets.js',
       'js/systemSpec.js',
@@ -206,6 +205,18 @@ describe('nothing else solves it again', () => {
         imports: true,
       });
     }
+  });
+
+  test('the callers on the orbital layer reach it through the layer, which imports it', () => {
+    // Prompt 148: js/forward/system.js moved onto js/orbital/layer.js, whose
+    // mean-to-eccentric conversion is this solver and no copy of it.
+    expect(readFileSync('js/orbital/layer.js', 'utf8')).toMatch(
+      /import \{ solveKepler \} from '\.\.\/orbital\.js'/
+    );
+    for (const f of ['js/forward/system.js'])
+      expect(readFileSync(f, 'utf8')).toMatch(
+        /from '(\.\.?\/)+orbital\/layer\.js'/
+      );
   });
 
   test('the module imports nothing', () => {
