@@ -1,4 +1,35 @@
 {
   "about": "Acceptance checks for features not built yet. A check listed here runs and is reported under 'pending acceptance'; it does not count as a failure until its prompt sets `activated` to true. See tools/pending-acceptance.mjs.",
-  "checks": []
+  "checks": [
+    {
+      "id": "interaction.keyboard.sandbox-zoom",
+      "prompt": "278",
+      "activated": false
+    },
+    {
+      "id": "interaction.single-pointer.sandbox-pan",
+      "prompt": "278",
+      "activated": false
+    },
+    {
+      "id": "interaction.single-pointer.lab3d-orbit",
+      "prompt": "278",
+      "activated": false
+    },
+    {
+      "id": "interaction.single-pointer.observer-handle",
+      "prompt": "278",
+      "activated": false
+    },
+    {
+      "id": "interaction.single-pointer.window-move",
+      "prompt": "278",
+      "activated": false
+    },
+    {
+      "id": "interaction.single-pointer.observatory-run",
+      "prompt": "278",
+      "activated": false
+    }
+  ]
 }

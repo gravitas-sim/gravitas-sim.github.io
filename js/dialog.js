@@ -61,10 +61,14 @@ function focusable(panel) {
   );
 }
 
-/** @returns {boolean} Whether the reader has asked for less motion */
+/**
+ * @returns {boolean} Whether the reader has asked for less motion: the system
+ *   setting, or the override js/quality.js writes on the root as `data-motion`
+ */
 const reducedMotion = () =>
-  typeof matchMedia === 'function' &&
-  matchMedia('(prefers-reduced-motion: reduce)').matches;
+  Boolean(document.documentElement.dataset.motion) ||
+  (typeof matchMedia === 'function' &&
+    matchMedia('(prefers-reduced-motion: reduce)').matches);
 
 /** Per-panel bookkeeping, so a second open does not install a second listener. */
 const wired = new WeakMap();

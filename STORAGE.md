@@ -47,6 +47,7 @@ These are the student's own work, and what an "export everything" would carry:
 | `gravitas_locale` | The interface language, shared by every page | `js/i18n/index.js` and each page's catalog loader |
 | `gravitas_theme` | The theme | `js/theme.js` |
 | `gravitas_units` | Physical or simulation units | `js/units.js` |
+| `gravitas_motion` | The reader's motion override: reduced or step by step (absent means follow the device) | `js/quality.js` |
 | `gravitas_course_level` | The course level: introductory, majors or advanced (sets the readout precision) | `js/settingsSchema.js` |
 | `gravitas_last_export` | When My work last made a backup file, and what it held (the file is the student's; this only remembers that one was made) | `js/myWorkPage.js`, through `js/storage/local.js` |
 | `gravitas_lesson_objects_open` | Whether the lesson panel's objects list was left open | `js/investigations.js` |
@@ -100,6 +101,7 @@ Every record a student's browser holds, its owner, how it migrates, whether a ba
 | `gravitas_capability_versions` | The capability package versions loaded | — | `js/platform/resolver.js` | direct | none | platform: the site’s own state, not exported | `capability-package` |
 | `gravitas_locale` | The interface language | preferences | `js/i18n/index.js` | direct | none | preference: in a backup file only when ticked | a one-word preference |
 | `gravitas_theme` | The theme | preferences | `js/theme.js` | direct | none | preference: in a backup file only when ticked | a one-word preference |
+| `gravitas_motion` | The motion override | preferences | `js/quality.js` | direct | none | preference: in a backup file only when ticked | a one-word preference |
 | `gravitas_units` | Physical or simulation units | preferences | `js/units.js` | direct | none | preference: in a backup file only when ticked | a one-word preference |
 | `gravitas_lesson_objects_open` | Whether the objects list was left open | preferences | `js/investigations.js` | `js/storage/local.js` | none | preference: in a backup file only when ticked | a flag |
 | `gravitas_rail_sections` | Which rail sections are open | preferences | `js/controls.js` | direct | none | preference: in a backup file only when ticked | a list of ids |
@@ -152,6 +154,7 @@ Still direct, and why, with what each lacks (measured at Prompt 146; `tests/stud
 | `js/settingsSchema.js` | as world.js | 1 request on front-door, sandbox (build) |
 | `js/theme.js` | a preference on every route, several with no room | 1.4 KB and 1 request on my-work, sky, course-home and the other routes with 0.0 KB free |
 | `js/units.js` | as theme.js | 1.4 KB and 1 request on as theme.js |
+| `js/quality.js` | as theme.js: the motion override is a preference every route reads | 1.4 KB and 1 request on as theme.js |
 | `js/shell.js` | the shell's own theme and language choice, on every route | 1.4 KB and 1 request on as theme.js |
 | `js/i18n/index.js` | the language; each page's catalog loader | 1.4 KB and 1 request on as theme.js |
 | `js/myWork/made.js` | reached from the Sandbox: a second importer would split storage/local.js into a chunk every lesson fetches; it states the collection's record limit itself (512 KB, equal to ITEM.made) and announces a refusal | 1 request on lesson routes (build) |

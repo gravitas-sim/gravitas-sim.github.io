@@ -7793,3 +7793,15 @@
     white-space: nowrap;
   }
 }
+
+/* The reader's override of the system's reduced-motion setting (data-motion on
+   the root, js/quality.js). Outside every layer, so it outranks the layered
+   rules that set a duration without needing to be marked important. */
+:root[data-motion] *,
+:root[data-motion] *::before,
+:root[data-motion] *::after {
+  animation-duration: 0.01ms;
+  animation-iteration-count: 1;
+  transition-duration: 0.01ms;
+  scroll-behavior: auto;
+}

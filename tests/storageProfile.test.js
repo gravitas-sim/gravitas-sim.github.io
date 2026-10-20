@@ -56,8 +56,11 @@ const inspect = (tree, file, dump) =>
 describe('the profile holds everything a 2.0.0 student could have', () => {
   test('every key group in the storage module has a key in it', () => {
     const keys = Object.keys(profile.localStorage);
+    // Keys that did not exist in 2.0.0, so no 2.0.0 student could hold one:
+    // gravitas_motion (Prompt 155, a one-word preference read by js/quality.js).
+    const SINCE_2_0_0 = ['gravitas_motion'];
     const bare = KEYS.map(([p]) => p).filter(
-      p => !keys.some(k => k.startsWith(p))
+      p => !SINCE_2_0_0.includes(p) && !keys.some(k => k.startsWith(p))
     );
     expect(bare).toEqual([]);
   });
