@@ -2451,9 +2451,9 @@ try {
       </p>
       <p>
         <span class="gs-en">The repository carries an automated validation suite. It runs
-        <!--fact:physicsChecks-->304<!--/fact-->
+        <!--fact:physicsChecks-->332<!--/fact-->
         deterministic checks and prints a table of measured value, expected
-        value, error and tolerance:</span><span class="gs-es" lang="es">El repositorio incluye una batería automática de validación. Ejecuta <!--fact:physicsChecks-->304<!--/fact--> comprobaciones deterministas e imprime una tabla con el valor medido, el valor esperado, el error y la tolerancia:</span>
+        value, error and tolerance:</span><span class="gs-es" lang="es">El repositorio incluye una batería automática de validación. Ejecuta <!--fact:physicsChecks-->332<!--/fact--> comprobaciones deterministas e imprime una tabla con el valor medido, el valor esperado, el error y la tolerancia:</span>
       </p>
       <p class="doc-eq-block">npm run validate:physics</p>
       <p>
@@ -2583,7 +2583,31 @@ try {
               <td>The production periodogram is the direct per-frequency evaluation. A faster rotated form would meet a tolerance stated against the formula's own conditioning, which has not been adopted, so the faster form is not used. <small>(DECISION_REGISTER.md, D-KERNEL-07)</small></td>
               <td>no check in this report</td>
             </tr>
-            <tr><td colspan="4">Checks failing in the report with no row above: none (304 checks, 304 pass).</td></tr>
+            <tr>
+              <td>The Barnes-Hut solver in the running application</td>
+              <td>Limit stated</td>
+              <td>The suite runs the tree's arithmetic (js/engine/barnesHut.js, the code the Worker runs) against the direct sum on three seeded worlds at the application's opening angle of 0.4, and its energy drift against the direct sum's. It does not start the Worker, so the message handling, the choice of when the tree takes over from the direct sum, and any distribution unlike the three worlds (a cluster of masses 1 to 20, two clumps, a disc about a body 100 to 500 times heavier than the rest) are not checked. The mean force error is about half a percent and the worst single body sits just under its 10 percent bound; the measured values are in the validation report. <small>(PHYSICS_VALIDATION.md, What is not validated)</small></td>
+              <td>Mean force error at the application opening angle, three seeded worlds: passes<br />Worst single-body force error at the application opening angle: passes</td>
+            </tr>
+            <tr>
+              <td>Debris generation and particle effects</td>
+              <td>Limit stated</td>
+              <td>The thirteen visual bursts are shown to alter no body, and every event that throws one is run with mass and momentum totalled either side (Collision outcomes). Two departures are characterized rather than conserved: a star that absorbs a planet, gas giant or asteroid keeps its own velocity and discards the body's momentum, and a rocky collision above a relative speed of 15 removes a tenth of each body's mass. The random momentum of the debris fragments themselves is not audited, and tidal-disruption debris is checked only for the star's own bookkeeping. <small>(PHYSICS_VALIDATION.md, What is not validated)</small></td>
+              <td>A star absorbing a body keeps its own velocity, so the body's momentum is discarded: passes<br />A fast rocky collision (relative speed 40) removes exactly a tenth of each body's mass: passes</td>
+            </tr>
+            <tr>
+              <td>Long-term N-body statistics</td>
+              <td>Limit stated</td>
+              <td>Cluster relaxation, mass segregation and ejection rates are not compared against any reference; a dense cluster in Gravitas is a demonstration, not a simulation anyone should measure. The one long-run check is a regression bound on the energy drift of 50 seeded perturbed three-body systems, recorded when it was written: it says the integrator has not got worse, and it validates no physical statistic. Its heavy tail (the worst tenth of the seeds drift by tens of percent in 50 simulated seconds) is the fixed step through a close encounter. <small>(PHYSICS_VALIDATION.md, What is not validated)</small></td>
+              <td>Median energy drift over 50 seeded three-body systems does not rise: passes<br />90th-percentile energy drift over 50 seeded three-body systems does not rise: passes</td>
+            </tr>
+            <tr>
+              <td>The gravitational-wave inspiral</td>
+              <td>Decided</td>
+              <td>Left unvalidated against general relativity by decision (DECISION_REGISTER.md, D-R10-13): the model is a constant fractional velocity decay, not the power-law inspiral of the quadrupole formula. The suite checks that the code does what the model page says it does, and measures how far that is from the equation it does not use, so the departure is a number; it does not check the physics of an inspiral, which is not claimed. <small>(PHYSICS_VALIDATION.md, What is not validated)</small></td>
+              <td>Velocity damping matches the stated constant fractional decay: passes<br />Separation decays exponentially at -2 * decay rate: passes<br />Decay is exponential in time, not the GR power law: passes<br />GR would give a late/early rate ratio of 3.4 over this window: passes</td>
+            </tr>
+            <tr><td colspan="4">Checks failing in the report with no row above: none (332 checks, 332 pass).</td></tr>
           <!--/fact-block-->
           </tbody>
         </table>

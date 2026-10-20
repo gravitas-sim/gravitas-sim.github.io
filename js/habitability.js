@@ -25,6 +25,7 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
+import { solveKepler } from './orbital.js';
 
 /** Earth's insolation is the unit everything is quoted in: 1 at 1 AU from the Sun. */
 export const EARTH_INSOLATION_WM2 = 1361;
@@ -272,31 +273,6 @@ export function stellarPropertiesFor(star, solarMassUnit = 1000) {
 // --- Eccentric orbits ---------------------------------------------------------
 
 /**
- * Solve Kepler's equation for the eccentric anomaly.
- *
- * Newton's method, which converges in a handful of iterations for the
- * eccentricities this is used at. Needed because a planet does not move round
- * an ellipse at a constant rate, and an animation that pretends it does gets
- * the whole point of this section backwards: the planet spends most of its year
- * in the cold, slow, outer part of the orbit.
- *
- * @param {number} M - Mean anomaly, radians
- * @param {number} e - Eccentricity
- * @returns {number} Eccentric anomaly, radians
- */
-export function eccentricAnomaly(M, e) {
-  let E = e < 0.8 ? M : Math.PI;
-  for (let i = 0; i < 60; i++) {
-    const f = E - e * Math.sin(E) - M;
-    const df = 1 - e * Math.cos(E);
-    const step = f / df;
-    E -= step;
-    if (Math.abs(step) < 1e-12) break;
-  }
-  return E;
-}
-
-/**
  * Where a planet is, and what it is receiving, at a given point in its year.
  *
  * @param {Object} orbit
@@ -311,7 +287,7 @@ export function orbitalStateAt(
   phase
 ) {
   const M = 2 * Math.PI * (phase - Math.floor(phase));
-  const E = eccentricAnomaly(M, eccentricity);
+  const E = solveKepler(M, eccentricity);
   const distanceAU = semiMajorAU * (1 - eccentricity * Math.cos(E));
   // True anomaly, for drawing the planet in the right place on the ellipse.
   const trueAnomaly =

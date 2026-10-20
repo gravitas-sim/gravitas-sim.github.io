@@ -1,0 +1,97 @@
+{
+  "note": "What the physics validation suite does not validate, and how far it goes where it goes part of the way. Read by tools/generated-blocks.mjs, which prints PHYSICS_VALIDATION.md's 'What is not validated' list from it and from the suite's own inventory, so a group named here must exist and have checks, and the counts printed are the suite's. An entry with a modelPage field is also read by the model page's known-discrepancies table. Statuses: unvalidated (nothing in the suite touches it), partial (some of it is checked, the rest is named), decided (left unvalidated on purpose, with the decision).",
+  "entries": [
+    {
+      "id": "rendering",
+      "status": "unvalidated",
+      "title": "Rendering",
+      "text": "Nothing here reads a pixel. Trails, glows, accretion disks, jets, the spacetime view and the merger ripple are visual and are described on the model page as illustrative.",
+      "groups": []
+    },
+    {
+      "id": "barnes-hut-beyond-the-worlds",
+      "status": "partial",
+      "title": "The Barnes-Hut solver in the running application",
+      "text": "The suite runs the tree's arithmetic (js/engine/barnesHut.js, the code the Worker runs) against the direct sum on three seeded worlds at the application's opening angle of 0.4, and its energy drift against the direct sum's. It does not start the Worker, so the message handling, the choice of when the tree takes over from the direct sum, and any distribution unlike the three worlds (a cluster of masses 1 to 20, two clumps, a disc about a body 100 to 500 times heavier than the rest) are not checked. The mean force error is about half a percent and the worst single body sits just under its 10 percent bound; the measured values are in the validation report.",
+      "groups": [
+        "Barnes-Hut gravity"
+      ],
+      "modelPage": {
+        "status": "limit",
+        "checks": [
+          "Mean force error at the application opening angle, three seeded worlds",
+          "Worst single-body force error at the application opening angle"
+        ]
+      }
+    },
+    {
+      "id": "debris-and-fragmentation",
+      "status": "partial",
+      "title": "Debris generation and particle effects",
+      "text": "The thirteen visual bursts are shown to alter no body, and every event that throws one is run with mass and momentum totalled either side (Collision outcomes). Two departures are characterized rather than conserved: a star that absorbs a planet, gas giant or asteroid keeps its own velocity and discards the body's momentum, and a rocky collision above a relative speed of 15 removes a tenth of each body's mass. The random momentum of the debris fragments themselves is not audited, and tidal-disruption debris is checked only for the star's own bookkeeping.",
+      "groups": [
+        "Collision outcomes",
+        "Tidal disruption"
+      ],
+      "modelPage": {
+        "status": "limit",
+        "checks": [
+          "A star absorbing a body keeps its own velocity, so the body's momentum is discarded",
+          "A fast rocky collision (relative speed 40) removes exactly a tenth of each body's mass"
+        ]
+      }
+    },
+    {
+      "id": "collision-outcome-classification",
+      "status": "partial",
+      "title": "Collision outcome classification",
+      "text": "Which object type results from a merger is a modeling choice, not a conservation law. The product of twelve hand-chosen canonical pairs and six collapse cases is checked against the documented thresholds (3.0 and 1.4 solar masses, 8 and the application's most-massive-star setting); the other pairs the sandbox can make are not enumerated.",
+      "groups": [
+        "Collision outcomes",
+        "Mergers"
+      ]
+    },
+    {
+      "id": "long-term-n-body-statistics",
+      "status": "partial",
+      "title": "Long-term N-body statistics",
+      "text": "Cluster relaxation, mass segregation and ejection rates are not compared against any reference; a dense cluster in Gravitas is a demonstration, not a simulation anyone should measure. The one long-run check is a regression bound on the energy drift of 50 seeded perturbed three-body systems, recorded when it was written: it says the integrator has not got worse, and it validates no physical statistic. Its heavy tail (the worst tenth of the seeds drift by tens of percent in 50 simulated seconds) is the fixed step through a close encounter.",
+      "groups": [
+        "Long-term regression",
+        "Three-body sensitivity"
+      ],
+      "modelPage": {
+        "status": "limit",
+        "checks": [
+          "Median energy drift over 50 seeded three-body systems does not rise",
+          "90th-percentile energy drift over 50 seeded three-body systems does not rise"
+        ]
+      }
+    },
+    {
+      "id": "inspiral",
+      "status": "decided",
+      "title": "The gravitational-wave inspiral",
+      "text": "Left unvalidated against general relativity by decision (DECISION_REGISTER.md, D-R10-13): the model is a constant fractional velocity decay, not the power-law inspiral of the quadrupole formula. The suite checks that the code does what the model page says it does, and measures how far that is from the equation it does not use, so the departure is a number; it does not check the physics of an inspiral, which is not claimed.",
+      "groups": [
+        "Inspiral (approximation)"
+      ],
+      "modelPage": {
+        "status": "decided",
+        "checks": [
+          "Velocity damping matches the stated constant fractional decay",
+          "Separation decays exponentially at -2 * decay rate",
+          "Decay is exponential in time, not the GR power law",
+          "GR would give a late/early rate ratio of 3.4 over this window"
+        ]
+      }
+    },
+    {
+      "id": "relativity",
+      "status": "unvalidated",
+      "title": "Numerical relativity, post-Newtonian dynamics and gravitational waveforms",
+      "text": "Absent entirely; see the educational approximations section below.",
+      "groups": []
+    }
+  ]
+}

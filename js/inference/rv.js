@@ -22,24 +22,9 @@
 
 // Bound once, not read as globals: in Jest's vm context every free global read
 // goes through the context, which made these loops 8-25x slower than in Node.
-const { Math, Float64Array } = globalThis;
+import { solveKepler } from '../orbital.js';
 
-/**
- * The eccentric anomaly.
- * @param {number} M - Mean anomaly, radians
- * @param {number} e - Eccentricity, [0, 1)
- */
-export function solveKepler(M, e) {
-  if (e === 0) return M;
-  let E = M + e * Math.sin(M);
-  for (let k = 0; k < 50; k++) {
-    const f = E - e * Math.sin(E) - M;
-    const step = f / (1 - e * Math.cos(E));
-    E -= step;
-    if (Math.abs(step) < 1e-13) break;
-  }
-  return E;
-}
+const { Math, Float64Array } = globalThis;
 
 /** Eccentricity and argument of periastron from the fitted pair. */
 export function eccentricity(sqrtEcosw, sqrtEsinw) {

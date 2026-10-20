@@ -39,7 +39,7 @@
 /* global process */
 import { describe, test, expect } from '@jest/globals';
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { KIND_ORDER, KIND_LABEL, KIND_SHORT } from '../js/physicsKinds.js';
 import { score } from '../js/validation/physicsChecks.js';
 import { conjunctions, conjunctionCluster } from '../js/resonance/elements.js';
@@ -310,10 +310,15 @@ describe('a missing measurement fails its own row, not the suite', () => {
     // back. A behavioural test cannot see this without a degenerate world to run
     // the registry in, so the invariant is asserted on the source: every read of
     // atConjunction goes through a guard, and a bare `atConjunction.` is the bug.
-    const registry = readFileSync(
-      path.join(here, '..', 'js', 'validation', 'physicsChecks.js'),
-      'utf8'
-    );
+    const dir = path.join(here, '..', 'js', 'validation');
+    const registry = [
+      path.join(dir, 'physicsChecks.js'),
+      ...readdirSync(path.join(dir, 'groups')).map(f =>
+        path.join(dir, 'groups', f)
+      ),
+    ]
+      .map(f => readFileSync(f, 'utf8'))
+      .join('\n');
     // Guard against the test silently passing because the name changed.
     expect(registry).toContain('atConjunction');
     // Every line that dereferences the cluster has to test it on the same line.
