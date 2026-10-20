@@ -113,27 +113,29 @@ function pages() {
 /**
  * The pages that would gain the registry if this module imported it.
  * @param {string[]} files - Repo-relative module paths
- * @returns {Object<string, string[]>} Module -> pages that lack the registry
+ * @param {string} [target] - The module to be imported (the registry; Prompt
+ *   143 asks the same of js/hash.js and js/notify.js)
+ * @returns {Object<string, string[]>} Module -> pages that lack the target
  */
-export function costs(files) {
-  if (!existsSync(join(ROOT, REGISTRY))) return {};
+export function costs(files, target = REGISTRY) {
+  if (!existsSync(join(ROOT, target))) return {};
   const all = pages();
   const out = {};
   for (const f of files)
     out[f] = Object.entries(all)
-      .filter(([, c]) => c.loads.has(f) && !c.starts.has(REGISTRY))
+      .filter(([, c]) => c.loads.has(f) && !c.starts.has(target))
       .map(([page]) => page);
   return out;
 }
 
 /** The modules in `files` that cost no page anything. */
-export const freeFiles = files => {
+export const freeFiles = (files, target = REGISTRY) => {
   const all = pages();
   // A module no page reaches by this screen (a worker's, a bundler entry) is
   // not shown to be free: it is left for a decision, not converted by default.
   return files.filter(f => {
     const loading = Object.values(all).filter(c => c.loads.has(f));
-    return loading.length && loading.every(c => c.starts.has(REGISTRY));
+    return loading.length && loading.every(c => c.starts.has(target));
   });
 };
 

@@ -34,25 +34,17 @@
 // =============================================================================
 
 import { chiSquareSf } from './stats.js';
+import { fnv1a32Bytes } from '../hash.js';
 
 export const MODEL_COMPARISON = { id: 'model-comparison', version: '1.0.0' };
 export const MAX_MODELS = 6;
 
 /** A fingerprint of the rows a fit saw: which rows, their values and errors. */
 export function dataKey(d) {
-  let h = 0x811c9dc5;
-  const mix = x => {
-    const b = new Uint8Array(new Float64Array([x]).buffer);
-    for (const v of b) {
-      h ^= v;
-      h = Math.imul(h, 0x01000193);
-    }
-  };
-  for (const r of d.rows) mix(r);
-  for (const v of d.y) mix(v);
-  if (d.sigma) for (const v of d.sigma) mix(v);
-  else mix(NaN);
-  return `${d.rows.length}:${(h >>> 0).toString(16)}`;
+  // Every value's eight bytes, one after another.
+  const values = [...d.rows, ...d.y, ...(d.sigma ? d.sigma : [NaN])];
+  const bytes = new Uint8Array(new Float64Array(values).buffer);
+  return `${d.rows.length}:${fnv1a32Bytes(bytes).toString(16)}`;
 }
 
 /**

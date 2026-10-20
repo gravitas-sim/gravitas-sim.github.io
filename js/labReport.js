@@ -17,6 +17,7 @@
 // =============================================================================
 
 import { createDocument } from './pdf.js';
+import { fnvBase36 } from './hash.js';
 import { registerMessages } from './i18n/index.js';
 // Depths, shallowest first (as in investigations/progressSchema.js).
 const LEVELS = ['core', 'quantitative', 'advanced'];
@@ -41,12 +42,7 @@ export const reportMessages = () =>
  * @returns {string} Checksum, grouped for reading aloud
  */
 function completionCode(text) {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
-    h = Math.imul(h, 0x01000193);
-  }
-  const base = (h >>> 0).toString(36).toUpperCase().padStart(7, '0');
+  const base = fnvBase36(text);
   return `${base.slice(0, 4)}-${base.slice(4)}`;
 }
 

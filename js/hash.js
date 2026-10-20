@@ -28,6 +28,21 @@ export function fnv1a32(text) {
   return h >>> 0;
 }
 
+/**
+ * FNV-1a over bytes: the same loop, fed each byte of a typed view (a fit's
+ * data key mixes the eight bytes of each float).
+ * @param {Iterable<number>} bytes
+ * @returns {number}
+ */
+export function fnv1a32Bytes(bytes) {
+  let h = 0x811c9dc5;
+  for (const b of bytes) {
+    h ^= b;
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
 /** As eight lowercase hex digits: the form links, keys and digests use. */
 export const fnvHex8 = text => fnv1a32(text).toString(16).padStart(8, '0');
 

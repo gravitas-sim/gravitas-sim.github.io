@@ -26,6 +26,7 @@
 // =============================================================================
 
 import { canonicalJson } from './canonicalState.js';
+import { fnvHex8 } from '../hash.js';
 import { METRICS, METRIC_ARITY, METRIC_UNITS } from './metrics.js';
 import { toCsv } from '../csv.js';
 import { mulberry32, normalizeSeed } from '../rng.js';
@@ -493,13 +494,7 @@ export function planTrials(m) {
 
 /** A short, stable identity for a manifest, as the bench hashes a state. */
 export function experimentHash(m) {
-  const text = canonicalJson(m);
-  let h = 0x811c9dc5;
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
-    h = Math.imul(h, 0x01000193) >>> 0;
-  }
-  return h.toString(16).padStart(8, '0');
+  return fnvHex8(canonicalJson(m));
 }
 
 /**

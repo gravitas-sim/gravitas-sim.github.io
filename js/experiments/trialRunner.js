@@ -18,6 +18,7 @@
 // =============================================================================
 
 import { TRIAL_STATUS } from './sweep.js';
+import { fnvHex8 } from '../hash.js';
 import { sampleFrame, reduceRun, series, UNITS_PER_AU } from './metrics.js';
 
 /** The body lists a role is looked up in, as the bench's picker does. */
@@ -408,24 +409,17 @@ export function engineFingerprint(m) {
   for (let f = 0; f < 60; f++) {
     for (let s = 0; s < plan.substeps; s++) m.physics.updatePhysics(plan.step);
   }
-  let h = 0x811c9dc5;
-  const mix = x => {
-    // FNV-1a over the position rounded to 1e-9 of a simulation unit: exact
-    // enough to see any change to the integrator, loose enough to be the same
-    // on every IEEE-754 machine running the same code.
-    const s = Math.round(x * 1e9).toString(36);
-    for (let i = 0; i < s.length; i++) {
-      h ^= s.charCodeAt(i);
-      h = Math.imul(h, 0x01000193) >>> 0;
-    }
-  };
+  // FNV-1a over each position rounded to 1e-9 of a simulation unit, the digits
+  // run together: exact enough to see any change to the integrator, loose
+  // enough to be the same on every IEEE-754 machine running the same code.
+  let digits = '';
   for (const name of BODY_LISTS) {
     for (const b of m.physics[name] || []) {
-      mix(b.pos.x);
-      mix(b.pos.y);
+      digits += Math.round(b.pos.x * 1e9).toString(36);
+      digits += Math.round(b.pos.y * 1e9).toString(36);
     }
   }
-  return h.toString(16).padStart(8, '0');
+  return fnvHex8(digits);
 }
 
 export { UNITS_PER_AU };
