@@ -24,13 +24,13 @@ const RECORDER = () => {
       n.hasAttribute('aria-live') ||
       n.id === 'srStatus');
   const seen = el => {
-    const text = (el.textContent || '').replace(/ /g, ' ').trim();
+    const text = (el.textContent || '').replace(/\u00a0/g, ' ').trim();
     if (!text || last.get(el) === text) return;
     last.set(el, text);
     window.__announced.push(`${el.id}: ${text}`);
   };
   const watch = () =>
-    new MutationObserver(records => {
+    new window.MutationObserver(records => {
       for (const r of records) {
         let n = r.target;
         while (n && !isRegion(n)) n = n.parentNode;
@@ -46,6 +46,15 @@ const RECORDER = () => {
 
 const announced = page => page.evaluate(() => window.__announced);
 
+/** Two frames, so what a click set off synchronously has been drawn. */
+const nextFrames = page =>
+  page.evaluate(
+    () =>
+      new Promise(done =>
+        window.requestAnimationFrame(() => window.requestAnimationFrame(done))
+      )
+  );
+
 /** Click each control that is there, in order, and let the page answer. */
 async function press(page, ids) {
   for (const id of ids) {
@@ -53,7 +62,7 @@ async function press(page, ids) {
     await expect(control).toBeVisible();
     await expect(control).toBeEnabled();
     await control.click();
-    await page.waitForTimeout(400);
+    await nextFrames(page);
   }
 }
 
@@ -69,31 +78,37 @@ test.describe('every status line says the same words in the same order', () => {
   test('the scenario studio', async ({ page }) => {
     await page.goto('/studio/', { waitUntil: 'domcontentloaded' });
     await press(page, ['st-new', 'st-from-go']);
-    expect(await announced(page)).toEqual([
-      'st-status: A new scenario. It is saved in this browser as you go.',
-      'st-status: Started from Supermassive Core.',
-    ]);
+    await expect
+      .poll(() => announced(page))
+      .toEqual([
+        'st-status: A new scenario. It is saved in this browser as you go.',
+        'st-status: Started from Supermassive Core.',
+      ]);
   });
 
   test('the investigation composer', async ({ page }) => {
     await page.goto('/studio/lesson/', { waitUntil: 'domcontentloaded' });
     await press(page, ['cp-new', 'cp-publish']);
-    expect(await announced(page)).toEqual([
-      'cp-status: A new investigation. It is saved in this browser as you go.',
-      'cp-status: Fix the checks first: a link is made only from a valid investigation.',
-    ]);
+    await expect
+      .poll(() => announced(page))
+      .toEqual([
+        'cp-status: A new investigation. It is saved in this browser as you go.',
+        'cp-status: Fix the checks first: a link is made only from a valid investigation.',
+      ]);
   });
 
   test('the course builder', async ({ page }) => {
     await page.goto('/studio/course/', { waitUntil: 'domcontentloaded' });
     await press(page, ['cb-new', 'cb-example', 'cb-save', 'cb-manifest']);
-    expect(await announced(page)).toEqual([
-      'cb-status: The example course: introductory astronomy.',
-      'cb-status: A new course.',
-      'cb-status: The example course: introductory astronomy.',
-      'cb-status: Saved as intro-astronomy.course.json.',
-      'cb-status: The manifest is saved as intro-astronomy.course-manifest.json.',
-    ]);
+    await expect
+      .poll(() => announced(page))
+      .toEqual([
+        'cb-status: The example course: introductory astronomy.',
+        'cb-status: A new course.',
+        'cb-status: The example course: introductory astronomy.',
+        'cb-status: Saved as intro-astronomy.course.json.',
+        'cb-status: The manifest is saved as intro-astronomy.course-manifest.json.',
+      ]);
   });
 
   test('the mission lab', async ({ page }) => {
@@ -105,26 +120,28 @@ test.describe('every status line says the same words in the same order', () => {
       'mn-planets-go',
       'mn-flyby-go',
     ]);
-    expect(await announced(page)).toEqual([
-      'mn-transfer-status: Working…',
-      'mn-transfer-status: Done.',
-      'mn-meet-status: Working…',
-      'mn-meet-status: Done.',
-      'mn-lambert-status: Working…',
-      'mn-lambert-status: Done.',
-      'mn-planets-status: Working…',
-      'mn-planets-status: Done.',
-      'mn-flyby-status: Working…',
-      'mn-flyby-status: Done.',
-    ]);
+    await expect
+      .poll(() => announced(page))
+      .toEqual([
+        'mn-transfer-status: Working…',
+        'mn-transfer-status: Done.',
+        'mn-meet-status: Working…',
+        'mn-meet-status: Done.',
+        'mn-lambert-status: Working…',
+        'mn-lambert-status: Done.',
+        'mn-planets-status: Working…',
+        'mn-planets-status: Done.',
+        'mn-flyby-status: Working…',
+        'mn-flyby-status: Done.',
+      ]);
   });
 
   test('my work', async ({ page }) => {
     await page.goto('/my-work/', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('#mwSummary')).not.toBeEmpty();
-    expect(await announced(page)).toEqual([
-      'mwSummary: Nothing is saved on this device yet.',
-    ]);
+    await expect
+      .poll(() => announced(page))
+      .toEqual(['mwSummary: Nothing is saved on this device yet.']);
   });
 
   test('the teaching page', async ({ page }) => {
@@ -134,26 +151,30 @@ test.describe('every status line says the same words in the same order', () => {
       'teachFeedbackExport',
       'teachFeedbackClear',
     ]);
-    expect(await announced(page)).toEqual([
-      'teachLive: Six links copied. Paste them into Lecture Mode.',
-      'teachFeedbackStatus: Nothing to save yet. Write in any field above; notes stay in this browser until you save them.',
-      'teachFeedbackStatus: Cleared.',
-    ]);
+    await expect
+      .poll(() => announced(page))
+      .toEqual([
+        'teachLive: Six links copied. Paste them into Lecture Mode.',
+        'teachFeedbackStatus: Nothing to save yet. Write in any field above; notes stay in this browser until you save them.',
+        'teachFeedbackStatus: Cleared.',
+      ]);
   });
 
   test('the observatory', async ({ page }) => {
     await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
     await press(page, ['obsOpen']);
-    expect(await announced(page)).toEqual([
-      'obsStatus: Opening…',
-      'obsStatus: Opened HD 209458: TESS sector 56 light curve.',
-    ]);
+    await expect
+      .poll(() => announced(page))
+      .toEqual([
+        'obsStatus: Opening…',
+        'obsStatus: Opened HD 209458: TESS sector 56 light curve.',
+      ]);
   });
 
   test('the figure builder', async ({ page }) => {
     await page.goto('/figure/', { waitUntil: 'domcontentloaded' });
     await press(page, ['fbCopyMarkup', 'fbCopyLink']);
-    expect(await announced(page)).toEqual(['fbCopyStatus: Copied.']);
+    await expect.poll(() => announced(page)).toEqual(['fbCopyStatus: Copied.']);
   });
 
   test('the orbital system builder', async ({ page, app }) => {
@@ -167,12 +188,15 @@ test.describe('every status line says the same words in the same order', () => {
     await page.locator('#systemBuilderTemplate').selectOption('kepler16');
     await page.locator('#systemBuilderTemplateApply').click();
     await expect(page.locator('#systemBuilderTableBody tr')).not.toHaveCount(0);
-    await page.waitForTimeout(400);
     // The main app announces a good deal else, with timings of its own.
-    expect(
-      (await announced(page)).filter(m => m.startsWith('systemBuilderStatus:'))
-    ).toEqual([
-      'systemBuilderStatus: Started from A planet around a binary star (Kepler-16).',
-    ]);
+    await expect
+      .poll(async () =>
+        (await announced(page)).filter(m =>
+          m.startsWith('systemBuilderStatus:')
+        )
+      )
+      .toEqual([
+        'systemBuilderStatus: Started from A planet around a binary star (Kepler-16).',
+      ]);
   });
 });
