@@ -1,0 +1,610 @@
+{
+ "bh-horizon": {
+  "en": {
+   "static": {
+    "title": "One black hole, drawn to scale",
+    "note": "Everything on this panel is drawn at the same scale, and the scale does not change when you move the slider. A bigger picture really is a bigger black hole.",
+    "controls": [{"id":"mass","label":"Mass of the black hole","unit":"M☉","min":2,"max":25,"step":1,"value":5,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"mass":"5"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 19,
+   "readout": {
+    "calls": 19,
+    "distinct": 19,
+    "digest": "6260651f6891063f",
+    "samples": [[{"label":"Mass","value":"5 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"14.8 km","emphasis":true},{"label":"Right across the event horizon","value":"29.5 km"}],[{"label":"Mass","value":"8 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"23.6 km","emphasis":true},{"label":"Right across the event horizon","value":"47.3 km"}],[{"label":"Mass","value":"2 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"5.9 km","emphasis":true},{"label":"Right across the event horizon","value":"11.8 km"}],[{"label":"Mass","value":"25 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"73.9 km","emphasis":true},{"label":"Right across the event horizon","value":"147.7 km"}],[{"label":"Mass","value":"19 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"56.1 km","emphasis":true},{"label":"Right across the event horizon","value":"112.3 km"}],[{"label":"Mass","value":"14 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"41.4 km","emphasis":true},{"label":"Right across the event horizon","value":"82.7 km"}],[{"label":"Mass","value":"13 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"38.4 km","emphasis":true},{"label":"Right across the event horizon","value":"76.8 km"}],[{"label":"Mass","value":"10 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"29.5 km","emphasis":true}],[{"label":"Mass","value":"25 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"73.9 km","emphasis":true}],[{"label":"Mass","value":"2 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"5.9 km","emphasis":true}],[{"label":"Mass","value":"10 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"29.5 km","emphasis":true},{"label":"Right across the event horizon","value":"59.1 km"},{"label":"Compared with the length of Manhattan","value":"1.4 times"}],[{"label":"Mass","value":"14 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"41.4 km","emphasis":true},{"label":"Right across the event horizon","value":"82.7 km"},{"label":"Compared with the length of Manhattan","value":"1.9 times"}],[{"label":"Mass","value":"2 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"5.9 km","emphasis":true},{"label":"Right across the event horizon","value":"11.8 km"},{"label":"Compared with the length of Manhattan","value":"0.3 times"}],[{"label":"Mass","value":"25 M☉"},{"label":"Schwarzschild radius, Rₛ","value":"73.9 km","emphasis":true},{"label":"Right across the event horizon","value":"147.7 km"},{"label":"Compared with the length of Manhattan","value":"3.4 times"}]]
+   },
+   "canvas": {
+    "calls": 19,
+    "distinct": 16,
+    "digest": "4bd3a2f9529aef44",
+    "samples": [["Rₛ","Rₛ","Rₛ = 14.8 km","Rₛ = 14.8 km","across the event horizon: 29.5 km","a marathon: 42.2 km","Manhattan, end to end: 21.6 km"],["Rₛ","Rₛ","Rₛ = 41.4 km","Rₛ = 41.4 km","across the event horizon: 82.7 km","a marathon: 42.2 km","Manhattan, end to end: 21.6 km"],["Rₛ","Rₛ","Rₛ = 5.9 km","Rₛ = 5.9 km","across the event horizon: 11.8 km","a marathon: 42.2 km","Manhattan, end to end: 21.6 km"],["Rₛ","Rₛ","Rₛ = 73.9 km","Rₛ = 73.9 km","across the event horizon: 148 km","a marathon: 42.2 km","Manhattan, end to end: 21.6 km"],["Rₛ","Rₛ","Rₛ = 56.1 km","Rₛ = 56.1 km","across the event horizon: 112 km","a marathon: 42.2 km","Manhattan, end to end: 21.6 km"],["Rₛ","Rₛ","Rₛ = 32.5 km","Rₛ = 32.5 km","across the event horizon: 65 km","a marathon: 42.2 km","Manhattan, end to end: 21.6 km"],["Rₛ","Rₛ","Rₛ = 29.5 km","Rₛ = 29.5 km","100 km"],["Rₛ","Rₛ","Rₛ = 73.9 km","Rₛ = 73.9 km","100 km"],["Rₛ","Rₛ","Rₛ = 5.9 km","Rₛ = 5.9 km","100 km"]]
+   },
+   "controls": {
+    "calls": 19,
+    "distinct": 12,
+    "digest": "37bc4e8e6ca2bb14",
+    "samples": [["5 M☉"],["2 M☉"],["25 M☉"],["14 M☉"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Un agujero negro, dibujado a escala",
+    "note": "Everything on this panel is drawn at the same scale, and the scale does not change when you move the slider. A bigger picture really is a bigger black hole.",
+    "controls": [{"id":"mass","label":"Masa del agujero negro","unit":"M☉","min":2,"max":25,"step":1,"value":5,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"mass":"5"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 19,
+   "readout": {
+    "calls": 19,
+    "distinct": 19,
+    "digest": "a1bbf2ebd8d820ba",
+    "samples": [[{"label":"Masa","value":"5 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"14.8 km","emphasis":true},{"label":"De lado a lado del horizonte de sucesos","value":"29.5 km"}],[{"label":"Masa","value":"8 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"23.6 km","emphasis":true},{"label":"De lado a lado del horizonte de sucesos","value":"47.3 km"}],[{"label":"Masa","value":"2 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"5.9 km","emphasis":true},{"label":"De lado a lado del horizonte de sucesos","value":"11.8 km"}],[{"label":"Masa","value":"25 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"73.9 km","emphasis":true},{"label":"De lado a lado del horizonte de sucesos","value":"147.7 km"}],[{"label":"Masa","value":"19 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"56.1 km","emphasis":true},{"label":"De lado a lado del horizonte de sucesos","value":"112.3 km"}],[{"label":"Masa","value":"14 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"41.4 km","emphasis":true},{"label":"De lado a lado del horizonte de sucesos","value":"82.7 km"}],[{"label":"Masa","value":"13 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"38.4 km","emphasis":true},{"label":"De lado a lado del horizonte de sucesos","value":"76.8 km"}],[{"label":"Masa","value":"10 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"29.5 km","emphasis":true}],[{"label":"Masa","value":"25 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"73.9 km","emphasis":true}],[{"label":"Masa","value":"2 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"5.9 km","emphasis":true}],[{"label":"Masa","value":"10 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"29.5 km","emphasis":true},{"label":"De lado a lado del horizonte de sucesos","value":"59.1 km"},{"label":"Comparado con la longitud de Manhattan","value":"1.4 times"}],[{"label":"Masa","value":"14 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"41.4 km","emphasis":true},{"label":"De lado a lado del horizonte de sucesos","value":"82.7 km"},{"label":"Comparado con la longitud de Manhattan","value":"1.9 times"}],[{"label":"Masa","value":"2 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"5.9 km","emphasis":true},{"label":"De lado a lado del horizonte de sucesos","value":"11.8 km"},{"label":"Comparado con la longitud de Manhattan","value":"0.3 times"}],[{"label":"Masa","value":"25 M☉"},{"label":"Radio de Schwarzschild, Rₛ","value":"73.9 km","emphasis":true},{"label":"De lado a lado del horizonte de sucesos","value":"147.7 km"},{"label":"Comparado con la longitud de Manhattan","value":"3.4 times"}]]
+   },
+   "canvas": {
+    "calls": 19,
+    "distinct": 16,
+    "digest": "3b47488f17e964a8",
+    "samples": [["Rₛ","Rₛ","Rₛ = 14.8 km","Rₛ = 14.8 km","de lado a lado del horizonte de sucesos: 29.5 km","un maratón: 42.2 km","Manhattan, de punta a punta: 21.6 km"],["Rₛ","Rₛ","Rₛ = 41.4 km","Rₛ = 41.4 km","de lado a lado del horizonte de sucesos: 82.7 km","un maratón: 42.2 km","Manhattan, de punta a punta: 21.6 km"],["Rₛ","Rₛ","Rₛ = 5.9 km","Rₛ = 5.9 km","de lado a lado del horizonte de sucesos: 11.8 km","un maratón: 42.2 km","Manhattan, de punta a punta: 21.6 km"],["Rₛ","Rₛ","Rₛ = 73.9 km","Rₛ = 73.9 km","de lado a lado del horizonte de sucesos: 148 km","un maratón: 42.2 km","Manhattan, de punta a punta: 21.6 km"],["Rₛ","Rₛ","Rₛ = 56.1 km","Rₛ = 56.1 km","de lado a lado del horizonte de sucesos: 112 km","un maratón: 42.2 km","Manhattan, de punta a punta: 21.6 km"],["Rₛ","Rₛ","Rₛ = 32.5 km","Rₛ = 32.5 km","de lado a lado del horizonte de sucesos: 65 km","un maratón: 42.2 km","Manhattan, de punta a punta: 21.6 km"],["Rₛ","Rₛ","Rₛ = 29.5 km","Rₛ = 29.5 km","100 km"],["Rₛ","Rₛ","Rₛ = 73.9 km","Rₛ = 73.9 km","100 km"],["Rₛ","Rₛ","Rₛ = 5.9 km","Rₛ = 5.9 km","100 km"]]
+   },
+   "controls": {
+    "calls": 19,
+    "distinct": 12,
+    "digest": "37bc4e8e6ca2bb14",
+    "samples": [["5 M☉"],["2 M☉"],["25 M☉"],["14 M☉"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ },
+ "bh-scaling": {
+  "en": {
+   "static": {
+    "title": "Mass against horizon size",
+    "note": "Set a mass, press Record, and the point lands on the graph. Three or four trials are plenty.",
+    "controls": [{"id":"mass","label":"Mass of the black hole","unit":"M☉","min":2,"max":25,"step":1,"value":5,"decimals":0}],
+    "presets": [],
+    "actions": [{"id":"record","label":"⊕ Record this trial"},{"id":"clear","label":"↺ Clear trials"},{"id":"capture","label":"Capture these trials"}],
+    "defaults": {"mass":"5"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 37,
+   "readout": {
+    "calls": 37,
+    "distinct": 11,
+    "digest": "0f251f938180d185",
+    "samples": [[{"label":"Slider is at","value":"5 M☉ → 14.8 km","emphasis":true}],[{"label":"Slider is at","value":"8 M☉ → 23.6 km","emphasis":true}],[{"label":"Slider is at","value":"2 M☉ → 5.9 km","emphasis":true}],[{"label":"Slider is at","value":"25 M☉ → 73.9 km","emphasis":true}],[{"label":"Slider is at","value":"14 M☉ → 41.4 km","emphasis":true}],[{"label":"Trial 1: 5 M☉","value":"14.8 km"},{"label":"Slider is at","value":"5 M☉ → 14.8 km","emphasis":true}]]
+   },
+   "canvas": {
+    "calls": 37,
+    "distinct": 2,
+    "digest": "66c9aa5ea455542d",
+    "samples": [["0","20","40","60","80","0","5","10","15","20","25","Mass of the black hole (M☉)","Schwarzschild radius (km)","no trials recorded yet"],["0","20","40","60","80","0","5","10","15","20","25","Mass of the black hole (M☉)","Schwarzschild radius (km)","1 trial recorded"]]
+   },
+   "controls": {
+    "calls": 37,
+    "distinct": 10,
+    "digest": "da18bf6fb0f305ca",
+    "samples": [["5 M☉"],["2 M☉"],["25 M☉"],["14 M☉"]]
+   },
+   "phases": {
+    "calls": 15,
+    "distinct": 9,
+    "digest": "28f532c589ad75e2",
+    "samples": [{"action":"record","after":"press","button":"⊕ Record this trial"},{"action":"record","after":"step","button":"⊕ Record this trial"},{"action":"record","after":"press again","button":"⊕ Record this trial"},{"action":"clear","after":"press","button":"↺ Clear trials"},{"action":"clear","after":"step","button":"↺ Clear trials"},{"action":"clear","after":"press again","button":"↺ Clear trials"},{"action":"capture","after":"press","button":"Capture these trials"},{"action":"capture","after":"step","button":"Capture these trials"},{"action":"capture","after":"press again","button":"Capture these trials"}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "La masa frente al tamaño del horizonte",
+    "note": "Fija una masa, pulsa Registrar y el punto cae en la gráfica. Con tres o cuatro ensayos basta.",
+    "controls": [{"id":"mass","label":"Masa del agujero negro","unit":"M☉","min":2,"max":25,"step":1,"value":5,"decimals":0}],
+    "presets": [],
+    "actions": [{"id":"record","label":"⊕ Registrar este ensayo"},{"id":"clear","label":"↺ Borrar ensayos"},{"id":"capture","label":"Capturar estos ensayos"}],
+    "defaults": {"mass":"5"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 37,
+   "readout": {
+    "calls": 37,
+    "distinct": 11,
+    "digest": "d39cc739cff6e668",
+    "samples": [[{"label":"El deslizador está en","value":"5 M☉ → 14.8 km","emphasis":true}],[{"label":"El deslizador está en","value":"8 M☉ → 23.6 km","emphasis":true}],[{"label":"El deslizador está en","value":"2 M☉ → 5.9 km","emphasis":true}],[{"label":"El deslizador está en","value":"25 M☉ → 73.9 km","emphasis":true}],[{"label":"El deslizador está en","value":"14 M☉ → 41.4 km","emphasis":true}],[{"label":"Trial 1: 5 M☉","value":"14.8 km"},{"label":"El deslizador está en","value":"5 M☉ → 14.8 km","emphasis":true}]]
+   },
+   "canvas": {
+    "calls": 37,
+    "distinct": 2,
+    "digest": "66c9aa5ea455542d",
+    "samples": [["0","20","40","60","80","0","5","10","15","20","25","Mass of the black hole (M☉)","Schwarzschild radius (km)","no trials recorded yet"],["0","20","40","60","80","0","5","10","15","20","25","Mass of the black hole (M☉)","Schwarzschild radius (km)","1 trial recorded"]]
+   },
+   "controls": {
+    "calls": 37,
+    "distinct": 10,
+    "digest": "da18bf6fb0f305ca",
+    "samples": [["5 M☉"],["2 M☉"],["25 M☉"],["14 M☉"]]
+   },
+   "phases": {
+    "calls": 15,
+    "distinct": 9,
+    "digest": "d5f5c984669900b6",
+    "samples": [{"action":"record","after":"press","button":"⊕ Registrar este ensayo"},{"action":"record","after":"step","button":"⊕ Registrar este ensayo"},{"action":"record","after":"press again","button":"⊕ Registrar este ensayo"},{"action":"clear","after":"press","button":"↺ Borrar ensayos"},{"action":"clear","after":"step","button":"↺ Borrar ensayos"},{"action":"clear","after":"press again","button":"↺ Borrar ensayos"},{"action":"capture","after":"press","button":"Capturar estos ensayos"},{"action":"capture","after":"step","button":"Capturar estos ensayos"},{"action":"capture","after":"press again","button":"Capturar estos ensayos"}]
+   }
+  }
+ },
+ "bh-escape": {
+  "en": {
+   "static": {
+    "title": "Squeezing the Sun",
+    "note": "The Sun keeps all of its mass. Only its size changes. The gauge is the ordinary escape speed from the surface, worked out the way you would for a planet.",
+    "controls": [{"id":"logr","label":"Radius of the squeezed Sun","unit":null,"min":0.4704290965903215,"max":5.84242200335765,"step":0.005,"value":5.84242200335765,"decimals":null}],
+    "presets": [{"label":"The Sun today","values":{"logr":"5.84242200336"},"note":"696,000 km across the radius. Escape speed 618 km/s, which is about two ten-thousandths of the speed of light."},{"label":"Earth-sized","values":{"logr":"3.80420760508"},"note":"A whole solar mass packed into a ball the size of the Earth. This is roughly what a white dwarf is."},{"label":"30 km","values":{"logr":"1.47712125472"},"note":"A solar mass in a ball the size of a city. This is roughly a neutron star, and light now needs about a third of its speed to get away."},{"label":"6 km","values":{"logr":"0.778151250384"},"note":"Twice the Schwarzschild radius. The escape speed is already seven tenths of the speed of light."},{"label":"3 km","values":{"logr":"0.47042909659"},"note":"The Schwarzschild radius of one solar mass, 2.95 km. The Newtonian escape speed here comes out at exactly the speed of light."}],
+    "actions": [],
+    "defaults": {"logr":"5.84242200336"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 27,
+   "readout": {
+    "calls": 27,
+    "distinct": 17,
+    "digest": "046ebf77b9da2f5e",
+    "samples": [[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"695,700 km"},{"label":"Escape speed from the surface","value":"618 km/s"},{"label":"As a share of the speed of light","value":"0.2%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"235,501 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"692,515 km"},{"label":"Escape speed from the surface","value":"619 km/s"},{"label":"As a share of the speed of light","value":"0.2%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"234,423 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"2.95 km"},{"label":"Escape speed from the surface","value":"299,792 km/s"},{"label":"As a share of the speed of light","value":"100.0%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"1.00 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"1,430 km"},{"label":"Escape speed from the surface","value":"13,625 km/s"},{"label":"As a share of the speed of light","value":"4.5%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"484 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"65.4 km"},{"label":"Escape speed from the surface","value":"63,727 km/s"},{"label":"As a share of the speed of light","value":"21.3%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"22 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"46.8 km"},{"label":"Escape speed from the surface","value":"75,304 km/s"},{"label":"As a share of the speed of light","value":"25.1%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"16 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"31,654 km"},{"label":"Escape speed from the surface","value":"2,896 km/s"},{"label":"As a share of the speed of light","value":"1.0%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"10,715 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"56,290 km"},{"label":"Escape speed from the surface","value":"2,172 km/s"},{"label":"As a share of the speed of light","value":"0.7%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"19,055 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"13,977 km"},{"label":"Escape speed from the surface","value":"4,358 km/s"},{"label":"As a share of the speed of light","value":"1.5%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"4,732 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"117,606 km"},{"label":"Escape speed from the surface","value":"1,503 km/s"},{"label":"As a share of the speed of light","value":"0.5%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"39,811 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"25.4 km"},{"label":"Escape speed from the surface","value":"102,169 km/s"},{"label":"As a share of the speed of light","value":"34.1%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"8.61 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"4,420 km"},{"label":"Escape speed from the surface","value":"7,750 km/s"},{"label":"As a share of the speed of light","value":"2.6%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"1,496 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"6,371 km"},{"label":"Escape speed from the surface","value":"6,456 km/s"},{"label":"As a share of the speed of light","value":"2.2%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"2,157 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"30 km"},{"label":"Escape speed from the surface","value":"94,075 km/s"},{"label":"As a share of the speed of light","value":"31.4%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"10 × Rₛ"}],[{"label":"Mass, unchanged throughout","value":"1 M☉"},{"label":"Radius now","value":"6 km"},{"label":"Escape speed from the surface","value":"210,358 km/s"},{"label":"As a share of the speed of light","value":"70.2%","emphasis":true},{"label":"Radius, in Schwarzschild radii","value":"2.03 × Rₛ"}]]
+   },
+   "canvas": {
+    "calls": 27,
+    "distinct": 14,
+    "digest": "9752269caf6b5ef3",
+    "samples": [["0.2% of the speed of light","the Sun's real size","the Sun's real size","0","the speed of light"],["0.7% of the speed of light","the Sun's real size","the Sun's real size","0","the speed of light"],["100.0% of the speed of light","the Sun's real size","the Sun's real size","smaller than one dot at this scale","smaller than one dot at this scale","0","the speed of light"],["4.5% of the speed of light","the Sun's real size","the Sun's real size","smaller than one dot at this scale","smaller than one dot at this scale","0","the speed of light"],["1.0% of the speed of light","the Sun's real size","the Sun's real size","smaller than one dot at this scale","smaller than one dot at this scale","0","the speed of light"],["21.3% of the speed of light","the Sun's real size","the Sun's real size","smaller than one dot at this scale","smaller than one dot at this scale","0","the speed of light"],["25.1% of the speed of light","the Sun's real size","the Sun's real size","smaller than one dot at this scale","smaller than one dot at this scale","0","the speed of light"]]
+   },
+   "controls": {
+    "calls": 27,
+    "distinct": 17,
+    "digest": "349139c45b79b627",
+    "samples": [["695,700 km"],["692,515 km"],["3 km"],["6 km"],["1,430 km"],["4,420 km"],["65 km"],["47 km"],["31,654 km"],["56,290 km"]]
+   },
+   "phases": {
+    "calls": 5,
+    "distinct": 5,
+    "digest": "5737bcbb44ee6029",
+    "samples": [{"preset":"The Sun today","note":"696,000 km across the radius. Escape speed 618 km/s, which is about two ten-thousandths of the speed of light."},{"preset":"Earth-sized","note":"A whole solar mass packed into a ball the size of the Earth. This is roughly what a white dwarf is."},{"preset":"30 km","note":"A solar mass in a ball the size of a city. This is roughly a neutron star, and light now needs about a third of its speed to get away."},{"preset":"6 km","note":"Twice the Schwarzschild radius. The escape speed is already seven tenths of the speed of light."},{"preset":"3 km","note":"The Schwarzschild radius of one solar mass, 2.95 km. The Newtonian escape speed here comes out at exactly the speed of light."}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Comprimiendo el Sol",
+    "note": "The Sun keeps all of its mass. Only its size changes. The gauge is the ordinary escape speed from the surface, worked out the way you would for a planet.",
+    "controls": [{"id":"logr","label":"Radio del Sol comprimido","unit":null,"min":0.4704290965903215,"max":5.84242200335765,"step":0.005,"value":5.84242200335765,"decimals":null}],
+    "presets": [{"label":"El Sol hoy","values":{"logr":"5.84242200336"},"note":"696 000 km de radio. Velocidad de escape 618 km/s, unas dos diezmilésimas de la velocidad de la luz."},{"label":"Del tamaño de la Tierra","values":{"logr":"3.80420760508"},"note":"Una masa solar entera comprimida en una bola del tamaño de la Tierra. Esto es aproximadamente lo que es una enana blanca."},{"label":"30 km","values":{"logr":"1.47712125472"},"note":"A solar mass in a ball the size of a city. This is roughly a neutron star, and light now needs about a third of its speed to get away."},{"label":"6 km","values":{"logr":"0.778151250384"},"note":"El doble del radio de Schwarzschild. La velocidad de escape ya es siete décimas de la velocidad de la luz."},{"label":"3 km","values":{"logr":"0.47042909659"},"note":"The Schwarzschild radius of one solar mass, 2.95 km. The Newtonian escape speed here comes out at exactly the speed of light."}],
+    "actions": [],
+    "defaults": {"logr":"5.84242200336"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 27,
+   "readout": {
+    "calls": 27,
+    "distinct": 17,
+    "digest": "88bee2e6a42346df",
+    "samples": [[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"695,700 km"},{"label":"Velocidad de escape desde la superficie","value":"618 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"0.2%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"235,501 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"692,515 km"},{"label":"Velocidad de escape desde la superficie","value":"619 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"0.2%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"234,423 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"2.95 km"},{"label":"Velocidad de escape desde la superficie","value":"299,792 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"100.0%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"1.00 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"1,430 km"},{"label":"Velocidad de escape desde la superficie","value":"13,625 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"4.5%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"484 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"65.4 km"},{"label":"Velocidad de escape desde la superficie","value":"63,727 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"21.3%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"22 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"46.8 km"},{"label":"Velocidad de escape desde la superficie","value":"75,304 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"25.1%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"16 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"31,654 km"},{"label":"Velocidad de escape desde la superficie","value":"2,896 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"1.0%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"10,715 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"56,290 km"},{"label":"Velocidad de escape desde la superficie","value":"2,172 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"0.7%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"19,055 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"13,977 km"},{"label":"Velocidad de escape desde la superficie","value":"4,358 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"1.5%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"4,732 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"117,606 km"},{"label":"Velocidad de escape desde la superficie","value":"1,503 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"0.5%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"39,811 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"25.4 km"},{"label":"Velocidad de escape desde la superficie","value":"102,169 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"34.1%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"8.61 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"4,420 km"},{"label":"Velocidad de escape desde la superficie","value":"7,750 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"2.6%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"1,496 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"6,371 km"},{"label":"Velocidad de escape desde la superficie","value":"6,456 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"2.2%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"2,157 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"30 km"},{"label":"Velocidad de escape desde la superficie","value":"94,075 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"31.4%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"10 × Rₛ"}],[{"label":"Masa, invariable en todo momento","value":"1 M☉"},{"label":"Radio ahora","value":"6 km"},{"label":"Velocidad de escape desde la superficie","value":"210,358 km/s"},{"label":"Como fracción de la velocidad de la luz","value":"70.2%","emphasis":true},{"label":"Radio, en radios de Schwarzschild","value":"2.03 × Rₛ"}]]
+   },
+   "canvas": {
+    "calls": 27,
+    "distinct": 14,
+    "digest": "9752269caf6b5ef3",
+    "samples": [["0.2% of the speed of light","the Sun's real size","the Sun's real size","0","the speed of light"],["0.7% of the speed of light","the Sun's real size","the Sun's real size","0","the speed of light"],["100.0% of the speed of light","the Sun's real size","the Sun's real size","smaller than one dot at this scale","smaller than one dot at this scale","0","the speed of light"],["4.5% of the speed of light","the Sun's real size","the Sun's real size","smaller than one dot at this scale","smaller than one dot at this scale","0","the speed of light"],["1.0% of the speed of light","the Sun's real size","the Sun's real size","smaller than one dot at this scale","smaller than one dot at this scale","0","the speed of light"],["21.3% of the speed of light","the Sun's real size","the Sun's real size","smaller than one dot at this scale","smaller than one dot at this scale","0","the speed of light"],["25.1% of the speed of light","the Sun's real size","the Sun's real size","smaller than one dot at this scale","smaller than one dot at this scale","0","the speed of light"]]
+   },
+   "controls": {
+    "calls": 27,
+    "distinct": 17,
+    "digest": "349139c45b79b627",
+    "samples": [["695,700 km"],["692,515 km"],["3 km"],["6 km"],["1,430 km"],["4,420 km"],["65 km"],["47 km"],["31,654 km"],["56,290 km"]]
+   },
+   "phases": {
+    "calls": 5,
+    "distinct": 5,
+    "digest": "c456d080737e951c",
+    "samples": [{"preset":"El Sol hoy","note":"696 000 km de radio. Velocidad de escape 618 km/s, unas dos diezmilésimas de la velocidad de la luz."},{"preset":"Del tamaño de la Tierra","note":"Una masa solar entera comprimida en una bola del tamaño de la Tierra. Esto es aproximadamente lo que es una enana blanca."},{"preset":"30 km","note":"A solar mass in a ball the size of a city. This is roughly a neutron star, and light now needs about a third of its speed to get away."},{"preset":"6 km","note":"El doble del radio de Schwarzschild. La velocidad de escape ya es siete décimas de la velocidad de la luz."},{"preset":"3 km","note":"The Schwarzschild radius of one solar mass, 2.95 km. The Newtonian escape speed here comes out at exactly the speed of light."}]
+   }
+  }
+ },
+ "bh-density": {
+  "en": {
+   "static": {
+    "title": "Average density, on a ladder",
+    "note": "This is the black hole’s mass divided by the volume of a sphere the size of its event horizon. It is a comparison number, not a claim about what the inside is made of. Every small tick on the ladder is ten times denser than the one below it.",
+    "controls": [{"id":"logm","label":"Mass of the black hole","unit":null,"min":0.5,"max":9,"step":0.05,"value":1,"decimals":null}],
+    "presets": [{"label":"10 M☉","values":{"logm":"1"},"note":null},{"label":"100 M☉","values":{"logm":"2"},"note":null},{"label":"1,000 M☉","values":{"logm":"3"},"note":null},{"label":"1,000,000 M☉","values":{"logm":"6"},"note":null}],
+    "actions": [],
+    "defaults": {"logm":"1"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 26,
+   "readout": {
+    "calls": 26,
+    "distinct": 21,
+    "digest": "d540762ccf0f8ab2",
+    "samples": [[{"label":"Mass","value":"10 M☉"},{"label":"Horizon radius","value":"29.5 km"},{"label":"Average density on this scale","value":"1.8 × 10¹⁷ kg/m³","emphasis":true},{"label":"Compared with water","value":"1.8 × 10¹⁴ times denser"}],[{"label":"Mass","value":"3.2 M☉"},{"label":"Horizon radius","value":"9.34 km"},{"label":"Average density on this scale","value":"1.8 × 10¹⁸ kg/m³","emphasis":true},{"label":"Compared with water","value":"1.8 × 10¹⁵ times denser"}],[{"label":"Mass","value":"1 billion M☉"},{"label":"Horizon radius","value":"19.7 AU"},{"label":"Average density on this scale","value":"18 kg/m³","emphasis":true},{"label":"Compared with water","value":"0.018 times denser"}],[{"label":"Mass","value":"56,234 M☉"},{"label":"Horizon radius","value":"166,123 km"},{"label":"Average density on this scale","value":"5.8 × 10⁹ kg/m³","emphasis":true},{"label":"Compared with water","value":"5.8 million times denser"}],[{"label":"Mass","value":"447 M☉"},{"label":"Horizon radius","value":"1,320 km"},{"label":"Average density on this scale","value":"9.2 × 10¹³ kg/m³","emphasis":true},{"label":"Compared with water","value":"92 billion times denser"}],[{"label":"Mass","value":"891 M☉"},{"label":"Horizon radius","value":"2,633 km"},{"label":"Average density on this scale","value":"2.3 × 10¹³ kg/m³","emphasis":true},{"label":"Compared with water","value":"23 billion times denser"}],[{"label":"Mass","value":"7.9 million M☉"},{"label":"Horizon radius","value":"0.157 AU"},{"label":"Average density on this scale","value":"2.9 × 10⁵ kg/m³","emphasis":true},{"label":"Compared with water","value":"292 times denser"}],[{"label":"Mass","value":"5,012 M☉"},{"label":"Horizon radius","value":"14,806 km"},{"label":"Average density on this scale","value":"7.3 × 10¹¹ kg/m³","emphasis":true},{"label":"Compared with water","value":"730 million times denser"}],[{"label":"Mass","value":"71 million M☉"},{"label":"Horizon radius","value":"1.4 AU"},{"label":"Average density on this scale","value":"3,675 kg/m³","emphasis":true},{"label":"Compared with water","value":"4 times denser"}],[{"label":"Mass","value":"1,585 M☉"},{"label":"Horizon radius","value":"4,682 km"},{"label":"Average density on this scale","value":"7.3 × 10¹² kg/m³","emphasis":true},{"label":"Compared with water","value":"7.3 billion times denser"}],[{"label":"Mass","value":"180 million M☉"},{"label":"Horizon radius","value":"3.51 AU"},{"label":"Average density on this scale","value":"582 kg/m³","emphasis":true},{"label":"Compared with water","value":"0.58 times denser"}],[{"label":"Mass","value":"160 million M☉"},{"label":"Horizon radius","value":"3.13 AU"},{"label":"Average density on this scale","value":"733 kg/m³","emphasis":true},{"label":"Compared with water","value":"0.73 times denser"}],[{"label":"Mass","value":"71 M☉"},{"label":"Horizon radius","value":"209 km"},{"label":"Average density on this scale","value":"3.7 × 10¹⁵ kg/m³","emphasis":true},{"label":"Compared with water","value":"3.7 × 10¹² times denser"}],[{"label":"Mass","value":"16 M☉"},{"label":"Horizon radius","value":"46.8 km"},{"label":"Average density on this scale","value":"7.3 × 10¹⁶ kg/m³","emphasis":true},{"label":"Compared with water","value":"7.3 × 10¹³ times denser"}],[{"label":"Mass","value":"100 M☉"},{"label":"Horizon radius","value":"295 km"},{"label":"Average density on this scale","value":"1.8 × 10¹⁵ kg/m³","emphasis":true},{"label":"Compared with water","value":"1.8 × 10¹² times denser"}],[{"label":"Mass","value":"1,000 M☉"},{"label":"Horizon radius","value":"2,954 km"},{"label":"Average density on this scale","value":"1.8 × 10¹³ kg/m³","emphasis":true},{"label":"Compared with water","value":"18 billion times denser"}],[{"label":"Mass","value":"1 million M☉"},{"label":"Horizon radius","value":"2,954,127 km"},{"label":"Average density on this scale","value":"1.8 × 10⁷ kg/m³","emphasis":true},{"label":"Compared with water","value":"18 thousand times denser"}],[{"label":"Mass","value":"1 million M☉"},{"label":"Horizon radius","value":"2,954,127 km"},{"label":"Average density on this scale","value":"1.8 × 10⁷ kg/m³","emphasis":true},{"label":"Compared with water","value":"18 thousand times denser"},{"label":"For comparison, 10 M☉","value":"1.8 × 10¹⁷ kg/m³"}],[{"label":"Mass","value":"3.2 M☉"},{"label":"Horizon radius","value":"9.34 km"},{"label":"Average density on this scale","value":"1.8 × 10¹⁸ kg/m³","emphasis":true},{"label":"Compared with water","value":"1.8 × 10¹⁵ times denser"},{"label":"For comparison, 10 M☉","value":"1.8 × 10¹⁷ kg/m³"}],[{"label":"Mass","value":"1 billion M☉"},{"label":"Horizon radius","value":"19.7 AU"},{"label":"Average density on this scale","value":"18 kg/m³","emphasis":true},{"label":"Compared with water","value":"0.018 times denser"},{"label":"For comparison, 10 M☉","value":"1.8 × 10¹⁷ kg/m³"}],[{"label":"Mass","value":"56,234 M☉"},{"label":"Horizon radius","value":"166,123 km"},{"label":"Average density on this scale","value":"5.8 × 10⁹ kg/m³","emphasis":true},{"label":"Compared with water","value":"5.8 million times denser"},{"label":"For comparison, 10 M☉","value":"1.8 × 10¹⁷ kg/m³"}]]
+   },
+   "canvas": {
+    "calls": 26,
+    "distinct": 17,
+    "digest": "0722c038641b0145",
+    "samples": [["10 M☉","1.8 × 10¹⁷ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["3.2 M☉","1.8 × 10¹⁸ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["1 billion M☉","18 kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["56,234 M☉","5.8 × 10⁹ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["447 M☉","9.2 × 10¹³ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["891 M☉","2.3 × 10¹³ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["7.9 million M☉","2.9 × 10⁵ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["5,012 M☉","7.3 × 10¹¹ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["71 million M☉","3,675 kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["1,585 M☉","7.3 × 10¹² kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["180 million M☉","582 kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["160 million M☉","733 kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["71 M☉","3.7 × 10¹⁵ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["16 M☉","7.3 × 10¹⁶ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["100 M☉","1.8 × 10¹⁵ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["1,000 M☉","1.8 × 10¹³ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"],["1 million M☉","1.8 × 10⁷ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Air at sea level","Air at sea level","Water","Water","A white dwarf","A white dwarf","An atomic nucleus","An atomic nucleus","this black hole","this black hole"]]
+   },
+   "controls": {
+    "calls": 26,
+    "distinct": 17,
+    "digest": "32efafb51df667e0",
+    "samples": [["10 M☉"],["71 M☉"],["3.2 M☉"],["1 billion M☉"],["56,234 M☉"],["447 M☉"],["891 M☉"],["7.9 million M☉"],["5,012 M☉"],["1,585 M☉"],["71 million M☉"],["180 million M☉"],["160 million M☉"],["1 million M☉"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "cb85a613b7aa676f",
+    "samples": [{"preset":"10 M☉","note":null},{"preset":"100 M☉","note":null},{"preset":"1,000 M☉","note":null},{"preset":"1,000,000 M☉","note":null}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Densidad media, en una escalera",
+    "note": "This is the black hole’s mass divided by the volume of a sphere the size of its event horizon. It is a comparison number, not a claim about what the inside is made of. Every small tick on the ladder is ten times denser than the one below it.",
+    "controls": [{"id":"logm","label":"Masa del agujero negro","unit":null,"min":0.5,"max":9,"step":0.05,"value":1,"decimals":null}],
+    "presets": [{"label":"10 M☉","values":{"logm":"1"},"note":null},{"label":"100 M☉","values":{"logm":"2"},"note":null},{"label":"1,000 M☉","values":{"logm":"3"},"note":null},{"label":"1,000,000 M☉","values":{"logm":"6"},"note":null}],
+    "actions": [],
+    "defaults": {"logm":"1"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 26,
+   "readout": {
+    "calls": 26,
+    "distinct": 21,
+    "digest": "df2a610659eafe17",
+    "samples": [[{"label":"Masa","value":"10 M☉"},{"label":"Radio del horizonte","value":"29.5 km"},{"label":"Densidad media a esta escala","value":"1.8 × 10¹⁷ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"1.8 × 10¹⁴ times denser"}],[{"label":"Masa","value":"3.2 M☉"},{"label":"Radio del horizonte","value":"9.34 km"},{"label":"Densidad media a esta escala","value":"1.8 × 10¹⁸ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"1.8 × 10¹⁵ times denser"}],[{"label":"Masa","value":"1 billion M☉"},{"label":"Radio del horizonte","value":"19.7 AU"},{"label":"Densidad media a esta escala","value":"18 kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"0.018 times denser"}],[{"label":"Masa","value":"56,234 M☉"},{"label":"Radio del horizonte","value":"166,123 km"},{"label":"Densidad media a esta escala","value":"5.8 × 10⁹ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"5.8 million times denser"}],[{"label":"Masa","value":"447 M☉"},{"label":"Radio del horizonte","value":"1,320 km"},{"label":"Densidad media a esta escala","value":"9.2 × 10¹³ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"92 billion times denser"}],[{"label":"Masa","value":"891 M☉"},{"label":"Radio del horizonte","value":"2,633 km"},{"label":"Densidad media a esta escala","value":"2.3 × 10¹³ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"23 billion times denser"}],[{"label":"Masa","value":"7.9 million M☉"},{"label":"Radio del horizonte","value":"0.157 AU"},{"label":"Densidad media a esta escala","value":"2.9 × 10⁵ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"292 times denser"}],[{"label":"Masa","value":"5,012 M☉"},{"label":"Radio del horizonte","value":"14,806 km"},{"label":"Densidad media a esta escala","value":"7.3 × 10¹¹ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"730 million times denser"}],[{"label":"Masa","value":"71 million M☉"},{"label":"Radio del horizonte","value":"1.4 AU"},{"label":"Densidad media a esta escala","value":"3,675 kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"4 times denser"}],[{"label":"Masa","value":"1,585 M☉"},{"label":"Radio del horizonte","value":"4,682 km"},{"label":"Densidad media a esta escala","value":"7.3 × 10¹² kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"7.3 billion times denser"}],[{"label":"Masa","value":"180 million M☉"},{"label":"Radio del horizonte","value":"3.51 AU"},{"label":"Densidad media a esta escala","value":"582 kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"0.58 times denser"}],[{"label":"Masa","value":"160 million M☉"},{"label":"Radio del horizonte","value":"3.13 AU"},{"label":"Densidad media a esta escala","value":"733 kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"0.73 times denser"}],[{"label":"Masa","value":"71 M☉"},{"label":"Radio del horizonte","value":"209 km"},{"label":"Densidad media a esta escala","value":"3.7 × 10¹⁵ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"3.7 × 10¹² times denser"}],[{"label":"Masa","value":"16 M☉"},{"label":"Radio del horizonte","value":"46.8 km"},{"label":"Densidad media a esta escala","value":"7.3 × 10¹⁶ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"7.3 × 10¹³ times denser"}],[{"label":"Masa","value":"100 M☉"},{"label":"Radio del horizonte","value":"295 km"},{"label":"Densidad media a esta escala","value":"1.8 × 10¹⁵ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"1.8 × 10¹² times denser"}],[{"label":"Masa","value":"1,000 M☉"},{"label":"Radio del horizonte","value":"2,954 km"},{"label":"Densidad media a esta escala","value":"1.8 × 10¹³ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"18 billion times denser"}],[{"label":"Masa","value":"1 million M☉"},{"label":"Radio del horizonte","value":"2,954,127 km"},{"label":"Densidad media a esta escala","value":"1.8 × 10⁷ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"18 thousand times denser"}],[{"label":"Masa","value":"1 million M☉"},{"label":"Radio del horizonte","value":"2,954,127 km"},{"label":"Densidad media a esta escala","value":"1.8 × 10⁷ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"18 thousand times denser"},{"label":"For comparison, 10 M☉","value":"1.8 × 10¹⁷ kg/m³"}],[{"label":"Masa","value":"3.2 M☉"},{"label":"Radio del horizonte","value":"9.34 km"},{"label":"Densidad media a esta escala","value":"1.8 × 10¹⁸ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"1.8 × 10¹⁵ times denser"},{"label":"For comparison, 10 M☉","value":"1.8 × 10¹⁷ kg/m³"}],[{"label":"Masa","value":"1 billion M☉"},{"label":"Radio del horizonte","value":"19.7 AU"},{"label":"Densidad media a esta escala","value":"18 kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"0.018 times denser"},{"label":"For comparison, 10 M☉","value":"1.8 × 10¹⁷ kg/m³"}],[{"label":"Masa","value":"56,234 M☉"},{"label":"Radio del horizonte","value":"166,123 km"},{"label":"Densidad media a esta escala","value":"5.8 × 10⁹ kg/m³","emphasis":true},{"label":"Comparado con el agua","value":"5.8 million times denser"},{"label":"For comparison, 10 M☉","value":"1.8 × 10¹⁷ kg/m³"}]]
+   },
+   "canvas": {
+    "calls": 26,
+    "distinct": 17,
+    "digest": "07ca10395c8ee164",
+    "samples": [["10 M☉","1.8 × 10¹⁷ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["3.2 M☉","1.8 × 10¹⁸ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["1 billion M☉","18 kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["56,234 M☉","5.8 × 10⁹ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["447 M☉","9.2 × 10¹³ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["891 M☉","2.3 × 10¹³ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["7.9 million M☉","2.9 × 10⁵ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["5,012 M☉","7.3 × 10¹¹ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["71 million M☉","3,675 kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["1,585 M☉","7.3 × 10¹² kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["180 million M☉","582 kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["160 million M☉","733 kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["71 M☉","3.7 × 10¹⁵ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["16 M☉","7.3 × 10¹⁶ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["100 M☉","1.8 × 10¹⁵ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["1,000 M☉","1.8 × 10¹³ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"],["1 million M☉","1.8 × 10⁷ kg/m³","10⁰","10⁴","10⁸","10¹²","10¹⁶","10²⁰","Aire a nivel del mar","Aire a nivel del mar","Agua","Agua","Una enana blanca","Una enana blanca","Un núcleo atómico","Un núcleo atómico","this black hole","this black hole"]]
+   },
+   "controls": {
+    "calls": 26,
+    "distinct": 17,
+    "digest": "32efafb51df667e0",
+    "samples": [["10 M☉"],["71 M☉"],["3.2 M☉"],["1 billion M☉"],["56,234 M☉"],["447 M☉"],["891 M☉"],["7.9 million M☉"],["5,012 M☉"],["1,585 M☉"],["71 million M☉"],["180 million M☉"],["160 million M☉"],["1 million M☉"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "cb85a613b7aa676f",
+    "samples": [{"preset":"10 M☉","note":null},{"preset":"100 M☉","note":null},{"preset":"1,000 M☉","note":null},{"preset":"1,000,000 M☉","note":null}]
+   }
+  }
+ },
+ "bh-blocks": {
+  "en": {
+   "static": {
+    "title": "Counting the zeros",
+    "note": "Start from a 10 M☉ black hole and multiply its mass. Each bar shows how many zeros that quantity gained, or lost. Radius grows in step with mass, so volume grows three times as fast, and density has to fall.",
+    "controls": [{"id":"zeros","label":"Multiply the mass by","unit":null,"min":1,"max":8,"step":1,"value":3,"decimals":null}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"zeros":"3"}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 12,
+   "readout": {
+    "calls": 12,
+    "distinct": 8,
+    "digest": "072c1931667134a0",
+    "samples": [[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"10,000 M☉"},{"label":"Volume gained","value":"3 + 3 + 3 = 9 zeros","emphasis":true},{"label":"So density lost","value":"9 − 3 = 6 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10¹¹ kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"100 M☉"},{"label":"Volume gained","value":"1 + 1 + 1 = 3 zeros","emphasis":true},{"label":"So density lost","value":"3 − 1 = 2 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10¹⁵ kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"1 billion M☉"},{"label":"Volume gained","value":"8 + 8 + 8 = 24 zeros","emphasis":true},{"label":"So density lost","value":"24 − 8 = 16 zeros","emphasis":true},{"label":"New average density","value":"18 kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"1 million M☉"},{"label":"Volume gained","value":"5 + 5 + 5 = 15 zeros","emphasis":true},{"label":"So density lost","value":"15 − 5 = 10 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10⁷ kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"10 million M☉"},{"label":"Volume gained","value":"6 + 6 + 6 = 18 zeros","emphasis":true},{"label":"So density lost","value":"18 − 6 = 12 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10⁵ kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"100 million M☉"},{"label":"Volume gained","value":"7 + 7 + 7 = 21 zeros","emphasis":true},{"label":"So density lost","value":"21 − 7 = 14 zeros","emphasis":true},{"label":"New average density","value":"1,842 kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"1,000 M☉"},{"label":"Volume gained","value":"2 + 2 + 2 = 6 zeros","emphasis":true},{"label":"So density lost","value":"6 − 2 = 4 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10¹³ kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"100,000 M☉"},{"label":"Volume gained","value":"4 + 4 + 4 = 12 zeros","emphasis":true},{"label":"So density lost","value":"12 − 4 = 8 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10⁹ kg/m³"}]]
+   },
+   "canvas": {
+    "calls": 12,
+    "distinct": 8,
+    "digest": "3e4ea79db026c2bf",
+    "samples": [["10 M☉  →  10,000 M☉","Mass","×1,000","Horizon radius","×1,000","Volume inside it","×1,000,000,000","Average density","÷1,000,000","zeros:  mass +3   radius +3   volume +9   density −6"],["10 M☉  →  100 M☉","Mass","×10","Horizon radius","×10","Volume inside it","×1,000","Average density","÷100","zeros:  mass +1   radius +1   volume +3   density −2"],["10 M☉  →  1 billion M☉","Mass","×100,000,000","Horizon radius","×100,000,000","Volume inside it","×1,000,000,000,000,000,000,000,000","Average density","÷10,000,000,000,000,000","zeros:  mass +8   radius +8   volume +24   density −16"],["10 M☉  →  1 million M☉","Mass","×100,000","Horizon radius","×100,000","Volume inside it","×1,000,000,000,000,000","Average density","÷10,000,000,000","zeros:  mass +5   radius +5   volume +15   density −10"],["10 M☉  →  10 million M☉","Mass","×1,000,000","Horizon radius","×1,000,000","Volume inside it","×1,000,000,000,000,000,000","Average density","÷1,000,000,000,000","zeros:  mass +6   radius +6   volume +18   density −12"],["10 M☉  →  100 million M☉","Mass","×10,000,000","Horizon radius","×10,000,000","Volume inside it","×1,000,000,000,000,000,000,000","Average density","÷100,000,000,000,000","zeros:  mass +7   radius +7   volume +21   density −14"],["10 M☉  →  1,000 M☉","Mass","×100","Horizon radius","×100","Volume inside it","×1,000,000","Average density","÷10,000","zeros:  mass +2   radius +2   volume +6   density −4"],["10 M☉  →  100,000 M☉","Mass","×10,000","Horizon radius","×10,000","Volume inside it","×1,000,000,000,000","Average density","÷100,000,000","zeros:  mass +4   radius +4   volume +12   density −8"]]
+   },
+   "controls": {
+    "calls": 12,
+    "distinct": 8,
+    "digest": "a378e8391e29d62b",
+    "samples": [["×1,000"],["×10"],["×100,000,000"],["×100,000"],["×1,000,000"],["×10,000,000"],["×100"],["×10,000"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Contando los ceros",
+    "note": "Start from a 10 M☉ black hole and multiply its mass. Each bar shows how many zeros that quantity gained, or lost. Radius grows in step with mass, so volume grows three times as fast, and density has to fall.",
+    "controls": [{"id":"zeros","label":"Multiplica la masa por","unit":null,"min":1,"max":8,"step":1,"value":3,"decimals":null}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"zeros":"3"}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 12,
+   "readout": {
+    "calls": 12,
+    "distinct": 8,
+    "digest": "e19cca7194fe6ef0",
+    "samples": [[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"10,000 M☉"},{"label":"Volumen ganado","value":"3 + 3 + 3 = 9 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"9 − 3 = 6 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1.8 × 10¹¹ kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"100 M☉"},{"label":"Volumen ganado","value":"1 + 1 + 1 = 3 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"3 − 1 = 2 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1.8 × 10¹⁵ kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"1 billion M☉"},{"label":"Volumen ganado","value":"8 + 8 + 8 = 24 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"24 − 8 = 16 zeros","emphasis":true},{"label":"Nueva densidad media","value":"18 kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"1 million M☉"},{"label":"Volumen ganado","value":"5 + 5 + 5 = 15 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"15 − 5 = 10 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1.8 × 10⁷ kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"10 million M☉"},{"label":"Volumen ganado","value":"6 + 6 + 6 = 18 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"18 − 6 = 12 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1.8 × 10⁵ kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"100 million M☉"},{"label":"Volumen ganado","value":"7 + 7 + 7 = 21 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"21 − 7 = 14 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1,842 kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"1,000 M☉"},{"label":"Volumen ganado","value":"2 + 2 + 2 = 6 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"6 − 2 = 4 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1.8 × 10¹³ kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"100,000 M☉"},{"label":"Volumen ganado","value":"4 + 4 + 4 = 12 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"12 − 4 = 8 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1.8 × 10⁹ kg/m³"}]]
+   },
+   "canvas": {
+    "calls": 12,
+    "distinct": 8,
+    "digest": "894364d70efd9a7b",
+    "samples": [["10 M☉  →  10,000 M☉","Masa","×1,000","Radio del horizonte","×1,000","Volumen en su interior","×1,000,000,000","Densidad media","÷1,000,000","zeros:  mass +3   radius +3   volume +9   density −6"],["10 M☉  →  100 M☉","Masa","×10","Radio del horizonte","×10","Volumen en su interior","×1,000","Densidad media","÷100","zeros:  mass +1   radius +1   volume +3   density −2"],["10 M☉  →  1 billion M☉","Masa","×100,000,000","Radio del horizonte","×100,000,000","Volumen en su interior","×1,000,000,000,000,000,000,000,000","Densidad media","÷10,000,000,000,000,000","zeros:  mass +8   radius +8   volume +24   density −16"],["10 M☉  →  1 million M☉","Masa","×100,000","Radio del horizonte","×100,000","Volumen en su interior","×1,000,000,000,000,000","Densidad media","÷10,000,000,000","zeros:  mass +5   radius +5   volume +15   density −10"],["10 M☉  →  10 million M☉","Masa","×1,000,000","Radio del horizonte","×1,000,000","Volumen en su interior","×1,000,000,000,000,000,000","Densidad media","÷1,000,000,000,000","zeros:  mass +6   radius +6   volume +18   density −12"],["10 M☉  →  100 million M☉","Masa","×10,000,000","Radio del horizonte","×10,000,000","Volumen en su interior","×1,000,000,000,000,000,000,000","Densidad media","÷100,000,000,000,000","zeros:  mass +7   radius +7   volume +21   density −14"],["10 M☉  →  1,000 M☉","Masa","×100","Radio del horizonte","×100","Volumen en su interior","×1,000,000","Densidad media","÷10,000","zeros:  mass +2   radius +2   volume +6   density −4"],["10 M☉  →  100,000 M☉","Masa","×10,000","Radio del horizonte","×10,000","Volumen en su interior","×1,000,000,000,000","Densidad media","÷100,000,000","zeros:  mass +4   radius +4   volume +12   density −8"]]
+   },
+   "controls": {
+    "calls": 12,
+    "distinct": 8,
+    "digest": "a378e8391e29d62b",
+    "samples": [["×1,000"],["×10"],["×100,000,000"],["×100,000"],["×1,000,000"],["×10,000,000"],["×100"],["×10,000"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ },
+ "bh-thermo": {
+  "en": {
+   "static": {
+    "title": "How cold is it?",
+    "note": "Quantum physics predicts that a black hole behaves as though it has a temperature. Every small tick on this thermometer is ten times hotter than the one below it, so a short drop on screen is an enormous drop in temperature.",
+    "controls": [{"id":"logm","label":"Mass of the black hole","unit":null,"min":0,"max":9,"step":0.05,"value":1,"decimals":null}],
+    "presets": [{"label":"1 M☉","values":{"logm":"0"},"note":null},{"label":"10 M☉","values":{"logm":"1"},"note":null},{"label":"1,000 M☉","values":{"logm":"3"},"note":null},{"label":"Sagittarius A*","values":{"logm":"6.63346845558"},"note":null}],
+    "actions": [],
+    "defaults": {"logm":"1"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 25,
+   "readout": {
+    "calls": 25,
+    "distinct": 16,
+    "digest": "6233e2209e2ec6c2",
+    "samples": [[{"label":"Mass","value":"10 M☉"},{"label":"Hawking temperature","value":"6.2 × 10⁻⁹ K","emphasis":true},{"label":"Colder than the microwave background by","value":"440 million times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"14 M☉"},{"label":"Hawking temperature","value":"4.4 × 10⁻⁹ K","emphasis":true},{"label":"Colder than the microwave background by","value":"620 million times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"1 M☉"},{"label":"Hawking temperature","value":"6.2 × 10⁻⁸ K","emphasis":true},{"label":"Colder than the microwave background by","value":"44 million times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"1 billion M☉"},{"label":"Hawking temperature","value":"6.2 × 10⁻¹⁷ K","emphasis":true},{"label":"Colder than the microwave background by","value":"4.4 × 10¹⁶ times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"31,623 M☉"},{"label":"Hawking temperature","value":"2 × 10⁻¹² K","emphasis":true},{"label":"Colder than the microwave background by","value":"1.4 × 10¹² times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"178 M☉"},{"label":"Hawking temperature","value":"3.5 × 10⁻¹⁰ K","emphasis":true},{"label":"Colder than the microwave background by","value":"7.9 billion times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"5.6 million M☉"},{"label":"Hawking temperature","value":"1.1 × 10⁻¹⁴ K","emphasis":true},{"label":"Colder than the microwave background by","value":"2.5 × 10¹⁴ times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"4.3 million M☉"},{"label":"Hawking temperature","value":"1.4 × 10⁻¹⁴ K","emphasis":true},{"label":"Colder than the microwave background by","value":"1.9 × 10¹⁴ times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"10,000 M☉"},{"label":"Hawking temperature","value":"6.2 × 10⁻¹² K","emphasis":true},{"label":"Colder than the microwave background by","value":"440 billion times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"28,184 M☉"},{"label":"Hawking temperature","value":"2.2 × 10⁻¹² K","emphasis":true},{"label":"Colder than the microwave background by","value":"1.2 × 10¹² times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"1,778 M☉"},{"label":"Hawking temperature","value":"3.5 × 10⁻¹¹ K","emphasis":true},{"label":"Colder than the microwave background by","value":"79 billion times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"1,000 M☉"},{"label":"Hawking temperature","value":"6.2 × 10⁻¹¹ K","emphasis":true},{"label":"Colder than the microwave background by","value":"44 billion times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"4.5 million M☉"},{"label":"Hawking temperature","value":"1.4 × 10⁻¹⁴ K","emphasis":true},{"label":"Colder than the microwave background by","value":"2 × 10¹⁴ times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"5,623 M☉"},{"label":"Hawking temperature","value":"1.1 × 10⁻¹¹ K","emphasis":true},{"label":"Colder than the microwave background by","value":"250 billion times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"4 million M☉"},{"label":"Hawking temperature","value":"1.5 × 10⁻¹⁴ K","emphasis":true},{"label":"Colder than the microwave background by","value":"1.8 × 10¹⁴ times"},{"label":"The microwave background, for scale","value":"2.725 K"}],[{"label":"Mass","value":"177,828 M☉"},{"label":"Hawking temperature","value":"3.5 × 10⁻¹³ K","emphasis":true},{"label":"Colder than the microwave background by","value":"7.9 × 10¹² times"},{"label":"The microwave background, for scale","value":"2.725 K"}]]
+   },
+   "canvas": {
+    "calls": 25,
+    "distinct": 16,
+    "digest": "5c02b2483eca755e",
+    "samples": [["10 M☉","6.2 × 10⁻⁹ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["14 M☉","4.4 × 10⁻⁹ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["1 M☉","6.2 × 10⁻⁸ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["1 billion M☉","6.2 × 10⁻¹⁷ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["31,623 M☉","2 × 10⁻¹² K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["178 M☉","3.5 × 10⁻¹⁰ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["5.6 million M☉","1.1 × 10⁻¹⁴ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["4.5 million M☉","1.4 × 10⁻¹⁴ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["10,000 M☉","6.2 × 10⁻¹² K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["28,184 M☉","2.2 × 10⁻¹² K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["1,778 M☉","3.5 × 10⁻¹¹ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["5,623 M☉","1.1 × 10⁻¹¹ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["4 million M☉","1.5 × 10⁻¹⁴ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"],["177,828 M☉","3.5 × 10⁻¹³ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","The Sun's surface","The Sun's surface","The microwave background","The microwave background","The coldest lab experiment","The coldest lab experiment","this black hole","this black hole"]]
+   },
+   "controls": {
+    "calls": 25,
+    "distinct": 16,
+    "digest": "1c7fb6b0211716ef",
+    "samples": [["10 M☉"],["14 M☉"],["1 M☉"],["1 billion M☉"],["31,623 M☉"],["10,000 M☉"],["178 M☉"],["5.6 million M☉"],["4.5 million M☉"],["1,778 M☉"],["5,623 M☉"],["4 million M☉"],["177,828 M☉"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "c858c8dd0763fd89",
+    "samples": [{"preset":"1 M☉","note":null},{"preset":"10 M☉","note":null},{"preset":"1,000 M☉","note":null},{"preset":"Sagittarius A*","note":null}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "¿Cómo de frío está?",
+    "note": "Quantum physics predicts that a black hole behaves as though it has a temperature. Every small tick on this thermometer is ten times hotter than the one below it, so a short drop on screen is an enormous drop in temperature.",
+    "controls": [{"id":"logm","label":"Masa del agujero negro","unit":null,"min":0,"max":9,"step":0.05,"value":1,"decimals":null}],
+    "presets": [{"label":"1 M☉","values":{"logm":"0"},"note":null},{"label":"10 M☉","values":{"logm":"1"},"note":null},{"label":"1,000 M☉","values":{"logm":"3"},"note":null},{"label":"Sagitario A*","values":{"logm":"6.63346845558"},"note":null}],
+    "actions": [],
+    "defaults": {"logm":"1"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 25,
+   "readout": {
+    "calls": 25,
+    "distinct": 16,
+    "digest": "da6214800268a76d",
+    "samples": [[{"label":"Masa","value":"10 M☉"},{"label":"Temperatura de Hawking","value":"6.2 × 10⁻⁹ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"440 million times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"14 M☉"},{"label":"Temperatura de Hawking","value":"4.4 × 10⁻⁹ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"620 million times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"1 M☉"},{"label":"Temperatura de Hawking","value":"6.2 × 10⁻⁸ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"44 million times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"1 billion M☉"},{"label":"Temperatura de Hawking","value":"6.2 × 10⁻¹⁷ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"4.4 × 10¹⁶ times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"31,623 M☉"},{"label":"Temperatura de Hawking","value":"2 × 10⁻¹² K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"1.4 × 10¹² times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"178 M☉"},{"label":"Temperatura de Hawking","value":"3.5 × 10⁻¹⁰ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"7.9 billion times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"5.6 million M☉"},{"label":"Temperatura de Hawking","value":"1.1 × 10⁻¹⁴ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"2.5 × 10¹⁴ times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"4.3 million M☉"},{"label":"Temperatura de Hawking","value":"1.4 × 10⁻¹⁴ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"1.9 × 10¹⁴ times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"10,000 M☉"},{"label":"Temperatura de Hawking","value":"6.2 × 10⁻¹² K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"440 billion times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"28,184 M☉"},{"label":"Temperatura de Hawking","value":"2.2 × 10⁻¹² K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"1.2 × 10¹² times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"1,778 M☉"},{"label":"Temperatura de Hawking","value":"3.5 × 10⁻¹¹ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"79 billion times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"1,000 M☉"},{"label":"Temperatura de Hawking","value":"6.2 × 10⁻¹¹ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"44 billion times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"4.5 million M☉"},{"label":"Temperatura de Hawking","value":"1.4 × 10⁻¹⁴ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"2 × 10¹⁴ times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"5,623 M☉"},{"label":"Temperatura de Hawking","value":"1.1 × 10⁻¹¹ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"250 billion times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"4 million M☉"},{"label":"Temperatura de Hawking","value":"1.5 × 10⁻¹⁴ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"1.8 × 10¹⁴ times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}],[{"label":"Masa","value":"177,828 M☉"},{"label":"Temperatura de Hawking","value":"3.5 × 10⁻¹³ K","emphasis":true},{"label":"Más frío que el fondo de microondas en","value":"7.9 × 10¹² times"},{"label":"El fondo de microondas, como referencia","value":"2.725 K"}]]
+   },
+   "canvas": {
+    "calls": 25,
+    "distinct": 16,
+    "digest": "323415b570bedfd7",
+    "samples": [["10 M☉","6.2 × 10⁻⁹ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["14 M☉","4.4 × 10⁻⁹ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["1 M☉","6.2 × 10⁻⁸ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["1 billion M☉","6.2 × 10⁻¹⁷ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["31,623 M☉","2 × 10⁻¹² K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["178 M☉","3.5 × 10⁻¹⁰ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["5.6 million M☉","1.1 × 10⁻¹⁴ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["4.5 million M☉","1.4 × 10⁻¹⁴ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["10,000 M☉","6.2 × 10⁻¹² K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["28,184 M☉","2.2 × 10⁻¹² K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["1,778 M☉","3.5 × 10⁻¹¹ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["5,623 M☉","1.1 × 10⁻¹¹ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["4 million M☉","1.5 × 10⁻¹⁴ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"],["177,828 M☉","3.5 × 10⁻¹³ K","10⁻²⁰","10⁻¹⁶","10⁻¹²","10⁻⁸","10⁻⁴","10⁰","10⁴","La superficie del Sol","La superficie del Sol","El fondo de microondas","El fondo de microondas","El experimento de laboratorio más frío","El experimento de laboratorio más frío","this black hole","this black hole"]]
+   },
+   "controls": {
+    "calls": 25,
+    "distinct": 16,
+    "digest": "1c7fb6b0211716ef",
+    "samples": [["10 M☉"],["14 M☉"],["1 M☉"],["1 billion M☉"],["31,623 M☉"],["10,000 M☉"],["178 M☉"],["5.6 million M☉"],["4.5 million M☉"],["1,778 M☉"],["5,623 M☉"],["4 million M☉"],["177,828 M☉"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "55dd91bb154f91f8",
+    "samples": [{"preset":"1 M☉","note":null},{"preset":"10 M☉","note":null},{"preset":"1,000 M☉","note":null},{"preset":"Sagitario A*","note":null}]
+   }
+  }
+ },
+ "bh-lifetime": {
+  "en": {
+   "static": {
+    "title": "How long will it last?",
+    "note": "Each bar is as long as the number of zeros in the answer. Thirteen point eight billion years has ten zeros; a black hole’s lifetime has dozens. One extra zero means ten times longer.",
+    "controls": [{"id":"logm","label":"Mass of the black hole","unit":null,"min":0,"max":9,"step":0.05,"value":1,"decimals":null}],
+    "presets": [{"label":"1 M☉","values":{"logm":"0"},"note":null},{"label":"10 M☉","values":{"logm":"1"},"note":null},{"label":"1,000 M☉","values":{"logm":"3"},"note":null},{"label":"Sagittarius A*","values":{"logm":"6.63346845558"},"note":null}],
+    "actions": [],
+    "defaults": {"logm":"1"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 26,
+   "readout": {
+    "calls": 26,
+    "distinct": 16,
+    "digest": "9d59599eff456fb1",
+    "samples": [[{"label":"Mass","value":"10 M☉"},{"label":"Evaporation lifetime","value":"2.1 × 10⁷⁰ years","emphasis":true},{"label":"Zeros in that number","value":"70"},{"label":"Ages of the universe","value":"1.5 × 10⁶⁰ times"}],[{"label":"Mass","value":"1 M☉"},{"label":"Evaporation lifetime","value":"2.1 × 10⁶⁷ years","emphasis":true},{"label":"Zeros in that number","value":"67"},{"label":"Ages of the universe","value":"1.5 × 10⁵⁷ times"}],[{"label":"Mass","value":"1 billion M☉"},{"label":"Evaporation lifetime","value":"2.1 × 10⁹⁴ years","emphasis":true},{"label":"Zeros in that number","value":"94"},{"label":"Ages of the universe","value":"1.5 × 10⁸⁴ times"}],[{"label":"Mass","value":"31,623 M☉"},{"label":"Evaporation lifetime","value":"6.6 × 10⁸⁰ years","emphasis":true},{"label":"Zeros in that number","value":"81"},{"label":"Ages of the universe","value":"4.8 × 10⁷⁰ times"}],[{"label":"Mass","value":"178 M☉"},{"label":"Evaporation lifetime","value":"1.2 × 10⁷⁴ years","emphasis":true},{"label":"Zeros in that number","value":"74"},{"label":"Ages of the universe","value":"8.5 × 10⁶³ times"}],[{"label":"Mass","value":"5.6 million M☉"},{"label":"Evaporation lifetime","value":"3.7 × 10⁸⁷ years","emphasis":true},{"label":"Zeros in that number","value":"88"},{"label":"Ages of the universe","value":"2.7 × 10⁷⁷ times"}],[{"label":"Mass","value":"4.3 million M☉"},{"label":"Evaporation lifetime","value":"1.7 × 10⁸⁷ years","emphasis":true},{"label":"Zeros in that number","value":"87"},{"label":"Ages of the universe","value":"1.2 × 10⁷⁷ times"}],[{"label":"Mass","value":"1,413 M☉"},{"label":"Evaporation lifetime","value":"5.9 × 10⁷⁶ years","emphasis":true},{"label":"Zeros in that number","value":"77"},{"label":"Ages of the universe","value":"4.3 × 10⁶⁶ times"}],[{"label":"Mass","value":"1,000 M☉"},{"label":"Evaporation lifetime","value":"2.1 × 10⁷⁶ years","emphasis":true},{"label":"Zeros in that number","value":"76"},{"label":"Ages of the universe","value":"1.5 × 10⁶⁶ times"}],[{"label":"Mass","value":"56 M☉"},{"label":"Evaporation lifetime","value":"3.7 × 10⁷² years","emphasis":true},{"label":"Zeros in that number","value":"73"},{"label":"Ages of the universe","value":"2.7 × 10⁶² times"}],[{"label":"Mass","value":"8.9 M☉"},{"label":"Evaporation lifetime","value":"1.5 × 10⁷⁰ years","emphasis":true},{"label":"Zeros in that number","value":"70"},{"label":"Ages of the universe","value":"1.1 × 10⁶⁰ times"}],[{"label":"Mass","value":"13 M☉"},{"label":"Evaporation lifetime","value":"4.2 × 10⁷⁰ years","emphasis":true},{"label":"Zeros in that number","value":"71"},{"label":"Ages of the universe","value":"3 × 10⁶⁰ times"}],[{"label":"Mass","value":"20 million M☉"},{"label":"Evaporation lifetime","value":"1.7 × 10⁸⁹ years","emphasis":true},{"label":"Zeros in that number","value":"89"},{"label":"Ages of the universe","value":"1.2 × 10⁷⁹ times"}],[{"label":"Mass","value":"1,778 M☉"},{"label":"Evaporation lifetime","value":"1.2 × 10⁷⁷ years","emphasis":true},{"label":"Zeros in that number","value":"77"},{"label":"Ages of the universe","value":"8.5 × 10⁶⁶ times"}],[{"label":"Mass","value":"501 M☉"},{"label":"Evaporation lifetime","value":"2.6 × 10⁷⁵ years","emphasis":true},{"label":"Zeros in that number","value":"75"},{"label":"Ages of the universe","value":"1.9 × 10⁶⁵ times"}],[{"label":"Mass","value":"2,818 M☉"},{"label":"Evaporation lifetime","value":"4.7 × 10⁷⁷ years","emphasis":true},{"label":"Zeros in that number","value":"78"},{"label":"Ages of the universe","value":"3.4 × 10⁶⁷ times"}]]
+   },
+   "canvas": {
+    "calls": 26,
+    "distinct": 16,
+    "digest": "c26f714982a6076f",
+    "samples": [["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","2.1 × 10⁷⁰ years (70 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","1.5 × 10⁷⁰ years (70 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","2.1 × 10⁶⁷ years (67 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","2.1 × 10⁹⁴ years (94 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","6.6 × 10⁸⁰ years (81 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","1.2 × 10⁷⁴ years (74 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","3.7 × 10⁸⁷ years (88 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","1.7 × 10⁸⁷ years (87 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","5.9 × 10⁷⁶ years (77 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","2.1 × 10⁷⁶ years (76 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","3.7 × 10⁷² years (73 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","1.7 × 10⁸⁹ years (89 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","1.2 × 10⁷⁷ years (77 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","4.7 × 10⁷⁷ years (78 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Age of the universe","13.8 billion years (10 zeros)","Until the last stars burn out","100 trillion years (14 zeros)","This black hole evaporates","2.6 × 10⁷⁵ years (75 zeros)","0","25","50","75","100","number of zeros in the number of years"]]
+   },
+   "controls": {
+    "calls": 26,
+    "distinct": 16,
+    "digest": "42ea45f4b22cccf4",
+    "samples": [["10 M☉"],["56 M☉"],["1 M☉"],["1 billion M☉"],["31,623 M☉"],["178 M☉"],["501 M☉"],["5.6 million M☉"],["4.3 million M☉"],["1,413 M☉"],["1,778 M☉"],["8.9 M☉"],["20 million M☉"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "c858c8dd0763fd89",
+    "samples": [{"preset":"1 M☉","note":null},{"preset":"10 M☉","note":null},{"preset":"1,000 M☉","note":null},{"preset":"Sagittarius A*","note":null}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "¿Cuánto durará?",
+    "note": "Each bar is as long as the number of zeros in the answer. Thirteen point eight billion years has ten zeros; a black hole’s lifetime has dozens. One extra zero means ten times longer.",
+    "controls": [{"id":"logm","label":"Masa del agujero negro","unit":null,"min":0,"max":9,"step":0.05,"value":1,"decimals":null}],
+    "presets": [{"label":"1 M☉","values":{"logm":"0"},"note":null},{"label":"10 M☉","values":{"logm":"1"},"note":null},{"label":"1,000 M☉","values":{"logm":"3"},"note":null},{"label":"Sagitario A*","values":{"logm":"6.63346845558"},"note":null}],
+    "actions": [],
+    "defaults": {"logm":"1"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 26,
+   "readout": {
+    "calls": 26,
+    "distinct": 16,
+    "digest": "b5d0646ec31c43dc",
+    "samples": [[{"label":"Masa","value":"10 M☉"},{"label":"Vida hasta la evaporación","value":"2.1 × 10⁷⁰ years","emphasis":true},{"label":"Ceros de ese número","value":"70"},{"label":"Edades del universo","value":"1.5 × 10⁶⁰ times"}],[{"label":"Masa","value":"1 M☉"},{"label":"Vida hasta la evaporación","value":"2.1 × 10⁶⁷ years","emphasis":true},{"label":"Ceros de ese número","value":"67"},{"label":"Edades del universo","value":"1.5 × 10⁵⁷ times"}],[{"label":"Masa","value":"1 billion M☉"},{"label":"Vida hasta la evaporación","value":"2.1 × 10⁹⁴ years","emphasis":true},{"label":"Ceros de ese número","value":"94"},{"label":"Edades del universo","value":"1.5 × 10⁸⁴ times"}],[{"label":"Masa","value":"31,623 M☉"},{"label":"Vida hasta la evaporación","value":"6.6 × 10⁸⁰ years","emphasis":true},{"label":"Ceros de ese número","value":"81"},{"label":"Edades del universo","value":"4.8 × 10⁷⁰ times"}],[{"label":"Masa","value":"178 M☉"},{"label":"Vida hasta la evaporación","value":"1.2 × 10⁷⁴ years","emphasis":true},{"label":"Ceros de ese número","value":"74"},{"label":"Edades del universo","value":"8.5 × 10⁶³ times"}],[{"label":"Masa","value":"5.6 million M☉"},{"label":"Vida hasta la evaporación","value":"3.7 × 10⁸⁷ years","emphasis":true},{"label":"Ceros de ese número","value":"88"},{"label":"Edades del universo","value":"2.7 × 10⁷⁷ times"}],[{"label":"Masa","value":"4.3 million M☉"},{"label":"Vida hasta la evaporación","value":"1.7 × 10⁸⁷ years","emphasis":true},{"label":"Ceros de ese número","value":"87"},{"label":"Edades del universo","value":"1.2 × 10⁷⁷ times"}],[{"label":"Masa","value":"1,413 M☉"},{"label":"Vida hasta la evaporación","value":"5.9 × 10⁷⁶ years","emphasis":true},{"label":"Ceros de ese número","value":"77"},{"label":"Edades del universo","value":"4.3 × 10⁶⁶ times"}],[{"label":"Masa","value":"1,000 M☉"},{"label":"Vida hasta la evaporación","value":"2.1 × 10⁷⁶ years","emphasis":true},{"label":"Ceros de ese número","value":"76"},{"label":"Edades del universo","value":"1.5 × 10⁶⁶ times"}],[{"label":"Masa","value":"56 M☉"},{"label":"Vida hasta la evaporación","value":"3.7 × 10⁷² years","emphasis":true},{"label":"Ceros de ese número","value":"73"},{"label":"Edades del universo","value":"2.7 × 10⁶² times"}],[{"label":"Masa","value":"8.9 M☉"},{"label":"Vida hasta la evaporación","value":"1.5 × 10⁷⁰ years","emphasis":true},{"label":"Ceros de ese número","value":"70"},{"label":"Edades del universo","value":"1.1 × 10⁶⁰ times"}],[{"label":"Masa","value":"13 M☉"},{"label":"Vida hasta la evaporación","value":"4.2 × 10⁷⁰ years","emphasis":true},{"label":"Ceros de ese número","value":"71"},{"label":"Edades del universo","value":"3 × 10⁶⁰ times"}],[{"label":"Masa","value":"20 million M☉"},{"label":"Vida hasta la evaporación","value":"1.7 × 10⁸⁹ years","emphasis":true},{"label":"Ceros de ese número","value":"89"},{"label":"Edades del universo","value":"1.2 × 10⁷⁹ times"}],[{"label":"Masa","value":"1,778 M☉"},{"label":"Vida hasta la evaporación","value":"1.2 × 10⁷⁷ years","emphasis":true},{"label":"Ceros de ese número","value":"77"},{"label":"Edades del universo","value":"8.5 × 10⁶⁶ times"}],[{"label":"Masa","value":"501 M☉"},{"label":"Vida hasta la evaporación","value":"2.6 × 10⁷⁵ years","emphasis":true},{"label":"Ceros de ese número","value":"75"},{"label":"Edades del universo","value":"1.9 × 10⁶⁵ times"}],[{"label":"Masa","value":"2,818 M☉"},{"label":"Vida hasta la evaporación","value":"4.7 × 10⁷⁷ years","emphasis":true},{"label":"Ceros de ese número","value":"78"},{"label":"Edades del universo","value":"3.4 × 10⁶⁷ times"}]]
+   },
+   "canvas": {
+    "calls": 26,
+    "distinct": 16,
+    "digest": "64f4f5932088d8f7",
+    "samples": [["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","2.1 × 10⁷⁰ years (70 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","1.5 × 10⁷⁰ years (70 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","2.1 × 10⁶⁷ years (67 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","2.1 × 10⁹⁴ years (94 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","6.6 × 10⁸⁰ years (81 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","1.2 × 10⁷⁴ years (74 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","3.7 × 10⁸⁷ years (88 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","1.7 × 10⁸⁷ years (87 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","5.9 × 10⁷⁶ years (77 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","2.1 × 10⁷⁶ years (76 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","3.7 × 10⁷² years (73 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","1.7 × 10⁸⁹ years (89 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","1.2 × 10⁷⁷ years (77 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","4.7 × 10⁷⁷ years (78 zeros)","0","25","50","75","100","number of zeros in the number of years"],["Edad del universo","13.8 billion years (10 zeros)","Hasta que se apaguen las últimas estrellas","100 trillion years (14 zeros)","Este agujero negro se evapora","2.6 × 10⁷⁵ years (75 zeros)","0","25","50","75","100","number of zeros in the number of years"]]
+   },
+   "controls": {
+    "calls": 26,
+    "distinct": 16,
+    "digest": "42ea45f4b22cccf4",
+    "samples": [["10 M☉"],["56 M☉"],["1 M☉"],["1 billion M☉"],["31,623 M☉"],["178 M☉"],["501 M☉"],["5.6 million M☉"],["4.3 million M☉"],["1,413 M☉"],["1,778 M☉"],["8.9 M☉"],["20 million M☉"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "55dd91bb154f91f8",
+    "samples": [{"preset":"1 M☉","note":null},{"preset":"10 M☉","note":null},{"preset":"1,000 M☉","note":null},{"preset":"Sagitario A*","note":null}]
+   }
+  }
+ },
+ "bh-lineup": {
+  "en": {
+   "static": {
+    "title": "Four black holes",
+    "note": "Each black hole is drawn at its own scale, and the scale bar underneath tells you which. They cannot share one, because the largest is half a million times wider than the smallest.",
+    "controls": [{"id":"which","label":"Showing","unit":null,"min":0,"max":3,"step":1,"value":0,"decimals":null}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"which":"0"}
+   },
+   "precision": [],
+   "specs": 5,
+   "frames": 16,
+   "readout": {
+    "calls": 16,
+    "distinct": 7,
+    "digest": "5cb44fb69bd5dfda",
+    "samples": [[{"label":"Black Hole A · 8 M☉","value":"23.6 km","emphasis":true},{"label":"Black Hole B · 1,000 M☉","value":"2,954 km"},{"label":"Black Hole C · 150,000 M☉","value":"443,119 km"},{"label":"Black Hole D · 4.3 million M☉","value":"0.0849 AU"}],[{"label":"Black Hole A · 8 M☉","value":"23.6 km"},{"label":"Black Hole B · 1,000 M☉","value":"2,954 km"},{"label":"Black Hole C · 150,000 M☉","value":"443,119 km"},{"label":"Black Hole D · 4.3 million M☉","value":"0.0849 AU","emphasis":true}],[{"label":"Black Hole A · 8 M☉","value":"23.6 km"},{"label":"Black Hole B · 1,000 M☉","value":"2,954 km"},{"label":"Black Hole C · 150,000 M☉","value":"443,119 km","emphasis":true},{"label":"Black Hole D · 4.3 million M☉","value":"0.0849 AU"}],[{"label":"Black Hole A · 8 M☉","value":"23.6 km"},{"label":"Black Hole B · 1,000 M☉","value":"2,954 km","emphasis":true},{"label":"Black Hole C · 150,000 M☉","value":"443,119 km"},{"label":"Black Hole D · 4.3 million M☉","value":"0.0849 AU"}],[{"label":"A stellar-mass black hole · 8 M☉","value":"23.6 km"},{"label":"An intermediate-mass black hole · 1,000 M☉","value":"2,954 km"},{"label":"An intermediate-mass black hole · 150,000 M☉","value":"443,119 km"},{"label":"Sagittarius A*, at the center of our galaxy · 4.3 million M☉","value":"0.0849 AU","emphasis":true}],[{"label":"A stellar-mass black hole · 8 M☉","value":"23.6 km","emphasis":true},{"label":"An intermediate-mass black hole · 1,000 M☉","value":"2,954 km"},{"label":"An intermediate-mass black hole · 150,000 M☉","value":"443,119 km"},{"label":"Sagittarius A*, at the center of our galaxy · 4.3 million M☉","value":"0.0849 AU"}],[{"label":"A stellar-mass black hole · 8 M☉","value":"23.6 km"},{"label":"An intermediate-mass black hole · 1,000 M☉","value":"2,954 km"},{"label":"An intermediate-mass black hole · 150,000 M☉","value":"443,119 km","emphasis":true},{"label":"Sagittarius A*, at the center of our galaxy · 4.3 million M☉","value":"0.0849 AU"}]]
+   },
+   "canvas": {
+    "calls": 16,
+    "distinct": 7,
+    "digest": "2140c4e4bffa5f67",
+    "samples": [["Black Hole A","8 M☉   ·   Rₛ = 23.6 km","Manhattan, end to end","Manhattan, end to end","50 km"],["Black Hole D","4.3 million M☉   ·   Rₛ = 0.0849 AU","Mercury's orbit","Mercury's orbit","0.5 AU"],["Black Hole C","150,000 M☉   ·   Rₛ = 443,119 km","the Sun","the Sun","the horizon","the horizon","1,000,000 km"],["Black Hole B","1,000 M☉   ·   Rₛ = 2,954 km","the Earth","the Earth","the horizon","the horizon","10,000 km"],["Sagittarius A*, at the center of our galaxy","4.3 million M☉   ·   Rₛ = 0.0849 AU","Mercury's orbit","Mercury's orbit","0.5 AU"],["A stellar-mass black hole","8 M☉   ·   Rₛ = 23.6 km","Manhattan, end to end","Manhattan, end to end","50 km"],["An intermediate-mass black hole","150,000 M☉   ·   Rₛ = 443,119 km","the Sun","the Sun","the horizon","the horizon","1,000,000 km"]]
+   },
+   "controls": {
+    "calls": 16,
+    "distinct": 4,
+    "digest": "4ee23a9dc15067b1",
+    "samples": [["A"],["D"],["C"],["B"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Cuatro agujeros negros",
+    "note": "Each black hole is drawn at its own scale, and the scale bar underneath tells you which. They cannot share one, because the largest is half a million times wider than the smallest.",
+    "controls": [{"id":"which","label":"Mostrando","unit":null,"min":0,"max":3,"step":1,"value":0,"decimals":null}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"which":"0"}
+   },
+   "precision": [],
+   "specs": 5,
+   "frames": 16,
+   "readout": {
+    "calls": 16,
+    "distinct": 7,
+    "digest": "b49805e510d76ec0",
+    "samples": [[{"label":"Agujero negro A · 8 M☉","value":"23.6 km","emphasis":true},{"label":"Agujero negro B · 1,000 M☉","value":"2,954 km"},{"label":"Agujero negro C · 150,000 M☉","value":"443,119 km"},{"label":"Agujero negro D · 4.3 million M☉","value":"0.0849 AU"}],[{"label":"Agujero negro A · 8 M☉","value":"23.6 km"},{"label":"Agujero negro B · 1,000 M☉","value":"2,954 km"},{"label":"Agujero negro C · 150,000 M☉","value":"443,119 km"},{"label":"Agujero negro D · 4.3 million M☉","value":"0.0849 AU","emphasis":true}],[{"label":"Agujero negro A · 8 M☉","value":"23.6 km"},{"label":"Agujero negro B · 1,000 M☉","value":"2,954 km"},{"label":"Agujero negro C · 150,000 M☉","value":"443,119 km","emphasis":true},{"label":"Agujero negro D · 4.3 million M☉","value":"0.0849 AU"}],[{"label":"Agujero negro A · 8 M☉","value":"23.6 km"},{"label":"Agujero negro B · 1,000 M☉","value":"2,954 km","emphasis":true},{"label":"Agujero negro C · 150,000 M☉","value":"443,119 km"},{"label":"Agujero negro D · 4.3 million M☉","value":"0.0849 AU"}],[{"label":"A stellar-mass black hole · 8 M☉","value":"23.6 km"},{"label":"An intermediate-mass black hole · 1,000 M☉","value":"2,954 km"},{"label":"An intermediate-mass black hole · 150,000 M☉","value":"443,119 km"},{"label":"Sagittarius A*, at the center of our galaxy · 4.3 million M☉","value":"0.0849 AU","emphasis":true}],[{"label":"A stellar-mass black hole · 8 M☉","value":"23.6 km","emphasis":true},{"label":"An intermediate-mass black hole · 1,000 M☉","value":"2,954 km"},{"label":"An intermediate-mass black hole · 150,000 M☉","value":"443,119 km"},{"label":"Sagittarius A*, at the center of our galaxy · 4.3 million M☉","value":"0.0849 AU"}],[{"label":"A stellar-mass black hole · 8 M☉","value":"23.6 km"},{"label":"An intermediate-mass black hole · 1,000 M☉","value":"2,954 km"},{"label":"An intermediate-mass black hole · 150,000 M☉","value":"443,119 km","emphasis":true},{"label":"Sagittarius A*, at the center of our galaxy · 4.3 million M☉","value":"0.0849 AU"}]]
+   },
+   "canvas": {
+    "calls": 16,
+    "distinct": 7,
+    "digest": "d077a7465cccb64f",
+    "samples": [["Agujero negro A","8 M☉   ·   Rₛ = 23.6 km","Manhattan, de punta a punta","Manhattan, de punta a punta","50 km"],["Agujero negro D","4.3 million M☉   ·   Rₛ = 0.0849 AU","la órbita de Mercurio","la órbita de Mercurio","0.5 AU"],["Agujero negro C","150,000 M☉   ·   Rₛ = 443,119 km","el Sol","el Sol","the horizon","the horizon","1,000,000 km"],["Agujero negro B","1,000 M☉   ·   Rₛ = 2,954 km","la Tierra","la Tierra","the horizon","the horizon","10,000 km"],["Sagittarius A*, at the center of our galaxy","4.3 million M☉   ·   Rₛ = 0.0849 AU","la órbita de Mercurio","la órbita de Mercurio","0.5 AU"],["A stellar-mass black hole","8 M☉   ·   Rₛ = 23.6 km","Manhattan, de punta a punta","Manhattan, de punta a punta","50 km"],["An intermediate-mass black hole","150,000 M☉   ·   Rₛ = 443,119 km","el Sol","el Sol","the horizon","the horizon","1,000,000 km"]]
+   },
+   "controls": {
+    "calls": 16,
+    "distinct": 4,
+    "digest": "4ee23a9dc15067b1",
+    "samples": [["A"],["D"],["C"],["B"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ }
+}
