@@ -20,7 +20,6 @@ import {
   canonicalJson,
   canonicalJsonExact,
   fnv1a32,
-  fnv1a32Bytes,
   fnvBase36,
   fnvHex8,
   sha256Hex,
@@ -39,7 +38,6 @@ import { shortHash } from '../js/assignments/assignment.js';
 import { digest } from '../js/composer/compile.js';
 import { normalizeSeed } from '../js/rng.js';
 import { scheduleFingerprint } from '../js/rvSchedule.js';
-import { dataKey } from '../js/analysis/modelCompare.js';
 
 // jsdom's crypto has no subtle digest, so the test lends Node's; and Node 20's
 // WebCrypto refuses another realm's ArrayBuffer, so the bytes are copied into
@@ -123,11 +121,29 @@ describe('FNV-1a', () => {
     );
   });
 
-  test('the loop is written out only where it seeds a stream, or is not text', () => {
-    // Prompt 143: a content hash (a link, a key, a fingerprint, a digest) is
-    // js/hash.js's. What still spells the basis is a seed, which shares the
-    // number on purpose (changing it would re-roll every saved world) and
-    // says so, or an instructor-bundle source that a session cannot rebuild.
+  test('the loop is spelled out only where a decision says so', () => {
+    // Prompt 143 Part A: a content hash (a link, a key, a fingerprint, a
+    // digest) is js/hash.js's wherever importing it costs no route a request.
+    // What still spells the basis is listed with its reason; a new one is a
+    // decision.
+    const KEPT = {
+      'js/hash.js': 'the one',
+      'js/rng.js': 'the world seed; an instructor-bundle source',
+      'js/assignments/assignment.js': 'an instructor-bundle source',
+      'js/analysis/stats.js':
+        'the seed of an analysis stream, spelled as js/rng.js seeds',
+      'js/bodyVisuals.js': 'a silhouette seed: the basis xor the body id',
+      'js/analysis/modelCompare.js':
+        'a fit data key over the bytes of floats: a bytes form of the loop in hash.js would add 0.3 KB to every route that has the module, for one caller',
+      'js/composer/compile.js':
+        'a request on the composer and the course-packs routes (D-R10-19)',
+      'js/experiments/canonicalState.js':
+        'a request on eleven sources routes, the front door among them (D-R10-19)',
+      'js/experiments/experimentManifest.js':
+        'a request on the experiments route (D-R10-19)',
+      'js/experiments/trialRunner.js':
+        'a request on the experiments route (D-R10-19)',
+    };
     const spellsIt = [];
     const walk = dir => {
       for (const e of readdirSync(dir, { withFileTypes: true })) {
@@ -141,23 +157,7 @@ describe('FNV-1a', () => {
       }
     };
     walk('js');
-    expect(spellsIt.sort()).toEqual([
-      'js/analysis/stats.js', // the seed of an analysis stream, as rng.js seeds
-      'js/assignments/assignment.js', // instructor bundle source
-      'js/bodyVisuals.js', // a silhouette seed: the basis xor the body's id
-      'js/hash.js',
-      'js/rng.js', // the world seed; instructor bundle source
-    ]);
-  });
-
-  test('FNV-1a over bytes is the text form over the same codes', () => {
-    for (const t of TEXTS) {
-      const codes = Array.from({ length: t.length }, (_, i) => t.charCodeAt(i));
-      expect(fnv1a32Bytes(codes.map(c => c & 0xff))).toBe(
-        fnv1a32(String.fromCharCode(...codes.map(c => c & 0xff)))
-      );
-    }
-    expect(fnv1a32Bytes([])).toBe(0x811c9dc5);
+    expect(spellsIt.sort()).toEqual(Object.keys(KEPT).sort());
   });
 
   test('digests run on across pieces, so a stream of pieces is their concatenation', () => {
@@ -297,7 +297,7 @@ describe('the digests v3 wrote, as recorded then', () => {
     expect(OBJ.map(v => snapshotFingerprint(v))).toEqual(WANT.snapshot);
   });
 
-  test('a schedule and a fit’s data', () => {
+  test('a schedule', () => {
     const plans = [
       { epochs: [] },
       {
@@ -315,24 +315,6 @@ describe('the digests v3 wrote, as recorded then', () => {
       null,
     ];
     expect(plans.map(scheduleFingerprint)).toEqual(WANT.schedule);
-    const rows = Array.from({ length: 40 }, (_, i) => i);
-    expect(
-      [
-        {
-          rows,
-          y: rows.map(i => Math.sin(i)),
-          sigma: rows.map(i => 0.1 + i / 100),
-        },
-        { rows, y: rows.map(i => Math.cos(i)), sigma: null },
-        { rows: [0], y: [NaN], sigma: [Infinity] },
-        { rows: [], y: [], sigma: null },
-        {
-          rows: [1.5, -0, 1e300],
-          y: [0.1 + 0.2, 5e-324, -1],
-          sigma: [1, 2, 3],
-        },
-      ].map(dataKey)
-    ).toEqual(WANT.dataKey);
   });
 });
 

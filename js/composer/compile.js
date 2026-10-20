@@ -29,7 +29,6 @@
 // =============================================================================
 
 import { mulberry32 } from '../rng.js';
-import { fnvHex8 } from '../hash.js';
 import {
   RELATIONS,
   evaluateRelation,
@@ -37,7 +36,15 @@ import {
 } from '../platform/relations.js';
 
 /** FNV-1a, as eight hex digits: the digest a translation records of its English. */
-export const digest = fnvHex8;
+export function digest(text) {
+  let h = 0x811c9dc5;
+  const s = String(text ?? '');
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(16).padStart(8, '0');
+}
 
 /** A copy of plain data: a pack is JSON, so this loses nothing. */
 const clone = v => JSON.parse(JSON.stringify(v));

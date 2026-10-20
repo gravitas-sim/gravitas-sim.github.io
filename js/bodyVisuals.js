@@ -338,9 +338,6 @@ export function lodAtLeast(level, atLeast) {
  * on two machines and after a reload. Mixed with the type name so a planet and
  * an asteroid that happen to share an id do not share a silhouette.
  *
- * A seed, not a content hash: the FNV-1a basis xor the id, then the type name
- * (Prompt 143: js/hash.js holds the hashes of content).
- *
  * @param {object} obj - Any body with an id
  * @returns {number} An unsigned 32-bit seed
  */

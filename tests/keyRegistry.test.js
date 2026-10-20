@@ -335,6 +335,17 @@ describe('what a module costs a page by importing the registry', () => {
     expect(freeFiles(['js/world.js'])).toEqual(['js/world.js']);
   });
 
+  test('the screen takes any module as the target, js/hash.js among them', () => {
+    // The composer's digest would add hash.js to the composer page; a module
+    // that is not there gets no pages.
+    expect(
+      costs(['js/composer/compile.js'], 'js/hash.js')['js/composer/compile.js']
+        .length
+    ).toBeGreaterThan(0);
+    expect(costs(['js/composer/compile.js'], 'js/not-a-module.js')).toEqual({});
+    expect(freeFiles(['js/composer/compile.js'], 'js/hash.js')).toEqual([]);
+  });
+
   test('every exemption names a real file and says why', () => {
     for (const [file, why] of Object.entries(EXEMPT)) {
       expect(() => readFileSync(file, 'utf8')).not.toThrow();

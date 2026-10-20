@@ -35,8 +35,6 @@
 // what lets every function here be unit-tested without a canvas.
 // =============================================================================
 
-import { fnvHex8 } from '../hash.js';
-
 /**
  * Version of the `x` block, independent of the share payload's own version.
  *
@@ -150,7 +148,13 @@ export function canonicalJson(value) {
  * @returns {string} Eight lowercase hex characters
  */
 export function hashState(payload) {
-  return fnvHex8(canonicalJson(stripVolatile(payload)));
+  const text = canonicalJson(stripVolatile(payload));
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h.toString(16).padStart(8, '0');
 }
 
 /**

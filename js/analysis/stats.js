@@ -145,8 +145,7 @@ export function meanInterval(d) {
 
 /**
  * A seeded uniform stream in [0, 1): mulberry32, seeded by the FNV-1a hash
- * of the seed's text, as js/rng.js seeds it. A seed, not a content hash: it
- * shares js/hash.js's constants on purpose and stays spelled out (Prompt 143).
+ * of the seed's text, as js/rng.js seeds it.
  */
 export function stream(seed) {
   let h = 0x811c9dc5;
