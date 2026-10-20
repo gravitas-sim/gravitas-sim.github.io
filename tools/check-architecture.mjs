@@ -89,6 +89,9 @@ const LAYERS = [
       /^js\/format\.js$/,
       /^js\/units\.js$/,
       /^js\/rng\.js$/,
+      // The named random streams (Prompt 149): js/rng.js's algorithm under
+      // stream identities, with nothing else in it, beside js/rng.js.
+      /^js\/random\//,
       /^js\/theme\.js$/,
       /^js\/i18n\//,
       // Pure geometry over values handed in: the follow camera's arithmetic and

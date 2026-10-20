@@ -695,6 +695,13 @@
       "student": true
     },
     {
+      "file": "SEEDING.md",
+      "kind": "feature",
+      "purpose": "Seeding: named random streams that keep every old sequence.",
+      "owner": 149,
+      "student": false
+    },
+    {
       "file": "SKY_LAB.md",
       "kind": "feature",
       "purpose": "The Sky Lab.",
