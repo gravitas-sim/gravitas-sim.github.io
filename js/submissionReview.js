@@ -55,12 +55,15 @@ import { validateBackup } from './investigations/progressBackup.js';
 import { activitiesOf, fragmentOf, readSource } from './teach/activity.js';
 import { gradebookModel, rosterMerges } from './gradebook/model.js';
 import { ADAPTERS } from './gradebook/index.js';
+import { criteriaPlan } from './instructorRubric.js';
 import {
+  criterionKey,
   marksCsv,
   marksIndex,
   markKey,
   needsJudgment,
   readMarksCsv,
+  setCriterionMark,
   setMark,
 } from './gradebook/marks.js';
 import { MANIFEST } from './data/investigations/manifest.js';
@@ -666,6 +669,25 @@ function byActivity(records) {
     .join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
 }
 
+/** A written answer's criteria at the depth read (Prompt 172), names as text. */
+const criteriaFor = (r, q) =>
+  criteriaPlan(
+    lessons.get(r.lessonId)?.steps?.find(x => x.sid === q.sid),
+    r.depth
+  ).map(c => ({ ...c, name: plain(c.name) }));
+
+/** One criterion's mark and comment, nested in its answer's fieldset. */
+const criterionHtml = (r, q, c, i) => {
+  const m = marks.get(criterionKey(r.fingerprint, q.sid, c.n));
+  const data = `data-fp="${esc(r.fingerprint)}" data-sid="${esc(q.sid)}" data-crit="${c.n}"`;
+  return `<fieldset class="sr-mark sr-criterion" data-kind="${c.kind}"><legend>${esc(c.name)}</legend>
+        <label for="mk-${i}-${c.n}">${esc(t('sub.judge.mark', { max: c.possible }))}</label>
+        <input id="mk-${i}-${c.n}" class="ui-input is-compact" type="number" min="0" max="${c.possible}" step="0.5" ${data} data-field="mark" value="${esc(m?.points ?? '')}" />
+        <label for="mc-${i}-${c.n}">${esc(t('sub.judge.comment'))}</label>
+        <input id="mc-${i}-${c.n}" class="ui-input" type="text" maxlength="500" ${data} data-field="comment" value="${esc(m?.comment ?? '')}" />
+      </fieldset>`;
+};
+
 /** How many written answers have a mark, of how many there are. */
 const judgedCount = records => {
   const items = needsJudgment(records);
@@ -721,7 +743,12 @@ function judgmentSection(records) {
         <label for="mk-${i}">${esc(t('sub.judge.mark', { max: q.pointsPossible }))}</label>
         <input id="mk-${i}" class="ui-input is-compact" type="number" min="0" max="${q.pointsPossible}" step="0.5" ${data} data-field="mark" value="${esc(m?.points ?? '')}" />
         <label for="mc-${i}">${esc(t('sub.judge.comment'))}</label>
-        <input id="mc-${i}" class="ui-input" type="text" maxlength="500" ${data} data-field="comment" value="${esc(m?.comment ?? '')}" />
+        <input id="mc-${i}" class="ui-input" type="text" maxlength="500" ${data} data-field="comment" value="${esc(m?.comment ?? '')}" />${criteriaFor(
+          r,
+          q
+        )
+          .map(c => criterionHtml(r, q, c, i))
+          .join('')}
       </fieldset>`;
     })
     .join('')}</div>`;
@@ -1019,6 +1046,7 @@ function saveMarks() {
   download(
     marksCsv(records, marks, {
       includeWritten: Boolean($('includeWritten')?.checked),
+      criteriaOf: criteriaFor,
     }),
     file,
     'text/csv;charset=utf-8'
@@ -1046,14 +1074,17 @@ async function openMarks(file) {
 /** A mark or a comment changed on the written answers. */
 function judged(e) {
   const el = e.target;
-  const { fp, sid, field } = el.dataset || {};
+  const { fp, sid, field, crit } = el.dataset || {};
   if (!field) return;
-  const current = marks.get(markKey(fp, sid)) || { points: null, comment: '' };
+  const key = crit ? criterionKey(fp, sid, crit) : markKey(fp, sid);
+  const current = marks.get(key) || { points: null, comment: '' };
   const next =
     field === 'mark'
       ? { ...current, points: el.value }
       : { ...current, comment: el.value };
-  const ok = setMark(marks, fp, sid, next, Number(el.max) || Infinity);
+  const ok = crit
+    ? setCriterionMark(marks, fp, sid, crit, next, Number(el.max) || Infinity)
+    : setMark(marks, fp, sid, next, Number(el.max) || Infinity);
   el.setAttribute('aria-invalid', String(!ok));
   if (!ok) {
     say(t('sub.judge.badMark', { max: el.max }));

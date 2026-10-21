@@ -93,6 +93,29 @@
           "name": {
             "$ref": "#/$defs/text"
           },
+          "kind": {
+            "description": "What the criterion claims: completion (an answer is there and speaks to the question), correctness (it agrees with the key within the step's tolerance), reasoning (the explanation is present and sound, judged by the instructor) or uncertainty (it says how well the quantity is known). Absent means reasoning.",
+            "enum": [
+              "completion",
+              "correctness",
+              "reasoning",
+              "uncertainty"
+            ]
+          },
+          "depth": {
+            "description": "The shallowest depth at which the criterion is marked; absent means every depth.",
+            "enum": [
+              "core",
+              "quantitative",
+              "advanced"
+            ]
+          },
+          "weight": {
+            "description": "The criterion's relative share of the step's rubric fraction; absent means 1.",
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 10
+          },
           "levels": {
             "type": "array",
             "minItems": 2,

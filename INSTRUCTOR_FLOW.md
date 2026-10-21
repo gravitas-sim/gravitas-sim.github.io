@@ -117,12 +117,49 @@ percentage, because a grade item made by the import has a maximum of 100.
 
 ### Instructor marks (a file of its own)
 
-Columns: `schema`, `submission`, `fingerprint`, `roster_id`, `assignment_id`, `name_as_typed`, `lesson_id`, `step_id`, `step_title`, `auto_verdict`, `entered_by`, `mark`, `points_possible`, `comment`, `response_status`, `response`.
+Columns: `schema`, `submission`, `fingerprint`, `roster_id`, `assignment_id`, `name_as_typed`, `lesson_id`, `step_id`, `step_title`, `auto_verdict`, `entered_by`, `mark`, `points_possible`, `comment`, `response_status`, `response`; and, in a `/2` file only, `criterion`, `criterion_name`, `criterion_kind`, `criterion_weight`.
 
 One row per written answer that needs reading. `mark` is the instructor's
 points, `comment` their words. Written answers are in the file only if the
 instructor asks (`response_status` says which); the file is saved and reopened by
 the instructor, never stored by the page.
+
+#### Rubric criteria (Prompt 172)
+
+A written step can carry rubric criteria (`rubricCriteria`: a name and two to
+five levels each). A criterion also says what it claims, in three optional
+fields that are written only when set:
+
+| Field | Values | Meaning |
+|---|---|---|
+| `kind` | `completion`, `correctness`, `reasoning`, `uncertainty` | what the criterion looks for: an answer that speaks to the question; an answer that agrees with the key within the step's stated tolerance; an explanation that is present and sound, judged by the instructor; the quantity's uncertainty stated. No `kind` means `reasoning`, which is what every criterion written before the field was. |
+| `depth` | `core`, `quantitative`, `advanced` | the shallowest depth at which the criterion is marked; none means every depth. A report read at a shallower depth is not asked for it. |
+| `weight` | a number above 0 and up to 10 | the criterion's relative share of the step's rubric fraction; none means 1. |
+
+On the review page, each written answer shows one mark and one comment per
+criterion, inside the answer's own, and a criterion's points possible is its best
+level's points (1 when its levels carry none). A criterion's mark is never added
+to the answer's mark or to a gradebook score: the answer's own mark stays the
+instructor's, and nothing already graded is regraded. `rubricFraction()` in
+`js/gradebook/marks.js` gives the step's criteria as one weighted fraction (each
+mark over its points possible, weighted) only when every criterion has a mark;
+until then it says how many do. The class summary reads it.
+
+When any written answer has criteria, the marks file is `gravitas.instructor-marks/2`:
+the same columns, then `criterion` (`c1`, `c2`, ... the criterion's place among
+the step's criteria), `criterion_name`, `criterion_kind` and `criterion_weight`,
+and a row per criterion after the answer's own row, whose `points_possible` is
+the criterion's. A file with none is `/1`, as before, byte for byte. A 2.0.0 build
+refuses a `/2` file as "a marks file of a different version" and reads nothing
+(proved in `tests/rubricSemantics.test.js`); it never reads a criterion's mark as
+the answer's. The Canvas, Moodle and D2L files do not change: each has the
+columns its platform's importer documents, none was tried with extra columns on
+a live platform, and the kind is in the marks file's rows instead (D-R10-38).
+
+Pack authors write the three fields in an investigation pack or a question bank
+(`gravitas.investigation-pack/1`, `gravitas.question-bank/1`); a 2.0.0 reader
+refuses a criterion that carries one, naming the field (the boundary list,
+`tests/compat/boundary.mjs`, `rubric-criterion-semantics`).
 
 ## Budgets
 
@@ -139,9 +176,8 @@ are modules of their own, fetched when a button is pressed. No ceiling was raise
 - **Course context comes from the instructor's file.** A token never carries a
   course, and adding one would move the token and the report; the review page
   names activities from an activity or course file or link instead.
-- **Rubric data.** Prompt 79's rubric data does not exist yet; the review shows
-  the marking note an investigation step already has and takes a free mark and
-  comment. Prompt 79 can feed the same field.
+- **Rubric data.** Prompt 79 added rubric criteria; Prompt 172 gave them kinds,
+  depths and weights and a mark of their own on the review page (above).
 - **Platform notes quote the platform's own labels** ("Assignments"), which are
   third-party names; they live in `js/teach/lmsNotes.js`, not in a catalog the
   terminology check reads. Everything a student reads uses activity,
@@ -150,7 +186,6 @@ are modules of their own, fetched when a button is pressed. No ceiling was raise
 ## Staged
 
 - "Add it to a course" on Library cards (the Library route has about 2 KB spare).
-- Prompt 79's rubric data in the judgment view.
 - Platform notes and gradebook layouts verified on live platforms.
 - A scan test with a real phone camera (the encoder is read back by a separate
   decoder in `tests/qrCode.test.js`).

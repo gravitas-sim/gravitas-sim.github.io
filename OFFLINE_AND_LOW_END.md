@@ -51,16 +51,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 913 | 14.7 MB |
+| JavaScript | 914 | 14.7 MB |
 | Images | 99 | 860 KB |
 | Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 12 | 340 KB |
 | Other | 16 | 640 KB |
-| **Total** | **1069** | **17.2 MB** |
+| **Total** | **1070** | **17.2 MB** |
 
-Of those, 805 are core (the install fails without them), 107 optional (installed with them; a missing one is reported and costs nothing) and 157 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 912 files.
+Of those, 804 are core (the install fails without them), 107 optional (installed with them; a missing one is reported and costs nothing) and 159 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 911 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -82,7 +82,7 @@ modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the Library and
 the data tables. It fetches only what the cache lacks, so a run cut short is
 finished by the next open, and a device that asked for less data (Save-Data) is
 not given it unasked. Until it finishes, those surfaces need the network; that
-is the trade D-PERF-02 accepted for a smaller install. **Parts** are on-demand:
+is the trade D-PERF-02 accepted for a smaller install. The submission review page's own module (`js/submissionReview.js`) is in the idle tier with the instructor modules (Prompt 172, D-R10-38): it arrives with the idle install, not at the first visit, and its page, like the other `instructors/` pages, is runtime-cached once visited. **Parts** are on-demand:
 a reader asks for them, with a storage estimate first (`js/offlineParts.js`).
 
 <!--fact-block:promises-->
@@ -101,7 +101,7 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 | --- | ---: | ---: |
 | 3-D lab | 38 | ~140 KB |
 | data tables | 33 | ~230 KB |
-| instructor modules | 15 | ~260 KB |
+| instructor modules | 17 | ~270 KB |
 | mission lab | 40 | ~230 KB |
 | Sky Lab | 22 | ~170 KB |
 | Library | 7 | ~70 KB |

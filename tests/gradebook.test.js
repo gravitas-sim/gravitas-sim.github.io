@@ -23,6 +23,7 @@ import { moodleCsv, COLUMNS as MOODLE } from '../js/gradebook/moodle.js';
 import { d2lCsv, COLUMNS as D2L } from '../js/gradebook/d2l.js';
 import {
   MARK_COLUMNS,
+  MARK_COLUMNS_RUBRIC,
   MARKS_SCHEMA,
   marksCsv,
   marksIndex,
@@ -273,6 +274,7 @@ describe('the documented columns are the written columns', () => {
     for (const c of columns) expect(doc).toContain(`| \`${c.name}\` |`);
   });
   test('the marks file’s columns are listed', () => {
+    for (const c of MARK_COLUMNS_RUBRIC) expect(doc).toContain(`\`${c}\``);
     for (const c of MARK_COLUMNS) expect(doc).toContain(`\`${c}\``);
   });
 });
