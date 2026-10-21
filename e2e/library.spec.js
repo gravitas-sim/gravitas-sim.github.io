@@ -480,6 +480,39 @@ test.describe('the one resume record', () => {
     expect(next).toEqual({ k: 'seq', id: 'the-sky' });
   });
 
+  test('Home lists the item opened last, named in both languages, beside the lessons begun', async ({
+    page,
+    app,
+  }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem(
+        'gravitas_resume',
+        JSON.stringify({
+          v: 1,
+          items: [
+            {
+              id: 'dataset:tess-light-curve',
+              route: '/observatory/?guide=exo-star',
+              title: {
+                en: 'A TESS light curve',
+                es: 'Una curva de luz de TESS',
+              },
+              at: 1,
+            },
+          ],
+        })
+      );
+    });
+    await app.boot();
+    await page.goto('/#home', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => window.splashScreenEnded === true);
+    const link = page.locator('#welContinue a.wel-quiet');
+    await expect(link).toHaveCount(1);
+    await expect(link).toHaveAttribute('href', '/observatory/?guide=exo-star');
+    await expect(link.locator('.gs-en')).toHaveText('A TESS light curve');
+    await expect(link.locator('.gs-es')).toHaveText('Una curva de luz de TESS');
+  });
+
   test('a lesson writes its step into the record, and Home and the Library continue from it', async ({
     page,
     app,
