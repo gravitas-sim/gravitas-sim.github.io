@@ -82,7 +82,7 @@ modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the Library and
 the data tables. It fetches only what the cache lacks, so a run cut short is
 finished by the next open, and a device that asked for less data (Save-Data) is
 not given it unasked. Until it finishes, those surfaces need the network; that
-is the trade D-PERF-02 accepted for a smaller install. **Parts** are on-demand:
+is the trade D-PERF-02 accepted for a smaller install. The submission review page's own module (`js/submissionReview.js`) is in the idle tier with the instructor modules (Prompt 172, D-R10-38): it arrives with the idle install, not at the first visit, and its page, like the other `instructors/` pages, is runtime-cached once visited. **Parts** are on-demand:
 a reader asks for them, with a storage estimate first (`js/offlineParts.js`).
 
 <!--fact-block:promises-->
