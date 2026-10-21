@@ -19,6 +19,8 @@
 //            a dataset); at most 3
 //   related  entries that share subjects, a sequence or a textbook chapter,
 //            most in common first, at most 4, never the entry itself
+//   uses     what it is built on, when it names something (the scenarios a
+//            lesson's steps open, the datasets a guide opens)
 //   in       the pathways it is in: ['seq', id, position] or ['course', id,
 //            unit], so a sequence and a course holding the same items can say
 //            which is which
@@ -64,7 +66,6 @@ export function teachRoute(
 export function buildRelations(library, { exists, uses = new Map() } = {}) {
   const { entries, sequences } = library;
   const ids = new Set(entries.map(e => e.id));
-  const at = new Map(entries.map((e, i) => [e.id, i]));
   const inPath = new Map(entries.map(e => [e.id, []]));
   const follows = new Map(entries.map(e => [e.id, []]));
   const lastOf = new Set();
@@ -145,6 +146,7 @@ export function buildRelations(library, { exists, uses = new Map() } = {}) {
       in: inPath.get(e.id),
       teach: teachRoute(e, exists),
     };
+    if (uses.get(e.id)?.length) rel.uses = [...uses.get(e.id)];
     if (!rel.next.length)
       rel.why =
         inPath.get(e.id).length || lastOf.has(e.id) ? 'last' : 'standalone';
@@ -178,7 +180,12 @@ export function problems(
       found.push(`${e.id}: no relations`);
       continue;
     }
-    for (const list of ['pre', 'next', 'related']) {
+    for (const list of [
+      'pre',
+      'next',
+      'related',
+      ...(r.uses ? ['uses'] : []),
+    ]) {
       if (!Array.isArray(r[list])) {
         found.push(`${e.id}: rel.${list} is not a list`);
         continue;

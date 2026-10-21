@@ -516,7 +516,9 @@
     "library": {
       "kinds": 6,
       "formats": 15,
-      "filters": 7
+      "filters": 4,
+      "moreFilters": 7,
+      "startCards": 12
     },
     "reach": {
       "maxClicksFromHome": 3,
@@ -549,27 +551,7 @@
       }
     }
   },
-  "futureAcceptance": [
-    {
-      "id": "navigation.library.student-kinds-only",
-      "says": "The Library's kind facet and card badges show only the four kinds students see.",
-      "workedBy": "163",
-      "activatedBy": "166"
-    },
-    {
-      "id": "navigation.library.no-where-it-runs",
-      "says": "The Library has no 'where it runs' facet.",
-      "workedBy": "163",
-      "activatedBy": "166"
-    },
-    {
-      "id": "navigation.library.default-view-is-bounded",
-      "says": "The Library's default view renders a bounded set of starting points, not the whole catalog.",
-      "workedBy": "163",
-      "activatedBy": "166",
-      "target": 24
-    }
-  ],
+  "futureAcceptance": [],
   "labels": {
     "note": "Each row is one thing named on more than one surface. refs are shell:<key> (tools/shell.mjs WORDS), deferred:/library:/observatory:/teaching:<message id> (js/i18n catalogs) and glossary:<label id> (tools/glossary.mjs LABELS). All must carry the same English and Spanish (a leading article is not a difference). knownDivergences are the rows that do not today; Prompt 162 emptied it, and a new divergence fails.",
     "sameThing": [

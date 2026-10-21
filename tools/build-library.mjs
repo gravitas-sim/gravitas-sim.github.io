@@ -41,6 +41,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const load = rel => import(pathToFileURL(path.join(ROOT, rel)).href);
 
 export const OUT = 'library/library.json';
+export const SEARCH_OUT = 'library/search-index.json';
 export const DOC = 'LIBRARY.md';
 export { FORMAT, FORMAT_VERSION } from '../js/library/format.js';
 import { FORMAT, FORMAT_VERSION } from '../js/library/format.js';
@@ -847,6 +848,41 @@ export async function buildLibrary() {
 }
 
 /**
+ * What the search reads that the index does not carry: each lesson's learning
+ * objectives, in both languages (the Spanish from the lesson's shadow file).
+ * A separate file, fetched on the first search, so the page's first view
+ * does not pay for words only a search looks at.
+ * @param {object} library - The built library
+ * @returns {Promise<object>} A gravitas.library-search/1 document
+ */
+export async function buildSearchIndex(library) {
+  const { INVESTIGATIONS } = await load('js/data/investigations.js');
+  const objectives = {};
+  for (const e of library.entries) {
+    if (e.kind !== 'investigation' || e.format !== 'lesson') continue;
+    const id = e.id.replace(/^investigation:/, '');
+    const lesson = INVESTIGATIONS.find(l => l.id === id);
+    const en = lesson?.objectives ?? [];
+    if (!en.length) continue;
+    const shadow = (await load(`js/data/investigations/es/${id}.js`)).default;
+    // Arrays line up by index with the English; a null keeps the English.
+    objectives[e.id] = {
+      en,
+      es: en.map((line, i) => shadow.objectives?.[i] ?? line),
+    };
+  }
+  return { format: 'gravitas.library-search', formatVersion: 1, objectives };
+}
+
+/** The search index, one lesson a line. */
+export function renderSearchIndex(index) {
+  const rows = Object.entries(index.objectives).map(
+    ([id, words]) => `    ${JSON.stringify(id)}: ${JSON.stringify(words)}`
+  );
+  return `{\n  "format": ${JSON.stringify(index.format)},\n  "formatVersion": ${index.formatVersion},\n  "objectives": {\n${rows.join(',\n')}\n  }\n}\n`;
+}
+
+/**
  * How many entries of each kind carry each field.
  * @param {object} library - A gravitas.library/1 document
  * @returns {Array<{kind: string, total: number, has: Object<string, number>}>}
@@ -957,6 +993,7 @@ async function main() {
   const library = await buildLibrary();
   const outputs = [
     [OUT, renderJson(library)],
+    [SEARCH_OUT, renderSearchIndex(await buildSearchIndex(library))],
     [DOC, withCoverage(readFileSync(path.join(ROOT, DOC), 'utf8'), library)],
     [
       HOME,

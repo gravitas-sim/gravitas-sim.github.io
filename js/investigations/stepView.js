@@ -41,7 +41,7 @@ import {
   nextHintStage,
 } from '../answerFeedback.js';
 import { command, state } from '../appState.js';
-import { drop, get, put } from '../storage/local.js';
+import { drop, get, noteResume, put } from '../storage/local.js';
 import { migrateSavedProgress } from '../platform/resolver.js';
 import { investigationMeta } from '../data/investigations/registry.js';
 import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
@@ -1290,6 +1290,25 @@ function setSaveState(status) {
   renderSaveStatus();
 }
 
+/** The step last noted in the resume record, so a keystroke is not a write. */
+let notedAt = '';
+
+/**
+ * Tell the one resume record where the reader is (js/storage/local.js): this
+ * lesson, at this step. The Library's link wrote the pathway they came by, and
+ * the record keeps it. Only a step that is new to the record is written.
+ */
+function noteWhereWeAre(id, step) {
+  const at = `${id}/${step ?? ''}`;
+  if (!step || at === notedAt) return;
+  notedAt = at;
+  noteResume({
+    id: `investigation:${id}`,
+    route: `/#investigation=${id}`,
+    step,
+  });
+}
+
 export function save() {
   const s = host.state();
   const { active } = s;
@@ -1327,6 +1346,7 @@ export function save() {
   try {
     put(progressKey(active.id), JSON.stringify(payload), progressArea());
     setSaveState('saved');
+    noteWhereWeAre(active.id, payload.stepSid);
   } catch (err) {
     // The answers stay in memory and the lesson keeps working; what changes is
     // that the reader is told, once, and given a way to take the work with

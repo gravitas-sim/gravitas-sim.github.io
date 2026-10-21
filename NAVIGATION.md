@@ -161,7 +161,9 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `home.countedLinks` | 0 |
 | `library.kinds` | 6 |
 | `library.formats` | 15 |
-| `library.filters` | 7 |
+| `library.filters` | 4 |
+| `library.moreFilters` | 7 |
+| `library.startCards` | 12 |
 | `reach.maxClicksFromHome` | 3 |
 | `reach.pagesWithoutALinkFromHome` | 1 |
 | `defaultView.home-first-visit.desktop` | 12 |
@@ -189,9 +191,7 @@ Three checks describe the Library's model and fail now, by design (Prompt 163's 
 <!-- navigation:pending -->
 | Check | What it holds the site to | Work of | Activated by |
 | --- | --- | --- | --- |
-| `navigation.library.student-kinds-only` | The Library's kind facet and card badges show only the four kinds students see. | 163 | 166 |
-| `navigation.library.no-where-it-runs` | The Library has no 'where it runs' facet. | 163 | 166 |
-| `navigation.library.default-view-is-bounded` | The Library's default view renders a bounded set of starting points, not the whole catalog. | 163 | 166 |
+| none | Every one of the nine checks is activated: 162 activated the six for Home and the global navigation, 163 the three for the Library. | | |
 <!-- /navigation:pending -->
 
 The registered failures that remain are the work of 163: the Library's kinds, facets and default view. Prompt 166's consolidation (with 165's verdicts for any surface that changes its route) works from this inventory.

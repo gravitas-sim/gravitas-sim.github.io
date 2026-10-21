@@ -51,7 +51,7 @@ import {
   loadFragment,
   mountFragment,
 } from './i18n/deferredMessages.js';
-import { EV_ESCAPE } from './names.js';
+import { EV_ESCAPE, KEY_RESUME } from './names.js';
 
 ensureDeferredMessages().catch(() => {});
 
@@ -108,6 +108,86 @@ export function unfinishedLessons(catalog, read = savedProgress) {
 }
 
 /**
+ * The items of the one resume record (js/storage/local.js owns it), newest
+ * first. Home only reads it, and reads it here, not through that module: the
+ * module would be one more request on every lesson route in the build.
+ * tests/resumeRecord.test.js holds this reader to the module's, record by
+ * record.
+ *
+ * @param {() => ?string} [raw] - The stored text
+ * @returns {Array<{id: string, route: string, title?: {en: string, es?: string}}>}
+ */
+export function resumeItems(raw = () => localStorage.getItem(KEY_RESUME)) {
+  let record = null;
+  try {
+    record = JSON.parse(raw());
+  } catch {
+    return [];
+  }
+  if (record?.v !== 1 || !Array.isArray(record.items)) return [];
+  const seen = new Set();
+  const out = [];
+  for (const i of record.items) {
+    if (
+      typeof i?.id !== 'string' ||
+      !/^[\w.:/-]+$/.test(i.id) ||
+      i.id.length > 120 ||
+      typeof i.route !== 'string' ||
+      !i.route.startsWith('/') ||
+      i.route.startsWith('//') ||
+      i.route.length > 240 ||
+      seen.has(i.id)
+    )
+      continue;
+    seen.add(i.id);
+    out.push({ id: i.id, route: i.route, title: i.title });
+  }
+  return out;
+}
+
+/**
+ * What Home's "where was I" lists: the item opened last first, then the
+ * lessons begun and not finished, at most three. A lesson is a button that
+ * opens it here (its address is the fallback); anything else is a link, and is
+ * named by the title the Library wrote into the record.
+ *
+ * @param {Array<Object>} catalog - The manifest
+ * @param {Array<Object>} items - From resumeItems
+ * @param {Array<Object>} going - From unfinishedLessons
+ * @returns {Array<{id: string, title: {en: string, es?: string}, route: ?string, seen?: number, total?: number}>}
+ */
+export function continueRows(catalog, items, going) {
+  const lessons = new Map(catalog.map(inv => [inv.id, inv]));
+  const progress = new Map(going.map(g => [g.id, g]));
+  const rows = [];
+  const add = row => {
+    if (rows.length < 3 && !rows.some(r => r.id === row.id)) rows.push(row);
+  };
+  for (const item of items) {
+    const lesson = lessons.get(item.id.replace(/^investigation:/, ''));
+    if (lesson && item.id.startsWith('investigation:')) {
+      const g = progress.get(lesson.id);
+      add({
+        id: lesson.id,
+        title: { en: lesson.title },
+        route: null,
+        ...(g ? { seen: g.seen, total: g.total } : {}),
+      });
+    } else if (item.title?.en)
+      add({ id: item.id, title: item.title, route: item.route });
+  }
+  for (const g of going)
+    add({
+      id: g.id,
+      title: { en: g.title },
+      route: null,
+      seen: g.seen,
+      total: g.total,
+    });
+  return rows;
+}
+
+/**
  * Fill in the lessons to continue, once the registry has loaded.
  *
  * The strip is hidden until there is something in it ("where was I" shows
@@ -121,12 +201,26 @@ async function fillContinue() {
     const { MANIFEST: INVESTIGATIONS } =
       await import('./data/investigations/registry.js');
     const going = unfinishedLessons(INVESTIGATIONS);
+    const rows = continueRows(INVESTIGATIONS, resumeItems(), going);
     const strip = els.body?.querySelector('#welContinue');
-    if (strip && going.length) {
-      strip.querySelector('ul').innerHTML = going
+    if (strip && rows.length) {
+      const name = r =>
+        r.title.es
+          ? `<span class="gs-en">${escape(r.title.en)}</span><span class="gs-es" lang="es">${escape(r.title.es)}</span>`
+          : escape(r.title.en);
+      strip.querySelector('ul').innerHTML = rows
         .map(
-          g => `<li class="wel-lesson"><button type="button" class="wel-quiet" data-lesson="${escape(g.id)}">${escape(g.title)}</button>
-          <span class="wel-lesson-meta"><span class="gs-en">${g.seen} of ${g.total} steps seen</span><span class="gs-es" lang="es">${g.seen} de ${g.total} pasos vistos</span></span></li>`
+          r =>
+            `<li class="wel-lesson">${
+              r.route
+                ? `<a class="wel-quiet" href="${escape(r.route)}">${name(r)}</a>`
+                : `<button type="button" class="wel-quiet" data-lesson="${escape(r.id)}">${name(r)}</button>`
+            }${
+              r.total
+                ? `
+          <span class="wel-lesson-meta"><span class="gs-en">${r.seen} of ${r.total} steps seen</span><span class="gs-es" lang="es">${r.seen} de ${r.total} pasos vistos</span></span>`
+                : ''
+            }</li>`
         )
         .join('');
       strip.hidden = false;

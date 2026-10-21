@@ -570,6 +570,14 @@
                 "last",
                 "standalone"
               ]
+            },
+            "uses": {
+              "description": "What it is built on: the scenarios a lesson's steps open, the datasets a guide opens.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              }
             }
           }
         }
