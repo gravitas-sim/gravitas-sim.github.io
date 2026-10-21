@@ -233,7 +233,7 @@ export function studentInterval(samples, { level = 0.95 } = {}) {
  * the deviance one. Chosen from the exact coverage table (STATISTICS.md): the
  * deviance interval dips to 0.934 near 19 counts and to 0.939 at 20 to 40 (at a
  * stated 0.95), and only from about 100 counts does the procedure stay within
- * 0.5 points of nominal (minimum 0.9451 to a rate times exposure of 200).
+ * 0.5 points of nominal (minimum 0.9446 to a rate times exposure of 200).
  */
 export const SMALL_COUNT = 100;
 
@@ -257,8 +257,10 @@ export const SMALL_COUNT = 100;
  * Exact coverage of the 'auto' procedure at a stated 0.95, over every rate times
  * exposure in each range (minimum, mean): 0.01 to 5: 0.9587, 0.9821; 5 to 9.5:
  * 0.9559, 0.9686; 9.5 to 20: 0.9521, 0.9636; 20 to 40: 0.9502, 0.9598; 40 to
- * 100: 0.9482, 0.9561; 100 to 200: 0.9451, 0.9507. The promised floor is 0.95 up
- * to 40 (Garwood) and 0.94 to 200; above that nothing is claimed.
+ * 100: 0.9482, 0.9561; 100 to 200: 0.9446, 0.9507 (near 131.86). The promised
+ * floor is 0.95 up to 40 (Garwood) and 0.94 to 200; above that nothing is
+ * claimed. The table and the floors are for level 0.95 ONLY: at 0.6827 the
+ * minimum over 0.05 to 150 is 0.660 and at 0.99 it is 0.9887.
  */
 export function poissonInterval(
   counts,

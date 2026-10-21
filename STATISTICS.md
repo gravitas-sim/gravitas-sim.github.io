@@ -49,7 +49,7 @@ D-SAMPLER-01 and D-KERNEL-01..03 stand.
 | `selection.js` | `selection`, `all`, `either` | A selection function: a cut and an inclusion probability on an observable (a row without a finite value is excluded); `all` multiplies independent selections, `either` is -expm1(sum log1p(-p)); `apply(rows, uniformFor)` returns who is in, their probabilities and weights 1/p, and throws `uniform` when a draw is needed and `uniformFor` is not a function | 215, 229, 252, 264 |
 | `selection.js` | `logisticCompleteness` | The survey suite's logistic completeness curve | 215, 229 |
 | `selection.js` | `completenessCorrect` | n / c with its sampling error for a Poisson or a fixed population; a bin with no detections has a one-sided upper limit at `level` (`upper-limit`), a bin below the completeness floor (0.1) is refused (`completeness`), a count that is not a whole number is refused (`count`) | 215, 229, 264 |
-| `selection.js` | `eddingtonShift`, `malmquistShift`, `malmquistCutShift` | The closed forms of the biases (below); the Eddington and cut shifts use the asymptotic Mills ratio deep in the tail instead of underflowing | 215, 252 |
+| `selection.js` | `eddingtonShift`, `malmquistShift`, `malmquistCutShift` | The closed forms of the biases (below); the Eddington and cut shifts use the asymptotic Mills ratio deep in the tail instead of underflowing; like the special functions they return NaN outside their domain (a sigma or scale that is not positive and finite, or a non-finite observed value, slope or z), never a number, so a caller must check `Number.isNaN` | 215, 252 |
 | `selection.js` | `measuredShift`, `binnedMeanShift` | A bias as a measured difference on a synthetic population, with its standard error; a NaN is refused (`non-finite`) | 215, 252 |
 
 <!-- statistics-exports:end -->
@@ -202,18 +202,20 @@ table at the head of `tools/statistics-cases.mjs`, each with its reason:
 | `tailRelative`, `tSfRelative` | 1e-8, 1e-10 | tail probabilities at 7, 9 and 12 sigma (and the lag-one and runs p values at 14 and 35 sigma) against the asymptotic series, and at large t against closed forms |
 | `garwoodExact` | 1e-12 relative | Garwood from chi-square quantiles against the exact Poisson sums at N = 10 to 20 |
 | `poissonGarwoodFloor` | 0.95 - 1e-6 | the exact coverage of the shipped 95% procedure for rate times exposure up to 40: it is Garwood there (a count of 100 or more has probability under 1e-14), whose guarantee is the stated level |
-| `poissonProfileFloor` | 0.94 | from 40 to 200 the deviance interval is in play; the promised floor is the measured minimum 0.9451 rounded down. Nothing is claimed above 200 |
+| `poissonProfileFloor` | 0.94 | from 40 to 200 the deviance interval is in play; the promised floor is the measured minimum 0.9446 (near 131.86) rounded down. Nothing is claimed above 200 |
 | `cfIterationBound` | 2,000 iterations | a continued fraction that needs more has lost its convergence (the cap is 100,000) |
 
 **Poisson coverage, measured.** The exact coverage of the shipped procedure
 (`poissonInterval` with `method: 'auto'`) at a stated 0.95, computed from the
 Poisson probabilities over every rate times exposure in each range (the
-coverage is constant between the interval ends of consecutive counts, so the
-minimum is exact; case I13):
+included counts at a given rate form a contiguous run, so the coverage of each
+count's interval is unimodal in the rate and the minimum over a range lies at
+an edge of a piece, just inside an interval end; case I13 evaluates it there,
+not at midpoints, which would overstate it: 0.9612 against 0.9587 near 4.1):
 
 | Rate x exposure | 0.01 to 5 | 5 to 9.5 | 9.5 to 20 | 20 to 40 | 40 to 100 | 100 to 200 |
 | --- | --- | --- | --- | --- | --- | --- |
-| minimum | 0.9587 | 0.9559 | 0.9521 | 0.9502 | 0.9482 | 0.9451 |
+| minimum | 0.9587 | 0.9559 | 0.9521 | 0.9502 | 0.9482 | 0.9446 |
 | mean | 0.9821 | 0.9686 | 0.9636 | 0.9598 | 0.9561 | 0.9507 |
 
 For comparison, with the switch at 10 (the first version) the minima were 0.9587,
@@ -225,8 +227,11 @@ stays within 0.5 points of nominal everywhere in the table (50 left 0.9426 betwe
 which is wider (mean coverage 0.96 rather than 0.95) and never short. The floor
 promised is 0.95 up to a rate times exposure of 40 (Garwood, to rounding) and 0.94
 to 200 (the measured minimum, rounded down); nothing is claimed above 200, where
-the deviance interval's coverage tends to 0.95 from below, and at levels other
-than 0.95 the table is not measured.
+the deviance interval's coverage tends to 0.95 from below. **The floors and the
+table are for level 0.95 only.** At other levels they do not carry over: at a
+level of 0.6827 the minimum over 0.05 to 150 is 0.660 (near 121), well under
+the stated level, and at 0.99 it is 0.9887 (near 145). A caller who asks for
+another level gets the same switch at 100 counts and no promise.
 
 The F-test sees only parameter counts and sums of squares, so `searched` and
 `boundary` are declarations the CALLER makes and the kernel cannot detect: a

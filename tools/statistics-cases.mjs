@@ -170,7 +170,7 @@ export const TOL = Object.freeze({
    * exposure up to 40 the procedure is Garwood to within a probability of 1e-14
    * of a count of 100 or more, so its guarantee holds to rounding; from 40 to
    * 200 the deviance interval is in play and the promised floor is the measured
-   * minimum (0.9451) rounded down to 0.94. Above 200 nothing is claimed.
+   * minimum (0.9446) rounded down to 0.94. Above 200 nothing is claimed.
    */
   poissonGarwoodFloor: 0.95 - 1e-6,
   poissonProfileFloor: 0.94,
