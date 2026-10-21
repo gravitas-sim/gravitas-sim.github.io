@@ -1,0 +1,15 @@
+{
+  "format": "gravitas.i18n-freshness/1",
+  "source": "sdk-strings:es",
+  "baseline": {
+    "date": "2026-10-21",
+    "note": "Every translation present on this date was taken as written against the English it stood beside. That records no review."
+  },
+  "rows": {
+    "sdk-strings/compared": "b71fe77c:3e7694c0",
+    "sdk-strings/days": "64b9f5b6:bb83062a",
+    "sdk-strings/period": "7dd69e0f:f5d8c884",
+    "sdk-strings/times": "44f7e205:0bb5d857",
+    "sdk-strings/years": "f51b8161:04b18a8d"
+  }
+}

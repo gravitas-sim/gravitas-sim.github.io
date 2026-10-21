@@ -86,6 +86,12 @@ current, and the orchestrator checks it.
 | `gw-shots.mjs` | Captures of the gravitational-wave lab |  |
 | `i18n-audit.mjs` | Message-catalog audit | `npm run i18n:check` |
 | `i18n-catalog.mjs` | The message catalog, however many files it is split across |  |
+| `i18n-freshness.mjs` | Is every translation still a translation of the English it stands beside? | `npm run i18n:freshness` |
+| `i18n-history.mjs` | Which Spanish catalog entries are probably stale already, from git history? |  |
+| `i18n-labels.mjs` | Do the labels say the same thing every time, in both languages? |  |
+| `i18n-ledger.mjs` | The translation-freshness ledger: what a translation was written against |  |
+| `i18n-sources.mjs` | Where the translations are, read as pairs of English and translated text |  |
+| `i18n-surfaces.mjs` | Which surfaces are English only, and is that a decision or an accident? |  |
 | `index-fragments.mjs` | The panels index.html no longer carries, and where each one went |  |
 | `inference-bench.mjs` | npm run bench:inference - how long a fit takes in its Workers, and what the | `npm run bench:inference` |
 | `inference-cases.mjs` | The cases the inference core is validated and timed on |  |

@@ -1,0 +1,48 @@
+{
+  "format": "gravitas.i18n-surfaces/1",
+  "note": "Surfaces that are English only by decision. A page not listed here must carry its Spanish (an English span and a Spanish span side by side, or message ids); a surface listed here must exist and, for a page, must carry no Spanish. TRANSLATION.md says how to add one.",
+  "englishOnly": [
+    {
+      "id": "compute-frame",
+      "kind": "page",
+      "path": "compute-frame/index.html",
+      "reason": "A sandboxed frame the compute page embeds to run reviewed notebooks. It has no controls, keeps nothing and is never the page a student reads.",
+      "decided": "COMPUTE.md"
+    },
+    {
+      "id": "general-instructor-documents",
+      "kind": "document",
+      "path": "INSTRUCTOR_MATERIALS.md",
+      "reason": "The adopter's guide, curriculum map, the observatory, 3-D and mission guides with their keys, and the activity guides and worksheets: 18 of the 150 instructor documents. The 24 investigation guides and their keys have a Spanish edition.",
+      "decided": "INSTRUCTOR_MATERIALS.md, the inventory table"
+    },
+    {
+      "id": "user-manual",
+      "kind": "document",
+      "path": "manual/gravitas-user-manual.tex",
+      "reason": "The printed user manual (LaTeX) is English only.",
+      "decided": "CHANGELOG.md 2.0.0, \"What this release does and does not establish\""
+    },
+    {
+      "id": "sdk-documentation",
+      "kind": "document",
+      "path": "sdk/README.md",
+      "reason": "The SDK documentation is English only. A package carries the languages its author wrote and Gravitas translates none of them.",
+      "decided": "sdk/README.md (\"Gravitas does not translate a package\")"
+    },
+    {
+      "id": "repository-documents",
+      "kind": "document",
+      "path": "CONTRIBUTING.md",
+      "reason": "Every Markdown document at the repository root is for contributors, adopters and reviewers and is English, except a document that has a .es.md twin (DATA_PROTECTION.md): that twin is tracked for freshness whole.",
+      "decided": "TRANSLATION.md, the untranslated-surface policy"
+    },
+    {
+      "id": "computed-validation-messages",
+      "kind": "code",
+      "path": "js/validation",
+      "reason": "The messages the validation groups compute (a tolerance, a measured value, a cited source) are English. The validation page that shows them carries its own Spanish prose.",
+      "decided": "CHANGELOG.md 2.0.0, \"What this release does and does not establish\""
+    }
+  ]
+}
