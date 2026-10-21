@@ -37,7 +37,7 @@ import {
 } from '../js/gradebook/marks.js';
 import { CRITERION_KINDS as PACK_KINDS } from '../js/platform/questionBank.js';
 import { WRITTEN_SID, pile } from './gradebookFixtures.js';
-import { archiveOld } from './compat/harness.js';
+import { archiveOld, run } from './compat/harness.js';
 
 const level = (label, points) => ({ label, text: `${label} text`, points });
 const STEP = {
@@ -320,4 +320,46 @@ describe('the 2.0.0 marks reader and a /2 file', () => {
     const got = oldReads(marksCsv(records, m));
     expect(got).toMatchObject({ ok: true, size: 1 });
   });
+});
+
+describe('the 2.0.0 pack reader and a criterion that claims something', () => {
+  let old;
+  beforeAll(() => {
+    old = archiveOld();
+  });
+  afterAll(() => old?.cleanup());
+
+  const criterion = extra => ({
+    name: { en: 'Gets the number' },
+    ...extra,
+    levels: [
+      { label: { en: 'Full' }, text: { en: 'Within tolerance.' } },
+      { label: { en: 'Not yet' }, text: { en: 'Outside it.' } },
+    ],
+  });
+  const read = extra => {
+    const made = run(old.tree, 'investigation-pack', 'make');
+    const doc = JSON.parse(JSON.stringify(made.value));
+    doc.steps.find(s => s.type === 'question' && s.rubric).rubricCriteria = [
+      criterion(extra),
+    ];
+    return run(old.tree, 'investigation-pack', 'read', doc).value;
+  };
+
+  test('accepts a table that sets none: nothing about the 2.0.0 shape changed', () => {
+    expect(read({}).accepted).toBe(true);
+  });
+
+  test.each([
+    ['kind', { kind: 'correctness' }],
+    ['depth', { depth: 'quantitative' }],
+    ['weight', { weight: 2 }],
+  ])(
+    'refuses %s, naming the field, rather than dropping it',
+    (field, extra) => {
+      const got = read(extra);
+      expect(got.accepted).toBe(false);
+      expect(got.problems.join(' ')).toContain(`rubricCriteria[0].${field}`);
+    }
+  );
 });

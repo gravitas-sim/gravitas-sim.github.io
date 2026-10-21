@@ -1699,6 +1699,7 @@
   "[chromium] › submissionReview.spec.js › the submission review page › reads a pile, keeps the duplicate, and refuses what it cannot read": 0.6,
   "[chromium] › submissionReview.spec.js › the submission review page › says there is nothing to download until something is read": 0.6,
   "[chromium] › submissionReview.spec.js › the submission review page › shows each written answer beside its rubric, on this screen only": 0.9,
+  "[chromium] › submissionReview.spec.js › the submission review page › marks each rubric criterion apart from the answer, and the marks file says which kind": 0.9,
   "[chromium] › submissionReview.spec.js › the submission review page › speaks Spanish, and remembers it for the rest of Gravitas": 0.8,
   "[chromium] › submissionReview.spec.js › the submission review page › withholds written answers unless the instructor asks for them": 1.1,
   "[chromium] › submissionReview.spec.js › the submission review page › works from the keyboard alone": 0.8,
