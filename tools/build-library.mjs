@@ -4,7 +4,7 @@
 // -----------------------------------------------------------------------------
 //   node tools/build-library.mjs           write library/library.json, the
 //                                          coverage table in LIBRARY.md and
-//                                          Home's Library cards
+//                                          Home's first-week start
 //   node tools/build-library.mjs --check   fail when either is not what this writes
 //
 // Roadmap II Prompt 54 (LIBRARY.md). Every entry is read from the source that
@@ -801,8 +801,8 @@ export function withCoverage(doc, library) {
 }
 
 const HOME = 'js/fragments/home.html';
-const HOME_START = '<!-- library:home -->';
-const HOME_END = '<!-- /library:home -->';
+const HOME_START = '<!-- first-week:home -->';
+const HOME_END = '<!-- /first-week:home -->';
 const html = s =>
   String(s)
     .replace(/&/g, '&amp;')
@@ -814,35 +814,40 @@ const bilingual = ({ en, es }) =>
   `<span class="gs-en">${html(en)}</span><span class="gs-es" lang="es">${html(es)}</span>`;
 
 /**
- * Home's "In the Library" cards: one per kind, with how many there are and
- * the first two of them, each a link into the Library narrowed to that kind.
+ * Home's recommended start, one per audience (Prompt 162): the committed list
+ * in tools/navigation-inventory.json (`firstWeek`), each entry read from the
+ * Library so no title or route is restated, and each action a button. A list
+ * that names a Library entry that does not exist fails here, not on the page.
  * Static markup in Home's fragment, so Home costs no JavaScript for it.
  */
-export async function renderHome(library) {
-  const { EN_LIBRARY } = await load('js/i18n/en.library.js');
-  const { ES_LIBRARY } = await load('js/i18n/es.library.js');
-  const cards = library.kinds.map(kind => {
-    const of = library.entries.filter(e => e.kind === kind);
-    const label = {
-      en: `${EN_LIBRARY[`lib.kind.${kind}`]} (${of.length})`,
-      es: `${ES_LIBRARY[`lib.kind.${kind}`]} (${of.length})`,
-    };
-    const first = of.slice(0, 2);
-    const note = {
-      en: first.map(e => e.title.en).join(' · '),
-      es: first.map(e => e.title.es).join(' · '),
-    };
-    return `<a class="wel-link" href="/library/?kind=${kind}"><span class="wel-link-label">${bilingual(label)}</span><span class="wel-link-note">${bilingual(note)}</span></a>`;
+export function renderHome(library) {
+  const { firstWeek } = JSON.parse(
+    readFileSync(path.join(ROOT, 'tools/navigation-inventory.json'), 'utf8')
+  );
+  const items = firstWeek.starts.map(start => {
+    const who = `<span class="wel-start-for">${bilingual(start.audience)}</span>`;
+    if (start.action)
+      return `<li class="wel-start-item">${who}<button type="button" class="ui-button wel-start-go" data-action="${start.action}">${bilingual(start.label)}</button></li>`;
+    const entry = library.entries.find(e => e.id === start.entry);
+    if (!entry)
+      throw new Error(
+        `The first-week list names ${start.entry}, which is not in the Library`
+      );
+    const lesson =
+      entry.kind === 'investigation'
+        ? ` data-lesson="${html(entry.id.split(':')[1])}"`
+        : '';
+    return `<li class="wel-start-item">${who}<a class="wel-start-go" href="${html(entry.route)}"${lesson}>${bilingual(entry.title)}</a></li>`;
   });
-  return `<div class="wel-links">\n${cards.join('\n')}\n</div>`;
+  return `<ul class="wel-start">\n${items.join('\n')}\n</ul>`;
 }
 
-/** Home's fragment with its Library cards rewritten. */
-export function withHome(doc, cards) {
+/** Home's fragment with its first-week block rewritten. */
+export function withHome(doc, block) {
   const a = doc.indexOf(HOME_START);
   const b = doc.indexOf(HOME_END);
   if (a < 0 || b < a) throw new Error(`${HOME} has no ${HOME_START} block`);
-  return `${doc.slice(0, a + HOME_START.length)}\n${cards}\n${doc.slice(b)}`;
+  return `${doc.slice(0, a + HOME_START.length)}\n${block}\n${doc.slice(b)}`;
 }
 
 async function main() {
@@ -855,7 +860,7 @@ async function main() {
       HOME,
       withHome(
         readFileSync(path.join(ROOT, HOME), 'utf8'),
-        await renderHome(library)
+        renderHome(library)
       ),
     ],
   ];

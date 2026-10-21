@@ -4,7 +4,8 @@
 // A first-time visitor arriving at Gravitas used to land in the middle of a
 // simulation control rail and have to work out from "Load Scenario", "Spacetime
 // View" and "Blank Simulation" what the project was for. This layer answers
-// that question once, offers three ways in, and then never appears again.
+// that question once, says where to start and where everything is, and then
+// never appears again.
 //
 // It is an orientation layer, not a homepage. The sandbox stays the product:
 //   first visit        splash -> welcome -> sandbox
@@ -12,22 +13,12 @@
 //   shared/deep link   splash -> the linked thing, welcome skipped and NOT
 //                      marked seen, so an ordinary visit later still gets it
 //
-// Nothing here reimplements anything. Scenario cards go through
-// loadScenarioByKey() in ui.js, the investigations button opens the real
-// browser in investigations.js, the tour button opens the real tour in
-// tutorial.js, and every title and summary is read from the live registries.
+// Nothing here reimplements anything. A recommended start opens the real
+// investigation or page, the tour button opens the real tour in tutorial.js,
+// and the first-week list and the five destinations are generated into
+// js/fragments/home.html from the Library and tools/navigation-inventory.json
+// (Prompt 162), so no title or line of prose is written twice.
 // =============================================================================
-
-import { SCENARIO_INFO } from './data/scenarioInfo.js';
-import {
-  FEATURED_SCENARIO_KEYS,
-  ENTRY_CARDS,
-  AUDIENCES,
-  RESOURCE_LINKS,
-} from './data/welcome.js';
-import { scenarioShotHtml, wireThumbnailFallbacks } from './scenarioBrowser.js';
-import { t } from './i18n/index.js';
-import { command } from './appState.js';
 
 // The four functions that decide whether this layer is needed live in
 // js/welcomeGate.js, so that deciding can happen without downloading this. They
@@ -48,6 +39,7 @@ import {
   markWelcomeSeen,
   resetWelcomePreference,
 } from './welcomeGate.js';
+import { t } from './i18n/index.js';
 import { announce } from './notify.js';
 
 // This module's prose lives in the deferred half of the catalog - see the
@@ -80,123 +72,6 @@ const escape = str =>
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
-
-/**
- * The first sentence or two of a scenario summary.
- *
- * The catalog summaries run to three or four sentences, which is right in the
- * scenario browser and far too long on a card. Deriving the opening rather than
- * writing six new blurbs keeps SCENARIO_INFO the only place a scenario is
- * described: edit it there and the front door follows.
- *
- * @param {string} summary - A SCENARIO_INFO summary
- * @returns {string} One or two sentences
- */
-export function cardSummary(summary) {
-  const text = String(summary || '').trim();
-  if (!text) return '';
-
-  // Split on terminators, walking the string rather than matching pieces of
-  // it. A period only ends a sentence when the end of the text or whitespace
-  // follows: the catalog is full of "1.4 M_sun" and "0.5 AU", and a plain
-  // /[.!?]/ split puts "Two neutron stars (1." on the card.
-  const ends = [];
-  for (let i = 0; i < text.length; i++) {
-    if (!'.!?'.includes(text[i])) continue;
-    const next = text[i + 1];
-    if (next === undefined || /\s/.test(next)) ends.push(i + 1);
-  }
-  if (!ends.length) return text;
-
-  let cut = ends[0];
-  // A very short opener reads as a fragment on its own, so it takes the next
-  // sentence with it. Anything past about seventy characters stands up alone.
-  if (cut < 70 && ends[1]) cut = ends[1];
-  return text.slice(0, cut).trim();
-}
-
-/**
- * The featured scenarios, resolved against the live catalog.
- * @returns {Array<Object>} key, title, trimmed summary and info for each entry
- */
-export function featuredScenarios() {
-  return FEATURED_SCENARIO_KEYS.filter(key => {
-    if (SCENARIO_INFO[key]) return true;
-    // A renamed scenario should cost one card, not the whole gallery.
-    console.warn(`Featured scenario "${key}" is not in SCENARIO_INFO.`);
-    return false;
-  }).map(key => ({
-    key,
-    info: SCENARIO_INFO[key],
-    title: SCENARIO_INFO[key].title || key,
-    summary: cardSummary(SCENARIO_INFO[key].summary),
-  }));
-}
-
-/**
- * A few lesson titles for the investigations block.
- *
- * Takes the catalog rather than importing it: it is loaded lazily, so the
- * only caller already has it in hand by the time it asks.
- *
- * Accepts either shape - a manifest entry, which carries a step count, or a
- * whole lesson, which carries the steps. The front door is given the former and
- * the tests hand it the latter, and three titles and a number read the same off
- * both.
- *
- * @param {Array<Object>} catalog - MANIFEST or INVESTIGATIONS
- * @param {number} [n] - How many
- * @returns {Array<Object>} id, title, subtitle and step count for each
- */
-export function previewInvestigations(catalog, n = 3) {
-  return catalog.slice(0, n).map(inv => ({
-    id: inv.id,
-    title: inv.title,
-    subtitle: inv.subtitle,
-    steps: inv.stepCount ?? inv.steps.length,
-  }));
-}
-
-// --- Markup ------------------------------------------------------------------
-
-function scenarioCardsHtml() {
-  return featuredScenarios()
-    .map(
-      s => `
-      <button type="button" class="wel-scenario" data-scenario="${escape(s.key)}">
-        ${scenarioShotHtml(s.info, s.title)}
-        <span class="wel-scenario-text">
-          <span class="wel-scenario-title">${escape(s.title)}</span>
-          <span class="wel-scenario-summary">${escape(s.summary)}</span>
-        </span>
-      </button>`
-    )
-    .join('');
-}
-
-function entryCardsHtml() {
-  return ENTRY_CARDS.map(
-    c => `
-      <div class="wel-door">
-        <p class="wel-door-eyebrow">${escape(t(c.eyebrow))}</p>
-        <h3 class="wel-door-title">${escape(t(c.title))}</h3>
-        <p class="wel-door-text">${escape(t(c.text))}</p>
-        <button type="button" class="ui-button wel-door-cta" data-action="${escape(c.action)}">
-          ${escape(t(c.cta))}
-        </button>
-      </div>`
-  ).join('');
-}
-
-function audiencesHtml() {
-  return AUDIENCES.map(
-    a => `
-      <div class="wel-audience">
-        <h3>${escape(t(a.title))}</h3>
-        <p>${escape(t(a.text))}</p>
-      </div>`
-  ).join('');
-}
 
 /** How far a reader is through a lesson, from what the lesson saved. */
 function savedProgress(id) {
@@ -233,40 +108,20 @@ export function unfinishedLessons(catalog, read = savedProgress) {
 }
 
 /**
- * Fill in the lessons, and the ones to continue, once the registry has loaded.
+ * Fill in the lessons to continue, once the registry has loaded.
  *
- * The section renders without them and they drop in a moment later, rather than
- * the panel waiting on a 225KB import before it can show anything. If the
- * import fails the list simply stays empty: the button beneath it goes to the
- * real browser either way, so nothing is lost but a flourish.
+ * The strip is hidden until there is something in it ("where was I" shows
+ * only when something exists), and the registry is the manifest: a few
+ * kilobytes of card-level facts, not the 225KB of lessons themselves, which
+ * are fetched one at a time when one is opened. If the import fails the
+ * strip simply stays hidden.
  */
-async function fillLessonPreviews() {
-  const list = els.body?.querySelector('[data-slot="lessons"]');
-  if (!list) return;
+async function fillContinue() {
   try {
-    // Imported here rather than at the top of the module, and the manifest
-    // rather than the lessons. Three titles and a step count are card-level
-    // facts, and the manifest is a few kilobytes of exactly those; the lessons
-    // themselves are 225KB and are fetched one at a time when one is opened.
     const { MANIFEST: INVESTIGATIONS } =
       await import('./data/investigations/registry.js');
-    const count = els.body?.querySelector('[data-lesson-count]');
-    if (count) count.textContent = `${INVESTIGATIONS.length} guided`;
-
-    const lessons = previewInvestigations(INVESTIGATIONS);
-    list.innerHTML = lessons
-      .map(
-        inv => `
-        <li class="wel-lesson">
-          <span class="wel-lesson-title">${escape(inv.title)}</span>
-          <span class="wel-lesson-sub">${escape(inv.subtitle)}</span>
-          <span class="wel-lesson-meta">${inv.steps} steps</span>
-        </li>`
-      )
-      .join('');
-
     const going = unfinishedLessons(INVESTIGATIONS);
-    const strip = els.body.querySelector('#welContinue');
+    const strip = els.body?.querySelector('#welContinue');
     if (strip && going.length) {
       strip.querySelector('ul').innerHTML = going
         .map(
@@ -277,7 +132,7 @@ async function fillLessonPreviews() {
       strip.hidden = false;
     }
   } catch {
-    list.remove();
+    /* the strip stays hidden */
   }
 }
 
@@ -312,7 +167,7 @@ function endOrient(focus) {
   const box = orientEl();
   if (box) box.hidden = true;
   if (focus)
-    els.body?.querySelector('.wel-hero [data-action="enter"]')?.focus();
+    els.body?.querySelector('.wel-start [data-action="enter"]')?.focus();
 }
 
 /** Put the sections in place and fill them. Runs once, after build(). */
@@ -321,34 +176,9 @@ async function fillSections() {
   const node = document.getElementById('welcomeSections');
   if (!node || !els.body) return;
   els.body.append(node);
-  const total = String(Object.keys(SCENARIO_INFO).length);
-  for (const n of node.querySelectorAll('[data-slot="scenario-count"]'))
-    n.textContent = total;
-  const fill = (slot, markup) => {
-    const n = node.querySelector(`[data-slot="${slot}"]`);
-    if (n) n.innerHTML = markup;
-  };
-  fill('doors', entryCardsHtml());
-  fill('scenarios', scenarioCardsHtml());
-  fill('audiences', audiencesHtml());
-  fill(
-    'links',
-    ['teaching', 'instructors', 'model']
-      .map(
-        k => `<a class="wel-link" href="${RESOURCE_LINKS[k].href}">
-          <span class="wel-link-label">${escape(t(RESOURCE_LINKS[k].label))}</span>
-          <span class="wel-link-note">${escape(t(RESOURCE_LINKS[k].note))}</span>
-        </a>`
-      )
-      .join('')
-  );
   syncReset();
   if (orienting) showOrient(0);
-  // The same treatment the gallery gives a capture that fails to load.
-  wireThumbnailFallbacks(node);
-  // The lesson titles and the count come from the registry, fetched
-  // separately so the panel does not wait on it.
-  fillLessonPreviews();
+  fillContinue();
 }
 
 /**
@@ -361,22 +191,16 @@ function build() {
   built = true;
   els.body.innerHTML = `
     <div class="wel-hero">
-      <p class="wel-eyebrow">Interactive astrophysics in your browser</p>
+      <p class="wel-eyebrow"><span class="gs-en">Interactive astrophysics in your browser</span><span class="gs-es" lang="es">Astrofísica interactiva en tu navegador</span></p>
       <h1 class="wel-wordmark" id="welcomeTitle">GRAVITAS</h1>
       <p class="wel-lede">
-        Build planetary systems, orbit binary stars, collide compact objects and
+        <span class="gs-en">Build planetary systems, orbit binary stars, collide compact objects and
         reproduce systems astronomers have actually observed. Then measure what
-        happens.
+        happens.</span><span class="gs-es" lang="es">Construye sistemas planetarios, haz orbitar estrellas binarias, colisiona objetos compactos y reproduce sistemas que los astrónomos han observado de verdad. Después, mide lo que ocurre.</span>
       </p>
       <div class="wel-hero-actions">
-        <button type="button" class="ui-button wel-primary" data-action="enter">
-          Enter the sandbox
-        </button>
-        <button type="button" class="ui-button wel-secondary" data-action="investigations">
-          Start an investigation
-        </button>
         <button type="button" class="wel-quiet" data-action="tour">
-          Take a quick tour
+          <span class="gs-en">Take a quick tour</span><span class="gs-es" lang="es">Hacer un recorrido rápido</span>
         </button>
       </div>
     </div>`;
@@ -391,33 +215,6 @@ async function runAction(action, key) {
     case 'enter':
       closeWelcome();
       break;
-
-    case 'scenario': {
-      // One authoritative scenario loader, shared with the scenario browser.
-      const loaded = command('loadScenarioByKey')(key);
-      closeWelcome();
-      if (!loaded) {
-        const { toast } = await import('./controls.js');
-        toast(t('welcome.scenarioGone'));
-      }
-      break;
-    }
-
-    case 'scenarios': {
-      closeWelcome();
-      // The real gallery, not a second copy of the catalog.
-      const { openScenarioBrowser } = await import('./scenarioBrowser.js');
-      openScenarioBrowser();
-      break;
-    }
-
-    case 'investigations': {
-      closeWelcome();
-      const { ensureInvestigations } =
-        await import('./investigationsLoader.js');
-      (await ensureInvestigations()).openBrowser();
-      break;
-    }
 
     case 'lesson': {
       closeWelcome();
@@ -434,8 +231,11 @@ async function runAction(action, key) {
       break;
     }
 
-    case 'instructors':
-      window.location.href = RESOURCE_LINKS.instructors.href;
+    case 'orient':
+      // The introduction again, on request: it is never forced a second time.
+      orienting = true;
+      document.body.classList.add('wel-orienting');
+      showOrient(0);
       break;
 
     case 'reset': {
@@ -455,13 +255,10 @@ async function runAction(action, key) {
 
 function wireBody() {
   els.body.addEventListener('click', e => {
-    const scenario = e.target.closest('[data-scenario]');
-    if (scenario) {
-      runAction('scenario', scenario.dataset.scenario);
-      return;
-    }
     const lesson = e.target.closest('[data-lesson]');
     if (lesson) {
+      // A link into the lesson (its address is the fallback) or a button.
+      e.preventDefault();
       runAction('lesson', lesson.dataset.lesson);
       return;
     }
@@ -475,7 +272,11 @@ function wireBody() {
       return;
     }
     const action = e.target.closest('[data-action]');
-    if (action) runAction(action.dataset.action);
+    if (action) {
+      // Explore is a link to the sandbox, which Home already stands over.
+      e.preventDefault();
+      runAction(action.dataset.action);
+    }
   });
   els.body.addEventListener('keydown', e => {
     const s = e.target.closest?.('[data-orient]');

@@ -33,33 +33,33 @@
     },
     {
       "id": "navigation.global.five-destinations",
-      "prompt": "166",
-      "activated": false
+      "prompt": "162",
+      "activated": true
     },
     {
       "id": "navigation.global.menu-follows-model",
-      "prompt": "166",
-      "activated": false
+      "prompt": "162",
+      "activated": true
     },
     {
       "id": "navigation.labels.shell-matches-glossary",
-      "prompt": "166",
-      "activated": false
+      "prompt": "162",
+      "activated": true
     },
     {
       "id": "navigation.home.entries-are-destinations",
-      "prompt": "166",
-      "activated": false
+      "prompt": "162",
+      "activated": true
     },
     {
       "id": "navigation.home.no-count-walls",
-      "prompt": "166",
-      "activated": false
+      "prompt": "162",
+      "activated": true
     },
     {
       "id": "navigation.reach.every-page-from-home",
-      "prompt": "166",
-      "activated": false
+      "prompt": "162",
+      "activated": true
     },
     {
       "id": "navigation.library.student-kinds-only",

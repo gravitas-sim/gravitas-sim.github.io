@@ -1,6 +1,6 @@
 # The navigation model
 
-What a first-time visitor should find, how every existing surface maps into it, and the structural checks that hold the site to it. Roadmap III Prompt 161 wrote this document and the checks; nothing visible changed in that prompt. Prompts 162 to 167 change what people see, and each is accepted by these checks. The model, the ceilings and the list of checks the site fails today are decision-register row D-R10-37.
+What a first-time visitor should find, how every existing surface maps into it, and the structural checks that hold the site to it. Roadmap III Prompt 161 wrote this document and the checks; nothing visible changed in that prompt. Prompt 162 then built Home and the global navigation to the model (see "Home and the global navigation" below). Prompts 163 to 167 change what people see next, and each is accepted by these checks. The model, the ceilings and the list of checks the site still fails are decision-register row D-R10-37; Prompt 162's changes are its own row.
 
 The numbers and tables below marked generated come from `tools/navigation-inventory.json` (`node tools/navigation.mjs write` rewrites them; `tests/navigationChecks.test.js` fails when they are stale). Prose is the author's.
 
@@ -12,8 +12,8 @@ A first-time visitor reads five destinations without documentation, in this orde
 
 The working hypothesis of the roadmap (section 9.4) was checked against the tree, not assumed.
 
-- **The menu names tools more than places.** The shell stamps one global navigation on all 109 pages: five groups (Learn, Labs, Make, Teach, About) holding 25 links, with 3 more in the footer. Of the 25 links, 5 are a destination's own page; 11 are a tool, an authoring surface or a diagnostics page (the 3-D lab, Mission lab, Sky Lab, Scenario Studio, Investigation Composer, Course builder, Figure builder, the two diagnostics pages and others), 2 are collections, 3 are instructor resources and 4 are documents. A visitor must already know what a "Composer" is to choose it.
-- **Home offers three entries and six counts.** The front door's doors are Sandbox, Investigations and Instructors (`js/data/welcome.js`), and the block under them links six Library kinds with their counts ("Investigations (77)").
+- **The menu named tools more than places** (measured by Prompt 161, before Prompt 162 replaced it). The shell stamped one global navigation on all 109 pages: five groups (Learn, Labs, Make, Teach, About) holding 25 links, with 3 more in the footer. Of the 25 links, 5 are a destination's own page; 11 are a tool, an authoring surface or a diagnostics page (the 3-D lab, Mission lab, Sky Lab, Scenario Studio, Investigation Composer, Course builder, Figure builder, the two diagnostics pages and others), 2 are collections, 3 are instructor resources and 4 are documents. A visitor must already know what a "Composer" is to choose it.
+- **Home offered three entries and six counts** (before Prompt 162). The front door's doors were Sandbox, Investigations and Instructors, and the block under them linked six Library kinds with their counts ("Investigations (77)").
 - **The Library names where code runs.** Its default view is nine controls (search, seven filters and an arrangement) over 175 entries in six kinds and fifteen formats, and every card carries a second badge such as "In the 3-D lab".
 - **The conformance baseline (Prompt 127, `ACCESSIBILITY_CONFORMANCE.md`)** records WCAG 2.2 criterion 3.2.3 (consistent navigation) as partially supported, the shared shell carrying the same navigation in the same order, and 2.4.5 (multiple ways) as partially supported because no test confirmed that every page is reachable in more than one way. This document's reachability walk is the missing test.
 - **Every surface maps** (the table below): there is no page the five destinations cannot hold, and none that needs a sixth. What does not fit a destination as a page (the model page, the validation page, the glossary, the manual, the two diagnostics pages, the first Gravitas) is documentation, reached from the footer and from the place it explains.
@@ -43,51 +43,51 @@ What each contains:
 
 ## Where every surface goes
 
-"Reached from" is the model's answer, written for Prompts 162 and 166 to build; it is not what the site does today (the last column is today's menu group). A surface with no destination is documentation or a diagnostic, reached from within.
+"Reached from" is what the site does since Prompt 162: the five destinations are the whole menu (the last column), and every other surface is reached from its destination's page through the places block that page carries (`tools/shell.mjs` `PLACES`, stamped between `<!-- shell:places -->` markers), from Home's Explore entry (Explore's own page is the sandbox), or from context. A surface with no destination is documentation or a diagnostic, reached from within.
 
 <!-- navigation:surfaces -->
-| Surface | Path | Role | Destination | Reached from | Menu today |
+| Surface | Path | Role | Destination | Reached from | In the menu |
 | --- | --- | --- | --- | --- | --- |
-| Sandbox | `/` | destination | Explore | Home; the brand link; Explore's first action | labs |
-| 3-D lab | `/3d/` | tool | Explore | a card on the Explore page; the Library's 3-D scenario cards | labs |
-| Mission lab | `/mission/lab/` | tool | Explore | a card on the Explore page; the Library's mission investigations | labs |
-| Scenario Studio | `/studio/` | authoring | Explore | the scenario section of the Explore page | make |
-| Library | `/library/` | destination | Learn | Home; Learn's first action | learn |
-| Investigations | `/#investigations` | tool | Learn | the Library's investigation cards; Home | learn |
-| Courses | `/course/` | collection | Learn | the Library's course cards; Learn's pathways | learn |
-| Observatory | `/observatory/` | destination | Observe | Home; Observe's first action | learn |
-| Experiments | `/experiments/` | tool | Observe | the Observe page; the Library's experiment cards | learn |
-| Sky Lab | `/sky/` | tool | Observe | the Observe page | labs |
-| Compute page | `/compute/` | tool | Observe | the Observe page (today only a saved notebook in My work links to it) | none |
-| Catalog | `/catalog/` | collection | Observe | the Observe page (datasets to install); Teach (course packages to install) | make |
-| Figure builder | `/figure/` | authoring | Observe | the figure action of a plot or an analysis result | make |
-| My work | `/my-work/` | destination | My work | Home; every page's global navigation | learn |
-| Teaching with Gravitas | `/teaching/` | destination | Teach | Home; Teach's first action | teach |
-| Instructor resources | `/instructors/` | instructor | Teach | the Teach page | teach |
-| Submission review | `/instructors/submissions/` | instructor | Teach | the instructor resources | teach |
-| Classroom evidence kit | `/evaluation/` | instructor | Teach | the Teach page | teach |
-| Investigation Composer | `/studio/lesson/` | authoring | Teach | the Teach page (make an investigation or an activity) | make |
-| Course-package builder | `/studio/course/` | authoring | Teach | the Teach page (make a course) | make |
-| Investigations in a course | `/studio/course/packs/` | authoring | Teach | the course-package builder | none |
-| Find content to teach | `/teaching/find/` | document | Teach | the Teach page | none |
-| Adopter's guide | `/teaching/adopt/` | document | Teach | the Teach page | none |
-| Textbook alignment | `/teaching/alignment/` | document | Teach | the Teach page | none |
-| Classroom kit | `/teaching/kit/` | document | Teach | the Teach page | none |
-| Adoption pages: activities | `/teaching/activity/*` | content | Teach | the Teach page; the Library's activity cards | none |
-| Adoption pages: investigations | `/teaching/investigation/*` | content | Teach | the Teach page; the Library's investigation cards | none |
-| How the model works | `/model/` | document | none (reached from within) | Home; the Teach page; the footer | about |
-| Physics validation | `/validation/` | document | none (reached from within) | the footer; the Teach page | about |
-| Glossary | `/glossary/` | document | none (reached from within) | a term in context; the Teach page | about |
-| User manual (PDF) | `/Gravitas_User_Manual.pdf` | document | none (reached from within) | the Teach page; the footer | about |
-| 3-D kernel diagnostics | `/lab3d/` | diagnostic | none (reached from within) | the 3-D lab's evidence section | about |
-| Mission core diagnostics | `/mission/` | diagnostic | none (reached from within) | the Mission lab's evidence section | about |
-| The first Gravitas | `/history/original/` | document | none (reached from within) | one quiet link in the model page's footer | none |
+| Sandbox | `/` | destination | Explore | Home; the brand link; the global navigation | yes |
+| 3-D lab | `/3d/` | tool | Explore | the places block of Home's Explore entry; the Library's 3-D scenario cards | no |
+| Mission lab | `/mission/lab/` | tool | Explore | the places block of Home's Explore entry; the Library's mission investigations | no |
+| Scenario Studio | `/studio/` | authoring | Explore | the places block of Home's Explore entry | no |
+| Library | `/library/` | destination | Learn | Home; the global navigation | yes |
+| Investigations | `/#investigations` | tool | Learn | the places block of the Library; the Library's investigation cards; Home's first-week start | no |
+| Courses | `/course/` | collection | Learn | the places block of the Library; the Library's course cards; Home's first-week start | no |
+| Observatory | `/observatory/` | destination | Observe | Home; the global navigation | yes |
+| Experiments | `/experiments/` | tool | Observe | the places block of the Observatory; the Library's experiment cards | no |
+| Sky Lab | `/sky/` | tool | Observe | the places block of the Observatory | no |
+| Compute page | `/compute/` | tool | Observe | the places block of the Observatory | no |
+| Catalog | `/catalog/` | collection | Observe | the places block of the Observatory (datasets to install); Teach (course packages to install) | no |
+| Figure builder | `/figure/` | authoring | Observe | the places block of the Observatory; the figure action of a plot or an analysis result | no |
+| My work | `/my-work/` | destination | My work | Home; the global navigation | yes |
+| Teaching with Gravitas | `/teaching/` | destination | Teach | Home; the global navigation | yes |
+| Instructor resources | `/instructors/` | instructor | Teach | the places block of the Teach page | no |
+| Submission review | `/instructors/submissions/` | instructor | Teach | the instructor resources | no |
+| Classroom evidence kit | `/evaluation/` | instructor | Teach | the places block of the Teach page | no |
+| Investigation Composer | `/studio/lesson/` | authoring | Teach | the places block of the Teach page (make an investigation or an activity) | no |
+| Course-package builder | `/studio/course/` | authoring | Teach | the places block of the Teach page (make a course) | no |
+| Investigations in a course | `/studio/course/packs/` | authoring | Teach | the course-package builder | no |
+| Find content to teach | `/teaching/find/` | document | Teach | the Teach page | no |
+| Adopter's guide | `/teaching/adopt/` | document | Teach | the Teach page | no |
+| Textbook alignment | `/teaching/alignment/` | document | Teach | the Teach page | no |
+| Classroom kit | `/teaching/kit/` | document | Teach | the Teach page | no |
+| Adoption pages: activities | `/teaching/activity/*` | content | Teach | the Teach page; the Library's activity cards | no |
+| Adoption pages: investigations | `/teaching/investigation/*` | content | Teach | the Teach page; the Library's investigation cards | no |
+| How the model works | `/model/` | document | none (reached from within) | the places block of the Teach page; Home's orientation | no |
+| Physics validation | `/validation/` | document | none (reached from within) | the footer; the places block of the Teach page | no |
+| Glossary | `/glossary/` | document | none (reached from within) | a term in context; the places block of the Teach page | no |
+| User manual (PDF) | `/Gravitas_User_Manual.pdf` | document | none (reached from within) | the places block of the Teach page | no |
+| 3-D kernel diagnostics | `/lab3d/` | diagnostic | none (reached from within) | the 3-D lab's evidence section | no |
+| Mission core diagnostics | `/mission/` | diagnostic | none (reached from within) | the Mission lab's evidence section | no |
+| The first Gravitas | `/history/original/` | document | none (reached from within) | one quiet link in the model page's footer | no |
 <!-- /navigation:surfaces -->
 
-Two findings from making the table:
+Two findings from making the table (Prompt 161), and what became of them:
 
-- `/compute/` is on no menu and no page links to it: the one way in is a saved notebook in My work (`js/myWork/model.js`). The reachability check registers it.
-- Of the 25 menu links, 7 sit under the group that carries their destination's name (Learn or Teach), 6 belong to no destination (the documents and the diagnostics) and 12 sit under a group that is not their destination's: My work, Observatory and Experiments under Learn, Sandbox, 3-D lab, Mission lab and Sky Lab under Labs, and the five authoring surfaces and the Catalog under Make.
+- `/compute/` was on no menu and no page linked to it: the one way in was a saved notebook in My work (`js/myWork/model.js`). Prompt 162 put it in the Observatory's places block, so every page now has a path from Home (`reach.pagesWithoutALinkFromHome` is 0).
+- Of the 25 menu links, 7 sat under the group that carried their destination's name, 6 belonged to no destination (the documents and the diagnostics) and 12 sat under a group that was not their destination's. The menu is now the five destinations, so every entry is its own destination's.
 
 ## What students see: kinds
 
@@ -112,12 +112,7 @@ The glossary's nouns stay: Teach keeps "activity" (it is the instructor's word f
 
 One noun per thing. `tools/glossary.mjs` is the source: `NOUNS` (the eight nouns), `RETIRED` (lesson, guide, pack and assignment, each with what to write instead) and `LABELS` (the page, instrument and quantity names with both languages). `tests/terminology.test.js` keeps the retired words out of what a reader sees; `tools/i18n-labels.mjs` holds the catalogs to `LABELS`. This document adds one table the inventory carries: the things that are named on more than one surface (the shell's menu, Home, the Library, a page's title, the glossary), each of which must carry the same English and Spanish on every one (a leading article is not a difference).
 
-Today four do not, all in words that 162 rewrites, and the list can only shrink:
-
-- Sandbox: the shell and the Library say "Simulación libre", Home's door says "Laboratorio".
-- Instructor resources: the shell says "Recursos para docentes", Home says "Recursos para el profesorado".
-- Figure builder: the shell says "Creador de figuras", the glossary "Constructor de figuras".
-- Course builder: the shell says "Course builder" and "Creador de cursos", the glossary "Course-package builder" and "Creador de paquetes de curso".
+Prompt 161 found four that did not (the sandbox, the instructor resources, the figure builder and the course builder), all in words Prompt 162 rewrites. The shell now says what the glossary says ("Constructor de figuras", "Course-package builder" and "Creador de paquetes de curso"), Home no longer has doors with their own words for the sandbox and the instructors, and the list of registered divergences is empty: a new one fails `tests/navigationChecks.test.js`.
 
 The new labels this document proposes (one line and first action of each destination, in both languages) are written by the project and have not been read by a fluent Spanish reader; the translation pass is owner-led (`TRANSLATION.md`, Appendix A).
 
@@ -145,8 +140,8 @@ They are named structural everywhere. Each reads the built pages, this document 
 | Navigation inventory | `tests/navigationChecks.test.js` | every page and menu entry is a row of the inventory, the rows agree with the shell, the menu is the same on every page, and menu, footer, Home and Library counts are within their ceilings | yes |
 | Default-view count | `e2e/navigation.spec.js` | the choices above the fold at 1280 by 800 and 390 by 844 for Home (first visit and reopened), the Library, My work, the Observatory and Teaching, against the ceilings | yes |
 | Kinds exposed | both | the Library's facet and every card's type label exist in both languages, are the catalog's, are the glossary's nouns and name no subsystem | yes |
-| Glossary consistency | `tests/navigationChecks.test.js` | one thing, one name, across the menu, Home, the Library and the glossary | yes, except the four registered divergences |
-| Reachability walk | both | a first action is on its page; every menu and footer link lands; each destination's first action is reached through the global navigation in both languages; Home's links land; no page loses its path from Home | yes, except what is pending |
+| Glossary consistency | `tests/navigationChecks.test.js` | one thing, one name, across the menu, Home, the Library and the glossary | yes (Prompt 162 emptied the registered divergences) |
+| Reachability walk | both | a first action is on its page; every menu and footer link lands; each destination's first action is reached through the global navigation in both languages; Home's links land; no page loses its path from Home | yes (the six Home and navigation checks were activated by Prompt 162) |
 
 The default view counts a choice as a link, button, form control or disclosure summary that is rendered, not hidden, not inert, inside the viewport and larger than a sliver; a closed disclosure counts its summary and nothing inside. The sandbox's control rail is the application, not a page of choices, and is not counted. The default-view ceilings carry one to three choices of slack over what the page measured (Chromium on macOS, 2026-10-21), because a fold can fall differently on another platform's fonts; the static counts carry none.
 
@@ -158,20 +153,17 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | Ceiling | Value |
 | --- | ---: |
 | `menu.groups` | 5 |
-| `menu.entries` | 25 |
-| `menu.distinctPages` | 25 |
+| `menu.entries` | 5 |
+| `menu.distinctPages` | 5 |
 | `footer.links` | 3 |
-| `home.doors` | 3 |
-| `home.resourceLinks` | 3 |
-| `home.featuredScenarios` | 6 |
-| `home.audiences` | 3 |
-| `home.libraryKindLinks` | 6 |
-| `home.countedLinks` | 6 |
+| `home.doors` | 5 |
+| `home.firstWeekLinks` | 4 |
+| `home.countedLinks` | 0 |
 | `library.kinds` | 6 |
 | `library.formats` | 15 |
 | `library.filters` | 7 |
 | `reach.maxClicksFromHome` | 3 |
-| `reach.pagesWithoutALinkFromHome` | 1 |
+| `reach.pagesWithoutALinkFromHome` | 0 |
 | `defaultView.home-first-visit.desktop` | 12 |
 | `defaultView.home-first-visit.phone` | 6 |
 | `defaultView.home.desktop` | 14 |
@@ -190,25 +182,29 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 
 They prove structure, language consistency and reachability. They do not prove comprehension: that a first-time visitor reads "Observe" and knows it is where measurement happens, that the one-line descriptions are understood, that the first actions are what a student reaches for, or that five is a good number for a person. Only observed people can, in sessions the owner runs (roadmap Appendix A: the student usability sessions that use the first-week mode and these checks as the task list). Nothing here is a user study, a usability result or evidence about learning, and no release note may say so.
 
-## What the site fails today
+## What the site still fails
 
-These checks describe the model and fail now, by design. They run under the future-acceptance contract of Prompt 145 (`tools/pending-acceptance.mjs`, `tools/pending-acceptance.json`): each runs, its outcome is reported in a "pending acceptance" section, none counts as a failure, and none is quarantined (they never touch the pass or fail of any other test). Prompt 166 activates every one by name; an activated check is an ordinary fatal test. `node tools/pending-acceptance.mjs report` prints them after a run.
+Three checks describe the Library's model and fail now, by design (Prompt 163's work). The other six of Prompt 161's nine, which describe Home and the global navigation, were activated by Prompt 162 (`activated: true` in `tools/pending-acceptance.json`) and are ordinary fatal tests (`tests/navigationChecks.test.js`, "Home and the global navigation follow the model"). The three run under the future-acceptance contract of Prompt 145 (`tools/pending-acceptance.mjs`, `tools/pending-acceptance.json`): each runs, its outcome is reported in a "pending acceptance" section, none counts as a failure, and none is quarantined (they never touch the pass or fail of any other test). Prompt 166 activates the rest by name; an activated check is an ordinary fatal test. `node tools/pending-acceptance.mjs report` prints them after a run.
 
 <!-- navigation:pending -->
 | Check | What it holds the site to | Work of | Activated by |
 | --- | --- | --- | --- |
-| `navigation.global.five-destinations` | The global navigation's top-level entries are the five destinations, in the model's order, labelled as the model says in both languages. | 162 | 166 |
-| `navigation.global.menu-follows-model` | Every global-navigation link goes to a surface the model maps to a destination, under that destination's entry; no tool, authoring surface, diagnostic or document is a menu entry. | 162, 166 | 166 |
-| `navigation.labels.shell-matches-glossary` | Every global-navigation label that names a glossary term carries the glossary's English and Spanish. | 162 | 166 |
-| `navigation.home.entries-are-destinations` | Home's entries are the five destinations. | 162 | 166 |
-| `navigation.home.no-count-walls` | Home shows no count of Library content. | 162 | 166 |
-| `navigation.reach.every-page-from-home` | Every page of the site has a path of links from Home, in the pages' own markup. | 162 | 166 |
 | `navigation.library.student-kinds-only` | The Library's kind facet and card badges show only the four kinds students see. | 163 | 166 |
 | `navigation.library.no-where-it-runs` | The Library has no 'where it runs' facet. | 163 | 166 |
 | `navigation.library.default-view-is-bounded` | The Library's default view renders a bounded set of starting points, not the whole catalog. | 163 | 166 |
 <!-- /navigation:pending -->
 
-The registered failures are exactly the work of 162 to 167: Home and the global navigation (162), the Library's kinds, facets and default view (163), and the menu's consolidation (166, with 165's verdicts for any surface that changes its route).
+The registered failures that remain are the work of 163: the Library's kinds, facets and default view. Prompt 166's consolidation (with 165's verdicts for any surface that changes its route) works from this inventory.
+
+## Home and the global navigation (Prompt 162)
+
+What a visitor sees, since Prompt 162 (the table of what changed is in the pull request):
+
+- **The global navigation is the five destinations**, one link each, in the model's order and in both languages, the same on every page: Explore (the sandbox), Learn (the Library), Observe (the Observatory), My work and Teach. It is a flat list: no dropdown holds anything. The destination a page belongs to is marked (`aria-current="true"`, and `"page"` on the destination's own page); the marking comes from the inventory's rows, so a page that moves is one edit.
+- **Everything that was a menu entry is reached from its destination.** A destination's page carries a "places" block (Learn on the Library, Observe on the Observatory, Teach on the Teaching page, the last with the documents), stamped by `tools/shell.mjs` from `PLACES`; Explore's page is the sandbox, so its three places (the 3-D lab, the mission lab, the Scenario Studio) are in Home's Explore entry. No capability was removed: only its menu entry moved.
+- **A breadcrumb on every page but the sandbox** (Gravitas, the destination, the page), also stamped from the inventory. The sandbox's fixed bar is one row over the canvas and keeps the marked destination only.
+- **Home answers three questions and offers one list.** What this is (one paragraph, in both languages); what to do first (`firstWeek` in the inventory: a first investigation, a first observation, the sandbox and a course for an instructor, each a Library entry read by `tools/build-library.mjs` or an action); where was I (the lessons started and not finished, shown only when there are some; Prompt 163's resume record replaces it); and the five destinations with their one line each, generated from the inventory. The three-screen introduction is kept, shown first on a first visit and reachable from Home's foot ("Show the introduction again"). Home shows no count of content, no scenario cards, no list of investigations and no feature list.
+- **What 162 did not do:** add a destination, rename a surface's route, or touch a lesson. The Library's own kinds, facet and default view are Prompt 163's.
 
 ## The internal review protocol
 

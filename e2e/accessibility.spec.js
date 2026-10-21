@@ -568,10 +568,6 @@ for (const surface of SURFACES) {
             });
           }
 
-          // With a navigation group open, so its links are checked too.
-          const group = page.locator('.gs-group').first();
-          if (await group.count()) await group.evaluate(d => (d.open = true));
-
           const violations = await analyze(
             page,
             `${surface.name} / ${locale.label} / ${theme.label}`,

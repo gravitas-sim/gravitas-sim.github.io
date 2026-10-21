@@ -3245,44 +3245,11 @@ export const ES_DEFERRED = {
     'Esa actividad no tiene un formato «{id}». Elige uno en la página de enseñanza.',
   'activity.error.notUsable':
     'No se pudo abrir esa actividad: la investigación en la que se basa ha cambiado demasiado. Abre la investigación completa.',
-  'welcome.scenarioGone': 'Ese escenario ya no está disponible.',
   'welcome.shownAgain': 'Se volverá a mostrar la próxima vez',
   'welcome.showAgain': 'Mostrar esto de nuevo en mi próxima visita',
   'export.viewTable': 'Ver como tabla',
   'export.hideTable': 'Ocultar tabla',
   'export.downloadCsv': 'Descargar CSV',
-  'welcomeCard.sandbox.eyebrow': 'Exploración libre',
-  'welcomeCard.sandbox.title': 'Laboratorio',
-  'welcomeCard.sandbox.text':
-    'Construye un sistema desde cero, o carga uno de los escenarios incluidos y cámbialo. Arrastra para colocar un objeto; el arrastre fija su velocidad.',
-  'welcomeCard.sandbox.cta': 'Entrar en el laboratorio',
-  'welcomeCard.investigations.eyebrow': 'Investigaciones guiadas',
-  'welcomeCard.investigations.title': 'Investigaciones',
-  'welcomeCard.investigations.text':
-    'Actividades de astronomía estructuradas dentro de la simulación: predice, experimenta, mide, responde y exporta un informe de laboratorio.',
-  'welcomeCard.investigations.cta': 'Ver las investigaciones',
-  'welcomeCard.instructors.eyebrow': 'Para enseñar',
-  'welcomeCard.instructors.title': 'Profesorado',
-  'welcomeCard.instructors.text':
-    'Guías docentes, objetivos de aprendizaje, soluciones y un mapa curricular para cursos de astronomía introductoria.',
-  'welcomeCard.instructors.cta': 'Recursos para el profesorado',
-  'welcomeAudience.students.title': 'Para estudiantes',
-  'welcomeAudience.students.text':
-    'Ve las relaciones que describe una ecuación. Aleja un planeta y observa cómo se alarga su año; estira una órbita y observa cómo oscila la luz estelar.',
-  'welcomeAudience.instructors.title': 'Para el profesorado',
-  'welcomeAudience.instructors.text':
-    '60 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
-  'welcomeAudience.curious.title': 'Para curiosos',
-  'welcomeAudience.curious.text':
-    'Sin cuenta, sin instalación, sin nada que leer antes. Carga una fusión de agujeros negros y obsérvala, o parte del espacio vacío y mira qué hace la gravedad.',
-  'welcomeLink.teaching.label': 'Enseñar con Gravitas',
-  'welcomeLink.teaching.note':
-    'Cómo se usa en un curso, con seis demostraciones que puede ejecutar.',
-  'welcomeLink.model.label': 'Cómo modela Gravitas el universo',
-  'welcomeLink.model.note':
-    'Qué se calcula, qué se aproxima y qué solo se dibuja.',
-  'welcomeLink.instructors.note':
-    'Guías docentes, soluciones y un mapa curricular.',
   'tideP.moonOnEarth': 'la Luna, sobre la Tierra',
   'tideP.sunOnEarth': 'el Sol, sobre la Tierra',
   'tideP.earthOnMoon': 'la Tierra, sobre la Luna',

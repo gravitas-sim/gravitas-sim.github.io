@@ -41,9 +41,9 @@ html:lang(es) .gs-en {
   color: var(--text-primary);
   text-decoration: none;
 }
-.gs-shell summary,
 .gs-shell button,
-.gs-shell select {
+.gs-shell select,
+.gs-nav a {
   font: inherit;
   color: var(--text-primary);
   background: var(--surface-2);
@@ -52,27 +52,6 @@ html:lang(es) .gs-en {
   padding: var(--space-1) var(--space-2);
   min-height: 32px;
   cursor: pointer;
-}
-.gs-shell summary {
-  display: flex;
-  align-items: center;
-  list-style: none;
-}
-.gs-shell summary::-webkit-details-marker {
-  display: none;
-}
-.gs-shell summary::after {
-  content: '';
-  margin-left: var(--space-2);
-  border: 4px solid transparent;
-  border-top-color: currentColor;
-  transform: translateY(2px);
-}
-.gs-shell details[open] > summary::after {
-  transform: translateY(-2px) rotate(180deg);
-}
-.gs-group[data-here] > summary {
-  border-color: var(--accent);
 }
 .gs-shell :focus-visible {
   outline: var(--focus-ring);
@@ -88,30 +67,64 @@ html:lang(es) .gs-en {
   flex-wrap: wrap;
   gap: var(--space-2);
 }
-.gs-nav li {
-  position: relative;
-}
-.gs-nav details ul {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  min-width: 14rem;
-  padding: var(--space-2);
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow);
-}
-.gs-nav details a {
-  display: block;
-  padding: var(--space-1) var(--space-2);
-  color: var(--text-primary);
+.gs-nav a {
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  border-radius: var(--radius-sm);
 }
-.gs-nav details a:hover,
+.gs-nav a:hover {
+  background: var(--surface-3);
+}
+.gs-nav [aria-current] {
+  border-color: var(--accent);
+}
 .gs-nav [aria-current='page'] {
   background: var(--surface-3);
+}
+.gs-crumbs,
+.gs-places {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+.gs-crumbs {
+  padding: var(--space-1) var(--space-4);
+}
+.gs-crumbs ol,
+.gs-places ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.gs-crumbs li + li::before {
+  content: '\203a' / '';
+  margin-right: var(--space-3);
+}
+.gs-crumbs a,
+.gs-places a {
+  color: var(--text-secondary);
+}
+.gs-crumbs [aria-current] {
+  color: var(--text-primary);
+}
+.gs-places {
+  max-width: 62rem;
+  margin: var(--space-6) auto;
+  padding: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+.gs-places-title,
+.gs-places-sub {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.gs-places-sub {
+  margin-top: var(--space-3);
 }
 .gs-controls {
   display: flex;
@@ -150,7 +163,7 @@ html:lang(es) .gs-en {
   }
 }
 
-/* Under 768 px, with the script, groups stack behind one Menu button. */
+/* Under 768 px, with the script, destinations stack behind one Menu button. */
 @media (max-width: 767px) {
   .gs-toggle {
     margin-left: auto;
@@ -170,18 +183,10 @@ html:lang(es) .gs-en {
   .gs-nav > ul {
     flex-direction: column;
   }
-  /* Without the script the groups stay in view, sharing rows. */
+  /* Without the script the destinations stay in view, sharing rows. */
   .gs-shell:not(.gs-js) .gs-nav > ul {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
-  }
-  .gs-shell:not(.gs-js) .gs-nav > ul > li:has(> details[open]) {
-    grid-column: 1 / -1;
-  }
-  .gs-nav details ul {
-    position: static;
-    min-width: 0;
-    box-shadow: none;
   }
   .gs-controls label {
     display: block;
@@ -189,18 +194,16 @@ html:lang(es) .gs-en {
   }
 }
 
-/* Touch: every control and open-group link is 44 px tall (WCAG 2.5.5). */
+/* Touch: controls and destination links are 44 px (WCAG 2.5.5). */
 @media (pointer: coarse) {
-  .gs-shell summary,
   .gs-shell button,
   .gs-shell select,
   .gs-brand,
-  .gs-nav details a {
+  .gs-nav a {
     box-sizing: border-box;
     min-height: 44px;
   }
-  .gs-brand,
-  .gs-nav details a {
+  .gs-brand {
     display: flex;
     align-items: center;
   }
@@ -240,7 +243,7 @@ body:has(> .gs-app) {
   }
 }
 
-/* At 1200 px and under the groups fold behind Menu; open, the bar is a
+/* At 1200 px and under the destinations fold behind Menu; open, the bar is a
    panel over the canvas. */
 @media (max-width: 1200px) {
   .gs-shell.gs-app .gs-toggle:not([hidden]) {
@@ -268,11 +271,6 @@ body:has(> .gs-app) {
   .gs-shell.gs-app .gs-nav > ul {
     flex-direction: column;
   }
-  .gs-shell.gs-app .gs-nav details ul {
-    position: static;
-    min-width: 0;
-    box-shadow: none;
-  }
 }
 
 /* An embedded figure is the figure alone. */
@@ -280,11 +278,13 @@ body.presentation-embed,
 body[data-presentation='lecture'] {
   --shell-height: 0px;
 }
-body[data-presentation='lecture'] .gs-shell {
+body[data-presentation='lecture'] .gs-shell,
+body[data-presentation='lecture'] .gs-crumbs {
   display: none;
 }
 .presentation-embed .gs-skip,
 .presentation-embed .gs-shell,
+.presentation-embed .gs-crumbs,
 .presentation-embed .gs-foot {
   display: none;
 }
@@ -293,6 +293,8 @@ body[data-presentation='lecture'] .gs-shell {
 @media print {
   .gs-skip,
   .gs-shell,
+  .gs-crumbs,
+  .gs-places,
   .gs-foot {
     display: none;
   }

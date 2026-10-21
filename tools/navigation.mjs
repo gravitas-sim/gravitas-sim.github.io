@@ -26,7 +26,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { hasShell, WORDS, shellPages, pathOf } from './shell.mjs';
+import { hasShell, WORDS, PLACES, shellPages, pathOf } from './shell.mjs';
 import { pages } from './csp.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -35,6 +35,11 @@ export const INVENTORY_FILE = path.join(
   'tools/navigation-inventory.json'
 );
 export const DOC = path.join(ROOT, 'NAVIGATION.md');
+export const HOME = 'js/fragments/home.html';
+const HOME_MARKS = [
+  '<!-- destinations:home -->',
+  '<!-- /destinations:home -->',
+];
 const read = f => readFileSync(path.join(ROOT, f), 'utf8');
 
 export const readInventory = () =>
@@ -66,25 +71,28 @@ const keyOfLabel = en =>
   Object.keys(WORDS).find(k => WORDS[k][0] === en) ?? null;
 
 /**
- * The global navigation of a stamped page: its groups in order, each with its
- * links in order.
+ * The global navigation of a stamped page, in order: one entry per destination
+ * (Prompt 162; before it the shell stamped five groups of links). Each entry
+ * carries its own link, so the shape is a group with one item.
  * @param {string} html - A page
- * @returns {null|Array<{key: string|null, en: string, es: string, items: Array<{href: string, en: string, es: string}>}>}
+ * @returns {null|Array<{key: string|null, en: string, es: string, dest: string, items: Array<{href: string, en: string, es: string}>}>}
  */
 export function menuOf(html) {
   const nav = /<nav id="gs-nav"[^>]*>([\s\S]*?)<\/nav>/.exec(html);
   if (!nav) return null;
-  const groups = [];
-  const group =
-    /<details class="gs-group"[^>]*><summary>([\s\S]*?)<\/summary><ul>([\s\S]*?)<\/ul><\/details>/g;
-  for (const g of nav[1].matchAll(group)) {
-    const label = labelOf(g[1]);
-    const items = [
-      ...g[2].matchAll(/<li><a href="([^"]+)"[^>]*>([\s\S]*?)<\/a><\/li>/g),
-    ].map(m => ({ href: m[1], ...labelOf(m[2]) }));
-    groups.push({ key: keyOfLabel(label.en), ...label, items });
-  }
-  return groups;
+  return [
+    ...nav[1].matchAll(
+      /<li><a href="([^"]+)" data-dest="([^"]+)"(?: aria-current="(?:page|true)")?>([\s\S]*?)<\/a><\/li>/g
+    ),
+  ].map(m => {
+    const label = labelOf(m[3]);
+    return {
+      key: keyOfLabel(label.en),
+      ...label,
+      dest: m[2],
+      items: [{ href: m[1], ...label }],
+    };
+  });
 }
 
 /** The footer's links, in order. */
@@ -134,10 +142,9 @@ export async function measure() {
   const links = first.flatMap(g => g.items);
   const footer = footerOf(read(stamped.find(f => f !== 'index.html')));
 
-  const welcome = await import('../js/data/welcome.js');
   const homeFragment = read('js/fragments/home.html');
-  const libraryBlock =
-    /<!-- library:home -->([\s\S]*?)<!-- \/library:home -->/.exec(
+  const firstWeek =
+    /<!-- first-week:home -->([\s\S]*?)<!-- \/first-week:home -->/.exec(
       homeFragment
     )?.[1] ?? '';
   const library = JSON.parse(read('library/library.json'));
@@ -153,13 +160,12 @@ export async function measure() {
     },
     footer: { links: footer.length },
     home: {
-      doors: welcome.ENTRY_CARDS.length,
-      resourceLinks: Object.keys(welcome.RESOURCE_LINKS).length,
-      featuredScenarios: welcome.FEATURED_SCENARIO_KEYS.length,
-      audiences: welcome.AUDIENCES.length,
-      libraryKindLinks: (libraryBlock.match(/class="wel-link"/g) ?? []).length,
+      doors: (homeFragment.match(/class="wel-door" data-dest=/g) ?? []).length,
+      firstWeekLinks: (firstWeek.match(/<a |data-action="/g) ?? []).length,
       countedLinks: (
-        libraryBlock.match(/<span class="gs-en">[^<]*\(\d+\)<\/span>/g) ?? []
+        homeFragment.match(
+          /\(\d+\)|data-slot="scenario-count"|data-lesson-count/g
+        ) ?? []
       ).length,
     },
     library: {
@@ -307,10 +313,10 @@ export function renderSurfaces(inv) {
       : 'none (reached from within)';
   const rows = inv.surfaces.map(
     s =>
-      `| ${s.en} | \`${s.path}\` | ${s.role} | ${dest(s.destination)} | ${cell(s.from)} | ${s.menu ?? 'none'} |`
+      `| ${s.en} | \`${s.path}\` | ${s.role} | ${dest(s.destination)} | ${cell(s.from)} | ${s.menu ? 'yes' : 'no'} |`
   );
   return [
-    '| Surface | Path | Role | Destination | Reached from | Menu today |',
+    '| Surface | Path | Role | Destination | Reached from | In the menu |',
     '| --- | --- | --- | --- | --- | --- |',
     ...rows,
   ].join('\n');
@@ -383,20 +389,75 @@ export function withParts(text, inv) {
   return out;
 }
 
+const attr = s =>
+  String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+const both = ({ en, es }) =>
+  `<span class="gs-en">${attr(en)}</span><span class="gs-es" lang="es">${attr(es)}</span>`;
+
+/**
+ * Home's five destinations, as static markup from the inventory: the name as
+ * a link to the destination's own page, its one line, and (Explore only, whose
+ * page is the sandbox itself) the places that used to be menu entries. Home
+ * costs no JavaScript for it, and no word is written twice.
+ * @param {object} inv - The inventory
+ * @returns {string} The block between the destinations:home markers
+ */
+export function renderHomeDestinations(inv) {
+  const cards = inv.destinations.map(d => {
+    const href = d.first.path;
+    const enter = d.id === 'explore' ? ' data-action="enter"' : '';
+    // Only Explore carries its places here: its page is the sandbox, which has
+    // no place for them; every other destination's page carries its own.
+    const places =
+      href === '/'
+        ? (PLACES[href]?.[1] ?? []).flatMap(([, links]) => links)
+        : [];
+    const more = places.length
+      ? `<ul class="wel-door-more">${places
+          .map(
+            ([key, to]) =>
+              `<li><a href="${to}">${both({ en: WORDS[key][0], es: WORDS[key][1] })}</a></li>`
+          )
+          .join('')}</ul>`
+      : '';
+    return `<div class="wel-door" data-dest="${d.id}"><h3 class="wel-door-title"><a href="${href}"${enter}>${both(d)}</a></h3><p class="wel-door-text">${both(d.says)}</p>${more}</div>`;
+  });
+  return `<div class="wel-doors">\n${cards.join('\n')}\n</div>`;
+}
+
+/** Home's fragment with its destinations rewritten. */
+export function withHomeDestinations(doc, inv) {
+  const [open, close] = HOME_MARKS;
+  const at = doc.indexOf(open);
+  const end = doc.indexOf(close);
+  if (at < 0 || end < at)
+    throw new Error(`${HOME} lacks the destinations markers`);
+  return `${doc.slice(0, at + open.length)}\n${renderHomeDestinations(inv)}\n${doc.slice(end)}`;
+}
+
 async function main(command) {
   const inv = readInventory();
   if (command === 'check' || command === 'write') {
     const text = read('NAVIGATION.md');
     const next = withParts(text, inv);
+    const home = read(HOME);
+    const nextHome = withHomeDestinations(home, inv);
     if (command === 'write') {
       writeFileSync(DOC, next);
-      console.log('Wrote the generated parts of NAVIGATION.md.');
-    } else if (next !== text) {
+      writeFileSync(path.join(ROOT, HOME), nextHome);
+      console.log(
+        "Wrote the generated parts of NAVIGATION.md and Home's destinations."
+      );
+    } else if (next !== text || nextHome !== home) {
       console.error(
-        'NAVIGATION.md is stale. Run node tools/navigation.mjs write'
+        "NAVIGATION.md or Home's destinations are stale. Run node tools/navigation.mjs write"
       );
       process.exit(1);
-    } else console.log('NAVIGATION.md is current.');
+    } else console.log('NAVIGATION.md and Home are current.');
     return;
   }
   if (command === 'report') {

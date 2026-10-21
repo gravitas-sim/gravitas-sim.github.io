@@ -33,24 +33,10 @@ export function mountShell({ onLanguage, onTheme } = {}) {
   const head = document.querySelector('.gs-shell');
   if (!head) return;
   head.classList.add('gs-js');
-  const groups = [...head.querySelectorAll('details')];
   const toggle = head.querySelector('.gs-toggle');
   const controls = head.querySelector('.gs-controls');
   toggle.hidden = controls.hidden = false;
 
-  for (const d of groups)
-    d.addEventListener('toggle', () => {
-      if (d.open) for (const o of groups) if (o !== d) o.open = false;
-    });
-  head.addEventListener('keydown', e => {
-    const d = groups.find(o => o.open);
-    if (e.key !== 'Escape' || !d) return;
-    d.open = false;
-    d.querySelector('summary').focus();
-  });
-  document.addEventListener('click', e => {
-    if (!head.contains(e.target)) for (const d of groups) d.open = false;
-  });
   toggle.addEventListener('click', () => {
     const open = toggle.getAttribute('aria-expanded') !== 'true';
     toggle.setAttribute('aria-expanded', String(open));

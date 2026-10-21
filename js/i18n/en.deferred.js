@@ -3213,44 +3213,11 @@ export const EN_DEFERRED = {
     'That activity has no “{id}” format. Choose one from the teaching page.',
   'activity.error.notUsable':
     'That activity could not be opened: the investigation behind it has changed too much. Open the full investigation instead.',
-  'welcome.scenarioGone': 'That scenario is no longer available.',
   'welcome.shownAgain': 'It will be shown again next time',
   'welcome.showAgain': 'Show this again on my next visit',
   'export.viewTable': 'View as table',
   'export.hideTable': 'Hide table',
   'export.downloadCsv': 'Download CSV',
-  'welcomeCard.sandbox.eyebrow': 'Free exploration',
-  'welcomeCard.sandbox.title': 'Sandbox',
-  'welcomeCard.sandbox.text':
-    'Build a system from nothing, or load one of the built-in scenarios and change it. Drag to place an object; the drag sets its velocity.',
-  'welcomeCard.sandbox.cta': 'Enter the sandbox',
-  'welcomeCard.investigations.eyebrow': 'Guided investigations',
-  'welcomeCard.investigations.title': 'Investigations',
-  'welcomeCard.investigations.text':
-    'Structured astronomy activities inside the simulation: predict, experiment, measure, answer, and export a lab report.',
-  'welcomeCard.investigations.cta': 'Browse investigations',
-  'welcomeCard.instructors.eyebrow': 'For teaching',
-  'welcomeCard.instructors.title': 'Instructors',
-  'welcomeCard.instructors.text':
-    'Instructor guides, learning objectives, answer keys and a curriculum map for introductory astronomy courses.',
-  'welcomeCard.instructors.cta': 'Instructor resources',
-  'welcomeAudience.students.title': 'For students',
-  'welcomeAudience.students.text':
-    'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
-  'welcomeAudience.instructors.title': 'For instructors',
-  'welcomeAudience.instructors.text':
-    '60 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
-  'welcomeAudience.curious.title': 'For the curious',
-  'welcomeAudience.curious.text':
-    'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',
-  'welcomeLink.teaching.label': 'Teaching with Gravitas',
-  'welcomeLink.teaching.note':
-    'How it is used in a course, with six demonstrations you can run.',
-  'welcomeLink.model.label': 'How Gravitas models the universe',
-  'welcomeLink.model.note':
-    'What is calculated, what is approximated, and what is only drawn.',
-  'welcomeLink.instructors.note':
-    'Instructor guides, answer keys and a curriculum map.',
   'tideP.moonOnEarth': 'the Moon, on the Earth',
   'tideP.sunOnEarth': 'the Sun, on the Earth',
   'tideP.earthOnMoon': 'the Earth, on the Moon',
