@@ -19,6 +19,11 @@
 // =============================================================================
 
 import { isUnit } from '../../js/units/registry.js';
+import {
+  validateGrid,
+  validateImage,
+  validateImageSequence,
+} from '../../js/dataKinds/contract.js';
 
 export const FORMAT = 'gravitas.observation-data-pack';
 export const FORMAT_VERSION = 1;
@@ -35,6 +40,13 @@ export const DATA_TYPES = [
   // A table of sources: a cluster's photometry, a survey's parameters
   // (js/tableObservation.js).
   'catalog',
+  // Ordered frames of one shape with their own times, and a precomputed table
+  // indexed by named parameters (Prompt 157, js/dataKinds/contract.js): the
+  // manifest carries the document (`sequence`, `grid`), validated by the same
+  // code that reads it. An `image` pack may carry its pixel contract as
+  // `image.sidecar`.
+  'image-sequence',
+  'grid',
 ];
 /** Types whose independent variable is a time, and so need a time system. */
 export const TIME_SERIES = new Set([
@@ -118,6 +130,8 @@ export const RUNTIME_FIELDS = [
 export const RUNTIME_OPTIONAL = [
   'reductions',
   'image',
+  'sequence',
+  'grid',
   'crowding',
   'model',
   'citations',
@@ -375,6 +389,31 @@ export function validateDataPack(m, { derivedUnder = 'js/data/' } = {}) {
       text(im.bitsSource, 'image.bitsSource');
     }
   }
+  const kind = (result, at) =>
+    result.problems.forEach(p =>
+      need(false, p.path ? `${at}.${p.path}` : at, p.message)
+    );
+  if (m.dataType === 'image' && m.image?.sidecar !== undefined) {
+    kind(validateImage(m.image.sidecar), 'image.sidecar');
+    need(
+      m.image.sidecar?.width === m.image.width &&
+        m.image.sidecar?.height === m.image.height,
+      'image.sidecar',
+      'is the size of image.width and image.height'
+    );
+  }
+  for (const [type, field, check] of [
+    ['image-sequence', 'sequence', validateImageSequence],
+    ['grid', 'grid', validateGrid],
+  ]) {
+    if (m.dataType !== type) continue;
+    need(
+      isObject(m[field]),
+      field,
+      `is the gravitas.${type} document this pack holds`
+    );
+    if (isObject(m[field])) kind(check(m[field]), field);
+  }
   list(m.masks, 'masks', 0);
   (m.masks || []).forEach((k, i) => {
     text(k?.column, `masks[${i}].column`);
@@ -444,6 +483,13 @@ export function runtimeDisagreement(PACK, m) {
       if (want === undefined || k in DERIVED_RUNTIME) continue;
       if (k === 'image' && m.dataType === 'image') {
         errors.push('image is required in the runtime copy of an image');
+      } else if (
+        (k === 'sequence' && m.dataType === 'image-sequence') ||
+        (k === 'grid' && m.dataType === 'grid')
+      ) {
+        errors.push(
+          `${k} is required in the runtime copy of a ${m.dataType} pack`
+        );
       } else if (k === 'model' && m.origin === 'synthetic') {
         errors.push(
           'model is required in the runtime copy of synthetic data, so an interface can say what made it'

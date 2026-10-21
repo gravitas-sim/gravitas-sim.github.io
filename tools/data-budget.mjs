@@ -108,12 +108,19 @@ export function measure(root = ROOT) {
  * @returns {Record<string, number>}
  */
 export function recordedProbe(root = ROOT) {
+  const out = {};
   const file = path.join(root, 'tools', 'worker-probe-results.json');
-  if (!existsSync(file)) return {};
-  const r = JSON.parse(readFileSync(file, 'utf8'));
-  return Number.isFinite(r.storage?.usageBytes)
-    ? { indexedDbAndCacheBytes: r.storage.usageBytes }
-    : {};
+  if (existsSync(file)) {
+    const r = JSON.parse(readFileSync(file, 'utf8'));
+    if (Number.isFinite(r.storage?.usageBytes))
+      out.indexedDbAndCacheBytes = r.storage.usageBytes;
+  }
+  // The decoded-memory probe (Prompt 157, tools/decoded-memory-results.json) is
+  // deliberately not read: its resident figure is the 64 MiB bound read back,
+  // equal to the ceiling by construction, and its real measurements are a
+  // Worker's peaks. `decodedImageBytesPerPage` stays "not measured" until a
+  // shipped route decodes images in a real page.
+  return out;
 }
 
 export function readDataBudget(file = DATA_BUDGET_FILE) {

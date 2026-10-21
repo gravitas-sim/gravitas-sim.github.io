@@ -173,6 +173,7 @@ export default [
       'js/mission/worker.js',
       'js/mission/labWorker.js',
       'js/kernels/stellar/worker.js',
+      'js/dataKinds/fitsWorker.js',
     ],
     languageOptions: {
       ecmaVersion: 2021,

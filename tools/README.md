@@ -56,6 +56,9 @@ current, and the orchestrator checks it.
 | `cosmology-validate.mjs` | (no header) | `npm run cosmology:validate` |
 | `csp.mjs` | A Content-Security-Policy on every page |  |
 | `data-budget.mjs` | The data plane's budget: what Gravitas stores and keeps, not just what it ships | `npm run budget:data` |
+| `data-kinds-cases.mjs` | The data kinds' cases, limits and tolerances (Prompt 157) |  |
+| `data-kinds-examples.mjs` | An example of each data kind, from material Gravitas already has (Prompt 157) |  |
+| `decoded-memory-probe.mjs` | npm run probe:decoded - what decoding an image holds, in a real browser | `npm run probe:decoded` |
 | `deps-audit.mjs` | The dependency audit | `npm run deps:audit` |
 | `design-ratchet.mjs` | Four migrations to the design system that may only go one way |  |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |

@@ -268,7 +268,12 @@ describe('the data plane budget', () => {
   });
 
   test('a browser-probe ceiling with no measurement is "not measured", never a pass', () => {
-    const rows = judgeData(readDataBudget(), measure());
+    // No shipped route decodes images yet; the decoded-memory probe's resident
+    // figure is the bound read back (two planes, the ceiling by construction),
+    // so tools/data-budget.mjs does not report it as a measurement.
+    const measured = measure();
+    expect('decodedImageBytesPerPage' in measured).toBe(false);
+    const rows = judgeData(readDataBudget(), measured);
     const probe = rows.find(r => r.key === 'decodedImageBytesPerPage');
     expect(probe.status).toBe('not measured');
     expect(
