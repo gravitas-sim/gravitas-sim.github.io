@@ -2133,6 +2133,7 @@
   "[chromium] › studio.spec.js › the Scenario Studio › typed bodies that overlap or escape are named as cautions, which never block saving": 2.1,
   "[chromium] › submissionReview.spec.js › the submission review page › downloads a summary, a question file and the JSON, all from the same reading": 1.1,
   "[chromium] › submissionReview.spec.js › the submission review page › grades the answers a lesson in the application saved": 9.9,
+  "[chromium] › submissionReview.spec.js › the submission review page › marks each rubric criterion apart from the answer, and the marks file says which kind": 0.9,
   "[chromium] › submissionReview.spec.js › the submission review page › passes axe with results on it": 1.8,
   "[chromium] › submissionReview.spec.js › the submission review page › reads a pile, keeps the duplicate, and refuses what it cannot read": 0.7,
   "[chromium] › submissionReview.spec.js › the submission review page › says there is nothing to download until something is read": 0.6,

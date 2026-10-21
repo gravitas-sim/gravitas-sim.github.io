@@ -79,6 +79,24 @@ const { token } = await encodeSubmission(
   })
 );
 
+/** A report on a lesson whose written step has rubric criteria (Prompt 172). */
+const energy = await import('../js/data/investigations/orbital-energy.js').then(
+  m => m.default || Object.values(m)[0]
+);
+const WRITTEN = 'will-it-be-back';
+const energyBackup = buildBackup({
+  lesson: energy,
+  responses: {
+    [stepKey(energy.id, WRITTEN)]:
+      'No: its energy is above zero, so it is unbound.',
+  },
+  attempts: {},
+  visited: energy.steps.map(s => s.sid),
+  stepSid: WRITTEN,
+  startedAt: '2026-09-01T10:00:00.000Z',
+  studentName: 'Dana',
+});
+
 const file = (name, text, mimeType) => ({
   name,
   mimeType,
@@ -239,6 +257,100 @@ test.describe('the submission review page', () => {
     }
     // Nothing on the page is an entity or a tag left as text.
     expect(await boxes.innerText()).not.toMatch(/&[a-z]+;|<\/?[a-z]/);
+  });
+
+  test('marks each rubric criterion apart from the answer, and the marks file says which kind', async ({
+    page,
+  }) => {
+    await open(page);
+    await page
+      .locator('#picker')
+      .setInputFiles([
+        file('dana.json', JSON.stringify(energyBackup), 'application/json'),
+      ]);
+    await expect(page.locator('#count')).toHaveText('1 submission');
+    await page.locator('#judgeToggle').click();
+    const criteria = page.locator('fieldset.sr-criterion');
+    // Orbital Energy's written step has two criteria, neither with a kind
+    // written: both are read as reasoning.
+    await expect(criteria).toHaveCount(2);
+    await expect(criteria.first().locator('legend')).toHaveText(
+      'Reaches the right answer'
+    );
+    await expect(criteria.first()).toHaveAttribute('data-kind', 'reasoning');
+    // The nested panel is something a keyboard and a screen reader meet.
+    const axe = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(axe.violations.map(v => v.id)).toEqual([]);
+    // The criterion's own most is its best level's points (2), not the answer's.
+    await expect(
+      criteria.first().locator('input[data-field="mark"]')
+    ).toHaveAttribute('max', '2');
+    await criteria.first().locator('input[data-field="mark"]').fill('2');
+    await criteria
+      .first()
+      .locator('input[data-field="comment"]')
+      .fill('Right.');
+    await criteria.first().locator('input[data-field="comment"]').blur();
+    // A criterion's mark is not the answer's: the count of marked answers holds.
+    await expect(page.locator('#judgeSummary')).toContainText(
+      '0 of 1 written answers marked'
+    );
+    // Too many points for the criterion is refused, as it is for an answer.
+    await criteria.nth(1).locator('input[data-field="mark"]').fill('9');
+    await criteria.nth(1).locator('input[data-field="mark"]').blur();
+    await expect(
+      criteria.nth(1).locator('input[data-field="mark"]')
+    ).toHaveAttribute('aria-invalid', 'true');
+    await criteria.nth(1).locator('input[data-field="mark"]').fill('1');
+    await criteria.nth(1).locator('input[data-field="mark"]').blur();
+    const marks = await take(page, 'marksSave');
+    const rows = fromCsv(marks.text);
+    const at = Object.fromEntries(rows[0].map((c, i) => [c, i]));
+    expect(rows[1][at.schema]).toBe('gravitas.instructor-marks/2');
+    const cr = rows.slice(1).filter(r => r[at.criterion]);
+    expect(
+      cr.map(r => [
+        r[at.criterion],
+        r[at.criterion_name],
+        r[at.criterion_kind],
+        r[at.points_possible],
+        r[at.mark],
+        r[at.comment],
+      ])
+    ).toEqual([
+      ['c1', 'Reaches the right answer', 'reasoning', '2', '2', 'Right.'],
+      ['c2', 'Uses what was measured', 'reasoning', '1', '1', ''],
+    ]);
+    // The answer's own row holds no criterion and no mark.
+    expect(rows[1][at.criterion]).toBe('');
+    expect(rows[1][at.mark]).toBe('');
+    expect(marks.text).not.toContain('is above zero');
+    // And it reads back: a fresh visit, the same report, the saved file.
+    await page.reload();
+    await expect(page.locator('#count')).toHaveText('nothing yet');
+    await page
+      .locator('#picker')
+      .setInputFiles([
+        file('dana.json', JSON.stringify(energyBackup), 'application/json'),
+      ]);
+    await page.locator('#judgeToggle').click();
+    await expect(
+      page.locator('input[data-crit="1"][data-field="mark"]')
+    ).toHaveValue('');
+    await page
+      .locator('#marksOpen')
+      .setInputFiles(file('marks.csv', marks.text, 'text/csv'));
+    await expect(
+      page.locator('input[data-crit="1"][data-field="mark"]')
+    ).toHaveValue('2');
+    await expect(
+      page.locator('input[data-crit="1"][data-field="comment"]')
+    ).toHaveValue('Right.');
+    await expect(
+      page.locator('input[data-crit="2"][data-field="mark"]')
+    ).toHaveValue('1');
   });
 
   test('works from the keyboard alone', async ({ page, browserName }) => {

@@ -85,7 +85,32 @@ describe('rubricCriteria in a pack', () => {
     ],
     [
       'an unknown field',
-      [{ ...clone(CRITERIA[0]), weight: 3 }],
+      [{ ...clone(CRITERIA[0]), bonus: 3 }],
+      /rubricCriteria\[0\]\.bonus/,
+    ],
+    [
+      'an unknown kind',
+      [{ ...clone(CRITERIA[0]), kind: 'neatness' }],
+      /rubricCriteria\[0\]\.kind/,
+    ],
+    [
+      'an unknown depth',
+      [{ ...clone(CRITERIA[0]), depth: 'expert' }],
+      /rubricCriteria\[0\]\.depth/,
+    ],
+    [
+      'a weight of zero',
+      [{ ...clone(CRITERIA[0]), weight: 0 }],
+      /rubricCriteria\[0\]\.weight/,
+    ],
+    [
+      'a weight above ten',
+      [{ ...clone(CRITERIA[0]), weight: 11 }],
+      /rubricCriteria\[0\]\.weight/,
+    ],
+    [
+      'a weight that is text',
+      [{ ...clone(CRITERIA[0]), weight: '2' }],
       /rubricCriteria\[0\]\.weight/,
     ],
     [
@@ -131,6 +156,45 @@ describe('rubricCriteria in a pack', () => {
     choice.rubricCriteria = clone(CRITERIA);
     const v = await checkInvestigationPack(pack);
     expect(v.errors.length).toBeGreaterThan(0);
+  });
+});
+
+describe('what a criterion claims (Prompt 172)', () => {
+  const claims = { kind: 'correctness', depth: 'quantitative', weight: 3 };
+
+  test('kind, depth and weight compile onto the step and its Spanish shadow', async () => {
+    const { pack, step } = withCriteria([{ ...clone(CRITERIA[0]), ...claims }]);
+    const v = await checkInvestigationPack(pack);
+    expect(v.errors).toEqual([]);
+    const got = v.compiled.lesson.steps.find(s => s.sid === step.sid);
+    expect(got.rubricCriteria[0]).toMatchObject(claims);
+    const es = mergeTranslation(
+      v.compiled.lesson,
+      v.compiled.shadow
+    ).steps.find(s => s.sid === step.sid);
+    expect(es.rubricCriteria[0]).toMatchObject(claims);
+    expect(es.rubricCriteria[0].name).toBe('Nombra los dos efectos');
+  });
+
+  test('a table that sets none writes none (the 2.0.0 shape is unchanged)', async () => {
+    const { pack, step } = withCriteria(clone(CRITERIA));
+    const v = await checkInvestigationPack(pack);
+    const c = v.compiled.lesson.steps.find(s => s.sid === step.sid)
+      .rubricCriteria[0];
+    expect(Object.keys(c)).toEqual(['name', 'levels']);
+  });
+
+  test('a remix keeps them and the key reads the criterion as before', async () => {
+    const { pack } = await remixBuiltin('orbital-energy', { id: 'my-oe' });
+    const edited = clone(pack);
+    const step = edited.steps.find(s => s.rubricCriteria);
+    Object.assign(step.rubricCriteria[0], claims);
+    const v = await checkInvestigationPack(edited);
+    expect(v.errors).toEqual([]);
+    const entry = answerKeyFor(v.compiled.lesson).entries.find(
+      e => e.sid === step.sid
+    );
+    expect(entry.criteria[0]).toMatchObject(claims);
   });
 });
 

@@ -107,6 +107,29 @@ export const BOUNDARY = [
     expect: 'ignored',
   },
   {
+    id: 'rubric-criterion-semantics',
+    prompt: 172,
+    kind: 'investigation-pack',
+    plans:
+      'a `kind`, `depth` and `weight` on a rubric criterion of a written step',
+    mutate: doc => {
+      const d = clone(doc);
+      const step = d.steps.find(s => s.type === 'question' && s.rubric);
+      step.rubricCriteria = [
+        {
+          name: { en: 'Gets the number' },
+          kind: 'correctness',
+          levels: [
+            { label: { en: 'Full' }, text: { en: 'Within tolerance.' } },
+            { label: { en: 'Not yet' }, text: { en: 'Outside it.' } },
+          ],
+        },
+      ];
+      return d;
+    },
+    expect: 'refused',
+  },
+  {
     id: 'ensemble-fields',
     prompt: 265,
     kind: 'experiment',
