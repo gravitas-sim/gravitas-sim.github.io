@@ -246,6 +246,13 @@ export const NEVER_PRECACHED = [
   // measured cost is in D-R10-30). Its first adopter deletes this entry, and
   // tests/workerPoolAdoption.test.js fails until it is deleted.
   /^js\/workers\/pool\.js$/,
+  // The data kinds (Prompt 157, DATA_PACKS.md): the image, sequence and grid
+  // contracts, the bounded local FITS reader and its Worker, no shipped module
+  // imports any of them yet, so no page can fetch one and an install has no use
+  // for them, and the first-visit tier has 18 bytes of room (adopting them is a
+  // wait: the measured costs are in D-R10-32). The first adopter deletes this
+  // entry, and tests/dataKindsInstall.test.js fails until it does.
+  /^js\/dataKinds\//,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

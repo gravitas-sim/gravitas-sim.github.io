@@ -70,6 +70,10 @@ export const TOL = Object.freeze({
     max: 1.1,
     why: 'the variance of the difference of two committed frames over at least 10,000 pixels has a sampling error of sqrt(2/N), 1.4%; a band of +-10% is seven standard errors',
   },
+  regeneratedAdu: {
+    value: 1,
+    why: 'the example frames are committed; regenerating them on another Node version can move a count across a rounding boundary by one count at most, because Math.log, cos and exp differ in the last bit',
+  },
   memoryPeak: {
     value: 1.25,
     why: 'the reading realm holds the file and the Float64 plane; its measured peak (heap and buffers) may be at most 1.25 times their sum, the rest being the reader and its result record',
@@ -2225,4 +2229,158 @@ export const MIST_GRID = Object.freeze({
   axes: ['feh', 'logAge'],
   // The cells must tile the table exactly: each row in one cell, in order.
   tile: true,
+});
+
+// --- Added before the examples were written ---------------------------------------
+
+/**
+ * A frame of bit flags (a mask: the TESS aperture) says what each bit means and
+ * where that is documented; it is not light, so photometry is refused.
+ */
+export const FLAGS_CASES = [
+  [
+    'a flags image with its bits and their source',
+    d => {
+      d.pixels = {
+        unit: 'flags',
+        bits: [
+          { value: 1, meaning: 'collected' },
+          { value: 2, meaning: 'in the aperture' },
+        ],
+        bitsSource: 'the data products document, table 15',
+      };
+    },
+    { valid: true, marking: true, photometry: 'not-flux', astrometry: true },
+  ],
+  [
+    'a flags image without bits',
+    d => {
+      d.pixels = { unit: 'flags' };
+    },
+    { valid: false },
+  ],
+  [
+    'a flags image whose bits have no source',
+    d => {
+      d.pixels = { unit: 'flags', bits: [{ value: 1, meaning: 'collected' }] };
+    },
+    { valid: false },
+  ],
+  [
+    'bits on an image that is light',
+    d => {
+      d.pixels.bits = [{ value: 1, meaning: 'collected' }];
+      d.pixels.bitsSource = 'somewhere';
+    },
+    { valid: false },
+  ],
+];
+
+/** Data packs of the new kinds: [label, change to the aperture pack's manifest, valid or the field it is about]. */
+export const PACK_CASES = [
+  ['the aperture pack as it is', () => {}, true],
+  [
+    'an image pack with a sidecar of its own size',
+    (m, k) => {
+      m.image.sidecar = k.image(m.image.width, m.image.height);
+    },
+    true,
+  ],
+  [
+    'a sidecar of another size',
+    (m, k) => {
+      m.image.sidecar = k.image(m.image.width + 1, m.image.height);
+    },
+    'image.sidecar',
+  ],
+  [
+    'a sidecar that is not a valid image',
+    (m, k) => {
+      m.image.sidecar = k.image(m.image.width, m.image.height);
+      delete m.image.sidecar.pixels;
+    },
+    'image.sidecar',
+  ],
+  [
+    'an image-sequence pack with its sequence',
+    (m, k) => {
+      m.dataType = 'image-sequence';
+      delete m.image;
+      m.sequence = k.sequence();
+    },
+    true,
+  ],
+  [
+    'an image-sequence pack without one',
+    m => {
+      m.dataType = 'image-sequence';
+      delete m.image;
+    },
+    'sequence',
+  ],
+  [
+    'an image-sequence pack with a bad one',
+    (m, k) => {
+      m.dataType = 'image-sequence';
+      delete m.image;
+      m.sequence = k.sequence();
+      m.sequence.frames.reverse();
+    },
+    'sequence',
+  ],
+  [
+    'a grid pack with its grid',
+    (m, k) => {
+      m.dataType = 'grid';
+      delete m.image;
+      m.grid = k.grid();
+    },
+    true,
+  ],
+  [
+    'a grid pack without one',
+    m => {
+      m.dataType = 'grid';
+      delete m.image;
+    },
+    'grid',
+  ],
+  [
+    'a grid pack with a bad one',
+    (m, k) => {
+      m.dataType = 'grid';
+      delete m.image;
+      m.grid = k.grid();
+      m.grid.axes[0].values = [3, 2, 1];
+    },
+    'grid',
+  ],
+];
+
+/** The examples from existing material, and what each must show. */
+export const EXAMPLES = Object.freeze({
+  dir: 'tests/fixtures/dataKinds',
+  image: {
+    file: 'image-tess-hd209458-aperture.json',
+    pack: 'tess-hd209458-s56-aperture',
+    width: 11,
+    height: 13,
+    // The pixels carrying bit 2 (the optimal aperture), as the pack's check counts them.
+    optimalAperture: 23,
+    photometry: 'not-flux',
+    astrometry: true,
+  },
+  sequence: {
+    file: 'image-sequence-forward-ccd.json',
+    frames: 2,
+    width: 128,
+    height: 96,
+    // Frames from the forward ccd model (js/forward/models/ccd.js), same seed, two labels.
+    model: 'ccd',
+  },
+  grid: {
+    file: 'grid-mist-sdss-isochrones.json',
+    pack: 'mist-sdss-isochrones',
+    axes: ['feh', 'logAge'],
+  },
 });
