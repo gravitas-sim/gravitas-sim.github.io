@@ -55,6 +55,7 @@ import {
   adoptersGuide,
   curriculumMap,
 } from '../js/instructorDocs.js';
+import { structuredNotes, notesModel } from '../js/instructorNotes.js';
 import { activityGuide, activityWorksheet } from '../js/activityDocs.js';
 import { ACTIVITIES } from '../js/data/activities.js';
 import { EN_TEACHING } from '../js/i18n/en.teaching.js';
@@ -640,6 +641,25 @@ export function renderDocuments(version, { stub = false } = {}) {
             : {}),
         }
       );
+      // The generated Spanish notes (Prompt 170): Spanish only, one per
+      // investigation, made from structured fields and never from the guide's
+      // prose, which stays English.
+      if (locale === 'es') {
+        const lessonOf = id => INVESTIGATIONS.find(i => i.id === id);
+        add(
+          `${base.id}-notes-es`,
+          `${s} - Notas estructuradas.pdf`,
+          'notes',
+          base.id,
+          () => structuredNotes(base, { version, lessonOf }),
+          {
+            ...common,
+            variant: 'notes',
+            label: L('doc.notes', { title }),
+            status: notesModel(base, lessonOf).status,
+          }
+        );
+      }
       if (depths.length > 1)
         for (const depth of depths)
           add(
