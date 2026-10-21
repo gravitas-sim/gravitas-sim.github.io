@@ -2,68 +2,59 @@
 // The shared shell, in a browser (Roadmap II Prompt 50)
 // -----------------------------------------------------------------------------
 // tests/shell.test.js holds the markup; this holds what a reader does with it:
-// open a group and follow a link, by mouse and by keyboard; close it with
-// Escape or a click elsewhere; choose a theme and a language on one page and
-// find them on the next two; fold it all behind Menu on a phone.
+// follow a destination and then one of its places, by mouse and by keyboard;
+// choose a theme and a language on one page and find them on the next two;
+// fold it all behind Menu on a phone.
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
 import { stepKey } from './keyboard.js';
 
-const groups = page => page.locator('.gs-group');
-const openGroups = page =>
-  page.evaluate(
-    () => [...document.querySelectorAll('.gs-group')].filter(d => d.open).length
-  );
+const dest = (page, id) => page.locator(`.gs-nav a[data-dest="${id}"]`);
 
 test.describe('the shell', () => {
   test(
-    'a group opens, one at a time, and Escape or a click elsewhere closes it',
+    'the navigation is the five destinations, flat, and the page marks its own',
     { tag: '@cross-browser' },
     async ({ page }) => {
-      await page.goto('/model/', { waitUntil: 'load' });
+      await page.goto('/teaching/', { waitUntil: 'load' });
       await expect(page.locator('.gs-controls')).toBeVisible();
-
-      await groups(page).nth(0).locator('summary').click();
-      await expect(groups(page).nth(0)).toHaveAttribute('open', '');
-      await groups(page).nth(4).locator('summary').click();
-      await expect(groups(page).nth(4)).toHaveAttribute('open', '');
-      expect(await openGroups(page)).toBe(1);
-
-      await page.keyboard.press('Escape');
-      await expect.poll(() => openGroups(page)).toBe(0);
-      await expect(groups(page).nth(4).locator('summary')).toBeFocused();
-
-      await groups(page).nth(1).locator('summary').click();
-      await page.locator('h1').click();
-      await expect.poll(() => openGroups(page)).toBe(0);
+      const links = page.locator('.gs-nav a');
+      await expect(links).toHaveCount(5);
+      expect(
+        await links.evaluateAll(as => as.map(a => a.dataset.dest))
+      ).toEqual(['explore', 'learn', 'observe', 'my-work', 'teach']);
+      await expect(page.locator('.gs-nav details')).toHaveCount(0);
+      await expect(dest(page, 'teach')).toHaveAttribute('aria-current', 'page');
+      await expect(page.locator('.gs-nav [aria-current]')).toHaveCount(1);
+      // A page under a destination marks the destination, not itself.
+      await page.goto('/instructors/', { waitUntil: 'load' });
+      await expect(dest(page, 'teach')).toHaveAttribute('aria-current', 'true');
+      await expect(
+        page.locator('.gs-crumbs [aria-current="page"]')
+      ).toBeVisible();
     }
   );
 
-  test('every page is two activations away, by mouse', async ({ page }) => {
+  test('every page is two activations away, by mouse: a destination, then one of its places', async ({
+    page,
+  }) => {
     await page.goto('/model/', { waitUntil: 'load' });
-    await groups(page).nth(3).locator('summary').click();
-    await page
-      .locator('.gs-nav a[href="/teaching/"]')
-      .filter({ visible: true })
-      .click();
+    await dest(page, 'teach').click();
     await expect(page).toHaveURL(/\/teaching\/$/);
-    await expect(
-      page.locator('.gs-nav a[aria-current="page"]')
-    ).toHaveAttribute('href', '/teaching/');
+    await expect(dest(page, 'teach')).toHaveAttribute('aria-current', 'page');
+    await page.locator('.gs-places a[href="/instructors/"]').click();
+    await expect(page).toHaveURL(/\/instructors\/$/);
+    await expect(page.locator('h1').first()).toBeVisible();
   });
 
   test(
-    'the Investigations entry opens the lesson chooser',
+    'the Investigations place opens the lesson chooser',
     { tag: '@cross-browser' },
     async ({ page, app }) => {
       await app.boot();
-      await page.goto('/model/', { waitUntil: 'load' });
-      await groups(page).nth(0).locator('summary').click();
-      await page
-        .locator('.gs-nav a[href="/#investigations"]')
-        .filter({ visible: true })
-        .click();
+      await page.goto('/library/', { waitUntil: 'load' });
+      await page.locator('.gs-places a[href="/#investigations"]').click();
       await page.waitForFunction(() => window.splashScreenEnded === true);
       await expect(page.locator('#investigationBrowser')).toBeVisible({
         timeout: 30_000,
@@ -76,16 +67,13 @@ test.describe('the shell', () => {
     { tag: '@cross-browser' },
     async ({ page, browserName }) => {
       await page.goto('/validation/', { waitUntil: 'load' });
-      // The skip link first, then Home, then the first group.
+      // The skip link first, then Home, then the first destination.
       await page.keyboard.press(stepKey(browserName));
       await expect(page.locator('.gs-skip')).toBeFocused();
-      const learn = groups(page).nth(0).locator('summary');
-      await learn.focus();
-      await page.keyboard.press('Enter');
-      await expect(groups(page).nth(0)).toHaveAttribute('open', '');
       await page.keyboard.press(stepKey(browserName));
-      const link = page.locator('.gs-nav details[open] a').first();
-      await expect(link).toBeFocused();
+      await expect(page.locator('.gs-brand')).toBeFocused();
+      await page.keyboard.press(stepKey(browserName));
+      await expect(dest(page, 'explore')).toBeFocused();
     }
   );
 
@@ -111,8 +99,8 @@ test.describe('the shell', () => {
       await page.locator('[data-gs-lang]').selectOption('es');
       await expect(page.locator('html')).toHaveAttribute('lang', 'es');
       // The shell speaks the page's language without a reload.
-      await expect(groups(page).nth(0).locator('summary .gs-es')).toBeVisible();
-      await expect(groups(page).nth(0).locator('summary .gs-en')).toBeHidden();
+      await expect(dest(page, 'explore').locator('.gs-es')).toBeVisible();
+      await expect(dest(page, 'explore').locator('.gs-en')).toBeHidden();
 
       for (const next of ['/model/', '/validation/']) {
         await page.goto(next, { waitUntil: 'load' });
@@ -124,9 +112,7 @@ test.describe('the shell', () => {
         // English-only pages: the choice is kept, and shown, but the page and
         // its shell stay in the language the page is written in.
         await expect(page.locator('[data-gs-lang]')).toHaveValue('es');
-        await expect(
-          groups(page).nth(0).locator('summary .gs-en')
-        ).toBeVisible();
+        await expect(dest(page, 'explore').locator('.gs-en')).toBeVisible();
       }
 
       await page.goto('/teaching/', { waitUntil: 'load' });
@@ -151,10 +137,9 @@ test.describe('the shell', () => {
     // The theme is applied by the head script, not the module.
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'deep');
     await expect(page.locator('.gs-controls')).toBeHidden();
-    await groups(page).nth(4).locator('summary').click();
-    await expect(
-      page.locator('.gs-nav a[href="/model/"]').filter({ visible: true })
-    ).toBeVisible();
+    await expect(dest(page, 'teach')).toBeVisible();
+    await dest(page, 'teach').click();
+    await expect(page).toHaveURL(/\/teaching\/$/);
   });
 
   test(
@@ -169,10 +154,7 @@ test.describe('the shell', () => {
       await menu.click();
       await expect(menu).toHaveAttribute('aria-expanded', 'true');
       await expect(page.locator('.gs-nav')).toBeVisible();
-      await groups(page).nth(2).locator('summary').click();
-      await expect(
-        page.locator('.gs-nav a[href="/studio/"]').filter({ visible: true })
-      ).toBeVisible();
+      await expect(dest(page, 'teach')).toBeVisible();
       const wide = await page.evaluate(
         () => document.documentElement.scrollWidth > window.innerWidth
       );
@@ -357,11 +339,8 @@ test.describe('Home', () => {
         await home.evaluate(e => Math.round(e.getBoundingClientRect().top))
       ).toBe(48);
       await expect(page.locator('.gs-shell')).not.toHaveAttribute('inert', '');
-      // The navigation above it is live: a group opens and its link is there.
-      await page.locator('.gs-group').nth(3).locator('summary').click();
-      await expect(
-        page.locator('.gs-nav a[href="/teaching/"]').filter({ visible: true })
-      ).toBeVisible();
+      // The navigation above it is live: its destinations are there.
+      await expect(dest(page, 'teach')).toBeVisible();
     }
   );
 

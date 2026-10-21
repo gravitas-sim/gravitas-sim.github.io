@@ -72,7 +72,9 @@ test.describe('first run', () => {
     await app.boot({ firstVisit: true });
     await page.getByRole('button', { name: 'Skip the introduction' }).click();
     await expect(orient(page)).toBeHidden();
-    await expect(page.locator('.wel-hero [data-action="enter"]')).toBeFocused();
+    await expect(
+      page.locator('.wel-start [data-action="enter"]')
+    ).toBeFocused();
     expect(
       await page.evaluate(() =>
         localStorage.getItem('gravitas_orientation_seen_v1')

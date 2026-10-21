@@ -17,7 +17,7 @@
 import { readFileSync } from 'node:fs';
 import { test, expect } from './fixtures.js';
 import { runPending } from '../tools/pending-acceptance.mjs';
-import { NAV, WORDS } from '../tools/shell.mjs';
+import { DESTINATIONS, PLACES, WORDS } from '../tools/shell.mjs';
 import { EN_LIBRARY } from '../js/i18n/en.library.js';
 import { ES_LIBRARY } from '../js/i18n/es.library.js';
 
@@ -27,9 +27,9 @@ const inventory = JSON.parse(
 const library = JSON.parse(
   readFileSync(new URL('../library/library.json', import.meta.url))
 );
-/** The shell's own words for each link, by href. */
+/** The shell's own words for each destination link, by href. */
 const shellWords = Object.fromEntries(
-  NAV.flatMap(([, links]) => links).map(([key, href]) => [href, WORDS[key]])
+  DESTINATIONS.map(([key, href]) => [href, WORDS[key]])
 );
 const CATALOGS = { en: EN_LIBRARY, es: ES_LIBRARY };
 
@@ -290,9 +290,6 @@ test.describe('the reachability walk', () => {
         const link = page
           .locator(`.gs-nav a[href="${destination.first.path}"]`)
           .first();
-        await link.evaluate(a => {
-          a.closest('details')?.setAttribute('open', '');
-        });
         await link.click();
         await expect(page).toHaveURL(
           new RegExp(
@@ -320,7 +317,7 @@ test.describe('the reachability walk', () => {
     });
     await page.goto('/model/', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('.gs-controls')).toBeVisible();
-    const entries = await page.locator('.gs-nav ul ul a').evaluateAll(as =>
+    const entries = await page.locator('.gs-nav a').evaluateAll(as =>
       as.map(a => ({
         href: a.getAttribute('href'),
         en: a.querySelector('.gs-en')?.textContent ?? a.textContent,
@@ -336,7 +333,6 @@ test.describe('the reachability walk', () => {
       ).toEqual(shellWords[entry.href]);
       await page.goto('/model/', { waitUntil: 'domcontentloaded' });
       const link = page.locator(`.gs-nav a[href="${entry.href}"]`).first();
-      await link.evaluate(a => a.closest('details')?.setAttribute('open', ''));
       await link.click();
       if (entry.href.endsWith('.pdf')) {
         // A browser downloads a PDF rather than navigating to it.
@@ -353,4 +349,100 @@ test.describe('the reachability walk', () => {
       ).toBeAttached();
     }
   });
+});
+
+// --- Places and breadcrumbs (Prompt 162) ---------------------------------------
+
+test.describe('what used to be a menu entry', () => {
+  for (const locale of ['en', 'es']) {
+    test(`is a place on its destination's page, and opens, in ${locale}`, async ({
+      page,
+    }) => {
+      test.setTimeout(240_000);
+      await inLocale(page, locale);
+      for (const [here, [, blocks]] of Object.entries(PLACES)) {
+        if (here === '/') continue; // Home's Explore entry, walked above
+        await page.goto(here, { waitUntil: 'domcontentloaded' });
+        const places = page.locator('.gs-places a');
+        const hrefs = blocks.flatMap(([, links]) => links.map(l => l[1]));
+        await expect(places).toHaveCount(hrefs.length);
+        expect(
+          await places.evaluateAll(as => as.map(a => a.getAttribute('href')))
+        ).toEqual(hrefs);
+        // The labels are the shell's words, in the page's language.
+        const words = blocks.flatMap(([, links]) =>
+          links.map(l => WORDS[l[0]][locale === 'es' ? 1 : 0])
+        );
+        expect(
+          await places.evaluateAll(as =>
+            as.map(
+              a =>
+                [...a.querySelectorAll('span')].find(
+                  s => getComputedStyle(s).display !== 'none'
+                )?.textContent
+            )
+          )
+        ).toEqual(words);
+        for (const href of hrefs) {
+          const response = await page.request.get(pathOf(href));
+          expect(response.status(), `${here} offers ${href}`).toBe(200);
+        }
+      }
+    });
+  }
+
+  test('a page says where it sits, and its destination is the marked one', async ({
+    page,
+  }) => {
+    await page.goto('/experiments/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.gs-crumbs li')).toHaveCount(2);
+    await expect(
+      page.locator('.gs-crumbs [aria-current="page"]')
+    ).toBeVisible();
+    await expect(
+      page.locator('.gs-nav a[data-dest="observe"]')
+    ).toHaveAttribute('aria-current', 'true');
+    await page.locator('.gs-crumbs a[href="/observatory/"]').click();
+    await expect(page).toHaveURL(/\/observatory\/$/);
+    await expect(
+      page.locator('.gs-nav a[data-dest="observe"]')
+    ).toHaveAttribute('aria-current', 'page');
+  });
+
+  test('Home says what Gravitas is, where to start, and the five places, and nothing else', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await page.evaluate(() => {
+      location.hash = '#home';
+    });
+    await expect(page.locator('#welcomeSections')).toBeVisible();
+    await expect(page.locator('#welcomeSections .wel-start li')).toHaveCount(
+      inventory.firstWeek.starts.length
+    );
+    await expect(page.locator('#welcomeSections [data-dest]')).toHaveCount(5);
+    await expect(page.locator('#welcomeSections')).not.toContainText(/\(\d+\)/);
+    // The introduction is reachable on request, not forced again.
+    await page.locator('#welcomeSections [data-action="orient"]').click();
+    await expect(page.locator('#welOrient')).toBeVisible();
+  });
+});
+
+test('a lesson open in the sandbox is Learn, and the sandbox is Explore again once it closes', async ({
+  page,
+  app,
+}) => {
+  await app.boot();
+  const learn = page.locator('.gs-nav a[data-dest="learn"]');
+  const explore = page.locator('.gs-nav a[data-dest="explore"]');
+  await expect(explore).toHaveAttribute('aria-current', 'page');
+  await page.evaluate(() => document.body.classList.add('investigation-open'));
+  await expect(learn).toHaveAttribute('aria-current', 'true');
+  await expect(explore).not.toHaveAttribute('aria-current', /.*/);
+  await page.evaluate(() =>
+    document.body.classList.remove('investigation-open')
+  );
+  await expect(explore).toHaveAttribute('aria-current', 'page');
+  await expect(learn).not.toHaveAttribute('aria-current', /.*/);
 });

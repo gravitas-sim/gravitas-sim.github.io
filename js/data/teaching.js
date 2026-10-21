@@ -6,7 +6,7 @@
 // what order, and what goes in each card.
 //
 // Two rules hold it together, and both are the same rule the front door's data
-// file follows (js/data/welcome.js).
+// followed (Prompt 162 moved it into js/fragments/home.html).
 //
 //   No prose. Every string here is a message id, resolved through
 //   js/i18n/en.teaching.js and its Spanish shadow. That keeps this file free of

@@ -12,8 +12,9 @@ import { gzipSync } from 'node:zlib';
 
 import {
   APPLICATION,
+  DESTINATIONS,
   EXEMPT,
-  NAV,
+  PLACES,
   THEMES,
   WORDS,
   hasShell,
@@ -179,9 +180,30 @@ describe('every page carries the shell', () => {
 
 describe('the navigation', () => {
   const served = new Set(shellPages().map(pathOf));
+  /** Every link a destination's page or Home's Explore entry offers. */
+  const placed = Object.values(PLACES).flatMap(([, blocks]) =>
+    blocks.flatMap(([, links]) => links)
+  );
 
-  test('every link is a page that exists, and none appears twice', () => {
-    const hrefs = NAV.flatMap(([, links]) => links.map(([, href]) => href));
+  test('is the five destinations of the model, in its order, and nothing else', () => {
+    expect(DESTINATIONS.map(([key]) => key)).toEqual([
+      'explore',
+      'learn',
+      'observe',
+      'myWork',
+      'teach',
+    ]);
+    const hrefs = DESTINATIONS.map(([, href]) => href);
+    expect(new Set(hrefs).size).toBe(5);
+    for (const href of hrefs)
+      expect({ href, exists: served.has(href) }).toEqual({
+        href,
+        exists: true,
+      });
+  });
+
+  test('every place a destination offers is a page that exists, offered once', () => {
+    const hrefs = placed.map(([, href]) => href);
     expect(new Set(hrefs).size).toBe(hrefs.length);
     // A document rather than a page - the user manual - is a file the site
     // ships: in the repository, and copied into the build by build.js.
@@ -195,27 +217,73 @@ describe('the navigation', () => {
     }
   });
 
-  test('reaches every page but the first Gravitas', () => {
-    const hrefs = new Set(
-      NAV.flatMap(([, links]) => links.map(([, href]) => href.split('#')[0]))
-    );
-    // The adoption pages (ADOPTION.md) are forty-four, generated, and one
-    // click from /teaching/find/ rather than each in the menu; the next test
-    // holds that index to listing them all and each of them to leading back.
-    // The kit is reached from Teach and the activity builder
-    // (tests/instructorFlow.test.js holds both links).
-    // The investigations check (/studio/course/packs/, REMIX.md) is reached
-    // from the course builder's item for an instructor's investigation
-    // (e2e/remixDelivery.spec.js holds that link).
-    const adoption = p =>
-      /^\/teaching\/(investigation|activity|find|kit|alignment|adopt)\//.test(
-        p
-      ) ||
-      p === '/studio/course/packs/' ||
-      // The compute page is opt-in: reached by its address and from the
-      // documents that describe it (COMPUTE.md), not offered in every page's menu.
-      p === '/compute/';
-    expect([...served].filter(p => !adoption(p) && !hrefs.has(p))).toEqual([]);
+  test('keeps every capability reachable that the menu once held', () => {
+    // The 25 entries of the five-group menu (Prompt 161's inventory), each now
+    // the destination's own page or one of its places.
+    const former = [
+      '/library/',
+      '/my-work/',
+      '/#investigations',
+      '/course/',
+      '/observatory/',
+      '/experiments/',
+      '/',
+      '/3d/',
+      '/mission/lab/',
+      '/sky/',
+      '/studio/',
+      '/studio/lesson/',
+      '/studio/course/',
+      '/figure/',
+      '/catalog/',
+      '/teaching/',
+      '/instructors/',
+      '/instructors/submissions/',
+      '/evaluation/',
+      '/model/',
+      '/validation/',
+      '/glossary/',
+      '/Gravitas_User_Manual.pdf',
+    ];
+    const now = new Set([
+      ...DESTINATIONS.map(([, href]) => href),
+      ...placed.map(([, href]) => href),
+      '/lab3d/',
+      '/mission/',
+    ]);
+    // The two diagnostics pages are reached from the lab that explains each
+    // (NAVIGATION.md); the reachability walk in tests/navigationChecks.test.js
+    // holds that.
+    for (const href of former)
+      expect({ href, now: now.has(href) }).toEqual({ href, now: true });
+  });
+
+  test('each destination page carries its places block, stamped from PLACES', () => {
+    for (const [here, [, blocks]] of Object.entries(PLACES)) {
+      if (here === '/') continue; // Home's Explore entry: home.html, held below
+      const html = read(`${here.slice(1)}index.html`);
+      expect(html.includes('<!-- shell:places -->')).toBe(true);
+      for (const [, links] of blocks)
+        for (const [, href] of links)
+          expect({
+            here,
+            href,
+            linked: html.includes(`href="${href}"`),
+          }).toEqual({
+            here,
+            href,
+            linked: true,
+          });
+    }
+  });
+
+  test("Home's Explore entry offers the places PLACES lists for it", () => {
+    const home = read('js/fragments/home.html');
+    for (const [, href] of PLACES['/'][1].flatMap(([, links]) => links))
+      expect({ href, linked: home.includes(`<a href="${href}">`) }).toEqual({
+        href,
+        linked: true,
+      });
   });
 
   test('the adoption pages are reached from their index, and lead back to it', () => {
@@ -235,18 +303,41 @@ describe('the navigation', () => {
     }
   });
 
-  test('marks the page it is on, and only that one', () => {
+  test('marks the page it is on, and the destination it belongs to', () => {
     for (const page of carrying) {
       const html = read(page);
-      const nav = html.slice(html.indexOf('<nav id="gs-nav"'));
-      const current = [...nav.matchAll(/href="([^"]+)" aria-current="page"/g)];
-      const listed = NAV.some(([, links]) =>
-        links.some(([, href]) => href === pathOf(page))
+      const nav = html.slice(
+        html.indexOf('<nav id="gs-nav"'),
+        html.indexOf('</nav>', html.indexOf('<nav id="gs-nav"'))
       );
-      expect({ page, current: current.map(m => m[1]) }).toEqual({
+      const marks = [
+        ...nav.matchAll(
+          /href="([^"]+)" data-dest="[\w-]+" aria-current="(\w+)"/g
+        ),
+      ].map(m => `${m[2]} ${m[1]}`);
+      const own = DESTINATIONS.some(([, href]) => href === pathOf(page));
+      expect({
         page,
-        current: listed ? [pathOf(page)] : [],
+        own,
+        pages: marks.filter(m => m.startsWith('page ')).length,
+      }).toEqual({
+        page,
+        own,
+        pages: own ? 1 : 0,
       });
+      // at most one destination is the current one
+      expect(marks.length).toBeLessThanOrEqual(1);
+    }
+  });
+
+  test('every page but the application says where it sits, as a breadcrumb', () => {
+    for (const page of carrying.filter(p => !APPLICATION.has(p))) {
+      const html = read(page);
+      expect({
+        page,
+        crumbs: (html.match(/<nav class="gs-crumbs"/g) || []).length,
+      }).toEqual({ page, crumbs: 1 });
+      expect(/<li aria-current="page">/.test(html)).toBe(true);
     }
   });
 
