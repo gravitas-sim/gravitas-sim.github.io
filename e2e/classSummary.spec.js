@@ -27,6 +27,7 @@ import {
 import { ledgerDigest } from '../js/submission/ledgerDigest.js';
 import { SUMMARY_COLUMNS, SUMMARY_SCHEMA } from '../js/instructorSummary.js';
 import { fromCsv } from '../js/csv.js';
+import { stepKey as tabKey } from './keyboard.js';
 
 const kepler = await import('../js/data/investigations/keplers-laws.js').then(
   m => m.default || Object.values(m)[0]
@@ -349,25 +350,21 @@ test.describe('the class summary', () => {
     page,
     browserName,
   }) => {
-    test.skip(
-      browserName === 'webkit',
-      'macOS WebKit tabs only to text fields and selects'
-    );
     await open(page);
     await page.locator('#picker').setInputFiles(PILE);
     await expect(page.locator('#count')).toHaveText('3 submissions');
-    // The buttons and the tables' scroll regions are all in the tab order.
+    // Tab in macOS WebKit skips buttons (e2e/keyboard.js).
     await page.locator('#sumCsv').focus();
-    await page.keyboard.press('Tab');
+    await page.keyboard.press(tabKey(browserName));
     await expect(page.locator('#sumPrint')).toBeFocused();
-    await page.keyboard.press('Tab');
-    await expect(page.locator('#summary .ui-table-wrap').first()).toBeFocused();
+    // The tables are scroll regions a keyboard can reach.
+    await expect(
+      page.locator('#summary .ui-table-wrap').first()
+    ).toHaveAttribute('tabindex', '0');
+    await page.locator('#sumCsv').focus();
     const [download] = await Promise.all([
       page.waitForEvent('download'),
-      (async () => {
-        await page.locator('#sumCsv').focus();
-        await page.keyboard.press('Enter');
-      })(),
+      page.keyboard.press('Enter'),
     ]);
     expect(download.suggestedFilename()).toMatch(/class-summary/);
   });
