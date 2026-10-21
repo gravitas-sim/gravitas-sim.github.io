@@ -163,6 +163,21 @@ const textTree = (en, es) =>
         )
       : en;
 
+/**
+ * Rubric criteria as texts: a criterion's `kind` and `depth` are words of the
+ * format, not of the lesson, so they stay the plain strings the pack reads
+ * (Prompt 172: a text there is refused); its `weight` is a number and stays.
+ */
+const criteriaTexts = (list, spanish) =>
+  list.map((c, i) => {
+    const { kind, depth, ...words } = c;
+    return {
+      ...textTree(words, spanish?.[i]),
+      ...(kind === undefined ? {} : { kind }),
+      ...(depth === undefined ? {} : { depth }),
+    };
+  });
+
 /** A list of strings as a list of texts. */
 const texts = (list, spanish) =>
   Array.isArray(list) ? list.map((x, i) => text(x, spanish?.[i])) : undefined;
@@ -288,7 +303,7 @@ function stepToPack(s, es = {}) {
     put('worked', text(s.worked, es.worked));
     put('rubric', text(s.rubric, es.rubric));
     if (Array.isArray(s.rubricCriteria))
-      out.rubricCriteria = textTree(s.rubricCriteria, es.rubricCriteria);
+      out.rubricCriteria = criteriaTexts(s.rubricCriteria, es.rubricCriteria);
     if (s.reflect) out.reflect = true;
     if (Array.isArray(s.misconceptions))
       out.misconceptions = s.misconceptions.map((m, i) => {

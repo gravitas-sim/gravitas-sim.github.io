@@ -9,9 +9,10 @@
 // instructor modules, in the idle tier, and not in the first visit's install
 // (tools/build-service-worker.mjs): only the review page reads it.
 //
-// js/rubric.js, which prints the criteria in the key, is a source of the
-// instructor bundle and is not edited here; the key prints names and levels,
-// not kinds, until the bundle is rebuilt with that change (D-R10-38).
+// js/rubric.js prints the criteria in the key, kind, weight and depth with
+// them, and holds its own copy of the kinds and depths (it serves the key and
+// the build, which must not import this module); tests/rubricSemantics.test.js
+// holds the copies equal.
 // =============================================================================
 
 import { criterionKey } from './gradebook/marks.js';
@@ -26,8 +27,9 @@ import { criterionKey } from './gradebook/marks.js';
  *   uncertainty  the answer says how well the quantity is known
  * A criterion with no `kind` is `reasoning`: every criterion written before the
  * field existed was levels an instructor reads and judges. The list is held
- * equal to js/platform/questionBank.js's by tests/rubricSemantics.test.js (that
- * file serves routes with no request to spare, so it keeps its own copy).
+ * equal to js/rubric.js's and js/platform/questionBank.js's by
+ * tests/rubricSemantics.test.js (those files serve the key and routes with no
+ * request to spare, so each keeps its own copy).
  */
 export const CRITERION_KINDS = Object.freeze([
   'completion',

@@ -136,6 +136,12 @@ fields that are written only when set:
 | `depth` | `core`, `quantitative`, `advanced` | the shallowest depth at which the criterion is marked; none means every depth. A report read at a shallower depth is not asked for it. |
 | `weight` | a number above 0 and up to 10 | the criterion's relative share of the step's rubric fraction; none means 1. |
 
+The answer key prints each criterion's kind, weight and, where set, the depth it
+is marked from, with one note on what the four kinds mean, in English and Spanish
+(`js/rubric.js`, `js/answerKeyDocument.js`, `js/data/instructorLabels.js`); a key
+for one depth leaves out the criteria marked from a deeper one. On the review
+page, each criterion's legend names its kind in words (`sub.judge.kind.*`).
+
 On the review page, each written answer shows one mark and one comment per
 criterion, inside the answer's own, and a criterion's points possible is its best
 level's points (1 when its levels carry none). A criterion's mark is never added
@@ -155,6 +161,15 @@ refuses a `/2` file as "a marks file of a different version" and reads nothing
 the answer's. The Canvas, Moodle and D2L files do not change: each has the
 columns its platform's importer documents, none was tried with extra columns on
 a live platform, and the kind is in the marks file's rows instead (D-R10-38).
+
+**The marking note (F-8).** The lab report prints a written answer's marking
+note (the sentence of what to look for) only when the activity asks for it:
+`markingNote: true` on the activity (`js/data/activities.js`) writes `m: 1` on the
+assignment it builds, and the report prints the note when it finds `m`. The
+default is off for students; the answer key prints the note whatever the activity
+says. An assignment link made without the choice is byte for byte what it was,
+and a 2.0.0 build opens one that carries it and prints the note as it always did.
+The assignment builder panel and the Studio do not offer the choice yet.
 
 Pack authors write the three fields in an investigation pack or a question bank
 (`gravitas.investigation-pack/1`, `gravitas.question-bank/1`); a 2.0.0 reader

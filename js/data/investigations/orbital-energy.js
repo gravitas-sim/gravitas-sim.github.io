@@ -698,6 +698,7 @@ const ENERGY = {
       rubricCriteria: [
         {
           name: 'Reaches the right answer',
+          kind: 'correctness',
           levels: [
             {
               label: 'Full',
@@ -713,6 +714,7 @@ const ENERGY = {
         },
         {
           name: 'Uses what was measured',
+          kind: 'reasoning',
           levels: [
             {
               label: 'Full',
