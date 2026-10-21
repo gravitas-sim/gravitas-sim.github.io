@@ -1,6 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { Worker } from 'node:worker_threads';
-import { fileURLToPath } from 'node:url';
+import { Buffer } from 'node:buffer';
+import { URL, fileURLToPath } from 'node:url';
 
 import { createLedger, createPool } from '../js/workers/pool.js';
 import { LIMITS } from '../js/dataKinds/limits.js';
@@ -189,7 +190,7 @@ describe('a FITS file read on the pool', () => {
     });
     expect(file.length).toBeLessThanOrEqual(LIMITS.maxFileBytes);
     const source = owned(file);
-    const controller = new AbortController();
+    const controller = new globalThis.AbortController();
     const h = harness();
     const pending = readFitsOnPool(h.pool, source, {
       signal: controller.signal,
@@ -204,7 +205,7 @@ describe('a FITS file read on the pool', () => {
 
   test('cancelled before it begins: nothing is transferred', async () => {
     const source = owned(image({ bitpix: 8, width: 2, height: 2 }));
-    const controller = new AbortController();
+    const controller = new globalThis.AbortController();
     controller.abort();
     const h = harness();
     expect(

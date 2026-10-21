@@ -1,0 +1,104 @@
+{
+  "format": "gravitas.image",
+  "formatVersion": 1,
+  "id": "tess-hd209458-s56-aperture",
+  "title": "HD 209458, TESS sector 56: the aperture mask, as an image with its contract",
+  "use": "quantitative",
+  "width": 11,
+  "height": 13,
+  "pixels": {
+    "unit": "flags",
+    "bits": [
+      {
+        "value": 1,
+        "meaning": "collected by the spacecraft"
+      },
+      {
+        "value": 2,
+        "meaning": "in the optimal aperture, summed into the light curve"
+      },
+      {
+        "value": 4,
+        "meaning": "used to measure the background"
+      },
+      {
+        "value": 8,
+        "meaning": "used for the flux-weighted centroid"
+      },
+      {
+        "value": 16,
+        "meaning": "used for the PRF-fitted centroid"
+      },
+      {
+        "value": 32,
+        "meaning": "on CCD output A"
+      },
+      {
+        "value": 64,
+        "meaning": "on CCD output B"
+      },
+      {
+        "value": 128,
+        "meaning": "on CCD output C"
+      },
+      {
+        "value": 256,
+        "meaning": "on CCD output D"
+      }
+    ],
+    "bitsSource": "TESS Science Data Products Description Document, NASA/TM-2018-220036 (EXP-TESS-ARC-ICD-0014 Rev D, 31 July 2018), table 15: aperture mask image bits"
+  },
+  "planes": {
+    "data": {
+      "encoding": "uint16-le"
+    }
+  },
+  "scale": {
+    "arcsecPerPixel": 19.395484062832594
+  },
+  "wcs": {
+    "ctype": [
+      "RA---TAN",
+      "DEC--TAN"
+    ],
+    "crpix": [
+      6.254819344476573,
+      6.530449812067786
+    ],
+    "crval": [
+      330.7950845247853,
+      18.884206107937736
+    ],
+    "cdelt": [
+      -0.005395091119529,
+      0.005395091119528831
+    ],
+    "pc": [
+      [
+        0.8513512737077913,
+        -0.46043911374994434
+      ],
+      [
+        -0.5219565893104138,
+        -0.8923117801814796
+      ]
+    ],
+    "radesys": "ICRS"
+  },
+  "history": [
+    {
+      "step": "decode",
+      "tool": "tools/data-packs/tess-aperture.mjs",
+      "version": "1.0.0",
+      "lossy": false
+    }
+  ],
+  "source": {
+    "kind": "pack",
+    "id": "tess-hd209458-s56-aperture",
+    "version": "1.0.0",
+    "module": "js/data/observations/tessHd209458S56Aperture.js",
+    "sha256": "82abe3d902c8f56417c543085f4289efb10afcbab0c1ac3f0c1c6a12705c4d60",
+    "note": "the pixels stay in the pack (encoding image-uint16/1, little-endian 16-bit, the lowest row first); this document is the contract beside them"
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "format": "gravitas.image-sequence",
+  "formatVersion": 1,
+  "id": "forward-ccd-two-frames",
+  "title": "Two synthetic CCD frames of one field (the forward ccd model)",
+  "frame": {
+    "id": "forward-ccd-frame-shape",
+    "use": "quantitative",
+    "width": 128,
+    "height": 96,
+    "pixels": {
+      "unit": "adu",
+      "linearity": {
+        "status": "linear",
+        "limit": 33833,
+        "source": "the model has no nonlinearity below the full well (its truth notes)"
+      },
+      "saturation": {
+        "level": 33833,
+        "source": "model: full well 50000 electrons over gain 1.5 electrons per count, plus the bias level 500"
+      },
+      "gain": {
+        "value": 1.5,
+        "unit": "electron/adu",
+        "source": "model"
+      },
+      "readNoise": {
+        "value": 8,
+        "unit": "electron",
+        "source": "model"
+      }
+    },
+    "planes": {
+      "data": {
+        "encoding": "uint16-le"
+      }
+    },
+    "scale": {
+      "arcsecPerPixel": 1.2
+    },
+    "wcs": {
+      "ctype": [
+        "RA---TAN",
+        "DEC--TAN"
+      ],
+      "crpix": [
+        64.5,
+        48.5
+      ],
+      "crval": [
+        0,
+        0
+      ],
+      "cd": [
+        [
+          -0.0003333333333333333,
+          0
+        ],
+        [
+          0,
+          0.0003333333333333333
+        ]
+      ]
+    },
+    "calibration": {
+      "state": "raw"
+    },
+    "history": [
+      {
+        "step": "decode",
+        "tool": "tools/data-kinds-examples.mjs",
+        "version": "1",
+        "lossy": false
+      }
+    ],
+    "source": {
+      "kind": "synthetic",
+      "model": {
+        "name": "forward model ccd 1.0.0 (js/forward/models/ccd.js)",
+        "parameters": {
+          "seed": "dk-157",
+          "labels": [
+            "f1",
+            "f2"
+          ],
+          "exposureSeconds": 30,
+          "skyElectronsPerSecondPerPixel": 5,
+          "sources": [
+            {
+              "x": 40,
+              "y": 30,
+              "rate": 300
+            },
+            {
+              "x": 90,
+              "y": 60,
+              "rate": 150
+            },
+            {
+              "x": 64,
+              "y": 48,
+              "rate": 80
+            }
+          ],
+          "pixelScaleArcsec": 1.2,
+          "psfFwhmArcsec": 3,
+          "gain": 1.5,
+          "readNoise": 8,
+          "biasLevel": 500,
+          "cosmicRayRate": 0
+        }
+      }
+    }
+  },
+  "frames": [
+    {
+      "index": 0,
+      "time": {
+        "value": "2026-03-01T04:00:00Z",
+        "scale": "UTC",
+        "format": "iso",
+        "reference": "mid"
+      },
+      "exposure": {
+        "seconds": 30,
+        "kind": "nominal"
+      },
+      "part": {
+        "id": "forward-ccd-frame-0",
+        "url": "/tests/fixtures/dataKinds/frame-0.8cb000a01ac93626.bin",
+        "sha256": "8cb000a01ac93626afec2c00a304ff84b6824dffe89636621562d8217f1ba9de",
+        "bytes": 24576
+      }
+    },
+    {
+      "index": 1,
+      "time": {
+        "value": "2026-03-01T04:01:00Z",
+        "scale": "UTC",
+        "format": "iso",
+        "reference": "mid"
+      },
+      "exposure": {
+        "seconds": 30,
+        "kind": "nominal"
+      },
+      "part": {
+        "id": "forward-ccd-frame-1",
+        "url": "/tests/fixtures/dataKinds/frame-1.1e33cea18f141f35.bin",
+        "sha256": "1e33cea18f141f353db532dcd3fb0aa3e38d63b19e85c84dd42cf811cff5e1b2",
+        "bytes": 24576
+      }
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import { describe, test, expect } from '@jest/globals';
+import { Buffer } from 'node:buffer';
 import { readFileSync } from 'node:fs';
 
 import {
