@@ -479,6 +479,8 @@ export function gradeSubmission(
     submissionSchema: kind === 'backup' ? null : submission.v,
     backupVersion: backup.version ?? null,
     savedAt: backup.savedAt || null,
+    // When the backup says the lesson was first opened (the class summary's time).
+    startedAt: backup.progress?.startedAt || null,
     fallbackLocale: submission.fl || 'en',
     answerLocales: locales,
     visitedSteps: Math.min(visited, steps.length),
