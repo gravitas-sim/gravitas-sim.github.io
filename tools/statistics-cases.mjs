@@ -3082,11 +3082,15 @@ export const CASES = [
           )
         );
       }
-      // The exact coverage of the SHIPPED procedure over a range of rate x exposure:
-      // the coverage is piecewise constant in lambda between the interval ends of
-      // every count, so its minimum is found exactly at the midpoints between
-      // consecutive ends, with the Poisson probabilities from a log-factorial sum
-      // written here.
+      // The exact coverage of the SHIPPED procedure over a range of rate x exposure.
+      // The counts an interval includes at a given rate form a contiguous run (both
+      // ends of the interval rise with the count), so the coverage P(a <= N <= b;
+      // lambda) of each count's interval is unimodal in lambda and the minimum over
+      // a range lies at an edge of a piece, where a count enters or leaves the
+      // included run. The minimum is therefore evaluated just inside every interval
+      // end (1e-9 relative) and just inside the band ends, with the Poisson
+      // probabilities from a log-factorial sum written here. (Midpoints between
+      // ends would overstate it: 0.9612 against 0.9587 near lambda x T of 4.1.)
       const Nmax = 340;
       const ivs = Array.from({ length: Nmax + 1 }, (_, N) =>
         poissonInterval([N], { exposure: 1, level: 0.95 })
@@ -3102,15 +3106,15 @@ export const CASES = [
             cov += Math.exp(-lam + N * Math.log(lam) - lnFact[N]);
         return cov;
       };
+      const EDGE = 1e-9;
       const minCoverage = (a, b) => {
         const ends = [a, b];
         for (const iv of ivs)
           for (const e of [iv.lo, iv.hi]) if (e > a && e < b) ends.push(e);
-        ends.sort((x, y) => x - y);
         let min = 1;
-        for (let i = 0; i + 1 < ends.length; i++)
-          if (ends[i + 1] > ends[i])
-            min = Math.min(min, coverageAt(0.5 * (ends[i] + ends[i + 1])));
+        for (const e of ends)
+          for (const lam of [e * (1 - EDGE), e * (1 + EDGE)])
+            if (lam >= a && lam <= b) min = Math.min(min, coverageAt(lam));
         return min;
       };
       for (const [a, b, floor] of [
@@ -3123,7 +3127,7 @@ export const CASES = [
       ])
         out.push(
           measure(
-            `exact coverage of the shipped 95% procedure for rate x exposure from ${a} to ${b}: shortfall below the floor ${floor.toFixed(6)} (the minimum over every interval of constancy)`,
+            `exact coverage of the shipped 95% procedure for rate x exposure from ${a} to ${b}: shortfall below the floor ${floor.toFixed(6)} (the minimum, taken just inside every interval end)`,
             Math.max(0, floor - minCoverage(a, b)),
             0,
             0

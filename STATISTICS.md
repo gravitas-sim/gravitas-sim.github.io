@@ -560,12 +560,12 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | true rate 0.3: coverage of the 95% interval against the exact coverage 0.9964 | 0.9963 | 0.9964 ± 4e-3 | pass |
 |  |  | true rate 2: coverage of the 95% interval against the exact coverage 0.9834 | 0.9857 | 0.9834 ± 9e-3 | pass |
 |  |  | true rate 6: coverage of the 95% interval against the exact coverage 0.9626 | 0.9683 | 0.9626 ± 0.01386 | pass |
-|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 0.01 to 5: shortfall below the floor 0.949999 (the minimum over every interval of constancy) | 0 | = 0 | pass |
-|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 5 to 9.5: shortfall below the floor 0.949999 (the minimum over every interval of constancy) | 0 | = 0 | pass |
-|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 9.5 to 20: shortfall below the floor 0.949999 (the minimum over every interval of constancy) | 0 | = 0 | pass |
-|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 20 to 40: shortfall below the floor 0.949999 (the minimum over every interval of constancy) | 0 | = 0 | pass |
-|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 40 to 100: shortfall below the floor 0.940000 (the minimum over every interval of constancy) | 0 | = 0 | pass |
-|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 100 to 200: shortfall below the floor 0.940000 (the minimum over every interval of constancy) | 0 | = 0 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 0.01 to 5: shortfall below the floor 0.949999 (the minimum, taken just inside every interval end) | 0 | = 0 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 5 to 9.5: shortfall below the floor 0.949999 (the minimum, taken just inside every interval end) | 0 | = 0 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 9.5 to 20: shortfall below the floor 0.949999 (the minimum, taken just inside every interval end) | 0 | = 0 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 20 to 40: shortfall below the floor 0.949999 (the minimum, taken just inside every interval end) | 0 | = 0 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 40 to 100: shortfall below the floor 0.940000 (the minimum, taken just inside every interval end) | 0 | = 0 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 100 to 200: shortfall below the floor 0.940000 (the minimum, taken just inside every interval end) | 0 | = 0 | pass |
 | **I14** Coverage of the covariance and profile intervals on a model that is not linear | ensemble | covariance, 68.27%: coverage of tau | 0.688 | 0.6827 ± 0.1177 | pass |
 |  |  | profile, 68.27%: coverage of tau | 0.68 | 0.6827 ± 0.1177 | pass |
 |  |  | covariance, 95%: coverage of tau | 0.944 | 0.95 ± 0.05514 | pass |
