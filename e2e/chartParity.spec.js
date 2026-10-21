@@ -41,10 +41,14 @@ const FIXTURE = join(process.cwd(), 'tests', 'fixtures', 'chart-parity.json');
  * @returns {Promise<object|null>}
  */
 async function readComponent({ hostId, mod, accessor }) {
-  const host = document.getElementById(hostId);
-  const parts = (await import(mod))[accessor]();
-  if (!host || !parts) return null;
+  // Both imports first, then everything below runs without a gap. An import
+  // settles in a later task even when its module is loaded, and a chart
+  // redraws on the host's resize (the legend appearing shrinks the host).
+  const read = await import(mod);
   const { chartColors } = await import('/js/observationChart.js');
+  const host = document.getElementById(hostId);
+  let parts = read[accessor]();
+  if (!host || !parts) return null;
   const probe = document.body.appendChild(document.createElement('i'));
   const norm = c => {
     probe.style.color = '';
@@ -112,6 +116,11 @@ async function readComponent({ hostId, mod, accessor }) {
     button.click();
     toggles = before === 'true' && hidden === 'false';
   }
+  // Each click above redraws the chart at the host's size as it is now. When
+  // the host had resized and the chart's own observer had not redrawn yet (a
+  // legend that has just appeared), the ticks taken before the clicks are the
+  // old size's and no longer match the labels in the svg. Take them again.
+  parts = read[accessor]();
 
   // The error bars: the paths the measurements series drew, read against the
   // points beside them.
