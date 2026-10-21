@@ -107,7 +107,7 @@ The roadmap (outside the repository, like the first two) is executed in tranches
 
 This pull request authorizes T1A and the policies the register rows D-INT-02, D-R9-01 and D-R9-02 record, and nothing else. T1B is authorized only by 160's recorded outcome, T2 only by 192's, and each later tranche only by its continuation checkpoint's. A continuation checkpoint records one of six outcomes as a register row and a line here naming the tranche and what it may run: CONTINUE AS PLANNED; CONTINUE WITH NARROWED SCOPE; REORDER; DEFER A SPECIFIC DOMAIN; SUBSTITUTE A BETTER BOUNDED VERSION; MAINTENANCE / CONSOLIDATION ONLY. A green closeout, a READY verdict or landed prerequisites are never an authorization. A session verifies the authorization before any work and stops without it.
 
-**Recorded outcomes:** none yet. T1A is authorized; every later tranche is not.
+**Recorded outcomes:** Continuation checkpoint I (Prompt 160, 2026-10-21, register row D-R10-35, measured on `v3` at f7f0ab17): CONTINUE AS PLANNED. Tranche T1B (R11, R12 and R13, prompts 161 to 192) may run, each prompt under its own run condition and the byte, request and runner-minute draws the row records; the first-visit precache tier has 18 B of room, so a prompt that ships a new file under `js/` stops for Carl's decision on it. T2 (R14 and later) is not authorized: only 192's recorded outcome can authorize it. T1A is closed. The row is DELEGATED, pending Carl's ratification.
 
 ## Generated artifacts are regenerated, never hand-merged
 
