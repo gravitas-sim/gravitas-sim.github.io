@@ -449,6 +449,33 @@ const getSettingTooltip = async (key, label) => {
 };
 
 /**
+ * Motion: a preference of this device, applied at once and filled in by its
+ * own lazy module (js/motionControl.js).
+ *
+ * Its own function, not a few lines of buildSettingsMenu: the callback waiting
+ * for the module is held until the file arrives, and a closure made inside
+ * that function holds the function's whole scope - the previous build's
+ * Advanced section and every listener on it - for as long as a slow file takes.
+ * Made here, it holds the one empty row.
+ * @param {HTMLElement} grid - The panel's grid
+ */
+const addMotionRow = grid => {
+  const row = document.createElement('div');
+  row.className = 'settings-level';
+  grid.appendChild(row);
+  import('./motionControl.js').then(m =>
+    m.fillMotionRow(row, {
+      getLocale,
+      announce,
+      modes: MOTION_MODES,
+      preference: motionPreference,
+      setPreference: setMotionPreference,
+      pause: () => setPlaying(false),
+    })
+  );
+};
+
+/**
  * Build the Settings panel from js/settingsSchema.js.
  *
  * `keep` rebuilds it around the values already pending in the panel instead of
@@ -523,21 +550,7 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
   levelRow.append(levelLabel, levelSelect, levelHint);
   settingsGrid.appendChild(levelRow);
 
-  // Motion: a preference of this device, applied at once and filled in by its
-  // own lazy module (js/motionControl.js).
-  const motionRow = document.createElement('div');
-  motionRow.className = 'settings-level';
-  settingsGrid.appendChild(motionRow);
-  import('./motionControl.js').then(m =>
-    m.fillMotionRow(motionRow, {
-      getLocale,
-      announce,
-      modes: MOTION_MODES,
-      preference: motionPreference,
-      setPreference: setMotionPreference,
-      pause: () => setPlaying(false),
-    })
-  );
+  addMotionRow(settingsGrid);
 
   // The sections, in the schema's order. The advanced ones sit together in
   // one disclosure after the rest, closed until it is opened.
