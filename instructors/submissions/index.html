@@ -90,28 +90,35 @@
         text-align: left;
         font-variant-numeric: tabular-nums;
       }
+      .sr-sum-table th {
+        overflow-wrap: normal;
+      }
       .sr-fig {
         margin: var(--space-4) 0;
       }
-      /* Printing the summary alone: the button puts this class on the body. */
+      /* Printing the summary alone: the button puts this class on the body. The
+         page prints in the light scheme whatever its theme, in system colors. */
       @media print {
+        body.sr-print-summary {
+          color-scheme: light;
+          background: Canvas;
+          color: CanvasText;
+        }
         body.sr-print-summary > :not(main),
         body.sr-print-summary main > :not(.sr-summary),
-        .sr-noprint {
-          display: none !important;
+        .sr-summary .sr-noprint {
+          display: none;
         }
         body.sr-print-summary .sr-summary .ow-plot {
-          background: #fff;
-          color: #000;
+          background: none;
+          color: CanvasText;
         }
-        body.sr-print-summary .sr-summary .ow-axes line {
-          stroke: #000;
+        body.sr-print-summary .sr-summary .ow-axes line,
+        body.sr-print-summary .sr-summary .ow-bars line {
+          stroke: currentColor;
         }
         body.sr-print-summary .sr-summary .ow-pt {
-          fill: #000;
-        }
-        body.sr-print-summary .sr-summary .ow-bars line {
-          stroke: #444;
+          fill: currentColor;
         }
         body.sr-print-summary .sr-summary .ui-table-wrap {
           overflow: visible;
