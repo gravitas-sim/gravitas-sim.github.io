@@ -103,6 +103,14 @@ export function noteResume(item, store) {
     for (const k of ['step', 'path', 'title'])
       if (!(k in next) && k in before) next[k] = before[k];
   }
+  const top = items[0];
+  if (
+    top?.id === next.id &&
+    top.step === next.step &&
+    top.route === next.route &&
+    top.path?.id === next.path?.id
+  )
+    return true;
   return writeJson(
     RESUME_KEY,
     {
@@ -116,3 +124,10 @@ export function noteResume(item, store) {
     store
   );
 }
+
+/** A lesson was reached at a step (the lesson's own save calls this). */
+export const noteLesson = (id, step, store) =>
+  noteResume(
+    { id: `investigation:${id}`, route: `/#investigation=${id}`, step },
+    store
+  );
