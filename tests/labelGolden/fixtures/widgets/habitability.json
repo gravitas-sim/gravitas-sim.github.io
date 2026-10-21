@@ -1,0 +1,534 @@
+{
+ "hz-insolation": {
+  "en": {
+   "static": {
+    "title": "How much starlight reaches the planet?",
+    "note": "The star never changes. Only the planet moves. Everything is measured against what Earth receives from the Sun, which is one Earth unit.",
+    "controls": [{"id":"distance","label":"Distance from the star","unit":"AU","min":0.3,"max":3,"step":0.05,"value":1,"decimals":2}],
+    "presets": [{"label":"0.5 AU","values":{"distance":"0.5"},"note":"Half of Earth’s distance."},{"label":"1 AU","values":{"distance":"1"},"note":"Earth’s distance from the Sun."},{"label":"2 AU","values":{"distance":"2"},"note":"Twice Earth’s distance."},{"label":"3 AU","values":{"distance":"3"},"note":"Three times Earth’s distance."}],
+    "actions": [],
+    "defaults": {"distance":"1"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 27,
+   "readout": {
+    "calls": 27,
+    "distinct": 13,
+    "digest": "0085510cdb1f5acf",
+    "samples": [[{"label":"Distance from the star","value":"1.00 AU"},{"label":"Starlight reaching each square meter","value":"1.00 Earths","emphasis":true},{"label":"The same thing in physical units","value":"1361 W/m²"},{"label":"Earth, for comparison","value":"1.00 Earths at 1 AU"}],[{"label":"Distance from the star","value":"1.15 AU"},{"label":"Starlight reaching each square meter","value":"0.76 Earths","emphasis":true},{"label":"The same thing in physical units","value":"1029 W/m²"},{"label":"Earth, for comparison","value":"1.00 Earths at 1 AU"}],[{"label":"Distance from the star","value":"0.30 AU"},{"label":"Starlight reaching each square meter","value":"11.1 Earths","emphasis":true},{"label":"The same thing in physical units","value":"15122 W/m²"},{"label":"Earth, for comparison","value":"1.00 Earths at 1 AU"}],[{"label":"Distance from the star","value":"3.00 AU"},{"label":"Starlight reaching each square meter","value":"0.11 Earths","emphasis":true},{"label":"The same thing in physical units","value":"151 W/m²"},{"label":"Earth, for comparison","value":"1.00 Earths at 1 AU"}],[{"label":"Distance from the star","value":"1.65 AU"},{"label":"Starlight reaching each square meter","value":"0.37 Earths","emphasis":true},{"label":"The same thing in physical units","value":"500 W/m²"},{"label":"Earth, for comparison","value":"1.00 Earths at 1 AU"}]]
+   },
+   "canvas": {
+    "calls": 27,
+    "distinct": 13,
+    "digest": "0b95429bb9c4ce25",
+    "samples": [["1.00 AU","1.00 AU","0","1","2","3","distance from the star (AU)","what Earth gets","what Earth gets","1.00 Earths","1.00 Earths"],["3.00 AU","3.00 AU","0","1","2","3","distance from the star (AU)","what Earth gets","what Earth gets","0.11 Earths","0.11 Earths"],["0.30 AU","0.30 AU","0","1","2","3","distance from the star (AU)","what Earth gets","what Earth gets","11.1 Earths"],["0.50 AU","0.50 AU","0","1","2","3","distance from the star (AU)","what Earth gets","what Earth gets","4.00 Earths"]]
+   },
+   "controls": {
+    "calls": 27,
+    "distinct": 13,
+    "digest": "d6bd9385e5688a3d",
+    "samples": [["1.00 AU"],["0.30 AU"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "0ecd879ce202d8ee",
+    "samples": [{"preset":"0.5 AU","note":"Half of Earth’s distance."},{"preset":"1 AU","note":"Earth’s distance from the Sun."},{"preset":"2 AU","note":"Twice Earth’s distance."},{"preset":"3 AU","note":"Three times Earth’s distance."}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "¿Cuánta luz estelar llega al planeta?",
+    "note": "The star never changes. Only the planet moves. Everything is measured against what Earth receives from the Sun, which is one Earth unit.",
+    "controls": [{"id":"distance","label":"Distancia a la estrella","unit":"AU","min":0.3,"max":3,"step":0.05,"value":1,"decimals":2}],
+    "presets": [{"label":"0.5 AU","values":{"distance":"0.5"},"note":"La mitad de la distancia de la Tierra."},{"label":"1 AU","values":{"distance":"1"},"note":"La distancia de la Tierra al Sol."},{"label":"2 AU","values":{"distance":"2"},"note":"El doble de la distancia de la Tierra."},{"label":"3 AU","values":{"distance":"3"},"note":"Tres veces la distancia de la Tierra."}],
+    "actions": [],
+    "defaults": {"distance":"1"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 27,
+   "readout": {
+    "calls": 27,
+    "distinct": 13,
+    "digest": "05795f367924959d",
+    "samples": [[{"label":"Distancia a la estrella","value":"1.00 AU"},{"label":"Luz estelar que llega a cada metro cuadrado","value":"1.00 Earths","emphasis":true},{"label":"Lo mismo en unidades físicas","value":"1361 W/m²"},{"label":"La Tierra, como comparación","value":"1.00 Earths at 1 AU"}],[{"label":"Distancia a la estrella","value":"1.15 AU"},{"label":"Luz estelar que llega a cada metro cuadrado","value":"0.76 Earths","emphasis":true},{"label":"Lo mismo en unidades físicas","value":"1029 W/m²"},{"label":"La Tierra, como comparación","value":"1.00 Earths at 1 AU"}],[{"label":"Distancia a la estrella","value":"0.30 AU"},{"label":"Luz estelar que llega a cada metro cuadrado","value":"11.1 Earths","emphasis":true},{"label":"Lo mismo en unidades físicas","value":"15122 W/m²"},{"label":"La Tierra, como comparación","value":"1.00 Earths at 1 AU"}],[{"label":"Distancia a la estrella","value":"3.00 AU"},{"label":"Luz estelar que llega a cada metro cuadrado","value":"0.11 Earths","emphasis":true},{"label":"Lo mismo en unidades físicas","value":"151 W/m²"},{"label":"La Tierra, como comparación","value":"1.00 Earths at 1 AU"}],[{"label":"Distancia a la estrella","value":"1.65 AU"},{"label":"Luz estelar que llega a cada metro cuadrado","value":"0.37 Earths","emphasis":true},{"label":"Lo mismo en unidades físicas","value":"500 W/m²"},{"label":"La Tierra, como comparación","value":"1.00 Earths at 1 AU"}]]
+   },
+   "canvas": {
+    "calls": 27,
+    "distinct": 13,
+    "digest": "0b95429bb9c4ce25",
+    "samples": [["1.00 AU","1.00 AU","0","1","2","3","distance from the star (AU)","what Earth gets","what Earth gets","1.00 Earths","1.00 Earths"],["3.00 AU","3.00 AU","0","1","2","3","distance from the star (AU)","what Earth gets","what Earth gets","0.11 Earths","0.11 Earths"],["0.30 AU","0.30 AU","0","1","2","3","distance from the star (AU)","what Earth gets","what Earth gets","11.1 Earths"],["0.50 AU","0.50 AU","0","1","2","3","distance from the star (AU)","what Earth gets","what Earth gets","4.00 Earths"]]
+   },
+   "controls": {
+    "calls": 27,
+    "distinct": 13,
+    "digest": "d6bd9385e5688a3d",
+    "samples": [["1.00 AU"],["0.30 AU"]]
+   },
+   "phases": {
+    "calls": 4,
+    "distinct": 4,
+    "digest": "e0f1dcc997d78662",
+    "samples": [{"preset":"0.5 AU","note":"La mitad de la distancia de la Tierra."},{"preset":"1 AU","note":"La distancia de la Tierra al Sol."},{"preset":"2 AU","note":"El doble de la distancia de la Tierra."},{"preset":"3 AU","note":"Tres veces la distancia de la Tierra."}]
+   }
+  }
+ },
+ "hz-spreading": {
+  "en": {
+   "static": {
+    "title": "The same light, spread further",
+    "note": "The star is not running out of light. Watch the patch of light and the shell it lands on as the distance grows.",
+    "controls": [{"id":"shell","label":"Distance from the star","unit":"AU","min":1,"max":4,"step":1,"value":1,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"shell":"1"}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 7,
+   "readout": {
+    "calls": 7,
+    "distinct": 4,
+    "digest": "6a81dd0841b6c9c3",
+    "samples": [[{"label":"Distance from the star","value":"1 AU"},{"label":"The shell","value":"the reference, where Earth sits"},{"label":"So each square meter gets","value":"1.00 Earths, by definition","emphasis":true},{"label":"Total energy crossing the shell","value":"the same, always"}],[{"label":"Distance from the star","value":"4.00 AU"},{"label":"The shell is this many times bigger","value":"4 × 4 = 16×"},{"label":"So each square meter gets","value":"1 / 16 = 0.063 Earths","emphasis":true},{"label":"Total energy crossing the shell","value":"the same, always"}],[{"label":"Distance from the star","value":"3.00 AU"},{"label":"The shell is this many times bigger","value":"3 × 3 = 9×"},{"label":"So each square meter gets","value":"1 / 9 = 0.111 Earths","emphasis":true},{"label":"Total energy crossing the shell","value":"the same, always"}],[{"label":"Distance from the star","value":"2.00 AU"},{"label":"The shell is this many times bigger","value":"2 × 2 = 4×"},{"label":"So each square meter gets","value":"1 / 4 = 0.25 Earths","emphasis":true},{"label":"Total energy crossing the shell","value":"the same, always"}]]
+   },
+   "canvas": {
+    "calls": 7,
+    "distinct": 4,
+    "digest": "91eb4cb5de4d2860",
+    "samples": [["1 AU","1 AU","2 AU","2 AU","3 AU","3 AU","at 1 AU this is the patch Earth gets","at 1 AU this is the patch Earth gets","move out and watch it stretch","move out and watch it stretch"],["1 AU","1 AU","2 AU","2 AU","3 AU","3 AU","at 4 AU the same light covers 16x the area","at 4 AU the same light covers 16x the area","so each square meter gets 1/16","so each square meter gets 1/16"],["1 AU","1 AU","2 AU","2 AU","3 AU","3 AU","at 3 AU the same light covers 9x the area","at 3 AU the same light covers 9x the area","so each square meter gets 1/9","so each square meter gets 1/9"],["1 AU","1 AU","2 AU","2 AU","3 AU","3 AU","at 2 AU the same light covers 4x the area","at 2 AU the same light covers 4x the area","so each square meter gets 1/4","so each square meter gets 1/4"]]
+   },
+   "controls": {
+    "calls": 7,
+    "distinct": 4,
+    "digest": "f24e1e2f26cd2745",
+    "samples": [["1 AU"],["4 AU"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "La misma luz, repartida más lejos",
+    "note": "La estrella no se está quedando sin luz. Observa el trozo de luz y la cáscara sobre la que cae a medida que crece la distancia.",
+    "controls": [{"id":"shell","label":"Distancia a la estrella","unit":"AU","min":1,"max":4,"step":1,"value":1,"decimals":0}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"shell":"1"}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 7,
+   "readout": {
+    "calls": 7,
+    "distinct": 4,
+    "digest": "f1f7a070d34eada5",
+    "samples": [[{"label":"Distancia a la estrella","value":"1 AU"},{"label":"La cáscara","value":"the reference, where Earth sits"},{"label":"Así que cada metro cuadrado recibe","value":"1.00 Earths, by definition","emphasis":true},{"label":"Energía total que cruza la cáscara","value":"the same, always"}],[{"label":"Distancia a la estrella","value":"4.00 AU"},{"label":"La cáscara es esta cantidad de veces mayor","value":"4 × 4 = 16×"},{"label":"Así que cada metro cuadrado recibe","value":"1 / 16 = 0.063 Earths","emphasis":true},{"label":"Energía total que cruza la cáscara","value":"the same, always"}],[{"label":"Distancia a la estrella","value":"3.00 AU"},{"label":"La cáscara es esta cantidad de veces mayor","value":"3 × 3 = 9×"},{"label":"Así que cada metro cuadrado recibe","value":"1 / 9 = 0.111 Earths","emphasis":true},{"label":"Energía total que cruza la cáscara","value":"the same, always"}],[{"label":"Distancia a la estrella","value":"2.00 AU"},{"label":"La cáscara es esta cantidad de veces mayor","value":"2 × 2 = 4×"},{"label":"Así que cada metro cuadrado recibe","value":"1 / 4 = 0.25 Earths","emphasis":true},{"label":"Energía total que cruza la cáscara","value":"the same, always"}]]
+   },
+   "canvas": {
+    "calls": 7,
+    "distinct": 4,
+    "digest": "91eb4cb5de4d2860",
+    "samples": [["1 AU","1 AU","2 AU","2 AU","3 AU","3 AU","at 1 AU this is the patch Earth gets","at 1 AU this is the patch Earth gets","move out and watch it stretch","move out and watch it stretch"],["1 AU","1 AU","2 AU","2 AU","3 AU","3 AU","at 4 AU the same light covers 16x the area","at 4 AU the same light covers 16x the area","so each square meter gets 1/16","so each square meter gets 1/16"],["1 AU","1 AU","2 AU","2 AU","3 AU","3 AU","at 3 AU the same light covers 9x the area","at 3 AU the same light covers 9x the area","so each square meter gets 1/9","so each square meter gets 1/9"],["1 AU","1 AU","2 AU","2 AU","3 AU","3 AU","at 2 AU the same light covers 4x the area","at 2 AU the same light covers 4x the area","so each square meter gets 1/4","so each square meter gets 1/4"]]
+   },
+   "controls": {
+    "calls": 7,
+    "distinct": 4,
+    "digest": "f24e1e2f26cd2745",
+    "samples": [["1 AU"],["4 AU"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ },
+ "hz-star": {
+  "en": {
+   "static": {
+    "title": "The same planet, a different star",
+    "note": "The planet stays where you put it. Only the star changes. Watch both the incoming energy and, once it is shown, the band of distances where liquid water could be possible.",
+    "controls": [{"id":"star","label":"Star","unit":null,"min":0,"max":3,"step":1,"value":2,"decimals":null},{"id":"distance","label":"Planet’s distance","unit":"AU","min":0.02,"max":3,"step":0.02,"value":1,"decimals":2}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"star":"2","distance":"1"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 27,
+   "readout": {
+    "calls": 27,
+    "distinct": 23,
+    "digest": "744e050870885e7d",
+    "samples": [[{"label":"Star","value":"The Sun"},{"label":"Its luminosity","value":"1 Suns"},{"label":"Planet’s distance","value":"1.00 AU"},{"label":"Starlight the planet receives","value":"1.00 Earths","emphasis":true}],[{"label":"Star","value":"The Sun"},{"label":"Its luminosity","value":"1 Suns"},{"label":"Planet’s distance","value":"1.52 AU"},{"label":"Starlight the planet receives","value":"0.43 Earths","emphasis":true}],[{"label":"Star","value":"A dim red dwarf"},{"label":"Its luminosity","value":"0.0015 Suns"},{"label":"Planet’s distance","value":"0.02 AU"},{"label":"Starlight the planet receives","value":"3.75 Earths","emphasis":true}],[{"label":"Star","value":"A dim red dwarf"},{"label":"Its luminosity","value":"0.0015 Suns"},{"label":"Planet’s distance","value":"1.00 AU"},{"label":"Starlight the planet receives","value":"0.00 Earths","emphasis":true}],[{"label":"Star","value":"A hotter, brighter star"},{"label":"Its luminosity","value":"5.1 Suns"},{"label":"Planet’s distance","value":"3.00 AU"},{"label":"Starlight the planet receives","value":"0.57 Earths","emphasis":true}],[{"label":"Star","value":"A hotter, brighter star"},{"label":"Its luminosity","value":"5.1 Suns"},{"label":"Planet’s distance","value":"1.00 AU"},{"label":"Starlight the planet receives","value":"5.10 Earths","emphasis":true}],[{"label":"Star","value":"An orange dwarf"},{"label":"Its luminosity","value":"0.34 Suns"},{"label":"Planet’s distance","value":"1.00 AU"},{"label":"Starlight the planet receives","value":"0.34 Earths","emphasis":true}],[{"label":"Star","value":"An orange dwarf"},{"label":"Its luminosity","value":"0.34 Suns"},{"label":"Planet’s distance","value":"2.30 AU"},{"label":"Starlight the planet receives","value":"0.06 Earths","emphasis":true}],[{"label":"Star","value":"The Sun"},{"label":"Its luminosity","value":"1 Suns"},{"label":"Planet’s distance","value":"0.02 AU"},{"label":"Starlight the planet receives","value":"2500 Earths","emphasis":true}],[{"label":"Star","value":"A dim red dwarf"},{"label":"Its luminosity","value":"0.0015 Suns"},{"label":"Planet’s distance","value":"0.04 AU"},{"label":"Starlight the planet receives","value":"0.94 Earths","emphasis":true},{"label":"Habitable zone runs from","value":"0.0417 to 0.0805 AU"},{"label":"This planet is","value":"closer than the inner edge","emphasis":true}],[{"label":"Star","value":"A dim red dwarf"},{"label":"Its luminosity","value":"0.0015 Suns"},{"label":"Planet’s distance","value":"0.02 AU"},{"label":"Starlight the planet receives","value":"3.75 Earths","emphasis":true},{"label":"Habitable zone runs from","value":"0.0417 to 0.0805 AU"},{"label":"This planet is","value":"closer than the inner edge","emphasis":true}],[{"label":"Star","value":"A hotter, brighter star"},{"label":"Its luminosity","value":"5.1 Suns"},{"label":"Planet’s distance","value":"3.00 AU"},{"label":"Starlight the planet receives","value":"0.57 Earths","emphasis":true},{"label":"Habitable zone runs from","value":"2.11 to 3.58 AU"},{"label":"This planet is","value":"within the modeled zone","emphasis":true}],[{"label":"Star","value":"The Sun"},{"label":"Its luminosity","value":"1 Suns"},{"label":"Planet’s distance","value":"1.52 AU"},{"label":"Starlight the planet receives","value":"0.43 Earths","emphasis":true},{"label":"Habitable zone runs from","value":"0.982 to 1.69 AU"},{"label":"This planet is","value":"within the modeled zone","emphasis":true}]]
+   },
+   "canvas": {
+    "calls": 27,
+    "distinct": 23,
+    "digest": "6f2a838088e22433",
+    "samples": [["The Sun","The Sun","1.00 AU","1.00 AU","1.00 Earths of starlight","1.00 Earths of starlight","0","0.2","0.4","0.6","0.8","1.0","distance from the star (AU)"],["The Sun","The Sun","2.26 AU","2.26 AU","0.20 Earths of starlight","0.20 Earths of starlight","0","0.5","1.0","1.5","2.0","2.5","distance from the star (AU)"],["A dim red dwarf","A dim red dwarf","0.02 AU","0.02 AU","3.75 Earths of starlight","3.75 Earths of starlight","0","0.01","0.02","0.03","0.04","0.05","distance from the star (AU)"],["A hotter, brighter star","A hotter, brighter star","3.00 AU","3.00 AU","0.57 Earths of starlight","0.57 Earths of starlight","0","1","2","3","distance from the star (AU)"],["The Sun","The Sun","1.52 AU","1.52 AU","0.43 Earths of starlight","0.43 Earths of starlight","0","0.5","1.0","1.5","distance from the star (AU)"],["A dim red dwarf","A dim red dwarf","1.00 AU","1.00 AU","0.00 Earths of starlight","0.00 Earths of starlight","0","0.2","0.4","0.6","0.8","1.0","distance from the star (AU)"],["An orange dwarf","An orange dwarf","1.00 AU","1.00 AU","0.34 Earths of starlight","0.34 Earths of starlight","0","0.2","0.4","0.6","0.8","1.0","distance from the star (AU)"],["An orange dwarf","An orange dwarf","2.30 AU","2.30 AU","0.06 Earths of starlight","0.06 Earths of starlight","0","0.5","1.0","1.5","2.0","2.5","distance from the star (AU)"],["A hotter, brighter star","A hotter, brighter star","1.00 AU","1.00 AU","5.10 Earths of starlight","5.10 Earths of starlight","0","0.2","0.4","0.6","0.8","1.0","distance from the star (AU)"],["The Sun","The Sun","0.02 AU","0.02 AU","2500 Earths of starlight","2500 Earths of starlight","0","0.01","0.02","0.03","0.04","0.05","distance from the star (AU)"],["The Sun","The Sun","0.76 AU","0.76 AU","1.73 Earths of starlight","1.73 Earths of starlight","0","0.2","0.4","0.6","0.8","distance from the star (AU)"],["The Sun","The Sun","1.86 AU","1.86 AU","0.29 Earths of starlight","0.29 Earths of starlight","0","0.5","1.0","1.5","2.0","distance from the star (AU)"],["The Sun","The Sun","3.00 AU","3.00 AU","0.11 Earths of starlight","0.11 Earths of starlight","0","1","2","3","distance from the star (AU)"],["A dim red dwarf","A dim red dwarf","0.64 AU","0.64 AU","0.00 Earths of starlight","0.00 Earths of starlight","0","0.2","0.4","0.6","distance from the star (AU)"],["A dim red dwarf","A dim red dwarf","0.34 AU","0.34 AU","0.01 Earths of starlight","0.01 Earths of starlight","0","0.1","0.2","0.3","distance from the star (AU)"],["A hotter, brighter star","A hotter, brighter star","0.80 AU","0.80 AU","7.97 Earths of starlight","7.97 Earths of starlight","0","0.2","0.4","0.6","0.8","distance from the star (AU)"],["An orange dwarf","An orange dwarf","3.00 AU","3.00 AU","0.04 Earths of starlight","0.04 Earths of starlight","0","1","2","3","distance from the star (AU)"],["A dim red dwarf","A dim red dwarf","1.26 AU","1.26 AU","0.00 Earths of starlight","0.00 Earths of starlight","0","0.2","0.4","0.6","0.8","1.0","1.2","1.4","distance from the star (AU)"],["habitable zone","habitable zone","too much light","too much light","too little light","too little light","A dim red dwarf","A dim red dwarf","0.04 AU","0.04 AU","0.94 Earths of starlight","0.94 Earths of starlight","0","0.02","0.04","0.06","0.08","0.10","distance from the star (AU)"],["habitable zone","habitable zone","too much light","too much light","too little light","too little light","A dim red dwarf","A dim red dwarf","0.02 AU","0.02 AU","3.75 Earths of starlight","3.75 Earths of starlight","0","0.02","0.04","0.06","0.08","0.10","distance from the star (AU)"],["habitable zone","habitable zone","too much light","too much light","too little light","too little light","A hotter, brighter star","A hotter, brighter star","3.00 AU","3.00 AU","0.57 Earths of starlight","0.57 Earths of starlight","0","1","2","3","4","distance from the star (AU)"],["habitable zone","habitable zone","too much light","too much light","too little light","too little light","The Sun","The Sun","1.52 AU","1.52 AU","0.43 Earths of starlight","0.43 Earths of starlight","0","0.5","1.0","1.5","2.0","distance from the star (AU)"]]
+   },
+   "controls": {
+    "calls": 27,
+    "distinct": 20,
+    "digest": "b3ebf4557f1d63aa",
+    "samples": [["The Sun","1.00 AU"],["The Sun","1.52 AU"],["A dim red dwarf","0.02 AU"],["A dim red dwarf","1.00 AU"],["A hotter, brighter star","3.00 AU"],["A hotter, brighter star","1.00 AU"],["An orange dwarf","1.00 AU"],["An orange dwarf","2.30 AU"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "El mismo planeta, otra estrella",
+    "note": "The planet stays where you put it. Only the star changes. Watch both the incoming energy and, once it is shown, the band of distances where liquid water could be possible.",
+    "controls": [{"id":"star","label":"Estrella","unit":null,"min":0,"max":3,"step":1,"value":2,"decimals":null},{"id":"distance","label":"Distancia del planeta","unit":"AU","min":0.02,"max":3,"step":0.02,"value":1,"decimals":2}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"star":"2","distance":"1"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 27,
+   "readout": {
+    "calls": 27,
+    "distinct": 23,
+    "digest": "d804482e916288e8",
+    "samples": [[{"label":"Estrella","value":"El Sol"},{"label":"Su luminosidad","value":"1 Suns"},{"label":"Distancia del planeta","value":"1.00 AU"},{"label":"Luz estelar que recibe el planeta","value":"1.00 Earths","emphasis":true}],[{"label":"Estrella","value":"El Sol"},{"label":"Su luminosidad","value":"1 Suns"},{"label":"Distancia del planeta","value":"1.52 AU"},{"label":"Luz estelar que recibe el planeta","value":"0.43 Earths","emphasis":true}],[{"label":"Estrella","value":"Una enana roja tenue"},{"label":"Su luminosidad","value":"0.0015 Suns"},{"label":"Distancia del planeta","value":"0.02 AU"},{"label":"Luz estelar que recibe el planeta","value":"3.75 Earths","emphasis":true}],[{"label":"Estrella","value":"Una enana roja tenue"},{"label":"Su luminosidad","value":"0.0015 Suns"},{"label":"Distancia del planeta","value":"1.00 AU"},{"label":"Luz estelar que recibe el planeta","value":"0.00 Earths","emphasis":true}],[{"label":"Estrella","value":"Una estrella más caliente y más brillante"},{"label":"Su luminosidad","value":"5.1 Suns"},{"label":"Distancia del planeta","value":"3.00 AU"},{"label":"Luz estelar que recibe el planeta","value":"0.57 Earths","emphasis":true}],[{"label":"Estrella","value":"Una estrella más caliente y más brillante"},{"label":"Su luminosidad","value":"5.1 Suns"},{"label":"Distancia del planeta","value":"1.00 AU"},{"label":"Luz estelar que recibe el planeta","value":"5.10 Earths","emphasis":true}],[{"label":"Estrella","value":"Una enana naranja"},{"label":"Su luminosidad","value":"0.34 Suns"},{"label":"Distancia del planeta","value":"1.00 AU"},{"label":"Luz estelar que recibe el planeta","value":"0.34 Earths","emphasis":true}],[{"label":"Estrella","value":"Una enana naranja"},{"label":"Su luminosidad","value":"0.34 Suns"},{"label":"Distancia del planeta","value":"2.30 AU"},{"label":"Luz estelar que recibe el planeta","value":"0.06 Earths","emphasis":true}],[{"label":"Estrella","value":"El Sol"},{"label":"Su luminosidad","value":"1 Suns"},{"label":"Distancia del planeta","value":"0.02 AU"},{"label":"Luz estelar que recibe el planeta","value":"2500 Earths","emphasis":true}],[{"label":"Estrella","value":"Una enana roja tenue"},{"label":"Su luminosidad","value":"0.0015 Suns"},{"label":"Distancia del planeta","value":"0.04 AU"},{"label":"Luz estelar que recibe el planeta","value":"0.94 Earths","emphasis":true},{"label":"La zona habitable va de","value":"0.0417 to 0.0805 AU"},{"label":"Este planeta está","value":"closer than the inner edge","emphasis":true}],[{"label":"Estrella","value":"Una enana roja tenue"},{"label":"Su luminosidad","value":"0.0015 Suns"},{"label":"Distancia del planeta","value":"0.02 AU"},{"label":"Luz estelar que recibe el planeta","value":"3.75 Earths","emphasis":true},{"label":"La zona habitable va de","value":"0.0417 to 0.0805 AU"},{"label":"Este planeta está","value":"closer than the inner edge","emphasis":true}],[{"label":"Estrella","value":"Una estrella más caliente y más brillante"},{"label":"Su luminosidad","value":"5.1 Suns"},{"label":"Distancia del planeta","value":"3.00 AU"},{"label":"Luz estelar que recibe el planeta","value":"0.57 Earths","emphasis":true},{"label":"La zona habitable va de","value":"2.11 to 3.58 AU"},{"label":"Este planeta está","value":"within the modeled zone","emphasis":true}],[{"label":"Estrella","value":"El Sol"},{"label":"Su luminosidad","value":"1 Suns"},{"label":"Distancia del planeta","value":"1.52 AU"},{"label":"Luz estelar que recibe el planeta","value":"0.43 Earths","emphasis":true},{"label":"La zona habitable va de","value":"0.982 to 1.69 AU"},{"label":"Este planeta está","value":"within the modeled zone","emphasis":true}]]
+   },
+   "canvas": {
+    "calls": 27,
+    "distinct": 23,
+    "digest": "96cd5a16ee82fce4",
+    "samples": [["El Sol","El Sol","1.00 AU","1.00 AU","1.00 Earths of starlight","1.00 Earths of starlight","0","0.2","0.4","0.6","0.8","1.0","distance from the star (AU)"],["El Sol","El Sol","2.26 AU","2.26 AU","0.20 Earths of starlight","0.20 Earths of starlight","0","0.5","1.0","1.5","2.0","2.5","distance from the star (AU)"],["Una enana roja tenue","Una enana roja tenue","0.02 AU","0.02 AU","3.75 Earths of starlight","3.75 Earths of starlight","0","0.01","0.02","0.03","0.04","0.05","distance from the star (AU)"],["Una estrella más caliente y más brillante","Una estrella más caliente y más brillante","3.00 AU","3.00 AU","0.57 Earths of starlight","0.57 Earths of starlight","0","1","2","3","distance from the star (AU)"],["El Sol","El Sol","1.52 AU","1.52 AU","0.43 Earths of starlight","0.43 Earths of starlight","0","0.5","1.0","1.5","distance from the star (AU)"],["Una enana roja tenue","Una enana roja tenue","1.00 AU","1.00 AU","0.00 Earths of starlight","0.00 Earths of starlight","0","0.2","0.4","0.6","0.8","1.0","distance from the star (AU)"],["Una enana naranja","Una enana naranja","1.00 AU","1.00 AU","0.34 Earths of starlight","0.34 Earths of starlight","0","0.2","0.4","0.6","0.8","1.0","distance from the star (AU)"],["Una enana naranja","Una enana naranja","2.30 AU","2.30 AU","0.06 Earths of starlight","0.06 Earths of starlight","0","0.5","1.0","1.5","2.0","2.5","distance from the star (AU)"],["Una estrella más caliente y más brillante","Una estrella más caliente y más brillante","1.00 AU","1.00 AU","5.10 Earths of starlight","5.10 Earths of starlight","0","0.2","0.4","0.6","0.8","1.0","distance from the star (AU)"],["El Sol","El Sol","0.02 AU","0.02 AU","2500 Earths of starlight","2500 Earths of starlight","0","0.01","0.02","0.03","0.04","0.05","distance from the star (AU)"],["El Sol","El Sol","0.76 AU","0.76 AU","1.73 Earths of starlight","1.73 Earths of starlight","0","0.2","0.4","0.6","0.8","distance from the star (AU)"],["El Sol","El Sol","1.86 AU","1.86 AU","0.29 Earths of starlight","0.29 Earths of starlight","0","0.5","1.0","1.5","2.0","distance from the star (AU)"],["El Sol","El Sol","3.00 AU","3.00 AU","0.11 Earths of starlight","0.11 Earths of starlight","0","1","2","3","distance from the star (AU)"],["Una enana roja tenue","Una enana roja tenue","0.64 AU","0.64 AU","0.00 Earths of starlight","0.00 Earths of starlight","0","0.2","0.4","0.6","distance from the star (AU)"],["Una enana roja tenue","Una enana roja tenue","0.34 AU","0.34 AU","0.01 Earths of starlight","0.01 Earths of starlight","0","0.1","0.2","0.3","distance from the star (AU)"],["Una estrella más caliente y más brillante","Una estrella más caliente y más brillante","0.80 AU","0.80 AU","7.97 Earths of starlight","7.97 Earths of starlight","0","0.2","0.4","0.6","0.8","distance from the star (AU)"],["Una enana naranja","Una enana naranja","3.00 AU","3.00 AU","0.04 Earths of starlight","0.04 Earths of starlight","0","1","2","3","distance from the star (AU)"],["Una enana roja tenue","Una enana roja tenue","1.26 AU","1.26 AU","0.00 Earths of starlight","0.00 Earths of starlight","0","0.2","0.4","0.6","0.8","1.0","1.2","1.4","distance from the star (AU)"],["habitable zone","habitable zone","too much light","too much light","too little light","too little light","Una enana roja tenue","Una enana roja tenue","0.04 AU","0.04 AU","0.94 Earths of starlight","0.94 Earths of starlight","0","0.02","0.04","0.06","0.08","0.10","distance from the star (AU)"],["habitable zone","habitable zone","too much light","too much light","too little light","too little light","Una enana roja tenue","Una enana roja tenue","0.02 AU","0.02 AU","3.75 Earths of starlight","3.75 Earths of starlight","0","0.02","0.04","0.06","0.08","0.10","distance from the star (AU)"],["habitable zone","habitable zone","too much light","too much light","too little light","too little light","Una estrella más caliente y más brillante","Una estrella más caliente y más brillante","3.00 AU","3.00 AU","0.57 Earths of starlight","0.57 Earths of starlight","0","1","2","3","4","distance from the star (AU)"],["habitable zone","habitable zone","too much light","too much light","too little light","too little light","El Sol","El Sol","1.52 AU","1.52 AU","0.43 Earths of starlight","0.43 Earths of starlight","0","0.5","1.0","1.5","2.0","distance from the star (AU)"]]
+   },
+   "controls": {
+    "calls": 27,
+    "distinct": 20,
+    "digest": "e97142a947494bd2",
+    "samples": [["El Sol","1.00 AU"],["El Sol","1.52 AU"],["Una enana roja tenue","0.02 AU"],["Una enana roja tenue","1.00 AU"],["Una estrella más caliente y más brillante","3.00 AU"],["Una estrella más caliente y más brillante","1.00 AU"],["Una enana naranja","1.00 AU"],["Una enana naranja","2.30 AU"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ },
+ "hz-boundaries": {
+  "en": {
+   "static": {
+    "title": "Where the edges come from",
+    "note": "Two published definitions of the same zone. They differ in what atmospheric conditions they are willing to assume, not in how optimistic anyone feels.",
+    "controls": [{"id":"model","label":"Definition","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":null}],
+    "presets": [{"label":"Conservative","values":{"model":"0"},"note":"From a climate model: the inner edge is where a water-rich planet would lose its oceans to space, and the outer edge is the most a carbon-dioxide atmosphere can warm a surface."},{"label":"Optimistic","values":{"model":"1"},"note":"From the Solar System’s own history: Venus has had no surface water for about a billion years, and Mars appears to have had some early on. Those two facts bracket a wider zone."}],
+    "actions": [],
+    "defaults": {"model":"0"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 8,
+   "readout": {
+    "calls": 8,
+    "distinct": 2,
+    "digest": "817a3abf0c7cc244",
+    "samples": [[{"label":"Definition shown","value":"Conservative"},{"label":"Inner edge","value":"0.982 AU · Runaway Greenhouse"},{"label":"Outer edge","value":"1.69 AU · Maximum Greenhouse"},{"label":"Width of the zone","value":"0.708 AU","emphasis":true},{"label":"Earth sits at","value":"1.00 AU"}],[{"label":"Definition shown","value":"Optimistic"},{"label":"Inner edge","value":"0.751 AU · Recent Venus"},{"label":"Outer edge","value":"1.77 AU · Early Mars"},{"label":"Width of the zone","value":"1.02 AU","emphasis":true},{"label":"Earth sits at","value":"1.00 AU"}]]
+   },
+   "canvas": {
+    "calls": 8,
+    "distinct": 2,
+    "digest": "9adcf039c125b1d1",
+    "samples": [["optimistic","optimistic","conservative","conservative","Earth","Earth","Runaway Greenhouse  0.982 AU","Runaway Greenhouse  0.982 AU","Maximum Greenhouse  1.69 AU","Maximum Greenhouse  1.69 AU","0.0","0.5","1.0","1.5","2.0"],["optimistic","optimistic","conservative","conservative","Earth","Earth","Recent Venus  0.751 AU","Recent Venus  0.751 AU","Early Mars  1.77 AU","Early Mars  1.77 AU","0.0","0.5","1.0","1.5","2.0"]]
+   },
+   "controls": {
+    "calls": 8,
+    "distinct": 2,
+    "digest": "caba16cf442392e6",
+    "samples": [["Conservative"],["Optimistic"]]
+   },
+   "phases": {
+    "calls": 2,
+    "distinct": 2,
+    "digest": "6e3da70eb1562174",
+    "samples": [{"preset":"Conservative","note":"From a climate model: the inner edge is where a water-rich planet would lose its oceans to space, and the outer edge is the most a carbon-dioxide atmosphere can warm a surface."},{"preset":"Optimistic","note":"From the Solar System’s own history: Venus has had no surface water for about a billion years, and Mars appears to have had some early on. Those two facts bracket a wider zone."}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "De dónde salen los bordes",
+    "note": "Two published definitions of the same zone. They differ in what atmospheric conditions they are willing to assume, not in how optimistic anyone feels.",
+    "controls": [{"id":"model","label":"Definición","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":null}],
+    "presets": [{"label":"Conservadora","values":{"model":"0"},"note":"From a climate model: the inner edge is where a water-rich planet would lose its oceans to space, and the outer edge is the most a carbon-dioxide atmosphere can warm a surface."},{"label":"Optimista","values":{"model":"1"},"note":"From the Solar System’s own history: Venus has had no surface water for about a billion years, and Mars appears to have had some early on. Those two facts bracket a wider zone."}],
+    "actions": [],
+    "defaults": {"model":"0"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 8,
+   "readout": {
+    "calls": 8,
+    "distinct": 2,
+    "digest": "e347b3c500fb11bf",
+    "samples": [[{"label":"Definición mostrada","value":"Conservative"},{"label":"Borde interior","value":"0.982 AU · Runaway Greenhouse"},{"label":"Borde exterior","value":"1.69 AU · Maximum Greenhouse"},{"label":"Anchura de la zona","value":"0.708 AU","emphasis":true},{"label":"La Tierra está a","value":"1.00 AU"}],[{"label":"Definición mostrada","value":"Optimistic"},{"label":"Borde interior","value":"0.751 AU · Recent Venus"},{"label":"Borde exterior","value":"1.77 AU · Early Mars"},{"label":"Anchura de la zona","value":"1.02 AU","emphasis":true},{"label":"La Tierra está a","value":"1.00 AU"}]]
+   },
+   "canvas": {
+    "calls": 8,
+    "distinct": 2,
+    "digest": "9adcf039c125b1d1",
+    "samples": [["optimistic","optimistic","conservative","conservative","Earth","Earth","Runaway Greenhouse  0.982 AU","Runaway Greenhouse  0.982 AU","Maximum Greenhouse  1.69 AU","Maximum Greenhouse  1.69 AU","0.0","0.5","1.0","1.5","2.0"],["optimistic","optimistic","conservative","conservative","Earth","Earth","Recent Venus  0.751 AU","Recent Venus  0.751 AU","Early Mars  1.77 AU","Early Mars  1.77 AU","0.0","0.5","1.0","1.5","2.0"]]
+   },
+   "controls": {
+    "calls": 8,
+    "distinct": 2,
+    "digest": "caba16cf442392e6",
+    "samples": [["Conservative"],["Optimistic"]]
+   },
+   "phases": {
+    "calls": 2,
+    "distinct": 2,
+    "digest": "30f680edc07e09c0",
+    "samples": [{"preset":"Conservadora","note":"From a climate model: the inner edge is where a water-rich planet would lose its oceans to space, and the outer edge is the most a carbon-dioxide atmosphere can warm a surface."},{"preset":"Optimista","note":"From the Solar System’s own history: Venus has had no surface water for about a billion years, and Mars appears to have had some early on. Those two facts bracket a wider zone."}]
+   }
+  }
+ },
+ "hz-orbit": {
+  "en": {
+   "static": {
+    "title": "A year on an eccentric orbit",
+    "note": "The planet is not moving at a constant speed. It races through the part of its year closest to the star and takes far longer over the cold outer half, exactly as Kepler’s second law requires.",
+    "controls": [{"id":"ecc","label":"Eccentricity","unit":null,"min":0,"max":0.6,"step":0.01,"value":0,"decimals":2},{"id":"semi","label":"Semi-major axis","unit":"AU","min":0.6,"max":1.8,"step":0.05,"value":1.2,"decimals":2}],
+    "presets": [],
+    "actions": [{"id":"run","label":"Run / Pause"},{"id":"reset","label":"↺ Reset"}],
+    "defaults": {"ecc":"0","semi":"1.2"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 48,
+   "readout": {
+    "calls": 48,
+    "distinct": 26,
+    "digest": "4eb3644b50261472",
+    "samples": [[{"label":"Distance right now","value":"1.200 AU"},{"label":"Starlight right now","value":"0.69 Earths","emphasis":true},{"label":"Closest / furthest","value":"1.20 / 1.20 AU"},{"label":"Starlight at closest / furthest","value":"0.69 Earths / 0.69 Earths"}],[{"label":"Distance right now","value":"0.600 AU"},{"label":"Starlight right now","value":"2.78 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.60 / 0.60 AU"},{"label":"Starlight at closest / furthest","value":"2.78 Earths / 2.78 Earths"}],[{"label":"Distance right now","value":"0.260 AU"},{"label":"Starlight right now","value":"14.8 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.26 / 1.04 AU"},{"label":"Starlight at closest / furthest","value":"14.8 Earths / 0.92 Earths"}],[{"label":"Distance right now","value":"0.286 AU"},{"label":"Starlight right now","value":"12.2 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.29 / 1.01 AU"},{"label":"Starlight at closest / furthest","value":"12.2 Earths / 0.97 Earths"}],[{"label":"Distance right now","value":"0.660 AU"},{"label":"Starlight right now","value":"2.30 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.66 / 1.74 AU"},{"label":"Starlight at closest / furthest","value":"2.30 Earths / 0.33 Earths"},{"label":"Right now the planet is","value":"closer than the inner edge"},{"label":"Fraction of the year inside the zone","value":"56%","emphasis":true}],[{"label":"Distance right now","value":"0.720 AU"},{"label":"Starlight right now","value":"1.93 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.72 / 2.88 AU"},{"label":"Starlight at closest / furthest","value":"1.93 Earths / 0.12 Earths"},{"label":"Right now the planet is","value":"closer than the inner edge"},{"label":"Fraction of the year inside the zone","value":"18%","emphasis":true}],[{"label":"Distance right now","value":"0.600 AU"},{"label":"Starlight right now","value":"2.78 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.60 / 0.60 AU"},{"label":"Starlight at closest / furthest","value":"2.78 Earths / 2.78 Earths"},{"label":"Right now the planet is","value":"closer than the inner edge"},{"label":"Fraction of the year inside the zone","value":"0%","emphasis":true}],[{"label":"Distance right now","value":"1.609 AU"},{"label":"Starlight right now","value":"0.39 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.66 / 1.74 AU"},{"label":"Starlight at closest / furthest","value":"2.30 Earths / 0.33 Earths"},{"label":"Right now the planet is","value":"within the modeled zone"},{"label":"Fraction of the year inside the zone","value":"56%","emphasis":true}]]
+   },
+   "canvas": {
+    "calls": 48,
+    "distinct": 19,
+    "digest": "e92be931b7973f65",
+    "samples": [["one full year","starlight (Earths)","0.8","0"],["one full year","starlight (Earths)","3.2","0"],["one full year","starlight (Earths)","17.0","0"],["one full year","starlight (Earths)","14.1","0"],["habitable zone","habitable zone","one full year","starlight (Earths)","2.6","0"],["habitable zone","habitable zone","one full year","starlight (Earths)","3.2","0"]]
+   },
+   "controls": {
+    "calls": 48,
+    "distinct": 18,
+    "digest": "eee77cc393ceb092",
+    "samples": [["0.00","1.20 AU"],["0.00","0.60 AU"]]
+   },
+   "phases": {
+    "calls": 18,
+    "distinct": 12,
+    "digest": "0797b274d8258bbc",
+    "samples": [{"run":1},{"run":2},{"run":16},{"run":24},{"action":"run","after":"press","button":"Run / Pause"},{"action":"run","after":"step","button":"Run / Pause"},{"action":"run","after":"press again","button":"Run / Pause"},{"action":"reset","after":"press","button":"↺ Reset"},{"action":"reset","after":"step","button":"↺ Reset"},{"action":"reset","after":"press again","button":"↺ Reset"}]
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Un año en una órbita excéntrica",
+    "note": "The planet is not moving at a constant speed. It races through the part of its year closest to the star and takes far longer over the cold outer half, exactly as Kepler’s second law requires.",
+    "controls": [{"id":"ecc","label":"Excentricidad","unit":null,"min":0,"max":0.6,"step":0.01,"value":0,"decimals":2},{"id":"semi","label":"Semieje mayor","unit":"AU","min":0.6,"max":1.8,"step":0.05,"value":1.2,"decimals":2}],
+    "presets": [],
+    "actions": [{"id":"run","label":"Ejecutar / Pausar"},{"id":"reset","label":"↺ Reiniciar"}],
+    "defaults": {"ecc":"0","semi":"1.2"}
+   },
+   "precision": [],
+   "specs": 4,
+   "frames": 48,
+   "readout": {
+    "calls": 48,
+    "distinct": 26,
+    "digest": "19b9ab8fac990fa2",
+    "samples": [[{"label":"Distancia ahora mismo","value":"1.200 AU"},{"label":"Luz estelar ahora mismo","value":"0.69 Earths","emphasis":true},{"label":"Mínima / máxima","value":"1.20 / 1.20 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"0.69 Earths / 0.69 Earths"}],[{"label":"Distancia ahora mismo","value":"0.600 AU"},{"label":"Luz estelar ahora mismo","value":"2.78 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.60 / 0.60 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.78 Earths / 2.78 Earths"}],[{"label":"Distancia ahora mismo","value":"0.260 AU"},{"label":"Luz estelar ahora mismo","value":"14.8 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.26 / 1.04 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"14.8 Earths / 0.92 Earths"}],[{"label":"Distancia ahora mismo","value":"0.286 AU"},{"label":"Luz estelar ahora mismo","value":"12.2 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.29 / 1.01 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"12.2 Earths / 0.97 Earths"}],[{"label":"Distancia ahora mismo","value":"0.660 AU"},{"label":"Luz estelar ahora mismo","value":"2.30 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.66 / 1.74 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.30 Earths / 0.33 Earths"},{"label":"Ahora mismo el planeta está","value":"closer than the inner edge"},{"label":"Fracción del año dentro de la zona","value":"56%","emphasis":true}],[{"label":"Distancia ahora mismo","value":"0.720 AU"},{"label":"Luz estelar ahora mismo","value":"1.93 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.72 / 2.88 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"1.93 Earths / 0.12 Earths"},{"label":"Ahora mismo el planeta está","value":"closer than the inner edge"},{"label":"Fracción del año dentro de la zona","value":"18%","emphasis":true}],[{"label":"Distancia ahora mismo","value":"0.600 AU"},{"label":"Luz estelar ahora mismo","value":"2.78 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.60 / 0.60 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.78 Earths / 2.78 Earths"},{"label":"Ahora mismo el planeta está","value":"closer than the inner edge"},{"label":"Fracción del año dentro de la zona","value":"0%","emphasis":true}],[{"label":"Distancia ahora mismo","value":"1.609 AU"},{"label":"Luz estelar ahora mismo","value":"0.39 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.66 / 1.74 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.30 Earths / 0.33 Earths"},{"label":"Ahora mismo el planeta está","value":"within the modeled zone"},{"label":"Fracción del año dentro de la zona","value":"56%","emphasis":true}]]
+   },
+   "canvas": {
+    "calls": 48,
+    "distinct": 19,
+    "digest": "e92be931b7973f65",
+    "samples": [["one full year","starlight (Earths)","0.8","0"],["one full year","starlight (Earths)","3.2","0"],["one full year","starlight (Earths)","17.0","0"],["one full year","starlight (Earths)","14.1","0"],["habitable zone","habitable zone","one full year","starlight (Earths)","2.6","0"],["habitable zone","habitable zone","one full year","starlight (Earths)","3.2","0"]]
+   },
+   "controls": {
+    "calls": 48,
+    "distinct": 18,
+    "digest": "eee77cc393ceb092",
+    "samples": [["0.00","1.20 AU"],["0.00","0.60 AU"]]
+   },
+   "phases": {
+    "calls": 18,
+    "distinct": 12,
+    "digest": "2c77d19f688376f1",
+    "samples": [{"run":1},{"run":2},{"run":16},{"run":24},{"action":"run","after":"press","button":"Ejecutar / Pausar"},{"action":"run","after":"step","button":"Ejecutar / Pausar"},{"action":"run","after":"press again","button":"Ejecutar / Pausar"},{"action":"reset","after":"press","button":"↺ Reiniciar"},{"action":"reset","after":"step","button":"↺ Reiniciar"},{"action":"reset","after":"press again","button":"↺ Reiniciar"}]
+   }
+  }
+ },
+ "hz-trappist": {
+  "en": {
+   "static": {
+    "title": "TRAPPIST-1, all seven planets",
+    "note": "Every planet in this system orbits closer to its star than Mercury does to the Sun. The star is so faint that the habitable zone is in there with them.",
+    "controls": [{"id":"model","label":"Zone definition","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":null}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"model":"0"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 6,
+   "readout": {
+    "calls": 6,
+    "distinct": 2,
+    "digest": "3ec22cc356d495a3",
+    "samples": [[{"label":"Habitable zone","value":"0.0254 to 0.0499 AU","emphasis":true},{"label":"Planet b at 0.0115 AU","value":"4.18 Earths · closer than the inner edge"},{"label":"Planet c at 0.0158 AU","value":"2.22 Earths · closer than the inner edge"},{"label":"Planet d at 0.0223 AU","value":"1.11 Earths · closer than the inner edge"},{"label":"Planet e at 0.0292 AU","value":"0.65 Earths · within the modeled zone","emphasis":true},{"label":"Planet f at 0.0385 AU","value":"0.37 Earths · within the modeled zone","emphasis":true},{"label":"Planet g at 0.0469 AU","value":"0.25 Earths · within the modeled zone","emphasis":true},{"label":"Planet h at 0.0619 AU","value":"0.14 Earths · beyond the outer edge"}],[{"label":"Habitable zone","value":"0.0193 to 0.0534 AU","emphasis":true},{"label":"Planet b at 0.0115 AU","value":"4.18 Earths · closer than the inner edge"},{"label":"Planet c at 0.0158 AU","value":"2.22 Earths · closer than the inner edge"},{"label":"Planet d at 0.0223 AU","value":"1.11 Earths · within the modeled zone","emphasis":true},{"label":"Planet e at 0.0292 AU","value":"0.65 Earths · within the modeled zone","emphasis":true},{"label":"Planet f at 0.0385 AU","value":"0.37 Earths · within the modeled zone","emphasis":true},{"label":"Planet g at 0.0469 AU","value":"0.25 Earths · within the modeled zone","emphasis":true},{"label":"Planet h at 0.0619 AU","value":"0.14 Earths · beyond the outer edge"}]]
+   },
+   "canvas": {
+    "calls": 6,
+    "distinct": 4,
+    "digest": "419c57a69b828d45",
+    "samples": [["habitable zone (conservative)","habitable zone (conservative)","TRAPPIST-1","TRAPPIST-1","b","b","c","c","d","d","e","e","f","f","g","g","h","h","0","0.01","0.02","0.04","0.06","distance from the star (AU)"],["habitable zone (optimistic)","habitable zone (optimistic)","TRAPPIST-1","TRAPPIST-1","b","b","c","c","d","d","e","e","f","f","g","g","h","h","0","0.01","0.02","0.04","0.06","distance from the star (AU)"],["habitable zone (conservative)","habitable zone (conservative)","TRAPPIST-1","TRAPPIST-1","b","b","c","c","d","d","e","e","f","f","g","g","h","h","0","0.01","0.02","0.04","0.06","distance from the star (AU)","the same axis, with the Solar System on it","Mercury is at 0.387 AU, 6x further out than TRAPPIST-1h","Mercury is at 0.387 AU, 6x further out than TRAPPIST-1h","the whole system would fit inside Mercury’s orbit","the whole system would fit inside Mercury’s orbit"],["habitable zone (optimistic)","habitable zone (optimistic)","TRAPPIST-1","TRAPPIST-1","b","b","c","c","d","d","e","e","f","f","g","g","h","h","0","0.01","0.02","0.04","0.06","distance from the star (AU)","the same axis, with the Solar System on it","Mercury is at 0.387 AU, 6x further out than TRAPPIST-1h","Mercury is at 0.387 AU, 6x further out than TRAPPIST-1h","the whole system would fit inside Mercury’s orbit","the whole system would fit inside Mercury’s orbit"]]
+   },
+   "controls": {
+    "calls": 6,
+    "distinct": 2,
+    "digest": "caba16cf442392e6",
+    "samples": [["Conservative"],["Optimistic"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "TRAPPIST-1, los siete planetas",
+    "note": "Every planet in this system orbits closer to its star than Mercury does to the Sun. The star is so faint that the habitable zone is in there with them.",
+    "controls": [{"id":"model","label":"Definición de la zona","unit":null,"min":0,"max":1,"step":1,"value":0,"decimals":null}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"model":"0"}
+   },
+   "precision": [],
+   "specs": 3,
+   "frames": 6,
+   "readout": {
+    "calls": 6,
+    "distinct": 2,
+    "digest": "82264cdd5b2eea63",
+    "samples": [[{"label":"Zona habitable","value":"0.0254 to 0.0499 AU","emphasis":true},{"label":"Planet b at 0.0115 AU","value":"4.18 Earths · closer than the inner edge"},{"label":"Planet c at 0.0158 AU","value":"2.22 Earths · closer than the inner edge"},{"label":"Planet d at 0.0223 AU","value":"1.11 Earths · closer than the inner edge"},{"label":"Planet e at 0.0292 AU","value":"0.65 Earths · within the modeled zone","emphasis":true},{"label":"Planet f at 0.0385 AU","value":"0.37 Earths · within the modeled zone","emphasis":true},{"label":"Planet g at 0.0469 AU","value":"0.25 Earths · within the modeled zone","emphasis":true},{"label":"Planet h at 0.0619 AU","value":"0.14 Earths · beyond the outer edge"}],[{"label":"Zona habitable","value":"0.0193 to 0.0534 AU","emphasis":true},{"label":"Planet b at 0.0115 AU","value":"4.18 Earths · closer than the inner edge"},{"label":"Planet c at 0.0158 AU","value":"2.22 Earths · closer than the inner edge"},{"label":"Planet d at 0.0223 AU","value":"1.11 Earths · within the modeled zone","emphasis":true},{"label":"Planet e at 0.0292 AU","value":"0.65 Earths · within the modeled zone","emphasis":true},{"label":"Planet f at 0.0385 AU","value":"0.37 Earths · within the modeled zone","emphasis":true},{"label":"Planet g at 0.0469 AU","value":"0.25 Earths · within the modeled zone","emphasis":true},{"label":"Planet h at 0.0619 AU","value":"0.14 Earths · beyond the outer edge"}]]
+   },
+   "canvas": {
+    "calls": 6,
+    "distinct": 4,
+    "digest": "419c57a69b828d45",
+    "samples": [["habitable zone (conservative)","habitable zone (conservative)","TRAPPIST-1","TRAPPIST-1","b","b","c","c","d","d","e","e","f","f","g","g","h","h","0","0.01","0.02","0.04","0.06","distance from the star (AU)"],["habitable zone (optimistic)","habitable zone (optimistic)","TRAPPIST-1","TRAPPIST-1","b","b","c","c","d","d","e","e","f","f","g","g","h","h","0","0.01","0.02","0.04","0.06","distance from the star (AU)"],["habitable zone (conservative)","habitable zone (conservative)","TRAPPIST-1","TRAPPIST-1","b","b","c","c","d","d","e","e","f","f","g","g","h","h","0","0.01","0.02","0.04","0.06","distance from the star (AU)","the same axis, with the Solar System on it","Mercury is at 0.387 AU, 6x further out than TRAPPIST-1h","Mercury is at 0.387 AU, 6x further out than TRAPPIST-1h","the whole system would fit inside Mercury’s orbit","the whole system would fit inside Mercury’s orbit"],["habitable zone (optimistic)","habitable zone (optimistic)","TRAPPIST-1","TRAPPIST-1","b","b","c","c","d","d","e","e","f","f","g","g","h","h","0","0.01","0.02","0.04","0.06","distance from the star (AU)","the same axis, with the Solar System on it","Mercury is at 0.387 AU, 6x further out than TRAPPIST-1h","Mercury is at 0.387 AU, 6x further out than TRAPPIST-1h","the whole system would fit inside Mercury’s orbit","the whole system would fit inside Mercury’s orbit"]]
+   },
+   "controls": {
+    "calls": 6,
+    "distinct": 2,
+    "digest": "caba16cf442392e6",
+    "samples": [["Conservative"],["Optimistic"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ },
+ "hz-candidates": {
+  "en": {
+   "static": {
+    "title": "Three planets, similar starlight",
+    "note": "All three receive close to what Earth receives, and all three lie inside the modeled habitable zone. That is where the similarity ends.",
+    "controls": [{"id":"which","label":"Showing","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":null}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"which":"0"}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 6,
+   "readout": {
+    "calls": 6,
+    "distinct": 3,
+    "digest": "e5f88adccc8cf8cc",
+    "samples": [[{"label":"Planet A","value":"1.05 Earths · 1.0 R⊕","emphasis":true},{"label":"Planet B","value":"0.95 Earths · 1.1 R⊕"},{"label":"Planet C","value":"1.10 Earths · 1.6 R⊕"}],[{"label":"Planet A","value":"1.05 Earths · 1.0 R⊕"},{"label":"Planet B","value":"0.95 Earths · 1.1 R⊕"},{"label":"Planet C","value":"1.10 Earths · 1.6 R⊕","emphasis":true}],[{"label":"Planet A","value":"1.05 Earths · 1.0 R⊕"},{"label":"Planet B","value":"0.95 Earths · 1.1 R⊕","emphasis":true},{"label":"Planet C","value":"1.10 Earths · 1.6 R⊕"}]]
+   },
+   "canvas": {
+    "calls": 6,
+    "distinct": 3,
+    "digest": "9f86e32749ca4fb7",
+    "samples": [["Planet A","1.05 Earths  ·  1.0 Earth radii  ·  inside the modeled zone","Earth","Earth","·","Rocky, about Earth’s size","·","No atmosphere detected at current sensitivity","·","Host star is quiet","·","Nearly circular orbit"],["Planet C","1.10 Earths  ·  1.6 Earth radii  ·  inside the modeled zone","Earth","Earth","·","1.6 Earth radii, likely a thick hydrogen envelope","·","Atmosphere detected, very extended","·","Host star flares frequently","·","Nearly circular orbit"],["Planet B","0.95 Earths  ·  1.1 Earth radii  ·  inside the modeled zone","Earth","Earth","·","Rocky, slightly larger than Earth","·","Atmosphere detected, composition not yet measured","·","Host star is quiet","·","Nearly circular orbit"]]
+   },
+   "controls": {
+    "calls": 6,
+    "distinct": 3,
+    "digest": "145bdff37b495387",
+    "samples": [["Planet A"],["Planet C"],["Planet B"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  },
+  "es": {
+   "static": {
+    "title": "Tres planetas, luz estelar parecida",
+    "note": "All three receive close to what Earth receives, and all three lie inside the modeled habitable zone. That is where the similarity ends.",
+    "controls": [{"id":"which","label":"Mostrando","unit":null,"min":0,"max":2,"step":1,"value":0,"decimals":null}],
+    "presets": [],
+    "actions": [],
+    "defaults": {"which":"0"}
+   },
+   "precision": [],
+   "specs": 2,
+   "frames": 6,
+   "readout": {
+    "calls": 6,
+    "distinct": 3,
+    "digest": "221497286257c60d",
+    "samples": [[{"label":"Planeta A","value":"1.05 Earths · 1.0 R⊕","emphasis":true},{"label":"Planeta B","value":"0.95 Earths · 1.1 R⊕"},{"label":"Planeta C","value":"1.10 Earths · 1.6 R⊕"}],[{"label":"Planeta A","value":"1.05 Earths · 1.0 R⊕"},{"label":"Planeta B","value":"0.95 Earths · 1.1 R⊕"},{"label":"Planeta C","value":"1.10 Earths · 1.6 R⊕","emphasis":true}],[{"label":"Planeta A","value":"1.05 Earths · 1.0 R⊕"},{"label":"Planeta B","value":"0.95 Earths · 1.1 R⊕","emphasis":true},{"label":"Planeta C","value":"1.10 Earths · 1.6 R⊕"}]]
+   },
+   "canvas": {
+    "calls": 6,
+    "distinct": 3,
+    "digest": "b673a5c9b77ab0b8",
+    "samples": [["Planeta A","1.05 Earths  ·  1.0 Earth radii  ·  inside the modeled zone","Earth","Earth","·","Rocky, about Earth’s size","·","No atmosphere detected at current sensitivity","·","Host star is quiet","·","Nearly circular orbit"],["Planeta C","1.10 Earths  ·  1.6 Earth radii  ·  inside the modeled zone","Earth","Earth","·","1.6 Earth radii, likely a thick hydrogen envelope","·","Atmosphere detected, very extended","·","Host star flares frequently","·","Nearly circular orbit"],["Planeta B","0.95 Earths  ·  1.1 Earth radii  ·  inside the modeled zone","Earth","Earth","·","Rocky, slightly larger than Earth","·","Atmosphere detected, composition not yet measured","·","Host star is quiet","·","Nearly circular orbit"]]
+   },
+   "controls": {
+    "calls": 6,
+    "distinct": 3,
+    "digest": "08a4450d4e2ea6bc",
+    "samples": [["Planeta A"],["Planeta C"],["Planeta B"]]
+   },
+   "phases": {
+    "calls": 0,
+    "distinct": 0,
+    "digest": "4f53cda18c2baa0c",
+    "samples": []
+   }
+  }
+ }
+}

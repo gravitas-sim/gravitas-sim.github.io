@@ -97,3 +97,11 @@ if (typeof global.Blob === 'undefined' || !global.Blob.prototype.stream) {
 // not in cache" - when whenWidgetsReady() fetches every family at once and
 // many of them reach js/random/streams.js. A browser does not.
 await import('../js/random/streams.js');
+
+// The same race, one level up: js/kernels/cosmology/flrw.js and js/inference/
+// fit.js, which import the numeric routines, are reached by many families at
+// once - "request for '../numeric/linalg.js' is not in cache". Linking the two
+// importers here keeps that out of js/widgets.js, where a line costs every
+// reader of the catalog bytes the first-visit precache does not have.
+await import('../js/kernels/cosmology/flrw.js');
+await import('../js/inference/fit.js');
