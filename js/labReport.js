@@ -394,7 +394,10 @@ export function buildLabReport({
           : lessonPlain(step.prompt),
         plain(value)
       );
-      if (step.rubric && !step.reflect) {
+      // The marking note is the instructor's, so the report prints it only
+      // when the activity asked (`m` on the assignment, js/assignments/
+      // assignment.js); the answer key prints it always (F-8).
+      if (assignment?.m === 1 && step.rubric && !step.reflect) {
         doc.paragraph(t('rp.rubric', { note: lessonPlain(step.rubric) }), {
           size: 8.5,
           indent: 10,

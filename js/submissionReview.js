@@ -680,7 +680,7 @@ const criteriaFor = (r, q) =>
 const criterionHtml = (r, q, c, i) => {
   const m = marks.get(criterionKey(r.fingerprint, q.sid, c.n));
   const data = `data-fp="${esc(r.fingerprint)}" data-sid="${esc(q.sid)}" data-crit="${c.n}"`;
-  return `<fieldset class="sr-mark sr-criterion" data-kind="${c.kind}"><legend>${esc(c.name)}</legend>
+  return `<fieldset class="sr-mark sr-criterion" data-kind="${c.kind}"><legend>${esc(c.name)} (${esc(t(`sub.judge.kind.${c.kind}`))})</legend>
         <label for="mk-${i}-${c.n}">${esc(t('sub.judge.mark', { max: c.possible }))}</label>
         <input id="mk-${i}-${c.n}" class="ui-input is-compact" type="number" min="0" max="${c.possible}" step="0.5" ${data} data-field="mark" value="${esc(m?.points ?? '')}" />
         <label for="mc-${i}-${c.n}">${esc(t('sub.judge.comment'))}</label>

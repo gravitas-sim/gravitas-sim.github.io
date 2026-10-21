@@ -236,7 +236,10 @@ export function validateSelection(lesson, spec) {
 /**
  * Build the payload that becomes a link and a file.
  *
- * @param {object} params - lesson, chosen, title, intro, id, now, fingerprint
+ * @param {object} params - lesson, chosen, title, intro, id, now, fingerprint,
+ *   and, when set, provider, depth and markingNote (the lab report prints a
+ *   written answer's marking note for the student: off unless the instructor
+ *   asked)
  * @returns {object} The assignment payload
  */
 export function buildAssignment({
@@ -249,6 +252,7 @@ export function buildAssignment({
   fingerprint,
   provider = null,
   depth = null,
+  markingNote = false,
 }) {
   const resolved = resolveSelection(lesson, chosen, depth ?? undefined);
   const byId = new Map((lesson.steps || []).map(s => [s.sid, s]));
@@ -273,6 +277,11 @@ export function buildAssignment({
     ...(provider ? { p: [provider.id, provider.version] } : {}),
     // The depth it was set at: its steps stop there and the review says so.
     ...(depth ? { d: depth } : {}),
+    // The instructor's choice to print the marking note in the student's lab
+    // report (Prompt 172, F-8): written only when set, so every link made
+    // without it is byte for byte what it was. A build that does not know the
+    // field opens the link and prints the note as it always did.
+    ...(markingNote ? { m: 1 } : {}),
   };
 }
 
@@ -361,6 +370,7 @@ export function validateAssignment(data) {
     if (!ok) return fail('badPackage');
   }
   if (data.d !== undefined && !DEPTHS.includes(data.d)) return fail('badDepth');
+  if (data.m !== undefined && data.m !== 1) return fail('badMarkingNote');
   if ((data.t || '').length > MAX_TITLE) return fail('titleTooLong');
   if ((data.n || '').length > MAX_INTRO) return fail('introTooLong');
 

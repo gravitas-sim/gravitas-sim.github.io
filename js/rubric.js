@@ -11,14 +11,47 @@
 import { plainText } from './answerKey.js';
 
 /**
- * A step's rubric criteria as plain text: each a name and its levels, best
+ * What a criterion claims (Prompt 172): its `kind`, the depth it is marked
+ * from and its weight. The kinds, the default and the weight's top are held
+ * equal to js/instructorRubric.js's and js/platform/questionBank.js's by
+ * tests/rubricSemantics.test.js: this file serves the key and the build, and
+ * neither of those may import the review page's module for three constants.
+ */
+export const CRITERION_KINDS = Object.freeze([
+  'completion',
+  'correctness',
+  'reasoning',
+  'uncertainty',
+]);
+export const DEFAULT_CRITERION_KIND = 'reasoning';
+export const CRITERION_DEPTHS = Object.freeze([
+  'core',
+  'quantitative',
+  'advanced',
+]);
+export const MAX_CRITERION_WEIGHT = 10;
+
+/** Whether a criterion is marked at a depth: from its own `depth` deeper, or at every depth when it has none. */
+export const appliesAt = (criterion, depth) =>
+  !depth ||
+  !criterion?.depth ||
+  CRITERION_DEPTHS.indexOf(criterion.depth) <=
+    Math.max(0, CRITERION_DEPTHS.indexOf(depth));
+
+/**
+ * A step's rubric criteria as plain text: each a name, what it claims (`kind`,
+ * `reasoning` unless the author said otherwise), its `weight` (1 unless set),
+ * the `depth` it is marked from (null for every depth) and its levels, best
  * first, with the points a level is worth where the author gave them.
  * @param {Object} step - Step definition
- * @returns {Array<{name: string, levels: Array<{label: string, points: ?number, text: string}>}>}
+ * @returns {Array<{name: string, kind: string, weight: number, depth: ?string, levels: Array<{label: string, points: ?number, text: string}>}>}
  */
 export const criteriaOf = step =>
   (Array.isArray(step?.rubricCriteria) ? step.rubricCriteria : []).map(c => ({
     name: plainText(c?.name),
+    kind: CRITERION_KINDS.includes(c?.kind) ? c.kind : DEFAULT_CRITERION_KIND,
+    weight: Number.isFinite(c?.weight) && c.weight > 0 ? c.weight : 1,
+    depth: CRITERION_DEPTHS.includes(c?.depth) ? c.depth : null,
     levels: (Array.isArray(c?.levels) ? c.levels : []).map(l => ({
       label: plainText(l?.label),
       points: Number.isFinite(l?.points) ? l.points : null,
@@ -45,6 +78,21 @@ export function rubricProblems(step) {
   list.forEach((c, i) => {
     const at = `rubricCriteria[${i}]`;
     if (!plainText(c?.name)) out.push(`${at} has no name`);
+    if (c?.kind !== undefined && !CRITERION_KINDS.includes(c.kind))
+      out.push(`${at}.kind must be one of ${CRITERION_KINDS.join(', ')}`);
+    if (c?.depth !== undefined && !CRITERION_DEPTHS.includes(c.depth))
+      out.push(`${at}.depth must be one of ${CRITERION_DEPTHS.join(', ')}`);
+    if (
+      c?.weight !== undefined &&
+      !(
+        typeof c.weight === 'number' &&
+        c.weight > 0 &&
+        c.weight <= MAX_CRITERION_WEIGHT
+      )
+    )
+      out.push(
+        `${at}.weight must be a number above 0 and up to ${MAX_CRITERION_WEIGHT}`
+      );
     const levels = Array.isArray(c?.levels) ? c.levels : [];
     if (levels.length < 2 || levels.length > 5)
       out.push(`${at} needs two to five levels`);

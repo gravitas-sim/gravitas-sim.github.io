@@ -81,6 +81,10 @@
         }
       ]
     },
+    "m": {
+      "const": 1,
+      "description": "Written only when the instructor asked that the student's lab report print each written answer's marking note (Prompt 172); without it the report does not."
+    },
     "responses": false,
     "answers": false,
     "attempts": false,

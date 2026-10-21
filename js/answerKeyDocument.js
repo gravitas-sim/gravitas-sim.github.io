@@ -10,7 +10,7 @@
 
 import { createDocument } from './pdf.js';
 import { answerKeyFor, questionCounts, plainText } from './answerKey.js';
-import { criteriaOf } from './rubric.js';
+import { appliesAt, criteriaOf } from './rubric.js';
 import { labelsFor } from './data/instructorLabels.js';
 import { lessonAt } from './investigations/depthPure.js';
 
@@ -271,16 +271,33 @@ export function answerKeyDocument(
       doc.paragraph(e.rubric, { size: 9.5 });
     }
 
-    if (e.criteria?.length) {
+    // The criteria this key's reader marks: in a key for one depth, those
+    // marked from that depth or a shallower one (js/rubric.js).
+    const criteria = criteriaOf({ rubricCriteria: e.criteria }).filter(c =>
+      appliesAt(c, depth)
+    );
+    if (criteria.length) {
       doc.paragraph(
         e.reflect ? L('key.rubricOnReflection') : `${L('key.rubric')}:`,
         { size: 9, gap: 3, color: '0.35 0.35 0.42' }
       );
+      doc.paragraph(L('key.rubric.kindsNote'), {
+        size: 8.5,
+        gap: 3,
+        color: '0.4 0.4 0.46',
+      });
       doc.table({
         columns: [L('key.rubric.criterion'), L('key.rubric.levels')],
         widths: [1.4, 4.2],
-        rows: criteriaOf({ rubricCriteria: e.criteria }).map(c => [
-          c.name,
+        rows: criteria.map(c => [
+          `${c.name}\n${[
+            L(`key.rubric.kind.${c.kind}`),
+            L('key.rubric.weight', { weight: c.weight }),
+            c.depth &&
+              L('key.rubric.depthFrom', { depth: depthLabel(L, c.depth) }),
+          ]
+            .filter(Boolean)
+            .join(', ')}`,
           c.levels
             .map(
               l =>
