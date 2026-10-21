@@ -240,6 +240,12 @@ export const NEVER_PRECACHED = [
   // until it is: a module a page imports is installed, and its bytes are that
   // change's to find.
   /^js\/numeric\/(roots|interp|polyfit)\.js$/,
+  // The Worker pool (Prompt 153, WORKER_POOL.md): no shipped module imports it
+  // yet, so no page can fetch it and an install has no use for it, and the
+  // first-visit tier has 49 bytes of room (the adoption is a wait: its
+  // measured cost is in D-R10-30). Its first adopter deletes this entry, and
+  // tests/workerPoolAdoption.test.js fails until it is deleted.
+  /^js\/workers\/pool\.js$/,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

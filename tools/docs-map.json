@@ -800,6 +800,13 @@
       "student": false
     },
     {
+      "file": "WORKER_POOL.md",
+      "kind": "feature",
+      "purpose": "The Worker pool contract: typed jobs, generations, memory and concurrency caps, transfer, deterministic scheduling and per-job random streams.",
+      "owner": 153,
+      "student": false
+    },
+    {
       "file": "paper.md",
       "kind": "front-door",
       "purpose": "The JOSS-style summary paper.",

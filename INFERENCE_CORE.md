@@ -29,7 +29,11 @@ observatory page ── fit panel (lazy chunk) ── js/inference/run.js
   then one profile per fitted parameter) gets a fresh Worker from the
   experiment runner's scheduler, with its concurrency, timeouts,
   cancellation and progress (`createScheduler({ accept, message })`, which
-  now takes other task kinds than a trial).
+  now takes other task kinds than a trial). The Worker pool contract
+  (WORKER_POOL.md, Prompt 153) is this path's successor: the same machinery
+  with generations, memory caps across every Worker the page holds and
+  declared job sizes. The run is written as its client and proved identical to
+  this one, and waits for the budget decision that installs the pool.
 - **No world.** The realm imports the core and nothing else: no engine, no
   scene, no page. A fit cannot touch the simulation, and the engine was not
   refactored into instances (MULTI_WORLD_DECISION.md).
