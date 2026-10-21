@@ -56,6 +56,8 @@ import { activitiesOf, fragmentOf, readSource } from './teach/activity.js';
 import { gradebookModel, rosterMerges } from './gradebook/model.js';
 import { ADAPTERS } from './gradebook/index.js';
 import { criteriaPlan } from './instructorRubric.js';
+import { classSummary, classSummaryCsv } from './instructorSummary.js';
+import { drawMeasured, summaryHtml } from './instructorSummaryView.js';
 import {
   criterionKey,
   marksCsv,
@@ -156,6 +158,12 @@ const context = new Map();
 const contexts = [];
 /** Marks the instructor entered, by report and step. Never stored. */
 const marks = marksIndex();
+/**
+ * The lesson each report was graded against, by the report's fingerprint: its
+ * depth laid in, or the instructor's own version. The class summary reads the
+ * steps from it (misconceptions, criteria); `lessons` holds the raw lesson.
+ */
+const gradedAgainst = new Map();
 /** Whether the instructor has picked how to match students (then it is theirs). */
 let identifierChosen = false;
 
@@ -247,7 +255,9 @@ async function accept(label, thing, kind) {
   // The evidence behind the answers, checked against its digest here: the
   // table in front of the instructor is recomputed, not taken as stated.
   const evidence = await checkEvidence(submission.ev);
-  graded.push(gradeSubmission(submission, lesson, { kind, label, evidence }));
+  const record = gradeSubmission(submission, lesson, { kind, label, evidence });
+  graded.push(record);
+  gradedAgainst.set(record.fingerprint, lesson);
   render();
 }
 
@@ -842,6 +852,41 @@ function renderGradebook(records) {
   }
 }
 
+/** The steps of each lesson a report was graded against, by sid, once. */
+const stepIndexes = new WeakMap();
+
+/** The step a report was graded on, or null if its lesson is not known here. */
+function stepOf(record, sid) {
+  const lesson = gradedAgainst.get(record.fingerprint);
+  if (!lesson) return null;
+  if (!stepIndexes.has(lesson))
+    stepIndexes.set(lesson, new Map((lesson.steps || []).map(x => [x.sid, x])));
+  return stepIndexes.get(lesson).get(sid) ?? null;
+}
+
+/** The class summary of the reports read so far (Prompt 173). */
+const currentSummary = records => classSummary(records, { stepOf, marks });
+
+/** What the summary's markup and plots need from this page. */
+const summaryWords = () => ({
+  t,
+  number: num,
+  date: stamp(),
+  uncertainty: uncertaintyText,
+  origin: id =>
+    has(`sub.evidence.origin.${id}`) ? t(`sub.evidence.origin.${id}`) : id,
+});
+
+/** Draw the class summary, then its plots when the plot component arrives. */
+function renderSummary(records) {
+  const host = $('summary');
+  if (!host) return;
+  const summary = currentSummary(records);
+  const words = summaryWords();
+  host.innerHTML = summaryHtml(summary, words);
+  drawMeasured(host, summary, words);
+}
+
 function render() {
   const records = annotate(graded);
   const n = records.length;
@@ -909,6 +954,7 @@ function render() {
   $('evidence').innerHTML = evidenceSections(records) + systemSections(records);
   $('context').innerHTML = contextList();
   $('byActivity').innerHTML = byActivity(records);
+  renderSummary(records);
   $('judge').innerHTML = judgmentSection(records);
   renderGradebook(records);
 
@@ -1038,6 +1084,34 @@ async function exportGradebook(which) {
   }
 }
 
+/** Save the class summary as one CSV (Prompt 173). */
+function saveSummary() {
+  const records = annotate(graded);
+  if (!records.length) return say(t('sub.export.empty'));
+  const file = `gravitas-class-summary-${stamp()}.csv`;
+  download(
+    classSummaryCsv(currentSummary(records)),
+    file,
+    'text/csv;charset=utf-8'
+  );
+  say(t('sub.export.done', { file }));
+}
+
+/**
+ * Print the class summary alone: the page's print rules hide everything else
+ * while this class is on the body, and it comes off when printing ends.
+ */
+function printSummary() {
+  const body = document.body;
+  body.classList.add('sr-print-summary');
+  const done = () => {
+    body.classList.remove('sr-print-summary');
+    window.removeEventListener('afterprint', done);
+  };
+  window.addEventListener('afterprint', done);
+  window.print();
+}
+
 /** Save the instructor's marks as a file of their own. */
 function saveMarks() {
   const records = annotate(graded);
@@ -1096,6 +1170,7 @@ function judged(e) {
   if (summary)
     summary.textContent = t('sub.judge.summary', judgedCount(records));
   renderGradebook(records);
+  renderSummary(records);
 }
 
 /** Put every string in the chosen language. */
@@ -1144,6 +1219,7 @@ function wire() {
     context.clear();
     contexts.length = 0;
     marks.clear();
+    gradedAgainst.clear();
     judging = false;
     say('');
     render();
@@ -1160,6 +1236,10 @@ function wire() {
   $('exportMoodle')?.addEventListener('click', () => exportGradebook('moodle'));
   $('exportD2l')?.addEventListener('click', () => exportGradebook('d2l'));
   $('marksSave')?.addEventListener('click', saveMarks);
+  $('summary')?.addEventListener('click', e => {
+    if (e.target.closest?.('#sumCsv')) saveSummary();
+    else if (e.target.closest?.('#sumPrint')) printSummary();
+  });
   $('marksOpen')?.addEventListener('change', async e => {
     for (const file of e.target.files || []) await openMarks(file);
     e.target.value = '';
