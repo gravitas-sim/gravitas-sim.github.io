@@ -28,6 +28,8 @@
 // =============================================================================
 
 import { describe, expect, test, beforeAll, afterAll } from '@jest/globals';
+
+/* global document, URL -- jsdom's and node's, installed by the environment */
 import { JSDOM } from 'jsdom';
 import { readFileSync } from 'node:fs';
 import { webcrypto } from 'node:crypto';
