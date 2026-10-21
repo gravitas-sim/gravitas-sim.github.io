@@ -67,9 +67,18 @@ describe('the thresholds and periods are the committed ones', () => {
     expect(mergeJustified({ ...gain, target: null })).toBe(false);
     expect(mergeJustified({ ...gain, removesRoutes: 0 })).toBe(false);
     expect(mergeJustified({ ...gain, savingKb: 4.9 })).toBe(false);
-    expect(mergeJustified({ ...gain, savingKb: 0, choicesRemoved: 1 })).toBe(true);
-    expect(mergeJustified({ ...gain, savingKb: 0, duplicatedModules: 1 })).toBe(true);
+    expect(mergeJustified({ ...gain, savingKb: 0, choicesRemoved: 1 })).toBe(
+      true
+    );
+    expect(mergeJustified({ ...gain, savingKb: 0, duplicatedModules: 1 })).toBe(
+      true
+    );
     expect(mergeJustified({ ...gain, keepsRequestCeiling: false })).toBe(false);
+    // Unmeasured is not proven: the ceiling must be shown to hold.
+    expect(mergeJustified({ ...gain, keepsRequestCeiling: undefined })).toBe(
+      false
+    );
+    expect(mergeJustified({ ...gain, keepsRequestCeiling: null })).toBe(false);
     expect(mergeJustified(null)).toBe(false);
   });
 
@@ -90,7 +99,9 @@ describe('the thresholds and periods are the committed ones', () => {
         expect(phase.minorReleases).toBeGreaterThanOrEqual(1);
       }
     }
-    expect(supportClass({ exposure: { records: ['gravitas.made'] } })).toBe('R');
+    expect(supportClass({ exposure: { records: ['gravitas.made'] } })).toBe(
+      'R'
+    );
     expect(supportClass({ exposure: { stateLinks: ['?x='] } })).toBe('R');
     expect(supportClass({ exposure: { links: ['/a/'] } })).toBe('L');
     expect(supportClass({})).toBe('L');
@@ -99,65 +110,122 @@ describe('the thresholds and periods are the committed ones', () => {
 
 describe('every rule fires on its own case', () => {
   test('R0 an unanswered unique-task test keeps the surface', () => {
-    expect(verdict({ unique: 'UNKNOWN' })).toMatchObject({ verdict: 'KEEP', rule: 'R0' });
+    expect(verdict({ unique: 'UNKNOWN' })).toMatchObject({
+      verdict: 'KEEP',
+      rule: 'R0',
+    });
     expect(verdict({ unique: undefined })).toMatchObject({ rule: 'R0' });
   });
 
   test('R1 a destination page is kept whatever it costs and however little is linked', () => {
-    expect(verdict({ firstAction: true, cost: costly })).toMatchObject({ verdict: 'KEEP', rule: 'R1' });
+    expect(verdict({ firstAction: true, cost: costly })).toMatchObject({
+      verdict: 'KEEP',
+      rule: 'R1',
+    });
   });
 
   test('R2 a menu entry that is not a destination is grouped', () => {
-    expect(verdict({ menu: true, unique: 'yes' })).toMatchObject({ verdict: 'GROUP', rule: 'R2' });
+    expect(verdict({ menu: true, unique: 'yes' })).toMatchObject({
+      verdict: 'GROUP',
+      rule: 'R2',
+    });
   });
 
   test('R3 a unique task is kept, and frozen only when unused, unheld and costly', () => {
-    expect(verdict({ unique: 'yes', replacement: null })).toMatchObject({ verdict: 'KEEP', rule: 'R3b' });
-    expect(verdict({ unique: 'yes', cost: costly })).toMatchObject({ verdict: 'FREEZE', rule: 'R3a' });
-    expect(verdict({ unique: 'yes', cost: costly, use: used }).verdict).toBe('KEEP');
+    expect(verdict({ unique: 'yes', replacement: null })).toMatchObject({
+      verdict: 'KEEP',
+      rule: 'R3b',
+    });
+    expect(verdict({ unique: 'yes', cost: costly })).toMatchObject({
+      verdict: 'FREEZE',
+      rule: 'R3a',
+    });
+    expect(verdict({ unique: 'yes', cost: costly, use: used }).verdict).toBe(
+      'KEEP'
+    );
     expect(
-      verdict({ unique: 'yes', cost: costly, exposure: { ...none, records: ['r'] } }).verdict
+      verdict({
+        unique: 'yes',
+        cost: costly,
+        exposure: { ...none, records: ['r'] },
+      }).verdict
     ).toBe('KEEP');
     expect(
-      verdict({ unique: 'yes', cost: costly, exposure: { ...none, links: ['/x/'] } }).verdict
+      verdict({
+        unique: 'yes',
+        cost: costly,
+        exposure: { ...none, links: ['/x/'] },
+      }).verdict
     ).toBe('KEEP');
   });
 
   test('R4 no named replacement means nothing to point at', () => {
-    expect(verdict({ replacement: null })).toMatchObject({ verdict: 'KEEP', rule: 'R4' });
+    expect(verdict({ replacement: null })).toMatchObject({
+      verdict: 'KEEP',
+      rule: 'R4',
+    });
     expect(verdict({ unique: 'partly', replacement: '' }).rule).toBe('R4');
   });
 
   test('R5 fully replaced and unused is retired, in the class its exposure sets', () => {
-    expect(verdict({})).toMatchObject({ verdict: 'RETIRE', rule: 'R5', support: 'L' });
+    expect(verdict({})).toMatchObject({
+      verdict: 'RETIRE',
+      rule: 'R5',
+      support: 'L',
+    });
     expect(verdict({ exposure: { ...none, records: ['r'] } })).toMatchObject({
       verdict: 'RETIRE',
       support: 'R',
     });
-    expect(verdict({ exposure: { ...none, links: ['/old/'] } }).support).toBe('L');
+    expect(verdict({ exposure: { ...none, links: ['/old/'] } }).support).toBe(
+      'L'
+    );
   });
 
   test('R6 partly replaced and unused is frozen when it costs, kept when it does not', () => {
-    expect(verdict({ unique: 'partly', cost: costly })).toMatchObject({ verdict: 'FREEZE', rule: 'R6a' });
-    expect(verdict({ unique: 'partly' })).toMatchObject({ verdict: 'KEEP', rule: 'R6b' });
+    expect(verdict({ unique: 'partly', cost: costly })).toMatchObject({
+      verdict: 'FREEZE',
+      rule: 'R6a',
+    });
+    expect(verdict({ unique: 'partly' })).toMatchObject({
+      verdict: 'KEEP',
+      rule: 'R6b',
+    });
   });
 
   test('R7 used and replaceable consolidates only on a measured gain', () => {
-    expect(verdict({ use: used, merge: gain })).toMatchObject({ verdict: 'CONSOLIDATE', rule: 'R7', support: 'L' });
-    expect(verdict({ unique: 'partly', use: used, merge: gain }).verdict).toBe('CONSOLIDATE');
-    expect(verdict({ use: used, merge: { ...gain, savingKb: 1 } }).verdict).toBe('KEEP');
+    expect(verdict({ use: used, merge: gain })).toMatchObject({
+      verdict: 'CONSOLIDATE',
+      rule: 'R7',
+      support: 'L',
+    });
+    expect(verdict({ unique: 'partly', use: used, merge: gain }).verdict).toBe(
+      'CONSOLIDATE'
+    );
+    expect(
+      verdict({ use: used, merge: { ...gain, savingKb: 1 } }).verdict
+    ).toBe('KEEP');
   });
 
   test('R8 used, replaceable and no gain is frozen when it costs and kept when it does not', () => {
-    expect(verdict({ use: used, cost: costly })).toMatchObject({ verdict: 'FREEZE', rule: 'R8a' });
-    expect(verdict({ use: used })).toMatchObject({ verdict: 'KEEP', rule: 'R8b' });
+    expect(verdict({ use: used, cost: costly })).toMatchObject({
+      verdict: 'FREEZE',
+      rule: 'R8a',
+    });
+    expect(verdict({ use: used })).toMatchObject({
+      verdict: 'KEEP',
+      rule: 'R8b',
+    });
   });
 
   test('a surface in use is never retired by the function', () => {
     for (const unique of ['no', 'partly']) {
       for (const cost of [cheap, costly]) {
         expect(verdict({ unique, cost, use: used }).verdict).not.toBe('RETIRE');
-        expect(verdict({ unique, cost, use: { shippedLinks: 0, libraryEntries: 1 } }).verdict).not.toBe('RETIRE');
+        expect(
+          verdict({ unique, cost, use: { shippedLinks: 0, libraryEntries: 1 } })
+            .verdict
+        ).not.toBe('RETIRE');
       }
     }
   });
