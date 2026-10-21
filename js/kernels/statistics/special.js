@@ -25,7 +25,11 @@ const EPS = 1e-16;
 const CF_EPS = 4e-16;
 const TINY = 1e-300;
 
-/** The most iterations each routine has needed since the module loaded (a guard against lost convergence). */
+/**
+ * The most iterations each routine has needed since it was last zeroed (module
+ * state: a guard against lost convergence, which a test zeroes and then fills
+ * from its own grid, so its verdict does not depend on what ran before).
+ */
 export const iterationStats = {
   gammaSeries: 0,
   gammaFraction: 0,

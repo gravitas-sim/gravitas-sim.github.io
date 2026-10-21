@@ -50,7 +50,16 @@ function checkDraws(draws) {
 
 /** A uniform stream from a seed (named 'noise', labelled), or the stream given. */
 function uniformFrom(seed, label) {
-  if (typeof seed === 'function') return seed;
+  if (typeof seed === 'function') {
+    // A stream from js/random/streams.js names itself; a bare function could be
+    // a constant, and a constant stream makes every resample the same row.
+    if (!seed.stream)
+      throw new StatisticsError(
+        'seed',
+        'a seed function must be a named stream from js/random/streams.js'
+      );
+    return seed;
+  }
   if (seed === undefined || seed === null || seed === '')
     throw new StatisticsError(
       'seed',
@@ -74,6 +83,12 @@ function collector(draws) {
     },
     get samples() {
       return numbers ?? rows;
+    },
+    /** At least one draw is a finite number (an all-NaN statistic is not an answer). */
+    get usable() {
+      return numbers
+        ? numbers.some(Number.isFinite)
+        : rows.some(row => row.every(Number.isFinite));
     },
   };
 }
@@ -107,6 +122,8 @@ export function caseBootstrap({
     out.add(d, statistic(idx));
   }
   const identity = Int32Array.from({ length: n }, (_, i) => i);
+  if (!out.usable)
+    return refused('non-finite', 'every draw was NaN or infinite');
   return {
     status: 'ok',
     method: 'case-bootstrap',
@@ -158,6 +175,8 @@ export function residualBootstrap({
       y[i] = fit[i] + inflate * residuals[Math.floor(u() * n)];
     out.add(d, refit(y));
   }
+  if (!out.usable)
+    return refused('non-finite', 'every draw was NaN or infinite');
   return {
     status: 'ok',
     method: 'residual-bootstrap',
@@ -228,6 +247,8 @@ export function propagate({
     }
     out.add(d, fn(theta.slice()));
   }
+  if (!out.usable)
+    return refused('non-finite', 'every draw was NaN or infinite');
   return {
     status: 'ok',
     method: 'propagation',

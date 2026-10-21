@@ -54,14 +54,14 @@ export const METHODS = Object.freeze({
     label: 'Poisson exact (Garwood)',
     assumes: [
       'independent counts at a constant rate',
-      'conservative: the coverage is at least the stated level at any rate',
+      'conservative: the coverage is at least the stated level at any rate (mean 0.98 below a rate times exposure of 5)',
     ],
   },
   'poisson-profile': {
     label: 'Poisson profile deviance',
     assumes: [
       'independent counts at a constant rate',
-      'enough counts for the deviance to follow a chi-square on one degree of freedom (about 10 or more)',
+      'enough counts for the deviance to follow a chi-square on one degree of freedom: the exact coverage of the 95% interval dips to 0.934 near 19 counts and is within 0.5 points of nominal only from about 100 (STATISTICS.md has the table)',
     ],
   },
   percentile: {
@@ -228,23 +228,42 @@ export function studentInterval(samples, { level = 0.95 } = {}) {
   };
 }
 
-/** Below this many counts in all, the exact (Garwood) interval is used; from here the deviance one. */
-export const SMALL_COUNT = 10;
+/**
+ * Below this many counts in all, the exact (Garwood) interval is used; from here
+ * the deviance one. Chosen from the exact coverage table (STATISTICS.md): the
+ * deviance interval dips to 0.934 near 19 counts and to 0.939 at 20 to 40 (at a
+ * stated 0.95), and only from about 100 counts does the procedure stay within
+ * 0.5 points of nominal (minimum 0.9451 to a rate times exposure of 200).
+ */
+export const SMALL_COUNT = 100;
 
 /**
  * The rate of a Poisson process and its interval. The counts were taken in
  * equal exposures `exposure` each (or one exposure per count, as an array); the
  * rate is the sum of the counts over the total exposure, which is the maximum of
- * the likelihood exactly. Below SMALL_COUNT (10) counts in all the interval is
- * the exact one of Garwood (1936), from chi-square quantiles, which covers at
- * least the stated level at any rate (method `poisson-garwood`); the profile
- * deviance interval D = 2 (L - N - N ln (L / N)) < the chi-square quantile on
- * one degree of freedom under-covers there (at no counts its upper end is a
- * one-sided 85%, not 95%), so from 10 counts up that is used (method
- * `poisson-profile`). With no counts the lower end is 0 and the upper end is the
- * Garwood one.
+ * the likelihood exactly. The interval is, by `method`:
+ *
+ *  - 'auto' (the default): the exact interval of Garwood (1936), from chi-square
+ *    quantiles, below SMALL_COUNT (100) counts in all, the profile-deviance
+ *    interval D = 2 (L - N - N ln (L / N)) < the chi-square quantile on one
+ *    degree of freedom from there;
+ *  - 'garwood': Garwood at any count (it covers at least the stated level at
+ *    any rate, and is conservative: mean coverage 0.981 at a rate times exposure
+ *    below 5);
+ *  - 'profile': the deviance interval at any count (it under-covers at small
+ *    counts: at no counts its upper end is a one-sided 85%, not 95%, and at 19
+ *    counts the coverage dips to 0.934).
+ *
+ * Exact coverage of the 'auto' procedure at a stated 0.95, over every rate times
+ * exposure in each range (minimum, mean): 0.01 to 5: 0.9587, 0.9821; 5 to 9.5:
+ * 0.9559, 0.9686; 9.5 to 20: 0.9521, 0.9636; 20 to 40: 0.9502, 0.9598; 40 to
+ * 100: 0.9482, 0.9561; 100 to 200: 0.9451, 0.9507. The promised floor is 0.95 up
+ * to 40 (Garwood) and 0.94 to 200; above that nothing is claimed.
  */
-export function poissonInterval(counts, { exposure = 1, level = 0.95 } = {}) {
+export function poissonInterval(
+  counts,
+  { exposure = 1, level = 0.95, method = 'auto' } = {}
+) {
   const n = counts?.length ?? 0;
   if (n < 1) return refused('counts', 'there are no counts');
   if (!(level > 0 && level < 1))
@@ -274,9 +293,11 @@ export function poissonInterval(counts, { exposure = 1, level = 0.95 } = {}) {
       );
     T = exposure * n;
   }
+  if (method !== 'auto' && method !== 'garwood' && method !== 'profile')
+    return refused('method', 'the method is "auto", "garwood" or "profile"');
   const rate = N / T;
   const common = { status: 'ok', level, rate, total: N, exposure: T };
-  if (N < SMALL_COUNT) {
+  if (method === 'garwood' || (method === 'auto' && N < SMALL_COUNT)) {
     const alpha = (1 - level) / 2;
     return {
       ...common,

@@ -184,17 +184,14 @@ export function completenessCorrect({
   level = 0.95,
 }) {
   if (!observed?.length || observed.length !== completeness?.length)
-    throw new StatisticsError(
+    return refused(
       'length',
       'counts and completenesses must be lists of the same, non-zero length'
     );
   if (population !== 'poisson' && population !== 'fixed')
-    throw new StatisticsError(
-      'population',
-      'the population is "poisson" or "fixed"'
-    );
+    return refused('population', 'the population is "poisson" or "fixed"');
   if (!(level > 0 && level < 1))
-    throw new StatisticsError('level', 'the level is not between 0 and 1');
+    return refused('level', 'the level is not between 0 and 1');
   const bins = observed.map((n, i) => {
     const c = completeness[i];
     const base = { observed: n, completeness: c, corrected: null, sigma: null };
@@ -265,7 +262,9 @@ export function eddingtonShift({ observed, sigma, scale }) {
  * Euclidean space.
  */
 export const malmquistShift = ({ sigma, slope = 0.6 }) =>
-  -slope * Math.LN10 * sigma * sigma;
+  sigma > 0 && Number.isFinite(sigma) && Number.isFinite(slope)
+    ? -slope * Math.LN10 * sigma * sigma
+    : NaN;
 
 /**
  * The shift of the mean of a Gaussian population cut at z sigma above its mean

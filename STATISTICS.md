@@ -34,7 +34,7 @@ D-SAMPLER-01 and D-KERNEL-01..03 stand.
 | `intervals.js` | `covarianceInterval` | value +- z sigma, labelled `covariance`; refused for a sigma that is missing, negative or not finite | 190, 225 |
 | `intervals.js` | `profileInterval` | Where a chi-square profile stays within Delta chi-square of its minimum, by fit.js's `crossing`; a coverage sets Delta from chi-square on one degree of freedom, or Delta = 1 sets the coverage (68.27%); a side never reached is open (null) and flagged | 190, 217, 225, 256 |
 | `intervals.js` | `studentInterval` | The t interval of a mean; refused for a NaN or infinite value (`non-finite`) or constant values (`constant`) | 190, 261 |
-| `intervals.js` | `poissonInterval`, `SMALL_COUNT` | A Poisson rate (sum of counts over total exposure, the exact maximum) and its interval: the exact Garwood one below 10 counts in all (`poisson-garwood`, covers at least the level at any rate), the profile-deviance one from 10 (`poisson-profile`; below that it under-covers, a one-sided 85% at no counts); counts must be whole numbers (`counts`), exposures positive and one per count (`exposure`) | 229, 264 |
+| `intervals.js` | `poissonInterval`, `SMALL_COUNT` | A Poisson rate (sum of counts over total exposure, the exact maximum) and its interval. `method: 'auto'` (default) is the exact Garwood interval below 100 counts in all (`poisson-garwood`) and the profile-deviance interval from 100 (`poisson-profile`); `'garwood'` and `'profile'` force one at any count. Counts must be whole numbers (`counts`), exposures positive and one per count (`exposure`); the exact coverage of the procedure is tabulated below | 229, 264 |
 | `intervals.js` | `percentileInterval` | The central interval of draws, labelled with the scheme that made them; needs at least 2 / (1 - level) finite draws (`draws`) and reports how many it `dropped` | 190, 217 |
 | `resample.js` | `DRAW_BUDGET`, `StatisticsError` | The default (1,000) and maximum (20,000) draws; a draw count over the maximum throws code `budget`, one that is not a whole number code `draws` | 190 |
 | `resample.js` | `caseBootstrap` | Resample the rows with replacement, recompute a statistic; draws from the `noise` stream keyed by the seed (required: `seed` is thrown without one) and a `label` (default the method's name: two calls with the same seed and label give the same draws, so give each its own label); the stream's identity is in the result; `n` must be a whole number of at least 2 (`rows`) | 190, 217 |
@@ -85,8 +85,8 @@ degrees of freedom and is not offered here.
 | `covariance` | the model is linear in the parameters over the interval; the error bars are right, or were scaled by the reduced chi-square |
 | `profile` | Delta chi-square follows chi-square on one degree of freedom: a regular model, the truth inside the bounds; a coverage statement about repeated data, never a posterior probability |
 | `student-t` | independent normal values of unknown mean and variance |
-| `poisson-garwood` | independent counts at one rate; exact and conservative, used below 10 counts |
-| `poisson-profile` | independent counts at one rate, 10 or more for the chi-square limit (it under-covers below) |
+| `poisson-garwood` | independent counts at one rate; exact and conservative at every count (coverage at least the stated level, mean 0.98 below a rate times exposure of 5); used below 100 counts |
+| `poisson-profile` | independent counts at one rate, about 100 or more for the chi-square limit: used on its own it under-covers (a one-sided 85% at no counts, 0.934 at 19 counts) |
 | `case-bootstrap` | independent rows from one population; a smooth statistic (a mean is; a maximum is not); the percentile interval can under-cover at small n (Efron and Tibshirani 1993), and the case allows for it |
 | `residual-bootstrap` | the model is right and the residuals exchangeable |
 | `propagation` | jointly normal parameters with the covariance given; a linear function is exact, a strongly non-linear one is only as good as the normal |
@@ -172,7 +172,9 @@ detected everything). The five kinds:
   interval within the Monte Carlo error, the exact runs distribution against
   enumeration, and the selection-effects suite's own detection flag for flag;
 - ensemble: the coverage of every interval at its stated level and the
-  false-alarm rates of the tests, in bands of 4 binomial standard errors;
+  false-alarm rates of the tests, in bands of 4 binomial standard errors (the
+  bootstrap coverage case runs 1,000 samples and detects a shortfall below about
+  0.91);
 - negative: every refusal named above, and the measured reason for the F-test's;
 - authentic: the NIST/SEMATECH critical-value tables, Student's sleep data,
   Anscombe's quartet and Bortkiewicz's horse kicks, with published results the
@@ -202,6 +204,29 @@ table at the head of `tools/statistics-cases.mjs`, each with its reason:
 | `poissonGarwoodFloor` | 0.95 - 1e-6 | the exact coverage of the shipped 95% procedure for rate times exposure up to 40: it is Garwood there (a count of 100 or more has probability under 1e-14), whose guarantee is the stated level |
 | `poissonProfileFloor` | 0.94 | from 40 to 200 the deviance interval is in play; the promised floor is the measured minimum 0.9451 rounded down. Nothing is claimed above 200 |
 | `cfIterationBound` | 2,000 iterations | a continued fraction that needs more has lost its convergence (the cap is 100,000) |
+
+**Poisson coverage, measured.** The exact coverage of the shipped procedure
+(`poissonInterval` with `method: 'auto'`) at a stated 0.95, computed from the
+Poisson probabilities over every rate times exposure in each range (the
+coverage is constant between the interval ends of consecutive counts, so the
+minimum is exact; case I13):
+
+| Rate x exposure | 0.01 to 5 | 5 to 9.5 | 9.5 to 20 | 20 to 40 | 40 to 100 | 100 to 200 |
+| --- | --- | --- | --- | --- | --- | --- |
+| minimum | 0.9587 | 0.9559 | 0.9521 | 0.9502 | 0.9482 | 0.9451 |
+| mean | 0.9821 | 0.9686 | 0.9636 | 0.9598 | 0.9561 | 0.9507 |
+
+For comparison, with the switch at 10 (the first version) the minima were 0.9587,
+0.9460, 0.9340, 0.9390, 0.9422 and 0.9447: the deviance interval dips to 0.934
+near 19 counts and its coverage oscillates with the discreteness of the counts.
+**The switch is 100, not 10.** It is the smallest count at which the procedure
+stays within 0.5 points of nominal everywhere in the table (50 left 0.9426 between
+40 and 100); the cost is that between 10 and 100 counts the interval is Garwood,
+which is wider (mean coverage 0.96 rather than 0.95) and never short. The floor
+promised is 0.95 up to a rate times exposure of 40 (Garwood, to rounding) and 0.94
+to 200 (the measured minimum, rounded down); nothing is claimed above 200, where
+the deviance interval's coverage tends to 0.95 from below, and at levels other
+than 0.95 the table is not measured.
 
 The F-test sees only parameter counts and sums of squares, so `searched` and
 `boundary` are declarations the CALLER makes and the kernel cannot detect: a
@@ -329,8 +354,8 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | high end, bootstrap minus t, in SE of the mean | -5e-3 | 0 ± 0.09556 | pass |
 |  |  | standard deviation of the draws over the exact bootstrap SE, minus 1 | -2e-4 | 0 ± 0.02 | pass |
 |  |  | the estimate is the sample mean | 10.12 | 10.12 ± 1e-12 | pass |
-| **I8** Coverage of the bootstrap percentile interval on a fixed ensemble | ensemble | 95% percentile interval of a mean: shortfall below 0.95 (one-sided allowance for the known small-sample under-coverage) | 0 | 0 ± 0.06233 | pass |
-|  |  | 95% percentile interval of a mean: excess above 0.95 (4 standard errors, no allowance) | 0.01 | 0 ± 0.05033 | pass |
+| **I8** Coverage of the bootstrap percentile interval on a fixed ensemble | ensemble | 95% percentile interval of a mean: shortfall below 0.95 (one-sided allowance for the known small-sample under-coverage) | 0.013 | 0 ± 0.03957 | pass |
+|  |  | 95% percentile interval of a mean: excess above 0.95 (4 standard errors, no allowance) | 0 | 0 ± 0.02757 | pass |
 | **I9** Monte Carlo propagation of a covariance through a function | ensemble | mean of g | 5.005 | 5 ± 0.01893 | pass |
 |  |  | variance of g over the analytic, minus 1 | 6e-3 | 0 ± 0.04 | pass |
 |  |  | 95% interval, low end | 3.682 | 3.688 ± 0.05057 | pass |
@@ -502,11 +527,45 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | N = 5: high end against Garwood by Poisson sums | 11.67 | 11.67 ± 1e-9 | pass |
 |  |  | N = 9: low end against Garwood by Poisson sums | 4.115 | 4.115 ± 4e-10 | pass |
 |  |  | N = 9: high end against Garwood by Poisson sums | 17.08 | 17.08 ± 2e-9 | pass |
-|  |  | below 10 counts the method is labelled exact (poisson-garwood) | 1 | = 1 | pass |
-|  |  | from 10 counts it is the deviance interval (poisson-profile) | 1 | = 1 | pass |
+|  |  | below 100 counts in all the method is labelled exact (poisson-garwood): 99 counts | 1 | = 1 | pass |
+|  |  | from 100 counts it is the deviance interval (poisson-profile): 100 counts | 1 | = 1 | pass |
+|  |  | method: "profile" forces the deviance interval at 5 counts, "garwood" the exact one at 500 | 1 | = 1 | pass |
+|  |  | an unknown method is refused, code "method" | 1 | = 1 | pass |
+|  |  | N = 10: low end against Garwood by Poisson sums, relative | 2e-15 | 0 ± 1e-12 | pass |
+|  |  | N = 10: high end against Garwood by Poisson sums, relative | -3e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 11: low end against Garwood by Poisson sums, relative | 2e-15 | 0 ± 1e-12 | pass |
+|  |  | N = 11: high end against Garwood by Poisson sums, relative | 4e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 12: low end against Garwood by Poisson sums, relative | 3e-15 | 0 ± 1e-12 | pass |
+|  |  | N = 12: high end against Garwood by Poisson sums, relative | 4e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 13: low end against Garwood by Poisson sums, relative | -2e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 13: high end against Garwood by Poisson sums, relative | 2e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 14: low end against Garwood by Poisson sums, relative | 1e-15 | 0 ± 1e-12 | pass |
+|  |  | N = 14: high end against Garwood by Poisson sums, relative | -3e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 15: low end against Garwood by Poisson sums, relative | 2e-15 | 0 ± 1e-12 | pass |
+|  |  | N = 15: high end against Garwood by Poisson sums, relative | 0 | 0 ± 1e-12 | pass |
+|  |  | N = 16: low end against Garwood by Poisson sums, relative | 4e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 16: high end against Garwood by Poisson sums, relative | -2e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 17: low end against Garwood by Poisson sums, relative | -3e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 17: high end against Garwood by Poisson sums, relative | -8e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 18: low end against Garwood by Poisson sums, relative | 1e-15 | 0 ± 1e-12 | pass |
+|  |  | N = 18: high end against Garwood by Poisson sums, relative | 2e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 19: low end against Garwood by Poisson sums, relative | -1e-15 | 0 ± 1e-12 | pass |
+|  |  | N = 19: high end against Garwood by Poisson sums, relative | -2e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 20: low end against Garwood by Poisson sums, relative | 0 | 0 ± 1e-12 | pass |
+|  |  | N = 20: high end against Garwood by Poisson sums, relative | 2e-16 | 0 ± 1e-12 | pass |
+|  |  | N = 50: low end against Garwood by Poisson sums, relative | 0 | 0 ± 1e-10 | pass |
+|  |  | N = 50: high end against Garwood by Poisson sums, relative | -4e-16 | 0 ± 1e-10 | pass |
+|  |  | N = 99: low end against Garwood by Poisson sums, relative | -5e-15 | 0 ± 1e-10 | pass |
+|  |  | N = 99: high end against Garwood by Poisson sums, relative | 2e-15 | 0 ± 1e-10 | pass |
 |  |  | true rate 0.3: coverage of the 95% interval against the exact coverage 0.9964 | 0.9963 | 0.9964 ± 4e-3 | pass |
 |  |  | true rate 2: coverage of the 95% interval against the exact coverage 0.9834 | 0.9857 | 0.9834 ± 9e-3 | pass |
 |  |  | true rate 6: coverage of the 95% interval against the exact coverage 0.9626 | 0.9683 | 0.9626 ± 0.01386 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 0.01 to 5: shortfall below the floor 0.949999 (the minimum over every interval of constancy) | 0 | = 0 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 5 to 9.5: shortfall below the floor 0.949999 (the minimum over every interval of constancy) | 0 | = 0 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 9.5 to 20: shortfall below the floor 0.949999 (the minimum over every interval of constancy) | 0 | = 0 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 20 to 40: shortfall below the floor 0.949999 (the minimum over every interval of constancy) | 0 | = 0 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 40 to 100: shortfall below the floor 0.940000 (the minimum over every interval of constancy) | 0 | = 0 | pass |
+|  |  | exact coverage of the shipped 95% procedure for rate x exposure from 100 to 200: shortfall below the floor 0.940000 (the minimum over every interval of constancy) | 0 | = 0 | pass |
 | **I14** Coverage of the covariance and profile intervals on a model that is not linear | ensemble | covariance, 68.27%: coverage of tau | 0.688 | 0.6827 ± 0.1177 | pass |
 |  |  | profile, 68.27%: coverage of tau | 0.68 | 0.6827 ± 0.1177 | pass |
 |  |  | covariance, 95%: coverage of tau | 0.944 | 0.95 ± 0.05514 | pass |
@@ -533,6 +592,9 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | apply() without uniformFor throws code "uniform" when a draw is needed | 1 | = 1 | pass |
 |  |  | a selection given a null row includes nothing, without a TypeError | 1 | = 1 | pass |
 |  |  | malmquistCutShift with sigma <= 0 or z NaN is NaN | 2 | = 2 | pass |
+|  |  | caseBootstrap whose statistic is NaN on every draw is refused, code "non-finite" | 1 | = 1 | pass |
+|  |  | a seed that is a bare function (a constant stream) throws code "seed"; a named stream is accepted | 1 | = 1 | pass |
+|  |  | malmquistShift with sigma <= 0 is NaN, like malmquistCutShift and eddingtonShift | 2 | = 2 | pass |
 |  |  | the same seed and the same label give the same draws | 1 | = 1 | pass |
 |  |  | the same seed with a different label gives different draws | 1 | = 1 | pass |
 | **R7** Tail p values of the diagnostics, and of the selection and bias formulas, keep their digits | analytic | lag-one p of a ramp is above zero | 1 | = 1 | pass |
@@ -558,6 +620,8 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | n = NaN is refused, code "count" | 1 | = 1 | pass |
 |  |  | n = -1 is refused, code "count" | 1 | = 1 | pass |
 |  |  | c = NaN is refused, code "completeness" | 1 | = 1 | pass |
+|  |  | lists of different lengths are refused as a record, code "length" (not thrown) | 1 | = 1 | pass |
+|  |  | an unknown population is refused as a record, code "population" | 1 | = 1 | pass |
 |  |  | c below the floor is refused, code "completeness" | 1 | = 1 | pass |
 
 <!-- statistics-validation:end -->

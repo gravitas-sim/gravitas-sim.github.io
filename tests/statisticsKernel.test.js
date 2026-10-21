@@ -89,6 +89,9 @@ describe('the validation group', () => {
 
 describe('the continued fractions', () => {
   test('converge far under the cap on a grid of shapes and arguments', () => {
+    // The counters are module state: zero them so this grid alone decides.
+    for (const k of Object.keys(special.iterationStats))
+      special.iterationStats[k] = 0;
     const scales = [0.5, 1, 2.5, 10, 100, 1e3, 1e4];
     for (const a of scales)
       for (const f of [0.01, 0.5, 0.9, 1, 1.1, 2, 10, 100]) {
