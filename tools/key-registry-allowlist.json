@@ -25,6 +25,11 @@
     "js/data/instructorFlow.js": {
       "gravitas.instructor-flow": 1
     },
+    "js/dataKinds/contract.js": {
+      "gravitas.grid": 1,
+      "gravitas.image": 1,
+      "gravitas.image-sequence": 1
+    },
     "js/i18n/index.js": {
       "gravitas_locale": 1,
       "gravitasLocaleChanged": 1

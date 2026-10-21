@@ -29,6 +29,9 @@ import { LIMITS, checkFrame, residentFrames } from './limits.js';
 import { partProblems } from '../offlineParts.js';
 import { unusableWcs } from '../observatory/wcs.js';
 
+/** The units of the two noise terms, the one spelling of each. */
+export const GAIN_UNIT = 'electron/adu';
+export const READ_NOISE_UNIT = 'electron';
 export const IMAGE_FORMAT = 'gravitas.image';
 export const SEQUENCE_FORMAT = 'gravitas.image-sequence';
 export const GRID_FORMAT = 'gravitas.grid';
@@ -299,9 +302,9 @@ function checkPixels(p, add) {
     }
   }
   if (p.gain !== undefined)
-    checkNoiseTerm(p.gain, 'pixels.gain', 'electron/adu', 1, add);
+    checkNoiseTerm(p.gain, 'pixels.gain', GAIN_UNIT, 1, add);
   if (p.readNoise !== undefined)
-    checkNoiseTerm(p.readNoise, 'pixels.readNoise', 'electron', 0, add);
+    checkNoiseTerm(p.readNoise, 'pixels.readNoise', READ_NOISE_UNIT, 0, add);
 }
 
 function checkHistory(h, add) {

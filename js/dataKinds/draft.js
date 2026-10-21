@@ -12,6 +12,8 @@ import {
   photometryGaps,
   validateImage,
   FLUX_UNITS,
+  GAIN_UNIT,
+  READ_NOISE_UNIT,
   TIME_SCALES,
   IMAGE_FORMAT,
   FORMAT_VERSION,
@@ -55,13 +57,13 @@ export function draftSidecar(
   if (c.gain)
     pixels.gain = {
       value: c.gain.value,
-      unit: 'electron/adu',
+      unit: GAIN_UNIT,
       source: 'header',
     };
   if (c.readNoise)
     pixels.readNoise = {
       value: c.readNoise.value,
-      unit: 'electron',
+      unit: READ_NOISE_UNIT,
       source: 'header',
     };
   if (c.saturation)

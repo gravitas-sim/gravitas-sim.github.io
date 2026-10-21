@@ -268,7 +268,11 @@ describe('the data plane budget', () => {
   });
 
   test('a browser-probe ceiling with no measurement is "not measured", never a pass', () => {
-    const rows = judgeData(readDataBudget(), measure());
+    // Prompt 157 recorded the decoded-memory probe, so the ceiling is measured
+    // now; with its record taken away it is not, and it is not a pass.
+    const { decodedImageBytesPerPage, ...without } = measure();
+    expect(decodedImageBytesPerPage).toBe(67108864);
+    const rows = judgeData(readDataBudget(), without);
     const probe = rows.find(r => r.key === 'decodedImageBytesPerPage');
     expect(probe.status).toBe('not measured');
     expect(

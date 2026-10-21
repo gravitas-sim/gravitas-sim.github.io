@@ -148,6 +148,92 @@ bit 2 is on exactly the `NPIXSAP` pixels.
   either until it is asked for.
 - The next pack will find 8.2 KB of deferred room.
 
+## Image, image-sequence and grid kinds (Prompt 157)
+
+Three formats state what a picture, a stack of pictures and a table on axes are
+before anything reads one: `gravitas.image`, `gravitas.image-sequence` and
+`gravitas.grid`, version 1, each with a schema in `sdk/schemas/` and a row in
+FORMATS.md. A pack manifest carries them (`image.sidecar`, `sequence`, `grid`;
+`dataType` gains `image-sequence` and `grid`), and the runtime copy of a pack of
+the two new types must carry its document. The code is `js/dataKinds/`
+(`contract.js` validates, `planes.js` and `grid.js` read, `fits.js` reads a file,
+`fitsJob.js` and `fitsWorker.js` put that read on the Worker pool). **Nothing
+ships it yet:** the install excludes the directory (`NEVER_PRECACHED`, and
+`tests/dataKindsInstall.test.js` fails the day a shipped module imports it
+without deleting the entry), because the first-visit install has 18 bytes of
+room. `WORKER_POOL.md` and D-R10-32 say what the first adopter costs.
+
+The schemas state structure and the validator is the authority: arithmetic
+across fields, an order, a size against the page's memory and a rule that depends
+on another field's value are the validator's, and
+`tests/dataKindsFormats.test.js` lists exactly which refusals only it makes.
+
+### What a pixel is allowed to be used for
+
+A frame says what its pixels are (`pixels.unit`: counts, flux in a named unit,
+or bit flags). `permits(doc, use, frame)` answers `marking`, `photometry` or
+`astrometry`, with a code when it is no:
+
+| Code | Meaning |
+|---|---|
+| `display-only` | no pixel contract is stated (every pack that predates this one): marking only |
+| `not-flux` | the pixels are flags or a mask, not light |
+| `incomplete-contract` | photometry needs every one of the facts below, and the answer lists the missing ones |
+| `lossy-history` | the processing history contains a step that loses counts (clipping, rescaling to display levels) |
+| `no-wcs`, `wcs-unsupported`, `geometry-unrecorded` | astrometry needs a TAN world coordinate system and a recorded pixel scale |
+
+Photometry needs the unit, linearity, saturation level, noise (a variance plane,
+or a gain and read noise each with a source; an assumed value must say so),
+calibration state, time with its scale, and exposure. A flags image needs
+`pixels.bits` and `pixels.bitsSource`. A sequence has one shared frame shape
+with each frame's own time and exposure, in time order on one time scale, and
+every frame is a part by `js/offlineParts.js` (an immutable URL carrying the
+digest). A grid is dense (multilinear interpolation, never extrapolation) or
+keyed (its rows live in a pack's table and its cells tile them). Synthetic data
+must point at the manifest of its truth.
+
+### Bounds, before any allocation
+
+A frame is at most 8,192 pixels a side and 4,194,304 pixels, and it decodes to
+Float64 (8 bytes a pixel; a variance plane 8, a mask 2). The page may hold 64 MiB
+of decoded images, which is the 2,048-square frame twice and is
+`decodedImageBytesPerPage` in `tools/data-budget.json`; a sequence reports how
+many of its frames can be resident at once. A grid is at most 6 axes of 4,096
+and 4,194,304 values. `tools/decoded-memory-probe.mjs` (`npm run probe:decoded`)
+measured the Worker's sampled peak at 1.01 to 1.10 times the file plus the
+plane against the 1.25 written down beforehand
+(`tools/decoded-memory-results.json`).
+
+**The display rule:** a frame is drawn at no more than 1,024 pixels on a side by
+the block factor `ceil(max side / 1024)`, each drawn pixel the mean of a block.
+The drawn picture is for the eye; marks and measurements keep full-resolution
+FITS coordinates (`toFull`, `toDrawn`), so downsampling never changes a number.
+
+### A local FITS image
+
+`js/dataKinds/fits.js` reads one thing from a file a person chose on their own
+device: the first two-dimensional image, BITPIX 8, 16, 32, -32 or -64, with
+`BSCALE`, `BZERO` and `BLANK` applied, into a Float64 plane, and a TAN world
+coordinate system when the header has one. FITS from the network stays refused
+(D-VO-04). The reader trusts nothing in a header before it is checked: the
+file's size first; at most 16 header blocks and 8 units; every card printable
+ASCII; structural cards integer literals (a count that overflows is refused, not
+rounded); scale and coordinates finite; the pixel count and decoded bytes checked
+before the plane exists; units before the image walked by their declared sizes in
+exact integers. A cube, a tile-compressed image, BITPIX 64, random groups,
+a projection other than TAN, SIP or TPV distortion, a singular matrix, an
+ambiguous CD and PC pair, and an infinite pixel are each refused by a stable code
+(`DataKindError.code`). NaN is a blank. On the pool (`readFitsOnPool`) the header
+is checked on the page, the memory is declared as file plus plane, the buffer is
+transferred (the caller's copy is gone), and an `AbortSignal` cancels by
+terminating the realm. `tests/dataKinds.test.js` holds a 73-case adversarial
+corpus built by a builder that shares no code with the reader.
+
+An example of each kind from material the repository already holds is in
+`tests/fixtures/dataKinds/` (the TESS aperture mask, two frames of the forward
+CCD model, MIST isochrones as a keyed grid), written by
+`tools/data-kinds-examples.mjs`, judged by `tests/dataKindsExamples.test.js`.
+
 ## Series encodings
 
 `js/observation.js` decodes every pack's series, in the browser and in Node
@@ -448,7 +534,7 @@ rights are confirmed and recorded in the manifest.
 
 | What | Why |
 |---|---|
-| FITS in the browser | The reader (`tools/data-packs/fits.mjs`) is a developer tool, and the observatory does not import FITS (OBSERVATORY_WORKSPACE_DESIGN.md says why). A browser reader would need to refuse every form it doesn't read, and to be tested on files it hasn't seen. One precondition is met: the reader checks every header against the file before it allocates anything (VO_ARCHIVE_GATE.md, finding 4; `tests/fitsHeaderBounds.test.js`). |
+| FITS in the browser, shipped | The developer tool (`tools/data-packs/fits.mjs`) is not the browser's. The local-image reader `js/dataKinds/fits.js` exists and is proved, but nothing imports it and the install excludes it until a first adopter pays its bytes (D-R10-32); the Observatory does not import FITS (OBSERVATORY_WORKSPACE_DESIGN.md says why). A network FITS stays refused. The local reader refuses every form it does not read and is tested on a hostile corpus. One precondition is met: the reader checks every header against the file before it allocates anything (VO_ARCHIVE_GATE.md, finding 4; `tests/fitsHeaderBounds.test.js`). |
 | FITS images of more than two axes, tile compression, variable-length arrays, ASCII tables, repeated columns | The reader lists these in `unread` and refuses a request for one. It reads headers, the scalar binary-table columns of types L, B, I, J, K, E and D with `TSCAL`/`TZERO` applied, and two-dimensional images of every BITPIX but 64 with `BSCALE`/`BZERO` applied. |
 | A radial-velocity pack | The gate gave the HARPS HD 75289 series a B. It still needs ESO programme IDs in its credit and a confirmed time scale. It is not the TESS star, so it can't pair with this pack. It waits for a lesson that needs it. |
 | Student files as packs | A reader's CSV or JSON opens in the observatory, through a preview and a mapping in which every unit is chosen, as `origin: imported`. It is not a pack, and nothing turns one into one. |
