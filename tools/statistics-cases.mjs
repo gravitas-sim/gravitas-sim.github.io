@@ -50,6 +50,9 @@ import {
   chi2Cdf,
   chi2Quantile,
   tCdf,
+  tSf,
+  normalSf,
+  chi2Sf,
   tQuantile,
   fQuantile,
   fSf,
@@ -108,8 +111,43 @@ export const TOL = Object.freeze({
   identity: 1e-12,
   /** A rate that is a count over trials: this many binomial standard errors. */
   sigmas: 4,
-  /** The percentile bootstrap's known small-sample under-coverage (Efron 1987). */
-  bootstrapUnderCoverage: 0.012,
+  /**
+   * The lag-one z test uses the large-n null N(-1/n, 1/n); its exact level at
+   * n = 200 departs from 5% by O(1/n) (Bartlett 1946): one point is allowed.
+   */
+  lagOneNullApproximation: 0.01,
+  /**
+   * The Garwood interval is exact and conservative, the profile-deviance one is
+   * the large-count limit; they differ at O(1/N), under 1% for N >= 196.
+   */
+  garwood: 0.01,
+  /**
+   * The effective number of independent frequencies of a 100-point grid on 40
+   * points is between about 10 and 40, so the naive rate 1 - 0.95^k is between
+   * 0.40 and 0.87: 0.64 +- 0.25.
+   */
+  searchedPeriodRate: 0.25,
+  /**
+   * The bootstrap percentile interval against the t interval: the bootstrap SE
+   * is smaller by sqrt((n-1)/n) and the pivot is z (1.960) where t is 1.966, about
+   * 0.8% of the half-width, plus the sample skewness (order 1/sqrt n): 2% of one
+   * SE of the mean in all.
+   */
+  bootstrapPivot: 0.02,
+  /** The normal approximation of the runs test against the exact one at n = 60. */
+  normalApproxRuns: 0.03,
+  /**
+   * A residual sum of squares of a nested full model may exceed the reduced one
+   * by summation rounding; this relative excess is clamped to F = 0, more is
+   * refused as a worse nested model.
+   */
+  rssRounding: 1e-12,
+  /** Normal tail probabilities at 7, 9 and 12 sigma against the asymptotic series. */
+  tailRelative: 1e-8,
+  /** Student t tail probabilities against closed forms (1 and 2 dof). */
+  tSfRelative: 1e-10,
+  /** A continued fraction that needs more than this has lost its convergence (the cap is 100,000). */
+  cfIterationBound: 2000,
 });
 /** Four binomial standard errors of a rate p over N independent trials. */
 const band = (p, N) => TOL.sigmas * Math.sqrt((p * (1 - p)) / N);
@@ -236,6 +274,65 @@ const lineProblem = (x, y, sigma) =>
       hi: 1e3,
     }))
   );
+
+/** Exact binomial coverage of n/c within sqrt(n (1-c))/c of N, by the pmf recurrence. */
+function exactCoverage(N, c) {
+  let pmf = (1 - c) ** N;
+  let cov = 0;
+  for (let k = 0; k <= N; k++) {
+    if (Math.abs(k - N * c) <= Math.sqrt(k * (1 - c))) cov += pmf;
+    pmf *= ((N - k) / (k + 1)) * (c / (1 - c));
+  }
+  return cov;
+}
+
+/**
+ * The exact level of the runs test (two-sided p = 2 min(P(R <= r), P(R >= r)) < alpha)
+ * for n1 = n2 = m, from exact BigInt binomials: what the test's false-alarm rate on
+ * continuous noise about the median is, because the median splits them m and m.
+ */
+function exactRunsLevel(m, alpha) {
+  const C = (n, k) => {
+    if (k < 0 || k > n) return 0n;
+    let r = 1n;
+    for (let i = 1; i <= k; i++) r = (r * BigInt(n - k + i)) / BigInt(i);
+    return r;
+  };
+  const total = C(2 * m, m);
+  const n = 2 * m;
+  const count = Array.from({ length: n + 1 }, (_, r) =>
+    r < 2
+      ? 0n
+      : r % 2 === 0
+        ? 2n * C(m - 1, r / 2 - 1) ** 2n
+        : 2n * C(m - 1, (r - 1) / 2) * C(m - 1, (r - 1) / 2 - 1)
+  );
+  const pmf = count.map(c => Number((c * 10n ** 30n) / total) / 1e30);
+  let level = 0;
+  for (let r = 2; r <= n; r++) {
+    let few = 0;
+    let many = 0;
+    for (let q = 2; q <= n; q++) {
+      if (q <= r) few += pmf[q];
+      if (q >= r) many += pmf[q];
+    }
+    if (Math.min(1, 2 * Math.min(few, many)) < alpha) level += pmf[r];
+  }
+  return level;
+}
+
+/** The normal upper tail by its asymptotic series phi(z)/z (1 - 1/z^2 + 3/z^4 - ...), summed to its smallest term. */
+function qRef(z) {
+  let term = 1;
+  let sum = 1;
+  for (let k = 1; k < 200; k++) {
+    const next = (-term * (2 * k - 1)) / (z * z);
+    if (Math.abs(next) >= Math.abs(term)) break;
+    term = next;
+    sum += term;
+  }
+  return (pdfRef(z) / z) * sum;
+}
 
 /** Every arrangement of n1 ones and n2 zeros, counted by its number of runs. */
 function runsByEnumeration(n1, n2) {
@@ -507,7 +604,7 @@ export const CASES = [
     kind: 'authentic',
     title: 'Critical values from the NIST/SEMATECH tables',
     source:
-      'NIST/SEMATECH e-Handbook of Statistical Methods, sections 1.3.6.7.1 (normal), 1.3.6.7.2 (t), 1.3.6.7.3 (chi-square) and 1.3.6.7.3 (F, upper 5%), printed to three decimals',
+      'NIST/SEMATECH e-Handbook of Statistical Methods, sections 1.3.6.7.1 (normal CDF), 1.3.6.7.2 (Student t), 1.3.6.7.3 (F, upper 5%) and 1.3.6.7.4 (chi-square), printed to three decimals',
     why: 'The tables were computed by other people with other code; they fix the quantiles at the values every statistics course teaches.',
     run() {
       const out = [];
@@ -856,13 +953,13 @@ export const CASES = [
             `N = ${N}: low end over the Garwood low end, minus 1`,
             iv.lo / gl - 1,
             0,
-            0.01
+            TOL.garwood
           ),
           measure(
             `N = ${N}: high end over the Garwood high end, minus 1`,
             iv.hi / gh - 1,
             0,
-            0.01
+            TOL.garwood
           )
         );
       }
@@ -956,7 +1053,7 @@ export const CASES = [
       // Allowance for the pivot: the bootstrap SE is smaller by sqrt((n-1)/n),
       // and z is 1.960 where t is 1.966: about 0.8% of the half-width, plus the
       // sample's skewness (order 1/sqrt n of the half-width): 2% of one SE.
-      const pivot = 0.02 * se;
+      const pivot = TOL.bootstrapPivot * se;
       const sn = Math.sqrt(
         data.reduce((a, v) => a + (v - mean(data)) ** 2, 0) / n
       );
@@ -1020,7 +1117,7 @@ export const CASES = [
           '95% percentile interval of a mean: coverage',
           hit / trials,
           0.95,
-          band(0.95, trials) + TOL.bootstrapUnderCoverage
+          band(0.95, trials)
         ),
       ];
     },
@@ -1155,7 +1252,7 @@ export const CASES = [
           'standard deviation of the bootstrapped slopes over sigma sqrt(C_bb), minus 1',
           sd(run.samples) / expected - 1,
           0,
-          TOL.sigmas / Math.sqrt(2 * B) + 0.02
+          TOL.sigmas / Math.sqrt(2 * B)
         ),
         measure(
           'the draws are centred on the fitted slope, in SE',
@@ -1308,7 +1405,7 @@ export const CASES = [
       const iv = studentInterval(d, { level: 0.95 });
       const se = sd(d) / Math.sqrt(d.length);
       const t = mean(d) / se;
-      const p = 2 * (1 - tCdf(Math.abs(t), 9));
+      const p = 2 * tSf(Math.abs(t), 9);
       return [
         measure('mean difference', iv.value, 1.58, 1e-9),
         measure('degrees of freedom', iv.dof, 9, 0),
@@ -1433,7 +1530,7 @@ export const CASES = [
           'exact against normal two-sided p at n = 60',
           ap.pTwoSided - ex.pTwoSided,
           0,
-          0.03
+          TOL.normalApproxRuns
         ),
       ];
     },
@@ -1509,18 +1606,19 @@ export const CASES = [
         if (normalProbability(g).correlation > normalProbability(e).correlation)
           better++;
       }
+      const runsLevel = exactRunsLevel(50, 0.05);
       return [
         measure(
-          'runs test about the median, white noise: rate flagged at 5%',
+          'runs test about the median, white noise: rate flagged at 5% (the exact level of the discrete test at 50 and 50)',
           runsHit / trials,
-          0.05,
-          band(0.05, trials) + 0.02
+          runsLevel,
+          band(runsLevel, trials)
         ),
         measure(
           'lag-one test, white noise: rate flagged at 5%',
           lagHit / trials,
           0.05,
-          band(0.05, trials) + 0.01
+          band(0.05, trials) + TOL.lagOneNullApproximation
         ),
         measure(
           'lag-one test on AR(1) phi = 0.6: rate flagged (power)',
@@ -1771,10 +1869,10 @@ export const CASES = [
           band(0.05, trials)
         ),
         measure(
-          'without it: rate of false alarms against the exact value for the wrong variance',
+          'without it: rate of false alarms against the exact value for the wrong variance (about 1e-18: not one in 2,000 trials, with one trial of allowance)',
           without / trials,
           expectedNaive,
-          band(Math.max(expectedNaive, 1e-4), trials) + 1e-3
+          1 / trials
         ),
         measure(
           'without it, the stated 5% is not the rate: the rate is below 1%',
@@ -1832,7 +1930,7 @@ export const CASES = [
         pFull: 3,
         n,
       });
-      const pT = 2 * (1 - tCdf(Math.abs(t), dof));
+      const pT = 2 * tSf(Math.abs(t), dof);
       return [
         measure('F over t^2, minus 1', res.F / (t * t) - 1, 0, 1e-9),
         measure(
@@ -2024,7 +2122,7 @@ export const CASES = [
           'why: on white noise the naive F-test of the best of 100 searched periods flags at a rate far above 5% (expected order 1 - 0.95^20 = 0.64)',
           naive / trials,
           0.64,
-          0.25
+          TOL.searchedPeriodRate
         ),
         measure(
           'and at ONE fixed period the same test has its level',
@@ -2402,6 +2500,7 @@ export const CASES = [
           if (Math.abs(b.corrected - N[j]) <= b.sigma) cover[j]++;
         });
       }
+      const exact = N.map((Nk, j) => exactCoverage(Nk, c[j]));
       const out = [];
       N.forEach((Nk, j) => {
         const sdBin = Math.sqrt(Nk * c[j] * (1 - c[j])) / c[j];
@@ -2413,10 +2512,10 @@ export const CASES = [
             (TOL.sigmas * sdBin) / Math.sqrt(trials)
           ),
           measure(
-            `bin ${j + 1}: coverage of +-1 sigma`,
+            `bin ${j + 1}: coverage of +-1 sigma against the exact binomial value ${exact[j].toFixed(4)}`,
             cover[j] / trials,
-            0.6826894921370859,
-            band(0.6826894921370859, trials) + 0.03
+            exact[j],
+            band(exact[j], trials)
           )
         );
       });
@@ -2604,6 +2703,183 @@ export const CASES = [
           (iv.hi - iv.lo) / 2 / 0.7,
           1.96 / Math.sqrt(196),
           0.01
+        ),
+      ];
+    },
+  },
+  {
+    id: 'S8',
+    family: 'special functions',
+    kind: 'analytic',
+    title:
+      'Tail probabilities keep their digits at 7, 9 and 12 sigma, and at large t',
+    source:
+      'the asymptotic series Q(z) = phi(z) / z (1 - 1/z^2 + 3/z^4 - 15/z^6 + ...), summed to its smallest term (A&S 26.2.12; at z = 7 the smallest term is below 1e-10 of the sum); Student t with 1 dof: P(T > t) = atan(1/t) / pi, with 2 dof: 1 / (sqrt(2 + t^2) (sqrt(2 + t^2) + t)) (A&S 26.7.3-26.7.4)',
+    why: 'A p value written as 1 minus a CDF is 0 from about 8 sigma; a survival function must not be.',
+    run() {
+      const out = [];
+      for (const z of [7, 9, 12]) {
+        const q = qRef(z);
+        out.push(
+          measure(
+            `normalSf(${z}) over the series, minus 1`,
+            normalSf(z) / q - 1,
+            0,
+            TOL.tailRelative
+          ),
+          measure(
+            `normalCdf(-${z}) over the series, minus 1`,
+            normalCdf(-z) / q - 1,
+            0,
+            TOL.tailRelative
+          ),
+          measure(
+            `chi2Sf(${z}^2, 1) over 2 Q(${z}), minus 1`,
+            chi2Sf(z * z, 1) / (2 * q) - 1,
+            0,
+            TOL.tailRelative
+          ),
+          measure(
+            `difference(): two-sided p of a ${z}-sigma difference over 2 Q(${z}), minus 1`,
+            difference({ a: z, b: 0, varA: 1, varB: 0 }).p / (2 * q) - 1,
+            0,
+            TOL.tailRelative
+          ),
+          measure(
+            `difference(): the p of a ${z}-sigma difference is above zero`,
+            Number(difference({ a: z, b: 0, varA: 1, varB: 0 }).p > 0),
+            1,
+            0
+          )
+        );
+      }
+      for (const t of [30, 1e3, 1e6]) {
+        out.push(
+          measure(
+            `tSf(${t}, 1) over atan(1/t) / pi, minus 1`,
+            tSf(t, 1) / (Math.atan(1 / t) / Math.PI) - 1,
+            0,
+            TOL.tSfRelative
+          ),
+          measure(
+            `tSf(${t}, 2) over the closed form, minus 1`,
+            tSf(t, 2) * (Math.sqrt(2 + t * t) * (Math.sqrt(2 + t * t) + t)) - 1,
+            0,
+            TOL.tSfRelative
+          )
+        );
+      }
+      return out;
+    },
+  },
+  {
+    id: 'C7',
+    family: 'comparison',
+    kind: 'negative',
+    title:
+      'The F-test validates its inputs: counts, zero sums of squares, a worse full model',
+    source:
+      'the definitions: parameter counts and n are whole numbers with 0 <= p_reduced < p_full < n; F = ((RSS_r - RSS_f) / d1) / (RSS_f / d2) is 0/0 when both are 0 and negative when the full model fits worse; a nested least-squares full model cannot have the larger RSS except by summation rounding (Draper and Smith 1998, 6.1)',
+    why: "The kernel sees only counts and sums of squares: it can refuse what they cannot be, and says plainly that `searched` and `boundary` are the caller's declarations (STATISTICS.md).",
+    run() {
+      const base = { rssReduced: 10, pReduced: 1, rssFull: 8, pFull: 3, n: 30 };
+      const code = o => {
+        const r = fTest({ ...base, ...o });
+        return r.status === 'refused' ? r.code : r.status;
+      };
+      const perfect = fTest({ ...base, rssFull: 0 });
+      const rounded = fTest({
+        ...base,
+        rssFull: base.rssReduced * (1 + TOL.rssRounding / 10),
+      });
+      const worse = fTest({
+        ...base,
+        rssFull: base.rssReduced * (1 + 100 * TOL.rssRounding),
+      });
+      return [
+        measure(
+          'a non-integer parameter count is refused, code "counts"',
+          Number(code({ pFull: 3.5 }) === 'counts'),
+          1,
+          0
+        ),
+        measure(
+          'a negative reduced parameter count is refused, code "counts"',
+          Number(code({ pReduced: -1 }) === 'counts'),
+          1,
+          0
+        ),
+        measure(
+          'a non-integer n is refused, code "counts"',
+          Number(code({ n: 30.5 }) === 'counts'),
+          1,
+          0
+        ),
+        measure(
+          'a non-finite n or count is refused, code "counts"',
+          Number(code({ n: Infinity }) === 'counts') +
+            Number(code({ pFull: NaN }) === 'counts'),
+          2,
+          0
+        ),
+        measure(
+          'a NaN or infinite sum of squares is refused, code "input"',
+          Number(code({ rssFull: NaN }) === 'input') +
+            Number(code({ rssReduced: Infinity }) === 'input'),
+          2,
+          0
+        ),
+        measure(
+          'both sums of squares zero (0/0) is refused, code "zero-rss"',
+          Number(code({ rssReduced: 0, rssFull: 0 }) === 'zero-rss'),
+          1,
+          0
+        ),
+        measure(
+          'a full model that fits perfectly gives F = infinity and p = 0',
+          Number(
+            perfect.status === 'ok' && perfect.F === Infinity && perfect.p === 0
+          ),
+          1,
+          0
+        ),
+        measure(
+          'a full RSS above the reduced one by rounding (1e-13 relative) is clamped: F = 0, p = 1, and says so',
+          Number(
+            rounded.status === 'ok' &&
+              rounded.F === 0 &&
+              rounded.p === 1 &&
+              rounded.clamped === true
+          ),
+          1,
+          0
+        ),
+        measure(
+          'a full RSS above the reduced one by 1e-10 relative is refused, code "not-nested"',
+          Number(
+            code({ rssFull: base.rssReduced * (1 + 100 * TOL.rssRounding) }) ===
+              'not-nested' && worse.status === 'refused'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'equal sums of squares give F = 0 and p = 1 without a clamp',
+          Number(
+            fTest({ ...base, rssFull: 10 }).p === 1 &&
+              fTest({ ...base, rssFull: 10 }).clamped === false
+          ),
+          1,
+          0
+        ),
+        measure(
+          'searched and boundary are declarations: undeclared they are not detected (an ok result carries them as false)',
+          Number(
+            fTest(base).declared.searched === false &&
+              fTest(base).declared.boundary === false
+          ),
+          1,
+          0
         ),
       ];
     },

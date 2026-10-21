@@ -138,7 +138,7 @@ Cash (1979), ApJ 228, 939. Protassov et al. (2002), ApJ 571, 545. Eddington
 (1913), MNRAS 73, 359. Malmquist (1936), Stockholms Obs. Medd. 26. Teerikorpi
 (1997), ARA&A 35, 101. Garwood (1936), Biometrika 28, 437. Draper and Smith
 (1998), Applied Regression Analysis, 6.1. NIST/SEMATECH e-Handbook of
-Statistical Methods, 1.3.6.7. Anscombe (1973), The American Statistician 27, 17.
+Statistical Methods, 1.3.6.7.1 (normal CDF), 1.3.6.7.2 (Student t), 1.3.6.7.3 (F) and 1.3.6.7.4 (chi-square). Anscombe (1973), The American Statistician 27, 17.
 Student (1908), Biometrika 6, 1.
 
 ## Validation
@@ -164,6 +164,37 @@ detected everything). The five kinds:
 - authentic: the NIST/SEMATECH critical-value tables, Student's sleep data,
   Anscombe's quartet and Bortkiewicz's horse kicks, with published results the
   kernel was not tuned to.
+
+Tolerances. A rate over N seeded trials is held to 4 binomial standard errors
+of its expected value, with no pad, and the expected value is the exact one where
+there is one: the false-alarm rate of the runs test is the exact level of the
+discrete test (from the exact distribution of the runs, in BigInt), and the
+coverage of the completeness correction is the exact binomial coverage of its
+own interval (0.746, 0.642, 0.691, 0.696 in the four bins of case B5), not the
+nominal 68.27%. The few tolerances that are not that band are in the `TOL`
+table at the head of `tools/statistics-cases.mjs`, each with its reason:
+
+| Tolerance | Value | Reason |
+| --- | --- | --- |
+| `lagOneNullApproximation` | 0.01 added to the 5% band | the lag-one z test uses the large-n null N(-1/n, 1/n), whose level at n = 200 departs from 5% by O(1/n) (Bartlett 1946) |
+| `garwood` | 1% | the exact (Garwood) and likelihood intervals differ at O(1/N) |
+| `searchedPeriodRate` | 0.64 +- 0.25 | the effective number of independent frequencies of the searched grid is between about 10 and 40: 0.40 to 0.87 |
+| `bootstrapPivot` | 2% of one SE | the bootstrap SE is smaller by sqrt((n-1)/n) and z is 1.960 where t is 1.966, plus skewness |
+| `normalApproxRuns` | 0.03 | the normal approximation of the runs test against the exact one at n = 60 |
+| `rssRounding` | 1e-12 relative | a nested full model's RSS may exceed the reduced one by summation rounding: clamped to F = 0 (the result says `clamped`), more is refused |
+| `tailRelative`, `tSfRelative` | 1e-8, 1e-10 | tail probabilities at 7, 9 and 12 sigma against the asymptotic series, and at large t against closed forms |
+| `cfIterationBound` | 2,000 iterations | a continued fraction that needs more has lost its convergence (the cap is 100,000) |
+
+The F-test sees only parameter counts and sums of squares, so `searched` and
+`boundary` are declarations the CALLER makes and the kernel cannot detect: a
+caller must declare `searched` when any added parameter (a period, a position, a
+break) was chosen by looking at the data, and `boundary` when the null value of
+an added parameter (a variance, an amplitude, a mixing fraction) is on the edge
+of its allowed range. An undeclared search is not caught; the result carries the
+declarations it was given (`declared`). What the kernel does check is what the
+numbers cannot be: whole-number counts with 0 <= p_reduced < p_full < n, finite
+sums of squares, not both zero, and a full model that does not fit worse than the
+reduced one beyond rounding.
 
 Values in the table are one run on one engine; the bound is what is promised.
 Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
