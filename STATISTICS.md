@@ -198,6 +198,9 @@ table at the head of `tools/statistics-cases.mjs`, each with its reason:
 | `deepTailShift` | 1e-6 relative | the Eddington shift at t = -35, -100, -200 is the small difference of numbers near 100; the reference is the asymptotic Mills ratio |
 | `rssRounding` | 1e-12 relative | a nested full model's RSS may exceed the reduced one by summation rounding: clamped to F = 0 (the result says `clamped`), more is refused |
 | `tailRelative`, `tSfRelative` | 1e-8, 1e-10 | tail probabilities at 7, 9 and 12 sigma (and the lag-one and runs p values at 14 and 35 sigma) against the asymptotic series, and at large t against closed forms |
+| `garwoodExact` | 1e-12 relative | Garwood from chi-square quantiles against the exact Poisson sums at N = 10 to 20 |
+| `poissonGarwoodFloor` | 0.95 - 1e-6 | the exact coverage of the shipped 95% procedure for rate times exposure up to 40: it is Garwood there (a count of 100 or more has probability under 1e-14), whose guarantee is the stated level |
+| `poissonProfileFloor` | 0.94 | from 40 to 200 the deviance interval is in play; the promised floor is the measured minimum 0.9451 rounded down. Nothing is claimed above 200 |
 | `cfIterationBound` | 2,000 iterations | a continued fraction that needs more has lost its convergence (the cap is 100,000) |
 
 The F-test sees only parameter counts and sums of squares, so `searched` and

@@ -162,6 +162,18 @@ export const TOL = Object.freeze({
    * is the asymptotic Mills ratio: relative to the shift.
    */
   deepTailShift: 1e-6,
+  /** Garwood against the exact Poisson sums at N = 10 to 20 (the reviewer's bound). */
+  garwoodExact: 1e-12,
+  /**
+   * The exact coverage of the SHIPPED Poisson procedure (Garwood below 100
+   * counts, deviance interval from 100), at stated level 0.95: for a rate times
+   * exposure up to 40 the procedure is Garwood to within a probability of 1e-14
+   * of a count of 100 or more, so its guarantee holds to rounding; from 40 to
+   * 200 the deviance interval is in play and the promised floor is the measured
+   * minimum (0.9451) rounded down to 0.94. Above 200 nothing is claimed.
+   */
+  poissonGarwoodFloor: 0.95 - 1e-6,
+  poissonProfileFloor: 0.94,
   /** A continued fraction that needs more than this has lost its convergence (the cap is 100,000). */
   cfIterationBound: 2000,
 });
@@ -944,7 +956,11 @@ export const CASES = [
       const out = [];
       const dev = lam => 2 * (lam * T - N - N * Math.log((lam * T) / N));
       for (const level of [0.6826894921370859, 0.95]) {
-        const iv = poissonInterval(counts, { exposure: t, level });
+        const iv = poissonInterval(counts, {
+          exposure: t,
+          level,
+          method: 'profile',
+        });
         const thr = zRef(level) ** 2;
         const lam0 = N / T;
         const lo = bisect(l => dev(l) - thr, 1e-9, lam0);
@@ -1134,11 +1150,11 @@ export const CASES = [
     kind: 'ensemble',
     title: 'Coverage of the bootstrap percentile interval on a fixed ensemble',
     source:
-      'Efron and Tibshirani (1993), ch. 13: the percentile interval of a mean under-covers slightly at small n; 300 samples of n = 40, 600 draws each',
+      'Efron and Tibshirani (1993), ch. 13: the percentile interval of a mean under-covers slightly at small n; 1,000 samples of n = 40, 600 draws each: the run detects a coverage below about 0.91 (0.95 less 4 standard errors, 0.0276, less the 0.012 allowance), not a smaller shortfall',
     why: "The bootstrap's stated level must hold to within its known small-sample deficit.",
     run() {
       const { z } = rng(15403);
-      const trials = 300;
+      const trials = 1000;
       let hit = 0;
       for (let k = 0; k < trials; k++) {
         const data = Array.from({ length: 40 }, () => 5 + 2 * z());
@@ -2978,24 +2994,60 @@ export const CASES = [
       }
       out.push(
         measure(
-          'below 10 counts the method is labelled exact (poisson-garwood)',
+          'below 100 counts in all the method is labelled exact (poisson-garwood): 99 counts',
           Number(
-            poissonInterval([4, 4], { exposure: 1 }).method ===
+            poissonInterval([49, 50], { exposure: 1 }).method ===
               'poisson-garwood'
           ),
           1,
           0
         ),
         measure(
-          'from 10 counts it is the deviance interval (poisson-profile)',
+          'from 100 counts it is the deviance interval (poisson-profile): 100 counts',
           Number(
-            poissonInterval([5, 5], { exposure: 1 }).method ===
+            poissonInterval([50, 50], { exposure: 1 }).method ===
               'poisson-profile'
           ),
           1,
           0
+        ),
+        measure(
+          'method: "profile" forces the deviance interval at 5 counts, "garwood" the exact one at 500',
+          Number(
+            poissonInterval([5], { method: 'profile' }).method ===
+              'poisson-profile' &&
+              poissonInterval([500], { method: 'garwood' }).method ===
+                'poisson-garwood'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'an unknown method is refused, code "method"',
+          Number(poissonInterval([5], { method: 'bayes' }).code === 'method'),
+          1,
+          0
         )
       );
+      for (const N of [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 50, 99]) {
+        const iv = poissonInterval([N], { exposure: 1, level: 0.95 });
+        const [lo, hi] = garwoodRef(N, 0.95);
+        const tol = N <= 20 ? TOL.garwoodExact : TOL.secondMethod;
+        out.push(
+          measure(
+            `N = ${N}: low end against Garwood by Poisson sums, relative`,
+            iv.lo / lo - 1,
+            0,
+            tol
+          ),
+          measure(
+            `N = ${N}: high end against Garwood by Poisson sums, relative`,
+            iv.hi / hi - 1,
+            0,
+            tol
+          )
+        );
+      }
       // Coverage at three true rates against the exact coverage of Garwood's interval.
       const { u } = rng(15413);
       const trials = 3000;
@@ -3030,6 +3082,53 @@ export const CASES = [
           )
         );
       }
+      // The exact coverage of the SHIPPED procedure over a range of rate x exposure:
+      // the coverage is piecewise constant in lambda between the interval ends of
+      // every count, so its minimum is found exactly at the midpoints between
+      // consecutive ends, with the Poisson probabilities from a log-factorial sum
+      // written here.
+      const Nmax = 340;
+      const ivs = Array.from({ length: Nmax + 1 }, (_, N) =>
+        poissonInterval([N], { exposure: 1, level: 0.95 })
+      );
+      const lnFact = [0];
+      for (let i = 1; i <= Nmax; i++) lnFact.push(lnFact[i - 1] + Math.log(i));
+      const coverageAt = lam => {
+        let cov = 0;
+        const from = Math.max(0, Math.floor(lam - 12 * Math.sqrt(lam) - 20));
+        const to = Math.min(Nmax, Math.ceil(lam + 12 * Math.sqrt(lam) + 40));
+        for (let N = from; N <= to; N++)
+          if (ivs[N].lo <= lam && lam <= ivs[N].hi)
+            cov += Math.exp(-lam + N * Math.log(lam) - lnFact[N]);
+        return cov;
+      };
+      const minCoverage = (a, b) => {
+        const ends = [a, b];
+        for (const iv of ivs)
+          for (const e of [iv.lo, iv.hi]) if (e > a && e < b) ends.push(e);
+        ends.sort((x, y) => x - y);
+        let min = 1;
+        for (let i = 0; i + 1 < ends.length; i++)
+          if (ends[i + 1] > ends[i])
+            min = Math.min(min, coverageAt(0.5 * (ends[i] + ends[i + 1])));
+        return min;
+      };
+      for (const [a, b, floor] of [
+        [0.01, 5, TOL.poissonGarwoodFloor],
+        [5, 9.5, TOL.poissonGarwoodFloor],
+        [9.5, 20, TOL.poissonGarwoodFloor],
+        [20, 40, TOL.poissonGarwoodFloor],
+        [40, 100, TOL.poissonProfileFloor],
+        [100, 200, TOL.poissonProfileFloor],
+      ])
+        out.push(
+          measure(
+            `exact coverage of the shipped 95% procedure for rate x exposure from ${a} to ${b}: shortfall below the floor ${floor.toFixed(6)} (the minimum over every interval of constancy)`,
+            Math.max(0, floor - minCoverage(a, b)),
+            0,
+            0
+          )
+        );
       return out;
     },
   },
@@ -3389,6 +3488,49 @@ export const CASES = [
           0
         ),
         measure(
+          'caseBootstrap whose statistic is NaN on every draw is refused, code "non-finite"',
+          Number(
+            code(
+              caseBootstrap({
+                n: 5,
+                statistic: () => NaN,
+                draws: 30,
+                seed: 's',
+              })
+            ) === 'non-finite'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'a seed that is a bare function (a constant stream) throws code "seed"; a named stream is accepted',
+          Number(
+            thrown(() =>
+              caseBootstrap({
+                n: 5,
+                statistic: idx => idx[0],
+                draws: 30,
+                seed: () => 0.5,
+              })
+            ) === 'seed' &&
+              caseBootstrap({
+                n: 5,
+                statistic: idx => idx[0],
+                draws: 30,
+                seed: stream('noise', 'named'),
+              }).status === 'ok'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'malmquistShift with sigma <= 0 is NaN, like malmquistCutShift and eddingtonShift',
+          Number(Number.isNaN(malmquistShift({ sigma: 0 }))) +
+            Number(Number.isNaN(malmquistShift({ sigma: -1 }))),
+          2,
+          0
+        ),
+        measure(
           'the same seed and the same label give the same draws',
           Number(eq(a, a2)),
           1,
@@ -3605,6 +3747,27 @@ export const CASES = [
         measure(
           'c = NaN is refused, code "completeness"',
           Number(bin(5, NaN).code === 'completeness'),
+          1,
+          0
+        ),
+        measure(
+          'lists of different lengths are refused as a record, code "length" (not thrown)',
+          Number(
+            completenessCorrect({ observed: [1, 2], completeness: [0.5] })
+              .code === 'length'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'an unknown population is refused as a record, code "population"',
+          Number(
+            completenessCorrect({
+              observed: [1],
+              completeness: [0.5],
+              population: 'x',
+            }).code === 'population'
+          ),
           1,
           0
         ),
