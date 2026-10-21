@@ -153,8 +153,8 @@ the criterion's. A file with none is `/1`, as before, byte for byte. A 2.0.0 bui
 refuses a `/2` file as "a marks file of a different version" and reads nothing
 (proved in `tests/rubricSemantics.test.js`); it never reads a criterion's mark as
 the answer's. The Canvas, Moodle and D2L files do not change: each has the
-columns its platform's importer defines, and a kind in a header would break two
-of them (D-R10-38).
+columns its platform's importer documents, none was tried with extra columns on
+a live platform, and the kind is in the marks file's rows instead (D-R10-38).
 
 Pack authors write the three fields in an investigation pack or a question bank
 (`gravitas.investigation-pack/1`, `gravitas.question-bank/1`); a 2.0.0 reader
