@@ -428,3 +428,21 @@ test.describe('what used to be a menu entry', () => {
     await expect(page.locator('#welOrient')).toBeVisible();
   });
 });
+
+test('a lesson open in the sandbox is Learn, and the sandbox is Explore again once it closes', async ({
+  page,
+  app,
+}) => {
+  await app.boot();
+  const learn = page.locator('.gs-nav a[data-dest="learn"]');
+  const explore = page.locator('.gs-nav a[data-dest="explore"]');
+  await expect(explore).toHaveAttribute('aria-current', 'page');
+  await page.evaluate(() => document.body.classList.add('investigation-open'));
+  await expect(learn).toHaveAttribute('aria-current', 'true');
+  await expect(explore).not.toHaveAttribute('aria-current', /.*/);
+  await page.evaluate(() =>
+    document.body.classList.remove('investigation-open')
+  );
+  await expect(explore).toHaveAttribute('aria-current', 'page');
+  await expect(learn).not.toHaveAttribute('aria-current', /.*/);
+});

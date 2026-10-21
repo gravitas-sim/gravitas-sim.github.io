@@ -37,6 +37,21 @@ export function mountShell({ onLanguage, onTheme } = {}) {
   const controls = head.querySelector('.gs-controls');
   toggle.hidden = controls.hidden = false;
 
+  // A lesson is Learn.
+  if (head.classList.contains('gs-app')) {
+    const sync = () => {
+      const l = document.body.classList.contains('investigation-open');
+      for (const a of head.querySelectorAll('.gs-nav a')) {
+        if (a.dataset.dest === (l ? 'learn' : 'explore'))
+          a.setAttribute('aria-current', l ? 'true' : 'page');
+        else a.removeAttribute('aria-current');
+      }
+    };
+    new MutationObserver(sync).observe(document.body, {
+      attributeFilter: ['class'],
+    });
+  }
+
   toggle.addEventListener('click', () => {
     const open = toggle.getAttribute('aria-expanded') !== 'true';
     toggle.setAttribute('aria-expanded', String(open));
