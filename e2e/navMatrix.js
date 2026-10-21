@@ -129,7 +129,9 @@ export const edge =
           new RegExp(`${href.replace(/[/.]/g, '\\$&')}$`)
         );
     };
-    const direct = page.locator(`#welcomeScreen a[href="${href}"]`);
+    const direct = page
+      .locator(`#welcomeScreen a[href="${href}"]`)
+      .filter({ visible: true });
     if (await direct.first().isVisible()) {
       // Home links it itself: one activation.
       await activate(page, direct.first(), input);
@@ -141,7 +143,10 @@ export const edge =
       expect(via, `${href} belongs to a destination's places`).not.toBeNull();
       await activate(
         page,
-        page.locator(`#welcomeScreen a[href="${via}"]`).first(),
+        page
+          .locator(`#welcomeScreen a[href="${via}"]`)
+          .filter({ visible: true })
+          .first(),
         input
       );
       count++;
