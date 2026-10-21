@@ -457,6 +457,13 @@
       "student": true
     },
     {
+      "file": "NAVIGATION.md",
+      "kind": "design",
+      "purpose": "The navigation model: five destinations, where every surface goes, what students see, the structural checks and what they do not prove.",
+      "owner": 161,
+      "student": false
+    },
+    {
       "file": "NOTEBOOK_BRIDGE_GATE.md",
       "kind": "gate",
       "purpose": "Browser notebook bridge and compute capsules gate.",
