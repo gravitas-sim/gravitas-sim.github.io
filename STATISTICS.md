@@ -20,6 +20,7 @@ D-SAMPLER-01 and D-KERNEL-01..03 stand.
 
 | Module | Export | Contract | Consumers |
 | --- | --- | --- | --- |
+| `check.js` | `refused`, `allFinite`, `isCount` | The refusal record `{ status: 'refused', code, why }` and the finite and whole-number checks every function makes at its head | 190 |
 | `special.js` | `lnGamma` | ln Gamma(x) for x > 0, Lanczos; NaN outside | 261 |
 | `special.js` | `gammaP`, `gammaQ` | Regularised incomplete gamma P and Q; NaN outside a > 0, x >= 0 | 261 |
 | `special.js` | `betaI` | Regularised incomplete beta I_x(a, b); NaN outside 0 <= x <= 1, a, b > 0 | 261 |
@@ -32,26 +33,36 @@ D-SAMPLER-01 and D-KERNEL-01..03 stand.
 | `intervals.js` | `levelOfSigma`, `sigmaOfLevel` | A coverage and the number of sigmas of a central normal interval, erf(k / sqrt 2) and its inverse | 190, 225 |
 | `intervals.js` | `covarianceInterval` | value +- z sigma, labelled `covariance`; refused for a sigma that is missing, negative or not finite | 190, 225 |
 | `intervals.js` | `profileInterval` | Where a chi-square profile stays within Delta chi-square of its minimum, by fit.js's `crossing`; a coverage sets Delta from chi-square on one degree of freedom, or Delta = 1 sets the coverage (68.27%); a side never reached is open (null) and flagged | 190, 217, 225, 256 |
-| `intervals.js` | `studentInterval` | The t interval of a mean | 190, 261 |
-| `intervals.js` | `poissonInterval` | A Poisson rate (sum of counts over total exposure, the exact maximum) and its profile-deviance interval | 229, 264 |
-| `intervals.js` | `percentileInterval` | The central interval of draws, from at least 20, labelled with the scheme that made them | 190, 217 |
+| `intervals.js` | `studentInterval` | The t interval of a mean; refused for a NaN or infinite value (`non-finite`) or constant values (`constant`) | 190, 261 |
+| `intervals.js` | `poissonInterval`, `SMALL_COUNT` | A Poisson rate (sum of counts over total exposure, the exact maximum) and its interval: the exact Garwood one below 10 counts in all (`poisson-garwood`, covers at least the level at any rate), the profile-deviance one from 10 (`poisson-profile`; below that it under-covers, a one-sided 85% at no counts); counts must be whole numbers (`counts`), exposures positive and one per count (`exposure`) | 229, 264 |
+| `intervals.js` | `percentileInterval` | The central interval of draws, labelled with the scheme that made them; needs at least 2 / (1 - level) finite draws (`draws`) and reports how many it `dropped` | 190, 217 |
 | `resample.js` | `DRAW_BUDGET`, `StatisticsError` | The default (1,000) and maximum (20,000) draws; a draw count over the maximum throws code `budget`, one that is not a whole number code `draws` | 190 |
-| `resample.js` | `caseBootstrap` | Resample the rows with replacement, recompute a statistic; draws from the `noise` stream keyed by the seed; the stream's identity is in the result | 190, 217 |
-| `resample.js` | `residualBootstrap` | Hold the fit, resample its residuals inflated by sqrt(n / (n - parameters)), refit | 190, 225 |
-| `resample.js` | `propagate` | Draw parameters from a normal with the fitted covariance (Cholesky) and push each through a function; a covariance that is missing or not positive definite is refused | 190, 225, 233 |
-| `diagnostics.js` | `normalisedResiduals` | (y - fit) / sigma, or scaled by the residuals' own rms and labelled `estimated` | 190, 217 |
-| `diagnostics.js` | `runsPmf`, `runsTest` | The exact distribution of the number of runs; the runs test about the median or a value, exact or normal, with one- and two-sided p values; refused when one sign is absent | 190, 261 |
-| `diagnostics.js` | `lagOne` | Lag-one autocorrelation and its z against white noise; refused for a constant series or fewer than three values | 190, 261 |
-| `diagnostics.js` | `normalProbability` | Sorted values against normal quantiles at Blom positions, the line and its correlation | 190 |
+| `resample.js` | `caseBootstrap` | Resample the rows with replacement, recompute a statistic; draws from the `noise` stream keyed by the seed (required: `seed` is thrown without one) and a `label` (default the method's name: two calls with the same seed and label give the same draws, so give each its own label); the stream's identity is in the result; `n` must be a whole number of at least 2 (`rows`) | 190, 217 |
+| `resample.js` | `residualBootstrap` | Hold the fit, resample its residuals inflated by sqrt(n / (n - parameters)), refit; refused for a NaN fit or residual (`non-finite`) or a parameter count that is not a whole number of at least 0 (`parameters`) | 190, 225 |
+| `resample.js` | `propagate` | Draw parameters from a normal with the fitted covariance (Cholesky) and push each through a function; a covariance that is missing, not finite, not symmetric or not positive definite is refused (`covariance`) | 190, 225, 233 |
+| `diagnostics.js` | `normalisedResiduals` | (y - fit) / sigma, or scaled by the residuals' own rms and labelled `estimated`; a NaN is refused (`non-finite`) | 190, 217 |
+| `diagnostics.js` | `runsPmf`, `runsTest` | The exact distribution of the number of runs; the runs test about the median or a value, exact or normal, with one- and two-sided p values (survival forms: no cancellation); refused for non-finite values (`non-finite`), fewer than 8 values away from the centre (`length`) or one sign (`one-sign`) | 190, 261 |
+| `diagnostics.js` | `lagOne` | Lag-one autocorrelation and its z against white noise (mean -1/n, sd sqrt((n - 2) / (n^2 - 1)), Anderson 1942); at least ten finite values, not constant | 190, 261 |
+| `diagnostics.js` | `normalProbability` | Sorted values against normal quantiles at Blom positions, the line and its correlation; refused for a NaN or fewer than 3 values | 190 |
 | `compare.js` | `difference` | A minus B with variance Var A + Var B - 2 Cov(A, B), the covariance used recorded; refused for an impossible covariance; `degenerate` when the two are one function of the same data | 229, 252, 264 |
 | `compare.js` | `fTest` | The F-test of nested models; refused with a code for a declared searched parameter or boundary alternative, counts that are not whole numbers (`counts`), a non-finite or negative sum of squares (`input`), both sums zero (`zero-rss`), models that are not nested or a full model that fits worse beyond rounding (`not-nested`), or no degrees of freedom (`no-dof`); a full RSS above the reduced one by rounding only (1e-12 relative) is clamped to F = 0 and says `clamped`; the declarations it was given are in `declared` | 261 |
-| `selection.js` | `selection`, `all`, `either` | A selection function: a cut and an inclusion probability on an observable; `all` multiplies independent selections, `either` is 1 minus the product of (1 - p); `apply` returns who is in, their probabilities and weights 1/p | 215, 229, 252, 264 |
+| `selection.js` | `selection`, `all`, `either` | A selection function: a cut and an inclusion probability on an observable (a row without a finite value is excluded); `all` multiplies independent selections, `either` is -expm1(sum log1p(-p)); `apply(rows, uniformFor)` returns who is in, their probabilities and weights 1/p, and throws `uniform` when a draw is needed and `uniformFor` is not a function | 215, 229, 252, 264 |
 | `selection.js` | `logisticCompleteness` | The survey suite's logistic completeness curve | 215, 229 |
-| `selection.js` | `completenessCorrect` | n / c with its sampling error for a Poisson or a fixed population; a bin below the completeness floor (0.1) is refused, not corrected | 215, 229, 264 |
-| `selection.js` | `eddingtonShift`, `malmquistShift`, `malmquistCutShift` | The closed forms of the biases (below) | 215, 252 |
-| `selection.js` | `measuredShift`, `binnedMeanShift` | A bias as a measured difference on a synthetic population, with its standard error | 215, 252 |
+| `selection.js` | `completenessCorrect` | n / c with its sampling error for a Poisson or a fixed population; a bin with no detections has a one-sided upper limit at `level` (`upper-limit`), a bin below the completeness floor (0.1) is refused (`completeness`), a count that is not a whole number is refused (`count`) | 215, 229, 264 |
+| `selection.js` | `eddingtonShift`, `malmquistShift`, `malmquistCutShift` | The closed forms of the biases (below); the Eddington and cut shifts use the asymptotic Mills ratio deep in the tail instead of underflowing | 215, 252 |
+| `selection.js` | `measuredShift`, `binnedMeanShift` | A bias as a measured difference on a synthetic population, with its standard error; a NaN is refused (`non-finite`) | 215, 252 |
 
 <!-- statistics-exports:end -->
+
+Refusals. Every function checks its inputs once, at its head, and a refusal is
+a record with a `code` a caller can switch on (`non-finite`, `counts`,
+`exposure`, `constant`, `order`, `minimum`, `level`, `draws`, `length`, `rows`,
+`parameters`, `covariance`, `count`, `completeness` and the F-test's own). A list
+with a NaN in it is refused, not trimmed, because a dropped value changes which
+values are adjacent and which are in a run. The one exception is a set of
+bootstrap or propagation draws, where a NaN is a failed draw: `percentileInterval`
+drops it and reports `dropped`. Two bootstraps on one seed reuse the same index
+matrix unless given different `label`s; the default label is the method's name.
 
 Dependencies: `js/inference/fit.js` (`crossing`, so the intervals are the
 inference core's own), `js/random/streams.js` (the `noise` stream) and
@@ -74,7 +85,8 @@ degrees of freedom and is not offered here.
 | `covariance` | the model is linear in the parameters over the interval; the error bars are right, or were scaled by the reduced chi-square |
 | `profile` | Delta chi-square follows chi-square on one degree of freedom: a regular model, the truth inside the bounds; a coverage statement about repeated data, never a posterior probability |
 | `student-t` | independent normal values of unknown mean and variance |
-| `poisson-profile` | independent counts at one rate, about 10 or more for the chi-square limit |
+| `poisson-garwood` | independent counts at one rate; exact and conservative, used below 10 counts |
+| `poisson-profile` | independent counts at one rate, 10 or more for the chi-square limit (it under-covers below) |
 | `case-bootstrap` | independent rows from one population; a smooth statistic (a mean is; a maximum is not); the percentile interval can under-cover at small n (Efron and Tibshirani 1993), and the case allows for it |
 | `residual-bootstrap` | the model is right and the residuals exchangeable |
 | `propagation` | jointly normal parameters with the covariance given; a linear function is exact, a strongly non-linear one is only as good as the normal |
@@ -87,7 +99,7 @@ draw count is fixed by the caller and capped at `DRAW_BUDGET.max`.
 when the error bars are right. The runs test uses the exact distribution of the
 number of runs (Wald and Wolfowitz 1940), mean 2 n1 n2 / n + 1. Lag-one
 autocorrelation is r1 = sum (x_i - m)(x_(i+1) - m) / sum (x_i - m)^2, tested
-against N(-1/n, 1/n). The probability plot uses Blom positions (i - 3/8) / (n +
+against N(-1/n, (n - 2) / (n^2 - 1)) (the Gaussian white-noise variance of the circular coefficient, Anderson 1942; at least ten values). The probability plot uses Blom positions (i - 3/8) / (n +
 1/4).
 
 **Comparison.** Var(A - B) = Var A + Var B - 2 Cov(A, B). Two functions of one
@@ -310,11 +322,12 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | covariance interval, 95%: coverage | 0.956 | 0.95 ± 0.02251 | pass |
 |  |  | profile interval, 95%: coverage | 0.956 | 0.95 ± 0.02251 | pass |
 |  |  | Student-t interval of a mean, 95%: coverage | 0.946 | 0.95 ± 0.02251 | pass |
-| **I7** The bootstrap interval of a Gaussian mean against the t interval, within the Monte Carlo error | oracle | low end, bootstrap minus t, in SE of the mean | 0.01304 | 0 ± 0.1889 | pass |
-|  |  | high end, bootstrap minus t, in SE of the mean | 3e-3 | 0 ± 0.1889 | pass |
-|  |  | standard deviation of the draws over the exact bootstrap SE, minus 1 | -2e-3 | 0 ± 0.04472 | pass |
+| **I7** The bootstrap interval of a Gaussian mean against the t interval, within the Monte Carlo error | oracle | low end, bootstrap minus t, in SE of the mean | -2e-3 | 0 ± 0.09556 | pass |
+|  |  | high end, bootstrap minus t, in SE of the mean | -5e-3 | 0 ± 0.09556 | pass |
+|  |  | standard deviation of the draws over the exact bootstrap SE, minus 1 | -2e-4 | 0 ± 0.02 | pass |
 |  |  | the estimate is the sample mean | 10.12 | 10.12 ± 1e-12 | pass |
-| **I8** Coverage of the bootstrap percentile interval on a fixed ensemble | ensemble | 95% percentile interval of a mean: coverage | 0.96 | 0.95 ± 0.05033 | pass |
+| **I8** Coverage of the bootstrap percentile interval on a fixed ensemble | ensemble | 95% percentile interval of a mean: shortfall below 0.95 (one-sided allowance for the known small-sample under-coverage) | 0 | 0 ± 0.06233 | pass |
+|  |  | 95% percentile interval of a mean: excess above 0.95 (4 standard errors, no allowance) | 0.01 | 0 ± 0.05033 | pass |
 | **I9** Monte Carlo propagation of a covariance through a function | ensemble | mean of g | 5.005 | 5 ± 0.01893 | pass |
 |  |  | variance of g over the analytic, minus 1 | 6e-3 | 0 ± 0.04 | pass |
 |  |  | 95% interval, low end | 3.682 | 3.688 ± 0.05057 | pass |
@@ -348,13 +361,13 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | runs distribution: variance against the closed form | 3.609 | 3.609 ± 1e-12 | pass |
 |  |  | without error bars the residuals are scaled by their own rms and the result says so | 1 | = 1 | pass |
 | **R2** The exact runs distribution against brute-force enumeration, and the normal approximation against it | oracle | exact distribution against enumeration over six splits, largest deviation | 3e-16 | 0 ± 1e-13 | pass |
-|  |  | exact against normal two-sided p at n = 60 | 0.01229 | 0 ± 0.03 | pass |
+|  |  | exact against normal two-sided p at n = 60 | 0.01229 | 0 ± 0.02 | pass |
 | **R3** A normal-probability plot of exact normal quantiles is a straight line of slope 1 | analytic | correlation of the plot | 1 | 1 ± 1e-9 | pass |
 |  |  | slope | 1 | 1 ± 1e-8 | pass |
 |  |  | intercept | -5e-17 | 0 ± 1e-8 | pass |
 |  |  | theoretical position 1 against the quantile by bisection | -1.964 | -1.964 ± 1e-9 | pass |
 | **R4** False-alarm rates of the diagnostics on white noise, and their power | ensemble | runs test about the median, white noise: rate flagged at 5% (the exact level of the discrete test at 50 and 50) | 0.0395 | 0.03436 ± 0.01629 | pass |
-|  |  | lag-one test, white noise: rate flagged at 5% | 0.0435 | 0.05 ± 0.02949 | pass |
+|  |  | lag-one test, white noise: rate flagged at 5% | 0.044 | 0.05 ± 0.02949 | pass |
 |  |  | lag-one test on AR(1) phi = 0.6: rate flagged (power) | 1 | 1 ± 0.01 | pass |
 |  |  | probability-plot correlation: Gaussian above exponential, fraction of pairs | 1 | 1 ± 0.01 | pass |
 | **R5** Diagnostics that cannot be computed say so | negative | runs test of all-positive values is refused | 1 | = 1 | pass |
@@ -366,11 +379,13 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | residuals of different lengths are refused | 1 | = 1 | pass |
 | **R6** Anscombe's quartet: the line of dataset I, and the pattern in the residuals of dataset II | authentic | dataset I: intercept | 3 | 3 ± 5e-3 | pass |
 |  |  | dataset I: slope | 0.5001 | 0.5 ± 5e-3 | pass |
-|  |  | dataset I: residual sum of squares | 13.76 | 13.75 ± 0.03 | pass |
+|  |  | dataset I: residual standard error (R's lm summary, 1.237 on 9 degrees of freedom) | 1.237 | 1.237 ± 5e-4 | pass |
+|  |  | dataset I: multiple R-squared (R's lm summary) | 0.6665 | 0.6665 ± 6e-5 | pass |
 |  |  | dataset I: standard error of the slope | 0.1179 | 0.118 ± 6e-4 | pass |
 |  |  | dataset II: intercept | 3.001 | 3 ± 5e-3 | pass |
 |  |  | dataset II: slope | 0.5 | 0.5 ± 5e-3 | pass |
-|  |  | dataset II: residual sum of squares | 13.78 | 13.75 ± 0.03 | pass |
+|  |  | dataset II: residual standard error (R's lm summary, 1.237 on 9 degrees of freedom) | 1.237 | 1.237 ± 5e-4 | pass |
+|  |  | dataset II: multiple R-squared (R's lm summary) | 0.6662 | 0.6662 ± 6e-5 | pass |
 |  |  | dataset II: standard error of the slope | 0.118 | 0.118 ± 6e-4 | pass |
 |  |  | dataset II: runs test, one-sided p for too few runs is at most 0.05 | 1 | = 1 | pass |
 | **C1** Var(A - B) with the covariance, and the case where it matters | analytic | variance with the covariance against Var(b) (x1 - x2)^2 | 9e-3 | 9e-3 ± 1e-12 | pass |
@@ -400,7 +415,7 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | a cut at m <= 17 includes the fraction (17 - 14) / 6 | 0.5004 | 0.5 ± 0.01 | pass |
 |  |  | the weights of the included objects are 1 / p | 0 | 0 ± 1e-15 | pass |
 | **B2** Selections compose: independent selections multiply, and the union is 1 - prod (1 - p) | analytic | all(): inclusion against the product, largest deviation | 0 | 0 ± 1e-15 | pass |
-|  |  | either(): inclusion against 1 - prod(1 - p), largest deviation | 0 | 0 ± 1e-15 | pass |
+|  |  | either(): inclusion against 1 - prod(1 - p), largest deviation | 1e-16 | 0 ± 1e-15 | pass |
 |  |  | the observables of a composite are the union | 1 | = 1 | pass |
 |  |  | rate included against the mean inclusion | 0.2 | 0.2023 ± 9e-3 | pass |
 | **B3** Eddington bias: the exact shift for an exponential population, and the measured difference on a synthetic one | analytic | eddingtonShift against the truncated-Gaussian formula, largest deviation | 6e-17 | 0 ± 1e-12 | pass |
@@ -474,6 +489,73 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | a full RSS above the reduced one by 1e-10 relative is refused, code "not-nested" | 1 | = 1 | pass |
 |  |  | equal sums of squares give F = 0 and p = 1 without a clamp | 1 | = 1 | pass |
 |  |  | searched and boundary are declarations: undeclared they are not detected (an ok result carries them as false) | 1 | = 1 | pass |
+| **I13** Poisson intervals at small counts are the exact (Garwood) ones, and cover | oracle | N = 0: low end against Garwood by Poisson sums | 0 | 0 ± 1e-10 | pass |
+|  |  | N = 0: high end against Garwood by Poisson sums | 3.689 | 3.689 ± 4e-10 | pass |
+|  |  | N = 1: low end against Garwood by Poisson sums | 0.02532 | 0.02532 ± 1e-10 | pass |
+|  |  | N = 1: high end against Garwood by Poisson sums | 5.572 | 5.572 ± 6e-10 | pass |
+|  |  | N = 2: low end against Garwood by Poisson sums | 0.2422 | 0.2422 ± 1e-10 | pass |
+|  |  | N = 2: high end against Garwood by Poisson sums | 7.225 | 7.225 ± 7e-10 | pass |
+|  |  | N = 5: low end against Garwood by Poisson sums | 1.623 | 1.623 ± 2e-10 | pass |
+|  |  | N = 5: high end against Garwood by Poisson sums | 11.67 | 11.67 ± 1e-9 | pass |
+|  |  | N = 9: low end against Garwood by Poisson sums | 4.115 | 4.115 ± 4e-10 | pass |
+|  |  | N = 9: high end against Garwood by Poisson sums | 17.08 | 17.08 ± 2e-9 | pass |
+|  |  | below 10 counts the method is labelled exact (poisson-garwood) | 1 | = 1 | pass |
+|  |  | from 10 counts it is the deviance interval (poisson-profile) | 1 | = 1 | pass |
+|  |  | true rate 0.3: coverage of the 95% interval against the exact coverage 0.9964 | 0.9963 | 0.9964 ± 4e-3 | pass |
+|  |  | true rate 2: coverage of the 95% interval against the exact coverage 0.9834 | 0.9857 | 0.9834 ± 9e-3 | pass |
+|  |  | true rate 6: coverage of the 95% interval against the exact coverage 0.9626 | 0.9683 | 0.9626 ± 0.01386 | pass |
+| **I14** Coverage of the covariance and profile intervals on a model that is not linear | ensemble | covariance, 68.27%: coverage of tau | 0.688 | 0.6827 ± 0.1177 | pass |
+|  |  | profile, 68.27%: coverage of tau | 0.68 | 0.6827 ± 0.1177 | pass |
+|  |  | covariance, 95%: coverage of tau | 0.944 | 0.95 ± 0.05514 | pass |
+|  |  | profile, 95%: coverage of tau | 0.956 | 0.95 ± 0.05514 | pass |
+|  |  | the profile interval of the first data set is asymmetric about the best fit by more than 1% | 1 | = 1 | pass |
+| **I15** Inputs that are not what they claim to be are refused with a precise code, and nothing is dropped silently | negative | studentInterval with a NaN is refused, code "non-finite" | 1 | = 1 | pass |
+|  |  | studentInterval with an Infinity is refused, code "non-finite" | 1 | = 1 | pass |
+|  |  | studentInterval of constant values (width 0) is refused, code "constant" | 1 | = 1 | pass |
+|  |  | normalisedResiduals with a NaN is refused "non-finite", with and without sigma | 2 | = 2 | pass |
+|  |  | measuredShift with a NaN is refused, code "non-finite" | 1 | = 1 | pass |
+|  |  | poissonInterval with a non-integer count is refused, code "counts" | 1 | = 1 | pass |
+|  |  | poissonInterval with an exposure list of the wrong length is refused, code "exposure" | 1 | = 1 | pass |
+|  |  | residualBootstrap with a NaN residual is refused "non-finite" | 1 | = 1 | pass |
+|  |  | residualBootstrap with parameters = -3 is refused "parameters" | 1 | = 1 | pass |
+|  |  | profileInterval of unsorted points is refused, code "order" | 1 | = 1 | pass |
+|  |  | profileInterval with a minimum above every chi-square is refused, code "minimum" | 1 | = 1 | pass |
+|  |  | profileInterval with a NaN chi-square is refused, code "non-finite" | 1 | = 1 | pass |
+|  |  | profileInterval given both level and deltaChi2 is refused, code "level" | 1 | = 1 | pass |
+|  |  | percentileInterval of 20 draws at level 0.999 is refused, code "draws" (needs 2 / (1 - level)) | 1 | = 1 | pass |
+|  |  | percentileInterval of 60 draws with 3 NaN is ok and reports dropped = 3, draws = 57 | 1 | = 1 | pass |
+|  |  | propagate with an asymmetric covariance is refused, code "covariance" | 1 | = 1 | pass |
+|  |  | caseBootstrap without a seed throws code "seed" | 1 | = 1 | pass |
+|  |  | caseBootstrap with n = 2.5 and n = Infinity is refused, code "rows" | 2 | = 2 | pass |
+|  |  | apply() without uniformFor throws code "uniform" when a draw is needed | 1 | = 1 | pass |
+|  |  | a selection given a null row includes nothing, without a TypeError | 1 | = 1 | pass |
+|  |  | malmquistCutShift with sigma <= 0 or z NaN is NaN | 2 | = 2 | pass |
+|  |  | the same seed and the same label give the same draws | 1 | = 1 | pass |
+|  |  | the same seed with a different label gives different draws | 1 | = 1 | pass |
+| **R7** Tail p values of the diagnostics, and of the selection and bias formulas, keep their digits | analytic | lag-one p of a ramp is above zero | 1 | = 1 | pass |
+|  |  | lag-one p of a ramp over 2 Q(|z|), minus 1 | 9e-15 | 0 ± 1e-8 | pass |
+|  |  | runs test (normal branch) of 1,200 alternating values: P(runs >= observed) is above zero | 1 | = 1 | pass |
+|  |  | ... and equals Q((runs - 1/2 - mean) / sd), relative | 3e-14 | 0 ± 1e-8 | pass |
+|  |  | either(1e-17, 1e-17) over 2e-17, minus 1 | 0 | 0 ± 1e-12 | pass |
+|  |  | either(1, 0.3) is 1 | 1 | = 1 | pass |
+|  |  | either(0.5, 0.5) is 0.75 | 0.75 | 0.75 ± 1e-15 | pass |
+|  |  | eddingtonShift at t = -35 (observed 65, sigma 1, scale 0.01) over the Mills-ratio form, minus 1 | 0 | 0 ± 1e-6 | pass |
+|  |  | eddingtonShift at t = -100 (observed 0, sigma 1, scale 0.01) over the Mills-ratio form, minus 1 | 0 | 0 ± 1e-6 | pass |
+|  |  | eddingtonShift at t = -200 (observed 0, sigma 1, scale 0.005) over the Mills-ratio form, minus 1 | 0 | 0 ± 1e-6 | pass |
+| **R8** Diagnostics refuse non-finite values and series too short for their null, instead of dropping or approximating | negative | lagOne with a NaN is refused, code "non-finite" | 1 | = 1 | pass |
+|  |  | runsTest with a NaN is refused, code "non-finite" | 1 | = 1 | pass |
+|  |  | normalProbability with a NaN is refused, code "non-finite" | 1 | = 1 | pass |
+|  |  | lagOne of 9 values is refused, code "length" | 1 | = 1 | pass |
+|  |  | runsTest of 7 values is refused, code "length" | 1 | = 1 | pass |
+|  |  | lagOne sigma at n = 200 is sqrt((n - 2) / (n^2 - 1)) | 0.07036 | 0.07036 ± 1e-14 | pass |
+| **B9** Completeness correction: an empty bin has an upper limit, counts are whole numbers, codes say what is wrong | negative | n = 0, Poisson, c = 0.5: status upper-limit | 1 | = 1 | pass |
+|  |  | ... upper limit at 95% is -ln(0.05) / 0.5 | 5.991 | 5.991 ± 1e-12 | pass |
+|  |  | n = 0, fixed population, c = 0.5: upper limit ln(0.05) / ln(0.5) | 4.322 | 4.322 ± 1e-12 | pass |
+|  |  | n = 2.5 is refused, code "count" | 1 | = 1 | pass |
+|  |  | n = NaN is refused, code "count" | 1 | = 1 | pass |
+|  |  | n = -1 is refused, code "count" | 1 | = 1 | pass |
+|  |  | c = NaN is refused, code "completeness" | 1 | = 1 | pass |
+|  |  | c below the floor is refused, code "completeness" | 1 | = 1 | pass |
 
 <!-- statistics-validation:end -->
 
@@ -488,8 +570,8 @@ Node 24), and a request ceiling does not rise under the standing approval.
 
 | Adoption | Equivalence proved | Cost measured |
 | --- | --- | --- |
-| `js/inference/infer.js` profile interval onto `profileInterval` (adds `method` and `level` to the profile result) | `profileInterval` calls the function the core already calls on the same inputs: 300 seeded profiles, bit for bit; on a real transit profile within 1e-12 | intervals.js + special.js: 5.8 KB gzip in the first-visit tier, two more requests on the 5 pages that load infer.js (screen) |
-| `js/survey/model.js` detection onto `selection` and `logisticCompleteness` | detection flags equal on 8 universes (4 seeds, 2 instruments), and `malmquistShift` equals `malmquistFormula` to 1e-15 relative | selection.js + resample.js + special.js: about 8.3 KB gzip, three more requests on the 5 pages that load model.js (screen) |
+| `js/inference/infer.js` profile interval onto `profileInterval` (adds `method` and `level` to the profile result) | `profileInterval` calls the function the core already calls on the same inputs: 300 seeded profiles, bit for bit; on a real fit's profile within 1e-12 | intervals.js + special.js + check.js: 7.3 KB gzip in the first-visit tier, three more requests on the 5 pages that load infer.js (screen) |
+| `js/survey/model.js` detection onto `selection` and `logisticCompleteness` | detection flags equal on 8 universes (4 seeds, 2 instruments), and `malmquistShift` equals `malmquistFormula` to 1e-15 relative | selection.js + resample.js + special.js + check.js: about 10.2 KB gzip, four more requests (a fifth where linalg.js is not already loaded) on the 5 pages that load model.js (screen) |
 
-Both are waits for Carl: a first-visit ceiling raise (tools/data-budget.json,
+Both are waits for Carl (the whole kernel is 19.8 KB gzip): a first-visit ceiling raise (tools/data-budget.json,
 which a session may not edit) and a request decision for those routes.

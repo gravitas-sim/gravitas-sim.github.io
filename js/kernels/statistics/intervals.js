@@ -16,6 +16,7 @@
 // =============================================================================
 
 import { crossing } from '../../inference/fit.js';
+import { refused, allFinite, isCount } from './check.js';
 import {
   chi2Cdf,
   chi2Quantile,
@@ -47,6 +48,13 @@ export const METHODS = Object.freeze({
     label: "Student's t",
     assumes: [
       'independent values from a normal distribution of unknown mean and variance',
+    ],
+  },
+  'poisson-garwood': {
+    label: 'Poisson exact (Garwood)',
+    assumes: [
+      'independent counts at a constant rate',
+      'conservative: the coverage is at least the stated level at any rate',
     ],
   },
   'poisson-profile': {
@@ -85,7 +93,6 @@ export const METHODS = Object.freeze({
 });
 
 const assumesOf = method => METHODS[method]?.assumes ?? [];
-const refused = (code, why) => ({ status: 'refused', code, why });
 
 /** The coverage of a central interval of k sigmas of a normal: erf(k / sqrt 2). */
 export const levelOfSigma = k => gammaP(0.5, (k * k) / 2);
@@ -139,6 +146,25 @@ export function profileInterval(points, minimum, { level, deltaChi2 } = {}) {
     return refused('points', 'a profile needs at least three points');
   if (!Number.isFinite(minimum))
     return refused('minimum', 'the minimum is not a number');
+  if (!points.every(p => Number.isFinite(p?.value) && Number.isFinite(p?.chi2)))
+    return refused(
+      'non-finite',
+      'a profile point has a value or a chi-square that is not a finite number'
+    );
+  for (let i = 1; i < points.length; i++)
+    if (!(points[i].value > points[i - 1].value))
+      return refused(
+        'order',
+        'the profile points must be sorted by increasing value'
+      );
+  const lowest = Math.min(...points.map(p => p.chi2));
+  if (minimum > lowest + 1e-9 * Math.max(1, Math.abs(lowest)))
+    return refused(
+      'minimum',
+      'the minimum is above the lowest chi-square of the profile: it is not the best fit of this profile'
+    );
+  if (level !== undefined && deltaChi2 !== undefined)
+    return refused('level', 'give a level or a deltaChi2, not both');
   let delta = deltaChi2;
   let cover = level;
   if (delta === undefined) {
@@ -172,6 +198,8 @@ export function studentInterval(samples, { level = 0.95 } = {}) {
       'samples',
       'an interval of a mean needs at least two values'
     );
+  if (!allFinite(samples))
+    return refused('non-finite', 'a value is NaN or infinite');
   if (!(level > 0 && level < 1))
     return refused('level', 'the level is not between 0 and 1');
   let m = 0;
@@ -179,6 +207,11 @@ export function studentInterval(samples, { level = 0.95 } = {}) {
   m /= n;
   let ss = 0;
   for (let i = 0; i < n; i++) ss += (samples[i] - m) ** 2;
+  if (!(ss > 0))
+    return refused(
+      'constant',
+      'the values are all equal: the interval has no width to estimate'
+    );
   const se = Math.sqrt(ss / (n - 1) / n);
   const dof = n - 1;
   const half = tQuantile((1 + level) / 2, dof) * se;
@@ -195,14 +228,21 @@ export function studentInterval(samples, { level = 0.95 } = {}) {
   };
 }
 
+/** Below this many counts in all, the exact (Garwood) interval is used; from here the deviance one. */
+export const SMALL_COUNT = 10;
+
 /**
- * The rate of a Poisson process and its profile-deviance interval. The counts
- * were taken in equal exposures `exposure` each (or one exposure per count, as
- * an array); the rate is the sum of the counts over the total exposure, which is
- * the maximum of the likelihood exactly. The interval is where the deviance
- * D = 2 (L - N - N ln (L / N)), L = rate x total exposure, stays under the
- * chi-square quantile of the level on one degree of freedom. With no counts the
- * lower end is 0 and the upper end the one-sided limit.
+ * The rate of a Poisson process and its interval. The counts were taken in
+ * equal exposures `exposure` each (or one exposure per count, as an array); the
+ * rate is the sum of the counts over the total exposure, which is the maximum of
+ * the likelihood exactly. Below SMALL_COUNT (10) counts in all the interval is
+ * the exact one of Garwood (1936), from chi-square quantiles, which covers at
+ * least the stated level at any rate (method `poisson-garwood`); the profile
+ * deviance interval D = 2 (L - N - N ln (L / N)) < the chi-square quantile on
+ * one degree of freedom under-covers there (at no counts its upper end is a
+ * one-sided 85%, not 95%), so from 10 counts up that is used (method
+ * `poisson-profile`). With no counts the lower end is 0 and the upper end is the
+ * Garwood one.
  */
 export function poissonInterval(counts, { exposure = 1, level = 0.95 } = {}) {
   const n = counts?.length ?? 0;
@@ -211,46 +251,60 @@ export function poissonInterval(counts, { exposure = 1, level = 0.95 } = {}) {
     return refused('level', 'the level is not between 0 and 1');
   let N = 0;
   for (let i = 0; i < n; i++) {
-    if (!(counts[i] >= 0))
-      return refused('counts', 'a count is negative or not a number');
+    if (!isCount(counts[i]))
+      return refused('counts', 'a count is not a whole number of at least 0');
     N += counts[i];
   }
-  const T = Array.isArray(exposure)
-    ? exposure.reduce((a, b) => a + b, 0)
-    : exposure * n;
-  if (!(T > 0))
-    return refused('exposure', 'the total exposure is not positive');
-  const thr = chi2Quantile(level, 1);
-  const rate = N / T;
-  let lo = 0;
-  let hi;
-  if (N === 0) hi = thr / (2 * T);
-  else {
-    // x = L / N: the deviance is 2 N (x - 1 - ln x), zero at 1, rising both ways.
-    const f = x => 2 * N * (x - 1 - Math.log(x)) - thr;
-    const root = (a, b, rising) => {
-      for (let i = 0; i < 200; i++) {
-        const mid = 0.5 * (a + b);
-        if (mid === a || mid === b) break;
-        if (f(mid) > 0 === rising) b = mid;
-        else a = mid;
-      }
-      return 0.5 * (a + b);
-    };
-    let top = 2;
-    while (f(top) < 0 && top < 1e12) top *= 2;
-    lo = root(0, 1, false) * rate;
-    hi = root(1, top, true) * rate;
+  let T;
+  if (Array.isArray(exposure)) {
+    if (
+      exposure.length !== n ||
+      !exposure.every(e => Number.isFinite(e) && e > 0)
+    )
+      return refused(
+        'exposure',
+        'there must be one positive finite exposure per count'
+      );
+    T = exposure.reduce((a, b) => a + b, 0);
+  } else {
+    if (!(Number.isFinite(exposure) && exposure > 0))
+      return refused(
+        'exposure',
+        'the exposure is not a positive finite number'
+      );
+    T = exposure * n;
   }
+  const rate = N / T;
+  const common = { status: 'ok', level, rate, total: N, exposure: T };
+  if (N < SMALL_COUNT) {
+    const alpha = (1 - level) / 2;
+    return {
+      ...common,
+      method: 'poisson-garwood',
+      lo: N === 0 ? 0 : chi2Quantile(alpha, 2 * N) / 2 / T,
+      hi: chi2Quantile(1 - alpha, 2 * N + 2) / 2 / T,
+      assumes: assumesOf('poisson-garwood'),
+    };
+  }
+  const thr = chi2Quantile(level, 1);
+  // x = L / N: the deviance is 2 N (x - 1 - ln x), zero at 1, rising both ways.
+  const f = x => 2 * N * (x - 1 - Math.log(x)) - thr;
+  const root = (a, b, rising) => {
+    for (let i = 0; i < 200; i++) {
+      const mid = 0.5 * (a + b);
+      if (mid === a || mid === b) break;
+      if (f(mid) > 0 === rising) b = mid;
+      else a = mid;
+    }
+    return 0.5 * (a + b);
+  };
+  let top = 2;
+  while (f(top) < 0 && top < 1e12) top *= 2;
   return {
-    status: 'ok',
+    ...common,
     method: 'poisson-profile',
-    level,
-    rate,
-    total: N,
-    exposure: T,
-    lo,
-    hi,
+    lo: root(0, 1, false) * rate,
+    hi: root(1, top, true) * rate,
     assumes: assumesOf('poisson-profile'),
   };
 }
@@ -264,15 +318,17 @@ export function percentileInterval(
   samples,
   { level = 0.95, method = 'percentile' } = {}
 ) {
-  const sorted = Float64Array.from(samples).filter(Number.isFinite).sort();
-  const n = sorted.length;
-  if (n < 20)
-    return refused(
-      'samples',
-      'a percentile interval needs at least 20 finite draws'
-    );
   if (!(level > 0 && level < 1))
     return refused('level', 'the level is not between 0 and 1');
+  const all = Float64Array.from(samples ?? []);
+  const sorted = all.filter(Number.isFinite).sort();
+  const n = sorted.length;
+  const need = Math.ceil(2 / (1 - level));
+  if (n < need)
+    return refused(
+      'draws',
+      `a ${level} interval needs at least ${need} finite draws (2 / (1 - level)); there are ${n}`
+    );
   const at = p => {
     const h = (n - 1) * p;
     const i = Math.floor(h);
@@ -285,6 +341,7 @@ export function percentileInterval(
     method,
     level,
     draws: n,
+    dropped: all.length - n,
     value: at(0.5),
     lo: at((1 - level) / 2),
     hi: at((1 + level) / 2),

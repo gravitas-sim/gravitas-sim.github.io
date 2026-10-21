@@ -10,11 +10,10 @@
 // like one.
 // =============================================================================
 
-import { lnGamma, normalCdf, normalQuantile } from './special.js';
+import { lnGamma, normalCdf, normalSf, normalQuantile } from './special.js';
+import { refused, allFinite } from './check.js';
 
 const { Math, Number, Float64Array } = globalThis;
-
-const refused = (code, why) => ({ status: 'refused', code, why });
 
 /**
  * (y - fit) / sigma, so that a fit with right error bars gives unit-variance
@@ -28,6 +27,11 @@ export function normalisedResiduals({ y, fit, sigma = null, parameters = 0 }) {
   const n = y?.length ?? 0;
   if (!n || fit?.length !== n)
     return refused('length', 'the data and the fit differ in length');
+  if (!allFinite(y) || !allFinite(fit))
+    return refused(
+      'non-finite',
+      'the data or the fit has a value that is NaN or infinite'
+    );
   const values = new Float64Array(n);
   if (sigma === null || sigma === undefined) {
     const dof = n - parameters;
@@ -99,9 +103,12 @@ export function runsPmf(n1, n2) {
  * correction) or "auto" (exact up to 1,000 values).
  */
 export function runsTest(values, { center = 'median', method = 'auto' } = {}) {
-  const finite = Array.from(values ?? []).filter(Number.isFinite);
-  if (finite.length < 2)
-    return refused('length', 'a runs test needs at least two values');
+  const finite = Array.from(values ?? []);
+  if (!allFinite(finite))
+    return refused(
+      'non-finite',
+      'a value is NaN or infinite: dropping it would change the run structure'
+    );
   let c = center;
   if (center === 'median') {
     const s = finite.slice().sort((a, b) => a - b);
@@ -109,6 +116,11 @@ export function runsTest(values, { center = 'median', method = 'auto' } = {}) {
     c = s.length % 2 ? s[h] : 0.5 * (s[h - 1] + s[h]);
   }
   const signs = finite.filter(v => v !== c).map(v => v > c);
+  if (signs.length < 8)
+    return refused(
+      'length',
+      'a runs test needs at least 8 values away from the centre'
+    );
   const n1 = signs.filter(Boolean).length;
   const n2 = signs.length - n1;
   if (!n1 || !n2)
@@ -132,7 +144,7 @@ export function runsTest(values, { center = 'median', method = 'auto' } = {}) {
   } else {
     const sd = Math.sqrt(variance);
     pFew = normalCdf((runs + 0.5 - mean) / sd);
-    pMany = 1 - normalCdf((runs - 0.5 - mean) / sd);
+    pMany = normalSf((runs - 0.5 - mean) / sd);
   }
   pFew = Math.min(1, pFew);
   pMany = Math.min(1, pMany);
@@ -154,15 +166,21 @@ export function runsTest(values, { center = 'median', method = 'auto' } = {}) {
 
 /**
  * The lag-one autocorrelation of a series about its mean, and a z test against
- * white noise (large n: mean -1/n, standard deviation 1/sqrt n).
+ * white noise: mean -1/n and the Gaussian white-noise standard deviation of the
+ * circular coefficient, sqrt((n - 2) / (n^2 - 1)) (Anderson 1942); at least ten values.
  */
 export function lagOne(values) {
-  const x = Array.from(values ?? []).filter(Number.isFinite);
+  const x = Array.from(values ?? []);
   const n = x.length;
-  if (n < 3)
+  if (!allFinite(x))
+    return refused(
+      'non-finite',
+      'a value is NaN or infinite: dropping it would change which values are adjacent'
+    );
+  if (n < 10)
     return refused(
       'length',
-      'lag-one autocorrelation needs at least three values'
+      'lag-one autocorrelation needs at least ten values (its null is a large-n one)'
     );
   const m = x.reduce((a, b) => a + b, 0) / n;
   let den = 0;
@@ -172,7 +190,7 @@ export function lagOne(values) {
   for (let i = 0; i + 1 < n; i++) num += (x[i] - m) * (x[i + 1] - m);
   const r1 = num / den;
   const expected = -1 / n;
-  const sigma = 1 / Math.sqrt(n);
+  const sigma = Math.sqrt((n - 2) / (n * n - 1));
   const z = (r1 - expected) / sigma;
   return {
     status: 'ok',
@@ -182,7 +200,7 @@ export function lagOne(values) {
     expected,
     sigma,
     z,
-    p: Math.min(1, 2 * (1 - normalCdf(Math.abs(z)))),
+    p: Math.min(1, 2 * normalSf(Math.abs(z))),
   };
 }
 
@@ -193,9 +211,10 @@ export function lagOne(values) {
  * coefficient, near 1 for a normal sample).
  */
 export function normalProbability(values) {
-  const x = Float64Array.from(
-    Array.from(values ?? []).filter(Number.isFinite)
-  ).sort();
+  const raw = Array.from(values ?? []);
+  if (!allFinite(raw))
+    return refused('non-finite', 'a value is NaN or infinite');
+  const x = Float64Array.from(raw).sort();
   const n = x.length;
   if (n < 3)
     return refused('length', 'a probability plot needs at least three values');

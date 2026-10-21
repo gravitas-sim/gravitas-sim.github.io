@@ -27,13 +27,33 @@
 // =============================================================================
 
 import { normalCdf } from './special.js';
+import { refused, allFinite, isCount } from './check.js';
 import { StatisticsError } from './resample.js';
 
 const { Math, Number, Float64Array, Int32Array, Uint8Array } = globalThis;
 
-const refused = (code, why) => ({ status: 'refused', code, why });
 const SQRT_2PI = Math.sqrt(2 * Math.PI);
 const pdf = z => Math.exp(-0.5 * z * z) / SQRT_2PI;
+
+/**
+ * phi(t) / Phi(t), the inverse Mills ratio at the lower tail. Direct above
+ * t = -30; below it phi and Phi underflow together, so the ratio comes from the
+ * asymptotic series Phi(t) = phi(t) / |t| (1 - 1/t^2 + 3/t^4 - ...): the ratio is
+ * |t| over that sum (a few terms reach 1e-14 at |t| = 30).
+ */
+function inverseMills(t) {
+  if (t > -30) return pdf(t) / normalCdf(t);
+  const z = -t;
+  let term = 1;
+  let sum = 1;
+  for (let k = 1; k < 200; k++) {
+    const next = (-term * (2 * k - 1)) / (z * z);
+    if (Math.abs(next) >= Math.abs(term)) break;
+    term = next;
+    sum += term;
+  }
+  return z / sum;
+}
 
 function build(name, observables, inclusion) {
   const sel = {
@@ -41,6 +61,7 @@ function build(name, observables, inclusion) {
     observables,
     inclusion,
     apply(rows, uniformFor) {
+      // A draw is needed only for a probability strictly between 0 and 1.
       const n = rows.length;
       const flags = new Uint8Array(n);
       const probabilities = new Float64Array(n);
@@ -50,6 +71,11 @@ function build(name, observables, inclusion) {
         const p = inclusion(rows[i]);
         probabilities[i] = p;
         expected += p;
+        if (p > 0 && p < 1 && typeof uniformFor !== 'function')
+          throw new StatisticsError(
+            'uniform',
+            'apply() needs uniformFor(i), a uniform draw for row i, for a row whose probability is between 0 and 1'
+          );
         if (p >= 1 || (p > 0 && uniformFor(i) < p)) {
           flags[i] = 1;
           included.push(i);
@@ -85,11 +111,16 @@ export function selection({
   probability = null,
 } = {}) {
   const valueOf = row =>
-    observable !== null && typeof row === 'object' ? row[observable] : row;
+    row === null || row === undefined
+      ? NaN
+      : observable !== null && typeof row === 'object'
+        ? row[observable]
+        : row;
   const inclusion = row => {
     const v = valueOf(row);
+    // A row with no finite value of the observable cannot be included.
+    if (!Number.isFinite(v)) return 0;
     if (cut) {
-      if (!Number.isFinite(v)) return 0;
       if (
         (cut.min !== undefined && v < cut.min) ||
         (cut.max !== undefined && v > cut.max)
@@ -122,9 +153,10 @@ export function all(...sels) {
 /** Independent channels in parallel: a row is in if any one takes it. */
 export function either(...sels) {
   return build(sels.map(s => s.name).join(' or '), union(sels), row => {
-    let q = 1;
-    for (const s of sels) q *= 1 - s.inclusion(row);
-    return 1 - q;
+    // 1 - prod (1 - p) as -expm1(sum log1p(-p)): exact for p of 1e-17.
+    let logQ = 0;
+    for (const s of sels) logQ += Math.log1p(-s.inclusion(row));
+    return -Math.expm1(logQ);
   });
 }
 
@@ -139,13 +171,17 @@ export const logisticCompleteness =
  * error. The population is "poisson" (a rate: variance n / c^2) or "fixed" (a
  * known finite population thinned by detection: variance n (1 - c) / c^2). A bin
  * whose completeness is below `minCompleteness` is refused, not corrected: it
- * would multiply a handful of objects by a large number and call it a count.
+ * would multiply a handful of objects by a large number and call it a count. A
+ * bin with no detections has no estimate, only a one-sided upper limit at
+ * `level` (status `upper-limit`: -ln(1 - level) / c for a Poisson population);
+ * a count that is not a whole number is refused (code `count`).
  */
 export function completenessCorrect({
   observed,
   completeness,
   population = 'poisson',
   minCompleteness = 0.1,
+  level = 0.95,
 }) {
   if (!observed?.length || observed.length !== completeness?.length)
     throw new StatisticsError(
@@ -157,21 +193,41 @@ export function completenessCorrect({
       'population',
       'the population is "poisson" or "fixed"'
     );
+  if (!(level > 0 && level < 1))
+    throw new StatisticsError('level', 'the level is not between 0 and 1');
   const bins = observed.map((n, i) => {
     const c = completeness[i];
-    if (!(c >= minCompleteness && c <= 1) || !(n >= 0))
+    const base = { observed: n, completeness: c, corrected: null, sigma: null };
+    if (!isCount(n))
       return {
-        observed: n,
-        completeness: c,
-        corrected: null,
-        sigma: null,
+        ...base,
+        status: 'refused',
+        code: 'count',
+        why: 'a count is a whole number of at least 0',
+      };
+    if (!(Number.isFinite(c) && c >= minCompleteness && c <= 1))
+      return {
+        ...base,
         status: 'refused',
         code: 'completeness',
+        why: `the completeness is not a number from ${minCompleteness} to 1`,
+      };
+    if (n === 0)
+      // Nothing seen is not nothing there: the one-sided upper limit at `level`.
+      return {
+        ...base,
+        status: 'upper-limit',
+        level,
+        upperLimit:
+          population === 'poisson'
+            ? -Math.log(1 - level) / c
+            : c === 1
+              ? 0
+              : Math.log(1 - level) / Math.log(1 - c),
       };
     const variance = population === 'poisson' ? n : n * (1 - c);
     return {
-      observed: n,
-      completeness: c,
+      ...base,
       corrected: n / c,
       sigma: Math.sqrt(variance) / c,
       status: 'ok',
@@ -198,9 +254,7 @@ export function eddingtonShift({ observed, sigma, scale }) {
   if (!(sigma > 0) || !(scale > 0) || !Number.isFinite(observed)) return NaN;
   const mu = observed - (sigma * sigma) / scale;
   const t = mu / sigma;
-  const tail = normalCdf(t);
-  if (!(tail > 0)) return NaN;
-  return mu + (sigma * pdf(t)) / tail - observed;
+  return mu + sigma * inverseMills(t) - observed;
 }
 
 /**
@@ -219,7 +273,9 @@ export const malmquistShift = ({ sigma, slope = 0.6 }) =>
  * flux-limited sample: -sigma phi(z) / Phi(z).
  */
 export const malmquistCutShift = ({ sigma, z }) =>
-  (-sigma * pdf(z)) / normalCdf(z);
+  sigma > 0 && Number.isFinite(sigma) && Number.isFinite(z)
+    ? -sigma * inverseMills(z)
+    : NaN;
 
 /**
  * A bias measured on a synthetic population: the mean of the selected values
@@ -229,6 +285,8 @@ export function measuredShift(values, reference) {
   const n = values?.length ?? 0;
   if (n < 2)
     return refused('samples', 'a shift needs at least two selected values');
+  if (!allFinite(values) || !Number.isFinite(reference))
+    return refused('non-finite', 'a value or the reference is NaN or infinite');
   let m = 0;
   for (let i = 0; i < n; i++) m += values[i];
   m /= n;

@@ -20,6 +20,7 @@
 
 import { stream, gaussian } from '../../random/streams.js';
 import { cholesky } from '../../numeric/linalg.js';
+import { refused, allFinite, isCount } from './check.js';
 
 const { Math, Number, Int32Array, Float64Array } = globalThis;
 
@@ -50,6 +51,11 @@ function checkDraws(draws) {
 /** A uniform stream from a seed (named 'noise', labelled), or the stream given. */
 function uniformFrom(seed, label) {
   if (typeof seed === 'function') return seed;
+  if (seed === undefined || seed === null || seed === '')
+    throw new StatisticsError(
+      'seed',
+      'a seed is required: an unseeded draw would be one fixed stream for every caller'
+    );
   return stream('noise', seed, label);
 }
 
@@ -85,15 +91,15 @@ export function caseBootstrap({
   statistic,
   draws = DRAW_BUDGET.default,
   seed,
+  label = 'case-bootstrap',
 }) {
   checkDraws(draws);
-  if (!(n >= 2))
-    return {
-      status: 'refused',
-      code: 'rows',
-      why: 'a bootstrap needs at least two rows',
-    };
-  const u = uniformFrom(seed, 'case-bootstrap');
+  if (!isCount(n, 2))
+    return refused(
+      'rows',
+      'a bootstrap needs a whole number of at least two rows'
+    );
+  const u = uniformFrom(seed, label);
   const out = collector(draws);
   for (let d = 0; d < draws; d++) {
     const idx = new Int32Array(n);
@@ -125,23 +131,26 @@ export function residualBootstrap({
   refit,
   draws = DRAW_BUDGET.default,
   seed,
+  label = 'residual-bootstrap',
 }) {
   checkDraws(draws);
-  const n = residuals.length;
-  if (!(n >= 2) || fit.length !== n)
-    return {
-      status: 'refused',
-      code: 'rows',
-      why: 'a residual bootstrap needs matching fit and residuals of at least two rows',
-    };
+  const n = residuals?.length ?? 0;
+  if (!(n >= 2) || fit?.length !== n)
+    return refused(
+      'rows',
+      'a residual bootstrap needs matching fit and residuals of at least two rows'
+    );
+  if (!isCount(parameters, 0))
+    return refused(
+      'parameters',
+      'the parameter count is not a whole number of at least 0'
+    );
+  if (!allFinite(fit) || !allFinite(residuals))
+    return refused('non-finite', 'the fit or a residual is NaN or infinite');
   if (!(n > parameters))
-    return {
-      status: 'refused',
-      code: 'dof',
-      why: 'no degrees of freedom are left',
-    };
+    return refused('dof', 'no degrees of freedom are left');
   const inflate = Math.sqrt(n / (n - parameters));
-  const u = uniformFrom(seed, 'residual-bootstrap');
+  const u = uniformFrom(seed, label);
   const out = collector(draws);
   const y = new Float64Array(n);
   for (let d = 0; d < draws; d++) {
@@ -172,23 +181,40 @@ export function propagate({
   fn,
   draws = DRAW_BUDGET.default,
   seed,
+  label = 'propagation',
 }) {
   checkDraws(draws);
   const k = mean?.length ?? 0;
-  if (!covariance || covariance.length !== k || !k)
-    return {
-      status: 'refused',
-      code: 'covariance',
-      why: 'there is no covariance of the right size',
-    };
+  if (!k || !allFinite(mean))
+    return refused(
+      'mean',
+      'the mean is missing or has a value that is not finite'
+    );
+  if (
+    !covariance ||
+    covariance.length !== k ||
+    !covariance.every(r => r?.length === k && allFinite(r))
+  )
+    return refused(
+      'covariance',
+      'there is no finite covariance of the right size'
+    );
+  for (let i = 0; i < k; i++)
+    for (let j = 0; j < i; j++)
+      if (
+        Math.abs(covariance[i][j] - covariance[j][i]) >
+        1e-9 *
+          Math.max(
+            Math.abs(covariance[i][j]),
+            Math.abs(covariance[j][i]),
+            1e-300
+          )
+      )
+        return refused('covariance', 'the covariance is not symmetric');
   const L = cholesky(covariance);
   if (!L)
-    return {
-      status: 'refused',
-      code: 'covariance',
-      why: 'the covariance is not positive definite',
-    };
-  const u = uniformFrom(seed, 'propagation');
+    return refused('covariance', 'the covariance is not positive definite');
+  const u = uniformFrom(seed, label);
   const z = gaussian(u);
   const out = collector(draws);
   const theta = new Array(k);

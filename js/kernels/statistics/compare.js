@@ -15,9 +15,12 @@
 // code before it prints a p value (Protassov et al. 2002).
 // =============================================================================
 
-import { fSf, normalCdf } from './special.js';
+import { fSf, normalSf } from './special.js';
 
 const { Math, Number } = globalThis;
+
+/** The relative excess of a nested full model's RSS that rounding can explain (STATISTICS.md). */
+const RSS_ROUNDING = 1e-12;
 
 const refused = (code, why) => ({ status: 'refused', code, why });
 
@@ -63,7 +66,7 @@ export function difference({ a, b, varA, varB, covAB = 0 }) {
     ...base,
     status: 'ok',
     z,
-    p: Math.min(1, 2 * (1 - normalCdf(Math.abs(z)))),
+    p: Math.min(1, 2 * normalSf(Math.abs(z))),
   };
 }
 
@@ -94,19 +97,35 @@ export function fTest({
       'boundary',
       'a null value on the boundary of the parameter space changes the reference distribution'
     );
+  const counts = [n, pReduced, pFull];
+  if (!counts.every(Number.isInteger) || pReduced < 0)
+    return refused(
+      'counts',
+      'n and the parameter counts must be whole numbers, with the reduced count not negative'
+    );
   if (
-    ![rssReduced, rssFull, pReduced, pFull, n].every(Number.isFinite) ||
+    ![rssReduced, rssFull].every(Number.isFinite) ||
     rssFull < 0 ||
     rssReduced < 0
   )
     return refused(
       'input',
-      'an input is not a number, or a sum of squares is negative'
+      'a sum of squares is not a finite number, or is negative'
     );
-  if (!(pFull > pReduced) || rssFull > rssReduced * (1 + 1e-12))
+  if (rssReduced === 0 && rssFull === 0)
+    return refused(
+      'zero-rss',
+      'both models fit perfectly: F is 0/0 (the data are exactly in the reduced model)'
+    );
+  if (!(pFull > pReduced))
     return refused(
       'not-nested',
-      'the full model must have more parameters and fit no worse'
+      'the full model must have more parameters than the reduced one'
+    );
+  if (rssFull > rssReduced * (1 + RSS_ROUNDING))
+    return refused(
+      'not-nested',
+      'the full model fits worse than the reduced one it contains: they are not nested, or one fit did not converge'
     );
   const d1 = pFull - pReduced;
   const d2 = n - pFull;
@@ -115,12 +134,19 @@ export function fTest({
       'no-dof',
       'no degrees of freedom are left in the full model'
     );
-  const F =
-    rssFull === 0 ? Infinity : (rssReduced - rssFull) / d1 / (rssFull / d2);
+  // A full RSS above the reduced one by rounding only is no improvement at all.
+  const clamped = rssFull > rssReduced;
+  const F = clamped
+    ? 0
+    : rssFull === 0
+      ? Infinity
+      : (rssReduced - rssFull) / d1 / (rssFull / d2);
   return {
     status: 'ok',
     method: 'f-test-nested',
     F,
+    clamped,
+    declared: { searched, boundary },
     d1,
     d2,
     p: fSf(F, d1, d2),

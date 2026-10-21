@@ -15,7 +15,8 @@ import { describe, test, expect } from '@jest/globals';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 
-import { CASES, runCase } from '../tools/statistics-cases.mjs';
+import { CASES, runCase, TOL } from '../tools/statistics-cases.mjs';
+import * as special from '../js/kernels/statistics/special.js';
 import { crossing } from '../js/inference/fit.js';
 import { fitOnce, profileTask } from '../js/inference/infer.js';
 import { gaussian } from '../js/inference/synthetic.js';
@@ -86,9 +87,40 @@ describe('the validation group', () => {
     });
 });
 
+describe('the continued fractions', () => {
+  test('converge far under the cap on a grid of shapes and arguments', () => {
+    const scales = [0.5, 1, 2.5, 10, 100, 1e3, 1e4];
+    for (const a of scales)
+      for (const f of [0.01, 0.5, 0.9, 1, 1.1, 2, 10, 100]) {
+        const x = a * f;
+        const p = special.gammaP(a, x);
+        const q = special.gammaQ(a, x);
+        expect(Math.abs(p + q - 1)).toBeLessThan(1e-12);
+        for (const b of scales)
+          for (const u of [1e-3, 0.1, 0.5, 0.9, 0.999]) {
+            const v = special.betaI(u, a, b);
+            expect(Math.abs(v + special.betaI(1 - u, b, a) - 1)).toBeLessThan(
+              1e-11
+            );
+          }
+      }
+    for (let z = 0; z <= 38; z += 0.5) special.normalSf(z);
+    special.fQuantile(0.95, 1e3, 1e3);
+    special.tQuantile(0.975, 1e5);
+    special.chi2Quantile(0.99, 5e3);
+    const used = special.iterationStats;
+    expect(special.ITERATION_CAP).toBeGreaterThanOrEqual(
+      50 * TOL.cfIterationBound
+    );
+    for (const [name, n] of Object.entries(used))
+      expect([name, n < TOL.cfIterationBound]).toEqual([name, true]);
+  });
+});
+
 describe('the modules', () => {
   test('are the kernel named in the roadmap', () => {
     expect(modules.sort()).toEqual([
+      'check.js',
       'compare.js',
       'diagnostics.js',
       'index.js',
@@ -294,6 +326,6 @@ describe('the install', () => {
   });
 
   test('the kernel is at its documented size', () => {
-    expect(kernelFiles.length).toBe(7);
+    expect(kernelFiles.length).toBe(8);
   });
 });

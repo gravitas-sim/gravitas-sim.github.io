@@ -20,7 +20,19 @@
 const { Math, Number } = globalThis;
 
 const EPS = 1e-16;
+// The continued fractions stop when a step changes the product by less than a
+// few ulps of 1 (one ulp is 2.2e-16: a test against 1e-16 cannot be met).
+const CF_EPS = 4e-16;
 const TINY = 1e-300;
+
+/** The most iterations each routine has needed since the module loaded (a guard against lost convergence). */
+export const iterationStats = {
+  gammaSeries: 0,
+  gammaFraction: 0,
+  betaFraction: 0,
+};
+/** The cap on every iteration loop here. */
+export const ITERATION_CAP = 100000;
 
 const LANCZOS = [
   0.99999999999980993, 676.5203681218851, -1259.1392167224028,
@@ -46,7 +58,8 @@ function gammaSeries(a, x) {
   let ap = a;
   let del = 1 / a;
   let sum = del;
-  for (let n = 0; n < 100000; n++) {
+  for (let n = 0; n < ITERATION_CAP; n++) {
+    if (n > iterationStats.gammaSeries) iterationStats.gammaSeries = n;
     ap += 1;
     del *= x / ap;
     sum += del;
@@ -60,7 +73,8 @@ function gammaFraction(a, x) {
   let c = 1 / TINY;
   let d = 1 / b;
   let h = d;
-  for (let i = 1; i < 100000; i++) {
+  for (let i = 1; i < ITERATION_CAP; i++) {
+    if (i > iterationStats.gammaFraction) iterationStats.gammaFraction = i;
     const an = -i * (i - a);
     b += 2;
     d = an * d + b;
@@ -70,7 +84,7 @@ function gammaFraction(a, x) {
     d = 1 / d;
     const del = d * c;
     h *= del;
-    if (Math.abs(del - 1) < EPS) break;
+    if (Math.abs(del - 1) < CF_EPS) break;
   }
   return Math.exp(-x + a * Math.log(x) - lnGamma(a)) * h;
 }
@@ -100,7 +114,8 @@ function betaFraction(x, a, b) {
   if (Math.abs(d) < TINY) d = TINY;
   d = 1 / d;
   let h = d;
-  for (let m = 1; m < 100000; m++) {
+  for (let m = 1; m < ITERATION_CAP; m++) {
+    if (m > iterationStats.betaFraction) iterationStats.betaFraction = m;
     const m2 = 2 * m;
     let aa = (m * (b - m) * x) / ((qam + m2) * (a + m2));
     d = 1 + aa * d;
@@ -117,7 +132,7 @@ function betaFraction(x, a, b) {
     d = 1 / d;
     const del = d * c;
     h *= del;
-    if (Math.abs(del - 1) < EPS) break;
+    if (Math.abs(del - 1) < CF_EPS) break;
   }
   return h;
 }
@@ -160,15 +175,17 @@ function upper(cdf, p, start) {
 
 // --- Normal ----------------------------------------------------------------------
 
-/** P(Z <= z) for a standard normal Z. */
-export function normalCdf(z) {
+/** P(Z > z), the upper tail of a standard normal Z, without the cancellation of 1 - CDF. */
+export function normalSf(z) {
   if (Number.isNaN(z)) return NaN;
-  if (z === Infinity) return 1;
-  if (z === -Infinity) return 0;
-  return z >= 0
-    ? 0.5 + 0.5 * gammaP(0.5, (z * z) / 2)
-    : 0.5 * gammaQ(0.5, (z * z) / 2);
+  if (z === Infinity) return 0;
+  if (z === -Infinity) return 1;
+  const tail = 0.5 * gammaQ(0.5, (z * z) / 2);
+  return z >= 0 ? tail : 1 - tail;
 }
+
+/** P(Z <= z) for a standard normal Z (the lower tail keeps its digits). */
+export const normalCdf = z => normalSf(-z);
 
 /** The z with P(Z <= z) = p. */
 export function normalQuantile(p) {
@@ -202,15 +219,17 @@ export function chi2Quantile(p, k) {
 
 // --- Student t -------------------------------------------------------------------
 
-/** P(T <= t) for Student's t on nu degrees of freedom. */
-export function tCdf(t, nu) {
+/** P(T > t) for Student's t on nu degrees of freedom: the p value, without the cancellation of 1 - CDF. */
+export function tSf(t, nu) {
   if (!(nu > 0) || Number.isNaN(t)) return NaN;
-  if (t === Infinity) return 1;
-  if (t === -Infinity) return 0;
+  if (t === Infinity) return 0;
+  if (t === -Infinity) return 1;
   if (t === 0) return 0.5;
   const tail = 0.5 * betaI(nu / (nu + t * t), nu / 2, 0.5);
-  return t > 0 ? 1 - tail : tail;
+  return t > 0 ? tail : 1 - tail;
 }
+/** P(T <= t) for Student's t on nu degrees of freedom. */
+export const tCdf = (t, nu) => tSf(-t, nu);
 /** The t with P(T <= t) = p on nu degrees of freedom. */
 export function tQuantile(p, nu) {
   if (!(p >= 0 && p <= 1) || !(nu > 0)) return NaN;
