@@ -174,6 +174,71 @@ export async function measure() {
   };
 }
 
+// --- Labels: one thing, one name ----------------------------------------------
+
+const CATALOGS = {
+  deferred: ['en.deferred.js', 'EN_DEFERRED', 'es.deferred.js', 'ES_DEFERRED'],
+  library: ['en.library.js', 'EN_LIBRARY', 'es.library.js', 'ES_LIBRARY'],
+  observatory: [
+    'en.observatory.js',
+    'EN_OBSERVATORY',
+    'es.observatory.js',
+    'ES_OBSERVATORY',
+  ],
+  teaching: ['en.teaching.js', 'EN_TEACHING', 'es.teaching.js', 'ES_TEACHING'],
+};
+
+/**
+ * The English and Spanish a reference names: `shell:<key>`, `glossary:<id>` or
+ * `<catalog>:<message id>`.
+ * @param {string} ref - A reference from the inventory's label table
+ * @returns {Promise<{en: string, es: string}>} The words
+ */
+export async function resolveLabel(ref) {
+  const [kind, id] = ref.split(':');
+  if (kind === 'shell') return { en: WORDS[id][0], es: WORDS[id][1] };
+  if (kind === 'glossary') {
+    const { LABELS } = await import('./glossary.mjs');
+    const label = LABELS.find(l => l.id === id);
+    return { en: label.en, es: label.es };
+  }
+  const [enFile, enName, esFile, esName] = CATALOGS[kind];
+  const en = (await import(`../js/i18n/${enFile}`))[enName];
+  const es = (await import(`../js/i18n/${esFile}`))[esName];
+  return { en: en[id], es: es[id] };
+}
+
+/** A label without its article, case folded: "The 3-D lab" is "3-D lab". */
+const bare = s =>
+  String(s)
+    .replace(/^(?:the|el|la|los|las) /i, '')
+    .toLowerCase();
+
+/**
+ * The things the inventory says are named more than once and are not named
+ * alike. The first reference is the standard; each other is held to it.
+ * @param {object} inv - The inventory
+ * @returns {Promise<Array<{id: string, problems: string[]}>>} Things that diverge
+ */
+export async function labelDivergences(inv) {
+  const out = [];
+  for (const thing of inv.labels.sameThing) {
+    const [first, ...rest] = thing.refs;
+    const standard = await resolveLabel(first);
+    const problems = [];
+    for (const ref of rest) {
+      const got = await resolveLabel(ref);
+      for (const lang of ['en', 'es'])
+        if (bare(got[lang]) !== bare(standard[lang]))
+          problems.push(
+            `${ref} says ${JSON.stringify(got[lang])} in ${lang}, ${first} says ${JSON.stringify(standard[lang])}`
+          );
+    }
+    if (problems.length) out.push({ id: thing.id, problems });
+  }
+  return out;
+}
+
 // --- Reachability, from the page sources ---------------------------------------
 
 /** The internal page paths a page's own markup links to (and Home's fragment). */

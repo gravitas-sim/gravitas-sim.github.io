@@ -533,5 +533,85 @@
       "activatedBy": "166",
       "target": 24
     }
-  ]
+  ],
+  "labels": {
+    "note": "Each row is one thing named on more than one surface. refs are shell:<key> (tools/shell.mjs WORDS), deferred:/library:/observatory:/teaching:<message id> (js/i18n catalogs) and glossary:<label id> (tools/glossary.mjs LABELS). All must carry the same English and Spanish (a leading article is not a difference). knownDivergences are the rows that do not today; the list can only shrink, and Prompt 162 empties it.",
+    "sameThing": [
+      {
+        "id": "sandbox",
+        "refs": ["shell:sandbox", "deferred:welcomeCard.sandbox.title"]
+      },
+      {
+        "id": "investigations",
+        "refs": [
+          "shell:investigations",
+          "deferred:welcomeCard.investigations.title",
+          "library:lib.kind.investigation"
+        ]
+      },
+      {
+        "id": "courses",
+        "refs": ["shell:courses", "library:lib.kind.course"]
+      },
+      {
+        "id": "experiments",
+        "refs": ["shell:experiments", "library:lib.kind.experiment"]
+      },
+      {
+        "id": "instructors",
+        "refs": ["shell:instructors", "deferred:welcomeCard.instructors.cta"]
+      },
+      {
+        "id": "teaching",
+        "refs": [
+          "shell:teaching",
+          "teaching:teach.title",
+          "deferred:welcomeLink.teaching.label",
+          "glossary:teaching"
+        ]
+      },
+      {
+        "id": "library",
+        "refs": ["shell:library", "library:lib.title", "glossary:library"]
+      },
+      {
+        "id": "observatory",
+        "refs": [
+          "shell:observatory",
+          "observatory:obs.title",
+          "glossary:observatory"
+        ]
+      },
+      {
+        "id": "catalog",
+        "refs": ["shell:catalog", "glossary:catalog"]
+      },
+      {
+        "id": "scenario-studio",
+        "refs": ["shell:studio", "glossary:scenario-studio"]
+      },
+      {
+        "id": "composer",
+        "refs": ["shell:composer", "glossary:composer"]
+      },
+      {
+        "id": "figure-builder",
+        "refs": ["shell:figure", "glossary:figure-builder"]
+      },
+      {
+        "id": "course-builder",
+        "refs": ["shell:courseBuilder", "glossary:course-builder"]
+      },
+      {
+        "id": "lab3d",
+        "refs": ["shell:lab3d", "glossary:lab3d"]
+      }
+    ],
+    "knownDivergences": [
+      "sandbox",
+      "instructors",
+      "figure-builder",
+      "course-builder"
+    ]
+  }
 }
