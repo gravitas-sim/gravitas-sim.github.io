@@ -1,6 +1,6 @@
 {
   "version": "October 2026",
-  "generated": "2026-10-20",
+  "generated": "2026-10-21",
   "documents": 480,
   "inventory": {
     "documents": 480,
@@ -22,7 +22,7 @@
     }
   },
   "sourceFiles": 268,
-  "sourceDigest": "1bcb730363346444684c26920e617968a4ca1476514e28c9c93d68dd5a7f3569",
+  "sourceDigest": "9c097421f2c67ec74600d8cf05fecdb14d5adc9e44663ec61869baa5c9b0642e",
   "sources": {
     "js/activities/activities.js": "831a7712f2372ff8b54693d6669abfe9a185e677cd43411cac355fef979b8937",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -258,7 +258,7 @@
     "js/i18n/en.teaching.js": "7ff770aa281aed33e8f7bccb0c2a1f7e3826b203afa705c337225ba753a645ce",
     "js/i18n/es.activities.js": "252cf8e9b01b359777e925e89144e47e9fb0252f6fce08a8903e07348f220e93",
     "js/i18n/es.teaching.js": "b4965a7b2e5a6c5d4288cbaf3b4c121a02bf73fdeae110ab01b4b0a7741779d5",
-    "js/i18n/index.js": "e9e220de70294a82aec01921b14d1c882c77556ebf1537b6279c40b5783c4c36",
+    "js/i18n/index.js": "de0a259e4e17bdc04cb48d8f32fa7c6d47bb888cb327a948f412548e10f7a7f0",
     "js/instructorDocs.js": "45851faa46cae5f6bf587fa20969332822f9dda58e2bb6a858b42008936c2641",
     "js/instructorExpectations.js": "09b1aeac6b3fa134374f0286029cdda1cbe68c9e3d7885afdc75387a4f5d6282",
     "js/instructorFacts.js": "a8939d4e55ea32df76d53d4ae9222ccb98554a0251603aafe523f4f37f658a41",
