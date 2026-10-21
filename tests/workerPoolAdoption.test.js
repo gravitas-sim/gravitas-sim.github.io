@@ -7,6 +7,8 @@ import * as poolScheduler from './fixtures/poolAdopters/scheduler.js';
 import { runInference as legacyRun } from '../js/inference/run.js';
 import {
   runInference as poolRun,
+  FIT_BYTES,
+  PROFILE_BYTES,
   realmBytes,
 } from './fixtures/poolAdopters/run.js';
 import {
@@ -523,11 +525,14 @@ describe('the inference core’s run on the pool', () => {
   });
 
   test('what an inference realm holds is declared, in bytes, from the observation’s size', () => {
-    expect(realmBytes(0, 0)).toBe(6e6);
-    expect(realmBytes(50_000, 5)).toBe(6e6 + 50_000 * 8 * 14);
+    expect(realmBytes(0, 0, PROFILE_BYTES)).toBe(8e6);
+    expect(realmBytes(50_000, 5, FIT_BYTES)).toBe(64e6 + 50_000 * 8 * 14);
     // More rows or more free parameters never ask for less.
-    expect(realmBytes(2000, 7)).toBeGreaterThan(realmBytes(2000, 6));
-    expect(realmBytes(2001, 6)).toBeGreaterThan(realmBytes(2000, 6));
+    expect(realmBytes(2000, 7, 0)).toBeGreaterThan(realmBytes(2000, 6, 0));
+    expect(realmBytes(2001, 6, 0)).toBeGreaterThan(realmBytes(2000, 6, 0));
+    // The most any inference realm declares, on the data the page allows a
+    // low-end device, fits the low-end aggregate cap with room for the second.
+    expect(realmBytes(50_000, 12, FIT_BYTES)).toBeLessThan(256e6);
   });
 });
 

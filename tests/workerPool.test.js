@@ -12,6 +12,7 @@ import {
 import { stream } from '../js/random/streams.js';
 import { PROFILES } from '../js/experiments/experimentManifest.js';
 import { measure, readDataBudget } from '../tools/data-budget.mjs';
+import { readFileSync } from 'node:fs';
 
 // =============================================================================
 // The Worker pool contract (Prompt 153, WORKER_POOL.md)
@@ -275,6 +276,28 @@ describe('a run of jobs', () => {
     ]);
   });
 
+  test('a limit that is not a number sets no timer (setTimeout(Infinity) fires at once)', async () => {
+    const t = fakeTime();
+    let timers = 0;
+    const r = realms(() => 'manual');
+    const run = createPool({
+      spawn: r.spawn,
+      concurrency: 1,
+      now: t.now,
+      setTimer: (fn, ms) => {
+        timers++;
+        return t.setTimer(fn, ms);
+      },
+      clearTimer: t.clearTimer,
+    }).batch(jobs(1), { accept });
+    const done = run.run();
+    t.advance(1e12);
+    expect(run.state().state).toBe('running');
+    expect(timers).toBe(0);
+    r.made[0].answer({ type: 'result', result: { index: 0, status: 'ok' } });
+    expect((await done).status).toBe('complete');
+  });
+
   test('a job may carry its own time limit', async () => {
     const t = fakeTime();
     const r = realms(() => 'hang');
@@ -448,6 +471,26 @@ describe('memory and concurrency caps', () => {
     ]);
     expect(out.trials[1].error).toMatch(/250 bytes/);
     expect(r.made).toHaveLength(1);
+  });
+
+  test('a declaration that is not a number is refused, not waited on forever', async () => {
+    const r = realms();
+    const out = await createPool({ spawn: r.spawn, concurrency: 1 })
+      .batch(
+        [
+          { index: 0, memoryBytes: NaN },
+          { index: 1, memoryBytes: -1 },
+        ],
+        {
+          accept,
+        }
+      )
+      .run();
+    expect(out.trials.map(x => x.status)).toEqual([
+      JOB.RESOURCE_LIMIT,
+      JOB.RESOURCE_LIMIT,
+    ]);
+    expect(r.made).toHaveLength(0);
   });
 
   test('the caps are the data budget’s: the low-end profile refuses what its ceiling forbids', async () => {
@@ -774,5 +817,56 @@ describe('a stream for each job', () => {
     const forward = [0, 1, 2].map(draw);
     const backward = [2, 1, 0].map(draw).reverse();
     expect(backward).toEqual(forward);
+  });
+});
+
+describe('the recorded probe (tools/worker-probe.mjs)', () => {
+  const probe = JSON.parse(
+    readFileSync(
+      new URL('../tools/worker-probe-results.json', import.meta.url),
+      'utf8'
+    )
+  );
+  const budget = readDataBudget();
+  const ceiling = key => budget.ceilings.find(c => c.key === key).ceiling;
+
+  test('the Observatory with its largest pack open holds no Worker', () => {
+    for (const name of ['low-end', 'desktop'])
+      expect(probe.observatory[name].workersWithLargestOpen).toBe(0);
+  });
+
+  test('a profile run stays inside the caps: realms at once, and the aggregate bytes', () => {
+    const low = probe.profileRun['low-end'];
+    expect(low.peakRealmsAtOnce).toBeLessThanOrEqual(
+      ceiling('workerConcurrencyLowEnd')
+    );
+    expect(low.concurrency).toBeLessThanOrEqual(
+      ceiling('workerConcurrencyLowEnd')
+    );
+    expect(low.aggregatePeakHeldMB * 1e6).toBeLessThan(
+      ceiling('workerMemoryBytesLowEnd')
+    );
+    const desktop = probe.profileRun.desktop;
+    expect(desktop.peakRealmsAtOnce).toBeLessThanOrEqual(
+      PROFILES.desktop.maxConcurrency
+    );
+    expect(desktop.aggregatePeakHeldMB * 1e6).toBeLessThan(
+      PROFILES.desktop.maxMemoryBytes
+    );
+    // Every realm was seen: the fit, then one profile per fitted parameter.
+    expect(low.realmsSampled).toBe(low.realmsSeen);
+  });
+
+  test('what a first visit leaves is under the storage ceiling, and the data budget reads it', () => {
+    expect(probe.storage.usageBytes).toBeLessThan(
+      ceiling('indexedDbAndCacheBytes')
+    );
+    expect(measure().indexedDbAndCacheBytes).toBe(probe.storage.usageBytes);
+  });
+
+  test('it says when and on what it was taken', () => {
+    expect(probe.measuredAt).toMatch(/^[0-9a-f]{7,}$/);
+    expect(probe.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(probe.environment.chromium).toBeTruthy();
   });
 });

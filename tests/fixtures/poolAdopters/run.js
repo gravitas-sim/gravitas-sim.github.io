@@ -40,12 +40,17 @@ const failed = (task, status, extra) => ({
 });
 
 /**
- * What one inference realm holds: the Worker and the inference core's modules,
- * and the observation's columns and the fit's work arrays, 8 bytes a value.
- * `perRow` and `base` are measured (INFERENCE_CORE.md, tools/worker-probe.mjs).
+ * What one inference realm holds, by what tools/worker-probe.mjs measured in
+ * Chromium on the observatory's 1,882-row TESS light curve (WORKER_POOL.md):
+ * a profile realm peaked at 4.8 MB (JavaScript heap and buffers), the fit realm
+ * at 55.4 MB, because the fit's period search fills buffers it frees after.
+ * Declared with room (8 MB and 64 MB) plus the observation's columns and the
+ * fit's work arrays at 8 bytes a value, which is what grows with the data.
  */
-export const realmBytes = (rows, free, { base = 6e6, perRow = 8 } = {}) =>
-  base + rows * perRow * (4 + 2 * free);
+export const FIT_BYTES = 64e6;
+export const PROFILE_BYTES = 8e6;
+export const realmBytes = (rows, free, base) =>
+  base + rows * 8 * (4 + 2 * free);
 
 /**
  * @param {{request: object, data: object, spawn: Function,
@@ -102,7 +107,7 @@ export function runInference(opts) {
     const a = await stage(
       [{ index: 0, task: 'fit' }],
       t => ({ type: 'run', task: 'fit', index: t.index, request, data }),
-      realmBytes(rows, free),
+      realmBytes(rows, free, FIT_BYTES),
       0,
       profiles ? 0.25 : 1
     );
@@ -133,7 +138,7 @@ export function runInference(opts) {
         data,
         fit: slim(fit),
       }),
-      realmBytes(rows, fit.free.length),
+      realmBytes(rows, fit.free.length, PROFILE_BYTES),
       0.25,
       1
     );

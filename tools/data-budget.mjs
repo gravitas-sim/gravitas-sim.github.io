@@ -15,16 +15,18 @@
 // Some of these can be measured from the tree, and are: pack bytes by kind
 // and the two precache tiers, raw and gzipped. Others need a browser: decoded
 // image memory per page and aggregate worker memory are probes on the throttled
-// profile (Prompt 157), and the IndexedDB and cache footprint is read from a
-// real profile. Those ceilings are written down as proposals with
-// `measured: null`; a null measurement is reported as "not measured", never as
-// zero and never as a pass, and --check does not fail on it.
+// profile (Prompts 153 and 157), and the IndexedDB and cache footprint is read
+// from a real profile. Prompt 153's probe (tools/worker-probe.mjs) records the
+// storage a first visit leaves, and that is the one browser figure measured
+// here; decoded image memory still waits for 157. A ceiling with `measured:
+// null` is reported as "not measured", never as zero and never as a pass, and
+// --check does not fail on it.
 //
 // The mode in tools/budget-policy.json decides whether any of this can fail a
 // build. While the mode is "exact" the check reports and exits 0.
 // =============================================================================
 
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
@@ -92,7 +94,26 @@ export function measure(root = ROOT) {
     // The pool's own caps, which are what the realms are held to.
     workerConcurrencyLowEnd: PROFILES['low-end'].maxConcurrency,
     workerMemoryBytesLowEnd: PROFILES['low-end'].maxMemoryBytes,
+    // What a first visit leaves in Cache Storage and IndexedDB: a browser
+    // probe's figure (tools/worker-probe.mjs, Prompt 153), recorded in
+    // tools/worker-probe-results.json with the commit and the date it was
+    // taken. Absent until a probe has been recorded, and then "not measured".
+    ...recordedProbe(root),
   };
+}
+
+/**
+ * The browser probe's recorded measurements, by the keys of data-budget.json.
+ * @param {string} [root]
+ * @returns {Record<string, number>}
+ */
+export function recordedProbe(root = ROOT) {
+  const file = path.join(root, 'tools', 'worker-probe-results.json');
+  if (!existsSync(file)) return {};
+  const r = JSON.parse(readFileSync(file, 'utf8'));
+  return Number.isFinite(r.storage?.usageBytes)
+    ? { indexedDbAndCacheBytes: r.storage.usageBytes }
+    : {};
 }
 
 export function readDataBudget(file = DATA_BUDGET_FILE) {
