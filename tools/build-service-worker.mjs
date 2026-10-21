@@ -292,7 +292,9 @@ const ON_DEMAND_ONLY = new Set([
 export const IDLE_TIER = [
   [
     'instructor modules',
-    /^(js\/authoring\/instructorSchema\.js|js\/instructor[A-Za-z]*\.js|js\/data\/instructor[A-Za-z.]*\.js)$/,
+    // The review page's own module (Prompt 172, D-R10-38): an instructor
+    // surface like the documents, read by no first visit.
+    /^(js\/authoring\/instructorSchema\.js|js\/instructor[A-Za-z]*\.js|js\/submissionReview\.js|js\/data\/instructor[A-Za-z.]*\.js)$/,
   ],
   ['three.js', /^vendor\/three\//],
   [
