@@ -44,7 +44,7 @@ export const EN_CLASSSUMMARY = {
     'No wrong answers among the answers Gravitas can check.',
   'sub.sum.col.question': 'Question',
   'sub.sum.col.given': 'Answer given',
-  'sub.sum.col.times': 'Times',
+  'sub.sum.col.times': 'Count',
   'sub.sum.col.share': 'Share of the wrong answers to that question',
   'sub.sum.col.misconception': 'Misconception the author named',
   'sub.sum.unreadable': 'not a readable answer',
@@ -76,7 +76,7 @@ export const EN_CLASSSUMMARY = {
   'sub.sum.measured.line':
     '{n} values: median {median}, range {min} to {max}. {bars} state an uncertainty (mean {sigma}).',
   'sub.sum.measured.left':
-    'Left out of the plot: {limit} limits, {failed} failed fits, {nc} not constrained.',
+    'Left out of the plot: limits {limit}, failed fits {failed}, not constrained {nc}.',
   'sub.sum.measured.caption':
     '{name}: one row for each report, ordered by value',
   'sub.sum.col.rank': 'Rank',

@@ -42,7 +42,7 @@ export const ES_CLASSSUMMARY = {
     'No hay respuestas incorrectas entre las que Gravitas puede comprobar.',
   'sub.sum.col.question': 'Pregunta',
   'sub.sum.col.given': 'Respuesta dada',
-  'sub.sum.col.times': 'Veces',
+  'sub.sum.col.times': 'Cantidad',
   'sub.sum.col.share':
     'Proporción de las respuestas incorrectas a esa pregunta',
   'sub.sum.col.misconception': 'Concepto erróneo que nombró el autor',
@@ -74,7 +74,7 @@ export const ES_CLASSSUMMARY = {
   'sub.sum.measured.line':
     '{n} valores: mediana {median}, rango de {min} a {max}. {bars} indican una incertidumbre (media {sigma}).',
   'sub.sum.measured.left':
-    'Omitidos del gráfico: {limit} límites, {failed} ajustes fallidos, {nc} no acotados.',
+    'Omitidos del gráfico: límites {limit}, ajustes fallidos {failed}, no acotados {nc}.',
   'sub.sum.measured.caption':
     '{name}: una fila por informe, ordenada por valor',
   'sub.sum.col.rank': 'Posición',
