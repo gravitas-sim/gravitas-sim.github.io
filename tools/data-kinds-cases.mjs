@@ -1114,7 +1114,7 @@ export const CONSERVE = { seed: 99, width: 64, height: 48, k: 4 };
 export const DECODED_BYTES = [
   [2048, 2048, { data: true }, 33554432],
   [2048, 2048, { data: true, variance: true }, 67108864],
-  [2048, 2048, { data: true, variance: true, mask: true }, 71303168],
+  [2048, 2048, { data: true, variance: true, mask: true }, 75497472],
   [1024, 1024, { data: true }, 8388608],
   [8192, 512, { data: true }, 33554432],
   [1, 1, { data: true }, 8],
