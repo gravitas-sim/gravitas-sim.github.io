@@ -45,7 +45,7 @@ test.describe('the shell', () => {
     await expect(dest(page, 'teach')).toHaveAttribute('aria-current', 'page');
     await page.locator('.gs-places a[href="/instructors/"]').click();
     await expect(page).toHaveURL(/\/instructors\/$/);
-    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('h1').first()).toBeVisible();
   });
 
   test(

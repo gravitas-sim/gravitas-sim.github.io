@@ -395,7 +395,7 @@ test.describe('what used to be a menu entry', () => {
     page,
   }) => {
     await page.goto('/experiments/', { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('.gs-crumbs li')).toHaveCount(3);
+    await expect(page.locator('.gs-crumbs li')).toHaveCount(2);
     await expect(
       page.locator('.gs-crumbs [aria-current="page"]')
     ).toBeVisible();
@@ -418,7 +418,7 @@ test.describe('what used to be a menu entry', () => {
       location.hash = '#home';
     });
     await expect(page.locator('#welcomeSections')).toBeVisible();
-    await expect(page.locator('#welStart li')).toHaveCount(
+    await expect(page.locator('#welcomeSections .wel-start li')).toHaveCount(
       inventory.firstWeek.starts.length
     );
     await expect(page.locator('#welcomeSections [data-dest]')).toHaveCount(5);

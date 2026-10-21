@@ -531,7 +531,7 @@ describe('NAVIGATION.md', () => {
       '## Acceptance criteria',
       '## The structural checks',
       '## What these checks do not prove',
-      '## What the site fails today',
+      '## What the site still fails',
       '## The internal review protocol',
     ])
       expect(text, heading).toContain(heading);

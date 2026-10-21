@@ -198,11 +198,6 @@ function build() {
         reproduce systems astronomers have actually observed. Then measure what
         happens.</span><span class="gs-es" lang="es">Construye sistemas planetarios, haz orbitar estrellas binarias, colisiona objetos compactos y reproduce sistemas que los astrónomos han observado de verdad. Después, mide lo que ocurre.</span>
       </p>
-      <div class="wel-hero-actions">
-        <button type="button" class="wel-quiet" data-action="tour">
-          <span class="gs-en">Take a quick tour</span><span class="gs-es" lang="es">Hacer un recorrido rápido</span>
-        </button>
-      </div>
     </div>`;
   wireBody();
   fillSections().catch(err => console.warn('Home sections unavailable:', err));

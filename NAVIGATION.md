@@ -167,7 +167,7 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `defaultView.home-first-visit.desktop` | 12 |
 | `defaultView.home-first-visit.phone` | 6 |
 | `defaultView.home.desktop` | 14 |
-| `defaultView.home.phone` | 7 |
+| `defaultView.home.phone` | 8 |
 | `defaultView.library.desktop` | 24 |
 | `defaultView.library.phone` | 14 |
 | `defaultView.my-work.desktop` | 9 |
@@ -202,8 +202,8 @@ What a visitor sees, since Prompt 162 (the table of what changed is in the pull 
 
 - **The global navigation is the five destinations**, one link each, in the model's order and in both languages, the same on every page: Explore (the sandbox), Learn (the Library), Observe (the Observatory), My work and Teach. It is a flat list: no dropdown holds anything. The destination a page belongs to is marked (`aria-current="true"`, and `"page"` on the destination's own page); the marking comes from the inventory's rows, so a page that moves is one edit.
 - **Everything that was a menu entry is reached from its destination.** A destination's page carries a "places" block (Learn on the Library, Observe on the Observatory, Teach on the Teaching page, the last with the documents), stamped by `tools/shell.mjs` from `PLACES`; Explore's page is the sandbox, so its three places (the 3-D lab, the mission lab, the Scenario Studio) are in Home's Explore entry. No capability was removed: only its menu entry moved.
-- **A breadcrumb on every page but the sandbox** (Gravitas, the destination, the page), also stamped from the inventory. The sandbox's fixed bar is one row over the canvas and keeps the marked destination only.
-- **Home answers three questions and offers one list.** What this is (one paragraph, in both languages); what to do first (`firstWeek` in the inventory: a first investigation, a first observation, the sandbox and a course for an instructor, each a Library entry read by `tools/build-library.mjs` or an action); where was I (the lessons started and not finished, shown only when there are some; Prompt 163's resume record replaces it); and the five destinations with their one line each, generated from the inventory. The three-screen introduction is kept, shown first on a first visit and reachable from Home's foot ("Show the introduction again"). Home shows no count of content, no scenario cards, no list of investigations and no feature list.
+- **A breadcrumb on every page but the sandbox** (the destination, then the page; Gravitas first only where a page has no destination, since the brand link already goes Home), also stamped from the inventory. The sandbox's fixed bar is one row over the canvas and keeps the marked destination only.
+- **Home answers three questions and offers one list.** What this is (one paragraph, in both languages); what to do first (`firstWeek` in the inventory: a first investigation, a first observation, the sandbox and a course for an instructor, each a Library entry read by `tools/build-library.mjs` or an action); where was I (the lessons started and not finished, shown only when there are some; Prompt 163's resume record replaces it); and the five destinations with their one line each, generated from the inventory. The three-screen introduction is kept, shown first on a first visit and reachable from Home's foot ("Show the introduction again", beside the quick tour). Home shows no count of content, no scenario cards, no list of investigations and no feature list.
 - **What 162 did not do:** add a destination, rename a surface's route, or touch a lesson. The Library's own kinds, facet and default view are Prompt 163's.
 
 ## The internal review protocol

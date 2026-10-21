@@ -301,7 +301,7 @@ export const pathOf = page =>
   '/' + page.replace(/(^|\/)index\.html$/, '$1').replace(/^\/$/, '');
 
 /**
- * Where a page sits, as a breadcrumb: Gravitas, its destination, its own name.
+ * Where a page sits, as a breadcrumb: its destination, then its own name.
  * The destination is plain text on its own page and a link elsewhere; a name
  * that repeats the destination's word is left out. A page the model leaves
  * outside every destination (a document) shows Gravitas and its name.
@@ -310,7 +310,9 @@ function crumbsFor(here) {
   const row = covering(here);
   if (!row) return '';
   const own = DESTINATIONS.find(d => d[2] === row.destination);
-  const items = [`<li><a href="/#home">GRAVITAS</a></li>`];
+  // The brand link above is already the way to Home; the trail starts at the
+  // destination, and names Gravitas only where there is no destination.
+  const items = own ? [] : [`<li><a href="/#home">GRAVITAS</a></li>`];
   if (own)
     items.push(
       own[1] === here

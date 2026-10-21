@@ -324,7 +324,7 @@ export const LABELS = [
     kind: 'navigation',
     en: 'Teaching with Gravitas',
     es: 'Enseñar con Gravitas',
-    ids: ['teach.title', 'welcomeLink.teaching.label'],
+    ids: ['teach.title'],
   },
   {
     id: 'settings',
@@ -353,11 +353,7 @@ export const LABELS = [
     kind: 'library',
     en: 'Investigations',
     es: 'Investigaciones',
-    ids: [
-      'lib.kind.investigation',
-      'rail.investigations',
-      'welcomeCard.investigations.title',
-    ],
+    ids: ['lib.kind.investigation', 'rail.investigations'],
   },
   {
     id: 'kind-activity',
