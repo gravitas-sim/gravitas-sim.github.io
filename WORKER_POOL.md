@@ -102,6 +102,10 @@ that already stand.
 | `js/experiments/scheduler.js` as a client | `tests/fixtures/poolAdopters/scheduler.js` (about 85 lines of what only an experiment has: the shape of a trial that did not run, `RESUMABLE`, `isTrialResult`) | ten staged scenarios run on both, comparing every outcome, callback, message, termination and progress snapshot (the pool's two additive fields, `generation` and `heldBytes`, removed); the whole of `tests/experimentScheduler.test.js` and `tests/lab3d.test.js` (56 tests) run against it unchanged |
 | `js/inference/run.js` on the pool | `tests/fixtures/poolAdopters/run.js` | a real fit and every profile of a 48-row radial-velocity set through the real `inferenceWorker.js` in this thread: every number equal by `Object.is`, the same progress, the same failures, the same cancel |
 
+In a browser: with the two files swapped into a scratch copy of this tree,
+`e2e/experimentRunner.spec.js` and `e2e/inference.spec.js` (13 tests, Chromium,
+the published sources, real Workers) pass unchanged.
+
 What it costs if the two files are swapped in (measured on a scratch copy of
 this tree, the Mac with Node 24; CI's Node 22 reads a few KB smaller):
 
