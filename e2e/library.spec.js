@@ -572,7 +572,6 @@ test.describe('at three times the size', () => {
     page,
     browserName,
   }) => {
-    test.skip(browserName !== 'chromium', 'CPU throttling is a Chromium tool');
     const big = scaled();
     expect(big.entries.length).toBe(TOTAL * 3);
     await page.route('**/library/library.json', route =>
@@ -588,8 +587,13 @@ test.describe('at three times the size', () => {
     // The topic list does not grow with the content: subjects, not entries.
     expect(defaultView.links).toBeLessThan(60);
 
-    const cdp = await page.context().newCDPSession(page);
-    await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
+    // CPU throttling is a DevTools command: Chromium only. Other engines run the
+    // same budget unthrottled, which is the easier case, not a skipped one.
+    const cdp =
+      browserName === 'chromium'
+        ? await page.context().newCDPSession(page)
+        : null;
+    await cdp?.send('Emulation.setCPUThrottlingRate', { rate: 4 });
     const took = await page.evaluate(async () => {
       const wait = () => new Promise(r => setTimeout(r, 0));
       const timeIt = async act => {
@@ -613,9 +617,9 @@ test.describe('at three times the size', () => {
       out.facet = await timeIt(select('libSubject', 'exoplanets'));
       return out;
     });
-    await cdp.send('Emulation.setCPUThrottlingRate', { rate: 1 });
+    await cdp?.send('Emulation.setCPUThrottlingRate', { rate: 1 });
     test.info().annotations.push({
-      type: 'interaction ms at 4x throttle, 3x index',
+      type: 'interaction ms at 3x index (4x throttle in Chromium)',
       description: JSON.stringify(took),
     });
     // The budget: a change answers inside three quarters of a second even at a quarter of the
