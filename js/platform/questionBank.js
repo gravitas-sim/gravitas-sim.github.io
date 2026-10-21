@@ -35,11 +35,7 @@ export const BANK_FORMAT = ID_QUESTION_BANK;
 export const BANK_FORMAT_VERSION = 1;
 
 export const ITEM_KINDS = Object.freeze(['choice', 'numeric', 'short']);
-/**
- * What a rubric criterion claims (Prompt 172; js/gradebook/marks.js says what
- * each means and is held equal to this list by tests/rubricSemantics.test.js).
- * A criterion with no `kind` is `reasoning`.
- */
+/** What a criterion claims (Prompt 172: js/instructorRubric.js, held equal by a test). */
 export const CRITERION_KINDS = Object.freeze([
   'completion',
   'correctness',
@@ -107,7 +103,6 @@ export function checkUnitName(unit, path, { need, api }) {
 }
 
 const CRITERION_FIELDS = ['name', 'levels', 'kind', 'depth', 'weight'];
-
 /** A written answer's rubric criteria (Prompt 79, js/rubric.js): the shape only. */
 function checkCriteria(list, path, { need, text }) {
   if (list === undefined) return;
@@ -123,9 +118,7 @@ function checkCriteria(list, path, { need, text }) {
     walk(c, `${path}[${i}]`, CRITERION_FIELDS, () => {
       const at = `${path}[${i}]`;
       text(c.name, `${at}.name`, true);
-      // The semantics (Prompt 172): what it claims, from which depth it is
-      // marked, and its share of the step's rubric. Each is written only when
-      // set; a 2.0.0 reader refuses a criterion that carries one.
+      // Written only when set; a 2.0.0 reader refuses a criterion with one.
       for (const [field, list] of [
         ['kind', CRITERION_KINDS],
         ['depth', CRITERION_DEPTHS],

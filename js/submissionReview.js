@@ -55,8 +55,8 @@ import { validateBackup } from './investigations/progressBackup.js';
 import { activitiesOf, fragmentOf, readSource } from './teach/activity.js';
 import { gradebookModel, rosterMerges } from './gradebook/model.js';
 import { ADAPTERS } from './gradebook/index.js';
+import { criteriaPlan } from './instructorRubric.js';
 import {
-  criteriaPlan,
   criterionKey,
   marksCsv,
   marksIndex,
@@ -669,20 +669,14 @@ function byActivity(records) {
     .join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
 }
 
-/**
- * The rubric criteria of a written answer that the instructor marks, at the
- * depth the report was read at (Prompt 172), with their names as text.
- * @param {object} r - A record from annotate()
- * @param {object} q - One of its questions
- * @returns {Array<object>} criteriaPlan()'s entries; none for a step without
- */
+/** A written answer's criteria at the depth read (Prompt 172), names as text. */
 const criteriaFor = (r, q) =>
   criteriaPlan(
     lessons.get(r.lessonId)?.steps?.find(x => x.sid === q.sid),
     r.depth
   ).map(c => ({ ...c, name: plain(c.name) }));
 
-/** One criterion's mark and comment, nested in its written answer's fieldset. */
+/** One criterion's mark and comment, nested in its answer's fieldset. */
 const criterionHtml = (r, q, c, i) => {
   const m = marks.get(criterionKey(r.fingerprint, q.sid, c.n));
   const data = `data-fp="${esc(r.fingerprint)}" data-sid="${esc(q.sid)}" data-crit="${c.n}"`;

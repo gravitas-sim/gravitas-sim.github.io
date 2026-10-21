@@ -21,17 +21,19 @@ import { fromCsv, toCsv } from '../js/csv.js';
 import {
   CRITERION_KINDS,
   DEFAULT_CRITERION_KIND,
+  criteriaPlan,
+  rubricFraction,
+} from '../js/instructorRubric.js';
+import {
   MARK_COLUMNS,
   MARK_COLUMNS_RUBRIC,
   MARKS_SCHEMA,
   MARKS_SCHEMA_RUBRIC,
-  criteriaPlan,
   criterionKey,
   marksCsv,
   marksIndex,
   markKey,
   readMarksCsv,
-  rubricFraction,
   setCriterionMark,
   setMark,
 } from '../js/gradebook/marks.js';

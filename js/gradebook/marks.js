@@ -24,14 +24,7 @@ import { fromCsv, num, toCsv } from '../csv.js';
 /** What the marks file says it is, in its `schema` column. */
 export const MARKS_SCHEMA = 'gravitas.instructor-marks/1';
 
-/**
- * The same file with a row per rubric criterion (Prompt 172). A file is /2 only
- * when it has such rows, so a class with no rubric criteria still writes the
- * /1 file byte for byte. A 2.0.0 reader says "a marks file of a different
- * version" to /2 and reads nothing, rather than reading the criterion rows as
- * if they were marks of the whole answer (tests/rubricSemantics.test.js runs
- * the 2.0.0 reader on one).
- */
+/** /2: a row per rubric criterion (Prompt 172), written only when there is one. */
 export const MARKS_SCHEMA_RUBRIC = 'gravitas.instructor-marks/2';
 
 /** The columns, in order. */
@@ -62,69 +55,6 @@ export const MARK_COLUMNS_RUBRIC = Object.freeze([
   'criterion_kind',
   'criterion_weight',
 ]);
-
-/**
- * What a rubric criterion claims (Prompt 172), the `kind` of a criterion:
- *   completion   an answer is there and speaks to the question
- *   correctness  the answer agrees with the key within the step's stated
- *                tolerance (the instructor judges it; a written answer has no
- *                machine verdict)
- *   reasoning    the explanation is present and sound, judged by the instructor
- *   uncertainty  the answer says how well the quantity is known
- * A criterion with no `kind` is `reasoning`: every criterion written before the
- * field existed was levels an instructor reads and judges. The list is held
- * equal to js/platform/questionBank.js's by tests/rubricSemantics.test.js (this
- * file cannot import it: the review page has no request to spare).
- */
-export const CRITERION_KINDS = Object.freeze([
-  'completion',
-  'correctness',
-  'reasoning',
-  'uncertainty',
-]);
-export const DEFAULT_CRITERION_KIND = 'reasoning';
-
-/** Depths, shallowest first (js/investigations/depthPure.js). */
-const DEPTH_ORDER = ['core', 'quantitative', 'advanced'];
-const depthRank = d => Math.max(0, DEPTH_ORDER.indexOf(d));
-
-/**
- * A step's rubric criteria with their semantics filled in, those marked at
- * `depth`: a criterion with a `depth` is marked from that depth deeper, one
- * without is marked at every depth. `n` is the criterion's place among all the
- * step's criteria, whatever the depth, so a mark keeps meaning when a class
- * reads at another depth. Points possible is the best level's points, or 1 when
- * the levels carry none; `weight` is the criterion's relative share of the
- * step's rubric fraction (rubricFraction) and defaults to 1.
- *
- * Names are the lesson's text, not plain text: the caller plains them.
- *
- * @param {object} step - A step with `rubricCriteria`
- * @param {?string} [depth] - The depth the report was read at; every
- *   criterion when omitted
- * @returns {Array<{n: number, name: string, kind: string, weight: number,
- *   depth: ?string, possible: number}>}
- */
-export function criteriaPlan(step, depth = null) {
-  const list = Array.isArray(step?.rubricCriteria) ? step.rubricCriteria : [];
-  return list
-    .map((c, i) => {
-      const points = (Array.isArray(c?.levels) ? c.levels : [])
-        .map(l => l?.points)
-        .filter(Number.isFinite);
-      return {
-        n: i + 1,
-        name: c?.name,
-        kind: CRITERION_KINDS.includes(c?.kind)
-          ? c.kind
-          : DEFAULT_CRITERION_KIND,
-        weight: Number.isFinite(c?.weight) && c.weight > 0 ? c.weight : 1,
-        depth: DEPTH_ORDER.includes(c?.depth) ? c.depth : null,
-        possible: points.length ? Math.max(...points) : 1,
-      };
-    })
-    .filter(c => !depth || depthRank(c.depth) <= depthRank(depth));
-}
 
 /** The longest comment kept. */
 export const MAX_COMMENT = 500;
@@ -165,69 +95,9 @@ export function setMark(marks, fingerprint, sid, value, possible = Infinity) {
 export const criterionKey = (fingerprint, sid, n) =>
   markKey(fingerprint, `${sid}\u0000c${n}`);
 
-/**
- * Put a criterion's mark in; the same rules as setMark, kept apart from the
- * step's own mark so a criterion never changes what a written answer scores.
- * @param {Map<string, object>} marks - From marksIndex()
- * @param {string} fingerprint - The report's
- * @param {string} sid - The step's
- * @param {number} n - The criterion's place (criteriaPlan's `n`)
- * @param {{points: ?number, comment: ?string}} value - What was entered
- * @param {number} [possible] - The most the criterion is worth
- * @returns {boolean} Whether the mark was kept
- */
-export const setCriterionMark = (
-  marks,
-  fingerprint,
-  sid,
-  n,
-  value,
-  possible = Infinity
-) => setMark(marks, fingerprint, `${sid}\u0000c${n}`, value, possible);
-
-/**
- * The step's rubric as one fraction, from the criteria marks entered: the
- * weighted mean of each marked criterion's mark over its points possible.
- * `fraction` is null until every criterion in `plan` has a mark, so a rubric
- * with a criterion unread is partial and says so, never silently low. It
- * is a summary for a class view (Prompt 173) and is not added to the step's
- * score: the step's own mark stays the instructor's.
- *
- * @param {Map<string, object>} marks - From marksIndex()
- * @param {string} fingerprint - The report's
- * @param {string} sid - The step's
- * @param {Array<object>} plan - From criteriaPlan()
- * @returns {{fraction: ?number, marked: number, of: number,
- *   byKind: Object<string, ?number>}} `byKind` is the same fraction for the
- *   criteria of each kind present, null while one of them is unmarked
- */
-export function rubricFraction(marks, fingerprint, sid, plan) {
-  const part = list => {
-    let top = 0;
-    let marked = 0;
-    for (const c of list) {
-      const m = marks.get(criterionKey(fingerprint, sid, c.n));
-      if (!m || m.points === null) continue;
-      marked++;
-      top += c.weight * (Math.min(m.points, c.possible) / c.possible);
-    }
-    const total = list.reduce((a, c) => a + c.weight, 0);
-    return {
-      marked,
-      fraction: marked === list.length && list.length ? top / total : null,
-    };
-  };
-  const all = part(plan);
-  const byKind = {};
-  for (const k of new Set(plan.map(c => c.kind)))
-    byKind[k] = part(plan.filter(c => c.kind === k)).fraction;
-  return {
-    fraction: all.fraction,
-    marked: all.marked,
-    of: plan.length,
-    byKind,
-  };
-}
+/** setMark for a criterion (js/instructorRubric.js says what one is). */
+export const setCriterionMark = (marks, fingerprint, sid, n, value, possible) =>
+  setMark(marks, fingerprint, `${sid}\u0000c${n}`, value, possible);
 
 /**
  * Whether a question is a written answer an instructor has to read and mark.
@@ -264,18 +134,15 @@ export const needsJudgment = records =>
 
 /**
  * The marks file: a row for every written answer, with its mark if it has one.
- * A written answer whose step has rubric criteria is followed by a row for each
- * criterion marked at the report's depth (Prompt 172): the row names the
- * criterion, its kind and its weight, and its mark and comment are the
- * criterion's own. A file with such rows is /2; a file without any is /1.
+ * A written answer with rubric criteria is followed by a row for each (Prompt
+ * 172); a file with such rows is /2, and one without any is /1.
  *
  * @param {Array<object>} records - From annotate()
  * @param {Map<string, object>} marks - Marks entered so far
  * @param {object} [options] - Options
  * @param {boolean} [options.includeWritten] - Write the answers too (opt-in)
  * @param {(record: object, question: object) => Array<object>} [options.criteriaOf] -
- *   The step's criteria at the report's depth, criteriaPlan()'s entries with
- *   the name as plain text; none when omitted
+ *   criteriaPlan()'s entries for the answer, names as plain text; none if omitted
  * @returns {string} CSV, CRLF, header first
  */
 export function marksCsv(
@@ -373,8 +240,6 @@ export function readMarksCsv(text, into = new Map()) {
       comment: row[at.comment],
     };
     const room = Number.isFinite(possible) ? possible : Infinity;
-    // A /2 row with a criterion is that criterion's mark; any other row is the
-    // answer's own, as in /1.
     const place = /^c(\d+)$/.exec(row[at.criterion] ?? '');
     if (
       !fingerprint ||
