@@ -384,6 +384,12 @@ function copyForCheck() {
     'js/rng.js',
     'js/random',
     'js/numeric',
+    // A manifest of an image, a sequence or a grid is held to the data kinds'
+    // validators (Prompt 157), which check a part against the offline contract.
+    'js/dataKinds',
+    'js/offlineParts.js',
+    'js/archive/net.js',
+    'js/names.js',
     // The radiation packs' checks run the kernel they are measured with.
     'js/kernels/radiation',
     // The galactic packs' rows are sidecar files.

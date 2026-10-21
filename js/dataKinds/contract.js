@@ -244,6 +244,26 @@ function checkPixels(p, add) {
     return add('pixels', 'is the pixel contract: { unit, ... }');
   if (!PIXEL_UNITS.includes(p.unit))
     add('pixels.unit', `is one of ${PIXEL_UNITS.join(', ')}`);
+  const bitsOk =
+    Array.isArray(p.bits) &&
+    p.bits.length > 0 &&
+    p.bits.every(
+      b =>
+        isObject(b) &&
+        Number.isInteger(b.value) &&
+        b.value > 0 &&
+        isText(b.meaning)
+    );
+  if (p.unit === 'flags') {
+    if (!bitsOk)
+      add('pixels.bits', 'says what each bit means: [{ value, meaning }]');
+    if (!isText(p.bitsSource))
+      add(
+        'pixels.bitsSource',
+        'says where the meaning of the bits is documented'
+      );
+  } else if (p.bits !== undefined || p.bitsSource !== undefined)
+    add('pixels.bits', 'belongs to an image of bit flags; light has no bits');
   const l = p.linearity;
   if (l !== undefined) {
     if (!isObject(l) || !LINEARITY.includes(l.status))
@@ -751,4 +771,33 @@ export function permits(doc, operation, i = 0) {
       `The pixels went through "${lossy.step}" (${lossy.tool}), which does not keep the measured light, so they cannot be measured for it.`
     );
   return { ok: true };
+}
+
+/**
+ * `permits` for a data pack's runtime copy (PACK in js/data/observations/): an
+ * image pack that states no pixel contract is display-only, whatever its
+ * numbers are, and an image-sequence pack is judged by its sequence.
+ * @param {object} pack - PACK
+ * @param {'marking'|'photometry'|'astrometry'} operation
+ * @param {number} [i] - The frame, for a sequence
+ */
+export function packPermits(pack, operation, i = 0) {
+  const doc =
+    pack?.dataType === 'image-sequence' ? pack.sequence : pack?.image?.sidecar;
+  if (!doc) {
+    if (!OPERATIONS.includes(operation))
+      throw new RangeError(`not an operation: ${operation}`);
+    if (pack?.dataType !== 'image' && pack?.dataType !== 'image-sequence')
+      return refuse(
+        'not-an-image',
+        `${pack?.id ?? 'this pack'} is not an image.`
+      );
+    return operation === 'marking'
+      ? { ok: true }
+      : refuse(
+          'display-only',
+          `${pack.id} states no pixel contract, so it is display-only: it can be marked, and ${operation} waits for one.`
+        );
+  }
+  return permits(doc, operation, i);
 }

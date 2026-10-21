@@ -1257,11 +1257,11 @@ export const IMAGE_CASES = [
     { valid: true, marking: true, photometry: 'not-flux', astrometry: true },
   ],
   [
-    'bit flags are not flux',
+    'bit flags with no bits are not a valid image (FLAGS_CASES has the valid ones)',
     d => {
       d.pixels.unit = 'flags';
     },
-    { valid: true, marking: true, photometry: 'not-flux', astrometry: true },
+    { valid: false },
   ],
   [
     'no pixel unit at all',

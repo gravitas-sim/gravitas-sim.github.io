@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 51 of them. 28 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 54 of them. 31 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -27,6 +27,9 @@ The columns:
 | gravitas.artifact | format, formatVersion | 1 | js/platform/artifact.js validateArtifact | memory | v1 only | a validation problem | [yes](sdk/schemas/artifact-1.schema.json) |
 | gravitas.observed | format, formatVersion | 1 | js/notebook/observed.js (inside a notebook entry) | localStorage | v1 only | not checked | no |
 | gravitas.observation-data-pack | format, formatVersion | 1 | tools/data-packs/schema.mjs validateDataPack | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/observation-data-pack-1.schema.json) |
+| gravitas.image | format, formatVersion | 1 | js/dataKinds/contract.js validateImage | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/image-1.schema.json) |
+| gravitas.image-sequence | format, formatVersion | 1 | js/dataKinds/contract.js validateImageSequence | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/image-sequence-1.schema.json) |
+| gravitas.grid | format, formatVersion | 1 | js/dataKinds/contract.js validateGrid | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/grid-1.schema.json) |
 | world share link | v (link prefix 2) | 2 | js/shareState.js decodePayload | link | reads v1, whose scenario is an English name, by id | refused, in words | no |
 | built-in scenario id | a public id (SCENARIO_INFO key) | 1 | js/scenarios.js scenarioId, js/data/scenarioInfo.js scenarioId | link, lesson, course pack, investigation pack, experiment, notebook entry | reads the English name it was keyed by before ids | refused: a link in words, a pack by its validator | [yes](sdk/schemas/scenario-id-1.schema.json) |
 | experiment link block (xp) | v | 1 | js/experiments/shareExperiment.js readExperimentBlock | link | v1 only | reported, not checked | no |
@@ -109,6 +112,9 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.artifact | `artifact` | ignored | policy (above) |
 | gravitas.observed | none yet | not yet exercised | policy (above) |
 | gravitas.observation-data-pack | none yet | not yet exercised | policy (above) |
+| gravitas.image | none yet | not yet exercised | policy (above) |
+| gravitas.image-sequence | none yet | not yet exercised | policy (above) |
+| gravitas.grid | none yet | not yet exercised | policy (above) |
 | world share link | `share-link` | n/a | policy (above) |
 | built-in scenario id | none yet | not yet exercised | policy (above) |
 | experiment link block (xp) | none yet | not yet exercised | policy (above) |
