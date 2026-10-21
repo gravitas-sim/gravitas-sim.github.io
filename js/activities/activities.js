@@ -78,6 +78,10 @@ export function assignmentForFormat(
     // teaching page, which lists formats and builds nothing, does not load
     // the package catalog to do it.
     provider,
+    // Whether the student's lab report prints a written answer's marking note
+    // (F-8: off unless the activity says `markingNote: true`, which the key
+    // prints whatever it says).
+    markingNote: activity.markingNote === true,
   });
 
   return {

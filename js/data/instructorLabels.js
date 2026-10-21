@@ -183,6 +183,14 @@ const en = {
   'key.rubric.levels': 'Levels',
   'key.rubric.points': '{points} pt',
   'key.rubric.pointsMany': '{points} pts',
+  'key.rubric.kind.completion': 'completion',
+  'key.rubric.kind.correctness': 'correctness',
+  'key.rubric.kind.reasoning': 'reasoning',
+  'key.rubric.kind.uncertainty': 'uncertainty',
+  'key.rubric.weight': 'weight {weight}',
+  'key.rubric.depthFrom': 'from {depth} depth',
+  'key.rubric.kindsNote':
+    'Each criterion says what it claims: completion (an answer is there and speaks to the question), correctness (it agrees with the key within the stated tolerance), reasoning (the explanation is present and sound) or uncertainty (the answer says how well the quantity is known). You judge every one; none adds to or changes the step’s mark. A weight is the criterion’s share of the rubric, and a criterion marked from a depth is read at that depth and deeper.',
   'key.rubricOnReflection':
     'Criteria for reading this reflection. Nothing marks it, and the review page shows them beside the response:',
   'key.fields': 'Fields on this screen:',
@@ -388,6 +396,14 @@ const es = {
   'key.rubric.levels': 'Niveles',
   'key.rubric.points': '{points} pt',
   'key.rubric.pointsMany': '{points} pts',
+  'key.rubric.kind.completion': 'completitud',
+  'key.rubric.kind.correctness': 'corrección',
+  'key.rubric.kind.reasoning': 'razonamiento',
+  'key.rubric.kind.uncertainty': 'incertidumbre',
+  'key.rubric.weight': 'peso {weight}',
+  'key.rubric.depthFrom': 'desde la profundidad {depth}',
+  'key.rubric.kindsNote':
+    'Cada criterio dice qué afirma: completitud (hay una respuesta y responde a la pregunta), corrección (coincide con la clave dentro de la tolerancia indicada), razonamiento (la explicación está presente y es sólida) o incertidumbre (la respuesta dice con qué precisión se conoce la cantidad). Usted juzga todos; ninguno suma ni cambia la nota del paso. El peso es la parte del criterio en la rúbrica, y un criterio marcado desde una profundidad se lee en ella y en las más profundas.',
   'key.rubricOnReflection':
     'Criterios para leer esta reflexión. Nada la califica, y la página de revisión los muestra junto a la respuesta:',
   'key.fields': 'Campos de esta pantalla:',

@@ -54,6 +54,11 @@
  * - and the structure held, which is why the second and third slotted in
  * rather than needing it rebuilt.
  *
+ * An activity may carry `markingNote: true`: the student's lab report then
+ * prints each written answer's marking note (the sentence of what to look for)
+ * beneath the answer. Without it the report does not, and the answer key
+ * prints the note whatever it says (Prompt 172, F-8).
+ *
  * Every format needs a matching entry in js/data/activityTeaching.js. Three of
  * the six went without one for a while, and the generated guide for those
  * formats simply had no teaching section in it; `npm run activities:check`
