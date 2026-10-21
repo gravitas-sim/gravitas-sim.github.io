@@ -692,6 +692,49 @@ test.describe('the application cleans up its panels', () => {
     await PANELS.settings.close(page, app);
   });
 
+  // The same hold from the other side: an info button's press waits for the
+  // help files, and its callback was made inside the build that drew the
+  // button. Pressed once in each of several panels, with the files held back,
+  // every one of those builds stayed in memory.
+  test('settings: panels whose info button waits for the help files are not held', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await page.addInitScript(INSTRUMENT);
+    let release;
+    const gate = new Promise(resolve => {
+      release = resolve;
+    });
+    await page.route(/\/(en|es)\.settingsHelp\.js$/, async route => {
+      await gate;
+      await route.continue();
+    });
+    try {
+      await app.boot({ url: '/' });
+      await settled(page);
+      for (let i = 0; i < 6; i++) {
+        await PANELS.settings.open(page, app);
+        await page.locator('#settingsPanel .setting-info-icon').first().click();
+        await PANELS.settings.close(page, app);
+      }
+      const held = (await collect(page))
+        ? await page.evaluate(() => window.__detachedHeld())
+        : 0;
+      expect(
+        held,
+        'detached listener targets held while the help files wait'
+      ).toBeLessThanOrEqual(8);
+    } finally {
+      release();
+    }
+    // Released, a press still shows its help.
+    await PANELS.settings.open(page, app);
+    await page.locator('#settingsPanel .setting-info-icon').first().click();
+    await expect(page.locator('.tooltip-system').first()).toBeVisible();
+    await PANELS.settings.close(page, app);
+  });
+
   test('the check sees a removed panel that something still holds, and lets go of one that nothing does', async ({
     page,
     app,

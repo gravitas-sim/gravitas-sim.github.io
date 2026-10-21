@@ -465,6 +465,30 @@ const addMotionRow = grid => {
   );
 };
 
+// A scope of its own: a press waiting on the help files must not hold the panel.
+const pressInfo = (e, item) => {
+  e.preventDefault();
+  e.stopPropagation();
+  const infoIcon = e.currentTarget;
+  const hadFocus = document.activeElement === infoIcon;
+  const pressed = new WeakRef(infoIcon);
+  getSettingTooltip(item.key, t(item.labelId)).then(text => {
+    // The first press registers the deferred catalog, which translates
+    // the page again and so rebuilds this panel: the button pressed has
+    // been replaced by its twin by the time the words arrive. The help
+    // goes to the twin, and so does the focus a keyboard reader had.
+    const self = pressed.deref();
+    const icon = self?.isConnected
+      ? self
+      : document.querySelector(
+          `#settingsGrid .setting-label-container[data-setting-key="${item.key}"] .setting-info-icon`
+        );
+    if (!icon) return;
+    if (hadFocus && icon !== self) icon.focus();
+    tooltipManager.show(text, icon, { position: 'bottom' });
+  });
+};
+
 /**
  * Build the Settings panel from js/settingsSchema.js.
  *
@@ -634,26 +658,7 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
       );
 
       // Add click handler for tooltip using the new tooltip system
-      infoIcon.addEventListener('click', e => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const hadFocus = document.activeElement === infoIcon;
-        getSettingTooltip(item.key, t(item.labelId)).then(text => {
-          // The first press registers the deferred catalog, which translates
-          // the page again and so rebuilds this panel: the button pressed has
-          // been replaced by its twin by the time the words arrive. The help
-          // goes to the twin, and so does the focus a keyboard reader had.
-          const icon = infoIcon.isConnected
-            ? infoIcon
-            : document.querySelector(
-                `#settingsGrid .setting-label-container[data-setting-key="${item.key}"] .setting-info-icon`
-              );
-          if (!icon) return;
-          if (hadFocus && icon !== infoIcon) icon.focus();
-          tooltipManager.show(text, icon, { position: 'bottom' });
-        });
-      });
+      infoIcon.addEventListener('click', e => pressInfo(e, item));
 
       // Add label and icon to container
       labelContainer.appendChild(label);
