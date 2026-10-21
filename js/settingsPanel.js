@@ -448,6 +448,23 @@ const getSettingTooltip = async (key, label) => {
     : t('settings.tooltip.generic', { label: label.toLowerCase() });
 };
 
+// Motion: filled by its lazy module; its own scope, so a slow file holds only the row.
+const addMotionRow = grid => {
+  const row = document.createElement('div');
+  row.className = 'settings-level';
+  grid.appendChild(row);
+  import('./motionControl.js').then(m =>
+    m.fillMotionRow(row, {
+      getLocale,
+      announce,
+      modes: MOTION_MODES,
+      preference: motionPreference,
+      setPreference: setMotionPreference,
+      pause: () => setPlaying(false),
+    })
+  );
+};
+
 /**
  * Build the Settings panel from js/settingsSchema.js.
  *
@@ -523,21 +540,7 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
   levelRow.append(levelLabel, levelSelect, levelHint);
   settingsGrid.appendChild(levelRow);
 
-  // Motion: a preference of this device, applied at once and filled in by its
-  // own lazy module (js/motionControl.js).
-  const motionRow = document.createElement('div');
-  motionRow.className = 'settings-level';
-  settingsGrid.appendChild(motionRow);
-  import('./motionControl.js').then(m =>
-    m.fillMotionRow(motionRow, {
-      getLocale,
-      announce,
-      modes: MOTION_MODES,
-      preference: motionPreference,
-      setPreference: setMotionPreference,
-      pause: () => setPlaying(false),
-    })
-  );
+  addMotionRow(settingsGrid);
 
   // The sections, in the schema's order. The advanced ones sit together in
   // one disclosure after the rest, closed until it is opened.
