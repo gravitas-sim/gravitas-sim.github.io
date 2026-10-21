@@ -58,7 +58,9 @@ Nothing below needs the maintainer, an account on any service, or a build.
    `GRAVITAS_INSTRUCTOR_PASSWORD`, run `npm run build:instructors`, and serve
    the result. The materials are then encrypted under the department's key, and
    nobody outside it holds it. Choose a long passphrase: the ciphertext is
-   public, so its strength is the passphrase's.
+   public, so its strength is the passphrase's. The numbered procedure, with a
+   rehearsal step and the test that a bundle under one passphrase does not open
+   with another, is in [`INSTRUCTOR_MATERIALS.md`](INSTRUCTOR_MATERIALS.md).
 5. Read [`SUPPORT.md`](SUPPORT.md) for the browsers that are tested and the
    features that degrade.
 

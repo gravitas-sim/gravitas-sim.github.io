@@ -285,10 +285,17 @@ The author-facing side is [`CONTRIBUTING_CONTENT.md`](CONTRIBUTING_CONTENT.md).
 
 ## Instructor materials
 
-- [ ] **Decide who gets the instructor passphrase, and how.**
-      [`SUPPORT.md`](SUPPORT.md) says to email you for it. If that does not
-      scale, decide what replaces it before the paper is published rather than
-      after.
+- [ ] **Decide who gets the instructor passphrase, and how.** A policy is
+      written (Prompt 170, D-R10-43, delegated and unreviewed): the request route
+      from an institutional address and its form of words, what you verify, the
+      reply, the turnaround, rotation on a suspected leak, and a department's own
+      passphrase and bundle, all in [`INSTRUCTOR_MATERIALS.md`](INSTRUCTOR_MATERIALS.md)
+      ("Who gets the passphrase, and how"); [`SUPPORT.md`](SUPPORT.md) points to it.
+      Review it, or replace it, before the paper is published. It changes nothing
+      about how the bundle is encrypted.
+- [ ] **Say who the second passphrase holder is, or that there is none.** Recorded
+      today as `UNKNOWN`, in the same document ("The second holder"). Record who
+      (a name and a role), never the passphrase and never where it is kept.
 Standing, not a box to tick: **rebuild and commit the instructor bundle**
 whenever instructional content changes. `npm run instructors:check` says
 whether it is current and needs no passphrase; rebuilding needs the real one.
