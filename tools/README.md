@@ -123,6 +123,7 @@ current, and the orchestrator checks it.
 | `migrate-flow.mjs` | One-off: move the investigation flow out of instructorContent.js into |  |
 | `mission-lab-key.mjs` | The mission lab's answer key: a reference run of every guide | `npm run mission:key` |
 | `module-load-hook.mjs` | Write down every module Node loads |  |
+| `navigation.mjs` | The navigation model, measured: the structural navigation checks' reader | `npm run navigation:check`, `npm run navigation:write`, `npm run navigation:report` |
 | `new-investigation.mjs` | npm run author:new -- --id=<lesson-id> --title="..." | `npm run author:new` |
 | `number-ratchet.mjs` | Three migrations that may only go one way: numbers through the formatter, |  |
 | `numeric-cases.mjs` | The numerical routines' validation group (Prompt 152) |  |
