@@ -149,6 +149,8 @@ current, and the orchestrator checks it.
 | `source-closure.mjs` | Which files a program actually reads |  |
 | `starfield-probe.mjs` | Starfield phase profile |  |
 | `static-server.mjs` | A static file server with no dependencies | `npm run serve:dist` |
+| `statistics-cases.mjs` | The statistics kernel's validation group (Prompt 154) |  |
+| `statistics-validate.mjs` | npm run validate:statistics - the statistics kernel's validation group | `npm run validate:statistics` |
 | `stellar-shots.mjs` | Captures of the Stellar Lab |  |
 | `storage-matrix.mjs` | npm run storage:matrix | `npm run storage:matrix` |
 | `storage-profile.mjs` | npm run storage:profile -- --capture | `npm run storage:profile` |
