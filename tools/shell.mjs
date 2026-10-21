@@ -185,7 +185,6 @@ export const PLACES = {
         [
           ['experiments', '/experiments/'],
           ['skyLab', '/sky/'],
-          ['compute', '/compute/'],
           ['catalog', '/catalog/'],
           ['figure', '/figure/'],
         ],

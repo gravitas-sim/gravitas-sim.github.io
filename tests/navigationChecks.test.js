@@ -353,7 +353,7 @@ describe('the reachability walk, from the pages', () => {
       lost,
       'a page nothing links to (add a link, and lower the ceiling)'
     ).toHaveLength(inv.ceilings.reach.pagesWithoutALinkFromHome);
-    expect(lost.map(urlOf)).toEqual([]);
+    expect(lost.map(urlOf)).toEqual(['/compute/']);
     const farthest = Math.max(...clicks.values());
     expect(farthest).toBe(inv.ceilings.reach.maxClicksFromHome);
   });
@@ -423,10 +423,15 @@ describe('Home and the global navigation follow the model (activated by Prompt 1
   });
 
   test('navigation.reach.every-page-from-home', () => {
+    // One acknowledged exception: /compute/ is reached from within (a saved
+    // notebook in My work), not from any destination's page, because
+    // D-COMPUTE-03 keeps an online-only 9 to 19 MB download from being offered
+    // to every reader. The ceiling names it, so a second orphan fails.
     const lost = [...pages(), 'history/original/index.html'].filter(
       f => !clicksFromHome().has(urlOf(f))
     );
-    expect(lost.map(urlOf)).toEqual([]);
+    expect(lost.map(urlOf)).toEqual(['/compute/']);
+    expect(lost).toHaveLength(inv.ceilings.reach.pagesWithoutALinkFromHome);
   });
 
   test('every former menu entry has a path from Home, in two activations (three for what hangs below Teach)', () => {
@@ -436,6 +441,7 @@ describe('Home and the global navigation follow the model (activated by Prompt 1
       s =>
         !s.path.endsWith('*') &&
         !s.path.endsWith('.pdf') &&
+        s.id !== 'compute' &&
         s.id !== 'history-original'
     ))
       expect(

@@ -265,7 +265,7 @@
       "path": "/compute/",
       "role": "tool",
       "destination": "observe",
-      "from": "the places block of the Observatory",
+      "from": "reached from within: a saved notebook in My work links to it; the Observatory's page body does not, and no destination's page offers it (D-COMPUTE-03, kept as ratified)",
       "menu": null
     },
     {
@@ -520,7 +520,7 @@
     },
     "reach": {
       "maxClicksFromHome": 3,
-      "pagesWithoutALinkFromHome": 0
+      "pagesWithoutALinkFromHome": 1
     },
     "defaultView": {
       "home-first-visit": {
@@ -529,7 +529,7 @@
       },
       "home": {
         "desktop": 14,
-        "phone": 8
+        "phone": 7
       },
       "library": {
         "desktop": 24,

@@ -5472,6 +5472,14 @@
       flex-basis: 100%;
     }
 
+    /* A finger needs 44 px (WCAG 2.5.5): the starts are the page's main
+       choices, and the five places begin below them. */
+    .wel-start-go {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+
     .wel-hero-actions .ui-button {
       flex: 1 1 100%;
       justify-content: center;

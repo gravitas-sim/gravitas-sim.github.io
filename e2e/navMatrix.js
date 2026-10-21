@@ -27,7 +27,13 @@ const MAX = 2;
 // Allowlists (each entry justified; the count is asserted).
 // The first Gravitas is reached from one quiet word in /model/'s footer, by
 // design (tools/shell.mjs EXEMPT), so no destination or place points at it.
-const ORPHAN_ALLOW = new Set(['history/original/index.html']);
+// The compute page is deliberately unlinked from every destination's page
+// while it is opt-in and online-only (D-COMPUTE-03, kept as ratified by Prompt
+// 162); it is reached by its address and from a saved notebook in My work.
+const ORPHAN_ALLOW = new Set([
+  'history/original/index.html',
+  'compute/index.html',
+]);
 // Targets that are not a page load: the sandbox is Home itself, the PDF is a
 // download. They are reached (counted) but not followed.
 const NOT_FOLLOWED = new Set(['/', '/Gravitas_User_Manual.pdf']);
@@ -286,7 +292,7 @@ export const orphans = async () => {
   expect(readFileSync('model/index.html', 'utf8')).toContain(
     'href="/history/original/"'
   );
-  expect(ORPHAN_ALLOW.size).toBe(1);
+  expect(ORPHAN_ALLOW.size).toBe(2);
   expect(DEAD_END_ALLOW.size).toBe(0);
   // No target is a stale route: every nav page exists.
   for (const t of targets.filter(t => !NOT_FOLLOWED.has(t) && !t.includes('#')))

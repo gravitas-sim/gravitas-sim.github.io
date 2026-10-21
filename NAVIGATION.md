@@ -58,7 +58,7 @@ What each contains:
 | Observatory | `/observatory/` | destination | Observe | Home; the global navigation | yes |
 | Experiments | `/experiments/` | tool | Observe | the places block of the Observatory; the Library's experiment cards | no |
 | Sky Lab | `/sky/` | tool | Observe | the places block of the Observatory | no |
-| Compute page | `/compute/` | tool | Observe | the places block of the Observatory | no |
+| Compute page | `/compute/` | tool | Observe | reached from within: a saved notebook in My work links to it; the Observatory's page body does not, and no destination's page offers it (D-COMPUTE-03, kept as ratified) | no |
 | Catalog | `/catalog/` | collection | Observe | the places block of the Observatory (datasets to install); Teach (course packages to install) | no |
 | Figure builder | `/figure/` | authoring | Observe | the places block of the Observatory; the figure action of a plot or an analysis result | no |
 | My work | `/my-work/` | destination | My work | Home; the global navigation | yes |
@@ -86,7 +86,7 @@ What each contains:
 
 Two findings from making the table (Prompt 161), and what became of them:
 
-- `/compute/` was on no menu and no page linked to it: the one way in was a saved notebook in My work (`js/myWork/model.js`). Prompt 162 put it in the Observatory's places block, so every page now has a path from Home (`reach.pagesWithoutALinkFromHome` is 0).
+- `/compute/` was on no menu and no page linked to it: the one way in was a saved notebook in My work (`js/myWork/model.js`). Prompt 162 keeps it that way: D-COMPUTE-03 (ratified) keeps an online-only 9 to 19 MB download from being offered to every reader, so the page is reached from within (a saved notebook), no destination's page offers it, and it stays the one acknowledged page without a link from Home (`reach.pagesWithoutALinkFromHome` is 1, and the reachability check names it).
 - Of the 25 menu links, 7 sat under the group that carried their destination's name, 6 belonged to no destination (the documents and the diagnostics) and 12 sat under a group that was not their destination's. The menu is now the five destinations, so every entry is its own destination's.
 
 ## What students see: kinds
@@ -163,11 +163,11 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `library.formats` | 15 |
 | `library.filters` | 7 |
 | `reach.maxClicksFromHome` | 3 |
-| `reach.pagesWithoutALinkFromHome` | 0 |
+| `reach.pagesWithoutALinkFromHome` | 1 |
 | `defaultView.home-first-visit.desktop` | 12 |
 | `defaultView.home-first-visit.phone` | 6 |
 | `defaultView.home.desktop` | 14 |
-| `defaultView.home.phone` | 8 |
+| `defaultView.home.phone` | 7 |
 | `defaultView.library.desktop` | 24 |
 | `defaultView.library.phone` | 14 |
 | `defaultView.my-work.desktop` | 9 |
