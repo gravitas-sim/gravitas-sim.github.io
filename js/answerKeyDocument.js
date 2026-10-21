@@ -193,6 +193,7 @@ export function answerKeyDocument(
     );
   doc.rule({ gap: 8, shade: 0.85 });
 
+  let kindsSaid = false;
   for (const e of entries) {
     // A reading step asks for nothing, so there is no answer to print. Some
     // put an instrument or a readout in front of the class, though, and what
@@ -281,11 +282,15 @@ export function answerKeyDocument(
         e.reflect ? L('key.rubricOnReflection') : `${L('key.rubric')}:`,
         { size: 9, gap: 3, color: '0.35 0.35 0.42' }
       );
-      doc.paragraph(L('key.rubric.kindsNote'), {
-        size: 8.5,
-        gap: 3,
-        color: '0.4 0.4 0.46',
-      });
+      // What the kinds mean is said once, before the key's first table.
+      if (!kindsSaid) {
+        kindsSaid = true;
+        doc.paragraph(L('key.rubric.kindsNote'), {
+          size: 8.5,
+          gap: 3,
+          color: '0.4 0.4 0.46',
+        });
+      }
       doc.table({
         columns: [L('key.rubric.criterion'), L('key.rubric.levels')],
         widths: [1.4, 4.2],

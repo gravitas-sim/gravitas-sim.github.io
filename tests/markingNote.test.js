@@ -301,6 +301,18 @@ describe('the key prints the kind, the weight and the depth', () => {
     expect(text).toContain('What to look for');
   });
 
+  test('the note on what the kinds mean is printed once, not before every table', () => {
+    const one = withDepths();
+    const written = one.steps.find(s => s.sid === WRITTEN);
+    const twice = {
+      ...one,
+      steps: [...one.steps, { ...written, sid: 'will-it-be-back-again' }],
+    };
+    const text = pdfText(answerKeyDocument(twice, { version: 'T' }));
+    expect(text.match(/Each criterion says what it claims/g)).toHaveLength(1);
+    expect(text.match(/correctness, weight 2/g)).toHaveLength(2);
+  });
+
   test('Spanish: the same, in Spanish', () => {
     const text = pdfText(
       answerKeyDocument(withDepths(), { version: 'T', locale: 'es' })

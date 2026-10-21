@@ -10,13 +10,8 @@
 // =============================================================================
 import { plainText } from './answerKey.js';
 
-/**
- * What a criterion claims (Prompt 172): its `kind`, the depth it is marked
- * from and its weight. The kinds, the default and the weight's top are held
- * equal to js/instructorRubric.js's and js/platform/questionBank.js's by
- * tests/rubricSemantics.test.js: this file serves the key and the build, and
- * neither of those may import the review page's module for three constants.
- */
+// What a criterion claims (Prompt 172); copies held equal to
+// js/instructorRubric.js's and js/platform/questionBank.js's by a test.
 export const CRITERION_KINDS = Object.freeze([
   'completion',
   'correctness',
@@ -31,7 +26,7 @@ export const CRITERION_DEPTHS = Object.freeze([
 ]);
 export const MAX_CRITERION_WEIGHT = 10;
 
-/** Whether a criterion is marked at a depth: from its own `depth` deeper, or at every depth when it has none. */
+/** Whether a criterion is marked at `depth`: from its own deeper, or always. */
 export const appliesAt = (criterion, depth) =>
   !depth ||
   !criterion?.depth ||
@@ -39,9 +34,8 @@ export const appliesAt = (criterion, depth) =>
     Math.max(0, CRITERION_DEPTHS.indexOf(depth));
 
 /**
- * A step's rubric criteria as plain text: each a name, what it claims (`kind`,
- * `reasoning` unless the author said otherwise), its `weight` (1 unless set),
- * the `depth` it is marked from (null for every depth) and its levels, best
+ * A step's rubric criteria as plain text: each a name, its `kind` (reasoning
+ * unless set), `weight` (1), `depth` (null: every depth) and levels, best
  * first, with the points a level is worth where the author gave them.
  * @param {Object} step - Step definition
  * @returns {Array<{name: string, kind: string, weight: number, depth: ?string, levels: Array<{label: string, points: ?number, text: string}>}>}

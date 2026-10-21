@@ -271,13 +271,16 @@ test.describe('the submission review page', () => {
     await expect(page.locator('#count')).toHaveText('1 submission');
     await page.locator('#judgeToggle').click();
     const criteria = page.locator('fieldset.sr-criterion');
-    // Orbital Energy's written step has two criteria, neither with a kind
-    // written: both are read as reasoning.
+    // Orbital Energy's written step has two criteria: the first is
+    // correctness, the second reasoning, and the legend says the kind in words.
     await expect(criteria).toHaveCount(2);
     await expect(criteria.first().locator('legend')).toHaveText(
-      'Reaches the right answer'
+      'Reaches the right answer (correctness)'
     );
-    await expect(criteria.first()).toHaveAttribute('data-kind', 'reasoning');
+    await expect(criteria.first()).toHaveAttribute('data-kind', 'correctness');
+    await expect(criteria.nth(1).locator('legend')).toHaveText(
+      'Uses what was measured (reasoning)'
+    );
     // The nested panel is something a keyboard and a screen reader meet.
     const axe = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
@@ -320,7 +323,7 @@ test.describe('the submission review page', () => {
         r[at.comment],
       ])
     ).toEqual([
-      ['c1', 'Reaches the right answer', 'reasoning', '2', '2', 'Right.'],
+      ['c1', 'Reaches the right answer', 'correctness', '2', '2', 'Right.'],
       ['c2', 'Uses what was measured', 'reasoning', '1', '1', ''],
     ]);
     // The answer's own row holds no criterion and no mark.
