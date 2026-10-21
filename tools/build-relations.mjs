@@ -24,6 +24,7 @@
 //   in       the pathways it is in: ['seq', id, position] or ['course', id,
 //            unit], so a sequence and a course holding the same items can say
 //            which is which
+//   (a field with nothing to say is left out)
 //   teach    the instructor's page for it, when the site has one
 //   why      only when there is no next entry: 'last' (it ends a pathway) or
 //            'standalone' (it is in none), the stated reason of the contract
@@ -139,15 +140,18 @@ export function buildRelations(library, { exists, uses = new Map() } = {}) {
     }
     scored.sort((a, b) => b[0] - a[0] || (a[1] < b[1] ? -1 : 1));
 
-    const rel = {
-      pre,
-      next: next.slice(0, MAX_NEXT),
-      related: scored.slice(0, MAX_RELATED).map(([, id]) => id),
-      in: inPath.get(e.id),
-      teach: teachRoute(e, exists),
-    };
+    // Only what there is: an empty list or no page is left out, so the index
+    // (which every first visit installs) does not carry a hundred empty fields.
+    const rel = {};
+    if (pre.length) rel.pre = pre;
+    if (next.length) rel.next = next.slice(0, MAX_NEXT);
+    const related = scored.slice(0, MAX_RELATED).map(([, id]) => id);
+    if (related.length) rel.related = related;
     if (uses.get(e.id)?.length) rel.uses = [...uses.get(e.id)];
-    if (!rel.next.length)
+    if (inPath.get(e.id).length) rel.in = inPath.get(e.id);
+    const teach = teachRoute(e, exists);
+    if (teach) rel.teach = teach;
+    if (!next.length)
       rel.why =
         inPath.get(e.id).length || lastOf.has(e.id) ? 'last' : 'standalone';
     out.set(e.id, rel);
@@ -180,14 +184,12 @@ export function problems(
       found.push(`${e.id}: no relations`);
       continue;
     }
-    for (const list of [
-      'pre',
-      'next',
-      'related',
-      ...(r.uses ? ['uses'] : []),
-    ]) {
-      if (!Array.isArray(r[list])) {
-        found.push(`${e.id}: rel.${list} is not a list`);
+    for (const list of ['pre', 'next', 'related', 'uses']) {
+      if (r[list] === undefined) continue;
+      if (!Array.isArray(r[list]) || !r[list].length) {
+        found.push(
+          `${e.id}: rel.${list} is empty or not a list (leave it out)`
+        );
         continue;
       }
       if (new Set(r[list]).size !== r[list].length)

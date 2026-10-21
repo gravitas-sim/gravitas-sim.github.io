@@ -40,16 +40,20 @@ describe('the relations in library.json', () => {
 
   test('stay inside their limits, and never name the entry itself', () => {
     for (const e of LIB.entries) {
-      expect(e.rel.next.length).toBeLessThanOrEqual(MAX_NEXT);
-      expect(e.rel.related.length).toBeLessThanOrEqual(MAX_RELATED);
-      for (const list of [e.rel.pre, e.rel.next, e.rel.related])
+      expect((e.rel.next ?? []).length).toBeLessThanOrEqual(MAX_NEXT);
+      expect((e.rel.related ?? []).length).toBeLessThanOrEqual(MAX_RELATED);
+      for (const list of [
+        e.rel.pre ?? [],
+        e.rel.next ?? [],
+        e.rel.related ?? [],
+      ])
         expect(list).not.toContain(e.id);
     }
   });
 
   test('every entry has next entries or a stated reason, and a reason only when there are none', () => {
     for (const e of LIB.entries) {
-      if (e.rel.next.length) expect(e.rel.why).toBeUndefined();
+      if ((e.rel.next ?? []).length) expect(e.rel.why).toBeUndefined();
       else expect(['last', 'standalone']).toContain(e.rel.why);
     }
   });
@@ -59,7 +63,7 @@ describe('the relations in library.json', () => {
       s.entries.slice(0, -1).forEach((id, i) => {
         const e = LIB.entries.find(x => x.id === id);
         expect(e.rel.next).toContain(s.entries[i + 1]);
-        expect(e.rel.in).toContainEqual(['seq', s.id, i]);
+        expect(e.rel.in ?? []).toContainEqual(['seq', s.id, i]);
       });
   });
 
@@ -93,7 +97,7 @@ describe('the validator', () => {
     for (const list of ['pre', 'next', 'related']) {
       const lib = one();
       lib.entries[0].rel[list] = ['investigation:no-such-thing'];
-      lib.entries[0].rel.why = undefined;
+      delete lib.entries[0].rel.why;
       expect(problems(lib).join('\n')).toMatch(/no-such-thing/);
     }
   });
@@ -106,14 +110,14 @@ describe('the validator', () => {
       `${e.id}: no next entry and no stated reason`
     );
     const both = one();
-    const f = both.entries.find(x => x.rel.next.length);
+    const f = both.entries.find(x => x.rel.next?.length);
     f.rel.why = 'last';
     expect(problems(both)).toContain(`${f.id}: a reason with next entries`);
   });
 
   test('catches a repeat, a self-reference, a bad pathway and a missing instructor page', () => {
     const lib = one();
-    const e = lib.entries.find(x => x.rel.next.length);
+    const e = lib.entries.find(x => x.rel.next?.length);
     e.rel.next = [e.rel.next[0], e.rel.next[0]];
     e.rel.related = [e.id];
     e.rel.in = [['seq', 'no-such-sequence', 0]];

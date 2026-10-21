@@ -409,7 +409,7 @@ test.describe('an item, its relations and its pathway', () => {
     ).toHaveCount(1);
     for (const h of ['Before this', 'Next', 'Related', 'In these pathways'])
       await expect(item.getByRole('heading', { name: h })).toBeVisible();
-    for (const id of kepler.rel.next)
+    for (const id of kepler.rel.next ?? [])
       await expect(
         item.locator(`.lib-row[data-entry="${id}"] a.lib-link`)
       ).toHaveAttribute('href', LIBRARY.entries.find(e => e.id === id).route);
@@ -436,7 +436,8 @@ test.describe('an item, its relations and its pathway', () => {
   test('every entry has next entries or a stated reason', () => {
     for (const e of LIBRARY.entries)
       expect(
-        e.rel.next.length > 0 || ['last', 'standalone'].includes(e.rel.why),
+        (e.rel.next ?? []).length > 0 ||
+          ['last', 'standalone'].includes(e.rel.why),
         e.id
       ).toBe(true);
   });
@@ -524,9 +525,8 @@ test.describe('at three times the size', () => {
       for (const e of LIBRARY.entries) {
         const c = JSON.parse(JSON.stringify(e));
         c.id = rename(e.id);
-        c.rel.pre = c.rel.pre.map(rename);
-        c.rel.next = c.rel.next.map(rename);
-        c.rel.related = c.rel.related.map(rename);
+        for (const k of ['pre', 'next', 'related'])
+          if (c.rel[k]) c.rel[k] = c.rel[k].map(rename);
         c.title = { en: `${e.title.en} ${n}`, es: `${e.title.es} ${n}` };
         extra.push(c);
       }

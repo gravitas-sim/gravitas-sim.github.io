@@ -370,16 +370,6 @@
       "student": null
     },
     {
-      "file": "js/libraryPage.js",
-      "reason": "gravitas_next_context, not student work; its route has no room for the module",
-      "lacks": {
-        "kb": 1.4,
-        "requests": 0,
-        "route": "library"
-      },
-      "student": null
-    },
-    {
       "file": "js/world.js",
       "reason": "reached from the start-up entry: the module there costs the front door and the Sandbox one build request, with 0 free",
       "lacks": {

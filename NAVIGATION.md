@@ -186,7 +186,7 @@ They prove structure, language consistency and reachability. They do not prove c
 
 ## What the site still fails
 
-Three checks describe the Library's model and fail now, by design (Prompt 163's work). The other six of Prompt 161's nine, which describe Home and the global navigation, were activated by Prompt 162 (`activated: true` in `tools/pending-acceptance.json`) and are ordinary fatal tests (`tests/navigationChecks.test.js`, "Home and the global navigation follow the model"). The three run under the future-acceptance contract of Prompt 145 (`tools/pending-acceptance.mjs`, `tools/pending-acceptance.json`): each runs, its outcome is reported in a "pending acceptance" section, none counts as a failure, and none is quarantined (they never touch the pass or fail of any other test). Prompt 166 activates the rest by name; an activated check is an ordinary fatal test. `node tools/pending-acceptance.mjs report` prints them after a run.
+Nothing is pending. Prompt 161 registered nine checks the site failed by design under the future-acceptance contract of Prompt 145 (`tools/pending-acceptance.mjs`, `tools/pending-acceptance.json`): Prompt 162 activated the six for Home and the global navigation, and Prompt 163 the three for the Library (`activated: true`), so all nine are ordinary fatal tests (`tests/navigationChecks.test.js`, `e2e/navigation.spec.js`). Prompt 166 activates nothing more; its consolidation, with 165's verdicts for any surface that changes its route, works from this inventory.
 
 <!-- navigation:pending -->
 | Check | What it holds the site to | Work of | Activated by |
@@ -194,7 +194,7 @@ Three checks describe the Library's model and fail now, by design (Prompt 163's 
 | none | Every one of the nine checks is activated: 162 activated the six for Home and the global navigation, 163 the three for the Library. | | |
 <!-- /navigation:pending -->
 
-The registered failures that remain are the work of 163: the Library's kinds, facets and default view. Prompt 166's consolidation (with 165's verdicts for any surface that changes its route) works from this inventory.
+The Library's three, as they hold now: the facet and every card's type label are the four kinds students see (an activity or an experiment is an investigation to a student: `kindShown` in the index), no facet says where code runs, and the default view lists a committed handful of starting points (`starts`, seven entries) and no grid.
 
 ## Home and the global navigation (Prompt 162)
 
@@ -204,7 +204,11 @@ What a visitor sees, since Prompt 162 (the table of what changed is in the pull 
 - **Everything that was a menu entry is reached from its destination.** A destination's page carries a "places" block (Learn on the Library, Observe on the Observatory, Teach on the Teaching page, the last with the documents), stamped by `tools/shell.mjs` from `PLACES`; Explore's page is the sandbox, so its three places (the 3-D lab, the mission lab, the Scenario Studio) are in Home's Explore entry. No capability was removed: only its menu entry moved.
 - **A breadcrumb on every page but the sandbox** (the destination, then the page; Gravitas first only where a page has no destination, since the brand link already goes Home), also stamped from the inventory. The sandbox's fixed bar is one row over the canvas: it marks Explore, and Learn while a lesson is open (`js/shell.js` watches the `investigation-open` class the lesson already sets).
 - **Home answers three questions and offers one list.** What this is (one paragraph, in both languages); what to do first (`firstWeek` in the inventory: a first investigation, a first observation, the sandbox and a course for an instructor, each a Library entry read by `tools/build-library.mjs` or an action); where was I (the lessons started and not finished, shown only when there are some; Prompt 163's resume record replaces it); and the five destinations with their one line each, generated from the inventory. The three-screen introduction is kept, shown first on a first visit and reachable from Home's foot ("Show the introduction again", beside the quick tour). Home shows no count of content, no scenario cards, no list of investigations and no feature list.
-- **What 162 did not do:** add a destination, rename a surface's route, or touch a lesson. The Library's own kinds, facet and default view are Prompt 163's.
+- **What 162 did not do:** add a destination, rename a surface's route, or touch a lesson. The Library's own kinds, facet and default view are Prompt 163's (next section).
+
+## The Library (Prompt 163)
+
+The Library answers questions instead of listing things (LIBRARY.md has the detail): its default view is where you left off, where to start (seven committed entries for four audiences), the sequences and courses as pathways and the subjects as topics, with counts that are generated; "Browse everything" is one click away, with four facets and the rest behind "More filters"; a search names why each result matched; a topic page and an item page live in the Library's route (`?topic=`, `?item=`), so no destination was added. The default view's choices at 1280 by 800 are 21 (they were 21) and at 390 by 844 are 9 (they were 12), with no ceiling raised: the phone ceiling is lowered from 14 to 11, and the static counts are four facets by default (they were seven selects), seven behind "More filters", and seven committed start cards. Home's "where was I" reads the one resume record that the Library's links and the lesson's save write.
 
 ## The internal review protocol
 

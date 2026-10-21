@@ -50,14 +50,9 @@ export const writeJson = (key, value, collection, store) => {
   }
 };
 
-// --- The one resume record (Roadmap III Prompt 163) ---------------------------
-// Where a reader was: the items they opened last, newest first, and for each the
-// pathway they came by and the step they stopped at. One key, one record, read
-// by Home, the Library and My work, and written by the lesson's save and the
-// Library's links. It is a sidecar, never a field of a progress record: a 2.0.0
-// reader does not know the key, so it ignores the whole record and misreads
-// nothing (tests/compat/kinds/resume-record.mjs). A damaged or foreign record
-// reads as "nothing to resume", and the next write replaces it.
+// The one resume record (Prompt 163, STORAGE.md): the items a reader opened
+// last, newest first, with the pathway and step. A sidecar key, never a field of
+// a progress record, so 2.0.0 ignores it whole. A damaged record reads as empty.
 export const RESUME_KEY = KEY_RESUME;
 export const RESUME_VERSION = 1;
 export const RESUME_MAX = 6;
@@ -84,11 +79,7 @@ function resumeItem(raw) {
   return item;
 }
 
-/**
- * The items, newest first.
- * @param {Storage} [store] - Defaults to localStorage
- * @returns {Array<{id: string, route: string, at: number, step?: string, path?: {k: string, id: string}, title?: {en: string, es?: string}}>}
- */
+/** The items, newest first: {id, route, at, step?, path?, title?}. */
 export function readResume(store) {
   const record = readJson(RESUME_KEY, null, store);
   if (record?.v !== RESUME_VERSION || !Array.isArray(record.items)) return [];
@@ -100,11 +91,8 @@ export function readResume(store) {
 }
 
 /**
- * Note that an item was opened or moved on: it becomes the newest. A step or
- * pathway the caller leaves out is kept from the earlier note of the same item,
- * so the lesson's save (which knows the step) and the Library's link (which
- * knows the pathway) can each write the half they know.
- * @returns {boolean} Whether the browser kept it
+ * An item was opened or moved on: it becomes the newest. A step, pathway or
+ * title left out is kept from the earlier note of the same item. True if kept.
  */
 export function noteResume(item, store) {
   const next = resumeItem({ at: Date.now(), ...item });
@@ -118,7 +106,7 @@ export function noteResume(item, store) {
   return writeJson(
     RESUME_KEY,
     {
-      v: 1,
+      v: RESUME_VERSION,
       items: [next, ...items.filter(i => i.id !== next.id)].slice(
         0,
         RESUME_MAX

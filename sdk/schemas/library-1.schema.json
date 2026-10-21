@@ -499,15 +499,9 @@
           ]
         },
         "rel": {
-          "description": "Relations derived by tools/build-relations.mjs: prerequisites, next steps (at most 3), related entries (at most 4), the pathways it is in, its instructor page, and, when nothing comes next, why.",
+          "description": "Relations derived by tools/build-relations.mjs: prerequisites, next steps (at most 3), related entries (at most 4), what it is built on, the pathways it is in, its instructor page, and, when nothing comes next, why. A field with nothing to say is left out.",
           "type": "object",
-          "required": [
-            "pre",
-            "next",
-            "related",
-            "in",
-            "teach"
-          ],
+          "required": [],
           "additionalProperties": false,
           "properties": {
             "pre": {
@@ -515,21 +509,24 @@
               "uniqueItems": true,
               "items": {
                 "$ref": "#/$defs/id"
-              }
+              },
+              "minItems": 1
             },
             "next": {
               "type": "array",
               "uniqueItems": true,
               "items": {
                 "$ref": "#/$defs/id"
-              }
+              },
+              "minItems": 1
             },
             "related": {
               "type": "array",
               "uniqueItems": true,
               "items": {
                 "$ref": "#/$defs/id"
-              }
+              },
+              "minItems": 1
             },
             "in": {
               "type": "array",
@@ -552,7 +549,8 @@
                     "minimum": 0
                   }
                 ]
-              }
+              },
+              "minItems": 1
             },
             "teach": {
               "anyOf": [
@@ -577,7 +575,8 @@
               "uniqueItems": true,
               "items": {
                 "$ref": "#/$defs/id"
-              }
+              },
+              "minItems": 1
             }
           }
         }
