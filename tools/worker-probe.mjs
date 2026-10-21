@@ -30,6 +30,8 @@
 //   tools/worker-probe-results.json (read by tools/data-budget.mjs)
 // =============================================================================
 
+/* global navigator, MessageChannel, WebSocket, setTimeout */
+
 import { createServer } from 'node:http';
 import { createServer as netServer } from 'node:net';
 import { readFile, stat, writeFile } from 'node:fs/promises';
@@ -114,7 +116,14 @@ async function connect(port) {
     send(method, params = {}, sessionId) {
       const n = ++id;
       ws.send(JSON.stringify({ id: n, method, params, sessionId }));
-      return new Promise((res, rej) => waiting.set(n, { res, rej }));
+      // A Worker that ended between the request and its answer never answers.
+      const gone = new Promise((_, rej) =>
+        setTimeout(() => rej(new Error(`${method}: no answer`)), 2000).unref()
+      );
+      return Promise.race([
+        new Promise((res, rej) => waiting.set(n, { res, rej })),
+        gone,
+      ]);
     },
     on: f => listeners.push(f),
     close: () => ws.close(),
@@ -171,7 +180,7 @@ async function openFixture(page, id) {
   }, id);
 }
 
-async function observatory(browser, origin, name, p, cdpPort, proto) {
+async function observatory(browser, origin, p) {
   const { context, page } = await newPage(browser, origin, p);
   const cdp = await context.newCDPSession(page);
   await cdp.send('Performance.enable');
@@ -218,7 +227,7 @@ async function observatory(browser, origin, name, p, cdpPort, proto) {
   };
 }
 
-async function profileRun(browser, origin, name, p, cdpPort) {
+async function profileRun(browser, origin, p, cdpPort) {
   const { context, page } = await newPage(browser, origin, p);
   const cdp = await context.newCDPSession(page);
   if (p.cpu > 1)
@@ -438,20 +447,8 @@ async function main() {
   };
   try {
     for (const [name, p] of Object.entries(PROFILES)) {
-      report.observatory[name] = await observatory(
-        browser,
-        origin,
-        name,
-        p,
-        cdpPort
-      );
-      report.profileRun[name] = await profileRun(
-        browser,
-        origin,
-        name,
-        p,
-        cdpPort
-      );
+      report.observatory[name] = await observatory(browser, origin, p);
+      report.profileRun[name] = await profileRun(browser, origin, p, cdpPort);
     }
     report.storage = await storage(browser, origin);
   } finally {

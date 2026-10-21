@@ -1,12 +1,12 @@
 {
   "note": "Recorded by tools/worker-probe.mjs (npm run probe:workers). A measurement on one machine in headless Chromium, not a gate: nothing in CI reads it as a pass or a fail, and tools/data-budget.mjs only reports it beside the ceilings.",
-  "measuredAt": "0fdc0b60",
+  "measuredAt": "ad56dc2d",
   "date": "2026-10-21",
   "environment": {
     "chromium": "156.0.8078.4",
     "node": "v24.4.0",
     "platform": "darwin x64",
-    "load1": 3.8
+    "load1": 3.4
   },
   "observatory": {
     "low-end": {
@@ -20,7 +20,7 @@
         {
           "id": "sdss-a",
           "rows": 1271,
-          "heapMB": 1.92
+          "heapMB": 1.93
         },
         {
           "id": "sdss-g",
@@ -35,7 +35,7 @@
         {
           "id": "sdss-m",
           "rows": 1271,
-          "heapMB": 1.97
+          "heapMB": 1.98
         },
         {
           "id": "gwosc-events",
@@ -50,7 +50,7 @@
         {
           "id": "ngc2420-segue",
           "rows": 517,
-          "heapMB": 2.08
+          "heapMB": 2.09
         },
         {
           "id": "gaia-solar-neighbourhood",
@@ -60,7 +60,7 @@
         {
           "id": "gaia-ngc2420",
           "rows": 993,
-          "heapMB": 2.17
+          "heapMB": 2.16
         },
         {
           "id": "milky-way-rotation-curve",
@@ -70,16 +70,16 @@
         {
           "id": "mist-isochrones",
           "rows": 1410,
-          "heapMB": 2.21
+          "heapMB": 2.18
         },
         {
           "id": "tess-aperture",
           "rows": 143,
-          "heapMB": 2.29
+          "heapMB": 2.26
         }
       ],
       "largest": "tess-aperture",
-      "largestHeapMB": 2.29,
+      "largestHeapMB": 2.26,
       "workersWithLargestOpen": 0
     },
     "desktop": {
@@ -160,72 +160,72 @@
     "low-end": {
       "fixture": "tess-light-curve",
       "rows": 1882,
-      "status": "Fitted in 12.9 s.",
-      "wallMs": 13124,
+      "status": "Fitted in 13.0 s.",
+      "wallMs": 13141,
       "concurrency": 2,
       "realmsSampled": 8,
       "realmsSeen": 8,
       "perRealmPeakHeldMB": [
-        55.41,
-        3.79,
-        3.61,
-        4.76,
+        49.68,
+        4.02,
+        3.48,
+        4.5,
+        4.42,
         4.34,
-        3.83,
-        4.52,
-        4.6
+        4.31,
+        4.42
       ],
       "perRealmPeakUsedMB": [
-        1.86,
+        1.93,
         1.74,
-        1.74,
-        1.78,
+        1.75,
+        1.81,
         1.73,
-        1.74,
         1.78,
-        1.71
+        1.77,
+        1.73
       ],
-      "maxRealmHeldMB": 55.41,
-      "medianRealmHeldMB": 4.52,
-      "aggregatePeakHeldMB": 55.41,
-      "aggregatePeakUsedMB": 3.48,
+      "maxRealmHeldMB": 49.68,
+      "medianRealmHeldMB": 4.42,
+      "aggregatePeakHeldMB": 49.68,
+      "aggregatePeakUsedMB": 3.53,
       "peakRealmsAtOnce": 2,
-      "pageHeapPeakMB": 5.42
+      "pageHeapPeakMB": 5.68
     },
     "desktop": {
       "fixture": "tess-light-curve",
       "rows": 1882,
-      "status": "Fitted in 8.3 s.",
-      "wallMs": 8369,
+      "status": "Fitted in 8.0 s.",
+      "wallMs": 8011,
       "concurrency": 5,
       "realmsSampled": 8,
       "realmsSeen": 8,
       "perRealmPeakHeldMB": [
-        48.34,
-        4.22,
-        3.89,
-        4.39,
-        4.45,
-        4.2,
-        4.69,
-        4.14
+        53.95,
+        4.29,
+        3.67,
+        4.28,
+        4.11,
+        4.12,
+        4.52,
+        4.29
       ],
       "perRealmPeakUsedMB": [
-        1.88,
-        1.8,
+        1.87,
+        1.77,
         1.76,
-        1.81,
-        1.8,
-        1.78,
+        1.77,
+        1.77,
+        1.76,
         1.75,
-        1.73
+        1.74
       ],
-      "maxRealmHeldMB": 48.34,
-      "medianRealmHeldMB": 4.39,
-      "aggregatePeakHeldMB": 48.34,
-      "aggregatePeakUsedMB": 8.12,
+      "maxRealmHeldMB": 53.95,
+      "medianRealmHeldMB": 4.29,
+      "aggregatePeakHeldMB": 53.95,
+      "aggregatePeakUsedMB": 7.96,
       "peakRealmsAtOnce": 5,
-      "pageHeapPeakMB": 5.91
+      "pageHeapPeakMB": 5.74
     }
   },
   "storage": {
