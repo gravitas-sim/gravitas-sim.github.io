@@ -112,7 +112,7 @@ export const ES_LIBRARY = {
   'lib.filter.sequence': 'Secuencia',
   'lib.filter.sequence.any': 'Cualquier secuencia',
   'lib.start.title': 'Por dónde empezar',
-  'lib.start.note': 'Tres para cada manera de entrar.',
+  'lib.start.note': 'Dos para cada manera de entrar.',
   'lib.pathways.title': 'Secuencias y cursos',
   'lib.pathways.note':
     'Una secuencia es una serie corta de investigaciones en buen orden. Un curso es el trabajo de un período, en unidades.',

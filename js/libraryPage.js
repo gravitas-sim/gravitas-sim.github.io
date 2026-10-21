@@ -29,8 +29,6 @@
 import {
   NO_FILTERS,
   PROGRESSES,
-  filterCatalog,
-  loosening,
   progressBucket,
 } from './data/investigations/browse.js';
 import { LENGTHS, CALCULATIONS } from './data/investigations/sequences.js';
@@ -51,6 +49,9 @@ import { noteResume, put, readResume } from './storage/local.js';
 
 const $ = id => document.getElementById(id);
 const LEVELS = ['beginner', 'intro'];
+/** How many cards the list draws at once, then in each following task. */
+const FIRST_CARDS = 48;
+const CHUNK = 96;
 const MATHEMATICS = ['none', 'arithmetic', 'algebra', 'logarithms'];
 const GROUPS = ['all', 'subject', 'level', 'sequence'];
 /** The filters the default row offers, then the ones behind "More filters". */
@@ -150,136 +151,203 @@ function progressFor(id) {
 }
 const finished = id => progressBucket(progressFor(id)) === 'done';
 
-/** The sequence a filter names, as a set of ids. */
-const sequenceIds = id =>
-  new Set(state.library.sequences.find(s => s.id === id)?.entries);
+/** The sequences each entry is in, for the sequence facet. */
+let inSequences = new Map();
 
-/** Whether a row passes the filters this file adds to browse.js's. */
-function extras(entry, f) {
-  return (
-    (!students.includes(f.kind) || shown[entry.kind] === f.kind) &&
-    (!f.mathematics || entry.mathematics === f.mathematics) &&
-    (!f.data || entry.data === f.data) &&
-    (!f.depth || (entry.depths ?? 0) >= 2) &&
-    (!f.prereq || (entry.rel?.pre ?? []).every(finished)) &&
-    (!f.sequence || sequenceIds(f.sequence).has(entry.id))
-  );
+/** The facets, in the order the page offers them. */
+const FACET_KEYS = [
+  'subject',
+  'level',
+  'length',
+  'kind',
+  'mathematics',
+  'calculation',
+  'data',
+  'depth',
+  'prereq',
+  'sequence',
+  'progress',
+];
+
+/** What an entry is, as each facet reads it: the values it can be filed under. */
+function valuesOf(entry, key) {
+  switch (key) {
+    case 'subject':
+      return entry.subjects ?? [];
+    case 'kind':
+      return [shown[entry.kind] ?? entry.kind, entry.kind];
+    case 'depth':
+      return (entry.depths ?? 0) >= 2 ? ['deeper'] : [];
+    case 'prereq':
+      return (entry.rel?.pre ?? []).every(finished) ? ['met'] : [];
+    case 'sequence':
+      return inSequences.get(entry.id) ?? [];
+    case 'progress':
+      return [progressBucket(progressFor(entry.id))];
+    default:
+      return entry[key] ? [entry[key]] : [];
+  }
 }
 
-/** The rows a filter set leaves, ranked by the search when there is a query. */
+/** Whether an entry passes what is not a facet: the search and a hidden format. */
+const passesQuery = (entry, f) =>
+  (!f.query || !hits || hits.has(entry.id)) &&
+  (!f.format || entry.format === f.format);
+
+/**
+ * The rows a filter set leaves, ranked by the search when there is a query.
+ * Each carries the progress the card shows and the fields the search matched.
+ */
 function match(f) {
-  const base = {
-    ...f,
-    query: '',
-    kind: students.includes(f.kind) ? '' : f.kind,
-  };
-  let rows = filterCatalog(localized, base, progressFor).filter(r =>
-    extras(r.entry, f)
-  );
-  if (f.query && hits) {
-    rows = rows
-      .filter(r => hits.has(r.entry.id))
-      .sort((a, b) => hits.get(b.entry.id).score - hits.get(a.entry.id).score);
-    for (const r of rows) r.why = hits.get(r.entry.id).why;
+  const rows = [];
+  for (const entry of localized) {
+    if (!passesQuery(entry, f)) continue;
+    if (FACET_KEYS.some(k => f[k] && !valuesOf(entry, k).includes(f[k])))
+      continue;
+    rows.push({
+      entry,
+      progress: progressBucket(progressFor(entry.id)),
+      ...(f.query && hits ? { why: hits.get(entry.id).why } : {}),
+    });
   }
+  if (f.query && hits)
+    rows.sort(
+      (a, b) => hits.get(b.entry.id).score - hits.get(a.entry.id).score
+    );
   return rows;
 }
 
-function fillSelect(id, key, values, labelOf, anyLabel) {
+/**
+ * How many entries each option of each facet would leave, in one pass: an
+ * entry counts toward every facet when it passes them all, and toward the one
+ * facet it fails when it fails just that one (so an option shows what choosing
+ * it would give, the other choices held).
+ */
+function facetCounts(f) {
+  const out = Object.fromEntries(FACET_KEYS.map(k => [k, new Map()]));
+  for (const entry of localized) {
+    if (!passesQuery(entry, f)) continue;
+    const failing = FACET_KEYS.filter(
+      k => f[k] && !valuesOf(entry, k).includes(f[k])
+    );
+    if (failing.length > 1) continue;
+    for (const k of failing.length ? failing : FACET_KEYS)
+      for (const v of valuesOf(entry, k))
+        out[k].set(v, (out[k].get(v) ?? 0) + 1);
+  }
+  return out;
+}
+
+function fillSelect(id, key, values, labelOf, anyLabel, counts) {
   const select = $(id);
   if (!select) return;
   const current = state.filters[key];
   select.innerHTML = [
     `<option value="">${escape(anyLabel)}</option>`,
-    ...values.map(v => {
-      const n = match({ ...state.filters, [key]: v }).length;
-      return `<option value="${escape(v)}">${escape(
-        t('lib.filter.option', { label: labelOf(v), n })
-      )}</option>`;
-    }),
+    ...values.map(
+      v =>
+        `<option value="${escape(v)}">${escape(
+          t('lib.filter.option', {
+            label: labelOf(v),
+            n: counts[key].get(v) ?? 0,
+          })
+        )}</option>`
+    ),
   ].join('');
   select.value = values.includes(current) ? current : '';
 }
 
 function fillMenus() {
   const lib = state.library;
+  const counts = facetCounts(state.filters);
   const word = prefix => v => t(`lib.${prefix}.${v}`);
   fillSelect(
     'libSubject',
     'subject',
     lib.subjects.map(s => s.id),
     id => pick(lib.subjects.find(s => s.id === id).label),
-    t('lib.filter.subject.any')
+    t('lib.filter.subject.any'),
+    counts
   );
   fillSelect(
     'libLevel',
     'level',
     LEVELS,
     word('level'),
-    t('lib.filter.level.any')
+    t('lib.filter.level.any'),
+    counts
   );
   fillSelect(
     'libLength',
     'length',
     LENGTHS,
     word('length'),
-    t('lib.filter.length.any')
+    t('lib.filter.length.any'),
+    counts
   );
   fillSelect(
     'libKind',
     'kind',
     students,
     word('kind'),
-    t('lib.filter.kind.any')
+    t('lib.filter.kind.any'),
+    counts
   );
   fillSelect(
     'libMathematics',
     'mathematics',
     MATHEMATICS,
     word('mathematics'),
-    t('lib.filter.mathematics.any')
+    t('lib.filter.mathematics.any'),
+    counts
   );
   fillSelect(
     'libCalculation',
     'calculation',
     CALCULATIONS,
     word('calculation'),
-    t('lib.filter.calculation.any')
+    t('lib.filter.calculation.any'),
+    counts
   );
   fillSelect(
     'libData',
     'data',
     ['authentic', 'synthetic'],
     word('data'),
-    t('lib.filter.data.any')
+    t('lib.filter.data.any'),
+    counts
   );
   fillSelect(
     'libDepth',
     'depth',
     ['deeper'],
     word('depth'),
-    t('lib.filter.depth.any')
+    t('lib.filter.depth.any'),
+    counts
   );
   fillSelect(
     'libPrereq',
     'prereq',
     ['met'],
     word('prereq'),
-    t('lib.filter.prereq.any')
+    t('lib.filter.prereq.any'),
+    counts
   );
   fillSelect(
     'libSequence',
     'sequence',
     lib.sequences.map(s => s.id),
     id => pick(lib.sequences.find(s => s.id === id).title),
-    t('lib.filter.sequence.any')
+    t('lib.filter.sequence.any'),
+    counts
   );
   fillSelect(
     'libProgress',
     'progress',
     PROGRESSES,
     word('progress'),
-    t('lib.filter.progress.any')
+    t('lib.filter.progress.any'),
+    counts
   );
   const group = $('libGroup');
   group.innerHTML = GROUPS.map(
@@ -511,6 +579,28 @@ async function renderDetail(kind) {
   );
 }
 
+let listToken = 0;
+
+/**
+ * The one list of cards, drawn in pieces: the first screenful at once, the
+ * rest in the tasks that follow, so a catalog of any size answers a filter
+ * before it has finished drawing (the scale test holds it to a budget).
+ */
+function drawList(rows) {
+  const mine = ++listToken;
+  const box = $('libResults');
+  box.innerHTML = `<ul class="lib-list">${cards(rows.slice(0, FIRST_CARDS))}</ul>`;
+  const list = box.firstElementChild;
+  let at = FIRST_CARDS;
+  const more = () => {
+    if (mine !== listToken || at >= rows.length) return;
+    list.insertAdjacentHTML('beforeend', cards(rows.slice(at, at + CHUNK)));
+    at += CHUNK;
+    setTimeout(more, 0);
+  };
+  setTimeout(more, 0);
+}
+
 function render() {
   if (!state.library) return;
   translatePage();
@@ -531,6 +621,7 @@ function render() {
   );
   $('libClear').hidden = !narrowed();
   setCrumbs([]);
+  listToken++;
   $('libResults').innerHTML = '';
   $('libDetail').innerHTML = '';
   $('libEmpty').hidden = true;
@@ -545,7 +636,8 @@ function render() {
     $('libCount').textContent = narrowed()
       ? t('lib.count', { n: rows.length, total })
       : t('lib.count.all', { total });
-    $('libResults').innerHTML = rows.length ? grouped(rows) : '';
+    if (state.group === 'all' && rows.length) drawList(rows);
+    else $('libResults').innerHTML = rows.length ? grouped(rows) : '';
     $('libEmpty').hidden = rows.length > 0;
     if (!rows.length) {
       $('libEmptyText').textContent = f.query
@@ -576,7 +668,7 @@ function looseningOf(f) {
     const n = match({ ...f, [key]: '' }).length;
     if (n && (!best || n > best.count)) best = { key, count: n };
   }
-  return best ?? (loosening(localized, f, progressFor) || null);
+  return best;
 }
 
 async function setFilter(key, value) {
@@ -741,6 +833,10 @@ async function start() {
   $('main').removeAttribute('aria-busy');
   byId = new Map(state.library.entries.map(e => [e.id, e]));
   shown = state.library.kindShown ?? {};
+  inSequences = new Map();
+  for (const sq of state.library.sequences)
+    for (const id of sq.entries)
+      inSequences.set(id, [...(inSequences.get(id) ?? []), sq.id]);
   students = [...new Set(state.library.kinds.map(k => shown[k] ?? k))];
   wire();
   await refreshHits();

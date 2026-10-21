@@ -585,10 +585,10 @@ test.describe('at three times the size', () => {
       type: 'interaction ms at 4x throttle, 3x index',
       description: JSON.stringify(took),
     });
-    // The budget: a change answers inside a second even at a quarter of the
+    // The budget: a change answers inside three quarters of a second even at a quarter of the
     // speed, over 525 entries.
     for (const [what, ms] of Object.entries(took))
-      expect(ms, `${what} took ${Math.round(ms)} ms`).toBeLessThan(1000);
+      expect(ms, `${what} took ${Math.round(ms)} ms`).toBeLessThan(750);
     // The search, the first time: loads its code and the objectives, then ranks.
     const t0 = Date.now();
     await page.locator('#libSearch').fill('transit');

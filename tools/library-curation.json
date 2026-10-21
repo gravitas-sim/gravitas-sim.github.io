@@ -661,7 +661,7 @@
     }
   },
   "starts": {
-    "note": "Where to begin, per audience and level: three Library entries each, committed here and read by tools/build-library.mjs, which fails on an id that is not in the Library. Home's first-week list (tools/navigation-inventory.json) names entries that must also appear here. Prompt 163.",
+    "note": "Where to begin, per audience and level: two Library entries each, committed here and read by tools/build-library.mjs, which fails on an id that is not in the Library. Home's first-week list (tools/navigation-inventory.json) names entries that must also appear here. Prompt 163.",
     "groups": [
       {
         "id": "new",
@@ -672,8 +672,7 @@
         },
         "entries": [
           "investigation:the-turning-sky",
-          "scenario:solar-system",
-          "scenario:keplers-2nd-law"
+          "scenario:solar-system"
         ]
       },
       {
@@ -685,8 +684,7 @@
         },
         "entries": [
           "investigation:keplers-laws",
-          "investigation:color-and-temperature",
-          "investigation:transit-photometry"
+          "investigation:color-and-temperature"
         ]
       },
       {
@@ -698,7 +696,6 @@
         },
         "entries": [
           "dataset:tess-light-curve",
-          "dataset:sdss-g",
           "investigation:exo-star"
         ]
       },
@@ -710,9 +707,7 @@
           "es": "Para enseñar un curso"
         },
         "entries": [
-          "course:intro-astronomy",
-          "course:observing-lab",
-          "activity:orbital-speed/route"
+          "course:intro-astronomy"
         ]
       }
     ]

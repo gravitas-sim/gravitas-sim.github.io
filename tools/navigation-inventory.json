@@ -518,7 +518,7 @@
       "formats": 15,
       "filters": 4,
       "moreFilters": 7,
-      "startCards": 12
+      "startCards": 7
     },
     "reach": {
       "maxClicksFromHome": 3,
@@ -535,7 +535,7 @@
       },
       "library": {
         "desktop": 24,
-        "phone": 14
+        "phone": 11
       },
       "my-work": {
         "desktop": 9,

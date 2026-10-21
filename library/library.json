@@ -20,10 +20,10 @@
     {"id":"waves","label":{"en":"Gravitational waves","es":"Ondas gravitacionales"},"blurb":{"en":"Ripples in spacetime: what a gravitational wave is, how a merger makes one, and what the five detected events let you measure.","es":"Ondulaciones del espacio-tiempo: qué es una onda gravitacional, cómo la produce una fusión y qué permiten medir los cinco eventos detectados."},"count":7}
   ],
   "starts": [
-    {"id":"new","level":"beginner","audience":{"en":"New to astronomy","es":"Nuevo en la astronomía"},"entries":["investigation:the-turning-sky","scenario:solar-system","scenario:keplers-2nd-law"]},
-    {"id":"course","level":"intro","audience":{"en":"In an astronomy course","es":"En un curso de astronomía"},"entries":["investigation:keplers-laws","investigation:color-and-temperature","investigation:transit-photometry"]},
-    {"id":"measure","level":"intro","audience":{"en":"Measure something real","es":"Mide algo real"},"entries":["dataset:tess-light-curve","dataset:sdss-g","investigation:exo-star"]},
-    {"id":"teach","level":"intro","audience":{"en":"Teaching a course","es":"Para enseñar un curso"},"entries":["course:intro-astronomy","course:observing-lab","activity:orbital-speed/route"]}
+    {"id":"new","level":"beginner","audience":{"en":"New to astronomy","es":"Nuevo en la astronomía"},"entries":["investigation:the-turning-sky","scenario:solar-system"]},
+    {"id":"course","level":"intro","audience":{"en":"In an astronomy course","es":"En un curso de astronomía"},"entries":["investigation:keplers-laws","investigation:color-and-temperature"]},
+    {"id":"measure","level":"intro","audience":{"en":"Measure something real","es":"Mide algo real"},"entries":["dataset:tess-light-curve","investigation:exo-star"]},
+    {"id":"teach","level":"intro","audience":{"en":"Teaching a course","es":"Para enseñar un curso"},"entries":["course:intro-astronomy"]}
   ],
   "sequences": [
     {"id":"the-sky","title":{"en":"The sky","es":"El cielo"},"blurb":{"en":"Where things are in the sky and why they move: the turning of the stars, the Sun’s year, the Moon’s phases and eclipses, the planets’ loops, and then planning a night at a telescope. The first sequence for an introductory course; each takes 10 to 20 minutes.","es":"Dónde están las cosas en el cielo y por qué se mueven: el giro de las estrellas, el año del Sol, las fases de la Luna y los eclipses, los lazos de los planetas, y luego planificar una noche en un telescopio. La primera secuencia para un curso introductorio; cada una dura de 10 a 20 minutos."},"entries":["investigation:the-turning-sky","investigation:the-sun-through-the-year","investigation:phases-and-eclipses","investigation:wanderers-on-the-sky","investigation:plan-a-night"],"depths":["core","core","core","core","quantitative"],"after":[]},

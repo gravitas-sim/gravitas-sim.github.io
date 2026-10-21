@@ -196,11 +196,7 @@ describe('the search', () => {
 
   test('names the fields a result matched, and drops the id when the title already said it', () => {
     const hit = rank(entries, 'transit', ctx);
-    expect(hit.get('scenario:transit-lab').why).toEqual(
-      ['title', 'summary'].filter(f => f === 'title' || false).concat([]).length
-        ? ['title']
-        : []
-    );
+    expect(hit.get('scenario:transit-lab').why).toEqual(['title']);
     expect(hit.get('investigation:transit-photometry').why).toEqual(['id']);
     expect(hit.get('investigation:kepler').why).toEqual(['summary']);
     expect(

@@ -163,7 +163,7 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `library.formats` | 15 |
 | `library.filters` | 4 |
 | `library.moreFilters` | 7 |
-| `library.startCards` | 12 |
+| `library.startCards` | 7 |
 | `reach.maxClicksFromHome` | 3 |
 | `reach.pagesWithoutALinkFromHome` | 1 |
 | `defaultView.home-first-visit.desktop` | 12 |
@@ -171,7 +171,7 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `defaultView.home.desktop` | 14 |
 | `defaultView.home.phone` | 7 |
 | `defaultView.library.desktop` | 24 |
-| `defaultView.library.phone` | 14 |
+| `defaultView.library.phone` | 11 |
 | `defaultView.my-work.desktop` | 9 |
 | `defaultView.my-work.phone` | 3 |
 | `defaultView.observatory.desktop` | 16 |

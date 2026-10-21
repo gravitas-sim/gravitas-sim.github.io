@@ -115,7 +115,7 @@ export const EN_LIBRARY = {
   'lib.filter.sequence': 'Sequence',
   'lib.filter.sequence.any': 'Any sequence',
   'lib.start.title': 'Where to start',
-  'lib.start.note': 'Three for each way in.',
+  'lib.start.note': 'Two for each way in.',
   'lib.pathways.title': 'Sequences and courses',
   'lib.pathways.note':
     'A sequence is a short run of investigations in a good order. A course is a term of work, in units.',
