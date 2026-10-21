@@ -19,9 +19,10 @@ import { withAllDepths } from '../js/investigations/depthAll.js';
 import { INSTRUCTOR_CONTENT } from '../js/data/instructorContent.js';
 import { LABELS } from '../js/data/instructorLabels.js';
 import { answerKeyFor, plainText } from '../js/answerKey.js';
-import { digest } from '../js/composer/compile.js';
+import { digest as ledgerDigest } from '../js/composer/compile.js';
 import {
   ENGLISH_MARK,
+  digest,
   notesModel,
   structuredNotes,
 } from '../js/instructorNotes.js';
@@ -157,6 +158,19 @@ describe('the digests are the ledger’s', () => {
     expect(digest('x')).toMatch(/^[0-9a-f]{8}$/);
     expect(pageOf(base).join(' ')).toContain(m.digests.en);
     expect(pageOf(base).join(' ')).toContain(m.digests.es);
+  });
+
+  test('the digest is the ledger’s function, on every text of every page', () => {
+    for (const b of INVESTIGATIONS) {
+      const m = notesModel(b, lessonOf);
+      for (const t of [
+        m.title.text,
+        ...m.objectives.map(o => o.text),
+        '',
+        'ñ¿é',
+      ])
+        expect(digest(t)).toBe(ledgerDigest(t));
+    }
   });
 
   test('a changed English objective moves the English digest and not the Spanish', () => {

@@ -24,18 +24,38 @@
 //
 // Freshness: the page prints two digests, of the English texts it was made from
 // and of the Spanish it printed, with the function the translation-freshness
-// ledger uses (js/composer/compile.js digest), so the same pair can be compared.
+// ledger uses (js/composer/compile.js digest, repeated below), so the same pair
+// can be compared.
 //
 // Not imported by any route: the build and the tests read it.
 // =============================================================================
 
 import { createDocument } from './pdf.js';
 import { entryFor, plainText } from './answerKey.js';
-import { digest } from './composer/compile.js';
 import { labelsFor } from './data/instructorLabels.js';
 import { lessonFacts } from './instructorFacts.js';
 import { SHADOW_MARK, spanishLesson } from './instructorLocale.js';
 import { withAllDepths } from './investigations/depthAll.js';
+
+/**
+ * FNV-1a as eight hex digits: the ledger's digest (js/composer/compile.js
+ * `digest`), written out again because importing that module would bring it and
+ * the relation table into the instructor bundle's source closure, which the
+ * digest test holds under 270 files. tests/instructorNotes.test.js holds this
+ * equal to the original on every text the notes print.
+ *
+ * @param {string} text - What to digest
+ * @returns {string} Eight hex digits
+ */
+export function digest(text) {
+  let h = 0x811c9dc5;
+  const s = String(text ?? '');
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(16).padStart(8, '0');
+}
 
 /** The marker printed after a text that has no Spanish. */
 export const ENGLISH_MARK = '[EN]';
