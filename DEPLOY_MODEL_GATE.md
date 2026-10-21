@@ -66,3 +66,124 @@ Each item is its own work, and each is measurable against these thresholds:
 - **Minify the tree in place at deploy.** It would give the route budgets
   their room, but the tests would then judge a tree that is not the one
   published, which is T4 in another form.
+
+## Second run (Roadmap III, Prompt 158, part A)
+
+Written on 2026-10-21 against `v3` at 0cc96a74, **before any measurement of
+this run**. The first run's verdict (B, above) stands as D-DEPLOY-01 until
+this run is ratified. This run compares complete workflows, because the first
+compared a build that could not be judged with a suite that could not judge
+it; Prompt 159 builds what a switch needs, and only if the verdict below says
+to. Nothing here changes the deploy job.
+
+### The committed criteria, unchanged
+
+Copied from `spike/deploy/THRESHOLDS.md` (09a1f6e4 on `spike/deploy-model`),
+whose measurements this document records at 8150bb9c. No number is touched.
+
+- **T1 start-up.** The build cuts the front door's JavaScript by at least 50%
+  of its bytes and 30% of its requests, and each of the four measured lesson
+  routes' bytes by at least 40%.
+- **T2 offline.** The build's service worker installs from its own precache,
+  and a reader who has opened it once can open it offline.
+- **T3 committed artifacts.** The build needs no more committed generated
+  artifacts than the tree does.
+- **T4 tests.** The browser suite that can judge the published build covers
+  at least 90% of the tests the source suite runs.
+- **T5 instructor bundle.** The build can publish the encrypted instructor
+  bundle without the passphrase reaching any job but the one that publishes.
+- **T6 updates.** In the build, a deploy changes the precache version exactly
+  when a published file changes, as it does in the tree.
+
+First run's outcome rule, unchanged: **A** needs T1 to T6. **B** is the verdict
+when T1 passes and the build cannot yet be judged by the suite (T4) or kept
+offline (T2). **C** otherwise.
+
+### The criteria as workflow criteria
+
+The first run's T4 counted tests, and a count can be met by quantity (267 of
+1474 was 18%; a suite of ten thousand trivial tests would have passed). What
+T4 meant to prove is that a regression in the build would be seen. It is
+restated as the workflows the product stands on, with its number unchanged.
+
+- **The workflows.** The ten student workflows S1 to S10 and the instructor
+  path I1 of `tools/conformance/product.json` (the specs each names are its
+  list). That is 11 workflows; 90% of 11 is 9.9, so **T4 is met when at least
+  10 of the 11 are judged on the build**. A workflow is judged on the build
+  when every spec in its list runs against `dist/` and passes there, not in
+  part: the part left to sources is exactly where a build-only regression
+  would hide. A spec that fails against `dist/` because it imports `/js/...`
+  modules counts as not judged; no spec is edited, skipped or loosened for
+  this run. The test-count ratio of the first run is reported beside it for
+  continuity and judges nothing.
+- **T1 is judged as the first run judged it**: JavaScript bytes and requests
+  on the front door and the four lesson routes (kepler, transit, power-law,
+  largest-lesson), `tools/route-budget.mjs` on both configurations, cold
+  cache, service worker blocked. The same tool also reports the other routes
+  and the Observatory; those route numbers decide nothing except the B slice
+  named below.
+- **Time to usable is reported, never judged.** Front door, the kepler lesson
+  and the Observatory with one observation open, on both configurations, on
+  the throttled profile: Chromium, `Emulation.setCPUThrottlingRate` 4, and
+  `Network.emulateNetworkConditions` at 150 ms round trip, 1.6 Mbit/s down,
+  0.75 Mbit/s up (the published Lighthouse mobile preset, chosen here and not
+  tuned). Three runs per cell, sources and build interleaved, median. Every
+  timing is printed with `uptime` before and after, and nothing is measured
+  while the one-minute load is above 24. A median that differs between the
+  configurations by less than the spread of its own three runs is reported as
+  "not distinguishable".
+- **T2 and T6 are judged on the build as `node build.js` produces it**: it has
+  a service worker and a precache, or it does not. The spike additionally
+  generates a precache over a copy of `dist/` and runs the offline and
+  update behaviour against it, so the verdict can say whether the missing
+  piece is a bounded task. That evidence decides between A and B below; it
+  never turns the shipped build's T2 or T6 into a pass.
+- **T3 and T5** are counted as the first run counted them
+  (`tools/generate-graph.mjs` outputs for the build and the tree; the
+  published `dist/instructors/materials.enc.json` and the jobs that read the
+  passphrase). The passphrase is never read in this run.
+- **Marginal costs, reported.** One new lazy family and one new pack under
+  each model: requests, bytes as served and committed files touched, taken
+  from the families and packs the tree has (`route-budget.mjs --lessons` per
+  family on both configurations; the smallest, the median and the largest
+  pack the Observatory opens). The precache a build would need is the byte
+  total and file count the spike's generated manifest reports, next to the
+  tree's (`tools/data-budget.json`'s first-visit tier).
+
+### Outcomes, fixed before measurement
+
+- **A (159 runs, all of it).** T1, T3 and T5 are met on the shipped build; the
+  spike's precache over `dist/` installs and serves the offline workflow with
+  the spike's offline spec, and its version changes exactly when a published
+  file changes (T2 and T6 shown to be a bounded task); and at least 10 of the
+  11 workflows are judged on the build when the specs the workflows name are
+  run against `dist/` by the spike's configuration unchanged (T4 shown to be
+  a bounded task). A is the decision to invest in the production
+  prerequisites, not a switch.
+- **B (159 runs for the named slice only).** T1 met on the front door and the
+  four lesson routes, and A's other conditions fail. The predefined slices,
+  either or both:
+  - **B-routes, the build for named routes.** A route is named when, on the
+    build, it meets T1's bar for its kind (a lesson or document route: bytes
+    cut by at least 40%; the front door and sandbox: 50% of bytes and 30% of
+    requests), every spec of the workflows that open it passes against
+    `dist/` unchanged, and the spike's precache serves it offline.
+  - **B-hybrid, a bundled engine artifact in the tree.** The spike bundles
+    `js/engine/` and what it imports into one file loaded by the sources
+    routes that load the engine. It qualifies when, over those routes, the
+    engine's own requests fall by at least 30% and its bytes by at least 40%
+    (T1's bars applied to the part replaced), the tests that judge the tree
+    still pass unchanged against the tree that loads it, and its artifact is
+    produced by a generator node the existing `generate.mjs --check` graph
+    holds, so a conflict in it is resolved by regeneration, never by hand.
+    Its merge-conflict cost is reported (the share of the merged pull
+    requests since `v3` was cut that touch the bundle's inputs, and how many
+    of those were open at the same time), and judges nothing beyond that
+    binary.
+- **C (the tree stays; 159 does not run; 133's policy is the relief).** T1 not
+  met on the front door or on any of the four lesson routes, or A and B both
+  not reached. The consumers Appendix C of the roadmap names for a 158 C are
+  removed and nothing else.
+
+An unmeasurable threshold fails the gate on that threshold and Carl resets it;
+no threshold above is changed after this section's commit.
