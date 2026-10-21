@@ -648,6 +648,50 @@ test.describe('the application cleans up its panels', () => {
     });
   }
 
+  // A callback waiting on a lazy file holds whatever scope it was made in until
+  // the file arrives. Settings makes one per build for its Motion row, and the
+  // first visit fetches the two files that row needs: on a loaded machine they
+  // can arrive after several panels have been built and thrown away, and every
+  // one of those was held, Advanced section and listeners included. The files
+  // are held back here, by the test and not by a timer, so the case does not
+  // depend on how slow a machine is.
+  test('settings: panels built while the Motion row waits for its files are not held', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await page.addInitScript(INSTRUMENT);
+    let release;
+    const gate = new Promise(resolve => {
+      release = resolve;
+    });
+    await page.route(/\/(motionControl|en\.interaction)\.js$/, async route => {
+      await gate;
+      await route.continue();
+    });
+    try {
+      await app.boot({ url: '/' });
+      await settled(page);
+      for (let i = 0; i < 6; i++) {
+        await PANELS.settings.open(page, app);
+        await PANELS.settings.close(page, app);
+      }
+      const held = (await collect(page))
+        ? await page.evaluate(() => window.__detachedHeld())
+        : 0;
+      expect(
+        held,
+        'detached listener targets held while the Motion row waits'
+      ).toBeLessThanOrEqual(4);
+    } finally {
+      release();
+    }
+    // Released, the row still fills in the panel that is open by then.
+    await PANELS.settings.open(page, app);
+    await expect(page.locator('#settingsMotion')).toBeVisible();
+    await PANELS.settings.close(page, app);
+  });
+
   test('the check sees a removed panel that something still holds, and lets go of one that nothing does', async ({
     page,
     app,
