@@ -23,9 +23,10 @@ D-SAMPLER-01 and D-KERNEL-01..03 stand.
 | `special.js` | `lnGamma` | ln Gamma(x) for x > 0, Lanczos; NaN outside | 261 |
 | `special.js` | `gammaP`, `gammaQ` | Regularised incomplete gamma P and Q; NaN outside a > 0, x >= 0 | 261 |
 | `special.js` | `betaI` | Regularised incomplete beta I_x(a, b); NaN outside 0 <= x <= 1, a, b > 0 | 261 |
-| `special.js` | `normalCdf`, `normalQuantile` | The standard normal CDF and its inverse (bisection); the quantile of 0 and 1 is minus and plus infinity | 190, 261 |
+| `special.js` | `normalCdf`, `normalSf`, `normalQuantile` | The standard normal CDF, its survival function (a p value keeps its digits at 12 sigma; `1 - CDF` is 0 from 8) and the inverse (bisection); the quantile of 0 and 1 is minus and plus infinity | 190, 261 |
 | `special.js` | `chi2Cdf`, `chi2Sf`, `chi2Quantile` | Chi-square on k degrees of freedom | 190, 256, 261 |
-| `special.js` | `tCdf`, `tQuantile` | Student t on nu degrees of freedom | 190, 261 |
+| `special.js` | `tCdf`, `tSf`, `tQuantile` | Student t on nu degrees of freedom; `tSf` is the p value without the cancellation | 190, 261 |
+| `special.js` | `iterationStats`, `ITERATION_CAP` | The most iterations each series or continued fraction has needed, and the cap (100,000); a guard test holds the first under 2,000 | 261 |
 | `special.js` | `fCdf`, `fSf`, `fQuantile` | The F distribution; `fSf` is the p value without the cancellation of 1 minus the CDF | 261 |
 | `intervals.js` | `METHODS` | The ids an interval can carry as its label, with their labels and the sentences each assumes | 190, 217, 225 |
 | `intervals.js` | `levelOfSigma`, `sigmaOfLevel` | A coverage and the number of sigmas of a central normal interval, erf(k / sqrt 2) and its inverse | 190, 225 |
@@ -43,7 +44,7 @@ D-SAMPLER-01 and D-KERNEL-01..03 stand.
 | `diagnostics.js` | `lagOne` | Lag-one autocorrelation and its z against white noise; refused for a constant series or fewer than three values | 190, 261 |
 | `diagnostics.js` | `normalProbability` | Sorted values against normal quantiles at Blom positions, the line and its correlation | 190 |
 | `compare.js` | `difference` | A minus B with variance Var A + Var B - 2 Cov(A, B), the covariance used recorded; refused for an impossible covariance; `degenerate` when the two are one function of the same data | 229, 252, 264 |
-| `compare.js` | `fTest` | The F-test of nested models; refused with a code for a searched parameter, a boundary alternative, models that are not nested, or no degrees of freedom | 261 |
+| `compare.js` | `fTest` | The F-test of nested models; refused with a code for a declared searched parameter or boundary alternative, counts that are not whole numbers (`counts`), a non-finite or negative sum of squares (`input`), both sums zero (`zero-rss`), models that are not nested or a full model that fits worse beyond rounding (`not-nested`), or no degrees of freedom (`no-dof`); a full RSS above the reduced one by rounding only (1e-12 relative) is clamped to F = 0 and says `clamped`; the declarations it was given are in `declared` | 261 |
 | `selection.js` | `selection`, `all`, `either` | A selection function: a cut and an inclusion probability on an observable; `all` multiplies independent selections, `either` is 1 minus the product of (1 - p); `apply` returns who is in, their probabilities and weights 1/p | 215, 229, 252, 264 |
 | `selection.js` | `logisticCompleteness` | The survey suite's logistic completeness curve | 215, 229 |
 | `selection.js` | `completenessCorrect` | n / c with its sampling error for a Poisson or a fixed population; a bin below the completeness floor (0.1) is refused, not corrected | 215, 229, 264 |
@@ -138,7 +139,7 @@ Cash (1979), ApJ 228, 939. Protassov et al. (2002), ApJ 571, 545. Eddington
 (1913), MNRAS 73, 359. Malmquist (1936), Stockholms Obs. Medd. 26. Teerikorpi
 (1997), ARA&A 35, 101. Garwood (1936), Biometrika 28, 437. Draper and Smith
 (1998), Applied Regression Analysis, 6.1. NIST/SEMATECH e-Handbook of
-Statistical Methods, 1.3.6.7.1 (normal CDF), 1.3.6.7.2 (Student t), 1.3.6.7.3 (F) and 1.3.6.7.4 (chi-square). Anscombe (1973), The American Statistician 27, 17.
+Statistical Methods, 1.3.6.7.1 (normal CDF), 1.3.6.7.2 (Student t), 1.3.6.7.3 (F) and 1.3.6.7.4 (chi-square). Anscombe (1973), The American Statistician 27, 17 (the paper's residual sum of squares, 13.75, is rounded from 13.76: the cases use R's residual standard error and R-squared and the paper's 0.118).
 Student (1908), Biometrika 6, 1.
 
 ## Validation
@@ -180,9 +181,11 @@ table at the head of `tools/statistics-cases.mjs`, each with its reason:
 | `garwood` | 1% | the exact (Garwood) and likelihood intervals differ at O(1/N) |
 | `searchedPeriodRate` | 0.64 +- 0.25 | the effective number of independent frequencies of the searched grid is between about 10 and 40: 0.40 to 0.87 |
 | `bootstrapPivot` | 2% of one SE | the bootstrap SE is smaller by sqrt((n-1)/n) and z is 1.960 where t is 1.966, plus skewness |
-| `normalApproxRuns` | 0.03 | the normal approximation of the runs test against the exact one at n = 60 |
+| `normalApproxRuns` | 0.02 | the normal approximation of the runs test against the exact one at n = 60: an empirical regression guard (measured 0.012), not a theorem |
+| `bootstrapUnderCoverage` | 0.012, one-sided | the percentile bootstrap of a mean can under-cover at small n (Efron and Tibshirani 1993, ch. 13): the shortfall below 0.95 is allowed 0.012 beyond 4 standard errors, an excess only 4 |
+| `deepTailShift` | 1e-6 relative | the Eddington shift at t = -35, -100, -200 is the small difference of numbers near 100; the reference is the asymptotic Mills ratio |
 | `rssRounding` | 1e-12 relative | a nested full model's RSS may exceed the reduced one by summation rounding: clamped to F = 0 (the result says `clamped`), more is refused |
-| `tailRelative`, `tSfRelative` | 1e-8, 1e-10 | tail probabilities at 7, 9 and 12 sigma against the asymptotic series, and at large t against closed forms |
+| `tailRelative`, `tSfRelative` | 1e-8, 1e-10 | tail probabilities at 7, 9 and 12 sigma (and the lag-one and runs p values at 14 and 35 sigma) against the asymptotic series, and at large t against closed forms |
 | `cfIterationBound` | 2,000 iterations | a continued fraction that needs more has lost its convergence (the cap is 100,000) |
 
 The F-test sees only parameter counts and sums of squares, so `searched` and
@@ -239,7 +242,7 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 | **S5** Quantiles in closed form and by bisection | analytic | chi-square quantile, 2 dof, largest relative deviation | 8e-15 | 0 ± 1e-10 | pass |
 |  |  | t quantile, 1 dof, largest relative deviation | 3e-14 | 0 ± 1e-10 | pass |
 |  |  | t quantile, 2 dof, largest relative deviation | 3e-14 | 0 ± 1e-10 | pass |
-|  |  | normal quantile against bisection on the series, largest deviation | 7e-14 | 0 ± 1e-10 | pass |
+|  |  | normal quantile against bisection on the series, largest deviation | 5e-14 | 0 ± 1e-10 | pass |
 | **S6** Critical values from the NIST/SEMATECH tables | authentic | normal, two-sided 95% (z = 1.960) | 1.96 | 1.96 ± 5e-4 | pass |
 |  |  | normal, two-sided 99% (z = 2.576) | 2.576 | 2.576 ± 5e-4 | pass |
 |  |  | chi-square, 1 dof, 0.95 | 3.841 | 3.841 ± 5e-4 | pass |
@@ -311,7 +314,7 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | high end, bootstrap minus t, in SE of the mean | 3e-3 | 0 ± 0.1889 | pass |
 |  |  | standard deviation of the draws over the exact bootstrap SE, minus 1 | -2e-3 | 0 ± 0.04472 | pass |
 |  |  | the estimate is the sample mean | 10.12 | 10.12 ± 1e-12 | pass |
-| **I8** Coverage of the bootstrap percentile interval on a fixed ensemble | ensemble | 95% percentile interval of a mean: coverage | 0.96 | 0.95 ± 0.06233 | pass |
+| **I8** Coverage of the bootstrap percentile interval on a fixed ensemble | ensemble | 95% percentile interval of a mean: coverage | 0.96 | 0.95 ± 0.05033 | pass |
 | **I9** Monte Carlo propagation of a covariance through a function | ensemble | mean of g | 5.005 | 5 ± 0.01893 | pass |
 |  |  | variance of g over the analytic, minus 1 | 6e-3 | 0 ± 0.04 | pass |
 |  |  | 95% interval, low end | 3.682 | 3.688 ± 0.05057 | pass |
@@ -319,7 +322,7 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | sample covariance of the two parameters | 0.01199 | 0.012 ± 2e-3 | pass |
 |  |  | the stream that drew is recorded (seed key and id) | 1 | = 1 | pass |
 |  |  | the same seed gives the same draws, bit for bit | 1 | = 1 | pass |
-| **I10** The residual bootstrap of a fitted slope | ensemble | standard deviation of the bootstrapped slopes over sigma sqrt(C_bb), minus 1 | -0.01157 | 0 ± 0.07164 | pass |
+| **I10** The residual bootstrap of a fitted slope | ensemble | standard deviation of the bootstrapped slopes over sigma sqrt(C_bb), minus 1 | -0.01157 | 0 ± 0.05164 | pass |
 |  |  | the draws are centred on the fitted slope, in SE | 1e-3 | 0 ± 0.07303 | pass |
 | **I11** Refusals: no sigma, an open profile, a covariance that is not one, a draw count over the budget | negative | covarianceInterval with sigma NaN is refused | 1 | = 1 | pass |
 |  |  | covarianceInterval with sigma < 0 is refused | 1 | = 1 | pass |
@@ -348,9 +351,9 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | exact against normal two-sided p at n = 60 | 0.01229 | 0 ± 0.03 | pass |
 | **R3** A normal-probability plot of exact normal quantiles is a straight line of slope 1 | analytic | correlation of the plot | 1 | 1 ± 1e-9 | pass |
 |  |  | slope | 1 | 1 ± 1e-8 | pass |
-|  |  | intercept | -4e-17 | 0 ± 1e-8 | pass |
+|  |  | intercept | -5e-17 | 0 ± 1e-8 | pass |
 |  |  | theoretical position 1 against the quantile by bisection | -1.964 | -1.964 ± 1e-9 | pass |
-| **R4** False-alarm rates of the diagnostics on white noise, and their power | ensemble | runs test about the median, white noise: rate flagged at 5% | 0.0395 | 0.05 ± 0.03949 | pass |
+| **R4** False-alarm rates of the diagnostics on white noise, and their power | ensemble | runs test about the median, white noise: rate flagged at 5% (the exact level of the discrete test at 50 and 50) | 0.0395 | 0.03436 ± 0.01629 | pass |
 |  |  | lag-one test, white noise: rate flagged at 5% | 0.0435 | 0.05 ± 0.02949 | pass |
 |  |  | lag-one test on AR(1) phi = 0.6: rate flagged (power) | 1 | 1 ± 0.01 | pass |
 |  |  | probability-plot correlation: Gaussian above exponential, fraction of pairs | 1 | 1 ± 0.01 | pass |
@@ -376,7 +379,7 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | an estimate compared with itself has zero variance and no z | 1 | = 1 | pass |
 |  |  | the label names the method | 1 | = 1 | pass |
 | **C2** The comparison with the covariance has its stated false-alarm rate; ignoring the covariance does not | ensemble | with the covariance: rate of false alarms at 5% | 0.0565 | 0.05 ± 0.01949 | pass |
-|  |  | without it: rate of false alarms against the exact value for the wrong variance | 0 | 2e-16 ± 2e-3 | pass |
+|  |  | without it: rate of false alarms against the exact value for the wrong variance (about 1e-18: not one in 2,000 trials, with one trial of allowance) | 0 | 2e-16 ± 5e-4 | pass |
 |  |  | without it, the stated 5% is not the rate: the rate is below 1% | 1 | = 1 | pass |
 | **C3** The F-test of one added parameter is the square of its t test | analytic | F over t^2, minus 1 | 3e-14 | 0 ± 1e-9 | pass |
 |  |  | degrees of freedom (1, n - 3) | 1.11 | 1.11 ± 1e-12 | pass |
@@ -415,13 +418,13 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | malmquistCutShift against the truncated-normal formula | -0.2546 | -0.2546 ± 1e-12 | pass |
 |  |  | measured shift of a cut at z = 0.5 (n = 138480) | -0.2551 | -0.2546 ± 4e-3 | pass |
 | **B5** The completeness correction recovers the true counts and covers them | ensemble | bin 1 (c = 0.95): mean corrected count against N = 200 | 200 | 200 ± 0.2902 | pass |
-|  |  | bin 1: coverage of +-1 sigma | 0.751 | 0.6827 ± 0.07163 | pass |
+|  |  | bin 1: coverage of +-1 sigma against the exact binomial value 0.7464 | 0.751 | 0.7464 ± 0.03892 | pass |
 |  |  | bin 2 (c = 0.8): mean corrected count against N = 150 | 150.1 | 150 ± 0.5477 | pass |
-|  |  | bin 2: coverage of +-1 sigma | 0.619 | 0.6827 ± 0.07163 | pass |
+|  |  | bin 2: coverage of +-1 sigma against the exact binomial value 0.6418 | 0.619 | 0.6418 ± 0.04288 | pass |
 |  |  | bin 3 (c = 0.6): mean corrected count against N = 100 | 99.86 | 100 ± 0.7303 | pass |
-|  |  | bin 3: coverage of +-1 sigma | 0.684 | 0.6827 ± 0.07163 | pass |
+|  |  | bin 3: coverage of +-1 sigma against the exact binomial value 0.6908 | 0.684 | 0.6908 ± 0.04134 | pass |
 |  |  | bin 4 (c = 0.4): mean corrected count against N = 80 | 79.84 | 80 ± 0.9798 | pass |
-|  |  | bin 4: coverage of +-1 sigma | 0.701 | 0.6827 ± 0.07163 | pass |
+|  |  | bin 4: coverage of +-1 sigma against the exact binomial value 0.6956 | 0.701 | 0.6956 ± 0.04116 | pass |
 |  |  | Poisson population: variance estimate is n / c^2 | 40 | 40 ± 1e-12 | pass |
 | **B6** The object reproduces the selection-effects suite's detection, flag for flag | oracle | stars whose detection flag differs from observe() | 0 | = 0 | pass |
 |  |  | count detected | 91 | = 91 | pass |
@@ -439,6 +442,38 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | the 95% interval contains the mean, low end below | 1 | = 1 | pass |
 |  |  | the 95% interval, high end above | 1 | = 1 | pass |
 |  |  | the 95% interval is of relative half-width about 1.96 / sqrt(196) | 0.1401 | 0.14 ± 0.01 | pass |
+| **S8** Tail probabilities keep their digits at 7, 9 and 12 sigma, and at large t | analytic | normalSf(7) over the series, minus 1 | -2e-11 | 0 ± 1e-8 | pass |
+|  |  | normalCdf(-7) over the series, minus 1 | -2e-11 | 0 ± 1e-8 | pass |
+|  |  | chi2Sf(7^2, 1) over 2 Q(7), minus 1 | -2e-11 | 0 ± 1e-8 | pass |
+|  |  | difference(): two-sided p of a 7-sigma difference over 2 Q(7), minus 1 | -2e-11 | 0 ± 1e-8 | pass |
+|  |  | difference(): the p of a 7-sigma difference is above zero | 1 | = 1 | pass |
+|  |  | normalSf(9) over the series, minus 1 | 2e-15 | 0 ± 1e-8 | pass |
+|  |  | normalCdf(-9) over the series, minus 1 | 2e-15 | 0 ± 1e-8 | pass |
+|  |  | chi2Sf(9^2, 1) over 2 Q(9), minus 1 | 2e-15 | 0 ± 1e-8 | pass |
+|  |  | difference(): two-sided p of a 9-sigma difference over 2 Q(9), minus 1 | 2e-15 | 0 ± 1e-8 | pass |
+|  |  | difference(): the p of a 9-sigma difference is above zero | 1 | = 1 | pass |
+|  |  | normalSf(12) over the series, minus 1 | 7e-15 | 0 ± 1e-8 | pass |
+|  |  | normalCdf(-12) over the series, minus 1 | 7e-15 | 0 ± 1e-8 | pass |
+|  |  | chi2Sf(12^2, 1) over 2 Q(12), minus 1 | 7e-15 | 0 ± 1e-8 | pass |
+|  |  | difference(): two-sided p of a 12-sigma difference over 2 Q(12), minus 1 | 7e-15 | 0 ± 1e-8 | pass |
+|  |  | difference(): the p of a 12-sigma difference is above zero | 1 | = 1 | pass |
+|  |  | tSf(30, 1) over atan(1/t) / pi, minus 1 | 0 | 0 ± 1e-10 | pass |
+|  |  | tSf(30, 2) over the closed form, minus 1 | 2e-15 | 0 ± 1e-10 | pass |
+|  |  | tSf(1000, 1) over atan(1/t) / pi, minus 1 | -9e-16 | 0 ± 1e-10 | pass |
+|  |  | tSf(1000, 2) over the closed form, minus 1 | 3e-15 | 0 ± 1e-10 | pass |
+|  |  | tSf(1000000, 1) over atan(1/t) / pi, minus 1 | -1e-16 | 0 ± 1e-10 | pass |
+|  |  | tSf(1000000, 2) over the closed form, minus 1 | 2e-15 | 0 ± 1e-10 | pass |
+| **C7** The F-test validates its inputs: counts, zero sums of squares, a worse full model | negative | a non-integer parameter count is refused, code "counts" | 1 | = 1 | pass |
+|  |  | a negative reduced parameter count is refused, code "counts" | 1 | = 1 | pass |
+|  |  | a non-integer n is refused, code "counts" | 1 | = 1 | pass |
+|  |  | a non-finite n or count is refused, code "counts" | 2 | = 2 | pass |
+|  |  | a NaN or infinite sum of squares is refused, code "input" | 2 | = 2 | pass |
+|  |  | both sums of squares zero (0/0) is refused, code "zero-rss" | 1 | = 1 | pass |
+|  |  | a full model that fits perfectly gives F = infinity and p = 0 | 1 | = 1 | pass |
+|  |  | a full RSS above the reduced one by rounding (1e-13 relative) is clamped: F = 0, p = 1, and says so | 1 | = 1 | pass |
+|  |  | a full RSS above the reduced one by 1e-10 relative is refused, code "not-nested" | 1 | = 1 | pass |
+|  |  | equal sums of squares give F = 0 and p = 1 without a clamp | 1 | = 1 | pass |
+|  |  | searched and boundary are declarations: undeclared they are not detected (an ok result carries them as false) | 1 | = 1 | pass |
 
 <!-- statistics-validation:end -->
 

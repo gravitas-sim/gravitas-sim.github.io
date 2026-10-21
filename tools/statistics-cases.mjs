@@ -134,8 +134,12 @@ export const TOL = Object.freeze({
    * SE of the mean in all.
    */
   bootstrapPivot: 0.02,
-  /** The normal approximation of the runs test against the exact one at n = 60. */
-  normalApproxRuns: 0.03,
+  /**
+   * The normal approximation of the runs test against the exact one at n = 60:
+   * an empirical regression guard (measured 0.012), not a theorem; the
+   * approximation is the textbook one with a continuity correction.
+   */
+  normalApproxRuns: 0.02,
   /**
    * A residual sum of squares of a nested full model may exceed the reduced one
    * by summation rounding; this relative excess is clamped to F = 0, more is
@@ -146,6 +150,18 @@ export const TOL = Object.freeze({
   tailRelative: 1e-8,
   /** Student t tail probabilities against closed forms (1 and 2 dof). */
   tSfRelative: 1e-10,
+  /**
+   * The percentile bootstrap of a mean under-covers at small n (Efron and
+   * Tibshirani 1993, ch. 13): the SHORTFALL below the nominal level is allowed
+   * this much beyond 4 binomial standard errors; an excess is held to 4 only.
+   */
+  bootstrapUnderCoverage: 0.012,
+  /**
+   * Eddington shift deep in the truncated tail (t = -35, -100, -200), where
+   * the shift is the small difference of numbers near 100 and the reference
+   * is the asymptotic Mills ratio: relative to the shift.
+   */
+  deepTailShift: 1e-6,
   /** A continued fraction that needs more than this has lost its convergence (the cap is 100,000). */
   cfIterationBound: 2000,
 });
@@ -323,6 +339,10 @@ function exactRunsLevel(m, alpha) {
 
 /** The normal upper tail by its asymptotic series phi(z)/z (1 - 1/z^2 + 3/z^4 - ...), summed to its smallest term. */
 function qRef(z) {
+  return (pdfRef(z) / z) * seriesSum(z);
+}
+/** Q(z) z / phi(z): 1 - 1/z^2 + 3/z^4 - ..., to its smallest term. */
+function seriesSum(z) {
   let term = 1;
   let sum = 1;
   for (let k = 1; k < 200; k++) {
@@ -331,7 +351,30 @@ function qRef(z) {
     term = next;
     sum += term;
   }
-  return (pdfRef(z) / z) * sum;
+  return sum;
+}
+/** The Mills ratio phi(z) / Q(z) for large z, from the series, without underflow. */
+const millsRef = z => z / seriesSum(z);
+/** Garwood's exact interval for N events, by bisection on the Poisson sums (no chi-square). */
+function garwoodRef(N, level) {
+  const alpha = (1 - level) / 2;
+  const cdf = (k, lam) => {
+    let t = Math.exp(-lam);
+    let sum = t;
+    for (let i = 1; i <= k; i++) {
+      t *= lam / i;
+      sum += t;
+    }
+    return sum;
+  };
+  const lo =
+    N === 0 ? 0 : bisect(l => 1 - cdf(N - 1, l) - alpha, 1e-12, N + 60);
+  const hi = bisect(
+    l => alpha - cdf(N, l),
+    1e-12,
+    N + 60 + 10 * Math.sqrt(N + 1)
+  );
+  return [lo, hi];
 }
 
 /** Every arrangement of n1 ones and n2 zeros, counted by its number of runs. */
@@ -1033,7 +1076,7 @@ export const CASES = [
     why: 'The roadmap names this comparison: at the fixed seed the bootstrap and the t interval differ by the Monte Carlo error and by the known small difference in the pivot, and by nothing else.',
     run() {
       const n = 400;
-      const B = 4000;
+      const B = 20000;
       const { z } = rng(15402);
       const data = Array.from({ length: n }, () => 10 + 3 * z());
       const run = caseBootstrap({
@@ -1112,11 +1155,18 @@ export const CASES = [
         const iv = percentileInterval(run.samples, { level: 0.95 });
         if (iv.lo <= 5 && 5 <= iv.hi) hit++;
       }
+      const cov = hit / trials;
       return [
         measure(
-          '95% percentile interval of a mean: coverage',
-          hit / trials,
-          0.95,
+          '95% percentile interval of a mean: shortfall below 0.95 (one-sided allowance for the known small-sample under-coverage)',
+          Math.max(0, 0.95 - cov),
+          0,
+          band(0.95, trials) + TOL.bootstrapUnderCoverage
+        ),
+        measure(
+          '95% percentile interval of a mean: excess above 0.95 (4 standard errors, no allowance)',
+          Math.max(0, cov - 0.95),
+          0,
           band(0.95, trials)
         ),
       ];
@@ -1702,7 +1752,7 @@ export const CASES = [
     title:
       "Anscombe's quartet: the line of dataset I, and the pattern in the residuals of dataset II",
     source:
-      "Anscombe (1973), The American Statistician 27, 17: datasets I and II share the fit y = 3.00 + 0.500 x, residual sum of squares 13.75, standard error of the slope 0.118 (the paper's own figures); dataset II is a smooth curve, and the runs of its residuals about the line are the standard picture of a wrong model",
+      "Anscombe (1973), The American Statistician 27, 17: datasets I and II share the fit y = 3.00 + 0.500 x, standard error of the slope 0.118 (the paper's figure); R's summary(lm(y1 ~ x1, anscombe)) and (y2 ~ x2) print a residual standard error of 1.237 on 9 degrees of freedom and a multiple R-squared of 0.6665 and 0.6662 (the paper's own residual sum of squares, 13.75, is rounded from 13.76 and is not used); dataset II is a smooth curve, and the runs of its residuals about the line are the standard picture of a wrong model",
     why: 'Published values the kernel was not tuned to, and the case every course shows to explain why a fit statistic is not enough. Fixed before the run: the runs test of dataset II must flag too few runs at 5% (one-sided), and that of dataset I need not.',
     run() {
       const out = [];
@@ -1719,10 +1769,23 @@ export const CASES = [
         const dof = y.length - 2;
         const rss = fit.best.chi2;
         const se = Math.sqrt(cov.covariance[1][1] * (rss / dof));
+        const my = y.reduce((a, b) => a + b, 0) / y.length;
+        const r2 = 1 - rss / y.reduce((a, v) => a + (v - my) ** 2, 0);
         out.push(
           measure(`dataset ${tag}: intercept`, fit.theta[0], 3.0, 0.005),
           measure(`dataset ${tag}: slope`, fit.theta[1], 0.5, 0.005),
-          measure(`dataset ${tag}: residual sum of squares`, rss, 13.75, 0.03),
+          measure(
+            `dataset ${tag}: residual standard error (R's lm summary, 1.237 on 9 degrees of freedom)`,
+            Math.sqrt(rss / dof),
+            1.237,
+            5e-4
+          ),
+          measure(
+            `dataset ${tag}: multiple R-squared (R's lm summary)`,
+            r2,
+            tag === 'I' ? 0.6665 : 0.6662,
+            6e-5
+          ),
           measure(
             `dataset ${tag}: standard error of the slope`,
             se,
@@ -2878,6 +2941,676 @@ export const CASES = [
             fTest(base).declared.searched === false &&
               fTest(base).declared.boundary === false
           ),
+          1,
+          0
+        ),
+      ];
+    },
+  },
+  {
+    id: 'I13',
+    family: 'intervals',
+    kind: 'oracle',
+    title:
+      'Poisson intervals at small counts are the exact (Garwood) ones, and cover',
+    source:
+      'Garwood (1936), Biometrika 28, 437: for N events the exact central interval solves P(X >= N | lambda) = (1 - L) / 2 and P(X <= N | lambda) = (1 - L) / 2, here by bisection on the Poisson sums written in this file, with no chi-square; the profile deviance interval under-covers below about 10 counts (at N = 0 its upper end 1.92 is a one-sided 85%, against 3.69)',
+    why: 'A record that says 0.95 must cover at 0.95 or more at any count, so the kernel uses the exact interval below 10 counts and the deviance one from 10 up, and says which.',
+    run() {
+      const out = [];
+      for (const N of [0, 1, 2, 5, 9]) {
+        const iv = poissonInterval([N], { exposure: 1, level: 0.95 });
+        const [lo, hi] = garwoodRef(N, 0.95);
+        out.push(
+          measure(
+            `N = ${N}: low end against Garwood by Poisson sums`,
+            iv.lo,
+            lo,
+            TOL.secondMethod * Math.max(1, lo)
+          ),
+          measure(
+            `N = ${N}: high end against Garwood by Poisson sums`,
+            iv.hi,
+            hi,
+            TOL.secondMethod * Math.max(1, hi)
+          )
+        );
+      }
+      out.push(
+        measure(
+          'below 10 counts the method is labelled exact (poisson-garwood)',
+          Number(
+            poissonInterval([4, 4], { exposure: 1 }).method ===
+              'poisson-garwood'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'from 10 counts it is the deviance interval (poisson-profile)',
+          Number(
+            poissonInterval([5, 5], { exposure: 1 }).method ===
+              'poisson-profile'
+          ),
+          1,
+          0
+        )
+      );
+      // Coverage at three true rates against the exact coverage of Garwood's interval.
+      const { u } = rng(15413);
+      const trials = 3000;
+      for (const lam of [0.3, 2, 6]) {
+        let hit = 0;
+        for (let k = 0; k < trials; k++) {
+          let N = 0;
+          let t = Math.exp(-lam);
+          let c = t;
+          const v = u();
+          while (v > c && N < 200) {
+            N++;
+            t *= lam / N;
+            c += t;
+          }
+          const iv = poissonInterval([N], { exposure: 1, level: 0.95 });
+          if (iv.lo <= lam && lam <= iv.hi) hit++;
+        }
+        let exact = 0;
+        let pmf = Math.exp(-lam);
+        for (let N = 0; N < 80; N++) {
+          const [lo, hi] = garwoodRef(N, 0.95);
+          if (lo <= lam && lam <= hi) exact += pmf;
+          pmf *= lam / (N + 1);
+        }
+        out.push(
+          measure(
+            `true rate ${lam}: coverage of the 95% interval against the exact coverage ${exact.toFixed(4)}`,
+            hit / trials,
+            exact,
+            band(exact, trials)
+          )
+        );
+      }
+      return out;
+    },
+  },
+  {
+    id: 'I14',
+    family: 'intervals',
+    kind: 'ensemble',
+    title:
+      'Coverage of the covariance and profile intervals on a model that is not linear',
+    source:
+      'a seeded ensemble of 250 exponential-decay data sets y = A exp(-t / tau) (A = 1, tau = 3, 25 points on 0 to 6, sigma = 0.15), fitted and profiled in tau by js/inference/fit.js; the profile of a non-linear model is not a parabola, so this is where the two interval methods can differ (Press et al., 15.6). Fixed before the run: the profile interval of the first data set is asymmetric about its best fit by more than 1%',
+    why: 'I6 uses a model whose profile is exactly a parabola and cannot tell the methods apart.',
+    run() {
+      const EXPD = {
+        id: 'expd',
+        parameters: [{ name: 'A' }, { name: 'tau' }],
+        predict: (v, x) =>
+          Float64Array.from(x, t => v.A * Math.exp(-t / v.tau)),
+        solveLinear: (data, w, shape) => ({ fit: shape, linear: {} }),
+      };
+      const { z } = rng(15501);
+      const x = Array.from({ length: 25 }, (_, i) => (6 * i) / 24);
+      const sigma = x.map(() => 0.15);
+      const trials = 250;
+      const hit = { cov68: 0, prof68: 0, cov95: 0, prof95: 0 };
+      let asym = null;
+      for (let k = 0; k < trials; k++) {
+        const y = x.map(t => Math.exp(-t / 3) + 0.15 * z());
+        const problem = createProblem(
+          EXPD,
+          {
+            x: Float64Array.from(x),
+            y: Float64Array.from(y),
+            sigma: Float64Array.from(sigma),
+          },
+          [
+            { name: 'A', mode: 'fitted', value: 0.8, lo: 0, hi: 10 },
+            { name: 'tau', mode: 'fitted', value: 2, lo: 0.1, hi: 100 },
+          ]
+        );
+        const fit = refine(problem, [0.8, 2], {
+          tolerance: 1e-12,
+          maxIterations: 300,
+        });
+        const cov = covarianceAt(problem, fit.theta);
+        const best = fit.theta[1];
+        const s = cov.sigma[1];
+        const values = Array.from({ length: 31 }, (_, i) =>
+          Math.max(0.11, best + (i - 15) * 0.4 * s)
+        );
+        const pts = profile(
+          problem,
+          fit.theta,
+          1,
+          [...new Set(values)].sort((a, b) => a - b),
+          { tolerance: 1e-10, profileIterations: 60 }
+        );
+        for (const [tag, level] of [
+          ['68', 0.6826894921370859],
+          ['95', 0.95],
+        ]) {
+          const c = covarianceInterval(best, s, { level });
+          if (c.lo <= 3 && 3 <= c.hi) hit[`cov${tag}`]++;
+          const p = profileInterval(pts, fit.best.chi2, { level });
+          if ((p.lo ?? -Infinity) <= 3 && 3 <= (p.hi ?? Infinity))
+            hit[`prof${tag}`]++;
+          if (k === 0 && tag === '68') asym = (p.hi - best) / (best - p.lo);
+        }
+      }
+      return [
+        ...[
+          ['covariance, 68.27%', 'cov68', 0.6826894921370859],
+          ['profile, 68.27%', 'prof68', 0.6826894921370859],
+          ['covariance, 95%', 'cov95', 0.95],
+          ['profile, 95%', 'prof95', 0.95],
+        ].map(([name, key, level]) =>
+          measure(
+            `${name}: coverage of tau`,
+            hit[key] / trials,
+            level,
+            band(level, trials)
+          )
+        ),
+        measure(
+          'the profile interval of the first data set is asymmetric about the best fit by more than 1%',
+          Number(Math.abs(asym - 1) > 0.01),
+          1,
+          0
+        ),
+      ];
+    },
+  },
+  {
+    id: 'I15',
+    family: 'intervals',
+    kind: 'negative',
+    title:
+      'Inputs that are not what they claim to be are refused with a precise code, and nothing is dropped silently',
+    source:
+      'the contract in STATISTICS.md: one finite-and-shape check at the head of every function; a refusal names its code; where draws are dropped the record says how many',
+    why: 'An interval of a list with a NaN in it, a profile in the wrong order, or a level that the draws cannot support must not come back as "ok".',
+    run() {
+      const code = r => (r && r.status === 'refused' ? r.code : r?.status);
+      const flat = Array.from({ length: 9 }, (_, i) => ({
+        value: i,
+        chi2: 10 + i,
+      }));
+      const draws = n => Array.from({ length: n }, (_, i) => i);
+      const withNaN = Array.from({ length: 60 }, (_, i) => (i < 3 ? NaN : i));
+      const dropped = percentileInterval(withNaN, { level: 0.95 });
+      const thrown = fn => {
+        try {
+          fn();
+        } catch (e) {
+          return e.code ?? e.name;
+        }
+        return 'no error';
+      };
+      const a = caseBootstrap({
+        n: 5,
+        statistic: idx => idx[0],
+        draws: 30,
+        seed: 'same',
+        label: 'a',
+      });
+      const a2 = caseBootstrap({
+        n: 5,
+        statistic: idx => idx[0],
+        draws: 30,
+        seed: 'same',
+        label: 'a',
+      });
+      const b = caseBootstrap({
+        n: 5,
+        statistic: idx => idx[0],
+        draws: 30,
+        seed: 'same',
+        label: 'b',
+      });
+      const eq = (p, q) => p.samples.every((v, i) => v === q.samples[i]);
+      return [
+        measure(
+          'studentInterval with a NaN is refused, code "non-finite"',
+          Number(code(studentInterval([1, 2, NaN])) === 'non-finite'),
+          1,
+          0
+        ),
+        measure(
+          'studentInterval with an Infinity is refused, code "non-finite"',
+          Number(code(studentInterval([1, 2, Infinity])) === 'non-finite'),
+          1,
+          0
+        ),
+        measure(
+          'studentInterval of constant values (width 0) is refused, code "constant"',
+          Number(code(studentInterval([3, 3, 3])) === 'constant'),
+          1,
+          0
+        ),
+        measure(
+          'normalisedResiduals with a NaN is refused "non-finite", with and without sigma',
+          Number(
+            code(
+              normalisedResiduals({ y: [1, NaN], fit: [1, 1], sigma: 1 })
+            ) === 'non-finite'
+          ) +
+            Number(
+              code(normalisedResiduals({ y: [1, NaN, 3], fit: [1, 1, 1] })) ===
+                'non-finite'
+            ),
+          2,
+          0
+        ),
+        measure(
+          'measuredShift with a NaN is refused, code "non-finite"',
+          Number(code(measuredShift([1, NaN], 0)) === 'non-finite'),
+          1,
+          0
+        ),
+        measure(
+          'poissonInterval with a non-integer count is refused, code "counts"',
+          Number(code(poissonInterval([1, 2.5])) === 'counts'),
+          1,
+          0
+        ),
+        measure(
+          'poissonInterval with an exposure list of the wrong length is refused, code "exposure"',
+          Number(
+            code(poissonInterval([1, 2], { exposure: [1] })) === 'exposure'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'residualBootstrap with a NaN residual is refused "non-finite"',
+          Number(
+            code(
+              residualBootstrap({
+                fit: [1, 2, 3],
+                residuals: [0, NaN, 0],
+                refit: () => 0,
+                seed: 's',
+              })
+            ) === 'non-finite'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'residualBootstrap with parameters = -3 is refused "parameters"',
+          Number(
+            code(
+              residualBootstrap({
+                fit: [1, 2, 3],
+                residuals: [0, 1, 0],
+                parameters: -3,
+                refit: () => 0,
+                seed: 's',
+              })
+            ) === 'parameters'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'profileInterval of unsorted points is refused, code "order"',
+          Number(
+            code(profileInterval([flat[2], flat[0], flat[1], flat[3]], 10)) ===
+              'order'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'profileInterval with a minimum above every chi-square is refused, code "minimum"',
+          Number(code(profileInterval(flat, 50)) === 'minimum'),
+          1,
+          0
+        ),
+        measure(
+          'profileInterval with a NaN chi-square is refused, code "non-finite"',
+          Number(
+            code(
+              profileInterval([flat[0], { value: 1, chi2: NaN }, flat[2]], 10)
+            ) === 'non-finite'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'profileInterval given both level and deltaChi2 is refused, code "level"',
+          Number(
+            code(profileInterval(flat, 10, { level: 0.9, deltaChi2: 1 })) ===
+              'level'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'percentileInterval of 20 draws at level 0.999 is refused, code "draws" (needs 2 / (1 - level))',
+          Number(
+            code(percentileInterval(draws(20), { level: 0.999 })) === 'draws'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'percentileInterval of 60 draws with 3 NaN is ok and reports dropped = 3, draws = 57',
+          Number(
+            dropped.status === 'ok' &&
+              dropped.dropped === 3 &&
+              dropped.draws === 57
+          ),
+          1,
+          0
+        ),
+        measure(
+          'propagate with an asymmetric covariance is refused, code "covariance"',
+          Number(
+            code(
+              propagate({
+                mean: [0, 0],
+                covariance: [
+                  [1, 5],
+                  [0, 1],
+                ],
+                fn: t => t[0],
+                draws: 10,
+                seed: 's',
+              })
+            ) === 'covariance'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'caseBootstrap without a seed throws code "seed"',
+          Number(
+            thrown(() =>
+              caseBootstrap({ n: 5, statistic: () => 0, draws: 10 })
+            ) === 'seed'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'caseBootstrap with n = 2.5 and n = Infinity is refused, code "rows"',
+          Number(
+            code(
+              caseBootstrap({
+                n: 2.5,
+                statistic: () => 0,
+                draws: 10,
+                seed: 's',
+              })
+            ) === 'rows'
+          ) +
+            Number(
+              code(
+                caseBootstrap({
+                  n: Infinity,
+                  statistic: () => 0,
+                  draws: 10,
+                  seed: 's',
+                })
+              ) === 'rows'
+            ),
+          2,
+          0
+        ),
+        measure(
+          'apply() without uniformFor throws code "uniform" when a draw is needed',
+          Number(
+            thrown(() =>
+              selection({ observable: 'x', probability: () => 0.5 }).apply([
+                { x: 1 },
+              ])
+            ) === 'uniform'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'a selection given a null row includes nothing, without a TypeError',
+          Number(
+            selection({ observable: 'x', cut: { max: 1 } }).inclusion(null) ===
+              0
+          ),
+          1,
+          0
+        ),
+        measure(
+          'malmquistCutShift with sigma <= 0 or z NaN is NaN',
+          Number(Number.isNaN(malmquistCutShift({ sigma: -1, z: 0 }))) +
+            Number(Number.isNaN(malmquistCutShift({ sigma: 1, z: NaN }))),
+          2,
+          0
+        ),
+        measure(
+          'the same seed and the same label give the same draws',
+          Number(eq(a, a2)),
+          1,
+          0
+        ),
+        measure(
+          'the same seed with a different label gives different draws',
+          Number(!eq(a, b)),
+          1,
+          0
+        ),
+      ];
+    },
+  },
+  {
+    id: 'R7',
+    family: 'diagnostics',
+    kind: 'analytic',
+    title:
+      'Tail p values of the diagnostics, and of the selection and bias formulas, keep their digits',
+    source:
+      'the asymptotic series for the normal tail (A&S 26.2.12) and for the Mills ratio phi(z) / Q(z) = z / (1 - 1/z^2 + 3/z^4 - ...); for independent channels 1 - prod (1 - p) = -expm1(sum log1p(-p)); a linear ramp of 200 points has a lag-one coefficient near 1 and a z near 14',
+    why: 'A p value of 1e-44 reported as 0 is a wrong number a reader will quote.',
+    run() {
+      const ramp = lagOne(Array.from({ length: 200 }, (_, i) => i));
+      const alt = Array.from({ length: 1200 }, (_, i) => (i % 2 ? -1 : 1));
+      const rt = runsTest(alt, { center: 0, method: 'normal' });
+      const zRuns = (rt.runs - 0.5 - rt.mean) / Math.sqrt(rt.variance);
+      const out = [
+        measure('lag-one p of a ramp is above zero', Number(ramp.p > 0), 1, 0),
+        measure(
+          'lag-one p of a ramp over 2 Q(|z|), minus 1',
+          ramp.p / (2 * qRef(Math.abs(ramp.z))) - 1,
+          0,
+          TOL.tailRelative
+        ),
+        measure(
+          'runs test (normal branch) of 1,200 alternating values: P(runs >= observed) is above zero',
+          Number(rt.pMany > 0),
+          1,
+          0
+        ),
+        measure(
+          '... and equals Q((runs - 1/2 - mean) / sd), relative',
+          rt.pMany / qRef(zRuns) - 1,
+          0,
+          TOL.tailRelative
+        ),
+        measure(
+          'either(1e-17, 1e-17) over 2e-17, minus 1',
+          eitherOf(
+            selection({ probability: () => 1e-17 }),
+            selection({ probability: () => 1e-17 })
+          ).inclusion(0) /
+            2e-17 -
+            1,
+          0,
+          1e-12
+        ),
+        measure(
+          'either(1, 0.3) is 1',
+          eitherOf(
+            selection({ probability: () => 1 }),
+            selection({ probability: () => 0.3 })
+          ).inclusion(0),
+          1,
+          0
+        ),
+        measure(
+          'either(0.5, 0.5) is 0.75',
+          eitherOf(
+            selection({ probability: () => 0.5 }),
+            selection({ probability: () => 0.5 })
+          ).inclusion(0),
+          0.75,
+          1e-15
+        ),
+      ];
+      for (const [x, sg, sc] of [
+        [65, 1, 0.01],
+        [0, 1, 0.01],
+        [0, 1, 0.005],
+      ]) {
+        const mu = x - (sg * sg) / sc;
+        const t = mu / sg;
+        const ref = mu + sg * millsRef(Math.abs(t)) - x;
+        out.push(
+          measure(
+            `eddingtonShift at t = ${t} (observed ${x}, sigma ${sg}, scale ${sc}) over the Mills-ratio form, minus 1`,
+            eddingtonShift({ observed: x, sigma: sg, scale: sc }) / ref - 1,
+            0,
+            TOL.deepTailShift
+          )
+        );
+      }
+      return out;
+    },
+  },
+  {
+    id: 'R8',
+    family: 'diagnostics',
+    kind: 'negative',
+    title:
+      'Diagnostics refuse non-finite values and series too short for their null, instead of dropping or approximating',
+    source:
+      'a dropped NaN changes adjacency and the run structure; the lag-one null N(-1/n, (n - 2) / (n^2 - 1)) (the Gaussian white-noise variance of the circular coefficient, Anderson 1942) is not usable below about 10 values; the exact runs test of fewer than 8 values has no power at 5%',
+    why: 'A diagnostic must not answer a question about a different series than the one given.',
+    run() {
+      const code = r => (r && r.status === 'refused' ? r.code : r?.status);
+      const x = Array.from(
+        { length: 200 },
+        (_, i) => Math.sin(i * 1.3) + 0.1 * ((i * 7) % 5)
+      );
+      const l = lagOne(x);
+      return [
+        measure(
+          'lagOne with a NaN is refused, code "non-finite"',
+          Number(
+            code(lagOne([1, 2, NaN, 4, 5, 6, 7, 8, 9, 10, 11])) === 'non-finite'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'runsTest with a NaN is refused, code "non-finite"',
+          Number(
+            code(runsTest([1, -1, NaN, 1, -1, 1, -1, 1, -1, 1])) ===
+              'non-finite'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'normalProbability with a NaN is refused, code "non-finite"',
+          Number(code(normalProbability([1, 2, NaN, 4])) === 'non-finite'),
+          1,
+          0
+        ),
+        measure(
+          'lagOne of 9 values is refused, code "length"',
+          Number(code(lagOne([1, 3, 2, 5, 4, 6, 5, 7, 6])) === 'length'),
+          1,
+          0
+        ),
+        measure(
+          'runsTest of 7 values is refused, code "length"',
+          Number(
+            code(runsTest([1, -1, 2, -2, 3, -3, 4], { center: 0 })) === 'length'
+          ),
+          1,
+          0
+        ),
+        measure(
+          'lagOne sigma at n = 200 is sqrt((n - 2) / (n^2 - 1))',
+          l.sigma,
+          Math.sqrt(198 / (200 * 200 - 1)),
+          1e-14
+        ),
+      ];
+    },
+  },
+  {
+    id: 'B9',
+    family: 'selection',
+    kind: 'negative',
+    title:
+      'Completeness correction: an empty bin has an upper limit, counts are whole numbers, codes say what is wrong',
+    source:
+      'for no detections of a Poisson population the one-sided upper limit at level L is -ln(1 - L) / c (Gehrels 1986, ApJ 303, 336: 2.996 at 95%); of a fixed population thinned with probability c, the largest N with (1 - c)^N >= 1 - L, N = ln(1 - L) / ln(1 - c)',
+    why: 'Zero observed is not zero true: 0 +- 0 is a wrong answer.',
+    run() {
+      const bin = (n, c, population = 'poisson') =>
+        completenessCorrect({ observed: [n], completeness: [c], population })
+          .bins[0];
+      const p0 = bin(0, 0.5);
+      const f0 = bin(0, 0.5, 'fixed');
+      return [
+        measure(
+          'n = 0, Poisson, c = 0.5: status upper-limit',
+          Number(p0.status === 'upper-limit' && p0.corrected === null),
+          1,
+          0
+        ),
+        measure(
+          '... upper limit at 95% is -ln(0.05) / 0.5',
+          p0.upperLimit,
+          -Math.log(0.05) / 0.5,
+          1e-12
+        ),
+        measure(
+          'n = 0, fixed population, c = 0.5: upper limit ln(0.05) / ln(0.5)',
+          f0.upperLimit,
+          Math.log(0.05) / Math.log(0.5),
+          1e-12
+        ),
+        measure(
+          'n = 2.5 is refused, code "count"',
+          Number(bin(2.5, 0.5).code === 'count'),
+          1,
+          0
+        ),
+        measure(
+          'n = NaN is refused, code "count"',
+          Number(bin(NaN, 0.5).code === 'count'),
+          1,
+          0
+        ),
+        measure(
+          'n = -1 is refused, code "count"',
+          Number(bin(-1, 0.5).code === 'count'),
+          1,
+          0
+        ),
+        measure(
+          'c = NaN is refused, code "completeness"',
+          Number(bin(5, NaN).code === 'completeness'),
+          1,
+          0
+        ),
+        measure(
+          'c below the floor is refused, code "completeness"',
+          Number(bin(5, 0.05).code === 'completeness'),
           1,
           0
         ),
