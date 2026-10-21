@@ -30,7 +30,8 @@ export const BOUNDARY = [
     id: 'resume-in-progress-record',
     prompt: 163,
     kind: 'progress-store',
-    plans: 'the one resume record carried as a field of the progress record',
+    plans:
+      'the one resume record carried as a field of the progress record (not built: Prompt 163 keeps it a sidecar key, `resume-record`)',
     mutate: doc => ({
       ...clone(doc),
       resume: { item: 'tides', pathway: null, step: 'guess' },

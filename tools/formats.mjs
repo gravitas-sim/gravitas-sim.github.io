@@ -580,6 +580,16 @@ export const FORMATS = Object.freeze([
     newer: 'left out of the list, not overwritten',
   },
   {
+    name: 'resume record',
+    fields: 'v, items (id, route, step, path, title, at)',
+    version: 1,
+    const: ['js/storage/local.js', 'RESUME_VERSION'],
+    owner: 'js/storage/local.js readResume',
+    persisted: 'localStorage, inside gravitas.student-data (preferences)',
+    older: 'v1 only',
+    newer: 'reads as nothing to resume; the next write replaces it',
+  },
+  {
     name: 'gravitas.evaluation',
     fields: 'kind, schema',
     version: 1,
@@ -611,6 +621,7 @@ export const COMPAT = Object.freeze({
     unknown: 'ignored',
   },
   'submission token': { fixture: 'submission-token', unknown: 'n/a' },
+  'resume record': { fixture: 'resume-record', unknown: 'ignored' },
   'gravitas.submission-results': {
     fixture: 'submission-results',
     unknown: 'ignored',
