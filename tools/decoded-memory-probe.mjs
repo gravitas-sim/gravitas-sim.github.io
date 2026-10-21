@@ -17,13 +17,19 @@
 //      before the probe was run (tools/data-kinds-cases.mjs TOL.memoryPeak): the
 //      realm's peak is at most 1.25 times the file plus the plane.
 //   2. the page holds two 2,048-square planes at once, which is all the bound
-//      lets it (residentFrames), and the probe records the bytes of decoded
-//      arrays it holds, which is what `decodedImageBytesPerPage` counts.
+//      lets it (residentFrames). `residentDecodedBytes` is their summed
+//      byteLength, 2 x 33,554,432 = 67,108,864: the bound READ BACK, equal to the
+//      ceiling by construction and unable to exceed it. It shows the cap is
+//      reachable (two planes really coexist), and it is NOT an observed peak of a
+//      real page, so nothing reads it as a measurement of
+//      `decodedImageBytesPerPage`, which stays "not measured" in
+//      tools/data-budget.mjs until a shipped route decodes images. The
+//      measurements here are the realms' peaks in 1 (about 1.01 to 1.10 times
+//      file plus plane; the largest file's realm peak is about 67.7 MB).
 //
 // CPU throttling slows the page's thread and not its Workers, so the memory is
 // honest and the times are not the low-end's. A measurement on one machine in
-// headless Chromium, not a gate; tools/data-budget.mjs reports the recorded
-// decoded figure beside its ceiling.
+// headless Chromium, not a gate; tools/data-budget.mjs does not read it.
 //
 //   node tools/decoded-memory-probe.mjs [--write]   --write records
 //   tools/decoded-memory-results.json
@@ -329,7 +335,7 @@ async function main() {
   const report = {
     sampling:
       'The realm answers Runtime.getHeapUsage every 10 ms while it works; a read lasts tens of milliseconds, so each peak is the largest of a few samples and a lower bound on the true peak (realmSamples says how few). The 1.25 acceptance is judged on the samples.',
-    note: 'Recorded by tools/decoded-memory-probe.mjs (npm run probe:decoded). A measurement on one machine in headless Chromium, not a gate: tools/data-budget.mjs reports decodedImageBytesPerPage from it beside the ceiling.',
+    note: 'Recorded by tools/decoded-memory-probe.mjs (npm run probe:decoded). A measurement on one machine in headless Chromium, not a gate. The realm peaks are the measurements; residentDecodedBytes is the bound read back (two planes at the ceiling by construction), and tools/data-budget.mjs does not read this file, so decodedImageBytesPerPage stays not measured until a shipped route decodes images.',
     measuredAt: commit,
     date: new Date().toISOString().slice(0, 10),
     environment: {
@@ -348,16 +354,15 @@ async function main() {
     await browser.close();
     server.close();
   }
-  report.decodedImageBytesPerPage = Math.max(
-    ...Object.values(report.profiles).map(p => p.residentDecodedBytes)
-  );
-  report.within = Object.values(report.profiles).every(p =>
-    p.cases.every(
-      c =>
-        c.ok &&
-        c.peakOverFileAndPlane <= TOL.memoryPeak.value &&
-        c.ledgerAfter === 0
-    )
+  report.within = Object.values(report.profiles).every(
+    p =>
+      p.residentDecodedBytes === 2 * 2048 * 2048 * 8 &&
+      p.cases.every(
+        c =>
+          c.ok &&
+          c.peakOverFileAndPlane <= TOL.memoryPeak.value &&
+          c.ledgerAfter === 0
+      )
   );
   if (process.argv.includes('--write'))
     await writeFile(RESULTS_FILE, `${JSON.stringify(report, null, 2)}\n`);

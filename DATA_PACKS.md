@@ -200,9 +200,13 @@ of decoded images, which is the 2,048-square frame twice and is
 `decodedImageBytesPerPage` in `tools/data-budget.json`; a sequence reports how
 many of its frames can be resident at once. A grid is at most 6 axes of 4,096
 and 4,194,304 values. `tools/decoded-memory-probe.mjs` (`npm run probe:decoded`)
-measured the Worker's sampled peak at 1.01 to 1.10 times the file plus the
-plane against the 1.25 written down beforehand
-(`tools/decoded-memory-results.json`).
+measured the Worker's sampled peak at 1.01 to 1.105 times the file plus the
+plane against the 1.25 written down beforehand (the largest file's realm peak
+is about 67.7 MB; `tools/decoded-memory-results.json`). That file's
+`residentDecodedBytes` (two planes, 67,108,864) is the bound read back: it is
+the ceiling by construction and shows only that the cap is reachable, so it is
+not a measurement, and `decodedImageBytesPerPage` stays "not measured" in
+`tools/data-budget.mjs` until a shipped route decodes images in a real page.
 
 **The display rule:** a frame is drawn at no more than 1,024 pixels on a side by
 the block factor `ceil(max side / 1024)`, each drawn pixel the mean of a block.

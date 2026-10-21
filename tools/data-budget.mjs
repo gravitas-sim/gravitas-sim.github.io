@@ -115,13 +115,11 @@ export function recordedProbe(root = ROOT) {
     if (Number.isFinite(r.storage?.usageBytes))
       out.indexedDbAndCacheBytes = r.storage.usageBytes;
   }
-  // Prompt 157: the decoded-image probe records what a page holds of them.
-  const decoded = path.join(root, 'tools', 'decoded-memory-results.json');
-  if (existsSync(decoded)) {
-    const r = JSON.parse(readFileSync(decoded, 'utf8'));
-    if (Number.isFinite(r.decodedImageBytesPerPage))
-      out.decodedImageBytesPerPage = r.decodedImageBytesPerPage;
-  }
+  // The decoded-memory probe (Prompt 157, tools/decoded-memory-results.json) is
+  // deliberately not read: its resident figure is the 64 MiB bound read back,
+  // equal to the ceiling by construction, and its real measurements are a
+  // Worker's peaks. `decodedImageBytesPerPage` stays "not measured" until a
+  // shipped route decodes images in a real page.
   return out;
 }
 
