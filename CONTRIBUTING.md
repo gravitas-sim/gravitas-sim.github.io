@@ -171,8 +171,8 @@ their ceilings:
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
 | `js/data/instructorContent.js` | 6,715 | 6,715 |
-| `js/i18n/es.deferred.js` | 4,118 | 4,118 |
-| `js/i18n/en.deferred.js` | 3,871 | 3,871 |
+| `js/i18n/es.deferred.js` | 4,085 | 4,085 |
+| `js/i18n/en.deferred.js` | 3,838 | 3,838 |
 | `js/investigations.js` | 3,296 | 3,296 |
 | `js/render.js` | 3,015 | 3,015 |
 | `js/world/build.js` | 2,599 | 2,599 |

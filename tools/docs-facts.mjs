@@ -278,20 +278,6 @@ const ATTRIBUTE_FACTS = [
     key: 'physicsChecks',
     pattern: /(comprobado el motor físico: )(\d+)( verificaciones)/,
   },
-  // The welcome screen's card for instructors. It said "Six guided
-  // investigations" over a manifest of twenty-two, in both languages, for as
-  // long as the lesson set had been growing - the first thing an instructor
-  // reads about the project, understating it by sixteen lessons.
-  {
-    file: 'js/i18n/en.deferred.js',
-    key: 'investigations',
-    pattern: /(')(\d+)( guided investigations for introductory)/,
-  },
-  {
-    file: 'js/i18n/es.deferred.js',
-    key: 'investigations',
-    pattern: /(')(\d+)( investigaciones guiadas para astronomía)/,
-  },
 ];
 
 // --- gathering ---------------------------------------------------------------
