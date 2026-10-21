@@ -448,17 +448,7 @@ const getSettingTooltip = async (key, label) => {
     : t('settings.tooltip.generic', { label: label.toLowerCase() });
 };
 
-/**
- * Motion: a preference of this device, applied at once and filled in by its
- * own lazy module (js/motionControl.js).
- *
- * Its own function, not a few lines of buildSettingsMenu: the callback waiting
- * for the module is held until the file arrives, and a closure made inside
- * that function holds the function's whole scope - the previous build's
- * Advanced section and every listener on it - for as long as a slow file takes.
- * Made here, it holds the one empty row.
- * @param {HTMLElement} grid - The panel's grid
- */
+// Motion: filled by its lazy module; its own scope, so a slow file holds only the row.
 const addMotionRow = grid => {
   const row = document.createElement('div');
   row.className = 'settings-level';
