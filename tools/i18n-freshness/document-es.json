@@ -1,0 +1,11 @@
+{
+  "format": "gravitas.i18n-freshness/1",
+  "source": "document:es",
+  "baseline": {
+    "date": "2026-10-21",
+    "note": "Every translation present on this date was taken as written against the English it stood beside. That records no review."
+  },
+  "rows": {
+    "DATA_PROTECTION.md": "b0981480:704d5a8f"
+  }
+}
