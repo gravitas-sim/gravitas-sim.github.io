@@ -49,7 +49,7 @@
       "label": "Decoded image memory held by one page",
       "ceiling": 67108864,
       "unit": "bytes",
-      "measuredBy": "decoded-memory probe on the throttled profile (Prompt 157): not built yet"
+      "measuredBy": "not measured: no route imports js/dataKinds yet, so the page total is the bound itself until one decodes images; npm run probe:decoded records the realm peaks, not a page total"
     },
     {
       "key": "indexedDbAndCacheBytes",
