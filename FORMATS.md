@@ -170,6 +170,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | a fit-result record carried by the envelope (150) | `artifact` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 | a correlation reference between quantities that share data (150) | `artifact` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 | the mark set as part of the observation workspace record (179) | `observation` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
+| a `kind`, `depth` and `weight` on a rubric criterion of a written step (172) | `investigation-pack` | refuses | refused in its own words: safe as a capability-required refusal |
 | named streams, the stream fork per trial and the kernel versions on the experiment record (265) | `experiment` | ignores the field | accepted and silently dropped: a boundary, or the field must not be one an old reader needs |
 
 ## Fields added inside a version
