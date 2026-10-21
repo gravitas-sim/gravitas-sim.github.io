@@ -40,6 +40,7 @@
     "validate:orbital": "node tools/orbital-validate.mjs",
     "validate:numeric": "node tools/numeric-validate.mjs",
     "probe:workers": "node tools/worker-probe.mjs",
+    "probe:decoded": "node tools/decoded-memory-probe.mjs",
     "validate:inference": "node tools/inference-validate.mjs",
     "manifest": "node tools/build-investigation-manifest.js",
     "teaching:data": "node tools/build-teaching-demos.mjs",

@@ -108,12 +108,21 @@ export function measure(root = ROOT) {
  * @returns {Record<string, number>}
  */
 export function recordedProbe(root = ROOT) {
+  const out = {};
   const file = path.join(root, 'tools', 'worker-probe-results.json');
-  if (!existsSync(file)) return {};
-  const r = JSON.parse(readFileSync(file, 'utf8'));
-  return Number.isFinite(r.storage?.usageBytes)
-    ? { indexedDbAndCacheBytes: r.storage.usageBytes }
-    : {};
+  if (existsSync(file)) {
+    const r = JSON.parse(readFileSync(file, 'utf8'));
+    if (Number.isFinite(r.storage?.usageBytes))
+      out.indexedDbAndCacheBytes = r.storage.usageBytes;
+  }
+  // Prompt 157: the decoded-image probe records what a page holds of them.
+  const decoded = path.join(root, 'tools', 'decoded-memory-results.json');
+  if (existsSync(decoded)) {
+    const r = JSON.parse(readFileSync(decoded, 'utf8'));
+    if (Number.isFinite(r.decodedImageBytesPerPage))
+      out.decodedImageBytesPerPage = r.decodedImageBytesPerPage;
+  }
+  return out;
 }
 
 export function readDataBudget(file = DATA_BUDGET_FILE) {

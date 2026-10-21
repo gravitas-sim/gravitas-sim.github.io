@@ -1,0 +1,101 @@
+{
+  "sampling": "The realm answers Runtime.getHeapUsage every 10 ms while it works; a read lasts tens of milliseconds, so each peak is the largest of a few samples and a lower bound on the true peak (realmSamples says how few). The 1.25 acceptance is judged on the samples.",
+  "note": "Recorded by tools/decoded-memory-probe.mjs (npm run probe:decoded). A measurement on one machine in headless Chromium, not a gate: tools/data-budget.mjs reports decodedImageBytesPerPage from it beside the ceiling.",
+  "measuredAt": "d0d00be7",
+  "date": "2026-10-21",
+  "environment": {
+    "chromium": "156.0.8078.4",
+    "node": "v24.4.0",
+    "platform": "darwin x64",
+    "load1": 3.2
+  },
+  "acceptance": {
+    "realmPeakOverFileAndPlane": 1.25
+  },
+  "profiles": {
+    "low-end": {
+      "cases": [
+        {
+          "file": "2048 x 2048, BITPIX -64 (the largest file)",
+          "ok": true,
+          "fileBytes": 33557760,
+          "planeBytes": 33554432,
+          "ms": 56,
+          "ledgerAfter": 0,
+          "declared": 67112192,
+          "realmPeakHeldBytes": 67705498,
+          "realmSamples": 3,
+          "peakOverFileAndPlane": 1.009
+        },
+        {
+          "file": "2048 x 2048, BITPIX 16",
+          "ok": true,
+          "fileBytes": 8392320,
+          "planeBytes": 33554432,
+          "ms": 33,
+          "ledgerAfter": 0,
+          "declared": 41946752,
+          "realmPeakHeldBytes": 42425982,
+          "realmSamples": 2,
+          "peakOverFileAndPlane": 1.011
+        },
+        {
+          "file": "1024 x 1024, BITPIX -32",
+          "ok": true,
+          "fileBytes": 4199040,
+          "planeBytes": 8388608,
+          "ms": 22,
+          "ledgerAfter": 0,
+          "declared": 12587648,
+          "realmPeakHeldBytes": 13640210,
+          "realmSamples": 1,
+          "peakOverFileAndPlane": 1.084
+        }
+      ],
+      "residentDecodedBytes": 67108864
+    },
+    "desktop": {
+      "cases": [
+        {
+          "file": "2048 x 2048, BITPIX -64 (the largest file)",
+          "ok": true,
+          "fileBytes": 33557760,
+          "planeBytes": 33554432,
+          "ms": 44,
+          "ledgerAfter": 0,
+          "declared": 67112192,
+          "realmPeakHeldBytes": 67707770,
+          "realmSamples": 3,
+          "peakOverFileAndPlane": 1.009
+        },
+        {
+          "file": "2048 x 2048, BITPIX 16",
+          "ok": true,
+          "fileBytes": 8392320,
+          "planeBytes": 33554432,
+          "ms": 32,
+          "ledgerAfter": 0,
+          "declared": 41946752,
+          "realmPeakHeldBytes": 42432062,
+          "realmSamples": 2,
+          "peakOverFileAndPlane": 1.012
+        },
+        {
+          "file": "1024 x 1024, BITPIX -32",
+          "ok": true,
+          "fileBytes": 4199040,
+          "planeBytes": 8388608,
+          "ms": 20,
+          "ledgerAfter": 0,
+          "declared": 12587648,
+          "realmPeakHeldBytes": 13318898,
+          "realmSamples": 1,
+          "peakOverFileAndPlane": 1.058
+        }
+      ],
+      "residentDecodedBytes": 67108864
+    }
+  },
+  "decodedImageBytesPerPage": 67108864,
+  "within": true
+}
