@@ -164,13 +164,6 @@ for (const m of readFileSync(join(ROOT, 'js/render.js'), 'utf8').matchAll(
 for (const state of ['running', 'paused']) {
   used.add(`readout.status.${state}`);
 }
-// The front door stores message ids in js/data/welcome.js rather than words, so
-// the id is the value of a data field and never appears inside a t() call.
-for (const m of readFileSync(join(ROOT, 'js/data/welcome.js'), 'utf8').matchAll(
-  /'(welcome(?:Card|Audience|Link)\.[A-Za-z.]+)'/g
-)) {
-  used.add(m[1]);
-}
 // A step's kind is looked up as `inv.step.kind.<type>` from the step data, and
 // the object-type button stores its label as an id.
 for (const kind of ['read', 'predict', 'explore', 'measure', 'question']) {

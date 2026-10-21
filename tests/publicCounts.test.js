@@ -137,9 +137,9 @@ describe('the public investigation count', () => {
     for (const { merged, homeOf } of catalogs.values())
       for (const [key, value] of Object.entries(merged))
         found.push(...claims(`${homeOf.get(key)} ${key}`, value));
-    // At least one, or this test would pass over a catalog that never
-    // mentions the number and prove nothing.
-    expect(found.length).toBeGreaterThan(0);
+    // None need exist: Home stated the count until Prompt 162 took every
+    // number that grows with content off it, and the probe above proves the
+    // sweep still sees a claim should a catalog make one.
     expect(
       found
         .filter(c => c.said !== MANIFEST.length)

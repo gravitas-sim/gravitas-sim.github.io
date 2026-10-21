@@ -15,7 +15,9 @@
 //   labels        one thing is named alike on every surface that names it
 //   reachability  a first action is on the page it is promised on, every link
 //                 lands, and every page has a path from Home
-//   pending       what the site fails today, reported by tools/pending-
+//   model         Home and the global navigation follow the model (Prompt 162
+//                 activated these six; they are ordinary tests now)
+//   pending       what the site still fails, reported by tools/pending-
 //                 acceptance.mjs and not a failure until Prompt 166 activates it
 //
 // They are structural. They do not prove that anybody understands the
@@ -38,13 +40,14 @@ import {
   readInventory,
   surfacesOf,
   urlOf,
+  withHomeDestinations,
   withParts,
+  HOME,
 } from '../tools/navigation.mjs';
-import { NAV, WORDS, shellPages, hasShell } from '../tools/shell.mjs';
+import { DESTINATIONS, WORDS, shellPages, hasShell } from '../tools/shell.mjs';
 import { pages } from '../tools/csp.mjs';
 import { NOUNS } from '../tools/glossary.mjs';
 import { readRegistry, runPending } from '../tools/pending-acceptance.mjs';
-import { ENTRY_CARDS } from '../js/data/welcome.js';
 import { EN_LIBRARY } from '../js/i18n/en.library.js';
 import { ES_LIBRARY } from '../js/i18n/es.library.js';
 
@@ -88,7 +91,7 @@ const ROLES = new Set([
   'content',
 ]);
 const ids = inv.destinations.map(d => d.id);
-const GROUPS = NAV.map(([key]) => key);
+const GROUPS = DESTINATIONS.map(([key]) => key);
 const measured = await measure();
 
 describe('the inventory', () => {
@@ -298,26 +301,31 @@ describe('one thing, one name', () => {
   });
 
   test("the shell's navigation words each carry a Spanish word", () => {
-    for (const [, links] of NAV)
-      for (const [key] of links) {
-        const [en, es] = WORDS[key];
-        expect(en, key).toMatch(/\S/);
-        expect(es, key).toMatch(/\S/);
-      }
+    for (const [key] of DESTINATIONS) {
+      const [en, es] = WORDS[key];
+      expect(en, key).toMatch(/\S/);
+      expect(es, key).toMatch(/\S/);
+    }
     const label = labelOf(
       '<span class="gs-en">A &amp; B</span><span class="gs-es" lang="es">C</span>'
     );
     expect(label).toEqual({ en: 'A & B', es: 'C' });
   });
 
-  test("Home's doors carry text in both languages", async () => {
-    const { EN_DEFERRED } = await import('../js/i18n/en.deferred.js');
-    const { ES_DEFERRED } = await import('../js/i18n/es.deferred.js');
-    for (const card of ENTRY_CARDS)
-      for (const id of [card.eyebrow, card.title, card.text, card.cta]) {
-        expect(EN_DEFERRED[id], id).toMatch(/\S/);
-        expect(ES_DEFERRED[id], id).toMatch(/\S/);
-      }
+  test("Home's five destinations are the inventory's words, in both languages, and the fragment is current", () => {
+    const home = read(HOME);
+    expect(withHomeDestinations(home, inv)).toBe(home);
+    for (const d of inv.destinations)
+      for (const text of [d.en, d.es, d.says.en, d.says.es])
+        expect(home, text).toContain(text);
+  });
+
+  test("the shell's words for the destinations are the inventory's", () => {
+    for (const [key, href, id] of DESTINATIONS) {
+      const d = inv.destinations.find(x => x.id === id);
+      expect([WORDS[key][0], WORDS[key][1]], id).toEqual([d.en, d.es]);
+      expect(href, id).toBe(d.first.path);
+    }
   });
 });
 
@@ -351,62 +359,126 @@ describe('the reachability walk, from the pages', () => {
   });
 });
 
-describe('what the site fails today, by design (pending until Prompt 166 activates it)', () => {
+describe('Home and the global navigation follow the model (activated by Prompt 162)', () => {
   const menu = menuOf(read('library/index.html'));
   const byHref = href => inv.surfaces.find(s => s.path === href);
+  const SIX = [
+    'navigation.global.five-destinations',
+    'navigation.global.menu-follows-model',
+    'navigation.labels.shell-matches-glossary',
+    'navigation.home.entries-are-destinations',
+    'navigation.home.no-count-walls',
+    'navigation.reach.every-page-from-home',
+  ];
 
+  test('the six are activated by name, so a failure fails', () => {
+    const registry = readRegistry();
+    for (const id of SIX)
+      expect(
+        registry.find(c => c.id === id),
+        id
+      ).toMatchObject({
+        prompt: '162',
+        activated: true,
+      });
+  });
+
+  test('navigation.global.five-destinations', async () => {
+    const got = menu.map(g => g.en);
+    expect(got).toEqual(inv.destinations.map(d => d.en));
+    expect(menu.map(g => g.es)).toEqual(inv.destinations.map(d => d.es));
+    const result = await runPending(SIX[0], () => {});
+    expect(result.status).toBe('met');
+  });
+
+  test('navigation.global.menu-follows-model', () => {
+    for (const g of menu)
+      for (const i of g.items) {
+        const row = byHref(i.href);
+        const home = inv.destinations.find(d => d.id === row?.destination);
+        expect(home?.en, `${i.en} is under ${g.en}`).toBe(g.en);
+        // no tool, authoring surface, diagnostic or document is a menu entry
+        expect(row.role, i.href).toBe('destination');
+      }
+    expect(menu.flatMap(g => g.items)).toHaveLength(5);
+  });
+
+  test('navigation.labels.shell-matches-glossary', async () => {
+    expect(await labelDivergences(inv)).toEqual([]);
+  });
+
+  test('navigation.home.entries-are-destinations', () => {
+    const home = read(HOME);
+    const got = [
+      ...home.matchAll(/class="wel-door" data-dest="([\w-]+)"/g),
+    ].map(m => m[1]);
+    expect(got).toEqual(ids);
+  });
+
+  test('navigation.home.no-count-walls', () => {
+    expect(measured.home.countedLinks).toBe(0);
+    expect(read(HOME)).not.toMatch(
+      /data-slot="(scenario-count|lessons|scenarios)"/
+    );
+  });
+
+  test('navigation.reach.every-page-from-home', () => {
+    // One acknowledged exception: /compute/ is reached from within (a saved
+    // notebook in My work), not from any destination's page, because
+    // D-COMPUTE-03 keeps an online-only 9 to 19 MB download from being offered
+    // to every reader. The ceiling names it, so a second orphan fails.
+    const lost = [...pages(), 'history/original/index.html'].filter(
+      f => !clicksFromHome().has(urlOf(f))
+    );
+    expect(lost.map(urlOf)).toEqual(['/compute/']);
+    expect(lost).toHaveLength(inv.ceilings.reach.pagesWithoutALinkFromHome);
+  });
+
+  test('every former menu entry has a path from Home, in two activations (three for what hangs below Teach)', () => {
+    const clicks = clicksFromHome();
+    const deeper = new Set(['submissions', 'course-packages']);
+    for (const row of inv.surfaces.filter(
+      s =>
+        !s.path.endsWith('*') &&
+        !s.path.endsWith('.pdf') &&
+        s.id !== 'compute' &&
+        s.id !== 'history-original'
+    ))
+      expect(
+        clicks.get(row.path.replace(/#.*$/, '')) ?? Infinity,
+        `${row.id} (${row.path})`
+      ).toBeLessThanOrEqual(deeper.has(row.id) ? 3 : 2);
+  });
+
+  test("Home's first-week start is a committed list that names real Library entries", () => {
+    const starts = inv.firstWeek.starts;
+    expect(starts.map(s => s.id)).toEqual([
+      'student',
+      'observer',
+      'sandbox',
+      'instructor',
+    ]);
+    for (const s of starts) {
+      expect(s.audience.en, s.id).toMatch(/\S/);
+      expect(s.audience.es, s.id).toMatch(/\S/);
+      if (s.entry)
+        expect(
+          library.entries.find(e => e.id === s.entry),
+          `${s.id}: ${s.entry}`
+        ).toBeTruthy();
+      else expect(s.action, s.id).toBe('enter');
+    }
+    // an investigation, an observation (a dataset), a course, and the sandbox
+    const kinds = starts.map(
+      s => library.entries.find(e => e.id === s.entry)?.kind ?? 'action'
+    );
+    expect(kinds).toEqual(['investigation', 'dataset', 'action', 'course']);
+    expect(measured.home.firstWeekLinks).toBe(starts.length);
+  });
+});
+
+describe('what the site still fails, by design (pending until Prompt 166 activates it)', () => {
   const checks = {
-    'navigation.global.five-destinations': () => {
-      const got = menu.map(g => g.en);
-      const want = inv.destinations.map(d => d.en);
-      if (JSON.stringify(got) !== JSON.stringify(want))
-        throw new Error(
-          `the menu's entries are ${got.join(', ')}; the model's are ${want.join(', ')}`
-        );
-    },
-    'navigation.global.menu-follows-model': () => {
-      const stray = [];
-      for (const g of menu)
-        for (const i of g.items) {
-          const row = byHref(i.href);
-          const home = inv.destinations.find(d => d.id === row?.destination);
-          if (!home || home.en !== g.en)
-            stray.push(`${i.en} (${g.en}, belongs to ${home?.en ?? 'none'})`);
-        }
-      if (stray.length)
-        throw new Error(
-          `${stray.length} of ${menu.flatMap(g => g.items).length} menu links are not under their destination: ${stray.slice(0, 3).join('; ')}...`
-        );
-    },
-    'navigation.labels.shell-matches-glossary': async () => {
-      const found = await labelDivergences(inv);
-      if (found.length)
-        throw new Error(
-          `${found.length} things are named two ways: ${found.map(f => f.id).join(', ')}`
-        );
-    },
-    'navigation.home.entries-are-destinations': () => {
-      const got = ENTRY_CARDS.map(c => c.id);
-      if (JSON.stringify(got) !== JSON.stringify(ids))
-        throw new Error(
-          `Home's entries are ${got.join(', ')}; the destinations are ${ids.join(', ')}`
-        );
-    },
-    'navigation.home.no-count-walls': () => {
-      if (measured.home.countedLinks)
-        throw new Error(
-          `Home shows ${measured.home.countedLinks} counts of Library content`
-        );
-    },
-    'navigation.reach.every-page-from-home': () => {
-      const lost = [...pages(), 'history/original/index.html'].filter(
-        f => !clicksFromHome().has(urlOf(f))
-      );
-      if (lost.length)
-        throw new Error(
-          `no page links to ${lost.map(urlOf).join(', ')} from Home's pages`
-        );
-    },
     'navigation.library.student-kinds-only': () => {
       const shown = library.kinds.filter(k => !inv.kinds.students.includes(k));
       if (shown.length)
@@ -426,19 +498,26 @@ describe('what the site fails today, by design (pending until Prompt 166 activat
       expect(['met', 'pending']).toContain(result.status);
     });
 
-  test('each of the nine is registered under the prompt that activates it, and the e2e one is not here', () => {
+  test('each of the three is registered under the prompt that activates it, and the e2e one is not here', () => {
     const registry = readRegistry().filter(c => c.id.startsWith('navigation.'));
     const listed = inv.futureAcceptance.map(f => f.id).sort();
-    expect(registry.map(c => c.id).sort()).toEqual(listed);
+    // the other six were activated by 162, and are ordinary tests above
+    expect(
+      registry
+        .filter(c => c.activated === false)
+        .map(c => c.id)
+        .sort()
+    ).toEqual(listed);
+    expect(registry).toHaveLength(9);
     for (const f of inv.futureAcceptance) {
       const entry = registry.find(c => c.id === f.id);
       expect(entry.prompt, f.id).toBe(f.activatedBy);
-      expect(f.workedBy, f.id).toMatch(/^16[2-7](, 16[2-7])*$/);
+      expect(f.workedBy, f.id).toMatch(/^16[3-7](, 16[3-7])*$/);
     }
     const here = Object.keys(checks);
     const browser = listed.filter(id => !here.includes(id));
     expect(browser).toEqual(['navigation.library.default-view-is-bounded']);
-    expect(listed).toHaveLength(9);
+    expect(listed).toHaveLength(3);
   });
 });
 
@@ -458,7 +537,7 @@ describe('NAVIGATION.md', () => {
       '## Acceptance criteria',
       '## The structural checks',
       '## What these checks do not prove',
-      '## What the site fails today',
+      '## What the site still fails',
       '## The internal review protocol',
     ])
       expect(text, heading).toContain(heading);

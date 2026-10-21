@@ -193,7 +193,7 @@ test.describe('the ways into it', () => {
     );
   });
 
-  test('Home leads into it by kind, and continues a lesson left part-way', async ({
+  test('Home leads into it by the Learn destination, and continues a lesson left part-way', async ({
     page,
     app,
   }) => {
@@ -211,8 +211,14 @@ test.describe('the ways into it', () => {
     await page.goto('/#home', { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.splashScreenEnded === true);
     await expect(page.locator('#welcomeScreen')).toBeVisible();
-    const kinds = page.locator('#welcomeSections a[href^="/library/?kind="]');
-    await expect(kinds).toHaveCount(LIBRARY.kinds.length);
+    // Learn is one of Home's five destinations and goes to the Library; Home
+    // no longer lists the Library's kinds with their counts (Prompt 162).
+    await expect(
+      page.locator('#welcomeSections [data-dest="learn"] a[href="/library/"]')
+    ).toHaveCount(1);
+    await expect(
+      page.locator('#welcomeSections a[href^="/library/?kind="]')
+    ).toHaveCount(0);
 
     const strip = page.locator('#welContinue');
     await expect(strip).toBeVisible();

@@ -5248,11 +5248,6 @@
     background: var(--accent-strong);
   }
 
-  .wel-secondary.ui-button {
-    padding: var(--space-3) var(--space-5);
-    font-size: var(--text-base);
-  }
-
   /* Tertiary actions read as links: the hero must have one obvious next step,
      and three equally weighted buttons do not give it one. */
   .wel-quiet {
@@ -5291,18 +5286,6 @@
     text-wrap: balance;
   }
 
-  .wel-section-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-3);
-  }
-
-  .wel-section-head .wel-h2 {
-    margin-bottom: var(--space-5);
-  }
-
   .wel-say {
     max-width: 62ch;
     margin: 0 0 var(--space-6);
@@ -5312,34 +5295,43 @@
     text-wrap: pretty;
   }
 
-  /* --- Build / Explore / Learn --------------------------------------------- */
+  /* --- Where to start ------------------------------------------------------ */
 
-  .wel-triad {
+  .wel-start {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: var(--space-5);
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .wel-point h3 {
-    margin: 0 0 var(--space-2);
-    padding-bottom: var(--space-2);
+  .wel-start-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: color-mix(in srgb, var(--surface-1) 60%, transparent);
+    border-left: 2px solid var(--accent-line);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .wel-start-for {
+    flex: 0 0 11rem;
     font-family: var(--font-mono);
     font-size: var(--text-2xs);
-    font-weight: var(--weight-semibold);
-    letter-spacing: 0.14em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .wel-start-go {
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
     color: var(--accent);
-    border-bottom: 1px solid var(--accent-line);
   }
 
-  .wel-point p {
-    margin: 0;
-    font-size: var(--text-sm);
-    line-height: 1.65;
-    color: var(--text-secondary);
-  }
-
-  /* --- Three ways in ------------------------------------------------------- */
+  /* --- Five places --------------------------------------------------------- */
 
   .wel-doors {
     display: grid;
@@ -5357,20 +5349,25 @@
     border-radius: var(--radius-md);
   }
 
-  .wel-door-eyebrow {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: var(--text-2xs);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
   .wel-door-title {
     margin: 0;
     font-size: var(--text-lg);
     font-weight: var(--weight-semibold);
+  }
+
+  .wel-door-title a {
     color: var(--text-primary);
+  }
+
+  /* Explore's page is the sandbox, so its places are here. */
+  .wel-door-more {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-sm);
   }
 
   .wel-door-text {
@@ -5378,81 +5375,6 @@
     font-size: var(--text-sm);
     line-height: 1.6;
     color: var(--text-secondary);
-  }
-
-  /* Pushed to the bottom so the three buttons line up however unevenly the
-     descriptions wrap. */
-  .wel-door-cta.ui-button {
-    margin-top: auto;
-    align-self: flex-start;
-  }
-
-  /* --- Featured scenarios --------------------------------------------------- */
-
-  .wel-scenarios {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-    gap: var(--space-3);
-  }
-
-  .wel-scenario {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    padding: var(--space-4);
-    text-align: left;
-
-    background: color-mix(in srgb, var(--surface-1) 68%, transparent);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition:
-      transform var(--duration) var(--ease-out),
-      border-color var(--duration) var(--ease),
-      background-color var(--duration) var(--ease);
-  }
-
-  .wel-scenario:hover,
-  .wel-scenario:focus-visible {
-    transform: translateY(-2px);
-    background: color-mix(in srgb, var(--surface-2) 85%, transparent);
-    border-color: var(--accent-line);
-  }
-
-  /* The featured cards show the same capture the gallery does, through the
-     shared .sc-card-shot markup, so a scenario looks the same wherever it is
-     offered and there is only one thumbnail fallback to maintain. This used to
-     be six hand-drawn SVG diagrams, which was a second visual vocabulary for
-     the same six systems. */
-  .wel-scenario .sc-card-shot {
-    border: 0;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-  }
-
-  .wel-scenario-text {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-  }
-
-  .wel-scenario-title {
-    font-size: var(--text-base);
-    font-weight: var(--weight-semibold);
-    color: var(--text-primary);
-  }
-
-  .wel-scenario-summary {
-    font-size: var(--text-xs);
-    line-height: 1.55;
-    color: var(--text-secondary);
-    /* A catalog summary can run long. Clamping keeps six cards the same height
-       without a second, shorter copy of every description. */
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    overflow: hidden;
   }
 
   /* --- Investigations ------------------------------------------------------- */
@@ -5488,79 +5410,10 @@
     color: var(--text-primary);
   }
 
-  .wel-lesson-sub {
-    font-size: var(--text-xs);
-    line-height: 1.5;
-    color: var(--text-secondary);
-  }
-
   .wel-lesson-meta {
     font-family: var(--font-mono);
     font-size: var(--text-2xs);
     color: var(--text-muted);
-  }
-
-  /* --- Audiences ------------------------------------------------------------ */
-
-  .wel-audiences {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: var(--space-5);
-  }
-
-  .wel-audience h3 {
-    margin: 0 0 var(--space-2);
-    font-size: var(--text-base);
-    font-weight: var(--weight-semibold);
-    color: var(--text-primary);
-  }
-
-  .wel-audience p {
-    margin: 0;
-    font-size: var(--text-sm);
-    line-height: 1.65;
-    color: var(--text-secondary);
-  }
-
-  /* --- Teaching links ------------------------------------------------------- */
-
-  .wel-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-    gap: var(--space-3);
-  }
-
-  .wel-link {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    padding: var(--space-4);
-    text-decoration: none;
-
-    background: color-mix(in srgb, var(--surface-1) 68%, transparent);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    transition:
-      border-color var(--duration) var(--ease),
-      background-color var(--duration) var(--ease);
-  }
-
-  .wel-link:hover,
-  .wel-link:focus-visible {
-    background: color-mix(in srgb, var(--surface-2) 85%, transparent);
-    border-color: var(--accent-line);
-  }
-
-  .wel-link-label {
-    font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
-    color: var(--accent);
-  }
-
-  .wel-link-note {
-    font-size: var(--text-xs);
-    line-height: 1.5;
-    color: var(--text-secondary);
   }
 
   /* --- Foot ----------------------------------------------------------------- */
@@ -5611,51 +5464,20 @@
       margin-bottom: var(--space-5);
     }
 
-    .wel-triad,
-    .wel-audiences {
-      gap: var(--space-4);
-    }
-
     .wel-door {
       padding: var(--space-4);
     }
 
-    /* The eyebrow is a desktop nicety: on a phone the three doors are stacked
-       and the headings alone already read as a list. */
-    .wel-door-eyebrow {
-      display: none;
+    .wel-start-for {
+      flex-basis: 100%;
     }
 
-    /* Title and length are enough to show what a lesson looks like. The
-       subtitle is three more lines each, for three lessons, and the button
-       underneath goes to the real browser where all of it is shown. */
-    .wel-lesson-sub {
-      display: none;
-    }
-
-    /* The heading and its "browse all" link stop sitting on one line here, and
-       the heading's own bottom margin then opens a gap that makes the link look
-       like a stray subtitle. */
-    .wel-section-head .wel-h2 {
-      margin-bottom: var(--space-2);
-    }
-
-    .wel-section-head .wel-quiet {
-      padding-left: 0;
-    }
-
-    /* One card per row rather than six desktop-sized cards stacked: the same
-       content, a third of the scrolling. */
-    .wel-scenario {
-      flex-direction: row;
+    /* A finger needs 44 px (WCAG 2.5.5): the starts are the page's main
+       choices, and the five places begin below them. */
+    .wel-start-go {
+      display: inline-flex;
       align-items: center;
-      gap: var(--space-3);
-      padding: var(--space-3);
-    }
-
-    .wel-scenario-summary {
-      -webkit-line-clamp: 2;
-      line-clamp: 2;
+      min-height: 44px;
     }
 
     .wel-hero-actions .ui-button {
@@ -5677,11 +5499,6 @@
   @media (prefers-reduced-motion: reduce) {
     .welcome-screen {
       transition: none;
-    }
-
-    .wel-scenario:hover,
-    .wel-scenario:focus-visible {
-      transform: none;
     }
   }
 }

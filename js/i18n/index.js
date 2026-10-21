@@ -91,9 +91,6 @@ export const DEFERRED_NAMESPACES = Object.freeze([
   'tideW',
   'transitW',
   'welcome',
-  'welcomeAudience',
-  'welcomeCard',
-  'welcomeLink',
 ]);
 
 const SET = new Set(DEFERRED_NAMESPACES);

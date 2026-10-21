@@ -7,8 +7,10 @@
 // inbound link from the navigation, the Library or Home) or a dead end (no way
 // back to Home on screen).
 //
-// What counts as an activation: opening a navigation group, following a link.
-// Menu on a phone and the welcome's close button count too (see OVER).
+// What counts as an activation: following a link, or opening a disclosure.
+// Since Prompt 162 the navigation is five destinations, Home links each of them
+// and Explore's places, and every other surface is one place on a
+// destination's page: Home, the destination, the place.
 //
 // Known gaps are explicit allowlists whose size is asserted, so they can only
 // shrink. Keyboard activation focuses the control and presses Enter; one
@@ -18,28 +20,16 @@
 import { readFileSync } from 'node:fs';
 import { expect } from './fixtures.js';
 import { stepKey } from './keyboard.js';
-import { NAV, shellPages, pathOf } from '../tools/shell.mjs';
+import { DESTINATIONS, PLACES, shellPages, pathOf } from '../tools/shell.mjs';
 
 const LIBRARY = JSON.parse(readFileSync('library/library.json', 'utf8'));
 const MAX = 2;
-// REAL FINDING (not fixed here: no shipped changes). Up to 1024 px the shell
-// folds behind Menu, which counts as an activation, so a nav target that Home
-// does not link itself costs three, by touch and keyboard alike (the welcome's
-// close button used to cover Menu by touch, which made it four; it no longer
-// does, P75 F-1). Exact counts, asserted, so the excess can only shrink.
-const OVER = {
-  '375/keyboard': 3,
-  '375/touch': 3,
-  '1024/keyboard': 3,
-  '1024/touch': 3,
-};
-
 // Allowlists (each entry justified; the count is asserted).
 // The first Gravitas is reached from one quiet word in /model/'s footer, by
-// design (tools/shell.mjs EXEMPT), so no nav or Library entry points at it.
-// The compute page is deliberately unlinked from the navigation, the Library
-// and Home while it is opt-in and online-only (D-COMPUTE-03); it is reached by
-// its address and from the notebook's own links.
+// design (tools/shell.mjs EXEMPT), so no destination or place points at it.
+// The compute page is deliberately unlinked from every destination's page
+// while it is opt-in and online-only (D-COMPUTE-03, kept as ratified by Prompt
+// 162); it is reached by its address and from a saved notebook in My work.
 const ORPHAN_ALLOW = new Set([
   'history/original/index.html',
   'compute/index.html',
@@ -50,7 +40,21 @@ const NOT_FOLLOWED = new Set(['/', '/Gravitas_User_Manual.pdf']);
 // Real dead ends found by this spec: none.
 const DEAD_END_ALLOW = new Set([]);
 
-const targets = [...new Set(NAV.flatMap(([, links]) => links.map(l => l[1])))];
+// The two diagnostics pages are reached from the lab each explains (the
+// evidence section of the 3-D lab and of the mission lab): a place of a place.
+const FROM_WITHIN = { '/lab3d/': '/3d/', '/mission/': '/mission/lab/' };
+const placed = Object.entries(PLACES).flatMap(([owner, [, blocks]]) =>
+  blocks.flatMap(([, links]) => links.map(l => [l[1], owner]))
+);
+const ownerOf = href =>
+  FROM_WITHIN[href] ?? placed.find(([h]) => h === href)?.[1] ?? null;
+const targets = [
+  ...new Set([
+    ...DESTINATIONS.map(d => d[1]),
+    ...placed.map(([h]) => h),
+    ...Object.keys(FROM_WITHIN),
+  ]),
+];
 const bases = [
   ...new Set(LIBRARY.entries.map(e => e.route.replace(/[?#].*/, ''))),
 ];
@@ -118,66 +122,56 @@ export const edge =
       );
       return;
     }
-    const direct = page.locator(`#welcomeScreen a[href="${href}"]`);
-    if (await direct.first().isVisible()) {
-      // Home links it itself: one activation.
-      await activate(page, direct.first(), input);
-      await expect(page).toHaveURL(
-        new RegExp(`${href.replace(/[/.]/g, '\\$&')}$`)
-      );
-      return;
-    }
-    const menu = page.locator('.gs-toggle');
-    if (await menu.isVisible()) {
-      // On a phone the welcome screen can sit over the Menu button: a
-      // finger cannot reach it until the welcome is closed.
-      const covered = await menu.evaluate(el => {
-        const r = el.getBoundingClientRect();
-        const top = document.elementFromPoint(
-          r.left + r.width / 2,
-          r.top + r.height / 2
-        );
-        return !!top && top !== el && !el.contains(top);
-      });
-      if (covered && input === 'touch') {
-        await activate(page, page.locator('#welcomeClose'), input);
-        count++;
-        await expect(page.locator('#welcomeScreen')).toBeHidden();
-      }
-      await activate(page, menu, input);
-      count++;
-      await expect(menu).toHaveAttribute('aria-expanded', 'true');
-    }
-    const group = page
-      .locator('.gs-group')
-      .filter({ has: page.locator(`a[href="${href}"]`) })
-      .locator('summary');
-    await activate(page, group, input);
-    count++;
-    const link = page.locator(`.gs-nav a[href="${href}"]`);
-    await expect(link).toBeVisible();
-    if (NOT_FOLLOWED.has(href)) {
-      const rect = await link.boundingBox();
-      expect(rect.x + rect.width).toBeLessThanOrEqual(width + 1);
-      count++;
-      const res = await page.request.get(href);
-      expect(res.status()).toBe(200);
-    } else {
-      await activate(page, link, input);
-      count++;
-      if (href === '/#investigations') {
+    const arrived = async () => {
+      if (href === '/#investigations')
         await expect(page.locator('#investigationBrowser')).toBeVisible({
           timeout: 30_000,
         });
-      } else {
+      else if (NOT_FOLLOWED.has(href)) {
+        const res = await page.request.get(href);
+        expect(res.status()).toBe(200);
+      } else
         await expect(page).toHaveURL(
           new RegExp(`${href.replace(/[/.]/g, '\\$&')}$`)
         );
+    };
+    const direct = page
+      .locator(`#welcomeScreen a[href="${href}"]`)
+      .filter({ visible: true });
+    if (await direct.first().isVisible()) {
+      // Home links it itself: one activation.
+      await activate(page, direct.first(), input);
+      count++;
+      await arrived();
+    } else {
+      // Home links the destination (or lab) that holds it; its page links it.
+      const via = ownerOf(href);
+      expect(via, `${href} belongs to a destination's places`).not.toBeNull();
+      await activate(
+        page,
+        page
+          .locator(`#welcomeScreen a[href="${via}"]`)
+          .filter({ visible: true })
+          .first(),
+        input
+      );
+      count++;
+      await expect(page).toHaveURL(
+        new RegExp(`${via.replace(/[/.]/g, '\\$&')}$`)
+      );
+      const place = page
+        .locator(`main a[href="${href}"], .gs-places a[href="${href}"]`)
+        .first();
+      if (NOT_FOLLOWED.has(href)) {
+        await expect(place).toBeVisible();
+        count++;
+      } else {
+        await activate(page, place, input);
+        count++;
       }
+      await arrived();
     }
-    // Within two, or exactly the recorded excess (it can only shrink).
-    expect(count).toBe(OVER[`${width}/${input}`] ?? count);
-    if (!OVER[`${width}/${input}`]) expect(count).toBeLessThanOrEqual(MAX);
+    expect(count).toBeLessThanOrEqual(MAX);
   };
 
 /** The Library test body; `full` walks every base, not the first. */
@@ -283,6 +277,8 @@ export const orphans = async () => {
     'library/index.html',
     'teaching/index.html',
     'teaching/find/index.html',
+    '3d/index.html',
+    'mission/lab/index.html',
   ]) {
     for (const m of readFileSync(f, 'utf8').matchAll(/href="(\/[^"#?]*)/g))
       inbound.add(m[1]);

@@ -33,24 +33,25 @@ export function mountShell({ onLanguage, onTheme } = {}) {
   const head = document.querySelector('.gs-shell');
   if (!head) return;
   head.classList.add('gs-js');
-  const groups = [...head.querySelectorAll('details')];
   const toggle = head.querySelector('.gs-toggle');
   const controls = head.querySelector('.gs-controls');
   toggle.hidden = controls.hidden = false;
 
-  for (const d of groups)
-    d.addEventListener('toggle', () => {
-      if (d.open) for (const o of groups) if (o !== d) o.open = false;
+  // A lesson is Learn.
+  if (head.classList.contains('gs-app')) {
+    const sync = () => {
+      const l = document.body.classList.contains('investigation-open');
+      for (const a of head.querySelectorAll('.gs-nav a')) {
+        if (a.dataset.dest === (l ? 'learn' : 'explore'))
+          a.setAttribute('aria-current', l ? 'true' : 'page');
+        else a.removeAttribute('aria-current');
+      }
+    };
+    new MutationObserver(sync).observe(document.body, {
+      attributeFilter: ['class'],
     });
-  head.addEventListener('keydown', e => {
-    const d = groups.find(o => o.open);
-    if (e.key !== 'Escape' || !d) return;
-    d.open = false;
-    d.querySelector('summary').focus();
-  });
-  document.addEventListener('click', e => {
-    if (!head.contains(e.target)) for (const d of groups) d.open = false;
-  });
+  }
+
   toggle.addEventListener('click', () => {
     const open = toggle.getAttribute('aria-expanded') !== 'true';
     toggle.setAttribute('aria-expanded', String(open));

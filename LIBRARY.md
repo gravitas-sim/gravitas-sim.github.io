@@ -160,20 +160,26 @@ The page and the index are precached as optional, as the catalog is.
 
 ## Home
 
-Home (`js/welcome.js`) keeps its heading and three buttons in its module, and
-its sections are now a fragment, `js/fragments/home.html`, fetched with it
-(INDEX_DECOMPOSITION.md's mechanism). That moved 2.6 KB of markup out of the
-deferred JavaScript, which paid for the rest:
+Home (`js/welcome.js`) keeps its heading in its module, and its sections are a
+fragment, `js/fragments/home.html`, fetched with it (INDEX_DECOMPOSITION.md's
+mechanism). Since Prompt 162 it is one calm page:
 
 - **Continue where you left off:** up to three lessons started and not
-  finished, most recently started first, each opening the lesson.
-- **In the Library:** a card per kind, with how many there are and the first
-  two, each a link into the Library narrowed to that kind. Generated, as
-  static markup in the fragment, by the Library's generator.
-- **Three ways in**, the featured scenarios, the lessons and the teaching
-  links, as before.
+  finished, most recently started first, each opening the lesson; shown only
+  when there is one.
+- **Where to start:** one recommended start per audience, from the committed
+  `firstWeek` list in `tools/navigation-inventory.json` (an investigation, an
+  observation, the sandbox, a course for an instructor). Generated, as static
+  markup in the fragment, by the Library's generator, which reads each entry's
+  title and route from the Library and fails on one that does not exist.
+- **Five places:** the destinations of NAVIGATION.md with their one line each,
+  generated from the same inventory.
 
-The shell's Learn group links the Library on every page.
+Home no longer lists the Library by kind with counts, the featured scenarios,
+the lessons or the teaching links; the Library, one click away, is where they
+are.
+
+The shell's Learn destination goes to the Library on every page.
 
 ## The lesson browser inside the application
 
