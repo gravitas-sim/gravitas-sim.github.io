@@ -786,6 +786,13 @@
       "student": false
     },
     {
+      "file": "TRANSLATION.md",
+      "kind": "policy",
+      "purpose": "Translation freshness (the ledger and the packs' esOf), the glossary's labels, the English-only surfaces and the rule for new vocabulary.",
+      "owner": 156,
+      "student": false
+    },
+    {
       "file": "UI_PERFORMANCE_AUDIT.md",
       "kind": "record",
       "purpose": "Historical UI, performance and quality audit.",

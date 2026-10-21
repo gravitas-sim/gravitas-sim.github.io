@@ -40,7 +40,11 @@ rather than something to edit by hand.
 
 The first ledger took every translation then present as written against its
 English (the `baseline` in each file). That records no review, and it is the only
-time the ledger was written without a person changing a translation.
+time the ledger was written without a person changing a translation. Git does
+remember what the catalogs' English was: `node tools/i18n-history.mjs` walks the
+history of `js/i18n` and lists the entries whose English last changed after their
+Spanish did. It is a triage list for a reader, indicative (a later English change
+may be a typo), and it never fails.
 
 ### What the tool does
 
