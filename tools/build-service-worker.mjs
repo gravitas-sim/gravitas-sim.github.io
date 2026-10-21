@@ -246,6 +246,12 @@ export const NEVER_PRECACHED = [
   // measured cost is in D-R10-30). Its first adopter deletes this entry, and
   // tests/workerPoolAdoption.test.js fails until it is deleted.
   /^js\/workers\/pool\.js$/,
+  // The statistics kernel (Prompt 154, STATISTICS.md): no shipped module imports
+  // it yet, so no page can fetch it and an install has no use for it, and the
+  // first-visit tier has 21 bytes of room (the adoption is a wait: its measured
+  // cost is in D-R10-31). Its first adopter deletes this entry, and
+  // tests/statisticsKernel.test.js fails until it is deleted.
+  /^js\/kernels\/statistics\//,
   // The validation suite's groups and harness: fetched when the suite runs,
   // like physicsChecks.js itself (ON_DEMAND_ONLY below).
   /^js\/validation\/(groups\/|harness\.js$)/,

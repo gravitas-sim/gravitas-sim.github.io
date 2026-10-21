@@ -1,0 +1,338 @@
+// =============================================================================
+// The selection function as an object, and the biases it leaves (Prompt 154)
+// -----------------------------------------------------------------------------
+// A survey does not see the population: it sees the part of it that passed a
+// cut on some observable and was then detected with some probability. That is
+// a selection function, and it is built here as a first-class value:
+//
+//   selection({ name, observable, cut: {min, max}, probability: v => p })
+//     .inclusion(row)         the probability a row is in the sample (0 below a cut)
+//     .apply(rows, uniformFor)  who is in, by the draws uniformFor(i) gives
+//   all(a, b, ...)            independent selections in series: the product
+//   either(a, b, ...)         independent channels: 1 - the product of (1 - p)
+//
+// `apply` returns every object's probability, the included indices and their
+// weights 1/p, which is what a completeness correction needs. The draw for row
+// i is made by the caller (`uniformFor(i)`), so a keyed stream and a sequential
+// one both work, and a row is drawn for only when its probability lies strictly
+// between 0 and 1.
+//
+// The biases are measured differences and closed forms to compare them with:
+// Eddington (a noisy measurement of a quantity that falls with its value, so
+// the true value of what is seen is lower than seen), Malmquist (a flux-limited
+// sample of scattered standard candles is brighter on average than the
+// population), and the completeness correction n / c with the sampling error
+// carried. Each closed form is exact for the model stated; none is a claim
+// about a real survey, whose selection and population must be modelled.
+// =============================================================================
+
+import { normalCdf } from './special.js';
+import { refused, allFinite, isCount } from './check.js';
+import { StatisticsError } from './resample.js';
+
+const { Math, Number, Float64Array, Int32Array, Uint8Array } = globalThis;
+
+const SQRT_2PI = Math.sqrt(2 * Math.PI);
+const pdf = z => Math.exp(-0.5 * z * z) / SQRT_2PI;
+
+/**
+ * phi(t) / Phi(t), the inverse Mills ratio at the lower tail. Direct above
+ * t = -30; below it phi and Phi underflow together, so the ratio comes from the
+ * asymptotic series Phi(t) = phi(t) / |t| (1 - 1/t^2 + 3/t^4 - ...): the ratio is
+ * |t| over that sum (a few terms reach 1e-14 at |t| = 30).
+ */
+function inverseMills(t) {
+  if (t > -30) return pdf(t) / normalCdf(t);
+  const z = -t;
+  let term = 1;
+  let sum = 1;
+  for (let k = 1; k < 200; k++) {
+    const next = (-term * (2 * k - 1)) / (z * z);
+    if (Math.abs(next) >= Math.abs(term)) break;
+    term = next;
+    sum += term;
+  }
+  return z / sum;
+}
+
+function build(name, observables, inclusion) {
+  const sel = {
+    name,
+    observables,
+    inclusion,
+    apply(rows, uniformFor) {
+      // A draw is needed only for a probability strictly between 0 and 1.
+      const n = rows.length;
+      const flags = new Uint8Array(n);
+      const probabilities = new Float64Array(n);
+      const included = [];
+      let expected = 0;
+      for (let i = 0; i < n; i++) {
+        const p = inclusion(rows[i]);
+        probabilities[i] = p;
+        expected += p;
+        if (p > 0 && p < 1 && typeof uniformFor !== 'function')
+          throw new StatisticsError(
+            'uniform',
+            'apply() needs uniformFor(i), a uniform draw for row i, for a row whose probability is between 0 and 1'
+          );
+        if (p >= 1 || (p > 0 && uniformFor(i) < p)) {
+          flags[i] = 1;
+          included.push(i);
+        }
+      }
+      const weights = Float64Array.from(included, i => 1 / probabilities[i]);
+      return {
+        status: 'ok',
+        name,
+        n,
+        flags,
+        probabilities,
+        included: Int32Array.from(included),
+        weights,
+        expected,
+      };
+    },
+  };
+  return Object.freeze(sel);
+}
+
+/**
+ * One selection: a cut and/or an inclusion probability on one observable.
+ * @param {{name?: string, observable?: string|null, cut?: {min?: number, max?: number}|null,
+ *   probability?: function(number): number|null}} spec - A row is an object
+ *   keyed by `observable`, or the number itself when there is no observable.
+ *   The cut's bounds are inclusive.
+ */
+export function selection({
+  name = 'selection',
+  observable = null,
+  cut = null,
+  probability = null,
+} = {}) {
+  const valueOf = row =>
+    row === null || row === undefined
+      ? NaN
+      : observable !== null && typeof row === 'object'
+        ? row[observable]
+        : row;
+  const inclusion = row => {
+    const v = valueOf(row);
+    // A row with no finite value of the observable cannot be included.
+    if (!Number.isFinite(v)) return 0;
+    if (cut) {
+      if (
+        (cut.min !== undefined && v < cut.min) ||
+        (cut.max !== undefined && v > cut.max)
+      )
+        return 0;
+    }
+    if (!probability) return 1;
+    const p = probability(v);
+    if (!(p >= 0 && p <= 1))
+      throw new StatisticsError(
+        'probability',
+        `the inclusion probability ${p} of selection "${name}" is not in [0, 1]`
+      );
+    return p;
+  };
+  return build(name, observable === null ? [] : [observable], inclusion);
+}
+
+const union = sels => [...new Set(sels.flatMap(s => s.observables))];
+
+/** Independent selections in series: a row must pass every one. */
+export function all(...sels) {
+  return build(sels.map(s => s.name).join(' and '), union(sels), row => {
+    let p = 1;
+    for (const s of sels) p *= s.inclusion(row);
+    return p;
+  });
+}
+
+/** Independent channels in parallel: a row is in if any one takes it. */
+export function either(...sels) {
+  return build(sels.map(s => s.name).join(' or '), union(sels), row => {
+    // 1 - prod (1 - p) as -expm1(sum log1p(-p)): exact for p of 1e-17.
+    let logQ = 0;
+    for (const s of sels) logQ += Math.log1p(-s.inclusion(row));
+    return -Math.expm1(logQ);
+  });
+}
+
+/** A logistic completeness curve 1 / (1 + e^((m - m50) / width)): the survey suite's. */
+export const logisticCompleteness =
+  ({ m50, width }) =>
+  m =>
+    1 / (1 + Math.exp((m - m50) / width));
+
+/**
+ * Correct binned counts for a known completeness: n / c, with its sampling
+ * error. The population is "poisson" (a rate: variance n / c^2) or "fixed" (a
+ * known finite population thinned by detection: variance n (1 - c) / c^2). A bin
+ * whose completeness is below `minCompleteness` is refused, not corrected: it
+ * would multiply a handful of objects by a large number and call it a count. A
+ * bin with no detections has no estimate, only a one-sided upper limit at
+ * `level` (status `upper-limit`: -ln(1 - level) / c for a Poisson population);
+ * a count that is not a whole number is refused (code `count`).
+ */
+export function completenessCorrect({
+  observed,
+  completeness,
+  population = 'poisson',
+  minCompleteness = 0.1,
+  level = 0.95,
+}) {
+  if (!observed?.length || observed.length !== completeness?.length)
+    return refused(
+      'length',
+      'counts and completenesses must be lists of the same, non-zero length'
+    );
+  if (population !== 'poisson' && population !== 'fixed')
+    return refused('population', 'the population is "poisson" or "fixed"');
+  if (!(level > 0 && level < 1))
+    return refused('level', 'the level is not between 0 and 1');
+  const bins = observed.map((n, i) => {
+    const c = completeness[i];
+    const base = { observed: n, completeness: c, corrected: null, sigma: null };
+    if (!isCount(n))
+      return {
+        ...base,
+        status: 'refused',
+        code: 'count',
+        why: 'a count is a whole number of at least 0',
+      };
+    if (!(Number.isFinite(c) && c >= minCompleteness && c <= 1))
+      return {
+        ...base,
+        status: 'refused',
+        code: 'completeness',
+        why: `the completeness is not a number from ${minCompleteness} to 1`,
+      };
+    if (n === 0)
+      // Nothing seen is not nothing there: the one-sided upper limit at `level`.
+      return {
+        ...base,
+        status: 'upper-limit',
+        level,
+        upperLimit:
+          population === 'poisson'
+            ? -Math.log(1 - level) / c
+            : c === 1
+              ? 0
+              : Math.log(1 - level) / Math.log(1 - c),
+      };
+    const variance = population === 'poisson' ? n : n * (1 - c);
+    return {
+      ...base,
+      corrected: n / c,
+      sigma: Math.sqrt(variance) / c,
+      status: 'ok',
+    };
+  });
+  return {
+    status: 'ok',
+    method: 'completeness-correction',
+    population,
+    minCompleteness,
+    bins,
+  };
+}
+
+/**
+ * Eddington bias, exact for an exponential population: for true values with
+ * density proportional to exp(-S / scale) on S >= 0, observed with Gaussian
+ * noise sigma, the mean of the true value given the observed one is that of a
+ * Gaussian N(observed - sigma^2 / scale, sigma^2) truncated to S >= 0. Returns
+ * that mean minus the observed value (negative: what is seen is brighter than
+ * what is there). NaN for a non-positive sigma or scale.
+ */
+export function eddingtonShift({ observed, sigma, scale }) {
+  if (!(sigma > 0) || !(scale > 0) || !Number.isFinite(observed)) return NaN;
+  const mu = observed - (sigma * sigma) / scale;
+  const t = mu / sigma;
+  return mu + sigma * inverseMills(t) - observed;
+}
+
+/**
+ * Malmquist bias at a fixed apparent magnitude, exact for Gaussian absolute
+ * magnitudes of scatter sigma and number counts that grow as 10^(slope m): the
+ * mean absolute magnitude of the objects seen is lower (brighter) than the
+ * population's by slope ln(10) sigma^2. `slope` 0.6 is a uniform density in
+ * Euclidean space.
+ */
+export const malmquistShift = ({ sigma, slope = 0.6 }) =>
+  sigma > 0 && Number.isFinite(sigma) && Number.isFinite(slope)
+    ? -slope * Math.LN10 * sigma * sigma
+    : NaN;
+
+/**
+ * The shift of the mean of a Gaussian population cut at z sigma above its mean
+ * (objects with M <= mean + z sigma kept), as at a fixed distance in a
+ * flux-limited sample: -sigma phi(z) / Phi(z).
+ */
+export const malmquistCutShift = ({ sigma, z }) =>
+  sigma > 0 && Number.isFinite(sigma) && Number.isFinite(z)
+    ? -sigma * inverseMills(z)
+    : NaN;
+
+/**
+ * A bias measured on a synthetic population: the mean of the selected values
+ * minus the reference value, with the standard error of that mean.
+ */
+export function measuredShift(values, reference) {
+  const n = values?.length ?? 0;
+  if (n < 2)
+    return refused('samples', 'a shift needs at least two selected values');
+  if (!allFinite(values) || !Number.isFinite(reference))
+    return refused('non-finite', 'a value or the reference is NaN or infinite');
+  let m = 0;
+  for (let i = 0; i < n; i++) m += values[i];
+  m /= n;
+  let ss = 0;
+  for (let i = 0; i < n; i++) ss += (values[i] - m) ** 2;
+  return {
+    status: 'ok',
+    n,
+    shift: m - reference,
+    se: Math.sqrt(ss / (n - 1) / n),
+  };
+}
+
+/**
+ * Eddington bias as a measured difference: in bins of the OBSERVED value, the
+ * mean true value minus the mean observed one (bins [lo, hi) between
+ * consecutive edges), with the standard error of the difference's mean.
+ */
+export function binnedMeanShift({ observed, truth, edges }) {
+  const bins = [];
+  for (let b = 0; b + 1 < edges.length; b++) {
+    const lo = edges[b];
+    const hi = edges[b + 1];
+    let n = 0;
+    let so = 0;
+    let st = 0;
+    let sd = 0;
+    for (let i = 0; i < observed.length; i++) {
+      if (observed[i] >= lo && observed[i] < hi) {
+        n++;
+        so += observed[i];
+        st += truth[i];
+        sd += (truth[i] - observed[i]) ** 2;
+      }
+    }
+    const shift = n ? (st - so) / n : NaN;
+    const se =
+      n > 1 ? Math.sqrt(Math.max(0, sd / n - shift * shift) / (n - 1)) : NaN;
+    bins.push({
+      lo,
+      hi,
+      n,
+      meanObserved: n ? so / n : NaN,
+      meanTruth: n ? st / n : NaN,
+      shift,
+      se,
+    });
+  }
+  return bins;
+}
