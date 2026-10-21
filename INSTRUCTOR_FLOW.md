@@ -176,6 +176,57 @@ Pack authors write the three fields in an investigation pack or a question bank
 refuses a criterion that carries one, naming the field (the boundary list,
 `tests/compat/boundary.mjs`, `rubric-criterion-semantics`).
 
+## The local class summary (Prompt 173)
+
+The review page draws one picture of the reports it holds, beside the table of
+each report, from the same graded records and nothing else
+(`js/instructorSummary.js`, the markup in `js/instructorSummaryView.js`, the
+plot in `js/instructorSummaryPlot.js`). It is computed in the page. Nothing is
+sent, nothing is stored, and it leaves the page only as the one CSV
+(`gravitas-class-summary-<date>.csv`, schema `gravitas.class-summary/1`, a long
+table: a section, the investigation, the item, the measure, its value and the
+count it rests on) or as the page printed (the Print button puts the summary
+alone before the printer; Ctrl+P prints the whole page as it did).
+
+Per investigation handed in it shows:
+
+- how far the reports got (the share of steps visited) and the depths read;
+- each step: how many reports answered, the share right of the answers Gravitas
+  can check, and for a written answer how many the instructor has marked and
+  their mean mark as a share of its points. A step nobody has marked says so
+  and shows no mean;
+- the rubric criteria of the written steps by what each claims (Prompt 172's
+  kinds), as the instructor marked them, and the same by kind. A criterion's
+  mark stays the instructor's reading and is still never added to a step's mark
+  or to a gradebook score; nothing here changes grading;
+- the wrong answers given most often (up to three a step, twelve shown, all in
+  the CSV), a choice in words and a number as the student's number, with the
+  misconception the investigation's author named for it where one is declared
+  (`misconceptions` with a `say`, `js/answerFeedback.js`) and nothing where none
+  is: a wrong answer is not explained by guessing at the student's thinking.
+  The author's words are the investigation's English;
+- the time the reports record: first opening to last save (`startedAt` and
+  `savedAt` of the backup), in bands, with the median and the middle half. It
+  includes every hour away and is not time on task, and says so on the page. A
+  report that records no start is left out and counted;
+- each measured quantity of the evidence tables (Prompt 150's record: the value,
+  and the uncertainty as the row states it): one value from each report, ordered
+  by value, drawn through the plot component (`js/plot/plot.js`) with the
+  uncertainty each report states as a bar (a sigma as plus or minus one, an
+  interval as its edges, none where none is stated), with the table of the same
+  numbers. Limits, failed fits and "not constrained" are counted and not
+  plotted; a table that does not match its digest is left out altogether and
+  counted; a quantity with a single value is not a distribution and is said
+  so. Gravitas does not combine the reports' values into one.
+
+No name, roster id or file name appears in the summary, its markup or its CSV;
+an exact duplicate is not counted and a repeated attempt is, each once, and the
+page says how many of each. It describes what this class handed in: it is the
+instructor's own picture, not a study of learning, and the evaluation kit links
+it as that, distinct from any study (`/evaluation/`). The modules and their two
+catalog fragments (`js/i18n/en.classSummary.js`, `es.classSummary.js`) are in the
+idle tier with the instructor modules, so no first-visit byte moved.
+
 ## Budgets
 
 The kit is a new route (`teach-kit`, measured, added by hand: D-BIND-07): 36.7 KB

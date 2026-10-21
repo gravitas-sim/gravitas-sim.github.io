@@ -15,12 +15,17 @@
 
 import { EN_SUBMISSIONS } from '../i18n/en.submissions.js';
 import { ES_SUBMISSIONS } from '../i18n/es.submissions.js';
+import { EN_CLASSSUMMARY } from '../i18n/en.classSummary.js';
+import { ES_CLASSSUMMARY } from '../i18n/es.classSummary.js';
 import { KEY_LOCALE } from '../names.js';
 
 const STORAGE_KEY = KEY_LOCALE;
 
 /** The languages this page is written in, in the order the switch offers them. */
-const CATALOGS = { en: EN_SUBMISSIONS, es: ES_SUBMISSIONS };
+const CATALOGS = {
+  en: { ...EN_SUBMISSIONS, ...EN_CLASSSUMMARY },
+  es: { ...ES_SUBMISSIONS, ...ES_CLASSSUMMARY },
+};
 const DEFAULT = 'en';
 let current = DEFAULT;
 
