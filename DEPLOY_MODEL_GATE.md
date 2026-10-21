@@ -187,3 +187,170 @@ restated as the workflows the product stands on, with its number unchanged.
 
 An unmeasurable threshold fails the gate on that threshold and Carl resets it;
 no threshold above is changed after this section's commit.
+
+### The second run's measurements
+
+Measured on 2026-10-21 on `v3` at 0cc96a74 (Mac, Node 24.4, Chromium from
+the repository's Playwright). The harness and every raw result are on the
+spike branch `spike/deploy-model-ii` (never merged; its last commit is
+0189cd15, `spike/deploy-ii/`). The criteria above were committed in b8f644a2,
+before any of this was measured. The load average (one minute) is stated
+where timing is involved. Bytes and requests do not depend on load.
+
+**T1, the shipped build against the tree** (`node tools/route-budget.mjs
+--report`, JavaScript as served, cold cache, service worker blocked; load
+3.3 before, 3.0 after). **Met.**
+
+| Route | Tree | Build | Cut (bytes, requests) | Bar |
+|---|---|---|---|---|
+| front door | 2116.8 KB, 107 | 596.1 KB, 54 | **71.8%**, **49.5%** | 50% and 30% |
+| kepler | 3311.2 KB, 146 | 1254.6 KB, 71 | **62.1%** | 40% |
+| transit | 3323.2 KB, 146 | 1266.1 KB, 71 | **61.9%** | 40% |
+| power-law | 3288.5 KB, 146 | 1239.2 KB, 71 | **62.3%** | 40% |
+| largest lesson | 3420.7 KB, 148 | 1300.1 KB, 73 | **62.0%** | 40% |
+
+Reported beside them: experiments 1062.2 KB in 57 requests against 288.7 KB
+in 4; the Observatory page 186.7 KB in 17 against 88.0 KB in 5.
+
+**Time to usable, throttled profile** (reported, judges nothing; three runs
+per cell, sources and build interleaved, median with the range; one-minute
+load 2.6 to 4.8 across the runs, `uptime` before the run 3.07, after 4.54).
+
+| Workflow | Tree | Build | Difference |
+|---|---|---|---|
+| front door (splash ended) | 19,760 ms (19,732 to 19,789) | 10,457 ms (10,447 to 10,502) | 47% less |
+| kepler lesson (first step shown) | 23,028 ms (22,926 to 23,034) | 10,430 ms (10,405 to 10,433) | 55% less |
+| Observatory, TESS light curve open | 4,653 ms (4,645 to 4,658) | 4,028 ms (4,020 to 4,115) | 13% less |
+
+Every difference is far outside the spread of its own three runs. This
+harness counts every JavaScript response while the network settles, so its
+request figures run a little above route-budget's (kepler build 73 and
+1257.8 KB against 71 and 1254.6); it is not the T1 instrument. A proxy for a
+slow device, not a device.
+
+**T2 and T6, the shipped build.** Not met. `dist/` has no `sw.js` and no
+`sw-manifest.js`; its bundled registration (`register("./sw.js")`) asks for a
+file that is not there. **The spike's precache** (`dist-precache.mjs`, a
+manifest over a copy of `dist/` plus the tree's `sw.js`): 1,642 files and
+33,695,355 bytes (1,533 core, 109 optional), untiered, because hashed chunks
+cannot be assigned to the tree's first-visit and idle tiers without a map
+from chunk to source that the build does not write (the tree's manifest is
+1,069 files and 17,588 KB in all tiers, 5,177,596 B first-visit). It
+installed (all 1,642 cached), a front door reload and a lesson opened in a
+new tab and the Observatory opened with the network off, with no failed
+request and no page error. The first attempt missed `js/fragments/*.html`
+(the lesson panel's markup, 504 offline): a build's precache policy has to be
+written for the build, not carried over. The version tracked the content:
+unchanged files gave the same version, one changed precached file a new one,
+restoring it the first again, and an unprecached file left it alone.
+
+**T3.** Met: the generate graph holds 21 nodes and 36 outputs for the tree;
+the build adds none (`dist/` is untracked, the spike's manifest is generated).
+
+**T5.** Met: `dist/instructors/materials.enc.json` is byte-identical to the
+committed file, `build.js` only copies it, and no workflow file references a
+secret. The passphrase was not used.
+
+**T4, workflows judged on the build.** Not met, by a long way.
+
+- As shipped, the `dist` target runs 334 tests in 30 files (14.5% of the
+  2,310 the source suite runs in Chromium; 18% in the first run). Of the 28
+  specs the eleven workflows name, 4 are in the dist target
+  (`accessibilityParity`, `measure`, `observatory`, `experimentRunner`; none
+  of them completes a workflow by itself): **0 of 11 workflows have every
+  spec in it.**
+- Run against `dist/` unchanged (the spike's configuration, 28 specs, 319
+  tests, two workers, load 3.7 to 7.5): **149 passed, 164 failed, 6
+  skipped.** 10 of the 28 specs pass completely (`accessibilityParity`,
+  `adoption`, `experimentRunner`, `instructorFlow`, `instructorPortal`,
+  `measure`, `observatory`, `presetRecovery`, `progressSafety`,
+  `submissionReview`). 161 of the 164 failures are
+  `Failed to fetch dynamically imported module` of `/js/...` (the specs read
+  modules a bundle does not have); 3 are assertions that differ in the build
+  (`firstRun` keyboard close, `investigations` fetch-once, `stellarSpectra`
+  fetch-once). **0 of 11 workflows pass in every spec**: S1 to S10 each have
+  at least one spec that fails, and I1 fails on `assignment` (17 of 20).
+
+| Workflow | Specs passing against `dist/` unchanged |
+|---|---|
+| S1 front door, open an investigation | onboarding 4 of 8, firstRun 6 of 7, investigations 9 of 23 |
+| S2 sandbox | sandbox 2 of 15, bodyPlacement 0 of 26, accessibilityParity 9 of 9 (4 skipped) |
+| S3 work an investigation | investigations, answerEntry 9 of 15, predictionLoops 0 of 19 |
+| S4 measure and read a plot | measure 13 of 13, plotChart 0 of 10, chartParity 1 of 8 |
+| S5 Observatory | observatory 8 of 8 (1 skipped), stellarSpectra 2 of 3 |
+| S6 Sky Lab | sky 6 of 7, observing 0 of 10 |
+| S7 experiment | experimentRunner 8 of 8 (1 skipped), experiments 0 of 8 |
+| S8 report | investigations, htmlReport 0 of 3 |
+| S9 save and resume | myWork 2 of 11, progressSafety 17 of 17, presetRecovery 3 of 3 |
+| S10 share | sharing 0 of 5, shareObserving 0 of 10 |
+| I1 instructor path | adoption 10, instructorFlow 8, assignment 3 of 20, submissionReview 9, instructorPortal 20 |
+
+**Marginal costs** (reported). One new lazy instrument family, the 15
+families a lesson step first reaches (`route-budget.mjs --lessons`): tree
+median 69.2 KB and 3 requests (35.8 to 129.1 KB, 1 to 5), build 25.9 KB and
+4 requests (13.8 to 67.1 KB, 3 to 7): fewer bytes, more requests. One new
+pack, the 13 observations the Observatory opens (`packs.mjs`): 1 to 3
+requests each under both models, the build 3.7 to 5.8 KB smaller each (the
+pack decoder), and one request more for the two TESS observations. Committed
+files a new family or pack touches: the same set under both (module or pack,
+route ceilings, counts); the tree also regenerates the committed
+`sw-manifest.js`, which a build would generate in CI.
+
+**The hybrid** (`hybrid.mjs`: `js/engine/*.js`, 9 files and 264,106 bytes,
+bundled into `js/engine/bundle.js` with everything outside the folder left
+external; `js/physics.js` pointed at it; `physicsWorker.js` still loads
+`barnesHut.js` itself).
+
+- Size: 147,328 bytes plain (34.2 KB gzipped), 62,689 bytes minified (20.6
+  KB). On every sources route that loads the engine the minified bundle
+  removes 190.3 KB and 7 requests (front door 2116.8 KB and 107 to 1926.5 KB
+  and 100; lessons 3311.2 and 146 to 3120.9 and 139; figure, experiments and
+  Studio likewise). The engine's own requests fall from 9 to 2 (78%) and its
+  bytes by 74% minified; computed from file sizes, 42% plain. **H1 is met**,
+  by either form.
+- Generator: one 7-line node in `tools/generate-graph.mjs` produced the file
+  and its `--check` held, in the spike. **Met.**
+- Tests unchanged: **not met.** The full Jest run with the minified bundle
+  applied (408 suites) had 7 failed suites and 32 failed tests; the same 7
+  suites pass on the base (449 tests). Five of them (`engineState`,
+  `engineEvents`, `engineConservation`, `settingsWriters`,
+  `physicsValidation`) fail because the engine now exists twice: the tests
+  and the validation groups import `js/engine/*.js` directly and get a second
+  instance of the engine's state, which is also a defect for the validation
+  page. Two are mechanical (`buildIntegrity`: `sw-manifest.js` stale;
+  `platformBaseline`: the feature-detection inventory has no row for the new
+  file).
+- Merge-conflict cost, reported: of the 61 pull requests merged into `v3`
+  since it was cut (092a121d), 9 touched `js/engine/` (14.8%), and 4 pairs of
+  them were open at the same time. The committed `sw-manifest.js`, which the
+  tree already regenerates after conflicts, was touched by 43 (70.5%), in 72
+  overlapping pairs.
+
+### Verdict: C
+
+| Condition | Result |
+|---|---|
+| T1 front door and four lessons | met |
+| T3, T5 | met |
+| T2, T6 on the shipped build | not met; shown to be a bounded task on the spike |
+| T4, at least 10 of 11 workflows judged on the build | **0 of 11**, unchanged specs on `dist/`; not a bounded task (161 module-access failures in 28 specs) |
+| **A** | not reached (T4) |
+| B-routes | no route named: every route's workflows have a failing spec (the nearest, the Observatory, fails one `stellarSpectra` assertion; the instructor path fails `assignment`) |
+| B-hybrid | H1 and the generator met; the tests that judge the tree do not pass unchanged (7 suites, 32 tests) |
+| **Outcome** | **C: the tree stays; Prompt 159 does not run; the relief for the request and byte ceilings is Prompt 133's policy** |
+
+What this does not say. The build is still much the smaller download (T1) and
+the offline obstacle is bounded; the gate fails on the suite that would judge
+it (T4), which is the first run's finding unchanged. One variant was not
+tested because it is outside the slices fixed above and a gate may not widen
+its scope: a bundle whose `js/engine/*.js` paths remain, as re-exports of the
+bundle, so that tests and importers share one instance. It would need its own
+gate. The verdict is evidence until Carl ratifies it; D-DEPLOY-01 (B, the tree
+with its artifacts precomputed in CI) stands as written.
+
+Not verified: Node 20 (the build's byte counts may differ by a few bytes);
+Firefox and WebKit; mobile; a real device (the throttled profile is a proxy);
+transfer (gzip) sizes; the full dist suite beyond the 28 specs named; the
+plain hybrid bundle through route-budget (its size was taken from the file);
+tests of the hybrid with the validation groups and tests repointed (not an
+option the slices allow).
