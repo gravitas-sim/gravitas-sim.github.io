@@ -8,13 +8,22 @@
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
+import { readFileSync } from 'node:fs';
 
 import {
+  DOC,
   PERIODS,
   THRESHOLDS,
+  VERDICTS,
   costClass,
   decide,
+  evidenceOf,
+  judge,
   mergeJustified,
+  problems,
+  readEvidence,
+  renderDoc,
+  schemaLessFormats,
   supportClass,
 } from '../tools/surface-gate.mjs';
 
@@ -228,5 +237,136 @@ describe('every rule fires on its own case', () => {
         ).not.toBe('RETIRE');
       }
     }
+  });
+});
+
+describe('the recorded evidence is judged by the function and nothing else', () => {
+  const evidence = readEvidence();
+  const doc = readFileSync(DOC, 'utf8');
+
+  test('every stored verdict is what decide() gives, and nothing is left unjudged', () => {
+    expect(problems(evidence)).toEqual([]);
+  });
+
+  test('every format without a schema has a record, and no record names a format that has one', async () => {
+    const names = await schemaLessFormats();
+    const recorded = evidence.surfaces
+      .filter(r => r.kind === 'stored-format')
+      .map(r => r.name);
+    expect(recorded.sort()).toEqual([...names].sort());
+    expect(names).toHaveLength(23);
+  });
+
+  test('the surfaces the roadmap named are all judged', () => {
+    const ids = new Set(evidence.surfaces.map(r => r.id));
+    for (const id of [
+      'history-original',
+      'compute',
+      'sky-lab',
+      'lab3d',
+      'mission-lab',
+      'experiments',
+      'analysis-lab',
+      'figure-builder',
+      'scenario-studio',
+      'composer',
+      'course-builder',
+      'catalog',
+      'evaluation',
+      'contributed-section',
+      'where-it-runs-facet',
+      'activity-demonstration',
+      'activity-route',
+      'activity-guided',
+      'activity-lab',
+    ]) {
+      expect(ids.has(id)).toBe(true);
+    }
+  });
+
+  test('the verdicts are the five and the unknowns stay unknown', () => {
+    for (const r of evidence.surfaces) {
+      expect(VERDICTS).toContain(r.verdict);
+      expect(r.referrer).toBe('UNKNOWN');
+      expect(r.why.length).toBeGreaterThan(20);
+    }
+  });
+
+  test('GROUP matches nothing: the menu is the five destinations and nothing else', () => {
+    expect(judge(evidence).filter(r => r.d.verdict === 'GROUP')).toEqual([]);
+    for (const { e } of judge(evidence)) {
+      if (e.menu)
+        throw new Error(`${e.id} is a menu entry that is not a destination`);
+    }
+  });
+
+  test('a surface in use is never retired, and a retired one is nothing a student made', () => {
+    for (const { rec, e, d } of judge(evidence)) {
+      if (d.verdict !== 'RETIRE') continue;
+      expect(e.use.shippedLinks + e.use.libraryEntries).toBe(0);
+      expect(rec.replacement).toBeTruthy();
+      expect(rec.exposure.records).toEqual([]);
+      expect(rec.exposure.stateLinks).toEqual([]);
+    }
+  });
+
+  test('the measured numbers are plain numbers and the citations name files that exist', () => {
+    for (const r of evidence.surfaces) {
+      for (const v of Object.values(r.cost))
+        expect(Number.isFinite(v)).toBe(true);
+      expect(Number.isFinite(r.use.shippedLinks)).toBe(true);
+      expect(Number.isFinite(r.use.libraryEntries)).toBe(true);
+      for (const f of r.cited)
+        readFileSync(new URL(`../${f}`, import.meta.url));
+    }
+    expect(evidenceOf(evidence.surfaces[0]).exposure.links).toBeDefined();
+  });
+
+  test('SURFACE_RETIREMENT_GATE.md carries the generated tables as they are', () => {
+    expect(renderDoc(doc)).toBe(doc);
+  });
+
+  test('the document states the committed thresholds and periods', () => {
+    const t = THRESHOLDS.material;
+    for (const [label, n] of [
+      ['source lines only this surface loads', t.lines.toLocaleString('en-US')],
+      ['test files that name it', String(t.testFiles)],
+      ['generated artifacts that exist for it alone', String(t.generated)],
+      ['catalog keys per language that only it uses', String(t.strings)],
+      ['gzip KB of its own files in the precache tiers', String(t.precacheKb)],
+      ['accessibility-spec rows that open it', String(t.axeRows)],
+    ]) {
+      const row = doc.split('\n').find(l => l.startsWith(`| ${label}`));
+      expect(row).toBeDefined();
+      expect(row).toContain(n);
+    }
+    expect(t.atLeast).toBe(2);
+    expect(doc).toContain('Material = at least two of the six');
+    for (const cls of ['L', 'R']) {
+      const d = PERIODS[cls].deprecated;
+      const r = PERIODS[cls].readOnly;
+      expect(doc).toContain(
+        `at least ${d.months} months and ${d.minorReleases} minor releases`
+      );
+      expect(doc).toContain(
+        `at least ${r.months} months and ${r.minorReleases} minor release`
+      );
+    }
+  });
+
+  test('the register row for the gate exists, is delegated and names Prompt 165', () => {
+    const reg = readFileSync(
+      new URL('../DECISION_REGISTER.md', import.meta.url),
+      'utf8'
+    );
+    const row = reg.split('\n').find(l => l.startsWith('| D-R10-44 |'));
+    expect(row).toBeDefined();
+    const cells = row
+      .split(/(?<!\\)\|/)
+      .slice(1, -1)
+      .map(c => c.trim());
+    expect(cells).toHaveLength(8);
+    expect(cells[4]).toBe('**DELEGATED**');
+    expect(cells[7]).toBe('165');
   });
 });

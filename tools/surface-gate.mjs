@@ -526,6 +526,7 @@ export function judge(evidence = readEvidence(), inv = inventory()) {
 }
 
 const esc2 = s => String(s).replace(/\|/g, '\\|');
+const citeName = f => (f.startsWith('manual/') ? 'the manual' : f);
 const list = a => (a && a.length ? a.join('; ') : 'none');
 const SIGNAL_NAMES = {
   lines: 'lines',
@@ -535,6 +536,13 @@ const SIGNAL_NAMES = {
   precacheKb: 'precache',
   axeRows: 'axe',
 };
+const exposureList = (x, e) =>
+  list([
+    ...(x.records || []),
+    ...(x.stateLinks || []),
+    ...(x.links || []),
+    ...(e.cited || []).map(f => `cited in ${citeName(f)}`),
+  ]);
 const costCell = e => {
   const c = costClass(e.cost);
   const n = c.reached.length;
@@ -546,8 +554,10 @@ const costNumbers = e => {
   const c = e.cost || {};
   return `${c.lines ?? 0} · ${c.testFiles ?? 0} · ${c.generated ?? 0} · ${c.strings ?? 0} · ${c.precacheKb ?? 0} · ${c.axeRows ?? 0}`;
 };
-const verdictCell = d =>
-  `**${d.verdict}** (${d.rule}${d.support ? `, class ${d.support}` : ''})`;
+/** Presentation (a section, a facet) carries no support period: the policy's scope. */
+const PRESENTATION = new Set(['section', 'facet']);
+const verdictCell = (d, kind) =>
+  `**${d.verdict}** (${d.rule}${d.support ? (PRESENTATION.has(kind) ? ', presentation' : `, class ${d.support}`) : ''})`;
 
 /** The generated tables, keyed by the marker that holds each one in SURFACE_RETIREMENT_GATE.md. */
 export function renderTables(rows = judge()) {
@@ -570,7 +580,7 @@ export function renderTables(rows = judge()) {
     ...by('page').map(({ rec, e, d }) => {
       const x = rec.exposure || {};
       const inv = inventory().surfaces.find(s => s.id === rec.inventoryId);
-      return `| ${esc2(rec.name)} | \`${inv ? inv.path : ''}\` | ${place(e)} | ${rec.unique}${rec.replacement ? ` (${esc2(rec.replacement)})` : ''} | ${useCell(e)} | ${costCell(e)} | ${esc2(list([...(x.records || []), ...(x.stateLinks || []), ...(e.cited || []).map(f => `cited in ${f}`)]))} | ${verdictCell(d)} | ${esc2(rec.consequence || 'none')} |`;
+      return `| ${esc2(rec.name)} | \`${inv ? inv.path : ''}\` | ${place(e)} | ${rec.unique}${rec.replacement ? ` (${esc2(rec.replacement)})` : ''} | ${useCell(e)} | ${costCell(e)} | ${esc2(exposureList(x, e))} | ${verdictCell(d, rec.kind)} | ${esc2(rec.consequence || 'none')} |`;
     }),
   ];
   const others = [
@@ -579,7 +589,7 @@ export function renderTables(rows = judge()) {
     ...[...by('section'), ...by('facet'), ...by('activity-format')].map(
       ({ rec, e, d }) => {
         const x = rec.exposure || {};
-        return `| ${esc2(rec.name)} | ${rec.kind} | ${rec.unique}${rec.replacement ? ` (${esc2(rec.replacement)})` : ''} | ${useCell(e)} | ${costCell(e)} | ${esc2(list([...(x.records || []), ...(x.stateLinks || [])]))} | ${verdictCell(d)} | ${esc2(rec.consequence || 'none')} |`;
+        return `| ${esc2(rec.name)} | ${rec.kind} | ${rec.unique}${rec.replacement ? ` (${esc2(rec.replacement)})` : ''} | ${useCell(e)} | ${costCell(e)} | ${esc2(exposureList(x, e))} | ${verdictCell(d, rec.kind)} | ${esc2(rec.consequence || 'none')} |`;
       }
     ),
   ];
