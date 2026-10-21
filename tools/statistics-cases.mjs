@@ -257,7 +257,7 @@ function runsByEnumeration(n1, n2) {
 
 /** The Wilson-Hilferty chi-square quantile: a second method good to ~1e-5 at 300 dof. */
 const wilsonHilferty = (p, k) => {
-  const z = zRef(2 * p - 1);
+  const z = p >= 0.5 ? zRef(2 * p - 1) : -zRef(1 - 2 * p);
   const a = 2 / (9 * k);
   return k * (1 - a + z * Math.sqrt(a)) ** 3;
 };
@@ -470,7 +470,7 @@ export const CASES = [
       let w1 = 0;
       let w2 = 0;
       let wn = 0;
-      for (const p of [0.5, 0.683, 0.8, 0.9, 0.95, 0.99, 0.999]) {
+      for (const p of [0.55, 0.683, 0.8, 0.9, 0.95, 0.99, 0.999]) {
         const rel = v => Math.abs(v);
         wc = Math.max(wc, rel(chi2Quantile(p, 2) / (-2 * Math.log(1 - p)) - 1));
         w1 = Math.max(
@@ -2453,7 +2453,7 @@ export const CASES = [
         meanM: 5,
         sigmaM: 0.7,
       });
-      const inst = { limit: 17.6, completeness: { m50: 17.1, width: 0.35 } };
+      const inst = { limit: 13.5, completeness: { m50: 13.0, width: 0.35 } };
       const obs = observe(u, inst);
       const sel = selection({
         name: 'survey',
