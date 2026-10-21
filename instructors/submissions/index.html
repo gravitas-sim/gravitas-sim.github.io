@@ -81,6 +81,46 @@
       .sr-response {
         white-space: pre-wrap;
       }
+      /* The class summary (Prompt 173): tables of words as well as numbers, and
+         a plot beside the table of the same values. */
+      .sr-summary {
+        margin-top: var(--space-8);
+      }
+      .sr-sum-table td:nth-child(n + 2) {
+        text-align: left;
+        font-variant-numeric: tabular-nums;
+      }
+      .sr-fig {
+        margin: var(--space-4) 0;
+      }
+      /* Printing the summary alone: the button puts this class on the body. */
+      @media print {
+        body.sr-print-summary > :not(main),
+        body.sr-print-summary main > :not(.sr-summary),
+        .sr-noprint {
+          display: none !important;
+        }
+        body.sr-print-summary .sr-summary .ow-plot {
+          background: #fff;
+          color: #000;
+        }
+        body.sr-print-summary .sr-summary .ow-axes line {
+          stroke: #000;
+        }
+        body.sr-print-summary .sr-summary .ow-pt {
+          fill: #000;
+        }
+        body.sr-print-summary .sr-summary .ow-bars line {
+          stroke: #444;
+        }
+        body.sr-print-summary .sr-summary .ui-table-wrap {
+          overflow: visible;
+        }
+        body.sr-print-summary .sr-summary figure,
+        body.sr-print-summary .sr-summary .ui-table-wrap {
+          break-inside: avoid;
+        }
+      }
     </style>
     <!-- shell:head -->
 <link rel="stylesheet" href="/css/shell.css" />
@@ -198,6 +238,7 @@ try {
       </div>
       <div id="context"></div>
       <div id="byActivity"></div>
+      <section id="summary" class="sr-summary" aria-labelledby="sumTitle"></section>
       <h2 data-i18n="sub.rates.title">Per-question failure rate</h2>
       <p class="ui-note" data-i18n="sub.rates.note">
         Hardest first. &ldquo;Marked&rdquo; counts only the answers Gravitas can

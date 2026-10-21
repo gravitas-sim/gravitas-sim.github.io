@@ -293,8 +293,10 @@ export const IDLE_TIER = [
   [
     'instructor modules',
     // The review page's own module (Prompt 172, D-R10-38): an instructor
-    // surface like the documents, read by no first visit.
-    /^(js\/authoring\/instructorSchema\.js|js\/instructor[A-Za-z]*\.js|js\/submissionReview\.js|js\/data\/instructor[A-Za-z.]*\.js)$/,
+    // surface like the documents, read by no first visit. The class summary
+    // (Prompt 173) is js/instructor*.js and its words are one catalog fragment
+    // per language, which only that page reads.
+    /^(js\/authoring\/instructorSchema\.js|js\/instructor[A-Za-z]*\.js|js\/submissionReview\.js|js\/data\/instructor[A-Za-z.]*\.js|js\/i18n\/(en|es)\.classSummary\.js)$/,
   ],
   ['three.js', /^vendor\/three\//],
   [
