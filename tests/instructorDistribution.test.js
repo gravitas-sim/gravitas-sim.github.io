@@ -23,6 +23,7 @@
 // and nothing here can reach the real bundle.
 // =============================================================================
 
+import { Buffer } from 'node:buffer';
 import { execFile } from 'node:child_process';
 import { webcrypto } from 'node:crypto';
 import {
@@ -35,7 +36,8 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { promisify } from 'node:util';
+import process from 'node:process';
+import { TextDecoder, TextEncoder, promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 

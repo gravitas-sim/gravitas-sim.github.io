@@ -10,6 +10,8 @@
 // the two digests the translation-freshness ledger computes.
 // =============================================================================
 
+import { TextDecoder } from 'node:util';
+
 import { describe, test, expect } from '@jest/globals';
 
 import { INVESTIGATIONS } from '../js/data/investigations.js';
