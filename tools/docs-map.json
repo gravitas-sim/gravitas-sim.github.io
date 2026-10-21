@@ -723,6 +723,13 @@
       "student": false
     },
     {
+      "file": "STATISTICS.md",
+      "kind": "feature",
+      "purpose": "The statistics kernel: labelled intervals, resampling, residual diagnostics, comparison of estimates, the F-test and the selection function, with their limits and validation.",
+      "owner": 154,
+      "student": false
+    },
+    {
       "file": "STELLAR_POPULATIONS.md",
       "kind": "feature",
       "purpose": "Stellar populations guides in the Observatory.",
