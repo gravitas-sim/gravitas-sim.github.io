@@ -206,3 +206,94 @@ fixture changed: that is the identity proof. The file
 a value finer than the uncertainty beside it (`hubble-law`, `solar-motion`,
 `rotating-disk`, `lens-passing`, `spectrum-viewer`, `completeness-lf`, and one
 parsing artifact in `ccd-frames`). They are listed in the fixtures, not changed.
+
+## The third family: lesson figures and the Observatory (D-R10-29)
+
+`js/investigations/*`, `js/lesson/*` and the Observatory's printed labels
+(`js/observatory/**`, `js/observatoryPage.js`) hold 16 `toFixed`/`toPrecision`
+calls and no unit literal. `js/lesson/*` prints no number at all (its modules
+draw scenes). The recording is `tests/labelGolden/investigations.mjs`
+(`npm run label:golden:investigations`, fixtures in
+`tests/labelGolden/fixtures/investigations/`, coverage in
+`tests/labelGolden/coverage-investigations.json`, the test
+`tests/labelGoldenInvestigations.test.js`). It was committed first, on its own,
+before any file moved.
+
+**What it records**, in English and Spanish:
+
+- `ellipse`: the readout `drawEllipse` paints ("e = 0.017", "b/a = 1.000") at all
+  981 positions of the eccentricity slider (0 to 0.98 by 0.001) and at each
+  lesson preset;
+- `plots`: `drawPlot` for the six lesson steps that have a plot (goldilocks-question,
+  keplers-laws, missing-mass, power-law-gravity, tides twice), plain, on log axes
+  and transformed, at the field values `record.mjs` deals out: the table under the
+  figure (every cell) and the "slope" label. The tick labels are not stored: they
+  are `tickLabel`'s, already on `js/format.js`, and their step is a logarithm at a
+  whole number;
+- `fieldNumbers`: `formatFieldNumber` over a ladder with signs, `-0`, ties,
+  large and tiny values, `NaN` and `Infinity`, at 0 to 4 decimals, both locales;
+- `aladin`, `rounded`, `fixtures`, `archive`: the archive link, the committed
+  numbers of an answer key, the crowding note a TESS pack carries (seven CROWDSAP
+  and FLFRCSAP pairs through the pack reader's own code) and the archive panel's
+  position label, mounted in jsdom against a stand-in `fetch` that serves the
+  repository's Sesame fixture with the position changed (six positions).
+
+**Per-site evidence.** While recording, each call site keeps whether it ever
+wrote a hyphen or was handed a number that is not finite
+(`withSiteCoverage`; the `hazards` of the coverage file). A site moves only if
+the recording reached it, it wrote no hyphen and saw no non-finite number, and
+the import it needs is free. Twelve of 16 were reached.
+
+**Node 20 and Node 24.** The figures take `Math.log10` and `Math.pow`. A first
+version stored the tick labels, and a unit in the last place on one `log10` call
+in sixteen turned a "10" into "10.0" (a tick step is `10 ** floor(log10(raw))`,
+and a logarithm at a whole number may land either side of it). So ticks are not
+stored, the one computed residual (a slope that should be zero) is written as a
+zero of the same shape (`maskNoise`), and the test perturbs `log10`, `pow`, `log`,
+`exp` and `atan2` by one unit in the last place on every sixteenth call and
+requires that no surface moves. Recording twice gives the same bytes.
+
+**What moved (4 calls, ratchet down by 4, 497 to 493 with the widgets family merged).** `stepView.js` 541 and 544 (the
+ellipse readout: the slider never gives a negative or a non-finite eccentricity)
+and `archivePanel.js` 257 and 258 (the label's right ascension and the absolute
+declination: `readSesame` refuses a position outside 0 to 360 degrees and 90, and
+a `NaN`). After the move the recording was regenerated and no fixture byte
+changed. `stepView.js` and `archivePanel.js` import `js/format.js`; the first
+already did, the second loads on a toggle like `fitPanel.js` and `comparePanel.js`
+(which already import it), and no route figure of `tools/route-budget.mjs` moved
+in either configuration. Cost in the first-visit precache: +28 bytes gzipped
+(5,175,201 to 5,175,229 of 5,175,296).
+
+**What stayed (12 calls), with the reason:**
+
+- `stepView.js` 643, 801, 1194 (3): the plot table, the slope and a computed
+  field's text write a hyphen where `fixed()` writes a true minus (and the
+  field's text is read back by `parseFieldNumber`). Prompt 282's decision.
+- `archivePanel.js` 94 (2): the Aladin link is a URL; a typographic minus would
+  break it. Machine text, not a label; it stays for good.
+- `fixtures.js` 143 (2): eligible (reached, no hyphen, no non-finite number) but
+  `js/format.js` is not loaded by `/observatory/` at start: the import costs one
+  request and 12.5 KB in the sources (observatory 17 to 18 requests against a
+  ceiling of 17; 186.7 to 199.2 KB) and one request in the build (5 to 6 against
+  5). Request ceilings are outside the standing size approval, so it waits.
+- `guides/core.js` 320 (1): an instructor-bundle source, not edited for 144.
+- `guidePanel.js` 330, `measurePanel.js` 491, `fitPanel.js` 557,
+  `observatoryPage.js` 512 (4): the recording cannot reach them (a clock, a file
+  size written by the page's own script, two roundings inside panel closures that
+  need a mounted observation and pipeline). `guidePanel.js` and `measurePanel.js`
+  round with `Number(x.toPrecision(n))`, which `roundSig` is on every input
+  (tested over a ladder with non-finite values and `-0`); they wait for a
+  recording that reaches them. `observerControls.js` 134 is a CSS `scaleY`, not a
+  label, and is not in this family.
+- Three raw parses wait: `guides/core.js` `parseAnswer` (bundle source) and two
+  in `import.js` (a data file's decimal comma; `parseNumber` refuses what is
+  ambiguous, which is a behaviour change).
+- `js/investigations.js` (4 calls, the engine beside the folder) is outside the
+  three named folders and its import is not free on one page.
+
+**Findings for Carl, not changed.** Spanish writes a decimal comma in a computed
+field (`formatFieldNumber`: "1,00") and a decimal point in the figure's tick
+labels, its table and the ellipse readout ("e = 0.017"); Prompt 282 decides.
+The archive label gives a position to five decimals of a degree (0.04
+arcsecond), finer than Sesame's own coordinates need but not finer than they
+state; nothing here writes a value beyond its stated uncertainty.
