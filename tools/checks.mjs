@@ -285,6 +285,21 @@ export const CHECKS = [
     group: 'correctness',
   },
   {
+    // Prompt 156. The translation ledger's age rule: a stale entry that has
+    // been recorded for longer than the grace period. It is release-time only
+    // and must stay out of required CI: age is a function of the calendar, so
+    // a commit that was green would turn red with no change in it. The step CI
+    // runs (`npm run i18n:check`) fails only on what a change itself causes;
+    // tests/releaseGate.test.js holds this entry out of ci.yml.
+    id: 'i18n-age',
+    label: 'no recorded translation is stale past its grace period',
+    command: ['npm', 'run', 'i18n:freshness', '--', '--fail-on-age'],
+    tier: 'slow',
+    ci: null,
+    why: 'Release-time only (D-R10-34, pending Carl): the age of a recorded stale entry changes with the calendar, so required CI reports it (npm run i18n:check) and does not fail on it',
+    group: 'correctness',
+  },
+  {
     id: 'links',
     label: 'internal links and anchors (sources)',
     command: ['npm', 'run', 'validate:links'],

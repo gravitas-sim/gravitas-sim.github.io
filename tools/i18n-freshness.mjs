@@ -8,6 +8,10 @@
 //   node tools/i18n-freshness.mjs --confirm KEY…  the English changed and the
 //                                                 translation is still right
 //   node tools/i18n-freshness.mjs --json          the report as data
+//   --fail-on-age                                 also fail on a recorded entry
+//                                                 stale past the grace period
+//                                                 (a manual or release-time
+//                                                 command, never required CI)
 //   --ledger DIR and --today YYYY-MM-DD           for tests: another ledger,
 //                                                 and what day it is
 //
@@ -72,15 +76,17 @@ const BASELINE_NOTE =
  * @returns {Promise<{today: string, sources: object[], problems: string[], writes: Map<string,string>, packs: object, missing: object}>}
  */
 export async function freshness({
-  today = isoDate(),
-  dir = LEDGER_DIR,
+  today = process.env.GRAVITAS_I18N_TODAY ?? isoDate(),
+  dir = process.env.GRAVITAS_I18N_LEDGER_DIR ?? LEDGER_DIR,
   current,
   confirm = [],
   packs: shipped,
+  failOnAge = false,
 } = {}) {
   const { sources, missing } = current ?? (await allRows());
   const report = {
     today,
+    dir,
     sources: [],
     problems: [],
     writes: new Map(),
@@ -121,7 +127,9 @@ export async function freshness({
       report.problems.push(
         `${name}: ${state.bad.length} ledger rows are not in the row format`
       );
-    if (state.expired.length)
+    // Age alone never fails the check CI runs: a commit that was green must not
+    // turn red because a calendar moved. Only the explicit flag does.
+    if (failOnAge && state.expired.length)
       report.problems.push(
         `${name}: ${state.expired.length} entries have been stale for more than ${GRACE_DAYS} days`
       );
@@ -157,7 +165,7 @@ export function render(report, { limit = 12 } = {}) {
     const { state: st } = s;
     out.push(
       `  ${s.name.padEnd(12)} ${String(s.entries).padStart(5)} entries: ${st.fresh.length} fresh, ${st.stale.length} stale in grace, ` +
-        `${st.expired.length} stale past grace, ${st.unrecorded.length} to stamp, ${st.orphan.length} removed`
+        `${st.expired.length} recorded stale past grace, ${st.unrecorded.length} to stamp, ${st.orphan.length} removed`
     );
     for (const item of [...st.expired, ...st.stale].slice(0, limit))
       out.push(
@@ -197,22 +205,24 @@ if (
     console.error('--confirm re-stamps the ledger: use it with --write');
     process.exit(2);
   }
-  const dir = take('--ledger') ? path.resolve(take('--ledger')) : LEDGER_DIR;
+  const dir = take('--ledger') ? path.resolve(take('--ledger')) : undefined;
+  const failOnAge = args.includes('--fail-on-age');
   const report = await freshness({
-    today: take('--today') ?? isoDate(),
+    today: take('--today') ?? undefined,
     dir,
     confirm,
+    failOnAge,
   });
   if (args.includes('--write')) {
-    mkdirSync(dir, { recursive: true });
+    mkdirSync(report.dir, { recursive: true });
     for (const [name, text] of report.writes) {
-      const file = ledgerFile(name, dir);
+      const file = ledgerFile(name, report.dir);
       if (!existsSync(file) || readFileSync(file, 'utf8') !== text) {
         writeFileSync(file, text);
         console.log(`wrote ${path.relative(ROOT, file)}`);
       }
     }
-    const again = await freshness({ today: report.today, dir });
+    const again = await freshness({ today: report.today, dir, failOnAge });
     console.log(render(again).join('\n'));
     process.exit(again.problems.length ? 1 : 0);
   }

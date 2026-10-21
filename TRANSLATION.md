@@ -61,16 +61,41 @@ new, and removed.
   fix): `node tools/i18n-freshness.mjs --write --confirm 'catalog:es/lib.*'`
   re-stamps the English digest for the keys named (`source/key`, a trailing `*`
   for a prefix). It is a diff in the ledger that a reviewer reads.
-- **A stale entry fails the gate after 14 days** (`GRACE_DAYS` in
-  `tools/i18n-ledger.mjs`), counted from the date `--write` recorded. A stale
-  entry that was never recorded, or a ledger that is not what `--write` would
-  leave, fails at once, so a change to English cannot pass without the ledger
-  saying so.
 - **A new or removed entry** reaches the ledger by `--write` in the same change.
 
-Acceptance for a pull request that touches English text: the check passes and
-no entry is stale, or the stale entries are listed in the pull request with the
-day they will expire.
+### What gates and what only reports
+
+Required CI runs `npm run i18n:check`. It fails only on what a change itself
+causes and can fix, and never on age:
+
+| State | `npm run i18n:check` (required CI) | `npm run i18n:freshness` | `npm run i18n:freshness -- --fail-on-age` |
+|---|---|---|---|
+| Stale and not recorded (the change moved English under an unchanged translation and the ledger was not written) | fails | fails | fails |
+| New, removed or retranslated entry the ledger does not hold; any ledger that is not what `--write` would leave | fails | fails | fails |
+| Stale and recorded (`@date` in the ledger), inside the 14-day grace period | reports | reports | reports |
+| Stale and recorded, older than the 14-day grace period (`GRACE_DAYS`, `tools/i18n-ledger.mjs`) | reports | reports | **fails** |
+| A label that disagrees with the glossary beyond the `known` list; a page with no Spanish and no declaration; a stale pack text; a pack Spanish text with no `esOf` | fails | fails | fails |
+| Terminology and accent lists | reports | reports | reports |
+
+The first row needs no history: `--write` is what records a stale entry and its
+date, so "stale and not recorded" is a state only a change can create, and CI can
+see it without git (a shallow checkout is enough). An entry that was fresh in the
+base and is stale in a change is exactly that state until the change runs
+`--write`, so the check fails on what the pull request introduced and on nothing
+that was already recorded. Age is a function of the calendar: a commit that was
+green must not turn red with no change in it, so required CI never fails on it.
+
+The age rule is `npm run i18n:freshness -- --fail-on-age`. It is the registry
+entry `i18n-age` in `tools/checks.mjs`, gate-only (`ci: null`), so the full
+`npm run release:check` runs it and required CI does not;
+`tests/releaseGate.test.js` fails if a gate-only entry appears in `ci.yml`, and
+`tests/i18nFreshness.test.js` checks that `ci.yml` has neither the flag nor the
+script. Whether required CI should ever fail on age is a decision for Carl
+(D-R10-34); it is not wired.
+
+Acceptance for a pull request that touches English text: `npm run i18n:check`
+passes, and every entry the change made stale is either translated or recorded
+with `--write` and listed in the pull request with the day its grace period ends.
 
 ### Inserting a lesson step
 

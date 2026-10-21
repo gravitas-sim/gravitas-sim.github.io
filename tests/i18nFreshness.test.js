@@ -545,10 +545,16 @@ describe('the real tree', () => {
       /@2026-03-01$/
     );
 
+    // Age alone fails nothing by default; only the explicit flag does, and
+    // the grace period (14 days, committed) is the line it draws.
     expect(run(args('2026-03-15')).status).toBe(0);
+    expect(run([...args('2026-03-15'), '--fail-on-age']).status).toBe(0);
     const late = run(args('2026-03-16'));
-    expect(late.status).toBe(1);
-    expect(late.stdout).toMatch(/stale for more than 14 days/);
+    expect(late.status).toBe(0);
+    expect(late.stdout).toMatch(/1 recorded stale past grace/);
+    const strict = run([...args('2026-03-16'), '--fail-on-age']);
+    expect(strict.status).toBe(1);
+    expect(strict.stdout).toMatch(/stale for more than 14 days/);
 
     // Confirming the English change clears it, in a diff a reviewer reads.
     const confirmed = run([
@@ -560,6 +566,87 @@ describe('the real tree', () => {
     expect(confirmed.status).toBe(0);
     expect(JSON.parse(readFileSync(file, 'utf8')).rows[key]).not.toMatch(/@/);
     expect(run(args('2026-03-16')).status).toBe(0);
+  });
+
+  describe('what required CI runs (npm run i18n:check) gates, and what it only reports', () => {
+    const audit = (dir, today) =>
+      spawnSync(
+        process.execPath,
+        [path.join(ROOT, 'tools', 'i18n-audit.mjs')],
+        {
+          cwd: ROOT,
+          encoding: 'utf8',
+          env: {
+            ...process.env,
+            GRAVITAS_I18N_LEDGER_DIR: dir,
+            GRAVITAS_I18N_TODAY: today,
+          },
+        }
+      );
+    const key = 'lib.title';
+    /** A copy of the ledger in which one English entry has moved, with its row as given. */
+    const moved = since => {
+      const dir = tempDir();
+      cpSync(path.join(ROOT, 'tools', 'i18n-freshness'), dir, {
+        recursive: true,
+      });
+      const file = path.join(dir, 'catalog-es.json');
+      const doc = JSON.parse(readFileSync(file, 'utf8'));
+      doc.rows[key] = formatRow({
+        ...parseRow(doc.rows[key]),
+        en: ['deadbeef'],
+        since,
+      });
+      writeFileSync(file, `${JSON.stringify(doc, null, 2)}\n`);
+      return dir;
+    };
+    const plus = (day, n) =>
+      new Date(Date.parse(`${day}T00:00:00Z`) + n * 864e5)
+        .toISOString()
+        .slice(0, 10);
+
+    test.each([15, 30, 400])(
+      'a recorded stale entry aged %i days does not fail i18n:check',
+      age => {
+        const r = audit(moved('2026-01-01'), plus('2026-01-01', age));
+        expect(r.status).toBe(0);
+        expect(r.stdout).toMatch(/1 recorded stale past grace/);
+        expect(r.stdout).not.toMatch(/TRANSLATION CONTRACT/);
+      }
+    );
+
+    test('a stale entry that is not recorded fails i18n:check, whatever day it is', () => {
+      for (const day of ['2026-01-01', '2027-06-01']) {
+        const r = audit(moved(null), day);
+        expect(r.status).toBe(1);
+        expect(r.stdout).toMatch(/TRANSLATION CONTRACT/);
+        expect(r.stdout).toMatch(/--write/);
+      }
+    });
+
+    test('--fail-on-age fails on the aged entry and not on a young one', () => {
+      const dir = moved('2026-01-01');
+      const check = (today, ...flags) =>
+        run(['--ledger', dir, '--today', today, ...flags]);
+      expect(check('2026-01-15', '--fail-on-age').status).toBe(0);
+      for (const age of [15, 30, 400]) {
+        const day = plus('2026-01-01', age);
+        expect(check(day).status).toBe(0);
+        const r = check(day, '--fail-on-age');
+        expect(r.status).toBe(1);
+        expect(r.stdout).toMatch(/stale for more than 14 days/);
+      }
+    });
+
+    test('the age rule is a release-time check and is not in required CI', () => {
+      const ci = readFileSync(
+        path.join(ROOT, '.github', 'workflows', 'ci.yml'),
+        'utf8'
+      );
+      expect(ci).toMatch(/npm run i18n:check/);
+      expect(ci).not.toMatch(/fail-on-age/);
+      expect(ci).not.toMatch(/i18n:freshness/);
+    });
   });
 
   test('the ledger holds one file per source, as prettier-stable JSON with sorted rows', () => {

@@ -30,8 +30,10 @@
 //     English digest on purpose, in a diff a reviewer reads.
 //
 // A stale entry is allowed GRACE_DAYS from the day it was first recorded and
-// fails the gate after that. The date is an argument, never read from a clock
-// inside the pure functions, so a test can say what day it is.
+// is reported after that, and fails only a release-time check run with
+// --fail-on-age (never required CI: age is the calendar's). The date is an
+// argument, never read from a clock inside the pure functions, so a test can
+// say what day it is.
 //
 // Pure: no file reads, no clock. tools/i18n-freshness.mjs reads and writes.
 // =============================================================================
